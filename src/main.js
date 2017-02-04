@@ -7,6 +7,8 @@ import VueResource from 'vue-resource'
 
 import Services from './Services'
 
+require('./styles/test.css');
+
 Vue.use(VueResource)
 Vue.use(VueRouter)
 Vue.use(Services)
