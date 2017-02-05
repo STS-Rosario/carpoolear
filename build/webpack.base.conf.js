@@ -78,8 +78,12 @@ module.exports = {
           limit: 10000,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
-      }
-    ]
+      },
+      {
+        test: /\.css$/,
+        loader: "postcss-loader"
+      },
+    ] 
   },
   eslint: {
     formatter: require('eslint-friendly-formatter')
@@ -91,16 +95,24 @@ module.exports = {
       /*require('autoprefixer')({
         browsers: ['last 2 versions']
       }),*/
+      require('postcss-import')(),
       require('postcss-cssnext')({
         browsers: ["last 2 version", "ie 9"]
       })
     ],
     autoprefixer: false
   },
-  postcss: [
-    require('autoprefixer')(),
-    require('postcss-cssnext')({
-        browsers: ["last 2 version", "ie 9"]
-      })
-  ]
+  postcss: function (webpack) { 
+    return [
+      require("postcss-import")({ addDependencyTo: webpack }),
+      require("postcss-url")(),
+      require("postcss-cssnext")(),
+      // add your "plugins" here
+      // ...
+      // and if you want to compress,
+      // just use css-loader option that already use cssnano under the hood
+      require("postcss-browser-reporter")(),
+      require("postcss-reporter")(),
+    ]
+  }
 }

@@ -7,7 +7,7 @@ import VueResource from 'vue-resource'
 
 import Services from './Services'
 
-require('./styles/test.css');
+import css from './styles/test.css';
 
 Vue.use(VueResource)
 Vue.use(VueRouter)
@@ -22,7 +22,7 @@ var router = new VueRouter({
         if (1 === 2) {
           next()
         } else {
-          next("/")
+          next()
         }
       }
     }

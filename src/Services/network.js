@@ -1,4 +1,4 @@
-import Auth from './Auth.js'
+import Auth from './auth.js'
 
 const API_URL = process.env.API_URL;
 
