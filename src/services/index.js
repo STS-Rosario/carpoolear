@@ -5,21 +5,14 @@
 
 import Network from './network.js';
 import Auth from './auth.js';
-import Api from './Api';
+import Api from './api';
 
 function plugin(Vue) { 
     
     if (plugin.installed) {
         return;
-    }     
-    
-    Network.install(Vue);
-    
-    //Vue.$network = Network;
-    //Vue.$auth = Auth; 
-
-    //Vue.$auth.setAuthToken("1234567890");
-
+    }      
+ 
     Vue.prototype.$network = Network;
     Vue.prototype.$auth = Auth; 
     Vue.prototype.$api = Api; 

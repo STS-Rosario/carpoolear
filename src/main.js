@@ -1,44 +1,22 @@
 import Vue from 'vue'
 import App from './App'
-import Hello from './Components/Hello'
+ 
+import VueResource from 'vue-resource' 
+import router from './router'
+import store from './store'
 
-import VueRouter from 'vue-router'
-import VueResource from 'vue-resource'
 
-import Services from './Services'
-
-import css from './styles/test.css';
-
+import css from './styles/main.css';
+ 
 Vue.use(VueResource)
-Vue.use(VueRouter)
-Vue.use(Services)
-
-var router = new VueRouter({
-  routes: [
-    { 
-      path: '/hello', 
-      component: Hello, 
-      beforeEnter: (to, from, next) => {
-        if (1 === 2) {
-          next()
-        } else {
-          next()
-        }
-      }
-    }
-  ]
-})
-
-// Any invalid route will redirect to home
-/* router.redirect({
-  '*': '/hello'
-}) */
+ 
 
 /* eslint-disable no-unused-vars */
 
 var app = new Vue({
   el: '#app',
   router,
+  store,
   template: '<App/>',
   components: { App }
 })

@@ -1,16 +1,13 @@
 import Auth from './auth.js'
+import Vue from 'vue'
 
 const API_URL = process.env.API_URL;
 
-module.exports =   {
-    Vue: null,
-    install (Vue) {
-      this.Vue = Vue
-    }, 
+module.exports =   { 
     get (url, params, headers = {}) {
       let authHeader = Auth.getAuthHeader()  
       Object.assign(headers, authHeader);
-      return this.Vue.http.get(
+      return Vue.http.get(
         API_URL + url,
         {
             params : params,
@@ -22,7 +19,7 @@ module.exports =   {
     post (url, body, headers = {}) {
       let authHeader = Auth.getAuthHeader()  
       Object.assign(headers, authHeader);
-      return this.Vue.http.post(
+      return Vue.http.post(
         API_URL + url,
         body,
         {
