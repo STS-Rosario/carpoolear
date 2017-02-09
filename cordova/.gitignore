@@ -1,0 +1,8 @@
+
+
+plugins/
+platforms/
+www/
+
+!plugins/.gitkeep
+!platforms/.gitkeep
