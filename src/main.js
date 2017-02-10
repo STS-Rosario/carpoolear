@@ -5,14 +5,14 @@ import VueResource from 'vue-resource'
 import router from './router'
 import store from './store'
 
+import cordova from './cordova'
 
-import css from './styles/main.css';
+import css from './styles/main.css'
 
 Vue.use(VueResource)
 
 
 /* eslint-disable no-unused-vars */
-
 var app = new Vue({
   el: '#app',
   router,
@@ -21,4 +21,6 @@ var app = new Vue({
   components: { App }
 })
 
-window.Vue = Vue;
+/* Just for debuggin */
+window.Vue = Vue
+window.store = store

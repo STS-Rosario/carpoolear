@@ -5,12 +5,24 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'app',
   methods: {
     gato () {
       console.log('hola')
       this.texto = 'Perro'
+    }
+  },
+  computed: {
+    ...mapGetters({
+      deviceReady: 'cordova/deviceReady'
+    })
+  },
+  watch: {
+    deviceReady: () => {
+      console.log("Device ready from components")
     }
   },
   data () {

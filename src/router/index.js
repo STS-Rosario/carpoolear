@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 
 import routes from './routes.js'
 
-Vue.use(VueRouter) 
+Vue.use(VueRouter)
 
 export default new VueRouter({
   routes

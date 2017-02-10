@@ -9,7 +9,11 @@ module.exports = function (ctx) {
   var fs = ctx.requireCordovaModule('fs')
   var path = ctx.requireCordovaModule('path')
   var deferral = ctx.requireCordovaModule('q').defer()
-  console.log('hola')
+  
+  cd('..')
+  exec('npm run build')
+  cd('cordova')
+
   var rootdir = ctx.opts.projectRoot
   var wwwDir = rootdir + '/www'
   var distDir = rootdir + '/../dist'
