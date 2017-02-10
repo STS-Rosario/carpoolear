@@ -4,14 +4,16 @@ import * as types from '../mutation-types'
 const state = {
   deviceReady: false,
   deviceOnline: false,
-  device: null
+  device: null,
+  deviceId: null
 }
 
 // getters
 const getters = {
   device: state => state.device,
   networkState: state => state.deviceOnline,
-  deviceReady: state => state.deviceReady
+  deviceReady: state => state.deviceReady,
+  deviceId: state => state.deviceId
 }
 
 // actions
@@ -32,6 +34,9 @@ const mutations = {
   },
   [types.CORDOVA_SET_DEVICE] (state, device) {
     state.device = device
+  },
+  [types.CORDOVA_DEVICE_REGISTER] (state, id) { 
+    state.deviceId = id
   }
 }
 

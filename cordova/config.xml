@@ -28,4 +28,7 @@
     <plugin name="cordova-plugin-network-information" spec="~1.3.1" />
     <plugin name="cordova-plugin-x-toast" spec="~2.5.2" />
     <plugin name="cordova-plugin-splashscreen" spec="~4.0.1" />
+    <plugin name="phonegap-plugin-push" spec="https://github.com/phonegap/phonegap-plugin-push">
+        <variable name="SENDER_ID" value="147151221990591" />
+    </plugin>
 </widget>

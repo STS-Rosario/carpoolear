@@ -1,12 +1,15 @@
 import store from '../store'
 import * as types from '../store/mutation-types'
-
-console.log(types)
+import push from './push.js'
 
 let onDeviceReady = () => {
   console.log('Device ready')
   store.commit('cordova/' + types.CORDOVA_DEVICEREADY)
   store.commit('cordova/' + types.CORDOVA_SET_DEVICE, window.device)
+
+  if (window.PushNotification) {
+    push.init()
+  }
 }
 
 let onOnline = () => {
