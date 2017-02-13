@@ -1,7 +1,7 @@
 <template>
   
   <div class="hello" >
-    <button @click="add"> Click Me!! </button>
+    <button @click="facebookLogin"> Click Me!! </button>
     <div v-show="checkLogin">
       <h1>{{ msg }}</h1> 
       <ul>
@@ -40,7 +40,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      add: 'auth/checkout' // map this.add() to this.$store.dispatch('increment')
+      add: 'auth/checkout', // map this.add() to this.$store.dispatch('increment')
+      facebookLogin: 'cordova/facebookLogin'
     })
   }
 }

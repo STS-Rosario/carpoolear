@@ -2,6 +2,10 @@ import store from '../store'
 import * as types from '../store/mutation-types'
 import push from './push.js'
 
+import facebook from './facebook.js'
+
+window.facebook = facebook
+
 let onDeviceReady = () => {
   console.log('Device ready')
   store.commit('cordova/' + types.CORDOVA_DEVICEREADY)

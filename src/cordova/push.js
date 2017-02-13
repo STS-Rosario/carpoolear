@@ -66,10 +66,11 @@ export default {
     push.on('notification', function (data) {
       var n = new Notification(data)
       console.log('Notificacion recived', n)
+      store.dispatch('cordova/notificationArrive', n)
     })
 
     // Registro fail
-    push.on('error', function (e, f) { 
+    push.on('error', function (e, f) {
       console.log('notification error', e, f)
     })
   }

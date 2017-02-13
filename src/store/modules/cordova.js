@@ -1,4 +1,6 @@
 import * as types from '../mutation-types'
+import facebook from '../../cordova/facebook.js'
+
 
 // initial state
 const state = {
@@ -18,7 +20,13 @@ const getters = {
 
 // actions
 const actions = {
-
+  notificationArrive (context, notification) {
+    // [TODO] Determinar logica
+    console.log(notification)
+  },
+  facebookLogin (context) {
+    facebook.login()
+  }
 }
 
 // mutations
@@ -35,7 +43,7 @@ const mutations = {
   [types.CORDOVA_SET_DEVICE] (state, device) {
     state.device = device
   },
-  [types.CORDOVA_DEVICE_REGISTER] (state, id) { 
+  [types.CORDOVA_DEVICE_REGISTER] (state, id) {
     state.deviceId = id
   }
 }
