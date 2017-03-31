@@ -45,7 +45,8 @@ const mutations = {
   },
   [types.CORDOVA_DEVICE_REGISTER] (state, id) {
     state.deviceId = id
-  }
+  }, 
+
 }
 
 export default {
@@ -55,3 +56,5 @@ export default {
   actions,
   mutations
 }
+
+

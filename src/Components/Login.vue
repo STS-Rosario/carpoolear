@@ -1,7 +1,7 @@
 <template>
   
   <div class="hello" >
-    <button @click="facebookLogin"> Click Me!! </button>
+    <button @click="add"> Click Me!! </button>
     <div v-show="checkLogin">
       <h1>{{ msg }}</h1> 
       <ul>

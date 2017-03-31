@@ -4,11 +4,8 @@
     <template v-if="trips != null">
         <template v-if="trips.length > 0">
             <ul id="trips-list">
-                <li v-for="trip in trips">
-                    {{ trip.from_town }}
-                    {{ trip.to_town }}
-                    {{ trip.description }}
-                </li>
+                <Trip v-for="trip in trips" :trip="trip" >
+                </Trip>
             </ul>
         </template>
         <template v-else>
@@ -18,8 +15,11 @@
     <template v-else>
         Cargando viajes ...
     </template>
+    </div>    
 </template>
 <script> 
+import Trip from "./Trip.vue"
+
 export default {
   name: 'trips',
   data () {
@@ -38,6 +38,8 @@ export default {
             }, (response) => {
                 // error callback
             });
-    }
+    },
+    components: {Trip}
+
 }
 </script>
