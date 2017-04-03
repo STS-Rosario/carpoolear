@@ -35,7 +35,7 @@ class TaggedList {
   }
 
   deleteValue = function (value) {
-    this.deleteMany(this.keys, value)
+    this.delete(this.keys, value)
   }
 
   get = function (tag) {

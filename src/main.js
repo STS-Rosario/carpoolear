@@ -32,3 +32,9 @@ Vue.use(VueAnalytics, {
 window.Vue = Vue
 window.store = store
 
+import { Thread, stopThreads }  from './classes/Threads'
+window.Thread = Thread
+window.stopThreads = stopThreads
+
+
+
