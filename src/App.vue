@@ -1,19 +1,21 @@
 <template>
   <div class="container"> 
-      <router-view></router-view>
+      <headerApp></headerApp>
+      <main id="main">
+        <router-view></router-view>
+      </main>
+      <footerApp></footerApp>
     </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import footerApp from './Components/Footer.vue'
+import headerApp from './Components/Header.vue'
 
 export default {
   name: 'app',
   methods: {
-    gato () {
-      console.log('hola')
-      this.texto = 'Perro'
-    }
   },
   computed: {
     ...mapGetters({
@@ -29,6 +31,10 @@ export default {
     return {
       texto: 'hola'
     }
+  },
+  components: { 
+    headerApp,
+    footerApp 
   }
 }
 </script>
