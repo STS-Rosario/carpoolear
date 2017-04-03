@@ -1,12 +1,18 @@
 :root {
-  --purple: #847AD1;
-  --large: 10px;
+  --main-background: #F0F0F0;
+  --main-font-color: #222222;
 }
-
+html {
+    font-size: 100%;
+}
 body {
-  background: var(--purple);
-}
+    background: var(--main-background);
+    color: var(--main-font-color);
 
-pre {
-  padding: var(--large);
-}  
+    font-family: 'Montserrat', sans-serif;
+}
+p {
+  margin: 1.5rem 0; 
+  font-size: 1rem; 
+  line-height: 1.5;
+}

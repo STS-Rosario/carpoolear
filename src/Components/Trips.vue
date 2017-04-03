@@ -32,18 +32,8 @@ export default {
     })
   },
   mounted() {
-
         console.log("ready function on trips", this.$root.$http);
         this.getTrips();
-
-        // GET request
-        /*window.network.get('/api/trips').then((response) => {
-                let valor = JSON.stringify(response.body.trips);
-                console.log('test',valor)
-                this.trips = response.body.trips;
-            }, (response) => {
-                // error callback
-            });*/
     },
     computed: {
         ...mapGetters({trips: 'trips/trips'})

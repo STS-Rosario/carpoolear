@@ -26,7 +26,6 @@
     <hook src="scripts/copy_dist.js" type="before_prepare" />
     <plugin name="cordova-plugin-device" spec="~1.1.4" />
     <plugin name="cordova-plugin-network-information" spec="~1.3.1" />
-    <plugin name="cordova-plugin-x-toast" spec="~2.5.2" />
     <plugin name="cordova-plugin-splashscreen" spec="~4.0.1" />
     <plugin name="phonegap-plugin-push" spec="https://github.com/phonegap/phonegap-plugin-push">
         <variable name="SENDER_ID" value="147151221990591" />
@@ -35,4 +34,6 @@
         <variable name="APP_ID" value="829566563845558" />
         <variable name="APP_NAME" value="Hay Equipo" />
     </plugin>
+    <plugin name="cordova-plugin-x-socialsharing" spec="https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin.git" />
+    <plugin name="cordova-plugin-x-toast" spec="https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git" />
 </widget>
