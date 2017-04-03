@@ -2,6 +2,8 @@ import Vue from 'vue'
 import App from './App'
 
 import VueResource from 'vue-resource'
+import VueAnalytics from 'vue-analytics'
+
 import router from './router'
 import store from './store'
 
@@ -24,6 +26,11 @@ var app = new Vue({
   template: '<App/>',
   components: { App }
 })
+
+ 
+Vue.use(VueAnalytics, {
+  id: 'UA-40995702-4'
+});
 
 /* Just for debuggin */
 window.Vue = Vue
