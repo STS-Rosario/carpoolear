@@ -32,9 +32,11 @@ export default {
         console.log("ready function on trips", this.$root.$http);
         // GET request
         this.$root.$http.get('http://carpoolear.138.197.64.208.nip.io/api/trips').then((response) => {
-                var valor = JSON.stringify(response.body.trips);
-                console.log('test',valor)
-                this.trips = response.body.trips;
+                var trips = [];
+                if(response.body.trips) {
+                    tripps = response.body.trips;
+                }
+                this.trips = trips;
             }, (response) => {
                 // error callback
             });
