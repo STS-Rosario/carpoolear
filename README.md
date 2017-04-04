@@ -23,6 +23,9 @@ Happy coding
 
 ## Contributing
 
+Respetar la siguiente configuración de linting: /*jshint esversion: 6*/
+
+Los nombres de las variables y métodos son en inglés
 
 
 ## License
