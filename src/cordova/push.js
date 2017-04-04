@@ -28,7 +28,7 @@ class Notification {
 
 export default {
   init () {
-    var push = window.PushNotification.init({
+    let push = window.PushNotification.init({
       android: {
         clearBadge: true,
         senderID: '147151221990591',
@@ -64,7 +64,7 @@ export default {
     })
 
     push.on('notification', function (data) {
-      var n = new Notification(data)
+      let n = new Notification(data)
       console.log('Notificacion recived', n)
       store.dispatch('cordova/notificationArrive', n)
     })

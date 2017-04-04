@@ -1,20 +1,23 @@
-import Network from '../network.js'
+import network from '../network.js'
+import ApiWithTags from './ApiWithTags'
 
-export default {
+class Auth extends ApiWithTags {
 
   login (creds) {
-    return Network.get('login', creds)
-  },
+    return this.get('login', creds)
+  }
 
   register () {
 
-  },
+  }
 
   logout () {
 
-  },
+  }
 
   retoken () {
 
   }
 }
+
+export { Auth as default }

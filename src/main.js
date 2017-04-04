@@ -21,7 +21,7 @@ Vue.use(VueResource);
 
 
 /* eslint-disable no-unused-vars */
-var app = new Vue({
+let app = new Vue({
   el: '#app',
   router,
   store,
@@ -37,3 +37,9 @@ Vue.use(VueAnalytics, {
 /* Just for debuggin */
 window.Vue = Vue;
 window.store = store;
+
+import { Thread, stopThreads }  from './classes/Threads';
+window.Thread = Thread;
+window.stopThreads = stopThreads;
+
+
