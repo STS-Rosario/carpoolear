@@ -8,5 +8,6 @@ Vue.use(VueRouter);
 
 export default new VueRouter({
   routes: routes,
-  mode: 'history'
+  //esto hay que atarlo a si estoy en cordova o no
+  //mode: 'history'
 });
