@@ -1,21 +1,23 @@
-import Vue from 'vue'
-import App from './App'
+/*jshint esversion: 6 */
 
-import VueResource from 'vue-resource'
-import VueAnalytics from 'vue-analytics'
+import Vue from 'vue';
+import App from './App';
 
-import router from './router'
-import store from './store'
+import VueResource from 'vue-resource';
+import VueAnalytics from 'vue-analytics';
 
-import cordova from './cordova'
+import router from './router';
+import store from './store';
 
-import font_awesome_css from './styles/font-awesome/css/font-awesome.min.css'
+import cordova from './cordova';
 
-import bootstrap_css from './styles/bootstrap/css/bootstrap.min.css'
+import font_awesome_css from './styles/font-awesome/css/font-awesome.min.css';
 
-import css from './styles/main.css'
+import bootstrap_css from './styles/bootstrap/css/bootstrap.min.css';
 
-Vue.use(VueResource)
+import css from './styles/main.css';
+
+Vue.use(VueResource);
 
 
 /* eslint-disable no-unused-vars */
@@ -25,7 +27,7 @@ var app = new Vue({
   store,
   template: '<App/>',
   components: { App }
-})
+});
 
  
 Vue.use(VueAnalytics, {
@@ -33,5 +35,5 @@ Vue.use(VueAnalytics, {
 });
 
 /* Just for debuggin */
-window.Vue = Vue
-window.store = store
+window.Vue = Vue;
+window.store = store;

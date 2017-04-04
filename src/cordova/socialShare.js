@@ -1,3 +1,4 @@
+/*jshint esversion: 6 */
 
 import cordovaToast from './toast';
 
@@ -32,4 +33,4 @@ export default {
     
   }
 
-}
+};

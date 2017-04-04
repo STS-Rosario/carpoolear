@@ -1,5 +1,5 @@
-
-import m from './middleware.js'
+/*jshint esversion: 6 */
+import m from './middleware.js';
 
 export default [
   {
@@ -27,4 +27,4 @@ export default [
     path: '/*',
     redirect: '/trips'
   }
-]
+];
