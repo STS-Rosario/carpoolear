@@ -1,20 +1,20 @@
-
-import m from './middleware.js'
+/*jshint esversion: 6 */
+import m from './middleware.js';
 
 export default [
   {
     path: '/about',
-    component: require('../components/About')
+    component: require('../Components/About')
   },
   {
     path: '/admin',
-    component: require('../components/About'),
+    component: require('../Components/About'),
     beforeEnter: m.auth
   },
   {
     path: '/login',
     name: 'login',
-    component: require('../components/Login')
+    component: require('../Components/Login')
   },
   {
     path: '/register',
@@ -23,7 +23,7 @@ export default [
   },
   {
     path: '/trips',
-    component: require('../components/Trips'),
+    component: require('../Components/Trips')
   },
   {
     path: '/trips/:trip',
@@ -35,4 +35,4 @@ export default [
     path: '/*',
     redirect: '/trips'
   }
-]
+];

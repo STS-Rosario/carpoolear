@@ -1,3 +1,4 @@
+/*jshint esversion: 6 */
 
 import cordovaToast from './toast';
 
@@ -25,6 +26,7 @@ export default {
         if(cordovaToast && cordovaToast.toast) {
             cordovaToast.toast("Buscando aplicaciones para compartir, espere ...");
         }
+        console.log("SHARE PLUGIN", options);
         window.plugins.socialsharing.shareWithOptions(options, onSuccess, onError);
     } else {
         console.error("ERROR: Se llamó al social plugin pero no se encontró");
@@ -32,4 +34,4 @@ export default {
     
   }
 
-}
+};

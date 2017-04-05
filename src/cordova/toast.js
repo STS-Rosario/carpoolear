@@ -1,4 +1,4 @@
-
+/*jshint esversion: 6 */
 export default {
   toast (options, onSuccess, onError) { 
     var message = '';
@@ -19,4 +19,4 @@ export default {
     }
   }
 
-}
+};
