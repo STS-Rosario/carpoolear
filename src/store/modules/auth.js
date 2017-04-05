@@ -44,7 +44,7 @@ const actions = {
   },
   register({ commit, state, rootState }, { email, password, passwordConfirmation, name, sureName, termsAndConditions }) {
     let data = {}
-    /*if (rootState.cordova && rootState.cordova.deviceId && rootState.cordova.device && rootState.cordova.device.platform) {
+    /* if (rootState.cordova && rootState.cordova.deviceId && rootState.cordova.device && rootState.cordova.device.platform) {
       console.log('here');
       creds['device_id'] = rootState.cordova.deviceId;
       creds['device_type'] = rootState.cordova.device.platform;
