@@ -15,7 +15,8 @@ import headerApp from './Components/Header.vue'
 
 export default {
   name: 'app',
-  methods: {
+  methods: { 
+
   },
   computed: mapGetters({
       deviceReady: 'cordova/deviceReady'

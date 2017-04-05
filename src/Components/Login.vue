@@ -1,24 +1,12 @@
 <template>
   
-  <div class="hello" >
-    <button @click="add"> Click Me!! </button>
-    <div v-show="checkLogin">
-      <h1>{{ msg }}</h1> 
-      <ul>
-        <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-        <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-        <li><a href="https://gitter.im/vuejs/vue" target="_blank">Gitter Chat</a></li>
-        <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-        <br>
-        <li><a href="http://vuejs-templates.github.io/webpack/" target="_blank">Docs for This Template</a></li>
-      </ul>
-      <h2>Ecosystem</h2>
-      <ul>
-        <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-        <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-        <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-        <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-      </ul>
+  <div class="login" >
+    <div class='form'>
+      <label for="txt_user">Usuario</label>
+      <input type="text" id="txt_user" v-model='username'/>
+      <label for="txt_password">Password</label>
+      <input  type="password" id="txt_password" v-model='password' />
+      <button @click="login"> Login </button>
     </div>
   </div>
 </template>
@@ -27,10 +15,11 @@
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
-  name: 'hello',
+  name: 'login',
   data () {
     return {
-      msg: "asd"
+      username: "",
+      password: "",
     }
   },
   computed: { 
@@ -40,30 +29,45 @@ export default {
   },
   methods: {
     ...mapActions({
-      add: 'auth/checkout', // map this.add() to this.$store.dispatch('increment')
+      doLogin: 'auth/login', // map this.add() to this.$store.dispatch('increment')
       facebookLogin: 'cordova/facebookLogin'
-    })
+    }),
+    login() {
+      console.log('happy doLogin', this.username);
+      let username = this.username;
+      let password = this.password;
+      this.doLogin({username, password});
+    }
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
-  font-weight: normal;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
-}
+  h1, h2 {
+    font-weight: normal;
+  }
+  .form {
+    margin-top:20px;
+    border: 1px solid gray;
+    padding: 15px;
+  }
+  input {
+    display:block;
+    padding: 3px;
+  }
+  button {
+    margin-top: 10px;
+  }
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  li {
+    display: inline-block;
+    margin: 0 10px;
+  }
+  a {
+    color: #42b983;
+  }
 </style>

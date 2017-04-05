@@ -13,15 +13,23 @@ export default [
   },
   {
     path: '/login',
+    name: 'login',
     component: require('../components/Login')
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: require('../components/Register')
   },
   {
     path: '/trips',
     component: require('../components/Trips'),
   },
   {
-    path: '/trips/:id',
+    path: '/trips/:trip',
+    name: 'detail_trip',
     component: require('../components/Trip'),
+    props: true
   },
   {
     path: '/*',

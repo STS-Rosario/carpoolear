@@ -10,6 +10,9 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   actions,
   getters,
+  state: {
+    appVersion: 1
+  },
   modules: {
     auth,
     cordova,

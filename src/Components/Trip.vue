@@ -1,6 +1,6 @@
 <template>
   <div class="trips"> 
-     {{trip.user_id}} 
+     {{trip}} 
   </div>   
 </template>
 <script> 
