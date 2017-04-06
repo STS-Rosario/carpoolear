@@ -19,7 +19,7 @@ export default [
   {
     path: '/register',
     name: 'register',
-    component: require('../components/Register')
+    component: require('../Components/Register')
   },
   {
     path: '/trips',
@@ -28,7 +28,7 @@ export default [
   {
     path: '/trips/:trip',
     name: 'detail_trip',
-    component: require('../components/Trip'),
+    component: require('../Components/Trip'),
     props: true
   },
   {
