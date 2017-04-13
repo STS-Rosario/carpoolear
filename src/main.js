@@ -19,6 +19,9 @@ import css from './styles/main.css';
 
 Vue.use(VueResource);
 
+Vue.use(VueAnalytics, {
+  id: 'UA-40995702-4'
+});
 
 /* eslint-disable no-unused-vars */
 let app = new Vue({
@@ -29,17 +32,9 @@ let app = new Vue({
   components: { App }
 });
 
- 
-Vue.use(VueAnalytics, {
-  id: 'UA-40995702-4'
-});
 
 /* Just for debuggin */
 window.Vue = Vue;
-window.store = store;
-
-import { Thread, stopThreads }  from './classes/Threads';
-window.Thread = Thread;
-window.stopThreads = stopThreads;
+window.store = store; 
 
 

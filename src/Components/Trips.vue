@@ -28,12 +28,12 @@ export default {
   name: 'trips',
   methods: {
     ...mapActions({
-      getTrips: 'trips/search', 
+      search: 'trips/search', 
     })
   },
   mounted() {
         console.log("ready function on trips", this.$root.$http);
-        this.getTrips();
+        this.search();
     },
     computed: {
         ...mapGetters({trips: 'trips/trips'})
