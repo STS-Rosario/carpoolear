@@ -4,6 +4,8 @@ import * as types from '../store/mutation-types'
 import TaggedList from '../classes/TaggedList'
 import axios from 'axios'
 
+window.axios = axios
+
 const API_URL = process.env.API_URL
 
 export default {
@@ -19,44 +21,83 @@ export default {
     return headers;
   },
 
+
+  newCancelToken () {
+    let CancelToken = axios.CancelToken;
+    return CancelToken.source();
+  },
+  
+  processResponse (response, source) {
+    let promise = new Promise((resolve, reject) => {
+
+      response.then((data) => {
+        resolve(data);
+      }).catch((resp) => {
+        // Revisar el tipo de error!
+        let data = resp.response.data;
+        let status = resp.response.status;
+        reject({data, status});
+
+      });
+
+    });
+
+    promise.abort = () => {
+      source.cancel("abort by the system");
+    };
+
+    return promise;
+
+  },
+
+
   get(url, params, headers = {}) {  
-    return axios.get(
+    let source = this.newCancelToken();
+    return this.processResponse(axios.get(
         API_URL + url,
         {
           params: params,
-          headers: this.getHeader(headers)
+          headers: this.getHeader(headers),
+          cancelToken: source.token
         }
-      )
+      ), source);
   },
 
   post (url, body, headers = {}) { 
-    return axios.post(
+    let source = this.newCancelToken();
+    return this.processResponse(axios.post(
         API_URL + url,
         body,
         {
-          headers: this.getHeader(headers)
+          headers: this.getHeader(headers),
+          cancelToken: source.token
         }
       )
+    , source);
   },
 
   delete(url, params, headers = {}) { 
-    return axios.delete(
+    let source = this.newCancelToken();
+    return this.processResponse(axios.delete(
       API_URL + url,
       {
         params: params,
-        headers: this.getHeader(headers)
+        headers: this.getHeader(headers),
+        cancelToken: source.token
       }
-    )
+    ), source);
   },
 
   put(url, body, headers = {}) { 
-    return axios.put(
+    let source = this.newCancelToken();
+    return this.processResponse(axios.put(
       API_URL + url,
       body,
       {
-        headers: this.getHeader(headers)
+        headers: this.getHeader(headers),
+        cancelToken: source.token
       }
-    )
+    ), source);
   }
 
 }

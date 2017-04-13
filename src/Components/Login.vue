@@ -36,7 +36,7 @@ export default {
       console.log('happy doLogin', this.username);
       let username = this.username;
       let password = this.password;
-      this.doLogin({username, password});
+      console.log(this.doLogin({username, password}));
     }
   }
 }

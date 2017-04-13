@@ -138,6 +138,15 @@ class Auth extends ApiWithTags {
     updatePhoto(userId) {
       return this.get('/api/users/' + userId)
     }
+
+    /**
+   * Show an user.
+   * @param {Integer} id 
+   * @return User 
+  */
+  show(id) {
+    return this.post('/api/users/' + id, {});
+  }
 }
 
 export { Auth as default }
