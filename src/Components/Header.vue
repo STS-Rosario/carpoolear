@@ -10,6 +10,7 @@
 
 <script> 
 import socialShare from '../services/socialShare.js';
+import dialogs from '../services/dialogs.js';
 export default {
   name: 'header',
   data () {
@@ -18,6 +19,7 @@ export default {
   },
   methods: {
     share () {
+      dialogs.message("Message example");
       socialShare.share();
     }
   }
