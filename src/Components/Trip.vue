@@ -1,5 +1,5 @@
 <template>
-  <div class="trips"> 
+  <div class="trip"> 
      {{trip}} 
   </div>   
 </template>

@@ -1,10 +1,11 @@
-import store from '../store'
-import Vue from 'vue'
-import * as types from '../store/mutation-types'
-import TaggedList from '../classes/TaggedList'
-import axios from 'axios'
+/*jshint esversion: 6 */
+import store from '../store';
+import Vue from 'vue';
+import * as types from '../store/mutation-types';
+import TaggedList from '../classes/TaggedList';
+import axios from 'axios';
 
-const API_URL = process.env.API_URL
+const API_URL = process.env.API_URL;
 
 export default {
   pendingRequest: new TaggedList,
@@ -15,7 +16,7 @@ export default {
 
   getHeader (headers) {
     let authHeader = store.getters['auth/authHeader'];
-    Object.assign(headers, authHeader)
+    Object.assign(headers, authHeader);
     return headers;
   },
 
@@ -26,7 +27,7 @@ export default {
           params: params,
           headers: this.getHeader(headers)
         }
-      )
+      );
   },
 
   post (url, body, headers = {}) { 
@@ -36,7 +37,7 @@ export default {
         {
           headers: this.getHeader(headers)
         }
-      )
+      );
   },
 
   delete(url, params, headers = {}) { 
@@ -46,7 +47,7 @@ export default {
         params: params,
         headers: this.getHeader(headers)
       }
-    )
+    );
   },
 
   put(url, body, headers = {}) { 
@@ -56,7 +57,7 @@ export default {
       {
         headers: this.getHeader(headers)
       }
-    )
+    );
   }
 
 }
