@@ -22,7 +22,14 @@ export default [
     component: require('../Components/Register')
   },
   {
+    path: '/activate/:token',
+    name: 'activate',
+    component: require('../Components/Activate'),
+    props: true
+  },
+  {
     path: '/trips',
+    name: 'trips',
     component: require('../Components/Trips')
   },
   {

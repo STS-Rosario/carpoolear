@@ -19,15 +19,12 @@ const getters = {
 // actions
 const actions = {
   search({ commit, state }, data) {
-    tripsApi.tag(['trips']).getTrips().then(trips => {
-      console.log(trips, trips.data)
+    return tripsApi.tag(['trips']).search().then(trips => {
       commit(types.TRIPS_SET_TRIPS, trips.data);
     }).catch(err => {
       console.log(err)
     })
   },
-  //nextPage({})
-
 }
 
 // mutations

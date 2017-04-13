@@ -28,12 +28,12 @@ export default {
   name: 'register',
   data () {
     return {
-      email: "",
-      password: "",
-      passwordConfirmation: "",
-      name: "",
-      sureName: "",
-      termsAndConditions: false,
+      email: '',
+      password: '',
+      passwordConfirmation: '',
+      name: '',
+      sureName: '',
+      termsAndConditions: false, 
     }
   },
   computed: { 
@@ -45,15 +45,17 @@ export default {
     ...mapActions({
       doRegister: 'auth/register',
     }),
-    register() {
-      console.log('happy doRegister', this.username);
+    register() { 
       let email = this.email;
       let password = this.password;
       let passwordConfirmation = this.passwordConfirmation;
-      let name = this.name;
-      let sureName = this.sureName;
+      let name = this.name + ' ' + this.sureName;
       let termsAndConditions = this.termsAndConditions;
-      this.doRegister({email, password, passwordConfirmation, name, sureName, termsAndConditions});
+      this.doRegister({email, password, passwordConfirmation, name, termsAndConditions}).then(() => {
+
+      }).catch (() => {
+
+      })
     }
   }
 }

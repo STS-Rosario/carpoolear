@@ -13,9 +13,24 @@ const state = {
 // getters
 const getters = {
   device: state => state.device,
+
   networkState: state => state.deviceOnline,
+
   deviceReady: state => state.deviceReady,
-  deviceId: state => state.deviceId
+
+  deviceId: state => state.deviceId,
+
+  deviceData: state => {
+    let data = {};
+    data.app_version = state.appVersion;
+    if (state.device) {
+      data.device_type = state.device.platform;
+    }
+    if (state.deviceId) {
+      data.device_id = state.deviceId;
+    }
+  }
+
 }
 
 // actions
