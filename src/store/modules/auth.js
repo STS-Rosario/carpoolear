@@ -42,21 +42,15 @@ const actions = {
       }
     });
   },
-  register({ commit, state, rootState }, { email, password, passwordConfirmation, name, sureName, termsAndConditions }) {
+  register({ commit, state, rootState }, { email, password, passwordConfirmation, name, termsAndConditions }) {
     let data = {}
-    /* if (rootState.cordova && rootState.cordova.deviceId && rootState.cordova.device && rootState.cordova.device.platform) {
-      console.log('here');
-      creds['device_id'] = rootState.cordova.deviceId;
-      creds['device_type'] = rootState.cordova.device.platform;
-    }*/
     data['app_version'] = rootState.appVersion;
     data['email'] = email;
     data['password'] = password;
     data['password_confirmation'] = passwordConfirmation;
-    data['name'] = name + sureName;
+    data['name'] = name;
     data['password'] = password;
     data['terms_and_conditions'] = termsAndConditions;
-
 
     authApi.register(data).then((data) => {
       console.log(data);
@@ -68,10 +62,35 @@ const actions = {
       } else {
         console.log(err.message);
       }
-
-
     });
-  }
+  },
+  logout() {
+    authApi.logout(data).then((data) => {
+      console.log(data);
+    }).catch((err) => {
+      if (err.response) {
+        console.log(err.response.data);
+        console.log(err.response.status);
+        console.log(err.response.headers);
+      } else {
+        console.log(err.message);
+      }
+    });
+  },
+  resetPassword({ commit, state, rootState }, email) {
+    data['email'] = email;
+    authApi.resetPassword(data).then((data) => {
+      console.log(data);
+    }).catch((err) => {
+      if (err.response) {
+        console.log(err.response.data);
+        console.log(err.response.status);
+        console.log(err.response.headers);
+      } else {
+        console.log(err.message);
+      }
+    });
+  },   
     /*checkout ({ commit, state }) {
       commit(types.DUMMY_MUTATION)
     },*/
