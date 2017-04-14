@@ -19,6 +19,7 @@ const state = {
 const getters = {
   checkLogin: state => state.auth,
   authHeader: state => state.auth ? { 'Authorization': 'Bearer ' + state.token } : {},
+  user: state => state.user,
 }
 
 // actions
