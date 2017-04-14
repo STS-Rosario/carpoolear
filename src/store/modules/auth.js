@@ -1,9 +1,10 @@
 import network from '../../services/network'
 import * as types from '../mutation-types'
-import { Auth } from '../../services/api'
+import { AuthApi, UserApi } from '../../services/api'
 import router from '../../router';
 
-let authApi = new Auth;
+let authApi = new AuthApi;
+let userApi = new UserApi;
 
 // initial state
 // shape: [{ id, quantity }]
@@ -57,7 +58,7 @@ const actions = {
     data.password = password;
     data.terms_and_conditions = termsAndConditions; 
 
-    return authApi.register(data).then((data) => {
+    return userApi.register(data).then((data) => {
       console.log(data);
     }).catch((err) => {
       if (err.response) {

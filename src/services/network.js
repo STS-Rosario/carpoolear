@@ -58,12 +58,8 @@ export default {
           params: params,
           headers: this.getHeader(headers),
           cancelToken: source.token
-        }
-<<<<<<< HEAD
-      ), source);
-=======
-      );
->>>>>>> fe27eba2a64f85d906264ae06bf94133fe199f1a
+        } 
+      ), source);  
   },
 
   post (url, body, headers = {}) { 
@@ -74,13 +70,9 @@ export default {
         {
           headers: this.getHeader(headers),
           cancelToken: source.token
-        }
-<<<<<<< HEAD
+        } 
       )
-    , source);
-=======
-      );
->>>>>>> fe27eba2a64f85d906264ae06bf94133fe199f1a
+    , source); 
   },
 
   delete(url, params, headers = {}) { 
@@ -91,12 +83,8 @@ export default {
         params: params,
         headers: this.getHeader(headers),
         cancelToken: source.token
-      }
-<<<<<<< HEAD
-    ), source);
-=======
-    );
->>>>>>> fe27eba2a64f85d906264ae06bf94133fe199f1a
+      } 
+    ), source); 
   },
 
   put(url, body, headers = {}) { 
@@ -107,12 +95,8 @@ export default {
       {
         headers: this.getHeader(headers),
         cancelToken: source.token
-      }
-<<<<<<< HEAD
-    ), source);
-=======
-    );
->>>>>>> fe27eba2a64f85d906264ae06bf94133fe199f1a
+      } 
+    ), source); 
   }
 
 }

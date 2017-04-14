@@ -1,6 +1,6 @@
-import network from '../network.js'
+import network from '../services/network.js'
 
-class ApiWithTags {
+class TaggedApi {
 
   constructor() {
     this._pendingRequest = network.pendingRequest;
@@ -58,4 +58,4 @@ class ApiWithTags {
   }
 }
 
-export { ApiWithTags as default}
+export { TaggedApi as default}

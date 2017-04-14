@@ -1,9 +1,9 @@
-import {Trips} from '../../services/api'
+import {TripApi} from '../../services/api'
 import * as types from '../mutation-types'
 
 // initial state
 // shape: [{ id, quantity }]
-let tripsApi = new Trips;
+let tripsApi = new TripApi;
 
 const state = {
   trips: null,

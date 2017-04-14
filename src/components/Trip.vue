@@ -75,7 +75,7 @@ export default {
     }
   },
   mounted() {
-    console.log("ready function on trips", this.$root.$route.params.id);
+     
   }
 }
 </script>

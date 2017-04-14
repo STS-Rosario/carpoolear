@@ -2,9 +2,9 @@
   <div class="trips">
     <h2>Viajes</h2>
     <template v-if="data != null">
-        <template v-if="data.trips.length > 0">
+        <template v-if="data.length > 0">
             <ul id="trips-list">
-                <Trip v-for="trip in data.trips" :trip="trip" ></Trip>
+                <Trip v-for="trip in data" :trip="trip" ></Trip>
             </ul>
         </template>
         <template v-else>
@@ -15,14 +15,11 @@
     <template v-else>
         <p class="alert alert-info" role="alert">Cargando viajes ...</p>
         
-    </template>
-    <pre>
-            {{this.$store.state}}
-    </pre>
+    </template> 
     </div>    
 </template>
 <script> 
-import Trip from "./Trip.vue"
+import Trip from "../Trip.vue"
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -32,8 +29,7 @@ export default {
       search: 'trips/search', 
     })
   },
-  mounted() {
-        console.log("ready function on trips", this.$root.$http);
+  mounted() { 
         this.search();
     },
     computed: {

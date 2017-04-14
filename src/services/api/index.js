@@ -1,7 +1,9 @@
-import Auth from './auth.js'
-import Trips from './Trips.js'
- 
+import AuthApi from './Auth.js'
+import TripApi from './Trips.js'
+import UserApi from './User.js'
+
 export {
-  Auth,
-  Trips 
+  AuthApi,
+  TripApi,
+  UserApi 
 }
