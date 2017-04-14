@@ -1,19 +1,20 @@
 <template>
   <div class="trips">
     <h2>Viajes</h2>
-    <template v-if="trips != null">
-        <template v-if="trips.length > 0">
+    <template v-if="data != null">
+        <template v-if="data.trips.length > 0">
             <ul id="trips-list">
-                <Trip v-for="trip in trips" :trip="trip" >
-                </Trip>
+                <Trip v-for="trip in data.trips" :trip="trip" ></Trip>
             </ul>
         </template>
         <template v-else>
-            No hay viajes
+            <p class="alert alert-warning"  role="alert">No hay viajes</p>
+            
         </template>
     </template>
     <template v-else>
-        Cargando viajes ...
+        <p class="alert alert-info" role="alert">Cargando viajes ...</p>
+        
     </template>
     <pre>
             {{this.$store.state}}
@@ -36,7 +37,7 @@ export default {
         this.search();
     },
     computed: {
-        ...mapGetters({trips: 'trips/trips'})
+        ...mapGetters({data: 'trips/trips'})
     },
     components: {Trip}
 

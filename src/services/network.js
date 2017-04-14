@@ -1,12 +1,11 @@
-import store from '../store'
-import Vue from 'vue'
-import * as types from '../store/mutation-types'
-import TaggedList from '../classes/TaggedList'
-import axios from 'axios'
-
-window.axios = axios
-
-const API_URL = process.env.API_URL
+/*jshint esversion: 6 */
+import store from '../store';
+import Vue from 'vue';
+import * as types from '../store/mutation-types';
+import TaggedList from '../classes/TaggedList';
+import axios from 'axios';
+ 
+const API_URL = process.env.API_URL; 
 
 export default {
   pendingRequest: new TaggedList,
@@ -17,7 +16,7 @@ export default {
 
   getHeader (headers) {
     let authHeader = store.getters['auth/authHeader'];
-    Object.assign(headers, authHeader)
+    Object.assign(headers, authHeader);
     return headers;
   },
 
@@ -60,7 +59,11 @@ export default {
           headers: this.getHeader(headers),
           cancelToken: source.token
         }
+<<<<<<< HEAD
       ), source);
+=======
+      );
+>>>>>>> fe27eba2a64f85d906264ae06bf94133fe199f1a
   },
 
   post (url, body, headers = {}) { 
@@ -72,8 +75,12 @@ export default {
           headers: this.getHeader(headers),
           cancelToken: source.token
         }
+<<<<<<< HEAD
       )
     , source);
+=======
+      );
+>>>>>>> fe27eba2a64f85d906264ae06bf94133fe199f1a
   },
 
   delete(url, params, headers = {}) { 
@@ -85,7 +92,11 @@ export default {
         headers: this.getHeader(headers),
         cancelToken: source.token
       }
+<<<<<<< HEAD
     ), source);
+=======
+    );
+>>>>>>> fe27eba2a64f85d906264ae06bf94133fe199f1a
   },
 
   put(url, body, headers = {}) { 
@@ -97,7 +108,11 @@ export default {
         headers: this.getHeader(headers),
         cancelToken: source.token
       }
+<<<<<<< HEAD
     ), source);
+=======
+    );
+>>>>>>> fe27eba2a64f85d906264ae06bf94133fe199f1a
   }
 
 }
