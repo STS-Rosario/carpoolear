@@ -31,6 +31,34 @@ p {
 
     border-radius: .4em .4em .5em .5em;
     box-shadow: 0 1px 6px 1px #CCC; 
+
+    position: relative;
+}
+.card-trip .card_heading:after {
+    top: 100%;
+    left: 85%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-color: rgba(136, 183, 213, 0);
+    border-top-color: var(--trip-half-free-color);
+    border-width: 12px;
+    margin-left: -12px;
+}
+.trip-almost-fill .card_heading {
+    background: var(--trip-almost-fill-color);
+}
+.trip-almost-fill .card_heading:after {
+    border-top-color: var(--trip-almost-fill-color);
+}
+.trip-mostly-available .card_heading {
+    background: var(--trip-mostly-free-color);
+}
+.trip-mostly-available  .card_heading:after {
+    border-top-color: var(--trip-mostly-free-color);
 }
 .trip_visibility {
     margin: .6em;
@@ -41,14 +69,8 @@ p {
 .trip_driver_ratings {
     font-size: 0.9rem;
 }
-.card-trip .card_body {
+.trip-with-driver .card_body {
     padding-top: 3em;
-}
-.trip-almost-fill .card_heading {
-    background: var(--trip-almost-fill-color);
-}
-.trip-mostly-available .card_heading {
-    background: var(--trip-mostly-free-color);
 }
 .card-trip .trip_driver_img {
     width: 100%;
@@ -77,8 +99,8 @@ p {
 }
 .trip_datetime {
     color: var(--medium-font-color);
-    margin-top: 1em;
-    margin-bottom: 1em;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
 }
 .trip_datetime_time {
     color: var(--trip-half-free-color);

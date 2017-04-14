@@ -1,5 +1,5 @@
 <template>
-  <div class="trip" v-bind:class="{ 'trip-almost-fill': trip.seats_available == 1, 'trip-mostly-available': trip.seats_available > 3   }"> 
+  <div class="trip" v-bind:class="{ 'trip-almost-fill': trip.seats_available == 1, 'trip-mostly-available': trip.seats_available > 3, 'trip-with-driver': user }"> 
       <div class="panel panel-default panel-card card card-trip">
         <div class="panel-heading card_heading">
           <div class="panel-title card-trip_title row">
@@ -16,22 +16,24 @@
                 </span>
               </span>
             </div>
-            <div class="col-xs-5">
-              <template v-if="trip.user.image !== ''">
-                <img alt="" :src="trip.user.image" class="trip_driver_img circle-box" />
-              </template>
-              <template v-else>
-                <img alt="" src="/static/img/default-profile.png" class="trip_driver_img circle-box" />
-              </template>
-            </div>
-            <div class="col-xs-16">
-              <div class="trip_driver_name" >
-                {{ trip.user.name }}
+            <template  v-if="user">
+              <div class="col-xs-5">
+                <template v-if="trip.user.image !== ''">
+                  <img alt="" :src="trip.user.image" class="trip_driver_img circle-box" />
+                </template>
+                <template v-else>
+                  <img alt="" src="/static/img/default-profile.png" class="trip_driver_img circle-box" />
+                </template>
               </div>
-              <div class="trip_driver_ratings">
-                X calificaciones
+              <div class="col-xs-16">
+                <div class="trip_driver_name" >
+                  {{ trip.user.name }}
+                </div>
+                <div class="trip_driver_ratings">
+                  X calificaciones
+                </div>
               </div>
-            </div>
+            </template>
           </div>
         </div>
         <div class="panel-body card_body">
@@ -98,7 +100,10 @@
 <script> 
 export default {
   name: 'trip',
-  props: ['trip'],
+  props: [
+    'trip',
+    'user'
+  ],
   data () {
     return { 
 

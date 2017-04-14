@@ -4,7 +4,7 @@
     <template v-if="data != null">
         <template v-if="data.trips.length > 0">
             <div id="trips-list">
-                <Trip v-for="trip in data.trips" :trip="trip" ></Trip>
+                <Trip v-for="trip in data.trips" :trip="trip" :user="null" ></Trip>
             </div>
         </template>
         <template v-else>
