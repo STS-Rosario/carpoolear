@@ -2,10 +2,10 @@
   <div class="trips">
     <h2>Viajes</h2>
     <template v-if="data != null">
-        <template v-if="data.length > 0">
-            <ul id="trips-list">
-                <Trip v-for="trip in data" :trip="trip" ></Trip>
-            </ul>
+        <template v-if="data.trips.length > 0">
+            <div id="trips-list">
+                <Trip v-for="trip in data.trips" :trip="trip" ></Trip>
+            </div>
         </template>
         <template v-else>
             <p class="alert alert-warning"  role="alert">No hay viajes</p>
@@ -33,9 +33,13 @@ export default {
         this.search();
     },
     computed: {
-        ...mapGetters({data: 'trips/trips'})
+        ...mapGetters({
+            data: 'trips/trips',
+        })
     },
-    components: {Trip}
+    components: {
+        Trip,
+    }
 
 }
 </script>

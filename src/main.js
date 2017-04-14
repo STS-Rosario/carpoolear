@@ -17,6 +17,7 @@ import font_awesome_css from './styles/font-awesome/css/font-awesome.min.css';
 
 import bootstrap_css from './styles/bootstrap/css/bootstrap.min.css';
 
+import cssHelpers from './styles/helpers.css';
 import css from './styles/main.css';
 
 

@@ -1,6 +1,11 @@
 :root {
   --main-background: #F0F0F0;
   --main-font-color: #222222;
+  --medium-font-color: #666666;
+  --soft-font-color: #BBBBBB;
+  --trip-almost-fill-color: #D72521;
+  --trip-mostly-free-color: #91B64C;
+  --trip-half-free-color: #FE9900;
 }
 html {
     font-size: 100%;
@@ -12,7 +17,110 @@ body {
     font-family: 'Montserrat', sans-serif;
 }
 p {
-  margin: 1.5rem 0; 
-  font-size: 1rem; 
-  line-height: 1.5;
+    margin: 1.5rem 0; 
+    font-size: 1rem; 
+    line-height: 1.5;
+}
+.card-trip {
+    box-shadow: 0 0 4px 1px #CCC; 
+    border-radius: .4em;
+}
+.card-trip .card_heading {
+    color: white;
+    background: var(--trip-half-free-color);
+
+    border-radius: .4em .4em .5em .5em;
+    box-shadow: 0 1px 6px 1px #CCC; 
+}
+.trip_visibility {
+    margin: .6em;
+}
+.trip_driver_name {
+    font-size: 1.1rem;
+}
+.trip_driver_ratings {
+    font-size: 0.9rem;
+}
+.card-trip .card_body {
+    padding-top: 3em;
+}
+.trip-almost-fill .card_heading {
+    background: var(--trip-almost-fill-color);
+}
+.trip-mostly-available .card_heading {
+    background: var(--trip-mostly-free-color);
+}
+.card-trip .trip_driver_img {
+    width: 100%;
+    max-width: 90px;
+    height: auto;
+    
+    border: 1px solid #FFF;
+    box-shadow: 0 3px 6px 1px #CCC; 
+
+    position: absolute;
+}
+.trip_location_from,
+.trip_location_to {
+    font-size: 1.5rem;
+}
+.trip_location_from {
+    color: var(--trip-half-free-color);
+}
+.trip_location_to {
+    color: var(--trip-mostly-free-color);
+}
+.trip_location_from_state-country {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--soft-font-color);
+}
+.trip_datetime {
+    color: var(--medium-font-color);
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+.trip_datetime_time {
+    color: var(--trip-half-free-color);
+    text-transform: uppercase;
+}
+.trip_seats-available_value {
+    font-size: 2.5em;
+    margin-right: .3em;
+    color: var(--trip-half-free-color);
+}
+.trip-almost-fill .trip_seats-available_value {
+    color: var(--trip-almost-fill-color);
+}
+.trip-mostly-available .trip_seats-available_value {
+    color: var(--trip-mostly-free-color);
+}
+.trip_seats-available_label {
+    font-size: 0.9em;
+    line-height: 0.5em;
+    
+    position: relative;
+    top: 4px;
+
+    text-transform: uppercase;
+    color: var(--medium-font-color);
+}
+.btn-trip-detail {
+    width: 100%;
+    padding: .5em;
+    border-width: 2px;
+
+    text-transform: uppercase;
+    font-size: 1.4em;
+
+    color: var(--trip-half-free-color);
+}
+
+.trip-almost-fill .btn-trip-detail {
+    color: var(--trip-almost-fill-color);
+    border-color: var(--trip-almost-fill-color);
+}
+.trip-mostly-available .btn-trip-detail {
+    color: var(--trip-mostly-free-color);
+    border-color: var(--trip-mostly-free-color);
 }
