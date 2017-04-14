@@ -2,6 +2,7 @@ import network from '../../services/network'
 import * as types from '../mutation-types'
 import { AuthApi, UserApi } from '../../services/api'
 import router from '../../router';
+import cache, {keys} from '../../services/cache' 
 
 let authApi = new AuthApi;
 let userApi = new UserApi;
@@ -81,6 +82,7 @@ const actions = {
 const mutations = {
   [types.AUTH_SET_TOKEN] (state, token) {
     state.token = token;
+    cache.setItem(keys.TOKEN_KEY, token);
   }, 
   [types.AUTH_SET_USER](state, user) {
     state.user = user;

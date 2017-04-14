@@ -13,8 +13,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import footerApp from './Components/Footer.vue'
-import headerApp from './Components/Header.vue'
+import footerApp from './components/Footer.vue'
+import headerApp from './components/Header.vue'
 
 export default {
   name: 'app',
@@ -32,7 +32,7 @@ export default {
   },
   data () {
     return {
-      texto: 'hola'
+      
     }
   },
   components: { 
