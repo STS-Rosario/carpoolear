@@ -1,5 +1,4 @@
-import network from '../network.js'
-import TaggedApi from '../../classes/TaggedApi'
+import TaggedApi from '../../classes/TaggedApi';
 
 class UserApi extends TaggedApi {
 
@@ -19,11 +18,11 @@ class UserApi extends TaggedApi {
    *    @param {String} description (Optional)
    *    @param {String} mobile_phone (Optional)
    *  }
-   * @return {} 
+   * @return {}
   */
-  register(data) {
-    return this.post('/api/users', data)
-  }
+    register (data) {
+        return this.post('/api/users', data);
+    }
 
   /**
    * Update an user.
@@ -38,42 +37,34 @@ class UserApi extends TaggedApi {
    *    @param {String} description (Optional)
    *    @param {String} mobile_phone (Optional)
    *  }
-   * @return {} 
+   * @return {}
   */
-    update(data) {
-      return this.put('/api/users', data)
-  }
-  
-  /**
-   * Update user photo.
-   * @param {Object} data {
-   *    @param {File} profile (Image)
-   *  }
-   * @return {} 
-  */
-    updatePhoto(data) {
-      return this.put('/api/users/photo', data)
+    update (data) {
+        return this.put('/api/users', data);
     }
-  
+
   /**
    * Update user photo.
    * @param {Object} data {
    *    @param {File} profile (Image)
    *  }
-   * @return {} 
+   * @return {}
   */
-    updatePhoto(userId) {
-      return this.get('/api/users/' + userId)
+    updatePhoto (data) {
+        return this.put('/api/users/photo', data);
     }
 
     /**
    * Show an user.
-   * @param {Integer} id 
-   * @return User 
+   * @param {Integer} id
+   * @return User
   */
-  show(id) {
-    return this.post('/api/users/' + id, {});
-  }
+    show (id) {
+        if (!id) {
+            id = '';
+        }
+        return this.post('/api/users/' + id, {});
+    }
 }
 
-export { UserApi as default }
+export { UserApi as default };

@@ -1,8 +1,8 @@
 class LocalStorage {
     setItem (key, value) {
-        if (typeof value === 'string' ||typeof value === 'number') {
+        if (typeof value === 'string' || typeof value === 'number') {
             window.localStorage.setItem(key, value);
-        } else {    
+        } else {
             window.localStorage.setItem(key, JSON.stringify(value));
         }
         return Promise.resolve();
@@ -13,9 +13,9 @@ class LocalStorage {
         return Promise.resolve();
     }
 
-    getItem (key) { 
+    getItem (key) {
         var temp = window.localStorage.getItem(key);
-        if (temp && temp != 'undefined') {
+        if (temp && temp !== 'undefined') {
             try {
                 temp = JSON.parse(temp);
                 return Promise.resolve(temp);
@@ -25,7 +25,7 @@ class LocalStorage {
         } else {
             return Promise.reject();
         }
-    } 
+    }
 
     clear () {
         window.localStorage.clear();
@@ -33,4 +33,4 @@ class LocalStorage {
     }
 }
 
-export {LocalStorage as default}
+export {LocalStorage as default};

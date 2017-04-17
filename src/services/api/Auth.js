@@ -1,10 +1,9 @@
-import network from '../network.js'
-import TaggedApi from '../../classes/TaggedApi'
+import TaggedApi from '../../classes/TaggedApi';
 
 class AuthApi extends TaggedApi {
 
   /** AUTH API **/
-  
+
   /**
    * User login
    * @param {Object} creds {
@@ -16,17 +15,17 @@ class AuthApi extends TaggedApi {
    *  }
    * @return {} token
   */
-  login (creds) {
-    return this.post('/api/login', creds)
-  }
+    login (creds) {
+        return this.post('/api/login', creds);
+    }
 
   /**
    * User logout.
    * @return {}
   */
-  logout() {
-    return this.post('/api//logout')
-  }
+    logout () {
+        return this.post('/api//logout');
+    }
 
   /**
    * Retoken.
@@ -35,9 +34,9 @@ class AuthApi extends TaggedApi {
    *  }
    * @return {} token
   */
-  retoken(data) {
-    return this.post('/api/retoken', data)
-  }
+    retoken (data) {
+        return this.post('/api/retoken', data);
+    }
 
   /**
    * Activate.
@@ -49,9 +48,9 @@ class AuthApi extends TaggedApi {
    * @param {String} activationToken
    * @return {} token
   */
-  activate(activationToken, data) {
-    return this.post('/api/activate/' + activationToken, data)
-  }
+    activate (activationToken, data) {
+        return this.post('/api/activate/' + activationToken, data);
+    }
 
   /**
    * Reset password by email.
@@ -60,9 +59,9 @@ class AuthApi extends TaggedApi {
    *  }
    * @return {}
   */
-  resetPassword(data) {
-    return this.post('/api/reset-password', data)
-  }
+    resetPassword (data) {
+        return this.post('/api/reset-password', data);
+    }
 
   /**
    * Change password by email.
@@ -72,9 +71,9 @@ class AuthApi extends TaggedApi {
    *  }
    * @return {}
   */
-  changePassword(token, data) {
-    return this.post('/api/change-password/' + token, data)
-  }
+    changePassword (token, data) {
+        return this.post('/api/change-password/' + token, data);
+    }
 }
 
-export { AuthApi as default }
+export { AuthApi as default };

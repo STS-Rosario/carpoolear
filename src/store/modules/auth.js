@@ -1,104 +1,116 @@
-import network from '../../services/network'
-import * as types from '../mutation-types'
-import { AuthApi, UserApi } from '../../services/api'
+import * as types from '../mutation-types';
+import { AuthApi, UserApi } from '../../services/api';
 import router from '../../router';
-import cache, {keys} from '../../services/cache' 
+import cache, {keys} from '../../services/cache';
 
-let authApi = new AuthApi;
-let userApi = new UserApi;
+let authApi = new AuthApi();
+let userApi = new UserApi();
 
 // initial state
 // shape: [{ id, quantity }]
 const state = {
-  auth: false,
-  user: null,
-  token: null,
-}
+    auth: false,
+    user: null,
+    token: null
+};
 
 // getters
 const getters = {
-  checkLogin: state => state.auth,
-  authHeader: state => state.auth ? { 'Authorization': 'Bearer ' + state.token } : {},
-  user: state => state.user,
-}
+    checkLogin: state => state.auth,
+    authHeader: state => state.auth ? { 'Authorization': 'Bearer ' + state.token } : {},
+    user: state => state.user
+};
 
 // actions
-const actions = {
 
-  login({ commit, state, rootState, rootGetters }, { email, password }) {
-    let creds = {}
-    Object.assign(creds, rootGetters['cordova/deviceData']);
+function login (store, { email, password }) {
+    let creds = {};
+    Object.assign(creds, store.rootGetters['cordova/deviceData']);
     creds.email = email;
     creds.password = password;
     creds.password_confirmation = password;
 
     return authApi.login(creds).then((token) => {
-      commit(types.AUTH_SET_TOKEN);
-    }).catch( ({data, status}) => { 
-        console.log(data, status);  
+        store.commit(types.AUTH_SET_TOKEN);
+        fetchUser(store);
+    }).catch(({data, status}) => {
+        console.log(data, status);
     });
-  },
+}
 
-  activate({ commit, state, rootState, rootGetters }, activationToken) {
-    let creds = {}
-    Object.assign(creds, rootGetters['cordova/deviceData']);
+// store = { commit, state, rootState, rootGetters }
+function activate (store, activationToken) {
+    let creds = {};
+    Object.assign(creds, store.rootGetters['cordova/deviceData']);
 
     return authApi.activate(activationToken, creds).then((token) => {
-      commit(types.AUTH_SET_TOKEN);
-      router.push({ name: 'trips' });
-    }).catch((err) => { 
+        store.commit(types.AUTH_SET_TOKEN);
+        router.push({ name: 'trips' });
+    }).catch((err) => {
+        if (err) {
 
+        }
     });
-  },
+}
 
-  register({ commit, state, rootState, rootGetters }, { email, password, passwordConfirmation, name, termsAndConditions }) {
-    let data = {}; 
+function register (store, { email, password, passwordConfirmation, name, termsAndConditions }) {
+    let data = {};
     data.email = email;
     data.password = password;
     data.password_confirmation = passwordConfirmation;
     data.name = name;
     data.password = password;
-    data.terms_and_conditions = termsAndConditions; 
+    data.terms_and_conditions = termsAndConditions;
 
     return userApi.register(data).then((data) => {
-      console.log(data);
+        console.log(data);
     }).catch((err) => {
-      if (err.response) {
-        console.log(err.response.data);
-        console.log(err.response.status);
-        console.log(err.response.headers);
-      } else {
-        console.log(err.message);
-      } 
+        if (err.response) {
+            console.log(err.response.data);
+            console.log(err.response.status);
+            console.log(err.response.headers);
+        } else {
+            console.log(err.message);
+        }
     });
-  },
-
-  user({state}) {
-
-  }
-
 }
+
+function fetchUser (store) {
+    return userApi.show().then((token) => {
+        store.commit(types.AUTH_SET_TOKEN);
+        fetchUser(store);
+    }).catch(({data, status}) => {
+        console.log(data, status);
+    });
+}
+
+const actions = {
+    login,
+    activate,
+    register,
+    fetchUser
+};
 
 // mutations
 const mutations = {
-  [types.AUTH_SET_TOKEN] (state, token) {
-    state.token = token;
-    cache.setItem(keys.TOKEN_KEY, token);
-  }, 
-  [types.AUTH_SET_USER](state, user) {
-    state.user = user;
-  }, 
-  [types.AUTH_LOGOUT](state) {
-    state.token = null;
-    state.user = null;
-    state.auth = false;
-  }
-}
+    [types.AUTH_SET_TOKEN] (state, token) {
+        state.token = token;
+        cache.setItem(keys.TOKEN_KEY, token);
+    },
+    [types.AUTH_SET_USER] (state, user) {
+        state.user = user;
+    },
+    [types.AUTH_LOGOUT] (state) {
+        state.token = null;
+        state.user = null;
+        state.auth = false;
+    }
+};
 
 export default {
-  namespaced: true,
-  state,
-  getters,
-  actions,
-  mutations
-}
+    namespaced: true,
+    state,
+    getters,
+    actions,
+    mutations
+};

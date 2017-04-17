@@ -1,10 +1,10 @@
-/*jshint esversion: 6 */
+/* jshint esversion: 6 */
 import store from '../store';
 
 export function auth (to, from, next) {
     if (store.getters['auth/checkLogin']) {
-      next();
+        next();
     } else {
-      next('/login');
+        next('/login');
     }
 }

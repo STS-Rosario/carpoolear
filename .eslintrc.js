@@ -26,6 +26,8 @@ module.exports = {
     'no-trailing-spaces' : 1,
 
     'func-call-spacing' : 1,
+
+    'handle-callback-err': 1
     
   }
 }

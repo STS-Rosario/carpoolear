@@ -1,4 +1,4 @@
-/*jshint esversion: 6 */
+/* jshint esversion: 6 */
 /*
     Vue Plugin
     Install all services on Vue System
@@ -9,17 +9,17 @@ import Auth from './auth.js';
 import Api from './api';
 
 function plugin (Vue) {
-  if (plugin.installed) {
-    return;
-  }
+    if (plugin.installed) {
+        return;
+    }
 
-  Vue.prototype.$network = Network;
-  Vue.prototype.$auth = Auth;
-  Vue.prototype.$api = Api;
+    Vue.prototype.$network = Network;
+    Vue.prototype.$auth = Auth;
+    Vue.prototype.$api = Api;
 }
 
 if (typeof window !== 'undefined' && window.Vue) {
-  window.Vue.use(plugin);
+    window.Vue.use(plugin);
 }
 
 export default plugin;
