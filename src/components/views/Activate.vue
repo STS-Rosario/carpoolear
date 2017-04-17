@@ -2,28 +2,27 @@
 
 </template>
 
-<script> 
-import { mapGetters, mapActions } from 'vuex'
+<script>
+import { mapActions } from 'vuex';
 
 export default {
-  name: 'activate',
-  props: ['token'],
+    name: 'activate',
+    props: ['token'],
 
-  data () {
-    return { 
+    data () {
+        return {
 
+        };
+    },
+
+    methods: {
+        ...mapActions({
+            activateAccount: 'auth/activate'
+        })
+    },
+
+    mounted () {
+        this.activateAccount(this.token);
     }
-  },
-
-  methods: {
-    ...mapActions({
-      activateAccount: 'auth/activate',
-    }),
-  },
-
-  mounted() { 
-    this.activateAccount(this.token);
-  }
-
-}
+};
 </script>

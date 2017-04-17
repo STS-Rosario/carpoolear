@@ -8,20 +8,20 @@
     </header>
 </template>
 
-<script> 
+<script>
 import socialShare from '../services/socialShare.js';
 import dialogs from '../services/dialogs.js';
 export default {
-  name: 'header',
-  data () {
-    return {
+    name: 'header',
+    data () {
+        return {
+        };
+    },
+    methods: {
+        share () {
+            dialogs.message('Message example');
+            socialShare.share();
+        }
     }
-  },
-  methods: {
-    share () {
-      dialogs.message("Message example");
-      socialShare.share();
-    }
-  }
-}
+};
 </script>

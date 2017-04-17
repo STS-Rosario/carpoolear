@@ -12,34 +12,33 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import footerApp from './components/Footer.vue'
-import headerApp from './components/Header.vue'
+import { mapGetters } from 'vuex';
+import footerApp from './components/Footer.vue';
+import headerApp from './components/Header.vue';
 
 export default {
-  name: 'app',
-  methods: { 
+    name: 'app',
+    methods: {
 
-  },
-  computed: mapGetters({
-      deviceReady: 'cordova/deviceReady'
-    })
-  ,
-  watch: {
-    deviceReady: () => {
-      console.log("Device ready from components")
+    },
+    computed: mapGetters({
+        deviceReady: 'cordova/deviceReady'
+    }),
+    watch: {
+        deviceReady: () => {
+            console.log('Device ready from components');
+        }
+    },
+    data () {
+        return {
+
+        };
+    },
+    components: {
+        headerApp,
+        footerApp
     }
-  },
-  data () {
-    return {
-      
-    }
-  },
-  components: { 
-    headerApp,
-    footerApp 
-  }
-}
+};
 </script>
 
 <style >

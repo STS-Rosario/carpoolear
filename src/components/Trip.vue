@@ -97,20 +97,20 @@
       </div>
   </div>   
 </template>
-<script> 
+<script>
 export default {
-  name: 'trip',
-  props: [
-    'trip',
-    'user'
-  ],
-  data () {
-    return { 
+    name: 'trip',
+    props: [
+        'trip',
+        'user'
+    ],
+    data () {
+        return {
+
+        };
+    },
+    mounted () {
 
     }
-  },
-  mounted() {
-     
-  }
-}
+};
 </script>

@@ -18,18 +18,18 @@
     </template> 
     </div>    
 </template>
-<script> 
-import Trip from "../Trip.vue"
-import { mapGetters, mapActions } from 'vuex'
+<script>
+import Trip from '../Trip.vue';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
-  name: 'trips',
-  methods: {
-    ...mapActions({
-      search: 'trips/search', 
-    })
-  },
-  mounted() { 
+    name: 'trips',
+    methods: {
+        ...mapActions({
+            search: 'trips/search'
+        })
+    },
+    mounted () {
         this.search();
     },
     computed: {
@@ -39,8 +39,7 @@ export default {
         })
     },
     components: {
-        Trip,
+        Trip
     }
-
-}
+};
 </script>

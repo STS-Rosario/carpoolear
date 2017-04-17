@@ -36,6 +36,7 @@ export default [
     path: '/trips/:trip',
     name: 'detail_trip',
     component: require('../components/Trip'),
+    beforeEnter: auth,
     props: true
   },
   {

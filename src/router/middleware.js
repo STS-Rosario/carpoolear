@@ -5,6 +5,6 @@ export function auth (to, from, next) {
     if (store.getters['auth/checkLogin']) {
       next();
     } else {
-      next('/');
+      next('/login');
     }
 }

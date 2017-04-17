@@ -10,36 +10,35 @@
     </div>
   </div>
 </template>
-
-<script> 
-import { mapGetters, mapActions } from 'vuex'
+<script>
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
-  name: 'login',
-  data () {
-    return {
-      username: "",
-      password: "",
+    name: 'login',
+    data () {
+        return {
+            username: '',
+            password: ''
+        };
+    },
+    computed: {
+        ...mapGetters({
+            checkLogin: 'auth/checkLogin'
+        })
+    },
+    methods: {
+        ...mapActions({
+            doLogin: 'auth/login', // map this.add() to this.$store.dispatch('increment')
+            facebookLogin: 'cordova/facebookLogin'
+        }),
+        login () {
+            console.log('happy doLogin', this.username);
+            let username = this.username;
+            let password = this.password;
+            console.log(this.doLogin({username, password}));
+        }
     }
-  },
-  computed: { 
-    ...mapGetters({
-      checkLogin: 'auth/checkLogin'
-    })
-  },
-  methods: {
-    ...mapActions({
-      doLogin: 'auth/login', // map this.add() to this.$store.dispatch('increment')
-      facebookLogin: 'cordova/facebookLogin'
-    }),
-    login() {
-      console.log('happy doLogin', this.username);
-      let username = this.username;
-      let password = this.password;
-      console.log(this.doLogin({username, password}));
-    }
-  }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

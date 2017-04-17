@@ -11,7 +11,7 @@ export default {
   pendingRequest: new TaggedList,
 
   addRequest(xhr, tags) {
-      this.pendingRequest.add(tags)
+      this.pendingRequest.add(tags);
   },
 
   getHeader (headers) {
