@@ -39,6 +39,6 @@ let app = new Vue({
 
 /* Just for debuggin */
 window.Vue = Vue;
-window.steslint-enableore = store;
+window.store = store;
 
 /* eslint-enable no-unused-vars */
