@@ -21,7 +21,6 @@ const getters = {
 
     deviceData: state => {
         let data = {};
-        data.app_version = state.appVersion;
         if (state.device) {
             data.device_type = state.device.platform;
         }

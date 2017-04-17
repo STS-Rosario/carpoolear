@@ -25,8 +25,8 @@ export default {
 
     processResponse (response, source) {
         let promise = new Promise((resolve, reject) => {
-            response.then((data) => {
-                resolve(data);
+            response.then((response) => {
+                resolve(response.data);
             }).catch((resp) => {
         // Revisar el tipo de error!
                 let data = resp.response.data;

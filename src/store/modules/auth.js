@@ -26,6 +26,7 @@ const getters = {
 function login (store, { email, password }) {
     let creds = {};
     Object.assign(creds, store.rootGetters['cordova/deviceData']);
+    creds.app_version = store.rootState.appVersion;
     creds.email = email;
     creds.password = password;
     creds.password_confirmation = password;
@@ -33,6 +34,7 @@ function login (store, { email, password }) {
     return authApi.login(creds).then((token) => {
         store.commit(types.AUTH_SET_TOKEN);
         fetchUser(store);
+        router.push({ name: 'trips' });
     }).catch(({data, status}) => {
         console.log(data, status);
     });
@@ -42,9 +44,11 @@ function login (store, { email, password }) {
 function activate (store, activationToken) {
     let creds = {};
     Object.assign(creds, store.rootGetters['cordova/deviceData']);
+    creds.app_version = store.rootState.appVersion;
 
     return authApi.activate(activationToken, creds).then((token) => {
-        store.commit(types.AUTH_SET_TOKEN);
+        store.commit(types.AUTH_SET_TOKEN, token);
+        fetchUser(store);
         router.push({ name: 'trips' });
     }).catch((err) => {
         if (err) {
@@ -76,11 +80,26 @@ function register (store, { email, password, passwordConfirmation, name, termsAn
 }
 
 function fetchUser (store) {
-    return userApi.show().then((token) => {
-        store.commit(types.AUTH_SET_TOKEN);
-        fetchUser(store);
+    return userApi.show().then((user) => {
+        store.commit(types.AUTH_SET_USER, user);
     }).catch(({data, status}) => {
         console.log(data, status);
+    });
+}
+
+function retoken (store) {
+    let data = {};
+    data.app_version = store.rootState.appVersion;
+
+    return userApi.retoken(data).then((token) => {
+        store.commit(types.AUTH_SET_TOKEN);
+        fetchUser(store);
+        router.push({ name: 'trips' });
+    }).catch(({data, status}) => {
+        // check for no internet problems
+        console.log(data, status);
+        store.commit(types.AUTH_LOGOUT);
+        router.push({ name: 'login' });
     });
 }
 
@@ -88,7 +107,8 @@ const actions = {
     login,
     activate,
     register,
-    fetchUser
+    fetchUser,
+    retoken
 };
 
 // mutations
@@ -99,11 +119,13 @@ const mutations = {
     },
     [types.AUTH_SET_USER] (state, user) {
         state.user = user;
+        cache.setItem(keys.USER_KEY, user);
     },
     [types.AUTH_LOGOUT] (state) {
         state.token = null;
         state.user = null;
         state.auth = false;
+        cache.clear();
     }
 };
 

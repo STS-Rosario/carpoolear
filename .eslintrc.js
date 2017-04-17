@@ -27,7 +27,9 @@ module.exports = {
 
     'func-call-spacing' : 1,
 
-    'handle-callback-err': 1
+    'handle-callback-err': 1,
+
+    'no-unused-vars': 1
     
   }
 }

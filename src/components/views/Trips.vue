@@ -1,10 +1,10 @@
 <template>
   <div class="trips">
     <h2>Viajes</h2>
-    <template v-if="data != null">
-        <template v-if="data.trips.length > 0">
+    <template v-if="trips != null">
+        <template v-if="trips.length > 0">
             <div id="trips-list">
-                <Trip v-for="trip in data.trips" :trip="trip" :user="user" ></Trip>
+                <Trip v-for="trip in trips" :trip="trip" :user="user" ></Trip>
             </div>
         </template>
         <template v-else>
@@ -34,7 +34,8 @@ export default {
     },
     computed: {
         ...mapGetters({
-            data: 'trips/trips',
+            trips: 'trips/trips',
+            morePages: 'trips/morePage',
             user: 'auth/user'
         })
     },

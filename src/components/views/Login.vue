@@ -32,10 +32,9 @@ export default {
             facebookLogin: 'cordova/facebookLogin'
         }),
         login () {
-            console.log('happy doLogin', this.username);
             let username = this.username;
             let password = this.password;
-            console.log(this.doLogin({username, password}));
+            this.doLogin({username, password});
         }
     }
 };

@@ -37,8 +37,9 @@ let app = new Vue({
     components: { App }
 });
 
-/* Just for debuggin */
-window.Vue = Vue;
-window.store = store;
+if (!window.cordova) {
+    console.log('Not running in cordova');
+    store.dispatch('init');
+}
 
 /* eslint-enable no-unused-vars */

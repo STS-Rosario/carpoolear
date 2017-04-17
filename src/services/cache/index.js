@@ -12,5 +12,7 @@ if (window.NativeStorage) {
 export default cache;
 
 export const keys = {
-    'TOKEN_KEY': 'TOKEN'
+    'TOKEN_KEY': 'TOKEN',
+    'USER_KEY': 'USER'
+
 };

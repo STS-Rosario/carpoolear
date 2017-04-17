@@ -1,10 +1,9 @@
 /* jshint esversion: 6 */
 
 import store from '../store';
-import * as types from '../store/mutation-types';
 import push from './push.js';
-
 import facebook from './facebook.js';
+import * as types from '../store/mutation-types';
 
 window.facebook = facebook;
 
@@ -16,6 +15,7 @@ let onDeviceReady = () => {
     if (window.PushNotification) {
         push.init();
     }
+    store.dispatch('init');
 };
 
 let onOnline = () => {
