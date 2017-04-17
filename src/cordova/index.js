@@ -20,25 +20,26 @@ let onDeviceReady = () => {
 
 let onOnline = () => {
     console.log('Device online');
-    store.commit('cordova/' + types.CORDOVA_ONLINE);
+    store.commit('cordova/deviceOnline');
 };
 
 let onOffline = () => {
     console.log('Device offline');
-    store.commit('cordova/' + types.CORDOVA_OFFLINE);
+    store.dispatch('cordova/deviceOffline');
 };
 
 //  cordova.fireDocumentEvent('backbutton'); for testing in console
 let onBackbutton = () => {
     console.log('Backbutton');
+    store.dispatch('cordova/onBackButton');
 };
 
 let onPause = () => {
-
+    store.dispatch('cordova/onPausa');
 };
 
 let onResumen = () => {
-
+    store.dispatch('cordova/onResumen');
 };
 
 document.addEventListener('deviceready', onDeviceReady, false);
