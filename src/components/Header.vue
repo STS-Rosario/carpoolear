@@ -1,11 +1,19 @@
 <template>
     <header class="header-component">
         <h1>Carpoolear</h1>
-        <router-link tag="button" :to=" {name: 'trips'}">Viajes</router-link>
-        <router-link tag="button" v-if="!logged" :to=" {name: 'login'}">Login</router-link>
-        <router-link tag="button" v-if="!logged" :to=" {name: 'register'}">Register</router-link>
+        <button @click="share" type="button">Invitar amigos</button>
+        <router-link :to=" {name: 'trips'}">Viajes</router-link>
+
+        <router-link v-if="!logged" :to=" {name: 'login'}">Login</router-link>
+        <router-link v-if="!logged" :to=" {name: 'register'}">Register</router-link>
+
         <button v-if="logged" @click="logout" >Logout</button>
-        <button @click="share" type="button">Invitar amigos</button> 
+
+        <span v-if="user">
+            {{user.name}}
+            <img :src=" user.image | profile-image " alt="">
+        </span>
+         
     </header>
 </template>
 

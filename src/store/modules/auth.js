@@ -25,16 +25,20 @@ const getters = {
 
 // actions
 
+function onLoggin (store, token) {
+    store.commit(types.AUTH_SET_TOKEN, token);
+    fetchUser(store);
+    globalStore.dispatch('device/register');
+    router.push({ name: 'trips' });
+}
+
 function login (store, { email, password }) {
     let creds = {};
     creds.email = email;
     creds.password = password;
 
     return authApi.login(creds).then((response) => {
-        store.commit(types.AUTH_SET_TOKEN, response.token);
-        fetchUser(store);
-        globalStore.dispatch('device/register');
-        router.push({ name: 'trips' });
+        onLoggin(store, response.token);
     }).catch(({data, status}) => {
         console.log(data, status);
     });
@@ -43,10 +47,7 @@ function login (store, { email, password }) {
 // store = { commit, state, rootState, rootGetters }
 function activate (store, activationToken) {
     return authApi.activate(activationToken, {}).then((token) => {
-        store.commit(types.AUTH_SET_TOKEN, token);
-        fetchUser(store);
-        globalStore.dispatch('device/register');
-        router.push({ name: 'trips' });
+        onLoggin(store, token);
     }).catch((err) => {
         if (err) {
 
@@ -77,8 +78,8 @@ function register (store, { email, password, passwordConfirmation, name, termsAn
 }
 
 function fetchUser (store) {
-    return userApi.show().then((user) => {
-        store.commit(types.AUTH_SET_USER, user);
+    return userApi.show().then((response) => {
+        store.commit(types.AUTH_SET_USER, response.data);
     }).catch(({data, status}) => {
         console.log(data, status);
     });
@@ -88,15 +89,17 @@ function retoken (store) {
     let data = {};
     data.app_version = store.rootState.appVersion;
 
-    return authApi.retoken(data).then((response) => {
-        store.commit(types.AUTH_SET_TOKEN, response.token);
-        fetchUser(store);
-        router.push({ name: 'trips' });
-    }).catch(({data, status}) => {
-        // check for no internet problems
-        console.log(data, status);
-        store.commit(types.AUTH_LOGOUT);
-        router.push({ name: 'login' });
+    return new Promise((resolve, reject) => {
+        authApi.retoken(data).then((response) => {
+            store.commit(types.AUTH_SET_TOKEN, response.token);
+            resolve();
+        }).catch(({data, status}) => {
+            // check for internet problems -> not resolve until retoken finish
+            console.log(data, status);
+            store.commit(types.AUTH_LOGOUT);
+            router.push({ name: 'login' });
+            resolve();
+        });
     });
 }
 

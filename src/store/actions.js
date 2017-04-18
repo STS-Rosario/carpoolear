@@ -32,12 +32,19 @@ export const init = (store) => {
         promises.push(p);
     });
 
-    return Promise.all(promises).then(() => startApp(store));
+    return Promise.all(promises).then(() => {
+        console.log('State loaded from cache', store);
+        if (store.state.auth.token) {
+            store.dispatch('auth/retoken').then(() => startApp(store));
+        } else {
+            startApp(store);
+        }
+    });
 };
 
-function startApp (store) {
-    console.log('State loaded from cache', store);
-    if (store.state.auth.token) {
-        store.dispatch('auth/retoken');
+export const startApp = (store) => {
+    store.dispatch('trips/search');
+    if (store.state.auth.auth) {
+        store.dispatch('auth/fetchUser');
     }
 };

@@ -28,6 +28,7 @@ Vue.use(VueAnalytics, {
 });
 
 Vue.use(VueMoment);
+require('./filters.js');
 
 window.store = store;
 
