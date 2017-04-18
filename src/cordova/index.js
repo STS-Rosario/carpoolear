@@ -20,7 +20,7 @@ let onDeviceReady = () => {
 
 let onOnline = () => {
     console.log('Device online');
-    store.commit('cordova/deviceOnline');
+    store.dispatch('cordova/deviceOnline');
 };
 
 let onOffline = () => {

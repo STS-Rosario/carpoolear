@@ -37,6 +37,8 @@ let app = new Vue({
     components: { App }
 });
 
+window.store = store;
+
 if (!window.cordova) {
     console.log('Not running in cordova');
     store.dispatch('init');

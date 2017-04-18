@@ -12,7 +12,11 @@ export const init = (store) => {
         },
         {
             key: keys.USER_KEY,
-            mutation: 'auth/' + types.USER_KEY
+            mutation: 'auth/' + types.AUTH_SET_USER
+        },
+        {
+            key: keys.DEVICE_KEY,
+            mutation: 'device/' + types.DEVICE_SET_CURRENT_DEVICE
         }
     ];
 
@@ -33,7 +37,7 @@ export const init = (store) => {
 
 function startApp (store) {
     console.log('State loaded from cache', store);
-    if (store.state.token) {
+    if (store.state.auth.token) {
         store.dispatch('auth/retoken');
     }
 };

@@ -18,5 +18,4 @@ export default {
             console.error('ERROR: Se llamó al toast plugin pero no se encontró');
         }
     }
-
 };

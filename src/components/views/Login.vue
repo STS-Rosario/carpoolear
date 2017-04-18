@@ -3,7 +3,7 @@
   <div class="login" >
     <div class='form'>
       <label for="txt_user">Usuario</label>
-      <input type="text" id="txt_user" v-model='username'/>
+      <input type="text" id="txt_user" v-model='email'/>
       <label for="txt_password">Password</label>
       <input  type="password" id="txt_password" v-model='password' />
       <button @click="login"> Login </button>
@@ -17,7 +17,7 @@ export default {
     name: 'login',
     data () {
         return {
-            username: '',
+            email: '',
             password: ''
         };
     },
@@ -32,9 +32,9 @@ export default {
             facebookLogin: 'cordova/facebookLogin'
         }),
         login () {
-            let username = this.username;
+            let email = this.email;
             let password = this.password;
-            this.doLogin({username, password});
+            this.doLogin({email, password});
         }
     }
 };
