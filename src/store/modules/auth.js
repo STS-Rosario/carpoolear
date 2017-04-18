@@ -100,12 +100,22 @@ function retoken (store) {
     });
 }
 
+function logout (store) {
+    let device = globalStore.state.device.current;
+    if (device) {
+        globalStore.dispatch('device/delete', device.id);
+    }
+    store.commit(types.AUTH_LOGOUT);
+    globalStore.commit('device/' + types.DEVICE_SET_DEVICES, []);
+}
+
 const actions = {
     login,
     activate,
     register,
     fetchUser,
-    retoken
+    retoken,
+    logout
 };
 
 // mutations

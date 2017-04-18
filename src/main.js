@@ -29,14 +29,6 @@ Vue.use(VueAnalytics, {
 
 Vue.use(VueMoment);
 
-let app = new Vue({
-    el: '#app',
-    router,
-    store,
-    template: '<App/>',
-    components: { App }
-});
-
 window.store = store;
 
 if (!window.cordova) {
@@ -44,4 +36,11 @@ if (!window.cordova) {
     store.dispatch('init');
 }
 
+let app = new Vue({
+    el: '#app',
+    router,
+    store,
+    template: '<App/>',
+    components: { App }
+});
 /* eslint-enable no-unused-vars */
