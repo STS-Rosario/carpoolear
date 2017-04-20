@@ -33,6 +33,11 @@ export default [
         component: require('../components/views/Trips')
     },
     {
+        path: '/new-trip',
+        name: 'new-trip',
+        component: require('../components/views/NewTrip')
+    },
+    {
         path: '/trips/:trip',
         name: 'detail_trip',
         component: require('../components/Trip'),

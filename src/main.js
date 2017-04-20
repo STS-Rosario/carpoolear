@@ -30,6 +30,16 @@ Vue.use(VueAnalytics, {
 Vue.use(VueMoment);
 require('./filters.js');
 
+import * as VueGoogleMaps from 'vue2-google-maps';
+
+Vue.use(VueGoogleMaps, {
+    load: {
+        key: process.env.MAPS_API,
+        libraries: 'places',
+        installComponents: true
+    }
+});
+
 window.store = store;
 
 if (!window.cordova) {
