@@ -1,11 +1,66 @@
 <template>
   <div>
-   
-   <div v-for="(m, index) in points">
+    <div>
+        <input type="radio" id="type-driver" value="0" v-model="trip.is_passenger">
+        <label for="type-driver">Como conductor</label>
+        <br>
+        <input type="radio" id="type-passenger" value="1" v-model="trip.is_passenger">
+        <label for="type-passenger">Como pasajero</label>
+    </div>
+
+    <div v-for="(m, index) in points">
         <span v-if="index == 0"> Origen: </span>
         <span v-if="index == points.length - 1"> Destino: </span>
         <GmapAutocomplete :placeholder="getPlaceholder(index)"  :value="m.name" v-on:place_changed="(data) => getPlace(index, data)"> </GmapAutocomplete>
    </div>
+
+   <div>
+        Distancia: {{distanceString}} <br>
+        Tiempo estimado: {{estimatedTimeString}} <br>   
+        CO2: {{CO2String}}
+   </div>
+
+   <br>
+    <label >Día</label>
+    <input type="text" v-model="date">
+    <br>
+    <label >Hora</label>
+    <input type="text" v-model="time">
+
+
+    <div>
+        Lugares disponibles
+        <input type="radio" id="seats-one" value="1" v-model="trip.total_seats">
+        <label for="seats-one">1</label>
+        <br>
+        <input type="radio" id="seats-two" value="2" v-model="trip.total_seats">
+        <label for="seats-two">2</label>
+        <br>
+        <input type="radio" id="seats-three" value="3" v-model="trip.total_seats">
+        <label for="seats-three">3</label>
+        <br>
+        <input type="radio" id="seats-four" value="4" v-model="trip.total_seats">
+        <label for="seats-four">4</label>
+    </div>
+
+    <div>
+        Privacidad del viaje
+        <input type="radio" id="privacity-public" value="2" v-model="trip.friendship_type_id">
+        <label for="privacity-public">Publicos</label>
+        <br>
+        <input type="radio" id="privacity-friend" value="0" v-model="trip.friendship_type_id">
+        <label for="privacity-friend">Amigos</label>
+        <br>
+        <input type="radio" id="privacity-friendofriend" value="1" v-model="trip.friendship_type_id">
+        <label for="privacity-friendofriend">Amigos de Amigos</label> 
+    </div>
+
+    <div>
+        Comentario de pasajero
+        <textarea v-model="trip.description"></textarea>
+    </div>
+
+    <button @click="save">CREAR</button>
 
     <gmap-map
         :center="center"
@@ -32,11 +87,6 @@ export default {
     data () {
         return {
             center: {lat: -10.0, lng: 10.0},
-            markers: [{
-                position: {lat: 10.0, lng: 10.0}
-            }, {
-                position: {lat: 11.0, lng: 11.0}
-            }],
             points: [
                 {
                     name: '',
@@ -50,10 +100,29 @@ export default {
                     json: null,
                     location: null
                 }
-            ]
+            ],
+            date: '',
+            time: '',
+            duraction: '',
+            trip: {
+                'is_passenger': 0,
+                'from_town': '',
+                'to_town': '',
+                'trip_date': '',
+                'total_seats': 2,
+                'friendship_type_id': 2,
+                'estimated_time': '00:00',
+                'distance': 0.0,
+                'co2': 0.0,
+                'description': '',
+                'car_id': null,
+                'enc_path': '',
+                'points': [] /* address json_address lat lng */
+            }
         };
     },
     mounted () {
+        window.testing = this;
         this.$refs.map.$mapCreated.then(() => {
             console.log('Map was created');
             /* eslint-disable no-undef */
@@ -62,11 +131,64 @@ export default {
             this.directionsDisplay.setMap(this.$refs.map.$mapObject);
         });
     },
-
+    computed: {
+        distanceString () {
+            return Math.floor(this.trip.distance / 1000) + ' kms';
+        },
+        estimatedTimeString () {
+            let totalMinutes = Math.floor(this.duraction / 60);
+            let minutes = Math.floor(totalMinutes % 60);
+            let hour = Math.floor(totalMinutes / 60);
+            return (hour < 10 ? '0' : '') + hour + ':' + (minutes < 10 ? '0' : '') + minutes;
+        },
+        CO2String () {
+            return 'no me acuerdo la formula';
+        }
+    },
     methods: {
+        save () {
+            this.points.forEach(p => {
+                let point = {};
+                point.address = p.name;
+                point.json_address = p.json;
+                point.lat = p.location.lat;
+                point.lng = p.location.lng;
+                this.trip.points.push(point);
+            });
+            this.trip.from_town = this.points[0].name;
+            this.trip.to_town = this.points[this.points.length - 1].name;
+            this.trip_date = this.date + ' ' + this.time;
+            this.trip.estimated_time = this.co2;
+            console.log(this.trip);
+        },
+        parserAddress (data) {
+            let place = data;
+            let addressComponents = {
+                street_number: 'short_name',
+                route: 'long_name',
+                locality: 'long_name',
+                administrative_area_level_1: 'short_name',
+                country: 'long_name',
+                postal_code: 'short_name'
+            };
+            let returnData = {};
+            if (place.address_components !== undefined) {
+                // Get each component of the address from the place details
+                for (let i = 0; i < place.address_components.length; i++) {
+                    let addressType = place.address_components[i].types[0];
+                    if (addressComponents[addressType]) {
+                        let val = place.address_components[i][addressComponents[addressType]];
+                        returnData[addressType] = val;
+                    }
+                }
+                return returnData;
+            }
+        },
+
         getPlace (i, data) {
             this.points[i].place = data;
             this.points[i].name = data.formatted_address;
+            this.points[i].json = this.parserAddress(data);
             this.center = this.points[i].location = {
                 lat: data.geometry.location.lat(),
                 lng: data.geometry.location.lng()
@@ -97,7 +219,23 @@ export default {
                 travelMode: 'DRIVING'
             }, (response, status) => {
                 if (status === 'OK') {
+                    /* encode path */
                     this.directionsDisplay.setDirections(response);
+
+                    let path = response.routes[0].overview_path;
+                    let encodeString = google.maps.geometry.encoding.encodePath(path);
+                    this.trip.enc_path = encodeString;
+
+                    let totalDistance = 0;
+                    let totalDuration = 0;
+                    let legs = response.routes[0].legs;
+                    for (let i = 0; i < legs.length; ++i) {
+                        totalDistance += legs[i].distance.value;
+                        totalDuration += legs[i].duration.value;
+                    }
+                    this.trip.distance = totalDistance;
+                    this.duraction = totalDuration;
+                    this.co2 = 0.0; /* agregar formula */
                 } else {
                     console.log('Directions request failed due to ' + status);
                 }
