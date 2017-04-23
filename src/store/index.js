@@ -5,6 +5,7 @@ import * as getters from './getters';
 import auth from './modules/auth';
 import cordova from './modules/cordova';
 import trips from './modules/trips';
+import device from './modules/device';
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -16,6 +17,7 @@ export default new Vuex.Store({
     modules: {
         auth,
         cordova,
-        trips
+        trips,
+        device
     }
 });

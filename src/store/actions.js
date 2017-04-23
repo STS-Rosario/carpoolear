@@ -12,7 +12,11 @@ export const init = (store) => {
         },
         {
             key: keys.USER_KEY,
-            mutation: 'auth/' + types.USER_KEY
+            mutation: 'auth/' + types.AUTH_SET_USER
+        },
+        {
+            key: keys.DEVICE_KEY,
+            mutation: 'device/' + types.DEVICE_SET_CURRENT_DEVICE
         }
     ];
 
@@ -28,12 +32,19 @@ export const init = (store) => {
         promises.push(p);
     });
 
-    return Promise.all(promises).then(() => startApp(store));
+    return Promise.all(promises).then(() => {
+        console.log('State loaded from cache', store);
+        if (store.state.auth.token) {
+            store.dispatch('auth/retoken').then(() => startApp(store));
+        } else {
+            startApp(store);
+        }
+    });
 };
 
-function startApp (store) {
-    console.log('State loaded from cache', store);
-    if (store.state.token) {
-        store.dispatch('auth/retoken');
+export const startApp = (store) => {
+    store.dispatch('trips/search');
+    if (store.state.auth.auth) {
+        store.dispatch('auth/fetchUser');
     }
 };

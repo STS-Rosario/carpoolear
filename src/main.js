@@ -28,6 +28,14 @@ Vue.use(VueAnalytics, {
 });
 
 Vue.use(VueMoment);
+require('./filters.js');
+
+window.store = store;
+
+if (!window.cordova) {
+    console.log('Not running in cordova');
+    store.dispatch('init');
+}
 
 let app = new Vue({
     el: '#app',
@@ -36,10 +44,4 @@ let app = new Vue({
     template: '<App/>',
     components: { App }
 });
-
-if (!window.cordova) {
-    console.log('Not running in cordova');
-    store.dispatch('init');
-}
-
 /* eslint-enable no-unused-vars */

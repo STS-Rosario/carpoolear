@@ -61,9 +61,9 @@ class UserApi extends TaggedApi {
   */
     show (id) {
         if (!id) {
-            id = '';
+            id = 'me';
         }
-        return this.post('/api/users/' + id, {});
+        return this.get('/api/users/' + id, {});
     }
 }
 

@@ -39,6 +39,26 @@ const actions = {
     },
     facebookLogin (context) {
         facebook.login();
+    },
+
+    deviceOnline (store) {
+        store.commit(types.CORDOVA_ONLINE);
+    },
+
+    deviceOffline (store) {
+        store.commit(types.CORDOVA_OFFLINE);
+    },
+
+    onPausa (store) {
+        // do staff
+    },
+
+    onResumen (store) {
+        // do staff
+    },
+
+    onBackButton (store) {
+        // do staff
     }
 };
 

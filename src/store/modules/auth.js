@@ -3,6 +3,8 @@ import { AuthApi, UserApi } from '../../services/api';
 import router from '../../router';
 import cache, {keys} from '../../services/cache';
 
+import globalStore from '../index';
+
 let authApi = new AuthApi();
 let userApi = new UserApi();
 
@@ -23,18 +25,20 @@ const getters = {
 
 // actions
 
+function onLoggin (store, token) {
+    store.commit(types.AUTH_SET_TOKEN, token);
+    fetchUser(store);
+    globalStore.dispatch('device/register');
+    router.push({ name: 'trips' });
+}
+
 function login (store, { email, password }) {
     let creds = {};
-    Object.assign(creds, store.rootGetters['cordova/deviceData']);
-    creds.app_version = store.rootState.appVersion;
     creds.email = email;
     creds.password = password;
-    creds.password_confirmation = password;
 
-    return authApi.login(creds).then((token) => {
-        store.commit(types.AUTH_SET_TOKEN);
-        fetchUser(store);
-        router.push({ name: 'trips' });
+    return authApi.login(creds).then((response) => {
+        onLoggin(store, response.token);
     }).catch(({data, status}) => {
         console.log(data, status);
     });
@@ -42,14 +46,8 @@ function login (store, { email, password }) {
 
 // store = { commit, state, rootState, rootGetters }
 function activate (store, activationToken) {
-    let creds = {};
-    Object.assign(creds, store.rootGetters['cordova/deviceData']);
-    creds.app_version = store.rootState.appVersion;
-
-    return authApi.activate(activationToken, creds).then((token) => {
-        store.commit(types.AUTH_SET_TOKEN, token);
-        fetchUser(store);
-        router.push({ name: 'trips' });
+    return authApi.activate(activationToken, {}).then((token) => {
+        onLoggin(store, token);
     }).catch((err) => {
         if (err) {
 
@@ -80,8 +78,8 @@ function register (store, { email, password, passwordConfirmation, name, termsAn
 }
 
 function fetchUser (store) {
-    return userApi.show().then((user) => {
-        store.commit(types.AUTH_SET_USER, user);
+    return userApi.show().then((response) => {
+        store.commit(types.AUTH_SET_USER, response.data);
     }).catch(({data, status}) => {
         console.log(data, status);
     });
@@ -91,16 +89,27 @@ function retoken (store) {
     let data = {};
     data.app_version = store.rootState.appVersion;
 
-    return userApi.retoken(data).then((token) => {
-        store.commit(types.AUTH_SET_TOKEN);
-        fetchUser(store);
-        router.push({ name: 'trips' });
-    }).catch(({data, status}) => {
-        // check for no internet problems
-        console.log(data, status);
-        store.commit(types.AUTH_LOGOUT);
-        router.push({ name: 'login' });
+    return new Promise((resolve, reject) => {
+        authApi.retoken(data).then((response) => {
+            store.commit(types.AUTH_SET_TOKEN, response.token);
+            resolve();
+        }).catch(({data, status}) => {
+            // check for internet problems -> not resolve until retoken finish
+            console.log(data, status);
+            store.commit(types.AUTH_LOGOUT);
+            router.push({ name: 'login' });
+            resolve();
+        });
     });
+}
+
+function logout (store) {
+    let device = globalStore.state.device.current;
+    if (device) {
+        globalStore.dispatch('device/delete', device.id);
+    }
+    store.commit(types.AUTH_LOGOUT);
+    globalStore.commit('device/' + types.DEVICE_SET_DEVICES, []);
 }
 
 const actions = {
@@ -108,13 +117,15 @@ const actions = {
     activate,
     register,
     fetchUser,
-    retoken
+    retoken,
+    logout
 };
 
 // mutations
 const mutations = {
     [types.AUTH_SET_TOKEN] (state, token) {
         state.token = token;
+        state.auth = true;
         cache.setItem(keys.TOKEN_KEY, token);
     },
     [types.AUTH_SET_USER] (state, user) {
