@@ -6,7 +6,7 @@
       <input type="text" id="txt_user" v-model='email'/>
       <label for="txt_password">Password</label>
       <input  type="password" id="txt_password" v-model='password' />
-      <button @click="login"> Login </button>
+      <button @click="login"> Login </button> <span v-if="loading"> Loading... </span>
     </div>
   </div>
 </template>
@@ -18,7 +18,9 @@ export default {
     data () {
         return {
             email: '',
-            password: ''
+            password: '',
+            loading: false,
+            error: ''
         };
     },
     computed: {
@@ -32,9 +34,17 @@ export default {
             facebookLogin: 'cordova/facebookLogin'
         }),
         login () {
+            this.loading = true;
             let email = this.email;
             let password = this.password;
-            this.doLogin({email, password});
+            this.doLogin({email, password}).then(data => {
+                this.loading = false;
+            }, error => {
+                if (error) {
+                    this.error = error.error;
+                }
+                this.loading = false;
+            });
         }
     }
 };

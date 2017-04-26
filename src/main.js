@@ -21,6 +21,8 @@ import bootstrapCss from './styles/bootstrap/css/bootstrap.min.css';
 import cssHelpers from './styles/helpers.css';
 import css from './styles/main.css';
 
+import bus from './services/bus-event';
+
 Vue.use(VueResource);
 
 Vue.use(VueAnalytics, {
@@ -47,11 +49,13 @@ if (!window.cordova) {
     store.dispatch('init');
 }
 
-let app = new Vue({
-    el: '#app',
-    router,
-    store,
-    template: '<App/>',
-    components: { App }
+bus.on('system-ready', () => {
+    let app = new Vue({
+        el: '#app',
+        router,
+        store,
+        template: '<App/>',
+        components: { App }
+    });
 });
 /* eslint-enable no-unused-vars */

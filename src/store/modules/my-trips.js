@@ -1,12 +1,9 @@
 import {TripApi} from '../../services/api';
 import * as types from '../mutation-types';
 
-// initial state
-// shape: [{ id, quantity }]
 let tripsApi = new TripApi();
 
 const state = {
-    trips: null,
     myTrips: null,
 
     searchParams: {
@@ -19,7 +16,6 @@ const state = {
 
 // getters
 const getters = {
-    trips: state => state.trips,
     myTrips: state => state.myTrips,
     morePage: state => state.searchParams.last_page
 };

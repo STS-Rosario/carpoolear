@@ -11,7 +11,7 @@
     <div v-for="(m, index) in points">
         <span v-if="index == 0"> Origen: </span>
         <span v-if="index == points.length - 1"> Destino: </span>
-        <GmapAutocomplete :placeholder="getPlaceholder(index)"  :value="m.name" v-on:place_changed="(data) => getPlace(index, data)"> </GmapAutocomplete>
+        <GmapAutocomplete  :types="['(cities)']" :componentRestrictions="{country: 'AR'}" :placeholder="getPlaceholder(index)"  :value="m.name" v-on:place_changed="(data) => getPlace(index, data)"> </GmapAutocomplete>
    </div>
 
    <div>
@@ -25,8 +25,7 @@
     <input type="text" v-model="date">
     <br>
     <label >Hora</label>
-    <input type="text" v-model="time">
-
+    <input type="text" v-model="time">  
 
     <div>
         Lugares disponibles
@@ -82,6 +81,8 @@
 </template>
 
 <script>
+import {mapActions} from 'vuex';
+
 export default {
     name: 'new-trip',
     data () {
@@ -146,6 +147,9 @@ export default {
         }
     },
     methods: {
+        ...mapActions({
+            'createTrip': 'trips/create'
+        }),
         save () {
             this.points.forEach(p => {
                 let point = {};
@@ -157,10 +161,12 @@ export default {
             });
             this.trip.from_town = this.points[0].name;
             this.trip.to_town = this.points[this.points.length - 1].name;
-            this.trip_date = this.date + ' ' + this.time;
-            this.trip.estimated_time = this.co2;
+            this.trip.trip_date = this.date + ' ' + this.time;
+            this.trip.estimated_time = this.estimatedTimeString;
             console.log(this.trip);
+            this.createTrip(this.trip);
         },
+
         parserAddress (data) {
             let place = data;
             let addressComponents = {
@@ -185,10 +191,36 @@ export default {
             }
         },
 
+        parseGeocode (result) {
+            var address = {};
+            for (var i in result.address_components) {
+                var obj = result.address_components[i];
+                var nombre = obj.long_name;
+                switch (obj.types[0]) {
+                case 'country':
+                    address.pais = nombre;
+                    break;
+                case 'administrative_area_level_1':
+                    address.provincia = nombre;
+                    break;
+                case 'locality':
+                    address.ciudad = nombre;
+                    break;
+                case 'route':
+                    address.calle = nombre;
+                    break;
+                case 'street_number':
+                    address.numero = nombre;
+                    break;
+                };
+            }
+            return address;
+        },
+
         getPlace (i, data) {
             this.points[i].place = data;
             this.points[i].name = data.formatted_address;
-            this.points[i].json = this.parserAddress(data);
+            this.points[i].json = this.parseGeocode(data);
             this.center = this.points[i].location = {
                 lat: data.geometry.location.lat(),
                 lng: data.geometry.location.lng()

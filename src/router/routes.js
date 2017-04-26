@@ -35,7 +35,8 @@ export default [
     {
         path: '/new-trip',
         name: 'new-trip',
-        component: require('../components/views/NewTrip')
+        component: require('../components/views/NewTrip'),
+        beforeEnter: auth
     },
     {
         path: '/trips/:trip',

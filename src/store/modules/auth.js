@@ -28,7 +28,9 @@ const getters = {
 function onLoggin (store, token) {
     store.commit(types.AUTH_SET_TOKEN, token);
     fetchUser(store);
-    globalStore.dispatch('device/register');
+    if (globalStore.state.cordova.device) {
+        globalStore.dispatch('device/register');
+    }
     router.push({ name: 'trips' });
 }
 
@@ -39,8 +41,8 @@ function login (store, { email, password }) {
 
     return authApi.login(creds).then((response) => {
         onLoggin(store, response.token);
-    }).catch(({data, status}) => {
-        console.log(data, status);
+    }, ({data, status}) => {
+        return Promise.reject(data);
     });
 }
 

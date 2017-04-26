@@ -1,5 +1,6 @@
 import * as types from './mutation-types';
 import cache, {keys} from '../services/cache';
+import bus from '../services/bus-event';
 
 export const init = (store) => {
     console.log('starting application');
@@ -33,7 +34,7 @@ export const init = (store) => {
     });
 
     return Promise.all(promises).then(() => {
-        console.log('State loaded from cache', store);
+        console.log('State loaded from cache');
         if (store.state.auth.token) {
             store.dispatch('auth/retoken').then(() => startApp(store));
         } else {
@@ -43,8 +44,9 @@ export const init = (store) => {
 };
 
 export const startApp = (store) => {
-    store.dispatch('trips/search');
     if (store.state.auth.auth) {
         store.dispatch('auth/fetchUser');
     }
+    store.dispatch('trips/search');
+    bus.emit('system-ready');
 };
