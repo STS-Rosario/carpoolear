@@ -4,99 +4,41 @@ import * as types from '../mutation-types';
 let tripsApi = new TripApi();
 
 const state = {
-    myTrips: null,
-
-    searchParams: {
-        page: 1,
-        pageSize: 20,
-        lastPage: false,
-        data: null
-    }
+    driver_trip: [],
+    passenger_trip: []
 };
 
 // getters
 const getters = {
-    myTrips: state => state.myTrips,
-    morePage: state => state.searchParams.last_page
+    myTrips: state => state.driver_trip,
+    passengerTrips: state => state.passenger_trip
 };
 
 // actions
 const actions = {
-    search ({ commit, state }, data = {}) {
-        commit(types.TRIPS_RESTORE_PAGE);
-        commit(types.TRIPS_SET_SEARCH_FILTER, data);
-        data.page = state.searchParams.page;
-        data.page_size = state.searchParams.pageSize;
-
-        return tripsApi.tag(['trips']).search(data).then(response => {
-            if (response.last_page === response.current_page) {
-                commit(types.TRIPS_SET_LAST_PAGE);
-            }
-            commit(types.TRIPS_SET_TRIPS, response.data);
-        }).catch(err => {
-            console.log(err);
+    tripAsDriver (store, data) {
+        return tripsApi.myTrips(true).then(response => {
+            store.commit(types.MYTRIPS_SET_DRIVER_TRIPS, response.data);
         });
     },
 
-    nextPage ({ commit, state }, data = {}) {
-        if (!state.searchParams.last_page) {
-            commit(types.TRIPS_NEXT_PAGE);
-            let data = state.searchParams.data;
-            data.page = state.searchParams.page;
-            data.page_size = state.searchParams.pageSize;
-
-            return tripsApi.tag(['trips']).search(data).then(response => {
-                if (response.last_page === response.current_page) {
-                    commit(types.TRIPS_SET_LAST_PAGE);
-                }
-                commit(types.TRIPS_ADD_TRIPS, response.data);
-            }).catch(err => {
-                console.log(err);
-            });
-        } else {
-            return null;
-        }
-    },
-
-    create (store, data) {
-        return tripsApi.create(data).then(response => {
-            console.log(response);
-        });
-    },
-
-    getMyTrips (store, data) {
-        return tripsApi.search(data).then(response => {
-            console.log(response);
+    tripAsPassenger (store, data) {
+        return tripsApi.myTrips(false).then(response => {
+            store.commit(types.MYTRIPS_SET_PASSENGER_TRIPS, response.data);
         });
     }
 };
 
 // mutations
 const mutations = {
-    [types.TRIPS_SET_TRIPS] (state, trips) {
-        state.trips = trips;
+    [types.MYTRIPS_SET_DRIVER_TRIPS] (state, trips) {
+        state.driver_trip = trips;
     },
-    [types.TRIPS_ADD_TRIPS] (state, trips) {
-        state.trips = [...state.trips, ...trips];
+    [types.MYTRIPS_SET_PASSENGER_TRIPS] (state, trips) {
+        state.passenger_trip = trips;
     },
-    [types.TRIPS_SET_MY_TRIPS] (state, trips) {
-        state.trips = trips;
-    },
-    [types.TRIPS_ADD_MY_TRIPS] (state, trips) {
-        state.trips = [...state.trips, ...trips];
-    },
-    [types.TRIPS_NEXT_PAGE] (state) {
-        state.searchParams.page++;
-    },
-    [types.TRIPS_RESTORE_PAGE] (state) {
-        state.searchParams.last_page = false;
-        state.searchParams.page = 1;
-    },
-    [types.TRIPS_SET_SEARCH_FILTER] (state, data) {
-        state.searchParams.data = data;
-    },
-    [types.TRIPS_SET_LAST_PAGE] (state) {
-        state.searchParams.last_page = true;
+    [types.MYTRIPS_ADD_TRIPS] (state, trip) {
+        state.driver_trip.push(trip);
     }
 };
 

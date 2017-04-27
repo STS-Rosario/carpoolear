@@ -146,3 +146,29 @@ p {
     color: var(--trip-mostly-free-color);
     border-color: var(--trip-mostly-free-color);
 }
+
+.cf {
+    clear: both;
+}
+
+.header-component .header-panel-left {
+    display: inline-block;
+}
+
+.header-component .header-panel-left .header-title {
+    width: 50%;
+}
+
+.header-component .header-panel-right {
+    float: right;
+    display: inline-block;
+}
+
+.header-component .header-profile {
+    display: inline-block;
+}
+
+.header-component .header-profile .header-profile-image {
+    width: 36px;
+    height: 36px;
+}

@@ -1,8 +1,7 @@
 import {TripApi} from '../../services/api';
 import * as types from '../mutation-types';
+import globalStore from '../index';
 
-// initial state
-// shape: [{ id, quantity }]
 let tripsApi = new TripApi();
 
 const state = {
@@ -64,12 +63,7 @@ const actions = {
 
     create (store, data) {
         return tripsApi.create(data).then(response => {
-            console.log(response);
-        });
-    },
-
-    getMyTrips (store, data) {
-        return tripsApi.search(data).then(response => {
+            globalStore.commit('myTrips/' + types.MYTRIPS_ADD_TRIPS, response.data);
             console.log(response);
         });
     }
@@ -81,12 +75,6 @@ const mutations = {
         state.trips = trips;
     },
     [types.TRIPS_ADD_TRIPS] (state, trips) {
-        state.trips = [...state.trips, ...trips];
-    },
-    [types.TRIPS_SET_MY_TRIPS] (state, trips) {
-        state.trips = trips;
-    },
-    [types.TRIPS_ADD_MY_TRIPS] (state, trips) {
         state.trips = [...state.trips, ...trips];
     },
     [types.TRIPS_NEXT_PAGE] (state) {

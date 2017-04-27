@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div>
+  <div class="new-trip-component">
+    <div class="trip-type">
         <input type="radio" id="type-driver" value="0" v-model="trip.is_passenger">
         <label for="type-driver">Como conductor</label>
         <br>
@@ -8,54 +8,81 @@
         <label for="type-passenger">Como pasajero</label>
     </div>
 
-    <div v-for="(m, index) in points">
-        <span v-if="index == 0"> Origen: </span>
-        <span v-if="index == points.length - 1"> Destino: </span>
-        <GmapAutocomplete  :types="['(cities)']" :componentRestrictions="{country: 'AR'}" :placeholder="getPlaceholder(index)"  :value="m.name" v-on:place_changed="(data) => getPlace(index, data)"> </GmapAutocomplete>
+    <div class="trip-points">
+        <div v-for="(m, index) in points">
+            <span v-if="index == 0"> Origen: </span>
+            <span v-if="index == points.length - 1"> Destino: </span>
+            <GmapAutocomplete  :types="['(cities)']" :componentRestrictions="{country: 'AR'}" :placeholder="getPlaceholder(index)"  :value="m.name" v-on:place_changed="(data) => getPlace(index, data)"> </GmapAutocomplete>
+        </div>
    </div>
 
-   <div>
-        Distancia: {{distanceString}} <br>
-        Tiempo estimado: {{estimatedTimeString}} <br>   
-        CO2: {{CO2String}}
+   <div class="trip-information">
+        <ul>
+            <li>
+                Distancia: {{distanceString}}    
+            </li>
+            <li>
+                Tiempo estimado: {{estimatedTimeString}}    
+            </li>
+            <li>
+                CO2: {{CO2String}}
+            </li>
+        </ul>
    </div>
 
-   <br>
-    <label >Día</label>
-    <input type="text" v-model="date">
-    <br>
-    <label >Hora</label>
-    <input type="text" v-model="time">  
+   <div class="trip-datetime">
+        <div class="trip-date">
+            <label >Día </label>
+            <input type="text" v-model="date">
+        </div>
+        <div class="trip-time">
+            <label >Hora</label>
+            <input type="text" v-model="time">
+        </div>
+   </div>
 
-    <div>
-        Lugares disponibles
-        <input type="radio" id="seats-one" value="1" v-model="trip.total_seats">
-        <label for="seats-one">1</label>
-        <br>
-        <input type="radio" id="seats-two" value="2" v-model="trip.total_seats">
-        <label for="seats-two">2</label>
-        <br>
-        <input type="radio" id="seats-three" value="3" v-model="trip.total_seats">
-        <label for="seats-three">3</label>
-        <br>
-        <input type="radio" id="seats-four" value="4" v-model="trip.total_seats">
-        <label for="seats-four">4</label>
+    <div class="trip-seats-available">
+        <span> Lugares disponibles </span>
+        <ul>
+            <li>
+                <input type="radio" id="seats-one" value="1" v-model="trip.total_seats">
+                <label for="seats-one">1</label>    
+            </li>
+            <li>
+                <input type="radio" id="seats-two" value="2" v-model="trip.total_seats">
+                <label for="seats-two">2</label>    
+            </li>
+            <li>
+                <input type="radio" id="seats-three" value="3" v-model="trip.total_seats">
+                <label for="seats-three">3</label>    
+            </li>
+            <li>
+                <input type="radio" id="seats-four" value="4" v-model="trip.total_seats">
+                <label for="seats-four">4</label>    
+            </li>
+        </ul>
     </div>
 
-    <div>
-        Privacidad del viaje
-        <input type="radio" id="privacity-public" value="2" v-model="trip.friendship_type_id">
-        <label for="privacity-public">Publicos</label>
-        <br>
-        <input type="radio" id="privacity-friend" value="0" v-model="trip.friendship_type_id">
-        <label for="privacity-friend">Amigos</label>
-        <br>
-        <input type="radio" id="privacity-friendofriend" value="1" v-model="trip.friendship_type_id">
-        <label for="privacity-friendofriend">Amigos de Amigos</label> 
+    <div class="trip-privacity">
+        <span> Privacidad del viaje </span>
+        <ul>
+            <li>    
+                <input type="radio" id="privacity-public" value="2" v-model="trip.friendship_type_id">
+                <label for="privacity-public">Publicos</label>    
+            </li>
+            <li>
+                <input type="radio" id="privacity-friend" value="0" v-model="trip.friendship_type_id">
+                <label for="privacity-friend">Amigos</label>    
+            </li>
+            <li>    
+                <input type="radio" id="privacity-friendofriend" value="1" v-model="trip.friendship_type_id">
+                <label for="privacity-friendofriend">Amigos de Amigos</label>     
+            </li>
+        </ul>
     </div>
 
-    <div>
-        Comentario de pasajero
+    <div class="trip-comment">
+        <span> Comentario de pasajero </span>
         <textarea v-model="trip.description"></textarea>
     </div>
 
@@ -63,7 +90,7 @@
 
     <gmap-map
         :center="center"
-        :zoom="7"
+        :zoom="zoom"
         style="width: 500px; height: 300px"
         ref="map"
     >
@@ -87,7 +114,8 @@ export default {
     name: 'new-trip',
     data () {
         return {
-            center: {lat: -10.0, lng: 10.0},
+            zoom: 4,
+            center: {lat: -29.0, lng: -60.0},
             points: [
                 {
                     name: '',

@@ -39,6 +39,7 @@ export const init = (store) => {
             store.dispatch('auth/retoken').then(() => startApp(store));
         } else {
             startApp(store);
+            console.log();
         }
     });
 };
@@ -48,5 +49,7 @@ export const startApp = (store) => {
         store.dispatch('auth/fetchUser');
     }
     store.dispatch('trips/search');
+    store.dispatch('myTrips/tripAsDriver');
+    store.dispatch('myTrips/tripAsPassenger');
     bus.emit('system-ready');
 };
