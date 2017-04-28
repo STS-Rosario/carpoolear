@@ -33,9 +33,22 @@ export default [
         component: require('../components/views/Trips')
     },
     {
-        path: '/trips/:trip',
+        path: '/trips/create',
+        name: 'new-trip',
+        component: require('../components/views/NewTrip'),
+        beforeEnter: auth
+    },
+    {
+        path: '/trips/update/:id',
+        name: 'update-trip',
+        component: require('../components/views/NewTrip'),
+        beforeEnter: auth,
+        props: true
+    },
+    {
+        path: '/trips/:id',
         name: 'detail_trip',
-        component: require('../components/Trip'),
+        component: require('../components/views/Trip'),
         beforeEnter: auth,
         props: true
     },

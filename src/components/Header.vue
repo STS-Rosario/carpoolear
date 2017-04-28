@@ -1,19 +1,28 @@
 <template>
     <header class="header-component">
-        <h1>Carpoolear</h1>
-        <button @click="share" type="button">Invitar amigos</button>
-        <router-link :to=" {name: 'trips'}">Viajes</router-link>
+        <div class="header-panel-left">
+            <h1 class="header-title"> Carpoolear </h1>
+        </div>
+        <div class="header-panel-right">
+            <!-- Mover al dropdonw despues -->
+            <button v-if="logged" @click="logout" >Logout</button>
 
-        <router-link v-if="!logged" :to=" {name: 'login'}">Login</router-link>
-        <router-link v-if="!logged" :to=" {name: 'register'}">Register</router-link>
+            <button @click="share" type="button">Invitar amigos</button>
 
-        <button v-if="logged" @click="logout" >Logout</button>
+            <router-link :to="{name: 'trips'}">Viajes</router-link>
+            
+            <router-link v-if="!logged" :to="{name: 'login'}">Login</router-link>
+            <router-link v-if="!logged" :to="{name: 'register'}">Register</router-link>
+            
+            <div class="header-profile" v-if="user">
+                <span > {{user.name}} </span>
+                <img class="header-profile-image"  :src=" user.image | profile-image " alt="">
+            </div>
 
-        <span v-if="user">
-            {{user.name}}
-            <img :src=" user.image | profile-image " alt="">
-        </span>
-         
+            <router-link v-if="logged" :to="{name: 'new-trip'}">Crear Viaje</router-link>
+
+        </div>
+        <div class="cf"></div>
     </header>
 </template>
 
