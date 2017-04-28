@@ -1,117 +1,139 @@
 <template>
-  <div class="new-trip-component">
-    <div class="trip-type">
-        <input type="radio" id="type-driver" value="0" v-model="trip.is_passenger">
-        <label for="type-driver">Como conductor</label>
-        <br>
-        <input type="radio" id="type-passenger" value="1" v-model="trip.is_passenger">
-        <label for="type-passenger">Como pasajero</label>
-    </div>
+    <div class="new-trip-component">
+        <div class="row">
+            <div class="col-xs-8">
+                <div class="trip-type">
+                    <input type="radio" id="type-driver" value="0" v-model="trip.is_passenger">
+                    <label for="type-driver">Como conductor</label>
+                    <br>
+                    <input type="radio" id="type-passenger" value="1" v-model="trip.is_passenger">
+                    <label for="type-passenger">Como pasajero</label>
+                </div>
+            </div>
+            <div class="col-xs-8">
+                <div class="trip-points">
+                    <div v-for="(m, index) in points">
+                        <span v-if="index == 0"> Origen: </span>
+                        <span v-if="index == points.length - 1"> Destino: </span>
+                        <GmapAutocomplete  :types="['(cities)']" :componentRestrictions="{country: 'AR'}" :placeholder="getPlaceholder(index)"  :value="m.name" v-on:place_changed="(data) => getPlace(index, data)"> </GmapAutocomplete>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-8">
+                <div class="trip-information">
+                        <ul>
+                            <li>
+                                Distancia: {{distanceString}}    
+                            </li>
+                            <li>
+                                Tiempo estimado: {{estimatedTimeString}}    
+                            </li>
+                            <li>
+                                CO2: {{CO2String}}
+                            </li>
+                        </ul>
+                </div>
+            </div>
+        </div> 
+        <div class="row">
+            <div class="col-xs-8">
+                Me comprometo a no lucrar con el viaje
+            </div>
+            <div class="col-xs-8"> 
+                <div class="trip-datetime">
+                    <div class="trip-date">
+                        <label >Día </label>
+                        <input type="text" v-model="date">
+                    </div>
+                    <div class="trip-time">
+                        <label >Hora</label>
+                        <input type="text" v-model="time">
+                    </div>
+                </div>
+                <div class="trip-seats-available">
+                    <span> Lugares disponibles </span>
+                    <ul>
+                        <li>
+                            <input type="radio" id="seats-one" value="1" v-model="trip.total_seats">
+                            <label for="seats-one">1</label>    
+                        </li>
+                        <li>
+                            <input type="radio" id="seats-two" value="2" v-model="trip.total_seats">
+                            <label for="seats-two">2</label>    
+                        </li>
+                        <li>
+                            <input type="radio" id="seats-three" value="3" v-model="trip.total_seats">
+                            <label for="seats-three">3</label>    
+                        </li>
+                        <li>
+                            <input type="radio" id="seats-four" value="4" v-model="trip.total_seats">
+                            <label for="seats-four">4</label>    
+                        </li>
+                    </ul>
+                </div>
+                <div class="trip-comment">
+                    <span> Comentario de pasajero </span>
+                    <textarea v-model="trip.description"></textarea>
+                </div>
+            </div>
+            <div class="col-xs-8">
+                <div class="trip-privacity">
+                    <span> Privacidad del viaje </span>
+                    <ul>
+                        <li>    
+                            <input type="radio" id="privacity-public" value="2" v-model="trip.friendship_type_id">
+                            <label for="privacity-public">Publicos</label>    
+                        </li>
+                        <li>
+                            <input type="radio" id="privacity-friend" value="0" v-model="trip.friendship_type_id">
+                            <label for="privacity-friend">Amigos</label>    
+                        </li>
+                        <li>    
+                            <input type="radio" id="privacity-friendofriend" value="1" v-model="trip.friendship_type_id">
+                            <label for="privacity-friendofriend">Amigos de Amigos</label>     
+                        </li>
+                    </ul>
+                </div>
 
-    <div class="trip-points">
-        <div v-for="(m, index) in points">
-            <span v-if="index == 0"> Origen: </span>
-            <span v-if="index == points.length - 1"> Destino: </span>
-            <GmapAutocomplete  :types="['(cities)']" :componentRestrictions="{country: 'AR'}" :placeholder="getPlaceholder(index)"  :value="m.name" v-on:place_changed="(data) => getPlace(index, data)"> </GmapAutocomplete>
+                <button class="trip-create" @click="save">CREAR</button>
+
+            </div>
+        </div> 
+        <div class="row">
+            <div class="col-xs-24"> 
+                <gmap-map
+                    :center="center"
+                    :zoom="zoom"
+                    style="width: 100%; height: 300px"
+                    ref="map"
+                >
+                    <gmap-marker
+                    :key="index"
+                    v-for="(m, index) in points"
+                    :position="m.location"
+                    :clickable="true"
+                    :draggable="true"
+                    @click="center=m.location"
+                    v-if="m.location"
+                    ></gmap-marker>
+                </gmap-map>        
+            </div> 
         </div>
-   </div>
-
-   <div class="trip-information">
-        <ul>
-            <li>
-                Distancia: {{distanceString}}    
-            </li>
-            <li>
-                Tiempo estimado: {{estimatedTimeString}}    
-            </li>
-            <li>
-                CO2: {{CO2String}}
-            </li>
-        </ul>
-   </div>
-
-   <div class="trip-datetime">
-        <div class="trip-date">
-            <label >Día </label>
-            <input type="text" v-model="date">
-        </div>
-        <div class="trip-time">
-            <label >Hora</label>
-            <input type="text" v-model="time">
-        </div>
-   </div>
-
-    <div class="trip-seats-available">
-        <span> Lugares disponibles </span>
-        <ul>
-            <li>
-                <input type="radio" id="seats-one" value="1" v-model="trip.total_seats">
-                <label for="seats-one">1</label>    
-            </li>
-            <li>
-                <input type="radio" id="seats-two" value="2" v-model="trip.total_seats">
-                <label for="seats-two">2</label>    
-            </li>
-            <li>
-                <input type="radio" id="seats-three" value="3" v-model="trip.total_seats">
-                <label for="seats-three">3</label>    
-            </li>
-            <li>
-                <input type="radio" id="seats-four" value="4" v-model="trip.total_seats">
-                <label for="seats-four">4</label>    
-            </li>
-        </ul>
-    </div>
-
-    <div class="trip-privacity">
-        <span> Privacidad del viaje </span>
-        <ul>
-            <li>    
-                <input type="radio" id="privacity-public" value="2" v-model="trip.friendship_type_id">
-                <label for="privacity-public">Publicos</label>    
-            </li>
-            <li>
-                <input type="radio" id="privacity-friend" value="0" v-model="trip.friendship_type_id">
-                <label for="privacity-friend">Amigos</label>    
-            </li>
-            <li>    
-                <input type="radio" id="privacity-friendofriend" value="1" v-model="trip.friendship_type_id">
-                <label for="privacity-friendofriend">Amigos de Amigos</label>     
-            </li>
-        </ul>
-    </div>
-
-    <div class="trip-comment">
-        <span> Comentario de pasajero </span>
-        <textarea v-model="trip.description"></textarea>
-    </div>
-
-    <button @click="save">CREAR</button>
-
-    <gmap-map
-        :center="center"
-        :zoom="zoom"
-        style="width: 500px; height: 300px"
-        ref="map"
-    >
-        <gmap-marker
-        :key="index"
-        v-for="(m, index) in points"
-        :position="m.location"
-        :clickable="true"
-        :draggable="true"
-        @click="center=m.location"
-        v-if="m.location"
-        ></gmap-marker>
-    </gmap-map>
   </div>
 </template>
 
 <script>
-import {mapActions} from 'vuex';
+import {mapActions, mapGetters} from 'vuex';
 
 export default {
     name: 'new-trip',
+    props: {
+        'id': {
+            type: Number,
+            required: false
+        }
+    },
+
     data () {
         return {
             zoom: 4,
@@ -147,11 +169,11 @@ export default {
                 'car_id': null,
                 'enc_path': '',
                 'points': [] /* address json_address lat lng */
-            }
+            },
+            updatingTrip: null
         };
     },
     mounted () {
-        window.testing = this;
         this.$refs.map.$mapCreated.then(() => {
             console.log('Map was created');
             /* eslint-disable no-undef */
@@ -159,8 +181,14 @@ export default {
             this.directionsDisplay = new google.maps.DirectionsRenderer();
             this.directionsDisplay.setMap(this.$refs.map.$mapObject);
         });
+        if (this.id) {
+            this.loadTrip();
+        }
     },
     computed: {
+        ...mapGetters({
+            user: 'auth/user'
+        }),
         distanceString () {
             return Math.floor(this.trip.distance / 1000) + ' kms';
         },
@@ -176,8 +204,26 @@ export default {
     },
     methods: {
         ...mapActions({
-            'createTrip': 'trips/create'
+            'createTrip': 'trips/create',
+            'getTrip': 'getTrip'
         }),
+
+        loadTrip () {
+            this.getTrip(this.id).then(trip => {
+                console.log(trip);
+                if (this.user.id === trip.user.id) {
+                    this.updatingTrip = trip;
+                } else {
+                    this.$router.replace({ name: 'trips' });
+                }
+            }).catch(error => {
+                console.log(error);
+                if (error) {
+                    this.$router.replace({ name: 'trips' });
+                }
+            });
+        },
+
         save () {
             this.points.forEach(p => {
                 let point = {};

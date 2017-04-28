@@ -18,6 +18,10 @@ class TripApi extends TaggedApi {
         return this.delete('/api/trips/' + data.id);
     }
 
+    show (id) {
+        return this.get('/api/trips/' + id);
+    }
+
     myTrips (asDriver) {
         return this.get('/api/users/my-trips', { 'as_driver': asDriver });
     }

@@ -1,28 +1,58 @@
 <template>  
-
+    <div v-if="trip">
+        Tengo un trip
+        <router-link v-if="user.id == trip.user.id" :to="{name: 'update-trip', params: { id: trip.id}}"> Editar  </router-link>
+    </div>
+    <div v-else>
+        Buscando un trip
+    </div>
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex';
 export default {
-    name: 'trips',
+    name: 'trip',
+    data () {
+        return {
+            trip: null
+        };
+    },
+
     methods: {
         ...mapActions({
-            search: 'trips/search'
-        })
+            getTrip: 'getTrip'
+        }),
+
+        loadTrip () {
+            this.getTrip(this.id).then(trip => {
+                console.log(trip);
+                this.trip = trip;
+            }).catch(error => {
+                if (error) {
+                    // Ver que hacer
+                    this.trip = null;
+                }
+            });
+        }
     },
+
     mounted () {
-        // this.search();
+        this.loadTrip();
     },
+
+    beforeUpdate () {
+        this.loadTrip();
+    },
+
     computed: {
         ...mapGetters({
-            trips: 'trips/trips',
-            morePages: 'trips/morePage',
             user: 'auth/user'
         })
     },
+
     components: {
 
     },
+
     props: [
         'id'
     ]
