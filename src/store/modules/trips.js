@@ -6,7 +6,6 @@ let tripsApi = new TripApi();
 
 const state = {
     trips: null,
-    myTrips: null,
 
     searchParams: {
         page: 1,
@@ -64,7 +63,15 @@ const actions = {
     create (store, data) {
         return tripsApi.create(data).then(response => {
             globalStore.commit('myTrips/' + types.MYTRIPS_ADD_TRIPS, response.data);
-            console.log(response);
+            store.dispatch('search', store.state.searchParams.data);
+        });
+    },
+
+    update (store, data) {
+        return tripsApi.update(data).then(response => {
+            globalStore.commit('myTrips/' + types.MYTRIPS_UPDATE_TRIPS, response.data);
+            store.dispatch('search', store.state.searchParams.data);
+            // globalStore.commit(types.TRIPS_UPDATE_TRIPS, response.data);
         });
     }
 };
@@ -89,6 +96,13 @@ const mutations = {
     },
     [types.TRIPS_SET_LAST_PAGE] (state) {
         state.searchParams.last_page = true;
+    },
+    [types.TRIPS_UPDATE_TRIPS] (state, trip) {
+        for (let i = 0; i < state.trips.length; i++) {
+            if (state.trips[i].id === trip.id) {
+                state.trips[i] = trip;
+            }
+        }
     }
 };
 

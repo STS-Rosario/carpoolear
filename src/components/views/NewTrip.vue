@@ -95,7 +95,10 @@
                     </ul>
                 </div>
 
-                <button class="trip-create" @click="save">CREAR</button>
+                <button class="trip-create" @click="save">
+                    <span v-if="!updatingTrip">CREAR</span>
+                    <span v-else>Actualizar</span>
+                </button>
 
             </div>
         </div> 
@@ -129,7 +132,7 @@ export default {
     name: 'new-trip',
     props: {
         'id': {
-            type: Number,
+            type: [String, Number],
             required: false
         }
     },
@@ -154,7 +157,7 @@ export default {
             ],
             date: '',
             time: '',
-            duraction: '',
+            duration: '',
             trip: {
                 'is_passenger': 0,
                 'from_town': '',
@@ -167,23 +170,24 @@ export default {
                 'co2': 0.0,
                 'description': '',
                 'car_id': null,
-                'enc_path': '',
+                'enc_path': '123',
                 'points': [] /* address json_address lat lng */
             },
             updatingTrip: null
         };
     },
     mounted () {
+        let self = this;
         this.$refs.map.$mapCreated.then(() => {
             console.log('Map was created');
             /* eslint-disable no-undef */
             this.directionsService = new google.maps.DirectionsService();
             this.directionsDisplay = new google.maps.DirectionsRenderer();
             this.directionsDisplay.setMap(this.$refs.map.$mapObject);
+            if (self.id) {
+                self.loadTrip();
+            }
         });
-        if (this.id) {
-            this.loadTrip();
-        }
     },
     computed: {
         ...mapGetters({
@@ -193,7 +197,7 @@ export default {
             return Math.floor(this.trip.distance / 1000) + ' kms';
         },
         estimatedTimeString () {
-            let totalMinutes = Math.floor(this.duraction / 60);
+            let totalMinutes = Math.floor(this.duration / 60);
             let minutes = Math.floor(totalMinutes % 60);
             let hour = Math.floor(totalMinutes / 60);
             return (hour < 10 ? '0' : '') + hour + ':' + (minutes < 10 ? '0' : '') + minutes;
@@ -205,14 +209,41 @@ export default {
     methods: {
         ...mapActions({
             'createTrip': 'trips/create',
+            'updateTrip': 'trips/update',
             'getTrip': 'getTrip'
         }),
+
+        restoreData (trip) {
+            this.points = [];
+            trip.points.forEach(p => {
+                let point = {
+                    name: p.address,
+                    json: p.json_address,
+                    location: {
+                        lat: p.lat,
+                        lng: p.lng
+                    },
+                    place: null
+                };
+                this.points.push(point);
+            });
+            this.date = trip.trip_date.split(' ')[0];
+            this.time = trip.trip_date.split(' ')[1];
+            this.trip.is_passenger = trip.is_passenger ? 1 : 0;
+            this.trip.total_seats = trip.total_seats;
+            this.trip.friendship_type_id = trip.friendship_type_id;
+            this.trip.distance = trip.distance;
+            this.trip.description = trip.description;
+
+            this.calcRoute();
+        },
 
         loadTrip () {
             this.getTrip(this.id).then(trip => {
                 console.log(trip);
                 if (this.user.id === trip.user.id) {
                     this.updatingTrip = trip;
+                    this.restoreData(trip);
                 } else {
                     this.$router.replace({ name: 'trips' });
                 }
@@ -225,6 +256,7 @@ export default {
         },
 
         save () {
+            this.trip.points = [];
             this.points.forEach(p => {
                 let point = {};
                 point.address = p.name;
@@ -238,30 +270,11 @@ export default {
             this.trip.trip_date = this.date + ' ' + this.time;
             this.trip.estimated_time = this.estimatedTimeString;
             console.log(this.trip);
-            this.createTrip(this.trip);
-        },
-
-        parserAddress (data) {
-            let place = data;
-            let addressComponents = {
-                street_number: 'short_name',
-                route: 'long_name',
-                locality: 'long_name',
-                administrative_area_level_1: 'short_name',
-                country: 'long_name',
-                postal_code: 'short_name'
-            };
-            let returnData = {};
-            if (place.address_components !== undefined) {
-                // Get each component of the address from the place details
-                for (let i = 0; i < place.address_components.length; i++) {
-                    let addressType = place.address_components[i].types[0];
-                    if (addressComponents[addressType]) {
-                        let val = place.address_components[i][addressComponents[addressType]];
-                        returnData[addressType] = val;
-                    }
-                }
-                return returnData;
+            if (!this.updatingTrip) {
+                this.createTrip(this.trip);
+            } else {
+                this.trip.id = this.updatingTrip.id;
+                this.updateTrip(this.trip);
             }
         },
 
@@ -314,7 +327,7 @@ export default {
 
         calcRoute () {
             for (let i = 0; i < this.points.length; i++) {
-                if (!this.points[i].place) {
+                if (!this.points[i].name) {
                     return;
                 }
             }
@@ -340,7 +353,7 @@ export default {
                         totalDuration += legs[i].duration.value;
                     }
                     this.trip.distance = totalDistance;
-                    this.duraction = totalDuration;
+                    this.duration = totalDuration;
                     this.co2 = 0.0; /* agregar formula */
                 } else {
                     console.log('Directions request failed due to ' + status);

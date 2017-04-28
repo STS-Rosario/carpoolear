@@ -39,6 +39,13 @@ const mutations = {
     },
     [types.MYTRIPS_ADD_TRIPS] (state, trip) {
         state.driver_trip.push(trip);
+    },
+    [types.MYTRIPS_UPDATE_TRIPS] (state, trip) {
+        for (let i = 0; i < state.driver_trip.length; i++) {
+            if (state.driver_trip[i].id === trip.id) {
+                state.driver_trip[i] = trip;
+            }
+        }
     }
 };
 
