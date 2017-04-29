@@ -1,6 +1,6 @@
 <template>  
     <div v-if="trip">
-        Tengo un trip
+        Tengo un trip {{trip.id}}
         <router-link v-if="user.id == trip.user.id" :to="{name: 'update-trip', params: { id: trip.id}}"> Editar  </router-link>
     </div>
     <div v-else>
@@ -23,6 +23,7 @@ export default {
         }),
 
         loadTrip () {
+            console.log(this.id);
             this.getTrip(this.id).then(trip => {
                 console.log(trip);
                 this.trip = trip;
@@ -39,8 +40,11 @@ export default {
         this.loadTrip();
     },
 
-    beforeUpdate () {
-        this.loadTrip();
+    watch: {
+        'id': function (value) {
+            console.log('watiching');
+            this.loadTrip();
+        }
     },
 
     computed: {

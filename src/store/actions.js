@@ -48,17 +48,17 @@ export const init = (store) => {
 };
 
 export const startApp = (store) => {
+    store.dispatch('trips/search');
     if (store.state.auth.auth) {
         store.dispatch('auth/fetchUser');
+        store.dispatch('myTrips/tripAsDriver');
+        store.dispatch('myTrips/tripAsPassenger');
     }
-    store.dispatch('trips/search');
-    store.dispatch('myTrips/tripAsDriver');
-    store.dispatch('myTrips/tripAsPassenger');
     bus.emit('system-ready');
 };
 
 export const getTrip = (store, id) => {
-    let trips = store.state.trips.trips;
+    let trips = store.getters['trips/trips'];
     if (trips) {
         for (let i = 0; i < trips.length; i++) {
             if (trips[i].id === id) {
