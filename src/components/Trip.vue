@@ -18,19 +18,14 @@
             </div>
             <template  v-if="user">
               <div class="col-xs-5">
-                <template v-if="trip.user.image !== ''">
-                  <img alt="" :src="trip.user.image" class="trip_driver_img circle-box" />
-                </template>
-                <template v-else>
-                  <img alt="" src="/static/img/default-profile.png" class="trip_driver_img circle-box" />
-                </template>
+                  <img alt="" :src="trip.user.image | profile-image" class="trip_driver_img circle-box" />
               </div>
               <div class="col-xs-16">
                 <div class="trip_driver_name" >
                   {{ trip.user.name }}
                 </div>
                 <div class="trip_driver_ratings">
-                  X calificaciones
+                  {{ trip.user.positive_ratings + trip.user.negative_ratings }} calificaciones
                 </div>
               </div>
             </template>
