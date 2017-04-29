@@ -6,11 +6,11 @@
             </div>
             <div class="header_panel-right">
                 <!-- Mover al dropdonw despues -->
-                <button v-if="logged" @click="logout" >Logout</button>
+                <button v-if="logged" @click="logout" class="btn btn-link">Logout</button>
 
-                <button @click="share" type="button">Invitar amigos</button>
+                <button @click="share" type="button" class="btn btn-link">Invitar amigos</button>
 
-                <router-link :to="{name: 'trips'}">Viajes</router-link>
+                <router-link :to="{name: 'trips'}" class="btn btn-link">Viajes</router-link>
                 
                 <router-link v-if="!logged" :to="{name: 'login'}">Login</router-link>
                 <router-link v-if="!logged" :to="{name: 'register'}">Register</router-link>

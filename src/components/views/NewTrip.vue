@@ -1,21 +1,24 @@
 <template>
-    <div class="new-trip-component">
+    <div class="new-trip-component form form-trip">
         <div class="row">
             <div class="col-xs-8">
-                <div class="trip-type">
-                    <input type="radio" id="type-driver" value="0" v-model="trip.is_passenger">
-                    <label for="type-driver">Como conductor</label>
-                    <br>
-                    <input type="radio" id="type-passenger" value="1" v-model="trip.is_passenger">
-                    <label for="type-passenger">Como pasajero</label>
-                </div>
+                <fieldset class="trip-type-selection">
+                    <div class="radio-option">
+                        <input type="radio" id="type-driver" value="0" v-model="trip.is_passenger">
+                        <label for="type-driver"  class="control-label">Como conductor</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="type-passenger" value="1" v-model="trip.is_passenger">
+                        <label for="type-passenger" class="control-label">Como pasajero</label>
+                    </div>
+                </fieldset>
             </div>
             <div class="col-xs-8">
                 <div class="trip-points">
                     <div v-for="(m, index) in points">
-                        <span v-if="index == 0"> Origen: </span>
-                        <span v-if="index == points.length - 1"> Destino: </span>
-                        <GmapAutocomplete  :types="['(cities)']" :componentRestrictions="{country: 'AR'}" :placeholder="getPlaceholder(index)"  :value="m.name" v-on:place_changed="(data) => getPlace(index, data)"> </GmapAutocomplete>
+                        <span v-if="index == 0">Origen</span>
+                        <span v-if="index == points.length - 1">Destino</span>
+                        <GmapAutocomplete  :types="['(cities)']" :componentRestrictions="{country: 'AR'}" :placeholder="getPlaceholder(index)"  :value="m.name" v-on:place_changed="(data) => getPlace(index, data)" class="form-control"> </GmapAutocomplete>
                     </div>
                 </div>
             </div>
@@ -37,17 +40,18 @@
         </div> 
         <div class="row">
             <div class="col-xs-8">
-                Me comprometo a no lucrar con el viaje
+                <input type="checkbox" id="no-lucrar" />
+                <label for="no-lucrar">Me comprometo a no lucrar con el viaje</label>
             </div>
             <div class="col-xs-8"> 
                 <div class="trip-datetime">
                     <div class="trip-date">
-                        <label >Día </label>
-                        <input type="text" v-model="date">
+                        <label for="date">Día </label>
+                        <input type="text" v-model="date" class="form-control" id="date" />
                     </div>
                     <div class="trip-time">
-                        <label >Hora</label>
-                        <input type="text" v-model="time">
+                        <label for="time">Hora</label>
+                        <input type="text" v-model="time" class="form-control" id="time" />
                     </div>
                 </div>
                 <div class="trip-seats-available">
