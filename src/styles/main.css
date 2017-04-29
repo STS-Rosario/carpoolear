@@ -1,11 +1,16 @@
 :root {
   --main-background: #F0F0F0;
   --main-font-color: #222222;
+
   --medium-font-color: #666666;
   --soft-font-color: #BBBBBB;
+
   --trip-almost-fill-color: #D72521;
   --trip-mostly-free-color: #91B64C;
   --trip-half-free-color: #FE9900;
+
+  --secondary-background: #016587;
+  --secondary-font-color: #F6F6F6;
 }
 html {
     font-size: 100%;
@@ -21,6 +26,86 @@ p {
     font-size: 1rem; 
     line-height: 1.5;
 }
+
+/* Overriding Bootstrap */
+.btn-primary {
+    border-radius: 0;
+    padding: 1em;
+
+    border: 2px solid #FFFFFF;
+    color: #FFFFFF;
+
+    background: var(--trip-almost-fill-color);
+
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+.btn-primary:hover {
+    color: #FFFFFF;
+    background: rgba(215,37,33, 0.8);
+    border-color: #FFFFFF;;
+}
+.btn-primary:focus {
+    border-color: #000000;
+    color: #000000;
+    background: var(--trip-almost-fill-color);
+}
+.btn-primary:active {
+    border-color: #000000;
+    color: #000000;
+    background: rgba(215,37,33, 0.8);
+}
+
+.btn-primary:active:hover, 
+.btn-primary.active:hover, 
+.open > .dropdown-toggle.btn-primary:hover, 
+.btn-primary:active:focus, 
+.btn-primary.active:focus, 
+.open > .dropdown-toggle.btn-primary:focus, 
+.btn-primary.focus:active, 
+.btn-primary.active.focus, 
+.open > .dropdown-toggle.btn-primary.focus {
+    border-color: #000000;
+    color: #000000;
+    background: rgba(215,37,33, 0.8);
+}
+/* -------------------- */
+
+.header {
+    background: var(--secondary-background);
+    color: var(--secondary-font-color);
+
+    margin: 1.5em 0;
+
+}
+.header_title {
+    text-transform: lowercase;
+    font-style: normal;
+}
+.header .header_panel-right,
+.header .header_panel-left {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.header .header_panel-left .header_title {
+    width: 50%;
+}
+
+.header .header_panel-right {
+    float: right;
+}
+
+.header .header_profile {
+    display: inline-block;
+}
+
+.header .header_profile .header_profile_image {
+    width: 36px;
+    height: 36px;
+}
+
+
 .card-trip {
     box-shadow: 0 0 4px 1px #CCC; 
     border-radius: .4em;
@@ -149,26 +234,4 @@ p {
 
 .cf {
     clear: both;
-}
-
-.header-component .header-panel-left {
-    display: inline-block;
-}
-
-.header-component .header-panel-left .header-title {
-    width: 50%;
-}
-
-.header-component .header-panel-right {
-    float: right;
-    display: inline-block;
-}
-
-.header-component .header-profile {
-    display: inline-block;
-}
-
-.header-component .header-profile .header-profile-image {
-    width: 36px;
-    height: 36px;
 }
