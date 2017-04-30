@@ -14,25 +14,28 @@
                 </fieldset>
             </div>
             <div class="col-xs-8">
-                <div class="trip-points">
-                    <div v-for="(m, index) in points">
-                        <span v-if="index == 0">Origen</span>
-                        <span v-if="index == points.length - 1">Destino</span>
-                        <GmapAutocomplete  :types="['(cities)']" :componentRestrictions="{country: 'AR'}" :placeholder="getPlaceholder(index)"  :value="m.name" v-on:place_changed="(data) => getPlace(index, data)" class="form-control"> </GmapAutocomplete>
+                <div class="trip_points">
+                    <div v-for="(m, index) in points" class="trip_point">
+                        <span v-if="index == 0" class="sr-only">Origen</span>
+                        <span v-if="index == points.length - 1" class="sr-only">Destino</span>
+                        <GmapAutocomplete  :types="['(cities)']" :componentRestrictions="{country: 'AR'}" :placeholder="getPlaceholder(index)"  :value="m.name" v-on:place_changed="(data) => getPlace(index, data)" class="form-control form-control-with-icon form-control-map-autocomplete"> </GmapAutocomplete>
                     </div>
                 </div>
             </div>
             <div class="col-xs-8">
                 <div class="trip-information">
-                        <ul>
+                        <ul class="no-bullet">
                             <li>
-                                Distancia: {{distanceString}}    
+                                <div>Distancia</div>
+                                <div>{{distanceString}}</div>
                             </li>
                             <li>
-                                Tiempo estimado: {{estimatedTimeString}}    
+                                <div>Tiempo estimado</div>
+                                <div>{{estimatedTimeString}}  </div>
                             </li>
                             <li>
-                                CO2: {{CO2String}}
+                                <div>CO2</div>
+                                <div>{{CO2String}}</div>
                             </li>
                         </ul>
                 </div>
@@ -44,46 +47,46 @@
                 <label for="no-lucrar">Me comprometo a no lucrar con el viaje</label>
             </div>
             <div class="col-xs-8"> 
-                <div class="trip-datetime">
-                    <div class="trip-date">
-                        <label for="date">Día </label>
-                        <input type="text" v-model="date" class="form-control" id="date" />
+                <div class="trip_datetime">
+                    <div class="trip_date">
+                        <label for="date" class="sr-only">Día </label>
+                        <input type="text" v-model="date" class="form-control form-control-with-icon form-control-date" id="date" placeholder="Día" />
                     </div>
-                    <div class="trip-time">
-                        <label for="time">Hora</label>
-                        <input type="text" v-model="time" class="form-control" id="time" />
+                    <div class="trip_time">
+                        <label for="time" class="sr-only">Hora</label>
+                        <input type="text" v-model="time" class="form-control form-control-with-icon form-control-time" id="time" placeholder="Hora" />
                     </div>
                 </div>
-                <div class="trip-seats-available">
-                    <span> Lugares disponibles </span>
-                    <ul>
-                        <li>
+                <div class="trip_seats-available">
+                    <fieldset>
+                        <legend>Lugares disponibles</legend>
+                        <span class="radio-inline">
                             <input type="radio" id="seats-one" value="1" v-model="trip.total_seats">
                             <label for="seats-one">1</label>    
-                        </li>
-                        <li>
+                        </span>
+                        <span class="radio-inline">
                             <input type="radio" id="seats-two" value="2" v-model="trip.total_seats">
                             <label for="seats-two">2</label>    
-                        </li>
-                        <li>
+                        </span>
+                        <span class="radio-inline">
                             <input type="radio" id="seats-three" value="3" v-model="trip.total_seats">
                             <label for="seats-three">3</label>    
-                        </li>
-                        <li>
+                        </span>
+                        <span class="radio-inline">
                             <input type="radio" id="seats-four" value="4" v-model="trip.total_seats">
                             <label for="seats-four">4</label>    
-                        </li>
-                    </ul>
+                        </span>
+                    </fieldset>
                 </div>
                 <div class="trip-comment">
-                    <span> Comentario de pasajero </span>
-                    <textarea v-model="trip.description"></textarea>
+                    <label for="trip_comment"> Comentario de pasajero </label>
+                    <textarea v-model="trip.description" id="trp_comment" class="form-control"></textarea>
                 </div>
             </div>
             <div class="col-xs-8">
                 <div class="trip-privacity">
                     <span> Privacidad del viaje </span>
-                    <ul>
+                    <ul class="no-bullet">
                         <li>    
                             <input type="radio" id="privacity-public" value="2" v-model="trip.friendship_type_id">
                             <label for="privacity-public">Publicos</label>    
@@ -99,7 +102,7 @@
                     </ul>
                 </div>
 
-                <button class="trip-create" @click="save">
+                <button class="trip-create btn btn-primary btn-lg" @click="save">
                     <span v-if="!updatingTrip">CREAR</span>
                     <span v-else>Actualizar</span>
                 </button>
@@ -198,7 +201,7 @@ export default {
             user: 'auth/user'
         }),
         distanceString () {
-            return Math.floor(this.trip.distance / 1000) + ' kms';
+            return Math.floor(this.trip.distance / 1000) + ' Kms';
         },
         estimatedTimeString () {
             let totalMinutes = Math.floor(this.duration / 60);
@@ -207,7 +210,7 @@ export default {
             return (hour < 10 ? '0' : '') + hour + ':' + (minutes < 10 ? '0' : '') + minutes;
         },
         CO2String () {
-            return 'no me acuerdo la formula';
+            return this.trip.co2 + ' Kg';
         }
     },
     methods: {
@@ -358,7 +361,7 @@ export default {
                     }
                     this.trip.distance = totalDistance;
                     this.duration = totalDuration;
-                    this.co2 = 0.0; /* agregar formula */
+                    this.co2 = totalDistance * 0.15; /* distancia por 0.15 kilos co2 en promedio por KM recorrido  */
                 } else {
                     console.log('Directions request failed due to ' + status);
                 }
