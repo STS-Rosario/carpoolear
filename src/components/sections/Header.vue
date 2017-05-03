@@ -11,6 +11,8 @@
                 <button @click="share" type="button" class="btn btn-link">Invitar amigos</button>
 
                 <router-link :to="{name: 'trips'}" class="btn btn-link">Viajes</router-link>
+
+                <router-link v-if="logged" :to="{name: 'my-trips'}" class="btn btn-link">Mis Viajes</router-link>
                 
                 <router-link v-if="!logged" :to="{name: 'login'}">Login</router-link>
                 <router-link v-if="!logged" :to="{name: 'register'}">Register</router-link>
@@ -29,8 +31,8 @@
 </template>
 
 <script>
-import socialShare from '../services/socialShare.js';
-import dialogs from '../services/dialogs.js';
+import socialShare from '../../services/socialShare.js';
+import dialogs from '../../services/dialogs.js';
 import {mapGetters} from 'vuex';
 export default {
     name: 'header',

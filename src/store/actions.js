@@ -53,6 +53,7 @@ export const startApp = (store) => {
         store.dispatch('auth/fetchUser');
         store.dispatch('myTrips/tripAsDriver');
         store.dispatch('myTrips/tripAsPassenger');
+        store.dispatch('myTrips/pendingRates');
     }
     bus.emit('system-ready');
 };

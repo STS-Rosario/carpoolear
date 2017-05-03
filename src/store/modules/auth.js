@@ -34,6 +34,7 @@ function onLoggin (store, token) {
     globalStore.dispatch('trips/search');
     globalStore.dispatch('myTrips/tripAsDriver');
     globalStore.dispatch('myTrips/tripAsPassenger');
+    globalStore.dispatch('myTrips/pendingRates');
     router.push({ name: 'trips' });
 }
 

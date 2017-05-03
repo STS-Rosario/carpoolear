@@ -1,17 +1,20 @@
-import {TripApi} from '../../services/api';
+import {TripApi, RateApi} from '../../services/api';
 import * as types from '../mutation-types';
 
 let tripsApi = new TripApi();
+let rateApi = new RateApi();
 
 const state = {
-    driver_trip: [],
-    passenger_trip: []
+    driver_trip: null,
+    passenger_trip: null,
+    pending_rates: null
 };
 
 // getters
 const getters = {
     myTrips: state => state.driver_trip,
-    passengerTrips: state => state.passenger_trip
+    passengerTrips: state => state.passenger_trip,
+    pendingRates: state => state.pending_rates
 };
 
 // actions
@@ -25,6 +28,12 @@ const actions = {
     tripAsPassenger (store, data) {
         return tripsApi.myTrips(false).then(response => {
             store.commit(types.MYTRIPS_SET_PASSENGER_TRIPS, response.data);
+        });
+    },
+
+    pendingRates (store) {
+        return rateApi.pending(null).then(response => {
+            store.commit(types.MYTRIPS_SET_PENDING_RATES, response.data);
         });
     }
 };
@@ -46,6 +55,9 @@ const mutations = {
                 state.driver_trip[i] = trip;
             }
         }
+    },
+    [types.MYTRIPS_SET_PENDING_RATES] (state, rates) {
+        state.pending_rates = rates;
     }
 };
 

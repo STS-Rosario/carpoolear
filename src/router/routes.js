@@ -28,6 +28,12 @@ export default [
         props: true
     },
     {
+        path: '/my-trips',
+        name: 'my-trips',
+        component: require('../components/views/MyTrips'),
+        beforeEnter: auth
+    },
+    {
         path: '/trips',
         name: 'trips',
         component: require('../components/views/Trips')

@@ -14,8 +14,8 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import footerApp from './components/Footer.vue';
-import headerApp from './components/Header.vue';
+import footerApp from './components/sections/Footer.vue';
+import headerApp from './components/sections/Header.vue';
 
 export default {
     name: 'app',
