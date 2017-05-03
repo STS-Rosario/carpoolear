@@ -134,6 +134,7 @@
 
 <script>
 import {mapActions, mapGetters} from 'vuex';
+import {parseStreet} from '../../services/maps.js';
 
 export default {
     name: 'new-trip',
@@ -285,36 +286,10 @@ export default {
             }
         },
 
-        parseGeocode (result) {
-            var address = {};
-            for (var i in result.address_components) {
-                var obj = result.address_components[i];
-                var nombre = obj.long_name;
-                switch (obj.types[0]) {
-                case 'country':
-                    address.pais = nombre;
-                    break;
-                case 'administrative_area_level_1':
-                    address.provincia = nombre;
-                    break;
-                case 'locality':
-                    address.ciudad = nombre;
-                    break;
-                case 'route':
-                    address.calle = nombre;
-                    break;
-                case 'street_number':
-                    address.numero = nombre;
-                    break;
-                };
-            }
-            return address;
-        },
-
         getPlace (i, data) {
             this.points[i].place = data;
             this.points[i].name = data.formatted_address;
-            this.points[i].json = this.parseGeocode(data);
+            this.points[i].json = parseStreet(data);
             this.center = this.points[i].location = {
                 lat: data.geometry.location.lat(),
                 lng: data.geometry.location.lng()

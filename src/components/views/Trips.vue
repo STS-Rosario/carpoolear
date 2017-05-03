@@ -1,5 +1,6 @@
 <template>
     <div class="trips">
+        <SearchBox :params="{}" v-on:trip-search="research" ></SearchBox>
         <h2>Viajes</h2> 
         <Loading :data="trips">
             <div id="trips-list">
@@ -12,6 +13,7 @@
 </template>
 <script>
 import Trip from '../sections/Trip.vue';
+import SearchBox from '../sections/SearchTrip.vue';
 import Loading from '../Loading.vue';
 
 import { mapGetters, mapActions } from 'vuex';
@@ -21,7 +23,10 @@ export default {
     methods: {
         ...mapActions({
             search: 'trips/search'
-        })
+        }),
+        research (params) {
+            console.log(params);
+        }
     },
     mounted () {
         // this.search();
@@ -35,7 +40,8 @@ export default {
     },
     components: {
         Trip,
-        Loading
+        Loading,
+        SearchBox
     }
 };
 </script>
