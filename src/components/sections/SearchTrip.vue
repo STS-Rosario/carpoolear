@@ -21,7 +21,7 @@
             </div>
         </div>
         <div class="col-xs-3">
-              <Calendar :class="'calendar-date'" :value="date.time" @change="(date) => this.date = date"></Calendar>
+              <Calendar :class="'calendar-date'" :value="date" @change="(date) => this.date = date"></Calendar>
         </div>
         <div class="col-xs-3">
             <button class="btn btn-primary" @click="emit">Buscar</button> 
