@@ -4,6 +4,7 @@ import globalStore from '../index';
 
 let tripsApi = new TripApi();
 
+// initial state
 const state = {
     trips: null,
 

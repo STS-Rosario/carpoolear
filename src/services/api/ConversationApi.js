@@ -6,6 +6,10 @@ class ConversationApi extends TaggedApi {
         return this.get('/api/conversations', data);
     }
 
+    userList (data) {
+        return this.get('/api/conversations/user-list', data);
+    }
+
     create (userId) {
         return this.post('/api/conversations', {to: userId});
     }

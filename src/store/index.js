@@ -7,6 +7,8 @@ import cordova from './modules/cordova';
 import trips from './modules/trips';
 import device from './modules/device';
 import myTrips from './modules/my-trips';
+import conversations from './modules/conversations';
+
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -20,6 +22,7 @@ export default new Vuex.Store({
         cordova,
         trips,
         device,
-        myTrips
+        myTrips,
+        conversations
     }
 });

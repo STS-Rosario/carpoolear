@@ -4,6 +4,7 @@ import * as types from '../mutation-types';
 let tripsApi = new TripApi();
 let rateApi = new RateApi();
 
+// initial state
 const state = {
     driver_trip: null,
     passenger_trip: null,

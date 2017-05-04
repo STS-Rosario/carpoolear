@@ -5,7 +5,6 @@ import bus from '../../services/bus-event';
 /* eslint-disable no-undef */
 
 // initial state
-// shape: [{ id, quantity }]
 let deviceApi = new DeviceApi();
 
 const state = {

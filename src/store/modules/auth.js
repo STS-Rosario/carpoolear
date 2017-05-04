@@ -8,8 +8,6 @@ import globalStore from '../index';
 let authApi = new AuthApi();
 let userApi = new UserApi();
 
-// initial state
-// shape: [{ id, quantity }]
 const state = {
     auth: false,
     user: null,

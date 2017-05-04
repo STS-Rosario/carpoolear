@@ -4,6 +4,7 @@ import UserApi from './User.js';
 import DeviceApi from './Device.js';
 import RateApi from './Rating.js';
 import PassengerApi from './PassengerApi';
+import ConversationApi from './ConversationApi';
 
 export {
   AuthApi,
@@ -11,5 +12,6 @@ export {
   UserApi,
   DeviceApi,
   RateApi,
-  PassengerApi
+  PassengerApi,
+  ConversationApi
 };
