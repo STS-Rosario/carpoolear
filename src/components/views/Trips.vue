@@ -1,10 +1,13 @@
 <template>
     <div class="trips">
-        <SearchBox :params="{}" v-on:trip-search="research" ></SearchBox>
+        <SearchBox :params="searchParams" v-on:trip-search="research" ></SearchBox>
         <h2>Viajes</h2> 
         <Loading :data="trips">
             <div id="trips-list">
                 <Trip v-for="trip in trips" :trip="trip" :user="user" ></Trip>
+            </div>
+            <div v-if="morePages">
+                <button class="btn btn-primary" @click="nextPage">Más resultados</button>
             </div>
             <p slot="no-data" class="alert alert-warning"  role="alert">No hay viajes</p> 
             <p slot="loading" class="alert alert-info" role="alert">Cargando viajes ...</p>
@@ -22,10 +25,11 @@ export default {
     name: 'trips',
     methods: {
         ...mapActions({
-            search: 'trips/search'
+            search: 'trips/search',
+            nextPage: 'trips/nextPage'
         }),
         research (params) {
-            console.log(params);
+            this.search(params);
         }
     },
     mounted () {
@@ -35,7 +39,8 @@ export default {
         ...mapGetters({
             trips: 'trips/trips',
             morePages: 'trips/morePage',
-            user: 'auth/user'
+            user: 'auth/user',
+            searchParams: 'trips/searchParams'
         })
     },
     components: {
