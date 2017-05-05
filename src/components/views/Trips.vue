@@ -25,7 +25,7 @@ export default {
     name: 'trips',
     methods: {
         ...mapActions({
-            search: 'trips/tripsSearch' 
+            search: 'trips/tripsSearch'
         }),
         research (params) {
             this.search(params);

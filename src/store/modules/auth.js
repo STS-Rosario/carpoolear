@@ -59,6 +59,27 @@ function activate (store, activationToken) {
     });
 }
 
+function resetPassword (store, email) {
+    return authApi.resetPassword({email}).then(() => {
+        return Promise.resolve();
+    }).catch((err) => {
+        if (err) {
+            return Promise.reject();
+        }
+    });
+}
+
+function changePassword (store, token, data) {
+    return authApi.changePassword(token, data).then(() => {
+        router.push({ name: 'login' });
+        return Promise.resolve();
+    }).catch((err) => {
+        if (err) {
+            return Promise.reject();
+        }
+    });
+}
+
 function register (store, { email, password, passwordConfirmation, name, termsAndConditions }) {
     let data = {};
     data.email = email;
@@ -122,7 +143,9 @@ const actions = {
     register,
     fetchUser,
     retoken,
-    logout
+    logout,
+    resetPassword,
+    changePassword
 };
 
 // mutations

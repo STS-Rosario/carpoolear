@@ -28,6 +28,18 @@ export default [
         props: true
     },
     {
+        path: '/reset-password',
+        name: 'reset-password',
+        component: require('../components/views/ResetPassword'),
+        props: true
+    },
+    {
+        path: '/reset-password/:token',
+        name: 'reset-password-confirm',
+        component: require('../components/views/ResetPassword'),
+        props: true
+    },
+    {
         path: '/my-trips',
         name: 'my-trips',
         component: require('../components/views/MyTrips'),
