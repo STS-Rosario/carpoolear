@@ -1,63 +1,71 @@
-import network from '../../services/network'
-import * as types from '../mutation-types'
-import { Auth } from '../../services/api'
+import * as types from '../mutation-types';
+import { AuthApi, UserApi } from '../../services/api';
 import router from '../../router';
+import cache, {keys} from '../../services/cache';
 
-let authApi = new Auth;
+import globalStore from '../index';
+
+let authApi = new AuthApi();
+let userApi = new UserApi();
 
 // initial state
 // shape: [{ id, quantity }]
 const state = {
-  auth: false,
-  user: null,
-  token: null,
-}
+    auth: false,
+    user: null,
+    token: null
+};
 
 // getters
 const getters = {
-  checkLogin: state => state.auth,
-  authHeader: state => state.auth ? { 'Authorization': 'Bearer ' + state.token } : {},
-}
+    checkLogin: state => state.auth,
+    authHeader: state => state.auth ? { 'Authorization': 'Bearer ' + state.token } : {},
+    user: state => state.user
+};
 
 // actions
-const actions = {
 
-  login({ commit, state, rootState, rootGetters }, { email, password }) {
-    let creds = {}
-    Object.assign(creds, rootGetters['cordova/deviceData']);
+function onLoggin (store, token) {
+    store.commit(types.AUTH_SET_TOKEN, token);
+    fetchUser(store);
+    globalStore.dispatch('device/register');
+    router.push({ name: 'trips' });
+}
+
+function login (store, { email, password }) {
+    let creds = {};
     creds.email = email;
     creds.password = password;
-    creds.password_confirmation = password;
 
-    return authApi.login(creds).then((token) => {
-      commit(types.AUTH_SET_TOKEN);
+    return authApi.login(creds).then((response) => {
+        onLoggin(store, response.token);
+    }).catch(({data, status}) => {
+        console.log(data, status);
+    });
+}
+
+// store = { commit, state, rootState, rootGetters }
+function activate (store, activationToken) {
+    return authApi.activate(activationToken, {}).then((token) => {
+        onLoggin(store, token);
     }).catch((err) => {
-        console.log('Credenciales incorrectas', err);
+        if (err) {
+
+        }
     });
-  },
-  activate({ commit, state, rootState, rootGetters }, activationToken) {
-    let creds = {}
-    Object.assign(creds, rootGetters['cordova/deviceData']);
+}
 
-    return authApi.activate(activationToken, creds).then((token) => {
-      commit(types.AUTH_SET_TOKEN);
-      router.push({ name: 'trips' });
-    }).catch((err) => { 
-
-    });
-  },
-
-  register({ commit, state, rootState, rootGetters }, { email, password, passwordConfirmation, name, termsAndConditions }) {
-    let data = {}; 
+function register (store, { email, password, passwordConfirmation, name, termsAndConditions }) {
+    let data = {};
     data.email = email;
     data.password = password;
     data.password_confirmation = passwordConfirmation;
     data.name = name;
     data.password = password;
-    data.terms_and_conditions = termsAndConditions; 
+    data.terms_and_conditions = termsAndConditions;
 
-    return authApi.register(data).then((data) => {
-      console.log(data);
+    return userApi.register(data).then((data) => {
+        console.log(data);
     }).catch((err) => {
       if (err.response) {
         console.log(err.response.data);
@@ -70,55 +78,75 @@ const actions = {
         }
       }
     });
-  },
-  logout() {
-    authApi.logout(data).then((data) => {
-      console.log(data);
-    }).catch((err) => {
-      if (err.response) {
-        console.log(err.response.data);
-        console.log(err.response.status);
-        console.log(err.response.headers);
-      } else {
-        console.log(err.message);
-      }
-    });
-  },
-  resetPassword({ commit, state, rootState }, email) {
-    data['email'] = email;
-    authApi.resetPassword(data).then((data) => {
-      console.log(data);
-    }).catch((err) => {
-      if (err.response) {
-        console.log(err.response.data);
-        console.log(err.response.status);
-        console.log(err.response.headers);
-      } else {
-        console.log(err.message);
-      }
-    });
-  },   
 }
+  
+function fetchUser (store) {
+    return userApi.show().then((response) => {
+        store.commit(types.AUTH_SET_USER, response.data);
+    }).catch(({data, status}) => {
+        console.log(data, status);
+    });
+}
+
+function retoken (store) {
+    let data = {};
+    data.app_version = store.rootState.appVersion;
+
+    return new Promise((resolve, reject) => {
+        authApi.retoken(data).then((response) => {
+            store.commit(types.AUTH_SET_TOKEN, response.token);
+            resolve();
+        }).catch(({data, status}) => {
+            // check for internet problems -> not resolve until retoken finish
+            console.log(data, status);
+            store.commit(types.AUTH_LOGOUT);
+            router.push({ name: 'login' });
+            resolve();
+        });
+    });
+}
+
+function logout (store) {
+    let device = globalStore.state.device.current;
+    if (device) {
+        globalStore.dispatch('device/delete', device.id);
+    }
+    store.commit(types.AUTH_LOGOUT);
+    globalStore.commit('device/' + types.DEVICE_SET_DEVICES, []);
+}
+
+const actions = {
+    login,
+    activate,
+    register,
+    fetchUser,
+    retoken,
+    logout
+};
 
 // mutations
 const mutations = {
-  [types.AUTH_SET_TOKEN] (state, token) {
-    state.token = token;
-  }, 
-  [types.AUTH_SET_USER](state, user) {
-    state.user = user;
-  }, 
-  [types.AUTH_LOGOUT](state) {
-    state.token = null;
-    state.user = null;
-    state.auth = false;
-  }
-}
+    [types.AUTH_SET_TOKEN] (state, token) {
+        state.token = token;
+        state.auth = true;
+        cache.setItem(keys.TOKEN_KEY, token);
+    },
+    [types.AUTH_SET_USER] (state, user) {
+        state.user = user;
+        cache.setItem(keys.USER_KEY, user);
+    },
+    [types.AUTH_LOGOUT] (state) {
+        state.token = null;
+        state.user = null;
+        state.auth = false;
+        cache.clear();
+    }
+};
 
 export default {
-  namespaced: true,
-  state,
-  getters,
-  actions,
-  mutations
-}
+    namespaced: true,
+    state,
+    getters,
+    actions,
+    mutations
+};

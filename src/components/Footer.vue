@@ -58,12 +58,12 @@
   </footer>
 </template>
 
-<script> 
+<script>
 export default {
-  name: 'footer',
-  data () {
-    return {
+    name: 'footer',
+    data () {
+        return {
+        };
     }
-  }
-}
+};
 </script>

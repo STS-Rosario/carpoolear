@@ -5,38 +5,40 @@
         <router-view></router-view>
       </main>
       <footerApp></footerApp>
+      <pre>
+            {{this.$store.state}}
+    </pre>
     </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import footerApp from './Components/Footer.vue'
-import headerApp from './Components/Header.vue'
+import { mapGetters } from 'vuex';
+import footerApp from './components/Footer.vue';
+import headerApp from './components/Header.vue';
 
 export default {
-  name: 'app',
-  methods: { 
+    name: 'app',
+    methods: {
 
-  },
-  computed: mapGetters({
-      deviceReady: 'cordova/deviceReady'
-    })
-  ,
-  watch: {
-    deviceReady: () => {
-      console.log("Device ready from components")
+    },
+    computed: mapGetters({
+        deviceReady: 'cordova/deviceReady'
+    }),
+    watch: {
+        deviceReady: () => {
+            console.log('Device ready from components');
+        }
+    },
+    data () {
+        return {
+
+        };
+    },
+    components: {
+        headerApp,
+        footerApp
     }
-  },
-  data () {
-    return {
-      texto: 'hola'
-    }
-  },
-  components: { 
-    headerApp,
-    footerApp 
-  }
-}
+};
 </script>
 
 <style >

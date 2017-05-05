@@ -3,43 +3,41 @@
   <div class="login" >
     <div class='form'>
       <label for="txt_user">Usuario</label>
-      <input type="text" id="txt_user" v-model='username'/>
+      <input type="text" id="txt_user" v-model='email'/>
       <label for="txt_password">Password</label>
       <input  type="password" id="txt_password" v-model='password' />
       <button @click="login"> Login </button>
     </div>
   </div>
 </template>
-
-<script> 
-import { mapGetters, mapActions } from 'vuex'
+<script>
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
-  name: 'login',
-  data () {
-    return {
-      username: "",
-      password: "",
+    name: 'login',
+    data () {
+        return {
+            email: '',
+            password: ''
+        };
+    },
+    computed: {
+        ...mapGetters({
+            checkLogin: 'auth/checkLogin'
+        })
+    },
+    methods: {
+        ...mapActions({
+            doLogin: 'auth/login', // map this.add() to this.$store.dispatch('increment')
+            facebookLogin: 'cordova/facebookLogin'
+        }),
+        login () {
+            let email = this.email;
+            let password = this.password;
+            this.doLogin({email, password});
+        }
     }
-  },
-  computed: { 
-    ...mapGetters({
-      checkLogin: 'auth/checkLogin'
-    })
-  },
-  methods: {
-    ...mapActions({
-      doLogin: 'auth/login', // map this.add() to this.$store.dispatch('increment')
-      facebookLogin: 'cordova/facebookLogin'
-    }),
-    login() {
-      console.log('happy doLogin', this.username);
-      let username = this.username;
-      let password = this.password;
-      this.doLogin({username, password});
-    }
-  }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

@@ -21,44 +21,44 @@
   </div>
 </template>
 
-<script> 
-import { mapGetters, mapActions } from 'vuex'
+<script>
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
-  name: 'register',
-  data () {
-    return {
-      email: '',
-      password: '',
-      passwordConfirmation: '',
-      name: '',
-      sureName: '',
-      termsAndConditions: false, 
-    }
-  },
-  computed: { 
-    ...mapGetters({
-      checkLogin: 'auth/checkLogin'
-    })
-  },
-  methods: {
-    ...mapActions({
-      doRegister: 'auth/register',
-    }),
-    register() { 
-      let email = this.email;
-      let password = this.password;
-      let passwordConfirmation = this.passwordConfirmation;
-      let name = this.name + ' ' + this.sureName;
-      let termsAndConditions = this.termsAndConditions;
-      this.doRegister({email, password, passwordConfirmation, name, termsAndConditions}).then(() => {
+    name: 'register',
+    data () {
+        return {
+            email: '',
+            password: '',
+            passwordConfirmation: '',
+            name: '',
+            sureName: '',
+            termsAndConditions: false
+        };
+    },
+    computed: {
+        ...mapGetters({
+            checkLogin: 'auth/checkLogin'
+        })
+    },
+    methods: {
+        ...mapActions({
+            doRegister: 'auth/register'
+        }),
+        register () {
+            let email = this.email;
+            let password = this.password;
+            let passwordConfirmation = this.passwordConfirmation;
+            let name = this.name + ' ' + this.sureName;
+            let termsAndConditions = this.termsAndConditions;
+            this.doRegister({email, password, passwordConfirmation, name, termsAndConditions}).then(() => {
 
-      }).catch (() => {
+            }).catch(() => {
 
-      })
+            });
+        }
     }
-  }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
