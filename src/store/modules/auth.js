@@ -32,12 +32,7 @@ const actions = {
     return authApi.login(creds).then((token) => {
       commit(types.AUTH_SET_TOKEN);
     }).catch((err) => {
-      if (err.response && err.response.data.error === 'invalid_credentials') {
-        console.log('Credenciales incorrectas');
-      } else {
-        console.log(err);
-        window.err = err;
-      }
+        console.log('Credenciales incorrectas', err);
     });
   },
   activate({ commit, state, rootState, rootGetters }, activationToken) {
@@ -70,6 +65,9 @@ const actions = {
         console.log(err.response.headers);
       } else {
         console.log(err.message);
+        if (err.message === 'Could not create new user.') {
+
+        }
       }
     });
   },
