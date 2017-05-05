@@ -29,7 +29,7 @@ function onLoggin (store, token) {
     if (globalStore.state.cordova.device) {
         globalStore.dispatch('device/register');
     }
-    globalStore.dispatch('trips/search');
+    globalStore.dispatch('trips/tripsSearch');
     globalStore.dispatch('myTrips/tripAsDriver');
     globalStore.dispatch('myTrips/tripAsPassenger');
     globalStore.dispatch('myTrips/pendingRates');

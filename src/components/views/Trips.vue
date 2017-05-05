@@ -25,11 +25,13 @@ export default {
     name: 'trips',
     methods: {
         ...mapActions({
-            search: 'trips/search',
-            nextPage: 'trips/nextPage'
+            search: 'trips/tripsSearch' 
         }),
         research (params) {
             this.search(params);
+        },
+        nextPage () {
+            this.search({next: true});
         }
     },
     mounted () {
@@ -38,9 +40,9 @@ export default {
     computed: {
         ...mapGetters({
             trips: 'trips/trips',
-            morePages: 'trips/morePage',
+            morePages: 'trips/tripsMorePage',
             user: 'auth/user',
-            searchParams: 'trips/searchParams'
+            searchParams: 'trips/tripsSearchParam'
         })
     },
     components: {
