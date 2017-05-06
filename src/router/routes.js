@@ -28,6 +28,18 @@ export default [
         props: true
     },
     {
+        path: '/reset-password',
+        name: 'reset-password',
+        component: require('../components/views/ResetPassword'),
+        props: true
+    },
+    {
+        path: '/reset-password/:token',
+        name: 'reset-password-confirm',
+        component: require('../components/views/ResetPassword'),
+        props: true
+    },
+    {
         path: '/my-trips',
         name: 'my-trips',
         component: require('../components/views/MyTrips'),
@@ -57,6 +69,12 @@ export default [
         component: require('../components/views/Trip'),
         beforeEnter: auth,
         props: true
+    },
+    {
+        path: '/profile/update',
+        name: 'profile_update',
+        component: require('../components/views/UpdateProfile.vue'),
+        beforeEnter: auth
     },
     {
         path: '/*',

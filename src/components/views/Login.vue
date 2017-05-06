@@ -1,12 +1,12 @@
 <template>
-  
   <div class="login" >
     <div class='form'>
       <label for="txt_user">Usuario</label>
       <input type="text" id="txt_user" v-model='email'/>
       <label for="txt_password">Password</label>
       <input  type="password" id="txt_password" v-model='password' />
-      <button @click="login"> Login </button> <span v-if="loading"> Loading... </span>
+      <button @click="login"> Login </button> <router-link :to="{name:'reset-password'}"> ¿Olvidó su contraseña? </router-link>
+      <span v-if="loading"> Loading... </span>
     </div>
   </div>
 </template>

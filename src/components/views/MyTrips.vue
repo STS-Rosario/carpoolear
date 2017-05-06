@@ -34,14 +34,11 @@
 <script>
 import Trip from '../sections/Trip.vue';
 import Loading from '../Loading.vue';
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters } from 'vuex';
 
 export default {
     name: 'trips',
     methods: {
-        ...mapActions({
-            search: 'trips/search'
-        })
     },
     mounted () {
         // this.search();

@@ -8,8 +8,6 @@ import globalStore from '../index';
 let authApi = new AuthApi();
 let userApi = new UserApi();
 
-// initial state
-// shape: [{ id, quantity }]
 const state = {
     auth: false,
     user: null,
@@ -31,10 +29,11 @@ function onLoggin (store, token) {
     if (globalStore.state.cordova.device) {
         globalStore.dispatch('device/register');
     }
-    globalStore.dispatch('trips/search');
+    globalStore.dispatch('trips/tripsSearch');
     globalStore.dispatch('myTrips/tripAsDriver');
     globalStore.dispatch('myTrips/tripAsPassenger');
     globalStore.dispatch('myTrips/pendingRates');
+    globalStore.dispatch('cars/index');
     router.push({ name: 'trips' });
 }
 
@@ -52,11 +51,32 @@ function login (store, { email, password }) {
 
 // store = { commit, state, rootState, rootGetters }
 function activate (store, activationToken) {
-    return authApi.activate(activationToken, {}).then((token) => {
-        onLoggin(store, token);
+    return authApi.activate(activationToken, {}).then((response) => {
+        onLoggin(store, response.token);
     }).catch((err) => {
         if (err) {
 
+        }
+    });
+}
+
+function resetPassword (store, email) {
+    return authApi.resetPassword({email}).then(() => {
+        return Promise.resolve();
+    }).catch((err) => {
+        if (err) {
+            return Promise.reject();
+        }
+    });
+}
+
+function changePassword (store, {token, data}) {
+    return authApi.changePassword(token, data).then(() => {
+        router.push({ name: 'login' });
+        return Promise.resolve();
+    }).catch((err) => {
+        if (err) {
+            return Promise.reject();
         }
     });
 }
@@ -118,13 +138,37 @@ function logout (store) {
     globalStore.commit('device/' + types.DEVICE_SET_DEVICES, []);
 }
 
+function update (store, data) {
+    return userApi.update(data).then((response) => {
+        store.commit(types.AUTH_SET_USER, response.data);
+        return Promise.resolve(response.data);
+    }).catch(({data, status}) => {
+        console.log(data, status);
+        return Promise.reject(data);
+    });
+}
+
+function updatePhoto (store, data) {
+    return userApi.updatePhoto(data).then((response) => {
+        store.commit(types.AUTH_SET_USER, response.data);
+        return Promise.resolve(response.data);
+    }).catch(({data, status}) => {
+        console.log(data, status);
+        return Promise.reject(data);
+    });
+}
+
 const actions = {
     login,
     activate,
     register,
     fetchUser,
     retoken,
-    logout
+    logout,
+    resetPassword,
+    changePassword,
+    update,
+    updatePhoto
 };
 
 // mutations

@@ -48,12 +48,13 @@ export const init = (store) => {
 };
 
 export const startApp = (store) => {
-    store.dispatch('trips/search');
+    store.dispatch('trips/tripsSearch');
     if (store.state.auth.auth) {
         store.dispatch('auth/fetchUser');
         store.dispatch('myTrips/tripAsDriver');
         store.dispatch('myTrips/tripAsPassenger');
         store.dispatch('myTrips/pendingRates');
+        store.dispatch('cars/index');
     }
     bus.emit('system-ready');
 };
