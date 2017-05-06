@@ -21,6 +21,8 @@ import bootstrapCss from './styles/bootstrap/css/bootstrap.min.css';
 import cssHelpers from './styles/helpers.css';
 import css from './styles/main.css';
 
+import bus from './services/bus-event';
+
 Vue.use(VueResource);
 
 Vue.use(VueAnalytics, {
@@ -30,6 +32,16 @@ Vue.use(VueAnalytics, {
 Vue.use(VueMoment);
 require('./filters.js');
 
+import * as VueGoogleMaps from 'vue2-google-maps';
+
+Vue.use(VueGoogleMaps, {
+    load: {
+        key: process.env.MAPS_API,
+        libraries: 'places',
+        installComponents: true
+    }
+});
+
 window.store = store;
 
 if (!window.cordova) {
@@ -37,11 +49,13 @@ if (!window.cordova) {
     store.dispatch('init');
 }
 
-let app = new Vue({
-    el: '#app',
-    router,
-    store,
-    template: '<App/>',
-    components: { App }
+bus.on('system-ready', () => {
+    let app = new Vue({
+        el: '#app',
+        router,
+        store,
+        template: '<App/>',
+        components: { App }
+    });
 });
 /* eslint-enable no-unused-vars */

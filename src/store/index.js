@@ -6,6 +6,7 @@ import auth from './modules/auth';
 import cordova from './modules/cordova';
 import trips from './modules/trips';
 import device from './modules/device';
+import myTrips from './modules/my-trips';
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -18,6 +19,7 @@ export default new Vuex.Store({
         auth,
         cordova,
         trips,
-        device
+        device,
+        myTrips
     }
 });
