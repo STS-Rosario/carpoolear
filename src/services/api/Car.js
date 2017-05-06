@@ -7,7 +7,7 @@ class CarApi extends TaggedApi {
     }
 
     index (data = {}) {
-        return this.get('/api/cars', data);
+        return this.get('/api/cars');
     }
 
     create (data = {}) {

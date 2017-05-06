@@ -1,15 +1,15 @@
 <template>
     <div class="reset-password-component" >
-        <div class='form' v-if="!token">
+        <div v-if="send">
+            <h3> Se ha enviado un email a su casilla de correo con las indicaciones. </h3>
+        </div>
+        <div class='form' v-else-if="!token">
             <label for="txt_email">E-mail</label>
             <input type="text" id="txt_email" v-model='email'/>
             
             <button class="btn btn-primary" @click="reset"> Reset password </button> 
             <span v-if="loading"> Loading... </span>
             <span v-if="error"> {{error}} </span>
-        </div>
-        <div v-else-if="send">
-            <h3> Se ha enviado un email a su casilla de correo con las indicaciones. </h3>
         </div>
         <div class='form' v-else-if="token">
             <div class='form'>
@@ -75,8 +75,8 @@ export default {
                 let data = {};
                 data.password = this.password;
                 data.password_confirmation = this.password_confirmation;
-
-                this.changePassword(this.token, data).then(() => {
+                let token = this.token;
+                this.changePassword({token, data}).then(() => {
                     // nothing
                 }, () => {
                     this.loading = false;

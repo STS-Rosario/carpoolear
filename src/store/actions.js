@@ -54,6 +54,7 @@ export const startApp = (store) => {
         store.dispatch('myTrips/tripAsDriver');
         store.dispatch('myTrips/tripAsPassenger');
         store.dispatch('myTrips/pendingRates');
+        store.dispatch('cars/index');
     }
     bus.emit('system-ready');
 };

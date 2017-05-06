@@ -71,6 +71,12 @@ export default [
         props: true
     },
     {
+        path: '/profile/update',
+        name: 'profile_update',
+        component: require('../components/views/UpdateProfile.vue'),
+        beforeEnter: auth
+    },
+    {
         path: '/*',
         redirect: '/trips'
     }
