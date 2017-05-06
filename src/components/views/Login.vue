@@ -34,7 +34,9 @@ export default {
         login () {
             let email = this.email;
             let password = this.password;
-            this.doLogin({email, password});
+            var a = this.doLogin({email, password});
+
+            console.log(a.abort);
         }
     }
 };

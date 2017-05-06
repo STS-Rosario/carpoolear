@@ -37,11 +37,14 @@ function login (store, { email, password }) {
     creds.email = email;
     creds.password = password;
 
-    return authApi.login(creds).then((response) => {
+    var a = authApi.login(creds)
+    a.then((response) => {
         onLoggin(store, response.token);
     }).catch(({data, status}) => {
         console.log(data, status);
-    });
+        });
+    console.log(a);
+    return a;
 }
 
 // store = { commit, state, rootState, rootGetters }

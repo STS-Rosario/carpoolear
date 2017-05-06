@@ -9,7 +9,7 @@ export default {
     pendingRequest: new TaggedList(),
 
     addRequest (xhr, tags) {
-        this.pendingRequest.add(tags);
+        this.pendingRequest.add(tags, xhr);
     },
 
     getHeader (headers) {
@@ -36,9 +36,8 @@ export default {
         });
 
         promise.abort = () => {
-            source.cancel('abort by the system');
+            source.cancel('Abort by the system');
         };
-
         return promise;
     },
 
