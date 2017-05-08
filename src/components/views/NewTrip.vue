@@ -12,8 +12,12 @@
                         <label for="type-passenger" class="control-label">Como pasajero</label>
                     </div>
                 </fieldset>
+                <div class="trip_terms">
+                    <input type="checkbox" id="no-lucrar" />
+                    <label for="no-lucrar" class="trip_terms_label">Me comprometo a no lucrar con el viaje</label>
+                </div>
             </div>
-            <div class="col-xs-8">
+            <div class="col-xs-8 xcv">
                 <div class="trip_points">
                     <div v-for="(m, index) in points" class="trip_point">
                         <span v-if="index == 0" class="sr-only">Origen</span>
@@ -22,19 +26,19 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-8">
-                <div class="trip-information">
+            <div class="col-xs-8 xcv">
+                <div class="trip_information">
                         <ul class="no-bullet">
-                            <li>
-                                <div>Distancia</div>
+                            <li class="list_item">
+                                <div class="label-soft">Distancia</div>
                                 <div>{{distanceString}}</div>
                             </li>
-                            <li>
-                                <div>Tiempo estimado</div>
+                            <li class="list_item">
+                                <div class="label-soft">Tiempo estimado</div>
                                 <div>{{estimatedTimeString}}  </div>
                             </li>
-                            <li>
-                                <div>CO2</div>
+                            <li class="list_item">
+                                <div class="label-soft">CO2</div>
                                 <div>{{CO2String}}</div>
                             </li>
                         </ul>
@@ -43,8 +47,6 @@
         </div> 
         <div class="row">
             <div class="col-xs-8">
-                <input type="checkbox" id="no-lucrar" />
-                <label for="no-lucrar">Me comprometo a no lucrar con el viaje</label>
             </div>
             <div class="col-xs-8"> 
                 <div class="trip_datetime">
@@ -62,7 +64,7 @@
                 </div>
                 <div class="trip_seats-available">
                     <fieldset>
-                        <legend>Lugares disponibles</legend>
+                        <legend class="label-for-group">Lugares disponibles</legend>
                         <span class="radio-inline">
                             <input type="radio" id="seats-one" value="1" v-model="trip.total_seats">
                             <label for="seats-one">1</label>    
@@ -82,30 +84,30 @@
                     </fieldset>
                 </div>
                 <div class="trip-comment">
-                    <label for="trip_comment"> Comentario de pasajero </label>
+                    <label for="trip_comment"  class="label-for-group"> Comentario de pasajero </label>
                     <textarea v-model="trip.description" id="trp_comment" class="form-control"></textarea>
                 </div>
             </div>
             <div class="col-xs-8">
-                <div class="trip-privacity">
-                    <span> Privacidad del viaje </span>
+                <fieldset class="trip-privacity">
+                    <legend class="label-for-group"> Privacidad del viaje </legend>
                     <ul class="no-bullet">
                         <li>    
                             <input type="radio" id="privacity-public" value="2" v-model="trip.friendship_type_id">
-                            <label for="privacity-public">Publicos</label>    
+                            <label for="privacity-public" class="label-soft">Publicos</label>    
                         </li>
                         <li>
                             <input type="radio" id="privacity-friend" value="0" v-model="trip.friendship_type_id">
-                            <label for="privacity-friend">Amigos</label>    
+                            <label for="privacity-friend" class="label-soft">Amigos</label>    
                         </li>
                         <li>    
                             <input type="radio" id="privacity-friendofriend" value="1" v-model="trip.friendship_type_id">
-                            <label for="privacity-friendofriend">Amigos de Amigos</label>     
+                            <label for="privacity-friendofriend" class="label-soft">Amigos de Amigos</label>     
                         </li>
                     </ul>
-                </div>
+                </fieldset>
 
-                <button class="trip-create btn btn-primary btn-lg" @click="save">
+                <button class="trip-create btn btn-primary btn-lg btn-shadowed" @click="save">
                     <span v-if="!updatingTrip">CREAR</span>
                     <span v-else>Actualizar</span>
                 </button>
