@@ -290,7 +290,7 @@ export default {
             this.trip.estimated_time = this.estimatedTimeString;
             if (this.cars && this.cars.length) {
                 this.trip.car_id = this.cars[0].id;
-            } 
+            }
             if (!this.updatingTrip) {
                 this.createTrip(this.trip);
             } else {
