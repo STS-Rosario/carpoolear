@@ -382,3 +382,8 @@ input[type=radio] + label {
 .trip_terms_label {
     color: var(--secondary-background);
 }
+.map_warning {
+    background: #D6D6D6;
+    color: var(--medium-font-color);
+    padding: .3rem;
+}

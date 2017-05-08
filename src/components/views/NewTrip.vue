@@ -115,7 +115,8 @@
             </div>
         </div> 
         <div class="row">
-            <div class="col-xs-24"> 
+            <div class="col-xs-24 map"> 
+                <div class="map_warning">* El recorrido del mapa es de referencia, puede no coincidir con el recorrido planeado por ud.</div>
                 <gmap-map
                     :center="center"
                     :zoom="zoom"
