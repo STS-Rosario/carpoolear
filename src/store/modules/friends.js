@@ -1,6 +1,5 @@
 import {FriendsApi, UserApi} from '../../services/api';
 import * as types from '../mutation-types';
-
 import * as pagination from '../pagination';
 
 let friendsApi = new FriendsApi();
@@ -36,6 +35,7 @@ const actions = {
 
     request (store, userId) {
         return friendsApi.request(userId).then(response => {
+            store.commit(types.FRIENDS_SET_REQUEST, userId);
             return Promise.resolve();
         });
     },
@@ -52,8 +52,8 @@ const actions = {
         });
     },
 
-    cancel (store, userId) {
-        return friendsApi.cancel(userId).then(response => {
+    delete (store, userId) {
+        return friendsApi.delete(userId).then(response => {
             store.commit(types.FRIENDS_REMOVE, userId);
         });
     },
@@ -81,15 +81,24 @@ const mutations = {
     },
 
     [types.FRIENDS_REMOVE_PENDING] (state, userID) {
-        state.pendings = state.pendings.filter(item => item.id === userID);
+        state.pendings = state.pendings.filter(item => item.id !== userID);
     },
 
     [types.FRIENDS_REMOVE] (state, userID) {
-        state.friends = state.friends.filter(item => item.id === userID);
+        state.friends = state.friends.filter(item => item.id !== userID);
     },
 
     [types.FRIENDS_SET_USERS] (state, users) {
         state.users = users;
+    },
+
+    [types.FRIENDS_SET_REQUEST] (state, userId) {
+        state.users = state.users.map(item => {
+            if (item.id === userId) {
+                item.state = 'pending';
+            }
+            return item;
+        });
     }
 
 };

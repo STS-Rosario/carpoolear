@@ -8,11 +8,13 @@
         </div>
         <Loading :data="users">
             <div id="friends-list">
-                <template v-for="user in users">
-                    <div class="col-lg-6 col-md-8 col-sm-12">
-                        {{user.name}}
-                    </div>
-                </template>
+                <FriendCard v-for="user in users" :user="user">
+                    <template slot>
+                        <button @click="onAddClick(user)" v-if="user.state == 'none'" class="btn btn-primary"> Agregar amigo </button>
+                        <button v-if="user.state != 'none'" class="btn"> Solicitud enviada </button>
+                        <span v-if="idRequesting == user.id">En proceso...</span>
+                    </template>
+                </FriendCard>
             </div>
             <p slot="no-data" class="alert alert-warning"  role="alert">No hay resultados</p> 
             <p slot="loading" class="alert alert-info" role="alert">Cargando amigos ...</p>
@@ -23,12 +25,14 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import Loading from '../Loading.vue';
+import FriendCard from './FriendCard';
 
 export default {
     name: 'friends_request',
     data () {
         return {
-            text: ''
+            text: '',
+            idRequesting: 0
         };
     },
     computed: {
@@ -38,12 +42,21 @@ export default {
     },
     methods: {
         ...mapActions({
-            'search': 'friends/searchUsers'
+            'search': 'friends/searchUsers',
+            'request': 'friends/request'
         }),
 
         onTextChange () {
-            console.log(this.text);
             this.search(this.text);
+        },
+
+        onAddClick (user) {
+            this.idRequesting = user.id;
+            this.request(user.id).then(() => {
+                this.idRequesting = 0;
+            }, () => {
+                this.idRequesting = 0;
+            });
         }
     },
 
@@ -51,7 +64,8 @@ export default {
         // this.search({});
     },
     components: {
-        Loading
+        Loading,
+        FriendCard
     }
 };
 </script>

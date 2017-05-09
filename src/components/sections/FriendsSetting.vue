@@ -4,10 +4,13 @@
         <h1>Solicitudes de amistad</h1>
         <Loading :data="pendings">
             <div id="friends-list">
-                <template v-for="p in pendings">
-                    <div class="col-lg-6 col-md-8 col-sm-12">
-                    </div>
-                </template>
+                <FriendCard v-for="user in pendings" :user="user">
+                    <template slot>
+                        <button @click="onAcceptClick(user)" class="btn btn-primary"> Acceptar </button>
+                        <button @click="onRejectClick(user)" class="btn"> Rechazar </button>
+                        <span v-if="idRequesting == user.id">En proceso...</span>
+                    </template>
+                </FriendCard>
             </div>
             <p slot="no-data" class="alert alert-warning"  role="alert">No hay solicitudes nuevas</p> 
             <p slot="loading" class="alert alert-info" role="alert">Cargando solicitudes ...</p>
@@ -22,10 +25,14 @@
         </div>
         <Loading :data="friends">
             <div id="friends-list">
-                <template v-for="friend in friends">
-                    <div class="col-lg-6 col-md-8 col-sm-12">
-                    </div>
-                </template>
+                <FriendCard v-for="user in friends" :user="user">
+                    <template slot>
+                        
+                        <button @click="onDeleteClick(user)" class="btn btn-primary"> Eliminar </button>
+                        <span v-if="idRequesting == user.id">En proceso...</span>
+                        
+                    </template>
+                </FriendCard>
             </div>
             <p slot="no-data" class="alert alert-warning"  role="alert">{{noResult}}</p> 
             <p slot="loading" class="alert alert-info" role="alert">Cargando amigos ...</p>
@@ -36,12 +43,14 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import Loading from '../Loading.vue';
+import FriendCard from './FriendCard';
 
 export default {
     name: 'friends_setting',
     data () {
         return {
-            text: ''
+            text: '',
+            idRequesting: 0
         };
     },
     computed: {
@@ -64,11 +73,38 @@ export default {
             'lookPeginds': 'friends/pending',
             'accept': 'friends/accept',
             'reject': 'friends/reject',
-            'cancel': 'friends/cancel'
+            'delete': 'friends/delete'
         }),
 
         onTextChange () {
             this.search({value: this.text});
+        },
+
+        onAcceptClick (user) {
+            this.idRequesting = user.id;
+            this.accept(user.id).then(() => {
+                this.idRequesting = 0;
+            }, () => {
+                this.idRequesting = 0;
+            });
+        },
+
+        onRejectClick (user) {
+            this.idRequesting = user.id;
+            this.reject(user.id).then(() => {
+                this.idRequesting = 0;
+            }, () => {
+                this.idRequesting = 0;
+            });
+        },
+
+        onDeleteClick (user) {
+            this.idRequesting = user.id;
+            this.delete(user.id).then(() => {
+                this.idRequesting = 0;
+            }, () => {
+                this.idRequesting = 0;
+            });
         }
     },
 
@@ -77,7 +113,8 @@ export default {
         this.lookPeginds();
     },
     components: {
-        Loading
+        Loading,
+        FriendCard
     }
 };
 </script>
