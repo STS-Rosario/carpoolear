@@ -387,3 +387,8 @@ input[type=radio] + label {
     color: var(--medium-font-color);
     padding: .3rem;
 }
+
+
+.conversation_list .conversation_image {
+    width: 56px;
+}

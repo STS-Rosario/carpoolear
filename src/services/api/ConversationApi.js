@@ -11,6 +11,7 @@ class ConversationApi extends TaggedApi {
     }
 
     create (userId) {
+        console.log(userId);
         return this.post('/api/conversations', {to: userId});
     }
 

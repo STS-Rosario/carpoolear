@@ -16,8 +16,10 @@
                     </li>
                     <template v-if="textSearch.length == 0">
                         <Loading :data="conversations"> 
-                            <li v-for="conversation in conversations" class="list-group-item" >
-                                Gato con botas
+                            <li v-for="conversation in conversations" class="list-group-item" @click="onChangeConversation(conversation)" :class="{'unread': conversation.unread, 'active': selected && conversation.id === selected.id  }" >
+                                <img alt="" :src="conversation.image | conversation-image" class="conversation_image circle-box" />
+                                <span class="conversation-title">{{conversation.title}}</span>
+                                <span class="conversation-timestamp">{{ conversation.updated_at | moment("h:mm a") }}</span>
                             </li> 
                             <li v-if="moreConversations" class="list-group-item" >
                                 <button class="btn btn-primary btn-block" @click="nextPage">Más resultados</button>
@@ -28,7 +30,8 @@
                     </template>
                     <template v-else>
                         <Loading :data="users"> 
-                            <li v-for="user in users" class="list-group-item" >
+                            <li v-for="user in users" class="list-group-item" @click="createConversation(user)">
+                                <img alt="" :src="user.image | profile-image" class="conversation_image circle-box" />
                                 {{user.name}}
                             </li>  
                             <li slot="no-data" class="list-group-item alert alert-warning"  role="alert">No hay concidencias</li> 
@@ -38,7 +41,7 @@
                 </ul>
             </div>
         </div>
-        <div class="col-xs-24-col-md-16">
+        <div class="col-xs-24 col-md-16">
             <div class="">
                 <router-view></router-view>
             </div>
@@ -49,6 +52,7 @@
 <script>
 import {mapGetters, mapActions} from 'vuex';
 import Loading from '../Loading.vue';
+import router from '../../router';
 
 export default {
     name: 'conversation-list',
@@ -64,7 +68,8 @@ export default {
         ...mapGetters({
             conversations: 'conversations/list',
             moreConversations: 'conversations/listMorePage',
-            users: 'conversations/users'
+            users: 'conversations/users',
+            selected: 'conversations/selectedConversation'
         }),
 
         hide () {
@@ -75,13 +80,29 @@ export default {
     methods: {
         ...mapActions({
             conversationsSearch: 'conversations/listSearch',
-            searchUser: 'conversations/getUserList'
+            searchUser: 'conversations/getUserList',
+            create: 'conversations/createConversation'
         }),
+
         nextPage () {
             this.conversationsSearch({next: true});
         },
+
         onSearchUser () {
             this.searchUser(this.textSearch);
+        },
+
+        createConversation (user) {
+            this.create(user).then((c) => {
+                this.textSearch = '';
+                router.push({ name: 'conversation-chat', params: { id: c.id } });
+            }).catch(() => {
+
+            });
+        },
+
+        onChangeConversation (conversation) {
+            router.push({ name: 'conversation-chat', params: { id: conversation.id } });
         }
     },
     components: {
