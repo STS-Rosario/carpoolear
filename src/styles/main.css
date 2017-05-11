@@ -387,3 +387,15 @@ input[type=radio] + label {
     color: var(--medium-font-color);
     padding: .3rem;
 }
+
+.update-profile-component .profile_image img {
+    width: 100%;
+}
+
+.profile_image {
+    text-align: center;
+}
+
+.profile_image img.loading {
+    opacity: 0.3;
+}
