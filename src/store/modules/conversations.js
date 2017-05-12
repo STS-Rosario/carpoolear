@@ -14,7 +14,7 @@ const state = {
         /*
             id => {
                 list: [],
-                page: Numbre,
+                timestamp: DateTime,
                 last_page: Boolean
             }
         */
@@ -26,7 +26,8 @@ const getters = {
     ...pagination.makeGetters('list'),
     users: state => state.userList,
     selectedConversation: state => state.list ? state.list.find(item => item.id === state.selectedID) : null,
-    messages: state => state.messages[state.selectedID]
+    messages: state => state.messages[state.selectedID],
+    messagesList: state => state.messages[state.selectedID].list.reverse()
 };
 
 // actions
@@ -59,19 +60,41 @@ const actions = {
         if (!store.state.messages[id]) {
             store.state.messages[id] = {
                 list: [],
-                page: 1,
+                timestamp: null,
                 last_page: false
             };
         }
         globalStore.dispatch('conversations/findMessage');
     },
 
-    findMessage (store, more = false) {
-        let id = store.state.selectedID;
+    findMessage (store, {id, more}) {
+        if (!id) {
+            id = store.state.selectedID;
+        }
         let msgObj = store.state.messages[id];
+        let timestamp = more ? msgObj.timestamp : null;
+        let unread = false;
 
-        return conversationApi.getMessages({ 'unread': false, pageSize, page: msgObj.page }).then(response => {
+        return conversationApi.getMessages({ unread, pageSize, timestamp }).then(response => {
+            if (!more) {
+                store.commit(types.CONVERSATION_BLANK_MESSAGES, {id});
+            }
+            if (response.data.length > 0) {
+                store.commit(types.CONVERSATION_SET_LAST_PAGE);
+            } else {
+                response.data.forEach(item => {
+                    store.commit(types.CONVERSATION_ADD_MESSAGE, item);
+                });
+            }
+        }).catch(error => {
+            return Promise.reject(error);
+        });
+    },
 
+    sendMessage (store, message) {
+        let id = store.state.selectedID;
+        return conversationApi.send(id, message).then(response => {
+            store.commit(types.CONVERSATION_ADD_MESSAGE, {message: response.data});
         }).catch(error => {
             return Promise.reject(error);
         });
@@ -89,6 +112,29 @@ const mutations = {
 
     [types.CONVERSATION_SET_SELECTED] (state, id) {
         state.selectedID = id;
+    },
+
+    [types.CONVERSATION_ADD_MESSAGE] (state, {message, id}) {
+        if (!id) {
+            id = state.selectedID;
+        }
+        state.messages[id].list.push(message);
+    },
+
+    [types.CONVERSATION_SET_LAST_PAGE] (state, {id}) {
+        if (!id) {
+            id = state.selectedID;
+        }
+        state.messages[id].last_page = true;
+    },
+
+    [types.CONVERSATION_BLANK_MESSAGES] (state, {id}) {
+        if (!id) {
+            id = state.selectedID;
+        }
+        state.messages[id].last_page = false;
+        state.messages[id].list = [];
+        state.messages[id].timestamp = null;
     }
 };
 
