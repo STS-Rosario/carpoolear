@@ -9,7 +9,7 @@ import device from './modules/device';
 import myTrips from './modules/my-trips';
 import conversations from './modules/conversations';
 import cars from './modules/car';
-
+import friends from './modules/friends';
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -25,6 +25,7 @@ export default new Vuex.Store({
         device,
         myTrips,
         conversations,
-        cars
+        cars,
+        friends
     }
 });

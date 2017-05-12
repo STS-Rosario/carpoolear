@@ -71,10 +71,29 @@ export default [
         props: true
     },
     {
-        path: '/profile/update',
-        name: 'profile_update',
-        component: require('../components/views/UpdateProfile.vue'),
-        beforeEnter: auth
+        path: '/setting',
+        component: require('../components/views/Settings.vue'),
+        beforeEnter: auth,
+        children: [
+            {
+                path: 'profile',
+                name: 'profile_update',
+                component: require('../components/sections/UpdateProfile.vue'),
+                meta: 'profile'
+            },
+            {
+                path: 'friends',
+                name: 'friends_setting',
+                component: require('../components/sections/FriendsSetting.vue'),
+                meta: 'friends'
+            },
+            {
+                path: 'friends/search',
+                name: 'friends_search',
+                component: require('../components/sections/FriendsRequest.vue'),
+                meta: 'friends'
+            }
+        ]
     },
     {
         path: '/conversations',
