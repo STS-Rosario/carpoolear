@@ -11,7 +11,6 @@ class ConversationApi extends TaggedApi {
     }
 
     create (userId) {
-        console.log(userId);
         return this.post('/api/conversations', {to: userId});
     }
 
@@ -25,6 +24,14 @@ class ConversationApi extends TaggedApi {
 
     send (id, text) {
         return this.post('/api/conversations/' + id + '/send', {message: text});
+    }
+
+    unread (id = null) {
+        let data = {};
+        if (id) {
+            data.conversation_id = id;
+        }
+        return this.get('/api/conversations/unread', data);
     }
 
 }

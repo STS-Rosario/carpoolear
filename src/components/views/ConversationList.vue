@@ -20,6 +20,10 @@
                                 <img alt="" :src="conversation.image | conversation-image" class="conversation_image circle-box" />
                                 <span class="conversation-title">{{conversation.title}}</span>
                                 <span class="conversation-timestamp">{{ conversation.updated_at | moment("h:mm a") }}</span>
+                                <div>
+                                    <span v-if="conversation.last_message"> {{ conversation.last_message.text }} </span>
+                                </div>
+                                
                             </li> 
                             <li v-if="moreConversations" class="list-group-item" >
                                 <button class="btn btn-primary btn-block" @click="nextPage">Más resultados</button>
@@ -51,6 +55,7 @@
 </template>
 <script>
 import {mapGetters, mapActions} from 'vuex';
+import {Thread} from '../../classes/Threads.js';
 import Loading from '../Loading.vue';
 import router from '../../router';
 
@@ -61,9 +66,7 @@ export default {
             textSearch: ''
         };
     },
-    mounted () {
-        this.conversationsSearch();
-    },
+
     computed: {
         ...mapGetters({
             conversations: 'conversations/list',
@@ -81,7 +84,9 @@ export default {
         ...mapActions({
             conversationsSearch: 'conversations/listSearch',
             searchUser: 'conversations/getUserList',
-            create: 'conversations/createConversation'
+            create: 'conversations/createConversation',
+            unreadMessage: 'conversations/getUnreaded',
+            select: 'conversations/select'
         }),
 
         nextPage () {
@@ -105,6 +110,20 @@ export default {
             router.push({ name: 'conversation-chat', params: { id: conversation.id } });
         }
     },
+
+    beforeDestroy () {
+        this.thread.stop();
+        this.select(null);
+    },
+
+    mounted () {
+        this.conversationsSearch();
+        this.thread = new Thread(() => {
+            this.unreadMessage();
+        });
+        this.thread.run(5000);
+    },
+
     components: {
         Loading
     }

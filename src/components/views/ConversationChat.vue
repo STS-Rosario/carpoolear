@@ -79,14 +79,14 @@ export default {
         }
     },
     beforeDestroy () {
-        this.thread.stop();
+        // this.thread.stop();
     },
     mounted () {
         this.select(parseInt(this.id));
         this.thread = new Thread(() => {
             this.unreadMessage();
         });
-        this.thread.run(5000);
+        // this.thread.run(5000);
     },
     watch: {
         'id': function () {
