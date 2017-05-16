@@ -116,6 +116,14 @@ export default {
         this.select(null);
     },
 
+    watch: {
+        '$route': function () {
+            if (!this.$route.meta.hide) {
+                this.select(null);
+            }
+        }
+    },
+
     mounted () {
         this.conversationsSearch();
         this.thread = new Thread(() => {
