@@ -15,11 +15,11 @@ const state = {
         /*
             id => {
                 list: [],
-                timestamp: DateTime,
                 lastPage: Boolean
             }
         */
-    }
+    },
+    timestamp: null
 };
 
 // getters
@@ -30,7 +30,6 @@ const getters = {
     msgObj: state => state.messages[state.selectedID],
     messagesList: state => state.messages[state.selectedID].list,
     lastPageConversation: state => state.messages[state.selectedID].lastPage
-    // timestampConversation: state => state.messages[state.selectedID].timestamp
 };
 
 // actions
@@ -88,16 +87,34 @@ const actions = {
     },
 
     getUnreaded (store) {
-        let id = null;
+        let data = {};
         if (store.state.selectedID) {
-            id = store.state.selectedID;
+            data.conversation_id = store.state.selectedID;
         }
-        return conversationApi.unread(id).then(response => {
+        if (store.state.timestamp) {
+            data.timestamp = store.state.timestamp;
+        }
+        return conversationApi.unread(data).then(response => {
             response.data.reverse().forEach(msg => {
-                store.commit(types.CONVERSATION_CREATE_MESSAGES, msg.conversation_id);
-                store.commit(types.CONVERSATION_INSERT_MESSAGE, { messages: [msg] });
-                store.commit(types.CONVERSATION_UPDATE, msg);
+                new Promise((resolve, reject) => {
+                    if (!store.state.messages[msg.conversation_id]) {
+                        conversationApi.show(msg.conversation_id).then((response) => {
+                            store.commit(types.CONVERSATION_PUSH, response.data);
+                            resolve();
+                        }).catch(reject);
+                    } else {
+                        resolve();
+                    }
+                }).then(() => {
+                    store.commit(types.CONVERSATION_CREATE_MESSAGES, msg.conversation_id);
+                    store.commit(types.CONVERSATION_INSERT_MESSAGE, { messages: [msg] });
+                    store.commit(types.CONVERSATION_UPDATE, msg);
+                });
             });
+            if (response.data.length > 0) {
+                let first = response.data[0];
+                store.commit(types.CONVERSATION_SET_TIMESTAMP, first.created_at);
+            }
         }).catch(error => {
             return Promise.reject(error);
         });
@@ -124,10 +141,6 @@ const actions = {
             } else {
                 let messages = response.data.reverse();
                 store.commit(types.CONVERSATION_ADD_MESSAGE, {messages});
-                /*
-                let last = messages[0];
-                store.commit(types.CONVERSATION_SET_TIMESTAMP, {timestamp: last.created_at});
-                */
             }
         }).catch(error => {
             return Promise.reject(error);
@@ -150,6 +163,14 @@ const actions = {
 const mutations = {
     ...pagination.makeMutations('list'),
 
+    [types.CONVERSATION_PUSH] (state, conv) {
+        state.list.push(conv);
+    },
+
+    [types.CONVERSATION_SET_TIMESTAMP] (state, timestamp) {
+        state.timestamp = timestamp;
+    },
+
     [types.CONVERSATION_SET_USERLIST] (state, users) {
         state.userList = users;
     },
@@ -168,7 +189,6 @@ const mutations = {
         if (!state.messages[id]) {
             let obj = {
                 list: [],
-                // timestamp: null,
                 lastPage: false
             };
             Vue.set(state.messages, id, obj);
@@ -190,7 +210,6 @@ const mutations = {
         let obj = {};
         obj[id] = {
             list: [...messages, ...state.messages[id].list],
-            // timestamp: state.messages[id].timestamp,
             lastPage: state.messages[id].lastPage
         };
 
@@ -202,12 +221,11 @@ const mutations = {
         conv.unread = true;
         conv.updated_at = msg.created_at;
         conv.last_message = msg;
-        /*
-        conv.sort((a, b) => a.updated_at <= b.updated_at);
+
+        state.list.sort((a, b) => a.updated_at <= b.updated_at);
         if (!state.messages[msg.conversation_id].timestamp) {
             state.messages[msg.conversation_id].timestamp = msg.created_at;
         }
-        */
     },
 
     [types.CONVERSATION_SET_LAST_PAGE] (state, {id} = {}) {
@@ -216,15 +234,6 @@ const mutations = {
         }
         state.messages[id].lastPage = true;
     },
-
-    /*
-    [types.CONVERSATION_SET_TIMESTAMP] (state, {id, timestamp} = {}) {
-        if (!id) {
-            id = state.selectedID;
-        }
-        state.messages[id].timestamp = timestamp;
-    },
-    */
 
     [types.CONVERSATION_BLANK_MESSAGES] (state, {id}) {
         id = parseInt(id);
