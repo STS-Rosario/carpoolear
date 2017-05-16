@@ -4,6 +4,11 @@ class AuthApi extends TaggedApi {
 
   /** AUTH API **/
 
+    // data = {access_token}
+    loginWithProvider (provider, data) {
+        return this.post('/api/social/login/' + provider, data);
+    }
+
   /**
    * User login
    * @param {Object} creds {

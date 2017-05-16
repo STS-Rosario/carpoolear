@@ -168,7 +168,8 @@ const actions = {
     resetPassword,
     changePassword,
     update,
-    updatePhoto
+    updatePhoto,
+    onLoggin
 };
 
 // mutations
