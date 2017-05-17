@@ -34,6 +34,7 @@ function onLoggin (store, token) {
     globalStore.dispatch('myTrips/tripAsPassenger');
     globalStore.dispatch('myTrips/pendingRates');
     globalStore.dispatch('cars/index');
+    globalStore.dispatch('passenger/getPendingRequest');
     router.push({ name: 'trips' });
 }
 

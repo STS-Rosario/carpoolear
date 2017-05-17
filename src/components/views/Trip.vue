@@ -83,7 +83,12 @@
             </div>
             <router-link v-if="user.id == trip.user.id" :to="{name: 'update-trip', params: { id: trip.id}}"> Editar  </router-link>
 
-            <button class="btn btn-primary" @click="verMensajes"> Coordinar viaje  </button1>
+            <button class="btn btn-primary" @click="toMessages" v-if="!owner"> Coordinar viaje  </button>
+
+            <button class="btn btn-primary" @click="makeRequest" v-if="canRequest"> Solicitar asciento </button>
+
+            <button class="btn" v-if="!canRequest"> Solicitud enviada </button>
+
         </template>
         <template v-else>
             <div>
@@ -94,23 +99,26 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import router from '../../router';
+
 export default {
     name: 'trip',
     data () {
         return {
-            trip: null
+            trip: null,
+            sending: false
         };
     },
 
     methods: {
         ...mapActions({
-            getTrip: 'getTrip'
+            getTrip: 'getTrip',
+            lookConversation: 'conversations/createConversation',
+            make: 'passenger/makeRequest'
         }),
 
         loadTrip () {
-            console.log(this.id);
             this.getTrip(this.id).then(trip => {
-                console.log(trip);
                 this.trip = trip;
             }).catch(error => {
                 if (error) {
@@ -120,8 +128,20 @@ export default {
             });
         },
 
-        verMensajes () {
-            
+        toMessages () {
+            this.lookConversation(this.trip.user).then(conversation => {
+                router.push({ name: 'conversation-chat', params: { id: conversation.id } });
+            });
+        },
+
+        makeRequest () {
+            this.sending = true;
+            this.make(this.trip.id).then(() => {
+                this.sending = false;
+                this.trip.request = 'send';
+            }).catch(() => {
+                this.sending = false;
+            });
         }
     },
 
@@ -131,7 +151,6 @@ export default {
 
     watch: {
         'id': function (value) {
-            console.log('watiching');
             this.loadTrip();
         }
     },
@@ -139,7 +158,15 @@ export default {
     computed: {
         ...mapGetters({
             user: 'auth/user'
-        })
+        }),
+
+        owner () {
+            return this.user.id === this.trip.user_id;
+        },
+
+        canRequest () {
+            return !this.owner && !this.trip.request;
+        }
     },
 
     components: {

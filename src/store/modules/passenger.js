@@ -1,6 +1,5 @@
 import {PassengerApi} from '../../services/api';
 import * as types from '../mutation-types';
-import bus from '../../services/bus-event';
 import globalStore from '../index';
 
 /* eslint-disable no-undef */
@@ -21,7 +20,7 @@ const getters = {
 const actions = {
     getPendingRequest (store) {
         return passengerApi.allRequest().then(response => {
-            store.commit(types.PASSENGER_SET_PENDING, response);
+            store.commit(types.PASSENGER_SET_PENDING, response.data);
         });
     },
 
