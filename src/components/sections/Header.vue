@@ -25,7 +25,7 @@
                         <router-link :to="{name: 'my-trips'}">Mis Viajes</router-link>
                     </li>
                     <li>
-                        <router-link :to="{name: 'my-trips'}">Mensajes</router-link>
+                        <router-link :to="{name: 'conversations-list'}">Mensajes</router-link>
                     </li>
                     <li>
                         <router-link :to="{name: 'my-trips'}">Perfil</router-link>

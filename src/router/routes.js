@@ -96,6 +96,23 @@ export default [
         ]
     },
     {
+        path: '/conversations',
+        name: 'conversations-list',
+        component: require('../components/views/ConversationList'),
+        beforeEnter: auth,
+        children: [
+            {
+                path: ':id',
+                name: 'conversation-chat',
+                component: require('../components/views/ConversationChat'),
+                props: true,
+                meta: {
+                    hide: true
+                }
+            }
+        ]
+    },
+    {
         path: '/*',
         redirect: '/trips'
     }

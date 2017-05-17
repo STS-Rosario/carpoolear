@@ -388,6 +388,10 @@ input[type=radio] + label {
     padding: .3rem;
 }
 
+.conversation_list .conversation_image {
+    width: 56px;
+}
+
 .update-profile-component .profile_image img {
     width: 100%;
 }

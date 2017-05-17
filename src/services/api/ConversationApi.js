@@ -6,6 +6,10 @@ class ConversationApi extends TaggedApi {
         return this.get('/api/conversations', data);
     }
 
+    show (id) {
+        return this.get('/api/conversations/show/' + id);
+    }
+
     userList (data) {
         return this.get('/api/conversations/user-list', data);
     }
@@ -24,6 +28,10 @@ class ConversationApi extends TaggedApi {
 
     send (id, text) {
         return this.post('/api/conversations/' + id + '/send', {message: text});
+    }
+
+    unread (data = {}) {
+        return this.get('/api/conversations/unread', data);
     }
 
 }
