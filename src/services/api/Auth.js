@@ -9,6 +9,14 @@ class AuthApi extends TaggedApi {
         return this.post('/api/social/login/' + provider, data);
     }
 
+    updateWithProvider (provider, data) {
+        return this.put('/api/social/update/' + provider, data);
+    }
+
+    matchFriendsWithProvider (provider, data) {
+        return this.post('/api/social/friends/' + provider, data);
+    }
+
   /**
    * User login
    * @param {Object} creds {
