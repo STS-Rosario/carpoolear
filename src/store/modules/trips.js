@@ -46,6 +46,43 @@ const mutations = {
         for (let i = 0; i < state.trips.length; i++) {
             if (state.trips[i].id === trip.id) {
                 state.trips[i] = trip;
+                return;
+            }
+        }
+    },
+
+    [types.TRIPS_SET_REQUEST] (state, id) {
+        for (let i = 0; i < state.trips.length; i++) {
+            if (state.trips[i].id === id) {
+                state.trips[i].request = 'send';
+                return;
+            }
+        }
+    },
+
+    [types.TRIPS_ADD_PASSENGER] (state, {id, user}) {
+        for (let i = 0; i < state.trips.length; i++) {
+            if (state.trips[i].id === id) {
+                if (!state.trips[i].passenger) {
+                    state.trips[i].passenger = [];
+                }
+                state.trips[i].passenger.push(user);
+                return;
+            }
+        }
+    },
+
+    [types.TRIPS_REMOVE_PASSENGER] (state, {id, user}) {
+        for (let i = 0; i < state.trips.length; i++) {
+            if (state.trips[i].id === id) {
+                if (!state.trips[i].passenger) {
+                    return;
+                }
+                var index = state.trips[i].passenger.findIndex(item => item.user_id === user.id);
+                if (index >= 0) {
+                    state.trips[i].passenger.splice(index, 1);
+                }
+                return;
             }
         }
     }

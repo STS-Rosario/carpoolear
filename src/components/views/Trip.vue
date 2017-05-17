@@ -82,6 +82,8 @@
                 </div>
             </div>
             <router-link v-if="user.id == trip.user.id" :to="{name: 'update-trip', params: { id: trip.id}}"> Editar  </router-link>
+
+            <button class="btn btn-primary" @click="verMensajes"> Coordinar viaje  </button1>
         </template>
         <template v-else>
             <div>
@@ -116,6 +118,10 @@ export default {
                     this.trip = null;
                 }
             });
+        },
+
+        verMensajes () {
+            
         }
     },
 

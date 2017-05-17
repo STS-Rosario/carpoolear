@@ -59,6 +59,40 @@ const mutations = {
     },
     [types.MYTRIPS_SET_PENDING_RATES] (state, rates) {
         state.pending_rates = rates;
+    },
+
+    [types.MYTRIPS_ADD_PASSENGER] (state, {id, user}) {
+        for (let i = 0; i < state.driver_trip.length; i++) {
+            if (state.driver_trip[i].id === id) {
+                if (!state.driver_trip[i].passenger) {
+                    state.driver_trip[i].passenger = [];
+                }
+                state.driver_trip[i].passenger.push(user);
+                return;
+            }
+        }
+    },
+
+    [types.MYTRIPS_REMOVE_PASSENGER] (state, {id, user}) {
+        for (let i = 0; i < state.driver_trip.length; i++) {
+            if (state.driver_trip[i].id === id) {
+                if (!state.driver_trip[i].passenger) {
+                    return;
+                }
+                var index = state.driver_trip[i].passenger.findIndex(item => item.user_id === user.id);
+                if (index >= 0) {
+                    state.driver_trip[i].passenger.splice(index, 1);
+                }
+                return;
+            }
+        }
+    },
+
+    [types.MYTRIPS_REMOVE_PASSENGER_TRIP] (state, id) {
+        let index = state.passenger_trip.findIndex(item => item.id === id);
+        if (index >= 0) {
+            state.passenger_trip.splice(index, 0);
+        }
     }
 };
 
