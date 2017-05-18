@@ -13,7 +13,7 @@ const state = {
 
 // getters
 const getters = {
-    trips: state => state.trips
+    pendingRequest: state => state.pendingRequest
 };
 
 // actions
@@ -26,7 +26,7 @@ const actions = {
 
     makeRequest (store, tripId) {
         return passengerApi.make(tripId).then(response => {
-            globalStore.commit('trips/' + types.TRIPS_SET_REQUEST, tripId);
+            globalStore.commit('trips/' + types.TRIPS_SET_REQUEST, {id: tripId, value: 'send'});
             return Promise.resolve();
         }).catch(error => {
             return Promise.reject(error);
@@ -61,11 +61,14 @@ const actions = {
 
     cancel (store, {user, trip}) {
         return passengerApi.cancel(trip.id, user.id).then(response => {
-            if (trip.user_id === user.id) {
+            if (trip.request !== 'send') {
                 globalStore.commit('trips/' + types.TRIPS_REMOVE_PASSENGER, {id: trip.id, user});
                 globalStore.commit('myTrips/' + types.MYTRIPS_REMOVE_PASSENGER, {id: trip.id, user});
+                if (trip.user.id !== user.id) {
+                    globalStore.commit('myTrips/' + types.MYTRIPS_REMOVE_PASSENGER_TRIP, trip.id);
+                }
             } else {
-                globalStore.commit('myTrips/' + types.MYTRIPS_REMOVE_PASSENGER_TRIP, trip.id);
+                globalStore.commit('trips/' + types.TRIPS_SET_REQUEST, {id: trip.id, value: ''});
             }
         }).catch(error => {
             return Promise.reject(error);
@@ -81,7 +84,8 @@ const mutations = {
     },
 
     [types.PASSENGER_REMOVE_PENDING] (state, data) {
-        state.pendingRequest = state.pendingRequest.filter(item => item.user_id !== data.userId || item.trip_id !== data.tripId);
+        var index = state.pendingRequest.findIndex(item => item.user.id === data.user_id || item.trip_id === data.trip_id);
+        state.pendingRequest.splice(index, 1);
     }
 };
 

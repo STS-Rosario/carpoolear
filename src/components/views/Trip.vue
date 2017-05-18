@@ -76,6 +76,19 @@
                                 <span class="trip_seats-available_label">Lugares<br />libres</span>
                             </div> 
                         </div>
+                        <div class="row">
+                            <div class="col-xs-offset-2 col-xs-12">
+                                <h4>Pasajeros</h4>
+                                <ul>
+                                    <li v-for="p in trip.passenger">
+                                        {{p.name}}
+                                        <span v-if="owner" @click="removePassenger(p)">
+                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div> 
+                        </div>
                     </div>
                     <div class="col-xs-8">
                     </div>
@@ -85,10 +98,13 @@
 
             <button class="btn btn-primary" @click="toMessages" v-if="!owner"> Coordinar viaje  </button>
 
-            <button class="btn btn-primary" @click="makeRequest" v-if="canRequest"> Solicitar asciento </button>
-
-            <button class="btn" v-if="!canRequest"> Solicitud enviada </button>
-
+            <template v-if="!inPassenger">
+                <button class="btn btn-primary" @click="makeRequest" v-if="canRequest"> Solicitar asciento </button>
+                <button class="btn" v-if="!canRequest" @click="cancelRequest"> Solicitud enviada </button>
+            </template>
+            <template v-if="inPassenger">
+                <button class="btn btn-primary" @click="cancelRequest" v-if="canRequest"> Cancelar viaje </button>
+            </template>
         </template>
         <template v-else>
             <div>
@@ -114,7 +130,8 @@ export default {
         ...mapActions({
             getTrip: 'getTrip',
             lookConversation: 'conversations/createConversation',
-            make: 'passenger/makeRequest'
+            make: 'passenger/makeRequest',
+            cancel: 'passenger/cancel'
         }),
 
         loadTrip () {
@@ -142,6 +159,32 @@ export default {
             }).catch(() => {
                 this.sending = false;
             });
+        },
+
+        cancelRequest () {
+            this.sending = true;
+            this.cancel({ user: this.user, trip: this.trip }).then(() => {
+                this.sending = false;
+                if (this.trip.request !== 'send') {
+                    let index = this.trip.passenger.findIndex(item => item.id === this.user.id);
+                    this.trip.passenger.splice(index, 1);
+                } else {
+                    this.trip.request = '';
+                }
+            }).catch(() => {
+                this.sending = false;
+            });
+        },
+
+        removePassenger (user) {
+            this.sending = true;
+            this.cancel({ user: user, trip: this.trip }).then(() => {
+                this.sending = false;
+                let index = this.trip.passenger.findIndex(item => item.id === user.id);
+                this.trip.passenger.splice(index, 1);
+            }).catch(() => {
+                this.sending = false;
+            });
         }
     },
 
@@ -161,12 +204,17 @@ export default {
         }),
 
         owner () {
-            return this.user.id === this.trip.user_id;
+            return this.user.id === this.trip.user.id;
         },
 
         canRequest () {
             return !this.owner && !this.trip.request;
+        },
+
+        inPassenger () {
+            return this.trip.passenger.findIndex(item => item.id === this.user.id) >= 0;
         }
+
     },
 
     components: {

@@ -1,5 +1,14 @@
 <template>
   <div class="trips">
+        <h2>Pendiente de contestar</h2>
+        <Loading :data="pendingRequest">
+            <div id="trips-list">
+                <PendingRequest v-for="r in pendingRequest" :user="r.user" :trip="findTrip(r.trip_id)"></PendingRequest>
+            </div>
+            <p slot="no-data" class="alert alert-warning"  role="alert">No hay pedientes de contestar</p> 
+            <p slot="loading" class="alert alert-info" role="alert">Cargando...</p>
+        </Loading>
+
         <h2>Viajes Creados</h2> 
         <Loading :data="trips">
             <div id="trips-list">
@@ -25,8 +34,8 @@
                     {{rate.id}}
                 </div>
             </div>
-            <p slot="no-data" class="alert alert-warning"  role="alert">No hay viajes</p> 
-            <p slot="loading" class="alert alert-info" role="alert">Cargando viajes ...</p>
+            <p slot="no-data" class="alert alert-warning"  role="alert">No hay calificaciones pendientes</p> 
+            <p slot="loading" class="alert alert-info" role="alert">Cargando calificaciones ...</p>
         </Loading>
     </div> 
 </template>
@@ -34,26 +43,36 @@
 <script>
 import Trip from '../sections/Trip.vue';
 import Loading from '../Loading.vue';
+import PendingRequest from '../PendingRequest';
 import { mapGetters } from 'vuex';
 
 export default {
-    name: 'trips',
-    methods: {
-    },
+    name: 'my-trips',
+
     mounted () {
-        // this.search();
+
     },
+
     computed: {
         ...mapGetters({
             trips: 'myTrips/myTrips',
             passengerTrips: 'myTrips/passengerTrips',
             pendingRates: 'myTrips/pendingRates',
+            pendingRequest: 'passenger/pendingRequest',
             user: 'auth/user'
         })
     },
+
+    methods: {
+        findTrip (id) {
+            return this.trips.find(item => item.id === id);
+        }
+    },
+
     components: {
         Trip,
-        Loading
+        Loading,
+        PendingRequest
     }
 };
 </script>

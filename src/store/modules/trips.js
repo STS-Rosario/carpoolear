@@ -51,10 +51,10 @@ const mutations = {
         }
     },
 
-    [types.TRIPS_SET_REQUEST] (state, id) {
+    [types.TRIPS_SET_REQUEST] (state, {id, value}) {
         for (let i = 0; i < state.trips.length; i++) {
             if (state.trips[i].id === id) {
-                state.trips[i].request = 'send';
+                state.trips[i].request = value;
                 return;
             }
         }
@@ -78,7 +78,7 @@ const mutations = {
                 if (!state.trips[i].passenger) {
                     return;
                 }
-                var index = state.trips[i].passenger.findIndex(item => item.user_id === user.id);
+                var index = state.trips[i].passenger.findIndex(item => item.id === user.id);
                 if (index >= 0) {
                     state.trips[i].passenger.splice(index, 1);
                 }

@@ -79,7 +79,7 @@ const mutations = {
                 if (!state.driver_trip[i].passenger) {
                     return;
                 }
-                var index = state.driver_trip[i].passenger.findIndex(item => item.user_id === user.id);
+                var index = state.driver_trip[i].passenger.findIndex(item => item.id === user.id);
                 if (index >= 0) {
                     state.driver_trip[i].passenger.splice(index, 1);
                 }
@@ -91,7 +91,7 @@ const mutations = {
     [types.MYTRIPS_REMOVE_PASSENGER_TRIP] (state, id) {
         let index = state.passenger_trip.findIndex(item => item.id === id);
         if (index >= 0) {
-            state.passenger_trip.splice(index, 0);
+            state.passenger_trip.splice(index, 1);
         }
     }
 };
