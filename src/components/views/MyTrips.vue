@@ -57,7 +57,7 @@ export default {
         ...mapGetters({
             trips: 'myTrips/myTrips',
             passengerTrips: 'myTrips/passengerTrips',
-            pendingRates: 'myTrips/pendingRates',
+            pendingRates: 'rates/pendingRates',
             pendingRequest: 'passenger/pendingRequest',
             user: 'auth/user'
         })

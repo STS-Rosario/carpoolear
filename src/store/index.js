@@ -11,6 +11,8 @@ import conversations from './modules/conversations';
 import cars from './modules/car';
 import friends from './modules/friends';
 import passenger from './modules/passenger';
+import notifications from './modules/notifications';
+import rates from './modules/rates';
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -28,6 +30,8 @@ export default new Vuex.Store({
         conversations,
         cars,
         friends,
-        passenger
+        passenger,
+        notifications,
+        rates
     }
 });

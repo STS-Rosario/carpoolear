@@ -71,6 +71,13 @@ export default [
         props: true
     },
     {
+        path: '/notifications',
+        name: 'notifications',
+        component: require('../components/views/Notifications.vue'),
+        beforeEnter: auth,
+        props: true
+    },
+    {
         path: '/setting',
         component: require('../components/views/Settings.vue'),
         beforeEnter: auth,

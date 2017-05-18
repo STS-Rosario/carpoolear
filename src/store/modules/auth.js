@@ -32,9 +32,10 @@ function onLoggin (store, token) {
     globalStore.dispatch('trips/tripsSearch');
     globalStore.dispatch('myTrips/tripAsDriver');
     globalStore.dispatch('myTrips/tripAsPassenger');
-    globalStore.dispatch('myTrips/pendingRates');
+    globalStore.dispatch('rates/pendingRates');
     globalStore.dispatch('cars/index');
     globalStore.dispatch('passenger/getPendingRequest');
+    globalStore.store.dispatch('startThread');
     router.push({ name: 'trips' });
 }
 
@@ -137,6 +138,7 @@ function logout (store) {
     }
     store.commit(types.AUTH_LOGOUT);
     globalStore.commit('device/' + types.DEVICE_SET_DEVICES, []);
+    globalStore.dispatch('stopThread');
 }
 
 function update (store, data) {

@@ -7,6 +7,7 @@ import PassengerApi from './PassengerApi';
 import ConversationApi from './ConversationApi';
 import CarApi from './Car';
 import FriendsApi from './FriendApi';
+import NotificationApi from './Notifications.js';
 
 export {
   AuthApi,
@@ -17,5 +18,6 @@ export {
   PassengerApi,
   ConversationApi,
   CarApi,
-  FriendsApi
+  FriendsApi,
+  NotificationApi
 };

@@ -14,6 +14,11 @@
                 <router-link v-if="!logged" :to="{name: 'login'}">Login</router-link>
                 <router-link v-if="!logged" :to="{name: 'register'}">Register</router-link>
                 
+                <span class="header_notifications" @click="toNotifications">
+                    <i class="fa fa-bell" aria-hidden="true"></i>
+                    <span class="badge" v-if="notificationsCount > 0">{{notificationsCount}}</span>
+                </span> 
+
                 <div class="header_profile" v-if="user">
                     <span > {{user.name}} </span>
                     <img class="header_profile_image"  :src=" user.image | profile-image " alt="">
@@ -50,19 +55,24 @@ import socialShare from '../../services/socialShare.js';
 import dialogs from '../../services/dialogs.js';
 import {mapGetters} from 'vuex';
 import {dropdown} from 'vue-strap';
+import router from '../../router';
 
 export default {
     name: 'header',
+
     data () {
         return {
         };
     },
+
     computed: {
         ...mapGetters({
             logged: 'auth/checkLogin',
-            user: 'auth/user'
+            user: 'auth/user',
+            notificationsCount: 'notifications/count'
         })
     },
+
     methods: {
         share () {
             dialogs.message('Message example');
@@ -70,8 +80,12 @@ export default {
         },
         logout () {
             this.$store.dispatch('auth/logout');
+        },
+        toNotifications () {
+            router.push({name: 'notifications'});
         }
     },
+
     components: {
         dropdown
     }
