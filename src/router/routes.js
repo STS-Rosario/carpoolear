@@ -1,30 +1,119 @@
-/*jshint esversion: 6 */
-import m from './middleware.js';
+/* jshint esversion: 6 */
+import {auth} from './middleware.js';
 
 export default [
-  {
-    path: '/about',
-    component: require('../Components/About')
-  },
-  {
-    path: '/admin',
-    component: require('../Components/About'),
-    beforeEnter: m.auth
-  },
-  {
-    path: '/login',
-    component: require('../Components/Login')
-  },
-  {
-    path: '/trips',
-    component: require('../Components/Trips')
-  },
-  {
-    path: '/trips/:id',
-    component: require('../Components/Trip')
-  },
-  {
-    path: '/*',
-    redirect: '/trips'
-  }
+    {
+        path: '/about',
+        component: require('../components/views/About')
+    },
+    {
+        path: '/admin',
+        component: require('../components/views/About'),
+        beforeEnter: auth
+    },
+    {
+        path: '/login',
+        name: 'login',
+        component: require('../components/views/Login')
+    },
+    {
+        path: '/register',
+        name: 'register',
+        component: require('../components/views/Register')
+    },
+    {
+        path: '/activate/:token',
+        name: 'activate',
+        component: require('../components/views/Activate'),
+        props: true
+    },
+    {
+        path: '/reset-password',
+        name: 'reset-password',
+        component: require('../components/views/ResetPassword'),
+        props: true
+    },
+    {
+        path: '/reset-password/:token',
+        name: 'reset-password-confirm',
+        component: require('../components/views/ResetPassword'),
+        props: true
+    },
+    {
+        path: '/my-trips',
+        name: 'my-trips',
+        component: require('../components/views/MyTrips'),
+        beforeEnter: auth
+    },
+    {
+        path: '/trips',
+        name: 'trips',
+        component: require('../components/views/Trips')
+    },
+    {
+        path: '/trips/create',
+        name: 'new-trip',
+        component: require('../components/views/NewTrip'),
+        beforeEnter: auth
+    },
+    {
+        path: '/trips/update/:id',
+        name: 'update-trip',
+        component: require('../components/views/NewTrip'),
+        beforeEnter: auth,
+        props: true
+    },
+    {
+        path: '/trips/:id',
+        name: 'detail_trip',
+        component: require('../components/views/Trip'),
+        beforeEnter: auth,
+        props: true
+    },
+    {
+        path: '/setting',
+        component: require('../components/views/Settings.vue'),
+        beforeEnter: auth,
+        children: [
+            {
+                path: 'profile',
+                name: 'profile_update',
+                component: require('../components/sections/UpdateProfile.vue'),
+                meta: 'profile'
+            },
+            {
+                path: 'friends',
+                name: 'friends_setting',
+                component: require('../components/sections/FriendsSetting.vue'),
+                meta: 'friends'
+            },
+            {
+                path: 'friends/search',
+                name: 'friends_search',
+                component: require('../components/sections/FriendsRequest.vue'),
+                meta: 'friends'
+            }
+        ]
+    },
+    {
+        path: '/conversations',
+        name: 'conversations-list',
+        component: require('../components/views/ConversationList'),
+        beforeEnter: auth,
+        children: [
+            {
+                path: ':id',
+                name: 'conversation-chat',
+                component: require('../components/views/ConversationChat'),
+                props: true,
+                meta: {
+                    hide: true
+                }
+            }
+        ]
+    },
+    {
+        path: '/*',
+        redirect: '/trips'
+    }
 ];

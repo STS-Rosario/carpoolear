@@ -1,45 +1,61 @@
-/*jshint esversion: 6 */
+/* jshint esversion: 6 */
 
 import Vue from 'vue';
 import App from './App';
 
 import VueResource from 'vue-resource';
 import VueAnalytics from 'vue-analytics';
+import VueMoment from 'vue-moment';
+require('moment/locale/es');
 
 import router from './router';
 import store from './store';
 
+/* eslint-disable no-unused-vars */
 import cordova from './cordova';
 
-import font_awesome_css from './styles/font-awesome/css/font-awesome.min.css';
+import fontAwesomeCss from './styles/font-awesome/css/font-awesome.min.css';
 
-import bootstrap_css from './styles/bootstrap/css/bootstrap.min.css';
+import bootstrapCss from './styles/bootstrap/css/bootstrap.min.css';
 
+import cssHelpers from './styles/helpers.css';
 import css from './styles/main.css';
+
+import bus from './services/bus-event';
 
 Vue.use(VueResource);
 
-
-/* eslint-disable no-unused-vars */
-let app = new Vue({
-  el: '#app',
-  router,
-  store,
-  template: '<App/>',
-  components: { App }
-});
-
- 
 Vue.use(VueAnalytics, {
-  id: 'UA-40995702-4'
+    id: 'UA-40995702-4'
 });
 
-/* Just for debuggin */
-window.Vue = Vue;
+Vue.use(VueMoment);
+require('./filters.js');
+
+import * as VueGoogleMaps from 'vue2-google-maps';
+
+Vue.use(VueGoogleMaps, {
+    load: {
+        key: process.env.MAPS_API,
+        libraries: 'places',
+        installComponents: true
+    }
+});
+
 window.store = store;
 
-import { Thread, stopThreads }  from './classes/Threads';
-window.Thread = Thread;
-window.stopThreads = stopThreads;
+if (!window.cordova) {
+    console.log('Not running in cordova');
+    store.dispatch('init');
+}
 
-
+bus.on('system-ready', () => {
+    let app = new Vue({
+        el: '#app',
+        router,
+        store,
+        template: '<App/>',
+        components: { App }
+    });
+});
+/* eslint-enable no-unused-vars */
