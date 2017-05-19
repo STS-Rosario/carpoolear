@@ -35,8 +35,8 @@ function onLoggin (store, token) {
     globalStore.dispatch('rates/pendingRates');
     globalStore.dispatch('cars/index');
     globalStore.dispatch('passenger/getPendingRequest');
-    globalStore.store.dispatch('startThread');
-    router.push({ name: 'trips' });
+    globalStore.dispatch('startThread');
+    router.replace({ name: 'trips' });
 }
 
 function login (store, { email, password }) {
@@ -139,6 +139,7 @@ function logout (store) {
     store.commit(types.AUTH_LOGOUT);
     globalStore.commit('device/' + types.DEVICE_SET_DEVICES, []);
     globalStore.dispatch('stopThread');
+    router.replace({ name: 'trips' });
 }
 
 function update (store, data) {

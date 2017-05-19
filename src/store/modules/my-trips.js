@@ -7,8 +7,7 @@ let rateApi = new RateApi();
 // initial state
 const state = {
     driver_trip: null,
-    passenger_trip: null,
-    pending_rates: null
+    passenger_trip: null
 };
 
 // getters

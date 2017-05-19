@@ -19,6 +19,19 @@ const actions = {
         return rateApi.pending(null).then(response => {
             store.commit(types.RATES_SET, response.data);
         });
+    },
+
+    vote (store, data) {
+        let obj = {
+            comment: data.comment,
+            rating: data.rating
+        };
+        return rateApi.rate(data.trip_id, data.user_id, obj).then(response => {
+            store.commit(types.RATES_REMOVE, data.id);
+            return Promise.resolve();
+        }).catch(error => {
+            return Promise.reject(error);
+        });
     }
 };
 
@@ -26,6 +39,13 @@ const actions = {
 const mutations = {
     [types.RATES_SET] (state, rates) {
         state.pending_rates = rates;
+    },
+
+    [types.RATES_REMOVE] (state, id) {
+        var index = state.pending_rates.findIndex(item => item.id === id);
+        if (index >= 0) {
+            state.pending_rates.splice(index, 1);
+        }
     }
 };
 

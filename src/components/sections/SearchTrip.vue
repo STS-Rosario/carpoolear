@@ -1,29 +1,29 @@
 <template>
     <div class="row search-section">  
-        <div class="col-xs-3">
-            <button class="btn btn-primary btn-sm" :class="{'active': !isPassenger}" @click="isPassenger = false" >
+        <div class="col-xs-12 col-md-3"> 
+            <button class="btn btn-primary" :class="{'active': !isPassenger}" @click="isPassenger = false" >
                 <i class="fa fa-car" aria-hidden="true"></i>
-                Busco conductor
-            </button>
+                <span>Busco conductor</span>
+            </button> 
         </div>
-        <div class="col-xs-3">
-            <button class="btn btn-primary btn-sm" :class="{'active': isPassenger}" @click="isPassenger = true" >
+        <div class="col-xs-12 col-md-3">
+            <button class="btn btn-primary" :class="{'active': isPassenger}" @click="isPassenger = true" >
                 <i class="fa fa-male" aria-hidden="true"></i>
-                Busco pasajero
+                <span>Busco pasajero</span>
             </button>
         </div> 
         <div class="trip_points">
-            <div class="col-xs-6"> 
-                <GmapAutocomplete  :types="['(cities)']" :componentRestrictions="{country: 'AR'}" placeholder="Origen"  :value="from_town.name" v-on:place_changed="(data) => getPlace(0, data)" class="form-control form-control-with-icon form-control-map-autocomplete"> </GmapAutocomplete>
+            <div class="col-xs-24 col-md-6"> 
+                <GmapAutocomplete  :types="['(cities)']" :componentRestrictions="{country: 'AR'}" placeholder="Origen"  :value="from_town.name" v-on:place_changed="(data) => getPlace(0, data)" class="form-control form-control-with-icon form-control-map-autocomplete origin"> </GmapAutocomplete>
             </div>
-            <div class="col-xs-6"> 
-                <GmapAutocomplete  :types="['(cities)']" :componentRestrictions="{country: 'AR'}" placeholder="Destino"  :value="to_town.name" v-on:place_changed="(data) => getPlace(1, data)" class="form-control form-control-with-icon form-control-map-autocomplete"> </GmapAutocomplete>
+            <div class="col-xs-24 col-md-6"> 
+                <GmapAutocomplete  :types="['(cities)']" :componentRestrictions="{country: 'AR'}" placeholder="Destino"  :value="to_town.name" v-on:place_changed="(data) => getPlace(1, data)" class="form-control form-control-with-icon form-control-map-autocomplete destiny"> </GmapAutocomplete>
             </div>
         </div>
-        <div class="col-xs-3">
-              <Calendar :class="'calendar-date'" :value="date" @change="(date) => this.date = date"></Calendar>
+        <div class="col-xs-24 col-md-3">
+              <Calendar :class="'calendar-date form-control form-control-with-icon form-control-date'" :value="date" @change="(date) => this.date = date"></Calendar>
         </div>
-        <div class="col-xs-3">
+        <div class="col-xs-24 col-md-3">
             <button class="btn btn-primary" @click="emit">Buscar</button> 
         </div>
         

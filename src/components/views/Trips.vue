@@ -1,7 +1,11 @@
 <template>
     <div class="trips">
-        <SearchBox :params="searchParams" v-on:trip-search="research" ></SearchBox>
-        <h2>Viajes</h2> 
+        <div class="trips_title">
+            <h1>Buscá con quién compartir tu próximo viaje!</h1>
+            <h3>¡Elegí fecha, origen o destino y encontralo!</h3>
+        </div>
+        <SearchBox :params="searchParams" v-on:trip-search="research" ></SearchBox> 
+
         <Loading :data="trips">
             <div id="trips-list">
                 <Trip v-for="trip in trips" :trip="trip" :user="user" ></Trip>

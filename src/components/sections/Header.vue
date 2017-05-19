@@ -2,15 +2,13 @@
     <header class="header header-component">
         <div class="container header_content">
             <div class="header_panel-left">
-                <h1 class="header_title"> Carpoolear </h1>
+                <router-link tag="h1" :to="{name: 'trips'}" class="header_title"> Carpoolear </router-link> 
             </div>
             <div class="header_panel-right">
                 <!-- Mover al dropdonw despues -->
                 
                 <button @click="share" type="button" class="btn btn-link">Invitar amigos</button>
 
-                <router-link :to="{name: 'trips'}" class="btn btn-link">Viajes</router-link> 
-                
                 <router-link v-if="!logged" :to="{name: 'login'}">Login</router-link>
                 <router-link v-if="!logged" :to="{name: 'register'}">Register</router-link>
                 
@@ -21,26 +19,27 @@
 
                 <div class="header_profile" v-if="user">
                     <span > {{user.name}} </span>
-                    <img class="header_profile_image"  :src=" user.image | profile-image " alt="">
+                    <dropdown type="info" v-if="logged" >
+                        <template slot="button"> 
+                            <img class="header_profile_image"  :src=" user.image | profile-image " alt=""> 
+                        </template>
+                        <li>
+                            <router-link :to="{name: 'my-trips'}">Mis Viajes</router-link>
+                        </li>
+                        <li>
+                            <router-link :to="{name: 'conversations-list'}">Mensajes</router-link>
+                        </li>
+                        <li>
+                            <router-link :to="{name: 'my-trips'}">Perfil</router-link>
+                        </li>
+                        <li role="separator" class="divider"></li>
+                        <li>
+                            <router-link :to="{name: 'profile_update'}">Configuración</router-link>
+                        </li>
+                        <li><a @click="logout">Logout</a></li>
+                    </dropdown>
                 </div>
-
-                <dropdown type="info" v-if="logged" >
-                    <div slot="before" type="button"></div>
-                    <li>
-                        <router-link :to="{name: 'my-trips'}">Mis Viajes</router-link>
-                    </li>
-                    <li>
-                        <router-link :to="{name: 'conversations-list'}">Mensajes</router-link>
-                    </li>
-                    <li>
-                        <router-link :to="{name: 'my-trips'}">Perfil</router-link>
-                    </li>
-                    <li role="separator" class="divider"></li>
-                    <li>
-                        <router-link :to="{name: 'profile_update'}">Configuración</router-link>
-                    </li>
-                    <li><a @click="logout">Logout</a></li>
-                </dropdown>
+                
 
                 <router-link v-if="logged" :to="{name: 'new-trip'}" class="btn btn-primary btn-lg">Crear Viaje</router-link>
 

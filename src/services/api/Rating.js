@@ -10,6 +10,7 @@ class RateApi extends TaggedApi {
         return this.get('/api/users/ratings/pending', data);
     }
 
+    // data = {comment, rating, hash = null }
     rate (tripId, userId, data) {
         return this.post('/api/trips/' + tripId + '/rate/' + userId, data);
     }
