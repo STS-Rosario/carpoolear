@@ -5,7 +5,6 @@
                 <router-link tag="h1" :to="{name: 'trips'}" class="header_title"> Carpoolear </router-link> 
             </div>
             <div class="header_panel-right">
-                <!-- Mover al dropdonw despues -->
                 
                 <button @click="share" type="button" class="btn btn-link">Invitar amigos</button>
 
@@ -46,7 +45,7 @@
             </div>
             <div class="cf"></div>
         </div>
-    </header>
+    </header> 
 </template>
 
 <script>
