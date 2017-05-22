@@ -43,39 +43,94 @@ export default [
         path: '/my-trips',
         name: 'my-trips',
         component: require('../components/views/MyTrips'),
-        beforeEnter: auth
+        beforeEnter: auth,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'profile'
+                }
+            }
+        }
     },
     {
         path: '/trips',
         name: 'trips',
-        component: require('../components/views/Trips')
+        component: require('../components/views/Trips'),
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'home'
+                },
+                header: {
+                    buttons: ['search']
+                }
+            }
+        }
     },
     {
         path: '/trips/create',
         name: 'new-trip',
         component: require('../components/views/NewTrip'),
-        beforeEnter: auth
+        beforeEnter: auth,
+        meta: {
+            actionbar: {
+                header: {
+                    title: 'Crear viaje',
+                    buttons: ['clear']
+                }
+            }
+        }
     },
     {
         path: '/trips/update/:id',
         name: 'update-trip',
         component: require('../components/views/NewTrip'),
         beforeEnter: auth,
-        props: true
+        props: true,
+        meta: {
+            actionbar: {
+                header: {
+                    title: 'Editar viaje',
+                    buttons: ['clear']
+                }
+            }
+        }
     },
     {
         path: '/trips/:id',
         name: 'detail_trip',
         component: require('../components/views/Trip'),
         beforeEnter: auth,
-        props: true
+        props: true,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'home'
+                },
+                header: {
+                    title: 'Viaje',
+                    buttons: ['back']
+                }
+            }
+        }
     },
     {
         path: '/notifications',
         name: 'notifications',
         component: require('../components/views/Notifications.vue'),
         beforeEnter: auth,
-        props: true
+        props: true,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'notifications'
+                }
+            }
+        }
     },
     {
         path: '/setting',
@@ -86,19 +141,19 @@ export default [
                 path: 'profile',
                 name: 'profile_update',
                 component: require('../components/sections/UpdateProfile.vue'),
-                meta: 'profile'
+                meta: { tab: 'profile' }
             },
             {
                 path: 'friends',
                 name: 'friends_setting',
                 component: require('../components/sections/FriendsSetting.vue'),
-                meta: 'friends'
+                meta: { tab: 'friends' }
             },
             {
                 path: 'friends/search',
                 name: 'friends_search',
                 component: require('../components/sections/FriendsRequest.vue'),
-                meta: 'friends'
+                meta: { tab: 'friends' }
             }
         ]
     },
@@ -107,6 +162,14 @@ export default [
         name: 'conversations-list',
         component: require('../components/views/ConversationList'),
         beforeEnter: auth,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'conversations'
+                }
+            }
+        },
         children: [
             {
                 path: ':id',
@@ -114,7 +177,13 @@ export default [
                 component: require('../components/views/ConversationChat'),
                 props: true,
                 meta: {
-                    hide: true
+                    hide: true,
+                    actionbar: {
+                        footer: {
+                            show: true,
+                            active_id: 'conversations'
+                        }
+                    }
                 }
             }
         ]

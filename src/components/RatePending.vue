@@ -53,7 +53,7 @@ export default {
                 user_id: this.to.id,
                 comment: this.comment,
                 rating: this.vote
-            }
+            };
             this.emit(data).then(() => {
                 this.sending = false;
             }).catch(() => {

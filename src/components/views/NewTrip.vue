@@ -139,6 +139,8 @@
 import {mapActions, mapGetters} from 'vuex';
 import {parseStreet} from '../../services/maps.js';
 import Calendar from '../Calendar';
+import bus from '../../services/bus-event.js';
+import router from '../../router';
 
 export default {
     name: 'new-trip',
@@ -202,7 +204,14 @@ export default {
                 self.loadTrip();
             }
         });
+
+        bus.on('clear-click', this.onClearClick);
     },
+
+    beforeDestroy () {
+        bus.off('clear-click', this.onClearClick);
+    },
+
     computed: {
         ...mapGetters({
             user: 'auth/user',
@@ -227,6 +236,11 @@ export default {
             'updateTrip': 'trips/update',
             'getTrip': 'getTrip'
         }),
+
+        onClearClick () {
+            console.log('clear click');
+            router.back();
+        },
 
         restoreData (trip) {
             this.points = [];

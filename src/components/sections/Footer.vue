@@ -1,6 +1,15 @@
 <template>
   <footer class="footer-component">
-    <div class="container">
+    <div class="actionbar actionbar-bottom visible-xs" v-if="footerShow">
+    
+        <div class="actionbar_item" v-for="item in footerButtons" :class="{ active: item.active }" @click="onClick(item)">
+            <span :class="{big: item.id === 'new-trip'}">
+                <i :class="'fa ' + item.icon" aria-hidden="true"></i>
+            </span>
+        </div>
+
+    </div>
+    <div class="container hidden-xs">
         <div class="row">
             <div class="col-md-6">
                 <h3>Acerca de ...</h3>
@@ -59,13 +68,25 @@
     </div>
   </footer>
 </template>
-
 <script>
+import {mapActions, mapGetters} from 'vuex';
+
 export default {
     name: 'footer',
     data () {
         return {
         };
+    },
+    computed: {
+        ...mapGetters({
+            footerButtons: 'actionbars/footerButtons',
+            footerShow: 'actionbars/footerShow'
+        })
+    },
+    methods: {
+        ...mapActions({
+            onClick: 'actionbars/footerButtonClick'
+        })
     }
 };
 </script>

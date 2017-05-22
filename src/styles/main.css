@@ -468,3 +468,61 @@ input[type=radio] + label {
 .search-section .btn-option span{
     font-size: 11px;
 }
+
+
+.actionbar {
+    position: fixed;
+    left: 0;
+    background: var(--main-background);
+    height: 52px;
+    width: 100%;
+    z-index: 1;
+    
+}
+
+.actionbar-bottom {
+    bottom: 0;
+    border-top: 1px solid var(--medium-font-color);
+    text-align: center;
+    padding: 7px 15px;
+}
+
+.actionbar-top {
+    top: 0;
+    border-top: 1px solid var(--secondary-background);
+    padding: 4px 10px;
+    background-color: var(--secondary-background);
+}
+
+.actionbar-bottom .actionbar_item {
+    display: inline-block;
+    color: var(--medium-font-color);
+    font-size: 26px;
+    width: 20%;
+}
+
+.actionbar-bottom .actionbar_item.active {
+    color: var(--secondary-background);
+}
+
+.actionbar-bottom .actionbar_item span {
+    padding: 0 8px;
+}
+
+.actionbar-bottom .actionbar_item .big {
+    color: var(--secondary-font-color);
+    background: red;
+}
+
+.actionbar_section {
+    display: inline-block;
+}
+
+.actionbar_icon {
+    font-size: 26px;
+    width: 30px;
+}
+
+.actionbar_title {
+    font-size: 26px;
+}

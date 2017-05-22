@@ -1,6 +1,28 @@
 <template>
     <header class="header header-component">
-        <div class="container header_content">
+        <div class="actionbar actionbar-top visible-xs">
+            <div class="actionbar_section actionbar_icon">
+                <span v-if="showLogo">
+                    <i class="fa fa-car" aria-hidden="true"></i>
+                </span>
+                <template v-else v-for="item in leftHeaderButton" v-if="item.show">
+                    <span @click="onClick(item)">
+                        <i :class="'fa ' + item.icon" aria-hidden="true"></i>
+                    </span>
+                </template>
+            </div>
+            <div class="actionbar_section actionbar_title">
+                {{title}}
+            </div>
+            <div class="actionbar_section actionbar_icon pull-right">
+                <template v-for="item in rightHeaderButton" v-if="item.show">
+                    <span @click="onClick(item)">
+                        <i :class="'fa ' + item.icon" aria-hidden="true"></i>
+                    </span>
+                </template>
+            </div>
+        </div>
+        <div class="container header_content hidden-xs">
             <div class="header_panel-left">
                 <router-link tag="h1" :to="{name: 'trips'}" class="header_title"> Carpoolear </router-link> 
             </div>
@@ -54,6 +76,7 @@ import dialogs from '../../services/dialogs.js';
 import {mapGetters} from 'vuex';
 import {dropdown} from 'vue-strap';
 import router from '../../router';
+import bus from '../../services/bus-event.js';
 
 export default {
     name: 'header',
@@ -67,8 +90,22 @@ export default {
         ...mapGetters({
             logged: 'auth/checkLogin',
             user: 'auth/user',
-            notificationsCount: 'notifications/count'
-        })
+            notificationsCount: 'notifications/count',
+            title: 'actionbars/title',
+            leftHeaderButton: 'actionbars/leftHeaderButton',
+            rightHeaderButton: 'actionbars/rightHeaderButton'
+        }),
+
+        showLogo () {
+            for (let i = 0; i < this.leftHeaderButton.length; i++) {
+                if (this.leftHeaderButton[i].show) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
     },
 
     methods: {
@@ -76,11 +113,17 @@ export default {
             dialogs.message('Message example');
             socialShare.share();
         },
+
         logout () {
             this.$store.dispatch('auth/logout');
         },
+
         toNotifications () {
             router.push({name: 'notifications'});
+        },
+
+        onClick (item) {
+            bus.emit(item.id + '-click');
         }
     },
 

@@ -13,6 +13,8 @@ import friends from './modules/friends';
 import passenger from './modules/passenger';
 import notifications from './modules/notifications';
 import rates from './modules/rates';
+import actionbars from './modules/actionbars';
+
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -32,6 +34,7 @@ export default new Vuex.Store({
         friends,
         passenger,
         notifications,
-        rates
+        rates,
+        actionbars
     }
 });

@@ -116,6 +116,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import router from '../../router';
+import bus from '../../services/bus-event.js';
 
 export default {
     name: 'trip',
@@ -185,11 +186,20 @@ export default {
             }).catch(() => {
                 this.sending = false;
             });
+        },
+
+        onBackClick () {
+            router.back();
         }
     },
 
     mounted () {
         this.loadTrip();
+        bus.on('back-click', this.onBackClick);
+    },
+
+    beforeDestroy () {
+        bus.off('back-click', this.onBackClick);
     },
 
     watch: {
