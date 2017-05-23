@@ -5,11 +5,11 @@
       <router-view></router-view>
     </main>
     <footerApp></footerApp>
-    <!--
+    
     <pre>
             {{this.$store.state}}
     </pre>
-    -->
+    
   </div>
 </template>
 

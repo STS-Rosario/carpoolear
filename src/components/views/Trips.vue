@@ -1,12 +1,13 @@
 <template>
     <div class="trips">
-        <div class="trips_title">
+        <div class="trips_title" v-show="!isMobile">
             <h1>Buscá con quién compartir tu próximo viaje!</h1>
             <h3>¡Elegí fecha, origen o destino y encontralo!</h3>
         </div>
-        <SearchBox :params="searchParams" v-on:trip-search="research" ></SearchBox> 
 
-        <Loading :data="trips">
+        <SearchBox :params="searchParams" v-on:trip-search="research" v-show="!showingTrips"></SearchBox> 
+
+        <Loading :data="trips" v-if="showingTrips">
             <div id="trips-list">
                 <Trip v-for="trip in trips" :trip="trip" :user="user" ></Trip>
             </div>
@@ -22,32 +23,64 @@
 import Trip from '../sections/Trip.vue';
 import SearchBox from '../sections/SearchTrip.vue';
 import Loading from '../Loading.vue';
-
+import bus from '../../services/bus-event.js';
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
     name: 'trips',
+    data () {
+        return {
+            lookSearch: false,
+            filtered: false
+        };
+    },
     methods: {
         ...mapActions({
-            search: 'trips/tripsSearch'
+            search: 'trips/tripsSearch',
+            setActionButton: 'actionbars/setHeaderButtons'
         }),
         research (params) {
+            this.lookSearch = false;
+            this.filtered = true;
             this.search(params);
+            this.setActionButton(['clear']);
         },
         nextPage () {
             this.search({next: true});
+        },
+
+        onSearchButton () {
+            console.log('testing');
+            this.lookSearch = true;
+        },
+
+        onClearButton () {
+            this.setActionButton(['search']);
+            this.filtered = false;
+            this.search({});
         }
     },
     mounted () {
         // this.search();
+        bus.on('search-click', this.onSearchButton);
+        bus.on('clear-click', this.onClearButton);
+    },
+    beforeDestroy () {
+        bus.off('search-click', this.onSearchButton);
+        bus.off('clear-click', this.onClearButton);
     },
     computed: {
         ...mapGetters({
             trips: 'trips/trips',
             morePages: 'trips/tripsMorePage',
             user: 'auth/user',
-            searchParams: 'trips/tripsSearchParam'
-        })
+            searchParams: 'trips/tripsSearchParam',
+            isMobile: 'device/isMobile'
+        }),
+
+        showingTrips () {
+            return !this.isMobile || !this.lookSearch;
+        }
     },
     components: {
         Trip,

@@ -488,6 +488,7 @@ input[type=radio] + label {
 }
 
 .actionbar-top {
+    position: relative;
     top: 0;
     border-top: 1px solid var(--secondary-background);
     padding: 4px 10px;

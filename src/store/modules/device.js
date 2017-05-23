@@ -18,7 +18,10 @@ const state = {
 
 // getters
 const getters = {
-    trips: state => state.trips
+    resolution: state => state.resolution,
+    isMobile: state => state.resolution.width < 768,
+    isTablet: state => state.resolution.width >= 768 && state.resolution.width < 992,
+    isDesktop: state => state.resolution.width >= 992
 };
 
 // actions

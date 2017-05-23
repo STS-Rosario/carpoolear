@@ -17,7 +17,6 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
     let meta = to.meta.actionbar || {};
-    console.log(meta);
     let user = store.getters['auth/checkLogin'];
     if (user && meta.footer) {
         if (meta.footer.show) {
