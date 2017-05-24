@@ -35,7 +35,7 @@
     <plugin name="cordova-plugin-whitelist" spec="1" />
     <plugin name="cordova-plugin-x-socialsharing" spec="https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin.git" />
     <plugin name="cordova-plugin-x-toast" spec="https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git" />
-    <plugin name="phonegap-plugin-push" spec="https://github.com/phonegap/phonegap-plugin-push">
-        <variable name="SENDER_ID" value="147151221990591" />
+    <plugin name="phonegap-plugin-push" spec="^1.10.4">
+        <variable name="SENDER_ID" value="465612190041" />
     </plugin>
 </widget>

@@ -18,7 +18,7 @@ const getters = {
 
 // actions
 const actions = {
-    ...pagination.makeActions('trips', (data) => {
+    ...pagination.makeActions('trips', ({store, data}) => {
         return tripsApi.tag(['trips']).search(data);
     }),
 

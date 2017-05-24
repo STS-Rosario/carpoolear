@@ -22,11 +22,13 @@ module.exports = function (ctx) {
 
     cd('..');
 
+    /*
     if (ctx.opts.options && ctx.opts.options.release) {
         exec('export PLATFORM=' + platform + ' && npm run build');
     } else {
         exec('export PLATFORM=' + platform + ' && npm run cordova-build');
     }
+    */
 
     cd('cordova');
 

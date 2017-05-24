@@ -2,8 +2,12 @@ import TaggedApi from '../../classes/TaggedApi';
 
 class RateApi extends TaggedApi {
 
-    index (data) {
-        return this.get('/api/users/ratings', data);
+    index (id, data = {}) {
+        if (id) {
+            return this.get('/api/users/' + id + '/ratings', data);
+        } else {
+            return this.get('/api/users/ratings', data);
+        }
     }
 
     pending (data) {

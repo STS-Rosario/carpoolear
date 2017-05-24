@@ -21,7 +21,7 @@ const getters = {
 
 // actions
 const actions = {
-    ...pagination.makeActions('friends', (data) => {
+    ...pagination.makeActions('friends', ({data}) => {
         return friendsApi.index(data);
     }),
 
