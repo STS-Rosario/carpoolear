@@ -23,7 +23,7 @@
         <allow-intent href="itms-apps:*" />
     </platform>
     <hook src="scripts/copy_dist.js" type="before_prepare" />
-    <engine name="android" spec="~6.2.3" />
+    <engine name="android" spec="^6.2.3" />
     <plugin name="cordova-plugin-device" spec="~1.1.4" />
     <plugin name="cordova-plugin-facebook4" spec="~1.7.4">
         <variable name="APP_ID" value="829566563845558" />
@@ -36,6 +36,6 @@
     <plugin name="cordova-plugin-x-socialsharing" spec="https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin.git" />
     <plugin name="cordova-plugin-x-toast" spec="https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git" />
     <plugin name="phonegap-plugin-push" spec="^1.10.4">
-        <variable name="SENDER_ID" value="465612190041" />
+        <variable name="SENDER_ID" value="486194499731" />
     </plugin>
 </widget>
