@@ -18,11 +18,13 @@ const getters = {
 const actions = {
     setUser (store, user) {
         store.commit(types.PROFILE_SET_USER, user);
+        store.dispatch('ratesSearch');
     },
 
     setUserByID (store, id) {
         return userApi.show(id).then((response) => {
             store.commit(types.PROFILE_SET_USER, response.data);
+            store.dispatch('ratesSearch');
             return Promise.resolve(response.data);
         }).catch((error) => {
             return Promise.reject(error);

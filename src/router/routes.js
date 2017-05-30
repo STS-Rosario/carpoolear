@@ -40,6 +40,24 @@ export default [
         props: true
     },
     {
+        path: '/profile/:id',
+        name: 'profile',
+        component: require('../components/views/Profile.vue'),
+        props: true,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'profile'
+                },
+                header: {
+                    title: 'Mi Perfil',
+                    buttons: []
+                }
+            }
+        }
+    },
+    {
         path: '/my-trips',
         name: 'my-trips',
         component: require('../components/views/MyTrips'),
@@ -49,6 +67,10 @@ export default [
                 footer: {
                     show: true,
                     active_id: 'profile'
+                },
+                header: {
+                    title: 'Mis Viajes',
+                    buttons: []
                 }
             }
         }
@@ -128,6 +150,9 @@ export default [
                 footer: {
                     show: true,
                     active_id: 'notifications'
+                },
+                header: {
+                    title: 'Notificaciones'
                 }
             }
         }
@@ -167,6 +192,9 @@ export default [
                 footer: {
                     show: true,
                     active_id: 'conversations'
+                },
+                header: {
+                    title: 'Mensajes'
                 }
             }
         },

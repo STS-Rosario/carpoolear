@@ -51,7 +51,7 @@
                             <router-link :to="{name: 'conversations-list'}">Mensajes</router-link>
                         </li>
                         <li>
-                            <router-link :to="{name: 'my-trips'}">Perfil</router-link>
+                            <router-link :to="{name: 'profile', params: {id: 'me'}}">Perfil</router-link>
                         </li>
                         <li role="separator" class="divider"></li>
                         <li>
