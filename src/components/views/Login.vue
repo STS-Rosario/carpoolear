@@ -7,6 +7,10 @@
       <input  type="password" id="txt_password" v-model='password' />
       <button @click="login"> Login </button> <router-link :to="{name:'reset-password'}"> ¿Olvidó su contraseña? </router-link>
       <span v-if="loading"> Loading... </span>
+      <div>
+        <button @click="facebookLogin"> Loggin with facebook </button>
+      </div>
+      
     </div>
   </div>
 </template>
@@ -31,7 +35,7 @@ export default {
     methods: {
         ...mapActions({
             doLogin: 'auth/login', // map this.add() to this.$store.dispatch('increment')
-            facebookLogin: 'cordova/facebookLogin'
+            fbLogin: 'cordova/facebookLogin'
         }),
         login () {
             this.loading = true;
@@ -45,6 +49,10 @@ export default {
                 }
                 this.loading = false;
             });
+        },
+
+        facebookLogin () {
+            this.fbLogin();
         }
     }
 };

@@ -27,7 +27,7 @@ export default {
     },
     computed: {
         tabActive () {
-            return this.$route.meta;
+            return this.$route.meta.tab;
         }
     },
     methods: {

@@ -4,6 +4,14 @@ Vue.filter('profile-image', function (value) {
     if (value && value.length) {
         return process.env.API_URL + '/image/profile/' + value;
     } else {
-        return '/static/img/default-profile.png';
+        return 'static/img/default-profile.png';
+    }
+});
+
+Vue.filter('conversation-image', function (value) {
+    if (value && value.length) {
+        return process.env.API_URL + value;
+    } else {
+        return 'static/img/default-profile.png';
     }
 });

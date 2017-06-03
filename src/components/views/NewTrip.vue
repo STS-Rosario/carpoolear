@@ -52,9 +52,6 @@
                 <div class="trip_datetime">
                     <div class="trip_date">
                         <label for="date" class="sr-only">Día </label>
-                        <!--
-                        <input type="text" v-model="date" class="form-control form-control-with-icon form-control-date" id="date" placeholder="Día" />
-                        -->
                         <Calendar :class="'form-control form-control-with-icon form-control-date'" :value="date" @change="(date) => this.date = date"></Calendar>
                     </div>
                     <div class="trip_time">
@@ -142,6 +139,8 @@
 import {mapActions, mapGetters} from 'vuex';
 import {parseStreet} from '../../services/maps.js';
 import Calendar from '../Calendar';
+import bus from '../../services/bus-event.js';
+import router from '../../router';
 
 export default {
     name: 'new-trip',
@@ -205,7 +204,14 @@ export default {
                 self.loadTrip();
             }
         });
+
+        bus.on('clear-click', this.onClearClick);
     },
+
+    beforeDestroy () {
+        bus.off('clear-click', this.onClearClick);
+    },
+
     computed: {
         ...mapGetters({
             user: 'auth/user',
@@ -230,6 +236,11 @@ export default {
             'updateTrip': 'trips/update',
             'getTrip': 'getTrip'
         }),
+
+        onClearClick () {
+            console.log('clear click');
+            router.back();
+        },
 
         restoreData (trip) {
             this.points = [];

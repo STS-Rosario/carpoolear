@@ -76,12 +76,35 @@
                                 <span class="trip_seats-available_label">Lugares<br />libres</span>
                             </div> 
                         </div>
+                        <div class="row">
+                            <div class="col-xs-offset-2 col-xs-12">
+                                <h4>Pasajeros</h4>
+                                <ul>
+                                    <li v-for="p in trip.passenger">
+                                        {{p.name}}
+                                        <span v-if="owner" @click="removePassenger(p)">
+                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div> 
+                        </div>
                     </div>
                     <div class="col-xs-8">
                     </div>
                 </div>
             </div>
             <router-link v-if="user.id == trip.user.id" :to="{name: 'update-trip', params: { id: trip.id}}"> Editar  </router-link>
+
+            <button class="btn btn-primary" @click="toMessages" v-if="!owner"> Coordinar viaje  </button>
+
+            <template v-if="!inPassenger">
+                <button class="btn btn-primary" @click="makeRequest" v-if="canRequest"> Solicitar asciento </button>
+                <button class="btn" v-if="!canRequest" @click="cancelRequest"> Solicitud enviada </button>
+            </template>
+            <template v-if="inPassenger">
+                <button class="btn btn-primary" @click="cancelRequest" v-if="canRequest"> Cancelar viaje </button>
+            </template>
         </template>
         <template v-else>
             <div>
@@ -92,23 +115,28 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import router from '../../router';
+import bus from '../../services/bus-event.js';
+
 export default {
     name: 'trip',
     data () {
         return {
-            trip: null
+            trip: null,
+            sending: false
         };
     },
 
     methods: {
         ...mapActions({
-            getTrip: 'getTrip'
+            getTrip: 'getTrip',
+            lookConversation: 'conversations/createConversation',
+            make: 'passenger/makeRequest',
+            cancel: 'passenger/cancel'
         }),
 
         loadTrip () {
-            console.log(this.id);
             this.getTrip(this.id).then(trip => {
-                console.log(trip);
                 this.trip = trip;
             }).catch(error => {
                 if (error) {
@@ -116,16 +144,66 @@ export default {
                     this.trip = null;
                 }
             });
+        },
+
+        toMessages () {
+            this.lookConversation(this.trip.user).then(conversation => {
+                router.push({ name: 'conversation-chat', params: { id: conversation.id } });
+            });
+        },
+
+        makeRequest () {
+            this.sending = true;
+            this.make(this.trip.id).then(() => {
+                this.sending = false;
+                this.trip.request = 'send';
+            }).catch(() => {
+                this.sending = false;
+            });
+        },
+
+        cancelRequest () {
+            this.sending = true;
+            this.cancel({ user: this.user, trip: this.trip }).then(() => {
+                this.sending = false;
+                if (this.trip.request !== 'send') {
+                    let index = this.trip.passenger.findIndex(item => item.id === this.user.id);
+                    this.trip.passenger.splice(index, 1);
+                } else {
+                    this.trip.request = '';
+                }
+            }).catch(() => {
+                this.sending = false;
+            });
+        },
+
+        removePassenger (user) {
+            this.sending = true;
+            this.cancel({ user: user, trip: this.trip }).then(() => {
+                this.sending = false;
+                let index = this.trip.passenger.findIndex(item => item.id === user.id);
+                this.trip.passenger.splice(index, 1);
+            }).catch(() => {
+                this.sending = false;
+            });
+        },
+
+        onBackClick () {
+            router.back();
         }
     },
 
     mounted () {
         this.loadTrip();
+        bus.on('back-click', this.onBackClick);
+    },
+
+    beforeDestroy () {
+        bus.off('back-click', this.onBackClick);
     },
 
     watch: {
         'id': function (value) {
-            console.log('watiching');
             this.loadTrip();
         }
     },
@@ -133,7 +211,20 @@ export default {
     computed: {
         ...mapGetters({
             user: 'auth/user'
-        })
+        }),
+
+        owner () {
+            return this.user.id === this.trip.user.id;
+        },
+
+        canRequest () {
+            return !this.owner && !this.trip.request;
+        },
+
+        inPassenger () {
+            return this.trip.passenger.findIndex(item => item.id === this.user.id) >= 0;
+        }
+
     },
 
     components: {

@@ -32,9 +32,11 @@ function onLoggin (store, token) {
     globalStore.dispatch('trips/tripsSearch');
     globalStore.dispatch('myTrips/tripAsDriver');
     globalStore.dispatch('myTrips/tripAsPassenger');
-    globalStore.dispatch('myTrips/pendingRates');
+    globalStore.dispatch('rates/pendingRates');
     globalStore.dispatch('cars/index');
-    router.push({ name: 'trips' });
+    globalStore.dispatch('passenger/getPendingRequest');
+    globalStore.dispatch('startThread');
+    router.replace({ name: 'trips' });
 }
 
 function login (store, { email, password }) {
@@ -136,6 +138,8 @@ function logout (store) {
     }
     store.commit(types.AUTH_LOGOUT);
     globalStore.commit('device/' + types.DEVICE_SET_DEVICES, []);
+    globalStore.dispatch('stopThread');
+    router.replace({ name: 'trips' });
 }
 
 function update (store, data) {
@@ -168,7 +172,8 @@ const actions = {
     resetPassword,
     changePassword,
     update,
-    updatePhoto
+    updatePhoto,
+    onLoggin
 };
 
 // mutations
