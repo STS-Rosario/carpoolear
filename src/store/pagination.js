@@ -57,18 +57,18 @@ export function makeActions (name, requestGeneration, callback) {
                 return;
             }
             store.commit(name.toUpperCase() + '_NEXT_PAGE');
-            params = store.state[name + 'SearchParam'].data;
+            params = Object.assign({}, store.state[name + 'SearchParam'].data);
             params.page = store.state[name + 'SearchParam'].page;
             params.page_size = store.state[name + 'SearchParam'].pageSize;
         } else {
             store.commit(name.toUpperCase() + '_RESTORE_PAGE');
             store.commit(name.toUpperCase() + '_SET_FILTER', data);
             store.commit(name.toUpperCase() + '_SET', null);
-            params = data;
-            data.page = store.state[name + 'SearchParam'].page;
-            data.page_size = store.state[name + 'SearchParam'].pageSize;
+            params = Object.assign({}, data);
+            params.page = store.state[name + 'SearchParam'].page;
+            params.page_size = store.state[name + 'SearchParam'].pageSize;
         }
-        let promises = requestGeneration(params);
+        let promises = requestGeneration({store, data: params});
         promises.then(response => {
             if (response.meta.pagination.total_pages === response.meta.pagination.current_page) {
                 store.commit(name.toUpperCase() + '_SET_LASTPAGE');
@@ -86,7 +86,7 @@ export function makeActions (name, requestGeneration, callback) {
             return Promise.reject(error);
         });
         if (callback) {
-            callback(promises);
+            callback(store, promises);
         }
     };
     return actions;

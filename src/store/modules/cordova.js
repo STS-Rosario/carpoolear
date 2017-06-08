@@ -1,6 +1,9 @@
 import * as types from '../mutation-types';
 import facebook from '../../cordova/facebook.js';
+import {AuthApi} from '../../services/api';
+import globalStore from '../index';
 
+let authApi = new AuthApi();
 // initial state
 const state = {
     deviceReady: false,
@@ -27,6 +30,7 @@ const getters = {
         if (state.deviceId) {
             data.device_id = state.deviceId;
         }
+        return data;
     }
 
 };
@@ -38,7 +42,13 @@ const actions = {
         console.log(notification);
     },
     facebookLogin (context) {
-        facebook.login();
+        facebook.login().then((response) => {
+            let accessToken = response.authResponse.accessToken;
+            authApi.loginWithProvider('facebook', {access_token: accessToken}).then((response) => {
+                let token = response.token;
+                globalStore.dispatch('auth/onLoggin', token);
+            });
+        });
     },
 
     deviceOnline (store) {

@@ -9,6 +9,11 @@ import device from './modules/device';
 import myTrips from './modules/my-trips';
 import conversations from './modules/conversations';
 import cars from './modules/car';
+import friends from './modules/friends';
+import passenger from './modules/passenger';
+import notifications from './modules/notifications';
+import rates from './modules/rates';
+import actionbars from './modules/actionbars';
 
 Vue.use(Vuex);
 
@@ -25,6 +30,11 @@ export default new Vuex.Store({
         device,
         myTrips,
         conversations,
-        cars
+        cars,
+        friends,
+        passenger,
+        notifications,
+        rates,
+        actionbars
     }
 });

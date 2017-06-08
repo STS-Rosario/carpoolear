@@ -4,17 +4,31 @@ class AuthApi extends TaggedApi {
 
     /** AUTH API **/
 
-    /**
-     * User login
-     * @param {Object} creds {
-     *    @param {String} email
-     *    @param {String} password
-     *    @param {String} device_id
-     *    @param {String} device_type
-     *    @param {Integer} app_version
-     *  }
-     * @return {} token
-    */
+    // data = {access_token}
+    loginWithProvider (provider, data) {
+        return this.post('/api/social/login/' + provider, data);
+    }
+
+    updateWithProvider (provider, data) {
+        return this.put('/api/social/update/' + provider, data);
+    }
+
+    matchFriendsWithProvider (provider, data) {
+        return this.post('/api/social/friends/' + provider, data);
+    }
+
+  /**
+   * User login
+   * @param {Object} creds {
+   *    @param {String} email
+   *    @param {String} password
+   *    @param {String} device_id
+   *    @param {String} device_type
+   *    @param {Integer} app_version
+   *  }
+   * @return {} token
+  */
+
     login (creds) {
         return this.post('/api/login', creds);
     }

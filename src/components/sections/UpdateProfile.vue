@@ -1,9 +1,6 @@
 <template>
   <div class="update-profile-component" v-if="user" >
     <div class="row">   
-        <div class="col-xs-8">
-            <img alt="" @click="changePhoto" :src="user.image | profile-image" class="trip_driver_img circle-box" />
-        </div>
         <div class="col-xs-16"> 
             <div class='form'>
                 <div class="form-group">
@@ -31,6 +28,10 @@
                     <input v-model="user.gender" type="text" class="form-control" id="input-genero" placeholder="Sexo">
                 </div>
                 <div class="form-group">
+                    <label for="input-patente">Patente</label>
+                    <input v-model="patente" type="text" class="form-control" id="input-patente" placeholder="Patente">
+                </div>
+                <div class="form-group">
                     <label for="input-description">Pequeña descripción personal</label>
                     <textarea v-model="user.descripcion" placeholder="Descripción"></textarea>
                 </div>
@@ -52,6 +53,12 @@
                 <Uploadfile :name="'profile'" @change="onPhotoChange" ref="file"></Uploadfile>
             </div>    
         </div>
+        <div class="col-xs-8 profile_image">
+            <img alt="" :src="user.image | profile-image" class="circle-box" :class="{'loading': loadingImg}"  />
+            <button @click="changePhoto" class="btn btn-secondary profile_image-edit">
+                Cambiar foto
+            </button>
+        </div>
     </div>
     
   </div>
@@ -66,27 +73,37 @@ export default {
     data () {
         return {
             user: null,
+            car: null,
+            patente: '',
             pass: {
                 password: '',
                 password_confirmation: ''
             },
             error: null,
-            loading: false
+            loading: false,
+            loadingImg: false
         };
     },
     computed: {
         ...mapGetters({
-            userData: 'auth/user'
+            userData: 'auth/user',
+            cars: 'cars/cars'
         })
     },
     methods: {
         ...mapActions({
             update: 'auth/update',
-            updatePhoto: 'auth/updatePhoto'
+            updatePhoto: 'auth/updatePhoto',
+            carCreate: 'cars/create',
+            carUpdate: 'cars/update'
         }),
         onPhotoChange (data) {
+            this.loadingImg = true;
             this.updatePhoto(data).then(user => {
                 this.user.image = user.image;
+                this.loadingImg = false;
+            }).catch(() => {
+                this.loadingImg = false;
             });
         },
         changePhoto () {
@@ -106,14 +123,45 @@ export default {
                 this.pass.password = '';
                 this.pass.password_confirmation = '';
                 this.loading = false;
+                if (this.patente.length) {
+                    if (this.car) {
+                        this.car.patente = this.patente;
+                        this.carUpdate(this.car);
+                    } else {
+                        let car = {
+                            description: 'NOT USED YET',
+                            patente: this.patente
+                        };
+                        this.carCreate(car);
+                    }
+                }
             }).catch(response => {
                 this.loading = false;
                 this.error = 'No se pudo grabar los datos. Intente de nuevo';
             });
         }
     },
+    watch: {
+        cars: function () {
+            if (this.cars.length > 0) {
+                this.car = this.cars[0];
+                this.patente = this.car.patente;
+            }
+        },
+        userData: function () {
+            this.user = this.userData;
+        }
+    },
+
     mounted () {
         this.user = this.userData;
+        if (this.cars) {
+            console.log(this.cars);
+            if (this.cars.length > 0) {
+                this.car = this.cars[0];
+                this.patente = this.car.patente;
+            }
+        }
     },
     components: {
         Calendar,

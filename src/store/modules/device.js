@@ -18,14 +18,17 @@ const state = {
 
 // getters
 const getters = {
-    trips: state => state.trips
+    resolution: state => state.resolution,
+    isMobile: state => state.resolution.width < 768,
+    isTablet: state => state.resolution.width >= 768 && state.resolution.width < 992,
+    isDesktop: state => state.resolution.width >= 992
 };
 
 // actions
 const actions = {
     register (store) {
-        let data = {};
-        Object.assign(data, store.rootGetters['cordova/deviceData']);
+        let data = Object.assign({}, store.rootGetters['cordova/deviceData']);
+        console.log(store.rootGetters['cordova/deviceData']);
         data.app_version = store.rootState.appVersion;
 
         return deviceApi.create(data).then(response => {
