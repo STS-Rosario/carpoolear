@@ -1,13 +1,19 @@
 import {DeviceApi} from '../../services/api';
 import * as types from '../mutation-types';
+import bus from '../../services/bus-event';
+
+/* eslint-disable no-undef */
 
 // initial state
-// shape: [{ id, quantity }]
 let deviceApi = new DeviceApi();
 
 const state = {
     devices: [],
-    current: null
+    current: null,
+    resolution: {
+        width: screen.width,
+        height: screen.height
+    }
 };
 
 // getters
@@ -94,3 +100,16 @@ export default {
     actions,
     mutations
 };
+
+window.addEventListener('resize', function () {
+    var w = window;
+    var d = document;
+    var e = d.documentElement;
+    var g = d.getElementsByTagName('body')[0];
+    var x = w.innerWidth || e.clientWidth || g.clientWidth;
+    var y = w.innerHeight || e.clientHeight || g.clientHeight;
+
+    state.resolution.width = x;
+    state.resolution.height = y;
+    bus.emit('resize', state.resolution);
+}, false);

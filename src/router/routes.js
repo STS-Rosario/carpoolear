@@ -28,16 +28,53 @@ export default [
         props: true
     },
     {
+        path: '/reset-password',
+        name: 'reset-password',
+        component: require('../components/views/ResetPassword'),
+        props: true
+    },
+    {
+        path: '/reset-password/:token',
+        name: 'reset-password-confirm',
+        component: require('../components/views/ResetPassword'),
+        props: true
+    },
+    {
+        path: '/my-trips',
+        name: 'my-trips',
+        component: require('../components/views/MyTrips'),
+        beforeEnter: auth
+    },
+    {
         path: '/trips',
         name: 'trips',
         component: require('../components/views/Trips')
     },
     {
-        path: '/trips/:trip',
-        name: 'detail_trip',
-        component: require('../components/Trip'),
+        path: '/trips/create',
+        name: 'new-trip',
+        component: require('../components/views/NewTrip'),
+        beforeEnter: auth
+    },
+    {
+        path: '/trips/update/:id',
+        name: 'update-trip',
+        component: require('../components/views/NewTrip'),
         beforeEnter: auth,
         props: true
+    },
+    {
+        path: '/trips/:id',
+        name: 'detail_trip',
+        component: require('../components/views/Trip'),
+        beforeEnter: auth,
+        props: true
+    },
+    {
+        path: '/profile/update',
+        name: 'profile_update',
+        component: require('../components/views/UpdateProfile.vue'),
+        beforeEnter: auth
     },
     {
         path: '/*',
