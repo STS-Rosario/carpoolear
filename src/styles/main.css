@@ -16,16 +16,17 @@
 }
 html {
     font-size: 100%;
+
 }
 body {
     background: var(--main-background);
     color: var(--main-font-color);
-
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Roboto', 'Montserrat', sans-serif !important;
+    font-weight: 400;
 }
 p {
     margin: 1.5rem 0; 
-    font-size: 1rem; 
+    font-size: .9rem; 
     line-height: 1.5;
 }
 textarea {
@@ -68,13 +69,13 @@ input[type=radio] + label {
     border-color: #FFFFFF;;
 }
 .btn-primary:focus {
-    border-color: #000000;
-    color: #000000;
+    border-color: #ccc;
+    color: #ccc;
     background: var(--trip-almost-fill-color);
 }
 .btn-primary:active {
-    border-color: #000000;
-    color: #000000;
+    border-color: #ccc;
+    color: #ccc;
     background: rgba(215,37,33, 0.8);
 }
 
@@ -87,8 +88,8 @@ input[type=radio] + label {
 .btn-primary.focus:active, 
 .btn-primary.active.focus, 
 .open > .dropdown-toggle.btn-primary.focus {
-    border-color: #000000;
-    color: #000000;
+    border-color: #ccc;
+    color: #ccc;
     background: rgba(215,37,33, 0.8);
 }
 
@@ -189,15 +190,33 @@ input[type=radio] + label {
 .header_title {
     text-transform: lowercase;
     font-style: normal;
-
+    font-weight: 300;
     font-size: 2.5rem;
 }
-.header_panel-left {
-    /*background: #009CE1;*/
-    padding: 0 7em;
-    /*border-radius: 35em 0em 35em 0em;*/
+.header_notifications {
+    border: 1px solid #0180a9;
+    border-right: 0;
+    border-bottom: 0;
+    border-top: 0;
+    padding-left: 10px;
+    padding-right: 6px;
+    cursor: pointer;
+}
+.trip_seats-available_label {
+    margin-top: 4px;
+    position: absolute;
+}
 
-    background: linear-gradient(100deg, #016587 10%, rgba(0, 0, 0, 0) 10%),   radial-gradient(circle farthest-corner at 0 0 , #009CE1 90%, #016587 90%);
+.trip_seats-available_label > span{
+    display:block;
+    margin: 7px 0;
+}
+.header_notifications > i {
+    color: #0180a9;
+}
+.header_panel-left {
+    position: relative;
+    margin: 0 0 0 4em;
 }
 .header .header_panel-right,
 .header .header_panel-left {
@@ -205,17 +224,31 @@ input[type=radio] + label {
     vertical-align: middle;
 }
 
+.header .header_panel-left > img:last-child {
+    left: 62px;
+    top: -12px;
+    position: absolute;
+    -webkit-filter: drop-shadow(2px 2px 5px rgba(0,0,0,0.3));
+}
+
 .header .header_panel-left .header_title {
     margin: 0;
     line-height: 74px;
     width: 50%;
+    margin-left: 1.2em;
 }
 
 .header .header_panel-right {
+    margin-right: 1.5rem;
     float: right;
     position: relative;
     line-height: 74px;
     vertical-align: middle;
+}
+
+.header_panel-right .btn-link,
+.header_panel-right a {
+    text-transform: uppercase;
 }
 
 .header .header_profile {
@@ -226,11 +259,13 @@ input[type=radio] + label {
     width: 2rem;
     height: 2rem;
 
-    border-radius: 2rem;
-    border: 1px solid var(--secondary-font-color);
+    border-radius: 100%;
+    border: 2px solid var(--secondary-font-color);
 }
 
 .header .header_profile button.btn {
+    margin: 0 3px;
+    padding: 6px 6px;
     background-color: transparent;
     border: none;
 }
@@ -254,7 +289,7 @@ input[type=radio] + label {
 }
 .card-trip .card_heading:after {
     top: 100%;
-    left: 85%;
+    right: 16%;
     border: solid transparent;
     content: " ";
     height: 0;
@@ -269,16 +304,19 @@ input[type=radio] + label {
 
 .trips .trips_title {
     text-align: center;
+    margin-bottom: 40px;
 }
 
 .trips .trips_title h1 {
     font-size: 42px;
     color: #016587;
+    font-weight: 300;
 }
 
 .trips .trips_title h3 {
     font-size: 20px;
     color: #009ce1;
+    font-weight: 300;
 }
 
 .trip-almost-fill .card_heading {
@@ -305,19 +343,41 @@ input[type=radio] + label {
 .trip-with-driver .card_body {
     padding-top: 3em;
 }
+.trip_driver_img_container {
+    width: 100px;
+    height: 30px;
+    float: left;
+}
+
 .card-trip .trip_driver_img {
     width: 100%;
-    max-width: 90px;
+    max-width: 70px;
     height: auto;
-    
     border: 1px solid #FFF;
-    box-shadow: 0 3px 6px 1px #CCC; 
-
+    box-shadow: 0 3px 6px 1px #CCC;
     position: absolute;
+    left: 18px;
+}
+.trip_location {
+    position: relative;
 }
 .trip_location_from,
 .trip_location_to {
     font-size: 1.5rem;
+}
+.trip_location-dot-line {
+    position: absolute;
+    top: 28px;
+}
+.trip_location-dot-line > div {
+    float: right;
+    width: 1px;
+    margin-right: 13px;
+    height: 28px;
+    content: '\A0';
+    border: 0;
+    border-left: solid 1px #777;
+    border-style: dashed;
 }
 .trip_location_from {
     color: var(--trip-half-free-color);
@@ -333,18 +393,20 @@ input[type=radio] + label {
 .trip_datetime {
     color: var(--medium-font-color);
     margin-bottom: 1.5em;
+    margin-top: 1rem;
 }
 .trip_datetime_time {
     color: var(--trip-half-free-color);
     text-transform: uppercase;
 }
 .trip_seats-available {
-    margin: 1rem 0;
+    /*margin: 1rem 0;*/
 }
 .trip_seats-available_value {
     font-size: 2.5em;
     margin-right: .3em;
     color: var(--trip-half-free-color);
+    font-weight:bold;
 }
 .trip-almost-fill .trip_seats-available_value {
     color: var(--trip-almost-fill-color);
@@ -369,6 +431,7 @@ input[type=radio] + label {
 
     text-transform: uppercase;
     font-size: 1.4em;
+    font-weight: bold;
 
     color: var(--trip-half-free-color);
 }
@@ -529,4 +592,14 @@ input[type=radio] + label {
 
 .actionbar_title {
     font-size: 26px;
+}
+
+.footer-component {
+    color: white;
+    background-color: #33363A;
+}
+
+.footer-component a {
+    text-decoration: none;
+    color: white;
 }

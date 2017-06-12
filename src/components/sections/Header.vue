@@ -22,18 +22,25 @@
                 </template>
             </div>
         </div>
-        <div class="container header_content hidden-xs">
-            <div class="header_panel-left">
-                <router-link tag="h1" :to="{name: 'trips'}" class="header_title"> Carpoolear </router-link> 
-            </div>
+        <div class="header_content hidden-xs">
+            <router-link :to="{name: 'trips'}">
+                <div class="header_panel-left">
+                    
+                        <img src="static/img/background_desktop.png" />
+                        <img src="static/img/carpoolear_logo.png" />
+                    <!--<router-link tag="h1" :to="{name: 'trips'}" class="header_title"> Carpoolear </router-link>-->
+                </div>
+            </router-link>
             <div class="header_panel-right">
                 
                 <button @click="share" type="button" class="btn btn-link">Invitar amigos</button>
-
-                <router-link v-if="!logged" :to="{name: 'login'}">Login</router-link>
-                <router-link v-if="!logged" :to="{name: 'register'}">Register</router-link>
+                <router-link class="btn btn-link" v-if="!logged" :to="{name: 'trips'}">Viajes</router-link>
+                <router-link class="btn btn-link" v-if="!logged" :to="{name: 'trips'}">Información</router-link>
+                <router-link class="btn btn-link" v-if="!logged" :to="{name: 'register'}">Registrarme</router-link>
+                <router-link class="btn btn-primary" btn-lg v-if="!logged" :to="{name: 'login'}">Login</router-link>
                 
-                <span class="header_notifications" @click="toNotifications">
+                
+                <span class="header_notifications" @click="toNotifications" v-if="logged">
                     <i class="fa fa-bell" aria-hidden="true"></i>
                     <span class="badge" v-if="notificationsCount > 0">{{notificationsCount}}</span>
                 </span> 

@@ -19,10 +19,10 @@
                 </span>
               </div>
               <template v-if="user">
-                <div class="col-xs-5">
-                    <img alt="" :src="trip.user.image | profile-image" class="trip_driver_img circle-box" />
+                <div class="trip_driver_img_container">
+                  <img alt="" :src="trip.user.image | profile-image" class="trip_driver_img circle-box" />
                 </div>
-                <div class="col-xs-14">
+                <div class="trip_driver_details">
                   <div class="trip_driver_name" >
                     {{ trip.user.name }}
                   </div>
@@ -54,6 +54,9 @@
                     <span class="trip_location_from_state-country">{{ trip.points[trip.points.length - 1].json_address.provincia }}, {{ trip.points[trip.points.length - 1].json_address.pais }}</span>
                   </div>
                 </div>
+                <div class="col-xs-4 trip_location-dot-line">
+                  <div></div>
+                </div>
               </template>
               <template v-else>
                   <div class="row trip_location_from">
@@ -84,7 +87,7 @@
             <div class="row">
               <div class="trip_seats-available col-xs-offset-2 col-xs-12">
                 <span class="trip_seats-available_value pull-left">{{ trip.seats_available }}</span>
-                <span class="trip_seats-available_label">Lugares<br />libres</span>
+                <span class="trip_seats-available_label"><span>Lugares</span><span>libres</span></span>
               </div>
               <div class="trip_actions col-xs-10">
                 <router-link :to=" { name: 'detail_trip', params: { id: trip.id } }" class="btn btn-default btn-lg btn-trip-detail">Ver</router-link>

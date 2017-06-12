@@ -43,6 +43,8 @@
                                 <span class="trip_location_from_state-country">{{ trip.points[trip.points.length - 1].json_address.provincia }}, {{ trip.points[trip.points.length - 1].json_address.pais }}</span>
                                 </div>
                             </div>
+                            <div class="col-xs-4 trip_location-dot-line">
+                            </div>
                             </template>
                             <template v-else>
                                 <div class="row trip_location_from">
