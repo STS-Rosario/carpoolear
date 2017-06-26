@@ -55,6 +55,9 @@ import PendingRequest from '../PendingRequest';
 import RatePending from '../RatePending';
 import { mapGetters } from 'vuex';
 
+import Tab from '../elements/Tab';
+import Tabset from '../elements/Tabset';
+
 export default {
     name: 'my-trips',
 
@@ -82,7 +85,9 @@ export default {
         Trip,
         Loading,
         PendingRequest,
-        RatePending
+        RatePending,
+        Tab,
+        Tabset
     }
 };
 </script>

@@ -28,6 +28,7 @@ router.beforeEach((to, from, next) => {
     } else {
         store.dispatch('actionbars/showFooter', false);
     }
+
     if (meta.header) {
         if (meta.header.title) {
             store.dispatch('actionbars/setTitle', meta.header.title);
