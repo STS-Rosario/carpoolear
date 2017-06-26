@@ -17,6 +17,7 @@
     <allow-intent href="geo:*" />
     <platform name="android">
         <allow-intent href="market:*" />
+        <resource-file src="google-services.json" target="google-services.json" />
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
@@ -35,7 +36,5 @@
     <plugin name="cordova-plugin-whitelist" spec="1" />
     <plugin name="cordova-plugin-x-socialsharing" spec="https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin.git" />
     <plugin name="cordova-plugin-x-toast" spec="https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git" />
-    <plugin name="phonegap-plugin-push" spec="^1.10.4">
-        <variable name="SENDER_ID" value="1027904610758" />
-    </plugin>
+    <plugin name="phonegap-plugin-push" spec="^2.0.0-rc4" />
 </widget>

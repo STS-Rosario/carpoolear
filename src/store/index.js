@@ -22,7 +22,7 @@ export default new Vuex.Store({
     actions,
     getters,
     state: {
-        appVersion: 1
+        appVersion: 3
     },
     modules: {
         auth,

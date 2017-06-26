@@ -15,24 +15,16 @@ class MyPromise extends Promise {
     }
 
     then (onFulfilled, onRejected) {
-        console.log('je');
         // before
         const returnValue = super.then(onFulfilled, onRejected);
-        console.log('hola');
-        console.log(this);
         returnValue.abort = this.abort;
         // after
         return returnValue;
     }
 
     catch (onRejected) {
-        console.log('je');
-        // before
         const returnValue = super.catch(onRejected);
-        console.log('je');
-        console.log(this);
         returnValue.abort = this.abort;
-        // after
         return returnValue;
     }
 }
@@ -70,7 +62,6 @@ export default {
         promise.abort = () => {
             source.cancel('Abort by the system');
         };
-        console.log(promise);
         return promise;
     },
 

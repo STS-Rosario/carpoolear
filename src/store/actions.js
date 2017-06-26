@@ -58,7 +58,11 @@ export const startApp = (store) => {
         store.dispatch('cars/index');
         store.dispatch('passenger/getPendingRequest');
         store.dispatch('startThread');
+        if (store.state.cordova.device) {
+            store.dispatch('device/update');
+        }
     }
+
     bus.emit('system-ready');
 };
 

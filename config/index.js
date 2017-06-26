@@ -1,7 +1,8 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 var path = require('path')
 
-var flag = (process.env.PLATFORM && process.env.PLATFORM == 'DESKTOP');
+var dFlag = (process.env.PLATFORM && process.env.PLATFORM == 'DESKTOP');
+var isSERVED = process.env.SERVE;
 
 module.exports = {
   build: {
@@ -9,7 +10,7 @@ module.exports = {
     index: path.resolve(__dirname, '../dist/index.html'),
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: flag ? '/app/' : '',
+    assetsPublicPath: dFlag ? '/app/' : (isSERVED ? '/' : ''),
     productionSourceMap: true,
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
@@ -22,7 +23,7 @@ module.exports = {
     env: require('./dev.env'),
     port: 8080,
     assetsSubDirectory: 'static',
-    assetsPublicPath: flag ? '/app/' : '/', // dejar vacio para compilar cordova
+    assetsPublicPath: dFlag ? '/app/' : (isSERVED ? '/' : ''), // dejar vacio para compilar cordova
     proxyTable: {},
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README

@@ -18,9 +18,7 @@
             "cordova-plugin-whitelist": {},
             "cordova-plugin-x-socialsharing": {},
             "cordova-plugin-x-toast": {},
-            "phonegap-plugin-push": {
-                "SENDER_ID": "1027904610758"
-            }
+            "phonegap-plugin-push": {}
         }
     },
     "dependencies": {
@@ -33,6 +31,6 @@
         "cordova-plugin-whitelist": "1",
         "cordova-plugin-x-socialsharing": "https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin.git",
         "cordova-plugin-x-toast": "https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git",
-        "phonegap-plugin-push": "^1.10.4"
+        "phonegap-plugin-push": "^2.0.0-rc4"
     }
 }

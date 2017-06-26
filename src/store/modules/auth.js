@@ -95,19 +95,19 @@ function register (store, { email, password, passwordConfirmation, name, termsAn
     return userApi.register(data).then((data) => {
         console.log(data);
     }).catch((err) => {
-      if (err.response) {
-        console.log(err.response.data);
-        console.log(err.response.status);
-        console.log(err.response.headers);
-      } else {
-        console.log(err.message);
-        if (err.message === 'Could not create new user.') {
+        if (err.response) {
+            console.log(err.response.data);
+            console.log(err.response.status);
+            console.log(err.response.headers);
+        } else {
+            console.log(err.message);
+            if (err.message === 'Could not create new user.') {
 
+            }
         }
-      }
     });
 }
-  
+
 function fetchUser (store) {
     return userApi.show().then((response) => {
         store.commit(types.AUTH_SET_USER, response.data);
@@ -118,7 +118,7 @@ function fetchUser (store) {
 
 function retoken (store) {
     let data = {};
-    data.app_version = store.rootState.appVersion;
+    // data.app_version = store.rootState.appVersion;
 
     return new Promise((resolve, reject) => {
         authApi.retoken(data).then((response) => {
