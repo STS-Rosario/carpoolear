@@ -1,4 +1,5 @@
 /* jshint esversion: 6 */
+import 'babel-polyfill';
 
 import Vue from 'vue';
 import App from './App';
@@ -14,7 +15,7 @@ import store from './store';
 /* eslint-disable no-unused-vars */
 import cordova from './cordova';
 
-import fontAwesomeCss from './styles/font-awesome/css/font-awesome.min.css';
+require('font-awesome-webpack');
 
 import bootstrapCss from './styles/bootstrap/css/bootstrap.min.css';
 
