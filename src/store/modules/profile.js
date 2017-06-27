@@ -32,7 +32,7 @@ const actions = {
     },
 
     ...pagination.makeActions('rates', ({store, data}) => {
-        return rateApi.index(store.state.user.id);
+        return rateApi.index(store.state.user.id, data);
     })
 
 };

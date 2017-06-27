@@ -8,7 +8,7 @@
                 <p class="alert alert-warning"  role="alert">No hay viajes</p>    
             </slot>
         </template>
-        <slot name="loadig" v-else>
+        <slot name="loading" v-else>
             <p class="alert alert-info" role="alert">Cargando viajes ...</p>
         </slot> 
     </div>  

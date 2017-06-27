@@ -26,8 +26,8 @@
             <router-link :to="{name: 'trips'}">
                 <div class="header_panel-left">
                     
-                        <img :src="process.env.ROUTE_BASE + 'static/img/background_desktop.png'" />
-                        <img :src="process.env.ROUTE_BASE +'static/img/carpoolear_logo.png'" />
+                        <img :src="background_desktop" />
+                        <img :src="carpoolear_logo" />
                     <!--<router-link tag="h1" :to="{name: 'trips'}" class="header_title"> Carpoolear </router-link>-->
                 </div>
             </router-link>
@@ -90,6 +90,8 @@ export default {
 
     data () {
         return {
+            background_desktop: process.env.ROUTE_BASE + 'static/img/background_desktop.png',
+            carpoolear_logo: process.env.ROUTE_BASE + 'static/img/carpoolear_logo.png'
         };
     },
 

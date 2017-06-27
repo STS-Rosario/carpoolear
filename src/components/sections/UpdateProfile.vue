@@ -54,7 +54,7 @@
             </div>    
         </div>
         <div class="col-xs-8 profile_image">
-            <img alt="" :src="user.image | profile-image" class="circle-box" :class="{'loading': loadingImg}"  />
+            <img alt="" :src="user.image | profile-image" class="circle-box" :class="{'loading': loadingImg}"></img>
             <button @click="changePhoto" class="btn btn-secondary profile_image-edit">
                 Cambiar foto
             </button>
