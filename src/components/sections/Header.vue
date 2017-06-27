@@ -26,8 +26,8 @@
             <router-link :to="{name: 'trips'}">
                 <div class="header_panel-left">
                     
-                        <img src="static/img/background_desktop.png" />
-                        <img src="static/img/carpoolear_logo.png" />
+                        <img :src="process.env.ROUTE_BASE + 'static/img/background_desktop.png'" />
+                        <img :src="process.env.ROUTE_BASE +'static/img/carpoolear_logo.png'" />
                     <!--<router-link tag="h1" :to="{name: 'trips'}" class="header_title"> Carpoolear </router-link>-->
                 </div>
             </router-link>

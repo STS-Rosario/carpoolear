@@ -16,7 +16,11 @@ console.log(config.HISTORY_MODE, process.env.PLATFORM);
 if (process.env.PLATFORM && process.env.PLATFORM == 'DESKTOP') {
   config.ROUTE_BASE = '"/app/"';
 } else {
-  config.ROUTE_BASE = '"/"';
+  if (process.env.SERVE) {
+    config.ROUTE_BASE = '"/"';
+  } else {
+    config.ROUTE_BASE = '""';
+  }
 }
 
 

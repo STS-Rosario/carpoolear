@@ -5,7 +5,7 @@
             <h3>¡Elegí fecha, origen o destino y encontralo!</h3>
         </div>
 
-        <SearchBox :params="searchParams" v-on:trip-search="research" v-show="!showingTrips"></SearchBox> 
+        <SearchBox :params="searchParams" v-on:trip-search="research" v-show="showingTrips"></SearchBox> 
 
         <Loading :data="trips" v-if="showingTrips">
             <div id="trips-list">
