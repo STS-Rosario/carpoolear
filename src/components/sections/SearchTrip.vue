@@ -1,5 +1,5 @@
 <template>
-    <div class="row search-section">  
+    <div class="row search-section hidden-xs">  
         <div class="col-xs-12 col-md-3"> 
             <button class="btn btn-option" :class="{'active': !isPassenger}" @click="isPassenger = false" >
                 <i class="fa fa-car" aria-hidden="true"></i>
@@ -22,7 +22,7 @@
               <Calendar :class="'calendar-date form-control form-control-with-icon form-control-date'" :value="date" @change="(date) => this.date = date"></Calendar>
         </div>
         <div class="col-xs-24 col-md-3">
-            <button class="btn btn-primary" @click="emit">Buscar</button> 
+            <button class="btn btn-primary btn-search" @click="emit">Buscar</button> 
         </div>
         
     </div>  
@@ -127,3 +127,10 @@ export default {
     }
 };
 </script>
+
+<style scoped>
+  .search-section .btn-option {
+    width: 100%;
+    margin-bottom: 1em;
+  }
+</style>

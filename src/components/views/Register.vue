@@ -63,17 +63,30 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  .register {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
   h1, h2 {
     font-weight: normal;
+  }
+  label {
+    font-weight: bold;
   }
   .form {
     margin-top:20px;
     border: 1px solid gray;
-    padding: 15px;
+    padding: 2em;
+    margin-bottom: 2rem;
   }
   input {
+    width: 100%;
     display:block;
     padding: 3px;
+    margin-bottom: 0.4em;
+  }
+  input[type="checkbox"] {
+    width: auto;
   }
   button {
     margin-top: 10px;

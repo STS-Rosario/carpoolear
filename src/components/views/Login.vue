@@ -1,16 +1,15 @@
 <template>
   <div class="login" >
+    <h1> Login: </h1>
     <div class='form'>
       <label for="txt_user">Usuario</label>
       <input type="text" id="txt_user" v-model='email'/>
       <label for="txt_password">Password</label>
       <input  type="password" id="txt_password" v-model='password' />
-      <button @click="login"> Login </button> <router-link :to="{name:'reset-password'}"> ¿Olvidó su contraseña? </router-link>
+      <button class="btn-primary btn-search" @click="login"> Login </button> <router-link class='login-forget' :to="{name:'reset-password'}"> ¿Olvidó su contraseña? </router-link>
       <span v-if="loading"> Loading... </span>
-      <div>
-        <button @click="facebookLogin"> Loggin with facebook </button>
-      </div>
-      
+      <button class="btn-primary btn-search btn-facebook" @click="facebookLogin"> Login con facebook </button>
+      <router-link class='login-register' :to="{name:'register'}"> Aún no cuenta con un usuario. Registrese aquí. </router-link>
     </div>
   </div>
 </template>
@@ -60,17 +59,27 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  .login {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  label {
+    font-weight: bold;
+  }
   h1, h2 {
     font-weight: normal;
   }
   .form {
     margin-top:20px;
     border: 1px solid gray;
-    padding: 15px;
+    padding: 2em;
+    margin-bottom: 2rem;
   }
   input {
     display:block;
     padding: 3px;
+    margin-bottom: 0.4em;
+    width: 100%;
   }
   button {
     margin-top: 10px;
@@ -83,7 +92,15 @@ export default {
     display: inline-block;
     margin: 0 10px;
   }
-  a {
+  .login-forget {
+    padding-left: 12px;
     color: #42b983;
+  }
+  .login-register {
+    color: red;
+  }
+  .btn-facebook {
+    display: block;
+    margin-bottom: 0.6em;
   }
 </style>

@@ -4,10 +4,10 @@
             Gato
         </tab>
         <tab header="Perfil">
-            <ProfileInfo></ProfileInfo>
+            <!--<ProfileInfo></ProfileInfo>-->
         </tab>
         <tab header="Valoraciones">
-            <ProfileRates></ProfileRates>
+            <!--<ProfileRates></ProfileRates>-->
         </tab>
     </tabset>
 </template>
@@ -15,15 +15,15 @@
 import Tab from '../elements/Tab';
 import Tabset from '../elements/Tabset';
 import {mapActions, mapGetters} from 'vuex';
-import ProfileInfo from '../sections/ProfileInfo';
-import ProfileRates from '../sections/ProfileRates';
+/* import ProfileInfo from '../sections/ProfileInfo';
+import ProfileRates from '../sections/ProfileRates'; */
 
 export default {
     components: {
         Tab,
-        Tabset,
+        Tabset/* ,
         ProfileInfo,
-        ProfileRates
+        ProfileRates */
     },
 
     props: {

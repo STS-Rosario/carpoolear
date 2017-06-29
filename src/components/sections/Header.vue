@@ -3,7 +3,7 @@
         <div class="actionbar actionbar-top visible-xs">
             <div class="actionbar_section actionbar_icon">
                 <span v-if="showLogo">
-                    <i class="fa fa-car" aria-hidden="true"></i>
+                    <img :src="carpoolear_logo" />
                 </span>
                 <template v-else v-for="item in leftHeaderButton" v-if="item.show">
                     <span @click="onClick(item)">
@@ -25,9 +25,9 @@
         <div class="header_content hidden-xs">
             <router-link :to="{name: 'trips'}">
                 <div class="header_panel-left">
-                    
-                        <img :src="background_desktop" />
-                        <img :src="carpoolear_logo" />
+                    <img :src="background_desktop_mini" v-if="isNotLargeDesktop" />
+                    <img :src="background_desktop" v-if="!isNotLargeDesktop" />
+                    <img :src="carpoolear_logo" />
                     <!--<router-link tag="h1" :to="{name: 'trips'}" class="header_title"> Carpoolear </router-link>-->
                 </div>
             </router-link>
@@ -90,6 +90,7 @@ export default {
 
     data () {
         return {
+            background_desktop_mini: process.env.ROUTE_BASE + 'static/img/background_desktop_mini.png',
             background_desktop: process.env.ROUTE_BASE + 'static/img/background_desktop.png',
             carpoolear_logo: process.env.ROUTE_BASE + 'static/img/carpoolear_logo.png'
         };
@@ -102,7 +103,8 @@ export default {
             notificationsCount: 'notifications/count',
             title: 'actionbars/title',
             leftHeaderButton: 'actionbars/leftHeaderButton',
-            rightHeaderButton: 'actionbars/rightHeaderButton'
+            rightHeaderButton: 'actionbars/rightHeaderButton',
+            isNotLargeDesktop: 'device/isNotLargeDesktop'
         }),
 
         showLogo () {
@@ -141,3 +143,11 @@ export default {
     }
 };
 </script>
+
+<style scoped>
+    .actionbar_icon img {
+        margin-bottom: 2px;
+        width: 26px;
+        margin-left: .3em;
+    }
+</style>

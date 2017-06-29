@@ -22,7 +22,8 @@ const getters = {
     resolution: state => state.resolution,
     isMobile: state => state.resolution.width < 768,
     isTablet: state => state.resolution.width >= 768 && state.resolution.width < 992,
-    isDesktop: state => state.resolution.width >= 992
+    isDesktop: state => state.resolution.width >= 992,
+    isNotLargeDesktop: sate => sate.resolution.width < 1120
 };
 
 // actions
@@ -65,8 +66,19 @@ const actions = {
         }).catch((err) => {
             console.log(err);
         });
-    }
+    },
+    resize () {
+        var w = window;
+        var d = document;
+        var e = d.documentElement;
+        var g = d.getElementsByTagName('body')[0];
+        var x = w.innerWidth || e.clientWidth || g.clientWidth;
+        var y = w.innerHeight || e.clientHeight || g.clientHeight;
 
+        state.resolution.width = x;
+        state.resolution.height = y;
+        bus.emit('resize', state.resolution);
+    }
 };
 
 // mutations
@@ -107,15 +119,4 @@ export default {
     mutations
 };
 
-window.addEventListener('resize', function () {
-    var w = window;
-    var d = document;
-    var e = d.documentElement;
-    var g = d.getElementsByTagName('body')[0];
-    var x = w.innerWidth || e.clientWidth || g.clientWidth;
-    var y = w.innerHeight || e.clientHeight || g.clientHeight;
-
-    state.resolution.width = x;
-    state.resolution.height = y;
-    bus.emit('resize', state.resolution);
-}, false);
+window.addEventListener('resize', actions.resize, false);

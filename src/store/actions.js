@@ -62,6 +62,7 @@ export const startApp = (store) => {
             store.dispatch('device/update');
         }
     }
+    store.dispatch('device/resize');
 
     bus.emit('system-ready');
 };
