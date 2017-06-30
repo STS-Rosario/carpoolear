@@ -80,7 +80,6 @@ export default {
         }),
 
         showingTrips () {
-            console.log(this.isMobile, this.lookSearch);
             return !this.isMobile || !this.lookSearch;
         }
     },
