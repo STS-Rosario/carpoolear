@@ -5,7 +5,7 @@
             <h3>¡Elegí fecha, origen o destino y encontralo!</h3>
         </div>
 
-        <SearchBox :params="searchParams" v-on:trip-search="research" v-show="showingTrips"></SearchBox> 
+        <SearchBox :params="searchParams" v-on:trip-search="research" v-show="!isMobile || lookSearch"></SearchBox> 
 
         <Loading :data="trips" v-if="showingTrips">
             <div id="trips-list">
@@ -50,13 +50,14 @@ export default {
         },
 
         onSearchButton () {
-            console.log('testing');
             this.lookSearch = true;
+            this.setActionButton(['clear']);
         },
 
         onClearButton () {
             this.setActionButton(['search']);
             this.filtered = false;
+            this.lookSearch = false;
             this.search({});
         }
     },
@@ -79,6 +80,7 @@ export default {
         }),
 
         showingTrips () {
+            console.log(this.isMobile, this.lookSearch);
             return !this.isMobile || !this.lookSearch;
         }
     },

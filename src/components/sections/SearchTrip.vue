@@ -1,5 +1,5 @@
 <template>
-    <div class="row search-section hidden-xs">  
+    <div class="row search-section">  
         <div class="col-xs-12 col-md-3"> 
             <button class="btn btn-option" :class="{'active': !isPassenger}" @click="isPassenger = false" >
                 <i class="fa fa-car" aria-hidden="true"></i>
