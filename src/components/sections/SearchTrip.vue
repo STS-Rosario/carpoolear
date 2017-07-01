@@ -11,18 +11,19 @@
                 <img alt="" :src="isPassenger ? pasajero_logo_blanco : pasajero_logo_gris" />
                 <span>Busco pasajero</span>
             </button>
-        </div>  
-        <div class="col-xs-24 col-md-5 gmap-autocomplete"> 
-            <GmapAutocomplete name="from_town" ref="from_town" :selectFirstOnEnter="true" :types="['(cities)']" :componentRestrictions="{country: 'AR'}" placeholder="Origen"  :value="from_town.name" v-on:place_changed="(data) => getPlace(0, data)" class="form-control form-control-with-icon form-control-map-autocomplete origin"> </GmapAutocomplete>
+        </div>
+        <div class="col-xs-24 col-md-5 gmap-autocomplete origin"> 
+            <GmapAutocomplete name="from_town" ref="from_town" :selectFirstOnEnter="true" :types="['(cities)']" :componentRestrictions="{country: 'AR'}" placeholder="Origen"  :value="from_town.name" v-on:place_changed="(data) => getPlace(0, data)" class="form-control form-control-with-icon form-control-map-autocomplete"> </GmapAutocomplete>
             <div class="date-picker--cross">
                 <i v-on:click="resetInput('from_town')" class="fa fa-times" aria-hidden="true"></i>
             </div>
         </div>
-        <div class="swap">
-            <img alt="swap" class="swap" :src="swap" />
+        <div class="swap btn">
+            <img alt="swap" class='swap-horizontal' :src="swap_horizontal" @click="swapCities" />
+            <img alt="swap" class='swap-vertical' :src="swap_vertical" @click="swapCities" />
         </div>
-        <div class="col-xs-24 col-md-5 gmap-autocomplete"> 
-            <GmapAutocomplete name="to_town" ref="to_town" :selectFirstOnEnter="true" :types="['(cities)']" :componentRestrictions="{country: 'AR'}" placeholder="Destino"  :value="to_town.name" v-on:place_changed="(data) => getPlace(1, data)" class="form-control form-control-with-icon form-control-map-autocomplete destiny"> </GmapAutocomplete>
+        <div class="col-xs-24 col-md-5 gmap-autocomplete destiny"> 
+            <GmapAutocomplete name="to_town" ref="to_town" :selectFirstOnEnter="true" :types="['(cities)']" :componentRestrictions="{country: 'AR'}" placeholder="Destino"  :value="to_town.name" v-on:place_changed="(data) => getPlace(1, data)" class="form-control form-control-with-icon form-control-map-autocomplete"> </GmapAutocomplete>
             <div class="date-picker--cross">
                 <i v-on:click="resetInput('to_town')" class="fa fa-times" aria-hidden="true"></i>
             </div>
@@ -148,6 +149,12 @@ export default {
         },
         resetInput (input) {
             this[input] = {};
+        },
+        swapCities () {
+            let temp;
+            temp = this['to_town'];
+            this['to_town'] = this['from_town'];
+            this['from_town'] = temp;
         }
     },
     props: [
@@ -160,14 +167,101 @@ export default {
 </script>
 
 <style scoped>
+    .search-section {
+        width: calc(100%);
+    }
     .search-section .btn-option {
         width: 100%;
         margin-bottom: 1em;
     }
+    .btn-option {
+        height: 72px;
+    }
     .btn-option img {
-        margin-right: 6px;
+        width: 20px;
+        display: inline-block;
+        top: 10px;
+        margin-right: 0;
+    }
+    .btn-option span {
+        vertical-align: middle;
+        display: inline-block;
+        width: calc(100% - 30px);
+    }
+    .swap {
+        display: none;
+    }
+    .swap-horizontal {
+        display: none;
+    }
+    @media only screen and (min-width: 300px) {
+        .swap {
+            left: 10px;
+            top: 198px;
+            border-radius: 0;
+            position: absolute;
+            z-index: 1;
+            text-align: center;
+            cursor: pointer;
+            background-color: #eee;
+            box-sizing: border-box;
+            padding: 2px 6px 3px;
+            border: 1px solid #aaa;
+            display: inline-block;
+            margin: 0em;
+        }
+        .search-section {
+            margin-left: 30px;
+            width: calc(100% - 30px);
+        }
+    }
+    @media only screen and (min-width: 414px) {
+        .btn-option {
+            height: initial;
+        }
+        .swap {
+            top: 178px;
+        }
+        .btn-option img {
+            width: initial;
+            display: initial;
+            top: initial;
+            margin-right: 6px;
+        }
+        .btn-option span {
+            display: initial;
+            width: initial;
+        }
+    }
+    @media only screen and (min-width: 768px) {
+        .swap {
+            left: initial;
+            top: initial;
+            transform: translate(-724px,106px);
+            -webkit-transform: translate(-724px,106px);
+            -o-transform: translate(-724px,106px);
+            -moz-transform: translate(-724px,106px);
+        }
+    }
+    @media only screen and (min-width: 856px) {
+        .swap {
+            transform: translate(-754px,106px);
+            -webkit-transform: translate(-754px,106px);
+            -o-transform: translate(-754px,106px);
+            -moz-transform: translate(-754px,106px);
+        }
+        .search-section {
+             width: 100%;
+             margin-left: 0;
+        }
     }
     @media only screen and (min-width: 992px) {
+        .swap {
+            transform: translate(-16px,20);
+            -webkit-transform: translate(-16px,20px);
+            -o-transform: translate(-16px,20px);
+            -moz-transform: translate(-16px,20px);
+        }
         .btn-option {
             height: 66px;
             padding: 1em .4em;
@@ -183,12 +277,13 @@ export default {
             top: 10px;
             margin-right: 0;
         }
-        .swap {
-            -webkit-transform: rotate(90deg);
-            -moz-transform: rotate(90deg);
-            -o-transform: rotate(90deg);
-            -ms-transform: rotate(90deg);
-            transform: rotate(45deg);
+    }
+    @media only screen and (min-width: 992px) {
+        .swap-horizontal {
+            display: block;
+        }
+        .swap-vertical {
+            display: none;
         }
     }
 </style>

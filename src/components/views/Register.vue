@@ -16,7 +16,7 @@
       <label for="cbx_terms">He leído y acepto términos y condiciones</label>
       <input  type="checkbox" id="cbx_terms" v-model='termsAndConditions' />
 
-      <button @click="register"> Registrarme </button>
+      <button @click="register" class="btn-primary btn-search"> Registrarme </button>
     </div>
   </div>
 </template>
