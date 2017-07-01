@@ -15,7 +15,7 @@ export function makeGetters (name) {
     let getters = {};
     getters[name] = state => state[name];
     getters[name + 'MorePage'] = state => !state[name + 'SearchParam'].lastPage;
-    getters[name + 'SearchParam'] = state => !state[name + 'SearchParam'];
+    getters[name + 'SearchParam'] = state => state[name + 'SearchParam'];
     return getters;
 }
 

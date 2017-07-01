@@ -34,6 +34,7 @@ p {
 }
 main {
     padding-top: calc(1.5em + 52px);
+    min-height: calc(100vh - 234px);
 }
 
 h1 {
@@ -156,7 +157,7 @@ input[type=radio] + label {
 } 
 
 .btn-option:hover {
-    color: #FFF;
+    color: #AAA;
     background: #d72322;
     border-color: #d72322;
 }
@@ -234,7 +235,7 @@ input[type=radio] + label {
     color: var(--secondary-font-color);
 
     margin: 0;
-    z-index: 1;
+    z-index: 10;
 }
 
 .header_panel-right .btn-primary { 
@@ -283,7 +284,7 @@ input[type=radio] + label {
     top: -12px;
     position: absolute;
     -webkit-filter: drop-shadow(2px 2px 5px rgba(0,0,0,0.3));
-    z-index: 1;
+    z-index: 10;
 }
 
 .header .header_panel-left .header_title {
@@ -561,6 +562,24 @@ input[type=radio] + label {
     padding: .3rem;
 }
 
+.gmap-autocomplete {
+    position: relative;
+}
+.gmap-autocomplete .date-picker--cross {
+    color: #666;
+    right: 22px;
+    position: absolute;
+    z-index: 1;
+    top: 14px;
+}
+.gmap-autocomplete input {
+    padding-right: 2.5em;
+}
+
+.gmap-autocomplete .date-picker--cross i {
+    cursor: pointer;
+}
+
 .conversation_list .conversation_image {
     width: 56px;
 }
@@ -614,7 +633,7 @@ input[type=radio] + label {
     background: var(--main-background);
     height: 52px;
     width: 100%;
-    z-index: 1;
+    z-index: 10;
     
 }
 
@@ -672,11 +691,33 @@ input[type=radio] + label {
 .footer-component {
     color: white;
     background-color: #33363A;
+    margin-top: 1em;
+}
+
+.footer-component .container {
+    padding: 2.4em 0;
 }
 
 .footer-component a {
     text-decoration: none;
     color: white;
+}
+
+.footer-component ul {
+    margin-top: 1.1em;
+}
+
+.footer-component a {
+    line-height: 22px;
+}
+
+.footer-component i {
+    width: 14px;
+    margin-right: 0.4em;
+}
+
+.footer-component p {
+    margin-top: 1em;
 }
 
 @media only screen and (min-width: 768px) {
@@ -715,13 +756,17 @@ input[type=radio] + label {
         line-height: 42px;
     }
     .search-section .form-control-date input {
-        line-height: 40px !important;
+        line-height: 42px !important;
     }
     .search-section .btn-search {
         padding: 1.4em;
     }
     .btn-primary {
         min-width: 8rem;
+    }
+    .gmap-autocomplete .date-picker--cross {
+        right: 26px;
+        top: 23px;
     }
 }
 

@@ -1,10 +1,10 @@
 <template>
   <div class="login" >
-    <h1> Login: </h1>
+    <h1> Login </h1>
     <div class='form'>
       <label for="txt_user">Usuario</label>
       <input type="text" id="txt_user" v-model='email'/>
-      <label for="txt_password">Password</label>
+      <label for="txt_password">Contraseña</label>
       <input  type="password" id="txt_password" v-model='password' />
       <button class="btn-primary btn-search" @click="login"> Login </button> <router-link class='login-forget' :to="{name:'reset-password'}"> ¿Olvidó su contraseña? </router-link>
       <span v-if="loading"> Loading... </span>
@@ -64,6 +64,7 @@ export default {
     padding-right: 10px;
   }
   label {
+    margin-top: .3em;
     font-weight: bold;
   }
   h1, h2 {

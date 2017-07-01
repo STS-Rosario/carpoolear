@@ -1,7 +1,7 @@
 <template>
   
   <div class="register" >
-    <h1> Registrar nuevo usuario: </h1>
+    <h1> Registrar nuevo usuario </h1>
     <div class='form'>
       <label for="txt_name">Nombre</label>
       <input  type="text" id="txt_name" v-model='name' />
@@ -9,9 +9,9 @@
       <input  type="text" id="txt_surename" v-model='sureName' />
       <label for="txt_email">Email</label>
       <input type="text" id="txt_email" v-model='email'/>
-      <label for="txt_password">Password</label>
+      <label for="txt_password">Contraseña</label>
       <input type="password" id="txt_password" v-model='password'/>
-      <label for="txt_password_confirmation">Ingrese nuevamente su password</label>
+      <label for="txt_password_confirmation">Ingrese nuevamente su contraseña</label>
       <input  type="password" id="txt_password_confirmation" v-model='passwordConfirmation' />
       <label for="cbx_terms">He leído y acepto términos y condiciones</label>
       <input  type="checkbox" id="cbx_terms" v-model='termsAndConditions' />
@@ -71,6 +71,7 @@ export default {
     font-weight: normal;
   }
   label {
+    margin-top: .3em;
     font-weight: bold;
   }
   .form {

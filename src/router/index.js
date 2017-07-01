@@ -40,6 +40,7 @@ router.beforeEach((to, from, next) => {
         store.dispatch('actionbars/setTitle', 'Carpoolear');
         store.dispatch('actionbars/setHeaderButtons', []);
     }
+    window.scrollTo(0, 0);
     next();
 });
 

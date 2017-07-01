@@ -11,7 +11,7 @@
     </div>
     <div class="container hidden-xs">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-xs-6 col-md-6">
                 <h3>Acerca de ...</h3>
                 <ul>
                     <li><a href="https://carpoolear.com.ar/acerca-de.php" target="_blank">Carpoolear</a></li>
@@ -19,7 +19,7 @@
                     <li><a href="http://www.stsrosario.org.ar/" target="_blank">STS Rosario</a></li>
                 </ul>
             </div>
-            <div class="col-md-6">
+            <div class="col-xs-6 col-md-6">
                 <h3>Ayuda</h3>
                 <ul>
                     <li><a href="https://carpoolear.com.ar/tutoriales.php" target="_blank">Tutoriales de uso</a></li>
@@ -27,7 +27,7 @@
                     <li><a href="https://carpoolear.com.ar/recomendaciones.php" target="_blank">Recomendaciones</a></li>
                 </ul>
             </div>
-            <div class="col-md-6">
+            <div class="col-xs-6 col-md-6">
                 <h3>Compartir en</h3>
                 <ul>
                     <li>
@@ -56,7 +56,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="col-md-6">
+            <div class="col-xs-6 col-md-6">
                 <h3>Información legal</h3>
                 <p>
                     Copyright © 2017 Carpoolear.<br />
@@ -90,3 +90,9 @@ export default {
     }
 };
 </script>
+
+<style scoped>
+    h3 {
+        font-size: 18px;
+    }
+</style>
