@@ -5,7 +5,7 @@
         <div class="panel panel-default panel-card card card-trip">
           <div class="panel-heading card_heading">
             <div class="panel-title card-trip_title row">
-              <div class="pull-right">
+              <div class="card-icon">
                 <span class="trip_visibility">
                   <span v-if="trip.friendship_type_id === 0" title="Visibilidad: Solo amigos">
                     <i class="fa fa-lock" aria-hidden="true"></i>

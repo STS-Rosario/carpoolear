@@ -53,9 +53,13 @@ export default {
                 resolve(response.data);
             }).catch((resp) => {
         // Revisar el tipo de error!
-                let data = resp.response.data;
-                let status = resp.response.status;
-                reject({data, status});
+                if (resp.response) {
+                    let data = resp.response.data;
+                    let status = resp.response.status;
+                    reject({ data, status });
+                } else {
+                    console.log(resp);
+                }
             });
         });
 

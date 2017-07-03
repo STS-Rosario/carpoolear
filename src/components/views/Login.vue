@@ -3,10 +3,10 @@
     <h1> Login </h1>
     <div class='form'>
       <label for="txt_user">Usuario</label>
-      <input type="text" id="txt_user" v-model='email'/>
+      <input ref="txt_user" type="text" id="txt_user" v-model="email" v-jump:focus="txt_password" v-focus />
       <label for="txt_password">Contraseña</label>
-      <input  type="password" id="txt_password" v-model='password' />
-      <button class="btn-primary btn-search" @click="login"> Login </button> <router-link class='login-forget' :to="{name:'reset-password'}"> ¿Olvidó su contraseña? </router-link>
+      <input  ref="txt_password" type="password" id="txt_password" v-jump:click="btn_login" v-model='password' />
+      <button ref="btn_login" id="btn_login" class="btn-primary btn-search" @click="login"> Login </button> <router-link class='login-forget' :to="{name:'reset-password'}"> ¿Olvidó su contraseña? </router-link>
       <span v-if="loading"> Loading... </span>
       <button class="btn-primary btn-search btn-facebook" @click="facebookLogin"> Login con facebook </button>
       <router-link class='login-register' :to="{name:'register'}"> Aún no cuenta con un usuario. Registrese aquí. </router-link>
@@ -15,15 +15,23 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import focus from '../../directives/autofocus.js';
+import jump from '../../directives/jump.js';
 
 export default {
     name: 'login',
+    directives: {
+        focus,
+        jump
+    },
     data () {
         return {
             email: '',
             password: '',
             loading: false,
-            error: ''
+            error: '',
+            txt_password: 'txt_password',
+            btn_login: 'btn_login'
         };
     },
     computed: {
@@ -67,7 +75,7 @@ export default {
     margin-top: .3em;
     font-weight: bold;
   }
-  h1, h2 {
+  h2 {
     font-weight: normal;
   }
   .form {
@@ -94,8 +102,9 @@ export default {
     margin: 0 10px;
   }
   .login-forget {
+    font-weight: bold;
     padding-left: 12px;
-    color: #42b983;
+    color: #016587;
   }
   .login-register {
     color: red;
