@@ -1,8 +1,9 @@
 <template>
   <div class="friends-component" >
     <div class="row">   
-        <h1>Solicitudes de amistad</h1>
-        <Loading :data="pendings">
+        
+        <Loading :data="pendings" :hideOnEmpty="true">
+            <h1 slot="title">Solicitudes de amistad</h1>
             <div id="friends-list">
                 <FriendCard v-for="user in pendings" :user="user">
                     <template slot>

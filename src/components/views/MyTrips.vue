@@ -1,8 +1,9 @@
 <template>
   <div class="trips">
         <div class="col-xs-24">
-            <h2>Pendiente de contestar</h2>
-            <Loading :data="pendingRequest">
+            
+            <Loading :data="pendingRequest" :hideOnEmpty="true">
+                <h2 slot="title"> Pendiente de contestar </h2>
                 <div id="trips-list">
                     <PendingRequest v-for="r in pendingRequest" :user="r.user" :trip="findTrip(r.trip_id)"></PendingRequest>
                 </div>
@@ -12,8 +13,8 @@
         </div>
 
         <div class="col-xs-24">
-            <h2>Calificaciones pendientes</h2> 
-            <Loading :data="pendingRates">
+            <Loading :data="pendingRates" :hideOnEmpty="true">
+                <h2 slot="title"> Calificaciones pendientes </h2>   
                 <div id="trips-list">
                     <RatePending v-for="rate in pendingRates" :rate="rate" />
                 </div>
@@ -34,8 +35,8 @@
         </div>
 
         <div class="col-xs-24">
-            <h2>Viajes Subido</h2> 
-            <Loading :data="passengerTrips">
+            <Loading :data="passengerTrips" :hideOnEmpty="true">
+                <h2 slot="title" > Viajes Subido </h2> 
                 <div id="trips-list">
                     <Trip v-for="trip in passengerTrips" :trip="trip" :user="user" ></Trip>
                 </div>

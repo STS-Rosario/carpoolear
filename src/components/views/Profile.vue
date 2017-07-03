@@ -1,7 +1,7 @@
 <template>
     <tabset>
         <tab header="Mis Viajes">
-            Gato
+            <component :is="currentView"></component>
         </tab>
         <tab header="Perfil">
             <ProfileInfo></ProfileInfo>
@@ -17,13 +17,17 @@ import Tabset from '../elements/Tabset';
 import {mapActions, mapGetters} from 'vuex';
 import ProfileInfo from '../sections/ProfileInfo';
 import ProfileRates from '../sections/ProfileRates';
+import MyTrips from './MyTrips';
+import ProfileTrip from '../sections//ProfileTrip';
 
 export default {
     components: {
         Tab,
         Tabset,
         ProfileInfo,
-        ProfileRates
+        ProfileRates,
+        MyTrips,
+        ProfileTrip
     },
 
     props: {
@@ -36,7 +40,7 @@ export default {
 
     data () {
         return {
-
+            currentView: null
         };
     },
 
@@ -60,8 +64,10 @@ export default {
         if (this.id === 'me' || this.id === this.user.id) {
             this.setTitle('Mi Perfil');
             this.setProfile(this.user);
+            this.currentView = 'my-trips';
         } else {
             this.setProfileByID(this.id);
+            this.currentView = 'profile-trip';
         }
     }
 };

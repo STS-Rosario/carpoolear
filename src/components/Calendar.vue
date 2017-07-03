@@ -13,7 +13,7 @@ import moment from 'moment';
 import {today} from '../services/utility.js';
 
 export default {
-    name: 'loading',
+    name: 'calendar',
     data () {
         return {
             date: {

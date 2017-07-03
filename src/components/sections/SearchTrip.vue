@@ -43,7 +43,7 @@ import {pointDistance} from '../../services/maps.js';
 import Calendar from '../Calendar';
 
 export default {
-    name: 'loading',
+    name: 'search-trip',
     data () {
         return {
             isPassenger: false,

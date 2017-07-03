@@ -1,5 +1,6 @@
 <template>
-    <div>  
+    <div v-if="(data && data.length > 0) || !hideOnEmpty">  
+        <slot name="title" ></slot>
         <template v-if="data != null">
             <slot v-if="data.length > 0"> 
 
@@ -20,8 +21,14 @@ export default {
     mounted () {
         // this.search();
     },
-    props: [
-        'data'
-    ]
+    props: {
+        data: {
+            required: true
+        },
+        hideOnEmpty: {
+            type: Boolean,
+            default: false
+        }
+    }
 };
 </script>
