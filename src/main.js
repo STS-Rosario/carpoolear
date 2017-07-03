@@ -14,7 +14,7 @@ import store from './store';
 
 /* eslint-disable no-unused-vars */
 import cordova from './cordova';
-
+import directives from './directives';
 require('font-awesome-webpack');
 
 import bootstrapCss from './styles/bootstrap/css/bootstrap.min.css';

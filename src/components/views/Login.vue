@@ -15,15 +15,9 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import focus from '../../directives/autofocus.js';
-import jump from '../../directives/jump.js';
 
 export default {
     name: 'login',
-    directives: {
-        focus,
-        jump
-    },
     data () {
         return {
             email: '',
