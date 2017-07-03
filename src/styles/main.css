@@ -39,6 +39,8 @@ main {
 
 h1 {
     margin-top: 0;
+    color: #016587;
+    font-weight: 300;
 }
 textarea {
     resize: none;
@@ -51,6 +53,8 @@ textarea {
 
 /* Overriding Bootstrap */
 label {
+    color: #016587;
+    margin-top: .3em;
     font-weight: normal;
 }
 input[type=checkbox] + label,
@@ -113,7 +117,7 @@ input[type=radio] + label {
     width: 100%;
     margin-bottom: 1em;
 }
-.btn-primary:focus {
+.btn-search:focus {
     border-color: #ccc;
     color: #ccc;
     background: var(--secondary-background);
@@ -348,8 +352,8 @@ input[type=radio] + label {
     position: relative;
 }
 .card-trip .card_heading:after {
-    top: 100%;
-    right: 16%;
+    top: calc(100% - 1px);
+    left: 120px;
     border: solid transparent;
     content: " ";
     height: 0;
@@ -395,10 +399,17 @@ input[type=radio] + label {
     margin: .6em;
 }
 .trip_driver_name {
-    font-size: 1.1rem;
+    font-size: 16px;
+    font-weight: 300;
+}
+.trip_driver_details {
+    padding-top: 4px;
+    white-space: nowrap;
+    overflow: hidden;
 }
 .trip_driver_ratings {
     font-size: 0.9rem;
+    font-weight: 300;
 }
 .trip-with-driver .card_body {
     padding-top: 3em;
@@ -411,12 +422,13 @@ input[type=radio] + label {
 
 .card-trip .trip_driver_img {
     width: 100%;
-    max-width: 70px;
+    max-width: 74px;
     height: auto;
     border: 1px solid #FFF;
     box-shadow: 0 3px 6px 1px #CCC;
     position: absolute;
-    left: 18px;
+    left: 16px;
+    top: 20px;
 }
 .trip_location {
     position: relative;
@@ -652,6 +664,8 @@ input[type=radio] + label {
     border-top: 1px solid var(--secondary-background);
     padding: 4px 10px;
     background-color: var(--secondary-background);
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .actionbar-bottom .actionbar_item {
@@ -676,6 +690,7 @@ input[type=radio] + label {
 
 .actionbar_section {
     display: inline-block;
+    margin-top: 2px;
 }
 
 .actionbar_icon {
@@ -720,6 +735,16 @@ input[type=radio] + label {
 
 .footer-component p {
     margin-top: 1em;
+}
+
+.panel-title {
+    margin-top: 14px;
+}
+
+.card-icon {
+    position: absolute;
+    right: 4px;
+    top: 8px;
 }
 
 @media only screen and (min-width: 768px) {
