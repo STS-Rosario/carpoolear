@@ -679,10 +679,24 @@ textarea {
     font-size: 1.4em;;
 }
 
-.profile-info-component .list-group-item{
+.profile-info-component .list-group-item {
     padding-top: 1.8em;
     text-align: center;
     padding-bottom: 1.8em;
+    border-left: 0;
+    border-right: 0;
+}
+.profile-info-component .edit-action {
+    text-align: center;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-left: 0;
+    border-right: 0;
+    padding-top: 1.4em;
+    padding-bottom: 3em;
+}
+.profile-info-component .list-group-item--no-border{
+    border-top: 0;
 }
 .profile-info-component .list-group-item img {
     margin-bottom: 1.2em;
