@@ -1,5 +1,5 @@
 <template>
-    <div class="new-trip-component form form-trip">
+    <div class="new-trip-component form form-trip margin-header">
         <div class="row">
             <div class="col-xs-8">
                 <fieldset class="trip-type-selection">

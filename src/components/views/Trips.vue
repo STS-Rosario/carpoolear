@@ -1,5 +1,5 @@
 <template>
-    <div class="trips">
+    <div class="trips margin-header">
         <div class="trips_title" v-show="!isMobile">
             <h1>Buscá con quién compartir tu próximo viaje!</h1>
             <h3>¡Elegí fecha, origen o destino y encontralo!</h3>

@@ -4,7 +4,7 @@
     
         <div class="actionbar_item" v-for="item in footerButtons" :class="{ active: item.active }" @click="onClick(item)">
             <span :class="{big: item.id === 'new-trip'}">
-                <i :class="'fa ' + item.icon" aria-hidden="true"></i>
+                <i class="material-icons" aria-hidden="true" v-html="item.icon"></i>
             </span>
         </div>
 

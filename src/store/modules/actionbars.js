@@ -33,31 +33,31 @@ const state = {
     footer_buttons: [
         {
             id: 'home',
-            icon: 'fa-home',
+            icon: '&#xE88A;',
             url: 'trips',
             active: true
         },
         {
             id: 'profile',
-            icon: 'fa-user',
+            icon: '&#xE7FD;',
             url: 'profile',
             active: false
         },
         {
             id: 'new-trip',
-            icon: 'fa-plus',
+            icon: '&#xE145;',
             url: 'new-trip',
             active: false
         },
         {
             id: 'conversations',
-            icon: 'fa-commenting',
+            icon: '&#xE0C9;',
             url: 'conversations-list',
             active: false
         },
         {
             id: 'notifications',
-            icon: 'fa-bell',
+            icon: '&#xE7F4;',
             url: 'notifications',
             active: false
         }

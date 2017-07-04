@@ -1,5 +1,5 @@
 <template>  
-<div class="conversation-component">
+<div class="conversation-component margin-header">
     <div class="row">
         <div class="col-xs-24 col-md-8" :class="{'hidden-xs': hide}">
             <div class="conversation_list">
