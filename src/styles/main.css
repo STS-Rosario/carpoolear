@@ -384,6 +384,9 @@ textarea {
     border: none;
     color: white;
 }
+.nav>li>a {
+    padding: 10px 0;
+}
 .nav>li>a:hover,
 .nav>li>a:focus {
     text-decoration: none;
@@ -926,6 +929,28 @@ textarea {
     position: absolute;
     right: 4px;
     top: 8px;
+}
+
+@media only screen and (max-width: 400px) {
+    .nav-tabs>li>a {
+        font-size: 10px;
+    }
+    .nav>li>a.active::after {
+        top: 30px;
+    }
+    .profile-info-component .list-group-item img {
+        width: 80%;
+    }
+    .profile .list-group-item {
+        padding: 10px 0;
+    }
+    .profile-info-component .edit-action button {
+        margin: .4em 0;
+        width: 80%;
+    }
+    .profile-info-component .edit-action button:first-child {
+        margin: .4em 0;
+    }
 }
 
 @media only screen and (max-width: 768px) {
