@@ -19,7 +19,7 @@ const getters = {
 const actions = {
     index (store, data = {}) {
         return carApi.index(data).then(response => {
-            store.commit(types.CARS_SET, response.cars);
+            store.commit(types.CARS_SET, response.cars ? response.cars : []);
         }).catch(err => {
             console.log(err);
         });
@@ -65,6 +65,9 @@ const mutations = {
         state.cars = items;
     },
     [types.CARS_ADD] (state, car) {
+        if (!state.cars) {
+            state.cars = [];
+        }
         state.cars.push(car);
     },
     [types.CARS_UPDATE] (state, car) {
