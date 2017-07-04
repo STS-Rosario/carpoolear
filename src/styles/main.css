@@ -180,7 +180,7 @@ input[type=radio] + label {
 .form-control {
     border-radius: 0;
     padding: .8em;
-    height: auto;
+    height: 34px;
 
     border: 1px solid var(--medium-font-color);
     color: var(--medium-font-color);
@@ -364,6 +364,7 @@ textarea {
 }
 
 .nav-tabs>li>a {
+    border: none;
     color: #aaa;
     text-transform: uppercase;
     font-size: 12px;
@@ -377,9 +378,15 @@ textarea {
     text-decoration: none;
     background-color: transparent;
 }
-.nav>li>a:hover::after,
-.nav>li>a:focus::after {
-    left: 64px;
+.nav>li>a:focus,
+.nav>li>a::after {
+    color: white;
+}
+.nav>li>a.active {
+    color: white
+}
+.nav>li>a.active::after {
+    left: 50%;
     top: 36px;
     border: solid transparent;
     content: " ";
