@@ -20,8 +20,8 @@ class RateApi extends TaggedApi {
         return this.post('/api/trips/' + tripId + '/rate/' + userId, data);
     }
 
-    replay (tripId, userId, data) {
-        return this.post('/api/trips/' + tripId + '/rate/' + userId, data);
+    reply (tripId, userId, data) {
+        return this.post('/api/trips/' + tripId + '/reply/' + userId, data);
     }
 
 }

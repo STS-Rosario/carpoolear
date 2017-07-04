@@ -1,5 +1,7 @@
 import {RateApi} from '../../services/api';
 import * as types from '../mutation-types';
+import globalStore from '../index';
+import moment from 'moment';
 
 let rateApi = new RateApi();
 
@@ -32,7 +34,21 @@ const actions = {
         }).catch(error => {
             return Promise.reject(error);
         });
+    },
+
+    reply (store, data) {
+        let obj = {
+            comment: data.comment
+        };
+        return rateApi.reply(data.trip_id, data.user_id, obj).then(response => {
+            data.reply_comment_created_at = moment(new Date()).format();
+            globalStore.commit('profile/' + types.PROFILE_SET_REPLY, data);
+            return Promise.resolve();
+        }).catch(error => {
+            return Promise.reject(error);
+        });
     }
+
 };
 
 // mutations

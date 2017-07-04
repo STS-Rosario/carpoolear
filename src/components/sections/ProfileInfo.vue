@@ -3,6 +3,10 @@
         <div class="list-group">
             <div class="list-group-item">
                 <img alt="" :src="profile.image | profile-image" class="trip_driver_img circle-box" />
+                <div class="edit-action" v-if="profile.id == user.id">
+                    <router-link class="btn btn-primary" tag="button" :to="{name:'profile_update'}"> Editar profile</router-link>
+                    <router-link class="btn btn-primary" tag="button" :to="{name:'friends_setting'}"> Ver amigos</router-link>
+                </div>
             </div>
             <div class="list-group-item">
                 <div>{{profile.name}}</div>

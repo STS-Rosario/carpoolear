@@ -38,10 +38,20 @@ const actions = {
 };
 
 const mutations = {
+    ...pagination.makeMutations('rates'),
+
     [types.PROFILE_SET_USER] (state, user) {
         state.user = user;
     },
-    ...pagination.makeMutations('rates')
+
+    [types.PROFILE_SET_REPLY] (state, rate) {
+        state.rates.forEach((item) => {
+            if (rate.trip_id === item.trip.id && rate.user_id === item.from.id) {
+                rate.reply_comment = item.comment;
+                rate.reply_comment_created_at = item.reply_comment_created_at;
+            }
+        });
+    }
 };
 
 export default {
