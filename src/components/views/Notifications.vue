@@ -1,6 +1,6 @@
 <template> 
     <div>
-        <Loading :data="notifications">
+        <Loading class="container" :data="notifications">
             <div id="notifications-list list-group">
                 <div class="list-group-item" v-for="n in notifications" :class="{'unread': !n.readed}" @click="onNotificationClick(n)">
                     <div>

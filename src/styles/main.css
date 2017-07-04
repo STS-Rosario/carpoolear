@@ -92,6 +92,10 @@ input[type=radio] + label {
     background: rgba(215,37,33, 0.8);
 }
 
+.alert {
+    margin-top: 0;
+}
+
 .btn-primary:active:hover, 
 .btn-primary.active:hover, 
 .open > .dropdown-toggle.btn-primary:hover, 
@@ -168,6 +172,10 @@ input[type=radio] + label {
     color: white;
     background: #d72322;
 }
+
+.form {
+    margin-bottom: 2rem;
+}
  
 .form-control {
     border-radius: 0;
@@ -184,7 +192,17 @@ input[type=radio] + label {
 /* -------------------- */
 .form-control-with-icon {
     padding: .8em .8em .8em 2.5em; 
-    border-color: #31B0E7;
+    /*border-color: #31B0E7;*/
+}
+textarea {
+    border-color: #BBBBBB;
+    padding: .8em;
+    height: 10em;
+}
+.btn-container {
+    margin-top: 2.4em;
+    width: 100%;
+    text-align: center;
 }
 .trip_point:first-child .form-control-map-autocomplete {
     border-color: var(--trip-half-free-color);
@@ -335,9 +353,45 @@ input[type=radio] + label {
     color: var(--secondary-font-color);
 }
 
+.nav-tabs {
+    background-color: #016587;
+    padding-top: 0.4em;
+}
+
 .nav-tabs>li {
     width: 33.33%;
     text-align: center;
+}
+
+.nav-tabs>li>a {
+    color: #aaa;
+    text-transform: uppercase;
+    font-size: 12px;
+}
+.nav-tabs>li>a:hover {
+    border: none;
+    color: white;
+}
+.nav>li>a:hover,
+.nav>li>a:focus {
+    text-decoration: none;
+    background-color: transparent;
+}
+.nav>li>a:hover::after,
+.nav>li>a:focus::after {
+    left: 64px;
+    top: 36px;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-color: rgba(136, 183, 213, 0);
+    border-top-color: #016587;
+    border-width: 12px;
+    margin-left: -12px;
+    z-index: 300;
 }
 
 .card-trip {
@@ -601,8 +655,21 @@ input[type=radio] + label {
     width: 56px;
 }
 
+.update-profile-component .form {
+    padding: 2.2em;
+}
+
 .update-profile-component .profile_image img {
-    width: 100%;
+    width: 90%;
+}
+
+.profile-info-component .list-group-item{
+    padding-top: 1.8em;
+    text-align: center;
+    padding-bottom: 1.8em;
+}
+.profile-info-component .list-group-item img {
+    margin-bottom: 1.2em;
 }
 
 .profile_image {
@@ -612,6 +679,21 @@ input[type=radio] + label {
 .profile_image img.loading {
     opacity: 0.3;
 }
+
+.profile_image-edit {
+    position: absolute;
+    color: #016587;
+    right: 8px;
+    bottom: 0;
+    cursor: pointer
+}
+.profile_image-edit i {
+    font-size: 24px;
+}
+.profile_image-edit:hover {
+    color: #0f90bb;
+}
+
 
 .form-control-map-autocomplete {
     line-height: 22px;
@@ -658,7 +740,7 @@ input[type=radio] + label {
     bottom: 0;
     border-top: 1px solid var(--medium-font-color);
     text-align: center;
-    padding: 7px 15px;
+    padding: 7px 0;
 }
 
 .actionbar-top {
@@ -719,11 +801,11 @@ input[type=radio] + label {
     margin-top: 1em;
 }
 
-.container {
-    padding-top: 52px;
+.view-container {
+    padding-top: 51px;
 }
 
-.margin-header {
+.container {
     padding-top: 1.5em;
 }
 
@@ -763,7 +845,38 @@ input[type=radio] + label {
     top: 8px;
 }
 
+@media only screen and (max-width: 768px) {
+    .profile_image {
+        top: 0;
+        position: absolute;
+        z-index: 1;
+        text-align: center;
+    }
+    .profile_image-container {
+        width: 230px;
+        margin: 0 auto;
+        position: relative;
+    }
+    .update-profile-component .profile_image img {
+        width: 230px;
+    }
+    .update-profile-component .form {
+        padding-top: 10em;
+        margin-top: 7em;
+    }
+    .update-profile-component .profile_image-edit {
+        right: -6px;
+        bottom: -6px;
+    }
+    .update-profile-component .profile_image-edit i {
+        font-size: 32px;
+    }
+}
+
 @media only screen and (min-width: 768px) {
+    .btn-container {
+        text-align: left;
+    }
     .header {
         margin: 1.5em 0;
     }
@@ -780,10 +893,10 @@ input[type=radio] + label {
     #trips-list {
         margin-bottom: 1rem;
     }
-    .container {
+    .view-container {
         padding-top: 8.6rem;
     }
-    .margin-header {
+    .container {
         padding-top: 0;
     }
 }
@@ -797,6 +910,13 @@ input[type=radio] + label {
     }
 }
 @media only screen and (min-width: 992px) {
+    .profile_image-edit {
+        right: 8px;
+        bottom: 2px;
+    }
+    .profile_image-edit i {
+        font-size: 30px;
+    }
     .form-control-date input {
         padding-top: .8em;
         padding-bottom: .8em;
@@ -823,6 +943,9 @@ input[type=radio] + label {
     }
     .origin.gmap-autocomplete .date-picker--cross  {
         right: 36px;
+    }
+    .form-control-date input {
+        padding-bottom: .7em;
     }
 }
 

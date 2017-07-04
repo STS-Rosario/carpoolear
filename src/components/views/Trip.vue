@@ -1,7 +1,7 @@
 <template>  
     <div>
         <template v-if="trip"> 
-            <div class="trip-detail-component margin-header">
+            <div class="trip-detail-component container">
                 <div class="row">
                     <div class="col-xs-8">
                         <div class="driver-profile">

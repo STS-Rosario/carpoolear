@@ -2,7 +2,7 @@
   <div class="app-container">
     <headerApp></headerApp>
     <main id="main">
-      <div class="container">
+      <div class="view-container">
         <router-view></router-view>
       </div>
     </main>

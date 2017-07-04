@@ -1,7 +1,15 @@
 <template>
   <div class="update-profile-component" v-if="user" >
     <div class="row">   
-        <div class="col-xs-16"> 
+        <div class="col-xs-24 col-sm-8 col-sm-push-16 profile_image">
+            <div class='profile_image-container'>
+                <img alt="" :src="user.image | profile-image" class="circle-box" :class="{'loading': loadingImg}"></img>
+                <div @click="changePhoto" class="profile_image-edit">
+                    <i class="material-icons">&#xE439;</i>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-24 col-sm-16 col-sm-pull-8"> 
             <div class='form'>
                 <div class="form-group">
                     <label for="input-name">Nombre</label>
@@ -20,7 +28,7 @@
                     <input v-model="user.nro_doc" type="text" class="form-control" id="input-dni" placeholder="DNI">
                 </div>
                 <div class="form-group">
-                    <label for="input-telefono">Número de contacto</label>
+                    <label for="input-telefono">Número de teléfono</label>
                     <input v-model="user.mobile_phone" type="text" class="form-control" id="input-phone" placeholder="Número de teléfono">
                 </div>
                 <div class="form-group">
@@ -48,16 +56,12 @@
                     <input v-model="pass.password_confirmation" type="password" class="form-control" id="input-pass-confirm" placeholder="Repetir contraseña">
                 </div> 
 
-                <button class="btn btn-primary" @click="grabar"> Grabar </button>
+                <div class="btn-container">
+                    <button class="btn btn-primary" @click="grabar"> Guardar cambios </button>
+                </div>
                 <span v-if="error">{{error}}</span>
                 <Uploadfile :name="'profile'" @change="onPhotoChange" ref="file"></Uploadfile>
             </div>    
-        </div>
-        <div class="col-xs-8 profile_image">
-            <img alt="" :src="user.image | profile-image" class="circle-box" :class="{'loading': loadingImg}"></img>
-            <button @click="changePhoto" class="btn btn-secondary profile_image-edit">
-                Cambiar foto
-            </button>
         </div>
     </div>
     
