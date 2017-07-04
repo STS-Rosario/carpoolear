@@ -3,9 +3,10 @@
         <div class="list-group">
             <div class="list-group-item">
                 <img alt="" :src="profile.image | profile-image" class="trip_driver_img circle-box" />
-                <div class="profile-ifo">
-                    <div>{{profile.name}}</div>
-                    <div>{{profile.positive_ratings}} {{profile.negative_ratings}}</div>
+                <div class="profile-info">
+                    <div class="profile-info--name">{{profile.name}}</div>
+                    <div class="profile-info--city">{{profile}}</div>
+                    <div class="profile-info--ratings">{{profile.positive_ratings}} {{profile.negative_ratings}}</div>
                 </div>
             </div>
             <div class="list-group-item" v-if="profile.descripcion">

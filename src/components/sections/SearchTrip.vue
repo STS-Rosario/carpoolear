@@ -29,7 +29,7 @@
             </div>
         </div> 
         <div class="col-xs-24 col-md-4">
-              <Calendar :class="'calendar-date form-control form-control-with-icon form-control-date'" :value="date" @change="(date) => this.date = date"></Calendar>
+              <Calendar :class="'calendar-date form-control form-control-with-icon form-control-date'" :value="date" @change="(date) => this.date = date" :limitFilter="datePickerLimitFilter"></Calendar>
         </div>
         <div class="col-xs-24 col-md-3">
             <button class="btn btn-primary btn-search" @click="emit">Buscar</button> 
@@ -41,6 +41,7 @@
 <script>
 import {pointDistance} from '../../services/maps.js';
 import Calendar from '../Calendar';
+import {today} from '../../services/utility.js';
 
 export default {
     name: 'search-trip',
@@ -58,6 +59,10 @@ export default {
                 radio: 0
             },
             date: '',
+            datePickerLimitFilter: {
+                type: 'fromto',
+                from: today()
+            },
             chofer_logo_blanco: process.env.ROUTE_BASE + 'static/img/icono-conductor-blanco.png',
             pasajero_logo_blanco: process.env.ROUTE_BASE + 'static/img/icono-pasajero-blanco.png',
             chofer_logo_gris: process.env.ROUTE_BASE + 'static/img/icono-conductor-gris.png',

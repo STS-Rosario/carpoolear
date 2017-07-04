@@ -10,7 +10,6 @@
 <script>
 import datePicker from 'vue-datepicker';
 import moment from 'moment';
-import {today} from '../services/utility.js';
 
 export default {
     name: 'calendar',
@@ -44,10 +43,7 @@ export default {
                 overlayOpacity: 0.5, // 0.5 as default
                 dismissible: true // as true as default
             },
-            limit: [{
-                type: 'fromto',
-                from: today()
-            }]
+            limit: [this.limitFilter]
         };
     },
     mounted () {
@@ -82,6 +78,13 @@ export default {
             type: String,
             required: false,
             default: ''
+        },
+        'limitFilter': {
+            type: Object,
+            required: false,
+            default: () => {
+                return {};
+            }
         }
     },
     components: {

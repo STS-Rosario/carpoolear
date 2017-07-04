@@ -49,6 +49,10 @@ textarea {
 }
 
 /* Overriding Bootstrap */
+.input-group-btn:last-child>.btn, 
+.input-group-btn:last-child>.btn-group {
+    height: 44px;
+}
 label {
     color: #016587;
     margin-top: .3em;
@@ -180,7 +184,7 @@ input[type=radio] + label {
 .form-control {
     border-radius: 0;
     padding: .8em;
-    height: 34px;
+    height: auto;
 
     border: 1px solid var(--medium-font-color);
     color: var(--medium-font-color);
@@ -217,7 +221,7 @@ textarea {
 }
 .form-control-date {
     background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4QQeFTU3VOviyQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAACB0lEQVRYw+1XO47CMBB9E2ggHIE6uQYNHVQU3AAUroIQbc6QNmnhHkSU0EHrAgnPFiuzJvEv2pW22E0TiCfMmzfPbwwxM+MXrwi/fDkBSCkBAIokE1nfJdAKgJkRRe/LRNSKU8+Y2QnGtk5dNMDMRhC+NRNjRPRZpC9Qx6dX27y7kjdrVLFEFMZAaHV6bPMd2290boFOXyioH9mGUkpkWYb9fm9tx263Q5ZlXkHqVz8k6Hg8QggBZsbtdkNZli0GiAj3+x1SSlRVhdFohMlk4mXL24LD4YCiKN62ZlOYxu1FhMVigel02tKFDqjv67kQ4kuxjWQ27Cru8XgYNaOz4QTQ7LNtXQemf34+n9/TgEJNRBiPxxgOh07XVImFELhcLi2NdAagV7NcLpEkCaSULYtusnQ+n7Hdbr0CdDqhCcjpdMJms0FZlgCA1WqF9XoNZkZVVciyDHVdQ0rZSm5z1ig0edPVALyY0JOolvl0FewDOuI0TZHn+et5nuev9fl8jtlsBiJCXddGHZksOYgB3w7wjWvTQAvWgOqna+/7bNdVRGcGQqr0mZUuyOBhFDpcpJTo9Xreaaru/ZCkzIyiKBDHsdHx1HfVLmXfIRrp+1wwSRIMBgNcr9fXmHW1QQGJ4xhpmloPK8EnoqaZ+I5epljXe1GXo1jocDINKJue6P+f0T+APw/gAzNBo3uUL/PXAAAAAElFTkSuQmCC') center left no-repeat white;
-
+    background-position: 0 4px;
     padding-top: 0;
     padding-bottom: 0;
 
@@ -670,6 +674,11 @@ textarea {
     width: 90%;
 }
 
+.profile-info--name {
+    font-weight: 500;
+    font-size: 1.4em;;
+}
+
 .profile-info-component .list-group-item{
     padding-top: 1.8em;
     text-align: center;
@@ -765,6 +774,11 @@ textarea {
     color: var(--medium-font-color);
     font-size: 26px;
     width: 20%;
+    cursor: pointer;
+}
+
+.actionbar_icon.pull-right {
+    cursor: pointer;
 }
 
 .actionbar-bottom .actionbar_item.active {
@@ -917,6 +931,9 @@ textarea {
     }
 }
 @media only screen and (min-width: 992px) {
+    .form-control-date {
+        background-position: center left;
+    }
     .profile_image-edit {
         right: 8px;
         bottom: 2px;
