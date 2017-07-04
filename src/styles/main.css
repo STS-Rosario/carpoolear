@@ -1,6 +1,6 @@
 :root {
   --main-background: #F0F0F0;
-  --main-font-color: #222222;
+  --main-font-color: #555;
 
   --medium-font-color: #666666;
   --soft-font-color: #BBBBBB;
@@ -594,6 +594,7 @@ textarea {
     border-radius: .4rem;
     box-shadow: 0 0 10px 5px #CCCCCC;
 }
+
 .trip-type-selection {
 	position: relative; /* Necesario para el arrow */
     background: var(--secondary-background);
@@ -679,6 +680,24 @@ textarea {
     font-size: 1.4em;;
 }
 
+.profile-info-component .list-group-item i {
+    float: left;
+    width: 20%;
+    color: var(--secondary-background);
+    font-size: 20px;
+    line-height: 20px;
+}
+
+.profile-info-component .list-group-item .list-group-item--content {
+    text-align: left;
+    display: inline-block;
+    width: 80%;
+}
+
+.italic {
+    font-style: italic;
+}
+
 .profile-info-component .list-group-item {
     padding-top: 1.8em;
     text-align: center;
@@ -694,6 +713,9 @@ textarea {
     border-right: 0;
     padding-top: 1.4em;
     padding-bottom: 3em;
+}
+.profile-info-component .edit-action button:first-child {
+    margin-right: .8em;
 }
 .profile-info-component .list-group-item--no-border{
     border-top: 0;
@@ -724,6 +746,25 @@ textarea {
     color: #0f90bb;
 }
 
+.profile-info-component .list-group-item i.bigger {
+    font-size: 35px;
+}
+.profile-info-component .profile-info--ratings i {
+    float: none;
+    width: auto;
+    margin-right: 0.4em;
+}
+
+.profile-info-component .profile-info--ratings span:first-of-type {
+    margin-right: 0.8em;
+}
+
+.profile-info-component .list-group-item i.fa-thumbs-up {
+    color: green;
+}
+.profile-info-component .list-group-item i.fa-thumbs-down {
+    color: red;
+}
 
 .form-control-map-autocomplete {
     line-height: 22px;
@@ -881,6 +922,18 @@ textarea {
 }
 
 @media only screen and (max-width: 768px) {
+    .settings-component {
+        background-color: white;
+    }
+    .settings-component .form {
+        background: var(--form-background);
+        border-radius: 0;
+        box-shadow: initial;
+    }
+    .update-profile-component .form {
+        padding: 1.1em;
+        margin-bottom: 0;
+    }
     .profile_image {
         top: 0;
         position: absolute;
