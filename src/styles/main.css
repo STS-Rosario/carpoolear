@@ -31,7 +31,7 @@ p {
     line-height: 1.5;
 }
 main {
-    min-height: calc(100vh - 234px);
+    min-height: calc(100vh - 337px);
 }
 
 h1 {
@@ -358,8 +358,15 @@ textarea {
 }
 
 .nav-tabs {
+    position: fixed;
     background-color: #016587;
     padding-top: 0.4em;
+    z-index: 3;
+    width: 100%;
+}
+
+.tab-content {
+    margin-top: 2.8rem;
 }
 
 .nav-tabs>li {
@@ -391,7 +398,7 @@ textarea {
 }
 .nav>li>a.active::after {
     left: 50%;
-    top: 36px;
+    top: 35px;
     border: solid transparent;
     content: " ";
     height: 0;
@@ -692,6 +699,7 @@ textarea {
     text-align: left;
     display: inline-block;
     width: 80%;
+    padding-right: 2.2em;
 }
 
 .italic {
@@ -874,7 +882,6 @@ textarea {
 .footer-component {
     color: white;
     background-color: #33363A;
-    margin-top: 1em;
 }
 
 .view-container {
@@ -962,6 +969,14 @@ textarea {
 }
 
 @media only screen and (min-width: 768px) {
+    main {
+        min-height: calc(100vh - 265px);
+    }
+    .footer-component {
+        color: white;
+        background-color: #33363A;
+        margin-top: 1em;
+    }
     .btn-container {
         text-align: left;
     }
@@ -998,6 +1013,9 @@ textarea {
     }
 }
 @media only screen and (min-width: 992px) {
+    main {
+        min-height: calc(100vh - 234px);
+    }
     .form-control-date {
         background-position: center left;
     }
