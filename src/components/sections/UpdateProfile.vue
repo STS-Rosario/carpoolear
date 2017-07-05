@@ -3,9 +3,10 @@
     <div class="row">   
         <div class="col-xs-24 col-sm-8 col-sm-push-16 profile_image">
             <div class='profile_image-container'>
-                <img alt="" :src="user.image | profile-image" class="circle-box" :class="{'loading': loadingImg}"></img>
-                <div @click="changePhoto" class="profile_image-edit">
-                    <i class="material-icons">&#xE439;</i>
+                <div class="circle-box" v-imgSrc:profile="user.image" :class="{'loading': loadingImg}">
+                    <div @click="changePhoto" class="profile_image-edit">
+                        <i class="material-icons">&#xE439;</i>
+                    </div>
                 </div>
             </div>
         </div>

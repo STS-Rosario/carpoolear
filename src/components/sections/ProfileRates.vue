@@ -1,20 +1,20 @@
 <template>
-    <div class="profile-rates-component">
-    <Loading :data="rates">
-        <div class="list-group">
-            <div class="list-group-item" v-for="rate in rates">
-                <RateItem :user="user" :rate="rate"></RateItem>
+    <div class="profile-rates-component container">
+        <Loading :data="rates">
+            <div class="list-group">
+                <div class="list-group-item" v-for="rate in rates">
+                    <RateItem :user="user" :rate="rate"></RateItem>
+                </div>
             </div>
-         </div>
-         <!--
-        <div v-if="morePages">
-            <button class="btn btn-primary" @click="nextPage">Más resultados</button>
-        </div>
-        -->
+            <!--
+            <div v-if="morePages">
+                <button class="btn btn-primary" @click="nextPage">Más resultados</button>
+            </div>
+            -->
 
-        <p slot="no-data" class="alert alert-warning"  role="alert">No hay calificaciones</p> 
-        <p slot="loading" class="alert alert-info" role="alert">Cargando calificaciones ...</p>
-    </Loading>
+            <p slot="no-data" class="alert alert-warning"  role="alert">No hay calificaciones</p> 
+            <p slot="loading" class="alert alert-info" role="alert">Cargando calificaciones ...</p>
+        </Loading>
 
          
     </div> 

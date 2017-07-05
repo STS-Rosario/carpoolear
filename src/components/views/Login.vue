@@ -3,9 +3,9 @@
     <h1> Login </h1>
     <div class='form'>
       <label for="txt_user">Usuario</label>
-      <input ref="txt_user" type="text" id="txt_user" v-model="email" v-jump:focus="txt_password" v-focus />
+      <input ref="txt_user" type="text" id="txt_user" v-model="email" v-jump:focus="'txt_password'" v-focus />
       <label for="txt_password">Contraseña</label>
-      <input  ref="txt_password" type="password" id="txt_password" v-jump:click="btn_login" v-model='password' />
+      <input  ref="txt_password" type="password" id="txt_password" v-jump:click="'btn_login'" v-model='password' />
       <button ref="btn_login" id="btn_login" class="btn-primary btn-search" @click="login"> Login </button> <router-link class='login-forget' :to="{name:'reset-password'}"> ¿Olvidó su contraseña? </router-link>
       <span v-if="loading"> Loading... </span>
       <button class="btn-primary btn-search btn-facebook" @click="facebookLogin"> Login con facebook </button>
@@ -23,9 +23,7 @@ export default {
             email: '',
             password: '',
             loading: false,
-            error: '',
-            txt_password: 'txt_password',
-            btn_login: 'btn_login'
+            error: ''
         };
     },
     computed: {

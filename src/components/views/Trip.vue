@@ -7,7 +7,7 @@
                         <div class="driver-profile">
                             <div class="row">
                                 <div class="col-xs-12">
-                                    <img alt="" :src="trip.user.image | profile-image" class="trip_driver_img circle-box" />
+                                    <div class="trip_driver_img circle-box" v-imgSrc:profile="trip.user.image"></div>
                                 </div>
                                 <div class="col-xs-12">
                                     <div>{{trip.user.name}}</div>

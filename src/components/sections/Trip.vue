@@ -20,7 +20,7 @@
               </div>
               <template v-if="user">
                 <div class="trip_driver_img_container">
-                  <img alt="" :src="trip.user.image | profile-image" class="trip_driver_img circle-box" />
+                  <div class="trip_driver_img circle-box" v-imgSrc:profile="trip.user.image"></div>
                 </div>
                 <div class="trip_driver_details">
                   <div class="trip_driver_name" >

@@ -11,3 +11,11 @@ export function today () {
     }
     return yyyy + '-' + mm + '-' + dd;
 }
+
+export function getRoute (value, subRoute = '') {
+    if (value && value.length) {
+        return process.env.API_URL + subRoute + value;
+    } else {
+        return process.env.ROUTE_BASE + 'static/img/default-profile.png';
+    }
+}

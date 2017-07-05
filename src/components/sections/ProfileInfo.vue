@@ -2,7 +2,7 @@
     <div class="profile-info-component" v-if="profile">  
         <div class="list-group">
             <div class="list-group-item list-group-item--no-border">
-                <img alt="" :src="profile.image | profile-image" class="trip_driver_img circle-box" />
+                <div class="circle-box" v-imgSrc:profile="profile.image"></div>
                 <div class="profile-info">
                     <div class="profile-info--name">{{profile.name}}</div>
                     <div class="profile-info--ratings">
@@ -39,7 +39,6 @@ import {mapGetters} from 'vuex';
 export default {
     data () {
         return {
-
         };
     },
     computed: {

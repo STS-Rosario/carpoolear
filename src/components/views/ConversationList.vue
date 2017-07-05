@@ -1,7 +1,7 @@
 <template>  
 <div class="conversation-component container">
     <div class="row">
-        <div class="col-xs-24" :class="{'hidden-xs': hide}">
+        <div class="col-sm-8 col-md-8" :class="{'hidden-xs': hide}">
             <div class="conversation_list">
                 <ul class="list-group">
                     <li class="list-group-item">
@@ -15,9 +15,9 @@
                         </div>
                     </li>
                     <template v-if="textSearch.length == 0">
-                        <Loading :data="conversations"> 
+                        <Loading class="conversation_chat--chats" :data="conversations"> 
                             <li v-for="conversation in conversations" class="list-group-item" @click="onChangeConversation(conversation)" :class="{'unread': conversation.unread, 'active': selected && conversation.id === selected.id  }" >
-                                <img alt="" :src="conversation.image | conversation-image" class="conversation_image circle-box" />
+                                <div class="conversation_image circle-box" v-imgSrc:conversation="conversation.image"></div>
                                 <span class="conversation-title">{{conversation.title}}</span>
                                 <span class="conversation-timestamp">{{ conversation.updated_at | moment("h:mm a") }}</span>
                                 <div>
@@ -35,7 +35,7 @@
                     <template v-else>
                         <Loading :data="users"> 
                             <li v-for="user in users" class="list-group-item" @click="createConversation(user)">
-                                <img alt="" :src="user.image | profile-image" class="conversation_image circle-box" />
+                                <div class="conversation_image circle-box" v-imgSrc:profile="user.image"></div>
                                 {{user.name}}
                             </li>  
                             <li slot="no-data" class="list-group-item alert alert-warning"  role="alert">No hay concidencias</li> 
@@ -45,7 +45,7 @@
                 </ul>
             </div>
         </div>
-        <div class="col-xs-24 col-md-16">
+        <div class="col-xs-24 col-sm-16 col-md-16">
             <div class="">
                 <router-view></router-view>
             </div>

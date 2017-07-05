@@ -18,7 +18,6 @@ export default {
     },
     inserted: function (el, binding, node) {
         jumpers[el.id].next = node.context.$refs[jumpers[el.id].value];
-        console.log(binding);
     },
     unbind: function (el, binding, node) {
         el.removeEventListener('keyup', keyHandler, false);

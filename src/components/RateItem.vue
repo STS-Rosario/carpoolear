@@ -2,7 +2,7 @@
     <div class="rate-item">
         <div class="row">
             <div class="col-xs-4">
-                <img alt="" :src="rate.from.image | profile-image" class="trip_driver_img circle-box" />
+                <div class="trip_driver_img circle-box" v-imgSrc:profile="rate.from.image"></div>
             </div>
             <div class="col-xs-20">
                 <div class="rate-item-title">

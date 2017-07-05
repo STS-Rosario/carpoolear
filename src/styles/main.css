@@ -339,11 +339,15 @@ textarea {
 }
 
 .header_profile_image {
+    vertical-align: middle;
+    display: inline-block;
+    width: 32px;
     width: 2rem;
+    height: 32px;
     height: 2rem;
-
     border-radius: 100%;
     border: 2px solid var(--secondary-font-color);
+    margin-bottom: 0;
 }
 
 .header .header_profile button.btn {
@@ -360,7 +364,8 @@ textarea {
 .nav-tabs {
     position: fixed;
     background-color: #016587;
-    padding-top: 0.4em;
+    padding-top: .4em;
+    padding-bottom: .3em;
     z-index: 3;
     width: 100%;
 }
@@ -401,7 +406,7 @@ textarea {
 }
 .nav>li>a.active::after {
     left: 50%;
-    top: 35px;
+    top: 40px;
     border: solid transparent;
     content: " ";
     height: 0;
@@ -476,7 +481,7 @@ textarea {
     margin: .6em;
 }
 .trip_driver_name {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 300;
 }
 .trip_driver_details {
@@ -485,7 +490,7 @@ textarea {
     overflow: hidden;
 }
 .trip_driver_ratings {
-    font-size: 0.9rem;
+    font-size: .8rem;
     font-weight: 300;
 }
 .trip-with-driver .card_body {
@@ -500,7 +505,7 @@ textarea {
 .card-trip .trip_driver_img {
     width: 100%;
     max-width: 74px;
-    height: auto;
+    height: 74px;
     border: 1px solid #FFF;
     box-shadow: 0 3px 6px 1px #CCC;
     position: absolute;
@@ -673,8 +678,15 @@ textarea {
     margin-left: 2px;
 }
 
+.conversation_chat--chats .list-group-item:first-child {
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+}
 .conversation_list .conversation_image {
+    margin-right: 10px;
+    vertical-align: middle;
     width: 56px;
+    height: 56px;
 }
 
 .update-profile-component .form {
@@ -741,6 +753,12 @@ textarea {
 
 .profile_image img.loading {
     opacity: 0.3;
+}
+
+.profile_image .circle-box {
+    margin-bottom: 1.2em;
+    max-height: 170px;
+    max-width: 170px;
 }
 
 .profile_image-edit {
@@ -931,29 +949,11 @@ textarea {
     top: 8px;
 }
 
-@media only screen and (max-width: 400px) {
-    .nav-tabs>li>a {
-        font-size: 10px;
-    }
-    .nav>li>a.active::after {
-        top: 30px;
-    }
-    .profile-info-component .list-group-item img {
-        width: 80%;
-    }
-    .profile .list-group-item {
-        padding: 10px 0;
-    }
-    .profile-info-component .edit-action button {
-        margin: .4em 0;
-        width: 80%;
-    }
-    .profile-info-component .edit-action button:first-child {
-        margin: .4em 0;
-    }
-}
-
 @media only screen and (max-width: 768px) {
+    .profile_image .circle-box {
+        max-height: 220px;
+        max-width: 220px;
+    }
     .settings-component {
         background-color: white;
     }
@@ -973,7 +973,6 @@ textarea {
         text-align: center;
     }
     .profile_image-container {
-        width: 230px;
         margin: 0 auto;
         position: relative;
     }
@@ -982,18 +981,58 @@ textarea {
     }
     .update-profile-component .form {
         padding-top: 10em;
-        margin-top: 7em;
+        margin-top: 3em;
     }
     .update-profile-component .profile_image-edit {
         right: -6px;
         bottom: -6px;
     }
     .update-profile-component .profile_image-edit i {
-        font-size: 32px;
+        font-size: 28px;
+    }
+    .update-profile-component .form {
+        margin-top: 7em;
+    }
+}
+
+@media only screen and (max-width: 400px) {
+    .nav-tabs>li>a {
+        font-size: 10px;
+    }
+    .nav>li>a.active::after {
+        top: 36px;
+    }
+    .profile-info-component .list-group-item img {
+        width: 80%;
+    }
+    .profile .list-group-item {
+        padding: 10px 0;
+    }
+    .profile-info-component .edit-action button {
+        margin: .4em 0;
+        width: 80%;
+    }
+    .profile-info-component .edit-action button:first-child {
+        margin: .4em 0;
+    }
+    .profile_image .circle-box {
+        max-height: 140px;
+        max-width: 140px;
+    }
+    .update-profile-component .form {
+        margin-top: 1em;
     }
 }
 
 @media only screen and (min-width: 768px) {
+    .update-profile-component .profile_image-edit {
+        right: -6px;
+        bottom: -6px;
+    }
+    .profile_image .circle-box {
+        max-height: 170px;
+        max-width: 170px;
+    }
     main {
         min-height: calc(100vh - 265px);
     }
@@ -1038,6 +1077,10 @@ textarea {
     }
 }
 @media only screen and (min-width: 992px) {
+    .profile_image .circle-box {
+        max-height: 240px;
+        max-width: 240px;
+    }
     main {
         min-height: calc(100vh - 234px);
     }
@@ -1045,8 +1088,8 @@ textarea {
         background-position: center left;
     }
     .profile_image-edit {
-        right: 8px;
-        bottom: 2px;
+        right: -6px;
+        bottom: -6px;
     }
     .profile_image-edit i {
         font-size: 30px;

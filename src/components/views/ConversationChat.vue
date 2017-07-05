@@ -6,7 +6,7 @@
                 <span class="chat_last_connection"> {{lastConnection | moment("calendar")}}  </span>
             </div>
             <div class="list-group-item">
-                <div > 
+                <div> 
                     <button @click="searchMore" v-if="!lastPageConversation" class="btn"> Ver más mensajes </button>
                 </div>
                 <MessageView v-for="m in messages" :message="m" :user="user" :users="conversation.users">

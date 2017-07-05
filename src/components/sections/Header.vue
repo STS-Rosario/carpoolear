@@ -49,7 +49,7 @@
                     <span > {{user.name}} </span>
                     <dropdown type="info" v-if="logged" >
                         <template slot="button"> 
-                            <img class="header_profile_image"  :src=" user.image | profile-image " alt=""> 
+                            <div class="circle-box header_profile_image" v-imgSrc:profile="user.image"></div>
                         </template>
                         <li>
                             <router-link :to="{name: 'my-trips'}">Mis Viajes</router-link>
