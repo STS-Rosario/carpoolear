@@ -420,7 +420,7 @@ textarea {
     border-top-color: #016587;
     border-width: 12px;
     margin-left: -12px;
-    z-index: 300;
+    z-index: 1;
 }
 
 .card-trip {
@@ -757,7 +757,7 @@ textarea {
     border-left-color: #016587;
     border-width: 12px;
     margin-left: -12px;
-    z-index: 300;
+    z-index: 1;
 }
 .trip-detail-component .buttons-container {
     left: 42px;
