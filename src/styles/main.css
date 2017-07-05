@@ -765,6 +765,18 @@ textarea {
     position: absolute;
 }
 
+.trip-detail-component .buttons-container button:first-child{
+    margin-right: 1em;
+}
+
+.trip-detail-component .btn {
+    font-weight: 500;
+    min-width: 8rem;
+    border-radius: .2em;
+    padding: .8em 1.2em;
+    text-transform: uppercase;
+}
+
 .xcv {
     border-bottom: 1px solid #CCC;
     margin-bottom: 1rem;
