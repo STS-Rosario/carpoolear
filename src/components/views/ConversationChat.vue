@@ -7,16 +7,16 @@
             </div>
             <div class="list-group-item">
                 <div> 
-                    <button @click="searchMore" v-if="!lastPageConversation" class="btn"> Ver más mensajes </button>
+                    <button @click="searchMore" v-if="!lastPageConversation" class="btn" v-jump:click.blur="'btn_login'"> Ver más mensajes </button>
                 </div>
                 <MessageView v-for="m in messages" :message="m" :user="user" :users="conversation.users">
                 </MessageView>
             </div>
             <div class="list-group-item">
                 <div class="input-group">
-                    <input v-model="message" type="text" class="form-control" placeholder="Escribir mensaje...">
+                    <input v-model="message" type="text" class="form-control" placeholder="Escribir mensaje..." v-jump:click="'btn-send'">
                     <span class="input-group-btn">
-                        <button class="btn btn-default" type="button" @click="sendMessage">
+                        <button ref="btn-send" id="btn-send" class="btn btn-default" type="button" @click="sendMessage">
                             <i class="fa fa-play" aria-hidden="true"></i>
                         </button>
                     </span>
@@ -66,7 +66,6 @@ export default {
         sendMessage () {
             this.sending = true;
             this.send(this.message).then(data => {
-                console.log('DONE');
                 this.message = '';
                 this.sending = false;
             }).catch(() => {

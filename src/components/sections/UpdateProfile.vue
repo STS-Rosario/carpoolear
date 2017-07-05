@@ -161,7 +161,6 @@ export default {
     mounted () {
         this.user = this.userData;
         if (this.cars) {
-            console.log(this.cars);
             if (this.cars.length > 0) {
                 this.car = this.cars[0];
                 this.patente = this.car.patente;

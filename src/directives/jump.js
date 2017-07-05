@@ -2,7 +2,9 @@ let jumpers = {};
 let keyHandler = function (key) {
     if (key.key === 'Enter') {
         let next = jumpers[this.id].next;
-        jumpers[this.id].el.blur();
+        if (jumpers[this.id].modifiers.blur) {
+            jumpers[this.id].el.blur();
+        }
         next[jumpers[this.id].arg]();
     }
 };
@@ -14,6 +16,7 @@ export default {
         jumpers[el.id].value = binding.value;
         jumpers[el.id].arg = binding.arg;
         jumpers[el.id].el = el;
+        jumpers[el.id].modifiers = binding.modifiers;
         el.addEventListener('keyup', keyHandler, false);
     },
     inserted: function (el, binding, node) {

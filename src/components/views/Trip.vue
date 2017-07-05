@@ -202,9 +202,7 @@ export default {
         }),
 
         loadTrip () {
-            console.log('load trip');
             this.getTrip(this.id).then(trip => {
-                console.log('hola', trip);
                 this.trip = trip;
                 this.points = trip.points;
             }).catch(error => {
