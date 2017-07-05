@@ -777,6 +777,25 @@ textarea {
     text-transform: uppercase;
 }
 
+.trip-detail-component .quote {
+    font-size: 17px;
+    font-weight: 300;
+    position: relative;
+    padding-left: 20px;
+    padding-top: 12px;
+}
+
+.trip-detail-component .quote i {
+    top: 0;
+    display: block;
+    position: absolute;
+    color: white;
+    font-weight: 400;
+    font-size: 32px;
+    left: -23px;
+    text-shadow: 1px 1px 1px #333;
+}
+
 .xcv {
     border-bottom: 1px solid #CCC;
     margin-bottom: 1rem;

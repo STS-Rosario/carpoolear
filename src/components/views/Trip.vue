@@ -22,8 +22,9 @@
                                     <router-link class="btn-primary btn-search btn-shadowed-black" :to="{name: 'trips'}"> Ver Perfil </router-link>
                                 </div>
                             </div>
-                            <div class="row">
-                                {{trip.user.descripcion}}
+                            <div class="row italic quote">
+                                <i class="fa fa-quote-left" aria-hidden="true"></i>
+                                <span> {{trip.description}} </span>
                             </div>
                         </div>
                     </div>
@@ -121,15 +122,14 @@
                                 </div>
                             </div>
                             <div class="buttons-container">
-                                <router-link v-if="user.id == trip.user.id" :to="{name: 'update-trip', params: { id: trip.id}}"> Editar  </router-link>
+                                <router-link class="btn btn-primary" v-if="user.id == trip.user.id" :to="{name: 'update-trip', params: { id: trip.id}}"> Editar  </router-link>
 
                                 <button class="btn btn-primary" @click="toMessages" v-if="!owner"> Coordinar viaje  </button>
-
-                                <template v-if="!inPassenger">
+                                <template v-if="isPassenger">
                                     <button class="btn btn-primary" @click="makeRequest" v-if="canRequest"> Solicitar asciento </button>
                                     <button class="btn" v-if="!canRequest" @click="cancelRequest"> Solicitud enviada </button>
                                 </template>
-                                <template v-if="inPassenger">
+                                <template v-if="!isPassenger">
                                     <button class="btn btn-primary" @click="cancelRequest" v-if="canRequest"> Cancelar viaje </button>
                                 </template>
                             </div>
@@ -287,11 +287,12 @@ export default {
         },
 
         canRequest () {
-            return !this.owner && !this.trip.request;
+            return !this.owner && !this.trip.request || this.owner;
         },
 
-        inPassenger () {
-            return this.trip.passenger.findIndex(item => item.id === this.user.id) >= 0;
+        isPassenger () {
+            console.log(this.trip['is_passenger']);
+            return this.trip['is_passenger'];
         }
 
     },
