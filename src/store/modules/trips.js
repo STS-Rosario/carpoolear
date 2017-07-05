@@ -25,14 +25,14 @@ const actions = {
     create (store, data) {
         return tripsApi.create(data).then(response => {
             globalStore.commit('myTrips/' + types.MYTRIPS_ADD_TRIPS, response.data);
-            store.dispatch('tripsSearch', store.state.tripsSearchParams.data);
+            store.dispatch('tripsSearch', store.state.tripsSearchParam.data);
         });
     },
 
     update (store, data) {
         return tripsApi.update(data).then(response => {
             globalStore.commit('myTrips/' + types.MYTRIPS_UPDATE_TRIPS, response.data);
-            store.dispatch('tripsSearch', store.state.tripsSearchParams.data);
+            store.dispatch('tripsSearch', store.state.tripsSearchParam.data);
             // globalStore.commit(types.TRIPS_UPDATE_TRIPS, response.data);
         });
     }
