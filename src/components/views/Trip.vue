@@ -1,112 +1,160 @@
 <template>  
-    <div>
+    <div class='container'>
         <template v-if="trip"> 
             <div class="trip-detail-component container">
-                <div class="row">
-                    <div class="col-xs-8">
+                <div class="row form">
+                    <div class="col-sm-9 col-md-8 col-lg-7 driver-container">
                         <div class="driver-profile">
                             <div class="row">
-                                <div class="col-xs-12">
+                                <div class="col-xs-9 col-md-8 col-lg-8">
                                     <div class="trip_driver_img circle-box" v-imgSrc:profile="trip.user.image"></div>
                                 </div>
-                                <div class="col-xs-12">
+                                <div class="col-xs-15 driver-data">
                                     <div>{{trip.user.name}}</div>
-                                    <div>{{trip.user.positive_ratings}} {{trip.user.negative_ratings}}</div>
+                                    <div class="profile-info--ratings">
+                                        <i class="material-icons" aria-hidden="true">&#xE8DC;</i> <span> {{trip.user.positive_ratings}} </span>
+                                        <i class="material-icons" aria-hidden="true">&#xE8DB;</i> <span> {{trip.user.negative_ratings}} </span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <router-link :to="{name: 'trips'}"> Ver Perfil </router-link>
+                                <div class="col-md-24">
+                                    <router-link class="btn-primary btn-search btn-shadowed-black" :to="{name: 'trips'}"> Ver Perfil </router-link>
+                                </div>
                             </div>
                             <div class="row">
                                 {{trip.user.descripcion}}
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-8">
-                        <div class="trip_location">
-                            <template v-if="trip.points.length >= 2">
-                            <div class="row trip_location_from">
-                                <div class="col-xs-4 text-right">
-                                <i class="fa fa-map-marker" aria-hidden="true"></i>
+                    <div class="col-xs-15 col-md-16 col-lg-17 white-background">
+                        <div class='row'>
+                            <div class="col-xs-14 column">
+                                <div class="trip_location">
+                                    <template v-if="trip.points.length >= 2">
+                                        <div class="row trip_location_from">
+                                            <div class="col-xs-4 text-right">
+                                            <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                            </div>
+                                            <div class="col-xs-20">
+                                            <span class="trip_location_from_city">{{ trip.points[0].json_address.ciudad }}</span>
+                                            <span class="trip_location_from_state-country">{{ trip.points[0].json_address.provincia }}, {{ trip.points[0].json_address.pais }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="row trip_location_to">
+                                            <div class="col-xs-4 text-right">
+                                                <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                            </div>
+                                            <div class="col-xs-20">
+                                                <span class="trip_location_from_city">{{ trip.points[trip.points.length - 1].json_address.ciudad }}</span>
+                                                <span class="trip_location_from_state-country">{{ trip.points[trip.points.length - 1].json_address.provincia }}, {{ trip.points[trip.points.length - 1].json_address.pais }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-4 trip_location-dot-line">
+                                            <div></div>
+                                        </div>
+                                    </template>
+                                    <template v-else>
+                                        <div class="row trip_location_from">
+                                            <div class="col-xs-4 text-right">
+                                                <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                            </div>
+                                            <div  class="col-xs-20">
+                                                {{ trip.from_town }}
+                                            </div>
+                                        </div>
+                                        <div class="row trip_location_to">
+                                            <div class="col-xs-4 text-right">
+                                                <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                            </div>
+                                            <div class="col-xs-20">
+                                                {{ trip.to_town }}
+                                            </div>
+                                        </div>
+                                    </template>
                                 </div>
-                                <div class="col-xs-20">
-                                <span class="trip_location_from_city">{{ trip.points[0].json_address.ciudad }}</span>
-                                <span class="trip_location_from_state-country">{{ trip.points[0].json_address.provincia }}, {{ trip.points[0].json_address.pais }}</span>
+                                <div class="row">
+                                    <time class="trip_datetime col-xs-offset-4 col-xs-20" :datetime="trip.trip_date">
+                                        <span class="trip_datetime_date">{{ [ trip.trip_date ] | moment("DD MMMM YYYY") }}</span>
+                                        -
+                                        <span class="trip_datetime_time">{{ [ trip.trip_date ] | moment("h:mm a") }}</span>
+                                    </time>
+                                </div>
+                                <div class="row">
+                                    <div class="trip_seats-available col-xs-offset-2 col-xs-12">
+                                        <span class="trip_seats-available_value pull-left">{{ trip.seats_available }}</span>
+                                        <span class="trip_seats-available_label">Lugares<br>libres</span>
+                                    </div> 
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-offset-2 col-xs-12">
+                                        <h4>Pasajeros</h4>
+                                        <ul>
+                                            <li v-for="p in trip.passenger">
+                                                {{p.name}}
+                                                <span v-if="owner" @click="removePassenger(p)">
+                                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </div> 
                                 </div>
                             </div>
-                            <div class="row trip_location_to">
-                                <div class="col-xs-4 text-right">
-                                <i class="fa fa-map-marker" aria-hidden="true"></i>
+                            <div class="col-xs-10 column">
+                                <div class="row trip-data">
+                                    <span>Viaje Público</span><br>
+                                    <span>Gastos compartidos</span>
                                 </div>
-                                <div class="col-xs-20">
-                                <span class="trip_location_from_city">{{ trip.points[trip.points.length - 1].json_address.ciudad }}</span>
-                                <span class="trip_location_from_state-country">{{ trip.points[trip.points.length - 1].json_address.provincia }}, {{ trip.points[trip.points.length - 1].json_address.pais }}</span>
-                                </div>
-                            </div>
-                            <div class="col-xs-4 trip_location-dot-line">
-                            </div>
-                            </template>
-                            <template v-else>
-                                <div class="row trip_location_from">
-                                <div class="col-xs-4 text-right">
-                                    <i class="fa fa-map-marker" aria-hidden="true"></i>
-                                </div>
-                                <div  class="col-xs-20">
-                                    {{ trip.from_town }}
-                                </div>
-                            </div>
-                            <div class="row trip_location_to">
-                                <div class="col-xs-4 text-right">
-                                <i class="fa fa-map-marker" aria-hidden="true"></i>
-                                </div>
-                                <div class="col-xs-20">
-                                {{ trip.to_town }}
+                                <div class="row trip-stats">
+                                    <div>
+                                        <span>Distancia a recorrer</span><br>
+                                        <span>{{ trip.distance}} kms</span>
+                                    </div>
+                                    <div>
+                                        <span>Tiempo estimado de viaje</span><br>
+                                        <span>{{ trip.estimated_time }} horas</span>
+                                    </div>
+                                    <div>
+                                        <span>CO2 aproximados</span><br>
+                                        <span>No disponible - kgs</span>
+                                    </div>
                                 </div>
                             </div>
-                            </template>
-                        </div>
-                        <div class="row">
-                            <time class="trip_datetime col-xs-offset-4 col-xs-20" :datetime="trip.trip_date">
-                                <span class="trip_datetime_date">{{ [ trip.trip_date ] | moment("DD MMMM YYYY") }}</span>
-                                -
-                                <span class="trip_datetime_time">{{ [ trip.trip_date ] | moment("h:mm a") }}</span>
-                            </time>
-                        </div>
-                        <div class="row">
-                            <div class="trip_seats-available col-xs-offset-2 col-xs-12">
-                                <span class="trip_seats-available_value pull-left">{{ trip.seats_available }}</span>
-                                <span class="trip_seats-available_label">Lugares<br />libres</span>
-                            </div> 
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-offset-2 col-xs-12">
-                                <h4>Pasajeros</h4>
-                                <ul>
-                                    <li v-for="p in trip.passenger">
-                                        {{p.name}}
-                                        <span v-if="owner" @click="removePassenger(p)">
-                                            <i class="fa fa-times" aria-hidden="true"></i>
-                                        </span>
-                                    </li>
-                                </ul>
-                            </div> 
+                            <div class="buttons-container">
+                                <router-link v-if="user.id == trip.user.id" :to="{name: 'update-trip', params: { id: trip.id}}"> Editar  </router-link>
+
+                                <button class="btn btn-primary" @click="toMessages" v-if="!owner"> Coordinar viaje  </button>
+
+                                <template v-if="!inPassenger">
+                                    <button class="btn btn-primary" @click="makeRequest" v-if="canRequest"> Solicitar asciento </button>
+                                    <button class="btn" v-if="!canRequest" @click="cancelRequest"> Solicitud enviada </button>
+                                </template>
+                                <template v-if="inPassenger">
+                                    <button class="btn btn-primary" @click="cancelRequest" v-if="canRequest"> Cancelar viaje </button>
+                                </template>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-xs-8">
+                    <div class="col-xs-24 structure-div">
+                    <gmap-map
+                        :center="center"
+                        :zoom="zoom"
+                        style="height: 400px"
+                        ref="map"
+                    >
+                        <gmap-marker
+                            :key="index"
+                            v-for="(m, index) in points"
+                            :position="m.location"
+                            :clickable="true"
+                            :draggable="true"
+                            @click="center=m.location"
+                            v-if="m.location"
+                        ></gmap-marker>
+                    </gmap-map>
                     </div>
                 </div>
             </div>
-            <router-link v-if="user.id == trip.user.id" :to="{name: 'update-trip', params: { id: trip.id}}"> Editar  </router-link>
-
-            <button class="btn btn-primary" @click="toMessages" v-if="!owner"> Coordinar viaje  </button>
-
-            <template v-if="!inPassenger">
-                <button class="btn btn-primary" @click="makeRequest" v-if="canRequest"> Solicitar asciento </button>
-                <button class="btn" v-if="!canRequest" @click="cancelRequest"> Solicitud enviada </button>
-            </template>
-            <template v-if="inPassenger">
-                <button class="btn btn-primary" @click="cancelRequest" v-if="canRequest"> Cancelar viaje </button>
-            </template>
         </template>
         <template v-else>
             <div>
@@ -125,7 +173,23 @@ export default {
     data () {
         return {
             trip: null,
-            sending: false
+            sending: false,
+            zoom: 4,
+            center: {lat: -29.0, lng: -60.0},
+            points: [
+                {
+                    name: '',
+                    place: null,
+                    json: null,
+                    location: null
+                },
+                {
+                    name: '',
+                    place: null,
+                    json: null,
+                    location: null
+                }
+            ]
         };
     },
 
@@ -138,9 +202,13 @@ export default {
         }),
 
         loadTrip () {
+            console.log('load trip');
             this.getTrip(this.id).then(trip => {
+                console.log('hola', trip);
                 this.trip = trip;
+                this.points = trip.points;
             }).catch(error => {
+                console.log('error');
                 if (error) {
                     // Ver que hacer
                     this.trip = null;
@@ -196,6 +264,7 @@ export default {
     },
 
     mounted () {
+        console.log('mounted');
         this.loadTrip();
         bus.on('back-click', this.onBackClick);
     },

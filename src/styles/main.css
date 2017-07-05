@@ -80,6 +80,9 @@ input[type=radio] + label {
 .btn-shadowed {
     box-shadow: 0 0 6px 5px #CCCCCC;
 }
+.btn-shadowed-black {
+    box-shadow: 0 0 6px 5px rgba(0,0,0,0.15);
+}
 .btn-primary:hover {
     color: #FFFFFF;
     background: rgba(215,37,33, 0.8);
@@ -641,6 +644,127 @@ textarea {
 .trip_point + .trip_point {
     margin-top: 2.5em;
 }
+
+.trip-detail-component .driver-container {
+    background-color: var(--secondary-background);
+    border-radius: .4rem;
+}
+
+.trip-detail-component .driver-profile {
+    padding: 2em 1em 2em 1em;
+    color: white;
+}
+
+.trip-detail-component .column {
+    padding: 2em 1em 2em 1em;
+}
+
+.trip-detail-component .driver-profile div.row:last-child {
+    height: 9rem;
+}
+
+.trip-detail-component .trip_driver_img {
+    border: 1px solid #F6F6F6;
+    margin-bottom: 0;
+    width: 5rem;
+    height: 5rem;
+}
+
+.trip-detail-component .driver-profile .row {
+    margin-bottom: 2rem;
+}
+
+.trip-detail-component .driver-data div:first-child {
+    margin-top: 1rem;
+    font-size: 16px;
+    margin-bottom: .7rem;
+}
+
+.trip-detail-component .profile-info--ratings i {
+    margin-right: .4em;
+    font-size: 18px;
+    vertical-align: middle;
+}
+
+.trip-detail-component .profile-info--ratings i+span {
+    margin-right: .4em;
+}
+
+.trip-detail-component .trip_location_from_city,
+.trip-detail-component .trip_location_to_city {
+    font-weight: 300;
+}
+.trip-detail-component .trip_location_from_state-country,
+.trip-detail-component .trip_location_to_state-country {
+    color: #777;
+    font-size: .95rem;
+}
+.trip-detail-component .trip_location>div:nth-child(2) {
+    margin-top: 1rem;
+}
+.trip-detail-component .trip_location-dot-line > div {
+    height: 3.2rem;
+}
+.trip-detail-component .trip_datetime {
+    font-weight: 400;
+    font-size: 17px;
+}
+.trip-detail-component .trip_seats-available_label {
+    line-height: initial;
+}
+.trip-detail-component .trip-data {
+    margin-bottom: .8rem;
+    padding-bottom: .8rem;
+    border-bottom: 1px solid #ddd;
+    border-bottom-style: dotted;
+    margin-right: 4px;
+}
+.trip-detail-component .trip-stats>div>span:last-child {
+    font-weight: 500;
+    font-size: 15px;
+}
+.trip-detail-component .trip-stats>div {
+    margin-bottom: .6rem;
+}
+.trip-detail-component .structure-div {
+    height: 336px;
+    position: relative;
+}
+.trip-detail-component .vue-map-container {
+    left: 0;
+    position: absolute;
+    height: 400px;
+    width: 100%;
+    top: -64px;
+    z-index: -1;
+}
+.trip-detail-component .white-background {
+    background-color: white;
+}
+.trip-detail-component .form {
+    background-color: transparent;
+}
+.trip-detail-component .driver-container::after {
+    top: 36px;
+    right: -23px;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-color: rgba(136, 183, 213, 0);
+    border-left-color: #016587;
+    border-width: 12px;
+    margin-left: -12px;
+    z-index: 300;
+}
+.trip-detail-component .buttons-container {
+    left: 42px;
+    bottom: -25px;
+    position: absolute;
+}
+
 .xcv {
     border-bottom: 1px solid #CCC;
     margin-bottom: 1rem;
@@ -859,6 +983,10 @@ textarea {
     font-size: 26px;
     width: 20%;
     cursor: pointer;
+}
+
+.actionbar-bottom .actionbar_item i {
+    font-size: 26px !important;
 }
 
 .actionbar_icon.pull-right {
@@ -1113,6 +1241,8 @@ textarea {
     }
     .btn-primary {
         min-width: 8rem;
+        border-radius: .2em;
+        padding: .8em 1.2em;
     }
     .gmap-autocomplete .date-picker--cross {
         right: 20px;

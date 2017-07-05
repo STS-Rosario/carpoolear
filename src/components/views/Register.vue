@@ -1,6 +1,6 @@
 <template>
   
-  <div class="register" >
+  <div class="register container" >
     <h1> Registrar nuevo usuario </h1>
     <div class='form'>
       <label for="txt_name">Nombre</label>

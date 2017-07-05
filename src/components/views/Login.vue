@@ -1,5 +1,5 @@
 <template>
-  <div class="login" >
+  <div class="login container" >
     <h1> Login </h1>
     <div class='form'>
       <label for="txt_user">Usuario</label>

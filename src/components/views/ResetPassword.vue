@@ -1,5 +1,5 @@
 <template>
-    <div class="reset-password-component" >
+    <div class="reset-password-component container" >
         <h1> Recuperar contraseña </h1>
         <div v-if="send">
             <h3> Se ha enviado un email a su casilla de correo con las indicaciones para restablecer su contraseña. </h3>
