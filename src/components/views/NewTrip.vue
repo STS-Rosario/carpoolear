@@ -303,10 +303,14 @@ export default {
                 this.trip.car_id = this.cars[0].id;
             }
             if (!this.updatingTrip) {
-                this.createTrip(this.trip);
+                this.createTrip(this.trip).then((t) => {
+                    this.$router.replace({ name: 'detail_trip', params: { id: t.id } });
+                });
             } else {
                 this.trip.id = this.updatingTrip.id;
-                this.updateTrip(this.trip);
+                this.updateTrip(this.trip).then(() => {
+                    this.$router.replace({ name: 'detail_trip', params: { id: this.trip.id } });
+                });
             }
         },
 

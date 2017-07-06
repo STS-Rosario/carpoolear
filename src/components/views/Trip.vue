@@ -122,16 +122,19 @@
                                 </div>
                             </div>
                             <div class="buttons-container">
-                                <router-link class="btn btn-primary" v-if="user.id == trip.user.id" :to="{name: 'update-trip', params: { id: trip.id}}"> Editar  </router-link>
-
-                                <button class="btn btn-primary" @click="toMessages" v-if="!owner"> Coordinar viaje  </button>
-                                <template v-if="isPassenger">
-                                    <button class="btn btn-primary" @click="makeRequest" v-if="canRequest"> Solicitar asciento </button>
-                                    <button class="btn" v-if="!canRequest" @click="cancelRequest"> Solicitud enviada </button>
+                                <router-link class="btn btn-primary" v-if="owner" :to="{name: 'update-trip', params: { id: trip.id}}"> Editar  </router-link>
+                                <template v-if="!owner && !trip.is_passenger">
+                                    <button class="btn btn-primary" @click="toMessages" v-if="!owner"> Coordinar viaje  </button>
+                                    <template v-if="!isPassenger">
+                                        <button class="btn btn-primary" @click="makeRequest" v-if="canRequest"> Solicitar asciento </button>
+                                        <button class="btn" v-if="!canRequest" @click="cancelRequest"> Solicitud enviada </button>
+                                    </template>
+                                    
+                                    <template v-if="isPassenger">
+                                        <button class="btn btn-primary" @click="cancelRequest" v-if="canRequest"> Cancelar viaje </button>
+                                    </template>
                                 </template>
-                                <template v-if="!isPassenger">
-                                    <button class="btn btn-primary" @click="cancelRequest" v-if="canRequest"> Cancelar viaje </button>
-                                </template>
+                                
                             </div>
                         </div>
                     </div>
@@ -205,6 +208,9 @@ export default {
             this.getTrip(this.id).then(trip => {
                 this.trip = trip;
                 this.points = trip.points;
+                console.log('ok');
+                var self = this;
+                setTimeout(() => { self.renderMap(); }, 500);
             }).catch(error => {
                 console.log('error');
                 if (error) {
@@ -258,11 +264,82 @@ export default {
 
         onBackClick () {
             router.back();
+        },
+
+        renderMap () {
+            this.$refs.map.$mapCreated.then(() => {
+                console.log('Map was created');
+                /* eslint-disable no-undef */
+                this.directionsService = new google.maps.DirectionsService();
+                this.directionsDisplay = new google.maps.DirectionsRenderer();
+                this.directionsDisplay.setMap(this.$refs.map.$mapObject);
+                this.restoreData(this.trip);
+            });
+        },
+
+        restoreData (trip) {
+            this.points = [];
+            trip.points.forEach(p => {
+                let point = {
+                    name: p.address,
+                    json: p.json_address,
+                    location: {
+                        lat: p.lat,
+                        lng: p.lng
+                    },
+                    place: null
+                };
+                this.points.push(point);
+            });
+            this.date = trip.trip_date.split(' ')[0];
+            this.time = trip.trip_date.split(' ')[1];
+            this.trip.is_passenger = trip.is_passenger ? 1 : 0;
+            this.trip.total_seats = trip.total_seats;
+            this.trip.friendship_type_id = trip.friendship_type_id;
+            this.trip.distance = trip.distance;
+            this.trip.description = trip.description;
+
+            this.calcRoute();
+        },
+
+        calcRoute () {
+            for (let i = 0; i < this.points.length; i++) {
+                if (!this.points[i].name) {
+                    return;
+                }
+            }
+
+            this.directionsService.route({
+                origin: this.points[0].name,
+                destination: this.points[this.points.length - 1].name,
+                travelMode: 'DRIVING'
+            }, (response, status) => {
+                if (status === 'OK') {
+                    /* encode path */
+                    this.directionsDisplay.setDirections(response);
+
+                    let path = response.routes[0].overview_path;
+                    let encodeString = google.maps.geometry.encoding.encodePath(path);
+                    this.trip.enc_path = encodeString;
+
+                    let totalDistance = 0;
+                    let totalDuration = 0;
+                    let legs = response.routes[0].legs;
+                    for (let i = 0; i < legs.length; ++i) {
+                        totalDistance += legs[i].distance.value;
+                        totalDuration += legs[i].duration.value;
+                    }
+                    this.trip.distance = totalDistance;
+                    this.duration = totalDuration;
+                    this.co2 = totalDistance * 0.15; /* distancia por 0.15 kilos co2 en promedio por KM recorrido  */
+                } else {
+                    console.log('Directions request failed due to ' + status);
+                }
+            });
         }
     },
 
     mounted () {
-        console.log('mounted');
         this.loadTrip();
         bus.on('back-click', this.onBackClick);
     },
@@ -287,12 +364,11 @@ export default {
         },
 
         canRequest () {
-            return !this.owner && !this.trip.request || this.owner;
+            return !this.owner && !this.trip.request;
         },
 
         isPassenger () {
-            console.log(this.trip['is_passenger']);
-            return this.trip['is_passenger'];
+            return this.trip.passenger.findIndex(item => item.id === this.user.id) >= 0;
         }
 
     },

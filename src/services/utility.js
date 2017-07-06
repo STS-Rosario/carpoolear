@@ -16,6 +16,7 @@ export function getRoute (value, subRoute = '') {
     if (!subRoute) {
         subRoute = '';
     }
+
     if (value && value.length) {
         return process.env.API_URL + subRoute + value;
     } else {

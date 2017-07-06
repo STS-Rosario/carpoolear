@@ -1,6 +1,7 @@
 <template>
   <div class="update-profile-component" v-if="user" >
     <div class="row">   
+    {{user|json}}
         <div class="col-xs-24 col-sm-8 col-sm-push-16 profile_image">
             <div class='profile_image-container'>
                 <div class="circle-box" v-imgSrc:profile="user.image" :class="{'loading': loadingImg}">

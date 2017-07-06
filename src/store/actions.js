@@ -55,8 +55,8 @@ export const startApp = (store) => {
         store.dispatch('myTrips/tripAsDriver');
         store.dispatch('myTrips/tripAsPassenger');
         store.dispatch('rates/pendingRates');
-        store.dispatch('cars/index');
         store.dispatch('passenger/getPendingRequest');
+        store.dispatch('cars/index');
         store.dispatch('startThread');
         if (store.state.cordova.device) {
             store.dispatch('device/update');

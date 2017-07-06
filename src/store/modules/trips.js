@@ -26,6 +26,7 @@ const actions = {
         return tripsApi.create(data).then(response => {
             globalStore.commit('myTrips/' + types.MYTRIPS_ADD_TRIPS, response.data);
             store.dispatch('tripsSearch', store.state.tripsSearchParam.data);
+            return Promise.resolve(response.data);
         });
     },
 
@@ -33,6 +34,7 @@ const actions = {
         return tripsApi.update(data).then(response => {
             globalStore.commit('myTrips/' + types.MYTRIPS_UPDATE_TRIPS, response.data);
             store.dispatch('tripsSearch', store.state.tripsSearchParam.data);
+            return Promise.resolve(response.data);
             // globalStore.commit(types.TRIPS_UPDATE_TRIPS, response.data);
         });
     }
