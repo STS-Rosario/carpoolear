@@ -54,7 +54,7 @@ import Trip from '../sections/Trip.vue';
 import Loading from '../Loading.vue';
 import PendingRequest from '../PendingRequest';
 import RatePending from '../RatePending';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 import Tab from '../elements/Tab';
 import Tabset from '../elements/Tabset';
@@ -63,7 +63,10 @@ export default {
     name: 'my-trips',
 
     mounted () {
-
+        this.tripAsDriver();
+        this.tripAsPassenger();
+        this.pendingRate();
+        this.getPendingRequest();
     },
 
     computed: {
@@ -79,7 +82,13 @@ export default {
     methods: {
         findTrip (id) {
             return this.trips.find(item => item.id === id);
-        }
+        },
+        ...mapActions({
+            tripAsDriver: 'myTrips/tripAsDriver',
+            tripAsPassenger: 'myTrips/tripAsPassenger',
+            pendingRate: 'rates/pendingRates',
+            getPendingRequest: 'passenger/getPendingRequest'
+        })
     },
 
     components: {

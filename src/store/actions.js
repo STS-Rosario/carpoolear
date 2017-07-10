@@ -72,7 +72,9 @@ export const getTrip = (store, id) => {
     if (trips) {
         for (let i = 0; i < trips.length; i++) {
             if (trips[i].id === id) {
-                return Promise.resolve(trips[i]);
+                store.commit('trips/' + types.TRIPS_SET_CURRENT, trips[i]);
+                break;
+                // return Promise.resolve(trips[i]);
             }
         }
     }
@@ -81,7 +83,9 @@ export const getTrip = (store, id) => {
     if (myTrips) {
         for (let i = 0; i < myTrips.length; i++) {
             if (myTrips[i].id === id) {
-                return Promise.resolve(myTrips[i]);
+                store.commit('trips/' + types.TRIPS_SET_CURRENT, myTrips[i]);
+                break;
+                // return Promise.resolve(myTrips[i]);
             }
         }
     }
@@ -90,12 +94,15 @@ export const getTrip = (store, id) => {
     if (myTrips) {
         for (let i = 0; i < myTrips.length; i++) {
             if (myTrips[i].id === id) {
-                return Promise.resolve(myTrips[i]);
+                store.commit('trips/' + types.TRIPS_SET_CURRENT, myTrips[i]);
+                break;
+                // return Promise.resolve(myTrips[i]);
             }
         }
     }
 
     return tripsApi.show(id).then(response => {
+        store.commit('trips/' + types.TRIPS_SET_CURRENT, response.data);
         return Promise.resolve(response.data);
     });
 };

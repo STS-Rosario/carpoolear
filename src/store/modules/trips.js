@@ -8,12 +8,14 @@ let tripsApi = new TripApi();
 
 // initial state
 const state = {
-    ...pagination.makeState('trips')
+    ...pagination.makeState('trips'),
+    current_trip: null
 };
 
 // getters
 const getters = {
-    ...pagination.makeGetters('trips')
+    ...pagination.makeGetters('trips'),
+    currentTrip: state => state.current_trip
 };
 
 // actions
@@ -43,6 +45,10 @@ const actions = {
 // mutations
 const mutations = {
     ...pagination.makeMutations('trips'),
+
+    [types.TRIPS_SET_CURRENT] (state, trip) {
+        state.current_trip = trip;
+    },
 
     [types.TRIPS_UPDATE_TRIPS] (state, trip) {
         for (let i = 0; i < state.trips.length; i++) {

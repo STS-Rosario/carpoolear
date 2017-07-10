@@ -175,7 +175,7 @@ export default {
     name: 'trip',
     data () {
         return {
-            trip: null,
+            // trip: null,
             sending: false,
             zoom: 4,
             center: {lat: -29.0, lng: -60.0},
@@ -206,16 +206,15 @@ export default {
 
         loadTrip () {
             this.getTrip(this.id).then(trip => {
-                this.trip = trip;
+                // this.trip = trip;
                 this.points = trip.points;
-                console.log('ok');
                 var self = this;
                 setTimeout(() => { self.renderMap(); }, 500);
             }).catch(error => {
                 console.log('error');
                 if (error) {
                     // Ver que hacer
-                    this.trip = null;
+                    // this.trip = null;
                 }
             });
         },
@@ -356,7 +355,8 @@ export default {
 
     computed: {
         ...mapGetters({
-            user: 'auth/user'
+            user: 'auth/user',
+            trip: 'trips/currentTrip'
         }),
 
         owner () {

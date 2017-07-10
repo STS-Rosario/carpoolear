@@ -11,6 +11,7 @@ export const AUTH_SET_TOKEN = 'AUTH_SET_TOKEN';
 export const AUTH_SET_USER = 'AUTH_SET_USER';
 export const AUTH_LOGOUT = 'AUTH_LOGOUT';
 
+export const TRIPS_SET_CURRENT = 'TRIPS_SET_CURRENT';
 export const TRIPS_SET_TRIPS = 'TRIPS_SET_TRIPS';
 export const TRIPS_ADD_TRIPS = 'TRIPS_ADD_TRIPS';
 export const TRIPS_RESTORE_PAGE = 'TRIPS_RESTORE_PAGE';
