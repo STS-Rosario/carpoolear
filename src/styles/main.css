@@ -30,6 +30,10 @@ p {
     font-size: .9rem; 
     line-height: 1.5;
 }
+abbr[title] {
+    text-decoration: none;
+    border: 0;
+}
 main {
     min-height: calc(100vh - 337px);
 }
@@ -542,16 +546,19 @@ textarea {
 .trip_location_to {
     color: var(--trip-mostly-free-color);
 }
-.trip_location_from_state-country {
+.trip_location_from_state-country,
+.trip_location_to_state-country {
     display: block;
     font-size: 0.8rem;
     color: var(--soft-font-color);
+    min-height: 3em;
 }
 .trip_datetime {
     color: var(--medium-font-color);
     margin-bottom: 1.5em;
     margin-top: 1rem;
     padding-right: 0;
+    min-height: 2.5em;
 }
 .trip_datetime_time {
     color: var(--trip-half-free-color);
@@ -698,6 +705,7 @@ textarea {
 .trip-detail-component .trip_location_to_state-country {
     color: #777;
     font-size: .95rem;
+    min-height: 3em;
 }
 .trip-detail-component .trip_location>div:nth-child(2) {
     margin-top: 1rem;
@@ -781,7 +789,7 @@ textarea {
     font-size: 17px;
     font-weight: 300;
     position: relative;
-    padding-left: 20px;
+    padding-left: 30px;
     padding-top: 12px;
 }
 
@@ -792,7 +800,7 @@ textarea {
     color: white;
     font-weight: 400;
     font-size: 32px;
-    left: -23px;
+    left: -8px;
     text-shadow: 1px 1px 1px #333;
 }
 
