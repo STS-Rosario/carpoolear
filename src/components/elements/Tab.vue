@@ -1,5 +1,5 @@
 <template>
-    <div role="tabpanel" class="tab-pane" :class="{ active: active }" :id="id">
+    <div role="tabpanel" class="tab-pane container" :class="{ active: active }" :id="id">
         <slot></slot>
     </div>
 </template>

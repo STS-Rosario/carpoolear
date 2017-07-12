@@ -38,17 +38,17 @@
                                 <div>{{estimatedTimeString}}  </div>
                             </li>
                             <li class="list_item">
-                                <div class="label-soft">CO2</div>
+                                <div class="label-soft">Huella de carbono (<abbr title="kilogramos dióxido de carbono equivalente">kg CO<sub>2eq</sub></abbr>)</div>
                                 <div>{{CO2String}}</div>
                             </li>
                         </ul>
                 </div>
             </div>
-        </div> 
+        </div>
         <div class="row">
             <div class="col-xs-8">
             </div>
-            <div class="col-xs-8"> 
+            <div class="col-xs-8">
                 <div class="trip_datetime">
                     <div class="trip_date">
                         <label for="date" class="sr-only">Día </label>
@@ -64,19 +64,19 @@
                         <legend class="label-for-group">Lugares disponibles</legend>
                         <span class="radio-inline">
                             <input type="radio" id="seats-one" value="1" v-model="trip.total_seats">
-                            <label for="seats-one">1</label>    
+                            <label for="seats-one">1</label>
                         </span>
                         <span class="radio-inline">
                             <input type="radio" id="seats-two" value="2" v-model="trip.total_seats">
-                            <label for="seats-two">2</label>    
+                            <label for="seats-two">2</label>
                         </span>
                         <span class="radio-inline">
                             <input type="radio" id="seats-three" value="3" v-model="trip.total_seats">
-                            <label for="seats-three">3</label>    
+                            <label for="seats-three">3</label>
                         </span>
                         <span class="radio-inline">
                             <input type="radio" id="seats-four" value="4" v-model="trip.total_seats">
-                            <label for="seats-four">4</label>    
+                            <label for="seats-four">4</label>
                         </span>
                     </fieldset>
                 </div>
@@ -89,17 +89,17 @@
                 <fieldset class="trip-privacity">
                     <legend class="label-for-group"> Privacidad del viaje </legend>
                     <ul class="no-bullet">
-                        <li>    
+                        <li>
                             <input type="radio" id="privacity-public" value="2" v-model="trip.friendship_type_id">
-                            <label for="privacity-public" class="label-soft">Publicos</label>    
+                            <label for="privacity-public" class="label-soft">Público</label>
                         </li>
                         <li>
                             <input type="radio" id="privacity-friend" value="0" v-model="trip.friendship_type_id">
-                            <label for="privacity-friend" class="label-soft">Amigos</label>    
+                            <label for="privacity-friend" class="label-soft">Solo amigos</label>
                         </li>
-                        <li>    
+                        <li>
                             <input type="radio" id="privacity-friendofriend" value="1" v-model="trip.friendship_type_id">
-                            <label for="privacity-friendofriend" class="label-soft">Amigos de Amigos</label>     
+                            <label for="privacity-friendofriend" class="label-soft">Amigos de Amigos</label>
                         </li>
                     </ul>
                 </fieldset>
@@ -110,9 +110,9 @@
                 </button>
 
             </div>
-        </div> 
+        </div>
         <div class="row">
-            <div class="col-xs-24 map"> 
+            <div class="col-xs-24 map">
                 <div class="map_warning">* El recorrido del mapa es de referencia, puede no coincidir con el recorrido planeado por ud.</div>
                 <gmap-map
                     :center="center"
@@ -129,8 +129,8 @@
                     @click="center=m.location"
                     v-if="m.location"
                     ></gmap-marker>
-                </gmap-map>        
-            </div> 
+                </gmap-map>
+            </div>
         </div>
   </div>
 </template>
@@ -218,7 +218,7 @@ export default {
             cars: 'cars/cars'
         }),
         distanceString () {
-            return Math.floor(this.trip.distance / 1000) + ' Kms';
+            return Math.floor(this.trip.distance / 1000) + ' Km';
         },
         estimatedTimeString () {
             let totalMinutes = Math.floor(this.duration / 60);
@@ -227,7 +227,7 @@ export default {
             return (hour < 10 ? '0' : '') + hour + ':' + (minutes < 10 ? '0' : '') + minutes;
         },
         CO2String () {
-            return this.trip.co2 + ' Kg';
+            return Math.floor(this.trip.distance / 1000) * 1.5 + ' Kg';
         }
     },
     methods: {

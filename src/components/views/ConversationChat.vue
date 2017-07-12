@@ -1,13 +1,13 @@
 <template>
-    <div class="conversation_chat" v-if="conversation">   
+    <div class="conversation_chat" v-if="conversation">
         <div class="list-group">
             <div class="list-group-item">
-                <h2> {{conversation.title}} </h2>    
+                <h2> {{conversation.title}} </h2>
                 <span class="chat_last_connection"> {{lastConnection | moment("calendar")}}  </span>
             </div>
             <div class="list-group-item">
-                <div> 
-                    <button @click="searchMore" v-if="!lastPageConversation" class="btn" v-jump:click.blur="'btn_login'"> Ver más mensajes </button>
+                <div>
+                    <button @click="searchMore" v-if="!lastPageConversation" class="btn text-center btn-full-width" v-jump:click.blur="'btn_login'"> Ver más mensajes </button>
                 </div>
                 <MessageView v-for="m in messages" :message="m" :user="user" :users="conversation.users">
                 </MessageView>
@@ -23,7 +23,11 @@
                 </div>
             </div>
         </div>
-        
+
+    </div>
+    <div v-else>
+      <p slot="no-data" class="alert alert-warning"  role="alert">Seleccione alguna conversación</p>
+
     </div>
 </template>
 <script>
