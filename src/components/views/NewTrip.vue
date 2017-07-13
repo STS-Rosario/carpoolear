@@ -91,19 +91,11 @@
                     <ul class="no-bullet">
                         <li>
                             <input type="radio" id="privacity-public" value="2" v-model="trip.friendship_type_id">
-<<<<<<< HEAD
-                            <label for="privacity-public" class="label-soft">Publicos</label>
-                        </li>
-                        <li>
-                            <input type="radio" id="privacity-friend" value="0" v-model="trip.friendship_type_id">
-                            <label for="privacity-friend" class="label-soft">Amigos</label>
-=======
                             <label for="privacity-public" class="label-soft">Público</label>
                         </li>
                         <li>
                             <input type="radio" id="privacity-friend" value="0" v-model="trip.friendship_type_id">
                             <label for="privacity-friend" class="label-soft">Solo amigos</label>
->>>>>>> afa3fe152070d56905d2d0733d5aed801c7cb9ae
                         </li>
                         <li>
                             <input type="radio" id="privacity-friendofriend" value="1" v-model="trip.friendship_type_id">
