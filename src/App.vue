@@ -7,11 +7,11 @@
       </div>
     </main>
     <footerApp></footerApp>
-    
+    <!--
     <pre>
             {{this.$store.state}}
-    </pre> 
-    
+    </pre>
+    -->
   </div>
 </template>
 

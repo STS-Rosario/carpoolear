@@ -26,8 +26,15 @@ var rsync = require('gulp-rsync');
 var prompt = require('gulp-prompt');
 var gulpif = require('gulp-if');
 var path = require('path');
+var exec = require('child_process').exec;
 
-gulp.task('deploy', function () {
+gulp.task('build-cordova', function (cb) {
+    exec('cd cordova && cordova build browser && cd ..', function (err, stdout, stderr) {
+        cb(err);
+    });
+});
+
+gulp.task('deploy', ['build-cordova'], function () {
   // Dirs and Files to sync
     rsyncPaths = [
         'cordova/platforms/browser/www/*.*',
@@ -52,14 +59,14 @@ gulp.task('deploy', function () {
   // develop
     if (argv.develop) {
         rsyncConf.port = 2200;
-        rsyncConf.hostname = '138.197.64.208'; // hostname
+        rsyncConf.hostname = '104.131.15.228'; // hostname
         rsyncConf.username = argv.user || 'movilizame'; // ssh username
         rsyncConf.destination = '/home/movilizame/sites/carpoolear_dev/public/app/'; // path where uploaded files go
 
   // Production
     } else if (argv.production) {
         rsyncConf.port = 2200;
-        rsyncConf.hostname = '138.197.64.208'; // hostname
+        rsyncConf.hostname = '104.131.15.228'; // hostname
         rsyncConf.username = argv.user || 'movilizame'; // ssh username
         rsyncConf.destination = '/home/movilizame/sites/carpoolear_dev/public/app/'; // path where uploaded files go
 
