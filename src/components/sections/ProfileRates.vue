@@ -1,5 +1,6 @@
 <template>
     <div class="profile-rates-component container">
+        <h2>Calificaciones</h2>
         <Loading :data="rates">
             <div class="list-group">
                 <div class="list-group-item" v-for="rate in rates">
@@ -12,12 +13,12 @@
             </div>
             -->
 
-            <p slot="no-data" class="alert alert-warning"  role="alert">No hay calificaciones</p> 
+            <p slot="no-data" class="alert alert-warning"  role="alert">No hay calificaciones</p>
             <p slot="loading" class="alert alert-info" role="alert">Cargando calificaciones ...</p>
         </Loading>
 
-         
-    </div> 
+
+    </div>
 </template>
 <script>
 import {mapGetters} from 'vuex';

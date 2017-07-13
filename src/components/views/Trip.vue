@@ -88,7 +88,7 @@
                                     </div> 
                                 </div>
                                 <div class="row">
-                                    <div class="col-xs-offset-2 col-xs-12">
+                                    <div class="col-xs-offset-2 col-xs-12" v-if="trip.passenger.length">
                                         <h4>Pasajeros</h4>
                                         <ul>
                                             <li v-for="p in trip.passenger">
@@ -99,6 +99,7 @@
                                             </li>
                                         </ul>
                                     </div> 
+                                    <div v-else style="height: 2em;"></div>
                                 </div>
                             </div>
                             <div class="col-xs-10 column">
@@ -109,15 +110,15 @@
                                 <div class="row trip-stats">
                                     <div>
                                         <span>Distancia a recorrer</span><br>
-                                        <span>{{ trip.distance}} kms</span>
+                                        <span>{{ trip.distance}} <abbr title="kilometros">km</abbr></span>
                                     </div>
                                     <div>
                                         <span>Tiempo estimado de viaje</span><br>
                                         <span>{{ trip.estimated_time }} horas</span>
                                     </div>
                                     <div>
-                                        <span>CO2 aproximados</span><br>
-                                        <span>No disponible - kgs</span>
+                                        <span>Huella de carbono (<abbr title="aproximada">aprox</abbr>)</span><br>
+                                        <span>{{ trip.distance * 1.5 }} <abbr title="kilogramos dióxido de carbono equivalente">kg CO<sub>2eq</sub></abbr></span>
                                     </div>
                                 </div>
                             </div>

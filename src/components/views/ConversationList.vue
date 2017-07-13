@@ -1,4 +1,4 @@
-<template>  
+<template>
 <div class="conversation-component container">
     <div class="row">
         <div class="col-sm-8 col-md-8" :class="{'hidden-xs': hide}">
@@ -15,7 +15,7 @@
                         </div>
                     </li>
                     <template v-if="textSearch.length == 0">
-                        <Loading class="conversation_chat--chats" :data="conversations"> 
+                        <Loading class="conversation_chat--chats" :data="conversations">
                             <li v-for="conversation in conversations" class="list-group-item" @click="onChangeConversation(conversation)" :class="{'unread': conversation.unread, 'active': selected && conversation.id === selected.id  }" >
                                 <div class="conversation_image circle-box" v-imgSrc:conversation="conversation.image"></div>
                                 <span class="conversation-title">{{conversation.title}}</span>
@@ -23,25 +23,25 @@
                                 <div>
                                     <span v-if="conversation.last_message"> {{ conversation.last_message.text }} </span>
                                 </div>
-                                
-                            </li> 
+
+                            </li>
                             <li v-if="moreConversations" class="list-group-item" >
                                 <button class="btn btn-primary btn-block" @click="nextPage">Más resultados</button>
                             </li>
-                            <li slot="no-data" class="list-group-item alert alert-warning"  role="alert">No tienes conversaciones...</li> 
+                            <li slot="no-data" class="list-group-item alert alert-warning"  role="alert">No tienes conversaciones...</li>
                             <li slot="loading" class="list-group-item alert alert-info" role="alert">Cargando conversaciones ...</li>
-                        </Loading> 
+                        </Loading>
                     </template>
                     <template v-else>
-                        <Loading :data="users"> 
+                        <Loading :data="users">
                             <li v-for="user in users" class="list-group-item" @click="createConversation(user)">
                                 <div class="conversation_image circle-box" v-imgSrc:profile="user.image"></div>
                                 {{user.name}}
-                            </li>  
-                            <li slot="no-data" class="list-group-item alert alert-warning"  role="alert">No hay concidencias</li> 
+                            </li>
+                            <li slot="no-data" class="list-group-item alert alert-warning"  role="alert">No hay concidencias</li>
                             <li slot="loading" class="list-group-item alert alert-info" role="alert">Buscando usuarios</li>
                         </Loading>
-                    </template> 
+                    </template>
                 </ul>
             </div>
         </div>
@@ -130,6 +130,7 @@ export default {
             this.unreadMessage();
         });
         this.thread.run(5000);
+        router.push({ name: 'conversation-chat' });
     },
 
     components: {
