@@ -9,7 +9,9 @@
     "build": "node build/build.js",
     "cordova-build": "node build/cordova-testing-build.js",
     "lint": "eslint --fix --ext .js,.vue src",
-    "postinstall": "node build/make-folders.js"
+    "postinstall": "node build/make-folders.js",
+    "install-android": "adb install -r cordova/platforms/android/build/outputs/apk/android-debug.apk",
+    "build-android": "cd cordova && cordova build android && cd .."
   },
   "dependencies": {
     "alertifyjs": "^1.10.0",
