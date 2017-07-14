@@ -106,9 +106,9 @@ export default {
     ],
 
     methods: {
-      goToDetail: function (event) {
-        this.$router.push({ name: 'detail_trip', params: { id: this.trip.id } })
-      }
+        goToDetail: function (event) {
+            this.$router.push({ name: 'detail_trip', params: { id: this.trip.id } });
+        }
     },
     data () {
         return {
