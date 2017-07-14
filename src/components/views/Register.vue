@@ -63,38 +63,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .register {
-    padding-left: 10px;
-    padding-right: 10px;
-  }
-  h2 {
-    font-weight: normal;
-  }
-  .form {
-    margin-top:20px;
-    border: 1px solid gray;
-    padding: 2em;
-    margin-bottom: 2rem;
-  }
-  input {
-    width: 100%;
-    display:block;
-    padding: 3px;
-    margin-bottom: 0.4em;
-  }
+
   input[type="checkbox"] {
     width: auto;
-  }
-  button {
-    margin-top: 10px;
-  }
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  li {
-    display: inline-block;
-    margin: 0 10px;
   }
   a {
     color: #42b983;

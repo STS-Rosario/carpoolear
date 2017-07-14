@@ -1,5 +1,5 @@
 <template>
-    <div class="reset-password-component container" >
+    <div class="user-form container " >
         <h1> Recuperar contraseña </h1>
         <div v-if="send">
             <h3> Se ha enviado un email a su casilla de correo con las indicaciones para restablecer su contraseña. </h3>
@@ -96,22 +96,9 @@ export default {
 </script>
 
 <style scoped>
-    h2 {
-        font-weight: normal;
-    }
     h3 {
         margin-bottom: 2em;
         font-size: 18px;
-    }
-    .reset-password-component {
-        padding-left: 10px;
-        padding-right: 10px;
-    }
-    .form {
-        margin-top:20px;
-        border: 1px solid gray;
-        padding: 2em;
-        margin-bottom: 2rem;
     }
     label {
         display: block;
@@ -119,10 +106,7 @@ export default {
         margin-bottom: .6em;
     }
     input {
-        display:block;
-        padding: 3px;
         margin-bottom: 0.8em;
-        width: 100%;
     }
     loading {
         margin-left: 1em;
