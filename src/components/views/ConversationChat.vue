@@ -34,6 +34,7 @@
 import {mapGetters, mapActions} from 'vuex';
 import {Thread} from '../../classes/Threads.js';
 import MessageView from '../MessageView';
+import router from '../../router';
 
 export default {
     name: 'conversation-chat',
@@ -48,7 +49,8 @@ export default {
             'user': 'auth/user',
             'messages': 'conversations/messagesList',
             'lastPageConversation': 'conversations/lastPageConversation',
-            'timestampConversation': 'conversations/timestampConversation'
+            'timestampConversation': 'conversations/timestampConversation',
+            'isMobile': 'device/isMobile'
         }),
         lastConnection () {
             let users = this.conversation.users.filter(item => item.id !== this.user.id);
@@ -94,6 +96,11 @@ export default {
     watch: {
         'id': function () {
             this.select(parseInt(this.id));
+        },
+        isMobile: function () {
+            if (!this.id && this.isMobile) {
+                router.push({ name: 'conversations-list' });
+            }
         }
     },
     props: [

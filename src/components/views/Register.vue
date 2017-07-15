@@ -14,10 +14,11 @@
       <input type="password" id="txt_password" v-model='password'/>
       <label for="txt_password_confirmation">Ingrese nuevamente su contraseña</label>
       <input  type="password" id="txt_password_confirmation" v-model='passwordConfirmation' />
-      <label for="cbx_terms">He leído y acepto términos y condiciones</label>
-      <input  type="checkbox" id="cbx_terms" v-model='termsAndConditions' />
-
-      <button @click="register" class="btn-primary btn-search"> Registrarme </button>
+      <div class="terms">
+        <input  type="checkbox" id="cbx_terms" v-model='termsAndConditions' />
+        <label for="cbx_terms">He leído y acepto términos y condiciones</label>
+        <button @click="register" class="btn-primary"> Registrarme </button>
+      </div>
     </div>
   </div>
 </template>
@@ -65,10 +66,20 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
-  input[type="checkbox"] {
-    width: auto;
-  }
-  a {
-    color: #42b983;
-  }
+    input[type="checkbox"] {
+        width: auto;
+    }
+    a {
+        color: #42b983;
+    }
+    .terms {
+        margin-top: 1.8rem;
+    }
+    @media only screen and (min-width: 768px) {
+        .terms button {
+            margin-left: 2rem;
+            text-align: right;
+        }
+    }
+
 </style>

@@ -88,7 +88,7 @@ export default {
     background-color: var(--button-facebook-blue-left);
   }
   .register {
-    font-weight: 200;
+    font-weight: 300;
     font-size: 16px;
     display: block;
     padding: 1.4em 0;

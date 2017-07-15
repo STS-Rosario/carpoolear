@@ -40,7 +40,7 @@
                     <i class="fa fa-map-marker" aria-hidden="true"></i>
                   </div>
                   <div class="col-xs-20">
-                    <span class="trip_location_from_city">{{ trip.points[0].json_address.ciudad }}</span>
+                    <span class="trip_location_from_city" :style="originLongName ? LONG_NAME_STYLE : {}">{{ trip.points[0].json_address.ciudad }}</span>
                     <span class="trip_location_from_state-country">{{ trip.points[0].json_address.provincia }}, {{ trip.points[0].json_address.pais }}</span>
                   </div>
                 </div>
@@ -49,7 +49,7 @@
                     <i class="fa fa-map-marker" aria-hidden="true"></i>
                   </div>
                   <div class="col-xs-20">
-                    <span class="trip_location_from_city">{{ trip.points[trip.points.length - 1].json_address.ciudad }}</span>
+                    <span class="trip_location_from_city" :style="destinyLongName ? LONG_NAME_STYLE : {}">{{ trip.points[trip.points.length - 1].json_address.ciudad }}</span>
                     <span class="trip_location_from_state-country">{{ trip.points[trip.points.length - 1].json_address.provincia }}, {{ trip.points[trip.points.length - 1].json_address.pais }}</span>
                   </div>
                 </div>
@@ -112,8 +112,19 @@ export default {
     },
     data () {
         return {
-
+            CITY_NAME_LONG_LENGTH: 16,
+            LONG_NAME_STYLE: {
+                'font-size': '17px'
+            }
         };
+    },
+    computed: {
+        originLongName () {
+            return this.trip.points[0].json_address.ciudad.length > this.CITY_NAME_LONG_LENGTH;
+        },
+        destinyLongName () {
+            return this.trip.points[this.trip.points.length - 1].json_address.ciudad.length > this.CITY_NAME_LONG_LENGTH;
+        }
     },
     mounted () {
 

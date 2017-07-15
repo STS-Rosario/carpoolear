@@ -112,6 +112,11 @@ input[type=radio] + label {
     color: #ccc;
     background: rgba(215,37,33, 0.8);
 }
+input[type="checkbox"] {
+    vertical-align: -2px;
+    transform: scale(1.4);
+    margin-left: 8px;
+}
 .btn-full-width {
   width: 100%;
   margin: .5em 0;
@@ -607,7 +612,7 @@ textarea {
     float: right;
     width: 1px;
     margin-right: 13px;
-    height: 28px;
+    height: 50px;
     content: '\A0';
     border: 0;
     border-left: solid 1px #777;
@@ -1240,12 +1245,13 @@ textarea {
 
 .user-form input[type='text'],
 .user-form input[type='password'] {
-    font-size: 20px;
+    font-size: 14px;
     display: block;
     padding: .4em .5em;
     margin-bottom: 0.5em;
     width: 100%;
     border: 1px solid #ccc;
+    line-height: 28px;
 }
 .user-form li {
     display: inline-block;
@@ -1324,6 +1330,51 @@ ul {
     padding-left: 0;
 }
 
+
+@media only screen and (max-width: 400px) {
+    .nav-tabs>li>a {
+        font-size: 10px;
+    }
+    .nav>li>a.active::after {
+        top: 36px;
+    }
+    .profile-info-component .list-group-item img {
+        width: 80%;
+    }
+    .profile .list-group-item {
+        padding: 10px 0;
+    }
+    .profile-info-component .edit-action button {
+        margin: .4em 0;
+        width: 80%;
+    }
+    .profile-info-component .edit-action button:first-child {
+        margin: .4em 0;
+    }
+    .profile_image .circle-box {
+        max-height: 140px;
+        max-width: 140px;
+    }
+    .update-profile-component .form {
+        margin-top: 1em;
+    }
+    .btn,
+    .btn-primary,
+    body {
+        font-size: 12px;
+    }
+    .user-form .btn-primary.btn-facebook {
+        width: 100%;
+        padding-left: 0;
+        padding: 0;
+    }
+    .btn-with-icon--label {
+        display: inline-block;
+        margin-left: 50px;
+        text-align: left;
+    }
+}
+
 @media only screen and (max-width: 768px) {
     .profile_image .circle-box {
         max-height: 220px;
@@ -1370,36 +1421,10 @@ ul {
     }
 }
 
-@media only screen and (max-width: 400px) {
-    .nav-tabs>li>a {
-        font-size: 10px;
-    }
-    .nav>li>a.active::after {
-        top: 36px;
-    }
-    .profile-info-component .list-group-item img {
-        width: 80%;
-    }
-    .profile .list-group-item {
-        padding: 10px 0;
-    }
-    .profile-info-component .edit-action button {
-        margin: .4em 0;
-        width: 80%;
-    }
-    .profile-info-component .edit-action button:first-child {
-        margin: .4em 0;
-    }
-    .profile_image .circle-box {
-        max-height: 140px;
-        max-width: 140px;
-    }
-    .update-profile-component .form {
-        margin-top: 1em;
-    }
-}
-
 @media only screen and (min-width: 768px) {
+    .app-container .view-container {
+        padding-top: 7rem;
+    }
     .user-form .btn-primary {
         width: initial;
         padding: 1em 2em;

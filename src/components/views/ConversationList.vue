@@ -72,7 +72,8 @@ export default {
             conversations: 'conversations/list',
             moreConversations: 'conversations/listMorePage',
             users: 'conversations/users',
-            selected: 'conversations/selectedConversation'
+            selected: 'conversations/selectedConversation',
+            isMobile: 'device/isMobile'
         }),
 
         hide () {
@@ -121,6 +122,11 @@ export default {
             if (!this.$route.meta.hide) {
                 this.select(null);
             }
+        },
+        isMobile: function () {
+            if (!this.isMobile) {
+                router.push({ name: 'conversation-chat' });
+            }
         }
     },
 
@@ -130,7 +136,9 @@ export default {
             this.unreadMessage();
         });
         this.thread.run(5000);
-        router.push({ name: 'conversation-chat' });
+        if (!this.isMobile) {
+            router.push({ name: 'conversation-chat' });
+        }
     },
 
     components: {
