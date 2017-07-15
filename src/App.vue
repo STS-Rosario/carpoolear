@@ -23,9 +23,18 @@ import headerApp from './components/sections/Header.vue';
 
 export default {
     name: 'app',
+    methods: {
+        setRouteClass: function (route) {
+            this.actualRouteName = 'route--' + route.name;
+        }
+    },
+    mounted () {
+
+    },
     computed: mapGetters({
         deviceReady: 'cordova/deviceReady',
-        backgroundStyle: 'background/backgroundStyle'
+        backgroundStyle: 'background/backgroundStyle',
+        resolution: 'device/resolution'
     }),
     watch: {
         deviceReady: () => {

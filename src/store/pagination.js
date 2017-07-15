@@ -88,6 +88,7 @@ export function makeActions (name, requestGeneration, callback) {
         if (callback) {
             callback(store, promises);
         }
+        return promises;
     };
     return actions;
 }
