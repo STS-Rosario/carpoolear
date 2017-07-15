@@ -1,8 +1,8 @@
 <template>
     <div class="container settings-component">
         <div class="row">
-            <div class="col-xs-24 col-sm-4" v-show="!isMobile">
-                <ul>
+            <div class="col-xs-24 col-sm-5" v-show="!isMobile">
+                <ul class="nav nav-pills nav-stacked">
                     <li :class="{active: tabActive === 'profile'}">
                         <router-link :to="{name:'profile_update'}">Perfil</router-link>
                     </li>
@@ -10,11 +10,11 @@
                         <router-link :to="{name:'friends_setting'}">Amigos</router-link>
                     </li>
                     <li>
-                        Dispositivos
+                        <a href="#">Dispositivos</a>
                     </li>
                 </ul>
             </div>
-            <div class="col-xs-24 col-sm-20">
+            <div class="col-xs-24 col-sm-19">
                 <router-view></router-view>
             </div>
         </div>
@@ -50,5 +50,5 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  
+
 </style>

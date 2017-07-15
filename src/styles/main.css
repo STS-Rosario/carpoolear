@@ -46,6 +46,7 @@ h1 {
 textarea {
     resize: none;
     width: 100%;
+    border: 1px solid #666666;
 }
 .no-bullet {
     list-style: none;
@@ -205,6 +206,12 @@ input[type=radio] + label {
 
     border-color: var(--soft-font-color);
 
+}
+.form-inline-with-margin {
+    margin-bottom: 1.5em;
+}
+.form-inline-with-margin .form-control {
+    margin-bottom: 0;
 }
 /* -------------------- */
 .form-control-with-icon {
@@ -402,7 +409,7 @@ textarea {
     border: none;
     color: white;
 }
-.nav>li>a {
+.nav > li > a {
     padding: 10px 0;
 }
 .nav>li>a:hover,
@@ -432,7 +439,9 @@ textarea {
     margin-left: -12px;
     z-index: 1;
 }
-
+.nav-pills > li > a {
+    padding: 10px 15px;
+}
 .card-trip {
     box-shadow: 0 0 4px 1px #CCC;
     border-radius: .4em;
@@ -856,13 +865,40 @@ textarea {
     border-top-right-radius: 0;
     border-top-left-radius: 0;
 }
-.conversation_list .conversation_image {
+.conversation_image {
     margin-right: 10px;
     vertical-align: middle;
     width: 56px;
     height: 56px;
 }
-
+.message-wrapper {
+    text-align: left;
+    margin-bottom: 1em;
+}
+.message-wrapper-me {
+    text-align: right;
+}
+.message-wrapper .message {
+    display: inline-block;
+    padding: .5em 1em;
+    border-radius: 5px;
+    width: auto;
+    background: var(--secondary-background);
+    color: var(--secondary-font-color);
+}
+.conversation_chat--chats  .media-body,
+.message-wrapper .message .media-body {
+    width: auto;
+}
+.message-wrapper-me .message {
+    background: var(--trip-almost-fill-color);
+    color: var(--secondary-font-color);
+}
+.message_meta {
+    text-align: right;
+    font-size: 0.8em;
+    color: var(--soft-font-color);
+}
 .update-profile-component .form {
     padding: 2.2em;
 }

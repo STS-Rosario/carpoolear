@@ -32,23 +32,23 @@
                 </div>
             </router-link>
             <div class="header_panel-right">
-                
+
                 <button @click="share" type="button" class="btn btn-link">Invitar amigos</button>
                 <router-link class="btn btn-link" v-if="!logged" :to="{name: 'trips'}">Viajes</router-link>
                 <router-link class="btn btn-link" v-if="!logged" :to="{name: 'trips'}">Información</router-link>
                 <router-link class="btn btn-link" v-if="!logged" :to="{name: 'register'}">Registrarme</router-link>
                 <router-link class="btn btn-primary" btn-lg v-if="!logged" :to="{name: 'login'}">Login</router-link>
-                
-                
+
+
                 <span class="header_notifications" @click="toNotifications" v-if="logged">
                     <i class="fa fa-bell" aria-hidden="true"></i>
                     <span class="badge" v-if="notificationsCount > 0">{{notificationsCount}}</span>
-                </span> 
+                </span>
 
                 <div class="header_profile" v-if="user">
                     <span > {{user.name}} </span>
                     <dropdown type="info" v-if="logged" >
-                        <template slot="button"> 
+                        <template slot="button">
                             <div class="circle-box header_profile_image" v-imgSrc:profile="user.image"></div>
                         </template>
                         <li>
@@ -64,17 +64,17 @@
                         <li>
                             <router-link :to="{name: 'profile_update'}">Configuración</router-link>
                         </li>
-                        <li><a @click="logout">Logout</a></li>
+                        <li><a @click="logout">Cerrar sesión</a></li>
                     </dropdown>
                 </div>
-                
+
 
                 <router-link v-if="logged" :to="{name: 'new-trip'}" class="btn btn-primary btn-lg">Crear Viaje</router-link>
 
             </div>
             <div class="cf"></div>
         </div>
-    </header> 
+    </header>
 </template>
 
 <script>

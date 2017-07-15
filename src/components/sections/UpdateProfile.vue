@@ -1,7 +1,6 @@
 <template>
   <div class="update-profile-component" v-if="user" >
-    <div class="row">   
-    {{user|json}}
+    <div class="row">
         <div class="col-xs-24 col-sm-8 col-sm-push-16 profile_image">
             <div class='profile_image-container'>
                 <div class="circle-box" v-imgSrc:profile="user.image" :class="{'loading': loadingImg}">
@@ -11,7 +10,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xs-24 col-sm-16 col-sm-pull-8"> 
+        <div class="col-xs-24 col-sm-16 col-sm-pull-8">
             <div class='form'>
                 <div class="form-group">
                     <label for="input-name">Nombre</label>
@@ -56,17 +55,17 @@
                     <label for="input-pass">Cambiar contraseña</label>
                     <input v-model="pass.password" type="password" class="form-control" id="input-pass" placeholder="Contraseña">
                     <input v-model="pass.password_confirmation" type="password" class="form-control" id="input-pass-confirm" placeholder="Repetir contraseña">
-                </div> 
+                </div>
 
                 <div class="btn-container">
                     <button class="btn btn-primary" @click="grabar"> Guardar cambios </button>
                 </div>
                 <span v-if="error">{{error}}</span>
                 <Uploadfile :name="'profile'" @change="onPhotoChange" ref="file"></Uploadfile>
-            </div>    
+            </div>
         </div>
     </div>
-    
+
   </div>
 </template>
 <script>
@@ -177,5 +176,5 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  
+
 </style>

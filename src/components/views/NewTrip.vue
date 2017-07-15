@@ -56,7 +56,8 @@
                     </div>
                     <div class="trip_time">
                         <label for="time" class="sr-only">Hora</label>
-                        <input type="text" v-model="time" class="form-control form-control-with-icon form-control-time" id="time" placeholder="Hora" />
+                        <input type="time" v-mask="'##:##'" v-model="time" class="form-control form-control-with-icon form-control-time" id="time" placeholder="Hora (12:00)" >
+                        <!--<input type="text" v-model="time" />-->
                     </div>
                 </div>
                 <div class="trip_seats-available">
@@ -297,7 +298,7 @@ export default {
             });
             this.trip.from_town = this.points[0].name;
             this.trip.to_town = this.points[this.points.length - 1].name;
-            this.trip.trip_date = this.date + ' ' + this.time;
+            this.trip.trip_date = this.date + ' ' + this.time + ':00';
             this.trip.estimated_time = this.estimatedTimeString;
             if (this.cars && this.cars.length) {
                 this.trip.car_id = this.cars[0].id;

@@ -1,7 +1,7 @@
 <template>
   <div class="friends-component" >
-    <div class="row">   
-        
+    <div class="row">
+
         <Loading :data="pendings" :hideOnEmpty="true">
             <h1 slot="title">Solicitudes de amistad</h1>
             <div id="friends-list">
@@ -13,29 +13,31 @@
                     </template>
                 </FriendCard>
             </div>
-            <p slot="no-data" class="alert alert-warning"  role="alert">No hay solicitudes nuevas</p> 
+            <p slot="no-data" class="alert alert-warning"  role="alert">No hay solicitudes nuevas</p>
             <p slot="loading" class="alert alert-info" role="alert">Cargando solicitudes ...</p>
         </Loading>
 
-        <h1>Amigos</h1>
-        <div class="form-group">
-            <label for="input-name">Buscar: </label>
-            <input v-on:input="onTextChange" v-model="text" type="text" class="form-control" id="input-name" placeholder="Buscar amigo">
+        <h2>Amigos</h2>
+        <div class="form-inline form-inline-with-margin">
+            <div class="form-group ">
+                <label for="input-name">Nombre</label>
+                <input v-on:input="onTextChange" v-model="text" type="text" class="form-control" id="input-name" placeholder="Buscar amigo">
 
-            <router-link :to="{name: 'friends_search'}" tag="button" class="btn"> Buscar personas </router-link>
+                <router-link :to="{name: 'friends_search'}" tag="button" class="btn btn-primary"> Buscar </router-link>
+            </div>
         </div>
         <Loading :data="friends">
             <div id="friends-list">
                 <FriendCard v-for="user in friends" :user="user">
                     <template slot>
-                        
+
                         <button @click="onDeleteClick(user)" class="btn btn-primary"> Eliminar </button>
                         <span v-if="idRequesting == user.id">En proceso...</span>
-                        
+
                     </template>
                 </FriendCard>
             </div>
-            <p slot="no-data" class="alert alert-warning"  role="alert">{{noResult}}</p> 
+            <p slot="no-data" class="alert alert-warning"  role="alert">{{noResult}}</p>
             <p slot="loading" class="alert alert-info" role="alert">Cargando amigos ...</p>
         </Loading>
     </div>
@@ -122,5 +124,5 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  
+
 </style>
