@@ -16,7 +16,6 @@ const actions = {
 
 const mutations = {
     [types.BACKGROUND_SET_STYLE] (state, style) {
-        console.log('mutating');
         state.background_style = style;
     }
 };
