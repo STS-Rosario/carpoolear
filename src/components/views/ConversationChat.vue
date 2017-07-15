@@ -3,14 +3,16 @@
         <div class="list-group">
             <div class="list-group-item">
                 <h2> {{conversation.title}} </h2>
-                <span class="chat_last_connection"> {{lastConnection | moment("calendar")}}  </span>
+                <p class="chat_last_connection">
+                    <strong>Última conexión: </strong>
+                    <span class="">{{lastConnection | moment("calendar")}}</span>
+                </p>
             </div>
-            <div class="list-group-item">
+            <div class="list-group-item clearfix">
                 <div>
                     <button @click="searchMore" v-if="!lastPageConversation" class="btn text-center btn-full-width" v-jump:click.blur="'btn_login'"> Ver más mensajes </button>
                 </div>
-                <MessageView v-for="m in messages" :message="m" :user="user" :users="conversation.users">
-                </MessageView>
+                <MessageView v-for="m in messages" :message="m" :user="user" :users="conversation.users"></MessageView>
             </div>
             <div class="list-group-item">
                 <div class="input-group">

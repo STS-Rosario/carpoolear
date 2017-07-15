@@ -53,6 +53,7 @@ h1 {
 textarea {
     resize: none;
     width: 100%;
+    border: 1px solid #666666;
 }
 .no-bullet {
     list-style: none;
@@ -278,6 +279,12 @@ input[type="checkbox"] {
     border-color: var(--soft-font-color);
 
 }
+.form-inline-with-margin {
+    margin-bottom: 1.5em;
+}
+.form-inline-with-margin .form-control {
+    margin-bottom: 0;
+}
 /* -------------------- */
 .form-control-with-icon {
     padding: .8em .8em .8em 2.5em;
@@ -474,7 +481,7 @@ textarea {
     border: none;
     color: white;
 }
-.nav>li>a {
+.nav > li > a {
     padding: 10px 0;
 }
 .nav>li>a:hover,
@@ -504,7 +511,9 @@ textarea {
     margin-left: -12px;
     z-index: 1;
 }
-
+.nav-pills > li > a {
+    padding: 10px 15px;
+}
 .card-trip {
     box-shadow: 0 0 4px 1px #CCC;
     border-radius: .4em;
@@ -706,26 +715,33 @@ textarea {
     border-radius: .4rem;
     color: var(--secondary-font-color);
 
-    padding: 1.5em;
+    padding: 1em;
     margin-bottom: 1.5em;
-    margin-right: 1.5em;
 }
-.trip-type-selection:after { /* CSS Arrow */
-	left: 100%;
-	top: 30%;
-	border: solid transparent;
-	content: " ";
-	height: 0;
-	width: 0;
-	position: absolute;
-	pointer-events: none;
-	border-color: rgba(136, 183, 213, 0);
-	border-left-color: var(--secondary-background);
-	border-width: 9px;
-	margin-top: -9px;
+@media (min-width: 768px) {
+
+    .trip-type-selection {
+        padding: 1.5em;
+        margin-right: 1.5em;
+    }
+    .trip-type-selection:after { /* CSS Arrow only for no mobiles */
+        left: 100%;
+        top: 30%;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+        border-color: rgba(136, 183, 213, 0);
+        border-left-color: var(--secondary-background);
+        border-width: 9px;
+        margin-top: -9px;
+    }
 }
+
 .trip-type-selection .control-label {
-  color: #FFFFFF;
+    color: #FFFFFF;
 }
 .trip_points,
 .trip_information {
@@ -886,7 +902,9 @@ textarea {
     left: -8px;
     text-shadow: 1px 1px 1px #333;
 }
-
+.form-trip .map {
+    margin-top: 1.5em;
+}
 .xcv {
     border-bottom: 1px solid #CCC;
     margin-bottom: 1rem;
@@ -928,13 +946,40 @@ textarea {
     border-top-right-radius: 0;
     border-top-left-radius: 0;
 }
-.conversation_list .conversation_image {
+.conversation_image {
     margin-right: 10px;
     vertical-align: middle;
     width: 56px;
     height: 56px;
 }
-
+.message-wrapper {
+    text-align: left;
+    margin-bottom: 1em;
+}
+.message-wrapper-me {
+    text-align: right;
+}
+.message-wrapper .message {
+    display: inline-block;
+    padding: .5em 1em;
+    border-radius: 5px;
+    width: auto;
+    background: var(--secondary-background);
+    color: var(--secondary-font-color);
+}
+.conversation_chat--chats  .media-body,
+.message-wrapper .message .media-body {
+    width: auto;
+}
+.message-wrapper-me .message {
+    background: var(--trip-almost-fill-color);
+    color: var(--secondary-font-color);
+}
+.message_meta {
+    text-align: right;
+    font-size: 0.8em;
+    color: var(--soft-font-color);
+}
 .update-profile-component .form {
     padding: 2.2em;
 }
@@ -1162,7 +1207,9 @@ textarea {
 .container {
     padding-top: 1.5em;
 }
-
+.conversation-component {
+    padding-bottom: 3em;
+}
 .footer-component .container {
     padding: 2.4em 0;
 }
@@ -1376,6 +1423,10 @@ ul {
 }
 
 @media only screen and (max-width: 768px) {
+    .trip-create {
+        width: 100%;
+        margin: 1em 0;
+    }
     .profile_image .circle-box {
         max-height: 220px;
         max-width: 220px;
@@ -1418,6 +1469,10 @@ ul {
     }
     .update-profile-component .form {
         margin-top: 7em;
+    }
+
+    .form-trip {
+        padding: 12px 15px;
     }
 }
 
