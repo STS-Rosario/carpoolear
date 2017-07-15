@@ -1,7 +1,7 @@
 <template>
     <div class="new-trip-component form form-trip container">
         <div class="row">
-            <div class="col-xs-8">
+            <div class="col-xs-24 col-sm-8">
                 <fieldset class="trip-type-selection">
                     <div class="radio-option">
                         <input type="radio" id="type-driver" value="0" v-model="trip.is_passenger">
@@ -17,7 +17,7 @@
                     <label for="no-lucrar" class="trip_terms_label">Me comprometo a no lucrar con el viaje</label>
                 </div>
             </div>
-            <div class="col-xs-8 xcv">
+            <div class="col-xs-24 xcv col-sm-8">
                 <div class="trip_points">
                     <div v-for="(m, index) in points" class="trip_point">
                         <span v-if="index == 0" class="sr-only">Origen</span>
@@ -26,7 +26,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-8 xcv">
+            <div class="col-xs-24 col-sm-8 xcv">
                 <div class="trip_information">
                         <ul class="no-bullet">
                             <li class="list_item">
@@ -46,9 +46,9 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-xs-8">
+            <div class="col-xs-24 col-sm-8">
             </div>
-            <div class="col-xs-8">
+            <div class="col-xs-24 col-sm-8">
                 <div class="trip_datetime">
                     <div class="trip_date">
                         <label for="date" class="sr-only">Día </label>
@@ -86,7 +86,7 @@
                     <textarea v-model="trip.description" id="trp_comment" class="form-control"></textarea>
                 </div>
             </div>
-            <div class="col-xs-8">
+            <div class="col-xs-24 col-sm-8">
                 <fieldset class="trip-privacity">
                     <legend class="label-for-group"> Privacidad del viaje </legend>
                     <ul class="no-bullet">
