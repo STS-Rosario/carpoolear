@@ -1,6 +1,6 @@
 <template>
   <div class="user-form container" >
-  <img src="/static/img/carpoolear_logo.png" />
+    <img src="/static/img/carpoolear_logo.png" />
     <h1> Ingresá con tu cuenta de <span class='brand'>Carpoolear</span> </h1>
     <div class='form row'>
       <div class="col-md-12">

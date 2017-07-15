@@ -16,29 +16,47 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    let meta = to.meta.actionbar || {};
+    let actionbar = to.meta.actionbar || {};
+    let background = to.meta.background || {};
     let user = store.getters['auth/checkLogin'];
-    if (user && meta.footer) {
-        if (meta.footer.show) {
+    if (user && actionbar.footer) {
+        if (actionbar.footer.show) {
             store.dispatch('actionbars/showFooter', true);
+        } else {
+            store.dispatch('actionbars/showFooter', false);
         }
-        if (meta.footer.active_id) {
-            store.dispatch('actionbars/setActiveFooter', meta.footer.active_id);
+        if (actionbar.footer.active_id) {
+            store.dispatch('actionbars/setActiveFooter', actionbar.footer.active_id);
         }
     } else {
         store.dispatch('actionbars/showFooter', false);
     }
 
-    if (meta.header) {
-        if (meta.header.title) {
-            store.dispatch('actionbars/setTitle', meta.header.title);
+    if (actionbar.header) {
+        if (actionbar.header.title) {
+            store.dispatch('actionbars/setTitle', actionbar.header.title);
+        } else {
+            store.dispatch('actionbars/setTitle', 'Carpoolear');
         }
-        if (meta.header.buttons) {
-            store.dispatch('actionbars/setHeaderButtons', meta.header.buttons);
+        if (actionbar.header.buttons) {
+            store.dispatch('actionbars/setHeaderButtons', actionbar.header.buttons);
+        } else {
+            store.dispatch('actionbars/setHeaderButtons', []);
+        }
+        if (actionbar.header.logo) {
+            store.dispatch('actionbars/showHeaderLogo', actionbar.header.logo.show);
+        } else {
+            store.dispatch('actionbars/showHeaderLogo', true);
         }
     } else {
         store.dispatch('actionbars/setTitle', 'Carpoolear');
         store.dispatch('actionbars/setHeaderButtons', []);
+        store.dispatch('actionbars/showHeaderLogo', true);
+    }
+    if (background.style) {
+        store.dispatch('background/setBackgroundStyle', background.style);
+    } else {
+        store.dispatch('background/setBackgroundStyle', 'white');
     }
     window.scrollTo(0, 0);
     next();

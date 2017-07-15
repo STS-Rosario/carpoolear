@@ -14,12 +14,36 @@ export default [
     {
         path: '/login',
         name: 'login',
-        component: require('../components/views/Login')
+        component: require('../components/views/Login'),
+        meta: {
+            actionbar: {
+                header: {
+                    logo: {
+                        show: false
+                    }
+                }
+            },
+            background: {
+                style: 'blue'
+            }
+        }
     },
     {
         path: '/register',
         name: 'register',
-        component: require('../components/views/Register')
+        component: require('../components/views/Register'),
+        meta: {
+            actionbar: {
+                header: {
+                    logo: {
+                        show: false
+                    }
+                }
+            },
+            background: {
+                style: 'blue'
+            }
+        }
     },
     {
         path: '/activate/:token',
@@ -31,7 +55,19 @@ export default [
         path: '/reset-password',
         name: 'reset-password',
         component: require('../components/views/ResetPassword'),
-        props: true
+        props: true,
+        meta: {
+            actionbar: {
+                header: {
+                    logo: {
+                        show: false
+                    }
+                }
+            },
+            background: {
+                style: 'blue'
+            }
+        }
     },
     {
         path: '/reset-password/:token',

@@ -29,6 +29,7 @@ const state = {
             position: 'right'
         }
     ],
+    header_logo_visibility: true,
     footer_visibility: true,
     footer_buttons: [
         {
@@ -68,13 +69,14 @@ const getters = {
     title: state => state.title,
     leftHeaderButton: state => state.header_buttons.filter(item => item.position === 'left'),
     rightHeaderButton: state => state.header_buttons.filter(item => item.position === 'right'),
+    headerLogoVisibility: state => state.header_logo_visibility,
 
     footerShow: state => state.footer_visibility,
     footerButtons: state => state.footer_buttons
 };
 
 const actions = {
-    setTitle (store, title) {
+    setTitle (store, title = 'Carpoolear') {
         store.commit(types.HEADER_SET_TITLE, title);
         if (document) {
             document.title = title + ' - Carpoolear';
@@ -83,6 +85,10 @@ const actions = {
 
     setHeaderButtons (store, items) {
         store.commit(types.HEADER_SET_VISIBILITY, items);
+    },
+
+    showHeaderLogo (store, show = true) {
+        store.commit(types.HEADER_LOGO_SET_VISIBILITY, show);
     },
 
     showFooter (store, show) {
@@ -121,6 +127,10 @@ const mutations = {
                 item.show = true;
             }
         });
+    },
+
+    [types.HEADER_LOGO_SET_VISIBILITY] (state, show) {
+        state.header_logo_visibility = show;
     },
 
     [types.FOOTER_SET_ACTIVE] (state, id) {

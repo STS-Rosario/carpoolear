@@ -15,6 +15,7 @@ import notifications from './modules/notifications';
 import rates from './modules/rates';
 import actionbars from './modules/actionbars';
 import profile from './modules/profile';
+import background from './modules/background';
 
 Vue.use(Vuex);
 
@@ -37,6 +38,7 @@ export default new Vuex.Store({
         notifications,
         rates,
         actionbars,
-        profile
+        profile,
+        background
     }
 });

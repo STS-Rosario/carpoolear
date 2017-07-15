@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container" :class="actualRouteName">
+  <div class="app-container" :class="backgroundStyle">
     <headerApp></headerApp>
     <main id="main">
       <div class="view-container">
@@ -23,23 +23,13 @@ import headerApp from './components/sections/Header.vue';
 
 export default {
     name: 'app',
-    methods: {
-        setRouteClass: function (route) {
-            this.actualRouteName = 'route--' + route.name;
-        }
-    },
     computed: mapGetters({
-        deviceReady: 'cordova/deviceReady'
+        deviceReady: 'cordova/deviceReady',
+        backgroundStyle: 'background/backgroundStyle'
     }),
-    created () {
-        this.setRouteClass(this.$route);
-    },
     watch: {
         deviceReady: () => {
             console.log('Device ready from components');
-        },
-        '$route': function (to, from) {
-            this.setRouteClass(to);
         }
     },
     data () {

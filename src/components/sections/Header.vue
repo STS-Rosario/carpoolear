@@ -24,10 +24,10 @@
         </div>
         <div class="header_content hidden-xs">
             <router-link :to="{name: 'trips'}">
-                <div class="header_panel-left">
+                <div class="header_panel-left" v-if="logoHeaderVisibility" >
                     <img :src="background_desktop_mini" v-if="isNotLargeDesktop" />
                     <img :src="background_desktop" v-if="!isNotLargeDesktop" />
-                    <img :src="carpoolear_logo" />
+                    <img :src="carpoolear_logo"/>
                     <!--<router-link tag="h1" :to="{name: 'trips'}" class="header_title"> Carpoolear </router-link>-->
                 </div>
             </router-link>
@@ -104,6 +104,7 @@ export default {
             title: 'actionbars/title',
             leftHeaderButton: 'actionbars/leftHeaderButton',
             rightHeaderButton: 'actionbars/rightHeaderButton',
+            logoHeaderVisibility: 'actionbars/headerLogoVisibility',
             isNotLargeDesktop: 'device/isNotLargeDesktop'
         }),
 
@@ -113,10 +114,8 @@ export default {
                     return false;
                 }
             }
-
             return true;
         }
-
     },
 
     methods: {

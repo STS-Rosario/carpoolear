@@ -1127,9 +1127,9 @@ textarea {
     top: 8px;
 }
 
-.app-container.route--login,
-.app-container.route--register,
-.app-container.route--reset-password {
+.app-container.blue,
+.app-container.blue,
+.app-container.blue {
     background: rgba(1,155,225,1);
     background: -moz-linear-gradient(-45deg, rgba(1,155,225,1) 0%, rgba(1,101,135,1) 100%);
     background: -webkit-gradient(left top, right bottom, color-stop(0%, rgba(1,155,225,1)), color-stop(100%, rgba(1,101,135,1)));
@@ -1139,18 +1139,14 @@ textarea {
     background: linear-gradient(135deg, rgba(1,155,225,1) 0%, rgba(1,101,135,1) 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#019be1', endColorstr='#016587', GradientType=1 );
 }
-.app-container.route--login .header_panel-left > img,
-.app-container.route--register .header_panel-left > img,
-.app-container.route--reset-password .header_panel-left > img {
-    display: none;
-}
+
 .user-form {
     padding-left: 10px;
     padding-right: 10px;
     position: relative;
     max-width: 800px;
-    margin: 2.8rem auto 0 auto;
-    height: calc(100vh - 196px);
+    margin: 2.8rem auto 4.8rem auto;
+    min-height: calc(100vh - 196px);
 }
 .user-form label {
     text-transform: uppercase;
@@ -1359,6 +1355,9 @@ ul {
         background-color: white;
         content: "";
         top: -22px;
+    }
+    .app-container.blue .header::after {
+        background-color: #0185bc;
     }
     #trips-list {
         margin-bottom: 1rem;

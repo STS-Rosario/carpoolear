@@ -1,6 +1,7 @@
 <template>
   
-  <div class="register container" >
+  <div class="user-form container" >
+    <img src="/static/img/carpoolear_logo.png" />
     <h1> Registrar nuevo usuario </h1>
     <div class='form'>
       <label for="txt_name">Nombre</label>

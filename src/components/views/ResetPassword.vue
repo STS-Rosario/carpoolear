@@ -1,5 +1,6 @@
 <template>
     <div class="user-form container " >
+        <img src="/static/img/carpoolear_logo.png" />
         <h1> Recuperar contraseña </h1>
         <div v-if="send">
             <h3> Se ha enviado un email a su casilla de correo con las indicaciones para restablecer su contraseña. </h3>
