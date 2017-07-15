@@ -28,8 +28,12 @@ export default {
             this.actualRouteName = 'route--' + route.name;
         }
     },
+    mounted () {
+
+    },
     computed: mapGetters({
-        deviceReady: 'cordova/deviceReady'
+        deviceReady: 'cordova/deviceReady',
+        resolution: 'device/resolution'
     }),
     created () {
         this.setRouteClass(this.$route);

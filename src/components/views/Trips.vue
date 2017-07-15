@@ -5,19 +5,24 @@
             <h3>¡Elegí fecha, origen o destino y encontralo!</h3>
         </div>
 
-        <SearchBox :params="searchParams" v-on:trip-search="research" v-show="!isMobile || lookSearch"></SearchBox> 
+        <SearchBox :params="searchParams" v-on:trip-search="research" v-show="!isMobile || lookSearch"></SearchBox>
 
         <Loading :data="trips" v-if="showingTrips">
             <div id="trips-list">
                 <Trip v-for="trip in trips" :trip="trip" :user="user" ></Trip>
             </div>
+            <!--
             <div v-if="morePages">
                 <button class="btn btn-primary" @click="nextPage">Más resultados</button>
             </div>
-            <p slot="no-data" class="alert alert-warning"  role="alert">No hay viajes</p> 
+            -->
+            <div v-if="runningSearch">
+                Cargando más resultados
+            </div>
+            <p slot="no-data" class="alert alert-warning"  role="alert">No hay viajes</p>
             <p slot="loading" class="alert alert-info" role="alert">Cargando viajes ...</p>
         </Loading>
-    </div>    
+    </div>
 </template>
 <script>
 import Trip from '../sections/Trip.vue';
@@ -31,12 +36,14 @@ export default {
     data () {
         return {
             lookSearch: false,
-            filtered: false
+            filtered: false,
+            runningSearch: false
         };
     },
     methods: {
         ...mapActions({
             search: 'trips/tripsSearch',
+            morePages: 'trips/tripMorePage',
             setActionButton: 'actionbars/setHeaderButtons'
         }),
         research (params) {
@@ -59,16 +66,27 @@ export default {
             this.filtered = false;
             this.lookSearch = false;
             this.search({});
+        },
+        onScrolBottom () {
+            if (this.morePages) {
+                if (!this.runningSearch) {
+                    this.runningSearch = true;
+                    let done = () => { this.runningSearch = false; };
+                    this.search({next: true}).then(done, done);
+                }
+            }
         }
     },
     mounted () {
         // this.search();
         bus.on('search-click', this.onSearchButton);
         bus.on('clear-click', this.onClearButton);
+        bus.on('scroll-bottom', this.onScrolBottom);
     },
     beforeDestroy () {
         bus.off('search-click', this.onSearchButton);
         bus.off('clear-click', this.onClearButton);
+        bus.off('scroll-bottom', this.onScrolBottom);
     },
     computed: {
         ...mapGetters({
