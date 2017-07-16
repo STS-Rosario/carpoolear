@@ -195,14 +195,14 @@ input[type="checkbox"] {
 }
 .btn-with-icon:focus,
 .btn-with-icon:active,
-.btn-sarch:active:hover, 
-.btn-with-icon.active:hover, 
-.open > .dropdown-toggle.btn-with-icon:hover, 
-.btn-with-icon:active:focus, 
-.btn-with-icon.active:focus, 
-.open > .dropdown-toggle.btn-with-icon:focus, 
-.btn-with-icon.focus:active, 
-.btn-with-icon.active.focus, 
+.btn-sarch:active:hover,
+.btn-with-icon.active:hover,
+.open > .dropdown-toggle.btn-with-icon:hover,
+.btn-with-icon:active:focus,
+.btn-with-icon.active:focus,
+.open > .dropdown-toggle.btn-with-icon:focus,
+.btn-with-icon.focus:active,
+.btn-with-icon.active.focus,
 .open > .dropdown-toggle.btn-with-icon.focus {
     background-color: rgb(48, 75, 130);
 }
@@ -210,12 +210,12 @@ input[type="checkbox"] {
 .btn-with-icon:active .btn-with-icon--icon,
 .btn-sarch:active:hover .btn-with-icon--icon,
 .btn-with-icon.active:hover .btn-with-icon--icon,
-.open > .dropdown-toggle.btn-with-icon:hover .btn-with-icon--icon, 
-.btn-with-icon:active:focus .btn-with-icon--icon, 
-.btn-with-icon.active:focus .btn-with-icon--icon, 
-.open > .dropdown-toggle.btn-with-icon:focus .btn-with-icon--icon, 
-.btn-with-icon.focus:active .btn-with-icon--icon, 
-.btn-with-icon.active.focus .btn-with-icon--icon, 
+.open > .dropdown-toggle.btn-with-icon:hover .btn-with-icon--icon,
+.btn-with-icon:active:focus .btn-with-icon--icon,
+.btn-with-icon.active:focus .btn-with-icon--icon,
+.open > .dropdown-toggle.btn-with-icon:focus .btn-with-icon--icon,
+.btn-with-icon.focus:active .btn-with-icon--icon,
+.btn-with-icon.active.focus .btn-with-icon--icon,
 .open > .dropdown-toggle.btn-with-icon.focus .btn-with-icon--icon {
     background-color: #2c406d;
 }
@@ -1521,7 +1521,7 @@ ul {
     .user-form .form > div:last-child{
         color: inherit;
         margin-top: inherit;
-    }    
+    }
     .user-form .form {
         padding: 5.2em 2em 3em 2em;
         box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.1);
@@ -1643,4 +1643,91 @@ ul {
     .header_panel-right .btn-link {
         padding: 12px;
     }
+}
+
+
+/**
+ * Tooltip Styles
+ */
+
+/* Add this attribute to the element that needs a tooltip */
+[data-tooltip] {
+  position: relative;
+  z-index: 2;
+  cursor: pointer;
+}
+
+/* Hide the tooltip content by default */
+[data-tooltip]:before,
+[data-tooltip]:after {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Position tooltip above the element */
+[data-tooltip]:before {
+  position: absolute;
+  bottom: 150%;
+  left: 50%;
+  margin-bottom: 5px;
+  margin-left: -160px;
+  padding: 7px;
+  width: 320px;
+  border-radius: 3px;
+  background-color: #000;
+  background-color: hsla(0, 0%, 20%, 0.9);
+  color: #fff;
+  content: attr(data-tooltip);
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.2;
+  padding: 1em;
+}
+
+/* Triangle hack to make tooltip look like a speech bubble */
+[data-tooltip]:after {
+  position: absolute;
+  bottom: 150%;
+  left: 50%;
+  margin-left: -5px;
+  width: 0;
+  border-top: 5px solid #000;
+  border-top: 5px solid hsla(0, 0%, 20%, 0.9);
+  border-right: 5px solid transparent;
+  border-left: 5px solid transparent;
+  content: " ";
+  font-size: 0;
+  line-height: 0;
+}
+
+/* Show tooltip content on hover */
+[data-tooltip]:hover:before,
+[data-tooltip]:hover:after {
+  visibility: visible;
+  opacity: 1;
+}
+/* Bottom */
+.tooltip-bottom:before,
+.tooltip-bottom:after {
+  top: 100%;
+  bottom: auto;
+  left: 50%;
+}
+
+.tooltip-bottom:before {
+  margin-top: -12px;
+  margin-bottom: 0;
+  border-top-color: transparent;
+  border-bottom-color: #000;
+  border-bottom-color: hsla(0, 0%, 20%, 0.9);
+}
+
+.tooltip-bottom:hover:before,
+.tooltip-bottom:hover:after,
+.tooltip-bottom:focus:before,
+.tooltip-bottom:focus:after {
+  -webkit-transform: translateY(12px);
+  -moz-transform:    translateY(12px);
+  transform:         translateY(12px);
 }
