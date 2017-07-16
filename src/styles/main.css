@@ -941,7 +941,9 @@ textarea {
     cursor: pointer;
     margin-left: 2px;
 }
-
+.conversation_header {
+    color: var(--main-font-color);
+}
 .conversation_chat--chats .list-group-item:first-child {
     border-top-right-radius: 0;
     border-top-left-radius: 0;

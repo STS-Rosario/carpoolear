@@ -16,14 +16,14 @@
                     </li>
                     <template v-if="textSearch.length == 0">
                         <Loading class="conversation_chat--chats" :data="conversations">
-                            <li v-for="conversation in conversations" class="list-group-item" @click="onChangeConversation(conversation)" :class="{'unread': conversation.unread, 'active': selected && conversation.id === selected.id  }" >
+                            <li v-for="conversation in conversations" class="list-group-item conversation_header" @click="onChangeConversation(conversation)" :class="{'unread': conversation.unread, 'active': selected && conversation.id === selected.id  }" >
                                 <div class="media">
                                   <div class="media-left">
                                     <div class="conversation_image circle-box" v-imgSrc:conversation="conversation.image"></div>
                                   </div>
                                   <div class="media-body">
                                     <h4 class="media-heading"><span class="conversation-title">{{ conversation.title }}</span></h4>
-                                    <span v-if="conversation.last_message"> {{ conversation.last_message.text ? conversation.last_message.text.substring(0, conversation.last_message.text < 50 ? conversation.last_message.text : 50) + (conversation.last_message.text < 50 ? '' : ' ...') : '' }} </span>
+                                    <span v-if="conversation.last_message"> {{ conversation.last_message.text ? conversation.last_message.text.substring(0, conversation.last_message.text.length < 50 ? conversation.last_message.text.length : 50) + (conversation.last_message.text.length < 50 ? '' : ' ...') : '' }} </span>
                                     <span class="conversation-timestamp" v-if="false">{{ conversation.updated_at | moment("h:mm a") }}</span>
                                   </div>
                                 </div>
