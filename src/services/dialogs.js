@@ -10,19 +10,21 @@ export default {
         }
         var defaultOptions = {
             duration: 2,
-            position: 'center'
+            position: 'center',
+            estado: 'success'
         };
         if (!options) {
             options = {};
         }
-        options = Object.assign(options, defaultOptions);
+        options = Object.assign(defaultOptions, options);
+        console.log(options);
         if (window && window.plugins && window.plugins.toast && window.plugins.toast.showWithOptions) {
             if (options.duration) {
                 options.duration = options.duration * 1000;
             }
             cordovaToast.toast(text, successCallback, options);
         } else {
-            alertifyjs.notify(text, 'success', options.duration, successCallback);
+            alertifyjs.notify(text, options.estado, options.duration, successCallback);
         }
     }
 };

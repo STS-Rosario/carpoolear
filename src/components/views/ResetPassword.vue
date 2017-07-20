@@ -1,6 +1,6 @@
 <template>
     <div class="user-form container " >
-        <img src="/static/img/carpoolear_logo.png" />
+        <img :src="carpoolear_logo" />
         <h1> Recuperar contraseña </h1>
         <div v-if="send">
             <h3> Se ha enviado un email a su casilla de correo con las indicaciones para restablecer su contraseña. </h3>
@@ -8,8 +8,8 @@
         <div class='form' v-else-if="!token">
             <label for="txt_email">E-mail</label>
             <input type="text" id="txt_email" v-model='email'/>
-            
-            <button class="btn btn-primary" @click="reset"> Recuperar contraseña </button> 
+
+            <button class="btn btn-primary" @click="reset"> Recuperar contraseña </button>
             <span v-if="loading" class='loading'> Espere... </span>
             <span v-if="error"> {{error}} </span>
         </div>
@@ -21,7 +21,7 @@
             <label for="txt_password">Repetir Password </label>
             <input  type="password" id="txt_password" v-model='password_confirmation' />
 
-            <button class="btn btn-primary" @click="change"> Cambiar contraseña </button> 
+            <button class="btn btn-primary" @click="change"> Cambiar contraseña </button>
             <span v-if="loading" class='loading'> Espere... </span>
             <span v-if="error"> {{error}} </span>
             </div>
@@ -48,7 +48,8 @@ export default {
             error: null,
             send: false,
             password_confirmation: '',
-            password: ''
+            password: '',
+            carpoolear_logo: process.env.ROUTE_BASE + 'static/img/carpoolear_logo.png'
         };
     },
 

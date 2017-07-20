@@ -1,6 +1,6 @@
 <template>
     <div>
-        <datePicker :date="date"  :option="option" v-on:change="updateDate" :limit="limit" class='date-picker'></datePicker>
+        <datePicker :date="date" ref="calendar" :option="option" v-on:change="updateDate" :limit="limit" class='date-picker'></datePicker>
         <div class="date-picker--cross">
             <i v-on:click="resetDatePicker" class="fa fa-times" aria-hidden="true"></i>
         </div>
@@ -13,6 +13,12 @@ import moment from 'moment';
 
 export default {
     name: 'calendar',
+    watch: {
+        'value': function () {
+            this.date.time = moment(this.value).format('DD/MM/YYYY');
+            this.$refs.calendar.showDay(this.date.time);
+        }
+    },
     data () {
         return {
             date: {

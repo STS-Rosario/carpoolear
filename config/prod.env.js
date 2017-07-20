@@ -22,6 +22,6 @@ if (process.env.PLATFORM && process.env.PLATFORM == 'DESKTOP') {
     config.ROUTE_BASE = '""';
   }
 }
-
+console.log(config.ROUTE_BASE);
 
 module.exports = config;

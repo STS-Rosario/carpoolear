@@ -96,6 +96,10 @@ export default {
         };
     },
 
+    mounted () {
+        console.log(this.carpoolear_logo);
+    },
+
     computed: {
         ...mapGetters({
             logged: 'auth/checkLogin',

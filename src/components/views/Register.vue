@@ -1,7 +1,7 @@
 <template>
-  
+
   <div class="user-form container" >
-    <img src="/static/img/carpoolear_logo.png" />
+    <img :src="carpoolear_logo" />
     <h1> Registrar nuevo usuario </h1>
     <div class='form'>
       <label for="txt_name">Nombre</label>
@@ -35,7 +35,8 @@ export default {
             passwordConfirmation: '',
             name: '',
             sureName: '',
-            termsAndConditions: false
+            termsAndConditions: false,
+            carpoolear_logo: process.env.ROUTE_BASE + 'static/img/carpoolear_logo.png'
         };
     },
     computed: {
