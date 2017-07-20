@@ -17,7 +17,7 @@
 
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import footerApp from './components/sections/Footer.vue';
 import headerApp from './components/sections/Header.vue';
 
@@ -26,15 +26,24 @@ export default {
     methods: {
         setRouteClass: function (route) {
             this.actualRouteName = 'route--' + route.name;
-        }
+        },
+        ...mapActions({
+            fbLogin: 'cordova/facebookLogin'
+        })
     },
     mounted () {
-
+        if (this.isFacebookApp()) {
+            if (!this.logged) {
+                this.fbLogin();
+            }
+        }
     },
     computed: mapGetters({
         deviceReady: 'cordova/deviceReady',
         backgroundStyle: 'background/backgroundStyle',
-        resolution: 'device/resolution'
+        resolution: 'device/resolution',
+        logged: 'auth/checkLogin',
+        isFacebokApp: 'device/isFacebokApp'
     }),
     watch: {
         deviceReady: () => {

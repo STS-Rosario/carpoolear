@@ -64,7 +64,7 @@
                         <li>
                             <router-link :to="{name: 'profile_update'}">Configuración</router-link>
                         </li>
-                        <li><a @click="logout">Cerrar sesión</a></li>
+                        <li><a @click="logout" v-if="!isFacebokApp">Cerrar sesión</a></li>
                     </dropdown>
                 </div>
 
@@ -105,7 +105,8 @@ export default {
             leftHeaderButton: 'actionbars/leftHeaderButton',
             rightHeaderButton: 'actionbars/rightHeaderButton',
             logoHeaderVisibility: 'actionbars/headerLogoVisibility',
-            isNotLargeDesktop: 'device/isNotLargeDesktop'
+            isNotLargeDesktop: 'device/isNotLargeDesktop',
+            isFacebokApp: 'device/isFacebokApp'
         }),
 
         showLogo () {

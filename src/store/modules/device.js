@@ -23,7 +23,8 @@ const getters = {
     isMobile: state => state.resolution.width < 768,
     isTablet: state => state.resolution.width >= 768 && state.resolution.width < 992,
     isDesktop: state => state.resolution.width >= 992,
-    isNotLargeDesktop: sate => sate.resolution.width < 1120
+    isNotLargeDesktop: sate => sate.resolution.width < 1120,
+    isFacebokApp: state => window.name !== ''
 };
 
 // actions
@@ -55,7 +56,7 @@ const actions = {
     },
 
     delete (store, id) {
-        return deviceApi.delete(id).then((response) => {
+        return deviceApi.remove(id).then((response) => {
             store.commit(types.DEVICE_DELETE, id);
         }).catch((err) => {
             console.log(err);
