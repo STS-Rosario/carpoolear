@@ -95,6 +95,7 @@ function register (store, { email, password, passwordConfirmation, name, termsAn
 
     return userApi.register(data).then((data) => {
         console.log(data);
+        return Promise.resolve();
     }).catch((err) => {
         if (err.response) {
             console.log(err.response.data);
@@ -106,6 +107,7 @@ function register (store, { email, password, passwordConfirmation, name, termsAn
 
             }
         }
+        return Promise.reject();
     });
 }
 
