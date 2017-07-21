@@ -58,7 +58,7 @@ export default {
                     let status = resp.response.status;
                     reject({ data, status });
                 } else {
-                    console.log(resp);
+                    reject(resp);
                 }
             });
         });

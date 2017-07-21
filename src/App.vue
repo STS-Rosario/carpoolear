@@ -32,7 +32,7 @@ export default {
         })
     },
     mounted () {
-        if (this.isFacebookApp()) {
+        if (this.isFacebookApp) {
             if (!this.logged) {
                 this.fbLogin();
             }

@@ -44,8 +44,9 @@ function login (store, { email, password }) {
     creds.email = email;
     creds.password = password;
 
-    authApi.login(creds).then((response) => {
+    return authApi.login(creds).then((response) => {
         onLoggin(store, response.token);
+        return Promise.resolve();
     }, ({data, status}) => {
         return Promise.reject(data);
     });
@@ -94,6 +95,7 @@ function register (store, { email, password, passwordConfirmation, name, termsAn
 
     return userApi.register(data).then((data) => {
         console.log(data);
+        return Promise.resolve();
     }).catch((err) => {
         if (err.response) {
             console.log(err.response.data);
@@ -105,6 +107,7 @@ function register (store, { email, password, passwordConfirmation, name, termsAn
 
             }
         }
+        return Promise.reject();
     });
 }
 
