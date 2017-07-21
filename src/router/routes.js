@@ -255,5 +255,18 @@ export default [
     {
         path: '/*',
         redirect: '/trips'
+    },
+    {
+        path: '/about',
+        name: 'acerca_de',
+        component: require('../components/views/About'),
+        meta: {
+            actionbar: {
+                header: {
+                    title: 'Acerca de',
+                    buttons: ['clear']
+                }
+            }
+        }
     }
 ];
