@@ -13,8 +13,11 @@
                     </div>
                 </fieldset>
                 <div class="trip_terms">
-                    <input type="checkbox" id="no-lucrar" />
+                    <input type="checkbox" id="no-lucrar" v-model="no_lucrar"/>
                     <label for="no-lucrar" class="trip_terms_label">Me comprometo a no lucrar con el viaje</label>
+                    <span class="tooltip-bottom" data-tooltip="No hay lucro mientras el conductor no pida una contribución mayor al costo de la nafta + los peajes vinculados al viaje, dividido la cantidad de viajeros (sí, el conductor es un viajero!!!). ¡Los asientos no tienen un valor! no sos un colectivo ;) . Al no lucrar, evitas ser un transporte ilegal de pasajeros, lo cual genera problemas con la validez del seguro particular automotor. Tengamos un buen viaje y cuidemosnos entre todos :)">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                    </span>
                 </div>
             </div>
             <div class="col-xs-24 xcv col-sm-8">
@@ -135,13 +138,13 @@
         </div>
   </div>
 </template>
-
 <script>
 import {mapActions, mapGetters} from 'vuex';
 import {parseStreet} from '../../services/maps.js';
 import Calendar from '../Calendar';
 import bus from '../../services/bus-event.js';
 import router from '../../router';
+import dialogs from '../../services/dialogs.js';
 
 export default {
     name: 'new-trip',
@@ -156,6 +159,7 @@ export default {
     },
     data () {
         return {
+            no_lucrar: false,
             zoom: 4,
             center: {lat: -29.0, lng: -60.0},
             points: [
@@ -286,6 +290,10 @@ export default {
         },
 
         save () {
+            if (!this.no_lucrar) {
+                dialogs.message('Debes indicar que te comprometes a no lucar', {estado: 'error'});
+                return;
+            }
             /* eslint-disable no-unreachable */
             this.trip.points = [];
             this.points.forEach(p => {

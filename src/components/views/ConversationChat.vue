@@ -16,7 +16,7 @@
             </div>
             <div class="list-group-item">
                 <div class="input-group">
-                    <input v-model="message" type="text" class="form-control" placeholder="Escribir mensaje..." v-jump:click="'btn-send'">
+                    <input v-model="message" type="text" class="form-control" placeholder="Escribir mensaje..." v-jump:click="'btn-send'" maxlength="255">
                     <span class="input-group-btn">
                         <button ref="btn-send" id="btn-send" class="btn btn-default" type="button" @click="sendMessage">
                             <i class="fa fa-play" aria-hidden="true"></i>

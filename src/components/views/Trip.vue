@@ -1,6 +1,6 @@
-<template>  
+<template>
     <div class='container'>
-        <template v-if="trip"> 
+        <template v-if="trip">
             <div class="trip-detail-component container">
                 <div class="row form">
                     <div class="col-sm-9 col-md-8 col-lg-7 driver-container">
@@ -85,7 +85,7 @@
                                     <div class="trip_seats-available col-xs-offset-2 col-xs-12">
                                         <span class="trip_seats-available_value pull-left">{{ trip.seats_available }}</span>
                                         <span class="trip_seats-available_label">Lugares<br>libres</span>
-                                    </div> 
+                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-xs-offset-2 col-xs-12" v-if="trip.passenger.length">
@@ -98,7 +98,7 @@
                                                 </span>
                                             </li>
                                         </ul>
-                                    </div> 
+                                    </div>
                                     <div v-else style="height: 2em;"></div>
                                 </div>
                             </div>
@@ -127,15 +127,15 @@
                                 <template v-if="!owner && !trip.is_passenger">
                                     <button class="btn btn-primary" @click="toMessages" v-if="!owner"> Coordinar viaje  </button>
                                     <template v-if="!isPassenger">
-                                        <button class="btn btn-primary" @click="makeRequest" v-if="canRequest"> Solicitar asciento </button>
+                                        <button class="btn btn-primary" @click="makeRequest" v-if="canRequest"> Solicitar asiento </button>
                                         <button class="btn" v-if="!canRequest" @click="cancelRequest"> Solicitud enviada </button>
                                     </template>
-                                    
+
                                     <template v-if="isPassenger">
                                         <button class="btn btn-primary" @click="cancelRequest" v-if="canRequest"> Cancelar viaje </button>
                                     </template>
                                 </template>
-                                
+
                             </div>
                         </div>
                     </div>
