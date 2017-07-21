@@ -2,11 +2,10 @@
   <div class="about-page container">
     <div class="jumbotron">
         <h1>
-            Acerca de Carpoolear
-            <small>Un proyecto de STS Rosario</small>
+            Carpoolear
         </h1>
     </div>
-    <p class="lead">Carpoolear es un proyecto de STS Rosario. El objetivo de STS Rosario en el que fundamentalmente se enmarca este proyecto es el de minimizar el impacto ambiental de nuestras actividades cotidianas.</p>
+    <p class="lead">Es un proyecto de <abbr title="Soluciones Tecnológicas Sustentables">STS</abbr> Rosario. El objetivo de STS Rosario en el que fundamentalmente se enmarca este proyecto es el de minimizar el impacto ambiental de nuestras actividades cotidianas.</p>
     <h2>Misión</h2>
     <p>El objetivo de Carpoolear es masificar la práctica de carpooling e incentivar el uso racional y eficiente del automóvil como modo de transporte. Con ello se busca lograr disminuir:</p>
 
@@ -54,9 +53,9 @@
         <li>Gobierno de la Provincia de Santa Fe - “Ingenia 3” (2012)</li>
 
     </ul>
-    <div>___________________________________</div>
+    <div aria-hidden="true" style="cursor: default;">_____________________________</div>
 
-    <img v-if="!isMobile" src="/static/img/espacio_santafesino.jpg" />
+    <img class="img-ES" src="/static/img/espacio_santafesino.jpg" alt="Realizado con el apoyo de Espacio Santafesino, Ministerio de Innovación y Cultura de Santa Fe. Convocatoria 2016." />
 
 
 
@@ -70,6 +69,12 @@
         margin: 3em auto;
         padding: 2em;
     }
+    @media (max-width: 768px) {
+        .about-page {
+            box-shadow: none;
+            margin: 0 auto;
+        }
+    }
     h1 {
         color: #E0191C;
     }
@@ -80,6 +85,9 @@
     }
     h2 {
         color: #016386;
+    }
+    .img-ES {
+        max-width: 100%;
     }
 </style>
 

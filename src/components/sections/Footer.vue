@@ -1,7 +1,7 @@
 <template>
   <footer class="footer-component">
     <div class="actionbar actionbar-bottom visible-xs" v-if="footerShow">
-    
+
         <div class="actionbar_item" v-for="item in footerButtons" :class="{ active: item.active }" @click="onClick(item)">
             <span :class="{big: item.id === 'new-trip'}">
                 <i class="material-icons" aria-hidden="true" v-html="item.icon"></i>
@@ -14,7 +14,7 @@
             <div class="col-xs-6 col-md-6">
                 <h3>Acerca de ...</h3>
                 <ul>
-                    <li><a href="https://carpoolear.com.ar/acerca-de.php" target="_blank">Carpoolear</a></li>
+                    <li><a href="/about">Carpoolear</a></li>
                     <li><a href="https://carpoolear.com.ar/nosotros.php" target="_blank">Equipo</a></li>
                     <li><a href="http://www.stsrosario.org.ar/" target="_blank">STS Rosario</a></li>
                 </ul>
