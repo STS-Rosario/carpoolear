@@ -1733,3 +1733,35 @@ ul {
   -moz-transform:    translateY(12px);
   transform:         translateY(12px);
 }
+.social-share {
+    text-align: center;
+}
+.lnk-social-network {
+    font-size: 2em;
+    background: lightgray;
+    color: white;
+    border-radius: 5px;
+    min-width: 3em;
+    padding: 0;
+    display: inline-block;
+    text-align: center;
+    margin: .5em;
+}
+.lnk-social-network:focus,
+.lnk-social-network:hover {
+    color: white;
+    background: gray;
+}
+.lnk-facebook {
+    background: #3B5998;
+}
+.lnk-twitter {
+    background: #1DA1F2;
+}
+.lnk-google-plus {
+    background: #DB4437;
+}
+
+.lnk-whatsapp {
+    background: #09D261;
+}

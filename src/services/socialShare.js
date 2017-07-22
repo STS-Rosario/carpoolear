@@ -18,7 +18,7 @@ export default {
         if (window && window.plugins && window.plugins.socialsharing && window.plugins.socialsharing.shareWithOptions) {
             cordovaSocialShare.share(options);
         } else {
-        // Not implemented yet
+            // Not implemented yet
             console.warn('Warning: Social share without cordova not implemented yet.');
         }
     }
