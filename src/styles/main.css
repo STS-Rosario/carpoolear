@@ -70,10 +70,19 @@ label {
     margin-top: .3em;
     font-weight: normal;
 }
+input[type=radio] {
+    vertical-align: -3px;
+}
 input[type=checkbox] + label,
 input[type=radio] + label {
     margin-left: .5em;
     vertical-align: -1px;
+}
+.radio-inline input[type="radio"] {
+    margin-top: 7px;
+}
+.new-left {
+    padding-right: 1em;
 }
 .brand {
     font-weight: 400;
@@ -463,7 +472,12 @@ textarea {
 }
 
 .tab-content {
+    margin-top: 1rem;
+}
+
+.active-1 + .tab-content {
     margin-top: 2.8rem;
+    background-color: #fff;
 }
 
 .nav-tabs>li {
@@ -722,7 +736,7 @@ textarea {
 
     .trip-type-selection {
         padding: 1.5em;
-        margin-right: 1.5em;
+        margin-right: .5em;
     }
     .trip-type-selection:after { /* CSS Arrow only for no mobiles */
         left: 100%;
@@ -806,11 +820,8 @@ textarea {
     font-size: .95rem;
     min-height: 3em;
 }
-.trip-detail-component .trip_location>div:nth-child(2) {
-    margin-top: 1rem;
-}
 .trip-detail-component .trip_location-dot-line > div {
-    height: 3.2rem;
+    height: 3.6rem;
 }
 .trip-detail-component .trip_datetime {
     font-weight: 400;
@@ -866,15 +877,6 @@ textarea {
     margin-left: -12px;
     z-index: 1;
 }
-.trip-detail-component .buttons-container {
-    left: 42px;
-    bottom: -25px;
-    position: absolute;
-}
-
-.trip-detail-component .buttons-container button:first-child{
-    margin-right: 1em;
-}
 
 .trip-detail-component .btn {
     font-weight: 500;
@@ -899,22 +901,38 @@ textarea {
     color: white;
     font-weight: 400;
     font-size: 32px;
-    left: -8px;
+    left: -18px;
     text-shadow: 1px 1px 1px #333;
 }
 .form-trip .map {
     margin-top: 1.5em;
 }
-.xcv {
-    border-bottom: 1px solid #CCC;
-    margin-bottom: 1rem;
-    height: 11rem;
+.panel-trip-data {
+    margin-bottom: 3rem;
+}
+.panel-trip-data::after {
+    border-bottom: 1px dashed #CCC;
+    position: absolute;
+    width: 90%;
+    bottom: -.5rem;
+    margin-left: .6em;
 }
 .trip_terms {
-    margin-left: 1.5rem;
+    margin-left: .5rem;
 }
 .trip_terms_label {
+    display: inline;
     color: var(--secondary-background);
+}
+.trip_terms > div {
+    display: inline-block;
+    width: calc(100% - 30px);
+}
+.trip_terms input[type="checkbox"] {
+    width: 10px;
+    display: inline-block;
+    vertical-align: top;
+    margin-right: .3em;
 }
 .map_warning {
     background: #D6D6D6;
@@ -944,9 +962,16 @@ textarea {
 .conversation_header {
     color: var(--main-font-color);
 }
+.conversation_chat--chats {
+    cursor: pointer;
+}
 .conversation_chat--chats .list-group-item:first-child {
     border-top-right-radius: 0;
     border-top-left-radius: 0;
+}
+.pic-info {
+    text-align: center;
+    margin: 2em 0;
 }
 .conversation_image {
     margin-right: 10px;
@@ -995,12 +1020,19 @@ textarea {
     font-size: 1.4em;;
 }
 
-.profile-info-component .list-group-item i {
+.profile-info-component .list-group-item i,
+.profile-info-component i {
     float: left;
     width: 20%;
     color: var(--secondary-background);
     font-size: 20px;
     line-height: 20px;
+}
+
+.data-info .list-group-item:last-child {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
 }
 
 .profile-info-component .list-group-item .list-group-item--content {
@@ -1028,7 +1060,7 @@ textarea {
     border-left: 0;
     border-right: 0;
     padding-top: 1.4em;
-    padding-bottom: 3em;
+    padding-bottom: 5em;
 }
 .profile-info-component .edit-action button:first-child {
     margin-right: .8em;
@@ -1081,10 +1113,10 @@ textarea {
     margin-right: 0.8em;
 }
 
-.profile-info-component .list-group-item i.fa-thumbs-up {
+.profile-info-component i.fa-thumbs-up {
     color: green;
 }
-.profile-info-component .list-group-item i.fa-thumbs-down {
+.profile-info-component i.fa-thumbs-down {
     color: red;
 }
 
@@ -1211,6 +1243,10 @@ textarea {
 }
 .conversation-component {
     padding-bottom: 3em;
+}
+.conversation-component.container {
+    width: auto;
+    padding: 3em 2em;
 }
 .footer-component .container {
     padding: 2.4em 0;
@@ -1378,7 +1414,9 @@ ul {
     text-decoration: underline;
     padding-left: 0;
 }
-
+.desktop {
+    display: none;
+}
 
 @media only screen and (max-width: 400px) {
     .nav-tabs>li>a {
@@ -1387,10 +1425,12 @@ ul {
     .nav>li>a.active::after {
         top: 36px;
     }
-    .profile-info-component .list-group-item img {
+    .profile-info-component img {
         width: 80%;
     }
-    .profile .list-group-item {
+    .profile .list-group-item,
+    .pic-info {
+        margin: 0;
         padding: 10px 0;
     }
     .profile-info-component .edit-action button {
@@ -1479,8 +1519,115 @@ ul {
 }
 
 @media only screen and (min-width: 768px) {
-    .app-container .view-container {
-        padding-top: 7rem;
+    .settings-component {
+        margin-top: 3rem;
+    }
+    .settings-component .nav-pills a {
+        transition: 400ms;
+        padding-left: 0;
+    }
+    .settings-component .active > a{
+        padding-left: 1em;
+    }
+    .friends-component {
+        padding-left: 2em;
+    }
+    .update-profile-component {
+        padding-left: 2.2em;
+    }
+    .tabset h2 {
+        font-weight: 400;
+        text-transform: uppercase;
+    }
+    .pic-info {
+        margin: 0 0 2em 0;
+    }
+    .desktop {
+        display: initial;
+    }
+    .mobile {
+        display: none;
+    }
+    .active-1 + .tab-content {
+        margin-top: 2rem;
+        background-color: transparent;
+    }
+    .tab-pane.container {
+        padding-top: 0;
+    }
+    .nav > li > a {
+        font-weight: 300;
+        font-size: 1.3em;
+        padding: 8px 0;
+    }
+    .nav>li>a.active::after {
+        display: none;
+    }
+    .nav-tabs::after {
+        top: 3.2em;
+        position: absolute;
+        width: 100px;
+        border: 4px solid var(--trip-almost-fill-color);
+        transition: 500ms;
+    }
+    .nav-tabs.active-0::after {
+        left: calc(16.665% - 50px);
+    }
+    .nav-tabs.active-1::after {
+        left: calc(50% - 50px);
+    }
+    .nav-tabs.active-2::after {
+        left: calc(83.335% - 50px);
+    }
+    .nav-tabs {
+        padding-bottom: 3em;
+        border-bottom: 1px solid #aaa;
+        background-color: transparent;
+        padding-top: .4em;
+        width: 90%;
+        margin: 2em 5% 0 5%;
+        position: relative;
+    }
+    .nav-tabs {
+        border-bottom: 1px solid #aaa;
+    }
+    .nav>li>a:hover,
+    .nav>li>a:focus {
+        color: #777;
+    }
+    .nav>li>a.active {
+        color: var(--trip-almost-fill-color);
+    }
+    .tab-content .list-group-item {
+        background-color: transparent;
+        border: 0;
+        padding: 1.4em 0 0 3em;
+    }
+    .profile-info-component .list-group-item i {
+        width: 0;
+    }
+    .circle-box.profile {
+        max-width: 170px;
+        max-height: 170px;
+    }
+    .list-container {
+        margin: .8em 0;
+    }
+    .profile-info-component .edit-action {
+        border: 0;
+        background-color: transparent;
+        text-align: left;
+        padding-left: 2.8em;
+    }
+    .profile-info-component .edit-action .btn-primary {
+        padding: 1em 1.7em;
+        font-size: 12px;
+
+    }
+    .profile-info--name {
+        padding: 0 2.2em;
+        font-size: 18px;
+        color: #333;
     }
     .user-form .btn-primary {
         width: initial;
@@ -1534,7 +1681,7 @@ ul {
         right: -6px;
         bottom: -6px;
     }
-    .profile_image .circle-box {
+    .profile_image .circle-box.profile {
         max-height: 170px;
         max-width: 170px;
     }
@@ -1571,9 +1718,6 @@ ul {
     .view-container {
         padding-top: 8.6rem;
     }
-    .container {
-        padding-top: 0;
-    }
 }
 @media only screen and (max-width: 892px) {
     .header_panel-left img:first-child {
@@ -1584,6 +1728,10 @@ ul {
     }
 }
 @media only screen and (min-width: 992px) {
+    .new-left {
+        padding-left: 1.5em;
+        padding-right: 2.8em;
+    }
     .profile_image .circle-box {
         max-height: 240px;
         max-width: 240px;
@@ -1625,6 +1773,9 @@ ul {
     }
     .gmap-autocomplete .date-picker--cross {
         right: 20px;
+        top: 15px;
+    }
+    .search-section  .gmap-autocomplete .date-picker--cross {
         top: 23px;
     }
     .origin.gmap-autocomplete .date-picker--cross  {
@@ -1654,6 +1805,7 @@ ul {
 
 /* Add this attribute to the element that needs a tooltip */
 [data-tooltip] {
+  padding-left: .7em;
   position: relative;
   z-index: 2;
   cursor: pointer;
@@ -1764,4 +1916,7 @@ ul {
 
 .lnk-whatsapp {
     background: #09D261;
+}
+.ajs-error {
+    color: white;
 }

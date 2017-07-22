@@ -79,7 +79,7 @@ const actions = {
     setTitle (store, title = 'Carpoolear') {
         store.commit(types.HEADER_SET_TITLE, title);
         if (document) {
-            document.title = title + ' - Carpoolear';
+            document.title = title + (title !== 'Carpoolear' ? ' - Carpoolear' : '');
         }
     },
 
