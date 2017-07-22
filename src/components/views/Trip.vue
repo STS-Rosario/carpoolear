@@ -1,36 +1,11 @@
 <template>
     <div class='container'>
         <template v-if="trip">
-            <div class="trip-detail-component container">
+            <div class="trip-detail-component">
                 <div class="row form">
-                    <div class="col-sm-9 col-md-8 col-lg-7 driver-container">
-                        <div class="driver-profile">
-                            <div class="row">
-                                <div class="col-xs-9 col-md-8 col-lg-8">
-                                    <div class="trip_driver_img circle-box" v-imgSrc:profile="trip.user.image"></div>
-                                </div>
-                                <div class="col-xs-15 driver-data">
-                                    <div>{{trip.user.name}}</div>
-                                    <div class="profile-info--ratings">
-                                        <i class="material-icons" aria-hidden="true">&#xE8DC;</i> <span> {{trip.user.positive_ratings}} </span>
-                                        <i class="material-icons" aria-hidden="true">&#xE8DB;</i> <span> {{trip.user.negative_ratings}} </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-24">
-                                    <router-link class="btn-primary btn-search btn-shadowed-black" :to="{name: 'trips'}"> Ver Perfil </router-link>
-                                </div>
-                            </div>
-                            <div class="row italic quote">
-                                <i class="fa fa-quote-left" aria-hidden="true"></i>
-                                <span> {{trip.description}} </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-15 col-md-16 col-lg-17 white-background">
+                    <div class="col-xs-24 col-sm-push-9 col-sm-15 col-md-push-8 col-md-16 col-lg-17 col-lg-push-7 white-background">
                         <div class='row'>
-                            <div class="col-xs-14 column">
+                            <div class="col-sm-14 col-md-14 column">
                                 <div class="trip_location">
                                     <template v-if="trip.points.length >= 2">
                                         <div class="row trip_location_from">
@@ -82,7 +57,7 @@
                                     </time>
                                 </div>
                                 <div class="row">
-                                    <div class="trip_seats-available col-xs-offset-2 col-xs-12">
+                                    <div class="trip_seats-available col-xs-offset-4 col-sm-offset-4 col-xs-12">
                                         <span class="trip_seats-available_value pull-left">{{ trip.seats_available }}</span>
                                         <span class="trip_seats-available_label">Lugares<br>libres</span>
                                     </div>
@@ -102,7 +77,7 @@
                                     <div v-else style="height: 2em;"></div>
                                 </div>
                             </div>
-                            <div class="col-xs-10 column">
+                            <div class="col-sm-10 col-md-10 column">
                                 <div class="row trip-data">
                                     <span>Viaje Público</span><br>
                                     <span>Gastos compartidos</span>
@@ -136,6 +111,31 @@
                                     </template>
                                 </template>
 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-24 col-sm-9 col-sm-pull-15 col-md-8 col-md-pull-16 col-lg-7 col-lg-pull-17 driver-container">
+                        <div class="driver-profile">
+                            <div class="row">
+                                <div class="col-xs-9 col-md-8 col-lg-8">
+                                    <div class="trip_driver_img circle-box" v-imgSrc:profile="trip.user.image"></div>
+                                </div>
+                                <div class="col-xs-15 driver-data">
+                                    <div>{{trip.user.name}}</div>
+                                    <div class="profile-info--ratings">
+                                        <i class="material-icons" aria-hidden="true">&#xE8DC;</i> <span> {{trip.user.positive_ratings}} </span>
+                                        <i class="material-icons" aria-hidden="true">&#xE8DB;</i> <span> {{trip.user.negative_ratings}} </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-24">
+                                    <router-link class="btn-primary btn-search btn-shadowed-black" :to="{name: 'trips'}"> Ver Perfil </router-link>
+                                </div>
+                            </div>
+                            <div class="row italic quote">
+                                <i class="fa fa-quote-left" aria-hidden="true"></i>
+                                <span> {{trip.description}} </span>
                             </div>
                         </div>
                     </div>
@@ -383,3 +383,119 @@ export default {
     ]
 };
 </script>
+
+<style scoped>
+    .trip-detail-component .structure-div {
+        margin-top: 1rem;
+    }
+    .trip-detail-component .driver-container {
+        margin-top: 0;
+    }
+    .trip-detail-component .driver-profile div.row:last-child {
+        height: auto;
+    }
+    .trip-detail-component .quote {
+        margin-left: 1em;
+    }
+    .trip-detail-component .driver-container::after {
+        top: -23px;
+        left: 4.4em;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+        border-color: rgba(136, 183, 213, 0);
+        border-bottom-color: #016587;
+        border-width: 12px;
+        margin-left: -12px;
+        z-index: 1;
+    }
+    .trip_datetime {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+    .container {
+        padding-top: 0;
+    }
+    .trip-detail-component .column {
+        padding: 0 4em;
+    }
+    .trip-detail-component .column:first-of-type {
+        padding: 0 1em;
+    }
+    .trip-detail-component .white-background {
+        padding-top: 1.1rem;
+    }
+    .trip-detail-component .buttons-container button:first-child {
+        margin-right: 0;
+    }
+    .trip-detail-component .buttons-container button {
+        margin-bottom: .4em;
+    }
+    .trip-detail-component .buttons-container {
+            text-align: center;
+            margin-top: 1em;
+            padding-bottom: 2rem;
+    }
+    .trip-detail-component .driver-data div:first-child {
+        margin-top: .4em;
+    }
+    @media only screen and (min-width: 400px) and (max-width: 768px) {
+        .trip-detail-component .trip_driver_img {
+            width: 6.7rem;
+            height: 6.7rem;
+        }
+    }
+    @media only screen and (min-width: 768px) {
+        .container {
+            padding-top: 1.5em;
+        }
+        .trip-detail-component .buttons-container button:first-child {
+            margin-right: 1em;
+        }
+        .trip-detail-component .buttons-container {
+            left: 42px;
+            bottom: -25px;
+            position: absolute;
+            padding-bottom: 0;
+        }
+        .trip-detail-component .white-background {
+            padding-top: 0;
+        }
+        .trip-detail-component .driver-container {
+            margin-top: 0;
+        }
+        .trip-detail-component .driver-profile div.row:last-child {
+            height: 9rem;
+        }
+        .trip-detail-component .quote {
+            margin-left: 0;
+        }
+        .trip-detail-component .driver-container::after {
+            top: 36px;
+            right: -23px;
+            left: unset;
+            border-color: rgba(136, 183, 213, 0);
+            border-left-color: #016587;
+            border-width: 12px;
+            margin-left: -12px;
+            z-index: 1;
+        }
+        .trip-detail-component .structure-div {
+            margin-top: 0;
+        }
+        .trip_datetime {
+            margin-top: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .trip-detail-component .column,
+        .trip-detail-component .column:first-of-type {
+            padding: 2em 1em 2em 1em;
+        }
+        .trip-detail-component .driver-data div:first-child {
+            margin-top: 16px;
+        }
+    }
+</style>

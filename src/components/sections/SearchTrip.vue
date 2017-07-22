@@ -109,7 +109,7 @@ export default {
             let value = event.target.value;
             let name = event.target.name;
             if (value === '') {
-                this[name] = {};
+                this[name] = '';
             }
         },
         getPlace (i, data) {
@@ -153,7 +153,11 @@ export default {
             this.$emit('trip-search', params);
         },
         resetInput (input) {
-            this[input] = {};
+            this[input] = {
+                name: '',
+                location: null,
+                radio: 0
+            };
         },
         swapCities () {
             let temp;
