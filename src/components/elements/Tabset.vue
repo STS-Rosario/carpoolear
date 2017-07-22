@@ -1,7 +1,7 @@
 <template>
     <div class="tabset clearfix" :class="orientationClass()">
         <!-- Nav tabs -->
-        <ul v-if="orientation != 'bottom' && orientation != 'right'" class="nav nav-tabs" role="tablist">
+        <ul v-if="orientation != 'bottom' && orientation != 'right'" class="nav nav-tabs" :class="activeTabClass" role="tablist">
             <li class="nav-item" v-for="(tab, $index) in tabs">
                 <a class="nav-link" :class="{ active: tab.active, disabled: tab.disabled }" :href="'#' + $index" role="tab" data-toggle="tab" @click.stop.prevent="activateTab($index)">{{ tab.header }}</a>
             </li>
@@ -34,14 +34,21 @@ export default {
     },
     data: function () {
         return {
-            tabs: []
+            tabs: [],
+            activeTabIndex: 0
         };
+    },
+    computed: {
+        activeTabClass: function () {
+            return ('active-' + this.activeTabIndex);
+        }
     },
     methods: {
         orientationClass: function () {
             return 'tabs-' + this.orientation;
         },
         activateTab: function (index) {
+            this.activeTabIndex = index;
             var tab = this.tabs[index];
             if (tab && !tab.disabled) {
                 if (index === 'first') {
