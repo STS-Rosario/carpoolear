@@ -1591,7 +1591,7 @@ ul {
     .nav-tabs {
         border-bottom: 1px solid #aaa;
     }
-    .nav>li>a:hover, 
+    .nav>li>a:hover,
     .nav>li>a:focus {
         color: #777;
     }
@@ -1773,6 +1773,9 @@ ul {
     }
     .gmap-autocomplete .date-picker--cross {
         right: 20px;
+        top: 15px;
+    }
+    .search-section  .gmap-autocomplete .date-picker--cross {
         top: 23px;
     }
     .origin.gmap-autocomplete .date-picker--cross  {
@@ -1913,4 +1916,7 @@ ul {
 
 .lnk-whatsapp {
     background: #09D261;
+}
+.ajs-error {
+    color: white;
 }

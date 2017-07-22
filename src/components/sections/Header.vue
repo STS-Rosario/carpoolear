@@ -51,7 +51,7 @@
                 </modal>
                 <button @click="share" type="button" class="btn btn-link">Invitar amigos</button>
                 <router-link class="btn btn-link" v-if="!logged" :to="{name: 'trips'}">Viajes</router-link>
-                <router-link class="btn btn-link" v-if="!logged" :to="{name: 'trips'}">Información</router-link>
+                <!--<router-link class="btn btn-link" v-if="!logged" :to="{name: 'trips'}">Información</router-link>-->
                 <router-link class="btn btn-link" v-if="!logged" :to="{name: 'register'}">Registrarme</router-link>
                 <router-link class="btn btn-primary" btn-lg v-if="!logged" :to="{name: 'login'}">Login</router-link>
 
