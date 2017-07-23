@@ -102,10 +102,8 @@ export default {
         },
 
         createConversation (user) {
-            console.log('creating');
             this.create(user).then((c) => {
                 this.textSearch = '';
-                console.log('created');
                 router.push({ name: 'conversation-chat', params: { id: c.id } });
             }).catch(() => {
 

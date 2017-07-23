@@ -38,6 +38,7 @@ import {Thread} from '../../classes/Threads.js';
 import MessageView from '../MessageView';
 import router from '../../router';
 import moment from 'moment';
+import bus from '../../services/bus-event.js';
 
 export default {
     name: 'conversation-chat',
@@ -86,6 +87,10 @@ export default {
             });
         },
 
+        onBackClick () {
+            router.back();
+        },
+
         jumpEndOfConversation () {
             if (this.isMobile) {
                 window.scrollTo(0, document.body.scrollHeight);
@@ -102,6 +107,7 @@ export default {
         }
     },
     beforeDestroy () {
+        bus.off('back-click', this.onBackClick);
         // this.thread.stop();
     },
     mounted () {
@@ -109,6 +115,7 @@ export default {
         this.thread = new Thread(() => {
             this.unreadMessage();
         });
+        bus.on('back-click', this.onBackClick);
         // this.thread.run(5000);
     },
     updated () {
@@ -117,7 +124,6 @@ export default {
             this.mustJump = false;
         }
         if (this.conversation) {
-            console.log(this.conversation.title);
             this.setTitle(this.conversation.title);
             this.setSubTitle('Última conexión: ' + moment().calendar(this.lastConnection));
         }

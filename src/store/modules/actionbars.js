@@ -86,7 +86,6 @@ const actions = {
     },
 
     setSubTitle (store, newSubTitle = '') {
-        console.log('seting');
         store.commit(types.HEADER_SET_SUB_TITLE, newSubTitle);
     },
 

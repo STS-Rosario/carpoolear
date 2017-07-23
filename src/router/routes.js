@@ -245,11 +245,11 @@ export default [
                     actionbar: {
                         footer: {
                             active_id: 'conversations'
+                        },
+                        header: {
+                            title: 'Conversación',
+                            buttons: ['back']
                         }
-                    },
-                    header: {
-                        title: 'Conversacion',
-                        buttons: ['clear']
                     }
                 }
             }
