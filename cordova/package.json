@@ -1,38 +1,41 @@
 {
-    "name": "com.sts.carpoolear",
-    "version": "1.0.0",
-    "displayName": "Carpoolear",
-    "cordova": {
-        "platforms": [
-            "android"
-        ],
-        "plugins": {
-            "cordova-plugin-device": {},
-            "cordova-plugin-facebook4": {
-                "APP_ID": "829566563845558",
-                "APP_NAME": "Hay Equipo"
-            },
-            "cordova-plugin-nativestorage": {},
-            "cordova-plugin-network-information": {},
-            "cordova-plugin-splashscreen": {},
-            "cordova-plugin-whitelist": {},
-            "cordova-plugin-x-socialsharing": {},
-            "cordova-plugin-x-toast": {},
-            "phonegap-plugin-push": {},
-            "cordova-plugin-backbutton": {}
-        }
-    },
-    "dependencies": {
-        "cordova-android": "^6.2.3",
-        "cordova-plugin-backbutton": "^0.3.0",
-        "cordova-plugin-device": "~1.1.4",
-        "cordova-plugin-facebook4": "~1.7.4",
-        "cordova-plugin-nativestorage": "~2.2.2",
-        "cordova-plugin-network-information": "~1.3.1",
-        "cordova-plugin-splashscreen": "~4.0.1",
-        "cordova-plugin-whitelist": "1",
-        "cordova-plugin-x-socialsharing": "https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin.git",
-        "cordova-plugin-x-toast": "https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git",
-        "phonegap-plugin-push": "^2.0.0-rc4"
+  "name": "com.sts.carpoolear",
+  "version": "1.0.0",
+  "displayName": "Carpoolear",
+  "cordova": {
+    "platforms": [
+      "android",
+      "browser"
+    ],
+    "plugins": {
+      "cordova-plugin-device": {},
+      "cordova-plugin-facebook4": {
+        "APP_ID": "829566563845558",
+        "APP_NAME": "Hay Equipo"
+      },
+      "cordova-plugin-nativestorage": {},
+      "cordova-plugin-network-information": {},
+      "cordova-plugin-splashscreen": {},
+      "cordova-plugin-whitelist": {},
+      "cordova-plugin-x-socialsharing": {},
+      "cordova-plugin-x-toast": {},
+      "phonegap-plugin-push": {},
+      "cordova-plugin-backbutton": {}
     }
+  },
+  "dependencies": {
+    "cordova-android": "^6.2.3",
+    "cordova-browser": "^4.1.0",
+    "cordova-ios": "^4.4.0",
+    "cordova-plugin-backbutton": "^0.3.0",
+    "cordova-plugin-device": "~1.1.4",
+    "cordova-plugin-facebook4": "~1.7.4",
+    "cordova-plugin-nativestorage": "~2.2.2",
+    "cordova-plugin-network-information": "~1.3.1",
+    "cordova-plugin-splashscreen": "~4.0.1",
+    "cordova-plugin-whitelist": "1",
+    "cordova-plugin-x-socialsharing": "https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin.git",
+    "cordova-plugin-x-toast": "https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git",
+    "phonegap-plugin-push": "^2.0.0-rc4"
+  }
 }
