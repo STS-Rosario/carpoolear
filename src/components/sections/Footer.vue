@@ -28,7 +28,7 @@
                 </ul>
             </div>
             <div class="col-xs-6 col-md-6">
-                <h3>Compartir en</h3>
+                <h3>Encontranos en</h3>
                 <ul>
                     <li>
                         <a href="https://www.facebook.com/Carpoolear">

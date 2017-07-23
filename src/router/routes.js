@@ -20,7 +20,8 @@ export default [
                 header: {
                     logo: {
                         show: false
-                    }
+                    },
+                    buttons: ['clear']
                 }
             },
             background: {
@@ -37,7 +38,8 @@ export default [
                 header: {
                     logo: {
                         show: false
-                    }
+                    },
+                    buttons: ['back']
                 }
             },
             background: {
@@ -61,7 +63,8 @@ export default [
                 header: {
                     logo: {
                         show: false
-                    }
+                    },
+                    buttons: ['back']
                 }
             },
             background: {
@@ -232,6 +235,9 @@ export default [
                 header: {
                     title: 'Mensajes'
                 }
+            },
+            background: {
+                style: 'white'
             }
         },
         children: [
@@ -250,6 +256,9 @@ export default [
                             title: 'Conversación',
                             buttons: ['back']
                         }
+                    },
+                    background: {
+                        style: 'white'
                     }
                 }
             }

@@ -134,7 +134,9 @@ input[type="checkbox"] {
 .alert {
     margin-top: 0;
 }
-
+.btn-shadowed-black {
+    box-shadow: 0 0 6px 5px rgba(0, 0, 0, .1);
+}
 .btn-primary:active:hover,
 .btn-primary.active:hover,
 .open > .dropdown-toggle.btn-primary:hover,
@@ -148,10 +150,23 @@ input[type="checkbox"] {
     color: #ccc;
     background: rgba(215,37,33, 0.8);
 }
-
+.login_usuario {
+    text-align: center;
+    font-size: 22px;
+    padding: 0 2em 1.2em 2em;
+    font-weight: 400;
+    display: block;
+}
+.login_usuario:hover,
+.login_usuario:focus {
+    text-decoration: none;
+}
+.underline {
+    text-decoration: underline;
+}
 .btn-search {
     background: var(--secondary-background);
-    padding: .8em;
+    padding: 1.2em;
 }
 .search-section .btn-search {
     width: 100%;
@@ -485,6 +500,7 @@ textarea {
 
 .tab-content {
     margin-top: 1rem;
+    min-height: calc(100vh - 150px);
 }
 
 .active-1 + .tab-content {
@@ -567,7 +583,10 @@ textarea {
     border-width: 12px;
     margin-left: -12px;
 }
-
+.not-logged .card_heading:after {
+    right: 40px;
+    left: unset;
+}
 .trips .trips_title {
     text-align: center;
     margin-bottom: 40px;
@@ -780,6 +799,7 @@ textarea {
 .trip-detail-component .driver-container {
     background-color: var(--secondary-background);
     border-radius: .4rem;
+    z-index: 1;
 }
 
 .trip-detail-component .driver-profile {
@@ -866,7 +886,6 @@ textarea {
     height: 400px;
     width: 100%;
     top: -64px;
-    z-index: -1;
 }
 .trip-detail-component .white-background {
     background-color: white;
@@ -1089,8 +1108,9 @@ textarea {
     border: 1px solid #ddd;
     border-left: 0;
     border-right: 0;
+    border-bottom: 0;
     padding-top: 1.4em;
-    padding-bottom: 5em;
+    padding-bottom: 4em;
 }
 .profile-info-component .edit-action button:first-child {
     margin-right: .8em;
@@ -1165,6 +1185,7 @@ textarea {
 
 .search-section {
     margin-bottom: 1rem;
+    position: relative;
 }
 
 .search-section .btn-option {
@@ -1274,6 +1295,9 @@ textarea {
 .container {
     padding-top: 1.5em;
 }
+.trips.container {
+    padding-top: 2em;
+}
 .conversation-component {
     padding-bottom: 3em;
 }
@@ -1345,7 +1369,7 @@ textarea {
 
 .user-form .form > div:last-child{
     color: white;
-    margin-top: 2rem;
+    margin-top: 1rem;
 }
 
 .user-form label {
@@ -1548,6 +1572,18 @@ ul {
 }
 
 @media only screen and (min-width: 768px) {
+    .tab-content {
+        min-height: initial;
+    }    
+    .trips.container {
+        padding-top: 0;
+    }
+    .trip-detail-component .vue-map-container {
+        z-index: -1;
+    }
+    .trip-detail-component .driver-container {
+        z-index: 0;
+    }
     .conversation-component .list-group-item:first-child {
         border-right-width: 1px;
         border-left-width: 1px;
@@ -1639,7 +1675,7 @@ ul {
         background-color: transparent;
         padding-top: .4em;
         width: 90%;
-        margin: 2em 5% 0 5%;
+        margin: 1em 5% 0 5%;
         position: relative;
     }
     .nav-tabs {
@@ -1705,7 +1741,7 @@ ul {
     .user-form {
         padding-left: 10px;
         padding-right: 10px;
-        margin: 2.8rem auto 4.8rem auto;
+        margin: 2rem auto 4.8rem auto;
         text-align: left;
     }
     .user-form h1 {
@@ -1718,7 +1754,7 @@ ul {
     .user-form img {
         left: 20px;
         width: 84px;
-        top: -25px;
+        top: 10px;
         position: absolute;
     }
     .user-form .form > div:last-child{

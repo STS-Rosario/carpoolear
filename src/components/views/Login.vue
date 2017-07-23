@@ -1,6 +1,8 @@
 <template>
   <div class="user-form container" >
-    <img v-if="!isMobile" :src="carpoolear_logo" />
+    <router-link v-if="!isMobile"  :to="{name: 'trips'}">
+        <img :src="carpoolear_logo" />
+    </router-link>
     <h1> Ingresá con tu cuenta de <span class='brand'>Carpoolear</span> </h1>
     <div class='form row'>
       <div class="col-sm-12 col-md-12">
@@ -15,6 +17,7 @@
             <input id="checkbox_remember" type="checkbox" /><label for="checkbox_remember">Recordame</label><span> - </span><router-link class='login-forget' :to="{name:'reset-password'}">Olvidé mi contraseña </router-link>
         </div>
       </div>
+        <router-link v-show="isMobile" class='password-not' :to="{name:'reset-password'}">Olvidé mi contraseña </router-link>
       <div class="col-sm-12 col-md-12">
         <span class="register">No tenés cuenta? <router-link class='login-register' :to="{name:'register'}"> Registrate aquí. </router-link></span>
         <button class="btn-primary btn-search btn-facebook btn-with-icon" @click="facebookLogin"><span class="btn-with-icon--icon"><i class="fa fa-facebook" aria-hidden="true"></i></span><span class='btn-with-icon--label'> Ingresá con Facebook </span></button>
@@ -27,6 +30,7 @@
 import { mapGetters, mapActions } from 'vuex';
 import dialogs from '../../services/dialogs.js';
 import router from '../../router';
+import bus from '../../services/bus-event';
 
 export default {
     name: 'login',
@@ -68,13 +72,40 @@ export default {
 
         facebookLogin () {
             this.fbLogin();
+        },
+
+        onClearClick () {
+            router.back();
         }
+    },
+
+    mounted () {
+        bus.on('clear-click', this.onClearClick);
+    },
+
+    beforeDestroy () {
+        bus.off('clear-click', this.onClearClick);
     }
 };
 </script>
 
+<style>
+  .app-container {
+    min-height: 100vh;
+  }
+</style>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+    .password-not {
+        text-align: center;
+        margin-top: 16px;
+        display: block;
+        text-align: center;
+        color: #ddd;
+        font-weight: bold;
+        text-decoration: underline;
+        padding-left: 10px;
+    }
   label {
     margin-top: .3em;
     font-weight: bold;

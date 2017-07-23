@@ -89,7 +89,7 @@
                 <span class="trip_seats-available_label"><span>Lugares</span><span>libres</span></span>
               </div>
               <div class="trip_actions col-xs-10">
-                <router-link :to=" { name: 'detail_trip', params: { id: trip.id } }" class="btn btn-default btn-lg btn-trip-detail">Ver</router-link>
+                <div class="btn btn-default btn-lg btn-trip-detail">Ver</div>
               </div>
             </div>
           </div>

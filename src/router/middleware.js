@@ -6,7 +6,6 @@ export function auth (to, from, next) {
     if (store.getters['auth/checkLogin']) {
         next();
     } else {
-        // next('/login');
-        router.replace({name: 'login'});
+        next('/login');
     }
 }

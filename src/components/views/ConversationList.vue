@@ -151,7 +151,7 @@ export default {
 </script>
 
 <style>
-    .app-container {
+    .app-container.white {
         background-color: #fff;
     }
     .conversation-component.container {
@@ -225,6 +225,10 @@ export default {
             padding-right: 10px;
             overflow-y: hidden;
             height: calc(100vh - 160px);
+        }
+        .conversation-component > .row {
+            padding-left: 20px;
+            padding-right: 20px;
         }
         .conversation_chat--search {
             height: calc(100% - 66px);

@@ -1,15 +1,17 @@
 <template>
     <div class="user-form container " >
-        <img :src="carpoolear_logo" />
+        <router-link v-if="!isMobile"  :to="{name: 'trips'}">
+            <img :src="carpoolear_logo" />
+        </router-link>
         <h1> Recuperar contraseña </h1>
         <div v-if="send">
             <h3> Se ha enviado un email a su casilla de correo con las indicaciones para restablecer su contraseña. </h3>
         </div>
-        <div class='form' v-else-if="!token">
+        <div class='form row' v-else-if="!token">
             <label for="txt_email">E-mail</label>
             <input type="text" id="txt_email" v-model='email'/>
 
-            <button class="btn btn-primary" @click="reset"> Recuperar contraseña </button>
+            <button class="btn btn-primary btn-shadowed-black" @click="reset"> Recuperar contraseña </button>
             <span v-if="loading" class='loading'> Espere... </span>
             <span v-if="error"> {{error}} </span>
         </div>
@@ -30,7 +32,9 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
+import bus from '../../services/bus-event';
+import router from '../../router';
 
 export default {
     name: 'reset-password',
@@ -51,6 +55,11 @@ export default {
             password: '',
             carpoolear_logo: process.env.ROUTE_BASE + 'static/img/carpoolear_logo.png'
         };
+    },
+    computed: {
+        ...mapGetters({
+            isMobile: 'device/isMobile'
+        })
     },
 
     methods: {
@@ -88,14 +97,27 @@ export default {
             } else {
                 this.error = 'No coicide los campos';
             }
+        },
+        onBackClick () {
+            router.back();
         }
     },
 
     mounted () {
+        bus.on('back-click', this.onBackClick);
+    },
 
+    beforeDestroy () {
+        bus.off('back-click', this.onBackClick);
     }
 };
 </script>
+
+<style>
+  .app-container {
+    min-height: 100vh;
+  }
+</style>
 
 <style scoped>
     h3 {
