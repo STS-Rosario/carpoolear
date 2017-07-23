@@ -25,6 +25,7 @@
     </platform>
     <hook src="scripts/copy_dist.js" type="before_prepare" />
     <engine name="android" spec="^6.2.3" />
+    <plugin name="cordova-plugin-backbutton" spec="^0.3.0" />
     <plugin name="cordova-plugin-device" spec="~1.1.4" />
     <plugin name="cordova-plugin-facebook4" spec="~1.7.4">
         <variable name="APP_ID" value="829566563845558" />

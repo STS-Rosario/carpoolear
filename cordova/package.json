@@ -18,11 +18,13 @@
             "cordova-plugin-whitelist": {},
             "cordova-plugin-x-socialsharing": {},
             "cordova-plugin-x-toast": {},
-            "phonegap-plugin-push": {}
+            "phonegap-plugin-push": {},
+            "cordova-plugin-backbutton": {}
         }
     },
     "dependencies": {
         "cordova-android": "^6.2.3",
+        "cordova-plugin-backbutton": "^0.3.0",
         "cordova-plugin-device": "~1.1.4",
         "cordova-plugin-facebook4": "~1.7.4",
         "cordova-plugin-nativestorage": "~2.2.2",

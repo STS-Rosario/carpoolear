@@ -26,6 +26,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import dialogs from '../../services/dialogs.js';
+import router from '../../router';
 
 export default {
     name: 'login',
@@ -55,8 +56,9 @@ export default {
             let password = this.password;
             this.doLogin({email, password}).then(data => {
                 this.loading = false;
+                router.push({ name: 'trips' });
             }, error => {
-                dialogs.message('Email o password incorrecto', { estado: 'error' });
+                dialogs.message('Email o password incorrecto', { duration: 10, estado: 'error' });
                 if (error) {
                     this.error = error.error;
                 }

@@ -63,4 +63,27 @@ router.beforeEach((to, from, next) => {
     next();
 });
 
+router.stack = [];
+router._push = router.push;
+router._replace = router.replace;
+router._go = router.go;
+
+router.push = function (data) {
+    console.log(router.stack);
+    router.stack.push(data);
+    router._push(data);
+};
+
+router.replace = function (data) {
+    router.stack.pop();
+    router.stack.push(data);
+    router._push(data);
+};
+
+router.go = function (number) {
+    console.log(router.stack);
+    router.stack.slice(0, number);
+    router._go(number);
+};
+
 export default router;
