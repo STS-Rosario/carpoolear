@@ -27,7 +27,6 @@
                                     <span class="conversation-timestamp" v-if="false">{{ conversation.updated_at | moment("h:mm a") }}</span>
                                   </div>
                                 </div>
-
                             </li>
                             <li v-if="moreConversations" class="list-group-item" >
                                 <button class="btn btn-primary btn-block" @click="nextPage">Más resultados</button>
@@ -37,7 +36,7 @@
                         </Loading>
                     </template>
                     <template v-else>
-                        <Loading :data="users">
+                        <Loading class="conversation_chat--search" :data="users">
                             <li v-for="user in users" class="list-group-item" @click="createConversation(user)">
                                 <div class="conversation_image circle-box" v-imgSrc:profile="user.image"></div>
                                 {{user.name}}
@@ -103,8 +102,10 @@ export default {
         },
 
         createConversation (user) {
+            console.log('creating');
             this.create(user).then((c) => {
                 this.textSearch = '';
+                console.log('created');
                 router.push({ name: 'conversation-chat', params: { id: c.id } });
             }).catch(() => {
 
@@ -150,3 +151,86 @@ export default {
     }
 };
 </script>
+
+<style>
+    .app-container {
+        background-color: #fff;
+    }
+    .conversation-component.container {
+        width: auto;
+    }
+    .conversation_chat p,
+    .message_text {
+        font-size: 13px;
+    }
+    .conversation_chat h2 {
+        font-size: 25px;
+        margin-top: .2em;
+        margin-bottom: 0;
+    }
+    .chat_last_connection {
+        margin: .4rem 0;
+    }
+
+    .btn-full-width {
+        width: 100%;
+        margin: 0 0 .8em 0;
+    }
+
+    .message-wrapper {
+        text-align: left;
+        margin-bottom: .4em;
+    }
+    .conversation-component.container {
+
+        margin-bottom: 1.4rem;
+    }
+    .conversation_chat--search > li {
+        color: #009ce1;
+        cursor: pointer;
+    }
+    .conversation_chat--search > li:hover {
+        background-color: #eee;
+    }
+    .conversation-title {
+        font-size: 14px;
+    }
+    .list-group-item {
+        font-size: 14px;
+    }
+    @media only screen and (min-width: 768px) {
+        .conversation-title {
+            font-size: 18px;
+        }
+        .conversation_chat p,
+        .message_text {
+            font-size: 14px;
+        }
+        .app-container {
+            background-color: transparent;
+        }
+        .conversation_chat,
+        .conversation_chat > div,
+        .conversation-component.container .row,
+        .conversation-component > .row > div,
+        .conversation-component > .row > div > div,
+        .conversation_list .list-group
+        {
+            height: 100%;
+        }
+        .conversation_chat .list-group-item:nth-child(2) {
+            height: calc(100% - 152px);
+            overflow-y: auto;
+        }
+        .conversation-component.container {
+            padding-left: 10px;
+            padding-right: 10px;
+            overflow-y: hidden;
+            height: calc(100vh - 160px);
+        }
+        .conversation_chat--search {
+            height: calc(100% - 66px);
+            overflow-y: auto;
+        }
+    }
+</style>

@@ -244,9 +244,12 @@ export default [
                     hide: true,
                     actionbar: {
                         footer: {
-                            show: true,
                             active_id: 'conversations'
                         }
+                    },
+                    header: {
+                        title: 'Conversacion',
+                        buttons: ['clear']
                     }
                 }
             }

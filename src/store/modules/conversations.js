@@ -28,7 +28,7 @@ const getters = {
     users: state => state.userList,
     selectedConversation: state => state.list ? state.list.find(item => item.id === state.selectedID) : null,
     msgObj: state => state.messages[state.selectedID],
-    messagesList: state => state.messages[state.selectedID].list,
+    messagesList: state => state.messages[state.selectedID] ? state.messages[state.selectedID].list : [],
     lastPageConversation: state => state.messages[state.selectedID].lastPage
 };
 
@@ -140,7 +140,7 @@ const actions = {
                 store.commit(types.CONVERSATION_SET_LAST_PAGE);
             } else {
                 let messages = response.data.reverse();
-                store.commit(types.CONVERSATION_ADD_MESSAGE, {messages});
+                store.commit(types.CONVERSATION_ADD_MESSAGE, {messages, id});
             }
         }).catch(error => {
             return Promise.reject(error);
@@ -195,7 +195,7 @@ const mutations = {
         }
     },
 
-    [types.CONVERSATION_INSERT_MESSAGE] (state, {messages, id}) {
+    [types.CONVERSATION_INSERT_MESSAGE] (state, { messages, id }) {
         messages.forEach(item => {
             if (!state.messages[item.conversation_id].list.find(i => i.id === item.id)) {
                 state.messages[item.conversation_id].list.push(item);
@@ -212,7 +212,6 @@ const mutations = {
             list: [...messages, ...state.messages[id].list],
             lastPage: state.messages[id].lastPage
         };
-
         state.messages = Object.assign({}, state.messages, obj);
     },
 

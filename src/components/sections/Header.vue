@@ -11,8 +11,9 @@
                     </span>
                 </template>
             </div>
-            <div class="actionbar_section actionbar_title">
-                {{title}}
+            <div class="actionbar_section actionbar_title" :class="subTitle !== '' ? 'header--with-subtitle' : ''">
+                <span class='header--title'>{{title}}</span>
+                <span class='header--subtitle'>{{subTitle}}</span>
             </div>
             <div class="actionbar_section actionbar_icon pull-right">
                 <template v-for="item in rightHeaderButton" v-if="item.show">
@@ -128,6 +129,7 @@ export default {
             user: 'auth/user',
             notificationsCount: 'notifications/count',
             title: 'actionbars/title',
+            subTitle: 'actionbars/subTitle',
             leftHeaderButton: 'actionbars/leftHeaderButton',
             rightHeaderButton: 'actionbars/rightHeaderButton',
             logoHeaderVisibility: 'actionbars/headerLogoVisibility',
