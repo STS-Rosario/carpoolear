@@ -33,6 +33,7 @@ router.beforeEach((to, from, next) => {
     }
 
     if (actionbar.header) {
+        store.dispatch('actionbars/setSubTitle', '');
         if (actionbar.header.title) {
             store.dispatch('actionbars/setTitle', actionbar.header.title);
         } else {
