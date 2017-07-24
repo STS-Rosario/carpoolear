@@ -20,7 +20,8 @@ export default [
                 header: {
                     logo: {
                         show: false
-                    }
+                    },
+                    buttons: ['clear']
                 }
             },
             background: {
@@ -37,7 +38,8 @@ export default [
                 header: {
                     logo: {
                         show: false
-                    }
+                    },
+                    buttons: ['back']
                 }
             },
             background: {
@@ -61,7 +63,8 @@ export default [
                 header: {
                     logo: {
                         show: false
-                    }
+                    },
+                    buttons: ['back']
                 }
             },
             background: {
@@ -232,6 +235,9 @@ export default [
                 header: {
                     title: 'Mensajes'
                 }
+            },
+            background: {
+                style: 'white'
             }
         },
         children: [
@@ -244,9 +250,15 @@ export default [
                     hide: true,
                     actionbar: {
                         footer: {
-                            show: true,
                             active_id: 'conversations'
+                        },
+                        header: {
+                            title: 'Conversación',
+                            buttons: ['back']
                         }
+                    },
+                    background: {
+                        style: 'white'
                     }
                 }
             }

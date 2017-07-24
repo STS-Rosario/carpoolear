@@ -1,9 +1,12 @@
 <template>
 
   <div class="user-form container" >
-    <img :src="carpoolear_logo" />
+    <router-link v-if="!isMobile"  :to="{name: 'trips'}">
+        <img :src="carpoolear_logo" />
+    </router-link>
+    <img v-if="isMobile" :src="carpoolear_logo" />
     <h1> Registrar nuevo usuario </h1>
-    <div class='form'>
+    <div class='form row'>
       <label for="txt_name">Nombre</label>
       <input  type="text" id="txt_name" v-model='name' />
       <label for="txt_surename">Apellido</label>
@@ -26,6 +29,8 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import dialogs from '../../services/dialogs.js';
+import bus from '../../services/bus-event';
+import router from '../../router';
 
 export default {
     name: 'register',
@@ -43,7 +48,8 @@ export default {
     },
     computed: {
         ...mapGetters({
-            checkLogin: 'auth/checkLogin'
+            checkLogin: 'auth/checkLogin',
+            isMobile: 'device/isMobile'
         })
     },
     methods: {
@@ -63,14 +69,28 @@ export default {
                 dialogs.message('La cuenta de email esta en uso', {estado: 'error'});
                 this.progress = false;
             });
+        },
+        onBackClick () {
+            router.back();
         }
+    },
+    mounted () {
+        bus.on('back-click', this.onBackClick);
+    },
+
+    beforeDestroy () {
+        bus.off('back-click', this.onBackClick);
     }
 };
 </script>
 
+<style>
+  .app-container {
+    min-height: 100vh;
+  }
+</style>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
     input[type="checkbox"] {
         width: auto;
     }

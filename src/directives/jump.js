@@ -1,11 +1,11 @@
 let jumpers = {};
 let keyHandler = function (key) {
     if (key.key === 'Enter') {
-        let next = jumpers[this.id].next;
+        let target = jumpers[this.id].target;
         if (jumpers[this.id].modifiers.blur) {
             jumpers[this.id].el.blur();
         }
-        next[jumpers[this.id].arg]();
+        target[jumpers[this.id].arg]();
     }
 };
 
@@ -20,10 +20,13 @@ export default {
         el.addEventListener('keyup', keyHandler, false);
     },
     inserted: function (el, binding, node) {
-        jumpers[el.id].next = node.context.$refs[jumpers[el.id].value];
+        jumpers[el.id].target = node.context.$refs[jumpers[el.id].value];
+        if (!jumpers[el.id].target || jumpers[el.id].target === '') {
+            jumpers[el.id].target = jumpers[el.id].el;
+        }
     },
     unbind: function (el, binding, node) {
         el.removeEventListener('keyup', keyHandler, false);
-        jumpers = {};
+        jumpers[el.id] = undefined;
     }
 };

@@ -33,6 +33,7 @@ router.beforeEach((to, from, next) => {
     }
 
     if (actionbar.header) {
+        store.dispatch('actionbars/setSubTitle', '');
         if (actionbar.header.title) {
             store.dispatch('actionbars/setTitle', actionbar.header.title);
         } else {
@@ -56,7 +57,7 @@ router.beforeEach((to, from, next) => {
     if (background.style) {
         store.dispatch('background/setBackgroundStyle', background.style);
     } else {
-        store.dispatch('background/setBackgroundStyle', 'white');
+        store.dispatch('background/setBackgroundStyle', 'gray');
     }
     window.scrollTo(0, 0);
     next();

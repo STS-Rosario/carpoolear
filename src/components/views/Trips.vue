@@ -1,10 +1,12 @@
 <template>
-    <div class="trips container">
+    <div class="trips container" :class="!user ? 'not-logged' : ''">
         <div class="trips_title" v-show="!isMobile">
             <h1>Buscá con quién compartir tu próximo viaje!</h1>
             <h3>¡Elegí fecha, origen o destino y encontralo!</h3>
         </div>
-
+        <div v-show="!user && isMobile">
+            <router-link :to="{name: 'login'}" class="login_usuario"> Ingresá con tu usuario o registrate <span class='underline'>aquí</span> para comenzar a Carpoolear!</router-link>
+        </div>
         <SearchBox :params="searchParams" v-on:trip-search="research" v-show="!isMobile || lookSearch"></SearchBox>
 
         <Loading :data="trips" v-if="showingTrips">

@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container" :class="backgroundStyle">
+  <div class="app-container" :class="[backgroundStyle]">
     <headerApp></headerApp>
     <main id="main">
       <div class="view-container">

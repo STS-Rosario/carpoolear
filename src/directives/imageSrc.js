@@ -10,5 +10,8 @@ export default {
             arg = null;
         }
         el.style.backgroundImage = 'url(' + getRoute(binding.value, arg) + ')';
+    },
+    unbind: function (el, binding, node) {
+        el.style.backgroundImage = null;
     }
 };
