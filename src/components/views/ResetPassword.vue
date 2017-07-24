@@ -1,14 +1,18 @@
 <template>
-    <div class="reset-password-component" >
+    <div class="user-form container " >
+        <router-link v-if="!isMobile"  :to="{name: 'trips'}">
+            <img :src="carpoolear_logo" />
+        </router-link>
+        <h1> Recuperar contraseña </h1>
         <div v-if="send">
-            <h3> Se ha enviado un email a su casilla de correo con las indicaciones. </h3>
+            <h3> Se ha enviado un email a su casilla de correo con las indicaciones para restablecer su contraseña. </h3>
         </div>
-        <div class='form' v-else-if="!token">
+        <div class='form row' v-else-if="!token">
             <label for="txt_email">E-mail</label>
             <input type="text" id="txt_email" v-model='email'/>
-            
-            <button class="btn btn-primary" @click="reset"> Reset password </button> 
-            <span v-if="loading"> Loading... </span>
+
+            <button class="btn btn-primary btn-shadowed-black" @click="reset"> Recuperar contraseña </button>
+            <span v-if="loading" class='loading'> Espere... </span>
             <span v-if="error"> {{error}} </span>
         </div>
         <div class='form' v-else-if="token">
@@ -19,8 +23,8 @@
             <label for="txt_password">Repetir Password </label>
             <input  type="password" id="txt_password" v-model='password_confirmation' />
 
-            <button class="btn btn-primary" @click="change"> Cambiar contraseña </button> 
-            <span v-if="loading"> Loading... </span>
+            <button class="btn btn-primary" @click="change"> Cambiar contraseña </button>
+            <span v-if="loading" class='loading'> Espere... </span>
             <span v-if="error"> {{error}} </span>
             </div>
         </div>
@@ -28,7 +32,9 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
+import bus from '../../services/bus-event';
+import router from '../../router';
 
 export default {
     name: 'reset-password',
@@ -46,8 +52,14 @@ export default {
             error: null,
             send: false,
             password_confirmation: '',
-            password: ''
+            password: '',
+            carpoolear_logo: process.env.ROUTE_BASE + 'static/img/carpoolear_logo.png'
         };
+    },
+    computed: {
+        ...mapGetters({
+            isMobile: 'device/isMobile'
+        })
     },
 
     methods: {
@@ -85,11 +97,42 @@ export default {
             } else {
                 this.error = 'No coicide los campos';
             }
+        },
+        onBackClick () {
+            router.back();
         }
     },
 
     mounted () {
+        bus.on('back-click', this.onBackClick);
+    },
 
+    beforeDestroy () {
+        bus.off('back-click', this.onBackClick);
     }
 };
 </script>
+
+<style>
+  .app-container {
+    min-height: 100vh;
+  }
+</style>
+
+<style scoped>
+    h3 {
+        margin-bottom: 2em;
+        font-size: 18px;
+    }
+    label {
+        display: block;
+        margin-top: .3em;
+        margin-bottom: .6em;
+    }
+    input {
+        margin-bottom: 0.8em;
+    }
+    loading {
+        margin-left: 1em;
+    }
+</style>

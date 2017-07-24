@@ -1,6 +1,7 @@
 import {DeviceApi} from '../../services/api';
 import * as types from '../mutation-types';
 import bus from '../../services/bus-event';
+import cache, {keys} from '../../services/cache';
 
 /* eslint-disable no-undef */
 
@@ -18,17 +19,23 @@ const state = {
 
 // getters
 const getters = {
-    trips: state => state.trips
+    resolution: state => state.resolution,
+    isMobile: state => state.resolution.width < 768,
+    isTablet: state => state.resolution.width >= 768 && state.resolution.width < 992,
+    isDesktop: state => state.resolution.width >= 992,
+    isNotLargeDesktop: sate => sate.resolution.width < 1120,
+    isFacebokApp: state => window.name !== ''
 };
 
 // actions
 const actions = {
     register (store) {
-        let data = {};
-        Object.assign(data, store.rootGetters['cordova/deviceData']);
+        let data = Object.assign({}, store.rootGetters['cordova/deviceData']);
+        console.log(store.rootGetters['cordova/deviceData']);
         data.app_version = store.rootState.appVersion;
 
         return deviceApi.create(data).then(response => {
+            response.data.notifications = true;
             store.commit(types.DEVICE_SET_CURRENT_DEVICE, response.data);
         }).catch(err => {
             console.log(err);
@@ -36,18 +43,20 @@ const actions = {
     },
 
     update (store, data = {}) {
-        Object.assign(data, store.rootGetters['cordova/deviceData']);
-        data.app_version = store.rootState.appVersion;
-
-        return deviceApi.update(store.state.current.id, data).then((response) => {
-            store.commit(types.DEVICE_SET_CURRENT_DEVICE, response.data);
-        }).catch((err) => {
-            console.log(err);
-        });
+        if (state.current) {
+            Object.assign(data, store.rootGetters['cordova/deviceData']);
+            data.app_version = store.rootState.appVersion;
+            data.notifications = state.current.notifications;
+            return deviceApi.update(store.state.current.id, data).then((response) => {
+                store.commit(types.DEVICE_SET_CURRENT_DEVICE, response.data);
+            }).catch((err) => {
+                console.log(err);
+            });
+        }
     },
 
     delete (store, id) {
-        return deviceApi.delete(id).then((response) => {
+        return deviceApi.remove(id).then((response) => {
             store.commit(types.DEVICE_DELETE, id);
         }).catch((err) => {
             console.log(err);
@@ -60,6 +69,24 @@ const actions = {
         }).catch((err) => {
             console.log(err);
         });
+    },
+    resize () {
+        var w = window;
+        var d = document;
+        var e = d.documentElement;
+        var g = d.getElementsByTagName('body')[0];
+        var x = w.innerWidth || e.clientWidth || g.clientWidth;
+        var y = w.innerHeight || e.clientHeight || g.clientHeight;
+
+        state.resolution.width = x;
+        state.resolution.height = y;
+        bus.emit('resize', state.resolution);
+    },
+    scrolling () {
+        let realScroll = document.body.scrollHeight - state.resolution.height;
+        if (document.body.scrollTop + 400 > realScroll) {
+            bus.emit('scroll-bottom', state.resolution);
+        }
     }
 
 };
@@ -68,6 +95,7 @@ const actions = {
 const mutations = {
     [types.DEVICE_SET_CURRENT_DEVICE] (state, device) {
         state.current = device;
+        cache.setItem(keys.DEVICE_KEY, device);
         let i = state.devices.findIndex((i) => i.id === device.id);
         if (i >= 0) {
             state.devices[i] = device;
@@ -101,15 +129,5 @@ export default {
     mutations
 };
 
-window.addEventListener('resize', function () {
-    var w = window;
-    var d = document;
-    var e = d.documentElement;
-    var g = d.getElementsByTagName('body')[0];
-    var x = w.innerWidth || e.clientWidth || g.clientWidth;
-    var y = w.innerHeight || e.clientHeight || g.clientHeight;
-
-    state.resolution.width = x;
-    state.resolution.height = y;
-    bus.emit('resize', state.resolution);
-}, false);
+window.addEventListener('resize', actions.resize, false);
+window.addEventListener('scroll', actions.scrolling, false);

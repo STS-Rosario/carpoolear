@@ -1,3 +1,13 @@
 .circle-box {
+    background: no-repeat center center; 
+    background-size: cover;
     border-radius: 50%;
+    max-width: 240px;
+    background-image: url(http://carpoolear.138.197.64.208.nip.io/image/profile/070420172018350518438001499210315.jpeg);
+    max-height: 240px;
+    margin: 0 auto;
+    width: 70vw;
+    height: 70vw;
+    position: relative;
+    display: inline-block;
 }

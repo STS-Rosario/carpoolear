@@ -2,6 +2,7 @@ import * as types from './mutation-types';
 import cache, {keys} from '../services/cache';
 import bus from '../services/bus-event';
 import {TripApi} from '../services/api';
+import {Thread, stopThreads} from '../classes/Threads';
 
 let tripsApi = new TripApi();
 
@@ -53,9 +54,16 @@ export const startApp = (store) => {
         store.dispatch('auth/fetchUser');
         store.dispatch('myTrips/tripAsDriver');
         store.dispatch('myTrips/tripAsPassenger');
-        store.dispatch('myTrips/pendingRates');
+        store.dispatch('rates/pendingRates');
+        store.dispatch('passenger/getPendingRequest');
         store.dispatch('cars/index');
+        store.dispatch('startThread');
+        if (store.state.cordova.device) {
+            store.dispatch('device/update');
+        }
     }
+    store.dispatch('device/resize');
+
     bus.emit('system-ready');
 };
 
@@ -64,7 +72,9 @@ export const getTrip = (store, id) => {
     if (trips) {
         for (let i = 0; i < trips.length; i++) {
             if (trips[i].id === id) {
-                return Promise.resolve(trips[i]);
+                store.commit('trips/' + types.TRIPS_SET_CURRENT, trips[i]);
+                break;
+                // return Promise.resolve(trips[i]);
             }
         }
     }
@@ -73,7 +83,9 @@ export const getTrip = (store, id) => {
     if (myTrips) {
         for (let i = 0; i < myTrips.length; i++) {
             if (myTrips[i].id === id) {
-                return Promise.resolve(myTrips[i]);
+                store.commit('trips/' + types.TRIPS_SET_CURRENT, myTrips[i]);
+                break;
+                // return Promise.resolve(myTrips[i]);
             }
         }
     }
@@ -82,12 +94,27 @@ export const getTrip = (store, id) => {
     if (myTrips) {
         for (let i = 0; i < myTrips.length; i++) {
             if (myTrips[i].id === id) {
-                return Promise.resolve(myTrips[i]);
+                store.commit('trips/' + types.TRIPS_SET_CURRENT, myTrips[i]);
+                break;
+                // return Promise.resolve(myTrips[i]);
             }
         }
     }
 
     return tripsApi.show(id).then(response => {
+        store.commit('trips/' + types.TRIPS_SET_CURRENT, response.data);
         return Promise.resolve(response.data);
     });
+};
+
+export const startThread = (store) => {
+    let fn = function () {
+        store.dispatch('notifications/count');
+    };
+    let th = new Thread(fn, 'NOTIFICATIONS');
+    th.run(20000, true);
+};
+
+export const stopThread = (store) => {
+    stopThreads('NOTIFICATIONS');
 };
