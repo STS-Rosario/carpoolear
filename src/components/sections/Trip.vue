@@ -1,5 +1,5 @@
 <template>
-  <div class="col-lg-6 col-md-8 col-sm-12"  v-on:click='goToDetail'>
+  <div class="col-lg-6 col-md-8 col-sm-12" v-on:click='goToDetail' >
     <div class="trip" v-bind:class="{ 'trip-almost-fill': trip.seats_available == 1, 'trip-mostly-available': trip.seats_available > 3, 'trip-with-driver': user }" >
         <div class="panel panel-default panel-card card card-trip">
           <div class="panel-heading card_heading">
