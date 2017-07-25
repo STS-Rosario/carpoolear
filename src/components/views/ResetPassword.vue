@@ -36,6 +36,8 @@ import { mapActions, mapGetters } from 'vuex';
 import bus from '../../services/bus-event';
 import router from '../../router';
 
+let emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+
 export default {
     name: 'reset-password',
     props: {
@@ -69,15 +71,19 @@ export default {
         }),
 
         reset () {
-            this.loading = true;
             this.error = null;
-            this.resetPassword(this.email).then(() => {
-                this.loading = false;
-                this.send = true;
-            }, () => {
-                this.loading = false;
-                this.error = 'No se encuentra el e-mail en nuestra base de datos';
-            });
+            if (emailRegex.test(this.email)) {
+                this.loading = true;
+                this.resetPassword(this.email).then(() => {
+                    this.loading = false;
+                    this.send = true;
+                }, () => {
+                    this.loading = false;
+                    this.error = 'No se encuentra el e-mail en nuestra base de datos.';
+                });
+            } else {
+                this.error = 'Ingrese un email valido.';
+            }
         },
 
         change () {
