@@ -50,6 +50,12 @@
         <splash height="1242" src="res/screen/ios/Default-736h.png" width="2208" />
         <splash height="2208" src="res/screen/ios/Default-Landscape-736h.png" width="1242" />
     </platform>
+    <platform name="browser">
+        <preference name="SplashScreenDelay" value="0" /> <!-- defaults to "3000" -->
+        <preference name="ShowSplashScreen" value="false" /> <!-- defaults to "true" -->
+        <preference name="SplashScreenWidth" value="0" /> <!-- defaults to "170" -->
+        <preference name="SplashScreenHeight" value="0" /> <!-- defaults to "200" -->
+    </platform>
     <hook src="scripts/copy_dist.js" type="before_prepare" />
     <engine name="android" spec="^6.2.3" />
     <engine name="browser" spec="^4.1.0" />
