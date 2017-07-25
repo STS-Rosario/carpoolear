@@ -66,7 +66,7 @@ export default {
             this.doRegister({email, password, passwordConfirmation, name, termsAndConditions}).then(() => {
                 this.progress = false;
             }).catch(() => {
-                dialogs.message('La cuenta de email esta en uso', {estado: 'error'});
+                dialogs.message('La cuenta de email ingresada se encuentra en uso.', {estado: 'error'});
                 this.progress = false;
             });
         },

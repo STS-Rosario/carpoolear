@@ -10,7 +10,9 @@ module.exports = function (ctx) {
     var path = ctx.requireCordovaModule('path');
     var deferral = ctx.requireCordovaModule('q').defer();
 
+    var isWin = /^win/.test(process.platform);
     var platform = '';
+    
     if (android || ios) {
         platform = 'MOVIL';
         if (browser) {
@@ -22,11 +24,20 @@ module.exports = function (ctx) {
 
     cd('..');
 
-    if (ctx.opts.options && ctx.opts.options.release) {
-        exec('export PLATFORM=' + platform + ' && npm run build');
+    // check if is it window or linux/mac
+    if (isWin) {
+        if (ctx.opts.options && ctx.opts.options.release) {
+            exec('set PLATFORM=' + platform + ' && npm run build');
+        } else {
+            exec('set PLATFORM=' + platform + ' && npm run cordova-build');
+        }
     } else {
-        exec('export PLATFORM=' + platform + ' && npm run cordova-build');
-    }
+        if (ctx.opts.options && ctx.opts.options.release) {
+            exec('export PLATFORM=' + platform + ' && npm run build');
+        } else {
+            exec('export PLATFORM=' + platform + ' && npm run cordova-build');
+        }
+    }    
 
 
     cd('cordova');

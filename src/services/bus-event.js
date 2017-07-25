@@ -6,7 +6,6 @@ class EventBuffer {
     }
 
     emit (name, params) {
-        console.log(this.buffer._events);
         let b = this.buffer._events[name] && this.buffer._events[name].length;
         this.buffer.$emit(name, params);
         return b;
