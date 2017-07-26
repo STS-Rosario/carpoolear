@@ -4,10 +4,10 @@
             <img :src="carpoolear_logo" />
         </router-link>
         <h1> Recuperar contraseña </h1>
-        <div v-if="send">
+        <div class="form row" v-if="send">
             <h3> Se ha enviado un email a su casilla de correo con las indicaciones para restablecer su contraseña. </h3>
         </div>
-        <div class='form row' v-else-if="!token">
+        <div class="form row" v-else-if="!token">
             <label for="txt_email">E-mail</label>
             <input type="text" id="txt_email" v-model='email'/>
 
@@ -15,8 +15,7 @@
             <span v-if="loading" class='loading'> Espere... </span>
             <span v-if="error"> {{error}} </span>
         </div>
-        <div class='form' v-else-if="token">
-            <div class='form'>
+        <div class='form row' v-else-if="token">
             <label for="txt_password">Password</label>
             <input  type="password" id="txt_password" v-model='password' />
 
@@ -26,7 +25,6 @@
             <button class="btn btn-primary" @click="change"> Cambiar contraseña </button>
             <span v-if="loading" class='loading'> Espere... </span>
             <span v-if="error"> {{error}} </span>
-            </div>
         </div>
     </div>
 </template>
@@ -95,7 +93,7 @@ export default {
                 data.password_confirmation = this.password_confirmation;
                 let token = this.token;
                 this.changePassword({token, data}).then(() => {
-                    // nothing
+                    this.$router.replace({name: 'login'});
                 }, () => {
                     this.loading = false;
                     this.error = 'Token invalido';

@@ -81,7 +81,20 @@ export default [
         name: 'reset-password-confirm',
         beforeEnter: guest,
         component: require('../components/views/ResetPassword'),
-        props: true
+        props: true,
+        meta: {
+            actionbar: {
+                header: {
+                    logo: {
+                        show: false
+                    },
+                    buttons: ['back']
+                }
+            },
+            background: {
+                style: 'blue'
+            }
+        }
     },
     {
         path: '/profile/:id',

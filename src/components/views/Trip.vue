@@ -133,7 +133,7 @@
                                     <router-link class="btn-primary btn-search btn-shadowed-black" :to="{name: 'profile', params: {id: trip.user.id}}"> Ver Perfil </router-link>
                                 </div>
                             </div>
-                            <div class="row italic quote">
+                            <div class="row italic quote" v-if="trip.description && trip.description.length">
                                 <i class="fa fa-quote-left" aria-hidden="true"></i>
                                 <span> {{trip.description}} </span>
                             </div>
