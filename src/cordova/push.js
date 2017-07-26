@@ -36,9 +36,9 @@ export default {
                 icon: 'icon',
                 iconColor: '#6E00A0'
             },
-            browser: {
-                pushServiceURL: 'http://push.api.phonegap.com/v1/push'
-            },
+            // browser: {
+            //     pushServiceURL: 'http://push.api.phonegap.com/v1/push'
+            // },
             ios: {
                 'sound': true,
                 'alert': true,

@@ -118,22 +118,22 @@
                         <div class="driver-profile">
                             <div class="row">
                                 <div class="col-xs-9 col-md-8 col-lg-8">
-                                    <div class="trip_driver_img circle-box" v-imgSrc:profile="trip.user.image"></div>
+                                    <div class="trip_driver_img circle-box" v-imgSrc:profile="getUserImage"></div>
                                 </div>
                                 <div class="col-xs-15 driver-data">
                                     <div>{{trip.user.name}}</div>
                                     <div class="profile-info--ratings">
-                                        <i class="material-icons" aria-hidden="true">&#xE8DC;</i> <span> {{trip.user.positive_ratings}} </span>
-                                        <i class="material-icons" aria-hidden="true">&#xE8DB;</i> <span> {{trip.user.negative_ratings}} </span>
+                                        <svgItem icon="thumbUp" size="18"></svgItem> <span> {{trip.user.positive_ratings}} </span>
+                                        <svgItem icon="thumbDown" size="18"></svgItem> <span> {{trip.user.negative_ratings}} </span>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-24">
-                                    <router-link class="btn-primary btn-search btn-shadowed-black" :to="{name: 'trips'}"> Ver Perfil </router-link>
+                                    <router-link class="btn-primary btn-search btn-shadowed-black" :to="{name: 'profile', params: {id: trip.user.id}}"> Ver Perfil </router-link>
                                 </div>
                             </div>
-                            <div class="row italic quote">
+                            <div class="row italic quote" v-if="trip.description && trip.description.length">
                                 <i class="fa fa-quote-left" aria-hidden="true"></i>
                                 <span> {{trip.description}} </span>
                             </div>
@@ -170,7 +170,8 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import router from '../../router';
-import bus from '../../services/bus-event.js';
+import bus from '../../services/bus-event';
+import svgItem from '../SvgItem';
 
 export default {
     name: 'trip',
@@ -359,23 +360,22 @@ export default {
             user: 'auth/user',
             trip: 'trips/currentTrip'
         }),
-
         owner () {
             return this.user.id === this.trip.user.id;
         },
-
         canRequest () {
             return !this.owner && !this.trip.request;
         },
-
         isPassenger () {
             return this.trip.passenger.findIndex(item => item.id === this.user.id) >= 0;
+        },
+        getUserImage () {
+            return this.user.id === this.trip.user.id ? this.user.image : this.trip.user.image;
         }
-
     },
 
     components: {
-
+        svgItem
     },
 
     props: [

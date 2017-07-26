@@ -1,5 +1,5 @@
 <template>
-    <tabset>
+    <tabset ref="tabs">
         <tab header="Mis Viajes">
             <component :is="currentView"></component>
         </tab>
@@ -61,9 +61,9 @@ export default {
     },
 
     mounted () {
+        this.$refs.tabs.activateTab(1);
         if (this.id === 'me' || this.id === this.user.id) {
             this.setTitle('Mi Perfil');
-            console.log(this.user);
             this.setProfile(this.user);
             this.currentView = 'my-trips';
         } else {

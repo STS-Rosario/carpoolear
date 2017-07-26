@@ -1,5 +1,5 @@
 <template>
-  <div class="col-lg-6 col-md-8 col-sm-12"  v-on:click='goToDetail'>
+  <div class="col-lg-6 col-md-8 col-sm-12" v-on:click='goToDetail' >
     <div class="trip" v-bind:class="{ 'trip-almost-fill': trip.seats_available == 1, 'trip-mostly-available': trip.seats_available > 3, 'trip-with-driver': user }" >
         <div class="panel panel-default panel-card card card-trip">
           <div class="panel-heading card_heading">
@@ -19,7 +19,7 @@
               </div>
               <template v-if="user">
                 <div class="trip_driver_img_container">
-                  <div class="trip_driver_img circle-box" v-imgSrc:profile="trip.user.image"></div>
+                  <div class="trip_driver_img circle-box" v-imgSrc:profile="getUserImage"></div>
                 </div>
                 <div class="trip_driver_details">
                   <div class="trip_driver_name" >
@@ -124,6 +124,9 @@ export default {
         },
         destinyLongName () {
             return this.trip.points[this.trip.points.length - 1].json_address.ciudad.length > this.CITY_NAME_LONG_LENGTH;
+        },
+        getUserImage () {
+            return this.user.id === this.trip.user.id ? this.user.image : this.trip.user.image;
         }
     },
     mounted () {

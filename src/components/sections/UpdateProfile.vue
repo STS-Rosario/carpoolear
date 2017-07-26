@@ -5,7 +5,7 @@
             <div class='profile_image-container'>
                 <div class="circle-box" v-imgSrc:profile="user.image" :class="{'loading': loadingImg}">
                     <div @click="changePhoto" class="profile_image-edit">
-                        <i class="material-icons">&#xE439;</i>
+                        <svgItem icon='addPhoto' size='28'></svgItem>
                     </div>
                 </div>
             </div>
@@ -50,7 +50,6 @@
                     <input type="checkbox" v-model="user.emails_notifications"> Recibir notificaciones por correo electrónico.
                     </label>
                 </div>
-
                 <div class="form-group">
                     <label for="input-pass">Cambiar contraseña</label>
                     <input v-model="pass.password" type="password" class="form-control" id="input-pass" placeholder="Contraseña">
@@ -72,6 +71,7 @@
 import { mapGetters, mapActions } from 'vuex';
 import Calendar from '../Calendar';
 import Uploadfile from '../Uploadfile';
+import SvgItem from '../SvgItem';
 
 export default {
     name: 'upddate-profile',
@@ -169,7 +169,8 @@ export default {
     },
     components: {
         Calendar,
-        Uploadfile
+        Uploadfile,
+        SvgItem
     }
 };
 </script>

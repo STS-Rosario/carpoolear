@@ -24,7 +24,7 @@ html {
 body {
     background: var(--main-background);
     color: var(--main-font-color);
-    font-family: 'Roboto', 'Montserrat', sans-serif !important;
+    font-family: 'Roboto', 'Muli', sans-serif !important;
     font-weight: 400;
 }
 .app-container {
@@ -58,6 +58,15 @@ textarea {
 .no-bullet {
     list-style: none;
     padding: 0;
+}
+
+.no-bullet {
+    color: black;
+    font-weight: bold;
+}
+
+.no-bullet .label-soft {
+    font-weight: 400;
 }
 
 /* Overriding Bootstrap */
@@ -100,6 +109,11 @@ input[type=radio] + label {
     text-transform: uppercase;
     font-size: 0.9rem;
 }
+
+.btn-primary:disabled {
+    cursor: not-allowed;
+}
+
 
 .btn-shadowed {
     box-shadow: 0 0 6px 5px #CCCCCC;
@@ -832,13 +846,7 @@ textarea {
     margin-bottom: .7rem;
 }
 
-.trip-detail-component .profile-info--ratings i {
-    margin-right: .4em;
-    font-size: 18px;
-    vertical-align: middle;
-}
-
-.trip-detail-component .profile-info--ratings i+span {
+.trip-detail-component .profile-info--ratings .svgItem+span {
     margin-right: .4em;
 }
 
@@ -981,6 +989,10 @@ textarea {
     z-index: 1;
     top: 14px;
 }
+.new-trip-component .gmap-autocomplete .date-picker--cross {
+    right: 12px;
+}
+
 .gmap-autocomplete input {
     padding-right: 30px;
     margin-right: 0;
@@ -1201,6 +1213,10 @@ textarea {
     overflow: auto;
     margin-bottom: 3rem;
 }
+#trips-list > div {
+    padding-left: 0;
+    padding-right: 0;
+}
 .conversation_chat .input-group-btn:last-child>.btn, .input-group-btn:last-child>.btn-group {
     height: 45px;
 }
@@ -1260,10 +1276,6 @@ textarea {
     color: var(--secondary-font-color);
     background: red;
     vertical-align: top;
-}
-.actionbar-bottom .actionbar_item .big i {
-    margin-top: 6px;
-    font-weight: bold;
 }
 
 .actionbar_section {
@@ -1572,9 +1584,13 @@ ul {
 }
 
 @media only screen and (min-width: 768px) {
+    #trips-list > div {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
     .tab-content {
         min-height: initial;
-    }    
+    }
     .trips.container {
         padding-top: 0;
     }
@@ -1864,6 +1880,10 @@ ul {
     .gmap-autocomplete .date-picker--cross {
         right: 20px;
         top: 15px;
+    }
+    .new-trip-component .gmap-autocomplete .date-picker--cross {
+        right: 12px;
+        top: 14px;
     }
     .search-section  .gmap-autocomplete .date-picker--cross {
         top: 23px;

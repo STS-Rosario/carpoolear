@@ -35,31 +35,31 @@ const state = {
     footer_buttons: [
         {
             id: 'home',
-            icon: '&#xE88A;',
+            icon: 'home',
             url: 'trips',
             active: true
         },
         {
             id: 'profile',
-            icon: '&#xE7FD;',
+            icon: 'contact',
             url: 'profile',
             active: false
         },
         {
             id: 'new-trip',
-            icon: '&#xE145;',
+            icon: 'add',
             url: 'new-trip',
             active: false
         },
         {
             id: 'conversations',
-            icon: '&#xE0C9;',
+            icon: 'message',
             url: 'conversations-list',
             active: false
         },
         {
             id: 'notifications',
-            icon: '&#xE7F4;',
+            icon: 'bell',
             url: 'notifications',
             active: false
         }
