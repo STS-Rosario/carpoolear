@@ -51,6 +51,7 @@
         <splash height="2208" src="res/screen/ios/Default-Landscape-736h.png" width="1242" />
     </platform>
     <platform name="browser">
+        <preference name="AutoHideSplashScreen" value="true" />
         <preference name="SplashScreenDelay" value="0" />
         <preference name="ShowSplashScreen" value="false" />
         <preference name="SplashScreenWidth" value="0" />

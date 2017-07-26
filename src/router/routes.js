@@ -1,5 +1,5 @@
 /* jshint esversion: 6 */
-import {auth} from './middleware.js';
+import {auth, guest} from './middleware.js';
 
 export default [
     {
@@ -14,6 +14,7 @@ export default [
     {
         path: '/login',
         name: 'login',
+        beforeEnter: guest,
         component: require('../components/views/Login'),
         meta: {
             actionbar: {
@@ -32,6 +33,7 @@ export default [
     {
         path: '/register',
         name: 'register',
+        beforeEnter: guest,
         component: require('../components/views/Register'),
         meta: {
             actionbar: {
@@ -50,12 +52,14 @@ export default [
     {
         path: '/activate/:token',
         name: 'activate',
+        beforeEnter: guest,
         component: require('../components/views/Activate'),
         props: true
     },
     {
         path: '/reset-password',
         name: 'reset-password',
+        beforeEnter: guest,
         component: require('../components/views/ResetPassword'),
         props: true,
         meta: {
@@ -75,6 +79,7 @@ export default [
     {
         path: '/reset-password/:token',
         name: 'reset-password-confirm',
+        beforeEnter: guest,
         component: require('../components/views/ResetPassword'),
         props: true
     },
@@ -83,6 +88,7 @@ export default [
         name: 'profile',
         component: require('../components/views/Profile.vue'),
         props: true,
+        beforeEnter: auth,
         meta: {
             actionbar: {
                 footer: {

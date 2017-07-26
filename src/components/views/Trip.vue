@@ -130,7 +130,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-24">
-                                    <router-link class="btn-primary btn-search btn-shadowed-black" :to="{name: 'trips'}"> Ver Perfil </router-link>
+                                    <router-link class="btn-primary btn-search btn-shadowed-black" :to="{name: 'profile', params: {id: trip.user.id}}"> Ver Perfil </router-link>
                                 </div>
                             </div>
                             <div class="row italic quote">
