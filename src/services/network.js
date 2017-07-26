@@ -5,11 +5,35 @@ import axios from 'axios';
 
 const API_URL = process.env.API_URL;
 
+class MyPromise extends Promise {
+    constructor (executor) {
+        super((resolve, reject) => {
+            // before
+            return executor(resolve, reject);
+        });
+        // after
+    }
+
+    then (onFulfilled, onRejected) {
+        // before
+        const returnValue = super.then(onFulfilled, onRejected);
+        returnValue.abort = this.abort;
+        // after
+        return returnValue;
+    }
+
+    catch (onRejected) {
+        const returnValue = super.catch(onRejected);
+        returnValue.abort = this.abort;
+        return returnValue;
+    }
+}
+
 export default {
     pendingRequest: new TaggedList(),
 
     addRequest (xhr, tags) {
-        this.pendingRequest.add(tags);
+        this.pendingRequest.add(tags, xhr);
     },
 
     getHeader (headers) {
@@ -24,21 +48,24 @@ export default {
     },
 
     processResponse (response, source) {
-        let promise = new Promise((resolve, reject) => {
+        let promise = new MyPromise((resolve, reject) => {
             response.then((response) => {
                 resolve(response.data);
             }).catch((resp) => {
         // Revisar el tipo de error!
-                let data = resp.response.data;
-                let status = resp.response.status;
-                reject({data, status});
+                if (resp.response) {
+                    let data = resp.response.data;
+                    let status = resp.response.status;
+                    reject({ data, status });
+                } else {
+                    reject(resp);
+                }
             });
         });
 
         promise.abort = () => {
-            source.cancel('abort by the system');
+            source.cancel('Abort by the system');
         };
-
         return promise;
     },
 

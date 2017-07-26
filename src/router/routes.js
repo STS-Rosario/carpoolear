@@ -1,5 +1,5 @@
 /* jshint esversion: 6 */
-import {auth} from './middleware.js';
+import {auth, guest} from './middleware.js';
 
 export default [
     {
@@ -14,61 +14,206 @@ export default [
     {
         path: '/login',
         name: 'login',
-        component: require('../components/views/Login')
+        beforeEnter: guest,
+        component: require('../components/views/Login'),
+        meta: {
+            actionbar: {
+                header: {
+                    logo: {
+                        show: false
+                    },
+                    buttons: ['clear']
+                }
+            },
+            background: {
+                style: 'blue'
+            }
+        }
     },
     {
         path: '/register',
         name: 'register',
-        component: require('../components/views/Register')
+        beforeEnter: guest,
+        component: require('../components/views/Register'),
+        meta: {
+            actionbar: {
+                header: {
+                    logo: {
+                        show: false
+                    },
+                    buttons: ['back']
+                }
+            },
+            background: {
+                style: 'blue'
+            }
+        }
     },
     {
         path: '/activate/:token',
         name: 'activate',
+        beforeEnter: guest,
         component: require('../components/views/Activate'),
         props: true
     },
     {
         path: '/reset-password',
         name: 'reset-password',
+        beforeEnter: guest,
         component: require('../components/views/ResetPassword'),
-        props: true
+        props: true,
+        meta: {
+            actionbar: {
+                header: {
+                    logo: {
+                        show: false
+                    },
+                    buttons: ['back']
+                }
+            },
+            background: {
+                style: 'blue'
+            }
+        }
     },
     {
         path: '/reset-password/:token',
         name: 'reset-password-confirm',
+        beforeEnter: guest,
         component: require('../components/views/ResetPassword'),
-        props: true
+        props: true,
+        meta: {
+            actionbar: {
+                header: {
+                    logo: {
+                        show: false
+                    },
+                    buttons: ['back']
+                }
+            },
+            background: {
+                style: 'blue'
+            }
+        }
+    },
+    {
+        path: '/profile/:id',
+        name: 'profile',
+        component: require('../components/views/Profile.vue'),
+        props: true,
+        beforeEnter: auth,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'profile'
+                },
+                header: {
+                    title: 'Mi Perfil',
+                    buttons: []
+                }
+            }
+        }
     },
     {
         path: '/my-trips',
         name: 'my-trips',
         component: require('../components/views/MyTrips'),
-        beforeEnter: auth
+        beforeEnter: auth,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'profile'
+                },
+                header: {
+                    title: 'Mis Viajes',
+                    buttons: []
+                }
+            }
+        }
     },
     {
         path: '/trips',
         name: 'trips',
-        component: require('../components/views/Trips')
+        component: require('../components/views/Trips'),
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'home'
+                },
+                header: {
+                    buttons: ['search']
+                }
+            }
+        }
     },
     {
         path: '/trips/create',
         name: 'new-trip',
         component: require('../components/views/NewTrip'),
-        beforeEnter: auth
+        beforeEnter: auth,
+        meta: {
+            actionbar: {
+                header: {
+                    title: 'Crear viaje',
+                    buttons: ['clear']
+                }
+            }
+        }
     },
     {
         path: '/trips/update/:id',
         name: 'update-trip',
         component: require('../components/views/NewTrip'),
         beforeEnter: auth,
-        props: true
+        props: true,
+        meta: {
+            actionbar: {
+                header: {
+                    title: 'Editar viaje',
+                    buttons: ['clear']
+                }
+            }
+        }
     },
     {
         path: '/trips/:id',
         name: 'detail_trip',
         component: require('../components/views/Trip'),
         beforeEnter: auth,
-        props: true
+        props: true,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'home'
+                },
+                header: {
+                    title: 'Viaje',
+                    buttons: ['back']
+                }
+            }
+        }
+    },
+    {
+        path: '/notifications',
+        name: 'notifications',
+        component: require('../components/views/Notifications.vue'),
+        beforeEnter: auth,
+        props: true,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'notifications'
+                },
+                header: {
+                    title: 'Notificaciones'
+                }
+            }
+        }
     },
     {
         path: '/setting',
@@ -79,19 +224,19 @@ export default [
                 path: 'profile',
                 name: 'profile_update',
                 component: require('../components/sections/UpdateProfile.vue'),
-                meta: 'profile'
+                meta: { tab: 'profile' }
             },
             {
                 path: 'friends',
                 name: 'friends_setting',
                 component: require('../components/sections/FriendsSetting.vue'),
-                meta: 'friends'
+                meta: { tab: 'friends' }
             },
             {
                 path: 'friends/search',
                 name: 'friends_search',
                 component: require('../components/sections/FriendsRequest.vue'),
-                meta: 'friends'
+                meta: { tab: 'friends' }
             }
         ]
     },
@@ -100,6 +245,20 @@ export default [
         name: 'conversations-list',
         component: require('../components/views/ConversationList'),
         beforeEnter: auth,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'conversations'
+                },
+                header: {
+                    title: 'Mensajes'
+                }
+            },
+            background: {
+                style: 'white'
+            }
+        },
         children: [
             {
                 path: ':id',
@@ -107,7 +266,19 @@ export default [
                 component: require('../components/views/ConversationChat'),
                 props: true,
                 meta: {
-                    hide: true
+                    hide: true,
+                    actionbar: {
+                        footer: {
+                            active_id: 'conversations'
+                        },
+                        header: {
+                            title: 'Conversación',
+                            buttons: ['back']
+                        }
+                    },
+                    background: {
+                        style: 'white'
+                    }
                 }
             }
         ]
@@ -115,5 +286,18 @@ export default [
     {
         path: '/*',
         redirect: '/trips'
+    },
+    {
+        path: '/about',
+        name: 'acerca_de',
+        component: require('../components/views/About'),
+        meta: {
+            actionbar: {
+                header: {
+                    title: 'Acerca de',
+                    buttons: ['clear']
+                }
+            }
+        }
     }
 ];

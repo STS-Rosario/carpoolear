@@ -1,6 +1,11 @@
 import * as types from '../mutation-types';
 import facebook from '../../cordova/facebook.js';
+import {AuthApi} from '../../services/api';
+import globalStore from '../index';
+import router from '../..//router';
+import bus from '../../services/bus-event.js';
 
+let authApi = new AuthApi();
 // initial state
 const state = {
     deviceReady: false,
@@ -27,6 +32,7 @@ const getters = {
         if (state.deviceId) {
             data.device_id = state.deviceId;
         }
+        return data;
     }
 
 };
@@ -38,7 +44,13 @@ const actions = {
         console.log(notification);
     },
     facebookLogin (context) {
-        facebook.login();
+        facebook.login().then((response) => {
+            let accessToken = response.authResponse.accessToken;
+            authApi.loginWithProvider('facebook', {access_token: accessToken}).then((response) => {
+                let token = response.token;
+                globalStore.dispatch('auth/onLoggin', token);
+            });
+        });
     },
 
     deviceOnline (store) {
@@ -58,7 +70,15 @@ const actions = {
     },
 
     onBackButton (store) {
-        // do staff
+        let result = bus.emit('backbutton');
+        if (!result) {
+            if (router.stack.length > 0) {
+                router.go(-1);
+            } else {
+                console.log('Must close apps');
+                navigator.Backbutton.goHome();
+            }
+        }
     }
 };
 

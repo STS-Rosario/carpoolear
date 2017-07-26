@@ -10,13 +10,20 @@ import myTrips from './modules/my-trips';
 import conversations from './modules/conversations';
 import cars from './modules/car';
 import friends from './modules/friends';
+import passenger from './modules/passenger';
+import notifications from './modules/notifications';
+import rates from './modules/rates';
+import actionbars from './modules/actionbars';
+import profile from './modules/profile';
+import background from './modules/background';
+
 Vue.use(Vuex);
 
 export default new Vuex.Store({
     actions,
     getters,
     state: {
-        appVersion: 1
+        appVersion: 3
     },
     modules: {
         auth,
@@ -26,6 +33,12 @@ export default new Vuex.Store({
         myTrips,
         conversations,
         cars,
-        friends
+        friends,
+        passenger,
+        notifications,
+        rates,
+        actionbars,
+        profile,
+        background
     }
 });

@@ -7,7 +7,7 @@
             <div class="panel-title card-trip_title row">
               <template v-if="user">
                 <div class="col-xs-5">
-                    <img alt="" :src="user.image | profile-image" class="trip_driver_img circle-box" />
+                    <div class="trip_driver_img circle-box" v-imgSrc:profile="user.image"></div>
                 </div>
                 <div class="col-xs-14">
                   <div class="trip_driver_name" >

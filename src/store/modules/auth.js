@@ -32,9 +32,12 @@ function onLoggin (store, token) {
     globalStore.dispatch('trips/tripsSearch');
     globalStore.dispatch('myTrips/tripAsDriver');
     globalStore.dispatch('myTrips/tripAsPassenger');
-    globalStore.dispatch('myTrips/pendingRates');
+    globalStore.dispatch('rates/pendingRates');
     globalStore.dispatch('cars/index');
-    router.push({ name: 'trips' });
+    globalStore.dispatch('passenger/getPendingRequest');
+    globalStore.dispatch('startThread');
+    // router.replace({ name: 'trips' });
+    router.rememberBack();
 }
 
 function login (store, { email, password }) {
@@ -44,6 +47,7 @@ function login (store, { email, password }) {
 
     return authApi.login(creds).then((response) => {
         onLoggin(store, response.token);
+        return Promise.resolve();
     }, ({data, status}) => {
         return Promise.reject(data);
     });
@@ -92,6 +96,7 @@ function register (store, { email, password, passwordConfirmation, name, termsAn
 
     return userApi.register(data).then((data) => {
         console.log(data);
+        return Promise.resolve();
     }).catch((err) => {
         if (err.response) {
             console.log(err.response.data);
@@ -99,7 +104,11 @@ function register (store, { email, password, passwordConfirmation, name, termsAn
             console.log(err.response.headers);
         } else {
             console.log(err.message);
+            if (err.message === 'Could not create new user.') {
+
+            }
         }
+        return Promise.reject();
     });
 }
 
@@ -113,7 +122,7 @@ function fetchUser (store) {
 
 function retoken (store) {
     let data = {};
-    data.app_version = store.rootState.appVersion;
+    // data.app_version = store.rootState.appVersion;
 
     return new Promise((resolve, reject) => {
         authApi.retoken(data).then((response) => {
@@ -136,6 +145,8 @@ function logout (store) {
     }
     store.commit(types.AUTH_LOGOUT);
     globalStore.commit('device/' + types.DEVICE_SET_DEVICES, []);
+    globalStore.dispatch('stopThread');
+    router.replace({ name: 'trips' });
 }
 
 function update (store, data) {
@@ -168,7 +179,8 @@ const actions = {
     resetPassword,
     changePassword,
     update,
-    updatePhoto
+    updatePhoto,
+    onLoggin
 };
 
 // mutations
