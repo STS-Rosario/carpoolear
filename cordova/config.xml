@@ -30,6 +30,8 @@
     <platform name="ios">
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
+        <icon gap:platform="ios" height="20" src="res/icon/ios/icon-20.png" width="20" />
+        <icon gap:platform="ios" height="40" src="res/icon/ios/icon-40.png" width="40" />
         <icon gap:platform="ios" height="57" src="res/icon/ios/icon-57.png" width="57" />
         <icon gap:platform="ios" height="72" src="res/icon/ios/icon-72.png" width="72" />
         <icon gap:platform="ios" height="114" src="res/icon/ios/icon-57-2x.png" width="114" />
