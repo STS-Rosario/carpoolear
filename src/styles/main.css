@@ -110,6 +110,11 @@ input[type=radio] + label {
     font-size: 0.9rem;
 }
 
+.btn-primary:disabled {
+    cursor: not-allowed;
+}
+
+
 .btn-shadowed {
     box-shadow: 0 0 6px 5px #CCCCCC;
 }
@@ -1579,7 +1584,7 @@ ul {
 @media only screen and (min-width: 768px) {
     .tab-content {
         min-height: initial;
-    }    
+    }
     .trips.container {
         padding-top: 0;
     }

@@ -51,10 +51,10 @@
         <splash height="2208" src="res/screen/ios/Default-Landscape-736h.png" width="1242" />
     </platform>
     <platform name="browser">
-        <preference name="SplashScreenDelay" value="0" /> <!-- defaults to "3000" -->
-        <preference name="ShowSplashScreen" value="false" /> <!-- defaults to "true" -->
-        <preference name="SplashScreenWidth" value="0" /> <!-- defaults to "170" -->
-        <preference name="SplashScreenHeight" value="0" /> <!-- defaults to "200" -->
+        <preference name="SplashScreenDelay" value="0" />
+        <preference name="ShowSplashScreen" value="false" />
+        <preference name="SplashScreenWidth" value="0" />
+        <preference name="SplashScreenHeight" value="0" />
     </platform>
     <hook src="scripts/copy_dist.js" type="before_prepare" />
     <engine name="android" spec="^6.2.3" />
@@ -62,8 +62,8 @@
     <plugin name="cordova-plugin-backbutton" spec="^0.3.0" />
     <plugin name="cordova-plugin-device" spec="~1.1.4" />
     <plugin name="cordova-plugin-facebook4" spec="~1.7.4">
-        <variable name="APP_ID" value="862086450497061" />
-        <variable name="APP_NAME" value="Carpoolear" />
+        <variable name="APP_ID" value="829566563845558" />
+        <variable name="APP_NAME" value="Hay Equipo" />
     </plugin>
     <plugin name="cordova-plugin-nativestorage" spec="~2.2.2" />
     <plugin name="cordova-plugin-network-information" spec="~1.3.1" />
