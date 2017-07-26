@@ -15,6 +15,8 @@ const router = new VueRouter({
 
 });
 
+router.rememberRoute = null;
+
 router.beforeEach((to, from, next) => {
     let actionbar = to.meta.actionbar || {};
     let background = to.meta.background || {};
@@ -68,16 +70,33 @@ router._push = router.push;
 router._replace = router.replace;
 router._go = router.go;
 
+router.rememberBack = function () {
+    if (router.rememberRoute) {
+        router.push(router.rememberRoute);
+        router.rememberRoute = null;
+    } else {
+        router.replace({name: 'trips'});
+    }
+};
+
 router.push = function (data) {
     console.log('push', JSON.stringify(router.stack), JSON.stringify(data));
-    router.stack.push(data);
+    if (data.name !== 'trips') {
+        router.stack.push(data);
+    } else {
+        router.stack = [];
+    }
     router._push(data);
 };
 
 router.replace = function (data) {
     console.log('replace', JSON.stringify(router.stack), JSON.stringify(data));
-    router.stack.pop();
-    router.stack.push(data);
+    if (data.name !== 'trips') {
+        router.stack.pop();
+        router.stack.push(data);
+    } else {
+        router.stack = [];
+    }
     router._push(data);
 };
 

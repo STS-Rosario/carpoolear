@@ -36,7 +36,8 @@ function onLoggin (store, token) {
     globalStore.dispatch('cars/index');
     globalStore.dispatch('passenger/getPendingRequest');
     globalStore.dispatch('startThread');
-    router.replace({ name: 'trips' });
+    // router.replace({ name: 'trips' });
+    router.rememberBack();
 }
 
 function login (store, { email, password }) {
