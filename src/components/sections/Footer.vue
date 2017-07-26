@@ -4,7 +4,7 @@
 
         <div class="actionbar_item" v-for="item in footerButtons" :class="{ active: item.active }" @click="onClick(item)">
             <span :class="{big: item.id === 'new-trip'}">
-                <i class="material-icons" aria-hidden="true" v-html="item.icon"></i>
+                <svgItem size="26" :icon="item.icon"></svgItem>
             </span>
         </div>
 
@@ -70,6 +70,7 @@
 </template>
 <script>
 import {mapActions, mapGetters} from 'vuex';
+import svgItem from '../SvgItem';
 
 export default {
     name: 'footer',
@@ -87,6 +88,9 @@ export default {
         ...mapActions({
             onClick: 'actionbars/footerButtonClick'
         })
+    },
+    components: {
+        svgItem
     }
 };
 </script>
