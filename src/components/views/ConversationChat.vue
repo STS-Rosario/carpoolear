@@ -16,9 +16,9 @@
             </div>
             <div class="list-group-item">
                 <div class="input-group">
-                    <input ref="ipt-text" id="ipt-text" v-model="message" type="text" class="form-control" placeholder="Escribir mensaje..." v-jump:click="'btn-send'" maxlength="255">
+                    <input ref="ipt-text" id="ipt-text" v-model="message" type="text" class="form-control" placeholder="Escribir mensaje..." v-jump:click="'btn-send'" maxlength="255" autofocus>
                     <span class="input-group-btn">
-                        <button ref="btn-send" id="btn-send" class="btn btn-default" type="button" @click="sendMessage">
+                        <button ref="btn-send" id="btn-send" class="btn btn-default" type="button" @click="sendMessage" v-jump:focus="'ipt-text'">
                             <i class="fa fa-play" aria-hidden="true"></i>
                         </button>
                     </span>
@@ -80,11 +80,11 @@ export default {
         sendMessage () {
             this.sending = true;
             this.send(this.message).then(data => {
-                this.message = '';
                 this.sending = false;
             }).catch(() => {
                 this.sending = false;
             });
+            this.message = '';
         },
 
         onBackClick () {

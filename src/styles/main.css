@@ -531,7 +531,7 @@ textarea {
     border: none;
     color: #aaa;
     text-transform: uppercase;
-    font-size: 12px;
+    font-size: 10px;
 }
 .nav-tabs>li>a:hover {
     border: none;
@@ -1483,10 +1483,32 @@ ul {
     display: none;
 }
 
-@media only screen and (max-width: 400px) {
+@media only screen and (min-width: 300px) {
     .nav-tabs>li>a {
-        font-size: 10px;
+        font-size: 12px;
     }
+    .nav>li>a.active::after {
+        top: 38px;
+    }
+}
+@media only screen and (min-width: 400px) {
+    .nav-tabs>li>a {
+        font-size: 16px;
+    }
+    .nav>li>a.active::after {
+        top: 44px;
+    }
+}
+@media only screen and (min-width: 530px) {
+    .nav-tabs>li>a {
+        font-size: 18px;
+    }
+    .nav>li>a.active::after {
+        top: 48px;
+    }
+}
+
+@media only screen and (max-width: 400px) {
     .nav>li>a.active::after {
         top: 36px;
     }
