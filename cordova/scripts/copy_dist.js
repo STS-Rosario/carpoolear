@@ -26,10 +26,12 @@ module.exports = function (ctx) {
 
     // check if is it window or linux/mac
     if (isWin) {
+        console.log('its window');
+        exec('SET PLATFORM=' + platform );
         if (ctx.opts.options && ctx.opts.options.release) {
-            exec('set PLATFORM=' + platform + ' && npm run build');
+            exec('npm run build');
         } else {
-            exec('set PLATFORM=' + platform + ' && npm run cordova-build');
+            exec('npm run cordova-build');
         }
     } else {
         if (ctx.opts.options && ctx.opts.options.release) {
@@ -39,6 +41,7 @@ module.exports = function (ctx) {
         }
     }    
 
+    
 
     cd('cordova');
 
