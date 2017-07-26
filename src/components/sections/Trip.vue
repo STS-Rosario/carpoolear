@@ -19,7 +19,7 @@
               </div>
               <template v-if="user">
                 <div class="trip_driver_img_container">
-                  <div class="trip_driver_img circle-box" v-imgSrc:profile="trip.user.image"></div>
+                  <div class="trip_driver_img circle-box" v-imgSrc:profile="getUserImage"></div>
                 </div>
                 <div class="trip_driver_details">
                   <div class="trip_driver_name" >
@@ -124,6 +124,9 @@ export default {
         },
         destinyLongName () {
             return this.trip.points[this.trip.points.length - 1].json_address.ciudad.length > this.CITY_NAME_LONG_LENGTH;
+        },
+        getUserImage () {
+            return this.user.id === this.trip.user.id ? this.user.image : this.trip.user.image;
         }
     },
     mounted () {

@@ -6,12 +6,12 @@ config = {
 }
 
 if (!process.env.PLATFORM || process.env.PLATFORM == 'DESKTOP') {
+  console.log('history');
   config.HISTORY_MODE = '"history"';
 } else {
+  console.log('hash');
   config.HISTORY_MODE = '"hash"';
 }
-
-console.log(config.HISTORY_MODE, process.env.PLATFORM);
 
 if (process.env.PLATFORM && process.env.PLATFORM == 'DESKTOP') {
   config.ROUTE_BASE = '"/app/"';
@@ -22,6 +22,5 @@ if (process.env.PLATFORM && process.env.PLATFORM == 'DESKTOP') {
     config.ROUTE_BASE = '""';
   }
 }
-console.log(config.ROUTE_BASE);
 
 module.exports = config;
