@@ -18,7 +18,7 @@ export default {
         }
         options = Object.assign(defaultOptions, options);
         console.log(options);
-        if (window && window.plugins && window.plugins.toast && window.plugins.toast.showWithOptions) {
+        if (window && window.plugins && window.plugins.toast && window.plugins.toast.showWithOptions && window.device && window.device.platform !== 'browser') {
             if (options.duration) {
                 options.duration = options.duration * 1000;
             }
