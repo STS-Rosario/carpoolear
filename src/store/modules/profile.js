@@ -21,7 +21,10 @@ const actions = {
         store.dispatch('ratesSearch');
     },
 
-    setUserByID (store, id) {
+    setUserByID (store, { id, userProfile }) {
+        if (userProfile) {
+            store.commit(types.PROFILE_SET_USER, userProfile);
+        }
         return userApi.show(id).then((response) => {
             store.commit(types.PROFILE_SET_USER, response.data);
             store.dispatch('ratesSearch');
@@ -45,6 +48,7 @@ const mutations = {
     },
 
     [types.PROFILE_SET_REPLY] (state, rate) {
+        console.log(rate);
         state.rates.forEach((item) => {
             if (rate.trip_id === item.trip.id && rate.user_id === item.from.id) {
                 rate.reply_comment = item.comment;

@@ -18,7 +18,8 @@ import {mapActions, mapGetters} from 'vuex';
 import ProfileInfo from '../sections/ProfileInfo';
 import ProfileRates from '../sections/ProfileRates';
 import MyTrips from './MyTrips';
-import ProfileTrip from '../sections//ProfileTrip';
+import ProfileTrip from '../sections/ProfileTrip';
+import router from '../../router';
 
 export default {
     components: {
@@ -32,9 +33,11 @@ export default {
 
     props: {
         id: {
-            type: String,
             required: false,
             default: 'me'
+        },
+        userProfile: {
+            required: false
         }
     },
 
@@ -55,21 +58,34 @@ export default {
         ...mapActions({
             setTitle: 'actionbars/setTitle',
             setProfile: 'profile/setUser',
-            setProfileByID: 'profile/setUserByID'
+            setProfileByID: 'profile/setUserByID',
+            setUserByID: 'userTrips/setUserByID'
 
-        })
+        }),
+        updateProfile () {
+            if (this.id === 'me' || this.id === this.user.id) {
+                this.setTitle('Mi Perfil');
+                this.setProfile(this.user);
+                this.currentView = 'my-trips';
+            } else {
+                if (this.userProfile) {
+                    this.setTitle(this.userProfile.name);
+                }
+                this.setProfileByID({id: this.id, userProfile: this.userProfile});
+                this.setUserByID(this.id);
+                this.currentView = 'profile-trip';
+            }
+        }
+    },
+    watch: {
+        '$route': function () {
+            this.updateProfile();
+        }
     },
 
     mounted () {
         this.$refs.tabs.activateTab(1);
-        if (this.id === 'me' || this.id === this.user.id) {
-            this.setTitle('Mi Perfil');
-            this.setProfile(this.user);
-            this.currentView = 'my-trips';
-        } else {
-            this.setProfileByID(this.id);
-            this.currentView = 'profile-trip';
-        }
+        this.updateProfile();
     }
 };
 </script>

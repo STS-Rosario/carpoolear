@@ -17,7 +17,7 @@
                         <input type="checkbox" id="no-lucrar" v-model="no_lucrar" />
                         <div>
                             <label for="no-lucrar" class="trip_terms_label">Me comprometo a no lucrar con el viaje</label>
-                            <span class="tooltip-bottom" data-tooltip="No hay lucro mientras el conductor no pida una contribución mayor al costo de la nafta + los peajes vinculados al viaje, dividido la cantidad de viajeros (sí, el conductor es un viajero!!!). ¡Los asientos no tienen un valor! no sos un colectivo ;) . Al no lucrar, evitas ser un transporte ilegal de pasajeros, lo cual genera problemas con la validez del seguro particular automotor. Tengamos un buen viaje y cuidemosnos entre todos :)">
+                            <span class="tooltip-bottom" data-tooltip="No hay lucro mientras el conductor no pida una contribución mayor al costo de la nafta + los peajes vinculados al viaje, dividido la cantidad de viajeros (sí, el conductor es un viajero!!!). ¡Los asientos no tienen un valor! No sos un colectivo ;). Al no lucrar, evitas ser un transporte ilegal de pasajeros, lo cual genera problemas con la validez del seguro particular automotor. Tengamos un buen viaje y cuidemosnos entre todos :)">
                                 <i class="fa fa-info-circle" aria-hidden="true"></i>
                             </span>
                         </div>
@@ -91,7 +91,7 @@
                                 </fieldset>
                             </div>
                             <div class="trip-comment">
-                                <label for="trip_comment"  class="label-for-group"> Comentario de pasajero </label>
+                                <label for="trip_comment"  class="label-for-group"> Comentario para los pasajeros </label>
                                 <textarea v-model="trip.description" id="trp_comment" class="form-control"></textarea>
                             </div>
                         </div>

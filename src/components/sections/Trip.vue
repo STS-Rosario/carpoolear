@@ -7,13 +7,17 @@
               <div class="card-icon">
                 <span class="trip_visibility">
                   <span v-if="trip.friendship_type_id === 0" title="Visibilidad: Solo amigos">
-                    <i class="fa fa-lock" aria-hidden="true"></i>
+                    <span class="tooltip" title="Visibilidad: Solo amigos" data-tooltip="Solo amigos.">
+                      <i class="fa fa-user" aria-hidden="true"></i>
+                    </span>
                   </span>
                   <span v-else-if="trip.friendship_type_id === 1" title="Visibilidad: Amigos de amigos">
                     <i class="fa fa-users" aria-hidden="true"></i>
                   </span>
                   <span v-else-if="trip.friendship_type_id === 2" title="Visilidad: Público">
-                    <i class="fa fa-car" aria-hidden="true"></i>
+                    <span class="tooltip-bottom" title="Visibilidad: Solo amigos" data-tooltip="Solo amigos.">
+                      <i class="fa fa-globe" aria-hidden="true"></i>
+                    </span>
                   </span>
                 </span>
               </div>

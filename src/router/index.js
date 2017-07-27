@@ -18,6 +18,7 @@ const router = new VueRouter({
 router.rememberRoute = null;
 
 router.beforeEach((to, from, next) => {
+    console.log(to, from);
     let actionbar = to.meta.actionbar || {};
     let background = to.meta.background || {};
     let user = store.getters['auth/checkLogin'];

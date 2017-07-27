@@ -10,7 +10,7 @@
                                     <template v-if="trip.points.length >= 2">
                                         <div class="row trip_location_from">
                                             <div class="col-xs-4 text-right">
-                                            <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                                <i class="fa fa-map-marker" aria-hidden="true"></i>
                                             </div>
                                             <div class="col-xs-20">
                                             <span class="trip_location_from_city">{{ trip.points[0].json_address.ciudad }}</span>
@@ -130,7 +130,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-24">
-                                    <router-link class="btn-primary btn-search btn-shadowed-black" :to="{name: 'profile', params: {id: trip.user.id}}"> Ver Perfil </router-link>
+                                    <router-link class="btn-primary btn-search btn-shadowed-black" :to="{name: 'profile', params: {id: getUserProfile, userProfile: trip.user}}"> Ver Perfil </router-link>
                                 </div>
                             </div>
                             <div class="row italic quote" v-if="trip.description && trip.description.length">
@@ -371,6 +371,9 @@ export default {
         },
         getUserImage () {
             return this.user.id === this.trip.user.id ? this.user.image : this.trip.user.image;
+        },
+        getUserProfile () {
+            return (this.trip.user.id === this.user.id ? 'me' : this.trip.user.id);
         }
     },
 
@@ -442,7 +445,7 @@ export default {
     .trip-detail-component .driver-data div:first-child {
         margin-top: .4em;
     }
-    @media only screen and (min-width: 400px) and (max-width: 768px) {
+    @media only screen and (min-width: 400px) and (max-width: 767px) {
         .trip-detail-component .trip_driver_img {
             width: 6.7rem;
             height: 6.7rem;

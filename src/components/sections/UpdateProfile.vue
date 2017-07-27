@@ -41,7 +41,7 @@
                     <input v-model="patente" type="text" class="form-control" id="input-patente" placeholder="Patente">
                 </div>
                 <div class="form-group">
-                    <label for="input-description">Pequeña descripción personal</label>
+                    <label for="input-description">Descripción</label>
                     <textarea v-model="user.description" placeholder="Descripción"></textarea>
                 </div>
 

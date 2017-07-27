@@ -633,6 +633,9 @@ textarea {
 .trip_visibility {
     margin: .6em;
 }
+.trip_visibility > span {
+   position: relative;
+}
 .trip_driver_name {
     font-size: 15px;
     font-weight: 300;
@@ -931,6 +934,10 @@ textarea {
     position: relative;
     padding-left: 30px;
     padding-top: 12px;
+}
+
+.trip-detail-component .quote span {
+    word-break: break-all;
 }
 
 .trip-detail-component .quote i {
@@ -1957,18 +1964,22 @@ ul {
   bottom: 150%;
   left: 50%;
   margin-bottom: 5px;
-  margin-left: -160px;
+  margin-left: -80px;
   padding: 7px;
-  width: 320px;
   border-radius: 3px;
   background-color: #000;
   background-color: hsla(0, 0%, 20%, 0.9);
   color: #fff;
   content: attr(data-tooltip);
   text-align: center;
-  font-size: 14px;
+  font-size: 12px;
   line-height: 1.2;
-  padding: 1em;
+  /*padding: 1em;*/
+}
+
+.trip_terms [data-tooltip]:before {
+    width: 320px;
+    padding: 1em;
 }
 
 /* Triangle hack to make tooltip look like a speech bubble */
@@ -1976,10 +1987,11 @@ ul {
   position: absolute;
   bottom: 150%;
   left: 50%;
-  margin-left: -5px;
+  margin-top: -17px;
+  margin-left: -19px;
   width: 0;
-  border-top: 5px solid #000;
-  border-top: 5px solid hsla(0, 0%, 20%, 0.9);
+  border-bottom: 5px solid #000;
+  border-bottom: 5px solid hsla(0, 0%, 20%, 0.9);
   border-right: 5px solid transparent;
   border-left: 5px solid transparent;
   content: " ";
@@ -2013,9 +2025,12 @@ ul {
 .tooltip-bottom:hover:after,
 .tooltip-bottom:focus:before,
 .tooltip-bottom:focus:after {
-  -webkit-transform: translateY(12px);
+  /*-webkit-transform: translateY(12px);
   -moz-transform:    translateY(12px);
-  transform:         translateY(12px);
+  transform:         translateY(12px);*/
+  -webkit-transform: translateY(20px, 17px);
+  -moz-transform:    translateY(20px, 17px);
+  transform: translate(20px, 17px)
 }
 .social-share {
     text-align: center;

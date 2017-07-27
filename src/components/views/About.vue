@@ -69,7 +69,7 @@
         margin: 3em auto;
         padding: 2em;
     }
-    @media (max-width: 768px) {
+    @media (max-width: 767px) {
         .about-page {
             box-shadow: none;
             margin: 0 auto;
