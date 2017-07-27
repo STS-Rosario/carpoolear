@@ -218,6 +218,7 @@ export default {
             }).catch(error => {
                 console.log('error');
                 if (error) {
+                    router.replace({name: 'trips'});
                     // Ver que hacer
                     // this.trip = null;
                 }

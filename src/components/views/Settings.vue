@@ -9,9 +9,11 @@
                     <li :class="{active: tabActive === 'friends'}">
                         <router-link :to="{name:'friends_setting'}">Amigos</router-link>
                     </li>
+                    <!--
                     <li>
                         <a href="#">Dispositivos</a>
                     </li>
+                    -->
                 </ul>
             </div>
             <div class="col-xs-24 col-sm-19">
