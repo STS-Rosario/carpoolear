@@ -81,7 +81,7 @@ router.rememberBack = function () {
 };
 
 router.push = function (data) {
-    console.log('push', JSON.stringify(router.stack), JSON.stringify(data));
+    // console.log('push', JSON.stringify(router.stack), JSON.stringify(data));
     if (data.name !== 'trips') {
         router.stack.push(data);
     } else {
@@ -91,7 +91,7 @@ router.push = function (data) {
 };
 
 router.replace = function (data) {
-    console.log('replace', JSON.stringify(router.stack), JSON.stringify(data));
+    // console.log('replace', JSON.stringify(router.stack), JSON.stringify(data));
     if (data.name !== 'trips') {
         router.stack.pop();
         router.stack.push(data);
@@ -102,7 +102,7 @@ router.replace = function (data) {
 };
 
 router.go = function (number) {
-    console.log('go', JSON.stringify(router.stack), number);
+    // console.log('go', JSON.stringify(router.stack), number);
     router.stack.splice(-1, -number);
     router._go(number);
 };

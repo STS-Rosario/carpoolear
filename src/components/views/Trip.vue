@@ -99,7 +99,7 @@
                             </div>
                             <div class="buttons-container">
                                 <router-link class="btn btn-primary" v-if="owner" :to="{name: 'update-trip', params: { id: trip.id}}"> Editar  </router-link>
-                                <template v-if="!owner && !trip.is_passenger">
+                                <template v-if="!owner && !trip.is_passenger && !expired">
                                     <button class="btn btn-primary" @click="toMessages" v-if="!owner"> Coordinar viaje  </button>
                                     <template v-if="!isPassenger">
                                         <button class="btn btn-primary" @click="makeRequest" v-if="canRequest"> Solicitar asiento </button>
@@ -110,7 +110,9 @@
                                         <button class="btn btn-primary" @click="cancelRequest" v-if="canRequest"> Cancelar viaje </button>
                                     </template>
                                 </template>
-
+                                <template v-if-else="expired">
+                                    <button class="btn btn-primary" disabled> Finalizado  </button>
+                                </template>
                             </div>
                         </div>
                     </div>
@@ -172,6 +174,7 @@ import { mapGetters, mapActions } from 'vuex';
 import router from '../../router';
 import bus from '../../services/bus-event';
 import svgItem from '../SvgItem';
+import moment from 'moment';
 
 export default {
     name: 'trip',
@@ -360,6 +363,9 @@ export default {
             user: 'auth/user',
             trip: 'trips/currentTrip'
         }),
+        expired () {
+            return moment(this.trip.trip_date) < moment();
+        },
         owner () {
             return this.user.id === this.trip.user.id;
         },
