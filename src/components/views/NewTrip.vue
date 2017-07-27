@@ -61,7 +61,7 @@
                             <div class="trip_datetime">
                                 <div class="trip_date">
                                     <label for="date" class="sr-only">Día </label>
-                                    <Calendar :class="'form-control form-control-with-icon form-control-date'" :value="date" @change="(date) => this.date = date"></Calendar>
+                                    <Calendar :limitFilter="limitFilter" :class="'form-control form-control-with-icon form-control-date'" :value="date" @change="(date) => this.date = date"></Calendar>
                                 </div>
                                 <div class="trip_time">
                                     <label for="time" class="sr-only">Hora</label>
@@ -154,6 +154,7 @@ import Calendar from '../Calendar';
 import bus from '../../services/bus-event.js';
 import router from '../../router';
 import dialogs from '../../services/dialogs.js';
+import moment from 'moment';
 
 export default {
     name: 'new-trip',
@@ -168,6 +169,10 @@ export default {
     },
     data () {
         return {
+            limitFilter: {
+                type: 'fromto',
+                from: moment().format('YYYY-MM-DD')
+            },
             no_lucrar: false,
             zoom: 4,
             center: {lat: -29.0, lng: -60.0},
