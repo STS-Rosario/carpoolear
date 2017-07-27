@@ -71,7 +71,9 @@ export default {
                 if (this.userProfile) {
                     this.setTitle(this.userProfile.name);
                 }
-                this.setProfileByID({id: this.id, userProfile: this.userProfile});
+                this.setProfileByID({id: this.id, userProfile: this.userProfile}).then(() => true).catch(() => {
+                    this.$router.replace({name: 'trips'});
+                });
                 this.setUserByID(this.id);
                 this.currentView = 'profile-trip';
             }

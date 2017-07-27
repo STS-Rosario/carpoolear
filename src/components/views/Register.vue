@@ -7,15 +7,15 @@
     <h1> Registrar nuevo usuario </h1>
     <div class='form row' v-if="!success">
       <label for="txt_name">Nombre</label>
-      <input  type="text" id="txt_name" v-model='name' />
+      <input  type="text" id="txt_name" v-model='name' :class="{'has-error': nombreError }"/>
       <label for="txt_surename">Apellido</label>
-      <input  type="text" id="txt_surename" v-model='sureName' />
+      <input  type="text" id="txt_surename" v-model='sureName' :class="{'has-error': apellidoError }"/>
       <label for="txt_email">Email</label>
-      <input type="text" id="txt_email" v-model='email'/>
+      <input type="text" id="txt_email" v-model='email' :class="{'has-error': emailError }"/>
       <label for="txt_password">Contraseña</label>
-      <input type="password" id="txt_password" v-model='password'/>
+      <input type="password" id="txt_password" v-model='password' :class="{'has-error': passwordError }"/>
       <label for="txt_password_confirmation">Ingrese nuevamente su contraseña</label>
-      <input  type="password" id="txt_password_confirmation" v-model='passwordConfirmation' />
+      <input  type="password" id="txt_password_confirmation" v-model='passwordConfirmation' :class="{'has-error': passwordError }" />
       <div class="terms">
         <input  type="checkbox" id="cbx_terms" v-model='termsAndConditions' />
         <label for="cbx_terms">He leído y acepto términos y condiciones</label>
@@ -34,6 +34,7 @@ import { mapGetters, mapActions } from 'vuex';
 import dialogs from '../../services/dialogs.js';
 import bus from '../../services/bus-event';
 import router from '../../router';
+let emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 
 export default {
     name: 'register',
@@ -47,7 +48,11 @@ export default {
             termsAndConditions: false,
             carpoolear_logo: process.env.ROUTE_BASE + 'static/img/carpoolear_logo.png',
             progress: false,
-            success: false
+            success: false,
+            emailError: false,
+            passwordError: false,
+            nombreError: false,
+            apellidoError: false
         };
     },
     computed: {
@@ -56,11 +61,46 @@ export default {
             isMobile: 'device/isMobile'
         })
     },
+    watch: {
+        email: function () { this.emailError = false; },
+        name: function () { this.nombreError = false; },
+        sureName: function () { this.apellidoError = false; },
+        password: function () { this.passwordError = false; },
+        passwordConfirmation: function () { this.passwordErrorError = false; }
+    },
     methods: {
         ...mapActions({
             doRegister: 'auth/register'
         }),
+
+        validate () {
+            let globalError = false;
+            if (!emailRegex.test(this.email)) {
+                this.emailError = true;
+                globalError = true;
+            }
+
+            if (this.password !== this.passwordConfirmation || this.password.length < 6) {
+                this.passwordError = true;
+                globalError = true;
+            }
+
+            if (this.name.length < 1) {
+                this.nombreError = true;
+                globalError = true;
+            }
+
+            if (this.sureName.length < 1) {
+                this.apellidoError = true;
+                globalError = true;
+            }
+
+            return globalError;
+        },
+
         register () {
+            if (this.validate()) return;
+
             let email = this.email;
             let password = this.password;
             let passwordConfirmation = this.passwordConfirmation;
@@ -72,6 +112,7 @@ export default {
                 this.success = true;
             }).catch(() => {
                 dialogs.message('La cuenta de email ingresada se encuentra en uso.', {estado: 'error'});
+                this.emailError = true;
                 this.progress = false;
             });
         },

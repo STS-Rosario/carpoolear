@@ -1424,6 +1424,11 @@ textarea {
     border: 1px solid #ccc;
     line-height: 28px;
 }
+
+.user-form input.has-error {
+    border: 1px solid var(--main-error);
+}
+
 .user-form li {
     display: inline-block;
     margin: 0 10px;
