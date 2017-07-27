@@ -20,10 +20,9 @@
         <h2>Amigos</h2>
         <div class="form-inline form-inline-with-margin">
             <div class="form-group ">
-                <label for="input-name">Nombre</label>
-                <input v-on:input="onTextChange" v-model="text" type="text" class="form-control" id="input-name" placeholder="Buscar amigo">
-
-                <router-link :to="{name: 'friends_search'}" tag="button" class="btn btn-primary"> Buscar </router-link>
+                <label for="input-name"> Nombre: </label>
+                <input v-on:input="onTextChange" v-model="text" type="text" class="form-control" id="input-name" placeholder="Ingrese nombre...">
+                <router-link :to="{name: 'friends_search'}" tag="button" class="btn btn-primary"> Agregar amigos</router-link>
             </div>
         </div>
         <Loading :data="friends">

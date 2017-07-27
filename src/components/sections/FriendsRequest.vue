@@ -1,7 +1,7 @@
 <template>
   <div class="friends-component" >
-    <div class="row">   
-        <h1>Buscar amigos</h1>
+    <div class="row">
+        <h1>Buscar contacto</h1>
         <div class="form-group">
             <label for="input-name">Buscar: </label>
             <input v-on:input="onTextChange" v-model="text" type="text" class="form-control" id="input-name" placeholder="Buscar amigo">
@@ -16,7 +16,7 @@
                     </template>
                 </FriendCard>
             </div>
-            <p slot="no-data" class="alert alert-warning"  role="alert">No hay resultados</p> 
+            <p slot="no-data" class="alert alert-warning"  role="alert">No hay resultados</p>
             <p slot="loading" class="alert alert-info" role="alert">Cargando amigos ...</p>
         </Loading>
     </div>
@@ -72,5 +72,5 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  
+
 </style>

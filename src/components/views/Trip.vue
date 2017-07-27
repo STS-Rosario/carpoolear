@@ -110,7 +110,7 @@
                                         <button class="btn btn-primary" @click="cancelRequest" v-if="canRequest"> Cancelar viaje </button>
                                     </template>
                                 </template>
-                                <template v-if-else="expired">
+                                <template v-if="expired">
                                     <button class="btn btn-primary" disabled> Finalizado  </button>
                                 </template>
                             </div>
@@ -364,7 +364,8 @@ export default {
             trip: 'trips/currentTrip'
         }),
         expired () {
-            return moment(this.trip.trip_date) < moment();
+            console.log(moment(this.trip.trip_date).format(), moment().format());
+            return moment(this.trip.trip_date).format() < moment().format();
         },
         owner () {
             return this.user.id === this.trip.user.id;
