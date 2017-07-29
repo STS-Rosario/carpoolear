@@ -804,6 +804,7 @@ textarea {
     margin-bottom: 1em;
 }
 .trip-fill .carpooleado {
+    cursor: pointer;
     margin-bottom: .7em;
     padding: .4em .6em;
     text-transform: uppercase;
@@ -811,7 +812,7 @@ textarea {
     background-color: #d72521;
     font-weight: bold;
     font-size: 20px;
-    box-shadow: -2px 2px 5px 0px #333;
+    box-shadow: -1px 1px 8px 0px #333;
 }
 .trip-fill .row--carpooleado {
     margin-right: -15px;

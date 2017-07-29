@@ -62,17 +62,15 @@
                                         <span class="trip_seats-available_label">Lugares<br>libres</span>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-xs-offset-2 col-xs-12" v-if="trip.passenger.length">
-                                        <h4>Pasajeros</h4>
-                                        <ul>
-                                            <li v-for="p in trip.passenger">
-                                                {{p.name}}
+                                <div class="row passengers">
+                                    <div class="col-xs-offset-3 col-xs-21" v-if="trip.passenger.length">
+                                        <span v-for="p in trip.passenger">
+                                            <div class="trip_driver_img circle-box passenger" v-imgSrc:profile="trip.passenger.image">
                                                 <span v-if="owner" @click="removePassenger(p)">
                                                     <i class="fa fa-times" aria-hidden="true"></i>
                                                 </span>
-                                            </li>
-                                        </ul>
+                                            </div>
+                                        </span>
                                     </div>
                                     <div v-else style="height: 2em;"></div>
                                 </div>
@@ -402,6 +400,22 @@ export default {
 </script>
 
 <style scoped>
+    .trip_driver_img.circle-box.passenger {
+        width: 2.2em;
+        height: 2.2em;
+        position: relative;
+        margin-right: .2em;
+    }
+    .trip_driver_img.circle-box.passenger span{
+        position: absolute;
+        right: -6px;
+        bottom: -6px;
+        color: #555;
+        font-size: 12px;
+    }
+    .passengers {
+        margin-bottom: .8em;
+    }
     .trip-detail-component .structure-div {
         margin-top: 1rem;
     }
