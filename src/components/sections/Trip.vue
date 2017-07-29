@@ -1,6 +1,6 @@
 <template>
   <div class="col-lg-6 col-md-8 col-sm-12" v-on:click='goToDetail' >
-    <div class="trip" v-bind:class="{ 'trip-almost-fill': trip.seats_available == 1, 'trip-mostly-available': trip.seats_available > 3, 'trip-with-driver': user }" >
+    <div class="trip" :class="{ 'trip-fill': trip.seats_available === 0, 'trip-almost-fill': trip.seats_available === 1, 'trip-mostly-available': trip.seats_available > 3, 'trip-with-driver': user }" >
         <div class="panel panel-default panel-card card card-trip">
           <div class="panel-heading card_heading">
             <div class="panel-title card-trip_title row">
@@ -87,13 +87,18 @@
                   <span class="trip_datetime_time">{{ [ trip.trip_date ] | moment("h:mm a") }}</span>
                 </time>
             </div>
-            <div class="row">
+            <div v-if="trip.seats_available !== 0" class="row">
               <div class="trip_seats-available col-xs-offset-2 col-xs-12">
                 <span class="trip_seats-available_value pull-left">{{ trip.seats_available }}</span>
                 <span class="trip_seats-available_label"><span>Lugares</span><span>libres</span></span>
               </div>
               <div class="trip_actions col-xs-10">
                 <div class="btn btn-default btn-lg btn-trip-detail">Ver</div>
+              </div>
+            </div>
+            <div v-if="trip.seats_available === 0" class="row row--carpooleado">
+              <div class="trip_seats-available col-xs-offset-6 col-xs-18 carpooleado">
+                <span>Carpooleado</span>
               </div>
             </div>
           </div>

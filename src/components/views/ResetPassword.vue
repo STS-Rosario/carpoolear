@@ -7,7 +7,7 @@
         <div class="form row" v-if="send">
             <h3> Se ha enviado un email a su casilla de correo con las indicaciones para restablecer su contraseña. </h3>
         </div>
-        <div class="form row" v-else-if="!token">
+        <div class="form row message" v-else-if="!token">
             <label for="txt_email">E-mail</label>
             <input type="text" id="txt_email" v-model='email'/>
 
@@ -77,10 +77,10 @@ export default {
                     this.send = true;
                 }, () => {
                     this.loading = false;
-                    this.error = 'No se encuentra el e-mail en nuestra base de datos.';
+                    this.error = 'El e-mail ingresado no pertenece a ningún usuario.';
                 });
             } else {
-                this.error = 'Ingrese un email valido.';
+                this.error = 'Ingrese un e-mail valido.';
             }
         },
 
@@ -138,5 +138,10 @@ export default {
     }
     loading {
         margin-left: 1em;
+    }
+    .message > span {
+        vertical-align: -.6em;
+        color: red;
+        margin-left: 2em;
     }
 </style>

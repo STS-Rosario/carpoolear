@@ -18,7 +18,7 @@
                 <div class="input-group">
                     <input ref="ipt-text" id="ipt-text" v-model="message" type="text" class="form-control" placeholder="Escribir mensaje..." v-jump:click="'btn-send'" maxlength="255" autofocus>
                     <span class="input-group-btn">
-                        <button ref="btn-send" id="btn-send" class="btn btn-default" type="button" @click="sendMessage" v-jump:focus="'ipt-text'">
+                        <button ref="btn-send" id="btn-send" class="btn btn-default" :class="message.length > 0 ? 'active' : ''" type="button" @click="sendMessage" v-jump:focus="'ipt-text'">
                             <i class="fa fa-play" aria-hidden="true"></i>
                         </button>
                     </span>
@@ -153,6 +153,13 @@ export default {
 <style scoped>
     #btn-more {
         padding: 1em 0;
+    }
+    #btn-send {
+        color: #ccc;
+        transition: color 200ms linear;
+    }
+    #btn-send.active {
+        color: #333;
     }
     @media only screen and (max-width: 767px) {
         .list-group-item {

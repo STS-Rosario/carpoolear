@@ -180,8 +180,7 @@ export default {
         margin-bottom: .4em;
     }
     .conversation-component.container {
-
-        margin-bottom: 1.4rem;
+        margin-bottom: 3rem;
     }
     .conversation_chat--search > li {
         color: #009ce1;
@@ -204,6 +203,13 @@ export default {
         .message_text {
             font-size: 14px;
         }
+        .conversation_chat h2 {
+            font-size: 22px;
+        }
+        .conversation_chat p.chat_last_connection {
+            font-size: 13px;
+            margin: 0;
+        }
         .app-container {
             background-color: transparent;
         }
@@ -217,14 +223,14 @@ export default {
             height: 100%;
         }
         .conversation_chat .list-group-item:nth-child(2) {
-            height: calc(100% - 152px);
+            height: calc(100% - 99px);
             overflow-y: auto;
         }
         .conversation-component.container {
             padding-left: 10px;
             padding-right: 10px;
             overflow-y: hidden;
-            height: calc(100vh - 160px);
+            height: calc(100vh - 150px);
         }
         .conversation-component > .row {
             padding-left: 20px;

@@ -771,6 +771,55 @@ textarea {
     color: var(--trip-mostly-free-color);
     border-color: var(--trip-mostly-free-color);
 }
+.trip-fill .card_heading {
+    box-shadow: none;
+    background: transparent;
+    border: none;
+}
+.trip-fill .card-trip {
+    background: rgba(1,103,137,1);
+    background: -moz-linear-gradient(45deg, rgba(1,103,137,1) 0%, rgba(1,103,137,1) 27%, rgba(0,157,224,1) 100%);
+    background: -webkit-gradient(left bottom, right top, color-stop(0%, rgba(1,103,137,1)), color-stop(27%, rgba(1,103,137,1)), color-stop(100%, rgba(0,157,224,1)));
+    background: -webkit-linear-gradient(45deg, rgba(1,103,137,1) 0%, rgba(1,103,137,1) 27%, rgba(0,157,224,1) 100%);
+    background: -o-linear-gradient(45deg, rgba(1,103,137,1) 0%, rgba(1,103,137,1) 27%, rgba(0,157,224,1) 100%);
+    background: -ms-linear-gradient(45deg, rgba(1,103,137,1) 0%, rgba(1,103,137,1) 27%, rgba(0,157,224,1) 100%);
+    background: linear-gradient(45deg, rgba(1,103,137,1) 0%, rgba(1,103,137,1) 27%, rgba(0,157,224,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#016789', endColorstr='#009de0', GradientType=1 );
+}
+.trip-fill .card-trip .trip_driver_img {
+    box-shadow: none;
+}
+.trip-fill .card-trip .card_heading:after {
+    content: none;
+}
+.trip-fill .trip_location_from,
+.trip-fill .trip_location_from_state-country, 
+.trip-fill .trip_location_to_state-country,
+.trip-fill .trip_location_to,
+.trip-fill .trip_datetime, 
+.trip-fill .trip_datetime_time {
+    color: white;
+}
+.trip-fill .trip_datetime {
+    margin-bottom: 1em;
+}
+.trip-fill .carpooleado {
+    margin-bottom: .7em;
+    padding: .4em .6em;
+    text-transform: uppercase;
+    color: white;
+    background-color: #d72521;
+    font-weight: bold;
+    font-size: 20px;
+    box-shadow: -2px 2px 5px 0px #333;
+}
+.trip-fill .row--carpooleado {
+    margin-right: -15px;
+}
+.trip-fill .trip_location-dot-line > div {
+    border-left: solid 1px white;
+}
+
 
 .cf {
     clear: both;
@@ -792,7 +841,7 @@ textarea {
     padding: 1em;
     margin-bottom: 1.5em;
 }
-@media (min-width: 768px) {
+@media only screen and (min-width: 768px) {
 
     .trip-type-selection {
         padding: 1.5em;
@@ -1033,6 +1082,9 @@ textarea {
     color: var(--main-font-color);
 }
 .conversation_chat--chats {
+    border-bottom: 1px #ddd solid;
+    height: calc(100% - 32px);
+    overflow-y: auto;
     cursor: pointer;
 }
 .conversation_chat--chats .list-group-item:first-child {
@@ -1072,7 +1124,7 @@ textarea {
 }
 .message-wrapper .message {
     display: inline-block;
-    padding: 1em 1.2em;
+    padding: .6em 1.2em;
     border-radius: 5px;
     width: auto;
     background: var(--secondary-background);
@@ -1090,7 +1142,6 @@ textarea {
     font-weight: bold;
     text-align: right;
     font-size: 0.8em;
-    margin-top: .4em;
     color: #ddd;
 }
 .update-profile-component .form {
@@ -1243,7 +1294,7 @@ textarea {
     padding-right: 0;
 }
 .conversation_chat .input-group-btn:last-child>.btn, .input-group-btn:last-child>.btn-group {
-    height: 45px;
+    height: 44px;
 }
 
 .actionbar {
@@ -1374,8 +1425,6 @@ textarea {
     top: 8px;
 }
 
-.app-container.blue,
-.app-container.blue,
 .app-container.blue {
     background: rgba(1,155,225,1);
     background: -moz-linear-gradient(-45deg, rgba(1,155,225,1) 0%, rgba(1,101,135,1) 100%);
@@ -1581,7 +1630,7 @@ ul {
     }
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 769px) {
     .trip-create {
         width: 100%;
         margin: 1em 0;
@@ -1636,6 +1685,10 @@ ul {
 }
 
 @media only screen and (min-width: 768px) {
+    .conversation_chat .list-group-item:nth-child(3) {
+        border-bottom-width: 1px;
+        margin-bottom: -4px;
+    }
     #trips-list > div {
         padding-left: 10px;
         padding-right: 10px;
@@ -1657,8 +1710,15 @@ ul {
         border-left-width: 1px;
         border-top-width: 1px;
     }
-    .conversation-component .list-group-item:last-child {
+    /*.conversation-component .list-group-item:last-child {
         border-bottom-width: 1px;
+    }*/
+    .conversation-component .list-group > li{
+        border-bottom-width: 1px;
+        margin-bottom: 1px;
+    }
+    .conversation-component .conversation_chat--chats .list-group-item:first-child {
+        border-top-width: 0;
     }
     .list-group {
         margin-bottom: 20px;
@@ -1809,7 +1869,7 @@ ul {
     .user-form {
         padding-left: 10px;
         padding-right: 10px;
-        margin: 2rem auto 4.8rem auto;
+        margin: 0 auto 4.8rem auto;
         text-align: left;
     }
     .user-form h1 {
@@ -1869,7 +1929,7 @@ ul {
         top: -22px;
     }
     .app-container.blue .header::after {
-        background-color: #0185bc;
+        background-color: rgba(1, 133, 188, .9);
     }
     #trips-list {
         margin-bottom: 1rem;

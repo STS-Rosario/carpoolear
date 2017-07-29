@@ -486,6 +486,7 @@ export default {
         }
         .trip-detail-component .driver-profile div.row:last-child {
             max-height: 11rem;
+            min-height: 9rem;
         }
         .trip-detail-component .quote {
             margin-left: 0;
