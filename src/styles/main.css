@@ -190,16 +190,19 @@ input[type="checkbox"] {
     border-color: #ccc;
     color: #ccc;
     background: var(--secondary-background);
+    text-decoration: none;
 }
 .btn-search:hover {
     color: #FFFFFF;
     background: rgb(1, 83, 111);
     border-color: #FFFFFF;;
+    text-decoration: none;
 }
 .btn-search:active {
     border-color: #ccc;
     color: #ccc;
     background: rgb(1, 83, 111);
+    text-decoration: none;
 }
 .btn-sarch:active:hover,
 .btn-search.active:hover,
@@ -210,6 +213,7 @@ input[type="checkbox"] {
 .btn-search.focus:active,
 .btn-search.active.focus,
 .open > .dropdown-toggle.btn-search.focus {
+    text-decoration: none;
     border-color: #ccc;
     color: #ccc;
     background: rgb(1, 83, 111);
@@ -376,7 +380,6 @@ textarea {
 }
 
 .label-for-group {
-    text-transform: uppercase;
     display: block;
     color: var(--main-font-color);
     font-size: .9rem;
@@ -943,6 +946,7 @@ textarea {
     position: relative;
     padding-left: 30px;
     padding-top: 12px;
+    padding-right: 1em;
 }
 
 .trip-detail-component .quote span {
@@ -1860,6 +1864,7 @@ ul {
         width: 100%;
         height: 22px;
         background-color: white;
+        background-color: rgba(255,255,255,.8);
         content: "";
         top: -22px;
     }
@@ -1873,7 +1878,7 @@ ul {
         padding-top: 8.6rem;
     }
 }
-@media only screen and (max-width: 892px) {
+@media only screen and (max-width: 912px) {
     .header_panel-left img:first-child {
         display: none;
     }

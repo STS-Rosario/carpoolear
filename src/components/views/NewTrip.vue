@@ -92,7 +92,7 @@
                             </div>
                             <div class="trip-comment">
                                 <label for="trip_comment"  class="label-for-group"> Comentario para los pasajeros </label>
-                                <textarea v-model="trip.description" id="trp_comment" class="form-control"></textarea>
+                                <textarea maxlength="280" v-model="trip.description" id="trp_comment" class="form-control"></textarea>
                             </div>
                         </div>
                         <div class="col-sm-11 col-md-9">
@@ -244,7 +244,6 @@ export default {
             cars: 'cars/cars'
         }),
         distanceString () {
-            console.log('distance');
             return Math.floor(this.trip.distance / 1000) + ' Km';
         },
         estimatedTimeString () {

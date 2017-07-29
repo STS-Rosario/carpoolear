@@ -3,10 +3,6 @@ import {auth, guest} from './middleware.js';
 
 export default [
     {
-        path: '/about',
-        component: require('../components/views/About')
-    },
-    {
         path: '/admin',
         component: require('../components/views/About'),
         beforeEnter: auth
@@ -284,10 +280,6 @@ export default [
         ]
     },
     {
-        path: '/*',
-        redirect: '/trips'
-    },
-    {
         path: '/about',
         name: 'acerca_de',
         component: require('../components/views/About'),
@@ -299,5 +291,22 @@ export default [
                 }
             }
         }
+    },
+    {
+        path: '/terminos',
+        name: 'terms',
+        component: require('../components/views/TermsAndConditions'),
+        meta: {
+            actionbar: {
+                header: {
+                    title: 'Términos',
+                    buttons: ['clear']
+                }
+            }
+        }
+    },
+    {
+        path: '/*',
+        redirect: '/trips'
     }
 ];

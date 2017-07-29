@@ -19,7 +19,6 @@ import ProfileInfo from '../sections/ProfileInfo';
 import ProfileRates from '../sections/ProfileRates';
 import MyTrips from './MyTrips';
 import ProfileTrip from '../sections/ProfileTrip';
-import router from '../../router';
 
 export default {
     components: {
@@ -67,6 +66,7 @@ export default {
                 this.setTitle('Mi Perfil');
                 this.setProfile(this.user);
                 this.currentView = 'my-trips';
+                console.log(this.id);
             } else {
                 if (this.userProfile) {
                     this.setTitle(this.userProfile.name);
@@ -74,6 +74,7 @@ export default {
                 this.setProfileByID({id: this.id, userProfile: this.userProfile}).then(() => true).catch(() => {
                     this.$router.replace({name: 'trips'});
                 });
+                console.log(this.id);
                 this.setUserByID(this.id);
                 this.currentView = 'profile-trip';
             }

@@ -61,7 +61,7 @@
                 <p>
                     Copyright © 2017 Carpoolear.<br />
                     Todos los derechos reservados.<br />
-                    <a href="https://carpoolear.com.ar/terminos.php" target="_blank">Términos y condiciones</a>
+                    <router-link :to="{name: 'terms'}">Terminos y condiciones</router-link>
                 </p>
             </div>
         </div>

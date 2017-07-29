@@ -14,7 +14,7 @@
                                             </div>
                                             <div class="col-xs-20">
                                             <span class="trip_location_from_city">{{ trip.points[0].json_address.ciudad }}</span>
-                                            <span class="trip_location_from_state-country">{{ trip.points[0].json_address.provincia }}, {{ trip.points[0].json_address.pais }}</span>
+                                            <span class="trip_location_from_state-country">{{ trip.points[0].json_address.provincia }} {{ trip.points[0].json_address.pais }}</span>
                                             </div>
                                         </div>
                                         <div class="row trip_location_to">
@@ -23,7 +23,7 @@
                                             </div>
                                             <div class="col-xs-20">
                                                 <span class="trip_location_from_city">{{ trip.points[trip.points.length - 1].json_address.ciudad }}</span>
-                                                <span class="trip_location_from_state-country">{{ trip.points[trip.points.length - 1].json_address.provincia }}, {{ trip.points[trip.points.length - 1].json_address.pais }}</span>
+                                                <span class="trip_location_from_state-country">{{ trip.points[trip.points.length - 1].json_address.provincia }} {{ trip.points[trip.points.length - 1].json_address.pais }}</span>
                                             </div>
                                         </div>
                                         <div class="col-xs-4 trip_location-dot-line">
@@ -85,7 +85,7 @@
                                 <div class="row trip-stats">
                                     <div>
                                         <span>Distancia a recorrer</span><br>
-                                        <span>{{ trip.distance}} <abbr title="kilometros">km</abbr></span>
+                                        <span>{{ distanceString }} <abbr title="kilometros">km</abbr></span>
                                     </div>
                                     <div>
                                         <span>Tiempo estimado de viaje</span><br>
@@ -135,7 +135,7 @@
                                     <router-link class="btn-primary btn-search btn-shadowed-black" :to="{name: 'profile', params: {id: getUserProfile, userProfile: trip.user}}"> Ver Perfil </router-link>
                                 </div>
                             </div>
-                            <div class="row italic quote" v-if="trip.description && trip.description.length">
+                            <div class="row italic quote" :class="descriptionLength" v-if="trip.description && trip.description.length">
                                 <i class="fa fa-quote-left" aria-hidden="true"></i>
                                 <span> {{trip.description}} </span>
                             </div>
@@ -381,7 +381,13 @@ export default {
             return this.user.id === this.trip.user.id ? this.user.image : this.trip.user.image;
         },
         getUserProfile () {
-            return (this.trip.user.id === this.user.id ? 'me' : this.trip.user.id);
+            return this.trip.user.id === this.user.id ? 'me' : this.trip.user.id;
+        },
+        descriptionLength () {
+            return this.trip.description.length > 215 ? 'long-description' : '';
+        },
+        distanceString () {
+            return Math.floor(this.trip.distance / 1000);
         }
     },
 
@@ -479,7 +485,7 @@ export default {
             margin-top: 0;
         }
         .trip-detail-component .driver-profile div.row:last-child {
-            height: 9rem;
+            max-height: 11rem;
         }
         .trip-detail-component .quote {
             margin-left: 0;
@@ -507,6 +513,9 @@ export default {
         }
         .trip-detail-component .driver-data div:first-child {
             margin-top: 16px;
+        }
+        .trip-detail-component .quote.long-description {
+            font-size: 14px;
         }
     }
 </style>

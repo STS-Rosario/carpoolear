@@ -18,13 +18,13 @@
       <input  type="password" id="txt_password_confirmation" v-model='passwordConfirmation' :class="{'has-error': passwordError }" />
       <div class="terms">
         <input  type="checkbox" id="cbx_terms" v-model='termsAndConditions' />
-        <label for="cbx_terms">He leído y acepto términos y condiciones</label>
+        <label for="cbx_terms"><router-link :to="{name: 'terms'}">He leído y acepto los términos y condiciones</router-link></label>
         <button @click="register" class="btn-primary" :disabled="progress || !termsAndConditions"> Registrarme </button>
       </div>
     </div>
     <div class='form row' v-else>
         <h2> Registro Exitoso! </h2>
-        <p>Te hemos enviado un código de verificación a tu e-mail para que puedas activar tu cuenta. </p>
+        <p>Te hemos enviado un código de verificación a tu e-mail para que puedas activar tu cuenta y comenzar a compartir viajes. </p>
     </div>
   </div>
 </template>
@@ -146,11 +146,14 @@ export default {
     .terms {
         margin-top: 1.8rem;
     }
+    .user-form a {
+        font-weight: 400;
+    }
+
     @media only screen and (min-width: 768px) {
         .terms button {
             margin-left: 2rem;
             text-align: right;
         }
     }
-
 </style>

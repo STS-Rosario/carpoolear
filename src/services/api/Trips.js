@@ -27,6 +27,7 @@ class TripApi extends TaggedApi {
     }
 
     userTrips (id, asDriver) {
+        console.log(id);
         return this.get('/api/trips', { 'user_id': id, 'as_driver': asDriver });
     }
 
