@@ -166,7 +166,6 @@ export default {
 
         onClick (item) {
             let b = bus.emit(item.id + '-click');
-            console.log(b);
         }
     },
 

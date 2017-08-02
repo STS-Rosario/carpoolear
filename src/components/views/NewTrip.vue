@@ -148,12 +148,12 @@
   </div>
 </template>
 <script>
-import {mapActions, mapGetters} from 'vuex';
-import {parseStreet} from '../../services/maps.js';
+import { mapActions, mapGetters } from 'vuex';
+import { parseStreet } from '../../services/maps.js';
 import Calendar from '../Calendar';
 import bus from '../../services/bus-event.js';
 import router from '../../router';
-import dialogs from '../../services/dialogs.js';
+// import dialogs from '../../services/dialogs.js';
 import moment from 'moment';
 
 export default {
