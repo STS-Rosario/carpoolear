@@ -38,12 +38,11 @@ export const init = (store) => {
     });
 
     return Promise.all(promises).then(() => {
-        console.log('State loaded from cache');
+        // console.log('State loaded from cache');
         if (store.state.auth.token) {
             store.dispatch('auth/retoken').then(() => startApp(store));
         } else {
             startApp(store);
-            console.log();
         }
     });
 };

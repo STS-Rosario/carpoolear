@@ -3,7 +3,6 @@ import TaggedApi from '../../classes/TaggedApi';
 class RateApi extends TaggedApi {
 
     index (id, data = {}) {
-        console.log(data);
         if (id) {
             return this.get('/api/users/' + id + '/ratings', data);
         } else {

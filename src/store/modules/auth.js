@@ -95,7 +95,6 @@ function register (store, { email, password, passwordConfirmation, name, termsAn
     data.terms_and_conditions = termsAndConditions;
 
     return userApi.register(data).then((data) => {
-        console.log(data);
         return Promise.resolve();
     }).catch((err) => {
         if (err.response) {

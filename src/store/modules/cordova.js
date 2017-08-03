@@ -75,7 +75,6 @@ const actions = {
             if (router.stack.length > 0) {
                 router.go(-1);
             } else {
-                console.log('Must close apps');
                 navigator.Backbutton.goHome();
             }
         }

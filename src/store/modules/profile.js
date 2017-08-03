@@ -48,7 +48,6 @@ const mutations = {
     },
 
     [types.PROFILE_SET_REPLY] (state, rate) {
-        console.log(rate);
         state.rates.forEach((item) => {
             if (rate.trip_id === item.trip.id && rate.user_id === item.from.id) {
                 rate.reply_comment = item.comment;

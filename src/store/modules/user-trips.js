@@ -19,16 +19,13 @@ const getters = {
 // actions
 const actions = {
     tripAsDriver (store) {
-        console.log('userid', state.userId);
         return tripsApi.userTrips(state.userId, true).then(response => {
-            console.log(response.data);
             store.commit(types.USERTRIPS_SET_DRIVER_TRIPS, response.data);
         });
     },
 
     tripAsPassenger (store) {
         return tripsApi.userTrips(state.userId, false).then(response => {
-            console.log(response.data);
             store.commit(types.USERTRIPS_SET_PASSENGER_TRIPS, response.data);
         });
     },
