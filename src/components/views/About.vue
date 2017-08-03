@@ -93,11 +93,26 @@
 
 
 <script>
+import bus from '../../services/bus-event.js';
+
 export default {
     name: 'about',
     data () {
         return {
         };
+    },
+    mounted () {
+        bus.on('back-click', this.onBackClick);
+    },
+
+    beforeDestroy () {
+        bus.off('back-click', this.onBackClick);
+    },
+
+    methods: {
+        onBackClick () {
+            this.$router.back();
+        }
     }
 };
 </script>

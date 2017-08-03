@@ -21,6 +21,15 @@
                         <i :class="'fa ' + item.icon" aria-hidden="true"></i>
                     </span>
                 </template>
+                <div class="dropdown-right" v-if="showMenu">
+                    <dropdown type="icon">
+                        <template slot="button">
+                            <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                        </template>
+                        <li><router-link tag="a" :to="{name: 'acerca_de'}"  >ACERCA DE</router-link></li>
+                        <li><a @click="logout" v-if="!isFacebokApp">CERRAR SESSION</a></li>
+                    </dropdown>
+                </div>
             </div>
         </div>
         <div class="header_content hidden-xs">
@@ -129,6 +138,7 @@ export default {
             notificationsCount: 'notifications/count',
             title: 'actionbars/title',
             subTitle: 'actionbars/subTitle',
+            showMenu: 'actionbars/showMenu',
             leftHeaderButton: 'actionbars/leftHeaderButton',
             rightHeaderButton: 'actionbars/rightHeaderButton',
             logoHeaderVisibility: 'actionbars/headerLogoVisibility',
@@ -165,7 +175,7 @@ export default {
         },
 
         onClick (item) {
-            let b = bus.emit(item.id + '-click');
+            bus.emit(item.id + '-click');
         }
     },
 
