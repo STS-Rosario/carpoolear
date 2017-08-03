@@ -2181,3 +2181,6 @@ ul {
 .ajs-error {
     color: white;
 }
+.ajax-loader {
+    vertical-align: -3px;
+}

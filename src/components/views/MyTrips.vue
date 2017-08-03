@@ -8,7 +8,10 @@
                     <PendingRequest v-for="r in pendingRequest" :user="r.user" :trip="findTrip(r.trip_id)"></PendingRequest>
                 </div>
                 <p slot="no-data" class="alert alert-warning"  role="alert">No hay pedientes de contestar</p>
-                <p slot="loading" class="alert alert-info" role="alert">Cargando...</p>
+                <p slot="loading" class="alert alert-info" role="alert">
+                    <img src="/static/img/loader.gif" alt="" class="ajax-loader" />
+                    Cargando...
+                </p>
             </Loading>
         </div>
 
@@ -19,7 +22,10 @@
                     <RatePending v-for="rate in pendingRates" :rate="rate" />
                 </div>
                 <p slot="no-data" class="alert alert-warning"  role="alert">No hay calificaciones pendientes</p>
-                <p slot="loading" class="alert alert-info" role="alert">Cargando calificaciones ...</p>
+                <p slot="loading" class="alert alert-info" role="alert">
+                    <img src="/static/img/loader.gif" alt="" class="ajax-loader" />
+                    Cargando calificaciones ...
+                </p>
             </Loading>
         </div>
 
@@ -30,7 +36,10 @@
                     <Trip v-for="trip in trips" :trip="trip" :user="user" ></Trip>
                 </div>
                 <p slot="no-data" class="alert alert-warning"  role="alert">No hay viajes</p>
-                <p slot="loading" class="alert alert-info" role="alert">Cargando viajes ...</p>
+                <p slot="loading" class="alert alert-info" role="alert">
+                    <img src="/static/img/loader.gif" alt="" class="ajax-loader" />
+                    Cargando viajes ...
+                </p>
             </Loading>
         </div>
 
@@ -41,7 +50,10 @@
                     <Trip v-for="trip in passengerTrips" :trip="trip" :user="user" ></Trip>
                 </div>
                 <p slot="no-data" class="alert alert-warning"  role="alert">No hay viajes</p>
-                <p slot="loading" class="alert alert-info" role="alert">Cargando viajes ...</p>
+                <p slot="loading" class="alert alert-info" role="alert">
+                    <img src="/static/img/loader.gif" alt="" class="ajax-loader" />
+                    Cargando viajes ...
+                </p>
             </Loading>
         </div>
 
