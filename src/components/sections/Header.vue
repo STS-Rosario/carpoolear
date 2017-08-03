@@ -78,13 +78,13 @@
                             <router-link :to="{name: 'profile', params: {id: 'me'}}">Perfil</router-link>
                         </li>
                         <li role="separator" class="divider"></li>
-                        <li>
+                        <!--<li>
                             <router-link :to="{name: 'acerca_de'}">Acerca</router-link>
                         </li>
                         <li role="separator" class="divider"></li>
                         <li>
                             <router-link :to="{name: 'profile_update'}">Configuración</router-link>
-                        </li>
+                        </li>-->
                         <li><a @click="logout" v-if="!isFacebokApp">Cerrar sesión</a></li>
                     </dropdown>
                 </div>

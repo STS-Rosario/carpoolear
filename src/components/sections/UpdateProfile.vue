@@ -32,10 +32,10 @@
                     <label for="input-telefono">Número de teléfono</label>
                     <input v-model="user.mobile_phone" type="text" class="form-control" id="input-phone" placeholder="Número de teléfono">
                 </div>
-                <div class="form-group">
+                <!--<div class="form-group">
                     <label for="input-genero">Sexo</label>
                     <input v-model="user.gender" type="text" class="form-control" id="input-genero" placeholder="Sexo">
-                </div>
+                </div>-->
                 <div class="form-group">
                     <label for="input-patente">Patente</label>
                     <input v-model="patente" type="text" class="form-control" id="input-patente" placeholder="Patente">
