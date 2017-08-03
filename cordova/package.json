@@ -10,8 +10,8 @@
         "plugins": {
             "cordova-plugin-device": {},
             "cordova-plugin-facebook4": {
-                "APP_ID": "829566563845558",
-                "APP_NAME": "Hay Equipo"
+                "APP_ID": "862086450497061",
+                "APP_NAME": "CarpoolearDev"
             },
             "cordova-plugin-nativestorage": {},
             "cordova-plugin-network-information": {},
