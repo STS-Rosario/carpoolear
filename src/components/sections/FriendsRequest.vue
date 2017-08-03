@@ -17,7 +17,10 @@
                 </FriendCard>
             </div>
             <p slot="no-data" class="alert alert-warning"  role="alert">No hay resultados</p>
-            <p slot="loading" class="alert alert-info" role="alert">Cargando amigos ...</p>
+            <p slot="loading" class="alert alert-info" role="alert">
+                <img src="/static/img/loader.gif" alt="" class="ajax-loader" />
+                Cargando amigos ...
+            </p>
         </Loading>
     </div>
   </div>

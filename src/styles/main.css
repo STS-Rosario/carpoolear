@@ -793,10 +793,10 @@ textarea {
     content: none;
 }
 .trip-fill .trip_location_from,
-.trip-fill .trip_location_from_state-country, 
+.trip-fill .trip_location_from_state-country,
 .trip-fill .trip_location_to_state-country,
 .trip-fill .trip_location_to,
-.trip-fill .trip_datetime, 
+.trip-fill .trip_datetime,
 .trip-fill .trip_datetime_time {
     color: white;
 }
@@ -2151,4 +2151,7 @@ ul {
 }
 .ajs-error {
     color: white;
+}
+.ajax-loader {
+    vertical-align: -3px;
 }
