@@ -96,6 +96,7 @@ input[type=radio] + label {
 .brand {
     font-weight: 400;
 }
+
 .btn-primary {
     border-radius: 0;
     padding: 1em;
@@ -458,6 +459,13 @@ textarea {
     bottom: 8px;
     left: 57px;
 }
+.fa-container {
+    position: relative;
+}
+.badge {
+    vertical-align: 1px;
+    margin-left: .2em;
+}
 .header_notifications {
     border: 1px solid #0180a9;
     border-right: 0;
@@ -466,6 +474,14 @@ textarea {
     padding-left: 10px;
     padding-right: 6px;
     cursor: pointer;
+}
+.header_notifications i.background {
+    left: -2px;
+    top: -1px;
+    position: absolute;
+    font-size: 18px;
+    color: white;
+    z-index: -1;
 }
 .trip_seats-available_label {
     margin-top: 4px;
@@ -476,7 +492,7 @@ textarea {
     display:block;
     margin: 7px 0;
 }
-.header_notifications > i {
+.header_notifications i {
     color: #0180a9;
 }
 .header_panel-left {
@@ -826,6 +842,16 @@ textarea {
     color: var(--trip-half-free-color);
 }
 
+.float-margin {
+    float: left;
+    width: calc(100% - 7em);
+}
+
+.trip .btn-trip-detail {
+    color: var(--trip-half-free-color);
+    border-color: var(--trip-half-free-color);
+}
+
 .trip-almost-fill .btn-trip-detail {
     color: var(--trip-almost-fill-color);
     border-color: var(--trip-almost-fill-color);
@@ -957,8 +983,9 @@ textarea {
     margin-top: .4em;
 }
 .request-list div.rate-pending_component .rate-buttons {
-    margin-top: 2em; 
+    margin-top: .8em; 
     margin-bottom: .7em;
+    margin-left: 2em;
     text-align: center;
 }
 .btn-accept-request {
@@ -1738,19 +1765,31 @@ ul {
         padding-left: 1em;
     }
 }
-@media only screen and (max-width: 330px) {
+@media only screen and (max-width: 350px) {
     .rate-pending_photo {
         display: none;
     }
     .rate-pending-message {
         width: 100%;
+        float: none;
+    }
+    .request-list div.rate-pending_component .rate-buttons {
+        width: 100%;
+    }
+    .request-list div.rate-pending_component .rate-buttons button {
+        max-width: auto;
+    }
+    .float-margin {
+        width: 100%;
+        float: none;
+        margin-top: .4em;
     }
 }
 @media only screen and (max-width: 370px) {
-    h2 {
-        font-size: 26px;
-    }
     .rate-pending-message--content {
+        margin-left: 0;
+    }
+    .request-list div.rate-pending_component .rate-buttons {
         margin-left: 0;
     }
 }
@@ -1825,6 +1864,9 @@ ul {
 }
 
 @media only screen and (max-width: 769px) {
+    h2 {
+        font-size: 26px;
+    }
     .trip-create {
         width: 100%;
         margin: 1em 0;
@@ -1891,9 +1933,6 @@ ul {
         margin-top: .8em; 
         margin-bottom: .7em;
         text-align: left;
-        margin-left: 2em;
-    }
-    .rate--comment-box {
         margin-left: 2em;
     }
     .rate-pending_message {

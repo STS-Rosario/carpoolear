@@ -1,5 +1,5 @@
 <template>  
-    <div class="col-md-12 col-lg-8">
+    <div class="col-xs-24 col-md-12 col-lg-8">
         <div class="rate-pending_component clearfix">
             <div class="rate-pending_photo">
                 <router-link :to="{name: 'profile', params: {id: user.id, userProfile: user}}">

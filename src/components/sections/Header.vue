@@ -67,7 +67,10 @@
 
 
                 <span class="header_notifications" @click="toNotifications" v-if="logged">
-                    <i class="fa fa-bell" aria-hidden="true"></i>
+                    <span class="fa-container">
+                        <i class="fa fa-bell background" aria-hidden="true"></i>
+                        <i :style="notificationsCount > 0 ? 'color: white' : ''" class="fa fa-bell" aria-hidden="true"></i>
+                    </span>
                     <span class="badge" v-if="notificationsCount > 0">{{notificationsCount}}</span>
                 </span>
 

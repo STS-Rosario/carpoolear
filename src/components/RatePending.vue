@@ -1,5 +1,5 @@
 <template>
-    <div class="col-md-12 col-lg-8">
+    <div class="col-xs-24 col-md-12 col-lg-8">
         <div class="rate-pending_component clearfix">
             <div class="rate-pending_photo">
                 <router-link :to="{name: 'profile', params: {id: to.id, userProfile: to}}">
@@ -15,7 +15,7 @@
                     en el viaje hacía <strong>{{ trip.points[trip.points.length - 1].json_address.ciudad }}</strong> el día <strong>{{ trip.trip_date | moment('dddd DD [de] MMMM') }}</strong> ?
                 </div>
             </div>
-            <div class="col-xs-24 col-sm-offset-4 col-sm-20  col-md-21 col-md-offset-3">
+            <div class="float-margin">
                 <div class='rate-buttons'>
                     <button class="btn rate-positive" @click="setRate(1)" :class="{active: vote === 1}">
                         <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
@@ -24,10 +24,10 @@
                         <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
                     </button>
                 </div>
-                <div class="rate--comment-box" v-show="expanded">
-                    <textarea maxlength="330" class="rate_comment" v-model="comment" placeholder="Incluya un comentario..."></textarea>
-                    <button class="btn btn-primary" @click="makeVote" :disabled="sending"> Calificar </button>
-                </div>
+            </div>
+            <div class="rate--comment-box" v-show="expanded">
+                <textarea maxlength="330" class="rate_comment" v-model="comment" placeholder="Incluya un comentario..."></textarea>
+                <button class="btn btn-primary" @click="makeVote" :disabled="sending"> Calificar </button>
             </div>
         </div>
     </div>
