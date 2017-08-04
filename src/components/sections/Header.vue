@@ -21,6 +21,15 @@
                         <i :class="'fa ' + item.icon" aria-hidden="true"></i>
                     </span>
                 </template>
+                <div class="dropdown-right" v-if="showMenu">
+                    <dropdown type="icon">
+                        <template slot="button">
+                            <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                        </template>
+                        <li><router-link tag="a" :to="{name: 'acerca_de'}"  >ACERCA DE</router-link></li>
+                        <li><a @click="logout" v-if="!isFacebokApp">CERRAR SESSION</a></li>
+                    </dropdown>
+                </div>
             </div>
         </div>
         <div class="header_content hidden-xs">
@@ -78,13 +87,13 @@
                             <router-link :to="{name: 'profile', params: {id: 'me'}}">Perfil</router-link>
                         </li>
                         <li role="separator" class="divider"></li>
-                        <li>
+                        <!--<li>
                             <router-link :to="{name: 'acerca_de'}">Acerca</router-link>
                         </li>
                         <li role="separator" class="divider"></li>
                         <li>
                             <router-link :to="{name: 'profile_update'}">Configuración</router-link>
-                        </li>
+                        </li>-->
                         <li><a @click="logout" v-if="!isFacebokApp">Cerrar sesión</a></li>
                     </dropdown>
                 </div>
@@ -129,6 +138,7 @@ export default {
             notificationsCount: 'notifications/count',
             title: 'actionbars/title',
             subTitle: 'actionbars/subTitle',
+            showMenu: 'actionbars/showMenu',
             leftHeaderButton: 'actionbars/leftHeaderButton',
             rightHeaderButton: 'actionbars/rightHeaderButton',
             logoHeaderVisibility: 'actionbars/headerLogoVisibility',
@@ -165,7 +175,7 @@ export default {
         },
 
         onClick (item) {
-            let b = bus.emit(item.id + '-click');
+            bus.emit(item.id + '-click');
         }
     },
 

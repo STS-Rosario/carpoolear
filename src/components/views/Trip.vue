@@ -94,6 +94,20 @@
                                         <span>{{ trip.distance * 1.5 }} <abbr title="kilogramos dióxido de carbono equivalente">kg CO<sub>2eq</sub></abbr></span>
                                     </div>
                                 </div>
+                                <div class="trip_share row">
+                                    <a  :href="'https://www.facebook.com/sharer/sharer.php?u=' + currentUrl" target="_blank" aria-label="Compartir en Facebook" class="lnk lnk-social-network lnk-facebook">
+                                        <i class="fa fa-facebook" aria-hidden="true"></i>
+                                    </a>
+                                    <a :href="'https://twitter.com/intent/tweet/?text=Publiqu%C3%A9%20un%20viaje%20para%20compartir%20en%20Carpoolear%20&via=carpoolear&url='  + currentUrl" target="_blank" aria-label="Compartir en Twitter"   class="lnk lnk-social-network lnk-twitter">
+                                        <i class="fa fa-twitter" aria-hidden="true"></i>
+                                    </a>
+                                    <a :href="'https://plus.google.com/share?url='  + currentUrl" target="_blank" aria-label="Compartir en Google+"  class="lnk lnk-social-network lnk-google-plus">
+                                        <i class="fa fa-google-plus" aria-hidden="true"></i>
+                                    </a>
+                                    <a :href="'whatsapp://send?text=Publiqu%C3%A9%20un%20viaje%20para%20compartir%20en%20Carpoolear%20'  + currentUrl" target="_blank" aria-label="Compartir en Whats App"   class="lnk lnk-social-network lnk-whatsapp"  v-if="isMobile">
+                                        <i class="fa fa-whatsapp" aria-hidden="true"></i>
+                                    </a>
+                                </div>
                             </div>
                             <div class="buttons-container">
                                 <router-link class="btn btn-primary" v-if="owner" :to="{name: 'update-trip', params: { id: trip.id}}"> Editar  </router-link>
@@ -195,7 +209,8 @@ export default {
                     json: null,
                     location: null
                 }
-            ]
+            ],
+            currentUrl: encodeURIComponent('https://carpoolear.com.ar' + this.$route.fullPath)
         };
     },
 

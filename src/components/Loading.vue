@@ -1,18 +1,21 @@
 <template>
-    <div v-if="(data && data.length > 0) || !hideOnEmpty">  
+    <div v-if="(data && data.length > 0) || !hideOnEmpty">
         <slot name="title" ></slot>
         <template v-if="data != null">
-            <slot v-if="data.length > 0"> 
+            <slot v-if="data.length > 0">
 
             </slot>
             <slot name="no-data" v-else>
-                <p class="alert alert-warning"  role="alert">No hay viajes</p>    
+                <p class="alert alert-warning"  role="alert">No hay viajes</p>
             </slot>
         </template>
         <slot name="loading" v-else>
-            <p class="alert alert-info" role="alert">Cargando viajes ...</p>
-        </slot> 
-    </div>  
+            <p class="alert alert-info" role="alert">
+                <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
+                Cargando viajes ...
+            </p>
+        </slot>
+    </div>
 </template>
 
 <script>

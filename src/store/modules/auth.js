@@ -185,7 +185,7 @@ const actions = {
 // mutations
 const mutations = {
     [types.AUTH_SET_TOKEN] (state, token) {
-        state.token = token;
+        state.token = token.replace('"', '');
         state.auth = true;
         cache.setItem(keys.TOKEN_KEY, token);
     },

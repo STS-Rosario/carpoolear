@@ -28,6 +28,7 @@ export const init = (store) => {
     loadStateMap.forEach(obj => {
         var p = new Promise((resolve, reject) => {
             cache.getItem(obj.key).then((value) => {
+                // console.log(value);
                 store.commit(obj.mutation, value);
                 resolve();
             }).catch(() => {
@@ -38,7 +39,7 @@ export const init = (store) => {
     });
 
     return Promise.all(promises).then(() => {
-        // console.log('State loaded from cache');
+        console.log('State loaded from cache');
         if (store.state.auth.token) {
             store.dispatch('auth/retoken').then(() => startApp(store));
         } else {

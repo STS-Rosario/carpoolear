@@ -13,7 +13,7 @@
                 </div>
                 <div class="message_meta">
                     <span class="message_time">{{ date }}</span>
-                    <span class="message_seen" v-if="message.no_of_read - 1 > 0" aria-label="Mensaje visto por el usuario">
+                    <span class="message_seen" v-if="message.no_of_read - 1 > 0" title="Mensaje visto por el usuario">
                         <i class="fa fa-check-circle" aria-hidden="true"></i>
                     </span>
                 </div>

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.sts.carpoolear" version="2.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.sts.carpoolear" version="2.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Carpoolear</name>
     <description>
         Aplicación para compartir viajes de media y larga distancia.
@@ -22,6 +22,8 @@
         <icon density="mdpi" src="res/icon/android/icon-48-mdpi.png" />
         <icon density="hdpi" src="res/icon/android/icon-72-hdpi.png" />
         <icon density="xhdpi" src="res/icon/android/icon-96-xhdpi.png" />
+        <icon density="xxhdpi" src="res/icon/android/icon-144-xxhdpi.png" />
+        <icon density="xxxhdpi" src="res/icon/android/icon-192-xxxhdpi.png" />
         <splash density="port-hdpi" src="res/screen/android/screen-hdpi-portrait.png" />
         <splash density="port-ldpi" src="res/screen/android/screen-mdpi-portrait.png" />
         <splash density="port-mdpi" src="res/screen/android/screen-mdpi-portrait.png" />
@@ -64,9 +66,9 @@
     <engine name="browser" spec="^4.1.0" />
     <plugin name="cordova-plugin-backbutton" spec="^0.3.0" />
     <plugin name="cordova-plugin-device" spec="~1.1.4" />
-    <plugin name="cordova-plugin-facebook4" spec="~1.7.4">
-        <variable name="APP_ID" value="829566563845558" />
-        <variable name="APP_NAME" value="Hay Equipo" />
+    <plugin name="cordova-plugin-facebook4" spec="^1.9.1">
+        <variable name="APP_ID" value="862086450497061" />
+        <variable name="APP_NAME" value="CarpoolearDev" />
     </plugin>
     <plugin name="cordova-plugin-nativestorage" spec="~2.2.2" />
     <plugin name="cordova-plugin-network-information" spec="~1.3.1" />

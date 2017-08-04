@@ -1,8 +1,18 @@
 <template>  
-    <div>
-        {{user.name}} quiere subirse al viaje hacia {{trip.to_town}}.
-        <button class="btn btn-primary" :disabled="acceptInProcess" @click="accept"> Aceptar </button>
-        <button class="btn btn-error" :disabled="rejectInProcess" @click="reject"> Cancelar </button>
+    <div class="rate-pending_component">
+        <div class="col-xs-8 col-sm-4 col-md-3 rate-pending_photo">
+            <router-link :to="{name: 'profile', params: {id: user.id, userProfile: user}}">
+                <div class="trip_driver_img circle-box" v-imgSrc:profile="user.image">
+                </div>
+            </router-link>
+        </div>
+        <div>
+            <strong>{{user.name}}</strong> quiere subirse al viaje hacia <strong>{{trip.points[trip.points.length - 1].json_address.ciudad}}</strong>.
+            <div>
+                <button class="btn " :disabled="acceptInProcess" @click="accept"> Aceptar </button>
+                <button class="btn btn-primary" :disabled="rejectInProcess" @click="reject"> Rechazar </button>
+            </div>
+        </div>
     </div>
 </template>
 <script>
