@@ -669,7 +669,10 @@ textarea {
     height: 30px;
     float: left;
 }
-
+.description {
+    font-size: 11px;
+    color: black;
+}
 .card-trip .trip_driver_img {
     width: 100%;
     max-width: 74px;
@@ -863,9 +866,55 @@ textarea {
         margin-top: -9px;
     }
 }
+.request-list > div.rate-pending_component {
+    box-shadow: 0 0 4px 1px #CCC;
+    border-radius: .4em;
+    margin: 1.1em auto;
+    background-color: #FFF;
+    padding: 1.2em;
+    position: relative;
+}
+.rate-pending_photo {
+    height: 5.7em;
+}
+.request-list > div.rate-pending_component:last-of-type {
+    margin-bottom: 0;
+}
 
+.rate-pending_component .trip_driver_img {
+    position: absolute;
+    height: 5em;
+    width: 5em;
+}
+.rate-pending_message {
+    margin-top: 1em;
+}
+.request-list > div.rate-pending_component .rate-buttons {
+    margin-top: 2em; 
+    margin-bottom: .7em;
+    text-align: center;
+}
+
+.rate-buttons .btn {
+	width: calc(50% - 6px);
+}
+.rate-buttons button:first-child {
+	margin-right: 6px;
+}
+.rate--comment-box button {
+    width: 100%;
+}
+
+.request-list > div.rate-pending_component button:first-of-type.active {
+    color: #FFF;
+    background-color: green;
+}
+.request-list > div.rate-pending_component button:last-of-type.active{
+    color: #FFF;
+    background-color: red;
+}
 .trip-type-selection .control-label {
-    color: #FFFFFF;
+    color: #FFF;
 }
 .trip_points,
 .trip_information {
@@ -1286,11 +1335,11 @@ textarea {
     font-size: 11px;
 }
 
-#trips-list {
+.trips-list {
     overflow: auto;
     margin-bottom: 3rem;
 }
-#trips-list > div {
+.trips-list > div {
     padding-left: 0;
     padding-right: 0;
 }
@@ -1322,7 +1371,6 @@ textarea {
     padding: 4px 10px;
     background-color: var(--secondary-background);
     white-space: nowrap;
-    overflow: hidden;
 }
 
 .actionbar-bottom .actionbar_item {
@@ -1467,6 +1515,11 @@ textarea {
 .user-form h2 {
     font-weight: normal;
 }
+h2 {
+    margin-bottom: 20px;
+    color: #036686;
+    font-weight: 400;
+}
 
 .user-form input[type='text'],
 .user-form input[type='password'] {
@@ -1570,8 +1623,16 @@ ul {
     .nav>li>a.active::after {
         top: 38px;
     }
+    .rate-pending_component .trip_driver_img {
+        height: 6em;
+        width: 6em;
+    }
 }
 @media only screen and (min-width: 400px) {
+    .rate-pending_component .trip_driver_img {
+        height: 7em;
+        width: 7em;
+    }
     .nav-tabs>li>a {
         font-size: 16px;
     }
@@ -1686,11 +1747,34 @@ ul {
 }
 
 @media only screen and (min-width: 768px) {
+    .request-list > div.rate-pending_component .rate-buttons {
+        margin-top: .8em; 
+        margin-bottom: .7em;
+        text-align: left;
+        margin-left: 2em;
+    }
+    .request-list > div.rate-pending_component {
+        min-height: 9em;
+    }
+    .rate-pending_message {
+        margin-top: 0;
+        margin-left: 2em;
+    }
+    .rate--comment-box button {
+        width: 150px;
+    }    
+    .rate-pending_photo {
+        height: 0;
+    }
+    .rate-buttons .btn {
+        width: 50px;
+        margin: 0;
+    }
     .conversation_chat .list-group-item:nth-child(3) {
         border-bottom-width: 1px;
         margin-bottom: -4px;
     }
-    #trips-list > div {
+    .trips-list > div {
         padding-left: 10px;
         padding-right: 10px;
     }
@@ -1932,7 +2016,7 @@ ul {
     .app-container.blue .header::after {
         background-color: rgba(1, 133, 188, .9);
     }
-    #trips-list {
+    .trips-list {
         margin-bottom: 1rem;
     }
     .view-container {

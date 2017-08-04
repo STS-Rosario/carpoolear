@@ -10,7 +10,7 @@
         <SearchBox :params="searchParams" v-on:trip-search="research" v-show="!isMobile || lookSearch"></SearchBox>
 
         <Loading :data="trips" v-if="showingTrips">
-            <div id="trips-list">
+            <div class="trips-list">
                 <Trip v-for="trip in trips" :trip="trip" :user="user" ></Trip>
             </div>
             <!--

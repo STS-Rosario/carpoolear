@@ -7,15 +7,20 @@
     <h1> Registrar nuevo usuario </h1>
     <div class='form row' v-if="!success">
       <label for="txt_name">Nombre</label>
-      <input  type="text" id="txt_name" v-model='name' :class="{'has-error': nombreError }"/>
+      <input  maxlength="25" type="text" id="txt_name" v-model='name' :class="{'has-error': nombreError.state }"/>
+      <span class="error" v-if="nombreError.state"> {{nombreError.message}} </span>
       <label for="txt_surename">Apellido</label>
-      <input  type="text" id="txt_surename" v-model='sureName' :class="{'has-error': apellidoError }"/>
+      <input  maxlength="25" type="text" id="txt_surename" v-model='sureName' :class="{'has-error': apellidoError.state }"/>
+      <span class="error" v-if="apellidoError.state"> {{apellidoError.message}} </span>
       <label for="txt_email">Email</label>
-      <input type="text" id="txt_email" v-model='email' :class="{'has-error': emailError }"/>
+      <input maxlength="40" type="text" id="txt_email" v-model='email' :class="{'has-error': emailError.state }"/>
+      <span class="error" v-if="emailError.state"> {{emailError.message}} </span>
       <label for="txt_password">Contraseña</label>
-      <input type="password" id="txt_password" v-model='password' :class="{'has-error': passwordError }"/>
+      <input maxlength="40" type="password" id="txt_password" v-model='password' :class="{'has-error': passwordError.state }"/>
+      <span class="error" v-if="passwordError.state"> {{passwordError.message}} </span>
       <label for="txt_password_confirmation">Ingrese nuevamente su contraseña</label>
-      <input  type="password" id="txt_password_confirmation" v-model='passwordConfirmation' :class="{'has-error': passwordError }" />
+      <input  maxlength="40" type="password" id="txt_password_confirmation" v-model='passwordConfirmation' :class="{'has-error': passwordError.state }" />
+      <span class="error" v-if="passwordError.state"> {{passwordError.message}} </span>
       <div class="terms">
         <input  type="checkbox" id="cbx_terms" v-model='termsAndConditions' />
         <label for="cbx_terms"><router-link :to="{name: 'terms'}">He leído y acepto los términos y condiciones</router-link></label>
@@ -35,6 +40,12 @@ import dialogs from '../../services/dialogs.js';
 import bus from '../../services/bus-event';
 import router from '../../router';
 let emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+class Error {
+    constructor (state = false, message = '') {
+        this.state = false;
+        this.message = '';
+    }
+}
 
 export default {
     name: 'register',
@@ -49,10 +60,10 @@ export default {
             carpoolear_logo: process.env.ROUTE_BASE + 'static/img/carpoolear_logo.png',
             progress: false,
             success: false,
-            emailError: false,
-            passwordError: false,
-            nombreError: false,
-            apellidoError: false
+            emailError: new Error(),
+            passwordError: new Error(),
+            nombreError: new Error(),
+            apellidoError: new Error()
         };
     },
     computed: {
@@ -62,11 +73,10 @@ export default {
         })
     },
     watch: {
-        email: function () { this.emailError = false; },
-        name: function () { this.nombreError = false; },
-        sureName: function () { this.apellidoError = false; },
-        password: function () { this.passwordError = false; },
-        passwordConfirmation: function () { this.passwordErrorError = false; }
+        email: function () { this.emailError.state = false; },
+        name: function () { this.nombreError.state = false; },
+        sureName: function () { this.apellidoError.state = false; },
+        password: function () { this.passwordError.state = false; }
     },
     methods: {
         ...mapActions({
@@ -75,23 +85,44 @@ export default {
 
         validate () {
             let globalError = false;
-            if (!emailRegex.test(this.email)) {
-                this.emailError = true;
+            console.log(this.emailError);
+            if (this.email.length < 1) {
+                this.emailError.state = true;
+                this.emailError.message = 'Olvido ingresar su email.';
+                globalError = true;
+            } else if (!emailRegex.test(this.email)) {
+                this.emailError.state = true;
+                this.emailError.message = 'Ingrese un email válido.';
                 globalError = true;
             }
 
-            if (this.password !== this.passwordConfirmation || this.password.length < 6) {
-                this.passwordError = true;
+            if (this.password.length < 1) {
+                this.passwordError.state = true;
+                this.passwordError.message = 'Olvido ingresar su contraseña.';
+                globalError = true;
+            } else if (this.password.length < 8) {
+                this.passwordError.state = true;
+                this.passwordError.message = 'Las contraseña debe tener al menos 8 caracteres.';
+                globalError = true;
+            } else if (this.passwordConfirmation < 1) {
+                this.passwordError.state = true;
+                this.passwordError.message = 'Olvido confirmar su contraseña.';
+                globalError = true;
+            } else if (this.password !== this.passwordConfirmation) {
+                this.passwordError.state = true;
+                this.passwordError.message = 'Las contraseñas no coinciden.';
                 globalError = true;
             }
 
             if (this.name.length < 1) {
-                this.nombreError = true;
+                this.nombreError.state = true;
+                this.nombreError.message = 'Olvido ingresar su nombre.';
                 globalError = true;
             }
 
             if (this.sureName.length < 1) {
-                this.apellidoError = true;
+                this.apellidoError.state = true;
+                this.apellidoError.message = 'Olvido ingresar su apellido.';
                 globalError = true;
             }
 
@@ -112,7 +143,8 @@ export default {
                 this.success = true;
             }).catch(() => {
                 dialogs.message('La cuenta de email ingresada se encuentra en uso.', {estado: 'error'});
-                this.emailError = true;
+                this.emailError.state = true;
+                this.emailError.message = 'La cuenta de email ingresada se encuentra en uso.';
                 this.progress = false;
             });
         },
@@ -148,6 +180,15 @@ export default {
     }
     .user-form a {
         font-weight: 400;
+    }
+    span.error {
+        display: block;
+        color: red;
+        font-size: 12px;
+        margin-top: -5px;
+    }
+    .cbx_terms {
+        display: inline;
     }
 
     @media only screen and (min-width: 768px) {

@@ -3,8 +3,8 @@
         <div class="col-xs-24">
 
             <Loading :data="pendingRequest" :hideOnEmpty="true">
-                <h2 slot="title"> Pendiente de contestar </h2>
-                <div id="trips-list">
+                <h2 slot="title"> Pendiente <strong>de contestar</strong> </h2>
+                <div class="request-list">
                     <PendingRequest v-for="r in pendingRequest" :user="r.user" :trip="findTrip(r.trip_id)"></PendingRequest>
                 </div>
                 <p slot="no-data" class="alert alert-warning"  role="alert">No hay pedientes de contestar</p>
@@ -14,8 +14,8 @@
 
         <div class="col-xs-24">
             <Loading :data="pendingRates" :hideOnEmpty="true">
-                <h2 slot="title"> Calificaciones pendientes </h2>
-                <div id="trips-list">
+                <h2 slot="title"> Calificaciones <strong>pendientes </strong></h2>
+                <div class="request-list">
                     <RatePending v-for="rate in pendingRates" :rate="rate" />
                 </div>
                 <p slot="no-data" class="alert alert-warning"  role="alert">No hay calificaciones pendientes</p>
@@ -24,9 +24,9 @@
         </div>
 
         <div class="col-xs-24">
-            <h2>Viajes Creados</h2>
+            <h2>Viajes <strong>Creados</strong></h2>
             <Loading :data="trips">
-                <div id="trips-list">
+                <div class="trips-list">
                     <Trip v-for="trip in trips" :trip="trip" :user="user" ></Trip>
                 </div>
                 <p slot="no-data" class="alert alert-warning"  role="alert">No hay viajes</p>
@@ -36,8 +36,8 @@
 
         <div class="col-xs-24">
             <Loading :data="passengerTrips" :hideOnEmpty="true">
-                <h2 slot="title" > Viajes Subido </h2>
-                <div id="trips-list">
+                <h2 slot="title" > Viajes <strong>subido</strong> </h2>
+                <div class="trips-list">
                     <Trip v-for="trip in passengerTrips" :trip="trip" :user="user" ></Trip>
                 </div>
                 <p slot="no-data" class="alert alert-warning"  role="alert">No hay viajes</p>

@@ -14,35 +14,31 @@
             <div class='form'>
                 <div class="form-group">
                     <label for="input-name">Nombre</label>
-                    <input v-model="user.name" type="text" class="form-control" id="input-name" placeholder="Nombre">
+                    <input maxlength="25" v-model="user.name" type="text" class="form-control" id="input-name" placeholder="Nombre">
                 </div>
                 <div class="form-group">
                     <label for="input-email">E-mail</label>
-                    <input v-model="user.email" type="text" class="form-control" id="input-email" placeholder="E-mail">
+                    <input maxlength="40" v-model="user.email" type="text" class="form-control" id="input-email" placeholder="E-mail">
                 </div>
                 <div class="form-group">
                     <label for="">Fecha de nacimiento</label>
                     <Calendar :class="'form-control form-control-with-icon form-control-date'" :value="user.birthday" @change="(date) => this.user.birthday = date"></Calendar>
                 </div>
                 <div class="form-group">
-                    <label for="input-dni">Número de documento</label>
-                    <input v-model="user.nro_doc" type="text" class="form-control" id="input-dni" placeholder="DNI">
+                    <label for="input-dni">Número de documento <span class="description">(Solo números)</span></label> 
+                    <input v-numberMask="'dniRawValue'" type="text" data-max-length="8" v-model="user.nro_doc" class="form-control" id="input-dni" placeholder="DNI">
                 </div>
                 <div class="form-group">
-                    <label for="input-telefono">Número de teléfono</label>
-                    <input v-model="user.mobile_phone" type="text" class="form-control" id="input-phone" placeholder="Número de teléfono">
+                    <label for="input-telefono">Número de teléfono <span class="description">(Código área + teléfono. Ej: 0341156708223)</span></label> 
+                    <input maxlength="20" @keydown="isNumber" v-on:paste='isNumber' v-model="user.mobile_phone" type="tel" class="form-control" id="input-phone" placeholder="Número de teléfono">
                 </div>
                 <div class="form-group">
-                    <label for="input-genero">Sexo</label>
-                    <input v-model="user.gender" type="text" class="form-control" id="input-genero" placeholder="Sexo">
-                </div>
-                <div class="form-group">
-                    <label for="input-patente">Patente</label>
-                    <input v-model="patente" type="text" class="form-control" id="input-patente" placeholder="Patente">
+                    <label for="input-patente">Patente <span class="description">(Sin espacios. Ej: ABC123 o AA123AA)</span></label> 
+                    <input :style="patente.length > 0 ? 'text-transform: uppercase' : ''" v-mask="'AAN##NA'" v-model="patente" type="text" class="form-control" id="input-patente" placeholder="Patente">
                 </div>
                 <div class="form-group">
                     <label for="input-description">Descripción</label>
-                    <textarea v-model="user.description" placeholder="Descripción"></textarea>
+                    <textarea maxlength="280" v-model="user.description" placeholder="Descripción"></textarea>
                 </div>
 
                 <div class="checkbox">
@@ -52,8 +48,8 @@
                 </div>
                 <div class="form-group">
                     <label for="input-pass">Cambiar contraseña</label>
-                    <input v-model="pass.password" type="password" class="form-control" id="input-pass" placeholder="Contraseña">
-                    <input v-model="pass.password_confirmation" type="password" class="form-control" id="input-pass-confirm" placeholder="Repetir contraseña">
+                    <input maxlength="40" v-model="pass.password" type="password" class="form-control" id="input-pass" placeholder="Contraseña">
+                    <input maxlength="40" v-model="pass.password_confirmation" type="password" class="form-control" id="input-pass-confirm" placeholder="Repetir contraseña">
                 </div>
 
                 <div class="btn-container">
@@ -69,6 +65,7 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import { inputIsNumber } from '../../services/utility';
 import Calendar from '../Calendar';
 import Uploadfile from '../Uploadfile';
 import SvgItem from '../SvgItem';
@@ -86,7 +83,8 @@ export default {
             },
             error: null,
             loading: false,
-            loadingImg: false
+            loadingImg: false,
+            dniRawValue: ''
         };
     },
     computed: {
@@ -102,6 +100,9 @@ export default {
             carCreate: 'cars/create',
             carUpdate: 'cars/update'
         }),
+        isNumber (value) {
+            inputIsNumber(value);
+        },
         onPhotoChange (data) {
             this.loadingImg = true;
             this.updatePhoto(data).then(user => {
