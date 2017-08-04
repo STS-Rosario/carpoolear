@@ -9,7 +9,7 @@
                 </div>
                 <p slot="no-data" class="alert alert-warning"  role="alert">No hay pedientes de contestar</p>
                 <p slot="loading" class="alert alert-info" role="alert">
-                    <img src="/static/img/loader.gif" alt="" class="ajax-loader" />
+                    <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
                     Cargando...
                 </p>
             </Loading>
@@ -23,7 +23,7 @@
                 </div>
                 <p slot="no-data" class="alert alert-warning"  role="alert">No hay calificaciones pendientes</p>
                 <p slot="loading" class="alert alert-info" role="alert">
-                    <img src="/static/img/loader.gif" alt="" class="ajax-loader" />
+                    <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
                     Cargando calificaciones ...
                 </p>
             </Loading>
@@ -37,7 +37,7 @@
                 </div>
                 <p slot="no-data" class="alert alert-warning"  role="alert">No hay viajes</p>
                 <p slot="loading" class="alert alert-info" role="alert">
-                    <img src="/static/img/loader.gif" alt="" class="ajax-loader" />
+                    <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
                     Cargando viajes ...
                 </p>
             </Loading>
@@ -51,7 +51,7 @@
                 </div>
                 <p slot="no-data" class="alert alert-warning"  role="alert">No hay viajes</p>
                 <p slot="loading" class="alert alert-info" role="alert">
-                    <img src="/static/img/loader.gif" alt="" class="ajax-loader" />
+                    <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
                     Cargando viajes ...
                 </p>
             </Loading>

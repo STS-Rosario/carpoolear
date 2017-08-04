@@ -11,7 +11,7 @@
         </template>
         <slot name="loading" v-else>
             <p class="alert alert-info" role="alert">
-                <img src="/static/img/loader.gif" alt="" class="ajax-loader" />
+                <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
                 Cargando viajes ...
             </p>
         </slot>

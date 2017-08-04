@@ -33,7 +33,7 @@
                             </li>
                             <li slot="no-data" class="list-group-item alert alert-warning"  role="alert">No tienes conversaciones...</li>
                             <li slot="loading" class="list-group-item alert alert-info" role="alert">
-                                <img src="/static/img/loader.gif" alt="" class="ajax-loader" />
+                                <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
                                 Cargando conversaciones ...
                             </li>
                         </Loading>
