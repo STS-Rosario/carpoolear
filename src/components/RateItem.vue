@@ -1,7 +1,7 @@
 <template>
     <div class="rate-item">
         <div class="row">
-            <div class="col-xs-12 col-md-8">
+            <div class="col-xs-24 col-sm-12 col-md-8">
                 <div class="image-width">
                     <div class="trip_driver_img circle-box" v-imgSrc:profile="rate.from.image"></div>
                 </div>
@@ -13,14 +13,14 @@
                                 <i class="fa fa-thumbs-up" aria-hidden="true" v-if="rate.rating == 1"></i>
                                 <i class="fa fa-thumbs-down" aria-hidden="true" v-if="rate.rating == 0"></i>
                             </span>
+                            <span class="pull-right clickeable" v-if="!rate.reply_comment" @click="showReply = !showReply">
+                                <i class="fa fa-reply" aria-hidden="true"></i>
+                            </span>
                         </div>
                         <div class="rate-item-detail">
                             Viajó a {{rate.trip.points[rate.trip.points.length - 1].json_address.ciudad}} como {{rateType}}
                              - {{rate.rate_at | moment("DD/MM/YYYY")}}
                         </div>
-                        <span class="pull-right" v-if="!rate.reply_comment" @click="showReply = true">
-                            <i class="fa fa-reply" aria-hidden="true"></i>
-                        </span>
                     </div>
                     <div class="rate-item-comment">
                         {{rate.comment}}
@@ -31,7 +31,7 @@
                     <div v-if="showReply">
                         <textarea v-model="comment"></textarea>
                         <button class="btn btn-primary" @click="onReply"> Responder </button>
-                        <button class="btn btn-primary" @click="onCancelReply"> Cancel </button>
+                        <button class="btn btn-primary" @click="onCancelReply"> Cancelar </button>
                     </div>
                     <div class="reply_comment_content" v-if="rate.reply_comment">
                         <div class="reply_comment">

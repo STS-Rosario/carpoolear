@@ -367,6 +367,9 @@ textarea {
     height: 10em;
     height: 8.9em;
 }
+.clickeable {
+    cursor: pointer;
+}
 .btn-container {
     margin-top: 2.4em;
     width: 100%;
@@ -500,8 +503,15 @@ textarea {
 }
 
 .rate-item .image-width {
-    width: 5em;
-    float: left;
+    display: none;
+}
+.rate-item .text-width {
+    width: 100%;
+    float: none;
+    padding-left: 0;
+}
+.rate-item textarea {
+    margin-top: .4em;
 }
 
 .rate-item-detail {
@@ -511,10 +521,8 @@ textarea {
     margin-bottom: .5em;
 }
 
-.rate-item .text-width {
-    width: calc(100% - 5em);
-    float: left;
-    padding-left: 1em;
+.tab-content .profile-rates-component .list-group-item {
+    padding: 1.8em 1.6em;
 }
 
 .header .header_panel-left .header_title {
@@ -670,7 +678,6 @@ textarea {
     text-align: center;
     margin-bottom: 40px;
 }
-
 .trips .trips_title h1 {
     font-size: 42px;
     color: #016587;
@@ -919,7 +926,7 @@ textarea {
         margin-top: -9px;
     }
 }
-.request-list > div.rate-pending_component {
+.request-list div.rate-pending_component {
     box-shadow: 0 0 4px 1px #CCC;
     border-radius: .4em;
     margin: 1.1em auto;
@@ -928,26 +935,49 @@ textarea {
     position: relative;
 }
 .rate-pending_photo {
-    height: 5.7em;
+    width: 7em;
+    float: left;
 }
-.request-list > div.rate-pending_component:last-of-type {
+.rate-pending-message {
+    width: calc(100% - 7em);
+    float: left;
+}
+.request-list div.rate-pending_component:last-of-type {
     margin-bottom: 0;
 }
 
 .rate-pending_component .trip_driver_img {
-    position: absolute;
     height: 5em;
     width: 5em;
 }
-.rate-pending_message {
-    margin-top: 1em;
+.rate-pending-message--content {
+    margin-left: 1.8em;
 }
-.request-list > div.rate-pending_component .rate-buttons {
+.pending-buttons {
+    margin-top: .4em;
+}
+.request-list div.rate-pending_component .rate-buttons {
     margin-top: 2em; 
     margin-bottom: .7em;
     text-align: center;
 }
-
+.btn-accept-request {
+    font-size: 0.9rem;
+    color: white;
+    background-color: green;
+    text-transform: uppercase;
+    padding: .8em;
+    border-radius: 0;
+    max-width: 8rem;
+    width: calc(50% - 4px);
+    border: 0;
+}
+.request-list .btn-primary {
+    max-width: 8rem;
+    width: calc(50% - 4px);
+    padding: .8em;
+    border: 0;
+}
 .rate-buttons .btn {
 	width: calc(50% - 6px);
 }
@@ -958,11 +988,11 @@ textarea {
     width: 100%;
 }
 
-.request-list > div.rate-pending_component button:first-of-type.active {
+.request-list div.rate-pending_component button:first-of-type.active {
     color: #FFF;
     background-color: green;
 }
-.request-list > div.rate-pending_component button:last-of-type.active{
+.request-list div.rate-pending_component button:last-of-type.active{
     color: #FFF;
     background-color: red;
 }
@@ -1354,12 +1384,8 @@ textarea {
     margin-right: 0.8em;
 }
 
-.tab-content .profile-rates-component .list-group-item {
-    padding: 0 1em;
-}
-
 .rate-item  i.fa-thumbs-up,
-.rate-item i.fa-thumbs-up {
+.profile-info-component i.fa-thumbs-up {
     color: #59b200;
 }
 .rate-item i.fa-thumbs-up,
@@ -1502,7 +1528,8 @@ textarea {
 .trips.container {
     padding-top: 2em;
 }
-.tab-content .trips.container {
+.tab-content .trips.container,
+.tab-content .trips.container .col-xs-24 {
     padding-left: 0;
     padding-right: 0;
 }
@@ -1699,6 +1726,34 @@ ul {
         width: 6em;
     }
 }
+@media only screen and (min-width: 330px) {
+    .rate-item .image-width {
+        width: 5em;
+        float: left;
+        display: block;
+    }
+    .rate-item .text-width {
+        width: calc(100% - 5em);
+        float: left;
+        padding-left: 1em;
+    }
+}
+@media only screen and (max-width: 330px) {
+    .rate-pending_photo {
+        display: none;
+    }
+    .rate-pending-message {
+        width: 100%;
+    }
+}
+@media only screen and (max-width: 370px) {
+    h2 {
+        font-size: 26px;
+    }
+    .rate-pending-message--content {
+        margin-left: 0;
+    }
+}
 @media only screen and (min-width: 400px) {
     .rate-pending_component .trip_driver_img {
         height: 7em;
@@ -1717,6 +1772,12 @@ ul {
     }
     .nav>li>a.active::after {
         top: 48px;
+    }
+    .btn-accept-request {
+        margin-right: .6em;
+    }
+    .rate-pending-message--content {
+        margin-top: .7em;
     }
 }
 
@@ -1818,7 +1879,15 @@ ul {
 }
 
 @media only screen and (min-width: 768px) {
-    .request-list > div.rate-pending_component .rate-buttons {
+    .tab-content .trips.container,
+    .tab-content .trips.container .col-xs-24 {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    .tab-content .profile-rates-component .list-group-item {
+        padding: 0 1em;
+    }
+    .request-list div.rate-pending_component .rate-buttons {
         margin-top: .8em; 
         margin-bottom: .7em;
         text-align: left;
@@ -1827,19 +1896,12 @@ ul {
     .rate--comment-box {
         margin-left: 2em;
     }
-    .request-list > div.rate-pending_component {
-        min-height: 9em;
-    }
     .rate-pending_message {
         margin-top: 0;
-        margin-left: 2em;
     }
     .rate--comment-box button {
         width: 150px;
     }    
-    .rate-pending_photo {
-        height: 0;
-    }
     .rate-buttons .btn {
         width: 50px;
         margin: 0;
@@ -2109,6 +2171,9 @@ ul {
     .new-left {
         padding-left: 1.5em;
         padding-right: 2.8em;
+    }
+    .btn-accept-request {
+       padding: .75em 1.2em;
     }
     .profile_image .circle-box {
         max-height: 240px;
