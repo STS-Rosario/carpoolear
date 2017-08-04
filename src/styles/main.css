@@ -2131,6 +2131,14 @@ ul {
     text-align: center;
     margin: .5em;
 }
+.trip_share .lnk-social-network {
+    font-size: 1.25em;
+    padding: .3em 0;
+    margin: .2em;
+}
+.trip_share .lnk-social-network:first-child {
+    margin-left: 0;
+}
 .lnk-social-network:focus,
 .lnk-social-network:hover {
     color: white;
