@@ -106,7 +106,7 @@ export default [
                 },
                 header: {
                     title: 'Mi Perfil',
-                    buttons: []
+                    buttons: ['menu']
                 }
             }
         }
@@ -287,7 +287,7 @@ export default [
             actionbar: {
                 header: {
                     title: 'Acerca de',
-                    buttons: ['clear']
+                    buttons: ['back']
                 }
             }
         }

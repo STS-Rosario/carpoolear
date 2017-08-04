@@ -14,7 +14,7 @@
             <div class="col-xs-6 col-md-6">
                 <h3>Acerca de ...</h3>
                 <ul>
-                    <li><a href="/about">Carpoolear</a></li>
+                    <li><router-link tag="a" :to="{name:'acerca_de'}"> Carpoolear</router-link></li>
                     <li><a href="https://carpoolear.com.ar/nosotros.php" target="_blank">Equipo</a></li>
                     <li><a href="http://www.stsrosario.org.ar/" target="_blank">STS Rosario</a></li>
                 </ul>
