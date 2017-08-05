@@ -52,5 +52,16 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+    @media only screen and (min-width: 768px) {
+        .settings-component {
+            margin: 2em;
+            min-height: calc(100vh - 54px);
+        }
+        .container {
+            margin: 0;
+            padding: 2em;
+            width: 100%;
+            min-height: calc(100vh - 152px);
+        }
+    }
 </style>

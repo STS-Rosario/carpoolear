@@ -952,7 +952,8 @@ textarea {
         margin-top: -9px;
     }
 }
-.request-list div.rate-pending_component {
+.request-list div.rate-pending_component,
+.friend-card {
     box-shadow: 0 0 4px 1px #CCC;
     border-radius: .4em;
     margin: 1.1em auto;
@@ -977,15 +978,15 @@ textarea {
     width: 5em;
 }
 .rate-pending-message--content {
-    margin-left: 1.8em;
+    margin-left: 1.2em;
 }
 .pending-buttons {
-    margin-top: .4em;
+    margin-top: .8em;
 }
 .request-list div.rate-pending_component .rate-buttons {
     margin-top: .8em; 
     margin-bottom: .7em;
-    margin-left: 2em;
+    margin-left: .8em;
     text-align: center;
 }
 .btn-accept-request {
@@ -994,22 +995,28 @@ textarea {
     background-color: green;
     text-transform: uppercase;
     padding: .8em;
-    border-radius: 0;
+    border-radius: 4px;
     max-width: 8rem;
-    width: calc(50% - 4px);
+    width: calc(50% - 12px);
     border: 0;
+    min-width: auto;
+    font-size: 13px;
 }
-.request-list .btn-primary {
+.request-list .btn-primary,
+.friend-card .pending-buttons .btn-primary {
+    border-radius: 4px;
     max-width: 8rem;
-    width: calc(50% - 4px);
+    width: calc(50% - 12px);
     padding: .8em;
     border: 0;
+    min-width: auto;
+    font-size: 13px;
 }
 .rate-buttons .btn {
-	width: calc(50% - 6px);
+	width: calc(50% - 12px);
 }
 .rate-buttons button:first-child {
-	margin-right: 6px;
+	margin-right: 4px;
 }
 .rate--comment-box button {
     width: 100%;
@@ -1877,6 +1884,7 @@ ul {
     }
     .settings-component {
         background-color: white;
+        min-height: 100vh;
     }
     .settings-component .form {
         background: var(--form-background);
@@ -1933,7 +1941,7 @@ ul {
         margin-top: .8em; 
         margin-bottom: .7em;
         text-align: left;
-        margin-left: 2em;
+        margin-left: 1em;
     }
     .rate-pending_message {
         margin-top: 0;

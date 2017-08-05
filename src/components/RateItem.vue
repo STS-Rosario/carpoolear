@@ -13,7 +13,7 @@
                                 <i class="fa fa-thumbs-up" aria-hidden="true" v-if="rate.rating == 1"></i>
                                 <i class="fa fa-thumbs-down" aria-hidden="true" v-if="rate.rating == 0"></i>
                             </span>
-                            <span class="pull-right clickeable" v-if="!rate.reply_comment" @click="showReply = !showReply">
+                            <span class="pull-right clickeable" v-if="!rate.reply_comment && user.id === id" @click="showReply = !showReply">
                                 <i class="fa fa-reply" aria-hidden="true"></i>
                             </span>
                         </div>
@@ -85,7 +85,8 @@ export default {
     },
     props: [
         'user',
-        'rate'
+        'rate',
+        'id'
     ]
 };
 </script>

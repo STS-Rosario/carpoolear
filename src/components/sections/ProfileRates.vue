@@ -4,7 +4,7 @@
         <Loading :data="rates">
             <div class="list-group">
                 <div class="list-group-item" v-for="rate in rates">
-                    <RateItem :user="user" :rate="rate"></RateItem>
+                    <RateItem :user="user" :id="id" :rate="rate"></RateItem>
                 </div>
             </div>
             <!--
@@ -43,6 +43,9 @@ export default {
     components: {
         Loading,
         RateItem
-    }
+    },
+    props: [
+        'id'
+    ]
 };
 </script>

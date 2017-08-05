@@ -7,7 +7,7 @@
             <ProfileInfo></ProfileInfo>
         </tab>
         <tab header="Calificaciones">
-            <ProfileRates></ProfileRates>
+            <ProfileRates :id="id"></ProfileRates>
         </tab>
     </tabset>
 </template>
