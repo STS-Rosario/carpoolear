@@ -3,7 +3,7 @@ import NativeStorage from './NativeStorage.js';
 import LocalStorage from './LocalStorage.js';
 
 let cache = null;
-if (window.NativeStorage) {
+if (window.cordova && window.cordova.platformId !== 'browser') {
     cache = new NativeStorage();
 } else {
     cache = new LocalStorage();
