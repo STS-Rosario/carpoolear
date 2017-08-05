@@ -49,7 +49,7 @@ export const init = (store) => {
 };
 
 export const startApp = (store) => {
-    store.dispatch('trips/tripsSearch');
+    store.dispatch('trips/tripsSearch', { is_passenger: false });
     if (store.state.auth.auth) {
         store.dispatch('auth/fetchUser');
         store.dispatch('myTrips/tripAsDriver');
