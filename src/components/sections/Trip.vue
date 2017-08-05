@@ -132,7 +132,15 @@ export default {
     },
     computed: {
         originLongName () {
-            return this.trip.points[0].json_address.ciudad.length > this.CITY_NAME_LONG_LENGTH;
+            if (this.trip.points) {
+                if (this.trip.points[0].json_address.ciudad) {
+                    return this.trip.points[0].json_address.ciudad.length > this.CITY_NAME_LONG_LENGTH;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
         },
         destinyLongName () {
             if (this.trip.points) {
