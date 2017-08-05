@@ -4,6 +4,7 @@ config = {
   MAPS_API: '"AIzaSyBlRfNi2qDcy_zwjR53VVOyD-csjYSq4Qo"',
   FACEBOOK_API: '"862086450497061"'
 }
+console.log('DEVICE', process.env.DEVICE);
 
 if (!process.env.PLATFORM || process.env.PLATFORM == 'DESKTOP') {
   config.HISTORY_MODE = '"history"';

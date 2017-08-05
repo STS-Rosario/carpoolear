@@ -12,22 +12,30 @@ module.exports = function (ctx) {
 
     var isWin = /^win/.test(process.platform);
     var platform = '';
-    
+    var device = '';
+
     if (android || ios) {
         platform = 'MOVIL';
+        if (android) {
+            device = 'ANDOIRD';
+        }
+        if (ios) {
+            device = 'IOS';
+        }
         if (browser) {
             console.warn('Platform browser must be build alone');
         }
     } else {
         platform = 'DESKTOP';
+        device = 'BROWSER';
     }
-
     cd('..');
 
     // check if is it window or linux/mac
     if (isWin) {
         console.log('its window');
-        exec('SET PLATFORM=' + platform );
+        exec('SET DEVICE=' + device);
+        exec('SET PLATFORM=' + platform);
         if (ctx.opts.options && ctx.opts.options.release) {
             exec('npm run build');
         } else {
@@ -35,13 +43,11 @@ module.exports = function (ctx) {
         }
     } else {
         if (ctx.opts.options && ctx.opts.options.release) {
-            exec('export PLATFORM=' + platform + ' && npm run build');
+            exec('export DEVICE=' + device + ' &&' + 'export PLATFORM=' + platform + ' && npm run build');
         } else {
-            exec('export PLATFORM=' + platform + ' && npm run cordova-build');
+            exec('export DEVICE=' + device + ' &&' + 'export PLATFORM=' + platform + ' && npm run cordova-build');
         }
-    }    
-
-    
+    }
 
     cd('cordova');
 
