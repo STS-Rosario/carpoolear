@@ -27,6 +27,10 @@ export function guest (to, from, next) {
 export function profileComplete (to, from, next) {
     let user = store.getters['auth/user'];
     if (!user.image || user.image.length === 0 || !user.description || user.description.length === 0) {
+        router.rememberRoute = {
+            name: to.name,
+            params: to.params
+        };
         console.log('problem');
         next(false);
         router.replace({ name: 'profile_update' });
