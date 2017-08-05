@@ -56,13 +56,13 @@
                                         <span class="trip_datetime_time">{{ [ trip.trip_date ] | moment("h:mm a") }}</span>
                                     </time>
                                 </div>
-                                <div class="row">
+                                <div class="row"  v-if="!trip.is_passenger">
                                     <div class="trip_seats-available col-xs-offset-4 col-sm-offset-4 col-xs-12">
                                         <span class="trip_seats-available_value pull-left">{{ trip.seats_available }}</span>
                                         <span class="trip_seats-available_label">Lugares<br>libres</span>
                                     </div>
                                 </div>
-                                <div class="row passengers">
+                                <div class="row passengers"  v-if="!trip.is_passenger">
                                     <div class="col-xs-offset-3 col-xs-21" v-if="trip.passenger.length">
                                         <span v-for="p in trip.passenger">
                                             <div class="trip_driver_img circle-box passenger" v-imgSrc:profile="trip.passenger.image">
@@ -76,11 +76,25 @@
                                 </div>
                             </div>
                             <div class="col-sm-10 col-md-10 column">
-                                <div class="row trip-data">
-                                    <span>Viaje Público</span><br>
-                                    <span>Gastos compartidos</span>
+                                <div class="row trip-data" v-if="trip.is_passenger">
+                                    <strong class="warning-is-passenger">Pasajero que busca viaje</strong>
                                 </div>
-                                <div class="row trip-stats">
+                                <div class="row trip-data">
+                                    <em v-if="trip.friendship_type_id == 2">
+                                        <i class="fa fa-globe" aria-hidden="true"></i>
+                                        Viaje público
+                                    </em>
+                                    <em v-if="trip.friendship_type_id == 1">
+                                        <i class="fa fa-users" aria-hidden="true"></i>
+                                        Amigos de amigos
+                                    </em>
+                                    <em v-if="trip.friendship_type_id == 0">
+                                        <i class="fa fa-user" aria-hidden="true"></i>
+                                        Sólo amigos
+                                    </em>
+                                </div>
+
+                                <div class="row trip-stats"  v-if="!trip.is_passenger">
                                     <div>
                                         <span>Distancia a recorrer</span><br>
                                         <span>{{ distanceString }} <abbr title="kilometros">km</abbr></span>
@@ -111,8 +125,10 @@
                             </div>
                             <div class="buttons-container">
                                 <router-link class="btn btn-primary" v-if="owner" :to="{name: 'update-trip', params: { id: trip.id}}"> Editar  </router-link>
-                                <template v-if="!owner && !trip.is_passenger && !expired">
+                                <template v-if="!owner && !expired">
                                     <button class="btn btn-primary" @click="toMessages" v-if="!owner"> Coordinar viaje  </button>
+                                </template>
+                                <template v-if="!owner && !trip.is_passenger && !expired">
                                     <template v-if="!isPassenger">
                                         <button class="btn btn-primary" @click="makeRequest" v-if="canRequest"> Solicitar asiento </button>
                                         <button class="btn" v-if="!canRequest" @click="cancelRequest"> Solicitud enviada </button>
