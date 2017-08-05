@@ -6,9 +6,9 @@
                 <ul class="list-group">
                     <li class="list-group-item">
                         <div class="input-group">
-                            <input v-model="textSearch" @input="onSearchUser" type="text" class="form-control" placeholder="Buscar personas">
+                            <input v-model="textSearch"  type="text" class="form-control" placeholder="Buscar personas">
                             <span class="input-group-btn">
-                                <button class="btn btn-default" type="button">
+                                <button class="btn btn-default" type="button" @click="onSearchUser" >
                                     <i class="fa fa-search" aria-hidden="true"></i>
                                 </button>
                             </span>
@@ -141,7 +141,7 @@ export default {
         this.thread = new Thread(() => {
             this.unreadMessage();
         });
-        this.thread.run(5000);
+        this.thread.run(45000);
         if (!this.isMobile) {
             router.push({ name: 'conversation-chat' });
         }

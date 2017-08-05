@@ -30,7 +30,7 @@
         <button @click="register" class="btn-primary" :disabled="progress || !termsAndConditions"> Registrarme </button>
       </div>
     </div>
-    <div class='form row' v-else>
+    <div class='form row register-success' v-else>
         <h2>Registro Exitoso! </h2>
         <p>Te hemos enviado un código de verificación a tu e-mail para que puedas activar tu cuenta y comenzar a compartir viajes. </p>
     </div>
@@ -215,6 +215,10 @@ export default {
     .cbx_terms {
         display: inline;
     }
+    .register-success * {
+        color: #333333;
+    }
+
 
     @media only screen and (min-width: 768px) {
         .terms button {

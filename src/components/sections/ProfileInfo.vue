@@ -1,5 +1,5 @@
 <template>
-    <div class="profile-info-component" v-if="profile">  
+    <div class="profile-info-component" v-if="profile">
         <div class="list-group">
             <div class="pic-info col-sm-6">
                 <div class="circle-box profile" v-imgSrc:profile="profile.image"></div>
@@ -18,18 +18,18 @@
                         <i class="fa fa-quote-left" aria-hidden="true"></i>
                         <div class="list-group-item--content italic"> {{profile.description}} </div>
                     </div>
-                    <div class="list-group-item" v-if="profile.nro_doc">
+                    <!--<div class="list-group-item" v-if="profile.nro_doc">
                         <i class="fa fa-id-card" aria-hidden="true"></i>
                         <div class="list-group-item--content">{{profile.nro_doc}}</div>
-                    </div>
+                    </div>-->
                     <div class="list-group-item" v-if="profile.email">
                         <i class="fa fa-envelope" aria-hidden="true"></i>
                         <div class="list-group-item--content">{{profile.email}}</div>
                     </div>
-                    <div class="list-group-item" v-if="profile.mobile_phone">
+                    <!--<div class="list-group-item" v-if="profile.mobile_phone">
                         <i class="fa fa-mobile bigger" aria-hidden="true"></i>
                         <div class="list-group-item--content">{{profile.mobile_phone}}</div>
-                    </div>
+                    </div>-->
                 </div>
                 <div class="edit-action" v-if="profile.id == user.id">
                     <router-link class="btn btn-primary" tag="button" :to="{name:'profile_update'}"> Editar perfil</router-link>
@@ -37,7 +37,7 @@
                 </div>
             </div>
         </div>
-    </div> 
+    </div>
 </template>
 <script>
 import {mapGetters} from 'vuex';
