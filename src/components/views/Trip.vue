@@ -403,7 +403,8 @@ export default {
     computed: {
         ...mapGetters({
             user: 'auth/user',
-            trip: 'trips/currentTrip'
+            trip: 'trips/currentTrip',
+            isMobile: 'device/isMobile'
         }),
         expired () {
             return moment(this.trip.trip_date).format() < moment().format();
