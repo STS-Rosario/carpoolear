@@ -171,7 +171,7 @@ export default {
         return {
             limitFilter: {
                 type: 'fromto',
-                from: moment().format('YYYY-MM-DD')
+                from: moment().add(-1, 'days').format('YYYY-MM-DD')
             },
             lucrarError: false,
             dateError: false,
@@ -217,6 +217,7 @@ export default {
     },
     mounted () {
         let self = this;
+        this.time = moment().add(1, 'hours').format('HH:00');
         this.$refs.map.$mapCreated.then(() => {
             console.log('Map was created');
             /* eslint-disable no-undef */

@@ -17,8 +17,12 @@
                                 <i class="fa fa-reply" aria-hidden="true"></i>
                             </span>
                         </div>
-                        <div class="rate-item-detail">
+                        <div class="rate-item-detail" v-if="rate.trip.points.length > 0">
                             Viajó a {{rate.trip.points[rate.trip.points.length - 1].json_address.ciudad}} como {{rateType}}
+                             - {{rate.rate_at | moment("DD/MM/YYYY")}}
+                        </div>
+                        <div class="rate-item-detail" v-else>
+                            Viajó a {{ rate.trip.to_town }} como {{rateType}}
                              - {{rate.rate_at | moment("DD/MM/YYYY")}}
                         </div>
                     </div>
@@ -26,8 +30,8 @@
                         {{rate.comment}}
                     </div>
                     <div class="rate-item-datetime">
-                        
-                    </div> 
+
+                    </div>
                     <div v-if="showReply">
                         <textarea v-model="comment"></textarea>
                         <button class="btn btn-primary" @click="onReply"> Responder </button>
@@ -43,7 +47,7 @@
                     </div>
                 </div>
             </div>
-        </div> 
+        </div>
     </div>
 </template>
 <script>
