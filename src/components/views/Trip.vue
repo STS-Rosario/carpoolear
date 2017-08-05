@@ -156,6 +156,9 @@
                                         <svgItem icon="thumbUp" size="18"></svgItem> <span> {{trip.user.positive_ratings}} </span>
                                         <svgItem icon="thumbDown" size="18"></svgItem> <span> {{trip.user.negative_ratings}} </span>
                                     </div>
+                                    <div v-if="trip.user.has_pin == 1" class="user_pin">
+                                        <img src="https://carpoolear.com.ar/static/img/pin.png" alt="" title="Aportante en la campaña mi media naranja carpoolera" />
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
@@ -428,6 +431,12 @@ export default {
 </script>
 
 <style scoped>
+    .user_pin {
+        margin-top: 1em;
+    }
+    .user_pin img {
+        width: 40px;
+    }
     .trip_driver_img.circle-box.passenger {
         width: 2.2em;
         height: 2.2em;

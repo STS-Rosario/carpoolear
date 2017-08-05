@@ -24,6 +24,7 @@
               <template v-if="user">
                 <div class="trip_driver_img_container">
                   <div class="trip_driver_img circle-box" v-imgSrc:profile="getUserImage"></div>
+                  <!-- {{ trip.user.has_pin }} -->
                 </div>
                 <div class="trip_driver_details">
                   <div class="trip_driver_name" >
@@ -31,6 +32,7 @@
                   </div>
                   <div class="trip_driver_ratings">
                     {{ trip.user.positive_ratings + trip.user.negative_ratings }} calificaciones
+
                   </div>
                 </div>
               </template>

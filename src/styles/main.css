@@ -984,7 +984,7 @@ textarea {
     margin-top: .8em;
 }
 .request-list div.rate-pending_component .rate-buttons {
-    margin-top: .8em; 
+    margin-top: .8em;
     margin-bottom: .7em;
     margin-left: .8em;
     text-align: center;
@@ -1497,7 +1497,7 @@ textarea {
     border-top: 1px solid var(--secondary-background);
     padding: 4px 10px;
     background-color: var(--secondary-background);
-    white-space: nowrap;
+    /*white-space: nowrap;*/
 }
 
 .actionbar-bottom .actionbar_item {
@@ -1938,7 +1938,7 @@ ul {
         padding: 0 1em;
     }
     .request-list div.rate-pending_component .rate-buttons {
-        margin-top: .8em; 
+        margin-top: .8em;
         margin-bottom: .7em;
         text-align: left;
         margin-left: 1em;
@@ -1948,7 +1948,7 @@ ul {
     }
     .rate--comment-box button {
         width: 150px;
-    }    
+    }
     .rate-buttons .btn {
         width: 50px;
         margin: 0;
