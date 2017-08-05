@@ -35,7 +35,7 @@
                 <div class="trips-list">
                     <Trip v-for="trip in trips" :trip="trip" :user="user" ></Trip>
                 </div>
-                <p slot="no-data" class="alert alert-warning"  role="alert">No hay viajes</p>
+                <p slot="no-data" class="alert alert-warning"  role="alert">No tenés viajes creados</p>
                 <p slot="loading" class="alert alert-info" role="alert">
                     <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
                     Cargando viajes ...
@@ -45,11 +45,11 @@
 
         <div class="col-xs-24">
             <Loading :data="passengerTrips" :hideOnEmpty="true">
-                <h2 slot="title" > Viajes <strong>subido</strong> </h2>
+                <h2 slot="title" > Viajes <strong>subidos</strong> </h2>
                 <div class="trips-list">
                     <Trip v-for="trip in passengerTrips" :trip="trip" :user="user" ></Trip>
                 </div>
-                <p slot="no-data" class="alert alert-warning"  role="alert">No hay viajes</p>
+                <p slot="no-data" class="alert alert-warning"  role="alert">No estas subido a ningún viaje.</p>
                 <p slot="loading" class="alert alert-info" role="alert">
                     <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
                     Cargando viajes ...
