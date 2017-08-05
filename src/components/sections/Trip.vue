@@ -47,7 +47,7 @@
                   </div>
                   <div class="col-xs-20">
                     <span class="trip_location_from_city" :style="originLongName ? LONG_NAME_STYLE : {}">{{ trip.points[0].json_address.ciudad }}</span>
-                    <span class="trip_location_from_state-country">{{ trip.points[0].json_address.provincia }}</span>
+                    <span class="trip_location_from_state-country">{{ trip.points[0].json_address.provincia | googleInfoClean }}</span>
                   </div>
                 </div>
                 <div class="row trip_location_to">
@@ -56,7 +56,7 @@
                   </div>
                   <div class="col-xs-20">
                     <span class="trip_location_from_city" :style="destinyLongName ? LONG_NAME_STYLE : {}">{{ trip.points[trip.points.length - 1].json_address.ciudad }}</span>
-                    <span class="trip_location_from_state-country">{{ trip.points[trip.points.length - 1].json_address.provincia }}</span>
+                    <span class="trip_location_from_state-country">{{ trip.points[trip.points.length - 1].json_address.provincia | googleInfoClean }}</span>
                   </div>
                 </div>
                 <div class="col-xs-4 trip_location-dot-line">
