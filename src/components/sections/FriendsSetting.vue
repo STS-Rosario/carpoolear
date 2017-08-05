@@ -166,7 +166,7 @@ export default {
     .alert {
         margin-top: 1em;
     }
-    @media only screen and (max-width: 769px) {
+    @media only screen and (max-width: 768px) {
         .friends-component {
             padding: 1em;
         }
@@ -174,7 +174,7 @@ export default {
             margin: 0;
         }
     }
-    @media only screen and (min-width: 768px) {
+    @media only screen and (min-width: 767px) {
         .friend-form {
             margin-top: 1.6em;
         }

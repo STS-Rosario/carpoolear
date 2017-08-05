@@ -28,7 +28,8 @@ body {
     font-weight: 400;
 }
 .app-container {
-    min-height: calc(100vh - 22px);
+    /* this is with bottom bar */
+    min-height: calc(100vh - 64px);
     padding: 0;
     margin: 0;
 }
@@ -108,14 +109,21 @@ input[type=radio] + label {
     background: var(--trip-almost-fill-color);
 
     text-transform: uppercase;
-    font-size: 0.9rem;
-}
-
+    font-size: 0.9rem;   
+}   
 .btn-primary:disabled {
     cursor: not-allowed;
+    background-color:rgb(240, 56, 51);
 }
-
-
+.alertify-notifier .ajs-message.ajs-success {
+    color: #fff;
+}
+.alert-icon {
+    width: 40px;
+    float:left;
+    font-size: 40px;
+    margin-left: 10px;
+}
 .btn-shadowed {
     box-shadow: 0 0 6px 5px #CCCCCC;
 }
@@ -124,7 +132,7 @@ input[type=radio] + label {
 }
 .btn-primary:hover {
     color: #FFFFFF;
-    background: rgba(215,37,33, 0.8);
+    background: rgb(182, 21, 17);
     border-color: #FFFFFF;;
 }
 .btn-primary:focus {
@@ -135,7 +143,7 @@ input[type=radio] + label {
 .btn-primary:active {
     border-color: #ccc;
     color: #ccc;
-    background: rgba(215,37,33, 0.8);
+    background: rgb(182, 21, 17);
 }
 input[type="checkbox"] {
     vertical-align: -2px;
@@ -164,9 +172,12 @@ input[type="checkbox"] {
 .open > .dropdown-toggle.btn-primary.focus {
     border-color: #ccc;
     color: #ccc;
-    background: rgba(215,37,33, 0.8);
+    background: rgb(182, 21, 17);
 }
-
+.btn-primary.disabled:hover, .btn-primary[disabled]:hover, fieldset[disabled] .btn-primary:hover, .btn-primary.disabled:focus, .btn-primary[disabled]:focus, fieldset[disabled] .btn-primary:focus, .btn-primary.disabled.focus, .btn-primary[disabled].focus, fieldset[disabled] .btn-primary.focus {
+    background-color: rgb(240, 56, 51);
+    border-color: #fff;
+}
 .dropdown-right {
     display: inline-block;
 }
@@ -397,6 +408,37 @@ textarea {
     background-position: 0 4px;
     padding-top: 0;
     padding-bottom: 0;
+}
+
+.register-component .form-control-date {
+    margin-bottom: .5em;
+}
+.form-control-date input {
+    cursor: pointer;
+}
+.register-component .form-control-date input {
+    margin-bottom: 0 !important;
+    margin-top: 6px;
+}
+
+.date-picker--cross {
+    top: 12px;
+    right: 12px;
+}
+
+.register-component .date-picker--cross {
+    top: 10px;
+    right: 10px;
+}
+.cov-date-box::-webkit-scrollbar {
+    width: 20px;
+}
+.cov-picker-box::-webkit-scrollbar {
+    width: 20px;
+}
+
+.register-component .date-picker {
+    margin-bottom: .2em;
 }
 
 .form-control-date.has-error {
@@ -1182,9 +1224,6 @@ textarea {
 .form-trip .map {
     margin-top: 1.5em;
 }
-.panel-trip-data {
-    margin-bottom: 3rem;
-}
 .panel-trip-data::after {
     border-bottom: 1px dashed #CCC;
     position: absolute;
@@ -1315,6 +1354,10 @@ textarea {
     padding: 2.2em;
 }
 
+.update-profile-component .btn-primary {
+    min-width: 11rem;
+}
+
 .update-profile-component .profile_image img {
     width: 90%;
 }
@@ -1357,6 +1400,13 @@ textarea {
     border-left: 0;
     border-right: 0;
 }
+.actionbar_icon i {
+    cursor: pointer;
+}
+.friends-component,
+.settings-component {
+    margin-bottom: 4rem;
+}
 .profile-info-component .edit-action {
     text-align: center;
     background-color: #fff;
@@ -1366,6 +1416,7 @@ textarea {
     border-bottom: 0;
     padding-top: 1.4em;
     padding-bottom: 4em;
+    margin-bottom: 2em;
 }
 .profile-info-component .edit-action button:first-child {
     margin-right: .8em;
@@ -1607,6 +1658,7 @@ textarea {
 }
 
 .app-container.blue {
+    min-height: 100vh;
     background: rgba(1,155,225,1);
     background: -moz-linear-gradient(-45deg, rgba(1,155,225,1) 0%, rgba(1,101,135,1) 100%);
     background: -webkit-gradient(left top, right bottom, color-stop(0%, rgba(1,155,225,1)), color-stop(100%, rgba(1,101,135,1)));
@@ -1651,6 +1703,10 @@ h2 {
     margin-bottom: 20px;
     color: #036686;
     font-weight: 400;
+}
+.blue h2,
+.blue p {
+    color: #fff;
 }
 
 .user-form input[type='text'],
@@ -1870,7 +1926,12 @@ ul {
     }
 }
 
-@media only screen and (max-width: 769px) {
+@media only screen and (max-width: 768px) {
+    .new-trip-component .form-trip {
+        padding-bottom: 3rem;
+        box-shadow: none;
+        margin-bottom: 0;
+    }
     h2 {
         font-size: 26px;
     }
@@ -1884,7 +1945,7 @@ ul {
     }
     .settings-component {
         background-color: white;
-        min-height: 100vh;
+        min-height: calc(100vh - 200px);
     }
     .settings-component .form {
         background: var(--form-background);
@@ -1897,7 +1958,6 @@ ul {
     }
     .profile_image {
         top: 0;
-        position: absolute;
         z-index: 1;
         text-align: center;
     }
@@ -1908,19 +1968,12 @@ ul {
     .update-profile-component .profile_image img {
         width: 230px;
     }
-    .update-profile-component .form {
-        padding-top: 10em;
-        margin-top: 3em;
-    }
     .update-profile-component .profile_image-edit {
         right: -6px;
         bottom: -6px;
     }
     .update-profile-component .profile_image-edit i {
         font-size: 28px;
-    }
-    .update-profile-component .form {
-        margin-top: 7em;
     }
 
     .form-trip {
@@ -1929,6 +1982,9 @@ ul {
 }
 
 @media only screen and (min-width: 768px) {
+    .panel-trip-data {
+        margin-bottom: 3rem;
+    }
     .tab-content .trips.container,
     .tab-content .trips.container .col-xs-24 {
         padding-left: 10px;
@@ -2215,6 +2271,10 @@ ul {
     }
 }
 @media only screen and (min-width: 992px) {
+    .search-section .date-picker--cross {
+        top: 22px;
+        right: 10px;
+    }
     .new-left {
         padding-left: 1.5em;
         padding-right: 2.8em;

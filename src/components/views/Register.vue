@@ -1,5 +1,5 @@
 <template>
-  <div class="user-form container" >
+  <div class="register-component user-form container" >
     <router-link v-if="!isMobile"  :to="{name: 'trips'}">
         <img :src="carpoolear_logo" />
     </router-link>
@@ -15,6 +15,9 @@
       <label for="txt_email">Email</label>
       <input maxlength="40" type="text" id="txt_email" v-model='email' :class="{'has-error': emailError.state }"/>
       <span class="error" v-if="emailError.state"> {{emailError.message}} </span>
+      <label for="">Fecha de nacimiento</label>
+      <Calendar class="form-control form-control-with-icon form-control-date" :class="{'has-error': birthdayError.state}" @change="(date) => this.birthday = date"></Calendar>
+      <span class="error" v-if="birthdayError.state"> {{birthdayError.message}} </span>
       <label for="txt_password">Contraseña</label>
       <input maxlength="40" type="password" id="txt_password" v-model='password' :class="{'has-error': passwordError.state }"/>
       <span class="error" v-if="passwordError.state"> {{passwordError.message}} </span>
@@ -28,7 +31,7 @@
       </div>
     </div>
     <div class='form row' v-else>
-        <h2> Registro Exitoso! </h2>
+        <h2>Registro Exitoso! </h2>
         <p>Te hemos enviado un código de verificación a tu e-mail para que puedas activar tu cuenta y comenzar a compartir viajes. </p>
     </div>
   </div>
@@ -39,6 +42,8 @@ import { mapGetters, mapActions } from 'vuex';
 import dialogs from '../../services/dialogs.js';
 import bus from '../../services/bus-event';
 import router from '../../router';
+import Calendar from '../Calendar';
+import moment from 'moment';
 let emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 class Error {
     constructor (state = false, message = '') {
@@ -56,6 +61,7 @@ export default {
             passwordConfirmation: '',
             name: '',
             sureName: '',
+            birthday: '',
             termsAndConditions: false,
             carpoolear_logo: process.env.ROUTE_BASE + 'static/img/carpoolear_logo.png',
             progress: false,
@@ -63,7 +69,8 @@ export default {
             emailError: new Error(),
             passwordError: new Error(),
             nombreError: new Error(),
-            apellidoError: new Error()
+            apellidoError: new Error(),
+            birthdayError: new Error()
         };
     },
     computed: {
@@ -76,7 +83,11 @@ export default {
         email: function () { this.emailError.state = false; },
         name: function () { this.nombreError.state = false; },
         sureName: function () { this.apellidoError.state = false; },
-        password: function () { this.passwordError.state = false; }
+        password: function () { this.passwordError.state = false; },
+        birthday: function () { this.birthdayError.state = false; }
+    },
+    components: {
+        Calendar
     },
     methods: {
         ...mapActions({
@@ -126,6 +137,18 @@ export default {
                 globalError = true;
             }
 
+            if (this.birthday.length < 1) {
+                this.birthdayError.state = true;
+                this.birthdayError.message = 'Olvido ingresar su fecha de nacimiento.';
+                globalError = true;
+            } else {
+                let birthday = moment(this.birthday);
+                if (moment().diff(birthday, 'years') < 18) {
+                    this.birthdayError.state = true;
+                    this.birthdayError.message = 'Lo sentimos, debes ser mayor de edad para usar el servicio. Para más información te recomendamos leer los términos y condiciones.';
+                    globalError = true;
+                }
+            }
             return globalError;
         },
 
@@ -137,8 +160,9 @@ export default {
             let passwordConfirmation = this.passwordConfirmation;
             let name = this.name + ' ' + this.sureName;
             let termsAndConditions = this.termsAndConditions;
+            let birthday = this.birthday;
             this.progress = true;
-            this.doRegister({email, password, passwordConfirmation, name, termsAndConditions}).then(() => {
+            this.doRegister({email, password, passwordConfirmation, name, birthday, termsAndConditions}).then(() => {
                 this.progress = false;
                 this.success = true;
             }).catch(() => {
@@ -183,9 +207,10 @@ export default {
     }
     span.error {
         display: block;
-        color: red;
         font-size: 12px;
         margin-top: -5px;
+        font-weight: bold;
+        color: #24007c;
     }
     .cbx_terms {
         display: inline;
@@ -195,6 +220,10 @@ export default {
         .terms button {
             margin-left: 2rem;
             text-align: right;
+        }
+        span.error {
+            color: red;
+            font-weight: 300;
         }
     }
 </style>

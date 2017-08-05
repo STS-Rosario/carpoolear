@@ -1,5 +1,20 @@
 <template>
   <div class="update-profile-component" v-if="user" >
+    <div class="alert alert-info" v-if="!user.image || user.image.length === 0 || !user.description || user.description.length === 0">
+        <div class='alert-icon'><i class="fa fa-exclamation" aria-hidden="true"></i></div>
+        <div class='alert-message'>
+            Hola <strong>{{user.name}}</strong>!! Bienvenido a Carpoolear, para comenzar a subirte a viajes y crear tus propios viajes, debes terminar de completar tu perfil.
+            <span v-if="(!user.image || user.image.length === 0) && (!user.description || user.description.length === 0)">
+                Completa tu <strong>imagen de perfil</strong> y tu <strong>descripción</strong> para comenzar a viajar.
+            </span>
+            <span v-if="(!user.image || user.image.length === 0) && !(!user.description || user.description.length === 0)">
+                Completa tu <strong>imagen de perfil</strong> para comenzar a viajar.
+            </span>
+            <span v-if="!(!user.image || user.image.length === 0) && (!user.description || user.description.length === 0)">
+                Completa tu <strong>descripción</strong> para comenzar a viajar.
+            </span>
+        </div>
+    </div>
     <div class="row">
         <div class="col-xs-24 col-sm-8 col-sm-push-16 profile_image">
             <div class='profile_image-container'>
@@ -18,11 +33,11 @@
                 </div>
                 <div class="form-group">
                     <label for="input-email">E-mail</label>
-                    <input maxlength="40" v-model="user.email" type="text" class="form-control" id="input-email" placeholder="E-mail">
+                    <input maxlength="40" v-model="user.email" type="text" class="form-control" id="input-email" placeholder="E-mail" disabled>
                 </div>
                 <div class="form-group">
                     <label for="">Fecha de nacimiento</label>
-                    <Calendar :class="'form-control form-control-with-icon form-control-date'" :value="user.birthday" @change="(date) => this.user.birthday = date"></Calendar>
+                    <Calendar :class="'form-control form-control-with-icon form-control-date'" :value="user.birthday | moment('MM/DD/YYYY')" @change="(date) => this.user.birthday = date"></Calendar>
                 </div>
                 <div class="form-group">
                     <label for="input-dni">Número de documento <span class="description">(Solo números)</span></label> 
@@ -37,7 +52,7 @@
                     <input :style="patente.length > 0 ? 'text-transform: uppercase' : ''" v-mask="'AAN##NA'" v-model="patente" type="text" class="form-control" id="input-patente" placeholder="Patente">
                 </div>
                 <div class="form-group">
-                    <label for="input-description">Descripción</label>
+                    <label for="input-description">Descripción <span class="description"> Contale de vos al resto de los carpooleros así te suman a sus viajes!! Qué te gusta hacer, en qué andas metido ahora, si estás con alguna idea, si te gustan los colores, etc.</span></label>
                     <textarea maxlength="280" v-model="user.description" placeholder="Descripción"></textarea>
                 </div>
 
@@ -53,7 +68,7 @@
                 </div>
 
                 <div class="btn-container">
-                    <button class="btn btn-primary" @click="grabar"> Guardar cambios </button>
+                    <button class="btn btn-primary" @click="grabar" :disabled="loading"> <span v-if="!loading">Guardar cambios</span><span v-if="loading">Guardando ...</span> </button>
                 </div>
                 <span v-if="error">{{error}}</span>
                 <Uploadfile :name="'profile'" @change="onPhotoChange" ref="file"></Uploadfile>
@@ -69,6 +84,7 @@ import { inputIsNumber } from '../../services/utility';
 import Calendar from '../Calendar';
 import Uploadfile from '../Uploadfile';
 import SvgItem from '../SvgItem';
+import dialogs from '../../services/dialogs.js';
 
 export default {
     name: 'upddate-profile',
@@ -125,10 +141,12 @@ export default {
                 data.password = this.pass.password;
                 data.password = this.pass.password_confirmation;
             }
+            data.nro_doc = this.dniRawValue;
             this.update(data).then(() => {
                 this.pass.password = '';
                 this.pass.password_confirmation = '';
                 this.loading = false;
+                dialogs.message('Perfil actualizado correctamente.');
                 if (this.patente.length) {
                     if (this.car) {
                         this.car.patente = this.patente;

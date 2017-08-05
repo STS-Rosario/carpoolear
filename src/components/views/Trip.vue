@@ -221,7 +221,13 @@ export default {
             make: 'passenger/makeRequest',
             cancel: 'passenger/cancel'
         }),
-
+        profileComplete () {
+            if (!this.user.image || this.user.image.length === 0 || !this.user.description || this.user.description.length === 0) {
+                router.replace({ name: 'profile_update' });
+            } else {
+                return true;
+            }
+        },
         loadTrip () {
             this.getTrip(this.id).then(trip => {
                 // this.trip = trip;
@@ -238,19 +244,23 @@ export default {
         },
 
         toMessages () {
-            this.lookConversation(this.trip.user).then(conversation => {
-                router.push({ name: 'conversation-chat', params: { id: conversation.id } });
-            });
+            if (this.profileComplete()) {
+                this.lookConversation(this.trip.user).then(conversation => {
+                    router.push({ name: 'conversation-chat', params: { id: conversation.id } });
+                });
+            }
         },
 
         makeRequest () {
-            this.sending = true;
-            this.make(this.trip.id).then(() => {
-                this.sending = false;
-                this.trip.request = 'send';
-            }).catch(() => {
-                this.sending = false;
-            });
+            if (this.profileComplete()) {
+                this.sending = true;
+                this.make(this.trip.id).then(() => {
+                    this.sending = false;
+                    this.trip.request = 'send';
+                }).catch(() => {
+                    this.sending = false;
+                });
+            }
         },
 
         cancelRequest () {

@@ -1,5 +1,5 @@
 /* jshint esversion: 6 */
-import {auth, guest} from './middleware.js';
+import {auth, guest, profileComplete} from './middleware.js';
 
 export default [
     {
@@ -149,7 +149,10 @@ export default [
         path: '/trips/create',
         name: 'new-trip',
         component: require('../components/views/NewTrip'),
-        beforeEnter: auth,
+        beforeEnter: (to, from, next) => {
+            auth(to, from, next);
+            profileComplete(to, from, next);
+        },
         meta: {
             actionbar: {
                 header: {
@@ -220,19 +223,51 @@ export default [
                 path: 'profile',
                 name: 'profile_update',
                 component: require('../components/sections/UpdateProfile.vue'),
-                meta: { tab: 'profile' }
+                meta: {
+                    tab: 'profile',
+                    actionbar: {
+                        footer: {
+                            show: true,
+                            active_id: 'profile'
+                        },
+                        header: {
+                            title: 'Editar perfil',
+                            buttons: ['menu']
+                        }
+                    }
+                }
             },
             {
                 path: 'friends',
                 name: 'friends_setting',
                 component: require('../components/sections/FriendsSetting.vue'),
-                meta: { tab: 'friends' }
+                meta: {
+                    tab: 'friends',
+                    actionbar: {
+                        footer: {
+                            show: true,
+                            active_id: 'profile'
+                        },
+                        header: {
+                            title: 'Amigos',
+                            buttons: ['menu']
+                        }
+                    }
+                }
             },
             {
                 path: 'friends/search',
                 name: 'friends_search',
                 component: require('../components/sections/FriendsRequest.vue'),
-                meta: { tab: 'friends' }
+                meta: {
+                    tab: 'friends',
+                    actionbar: {
+                        header: {
+                            title: 'Buscar Amigos',
+                            buttons: ['back']
+                        }
+                    }
+                }
             }
         ]
     },

@@ -146,7 +146,8 @@ export default {
             rightHeaderButton: 'actionbars/rightHeaderButton',
             logoHeaderVisibility: 'actionbars/headerLogoVisibility',
             isNotLargeDesktop: 'device/isNotLargeDesktop',
-            isFacebokApp: 'device/isFacebokApp'
+            isFacebokApp: 'device/isFacebokApp',
+            isMobile: 'device/isMobile'
         }),
 
         showLogo () {

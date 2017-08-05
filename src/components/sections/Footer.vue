@@ -22,7 +22,7 @@
             <div class="col-xs-6 col-md-6">
                 <h3>Ayuda</h3>
                 <ul>
-                    <li><a href="https://carpoolear.com.ar/tutoriales.php" target="_blank">Tutoriales de uso</a></li>
+                    <!--<li><a href="https://carpoolear.com.ar/tutoriales.php" target="_blank">Tutoriales de uso</a></li>-->
                     <li><a href="https://carpoolear.com.ar/preguntas-frecuentes.php" target="_blank">Preguntas frecuentas (FAQ)</a></li>
                     <li><a href="https://carpoolear.com.ar/recomendaciones.php" target="_blank">Recomendaciones</a></li>
                 </ul>

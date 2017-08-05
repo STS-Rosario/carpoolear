@@ -49,6 +49,7 @@
 import { mapGetters, mapActions } from 'vuex';
 import Loading from '../Loading.vue';
 import FriendCard from './FriendCard';
+import bus from '../../services/bus-event.js';
 
 export default {
     name: 'friends_request',
@@ -79,11 +80,18 @@ export default {
             }, () => {
                 this.idRequesting = 0;
             });
+        },
+        onBackClick () {
+            this.$router.back();
         }
     },
 
     mounted () {
-        // this.search({});
+        bus.on('back-click', this.onBackClick);
+    },
+
+    beforeDestroy () {
+        bus.off('back-click', this.onBackClick);
     },
     components: {
         Loading,
@@ -124,7 +132,7 @@ export default {
         padding-left: .4em;
         vertical-align: 0;
     }
-    @media only screen and (max-width: 769px) {
+    @media only screen and (max-width: 768px) {
         .friends-component {
             padding: 0;
         }

@@ -23,3 +23,12 @@ export function guest (to, from, next) {
         router.replace({name: 'trips'});
     }
 }
+
+export function profileComplete (to, from, next) {
+    let user = store.getters['auth/user'];
+    if (!user.image || user.image.length === 0 || !user.description || user.description.length === 0) {
+        console.log('problem');
+        next(false);
+        router.replace({ name: 'profile_update' });
+    }
+}

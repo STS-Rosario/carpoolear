@@ -11,14 +11,16 @@ let userApi = new UserApi();
 const state = {
     auth: false,
     user: null,
-    token: null
+    token: null,
+    firstTime: false
 };
 
 // getters
 const getters = {
     checkLogin: state => state.auth,
     authHeader: state => state.auth ? { 'Authorization': 'Bearer ' + state.token } : {},
-    user: state => state.user
+    user: state => state.user,
+    firstTime: firstTime => state.firstTime
 };
 
 // actions
@@ -36,8 +38,13 @@ function onLoggin (store, token) {
     globalStore.dispatch('cars/index');
     globalStore.dispatch('passenger/getPendingRequest');
     globalStore.dispatch('startThread');
-    // router.replace({ name: 'trips' });
-    router.rememberBack();
+    console.log(store);
+    if (store.getters.firstTime) {
+        router.replace({ name: 'profile_update' });
+        firstTime(store, false);
+    } else {
+        router.rememberBack();
+    }
 }
 
 function login (store, { email, password }) {
@@ -53,9 +60,15 @@ function login (store, { email, password }) {
     });
 }
 
+function firstTime (store, firstTime) {
+    store.commit(types.AUTH_FIRST_TIME, firstTime);
+}
+
 // store = { commit, state, rootState, rootGetters }
 function activate (store, activationToken) {
+    console.log('hola');
     return authApi.activate(activationToken, {}).then((response) => {
+        firstTime(store, true);
         onLoggin(store, response.token);
     }).catch((err) => {
         if (err) {
@@ -85,7 +98,7 @@ function changePassword (store, {token, data}) {
     });
 }
 
-function register (store, { email, password, passwordConfirmation, name, termsAndConditions }) {
+function register (store, { email, password, passwordConfirmation, name, birthday, termsAndConditions }) {
     let data = {};
     data.email = email;
     data.password = password;
@@ -93,6 +106,7 @@ function register (store, { email, password, passwordConfirmation, name, termsAn
     data.name = name;
     data.password = password;
     data.terms_and_conditions = termsAndConditions;
+    data.birthday = birthday;
 
     return userApi.register(data).then((data) => {
         return Promise.resolve();
@@ -198,6 +212,9 @@ const mutations = {
         state.user = null;
         state.auth = false;
         cache.clear();
+    },
+    [types.AUTH_FIRST_TIME] (state, firstTime) {
+        state.firstTime = firstTime;
     }
 };
 

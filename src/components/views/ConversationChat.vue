@@ -161,7 +161,7 @@ export default {
     #btn-send.active {
         color: #333;
     }
-    @media only screen and (max-width: 767px) {
+    @media only screen and (max-width: 768px) {
         .list-group-item {
             border: 0;
         }
