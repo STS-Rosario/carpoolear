@@ -15,7 +15,7 @@
                     <i class="fa fa-users" aria-hidden="true"></i>
                   </span>
                   <span v-else-if="trip.friendship_type_id === 2" title="Visilidad: Público">
-                    <span class="tooltip-bottom" title="Visibilidad: Solo amigos" data-tooltip="Solo amigos.">
+                    <span class="tooltip-bottom" title="Visibilidad: Público" data-tooltip="Público">
                       <i class="fa fa-globe" aria-hidden="true"></i>
                     </span>
                   </span>
@@ -24,6 +24,7 @@
               <template v-if="user">
                 <div class="trip_driver_img_container">
                   <div class="trip_driver_img circle-box" v-imgSrc:profile="getUserImage"></div>
+                  <!-- {{ trip.user.has_pin }} -->
                 </div>
                 <div class="trip_driver_details">
                   <div class="trip_driver_name" >
@@ -31,6 +32,7 @@
                   </div>
                   <div class="trip_driver_ratings">
                     {{ trip.user.positive_ratings + trip.user.negative_ratings }} calificaciones
+
                   </div>
                 </div>
               </template>
@@ -88,10 +90,11 @@
                 </time>
             </div>
             <div v-if="trip.seats_available !== 0" class="row">
-              <div class="trip_seats-available col-xs-offset-2 col-xs-12">
+              <div class="trip_seats-available col-xs-offset-2 col-xs-12" v-if="!trip.is_passenger">
                 <span class="trip_seats-available_value pull-left">{{ trip.seats_available }}</span>
                 <span class="trip_seats-available_label"><span>Lugares</span><span>libres</span></span>
               </div>
+              <div class="col-xs-offset-2 col-xs-12" v-else></div>
               <div class="trip_actions col-xs-10">
                 <div class="btn btn-default btn-lg btn-trip-detail">Ver</div>
               </div>
