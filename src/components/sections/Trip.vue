@@ -132,10 +132,26 @@ export default {
     },
     computed: {
         originLongName () {
-            return this.trip.points[0].json_address.ciudad.length > this.CITY_NAME_LONG_LENGTH;
+            if (this.trip.points) {
+                if (this.trip.points[0].json_address.ciudad) {
+                    return this.trip.points[0].json_address.ciudad.length > this.CITY_NAME_LONG_LENGTH;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
         },
         destinyLongName () {
-            return this.trip.points[this.trip.points.length - 1].json_address.ciudad.length > this.CITY_NAME_LONG_LENGTH;
+            if (this.trip.points) {
+                if (this.trip.points[this.trip.points.length - 1].json_address.ciudad) {
+                    return this.trip.points[this.trip.points.length - 1].json_address.ciudad.length > this.CITY_NAME_LONG_LENGTH;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
         },
         getUserImage () {
             return this.user.id === this.trip.user.id ? this.user.image : this.trip.user.image;

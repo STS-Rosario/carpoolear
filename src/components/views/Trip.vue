@@ -105,7 +105,8 @@
                                     </div>
                                     <div>
                                         <span>Huella de carbono (<abbr title="aproximada">aprox</abbr>)</span><br>
-                                        <span>{{ trip.distance * 1.5 }} <abbr title="kilogramos dióxido de carbono equivalente">kg CO<sub>2eq</sub></abbr></span>
+
+                                        <span>{{ trip.distance / 1000 * 1.5 }} <abbr title="kilogramos dióxido de carbono equivalente">kg CO<sub>2eq</sub></abbr></span>
                                     </div>
                                 </div>
                                 <div class="trip_share row">
@@ -402,7 +403,8 @@ export default {
     computed: {
         ...mapGetters({
             user: 'auth/user',
-            trip: 'trips/currentTrip'
+            trip: 'trips/currentTrip',
+            isMobile: 'device/isMobile'
         }),
         expired () {
             return moment(this.trip.trip_date).format() < moment().format();
