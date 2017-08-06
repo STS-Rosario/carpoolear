@@ -1,10 +1,11 @@
 <template>
-    <div class="row search-section">  
-        <div class="col-xs-12 col-md-3"> 
+    <div class="row search-section">
+        <div class="col-xs-12 col-md-3">
             <button class="btn btn-option" :class="{'active': !isPassenger}" @click="isPassenger = false" >
-                <img alt="" :src="isPassenger ? chofer_logo_gris : chofer_logo_blanco" />
+                <!--<img alt="" :src="isPassenger ? chofer_logo_gris : chofer_logo_blanco" />-->
+                <span class="fa fa-car" aria-hidden="true"></span>
                 <span>Busco conductor</span>
-            </button> 
+            </button>
         </div>
         <div class="col-xs-12 col-md-3">
             <button class="btn btn-option" :class="{'active': isPassenger}" @click="isPassenger = true" >
@@ -12,7 +13,7 @@
                 <span>Busco pasajero</span>
             </button>
         </div>
-        <div class="col-xs-24 col-md-5 gmap-autocomplete origin"> 
+        <div class="col-xs-24 col-md-5 gmap-autocomplete origin">
             <GmapAutocomplete name="from_town" ref="from_town" :selectFirstOnEnter="true" :types="['(cities)']" :componentRestrictions="{country: 'AR'}" placeholder="Origen"  :value="from_town.name" v-on:place_changed="(data) => getPlace(0, data)" class="form-control form-control-with-icon form-control-map-autocomplete"> </GmapAutocomplete>
             <div class="date-picker--cross">
                 <i v-on:click="resetInput('from_town')" class="fa fa-times" aria-hidden="true"></i>
@@ -22,20 +23,20 @@
             <img alt="swap" class='swap-horizontal' :src="swap_horizontal" @click="swapCities" />
             <img alt="swap" class='swap-vertical' :src="swap_vertical" @click="swapCities" />
         </div>
-        <div class="col-xs-24 col-md-5 gmap-autocomplete destiny"> 
+        <div class="col-xs-24 col-md-5 gmap-autocomplete destiny">
             <GmapAutocomplete name="to_town" ref="to_town" :selectFirstOnEnter="true" :types="['(cities)']" :componentRestrictions="{country: 'AR'}" placeholder="Destino"  :value="to_town.name" v-on:place_changed="(data) => getPlace(1, data)" class="form-control form-control-with-icon form-control-map-autocomplete"> </GmapAutocomplete>
             <div class="date-picker--cross">
                 <i v-on:click="resetInput('to_town')" class="fa fa-times" aria-hidden="true"></i>
             </div>
-        </div> 
+        </div>
         <div class="col-xs-24 col-md-4">
               <Calendar :class="'calendar-date form-control form-control-with-icon form-control-date'" :value="date" @change="(date) => this.date = date" :limitFilter="datePickerLimitFilter"></Calendar>
         </div>
         <div class="col-xs-24 col-md-3 col-lg-4">
-            <button class="btn btn-primary btn-search" @click="emit">Buscar</button> 
+            <button class="btn btn-primary btn-search" @click="emit">Buscar</button>
         </div>
-        
-    </div>  
+
+    </div>
 </template>
 
 <script>
@@ -187,11 +188,13 @@ export default {
     .btn-option {
         height: 72px;
     }
+    .btn-option .fa,
     .btn-option img {
         width: 20px;
         display: inline-block;
         top: 10px;
         margin-right: 0;
+        font-size: 20px;
     }
     .btn-option span {
         vertical-align: middle;

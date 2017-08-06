@@ -21,7 +21,10 @@ const actions = {
         store.dispatch('ratesSearch');
     },
 
-    setUserByID (store, id) {
+    setUserByID (store, { id, userProfile }) {
+        if (userProfile) {
+            store.commit(types.PROFILE_SET_USER, userProfile);
+        }
         return userApi.show(id).then((response) => {
             store.commit(types.PROFILE_SET_USER, response.data);
             store.dispatch('ratesSearch');

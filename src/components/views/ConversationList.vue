@@ -6,9 +6,9 @@
                 <ul class="list-group">
                     <li class="list-group-item">
                         <div class="input-group">
-                            <input v-model="textSearch" @input="onSearchUser" type="text" class="form-control" placeholder="Buscar personas">
+                            <input v-model="textSearch"  type="text" class="form-control" placeholder="Buscar personas">
                             <span class="input-group-btn">
-                                <button class="btn btn-default" type="button">
+                                <button class="btn btn-default" type="button" @click="onSearchUser" >
                                     <i class="fa fa-search" aria-hidden="true"></i>
                                 </button>
                             </span>
@@ -32,7 +32,10 @@
                                 <button class="btn btn-primary btn-block" @click="nextPage">Más resultados</button>
                             </li>
                             <li slot="no-data" class="list-group-item alert alert-warning"  role="alert">No tienes conversaciones...</li>
-                            <li slot="loading" class="list-group-item alert alert-info" role="alert">Cargando conversaciones ...</li>
+                            <li slot="loading" class="list-group-item alert alert-info" role="alert">
+                                <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
+                                Cargando conversaciones ...
+                            </li>
                         </Loading>
                     </template>
                     <template v-else>
@@ -138,7 +141,7 @@ export default {
         this.thread = new Thread(() => {
             this.unreadMessage();
         });
-        this.thread.run(5000);
+        this.thread.run(45000);
         if (!this.isMobile) {
             router.push({ name: 'conversation-chat' });
         }
@@ -180,8 +183,7 @@ export default {
         margin-bottom: .4em;
     }
     .conversation-component.container {
-
-        margin-bottom: 1.4rem;
+        margin-bottom: 3rem;
     }
     .conversation_chat--search > li {
         color: #009ce1;
@@ -204,6 +206,13 @@ export default {
         .message_text {
             font-size: 14px;
         }
+        .conversation_chat h2 {
+            font-size: 22px;
+        }
+        .conversation_chat p.chat_last_connection {
+            font-size: 13px;
+            margin: 0;
+        }
         .app-container {
             background-color: transparent;
         }
@@ -217,14 +226,14 @@ export default {
             height: 100%;
         }
         .conversation_chat .list-group-item:nth-child(2) {
-            height: calc(100% - 152px);
+            height: calc(100% - 99px);
             overflow-y: auto;
         }
         .conversation-component.container {
             padding-left: 10px;
             padding-right: 10px;
             overflow-y: hidden;
-            height: calc(100vh - 160px);
+            height: calc(100vh - 150px);
         }
         .conversation-component > .row {
             padding-left: 20px;

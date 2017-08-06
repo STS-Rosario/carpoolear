@@ -14,7 +14,7 @@
             <button ref="btn_login" id="btn_login" class="btn btn-primary btn-shadowed-black" @click="login" :disabled="loading"> Ingresar </button>
         </div>
         <div class='pass-options' v-if="!isMobile">
-            <input id="checkbox_remember" type="checkbox" /><label for="checkbox_remember">Recordame</label><span> - </span><router-link class='login-forget' :to="{name:'reset-password'}">Olvidé mi contraseña </router-link>
+            <input id="checkbox_remember" type="checkbox" /><label for="checkbox_remember">Recordarme</label><span> - </span><router-link class='login-forget' :to="{name:'reset-password'}">Olvidé mi contraseña </router-link>
         </div>
       </div>
         <router-link v-show="isMobile" class='password-not' :to="{name:'reset-password'}">Olvidé mi contraseña </router-link>

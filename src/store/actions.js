@@ -28,6 +28,7 @@ export const init = (store) => {
     loadStateMap.forEach(obj => {
         var p = new Promise((resolve, reject) => {
             cache.getItem(obj.key).then((value) => {
+                // console.log(value);
                 store.commit(obj.mutation, value);
                 resolve();
             }).catch(() => {
@@ -43,13 +44,12 @@ export const init = (store) => {
             store.dispatch('auth/retoken').then(() => startApp(store));
         } else {
             startApp(store);
-            console.log();
         }
     });
 };
 
 export const startApp = (store) => {
-    store.dispatch('trips/tripsSearch');
+    store.dispatch('trips/tripsSearch', { is_passenger: false });
     if (store.state.auth.auth) {
         store.dispatch('auth/fetchUser');
         store.dispatch('myTrips/tripAsDriver');

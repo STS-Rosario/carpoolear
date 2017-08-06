@@ -15,8 +15,9 @@ export default {
     name: 'calendar',
     watch: {
         'value': function () {
-            this.date.time = moment(this.value).format('DD/MM/YYYY');
-            this.$refs.calendar.showDay(this.date.time);
+            let time = moment(this.value).format('MM-DD-YYYY');
+            this.$refs.calendar.showDay(time);
+            this.date.time = moment(this.value).format('DD/MM/YYYY')
         }
     },
     data () {
@@ -35,7 +36,8 @@ export default {
                     'line-height': '22px',
                     'border-radius': '2px',
                     'color': '#5F5F5F',
-                    'width': '100%'
+                    'width': '100%',
+                    'border': 'none'
                 },
                 wrapperClass: this.class,
                 color: {
@@ -101,14 +103,20 @@ export default {
 
 <style scoped>
     .date-picker--cross {
-        width: calc(100% - 81px);
-        display: inline-block;
-        text-align: right;
+        position: absolute;
     }
     .date-picker--cross i {
         cursor: pointer;
     }
     .date-picker {
-        width: 77px;
+        width: 100%;
+        border: none;
+        vertical-align: middle;
     }
+    .form-control {
+        position: relative;
+        vertical-align: middle;
+        cursor: pointer;
+    }
+
 </style>

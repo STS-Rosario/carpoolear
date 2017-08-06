@@ -10,11 +10,11 @@
                                     <template v-if="trip.points.length >= 2">
                                         <div class="row trip_location_from">
                                             <div class="col-xs-4 text-right">
-                                            <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                                <i class="fa fa-map-marker" aria-hidden="true"></i>
                                             </div>
                                             <div class="col-xs-20">
                                             <span class="trip_location_from_city">{{ trip.points[0].json_address.ciudad }}</span>
-                                            <span class="trip_location_from_state-country">{{ trip.points[0].json_address.provincia }}, {{ trip.points[0].json_address.pais }}</span>
+                                            <span class="trip_location_from_state-country">{{ trip.points[0].json_address.provincia | googleInfoClean }}</span>
                                             </div>
                                         </div>
                                         <div class="row trip_location_to">
@@ -23,7 +23,7 @@
                                             </div>
                                             <div class="col-xs-20">
                                                 <span class="trip_location_from_city">{{ trip.points[trip.points.length - 1].json_address.ciudad }}</span>
-                                                <span class="trip_location_from_state-country">{{ trip.points[trip.points.length - 1].json_address.provincia }}, {{ trip.points[trip.points.length - 1].json_address.pais }}</span>
+                                                <span class="trip_location_from_state-country">{{ trip.points[trip.points.length - 1].json_address.provincia | googleInfoClean }} </span>
                                             </div>
                                         </div>
                                         <div class="col-xs-4 trip_location-dot-line">
@@ -56,36 +56,48 @@
                                         <span class="trip_datetime_time">{{ [ trip.trip_date ] | moment("h:mm a") }}</span>
                                     </time>
                                 </div>
-                                <div class="row">
+                                <div class="row"  v-if="!trip.is_passenger">
                                     <div class="trip_seats-available col-xs-offset-4 col-sm-offset-4 col-xs-12">
                                         <span class="trip_seats-available_value pull-left">{{ trip.seats_available }}</span>
                                         <span class="trip_seats-available_label">Lugares<br>libres</span>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-xs-offset-2 col-xs-12" v-if="trip.passenger.length">
-                                        <h4>Pasajeros</h4>
-                                        <ul>
-                                            <li v-for="p in trip.passenger">
-                                                {{p.name}}
+                                <div class="row passengers"  v-if="!trip.is_passenger">
+                                    <div class="col-xs-offset-3 col-xs-21" v-if="trip.passenger.length">
+                                        <span v-for="p in trip.passenger">
+                                            <div class="trip_driver_img circle-box passenger" v-imgSrc:profile="trip.passenger.image">
                                                 <span v-if="owner" @click="removePassenger(p)">
                                                     <i class="fa fa-times" aria-hidden="true"></i>
                                                 </span>
-                                            </li>
-                                        </ul>
+                                            </div>
+                                        </span>
                                     </div>
                                     <div v-else style="height: 2em;"></div>
                                 </div>
                             </div>
                             <div class="col-sm-10 col-md-10 column">
-                                <div class="row trip-data">
-                                    <span>Viaje Público</span><br>
-                                    <span>Gastos compartidos</span>
+                                <div class="row trip-data" v-if="trip.is_passenger">
+                                    <strong class="warning-is-passenger">Pasajero que busca viaje</strong>
                                 </div>
-                                <div class="row trip-stats">
+                                <div class="row trip-data">
+                                    <em v-if="trip.friendship_type_id == 2">
+                                        <i class="fa fa-globe" aria-hidden="true"></i>
+                                        Viaje público
+                                    </em>
+                                    <em v-if="trip.friendship_type_id == 1">
+                                        <i class="fa fa-users" aria-hidden="true"></i>
+                                        Amigos de amigos
+                                    </em>
+                                    <em v-if="trip.friendship_type_id == 0">
+                                        <i class="fa fa-user" aria-hidden="true"></i>
+                                        Sólo amigos
+                                    </em>
+                                </div>
+
+                                <div class="row trip-stats"  v-if="!trip.is_passenger">
                                     <div>
                                         <span>Distancia a recorrer</span><br>
-                                        <span>{{ trip.distance}} <abbr title="kilometros">km</abbr></span>
+                                        <span>{{ distanceString }} <abbr title="kilometros">km</abbr></span>
                                     </div>
                                     <div>
                                         <span>Tiempo estimado de viaje</span><br>
@@ -93,14 +105,31 @@
                                     </div>
                                     <div>
                                         <span>Huella de carbono (<abbr title="aproximada">aprox</abbr>)</span><br>
-                                        <span>{{ trip.distance * 1.5 }} <abbr title="kilogramos dióxido de carbono equivalente">kg CO<sub>2eq</sub></abbr></span>
+
+                                        <span>{{ trip.distance / 1000 * 1.5 }} <abbr title="kilogramos dióxido de carbono equivalente">kg CO<sub>2eq</sub></abbr></span>
                                     </div>
+                                </div>
+                                <div class="trip_share row">
+                                    <a  :href="'https://www.facebook.com/sharer/sharer.php?u=' + currentUrl" target="_blank" aria-label="Compartir en Facebook" class="lnk lnk-social-network lnk-facebook">
+                                        <i class="fa fa-facebook" aria-hidden="true"></i>
+                                    </a>
+                                    <a :href="'https://twitter.com/intent/tweet/?text=Publiqu%C3%A9%20un%20viaje%20para%20compartir%20en%20Carpoolear%20&via=carpoolear&url='  + currentUrl" target="_blank" aria-label="Compartir en Twitter"   class="lnk lnk-social-network lnk-twitter">
+                                        <i class="fa fa-twitter" aria-hidden="true"></i>
+                                    </a>
+                                    <a :href="'https://plus.google.com/share?url='  + currentUrl" target="_blank" aria-label="Compartir en Google+"  class="lnk lnk-social-network lnk-google-plus">
+                                        <i class="fa fa-google-plus" aria-hidden="true"></i>
+                                    </a>
+                                    <a :href="'whatsapp://send?text=Publiqu%C3%A9%20un%20viaje%20para%20compartir%20en%20Carpoolear%20'  + currentUrl" target="_blank" aria-label="Compartir en Whats App"   class="lnk lnk-social-network lnk-whatsapp"  v-if="isMobile">
+                                        <i class="fa fa-whatsapp" aria-hidden="true"></i>
+                                    </a>
                                 </div>
                             </div>
                             <div class="buttons-container">
                                 <router-link class="btn btn-primary" v-if="owner" :to="{name: 'update-trip', params: { id: trip.id}}"> Editar  </router-link>
-                                <template v-if="!owner && !trip.is_passenger">
+                                <template v-if="!owner && !expired">
                                     <button class="btn btn-primary" @click="toMessages" v-if="!owner"> Coordinar viaje  </button>
+                                </template>
+                                <template v-if="!owner && !trip.is_passenger && !expired">
                                     <template v-if="!isPassenger">
                                         <button class="btn btn-primary" @click="makeRequest" v-if="canRequest"> Solicitar asiento </button>
                                         <button class="btn" v-if="!canRequest" @click="cancelRequest"> Solicitud enviada </button>
@@ -110,7 +139,9 @@
                                         <button class="btn btn-primary" @click="cancelRequest" v-if="canRequest"> Cancelar viaje </button>
                                     </template>
                                 </template>
-
+                                <template v-if="expired">
+                                    <button class="btn btn-primary" disabled> Finalizado  </button>
+                                </template>
                             </div>
                         </div>
                     </div>
@@ -126,14 +157,17 @@
                                         <svgItem icon="thumbUp" size="18"></svgItem> <span> {{trip.user.positive_ratings}} </span>
                                         <svgItem icon="thumbDown" size="18"></svgItem> <span> {{trip.user.negative_ratings}} </span>
                                     </div>
+                                    <div v-if="trip.user.has_pin == 1" class="user_pin">
+                                        <img src="https://carpoolear.com.ar/static/img/pin.png" alt="" title="Aportante en la campaña mi media naranja carpoolera" />
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-24">
-                                    <router-link class="btn-primary btn-search btn-shadowed-black" :to="{name: 'profile', params: {id: trip.user.id}}"> Ver Perfil </router-link>
+                                    <router-link class="btn-primary btn-search btn-shadowed-black" :to="{name: 'profile', params: {id: getUserProfile, userProfile: trip.user}}"> Ver Perfil </router-link>
                                 </div>
                             </div>
-                            <div class="row italic quote" v-if="trip.description && trip.description.length">
+                            <div class="row italic quote" :class="descriptionLength" v-if="trip.description && trip.description.length">
                                 <i class="fa fa-quote-left" aria-hidden="true"></i>
                                 <span> {{trip.description}} </span>
                             </div>
@@ -172,6 +206,7 @@ import { mapGetters, mapActions } from 'vuex';
 import router from '../../router';
 import bus from '../../services/bus-event';
 import svgItem from '../SvgItem';
+import moment from 'moment';
 
 export default {
     name: 'trip',
@@ -194,7 +229,8 @@ export default {
                     json: null,
                     location: null
                 }
-            ]
+            ],
+            currentUrl: encodeURIComponent('https://carpoolear.com.ar' + this.$route.fullPath)
         };
     },
 
@@ -205,7 +241,13 @@ export default {
             make: 'passenger/makeRequest',
             cancel: 'passenger/cancel'
         }),
-
+        profileComplete () {
+            if (!this.user.image || this.user.image.length === 0 || !this.user.description || this.user.description.length === 0) {
+                router.replace({ name: 'profile_update' });
+            } else {
+                return true;
+            }
+        },
         loadTrip () {
             this.getTrip(this.id).then(trip => {
                 // this.trip = trip;
@@ -213,8 +255,8 @@ export default {
                 var self = this;
                 setTimeout(() => { self.renderMap(); }, 500);
             }).catch(error => {
-                console.log('error');
                 if (error) {
+                    router.replace({name: 'trips'});
                     // Ver que hacer
                     // this.trip = null;
                 }
@@ -222,19 +264,23 @@ export default {
         },
 
         toMessages () {
-            this.lookConversation(this.trip.user).then(conversation => {
-                router.push({ name: 'conversation-chat', params: { id: conversation.id } });
-            });
+            if (this.profileComplete()) {
+                this.lookConversation(this.trip.user).then(conversation => {
+                    router.push({ name: 'conversation-chat', params: { id: conversation.id } });
+                });
+            }
         },
 
         makeRequest () {
-            this.sending = true;
-            this.make(this.trip.id).then(() => {
-                this.sending = false;
-                this.trip.request = 'send';
-            }).catch(() => {
-                this.sending = false;
-            });
+            if (this.profileComplete()) {
+                this.sending = true;
+                this.make(this.trip.id).then(() => {
+                    this.sending = false;
+                    this.trip.request = 'send';
+                }).catch(() => {
+                    this.sending = false;
+                });
+            }
         },
 
         cancelRequest () {
@@ -269,7 +315,6 @@ export default {
 
         renderMap () {
             this.$refs.map.$mapCreated.then(() => {
-                console.log('Map was created');
                 /* eslint-disable no-undef */
                 this.directionsService = new google.maps.DirectionsService();
                 this.directionsDisplay = new google.maps.DirectionsRenderer();
@@ -358,8 +403,12 @@ export default {
     computed: {
         ...mapGetters({
             user: 'auth/user',
-            trip: 'trips/currentTrip'
+            trip: 'trips/currentTrip',
+            isMobile: 'device/isMobile'
         }),
+        expired () {
+            return moment(this.trip.trip_date).format() < moment().format();
+        },
         owner () {
             return this.user.id === this.trip.user.id;
         },
@@ -371,6 +420,15 @@ export default {
         },
         getUserImage () {
             return this.user.id === this.trip.user.id ? this.user.image : this.trip.user.image;
+        },
+        getUserProfile () {
+            return this.trip.user.id === this.user.id ? 'me' : this.trip.user.id;
+        },
+        descriptionLength () {
+            return this.trip.description.length > 215 ? 'long-description' : '';
+        },
+        distanceString () {
+            return Math.floor(this.trip.distance / 1000);
         }
     },
 
@@ -385,6 +443,28 @@ export default {
 </script>
 
 <style scoped>
+    .user_pin {
+        margin-top: 1em;
+    }
+    .user_pin img {
+        width: 40px;
+    }
+    .trip_driver_img.circle-box.passenger {
+        width: 2.2em;
+        height: 2.2em;
+        position: relative;
+        margin-right: .2em;
+    }
+    .trip_driver_img.circle-box.passenger span{
+        position: absolute;
+        right: -6px;
+        bottom: -6px;
+        color: #555;
+        font-size: 12px;
+    }
+    .passengers {
+        margin-bottom: .8em;
+    }
     .trip-detail-component .structure-div {
         margin-top: 1rem;
     }
@@ -442,7 +522,7 @@ export default {
     .trip-detail-component .driver-data div:first-child {
         margin-top: .4em;
     }
-    @media only screen and (min-width: 400px) and (max-width: 768px) {
+    @media only screen and (min-width: 400px) and (max-width: 767px) {
         .trip-detail-component .trip_driver_img {
             width: 6.7rem;
             height: 6.7rem;
@@ -468,7 +548,8 @@ export default {
             margin-top: 0;
         }
         .trip-detail-component .driver-profile div.row:last-child {
-            height: 9rem;
+            max-height: 11rem;
+            min-height: 9rem;
         }
         .trip-detail-component .quote {
             margin-left: 0;
@@ -496,6 +577,9 @@ export default {
         }
         .trip-detail-component .driver-data div:first-child {
             margin-top: 16px;
+        }
+        .trip-detail-component .quote.long-description {
+            font-size: 14px;
         }
     }
 </style>

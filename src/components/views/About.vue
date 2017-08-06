@@ -69,7 +69,7 @@
         margin: 3em auto;
         padding: 2em;
     }
-    @media (max-width: 768px) {
+    @media (max-width: 767px) {
         .about-page {
             box-shadow: none;
             margin: 0 auto;
@@ -93,11 +93,26 @@
 
 
 <script>
+import bus from '../../services/bus-event.js';
+
 export default {
     name: 'about',
     data () {
         return {
         };
+    },
+    mounted () {
+        bus.on('back-click', this.onBackClick);
+    },
+
+    beforeDestroy () {
+        bus.off('back-click', this.onBackClick);
+    },
+
+    methods: {
+        onBackClick () {
+            this.$router.back();
+        }
     }
 };
 </script>

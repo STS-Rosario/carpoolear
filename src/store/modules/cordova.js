@@ -49,6 +49,7 @@ const actions = {
             authApi.loginWithProvider('facebook', {access_token: accessToken}).then((response) => {
                 let token = response.token;
                 globalStore.dispatch('auth/onLoggin', token);
+                authApi.matchFriendsWithProvider('facebook', {access_token: accessToken});
             });
         });
     },
@@ -75,7 +76,6 @@ const actions = {
             if (router.stack.length > 0) {
                 router.go(-1);
             } else {
-                console.log('Must close apps');
                 navigator.Backbutton.goHome();
             }
         }
