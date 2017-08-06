@@ -37,18 +37,18 @@
                 </div>
                 <div class="form-group">
                     <label for="">Fecha de nacimiento</label>
-                    <Calendar :class="'form-control form-control-with-icon form-control-date'" :value="user.birthday | moment('MM/DD/YYYY')" @change="(date) => this.user.birthday = date"></Calendar>
+                    <Calendar :class="'form-control form-control-with-icon form-control-date'" :value="user.birthday | moment('DD//MM//YYYY')" @change="(date) => this.user.birthday = date"></Calendar>
                 </div>
                 <div class="form-group">
-                    <label for="input-dni">Número de documento <span class="description">(Solo números)</span></label> 
+                    <label for="input-dni">Número de documento <span class="description">(Solo números)</span></label>
                     <input v-numberMask="'dniRawValue'" type="text" data-max-length="8" v-model="user.nro_doc" class="form-control" id="input-dni" placeholder="DNI">
                 </div>
                 <div class="form-group">
-                    <label for="input-telefono">Número de teléfono <span class="description">(Código área + teléfono. Ej: 0341156708223)</span></label> 
+                    <label for="input-telefono">Número de teléfono <span class="description">(Código área + teléfono. Ej: 0341156708223)</span></label>
                     <input maxlength="20" @keydown="isNumber" v-on:paste='isNumber' v-model="user.mobile_phone" type="tel" class="form-control" id="input-phone" placeholder="Número de teléfono">
                 </div>
                 <div class="form-group">
-                    <label for="input-patente">Patente <span class="description">(Sin espacios. Ej: ABC123 o AA123AA)</span></label> 
+                    <label for="input-patente">Patente <span class="description">(Sin espacios. Ej: ABC123 o AA123AA)</span></label>
                     <input :style="patente.length > 0 ? 'text-transform: uppercase' : ''" v-mask="'AAN##NA'" v-model="patente" type="text" class="form-control" id="input-patente" placeholder="Patente">
                 </div>
                 <div class="form-group">
@@ -159,6 +159,7 @@ export default {
                         this.carCreate(car);
                     }
                 }
+                this.$router.rememberBack();
             }).catch(response => {
                 this.loading = false;
                 this.error = 'No se pudo grabar los datos. Intente de nuevo';
