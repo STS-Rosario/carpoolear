@@ -1709,6 +1709,10 @@ h2 {
     color: #fff;
 }
 
+.colum-rating {
+    width: 100%;
+}
+
 .user-form input[type='text'],
 .user-form input[type='password'] {
     font-size: 14px;
@@ -1982,6 +1986,10 @@ ul {
 }
 
 @media only screen and (min-width: 768px) {
+    .column-rating { 
+        width: 50%;
+        float: left;
+    }
     .panel-trip-data {
         margin-bottom: 3rem;
     }
@@ -1991,7 +1999,11 @@ ul {
         padding-right: 10px;
     }
     .tab-content .profile-rates-component .list-group-item {
-        padding: 0 1em;
+        background-color: white;
+        border: 1px solid #ddd;
+        box-shadow: 0 0 4px 1px #CCC;
+        margin: 1em;
+        padding: 1em;
     }
     .request-list div.rate-pending_component .rate-buttons {
         margin-top: .8em;
@@ -2271,6 +2283,10 @@ ul {
     }
 }
 @media only screen and (min-width: 992px) {
+    .column-rating { 
+        width: 33.33%;
+        float: left;
+    }
     .search-section .date-picker--cross {
         top: 22px;
         right: 10px;
