@@ -246,13 +246,13 @@ export default {
                 globalError = true;
             } */
 
-            if (this.user.name.length < 1) {
+            if (!this.user.name || this.user.name.length < 1) {
                 this.nombreError.state = true;
                 this.nombreError.message = 'Olvidaste ingresar tu nombre y apellido.';
                 globalError = true;
             }
 
-            if (this.user.birthday.length < 1) {
+            if (!this.user.birthday || this.user.birthday.length < 1) {
                 this.birthdayError.state = true;
                 this.birthdayError.message = 'Olvidaste ingresar tu fecha de nacimiento.';
                 globalError = true;
@@ -265,7 +265,7 @@ export default {
                 }
             }
 
-            if (this.patente.length > 0) {
+            if (this.patente && this.patente.length > 0) {
                 if (!patentRegex.test(this.patente)) {
                     this.patentError.state = true;
                     this.patentError.message = 'La patente ingresada no tiene un formato válido.';
@@ -273,7 +273,7 @@ export default {
                 }
             }
 
-            if (this.user.description.length < 1) {
+            if (!this.user.description || this.user.description.length < 1) {
                 this.descError.state = true;
                 this.descError.message = 'Olvidaste completar tu descripción.';
                 globalError = true;
@@ -283,13 +283,13 @@ export default {
                 globalError = true;
             }
 
-            if (this.dniRawValue.length > 0 && this.dniRawValue.length < 7) {
+            if (this.dniRawValue && this.dniRawValue.length > 0 && this.dniRawValue.length < 7) {
                 this.dniError.state = true;
                 this.dniError.message = 'El DNI que ingresaste no es válido.';
                 globalError = true;
             }
 
-            if (this.user.mobile_phone.length > 0 && this.user.mobile_phone.length < 8) {
+            if (this.user.mobile_phone && this.user.mobile_phone.length > 0 && this.user.mobile_phone.length < 8) {
                 this.phoneError.state = true;
                 this.phoneError.message = 'El teléfono que ingresaste no es válido.';
                 globalError = true;
