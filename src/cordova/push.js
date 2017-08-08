@@ -29,6 +29,9 @@ class Notification {
 
 export default {
     init () {
+        if (window.cordova.platformId === 'browser') {
+            return;
+        }
         let push = window.PushNotification.init({
             android: {
                 clearBadge: true,
