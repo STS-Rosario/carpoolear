@@ -4,7 +4,7 @@
         <img :src="carpoolear_logo" />
     </router-link>
     <img v-if="isMobile" :src="carpoolear_logo" />
-    <h1> Registrar nuevo usuario </h1>
+    <h1 v-if="!(success && isMobile)"> Registrar nuevo usuario </h1>
     <div class='form row' v-if="!success">
       <label for="txt_name">Nombre</label>
       <input autofocus v-jump:focus="'txt_surename'" ref="txt_name" name="txt_name" maxlength="25" type="text" id="txt_name" v-model='name' :class="{'has-error': nombreError.state }"/>
@@ -219,9 +219,14 @@ export default {
     .register-success * {
         color: #333333;
     }
-
+    h2 {
+        color: #fff;
+    }
 
     @media only screen and (min-width: 768px) {
+        h2 {
+            color: #036686;
+        }
         .terms button {
             margin-left: 2rem;
             text-align: right;
