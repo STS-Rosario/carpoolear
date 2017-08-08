@@ -99,9 +99,11 @@ input[type=radio] + label {
 }
 
 .btn-primary {
+    position: relative;
     border-radius: 0;
     padding: 1em;
     min-width: 5rem;
+    min-height: 42px;
 
     border: 2px solid #FFFFFF;
     color: #FFFFFF;
@@ -113,8 +115,13 @@ input[type=radio] + label {
 }   
 .btn-primary:disabled {
     cursor: not-allowed;
-    background-color:rgb(240, 56, 51);
+    background-color:rgb(220, 129, 127);
 }
+.btn-facebook:disabled {
+    cursor: not-allowed;
+    background-color: #6789d0
+}
+
 .alertify-notifier .ajs-message.ajs-success {
     color: #fff;
 }
@@ -175,8 +182,16 @@ input[type="checkbox"] {
     background: rgb(182, 21, 17);
 }
 .btn-primary.disabled:hover, .btn-primary[disabled]:hover, fieldset[disabled] .btn-primary:hover, .btn-primary.disabled:focus, .btn-primary[disabled]:focus, fieldset[disabled] .btn-primary:focus, .btn-primary.disabled.focus, .btn-primary[disabled].focus, fieldset[disabled] .btn-primary.focus {
-    background-color: rgb(240, 56, 51);
+    background-color:rgb(220, 129, 127);
     border-color: #fff;
+}
+.btn-facebook.disabled:hover, .btn-facebook[disabled]:hover, fieldset[disabled] .btn-facebook:hover, .btn-facebook.disabled:focus, .btn-facebook[disabled]:focus, fieldset[disabled] .btn-facebook:focus, .btn-facebook.disabled.focus, .btn-facebook[disabled].focus, fieldset[disabled] .btn-facebook.focus {
+    cursor: not-allowed;
+    background-color: #6789d0
+}
+.btn-facebook.disabled:hover, .btn-facebook[disabled]:hover, fieldset[disabled] .btn-facebook:hover, .btn-facebook.disabled:focus, .btn-facebook[disabled]:focus, fieldset[disabled] .btn-facebook:focus, .btn-facebook.disabled.focus, .btn-facebook[disabled].focus, fieldset[disabled] .btn-facebook.focus {
+    cursor: not-allowed;
+    background-color: #6789d0
 }
 .dropdown-right {
     display: inline-block;
@@ -319,6 +334,16 @@ input[type="checkbox"] {
   .btn-with-icon--label {
     margin-left: 40px;
   }
+
+    .btn-facebook:disabled span:first-child {
+    background-color: #5a77b7;
+    }
+    .btn-with-icon:disabled:hover .btn-with-icon--icon {
+        background-color: #5a77b7;
+    }
+    .btn-facebook:disabled span:first-child:hover {
+        background-color: #5a77b7;
+    }
 
 .btn-option {
     border-radius: 0;
@@ -1208,7 +1233,19 @@ textarea {
 }
 
 .trip-detail-component .quote span {
-    word-break: break-all;
+    /* These are technically the same, but use both */
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+
+    -ms-word-break: break-word;
+    /* Instead use this non-standard one: */
+    word-break: break-word;
+
+    /* Adds a hyphen where the word breaks, if supported (No Blink) */
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
 }
 
 .trip-detail-component .quote i {
@@ -1736,6 +1773,7 @@ h2 {
     margin-top: 1em;
 }
 .user-form .btn-primary {
+    height: 56px;
     margin-top: 1em;
     padding: 1em;
     width: 100%;
@@ -2184,7 +2222,7 @@ ul {
         color: #333;
     }
     .user-form .btn-primary {
-        width: initial;
+        max-width: 130px;
         padding: 1em 2em;
     }
     .user-form a {
@@ -2274,7 +2312,7 @@ ul {
         padding-top: 8.6rem;
     }
 }
-@media only screen and (max-width: 912px) {
+@media only screen and (max-width: 1080px) {
     .header_panel-left img:first-child {
         display: none;
     }
@@ -2356,7 +2394,7 @@ ul {
     }
 }
 
-@media only screen and (min-width: 1120px) {
+@media only screen and (min-width: 1300px) {
     .header_panel-left {
         margin: 0 0 0 4em;
     }

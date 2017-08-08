@@ -108,7 +108,7 @@ export default {
     },
     watch: {
         rates: {
-            handler: function (val, oldVal) { 
+            handler: function (val, oldVal) {
                 console.log('retes change');
                 this.makeRows();
             }

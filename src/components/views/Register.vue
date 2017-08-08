@@ -7,27 +7,27 @@
     <h1> Registrar nuevo usuario </h1>
     <div class='form row' v-if="!success">
       <label for="txt_name">Nombre</label>
-      <input  maxlength="25" type="text" id="txt_name" v-model='name' :class="{'has-error': nombreError.state }"/>
+      <input autofocus v-jump:focus="'txt_surename'" ref="txt_name" name="txt_name" maxlength="25" type="text" id="txt_name" v-model='name' :class="{'has-error': nombreError.state }"/>
       <span class="error" v-if="nombreError.state"> {{nombreError.message}} </span>
       <label for="txt_surename">Apellido</label>
-      <input  maxlength="25" type="text" id="txt_surename" v-model='sureName' :class="{'has-error': apellidoError.state }"/>
+      <input v-jump:focus="'txt_email'" ref="txt_surename" name="txt_surename" maxlength="25" type="text" id="txt_surename" v-model='sureName' :class="{'has-error': apellidoError.state }"/>
       <span class="error" v-if="apellidoError.state"> {{apellidoError.message}} </span>
       <label for="txt_email">Email</label>
-      <input maxlength="40" type="text" id="txt_email" v-model='email' :class="{'has-error': emailError.state }"/>
+      <input v-jump:focus="'txt_password'" ref="txt_email" name="txt_email" maxlength="40" type="text" id="txt_email" v-model='email' :class="{'has-error': emailError.state }"/>
       <span class="error" v-if="emailError.state"> {{emailError.message}} </span>
       <label for="">Fecha de nacimiento</label>
-      <Calendar class="form-control form-control-with-icon form-control-date" :class="{'has-error': birthdayError.state}" @change="(date) => this.birthday = date"></Calendar>
+      <Calendar ref="ipt_calendar" name="ipt_calendar" class="form-control form-control-with-icon form-control-date" :class="{'has-error': birthdayError.state}" @change="(date) => this.birthday = date"></Calendar>
       <span class="error" v-if="birthdayError.state"> {{birthdayError.message}} </span>
       <label for="txt_password">Contraseña</label>
-      <input maxlength="40" type="password" id="txt_password" v-model='password' :class="{'has-error': passwordError.state }"/>
+      <input v-jump:focus="'txt_password_confirmation'" ref="txt_password" name="txt_password" maxlength="40" type="password" id="txt_password" v-model='password' :class="{'has-error': passwordError.state }"/>
       <span class="error" v-if="passwordError.state"> {{passwordError.message}} </span>
       <label for="txt_password_confirmation">Ingrese nuevamente su contraseña</label>
-      <input  maxlength="40" type="password" id="txt_password_confirmation" v-model='passwordConfirmation' :class="{'has-error': passwordError.state }" />
+      <input v-jump:focus="'ipt_terms'" ref="txt_password_confirmation" name="txt_password_confirmation" maxlength="40" type="password" id="txt_password_confirmation" v-model='passwordConfirmation' :class="{'has-error': passwordError.state }" />
       <span class="error" v-if="passwordError.state"> {{passwordError.message}} </span>
       <div class="terms">
-        <input  type="checkbox" id="cbx_terms" v-model='termsAndConditions' />
+        <input v-jump:click="'ipt_submit'" ref="ipt_terms" name="ipt_terms" type="checkbox" id="cbx_terms" v-model='termsAndConditions' />
         <label for="cbx_terms"><router-link :to="{name: 'terms'}">He leído y acepto los términos y condiciones</router-link></label>
-        <button @click="register" class="btn-primary" :disabled="progress || !termsAndConditions"> Registrarme </button>
+        <button ref="ipt_submit" name="ipt_submit" @click="register" class="btn-primary" :disabled="progress || !termsAndConditions"> Registrarme </button>
       </div>
     </div>
     <div class='form row register-success' v-else>
@@ -93,7 +93,6 @@ export default {
         ...mapActions({
             doRegister: 'auth/register'
         }),
-
         validate () {
             let globalError = false;
             console.log(this.emailError);
@@ -152,9 +151,11 @@ export default {
             return globalError;
         },
 
-        register () {
-            if (this.validate()) return;
-
+        register (event) {
+            if (this.validate()) {
+                dialogs.message('Debe corregir o completar algunos campos para finalizar su registro.', { duration: 10, estado: 'error' });
+                return;
+            }
             let email = this.email;
             let password = this.password;
             let passwordConfirmation = this.passwordConfirmation;
@@ -203,7 +204,7 @@ export default {
         margin-top: 1.8rem;
     }
     .user-form a {
-        font-weight: 400;
+        font-weight: bold;
     }
     span.error {
         display: block;

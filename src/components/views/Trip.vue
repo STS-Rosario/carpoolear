@@ -230,7 +230,7 @@ export default {
                     location: null
                 }
             ],
-            currentUrl: encodeURIComponent('https://carpoolear.com.ar' + this.$route.fullPath)
+            currentUrl: encodeURIComponent('https://carpoolear.com.ar/app' + this.$route.fullPath)
         };
     },
 

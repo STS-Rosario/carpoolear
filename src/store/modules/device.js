@@ -23,7 +23,7 @@ const getters = {
     isMobile: state => state.resolution.width < 768,
     isTablet: state => state.resolution.width >= 768 && state.resolution.width < 992,
     isDesktop: state => state.resolution.width >= 992,
-    isNotLargeDesktop: sate => sate.resolution.width < 1120,
+    isNotLargeDesktop: sate => sate.resolution.width < 1300,
     isFacebokApp: state => window.name !== ''
 };
 

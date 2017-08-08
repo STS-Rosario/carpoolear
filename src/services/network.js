@@ -5,27 +5,26 @@ import axios from 'axios';
 
 const API_URL = process.env.API_URL;
 
-class MyPromise extends Promise {
-    constructor (executor) {
-        super((resolve, reject) => {
-            // before
-            return executor(resolve, reject);
-        });
-        // after
+class MyPromise {
+    constructor (resolve, reject, promise = null) {
+        if (!promise) {
+            this.promise = new Promise(resolve, reject);
+        } else {
+            this.promise = promise;
+        }
+    }
+    then (func) {
+        let tempPromise = this.promise.then(func);
+        let myTempPromise = new MyPromise(null, null, tempPromise);
+        myTempPromise.abort = this.abort;
+        return myTempPromise;
     }
 
-    then (onFulfilled, onRejected) {
-        // before
-        const returnValue = super.then(onFulfilled, onRejected);
-        returnValue.abort = this.abort;
-        // after
-        return returnValue;
-    }
-
-    catch (onRejected) {
-        const returnValue = super.catch(onRejected);
-        returnValue.abort = this.abort;
-        return returnValue;
+    catch (func) {
+        let tempPromise = this.promise.catch(func);
+        let myTempPromise = new MyPromise(null, null, tempPromise);
+        myTempPromise.abort = this.abort;
+        return myTempPromise;
     }
 }
 
@@ -62,7 +61,6 @@ export default {
                 }
             });
         });
-
         promise.abort = () => {
             source.cancel('Abort by the system');
         };

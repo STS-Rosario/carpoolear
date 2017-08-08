@@ -11,7 +11,7 @@
         </template>
         <slot name="loading" v-else>
             <p class="alert alert-info" role="alert">
-                <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
+                <spinner></spinner>
                 Cargando viajes ...
             </p>
         </slot>
@@ -19,6 +19,8 @@
 </template>
 
 <script>
+import spinner from './Spinner.vue';
+
 export default {
     name: 'loading',
     mounted () {
@@ -32,6 +34,9 @@ export default {
             type: Boolean,
             default: false
         }
+    },
+    components: {
+        spinner
     }
 };
 </script>

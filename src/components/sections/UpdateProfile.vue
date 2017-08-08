@@ -136,7 +136,8 @@ export default {
             var data = Object.assign({}, this.user);
             if (this.pass.password) {
                 if (this.pass.password !== this.pass.password_confirmation) {
-                    this.error = 'password no coincide';
+                    this.error = 'Password no coincide';
+                    return;
                 }
                 data.password = this.pass.password;
                 data.password = this.pass.password_confirmation;

@@ -9,14 +9,16 @@ let userApi = new UserApi();
 const state = {
     ...pagination.makeState('friends'),
     pendings: null,
-    users: []
+    users: [],
+    searching: null
 };
 
 // getters
 const getters = {
     ...pagination.makeGetters('friends'),
     pendings: state => state.pendings,
-    users: state => state.users
+    users: state => state.users,
+    searching: state => state.searching
 };
 
 // actions
@@ -61,10 +63,16 @@ const actions = {
     searchUsers (store, value) {
         if (value.length > 0) {
             store.commit(types.FRIENDS_SET_USERS, null);
-            return userApi.list({value}).then(response => {
+            if (store.state.searching) {
+                store.state.searching.abort();
+            }
+            let promise = userApi.list({ value }).then(response => {
                 store.commit(types.FRIENDS_SET_USERS, response.data);
+                store.commit(types.FRIENDS_SET_SEARCHING, null);
                 return Promise.resolve(response.data);
             });
+            store.commit(types.FRIENDS_SET_SEARCHING, promise);
+            return promise;
         } else {
             store.commit(types.FRIENDS_SET_USERS, []);
             return Promise.resolve();
@@ -90,6 +98,9 @@ const mutations = {
 
     [types.FRIENDS_SET_USERS] (state, users) {
         state.users = users;
+    },
+    [types.FRIENDS_SET_SEARCHING] (state, promise) {
+        state.searching = promise;
     },
 
     [types.FRIENDS_SET_REQUEST] (state, userId) {
