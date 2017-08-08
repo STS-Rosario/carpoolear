@@ -258,7 +258,6 @@ export default {
                 globalError = true;
             } else {
                 let birthday = moment(this.user.birthday);
-                console.log(this.user.birthday);
                 if (moment().diff(birthday, 'years') < 18) {
                     this.birthdayError.state = true;
                     this.birthdayError.message = 'Pareciera que no eres mayor de edad. Revisa si ingresaste bien tu fecha de nacimiento y recuerda que debes ser mayor de edad para utilziar carpoolear. Para más información te recomendamos volver a leer los términos y condiciones.';

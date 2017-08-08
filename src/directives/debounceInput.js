@@ -3,7 +3,6 @@ import { debounce } from '../services/utility';
 let debounceFunction = null;
 let inputHandler = debounce(
     function () {
-        console.log(debounceFunction);
         debounceFunction();
     },
 800);
@@ -11,7 +10,6 @@ let inputHandler = debounce(
 export default {
     bind: function (el, binding, node) {
         debounceFunction = binding.value;
-        console.log(el);
         el.addEventListener('input', inputHandler, false);
     },
     unbind: function (el, binding, node) {

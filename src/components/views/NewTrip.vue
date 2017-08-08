@@ -276,12 +276,9 @@ export default {
             }
         },
         onClearClick () {
-            console.log('clear click');
             router.back();
         },
         resetInput (index) {
-            console.log(index);
-            console.log(this.points[index].name);
             this.points[index].name = '';
         },
         restoreData (trip) {
@@ -312,7 +309,6 @@ export default {
 
         loadTrip () {
             this.getTrip(this.id).then(trip => {
-                console.log(trip);
                 if (this.user.id === trip.user.id) {
                     this.updatingTrip = trip;
                     this.restoreData(trip);
@@ -377,7 +373,6 @@ export default {
         },
 
         getPlace (i, data) {
-            console.log(i, data);
             this.points[i].place = data;
             this.points[i].name = data.formatted_address;
             this.points[i].json = parseStreet(data);
@@ -401,7 +396,6 @@ export default {
 
         calcRoute () {
             for (let i = 0; i < this.points.length; i++) {
-                console.log(this.points);
                 if (!this.points[i].name) {
                     return;
                 }

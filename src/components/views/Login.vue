@@ -82,7 +82,6 @@ export default {
             if (!this.loading) {
                 this.fbLoading = true;
                 this.fbLogin().catch((response) => {
-                    console.log(response);
                     if (response.errors && response.errors.email) {
                         dialogs.message('El correo asociado a su cuenta de facebook, ya tiene asociada una cuenta en Carpoolear. Por favor, ingresé utilizando el login por email. Si no recuerda su clave, cliqueé en olvidé mi contraseña.', { duration: 10, estado: 'error' });
                     }
