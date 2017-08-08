@@ -10,7 +10,6 @@ let keyHandler = function (event) {
 };
 
 let getJumperData = function (el, binding, node) {
-    console.log('binding', el.id);
     jumpers[el.id] = {};
     jumpers[el.id].name = el.id;
     jumpers[el.id].value = binding.value;
@@ -28,7 +27,6 @@ export default {
         getJumperData(el, binding, node);
     },
     inserted: function (el, binding, node) {
-        console.log('inserting', el.id);
         if (jumpers[el.id] === undefined) {
             getJumperData(el, binding, node);
         }
@@ -38,7 +36,6 @@ export default {
         }
     },
     unbind: function (el, binding, node) {
-        console.log('unbinding', el.id);
         el.removeEventListener('keyup', keyHandler, false);
         if (el.tagName === 'button') {
             el.removeEventListener('click', keyHandler, false);

@@ -28,32 +28,38 @@
         <div class="col-xs-24 col-sm-16 col-sm-pull-8">
             <div class='form'>
                 <div class="form-group">
-                    <label for="input-name">Nombre</label>
-                    <input maxlength="25" v-model="user.name" type="text" class="form-control" id="input-name" placeholder="Nombre">
+                    <label for="input-name">Nombre y apellido (*)</label>
+                    <input maxlength="25" v-model="user.name" type="text" class="form-control" id="input-name" placeholder="Nombre" :class="{'has-error': nombreError.state }" />
+                    <span class="error" v-if="nombreError.state"> {{nombreError.message}} </span>
                 </div>
                 <div class="form-group">
-                    <label for="input-email">E-mail</label>
+                    <label for="input-email">E-mail (*)</label>
                     <input maxlength="40" v-model="user.email" type="text" class="form-control" id="input-email" placeholder="E-mail" disabled>
                 </div>
                 <div class="form-group">
-                    <label for="">Fecha de nacimiento</label>
-                    <Calendar :class="'form-control form-control-with-icon form-control-date'" :value="user.birthday | moment('DD//MM//YYYY')" @change="(date) => this.user.birthday = date"></Calendar>
+                    <label for="">Fecha de nacimiento (*)</label>
+                    <Calendar :class="{'has-error': birthdayError.state }" class="form-control form-control-with-icon form-control-date" :value="user.birthday | moment('DD//MM//YYYY')" @change="(date) => this.user.birthday = date"></Calendar>
+                    <span class="error" v-if="birthdayError.state"> {{birthdayError.message}} </span>
+                </div>
+                <div class="form-group">
+                    <label for="input-description">Descripción (*)<span class="description"> Contale de vos al resto de los carpooleros así te suman a sus viajes!! Qué te gusta hacer, en qué andas metido ahora, si estás con alguna idea, si te gustan los colores, etc.</span></label>
+                    <textarea maxlength="280" v-model="user.description" placeholder="Descripción" :class="{'has-error': descError.state }" ></textarea>
+                    <span class="error" v-if="descError.state"> {{descError.message}} </span>
                 </div>
                 <div class="form-group">
                     <label for="input-dni">Número de documento <span class="description">(Solo números)</span></label>
-                    <input v-numberMask="'dniRawValue'" type="text" data-max-length="8" v-model="user.nro_doc" class="form-control" id="input-dni" placeholder="DNI">
+                    <input v-numberMask="'dniRawValue'" type="text" data-max-length="8" v-model="user.nro_doc" class="form-control" id="input-dni" placeholder="DNI" :class="{'has-error': dniError.state }">
+                    <span class="error" v-if="dniError.state"> {{dniError.message}} </span>
                 </div>
                 <div class="form-group">
                     <label for="input-telefono">Número de teléfono <span class="description">(Código área + teléfono. Ej: 0341156708223)</span></label>
-                    <input maxlength="20" @keydown="isNumber" v-on:paste='isNumber' v-model="user.mobile_phone" type="tel" class="form-control" id="input-phone" placeholder="Número de teléfono">
+                    <input maxlength="20" @keydown="isNumber" v-on:paste='isNumber' v-model="user.mobile_phone" type="tel" class="form-control" id="input-phone" placeholder="Número de teléfono" :class="{'has-error': phoneError.state }">
+                    <span class="error" v-if="phoneError.state"> {{phoneError.message}} </span>
                 </div>
                 <div class="form-group">
                     <label for="input-patente">Patente <span class="description">(Sin espacios. Ej: ABC123 o AA123AA)</span></label>
-                    <input :style="patente.length > 0 ? 'text-transform: uppercase' : ''" v-mask="'AAN##NA'" v-model="patente" type="text" class="form-control" id="input-patente" placeholder="Patente">
-                </div>
-                <div class="form-group">
-                    <label for="input-description">Descripción <span class="description"> Contale de vos al resto de los carpooleros así te suman a sus viajes!! Qué te gusta hacer, en qué andas metido ahora, si estás con alguna idea, si te gustan los colores, etc.</span></label>
-                    <textarea maxlength="280" v-model="user.description" placeholder="Descripción"></textarea>
+                    <input :style="patente.length > 0 ? 'text-transform: uppercase' : ''" v-mask="'AAN##NA'" v-model="patente" type="text" class="form-control" id="input-patente" placeholder="Patente" :class="{'has-error': patentError.state }">
+                    <span class="error" v-if="patentError.state"> {{patentError.message}} </span>
                 </div>
 
                 <div class="checkbox">
@@ -85,6 +91,16 @@ import Calendar from '../Calendar';
 import Uploadfile from '../Uploadfile';
 import SvgItem from '../SvgItem';
 import dialogs from '../../services/dialogs.js';
+import moment from 'moment';
+
+class Error {
+    constructor (state = false, message = '') {
+        this.state = false;
+        this.message = '';
+    }
+}
+
+let patentRegex = /([A-Z]{3}[0-9]{3})|([A-Z]{2}[0-9]{3}[A-Z]{2})/;
 
 export default {
     name: 'upddate-profile',
@@ -100,14 +116,52 @@ export default {
             error: null,
             loading: false,
             loadingImg: false,
-            dniRawValue: ''
+            dniRawValue: '',
+            globalError: false,
+            nombreError: new Error(),
+            descError: new Error(),
+            birthdayError: new Error(),
+            patentError: new Error(),
+            dniError: new Error(),
+            phoneError: new Error(),
+            emailError: new Error()
         };
     },
     computed: {
         ...mapGetters({
             userData: 'auth/user',
             cars: 'cars/cars'
-        })
+        }),
+        iptUser () {
+            if (this.user) {
+                return this.user.name;
+            }
+        },
+        iptEmail () {
+            if (this.user) {
+                return this.user.email;
+            }
+        },
+        iptBirthday () {
+            if (this.user) {
+                return this.user.birthday;
+            }
+        },
+        iptDescription () {
+            if (this.user) {
+                return this.user.description;
+            }
+        },
+        iptDni () {
+            if (this.user) {
+                return this.user.nro_doc;
+            }
+        },
+        iptPhone () {
+            if (this.user) {
+                return this.user.mobile_phone;
+            }
+        }
     },
     methods: {
         ...mapActions({
@@ -132,6 +186,10 @@ export default {
             this.$refs.file.show();
         },
         grabar () {
+            if (this.validate()) {
+                dialogs.message('Te faltaron completar campos obligatorios o ingresaste datos inválidos.', { duration: 10, estado: 'error' });
+                return;
+            }
             this.loading = true;
             var data = Object.assign({}, this.user);
             if (this.pass.password) {
@@ -140,7 +198,7 @@ export default {
                     return;
                 }
                 data.password = this.pass.password;
-                data.password = this.pass.password_confirmation;
+                data.password_confirmation = this.pass.password_confirmation;
             }
             data.nro_doc = this.dniRawValue;
             this.update(data).then(() => {
@@ -160,11 +218,85 @@ export default {
                         this.carCreate(car);
                     }
                 }
-                this.$router.rememberBack();
+                if ((this.user.image && this.user.image.length > 0) && (this.user.description && this.user.description.length > 0)) {
+                    this.$router.rememberBack();
+                }
             }).catch(response => {
                 this.loading = false;
                 this.error = 'No se pudo grabar los datos. Intente de nuevo';
             });
+        },
+        validate () {
+            let globalError = false;
+            /* if (this.password.length < 1) {
+                this.passwordError.state = true;
+                this.passwordError.message = 'Olvido ingresar su contraseña.';
+                globalError = true;
+            } else if (this.password.length < 8) {
+                this.passwordError.state = true;
+                this.passwordError.message = 'Las contraseña debe tener al menos 8 caracteres.';
+                globalError = true;
+            } else if (this.passwordConfirmation < 1) {
+                this.passwordError.state = true;
+                this.passwordError.message = 'Olvido confirmar su contraseña.';
+                globalError = true;
+            } else if (this.password !== this.passwordConfirmation) {
+                this.passwordError.state = true;
+                this.passwordError.message = 'Las contraseñas no coinciden.';
+                globalError = true;
+            } */
+
+            if (this.user.name.length < 1) {
+                this.nombreError.state = true;
+                this.nombreError.message = 'Olvidaste ingresar tu nombre y apellido.';
+                globalError = true;
+            }
+
+            if (this.user.birthday.length < 1) {
+                this.birthdayError.state = true;
+                this.birthdayError.message = 'Olvidaste ingresar tu fecha de nacimiento.';
+                globalError = true;
+            } else {
+                let birthday = moment(this.user.birthday);
+                console.log(this.user.birthday);
+                if (moment().diff(birthday, 'years') < 18) {
+                    this.birthdayError.state = true;
+                    this.birthdayError.message = 'Pareciera que no eres mayor de edad. Revisa si ingresaste bien tu fecha de nacimiento y recuerda que debes ser mayor de edad para utilziar carpoolear. Para más información te recomendamos volver a leer los términos y condiciones.';
+                    globalError = true;
+                }
+            }
+
+            if (this.patente.length > 0) {
+                if (!patentRegex.test(this.patente)) {
+                    this.patentError.state = true;
+                    this.patentError.message = 'La patente ingresada no tiene un formato válido.';
+                    globalError = true;
+                }
+            }
+
+            if (this.user.description.length < 1) {
+                this.descError.state = true;
+                this.descError.message = 'Olvidaste completar tu descripción.';
+                globalError = true;
+            } else if (this.user.description.replace(' ', '').length < 10) {
+                this.descError.state = true;
+                this.descError.message = 'Ups! Tu descripción es muy acotada. No seas tímido, contanos un poco más.';
+                globalError = true;
+            }
+
+            if (this.dniRawValue.length > 0 && this.dniRawValue.length < 7) {
+                this.dniError.state = true;
+                this.dniError.message = 'El DNI que ingresaste no es válido.';
+                globalError = true;
+            }
+
+            if (this.user.mobile_phone.length > 0 && this.user.mobile_phone.length < 8) {
+                this.phoneError.state = true;
+                this.phoneError.message = 'El teléfono que ingresaste no es válido.';
+                globalError = true;
+            }
+
+            return globalError;
         }
     },
     watch: {
@@ -176,6 +308,27 @@ export default {
         },
         userData: function () {
             this.user = this.userData;
+        },
+        iptUser () {
+            this.nombreError.state = false;
+        },
+        iptEmail () {
+            this.emailError.state = false;
+        },
+        iptBirthday () {
+            this.birthdayError.state = false;
+        },
+        iptDescription () {
+            this.descError.state = false;
+        },
+        iptDni () {
+            this.dniError.state = false;
+        },
+        iptPhone () {
+            this.phoneError.state = false;
+        },
+        patente () {
+            this.patentError.state = false;
         }
     },
 
@@ -198,5 +351,22 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+    .profile_image-container.error .circle-box {
+        border: solid 2px red;
+    }
+    .profile_image-container.error .span {
+        color: red;
+    }
+    span.error {
+        display: block;
+        font-size: 12px;
+        margin-top: -5px;
+        font-weight: bold;
+        color: red;
+    }
+    @media only screen and (min-width: 768px) {
+        span.error {
+            font-weight: 300;
+        }
+    }
 </style>

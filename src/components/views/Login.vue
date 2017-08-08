@@ -74,16 +74,21 @@ export default {
                     this.loading = false;
                 });
             } else {
-                dialogs.message('Su solicitud ya fue enviada, aguarde la respuesta.', { duration: 10, estado: 'error' });
+                dialogs.message('Su solicitud ya fue enviada, aguarde un momento por favor.', { duration: 10, estado: 'error' });
             }
         },
 
         facebookLogin () {
             if (!this.loading) {
                 this.fbLoading = true;
-                this.fbLogin();
+                this.fbLogin().catch((response) => {
+                    console.log(response);
+                    if (response.errors && response.errors.email) {
+                        dialogs.message('El correo asociado a su cuenta de facebook, ya tiene asociada una cuenta en Carpoolear. Por favor, ingresé utilizando el login por email. Si no recuerda su clave, cliqueé en olvidé mi contraseña.', { duration: 10, estado: 'error' });
+                    }
+                });
             } else {
-                dialogs.message('Su solicitud ya fue enviada, aguarde la respuesta.', { duration: 10, estado: 'error' });
+                dialogs.message('Su solicitud ya fue enviada, aguarde un momento por favor.', { duration: 10, estado: 'error' });
             }
         },
 
@@ -96,7 +101,6 @@ export default {
         bus.on('clear-click', this.onClearClick);
         let viewPort = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
         this.hasScroll = document.body.scrollHeight > viewPort;
-        console.log(document.body.scrollHeight, viewPort);
     },
 
     beforeDestroy () {

@@ -13,8 +13,8 @@ class MyPromise {
             this.promise = promise;
         }
     }
-    then (func) {
-        let tempPromise = this.promise.then(func);
+    then (callback, onError) {
+        let tempPromise = this.promise.then(callback, onError);
         let myTempPromise = new MyPromise(null, null, tempPromise);
         myTempPromise.abort = this.abort;
         return myTempPromise;

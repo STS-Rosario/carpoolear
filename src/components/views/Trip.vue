@@ -314,13 +314,15 @@ export default {
         },
 
         renderMap () {
-            this.$refs.map.$mapCreated.then(() => {
-                /* eslint-disable no-undef */
-                this.directionsService = new google.maps.DirectionsService();
-                this.directionsDisplay = new google.maps.DirectionsRenderer();
-                this.directionsDisplay.setMap(this.$refs.map.$mapObject);
-                this.restoreData(this.trip);
-            });
+            if (this.$refs.map) {
+                this.$refs.map.$mapCreated.then(() => {
+                    /* eslint-disable no-undef */
+                    this.directionsService = new google.maps.DirectionsService();
+                    this.directionsDisplay = new google.maps.DirectionsRenderer();
+                    this.directionsDisplay.setMap(this.$refs.map.$mapObject);
+                    this.restoreData(this.trip);
+                });
+            }
         },
 
         restoreData (trip) {

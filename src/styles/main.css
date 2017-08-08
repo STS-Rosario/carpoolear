@@ -1424,6 +1424,14 @@ textarea {
     display: inline-block;
     width: 80%;
     padding-right: 2.2em;
+
+    word-wrap: break-word;
+    word-wrap: break-word;
+    -ms-word-break: break-word;
+    word-break: break-word;
+    -ms-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
 }
 
 .italic {
@@ -1761,7 +1769,9 @@ h2 {
     line-height: 28px;
 }
 
-.user-form input.has-error {
+.user-form input.has-error,
+input.has-error,
+textarea.has-error {
     border: 1px solid var(--main-error);
 }
 

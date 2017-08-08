@@ -144,4 +144,12 @@ export default {
         color: red;
         margin-left: 2em;
     }
+    h3 {
+        color: #fff;
+    }
+    @media only screen and (min-width: 768px) {
+        h3 {
+            color: #036686;
+        }
+    }
 </style>
