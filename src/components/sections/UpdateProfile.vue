@@ -44,7 +44,7 @@
                 <div class="form-group">
                     <label for="input-description">Descripción (*)<span class="description"> Contale de vos al resto de los carpooleros así te suman a sus viajes!! Qué te gusta hacer, en qué andas metido ahora, si estás con alguna idea, si te gustan los colores, etc.</span></label>
                     <textarea maxlength="280" v-model="user.description" placeholder="Descripción" :class="{'has-error': descError.state }" ></textarea>
-                    <span class="error" v-if="descError.state"> {{descError.message}} </span>
+                    <span class="error textarea" v-if="descError.state"> {{descError.message}} </span>
                 </div>
                 <div class="form-group">
                     <label for="input-dni">Número de documento <span class="description">(Solo números)</span></label>
@@ -362,6 +362,9 @@ export default {
         margin-top: -5px;
         font-weight: bold;
         color: red;
+    }
+    span.error.textarea {
+        margin-top: .8em;
     }
     @media only screen and (min-width: 768px) {
         span.error {
