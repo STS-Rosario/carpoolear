@@ -3,7 +3,7 @@ var prodEnv = require('./prod.env')
 
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
-  API_URL: '"https://carpoolear.104.131.15.228.nip.io"',
+  API_URL: '"https://carpoolear.com.ar"',
   MAPS_API: '"AIzaSyBlRfNi2qDcy_zwjR53VVOyD-csjYSq4Qo"',
   FACEBOOK_API: '"862086450497061"'
 })
