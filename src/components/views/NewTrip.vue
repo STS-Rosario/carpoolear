@@ -5,18 +5,18 @@
                 <div class="col-sm-8">
                     <fieldset class="trip-type-selection">
                         <div class="radio-option">
-                            <input type="radio" id="type-driver" value="0" v-model="trip.is_passenger">
+                            <input type="radio" id="type-driver" value="0" v-model="trip.is_passenger" :disabled="updatingTrip">
                             <label for="type-driver"  class="control-label">Como conductor</label>
                         </div>
                         <div class="radio-option">
-                            <input type="radio" id="type-passenger" value="1" v-model="trip.is_passenger">
+                            <input type="radio" id="type-passenger" value="1" v-model="trip.is_passenger" :disabled="updatingTrip">
                             <label for="type-passenger" class="control-label">Como pasajero</label>
                         </div>
                     </fieldset>
                     <div class="trip_terms">
                         <input type="checkbox" id="no-lucrar" v-model="no_lucrar" />
                         <div>
-                            <label for="no-lucrar" class="trip_terms_label" :class="{'has-error': lucrarError }" >Me comprometo a no lucrar con el viaje</label>
+                            <label for="no-lucrar" class="trip_terms_label" :class="{'has-error': lucrarError.state }" >Me comprometo a no lucrar con el viaje</label>
                             <span class="tooltip-bottom" data-tooltip="No hay lucro mientras el conductor no pida una contribución mayor al costo de la nafta + los peajes vinculados al viaje, dividido la cantidad de viajeros (sí, el conductor es un viajero!!!). ¡Los asientos no tienen un valor! No sos un colectivo ;). Al no lucrar, evitas ser un transporte ilegal de pasajeros, lo cual genera problemas con la validez del seguro particular automotor. Tengamos un buen viaje y cuidemosnos entre todos :)">
                                 <i class="fa fa-info-circle" aria-hidden="true"></i>
                             </span>
@@ -30,7 +30,8 @@
                                 <div v-for="(m, index) in points" class="trip_point gmap-autocomplete">
                                     <span v-if="index == 0" class="sr-only">Origen</span>
                                     <span v-if="index == points.length - 1" class="sr-only">Destino</span>
-                                    <GmapAutocomplete  :selectFirstOnEnter="true" :types="['(cities)']" :componentRestrictions="{country: 'AR'}" :placeholder="getPlaceholder(index)"  :value="m.name" :name="'input-' + index" :ref="'input-' + index" v-on:place_changed="(data) => getPlace(index, data)" class="form-control form-control-with-icon form-control-map-autocomplete" :class="{'has-error': m.error}"> </GmapAutocomplete>
+                                    <GmapAutocomplete  :selectFirstOnEnter="true" :types="['(cities)']" :componentRestrictions="{country: 'AR'}" :placeholder="getPlaceholder(index)"  :value="m.name" :name="'input-' + index" :ref="'input-' + index" v-on:place_changed="(data) => getPlace(index, data)" class="form-control form-control-with-icon form-control-map-autocomplete" :class="{'has-error': m.error.state}"> </GmapAutocomplete>
+                                    <span class="error" v-if="m.error.state"> {{m.error.message}} </span>
                                     <div class="date-picker--cross">
                                         <i v-on:click="resetInput(index)" class="fa fa-times" aria-hidden="true"></i>
                                     </div>
@@ -61,11 +62,13 @@
                             <div class="trip_datetime">
                                 <div class="trip_date">
                                     <label for="date" class="sr-only">Día </label>
-                                    <Calendar :limitFilter="limitFilter" class="form-control form-control-with-icon form-control-date" :class="{'has-error': dateError }" :value="date" @change="(date) => { this.date = date; this.dateError = false; }"></Calendar>
+                                    <Calendar :limitFilter="limitFilter" class="form-control form-control-with-icon form-control-date" :class="{'has-error': dateError.state }" :value="date" @change="(date) => { this.date = date; this.dateError.state = false; }"></Calendar>
+                                    <span class="error" v-if="dateError.state"> {{dateError.message}} </span>
                                 </div>
                                 <div class="trip_time">
                                     <label for="time" class="sr-only">Hora</label>
                                     <input type="time" v-mask="'##:##'" v-model="time" class="form-control form-control-with-icon form-control-time" id="time" placeholder="Hora (12:00)" >
+                                    <span class="error" v-if="timeError.state"> {{timeError.message}} </span>
                                     <!--<input type="text" v-model="time" />-->
                                 </div>
                             </div>
@@ -93,6 +96,7 @@
                             <div class="trip-comment">
                                 <label for="trip_comment"  class="label-for-group"> Comentario para los pasajeros </label>
                                 <textarea maxlength="280" v-model="trip.description" id="trp_comment" class="form-control"></textarea>
+                                <span class="error" v-if="commentError.state"> {{commentError.message}} </span>
                             </div>
                         </div>
                         <div class="col-sm-11 col-md-9">
@@ -153,8 +157,15 @@ import { parseStreet } from '../../services/maps.js';
 import Calendar from '../Calendar';
 import bus from '../../services/bus-event.js';
 import router from '../../router';
-// import dialogs from '../../services/dialogs.js';
+import dialogs from '../../services/dialogs.js'
 import moment from 'moment';
+
+class Error {
+    constructor (state = false, message = '') {
+        this.state = false;
+        this.message = '';
+    }
+}
 
 export default {
     name: 'new-trip',
@@ -173,8 +184,10 @@ export default {
                 type: 'fromto',
                 from: moment().add(-1, 'days').format('YYYY-MM-DD')
             },
-            lucrarError: false,
-            dateError: false,
+            lucrarError: new Error(),
+            dateError: new Error(),
+            timeError: new Error(),
+            commentError: new Error(),
             no_lucrar: false,
             zoom: 4,
             center: {lat: -29.0, lng: -60.0},
@@ -184,14 +197,14 @@ export default {
                     place: null,
                     json: null,
                     location: null,
-                    error: false
+                    error: new Error()
                 },
                 {
                     name: '',
                     place: null,
                     json: null,
                     location: null,
-                    error: false
+                    error: new Error()
                 }
             ],
             date: '',
@@ -259,7 +272,7 @@ export default {
     },
     watch: {
         'no_lucrar': function () {
-            this.lucrarError = false;
+            this.lucrarError.state = false;
         }
     },
     methods: {
@@ -284,6 +297,7 @@ export default {
         restoreData (trip) {
             this.no_lucrar = true;
             this.points = [];
+            console.log(trip.points);
             trip.points.forEach(p => {
                 let point = {
                     name: p.address,
@@ -292,7 +306,8 @@ export default {
                         lat: p.lat,
                         lng: p.lng
                     },
-                    place: null
+                    place: JSON.stringify(p.json_address),
+                    error: new Error()
                 };
                 this.points.push(point);
             });
@@ -323,26 +338,51 @@ export default {
             });
         },
 
-        save () {
+        validate () {
+            console.log(this.trip.time);
             let globalError = false;
+            console.log(this.points);
             this.points.forEach(p => {
-                if (!p.place) {
-                    p.error = true;
+                if (!p.json) {
+                    p.error.state = true;
+                    p.error.message = 'Seleccione una localidad válida.';
                     globalError = true;
+                    console.log('place error');
                 }
             });
+            if (!this.trip.time) {
+                this.timeError.state = true;
+                this.timeError.message = 'No ingresaste una fecha válida';
+                globalError = true;
+            }
+            if (this.points[0].name === this.points[this.points.length - 1].name) {
+                this.points[0].error.state = true;
+                this.points[0].error.message = 'La localidad de origen y destino no deben ser la misma.';
+                this.points[this.points.length - 1].error.state = true;
+                this.points[this.points.length - 1].error.message = 'La localidad de origen y destino no deben ser la misma.';
+                globalError = true;
+            }
             if (!this.date.length) {
                 globalError = true;
-                this.dateError = true;
+                this.dateError.state = true;
+                this.dateError.message = 'Aún no ha ingresado ninguna fecha.';
+                console.log('date error');
             }
             if (!this.no_lucrar) {
-                this.lucrarError = true;
-                // dialogs.message('Debes indicar que te comprometes a no lucar', {estado: 'error'});
+                this.lucrarError.state = true;
+                this.lucrarError.message = 'Debes indicar que te comprometes a no lucrar con el viaje.';
+                dialogs.message('Debes indicar que te comprometes a no lucrar con el viaje.', {estado: 'error'});
                 globalError = true;
+                console.log('no lucrar error');
             }
 
-            if (globalError) return;
+            return globalError;
+        },
 
+        save () {
+            if (this.validate()) {
+                return;
+            }
             /* eslint-disable no-unreachable */
             this.trip.points = [];
             this.points.forEach(p => {
@@ -376,7 +416,7 @@ export default {
             this.points[i].place = data;
             this.points[i].name = data.formatted_address;
             this.points[i].json = parseStreet(data);
-            this.points[i].error = false;
+            this.points[i].error.state = false;
             this.center = this.points[i].location = {
                 lat: data.geometry.location.lat(),
                 lng: data.geometry.location.lng()
@@ -441,12 +481,25 @@ export default {
     .trip-type-selection {
         margin-top: 1.4rem;
     }
+    span.error {
+        display: block;
+        font-size: 12px;
+        margin-top: -5px;
+        font-weight: bold;
+        color: red;
+    }
+    span.error.textarea {
+        margin-top: .8em;
+    }
     @media only screen and (min-width: 768px) {
         .container {
             padding-top: 1.5em;
         }
         .trip-type-selection {
             margin-top: 0;
+        }
+        span.error {
+            font-weight: 300;
         }
     }
 </style>
