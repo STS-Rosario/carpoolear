@@ -18,10 +18,10 @@
             <div class="date-picker--cross">
                 <i v-on:click="resetInput('from_town')" class="fa fa-times" aria-hidden="true"></i>
             </div>
-        </div>
-        <div class="swap btn">
-            <img alt="swap" class='swap-horizontal' :src="swap_horizontal" @click="swapCities" />
-            <img alt="swap" class='swap-vertical' :src="swap_vertical" @click="swapCities" />
+            <div class="swap btn">
+                <img alt="swap" class='swap-horizontal' :src="swap_horizontal" @click="swapCities" />
+                <img alt="swap" class='swap-vertical' :src="swap_vertical" @click="swapCities" />
+            </div>
         </div>
         <div class="col-xs-24 col-md-5 gmap-autocomplete destiny">
             <GmapAutocomplete name="to_town" ref="to_town" :selectFirstOnEnter="true" :types="['(cities)']" :componentRestrictions="{country: 'AR'}" placeholder="Destino"  :value="to_town.name" v-on:place_changed="(data) => getPlace(1, data)" class="form-control form-control-with-icon form-control-map-autocomplete"> </GmapAutocomplete>
@@ -209,8 +209,8 @@ export default {
     }
     @media only screen and (min-width: 300px) {
         .swap {
+            bottom: -6px;
             left: -30px;
-            top: 122px;
             border-radius: 0;
             position: absolute;
             z-index: 1;
@@ -232,9 +232,6 @@ export default {
         .btn-option {
             height: initial;
         }
-        .swap {
-            top: 108px;
-        }
         .btn-option img {
             width: initial;
             display: initial;
@@ -252,22 +249,8 @@ export default {
             padding-right: 0;
             width: calc(100% - 30px);
         }
-        .swap {
-            left: initial;
-            top: initial;
-            transform: translate(-724px,106px);
-            -webkit-transform: translate(-724px,106px);
-            -o-transform: translate(-724px,106px);
-            -moz-transform: translate(-724px,106px);
-        }
     }
     @media only screen and (min-width: 856px) {
-        .swap {
-            transform: translate(-754px,106px);
-            -webkit-transform: translate(-754px,106px);
-            -o-transform: translate(-754px,106px);
-            -moz-transform: translate(-754px,106px);
-        }
         .search-section {
              width: 100%;
              margin-left: 0;
@@ -276,10 +259,10 @@ export default {
     }
     @media only screen and (min-width: 992px) {
         .swap {
-            transform: translate(-16px,20);
-            -webkit-transform: translate(-16px,20px);
-            -o-transform: translate(-16px,20px);
-            -moz-transform: translate(-16px,20px);
+            bottom: unset;
+            top: 20px;
+            right: -17px;
+            left: unset;
         }
         .btn-option {
             height: 66px;

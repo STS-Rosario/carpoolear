@@ -1,39 +1,59 @@
-import { eventNumberKeyInput, eventNumberPaste, isDigit } from '../services/utility';
+import { eventNumberKeyInput, isDigit } from '../services/utility';
 
 let numberFormatter = {};
-let keyDownHandler = function (event) {
-    if (!eventNumberKeyInput(event) || (isDigit(event.keyCode) && numberFormatter[this.id].rawValue.length + 1 > numberFormatter[this.id].el.dataset.maxLength)) {
-        event.preventDefault();
-        return false;
-    } else {
-        formatNumber(this.id);
+let inputHandler = function (event) {
+    let position = this.selectionStart;
+    let dots = countDots(this.value);
+    if (cleanDots(this.value).length + 1 > numberFormatter[this.id].el.dataset.maxLength) {
+        this.value = cleanDots(this.value).slice(0, numberFormatter[this.id].el.dataset.maxLength);
     }
+    formatNumber(this.id);
+    let modifyer = countDots(this.value) - dots;
+    this.selectionEnd = position + modifyer;
 };
 
-let keyUpHandler = function (event) {
-    if (eventNumberKeyInput(event)) {
-        formatNumber(this.id);
-    }
+let cleanDots = function (str) {
+    return str.replace(/\./g, '');
 };
 
-let pasteHandler = function (event) {
-    if (!eventNumberPaste(event)) {
-        event.preventDefault();
-        return false;
-    } else {
-        formatNumber(this.id);
-    }
+let countDots = function (str) {
+    return (str.split('.').length - 1);
 };
 
 let formatNumber = function (id) {
-    numberFormatter[id].rawValue = numberFormatter[id].el.value.replace(/\./g, '');
+    numberFormatter[id].rawValue = cleanDots(numberFormatter[id].el.value);
     numberFormatter[id].value = numberFormatter[id].rawValue.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     numberFormatter[id].el.value = numberFormatter[id].value;
     numberFormatter[id].context[numberFormatter[id].expression] = numberFormatter[id].rawValue;
 };
 
+/* This prevent insert chars, that are not numbers */
+let keyDownHandler = function (event) {
+    if (!eventNumberKeyInput(event) || (isDigit(event.keyCode) && numberFormatter[this.id].rawValue.length + 1 > numberFormatter[this.id].el.dataset.maxLength)) {
+        event.preventDefault();
+        return false;
+    }
+    if (event.key.toUpperCase() === 'DELETE' || event.key.toUpperCase() === 'BACKSPACE') {
+        let position = this.selectionStart;
+        if (event.key.toUpperCase() === 'BACKSPACE') {
+            if (this.selectionStart !== 0) {
+                position--;
+            } else {
+                return;
+            }
+        }
+        if (this.value[position] === '.') {
+            if (event.key.toUpperCase() === 'BACKSPACE') {
+                this.selectionEnd = position;
+            } else if (event.key.toUpperCase() === 'DELETE') {
+                this.selectionEnd = position + 2;
+            }
+        }
+    }
+};
+
 export default {
-    bind: function (el, binding, node) { 
+    bind: function (el, binding, node) {
         numberFormatter[el.id] = {};
         numberFormatter[el.id].name = el.id;
         numberFormatter[el.id].value = el.value;
@@ -44,19 +64,12 @@ export default {
         if (el.value.length > 0) {
             formatNumber(el.id);
         }
-        el.addEventListener('keyup', keyUpHandler, false);
         el.addEventListener('keydown', keyDownHandler, false);
-        el.addEventListener('paste', pasteHandler, false);
-    },
-    update: function (el, binding, node) {
-        if (el.value.length > 0) {
-            formatNumber(el.id);
-        }
+        el.addEventListener('input', inputHandler, false);
     },
     unbind: function (el, binding, node) {
-        el.removeEventListener('keyup', keyUpHandler, false);
-        el.addEventListener('keydown', keyDownHandler, false);
-        el.addEventListener('paste', pasteHandler, false);
+        el.removeEventListener('keydown', keyDownHandler, false);
+        el.removeEventListener('input', inputHandler, false);
         numberFormatter[el.id] = undefined;
     }
 };

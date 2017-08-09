@@ -17,7 +17,7 @@ export default {
         'value': function () {
             let time = moment(this.value).format('MM-DD-YYYY');
             this.$refs.calendar.showDay(time);
-            this.date.time = moment(this.value).format('DD/MM/YYYY')
+            this.date.time = moment(this.value).format('DD/MM/YYYY');
         }
     },
     data () {
