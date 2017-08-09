@@ -70,7 +70,9 @@ export default {
                 if (this.userProfile) {
                     this.setTitle(this.userProfile.name);
                 }
-                this.setProfileByID({id: this.id, userProfile: this.userProfile}).then(() => true).catch(() => {
+                this.setProfileByID({id: this.id, userProfile: this.userProfile}).then(() => {
+                    this.setTitle(this.profile.name);
+                }).catch(() => {
                     this.$router.replace({name: 'trips'});
                 });
                 this.setUserByID(this.id);

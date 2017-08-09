@@ -469,6 +469,7 @@ export default {
     }
     .trip-detail-component .structure-div {
         margin-top: 1rem;
+        z-index: -100;
     }
     .trip-detail-component .driver-container {
         margin-top: 0;
