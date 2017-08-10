@@ -38,7 +38,7 @@
                 </div>
                 <div class="form-group">
                     <label for="">Fecha de nacimiento (*)</label>
-                    <Calendar :class="{'has-error': birthdayError.state }" class="form-control form-control-with-icon form-control-date" :value="user.birthday | moment('DD//MM//YYYY')" @change="(date) => this.user.birthday = date"></Calendar>
+                    <Calendar :class="{'has-error': birthdayError.state }" class="form-control form-control-with-icon form-control-date" :value="user.birthday | moment('DD/MM/YYYY')" @change="(date) => this.user.birthday = date" ></Calendar>
                     <span class="error" v-if="birthdayError.state"> {{birthdayError.message}} </span>
                 </div>
                 <div class="form-group">
