@@ -350,9 +350,9 @@ export default {
                     console.log('place error');
                 }
             });
-            if (!this.trip.time) {
+            if (!this.time) {
                 this.timeError.state = true;
-                this.timeError.message = 'No ingresaste una fecha válida';
+                this.timeError.message = 'No ingresaste una hora válida';
                 globalError = true;
             }
             if (this.points[0].name === this.points[this.points.length - 1].name) {
