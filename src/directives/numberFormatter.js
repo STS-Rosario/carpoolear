@@ -1,6 +1,7 @@
 import { eventNumberKeyInput, isDigit } from '../services/utility';
 
 let numberFormatter = {};
+let first = 0;
 let inputHandler = function (event) {
     let position = this.selectionStart;
     let dots = countDots(this.value);
@@ -66,6 +67,12 @@ export default {
         }
         el.addEventListener('keydown', keyDownHandler, false);
         el.addEventListener('input', inputHandler, false);
+    },
+    update: function (el, binding, node) {
+        if (el.value.length > 0 && first < 3) {
+            first++;
+            formatNumber(el.id);
+        }
     },
     unbind: function (el, binding, node) {
         el.removeEventListener('keydown', keyDownHandler, false);
