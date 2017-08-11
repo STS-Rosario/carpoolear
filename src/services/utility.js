@@ -90,3 +90,29 @@ export function debounce (func, wait, immediate) {
         if (callNow) func.apply(context, args);
     };
 }
+
+export function getCityName (data) {
+    let city;
+    let province;
+    let name;
+    if (data.address_components) {
+        for (let ind = 0; ind < data.address_components.length; ind++) {
+            if (data.address_components[ind].types[0] === 'locality') {
+                city = data.address_components[ind].long_name.replace('Ciudad de ', '');
+            } else if (data.address_components[ind].types[0] === 'administrative_area_level_1') {
+                province = data.address_components[ind].short_name.replace('Provincia de ', '');
+            }
+        }
+    }
+    if (city && province) {
+        name = city + ', ' + province;
+    } else {
+        if (data.formatted_address) {
+            name = data.formatted_address;
+        } else {
+            name = data.name;
+        }
+        name = name.replace(', Argentina', '');
+    };
+    return name;
+}

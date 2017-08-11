@@ -30,7 +30,7 @@
             </div>
         </div>
         <div class="col-xs-24 col-md-4">
-              <Calendar :class="'calendar-date form-control form-control-with-icon form-control-date'" :value="date" @change="(date) => this.date = date" :limitFilter="datePickerLimitFilter"></Calendar>
+            <DatePicker :value="date" :minDate="minDate" :class="{'has-error': dateError.state}"></DatePicker>
         </div>
         <div class="col-xs-24 col-md-3 col-lg-4">
             <button class="btn btn-primary btn-search" @click="emit">Buscar</button>
@@ -41,13 +41,16 @@
 
 <script>
 import {pointDistance} from '../../services/maps.js';
-import Calendar from '../Calendar';
+import DatePicker from '../DatePicker';
 import {today} from '../../services/utility.js';
+import bus from '../../services/bus-event.js';
+import moment from 'moment';
 
 export default {
     name: 'search-trip',
     data () {
         return {
+            minDate: moment().toDate(),
             isPassenger: false,
             from_town: {
                 name: '',
@@ -60,9 +63,9 @@ export default {
                 radio: 0
             },
             date: '',
-            datePickerLimitFilter: {
-                type: 'fromto',
-                from: today()
+            dateError: {
+                message: '',
+                state: ''
             },
             chofer_logo_blanco: process.env.ROUTE_BASE + 'static/img/icono-conductor-blanco.png',
             pasajero_logo_blanco: process.env.ROUTE_BASE + 'static/img/icono-pasajero-blanco.png',
@@ -73,6 +76,9 @@ export default {
         };
     },
     mounted () {
+        bus.on('date-change', (value) => {
+            this.date = value;
+        });
         if (this.params) {
             if (this.params.origin_name) {
                 this.from_town.name = this.params.origin_name;
@@ -148,7 +154,7 @@ export default {
                 params.destination_name = this.to_town.name;
             }
             if (this.date) {
-                params.date = this.date;
+                params.date = moment(this.date, 'DD/MM/YYYY').format('YYYY-MM-DD');
             }
             params.is_passenger = this.isPassenger;
             this.$emit('trip-search', params);
@@ -171,7 +177,7 @@ export default {
         'params'
     ],
     components: {
-        Calendar
+        DatePicker
     }
 };
 </script>

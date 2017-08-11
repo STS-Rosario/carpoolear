@@ -26,6 +26,7 @@ body {
     color: var(--main-font-color);
     font-family: 'Roboto', 'Muli', sans-serif !important;
     font-weight: 400;
+    padding: 0;
 }
 .app-container {
     /* this is with bottom bar */
@@ -440,10 +441,21 @@ textarea {
 }
 .form-control-date input {
     cursor: pointer;
+    cursor: text;
+    width: 100%;
 }
-.register-component .form-control-date input {
-    margin-bottom: 0 !important;
-    margin-top: 6px;
+.trip_point.trip-error + .trip_point {
+    margin-top: 1.5em;
+}
+
+.form-control-date input:focus, .form-control-date input:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+.form-control-date input:focus {
+    border-color: #66afe9;
+    outline: none !important;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
 }
 
 .date-picker--cross {
@@ -607,7 +619,9 @@ textarea {
 .tab-content .profile-rates-component .list-group-item {
     padding: 1.8em 1.6em;
 }
-
+.pika-single.is-bound {
+    margin-top: 1px;
+}
 .header .header_panel-left .header_title {
     margin: 0;
     line-height: 74px;
@@ -727,6 +741,7 @@ textarea {
     padding: 10px 15px;
 }
 .card-trip {
+    height: 404px;
     box-shadow: 0 0 4px 1px #CCC;
     border-radius: .4em;
 }
@@ -999,7 +1014,15 @@ textarea {
     margin-bottom: 1.5em;
 }
 @media only screen and (min-width: 768px) {
-
+    .register-component .form-control-date {
+        padding-top: 3px;
+        padding-bottom: 3px;
+    }
+    .register-component .form-control-date input[type='text'] {
+        border: 0 !important;
+        margin-top: 0 !important;
+        margin-bottom: 0;
+    }
     .trip-type-selection {
         padding: 1.5em;
         margin-right: .5em;
@@ -2556,4 +2579,14 @@ ul {
 }
 .ajax-loader {
     vertical-align: -3px;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+    input[type="date"].form-control, input[type="time"].form-control, input[type="datetime-local"].form-control, input[type="month"].form-control {
+        line-height: normal;
+    }
+}
+
+.pika-label:after {
+    content:" \25be";
 }

@@ -38,7 +38,7 @@
                 </div>
                 <div class="form-group">
                     <label for="">Fecha de nacimiento (*)</label>
-                    <Calendar :class="{'has-error': birthdayError.state }" class="form-control form-control-with-icon form-control-date" :value="user.birthday | moment('DD/MM/YYYY')" @change="(date) => this.user.birthday = date" ></Calendar>
+                    <DatePicker :value="birthday" ref="ipt_calendar" name="ipt_calendar" :maxDate="maxDate" :minDate="minDate" :class="{'has-error': birthdayError.state}" ></DatePicker>
                     <span class="error" v-if="birthdayError.state"> {{birthdayError.message}} </span>
                 </div>
                 <div class="form-group">
@@ -87,11 +87,12 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import { inputIsNumber } from '../../services/utility';
-import Calendar from '../Calendar';
 import Uploadfile from '../Uploadfile';
+import DatePicker from '../DatePicker';
 import SvgItem from '../SvgItem';
 import dialogs from '../../services/dialogs.js';
 import moment from 'moment';
+import bus from '../../services/bus-event';
 
 class Error {
     constructor (state = false, message = '') {
@@ -124,7 +125,10 @@ export default {
             patentError: new Error(),
             dniError: new Error(),
             phoneError: new Error(),
-            emailError: new Error()
+            emailError: new Error(),
+            maxDate: moment().toDate(),
+            minDate: moment('1900-01-01').toDate(),
+            birthday: ''
         };
     },
     computed: {
@@ -221,6 +225,11 @@ export default {
                 if ((this.user.image && this.user.image.length > 0) && (this.user.description && this.user.description.length > 0)) {
                     this.$router.rememberBack();
                 }
+                if (moment(this.birthday, 'DD/MM/YYYY').isValid()) {
+                    console.log('valid date');
+                    this.user.birthday = moment(this.birthday, 'DD/MM/YYYY').format('YYYY-MM-DD');
+                    console.log(this.user.birthday);
+                }
             }).catch(response => {
                 this.loading = false;
                 this.error = 'No se pudo grabar los datos. Intente de nuevo';
@@ -252,12 +261,12 @@ export default {
                 globalError = true;
             }
 
-            if (!this.user.birthday || this.user.birthday.length < 1) {
+            if (!this.birthday || this.birthday.length < 1) {
                 this.birthdayError.state = true;
                 this.birthdayError.message = 'Olvidaste ingresar tu fecha de nacimiento.';
                 globalError = true;
             } else {
-                let birthday = moment(this.user.birthday);
+                let birthday = moment(this.birthday, 'DD/MM/YYYY');
                 if (moment().diff(birthday, 'years') < 18) {
                     this.birthdayError.state = true;
                     this.birthdayError.message = 'Pareciera que no eres mayor de edad. Revisa si ingresaste bien tu fecha de nacimiento y recuerda que debes ser mayor de edad para utilziar carpoolear. Para más información te recomendamos volver a leer los términos y condiciones.';
@@ -314,7 +323,7 @@ export default {
         iptEmail () {
             this.emailError.state = false;
         },
-        iptBirthday () {
+        birthday: function () {
             this.birthdayError.state = false;
         },
         iptDescription () {
@@ -332,16 +341,28 @@ export default {
     },
 
     mounted () {
+        bus.on('date-change', (value) => {
+            console.log(value);
+            this.birthday = value;
+        });
         this.user = this.userData;
         if (this.cars) {
             if (this.cars.length > 0) {
                 this.car = this.cars[0];
                 this.patente = this.car.patente;
             }
+        };
+        console.log(this.user.birthday);
+        if (moment(this.user.birthday, 'YYYY-MM-DD').isValid()) {
+            console.log('is valid');
+            this.birthday = moment(this.user.birthday, 'YYYY-MM-DD').format('DD/MM/YYYY');
+        } else {
+            console.log('is not valid');
+            this.birthday = '';
         }
     },
     components: {
-        Calendar,
+        DatePicker,
         Uploadfile,
         SvgItem
     }

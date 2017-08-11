@@ -65,7 +65,7 @@
                                 <div class="row passengers"  v-if="!trip.is_passenger">
                                     <div class="col-xs-offset-3 col-xs-21" v-if="trip.passenger.length">
                                         <span v-for="p in trip.passenger">
-                                            <div class="trip_driver_img circle-box passenger" v-imgSrc:profile="trip.passenger.image">
+                                            <div @click="toUserMessages(p)" class="trip_driver_img circle-box passenger" v-imgSrc:profile="p.image">
                                                 <span v-if="owner" @click="removePassenger(p)">
                                                     <i class="fa fa-times" aria-hidden="true"></i>
                                                 </span>
@@ -265,10 +265,15 @@ export default {
 
         toMessages () {
             if (this.profileComplete()) {
-                this.lookConversation(this.trip.user).then(conversation => {
-                    router.push({ name: 'conversation-chat', params: { id: conversation.id } });
-                });
+                this.toUserMessages(this.trip.user);
             }
+        },
+
+        toUserMessages (user) {
+            console.log(user);
+            this.lookConversation(user).then(conversation => {
+                router.push({ name: 'conversation-chat', params: { id: conversation.id } });
+            });
         },
 
         makeRequest () {

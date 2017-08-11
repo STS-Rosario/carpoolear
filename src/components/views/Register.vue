@@ -13,10 +13,10 @@
       <input v-jump:focus="'txt_email'" ref="txt_surename" name="txt_surename" maxlength="25" type="text" id="txt_surename" v-model='sureName' :class="{'has-error': apellidoError.state }"/>
       <span class="error" v-if="apellidoError.state"> {{apellidoError.message}} </span>
       <label for="txt_email">Email</label>
-      <input v-jump:focus="'txt_password'" ref="txt_email" name="txt_email" maxlength="40" type="text" id="txt_email" v-model='email' :class="{'has-error': emailError.state }"/>
+      <input v-jump:focus="'txt_birthday'" ref="txt_email" name="txt_email" maxlength="40" type="text" id="txt_email" v-model='email' :class="{'has-error': emailError.state }"/>
       <span class="error" v-if="emailError.state"> {{emailError.message}} </span>
       <label for="">Fecha de nacimiento</label>
-      <Calendar ref="ipt_calendar" name="ipt_calendar" class="form-control form-control-with-icon form-control-date" :class="{'has-error': birthdayError.state}" @change="(date) => this.birthday = date"></Calendar>
+      <DatePicker :value="birthday" ref="ipt_calendar" name="ipt_calendar" :maxDate="maxDate" :minDate="minDate" :class="{'has-error': birthdayError.state}" ></DatePicker>
       <span class="error" v-if="birthdayError.state"> {{birthdayError.message}} </span>
       <label for="txt_password">Contraseña</label>
       <input v-jump:focus="'txt_password_confirmation'" ref="txt_password" name="txt_password" maxlength="40" type="password" id="txt_password" v-model='password' :class="{'has-error': passwordError.state }"/>
@@ -42,7 +42,7 @@ import { mapGetters, mapActions } from 'vuex';
 import dialogs from '../../services/dialogs.js';
 import bus from '../../services/bus-event';
 import router from '../../router';
-import Calendar from '../Calendar';
+import DatePicker from '../DatePicker';
 import moment from 'moment';
 let emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 class Error {
@@ -70,7 +70,9 @@ export default {
             passwordError: new Error(),
             nombreError: new Error(),
             apellidoError: new Error(),
-            birthdayError: new Error()
+            birthdayError: new Error(),
+            maxDate: moment().toDate(),
+            minDate: moment('1900-01-01').toDate()
         };
     },
     computed: {
@@ -87,7 +89,7 @@ export default {
         birthday: function () { this.birthdayError.state = false; }
     },
     components: {
-        Calendar
+        DatePicker
     },
     methods: {
         ...mapActions({
@@ -95,7 +97,6 @@ export default {
         }),
         validate () {
             let globalError = false;
-            console.log(this.emailError);
             if (this.email.length < 1) {
                 this.emailError.state = true;
                 this.emailError.message = 'Olvido ingresar su email.';
@@ -136,7 +137,8 @@ export default {
                 globalError = true;
             }
 
-            if (this.birthday.length < 1) {
+            console.log(this.birthday);
+            if (!this.birthday || this.birthday.length < 1) {
                 this.birthdayError.state = true;
                 this.birthdayError.message = 'Olvido ingresar su fecha de nacimiento.';
                 globalError = true;
@@ -161,7 +163,7 @@ export default {
             let passwordConfirmation = this.passwordConfirmation;
             let name = this.name + ' ' + this.sureName;
             let termsAndConditions = this.termsAndConditions;
-            let birthday = this.birthday;
+            let birthday = moment(this.birthday, 'DD/MM/YYYY').format('YYYY-MM-DD');
             this.progress = true;
             this.doRegister({email, password, passwordConfirmation, name, birthday, termsAndConditions}).then(() => {
                 this.progress = false;
@@ -179,6 +181,9 @@ export default {
     },
     mounted () {
         bus.on('back-click', this.onBackClick);
+        bus.on('date-change', (value) => {
+            this.birthday = value;
+        });
     },
 
     beforeDestroy () {
@@ -224,6 +229,11 @@ export default {
     }
 
     @media only screen and (min-width: 768px) {
+        .user-form .btn-primary {
+            text-align: center;
+            max-width: 170px;
+            padding: 1em;
+        }
         h2 {
             color: #036686;
         }

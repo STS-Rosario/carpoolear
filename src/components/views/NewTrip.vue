@@ -27,14 +27,12 @@
                     <div class="row">
                         <div class="panel-trip-data">
                             <div class="new-left trip_points col-sm-13 col-md-15">
-                                <div v-for="(m, index) in points" class="trip_point gmap-autocomplete">
+                                <div v-for="(m, index) in points" class="trip_point gmap-autocomplete" :class="{'trip-error' : m.error.state}">
                                     <span v-if="index == 0" class="sr-only">Origen</span>
                                     <span v-if="index == points.length - 1" class="sr-only">Destino</span>
                                     <GmapAutocomplete  :selectFirstOnEnter="true" :types="['(cities)']" :componentRestrictions="{country: 'AR'}" :placeholder="getPlaceholder(index)"  :value="m.name" :name="'input-' + index" :ref="'input-' + index" v-on:place_changed="(data) => getPlace(index, data)" class="form-control form-control-with-icon form-control-map-autocomplete" :class="{'has-error': m.error.state}"> </GmapAutocomplete>
+                                    <div @click="m.name = ''" class="date-picker--cross"><i aria-hidden="true" class="fa fa-times"></i></div>
                                     <span class="error" v-if="m.error.state"> {{m.error.message}} </span>
-                                    <div class="date-picker--cross">
-                                        <i v-on:click="resetInput(index)" class="fa fa-times" aria-hidden="true"></i>
-                                    </div>
                                 </div>
                             </div>
                             <div class="col-sm-11 col-md-9">
@@ -62,12 +60,12 @@
                             <div class="trip_datetime">
                                 <div class="trip_date">
                                     <label for="date" class="sr-only">Día </label>
-                                    <Calendar :limitFilter="limitFilter" class="form-control form-control-with-icon form-control-date" :class="{'has-error': dateError.state }" :value="date" @change="(date) => { this.date = date; this.dateError.state = false; }"></Calendar>
+                                    <DatePicker :value="date" :minDate="minDate" :class="{'has-error': dateError.state}"></DatePicker>
                                     <span class="error" v-if="dateError.state"> {{dateError.message}} </span>
                                 </div>
                                 <div class="trip_time">
                                     <label for="time" class="sr-only">Hora</label>
-                                    <input type="time" v-mask="'##:##'" v-model="time" class="form-control form-control-with-icon form-control-time" id="time" placeholder="Hora (12:00)" >
+                                    <input type="time" v-mask="'##:##'" v-model="time" class="form-control form-control-with-icon form-control-time" id="time" :class="{'has-error': timeError.state}" placeholder="Hora (12:00)" >
                                     <span class="error" v-if="timeError.state"> {{timeError.message}} </span>
                                     <!--<input type="text" v-model="time" />-->
                                 </div>
@@ -92,6 +90,7 @@
                                         <label for="seats-four">4</label>
                                     </span>
                                 </fieldset>
+                                <span class="error" v-if="seatsError.state"> {{seatsError.message}} </span>
                             </div>
                             <div class="trip-comment">
                                 <label for="trip_comment"  class="label-for-group"> Comentario para los pasajeros </label>
@@ -154,10 +153,11 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import { parseStreet } from '../../services/maps.js';
-import Calendar from '../Calendar';
+import DatePicker from '../DatePicker';
 import bus from '../../services/bus-event.js';
 import router from '../../router';
-import dialogs from '../../services/dialogs.js'
+import dialogs from '../../services/dialogs.js';
+import { getCityName } from '../../services/utility';
 import moment from 'moment';
 
 class Error {
@@ -176,19 +176,22 @@ export default {
         }
     },
     components: {
-        Calendar
+        DatePicker
     },
     data () {
         return {
             limitFilter: {
                 type: 'fromto',
-                from: moment().add(-1, 'days').format('YYYY-MM-DD')
+                from: moment().add(-1, 'days').format('DD/MM/YYYY')
             },
+            minDate: moment().toDate(),
             lucrarError: new Error(),
             dateError: new Error(),
             timeError: new Error(),
             commentError: new Error(),
+            seatsError: new Error(),
             no_lucrar: false,
+            sameCity: false,
             zoom: 4,
             center: {lat: -29.0, lng: -60.0},
             points: [
@@ -207,9 +210,10 @@ export default {
                     error: new Error()
                 }
             ],
-            date: '',
+            date: moment().format('DD/MM/YYYY'),
             time: '12:00',
             duration: 0,
+            passengers: 0,
             trip: {
                 'is_passenger': 0,
                 'from_town': '',
@@ -242,6 +246,9 @@ export default {
             }
         });
         bus.on('clear-click', this.onClearClick);
+        bus.on('date-change', (value) => {
+            this.date = value;
+        });
         this.$refs['input-0'][0].$el.addEventListener('input', this.checkInput);
         this.$refs['input-1'][0].$el.addEventListener('input', this.checkInput);
     },
@@ -273,6 +280,12 @@ export default {
     watch: {
         'no_lucrar': function () {
             this.lucrarError.state = false;
+        },
+        'date': function () {
+            this.dateError.state = false;
+        },
+        'time': function () {
+            this.timeError.state = false;
         }
     },
     methods: {
@@ -291,13 +304,10 @@ export default {
         onClearClick () {
             router.back();
         },
-        resetInput (index) {
-            this.points[index].name = '';
-        },
         restoreData (trip) {
             this.no_lucrar = true;
             this.points = [];
-            console.log(trip.points);
+            console.log(trip);
             trip.points.forEach(p => {
                 let point = {
                     name: p.address,
@@ -311,9 +321,11 @@ export default {
                 };
                 this.points.push(point);
             });
-            this.date = trip.trip_date.split(' ')[0];
+            this.date = moment(trip.trip_date.split(' ')[0]).format('DD/MM/YYYY');
+            console.log(this.date);
             this.time = trip.trip_date.split(' ')[1];
             this.trip.is_passenger = trip.is_passenger ? 1 : 0;
+            this.passengers = trip.passenger_count;
             this.trip.total_seats = trip.total_seats;
             this.trip.friendship_type_id = trip.friendship_type_id;
             this.trip.distance = trip.distance;
@@ -339,7 +351,7 @@ export default {
         },
 
         validate () {
-            console.log(this.trip.time);
+            console.log(this.trip);
             let globalError = false;
             console.log(this.points);
             this.points.forEach(p => {
@@ -350,25 +362,37 @@ export default {
                     console.log('place error');
                 }
             });
-            if (!this.time) {
-                this.timeError.state = true;
-                this.timeError.message = 'No ingresaste una hora válida';
+            if (!this.time || !moment(this.time, 'HH mm').isValid()) {
+                console.log(this.time, moment(this.time, 'HH mm').isValid());
+               this.timeError.state = true;
+                this.timeError.message = 'No ingresaste un horrio válido.';
                 globalError = true;
+                console.log(this.time);
             }
             if (this.points[0].name === this.points[this.points.length - 1].name) {
                 this.points[0].error.state = true;
                 this.points[0].error.message = 'La localidad de origen y destino no deben ser la misma.';
                 this.points[this.points.length - 1].error.state = true;
                 this.points[this.points.length - 1].error.message = 'La localidad de origen y destino no deben ser la misma.';
+                this.sameCity = true;
                 globalError = true;
             }
-            if (!this.date.length) {
+
+            if (!this.date.length || !moment(this.date, 'DD/MM/YYYY').isValid()) {
+                console.log(this.date, moment(this.date, 'DD/MM/YYYY').isValid());
                 globalError = true;
                 this.dateError.state = true;
                 this.dateError.message = 'Aún no ha ingresado ninguna fecha.';
-                console.log('date error');
+                console.log('date error', this.date);
             }
-            if (!this.no_lucrar) {
+            if (this.trip.total_seats < this.trip.passengers) {
+                globalError = true;
+                this.seatsError.state = true;
+                this.seatsError.message = 'Ya tienes ' + this.trip.passengers + ' subidos en este viaje. No puedes cambiar el número de asientos por uno menor al de pasajeros ya subidos.';
+                dialogs.message('Ya tienes ' + this.trip.passengers + ' subidos en este viaje. No puedes cambiar el número de asientos por uno menor al de pasajeros ya subidos.', {estado: 'error'});
+            } else if (globalError) {
+                dialogs.message('Algunos datos ingresados no son válidos.', {estado: 'error'});
+            } else if (!this.no_lucrar) {
                 this.lucrarError.state = true;
                 this.lucrarError.message = 'Debes indicar que te comprometes a no lucrar con el viaje.';
                 dialogs.message('Debes indicar que te comprometes a no lucrar con el viaje.', {estado: 'error'});
@@ -395,7 +419,7 @@ export default {
             });
             this.trip.from_town = this.points[0].name;
             this.trip.to_town = this.points[this.points.length - 1].name;
-            this.trip.trip_date = this.date + ' ' + this.time + ':00';
+            this.trip.trip_date = moment.utc(this.date, 'DD/MM/YYYY').format('YYYY-MM-DD') + ' ' + this.time + ':00';
             this.trip.estimated_time = this.estimatedTimeString;
             if (this.cars && this.cars.length) {
                 this.trip.car_id = this.cars[0].id;
@@ -414,13 +438,17 @@ export default {
 
         getPlace (i, data) {
             this.points[i].place = data;
-            this.points[i].name = data.formatted_address;
+            this.points[i].name = getCityName(data);
             this.points[i].json = parseStreet(data);
             this.points[i].error.state = false;
             this.center = this.points[i].location = {
                 lat: data.geometry.location.lat(),
                 lng: data.geometry.location.lng()
             };
+            if ((i === 0 || i === this.points.length - 1) && this.sameCity) {
+                this.points[0].error.state = false;
+                this.points[this.points.length - 1].error.state = false;
+            }
             this.calcRoute();
         },
 
@@ -487,6 +515,7 @@ export default {
         margin-top: -5px;
         font-weight: bold;
         color: red;
+        margin-bottom: .4em;
     }
     span.error.textarea {
         margin-top: .8em;
