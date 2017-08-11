@@ -42,7 +42,6 @@
 <script>
 import {pointDistance} from '../../services/maps.js';
 import DatePicker from '../DatePicker';
-import {today} from '../../services/utility.js';
 import bus from '../../services/bus-event.js';
 import moment from 'moment';
 

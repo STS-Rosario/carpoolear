@@ -36,7 +36,7 @@ export default {
     },
     mounted () {
         let self = this;
-        this.picker = new Pikaday({ 
+        this.picker = new Pikaday({
             field: document.getElementById('datepicker'),
             format: 'DD/MM/YYYY',
             onSelect: function (value) {

@@ -364,8 +364,8 @@ export default {
             });
             if (!this.time || !moment(this.time, 'HH mm').isValid()) {
                 console.log(this.time, moment(this.time, 'HH mm').isValid());
-               this.timeError.state = true;
-                this.timeError.message = 'No ingresaste un horrio válido.';
+                this.timeError.state = true;
+                this.timeError.message = 'No ingresaste un horario válido.';
                 globalError = true;
                 console.log(this.time);
             }
