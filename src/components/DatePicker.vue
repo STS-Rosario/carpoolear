@@ -65,6 +65,8 @@ export default {
         resetDatePicker () {
             console.log('reseting');
             this.date = '';
+            this.dateMobile = '';
+            this.picker.setDate(null);
         },
         getInputSelection (el) {
             let start = 0;
