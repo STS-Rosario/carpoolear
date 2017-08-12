@@ -2,7 +2,7 @@
     <div class="conversation_chat" v-if="conversation">
         <div class="list-group">
             <div class="list-group-item">
-                <router-link v-if="conversation.users.length === 2" :to="{ name: 'profile', params: { id: conversation.users[1].id, userProfile: conversation.users[1] } }">
+                <router-link v-if="conversation.users.length === 2" :to="{ name: 'profile', params: userProfile() }">
                     <h2> {{conversation.title}} </h2>
                 </router-link>
                 <h2 v-else> {{conversation.title}} </h2>
@@ -79,6 +79,17 @@ export default {
             'setTitle': 'actionbars/setTitle',
             'setSubTitle': 'actionbars/setSubTitle'
         }),
+
+        userProfile () {
+            let id = 0;
+            if (this.conversation.users[0].id === this.user.id) {
+                id = 1;
+            };
+            return {
+                id: this.conversation.users[id].id,
+                userProfile: this.conversation.users[id]
+            };
+        },
 
         sendMessage () {
             this.sending = true;

@@ -27,11 +27,20 @@
                 @blur="focus = false"
                 :value = "dateMobile"
                 @change="changeMobileValue"
+<<<<<<< HEAD
                 type="date"
                 id="datepicker-mobile"
                 :min="min| moment('YYYY-MM-DD')"
                 :max="max| moment('YYYY-MM-DD')"
                 autocomplete="off"
+=======
+                type="date" 
+                id="datepicker-mobile" 
+                :min="min| moment('YYYY-MM-DD')" 
+                :max="max| moment('YYYY-MM-DD')" 
+                autocomplete="off" 
+                placeholder="'dd/mm/yyyy'" 
+>>>>>>> 321e296bd165c9b6688d80fdf87609db77b95b81
             />
         </div>
     </div>
