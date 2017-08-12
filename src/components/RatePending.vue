@@ -1,5 +1,5 @@
 <template>
-    <div class="col-xs-24 col-md-12 col-lg-8">
+    <div class="col-xs-24 col-md-16 col-lg-12">
         <div class="rate-pending_component clearfix">
             <div class="rate-pending_photo">
                 <router-link :to="{name: 'profile', params: {id: to.id, userProfile: to}}">
@@ -9,7 +9,7 @@
             </div>
             <div class="rate-pending-message">
                 <div class="rate-pending-message--content">
-                    ¿Cómo calificarías a <strong>{{ to.name }}</strong> como 
+                    ¿Cómo calificarías a <strong>{{ to.name }}</strong> como
                     <span v-if="rate.user_to_type === DRIVER"> conductor </span>
                     <span v-if="rate.user_to_type === PASSENGER"> pasajero </span>
                     en el viaje hacía <strong>{{ trip.points[trip.points.length - 1].json_address.ciudad }}</strong> el día <strong>{{ trip.trip_date | moment('dddd DD [de] MMMM') }}</strong> ?
