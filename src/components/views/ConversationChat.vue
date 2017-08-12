@@ -2,7 +2,7 @@
     <div class="conversation_chat" v-if="conversation">
         <div class="list-group">
             <div class="list-group-item desktop">
-                <router-link v-if="conversation.users.length === 2" :to="{name: 'profile', params: {id: conversation.users[0].id, userProfile: conversation.users[0]}}">
+                <router-link v-if="conversation.users.length === 2" :to="{ name: 'profile', params: { id: conversation.users[1].id, userProfile: conversation.users[1] } }">
                     <h2> {{conversation.title}} </h2>
                 </router-link>
                 <h2 v-else> {{conversation.title}} </h2>

@@ -45,7 +45,10 @@
                                 {{user.name}}
                             </li>
                             <li slot="no-data" class="list-group-item alert alert-warning"  role="alert">No hay concidencias</li>
-                            <li slot="loading" class="list-group-item alert alert-info" role="alert"><img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" /> Buscando usuarios</li>
+                            <li slot="loading" class="list-group-item alert alert-info" role="alert">
+                                <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
+                                Buscando usuarios
+                            </li>
                         </Loading>
                     </template>
                 </ul>

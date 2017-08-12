@@ -67,8 +67,14 @@
                     <input type="checkbox" v-model="user.emails_notifications"> Recibir notificaciones por correo electrónico.
                     </label>
                 </div>
-                <div class="form-group">
-                    <label for="input-pass">Cambiar contraseña</label>
+                <hr />
+                <div class="checkbox" >
+                    <label >
+                        <input type="checkbox"  @change="changeShowPassword"> Cambiar contraseña
+                    </label>
+                </div>
+                <div class="form-group" v-if="showChangePassword">
+                    <label for="input-pass">Ingrese su nueva contraseña</label>
                     <input maxlength="40" v-model="pass.password" type="password" class="form-control" id="input-pass" placeholder="Contraseña">
                     <input maxlength="40" v-model="pass.password_confirmation" type="password" class="form-control" id="input-pass-confirm" placeholder="Repetir contraseña">
                 </div>
@@ -129,7 +135,8 @@ export default {
             maxDate: moment().toDate(),
             minDate: moment('1900-01-01').toDate(),
             birthday: '',
-            birthdayAnswer: ''
+            birthdayAnswer: '',
+            showChangePassword: false
         };
     },
     computed: {
@@ -175,6 +182,10 @@ export default {
             carCreate: 'cars/create',
             carUpdate: 'cars/update'
         }),
+        changeShowPassword () {
+            console.log('showChangePassword', this.showChangePassword);
+            this.showChangePassword = !this.showChangePassword;
+        },
         isNumber (value) {
             inputIsNumber(value);
         },

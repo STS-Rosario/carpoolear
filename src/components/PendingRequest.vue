@@ -1,5 +1,5 @@
-<template>  
-    <div class="col-xs-24 col-md-12 col-lg-8">
+<template>
+    <div class="col-xs-24 col-md-16 col-lg-12">
         <div class="rate-pending_component clearfix">
             <div class="rate-pending_photo">
                 <router-link :to="{name: 'profile', params: {id: user.id, userProfile: user}}">
@@ -13,6 +13,10 @@
                     <div class='pending-buttons'>
                         <button class="btn btn-accept-request" :disabled="acceptInProcess" @click="accept"> Aceptar </button>
                         <button class="btn btn-primary" :disabled="rejectInProcess" @click="reject"> Rechazar </button>
+
+                    </div>
+                    <div class="message-button">
+                        <button class="btn btn-secondary"  @click="chat"> Enviar Mensaje </button>
                     </div>
                 </div>
             </div>
@@ -21,6 +25,7 @@
 </template>
 <script>
 import {mapActions} from 'vuex';
+import router from '../router';
 
 export default {
     data () {
@@ -33,7 +38,8 @@ export default {
     methods: {
         ...mapActions({
             passengerAccept: 'passenger/accept',
-            passengerReject: 'passenger/reject'
+            passengerReject: 'passenger/reject',
+            lookConversation: 'conversations/createConversation'
         }),
 
         accept () {
@@ -55,6 +61,14 @@ export default {
                 this.rejectInProcess = false;
             }).catch(() => {
                 this.rejectInProcess = false;
+            });
+        },
+
+        chat () {
+            let user = this.user;
+
+            this.lookConversation(user).then(conversation => {
+                router.push({ name: 'conversation-chat', params: { id: conversation.id } });
             });
         }
     },

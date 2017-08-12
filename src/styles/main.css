@@ -112,8 +112,8 @@ input[type=radio] + label {
     background: var(--trip-almost-fill-color);
 
     text-transform: uppercase;
-    font-size: 0.9rem;   
-}   
+    font-size: 0.9rem;
+}
 .btn-primary:disabled {
     cursor: not-allowed;
     background-color:rgb(220, 129, 127);
@@ -1059,6 +1059,11 @@ textarea {
     width: calc(100% - 7em);
     float: left;
 }
+
+.message-button {
+    margin-top: 1em;
+}
+
 .request-list div.rate-pending_component:last-of-type {
     margin-bottom: 0;
 }
@@ -1502,7 +1507,9 @@ textarea {
 .profile-info-component .list-group-item img {
     margin-bottom: 1.2em;
 }
-
+.profile-social-accounts {
+    margin-top: 2.5em;
+}
 .profile_image {
     text-align: center;
 }
@@ -2068,7 +2075,7 @@ ul {
 }
 
 @media only screen and (min-width: 768px) {
-    .column-rating { 
+    .column-rating {
         width: 50%;
         float: left;
     }
@@ -2371,7 +2378,7 @@ ul {
     .no-padding {
         padding: 0;
     }
-    .column-rating { 
+    .column-rating {
         width: 33.33%;
         float: left;
     }

@@ -10,6 +10,14 @@
                         <i class="fa fa-thumbs-down" aria-hidden="true"></i> <span> {{profile.negative_ratings}} </span>
                     </div>
                 </div>
+
+                <div class="profile-social-accounts" >
+                    <div v-for="account in profile.accounts" class="row">
+                        <a :href="'https://www.facebook.com/app_scoped_user_id/' + account.provider_user_id" target="_blank" class="btn-primary btn-search" style="border: 0">
+                            <span class=''>Perfil de Facebook</span>
+                        </a>
+                    </div>
+                </div>
             </div>
             <div class="data-info col-sm-offset-2 col-sm-16 col-md-offset-1">
                 <div class="profile-info--name desktop">{{profile.name}}</div>
