@@ -1502,7 +1502,9 @@ textarea {
 .profile-info-component .list-group-item img {
     margin-bottom: 1.2em;
 }
-
+.profile-social-accounts {
+    margin-top: 2.5em;
+}
 .profile_image {
     text-align: center;
 }

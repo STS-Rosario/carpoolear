@@ -30,6 +30,13 @@
                         <i class="fa fa-mobile bigger" aria-hidden="true"></i>
                         <div class="list-group-item--content">{{profile.mobile_phone}}</div>
                     </div>-->
+                    <div class="profile-social-accounts col-sm-10 col-sm-offset-1" >
+                        <div v-for="account in profile.accounts" class="row">
+                            <a :href="'https://www.facebook.com/app_scoped_user_id/' + account.provider_user_id" target="_blank" class="btn-primary btn-search btn-facebook">
+                                <span class=''>Perfil de Facebook</span>
+                            </a>
+                        </div>
+                    </div>
                 </div>
                 <div class="edit-action" v-if="profile.id == user.id">
                     <router-link class="btn btn-primary" tag="button" :to="{name:'profile_update'}"> Editar perfil</router-link>
