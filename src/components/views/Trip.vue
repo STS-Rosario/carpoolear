@@ -126,7 +126,7 @@
                             </div>
                             <div class="buttons-container">
                                 <router-link class="btn btn-primary" v-if="owner" :to="{name: 'update-trip', params: { id: trip.id}}"> Editar  </router-link>
-                                <button class="btn btn-primary" v-if="owner" @click="deleteTrip" > Borrar  </button>
+                                <a class="btn btn-primary" v-if="owner" @click="deleteTrip" > Cancelar viaje  </a>
                                 <template v-if="!owner && !expired && trip.seats_available > 0">
                                     <button class="btn btn-primary" @click="toMessages" v-if="!owner"> Coordinar viaje  </button>
                                 </template>
@@ -254,9 +254,11 @@ export default {
             }
         },
         deleteTrip () {
-            this.remove(this.trip.id).then(() => {
-                this.$router.replace({name: 'trips'});
-            })
+            if (window.confirm('¿Estás seguro que deseas cancelar el viaje?')) {
+                this.remove(this.trip.id).then(() => {
+                    this.$router.replace({name: 'trips'});
+                });
+            }
         },
         loadTrip () {
             this.getTrip(this.id).then(trip => {
