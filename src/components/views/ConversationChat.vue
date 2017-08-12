@@ -2,7 +2,10 @@
     <div class="conversation_chat" v-if="conversation">
         <div class="list-group">
             <div class="list-group-item desktop">
-                <h2> {{conversation.title}} </h2>
+                <router-link v-if="conversation.users.length === 2" :to="{name: 'profile', params: {id: conversation.users[0].id, userProfile: conversation.users[0]}}">
+                    <h2> {{conversation.title}} </h2>
+                </router-link>
+                <h2 v-else> {{conversation.title}} </h2>
                 <p class="chat_last_connection">
                     <strong>Última conexión: </strong>
                     <span class="">{{lastConnection | moment("calendar")}}</span>

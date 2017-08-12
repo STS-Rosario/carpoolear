@@ -93,7 +93,9 @@ export default {
 
     methods: {
         findTrip (id) {
-            return this.trips.find(item => item.id === id);
+            if (this.trips) {
+                return this.trips.find(item => item.id === id);
+            }
         },
         ...mapActions({
             tripAsDriver: 'myTrips/tripAsDriver',

@@ -1092,6 +1092,10 @@ textarea {
     min-width: auto;
     font-size: 13px;
 }
+.btn-accept-request:hover, .btn-accept-request:focus, .btn-accept-request.focus {
+    color: #fff;
+    background-color: #0fa30f;
+}
 .request-list .btn-primary,
 .friend-card .pending-buttons .btn-primary {
     border-radius: 4px;
@@ -1364,6 +1368,9 @@ textarea {
 }
 .conversation-component .list-group-item:last-child {
     border-bottom-width: 0;
+}
+.conversation_chat--chats .list-group-item:last-child {
+    border-bottom-width: 1px;
 }
 .list-group {
     margin-bottom: 0;
@@ -2002,6 +2009,10 @@ ul {
 }
 
 @media only screen and (max-width: 768px) {
+    .conversation_chat--search .list-group-item {
+        border-right-width: 0;
+        border-left-width: 0;
+    }
     .new-trip-component .form-trip {
         padding-bottom: 3rem;
         box-shadow: none;
@@ -2232,8 +2243,11 @@ ul {
         width: 0;
     }
     .circle-box.profile {
-        max-width: 170px;
-        max-height: 170px;
+        max-width: 230px;
+        max-height: 230px;
+    }
+    .profile-info--ratings {
+        width: 230px;
     }
     .list-container {
         margin: .8em 0;
