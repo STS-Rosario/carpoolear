@@ -49,7 +49,7 @@ export default {
     methods: {
         ...mapActions({
             search: 'trips/tripsSearch',
-            morePages: 'trips/tripMorePage',
+            // morePagesActions: 'trips/tripMorePage',
             setActionButton: 'actionbars/setHeaderButtons'
         }),
         research (params) {
