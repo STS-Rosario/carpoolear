@@ -56,6 +56,13 @@ const mutations = {
             }
         }
     },
+    [types.MYTRIPS_DELETE_TRIPS] (state, id) {
+        let index = state.driver_trip.findIndex(item => item.id === id);
+        if (index >= 0) {
+            state.passenger_trip.splice(index, 1);
+        }
+    },
+
     [types.MYTRIPS_SET_PENDING_RATES] (state, rates) {
         state.pending_rates = rates;
     },
