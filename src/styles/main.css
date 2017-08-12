@@ -98,7 +98,21 @@ input[type=radio] + label {
 .brand {
     font-weight: 400;
 }
+.carpooled-trip {
+    position: relative;
+    border-radius: 0;
+    padding: 1em;
+    min-width: 5rem;
+    min-height: 42px;
 
+    border: 2px solid #FFFFFF;
+    color: #FFFFFF;
+
+    background: var(--trip-almost-fill-color);
+
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
 .btn-primary {
     position: relative;
     border-radius: 0;
@@ -434,6 +448,14 @@ textarea {
     background-position: 0 4px;
     padding-top: 0;
     padding-bottom: 0;
+}
+.form-control-date {
+    height: 3em;
+}
+#datepicker-mobile {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 100%
 }
 
 .register-component .form-control-date {
