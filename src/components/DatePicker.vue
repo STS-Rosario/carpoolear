@@ -57,9 +57,9 @@ export default {
         };
     },
     mounted () {
-        console.log(this.value);
+        console.log('!!!!', this.value);
         if (this.value !== '') {
-            this.dateBrowser = this.value;
+            this.dateBrowser = moment(this.value).toDate();
             this.dateMobile = this.value;
         }
     },
@@ -90,7 +90,7 @@ export default {
             }
         },
         value: function (value) {
-            this.dateBrowser = this.value;
+            this.dateBrowser = moment(this.value).toDate();
             this.dateMobile = this.value;
         }
     },
@@ -124,6 +124,7 @@ export default {
             device: 'cordova/device'
         }),
         browser () {
+            console.log(this.device);
             if (this.device) {
                 if (this.device.platform === 'browser') {
                     return true;
