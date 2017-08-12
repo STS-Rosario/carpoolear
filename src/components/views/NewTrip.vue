@@ -180,10 +180,6 @@ export default {
     },
     data () {
         return {
-            limitFilter: {
-                type: 'fromto',
-                from: moment().add(-1, 'days').format('DD/MM/YYYY')
-            },
             minDate: moment().toDate(),
             lucrarError: new Error(),
             dateError: new Error(),
@@ -210,7 +206,8 @@ export default {
                     error: new Error()
                 }
             ],
-            date: moment().format('DD/MM/YYYY'),
+            date: '',
+            dateAnswer: this.date,
             time: '12:00',
             duration: 0,
             passengers: 0,
@@ -246,14 +243,13 @@ export default {
             }
         });
         bus.on('clear-click', this.onClearClick);
-        bus.on('date-change', (value) => {
-            this.date = value;
-        });
+        bus.on('date-change', this.dateChange);
         this.$refs['input-0'][0].$el.addEventListener('input', this.checkInput);
         this.$refs['input-1'][0].$el.addEventListener('input', this.checkInput);
     },
 
     beforeDestroy () {
+        bus.off('date-change', this.dateChange);
         bus.off('clear-click', this.onClearClick);
         this.$refs['input-0'][0].$el.removeEventListener('input', this.checkInput);
         this.$refs['input-1'][0].$el.removeEventListener('input', this.checkInput);
@@ -281,7 +277,7 @@ export default {
         'no_lucrar': function () {
             this.lucrarError.state = false;
         },
-        'date': function () {
+        'dateAnswer': function () {
             this.dateError.state = false;
         },
         'time': function () {
@@ -294,6 +290,9 @@ export default {
             'updateTrip': 'trips/update',
             'getTrip': 'getTrip'
         }),
+        dateChange (value) {
+            this.dateAnswer = value;
+        },
         checkInput (event) {
             let value = event.target.value;
             let name = event.target.name;
@@ -321,7 +320,7 @@ export default {
                 };
                 this.points.push(point);
             });
-            this.date = moment(trip.trip_date.split(' ')[0]).format('DD/MM/YYYY');
+            this.date = moment(trip.trip_date.split(' ')[0]).format('YYYY-MM-DD');
             console.log(this.date);
             this.time = trip.trip_date.split(' ')[1];
             this.trip.is_passenger = trip.is_passenger ? 1 : 0;
@@ -378,8 +377,7 @@ export default {
                 globalError = true;
             }
 
-            if (!this.date.length || !moment(this.date, 'DD/MM/YYYY').isValid()) {
-                console.log(this.date, moment(this.date, 'DD/MM/YYYY').isValid());
+            if (!this.dateAnswer.length || !moment(this.dateAnswer).isValid()) {
                 globalError = true;
                 this.dateError.state = true;
                 this.dateError.message = 'Aún no ha ingresado ninguna fecha.';
@@ -419,7 +417,7 @@ export default {
             });
             this.trip.from_town = this.points[0].name;
             this.trip.to_town = this.points[this.points.length - 1].name;
-            this.trip.trip_date = moment.utc(this.date, 'DD/MM/YYYY').format('YYYY-MM-DD') + ' ' + this.time + ':00';
+            this.trip.trip_date = this.dateAnswer + ' ' + this.time + ':00';
             this.trip.estimated_time = this.estimatedTimeString;
             if (this.cars && this.cars.length) {
                 this.trip.car_id = this.cars[0].id;
