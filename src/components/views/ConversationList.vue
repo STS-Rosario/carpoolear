@@ -6,7 +6,7 @@
                 <ul class="list-group">
                     <li class="list-group-item">
                         <div class="input-group">
-                            <input v-model="textSearch"  type="text" class="form-control" placeholder="Buscar personas">
+                            <input v-model="textSearch"  v-debounceInput="onSearchUser" type="text" class="form-control" placeholder="Buscar personas">
                             <span class="input-group-btn">
                                 <button class="btn btn-default" type="button" @click="onSearchUser" >
                                     <i class="fa fa-search" aria-hidden="true"></i>
@@ -45,7 +45,10 @@
                                 {{user.name}}
                             </li>
                             <li slot="no-data" class="list-group-item alert alert-warning"  role="alert">No hay concidencias</li>
-                            <li slot="loading" class="list-group-item alert alert-info" role="alert">Buscando usuarios</li>
+                            <li slot="loading" class="list-group-item alert alert-info" role="alert">
+                                <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
+                                Buscando usuarios
+                            </li>
                         </Loading>
                     </template>
                 </ul>
@@ -192,6 +195,9 @@ export default {
     .conversation_chat--search > li:hover {
         background-color: #eee;
     }
+    .conversation_chat--search li.list-group-item:last-child {
+        border-bottom-width: 1px;
+    }
     .conversation-title {
         font-size: 14px;
     }
@@ -242,6 +248,7 @@ export default {
         .conversation_chat--search {
             height: calc(100% - 66px);
             overflow-y: auto;
+            border-bottom: 1px solid #ddd;
         }
     }
 </style>

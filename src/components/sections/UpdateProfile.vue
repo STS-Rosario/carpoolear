@@ -38,7 +38,7 @@
                 </div>
                 <div class="form-group">
                     <label for="">Fecha de nacimiento (*)</label>
-                    <DatePicker :value="birthday" ref="ipt_calendar" name="ipt_calendar" :maxDate="maxDate" :minDate="minDate" :class="{'has-error': birthdayError.state}" ></DatePicker>
+                    <DatePicker :value="birthday | moment('YYYY-MM-DD') " ref="ipt_calendar" name="ipt_calendar" :maxDate="maxDate" :minDate="minDate" :class="{'has-error': birthdayError.state}" ></DatePicker>
                     <span class="error" v-if="birthdayError.state"> {{birthdayError.message}} </span>
                 </div>
                 <div class="form-group">
@@ -67,8 +67,14 @@
                     <input type="checkbox" v-model="user.emails_notifications"> Recibir notificaciones por correo electrónico.
                     </label>
                 </div>
-                <div class="form-group">
-                    <label for="input-pass">Cambiar contraseña</label>
+                <hr />
+                <div class="checkbox" >
+                    <label >
+                        <input type="checkbox"  @change="changeShowPassword"> Cambiar contraseña
+                    </label>
+                </div>
+                <div class="form-group" v-if="showChangePassword">
+                    <label for="input-pass">Ingrese su nueva contraseña</label>
                     <input maxlength="40" v-model="pass.password" type="password" class="form-control" id="input-pass" placeholder="Contraseña">
                     <input maxlength="40" v-model="pass.password_confirmation" type="password" class="form-control" id="input-pass-confirm" placeholder="Repetir contraseña">
                 </div>
@@ -128,7 +134,9 @@ export default {
             emailError: new Error(),
             maxDate: moment().toDate(),
             minDate: moment('1900-01-01').toDate(),
-            birthday: ''
+            birthday: '',
+            birthdayAnswer: '',
+            showChangePassword: false
         };
     },
     computed: {
@@ -148,7 +156,7 @@ export default {
         },
         iptBirthday () {
             if (this.user) {
-                return this.user.birthday;
+                return this.user.birthdayAnswer;
             }
         },
         iptDescription () {
@@ -174,6 +182,10 @@ export default {
             carCreate: 'cars/create',
             carUpdate: 'cars/update'
         }),
+        changeShowPassword () {
+            console.log('showChangePassword', this.showChangePassword);
+            this.showChangePassword = !this.showChangePassword;
+        },
         isNumber (value) {
             inputIsNumber(value);
         },
@@ -185,6 +197,9 @@ export default {
             }).catch(() => {
                 this.loadingImg = false;
             });
+        },
+        dateChange (value) {
+            this.birthdayAnswer = value;
         },
         changePhoto () {
             this.$refs.file.show();
@@ -225,9 +240,9 @@ export default {
                 if ((this.user.image && this.user.image.length > 0) && (this.user.description && this.user.description.length > 0)) {
                     this.$router.rememberBack();
                 }
-                if (moment(this.birthday, 'DD/MM/YYYY').isValid()) {
+                if (moment(this.birthdayAnswer, 'YYYY-MM-DD').isValid()) {
                     console.log('valid date');
-                    this.user.birthday = moment(this.birthday, 'DD/MM/YYYY').format('YYYY-MM-DD');
+                    this.user.birthday = this.birthdayAnswer;
                     console.log(this.user.birthday);
                 }
             }).catch(response => {
@@ -261,12 +276,13 @@ export default {
                 globalError = true;
             }
 
-            if (!this.birthday || this.birthday.length < 1) {
+            console.log(this.birthdayAnswer);
+            if (!this.birthdayAnswer || this.birthdayAnswer.length < 1) {
                 this.birthdayError.state = true;
                 this.birthdayError.message = 'Olvidaste ingresar tu fecha de nacimiento.';
                 globalError = true;
             } else {
-                let birthday = moment(this.birthday, 'DD/MM/YYYY');
+                let birthday = moment(this.birthdayAnswer);
                 if (moment().diff(birthday, 'years') < 18) {
                     this.birthdayError.state = true;
                     this.birthdayError.message = 'Pareciera que no eres mayor de edad. Revisa si ingresaste bien tu fecha de nacimiento y recuerda que debes ser mayor de edad para utilziar carpoolear. Para más información te recomendamos volver a leer los términos y condiciones.';
@@ -323,7 +339,7 @@ export default {
         iptEmail () {
             this.emailError.state = false;
         },
-        birthday: function () {
+        birthdayAnswer: function () {
             this.birthdayError.state = false;
         },
         iptDescription () {
@@ -341,10 +357,7 @@ export default {
     },
 
     mounted () {
-        bus.on('date-change', (value) => {
-            console.log(value);
-            this.birthday = value;
-        });
+        bus.on('date-change', this.dateChange);
         this.user = this.userData;
         if (this.cars) {
             if (this.cars.length > 0) {
@@ -355,11 +368,14 @@ export default {
         console.log(this.user.birthday);
         if (moment(this.user.birthday, 'YYYY-MM-DD').isValid()) {
             console.log('is valid');
-            this.birthday = moment(this.user.birthday, 'YYYY-MM-DD').format('DD/MM/YYYY');
+            this.birthday = moment(this.user.birthday, 'YYYY-MM-DD');
         } else {
             console.log('is not valid');
             this.birthday = '';
         }
+    },
+    beforeDestroy () {
+        bus.off('date-change', this.dateChange);
     },
     components: {
         DatePicker,

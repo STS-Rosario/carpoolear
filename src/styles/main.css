@@ -112,8 +112,8 @@ input[type=radio] + label {
     background: var(--trip-almost-fill-color);
 
     text-transform: uppercase;
-    font-size: 0.9rem;   
-}   
+    font-size: 0.9rem;
+}
 .btn-primary:disabled {
     cursor: not-allowed;
     background-color:rgb(220, 129, 127);
@@ -1059,6 +1059,11 @@ textarea {
     width: calc(100% - 7em);
     float: left;
 }
+
+.message-button {
+    margin-top: 1em;
+}
+
 .request-list div.rate-pending_component:last-of-type {
     margin-bottom: 0;
 }
@@ -1091,6 +1096,10 @@ textarea {
     border: 0;
     min-width: auto;
     font-size: 13px;
+}
+.btn-accept-request:hover, .btn-accept-request:focus, .btn-accept-request.focus {
+    color: #fff;
+    background-color: #0fa30f;
 }
 .request-list .btn-primary,
 .friend-card .pending-buttons .btn-primary {
@@ -1365,6 +1374,9 @@ textarea {
 .conversation-component .list-group-item:last-child {
     border-bottom-width: 0;
 }
+.conversation_chat--chats .list-group-item:last-child {
+    border-bottom-width: 1px;
+}
 .list-group {
     margin-bottom: 0;
 }
@@ -1495,7 +1507,9 @@ textarea {
 .profile-info-component .list-group-item img {
     margin-bottom: 1.2em;
 }
-
+.profile-social-accounts {
+    margin-top: 2.5em;
+}
 .profile_image {
     text-align: center;
 }
@@ -2002,6 +2016,10 @@ ul {
 }
 
 @media only screen and (max-width: 768px) {
+    .conversation_chat--search .list-group-item {
+        border-right-width: 0;
+        border-left-width: 0;
+    }
     .new-trip-component .form-trip {
         padding-bottom: 3rem;
         box-shadow: none;
@@ -2057,7 +2075,7 @@ ul {
 }
 
 @media only screen and (min-width: 768px) {
-    .column-rating { 
+    .column-rating {
         width: 50%;
         float: left;
     }
@@ -2232,8 +2250,11 @@ ul {
         width: 0;
     }
     .circle-box.profile {
-        max-width: 170px;
-        max-height: 170px;
+        max-width: 230px;
+        max-height: 230px;
+    }
+    .profile-info--ratings {
+        width: 230px;
     }
     .list-container {
         margin: .8em 0;
@@ -2354,7 +2375,10 @@ ul {
     }
 }
 @media only screen and (min-width: 992px) {
-    .column-rating { 
+    .no-padding {
+        padding: 0;
+    }
+    .column-rating {
         width: 33.33%;
         float: left;
     }

@@ -53,7 +53,7 @@
                                     <time class="trip_datetime col-xs-offset-4 col-xs-20" :datetime="trip.trip_date">
                                         <span class="trip_datetime_date">{{ [ trip.trip_date ] | moment("DD MMMM YYYY") }}</span>
                                         -
-                                        <span class="trip_datetime_time">{{ [ trip.trip_date ] | moment("h:mm a") }}</span>
+                                        <span class="trip_datetime_time">{{ [ trip.trip_date ] | moment("HH:mm") }}</span>
                                     </time>
                                 </div>
                                 <div class="row"  v-if="!trip.is_passenger">
