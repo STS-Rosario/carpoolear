@@ -413,8 +413,11 @@ export default {
                 point.json_address = p.json;
                 point.lat = p.location.lat;
                 point.lng = p.location.lng;
+
+                console.log('place', point);
                 this.trip.points.push(point);
             });
+
             this.trip.from_town = this.points[0].name;
             this.trip.to_town = this.points[this.points.length - 1].name;
             this.trip.trip_date = this.dateAnswer + ' ' + this.time + ':00';

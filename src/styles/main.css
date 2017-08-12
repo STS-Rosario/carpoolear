@@ -1455,7 +1455,9 @@ textarea {
 .update-profile-component .profile_image img {
     width: 90%;
 }
-
+.profile-info-component {
+    padding-bottom: 6em;
+}
 .profile-info--name {
     font-weight: 500;
     font-size: 1.4em;;
