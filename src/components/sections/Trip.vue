@@ -22,12 +22,12 @@
                 </span>
               </div>
               <template v-if="user">
-                <div class="trip_driver_img_container">
+                <div class="trip_driver_img_container"  v-on:click='goToProfile'>
                   <div class="trip_driver_img circle-box" v-imgSrc:profile="getUserImage"></div>
                   <!-- {{ trip.user.has_pin }} -->
                 </div>
                 <div class="trip_driver_details">
-                  <div class="trip_driver_name" >
+                  <div class="trip_driver_name"  v-on:click='goToProfile'>
                     {{ trip.user.name }}
                   </div>
                   <div class="trip_driver_ratings">
@@ -120,6 +120,10 @@ export default {
     methods: {
         goToDetail: function (event) {
             this.$router.push({ name: 'detail_trip', params: { id: this.trip.id } });
+        },
+        goToProfile: function (event) {
+            event.stopPropagation();
+            this.$router.push({ name: 'profile', params: { id: this.trip.user.id, userProfile: this.trip.user } });
         }
     },
     data () {
