@@ -126,10 +126,10 @@
                             </div>
                             <div class="buttons-container">
                                 <router-link class="btn btn-primary" v-if="owner" :to="{name: 'update-trip', params: { id: trip.id}}"> Editar  </router-link>
-                                <template v-if="!owner && !expired">
+                                <template v-if="!owner && !expired && trip.seats_available > 0">
                                     <button class="btn btn-primary" @click="toMessages" v-if="!owner"> Coordinar viaje  </button>
                                 </template>
-                                <template v-if="!owner && !trip.is_passenger && !expired">
+                                <template v-if="!owner && !trip.is_passenger && !expired && trip.seats_available > 0">
                                     <template v-if="!isPassenger">
                                         <button class="btn btn-primary" @click="makeRequest" v-if="canRequest"> Solicitar asiento </button>
                                         <button class="btn" v-if="!canRequest" @click="cancelRequest"> Solicitud enviada </button>
@@ -141,6 +141,9 @@
                                 </template>
                                 <template v-if="expired">
                                     <button class="btn btn-primary" disabled> Finalizado  </button>
+                                </template>
+                                <template v-if="trip.seats_available === 0 && !trip.is_passenger">
+                                    <div class="carpooled-trip"> Viaje Carpooleado </div>
                                 </template>
                             </div>
                         </div>
