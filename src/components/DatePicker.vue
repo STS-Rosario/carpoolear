@@ -32,6 +32,7 @@
                 :min="min| moment('YYYY-MM-DD')" 
                 :max="max| moment('YYYY-MM-DD')" 
                 autocomplete="off" 
+                placeholder="'dd/mm/yyyy'" 
             />
         </div>
     </div>
