@@ -219,6 +219,11 @@ export default {
                 data.password = this.pass.password;
                 data.password_confirmation = this.pass.password_confirmation;
             }
+            if (moment(this.birthdayAnswer, 'YYYY-MM-DD').isValid()) {
+                console.log('valid date');
+                data.birthday = this.birthdayAnswer;
+                console.log(this.user.birthday);
+            }
             data.nro_doc = this.dniRawValue;
             this.update(data).then(() => {
                 this.pass.password = '';
@@ -237,13 +242,9 @@ export default {
                         this.carCreate(car);
                     }
                 }
+                this.user.birthday = this.birthdayAnswer;
                 if ((this.user.image && this.user.image.length > 0) && (this.user.description && this.user.description.length > 0)) {
                     this.$router.rememberBack();
-                }
-                if (moment(this.birthdayAnswer, 'YYYY-MM-DD').isValid()) {
-                    console.log('valid date');
-                    this.user.birthday = this.birthdayAnswer;
-                    console.log(this.user.birthday);
                 }
             }).catch(response => {
                 this.loading = false;
