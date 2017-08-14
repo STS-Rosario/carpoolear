@@ -794,6 +794,17 @@ textarea {
     right: 40px;
     left: unset;
 }
+.trips-list .trip-complementary {
+    margin-top: 3em;
+}
+.trips-list > .trip-complementary {
+    clear: both;
+}
+
+.trips-list > .trip-complementary  ~ .trip-complementary {
+    display: none;
+}
+
 .trips .trips_title {
     text-align: center;
     margin-bottom: 40px;
