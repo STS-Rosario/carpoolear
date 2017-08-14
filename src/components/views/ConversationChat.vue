@@ -131,6 +131,10 @@ export default {
         });
         bus.on('back-click', this.onBackClick);
         // this.thread.run(5000);
+        if (this.conversation) {
+            this.setTitle(this.conversation.title);
+            this.setSubTitle('Última conexión: ' + moment().calendar(this.lastConnection));
+        }
     },
     updated () {
         if (this.mustJump) {
