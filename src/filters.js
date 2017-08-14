@@ -10,5 +10,9 @@ Vue.filter('conversation-image', function (value) {
 });
 
 Vue.filter('googleInfoClean', function (value) {
-    return value.replace('Province', '');
+    if (value && value.replace) {
+        return value.replace('Province', '');
+    } else {
+        return value;
+    }
 });

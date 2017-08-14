@@ -62,18 +62,7 @@
                                         <span class="trip_seats-available_label">Lugares<br>libres</span>
                                     </div>
                                 </div>
-                                <div class="row passengers"  v-if="!trip.is_passenger">
-                                    <div class="col-xs-offset-3 col-xs-21" v-if="trip.passenger.length">
-                                        <span v-for="p in trip.passenger">
-                                            <div @click="toUserMessages(p)" class="trip_driver_img circle-box passenger" v-imgSrc:profile="p.image">
-                                                <span v-if="owner" @click="removePassenger(p)">
-                                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                                </span>
-                                            </div>
-                                        </span>
-                                    </div>
-                                    <div v-else style="height: 2em;"></div>
-                                </div>
+                                <div style="height: 3.5em;"></div>
                             </div>
                             <div class="col-sm-10 col-md-10 column">
                                 <div class="row trip-data" v-if="trip.is_passenger">
@@ -123,6 +112,20 @@
                                         <i class="fa fa-whatsapp" aria-hidden="true"></i>
                                     </a>
                                 </div>
+
+                                <div class="row passengers"  v-if="!trip.is_passenger">
+                                    <div class="col-xs-24" v-if="trip.passenger.length">
+                                        <div style="margin-top: 1em;"><strong>Pasajeros</strong></div>
+                                        <span v-for="p in trip.passenger">
+                                            <div @click="toUserMessages(p)" class="trip_driver_img circle-box passenger" v-imgSrc:profile="p.image">
+                                                <span v-if="owner" @click="removePassenger(p)">
+                                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                        </span>
+                                    </div>
+                                    <div v-else style="height: 2em;"></div>
+                                </div>
                             </div>
                             <div class="buttons-container">
                                 <router-link class="btn btn-primary" v-if="owner" :to="{name: 'update-trip', params: { id: trip.id}}"> Editar  </router-link>
@@ -130,14 +133,14 @@
                                 <template v-if="!owner && !expired && trip.seats_available > 0">
                                     <button class="btn btn-primary" @click="toMessages" v-if="!owner"> Coordinar viaje  </button>
                                 </template>
-                                <template v-if="!owner && !trip.is_passenger && !expired && trip.seats_available > 0">
+                                <template v-if="!owner && !trip.is_passenger && !expired">
                                     <template v-if="!isPassenger">
-                                        <button class="btn btn-primary" @click="makeRequest" v-if="canRequest"> Solicitar asiento </button>
+                                        <button class="btn btn-primary" @click="makeRequest" v-if="canRequest && trip.seats_available > 0"> Solicitar asiento </button>
                                         <button class="btn" v-if="!canRequest" @click="cancelRequest"> Solicitud enviada </button>
                                     </template>
 
                                     <template v-if="isPassenger">
-                                        <button class="btn btn-primary" @click="cancelRequest" v-if="canRequest"> Cancelar viaje </button>
+                                        <button class="btn btn-primary" @click="cancelRequest" v-if="canRequest"> Bajarme del viaje </button>
                                     </template>
                                 </template>
                                 <template v-if="expired">
@@ -211,6 +214,7 @@ import router from '../../router';
 import bus from '../../services/bus-event';
 import svgItem from '../SvgItem';
 import moment from 'moment';
+import dialogs from '../../services/dialogs.js';
 
 export default {
     name: 'trip',
@@ -292,6 +296,7 @@ export default {
             if (this.profileComplete()) {
                 this.sending = true;
                 this.make(this.trip.id).then(() => {
+                    dialogs.message('La solicitud fue enviada.');
                     this.sending = false;
                     this.trip.request = 'send';
                 }).catch(() => {
@@ -301,18 +306,21 @@ export default {
         },
 
         cancelRequest () {
-            this.sending = true;
-            this.cancel({ user: this.user, trip: this.trip }).then(() => {
-                this.sending = false;
-                if (this.trip.request !== 'send') {
-                    let index = this.trip.passenger.findIndex(item => item.id === this.user.id);
-                    this.trip.passenger.splice(index, 1);
-                } else {
-                    this.trip.request = '';
-                }
-            }).catch(() => {
-                this.sending = false;
-            });
+            if (window.confirm('¿Estás seguro que deseas bajarte del viaje?')) {
+                this.sending = true;
+                this.cancel({ user: this.user, trip: this.trip }).then(() => {
+                    this.sending = false;
+                    dialogs.message('Te has bajado del viaje.');
+                    if (this.trip.request !== 'send') {
+                        let index = this.trip.passenger.findIndex(item => item.id === this.user.id);
+                        this.trip.passenger.splice(index, 1);
+                    } else {
+                        this.trip.request = '';
+                    }
+                }).catch(() => {
+                    this.sending = false;
+                });
+            }
         },
 
         removePassenger (user) {

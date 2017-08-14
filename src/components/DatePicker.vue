@@ -1,17 +1,17 @@
 <template>
     <div class="date-picker">
         <div v-if="browser" class="form-control picker" :class="focus ? 'input-border' : ''">
-            <DatepickerSystem 
-                :clear-button="true" 
-                :clear-button-icon="'fa fa-times'" 
-                :calendar-button="true" 
-                :calendar-button-icon="'fa fa-calendar'" 
-                :value="dateBrowser" 
-                :language="'es'" 
-                v-on:opened="focus = true" 
-                v-on:closed="focus = false" 
+            <DatepickerSystem
+                :clear-button="true"
+                :clear-button-icon="'fa fa-times'"
+                :calendar-button="true"
+                :calendar-button-icon="'fa fa-calendar'"
+                :value="dateBrowser"
+                :language="'es'"
+                v-on:opened="focus = true"
+                v-on:closed="focus = false"
                 v-on:selected="changeValue"
-                :placeholder="'dd/mm/yyyy'" 
+                :placeholder="'dd/mm/yyyy'"
                 :format="'dd/MM/yyyy'"
                 :disabled="{
                     to: min,
@@ -22,17 +22,17 @@
             </DatepickerSystem>
         </div>
         <div v-if="!browser" class="form-control form-control-with-icon form-control-date">
-            <input 
-                @focus="focus = true" 
+            <input
+                @focus="focus = true"
                 @blur="focus = false"
                 :value = "dateMobile"
                 @change="changeMobileValue"
-                type="date" 
-                id="datepicker-mobile" 
-                :min="min| moment('YYYY-MM-DD')" 
-                :max="max| moment('YYYY-MM-DD')" 
-                autocomplete="off" 
-                placeholder="'dd/mm/yyyy'" 
+                type="date"
+                id="datepicker-mobile"
+                :min="min| moment('YYYY-MM-DD')"
+                :max="max| moment('YYYY-MM-DD')"
+                autocomplete="off"
+                placeholder="'dd/mm/yyyy'"
             />
         </div>
     </div>
@@ -53,7 +53,7 @@ export default {
             date: '',
             update: true,
             focus: false,
-            nextYear: moment().add(1, 'years').format('YYYY-MM-DD'),
+            nextYear: moment().add(2, 'years').format('YYYY-MM-DD'),
             lastCentury: moment().subtract(100, 'years').format('YYYY-MM-DD')
         };
     },
@@ -158,7 +158,11 @@ export default {
                 answer = this.lastCentury;
             }
             if (this.browser) {
-                return moment(answer).toDate();
+                let date = moment(answer).toDate();
+                date.setHours(0);
+                date.setMinutes(0);
+                date.setSeconds(0);
+                return date;
             } else {
                 return moment(answer).format('YYYY-MM-DD');
             }
