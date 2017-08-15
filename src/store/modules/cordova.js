@@ -42,6 +42,7 @@ const actions = {
     notificationArrive (context, notification) {
     // [TODO] Determinar logica
         console.log(notification);
+        globalStore.dispatch('notifications/add');
     },
     facebookLogin (context) {
         return facebook.login().then((response) => {
