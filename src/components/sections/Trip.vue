@@ -1,5 +1,5 @@
 <template>
-  <div class="col-lg-6 col-md-8 col-sm-12" v-on:click='goToDetail' >
+  <div class="col-lg-6 col-md-8 col-sm-12" v-on:click='goToDetail'>
     <div class="trip" :class="{ 'trip-fill': trip.seats_available === 0, 'trip-almost-fill': trip.seats_available === 1, 'trip-mostly-available': trip.seats_available > 3, 'trip-with-driver': user }" >
         <div class="panel panel-default panel-card card card-trip">
           <div class="panel-heading card_heading">
@@ -162,7 +162,7 @@ export default {
         }
     },
     mounted () {
-
+        // console.log('SEARCH PARAMS', this.searchParams.data.date);
     }
 };
 </script>

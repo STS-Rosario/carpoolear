@@ -321,7 +321,6 @@ export default {
                 this.points.push(point);
             });
             this.date = moment(trip.trip_date.split(' ')[0]).format('YYYY-MM-DD');
-            console.log(this.date);
             this.time = trip.trip_date.split(' ')[1];
             this.trip.is_passenger = trip.is_passenger ? 1 : 0;
             this.passengers = trip.passenger_count;
@@ -383,7 +382,7 @@ export default {
                 this.dateError.message = 'Aún no ha ingresado ninguna fecha.';
                 console.log('date error', this.date);
             }
-            if (this.trip.total_seats < this.trip.passengers) {
+            if (this.trip.total_seats < this.passengers) {
                 globalError = true;
                 this.seatsError.state = true;
                 this.seatsError.message = 'Ya tienes ' + this.trip.passengers + ' subidos en este viaje. No puedes cambiar el número de asientos por uno menor al de pasajeros ya subidos.';
@@ -430,6 +429,7 @@ export default {
                     this.$router.replace({ name: 'detail_trip', params: { id: t.id } });
                 });
             } else {
+                console.log(this.trip);
                 this.trip.id = this.updatingTrip.id;
                 this.updateTrip(this.trip).then(() => {
                     this.$router.replace({ name: 'detail_trip', params: { id: this.trip.id } });

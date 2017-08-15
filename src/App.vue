@@ -52,7 +52,8 @@ export default {
     },
     data () {
         return {
-            actualRouteName: ''
+            actualRouteName: '',
+            cordova_path: process.env.ROUTE_BASE + 'cordova.js'
         };
     },
     components: {
