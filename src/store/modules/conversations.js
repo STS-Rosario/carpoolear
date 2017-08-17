@@ -26,7 +26,15 @@ const state = {
 const getters = {
     ...pagination.makeGetters('list'),
     users: state => state.userList,
-    selectedConversation: state => state.list ? state.list.find(item => item.id === state.selectedID) : null,
+    selectedConversation: state => {
+        console.log('SelectedConversation Geteer State', state.selectedID);
+        if (state.list) {
+            console.log('find me please', state.selectedID);
+            let conversationTemp = state.list.find(item => item.id === state.selectedID);
+            return conversationTemp || state.conversation;
+        }
+        return state.conversation;
+    },
     msgObj: state => state.messages[state.selectedID],
     messagesList: state => state.messages[state.selectedID] ? state.messages[state.selectedID].list : [],
     lastPageConversation: state => state.messages[state.selectedID].lastPage
@@ -66,10 +74,11 @@ const actions = {
     },
 
     select (store, id) {
+        console.log('Conversation Selected:', id);
         if (id) {
             store.commit(types.CONVERSATION_SET_SELECTED, id);
             store.commit(types.CONVERSATION_CREATE_MESSAGES, id);
-            globalStore.dispatch('conversations/findMessage', {id, more: false});
+            globalStore.dispatch('conversations/findConversation', {id, more: false});
         } else {
             store.commit(types.CONVERSATION_SET_SELECTED, null);
         }
@@ -122,6 +131,21 @@ const actions = {
         });
     },
 
+    findConversation (store, {id} = {}) {
+        if (!id) {
+            id = store.state.selectedID;
+        }
+        return conversationApi.show(id).then(response => {
+            console.log('Get Conversation:', id, response.data);
+            if (response.data) {
+                store.commit(types.CONVERSATION_GET, response.data);
+                globalStore.dispatch('conversations/findMessage', {id, more: false});
+            }
+        }).catch(error => {
+            return Promise.reject(error);
+        });
+    },
+
     findMessage (store, {id, more} = {}) {
         if (!id) {
             id = store.state.selectedID;
@@ -135,6 +159,7 @@ const actions = {
         let unread = false;
         let read = true;
         return conversationApi.getMessages(id, { read, unread, pageSize, timestamp }).then(response => {
+            console.log('Get Messages:', id, response.data);
             if (!more) {
                 store.commit(types.CONVERSATION_BLANK_MESSAGES, {id});
             }
@@ -215,6 +240,10 @@ const mutations = {
             lastPage: state.messages[id].lastPage
         };
         state.messages = Object.assign({}, state.messages, obj);
+    },
+    [types.CONVERSATION_GET] (state, conversation) {
+        state.conversation = Object.assign({}, state.conversation, conversation);
+        console.log('Excuting CONVERSATION_GET', state.conversation);
     },
 
     [types.CONVERSATION_UPDATE] (state, msg) {
