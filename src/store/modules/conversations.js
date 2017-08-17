@@ -138,6 +138,7 @@ const actions = {
         return conversationApi.show(id).then(response => {
             console.log('Get Conversation:', id, response.data);
             if (response.data) {
+                store.commit(types.CONVERSATION_PUSH, response.data);
                 store.commit(types.CONVERSATION_GET, response.data);
                 globalStore.dispatch('conversations/findMessage', {id, more: false});
             }
@@ -191,6 +192,9 @@ const mutations = {
     ...pagination.makeMutations('list'),
 
     [types.CONVERSATION_PUSH] (state, conv) {
+        if (!state.list) {
+            state.list = [];
+        }
         state.list.push(conv);
     },
 
