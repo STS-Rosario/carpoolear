@@ -58,8 +58,7 @@ export default {
             'messages': 'conversations/messagesList',
             'lastPageConversation': 'conversations/lastPageConversation',
             'timestampConversation': 'conversations/timestampConversation',
-            'isMobile': 'device/isMobile',
-            'selectedConversation': 'conversations/selectedConversation'
+            'isMobile': 'device/isMobile'
         }),
         lastConnection () {
             let users = this.conversation.users.filter(item => item.id !== this.user.id);
@@ -118,6 +117,21 @@ export default {
 
         searchMore () {
             this.findMessage({more: true});
+        },
+
+        refresh () {
+            this.select(parseInt(this.id)).then(() => {
+                console.log('sentro', this.conversation);
+                this.thread = new Thread(() => {
+                    this.unreadMessage();
+                });
+                bus.on('back-click', this.onBackClick);
+                // this.thread.run(5000);
+                if (this.conversation) {
+                    this.setTitle(this.conversation.title);
+                    this.setSubTitle('Última conexión: ' + moment().calendar(this.lastConnection));
+                }
+            });
         }
     },
     beforeDestroy () {
@@ -125,16 +139,7 @@ export default {
         // this.thread.stop();
     },
     mounted () {
-        this.select(parseInt(this.id));
-        this.thread = new Thread(() => {
-            this.unreadMessage();
-        });
-        bus.on('back-click', this.onBackClick);
-        // this.thread.run(5000);
-        if (this.conversation) {
-            this.setTitle(this.conversation.title);
-            this.setSubTitle('Última conexión: ' + moment().calendar(this.lastConnection));
-        }
+        this.refresh();
     },
     updated () {
         if (this.mustJump) {
@@ -148,7 +153,7 @@ export default {
     },
     watch: {
         'id': function () {
-            this.select(parseInt(this.id));
+            this.refresh();
         },
         isMobile: function () {
             if (!this.id && this.isMobile) {

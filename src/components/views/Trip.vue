@@ -246,6 +246,7 @@ export default {
         ...mapActions({
             getTrip: 'getTrip',
             lookConversation: 'conversations/createConversation',
+            selectConversation: 'conversations/select',
             make: 'passenger/makeRequest',
             cancel: 'passenger/cancel',
             remove: 'trips/remove'
@@ -288,7 +289,9 @@ export default {
         toUserMessages (user) {
             console.log(user);
             this.lookConversation(user).then(conversation => {
+                // this.selectConversation(conversation.id).then(data => {
                 router.push({ name: 'conversation-chat', params: { id: conversation.id } });
+                // });
             });
         },
 
