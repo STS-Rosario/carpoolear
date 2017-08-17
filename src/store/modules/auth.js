@@ -39,7 +39,6 @@ function onLoggin (store, token) {
     globalStore.dispatch('cars/index');
     globalStore.dispatch('passenger/getPendingRequest');
     globalStore.dispatch('startThread');
-    console.log(store);
     if (store.getters.firstTime) {
         router.replace({ name: 'profile_update' });
         firstTime(store, false);
@@ -67,7 +66,6 @@ function firstTime (store, firstTime) {
 
 // store = { commit, state, rootState, rootGetters }
 function activate (store, activationToken) {
-    console.log('hola');
     return authApi.activate(activationToken, {}).then((response) => {
         firstTime(store, true);
         onLoggin(store, response.token);

@@ -1,7 +1,6 @@
 import { eventNumberKeyInput, isDigit } from '../services/utility';
 
 let numberFormatter = {};
-let first = 0;
 let inputHandler = function (event) {
     let position = this.selectionStart;
     let dots = countDots(this.value);
@@ -14,16 +13,16 @@ let inputHandler = function (event) {
 };
 
 let cleanDots = function (str) {
-    return str.replace(/\./g, '');
+    return str.replace(/\/$/, '');
 };
 
 let countDots = function (str) {
-    return (str.split('.').length - 1);
+    return (str.split('/').length - 1);
 };
 
 let formatNumber = function (id) {
     numberFormatter[id].rawValue = cleanDots(numberFormatter[id].el.value);
-    numberFormatter[id].value = numberFormatter[id].rawValue.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    numberFormatter[id].value = numberFormatter[id].rawValue.replace(/^(\d{2})(\d{2})(\d{4})$/, '$1/$2/$3');
     numberFormatter[id].el.value = numberFormatter[id].value;
     numberFormatter[id].context[numberFormatter[id].expression] = numberFormatter[id].rawValue;
 };
@@ -67,12 +66,6 @@ export default {
         }
         el.addEventListener('keydown', keyDownHandler, false);
         el.addEventListener('input', inputHandler, false);
-    },
-    update: function (el, binding, node) {
-        if (el.value.length > 0 && first < 3) {
-            first++;
-            formatNumber(el.id);
-        }
     },
     unbind: function (el, binding, node) {
         el.removeEventListener('keydown', keyDownHandler, false);

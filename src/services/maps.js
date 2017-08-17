@@ -20,22 +20,23 @@ export function parseStreet (result) {
     var address = {};
     for (var i in result.address_components) {
         var obj = result.address_components[i];
-        var nombre = obj.long_name;
+        var nombreLong = obj.long_name;
+        var nombreShort = obj.short_name;
         switch (obj.types[0]) {
         case 'country':
-            address.pais = nombre;
+            address.pais = nombreLong;
             break;
         case 'administrative_area_level_1':
-            address.provincia = nombre;
+            address.provincia = nombreShort.replace('Provincia de ', '');
             break;
         case 'locality':
-            address.ciudad = nombre;
+            address.ciudad = nombreLong.replace('Ciudad de ', '');
             break;
         case 'route':
-            address.calle = nombre;
+            address.calle = nombreLong;
             break;
         case 'street_number':
-            address.numero = nombre;
+            address.numero = nombreLong;
             break;
         };
     }

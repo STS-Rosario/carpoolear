@@ -49,16 +49,16 @@ export function isNumber (variable) {
 }
 
 export function eventNumberKeyInput (event) {
-        if (event.ctrlKey || event.altKey ||
-            (event.keyCode > 47 && event.keyCode < 58 && event.shiftKey === false) ||
-            (event.keyCode > 95 && event.keyCode < 106) ||
-            (event.keyCode === 8) || (event.keyCode === 9) ||
-            (event.keyCode > 34 && event.keyCode < 40) ||
-            (event.keyCode === 46)) {
-            return true;
-        } else {
-            return false;
-        }
+    if (event.ctrlKey || event.altKey ||
+        (event.keyCode > 47 && event.keyCode < 58 && event.shiftKey === false) ||
+        (event.keyCode > 95 && event.keyCode < 106) ||
+        (event.keyCode === 8) || (event.keyCode === 9) ||
+        (event.keyCode > 34 && event.keyCode < 40) ||
+        (event.keyCode === 46)) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 export function eventNumberPaste (event) {
@@ -73,4 +73,46 @@ export function clipboardIsNumeric (event) {
     var clipboardData = (event.clipboardData) ? event.clipboardData.getData('Text') : window.clipboardData.getData('Text');
     var isNumber = /^\d+$/.test(clipboardData);
     return (isNumber);
+}
+
+export function debounce (func, wait, immediate) {
+    let timeout;
+    return function () {
+        let context = this;
+        let args = arguments;
+        let later = function () {
+            timeout = null;
+            if (!immediate) func.apply(context, args);
+        };
+        let callNow = immediate && !timeout;
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+        if (callNow) func.apply(context, args);
+    };
+}
+
+export function getCityName (data) {
+    let city;
+    let province;
+    let name;
+    if (data.address_components) {
+        for (let ind = 0; ind < data.address_components.length; ind++) {
+            if (data.address_components[ind].types[0] === 'locality') {
+                city = data.address_components[ind].long_name.replace('Ciudad de ', '');
+            } else if (data.address_components[ind].types[0] === 'administrative_area_level_1') {
+                province = data.address_components[ind].short_name.replace('Provincia de ', '');
+            }
+        }
+    }
+    if (city && province) {
+        name = city + ', ' + province;
+    } else {
+        if (data.formatted_address) {
+            name = data.formatted_address;
+        } else {
+            name = data.name;
+        }
+        name = name.replace(', Argentina', '');
+    };
+    return name;
 }

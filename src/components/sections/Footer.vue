@@ -5,6 +5,7 @@
         <div class="actionbar_item" v-for="item in footerButtons" :class="{ active: item.active }" @click="onClick(item)">
             <span :class="{big: item.id === 'new-trip'}">
                 <svgItem size="26" :icon="item.icon"></svgItem>
+                <span class="badge" v-if="notificationsCount > 0 && item.id === 'notifications'">{{notificationsCount}}</span>
             </span>
         </div>
 
@@ -81,7 +82,8 @@ export default {
     computed: {
         ...mapGetters({
             footerButtons: 'actionbars/footerButtons',
-            footerShow: 'actionbars/footerShow'
+            footerShow: 'actionbars/footerShow',
+            notificationsCount: 'notifications/count'
         })
     },
     methods: {
@@ -98,5 +100,14 @@ export default {
 <style scoped>
     h3 {
         font-size: 18px;
+    }
+    .badge {
+        position: absolute;
+        background-color: red;
+        right: 14px;
+        bottom: 8px;
+        font-size: 10px;
+        /* height: 17px; */
+        width: 16px;
     }
 </style>

@@ -3,8 +3,8 @@ config = {
   API_URL: '"https://carpoolear.com.ar"',
   MAPS_API: '"AIzaSyBlRfNi2qDcy_zwjR53VVOyD-csjYSq4Qo"',
   FACEBOOK_API: '"147151221990591"'
+
 }
-console.log('DEVICE', process.env.DEVICE);
 
 if (!process.env.PLATFORM || process.env.PLATFORM == 'DESKTOP') {
   config.HISTORY_MODE = '"history"';
@@ -12,16 +12,19 @@ if (!process.env.PLATFORM || process.env.PLATFORM == 'DESKTOP') {
   config.HISTORY_MODE = '"hash"';
 }
 
-if (process.env.PLATFORM && process.env.PLATFORM == 'DESKTOP') {
+var isWin = /^win/.test(process.platform);
+if (isWin && config.NODE_ENV === "production") {
   config.ROUTE_BASE = '"/app/"';
 } else {
-  if (process.env.SERVE) {
-    config.ROUTE_BASE = '"/"';
+  if (process.env.PLATFORM && process.env.PLATFORM == 'DESKTOP') {
+    config.ROUTE_BASE = '"/app/"';
   } else {
-    config.ROUTE_BASE = '""';
+    if (process.env.SERVE) {
+      config.ROUTE_BASE = '"/"';
+    } else {
+      config.ROUTE_BASE = '""';
+    }
   }
 }
-
-console.log(config);
 
 module.exports = config;

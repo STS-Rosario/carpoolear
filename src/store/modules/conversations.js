@@ -60,6 +60,8 @@ const actions = {
         return conversationApi.create(user.id).then((response) => {
             globalStore.dispatch('conversations/listSearch');
             return Promise.resolve(response.data);
+        }).catch((error) => {
+            console.log(error);
         });
     },
 

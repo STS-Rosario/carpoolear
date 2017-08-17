@@ -4,7 +4,7 @@
         <h2>Buscar contacto</h2>
         <li class="list-group-item">
             <div class="input-group">
-                <input v-model="text" @input="onTextChange" type="text" class="form-control" id="input-name" placeholder="Buscar personas">
+                <input v-model="text" v-debounceInput="onTextChange" type="text" class="form-control" id="input-name" placeholder="Buscar personas">
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="button">
                         <i class="fa fa-search" aria-hidden="true"></i>
@@ -25,17 +25,17 @@
                             <h4 class="media-heading"><span class="conversation-title">{{ user.name }}</span></h4>
                         </div>
                         <div class="media-right">
-                            <button @click="onAddClick(user)" :class="user.state === 'none' && this.idRequesting !== user.id ? 'btn-primary' : ''" class="btn" :disabled="user.state != 'none'"> 
-                                <span v-if="user.state == 'none' && idRequesting != user.id"> 
+                            <button @click="onAddClick(user)" :class="user.state === 'none' ? 'btn-primary' : ''" class="btn" :disabled="user.state != 'none'"> 
+                                <span v-if="user.state == 'none' && !idRequesting[user.id]"> 
                                     Agregar <i class="fa fa-plus" aria-hidden="true"></i> 
                                 </span>
-                                <span v-if="idRequesting == user.id"><img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" /></span>
+                                <span v-if="idRequesting[user.id] && idRequesting[user.id] === true"><spinner class="blue"></spinner></span>
                                 <span v-if="user.state != 'none'"> Solicitud enviada </span> 
                             </button>
                         </div>
                     </div>
                 </li>
-                <li slot="no-data" class="list-group-item alert alert-warning"  role="alert">No tienes conversaciones...</li>
+                <li slot="no-data" class="list-group-item alert alert-warning"  role="alert">No se encontraron contactos.</li>
                 <li slot="loading" class="list-group-item alert alert-info" role="alert">
                     <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
                     Buscando contactos..
@@ -50,13 +50,15 @@ import { mapGetters, mapActions } from 'vuex';
 import Loading from '../Loading.vue';
 import FriendCard from './FriendCard';
 import bus from '../../services/bus-event.js';
+import spinner from '../Spinner.vue';
 
 export default {
     name: 'friends_request',
     data () {
         return {
             text: '',
-            idRequesting: 0
+            idRequesting: {},
+            searchingRequest: null
         };
     },
     computed: {
@@ -74,11 +76,11 @@ export default {
         },
 
         onAddClick (user) {
-            this.idRequesting = user.id;
+            this.$set(this.idRequesting, user.id, true);
             this.request(user.id).then(() => {
-                this.idRequesting = 0;
+                this.$set(this.idRequesting, user.id, false);
             }, () => {
-                this.idRequesting = 0;
+                this.$set(this.idRequesting, user.id, false);
             });
         },
         onBackClick () {
@@ -95,7 +97,8 @@ export default {
     },
     components: {
         Loading,
-        FriendCard
+        FriendCard,
+        spinner
     }
 };
 </script>
@@ -103,9 +106,11 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
     .btn {
+        border: solid 2px #fff;
         width: 132px;
+        height: 42px;
         padding: 6px 12px;
-        border-radius: 3px;
+        border-radius: 1px;
     }
     h2 {
         padding-top: 0;

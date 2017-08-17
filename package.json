@@ -30,6 +30,7 @@
     "less-loader": "^4.0.4",
     "lodash": "^4.17.4",
     "minimist": "^1.2.0",
+    "pikaday": "^1.6.1",
     "postcss-browser-reporter": "^0.5.0",
     "postcss-import": "^9.1.0",
     "postcss-reporter": "^3.0.0",
@@ -44,6 +45,7 @@
     "vue-router": "^2.1.1",
     "vue-strap": "github:wffranco/vue-strap",
     "vue2-google-maps": "^0.7.5",
+    "vuejs-datepicker": "^0.9.7",
     "vuex": "^2.1.2"
   },
   "devDependencies": {

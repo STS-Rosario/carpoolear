@@ -31,6 +31,11 @@ const actions = {
         }).catch(() => {
             return Promise.reject();
         });
+    },
+
+    add (store) {
+        store.commit(types.NOTIFICATIONS_COUNT, store.state.count + 1);
+        console.log(store.state);
     }
 };
 
@@ -41,6 +46,7 @@ const mutations = {
 
     [types.NOTIFICATIONS_COUNT] (state, count) {
         state.count = count;
+        console.log(count);
     },
 
     [types.NOTIFICATIONS_DELETE] (state, id) {

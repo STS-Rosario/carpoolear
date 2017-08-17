@@ -26,6 +26,7 @@ body {
     color: var(--main-font-color);
     font-family: 'Roboto', 'Muli', sans-serif !important;
     font-weight: 400;
+    padding: 0;
 }
 .app-container {
     /* this is with bottom bar */
@@ -97,11 +98,12 @@ input[type=radio] + label {
 .brand {
     font-weight: 400;
 }
-
-.btn-primary {
+.carpooled-trip {
+    position: relative;
     border-radius: 0;
     padding: 1em;
     min-width: 5rem;
+    min-height: 42px;
 
     border: 2px solid #FFFFFF;
     color: #FFFFFF;
@@ -109,12 +111,32 @@ input[type=radio] + label {
     background: var(--trip-almost-fill-color);
 
     text-transform: uppercase;
-    font-size: 0.9rem;   
-}   
+    font-size: 0.9rem;
+}
+.btn-primary {
+    position: relative;
+    border-radius: 0;
+    padding: 1em;
+    min-width: 5rem;
+    min-height: 42px;
+
+    border: 2px solid #FFFFFF;
+    color: #FFFFFF;
+
+    background: var(--trip-almost-fill-color);
+
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
 .btn-primary:disabled {
     cursor: not-allowed;
-    background-color:rgb(240, 56, 51);
+    background-color:rgb(220, 129, 127);
 }
+.btn-facebook:disabled {
+    cursor: not-allowed;
+    background-color: #6789d0
+}
+
 .alertify-notifier .ajs-message.ajs-success {
     color: #fff;
 }
@@ -175,8 +197,16 @@ input[type="checkbox"] {
     background: rgb(182, 21, 17);
 }
 .btn-primary.disabled:hover, .btn-primary[disabled]:hover, fieldset[disabled] .btn-primary:hover, .btn-primary.disabled:focus, .btn-primary[disabled]:focus, fieldset[disabled] .btn-primary:focus, .btn-primary.disabled.focus, .btn-primary[disabled].focus, fieldset[disabled] .btn-primary.focus {
-    background-color: rgb(240, 56, 51);
+    background-color:rgb(220, 129, 127);
     border-color: #fff;
+}
+.btn-facebook.disabled:hover, .btn-facebook[disabled]:hover, fieldset[disabled] .btn-facebook:hover, .btn-facebook.disabled:focus, .btn-facebook[disabled]:focus, fieldset[disabled] .btn-facebook:focus, .btn-facebook.disabled.focus, .btn-facebook[disabled].focus, fieldset[disabled] .btn-facebook.focus {
+    cursor: not-allowed;
+    background-color: #6789d0
+}
+.btn-facebook.disabled:hover, .btn-facebook[disabled]:hover, fieldset[disabled] .btn-facebook:hover, .btn-facebook.disabled:focus, .btn-facebook[disabled]:focus, fieldset[disabled] .btn-facebook:focus, .btn-facebook.disabled.focus, .btn-facebook[disabled].focus, fieldset[disabled] .btn-facebook.focus {
+    cursor: not-allowed;
+    background-color: #6789d0
 }
 .dropdown-right {
     display: inline-block;
@@ -320,6 +350,16 @@ input[type="checkbox"] {
     margin-left: 40px;
   }
 
+    .btn-facebook:disabled span:first-child {
+    background-color: #5a77b7;
+    }
+    .btn-with-icon:disabled:hover .btn-with-icon--icon {
+        background-color: #5a77b7;
+    }
+    .btn-facebook:disabled span:first-child:hover {
+        background-color: #5a77b7;
+    }
+
 .btn-option {
     border-radius: 0;
     padding: 1em;
@@ -409,16 +449,35 @@ textarea {
     padding-top: 0;
     padding-bottom: 0;
 }
+.form-control-date {
+    height: 3em;
+}
+#datepicker-mobile {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 100%
+}
 
 .register-component .form-control-date {
     margin-bottom: .5em;
 }
 .form-control-date input {
     cursor: pointer;
+    cursor: text;
+    width: 100%;
 }
-.register-component .form-control-date input {
-    margin-bottom: 0 !important;
-    margin-top: 6px;
+.trip_point.trip-error + .trip_point {
+    margin-top: 1.5em;
+}
+
+.form-control-date input:focus, .form-control-date input:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+.form-control-date input:focus {
+    border-color: #66afe9;
+    outline: none !important;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
 }
 
 .date-picker--cross {
@@ -499,7 +558,6 @@ textarea {
     position: absolute;
     font-size: 10px;
     bottom: 8px;
-    left: 57px;
 }
 .fa-container {
     position: relative;
@@ -582,7 +640,9 @@ textarea {
 .tab-content .profile-rates-component .list-group-item {
     padding: 1.8em 1.6em;
 }
-
+.pika-single.is-bound {
+    margin-top: 1px;
+}
 .header .header_panel-left .header_title {
     margin: 0;
     line-height: 74px;
@@ -702,6 +762,7 @@ textarea {
     padding: 10px 15px;
 }
 .card-trip {
+    height: 404px;
     box-shadow: 0 0 4px 1px #CCC;
     border-radius: .4em;
 }
@@ -732,6 +793,17 @@ textarea {
     right: 40px;
     left: unset;
 }
+.trips-list .trip-complementary {
+    margin-top: 3em;
+}
+.trips-list > .trip-complementary {
+    clear: both;
+}
+
+.trips-list > .trip-complementary  ~ .trip-complementary {
+    display: none;
+}
+
 .trips .trips_title {
     text-align: center;
     margin-bottom: 40px;
@@ -974,7 +1046,15 @@ textarea {
     margin-bottom: 1.5em;
 }
 @media only screen and (min-width: 768px) {
-
+    .register-component .form-control-date {
+        padding-top: 3px;
+        padding-bottom: 3px;
+    }
+    .register-component .form-control-date input[type='text'] {
+        border: 0 !important;
+        margin-top: 0 !important;
+        margin-bottom: 0;
+    }
     .trip-type-selection {
         padding: 1.5em;
         margin-right: .5em;
@@ -1011,6 +1091,11 @@ textarea {
     width: calc(100% - 7em);
     float: left;
 }
+
+.message-button {
+    margin-top: 1em;
+}
+
 .request-list div.rate-pending_component:last-of-type {
     margin-bottom: 0;
 }
@@ -1043,6 +1128,10 @@ textarea {
     border: 0;
     min-width: auto;
     font-size: 13px;
+}
+.btn-accept-request:hover, .btn-accept-request:focus, .btn-accept-request.focus {
+    color: #fff;
+    background-color: #0fa30f;
 }
 .request-list .btn-primary,
 .friend-card .pending-buttons .btn-primary {
@@ -1208,7 +1297,19 @@ textarea {
 }
 
 .trip-detail-component .quote span {
-    word-break: break-all;
+    /* These are technically the same, but use both */
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+
+    -ms-word-break: break-word;
+    /* Instead use this non-standard one: */
+    word-break: break-word;
+
+    /* Adds a hyphen where the word breaks, if supported (No Blink) */
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
 }
 
 .trip-detail-component .quote i {
@@ -1305,6 +1406,9 @@ textarea {
 .conversation-component .list-group-item:last-child {
     border-bottom-width: 0;
 }
+.conversation_chat--chats .list-group-item:last-child {
+    border-bottom-width: 1px;
+}
 .list-group {
     margin-bottom: 0;
 }
@@ -1361,7 +1465,9 @@ textarea {
 .update-profile-component .profile_image img {
     width: 90%;
 }
-
+.profile-info-component {
+    padding-bottom: 6em;
+}
 .profile-info--name {
     font-weight: 500;
     font-size: 1.4em;;
@@ -1387,6 +1493,14 @@ textarea {
     display: inline-block;
     width: 80%;
     padding-right: 2.2em;
+
+    word-wrap: break-word;
+    word-wrap: break-word;
+    -ms-word-break: break-word;
+    word-break: break-word;
+    -ms-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
 }
 
 .italic {
@@ -1427,7 +1541,9 @@ textarea {
 .profile-info-component .list-group-item img {
     margin-bottom: 1.2em;
 }
-
+.profile-social-accounts {
+    margin-top: 2.5em;
+}
 .profile_image {
     text-align: center;
 }
@@ -1724,7 +1840,9 @@ h2 {
     line-height: 28px;
 }
 
-.user-form input.has-error {
+.user-form input.has-error,
+input.has-error,
+textarea.has-error {
     border: 1px solid var(--main-error);
 }
 
@@ -1736,6 +1854,7 @@ h2 {
     margin-top: 1em;
 }
 .user-form .btn-primary {
+    height: 56px;
     margin-top: 1em;
     padding: 1em;
     width: 100%;
@@ -1931,6 +2050,10 @@ ul {
 }
 
 @media only screen and (max-width: 768px) {
+    .conversation_chat--search .list-group-item {
+        border-right-width: 0;
+        border-left-width: 0;
+    }
     .new-trip-component .form-trip {
         padding-bottom: 3rem;
         box-shadow: none;
@@ -1986,7 +2109,7 @@ ul {
 }
 
 @media only screen and (min-width: 768px) {
-    .column-rating { 
+    .column-rating {
         width: 50%;
         float: left;
     }
@@ -2161,8 +2284,11 @@ ul {
         width: 0;
     }
     .circle-box.profile {
-        max-width: 170px;
-        max-height: 170px;
+        max-width: 230px;
+        max-height: 230px;
+    }
+    .profile-info--ratings {
+        width: 230px;
     }
     .list-container {
         margin: .8em 0;
@@ -2184,7 +2310,7 @@ ul {
         color: #333;
     }
     .user-form .btn-primary {
-        width: initial;
+        max-width: 130px;
         padding: 1em 2em;
     }
     .user-form a {
@@ -2274,7 +2400,7 @@ ul {
         padding-top: 8.6rem;
     }
 }
-@media only screen and (max-width: 912px) {
+@media only screen and (max-width: 1080px) {
     .header_panel-left img:first-child {
         display: none;
     }
@@ -2283,7 +2409,10 @@ ul {
     }
 }
 @media only screen and (min-width: 992px) {
-    .column-rating { 
+    .no-padding {
+        padding: 0;
+    }
+    .column-rating {
         width: 33.33%;
         float: left;
     }
@@ -2356,7 +2485,7 @@ ul {
     }
 }
 
-@media only screen and (min-width: 1120px) {
+@media only screen and (min-width: 1300px) {
     .header_panel-left {
         margin: 0 0 0 4em;
     }
@@ -2508,4 +2637,14 @@ ul {
 }
 .ajax-loader {
     vertical-align: -3px;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+    input[type="date"].form-control, input[type="time"].form-control, input[type="datetime-local"].form-control, input[type="month"].form-control {
+        line-height: normal;
+    }
+}
+
+.pika-label:after {
+    content:" \25be";
 }

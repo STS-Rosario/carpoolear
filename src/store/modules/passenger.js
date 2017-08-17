@@ -84,7 +84,8 @@ const mutations = {
     },
 
     [types.PASSENGER_REMOVE_PENDING] (state, data) {
-        var index = state.pendingRequest.findIndex(item => item.user.id === data.user_id || item.trip_id === data.trip_id);
+        let index = state.pendingRequest.findIndex(item => item.user.id === data.user_id || item.trip_id === data.trip_id);
+        console.log(index, state.pendingRequest);
         state.pendingRequest.splice(index, 1);
     }
 };

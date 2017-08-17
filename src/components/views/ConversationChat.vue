@@ -1,8 +1,11 @@
 <template>
     <div class="conversation_chat" v-if="conversation">
         <div class="list-group">
-            <div class="list-group-item desktop">
-                <h2> {{conversation.title}} </h2>
+            <div class="list-group-item">
+                <router-link v-if="conversation.users.length === 2" :to="{ name: 'profile', params: userProfile() }">
+                    <h2> {{conversation.title}} </h2>
+                </router-link>
+                <h2 v-else> {{conversation.title}} </h2>
                 <p class="chat_last_connection">
                     <strong>Última conexión: </strong>
                     <span class="">{{lastConnection | moment("calendar")}}</span>
@@ -77,6 +80,17 @@ export default {
             'setSubTitle': 'actionbars/setSubTitle'
         }),
 
+        userProfile () {
+            let id = 0;
+            if (this.conversation.users[0].id === this.user.id) {
+                id = 1;
+            };
+            return {
+                id: this.conversation.users[id].id,
+                userProfile: this.conversation.users[id]
+            };
+        },
+
         sendMessage () {
             this.sending = true;
             this.send(this.message).then(data => {
@@ -117,6 +131,10 @@ export default {
         });
         bus.on('back-click', this.onBackClick);
         // this.thread.run(5000);
+        if (this.conversation) {
+            this.setTitle(this.conversation.title);
+            this.setSubTitle('Última conexión: ' + moment().calendar(this.lastConnection));
+        }
     },
     updated () {
         if (this.mustJump) {

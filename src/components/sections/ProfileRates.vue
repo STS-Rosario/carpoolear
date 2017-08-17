@@ -108,20 +108,17 @@ export default {
     },
     watch: {
         rates: {
-            handler: function (val, oldVal) { 
-                console.log('retes change');
+            handler: function (val, oldVal) {
                 this.makeRows();
             }
         },
         isMobile: {
             handler: function (val, oldVal) {
-                console.log('resolution change');
                 this.makeRows();
             }
         },
         isDesktop: {
             handler: function (val, oldVal) {
-                console.log('resolution change');
                 this.makeRows();
             }
         }

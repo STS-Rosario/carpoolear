@@ -4,7 +4,8 @@
             <div id="notifications-list list-group">
                 <div class="list-group-item" v-for="n in notifications" :class="{'unread': !n.readed}" @click="onNotificationClick(n)">
                     <div>
-                        {{n.text}} - {{n.created_at | moment('calendar')}}
+                        <strong>{{n.text}}</strong>
+                        <em>{{n.created_at | moment('calendar')}}</em>
                     </div>
                 </div>
             </div>

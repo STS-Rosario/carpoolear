@@ -53,7 +53,7 @@
                                     <time class="trip_datetime col-xs-offset-4 col-xs-20" :datetime="trip.trip_date">
                                         <span class="trip_datetime_date">{{ [ trip.trip_date ] | moment("DD MMMM YYYY") }}</span>
                                         -
-                                        <span class="trip_datetime_time">{{ [ trip.trip_date ] | moment("h:mm a") }}</span>
+                                        <span class="trip_datetime_time">{{ [ trip.trip_date ] | moment("HH:mm") }}</span>
                                     </time>
                                 </div>
                                 <div class="row"  v-if="!trip.is_passenger">
@@ -62,18 +62,7 @@
                                         <span class="trip_seats-available_label">Lugares<br>libres</span>
                                     </div>
                                 </div>
-                                <div class="row passengers"  v-if="!trip.is_passenger">
-                                    <div class="col-xs-offset-3 col-xs-21" v-if="trip.passenger.length">
-                                        <span v-for="p in trip.passenger">
-                                            <div class="trip_driver_img circle-box passenger" v-imgSrc:profile="trip.passenger.image">
-                                                <span v-if="owner" @click="removePassenger(p)">
-                                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                                </span>
-                                            </div>
-                                        </span>
-                                    </div>
-                                    <div v-else style="height: 2em;"></div>
-                                </div>
+                                <div style="height: 3.5em;"></div>
                             </div>
                             <div class="col-sm-10 col-md-10 column">
                                 <div class="row trip-data" v-if="trip.is_passenger">
@@ -123,24 +112,42 @@
                                         <i class="fa fa-whatsapp" aria-hidden="true"></i>
                                     </a>
                                 </div>
+
+                                <div class="row passengers"  v-if="!trip.is_passenger">
+                                    <div class="col-xs-24" v-if="trip.passenger.length">
+                                        <div style="margin-top: 1em;"><strong>Pasajeros</strong></div>
+                                        <span v-for="p in trip.passenger">
+                                            <div @click="toUserMessages(p)" class="trip_driver_img circle-box passenger" v-imgSrc:profile="p.image">
+                                                <span v-if="owner" @click="removePassenger(p)">
+                                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                        </span>
+                                    </div>
+                                    <div v-else style="height: 2em;"></div>
+                                </div>
                             </div>
                             <div class="buttons-container">
                                 <router-link class="btn btn-primary" v-if="owner" :to="{name: 'update-trip', params: { id: trip.id}}"> Editar  </router-link>
+                                <a class="btn btn-primary" v-if="owner" @click="deleteTrip" > Cancelar viaje  </a>
                                 <template v-if="!owner && !expired">
                                     <button class="btn btn-primary" @click="toMessages" v-if="!owner"> Coordinar viaje  </button>
                                 </template>
                                 <template v-if="!owner && !trip.is_passenger && !expired">
                                     <template v-if="!isPassenger">
-                                        <button class="btn btn-primary" @click="makeRequest" v-if="canRequest"> Solicitar asiento </button>
+                                        <button class="btn btn-primary" @click="makeRequest" v-if="canRequest && trip.seats_available > 0"> Solicitar asiento </button>
                                         <button class="btn" v-if="!canRequest" @click="cancelRequest"> Solicitud enviada </button>
                                     </template>
 
                                     <template v-if="isPassenger">
-                                        <button class="btn btn-primary" @click="cancelRequest" v-if="canRequest"> Cancelar viaje </button>
+                                        <button class="btn btn-primary" @click="cancelRequest" v-if="canRequest"> Bajarme del viaje </button>
                                     </template>
                                 </template>
                                 <template v-if="expired">
                                     <button class="btn btn-primary" disabled> Finalizado  </button>
+                                </template>
+                                <template v-if="trip.seats_available === 0 && !trip.is_passenger">
+                                    <div class="carpooled-trip"> Viaje Carpooleado </div>
                                 </template>
                             </div>
                         </div>
@@ -207,6 +214,7 @@ import router from '../../router';
 import bus from '../../services/bus-event';
 import svgItem from '../SvgItem';
 import moment from 'moment';
+import dialogs from '../../services/dialogs.js';
 
 export default {
     name: 'trip',
@@ -230,7 +238,7 @@ export default {
                     location: null
                 }
             ],
-            currentUrl: encodeURIComponent('https://carpoolear.com.ar' + this.$route.fullPath)
+            currentUrl: encodeURIComponent('https://carpoolear.com.ar/app' + this.$route.fullPath)
         };
     },
 
@@ -239,13 +247,21 @@ export default {
             getTrip: 'getTrip',
             lookConversation: 'conversations/createConversation',
             make: 'passenger/makeRequest',
-            cancel: 'passenger/cancel'
+            cancel: 'passenger/cancel',
+            remove: 'trips/remove'
         }),
         profileComplete () {
             if (!this.user.image || this.user.image.length === 0 || !this.user.description || this.user.description.length === 0) {
                 router.replace({ name: 'profile_update' });
             } else {
                 return true;
+            }
+        },
+        deleteTrip () {
+            if (window.confirm('¿Estás seguro que deseas cancelar el viaje?')) {
+                this.remove(this.trip.id).then(() => {
+                    this.$router.replace({name: 'trips'});
+                });
             }
         },
         loadTrip () {
@@ -265,16 +281,22 @@ export default {
 
         toMessages () {
             if (this.profileComplete()) {
-                this.lookConversation(this.trip.user).then(conversation => {
-                    router.push({ name: 'conversation-chat', params: { id: conversation.id } });
-                });
+                this.toUserMessages(this.trip.user);
             }
+        },
+
+        toUserMessages (user) {
+            console.log(user);
+            this.lookConversation(user).then(conversation => {
+                router.push({ name: 'conversation-chat', params: { id: conversation.id } });
+            });
         },
 
         makeRequest () {
             if (this.profileComplete()) {
                 this.sending = true;
                 this.make(this.trip.id).then(() => {
+                    dialogs.message('La solicitud fue enviada.');
                     this.sending = false;
                     this.trip.request = 'send';
                 }).catch(() => {
@@ -284,18 +306,21 @@ export default {
         },
 
         cancelRequest () {
-            this.sending = true;
-            this.cancel({ user: this.user, trip: this.trip }).then(() => {
-                this.sending = false;
-                if (this.trip.request !== 'send') {
-                    let index = this.trip.passenger.findIndex(item => item.id === this.user.id);
-                    this.trip.passenger.splice(index, 1);
-                } else {
-                    this.trip.request = '';
-                }
-            }).catch(() => {
-                this.sending = false;
-            });
+            if (window.confirm('¿Estás seguro que deseas bajarte del viaje?')) {
+                this.sending = true;
+                this.cancel({ user: this.user, trip: this.trip }).then(() => {
+                    this.sending = false;
+                    dialogs.message('Te has bajado del viaje.');
+                    if (this.trip.request !== 'send') {
+                        let index = this.trip.passenger.findIndex(item => item.id === this.user.id);
+                        this.trip.passenger.splice(index, 1);
+                    } else {
+                        this.trip.request = '';
+                    }
+                }).catch(() => {
+                    this.sending = false;
+                });
+            }
         },
 
         removePassenger (user) {
@@ -314,13 +339,15 @@ export default {
         },
 
         renderMap () {
-            this.$refs.map.$mapCreated.then(() => {
-                /* eslint-disable no-undef */
-                this.directionsService = new google.maps.DirectionsService();
-                this.directionsDisplay = new google.maps.DirectionsRenderer();
-                this.directionsDisplay.setMap(this.$refs.map.$mapObject);
-                this.restoreData(this.trip);
-            });
+            if (this.$refs.map) {
+                this.$refs.map.$mapCreated.then(() => {
+                    /* eslint-disable no-undef */
+                    this.directionsService = new google.maps.DirectionsService();
+                    this.directionsDisplay = new google.maps.DirectionsRenderer();
+                    this.directionsDisplay.setMap(this.$refs.map.$mapObject);
+                    this.restoreData(this.trip);
+                });
+            }
         },
 
         restoreData (trip) {
@@ -467,6 +494,7 @@ export default {
     }
     .trip-detail-component .structure-div {
         margin-top: 1rem;
+        z-index: -100;
     }
     .trip-detail-component .driver-container {
         margin-top: 0;
