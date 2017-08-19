@@ -112,6 +112,9 @@ const actions = {
         if (item.url === 'profile') {
             params.id = 'me';
         }
+        if (item.url === 'trips') {
+            params.clearSearch = true;
+        }
         router.push({name: item.url, params});
     }
 

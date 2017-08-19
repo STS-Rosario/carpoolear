@@ -133,6 +133,7 @@ export default [
         path: '/trips',
         name: 'trips',
         component: require('../components/views/Trips'),
+        props: true,
         meta: {
             actionbar: {
                 footer: {
