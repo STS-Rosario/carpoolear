@@ -35,6 +35,8 @@ const actions = {
     },
 
     ...pagination.makeActions('rates', ({store, data}) => {
+        // TODO: Pagination not working
+        data.page_size = 200;
         return rateApi.index(store.state.user.id, data);
     })
 

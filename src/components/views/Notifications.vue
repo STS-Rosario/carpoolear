@@ -1,11 +1,14 @@
 <template>
     <div>
         <Loading class="container" :data="notifications">
-            <div id="notifications-list list-group">
+            <div class="notifications-list list-group">
                 <div class="list-group-item" v-for="n in notifications" :class="{'unread': !n.readed}" @click="onNotificationClick(n)">
                     <div>
                         <strong>{{n.text}}</strong>
                         <em>{{n.created_at | moment('calendar')}}</em>
+                        <span class="pull-right">
+                            <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -77,5 +80,11 @@ export default {
 <style scoped>
     .container {
         padding: 3em 2em;
+    }
+    .notifications-list .list-group-item {
+        cursor: pointer;
+    }
+    .notifications-list .list-group-item:hover {
+        background: #DDD;
     }
 </style>

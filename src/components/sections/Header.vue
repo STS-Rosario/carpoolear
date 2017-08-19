@@ -163,11 +163,13 @@ export default {
     methods: {
         share () {
             // dialogs.message('Message example');
-            if (window && window.plugins && window.plugins.socialsharing && window.plugins.socialsharing.shareWithOptions) {
+            /* if (window && window.plugins && window.plugins.socialsharing && window.plugins.socialsharing.shareWithOptions) {
                 socialShare.share();
             } else {
                 this.showModal = true;
-            }
+            } */
+            // Primero necesito ver cuando estoy en App y cuando en Web
+            this.showModal = true;
         },
 
         logout () {
