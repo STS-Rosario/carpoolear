@@ -114,15 +114,16 @@
                                 </div>
 
                                 <div class="row passengers"  v-if="!trip.is_passenger">
-                                    <div class="col-xs-24" v-if="trip.passenger.length">
-                                        <div style="margin-top: 1em;"><strong>Pasajeros</strong></div>
-                                        <span v-for="p in trip.passenger">
-                                            <div @click="toUserMessages(p)" class="trip_driver_img circle-box passenger" v-imgSrc:profile="p.image">
-                                                <span v-if="owner" @click="removePassenger(p)">
-                                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                                </span>
-                                            </div>
-                                        </span>
+                                    <div class="col-xs-24" v-if="trip.passenger.length  && owner">
+                                        <h4 style="margin: 1em 0;"><strong>Pasajeros subidos</strong></h4>
+                                        <div v-for="p in trip.passenger">
+                                            <span @click="toUserMessages(p)" class="trip_driver_img circle-box passenger trip_passenger_image" v-imgSrc:profile="p.image">
+                                            </span>
+                                            <a href="#" @click="toUserMessages(p)" class="trip_passenger_name">{{ p.name }}</a>
+                                            <span @click="removePassenger(p)" class="trip_passenger-remove">
+                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
                                     </div>
                                     <div v-else style="height: 2em;"></div>
                                 </div>
@@ -327,14 +328,16 @@ export default {
         },
 
         removePassenger (user) {
-            this.sending = true;
-            this.cancel({ user: user, trip: this.trip }).then(() => {
-                this.sending = false;
-                let index = this.trip.passenger.findIndex(item => item.id === user.id);
-                this.trip.passenger.splice(index, 1);
-            }).catch(() => {
-                this.sending = false;
-            });
+            if (window.confirm('¿Estás seguro que deseas bajar a este pasajero de tu viaje?')) {
+                this.sending = true;
+                this.cancel({ user: user, trip: this.trip }).then(() => {
+                    this.sending = false;
+                    let index = this.trip.passenger.findIndex(item => item.id === user.id);
+                    this.trip.passenger.splice(index, 1);
+                }).catch(() => {
+                    this.sending = false;
+                });
+            }
         },
 
         onBackClick () {
@@ -480,20 +483,23 @@ export default {
         width: 40px;
     }
     .trip_driver_img.circle-box.passenger {
-        width: 2.2em;
-        height: 2.2em;
+        width: 3.5em;
+        height: 3.5em;
         position: relative;
         margin-right: .2em;
     }
-    .trip_driver_img.circle-box.passenger span{
-        position: absolute;
-        right: -6px;
-        bottom: -6px;
-        color: #555;
-        font-size: 12px;
-    }
     .passengers {
         margin-bottom: .8em;
+    }
+    .trip_passenger-remove,
+    .trip_passenger_image,
+    .trip_passenger_name {
+        vertical-align: middle;
+        cursor: pointer;
+    }
+    .trip_passenger-remove {
+        font-size: 1.8em;
+        margin-left: .5em;
     }
     .trip-detail-component .structure-div {
         margin-top: 1rem;

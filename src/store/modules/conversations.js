@@ -53,6 +53,10 @@ const actions = {
         });
     }),
 
+    clearUserList (store) {
+        store.commit(types.CONVERSATION_SET_USERLIST, null);
+    },
+
     getUserList (store, texto) {
         if (texto.length > 0) {
             store.commit(types.CONVERSATION_SET_USERLIST, null);

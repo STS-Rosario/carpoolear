@@ -6,8 +6,8 @@
                 <ul class="list-group">
                     <li class="list-group-item">
                         <div class="input-group">
-                            <input v-model="textSearch"  v-debounceInput="onSearchUser" type="text" class="form-control" placeholder="Buscar personas">
-                            <span class="input-group-btn">
+                            <input v-model="textSearch" type="text" class="form-control" placeholder="Escribe un nombre y presiona buscar">
+                            <span class="input-group-btn"><!-- v-debounceInput="onSearchUser" -->
                                 <button class="btn btn-default" type="button" @click="onSearchUser" >
                                     <i class="fa fa-search" aria-hidden="true"></i>
                                 </button>
@@ -39,7 +39,7 @@
                         </Loading>
                     </template>
                     <template v-else>
-                        <Loading class="conversation_chat--search" :data="users">
+                        <Loading class="conversation_chat--search" :data="users" :hideOnEmpty="true">
                             <li v-for="user in users" class="list-group-item" @click="createConversation(user)">
                                 <div class="conversation_image circle-box" v-imgSrc:profile="user.image"></div>
                                 {{user.name}}
@@ -96,7 +96,8 @@ export default {
             searchUser: 'conversations/getUserList',
             create: 'conversations/createConversation',
             unreadMessage: 'conversations/getUnreaded',
-            select: 'conversations/select'
+            select: 'conversations/select',
+            clear: 'conversations/clearUserList'
         }),
 
         nextPage () {
@@ -110,6 +111,7 @@ export default {
         createConversation (user) {
             this.create(user).then((c) => {
                 this.textSearch = '';
+                this.clear();
                 router.push({ name: 'conversation-chat', params: { id: c.id } });
             }).catch(() => {
 

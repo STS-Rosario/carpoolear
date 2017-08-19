@@ -2165,9 +2165,7 @@ ul {
         z-index: 0;
     }
     .conversation-component .list-group-item:first-child {
-        border-right-width: 1px;
-        border-left-width: 1px;
-        border-top-width: 1px;
+        border: 1px solid #DDDDDD;
     }
     /*.conversation-component .list-group-item:last-child {
         border-bottom-width: 1px;
