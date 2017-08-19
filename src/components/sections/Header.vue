@@ -3,7 +3,9 @@
         <div class="actionbar actionbar-top visible-xs">
             <div class="actionbar_section actionbar_icon">
                 <span v-if="showLogo">
-                    <img :src="carpoolear_logo" />
+                    <router-link :to="{ name: 'trips', params: { clearSearch: true } }"  v-on:click.native="tripsClick">
+                        <img :src="carpoolear_logo" />
+                    </router-link>
                 </span>
                 <template v-else v-for="item in leftHeaderButton" v-if="item.show">
                     <span @click="onClick(item)">
@@ -33,7 +35,7 @@
             </div>
         </div>
         <div class="header_content hidden-xs">
-            <router-link :to="{name: 'trips'}">
+            <router-link :to="{ name: 'trips', params: { clearSearch: true } }"  v-on:click.native="tripsClick">
                 <div class="header_panel-left" v-if="logoHeaderVisibility" >
                     <img :src="background_desktop_mini" v-if="isNotLargeDesktop" />
                     <img :src="background_desktop" v-if="!isNotLargeDesktop" />
@@ -60,7 +62,7 @@
                     </div>
                 </modal>
                 <button @click="share" type="button" class="btn btn-link">Invitar amigos</button>
-                <router-link class="btn btn-link trips-link" :to="{name: 'trips'}">Viajes</router-link>
+                <router-link class="btn btn-link trips-link" :to="{name: 'trips', params: { clearSearch: true }}">Viajes</router-link>
                 <!--<router-link class="btn btn-link" v-if="!logged" :to="{name: 'trips'}">Información</router-link>-->
                 <router-link class="btn btn-link" v-if="!logged" :to="{name: 'register'}">Registrarme</router-link>
                 <router-link class="btn btn-primary" btn-lg v-if="!logged" :to="{name: 'login'}">Login</router-link>
@@ -111,7 +113,6 @@
 </template>
 
 <script>
-import socialShare from '../../services/socialShare.js';
 import {mapGetters} from 'vuex';
 import {dropdown} from 'vue-strap';
 import router from '../../router';
@@ -163,11 +164,13 @@ export default {
     methods: {
         share () {
             // dialogs.message('Message example');
-            if (window && window.plugins && window.plugins.socialsharing && window.plugins.socialsharing.shareWithOptions) {
+            /* if (window && window.plugins && window.plugins.socialsharing && window.plugins.socialsharing.shareWithOptions) {
                 socialShare.share();
             } else {
                 this.showModal = true;
-            }
+            } */
+            // Primero necesito ver cuando estoy en App y cuando en Web
+            this.showModal = true;
         },
 
         logout () {
@@ -180,7 +183,12 @@ export default {
 
         onClick (item) {
             bus.emit(item.id + '-click');
+        },
+
+        tripsClick () {
+            this.$store.dispatch('trips/tripsSearch', {});
         }
+
     },
 
     components: {

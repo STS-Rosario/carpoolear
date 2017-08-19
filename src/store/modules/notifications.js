@@ -46,7 +46,6 @@ const mutations = {
 
     [types.NOTIFICATIONS_COUNT] (state, count) {
         state.count = count;
-        console.log(count);
     },
 
     [types.NOTIFICATIONS_DELETE] (state, id) {

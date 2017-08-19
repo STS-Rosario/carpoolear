@@ -58,7 +58,6 @@ export default {
         };
     },
     mounted () {
-        console.log('!!!!', this.value);
         if (this.value !== '') {
             this.dateBrowser = moment(this.value).toDate();
             this.dateMobile = this.value;
@@ -66,11 +65,9 @@ export default {
     },
     methods: {
         changeValue (value) {
-            console.log(value, this);
             this.dateBrowser = value;
         },
         changeMobileValue (el) {
-            console.log(el);
             this.dateMobile = el.target.value;
         }
     },
@@ -81,7 +78,6 @@ export default {
             } else {
                 bus.emit('date-change', '');
             }
-            console.log('emiting');
         },
         dateMobile: function (value) {
             if (value && value !== '') {
@@ -125,7 +121,6 @@ export default {
             device: 'cordova/device'
         }),
         browser () {
-            console.log(this.device);
             if (this.device) {
                 if (this.device.platform === 'browser') {
                     return true;
@@ -137,7 +132,6 @@ export default {
             }
         },
         max () {
-            console.log(this.maxDate, this.minDate);
             let answer;
             if (this.maxDate) {
                 answer = this.maxDate;

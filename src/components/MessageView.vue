@@ -31,7 +31,7 @@ export default {
     computed: {
         author () {
             let user = this.users.find(item => this.message.user_id === item.id);
-            return user;
+            return user || {};
         },
         date () {
             var today = new Date();

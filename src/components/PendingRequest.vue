@@ -9,7 +9,7 @@
             </div>
             <div class="rate-pending-message">
                 <div class="rate-pending-message--content">
-                    <strong>{{user.name}}</strong> quiere subirse al viaje hacia <strong>{{trip.points[trip.points.length - 1].json_address.ciudad}}</strong>.
+                    <strong>{{user.name}}</strong> quiere subirse al viaje hacia <strong>{{trip.points[trip.points.length - 1].json_address.ciudad}}</strong> del día {{ trip.trip_date | moment("DD/MM/YYYY") }} a las  {{ trip.trip_date | moment("HH:mm") }}.
                     <div class='pending-buttons'>
                         <button class="btn btn-accept-request" :disabled="acceptInProcess" @click="accept"> Aceptar </button>
                         <button class="btn btn-primary" :disabled="rejectInProcess" @click="reject"> Rechazar </button>

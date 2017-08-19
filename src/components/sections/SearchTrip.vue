@@ -77,33 +77,11 @@ export default {
     },
     mounted () {
         bus.on('date-change', this.dateChange);
-        if (this.params) {
-            if (this.params.origin_name) {
-                this.from_town.name = this.params.origin_name;
-                this.from_town.location = {
-                    lat: this.params.origin_lat,
-                    lng: this.params.origin_lng
-                };
-                this.from_town.radio = this.params.origin_radio;
-            }
-
-            if (this.params.destination_name) {
-                this.to_town.name = this.params.destination_name;
-                this.to_town.location = {
-                    lat: this.params.destination_lat,
-                    lng: this.params.destination_lng
-                };
-                this.to_town.radio = this.params.destination_radio;
-            }
-            if (this.params.is_passenger) {
-                this.isPassenger = this.params.is_passenger;
-            }
-            if (this.params.date) {
-                this.date = this.params.date;
-            }
-        }
+        this.loadParams(this.params);
         this.$refs['from_town'].$el.addEventListener('input', this.checkInput);
         this.$refs['to_town'].$el.addEventListener('input', this.checkInput);
+    },
+    updated () {
     },
     beforeDestroy () {
         this.$refs['from_town'].$el.removeEventListener('input', this.checkInput);
@@ -174,6 +152,46 @@ export default {
             temp = this['to_town'];
             this['to_town'] = this['from_town'];
             this['from_town'] = temp;
+        },
+        clear () {
+            this.resetInput('to_town');
+            this.resetInput('to_town');
+            this.date = '';
+        },
+        loadParams (parameters) {
+            if (parameters) {
+                if (parameters.origin_name) {
+                    this.from_town.name = parameters.origin_name;
+                    this.from_town.location = {
+                        lat: parameters.origin_lat,
+                        lng: parameters.origin_lng
+                    };
+                    this.from_town.radio = parameters.origin_radio;
+                } else {
+                    this.resetInput('from_town');
+                }
+
+                if (parameters.destination_name) {
+                    this.to_town.name = parameters.destination_name;
+                    this.to_town.location = {
+                        lat: parameters.destination_lat,
+                        lng: parameters.destination_lng
+                    };
+                    this.to_town.radio = parameters.destination_radio;
+                } else {
+                    this.resetInput('to_town');
+                }
+                if (parameters.is_passenger) {
+                    this.isPassenger = parameters.is_passenger;
+                } else {
+                    this.isPassenger = false;
+                }
+                if (parameters.date) {
+                    this.date = parameters.date;
+                } else {
+                    this.date = '';
+                }
+            }
         }
     },
     props: [

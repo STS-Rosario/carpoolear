@@ -11,6 +11,7 @@ const state = {
     ...pagination.makeState('list'),
     userList: null,
     selectedID: null,
+    conversationSelected: null,
     messages: {
         /*
             id => {
@@ -26,10 +27,18 @@ const state = {
 const getters = {
     ...pagination.makeGetters('list'),
     users: state => state.userList,
-    selectedConversation: state => state.list ? state.list.find(item => item.id === state.selectedID) : null,
+    // selectedConversation: state => {
+    //     if (state.list) {
+    //         let conversationTemp = state.list.find(item => item.id === state.selectedID);
+    //         return conversationTemp || state.conversation;
+    //     }
+    //     return state.conversation;
+    // },
+    selectedConversation: state => state.conversationSelected,
+
     msgObj: state => state.messages[state.selectedID],
     messagesList: state => state.messages[state.selectedID] ? state.messages[state.selectedID].list : [],
-    lastPageConversation: state => state.messages[state.selectedID].lastPage
+    lastPageConversation: state => state.messages[state.selectedID] ? state.messages[state.selectedID].lastPage : true
 };
 
 // actions
@@ -43,6 +52,10 @@ const actions = {
             });
         });
     }),
+
+    clearUserList (store) {
+        store.commit(types.CONVERSATION_SET_USERLIST, null);
+    },
 
     getUserList (store, texto) {
         if (texto.length > 0) {
@@ -58,7 +71,7 @@ const actions = {
 
     createConversation (store, user) {
         return conversationApi.create(user.id).then((response) => {
-            globalStore.dispatch('conversations/listSearch');
+            // globalStore.dispatch('conversations/listSearch');
             return Promise.resolve(response.data);
         }).catch((error) => {
             console.log(error);
@@ -66,10 +79,25 @@ const actions = {
     },
 
     select (store, id) {
+        console.log('Conversation Selected:', id);
         if (id) {
-            store.commit(types.CONVERSATION_SET_SELECTED, id);
-            store.commit(types.CONVERSATION_CREATE_MESSAGES, id);
-            globalStore.dispatch('conversations/findMessage', {id, more: false});
+            let conversationTemp = store.state.list ? store.state.list.find(item => item.id === id) : null;
+
+            if (conversationTemp) {
+                store.commit(types.CONVERSATION_SET_CONVERSATION, conversationTemp);
+                store.commit(types.CONVERSATION_SET_SELECTED, id);
+                store.commit(types.CONVERSATION_CREATE_MESSAGES, id);
+                globalStore.dispatch('conversations/findConversation', {id, more: false});
+
+                return Promise.resolve(conversationTemp);
+            } else {
+                return globalStore.dispatch('conversations/findConversation', {id, more: false}).then(conversation => {
+                    store.commit(types.CONVERSATION_CREATE_MESSAGES, id);
+                    store.commit(types.CONVERSATION_SET_CONVERSATION, conversation);
+                    store.commit(types.CONVERSATION_SET_SELECTED, id);
+                    return Promise.resolve(conversation);
+                }).catch(err => Promise.reject(err));
+            }
         } else {
             store.commit(types.CONVERSATION_SET_SELECTED, null);
         }
@@ -122,6 +150,24 @@ const actions = {
         });
     },
 
+    findConversation (store, {id} = {}) {
+        if (!id) {
+            id = store.state.selectedID;
+        }
+        return conversationApi.show(id).then(response => {
+            if (response.data) {
+                store.commit(types.CONVERSATION_CREATE_MESSAGES, id);
+                store.commit(types.CONVERSATION_PUSH, response.data);
+                store.commit(types.CONVERSATION_GET, response.data);
+                store.commit(types.CONVERSATION_SET_CONVERSATION, response.data);
+                globalStore.dispatch('conversations/findMessage', {id, more: false});
+            }
+            return Promise.resolve(response.data);
+        }).catch(error => {
+            return Promise.reject(error);
+        });
+    },
+
     findMessage (store, {id, more} = {}) {
         if (!id) {
             id = store.state.selectedID;
@@ -135,6 +181,7 @@ const actions = {
         let unread = false;
         let read = true;
         return conversationApi.getMessages(id, { read, unread, pageSize, timestamp }).then(response => {
+            console.log('Get Messages:', id, response.data);
             if (!more) {
                 store.commit(types.CONVERSATION_BLANK_MESSAGES, {id});
             }
@@ -166,6 +213,9 @@ const mutations = {
     ...pagination.makeMutations('list'),
 
     [types.CONVERSATION_PUSH] (state, conv) {
+        if (!state.list) {
+            state.list = [];
+        }
         state.list.push(conv);
     },
 
@@ -183,6 +233,15 @@ const mutations = {
             state.selectedID = id;
         } else {
             state.selectedID = null;
+            state.conversationSelected = null;
+        }
+    },
+
+    [types.CONVERSATION_SET_CONVERSATION] (state, conversation) {
+        if (conversation) {
+            state.conversationSelected = conversation;
+        } else {
+            state.conversationSelected = null;
         }
     },
 
@@ -215,6 +274,10 @@ const mutations = {
             lastPage: state.messages[id].lastPage
         };
         state.messages = Object.assign({}, state.messages, obj);
+    },
+    [types.CONVERSATION_GET] (state, conversation) {
+        state.conversation = Object.assign({}, state.conversation, conversation);
+        console.log('Excuting CONVERSATION_GET', state.conversation);
     },
 
     [types.CONVERSATION_UPDATE] (state, msg) {

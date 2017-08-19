@@ -7,8 +7,7 @@
         <div v-show="!user && isMobile">
             <router-link :to="{name: 'login'}" class="login_usuario"> Ingresá con tu usuario o registrate <span class='underline'>aquí</span> para comenzar a Carpoolear!</router-link>
         </div>
-        <SearchBox :params="searchParams" v-on:trip-search="research" v-show="!isMobile || lookSearch"></SearchBox>
-
+        <SearchBox :params="searchParams" v-on:trip-search="research" v-show="!isMobile || lookSearch" ref="searchBox"></SearchBox>
         <Loading :data="trips" v-if="showingTrips">
             <div class="trips-list">
                 <template v-for="(trip, index) in trips">
@@ -54,6 +53,9 @@ export default {
             runningSearch: false
         };
     },
+    props: [
+        'clearSearch'
+    ],
     methods: {
         ...mapActions({
             search: 'trips/tripsSearch',
@@ -98,6 +100,9 @@ export default {
             this.filtered = false;
             this.lookSearch = false;
             this.search({});
+            if (this.$refs.searchBox) {
+                this.$refs.searchBox.clear();
+            }
         },
         onScrollBottom () {
             if (this.morePages) {
@@ -110,14 +115,26 @@ export default {
         },
         onBackBottom () {
             bus.off('backbutton', this.onBackBottom);
-            this.onClearButton();
         }
     },
     mounted () {
-        // this.search();
+        // Clear search
+        if (this.clearSearch) {
+            this.onClearButton();
+        } else {
+            // Tendria que recargar desde la búsqueda anterior
+            if (this.$refs.searchBox) {
+                this.$refs.searchBox.loadParams(this.searchParams.data);
+            }
+        }
+
+        // bus.event
         bus.on('search-click', this.onSearchButton);
         bus.on('clear-click', this.onClearButton);
         bus.on('scroll-bottom', this.onScrollBottom);
+    },
+    updated () {
+        // Pendiente, no se limpia el buscador, si los search params están vacios
     },
     beforeDestroy () {
         bus.off('search-click', this.onSearchButton);
