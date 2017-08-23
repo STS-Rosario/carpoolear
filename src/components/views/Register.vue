@@ -6,22 +6,24 @@
     <img v-if="isMobile" :src="carpoolear_logo" />
     <h1 v-if="!(success && isMobile)"> Registrar nuevo usuario </h1>
     <div class='form row' v-if="!success">
-      <label for="txt_name">Nombre</label>
+      <div class="campos-obligatorios">Los campos marcados con (*) son obligatorios.</div>
+      <br />
+      <label for="txt_name">Nombre <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
       <input autofocus v-jump:focus="'txt_surename'" ref="txt_name" name="txt_name" maxlength="25" type="text" id="txt_name" v-model='name' :class="{'has-error': nombreError.state }"/>
       <span class="error" v-if="nombreError.state"> {{nombreError.message}} </span>
-      <label for="txt_surename">Apellido</label>
+      <label for="txt_surename">Apellido <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
       <input v-jump:focus="'txt_email'" ref="txt_surename" name="txt_surename" maxlength="25" type="text" id="txt_surename" v-model='sureName' :class="{'has-error': apellidoError.state }"/>
       <span class="error" v-if="apellidoError.state"> {{apellidoError.message}} </span>
-      <label for="txt_email">Email</label>
+      <label for="txt_email">Email <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
       <input v-jump:focus="'txt_birthday'" ref="txt_email" name="txt_email" maxlength="40" type="text" id="txt_email" v-model='email' :class="{'has-error': emailError.state }"/>
       <span class="error" v-if="emailError.state"> {{emailError.message}} </span>
-      <label for="">Fecha de nacimiento</label>
+      <label for="">Fecha de nacimiento <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
       <DatePicker :value="birthday" ref="ipt_calendar" name="ipt_calendar" :maxDate="maxDate" :minDate="minDate" :class="{'has-error': birthdayError.state}" ></DatePicker>
       <span class="error" v-if="birthdayError.state"> {{birthdayError.message}} </span>
-      <label for="txt_password">Contraseña</label>
+      <label for="txt_password">Contraseña <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
       <input v-jump:focus="'txt_password_confirmation'" ref="txt_password" name="txt_password" maxlength="40" type="password" id="txt_password" v-model='password' :class="{'has-error': passwordError.state }"/>
       <span class="error" v-if="passwordError.state"> {{passwordError.message}} </span>
-      <label for="txt_password_confirmation">Ingrese nuevamente su contraseña</label>
+      <label for="txt_password_confirmation">Ingrese nuevamente su contraseña <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
       <input v-jump:focus="'ipt_terms'" ref="txt_password_confirmation" name="txt_password_confirmation" maxlength="40" type="password" id="txt_password_confirmation" v-model='passwordConfirmation' :class="{'has-error': passwordError.state }" />
       <span class="error" v-if="passwordError.state"> {{passwordError.message}} </span>
       <div class="terms">
@@ -202,6 +204,10 @@ export default {
 </style>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+    .campo-obligatorio,
+    .campos-obligatorios {
+        color: red;
+    }
     input[type="checkbox"] {
         width: auto;
     }

@@ -65,7 +65,7 @@
                 <router-link class="btn btn-link trips-link" :to="{name: 'trips', params: { clearSearch: true }}">Viajes</router-link>
                 <!--<router-link class="btn btn-link" v-if="!logged" :to="{name: 'trips'}">Información</router-link>-->
                 <router-link class="btn btn-link" v-if="!logged" :to="{name: 'register'}">Registrarme</router-link>
-                <router-link class="btn btn-primary" btn-lg v-if="!logged" :to="{name: 'login'}">Login</router-link>
+                <router-link class="btn btn-primary" btn-lg v-if="!logged" :to="{name: 'login'}">Inicio</router-link>
 
 
                 <span class="header_notifications" @click="toNotifications" v-if="logged">

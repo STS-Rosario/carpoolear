@@ -370,13 +370,17 @@ export default {
                 this.patente = this.car.patente;
             }
         };
-        console.log(this.user.birthday);
-        if (moment(this.user.birthday, 'YYYY-MM-DD').isValid()) {
-            console.log('is valid');
-            this.birthday = moment(this.user.birthday, 'YYYY-MM-DD');
-        } else {
-            console.log('is not valid');
-            this.birthday = '';
+        try {
+            console.log(this.user.birthday);
+            if (moment(this.user.birthday, 'YYYY-MM-DD').isValid()) {
+                console.log('is valid');
+                this.birthday = moment(this.user.birthday, 'YYYY-MM-DD');
+            } else {
+                console.log('is not valid');
+                this.birthday = '';
+            }
+        } catch (ex) {
+            console.log('exception', ex);
         }
     },
     beforeDestroy () {
