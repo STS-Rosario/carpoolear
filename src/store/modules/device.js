@@ -24,7 +24,16 @@ const getters = {
     isTablet: state => state.resolution.width >= 768 && state.resolution.width < 992,
     isDesktop: state => state.resolution.width >= 992,
     isNotLargeDesktop: sate => sate.resolution.width < 1300,
-    isFacebokApp: state => window.name !== ''
+    isFacebokApp: state => window.name !== '',
+    isBrowser: state => {
+        let isBrowser = true;
+        if (window.device && window.device.platform) {
+            if (window.device.platform.toLowerCase() !== 'browser') {
+                isBrowser = false;
+            }
+        }
+        return isBrowser;
+    }
 };
 
 // actions

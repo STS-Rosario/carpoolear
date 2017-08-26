@@ -129,7 +129,7 @@ export default {
                 // this.thread.run(5000);
                 if (this.conversation) {
                     this.setTitle(this.conversation.title);
-                    this.setSubTitle('Última conexión: ' + moment().calendar(this.lastConnection));
+                    // this.setSubTitle('Última conexión: ' + moment().calendar(this.lastConnection));
                 }
             });
         }

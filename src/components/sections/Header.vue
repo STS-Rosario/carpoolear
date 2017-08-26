@@ -186,7 +186,7 @@ export default {
         },
 
         tripsClick () {
-            this.$store.dispatch('trips/tripsSearch', {});
+            this.$store.dispatch('trips/tripsSearch', { is_passenger: false });
         }
 
     },

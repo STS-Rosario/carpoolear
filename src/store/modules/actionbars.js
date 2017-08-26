@@ -1,5 +1,6 @@
 import * as types from '../mutation-types';
 import router from '../../router';
+import globalStore from '../index';
 
 const state = {
     title: 'Carpoolear',
@@ -114,6 +115,7 @@ const actions = {
         }
         if (item.url === 'trips') {
             params.clearSearch = true;
+            globalStore.dispatch('trips/tripsSearch', { is_passenger: false });
         }
         router.push({name: item.url, params});
     }

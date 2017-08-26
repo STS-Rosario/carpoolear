@@ -24,7 +24,7 @@
                 <button class="btn btn-primary" @click="nextPage">Más resultados</button>
             </div>
             -->
-            <div v-if="runningSearch">
+            <div v-if="runningSearch" class="more-trips-loading">
                 <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
                 Cargando más resultados
             </div>
@@ -58,15 +58,15 @@ export default {
     ],
     methods: {
         ...mapActions({
-            search: 'trips/tripsSearch',
+            search: 'trips/tripsSearch' // ,
             // morePagesActions: 'trips/tripMorePage',
-            setActionButton: 'actionbars/setHeaderButtons'
+            // setActionButton: 'actionbars/setHeaderButtons'
         }),
         research (params) {
             this.lookSearch = false;
             this.filtered = true;
             this.search(params);
-            this.setActionButton(['clear']);
+            // this.setActionButton(['clear']);
         },
         nextPage () {
             this.search({next: true});
@@ -90,16 +90,16 @@ export default {
 
         onSearchButton () {
             this.lookSearch = true;
-            this.setActionButton(['clear']);
+            // this.setActionButton(['clear']);
             bus.on('backbutton', this.onBackBottom);
         },
 
         onClearButton () {
             bus.off('backbutton', this.onBackBottom);
-            this.setActionButton(['search']);
+            // this.setActionButton(['search']);
             this.filtered = false;
             this.lookSearch = false;
-            this.search({});
+            this.search({ is_passenger: false });
             if (this.$refs.searchBox) {
                 this.$refs.searchBox.clear();
             }
@@ -142,13 +142,22 @@ export default {
         bus.off('scroll-bottom', this.onScrollBottom);
         bus.off('backbutton', this.onBackBottom);
     },
+    watch: {
+        trips: function (oldValue, newValue) {
+            console.log('isBrowser', this.isBrowser, oldValue);
+            if (this.isBrowser) {
+                this.lookSearch = false;
+            }
+        }
+    },
     computed: {
         ...mapGetters({
             trips: 'trips/trips',
             morePages: 'trips/tripsMorePage',
             user: 'auth/user',
             searchParams: 'trips/tripsSearchParam',
-            isMobile: 'device/isMobile'
+            isMobile: 'device/isMobile',
+            isBrowser: 'device/isBrowser'
         }),
 
         showingTrips () {

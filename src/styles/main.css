@@ -455,7 +455,8 @@ textarea {
 #datepicker-mobile {
     -webkit-appearance: none;
     width: 100%;
-    height: 100%
+    height: 100%;
+    background: transparent;
 }
 
 .register-component .form-control-date {
@@ -1728,6 +1729,8 @@ textarea {
 }
 .trips.container {
     padding-top: 2em;
+    padding-bottom: 1em;
+    margin-bottom: 5em;
 }
 .tab-content .trips.container,
 .tab-content .trips.container .col-xs-24 {
@@ -1828,7 +1831,7 @@ h2 {
 .colum-rating {
     width: 100%;
 }
-
+.user-form input[type='email'],
 .user-form input[type='text'],
 .user-form input[type='password'] {
     font-size: 14px;
@@ -2157,6 +2160,7 @@ ul {
     }
     .trips.container {
         padding-top: 0;
+        padding-bottom: 5em;
     }
     .trip-detail-component .vue-map-container {
         z-index: -1;
