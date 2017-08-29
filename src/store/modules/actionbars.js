@@ -115,6 +115,7 @@ const actions = {
         }
         if (item.url === 'trips') {
             params.clearSearch = true;
+            console.log('dispatch trips/tripsSearch on footerButtonClick');
             globalStore.dispatch('trips/tripsSearch', { is_passenger: false });
         }
         router.push({name: item.url, params});

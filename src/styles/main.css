@@ -2540,8 +2540,9 @@ ul {
 }
 
 .trip_terms [data-tooltip]:before {
-    width: 320px;
+    width: 250px;
     padding: 1em;
+    margin-left: -220px;
 }
 
 /* Triangle hack to make tooltip look like a speech bubble */

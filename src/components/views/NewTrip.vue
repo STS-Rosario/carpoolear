@@ -17,7 +17,7 @@
                         <input type="checkbox" id="no-lucrar" v-model="no_lucrar" />
                         <div>
                             <label for="no-lucrar" class="trip_terms_label" :class="{'has-error': lucrarError.state }" >Me comprometo a no lucrar con el viaje</label>
-                            <span class="tooltip-bottom" data-tooltip="No hay lucro mientras el conductor no pida una contribución mayor al costo de la nafta + los peajes vinculados al viaje, dividido la cantidad de viajeros (sí, el conductor es un viajero!!!). ¡Los asientos no tienen un valor! No sos un colectivo ;). Al no lucrar, evitas ser un transporte ilegal de pasajeros, lo cual genera problemas con la validez del seguro particular automotor. Tengamos un buen viaje y cuidemosnos entre todos :)">
+                            <span class="tooltip-bottom" data-tooltip="La contribución máxima que se puede pedir para el viaje es igual a gastos de combustible más peajes dividido la cantidad de viajeros en el auto (sí, el conductor también cuenta como tal). Al no lucrar evitás ser un transporte ilegal de pasajeros, lo que invalidaríael seguro particular automor y la cobertura contra terceros asociada, Tengamos un buen viaje cuidándonos entre todos :D">
                                 <i class="fa fa-info-circle" aria-hidden="true"></i>
                             </span>
                         </div>

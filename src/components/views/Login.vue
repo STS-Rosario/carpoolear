@@ -6,7 +6,7 @@
     <h1 v-if="!(hasScroll && isMobile)"> Ingresá con tu cuenta de <span class='brand'>Carpoolear</span> </h1>
     <div class='form row'>
       <div class="alert alert-warning" role="alert" v-if="!isUnderstood">
-        Si carpooleabas antes del 5/8, tenés que ingresar por Facebook para seguir usando el mismo usuario. Si no podés entrar, mandanos un mail a carpoolear@stsrosario.org.ar o mandanos un mensaje a nuestro facebook así te ayudamos :)
+        Si carpooleabas antes del 5/8/17, tenés que entrar al sistema mediante el botón "ingresar con facebook" para seguir usando el mismo usuario y recuperar tus calificaciones. Si no podés entrar, escribinos a <a href="mailto:carpoolear@stsrosario.org.ar">carpoolear@stsrosario.org.ar</a> o a nuestro facebook así te ayudamos :)
         <div class="row form-inline form-warning-login">
             <div class="col-sm-24 text-right">
                 <div class="checkbox">
@@ -19,21 +19,33 @@
             </div>
         </div>
       </div>
-      <div class="col-sm-12 col-md-12">
-        <label for="txt_user">Usuario<span class="description">(El email con el que te registraste.)</span></label>
+      <div class="col-sm-12 col-md-12" v-show="isMobile">
+        <button class="btn-primary btn-search btn-facebook btn-with-icon" @click="facebookLogin" :disabled="fbLoading"><span class="btn-with-icon--icon"><i class="fa fa-facebook" aria-hidden="true"></i></span><span class='btn-with-icon--label'> <span v-if="!fbLoading">Ingresá con Facebook</span><spinner class="blue" v-if="fbLoading"></spinner></span></button>
+        <hr />
+        <button ref="btn_show_login" id="btn_show_login" class="btn btn-primary btn-shadowed-black" @click="showLogin" v-show="!isShowLogin"> <span>Ingresá con tu cuenta</span></button>
+      </div>
+
+      <div class="col-sm-12 col-md-12" v-show="isShowLogin || !isMobile">
+        <label for="txt_user">Usuario<span class="description" v-show="!isMobile">(El email con el que te registraste.)</span></label>
         <div class='visual-trick'>
-            <input placeholder="Usuario" ref="txt_user" type="email" id="txt_user" v-model="email" v-jump:focus="'txt_password'" />
-            <label for="txt_password">Contraseña</label>
-            <input  placeholder="Password" ref="txt_password" type="password" id="txt_password" v-jump:click.blur="'btn_login'" v-model='password' />
+            <input placeholder="Usuario (El email con el que te registraste.)" ref="txt_user" type="email" id="txt_user" v-model="email" v-jump:focus="'txt_password'" />
+            <label for="txt_password" v-show="!isMobile">Contraseña</label>
+            <input  placeholder="Contraseña" ref="txt_password" type="password" id="txt_password" v-jump:click.blur="'btn_login'" v-model='password' />
             <button ref="btn_login" id="btn_login" class="btn btn-primary btn-shadowed-black" @click="login" :disabled="loading"> <span v-if="!loading">Ingresar</span> <spinner class="blue" v-if="loading"></spinner></button>
         </div>
         <div class='pass-options' v-if="!isMobile">
             <input id="checkbox_remember" type="checkbox" /><label for="checkbox_remember">Recordarme</label><span> - </span><router-link class='login-forget' :to="{name:'reset-password'}">Olvidé mi contraseña </router-link>
         </div>
+
       </div>
-        <router-link v-show="isMobile" class='password-not' :to="{name:'reset-password'}">Olvidé mi contraseña </router-link>
-      <div class="col-sm-12 col-md-12">
-        <span class="register">No tenés cuenta? <router-link class='login-register' :to="{name:'register'}"> Registrate aquí. </router-link></span>
+      <div style="margin: 1em 0"  v-show="isShowLogin && isMobile" >
+        <router-link class='password-not' :to="{name:'reset-password'}">Olvidé mi contraseña </router-link>
+      </div>
+      <div  class="col-sm-12 col-md-12"  v-show="isMobile">
+        <span class="register" v-if="isMobile">¿No tenés cuenta? Ingresá con Facebook o <router-link class='login-register' :to="{name:'register'}"> Registrate acá. </router-link></span>
+      </div>
+      <div class="col-sm-12 col-md-12"  v-show="!isMobile">
+        <span class="register">¿No tenés cuenta?  Ingresá con Facebook o <router-link class='login-register' :to="{name:'register'}"> Registrate acá. </router-link></span>
         <button class="btn-primary btn-search btn-facebook btn-with-icon" @click="facebookLogin" :disabled="fbLoading"><span class="btn-with-icon--icon"><i class="fa fa-facebook" aria-hidden="true"></i></span><span class='btn-with-icon--label'> <span v-if="!fbLoading">Ingresá con Facebook</span><spinner class="blue" v-if="fbLoading"></spinner></span></button>
       </div>
       <!--<span v-if="loading"> Loading... </span>-->
@@ -60,7 +72,8 @@ export default {
             carpoolear_logo: process.env.ROUTE_BASE + 'static/img/carpoolear_logo.png',
             hasScroll: false,
             isUnderstood: false,
-            dontShowAgain: false
+            dontShowAgain: false,
+            isShowLogin: false
         };
     },
     computed: {
@@ -99,6 +112,9 @@ export default {
             } else {
                 dialogs.message('Su solicitud ya fue enviada, aguarde un momento por favor.', { duration: 10, estado: 'error' });
             }
+        },
+        showLogin () {
+            this.isShowLogin = true;
         },
 
         facebookLogin () {
@@ -215,8 +231,33 @@ export default {
     bottom: 0;
     left: 0;
   }
-
+    .alert-warning a {
+        color: #337ab7;
+    }
+    .register {
+        color: #CCC;
+    }
+    .alert-warning {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 94%;
+        margin: 10vh 3%;
+        height: 80vh;
+        z-index: 100;
+    }
   @media only screen and (min-width: 768px) {
+
+    .alert-warning {
+        position: static;
+        width: auto;
+        height: auto;
+        margin: auto;
+        margin-bottom: 1em;
+    }
+    .register {
+        color: #555;
+    }
     .description {
         display: inline;
         padding-left: .4em;
