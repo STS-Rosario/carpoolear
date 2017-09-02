@@ -41,7 +41,6 @@ function onLoggin (store, token) {
     globalStore.dispatch('startThread');
     if (store.getters.firstTime) {
         router.replace({ name: 'profile_update' });
-        firstTime(store, false);
     } else {
         router.rememberBack();
     }
@@ -66,8 +65,9 @@ function firstTime (store, firstTime) {
 
 // store = { commit, state, rootState, rootGetters }
 function activate (store, activationToken) {
+    console.log('activate action');
+    firstTime(store, true);
     return authApi.activate(activationToken, {}).then((response) => {
-        firstTime(store, true);
         onLoggin(store, response.token);
     }).catch((err) => {
         if (err) {
@@ -163,6 +163,7 @@ function logout (store) {
 
 function update (store, data) {
     return userApi.update(data).then((response) => {
+        firstTime(store, false);
         store.commit(types.AUTH_SET_USER, response.data);
         return Promise.resolve(response.data);
     }).catch(({data, status}) => {

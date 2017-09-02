@@ -29,7 +29,7 @@
             <div class='form'>
                 <div class="form-group">
                     <label for="input-name">Nombre y apellido (*)</label>
-                    <input maxlength="25" v-model="user.name" type="text" class="form-control" id="input-name" placeholder="Nombre" :class="{'has-error': nombreError.state }" />
+                    <input maxlength="25" v-model="user.name" type="text" class="form-control" id="input-name" placeholder="Nombre" :class="{'has-error': nombreError.state }" :disabled="!firstTime" />
                     <span class="error" v-if="nombreError.state"> {{nombreError.message}} </span>
                 </div>
                 <div class="form-group">
@@ -142,6 +142,7 @@ export default {
     computed: {
         ...mapGetters({
             userData: 'auth/user',
+            firstTime: 'auth/firstTime',
             cars: 'cars/cars'
         }),
         iptUser () {
@@ -362,6 +363,7 @@ export default {
     },
 
     mounted () {
+        console.log('FirstTime', this.firstTime);
         bus.on('date-change', this.dateChange);
         this.user = this.userData;
         if (this.cars) {
