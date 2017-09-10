@@ -92,10 +92,12 @@ export default {
             this.lookSearch = true;
             // this.setActionButton(['clear']);
             bus.on('backbutton', this.onBackBottom);
+            // Desactivo reaccionar al Scroll
         },
 
         onClearButton () {
             bus.off('backbutton', this.onBackBottom);
+            bus.on('scroll-bottom', this.onScrollBottom);
             // this.setActionButton(['search']);
             this.filtered = false;
             this.lookSearch = false;
@@ -105,8 +107,9 @@ export default {
             }
         },
         onScrollBottom () {
-            if (this.morePages) {
+            if (this.morePages && !this.lookSearch) { // Hay páginas y no estoy en búsquedas
                 if (!this.runningSearch) {
+                    console.log('CALL NEXT');
                     this.runningSearch = true;
                     let done = () => { this.runningSearch = false; };
                     this.search({next: true}).then(done, done);
@@ -129,8 +132,12 @@ export default {
         }
 
         // bus.event
+        bus.off('search-click', this.onSearchButton);
         bus.on('search-click', this.onSearchButton);
+        bus.off('clear-click', this.onClearButton);
         bus.on('clear-click', this.onClearButton);
+        console.log('mounted on Scroll Bottom');
+        bus.off('scroll-bottom', this.onScrollBottom);
         bus.on('scroll-bottom', this.onScrollBottom);
     },
     updated () {

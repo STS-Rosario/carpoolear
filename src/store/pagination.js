@@ -8,6 +8,7 @@ export function makeState (name) {
         lastPage: false,
         data: {}
     };
+    obj[name + 'CurrentPage'] = 1;
     return obj;
 }
 
@@ -47,6 +48,7 @@ export function makeMutations (name) {
     mutations[name.toUpperCase() + '_SET_LASTPAGE'] = (state) => {
         state[name + 'SearchParam'].lastPage = true;
     };
+
     return mutations;
 }
 
@@ -78,7 +80,10 @@ export function makeActions (name, requestGeneration, callback) {
                 store.commit(name.toUpperCase() + '_SET_LASTPAGE');
             }
             if (data.next) {
-                console.log('tripSearch data next');
+                console.log('tripSearch data next', response.meta.pagination.current_page, store.state[name + 'SearchParam'].page);
+                if (response.meta.pagination.current_page === store.state[name + 'SearchParam'].page) {
+
+                }
                 store.commit(name.toUpperCase() + '_ADD', response.data);
             } else {
                 store.commit(name.toUpperCase() + '_SET', response.data);

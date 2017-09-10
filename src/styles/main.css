@@ -763,7 +763,7 @@ textarea {
     padding: 10px 15px;
 }
 .card-trip {
-    height: 404px;
+    height: 416px;
     box-shadow: 0 0 4px 1px #CCC;
     border-radius: .4em;
 }
@@ -914,10 +914,13 @@ textarea {
     margin-top: 1rem;
     padding-right: 0;
     min-height: 2.5em;
+    font-size: 1.2em;
+}
+.trip_datetime_date {
+    text-align: right;
 }
 .trip_datetime_time {
     color: var(--trip-half-free-color);
-    text-transform: uppercase;
 }
 .trip_seats-available {
     /*margin: 1rem 0;*/

@@ -84,15 +84,29 @@
             </div>
             <div class="row">
                 <time class="trip_datetime col-xs-offset-4 col-xs-20" :datetime="trip.trip_date">
-                  <span class="trip_datetime_date">{{ [ trip.trip_date ] | moment("DD MMMM YYYY") }}</span>
-                  -
-                  <span class="trip_datetime_time">{{ [ trip.trip_date ] | moment("HH:mm") }}</span>
+                    <div class="row">
+                        <div class="col-xs-12 trip_datetime_date">
+                            <span class="trip_datetime_date_day">{{ [ trip.trip_date ] | moment("DD MMMM") }}</span>
+                            <br />
+                            <span class="trip_datetime_date_year">{{ [ trip.trip_date ] | moment("YYYY") }}</span>
+                        </div>
+                        <div class="col-xs-12">
+                            -
+                            <span class="trip_datetime_time">{{ [ trip.trip_date ] | moment("HH:mm") }} hs</span>
+                        </div>
+                    </div>
+
                 </time>
             </div>
             <div v-if="trip.seats_available !== 0" class="row">
               <div class="trip_seats-available col-xs-offset-2 col-xs-12" v-if="!trip.is_passenger">
                 <span class="trip_seats-available_value pull-left">{{ trip.seats_available }}</span>
-                <span class="trip_seats-available_label"><span>Lugares</span><span>libres</span></span>
+                <span class="trip_seats-available_label" v-if="trip.seats_available > 1">
+                    <span>Lugares</span><span>libres</span>
+                </span>
+                <span class="trip_seats-available_label" v-else="trip.seats_available > 1">
+                    <span>Lugar</span><span>libre</span>
+                </span>
               </div>
               <div class="col-xs-offset-2 col-xs-12" v-else></div>
               <div class="trip_actions col-xs-10">
