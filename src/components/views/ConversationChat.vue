@@ -19,7 +19,7 @@
             </div>
             <div class="list-group-item">
                 <div class="input-group">
-                    <input ref="ipt-text" id="ipt-text" v-model="message" type="text" class="form-control" placeholder="Escribir mensaje..." v-jump:click="'btn-send'" maxlength="255" autofocus>
+                    <input ref="ipt-text" id="ipt-text" v-model="message" type="text" class="form-control" placeholder="Escribir mensaje..." v-jump:click="'btn-send'" maxlength="255">
                     <span class="input-group-btn">
                         <button ref="btn-send" id="btn-send" class="btn btn-default" :class="message.length > 0 ? 'active' : ''" type="button" @click="sendMessage" v-jump:focus="'ipt-text'">
                             <i class="fa fa-play" aria-hidden="true"></i>
@@ -101,7 +101,9 @@ export default {
         },
 
         onBackClick () {
-            router.back();
+            // router.back();
+            console.log('back click');
+            router.push({ name: 'conversations-list' });
         },
 
         jumpEndOfConversation () {

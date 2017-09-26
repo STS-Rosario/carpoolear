@@ -58,7 +58,8 @@ export default {
     ],
     methods: {
         ...mapActions({
-            search: 'trips/tripsSearch' // ,
+            search: 'trips/tripsSearch',
+            refreshTrips: 'trips/refreshList' // ,
             // morePagesActions: 'trips/tripMorePage',
             // setActionButton: 'actionbars/setHeaderButtons'
         }),
@@ -111,7 +112,9 @@ export default {
                 if (!this.runningSearch) {
                     console.log('CALL NEXT');
                     this.runningSearch = true;
-                    let done = () => { this.runningSearch = false; };
+                    let done = () => {
+                        this.runningSearch = false;
+                    };
                     this.search({next: true}).then(done, done);
                 }
             }
@@ -151,8 +154,9 @@ export default {
     },
     watch: {
         trips: function (oldValue, newValue) {
-            console.log('isBrowser', this.isBrowser, oldValue);
-            if (this.isBrowser) {
+            console.log('refreshList', this.refreshList);
+            if (this.refreshList) {
+                this.refreshTrips(false);
                 this.lookSearch = false;
             }
         }
@@ -164,7 +168,8 @@ export default {
             user: 'auth/user',
             searchParams: 'trips/tripsSearchParam',
             isMobile: 'device/isMobile',
-            isBrowser: 'device/isBrowser'
+            isBrowser: 'device/isBrowser',
+            refreshList: 'trips/refreshList'
         }),
 
         showingTrips () {

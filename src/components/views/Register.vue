@@ -17,8 +17,8 @@
       <label for="txt_email">Email <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
       <input v-jump:focus="'txt_birthday'" ref="txt_email" name="txt_email" maxlength="40" type="text" id="txt_email" v-model='email' :class="{'has-error': emailError.state }"/>
       <span class="error" v-if="emailError.state"> {{emailError.message}} </span>
-      <label for="">Fecha de nacimiento <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
-      <DatePicker :value="birthday" ref="ipt_calendar" name="ipt_calendar" :maxDate="maxDate" :minDate="minDate" :class="{'has-error': birthdayError.state}" ></DatePicker>
+      <!--<label for="">Fecha de nacimiento <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
+      <DatePicker :value="birthday" ref="ipt_calendar" name="ipt_calendar" :maxDate="maxDate" :minDate="minDate" :class="{'has-error': birthdayError.state}" ></DatePicker>-->
       <span class="error" v-if="birthdayError.state"> {{birthdayError.message}} </span>
       <label for="txt_password">Contraseña <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
       <input v-jump:focus="'txt_password_confirmation'" ref="txt_password" name="txt_password" maxlength="40" type="password" id="txt_password" v-model='password' :class="{'has-error': passwordError.state }"/>
@@ -139,7 +139,7 @@ export default {
                 globalError = true;
             }
 
-            console.log(this.birthdayAnswer);
+            /* console.log(this.birthdayAnswer);
             if (!this.birthdayAnswer || this.birthdayAnswer.length < 1) {
                 this.birthdayError.state = true;
                 this.birthdayError.message = 'Olvido ingresar su fecha de nacimiento.';
@@ -151,7 +151,7 @@ export default {
                     this.birthdayError.message = 'Lo sentimos, debes ser mayor de edad para usar el servicio. Para más información te recomendamos leer los términos y condiciones.';
                     globalError = true;
                 }
-            }
+            } */
             return globalError;
         },
 

@@ -197,7 +197,7 @@ const actions = {
     sendMessage (store, message) {
         let id = store.state.selectedID;
         return conversationApi.send(id, message).then(response => {
-            store.commit(types.CONVERSATION_INSERT_MESSAGE, { messages: [response.data] });
+            store.commit(types.CONVERSATION_INSERT_MESSAGE, { messages: [response.data], id });
             return Promise.resolve(response.data);
         }).catch(error => {
             return Promise.reject(error);
@@ -257,9 +257,22 @@ const mutations = {
     },
 
     [types.CONVERSATION_INSERT_MESSAGE] (state, { messages, id }) {
+        console.log('insert message');
         messages.forEach(item => {
             if (!state.messages[item.conversation_id].list.find(i => i.id === item.id)) {
                 state.messages[item.conversation_id].list.push(item);
+            }
+            if (state.list) {
+                state.list.forEach(c => {
+                    if (c.id.toString() === item.conversation_id.toString()) {
+                        c.update_at = item.created_at;
+                        c.last_message = item;
+                    }
+                });
+                console.log('conversation sort');
+                state.list.sort((a, b) => {
+                    return new Date(b.update_at) - new Date(a.update_at);
+                });
             }
         });
     },

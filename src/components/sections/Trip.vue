@@ -83,15 +83,17 @@
               </template>
             </div>
             <div class="row">
-                <time class="trip_datetime col-xs-offset-4 col-xs-20" :datetime="trip.trip_date">
+                <time class="trip_datetime col-xs-24" :datetime="trip.trip_date">
                     <div class="row">
-                        <div class="col-xs-12 trip_datetime_date">
-                            <span class="trip_datetime_date_day">{{ [ trip.trip_date ] | moment("DD MMMM") }}</span>
+                        <div class="col-xs-14 trip_datetime_date">
+                            <span class="trip_datetime_date_day">
+                                <span style="text-transform: uppercase;">{{ [ trip.trip_date ] | moment("ddd") }}</span>
+                                {{ [ trip.trip_date ] | moment("DD MMMM") }}
+                            </span>
                             <br />
                             <span class="trip_datetime_date_year">{{ [ trip.trip_date ] | moment("YYYY") }}</span>
                         </div>
-                        <div class="col-xs-12">
-                            -
+                        <div class="col-xs-10">
                             <span class="trip_datetime_time">{{ [ trip.trip_date ] | moment("HH:mm") }} hs</span>
                         </div>
                     </div>

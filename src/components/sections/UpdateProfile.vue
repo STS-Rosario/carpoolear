@@ -27,6 +27,9 @@
         </div>
         <div class="col-xs-24 col-sm-16 col-sm-pull-8">
             <div class='form'>
+                <div class="alert alert-info">
+                    Generá confianza con el resto de la comunidad carpoolear, usá una foto tuya y contales un poco acerca de vos. Con eso aumentás tus chances de que alguien quiera compartir viaje con vos... es verdad, llevar torta para compartir también ayuda mucho :D
+                </div>
                 <div class="form-group">
                     <label for="input-name">Nombre y apellido (*)</label>
                     <input maxlength="25" v-model="user.name" type="text" class="form-control" id="input-name" placeholder="Nombre" :class="{'has-error': nombreError.state }" :disabled="!firstTime" />
@@ -36,28 +39,28 @@
                     <label for="input-email">E-mail (*)</label>
                     <input maxlength="40" v-model="user.email" type="text" class="form-control" id="input-email" placeholder="E-mail" disabled>
                 </div>
-                <div class="form-group">
+                <!--<div class="form-group">
                     <label for="">Fecha de nacimiento (*)</label>
                     <DatePicker :value="birthday | moment('YYYY-MM-DD') " ref="ipt_calendar" name="ipt_calendar" :maxDate="maxDate" :minDate="minDate" :class="{'has-error': birthdayError.state}" ></DatePicker>
                     <span class="error" v-if="birthdayError.state"> {{birthdayError.message}} </span>
-                </div>
+                </div>-->
                 <div class="form-group">
-                    <label for="input-description">Descripción (*)<span class="description"> Contale de vos al resto de los carpooleros así te suman a sus viajes!! Qué te gusta hacer, en qué andas metido ahora, si estás con alguna idea, si te gustan los colores, etc.</span></label>
+                    <label for="input-description">Acerca de mi (*)<span class="description"> Contale de vos al resto de los carpooleros así te suman a sus viajes!! Qué te gusta hacer, en qué andas metido ahora, si estás con alguna idea, si te gustan los colores, etc.</span></label>
                     <textarea maxlength="280" v-model="user.description" placeholder="Descripción" :class="{'has-error': descError.state }" ></textarea>
                     <span class="error textarea" v-if="descError.state"> {{descError.message}} </span>
                 </div>
                 <div class="form-group">
-                    <label for="input-dni">Número de documento <span class="description">(Solo números)</span></label>
+                    <label for="input-dni">Número de documento <span class="description">(Solo números). Dales un extra de confianza al resto de los carpooleros certificándoles que este es tu DNI al momento de viajar.</span></label>
                     <input v-numberMask="'dniRawValue'" type="text" data-max-length="8" v-model="user.nro_doc" class="form-control" id="input-dni" placeholder="DNI" :class="{'has-error': dniError.state }">
                     <span class="error" v-if="dniError.state"> {{dniError.message}} </span>
                 </div>
                 <div class="form-group">
-                    <label for="input-telefono">Número de teléfono <span class="description">(Código área + teléfono. Ej: 0341156708223)</span></label>
+                    <label for="input-telefono">Número de teléfono <span class="description">(Código área + teléfono. Ej: 0341156708223). Por si querés querés que el resto de los carpooleros también te puedan contactar por ahí.</span></label>
                     <input maxlength="20" @keydown="isNumber" v-on:paste='isNumber' v-model="user.mobile_phone" type="tel" class="form-control" id="input-phone" placeholder="Número de teléfono (al menos 7 números)" :class="{'has-error': phoneError.state }">
                     <span class="error" v-if="phoneError.state"> {{phoneError.message}} </span>
                 </div>
                 <div class="form-group">
-                    <label for="input-patente">Patente <span class="description">(Sin espacios. Ej: ABC123 o AA123AA)</span></label>
+                    <label for="input-patente">Patente <span class="description">(Sin espacios. Ej: ABC123 o AA123AA). Dale un extra de confianza a los carpooleros que viajen con vos identificando tu auto.</span></label>
                     <input :style="patente.length > 0 ? 'text-transform: uppercase' : ''" v-mask="'AAN##NA'" v-model="patente" type="text" class="form-control" id="input-patente" placeholder="Patentes válidas (AAA111 o AA111BB)" :class="{'has-error': patentError.state }">
                     <span class="error" v-if="patentError.state"> {{patentError.message}} </span>
                 </div>
@@ -220,11 +223,11 @@ export default {
                 data.password = this.pass.password;
                 data.password_confirmation = this.pass.password_confirmation;
             }
-            if (moment(this.birthdayAnswer, 'YYYY-MM-DD').isValid()) {
+            /* if (moment(this.birthdayAnswer, 'YYYY-MM-DD').isValid()) {
                 console.log('valid date');
                 data.birthday = this.birthdayAnswer;
                 console.log(this.user.birthday);
-            }
+            } */
             data.nro_doc = this.dniRawValue;
             this.update(data).then(() => {
                 this.pass.password = '';
@@ -243,7 +246,7 @@ export default {
                         this.carCreate(car);
                     }
                 }
-                this.user.birthday = this.birthdayAnswer;
+                // this.user.birthday = this.birthdayAnswer;
                 if ((this.user.image && this.user.image.length > 0) && (this.user.description && this.user.description.length > 0)) {
                     this.$router.rememberBack();
                 } else {
@@ -282,7 +285,7 @@ export default {
                 globalError = true;
             }
 
-            console.log(this.birthdayAnswer);
+            /* console.log(this.birthdayAnswer);
             if (!this.birthdayAnswer || this.birthdayAnswer.length < 1) {
                 this.birthdayError.state = true;
                 this.birthdayError.message = 'Olvidaste ingresar tu fecha de nacimiento.';
@@ -294,7 +297,7 @@ export default {
                     this.birthdayError.message = 'Pareciera que no eres mayor de edad. Revisa si ingresaste bien tu fecha de nacimiento y recuerda que debes ser mayor de edad para utilziar carpoolear. Para más información te recomendamos volver a leer los términos y condiciones.';
                     globalError = true;
                 }
-            }
+            } */
 
             if (this.patente && this.patente.length > 0) {
                 if (!patentRegex.test(this.patente)) {

@@ -27,7 +27,7 @@
         <p>
             El servicio ofrecido por Carpoolear a través del sitio es gratuito, pero Carpoolear se reserva el derecho de implementar nuevos servicios a los Usuarios, gratis o pagos.
             Carpoolear se reserva el derecho de inhabilitar o suspender usuarios del sitio, sin que esté obligado a comunicar o exponer las razones de su decisión y sin que ello genere algún derecho a indemnización o resarcimiento.
-            Sin perjuicio de otras medidas, Carpoolear podrá advertir, suspender en forma temporal o inhabilitar un Usuario o una publicación, iniciar las acciones que estime pertinentes y/o suspender la prestación de sus Servicios si : 
+            Sin perjuicio de otras medidas, Carpoolear podrá advertir, suspender en forma temporal o inhabilitar un Usuario o una publicación, iniciar las acciones que estime pertinentes y/o suspender la prestación de sus Servicios si :
             <ul>
                 <li>(1) se quebrantara alguna ley, o cualquiera de las estipulaciones de los Términos y Condiciones Generales y demás políticas de Carpoolear;</li>
                 <li>(2) si incumpliera sus compromisos como Usuario;</li>
@@ -99,11 +99,24 @@
 
 
 <script>
+import router from '../../router';
+import bus from '../../services/bus-event.js';
 export default {
     name: 'about',
     data () {
         return {
         };
+    },
+    methods: {
+        onBackClick () {
+            router.back();
+        }
+    },
+    beforeDestroy () {
+        bus.off('back-click', this.onBackClick);
+    },
+    mounted () {
+        bus.on('back-click', this.onBackClick);
     }
 };
 </script>

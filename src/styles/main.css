@@ -763,7 +763,7 @@ textarea {
     padding: 10px 15px;
 }
 .card-trip {
-    height: 416px;
+    height: 432px;
     box-shadow: 0 0 4px 1px #CCC;
     border-radius: .4em;
 }
@@ -914,10 +914,16 @@ textarea {
     margin-top: 1rem;
     padding-right: 0;
     min-height: 2.5em;
-    font-size: 1.2em;
+    font-size: 1.1em;
+}
+@media (min-width: 992px) {
+    .trip_datetime {
+        font-size: 1em;
+    }
 }
 .trip_datetime_date {
     text-align: right;
+    padding-right: 0;
 }
 .trip_datetime_time {
     color: var(--trip-half-free-color);

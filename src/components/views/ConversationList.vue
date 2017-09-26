@@ -16,7 +16,7 @@
                     </li>
                     <template v-if="textSearch.length == 0">
                         <Loading class="conversation_chat--chats" :data="conversations">
-                            <li v-for="conversation in conversations" class="list-group-item conversation_header" @click="onChangeConversation(conversation)" :class="{'unread': conversation.unread, 'active': selected && conversation.id === selected.id  }" >
+                            <li v-for="conversation in conversations" class="list-group-item conversation_header" @click="onChangeConversation(conversation)" :class="{'unread': conversation.unread, 'active': selected && conversation.id === selected.id  }" v-bind:key="conversation.id">
                                 <div class="media">
                                   <div class="media-left">
                                     <div class="conversation_image circle-box" v-imgSrc:conversation="conversation.image"></div>
@@ -40,7 +40,7 @@
                     </template>
                     <template v-else>
                         <Loading class="conversation_chat--search" :data="users" >
-                            <li v-for="user in users" class="list-group-item" @click="createConversation(user)">
+                            <li v-for="user in users" class="list-group-item" @click="createConversation(user)" v-bind:key="user.id">
                                 <div class="conversation_image circle-box" v-imgSrc:profile="user.image"></div>
                                 {{user.name}}
                             </li>
@@ -146,6 +146,7 @@ export default {
     },
 
     mounted () {
+        console.log('conversation mounted');
         this.conversationsSearch();
         this.thread = new Thread(() => {
             this.unreadMessage();
@@ -154,6 +155,9 @@ export default {
         if (!this.isMobile) {
             router.push({ name: 'conversation-chat' });
         }
+    },
+    updated () {
+        console.log('conversation updated');
     },
     components: {
         Loading
