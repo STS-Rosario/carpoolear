@@ -9,13 +9,15 @@ let tripsApi = new TripApi();
 // initial state
 const state = {
     ...pagination.makeState('trips'),
-    current_trip: null
+    current_trip: null,
+    refresh_list: false
 };
 
 // getters
 const getters = {
     ...pagination.makeGetters('trips'),
-    currentTrip: state => state.current_trip
+    currentTrip: state => state.current_trip,
+    refreshList: state => state.refresh_list
 };
 
 // actions
@@ -48,12 +50,20 @@ const actions = {
             return Promise.resolve({status: 'ok'});
             // globalStore.commit(types.TRIPS_UPDATE_TRIPS, response.data);
         });
+    },
+
+    refreshList (store, status) {
+        store.commit(types.TRIPS_REFRESH, status);
     }
 };
 
 // mutations
 const mutations = {
     ...pagination.makeMutations('trips'),
+
+    [types.TRIPS_REFRESH] (state, status) {
+        state.refresh_list = status;
+    },
 
     [types.TRIPS_SET_CURRENT] (state, trip) {
         state.current_trip = trip;

@@ -6,8 +6,8 @@
                 <ul class="list-group">
                     <li class="list-group-item">
                         <div class="input-group">
-                            <input v-model="textSearch" type="text" class="form-control" placeholder="Escribe un nombre y presiona buscar">
-                            <span class="input-group-btn"><!-- v-debounceInput="onSearchUser" -->
+                            <input v-model="textSearch" type="text" class="form-control" placeholder="Escribe un nombre y presiona buscar" />
+                            <span class="input-group-btn"><!--  -->
                                 <button class="btn btn-default" type="button" @click="onSearchUser" >
                                     <i class="fa fa-search" aria-hidden="true"></i>
                                 </button>
@@ -16,7 +16,7 @@
                     </li>
                     <template v-if="textSearch.length == 0">
                         <Loading class="conversation_chat--chats" :data="conversations">
-                            <li v-for="conversation in conversations" class="list-group-item conversation_header" @click="onChangeConversation(conversation)" :class="{'unread': conversation.unread, 'active': selected && conversation.id === selected.id  }" >
+                            <li v-for="conversation in conversations" class="list-group-item conversation_header" @click="onChangeConversation(conversation)" :class="{'unread': conversation.unread, 'active': selected && conversation.id === selected.id  }" v-bind:key="conversation.id">
                                 <div class="media">
                                   <div class="media-left">
                                     <div class="conversation_image circle-box" v-imgSrc:conversation="conversation.image"></div>
@@ -39,15 +39,14 @@
                         </Loading>
                     </template>
                     <template v-else>
-                        <Loading class="conversation_chat--search" :data="users" :hideOnEmpty="true">
-                            <li v-for="user in users" class="list-group-item" @click="createConversation(user)">
+                        <Loading class="conversation_chat--search" :data="users" >
+                            <li v-for="user in users" class="list-group-item" @click="createConversation(user)" v-bind:key="user.id">
                                 <div class="conversation_image circle-box" v-imgSrc:profile="user.image"></div>
                                 {{user.name}}
                             </li>
                             <li slot="no-data" class="list-group-item alert alert-warning"  role="alert">No hay concidencias</li>
                             <li slot="loading" class="list-group-item alert alert-info" role="alert">
-                                <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
-                                Buscando usuarios
+                                Tipeá un nombre y buscá
                             </li>
                         </Loading>
                     </template>
@@ -138,10 +137,16 @@ export default {
             if (!this.isMobile) {
                 router.push({ name: 'conversation-chat' });
             }
+        },
+        textSearch: function (newValue, oldValue) {
+            if (oldValue.length === 0 && newValue.length > 0) {
+                this.clear();
+            }
         }
     },
 
     mounted () {
+        console.log('conversation mounted');
         this.conversationsSearch();
         this.thread = new Thread(() => {
             this.unreadMessage();
@@ -151,7 +156,9 @@ export default {
             router.push({ name: 'conversation-chat' });
         }
     },
-
+    updated () {
+        console.log('conversation updated');
+    },
     components: {
         Loading
     }

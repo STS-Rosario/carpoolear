@@ -79,7 +79,6 @@ const actions = {
     },
 
     select (store, id) {
-        console.log('Conversation Selected:', id);
         if (id) {
             let conversationTemp = store.state.list ? store.state.list.find(item => item.id === id) : null;
 
@@ -181,7 +180,6 @@ const actions = {
         let unread = false;
         let read = true;
         return conversationApi.getMessages(id, { read, unread, pageSize, timestamp }).then(response => {
-            console.log('Get Messages:', id, response.data);
             if (!more) {
                 store.commit(types.CONVERSATION_BLANK_MESSAGES, {id});
             }
@@ -199,7 +197,7 @@ const actions = {
     sendMessage (store, message) {
         let id = store.state.selectedID;
         return conversationApi.send(id, message).then(response => {
-            store.commit(types.CONVERSATION_INSERT_MESSAGE, { messages: [response.data] });
+            store.commit(types.CONVERSATION_INSERT_MESSAGE, { messages: [response.data], id });
             return Promise.resolve(response.data);
         }).catch(error => {
             return Promise.reject(error);
@@ -216,7 +214,9 @@ const mutations = {
         if (!state.list) {
             state.list = [];
         }
-        state.list.push(conv);
+        if (!state.list.find(i => i.id === conv.id)) {
+            state.list.push(conv);
+        }
     },
 
     [types.CONVERSATION_SET_TIMESTAMP] (state, timestamp) {
@@ -257,9 +257,22 @@ const mutations = {
     },
 
     [types.CONVERSATION_INSERT_MESSAGE] (state, { messages, id }) {
+        console.log('insert message');
         messages.forEach(item => {
             if (!state.messages[item.conversation_id].list.find(i => i.id === item.id)) {
                 state.messages[item.conversation_id].list.push(item);
+            }
+            if (state.list) {
+                state.list.forEach(c => {
+                    if (c.id.toString() === item.conversation_id.toString()) {
+                        c.update_at = item.created_at;
+                        c.last_message = item;
+                    }
+                });
+                console.log('conversation sort');
+                state.list.sort((a, b) => {
+                    return new Date(b.update_at) - new Date(a.update_at);
+                });
             }
         });
     },
@@ -277,7 +290,6 @@ const mutations = {
     },
     [types.CONVERSATION_GET] (state, conversation) {
         state.conversation = Object.assign({}, state.conversation, conversation);
-        console.log('Excuting CONVERSATION_GET', state.conversation);
     },
 
     [types.CONVERSATION_UPDATE] (state, msg) {

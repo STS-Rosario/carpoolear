@@ -336,7 +336,7 @@ export default [
             actionbar: {
                 header: {
                     title: 'Términos',
-                    buttons: ['clear']
+                    buttons: ['back']
                 }
             }
         }

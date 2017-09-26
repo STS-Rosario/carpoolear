@@ -24,7 +24,16 @@ const getters = {
     isTablet: state => state.resolution.width >= 768 && state.resolution.width < 992,
     isDesktop: state => state.resolution.width >= 992,
     isNotLargeDesktop: sate => sate.resolution.width < 1300,
-    isFacebokApp: state => window.name !== ''
+    isFacebokApp: state => window.name !== '',
+    isBrowser: state => {
+        let isBrowser = true;
+        if (window.device && window.device.platform) {
+            if (window.device.platform.toLowerCase() !== 'browser') {
+                isBrowser = false;
+            }
+        }
+        return isBrowser;
+    }
 };
 
 // actions
@@ -84,7 +93,13 @@ const actions = {
     },
     scrolling () {
         let realScroll = document.body.scrollHeight - state.resolution.height;
-        if (document.body.scrollTop + 400 > realScroll) {
+
+        var supportPageOffset = window.pageXOffset !== undefined;
+        var isCSS1Compat = ((document.compatMode || '') === 'CSS1Compat');
+
+        let scrollPosition = supportPageOffset ? window.pageYOffset : isCSS1Compat ? document.documentElement.scrollTop : document.body.scrollTop;
+
+        if (scrollPosition + 400 > realScroll) {
             bus.emit('scroll-bottom', state.resolution);
         }
     }
@@ -130,4 +145,5 @@ export default {
 };
 
 window.addEventListener('resize', actions.resize, false);
-window.addEventListener('scroll', actions.scrolling, false);
+console.log('EVENT BINDING', actions.scrolling);
+document.addEventListener('scroll', actions.scrolling, false);

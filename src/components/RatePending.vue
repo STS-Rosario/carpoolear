@@ -76,6 +76,7 @@ export default {
                 rating: this.vote
             };
             this.emit(data).then(() => {
+                this.comment = '';
                 this.sending = false;
             }).catch(() => {
                 this.sending = false;

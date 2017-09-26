@@ -24,7 +24,7 @@
                 <button class="btn btn-primary" @click="nextPage">Más resultados</button>
             </div>
             -->
-            <div v-if="runningSearch">
+            <div v-if="runningSearch" class="more-trips-loading">
                 <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
                 Cargando más resultados
             </div>
@@ -59,14 +59,15 @@ export default {
     methods: {
         ...mapActions({
             search: 'trips/tripsSearch',
+            refreshTrips: 'trips/refreshList' // ,
             // morePagesActions: 'trips/tripMorePage',
-            setActionButton: 'actionbars/setHeaderButtons'
+            // setActionButton: 'actionbars/setHeaderButtons'
         }),
         research (params) {
             this.lookSearch = false;
             this.filtered = true;
             this.search(params);
-            this.setActionButton(['clear']);
+            // this.setActionButton(['clear']);
         },
         nextPage () {
             this.search({next: true});
@@ -90,25 +91,30 @@ export default {
 
         onSearchButton () {
             this.lookSearch = true;
-            this.setActionButton(['clear']);
+            // this.setActionButton(['clear']);
             bus.on('backbutton', this.onBackBottom);
+            // Desactivo reaccionar al Scroll
         },
 
         onClearButton () {
             bus.off('backbutton', this.onBackBottom);
-            this.setActionButton(['search']);
+            bus.on('scroll-bottom', this.onScrollBottom);
+            // this.setActionButton(['search']);
             this.filtered = false;
             this.lookSearch = false;
-            this.search({});
+            this.search({ is_passenger: false });
             if (this.$refs.searchBox) {
                 this.$refs.searchBox.clear();
             }
         },
         onScrollBottom () {
-            if (this.morePages) {
+            if (this.morePages && !this.lookSearch) { // Hay páginas y no estoy en búsquedas
                 if (!this.runningSearch) {
+                    console.log('CALL NEXT');
                     this.runningSearch = true;
-                    let done = () => { this.runningSearch = false; };
+                    let done = () => {
+                        this.runningSearch = false;
+                    };
                     this.search({next: true}).then(done, done);
                 }
             }
@@ -129,8 +135,12 @@ export default {
         }
 
         // bus.event
+        bus.off('search-click', this.onSearchButton);
         bus.on('search-click', this.onSearchButton);
+        bus.off('clear-click', this.onClearButton);
         bus.on('clear-click', this.onClearButton);
+        console.log('mounted on Scroll Bottom');
+        bus.off('scroll-bottom', this.onScrollBottom);
         bus.on('scroll-bottom', this.onScrollBottom);
     },
     updated () {
@@ -142,13 +152,24 @@ export default {
         bus.off('scroll-bottom', this.onScrollBottom);
         bus.off('backbutton', this.onBackBottom);
     },
+    watch: {
+        trips: function (oldValue, newValue) {
+            console.log('refreshList', this.refreshList);
+            if (this.refreshList) {
+                this.refreshTrips(false);
+                this.lookSearch = false;
+            }
+        }
+    },
     computed: {
         ...mapGetters({
             trips: 'trips/trips',
             morePages: 'trips/tripsMorePage',
             user: 'auth/user',
             searchParams: 'trips/tripsSearchParam',
-            isMobile: 'device/isMobile'
+            isMobile: 'device/isMobile',
+            isBrowser: 'device/isBrowser',
+            refreshList: 'trips/refreshList'
         }),
 
         showingTrips () {

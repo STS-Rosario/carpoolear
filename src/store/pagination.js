@@ -8,6 +8,7 @@ export function makeState (name) {
         lastPage: false,
         data: {}
     };
+    obj[name + 'CurrentPage'] = 1;
     return obj;
 }
 
@@ -22,10 +23,12 @@ export function makeGetters (name) {
 export function makeMutations (name) {
     let mutations = {};
     mutations[name.toUpperCase() + '_SET'] = (state, items) => {
+        console.log(name + 'mutation _SET');
         state[name] = items;
     };
 
     mutations[name.toUpperCase() + '_ADD'] = (state, items) => {
+        console.log(name + 'mutation _ADD');
         state[name] = [...state[name], ...items];
     };
 
@@ -45,17 +48,20 @@ export function makeMutations (name) {
     mutations[name.toUpperCase() + '_SET_LASTPAGE'] = (state) => {
         state[name + 'SearchParam'].lastPage = true;
     };
+
     return mutations;
 }
 
 export function makeActions (name, requestGeneration, callback) {
     let actions = {};
     actions[name + 'Search'] = (store, data = {}, next = false) => {
+        console.log('tripSearch action executed');
         let params = null;
         if (data.next) {
             if (store.state[name + 'SearchParam'].lastPage) {
                 return;
             }
+            console.log('tripSearch action executed call Next');
             store.commit(name.toUpperCase() + '_NEXT_PAGE');
             params = Object.assign({}, store.state[name + 'SearchParam'].data);
             params.page = store.state[name + 'SearchParam'].page;
@@ -74,6 +80,10 @@ export function makeActions (name, requestGeneration, callback) {
                 store.commit(name.toUpperCase() + '_SET_LASTPAGE');
             }
             if (data.next) {
+                console.log('tripSearch data next', response.meta.pagination.current_page, store.state[name + 'SearchParam'].page);
+                if (response.meta.pagination.current_page === store.state[name + 'SearchParam'].page) {
+
+                }
                 store.commit(name.toUpperCase() + '_ADD', response.data);
             } else {
                 store.commit(name.toUpperCase() + '_SET', response.data);

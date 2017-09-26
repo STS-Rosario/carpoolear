@@ -15,11 +15,14 @@
             "cordova-plugin-whitelist": {},
             "cordova-plugin-x-socialsharing": {},
             "cordova-plugin-x-toast": {},
-            "phonegap-plugin-push": {},
             "cordova-plugin-backbutton": {},
             "cordova-plugin-facebook4": {
                 "APP_ID": "147151221990591",
                 "APP_NAME": "Carpoolear"
+            },
+            "phonegap-plugin-push": {
+                "SENDER_ID": "1027904610758",
+                "PACKAGE_NAME": "com.sts.carpoolear"
             }
         }
     },

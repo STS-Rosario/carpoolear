@@ -37,7 +37,7 @@ export default {
                 clearBadge: true,
                 senderID: '147151221990591',
                 icon: 'icon',
-                iconColor: '#6E00A0'
+                iconColor: '#d72521'
             },
             // browser: {
             //     pushServiceURL: 'http://push.api.phonegap.com/v1/push'

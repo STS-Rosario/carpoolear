@@ -49,10 +49,14 @@ Vue.use(VueGoogleMaps, {
 });
 
 window.store = store;
-
-if (!window.cordova) {
-    console.log('Not running in cordova');
-    store.dispatch('init');
+if (process.env.NODE_ENV === 'development') {
+    console.log('In development wait for cordova');
+    setTimeout(function () {
+        if (!window.cordova) {
+            console.log('Not running in cordova');
+            store.dispatch('init');
+        }
+    }, 2000);
 }
 
 bus.on('system-ready', () => {

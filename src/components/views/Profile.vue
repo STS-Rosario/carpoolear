@@ -19,6 +19,7 @@ import ProfileInfo from '../sections/ProfileInfo';
 import ProfileRates from '../sections/ProfileRates';
 import MyTrips from './MyTrips';
 import ProfileTrip from '../sections/ProfileTrip';
+import router from '../../router';
 
 export default {
     components: {
@@ -87,7 +88,11 @@ export default {
     },
 
     mounted () {
-        this.$refs.tabs.activateTab(1);
+        let index = 1;
+        if (router.history && router.history.current && router.history.current.hash) {
+            index = parseInt(router.history.current.hash.replace('#', ''), 10);
+        }
+        this.$refs.tabs.activateTab(index);
         this.updateProfile();
     }
 };
