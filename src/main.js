@@ -6,6 +6,9 @@ document.head.appendChild(cordovaTag);
 
 import 'babel-polyfill';
 
+var moment = require('moment-timezone');
+moment.tz.setDefault('America/Argentina');
+
 import Vue from 'vue';
 import App from './App';
 

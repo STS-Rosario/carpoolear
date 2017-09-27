@@ -102,7 +102,6 @@ export default {
 
         onBackClick () {
             // router.back();
-            console.log('back click');
             router.push({ name: 'conversations-list' });
         },
 

@@ -146,7 +146,6 @@ export default {
     },
 
     mounted () {
-        console.log('conversation mounted');
         this.conversationsSearch();
         this.thread = new Thread(() => {
             this.unreadMessage();
@@ -157,7 +156,6 @@ export default {
         }
     },
     updated () {
-        console.log('conversation updated');
     },
     components: {
         Loading

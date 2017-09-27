@@ -72,6 +72,7 @@ const actions = {
     },
 
     onBackButton (store) {
+        debugger;
         let result = bus.emit('backbutton');
         if (!result) {
             if (router.stack.length > 0) {

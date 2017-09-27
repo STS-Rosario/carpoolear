@@ -43,7 +43,7 @@ import Loading from '../Loading.vue';
 import bus from '../../services/bus-event.js';
 import { mapGetters, mapActions } from 'vuex';
 import moment from 'moment';
-
+import router from '../../router';
 export default {
     name: 'trips',
     data () {
@@ -110,7 +110,6 @@ export default {
         onScrollBottom () {
             if (this.morePages && !this.lookSearch) { // Hay páginas y no estoy en búsquedas
                 if (!this.runningSearch) {
-                    console.log('CALL NEXT');
                     this.runningSearch = true;
                     let done = () => {
                         this.runningSearch = false;
@@ -121,6 +120,7 @@ export default {
         },
         onBackBottom () {
             bus.off('backbutton', this.onBackBottom);
+            this.lookSearch = false;
         }
     },
     mounted () {
@@ -133,17 +133,20 @@ export default {
                 this.$refs.searchBox.loadParams(this.searchParams.data);
             }
         }
+        this.$refs.searchBox.clear();
 
         // bus.event
         bus.off('search-click', this.onSearchButton);
         bus.on('search-click', this.onSearchButton);
         bus.off('clear-click', this.onClearButton);
         bus.on('clear-click', this.onClearButton);
-        console.log('mounted on Scroll Bottom');
         bus.off('scroll-bottom', this.onScrollBottom);
         bus.on('scroll-bottom', this.onScrollBottom);
+
+        router.stack = [];
     },
-    updated () {
+    updated (a) {
+
         // Pendiente, no se limpia el buscador, si los search params están vacios
     },
     beforeDestroy () {
@@ -154,10 +157,10 @@ export default {
     },
     watch: {
         trips: function (oldValue, newValue) {
-            console.log('refreshList', this.refreshList);
             if (this.refreshList) {
                 this.refreshTrips(false);
                 this.lookSearch = false;
+                this.$refs.searchBox.clear();
             }
         }
     },

@@ -30,6 +30,7 @@
     "less-loader": "^4.0.4",
     "lodash": "^4.17.4",
     "minimist": "^1.2.0",
+    "moment-timezone": "^0.5.13",
     "pikaday": "^1.6.1",
     "postcss-browser-reporter": "^0.5.0",
     "postcss-import": "^9.1.0",
