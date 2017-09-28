@@ -288,7 +288,6 @@ export default {
         },
 
         toUserMessages (user) {
-            console.log(user);
             this.lookConversation(user).then(conversation => {
                 // this.selectConversation(conversation.id).then(data => {
                 router.push({ name: 'conversation-chat', params: { id: conversation.id } });

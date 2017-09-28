@@ -15,12 +15,10 @@ export default {
     name: 'calendar',
     watch: {
         'value': function () {
-            console.log('calendar value', this.value);
             let format = 'YYYY-MM-DD';
             if (this.value.indexOf('/') >= 0) {
                 format = 'DD/MM/YYYY';
             }
-            console.log('format', this.value);
             let time = moment(this.value, format).format('DD/MM/YYYY');
             this.$refs.calendar.showDay(time);
             this.date.time = moment(this.value, format).format('DD/MM/YYYY');

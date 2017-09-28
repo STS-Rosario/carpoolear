@@ -91,7 +91,6 @@ export default {
     methods: {
         dateChange (value) {
             this.dateAnswer = value;
-            console.log('!!!', this.dateAnswer);
         },
         checkInput (event) {
             let value = event.target.value;
@@ -154,7 +153,7 @@ export default {
             this['from_town'] = temp;
         },
         clear () {
-            this.resetInput('to_town');
+            this.resetInput('from_town');
             this.resetInput('to_town');
             this.date = '';
         },
