@@ -22,7 +22,6 @@
             </DatepickerSystem>
         </div>
         <div v-if="!browser" class="form-control form-control-with-icon form-control-date">
-            <div hidden>{{ niceDate }}</div>
             <input
                 @focus="openNativeDatePicker"
                 @blur="focus = false"
@@ -62,9 +61,18 @@ export default {
         };
     },
     mounted () {
+        console.log('mounted', this.value);
         if (this.value !== '') {
             this.dateBrowser = moment(this.value).toDate();
             this.dateMobile = this.value;
+            this.niceDate = moment(this.value).format('DD/MM/YYYY');
+        }
+    },
+
+    updated () {
+        console.log('updated', this.value);
+        if (this.value !== '') {
+            this.niceDate = moment(this.value).format('DD/MM/YYYY');
         }
     },
     methods: {
@@ -75,26 +83,23 @@ export default {
             this.dateMobile = el.target.value;
         },
         openNativeDatePicker (event) {
-            console.log('blur', event);
+            event.target.blur();
             var context = this;
             this.focus = true;
             let date = new Date();
             if (context.dateMobile) {
                 date = moment(context.dateMobile).toDate();
             }
-            console.log('dateToLoad', date);
             var options = {
                 date: date,
                 mode: 'date',
                 minDate: Date.parse(moment(this.min).toDate()),
                 maxDate: Date.parse(moment(this.max).toDate())
             };
-            console.log(options);
 
             function onSuccess (date) {
                 context.dateMobile = moment(date).format('YYYY-MM-DD');
                 context.niceDate = moment(date).format('DD/MM/YYYY');
-                event.target.blur();
             }
 
             function onError (error) { // Android only
@@ -123,6 +128,7 @@ export default {
         value: function (value) {
             this.dateBrowser = moment(this.value).toDate();
             this.dateMobile = this.value;
+            this.niceDate = moment(this.value).format('DD/MM/YYYY');
         }
     },
     props: {

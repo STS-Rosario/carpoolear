@@ -23,7 +23,8 @@
             "phonegap-plugin-push": {
                 "SENDER_ID": "1027904610758",
                 "PACKAGE_NAME": "com.sts.carpoolear"
-            }
+            },
+            "cordova-plugin-datepicker": {}
         }
     },
     "dependencies": {
@@ -31,6 +32,7 @@
         "cordova-browser": "^4.1.0",
         "cordova-ios": "^4.4.0",
         "cordova-plugin-backbutton": "^0.3.0",
+        "cordova-plugin-datepicker": "^0.9.3",
         "cordova-plugin-device": "~1.1.4",
         "cordova-plugin-facebook4": "^1.9.1",
         "cordova-plugin-nativestorage": "~2.2.2",
