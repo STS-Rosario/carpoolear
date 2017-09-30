@@ -30,7 +30,7 @@
             </div>
         </div>
         <div class="col-xs-24 col-md-4 no-padding">
-            <DatePicker :value="date" :minDate="minDate" :class="{'has-error': dateError.state}"></DatePicker>
+            <DatePicker ref="datepicker" :value="date" :minDate="minDate" :class="{'has-error': dateError.state}"></DatePicker>
         </div>
         <div class="col-xs-24 col-md-3 col-lg-4">
             <button class="btn btn-primary btn-search" @click="emit">Buscar</button>
@@ -155,7 +155,7 @@ export default {
         clear () {
             this.resetInput('from_town');
             this.resetInput('to_town');
-            this.date = '';
+            this.$refs.datepicker.clear();
         },
         loadParams (parameters) {
             if (parameters) {

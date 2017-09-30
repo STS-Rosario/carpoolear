@@ -61,7 +61,6 @@ export default {
         };
     },
     mounted () {
-        console.log('mounted', this.value);
         if (this.value !== '') {
             this.dateBrowser = moment(this.value).toDate();
             this.dateMobile = this.value;
@@ -70,12 +69,16 @@ export default {
     },
 
     updated () {
-        console.log('updated', this.value);
         if (this.value !== '') {
             this.niceDate = moment(this.value).format('DD/MM/YYYY');
         }
     },
     methods: {
+        clear () {
+            this.dateBrowser = '';
+            this.dateMobile = '';
+            this.niceDate = '';
+        },
         changeValue (value) {
             this.dateBrowser = value;
         },
@@ -126,6 +129,7 @@ export default {
             }
         },
         value: function (value) {
+            console.log('date value change');
             this.dateBrowser = moment(this.value).toDate();
             this.dateMobile = this.value;
             this.niceDate = moment(this.value).format('DD/MM/YYYY');
