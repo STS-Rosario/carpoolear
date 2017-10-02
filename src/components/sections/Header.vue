@@ -186,7 +186,7 @@ export default {
         },
 
         tripsClick () {
-            console.log('dispatch trips/tripsSearch on header tripsClick');
+            this.$store.dispatch('trips/refreshList', true);
             this.$store.dispatch('trips/tripsSearch', { is_passenger: false });
         }
 

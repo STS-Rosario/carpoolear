@@ -49,7 +49,6 @@ export const init = (store) => {
 };
 
 export const startApp = (store) => {
-    console.log('dispatch trips/tripsSearch on AppStart');
     store.dispatch('trips/tripsSearch', { is_passenger: false });
     if (store.state.auth.auth) {
         store.dispatch('auth/fetchUser');

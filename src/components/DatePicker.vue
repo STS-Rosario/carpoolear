@@ -23,16 +23,16 @@
         </div>
         <div v-if="!browser" class="form-control form-control-with-icon form-control-date">
             <input
-                @focus="focus = true"
+                @focus="openNativeDatePicker"
                 @blur="focus = false"
-                :value = "dateMobile"
+                :value = "niceDate"
                 @change="changeMobileValue"
-                type="date"
+                type="text"
                 id="datepicker-mobile"
                 :min="min| moment('YYYY-MM-DD')"
                 :max="max| moment('YYYY-MM-DD')"
                 autocomplete="off"
-                placeholder="'dd/mm/yyyy'"
+                :placeholder="'dd/mm/yyyy'"
             />
         </div>
     </div>
@@ -43,7 +43,9 @@ import DatepickerSystem from 'vuejs-datepicker';
 import { mapGetters } from 'vuex';
 import moment from 'moment';
 import bus from '../services/bus-event';
+/*
 
+*/
 export default {
     name: 'datePicker',
     data () {
@@ -54,22 +56,62 @@ export default {
             update: true,
             focus: false,
             nextYear: moment().add(2, 'years').format('YYYY-MM-DD'),
-            lastCentury: moment().subtract(100, 'years').format('YYYY-MM-DD')
+            lastCentury: moment().subtract(100, 'years').format('YYYY-MM-DD'),
+            niceDate: ''
         };
     },
     mounted () {
         if (this.value !== '') {
             this.dateBrowser = moment(this.value).toDate();
             this.dateMobile = this.value;
+            this.niceDate = moment(this.value).format('DD/MM/YYYY');
+        }
+    },
+
+    updated () {
+        if (this.value !== '') {
+            this.niceDate = moment(this.value).format('DD/MM/YYYY');
         }
     },
     methods: {
+        clear () {
+            this.dateBrowser = '';
+            this.dateMobile = '';
+            this.niceDate = '';
+        },
         changeValue (value) {
             this.dateBrowser = value;
         },
         changeMobileValue (el) {
             this.dateMobile = el.target.value;
+        },
+        openNativeDatePicker (event) {
+            event.target.blur();
+            var context = this;
+            this.focus = true;
+            let date = new Date();
+            if (context.dateMobile) {
+                date = moment(context.dateMobile).toDate();
+            }
+            var options = {
+                date: date,
+                mode: 'date',
+                minDate: Date.parse(moment(this.min).toDate()),
+                maxDate: Date.parse(moment(this.max).toDate())
+            };
+
+            function onSuccess (date) {
+                context.dateMobile = moment(date).format('YYYY-MM-DD');
+                context.niceDate = moment(date).format('DD/MM/YYYY');
+            }
+
+            function onError (error) { // Android only
+                // window.alert('Error: ' + error);
+            }
+
+            window.datePicker.show(options, onSuccess, onError);
         }
+
     },
     watch: {
         dateBrowser: function (value) {
@@ -87,8 +129,10 @@ export default {
             }
         },
         value: function (value) {
+            console.log('date value change');
             this.dateBrowser = moment(this.value).toDate();
             this.dateMobile = this.value;
+            this.niceDate = moment(this.value).format('DD/MM/YYYY');
         }
     },
     props: {

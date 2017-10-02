@@ -187,7 +187,6 @@ export default {
             carUpdate: 'cars/update'
         }),
         changeShowPassword () {
-            console.log('showChangePassword', this.showChangePassword);
             this.showChangePassword = !this.showChangePassword;
         },
         isNumber (value) {
@@ -366,7 +365,6 @@ export default {
     },
 
     mounted () {
-        console.log('FirstTime', this.firstTime);
         bus.on('date-change', this.dateChange);
         this.user = this.userData;
         if (this.cars) {
@@ -376,12 +374,9 @@ export default {
             }
         };
         try {
-            console.log(this.user.birthday);
             if (moment(this.user.birthday, 'YYYY-MM-DD').isValid()) {
-                console.log('is valid');
                 this.birthday = moment(this.user.birthday, 'YYYY-MM-DD');
             } else {
-                console.log('is not valid');
                 this.birthday = '';
             }
         } catch (ex) {

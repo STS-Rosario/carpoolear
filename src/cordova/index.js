@@ -13,9 +13,12 @@ let onDeviceReady = () => {
     store.commit('cordova/' + types.CORDOVA_SET_DEVICE, window.device);
 
     if (window.PushNotification) {
+        console.log('push init');
         push.init();
     }
     store.dispatch('init');
+
+    document.addEventListener('backbutton', onBackbutton, false);
 };
 
 let onOnline = () => {
@@ -45,6 +48,6 @@ let onResumen = () => {
 document.addEventListener('deviceready', onDeviceReady, false);
 document.addEventListener('online', onOnline, false);
 document.addEventListener('offline', onOffline, false);
-document.addEventListener('backbutton', onBackbutton, false);
+
 document.addEventListener('pause', onPause, false);
 document.addEventListener('resumen', onResumen, false);
