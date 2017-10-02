@@ -26,10 +26,10 @@
         <button ref="btn_show_login" id="btn_show_login" class="btn btn-primary btn-shadowed-black" @click="showLogin" v-show="!isShowLogin"> <span>Ingresá con tu cuenta</span></button>
       </div>
 
-      <div class="col-sm-12 col-md-12" v-show="isShowLogin || !isMobile">
-        <label for="txt_user">Usuario<span class="description" v-show="!isMobile">(El email con el que te registraste.)</span></label>
+      <div class="col-sm-12 col-md-12 login-box" v-show="isShowLogin || !isMobile">
+        <label for="txt_user">Email</label>
         <div class='visual-trick'>
-            <input placeholder="Usuario (El email con el que te registraste.)" ref="txt_user" type="email" id="txt_user" v-model="email" v-jump:focus="'txt_password'" />
+            <input placeholder="El email con el que te registraste" ref="txt_user" type="email" id="txt_user" v-model="email" v-jump:focus="'txt_password'" />
             <label for="txt_password" v-show="!isMobile">Contraseña</label>
             <input  placeholder="Contraseña" ref="txt_password" type="password" id="txt_password" v-jump:click.blur="'btn_login'" v-model='password' />
             <button ref="btn_login" id="btn_login" class="btn btn-primary btn-shadowed-black" @click="login" :disabled="loading"> <span v-if="!loading">Ingresar</span> <spinner class="blue" v-if="loading"></spinner></button>
@@ -46,7 +46,7 @@
         <span class="register" v-if="isMobile">¿No tenés cuenta? Ingresá con Facebook o <router-link class='login-register' :to="{name:'register'}"> Registrate acá. </router-link></span>
 
       </div>
-      <div class="col-sm-12 col-md-12"  v-show="!isMobile">
+      <div class="col-sm-12 col-md-12 facebook-box"  v-show="!isMobile" >
         <span class="register">¿No tenés cuenta?  Ingresá con Facebook o <router-link class='login-register' :to="{name:'register'}"> Registrate acá. </router-link></span>
         <button class="btn-primary btn-search btn-facebook btn-with-icon" @click="facebookLogin" :disabled="fbLoading"><span class="btn-with-icon--icon"><i class="fa fa-facebook" aria-hidden="true"></i></span><span class='btn-with-icon--label'> <span v-if="!fbLoading">Ingresá con Facebook</span><spinner class="blue" v-if="fbLoading"></spinner></span></button>
         <div>Al ingresar con Facebook estas aceptando nuestros términos y condiciones.</div>
@@ -172,9 +172,14 @@ export default {
 </style>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.fb-terms {
-    color: #EEE;
-}
+    .fb-terms {
+        color: #EEE;
+    }
+
+    .facebook-box {
+        margin-top: .5em!important;
+    }
+
     .password-not {
         text-align: center;
         margin-top: 16px;
@@ -185,63 +190,71 @@ export default {
         text-decoration: underline;
         padding-left: 10px;
     }
-  label {
-    margin-top: .3em;
-    font-weight: bold;
-  }
-  .login-forget {
-    font-weight: bold;
-    padding-left: 12px;
-    color: #016587;
-  }
-  .user-form .btn-primary.btn-facebook {
-    width: 90%;
-    margin: 1em auto;
-  }
 
-  .description {
-    font-size: 11px;
-    text-transform: none;
-    color: #fff;
-    display: block;
-  }
+    label {
+        margin-top: .3em;
+        font-weight: bold;
+    }
 
-  .btn-facebook.btn-with-icon--icon {
-    background-color: var(--button-facebook-blue-left);
-  }
-  .register {
-    font-weight: 300;
-    font-size: 16px;
-    display: block;
-    padding: 1.4em 0;
-    position: relative;
-    display: inline-block;
-  }
+    .login-forget {
+        font-weight: bold;
+        padding-left: 12px;
+        color: #016587;
+    }
 
-  .register::before {
-    position: absolute;
-    border-top: solid 1px #2793ff;
-    width: 90%;
-    margin-left: 5%;
-    content: " ";
-    top: 0;
-    left: 0;
-  }
-  .register::after {
-    position: absolute;
-    border-bottom: solid 1px #2793ff;
-    width: 90%;
-    margin-left: 5%;
-    content: " ";
-    bottom: 0;
-    left: 0;
-  }
+    .user-form .btn-primary.btn-facebook {
+        width: 90%;
+        margin: 1em auto;
+    }
+
+    .description {
+        font-size: 11px;
+        text-transform: none;
+        color: #fff;
+        display: block;
+    }
+
+    .btn-facebook.btn-with-icon--icon {
+        background-color: var(--button-facebook-blue-left);
+    }
+
+    .register {
+        font-weight: 300;
+        font-size: 16px;
+        display: block;
+        padding: 1.4em 0;
+        position: relative;
+        display: inline-block;
+    }
+
+    .register::before {
+        position: absolute;
+        border-top: solid 1px #2793ff;
+        width: 90%;
+        margin-left: 5%;
+        content: " ";
+        top: 0;
+        left: 0;
+    }
+
+    .register::after {
+        position: absolute;
+        border-bottom: solid 1px #2793ff;
+        width: 90%;
+        margin-left: 5%;
+        content: " ";
+        bottom: 0;
+        left: 0;
+    }
+
     .alert-warning a {
         color: #337ab7;
     }
+
     .register {
         color: #CCC;
     }
+
     .alert-warning {
         position: fixed;
         top: 0;
@@ -251,69 +264,79 @@ export default {
         height: 80vh;
         z-index: 100;
     }
-  @media only screen and (min-width: 768px) {
 
-    .alert-warning {
-        position: static;
-        width: auto;
-        height: auto;
-        margin: auto;
-        margin-bottom: 1em;
+    @media only screen and (min-width: 768px) {
+        .login-box {
+            margin-right: 0;
+        }
+        .alert-warning {
+            position: static;
+            width: auto;
+            height: auto;
+            margin: auto;
+            margin-bottom: 1em;
+        }
+        .register {
+            color: #555;
+        }
+        .description {
+            display: inline;
+            padding-left: .4em;
+            color: rgb(1, 101, 135);
+        }
+        .visual-trick {
+            border-right: solid 1px #ccc;
+            padding-right: 4rem;
+        }
+        .form>div:last-child {
+            padding-left: 4em;
+        }
+        .user-form .btn-primary.btn-facebook {
+            width: 100%;
+            max-width: 280px;
+            margin: 1.6em 0 .6em 0;
+        }
+        .register {
+            display: inline;
+            margin-bottom: 2em;
+            font-weight: 400;
+        }
+        .register::before {
+            display: none;
+        }
+        .register::after {
+            display: none;
+        }
     }
-    .register {
-        color: #555;
+
+    .form-warning-login label {
+        color: black;
     }
-    .description {
-        display: inline;
-        padding-left: .4em;
-        color: rgb(1, 101, 135);
+
+    .form-warning-login .checkbox {
+        display: inline-block;
+        margin-right: 1em;
     }
-    .visual-trick {
-        border-right: solid 1px #ccc;
-        padding-right: 4em;
+
+    .form-warning-login .checkbox span {
+        text-transform: none;
     }
-    .form > div:last-child {
-        padding-left: 4em;
+
+    .form-warning-login * {
+        vertical-align: middle;
     }
-    .user-form .btn-primary.btn-facebook {
-        width: 100%;
-        max-width: 280px;
-        margin: 1.6em 0 .6em 0;
-    }
-    .register {
-        display: inline;
-        margin-bottom: 2em;
-        font-weight: 400;
-    }
-    .register::before {
-        display: none;
-    }
-    .register::after {
-        display: none;
-    }
-  }
-  .form-warning-login label {
-      color: black;
-  }
-  .form-warning-login .checkbox {
-      display: inline-block;
-      margin-right: 1em;
-  }
-  .form-warning-login .checkbox span {
-      text-transform: none;
-  }
-  .form-warning-login * {
-      vertical-align: middle;
-  }
-  .form-warning-login  button {
+
+    .form-warning-login button {
         margin-top: 0em;
     }
-  @media only screen and (min-width: 768px) {
-    .form-warning-login  button {
-        margin-top: 0.5em;
+
+    @media only screen and (min-width: 768px) {
+        .form-warning-login button {
+            margin-top: 0.5em;
+        }
+        [type=checkbox] {
+            margin-top: 0;
+        }
     }
-    [type=checkbox] {
-        margin-top: 0;
-    }
-  }
+
 </style>

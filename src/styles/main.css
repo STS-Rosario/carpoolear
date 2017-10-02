@@ -1885,21 +1885,21 @@ ul {
     padding: 0;
 }
 .user-form input::-webkit-input-placeholder { /* WebKit, Blink, Edge */
-    color:    #ddd;
+    color:    #7F7F7F;
 }
 .user-form input:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-   color:    #ddd;
+   color:    #7F7F7F;
    opacity:  1;
 }
 .user-form input::-moz-placeholder { /* Mozilla Firefox 19+ */
-   color:    #ddd;
+   color:    #7F7F7F;
    opacity:  1;
 }
 .user-form input:-ms-input-placeholder { /* Internet Explorer 10-11 */
-   color:    #ddd;
+   color:    #7F7F7F;
 }
 .user-form input::-ms-input-placeholder { /* Microsoft Edge */
-   color:    #ddd;
+   color:    #7F7F7F;
 }
 .user-form .pass-options {
     margin-top: 2em;
