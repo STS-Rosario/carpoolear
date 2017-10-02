@@ -13,6 +13,7 @@ let onDeviceReady = () => {
     store.commit('cordova/' + types.CORDOVA_SET_DEVICE, window.device);
 
     if (window.PushNotification) {
+        console.log('push init');
         push.init();
     }
     store.dispatch('init');

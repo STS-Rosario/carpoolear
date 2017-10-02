@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.sts.carpoolear" version="2.1.7" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.sts.carpoolear" version="2.1.8" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Carpoolear</name>
     <description>
         Aplicación para compartir viajes de media y larga distancia.
@@ -33,11 +33,18 @@
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
         <icon gap:platform="ios" height="20" src="res/icon/ios/icon-20.png" width="20" />
+        <icon gap:platform="ios" height="29" src="res/icon/ios/icon-small.png" width="29" />
+        <icon gap:platform="ios" height="58" src="res/icon/ios/icon-small@2x.png" width="58" />
+        <icon gap:platform="ios" height="87" src="res/icon/ios/icon-small@3x.png" width="87" />
         <icon gap:platform="ios" height="40" src="res/icon/ios/icon-40.png" width="40" />
+        <icon gap:platform="ios" height="80" src="res/icon/ios/icon-40@2x.png" width="80" />
+        <icon gap:platform="ios" height="50" src="res/icon/ios/icon-50.png" width="50" />
+        <icon gap:platform="ios" height="100" src="res/icon/ios/icon-100.png" width="100" />
         <icon gap:platform="ios" height="57" src="res/icon/ios/icon-57.png" width="57" />
         <icon gap:platform="ios" height="72" src="res/icon/ios/icon-72.png" width="72" />
         <icon gap:platform="ios" height="114" src="res/icon/ios/icon-57-2x.png" width="114" />
         <icon gap:platform="ios" height="144" src="res/icon/ios/icon-72-2x.png" width="144" />
+        <icon gap:platform="ios" height="167" src="res/icon/ios/icon-83.5@2x.png" width="167" />
         <icon height="60" src="res/icon/ios/icon-60.png" width="60" />
         <icon height="120" src="res/icon/ios/icon-60-2x.png" width="120" />
         <icon height="76" src="res/icon/ios/icon-76.png" width="76" />
@@ -64,6 +71,7 @@
     <hook src="scripts/copy_dist.js" type="before_prepare" />
     <engine name="android" spec="^6.2.3" />
     <engine name="browser" spec="^4.1.0" />
+    <engine name="ios" spec="^4.4.0" />
     <plugin name="cordova-plugin-backbutton" spec="^0.3.0" />
     <plugin name="cordova-plugin-datepicker" spec="^0.9.3" />
     <plugin name="cordova-plugin-device" spec="~1.1.4" />

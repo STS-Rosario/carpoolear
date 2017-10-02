@@ -5,7 +5,8 @@
     "cordova": {
         "platforms": [
             "android",
-            "browser"
+            "browser",
+            "ios"
         ],
         "plugins": {
             "cordova-plugin-device": {},
@@ -20,11 +21,11 @@
                 "APP_ID": "147151221990591",
                 "APP_NAME": "Carpoolear"
             },
+            "cordova-plugin-datepicker": {},
             "phonegap-plugin-push": {
                 "SENDER_ID": "1027904610758",
                 "PACKAGE_NAME": "com.sts.carpoolear"
-            },
-            "cordova-plugin-datepicker": {}
+            }
         }
     },
     "dependencies": {
