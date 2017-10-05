@@ -109,7 +109,6 @@ const actions = {
         }
         let unread = true;
         let read = true;
-        console.log('id getMessages', id);
         return conversationApi.getMessages(id, { read, unread, pageSize }).then(response => {
             store.commit(types.CONVERSATION_INSERT_MESSAGE, { messages: response.data.reverse() });
         }).catch(error => {
