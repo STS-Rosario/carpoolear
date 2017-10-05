@@ -122,12 +122,7 @@ export default {
 
         refresh () {
             this.select(parseInt(this.id)).then(() => {
-                console.log('sentro', this.conversation);
-                this.thread = new Thread(() => {
-                    this.unreadMessage();
-                });
                 bus.on('back-click', this.onBackClick);
-                // this.thread.run(5000);
                 if (this.conversation) {
                     this.setTitle(this.conversation.title);
                     // this.setSubTitle('Última conexión: ' + moment().calendar(this.lastConnection));
@@ -137,7 +132,6 @@ export default {
     },
     beforeDestroy () {
         bus.off('back-click', this.onBackClick);
-        // this.thread.stop();
     },
     mounted () {
         this.refresh();

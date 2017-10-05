@@ -31,21 +31,21 @@
                     Generá confianza con el resto de la comunidad carpoolear, usá una foto tuya y contales un poco acerca de vos. Con eso aumentás tus chances de que alguien quiera compartir viaje con vos... es verdad, llevar torta para compartir también ayuda mucho :D
                 </div>
                 <div class="form-group">
-                    <label for="input-name">Nombre y apellido (*)</label>
+                    <label for="input-name">Nombre y apellido <span class="required-field-flag" title="Campo requerido">(*)</span></label>
                     <input maxlength="25" v-model="user.name" type="text" class="form-control" id="input-name" placeholder="Nombre" :class="{'has-error': nombreError.state }" :disabled="!firstTime" />
                     <span class="error" v-if="nombreError.state"> {{nombreError.message}} </span>
                 </div>
                 <div class="form-group">
-                    <label for="input-email">E-mail (*)</label>
+                    <label for="input-email">E-mail <span class="required-field-flag" title="Campo requerido">(*)</span></label>
                     <input maxlength="40" v-model="user.email" type="text" class="form-control" id="input-email" placeholder="E-mail" disabled>
                 </div>
                 <!--<div class="form-group">
-                    <label for="">Fecha de nacimiento (*)</label>
+                    <label for="">Fecha de nacimiento <span class="required-field-flag" title="Campo requerido">(*)</span></label>
                     <DatePicker :value="birthday | moment('YYYY-MM-DD') " ref="ipt_calendar" name="ipt_calendar" :maxDate="maxDate" :minDate="minDate" :class="{'has-error': birthdayError.state}" ></DatePicker>
                     <span class="error" v-if="birthdayError.state"> {{birthdayError.message}} </span>
                 </div>-->
                 <div class="form-group">
-                    <label for="input-description">Acerca de mi (*)<span class="description"> Contale de vos al resto de los carpooleros así te suman a sus viajes!! Qué te gusta hacer, en qué andas metido ahora, si estás con alguna idea, si te gustan los colores, etc.</span></label>
+                    <label for="input-description">Acerca de mi <span class="required-field-flag" title="Campo requerido">(*)</span><span class="description"> Contale de vos al resto de los carpooleros así te suman a sus viajes!! Qué te gusta hacer, en qué andas metido ahora, si estás con alguna idea, si te gustan los colores, etc.</span></label>
                     <textarea maxlength="280" v-model="user.description" placeholder="Descripción" :class="{'has-error': descError.state }" ></textarea>
                     <span class="error textarea" v-if="descError.state"> {{descError.message}} </span>
                 </div>
@@ -84,6 +84,7 @@
 
                 <div class="btn-container">
                     <button class="btn btn-primary" @click="grabar" :disabled="loading"> <span v-if="!loading">Guardar cambios</span><span v-if="loading">Guardando ...</span> </button>
+                    <span class="required-field-flag" v-bind:class="{ 'required-field-info': isMobile }">Los campos marcados con (*) son obligatorios.</span>
                 </div>
                 <span v-if="error">{{error}}</span>
                 <Uploadfile :name="'profile'" @change="onPhotoChange" ref="file"></Uploadfile>
@@ -146,7 +147,8 @@ export default {
         ...mapGetters({
             userData: 'auth/user',
             firstTime: 'auth/firstTime',
-            cars: 'cars/cars'
+            cars: 'cars/cars',
+            isMobile: 'device/isMobile'
         }),
         iptUser () {
             if (this.user) {
@@ -396,6 +398,13 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+    .required-field-flag {
+        color: red;
+    }
+    .required-field-info {
+        display: block;
+        padding: 1em 0;
+    }
     .profile_image-container.error .circle-box {
         border: solid 2px red;
     }

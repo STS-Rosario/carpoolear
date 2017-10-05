@@ -112,7 +112,7 @@ export const startThread = (store) => {
         store.dispatch('notifications/count');
     };
     let th = new Thread(fn, 'NOTIFICATIONS');
-    th.run(20000, true);
+    th.run(30000, true);
 };
 
 export const stopThread = (store) => {

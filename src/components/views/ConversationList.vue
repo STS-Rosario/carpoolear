@@ -150,7 +150,7 @@ export default {
         this.thread = new Thread(() => {
             this.unreadMessage();
         });
-        this.thread.run(45000);
+        this.thread.run(20000);
         if (!this.isMobile) {
             router.push({ name: 'conversation-chat' });
         }

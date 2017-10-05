@@ -28,7 +28,7 @@
       <span class="error" v-if="passwordError.state"> {{passwordError.message}} </span>
       <div class="terms">
         <input v-jump:click="'ipt_submit'" ref="ipt_terms" name="ipt_terms" type="checkbox" id="cbx_terms" v-model='termsAndConditions' />
-        <label for="cbx_terms"><router-link :to="{name: 'terms'}">He leído y acepto los términos y condiciones</router-link></label>
+        <label for="cbx_terms">He leído y acepto los <router-link :to="{name: 'terms'}">términos y condiciones</router-link>.</label>
         <button ref="ipt_submit" name="ipt_submit" @click="register" class="btn-primary" :disabled="progress || !termsAndConditions"> Registrarme </button>
       </div>
     </div>

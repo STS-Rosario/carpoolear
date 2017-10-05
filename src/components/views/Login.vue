@@ -21,7 +21,7 @@
       </div>
       <div class="col-sm-12 col-md-12" v-show="isMobile">
         <button class="btn-primary btn-search btn-facebook btn-with-icon" @click="facebookLogin" :disabled="fbLoading"><span class="btn-with-icon--icon"><i class="fa fa-facebook" aria-hidden="true"></i></span><span class='btn-with-icon--label'> <span v-if="!fbLoading">Ingresá con Facebook</span><spinner class="blue" v-if="fbLoading"></spinner></span></button>
-        <div class="fb-terms">Al ingresar con Facebook estas aceptando nuestros términos y condiciones.</div>
+        <div class="fb-terms">Al ingresar con Facebook estas aceptando nuestros <router-link :to="{name: 'terms'}">términos y condiciones</router-link>.</div>
         <hr />
         <button ref="btn_show_login" id="btn_show_login" class="btn btn-primary btn-shadowed-black" @click="showLogin" v-show="!isShowLogin"> <span>Ingresá con tu cuenta</span></button>
       </div>
@@ -49,7 +49,7 @@
       <div class="col-sm-12 col-md-12 facebook-box"  v-show="!isMobile" >
         <span class="register">¿No tenés cuenta?  Ingresá con Facebook o <router-link class='login-register' :to="{name:'register'}"> Registrate acá. </router-link></span>
         <button class="btn-primary btn-search btn-facebook btn-with-icon" @click="facebookLogin" :disabled="fbLoading"><span class="btn-with-icon--icon"><i class="fa fa-facebook" aria-hidden="true"></i></span><span class='btn-with-icon--label'> <span v-if="!fbLoading">Ingresá con Facebook</span><spinner class="blue" v-if="fbLoading"></spinner></span></button>
-        <div>Al ingresar con Facebook estas aceptando nuestros términos y condiciones.</div>
+        <div>Al ingresar con Facebook estas aceptando nuestros <router-link :to="{name: 'terms'}">términos y condiciones</router-link>.</div>
       </div>
       <!--<span v-if="loading"> Loading... </span>-->
     </div>

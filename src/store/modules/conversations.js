@@ -3,6 +3,7 @@ import * as types from '../mutation-types';
 import * as pagination from '../pagination';
 import globalStore from '../index';
 import Vue from 'vue';
+import moment from 'moment';
 
 let conversationApi = new ConversationApi();
 let pageSize = 20;
@@ -108,6 +109,7 @@ const actions = {
         }
         let unread = true;
         let read = true;
+        console.log('id getMessages', id);
         return conversationApi.getMessages(id, { read, unread, pageSize }).then(response => {
             store.commit(types.CONVERSATION_INSERT_MESSAGE, { messages: response.data.reverse() });
         }).catch(error => {
@@ -257,7 +259,6 @@ const mutations = {
     },
 
     [types.CONVERSATION_INSERT_MESSAGE] (state, { messages, id }) {
-        console.log('insert message');
         messages.forEach(item => {
             if (!state.messages[item.conversation_id].list.find(i => i.id === item.id)) {
                 state.messages[item.conversation_id].list.push(item);
@@ -269,10 +270,13 @@ const mutations = {
                         c.last_message = item;
                     }
                 });
-                console.log('conversation sort');
-                state.list.sort((a, b) => {
-                    return new Date(b.update_at) - new Date(a.update_at);
+                let arrayClone = state.list.slice(0);
+                arrayClone.sort((a, b) => {
+                    let dateA = moment(a.update_at).toDate();
+                    let dateB = moment(b.update_at).toDate();
+                    return dateB - dateA;
                 });
+                state.list = arrayClone;
             }
         });
     },

@@ -1529,7 +1529,7 @@ textarea {
 }
 .friends-component,
 .settings-component {
-    margin-bottom: 4rem;
+    margin-bottom: 3rem;
 }
 .profile-info-component .edit-action {
     text-align: center;
@@ -2084,7 +2084,7 @@ ul {
     }
     .settings-component {
         background-color: white;
-        min-height: calc(100vh - 200px);
+        min-height: calc(100vh - 100px);
     }
     .settings-component .form {
         background: var(--form-background);

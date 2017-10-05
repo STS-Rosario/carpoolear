@@ -21,6 +21,23 @@ npm run dev
 
 Happy coding
 
+## Mobile apps
+
+
+``` bash
+# get into cordova directory after npm install
+cd cordova
+
+# add a platform ios / android
+cordova platform add android
+
+# emulate
+cordova emulate android
+
+```
+
+Happy coding
+
 ## Contributing
 
 Respetar la siguiente configuración de linting: /*jshint esversion: 6*/
