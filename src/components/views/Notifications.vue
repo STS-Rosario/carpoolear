@@ -3,10 +3,13 @@
         <Loading class="container" :data="notifications">
             <div class="notifications-list list-group">
                 <div class="list-group-item" v-for="n in notifications" :class="{'unread': !n.readed}" @click="onNotificationClick(n)">
-                    <div>
-                        <strong>{{n.text}}</strong>
-                        <em>{{n.created_at | moment('calendar')}}</em>
-                        <span class="pull-right">
+                    <div class="row">
+                        <div class="col-xs-22">
+                            <i class="fa fa-bell-o" aria-hidden="true" v-show="!n.readed"></i>
+                            <strong>{{n.text}}</strong>
+                            <em>{{n.created_at | moment('calendar')}}</em>
+                        </div>
+                        <span class="col-xs-2 text-right">
                             <i class="fa fa-chevron-right" aria-hidden="true"></i>
                         </span>
                     </div>
@@ -85,6 +88,12 @@ export default {
         cursor: pointer;
     }
     .notifications-list .list-group-item:hover {
-        background: #DDD;
+        background: #EEE;
+    }
+    .notifications-list .list-group-item.unread {
+        background: rgba(254, 153, 0, 0.25);
+    }
+    .notifications-list .list-group-item.unread:hover {
+        background: rgba(254, 222, 0, 0.1);
     }
 </style>

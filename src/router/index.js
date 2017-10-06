@@ -79,14 +79,14 @@ router.rememberBack = function () {
     }
 };
 
-router.push = function (data) {
+router.push = function (data, fnSuccess, fnFailure) {
     // console.log('push', JSON.stringify(router.stack), JSON.stringify(data));
     if (data.name !== 'trips') {
         router.stack.push(data);
     } else {
         router.stack = [];
     }
-    router._push(data);
+    router._push(data, fnSuccess, fnFailure);
 };
 
 router.replace = function (data) {

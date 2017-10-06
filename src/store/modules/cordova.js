@@ -2,8 +2,9 @@ import * as types from '../mutation-types';
 import facebook from '../../cordova/facebook.js';
 import {AuthApi} from '../../services/api';
 import globalStore from '../index';
-import router from '../..//router';
+import router from '../../router';
 import bus from '../../services/bus-event.js';
+import toast from '../../cordova/toast.js';
 
 let authApi = new AuthApi();
 // initial state
@@ -40,8 +41,24 @@ const getters = {
 // actions
 const actions = {
     notificationArrive (context, notification) {
-    // [TODO] Determinar logica
-        console.log(notification);
+        // [TODO] Determinar logica
+        console.log('Notification arrive', notification);
+        if (notification.foreground) {
+            toast.toast(notification.content);
+            // tendria que recargar cierto dato
+            if (notification.data) {
+                if (notification.data.type === 'conversation' && notification.data.conversation_id) {
+                    globalStore.dispatch('conversations/findConversation', { id: notification.data.conversation_id })
+                }
+            }
+        } else {
+            // Sino estoy entrando desde la notificacion debería abrirme la URL
+            router.push({ path: notification.url }, function (a, b) {
+                console.log('router succes');
+            }, function (x, y) {
+                console.log('router abort');
+            });
+        }
         globalStore.dispatch('notifications/add');
     },
     facebookLogin (context) {

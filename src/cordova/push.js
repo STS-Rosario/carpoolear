@@ -21,6 +21,7 @@ class Notification {
             this.content = e.body ? e.body : (e.message ? e.message : '');
             this.type = e.additionalData.type ? e.additionalData.type : '';
             this.url = e.additionalData.url ? e.additionalData.url : '';
+            this.data = e.additionalData.extras ? e.additionalData.extras : '';
             this.coldstart = e.additionalData.coldstart;
             this._original = e;
         }
