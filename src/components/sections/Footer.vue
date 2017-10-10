@@ -60,8 +60,7 @@
             <div class="col-xs-6 col-md-6">
                 <h3>Información legal</h3>
                 <p>
-                    Copyright © 2017 Carpoolear.<br />
-                    Todos los derechos reservados.<br />
+                    En ruta desde el año 2013<br />
                     <router-link :to="{name: 'terms'}">Terminos y condiciones</router-link>
                 </p>
             </div>
