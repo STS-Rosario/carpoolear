@@ -30,7 +30,7 @@
         </div>
 
         <div class="col-xs-24">
-            <h2>Mis <strong>próximos viajes</strong></h2>
+            <h2>Mis <strong>próximos</strong> viajes</h2>
             <Loading :data="trips">
                 <div class="trips-list">
                     <Trip v-for="trip in trips" :trip="trip" :user="user" ></Trip>
@@ -45,7 +45,7 @@
 
         <div class="col-xs-24">
             <Loading :data="passengerTrips" :hideOnEmpty="true">
-                <h2 slot="title" > Viajes a los que estoy <strong>subido</strong> </h2>
+                <h2 slot="title" > Viajes a los que <strong>estoy subido</strong> </h2>
                 <div class="trips-list">
                     <Trip v-for="trip in passengerTrips" :trip="trip" :user="user" ></Trip>
                 </div>
@@ -59,7 +59,7 @@
 
 
         <div class="col-xs-24" v-if="oldTrips">
-            <h2>Mis <strong>viajes pasados</strong></h2>
+            <h2>Mis viajes pasados</h2>
             <Loading :data="oldTrips">
                 <div class="trips-list">
                     <Trip v-for="trip in oldTrips" :trip="trip" :user="user" ></Trip>

@@ -26,7 +26,7 @@
 <script>
 import {mapActions} from 'vuex';
 import router from '../router';
-
+import dialogs from '../services/dialogs.js';
 export default {
     data () {
         return {
@@ -48,8 +48,18 @@ export default {
             this.acceptInProcess = true;
             this.passengerAccept({user, trip}).then(() => {
                 this.acceptInProcess = false;
-            }).catch(() => {
+            }).catch((resp) => {
                 this.acceptInProcess = false;
+                if (resp.status === 422) {
+                    if (resp.data && resp.data.errors && resp.data.errors.error && resp.data.errors.error.length) {
+                        for (let i = 0; i < resp.data.errors.error.length; i++) {
+                            let error = resp.data.errors.error[i];
+                            if (error === 'not_seat_available') {
+                                dialogs.message('No puedes aceptar esta solicitud, todos los asientos del viaje están ocupados.', { duration: 10, estado: 'error' });
+                            }
+                        }
+                    }
+                }
             });
         },
 
@@ -59,7 +69,7 @@ export default {
             this.rejectInProcess = true;
             this.passengerReject({user, trip}).then(() => {
                 this.rejectInProcess = false;
-            }).catch(() => {
+            }).catch((resp) => {
                 this.rejectInProcess = false;
             });
         },
