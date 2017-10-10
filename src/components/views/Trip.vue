@@ -129,8 +129,8 @@
                                 </div>
                             </div>
                             <div class="buttons-container">
-                                <router-link class="btn btn-primary" v-if="owner" :to="{name: 'update-trip', params: { id: trip.id}}"> Editar  </router-link>
-                                <a class="btn btn-primary" v-if="owner" @click="deleteTrip" > Cancelar viaje  </a>
+                                <router-link class="btn btn-primary" v-if="owner && !expired" :to="{name: 'update-trip', params: { id: trip.id}}"> Editar  </router-link>
+                                <a class="btn btn-primary" v-if="owner && !expired" @click="deleteTrip" > Cancelar viaje  </a>
                                 <template v-if="!owner && !expired">
                                     <button class="btn btn-primary" @click="toMessages" v-if="!owner"> Coordinar viaje  </button>
                                 </template>
