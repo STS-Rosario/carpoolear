@@ -14,6 +14,7 @@
                 </template>
             </div>
             <div class="actionbar_section actionbar_title" :class="subTitle !== '' ? 'header--with-subtitle' : ''">
+                <div class="header--image circle-box" v-imgSrc="imgTitle" v-show="imgTitle" ></div>
                 <span class='header--title'>{{title}}</span>
                 <span class='header--subtitle'>{{subTitle}}</span>
             </div>
@@ -132,7 +133,7 @@ export default {
     },
 
     mounted () {
-
+        bus.on('header-title-change', this.onHeaderChange);
     },
 
     computed: {
@@ -142,6 +143,7 @@ export default {
             notificationsCount: 'notifications/count',
             title: 'actionbars/title',
             subTitle: 'actionbars/subTitle',
+            imgTitle: 'actionbars/imgTitle',
             showMenu: 'actionbars/showMenu',
             leftHeaderButton: 'actionbars/leftHeaderButton',
             rightHeaderButton: 'actionbars/rightHeaderButton',
@@ -188,6 +190,10 @@ export default {
         tripsClick () {
             this.$store.dispatch('trips/refreshList', true);
             this.$store.dispatch('trips/tripsSearch', { is_passenger: false });
+        },
+
+        onHeaderChange () {
+            console.log('header-change', this.title);
         }
 
     },

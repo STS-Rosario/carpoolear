@@ -128,14 +128,35 @@
 <script>
 export default {
     name: 'trip',
-    props: [
-        'trip',
-        'user'
-    ],
+    props: {
+        'trip': {
+            type: Object,
+            required: false,
+            default: () => {
+                return {};
+            }
+        },
+        'user': {
+            type: Object,
+            required: false,
+            default: () => {
+                return {};
+            }
+        },
+        'navigateToEdit': {
+            type: Boolean,
+            required: false,
+            default: false
+        }
+    },
 
     methods: {
         goToDetail: function (event) {
-            this.$router.push({ name: 'detail_trip', params: { id: this.trip.id } });
+            if (this.navigateToEdit) {
+                this.$router.push({ name: 'update-trip', params: { id: this.trip.id } });
+            } else {
+                this.$router.push({ name: 'detail_trip', params: { id: this.trip.id } });
+            }
         },
         goToProfile: function (event) {
             event.stopPropagation();

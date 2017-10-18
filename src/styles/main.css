@@ -549,16 +549,29 @@ textarea {
     font-weight: 300;
     font-size: 2.5rem;
 }
+.header--with-subtitle {
+    width: 70%;
+}
 .header--with-subtitle .header--title {
     font-weight: bold;
     font-size: 16px;
     vertical-align: top;
+    display: block;
+    line-height: 1em;
 }
 
 .header--with-subtitle .header--subtitle {
-    position: absolute;
     font-size: 10px;
-    bottom: 8px;
+    display: block;
+    line-height: 1.5em;
+    /* position: absolute;
+    bottom: 8px; */
+}
+.header--image {
+    width: 32px;
+    height: 32px;
+    float: left;
+    margin-right: .5em;
 }
 .fa-container {
     position: relative;
@@ -1432,6 +1445,9 @@ textarea {
     width: 56px;
     height: 56px;
 }
+.conversation_image_chat {
+    float: left;
+}
 .message-wrapper {
     text-align: left;
     margin-bottom: .6em;
@@ -1710,6 +1726,7 @@ textarea {
 .actionbar_section {
     display: inline-block;
     margin-top: 2px;
+    vertical-align: middle;
 }
 
 .actionbar_icon {
@@ -1722,6 +1739,13 @@ textarea {
     font-family: 'Muli';
     font-weight: 300;
     margin-left: .5em;
+
+    max-width: 70%;
+    text-overflow: ellipsis;
+
+    /* Required for text-overflow to do anything */
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .footer-component {

@@ -34,6 +34,7 @@
 </template>
 <script>
 import {mapActions, mapGetters} from 'vuex';
+import dialogs from '../services/dialogs.js';
 
 export default {
     name: 'rate-pending',
@@ -75,12 +76,27 @@ export default {
                 comment: this.comment,
                 rating: this.vote
             };
-            this.emit(data).then(() => {
-                this.comment = '';
+            let ok = false;
+            if (!this.vote) {
+                if (!this.comment) {
+                    // Voto negativo y comentario vacio
+                    dialogs.message('El comentario no puede estar vacío para los votos negativos.', { duration: 10, estado: 'error' });
+                } else {
+                    ok = true;
+                }
+            } else {
+                ok = true;
+            }
+            if (ok) {
+                this.emit(data).then(() => {
+                    this.comment = '';
+                    this.sending = false;
+                }).catch(() => {
+                    this.sending = false;
+                });
+            } else {
                 this.sending = false;
-            }).catch(() => {
-                this.sending = false;
-            });
+            }
         }
     },
 

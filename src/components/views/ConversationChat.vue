@@ -2,6 +2,9 @@
     <div class="conversation_chat" v-if="conversation">
         <div class="list-group">
             <div class="list-group-item">
+                <router-link v-if="conversation.users.length === 2" :to="{ name: 'profile', params: userProfile() }" v-show="isMobile">
+                    <div class="conversation_image conversation_image_chat circle-box" v-imgSrc="conversation.image" ></div>
+                </router-link>
                 <router-link v-if="conversation.users.length === 2" :to="{ name: 'profile', params: userProfile() }">
                     <h2> {{conversation.title}} </h2>
                 </router-link>
@@ -58,6 +61,7 @@ export default {
             'messages': 'conversations/messagesList',
             'lastPageConversation': 'conversations/lastPageConversation',
             'timestampConversation': 'conversations/timestampConversation',
+            'title': 'actionbars/title',
             'isMobile': 'device/isMobile'
         }),
         lastConnection () {
@@ -76,7 +80,8 @@ export default {
             'findMessage': 'conversations/findMessage',
             'unreadMessage': 'conversations/getUnreadMessages',
             'setTitle': 'actionbars/setTitle',
-            'setSubTitle': 'actionbars/setSubTitle'
+            'setSubTitle': 'actionbars/setSubTitle',
+            'setImgTitle': 'actionbars/setImgTitle'
         }),
 
         userProfile () {
@@ -125,7 +130,8 @@ export default {
                 bus.on('back-click', this.onBackClick);
                 if (this.conversation) {
                     this.setTitle(this.conversation.title);
-                    // this.setSubTitle('Última conexión: ' + moment().calendar(this.lastConnection));
+                    this.setSubTitle('Última conexión: ' + moment(this.lastConnection).calendar());
+                    this.setImgTitle(this.conversation.image);
                 }
             });
         }
@@ -143,7 +149,10 @@ export default {
         }
         if (this.conversation) {
             this.setTitle(this.conversation.title);
-            this.setSubTitle('Última conexión: ' + moment().calendar(this.lastConnection));
+            this.setSubTitle('Última conexión: ' + moment(this.lastConnection).calendar());
+            this.setImgTitle(this.conversation.image);
+
+            bus.emit('header-title-change');
         }
     },
     watch: {
