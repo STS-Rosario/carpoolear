@@ -51,7 +51,7 @@ export default {
             response.then((response) => {
                 resolve(response.data);
             }).catch((resp) => {
-        // Revisar el tipo de error!
+                // Revisar el tipo de error!
                 if (resp.response) {
                     let data = resp.response.data;
                     let status = resp.response.status;

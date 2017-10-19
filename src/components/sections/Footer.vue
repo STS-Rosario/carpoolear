@@ -3,7 +3,7 @@
     <div class="actionbar actionbar-bottom visible-xs" v-if="footerShow">
 
         <div class="actionbar_item" v-for="item in footerButtons" :class="{ active: item.active }" @click="onClick(item)">
-            <span :class="{big: item.id === 'new-trip'}">
+            <span :class="{ big: item.id === 'new-trip', 'width-badges': item.id === 'notifications' }" class="">
                 <svgItem size="26" :icon="item.icon"></svgItem>
                 <span class="badge" v-if="notificationsCount > 0 && item.id === 'notifications'">{{notificationsCount}}</span>
             </span>
@@ -60,8 +60,7 @@
             <div class="col-xs-6 col-md-6">
                 <h3>Información legal</h3>
                 <p>
-                    Copyright © 2017 Carpoolear.<br />
-                    Todos los derechos reservados.<br />
+                    En ruta desde el año 2013<br />
                     <router-link :to="{name: 'terms'}">Terminos y condiciones</router-link>
                 </p>
             </div>
@@ -101,13 +100,17 @@ export default {
     h3 {
         font-size: 18px;
     }
+    .width-badges {
+        position: relative;
+    }
     .badge {
         position: absolute;
         background-color: red;
-        right: 14px;
-        bottom: 8px;
+        right: 5px;
+        bottom: 3px;
         font-size: 10px;
-        /* height: 17px; */
-        width: 16px;
+        height: auto;
+        width: auto;
+        padding: 3px 4px!important;
     }
 </style>

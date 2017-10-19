@@ -36,6 +36,7 @@ router.beforeEach((to, from, next) => {
 
     if (actionbar.header) {
         store.dispatch('actionbars/setSubTitle', '');
+        store.dispatch('actionbars/setImgTitle', '');
         if (actionbar.header.title) {
             store.dispatch('actionbars/setTitle', actionbar.header.title);
         } else {
@@ -79,14 +80,14 @@ router.rememberBack = function () {
     }
 };
 
-router.push = function (data) {
+router.push = function (data, fnSuccess, fnFailure) {
     // console.log('push', JSON.stringify(router.stack), JSON.stringify(data));
     if (data.name !== 'trips') {
         router.stack.push(data);
     } else {
         router.stack = [];
     }
-    router._push(data);
+    router._push(data, fnSuccess, fnFailure);
 };
 
 router.replace = function (data) {

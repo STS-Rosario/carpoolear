@@ -23,7 +23,20 @@ export function makeGetters (name) {
 export function makeMutations (name) {
     let mutations = {};
     mutations[name.toUpperCase() + '_SET'] = (state, items) => {
-        state[name] = items;
+        if (items) {
+            if (state[name] && state[name].length) {
+                items.forEach(item => {
+                    let foundItem = state[name].find(i => i.id.toString() === item.id.toString());
+                    if (!foundItem) {
+                        state[name].push(item);
+                    }
+                });
+            } else {
+                state[name] = items;
+            }
+        } else {
+            state[name] = items;
+        }
     };
 
     mutations[name.toUpperCase() + '_ADD'] = (state, items) => {

@@ -129,8 +129,8 @@
                                 </div>
                             </div>
                             <div class="buttons-container">
-                                <router-link class="btn btn-primary" v-if="owner" :to="{name: 'update-trip', params: { id: trip.id}}"> Editar  </router-link>
-                                <a class="btn btn-primary" v-if="owner" @click="deleteTrip" > Cancelar viaje  </a>
+                                <router-link class="btn btn-primary" v-if="owner && !expired" :to="{name: 'update-trip', params: { id: trip.id}}"> Editar  </router-link>
+                                <a class="btn btn-primary" v-if="owner && !expired" @click="deleteTrip" > Cancelar viaje  </a>
                                 <template v-if="!owner && !expired">
                                     <button class="btn btn-primary" @click="toMessages" v-if="!owner"> Coordinar viaje  </button>
                                 </template>
@@ -343,7 +343,13 @@ export default {
             if (window.device && window.device.platform && window.device.platform.toLowerCase() !== 'browser') {
                 // Estoy en movil
                 event.preventDefault();
-                window.location.href = event.target.getAttribute('href');
+                let href = event.target.getAttribute('href');
+                if (!href) {
+                    href = event.target.parentElement.getAttribute('href');
+                }
+                if (href) {
+                    window.location.href = href;
+                }
             }
         },
         onWhatsAppShareClick (event) {
@@ -352,7 +358,6 @@ export default {
                 event.preventDefault();
                 if (window && window.plugins && window.plugins.socialsharing && window.plugins.socialsharing.shareWithOptions) {
                     let message = 'Publiqué un viaje para compartir en Carpoolear';
-                    console.log('currentUrl', this.currentUrl);
                     window.plugins.socialsharing.shareViaWhatsApp(message, null /* img */, decodeURIComponent(this.currentUrl), function () {
                         console.log('share ok');
                     }, function (errormsg) {
