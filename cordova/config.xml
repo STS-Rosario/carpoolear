@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.sts.carpoolear" version="2.2.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.sts.carpoolear" version="2.2.4" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Carpoolear</name>
     <description>
         Aplicación para compartir viajes de media y larga distancia.
@@ -28,6 +28,7 @@
         <splash density="port-ldpi" src="res/screen/android/screen-mdpi-portrait.png" />
         <splash density="port-mdpi" src="res/screen/android/screen-mdpi-portrait.png" />
         <splash density="port-xhdpi" src="res/screen/android/screen-xhdpi-portrait.png" />
+        <preference name="AndroidLaunchMode" value="singleTop" />
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
@@ -74,6 +75,7 @@
     <engine name="browser" spec="^4.1.0" />
     <engine name="ios" spec="^4.4.0" />
     <plugin name="cordova-plugin-backbutton" spec="^0.3.0" />
+    <plugin name="cordova-plugin-cache-clear" spec="^1.3.7" />
     <plugin name="cordova-plugin-datepicker" spec="^0.9.3" />
     <plugin name="cordova-plugin-device" spec="~1.1.4" />
     <plugin name="cordova-plugin-disable-ios11-statusbar" spec="^1.0.0" />

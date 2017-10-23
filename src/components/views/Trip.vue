@@ -446,6 +446,7 @@ export default {
     },
 
     mounted () {
+        console.log('mounted Trip.vue', this.id);
         this.loadTrip();
         bus.on('back-click', this.onBackClick);
     },
