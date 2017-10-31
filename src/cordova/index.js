@@ -4,7 +4,7 @@ import store from '../store';
 import push from './push.js';
 import facebook from './facebook.js';
 import * as types from '../store/mutation-types';
-import cache, {keys} from '../services/cache';
+import cache from '../services/cache';
 
 window.facebook = facebook;
 window.appVersion = '2.2.2';

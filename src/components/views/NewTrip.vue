@@ -432,14 +432,14 @@ export default {
                 this.createTrip(this.trip).then((t) => {
                     this.saving = false;
                     this.$router.replace({ name: 'detail_trip', params: { id: t.id } });
-                }).catch(() => { this.saving = false });
+                }).catch(() => { this.saving = false; });
             } else {
                 console.log(this.trip);
                 this.trip.id = this.updatingTrip.id;
                 this.updateTrip(this.trip).then(() => {
                     this.saving = false;
                     this.$router.replace({ name: 'detail_trip', params: { id: this.trip.id } });
-                }).catch(() => { this.saving = false });
+                }).catch(() => { this.saving = false; });
             }
         },
 

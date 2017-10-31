@@ -40,7 +40,6 @@
 </template>
 <script>
 import {mapGetters, mapActions} from 'vuex';
-import {Thread} from '../../classes/Threads.js';
 import MessageView from '../MessageView';
 import router from '../../router';
 import moment from 'moment';

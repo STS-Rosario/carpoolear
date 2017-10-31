@@ -42,7 +42,6 @@ export default {
             } else {
                 doLogin();
             }
-
         });
     }
 };
