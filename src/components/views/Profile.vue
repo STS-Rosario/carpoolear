@@ -1,5 +1,5 @@
 <template>
-    <tabset ref="tabs">
+    <tabset ref="tabs" :keytabset="'profile'">
         <tab header="Mis Viajes">
             <component :is="currentView"></component>
         </tab>
@@ -91,6 +91,12 @@ export default {
         let index = 1;
         if (router.history && router.history.current && router.history.current.hash) {
             index = parseInt(router.history.current.hash.replace('#', ''), 10);
+        }
+        if (window.sessionStorage) {
+            let savedIndex = window.sessionStorage.getItem('profile_last_active_tab');
+            if (savedIndex) {
+                index = parseInt(savedIndex, 10);
+            }
         }
         this.$refs.tabs.activateTab(index);
         this.updateProfile();

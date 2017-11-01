@@ -69,13 +69,14 @@ const mutations = {
         for (let i = 0; i < state.driver_trip.length; i++) {
             if (state.driver_trip[i].id === trip.id) {
                 state.driver_trip[i] = trip;
+                // Object.assing(state.driver_trip[i], trip);
             }
         }
     },
     [types.MYTRIPS_DELETE_TRIPS] (state, id) {
         let index = state.driver_trip.findIndex(item => item.id === id);
         if (index >= 0) {
-            state.passenger_trip.splice(index, 1);
+            state.driver_trip.splice(index, 1);
         }
     },
 

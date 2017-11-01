@@ -33,7 +33,7 @@
             <h2>Mis <strong>próximos</strong> viajes</h2>
             <Loading :data="trips">
                 <div class="trips-list">
-                    <Trip v-for="trip in trips" :trip="trip" :user="user"></Trip>
+                    <Trip v-for="trip in trips" :trip="trip" :user="user" :enableChangeSeats="true"></Trip>
                 </div>
                 <p slot="no-data" class="alert alert-warning"  role="alert">No tenés viajes creados</p>
                 <p slot="loading" class="alert alert-info" role="alert">

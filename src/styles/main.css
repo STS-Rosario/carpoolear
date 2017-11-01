@@ -927,11 +927,11 @@ textarea {
     margin-top: 1rem;
     padding-right: 0;
     min-height: 2.5em;
-    font-size: 1.1em;
+    font-size: 1.2em;
 }
 @media (min-width: 992px) {
     .trip_datetime {
-        font-size: 1em;
+        font-size: 1.1em;
     }
 }
 .trip_datetime_date {
@@ -1656,7 +1656,7 @@ textarea {
 }
 
 .trips-list {
-    overflow: auto;
+    /*overflow: auto;*/ overflow: visible;
     margin-bottom: 3rem;
 }
 .trips-list > div {
@@ -2683,4 +2683,12 @@ ul {
 
 .pika-label:after {
     content:" \25be";
+}
+.title-margined {
+    margin: 1em 0;
+}
+.list-item {
+    border-bottom: 1px solid #CCC;
+    padding-bottom: .5em;
+    margin-bottom: .5em;
 }

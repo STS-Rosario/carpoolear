@@ -1,6 +1,6 @@
 <template>
-  <div class="col-lg-6 col-md-8 col-sm-12" v-on:click='goToDetail'>
-    <div class="trip" :class="{ 'trip-fill': trip.seats_available === 0, 'trip-almost-fill': trip.seats_available === 1, 'trip-mostly-available': trip.seats_available > 3, 'trip-with-driver': user }" >
+  <div class="col-lg-6 col-md-8 col-sm-12" v-on:click='goToDetail(false)'>
+    <div class="trip" :class="{ 'trip-fill': seats_available === 0, 'trip-almost-fill': seats_available === 1, 'trip-mostly-available': seats_available > 3, 'trip-with-driver': user, 'trip-with-control': enableChangeSeats } " >
         <div class="panel panel-default panel-card card card-trip">
           <div class="panel-heading card_heading">
             <div class="panel-title card-trip_title row">
@@ -100,32 +100,82 @@
 
                 </time>
             </div>
-            <div v-if="trip.seats_available !== 0" class="row">
-              <div class="trip_seats-available col-xs-offset-2 col-xs-12" v-if="!trip.is_passenger">
-                <span class="trip_seats-available_value pull-left">{{ trip.seats_available }}</span>
-                <span class="trip_seats-available_label" v-if="trip.seats_available > 1">
-                    <span>Lugares</span><span>libres</span>
-                </span>
-                <span class="trip_seats-available_label" v-else="trip.seats_available > 1">
-                    <span>Lugar</span><span>libre</span>
-                </span>
-              </div>
-              <div class="col-xs-offset-2 col-xs-12" v-else></div>
-              <div class="trip_actions col-xs-10">
-                <div class="btn btn-default btn-lg btn-trip-detail">Ver</div>
-              </div>
-            </div>
-            <div v-if="trip.seats_available === 0" class="row row--carpooleado">
-              <div class="trip_seats-available col-xs-offset-6 col-xs-18 carpooleado">
-                <span>Carpooleado</span>
-              </div>
-            </div>
+            <template v-if="!enableChangeSeats">
+                <div v-if="trip.seats_available !== 0" class="row">
+                    <div class="trip_seats-available col-xs-offset-2 col-xs-12" v-if="!trip.is_passenger">
+                        <span class="trip_seats-available_value pull-left">{{ trip.seats_available }}</span>
+                        <span class="trip_seats-available_label" v-if="trip.seats_available > 1">
+                            <span>Lugares</span><span>libres</span>
+                        </span>
+                        <span class="trip_seats-available_label" v-else="trip.seats_available > 1">
+                            <span>Lugar</span><span>libre</span>
+                        </span>
+                    </div>
+                    <div class="col-xs-offset-2 col-xs-12" v-else></div>
+                    <div class="trip_actions col-xs-10">
+                        <div class="btn btn-default btn-lg btn-trip-detail">Ver</div>
+                    </div>
+                </div>
+                <div v-if="trip.seats_available === 0" class="row row--carpooleado">
+                    <div class="trip_seats-available col-xs-offset-6 col-xs-18 carpooleado">
+                        <span>Carpooleado</span>
+                    </div>
+                </div>
+            </template>
+            <template v-else>
+                <div class="row">
+                    <div v-if="!trip.is_passenger" class="trip-seats-control col-xs-offset-2">
+                        <button aria-label="Disminuir en uno la cantidad de asientos" v-on:click.stop="changeSeatsNumber(-1)" :disabled="sending || seats_available < 2" class="btn btn-default">
+                            -
+                        </button>
+                        <span class="trip_seats-available_value">
+                            {{ seats_available }}
+                        </span>
+                        <button aria-label="Aumentar en uno la cantidad de asientos" v-on:click.stop="changeSeatsNumber(1)" :disabled="sending || seats_available > 3" class="btn btn-default">
+                            +
+                        </button>
+                        <span class="trip_seats-available_label" v-if="seats_available > 1">
+                            <span>Lugares libres</span>
+                        </span>
+                        <span class="trip_seats-available_label" v-if="seats_available === 1">
+                            <span>Lugar libre</span>
+                        </span>
+                        <span class="trip_seats-available_label" v-if="seats_available === 0">
+                            Carpooleado
+                        </span>
+                    </div>
+                    <div class="trip-inline-controls row">
+                        <span class="col-xs-6">
+                            <button v-on:click.stop="goToDetail(false)" class="btn btn-default" aria-label="Ver detalle del viaje">
+                                <i class="fa fa-eye" aria-hidden="true"></i>
+                            </button>
+                        </span>
+                        <span class="col-xs-6">
+                            <button v-on:click.stop="goToDetail(false, true)" v-if="!trip.is_passenger" :disabled="!trip.passenger.length" class="btn btn-default"  aria-label="Ver pasajeros subidos">
+                                <i class="fa fa-users" aria-hidden="true"></i>
+                            </button>
+                        </span>
+                        <span class="col-xs-6">
+                            <button v-on:click.stop="goToDetail(true)" class="btn btn-default" aria-label="Editar viaje">
+                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                            </button>
+                        </span>
+                        <span class="col-xs-6">
+                            <button v-on:click.stop="deleteTrip" class="btn btn-default"  aria-label="Eliminar viaje">
+                                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </template>
           </div>
         </div>
     </div>
   </div>
 </template>
 <script>
+import { mapActions } from 'vuex';
+import dialogs from '../../services/dialogs.js';
 export default {
     name: 'trip',
     props: {
@@ -143,7 +193,7 @@ export default {
                 return {};
             }
         },
-        'navigateToEdit': {
+        'enableChangeSeats': {
             type: Boolean,
             required: false,
             default: false
@@ -151,20 +201,85 @@ export default {
     },
 
     methods: {
-        goToDetail: function (event) {
-            if (this.navigateToEdit) {
+        ...mapActions({
+            changeSeats: 'trips/changeSeats',
+            remove: 'trips/remove'
+        }),
+        goToDetail: function (goToEdit, passengerView) {
+            if (goToEdit) {
                 this.$router.push({ name: 'update-trip', params: { id: this.trip.id } });
             } else {
-                this.$router.push({ name: 'detail_trip', params: { id: this.trip.id } });
+                if (!passengerView) {
+                    this.$router.push({ name: 'detail_trip', params: { id: this.trip.id } });
+                } else {
+                    this.$router.push({
+                        name: 'detail_trip_location',
+                        params: {
+                            id: this.trip.id,
+                            location: 'passenger'
+                        }
+                    });
+                }
             }
         },
         goToProfile: function (event) {
             event.stopPropagation();
             this.$router.push({ name: 'profile', params: { id: this.trip.user.id, userProfile: this.trip.user } });
+        },
+        changeSeatsNumber: function (increment) {
+            this.sending = true;
+            let data = {
+                id: this.trip.id,
+                increment: increment
+            };
+            this.changeSeats(data).then((data) => {
+                this.sending = false;
+                this.seats_available = data.seats_available;
+                this.$forceUpdate();
+            }).catch((response) => {
+                this.sending = false;
+                let errorMessage = '';
+                if (response.status === 422) {
+                    if (response.data.errors && response.data.errors.error && response.data.errors.error.length) {
+                        let error = response.data.errors.error[0];
+                        switch (error) {
+                        case 'trip_seats_greater_than_zero':
+                            errorMessage = 'Un viaje debe tener al menos un asiento disponible.';
+                            break;
+                        case 'trip_seats_less_than_four':
+                            errorMessage = 'Un viaje no puede tener más de 4 asientos disponibles.';
+                            break;
+                        case 'trip_invalid_seats':
+                            errorMessage = 'Ya tienes pasajeros subidos no puedes disminuir la cantidad de asientos.';
+                            break;
+                        default:
+                            errorMessage = 'Se produjo un error al cambiar la cantidad de asientos. Por favor vuelva a intentarlo.';
+                            break;
+
+                        }
+                    } else {
+                        errorMessage = 'Se produjo un error al cambiar la cantidad de asientos. Por favor vuelva a intentarlo.';
+                    }
+                } else {
+                    errorMessage = 'Se produjo un error al cambiar la cantidad de asientos. Por favor vuelva a intentarlo.';
+                }
+                dialogs.message(errorMessage, { estado: 'error' });
+            });
+        },
+        deleteTrip: function () {
+            if (window.confirm('¿Estás seguro que deseas cancelar el viaje?')) {
+                this.remove(this.trip.id).then(() => {
+                    dialogs.message('El viaje fue cancelado.', { estado: 'error' });
+                }).catch(() => {
+                    dialogs.message('Ocurrió un error al cancelar el viaje.', { estado: 'error' });
+                });
+            }
         }
     },
     data () {
         return {
+            sending: false,
+            seats_available: 0,
             CITY_NAME_LONG_LENGTH: 16,
             LONG_NAME_STYLE: {
                 'font-size': '17px'
@@ -199,7 +314,51 @@ export default {
         }
     },
     mounted () {
-        // console.log('SEARCH PARAMS', this.searchParams.data.date);
+        if (this.trip) {
+            this.seats_available = this.trip.seats_available;
+        }
+    },
+    updated () {
     }
 };
 </script>
+<style scoped>
+    .trip-seats-control .trip_seats-available_value {
+        margin-right: .15em;
+        margin-left: .15em;
+    }
+    .trip-seats-control .trip_seats-available_label {
+        position: static;
+        top: 0;
+        margin-left: .5em;
+    }
+    .trip-seats-control .btn {
+        background: #EEE;
+        min-width: 2.5em;
+    }
+    .trip-seats-control .btn[disabled] {
+        opacity: 0.25;
+    }
+    .trip-seats-control .btn[disabled]:hover {
+        background: #EEE;
+    }
+    .trip-seats-control > * {
+        vertical-align: middle;
+    }
+    .trip-with-control .card-trip {
+        height: 470px;
+    }
+    .trip-inline-controls .btn {
+        width: 100%;
+    }
+    .trip-inline-controls {
+        margin-top: 1em;
+    }
+
+    .trip-inline-controls .btn[disabled] {
+        opacity: 0.20;
+    }
+    .trip-inline-controls .btn[disabled]:hover {
+        background: #EEE;
+    }
+</style>

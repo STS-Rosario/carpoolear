@@ -68,7 +68,7 @@
                                 <div class="row trip-data" v-if="trip.is_passenger">
                                     <strong class="warning-is-passenger">Pasajero que busca viaje</strong>
                                 </div>
-                                <div class="row trip-data">
+                                <div class="row trip-data"  v-if="!isPasssengersView">
                                     <em v-if="trip.friendship_type_id == 2">
                                         <i class="fa fa-globe" aria-hidden="true"></i>
                                         Viaje público
@@ -83,7 +83,7 @@
                                     </em>
                                 </div>
 
-                                <div class="row trip-stats"  v-if="!trip.is_passenger">
+                                <div class="row trip-stats"  v-if="!trip.is_passenger && !isPasssengersView">
                                     <div>
                                         <span>Distancia a recorrer</span><br>
                                         <span>{{ distanceString }} <abbr title="kilometros">km</abbr></span>
@@ -98,7 +98,7 @@
                                         <span>{{ trip.distance / 1000 * 1.5 }} <abbr title="kilogramos dióxido de carbono equivalente">kg CO<sub>2eq</sub></abbr></span>
                                     </div>
                                 </div>
-                                <div class="trip_share row">
+                                <div class="trip_share row"  v-if="!isPasssengersView">
                                     <a  :href="'https://www.facebook.com/sharer/sharer.php?u=' + currentUrl" target="_blank" aria-label="Compartir en Facebook" class="lnk lnk-social-network lnk-facebook" @click="onShareLinkClick">
                                         <i class="fa fa-facebook" aria-hidden="true"></i>
                                     </a>
@@ -113,22 +113,27 @@
                                     </a>
                                 </div>
 
-                                <div class="row passengers"  v-if="!trip.is_passenger">
-                                    <div class="col-xs-24" v-if="trip.passenger.length  && owner">
-                                        <h4 style="margin: 1em 0;"><strong>Pasajeros subidos</strong></h4>
-                                        <div v-for="p in trip.passenger">
+                                <div class="row passengers" v-if="!trip.is_passenger">
+                                    <div class="col-xs-24" v-if="owner">
+                                        <h4 class="title-margined">
+                                            <strong>Pasajeros subidos</strong>
+                                        </h4>
+                                        <div v-for="p in trip.passenger" v-if="trip.passenger.length" class="list-item">
                                             <span @click="toUserMessages(p)" class="trip_driver_img circle-box passenger trip_passenger_image" v-imgSrc:profile="p.image">
                                             </span>
                                             <a href="#" @click="toUserMessages(p)" class="trip_passenger_name">{{ p.name }}</a>
-                                            <span @click="removePassenger(p)" class="trip_passenger-remove">
+                                            <span @click="removePassenger(p)" class="trip_passenger-remove pull-right">
                                                 <i class="fa fa-times" aria-hidden="true"></i>
                                             </span>
+                                        </div>
+                                        <div v-if="trip.passenger.length === 0">
+                                            Aún no hay pasajeros subidos a este viaje.
                                         </div>
                                     </div>
                                     <div v-else style="height: 2em;"></div>
                                 </div>
                             </div>
-                            <div class="buttons-container">
+                            <div class="buttons-container"  v-if="!isPasssengersView">
                                 <router-link class="btn btn-primary" v-if="owner && !expired" :to="{name: 'update-trip', params: { id: trip.id}}"> Editar  </router-link>
                                 <a class="btn btn-primary" v-if="owner && !expired" @click="deleteTrip" > Cancelar viaje  </a>
                                 <template v-if="!owner && !expired">
@@ -153,7 +158,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-24 col-sm-9 col-sm-pull-15 col-md-8 col-md-pull-16 col-lg-7 col-lg-pull-17 driver-container">
+                    <div class="col-xs-24 col-sm-9 col-sm-pull-15 col-md-8 col-md-pull-16 col-lg-7 col-lg-pull-17 driver-container" v-if="!isPasssengersView">
                         <div class="driver-profile">
                             <div class="row">
                                 <div class="col-xs-9 col-md-8 col-lg-8">
@@ -181,23 +186,23 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-24 structure-div">
-                    <gmap-map
-                        :center="center"
-                        :zoom="zoom"
-                        style="height: 400px"
-                        ref="map"
-                    >
-                        <gmap-marker
-                            :key="index"
-                            v-for="(m, index) in points"
-                            :position="m.location"
-                            :clickable="true"
-                            :draggable="true"
-                            @click="center=m.location"
-                            v-if="m.location"
-                        ></gmap-marker>
-                    </gmap-map>
+                    <div class="col-xs-24 structure-div"  v-if="!isPasssengersView">
+                        <gmap-map
+                            :center="center"
+                            :zoom="zoom"
+                            style="height: 400px"
+                            ref="map"
+                        >
+                            <gmap-marker
+                                :key="index"
+                                v-for="(m, index) in points"
+                                :position="m.location"
+                                :clickable="true"
+                                :draggable="true"
+                                @click="center=m.location"
+                                v-if="m.location"
+                            ></gmap-marker>
+                        </gmap-map>
                     </div>
                 </div>
             </div>
@@ -489,6 +494,12 @@ export default {
         },
         distanceString () {
             return Math.floor(this.trip.distance / 1000);
+        },
+        isPasssengersView () {
+            if (this.location) {
+                return this.location === 'passenger';
+            }
+            return false;
         }
     },
 
@@ -497,7 +508,8 @@ export default {
     },
 
     props: [
-        'id'
+        'id',
+        'location'
     ]
 };
 </script>
@@ -513,7 +525,7 @@ export default {
         width: 3.5em;
         height: 3.5em;
         position: relative;
-        margin-right: .2em;
+        margin-right: .5em;
     }
     .passengers {
         margin-bottom: .8em;
@@ -527,6 +539,7 @@ export default {
     .trip_passenger-remove {
         font-size: 1.8em;
         margin-left: .5em;
+        margin-top: .25em;
     }
     .trip-detail-component .structure-div {
         margin-top: 1rem;
