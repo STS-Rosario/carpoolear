@@ -134,19 +134,31 @@
                                 </div>
                             </div>
                             <div class="buttons-container"  v-if="!isPasssengersView">
-                                <router-link class="btn btn-primary" v-if="owner && !expired" :to="{name: 'update-trip', params: { id: trip.id}}"> Editar  </router-link>
-                                <a class="btn btn-primary" v-if="owner && !expired" @click="deleteTrip" > Cancelar viaje  </a>
+                                <router-link class="btn btn-primary" v-if="owner && !expired" :to="{name: 'update-trip', params: { id: trip.id}}">
+                                    Editar
+                                </router-link>
+                                <a class="btn btn-primary" v-if="owner && !expired" @click="deleteTrip" :disabled="sending">
+                                    Cancelar viaje
+                                </a>
                                 <template v-if="!owner && !expired">
-                                    <button class="btn btn-primary" @click="toMessages" v-if="!owner"> Coordinar viaje  </button>
+                                    <button class="btn btn-primary" @click="toMessages" v-if="!owner">
+                                        Coordinar viaje
+                                    </button>
                                 </template>
                                 <template v-if="!owner && !trip.is_passenger && !expired">
                                     <template v-if="!isPassenger">
-                                        <button class="btn btn-primary" @click="makeRequest" v-if="canRequest && trip.seats_available > 0"> Solicitar asiento </button>
-                                        <button class="btn" v-if="!canRequest" @click="cancelRequest"> Solicitud enviada </button>
+                                        <button class="btn btn-primary" @click="makeRequest" v-if="canRequest && trip.seats_available > 0" :disabled="sending">
+                                            Solicitar asiento
+                                        </button>
+                                        <button class="btn" v-if="!canRequest" @click="cancelRequest" :disabled="sending">
+                                            Solicitud enviada
+                                        </button>
                                     </template>
 
                                     <template v-if="isPassenger">
-                                        <button class="btn btn-primary" @click="cancelRequest" v-if="canRequest"> Bajarme del viaje </button>
+                                        <button class="btn btn-primary" @click="cancelRequest" v-if="canRequest" :disabled="sending">
+                                            Bajarme del viaje
+                                        </button>
                                     </template>
                                 </template>
                                 <template v-if="expired">
@@ -266,8 +278,11 @@ export default {
         },
         deleteTrip () {
             if (window.confirm('¿Estás seguro que deseas cancelar el viaje?')) {
+                this.sending = true;
                 this.remove(this.trip.id).then(() => {
                     this.$router.replace({name: 'trips'});
+                }).catch(() => {
+                    this.sending = false;
                 });
             }
         },
