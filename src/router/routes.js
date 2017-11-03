@@ -198,6 +198,25 @@ export default [
         }
     },
     {
+        path: '/trips/:id/:location',
+        name: 'detail_trip_location',
+        component: require('../components/views/Trip'),
+        beforeEnter: auth,
+        props: true,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'home'
+                },
+                header: {
+                    title: 'Viaje',
+                    buttons: ['back']
+                }
+            }
+        }
+    },
+    {
         path: '/notifications',
         name: 'notifications',
         component: require('../components/views/Notifications.vue'),

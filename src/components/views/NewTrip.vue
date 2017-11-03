@@ -119,7 +119,7 @@ Tengamos un buen viaje cuidándonos entre todos :D">
                                 </ul>
                             </fieldset>
 
-                            <button class="trip-create btn btn-primary btn-lg btn-shadowed" @click="save">
+                            <button class="trip-create btn btn-primary btn-lg btn-shadowed" @click="save" :disabled="saving">
                                 <span v-if="!updatingTrip">CREAR</span>
                                 <span v-else>Actualizar</span>
                             </button>
@@ -228,7 +228,8 @@ export default {
                 'enc_path': '123',
                 'points': [] /* address json_address lat lng */
             },
-            updatingTrip: null
+            updatingTrip: null,
+            saving: false
         };
     },
     mounted () {
@@ -407,6 +408,7 @@ export default {
                 return;
             }
             /* eslint-disable no-unreachable */
+            this.saving = true;
             this.trip.points = [];
             this.points.forEach(p => {
                 let point = {};
@@ -428,14 +430,16 @@ export default {
             }
             if (!this.updatingTrip) {
                 this.createTrip(this.trip).then((t) => {
+                    this.saving = false;
                     this.$router.replace({ name: 'detail_trip', params: { id: t.id } });
-                });
+                }).catch(() => { this.saving = false; });
             } else {
                 console.log(this.trip);
                 this.trip.id = this.updatingTrip.id;
                 this.updateTrip(this.trip).then(() => {
+                    this.saving = false;
                     this.$router.replace({ name: 'detail_trip', params: { id: this.trip.id } });
-                });
+                }).catch(() => { this.saving = false; });
             }
         },
 
