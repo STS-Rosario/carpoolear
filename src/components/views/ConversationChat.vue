@@ -24,7 +24,7 @@
                 <div class="input-group">
                     <input ref="ipt-text" id="ipt-text" v-model="message" type="text" class="form-control" placeholder="Escribir mensaje..." v-jump:click="'btn-send'" maxlength="255">
                     <span class="input-group-btn">
-                        <button ref="btn-send" id="btn-send" class="btn btn-default" :class="message.length > 0 ? 'active' : ''" type="button" @click="sendMessage" v-jump:focus="'ipt-text'">
+                        <button ref="btn-send" id="btn-send" class="btn btn-default" :class="message.length > 0 ? 'active' : ''" type="button" @click="sendMessage" v-jump:focus="'ipt-text'" :disabled="sending">
                             <i class="fa fa-play" aria-hidden="true"></i>
                         </button>
                     </span>
@@ -50,7 +50,8 @@ export default {
     data () {
         return {
             message: '',
-            mustJump: false
+            mustJump: false,
+            sending: false
         };
     },
     computed: {
@@ -95,13 +96,15 @@ export default {
         },
 
         sendMessage () {
-            this.sending = true;
-            this.send(this.message).then(data => {
-                this.sending = false;
-            }).catch(() => {
-                this.sending = false;
-            });
-            this.message = '';
+            if (this.message.length) {
+                this.sending = true;
+                this.send(this.message).then(data => {
+                    this.sending = false;
+                }).catch(() => {
+                    this.sending = false;
+                });
+                this.message = '';
+            }
         },
 
         onBackClick () {

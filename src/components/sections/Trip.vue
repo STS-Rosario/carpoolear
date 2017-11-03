@@ -332,6 +332,9 @@ export default {
         top: 0;
         margin-left: .5em;
     }
+    .trip-fill .trip-seats-control .trip_seats-available_label {
+        color: #FE9900;
+    }
     .trip-seats-control .btn {
         background: #EEE;
         min-width: 2.5em;
@@ -360,5 +363,10 @@ export default {
     }
     .trip-inline-controls .btn[disabled]:hover {
         background: #EEE;
+    }
+    @media (min-width: 1200px) {
+        .trip-with-control .card-trip {
+            height: 500px;
+        }
     }
 </style>
