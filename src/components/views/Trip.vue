@@ -119,12 +119,16 @@
                                             <strong>Pasajeros subidos</strong>
                                         </h4>
                                         <div v-for="p in trip.passenger" v-if="trip.passenger.length" class="list-item">
-                                            <span @click="toUserMessages(p)" class="trip_driver_img circle-box passenger trip_passenger_image" v-imgSrc:profile="p.image">
-                                            </span>
-                                            <a href="#" @click="toUserMessages(p)" class="trip_passenger_name">{{ p.name }}</a>
-                                            <span @click="removePassenger(p)" class="trip_passenger-remove pull-right">
+                                            <span @click="toUserProfile(p)" class="trip_driver_img circle-box passenger trip_passenger_image" v-imgSrc:profile="p.image"></span>
+                                            <a href="#" @click="toUserProfile(p)" class="trip_passenger_name">
+                                                {{ p.name }}
+                                            </a>
+                                            <a href="#" @click="toUserMessages(p)" aria-label="Ir a mensajes" class="trip_passenger-chat">
+                                                 <i class="fa fa-comments" aria-hidden="true"></i>
+                                            </a>
+                                            <button @click="removePassenger(p)" class="trip_passenger-remove pull-right" aria-label="Bajar pasajero del viaje">
                                                 <i class="fa fa-times" aria-hidden="true"></i>
-                                            </span>
+                                            </button>
                                         </div>
                                         <div v-if="trip.passenger.length === 0">
                                             Aún no hay pasajeros subidos a este viaje.
@@ -312,6 +316,17 @@ export default {
                 // this.selectConversation(conversation.id).then(data => {
                 router.push({ name: 'conversation-chat', params: { id: conversation.id } });
                 // });
+            });
+        },
+
+        toUserProfile (user) {
+            router.push({
+                name: 'profile',
+                params: {
+                    id: user.id,
+                    userProfile: user,
+                    activeTab: 1
+                }
             });
         },
 
@@ -545,16 +560,25 @@ export default {
     .passengers {
         margin-bottom: .8em;
     }
+    .trip_passenger-chat,
     .trip_passenger-remove,
     .trip_passenger_image,
     .trip_passenger_name {
         vertical-align: middle;
         cursor: pointer;
     }
+    .trip_passenger-chat,
     .trip_passenger-remove {
         font-size: 1.8em;
+        background: none;
+        border: 0;
+    }
+    .trip_passenger-remove {
         margin-left: .5em;
         margin-top: .25em;
+    }
+    .trip_passenger-chat {
+        margin-left: .5em;
     }
     .trip-detail-component .structure-div {
         margin-top: 1rem;

@@ -2,7 +2,7 @@
     <div class="col-xs-24 col-md-16 col-lg-12">
         <div class="rate-pending_component clearfix">
             <div class="rate-pending_photo">
-                <router-link :to="{name: 'profile', params: {id: user.id, userProfile: user}}">
+                <router-link :to="{name: 'profile', params: { id: user.id, userProfile: user, activeTab: 1}}">
                     <div class="trip_driver_img circle-box" v-imgSrc:profile="user.image">
                     </div>
                 </router-link>

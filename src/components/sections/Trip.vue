@@ -125,7 +125,7 @@
             <template v-else>
                 <div class="row">
                     <div v-if="!trip.is_passenger" class="trip-seats-control col-xs-offset-2">
-                        <button aria-label="Disminuir en uno la cantidad de asientos" v-on:click.stop="changeSeatsNumber(-1)" :disabled="sending || seats_available < 2" class="btn btn-default">
+                        <button aria-label="Disminuir en uno la cantidad de asientos" v-on:click.stop="changeSeatsNumber(-1)" :disabled="sending || trip.total_seats < 2" class="btn btn-default">
                             -
                         </button>
                         <span class="trip_seats-available_value">
@@ -224,7 +224,14 @@ export default {
         },
         goToProfile: function (event) {
             event.stopPropagation();
-            this.$router.push({ name: 'profile', params: { id: this.trip.user.id, userProfile: this.trip.user } });
+            this.$router.push({
+                name: 'profile',
+                params: {
+                    id: this.trip.user.id,
+                    userProfile: this.trip.user,
+                    activeTab: 1
+                }
+            });
         },
         changeSeatsNumber: function (increment) {
             this.sending = true;
@@ -235,6 +242,7 @@ export default {
             this.changeSeats(data).then((data) => {
                 this.sending = false;
                 this.seats_available = data.seats_available;
+                this.trip.total_seats += increment;
                 this.$forceUpdate();
             }).catch((response) => {
                 this.sending = false;
