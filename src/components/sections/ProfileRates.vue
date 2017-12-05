@@ -4,7 +4,7 @@
         <Loading :data="rates">
             <div class="list-group">
                 <div class="column-rating">
-                    <div class="list-group-item clearfix" v-for="rate in rating.col3">
+                    <div class="list-group-item clearfix" v-for="rate in rating.col1">
                         <RateItem :user="user" :id="id" :rate="rate"></RateItem>
                     </div>
                 </div>
@@ -14,7 +14,7 @@
                     </div>
                 </div>
                 <div class="column-rating">
-                    <div class="list-group-item clearfix" v-for="rate in rating.col1">
+                    <div class="list-group-item clearfix" v-for="rate in rating.col3">
                         <RateItem :user="user" :id="id" :rate="rate"></RateItem>
                     </div>
                 </div>
