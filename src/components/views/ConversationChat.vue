@@ -91,7 +91,8 @@ export default {
             };
             return {
                 id: this.conversation.users[id].id,
-                userProfile: this.conversation.users[id]
+                userProfile: this.conversation.users[id],
+                activeTab: 1
             };
         },
 

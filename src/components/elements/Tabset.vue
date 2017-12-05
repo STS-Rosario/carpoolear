@@ -34,6 +34,10 @@ export default {
         keytabset: {
             type: String,
             default: 'tabset'
+        },
+        rememberTab: {
+            type: Boolean,
+            default: false
         }
     },
     data: function () {
@@ -53,8 +57,10 @@ export default {
         },
         activateTab: function (index, ensure) {
             this.activeTabIndex = index;
-            if (window.sessionStorage && !ensure) {
-                window.sessionStorage.setItem(this.keytabset + '_last_active_tab', this.activeTabIndex);
+            if (this.rememberTab) {
+                if (window.sessionStorage && !ensure) {
+                    window.sessionStorage.setItem(this.keytabset + '_last_active_tab', this.activeTabIndex);
+                }
             }
             var tab = this.tabs[index];
             if (tab && !tab.disabled) {
@@ -67,6 +73,17 @@ export default {
                     tab.active = idx === index;
                 });
             } // end if
+        },
+        getRememberedTab: function (defaultValue) {
+            if (this.rememberTab) {
+                if (window.sessionStorage) {
+                    let savedIndex = window.sessionStorage.getItem(this.keytabset + '_last_active_tab');
+                    if (savedIndex) {
+                        return parseInt(savedIndex, 10);
+                    }
+                }
+            }
+            return defaultValue;
         },
         ensureActiveTab: function () {
             var activeTab = 0;

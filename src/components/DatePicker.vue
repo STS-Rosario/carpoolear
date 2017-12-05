@@ -97,7 +97,8 @@ export default {
                 date: date,
                 mode: 'date',
                 minDate: Date.parse(moment(this.min).toDate()),
-                maxDate: Date.parse(moment(this.max).toDate())
+                maxDate: Date.parse(moment(this.max).toDate()),
+                androidTheme: 3
             };
 
             function onSuccess (date) {
