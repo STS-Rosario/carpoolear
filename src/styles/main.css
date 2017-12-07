@@ -2684,3 +2684,9 @@ ul {
 .pika-label:after {
     content:" \25be";
 }
+
+/* Remove the blue styling of telephone numbers */
+a[href^="tel"]{
+    color:inherit;
+    text-decoration:none;
+}
