@@ -1355,12 +1355,17 @@ textarea {
     bottom: -.5rem;
     margin-left: .6em;
 }
+.trip_allow-foreign,
 .trip_terms {
     margin-left: .5rem;
+    vertical-align: middle;
+    margin-top: 1em;
 }
+.trip_allow-foreign label,
 .trip_terms_label {
     display: inline;
     color: var(--secondary-background);
+    vertical-align: middle;
 }
 
 .trip_terms_label.has-error {
@@ -2571,7 +2576,7 @@ ul {
   line-height: 1.2;
   /*padding: 1em;*/
 }
-
+.trip_allow-foreign [data-tooltip]:before,
 .trip_terms [data-tooltip]:before {
     width: 250px;
     padding: 1em;
