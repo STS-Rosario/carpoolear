@@ -277,11 +277,15 @@ export default {
             };
         },
         meta: function () {
-            return [
-                { p: 'og:description', c: this.trip.description },
-                { p: 'og:title', c: this.trip.points[0].json_address.ciudad + ' -> ' + this.trip.points[this.trip.points.length - 1].json_address.ciudad + ' | ' + moment(this.trip.trip_date).format('dddd DD/MM hh:mm') },
-                { p: 'og:image', c: this.carpoolear_logo }
-            ];
+            if (this.trip) {
+                return [
+                    { p: 'og:description', c: this.trip.description },
+                    { p: 'og:title', c: this.trip.points[0].json_address.ciudad + ' -> ' + this.trip.points[this.trip.points.length - 1].json_address.ciudad + ' | ' + moment(this.trip.trip_date).format('dddd DD/MM hh:mm') },
+                    { p: 'og:image', c: this.carpoolear_logo }
+                ];
+            } else {
+                return [];
+            }
         }
     },
 
