@@ -237,12 +237,18 @@ import bus from '../../services/bus-event';
 import svgItem from '../SvgItem';
 import moment from 'moment';
 import dialogs from '../../services/dialogs.js';
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import VueHead from 'vue-head';
+Vue.use(VueHead);
+Vue.use(VueRouter);
 
 export default {
     name: 'trip',
     data () {
         return {
             // trip: null,
+            carpoolear_logo: process.env.ROUTE_BASE + 'static/img/carpoolear_logo.png',
             sending: false,
             zoom: 4,
             center: {lat: -29.0, lng: -60.0},
@@ -262,6 +268,25 @@ export default {
             ],
             currentUrl: encodeURIComponent('https://carpoolear.com.ar/app' + this.$route.fullPath)
         };
+    },
+
+    head: {
+        title: function () {
+            return {
+                inner: 'Viaje'
+            };
+        },
+        meta: function () {
+            if (this.trip) {
+                return [
+                    { p: 'og:description', c: this.trip.description },
+                    { p: 'og:title', c: this.trip.points[0].json_address.ciudad + ' -> ' + this.trip.points[this.trip.points.length - 1].json_address.ciudad + ' | ' + moment(this.trip.trip_date).format('dddd DD/MM hh:mm') },
+                    { p: 'og:image', c: this.carpoolear_logo }
+                ];
+            } else {
+                return [];
+            }
+        }
     },
 
     methods: {
