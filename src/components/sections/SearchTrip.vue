@@ -1,45 +1,67 @@
 <template>
-    <div class="row search-section">
-        <div class="col-xs-12 col-md-3">
-            <button class="btn btn-option" :class="{'active': !isPassenger}" @click="isPassenger = false" >
-                <!--<img alt="" :src="isPassenger ? chofer_logo_gris : chofer_logo_blanco" />-->
-                <span class="fa fa-car" aria-hidden="true"></span>
-                <span>Busco conductor</span>
-            </button>
-        </div>
-        <div class="col-xs-12 col-md-3">
-            <button class="btn btn-option" :class="{'active': isPassenger}" @click="isPassenger = true" >
-                <img alt="" :src="isPassenger ? pasajero_logo_blanco : pasajero_logo_gris" />
-                <span>Busco pasajero</span>
-            </button>
-        </div>
-        <div class="col-xs-24 col-md-5 gmap-autocomplete origin">
-            <GmapAutocomplete name="from_town" ref="from_town" :selectFirstOnEnter="true" :types="['(cities)']" :componentRestrictions="{country: 'AR'}" placeholder="Origen"  :value="from_town.name" v-on:place_changed="(data) => getPlace(0, data)" class="form-control form-control-with-icon form-control-map-autocomplete"> </GmapAutocomplete>
-            <div class="date-picker--cross">
-                <i v-on:click="resetInput('from_town')" class="fa fa-times" aria-hidden="true"></i>
-            </div>
-            <div class="swap btn">
-                <img alt="swap" class='swap-horizontal' :src="swap_horizontal" @click="swapCities" />
-                <img alt="swap" class='swap-vertical' :src="swap_vertical" @click="swapCities" />
+    <div>
+        <div class="row text-center foreignCountry-select foreignCountry-select-desktop" v-show="!isMobile">
+            <div class="foreignCountry-select_wrapper">
+                <input type="checkbox" v-model="allowForeignPoints" id="cbxAllowForeignPoints" class="cbx" />
+                <label for="cbxAllowForeignPoints" class="cbx_label">
+                    Voy o vuelvo a la Argentina
+                </label>
             </div>
         </div>
-        <div class="col-xs-24 col-md-5 gmap-autocomplete destiny">
-            <GmapAutocomplete name="to_town" ref="to_town" :selectFirstOnEnter="true" :types="['(cities)']" :componentRestrictions="{country: 'AR'}" placeholder="Destino"  :value="to_town.name" v-on:place_changed="(data) => getPlace(1, data)" class="form-control form-control-with-icon form-control-map-autocomplete"> </GmapAutocomplete>
-            <div class="date-picker--cross">
-                <i v-on:click="resetInput('to_town')" class="fa fa-times" aria-hidden="true"></i>
+        <div class="row search-section">
+            <div class="col-xs-12 col-md-3">
+                <button class="btn btn-option" :class="{'active': !isPassenger}" @click="isPassenger = false" >
+                    <!--<img alt="" :src="isPassenger ? chofer_logo_gris : chofer_logo_blanco" />-->
+                    <span class="fa fa-car" aria-hidden="true"></span>
+                    <span>Busco conductor</span>
+                </button>
             </div>
-        </div>
-        <div class="col-xs-24 col-md-4 no-padding">
-            <DatePicker ref="datepicker" :value="date" :minDate="minDate" :class="{'has-error': dateError.state}"></DatePicker>
-        </div>
-        <div class="col-xs-24 col-md-3 col-lg-4">
-            <button class="btn btn-primary btn-search" @click="emit">Buscar</button>
-        </div>
+            <div class="col-xs-12 col-md-3">
+                <button class="btn btn-option" :class="{'active': isPassenger}" @click="isPassenger = true" >
+                    <img alt="" :src="isPassenger ? pasajero_logo_blanco : pasajero_logo_gris" />
+                    <span>Busco pasajero</span>
+                </button>
+            </div>
+            <div class="row text-center foreignCountry-select" v-show="isMobile">
+                <div class="foreignCountry-select_wrapper">
+                    <input type="checkbox" v-model="allowForeignPoints" id="cbxAllowForeignPoints" class="cbx" />
+                    <label for="cbxAllowForeignPoints" class="cbx_label">
+                        Voy o vuelvo a la Argentina
+                    </label>
+                </div>
+            </div>
+            <div class="col-xs-24 col-md-5 gmap-autocomplete origin">
+                <GmapAutocomplete name="from_town" ref="from_town" :selectFirstOnEnter="true" :types="['(cities)']"  :componentRestrictions="allowForeignPoints ? null : {country: 'AR'}"  placeholder="Origen"  :value="from_town.name" v-on:place_changed="(data) => getPlace(0, data)" class="form-control form-control-with-icon form-control-map-autocomplete"> </GmapAutocomplete>
+                <div class="date-picker--cross">
+                    <i v-on:click="resetInput('from_town')" class="fa fa-times" aria-hidden="true"></i>
+                </div>
+                <div class="optional-warning text-center">(opcional)</div>
+                <div class="swap btn">
+                    <img alt="swap" class='swap-horizontal' :src="swap_horizontal" @click="swapCities" />
+                    <img alt="swap" class='swap-vertical' :src="swap_vertical" @click="swapCities" />
+                </div>
+            </div>
+            <div class="col-xs-24 col-md-5 gmap-autocomplete destiny">
+                <GmapAutocomplete name="to_town" ref="to_town" :selectFirstOnEnter="true" :types="['(cities)']"  :componentRestrictions="allowForeignPoints ? null : {country: 'AR'}"  placeholder="Destino"  :value="to_town.name" v-on:place_changed="(data) => getPlace(1, data)" class="form-control form-control-with-icon form-control-map-autocomplete"> </GmapAutocomplete>
+                <div class="date-picker--cross">
+                    <i v-on:click="resetInput('to_town')" class="fa fa-times" aria-hidden="true"></i>
+                </div>
+                <div class="optional-warning text-center">(opcional)</div>
+            </div>
+            <div class="col-xs-24 col-md-4 no-padding">
+                <DatePicker ref="datepicker" :value="date" :minDate="minDate" :class="{'has-error': dateError.state}"></DatePicker>
+                <div class="optional-warning text-center">(opcional)</div>
+            </div>
+            <div class="col-xs-24 col-md-3 col-lg-4">
+                <button class="btn btn-primary btn-search" @click="emit">Buscar</button>
+            </div>
 
+        </div>
     </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import {pointDistance} from '../../services/maps.js';
 import DatePicker from '../DatePicker';
 import bus from '../../services/bus-event.js';
@@ -72,8 +94,14 @@ export default {
             chofer_logo_gris: process.env.ROUTE_BASE + 'static/img/icono-conductor-gris.png',
             pasajero_logo_gris: process.env.ROUTE_BASE + 'static/img/icono-pasajero-gris.png',
             swap_horizontal: process.env.ROUTE_BASE + 'static/img/flechas_horizontales.png',
-            swap_vertical: process.env.ROUTE_BASE + 'static/img/flechas_verticales.png'
+            swap_vertical: process.env.ROUTE_BASE + 'static/img/flechas_verticales.png',
+            allowForeignPoints: false
         };
+    },
+    computed: {
+        ...mapGetters({
+            isMobile: 'device/isMobile'
+        })
     },
     mounted () {
         bus.on('date-change', this.dateChange);
@@ -232,6 +260,26 @@ export default {
     }
     .swap-horizontal {
         display: none;
+    }
+    .foreignCountry-select {
+        margin-bottom: 1em;
+    }
+    .foreignCountry-select-desktop .foreignCountry-select_wrapper {
+        margin-left: -10%;
+    }
+    .cbx,
+    .cbx_label {
+        vertical-align: middle;
+        margin: 0;
+    }
+    .cbx_label {
+        margin-left: .5em;
+    }
+    .optional-warning {
+        font-size: .8em;
+        color: #999;
+        position: relative;
+        top: -.8em;
     }
     @media only screen and (min-width: 300px) {
         .swap {
