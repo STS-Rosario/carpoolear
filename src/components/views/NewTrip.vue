@@ -35,7 +35,7 @@ Tengamos un buen viaje cuidándonos entre todos :D">
                                 <span>
                                     <input type="checkbox" v-model="allowForeignPoints" id="cbxAllowForeignPoints" />
                                     <label for="cbxAllowForeignPoints">
-                                        Voy o vuelvo a la Argentina
+                                        Origen o destino fuera de Argentina
                                     </label>
                                     <span class="tooltip-bottom" data-tooltip="Habilita seleccionar origen o destino fuera de Argentina. Recordá averiguar con la aseguradora del auto, si tenés cobertura contra terceros fuera de la Argentina. Si no es así, tenés que sacar la extensión fuera de Argentina para tener cobertura durante el viaje">
                                     <i class="fa fa-info-circle" aria-hidden="true"></i>

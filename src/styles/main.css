@@ -2576,6 +2576,7 @@ ul {
   line-height: 1.2;
   /*padding: 1em;*/
 }
+.foreignCountry-select_wrapper [data-tooltip]:before,
 .trip_allow-foreign [data-tooltip]:before,
 .trip_terms [data-tooltip]:before {
     width: 250px;

@@ -4,8 +4,10 @@
             <div class="foreignCountry-select_wrapper">
                 <input type="checkbox" v-model="allowForeignPoints" id="cbxAllowForeignPoints" class="cbx" />
                 <label for="cbxAllowForeignPoints" class="cbx_label">
-                    Voy o vuelvo a la Argentina
+                    Origen o destino fuera de Argentina
                 </label>
+                <span class="tooltip-bottom" data-tooltip="Marcando esta opción vas a poder seleccionar origen o destino fuera de Argentina. Recordá averiguar con la aseguradora del auto, si tenés cobertura contra terceros fuera de la Argentina. Si no es así, averiguá con ella para obtener la extensión fuera de Argentina, de forma de tener cobertura durante el viaje">
+                <i class="fa fa-info-circle" aria-hidden="true"></i>
             </div>
         </div>
         <div class="row search-section">
@@ -26,8 +28,10 @@
                 <div class="foreignCountry-select_wrapper">
                     <input type="checkbox" v-model="allowForeignPoints" id="cbxAllowForeignPoints" class="cbx" />
                     <label for="cbxAllowForeignPoints" class="cbx_label">
-                        Voy o vuelvo a la Argentina
+                        Origen o destino fuera de Argentina
                     </label>
+                    <span class="tooltip-bottom" data-tooltip="Marcando esta opción vas a poder seleccionar origen o destino fuera de Argentina. Recordá averiguar con la aseguradora del auto, si tenés cobertura contra terceros fuera de la Argentina. Si no es así, averiguá con ella para obtener la extensión fuera de Argentina, de forma de tener cobertura durante el viaje">
+                    <i class="fa fa-info-circle" aria-hidden="true"></i>
                 </div>
             </div>
             <div class="col-xs-24 col-md-5 gmap-autocomplete origin">
