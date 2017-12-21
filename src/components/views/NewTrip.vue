@@ -382,7 +382,7 @@ export default {
             if (foreignPoints > 1) {
                 globalError = true;
                 this.points[0].error.state = true;
-                this.points[0].error.message = 'Ambos localidades no pueden ser extranjeras.';
+                this.points[0].error.message = 'El origen o el destino de tu viaje tiene que estar en Argentina.';
             }
             if (!this.time || !moment(this.time, 'HH mm').isValid()) {
                 this.timeError.state = true;

@@ -70,6 +70,7 @@ import {pointDistance} from '../../services/maps.js';
 import DatePicker from '../DatePicker';
 import bus from '../../services/bus-event.js';
 import moment from 'moment';
+import dialogs from '../../services/dialogs.js';
 
 export default {
     name: 'search-trip',
@@ -80,12 +81,14 @@ export default {
             from_town: {
                 name: '',
                 location: null,
-                radio: 0
+                radio: 0,
+                country: 'AR'
             },
             to_town: {
                 name: '',
                 location: null,
-                radio: 0
+                radio: 0,
+                country: 'AR'
             },
             date: '',
             dateAnswer: '',
@@ -142,8 +145,17 @@ export default {
                         lat: data.geometry.location.lat(),
                         lng: data.geometry.location.lng()
                     },
-                    radio: distance
+                    radio: distance,
+                    country: 'AR'
                 };
+            }
+            if (data && data.address_components) {
+                for (let j = 0; j < data.address_components.length; j++) {
+                    let addrComp = data.address_components[j];
+                    if (addrComp.types.indexOf('country') >= 0) {
+                        obj.country = addrComp.short_name;
+                    }
+                }
             }
             if (i === 0) {
                 this.from_town = obj;
@@ -153,11 +165,16 @@ export default {
         },
         emit () {
             let params = {};
+            let one = 0;
+            let foreignCountry = 0;
             if (this.from_town.location) {
                 params.origin_lat = this.from_town.location.lat;
                 params.origin_lng = this.from_town.location.lng;
                 params.origin_radio = this.from_town.radio;
                 params.origin_name = this.from_town.name;
+            }
+            if (this.from_town.country !== 'AR') {
+                foreignCountry++;
             }
             if (this.to_town.location) {
                 params.destination_lat = this.to_town.location.lat;
@@ -165,17 +182,25 @@ export default {
                 params.destination_radio = this.to_town.radio;
                 params.destination_name = this.to_town.name;
             }
+            if (this.to_town.country !== 'AR') {
+                foreignCountry++;
+            }
             if (this.dateAnswer) {
                 params.date = this.dateAnswer;
             }
             params.is_passenger = this.isPassenger;
-            this.$emit('trip-search', params);
+            if (foreignCountry < 2) {
+                this.$emit('trip-search', params);
+            } else {
+                dialogs.message('Origen y destino no pueden ser ambos del exterior.', { duration: 10, estado: 'error' });
+            }
         },
         resetInput (input) {
             this[input] = {
                 name: '',
                 location: null,
-                radio: 0
+                radio: 0,
+                country: 'AR'
             };
         },
         swapCities () {
@@ -284,6 +309,7 @@ export default {
         color: #999;
         position: relative;
         top: -.8em;
+        clear: both;
     }
     @media only screen and (min-width: 300px) {
         .swap {
