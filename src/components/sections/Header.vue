@@ -214,4 +214,13 @@ export default {
         width: 26px;
         margin-left: .3em;
     }
+    .header_panel-right {
+        min-width: 50%;
+        text-align: right;
+    }
+    @media (max-width: 1050px) {
+        .header_panel-right {
+            min-width: 70%;
+        }
+    }
 </style>
