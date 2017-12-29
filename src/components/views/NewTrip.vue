@@ -123,12 +123,12 @@ Tengamos un buen viaje cuidándonos entre todos :D">
                                         <label for="privacity-public" class="label-soft">Público</label>
                                     </li>
                                     <li>
-                                        <input type="radio" id="privacity-friend" value="0" v-model="trip.friendship_type_id">
-                                        <label for="privacity-friend" class="label-soft">Solo amigos</label>
-                                    </li>
-                                    <li>
                                         <input type="radio" id="privacity-friendofriend" value="1" v-model="trip.friendship_type_id">
                                         <label for="privacity-friendofriend" class="label-soft">Amigos de Amigos</label>
+                                    </li>
+                                    <li>
+                                        <input type="radio" id="privacity-friend" value="0" v-model="trip.friendship_type_id">
+                                        <label for="privacity-friend" class="label-soft">Solo amigos</label>
                                     </li>
                                 </ul>
                             </fieldset>
