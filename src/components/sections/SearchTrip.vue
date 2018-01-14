@@ -24,7 +24,7 @@
                     <span>Busco pasajero</span>
                 </button>
             </div>
-            <div class="row text-center foreignCountry-select" v-show="isMobile">
+            <div class="row text-center foreignCountry-select foreignCountry-select-mobile" v-show="isMobile">
                 <div class="foreignCountry-select_wrapper">
                     <input type="checkbox" v-model="allowForeignPoints" id="cbxAllowForeignPoints" class="cbx" />
                     <label for="cbxAllowForeignPoints" class="cbx_label">
@@ -292,6 +292,9 @@ export default {
     }
     .foreignCountry-select {
         margin-bottom: 1em;
+    }
+    .foreignCountry-select-mobile {
+        width: 100%;
     }
     .foreignCountry-select-desktop .foreignCountry-select_wrapper {
         margin-left: -10%;
