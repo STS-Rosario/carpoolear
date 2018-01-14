@@ -252,7 +252,7 @@ export default {
                         let error = response.data.errors.error[0];
                         switch (error) {
                         case 'trip_seats_greater_than_zero':
-                            errorMessage = 'Un viaje debe tener al menos un asiento disponible.';
+                            errorMessage = 'La cantidad de asientos no puede ser menor a cero.';
                             break;
                         case 'trip_seats_less_than_four':
                             errorMessage = 'Un viaje no puede tener más de 4 asientos disponibles.';
