@@ -64,7 +64,7 @@
                 <div class="trips-list">
                     <Trip v-for="trip in oldTrips" :trip="trip" :user="user"></Trip>
                 </div>
-                <p slot="no-data" class="alert alert-warning"  role="alert">No create ningún viaje</p>
+                <p slot="no-data" class="alert alert-warning"  role="alert">No creaste ningún viaje</p>
                 <p slot="loading" class="alert alert-info" role="alert">
                     <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
                     Cargando viajes ...
