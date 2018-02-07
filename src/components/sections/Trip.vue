@@ -66,19 +66,19 @@
               <template v-else>
                   <div class="row trip_location_from">
                     <div class="col-xs-4 text-right">
-                      <i class="fa fa-map-marker" aria-hidden="true"></i>
+                        <i class="fa fa-map-marker" aria-hidden="true"></i>
                     </div>
-                    <div  class="col-xs-20">
-                      {{ trip.from_town }}
+                    <div class="col-xs-20">
+                        {{ trip.from_town }}
                     </div>
                 </div>
                 <div class="row trip_location_to">
-                  <div class="col-xs-4 text-right">
-                    <i class="fa fa-map-marker" aria-hidden="true"></i>
-                  </div>
-                  <div class="col-xs-20">
-                    {{ trip.to_town }}
-                  </div>
+                    <div class="col-xs-4 text-right">
+                        <i class="fa fa-map-marker" aria-hidden="true"></i>
+                    </div>
+                    <div class="col-xs-20">
+                        {{ trip.to_town }}
+                    </div>
                 </div>
               </template>
             </div>
