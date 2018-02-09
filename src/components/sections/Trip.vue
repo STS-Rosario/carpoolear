@@ -68,7 +68,7 @@
                     <div class="col-xs-4 text-right">
                         <i class="fa fa-map-marker" aria-hidden="true"></i>
                     </div>
-                    <div class="col-xs-20">
+                    <div class="col-xs-20" :style="originLongName ? LONG_NAME_STYLE : {}">
                         {{ trip.from_town }}
                     </div>
                 </div>
@@ -76,7 +76,7 @@
                     <div class="col-xs-4 text-right">
                         <i class="fa fa-map-marker" aria-hidden="true"></i>
                     </div>
-                    <div class="col-xs-20">
+                    <div class="col-xs-20" :style="destinyLongName ? LONG_NAME_STYLE : {}">
                         {{ trip.to_town }}
                     </div>
                 </div>
@@ -296,25 +296,25 @@ export default {
     },
     computed: {
         originLongName () {
-            if (this.trip.points) {
+            if (this.trip.points && this.trip.points.length > 1) {
                 if (this.trip.points[0].json_address.ciudad) {
                     return this.trip.points[0].json_address.ciudad.length > this.CITY_NAME_LONG_LENGTH;
                 } else {
                     return false;
                 }
             } else {
-                return false;
+                return this.trip.from_town.length > this.CITY_NAME_LONG_LENGTH;
             }
         },
         destinyLongName () {
-            if (this.trip.points) {
+            if (this.trip.points && this.trip.points.length > 1) {
                 if (this.trip.points[this.trip.points.length - 1].json_address.ciudad) {
                     return this.trip.points[this.trip.points.length - 1].json_address.ciudad.length > this.CITY_NAME_LONG_LENGTH;
                 } else {
                     return false;
                 }
             } else {
-                return false;
+                return this.trip.to_town.length > this.CITY_NAME_LONG_LENGTH;
             }
         },
         getUserImage () {

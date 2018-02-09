@@ -938,6 +938,9 @@ textarea {
     text-align: right;
     padding-right: 0;
 }
+.trip_datetime_date_day{
+    float: right;
+}
 .trip_datetime_time {
     color: var(--trip-half-free-color);
 }
