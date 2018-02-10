@@ -38,8 +38,7 @@
         <div class="header_content hidden-xs">
             <router-link :to="{ name: 'trips', params: { clearSearch: true } }"  v-on:click.native="tripsClick">
                 <div class="header_panel-left" v-if="logoHeaderVisibility" >
-                    <img :src="background_desktop_mini" v-if="isNotLargeDesktop" />
-                    <img :src="background_desktop" v-if="!isNotLargeDesktop" />
+                    <img :src="background_desktop_mini" />                    
                     <img :src="carpoolear_logo"/>
                     <!--<router-link tag="h1" :to="{name: 'trips'}" class="header_title"> Carpoolear </router-link>-->
                 </div>

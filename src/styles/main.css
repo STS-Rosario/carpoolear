@@ -620,11 +620,12 @@ textarea {
 }
 
 .header .header_panel-left > img:last-child {
-    left: 22px;
-    top: -12px;
+    left: 40px;
+    top: 0px;
     position: absolute;
     -webkit-filter: drop-shadow(2px 2px 5px rgba(0,0,0,0.3));
     z-index: 10;
+    max-height: 74px;
 }
 
 .rate-item .image-width .trip_driver_img{
@@ -2416,8 +2417,7 @@ ul {
     .btn-container {
         text-align: left;
     }
-    .header {
-        margin: 1.5em 0;
+    .header {        
     }
     .header::after {
         z-index: 0;
@@ -2445,7 +2445,7 @@ ul {
         display: none;
     }
     .header .header_panel-left > img:last-child {
-        top: -22px;
+        top: -11px;
     }
 }
 @media only screen and (min-width: 992px) {
@@ -2530,7 +2530,7 @@ ul {
         margin: 0 0 0 4em;
     }
     .header .header_panel-left > img:last-child {
-        left: 62px;
+        left: 42px;
     }
     .header_panel-right .btn-link {
         padding: 12px;
