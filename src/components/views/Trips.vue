@@ -158,7 +158,6 @@ export default {
     watch: {
         trips: function (oldValue, newValue) {
             if (this.refreshList) {
-                console.log('refreshList');
                 this.refreshTrips(false);
                 this.lookSearch = false;
                 this.$refs.searchBox.clear();

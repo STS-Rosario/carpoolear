@@ -28,11 +28,25 @@ Tengamos un buen viaje cuidándonos entre todos :D">
                 <div class="col-sm-16">
                     <div class="row">
                         <div class="panel-trip-data">
+                            <div class="col-md-24" v-show="isMobile">
+                                <hr />
+                            </div>
+                            <div class="trip_allow-foreign col-md-24">
+                                <span>
+                                    <input type="checkbox" v-model="allowForeignPoints" id="cbxAllowForeignPoints" />
+                                    <label for="cbxAllowForeignPoints">
+                                        Origen o destino fuera de Argentina
+                                    </label>
+                                    <span class="tooltip-bottom" data-tooltip="Habilita seleccionar origen o destino fuera de Argentina. Recordá averiguar con la aseguradora del auto, si tenés cobertura contra terceros fuera de la Argentina. Si no es así, tenés que sacar la extensión fuera de Argentina para tener cobertura durante el viaje">
+                                    <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                </span>
+                                </span>
+                            </div>
                             <div class="new-left trip_points col-sm-13 col-md-15">
                                 <div v-for="(m, index) in points" class="trip_point gmap-autocomplete" :class="{'trip-error' : m.error.state}">
                                     <span v-if="index == 0" class="sr-only">Origen</span>
                                     <span v-if="index == points.length - 1" class="sr-only">Destino</span>
-                                    <GmapAutocomplete  :selectFirstOnEnter="true" :types="['(cities)']" :componentRestrictions="{country: 'AR'}" :placeholder="getPlaceholder(index)"  :value="m.name" :name="'input-' + index" :ref="'input-' + index" v-on:place_changed="(data) => getPlace(index, data)" class="form-control form-control-with-icon form-control-map-autocomplete" :class="{'has-error': m.error.state}"> </GmapAutocomplete>
+                                    <GmapAutocomplete  :selectFirstOnEnter="true" :types="['(cities)']" :componentRestrictions="allowForeignPoints ? null : {country: 'AR'}" :placeholder="getPlaceholder(index)"  :value="m.name" :name="'input-' + index" :ref="'input-' + index" v-on:place_changed="(data) => getPlace(index, data)" class="form-control form-control-with-icon form-control-map-autocomplete" :class="{'has-error': m.error.state}"> </GmapAutocomplete>
                                     <div @click="m.name = ''" class="date-picker--cross"><i aria-hidden="true" class="fa fa-times"></i></div>
                                     <span class="error" v-if="m.error.state"> {{m.error.message}} </span>
                                 </div>
@@ -109,17 +123,17 @@ Tengamos un buen viaje cuidándonos entre todos :D">
                                         <label for="privacity-public" class="label-soft">Público</label>
                                     </li>
                                     <li>
-                                        <input type="radio" id="privacity-friend" value="0" v-model="trip.friendship_type_id">
-                                        <label for="privacity-friend" class="label-soft">Solo amigos</label>
-                                    </li>
-                                    <li>
                                         <input type="radio" id="privacity-friendofriend" value="1" v-model="trip.friendship_type_id">
                                         <label for="privacity-friendofriend" class="label-soft">Amigos de Amigos</label>
+                                    </li>
+                                    <li>
+                                        <input type="radio" id="privacity-friend" value="0" v-model="trip.friendship_type_id">
+                                        <label for="privacity-friend" class="label-soft">Solo amigos</label>
                                     </li>
                                 </ul>
                             </fieldset>
 
-                            <button class="trip-create btn btn-primary btn-lg btn-shadowed" @click="save">
+                            <button class="trip-create btn btn-primary btn-lg btn-shadowed" @click="save" :disabled="saving">
                                 <span v-if="!updatingTrip">CREAR</span>
                                 <span v-else>Actualizar</span>
                             </button>
@@ -228,7 +242,9 @@ export default {
                 'enc_path': '123',
                 'points': [] /* address json_address lat lng */
             },
-            updatingTrip: null
+            updatingTrip: null,
+            saving: false,
+            allowForeignPoints: false
         };
     },
     mounted () {
@@ -260,7 +276,8 @@ export default {
     computed: {
         ...mapGetters({
             user: 'auth/user',
-            cars: 'cars/cars'
+            cars: 'cars/cars',
+            isMobile: 'device/isMobile'
         }),
         distanceString () {
             return Math.floor(this.trip.distance / 1000) + ' Km';
@@ -351,23 +368,26 @@ export default {
         },
 
         validate () {
-            console.log(this.trip);
             let globalError = false;
-            console.log(this.points);
+            let foreignPoints = 0;
             this.points.forEach(p => {
                 if (!p.json) {
                     p.error.state = true;
                     p.error.message = 'Seleccione una localidad válida.';
                     globalError = true;
-                    console.log('place error');
+                } else {
+                    foreignPoints += (p.json.pais === 'Argentina' ? 0 : 1);
                 }
             });
+            if (foreignPoints > 1) {
+                globalError = true;
+                this.points[0].error.state = true;
+                this.points[0].error.message = 'El origen o el destino de tu viaje tiene que estar en Argentina.';
+            }
             if (!this.time || !moment(this.time, 'HH mm').isValid()) {
-                console.log(this.time, moment(this.time, 'HH mm').isValid());
                 this.timeError.state = true;
                 this.timeError.message = 'No ingresaste un horario válido.';
                 globalError = true;
-                console.log(this.time);
             }
             if (this.points[0].name === this.points[this.points.length - 1].name) {
                 this.points[0].error.state = true;
@@ -378,11 +398,10 @@ export default {
                 globalError = true;
             }
 
-            if (!this.dateAnswer.length || !moment(this.dateAnswer).isValid()) {
+            if (!(this.dateAnswer && this.dateAnswer.length) || !moment(this.dateAnswer).isValid()) {
                 globalError = true;
                 this.dateError.state = true;
                 this.dateError.message = 'Aún no ha ingresado ninguna fecha.';
-                console.log('date error', this.date);
             }
             if (this.trip.total_seats < this.passengers) {
                 globalError = true;
@@ -396,7 +415,6 @@ export default {
                 this.lucrarError.message = 'Debes indicar que te comprometes a no lucrar con el viaje.';
                 dialogs.message('Debes indicar que te comprometes a no lucrar con el viaje.', {estado: 'error'});
                 globalError = true;
-                console.log('no lucrar error');
             }
 
             return globalError;
@@ -407,6 +425,7 @@ export default {
                 return;
             }
             /* eslint-disable no-unreachable */
+            this.saving = true;
             this.trip.points = [];
             this.points.forEach(p => {
                 let point = {};
@@ -428,14 +447,16 @@ export default {
             }
             if (!this.updatingTrip) {
                 this.createTrip(this.trip).then((t) => {
+                    this.saving = false;
                     this.$router.replace({ name: 'detail_trip', params: { id: t.id } });
-                });
+                }).catch(() => { this.saving = false; });
             } else {
                 console.log(this.trip);
                 this.trip.id = this.updatingTrip.id;
                 this.updateTrip(this.trip).then(() => {
+                    this.saving = false;
                     this.$router.replace({ name: 'detail_trip', params: { id: this.trip.id } });
-                });
+                }).catch(() => { this.saving = false; });
             }
         },
 

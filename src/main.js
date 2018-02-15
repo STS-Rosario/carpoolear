@@ -31,6 +31,9 @@ import cssHelpers from './styles/helpers.css';
 import css from './styles/main.css';
 
 import bus from './services/bus-event';
+import { DebugApi } from './services/api';
+
+let debugApi = new DebugApi();
 
 Vue.use(VueResource);
 
@@ -50,7 +53,14 @@ Vue.use(VueGoogleMaps, {
         installComponents: true
     }
 });
-
+Vue.config.errorHandler = function (err, vm, info) {
+    // handle error
+    // `info` is a Vue-specific error info, e.g. which lifecycle hook
+    // the error was found in. Only available in 2.2.0+
+    let data = {};
+    data.log = err.stack;
+    debugApi.log(data);
+};
 window.store = store;
 if (process.env.NODE_ENV === 'development') {
     console.log('In development wait for cordova');

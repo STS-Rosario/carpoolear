@@ -14,6 +14,11 @@ class TripApi extends TaggedApi {
         return this.put('/api/trips/' + data.id, data);
     }
 
+    changeSeats (data) {
+        // data.increment = +1 / -1
+        return this.post('/api/trips/' + data.id + '/changeSeats', data);
+    }
+
     remove (id) {
         return this.delete('/api/trips/' + id);
     }

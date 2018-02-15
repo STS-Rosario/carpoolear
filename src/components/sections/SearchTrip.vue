@@ -1,49 +1,76 @@
 <template>
-    <div class="row search-section">
-        <div class="col-xs-12 col-md-3">
-            <button class="btn btn-option" :class="{'active': !isPassenger}" @click="isPassenger = false" >
-                <!--<img alt="" :src="isPassenger ? chofer_logo_gris : chofer_logo_blanco" />-->
-                <span class="fa fa-car" aria-hidden="true"></span>
-                <span>Busco conductor</span>
-            </button>
-        </div>
-        <div class="col-xs-12 col-md-3">
-            <button class="btn btn-option" :class="{'active': isPassenger}" @click="isPassenger = true" >
-                <img alt="" :src="isPassenger ? pasajero_logo_blanco : pasajero_logo_gris" />
-                <span>Busco pasajero</span>
-            </button>
-        </div>
-        <div class="col-xs-24 col-md-5 gmap-autocomplete origin">
-            <GmapAutocomplete name="from_town" ref="from_town" :selectFirstOnEnter="true" :types="['(cities)']" :componentRestrictions="{country: 'AR'}" placeholder="Origen"  :value="from_town.name" v-on:place_changed="(data) => getPlace(0, data)" class="form-control form-control-with-icon form-control-map-autocomplete"> </GmapAutocomplete>
-            <div class="date-picker--cross">
-                <i v-on:click="resetInput('from_town')" class="fa fa-times" aria-hidden="true"></i>
-            </div>
-            <div class="swap btn">
-                <img alt="swap" class='swap-horizontal' :src="swap_horizontal" @click="swapCities" />
-                <img alt="swap" class='swap-vertical' :src="swap_vertical" @click="swapCities" />
+    <div>
+        <div class="row text-center foreignCountry-select foreignCountry-select-desktop" v-show="!isMobile">
+            <div class="foreignCountry-select_wrapper">
+                <input type="checkbox" v-model="allowForeignPoints" id="cbxAllowForeignPoints" class="cbx" />
+                <label for="cbxAllowForeignPoints" class="cbx_label">
+                    Origen o destino fuera de Argentina
+                </label>
+                <span class="tooltip-bottom" data-tooltip="Marcando esta opción vas a poder seleccionar origen o destino fuera de Argentina. Recordá averiguar con la aseguradora del auto, si tenés cobertura contra terceros fuera de la Argentina. Si no es así, averiguá con ella para obtener la extensión fuera de Argentina, de forma de tener cobertura durante el viaje">
+                <i class="fa fa-info-circle" aria-hidden="true"></i>
             </div>
         </div>
-        <div class="col-xs-24 col-md-5 gmap-autocomplete destiny">
-            <GmapAutocomplete name="to_town" ref="to_town" :selectFirstOnEnter="true" :types="['(cities)']" :componentRestrictions="{country: 'AR'}" placeholder="Destino"  :value="to_town.name" v-on:place_changed="(data) => getPlace(1, data)" class="form-control form-control-with-icon form-control-map-autocomplete"> </GmapAutocomplete>
-            <div class="date-picker--cross">
-                <i v-on:click="resetInput('to_town')" class="fa fa-times" aria-hidden="true"></i>
+        <div class="row search-section">
+            <div class="col-xs-12 col-md-3">
+                <button class="btn btn-option" :class="{'active': !isPassenger}" @click="isPassenger = false" >
+                    <!--<img alt="" :src="isPassenger ? chofer_logo_gris : chofer_logo_blanco" />-->
+                    <span class="fa fa-car" aria-hidden="true"></span>
+                    <span>Busco conductor</span>
+                </button>
             </div>
-        </div>
-        <div class="col-xs-24 col-md-4 no-padding">
-            <DatePicker ref="datepicker" :value="date" :minDate="minDate" :class="{'has-error': dateError.state}"></DatePicker>
-        </div>
-        <div class="col-xs-24 col-md-3 col-lg-4">
-            <button class="btn btn-primary btn-search" @click="emit">Buscar</button>
-        </div>
+            <div class="col-xs-12 col-md-3">
+                <button class="btn btn-option" :class="{'active': isPassenger}" @click="isPassenger = true" >
+                    <img alt="" :src="isPassenger ? pasajero_logo_blanco : pasajero_logo_gris" />
+                    <span>Busco pasajero</span>
+                </button>
+            </div>
+            <div class="row text-center foreignCountry-select foreignCountry-select-mobile" v-show="isMobile">
+                <div class="foreignCountry-select_wrapper">
+                    <input type="checkbox" v-model="allowForeignPoints" id="cbxAllowForeignPoints" class="cbx" />
+                    <label for="cbxAllowForeignPoints" class="cbx_label">
+                        Origen o destino fuera de Argentina
+                    </label>
+                    <span class="tooltip-bottom" data-tooltip="Marcando esta opción vas a poder seleccionar origen o destino fuera de Argentina. Recordá averiguar con la aseguradora del auto, si tenés cobertura contra terceros fuera de la Argentina. Si no es así, averiguá con ella para obtener la extensión fuera de Argentina, de forma de tener cobertura durante el viaje">
+                    <i class="fa fa-info-circle" aria-hidden="true"></i>
+                </div>
+            </div>
+            <div class="col-xs-24 col-md-5 gmap-autocomplete origin">
+                <GmapAutocomplete name="from_town" ref="from_town" :selectFirstOnEnter="true" :types="['(cities)']"  :componentRestrictions="allowForeignPoints ? null : {country: 'AR'}"  placeholder="Origen"  :value="from_town.name" v-on:place_changed="(data) => getPlace(0, data)" class="form-control form-control-with-icon form-control-map-autocomplete"> </GmapAutocomplete>
+                <div class="date-picker--cross">
+                    <i v-on:click="resetInput('from_town')" class="fa fa-times" aria-hidden="true"></i>
+                </div>
+                <div class="optional-warning text-center">(opcional)</div>
+                <div class="swap btn">
+                    <img alt="swap" class='swap-horizontal' :src="swap_horizontal" @click="swapCities" />
+                    <img alt="swap" class='swap-vertical' :src="swap_vertical" @click="swapCities" />
+                </div>
+            </div>
+            <div class="col-xs-24 col-md-5 gmap-autocomplete destiny">
+                <GmapAutocomplete name="to_town" ref="to_town" :selectFirstOnEnter="true" :types="['(cities)']"  :componentRestrictions="allowForeignPoints ? null : {country: 'AR'}"  placeholder="Destino"  :value="to_town.name" v-on:place_changed="(data) => getPlace(1, data)" class="form-control form-control-with-icon form-control-map-autocomplete"> </GmapAutocomplete>
+                <div class="date-picker--cross">
+                    <i v-on:click="resetInput('to_town')" class="fa fa-times" aria-hidden="true"></i>
+                </div>
+                <div class="optional-warning text-center">(opcional)</div>
+            </div>
+            <div class="col-xs-24 col-md-4 no-padding">
+                <DatePicker ref="datepicker" :value="date" :minDate="minDate" :class="{'has-error': dateError.state}"></DatePicker>
+                <div class="optional-warning text-center">(opcional)</div>
+            </div>
+            <div class="col-xs-24 col-md-3 col-lg-4">
+                <button class="btn btn-primary btn-search" @click="emit">Buscar</button>
+            </div>
 
+        </div>
     </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import {pointDistance} from '../../services/maps.js';
 import DatePicker from '../DatePicker';
 import bus from '../../services/bus-event.js';
 import moment from 'moment';
+import dialogs from '../../services/dialogs.js';
 
 export default {
     name: 'search-trip',
@@ -54,12 +81,14 @@ export default {
             from_town: {
                 name: '',
                 location: null,
-                radio: 0
+                radio: 0,
+                country: 'AR'
             },
             to_town: {
                 name: '',
                 location: null,
-                radio: 0
+                radio: 0,
+                country: 'AR'
             },
             date: '',
             dateAnswer: '',
@@ -72,8 +101,14 @@ export default {
             chofer_logo_gris: process.env.ROUTE_BASE + 'static/img/icono-conductor-gris.png',
             pasajero_logo_gris: process.env.ROUTE_BASE + 'static/img/icono-pasajero-gris.png',
             swap_horizontal: process.env.ROUTE_BASE + 'static/img/flechas_horizontales.png',
-            swap_vertical: process.env.ROUTE_BASE + 'static/img/flechas_verticales.png'
+            swap_vertical: process.env.ROUTE_BASE + 'static/img/flechas_verticales.png',
+            allowForeignPoints: false
         };
+    },
+    computed: {
+        ...mapGetters({
+            isMobile: 'device/isMobile'
+        })
     },
     mounted () {
         bus.on('date-change', this.dateChange);
@@ -110,8 +145,17 @@ export default {
                         lat: data.geometry.location.lat(),
                         lng: data.geometry.location.lng()
                     },
-                    radio: distance
+                    radio: distance,
+                    country: 'AR'
                 };
+            }
+            if (data && data.address_components) {
+                for (let j = 0; j < data.address_components.length; j++) {
+                    let addrComp = data.address_components[j];
+                    if (addrComp.types.indexOf('country') >= 0) {
+                        obj.country = addrComp.short_name;
+                    }
+                }
             }
             if (i === 0) {
                 this.from_town = obj;
@@ -121,11 +165,16 @@ export default {
         },
         emit () {
             let params = {};
+            let one = 0;
+            let foreignCountry = 0;
             if (this.from_town.location) {
                 params.origin_lat = this.from_town.location.lat;
                 params.origin_lng = this.from_town.location.lng;
                 params.origin_radio = this.from_town.radio;
                 params.origin_name = this.from_town.name;
+            }
+            if (this.from_town.country !== 'AR') {
+                foreignCountry++;
             }
             if (this.to_town.location) {
                 params.destination_lat = this.to_town.location.lat;
@@ -133,17 +182,25 @@ export default {
                 params.destination_radio = this.to_town.radio;
                 params.destination_name = this.to_town.name;
             }
+            if (this.to_town.country !== 'AR') {
+                foreignCountry++;
+            }
             if (this.dateAnswer) {
                 params.date = this.dateAnswer;
             }
             params.is_passenger = this.isPassenger;
-            this.$emit('trip-search', params);
+            if (foreignCountry < 2) {
+                this.$emit('trip-search', params);
+            } else {
+                dialogs.message('Origen y destino no pueden ser ambos del exterior.', { duration: 10, estado: 'error' });
+            }
         },
         resetInput (input) {
             this[input] = {
                 name: '',
                 location: null,
-                radio: 0
+                radio: 0,
+                country: 'AR'
             };
         },
         swapCities () {
@@ -232,6 +289,30 @@ export default {
     }
     .swap-horizontal {
         display: none;
+    }
+    .foreignCountry-select {
+        margin-bottom: 1em;
+    }
+    .foreignCountry-select-mobile {
+        width: 100%;
+    }
+    .foreignCountry-select-desktop .foreignCountry-select_wrapper {
+        margin-left: -10%;
+    }
+    .cbx,
+    .cbx_label {
+        vertical-align: middle;
+        margin: 0;
+    }
+    .cbx_label {
+        margin-left: .5em;
+    }
+    .optional-warning {
+        font-size: .8em;
+        color: #999;
+        position: relative;
+        top: -.8em;
+        clear: both;
     }
     @media only screen and (min-width: 300px) {
         .swap {

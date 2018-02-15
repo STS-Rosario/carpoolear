@@ -17,7 +17,7 @@
                 <li v-for="user in users" class="list-group-item conversation_header" >
                     <div class="media">
                         <div class="media-left">
-                            <router-link :to="{name: 'profile', params: {id: user.id, userProfile: user}}">
+                            <router-link :to="{name: 'profile', params: { id: user.id, userProfile: user, activeTab: 1 }}">
                                 <div class="conversation_image circle-box" v-imgSrc:profile="user.image"></div>
                             </router-link>
                         </div>
@@ -25,12 +25,12 @@
                             <h4 class="media-heading"><span class="conversation-title">{{ user.name }}</span></h4>
                         </div>
                         <div class="media-right">
-                            <button @click="onAddClick(user)" :class="user.state === 'none' ? 'btn-primary' : ''" class="btn" :disabled="user.state != 'none'"> 
-                                <span v-if="user.state == 'none' && !idRequesting[user.id]"> 
-                                    Agregar <i class="fa fa-plus" aria-hidden="true"></i> 
+                            <button @click="onAddClick(user)" :class="user.state === 'none' ? 'btn-primary' : ''" class="btn" :disabled="user.state != 'none'">
+                                <span v-if="user.state == 'none' && !idRequesting[user.id]">
+                                    Agregar <i class="fa fa-plus" aria-hidden="true"></i>
                                 </span>
                                 <span v-if="idRequesting[user.id] && idRequesting[user.id] === true"><spinner class="blue"></spinner></span>
-                                <span v-if="user.state != 'none'"> Solicitud enviada </span> 
+                                <span v-if="user.state != 'none'"> Solicitud enviada </span>
                             </button>
                         </div>
                     </div>

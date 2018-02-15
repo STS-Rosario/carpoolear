@@ -927,11 +927,11 @@ textarea {
     margin-top: 1rem;
     padding-right: 0;
     min-height: 2.5em;
-    font-size: 1.1em;
+    font-size: 1.2em;
 }
 @media (min-width: 992px) {
     .trip_datetime {
-        font-size: 1em;
+        font-size: 1.1em;
     }
 }
 .trip_datetime_date {
@@ -1355,12 +1355,17 @@ textarea {
     bottom: -.5rem;
     margin-left: .6em;
 }
+.trip_allow-foreign,
 .trip_terms {
     margin-left: .5rem;
+    vertical-align: middle;
+    margin-top: 1em;
 }
+.trip_allow-foreign label,
 .trip_terms_label {
     display: inline;
     color: var(--secondary-background);
+    vertical-align: middle;
 }
 
 .trip_terms_label.has-error {
@@ -1656,7 +1661,7 @@ textarea {
 }
 
 .trips-list {
-    overflow: auto;
+    /*overflow: auto;*/ overflow: visible;
     margin-bottom: 3rem;
 }
 .trips-list > div {
@@ -2571,7 +2576,8 @@ ul {
   line-height: 1.2;
   /*padding: 1em;*/
 }
-
+.foreignCountry-select_wrapper [data-tooltip]:before,
+.trip_allow-foreign [data-tooltip]:before,
 .trip_terms [data-tooltip]:before {
     width: 250px;
     padding: 1em;
@@ -2685,8 +2691,11 @@ ul {
     content:" \25be";
 }
 
-/* Remove the blue styling of telephone numbers */
-a[href^="tel"]{
-    color:inherit;
-    text-decoration:none;
+.title-margined {
+    margin: 1em 0;
+}
+.list-item {
+    border-bottom: 1px solid #CCC;
+    padding-bottom: .5em;
+    margin-bottom: .5em;
 }

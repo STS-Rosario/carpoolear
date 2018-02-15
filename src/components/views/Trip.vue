@@ -68,7 +68,7 @@
                                 <div class="row trip-data" v-if="trip.is_passenger">
                                     <strong class="warning-is-passenger">Pasajero que busca viaje</strong>
                                 </div>
-                                <div class="row trip-data">
+                                <div class="row trip-data"  v-if="!isPasssengersView">
                                     <em v-if="trip.friendship_type_id == 2">
                                         <i class="fa fa-globe" aria-hidden="true"></i>
                                         Viaje público
@@ -83,7 +83,7 @@
                                     </em>
                                 </div>
 
-                                <div class="row trip-stats"  v-if="!trip.is_passenger">
+                                <div class="row trip-stats"  v-if="!trip.is_passenger && !isPasssengersView">
                                     <div>
                                         <span>Distancia a recorrer</span><br>
                                         <span>{{ distanceString }} <abbr title="kilometros">km</abbr></span>
@@ -98,7 +98,7 @@
                                         <span>{{ trip.distance / 1000 * 1.5 }} <abbr title="kilogramos dióxido de carbono equivalente">kg CO<sub>2eq</sub></abbr></span>
                                     </div>
                                 </div>
-                                <div class="trip_share row">
+                                <div class="trip_share row"  v-if="!isPasssengersView">
                                     <a  :href="'https://www.facebook.com/sharer/sharer.php?u=' + currentUrl" target="_blank" aria-label="Compartir en Facebook" class="lnk lnk-social-network lnk-facebook" @click="onShareLinkClick">
                                         <i class="fa fa-facebook" aria-hidden="true"></i>
                                     </a>
@@ -113,35 +113,56 @@
                                     </a>
                                 </div>
 
-                                <div class="row passengers"  v-if="!trip.is_passenger">
-                                    <div class="col-xs-24" v-if="trip.passenger.length  && owner">
-                                        <h4 style="margin: 1em 0;"><strong>Pasajeros subidos</strong></h4>
-                                        <div v-for="p in trip.passenger">
-                                            <span @click="toUserMessages(p)" class="trip_driver_img circle-box passenger trip_passenger_image" v-imgSrc:profile="p.image">
-                                            </span>
-                                            <a href="#" @click="toUserMessages(p)" class="trip_passenger_name">{{ p.name }}</a>
-                                            <span @click="removePassenger(p)" class="trip_passenger-remove">
+                                <div class="row passengers" v-if="!trip.is_passenger">
+                                    <div class="col-xs-24" v-if="owner">
+                                        <h4 class="title-margined">
+                                            <strong>Pasajeros subidos</strong>
+                                        </h4>
+                                        <div v-for="p in trip.passenger" v-if="trip.passenger.length" class="list-item">
+                                            <span @click="toUserProfile(p)" class="trip_driver_img circle-box passenger trip_passenger_image" v-imgSrc:profile="p.image"></span>
+                                            <a href="#" @click="toUserProfile(p)" class="trip_passenger_name">
+                                                {{ p.name }}
+                                            </a>
+                                            <a href="#" @click="toUserMessages(p)" aria-label="Ir a mensajes" class="trip_passenger-chat">
+                                                 <i class="fa fa-comments" aria-hidden="true"></i>
+                                            </a>
+                                            <button @click="removePassenger(p)" class="trip_passenger-remove pull-right" aria-label="Bajar pasajero del viaje">
                                                 <i class="fa fa-times" aria-hidden="true"></i>
-                                            </span>
+                                            </button>
+                                        </div>
+                                        <div v-if="trip.passenger.length === 0">
+                                            Aún no hay pasajeros subidos a este viaje.
                                         </div>
                                     </div>
                                     <div v-else style="height: 2em;"></div>
                                 </div>
                             </div>
-                            <div class="buttons-container">
-                                <router-link class="btn btn-primary" v-if="owner && !expired" :to="{name: 'update-trip', params: { id: trip.id}}"> Editar  </router-link>
-                                <a class="btn btn-primary" v-if="owner && !expired" @click="deleteTrip" > Cancelar viaje  </a>
+                            <div class="buttons-container"  v-if="!isPasssengersView">
+                                <router-link class="btn btn-primary" v-if="owner && !expired" :to="{name: 'update-trip', params: { id: trip.id}}">
+                                    Editar
+                                </router-link>
+                                <a class="btn btn-primary" v-if="owner && !expired" @click="deleteTrip" :disabled="sending">
+                                    Cancelar viaje
+                                </a>
                                 <template v-if="!owner && !expired">
-                                    <button class="btn btn-primary" @click="toMessages" v-if="!owner"> Coordinar viaje  </button>
+                                    <button class="btn btn-primary" @click="toMessages" v-if="!owner">
+                                        Coordinar viaje
+                                    </button>
                                 </template>
                                 <template v-if="!owner && !trip.is_passenger && !expired">
                                     <template v-if="!isPassenger">
-                                        <button class="btn btn-primary" @click="makeRequest" v-if="canRequest && trip.seats_available > 0"> Solicitar asiento </button>
-                                        <button class="btn" v-if="!canRequest" @click="cancelRequest"> Solicitud enviada </button>
+                                        <button class="btn btn-primary" @click="makeRequest" v-if="canRequest && trip.seats_available > 0" :disabled="sending">
+                                            Solicitar asiento
+                                        </button>
+                                        <button class="btn" v-if="!canRequest" @click="cancelRequest" :disabled="sending">
+                                            Solicitud enviada
+                                        </button>
                                     </template>
 
                                     <template v-if="isPassenger">
-                                        <button class="btn btn-primary" @click="cancelRequest" v-if="canRequest"> Bajarme del viaje </button>
+                                        <button class="btn btn-primary" @click="cancelRequest" v-if="canRequest" :disabled="sending">
+                                            Bajarme del viaje
+                                        </button>
                                     </template>
                                 </template>
                                 <template v-if="expired">
@@ -153,7 +174,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-24 col-sm-9 col-sm-pull-15 col-md-8 col-md-pull-16 col-lg-7 col-lg-pull-17 driver-container">
+                    <div class="col-xs-24 col-sm-9 col-sm-pull-15 col-md-8 col-md-pull-16 col-lg-7 col-lg-pull-17 driver-container" v-if="!isPasssengersView">
                         <div class="driver-profile">
                             <div class="row">
                                 <div class="col-xs-9 col-md-8 col-lg-8">
@@ -181,23 +202,23 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-24 structure-div">
-                    <gmap-map
-                        :center="center"
-                        :zoom="zoom"
-                        style="height: 400px"
-                        ref="map"
-                    >
-                        <gmap-marker
-                            :key="index"
-                            v-for="(m, index) in points"
-                            :position="m.location"
-                            :clickable="true"
-                            :draggable="true"
-                            @click="center=m.location"
-                            v-if="m.location"
-                        ></gmap-marker>
-                    </gmap-map>
+                    <div class="col-xs-24 structure-div"  v-if="!isPasssengersView">
+                        <gmap-map
+                            :center="center"
+                            :zoom="zoom"
+                            style="height: 400px"
+                            ref="map"
+                        >
+                            <gmap-marker
+                                :key="index"
+                                v-for="(m, index) in points"
+                                :position="m.location"
+                                :clickable="true"
+                                :draggable="true"
+                                @click="center=m.location"
+                                v-if="m.location"
+                            ></gmap-marker>
+                        </gmap-map>
                     </div>
                 </div>
             </div>
@@ -216,12 +237,18 @@ import bus from '../../services/bus-event';
 import svgItem from '../SvgItem';
 import moment from 'moment';
 import dialogs from '../../services/dialogs.js';
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import VueHead from 'vue-head';
+Vue.use(VueHead);
+Vue.use(VueRouter);
 
 export default {
     name: 'trip',
     data () {
         return {
             // trip: null,
+            carpoolear_logo: process.env.ROUTE_BASE + 'static/img/carpoolear_logo.png',
             sending: false,
             zoom: 4,
             center: {lat: -29.0, lng: -60.0},
@@ -243,6 +270,25 @@ export default {
         };
     },
 
+    head: {
+        title: function () {
+            return {
+                inner: 'Viaje'
+            };
+        },
+        meta: function () {
+            if (this.trip) {
+                return [
+                    { p: 'og:description', c: this.trip.description },
+                    { p: 'og:title', c: this.trip.points[0].json_address.ciudad + ' -> ' + this.trip.points[this.trip.points.length - 1].json_address.ciudad + ' | ' + moment(this.trip.trip_date).format('dddd DD/MM hh:mm') },
+                    { p: 'og:image', c: this.carpoolear_logo }
+                ];
+            } else {
+                return [];
+            }
+        }
+    },
+
     methods: {
         ...mapActions({
             getTrip: 'getTrip',
@@ -261,8 +307,11 @@ export default {
         },
         deleteTrip () {
             if (window.confirm('¿Estás seguro que deseas cancelar el viaje?')) {
+                this.sending = true;
                 this.remove(this.trip.id).then(() => {
                     this.$router.replace({name: 'trips'});
+                }).catch(() => {
+                    this.sending = false;
                 });
             }
         },
@@ -292,6 +341,17 @@ export default {
                 // this.selectConversation(conversation.id).then(data => {
                 router.push({ name: 'conversation-chat', params: { id: conversation.id } });
                 // });
+            });
+        },
+
+        toUserProfile (user) {
+            router.push({
+                name: 'profile',
+                params: {
+                    id: user.id,
+                    userProfile: user,
+                    activeTab: 1
+                }
             });
         },
 
@@ -489,6 +549,12 @@ export default {
         },
         distanceString () {
             return Math.floor(this.trip.distance / 1000);
+        },
+        isPasssengersView () {
+            if (this.location) {
+                return this.location === 'passenger';
+            }
+            return false;
         }
     },
 
@@ -497,7 +563,8 @@ export default {
     },
 
     props: [
-        'id'
+        'id',
+        'location'
     ]
 };
 </script>
@@ -513,19 +580,29 @@ export default {
         width: 3.5em;
         height: 3.5em;
         position: relative;
-        margin-right: .2em;
+        margin-right: .5em;
     }
     .passengers {
         margin-bottom: .8em;
     }
+    .trip_passenger-chat,
     .trip_passenger-remove,
     .trip_passenger_image,
     .trip_passenger_name {
         vertical-align: middle;
         cursor: pointer;
     }
+    .trip_passenger-chat,
     .trip_passenger-remove {
         font-size: 1.8em;
+        background: none;
+        border: 0;
+    }
+    .trip_passenger-remove {
+        margin-left: .5em;
+        margin-top: .25em;
+    }
+    .trip_passenger-chat {
         margin-left: .5em;
     }
     .trip-detail-component .structure-div {

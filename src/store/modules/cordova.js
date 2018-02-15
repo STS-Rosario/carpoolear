@@ -48,7 +48,7 @@ const actions = {
             // tendria que recargar cierto dato
             if (notification.data) {
                 if (notification.data.type === 'conversation' && notification.data.conversation_id) {
-                    globalStore.dispatch('conversations/findConversation', { id: notification.data.conversation_id })
+                    globalStore.dispatch('conversations/findConversation', { id: notification.data.conversation_id });
                 }
             }
         } else {
