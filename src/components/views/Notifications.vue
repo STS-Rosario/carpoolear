@@ -50,7 +50,7 @@ export default {
                     router.push({name: 'detail_trip', params: { id: n.extras.trip_id }});
                     break;
                 case 'friends':
-                    router.push({name: 'friends'});
+                    router.push({name: 'friends_setting'});
                     break;
                 case 'my-trips':
                     router.push({ name: 'my-trips' });
