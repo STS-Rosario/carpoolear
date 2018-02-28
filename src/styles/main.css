@@ -1443,6 +1443,14 @@ textarea {
 .pic-info {
     text-align: center;
     margin: 2em 0;
+    position: relative;
+}
+
+.pic-info .user_pin {
+    position: absolute;
+    left: 60%;
+    top: 0;
+    z-index: 1;
 }
 .conversation_image {
     margin-right: 10px;
@@ -2259,6 +2267,8 @@ ul {
     .pic-info {
         margin: 0 0 2em 0;
     }
+
+
     .desktop {
         display: inherit;
     }
@@ -2535,9 +2545,24 @@ ul {
     .header_panel-right .btn-link {
         padding: 12px;
     }
+
+    .pic-info .user_pin {
+        left: 65%;
+    }
 }
 
 
+
+@media only screen and (min-width: 768px) and (max-width: 1000px) {
+    .pic-info .user_pin {
+        left: 90%;
+    }
+}
+@media only screen and (min-width: 1001px) and (max-width: 1400px) {
+    .pic-info .user_pin {
+        left: 70%;
+    }
+}
 /**
  * Tooltip Styles
  */
