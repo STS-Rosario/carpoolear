@@ -36,6 +36,8 @@
     "postcss-import": "^9.1.0",
     "postcss-reporter": "^3.0.0",
     "postcss-url": "^5.1.2",
+    "socket.io": "^2.0.4",
+    "socket.io-client": "^2.0.4",
     "v-mask": "^1.3.0",
     "vue": "^2.1.0",
     "vue-analytics": "^3.2.0",

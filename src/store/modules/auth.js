@@ -1,10 +1,12 @@
 import * as types from '../mutation-types';
 import { AuthApi, UserApi } from '../../services/api';
+import socket from '../../services/wesockets';
 import router from '../../router';
 import cache, {keys} from '../../services/cache';
 
 import globalStore from '../index';
 
+socket.init();
 let authApi = new AuthApi();
 let userApi = new UserApi();
 
@@ -27,6 +29,7 @@ const getters = {
 
 function onLoggin (store, token) {
     store.commit(types.AUTH_SET_TOKEN, token);
+    socket.auth(token);
     fetchUser(store);
     if (globalStore.state.cordova.device) {
         globalStore.dispatch('device/register');
@@ -134,6 +137,7 @@ function retoken (store) {
 
     return new Promise((resolve, reject) => {
         authApi.retoken(data).then((response) => {
+            socket.auth(response.token);
             store.commit(types.AUTH_SET_TOKEN, response.token);
             resolve();
         }).catch(({data, status}) => {
