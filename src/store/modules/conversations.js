@@ -4,6 +4,11 @@ import * as pagination from '../pagination';
 import globalStore from '../index';
 import Vue from 'vue';
 import moment from 'moment';
+import socket from '../../services/wesockets';
+
+socket.on('new-message', (data) => {
+    globalStore.commit('conversations/' + types.CONVERSATION_INSERT_MESSAGE, { messages: [data] });
+});
 
 let conversationApi = new ConversationApi();
 let pageSize = 20;

@@ -2,10 +2,7 @@ import io from 'socket.io-client';
 
 let socketClient;
 let _token = null;
-let isAuth = false;
-// socketClient.on('user-notify', (data) => {
-//     console.log('testing', data);
-// });
+// let isAuth = false;
 
 export default {
     init () {
@@ -13,12 +10,12 @@ export default {
 
         socketClient.on('auth', (data) => {
             if (data.status) {
-                isAuth = true;
+                // isAuth = true;
             }
         });
 
         socketClient.on('disconnected', () => {
-            isAuth = false;
+            // isAuth = false;
         });
 
         socketClient.on('reconnect', () => {
@@ -39,5 +36,9 @@ export default {
 
     emit (message, data) {
         socketClient.emit(message, data);
+    },
+
+    on (event, callback) {
+        socketClient.on(event, callback);
     }
 };
