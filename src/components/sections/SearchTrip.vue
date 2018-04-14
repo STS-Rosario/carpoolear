@@ -35,21 +35,6 @@
                 </div>
             </div>
             <div class="col-xs-24 col-md-5 gmap-autocomplete origin">
-                <v-select  name="from_town" :filterable="false" :options="options" @search="onSearch" class="form-control form-control-with-icon form-control-map-autocomplete">
-                    <template slot="no-options">
-                    type to search cities
-                    </template>
-                    <template slot="option" slot-scope="option">
-                    <div class="d-center">
-                        {{ option.address }}
-                        </div>
-                    </template>
-                    <template slot="selected-option" scope="option">
-                    <div class="selected d-center">
-                        {{ option.address }}
-                    </div>
-                    </template>
-                </v-select>
                 <GmapAutocomplete name="from_town" ref="from_town" :selectFirstOnEnter="true" :types="['(cities)']"  :componentRestrictions="allowForeignPoints ? null : {country: 'AR'}"  placeholder="Origen"  :value="from_town.name" v-on:place_changed="(data) => getPlace(0, data)" class="form-control form-control-with-icon form-control-map-autocomplete"> </GmapAutocomplete>
                 <div class="date-picker--cross">
                     <i v-on:click="resetInput('from_town')" class="fa fa-times" aria-hidden="true"></i>
@@ -268,15 +253,6 @@ export default {
         onSearch (search, loading) {
             loading(true);
             this.search(loading, search, this);
-        },
-        /* eslint-disable no-undef */
-        search: function (loading, search, vm) {
-            fetch(
-                `https://carpoolear.com.ar/api/trips/autocomplete?value=${escape(search)}`
-            ).then(res => {
-                loading(false);
-                res.json().then(json => (vm.options = json.trips_points));
-            });
         }
     },
     props: [
