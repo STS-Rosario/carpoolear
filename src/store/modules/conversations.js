@@ -77,6 +77,7 @@ const actions = {
             let conversationTemp = store.state.list ? store.state.list.find(item => item.id === id) : null;
 
             if (conversationTemp) {
+                conversationTemp.unread = false;
                 store.commit(types.CONVERSATION_SET_CONVERSATION, conversationTemp);
                 store.commit(types.CONVERSATION_SET_SELECTED, id);
                 store.commit(types.CONVERSATION_CREATE_MESSAGES, id);
@@ -85,6 +86,7 @@ const actions = {
                 return Promise.resolve(conversationTemp);
             } else {
                 return globalStore.dispatch('conversations/findConversation', {id, more: false}).then(conversation => {
+                    conversation.unread = false;
                     store.commit(types.CONVERSATION_CREATE_MESSAGES, id);
                     store.commit(types.CONVERSATION_SET_CONVERSATION, conversation);
                     store.commit(types.CONVERSATION_SET_SELECTED, id);
@@ -259,6 +261,13 @@ const mutations = {
         messages.forEach(item => {
             if (!state.messages[item.conversation_id].list.find(i => i.id === item.id)) {
                 state.messages[item.conversation_id].list.push(item);
+                if (!id) {
+                    // marcar conversacion como no leida
+                    let conv = state.list.find(c => c.id === item.conversation_id);
+                    if (conv) {
+                        conv.unread = true;
+                    }
+                }
             }
             if (state.list) {
                 state.list.forEach(c => {

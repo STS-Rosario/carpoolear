@@ -6,7 +6,7 @@
                 <label for="cbxAllowForeignPoints" class="cbx_label">
                     Origen o destino fuera de Argentina
                 </label>
-                <span class="tooltip-bottom" data-tooltip="Marcando esta opción vas a poder seleccionar origen o destino fuera de Argentina. Recordá averiguar con la aseguradora del auto, si tenés cobertura contra terceros fuera de la Argentina. Si no es así, averiguá con ella para obtener la extensión fuera de Argentina, de forma de tener cobertura durante el viaje">
+                <span class="tooltip-bottom" data-tooltip="Marcando esta opción vas a poder seleccionar origen o destino fuera de Argentina. Recordá averiguar con la aseguradora del auto, si tenés cobertura contra terceros fuera de la Argentina. Si no es así, averiguá con ella para obtener la extensión fuera de Argentina, de forma de tener cobertura durante el viaje"></span>
                 <i class="fa fa-info-circle" aria-hidden="true"></i>
             </div>
         </div>
@@ -30,7 +30,7 @@
                     <label for="cbxAllowForeignPoints" class="cbx_label">
                         Origen o destino fuera de Argentina
                     </label>
-                    <span class="tooltip-bottom" data-tooltip="Marcando esta opción vas a poder seleccionar origen o destino fuera de Argentina. Recordá averiguar con la aseguradora del auto, si tenés cobertura contra terceros fuera de la Argentina. Si no es así, averiguá con ella para obtener la extensión fuera de Argentina, de forma de tener cobertura durante el viaje">
+                    <span class="tooltip-bottom" data-tooltip="Marcando esta opción vas a poder seleccionar origen o destino fuera de Argentina. Recordá averiguar con la aseguradora del auto, si tenés cobertura contra terceros fuera de la Argentina. Si no es así, averiguá con ella para obtener la extensión fuera de Argentina, de forma de tener cobertura durante el viaje"></span>
                     <i class="fa fa-info-circle" aria-hidden="true"></i>
                 </div>
             </div>
@@ -102,7 +102,8 @@ export default {
             pasajero_logo_gris: process.env.ROUTE_BASE + 'static/img/icono-pasajero-gris.png',
             swap_horizontal: process.env.ROUTE_BASE + 'static/img/flechas_horizontales.png',
             swap_vertical: process.env.ROUTE_BASE + 'static/img/flechas_verticales.png',
-            allowForeignPoints: false
+            allowForeignPoints: false,
+            options: []
         };
     },
     computed: {
@@ -165,7 +166,6 @@ export default {
         },
         emit () {
             let params = {};
-            let one = 0;
             let foreignCountry = 0;
             if (this.from_town.location) {
                 params.origin_lat = this.from_town.location.lat;
@@ -248,6 +248,10 @@ export default {
                     this.date = '';
                 }
             }
+        },
+        onSearch (search, loading) {
+            loading(true);
+            this.search(loading, search, this);
         }
     },
     props: [

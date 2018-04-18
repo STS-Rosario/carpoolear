@@ -4,6 +4,9 @@
             <h1>Buscá con quién compartir tu próximo viaje!</h1>
             <h3>¡Elegí fecha, origen o destino y encontralo!</h3>
         </div>
+        <!-- <a href="https://carpoolear.com.ar/encuentrocarpoolero" target="_blank" class="banner">
+            <img alt="" :src="'/static/img/banner_encuentro_carpoolero.png'" />
+        </a> -->
         <div v-show="!user && isMobile">
             <router-link :to="{name: 'login'}" class="login_usuario"> Ingresá con tu usuario o registrate <span class='underline'>aquí</span> para comenzar a Carpoolear!</router-link>
         </div>
@@ -186,3 +189,15 @@ export default {
     }
 };
 </script>
+<style scoped>
+    .banner {
+        display: block;
+        margin: -1em auto 1em;
+        text-align: center;
+    }
+    .banner img {
+        border: 1px solid #999;
+        width: 100%;
+        max-width: 934px;
+    }
+</style>
