@@ -166,7 +166,6 @@ export default {
         },
         emit () {
             let params = {};
-            let one = 0;
             let foreignCountry = 0;
             if (this.from_town.location) {
                 params.origin_lat = this.from_town.location.lat;
