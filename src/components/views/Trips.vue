@@ -28,7 +28,10 @@
                 <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
                 Cargando más resultados
             </div>
-            <p slot="no-data" class="alert alert-warning"  role="alert">¡Ups! No hay viajes con los criterios indicados en la búsqueda, intenta en otra fecha o ¡crea uno!</p>
+            <p slot="no-data" class="alert alert-warning"  role="alert">
+                ¡Ups! No hay viajes con los criterios indicados en la búsqueda, intenta en otra fecha o ¡crea uno!
+                <button class="btn btn-primary btn-search" v-if="user && !searchParams.data.is_passenger" @click="subscribeSearch">Sbucribirse</button>
+            </p>
             <p slot="loading" class="alert alert-info" role="alert">
                 <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
                 Cargando viajes ...
@@ -44,6 +47,8 @@ import bus from '../../services/bus-event.js';
 import { mapGetters, mapActions } from 'vuex';
 import moment from 'moment';
 import router from '../../router';
+import dialogs from '../../services/dialogs.js';
+
 export default {
     name: 'trips',
     data () {
@@ -59,7 +64,8 @@ export default {
     methods: {
         ...mapActions({
             search: 'trips/tripsSearch',
-            refreshTrips: 'trips/refreshList' // ,
+            refreshTrips: 'trips/refreshList',
+            subscribeToSearch: 'subscriptions/create'
             // morePagesActions: 'trips/tripMorePage',
             // setActionButton: 'actionbars/setHeaderButtons'
         }),
@@ -108,7 +114,7 @@ export default {
             }
         },
         onScrollBottom () {
-            if (this.morePages && !this.lookSearch) { // Hay páginas y no estoy en búsquedas
+            if (this.morePages && !this.lookSearch) { // Hay páginas y no estoy en búsquedas;
                 if (!this.runningSearch) {
                     this.runningSearch = true;
                     let done = () => {
@@ -121,6 +127,30 @@ export default {
         onBackBottom () {
             bus.off('backbutton', this.onBackBottom);
             this.lookSearch = false;
+        },
+        subscribeSearch () {
+            let params = this.searchParams.data;
+            let data = {};
+            if (params.date) {
+                data.trip_date = params.date;
+            }
+            if (params.origin_name) {
+                data.from_address = params.origin_name;
+                data.from_lat = params.origin_lat;
+                data.from_lng = params.origin_lng;
+                data.from_radio = params.origin_radio;
+                data.from_json_address = [];
+            }
+            if (params.destination_name) {
+                data.to_address = params.destination_name;
+                data.to_lat = params.destination_lat;
+                data.to_lng = params.destination_lng;
+                data.to_radio = params.destination_radio;
+                data.to_json_address = [];
+            }
+            this.subscribeToSearch(data).then(() => {
+                dialogs.message('Te subscribiste correctamente. Te avisaremos cuando hayan viajes similares', { duration: 10, estado: 'success' });
+            });
         }
     },
     mounted () {
@@ -134,6 +164,8 @@ export default {
             }
         }
         this.$refs.searchBox.clear();
+
+        this.$store.dispatch('subscriptions/index');
 
         // bus.event
         bus.off('search-click', this.onSearchButton);
