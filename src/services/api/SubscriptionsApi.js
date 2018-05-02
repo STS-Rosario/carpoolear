@@ -18,8 +18,8 @@ class SubscriptionsApi extends TaggedApi {
         return this.put('/api/subscriptions/' + data.id, data);
     }
 
-    delete (data = {}) {
-        return this.delete('/api/subscriptions/' + data.id, data);
+    remove (data = {}) {
+        return this.delete('/api/subscriptions/' + data.id, {});
     }
 
 }

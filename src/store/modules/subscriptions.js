@@ -19,7 +19,7 @@ const getters = {
 const actions = {
     index (store, data = {}) {
         return subscriptionApi.index(data).then(response => {
-            store.commit(types.SUBSCRIPTION_SET, response.data ? response.data : []);
+            store.commit(types.SUBSCRIPTION_SET, response.subscriptions ? response.subscriptions : []);
         }).catch(err => {
             console.log(err);
         });
@@ -47,8 +47,8 @@ const actions = {
         });
     },
 
-    delete (store, data = {}) {
-        return subscriptionApi.delete(data).then(response => {
+    remove (store, data = {}) {
+        return subscriptionApi.remove(data).then(response => {
             store.commit(types.SUBSCRIPTION_DELETE, data);
             return Promise.resolve();
         }).catch(err => {
@@ -78,7 +78,8 @@ const mutations = {
         }
     },
     [types.SUBSCRIPTION_DELETE] (state, subs) {
-        state.subscriptions = state.subscriptions.filter(item => item.id === subs.id);
+        debugger;
+        state.subscriptions = state.subscriptions.filter(item => item.id !== subs.id);
     }
 };
 

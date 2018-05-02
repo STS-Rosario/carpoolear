@@ -30,7 +30,7 @@
             </div>
             <p slot="no-data" class="alert alert-warning"  role="alert">
                 ¡Ups! No hay viajes con los criterios indicados en la búsqueda, intenta en otra fecha o ¡crea uno!
-                <button class="btn btn-primary btn-search" v-if="user && !searchParams.data.is_passenger" @click="subscribeSearch">Sbucribirse</button>
+                <button class="btn btn-primary btn-search" v-if="user && !searchParams.data.is_passenger" @click="subscribeSearch">Suscribirse</button>
             </p>
             <p slot="loading" class="alert alert-info" role="alert">
                 <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
@@ -59,7 +59,7 @@ export default {
         };
     },
     props: [
-        'clearSearch'
+        'clearSearch', 'keepSearch'
     ],
     methods: {
         ...mapActions({
@@ -163,9 +163,9 @@ export default {
                 this.$refs.searchBox.loadParams(this.searchParams.data);
             }
         }
-        this.$refs.searchBox.clear();
-
-        this.$store.dispatch('subscriptions/index');
+        if (!this.keepSearch) {
+            this.$refs.searchBox.clear();
+        }
 
         // bus.event
         bus.off('search-click', this.onSearchButton);
