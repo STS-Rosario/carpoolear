@@ -370,6 +370,8 @@ export default {
         validate () {
             let globalError = false;
             let foreignPoints = 0;
+            let validTime = false;
+            let validDate = false;
             this.points.forEach(p => {
                 if (!p.json) {
                     p.error.state = true;
@@ -388,6 +390,8 @@ export default {
                 this.timeError.state = true;
                 this.timeError.message = 'No ingresaste un horario válido.';
                 globalError = true;
+            } else {
+                validTime = true;
             }
             if (this.points[0].name === this.points[this.points.length - 1].name) {
                 this.points[0].error.state = true;
@@ -402,6 +406,8 @@ export default {
                 globalError = true;
                 this.dateError.state = true;
                 this.dateError.message = 'Aún no ha ingresado ninguna fecha.';
+            } else {
+                validDate = true;
             }
             if (this.trip.total_seats < this.passengers) {
                 globalError = true;
@@ -415,6 +421,19 @@ export default {
                 this.lucrarError.message = 'Debes indicar que te comprometes a no lucrar con el viaje.';
                 dialogs.message('Debes indicar que te comprometes a no lucrar con el viaje.', {estado: 'error'});
                 globalError = true;
+            }
+            if (validDate && validTime) {
+                console.log('valid date time');
+                if (moment(this.dateAnswer).format('YYYY-MM-DD') === moment().format('YYYY-MM-DD')) {
+                    console.log('es hoy', moment(this.time, 'HH mm').format('HH mm'), moment().format('HH mm'));
+                    // la fecha es de hoy, la hora no debería poder ser anterior
+                    if (moment(this.time, 'HH mm').format('HH mm') < moment().format('HH mm')) {
+                        console.log('es antes de ahora');
+                        this.timeError.state = true;
+                        this.timeError.message = 'En Carpoolear no se permiten viajes hacia el pasado :), revisá la fecha y hora de tu viaje.';
+                        globalError = true;
+                    }
+                }
             }
 
             return globalError;

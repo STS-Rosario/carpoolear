@@ -102,7 +102,8 @@ export default {
             pasajero_logo_gris: process.env.ROUTE_BASE + 'static/img/icono-pasajero-gris.png',
             swap_horizontal: process.env.ROUTE_BASE + 'static/img/flechas_horizontales.png',
             swap_vertical: process.env.ROUTE_BASE + 'static/img/flechas_verticales.png',
-            allowForeignPoints: false
+            allowForeignPoints: false,
+            options: []
         };
     },
     computed: {
@@ -247,6 +248,10 @@ export default {
                     this.date = '';
                 }
             }
+        },
+        onSearch (search, loading) {
+            loading(true);
+            this.search(loading, search, this);
         }
     },
     props: [

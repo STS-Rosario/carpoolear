@@ -74,7 +74,7 @@ export default {
             error: '',
             carpoolear_logo: process.env.ROUTE_BASE + 'static/img/carpoolear_logo.png',
             hasScroll: false,
-            isUnderstood: false,
+            isUnderstood: true,
             dontShowAgain: false,
             isShowLogin: false
         };
@@ -229,7 +229,7 @@ export default {
 
     .register::before {
         position: absolute;
-        border-top: solid 1px #2793ff;
+        /* border-top: solid 1px #2793ff; */
         width: 90%;
         margin-left: 5%;
         content: " ";
@@ -337,6 +337,12 @@ export default {
         [type=checkbox] {
             margin-top: 0;
         }
+    }
+
+    #btn_show_login {
+        border: 2px solid rgba(215, 37, 33, 0.8);
+        color: #FFF;
+        background: rgba(215, 37, 33, 0.8);
     }
 
 </style>
