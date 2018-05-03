@@ -2724,3 +2724,7 @@ ul {
     padding-bottom: .5em;
     margin-bottom: .5em;
 }
+
+.suscription-item-detail--content strong {
+    color: var(--secondary-background);
+}

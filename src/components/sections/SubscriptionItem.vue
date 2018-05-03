@@ -1,27 +1,38 @@
 <template>
-    <div class="rate-pending_component" @click="search">
-        
-        <div class="rate-pending-message" v-if="subscription.trip_date">
-            <div class="rate-pending-message--content">   
-                Fecha aproximada: {{ subscription.trip_date | moment("DD/MM/YYYY") }}
+    <div class="suscription-item_component panel panel-default" @click="search">
+        <div class="row panel-body">
+            <div class="col-xs-20">
+                <div class="suscription-item-detail" v-if="subscription.from_address">
+                    <div class="suscription-item-detail--content">
+                        <span>Origen:</span>
+                        <strong>{{ subscription.from_address }}</strong>
+                    </div>
+                </div>
+                <div class="suscription-item-detail" v-if="subscription.to_address">
+                    <div class="suscription-item-detail--content">
+                        <span>Destino:</span>
+                        <strong>{{ subscription.to_address }}</strong>
+                    </div>
+                </div>
+                <div class="suscription-item-detail" v-if="subscription.trip_date">
+                    <div class="suscription-item-detail--content">
+                        <span>Fecha aproximada:</span>
+                        <strong>{{ subscription.trip_date | moment("DD/MM/YYYY") }}</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <button v-on:click.stop="remove" :disabled="inProgress" class="btn btn-default"  aria-label="Eliminar suscripción">
+                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                </button>
             </div>
         </div>
-        <div class="rate-pending-message" v-if="subscription.from_address">
-            <div class="rate-pending-message--content">
-                Desde: {{ subscription.from_address }}
-            </div>
-        </div>
-        <div class="rate-pending-message" v-if="subscription.to_address">
-            Hasta: {{ subscription.to_address }}
-        </div>
-        <button v-on:click.stop="remove" :disabled="inProgress" class="btn btn-default"  aria-label="Eliminar suscripción">
-            <i class="fa fa-trash-o" aria-hidden="true"></i>
-        </button>
-        
+
     </div>
 </template>
 <script>
 import { mapActions } from 'vuex';
+import moment from 'moment';
 export default {
     name: 'subscriptions-item',
     props: {
@@ -61,7 +72,7 @@ export default {
         search () {
             let params = {};
             if (this.subscription.trip_date) {
-                params.date = this.subscription.trip_date;
+                params.date = moment(this.subscription.trip_date).format('YYYY-MM-DD');
             }
             if (this.subscription.from_address) {
                 params.origin_name = this.subscription.from_address;

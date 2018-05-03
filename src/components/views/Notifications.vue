@@ -45,19 +45,21 @@ export default {
 
         onNotificationClick (n) {
             if (n.extras) {
+                console.log(n.extras);
                 switch (n.extras.type) {
-                case 'trip':
-                    router.push({name: 'detail_trip', params: { id: n.extras.trip_id }});
-                    break;
-                case 'friends':
-                    router.push({name: 'friends_setting'});
-                    break;
-                case 'my-trips':
-                    router.push({ name: 'my-trips' });
-                    break;
-                case 'conversation':
-                    router.push({ name: 'conversation-chat', params: { id: n.extras.conversation_id } });
-                    break;
+                    case 'trip':
+                        router.push({name: 'detail_trip', params: { id: n.extras.trip_id }});
+                        break;
+                    case 'friends':
+                        router.push({name: 'friends_setting'});
+                        break;
+                    case 'subscription':
+                    case 'my-trips':
+                        router.push({ name: 'my-trips' });
+                        break;
+                    case 'conversation':
+                        router.push({ name: 'conversation-chat', params: { id: n.extras.conversation_id } });
+                        break;
                 }
             }
         }
