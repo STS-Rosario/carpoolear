@@ -58,9 +58,12 @@
 
         <div class="col-xs-24" v-if="subscriptions && subscriptions.length">
             <Loading :data="subscriptions" :hideOnEmpty="true">
-                <h2 slot="title" > Suscripciones a Viajes</h2>
-                <div class="trips-list">
-                    <subscriptionItem v-for="subs in subscriptions" :subscription="subs" :user="user"></subscriptionItem>
+                <h2 slot="title" > Suscripciones a viajes</h2>
+                <div class="trips-list row">
+                    <div class="col-xs-24 col-md-12" v-for="subs in subscriptions" :key="subs.id">
+                        <subscriptionItem :subscription="subs" :user="user"></subscriptionItem>
+                    </div>
+
                 </div>
                 <p slot="no-data" class="alert alert-warning"  role="alert">No tienes ninguna suscripción.</p>
                 <p slot="loading" class="alert alert-info" role="alert">

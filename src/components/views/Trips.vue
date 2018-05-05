@@ -4,6 +4,9 @@
             <h1>Buscá con quién compartir tu próximo viaje!</h1>
             <h3>¡Elegí fecha, origen o destino y encontralo!</h3>
         </div>
+        <!-- <a href="https://carpoolear.com.ar/encuentrocarpoolero" target="_blank" class="banner">
+            <img alt="" :src="'/static/img/banner_encuentro_carpoolero.png'" />
+        </a> -->
         <div v-show="!user && isMobile">
             <router-link :to="{name: 'login'}" class="login_usuario"> Ingresá con tu usuario o registrate <span class='underline'>aquí</span> para comenzar a Carpoolear!</router-link>
         </div>
@@ -28,9 +31,12 @@
                 <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
                 Cargando más resultados
             </div>
-            <p slot="no-data" class="alert alert-warning"  role="alert">
-                ¡Ups! No hay viajes con los criterios indicados en la búsqueda, intenta en otra fecha o ¡crea uno!
-                <button class="btn btn-primary btn-search" v-if="user && !searchParams.data.is_passenger && !readySub" @click="subscribeSearch">Suscribirse</button>
+            <p slot="no-data" class="alert alert-warning"  role="alert"  :class="isMobile ? 'mobile-alert' : ''">
+                <span class="sentence">¡Ups! No hay viajes con los criterios indicados en la búsqueda.</span>
+                <span class="sentence" v-if="!alreadySubscribe">
+                    <strong :class="isMobile ? 'sentence' : ''">Pero no te preocupes, ahora podés suscribirte para que te avisemos cuando haya un viaje que concuerde con lo que estas buscando.</strong>
+                    <button class="btn btn-primary" v-if="user && !searchParams.data.is_passenger" @click="subscribeSearch" >Suscribirme</button>
+                </span>
             </p>
             <p slot="loading" class="alert alert-info" role="alert">
                 <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
@@ -39,6 +45,19 @@
         </Loading>
     </div>
 </template>
+<style scoped>
+.sentence {
+    display: block;
+    margin-bottom: .5em;
+}
+.mobile-alert .sentence {
+    margin-bottom: 1em;
+}
+.mobile-alert .btn {
+    margin: 0 auto;
+    display: block;
+}
+</style>
 <script>
 import Trip from '../sections/Trip.vue';
 import SearchBox from '../sections/SearchTrip.vue';
@@ -56,7 +75,7 @@ export default {
             lookSearch: false,
             filtered: false,
             runningSearch: false,
-            readySub: false
+            alreadySubscribe: false
         };
     },
     props: [
@@ -151,7 +170,7 @@ export default {
                 data.to_json_address = [];
             }
             this.subscribeToSearch(data).then(() => {
-                this.readySub = true;
+                this.alreadySubscribe = true;
                 dialogs.message('Te subscribiste correctamente. Te avisaremos cuando hayan viajes similares', { duration: 10, estado: 'success' });
             });
         }
@@ -221,3 +240,15 @@ export default {
     }
 };
 </script>
+<style scoped>
+    .banner {
+        display: block;
+        margin: -1em auto 1em;
+        text-align: center;
+    }
+    .banner img {
+        border: 1px solid #999;
+        width: 100%;
+        max-width: 934px;
+    }
+</style>
