@@ -1,6 +1,7 @@
 import {TripApi} from '../../services/api';
 import * as types from '../mutation-types';
 import globalStore from '../index';
+import moment from 'moment';
 
 import * as pagination from '../pagination';
 
@@ -60,6 +61,37 @@ const actions = {
 
     refreshList (store, status) {
         store.commit(types.TRIPS_REFRESH, status);
+    },
+
+    searchMatchers (store, { trip }) {
+        let firstPoint = trip.points[0];
+        let lastPoint = trip.points[trip.points.length - 1];
+        let data = {
+            is_passenger: !trip.is_passenger,
+            date: moment(trip.trip_date).format('YYYY-MM-DD'),
+            origin_lat: firstPoint.lat,
+            origin_lng: firstPoint.lng,
+            origin_radio: 25000, // Por ahora hardcoreado
+            origin_name: firstPoint.address,
+
+            destination_lat: lastPoint.lat,
+            destination_lng: lastPoint.lng,
+            destination_radio: 25000, // Por ahora hardcoreado
+            destination_name: lastPoint.address
+
+        };
+        return tripsApi.tag(['trips']).search(data).then(trips => {
+            let users = [];
+            debugger;
+            for (let i = 0; i < trips.data.length; i++) {
+                let trip = trips.data[i];
+                const i = users.findIndex(item => item.id === trip.user_id);
+                if (i < 0) {
+                    users.push(trip.user);
+                }
+            }
+            return Promise.resolve(users);
+        });
     }
 };
 
