@@ -138,7 +138,7 @@
                                 </div>
                                 <div class="row passengers" v-if="matchingUsers && matchingUsers.length > 0">
                                     <div class="col-xs-24" v-if="owner">
-                                        <h4 class="title-margined">
+                                        <h4 class="title-margined" @click="sendAll()">
                                             <strong>Candidatos a viajar</strong>
                                         </h4>
                                         <div v-for="p in matchingUsers" class="list-item">
@@ -209,7 +209,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                             <div class="row">
                                 <div class="col-md-24">
                                     <router-link class="btn-primary btn-search btn-shadowed-black" :to="{name: 'profile', params: {id: getUserProfile, userProfile: trip.user}}"> Ver Perfil </router-link>
                                 </div>
@@ -527,6 +527,9 @@ export default {
                     console.log('Directions request failed due to ' + status);
                 }
             });
+        },
+        sendAll () {
+            this.$store.dispatch('conversations/sendToAll', {message: 'Hola', users: this.matchingUsers});
         }
     },
 

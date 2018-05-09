@@ -82,7 +82,6 @@ const actions = {
         };
         return tripsApi.tag(['trips']).search(data).then(trips => {
             let users = [];
-            debugger;
             for (let i = 0; i < trips.data.length; i++) {
                 let trip = trips.data[i];
                 const i = users.findIndex(item => item.id === trip.user_id);
