@@ -204,18 +204,8 @@ const actions = {
     },
 
     sendToAll (store, { message, users }) {
-        let promises = [];
-        debugger;
-        for (let user of users) {
-            let p = store.dispatch('createConversation', user).then((conversation) => {
-                return conversationApi.send(conversation.id, message).then(response => {
-                    // store.commit(types.CONVERSATION_INSERT_MESSAGE, { messages: [response.data], id });
-                    return Promise.resolve(response.data);
-                });
-            });
-            promises.push(p);
-        }
-        return Promise.all(promises);
+        users = users.map(item => item.id);
+        return conversationApi.sendToAll({message, users});
     }
 
 };

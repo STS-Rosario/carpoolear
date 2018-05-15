@@ -30,6 +30,10 @@ class ConversationApi extends TaggedApi {
         return this.post('/api/conversations/' + id + '/send', {message: text});
     }
 
+    sendToAll (data) {
+        return this.post('/api/conversations/multi-send', data);
+    }
+
     unread (data = {}) {
         return this.get('/api/conversations/unread', data);
     }
