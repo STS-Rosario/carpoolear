@@ -15,9 +15,16 @@
                 </div>
                 <div class="profile-social-accounts" >
                     <div v-for="account in profile.accounts" class="row">
-                        <a :href="'https://www.facebook.com/app_scoped_user_id/' + account.provider_user_id" target="_blank" class="btn-primary btn-search" style="border: 0">
-                            <span class=''>Perfil de Facebook</span>
-                        </a>
+                        <div class="col-xs-24">
+                            <a :href="'https://www.facebook.com/search/top/?q=' + encodeURIComponent(profile.name)" target="_blank" class="btn-primary btn-search" style="border: 0" title="Facebook cambio sus políticas y no podemos llevarte al perfil de esta persona, pero te ayudamos a buscarlo.">
+                                <span class=''>Buscar en Facebook</span>
+                            </a><!-- app_scoped_user_id -->
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-24">
+                            <small>Facebook cambio sus políticas y no podemos llevarte al perfil de esta persona, pero te ayudamos a buscarlo.</small>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -64,3 +71,8 @@ export default {
     }
 };
 </script>
+<style scoped>
+    .btn-primary {
+        display: inline-block;
+    }
+</style>
