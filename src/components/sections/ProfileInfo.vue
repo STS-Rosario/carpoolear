@@ -23,7 +23,7 @@
                     </div>
                     <div class="row">
                         <div class="col-xs-24">
-                            <small>Facebook cambio sus políticas y no podemos llevarte al perfil de esta persona, pero te ayudamos a buscarlo.</small>
+                            <small>Facebook cambió sus políticas y no podemos llevarte al perfil de esta persona, pero te ayudamos a buscarlo.</small>
                         </div>
                     </div>
                 </div>
