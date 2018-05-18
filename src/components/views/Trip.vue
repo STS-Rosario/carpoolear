@@ -136,24 +136,6 @@
                                     </div>
                                     <div v-else style="height: 2em;"></div>
                                 </div>
-                                <div class="row passengers" v-if="matchingUsers && matchingUsers.length > 0">
-                                    <div class="col-xs-24" v-if="owner">
-                                        <h4 class="title-margined" @click="sendAll()">
-                                            <strong>Candidatos a viajar</strong>
-                                        </h4>
-                                        <div v-for="p in matchingUsers" class="list-item">
-                                            <span @click="toUserProfile(p)" class="trip_driver_img circle-box passenger trip_passenger_image" v-imgSrc:profile="p.image"></span>
-                                            <a href="#" @click="toUserProfile(p)" class="trip_passenger_name">
-                                                {{ p.name }}
-                                            </a>
-                                            <a href="#" @click="toUserMessages(p)" aria-label="Ir a mensajes" class="trip_passenger-chat">
-                                                 <i class="fa fa-comments" aria-hidden="true"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                
                             </div>
                             <div class="buttons-container"  v-if="!isPasssengersView">
                                 <router-link class="btn btn-primary" v-if="owner && !expired" :to="{name: 'update-trip', params: { id: trip.id}}">
@@ -220,8 +202,43 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="col-xs-24 matcheo-passengers">
+                        <div v-if="matchingUsers && matchingUsers.length > 0">
+                            <div v-if="owner">
+                                <h3 class="title-margined" @click="sendAll()">
+                                    <strong>Matcheos del viaje</strong>
+                                </h3>
+                                <div class="row">
+                                    <div v-for="p in matchingUsers" class="list-item col-sm-12 col-md-8" v-bind:key="p.id">
+                                        <div class="passenger-match">
+                                            <input type="checkbox" v-model="selectedMatchingUser" :value="p.id">
+                                            <span @click="toUserProfile(p)" class="trip_driver_img circle-box passenger trip_passenger_image" v-imgSrc:profile="p.image"></span>
+                                            <a :href="'/profile/' + p.id " @click="toUserProfile(p)" class="trip_passenger_name">
+                                                {{ p.name }}
+                                            </a>
+                                            <button @click="toUserMessages(p)" aria-label="Ir a mensajes" class="trip_passenger-chat">
+                                                    <i class="fa fa-comments" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-inline col-xs-24 send_to_all-form">
+                                        <div class="input-group">
+                                            <label for="message_all" class="sr-only">Mensaje para los usuarios seleccionados</label>
+                                            <input type="text" id="message_all" class="form-control" placeholder="Mensaje para todos" v-model="messageToUsers">
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-success" @click="onSendToAll">Enviar a seleccionados</button>
+                                            </span>
+                                        </div><!-- /input-group -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-xs-24 structure-div"  v-if="!isPasssengersView">
-                 ;       <gmap-map
+                        <gmap-map
                             :center="center"
                             :zoom="zoom"
                             style="height: 400px"
@@ -285,7 +302,9 @@ export default {
                 }
             ],
             currentUrl: encodeURIComponent('https://carpoolear.com.ar/app' + this.$route.fullPath),
-            matchingUsers: []
+            matchingUsers: [],
+            messageToUsers: '',
+            selectedMatchingUser: []
         };
     },
 
@@ -316,7 +335,8 @@ export default {
             make: 'passenger/makeRequest',
             cancel: 'passenger/cancel',
             remove: 'trips/remove',
-            searchMatchers: 'trips/searchMatchers'
+            searchMatchers: 'trips/searchMatchers',
+            sendToAll: 'conversations/sendToAll'
         }),
         profileComplete () {
             if (!this.user.image || this.user.image.length === 0 || !this.user.description || this.user.description.length === 0) {
@@ -344,6 +364,7 @@ export default {
                 if (this.owner) {
                     this.searchMatchers({ trip: this.trip }).then(users => {
                         this.matchingUsers = users;
+                        this.selectedMatchingUser = users.reduce(u => u.id);
                     });
                 }
             }).catch(error => {
@@ -528,8 +549,18 @@ export default {
                 }
             });
         },
-        sendAll () {
-            this.$store.dispatch('conversations/sendToAll', {message: 'Hola', users: this.matchingUsers});
+        onSendToAll () {
+            let users = this.matchingUsers.filter(u => this.selectedMatchingUser.indexOf(u.id) >= 0);
+            console.log(users);
+            if (this.messageToUsers && users && users.length) {
+                /* this.sendToAll({
+                    message: this.messageToUsers,
+                    users: users
+                }).then(() => {
+                    this.messageToUsers = '';
+                    dialogs.message('El mensaje fue enviado.');
+                }); */
+            }
         }
     },
 
@@ -684,9 +715,9 @@ export default {
         margin-bottom: .4em;
     }
     .trip-detail-component .buttons-container {
-            text-align: center;
-            margin-top: 1em;
-            padding-bottom: 2rem;
+        text-align: center;
+        margin-top: 1em;
+        padding-bottom: 2rem;
     }
     .trip-detail-component .driver-data div:first-child {
         margin-top: .4em;
@@ -709,6 +740,7 @@ export default {
             bottom: -25px;
             position: absolute;
             padding-bottom: 0;
+            z-index: 1;
         }
         .trip-detail-component .white-background {
             padding-top: 0;
@@ -750,5 +782,28 @@ export default {
         .trip-detail-component .quote.long-description {
             font-size: 14px;
         }
+    }
+    .matcheo-passengers {
+        background: #F0F0F0;
+    }
+    .matcheo-passengers .list-item {
+        border: 0;
+    }
+    .matcheo-passengers .passenger-match {
+        margin: 0 .5em;
+        border-bottom: 1px solid #337ab7;
+        padding: .5em 0;
+    }
+    .passenger-match input {
+        margin-right: 1em;
+    }
+    .passenger-match button {
+        color: #337ab7;
+    }
+    .send_to_all-form {
+        padding: 1em;
+    }
+    .form-inline .input-group {
+        width: 100%;
     }
 </style>
