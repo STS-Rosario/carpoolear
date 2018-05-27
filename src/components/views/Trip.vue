@@ -95,7 +95,7 @@
                                     <div>
                                         <span>Huella de carbono (<abbr title="aproximada">aprox</abbr>)</span><br>
 
-                                        <span>{{ trip.distance / 1000 * 1.5 }} <abbr title="kilogramos dióxido de carbono equivalente">kg CO<sub>2eq</sub></abbr></span>
+                                        <span>{{ (trip.distance / 1000 * 1.5).toFixed(2) }} <abbr title="kilogramos dióxido de carbono equivalente">kg CO<sub>2eq</sub></abbr></span>
                                     </div>
                                 </div>
                                 <div class="trip_share row"  v-if="!isPasssengersView">
@@ -146,7 +146,7 @@
                                 </a>
                                 <template v-if="!owner && !expired">
                                     <button class="btn btn-primary" @click="toMessages" v-if="!owner">
-                                        Coordinar viaje
+                                        Enviar mensaje
                                     </button>
                                 </template>
                                 <template v-if="!owner && !trip.is_passenger && !expired">
@@ -191,7 +191,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                             <div class="row">
                                 <div class="col-md-24">
                                     <router-link class="btn-primary btn-search btn-shadowed-black" :to="{name: 'profile', params: {id: getUserProfile, userProfile: trip.user}}"> Ver Perfil </router-link>
                                 </div>
@@ -199,6 +199,41 @@
                             <div class="row italic quote" :class="descriptionLength" v-if="trip.description && trip.description.length">
                                 <i class="fa fa-quote-left" aria-hidden="true"></i>
                                 <span> {{trip.description}} </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-24 matcheo-passengers"  v-if="matchingUsers && matchingUsers.length > 0 && false">
+                        <div>
+                            <div v-if="owner">
+                                <h3 class="title-margined" @click="sendAll()">
+                                    <strong>Matcheos del viaje</strong>
+                                </h3>
+                                <div class="row">
+                                    <div v-for="p in matchingUsers" class="list-item col-sm-12 col-md-8" v-bind:key="p.id">
+                                        <div class="passenger-match">
+                                            <input type="checkbox" v-model="selectedMatchingUser" :value="p.id">
+                                            <span @click="toUserProfile(p)" class="trip_driver_img circle-box passenger trip_passenger_image" v-imgSrc:profile="p.image"></span>
+                                            <a :href="'/profile/' + p.id " @click="toUserProfile(p)" class="trip_passenger_name">
+                                                {{ p.name }}
+                                            </a>
+                                            <button @click="toUserMessages(p)" aria-label="Ir a mensajes" class="trip_passenger-chat">
+                                                    <i class="fa fa-comments" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-inline col-xs-24 send_to_all-form">
+                                        <div class="input-group">
+                                            <label for="message_all" class="sr-only">Mensaje para los usuarios seleccionados</label>
+                                            <input type="text" id="message_all" class="form-control" placeholder="Mensaje para todos" v-model="messageToUsers">
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-success" @click="onSendToAll">Enviar a seleccionados</button>
+                                            </span>
+                                        </div><!-- /input-group -->
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -266,7 +301,10 @@ export default {
                     location: null
                 }
             ],
-            currentUrl: encodeURIComponent('https://carpoolear.com.ar/app' + this.$route.fullPath)
+            currentUrl: encodeURIComponent('https://carpoolear.com.ar/app' + this.$route.fullPath),
+            matchingUsers: [],
+            messageToUsers: '',
+            selectedMatchingUser: []
         };
     },
 
@@ -296,7 +334,9 @@ export default {
             selectConversation: 'conversations/select',
             make: 'passenger/makeRequest',
             cancel: 'passenger/cancel',
-            remove: 'trips/remove'
+            remove: 'trips/remove',
+            searchMatchers: 'trips/searchMatchers',
+            sendToAll: 'conversations/sendToAll'
         }),
         profileComplete () {
             if (!this.user.image || this.user.image.length === 0 || !this.user.description || this.user.description.length === 0) {
@@ -321,6 +361,12 @@ export default {
                 this.points = trip.points;
                 var self = this;
                 setTimeout(() => { self.renderMap(); }, 500);
+                if (this.owner) {
+                    this.searchMatchers({ trip: this.trip }).then(users => {
+                        this.matchingUsers = users;
+                        this.selectedMatchingUser = users.reduce(u => u.id);
+                    });
+                }
             }).catch(error => {
                 if (error) {
                     router.replace({name: 'trips'});
@@ -497,11 +543,24 @@ export default {
                     }
                     this.trip.distance = totalDistance;
                     this.duration = totalDuration;
-                    this.co2 = totalDistance * 0.15; /* distancia por 0.15 kilos co2 en promedio por KM recorrido  */
+                    this.co2 = parseFloat(totalDistance * 0.15).toFixed(2); /* distancia por 0.15 kilos co2 en promedio por KM recorrido  */
                 } else {
                     console.log('Directions request failed due to ' + status);
                 }
             });
+        },
+        onSendToAll () {
+            let users = this.matchingUsers.filter(u => this.selectedMatchingUser.indexOf(u.id) >= 0);
+            console.log(users);
+            if (this.messageToUsers && users && users.length) {
+                /* this.sendToAll({
+                    message: this.messageToUsers,
+                    users: users
+                }).then(() => {
+                    this.messageToUsers = '';
+                    dialogs.message('El mensaje fue enviado.');
+                }); */
+            }
         }
     },
 
@@ -530,7 +589,7 @@ export default {
             return moment(this.trip.trip_date).format() < moment().format();
         },
         owner () {
-            return this.user.id === this.trip.user.id;
+            return this.trip && this.user && this.user.id === this.trip.user.id;
         },
         canRequest () {
             return !this.owner && !this.trip.request;
@@ -656,9 +715,9 @@ export default {
         margin-bottom: .4em;
     }
     .trip-detail-component .buttons-container {
-            text-align: center;
-            margin-top: 1em;
-            padding-bottom: 2rem;
+        text-align: center;
+        margin-top: 1em;
+        padding-bottom: 2rem;
     }
     .trip-detail-component .driver-data div:first-child {
         margin-top: .4em;
@@ -681,6 +740,7 @@ export default {
             bottom: -25px;
             position: absolute;
             padding-bottom: 0;
+            z-index: 1;
         }
         .trip-detail-component .white-background {
             padding-top: 0;
@@ -722,5 +782,28 @@ export default {
         .trip-detail-component .quote.long-description {
             font-size: 14px;
         }
+    }
+    .matcheo-passengers {
+        background: #F0F0F0;
+    }
+    .matcheo-passengers .list-item {
+        border: 0;
+    }
+    .matcheo-passengers .passenger-match {
+        margin: 0 .5em;
+        border-bottom: 1px solid #337ab7;
+        padding: .5em 0;
+    }
+    .passenger-match input {
+        margin-right: 1em;
+    }
+    .passenger-match button {
+        color: #337ab7;
+    }
+    .send_to_all-form {
+        padding: 1em;
+    }
+    .form-inline .input-group {
+        width: 100%;
     }
 </style>
