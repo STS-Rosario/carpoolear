@@ -95,7 +95,7 @@
                                     <div>
                                         <span>Huella de carbono (<abbr title="aproximada">aprox</abbr>)</span><br>
 
-                                        <span>{{ trip.distance / 1000 * 1.5 }} <abbr title="kilogramos dióxido de carbono equivalente">kg CO<sub>2eq</sub></abbr></span>
+                                        <span>{{ (trip.distance / 1000 * 1.5).toFixed(2) }} <abbr title="kilogramos dióxido de carbono equivalente">kg CO<sub>2eq</sub></abbr></span>
                                     </div>
                                 </div>
                                 <div class="trip_share row"  v-if="!isPasssengersView">
@@ -203,8 +203,8 @@
                         </div>
                     </div>
 
-                    <div class="col-xs-24 matcheo-passengers">
-                        <div v-if="matchingUsers && matchingUsers.length > 0">
+                    <div class="col-xs-24 matcheo-passengers"  v-if="matchingUsers && matchingUsers.length > 0">
+                        <div>
                             <div v-if="owner">
                                 <h3 class="title-margined" @click="sendAll()">
                                     <strong>Matcheos del viaje</strong>
@@ -543,7 +543,7 @@ export default {
                     }
                     this.trip.distance = totalDistance;
                     this.duration = totalDuration;
-                    this.co2 = totalDistance * 0.15; /* distancia por 0.15 kilos co2 en promedio por KM recorrido  */
+                    this.co2 = parseFloat(totalDistance * 0.15).toFixed(2); /* distancia por 0.15 kilos co2 en promedio por KM recorrido  */
                 } else {
                     console.log('Directions request failed due to ' + status);
                 }
