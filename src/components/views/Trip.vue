@@ -203,7 +203,7 @@
                         </div>
                     </div>
 
-                    <div class="col-xs-24 matcheo-passengers"  v-if="matchingUsers && matchingUsers.length > 0">
+                    <div class="col-xs-24 matcheo-passengers"  v-if="matchingUsers && matchingUsers.length > 0 && false">
                         <div>
                             <div v-if="owner">
                                 <h3 class="title-margined" @click="sendAll()">
