@@ -93,6 +93,7 @@ export default {
             this.lookSearch = false;
             this.filtered = true;
             this.readySub = false;
+            this.alreadySubscribe = false;
             this.search(params);
             // this.setActionButton(['clear']);
         },
@@ -129,6 +130,7 @@ export default {
             // this.setActionButton(['search']);
             this.filtered = false;
             this.lookSearch = false;
+            this.alreadySubscribe = false;
             this.search({ is_passenger: false });
             if (this.$refs.searchBox) {
                 this.$refs.searchBox.clear();
@@ -148,6 +150,7 @@ export default {
         onBackBottom () {
             bus.off('backbutton', this.onBackBottom);
             this.lookSearch = false;
+            this.alreadySubscribe = false;
         },
         subscribeSearch () {
             let params = this.searchParams.data;
