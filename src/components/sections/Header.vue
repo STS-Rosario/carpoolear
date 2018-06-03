@@ -30,6 +30,7 @@
                             <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
                         </template>
                         <li><router-link tag="a" :to="{name: 'acerca_de'}"  >ACERCA DE</router-link></li>
+                        <li><router-link :to="{name: 'terms'}" tag="a">TÉRMINOS Y CONDICIONES</router-link></li>
                         <li><a @click="logout" v-if="!isFacebokApp">CERRAR SESSION</a></li>
                     </dropdown>
                 </div>
