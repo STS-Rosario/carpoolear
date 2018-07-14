@@ -203,45 +203,47 @@
                         </div>
                     </div>
 
-                    <div class="col-xs-24 matcheo-passengers"  v-if="matchingUsers && matchingUsers.length > 0 && false">
-                        <div>
-                            <div v-if="owner">
-                                <h3 class="title-margined" @click="sendAll()">
-                                    <strong>Matcheos del viaje</strong>
-                                </h3>
-                                <div class="row">
-                                    <div v-for="p in matchingUsers" class="list-item col-sm-12 col-md-8" v-bind:key="p.id">
-                                        <div class="passenger-match">
-                                            <input type="checkbox" v-model="selectedMatchingUser" :value="p.id">
-                                            <span @click="toUserProfile(p)" class="trip_driver_img circle-box passenger trip_passenger_image" v-imgSrc:profile="p.image"></span>
-                                            <a :href="'/profile/' + p.id " @click="toUserProfile(p)" class="trip_passenger_name">
-                                                {{ p.name }}
-                                            </a>
-                                            <button @click="toUserMessages(p)" aria-label="Ir a mensajes" class="trip_passenger-chat">
-                                                    <i class="fa fa-comments" aria-hidden="true"></i>
-                                            </button>
+                    <div class="col-xs-24 structure-div"  v-if="!isPasssengersView">
+                        <div class="col-xs-24 col-sm-12 col-md-9 matcheo-passengers"  v-if="matchingUsers && matchingUsers.length > 0">
+                            <div>
+                                <div v-if="owner">
+                                    <h3 class="title-margined">
+                                        Matcheos del viaje
+                                    </h3>
+                                    <div class="row matching-user-list">
+                                        <div v-for="p in matchingUsers" class="list-item col-sm-24" v-bind:key="p.id">
+                                            <div class="passenger-match">
+                                                <input type="checkbox" v-model="selectedMatchingUser" :value="p.id">
+                                                <span @click="toUserProfile(p)" class="trip_driver_img circle-box passenger trip_passenger_image" v-imgSrc:profile="p.image"></span>
+                                                <a :href="'/profile/' + p.id " @click="toUserProfile(p)" class="trip_passenger_name">
+                                                    {{ p.name }}
+                                                </a>
+                                                <button @click="toUserMessages(p)" aria-label="Ir a mensajes" class="trip_passenger-chat">
+                                                        <i class="fa fa-comments" aria-hidden="true"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="form-inline col-xs-24 send_to_all-form">
-                                        <div class="input-group">
-                                            <label for="message_all" class="sr-only">Mensaje para los usuarios seleccionados</label>
-                                            <input type="text" id="message_all" class="form-control" placeholder="Mensaje para todos" v-model="messageToUsers">
-                                            <span class="input-group-btn">
-                                                <button class="btn btn-success" @click="onSendToAll">Enviar a seleccionados</button>
-                                            </span>
-                                        </div><!-- /input-group -->
+                                    <div class="row">
+                                        <div class="form-inline col-xs-24 send_to_all-form">
+                                            <div class="input-group">
+                                                <label for="message_all" class="sr-only">Mensaje para los usuarios seleccionados</label>
+                                                <input type="text" id="message_all" class="form-control" placeholder="Envía a los seleccionados" v-model="messageToUsers">
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-success" @click="onSendToAll">
+                                                        <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                                                    </button>
+                                                </span>
+                                            </div><!-- /input-group -->
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-xs-24 structure-div"  v-if="!isPasssengersView">
                         <gmap-map
                             :center="center"
                             :zoom="zoom"
-                            style="height: 400px"
+                            style="height: 524px"
                             ref="map"
                         >
                             <gmap-marker
@@ -363,8 +365,11 @@ export default {
                 setTimeout(() => { self.renderMap(); }, 500);
                 if (this.owner) {
                     this.searchMatchers({ trip: this.trip }).then(users => {
+                        console.log('matching', users);
                         this.matchingUsers = users;
-                        this.selectedMatchingUser = users.reduce(u => u.id);
+                        if (users && users.length) {
+                            this.selectedMatchingUser = users.reduce(u => u.id);
+                        }
                     });
                 }
             }).catch(error => {
@@ -629,6 +634,11 @@ export default {
 </script>
 
 <style scoped>
+    :root {
+        --trip-almost-fill-color: #D72521;
+        --trip-mostly-free-color: #91B64C;
+        --secondary-background: #016587;
+    }
     .user_pin {
         margin-top: 1em;
     }
@@ -666,7 +676,10 @@ export default {
     }
     .trip-detail-component .structure-div {
         margin-top: 1rem;
-        z-index: -100;
+        z-index: 0;
+        position: relative;
+        min-height: 460px;
+        overflow: hidden;
     }
     .trip-detail-component .driver-container {
         margin-top: 0;
@@ -784,26 +797,80 @@ export default {
         }
     }
     .matcheo-passengers {
-        background: #F0F0F0;
+        background: #FFF;
+        box-shadow: 0 0 4px 1px #CCC;
+        border-radius: .4em;
+        position: absolute;
+        left: 1em;
+        top: 1em;
+        max-height: 400px;
+    }
+    .matcheo-passengers h3 {
+        font-size: 1.4em;
     }
     .matcheo-passengers .list-item {
         border: 0;
     }
+    .matcheo-passengers .list-item .trip_passenger_name {
+        color: var(--trip-mostly-free-color);
+        font-weight: bold;
+    }
     .matcheo-passengers .passenger-match {
         margin: 0 .5em;
-        border-bottom: 1px solid #337ab7;
         padding: .5em 0;
     }
     .passenger-match input {
         margin-right: 1em;
     }
     .passenger-match button {
-        color: #337ab7;
+        color: var(--secondary-background);
+    }
+
+    .passenger-match .trip_driver_img.circle-box.passenger {
+        border: 2px solid var(--trip-almost-fill-color);
     }
     .send_to_all-form {
         padding: 1em;
     }
     .form-inline .input-group {
         width: 100%;
+    }
+    .send_to_all-form .btn {
+        min-width: 100%;
+    }
+    .matching-user-list {
+        max-height: 270px;
+        overflow-y: auto;
+    }
+
+    @media only screen and (max-width: 768px) {
+        .trip-detail-component .driver-container {
+            border-radius: 0;
+        }
+        .trip-detail-component .structure-div {
+            overflow: visible;
+            padding: 0;
+        }
+        .matcheo-passengers {
+            position: static;
+            left: 0;
+            top: 0;
+            max-height: auto;
+            float: none;
+            margin: -1rem 0;
+            border-radius: 0;
+            padding-bottom: 1em;
+        }
+        .matcheo-passengers .title-margined {
+            margin: 0;
+            padding: 1em 0;
+        }
+        .trip-detail-component .vue-map-container {
+            position: relative;
+            left: 0;
+            top: 0;
+            max-height: auto;
+            float: none;
+        }
     }
 </style>
