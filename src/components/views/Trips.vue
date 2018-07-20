@@ -12,6 +12,13 @@
         </div>
         <SearchBox :params="searchParams" v-on:trip-search="research" v-show="!isMobile || lookSearch" ref="searchBox"></SearchBox>
         <Loading :data="trips" v-if="showingTrips">
+            <p class="alert alert-warning"  role="alert"  :class="isMobile ? 'mobile-alert' : ''" v-if="resultaOfSearch">
+                <!-- <span class="sentence">¡Ups! No hay viajes con los criterios indicados en la búsqueda.</span> -->
+                <span class="sentence" v-if="!alreadySubscribe">
+                    <strong :class="isMobile ? 'sentence' : ''">Ahora podés suscribirte para que te avisemos cuando haya un nuevo viaje que concuerde con lo que estas buscando.</strong>
+                    <button class="btn btn-primary" v-if="user && !searchParams.data.is_passenger" @click="subscribeSearch" >Crear Alerta</button>
+                </span>
+            </p>
             <div class="trips-list">
                 <template v-for="(trip, index) in trips">
                     <template v-if="isComplementary(trip, searchParams, index)">
@@ -34,8 +41,8 @@
             <p slot="no-data" class="alert alert-warning"  role="alert"  :class="isMobile ? 'mobile-alert' : ''">
                 <span class="sentence">¡Ups! No hay viajes con los criterios indicados en la búsqueda.</span>
                 <span class="sentence" v-if="!alreadySubscribe">
-                    <strong :class="isMobile ? 'sentence' : ''">Pero no te preocupes, ahora podés suscribirte para que te avisemos cuando haya un viaje que concuerde con lo que estas buscando.</strong>
-                    <button class="btn btn-primary" v-if="user && !searchParams.data.is_passenger" @click="subscribeSearch" >Suscribirme</button>
+                    <strong :class="isMobile ? 'sentence' : ''">Ahora podés suscribirte para que te avisemos cuando haya un nuevo viaje que concuerde con lo que estas buscando.</strong>
+                    <button class="btn btn-primary" v-if="user" @click="subscribeSearch" >Crear Alerta</button>
                 </span>
             </p>
             <p slot="loading" class="alert alert-info" role="alert">
@@ -75,7 +82,8 @@ export default {
             lookSearch: false,
             filtered: false,
             runningSearch: false,
-            alreadySubscribe: false
+            alreadySubscribe: false,
+            resultaOfSearch: false
         };
     },
     props: [
@@ -85,16 +93,19 @@ export default {
         ...mapActions({
             search: 'trips/tripsSearch',
             refreshTrips: 'trips/refreshList',
-            subscribeToSearch: 'subscriptions/create'
+            subscribeToSearch: 'subscriptions/create',
+            findSubscriptions: 'subscriptions/index'
             // morePagesActions: 'trips/tripMorePage',
             // setActionButton: 'actionbars/setHeaderButtons'
         }),
         research (params) {
+            this.resultaOfSearch = true;
             this.lookSearch = false;
             this.filtered = true;
             this.readySub = false;
             this.alreadySubscribe = false;
             this.search(params);
+            this.findSubscriptions();
             // this.setActionButton(['clear']);
         },
         nextPage () {
@@ -118,6 +129,7 @@ export default {
         },
 
         onSearchButton () {
+            console.log('onSearchButton');
             this.lookSearch = true;
             // this.setActionButton(['clear']);
             bus.on('backbutton', this.onBackBottom);
@@ -172,9 +184,19 @@ export default {
                 data.to_radio = params.destination_radio;
                 data.to_json_address = [];
             }
+
+            data.is_passenger = params.is_passenger;
+
             this.subscribeToSearch(data).then(() => {
                 this.alreadySubscribe = true;
                 dialogs.message('Te subscribiste correctamente. Te avisaremos cuando hayan viajes similares', { duration: 10, estado: 'success' });
+            }).catch((response) => {
+                console.log(response);
+                if (response.data.errors && response.data.errors.error) {
+                    if (response.data.errors.error[0] === 'subscription_exist') {
+                        dialogs.message('Ya tienes una suscripción para esta búsqueda.', { duration: 10, estado: 'error' });
+                    }
+                }
             });
         }
     },
@@ -217,6 +239,7 @@ export default {
             if (this.refreshList) {
                 this.refreshTrips(false);
                 this.lookSearch = false;
+                this.resultaOfSearch = false;
                 this.$refs.searchBox.clear();
             }
         }
@@ -229,7 +252,8 @@ export default {
             searchParams: 'trips/tripsSearchParam',
             isMobile: 'device/isMobile',
             isBrowser: 'device/isBrowser',
-            refreshList: 'trips/refreshList'
+            refreshList: 'trips/refreshList',
+            subscriptions: 'subscriptions/subscriptions'
         }),
 
         showingTrips () {

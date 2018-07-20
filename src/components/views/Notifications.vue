@@ -54,6 +54,8 @@ export default {
                     router.push({name: 'friends_setting'});
                     break;
                 case 'subscription':
+                    router.push({ name: 'my-trips', query: { loc: 'suscriptions' } });
+                    break;
                 case 'my-trips':
                     router.push({ name: 'my-trips' });
                     break;

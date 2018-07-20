@@ -1,5 +1,5 @@
 <template>
-    <div class="suscription-item_component panel panel-default" @click="search">
+    <div class="suscription-item_component panel panel-default" @click="search(true)">
         <div class="row panel-body">
             <div class="col-xs-20">
                 <div class="suscription-item-detail" v-if="subscription.from_address">
@@ -20,6 +20,21 @@
                         <strong>{{ subscription.trip_date | moment("DD/MM/YYYY") }}</strong>
                     </div>
                 </div>
+                <div class="suscription-item-detail" v-if="subscription.is_passenger == 1">
+                    <div class="suscription-item-detail--content">
+                        <span>Busco pasajeros</span>
+                    </div>
+                </div>
+                <div class="suscription-item-detail" v-if="resultCount > 0">
+                    <div class="suscription-item-detail--content">
+                        <span>Coincidencias:</span>
+                        <span class="badge">
+                            {{ resultCount }}
+                            {{ resultCount === 20 ? '+' : '' }}
+                        </span>
+                    </div>
+                </div>
+
             </div>
             <div class="col-xs-4">
                 <button v-on:click.stop="remove" :disabled="inProgress" class="btn btn-default"  aria-label="Eliminar suscripción">
@@ -53,12 +68,16 @@ export default {
     },
     data () {
         return {
-            inProgress: false
+            inProgress: false,
+            resultCount: 0
         };
+    },
+    mounted () {
+        this.search(false);
     },
     methods: {
         ...mapActions({
-            'removeStore': 'subscriptions/remove',
+            removeStore: 'subscriptions/remove',
             searchTrip: 'trips/tripsSearch'
         }),
         remove () {
@@ -69,7 +88,7 @@ export default {
                 this.inProgress = false;
             });
         },
-        search () {
+        search (redirect) {
             let params = {};
             if (this.subscription.trip_date) {
                 params.date = moment(this.subscription.trip_date).format('YYYY-MM-DD');
@@ -88,9 +107,19 @@ export default {
                 params.destination_radio = this.subscription.to_radio;
                 // this.subscription.to_json_address = [];
             }
-            this.searchTrip(params);
-            this.$router.replace({ name: 'trips', params: { keepSearch: true } });
+            params.is_passenger = this.subscription.is_passenger;
+            this.searchTrip(params).then((res) => {
+                this.resultCount = res.data.length;
+            });
+            if (redirect) {
+                this.$router.replace({ name: 'trips', params: { keepSearch: true } });
+            }
         }
     }
 };
 </script>
+<style scoped>
+    .badge {
+        background: red;
+    }
+</style>
