@@ -12,15 +12,50 @@
         </div>
         <SearchBox :params="searchParams" v-on:trip-search="research" v-show="!isMobile || lookSearch" ref="searchBox"></SearchBox>
         <Loading :data="trips" v-if="showingTrips">
-            <p class="alert alert-warning"  role="alert"  :class="isMobile ? 'mobile-alert' : ''" v-if="resultaOfSearch">
+            <p class="alert alert-warning"  role="alert"  :class="isMobile ? 'mobile-alert' : ''" v-if="resultaOfSearch && !alreadySubscribe">
                 <!-- <span class="sentence">¡Ups! No hay viajes con los criterios indicados en la búsqueda.</span> -->
-                <span class="sentence" v-if="!alreadySubscribe">
+                <span class="sentence">
                     <strong :class="isMobile ? 'sentence' : ''">Ahora podés suscribirte para que te avisemos cuando haya un nuevo viaje que concuerde con lo que estas buscando.</strong>
                     <button class="btn btn-primary" v-if="user && !searchParams.data.is_passenger" @click="subscribeSearch" >Crear Alerta</button>
                 </span>
             </p>
             <div class="trips-list">
+                <modal :name="'modal'" v-if="showModal" @close="showModal = false" :title="'Test'" :body="'Body'">
+                    <h3 slot="header">Doná a Carpoolear un proyecto de <img width="120" alt="STS Rosario" src="https://carpoolear.com.ar/img/logo_sts_nuevo_color.png"></h3>
+                    <div slot="body" class="donation">
+                        <div class="radio">
+                            <label class="radio-inline">
+                                <input type="radio" name="donationValor" id="donation50" value="50" v-model="donateValue"><span>50</span>
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="donationValor" id="donation100" value="100" v-model="donateValue"><span>100</span>
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="donationValor" id="donation200" value="200" v-model="donateValue"><span>200</span>
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="donationValor" id="donation500" value="500" v-model="donateValue"><span>500</span>
+                            </label>
+                        </div>
+                        <div>
+                            <button class="btn btn-success btn-unica-vez" @click="onDonateOnceTime">ÚNICA VEZ</button>
+                            <button class="btn btn-info btn-mensualmente" @click="onDonateMonthly">MENSUALMENTE <br />(cancelá cuando quieras)</button>
+                        </div>
+                    </div>
+                </modal>
                 <template v-for="(trip, index) in trips">
+                    <template v-if="isDonationTime() && false">
+                        <div class="panel panel-default pull-left" v-if="(index + parseFloat(appConfig.donation.trips_offset))  % parseFloat(appConfig.donation.trips_count) === 0">
+                            <div class="panel-body">
+                                <button class="btn btn-success pull-right btn-donar" @click="onDonate">Donar</button>
+                                <h2>Ayudanos a seguir siendo una plataforma abierta, colaborativa y sin fines de lucro</h2>
+
+                                <a href="/donar">
+                                    Conocé más
+                                </a>
+                            </div>
+                        </div>
+                    </template>
                     <template v-if="isComplementary(trip, searchParams, index)">
                         <div class="trip-complementary">
                             <h2>Resultados cercanos</h2>
@@ -74,6 +109,7 @@ import { mapGetters, mapActions } from 'vuex';
 import moment from 'moment';
 import router from '../../router';
 import dialogs from '../../services/dialogs.js';
+import modal from '../Modal';
 
 export default {
     name: 'trips',
@@ -83,7 +119,9 @@ export default {
             filtered: false,
             runningSearch: false,
             alreadySubscribe: false,
-            resultaOfSearch: false
+            resultaOfSearch: false,
+            showModal: false,
+            donateValue: 0
         };
     },
     props: [
@@ -98,6 +136,9 @@ export default {
             // morePagesActions: 'trips/tripMorePage',
             // setActionButton: 'actionbars/setHeaderButtons'
         }),
+        isDonationTime () {
+            return moment().date() < parseFloat(this.appConfig.donation.month_days);
+        },
         research (params) {
             this.resultaOfSearch = true;
             this.lookSearch = false;
@@ -163,6 +204,49 @@ export default {
             bus.off('backbutton', this.onBackBottom);
             this.lookSearch = false;
             this.alreadySubscribe = false;
+        },
+        onDonate () {
+            this.showModal = true;
+        },
+        onDonateOnceTime () {
+            if (this.donateValue > 0) {
+                var url = 'http://mpago.la/jgap'; // 50
+                switch (this.donateValue) {
+                    case '100':
+                        url = 'http://mpago.la/CaSZ';
+                        break;
+                    case '200':
+                        url = 'http://mpago.la/xntw';
+                        break;
+                    case '500':
+                        url = 'http://mpago.la/QEiN';
+                        break;
+                    default:
+                        break;
+                }
+                window.open(url, '_blank');
+                this.showModal = false;
+            }
+        },
+        onDonateMonthly () {
+            if (this.donateValue > 0) {
+                var url = 'http://mpago.la/nqgV'; // 50
+                switch (this.donateValue) {
+                    case '100':
+                        url = 'http://mpago.la/BfZ';
+                        break;
+                    case '200':
+                        url = 'http://mpago.la/P02H';
+                        break;
+                    case '500':
+                        url = 'http://mpago.la/k8Xp';
+                        break;
+                    default:
+                        break;
+                }
+                window.open(url, '_blank');
+                this.showModal = false;
+            }
         },
         subscribeSearch () {
             let params = this.searchParams.data;
@@ -253,7 +337,8 @@ export default {
             isMobile: 'device/isMobile',
             isBrowser: 'device/isBrowser',
             refreshList: 'trips/refreshList',
-            subscriptions: 'subscriptions/subscriptions'
+            subscriptions: 'subscriptions/subscriptions',
+            appConfig: 'auth/appConfig'
         }),
 
         showingTrips () {
@@ -263,7 +348,8 @@ export default {
     components: {
         Trip,
         Loading,
-        SearchBox
+        SearchBox,
+        modal
     }
 };
 </script>
@@ -277,5 +363,35 @@ export default {
         border: 1px solid #999;
         width: 100%;
         max-width: 934px;
+    }
+    .btn-donar {
+        margin-left: 2em;
+        margin-right: 2em;
+        margin-top: 1em;
+        padding: 1em 2em;
+        font-size: 1.3em;
+    }
+    .radio > label > input {
+        opacity: 1;
+        z-index: 100;
+        vertical-align: middle;
+        display: inline-block;
+        margin-left: 1.3em;
+        margin-right: .8em;
+        position: static;
+        margin-top: 0;
+    }
+    .radio > label > span {
+        vertical-align: middle;
+        display: inline-block;
+        font-size: 1.4em;
+    }
+    .btn-unica-vez,
+    .btn-mensualmente {
+        width: 40%;
+        margin: 4%;
+        padding: 1em 0;
+        min-height: 5em;
+        font-size: 1.15em;
     }
 </style>
