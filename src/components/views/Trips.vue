@@ -137,7 +137,11 @@ export default {
             // setActionButton: 'actionbars/setHeaderButtons'
         }),
         isDonationTime () {
-            return moment().date() < parseFloat(this.appConfig.donation.month_days);
+            if (this.appConfig) {
+                return moment().date() < parseFloat(this.appConfig.donation.month_days);
+            } else {
+                return false;
+            }
         },
         research (params) {
             this.resultaOfSearch = true;
@@ -230,7 +234,7 @@ export default {
         },
         onDonateMonthly () {
             if (this.donateValue > 0) {
-                var url = 'http://mpago.la/nqgV'; // 50
+                var url = 'http://mpago.la/1w3aci'; // 50
                 switch (this.donateValue) {
                     case '100':
                         url = 'http://mpago.la/BfZ';
