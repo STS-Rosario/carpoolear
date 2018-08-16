@@ -12,14 +12,7 @@
         </div>
         <SearchBox :params="searchParams" v-on:trip-search="research" v-show="!isMobile || lookSearch" ref="searchBox"></SearchBox>
         <Loading :data="trips" v-if="showingTrips">
-            <p class="alert alert-warning"  role="alert"  :class="isMobile ? 'mobile-alert' : ''" v-if="resultaOfSearch && !alreadySubscribe">
-                <!-- <span class="sentence">¡Ups! No hay viajes con los criterios indicados en la búsqueda.</span> -->
-                <span class="sentence">
-                    <strong :class="isMobile ? 'sentence' : ''">Ahora podés suscribirte para que te avisemos cuando haya un nuevo viaje que concuerde con lo que estas buscando.</strong>
-                    <button class="btn btn-primary" v-if="user && !searchParams.data.is_passenger" @click="subscribeSearch" >Crear Alerta</button>
-                </span>
-            </p>
-            <div class="trips-list">
+            <div class="trips-list row">
                 <modal :name="'modal'" v-if="showModal" @close="showModal = false" :title="'Test'" :body="'Body'">
                     <h3 slot="header">Doná a Carpoolear un proyecto de <img width="120" alt="STS Rosario" src="https://carpoolear.com.ar/img/logo_sts_nuevo_color.png"></h3>
                     <div slot="body" class="donation">
@@ -63,6 +56,15 @@
                     </template>
                     <Trip :trip="trip" :user="user"></Trip>
                 </template>
+            </div>
+            <div class="row">
+                <p class="alert alert-warning"  role="alert"  :class="isMobile ? 'mobile-alert' : ''" v-if="resultaOfSearch && !alreadySubscribe">
+                    <!-- <span class="sentence">¡Ups! No hay viajes con los criterios indicados en la búsqueda.</span> -->
+                    <span class="sentence">
+                        <strong :class="isMobile ? 'sentence' : ''">Ahora podés suscribirte para que te avisemos cuando haya un nuevo viaje que concuerde con lo que estas buscando.</strong>
+                        <button class="btn btn-primary" v-if="user && !searchParams.data.is_passenger" @click="subscribeSearch" >Crear Alerta</button>
+                    </span>
+                </p>
             </div>
             <!--
             <div v-if="morePages">

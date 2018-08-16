@@ -238,8 +238,13 @@ export default {
         swapCities () {
             let temp;
             temp = this['to_town'];
-            this['to_town'] = this['from_town'];
-            this['from_town'] = temp;
+            let tempToName = this['to_town'].name;
+            let tempFromName = this['from_town'].name;
+            console.log(tempFromName, tempToName);
+            this['to_town'] = Object.assign({}, this['from_town']);
+            // this.to_town.name = tempFromName;
+            this['from_town'] = Object.assign({}, temp);
+            // this.from_town.name = this.tempToName;
         },
         clear () {
             this.resetInput('from_town');
