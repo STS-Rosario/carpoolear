@@ -35,7 +35,8 @@
                 </div>
             </div>
             <div class="col-xs-24 col-md-5 gmap-autocomplete origin">
-                <GmapAutocomplete name="from_town" ref="from_town" :selectFirstOnEnter="true" :types="['(cities)']"  :componentRestrictions="allowForeignPoints ? null : {country: 'AR'}"  placeholder="Origen"  :value="from_town.name" v-on:place_changed="(data) => getPlace(0, data)" class="form-control form-control-with-icon form-control-map-autocomplete"> </GmapAutocomplete>
+                <OsmAutocomplete :placeholder="'Origen'" name="from_town" ref="from_town" :value="from_town.name" v-on:place_changed="(data) => getPlace(0, data)" :classes="'form-control form-control-with-icon form-control-map-autocomplete'" :country="allowForeignPoints ? null : 'AR'"></OsmAutocomplete>
+                <!-- <GmapAutocomplete name="from_town" ref="from_town" :selectFirstOnEnter="true" :types="['(cities)']"  :componentRestrictions="allowForeignPoints ? null : {country: 'AR'}"  placeholder="Origen"  :value="from_town.name" v-on:place_changed="(data) => getPlace(0, data)" class="form-control form-control-with-icon form-control-map-autocomplete"> </GmapAutocomplete>-->
                 <div class="date-picker--cross">
                     <i v-on:click="resetInput('from_town')" class="fa fa-times" aria-hidden="true"></i>
                 </div>
@@ -46,7 +47,8 @@
                 </div>
             </div>
             <div class="col-xs-24 col-md-5 gmap-autocomplete destiny">
-                <GmapAutocomplete name="to_town" ref="to_town" :selectFirstOnEnter="true" :types="['(cities)']"  :componentRestrictions="allowForeignPoints ? null : {country: 'AR'}"  placeholder="Destino"  :value="to_town.name" v-on:place_changed="(data) => getPlace(1, data)" class="form-control form-control-with-icon form-control-map-autocomplete"> </GmapAutocomplete>
+                <OsmAutocomplete :placeholder="'Destino'" name="to_town" ref="to_town" :value="to_town.name" v-on:place_changed="(data) => getPlace(1, data)" :classes="'form-control form-control-with-icon form-control-map-autocomplete'" :country="allowForeignPoints ? null : 'AR'"></OsmAutocomplete>
+                <!-- <GmapAutocomplete name="to_town" ref="to_town" :selectFirstOnEnter="true" :types="['(cities)']"  :componentRestrictions="allowForeignPoints ? null : {country: 'AR'}"  placeholder="Destino"  :value="to_town.name" v-on:place_changed="(data) => getPlace(1, data)" class="form-control form-control-with-icon form-control-map-autocomplete"> </GmapAutocomplete> -->
                 <div class="date-picker--cross">
                     <i v-on:click="resetInput('to_town')" class="fa fa-times" aria-hidden="true"></i>
                 </div>
@@ -68,6 +70,7 @@
 import { mapGetters } from 'vuex';
 import {pointDistance} from '../../services/maps.js';
 import DatePicker from '../DatePicker';
+import OsmAutocomplete from '../OsmAutocomplete';
 import bus from '../../services/bus-event.js';
 import moment from 'moment';
 import dialogs from '../../services/dialogs.js';
@@ -136,28 +139,57 @@ export default {
             }
         },
         getPlace (i, data) {
+            console.log('getPlace', data);
+            /*
+                {
+                    place_id: "221733657",
+                    licence: "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
+                    osm_type: "relation",
+                    osm_id: "1224652",
+                    boundingbox: [
+                        "-34.705637",
+                        "-34.5265535",
+                        "-58.5314588",
+                        "-58.3351249"
+                    ],
+                    lat: "-34.6075616",
+                    lon: "-58.437076",
+                    display_name: "Buenos Aires, Ciudad Autónoma de Buenos Aires, Argentina",
+                    class: "place",
+                    type: "city",
+                    importance: 0.76879583938391,
+                    icon: "https://nominatim.openstreetmap.org/images/mapicons/poi_place_city.p.20.png",
+                    address: {
+                        city: "Buenos Aires",
+                        state: "Ciudad Autónoma de Buenos Aires",
+                        country: "Argentina",
+                        country_code: "ar"
+                    }
+                }
+            */
             let obj = {};
-            if (data && data.geometry) {
-                var viewport = JSON.parse((JSON.stringify(data.geometry.viewport)));
-                let distance = pointDistance(viewport.north, viewport.east, viewport.south, viewport.west);
+            if (data && data.boundingbox) {
+                // var viewport = JSON.parse((JSON.stringify(data.geometry.viewport)));
+
+                let distance = pointDistance(parseFloat(data.boundingbox[1]), parseFloat(data.boundingbox[3]), parseFloat(data.boundingbox[0]), parseFloat(data.boundingbox[2]));
                 obj = {
-                    name: data.formatted_address,
+                    name: data.display_name,
                     location: {
-                        lat: data.geometry.location.lat(),
-                        lng: data.geometry.location.lng()
+                        lat: parseFloat(data.lat),
+                        lng: parseFloat(data.lon)
                     },
                     radio: distance,
-                    country: 'AR'
+                    country: data.country_code
                 };
             }
-            if (data && data.address_components) {
+            /* if (data && data.address_components) {
                 for (let j = 0; j < data.address_components.length; j++) {
                     let addrComp = data.address_components[j];
                     if (addrComp.types.indexOf('country') >= 0) {
                         obj.country = addrComp.short_name;
                     }
                 }
-            }
+            } */
             if (i === 0) {
                 this.from_town = obj;
             } else {
@@ -173,7 +205,7 @@ export default {
                 params.origin_radio = this.from_town.radio;
                 params.origin_name = this.from_town.name;
             }
-            if (this.from_town.country !== 'AR') {
+            if (this.from_town && this.from_town.country && this.from_town.country.toLowerCase() !== 'AR'.toLowerCase()) {
                 foreignCountry++;
             }
             if (this.to_town.location) {
@@ -182,7 +214,7 @@ export default {
                 params.destination_radio = this.to_town.radio;
                 params.destination_name = this.to_town.name;
             }
-            if (this.to_town.country !== 'AR') {
+            if (this.to_town && this.to_town.country && this.to_town.country.toLowerCase() !== 'AR'.toLowerCase()) {
                 foreignCountry++;
             }
             if (this.dateAnswer) {
@@ -258,7 +290,8 @@ export default {
         'params'
     ],
     components: {
-        DatePicker
+        DatePicker,
+        OsmAutocomplete
     }
 };
 </script>

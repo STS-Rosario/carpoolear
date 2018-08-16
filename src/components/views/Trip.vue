@@ -240,7 +240,7 @@
                                 </div>
                             </div>
                         </div>
-                        <gmap-map
+                        <!-- <gmap-map
                             :center="center"
                             :zoom="zoom"
                             style="height: 524px"
@@ -255,7 +255,10 @@
                                 @click="center=m.location"
                                 v-if="m.location"
                             ></gmap-marker>
-                        </gmap-map>
+                        </gmap-map> -->
+                        <l-map :zoom="zoom" :center="center" style="width: calc(100% + 20px); height: 461px; overflow: hidden; margin-left: -10px" ref="map">
+                            <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
+                        </l-map>
                     </div>
                 </div>
             </div>
@@ -277,6 +280,8 @@ import dialogs from '../../services/dialogs.js';
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import VueHead from 'vue-head';
+import { LMap, LTileLayer } from 'vue2-leaflet';
+import 'leaflet-routing-machine';
 Vue.use(VueHead);
 Vue.use(VueRouter);
 
@@ -306,7 +311,9 @@ export default {
             currentUrl: encodeURIComponent('https://carpoolear.com.ar/app' + this.$route.fullPath),
             matchingUsers: [],
             messageToUsers: '',
-            selectedMatchingUser: []
+            selectedMatchingUser: [],
+            url: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         };
     },
 
@@ -484,13 +491,26 @@ export default {
 
         renderMap () {
             if (this.$refs.map) {
-                this.$refs.map.$mapCreated.then(() => {
-                    /* eslint-disable no-undef */
+                /* eslint-disable no-undef */
+                /* this.$refs.map.$mapCreated.then(() => {
                     this.directionsService = new google.maps.DirectionsService();
                     this.directionsDisplay = new google.maps.DirectionsRenderer();
                     this.directionsDisplay.setMap(this.$refs.map.$mapObject);
                     this.restoreData(this.trip);
-                });
+                }); */
+                let map = this.$refs.map.mapObject;
+                console.log('trip', this.trip);
+                let data = {
+                    origin: this.trip.points[0],
+                    destiny: this.trip.points[this.trip.points.length - 1]
+                };
+                 /* eslint-disable no-undef */
+                L.Routing.control({
+                    waypoints: [
+                        L.latLng(data.origin.lat, data.origin.lng),
+                        L.latLng(data.destiny.lat, data.destiny.lng)
+                    ]
+                }).addTo(map);
             }
         },
 
@@ -526,13 +546,12 @@ export default {
                 }
             }
 
-            this.directionsService.route({
+            /* this.directionsService.route({
                 origin: this.points[0].name,
                 destination: this.points[this.points.length - 1].name,
                 travelMode: 'DRIVING'
             }, (response, status) => {
                 if (status === 'OK') {
-                    /* encode path */
                     this.directionsDisplay.setDirections(response);
 
                     let path = response.routes[0].overview_path;
@@ -548,23 +567,23 @@ export default {
                     }
                     this.trip.distance = totalDistance;
                     this.duration = totalDuration;
-                    this.co2 = parseFloat(totalDistance * 0.15).toFixed(2); /* distancia por 0.15 kilos co2 en promedio por KM recorrido  */
+                    this.co2 = parseFloat(totalDistance * 0.15).toFixed(2);
                 } else {
                     console.log('Directions request failed due to ' + status);
                 }
-            });
+            }); */
         },
         onSendToAll () {
             let users = this.matchingUsers.filter(u => this.selectedMatchingUser.indexOf(u.id) >= 0);
             console.log(users);
             if (this.messageToUsers && users && users.length) {
-                /* this.sendToAll({
+                this.sendToAll({
                     message: this.messageToUsers,
                     users: users
                 }).then(() => {
                     this.messageToUsers = '';
                     dialogs.message('El mensaje fue enviado.');
-                }); */
+                });
             }
         }
     },
@@ -623,7 +642,9 @@ export default {
     },
 
     components: {
-        svgItem
+        svgItem,
+        LMap,
+        LTileLayer
     },
 
     props: [

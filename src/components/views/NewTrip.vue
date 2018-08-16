@@ -43,10 +43,11 @@ Tengamos un buen viaje cuidándonos entre todos :D">
                                 </span>
                             </div>
                             <div class="new-left trip_points col-sm-13 col-md-15">
-                                <div v-for="(m, index) in points" class="trip_point gmap-autocomplete" :class="{'trip-error' : m.error.state}">
+                                <div v-for="(m, index) in points" class="trip_point gmap-autocomplete" :class="{'trip-error' : m.error.state}" :key="index">
                                     <span v-if="index == 0" class="sr-only">Origen</span>
                                     <span v-if="index == points.length - 1" class="sr-only">Destino</span>
-                                    <GmapAutocomplete  :selectFirstOnEnter="true" :types="['(cities)']" :componentRestrictions="allowForeignPoints ? null : {country: 'AR'}" :placeholder="getPlaceholder(index)"  :value="m.name" :name="'input-' + index" :ref="'input-' + index" v-on:place_changed="(data) => getPlace(index, data)" class="form-control form-control-with-icon form-control-map-autocomplete" :class="{'has-error': m.error.state}"> </GmapAutocomplete>
+                                    <OsmAutocomplete :placeholder="getPlaceholder(index)" name="'input-' + index" ref="'input-' + index" :value="m.name" v-on:place_changed="(data) => getPlace(index, data)" :classes="'form-control form-control-with-icon form-control-map-autocomplete'" :country="allowForeignPoints ? null : 'AR'"  :class="{'has-error': m.error.state}"></OsmAutocomplete>
+                                    <!-- <GmapAutocomplete  :selectFirstOnEnter="true" :types="['(cities)']" :componentRestrictions="allowForeignPoints ? null : {country: 'AR'}" :placeholder="getPlaceholder(index)"  :value="m.name" :name="'input-' + index" :ref="'input-' + index" v-on:place_changed="(data) => getPlace(index, data)" class="form-control form-control-with-icon form-control-map-autocomplete" :class="{'has-error': m.error.state}"> </GmapAutocomplete> -->
                                     <div @click="m.name = ''" class="date-picker--cross"><i aria-hidden="true" class="fa fa-times"></i></div>
                                     <span class="error" v-if="m.error.state"> {{m.error.message}} </span>
                                 </div>
@@ -144,8 +145,8 @@ Tengamos un buen viaje cuidándonos entre todos :D">
             </div>
             <div class="row">
                 <div class="col-xs-24 map">
-                    <div class="map_warning">* El recorrido del mapa es de referencia, puede no coincidir con el recorrido planeado por ud.</div>
-                    <gmap-map
+                    <!-- <div class="map_warning">* El recorrido del mapa es de referencia, puede no coincidir con el recorrido planeado por ud.</div> -->
+                    <!-- <gmap-map
                         :center="center"
                         :zoom="zoom"
                         style="width: 100%; height: 300px"
@@ -160,7 +161,11 @@ Tengamos un buen viaje cuidándonos entre todos :D">
                         @click="center=m.location"
                         v-if="m.location"
                         ></gmap-marker>
-                    </gmap-map>
+                    </gmap-map> -->
+
+                    <!-- <l-map :zoom="zoom" :center="center" style="width: 100%; height: 300px; overflow: hidden;" ref="map">
+                        <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
+                    </l-map> -->
                 </div>
             </div>
         </div>
@@ -168,13 +173,21 @@ Tengamos un buen viaje cuidándonos entre todos :D">
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import { parseStreet } from '../../services/maps.js';
+import { parseOsmStreet } from '../../services/maps.js';
 import DatePicker from '../DatePicker';
 import bus from '../../services/bus-event.js';
 import router from '../../router';
 import dialogs from '../../services/dialogs.js';
 import { getCityName } from '../../services/utility';
 import moment from 'moment';
+
+import OsmApi from '../../services/api/Osm';
+import OsmAutocomplete from '../OsmAutocomplete';
+// import { LMap, LTileLayer } from 'vue2-leaflet';
+
+// import 'leaflet-routing-machine';
+
+let osmApi = new OsmApi();
 
 class Error {
     constructor (state = false, message = '') {
@@ -192,7 +205,10 @@ export default {
         }
     },
     components: {
-        DatePicker
+        DatePicker,
+        OsmAutocomplete /* ,
+        LMap,
+        LTileLayer */
     },
     data () {
         return {
@@ -205,7 +221,7 @@ export default {
             no_lucrar: false,
             sameCity: false,
             zoom: 4,
-            center: {lat: -29.0, lng: -60.0},
+            center: [-29.0, -60.0],
             points: [
                 {
                     name: '',
@@ -244,22 +260,24 @@ export default {
             },
             updatingTrip: null,
             saving: false,
-            allowForeignPoints: false
+            allowForeignPoints: false,
+            url: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         };
     },
     mounted () {
         let self = this;
         this.time = moment().add(1, 'hours').format('HH:00');
-        this.$refs.map.$mapCreated.then(() => {
+        /* this.$refs.map.$mapCreated.then(() => {
             console.log('Map was created');
-            /* eslint-disable no-undef */
+            / * eslint-disable no-undef * /
             this.directionsService = new google.maps.DirectionsService();
             this.directionsDisplay = new google.maps.DirectionsRenderer();
             this.directionsDisplay.setMap(this.$refs.map.$mapObject);
             if (self.id) {
                 self.loadTrip();
             }
-        });
+        }); */
         bus.on('clear-click', this.onClearClick);
         bus.on('date-change', this.dateChange);
         this.$refs['input-0'][0].$el.addEventListener('input', this.checkInput);
@@ -480,13 +498,15 @@ export default {
         },
 
         getPlace (i, data) {
+            console.log('getPalce', data);
             this.points[i].place = data;
-            this.points[i].name = getCityName(data);
-            this.points[i].json = parseStreet(data);
+            this.points[i].name = data.address[data.type] ? data.address[data.type] : data.address['county'];
+            // TODO: Recordar parseStreet
+            this.points[i].json = parseOsmStreet(data);
             this.points[i].error.state = false;
             this.center = this.points[i].location = {
-                lat: data.geometry.location.lat(),
-                lng: data.geometry.location.lng()
+                lat: parseFloat(data.lat),
+                lng: parseFloat(data.lon)
             };
             if ((i === 0 || i === this.points.length - 1) && this.sameCity) {
                 this.points[0].error.state = false;
@@ -506,19 +526,42 @@ export default {
         },
 
         calcRoute () {
+            console.log('calc route', this.points);
             for (let i = 0; i < this.points.length; i++) {
                 if (!this.points[i].name) {
                     return;
                 }
             }
+            let data = {
+                origin: this.points[0].location,
+                destiny: this.points[this.points.length - 1].location
+            };
+            osmApi.route(data).then((result) => {
+                console.log('osm route result', result);
+                if (result.code === 'Ok' && result.routes && result.routes.length) {
+                    let route = result.routes[0];
+                    this.trip.distance = route.distance;
+                    this.duration = route.duration;
+                    this.trip.co2 = route.distance * 0.15; /* distancia por 0.15 kilos co2 en promedio por KM recorrido  */
+                }
+            });
 
-            this.directionsService.route({
+            let map = this.$refs.map.mapObject;
+
+            /* eslint-disable no-undef */
+            L.Routing.control({
+                waypoints: [
+                    L.latLng(data.origin.lat, data.origin.lng),
+                    L.latLng(data.destiny.lat, data.destiny.lng)
+                ]
+            }).addTo(map);
+
+            /* this.directionsService.route({
                 origin: this.points[0].location,
                 destination: this.points[this.points.length - 1].location,
                 travelMode: 'DRIVING'
             }, (response, status) => {
                 if (status === 'OK') {
-                    /* encode path */
                     this.directionsDisplay.setDirections(response);
 
                     let path = response.routes[0].overview_path;
@@ -534,12 +577,12 @@ export default {
                     }
                     this.trip.distance = totalDistance;
                     this.duration = totalDuration;
-                    this.trip.co2 = totalDistance * 0.15; /* distancia por 0.15 kilos co2 en promedio por KM recorrido  */
+                    this.trip.co2 = totalDistance * 0.15;
                 } else {
                     console.log(this.points[0].name, this.points[this.points.length - 1].name, 'DRIVING');
                     console.log('Directions request failed due to ' + status);
                 }
-            });
+            }); */
         }
     }
 };

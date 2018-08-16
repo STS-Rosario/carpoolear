@@ -33,6 +33,8 @@ import css from './styles/main.css';
 import bus from './services/bus-event';
 import { DebugApi } from './services/api';
 
+import Vue2Leaflet from 'vue2-leaflet';
+
 let debugApi = new DebugApi();
 
 Vue.use(VueResource);
@@ -44,7 +46,7 @@ Vue.use(VueAnalytics, {
 Vue.use(VueMoment);
 require('./filters.js');
 
-import * as VueGoogleMaps from 'vue2-google-maps';
+/* import * as VueGoogleMaps from 'vue2-google-maps';
 
 Vue.use(VueGoogleMaps, {
     load: {
@@ -52,7 +54,8 @@ Vue.use(VueGoogleMaps, {
         libraries: 'places',
         installComponents: true
     }
-});
+}); */
+
 Vue.config.errorHandler = function (err, vm, info) {
     // handle error
     // `info` is a Vue-specific error info, e.g. which lifecycle hook
