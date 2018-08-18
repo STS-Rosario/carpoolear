@@ -1,12 +1,15 @@
 <template>
-    <div class="osm-autocomplete"><!-- v-click-outside="clickOutside" -->
-        <input ref="input" :disabled="disabled"  type="text" :placeholder="placeholder" v-model="input" @keydown="onKeyDown" @keyup="onKeyup" :id="name" :class="classes" @focus="onFocus" />
-        <div class="osm-autocomplete-results" v-if="results.length">
-            <button v-for="result in results" @click="onItemClick(result)">
+    <div class="osm-autocomplete" v-clickoutside="clickOutside" :id="name">
+        <input ref="input" :disabled="disabled"  type="text" :placeholder="placeholder" v-model="input" @keydown="onKeyDown" @keyup="onKeyup" :class="classes" @focus="onFocus" autocomplete="new-password" />
+        <div class="osm-autocomplete-results" v-if="results.length || this.waiting">
+            <button v-for="(result, index) in results" @click="onItemClick(result)" v-if="results.length" :key="index">
                 {{ result.address[result.type] ? result.address[result.type] : (result.address['county'] ? result.address['county'] : result.address['city']) }}
                 <small>{{ result.address.state }}, {{ result.address.country }}</small>
             </button>
-            <small class="copy">© OpenStreetMap</small>
+            <small class="copy" v-if="results.length || this.waiting">
+                <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" v-if="this.waiting" />
+                <span>© OpenStreetMap</span>
+            </small>
         </div>
     </div>
 </template>
@@ -107,6 +110,7 @@ export default {
                 return;
             }
             this.waiting = true;
+            this.results = [];
             if (this.inputCallback) {
                 this.inputCallback();
             }
@@ -116,72 +120,57 @@ export default {
             this.keyUpTimerId = setTimeout(() => {
                 this.forceEmitChangeEvent();
                 this.autocomplete();
-            }, 500);
+            }, 750);
         },
         autocomplete () {
+            this.waiting = true;
+            this.results = [];
             /* eslint-disable */
             let data = {
                 input: this.input,
                 country: this.country
             };
             osmApi.search(data).then(data => {
-                data = data.filter(o => {
-                    let type = ['city', 'town', 'village', 'hamlet', 'administrative'].indexOf(o.type) >= 0;
-                    let osmType = ['node', 'relation'].indexOf(o.osm_type) >= 0;
-                    let county = true;
-                    if (o.class === 'boundary' && o.type === 'administrative') {
-                        if (o.address.county) {
-                            let city = data.find(c => c.address.city === o.address.county);
-                            if (city) {
-                                county = false;
+                this.waiting = false;
+                if (data && data.filter) {
+                    data = data.filter(o => {
+                        let type = ['city', 'town', 'village', 'hamlet', 'administrative'].indexOf(o.type) >= 0;
+                        let osmType = ['node', 'relation'].indexOf(o.osm_type) >= 0;
+                        let county = true;
+                        if (o.class === 'boundary' && o.type === 'administrative') {
+                            if (o.address.county) {
+                                let city = data.find(c => c.address.city === o.address.county);
+                                if (city) {
+                                    county = false;
+                                } else {
+                                    county = new RegExp(this.input.toLowerCase(), 'gi').test(o.address.county.normalize('NFD').replace(/[\u0300-\u036f]/g, ""));
+                                }
                             } else {
-                                // county = o.address.county.toLowerCase().indexOf(this.input.toLowerCase()) >= 0;
-                                county = new RegExp(this.input.toLowerCase(), 'gi').test(o.address.county.normalize('NFD').replace(/[\u0300-\u036f]/g, ""));
-                            }
-                        } else {
-                            if (o.address.city) {
-                                // county = o.address.city.match(new RegExp(this.input.toLowerCase(), 'g'));
-                                county = new RegExp(this.input.toLowerCase(), 'gi').test(o.address.city.normalize('NFD').replace(/[\u0300-\u036f]/g, ""));
-                                county = county && !o.address.city_district;
-                            } else {
-                                county = false;
+                                if (o.address.city) {
+                                    county = new RegExp(this.input.toLowerCase(), 'gi').test(o.address.city.normalize('NFD').replace(/[\u0300-\u036f]/g, ""));
+                                    county = county && !o.address.city_district;
+                                } else {
+                                    county = false;
+                                }
                             }
                         }
-                    }
-                    return type && osmType && county;
-                });
-                data.sort((a, b) => {
-                    return b.importance - a.importance;
-                });
-                console.log(data);
-                this.results = data.slice(0, 6);
-                if (this.input.toLowerCase() === 'mendoza' && this.results.length === 0) {
-                    this.results.push({
-                        osm_type: "relation",
-                        boundingbox: [
-                            "-32.9188",
-                            "-32.8657",
-                            "-68.8802",
-                            "-68.7950"
-                        ],
-                        lat: "-32.8843",
-                        lon: "-68.8124",
-                        display_name: "Mendoza, Mendoza, Argentina",
-                        class: "place",
-                        type: "city",
-                        importance: 0.76879583938391,
-                        address: {
-                            city: "Mendoza",
-                            state: "Mendoza",
-                            country: "Argentina",
-                            country_code: "ar"
-                        }
+                        return type && osmType && county;
                     });
+                    data.sort((a, b) => {
+                        return b.importance - a.importance;
+                    });
+                    console.log(data);
+                    this.results = data.slice(0, 6);
+                    console.log(this.results);
+                } else {
+                    this.results = [];
                 }
-                console.log(this.results);
+            }).then(() => {
+                this.waiting = false;
             });
         },
         onItemClick (item) {
+            this.waiting = false;
             this.$emit('place_changed', item);
             this.results = [];
             this.input = item.display_name;

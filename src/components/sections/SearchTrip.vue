@@ -204,6 +204,8 @@ export default {
                 params.origin_lng = this.from_town.location.lng;
                 params.origin_radio = this.from_town.radio;
                 params.origin_name = this.from_town.name;
+            } else {
+                params.origin_name = this.$refs['from_town'].input;
             }
             if (this.from_town && this.from_town.country && this.from_town.country.toLowerCase() !== 'AR'.toLowerCase()) {
                 foreignCountry++;
@@ -213,6 +215,8 @@ export default {
                 params.destination_lng = this.to_town.location.lng;
                 params.destination_radio = this.to_town.radio;
                 params.destination_name = this.to_town.name;
+            } else {
+                params.origin_name = this.$refs['to_town'].input;
             }
             if (this.to_town && this.to_town.country && this.to_town.country.toLowerCase() !== 'AR'.toLowerCase()) {
                 foreignCountry++;
@@ -222,12 +226,16 @@ export default {
             }
             params.is_passenger = this.isPassenger;
             if (foreignCountry < 2) {
+                // console.log('trip-search', params);
                 this.$emit('trip-search', params);
             } else {
                 dialogs.message('Origen y destino no pueden ser ambos del exterior.', { duration: 10, estado: 'error' });
             }
         },
         resetInput (input) {
+            if (this.$refs[input]) {
+               this.$refs[input].input = '';
+            }
             this[input] = {
                 name: '',
                 location: null,
@@ -238,17 +246,14 @@ export default {
         swapCities () {
             let temp;
             temp = this['to_town'];
-            let tempToName = this['to_town'].name;
-            let tempFromName = this['from_town'].name;
-            console.log(tempFromName, tempToName);
             this['to_town'] = Object.assign({}, this['from_town']);
-            // this.to_town.name = tempFromName;
             this['from_town'] = Object.assign({}, temp);
-            // this.from_town.name = this.tempToName;
         },
         clear () {
             this.resetInput('from_town');
+            this.$refs['from_town'].input = '';
             this.resetInput('to_town');
+            this.$refs['to_town'].input = '';
             this.$refs.datepicker.clear();
         },
         loadParams (parameters) {

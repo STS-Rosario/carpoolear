@@ -278,6 +278,9 @@ export default {
                 self.loadTrip();
             }
         }); */
+        if (self.id) {
+            self.loadTrip();
+        }
         bus.on('clear-click', this.onClearClick);
         bus.on('date-change', this.dateChange);
         this.$refs['input-0'][0].$el.addEventListener('input', this.checkInput);
@@ -366,7 +369,7 @@ export default {
             this.trip.distance = trip.distance;
             this.trip.description = trip.description;
 
-            this.calcRoute();
+            // this.calcRoute();
         },
 
         loadTrip () {
@@ -546,15 +549,17 @@ export default {
                 }
             });
 
-            let map = this.$refs.map.mapObject;
+            if (this.$refs.map && this.$refs.map.mapObject) {
+                let map = this.$refs.map.mapObject;
 
-            /* eslint-disable no-undef */
-            L.Routing.control({
-                waypoints: [
-                    L.latLng(data.origin.lat, data.origin.lng),
-                    L.latLng(data.destiny.lat, data.destiny.lng)
-                ]
-            }).addTo(map);
+                /* eslint-disable no-undef */
+                L.Routing.control({
+                    waypoints: [
+                        L.latLng(data.origin.lat, data.origin.lng),
+                        L.latLng(data.destiny.lat, data.destiny.lng)
+                    ]
+                }).addTo(map);
+            }
 
             /* this.directionsService.route({
                 origin: this.points[0].location,

@@ -5,6 +5,5 @@ module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
   API_URL: '"https://carpoolear.com.ar"',
   MAPS_API: '"AIzaSyBlRfNi2qDcy_zwjR53VVOyD-csjYSq4Qo"',
-  FACEBOOK_API: '"147151221990591"',
-  ROUTE_BASE: '"/dev/"'
+  FACEBOOK_API: '"147151221990591"'
 })
