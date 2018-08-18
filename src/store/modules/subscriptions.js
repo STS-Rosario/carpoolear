@@ -78,7 +78,6 @@ const mutations = {
         }
     },
     [types.SUBSCRIPTION_DELETE] (state, subs) {
-        debugger;
         state.subscriptions = state.subscriptions.filter(item => item.id !== subs.id);
     }
 };

@@ -21,7 +21,7 @@
                             </a><!-- app_scoped_user_id -->
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row" v-if="profile.accounts && profile.accounts.length">
                         <div class="col-xs-24">
                             <small>Facebook cambió sus políticas y no podemos llevarte al perfil de esta persona, pero te ayudamos a buscarlo.</small>
                         </div>

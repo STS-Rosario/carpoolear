@@ -2500,10 +2500,10 @@ ul {
     }
     .search-section .form-control-map-autocomplete {
         line-height: 42px;
-        width: 92%;
+        width: 100%;
     }
     .search-section .destiny .form-control-map-autocomplete {
-        float: right;
+        /* float: right; */
     }
     .search-section .form-control-date input {
         line-height: 42px !important;
@@ -2727,4 +2727,7 @@ ul {
 
 .suscription-item-detail--content strong {
     color: var(--secondary-background);
+}
+.leaflet-routing-container {
+    display: none;
 }

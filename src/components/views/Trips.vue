@@ -12,8 +12,43 @@
         </div>
         <SearchBox :params="searchParams" v-on:trip-search="research" v-show="!isMobile || lookSearch" ref="searchBox"></SearchBox>
         <Loading :data="trips" v-if="showingTrips">
-            <div class="trips-list">
+            <div class="trips-list row">
+                <modal :name="'modal'" v-if="showModal" @close="showModal = false" :title="'Test'" :body="'Body'">
+                    <h3 slot="header">Doná a Carpoolear un proyecto de <img width="120" alt="STS Rosario" src="https://carpoolear.com.ar/img/logo_sts_nuevo_color.png"></h3>
+                    <div slot="body" class="donation">
+                        <div class="radio">
+                            <label class="radio-inline">
+                                <input type="radio" name="donationValor" id="donation50" value="50" v-model="donateValue"><span>50</span>
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="donationValor" id="donation100" value="100" v-model="donateValue"><span>100</span>
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="donationValor" id="donation200" value="200" v-model="donateValue"><span>200</span>
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="donationValor" id="donation500" value="500" v-model="donateValue"><span>500</span>
+                            </label>
+                        </div>
+                        <div>
+                            <button class="btn btn-success btn-unica-vez" @click="onDonateOnceTime">ÚNICA VEZ</button>
+                            <button class="btn btn-info btn-mensualmente" @click="onDonateMonthly">MENSUALMENTE <br />(cancelá cuando quieras)</button>
+                        </div>
+                    </div>
+                </modal>
                 <template v-for="(trip, index) in trips">
+                    <template v-if="isDonationTime() && false">
+                        <div class="panel panel-default pull-left" v-if="(index + parseFloat(appConfig.donation.trips_offset))  % parseFloat(appConfig.donation.trips_count) === 0">
+                            <div class="panel-body">
+                                <button class="btn btn-success pull-right btn-donar" @click="onDonate">Donar</button>
+                                <h2>Ayudanos a seguir siendo una plataforma abierta, colaborativa y sin fines de lucro</h2>
+
+                                <a href="/donar">
+                                    Conocé más
+                                </a>
+                            </div>
+                        </div>
+                    </template>
                     <template v-if="isComplementary(trip, searchParams, index)">
                         <div class="trip-complementary">
                             <h2>Resultados cercanos</h2>
@@ -21,6 +56,15 @@
                     </template>
                     <Trip :trip="trip" :user="user"></Trip>
                 </template>
+            </div>
+            <div class="row">
+                <p class="alert alert-warning"  role="alert"  :class="isMobile ? 'mobile-alert' : ''" v-if="resultaOfSearch && !alreadySubscribe">
+                    <!-- <span class="sentence">¡Ups! No hay viajes con los criterios indicados en la búsqueda.</span> -->
+                    <span class="sentence">
+                        <strong :class="isMobile ? 'sentence' : ''">Ahora podés suscribirte para que te avisemos cuando haya un nuevo viaje que concuerde con lo que estas buscando.</strong>
+                        <button class="btn btn-primary" v-if="user && !searchParams.data.is_passenger" @click="subscribeSearch" >Crear Alerta</button>
+                    </span>
+                </p>
             </div>
             <!--
             <div v-if="morePages">
@@ -34,8 +78,8 @@
             <p slot="no-data" class="alert alert-warning"  role="alert"  :class="isMobile ? 'mobile-alert' : ''">
                 <span class="sentence">¡Ups! No hay viajes con los criterios indicados en la búsqueda.</span>
                 <span class="sentence" v-if="!alreadySubscribe">
-                    <strong :class="isMobile ? 'sentence' : ''">Pero no te preocupes, ahora podés suscribirte para que te avisemos cuando haya un viaje que concuerde con lo que estas buscando.</strong>
-                    <button class="btn btn-primary" v-if="user && !searchParams.data.is_passenger" @click="subscribeSearch" >Suscribirme</button>
+                    <strong :class="isMobile ? 'sentence' : ''">Ahora podés suscribirte para que te avisemos cuando haya un nuevo viaje que concuerde con lo que estas buscando.</strong>
+                    <button class="btn btn-primary" v-if="user" @click="subscribeSearch" >Crear Alerta</button>
                 </span>
             </p>
             <p slot="loading" class="alert alert-info" role="alert">
@@ -67,6 +111,7 @@ import { mapGetters, mapActions } from 'vuex';
 import moment from 'moment';
 import router from '../../router';
 import dialogs from '../../services/dialogs.js';
+import modal from '../Modal';
 
 export default {
     name: 'trips',
@@ -75,7 +120,10 @@ export default {
             lookSearch: false,
             filtered: false,
             runningSearch: false,
-            alreadySubscribe: false
+            alreadySubscribe: false,
+            resultaOfSearch: false,
+            showModal: false,
+            donateValue: 0
         };
     },
     props: [
@@ -85,15 +133,26 @@ export default {
         ...mapActions({
             search: 'trips/tripsSearch',
             refreshTrips: 'trips/refreshList',
-            subscribeToSearch: 'subscriptions/create'
+            subscribeToSearch: 'subscriptions/create',
+            findSubscriptions: 'subscriptions/index'
             // morePagesActions: 'trips/tripMorePage',
             // setActionButton: 'actionbars/setHeaderButtons'
         }),
+        isDonationTime () {
+            if (this.appConfig) {
+                return moment().date() < parseFloat(this.appConfig.donation.month_days);
+            } else {
+                return false;
+            }
+        },
         research (params) {
+            this.resultaOfSearch = true;
             this.lookSearch = false;
             this.filtered = true;
             this.readySub = false;
+            this.alreadySubscribe = false;
             this.search(params);
+            this.findSubscriptions();
             // this.setActionButton(['clear']);
         },
         nextPage () {
@@ -117,6 +176,7 @@ export default {
         },
 
         onSearchButton () {
+            console.log('onSearchButton');
             this.lookSearch = true;
             // this.setActionButton(['clear']);
             bus.on('backbutton', this.onBackBottom);
@@ -129,6 +189,7 @@ export default {
             // this.setActionButton(['search']);
             this.filtered = false;
             this.lookSearch = false;
+            this.alreadySubscribe = false;
             this.search({ is_passenger: false });
             if (this.$refs.searchBox) {
                 this.$refs.searchBox.clear();
@@ -148,6 +209,50 @@ export default {
         onBackBottom () {
             bus.off('backbutton', this.onBackBottom);
             this.lookSearch = false;
+            this.alreadySubscribe = false;
+        },
+        onDonate () {
+            this.showModal = true;
+        },
+        onDonateOnceTime () {
+            if (this.donateValue > 0) {
+                var url = 'http://mpago.la/jgap'; // 50
+                switch (this.donateValue) {
+                    case '100':
+                        url = 'http://mpago.la/CaSZ';
+                        break;
+                    case '200':
+                        url = 'http://mpago.la/xntw';
+                        break;
+                    case '500':
+                        url = 'http://mpago.la/QEiN';
+                        break;
+                    default:
+                        break;
+                }
+                window.open(url, '_blank');
+                this.showModal = false;
+            }
+        },
+        onDonateMonthly () {
+            if (this.donateValue > 0) {
+                var url = 'http://mpago.la/1w3aci'; // 50
+                switch (this.donateValue) {
+                    case '100':
+                        url = 'http://mpago.la/BfZ';
+                        break;
+                    case '200':
+                        url = 'http://mpago.la/P02H';
+                        break;
+                    case '500':
+                        url = 'http://mpago.la/k8Xp';
+                        break;
+                    default:
+                        break;
+                }
+                window.open(url, '_blank');
+                this.showModal = false;
+            }
         },
         subscribeSearch () {
             let params = this.searchParams.data;
@@ -169,9 +274,19 @@ export default {
                 data.to_radio = params.destination_radio;
                 data.to_json_address = [];
             }
+
+            data.is_passenger = params.is_passenger;
+
             this.subscribeToSearch(data).then(() => {
                 this.alreadySubscribe = true;
                 dialogs.message('Te subscribiste correctamente. Te avisaremos cuando hayan viajes similares', { duration: 10, estado: 'success' });
+            }).catch((response) => {
+                console.log(response);
+                if (response.data.errors && response.data.errors.error) {
+                    if (response.data.errors.error[0] === 'subscription_exist') {
+                        dialogs.message('Ya tienes una suscripción para esta búsqueda.', { duration: 10, estado: 'error' });
+                    }
+                }
             });
         }
     },
@@ -214,6 +329,7 @@ export default {
             if (this.refreshList) {
                 this.refreshTrips(false);
                 this.lookSearch = false;
+                this.resultaOfSearch = false;
                 this.$refs.searchBox.clear();
             }
         }
@@ -226,7 +342,9 @@ export default {
             searchParams: 'trips/tripsSearchParam',
             isMobile: 'device/isMobile',
             isBrowser: 'device/isBrowser',
-            refreshList: 'trips/refreshList'
+            refreshList: 'trips/refreshList',
+            subscriptions: 'subscriptions/subscriptions',
+            appConfig: 'auth/appConfig'
         }),
 
         showingTrips () {
@@ -236,7 +354,8 @@ export default {
     components: {
         Trip,
         Loading,
-        SearchBox
+        SearchBox,
+        modal
     }
 };
 </script>
@@ -250,5 +369,35 @@ export default {
         border: 1px solid #999;
         width: 100%;
         max-width: 934px;
+    }
+    .btn-donar {
+        margin-left: 2em;
+        margin-right: 2em;
+        margin-top: 1em;
+        padding: 1em 2em;
+        font-size: 1.3em;
+    }
+    .radio > label > input {
+        opacity: 1;
+        z-index: 100;
+        vertical-align: middle;
+        display: inline-block;
+        margin-left: 1.3em;
+        margin-right: .8em;
+        position: static;
+        margin-top: 0;
+    }
+    .radio > label > span {
+        vertical-align: middle;
+        display: inline-block;
+        font-size: 1.4em;
+    }
+    .btn-unica-vez,
+    .btn-mensualmente {
+        width: 40%;
+        margin: 4%;
+        padding: 1em 0;
+        min-height: 5em;
+        font-size: 1.15em;
     }
 </style>

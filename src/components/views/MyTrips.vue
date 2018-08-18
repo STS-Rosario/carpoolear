@@ -55,8 +55,7 @@
                 </p>
             </Loading>
         </div>
-
-        <div class="col-xs-24" v-if="subscriptions && subscriptions.length">
+        <div class="col-xs-24" v-if="subscriptions && subscriptions.length" id="suscriptions">
             <Loading :data="subscriptions" :hideOnEmpty="true">
                 <h2 slot="title" > Suscripciones a viajes</h2>
                 <div class="trips-list row">
@@ -129,7 +128,6 @@ export default {
         });
         this.findSubscriptions();
     },
-
     computed: {
         ...mapGetters({
             trips: 'myTrips/myTrips',
@@ -149,6 +147,14 @@ export default {
                 return this.trips.find(item => item.id === id);
             }
         },
+        updateScroll () {
+            if (this.$route.query.loc) {
+                // window.scrollTo(0, document.body.scrollHeight);
+                // window.location.hash = this.$route.query.loc;
+                let domNode = document.getElementById(this.$route.query.loc);
+                window.scrollTo(0, domNode.offsetTop - 150);
+            }
+        },
         ...mapActions({
             tripAsDriver: 'myTrips/tripAsDriver',
             tripAsPassenger: 'myTrips/tripAsPassenger',
@@ -159,7 +165,32 @@ export default {
             findSubscriptions: 'subscriptions/index'
         })
     },
-
+    watch: {
+        trips: function () {
+            this.updateScroll();
+        },
+        passengerTrips: function () {
+            this.updateScroll();
+        },
+        pendingRates: function () {
+            this.updateScroll();
+        },
+        pendingRequest: function () {
+            this.updateScroll();
+        },
+        user: function () {
+            this.updateScroll();
+        },
+        oldTrips: function () {
+            this.updateScroll();
+        },
+        oldPassengerTrips: function () {
+            this.updateScroll();
+        }/* ,
+        subscriptions: function () {
+            this.updateScroll();
+        } */
+    },
     components: {
         Trip,
         Loading,

@@ -64,7 +64,7 @@ gulp.task('deploy', ['build-cordova'], function () {
         rsyncConf.port = 2200;
         rsyncConf.hostname = '104.131.15.228'; // hostname
         rsyncConf.username = argv.user || 'movilizame'; // ssh username
-        rsyncConf.destination = '/home/movilizame/sites/carpoolear_dev/public/app/'; // path where uploaded files go
+        rsyncConf.destination = '/home/movilizame/sites/carpoolear_dev/public/dev/'; // path where uploaded files go
 
   // Production
     } else if (argv.production) {
