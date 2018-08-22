@@ -503,7 +503,7 @@ export default {
         getPlace (i, data) {
             console.log('getPalce', data);
             this.points[i].place = data;
-            this.points[i].name = data.address[data.type] ? data.address[data.type] : data.address['county'];
+            this.points[i].name = data.display_name;
             // TODO: Recordar parseStreet
             this.points[i].json = parseOsmStreet(data);
             this.points[i].error.state = false;
