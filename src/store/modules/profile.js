@@ -34,6 +34,15 @@ const actions = {
         });
     },
 
+    registerDonation (store, data) {
+        return userApi.registerDonation(data).then((response) => {
+            console.log(response);
+            return Promise.resolve();
+        }).catch((error) => {
+            return Promise.reject(error);
+        });
+    },
+
     ...pagination.makeActions('rates', ({store, data}) => {
         // TODO: Pagination not working
         data.page_size = 200;

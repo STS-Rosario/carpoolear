@@ -186,8 +186,13 @@
                                         <svgItem icon="thumbUp" size="18"></svgItem> <span> {{trip.user.positive_ratings}} </span>
                                         <svgItem icon="thumbDown" size="18"></svgItem> <span> {{trip.user.negative_ratings}} </span>
                                     </div>
-                                    <div v-if="trip.user.has_pin == 1" class="user_pin">
-                                        <img src="https://carpoolear.com.ar/static/img/pin.png" alt="" title="Aportante en la campaña mi media naranja carpoolera" />
+                                    <div class="user_pin">
+                                        <span v-if="trip.user.has_pin == 1">
+                                            <img src="https://carpoolear.com.ar/static/img/pin.png" alt="" title="Aportante en la campaña mi media naranja carpoolera" />
+                                        </span>
+                                        <span v-if="trip.user.is_member == 1">
+                                            <img src="https://carpoolear.com.ar/static/img/pin_member.png" alt="" title="Miembro del equipo de Carpoolear" />
+                                        </span>
                                     </div>
                                 </div>
                             </div>

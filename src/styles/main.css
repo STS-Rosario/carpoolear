@@ -136,6 +136,9 @@ input[type=radio] + label {
     cursor: not-allowed;
     background-color: #6789d0
 }
+.alertify-notifier {
+    z-index: 9999!important;
+}
 
 .alertify-notifier .ajs-message.ajs-success {
     color: #fff;
@@ -1617,7 +1620,7 @@ textarea {
 .profile-info-component .profile-info--ratings i {
     float: none;
     width: auto;
-    margin-right: 0.4em;
+    margin-right: 0.2em;
 }
 
 .profile-info-component .profile-info--ratings span:first-of-type {
@@ -2338,7 +2341,7 @@ ul {
         max-height: 230px;
     }
     .profile-info--ratings {
-        width: 230px;
+        width: 100%;
     }
     .list-container {
         margin: .8em 0;

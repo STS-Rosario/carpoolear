@@ -24,7 +24,6 @@
               <template v-if="user">
                 <div class="trip_driver_img_container"  v-on:click='goToProfile'>
                   <div class="trip_driver_img circle-box" v-imgSrc:profile="getUserImage"></div>
-                  <!-- {{ trip.user.has_pin }} -->
                 </div>
                 <div class="trip_driver_details">
                   <div class="trip_driver_name"  v-on:click='goToProfile'>
