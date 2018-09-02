@@ -4,9 +4,11 @@
             <h1>Buscá con quién compartir tu próximo viaje!</h1>
             <h3>¡Elegí fecha, origen o destino y encontralo!</h3>
         </div>
-        <!-- <a href="https://carpoolear.com.ar/encuentrocarpoolero" target="_blank" class="banner">
-            <img alt="" :src="'/static/img/banner_encuentro_carpoolero.png'" />
-        </a> -->
+        <template v-if="appConfig && appConfig.banner && appConfig.banner.url">
+            <a :href="appConfig.banner.url" target="_blank" class="banner">
+                <img alt="" :src="appConfig.banner.image" />
+            </a>
+        </template>
         <div v-show="!user && isMobile">
             <router-link :to="{name: 'login'}" class="login_usuario"> Ingresá con tu usuario o registrate <span class='underline'>aquí</span> para comenzar a Carpoolear!</router-link>
         </div>
@@ -14,20 +16,25 @@
         <Loading :data="trips" v-if="showingTrips">
             <div class="trips-list row">
                 <modal :name="'modal'" v-if="showModal" @close="showModal = false" :title="'Test'" :body="'Body'">
-                    <h3 slot="header">Doná a Carpoolear un proyecto de <img width="120" alt="STS Rosario" src="https://carpoolear.com.ar/img/logo_sts_nuevo_color.png"></h3>
+                    <h3 slot="header">Doná a Carpoolear un proyecto de <img width="100" alt="STS Rosario" src="https://carpoolear.com.ar/img/logo_sts_nuevo_color.png"></h3>
                     <div slot="body" class="donation">
+                        <div class="text-center">
+                            <a href="/donar" target="_blank" v-on:click.prevent="onOpenLink('https://carpoolear.com.ar/donar')">
+                                Conocé más acerca de por qué donar a Carpoolear
+                            </a>
+                        </div>
                         <div class="radio">
                             <label class="radio-inline">
-                                <input type="radio" name="donationValor" id="donation50" value="50" v-model="donateValue"><span>50</span>
+                                <input type="radio" name="donationValor" id="donation50" value="50" v-model="donateValue"><span>$ 50</span>
                             </label>
                             <label class="radio-inline">
-                                <input type="radio" name="donationValor" id="donation100" value="100" v-model="donateValue"><span>100</span>
+                                <input type="radio" name="donationValor" id="donation100" value="100" v-model="donateValue"><span>$ 100</span>
                             </label>
                             <label class="radio-inline">
-                                <input type="radio" name="donationValor" id="donation200" value="200" v-model="donateValue"><span>200</span>
+                                <input type="radio" name="donationValor" id="donation200" value="200" v-model="donateValue"><span>$ 200</span>
                             </label>
                             <label class="radio-inline">
-                                <input type="radio" name="donationValor" id="donation500" value="500" v-model="donateValue"><span>500</span>
+                                <input type="radio" name="donationValor" id="donation500" value="500" v-model="donateValue"><span>$ 500</span>
                             </label>
                         </div>
                         <div>
@@ -37,13 +44,13 @@
                     </div>
                 </modal>
                 <template v-for="(trip, index) in trips">
-                    <template v-if="isDonationTime() && false">
-                        <div class="panel panel-default pull-left" v-if="(index + parseFloat(appConfig.donation.trips_offset))  % parseFloat(appConfig.donation.trips_count) === 0">
+                    <template v-if="isDonationTime()"><!--  || -->
+                        <div class="panel panel-default panel-donar" v-if="((index + parseFloat(appConfig.donation.trips_offset))  % parseFloat(appConfig.donation.trips_count) === 0)">
                             <div class="panel-body">
                                 <button class="btn btn-success pull-right btn-donar" @click="onDonate">Donar</button>
                                 <h2>Ayudanos a seguir siendo una plataforma abierta, colaborativa y sin fines de lucro</h2>
 
-                                <a href="/donar">
+                                <a href="/donar" target="_blank" v-on:click.prevent="onOpenLink('https://carpoolear.com.ar/donar')">
                                     Conocé más
                                 </a>
                             </div>
@@ -134,7 +141,8 @@ export default {
             search: 'trips/tripsSearch',
             refreshTrips: 'trips/refreshList',
             subscribeToSearch: 'subscriptions/create',
-            findSubscriptions: 'subscriptions/index'
+            findSubscriptions: 'subscriptions/index',
+            registerDonation: 'profile/registerDonation'
             // morePagesActions: 'trips/tripMorePage',
             // setActionButton: 'actionbars/setHeaderButtons'
         }),
@@ -214,6 +222,9 @@ export default {
         onDonate () {
             this.showModal = true;
         },
+        onOpenLink (link) {
+            window.open(link, '_blank');
+        },
         onDonateOnceTime () {
             if (this.donateValue > 0) {
                 var url = 'http://mpago.la/jgap'; // 50
@@ -232,6 +243,14 @@ export default {
                 }
                 window.open(url, '_blank');
                 this.showModal = false;
+                let data = {
+                    has_donated: 1,
+                    has_denied: 0,
+                    ammount: parseFloat(this.donateValue)
+                };
+                this.registerDonation(data);
+            } else {
+                dialogs.message('Tienes que seleccionar un valor de donación.', { duration: 10, estado: 'error' });
             }
         },
         onDonateMonthly () {
@@ -252,6 +271,14 @@ export default {
                 }
                 window.open(url, '_blank');
                 this.showModal = false;
+                let data = {
+                    has_donated: 1,
+                    has_denied: 0,
+                    ammount: parseFloat(this.donateValue)
+                };
+                this.registerDonation(data);
+            } else {
+                dialogs.message('Tienes que seleccionar un valor de donación.', { duration: 10, estado: 'error' });
             }
         },
         subscribeSearch () {
@@ -394,10 +421,27 @@ export default {
     }
     .btn-unica-vez,
     .btn-mensualmente {
-        width: 40%;
-        margin: 4%;
+        width: 43%;
+        margin: 2%;
         padding: 1em 0;
-        min-height: 5em;
-        font-size: 1.15em;
+        min-height: 6em;
+        font-size: 1.1em;
+        white-space: normal;
+    }
+    .panel-donar {
+        float: none;
+        clear: both;
+    }
+    @media (max-width: 550px) {
+        .panel-donar h2 {
+            font-size: 22px;
+        }
+        .donation .radio-inline {
+            display: inline-block;
+            width: calc(49% - 10px);
+            box-sizing: border-box;
+            padding: 0;
+            margin-left: 8px;
+        }
     }
 </style>

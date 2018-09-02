@@ -12,6 +12,9 @@
                         <i class="fa fa-thumbs-up" aria-hidden="true"></i> <span> {{profile.positive_ratings}} </span>
                         <i class="fa fa-thumbs-down" aria-hidden="true"></i> <span> {{profile.negative_ratings}} </span>
                     </div>
+                    <div v-if="profile.is_member == 1" class="">
+                        <img src="https://carpoolear.com.ar/static/img/pin_member.png" alt="" title="Aportante en la campaña mi media naranja carpoolera" />
+                    </div>
                 </div>
                 <div class="profile-social-accounts" >
                     <div v-for="account in profile.accounts" class="row">
