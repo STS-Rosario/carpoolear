@@ -45,12 +45,16 @@ export default {
 
         onNotificationClick (n) {
             if (n.extras) {
+                console.log(n.extras);
                 switch (n.extras.type) {
                 case 'trip':
                     router.push({name: 'detail_trip', params: { id: n.extras.trip_id }});
                     break;
                 case 'friends':
-                    router.push({name: 'friends'});
+                    router.push({name: 'friends_setting'});
+                    break;
+                case 'subscription':
+                    router.push({ name: 'my-trips', query: { loc: 'suscriptions' } });
                     break;
                 case 'my-trips':
                     router.push({ name: 'my-trips' });

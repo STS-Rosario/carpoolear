@@ -61,7 +61,7 @@
                 <h3>Información legal</h3>
                 <p>
                     En ruta desde el año 2013<br />
-                    <router-link :to="{name: 'terms'}">Terminos y condiciones</router-link>
+                    <router-link :to="{name: 'terms'}">Términos y condiciones</router-link>
                 </p>
             </div>
         </div>

@@ -1,7 +1,6 @@
 <template>
   <div class="trips container">
         <div class="col-xs-24">
-
             <Loading :data="pendingRequest" :hideOnEmpty="true">
                 <h2 slot="title"> Pendientes <strong>de contestar</strong> </h2>
                 <div class="request-list">
@@ -56,6 +55,22 @@
                 </p>
             </Loading>
         </div>
+        <div class="col-xs-24" v-if="subscriptions && subscriptions.length" id="suscriptions">
+            <Loading :data="subscriptions" :hideOnEmpty="true">
+                <h2 slot="title" > Suscripciones a viajes</h2>
+                <div class="trips-list row">
+                    <div class="col-xs-24 col-md-12" v-for="subs in subscriptions" :key="subs.id">
+                        <subscriptionItem :subscription="subs" :user="user"></subscriptionItem>
+                    </div>
+
+                </div>
+                <p slot="no-data" class="alert alert-warning"  role="alert">No tienes ninguna suscripción.</p>
+                <p slot="loading" class="alert alert-info" role="alert">
+                    <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
+                    Cargando suscripciones ...
+                </p>
+            </Loading>
+        </div>
 
 
         <div class="col-xs-24" v-if="oldTrips">
@@ -90,6 +105,7 @@
 </template>
 
 <script>
+import subscriptionItem from '../sections/SubscriptionItem.vue';
 import Trip from '../sections/Trip.vue';
 import Loading from '../Loading.vue';
 import PendingRequest from '../PendingRequest';
@@ -110,8 +126,8 @@ export default {
             this.oldTripsAsDriver();
             this.oldTripsAsPassenger();
         });
+        this.findSubscriptions();
     },
-
     computed: {
         ...mapGetters({
             trips: 'myTrips/myTrips',
@@ -120,7 +136,8 @@ export default {
             pendingRequest: 'passenger/pendingRequest',
             user: 'auth/user',
             oldTrips: 'myTrips/myOldTrips',
-            oldPassengerTrips: 'myTrips/passengerOldTrips'
+            oldPassengerTrips: 'myTrips/passengerOldTrips',
+            subscriptions: 'subscriptions/subscriptions'
         })
     },
 
@@ -130,23 +147,58 @@ export default {
                 return this.trips.find(item => item.id === id);
             }
         },
+        updateScroll () {
+            if (this.$route.query.loc) {
+                // window.scrollTo(0, document.body.scrollHeight);
+                // window.location.hash = this.$route.query.loc;
+                let domNode = document.getElementById(this.$route.query.loc);
+                window.scrollTo(0, domNode.offsetTop - 150);
+            }
+        },
         ...mapActions({
             tripAsDriver: 'myTrips/tripAsDriver',
             tripAsPassenger: 'myTrips/tripAsPassenger',
             pendingRate: 'rates/pendingRates',
             getPendingRequest: 'passenger/getPendingRequest',
             oldTripsAsDriver: 'myTrips/oldTripsAsDriver',
-            oldTripsAsPassenger: 'myTrips/oldTripsAsPassenger'
+            oldTripsAsPassenger: 'myTrips/oldTripsAsPassenger',
+            findSubscriptions: 'subscriptions/index'
         })
     },
-
+    watch: {
+        trips: function () {
+            this.updateScroll();
+        },
+        passengerTrips: function () {
+            this.updateScroll();
+        },
+        pendingRates: function () {
+            this.updateScroll();
+        },
+        pendingRequest: function () {
+            this.updateScroll();
+        },
+        user: function () {
+            this.updateScroll();
+        },
+        oldTrips: function () {
+            this.updateScroll();
+        },
+        oldPassengerTrips: function () {
+            this.updateScroll();
+        }/* ,
+        subscriptions: function () {
+            this.updateScroll();
+        } */
+    },
     components: {
         Trip,
         Loading,
         PendingRequest,
         RatePending,
         Tab,
-        Tabset
+        Tabset,
+        subscriptionItem
     }
 };
 </script>

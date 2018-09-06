@@ -136,6 +136,9 @@ input[type=radio] + label {
     cursor: not-allowed;
     background-color: #6789d0
 }
+.alertify-notifier {
+    z-index: 9999!important;
+}
 
 .alertify-notifier .ajs-message.ajs-success {
     color: #fff;
@@ -1443,6 +1446,14 @@ textarea {
 .pic-info {
     text-align: center;
     margin: 2em 0;
+    position: relative;
+}
+
+.pic-info .user_pin {
+    position: absolute;
+    left: 60%;
+    top: 0;
+    z-index: 1;
 }
 .conversation_image {
     margin-right: 10px;
@@ -1609,7 +1620,7 @@ textarea {
 .profile-info-component .profile-info--ratings i {
     float: none;
     width: auto;
-    margin-right: 0.4em;
+    margin-right: 0.2em;
 }
 
 .profile-info-component .profile-info--ratings span:first-of-type {
@@ -2259,6 +2270,8 @@ ul {
     .pic-info {
         margin: 0 0 2em 0;
     }
+
+
     .desktop {
         display: inherit;
     }
@@ -2328,7 +2341,7 @@ ul {
         max-height: 230px;
     }
     .profile-info--ratings {
-        width: 230px;
+        width: 100%;
     }
     .list-container {
         margin: .8em 0;
@@ -2490,10 +2503,10 @@ ul {
     }
     .search-section .form-control-map-autocomplete {
         line-height: 42px;
-        width: 92%;
+        width: 100%;
     }
     .search-section .destiny .form-control-map-autocomplete {
-        float: right;
+        /* float: right; */
     }
     .search-section .form-control-date input {
         line-height: 42px !important;
@@ -2535,9 +2548,24 @@ ul {
     .header_panel-right .btn-link {
         padding: 12px;
     }
+
+    .pic-info .user_pin {
+        left: 65%;
+    }
 }
 
 
+
+@media only screen and (min-width: 768px) and (max-width: 1000px) {
+    .pic-info .user_pin {
+        left: 90%;
+    }
+}
+@media only screen and (min-width: 1001px) and (max-width: 1400px) {
+    .pic-info .user_pin {
+        left: 70%;
+    }
+}
 /**
  * Tooltip Styles
  */
@@ -2698,4 +2726,11 @@ ul {
     border-bottom: 1px solid #CCC;
     padding-bottom: .5em;
     margin-bottom: .5em;
+}
+
+.suscription-item-detail--content strong {
+    color: var(--secondary-background);
+}
+.leaflet-routing-container {
+    display: none;
 }

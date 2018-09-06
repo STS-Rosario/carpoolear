@@ -12,7 +12,8 @@ const state = {
     auth: false,
     user: null,
     token: null,
-    firstTime: false
+    firstTime: false,
+    appConfig: null
 };
 
 // getters
@@ -20,7 +21,8 @@ const getters = {
     checkLogin: state => state.auth,
     authHeader: state => state.auth ? { 'Authorization': 'Bearer ' + state.token } : {},
     user: state => state.user,
-    firstTime: firstTime => state.firstTime
+    firstTime: state => state.firstTime,
+    appConfig: state => state.appConfig
 };
 
 // actions
@@ -134,7 +136,9 @@ function retoken (store) {
 
     return new Promise((resolve, reject) => {
         authApi.retoken(data).then((response) => {
+            console.log('retoken response', response);
             store.commit(types.AUTH_SET_TOKEN, response.token);
+            store.commit('AUTH_APP_CONFIG', response.config);
             resolve();
         }).catch(({data, status}) => {
             // check for internet problems -> not resolve until retoken finish
@@ -211,6 +215,10 @@ const mutations = {
     },
     [types.AUTH_FIRST_TIME] (state, firstTime) {
         state.firstTime = firstTime;
+    },
+
+    AUTH_APP_CONFIG (state, appConfig) {
+        state.appConfig = appConfig;
     }
 };
 

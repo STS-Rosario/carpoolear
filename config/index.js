@@ -21,7 +21,7 @@ module.exports = {
   },
   dev: {
     env: require('./dev.env'),
-    port: 8080,
+    port: 8081,
     assetsSubDirectory: 'static',
     assetsPublicPath: dFlag ? '/app/' : (isSERVED ? '/' : ''), // dejar vacio para compilar cordova
     proxyTable: {},
