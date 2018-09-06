@@ -29,9 +29,9 @@
                         <template slot="button">
                             <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
                         </template>
-                        <li><router-link tag="a" :to="{name: 'acerca_de'}"  >ACERCA DE</router-link></li>
-                        <li><router-link :to="{name: 'terms'}" tag="a">TÉRMINOS Y CONDICIONES</router-link></li>
-                        <li><a @click="logout" v-if="!isFacebokApp">CERRAR SESSION</a></li>
+                        <li><router-link tag="a" :to="{name: 'acerca_de'}"  >Acerca de</router-link></li>
+                        <li><router-link :to="{name: 'terms'}" tag="a">Términos y Condiciones</router-link></li>
+                        <li><a @click="logout" v-if="!isFacebokApp">Cerrar sesión</a></li>
                     </dropdown>
                 </div>
             </div>
