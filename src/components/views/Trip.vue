@@ -218,9 +218,9 @@
                                     <div class="row matching-user-list">
                                         <div v-for="p in matchingUsers" class="list-item col-sm-24" v-bind:key="p.id">
                                             <div class="passenger-match">
-                                                <input type="checkbox" v-model="selectedMatchingUser" :value="p.id">
+                                                <input type="checkbox" v-model="selectedMatchingUser" v-bind:id="p.id" v-bind:value="p.id">
                                                 <span @click="toUserProfile(p)" class="trip_driver_img circle-box passenger trip_passenger_image" v-imgSrc:profile="p.image"></span>
-                                                <a :href="'/profile/' + p.id " @click="toUserProfile(p)" class="trip_passenger_name">
+                                                <a href="#" @click="toUserProfile(p)" class="trip_passenger_name">
                                                     {{ p.name }}
                                                 </a>
                                                 <button @click="toUserMessages(p)" aria-label="Ir a mensajes" class="trip_passenger-chat">
@@ -261,7 +261,7 @@
                                 v-if="m.location"
                             ></gmap-marker>
                         </gmap-map> -->
-                        <l-map :zoom="zoom" :center="center" style="width: calc(100% + 20px); height: 461px; overflow: hidden; margin-left: -10px" ref="map">
+                        <l-map :zoom="zoom" :center="center" style="width: calc(100% + 20px); height: 461px; overflow: hidden; margin-left: -10px; z-index: 0;" ref="map">
                             <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
                         </l-map>
                     </div>
@@ -380,7 +380,8 @@ export default {
                         console.log('matching', users);
                         this.matchingUsers = users;
                         if (users && users.length) {
-                            this.selectedMatchingUser = users.reduce(u => u.id);
+                            this.selectedMatchingUser = users.map(u => u.id);
+                            // console.log('selectedMatchingUser', users);
                         }
                     });
                 }
@@ -408,7 +409,8 @@ export default {
         },
 
         toUserProfile (user) {
-            router.push({
+            console.log('toUserProfile replace');
+            router.replace({
                 name: 'profile',
                 params: {
                     id: user.id,
@@ -580,7 +582,7 @@ export default {
         },
         onSendToAll () {
             let users = this.matchingUsers.filter(u => this.selectedMatchingUser.indexOf(u.id) >= 0);
-            console.log(users);
+            console.log(users, this.messageToUsers);
             if (this.messageToUsers && users && users.length) {
                 this.sendToAll({
                     message: this.messageToUsers,
@@ -704,8 +706,9 @@ export default {
         margin-top: 1rem;
         z-index: 0;
         position: relative;
-        min-height: 460px;
-        overflow: hidden;
+        min-height: 418px;
+        /* overflow: hidden; */
+        top: -43px;
     }
     .trip-detail-component .driver-container {
         margin-top: 0;
@@ -788,8 +791,8 @@ export default {
             margin-top: 0;
         }
         .trip-detail-component .driver-profile div.row:last-child {
-            max-height: 11rem;
-            min-height: 9rem;
+            max-height: 12rem;
+            min-height: 11rem;
         }
         .trip-detail-component .quote {
             margin-left: 0;
@@ -830,6 +833,7 @@ export default {
         left: 1em;
         top: 1em;
         max-height: 400px;
+        z-index: 100;
     }
     .matcheo-passengers h3 {
         font-size: 1.4em;
