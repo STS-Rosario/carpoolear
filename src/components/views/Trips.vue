@@ -16,12 +16,17 @@
         <Loading :data="trips" v-if="showingTrips">
             <div class="trips-list row">
                 <modal :name="'modal'" v-if="showModal" @close="showModal = false" :title="'Test'" :body="'Body'">
-                    <h3 slot="header">Doná a Carpoolear un proyecto de <img width="100" alt="STS Rosario" src="https://carpoolear.com.ar/img/logo_sts_nuevo_color.png"></h3>
+                    <h3 slot="header">
+                        <span>Doná a Carpoolear</span>
+                        <br class="hidden-sm hidden-md hidden-lg">
+                        <small>un proyecto de </small>
+                        <img width="90" alt="STS Rosario" src="https://carpoolear.com.ar/img/logo_sts_nuevo_color.png">
+                    </h3>
                     <div slot="body" class="donation">
                         <div class="text-center">
-                            <a href="/donar" target="_blank" v-on:click.prevent="onOpenLink('https://carpoolear.com.ar/donar')">
+                            <!-- <a href="/donar" target="_blank" v-on:click.prevent="onOpenLink('https://carpoolear.com.ar/donar')">
                                 Conocé más acerca de por qué donar a Carpoolear
-                            </a>
+                            </a> -->
                         </div>
                         <div class="radio">
                             <label class="radio-inline">
@@ -39,7 +44,7 @@
                         </div>
                         <div>
                             <button class="btn btn-success btn-unica-vez" @click="onDonateOnceTime">ÚNICA VEZ</button>
-                            <button class="btn btn-info btn-mensualmente" @click="onDonateMonthly">MENSUALMENTE <br />(cancelá cuando quieras)</button>
+                            <button class="btn btn-info btn-mensualmente" @click="onDonateMonthly">MENSUAL <br />(cancelá cuando quieras)</button>
                         </div>
                     </div>
                 </modal>
@@ -50,8 +55,8 @@
                                 <button class="btn btn-success pull-right btn-donar" @click="onDonate">Donar</button>
                                 <h2>Ayudanos a seguir siendo una plataforma abierta, colaborativa y sin fines de lucro</h2>
 
-                                <a href="/donar" target="_blank" v-on:click.prevent="onOpenLink('https://carpoolear.com.ar/donar')">
-                                    Conocé más
+                                <a href="/donar" target="_blank" v-on:click.prevent="onOpenLink('https://carpoolear.com.ar/donar?u=' + user.id)">
+                                    Por qué donar a Carpoolear
                                 </a>
                             </div>
                         </div>
