@@ -46,7 +46,7 @@
                 </div>-->
                 <div class="form-group">
                     <label for="input-description">Acerca de mi <span class="required-field-flag" title="Campo requerido">(*)</span><span class="description"> Contale de vos al resto de los carpooleros así te suman a sus viajes! Qué te gusta hacer, en qué andas metido ahora, si estás con alguna idea, si te gustan los colores, etc.</span></label>
-                    <textarea maxlength="280" v-model="user.description" placeholder="Descripción" :class="{'has-error': descError.state }" ></textarea>
+                    <textarea maxlength="1000" v-model="user.description" placeholder="Descripción" :class="{'has-error': descError.state }" ></textarea>
                     <span class="error textarea" v-if="descError.state"> {{descError.message}} </span>
                 </div>
                 <div class="form-group">
