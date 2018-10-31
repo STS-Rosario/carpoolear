@@ -5,8 +5,8 @@
   "cordova": {
     "platforms": [
       "android",
-      "ios",
-      "browser"
+      "browser",
+      "ios"
     ],
     "plugins": {
       "cordova-plugin-device": {},
@@ -22,18 +22,17 @@
         "APP_NAME": "Carpoolear"
       },
       "cordova-plugin-datepicker": {},
-      "phonegap-plugin-push": {
-        "SENDER_ID": "1027904610758",
-        "PACKAGE_NAME": "com.sts.carpoolear"
-      },
       "cordova-plugin-disable-ios11-statusbar": {},
-      "cordova-plugin-cache-clear": {}
+      "cordova-plugin-cache-clear": {},
+      "phonegap-plugin-push": {
+        "FCM_VERSION": "11.6.2"
+      }
     }
   },
   "dependencies": {
-    "cordova-android": "^6.2.3",
+    "cordova-android": "^6.3.0",
     "cordova-browser": "^5.0.1",
-    "cordova-ios": "^4.4.0",
+    "cordova-ios": "^4.5.0",
     "cordova-plugin-backbutton": "^0.3.0",
     "cordova-plugin-cache-clear": "^1.3.7",
     "cordova-plugin-datepicker": "^0.9.3",
@@ -46,6 +45,6 @@
     "cordova-plugin-whitelist": "1",
     "cordova-plugin-x-socialsharing": "https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin.git",
     "cordova-plugin-x-toast": "https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git",
-    "phonegap-plugin-push": "^2.0.0-rc4"
+    "phonegap-plugin-push": "^2.1.3"
   }
 }
