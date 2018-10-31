@@ -111,7 +111,7 @@ Tengamos un buen viaje cuidándonos entre todos :D">
                             </div>
                             <div class="trip-comment">
                                 <label for="trip_comment"  class="label-for-group"> Comentario para los pasajeros </label>
-                                <textarea maxlength="280" v-model="trip.description" id="trp_comment" class="form-control"></textarea>
+                                <textarea maxlength="1000" v-model="trip.description" id="trp_comment" class="form-control"></textarea>
                                 <span class="error" v-if="commentError.state"> {{commentError.message}} </span>
                             </div>
                         </div>

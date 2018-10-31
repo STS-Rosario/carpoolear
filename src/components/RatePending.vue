@@ -26,7 +26,7 @@
                 </div>
             </div>
             <div class="rate--comment-box" v-show="expanded">
-                <textarea maxlength="330" class="rate_comment" v-model="comment" placeholder="Incluya un comentario..."></textarea>
+                <textarea maxlength="1000" class="rate_comment" v-model="comment" placeholder="Incluya un comentario..."></textarea>
                 <button class="btn btn-primary" @click="makeVote" :disabled="sending"> Calificar </button>
             </div>
         </div>
