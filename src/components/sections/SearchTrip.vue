@@ -216,7 +216,7 @@ export default {
                 params.destination_radio = this.to_town.radio;
                 params.destination_name = this.to_town.name;
             } else {
-                params.origin_name = this.$refs['to_town'].input;
+                params.destination_name = this.$refs['to_town'].input;
             }
             if (this.to_town && this.to_town.country && this.to_town.country.toLowerCase() !== 'AR'.toLowerCase()) {
                 foreignCountry++;
@@ -234,7 +234,7 @@ export default {
         },
         resetInput (input) {
             if (this.$refs[input]) {
-               this.$refs[input].input = '';
+                this.$refs[input].input = '';
             }
             this[input] = {
                 name: '',

@@ -512,12 +512,44 @@ export default {
                     destiny: this.trip.points[this.trip.points.length - 1]
                 };
                  /* eslint-disable no-undef */
-                L.Routing.control({
+                let control = L.Routing.control({
                     waypoints: [
                         L.latLng(data.origin.lat, data.origin.lng),
                         L.latLng(data.destiny.lat, data.destiny.lng)
-                    ]
-                }).addTo(map);
+                    ],
+                    language: 'es'
+                });
+                control.on('routeselected', function (e) {
+                    console.log('routeselected', e);
+                    var coord = e.route.coordinates;
+                    var instr = e.route.instructions;
+                    var formatter = new L.Routing.Formatter({ langague: 'es' });
+                    var instrPts = {
+                        type: 'FeatureCollection',
+                        features: []
+                    };
+                    for (var i = 0; i < instr.length; ++i) {
+                        var g = {
+                            'type': 'Point',
+                            'coordinates': [
+                                coord[instr[i].index].lng,
+                                coord[instr[i].index].lat
+                            ]
+                        };
+                        var p = {
+                            'instruction': formatter.formatInstruction(instr[i]),
+                            '_instruction': instr[i]
+                        };
+                        instrPts.features.push({
+                            'geometry': g,
+                            'type': 'Feature',
+                            'properties': p
+                        });
+                    }
+                    console.log(instrPts);
+                    console.log(JSON.stringify(instrPts));
+                });
+                control.addTo(map);
             }
         },
 
@@ -880,6 +912,7 @@ export default {
         .trip-detail-component .structure-div {
             overflow: visible;
             padding: 0;
+            margin-bottom: 3em;
         }
         .matcheo-passengers {
             position: static;

@@ -178,7 +178,6 @@ import DatePicker from '../DatePicker';
 import bus from '../../services/bus-event.js';
 import router from '../../router';
 import dialogs from '../../services/dialogs.js';
-import { getCityName } from '../../services/utility';
 import moment from 'moment';
 
 import OsmApi from '../../services/api/Osm';
