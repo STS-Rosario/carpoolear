@@ -234,7 +234,7 @@ export default {
         },
         resetInput (input) {
             if (this.$refs[input]) {
-               this.$refs[input].input = '';
+                this.$refs[input].input = '';
             }
             this[input] = {
                 name: '',
