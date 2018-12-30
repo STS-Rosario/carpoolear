@@ -519,7 +519,7 @@ export default {
                     ],
                     language: 'es'
                 });
-                control.on('routeselected', function (e) {
+                /* control.on('routeselected', function (e) {
                     console.log('routeselected', e);
                     var coord = e.route.coordinates;
                     var instr = e.route.instructions;
@@ -547,8 +547,7 @@ export default {
                         });
                     }
                     console.log(instrPts);
-                    console.log(JSON.stringify(instrPts));
-                });
+                }); */
                 control.addTo(map);
             }
         },
@@ -920,7 +919,7 @@ export default {
             top: 0;
             max-height: auto;
             float: none;
-            margin: -1rem 0;
+            margin: 1.5rem 0 -1rem 0;
             border-radius: 0;
             padding-bottom: 1em;
         }

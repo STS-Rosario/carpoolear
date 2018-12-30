@@ -83,10 +83,12 @@ const actions = {
         return tripsApi.tag(['trips']).search(data).then(trips => {
             let users = [];
             for (let i = 0; i < trips.data.length; i++) {
-                let trip = trips.data[i];
-                const i = users.findIndex(item => item.id === trip.user_id);
-                if (i < 0) {
-                    users.push(trip.user);
+                let t = trips.data[i];
+                if (moment(trip.trip_date).format('YYYY-MM-DD') === moment(t.trip_date).format('YYYY-MM-DD')) {
+                    const i = users.findIndex(item => t.user && item.id === t.user.id);
+                    if (i < 0) {
+                        users.push(t.user);
+                    }
                 }
             }
             return Promise.resolve(users);
