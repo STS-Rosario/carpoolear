@@ -1,6 +1,7 @@
 import * as types from '../mutation-types';
 import {UserApi, RateApi} from '../../services/api';
 import * as pagination from '../pagination';
+import globalStore from '../index';
 
 let userApi = new UserApi();
 let rateApi = new RateApi();
@@ -36,7 +37,8 @@ const actions = {
 
     registerDonation (store, data) {
         return userApi.registerDonation(data).then((response) => {
-            console.log(response);
+            console.log('registerDonation', response);
+            globalStore.commit('auth/' + types.DONATION_INTENT_PUSH, response.donation);
             return Promise.resolve();
         }).catch((error) => {
             return Promise.reject(error);

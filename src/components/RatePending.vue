@@ -88,6 +88,8 @@ export default {
                 ok = true;
             }
             if (ok) {
+                console.log('emit rated');
+                this.$emit('rated', data);
                 this.emit(data).then(() => {
                     this.comment = '';
                     this.sending = false;

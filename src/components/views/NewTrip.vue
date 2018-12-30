@@ -16,12 +16,14 @@
                     <div class="trip_terms">
                         <input type="checkbox" id="no-lucrar" v-model="no_lucrar" />
                         <div>
-                            <label for="no-lucrar" class="trip_terms_label" :class="{'has-error': lucrarError.state }" >Me comprometo a no lucrar con el viaje</label>
-                            <span class="tooltip-bottom" data-tooltip="La contribución máxima que se puede pedir para el viaje es igual a gastos de combustible más peajes dividido la cantidad de viajeros
-en el auto (sí, el conductor también cuenta como uno). Al no lucrar evitás ser un transporte ilegal de pasajeros, lo que invalidaría el seguro particular automor y la cobertura contra terceros asociada.
-Tengamos un buen viaje cuidándonos entre todos :D">
-                                <i class="fa fa-info-circle" aria-hidden="true"></i>
-                            </span>
+                            <label for="no-lucrar" class="trip_terms_label" :class="{'has-error': lucrarError.state }" >
+                                Me comprometo a no lucrar con el viaje.
+                                <span class="tooltip-bottom" data-tooltip="Al pedir una contribución por encima de la máxima, es posible que el viaje sea considerado con fin de lucro y por lo tanto un transporte ilegal de pasajeros, pudiendo ser invalidado el seguro particular automotor y la cobertura contra terceros asociada. Tengamos un buen viaje cuidándonos entre todos :-D">
+                                    <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                </span>
+                                <br />
+                                <small>La contribución máxima es igual a gastos de combustible + peaje dividido la cantidad de personas viajando en el auto. Durante la coordinación previa al viaje, cualquier persona puede pedir hacer la división con tickets de combustible y peaje en mano.</small>
+                            </label>
                         </div>
                     </div>
                 </div>
