@@ -219,6 +219,15 @@ const mutations = {
 
     AUTH_APP_CONFIG (state, appConfig) {
         state.appConfig = appConfig;
+    },
+
+    [types.DONATION_INTENT_PUSH] (state, donation) {
+        if (state.user) {
+            if (!state.user.donations) {
+                state.user.donations = [];
+            }
+            state.user.donations.push(donation);
+        }
     }
 };
 

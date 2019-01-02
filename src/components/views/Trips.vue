@@ -234,17 +234,17 @@ export default {
             if (this.donateValue > 0) {
                 var url = 'http://mpago.la/jgap'; // 50
                 switch (this.donateValue) {
-                    case '100':
-                        url = 'http://mpago.la/CaSZ';
-                        break;
-                    case '200':
-                        url = 'http://mpago.la/xntw';
-                        break;
-                    case '500':
-                        url = 'http://mpago.la/QEiN';
-                        break;
-                    default:
-                        break;
+                case '100':
+                    url = 'http://mpago.la/CaSZ';
+                    break;
+                case '200':
+                    url = 'http://mpago.la/xntw';
+                    break;
+                case '500':
+                    url = 'http://mpago.la/QEiN';
+                    break;
+                default:
+                    break;
                 }
                 window.open(url, '_blank');
                 this.showModal = false;
@@ -262,17 +262,17 @@ export default {
             if (this.donateValue > 0) {
                 var url = 'http://mpago.la/1w3aci'; // 50
                 switch (this.donateValue) {
-                    case '100':
-                        url = 'http://mpago.la/BfZ';
-                        break;
-                    case '200':
-                        url = 'http://mpago.la/P02H';
-                        break;
-                    case '500':
-                        url = 'http://mpago.la/k8Xp';
-                        break;
-                    default:
-                        break;
+                case '100':
+                    url = 'http://mpago.la/BfZ';
+                    break;
+                case '200':
+                    url = 'http://mpago.la/P02H';
+                    break;
+                case '500':
+                    url = 'http://mpago.la/k8Xp';
+                    break;
+                default:
+                    break;
                 }
                 window.open(url, '_blank');
                 this.showModal = false;
@@ -408,45 +408,5 @@ export default {
         margin-top: 1em;
         padding: 1em 2em;
         font-size: 1.3em;
-    }
-    .radio > label > input {
-        opacity: 1;
-        z-index: 100;
-        vertical-align: middle;
-        display: inline-block;
-        margin-left: 1.3em;
-        margin-right: .8em;
-        position: static;
-        margin-top: 0;
-    }
-    .radio > label > span {
-        vertical-align: middle;
-        display: inline-block;
-        font-size: 1.4em;
-    }
-    .btn-unica-vez,
-    .btn-mensualmente {
-        width: 43%;
-        margin: 2%;
-        padding: 1em 0;
-        min-height: 6em;
-        font-size: 1.1em;
-        white-space: normal;
-    }
-    .panel-donar {
-        float: none;
-        clear: both;
-    }
-    @media (max-width: 550px) {
-        .panel-donar h2 {
-            font-size: 22px;
-        }
-        .donation .radio-inline {
-            display: inline-block;
-            width: calc(49% - 10px);
-            box-sizing: border-box;
-            padding: 0;
-            margin-left: 8px;
-        }
     }
 </style>

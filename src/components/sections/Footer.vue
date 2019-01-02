@@ -44,9 +44,15 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="https://www.instagram.com/carpoolear/?hl=en">
                             <i class="fa fa-instagram" aria-hidden="true"></i>
                             <span>Instagram</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/STS-Rosario">
+                            <i class="fa fa-github" aria-hidden="true"></i>
+                            <span>Github</span>
                         </a>
                     </li>
                     <li>
