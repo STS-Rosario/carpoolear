@@ -623,4 +623,7 @@ export default {
             font-weight: 300;
         }
     }
+    .tooltip-bottom {
+        color: #D72521;
+    }
 </style>
