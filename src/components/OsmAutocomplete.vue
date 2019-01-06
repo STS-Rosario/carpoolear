@@ -225,16 +225,18 @@ export default {
             osmApi.search(data).then(data => {
                 this.waiting = false;
                 if (data && data.filter) {
+                    console.log(data);
                     data = data.filter(o => {
                         let type = ['city', 'town', 'village', 'hamlet', 'administrative'].indexOf(o.type) >= 0;
                         let osmType = ['node', 'relation'].indexOf(o.osm_type) >= 0;
                         let county = true;
                         if (o.class === 'boundary' && o.type === 'administrative') {
                             if (o.address.county) {
-                                let city = data.find(c => c.address.city === o.address.county);
+                                let city = data.find(c => c.address.city === o.address.county && c.osm_id !== o.osm_id);
                                 if (city) {
                                     county = false;
                                 } else {
+                                    // console.log(this.removeDiacritics(this.input.toLowerCase()), o.address.county.toLowerCase(), new RegExp(this.removeDiacritics(this.input.toLowerCase()), 'gi').test(this.removeDiacritics(o.address.county.toLowerCase())));
                                     county = new RegExp(this.removeDiacritics(this.input.toLowerCase()), 'gi').test(this.removeDiacritics(o.address.county.toLowerCase()));
                                 }
                             } else {
@@ -251,7 +253,6 @@ export default {
                     data.sort((a, b) => {
                         return b.importance - a.importance;
                     });
-                    console.log(data);
                     this.results = data.slice(0, 6);
                     console.log(this.results);
                 } else {
