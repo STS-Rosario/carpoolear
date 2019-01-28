@@ -87,7 +87,10 @@ const actions = {
                 if (moment(trip.trip_date).format('YYYY-MM-DD') === moment(t.trip_date).format('YYYY-MM-DD')) {
                     const i = users.findIndex(item => t.user && item.id === t.user.id);
                     if (i < 0) {
-                        users.push(t.user);
+                        let user = t.user;
+                        delete t.user;
+                        user.tripMatch = t;
+                        users.push(user);
                     }
                 }
             }
