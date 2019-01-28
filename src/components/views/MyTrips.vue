@@ -282,7 +282,7 @@ export default {
         },
         hasToShowModal (tripId) {
             let tripRateds = parseFloat(this.appConfig.donation.trips_rated);
-            if (this.user) {
+            if (this.user && !this.user.monthly_donate) { // solo si el usuario no es donador mensual
                 if (!this.user.donations) {
                     // no tengo intento de donaciones este mes debe aparecer
                     this.showModal = true;
