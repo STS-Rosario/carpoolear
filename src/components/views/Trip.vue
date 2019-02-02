@@ -227,6 +227,12 @@
                                                         <i class="fa fa-comments" aria-hidden="true"></i>
                                                 </button>
                                             </div>
+                                            <div>
+                                                <small>
+                                                    Viaja el {{ p.tripMatch.trip_date | moment('DD/MM') }}
+                                                    <strong>{{ p.tripMatch.trip_date | moment('HH:mm') }}</strong>
+                                                </small>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -903,7 +909,17 @@ export default {
         max-height: 270px;
         overflow-y: auto;
     }
-
+    .matching-user-list small {
+        margin-left: 50px;
+    }
+    .matching-user-list .list-item:after {
+        content: " ";
+        display: block;
+        width: 90%;
+        margin: 0 auto;
+        border-bottom: 1px solid #CCC;
+        margin-top: .5rem;
+    }
     @media only screen and (max-width: 768px) {
         .trip-detail-component .driver-container {
             border-radius: 0;
