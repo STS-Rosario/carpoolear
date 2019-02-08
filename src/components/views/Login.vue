@@ -111,7 +111,7 @@ export default {
                     // router.push({ name: 'trips' });
                     // router.rememberBack();
                 }, error => {
-                    const userNotActive = error.message === 'user_not_active';
+                    const userNotActive = error && error.message === 'user_not_active';
                     const message = userNotActive ? 'Para ingresar debe activar su cuenta primero.' : 'Email o password incorrecto.';
                     this.showUserNotActiveInfo = userNotActive;
 
