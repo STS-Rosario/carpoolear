@@ -137,6 +137,29 @@
                                     <div v-else style="height: 2em;"></div>
                                 </div>
                             </div>
+                            <modal :name="'modal'" v-if="showModal" @close="onModalClose" :title="'Test'" :body="'Body'">
+                                <h3 slot="header">
+                                    <span>¡Carpoodatos!</span>
+                                </h3>
+                                <div slot="body">
+                                    <div class="text-left">
+                                      <p>Antes de aceptar solicitud de asiento, mandale mensaje a la otra persona para coordinar todo lo vinculado al viaje: punto de encuentro,punto de llegada,tamaño de bolsos,contribución para combustible y peajes, etc.</p>
+                                      <p>Si aceptás una solicitud de asiento, se genera el compromiso de viajar entre vos y la otra persona, habilitándose la posibilidad de calificación 24hs después de comenzado el viaje. Tendrán 14 días para calificarse.</p>
+                                      <p>Se podrán calificar aunque canceles el viaje o bajes a / se baje la otra persona.</p>
+                                      <p>No ofrezcas un viaje si no tenés seguridad de que vas a viajar. Si ocurriera algo que te obligue a cancelarlo, avisale lo más rápido que puedas a las personas que iban a viajar.</p>
+                                      <p>Cualquier duda escribinos a <a href="mailto:carpoolear@stsrosario.org.ar">carpoolear@stsrosario.org.ar</a> o nuestras redes sociales.</p>
+                                    </div>
+                                    <div class="check" style="margin-bottom:10px;">
+                                        <label class="check-inline">
+                                            <input type="checkbox" name="instructiveValor" id="instructive" value="1" v-model="instructiveValue"><span> No volver a mostrar mensaje</span>
+                                        </label>
+                                    </div>
+                                    <div class="text-center">
+                                      <button class="btn btn-success" @click="onConfirmMakeRequest">Confirmar</button>
+                                      <button class="btn btn-info" @click="onModalClose">Cancelar</button>
+                                    </div>
+                                </div>
+                            </modal>
                             <div class="buttons-container"  v-if="!isPasssengersView">
                                 <router-link class="btn btn-primary" v-if="owner && !expired" :to="{name: 'update-trip', params: { id: trip.id}}">
                                     Editar
@@ -286,8 +309,10 @@ import { mapGetters, mapActions } from 'vuex';
 import router from '../../router';
 import bus from '../../services/bus-event';
 import svgItem from '../SvgItem';
+import modal from '../Modal';
 import moment from 'moment';
 import dialogs from '../../services/dialogs.js';
+
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import VueHead from 'vue-head';
@@ -324,7 +349,9 @@ export default {
             messageToUsers: '',
             selectedMatchingUser: [],
             url: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
-            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+            showModal: false,
+            instructiveValue: 0
         };
     },
 
@@ -428,7 +455,14 @@ export default {
 
         makeRequest () {
             if (this.profileComplete()) {
+                this.showModal = true;
+            }
+        },
+
+        onConfirmMakeRequest () {
+            if (this.profileComplete()) {
                 this.sending = true;
+                this.showModal = false;
                 this.make(this.trip.id).then(() => {
                     dialogs.message('La solicitud fue enviada.');
                     this.sending = false;
@@ -629,6 +663,9 @@ export default {
                     dialogs.message('El mensaje fue enviado.');
                 });
             }
+        },
+        onModalClose () {
+            this.showModal = false;
         }
     },
 
@@ -688,7 +725,8 @@ export default {
     components: {
         svgItem,
         LMap,
-        LTileLayer
+        LTileLayer,
+        modal
     },
 
     props: [
@@ -801,10 +839,18 @@ export default {
     .trip-detail-component .driver-data div:first-child {
         margin-top: .4em;
     }
+
     @media only screen and (min-width: 400px) and (max-width: 767px) {
         .trip-detail-component .trip_driver_img {
             width: 6.7rem;
             height: 6.7rem;
+        }
+        .trip-detail-component .structure-div {
+            top: -15px;
+        }
+
+        .vue2leaflet-map {
+          width: calc(100% + 10px)!important;
         }
     }
     @media only screen and (min-width: 768px) {
@@ -950,5 +996,9 @@ export default {
             max-height: auto;
             float: none;
         }
+    }
+
+    .modal-footer {
+      display: none;
     }
 </style>
