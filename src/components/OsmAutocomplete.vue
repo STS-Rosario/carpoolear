@@ -41,7 +41,7 @@ export default {
         };
     },
     mounted () {
-
+        this.input = this.value ? this.value : '';
     },
     computed: {
     },
