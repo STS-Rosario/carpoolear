@@ -156,6 +156,7 @@
                                 </label>
                             </span>
                         </div>
+                        <hr  v-if="showReturnTrip" class="col-md-24" />
                         <div v-if="showReturnTrip">
                             <div class="new-left trip_points col-sm-13 col-md-15">
                                 <div v-for="(m, index) in otherTrip.points" class="trip_point gmap-autocomplete" :class="{'trip-error' : m.error.state}" :key="index">
@@ -168,9 +169,12 @@
                                         :value="m.name"
                                         v-on:place_changed="(data) => getPlace(index, data, 'returnTrip')"
                                         :classes="'form-control form-control-with-icon form-control-map-autocomplete'"
-                                        :country="allowForeignPoints ? null : 'AR'" :class="{'has-error': m.error.state}">
+                                        :country="allowForeignPoints ? null : 'AR'" :class="{'has-error': m.error.state}"
+                                        :disabled="true">
                                     </OsmAutocomplete>
-                                    <div @click="m.name = ''" class="date-picker--cross"><i aria-hidden="true" class="fa fa-times"></i></div>
+                                    <div @click="m.name = ''" class="date-picker--cross" v-if="false">
+                                        <i aria-hidden="true" class="fa fa-times"></i>
+                                    </div>
                                     <span class="error" v-if="m.error.state"> {{m.error.message}} </span>
                                 </div>
                             </div>
@@ -247,15 +251,15 @@
                                 <legend class="label-for-group"> Privacidad del viaje </legend>
                                 <ul class="no-bullet">
                                     <li>
-                                        <input type="radio" id="otherTrip-privacity-public" value="2" v-model="otherTrip.trip.friendship_type_id">
+                                        <input type="radio" id="otherTrip-privacity-public" value="2" v-model="otherTrip.trip.friendship_type_id" disabled>
                                         <label for="otherTrip-privacity-public" class="label-soft">Público</label>
                                     </li>
                                     <li>
-                                        <input type="radio" id="otherTrip-privacity-friendofriend" value="1" v-model="otherTrip.trip.friendship_type_id">
+                                        <input type="radio" id="otherTrip-privacity-friendofriend" value="1" v-model="otherTrip.trip.friendship_type_id" disabled>
                                         <label for="otherTrip-privacity-friendofriend" class="label-soft">Amigos de Amigos</label>
                                     </li>
                                     <li>
-                                        <input type="radio" id="otherTrip-privacity-friend" value="0" v-model="otherTrip.trip.friendship_type_id">
+                                        <input type="radio" id="otherTrip-privacity-friend" value="0" v-model="otherTrip.trip.friendship_type_id" disabled>
                                         <label for="otherTrip-privacity-friend" class="label-soft">Solo amigos</label>
                                     </li>
                                 </ul>
@@ -501,11 +505,10 @@ export default {
                 if (v.isValid()) {
                     date = value;
                 }
-
-                this.otherTrip.date = date;
-                this.otherTrip.dateAnswer = date;
+                // this.otherTrip.date = date;
+                // this.otherTrip.dateAnswer = date;
             }
-            this.dateError.state = false;
+            // this.dateError.state = false;
         },
         'time': function () {
             this.timeError.state = false;
@@ -515,6 +518,10 @@ export default {
         },
         'otherTrip.time': function () {
             this.otherTrip.timeError.state = false;
+        },
+        'trip.friendship_type_id': function () {
+            console.log('change');
+            this.otherTrip.trip.friendship_type_id = this.trip.friendship_type_id;
         }
     },
     methods: {

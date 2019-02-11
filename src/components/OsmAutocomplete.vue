@@ -353,4 +353,9 @@ export default {
         color: #000;
         text-align: right;
     }
+    .osm-autocomplete input[disabled] {
+        background-color: #DDD;
+        color: #555;
+        opacity: 0.85;
+    }
 </style>
