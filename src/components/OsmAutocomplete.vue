@@ -230,8 +230,9 @@ export default {
                         let type = ['city', 'town', 'village', 'hamlet', 'administrative'].indexOf(o.type) >= 0;
                         let osmType = ['node', 'relation'].indexOf(o.osm_type) >= 0;
                         let county = true;
+                        // TODO: Villa Constitucion se duplica
                         if (o.class === 'boundary' && o.type === 'administrative') {
-                            if (o.address.county) {
+                            if (o.address.county && !o.address.city) { // Para: Victoria, Entre Rios
                                 // Para: ???
                                 let city = data.find(c => c.address.city === o.address.county && c.osm_id !== o.osm_id);
                                 if (city) {
@@ -246,6 +247,8 @@ export default {
                                 }
                             } else {
                                 if (o.address.city) {
+                                    // Para: Pucon, Chile
+                                    o.type = 'city';
                                     county = new RegExp(this.removeDiacritics(this.input.toLowerCase()), 'gi').test(this.removeDiacritics(o.address.city.toLowerCase()));
                                     // Para Lanus Oeste y Lanus Este
                                     if (o.address.city_district) {
