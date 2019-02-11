@@ -32,6 +32,9 @@
             <input placeholder="El email con el que te registraste" ref="txt_user" type="email" id="txt_user" v-model="email" v-jump:focus="'txt_password'" />
             <label for="txt_password" v-show="!isMobile">Contraseña</label>
             <input  placeholder="Contraseña" ref="txt_password" type="password" id="txt_password" v-jump:click.blur="'btn_login'" v-model='password' />
+            <div class="alert alert-info" role="alert" v-if="showUserNotActiveInfo">
+                 Para ingresar debe activar su cuenta, te hemos enviado un código de verificación a tu e-mail para que puedas activar tu cuenta.
+            </div>
             <button ref="btn_login" id="btn_login" class="btn btn-primary btn-shadowed-black" @click="login" :disabled="loading"> <span v-if="!loading">Ingresar</span> <spinner class="blue" v-if="loading"></spinner></button>
         </div>
         <div class='pass-options' v-if="!isMobile">
@@ -76,7 +79,8 @@ export default {
             hasScroll: false,
             isUnderstood: true,
             dontShowAgain: false,
-            isShowLogin: false
+            isShowLogin: false,
+            showUserNotActiveInfo: false
         };
     },
     computed: {
@@ -98,6 +102,7 @@ export default {
         },
         login () {
             if (!this.fbLoading) {
+                this.showUserNotActiveInfo = false;
                 this.loading = true;
                 let email = this.email;
                 let password = this.password;
@@ -106,7 +111,11 @@ export default {
                     // router.push({ name: 'trips' });
                     // router.rememberBack();
                 }, error => {
-                    dialogs.message('Email o password incorrecto.', { duration: 10, estado: 'error' });
+                    const userNotActive = error && error.message === 'user_not_active';
+                    const message = userNotActive ? 'Para ingresar debe activar su cuenta primero.' : 'Email o password incorrecto.';
+                    this.showUserNotActiveInfo = userNotActive;
+
+                    dialogs.message(message, { duration: 10, estado: 'error' });
                     if (error) {
                         this.error = error.error;
                     }
@@ -166,183 +175,182 @@ export default {
 </script>
 
 <style>
-  .app-container {
-    min-height: 100vh;
-  }
+.app-container {
+  min-height: 100vh;
+}
 </style>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-    .fb-terms {
-        color: #EEE;
-    }
+.fb-terms {
+  color: #EEE;
+}
 
-    .facebook-box {
-        margin-top: .5em!important;
-    }
+.facebook-box {
+  margin-top: 0.5em !important;
+}
 
-    .password-not {
-        text-align: center;
-        margin-top: 16px;
-        display: block;
-        text-align: center;
-        color: #ddd;
-        font-weight: bold;
-        text-decoration: underline;
-        padding-left: 10px;
-    }
+.password-not {
+  text-align: center;
+  margin-top: 16px;
+  display: block;
+  text-align: center;
+  color: #ddd;
+  font-weight: bold;
+  text-decoration: underline;
+  padding-left: 10px;
+}
 
-    label {
-        margin-top: .3em;
-        font-weight: bold;
-    }
+label {
+  margin-top: 0.3em;
+  font-weight: bold;
+}
 
-    .login-forget {
-        font-weight: bold;
-        padding-left: 12px;
-        color: #016587;
-    }
+.login-forget {
+  font-weight: bold;
+  padding-left: 12px;
+  color: #016587;
+}
 
-    .user-form .btn-primary.btn-facebook {
-        width: 90%;
-        margin: 1em auto;
-    }
+.user-form .btn-primary.btn-facebook {
+  width: 90%;
+  margin: 1em auto;
+}
 
-    .description {
-        font-size: 11px;
-        text-transform: none;
-        color: #fff;
-        display: block;
-    }
+.description {
+  font-size: 11px;
+  text-transform: none;
+  color: #fff;
+  display: block;
+}
 
-    .btn-facebook.btn-with-icon--icon {
-        background-color: var(--button-facebook-blue-left);
-    }
+.btn-facebook.btn-with-icon--icon {
+  background-color: var(--button-facebook-blue-left);
+}
 
-    .register {
-        font-weight: 300;
-        font-size: 16px;
-        display: block;
-        padding: 1.4em 0;
-        position: relative;
-        display: inline-block;
-    }
+.register {
+  font-weight: 300;
+  font-size: 16px;
+  display: block;
+  padding: 1.4em 0;
+  position: relative;
+  display: inline-block;
+}
 
-    .register::before {
-        position: absolute;
-        /* border-top: solid 1px #2793ff; */
-        width: 90%;
-        margin-left: 5%;
-        content: " ";
-        top: 0;
-        left: 0;
-    }
+.register::before {
+  position: absolute;
+  /* border-top: solid 1px #2793ff; */
+  width: 90%;
+  margin-left: 5%;
+  content: " ";
+  top: 0;
+  left: 0;
+}
 
-    .register::after {
-        position: absolute;
-        border-bottom: solid 1px #2793ff;
-        width: 90%;
-        margin-left: 5%;
-        content: " ";
-        bottom: 0;
-        left: 0;
-    }
+.register::after {
+  position: absolute;
+  border-bottom: solid 1px #2793ff;
+  width: 90%;
+  margin-left: 5%;
+  content: " ";
+  bottom: 0;
+  left: 0;
+}
 
-    .alert-warning a {
-        color: #337ab7;
-    }
+.alert-warning a {
+  color: #337ab7;
+}
 
-    .register {
-        color: #CCC;
-    }
+.register {
+  color: #CCC;
+}
 
-    .alert-warning {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 94%;
-        margin: 10vh 3%;
-        height: 80vh;
-        z-index: 100;
-    }
+.alert-warning {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 94%;
+  margin: 10vh 3%;
+  height: 80vh;
+  z-index: 100;
+}
 
-    @media only screen and (min-width: 768px) {
-        .login-box {
-            margin-right: 0;
-        }
-        .alert-warning {
-            position: static;
-            width: auto;
-            height: auto;
-            margin: auto;
-            margin-bottom: 1em;
-        }
-        .register {
-            color: #555;
-        }
-        .description {
-            display: inline;
-            padding-left: .4em;
-            color: rgb(1, 101, 135);
-        }
-        .visual-trick {
-            border-right: solid 1px #ccc;
-            padding-right: 4rem;
-        }
-        .form>div:last-child {
-            padding-left: 4em;
-        }
-        .user-form .btn-primary.btn-facebook {
-            width: 100%;
-            max-width: 280px;
-            margin: 1.6em 0 .6em 0;
-        }
-        .register {
-            display: inline;
-            margin-bottom: 2em;
-            font-weight: 400;
-        }
-        .register::before {
-            display: none;
-        }
-        .register::after {
-            display: none;
-        }
-    }
+@media only screen and (min-width: 768px) {
+  .login-box {
+    margin-right: 0;
+  }
+  .alert-warning {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: auto;
+    margin-bottom: 1em;
+  }
+  .register {
+    color: #555;
+  }
+  .description {
+    display: inline;
+    padding-left: 0.4em;
+    color: rgb(1, 101, 135);
+  }
+  .visual-trick {
+    border-right: solid 1px #ccc;
+    padding-right: 4rem;
+  }
+  .form > div:last-child {
+    padding-left: 4em;
+  }
+  .user-form .btn-primary.btn-facebook {
+    width: 100%;
+    max-width: 280px;
+    margin: 1.6em 0 0.6em 0;
+  }
+  .register {
+    display: inline;
+    margin-bottom: 2em;
+    font-weight: 400;
+  }
+  .register::before {
+    display: none;
+  }
+  .register::after {
+    display: none;
+  }
+}
 
-    .form-warning-login label {
-        color: black;
-    }
+.form-warning-login label {
+  color: black;
+}
 
-    .form-warning-login .checkbox {
-        display: inline-block;
-        margin-right: 1em;
-    }
+.form-warning-login .checkbox {
+  display: inline-block;
+  margin-right: 1em;
+}
 
-    .form-warning-login .checkbox span {
-        text-transform: none;
-    }
+.form-warning-login .checkbox span {
+  text-transform: none;
+}
 
-    .form-warning-login * {
-        vertical-align: middle;
-    }
+.form-warning-login * {
+  vertical-align: middle;
+}
 
-    .form-warning-login button {
-        margin-top: 0em;
-    }
+.form-warning-login button {
+  margin-top: 0em;
+}
 
-    @media only screen and (min-width: 768px) {
-        .form-warning-login button {
-            margin-top: 0.5em;
-        }
-        [type=checkbox] {
-            margin-top: 0;
-        }
-    }
+@media only screen and (min-width: 768px) {
+  .form-warning-login button {
+    margin-top: 0.5em;
+  }
+  [type="checkbox"] {
+    margin-top: 0;
+  }
+}
 
-    #btn_show_login {
-        border: 2px solid rgba(215, 37, 33, 0.8);
-        color: #FFF;
-        background: rgba(215, 37, 33, 0.8);
-    }
-
+#btn_show_login {
+  border: 2px solid rgba(215, 37, 33, 0.8);
+  color: #FFF;
+  background: rgba(215, 37, 33, 0.8);
+}
 </style>
