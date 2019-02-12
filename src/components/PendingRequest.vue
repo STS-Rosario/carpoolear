@@ -13,7 +13,7 @@
                 </h3>
                 <div slot="body">
                     <div class="text-left">
-                      <p>Antes de mandar solicitud de asiento, mandale mensaje a la otra persona para coordinar todo lo vinculado al viaje: punto de encuentro,punto de llegada,tamaño de bolsos,contribución para combustible y peajes,etc.</p>
+                      <p>Antes de mandar solicitud de asiento, mandale mensaje a la otra persona para coordinar todo lo vinculado al viaje: punto de encuentro, punto de llegada,tamaño de bolsos, contribución para combustible y peajes, etc.</p>
                       <p>Si mandaste solicitud de asiento y te aceptan el pedido, se genera el compromiso de viaje. Habilitándose la posibilidad de calificación 24hs después de comenzado el viaje. Tendrán 14 días para calificarse</p>
                       <p>Podrán calificarse aunque el viaje se cancele, te bajen o te bajes del viaje.</p>
                       <p>No pidas asiento si no tenés seguridad de que vas a viajar, muchas personas también están buscando el mismo viaje que vos. Si ocurriera algo que te impida viajar, avisale lo más rápido que puedas a la persona con que ibas a compartir el viaje.</p>

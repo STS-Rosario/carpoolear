@@ -143,7 +143,7 @@
                                 </h3>
                                 <div slot="body">
                                     <div class="text-left">
-                                      <p>Antes de aceptar solicitud de asiento, mandale mensaje a la otra persona para coordinar todo lo vinculado al viaje: punto de encuentro,punto de llegada,tamaño de bolsos,contribución para combustible y peajes, etc.</p>
+                                      <p>Antes de aceptar solicitud de asiento, mandale mensaje a la otra persona para coordinar todo lo vinculado al viaje: punto de encuentro, punto de llegada, tamaño de bolsos, contribución para combustible y peajes, etc.</p>
                                       <p>Si aceptás una solicitud de asiento, se genera el compromiso de viajar entre vos y la otra persona, habilitándose la posibilidad de calificación 24hs después de comenzado el viaje. Tendrán 14 días para calificarse.</p>
                                       <p>Se podrán calificar aunque canceles el viaje o bajes a / se baje la otra persona.</p>
                                       <p>No ofrezcas un viaje si no tenés seguridad de que vas a viajar. Si ocurriera algo que te obligue a cancelarlo, avisale lo más rápido que puedas a las personas que iban a viajar.</p>
