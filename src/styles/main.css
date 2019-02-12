@@ -1672,8 +1672,11 @@ textarea {
 }
 
 .trips-list {
-    /*overflow: auto;*/ overflow: visible;
+    /*overflow: auto;*/
+    overflow: visible;
     margin-bottom: 3rem;
+    width: 100%;
+    margin: 0;
 }
 .trips-list > div {
     padding-left: 0;
@@ -2769,14 +2772,42 @@ ul {
     }
     .donation .radio-inline {
         display: inline-block;
-        width: calc(49% - 10px);
+        width: calc(49% - 20px);
         box-sizing: border-box;
         padding: 0;
-        margin-left: 8px;
+        margin-left: 21px;
     }
 }
 @media (min-width: 768px) {
     .donation .radio {
         text-align: center;
     }
+}
+
+.trip-detail-component .modal-body,
+.request-list .modal-body {
+  margin: 0!important;
+  padding: 0!important;
+}
+
+.trip-detail-component .modal-body p,
+.request-list .modal-body p {
+  margin: 0 0 15px 0;
+}
+
+.trip-detail-component .modal-header,
+.request-list .modal-header {
+  padding:0;
+  margin-bottom: 10px;
+}
+
+.trip-detail-component .modal-footer,
+.request-list .modal-footer {
+  padding: 0;
+  margin-top: 10px;
+}
+
+.trip-detail-component .modal-footer,
+.request-list .modal-footer {
+  display: none;
 }
