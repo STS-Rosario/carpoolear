@@ -383,7 +383,8 @@ export default {
             cancel: 'passenger/cancel',
             remove: 'trips/remove',
             searchMatchers: 'trips/searchMatchers',
-            sendToAll: 'conversations/sendToAll'
+            sendToAll: 'conversations/sendToAll',
+            changeProperty: 'profile/changeProperty'
         }),
         profileComplete () {
             if (!this.user.image || this.user.image.length === 0 || !this.user.description || this.user.description.length === 0) {
@@ -460,6 +461,15 @@ export default {
         },
 
         onConfirmMakeRequest () {
+            if (this.instructiveValue) {
+                let data = {
+                    property: 'do_not_alert_request_seat',
+                    value: 1
+                };
+                this.changeProperty(data).then(() => {
+                    console.log('do not alert success');
+                });
+            }
             if (this.profileComplete()) {
                 this.sending = true;
                 this.showModal = false;

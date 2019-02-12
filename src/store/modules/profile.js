@@ -45,6 +45,16 @@ const actions = {
         });
     },
 
+    changeProperty (store, data) {
+        return userApi.changeProperty(data).then((response) => {
+            console.log('changeProperty', response);
+            store.commit(types.PROFILE_SET_USER, response.data);
+            return Promise.resolve();
+        }).catch((error) => {
+            return Promise.reject(error);
+        });
+    },
+
     ...pagination.makeActions('rates', ({store, data}) => {
         // TODO: Pagination not working
         data.page_size = 200;
