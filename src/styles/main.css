@@ -2784,25 +2784,30 @@ ul {
     }
 }
 
-.modal-body {
+.trip-detail-component .modal-body,
+.request-list .modal-body {
   margin: 0!important;
   padding: 0!important;
 }
 
-.modal-body p {
+.trip-detail-component .modal-body p,
+.request-list .modal-body p {
   margin: 0 0 15px 0;
 }
 
-.modal-header {
+.trip-detail-component .modal-header,
+.request-list .modal-header {
   padding:0;
   margin-bottom: 10px;
 }
 
-.modal-footer {
+.trip-detail-component .modal-footer,
+.request-list .modal-footer {
   padding: 0;
   margin-top: 10px;
 }
 
-.trip-detail-component .modal-footer {
+.trip-detail-component .modal-footer,
+.request-list .modal-footer {
   display: none;
 }
