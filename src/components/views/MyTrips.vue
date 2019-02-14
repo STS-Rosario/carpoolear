@@ -373,8 +373,8 @@ export default {
         },
         pendingRates: function (newValue, oldValue) {
             this.updateScroll();
-
-            if (oldValue != null && oldValue.length !== 0) {
+            console.log('pendingRates', newValue, oldValue);
+            if (newValue && newValue.length > 0) {
               this.showModalPendingRates = true;
             }
         },
