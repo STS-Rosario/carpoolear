@@ -2784,17 +2784,20 @@ ul {
     }
 }
 
+.trips .modal-body,
 .trip-detail-component .modal-body,
 .request-list .modal-body {
   margin: 0!important;
   padding: 0!important;
 }
 
+.trips .modal-body p,
 .trip-detail-component .modal-body p,
 .request-list .modal-body p {
   margin: 0 0 15px 0;
 }
 
+.trips .modal-header,
 .trip-detail-component .modal-header,
 .request-list .modal-header {
   padding:0;
@@ -2807,7 +2810,17 @@ ul {
   margin-top: 10px;
 }
 
-.trip-detail-component .modal-footer,
+.trips .modal-footer {
+  display: none;
+}
+
+/* .trip-detail-component .modal-footer,
 .request-list .modal-footer {
   display: none;
+} */
+
+.trips .modal-container,
+.trip-detail-component .modal-container,
+.request-list .modal-container {
+  padding: 10px 19px;
 }

@@ -7,7 +7,7 @@
                     </div>
                 </router-link>
             </div>
-            <modal :name="'modal'" v-if="showModal" @close="onModalClose" :title="'Test'" :body="'Body'">
+            <modal :name="'modal'" v-if="showModalRequestSeat" @close="onModalClose" :title="'Test'" :body="'Body'">
                 <h3 slot="header">
                     <span>¡Carpoodatos!</span>
                 </h3>
@@ -21,12 +21,12 @@
                     </div>
                     <div class="check" style="margin-bottom:10px;">
                         <label class="check-inline">
-                            <input type="checkbox" name="instructiveValor" id="instructive" value="1" v-model="instructiveValue"><span> No volver a mostrar mensaje</span>
+                            <input type="checkbox" name="acceptRequestValor" value="0" v-model="acceptRequestValue"><span> No volver a mostrar mensaje</span>
                         </label>
                     </div>
                     <div class="text-center">
-                      <button class="btn btn-success" @click="onAcceptRequest">Confirmar</button>
-                      <button class="btn btn-info" @click="onModalClose">Cancelar</button>
+                      <button class="btn btn-accept-request" :disabled="acceptInProcess" @click="toAcceptRequest"> Aceptar </button>
+                      <button class="btn btn-primary" :disabled="rejectInProcess" @click="reject"> Rechazar </button>
                     </div>
                 </div>
             </modal>
@@ -34,9 +34,8 @@
                 <div class="rate-pending-message--content">
                     <strong>{{user.name}}</strong> quiere subirse al viaje hacia <strong>{{trip.points[trip.points.length - 1].json_address.ciudad}}</strong> del día {{ trip.trip_date | moment("DD/MM/YYYY") }} a las  {{ trip.trip_date | moment("HH:mm") }}.
                     <div class='pending-buttons'>
-                        <button class="btn btn-accept-request" :disabled="acceptInProcess" @click="accept"> Aceptar </button>
+                        <button class="btn btn-accept-request" :disabled="acceptInProcess" @click="onAcceptRequest"> Aceptar </button>
                         <button class="btn btn-primary" :disabled="rejectInProcess" @click="reject"> Rechazar </button>
-
                     </div>
                     <div class="message-button">
                         <button class="btn btn-secondary"  @click="chat"> Enviar Mensaje </button>
@@ -56,8 +55,8 @@ export default {
         return {
             acceptInProcess: false,
             rejectInProcess: false,
-            showModal: false,
-            instructiveValue: 0
+            showModalRequestSeat: false,
+            acceptRequestValue: 0
         };
     },
 
@@ -68,11 +67,21 @@ export default {
             lookConversation: 'conversations/createConversation'
         }),
 
-        accept () {
-            this.showModal = true;
+        onAcceptRequest () {
+            this.showModalRequestSeat = true;
         },
 
-        onAcceptRequest () {
+        toAcceptRequest () {
+          if (this.acceptRequestValue) {
+              let data = {
+                  property: 'do_not_alert_accept_passenger',
+                  value: 1
+              };
+              this.changeProperty(data).then(() => {
+                  console.log('do not alert success');
+              });
+          }
+
           let user = this.user;
           let trip = this.trip;
           this.acceptInProcess = true;
@@ -113,7 +122,7 @@ export default {
         },
 
         onModalClose () {
-            this.showModal = false;
+            this.showModalRequestSeat = false;
         }
     },
 

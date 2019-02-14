@@ -15,7 +15,41 @@
         </div>
 
         <div class="col-xs-24">
-            <modal :name="'modal'" v-if="showModal" @close="onModalClose" :title="'Test'" :body="'Body'">
+            <modal :name="'modal'" v-if="showModalPendingRates" @close="onModalClose" :title="'Test'" :body="'Body'">
+                <h3 slot="header">
+                    <span>¡Carpoodatos!</span>
+                </h3>
+                <div slot="body">
+                    <div class="text-left">
+                      <p>
+                        <b>Es muy muy importante calificar</b><br>
+                        Las calificaciones permiten conocernos mejor y poder decidir a la hora de compartir un viaje, son muy importantes para toda la comunidad carpoolera.
+                      </p>
+                      <p>
+                        <b>Tomate el tiempo para calificar pero no tanto...</b><br>
+                        Tenés 14 días para calificar contando a partir del momento en que se habilita la posibilidad, 24hs posteriores al comienzo del viaje.
+                      </p>
+                      <p>
+                        <b>No se borra con el codo ni hay líquido corrector</b><br>
+                        Tené en cuenta que no podés ni borrar ni editar la calificación que hagas.
+                      </p>
+                      <p>
+                        <b>Decí lo que pensás :D</b><br>
+                        Las calificación que vos hagas y la que recibas de la otra persona se mostrarán al mismo tiempo en los perfiles. Nunca se mostrará una antes que la otra. Solamente cuando la otra persona te califique o se venza el plazo de tiempo para calificar, aparecerá la calificación en el perfil.
+                      </p>
+                      <p>Cualquier duda escribinos a <a href="mailto:carpoolear@stsrosario.org.ar">carpoolear@stsrosario.org.ar</a> o nuestras redes sociales.</p>
+                    </div>
+                    <div class="check" style="margin-bottom:10px;">
+                        <label class="check-inline">
+                            <input type="checkbox" name="pendingRatesValor" value="0" v-model="pendingRatesValue"><span> No volver a mostrar mensaje</span>
+                        </label>
+                    </div>
+                    <div class="text-center">
+                      <button class="btn btn-accept-request" @click="toPendingRates"> !Entiendo! </button>
+                    </div>
+                </div>
+            </modal>
+            <modal :name="'modal'" v-if="showModalRequestSeat" @close="onModalClose" :title="'Test'" :body="'Body'">
                 <h3 slot="header">
                     <span>Doná a Carpoolear</span>
                     <br class="hidden-sm hidden-md hidden-lg">
@@ -159,9 +193,11 @@ export default {
     name: 'my-trips',
     data () {
         return {
-            showModal: false,
+            showModalRequestSeat: false,
             donateValue: 0,
-            modalTripId: 0
+            modalTripId: 0,
+            showModalPendingRates: false,
+            pendingRatesValue: 0
         };
     },
     mounted () {
@@ -229,7 +265,7 @@ export default {
                     break;
                 }
                 window.open(url, '_blank');
-                this.showModal = false;
+                this.showModalRequestSeat = false;
                 let data = {
                     has_donated: 1,
                     has_denied: 0,
@@ -258,7 +294,7 @@ export default {
                     break;
                 }
                 window.open(url, '_blank');
-                this.showModal = false;
+                this.showModalRequestSeat = false;
                 let data = {
                     has_donated: 1,
                     has_denied: 0,
@@ -270,8 +306,23 @@ export default {
                 dialogs.message('Tienes que seleccionar un valor de donación.', { duration: 10, estado: 'error' });
             }
         },
+
+        toPendingRates () {
+          if (this.pendingRatesValue) {
+              let data = {
+                  property: 'do_not_alert_pending_rates',
+                  value: 1
+              };
+              this.changeProperty(data).then(() => {
+                  console.log('do not alert success');
+              });
+          }
+
+          this.showModalPendingRates = false;
+        },
+
         onModalClose () {
-            this.showModal = false;
+            this.showModalRequestSeat = false;
             let data = {
                 has_donated: 0,
                 has_denied: 1,
@@ -285,7 +336,7 @@ export default {
             if (this.user && !this.user.monthly_donate) { // solo si el usuario no es donador mensual
                 if (!this.user.donations) {
                     // no tengo intento de donaciones este mes debe aparecer
-                    this.showModal = true;
+                    this.showModalRequestSeat = true;
                     this.modalTripId = tripId;
                 } else {
                     // debe aparecerme una vez por viaje
@@ -294,7 +345,7 @@ export default {
                         // para la cantidad de `tripRated` viajes mensuales
                         let donations = this.user.donations.filter(d => d.trip_id !== null);
                         if (donations && donations.length < tripRateds) {
-                            this.showModal = true;
+                            this.showModalRequestSeat = true;
                             this.modalTripId = tripId;
                         } else {
                             console.log('hasToShowModal: ya interactue con al menos dos viajes');
@@ -320,8 +371,12 @@ export default {
         passengerTrips: function () {
             this.updateScroll();
         },
-        pendingRates: function () {
+        pendingRates: function (newValue, oldValue) {
             this.updateScroll();
+
+            if (oldValue != null && oldValue.length !== 0) {
+              this.showModalPendingRates = true;
+            }
         },
         pendingRequest: function () {
             this.updateScroll();

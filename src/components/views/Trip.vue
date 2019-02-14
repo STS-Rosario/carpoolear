@@ -137,7 +137,7 @@
                                     <div v-else style="height: 2em;"></div>
                                 </div>
                             </div>
-                            <modal :name="'modal'" v-if="showModal" @close="onModalClose" :title="'Test'" :body="'Body'">
+                            <modal :name="'modal'" v-if="showModalAcceptPassenger" @close="onModalClose" :title="'Test'" :body="'Body'">
                                 <h3 slot="header">
                                     <span>¡Carpoodatos!</span>
                                 </h3>
@@ -151,12 +151,13 @@
                                     </div>
                                     <div class="check" style="margin-bottom:10px;">
                                         <label class="check-inline">
-                                            <input type="checkbox" name="instructiveValor" id="instructive" value="1" v-model="instructiveValue"><span> No volver a mostrar mensaje</span>
+                                            <input type="checkbox" name="acceptPassengerValor" value="0" v-model="acceptPassengerValue"><span> No volver a mostrar mensaje</span>
                                         </label>
                                     </div>
                                     <div class="text-center">
-                                      <button class="btn btn-success" @click="onConfirmMakeRequest">Confirmar</button>
-                                      <button class="btn btn-info" @click="onModalClose">Cancelar</button>
+                                      <button class="btn btn-primary" @click="toMessages" v-if="!owner">Enviar mensaje</button>
+                                      <button class="btn btn-primary" @click="toMakeRequest">Solicitar asiento</button>
+                                      <!--<button class="btn btn-info" @click="onModalClose">Cancelar</button>-->
                                     </div>
                                 </div>
                             </modal>
@@ -174,7 +175,7 @@
                                 </template>
                                 <template v-if="!owner && !trip.is_passenger && !expired">
                                     <template v-if="!isPassenger">
-                                        <button class="btn btn-primary" @click="makeRequest" v-if="canRequest && trip.seats_available > 0" :disabled="sending">
+                                        <button class="btn btn-primary" @click="onMakeRequest" v-if="canRequest && trip.seats_available > 0" :disabled="sending">
                                             Solicitar asiento
                                         </button>
                                         <button class="btn" v-if="!canRequest" @click="cancelRequest" :disabled="sending">
@@ -350,8 +351,8 @@ export default {
             selectedMatchingUser: [],
             url: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
             attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-            showModal: true,
-            instructiveValue: 0
+            showModalAcceptPassenger: false,
+            acceptPassengerValue: 0
         };
     },
 
@@ -454,14 +455,14 @@ export default {
             });
         },
 
-        makeRequest () {
+        onMakeRequest () {
             if (this.profileComplete()) {
-                this.showModal = true;
+                this.showModalAcceptPassenger = true;
             }
         },
 
-        onConfirmMakeRequest () {
-            if (this.instructiveValue) {
+        toMakeRequest () {
+            if (this.acceptPassengerValue) {
                 let data = {
                     property: 'do_not_alert_request_seat',
                     value: 1
@@ -472,7 +473,7 @@ export default {
             }
             if (this.profileComplete()) {
                 this.sending = true;
-                this.showModal = false;
+                this.showModalAcceptPassenger = false;
                 this.make(this.trip.id).then(() => {
                     dialogs.message('La solicitud fue enviada.');
                     this.sending = false;
@@ -675,7 +676,7 @@ export default {
             }
         },
         onModalClose () {
-            this.showModal = false;
+            this.showModalAcceptPassenger = false;
         }
     },
 
