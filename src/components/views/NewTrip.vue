@@ -170,9 +170,9 @@
                                         v-on:place_changed="(data) => getPlace(index, data, 'returnTrip')"
                                         :classes="'form-control form-control-with-icon form-control-map-autocomplete'"
                                         :country="allowForeignPoints ? null : 'AR'" :class="{'has-error': m.error.state}"
-                                        :disabled="true">
+                                        >
                                     </OsmAutocomplete>
-                                    <div @click="m.name = ''" class="date-picker--cross" v-if="false">
+                                    <div @click="m.name = ''" class="date-picker--cross">
                                         <i aria-hidden="true" class="fa fa-times"></i>
                                     </div>
                                     <span class="error" v-if="m.error.state"> {{m.error.message}} </span>
@@ -248,18 +248,18 @@
                         </div>
                         <div class="col-sm-11 col-md-9">
                             <fieldset class="trip-privacity">
-                                <legend class="label-for-group"> Privacidad del viaje </legend>
+                                <legend class="label-for-group"> Privacidad del viaje de vuelta </legend>
                                 <ul class="no-bullet">
                                     <li>
-                                        <input type="radio" id="otherTrip-privacity-public" value="2" v-model="otherTrip.trip.friendship_type_id" disabled>
+                                        <input type="radio" id="otherTrip-privacity-public" value="2" v-model="otherTrip.trip.friendship_type_id" >
                                         <label for="otherTrip-privacity-public" class="label-soft">Público</label>
                                     </li>
                                     <li>
-                                        <input type="radio" id="otherTrip-privacity-friendofriend" value="1" v-model="otherTrip.trip.friendship_type_id" disabled>
+                                        <input type="radio" id="otherTrip-privacity-friendofriend" value="1" v-model="otherTrip.trip.friendship_type_id" >
                                         <label for="otherTrip-privacity-friendofriend" class="label-soft">Amigos de Amigos</label>
                                     </li>
                                     <li>
-                                        <input type="radio" id="otherTrip-privacity-friend" value="0" v-model="otherTrip.trip.friendship_type_id" disabled>
+                                        <input type="radio" id="otherTrip-privacity-friend" value="0" v-model="otherTrip.trip.friendship_type_id" >
                                         <label for="otherTrip-privacity-friend" class="label-soft">Solo amigos</label>
                                     </li>
                                 </ul>
