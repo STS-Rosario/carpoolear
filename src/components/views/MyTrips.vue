@@ -15,7 +15,7 @@
         </div>
 
         <div class="col-xs-24">
-            <modal :name="'modal'" v-if="showModalPendingRates" @close="onModalClose" :title="'Test'" :body="'Body'">
+            <modal :name="'modal'" v-if="showModalPendingRates" @close="toPendingRates" :title="'Test'" :body="'Body'">
                 <h3 slot="header">
                     <span>¡Carpoodatos!</span>
                 </h3>
@@ -45,7 +45,7 @@
                     </div>
                 </div>
             </modal>
-            <modal :name="'modal'" v-if="showModalRequestSeat" @close="onModalClose" :title="'Test'" :body="'Body'">
+            <modal :name="'modal'" v-if="showModalRequestDonation" @close="onModalClose" :title="'Test'" :body="'Body'">
                 <h3 slot="header">
                     <span>Doná a Carpoolear</span>
                     <br class="hidden-sm hidden-md hidden-lg">
@@ -189,7 +189,7 @@ export default {
     name: 'my-trips',
     data () {
         return {
-            showModalRequestSeat: false,
+            showModalRequestDonation: false,
             donateValue: 0,
             modalTripId: 0,
             showModalPendingRates: false,
@@ -262,7 +262,7 @@ export default {
                     break;
                 }
                 window.open(url, '_blank');
-                this.showModalRequestSeat = false;
+                this.showModalRequestDonation = false;
                 let data = {
                     has_donated: 1,
                     has_denied: 0,
@@ -291,7 +291,7 @@ export default {
                     break;
                 }
                 window.open(url, '_blank');
-                this.showModalRequestSeat = false;
+                this.showModalRequestDonation = false;
                 let data = {
                     has_donated: 1,
                     has_denied: 0,
@@ -305,20 +305,29 @@ export default {
         },
 
         toPendingRates () {
-          if (this.pendingRatesValue) {
-              let data = {
-                  property: 'do_not_alert_pending_rates',
-                  value: 1
-              };
-              this.changeProperty(data).then(() => {
-                  console.log('do not alert success');
-              });
-          }
-          this.showModalPendingRates = false;
-        },
-
-        onModalClose () {
+            if (this.pendingRatesValue) {
+                let data = {
+                    property: 'do_not_alert_pending_rates',
+                    value: 1
+                };
+                this.changeProperty(data).then(() => {
+                    console.log('do not alert success');
+                });
+            }
             this.showModalPendingRates = false;
+        },
+        onMessageModalClose () {
+            this.showModalRequestDonation = false;
+            let data = {
+                has_donated: 0,
+                has_denied: 1,
+                ammount: 0,
+                trip_id: this.modalTripId
+            };
+            this.registerDonation(data);
+        },
+        onModalClose () {
+            this.showModalRequestDonation = false;
             let data = {
                 has_donated: 0,
                 has_denied: 1,
@@ -332,7 +341,7 @@ export default {
             if (this.user && !this.user.monthly_donate) { // solo si el usuario no es donador mensual
                 if (!this.user.donations) {
                     // no tengo intento de donaciones este mes debe aparecer
-                    this.showModalRequestSeat = true;
+                    this.showModalRequestDonation = true;
                     this.modalTripId = tripId;
                 } else {
                     // debe aparecerme una vez por viaje
@@ -341,7 +350,7 @@ export default {
                         // para la cantidad de `tripRated` viajes mensuales
                         let donations = this.user.donations.filter(d => d.trip_id !== null);
                         if (donations && donations.length < tripRateds) {
-                            this.showModalRequestSeat = true;
+                            this.showModalRequestDonation = true;
                             this.modalTripId = tripId;
                         } else {
                             console.log('hasToShowModal: ya interactue con al menos dos viajes');
@@ -370,7 +379,7 @@ export default {
         pendingRates: function (newValue, oldValue) {
             this.updateScroll();
             if (!this.user.do_not_alert_pending_rates) {
-              this.showModalPendingRates = true;
+                this.showModalPendingRates = true;
             }
         },
         pendingRequest: function () {

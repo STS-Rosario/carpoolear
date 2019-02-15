@@ -46,7 +46,7 @@
     </div>
 </template>
 <script>
-import {mapActions} from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import router from '../router';
 import modal from './Modal';
 import dialogs from '../services/dialogs.js';
@@ -59,7 +59,11 @@ export default {
             acceptRequestValue: 0
         };
     },
-
+    computed: {
+        ...mapGetters({
+            currentUser: 'auth/user'
+        })
+    },
     methods: {
         ...mapActions({
             passengerAccept: 'passenger/accept',
@@ -69,8 +73,8 @@ export default {
         }),
 
         onAcceptRequest () {
-            console.log(this.user.do_not_alert_accept_passenger);
-            if (this.user.do_not_alert_accept_passenger) {
+            console.log('acá', this.currentUser);
+            if (this.currentUser.do_not_alert_accept_passenger) {
                 this.toAcceptRequest();
             } else {
                 this.showModalRequestSeat = true;

@@ -137,7 +137,7 @@
                                     <div v-else style="height: 2em;"></div>
                                 </div>
                             </div>
-                            <modal :name="'modal'" v-if="showModalAcceptPassenger" @close="onModalClose" :title="'Test'" :body="'Body'">
+                            <modal :name="'modal'" v-if="showModalRequestSeat" @close="onModalClose" :title="'Test'" :body="'Body'">
                                 <h3 slot="header">
                                     <span>¡Carpoodatos!</span>
                                 </h3>
@@ -350,7 +350,7 @@ export default {
             selectedMatchingUser: [],
             url: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
             attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-            showModalAcceptPassenger: false,
+            showModalRequestSeat: false,
             acceptPassengerValue: 0
         };
     },
@@ -465,21 +465,21 @@ export default {
         },
 
         onMakeRequest () {
-              if (this.profileComplete()) {
-                  if (this.trip.do_not_alert_accept_passenger) {
-                      this.toMakeRequest();
-                      // console.log('1:' + this.trip.do_not_alert_accept_passenger);
-                  } else {
-                      this.showModalAcceptPassenger = true;
-                      // console.log('2:' + this.trip.do_not_alert_accept_passenger);
-                  }
-              }
+            if (this.profileComplete()) {
+                if (this.user.do_not_alert_request_seat) {
+                    this.toMakeRequest();
+                    // console.log('1:' + this.trip.do_not_alert_accept_passenger);
+                } else {
+                    this.showModalRequestSeat = true;
+                    // console.log('2:' + this.trip.do_not_alert_accept_passenger);
+                }
+            }
         },
 
         toMakeRequest () {
             if (this.acceptPassengerValue) {
                 let data = {
-                    property: 'do_not_alert_accept_passenger',
+                    property: 'do_not_alert_request_seat',
                     value: 1
                 };
                 this.changeProperty(data).then(() => {
@@ -488,7 +488,7 @@ export default {
             }
             if (this.profileComplete()) {
                 this.sending = true;
-                this.showModalAcceptPassenger = false;
+                this.showModalRequestSeat = false;
                 this.make(this.trip.id).then(() => {
                     dialogs.message('La solicitud fue enviada.');
                     this.sending = false;
@@ -693,15 +693,14 @@ export default {
         onModalClose () {
             if (this.acceptPassengerValue) {
                 let data = {
-                    property: 'do_not_alert_accept_passenger',
+                    property: 'do_not_alert_request_seat',
                     value: 1
                 };
                 this.changeProperty(data).then(() => {
                     console.log('do not alert success');
                 });
             }
-            
-            this.showModalAcceptPassenger = false;
+            this.showModalRequestSeat = false;
         }
     },
 

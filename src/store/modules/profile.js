@@ -48,7 +48,8 @@ const actions = {
     changeProperty (store, data) {
         return userApi.changeProperty(data).then((response) => {
             console.log('changeProperty', response);
-            store.commit(types.PROFILE_SET_USER, response.data);
+            // store.commit(types.PROFILE_SET_USER, response.data);
+            globalStore.commit('auth/' + types.AUTH_SET_USER, response.user);
             return Promise.resolve();
         }).catch((error) => {
             return Promise.reject(error);
