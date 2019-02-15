@@ -143,10 +143,10 @@
                                 </h3>
                                 <div slot="body">
                                     <div class="text-left">
-                                      <p>Antes de aceptar solicitud de asiento, mandale mensaje a la otra persona para coordinar todo lo vinculado al viaje: punto de encuentro, punto de llegada, tamaño de bolsos, contribución para combustible y peajes, etc.</p>
-                                      <p>Si aceptás una solicitud de asiento, se genera el compromiso de viajar entre vos y la otra persona, habilitándose la posibilidad de calificación 24hs después de comenzado el viaje. Tendrán 14 días para calificarse.</p>
-                                      <p>Se podrán calificar aunque canceles el viaje o bajes a / se baje la otra persona.</p>
-                                      <p>No ofrezcas un viaje si no tenés seguridad de que vas a viajar. Si ocurriera algo que te obligue a cancelarlo, avisale lo más rápido que puedas a las personas que iban a viajar.</p>
+                                      <p>Antes de mandar solicitud de asiento, mandale mensaje a la otra persona para coordinar todo lo vinculado al viaje: punto de encuentro, punto de llegada,tamaño de bolsos, contribución para combustible y peajes, etc.</p>
+                                      <p>Si mandaste solicitud de asiento y te aceptan el pedido, se genera el compromiso de viaje. Habilitándose la posibilidad de calificación 24hs después de comenzado el viaje. Tendrán 14 días para calificarse</p>
+                                      <p>Podrán calificarse aunque el viaje se cancele, te bajen o te bajes del viaje.</p>
+                                      <p>No pidas asiento si no tenés seguridad de que vas a viajar, muchas personas también están buscando el mismo viaje que vos. Si ocurriera algo que te impida viajar, avisale lo más rápido que puedas a la persona con que ibas a compartir el viaje.</p>
                                       <p>Cualquier duda escribinos a <a href="mailto:carpoolear@stsrosario.org.ar">carpoolear@stsrosario.org.ar</a> o nuestras redes sociales.</p>
                                     </div>
                                     <div class="check" style="margin-bottom:10px;">
@@ -157,7 +157,6 @@
                                     <div class="text-center">
                                       <button class="btn btn-primary" @click="toMessages" v-if="!owner">Enviar mensaje</button>
                                       <button class="btn btn-primary" @click="toMakeRequest">Solicitar asiento</button>
-                                      <!--<button class="btn btn-info" @click="onModalClose">Cancelar</button>-->
                                     </div>
                                 </div>
                             </modal>
@@ -430,6 +429,16 @@ export default {
         },
 
         toMessages () {
+            if (this.acceptPassengerValue) {
+                let data = {
+                    property: 'do_not_alert_accept_passenger',
+                    value: 1
+                };
+                this.changeProperty(data).then(() => {
+                    console.log('do not alert success');
+                });
+            }
+
             if (this.profileComplete()) {
                 this.toUserMessages(this.trip.user);
             }
@@ -456,15 +465,21 @@ export default {
         },
 
         onMakeRequest () {
-            if (this.profileComplete()) {
-                this.showModalAcceptPassenger = true;
-            }
+              if (this.profileComplete()) {
+                  if (this.trip.do_not_alert_accept_passenger) {
+                      this.toMakeRequest();
+                      // console.log('1:' + this.trip.do_not_alert_accept_passenger);
+                  } else {
+                      this.showModalAcceptPassenger = true;
+                      // console.log('2:' + this.trip.do_not_alert_accept_passenger);
+                  }
+              }
         },
 
         toMakeRequest () {
             if (this.acceptPassengerValue) {
                 let data = {
-                    property: 'do_not_alert_request_seat',
+                    property: 'do_not_alert_accept_passenger',
                     value: 1
                 };
                 this.changeProperty(data).then(() => {
@@ -676,6 +691,16 @@ export default {
             }
         },
         onModalClose () {
+            if (this.acceptPassengerValue) {
+                let data = {
+                    property: 'do_not_alert_accept_passenger',
+                    value: 1
+                };
+                this.changeProperty(data).then(() => {
+                    console.log('do not alert success');
+                });
+            }
+            
             this.showModalAcceptPassenger = false;
         }
     },

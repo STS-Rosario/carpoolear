@@ -22,20 +22,16 @@
                 <div slot="body">
                     <div class="text-left">
                       <p>
-                        <b>Es muy muy importante calificar</b><br>
-                        Las calificaciones permiten conocernos mejor y poder decidir a la hora de compartir un viaje, son muy importantes para toda la comunidad carpoolera.
+                        <b>Es muy muy importante calificar</b>. Las calificaciones permiten conocernos mejor y poder decidir a la hora de compartir un viaje, son muy importantes para toda la comunidad carpoolera.
                       </p>
                       <p>
-                        <b>Tomate el tiempo para calificar pero no tanto...</b><br>
-                        Tenés 14 días para calificar contando a partir del momento en que se habilita la posibilidad, 24hs posteriores al comienzo del viaje.
+                        <b>Tomate el tiempo para calificar pero no tanto...</b>. Tenés 14 días para calificar contando a partir del momento en que se habilita la posibilidad, 24hs posteriores al comienzo del viaje.
                       </p>
                       <p>
-                        <b>No se borra con el codo ni hay líquido corrector</b><br>
-                        Tené en cuenta que no podés ni borrar ni editar la calificación que hagas.
+                        <b>No se borra con el codo ni hay líquido corrector</b>. Tené en cuenta que no podés ni borrar ni editar la calificación que hagas.
                       </p>
                       <p>
-                        <b>Decí lo que pensás :D</b><br>
-                        Las calificación que vos hagas y la que recibas de la otra persona se mostrarán al mismo tiempo en los perfiles. Nunca se mostrará una antes que la otra. Solamente cuando la otra persona te califique o se venza el plazo de tiempo para calificar, aparecerá la calificación en el perfil.
+                        <b>Decí lo que pensás :D</b>. Las calificación que vos hagas y la que recibas de la otra persona se mostrarán al mismo tiempo en los perfiles. Nunca se mostrará una antes que la otra. Solamente cuando la otra persona te califique o se venza el plazo de tiempo para calificar, aparecerá la calificación en el perfil.
                       </p>
                       <p>Cualquier duda escribinos a <a href="mailto:carpoolear@stsrosario.org.ar">carpoolear@stsrosario.org.ar</a> o nuestras redes sociales.</p>
                     </div>
@@ -233,7 +229,8 @@ export default {
             oldTripsAsDriver: 'myTrips/oldTripsAsDriver',
             oldTripsAsPassenger: 'myTrips/oldTripsAsPassenger',
             findSubscriptions: 'subscriptions/index',
-            registerDonation: 'profile/registerDonation'
+            registerDonation: 'profile/registerDonation',
+            changeProperty: 'profile/changeProperty'
         }),
         findTrip (id) {
             if (this.trips) {
@@ -317,12 +314,11 @@ export default {
                   console.log('do not alert success');
               });
           }
-
           this.showModalPendingRates = false;
         },
 
         onModalClose () {
-            this.showModalRequestSeat = false;
+            this.showModalPendingRates = false;
             let data = {
                 has_donated: 0,
                 has_denied: 1,
@@ -373,8 +369,7 @@ export default {
         },
         pendingRates: function (newValue, oldValue) {
             this.updateScroll();
-            console.log('pendingRates', newValue, oldValue);
-            if (newValue && newValue.length > 0) {
+            if (!this.user.do_not_alert_pending_rates) {
               this.showModalPendingRates = true;
             }
         },

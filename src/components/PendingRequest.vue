@@ -13,10 +13,10 @@
                 </h3>
                 <div slot="body">
                     <div class="text-left">
-                      <p>Antes de mandar solicitud de asiento, mandale mensaje a la otra persona para coordinar todo lo vinculado al viaje: punto de encuentro, punto de llegada,tamaño de bolsos, contribución para combustible y peajes, etc.</p>
-                      <p>Si mandaste solicitud de asiento y te aceptan el pedido, se genera el compromiso de viaje. Habilitándose la posibilidad de calificación 24hs después de comenzado el viaje. Tendrán 14 días para calificarse</p>
-                      <p>Podrán calificarse aunque el viaje se cancele, te bajen o te bajes del viaje.</p>
-                      <p>No pidas asiento si no tenés seguridad de que vas a viajar, muchas personas también están buscando el mismo viaje que vos. Si ocurriera algo que te impida viajar, avisale lo más rápido que puedas a la persona con que ibas a compartir el viaje.</p>
+                      <p>Antes de aceptar solicitud de asiento, mandale mensaje a la otra persona para coordinar todo lo vinculado al viaje: punto de encuentro, punto de llegada, tamaño de bolsos, contribución para combustible y peajes, etc.</p>
+                      <p>Si aceptás una solicitud de asiento, se genera el compromiso de viajar entre vos y la otra persona, habilitándose la posibilidad de calificación 24hs después de comenzado el viaje. Tendrán 14 días para calificarse.</p>
+                      <p>Se podrán calificar aunque canceles el viaje o bajes a / se baje la otra persona.</p>
+                      <p>No ofrezcas un viaje si no tenés seguridad de que vas a viajar. Si ocurriera algo que te obligue a cancelarlo, avisale lo más rápido que puedas a las personas que iban a viajar.</p>
                       <p>Cualquier duda escribinos a <a href="mailto:carpoolear@stsrosario.org.ar">carpoolear@stsrosario.org.ar</a> o nuestras redes sociales.</p>
                     </div>
                     <div class="check" style="margin-bottom:10px;">
@@ -64,45 +64,61 @@ export default {
         ...mapActions({
             passengerAccept: 'passenger/accept',
             passengerReject: 'passenger/reject',
-            lookConversation: 'conversations/createConversation'
+            lookConversation: 'conversations/createConversation',
+            changeProperty: 'profile/changeProperty'
         }),
 
         onAcceptRequest () {
-            this.showModalRequestSeat = true;
+            console.log(this.user.do_not_alert_accept_passenger);
+            if (this.user.do_not_alert_accept_passenger) {
+                this.toAcceptRequest();
+            } else {
+                this.showModalRequestSeat = true;
+            }
         },
 
         toAcceptRequest () {
-          if (this.acceptRequestValue) {
-              let data = {
-                  property: 'do_not_alert_accept_passenger',
-                  value: 1
-              };
-              this.changeProperty(data).then(() => {
-                  console.log('do not alert success');
-              });
-          }
+            if (this.acceptRequestValue) {
+                let data = {
+                    property: 'do_not_alert_accept_passenger',
+                    value: 1
+                };
+                this.changeProperty(data).then(() => {
+                    console.log('do not alert success');
+                });
+            }
 
-          let user = this.user;
-          let trip = this.trip;
-          this.acceptInProcess = true;
-          this.passengerAccept({user, trip}).then(() => {
-              this.acceptInProcess = false;
-          }).catch((resp) => {
-              this.acceptInProcess = false;
-              if (resp.status === 422) {
-                  if (resp.data && resp.data.errors && resp.data.errors.error && resp.data.errors.error.length) {
-                      for (let i = 0; i < resp.data.errors.error.length; i++) {
-                          let error = resp.data.errors.error[i];
-                          if (error === 'not_seat_available') {
-                              dialogs.message('No puedes aceptar esta solicitud, todos los asientos del viaje están ocupados.', { duration: 10, estado: 'error' });
-                          }
-                      }
-                  }
-              }
-          });
+            let user = this.user;
+            let trip = this.trip;
+            this.acceptInProcess = true;
+            this.passengerAccept({user, trip}).then(() => {
+                this.acceptInProcess = false;
+            }).catch((resp) => {
+                this.acceptInProcess = false;
+                if (resp.status === 422) {
+                    if (resp.data && resp.data.errors && resp.data.errors.error && resp.data.errors.error.length) {
+                        for (let i = 0; i < resp.data.errors.error.length; i++) {
+                            let error = resp.data.errors.error[i];
+                            if (error === 'not_seat_available') {
+                                dialogs.message('No puedes aceptar esta solicitud, todos los asientos del viaje están ocupados.', { duration: 10, estado: 'error' });
+                            }
+                        }
+                    }
+                }
+            });
         },
 
         reject () {
+            if (this.acceptRequestValue) {
+                let data = {
+                    property: 'do_not_alert_accept_passenger',
+                    value: 1
+                };
+                this.changeProperty(data).then(() => {
+                    console.log('do not alert success');
+                });
+            }
+
             let user = this.user;
             let trip = this.trip;
             this.rejectInProcess = true;

@@ -2810,10 +2810,6 @@ ul {
   margin-top: 10px;
 }
 
-.trips .modal-footer {
-  display: none;
-}
-
 /* .trip-detail-component .modal-footer,
 .request-list .modal-footer {
   display: none;
