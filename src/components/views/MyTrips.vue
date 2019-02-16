@@ -193,7 +193,8 @@ export default {
             donateValue: 0,
             modalTripId: 0,
             showModalPendingRates: false,
-            pendingRatesValue: 0
+            pendingRatesValue: 0,
+            alreadyAlerted: false
         };
     },
     mounted () {
@@ -379,7 +380,11 @@ export default {
         pendingRates: function (newValue, oldValue) {
             this.updateScroll();
             if (!this.user.do_not_alert_pending_rates) {
-                this.showModalPendingRates = true;
+                console.log(newValue, oldValue);
+                if (newValue && newValue.length >= 0 && !this.alreadyAlerted) {
+                    this.alreadyAlerted = true;
+                    this.showModalPendingRates = true;
+                }
             }
         },
         pendingRequest: function () {

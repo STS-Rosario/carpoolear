@@ -431,7 +431,7 @@ export default {
         toMessages () {
             if (this.acceptPassengerValue) {
                 let data = {
-                    property: 'do_not_alert_accept_passenger',
+                    property: 'do_not_alert_request_seat',
                     value: 1
                 };
                 this.changeProperty(data).then(() => {

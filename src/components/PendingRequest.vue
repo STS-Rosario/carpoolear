@@ -73,7 +73,6 @@ export default {
         }),
 
         onAcceptRequest () {
-            console.log('acá', this.currentUser);
             if (this.currentUser.do_not_alert_accept_passenger) {
                 this.toAcceptRequest();
             } else {
@@ -143,6 +142,16 @@ export default {
 
         onModalClose () {
             this.showModalRequestSeat = false;
+
+            if (this.acceptRequestValue) {
+                let data = {
+                    property: 'do_not_alert_accept_passenger',
+                    value: 1
+                };
+                this.changeProperty(data).then(() => {
+                    console.log('do not alert success');
+                });
+            }
         }
     },
 
