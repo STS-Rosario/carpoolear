@@ -41,7 +41,7 @@ export default {
         };
     },
     mounted () {
-
+        this.input = this.value ? this.value : '';
     },
     computed: {
     },
@@ -355,5 +355,10 @@ export default {
         border: 1px solid #AAA;
         color: #000;
         text-align: right;
+    }
+    .osm-autocomplete input[disabled] {
+        background-color: #DDD;
+        color: #555;
+        opacity: 0.85;
     }
 </style>

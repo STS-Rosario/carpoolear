@@ -116,18 +116,18 @@ export default {
     },
     watch: {
         dateBrowser: function (value) {
-            if (value && value !== '') {
-                bus.emit('date-change', moment(value).format('YYYY-MM-DD'));
-            } else {
-                bus.emit('date-change', '');
-            }
+            value = value && value !== '' ? moment(value).format('YYYY-MM-DD') : '';
+
+            bus.emit('date-change', value);
+
+            this.$emit('date_changed', value);
         },
         dateMobile: function (value) {
-            if (value && value !== '') {
-                bus.emit('date-change', value);
-            } else {
-                bus.emit('date-change', '');
-            }
+            value = value && value !== '' ? value : '';
+
+            bus.emit('date-change', value);
+
+            this.$emit('date_changed', value);
         },
         value: function (value) {
             this.dateBrowser = moment(this.value).toDate();
