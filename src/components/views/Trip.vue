@@ -142,7 +142,7 @@
                                     <span>¡Carpoodatos!</span>
                                 </h3>
                                 <div slot="body">
-                                    <div class="text-left">
+                                    <div class="text-left carpoodatos">
                                       <p>Antes de mandar solicitud de asiento, mandale mensaje a la otra persona para coordinar todo lo vinculado al viaje: punto de encuentro, punto de llegada,tamaño de bolsos, contribución para combustible y peajes, etc.</p>
                                       <p>Si mandaste solicitud de asiento y te aceptan el pedido, se genera el compromiso de viaje. Habilitándose la posibilidad de calificación 24hs después de comenzado el viaje. Tendrán 14 días para calificarse</p>
                                       <p>Podrán calificarse aunque el viaje se cancele, te bajen o te bajes del viaje.</p>

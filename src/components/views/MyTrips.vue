@@ -15,12 +15,12 @@
         </div>
 
         <div class="col-xs-24">
-            <modal :name="'modal'" v-if="showModalPendingRates" @close="toPendingRates" :title="'Test'" :body="'Body'">
+            <modal :name="'modal'" v-if="showModalPendingRates" @close="toPendingRates" :title="'Test'" :body="'Body'" :hide-footer="true">
                 <h3 slot="header">
                     <span>¡Carpoodatos!</span>
                 </h3>
                 <div slot="body">
-                    <div class="text-left">
+                    <div class="text-left carpoodatos">
                       <p>
                         <b>Es muy muy importante calificar</b>. Las calificaciones permiten conocernos mejor y poder decidir a la hora de compartir un viaje, son muy importantes para toda la comunidad carpoolera.
                       </p>

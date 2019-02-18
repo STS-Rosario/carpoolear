@@ -2820,3 +2820,12 @@ ul {
 .request-list .modal-container {
   padding: 10px 19px;
 }
+
+@media (max-width: 800px) {
+    .carpoodatos p {
+        font-size: 11px;
+    }
+}
+.modal-container .btn-secondary {
+    padding: .8em;
+}

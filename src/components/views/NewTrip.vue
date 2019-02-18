@@ -140,7 +140,17 @@
                                     </li>
                                 </ul>
                             </fieldset>
-
+                            <div class="row row-showReturnTrip">
+                                <hr class="col-md-24" />
+                                <div class="checkbox-trip-return col-md-24">
+                                    <span>
+                                        <input type="checkbox" v-model="showReturnTrip" id="cbxShowReturnTrip" />
+                                        <label for="cbxShowReturnTrip">
+                                            Cargar viaje de regreso
+                                        </label>
+                                    </span>
+                                </div>
+                            </div>
                             <button v-if="!showReturnTrip" class="trip-create btn btn-primary btn-lg btn-shadowed" @click="save" :disabled="saving">
                                 <span v-if="!updatingTrip">CREAR</span>
                                 <span v-else>Actualizar</span>
@@ -148,14 +158,6 @@
                         </div>
                     </div>
                     <div class="row" v-if="!updatingTrip">
-                        <div class="checkbox-trip-return col-md-24">
-                            <span>
-                                <input type="checkbox" v-model="showReturnTrip" id="cbxShowReturnTrip" />
-                                <label for="cbxShowReturnTrip">
-                                Cargar viaje de regreso
-                                </label>
-                            </span>
-                        </div>
                         <hr  v-if="showReturnTrip" class="col-md-24" />
                         <div v-if="showReturnTrip">
                             <div class="new-left trip_points col-sm-13 col-md-15">
@@ -264,7 +266,6 @@
                                     </li>
                                 </ul>
                             </fieldset>
-
                             <button class="trip-create btn btn-primary btn-lg btn-shadowed" @click="save" :disabled="saving">
                                 <span v-if="!updatingTrip">CREAR</span>
                                 <span v-else>Actualizar</span>
@@ -501,10 +502,10 @@ export default {
         'dateAnswer': function (value) {
             if (!this.showReturnTrip || !this.otherTrip.dateAnswer) {
                 const v = moment(value);
-                let date = '';
-                if (v.isValid()) {
+                // let date = '';
+                /* if (v.isValid()) {
                     date = value;
-                }
+                } */
                 // this.otherTrip.date = date;
                 // this.otherTrip.dateAnswer = date;
             }
@@ -934,5 +935,8 @@ export default {
     }
     .tooltip-bottom {
         color: #D72521;
+    }
+    .row-showReturnTrip {
+        margin-bottom: 1.5rem;
     }
 </style>
