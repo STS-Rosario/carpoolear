@@ -137,6 +137,29 @@
                                     <div v-else style="height: 2em;"></div>
                                 </div>
                             </div>
+                            <modal :name="'modal'" v-if="showModalRequestSeat" @close="onModalClose" :title="'Test'" :body="'Body'">
+                                <h3 slot="header">
+                                    <span>¡Carpoodatos!</span>
+                                </h3>
+                                <div slot="body">
+                                    <div class="text-left carpoodatos">
+                                      <p>Antes de mandar solicitud de asiento, mandale mensaje a la otra persona para coordinar todo lo vinculado al viaje: punto de encuentro, punto de llegada,tamaño de bolsos, contribución para combustible y peajes, etc.</p>
+                                      <p>Si mandaste solicitud de asiento y te aceptan el pedido, se genera el compromiso de viaje. Habilitándose la posibilidad de calificación 24hs después de comenzado el viaje. Tendrán 14 días para calificarse</p>
+                                      <p>Podrán calificarse aunque el viaje se cancele, te bajen o te bajes del viaje.</p>
+                                      <p>No pidas asiento si no tenés seguridad de que vas a viajar, muchas personas también están buscando el mismo viaje que vos. Si ocurriera algo que te impida viajar, avisale lo más rápido que puedas a la persona con que ibas a compartir el viaje.</p>
+                                      <p>Cualquier duda escribinos a <a href="mailto:carpoolear@stsrosario.org.ar">carpoolear@stsrosario.org.ar</a> o nuestras redes sociales.</p>
+                                    </div>
+                                    <div class="check" style="margin-bottom:10px;">
+                                        <label class="check-inline">
+                                            <input type="checkbox" name="acceptPassengerValor" value="0" v-model="acceptPassengerValue"><span> No volver a mostrar mensaje</span>
+                                        </label>
+                                    </div>
+                                    <div class="text-center">
+                                      <button class="btn btn-primary" @click="toMessages" v-if="!owner">Enviar mensaje</button>
+                                      <button class="btn btn-primary" @click="toMakeRequest">Solicitar asiento</button>
+                                    </div>
+                                </div>
+                            </modal>
                             <div class="buttons-container"  v-if="!isPasssengersView">
                                 <router-link class="btn btn-primary" v-if="owner && !expired" :to="{name: 'update-trip', params: { id: trip.id}}">
                                     Editar
@@ -151,7 +174,7 @@
                                 </template>
                                 <template v-if="!owner && !trip.is_passenger && !expired">
                                     <template v-if="!isPassenger">
-                                        <button class="btn btn-primary" @click="makeRequest" v-if="canRequest && trip.seats_available > 0" :disabled="sending">
+                                        <button class="btn btn-primary" @click="onMakeRequest" v-if="canRequest && trip.seats_available > 0" :disabled="sending">
                                             Solicitar asiento
                                         </button>
                                         <button class="btn" v-if="!canRequest" @click="cancelRequest" :disabled="sending">
@@ -286,8 +309,10 @@ import { mapGetters, mapActions } from 'vuex';
 import router from '../../router';
 import bus from '../../services/bus-event';
 import svgItem from '../SvgItem';
+import modal from '../Modal';
 import moment from 'moment';
 import dialogs from '../../services/dialogs.js';
+
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import VueHead from 'vue-head';
@@ -324,7 +349,9 @@ export default {
             messageToUsers: '',
             selectedMatchingUser: [],
             url: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
-            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+            showModalRequestSeat: false,
+            acceptPassengerValue: 0
         };
     },
 
@@ -356,7 +383,8 @@ export default {
             cancel: 'passenger/cancel',
             remove: 'trips/remove',
             searchMatchers: 'trips/searchMatchers',
-            sendToAll: 'conversations/sendToAll'
+            sendToAll: 'conversations/sendToAll',
+            changeProperty: 'profile/changeProperty'
         }),
         profileComplete () {
             if (!this.user.image || this.user.image.length === 0 || !this.user.description || this.user.description.length === 0) {
@@ -401,6 +429,16 @@ export default {
         },
 
         toMessages () {
+            if (this.acceptPassengerValue) {
+                let data = {
+                    property: 'do_not_alert_request_seat',
+                    value: 1
+                };
+                this.changeProperty(data).then(() => {
+                    console.log('do not alert success');
+                });
+            }
+
             if (this.profileComplete()) {
                 this.toUserMessages(this.trip.user);
             }
@@ -426,9 +464,31 @@ export default {
             });
         },
 
-        makeRequest () {
+        onMakeRequest () {
+            if (this.profileComplete()) {
+                if (this.user.do_not_alert_request_seat) {
+                    this.toMakeRequest();
+                    // console.log('1:' + this.trip.do_not_alert_accept_passenger);
+                } else {
+                    this.showModalRequestSeat = true;
+                    // console.log('2:' + this.trip.do_not_alert_accept_passenger);
+                }
+            }
+        },
+
+        toMakeRequest () {
+            if (this.acceptPassengerValue) {
+                let data = {
+                    property: 'do_not_alert_request_seat',
+                    value: 1
+                };
+                this.changeProperty(data).then(() => {
+                    console.log('do not alert success');
+                });
+            }
             if (this.profileComplete()) {
                 this.sending = true;
+                this.showModalRequestSeat = false;
                 this.make(this.trip.id).then(() => {
                     dialogs.message('La solicitud fue enviada.');
                     this.sending = false;
@@ -629,6 +689,18 @@ export default {
                     dialogs.message('El mensaje fue enviado.');
                 });
             }
+        },
+        onModalClose () {
+            if (this.acceptPassengerValue) {
+                let data = {
+                    property: 'do_not_alert_request_seat',
+                    value: 1
+                };
+                this.changeProperty(data).then(() => {
+                    console.log('do not alert success');
+                });
+            }
+            this.showModalRequestSeat = false;
         }
     },
 
@@ -688,7 +760,8 @@ export default {
     components: {
         svgItem,
         LMap,
-        LTileLayer
+        LTileLayer,
+        modal
     },
 
     props: [
@@ -801,10 +874,18 @@ export default {
     .trip-detail-component .driver-data div:first-child {
         margin-top: .4em;
     }
+
     @media only screen and (min-width: 400px) and (max-width: 767px) {
         .trip-detail-component .trip_driver_img {
             width: 6.7rem;
             height: 6.7rem;
+        }
+        .trip-detail-component .structure-div {
+            top: -15px;
+        }
+
+        .vue2leaflet-map {
+          width: calc(100% + 10px)!important;
         }
     }
     @media only screen and (min-width: 768px) {

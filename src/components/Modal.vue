@@ -12,7 +12,7 @@
             <slot name="body"></slot>
           </div>
 
-          <div class="modal-footer">
+          <div class="modal-footer" v-if="!hideFooter">
             <slot name="footer">
               <button class="modal-default-button btn btn-link" @click="$emit('close')">Cerrar</button>
             </slot>
@@ -35,8 +35,10 @@ export default {
     },
     methods: {
     },
-    props: {
-    }
+
+    props: [
+        'hideFooter'
+    ]
 };
 </script>
 

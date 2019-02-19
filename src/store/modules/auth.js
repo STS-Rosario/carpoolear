@@ -124,6 +124,7 @@ function register (store, { email, password, passwordConfirmation, name, birthda
 
 function fetchUser (store) {
     return userApi.show().then((response) => {
+        console.log('fetch user', response.data);
         store.commit(types.AUTH_SET_USER, response.data);
     }).catch(({data, status}) => {
         console.log(data, status);
