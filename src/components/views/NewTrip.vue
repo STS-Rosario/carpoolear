@@ -501,7 +501,7 @@ export default {
         },
         'dateAnswer': function (value) {
             if (!this.showReturnTrip || !this.otherTrip.dateAnswer) {
-                const v = moment(value);
+                // const v = moment(value);
                 // let date = '';
                 /* if (v.isValid()) {
                     date = value;
