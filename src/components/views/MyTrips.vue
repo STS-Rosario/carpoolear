@@ -381,8 +381,8 @@ export default {
         pendingRates: function (newValue, oldValue) {
             this.updateScroll();
             if (!this.user.do_not_alert_pending_rates) {
-                console.log(newValue, oldValue);
-                if (newValue && newValue.length >= 0 && !this.alreadyAlerted) {
+                console.log('pendingRates', newValue, oldValue);
+                if (newValue && newValue.length > 0 && !this.alreadyAlerted) {
                     this.alreadyAlerted = true;
                     this.showModalPendingRates = true;
                 }
