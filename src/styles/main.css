@@ -2825,7 +2825,20 @@ ul {
     .carpoodatos p {
         font-size: 11px;
     }
+    .carpoodatos {
+        max-height: 50vh;
+        overflow-y: auto;
+    }
 }
 .modal-container .btn-secondary {
     padding: .8em;
+}
+.float-right-close {
+    float: right;
+    color: #91B64C!important;
+}
+.modal-container .btn {
+    max-width: 45%;
+    min-width: auto;
+    padding: .8em .6em;
 }

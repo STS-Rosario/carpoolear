@@ -10,6 +10,7 @@
             <modal :name="'modal'" v-if="showModalRequestSeat" @close="onModalClose" :title="'Test'" :body="'Body'">
                 <h3 slot="header">
                     <span>¡Carpoodatos!</span>
+                    <i v-on:click="onModalClose" class="fa fa-times float-right-close"></i>
                 </h3>
                 <div slot="body">
                     <div class="text-left carpoodatos">
