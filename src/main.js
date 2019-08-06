@@ -18,8 +18,8 @@ import directives from './directives';
 
 import bootstrapCss from './styles/bootstrap/css/bootstrap.min.css';
 
-import cssHelpers from './styles/helpers.css';
-import css from './styles/main.css';
+import cssHelpers from './styles/helpers';
+import css from './styles/main';
 
 import bus from './services/bus-event';
 

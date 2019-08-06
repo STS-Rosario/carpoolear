@@ -7,12 +7,12 @@ const xmlParser = require('xml2js').parseString;
 console.log('Movilizame builder -- Starting building');
 
 const TARGET = argv.target || 'default';
+process.env.TARGET_APP = process.env.TARGET_APP || TARGET;
 const PROD = argv.prod || false;
 const PLATFORM = argv.platform || 'android';
 if (PLATFORM === 'ios' || PLATFORM === 'android') {
     process.env.CORDOVA = true;
 }
-process.env.TARGET_APP = TARGET;
 const projectPath = `./dist/${TARGET}`;
 
 function showError (code, stderr, stdout) {
@@ -99,7 +99,7 @@ if (argv._.length > 0) {
         case 'serve':
             process.env.SERVE = true;
             process.env.CORDOVA = false;
-            shell.exec('webpack-dev-server --inline --progress --config --bail build/webpack.dev.conf.js',
+            shell.exec('webpack-dev-server --inline --progress --config build/webpack.dev.conf.js',
                 {
                     env: process.env,
                     async: true

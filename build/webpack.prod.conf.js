@@ -16,8 +16,6 @@ const PLATFORM = process.env.PLATFORM || 'android';
 const CORDOVA_FOLDER = path.resolve(__dirname, `../projects/${TARGET}/cordova`);
 const RES_FOLDER = path.resolve(__dirname, `../projects/${TARGET}/res`);
 
-console.log('FOLDERS', CORDOVA_FOLDER, RES_FOLDER);
-
 const webpackConfig = merge(baseWebpackConfig, {
   devtool: config.build.productionSourceMap ? '#source-map' : false,
   output: {
