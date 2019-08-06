@@ -1,4 +1,4 @@
-import {CarApi} from '../../services/api';
+import { CarApi } from '../../services/api';
 import * as types from '../mutation-types';
 
 /* eslint-disable no-undef */
@@ -89,4 +89,3 @@ export default {
     actions,
     mutations
 };
-

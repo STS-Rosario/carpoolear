@@ -171,11 +171,11 @@ export default {
             let termsAndConditions = this.termsAndConditions;
             let birthday = this.birthdayAnswer;
             this.progress = true;
-            this.doRegister({email, password, passwordConfirmation, name, birthday, termsAndConditions}).then(() => {
+            this.doRegister({ email, password, passwordConfirmation, name, birthday, termsAndConditions }).then(() => {
                 this.progress = false;
                 this.success = true;
             }).catch(() => {
-                dialogs.message('La cuenta de email ingresada se encuentra en uso.', {estado: 'error'});
+                dialogs.message('La cuenta de email ingresada se encuentra en uso.', { estado: 'error' });
                 this.emailError.state = true;
                 this.emailError.message = 'La cuenta de email ingresada se encuentra en uso.';
                 this.progress = false;

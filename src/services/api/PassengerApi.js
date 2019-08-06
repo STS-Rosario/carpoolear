@@ -1,7 +1,6 @@
 import TaggedApi from '../../classes/TaggedApi';
 
 class PassengerApi extends TaggedApi {
-
     allRequest () {
         return this.get('/api/users/requests', {});
     }

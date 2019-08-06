@@ -106,6 +106,7 @@ export default {
             }
 
             function onError (error) { // Android only
+                console.log(error);
                 // window.alert('Error: ' + error);
             }
 

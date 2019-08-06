@@ -1,7 +1,6 @@
 import TaggedApi from '../../classes/TaggedApi';
 
 class TripApi extends TaggedApi {
-
     search (data) {
         return this.get('/api/trips', data);
     }
@@ -29,7 +28,6 @@ class TripApi extends TaggedApi {
     userTrips (id, asDriver) {
         return this.get('/api/trips', { 'user_id': id, 'as_driver': asDriver });
     }
-
 }
 
 export { TripApi as default };

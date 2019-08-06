@@ -36,7 +36,7 @@
     </div>
 </template>
 <script>
-import {mapGetters} from 'vuex';
+import { mapGetters } from 'vuex';
 import Loading from '../Loading.vue';
 import RateItem from '../RateItem';
 

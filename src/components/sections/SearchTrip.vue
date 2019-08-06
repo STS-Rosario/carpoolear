@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import {pointDistance} from '../../services/maps.js';
+import { pointDistance } from '../../services/maps.js';
 import DatePicker from '../DatePicker';
 import bus from '../../services/bus-event.js';
 import moment from 'moment';

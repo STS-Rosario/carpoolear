@@ -1,7 +1,6 @@
 import TaggedApi from '../../classes/TaggedApi';
 
 class FriendApi extends TaggedApi {
-
     index (data = {}) {
         return this.get('/api/friends', data);
     }

@@ -1,4 +1,4 @@
-import {PassengerApi} from '../../services/api';
+import { PassengerApi } from '../../services/api';
 import * as types from '../mutation-types';
 import globalStore from '../index';
 
@@ -26,28 +26,28 @@ const actions = {
 
     makeRequest (store, tripId) {
         return passengerApi.make(tripId).then(response => {
-            globalStore.commit('trips/' + types.TRIPS_SET_REQUEST, {id: tripId, value: 'send'});
+            globalStore.commit('trips/' + types.TRIPS_SET_REQUEST, { id: tripId, value: 'send' });
             return Promise.resolve();
         }).catch(error => {
             return Promise.reject(error);
         });
     },
 
-    accept (store, {user, trip}) {
+    accept (store, { user, trip }) {
         return passengerApi.accept(trip.id, user.id).then(response => {
             let data = {
                 user_id: user.id,
                 trip_id: trip.id
             };
             store.commit(types.PASSENGER_REMOVE_PENDING, data);
-            globalStore.commit('trips/' + types.TRIPS_ADD_PASSENGER, {id: trip.id, user});
-            globalStore.commit('myTrips/' + types.MYTRIPS_ADD_PASSENGER, {id: trip.id, user});
+            globalStore.commit('trips/' + types.TRIPS_ADD_PASSENGER, { id: trip.id, user });
+            globalStore.commit('myTrips/' + types.MYTRIPS_ADD_PASSENGER, { id: trip.id, user });
         }).catch(error => {
             return Promise.reject(error);
         });
     },
 
-    reject (store, {user, trip}) {
+    reject (store, { user, trip }) {
         return passengerApi.reject(trip.id, user.id).then(response => {
             let data = {
                 user_id: user.id,
@@ -59,16 +59,16 @@ const actions = {
         });
     },
 
-    cancel (store, {user, trip}) {
+    cancel (store, { user, trip }) {
         return passengerApi.cancel(trip.id, user.id).then(response => {
             if (trip.request !== 'send') {
-                globalStore.commit('trips/' + types.TRIPS_REMOVE_PASSENGER, {id: trip.id, user});
-                globalStore.commit('myTrips/' + types.MYTRIPS_REMOVE_PASSENGER, {id: trip.id, user});
+                globalStore.commit('trips/' + types.TRIPS_REMOVE_PASSENGER, { id: trip.id, user });
+                globalStore.commit('myTrips/' + types.MYTRIPS_REMOVE_PASSENGER, { id: trip.id, user });
                 if (trip.user.id !== user.id) {
                     globalStore.commit('myTrips/' + types.MYTRIPS_REMOVE_PASSENGER_TRIP, trip.id);
                 }
             } else {
-                globalStore.commit('trips/' + types.TRIPS_SET_REQUEST, {id: trip.id, value: ''});
+                globalStore.commit('trips/' + types.TRIPS_SET_REQUEST, { id: trip.id, value: '' });
             }
         }).catch(error => {
             return Promise.reject(error);
@@ -89,7 +89,6 @@ const mutations = {
             state.pendingRequest.forEach((item, i) => {
                 if (item.user.id === data.user_id & item.trip_id === data.trip_id) {
                     index = i;
-                    return;
                 }
             });
             state.pendingRequest.splice(index, 1);

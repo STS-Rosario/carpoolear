@@ -1,8 +1,8 @@
 import * as types from './mutation-types';
-import cache, {keys} from '../services/cache';
+import cache, { keys } from '../services/cache';
 import bus from '../services/bus-event';
-import {TripApi} from '../services/api';
-import {Thread, stopThreads} from '../classes/Threads';
+import { TripApi } from '../services/api';
+import { Thread, stopThreads } from '../classes/Threads';
 
 let tripsApi = new TripApi();
 

@@ -83,7 +83,7 @@ export function makeActions (name, requestGeneration, callback) {
             params.page = store.state[name + 'SearchParam'].page;
             params.page_size = store.state[name + 'SearchParam'].pageSize;
         }
-        let promises = requestGeneration({store, data: params});
+        let promises = requestGeneration({ store, data: params });
         promises.then(response => {
             if (response.meta.pagination.total_pages === response.meta.pagination.current_page) {
                 store.commit(name.toUpperCase() + '_SET_LASTPAGE');

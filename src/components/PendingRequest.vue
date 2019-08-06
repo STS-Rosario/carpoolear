@@ -24,7 +24,7 @@
     </div>
 </template>
 <script>
-import {mapActions} from 'vuex';
+import { mapActions } from 'vuex';
 import router from '../router';
 
 export default {
@@ -46,7 +46,7 @@ export default {
             let user = this.user;
             let trip = this.trip;
             this.acceptInProcess = true;
-            this.passengerAccept({user, trip}).then(() => {
+            this.passengerAccept({ user, trip }).then(() => {
                 this.acceptInProcess = false;
             }).catch(() => {
                 this.acceptInProcess = false;
@@ -57,7 +57,7 @@ export default {
             let user = this.user;
             let trip = this.trip;
             this.rejectInProcess = true;
-            this.passengerReject({user, trip}).then(() => {
+            this.passengerReject({ user, trip }).then(() => {
                 this.rejectInProcess = false;
             }).catch(() => {
                 this.rejectInProcess = false;

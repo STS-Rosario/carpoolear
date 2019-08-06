@@ -224,7 +224,7 @@ export default {
             // trip: null,
             sending: false,
             zoom: 4,
-            center: {lat: -29.0, lng: -60.0},
+            center: { lat: -29.0, lng: -60.0 },
             points: [
                 {
                     name: '',
@@ -262,7 +262,7 @@ export default {
         deleteTrip () {
             if (window.confirm('¿Estás seguro que deseas cancelar el viaje?')) {
                 this.remove(this.trip.id).then(() => {
-                    this.$router.replace({name: 'trips'});
+                    this.$router.replace({ name: 'trips' });
                 });
             }
         },
@@ -274,7 +274,7 @@ export default {
                 setTimeout(() => { self.renderMap(); }, 500);
             }).catch(error => {
                 if (error) {
-                    router.replace({name: 'trips'});
+                    router.replace({ name: 'trips' });
                     // Ver que hacer
                     // this.trip = null;
                 }

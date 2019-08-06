@@ -1,5 +1,5 @@
 import * as types from '../mutation-types';
-import {UserApi, RateApi} from '../../services/api';
+import { UserApi, RateApi } from '../../services/api';
 import * as pagination from '../pagination';
 
 let userApi = new UserApi();
@@ -34,7 +34,7 @@ const actions = {
         });
     },
 
-    ...pagination.makeActions('rates', ({store, data}) => {
+    ...pagination.makeActions('rates', ({ store, data }) => {
         // TODO: Pagination not working
         data.page_size = 200;
         return rateApi.index(store.state.user.id, data);

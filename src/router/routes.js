@@ -1,5 +1,5 @@
 /* jshint esversion: 6 */
-import {auth, guest, profileComplete} from './middleware.js';
+import { auth, guest, profileComplete } from './middleware.js';
 
 export default [
     {

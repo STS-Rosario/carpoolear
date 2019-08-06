@@ -10,14 +10,14 @@ import FriendsApi from './FriendApi';
 import NotificationApi from './Notifications.js';
 
 export {
-  AuthApi,
-  TripApi,
-  UserApi,
-  DeviceApi,
-  RateApi,
-  PassengerApi,
-  ConversationApi,
-  CarApi,
-  FriendsApi,
-  NotificationApi
+    AuthApi,
+    TripApi,
+    UserApi,
+    DeviceApi,
+    RateApi,
+    PassengerApi,
+    ConversationApi,
+    CarApi,
+    FriendsApi,
+    NotificationApi
 };
