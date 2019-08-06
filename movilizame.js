@@ -1,19 +1,19 @@
 #!/usr/bin/env node
-let argv = require('minimist')(process.argv.slice(2));
-let shell = require('shelljs');
-let fs = require('fs');
-let xmlParser = require('xml2js').parseString;
+const argv = require('minimist')(process.argv.slice(2));
+const shell = require('shelljs');
+const fs = require('fs-extra');
+const xmlParser = require('xml2js').parseString;
 
-console.log('Movilizame build -- Starting building');
+console.log('Movilizame builder -- Starting building');
 
-let TARGET = argv.target || 'default';
-let PROD = argv.prod || false;
-let PLATFORM = argv.platform || 'android';
+const TARGET = argv.target || 'default';
+const PROD = argv.prod || false;
+const PLATFORM = argv.platform || 'android';
 if (PLATFORM === 'ios' || PLATFORM === 'android') {
     process.env.CORDOVA = true;
 }
 process.env.TARGET_APP = TARGET;
-const projectPath = `./projects/${TARGET}/cordova`;
+const projectPath = `./dist/${TARGET}`;
 
 function showError (code, stderr, stdout) {
     console.log('ERROR IN CORDOVA:');
@@ -22,14 +22,32 @@ function showError (code, stderr, stdout) {
     console.log('STDOUT', stdout);
 }
 
+function preBuildAndCheckPlatform (callback) {
+    let folder = `dist/${TARGET}`;
+    let cordovaFiles = `projects/${TARGET}/cordova`;
+    if (fs.existsSync(folder)) {
+        console.log('Deleting old files.')
+        fs.removeSync(folder);
+    }
+    fs.copy(cordovaFiles, folder, function (err) {
+        if (err) {
+            console.error(err);
+        } else {
+            console.log('Copyng cordova assets.')
+            buildAndCheckPlatform(callback);
+        }
+    });
+}
+
 function buildAndCheckPlatform (callback) {
     let options = {
         env: process.env
     };
     let buildEnv = PROD ? 'build.js' : 'build-dev.js';
     console.log(`cross-env PLATFORM=${PLATFORM} node build/${buildEnv}`);
-    shell.exec(`cross-env PLATFORM=${PLATFORM} node build/${buildEnv}`, options);
-    if (!fs.existsSync(`./projects/${TARGET}/cordova/platforms/${PLATFORM}`)) {
+    shell.exec(`cross-env PLATFORM=${PLATFORM} node build/${buildEnv}`, options)
+    ;
+    if (!fs.existsSync(`./dist/${TARGET}/platforms/${PLATFORM}`)) {
         console.log('Adding platform: ' + PLATFORM + ' - path: ' + projectPath);
         shell.exec(`cross-env cordova platform add ${PLATFORM}`, {
             cwd: projectPath,
@@ -81,7 +99,7 @@ if (argv._.length > 0) {
         case 'serve':
             process.env.SERVE = true;
             process.env.CORDOVA = false;
-            shell.exec('webpack-dev-server --inline --progress --config build/webpack.dev.conf.js',
+            shell.exec('webpack-dev-server --inline --progress --config --bail build/webpack.dev.conf.js',
                 {
                     env: process.env,
                     async: true
@@ -89,7 +107,7 @@ if (argv._.length > 0) {
             );
             break;
         case 'build':
-            buildAndCheckPlatform(() => {
+            preBuildAndCheckPlatform(() => {
                 shell.exec(`cordova build ${PLATFORM}`, {
                     env: process.env,
                     cwd: projectPath,
@@ -98,7 +116,7 @@ if (argv._.length > 0) {
             });
             break;
         case 'prepare':
-            buildAndCheckPlatform(() => {
+            preBuildAndCheckPlatform(() => {
                 shell.exec(`cordova prepare ${PLATFORM}`, {
                     cwd: projectPath,
                     silent: true,

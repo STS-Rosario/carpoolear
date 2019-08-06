@@ -1,7 +1,8 @@
 require('./check-versions')()
 
-process.env.NODE_ENV = 'production'
+process.env.NODE_ENV = 'development'
 process.env.SERVE = false;
+// process.env.CORDOVA = false;
 
 const ora = require('ora')
 const rm = require('rimraf')
@@ -9,11 +10,10 @@ const path = require('path')
 const chalk = require('chalk')
 const webpack = require('webpack')
 const config = require('../config')
-const webpackConfig = require('./webpack.prod.conf')
+const webpackConfig = require('./webpack.dev-build.conf')
 
-console.log('CORDOVA=', process.env.CORDOVA);
-const spinner = ora('Building for production...')
-spinner.start();
+const spinner = ora('Building for development...')
+spinner.start()
 
 rm (path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
   if (err) throw err

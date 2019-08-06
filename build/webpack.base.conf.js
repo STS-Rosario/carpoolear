@@ -1,11 +1,12 @@
-const path = require('path')
-const config = require('../config')
-const utils = require('./utils')
+const path = require('path');
+const config = require('../config');
+const utils = require('./utils');
 
 const env = process.env.NODE_ENV
 const TARGET = process.env.TARGET_APP || 'default';
 const devMode = process.env.NODE_ENV !== 'production';
-const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 console.log('TARGET = ' + TARGET);
 if (TARGET === 'default') {

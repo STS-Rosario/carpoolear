@@ -7,8 +7,9 @@ var dFlag = (process.env.PLATFORM && process.env.PLATFORM == 'DESKTOP');
 
 module.exports = {
   build: { 
-    index: path.resolve(__dirname, `../projects/${TARGET}/cordova/www/index.html`),
-    assetsRoot: path.resolve(__dirname, `../projects/${TARGET}/cordova/www/`),
+    index: path.resolve(__dirname, `../dist/${TARGET}/www/index.html`),
+    assetsRoot: path.resolve(__dirname, `../dist/${TARGET}/www/`),
+    cordovaRoot: path.resolve(__dirname, `../dist/${TARGET}/`),
     assetsSubDirectory: 'static',
     assetsPublicPath: dFlag ? '/app/' : (isSERVED ? '/' : ''),
     productionSourceMap: true,
