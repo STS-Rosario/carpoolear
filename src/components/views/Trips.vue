@@ -147,7 +147,8 @@ export default {
             refreshTrips: 'trips/refreshList',
             subscribeToSearch: 'subscriptions/create',
             findSubscriptions: 'subscriptions/index',
-            registerDonation: 'profile/registerDonation'
+            registerDonation: 'profile/registerDonation',
+            setScrollOffset: 'trips/setScrollOffset'
             // morePagesActions: 'trips/tripMorePage',
             // setActionButton: 'actionbars/setHeaderButtons'
         }),
@@ -170,6 +171,10 @@ export default {
         },
         nextPage () {
             this.search({next: true});
+        },
+        onTripClick () {
+            let scrolloffset = window.scrollY;
+            this.setScrollOffset(scrolloffset);
         },
         isComplementary (trip, searchParams, index) {
             let isComplementary = false;
@@ -336,6 +341,14 @@ export default {
             this.$refs.searchBox.clear();
         }
 
+        if (this.scrollPosition) {
+            this.$nextTick(() => {
+                setTimeout(() => {
+                    window.scrollTo(0, this.scrollPosition);
+                }, 2);
+            });
+        }
+
         // bus.event
         bus.off('search-click', this.onSearchButton);
         bus.on('search-click', this.onSearchButton);
@@ -343,6 +356,8 @@ export default {
         bus.on('clear-click', this.onClearButton);
         bus.off('scroll-bottom', this.onScrollBottom);
         bus.on('scroll-bottom', this.onScrollBottom);
+        bus.off('trip-click', this.onTripClick);
+        bus.on('trip-click', this.onTripClick);
 
         router.stack = [];
     },
@@ -376,7 +391,8 @@ export default {
             isBrowser: 'device/isBrowser',
             refreshList: 'trips/refreshList',
             subscriptions: 'subscriptions/subscriptions',
-            appConfig: 'auth/appConfig'
+            appConfig: 'auth/appConfig',
+            scrollPosition: 'trips/scrollOffset'
         }),
 
         showingTrips () {

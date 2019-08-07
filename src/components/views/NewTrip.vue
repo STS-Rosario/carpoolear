@@ -934,7 +934,7 @@ export default {
         }
     }
     .tooltip-bottom {
-        color: #D72521;
+        color: var(--trip-almost-fill-color);
     }
     .row-showReturnTrip {
         margin-bottom: 1.5rem;

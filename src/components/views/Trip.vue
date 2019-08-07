@@ -840,7 +840,7 @@ export default {
         position: absolute;
         pointer-events: none;
         border-color: rgba(136, 183, 213, 0);
-        border-bottom-color: #016587;
+        border-bottom-color: var(--secondary-background);
         border-width: 12px;
         margin-left: -12px;
         z-index: 1;
@@ -921,7 +921,7 @@ export default {
             right: -23px;
             left: unset;
             border-color: rgba(136, 183, 213, 0);
-            border-left-color: #016587;
+            border-left-color: var(--secondary-background);
             border-width: 12px;
             margin-left: -12px;
             z-index: 1;

@@ -77,7 +77,7 @@ export default {
     fill: #000;
   }
   .profile_image-edit svg {
-    fill: #016587;
+    fill: var(--secondary-background);
   }
   .profile_image-edit:hover svg {
     fill: #0f90bb;
@@ -96,10 +96,10 @@ export default {
     fill: #fff
   }
   .actionbar-bottom .actionbar_item .big .svgItem path:first-child{
-      stroke: #fff;
+    stroke: #fff;
   }
   .actionbar-bottom .actionbar_item.active svg {
-    fill: #016587;
+    fill: var(--secondary-background);
   }
 
 
