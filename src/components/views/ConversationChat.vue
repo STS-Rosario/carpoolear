@@ -2,6 +2,9 @@
     <div class="conversation_chat" v-if="conversation">
         <div class="list-group">
             <div class="list-group-item">
+                <router-link v-if="conversation.users.length === 2" :to="{ name: 'profile', params: userProfile() }" v-show="isMobile">
+                    <div class="conversation_image conversation_image_chat circle-box" v-imgSrc="conversation.image" ></div>
+                </router-link>
                 <router-link v-if="conversation.users.length === 2" :to="{ name: 'profile', params: userProfile() }">
                     <h2> {{conversation.title}} </h2>
                 </router-link>
@@ -21,7 +24,7 @@
                 <div class="input-group">
                     <input ref="ipt-text" id="ipt-text" v-model="message" type="text" class="form-control" placeholder="Escribir mensaje..." v-jump:click="'btn-send'" maxlength="255">
                     <span class="input-group-btn">
-                        <button ref="btn-send" id="btn-send" class="btn btn-default" :class="message.length > 0 ? 'active' : ''" type="button" @click="sendMessage" v-jump:focus="'ipt-text'">
+                        <button ref="btn-send" id="btn-send" class="btn btn-default" :class="message.length > 0 ? 'active' : ''" type="button" @click="sendMessage" v-jump:focus="'ipt-text'" :disabled="sending">
                             <i class="fa fa-play" aria-hidden="true"></i>
                         </button>
                     </span>
@@ -47,7 +50,8 @@ export default {
     data () {
         return {
             message: '',
-            mustJump: false
+            mustJump: false,
+            sending: false
         };
     },
     computed: {
@@ -57,6 +61,7 @@ export default {
             'messages': 'conversations/messagesList',
             'lastPageConversation': 'conversations/lastPageConversation',
             'timestampConversation': 'conversations/timestampConversation',
+            'title': 'actionbars/title',
             'isMobile': 'device/isMobile'
         }),
         lastConnection () {
@@ -75,7 +80,8 @@ export default {
             'findMessage': 'conversations/findMessage',
             'unreadMessage': 'conversations/getUnreadMessages',
             'setTitle': 'actionbars/setTitle',
-            'setSubTitle': 'actionbars/setSubTitle'
+            'setSubTitle': 'actionbars/setSubTitle',
+            'setImgTitle': 'actionbars/setImgTitle'
         }),
 
         userProfile () {
@@ -85,18 +91,21 @@ export default {
             };
             return {
                 id: this.conversation.users[id].id,
-                userProfile: this.conversation.users[id]
+                userProfile: this.conversation.users[id],
+                activeTab: 1
             };
         },
 
         sendMessage () {
-            this.sending = true;
-            this.send(this.message).then(data => {
-                this.sending = false;
-            }).catch(() => {
-                this.sending = false;
-            });
-            this.message = '';
+            if (this.message.length) {
+                this.sending = true;
+                this.send(this.message).then(data => {
+                    this.sending = false;
+                }).catch(() => {
+                    this.sending = false;
+                });
+                this.message = '';
+            }
         },
 
         onBackClick () {
@@ -124,7 +133,8 @@ export default {
                 bus.on('back-click', this.onBackClick);
                 if (this.conversation) {
                     this.setTitle(this.conversation.title);
-                    // this.setSubTitle('Última conexión: ' + moment().calendar(this.lastConnection));
+                    this.setSubTitle('Última conexión: ' + moment(this.lastConnection).calendar());
+                    this.setImgTitle(this.conversation.image);
                 }
             });
         }
@@ -142,7 +152,10 @@ export default {
         }
         if (this.conversation) {
             this.setTitle(this.conversation.title);
-            this.setSubTitle('Última conexión: ' + moment().calendar(this.lastConnection));
+            this.setSubTitle('Última conexión: ' + moment(this.lastConnection).calendar());
+            this.setImgTitle(this.conversation.image);
+
+            bus.emit('header-title-change');
         }
     },
     watch: {

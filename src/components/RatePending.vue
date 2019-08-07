@@ -2,7 +2,7 @@
     <div class="col-xs-24 col-md-16 col-lg-12">
         <div class="rate-pending_component clearfix">
             <div class="rate-pending_photo">
-                <router-link :to="{name: 'profile', params: {id: to.id, userProfile: to}}">
+                <router-link :to="{ name: 'profile', params: { id: to.id, userProfile: to, activeTab: 1} }">
                     <div class="trip_driver_img circle-box" v-imgSrc:profile="to.image">
                     </div>
                 </router-link>
@@ -26,14 +26,15 @@
                 </div>
             </div>
             <div class="rate--comment-box" v-show="expanded">
-                <textarea maxlength="330" class="rate_comment" v-model="comment" placeholder="Incluya un comentario..."></textarea>
+                <textarea maxlength="1000" class="rate_comment" v-model="comment" placeholder="Incluya un comentario..."></textarea>
                 <button class="btn btn-primary" @click="makeVote" :disabled="sending"> Calificar </button>
             </div>
         </div>
     </div>
 </template>
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import {mapActions, mapGetters} from 'vuex';
+import dialogs from '../services/dialogs.js';
 
 export default {
     name: 'rate-pending',
@@ -75,12 +76,29 @@ export default {
                 comment: this.comment,
                 rating: this.vote
             };
-            this.emit(data).then(() => {
-                this.comment = '';
+            let ok = false;
+            if (!this.vote) {
+                if (!this.comment) {
+                    // Voto negativo y comentario vacio
+                    dialogs.message('El comentario no puede estar vacío para los votos negativos.', { duration: 10, estado: 'error' });
+                } else {
+                    ok = true;
+                }
+            } else {
+                ok = true;
+            }
+            if (ok) {
+                console.log('emit rated');
+                this.$emit('rated', data);
+                this.emit(data).then(() => {
+                    this.comment = '';
+                    this.sending = false;
+                }).catch(() => {
+                    this.sending = false;
+                });
+            } else {
                 this.sending = false;
-            }).catch(() => {
-                this.sending = false;
-            });
+            }
         }
     },
 

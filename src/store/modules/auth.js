@@ -12,7 +12,8 @@ const state = {
     auth: false,
     user: null,
     token: null,
-    firstTime: false
+    firstTime: false,
+    appConfig: null
 };
 
 // getters
@@ -20,7 +21,8 @@ const getters = {
     checkLogin: state => state.auth,
     authHeader: state => state.auth ? { 'Authorization': 'Bearer ' + state.token } : {},
     user: state => state.user,
-    firstTime: firstTime => state.firstTime
+    firstTime: state => state.firstTime,
+    appConfig: state => state.appConfig
 };
 
 // actions
@@ -111,21 +113,18 @@ function register (store, { email, password, passwordConfirmation, name, birthda
         return Promise.resolve();
     }).catch((err) => {
         if (err.response) {
-            console.log(err.response.data);
-            console.log(err.response.status);
-            console.log(err.response.headers);
         } else {
-            console.log(err.message);
             if (err.message === 'Could not create new user.') {
 
             }
         }
-        return Promise.reject(new Error());
+        return Promise.reject(err);
     });
 }
 
 function fetchUser (store) {
     return userApi.show().then((response) => {
+        console.log('fetch user', response.data);
         store.commit(types.AUTH_SET_USER, response.data);
     }).catch(({ data, status }) => {
         console.log(data, status);
@@ -138,7 +137,9 @@ function retoken (store) {
 
     return new Promise((resolve, reject) => {
         authApi.retoken(data).then((response) => {
+            console.log('retoken response', response);
             store.commit(types.AUTH_SET_TOKEN, response.token);
+            store.commit('AUTH_APP_CONFIG', response.config);
             resolve();
         }).catch(({ data, status }) => {
             // check for internet problems -> not resolve until retoken finish
@@ -216,6 +217,19 @@ const mutations = {
     },
     [types.AUTH_FIRST_TIME] (state, firstTime) {
         state.firstTime = firstTime;
+    },
+
+    AUTH_APP_CONFIG (state, appConfig) {
+        state.appConfig = appConfig;
+    },
+
+    [types.DONATION_INTENT_PUSH] (state, donation) {
+        if (state.user) {
+            if (!state.user.donations) {
+                state.user.donations = [];
+            }
+            state.user.donations.push(donation);
+        }
     }
 };
 

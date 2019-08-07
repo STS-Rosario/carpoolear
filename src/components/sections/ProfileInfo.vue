@@ -2,6 +2,9 @@
     <div class="profile-info-component" v-if="profile">
         <div class="list-group">
             <div class="pic-info col-sm-6">
+                <div v-if="profile.has_pin == 1" class="user_pin">
+                    <img src="https://carpoolear.com.ar/static/img/pin.png" alt="" title="Aportante en la campaña mi media naranja carpoolera" />
+                </div>
                 <div class="circle-box profile" v-imgSrc:profile="profile.image"></div>
                 <div class="profile-info">
                     <div class="profile-info--name mobile">{{profile.name}}</div>
@@ -9,13 +12,22 @@
                         <i class="fa fa-thumbs-up" aria-hidden="true"></i> <span> {{profile.positive_ratings}} </span>
                         <i class="fa fa-thumbs-down" aria-hidden="true"></i> <span> {{profile.negative_ratings}} </span>
                     </div>
+                    <div v-if="profile.is_member == 1" class="">
+                        <img src="https://carpoolear.com.ar/static/img/pin_member.png" alt="" title="Miembro del equipo de Carpoolear" />
+                    </div>
                 </div>
-
                 <div class="profile-social-accounts" >
                     <div v-for="account in profile.accounts" class="row">
-                        <a :href="'https://www.facebook.com/app_scoped_user_id/' + account.provider_user_id" target="_blank" class="btn-primary btn-search" style="border: 0">
-                            <span class=''>Perfil de Facebook</span>
-                        </a>
+                        <div class="col-xs-24">
+                            <a :href="'https://www.facebook.com/search/top/?q=' + encodeURIComponent(profile.name)" target="_blank" class="btn-primary btn-search" style="border: 0" title="Facebook cambio sus políticas y no podemos llevarte al perfil de esta persona, pero te ayudamos a buscarlo.">
+                                <span class=''>Buscar en Facebook</span>
+                            </a><!-- app_scoped_user_id -->
+                        </div>
+                    </div>
+                    <div class="row" v-if="profile.accounts && profile.accounts.length">
+                        <div class="col-xs-24">
+                            <small>Facebook cambió sus políticas y no podemos llevarte al perfil de esta persona, pero te ayudamos a buscarlo.</small>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -62,3 +74,8 @@ export default {
     }
 };
 </script>
+<style scoped>
+    .btn-primary {
+        display: inline-block;
+    }
+</style>

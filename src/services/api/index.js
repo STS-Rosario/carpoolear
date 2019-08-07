@@ -8,9 +8,12 @@ import ConversationApi from './ConversationApi';
 import CarApi from './Car';
 import FriendsApi from './FriendApi';
 import NotificationApi from './Notifications.js';
+import DebugApi from './Debug';
+import SubscriptionApi from './SubscriptionsApi';
 
 export {
     AuthApi,
+    DebugApi,
     TripApi,
     UserApi,
     DeviceApi,
@@ -19,5 +22,6 @@ export {
     ConversationApi,
     CarApi,
     FriendsApi,
-    NotificationApi
+    NotificationApi,
+    SubscriptionApi
 };

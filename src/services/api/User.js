@@ -68,6 +68,14 @@ class UserApi extends TaggedApi {
     list (data) {
         return this.get('/api/users/list', data);
     }
+
+    registerDonation (data) {
+        return this.post('/api/users/donation', data);
+    }
+
+    changeProperty (data) {
+        return this.post('/api/users/change/' + data.property + '/' + data.value, null);
+    }
 }
 
 export { UserApi as default };

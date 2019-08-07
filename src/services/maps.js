@@ -42,3 +42,17 @@ export function parseStreet (result) {
     }
     return address;
 };
+
+export function parseOsmStreet (result) {
+    var address = {};
+    address.pais = result.address.country;
+    address.provincia = result.address.state.replace('Provincia de ', '');
+    let ciudad = '';
+    ciudad = result.address[result.type] ? result.address[result.type] : (result.address.county ? result.address.county : result.address.city);
+    ciudad.replace('Ciudad de ', '');
+    ciudad.replace('Municipio de ', '');
+    address.ciudad = ciudad;
+    address.calle = '';
+    address.numero = '';
+    return address;
+};

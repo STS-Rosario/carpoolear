@@ -30,6 +30,14 @@ export default {
         orientation: {
             type: String,
             default: 'top'
+        },
+        keytabset: {
+            type: String,
+            default: 'tabset'
+        },
+        rememberTab: {
+            type: Boolean,
+            default: false
         }
     },
     data: function () {
@@ -47,8 +55,13 @@ export default {
         orientationClass: function () {
             return 'tabs-' + this.orientation;
         },
-        activateTab: function (index) {
+        activateTab: function (index, ensure) {
             this.activeTabIndex = index;
+            if (this.rememberTab) {
+                if (window.sessionStorage && !ensure) {
+                    window.sessionStorage.setItem(this.keytabset + '_last_active_tab', this.activeTabIndex);
+                }
+            }
             var tab = this.tabs[index];
             if (tab && !tab.disabled) {
                 if (index === 'first') {
@@ -61,6 +74,17 @@ export default {
                 });
             } // end if
         },
+        getRememberedTab: function (defaultValue) {
+            if (this.rememberTab) {
+                if (window.sessionStorage) {
+                    let savedIndex = window.sessionStorage.getItem(this.keytabset + '_last_active_tab');
+                    if (savedIndex) {
+                        return parseInt(savedIndex, 10);
+                    }
+                }
+            }
+            return defaultValue;
+        },
         ensureActiveTab: function () {
             var activeTab = 0;
             this.tabs.forEach((tab, index) => {
@@ -68,7 +92,7 @@ export default {
                     activeTab = index;
                 } // end if
             });
-            this.activateTab(activeTab);
+            this.activateTab(activeTab, true);
         },
         registerTab: function (tab) {
             tab.id = this.tabs.length;

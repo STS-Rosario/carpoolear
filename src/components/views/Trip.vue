@@ -68,7 +68,7 @@
                                 <div class="row trip-data" v-if="trip.is_passenger">
                                     <strong class="warning-is-passenger">Pasajero que busca viaje</strong>
                                 </div>
-                                <div class="row trip-data">
+                                <div class="row trip-data"  v-if="!isPasssengersView">
                                     <em v-if="trip.friendship_type_id == 2">
                                         <i class="fa fa-globe" aria-hidden="true"></i>
                                         Viaje público
@@ -83,7 +83,7 @@
                                     </em>
                                 </div>
 
-                                <div class="row trip-stats"  v-if="!trip.is_passenger">
+                                <div class="row trip-stats"  v-if="!trip.is_passenger && !isPasssengersView">
                                     <div>
                                         <span>Distancia a recorrer</span><br>
                                         <span>{{ distanceString }} <abbr title="kilometros">km</abbr></span>
@@ -95,10 +95,10 @@
                                     <div>
                                         <span>Huella de carbono (<abbr title="aproximada">aprox</abbr>)</span><br>
 
-                                        <span>{{ trip.distance / 1000 * 1.5 }} <abbr title="kilogramos dióxido de carbono equivalente">kg CO<sub>2eq</sub></abbr></span>
+                                        <span>{{ (trip.distance / 1000 * 1.5).toFixed(2) }} <abbr title="kilogramos dióxido de carbono equivalente">kg CO<sub>2eq</sub></abbr></span>
                                     </div>
                                 </div>
-                                <div class="trip_share row">
+                                <div class="trip_share row"  v-if="!isPasssengersView">
                                     <a  :href="'https://www.facebook.com/sharer/sharer.php?u=' + currentUrl" target="_blank" aria-label="Compartir en Facebook" class="lnk lnk-social-network lnk-facebook" @click="onShareLinkClick">
                                         <i class="fa fa-facebook" aria-hidden="true"></i>
                                     </a>
@@ -113,35 +113,80 @@
                                     </a>
                                 </div>
 
-                                <div class="row passengers"  v-if="!trip.is_passenger">
-                                    <div class="col-xs-24" v-if="trip.passenger.length  && owner">
-                                        <h4 style="margin: 1em 0;"><strong>Pasajeros subidos</strong></h4>
-                                        <div v-for="p in trip.passenger">
-                                            <span @click="toUserMessages(p)" class="trip_driver_img circle-box passenger trip_passenger_image" v-imgSrc:profile="p.image">
-                                            </span>
-                                            <a href="#" @click="toUserMessages(p)" class="trip_passenger_name">{{ p.name }}</a>
-                                            <span @click="removePassenger(p)" class="trip_passenger-remove">
+                                <div class="row passengers" v-if="!trip.is_passenger">
+                                    <div class="col-xs-24" v-if="owner">
+                                        <h4 class="title-margined">
+                                            <strong>Pasajeros subidos</strong>
+                                        </h4>
+                                        <div v-for="p in trip.passenger" v-if="trip.passenger.length" class="list-item">
+                                            <span @click="toUserProfile(p)" class="trip_driver_img circle-box passenger trip_passenger_image" v-imgSrc:profile="p.image"></span>
+                                            <a href="#" @click="toUserProfile(p)" class="trip_passenger_name">
+                                                {{ p.name }}
+                                            </a>
+                                            <a href="#" @click="toUserMessages(p)" aria-label="Ir a mensajes" class="trip_passenger-chat">
+                                                 <i class="fa fa-comments" aria-hidden="true"></i>
+                                            </a>
+                                            <button @click="removePassenger(p)" class="trip_passenger-remove pull-right" aria-label="Bajar pasajero del viaje">
                                                 <i class="fa fa-times" aria-hidden="true"></i>
-                                            </span>
+                                            </button>
+                                        </div>
+                                        <div v-if="trip.passenger.length === 0">
+                                            Aún no hay pasajeros subidos a este viaje.
                                         </div>
                                     </div>
                                     <div v-else style="height: 2em;"></div>
                                 </div>
                             </div>
-                            <div class="buttons-container">
-                                <router-link class="btn btn-primary" v-if="owner" :to="{name: 'update-trip', params: { id: trip.id}}"> Editar  </router-link>
-                                <a class="btn btn-primary" v-if="owner" @click="deleteTrip" > Cancelar viaje  </a>
+                            <modal :name="'modal'" v-if="showModalRequestSeat" @close="onModalClose" :title="'Test'" :body="'Body'">
+                                <h3 slot="header">
+                                    <span>¡Carpoodatos!</span>
+                                    <i v-on:click="onModalClose" class="fa fa-times float-right-close"></i>
+                                </h3>
+                                <div slot="body">
+                                    <div class="text-left carpoodatos">
+                                      <p>Antes de mandar solicitud de asiento, mandale mensaje a la otra persona para coordinar todo lo vinculado al viaje: punto de encuentro, punto de llegada,tamaño de bolsos, contribución para combustible y peajes, etc.</p>
+                                      <p>Si mandaste solicitud de asiento y te aceptan el pedido, se genera el compromiso de viaje. Habilitándose la posibilidad de calificación 24hs después de comenzado el viaje. Tendrán 14 días para calificarse</p>
+                                      <p>Podrán calificarse aunque el viaje se cancele, te bajen o te bajes del viaje.</p>
+                                      <p>No pidas asiento si no tenés seguridad de que vas a viajar, muchas personas también están buscando el mismo viaje que vos. Si ocurriera algo que te impida viajar, avisale lo más rápido que puedas a la persona con que ibas a compartir el viaje.</p>
+                                      <p>Cualquier duda escribinos a <a href="mailto:carpoolear@stsrosario.org.ar">carpoolear@stsrosario.org.ar</a> o nuestras redes sociales.</p>
+                                    </div>
+                                    <div class="check" style="margin-bottom:10px;">
+                                        <label class="check-inline">
+                                            <input type="checkbox" name="acceptPassengerValor" value="0" v-model="acceptPassengerValue"><span> No volver a mostrar mensaje</span>
+                                        </label>
+                                    </div>
+                                    <div class="text-center">
+                                      <button class="btn btn-primary" @click="toMessages" v-if="!owner">Enviar mensaje</button>
+                                      <button class="btn btn-primary" @click="toMakeRequest">Solicitar asiento</button>
+                                    </div>
+                                </div>
+                            </modal>
+                            <div class="buttons-container"  v-if="!isPasssengersView">
+                                <router-link class="btn btn-primary" v-if="owner && !expired" :to="{name: 'update-trip', params: { id: trip.id}}">
+                                    Editar
+                                </router-link>
+                                <a class="btn btn-primary" v-if="owner && !expired" @click="deleteTrip" :disabled="sending">
+                                    Cancelar viaje
+                                </a>
                                 <template v-if="!owner && !expired">
-                                    <button class="btn btn-primary" @click="toMessages" v-if="!owner"> Coordinar viaje  </button>
+                                    <button class="btn btn-primary" @click="toMessages" v-if="!owner">
+                                        Enviar mensaje
+                                    </button>
                                 </template>
                                 <template v-if="!owner && !trip.is_passenger && !expired">
                                     <template v-if="!isPassenger">
-                                        <button class="btn btn-primary" @click="makeRequest" v-if="canRequest && trip.seats_available > 0"> Solicitar asiento </button>
-                                        <button class="btn" v-if="!canRequest" @click="cancelRequest"> Solicitud enviada </button>
+                                        <button class="btn btn-primary" @click="onMakeRequest" v-if="canRequest && trip.seats_available > 0" :disabled="sending">
+                                            Solicitar asiento
+                                        </button>
+                                        <button class="btn" v-if="!canRequest" @click="cancelRequest" :disabled="sending">
+                                            Solicitud enviada
+                                        </button>
                                     </template>
 
                                     <template v-if="isPassenger">
-                                        <button class="btn btn-primary" @click="cancelRequest" v-if="canRequest"> Bajarme del viaje </button>
+                                        <button class="btn btn-primary" @click="cancelRequest" v-if="canRequest" :disabled="sending">
+                                            Bajarme del viaje
+                                        </button>
                                     </template>
                                 </template>
                                 <template v-if="expired">
@@ -153,7 +198,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-24 col-sm-9 col-sm-pull-15 col-md-8 col-md-pull-16 col-lg-7 col-lg-pull-17 driver-container">
+                    <div class="col-xs-24 col-sm-9 col-sm-pull-15 col-md-8 col-md-pull-16 col-lg-7 col-lg-pull-17 driver-container" v-if="!isPasssengersView">
                         <div class="driver-profile">
                             <div class="row">
                                 <div class="col-xs-9 col-md-8 col-lg-8">
@@ -165,12 +210,17 @@
                                         <svgItem icon="thumbUp" size="18"></svgItem> <span> {{trip.user.positive_ratings}} </span>
                                         <svgItem icon="thumbDown" size="18"></svgItem> <span> {{trip.user.negative_ratings}} </span>
                                     </div>
-                                    <div v-if="trip.user.has_pin == 1" class="user_pin">
-                                        <img src="https://carpoolear.com.ar/static/img/pin.png" alt="" title="Aportante en la campaña mi media naranja carpoolera" />
+                                    <div class="user_pin">
+                                        <span v-if="trip.user.has_pin == 1">
+                                            <img src="https://carpoolear.com.ar/static/img/pin.png" alt="" title="Aportante en la campaña mi media naranja carpoolera" />
+                                        </span>
+                                        <span v-if="trip.user.is_member == 1">
+                                            <img src="https://carpoolear.com.ar/static/img/pin_member.png" alt="" title="Miembro del equipo de Carpoolear" />
+                                        </span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                             <div class="row">
                                 <div class="col-md-24">
                                     <router-link class="btn-primary btn-search btn-shadowed-black" :to="{name: 'profile', params: {id: getUserProfile, userProfile: trip.user}}"> Ver Perfil </router-link>
                                 </div>
@@ -181,23 +231,69 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-24 structure-div">
-                    <gmap-map
-                        :center="center"
-                        :zoom="zoom"
-                        style="height: 400px"
-                        ref="map"
-                    >
-                        <gmap-marker
-                            :key="index"
-                            v-for="(m, index) in points"
-                            :position="m.location"
-                            :clickable="true"
-                            :draggable="true"
-                            @click="center=m.location"
-                            v-if="m.location"
-                        ></gmap-marker>
-                    </gmap-map>
+
+                    <div class="col-xs-24 structure-div"  v-if="!isPasssengersView">
+                        <div class="col-xs-24 col-sm-12 col-md-9 matcheo-passengers"  v-if="matchingUsers && matchingUsers.length > 0">
+                            <div>
+                                <div v-if="owner">
+                                    <h3 class="title-margined">
+                                        Matcheos del viaje
+                                    </h3>
+                                    <div class="row matching-user-list">
+                                        <div v-for="p in matchingUsers" class="list-item col-sm-24" v-bind:key="p.id">
+                                            <div class="passenger-match">
+                                                <input type="checkbox" v-model="selectedMatchingUser" v-bind:id="p.id" v-bind:value="p.id">
+                                                <span @click="toUserProfile(p)" class="trip_driver_img circle-box passenger trip_passenger_image" v-imgSrc:profile="p.image"></span>
+                                                <a href="#" @click="toUserProfile(p)" class="trip_passenger_name">
+                                                    {{ p.name }}
+                                                </a>
+                                                <button @click="toUserMessages(p)" aria-label="Ir a mensajes" class="trip_passenger-chat">
+                                                        <i class="fa fa-comments" aria-hidden="true"></i>
+                                                </button>
+                                            </div>
+                                            <div>
+                                                <small>
+                                                    Viaja el {{ p.tripMatch.trip_date | moment('DD/MM') }}
+                                                    <strong>{{ p.tripMatch.trip_date | moment('HH:mm') }}</strong>
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-inline col-xs-24 send_to_all-form">
+                                            <div class="input-group">
+                                                <label for="message_all" class="sr-only">Mensaje para los usuarios seleccionados</label>
+                                                <input type="text" id="message_all" class="form-control" placeholder="Envía a los seleccionados" v-model="messageToUsers">
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-success" @click="onSendToAll">
+                                                        <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                                                    </button>
+                                                </span>
+                                            </div><!-- /input-group -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <gmap-map
+                            :center="center"
+                            :zoom="zoom"
+                            style="height: 524px"
+                            ref="map"
+                        >
+                            <gmap-marker
+                                :key="index"
+                                v-for="(m, index) in points"
+                                :position="m.location"
+                                :clickable="true"
+                                :draggable="true"
+                                @click="center=m.location"
+                                v-if="m.location"
+                            ></gmap-marker>
+                        </gmap-map> -->
+                        <l-map :zoom="zoom" :center="center" style="width: calc(100% + 20px); height: 461px; overflow: hidden; margin-left: -10px; z-index: 0;" ref="map">
+                            <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
+                        </l-map>
                     </div>
                 </div>
             </div>
@@ -214,14 +310,24 @@ import { mapGetters, mapActions } from 'vuex';
 import router from '../../router';
 import bus from '../../services/bus-event';
 import svgItem from '../SvgItem';
+import modal from '../Modal';
 import moment from 'moment';
 import dialogs from '../../services/dialogs.js';
+
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import VueHead from 'vue-head';
+import { LMap, LTileLayer } from 'vue2-leaflet';
+import 'leaflet-routing-machine';
+Vue.use(VueHead);
+Vue.use(VueRouter);
 
 export default {
     name: 'trip',
     data () {
         return {
             // trip: null,
+            carpoolear_logo: process.env.ROUTE_BASE + 'static/img/carpoolear_logo.png',
             sending: false,
             zoom: 4,
             center: { lat: -29.0, lng: -60.0 },
@@ -239,8 +345,34 @@ export default {
                     location: null
                 }
             ],
-            currentUrl: encodeURIComponent('https://carpoolear.com.ar/app' + this.$route.fullPath)
+            currentUrl: encodeURIComponent('https://carpoolear.com.ar/app' + this.$route.fullPath),
+            matchingUsers: [],
+            messageToUsers: '',
+            selectedMatchingUser: [],
+            url: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+            showModalRequestSeat: false,
+            acceptPassengerValue: 0
         };
+    },
+
+    head: {
+        title: function () {
+            return {
+                inner: 'Viaje'
+            };
+        },
+        meta: function () {
+            if (this.trip) {
+                return [
+                    { p: 'og:description', c: this.trip.description },
+                    { p: 'og:title', c: this.trip.points[0].json_address.ciudad + ' -> ' + this.trip.points[this.trip.points.length - 1].json_address.ciudad + ' | ' + moment(this.trip.trip_date).format('dddd DD/MM hh:mm') },
+                    { p: 'og:image', c: this.carpoolear_logo }
+                ];
+            } else {
+                return [];
+            }
+        }
     },
 
     methods: {
@@ -250,7 +382,10 @@ export default {
             selectConversation: 'conversations/select',
             make: 'passenger/makeRequest',
             cancel: 'passenger/cancel',
-            remove: 'trips/remove'
+            remove: 'trips/remove',
+            searchMatchers: 'trips/searchMatchers',
+            sendToAll: 'conversations/sendToAll',
+            changeProperty: 'profile/changeProperty'
         }),
         profileComplete () {
             if (!this.user.image || this.user.image.length === 0 || !this.user.description || this.user.description.length === 0) {
@@ -261,8 +396,11 @@ export default {
         },
         deleteTrip () {
             if (window.confirm('¿Estás seguro que deseas cancelar el viaje?')) {
+                this.sending = true;
                 this.remove(this.trip.id).then(() => {
-                    this.$router.replace({ name: 'trips' });
+                    this.$router.replace({name: 'trips'});
+                }).catch(() => {
+                    this.sending = false;
                 });
             }
         },
@@ -272,6 +410,16 @@ export default {
                 this.points = trip.points;
                 var self = this;
                 setTimeout(() => { self.renderMap(); }, 500);
+                if (this.owner) {
+                    this.searchMatchers({ trip: this.trip }).then(users => {
+                        console.log('matching', users);
+                        this.matchingUsers = users;
+                        if (users && users.length) {
+                            this.selectedMatchingUser = users.map(u => u.id);
+                            // console.log('selectedMatchingUser', users);
+                        }
+                    });
+                }
             }).catch(error => {
                 if (error) {
                     router.replace({ name: 'trips' });
@@ -282,6 +430,16 @@ export default {
         },
 
         toMessages () {
+            if (this.acceptPassengerValue) {
+                let data = {
+                    property: 'do_not_alert_request_seat',
+                    value: 1
+                };
+                this.changeProperty(data).then(() => {
+                    console.log('do not alert success');
+                });
+            }
+
             if (this.profileComplete()) {
                 this.toUserMessages(this.trip.user);
             }
@@ -295,9 +453,43 @@ export default {
             });
         },
 
-        makeRequest () {
+        toUserProfile (user) {
+            console.log('toUserProfile replace');
+            router.replace({
+                name: 'profile',
+                params: {
+                    id: user.id,
+                    userProfile: user,
+                    activeTab: 1
+                }
+            });
+        },
+
+        onMakeRequest () {
+            if (this.profileComplete()) {
+                if (this.user.do_not_alert_request_seat) {
+                    this.toMakeRequest();
+                    // console.log('1:' + this.trip.do_not_alert_accept_passenger);
+                } else {
+                    this.showModalRequestSeat = true;
+                    // console.log('2:' + this.trip.do_not_alert_accept_passenger);
+                }
+            }
+        },
+
+        toMakeRequest () {
+            if (this.acceptPassengerValue) {
+                let data = {
+                    property: 'do_not_alert_request_seat',
+                    value: 1
+                };
+                this.changeProperty(data).then(() => {
+                    console.log('do not alert success');
+                });
+            }
             if (this.profileComplete()) {
                 this.sending = true;
+                this.showModalRequestSeat = false;
                 this.make(this.trip.id).then(() => {
                     dialogs.message('La solicitud fue enviada.');
                     this.sending = false;
@@ -373,13 +565,57 @@ export default {
 
         renderMap () {
             if (this.$refs.map) {
-                this.$refs.map.$mapCreated.then(() => {
-                    /* eslint-disable no-undef */
+                /* eslint-disable no-undef */
+                /* this.$refs.map.$mapCreated.then(() => {
                     this.directionsService = new google.maps.DirectionsService();
                     this.directionsDisplay = new google.maps.DirectionsRenderer();
                     this.directionsDisplay.setMap(this.$refs.map.$mapObject);
                     this.restoreData(this.trip);
+                }); */
+                let map = this.$refs.map.mapObject;
+                console.log('trip', this.trip);
+                let data = {
+                    origin: this.trip.points[0],
+                    destiny: this.trip.points[this.trip.points.length - 1]
+                };
+                 /* eslint-disable no-undef */
+                let control = L.Routing.control({
+                    waypoints: [
+                        L.latLng(data.origin.lat, data.origin.lng),
+                        L.latLng(data.destiny.lat, data.destiny.lng)
+                    ],
+                    language: 'es'
                 });
+                /* control.on('routeselected', function (e) {
+                    console.log('routeselected', e);
+                    var coord = e.route.coordinates;
+                    var instr = e.route.instructions;
+                    var formatter = new L.Routing.Formatter({ langague: 'es' });
+                    var instrPts = {
+                        type: 'FeatureCollection',
+                        features: []
+                    };
+                    for (var i = 0; i < instr.length; ++i) {
+                        var g = {
+                            'type': 'Point',
+                            'coordinates': [
+                                coord[instr[i].index].lng,
+                                coord[instr[i].index].lat
+                            ]
+                        };
+                        var p = {
+                            'instruction': formatter.formatInstruction(instr[i]),
+                            '_instruction': instr[i]
+                        };
+                        instrPts.features.push({
+                            'geometry': g,
+                            'type': 'Feature',
+                            'properties': p
+                        });
+                    }
+                    console.log(instrPts);
+                }); */
+                control.addTo(map);
             }
         },
 
@@ -415,13 +651,12 @@ export default {
                 }
             }
 
-            this.directionsService.route({
+            /* this.directionsService.route({
                 origin: this.points[0].name,
                 destination: this.points[this.points.length - 1].name,
                 travelMode: 'DRIVING'
             }, (response, status) => {
                 if (status === 'OK') {
-                    /* encode path */
                     this.directionsDisplay.setDirections(response);
 
                     let path = response.routes[0].overview_path;
@@ -437,11 +672,36 @@ export default {
                     }
                     this.trip.distance = totalDistance;
                     this.duration = totalDuration;
-                    this.co2 = totalDistance * 0.15; /* distancia por 0.15 kilos co2 en promedio por KM recorrido  */
+                    this.co2 = parseFloat(totalDistance * 0.15).toFixed(2);
                 } else {
                     console.log('Directions request failed due to ' + status);
                 }
-            });
+            }); */
+        },
+        onSendToAll () {
+            let users = this.matchingUsers.filter(u => this.selectedMatchingUser.indexOf(u.id) >= 0);
+            console.log(users, this.messageToUsers);
+            if (this.messageToUsers && users && users.length) {
+                this.sendToAll({
+                    message: this.messageToUsers,
+                    users: users
+                }).then(() => {
+                    this.messageToUsers = '';
+                    dialogs.message('El mensaje fue enviado.');
+                });
+            }
+        },
+        onModalClose () {
+            if (this.acceptPassengerValue) {
+                let data = {
+                    property: 'do_not_alert_request_seat',
+                    value: 1
+                };
+                this.changeProperty(data).then(() => {
+                    console.log('do not alert success');
+                });
+            }
+            this.showModalRequestSeat = false;
         }
     },
 
@@ -470,7 +730,7 @@ export default {
             return moment(this.trip.trip_date).format() < moment().format();
         },
         owner () {
-            return this.user.id === this.trip.user.id;
+            return this.trip && this.user && this.user.id === this.trip.user.id;
         },
         canRequest () {
             return !this.owner && !this.trip.request;
@@ -489,20 +749,35 @@ export default {
         },
         distanceString () {
             return Math.floor(this.trip.distance / 1000);
+        },
+        isPasssengersView () {
+            if (this.location) {
+                return this.location === 'passenger';
+            }
+            return false;
         }
     },
 
     components: {
-        svgItem
+        svgItem,
+        LMap,
+        LTileLayer,
+        modal
     },
 
     props: [
-        'id'
+        'id',
+        'location'
     ]
 };
 </script>
 
 <style scoped>
+    :root {
+        --trip-almost-fill-color: #D72521;
+        --trip-mostly-free-color: #91B64C;
+        --secondary-background: #016587;
+    }
     .user_pin {
         margin-top: 1em;
     }
@@ -513,24 +788,38 @@ export default {
         width: 3.5em;
         height: 3.5em;
         position: relative;
-        margin-right: .2em;
+        margin-right: .5em;
     }
     .passengers {
         margin-bottom: .8em;
     }
+    .trip_passenger-chat,
     .trip_passenger-remove,
     .trip_passenger_image,
     .trip_passenger_name {
         vertical-align: middle;
         cursor: pointer;
     }
+    .trip_passenger-chat,
     .trip_passenger-remove {
         font-size: 1.8em;
+        background: none;
+        border: 0;
+    }
+    .trip_passenger-remove {
+        margin-left: .5em;
+        margin-top: .25em;
+    }
+    .trip_passenger-chat {
         margin-left: .5em;
     }
     .trip-detail-component .structure-div {
         margin-top: 1rem;
-        z-index: -100;
+        z-index: 0;
+        position: relative;
+        min-height: 418px;
+        /* overflow: hidden; */
+        top: -43px;
     }
     .trip-detail-component .driver-container {
         margin-top: 0;
@@ -579,17 +868,25 @@ export default {
         margin-bottom: .4em;
     }
     .trip-detail-component .buttons-container {
-            text-align: center;
-            margin-top: 1em;
-            padding-bottom: 2rem;
+        text-align: center;
+        margin-top: 1em;
+        padding-bottom: 2rem;
     }
     .trip-detail-component .driver-data div:first-child {
         margin-top: .4em;
     }
+
     @media only screen and (min-width: 400px) and (max-width: 767px) {
         .trip-detail-component .trip_driver_img {
             width: 6.7rem;
             height: 6.7rem;
+        }
+        .trip-detail-component .structure-div {
+            top: -15px;
+        }
+
+        .vue2leaflet-map {
+          width: calc(100% + 10px)!important;
         }
     }
     @media only screen and (min-width: 768px) {
@@ -604,6 +901,7 @@ export default {
             bottom: -25px;
             position: absolute;
             padding-bottom: 0;
+            z-index: 1;
         }
         .trip-detail-component .white-background {
             padding-top: 0;
@@ -612,8 +910,8 @@ export default {
             margin-top: 0;
         }
         .trip-detail-component .driver-profile div.row:last-child {
-            max-height: 11rem;
-            min-height: 9rem;
+            max-height: 12rem;
+            min-height: 11rem;
         }
         .trip-detail-component .quote {
             margin-left: 0;
@@ -644,6 +942,95 @@ export default {
         }
         .trip-detail-component .quote.long-description {
             font-size: 14px;
+        }
+    }
+    .matcheo-passengers {
+        background: #FFF;
+        box-shadow: 0 0 4px 1px #CCC;
+        border-radius: .4em;
+        position: absolute;
+        left: 1em;
+        top: 1em;
+        max-height: 400px;
+        z-index: 100;
+    }
+    .matcheo-passengers h3 {
+        font-size: 1.4em;
+    }
+    .matcheo-passengers .list-item {
+        border: 0;
+    }
+    .matcheo-passengers .list-item .trip_passenger_name {
+        color: var(--trip-mostly-free-color);
+        font-weight: bold;
+    }
+    .matcheo-passengers .passenger-match {
+        margin: 0 .5em;
+        padding: .5em 0;
+    }
+    .passenger-match input {
+        margin-right: 1em;
+    }
+    .passenger-match button {
+        color: var(--secondary-background);
+    }
+
+    .passenger-match .trip_driver_img.circle-box.passenger {
+        border: 2px solid var(--trip-almost-fill-color);
+    }
+    .send_to_all-form {
+        padding: 1em;
+    }
+    .form-inline .input-group {
+        width: 100%;
+    }
+    .send_to_all-form .btn {
+        min-width: 100%;
+    }
+    .matching-user-list {
+        max-height: 270px;
+        overflow-y: auto;
+    }
+    .matching-user-list small {
+        margin-left: 50px;
+    }
+    .matching-user-list .list-item:after {
+        content: " ";
+        display: block;
+        width: 90%;
+        margin: 0 auto;
+        border-bottom: 1px solid #CCC;
+        margin-top: .5rem;
+    }
+    @media only screen and (max-width: 768px) {
+        .trip-detail-component .driver-container {
+            border-radius: 0;
+        }
+        .trip-detail-component .structure-div {
+            overflow: visible;
+            padding: 0;
+            margin-bottom: 3em;
+        }
+        .matcheo-passengers {
+            position: static;
+            left: 0;
+            top: 0;
+            max-height: auto;
+            float: none;
+            margin: 1.5rem 0 -1rem 0;
+            border-radius: 0;
+            padding-bottom: 1em;
+        }
+        .matcheo-passengers .title-margined {
+            margin: 0;
+            padding: 1em 0;
+        }
+        .trip-detail-component .vue-map-container {
+            position: relative;
+            left: 0;
+            top: 0;
+            max-height: auto;
+            float: none;
         }
     }
 </style>

@@ -36,6 +36,7 @@ router.beforeEach((to, from, next) => {
 
     if (actionbar.header) {
         store.dispatch('actionbars/setSubTitle', '');
+        store.dispatch('actionbars/setImgTitle', '');
         if (actionbar.header.title) {
             store.dispatch('actionbars/setTitle', actionbar.header.title);
         } else {

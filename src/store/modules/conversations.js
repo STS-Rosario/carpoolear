@@ -28,13 +28,6 @@ const state = {
 const getters = {
     ...pagination.makeGetters('list'),
     users: state => state.userList,
-    // selectedConversation: state => {
-    //     if (state.list) {
-    //         let conversationTemp = state.list.find(item => item.id === state.selectedID);
-    //         return conversationTemp || state.conversation;
-    //     }
-    //     return state.conversation;
-    // },
     selectedConversation: state => state.conversationSelected,
 
     msgObj: state => state.messages[state.selectedID],
@@ -45,7 +38,7 @@ const getters = {
 // actions
 const actions = {
     ...pagination.makeActions('list', ({ data }) => {
-        return conversationApi.list();
+        return conversationApi.list(data);
     }, (store, p) => {
         p.then((list) => {
             list.data.forEach(item => {
@@ -84,6 +77,7 @@ const actions = {
             let conversationTemp = store.state.list ? store.state.list.find(item => item.id === id) : null;
 
             if (conversationTemp) {
+                conversationTemp.unread = false;
                 store.commit(types.CONVERSATION_SET_CONVERSATION, conversationTemp);
                 store.commit(types.CONVERSATION_SET_SELECTED, id);
                 store.commit(types.CONVERSATION_CREATE_MESSAGES, id);
@@ -91,7 +85,12 @@ const actions = {
 
                 return Promise.resolve(conversationTemp);
             } else {
+<<<<<<< HEAD
                 return globalStore.dispatch('conversations/findConversation', { id, more: false }).then(conversation => {
+=======
+                return globalStore.dispatch('conversations/findConversation', {id, more: false}).then(conversation => {
+                    conversation.unread = false;
+>>>>>>> 816d32de81b2cf8716daed226925bef232482aad
                     store.commit(types.CONVERSATION_CREATE_MESSAGES, id);
                     store.commit(types.CONVERSATION_SET_CONVERSATION, conversation);
                     store.commit(types.CONVERSATION_SET_SELECTED, id);
@@ -128,17 +127,20 @@ const actions = {
             response.data.reverse().forEach(msg => {
                 new Promise((resolve, reject) => {
                     if (!store.state.messages[msg.conversation_id]) {
+                        // Si la conversacion no está cargada la busco en el backend
                         conversationApi.show(msg.conversation_id).then((response) => {
                             store.commit(types.CONVERSATION_PUSH, response.data);
                             resolve();
                         }).catch(reject);
                     } else {
+                        // Si la conversación ya está listada no la necesito ir a buscar
                         resolve();
                     }
                 }).then(() => {
-                    store.commit(types.CONVERSATION_CREATE_MESSAGES, msg.conversation_id);
+                    // Tengo la conversacion, inserto el mensaje
+                    // store.commit(types.CONVERSATION_CREATE_MESSAGES, msg.conversation_id);
                     store.commit(types.CONVERSATION_INSERT_MESSAGE, { messages: [msg] });
-                    store.commit(types.CONVERSATION_UPDATE, msg);
+                    // store.commit(types.CONVERSATION_UPDATE, msg);
                 });
             });
             if (response.data.length > 0) {
@@ -203,6 +205,11 @@ const actions = {
         }).catch(error => {
             return Promise.reject(error);
         });
+    },
+
+    sendToAll (store, { message, users }) {
+        users = users.map(item => item.id);
+        return conversationApi.sendToAll({message, users});
     }
 
 };
@@ -212,11 +219,13 @@ const mutations = {
     ...pagination.makeMutations('list'),
 
     [types.CONVERSATION_PUSH] (state, conv) {
+        // Agrega una conversación a la lista si no existe
         if (!state.list) {
             state.list = [];
         }
         if (!state.list.find(i => i.id === conv.id)) {
-            state.list.push(conv);
+            // uso unshift para agregarlo primero, se asume una nueva conversacion
+            state.list.unshift(conv);
         }
     },
 
@@ -261,6 +270,13 @@ const mutations = {
         messages.forEach(item => {
             if (!state.messages[item.conversation_id].list.find(i => i.id === item.id)) {
                 state.messages[item.conversation_id].list.push(item);
+                if (!id) {
+                    // marcar conversacion como no leida
+                    let conv = state.list.find(c => c.id === item.conversation_id);
+                    if (conv) {
+                        conv.unread = true;
+                    }
+                }
             }
             if (state.list) {
                 state.list.forEach(c => {

@@ -7,14 +7,18 @@ let rateApi = new RateApi();
 // initial state
 const state = {
     driver_trip: null,
-    passenger_trip: null
+    passenger_trip: null,
+    driver_old_trips: null,
+    passenger_old_trips: null
 };
 
 // getters
 const getters = {
     myTrips: state => state.driver_trip,
     passengerTrips: state => state.passenger_trip,
-    pendingRates: state => state.pending_rates
+    pendingRates: state => state.pending_rates,
+    myOldTrips: state => state.driver_old_trips,
+    passengerOldTrips: state => state.passenger_old_trips
 };
 
 // actions
@@ -35,6 +39,18 @@ const actions = {
         return rateApi.pending(null).then(response => {
             store.commit(types.MYTRIPS_SET_PENDING_RATES, response.data);
         });
+    },
+
+    oldTripsAsDriver (store, data) {
+        return tripsApi.myOldTrips(true).then(response => {
+            store.commit(types.MYTRIPS_SET_DRIVER_TRIPS_OLD, response.data);
+        });
+    },
+
+    oldTripsAsPassenger (store, data) {
+        return tripsApi.myOldTrips(false).then(response => {
+            store.commit(types.MYTRIPS_SET_PASSENGER_TRIPS_OLD, response.data);
+        });
     }
 };
 
@@ -53,13 +69,14 @@ const mutations = {
         for (let i = 0; i < state.driver_trip.length; i++) {
             if (state.driver_trip[i].id === trip.id) {
                 state.driver_trip[i] = trip;
+                // Object.assing(state.driver_trip[i], trip);
             }
         }
     },
     [types.MYTRIPS_DELETE_TRIPS] (state, id) {
         let index = state.driver_trip.findIndex(item => item.id === id);
         if (index >= 0) {
-            state.passenger_trip.splice(index, 1);
+            state.driver_trip.splice(index, 1);
         }
     },
 
@@ -99,6 +116,13 @@ const mutations = {
         if (index >= 0) {
             state.passenger_trip.splice(index, 1);
         }
+    },
+
+    [types.MYTRIPS_SET_DRIVER_TRIPS_OLD] (state, trips) {
+        state.driver_old_trips = trips;
+    },
+    [types.MYTRIPS_SET_PASSENGER_TRIPS_OLD] (state, trips) {
+        state.passenger_old_trips = trips;
     }
 };
 

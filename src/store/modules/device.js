@@ -145,5 +145,4 @@ export default {
 };
 
 window.addEventListener('resize', actions.resize, false);
-console.log('EVENT BINDING', actions.scrolling);
 document.addEventListener('scroll', actions.scrolling, false);

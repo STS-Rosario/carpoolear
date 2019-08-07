@@ -1,9 +1,9 @@
 <template>
   <div class="col-lg-6 col-md-8 col-sm-12">
-    <div class="friend-card rate-pending_component clearfix" > 
+    <div class="friend-card rate-pending_component clearfix" >
       <template v-if="user">
         <div class="rate-pending_photo">
-            <router-link :to="{name: 'profile', params: {id: user.id, userProfile: user}}">
+            <router-link :to="{name: 'profile', params: { id: user.id, userProfile: user, activeTab: 1}}">
               <div class="trip_driver_img circle-box" v-imgSrc:profile="user.image"></div>
             </router-link>
         </div>
@@ -14,7 +14,7 @@
           </div>
         </div>
       </template>
-    </div>   
+    </div>
 
   </div>
 </template>

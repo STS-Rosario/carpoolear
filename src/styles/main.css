@@ -136,6 +136,9 @@ input[type=radio] + label {
     cursor: not-allowed;
     background-color: #6789d0
 }
+.alertify-notifier {
+    z-index: 9999!important;
+}
 
 .alertify-notifier .ajs-message.ajs-success {
     color: #fff;
@@ -549,16 +552,29 @@ textarea {
     font-weight: 300;
     font-size: 2.5rem;
 }
+.header--with-subtitle {
+    width: 70%;
+}
 .header--with-subtitle .header--title {
     font-weight: bold;
     font-size: 16px;
     vertical-align: top;
+    display: block;
+    line-height: 1em;
 }
 
 .header--with-subtitle .header--subtitle {
-    position: absolute;
     font-size: 10px;
-    bottom: 8px;
+    display: block;
+    line-height: 1.5em;
+    /* position: absolute;
+    bottom: 8px; */
+}
+.header--image {
+    width: 32px;
+    height: 32px;
+    float: left;
+    margin-right: .5em;
 }
 .fa-container {
     position: relative;
@@ -914,11 +930,11 @@ textarea {
     margin-top: 1rem;
     padding-right: 0;
     min-height: 2.5em;
-    font-size: 1.1em;
+    font-size: 1.2em;
 }
 @media (min-width: 992px) {
     .trip_datetime {
-        font-size: 1em;
+        font-size: 1.1em;
     }
 }
 .trip_datetime_date {
@@ -1342,12 +1358,17 @@ textarea {
     bottom: -.5rem;
     margin-left: .6em;
 }
+.trip_allow-foreign,
 .trip_terms {
     margin-left: .5rem;
+    vertical-align: middle;
+    margin-top: 1em;
 }
+.trip_allow-foreign label,
 .trip_terms_label {
     display: inline;
     color: var(--secondary-background);
+    vertical-align: middle;
 }
 
 .trip_terms_label.has-error {
@@ -1425,12 +1446,23 @@ textarea {
 .pic-info {
     text-align: center;
     margin: 2em 0;
+    position: relative;
+}
+
+.pic-info .user_pin {
+    position: absolute;
+    left: 60%;
+    top: 0;
+    z-index: 1;
 }
 .conversation_image {
     margin-right: 10px;
     vertical-align: middle;
     width: 56px;
     height: 56px;
+}
+.conversation_image_chat {
+    float: left;
 }
 .message-wrapper {
     text-align: left;
@@ -1588,7 +1620,7 @@ textarea {
 .profile-info-component .profile-info--ratings i {
     float: none;
     width: auto;
-    margin-right: 0.4em;
+    margin-right: 0.2em;
 }
 
 .profile-info-component .profile-info--ratings span:first-of-type {
@@ -1640,8 +1672,11 @@ textarea {
 }
 
 .trips-list {
-    overflow: auto;
+    /*overflow: auto;*/
+    overflow: visible;
     margin-bottom: 3rem;
+    width: 100%;
+    margin: 0;
 }
 .trips-list > div {
     padding-left: 0;
@@ -1710,6 +1745,7 @@ textarea {
 .actionbar_section {
     display: inline-block;
     margin-top: 2px;
+    vertical-align: middle;
 }
 
 .actionbar_icon {
@@ -1722,6 +1758,13 @@ textarea {
     font-family: 'Muli';
     font-weight: 300;
     margin-left: .5em;
+
+    max-width: 70%;
+    text-overflow: ellipsis;
+
+    /* Required for text-overflow to do anything */
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .footer-component {
@@ -2230,6 +2273,8 @@ ul {
     .pic-info {
         margin: 0 0 2em 0;
     }
+
+
     .desktop {
         display: inherit;
     }
@@ -2299,7 +2344,7 @@ ul {
         max-height: 230px;
     }
     .profile-info--ratings {
-        width: 230px;
+        width: 100%;
     }
     .list-container {
         margin: .8em 0;
@@ -2461,10 +2506,10 @@ ul {
     }
     .search-section .form-control-map-autocomplete {
         line-height: 42px;
-        width: 92%;
+        width: 100%;
     }
     .search-section .destiny .form-control-map-autocomplete {
-        float: right;
+        /* float: right; */
     }
     .search-section .form-control-date input {
         line-height: 42px !important;
@@ -2506,9 +2551,24 @@ ul {
     .header_panel-right .btn-link {
         padding: 12px;
     }
+
+    .pic-info .user_pin {
+        left: 65%;
+    }
 }
 
 
+
+@media only screen and (min-width: 768px) and (max-width: 1000px) {
+    .pic-info .user_pin {
+        left: 90%;
+    }
+}
+@media only screen and (min-width: 1001px) and (max-width: 1400px) {
+    .pic-info .user_pin {
+        left: 70%;
+    }
+}
 /**
  * Tooltip Styles
  */
@@ -2547,7 +2607,8 @@ ul {
   line-height: 1.2;
   /*padding: 1em;*/
 }
-
+.foreignCountry-select_wrapper [data-tooltip]:before,
+.trip_allow-foreign [data-tooltip]:before,
 .trip_terms [data-tooltip]:before {
     width: 250px;
     padding: 1em;
@@ -2659,4 +2720,125 @@ ul {
 
 .pika-label:after {
     content:" \25be";
+}
+
+.title-margined {
+    margin: 1em 0;
+}
+.list-item {
+    border-bottom: 1px solid #CCC;
+    padding-bottom: .5em;
+    margin-bottom: .5em;
+}
+
+.suscription-item-detail--content strong {
+    color: var(--secondary-background);
+}
+.leaflet-routing-container {
+    display: none;
+}
+
+.radio > label > input {
+    opacity: 1!important;
+    z-index: 100!important;
+    vertical-align: middle;
+    display: inline-block;
+    margin-left: 1.3em;
+    margin-right: .8em;
+    position: static;
+    margin-top: 0;
+}
+.radio > label > span {
+    vertical-align: middle;
+    display: inline-block;
+    font-size: 1.4em;
+}
+.btn-unica-vez,
+.btn-mensualmente {
+    width: 43%;
+    margin: 2%;
+    padding: 1em 0;
+    min-height: 6em;
+    font-size: 1.1em;
+    white-space: normal;
+}
+.panel-donar {
+    float: none;
+    clear: both;
+}
+@media (max-width: 550px) {
+    .panel-donar h2 {
+        font-size: 22px;
+    }
+    .donation .radio-inline {
+        display: inline-block;
+        width: calc(49% - 20px);
+        box-sizing: border-box;
+        padding: 0;
+        margin-left: 21px;
+    }
+}
+@media (min-width: 768px) {
+    .donation .radio {
+        text-align: center;
+    }
+}
+
+.trips .modal-body,
+.trip-detail-component .modal-body,
+.request-list .modal-body {
+  margin: 0!important;
+  padding: 0!important;
+}
+
+.trips .modal-body p,
+.trip-detail-component .modal-body p,
+.request-list .modal-body p {
+  margin: 0 0 15px 0;
+}
+
+.trips .modal-header,
+.trip-detail-component .modal-header,
+.request-list .modal-header {
+  padding:0;
+  margin-bottom: 10px;
+}
+
+.trip-detail-component .modal-footer,
+.request-list .modal-footer {
+  padding: 0;
+  margin-top: 10px;
+}
+
+/* .trip-detail-component .modal-footer,
+.request-list .modal-footer {
+  display: none;
+} */
+
+.trips .modal-container,
+.trip-detail-component .modal-container,
+.request-list .modal-container {
+  padding: 10px 19px;
+}
+
+@media (max-width: 800px) {
+    .carpoodatos p {
+        font-size: 11px;
+    }
+    .carpoodatos {
+        max-height: 50vh;
+        overflow-y: auto;
+    }
+}
+.modal-container .btn-secondary {
+    padding: .8em;
+}
+.float-right-close {
+    float: right;
+    color: #91B64C!important;
+}
+.modal-container .btn {
+    max-width: 45%;
+    min-width: auto;
+    padding: .8em .6em;
 }

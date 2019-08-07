@@ -1,6 +1,6 @@
 <template>
-    <tabset ref="tabs">
-        <tab header="Mis Viajes">
+    <tabset ref="tabs" :keytabset="'profile'" :rememberTab="isMyOwnProfile">
+        <tab :header="viajesHeaderTitle">
             <component :is="currentView"></component>
         </tab>
         <tab header="Perfil">
@@ -38,6 +38,9 @@ export default {
         },
         userProfile: {
             required: false
+        },
+        activeTab: {
+            required: false
         }
     },
 
@@ -51,7 +54,13 @@ export default {
         ...mapGetters({
             'user': 'auth/user',
             'profile': 'profile/user'
-        })
+        }),
+        viajesHeaderTitle () {
+            return (this.id === 'me' || this.id === this.user.id) ? 'Mis viajes' : 'Viajes';
+        },
+        isMyOwnProfile () {
+            return (this.id === 'me' || this.id === this.user.id);
+        }
     },
 
     methods: {
@@ -91,6 +100,11 @@ export default {
         let index = 1;
         if (router.history && router.history.current && router.history.current.hash) {
             index = parseInt(router.history.current.hash.replace('#', ''), 10);
+        }
+        if (this.activeTab) {
+            index = parseInt(this.activeTab, 10);
+        } else {
+            index = this.$refs.tabs.getRememberedTab(1);
         }
         this.$refs.tabs.activateTab(index);
         this.updateProfile();

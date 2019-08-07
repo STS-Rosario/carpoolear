@@ -45,8 +45,8 @@
                     <span class="error" v-if="birthdayError.state"> {{birthdayError.message}} </span>
                 </div>-->
                 <div class="form-group">
-                    <label for="input-description">Acerca de mi <span class="required-field-flag" title="Campo requerido">(*)</span><span class="description"> Contale de vos al resto de los carpooleros así te suman a sus viajes!! Qué te gusta hacer, en qué andas metido ahora, si estás con alguna idea, si te gustan los colores, etc.</span></label>
-                    <textarea maxlength="280" v-model="user.description" placeholder="Descripción" :class="{'has-error': descError.state }" ></textarea>
+                    <label for="input-description">Acerca de mi <span class="required-field-flag" title="Campo requerido">(*)</span><span class="description"> Contale de vos al resto de los carpooleros así te suman a sus viajes! Qué te gusta hacer, en qué andas metido ahora, si estás con alguna idea, si te gustan los colores, etc.</span></label>
+                    <textarea maxlength="1000" v-model="user.description" placeholder="Descripción" :class="{'has-error': descError.state }" ></textarea>
                     <span class="error textarea" v-if="descError.state"> {{descError.message}} </span>
                 </div>
                 <div class="form-group">
@@ -55,7 +55,7 @@
                     <span class="error" v-if="dniError.state"> {{dniError.message}} </span>
                 </div>
                 <div class="form-group">
-                    <label for="input-telefono">Número de teléfono <span class="description">(Código área + teléfono. Ej: 0341156708223). Por si querés querés que el resto de los carpooleros también te puedan contactar por ahí.</span></label>
+                    <label for="input-telefono">Número de teléfono <span class="description">(Código área + teléfono. Ej: 0341156708223). Por si querés que el resto de los carpooleros también te puedan contactar por ahí.</span></label>
                     <input maxlength="20" @keydown="isNumber" v-on:paste='isNumber' v-model="user.mobile_phone" type="tel" class="form-control" id="input-phone" placeholder="Número de teléfono (al menos 7 números)" :class="{'has-error': phoneError.state }">
                     <span class="error" v-if="phoneError.state"> {{phoneError.message}} </span>
                 </div>
@@ -264,7 +264,7 @@ export default {
             let globalError = false;
             /* if (this.password.length < 1) {
                 this.passwordError.state = true;
-                this.passwordError.message = 'Olvido ingresar su contraseña.';
+                this.passwordError.message = 'Olvidó ingresar su contraseña.';
                 globalError = true;
             } else if (this.password.length < 8) {
                 this.passwordError.state = true;
@@ -272,7 +272,7 @@ export default {
                 globalError = true;
             } else if (this.passwordConfirmation < 1) {
                 this.passwordError.state = true;
-                this.passwordError.message = 'Olvido confirmar su contraseña.';
+                this.passwordError.message = 'Olvidó confirmar su contraseña.';
                 globalError = true;
             } else if (this.password !== this.passwordConfirmation) {
                 this.passwordError.state = true;
@@ -295,7 +295,7 @@ export default {
                 let birthday = moment(this.birthdayAnswer);
                 if (moment().diff(birthday, 'years') < 18) {
                     this.birthdayError.state = true;
-                    this.birthdayError.message = 'Pareciera que no eres mayor de edad. Revisa si ingresaste bien tu fecha de nacimiento y recuerda que debes ser mayor de edad para utilziar carpoolear. Para más información te recomendamos volver a leer los términos y condiciones.';
+                    this.birthdayError.message = 'Pareciera que no eres mayor de edad. Revisa si ingresaste bien tu fecha de nacimiento y recuerda que debes ser mayor de edad para utilizar Carpoolear. Para más información te recomendamos volver a leer los términos y condiciones.';
                     globalError = true;
                 }
             } */

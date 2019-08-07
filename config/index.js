@@ -26,10 +26,8 @@ module.exports = {
     bundleAnalyzerReport: process.env.npm_config_report
   },
   dev: {
-    host: 'localhost', // can be overwritten by process.env.HOST
-    port: 8080, // can be overwritten by process.env.HOST, if port is in use, a free one will be determined
-
-    // Paths
+    env: require('./dev.env'),
+    port: 8081,
     assetsSubDirectory: 'static',
     assetsPublicPath: dFlag ? '/app/' : (isSERVED ? '/' : ''), // dejar vacio para compilar cordova
     proxyTable: {},

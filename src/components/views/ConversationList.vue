@@ -211,6 +211,12 @@ export default {
     .list-group-item {
         font-size: 14px;
     }
+    .list-group-item.unread,
+    .list-group-item.unread:hover,
+    .list-group-item.unread:focus {
+        background: rgba(254, 153, 0, .25);
+    }
+
     @media only screen and (min-width: 768px) {
         .conversation-title {
             font-size: 18px;

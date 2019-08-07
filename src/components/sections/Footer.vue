@@ -16,7 +16,7 @@
                 <h3>Acerca de ...</h3>
                 <ul>
                     <li><router-link tag="a" :to="{ name:'acerca_de' }">Carpoolear</router-link></li>
-                    <li><a href="https://carpoolear.com.ar/acerca-de-equipo.php" target="_blank">Equipo</a></li>
+                    <li><a href="https://carpoolear.com.ar/acerca-de-equipo" target="_blank">Equipo</a></li>
                     <li><a href="http://www.stsrosario.org.ar/" target="_blank">STS Rosario</a></li>
                 </ul>
             </div>
@@ -24,8 +24,8 @@
                 <h3>Ayuda</h3>
                 <ul>
                     <!--<li><a href="https://carpoolear.com.ar/tutoriales.php" target="_blank">Tutoriales de uso</a></li>-->
-                    <li><a href="https://carpoolear.com.ar/plataforma-preguntas-frecuentes.php" target="_blank">Preguntas frecuentas (FAQ)</a></li>
-                    <li><a href="https://carpoolear.com.ar/plataforma-recomendaciones.php" target="_blank">Recomendaciones</a></li>
+                    <li><a href="https://carpoolear.com.ar/plataforma-preguntas-frecuentes" target="_blank">Preguntas frecuentas (FAQ)</a></li>
+                    <li><a href="https://carpoolear.com.ar/plataforma-recomendaciones" target="_blank">Recomendaciones</a></li>
                 </ul>
             </div>
             <div class="col-xs-6 col-md-6">
@@ -44,9 +44,15 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="https://www.instagram.com/carpoolear/?hl=en">
                             <i class="fa fa-instagram" aria-hidden="true"></i>
                             <span>Instagram</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/STS-Rosario">
+                            <i class="fa fa-github" aria-hidden="true"></i>
+                            <span>Github</span>
                         </a>
                     </li>
                     <li>
@@ -60,9 +66,8 @@
             <div class="col-xs-6 col-md-6">
                 <h3>Información legal</h3>
                 <p>
-                    Copyright © 2017 Carpoolear.<br />
-                    Todos los derechos reservados.<br />
-                    <router-link :to="{name: 'terms'}">Terminos y condiciones</router-link>
+                    En ruta desde el año 2013<br />
+                    <router-link :to="{name: 'terms'}">Términos y condiciones</router-link>
                 </p>
             </div>
         </div>
