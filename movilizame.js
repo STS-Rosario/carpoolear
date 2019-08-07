@@ -25,10 +25,11 @@ function showError (code, stderr, stdout) {
 
 function preBuildAndCheckPlatform (callback) {
     let folder = `dist/${TARGET}/${NODE_ENV}`;
+    let folderCordovaResFiles = `dist/${TARGET}/${NODE_ENV}/res`;
     let cordovaFiles = `projects/${TARGET}/cordova`;
-    if (fs.existsSync(folder)) {
+    if (fs.existsSync(folderCordovaResFiles)) {
         console.log('Deleting old files.')
-        fs.removeSync(folder);
+        fs.removeSync(folderCordovaResFiles);
     }
     fs.copy(cordovaFiles, folder, function (err) {
         if (err) {
@@ -126,16 +127,6 @@ if (argv._.length > 0) {
                     env: process.env
                 }, showError);
             });
-            break;
-        case 'build-web':
-            let buildEnv = PROD ? 'build.js' : 'build-dev.js';
-            process.env.CORDOVA = false;
-            process.env.NODE_ENV = 'production';
-            let options = {
-                env: process.env
-            };
-            console.log(`cross-env PLATFORM=DESKTOP node build/${buildEnv}`);
-            shell.exec(`cross-env PLATFORM=DESKTOP node build/${buildEnv}`, options);
             break;
         default:
             console.log(shell);

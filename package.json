@@ -10,6 +10,7 @@
     "build": "node movilizame build --prod",
     "build:ios": "node movilizame prepare --prod --platform=ios",
     "build:android": "node movilizame build --prod --platform=android",
+    "build:web": "node movilizame build --prod --platform=browser",
     "build-dev": "node movilizame build",
     "build-dev:ios": "node movilizame build --platform=ios",
     "build-dev:android": "node movilizame build --platform=android",
