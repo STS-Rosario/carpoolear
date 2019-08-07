@@ -6,6 +6,7 @@
   "private": true,
   "scripts": {
     "dev": "node movilizame serve",
+    "prod": "node movilizame serve --prod",
     "build": "node movilizame build --prod",
     "build:ios": "node movilizame prepare --prod --platform=ios",
     "build:android": "node movilizame build --prod --platform=android",

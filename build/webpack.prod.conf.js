@@ -13,9 +13,6 @@ const WebpackMultiResolver = require('./plugins/webpack-multi-resolver.js');
 const TARGET = process.env.TARGET_APP || 'default';
 const PLATFORM = process.env.PLATFORM || 'android';
 
-const CORDOVA_FOLDER = path.resolve(__dirname, `../projects/${TARGET}/cordova`);
-const RES_FOLDER = path.resolve(__dirname, `../projects/${TARGET}/res`);
-
 const webpackConfig = merge(baseWebpackConfig, {
   devtool: config.build.productionSourceMap ? '#source-map' : false,
   output: {

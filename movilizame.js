@@ -6,14 +6,15 @@ const xmlParser = require('xml2js').parseString;
 
 console.log('Movilizame builder -- Starting building');
 
-const TARGET = argv.target || 'default';
-process.env.TARGET_APP = process.env.TARGET_APP || TARGET;
+const TARGET = process.env.TARGET_APP || argv.target || 'default';
 const PROD = argv.prod || false;
 const PLATFORM = argv.platform || 'android';
 if (PLATFORM === 'ios' || PLATFORM === 'android') {
     process.env.CORDOVA = true;
 }
-const projectPath = `./dist/${TARGET}`;
+const NODE_ENV = PROD ? 'production' : 'development';
+const projectPath = `./dist/${TARGET}/${NODE_ENV}/`;
+console.log('Enviroment: ' + NODE_ENV);
 
 function showError (code, stderr, stdout) {
     console.log('ERROR IN CORDOVA:');
@@ -23,7 +24,7 @@ function showError (code, stderr, stdout) {
 }
 
 function preBuildAndCheckPlatform (callback) {
-    let folder = `dist/${TARGET}`;
+    let folder = `dist/${TARGET}/${NODE_ENV}`;
     let cordovaFiles = `projects/${TARGET}/cordova`;
     if (fs.existsSync(folder)) {
         console.log('Deleting old files.')
@@ -47,7 +48,7 @@ function buildAndCheckPlatform (callback) {
     console.log(`cross-env PLATFORM=${PLATFORM} node build/${buildEnv}`);
     shell.exec(`cross-env PLATFORM=${PLATFORM} node build/${buildEnv}`, options)
     ;
-    if (!fs.existsSync(`./dist/${TARGET}/platforms/${PLATFORM}`)) {
+    if (!fs.existsSync(`./dist/${TARGET}/${NODE_ENV}/platforms/${PLATFORM}`)) {
         console.log('Adding platform: ' + PLATFORM + ' - path: ' + projectPath);
         shell.exec(`cross-env cordova platform add ${PLATFORM}`, {
             cwd: projectPath,
@@ -68,7 +69,8 @@ function buildAndCheckPlatform (callback) {
 }
 
 function loadAppVersion () {
-    let xml = fs.readFileSync(`./projects/${TARGET}/cordova/config.xml`);
+    let path = `./projects/${TARGET}/cordova/config.xml`;
+    let xml = fs.readFileSync(path);
     xmlParser(xml, function (err, result) {
         if (err) {
             console.error(error);
@@ -99,6 +101,7 @@ if (argv._.length > 0) {
         case 'serve':
             process.env.SERVE = true;
             process.env.CORDOVA = false;
+            process.env.NODE_ENV = NODE_ENV;
             shell.exec('webpack-dev-server --inline --progress --config build/webpack.dev.conf.js',
                 {
                     env: process.env,

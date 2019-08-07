@@ -1,15 +1,15 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 const path = require('path')
-let TARGET = process.env.TARGET_APP || 'default';
-let PLATFORM = process.env.PLATFORM || 'android';
-var isSERVED = process.env.SERVE;
-var dFlag = (process.env.PLATFORM && process.env.PLATFORM == 'DESKTOP');
+const TARGET = process.env.TARGET_APP || 'default';
+const PLATFORM = process.env.PLATFORM || 'android';
+const isSERVED = process.env.SERVE;
+const NODE_ENV = process.env.NODE_ENV;
+const dFlag = (process.env.PLATFORM && process.env.PLATFORM == 'DESKTOP');
 
 module.exports = {
   build: { 
-    index: path.resolve(__dirname, `../dist/${TARGET}/www/index.html`),
-    assetsRoot: path.resolve(__dirname, `../dist/${TARGET}/www/`),
-    cordovaRoot: path.resolve(__dirname, `../dist/${TARGET}/`),
+    index: path.resolve(__dirname, `../dist/${TARGET}/${NODE_ENV}/www/index.html`),
+    assetsRoot: path.resolve(__dirname, `../dist/${TARGET}/${NODE_ENV}/www/`),
     assetsSubDirectory: 'static',
     assetsPublicPath: dFlag ? '/app/' : (isSERVED ? '/' : ''),
     productionSourceMap: true,

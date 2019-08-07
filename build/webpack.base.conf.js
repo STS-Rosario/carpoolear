@@ -4,6 +4,7 @@ const utils = require('./utils');
 
 const env = process.env.NODE_ENV
 const TARGET = process.env.TARGET_APP || 'default';
+const serveMode = process.env.SERVE || false;
 const devMode = process.env.NODE_ENV !== 'production';
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -71,7 +72,7 @@ module.exports = {
       {
         test: /\.css$/,
         use: [
-          devMode ? 'vue-style-loader' : MiniCssExtractPlugin.loader,
+          serveMode ? 'vue-style-loader' : MiniCssExtractPlugin.loader,
           { loader: 'css-loader', options: { importLoaders: 1 } },
           { loader: 'postcss-loader', options: { 
               sourceMap: true, 

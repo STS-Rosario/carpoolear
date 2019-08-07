@@ -7,6 +7,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var WebpackMultiResolver = require('./plugins/webpack-multi-resolver.js');
 var FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const portfinder = require('portfinder')
+const NODE_ENV = process.env.NODE_ENV;
 
 const devWebpackConfig = merge(baseWebpackConfig, {
   // cheap-module-eval-source-map is faster for development
@@ -41,7 +42,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env': require(utils.devEnvPath())
+      'process.env': NODE_ENV === 'production' ? require(utils.prodEnvPath()) : require(utils.devEnvPath())
     }), 
     new WebpackMultiResolver({
       sourceFolder: 'resources',
