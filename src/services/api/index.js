@@ -12,16 +12,16 @@ import DebugApi from './Debug';
 import SubscriptionApi from './SubscriptionsApi';
 
 export {
-  AuthApi,
-  DebugApi,
-  TripApi,
-  UserApi,
-  DeviceApi,
-  RateApi,
-  PassengerApi,
-  ConversationApi,
-  CarApi,
-  FriendsApi,
-  NotificationApi,
-  SubscriptionApi
+    AuthApi,
+    DebugApi,
+    TripApi,
+    UserApi,
+    DeviceApi,
+    RateApi,
+    PassengerApi,
+    ConversationApi,
+    CarApi,
+    FriendsApi,
+    NotificationApi,
+    SubscriptionApi
 };

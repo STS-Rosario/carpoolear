@@ -75,7 +75,7 @@
   </footer>
 </template>
 <script>
-import {mapActions, mapGetters} from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import svgItem from '../SvgItem';
 
 export default {

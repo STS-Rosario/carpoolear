@@ -124,7 +124,7 @@ const actions = {
             globalStore.dispatch('trips/tripsSearch', { is_passenger: false });
             globalStore.dispatch('trips/refreshList', true);
         }
-        router.push({name: item.url, params});
+        router.push({ name: item.url, params });
     }
 
 };

@@ -1,4 +1,4 @@
-import {TripApi, RateApi} from '../../services/api';
+import { TripApi, RateApi } from '../../services/api';
 import * as types from '../mutation-types';
 
 let tripsApi = new TripApi();
@@ -84,7 +84,7 @@ const mutations = {
         state.pending_rates = rates;
     },
 
-    [types.MYTRIPS_ADD_PASSENGER] (state, {id, user}) {
+    [types.MYTRIPS_ADD_PASSENGER] (state, { id, user }) {
         for (let i = 0; i < state.driver_trip.length; i++) {
             if (state.driver_trip[i].id === id) {
                 if (!state.driver_trip[i].passenger) {
@@ -96,7 +96,7 @@ const mutations = {
         }
     },
 
-    [types.MYTRIPS_REMOVE_PASSENGER] (state, {id, user}) {
+    [types.MYTRIPS_REMOVE_PASSENGER] (state, { id, user }) {
         for (let i = 0; i < state.driver_trip.length; i++) {
             if (state.driver_trip[i].id === id) {
                 if (!state.driver_trip[i].passenger) {

@@ -2,3 +2,10 @@
 node_modules/
 dist/
 npm-debug.log
+
+/projects/*/cordova/node_modules/
+/projects/*/cordova/platforms/
+/projects/*/cordova/plugins/
+/projects/*/cordova/www/
+/projects/*/cordova/package.json
+/projects/*/cordova/package-lock.json

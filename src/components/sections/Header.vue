@@ -115,8 +115,8 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex';
-import {dropdown} from 'vue-strap';
+import { mapGetters } from 'vuex';
+import { dropdown } from 'vue-strap';
 import router from '../../router';
 import bus from '../../services/bus-event.js';
 import modal from '../Modal';
@@ -181,7 +181,7 @@ export default {
         },
 
         toNotifications () {
-            router.push({name: 'notifications'});
+            router.push({ name: 'notifications' });
         },
 
         onClick (item) {

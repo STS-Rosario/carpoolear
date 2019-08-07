@@ -1,5 +1,5 @@
 import * as types from '../mutation-types';
-import {NotificationApi} from '../../services/api';
+import { NotificationApi } from '../../services/api';
 
 const notificationApi = new NotificationApi();
 
@@ -16,11 +16,11 @@ const getters = {
 const actions = {
     index (store, mark = false) {
         store.commit(types.NOTIFICATIONS_SET, null);
-        return notificationApi.index({mark}).then(response => {
+        return notificationApi.index({ mark }).then(response => {
             store.commit(types.NOTIFICATIONS_SET, response.data);
             return Promise.resolve(response.data);
         }).catch(() => {
-            return Promise.reject();
+            return Promise.reject(new Error());
         });
     },
 
@@ -29,7 +29,7 @@ const actions = {
             store.commit(types.NOTIFICATIONS_COUNT, response.data);
             return Promise.resolve(response.data);
         }).catch(() => {
-            return Promise.reject();
+            return Promise.reject(new Error());
         });
     },
 

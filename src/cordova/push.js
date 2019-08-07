@@ -14,7 +14,7 @@ class Notification {
         this.coldstart = false;
 
         if (e) {
-      // La aplicacion esta abierta y en pantalla
+            // La aplicacion esta abierta y en pantalla
             this.foreground = e.additionalData.foreground; // Coercion
             this.sound = e.additionalData.sound ? e.additionalData.sound : '';
             this.title = e.title ? e.title : '';
@@ -63,7 +63,7 @@ export default {
             windows: {}
         });
 
-    // Registro Exitoso
+        // Registro Exitoso
         push.on('registration', function (data) {
             console.log('Device register successfully', data.registrationId);
             store.commit('cordova/' + types.CORDOVA_DEVICE_REGISTER, data.registrationId);
@@ -75,10 +75,9 @@ export default {
             store.dispatch('cordova/notificationArrive', n);
         });
 
-    // Registro fail
+        // Registro fail
         push.on('error', function (e, f) {
             console.log('notification error', e, f);
         });
     }
 };
-

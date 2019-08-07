@@ -62,8 +62,8 @@
 </div>
 </template>
 <script>
-import {mapGetters, mapActions} from 'vuex';
-import {Thread} from '../../classes/Threads.js';
+import { mapGetters, mapActions } from 'vuex';
+import { Thread } from '../../classes/Threads.js';
 import Loading from '../Loading.vue';
 import router from '../../router';
 
@@ -100,7 +100,7 @@ export default {
         }),
 
         nextPage () {
-            this.conversationsSearch({next: true});
+            this.conversationsSearch({ next: true });
         },
 
         onSearchUser () {

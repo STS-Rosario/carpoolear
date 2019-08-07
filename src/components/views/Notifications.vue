@@ -26,7 +26,7 @@
 
 <script>
 import Loading from '../Loading';
-import {mapActions, mapGetters} from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import router from '../../router';
 
 export default {
@@ -48,10 +48,10 @@ export default {
                 console.log(n.extras);
                 switch (n.extras.type) {
                 case 'trip':
-                    router.push({name: 'detail_trip', params: { id: n.extras.trip_id }});
+                    router.push({ name: 'detail_trip', params: { id: n.extras.trip_id } });
                     break;
                 case 'friends':
-                    router.push({name: 'friends_setting'});
+                    router.push({ name: 'friends_setting' });
                     break;
                 case 'subscription':
                     router.push({ name: 'my-trips', query: { loc: 'suscriptions' } });

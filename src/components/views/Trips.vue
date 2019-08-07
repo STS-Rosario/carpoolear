@@ -169,7 +169,7 @@ export default {
             // this.setActionButton(['clear']);
         },
         nextPage () {
-            this.search({next: true});
+            this.search({ next: true });
         },
         isComplementary (trip, searchParams, index) {
             let isComplementary = false;
@@ -215,7 +215,7 @@ export default {
                     let done = () => {
                         this.runningSearch = false;
                     };
-                    this.search({next: true}).then(done, done);
+                    this.search({ next: true }).then(done, done);
                 }
             }
         },

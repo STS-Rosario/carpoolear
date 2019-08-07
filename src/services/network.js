@@ -70,50 +70,50 @@ export default {
     get (url, params, headers = {}) {
         let source = this.newCancelToken();
         return this.processResponse(axios.get(
-        API_URL + url,
+            API_URL + url,
             {
                 params: params,
                 headers: this.getHeader(headers),
                 cancelToken: source.token
             }
-      ), source);
+        ), source);
     },
 
     post (url, body, headers = {}) {
         let source = this.newCancelToken();
         return this.processResponse(axios.post(
-        API_URL + url,
-        body,
+            API_URL + url,
+            body,
             {
                 headers: this.getHeader(headers),
                 cancelToken: source.token
             }
-      )
-    , source);
+        )
+        , source);
     },
 
     delete (url, params, headers = {}) {
         let source = this.newCancelToken();
         return this.processResponse(axios.delete(
-      API_URL + url,
+            API_URL + url,
             {
                 params: params,
                 headers: this.getHeader(headers),
                 cancelToken: source.token
             }
-    ), source);
+        ), source);
     },
 
     put (url, body, headers = {}) {
         let source = this.newCancelToken();
         return this.processResponse(axios.put(
-      API_URL + url,
-      body,
+            API_URL + url,
+            body,
             {
                 headers: this.getHeader(headers),
                 cancelToken: source.token
             }
-    ), source);
+        ), source);
     }
 
 };

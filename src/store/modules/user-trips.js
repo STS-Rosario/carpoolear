@@ -1,4 +1,4 @@
-import {TripApi} from '../../services/api';
+import { TripApi } from '../../services/api';
 import * as types from '../mutation-types';
 
 let tripsApi = new TripApi();

@@ -1,7 +1,6 @@
 import TaggedApi from '../../classes/TaggedApi';
 
 class NotificationApi extends TaggedApi {
-
     index (data = {}) {
         return this.get('/api/notifications', data);
     }
@@ -13,7 +12,6 @@ class NotificationApi extends TaggedApi {
     delete (id) {
         return this.delete('/api/notifications/' + id);
     }
-
 }
 
 export { NotificationApi as default };

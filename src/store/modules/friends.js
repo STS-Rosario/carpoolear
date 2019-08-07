@@ -1,4 +1,4 @@
-import {FriendsApi, UserApi} from '../../services/api';
+import { FriendsApi, UserApi } from '../../services/api';
 import * as types from '../mutation-types';
 import * as pagination from '../pagination';
 
@@ -23,7 +23,7 @@ const getters = {
 
 // actions
 const actions = {
-    ...pagination.makeActions('friends', ({data}) => {
+    ...pagination.makeActions('friends', ({ data }) => {
         return friendsApi.index(data);
     }),
 

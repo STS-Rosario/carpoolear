@@ -11,7 +11,7 @@ export function auth (to, from, next) {
             name: to.name,
             params: to.params
         };
-        router.replace({name: 'login'});
+        router.replace({ name: 'login' });
     }
 }
 
@@ -20,7 +20,7 @@ export function guest (to, from, next) {
         next();
     } else {
         next(false);
-        router.replace({name: 'trips'});
+        router.replace({ name: 'trips' });
     }
 }
 

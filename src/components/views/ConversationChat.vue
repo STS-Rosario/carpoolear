@@ -39,7 +39,7 @@
     </div>
 </template>
 <script>
-import {mapGetters, mapActions} from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import MessageView from '../MessageView';
 import router from '../../router';
 import moment from 'moment';
@@ -125,7 +125,7 @@ export default {
         },
 
         searchMore () {
-            this.findMessage({more: true});
+            this.findMessage({ more: true });
         },
 
         refresh () {

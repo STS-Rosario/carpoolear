@@ -350,7 +350,7 @@ export default {
             no_lucrar: false,
             sameCity: false,
             zoom: 4,
-            center: [-29.0, -60.0],
+            center: [ -29.0, -60.0 ],
             points: [
                 {
                     name: '',
@@ -645,13 +645,13 @@ export default {
                 globalError = true;
                 this.seatsError.state = true;
                 this.seatsError.message = 'Ya tienes ' + this.trip.passengers + ' subidos en este viaje. No puedes cambiar el número de asientos por uno menor al de pasajeros ya subidos.';
-                dialogs.message('Ya tienes ' + this.trip.passengers + ' subidos en este viaje. No puedes cambiar el número de asientos por uno menor al de pasajeros ya subidos.', {estado: 'error'});
+                dialogs.message('Ya tienes ' + this.trip.passengers + ' subidos en este viaje. No puedes cambiar el número de asientos por uno menor al de pasajeros ya subidos.', { estado: 'error' });
             } else if (globalError) {
-                dialogs.message('Algunos datos ingresados no son válidos.', {estado: 'error'});
+                dialogs.message('Algunos datos ingresados no son válidos.', { estado: 'error' });
             } else if (!this.no_lucrar) {
                 this.lucrarError.state = true;
                 this.lucrarError.message = 'Debes indicar que te comprometes a no lucrar con el viaje.';
-                dialogs.message('Debes indicar que te comprometes a no lucrar con el viaje.', {estado: 'error'});
+                dialogs.message('Debes indicar que te comprometes a no lucrar con el viaje.', { estado: 'error' });
                 globalError = true;
             }
             if (validDate && validTime) {

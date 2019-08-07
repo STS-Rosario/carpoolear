@@ -89,7 +89,7 @@ export default {
         }),
 
         onTextChange () {
-            this.search({value: this.text});
+            this.search({ value: this.text });
         },
 
         onAcceptClick (user) {

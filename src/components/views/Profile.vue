@@ -14,7 +14,7 @@
 <script>
 import Tab from '../elements/Tab';
 import Tabset from '../elements/Tabset';
-import {mapActions, mapGetters} from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import ProfileInfo from '../sections/ProfileInfo';
 import ProfileRates from '../sections/ProfileRates';
 import MyTrips from './MyTrips';
@@ -80,10 +80,10 @@ export default {
                 if (this.userProfile) {
                     this.setTitle(this.userProfile.name);
                 }
-                this.setProfileByID({id: this.id, userProfile: this.userProfile}).then(() => {
+                this.setProfileByID({ id: this.id, userProfile: this.userProfile }).then(() => {
                     this.setTitle(this.profile.name);
                 }).catch(() => {
-                    this.$router.replace({name: 'trips'});
+                    this.$router.replace({ name: 'trips' });
                 });
                 this.setUserByID(this.id);
                 this.currentView = 'profile-trip';

@@ -1,13 +1,6 @@
 /* jshint esversion: 6 */
 
-let cordovaTag = document.createElement('script');
-cordovaTag.setAttribute('src', process.env.ROUTE_BASE + 'cordova.js');
-document.head.appendChild(cordovaTag);
-
 import 'babel-polyfill';
-
-var moment = require('moment-timezone');
-moment.tz.setDefault('America/Argentina');
 
 import Vue from 'vue';
 import App from './App';
@@ -15,7 +8,6 @@ import App from './App';
 import VueResource from 'vue-resource';
 import VueAnalytics from 'vue-analytics';
 import VueMoment from 'vue-moment';
-require('moment/locale/es');
 
 import router from './router';
 import store from './store';
@@ -23,12 +15,11 @@ import store from './store';
 /* eslint-disable no-unused-vars */
 import cordova from './cordova';
 import directives from './directives';
-require('font-awesome-webpack');
 
 import bootstrapCss from './styles/bootstrap/css/bootstrap.min.css';
 
-import cssHelpers from './styles/helpers.css';
-import css from './styles/main.css';
+import cssHelpers from './styles/helpers';
+import css from './styles/main';
 
 import bus from './services/bus-event';
 import { DebugApi } from './services/api';
@@ -36,6 +27,17 @@ import { DebugApi } from './services/api';
 import Vue2Leaflet from 'vue2-leaflet';
 
 let debugApi = new DebugApi();
+
+import * as VueGoogleMaps from 'vue2-google-maps';
+
+let cordovaTag = document.createElement('script');
+cordovaTag.setAttribute('src', process.env.ROUTE_BASE + 'cordova.js');
+document.head.appendChild(cordovaTag);
+
+var moment = require('moment-timezone');
+moment.tz.setDefault('America/Argentina');
+require('moment/locale/es');
+require('font-awesome-webpack-4');
 
 Vue.use(VueResource);
 

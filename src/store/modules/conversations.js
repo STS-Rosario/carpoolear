@@ -1,4 +1,4 @@
-import {ConversationApi} from '../../services/api';
+import { ConversationApi } from '../../services/api';
 import * as types from '../mutation-types';
 import * as pagination from '../pagination';
 import globalStore from '../index';
@@ -37,7 +37,7 @@ const getters = {
 
 // actions
 const actions = {
-    ...pagination.makeActions('list', ({data}) => {
+    ...pagination.makeActions('list', ({ data }) => {
         return conversationApi.list(data);
     }, (store, p) => {
         p.then((list) => {
@@ -54,7 +54,7 @@ const actions = {
     getUserList (store, texto) {
         if (texto.length > 0) {
             store.commit(types.CONVERSATION_SET_USERLIST, null);
-            return conversationApi.userList({value: texto}).then((response) => {
+            return conversationApi.userList({ value: texto }).then((response) => {
                 store.commit(types.CONVERSATION_SET_USERLIST, response.data);
             });
         } else {
@@ -81,11 +81,11 @@ const actions = {
                 store.commit(types.CONVERSATION_SET_CONVERSATION, conversationTemp);
                 store.commit(types.CONVERSATION_SET_SELECTED, id);
                 store.commit(types.CONVERSATION_CREATE_MESSAGES, id);
-                globalStore.dispatch('conversations/findConversation', {id, more: false});
+                globalStore.dispatch('conversations/findConversation', { id, more: false });
 
                 return Promise.resolve(conversationTemp);
             } else {
-                return globalStore.dispatch('conversations/findConversation', {id, more: false}).then(conversation => {
+                return globalStore.dispatch('conversations/findConversation', { id, more: false }).then(conversation => {
                     conversation.unread = false;
                     store.commit(types.CONVERSATION_CREATE_MESSAGES, id);
                     store.commit(types.CONVERSATION_SET_CONVERSATION, conversation);
@@ -98,7 +98,7 @@ const actions = {
         }
     },
 
-    getUnreadMessages (store, {id} = {}) {
+    getUnreadMessages (store, { id } = {}) {
         if (!id) {
             id = store.state.selectedID;
         }
@@ -148,7 +148,7 @@ const actions = {
         });
     },
 
-    findConversation (store, {id} = {}) {
+    findConversation (store, { id } = {}) {
         if (!id) {
             id = store.state.selectedID;
         }
@@ -158,7 +158,7 @@ const actions = {
                 store.commit(types.CONVERSATION_PUSH, response.data);
                 store.commit(types.CONVERSATION_GET, response.data);
                 store.commit(types.CONVERSATION_SET_CONVERSATION, response.data);
-                globalStore.dispatch('conversations/findMessage', {id, more: false});
+                globalStore.dispatch('conversations/findMessage', { id, more: false });
             }
             return Promise.resolve(response.data);
         }).catch(error => {
@@ -166,7 +166,7 @@ const actions = {
         });
     },
 
-    findMessage (store, {id, more} = {}) {
+    findMessage (store, { id, more } = {}) {
         if (!id) {
             id = store.state.selectedID;
         }
@@ -180,13 +180,13 @@ const actions = {
         let read = true;
         return conversationApi.getMessages(id, { read, unread, pageSize, timestamp }).then(response => {
             if (!more) {
-                store.commit(types.CONVERSATION_BLANK_MESSAGES, {id});
+                store.commit(types.CONVERSATION_BLANK_MESSAGES, { id });
             }
             if (response.data.length === 0) {
                 store.commit(types.CONVERSATION_SET_LAST_PAGE);
             } else {
                 let messages = response.data.reverse();
-                store.commit(types.CONVERSATION_ADD_MESSAGE, {messages, id});
+                store.commit(types.CONVERSATION_ADD_MESSAGE, { messages, id });
             }
         }).catch(error => {
             return Promise.reject(error);
@@ -292,7 +292,7 @@ const mutations = {
         });
     },
 
-    [types.CONVERSATION_ADD_MESSAGE] (state, {messages, id}) {
+    [types.CONVERSATION_ADD_MESSAGE] (state, { messages, id }) {
         if (!id) {
             id = state.selectedID;
         }
@@ -319,14 +319,14 @@ const mutations = {
         }
     },
 
-    [types.CONVERSATION_SET_LAST_PAGE] (state, {id} = {}) {
+    [types.CONVERSATION_SET_LAST_PAGE] (state, { id } = {}) {
         if (!id) {
             id = state.selectedID;
         }
         state.messages[id].lastPage = true;
     },
 
-    [types.CONVERSATION_BLANK_MESSAGES] (state, {id}) {
+    [types.CONVERSATION_BLANK_MESSAGES] (state, { id }) {
         id = parseInt(id);
         if (!id) {
             id = state.selectedID;

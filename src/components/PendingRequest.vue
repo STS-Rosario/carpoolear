@@ -95,7 +95,7 @@ export default {
             let user = this.user;
             let trip = this.trip;
             this.acceptInProcess = true;
-            this.passengerAccept({user, trip}).then(() => {
+            this.passengerAccept({ user, trip }).then(() => {
                 this.acceptInProcess = false;
             }).catch((resp) => {
                 this.acceptInProcess = false;
@@ -126,7 +126,7 @@ export default {
             let user = this.user;
             let trip = this.trip;
             this.rejectInProcess = true;
-            this.passengerReject({user, trip}).then(() => {
+            this.passengerReject({ user, trip }).then(() => {
                 this.rejectInProcess = false;
             }).catch((resp) => {
                 this.rejectInProcess = false;

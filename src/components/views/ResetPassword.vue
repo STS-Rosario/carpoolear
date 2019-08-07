@@ -92,8 +92,8 @@ export default {
                 data.password = this.password;
                 data.password_confirmation = this.password_confirmation;
                 let token = this.token;
-                this.changePassword({token, data}).then(() => {
-                    this.$router.replace({name: 'login'});
+                this.changePassword({ token, data }).then(() => {
+                    this.$router.replace({ name: 'login' });
                 }, () => {
                     this.loading = false;
                     this.error = 'Token invalido';
