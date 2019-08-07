@@ -1,13 +1,16 @@
 const path = require('path');
 const config = require('../config');
 const utils = require('./utils');
+const webpack = require('webpack');
 
-const env = process.env.NODE_ENV
 const TARGET = process.env.TARGET_APP || 'default';
 const serveMode = process.env.SERVE || false;
 const devMode = process.env.NODE_ENV !== 'production';
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+processEnv = process.env.NODE_ENV && process.env.NODE_ENV === 'production' ? require(utils.prodEnvPath()) : require(utils.devEnvPath());
+processEnv.SERVE = serveMode;
 
 console.log('TARGET = ' + TARGET);
 if (TARGET === 'default') {
@@ -107,6 +110,9 @@ module.exports = {
     ] 
   },
   plugins: [
+    new webpack.DefinePlugin({
+      'process.env': processEnv
+    }), 
     new VueLoaderPlugin()
   ]
 }

@@ -23,7 +23,9 @@ npm install
 
 # serve with hot reload at localhost:8080
 npm run dev
-npm run prod (NOT WORKING)
+
+# serve with hot realod and with prod.env
+npm run prod
 
 ```
 

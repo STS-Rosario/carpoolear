@@ -67,14 +67,19 @@ Vue.config.errorHandler = function (err, vm, info) {
     debugApi.log(data);
 };
 window.store = store;
-if (process.env.NODE_ENV === 'development') {
-    console.log('In development wait for cordova');
-    setTimeout(function () {
-        if (!window.cordova) {
-            console.log('Not running in cordova');
-            store.dispatch('init');
-        }
-    }, 2000);
+if (process.env.SERVE) {
+    console.log('Not running in cordova');
+    store.dispatch('init');
+} else {
+    if (process.env.NODE_ENV === 'development') {
+        console.log('In development wait for cordova');
+        setTimeout(function () {
+            if (!window.cordova) {
+                console.log('Not running in cordova');
+                store.dispatch('init');
+            }
+        }, 2000);
+    }
 }
 
 bus.on('system-ready', () => {
