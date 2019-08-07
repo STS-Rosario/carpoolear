@@ -584,7 +584,7 @@ export default {
             let validOtherTripTime = false;
             let validOtherTripDate = false;
 
-            this.points.concat(this.showReturnTrip ? this.otherTrip.points : []).forEach(p => {
+            this.points.forEach(p => {
                 if (!p.json) {
                     p.error.state = true;
                     p.error.message = 'Seleccione una localidad válida.';
@@ -593,11 +593,28 @@ export default {
                     foreignPoints += (p.json.pais === 'Argentina' ? 0 : 1);
                 }
             });
-
             if (foreignPoints > 1) {
                 globalError = true;
                 this.points[0].error.state = true;
                 this.points[0].error.message = 'El origen o el destino de tu viaje tiene que estar en Argentina.';
+            }
+
+            if (this.showReturnTrip) {
+                foreignPoints = 0;
+                this.otherTrip.points.forEach(p => {
+                    if (!p.json) {
+                        p.error.state = true;
+                        p.error.message = 'Seleccione una localidad válida.';
+                        globalError = true;
+                    } else {
+                        foreignPoints += (p.json.pais === 'Argentina' ? 0 : 1);
+                    }
+                });
+                if (foreignPoints > 1) {
+                    globalError = true;
+                    this.otherTrip.points[0].error.state = true;
+                    this.otherTrip.points[0].error.message = 'El origen o el destino de tu viaje tiene que estar en Argentina.';
+                }
             }
 
             if (!this.time || !moment(this.time, 'HH mm').isValid()) {
