@@ -26,9 +26,9 @@ import { DebugApi } from './services/api';
 
 import Vue2Leaflet from 'vue2-leaflet';
 
-let debugApi = new DebugApi();
-
 import * as VueGoogleMaps from 'vue2-google-maps';
+
+let debugApi = new DebugApi();
 
 let cordovaTag = document.createElement('script');
 cordovaTag.setAttribute('src', process.env.ROUTE_BASE + 'cordova.js');

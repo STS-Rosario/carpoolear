@@ -33,7 +33,7 @@
     </div>
 </template>
 <script>
-import {mapActions, mapGetters} from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import dialogs from '../services/dialogs.js';
 
 export default {

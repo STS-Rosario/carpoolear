@@ -694,7 +694,7 @@ export default {
                     validOtherTripDate = true;
                 }
                 if (globalError) {
-                    dialogs.message('Algunos datos ingresados no son válidos.', {estado: 'error'});
+                    dialogs.message('Algunos datos ingresados no son válidos.', { estado: 'error' });
                 }
 
                 if (validOtherTripTime && validOtherTripDate) {

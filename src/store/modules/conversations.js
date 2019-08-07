@@ -85,12 +85,8 @@ const actions = {
 
                 return Promise.resolve(conversationTemp);
             } else {
-<<<<<<< HEAD
                 return globalStore.dispatch('conversations/findConversation', { id, more: false }).then(conversation => {
-=======
-                return globalStore.dispatch('conversations/findConversation', {id, more: false}).then(conversation => {
                     conversation.unread = false;
->>>>>>> 816d32de81b2cf8716daed226925bef232482aad
                     store.commit(types.CONVERSATION_CREATE_MESSAGES, id);
                     store.commit(types.CONVERSATION_SET_CONVERSATION, conversation);
                     store.commit(types.CONVERSATION_SET_SELECTED, id);
@@ -209,7 +205,7 @@ const actions = {
 
     sendToAll (store, { message, users }) {
         users = users.map(item => item.id);
-        return conversationApi.sendToAll({message, users});
+        return conversationApi.sendToAll({ message, users });
     }
 
 };

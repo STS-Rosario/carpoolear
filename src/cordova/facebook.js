@@ -20,7 +20,7 @@ export default {
 
                         debugApi.log(data).then((response) => {
                             return Promise.resolve();
-                        }, ({data, status}) => {
+                        }, ({ data, status }) => {
                             return Promise.reject(data);
                         });
                         reject(response);

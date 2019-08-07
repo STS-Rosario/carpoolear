@@ -179,14 +179,14 @@ export default {
                 if (err) {
                     if (err.status === 422) {
                         if (err.data && err.data.errors && err.data.errors.email) {
-                            dialogs.message('La cuenta de email ingresada se encuentra en uso.', {estado: 'error'});
+                            dialogs.message('La cuenta de email ingresada se encuentra en uso.', { estado: 'error' });
                             this.emailError.state = true;
                             this.emailError.message = 'La cuenta de email ingresada se encuentra en uso.';
                         } else {
-                            dialogs.message('Algunos de los campos ingresados no es válido.', {estado: 'error'});
+                            dialogs.message('Algunos de los campos ingresados no es válido.', { estado: 'error' });
                         }
                     } else {
-                        dialogs.message('Ocurrió un error al procesar el registro, por favor vuelva a intentar.', {estado: 'error'});
+                        dialogs.message('Ocurrió un error al procesar el registro, por favor vuelva a intentar.', { estado: 'error' });
                     }
                 }
                 this.progress = false;

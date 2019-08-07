@@ -68,7 +68,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import {pointDistance} from '../../services/maps.js';
+import { pointDistance } from '../../services/maps.js';
 import DatePicker from '../DatePicker';
 import OsmAutocomplete from '../OsmAutocomplete';
 import bus from '../../services/bus-event.js';
