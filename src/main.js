@@ -26,9 +26,9 @@ import { DebugApi } from './services/api';
 
 import Vue2Leaflet from 'vue2-leaflet';
 
-let debugApi = new DebugApi();
-
 import * as VueGoogleMaps from 'vue2-google-maps';
+
+let debugApi = new DebugApi();
 
 let cordovaTag = document.createElement('script');
 cordovaTag.setAttribute('src', process.env.ROUTE_BASE + 'cordova.js');
@@ -67,14 +67,19 @@ Vue.config.errorHandler = function (err, vm, info) {
     debugApi.log(data);
 };
 window.store = store;
-if (process.env.NODE_ENV === 'development') {
-    console.log('In development wait for cordova');
-    setTimeout(function () {
-        if (!window.cordova) {
-            console.log('Not running in cordova');
-            store.dispatch('init');
-        }
-    }, 2000);
+if (process.env.SERVE) {
+    console.log('Not running in cordova');
+    store.dispatch('init');
+} else {
+    if (process.env.NODE_ENV === 'development') {
+        console.log('In development wait for cordova');
+        setTimeout(function () {
+            if (!window.cordova) {
+                console.log('Not running in cordova');
+                store.dispatch('init');
+            }
+        }, 2000);
+    }
 }
 
 bus.on('system-ready', () => {

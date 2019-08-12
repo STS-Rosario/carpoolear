@@ -56,6 +56,7 @@ const actions = {
             globalStore.commit('myTrips/' + types.MYTRIPS_DELETE_TRIPS, id);
             store.dispatch('tripsSearch', store.state.tripsSearchParam.data);
             return Promise.resolve({ status: 'ok' });
+            // globalStore.commit(types.TRIPS_UPDATE_TRIPS, response.data);
         });
     },
 

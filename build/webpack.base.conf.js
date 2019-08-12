@@ -1,13 +1,16 @@
 const path = require('path');
 const config = require('../config');
 const utils = require('./utils');
+const webpack = require('webpack');
 
-const env = process.env.NODE_ENV
 const TARGET = process.env.TARGET_APP || 'default';
 const serveMode = process.env.SERVE || false;
 const devMode = process.env.NODE_ENV !== 'production';
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+processEnv = process.env.NODE_ENV && process.env.NODE_ENV === 'production' ? require(utils.prodEnvPath()) : require(utils.devEnvPath());
+processEnv.SERVE = serveMode;
 
 console.log('TARGET = ' + TARGET);
 if (TARGET === 'default') {
@@ -32,7 +35,7 @@ module.exports = {
   },
   output: {
     path: config.build.assetsRoot,
-    publicPath: process.env.NODE_ENV === 'production' ? config.build.assetsPublicPath : config.dev.assetsPublicPath, 
+    publicPath: process.env.NODE_ENV === 'production' ? config.build.assetsPublicPath : config.dev.assetsPublicPath,
     filename: '[name].js'
   },
   resolve: {
@@ -74,15 +77,15 @@ module.exports = {
         use: [
           serveMode ? 'vue-style-loader' : MiniCssExtractPlugin.loader,
           { loader: 'css-loader', options: { importLoaders: 1 } },
-          { loader: 'postcss-loader', options: { 
-              sourceMap: true, 
+          { loader: 'postcss-loader', options: {
+              sourceMap: true,
               plugins: [
                 require('postcss-import')(),
                 require('postcss-preset-env')({
                   browsers: ["last 2 version", "ie 9"]
                 })
-              ] 
-            } 
+              ]
+            }
           }
         ]
       },
@@ -104,9 +107,12 @@ module.exports = {
       },
       { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=10000&minetype=application/font-woff" },
       { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader" }
-    ] 
+    ]
   },
   plugins: [
+    new webpack.DefinePlugin({
+      'process.env': processEnv
+    }),
     new VueLoaderPlugin()
   ]
 }

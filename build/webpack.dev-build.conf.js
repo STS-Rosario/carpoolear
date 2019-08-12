@@ -8,9 +8,6 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackMultiResolver = require('./plugins/webpack-multi-resolver.js');
 
-const TARGET = process.env.TARGET_APP || 'default';
-const PLATFORM = process.env.PLATFORM || 'android';
-
 const webpackConfig = merge(baseWebpackConfig, {
   devtool: config.build.productionSourceMap ? '#source-map' : false,
   output: {
@@ -28,9 +25,6 @@ const webpackConfig = merge(baseWebpackConfig, {
     concatenateModules: true //ModuleConcatenationPlugin
   },
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env': require(utils.prodEnvPath())
-    }),
     new WebpackMultiResolver({
      sourceFolder: 'resources',
      targetProject: process.env.TARGET_APP

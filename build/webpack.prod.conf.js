@@ -30,9 +30,6 @@ const webpackConfig = merge(baseWebpackConfig, {
     concatenateModules: true //ModuleConcatenationPlugin
   },
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env': require(utils.prodEnvPath())
-    }),
     new WebpackMultiResolver({
      sourceFolder: 'resources',
      targetProject: process.env.TARGET_APP

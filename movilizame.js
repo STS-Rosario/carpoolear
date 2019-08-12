@@ -25,10 +25,11 @@ function showError (code, stderr, stdout) {
 
 function preBuildAndCheckPlatform (callback) {
     let folder = `dist/${TARGET}/${NODE_ENV}`;
+    let folderCordovaResFiles = `dist/${TARGET}/${NODE_ENV}/res`;
     let cordovaFiles = `projects/${TARGET}/cordova`;
-    if (fs.existsSync(folder)) {
+    if (fs.existsSync(folderCordovaResFiles)) {
         console.log('Deleting old files.')
-        fs.removeSync(folder);
+        fs.removeSync(folderCordovaResFiles);
     }
     fs.copy(cordovaFiles, folder, function (err) {
         if (err) {

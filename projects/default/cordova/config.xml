@@ -95,7 +95,7 @@
     <plugin name="cordova-plugin-x-socialsharing" spec="^5.4.7">
         <variable name="ANDROID_SUPPORT_V4_VERSION" value="24.1.1+" />
     </plugin>
-    <engine name="android" spec="^6.2.3" />
-    <engine name="browser" spec="^4.1.0" />
-    <engine name="ios" spec="^4.4.0" />
+    <engine name="android" spec="^6.3.0" />
+    <engine name="browser" spec="^5.0.1" />
+    <engine name="ios" spec="^4.5.0" />
 </widget>

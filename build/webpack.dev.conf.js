@@ -7,12 +7,11 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var WebpackMultiResolver = require('./plugins/webpack-multi-resolver.js');
 var FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const portfinder = require('portfinder')
-const NODE_ENV = process.env.NODE_ENV;
 
 const devWebpackConfig = merge(baseWebpackConfig, {
   // cheap-module-eval-source-map is faster for development
   devtool: '#cheap-module-eval-source-map',
-  
+
   // these devServer options should be customized in /config/index.js
   devServer: {
     clientLogLevel: 'warning',
@@ -41,9 +40,6 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     concatenateModules: true //ModuleConcatenationPlugin
   },
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env': NODE_ENV === 'production' ? require(utils.prodEnvPath()) : require(utils.devEnvPath())
-    }), 
     new WebpackMultiResolver({
       sourceFolder: 'resources',
       targetProject: process.env.TARGET_APP

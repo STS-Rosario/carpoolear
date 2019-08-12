@@ -578,7 +578,7 @@ export default {
                     origin: this.trip.points[0],
                     destiny: this.trip.points[this.trip.points.length - 1]
                 };
-                 /* eslint-disable no-undef */
+                /* eslint-disable no-undef */
                 let control = L.Routing.control({
                     waypoints: [
                         L.latLng(data.origin.lat, data.origin.lng),
