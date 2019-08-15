@@ -50,7 +50,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="mailto://carpoolear@stsrosario.org.ar">
+                        <a href="mailto:carpoolear@stsrosario.org.ar">
                             <i class="fa fa-envelope-o" aria-hidden="true"></i>
                             <span>Correo</span>
                         </a>
