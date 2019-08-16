@@ -77,6 +77,14 @@ class UserApi extends TaggedApi {
     changeProperty (data) {
         return this.post('/api/users/change/' + data.property + '/' + data.value, null);
     }
+
+    searchUsers (data) {
+        return this.get('/api/users/search', data);
+    }
+
+    adminUpdate (data) {
+        return this.put('/api/users/modify', data);
+    }
 }
 
 export { UserApi as default };

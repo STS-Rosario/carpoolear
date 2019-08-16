@@ -78,6 +78,12 @@ function activate (store, activationToken) {
     });
 }
 
+function searchUsers (store, name) {
+    if (store.state.user.is_admin) {
+        return userApi.searchUsers({name: name});
+    }
+}
+
 function resetPassword (store, email) {
     return authApi.resetPassword({email}).then(() => {
         return Promise.resolve();
@@ -172,6 +178,14 @@ function update (store, data) {
         return Promise.reject(data);
     });
 }
+function adminUpdate (store, data) {
+    return userApi.adminUpdate(data).then((response) => {
+        return Promise.resolve(response.data);
+    }).catch(({data, status}) => {
+        console.log(data, status);
+        return Promise.reject(data);
+    });
+}
 
 function updatePhoto (store, data) {
     return userApi.updatePhoto(data).then((response) => {
@@ -194,7 +208,9 @@ const actions = {
     changePassword,
     update,
     updatePhoto,
-    onLoggin
+    onLoggin,
+    searchUsers,
+    adminUpdate
 };
 
 // mutations
