@@ -77,7 +77,7 @@ textarea {
     height: 44px;
 }
 label {
-    color: #016587;
+    color: var(--secondary-background);
     margin-top: .3em;
     font-weight: normal;
 }
@@ -648,7 +648,7 @@ textarea {
 }
 
 .rate-item-detail {
-    color: #016587;
+    color: var(--secondary-background);
     font-weight: bold;
     font-size: 11px;
     margin-bottom: .5em;
@@ -713,7 +713,7 @@ textarea {
 
 .nav-tabs {
     position: fixed;
-    background-color: #016587;
+    background-color: var(--secondary-background);
     padding-top: .4em;
     padding-bottom: .3em;
     z-index: 3;
@@ -770,7 +770,7 @@ textarea {
     position: absolute;
     pointer-events: none;
     border-color: rgba(136, 183, 213, 0);
-    border-top-color: #016587;
+    border-top-color: var(--secondary-background);
     border-width: 12px;
     margin-left: -12px;
     z-index: 1;
@@ -827,7 +827,7 @@ textarea {
 }
 .trips .trips_title h1 {
     font-size: 42px;
-    color: #016587;
+    color: var(--secondary-background);
     font-weight: 300;
 }
 
@@ -1299,7 +1299,7 @@ textarea {
     position: absolute;
     pointer-events: none;
     border-color: rgba(136, 183, 213, 0);
-    border-left-color: #016587;
+    border-left-color: var(--secondary-background);
     border-width: 12px;
     margin-left: -12px;
     z-index: 1;
@@ -1602,7 +1602,7 @@ textarea {
 
 .profile_image-edit {
     position: absolute;
-    color: #016587;
+    color: var(--secondary-background);
     right: 8px;
     bottom: 0;
     cursor: pointer
@@ -2835,7 +2835,7 @@ ul {
 }
 .float-right-close {
     float: right;
-    color: #91B64C!important;
+    color: var(--trip-mostly-free-color)!important;
 }
 .modal-container .btn {
     max-width: 45%;

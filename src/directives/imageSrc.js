@@ -10,7 +10,6 @@ function changePhoto (el, binding, node) {
     } else {
         arg = '/image/' + binding.arg + '/';
     }
-    console.log('changePhoto', binding, getRoute(binding.value, arg));
     el.style.backgroundImage = 'url(' + getRoute(binding.value, arg) + ')';
 };
 

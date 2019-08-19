@@ -11,14 +11,16 @@ let tripsApi = new TripApi();
 const state = {
     ...pagination.makeState('trips'),
     current_trip: null,
-    refresh_list: false
+    refresh_list: false,
+    scroll_offset: 0
 };
 
 // getters
 const getters = {
     ...pagination.makeGetters('trips'),
     currentTrip: state => state.current_trip,
-    refreshList: state => state.refresh_list
+    refreshList: state => state.refresh_list,
+    scrollOffset: state => state.scroll_offset
 };
 
 // actions
@@ -62,6 +64,11 @@ const actions = {
 
     refreshList (store, status) {
         store.commit(types.TRIPS_REFRESH, status);
+    },
+
+    setScrollOffset (store, pos) {
+        console.log(pos);
+        store.commit(types.TRIPS_SET_SCROLL, pos);
     },
 
     searchMatchers (store, { trip }) {
@@ -155,6 +162,10 @@ const mutations = {
                 return;
             }
         }
+    },
+
+    [types.TRIPS_SET_SCROLL] (state, scrollOffset) {
+        state.scroll_offset = scrollOffset;
     }
 };
 

@@ -10,6 +10,7 @@
 <script>
 import datePicker from 'vue-datepicker';
 import moment from 'moment';
+import cssvar from 'helpers'
 
 export default {
     name: 'calendar',
@@ -45,7 +46,7 @@ export default {
                 },
                 wrapperClass: this.class,
                 color: {
-                    header: '#016587',
+                    header: cssvar('--secondary-background'),
                     headerText: '#FFF'
                 },
                 buttons: {

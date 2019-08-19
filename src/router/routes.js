@@ -1,12 +1,7 @@
 /* jshint esversion: 6 */
-import { auth, guest, profileComplete } from './middleware.js';
+import { auth, guest, profileComplete, authAdmin } from './middleware.js';
 
 export default [
-    {
-        path: '/admin',
-        component: require('../components/views/About').default,
-        beforeEnter: auth
-    },
     {
         path: '/login',
         name: 'login',
@@ -356,6 +351,42 @@ export default [
                 header: {
                     title: 'Términos',
                     buttons: ['back']
+                }
+            }
+        }
+    },
+    {
+        path: '/admin',
+        name: 'admin-page',
+        component: require('../components/views/AdminPage'),
+        beforeEnter: authAdmin,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'admin'
+                },
+                header: {
+                    title: 'Admin Page',
+                    buttons: []
+                }
+            }
+        }
+    },
+    {
+        path: '/admin/users',
+        name: 'admin-users',
+        component: require('../components/views/UsersCrud'),
+        beforeEnter: authAdmin,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'admin'
+                },
+                header: {
+                    title: 'Admin users',
+                    buttons: []
                 }
             }
         }

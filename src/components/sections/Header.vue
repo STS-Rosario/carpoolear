@@ -93,6 +93,9 @@
                         <li>
                             <router-link :to="{name: 'profile', params: {id: 'me'}}">Perfil</router-link>
                         </li>
+                        <li v-if="user.is_admin">
+                            <router-link :to="{name: 'admin-page'}">Administracion</router-link>
+                        </li>
                         <li role="separator" class="divider"></li>
                         <!--<li>
                             <router-link :to="{name: 'acerca_de'}">Acerca</router-link>

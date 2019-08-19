@@ -59,11 +59,6 @@
                     <input maxlength="20" @keydown="isNumber" v-on:paste='isNumber' v-model="user.mobile_phone" type="tel" class="form-control" id="input-phone" placeholder="Número de teléfono (al menos 7 números)" :class="{'has-error': phoneError.state }">
                     <span class="error" v-if="phoneError.state"> {{phoneError.message}} </span>
                 </div>
-                <div class="form-group">
-                    <label for="input-patente">Patente <span class="description">(Sin espacios. Ej: ABC123 o AA123AA). Dale un extra de confianza a los carpooleros que viajen con vos identificando tu auto.</span></label>
-                    <input :style="patente.length > 0 ? 'text-transform: uppercase' : ''" v-mask="'AAN##NA'" v-model="patente" type="text" class="form-control" id="input-patente" placeholder="Patentes válidas (AAA111 o AA111BB)" :class="{'has-error': patentError.state }">
-                    <span class="error" v-if="patentError.state"> {{patentError.message}} </span>
-                </div>
 
                 <div class="checkbox">
                     <label>

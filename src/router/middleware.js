@@ -14,6 +14,18 @@ export function auth (to, from, next) {
         router.replace({ name: 'login' });
     }
 }
+export function authAdmin (to, from, next) {
+    if (store.getters['auth/checkLogin'] && store.getters['auth/user'].is_admin) {
+        next();
+    } else {
+        next(false);
+        router.rememberRoute = {
+            name: to.name,
+            params: to.params
+        };
+        router.replace({name: 'login'});
+    }
+}
 
 export function guest (to, from, next) {
     if (!store.getters['auth/checkLogin']) {

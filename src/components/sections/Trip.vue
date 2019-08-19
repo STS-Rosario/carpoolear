@@ -175,6 +175,7 @@
 <script>
 import { mapActions } from 'vuex';
 import dialogs from '../../services/dialogs.js';
+import bus from '../../services/bus-event.js';
 export default {
     name: 'trip',
     props: {
@@ -209,6 +210,7 @@ export default {
                 this.$router.push({ name: 'update-trip', params: { id: this.trip.id } });
             } else {
                 if (!passengerView) {
+                    bus.emit('trip-click');
                     this.$router.push({ name: 'detail_trip', params: { id: this.trip.id } });
                 } else {
                     this.$router.push({
@@ -339,7 +341,7 @@ export default {
         margin-left: .5em;
     }
     .trip-fill .trip-seats-control .trip_seats-available_label {
-        color: #FE9900;
+        color: var(--trip-half-free-color);
     }
     .trip-seats-control .btn {
         background: #EEE;

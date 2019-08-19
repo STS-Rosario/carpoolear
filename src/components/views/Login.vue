@@ -208,7 +208,7 @@ label {
 .login-forget {
   font-weight: bold;
   padding-left: 12px;
-  color: #016587;
+  color: var(--secondary-background);
 }
 
 .user-form .btn-primary.btn-facebook {
