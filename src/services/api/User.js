@@ -39,7 +39,11 @@ class UserApi extends TaggedApi {
    * @return {}
   */
     update (data) {
-        return this.put('/api/users', data);
+        let customHeaders = {
+            'Content-Type': 'multipart/form-data'
+        };
+        data.append('_method', 'PUT');
+        return this.post('/api/users', data, customHeaders);
     }
 
     /**
