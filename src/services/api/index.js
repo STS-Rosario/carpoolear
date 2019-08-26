@@ -10,6 +10,7 @@ import FriendsApi from './FriendApi';
 import NotificationApi from './Notifications.js';
 import DebugApi from './Debug';
 import SubscriptionApi from './SubscriptionsApi';
+import AdminApi from './Admin';
 
 export {
   AuthApi,
@@ -23,5 +24,6 @@ export {
   CarApi,
   FriendsApi,
   NotificationApi,
-  SubscriptionApi
+  SubscriptionApi,
+  AdminApi
 };

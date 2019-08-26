@@ -18,6 +18,7 @@ import actionbars from './modules/actionbars';
 import profile from './modules/profile';
 import background from './modules/background';
 import subscriptions from './modules/subscriptions';
+import admin from './modules/admin';
 
 Vue.use(Vuex);
 
@@ -43,6 +44,7 @@ export default new Vuex.Store({
         profile,
         background,
         userTrips,
-        subscriptions
+        subscriptions,
+        admin
     }
 });
