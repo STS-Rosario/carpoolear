@@ -223,7 +223,6 @@ export default {
             });
         },
         onDriverDocumentChange (event) {
-            console.log('file input ', event);
             if (event.target.files) {
                 this.driverFiles = event.target.files;
             }
@@ -255,13 +254,11 @@ export default {
                 console.log(this.user.birthday);
             } */
             data.nro_doc = this.dniRawValue;
-
+            /* global FormData */
             let bodyFormData = new FormData();
             for (const key in data) {
                 if (data.hasOwnProperty(key)) {
-                    const element = data[key];
                     bodyFormData.append(key, data[key]);
-
                 }
             }
             if (this.driverFiles) {

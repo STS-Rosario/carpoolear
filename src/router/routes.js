@@ -358,7 +358,7 @@ export default [
     {
         path: '/admin',
         name: 'admin-page',
-        component: require('../components/views/AdminPage'),
+        component: require('../components/views/AdminPage').default,
         beforeEnter: authAdmin,
         meta: {
             actionbar: {
@@ -376,7 +376,7 @@ export default [
     {
         path: '/admin/users',
         name: 'admin-users',
-        component: require('../components/views/UsersCrud'),
+        component: require('../components/views/UsersCrud').default,
         beforeEnter: authAdmin,
         meta: {
             actionbar: {

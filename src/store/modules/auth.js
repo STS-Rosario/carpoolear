@@ -80,7 +80,7 @@ function activate (store, activationToken) {
 
 function searchUsers (store, name) {
     if (store.state.user.is_admin) {
-        return userApi.searchUsers({name: name});
+        return userApi.searchUsers({ name: name });
     }
 }
 
@@ -105,16 +105,7 @@ function changePassword (store, { token, data }) {
     });
 }
 
-function register (store, { email, password, passwordConfirmation, name, birthday, termsAndConditions }) {
-    let data = {};
-    data.email = email;
-    data.password = password;
-    data.password_confirmation = passwordConfirmation;
-    data.name = name;
-    data.password = password;
-    data.terms_and_conditions = termsAndConditions;
-    data.birthday = birthday;
-
+function register (store, data) {
     return userApi.register(data).then((data) => {
         return Promise.resolve();
     }).catch((err) => {
@@ -134,6 +125,14 @@ function fetchUser (store) {
         store.commit(types.AUTH_SET_USER, response.data);
     }).catch(({ data, status }) => {
         console.log(data, status);
+    });
+}
+
+function getConfig (store) {
+    return authApi.config().then((response) => {
+        console.log('config response', response);
+        store.commit('AUTH_APP_CONFIG', response);
+        return response;
     });
 }
 
@@ -181,7 +180,7 @@ function update (store, data) {
 function adminUpdate (store, data) {
     return userApi.adminUpdate(data).then((response) => {
         return Promise.resolve(response.data);
-    }).catch(({data, status}) => {
+    }).catch(({ data, status }) => {
         console.log(data, status);
         return Promise.reject(data);
     });
@@ -211,7 +210,8 @@ const actions = {
     updatePhoto,
     onLoggin,
     searchUsers,
-    adminUpdate
+    adminUpdate,
+    getConfig
 };
 
 // mutations

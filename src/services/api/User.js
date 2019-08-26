@@ -20,7 +20,10 @@ class UserApi extends TaggedApi {
    * @return {}
   */
     register (data) {
-        return this.post('/api/users', data);
+        let customHeaders = {
+            'Content-Type': 'multipart/form-data'
+        };
+        return this.post('/api/users', data, customHeaders);
     }
 
     /**

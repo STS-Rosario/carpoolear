@@ -26,9 +26,22 @@
       <label for="txt_password_confirmation">Ingrese nuevamente su contraseña <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
       <input v-jump:focus="'ipt_terms'" ref="txt_password_confirmation" name="txt_password_confirmation" maxlength="40" type="password" id="txt_password_confirmation" v-model='passwordConfirmation' :class="{'has-error': passwordError.state }" />
       <span class="error" v-if="passwordError.state"> {{passwordError.message}} </span>
-      <div class="terms">
+      <div class="text-left checkbox-container" v-if="settings.module_validated_drivers">
+        <input type="checkbox" @change="changeBeDriver" id="change_be_driver">
+        <label for="change_be_driver" class="label-cbx">
+            Solicitar ser chofer
+        </label>
+      </div>
+      <div class="form-group text-left" v-if="settings.module_validated_drivers && showBeDriver">
+        <label for="driver_documentation">Ingrese la documentación</label>
+        <input type="file" id="driver_documentation" multiple @change="onDriverDocumentChange" />
+        <p class="help-block">Se requiere que cargue: licencia de conductor, seguro del vehículo ...</p>
+      </div>
+      <div class="terms text-left">
         <input v-jump:click="'ipt_submit'" ref="ipt_terms" name="ipt_terms" type="checkbox" id="cbx_terms" v-model='termsAndConditions' />
-        <label for="cbx_terms">He leído y acepto los <router-link :to="{name: 'terms'}">términos y condiciones</router-link>.</label>
+        <label for="cbx_terms" class="label-cbx">
+            He leído y acepto los <router-link :to="{name: 'terms'}">términos y condiciones</router-link>.
+        </label>
         <button ref="ipt_submit" name="ipt_submit" @click="register" class="btn-primary" :disabled="progress || !termsAndConditions"> Registrarme </button>
       </div>
     </div>
@@ -74,13 +87,16 @@ export default {
             apellidoError: new Error(),
             birthdayError: new Error(),
             maxDate: moment().toDate(),
-            minDate: moment('1900-01-01').toDate()
+            minDate: moment('1900-01-01').toDate(),
+            showBeDriver: false,
+            driverFiles: null
         };
     },
     computed: {
         ...mapGetters({
             checkLogin: 'auth/checkLogin',
-            isMobile: 'device/isMobile'
+            isMobile: 'device/isMobile',
+            settings: 'auth/appConfig'
         })
     },
     watch: {
@@ -95,7 +111,8 @@ export default {
     },
     methods: {
         ...mapActions({
-            doRegister: 'auth/register'
+            doRegister: 'auth/register',
+            getConfig: 'auth/getConfig'
         }),
         validate () {
             let globalError = false;
@@ -154,24 +171,49 @@ export default {
             } */
             return globalError;
         },
-
+        onDriverDocumentChange (event) {
+            console.log('file input ', event);
+            if (event.target.files) {
+                this.driverFiles = event.target.files;
+            }
+        },
+        changeBeDriver () {
+            this.showBeDriver = !this.showBeDriver;
+        },
         dateChange (value) {
             this.birthdayAnswer = value;
         },
-
         register (event) {
             if (this.validate()) {
                 dialogs.message('Debe corregir o completar algunos campos para finalizar su registro.', { duration: 10, estado: 'error' });
                 return;
             }
-            let email = this.email;
-            let password = this.password;
-            let passwordConfirmation = this.passwordConfirmation;
-            let name = this.name + ' ' + this.sureName;
-            let termsAndConditions = this.termsAndConditions;
-            let birthday = this.birthdayAnswer;
             this.progress = true;
-            this.doRegister({ email, password, passwordConfirmation, name, birthday, termsAndConditions }).then(() => {
+            let data = {
+                email: this.email,
+                password: this.password,
+                password_confirmation: this.passwordConfirmation,
+                name: this.name + ' ' + this.sureName,
+                terms_and_conditions: this.termsAndConditions,
+                birthday: this.birthdayAnswer
+            }
+            /* global FormData */
+            let bodyFormData = new FormData();
+            for (const key in data) {
+                if (data.hasOwnProperty(key)) {
+                    bodyFormData.append(key, data[key]);
+                }
+            }
+            if (this.driverFiles) {
+                bodyFormData.append('user_be_driver', true);
+                console.log('file', this.driverFiles);
+                for (let index = 0; index < this.driverFiles.length; index++) {
+                    const file = this.driverFiles[index];
+                    console.log('file', file);
+                    bodyFormData.append('driver_data_docs[]', file);
+                }
+            }
+            this.doRegister(bodyFormData).then(() => {
                 this.progress = false;
                 this.success = true;
             }).catch((err) => {
@@ -199,6 +241,9 @@ export default {
     mounted () {
         bus.on('back-click', this.onBackClick);
         bus.on('date-change', this.dateChange);
+        this.getConfig().then((data) => {
+            console.log('getConfig', data);
+        });
     },
 
     beforeDestroy () {
@@ -265,5 +310,18 @@ export default {
             color: red;
             font-weight: 300;
         }
+    }
+    .label-cbx {
+        vertical-align: middle;
+    }
+    input[type=checkbox] {
+        margin-top: -2px;
+        vertical-align: middle;
+    }
+    .checkbox-container {
+        margin-top: 1.5rem;
+    }
+    input[type=file] {
+        color: white;
     }
 </style>

@@ -23,7 +23,7 @@ export function authAdmin (to, from, next) {
             name: to.name,
             params: to.params
         };
-        router.replace({name: 'login'});
+        router.replace({ name: 'login' });
     }
 }
 
