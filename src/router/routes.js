@@ -392,6 +392,24 @@ export default [
         }
     },
     {
+        path: '/admin/trips',
+        name: 'admin-trips',
+        component: require('../components/views/AdminTrips.vue'),
+        beforeEnter: authAdmin,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'admin'
+                },
+                header: {
+                    title: 'Admin trips',
+                    buttons: []
+                }
+            }
+        }
+    },
+    {
         path: '/*',
         redirect: '/trips'
     }

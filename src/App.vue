@@ -2,7 +2,7 @@
   <div class="app-container" :class="[backgroundStyle]">
     <headerApp></headerApp>
     <main id="main">
-      <div class="view-container">
+      <div class="view-container clearfix">
         <router-view></router-view>
       </div>
     </main>

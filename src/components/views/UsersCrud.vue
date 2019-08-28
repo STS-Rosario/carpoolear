@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="col-md-24">
     <div class="row">
         <adminNav></adminNav>
     </div>

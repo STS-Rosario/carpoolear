@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="col-md-24">
         <div class="row">
             <adminNav></adminNav>
         </div>
@@ -54,7 +54,6 @@ import MonthlyUsersChart from '../elements/MonthlyUsersChart';
 import TotalUsersChart from '../elements/TotalUsersChart';
 import datePicker from '../DatePicker';
 import moment from 'moment';
-import usersCrud from '../views/UsersCrud';
 import adminNav from '../sections/adminNav';
 
 export default {
@@ -82,7 +81,6 @@ export default {
         MonthlyUsersChart,
         TotalUsersChart,
         datePicker,
-        usersCrud,
         adminNav
     },
     mounted () {
