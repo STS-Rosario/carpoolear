@@ -109,7 +109,6 @@
 import { mapGetters, mapActions } from 'vuex';
 import {pointDistance} from '../../services/maps.js';
 import DatePicker from '../DatePicker';
-import bus from '../../services/bus-event.js';
 import moment from 'moment';
 import dialogs from '../../services/dialogs.js';
 import loading from '../Loading';
@@ -233,16 +232,16 @@ export default {
             if (this.to_date) {
                 params.to_date = this.to_date;
             }
+
+            if (!this.from_date && !this.to_date) {
+                params.history = true;
+            }
             if (this.user.id) {
                 params.user_id = this.user.id;
             }
             params.is_passenger = this.isPassenger;
             if (foreignCountry < 2) {
-                console.log('search', params);
-                this.search(params)
-                .then((data) => {
-                    console.log(data);
-                });
+                this.$emit('admin-trip-search', params);
             } else {
                 dialogs.message('Origen y destino no pueden ser ambos del exterior.', { duration: 10, estado: 'error' });
             }
