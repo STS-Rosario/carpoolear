@@ -1,109 +1,117 @@
 <template>
-<div class="conversation-component container">
+<div class="col-md-24">
     <div class="row">
-        <div class="col-sm-8 col-md-8">
-            <div class="conversation_list">
-                <ul class="list-group">
-                    <li class="list-group-item">
-                        <div class="    up">
-                            <input v-model="textSearch" v-on:keyup="onSearchUsers" type="text" class="form-control" placeholder="Escribe un nombre y presiona buscar" />
-                        </div>
-                    </li>
-                    <template v-if="textSearch.length != 0">
-                        <Loading class="conversation_chat--chats" :data="userList">
-                            <li v-for="user in userList" class="list-group-item conversation_header" @click="selectUser(user)"  v-bind:key="user.id">
-                                <div class="media">
-                                  <div class="media-right pull-right">
-                                      <button class="btn btn-success btn-circle" v-on:click="toUserMessages(user)">
-                                          <i class="fa fa-comments medium-icon" aria-hidden="true"></i>
-                                      </button>
-                                  </div>
-                                  <div class="media-left">
-                                    <div class="conversation_image circle-box" v-imgSrc:profile="user.image"></div>
-                                  </div>
-                                  <div class="media-body">
-                                    <h4 class="media-heading"><span class="conversation-title">{{ user.name }}</span></h4>
-                                    <span> {{ user.email }} </span>
-                                  </div>
+        <adminNav></adminNav>
+    </div>
+    <div class="conversation-component container">
+        <div class="row">
+            <div class="col-md-20 col-md-offset-2">
+                <div class="col-sm-8 col-md-8">
+                    <div class="conversation_list">
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <div class="    up">
+                                    <input v-model="textSearch" v-on:keyup="onSearchUsers" type="text" class="form-control" placeholder="Escribe un nombre y presiona buscar" />
                                 </div>
                             </li>
-                            <li slot="no-data" class="list-group-item alert alert-warning"  role="alert">No se encontro ningun usuario</li>
-                            <li slot="loading" class="list-group-item alert alert-info" role="alert">
-                                <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
-                                Cargando usuarios ...
-                            </li>
-                        </Loading>
-                    </template>
-                </ul>
-            </div>
-        </div>
-        <div v-if="currentUser" class="user-settings col-xs-24 col-sm-16 col-md-16">
-                <div class="settings-container">
-                    <div class="form-group">
-                        <label for="input-name">Nombre y apellido </label>
-                        <input maxlength="25" v-model="newInfo.name" type="text" class="form-control" id="input-name" placeholder="Nombre" />
-                        <span class="error" v-if="nombreError.state"> {{nombreError.message}} </span>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="input-email">E-mail </label>
-                        <input maxlength="40" v-model="newInfo.email" type="text" class="form-control" id="input-email" placeholder="E-mail">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="input-description">Acerca de mi</label>
-                        <textarea maxlength="1000" v-model="newInfo.description" placeholder="Descripción"></textarea>
-                        <span class="error textarea" v-if="descError.state"> {{descError.message}} </span>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="input-dni">Número de documento</label>
-                        <input v-numberMask="'dniRawValue'" type="text" data-max-length="8" v-model="newInfo.nro_doc" class="form-control" id="input-dni" placeholder="DNI">
-                        <span class="error" v-if="dniError.state"> {{dniError.message}} </span>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="input-telefono">Número de teléfono </label>
-                        <input maxlength="20" @keydown="isNumber" v-on:paste='isNumber' v-model="newInfo.mobile_phone" type="tel" class="form-control" id="input-phone" placeholder="Número de teléfono (al menos 7 números)">
-                        <span class="error" v-if="phoneError.state"> {{phoneError.message}} </span>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="input-pass">Ingrese su nueva contraseña</label>
-                        <input maxlength="40" v-model="newInfo.pass.password" type="password" class="form-control" id="input-pass" placeholder="Contraseña">
-                        <input maxlength="40" v-model="newInfo.pass.password_confirmation" type="password" class="form-control" id="input-pass-confirm" placeholder="Repetir contraseña">
-                        <span class="error" v-if="passError.state"> {{phoneError.message}} </span>
-                    </div>
-                    <hr />
-                    <div class="row" v-if="newInfo.driver_data_docs && newInfo.driver_data_docs.length">
-                        <h4 class="col-xs-24">Documentación del chofer</h4>
-                        <div v-imgSrc:docs="img"  v-for="img in newInfo.driver_data_docs" class="img-doc col-md-8 col-sm-12"></div>
-                    </div>
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" v-model="newInfo.driver_is_verified"> Es chofer
-                        </label>
-                    </div>
-                    <hr />
-                    <div class="checkbox">
-                        <label >
-                            <input type="checkbox"  v-model="newInfo.active"> Usuario activo
-                        </label>
-                    </div>
-                    <div class="row">
-                        <div class="checkbox col-md-19" >
-                            <label >
-                                <input type="checkbox"  v-model="newInfo.banned"> Usuario suspendido
-                            </label>
-                        </div>
-                        <div class="col-md-5 text-right">
-                            <button class="btn btn-primary" v-on:click="save">Grabar</button>
-                        </div>
+                            <template v-if="textSearch.length != 0">
+                                <Loading class="conversation_chat--chats" :data="userList">
+                                    <li v-for="user in userList" class="list-group-item conversation_header" @click="selectUser(user)"  v-bind:key="user.id">
+                                        <div class="media">
+                                          <div class="media-right pull-right">
+                                              <button class="btn btn-success btn-circle" v-on:click="toUserMessages(user)">
+                                                  <i class="fa fa-comments medium-icon" aria-hidden="true"></i>
+                                              </button>
+                                          </div>
+                                          <div class="media-left">
+                                            <div class="conversation_image circle-box" v-imgSrc:profile="user.image"></div>
+                                          </div>
+                                          <div class="media-body">
+                                            <h4 class="media-heading"><span class="conversation-title">{{ user.name }}</span></h4>
+                                            <span> {{ user.email }} </span>
+                                          </div>
+                                        </div>
+                                    </li>
+                                    <li slot="no-data" class="list-group-item alert alert-warning"  role="alert">No se encontro ningun usuario</li>
+                                    <li slot="loading" class="list-group-item alert alert-info" role="alert">
+                                        <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
+                                        Cargando usuarios ...
+                                    </li>
+                                </Loading>
+                            </template>
+                        </ul>
                     </div>
                 </div>
-        </div>
-        <div v-else class="col-xs-24 col-sm-16 col-md-16">
-            <p slot="no-data" class="alert alert-warning"  role="alert">Seleccione alguna persona</p>
+                <div v-if="currentUser" class="user-settings col-xs-24 col-sm-16 col-md-16">
+                        <div class="settings-container">
+                            <div class="form-group">
+                                <label for="input-name">Nombre y apellido </label>
+                                <input maxlength="25" v-model="newInfo.name" type="text" class="form-control" id="input-name" placeholder="Nombre" />
+                                <span class="error" v-if="nombreError.state"> {{nombreError.message}} </span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="input-email">E-mail </label>
+                                <input maxlength="40" v-model="newInfo.email" type="text" class="form-control" id="input-email" placeholder="E-mail">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="input-description">Acerca de mi</label>
+                                <textarea maxlength="1000" v-model="newInfo.description" placeholder="Descripción"></textarea>
+                                <span class="error textarea" v-if="descError.state"> {{descError.message}} </span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="input-dni">Número de documento</label>
+                                <input v-numberMask="'dniRawValue'" type="text" data-max-length="8" v-model="newInfo.nro_doc" class="form-control" id="input-dni" placeholder="DNI">
+                                <span class="error" v-if="dniError.state"> {{dniError.message}} </span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="input-telefono">Número de teléfono </label>
+                                <input maxlength="20" @keydown="isNumber" v-on:paste='isNumber' v-model="newInfo.mobile_phone" type="tel" class="form-control" id="input-phone" placeholder="Número de teléfono (al menos 7 números)">
+                                <span class="error" v-if="phoneError.state"> {{phoneError.message}} </span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="input-pass">Ingrese su nueva contraseña</label>
+                                <input maxlength="40" v-model="newInfo.pass.password" type="password" class="form-control" id="input-pass" placeholder="Contraseña">
+                                <input maxlength="40" v-model="newInfo.pass.password_confirmation" type="password" class="form-control" id="input-pass-confirm" placeholder="Repetir contraseña">
+                                <span class="error" v-if="passError.state"> {{phoneError.message}} </span>
+                            </div>
+                            <hr />
+                            <div class="row" v-if="newInfo.driver_data_docs && newInfo.driver_data_docs.length">
+                                <h4 class="col-xs-24">Documentación del chofer</h4>
+                                <div v-imgSrc:docs="img"  v-for="img in newInfo.driver_data_docs" class="img-doc col-md-8 col-sm-12"></div>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" v-model="newInfo.driver_is_verified"> Es chofer
+                                </label>
+                            </div>
+                            <hr />
+                            <div class="checkbox">
+                                <label >
+                                    <input type="checkbox"  v-model="newInfo.active"> Usuario activo
+                                </label>
+                            </div>
+
+                            <div class="row">
+                                <div class="checkbox col-md-19" >
+                                    <label >
+                                        <input type="checkbox"  v-model="newInfo.banned"> Usuario suspendido
+                                    </label>
+                                </div>
+                                <div class="col-md-5 text-right">
+                                    <button class="btn btn-primary" v-on:click="save">Grabar</button>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                <div v-else class="col-xs-24 col-sm-16 col-md-16">
+                    <p slot="no-data" class="alert alert-warning"  role="alert">Seleccione alguna persona</p>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -115,6 +123,7 @@ import Loading from '../Loading.vue';
 import { inputIsNumber } from '../../services/utility';
 import dialogs from '../../services/dialogs.js';
 import router from '../../router';
+import adminNav from '../sections/adminNav';
 
 export default {
     // TODO fix css names
@@ -158,10 +167,9 @@ export default {
 
     methods: {
         ...mapActions({
-            update: 'auth/adminUpdate',
-            search: 'auth/searchUsers',
+            update: 'admin/adminUpdate',
+            search: 'admin/searchUsers',
             lookConversation: 'conversations/createConversation'
-
         }),
 
         onSearchUsers () {
@@ -295,7 +303,8 @@ export default {
     updated () {
     },
     components: {
-        Loading
+        Loading,
+        adminNav
     }
 };
 </script>
@@ -390,7 +399,10 @@ export default {
         height: auto;
         overflow-y: auto;
     }
-
+    .img-doc {
+        height: 320px;
+        background-size: cover;
+    }
 
     @media only screen and (min-width: 768px) {
         .conversation-title {
@@ -416,10 +428,5 @@ export default {
             padding-right: 20px;
         }
 
-    }
-
-    .img-doc {
-        height: 320px;
-        background-size: cover;
     }
 </style>
