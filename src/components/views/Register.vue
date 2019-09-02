@@ -196,7 +196,7 @@ export default {
                 name: this.name + ' ' + this.sureName,
                 terms_and_conditions: this.termsAndConditions,
                 birthday: this.birthdayAnswer
-            }
+            };
             /* global FormData */
             let bodyFormData = new FormData();
             for (const key in data) {

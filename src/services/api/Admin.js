@@ -1,7 +1,6 @@
 import TaggedApi from '../../classes/TaggedApi';
 
 class AdminApi extends TaggedApi {
-
     // modify user data.user with data
     adminUpdate (data) {
         return this.put('/api/users/modify', data);

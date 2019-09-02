@@ -107,7 +107,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import {pointDistance} from '../../services/maps.js';
+import { pointDistance } from '../../services/maps.js';
 import DatePicker from '../DatePicker';
 import moment from 'moment';
 import dialogs from '../../services/dialogs.js';
@@ -166,13 +166,13 @@ export default {
         onSearchUsers () {
             this.showAutocomplete = true;
             this.searchUsers(this.userSearch)
-            .then((data) => {
-                this.userList = data.data.slice(0, 3);
-            })
-            .catch((err) => {
-                console.log(err);
-                this.userList = [];
-            });
+                .then((data) => {
+                    this.userList = data.data.slice(0, 3);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    this.userList = [];
+                });
         },
         selectUser (user) {
             this.showAutocomplete = false;

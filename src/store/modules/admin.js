@@ -6,7 +6,7 @@ let adminApi = new AdminApi();
 function adminUpdate (store, data) {
     return adminApi.adminUpdate(data).then((response) => {
         return Promise.resolve(response.data);
-    }).catch(({data, status}) => {
+    }).catch(({ data, status }) => {
         console.log(data, status);
         return Promise.reject(data);
     });
@@ -14,7 +14,7 @@ function adminUpdate (store, data) {
 
 function searchUsers (store, name) {
     if (globalStore.getters['auth/user'].is_admin) {
-        return adminApi.searchUsers({name: name});
+        return adminApi.searchUsers({ name: name });
     }
 }
 

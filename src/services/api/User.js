@@ -83,7 +83,6 @@ class UserApi extends TaggedApi {
     changeProperty (data) {
         return this.post('/api/users/change/' + data.property + '/' + data.value, null);
     }
-
 }
 
 export { UserApi as default };

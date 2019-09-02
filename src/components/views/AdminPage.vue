@@ -69,7 +69,7 @@ export default {
     },
     methods: {
         goToAbm () {
-            router.replace({name: 'admin-users'});
+            router.replace({ name: 'admin-users' });
         },
         formatDate (date) {
             return date.slice(0, 7);
