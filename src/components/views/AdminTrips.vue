@@ -49,8 +49,6 @@ import adminNav from '../sections/adminNav';
 import adminSearchTrip from '../sections/AdminSearchTrips';
 import { mapActions } from 'vuex';
 
-// TODO next page button
-// FIXME ocupados y solicitados
 export default {
     name: 'admin-trips',
     data () {
