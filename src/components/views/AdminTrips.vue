@@ -36,7 +36,7 @@
                         </tr>
                     </tbody>
                     </table>
-                    <div class="row">
+                    <div class="row" v-if="viajes.length > 0">
                         <button type="button" class="btn btn-default pull-right" v-on:click="nextPage">Siguiente</button>
                     </div>
             </div>
