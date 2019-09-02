@@ -31,11 +31,14 @@
                             <td>  {{ viaje.trip_date.slice(0,10) }} </td>
                             <td>  {{ viaje.trip_date.slice(10,20) }} </td>
                             <td>  {{ viaje.total_seats }} </td>
-                            <td> {{ (viaje.passenger) }} </td>
-                            <td> {{ viaje.request }} </td>
+                            <td> {{ viaje.passenger.length }} </td>
+                            <td> {{ viaje.request_count }} </td>
                         </tr>
                     </tbody>
                     </table>
+                    <div class="row">
+                        <button type="button" class="btn btn-default pull-right" v-on:click="nextPage">Siguiente</button>
+                    </div>
             </div>
         </div>
     </div>
@@ -52,7 +55,8 @@ export default {
     name: 'admin-trips',
     data () {
         return {
-            viajes: []
+            viajes: [],
+            query: {}
         };
     },
     methods: {
@@ -60,23 +64,19 @@ export default {
             search: 'trips/tripsSearch'
         }),
         research (params) {
-            console.log('busqueda');
-            console.log(params);
+            this.query = params;
             this.search(params)
             .then((data) => {
                 this.viajes = data.data;
-                this.$set(this, 'viajes', data.data);
-                console.log(this.viajes);
             });
         },
-        calculatePassengers (passengers) {
-            let counter = 0;
-            passengers.forEach(pass => {
-                if (pass.request_state) {
-                    counter += 1;
-                }
+        nextPage () {
+            this.query.next = true;
+            this.search(this.query)
+            .then((data) => {
+                this.viajes = data.data;
             });
-            return counter;
+            window.scrollTo({}, 0);
         }
     },
     components: {
