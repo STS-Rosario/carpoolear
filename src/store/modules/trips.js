@@ -62,6 +62,10 @@ const actions = {
         });
     },
 
+    show (store, id) {
+        return tripsApi.show(id);
+    },
+
     refreshList (store, status) {
         store.commit(types.TRIPS_REFRESH, status);
     },

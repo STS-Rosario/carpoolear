@@ -2,7 +2,7 @@
 <transition name="modal">
     <div class="modal-mask">
       <div class="modal-wrapper">
-        <div class="modal-container">
+        <div class="modal-container" v-clickoutside="clickOutsideHandler" :id="name">
 
           <div class="modal-header">
             <slot name="header"></slot>
@@ -24,21 +24,33 @@
 </template>
 
 <script>
+import { setTimeout } from 'timers';
 export default {
     name: 'modal',
     data () {
         return {
+          clickOutsideHandler: () => {}
         };
     },
     mounted () {
-
+      setTimeout(() => {
+        this.clickOutsideHandler = this.clickOutside;
+      },0);
     },
     methods: {
     },
 
-    props: [
-        'hideFooter'
-    ]
+    props: {
+        hideFooter: {
+          required: false
+        },
+        clickOutside: {
+          required: false
+        },
+        name: {
+          required: false
+        }
+    }
 };
 </script>
 

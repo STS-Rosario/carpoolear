@@ -24,14 +24,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="viaje in viajes">
+                        <tr v-for="viaje in viajes" v-on:click="openTrip(viaje)">
                             <th scope="row">{{ viaje.user.name }}</th>
                             <td> {{ viaje.from_town }} </td>
                             <td> {{ viaje.to_town }} </td>
                             <td>  {{ viaje.trip_date.slice(0,10) }} </td>
                             <td>  {{ viaje.trip_date.slice(10,20) }} </td>
                             <td>  {{ viaje.total_seats }} </td>
-                            <td> {{ viaje.passenger.length }} </td>
+                            <td> {{ viaje.passengerAccepted_count }} </td>
                             <td> {{ viaje.request_count }} </td>
                         </tr>
                     </tbody>
@@ -39,6 +39,7 @@
                     <div class="row" v-if="viajes.length > 0">
                         <button type="button" class="btn btn-default pull-right" v-on:click="nextPage">Siguiente</button>
                     </div>
+                    <tripDisplay v-if="showTrip" :trip="currentViaje" :clickOutside="closeTrip.bind(this)"></tripDisplay>
             </div>
         </div>
     </div>
@@ -48,38 +49,51 @@
 import adminNav from '../sections/adminNav';
 import adminSearchTrip from '../sections/AdminSearchTrips';
 import { mapActions } from 'vuex';
+import tripDisplay from '../sections/TripDisplay';
 
 export default {
     name: 'admin-trips',
     data () {
         return {
             viajes: [],
-            query: {}
+            query: {},
+            currentViaje: {},
+            showTrip: false
         };
     },
     methods: {
         ...mapActions({
-            search: 'trips/tripsSearch'
+            search: 'trips/tripsSearch',
+            show: 'trips/show'
         }),
         research (params) {
             this.query = params;
             this.search(params)
-            .then((data) => {
-                this.viajes = data.data;
-            });
+                .then((data) => {
+                    this.viajes = data.data;
+                });
         },
         nextPage () {
             this.query.next = true;
             this.search(this.query)
-            .then((data) => {
-                this.viajes = data.data;
-            });
+                .then((data) => {
+                    this.viajes = data.data;
+                });
             window.scrollTo({}, 0);
+        },
+        openTrip (viaje) {
+            this.currentViaje = viaje;
+            this.showTrip = true;
+        },
+        closeTrip () {
+            this.currentViaje = {};
+            this.showTrip = false;
         }
     },
     components: {
         adminNav,
-        adminSearchTrip
+        adminSearchTrip,
+        tripDisplay
     },
     mounted () {
     }
