@@ -18,7 +18,7 @@
                 <div>
                     <button id='btn-more' @click="searchMore" v-if="!lastPageConversation" class="btn text-center btn-full-width"> Ver más mensajes </button>
                 </div>
-                <MessageView v-for="m in messages" :message="m" :user="user" :users="conversation.users"></MessageView>
+                <MessageView v-for="m in messages" v-bind:key="m.id" :message="m" :user="user" :users="conversation.users"></MessageView>
             </div>
             <div class="list-group-item">
                 <div class="input-group">

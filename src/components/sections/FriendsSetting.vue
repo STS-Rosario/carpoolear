@@ -4,7 +4,7 @@
             <Loading :data="pendings" :hideOnEmpty="true">
                 <h2 slot="title">Solicitudes de amistad</h2>
                 <div id="friends-list">
-                    <FriendCard v-for="user in pendings" :user="user">
+                    <FriendCard v-for="user in pendings" v-bind:key="user.id" :user="user">
                         <template slot>
                             <span> desea ser tu amigo. </span>
                             <div class="pending-buttons">
@@ -34,7 +34,7 @@
         </div>
         <Loading :data="friends">
             <div id="friends-list">
-                <FriendRequestCard v-for="user in friends" :user="user">
+                <FriendRequestCard v-for="user in friends" v-bind:key="user.id" :user="user">
                     <template slot>
                         <div>
                             <div @click="onDeleteClick(user)" class="delete-friend">  <i class="fa fa-times" aria-hidden="true"></i>  </div>

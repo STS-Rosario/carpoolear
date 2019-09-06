@@ -7,7 +7,6 @@ import cordova from './modules/cordova';
 import trips from './modules/trips';
 import device from './modules/device';
 import myTrips from './modules/my-trips';
-import userTrips from './modules/user-trips';
 import conversations from './modules/conversations';
 import cars from './modules/car';
 import friends from './modules/friends';
@@ -43,7 +42,6 @@ export default new Vuex.Store({
         actionbars,
         profile,
         background,
-        userTrips,
         subscriptions,
         admin
     }

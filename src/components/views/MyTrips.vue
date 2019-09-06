@@ -4,7 +4,7 @@
             <Loading :data="pendingRequest" :hideOnEmpty="true">
                 <h2 slot="title"> Pendientes <strong>de contestar</strong> </h2>
                 <div class="request-list">
-                    <PendingRequest v-for="r in pendingRequest" :user="r.user" :trip="findTrip(r.trip_id)"></PendingRequest>
+                    <PendingRequest v-for="r in pendingRequest" v-bind:key="r.id" :user="r.user" :trip="findTrip(r.trip_id)"></PendingRequest>
                 </div>
                 <p slot="no-data" class="alert alert-warning"  role="alert">No hay pedientes de contestar</p>
                 <p slot="loading" class="alert alert-info" role="alert">
@@ -87,7 +87,7 @@
             <Loading :data="pendingRates" :hideOnEmpty="true">
                 <h2 slot="title"> Calificaciones <strong>pendientes </strong></h2>
                 <div class="request-list">
-                    <RatePending v-for="rate in pendingRates" :rate="rate" @rated="onUserRated" />
+                    <RatePending v-for="rate in pendingRates" v-bind:key="rate.id" :rate="rate" @rated="onUserRated" />
                 </div>
                 <p slot="no-data" class="alert alert-warning"  role="alert">No hay calificaciones pendientes</p>
                 <p slot="loading" class="alert alert-info" role="alert">
@@ -101,7 +101,7 @@
             <h2>Mis <strong>próximos</strong> viajes</h2>
             <Loading :data="trips">
                 <div class="trips-list">
-                    <Trip v-for="trip in trips" :trip="trip" :user="user" :enableChangeSeats="true"></Trip>
+                    <Trip v-for="trip in trips" v-bind:key="trip.id" :trip="trip" :user="user" :enableChangeSeats="true"></Trip>
                 </div>
                 <p slot="no-data" class="alert alert-warning"  role="alert">No tenés viajes creados</p>
                 <p slot="loading" class="alert alert-info" role="alert">
@@ -115,7 +115,7 @@
             <Loading :data="passengerTrips" :hideOnEmpty="true">
                 <h2 slot="title" > Viajes a los que <strong>estoy subido</strong> </h2>
                 <div class="trips-list">
-                    <Trip v-for="trip in passengerTrips" :trip="trip" :user="user"></Trip>
+                    <Trip v-for="trip in passengerTrips" v-bind:key="trip.id" :trip="trip" :user="user"></Trip>
                 </div>
                 <p slot="no-data" class="alert alert-warning"  role="alert">No estas subido a ningún viaje.</p>
                 <p slot="loading" class="alert alert-info" role="alert">
@@ -128,7 +128,7 @@
             <Loading :data="subscriptions" :hideOnEmpty="true">
                 <h2 slot="title" > Suscripciones a viajes</h2>
                 <div class="trips-list row">
-                    <div class="col-xs-24 col-md-12" v-for="subs in subscriptions" :key="subs.id">
+                    <div class="col-xs-24 col-md-12" v-for="subs in subscriptions" v-bind:key="subs.id" :key="subs.id">
                         <subscriptionItem :subscription="subs" :user="user"></subscriptionItem>
                     </div>
 
@@ -146,7 +146,7 @@
             <h2>Mis viajes pasados</h2>
             <Loading :data="oldTrips">
                 <div class="trips-list">
-                    <Trip v-for="trip in oldTrips" :trip="trip" :user="user"></Trip>
+                    <Trip v-for="trip in oldTrips" v-bind:key="trip.id" :trip="trip" :user="user"></Trip>
                 </div>
                 <p slot="no-data" class="alert alert-warning"  role="alert">No create ningún viaje</p>
                 <p slot="loading" class="alert alert-info" role="alert">
@@ -160,7 +160,7 @@
             <Loading :data="oldPassengerTrips" :hideOnEmpty="true">
                 <h2 slot="title" > Viajes a los que me <strong>subí</strong> </h2>
                 <div class="trips-list">
-                    <Trip v-for="trip in oldPassengerTrips" :trip="trip" :user="user"></Trip>
+                    <Trip v-for="trip in oldPassengerTrips" v-bind:key="trip.id" :trip="trip" :user="user"></Trip>
                 </div>
                 <p slot="no-data" class="alert alert-warning"  role="alert">No te has subido a ningún viaje.</p>
                 <p slot="loading" class="alert alert-info" role="alert">
