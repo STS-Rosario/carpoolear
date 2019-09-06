@@ -66,6 +66,30 @@ const actions = {
         return tripsApi.show(id);
     },
 
+    tripsAsDriver (store, id) {
+        return tripsApi.getTrips(id, true).then(response => {
+            return response.data;
+        });
+    },
+
+    tripsAsPassenger (store, id) {
+        return tripsApi.getTrips(id, false).then(response => {
+            return response.data;
+        });
+    },
+
+    oldTripsAsDriver (store, id) {
+        return tripsApi.getOldTrips(id, true).then(response => {
+            return response.data;
+        });
+    },
+
+    oldTripsAsPassenger (store, id) {
+        return tripsApi.getOldTrips(id, false).then(response => {
+            return response.data;
+        });
+    },
+
     refreshList (store, status) {
         store.commit(types.TRIPS_REFRESH, status);
     },

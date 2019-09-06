@@ -1,7 +1,7 @@
 <template>
     <tabset ref="tabs" :keytabset="'profile'" :rememberTab="isMyOwnProfile">
         <tab :header="viajesHeaderTitle">
-            <component :is="currentView"></component>
+            <component :is="currentView" :userId="id"></component>
         </tab>
         <tab header="Perfil">
             <ProfileInfo></ProfileInfo>
@@ -67,8 +67,7 @@ export default {
         ...mapActions({
             setTitle: 'actionbars/setTitle',
             setProfile: 'profile/setUser',
-            setProfileByID: 'profile/setUserByID',
-            setUserByID: 'userTrips/setUserByID'
+            setProfileByID: 'profile/setUserByID'
 
         }),
         updateProfile () {
@@ -85,7 +84,6 @@ export default {
                 }).catch(() => {
                     this.$router.replace({ name: 'trips' });
                 });
-                this.setUserByID(this.id);
                 this.currentView = 'profile-trip';
             }
         }

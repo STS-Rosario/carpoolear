@@ -29,26 +29,26 @@ export default {
     name: 'modal',
     data () {
         return {
-          clickOutsideHandler: () => {}
+            clickOutsideHandler: () => {}
         };
     },
     mounted () {
-      setTimeout(() => {
-        this.clickOutsideHandler = this.clickOutside;
-      },0);
+        setTimeout(() => {
+            this.clickOutsideHandler = this.clickOutside;
+        }, 0);
     },
     methods: {
     },
 
     props: {
         hideFooter: {
-          required: false
+            required: false
         },
         clickOutside: {
-          required: false
+            required: false
         },
         name: {
-          required: false
+            required: false
         }
     }
 };

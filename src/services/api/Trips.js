@@ -34,6 +34,13 @@ class TripApi extends TaggedApi {
         return this.get('/api/users/my-old-trips', { 'as_driver': asDriver });
     }
 
+    getTrips (id, asDriver) {
+        return this.get('/api/trips', { 'user_id': id, 'as_driver': asDriver, 'new': true });
+    }
+
+    getOldTrips (id, asDriver) {
+        return this.get('/api/trips', { 'user_id': id, 'as_driver': asDriver, 'old': true });
+    }
     userTrips (id, asDriver) {
         return this.get('/api/trips', { 'user_id': id, 'as_driver': asDriver });
     }

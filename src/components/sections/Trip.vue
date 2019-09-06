@@ -1,5 +1,6 @@
 <template>
-  <div class="col-lg-6 col-md-8 col-sm-12" v-on:click='goToDetail(false)'>
+  <div class="col-lg-6 col-md-8 col-sm-12" v-on:click='clickModal ? openModal() : goToDetail(false)'>
+    <tripDisplay v-if="showTrip && clickModal" :trip="trip" :clickOutside="closeModal.bind(this)"></tripDisplay>
     <div class="trip" :class="{ 'trip-fill': seats_available === 0, 'trip-almost-fill': seats_available === 1, 'trip-mostly-available': seats_available > 3, 'trip-with-driver': user, 'trip-with-control': enableChangeSeats } " >
         <div class="panel panel-default panel-card card card-trip">
           <div class="panel-heading card_heading">
@@ -176,6 +177,8 @@
 import { mapActions } from 'vuex';
 import dialogs from '../../services/dialogs.js';
 import bus from '../../services/bus-event.js';
+import tripDisplay from './TripDisplay';
+
 export default {
     name: 'trip',
     props: {
@@ -195,6 +198,10 @@ export default {
         },
         'enableChangeSeats': {
             type: Boolean,
+            required: false,
+            default: false
+        },
+        'clickModal': {
             required: false,
             default: false
         }
@@ -282,6 +289,13 @@ export default {
                     dialogs.message('Ocurrió un error al cancelar el viaje.', { estado: 'error' });
                 });
             }
+        },
+        openModal () {
+            this.showTrip = true;
+            console.log(this.trip);
+        },
+        closeModal () {
+            this.showTrip = false;
         }
     },
     data () {
@@ -291,7 +305,8 @@ export default {
             CITY_NAME_LONG_LENGTH: 16,
             LONG_NAME_STYLE: {
                 'font-size': '17px'
-            }
+            },
+            showTrip: false
         };
     },
     computed: {
@@ -320,6 +335,9 @@ export default {
         getUserImage () {
             return this.user.id === this.trip.user.id ? this.user.image : this.trip.user.image;
         }
+    },
+    components: {
+        tripDisplay
     },
     mounted () {
         if (this.trip) {

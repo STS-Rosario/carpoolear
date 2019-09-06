@@ -12,7 +12,7 @@
                             </span></div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6"><span><h4>Nombre:</h4> {{ trip.user.name }}</span></div>
+                            <div class="col-md-6" v-on:click="openProfile(trip.user.id)"><span><h4>Nombre:</h4> {{ trip.user.name }}</span></div>
                             <div class="col-md-6"><span><h4>Tipo:</h4> {{ trip.is_passenger ? 'pasajero' : 'conductor' }}</span></div>
                             <div class="col-md-6"><span><h4>Fecha:</h4> {{ trip.trip_date.slice(0,10) }}</span></div>
                             <div class="col-md-6"><span><h4>Hora:</h4> {{ trip.trip_date.slice(10,20) }}</span></div>
@@ -31,22 +31,24 @@
                         </div>                   
                         <div class="row">
                             <div class="col-md-6"><span><h5>Aceptadas:</h5> 
-                                <div v-for="pas in trip.passenger">{{ pas.request_state == 1 ? pas.user.name : '' }}</div>
+                                <div v-for="pas in trip.passenger" v-on:click="openProfile(pas.user.id)">{{ pas.request_state == 1 ? pas.user.name : '' }}</div>
                             </span></div>
                             <div class="col-md-6"><span><h5>Rechazadas:</h5> 
-                                <div v-for="pas in trip.passenger">{{ pas.request_state == 2 ? pas.user.name : '' }}</div>
+                                <div v-for="pas in trip.passenger" v-on:click="openProfile(pas.user.id)">{{ pas.request_state == 2 ? pas.user.name : '' }}</div>
                             </span></div>
                             <div class="col-md-6"><span><h5>Canceladas:</h5> 
-                                <div v-for="pas in trip.passenger">{{ pas.request_state == 3 ? pas.user.name : '' }}</div>
+                                <div v-for="pas in trip.passenger" v-on:click="openProfile(pas.user.id)">{{ pas.request_state == 3 ? pas.user.name : '' }}</div>
                             </span></div>
                             <div class="col-md-6"><span><h5>Pendientes:</h5> 
-                                <div v-for="pas in trip.passenger">{{ pas.request_state == 0 ? pas.user.name : '' }}</div>
+                                <div v-for="pas in trip.passenger" v-on:click="openProfile(pas.user.id)">{{ pas.request_state == 0 ? pas.user.name : '' }}</div>
                             </span></div>
                         </div>
                         <div class="row">
                             <div class="col-md-24"><span><h4>Calficacion:</h4> 
                                 <div v-for="rating in trip.ratings">
-                                    <span><strong>{{ rating.from.name }}</strong> califico a <strong>{{ rating.to.name }}</strong> como {{ rating.rating ? 'positivo' : 'negativo'}} en {{ rating.rate_at.slice(0, 10)}} {{ rating.comment ? 'con el comentario: ' + rating.comment : ''}}</span>
+                                    <span>
+                                        <strong>{{ rating.from.name }}</strong> califico a <strong> {{ rating.to.name }}</strong> como {{ rating.rating ? 'positivo' : 'negativo'}} en {{ rating.rate_at ? rating.rate_at.slice(0, 10) : 'undefined' }} {{ rating.comment ? 'con el comentario: ' + rating.comment : ''}}
+                                    </span>
                                     <br>
                                 </div>
                             </span></div>
@@ -61,7 +63,9 @@
 
 <script>
 import Modal from '../Modal';
+import router from '../../router';
 
+// FIXME: Rate_at undefined
 
 export default {
     name: 'trip-display',
@@ -76,20 +80,19 @@ export default {
         }
     },
     methods: {
+        openProfile (id) {
+            router.replace({ name: 'profile', params: { id: id } });
+        },
         visibilityParser (id) {
             switch (id) {
-                case 0:
-                    return 'Amigos'
-                    break;
-                case 1:
-                    return 'Amigos de amigos'
-                    break;
-                case 2:
-                    return 'Publico'
-                    break;
-                default:
-                    return 'Indefinido'
-                    break;
+            case 0:
+                return 'Amigos';
+            case 1:
+                return 'Amigos de amigos';
+            case 2:
+                return 'Publico';
+            default:
+                return 'Indefinido';
             }
         }
     },
