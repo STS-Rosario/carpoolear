@@ -15,6 +15,7 @@
 </template>
 <script>
 import OsmApi from '../services/api/Osm';
+import { mapGetters } from 'vuex';
 
 let osmApi = new OsmApi();
 export default {
@@ -44,6 +45,9 @@ export default {
         this.input = this.value ? this.value : '';
     },
     computed: {
+        ...mapGetters({
+            config: 'auth/appConfig'
+        })
     },
     methods: {
         removeDiacritics (str) {
@@ -220,7 +224,7 @@ export default {
             /* eslint-disable */
             let data = {
                 input: this.input,
-                country: this.country
+                country: this.config.osm_country
             };
             osmApi.search(data).then(data => {
                 this.waiting = false;
