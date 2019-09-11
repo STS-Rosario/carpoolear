@@ -81,7 +81,7 @@ export default {
     },
     methods: {
         openProfile (id) {
-            router.replace({ name: 'profile', params: { id: id } });
+            router.push({ name: 'profile', params: { id: id } });
         },
         visibilityParser (id) {
             switch (id) {

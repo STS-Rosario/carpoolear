@@ -292,7 +292,6 @@ export default {
         },
         openModal () {
             this.showTrip = true;
-            console.log(this.trip);
         },
         closeModal () {
             this.showTrip = false;

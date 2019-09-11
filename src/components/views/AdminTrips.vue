@@ -82,7 +82,6 @@ export default {
             window.scrollTo({}, 0);
         },
         openTrip (viaje) {
-            console.log('viaje', viaje);
             this.currentViaje = viaje;
             this.showTrip = true;
         },
