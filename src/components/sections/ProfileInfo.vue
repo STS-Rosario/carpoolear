@@ -42,14 +42,22 @@
                         <i class="fa fa-id-card" aria-hidden="true"></i>
                         <div class="list-group-item--content">{{profile.nro_doc}}</div>
                     </div>-->
-                    <div class="list-group-item" v-if="profile.email && profile.id == user.id">
+                    <div class="list-group-item" v-if="profile.email && (profile.id == user.id || user.is_admin)">
                         <i class="fa fa-envelope" aria-hidden="true"></i>
                         <div class="list-group-item--content">{{profile.email}}</div>
                     </div>
+
+
                     <!--<div class="list-group-item" v-if="profile.mobile_phone">
                         <i class="fa fa-mobile bigger" aria-hidden="true"></i>
                         <div class="list-group-item--content">{{profile.mobile_phone}}</div>
                     </div>-->
+                </div>
+                <div class="edit-action" v-if="user.is_admin">
+                    <button class="btn btn-primary btn-circle" v-on:click="messageUser()">
+                        <!-- <i class="fa fa-comments medium-icon" aria-hidden="true"></i> -->
+                        Enviar mensaje
+                    </button>
                 </div>
                 <div class="edit-action" v-if="profile.id == user.id">
                     <router-link class="btn btn-primary" tag="button" :to="{name:'profile_update'}"> Editar perfil</router-link>
@@ -60,7 +68,9 @@
     </div>
 </template>
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
+import router from '../../router';
+
 export default {
     data () {
         return {
@@ -71,6 +81,17 @@ export default {
             'user': 'auth/user',
             'profile': 'profile/user'
         })
+    },
+    methods: {
+        ...mapActions({
+            lookConversation: 'conversations/createConversation'
+        }),
+        messageUser () {
+            this.lookConversation(this.profile).then(conversation => {
+                router.push({ name: 'conversation-chat', params: { id: conversation.id } });
+                // });
+            });
+        }
     }
 };
 </script>
