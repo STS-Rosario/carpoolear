@@ -69,7 +69,7 @@
                       <i class="fa fa-map-marker" aria-hidden="true"></i>
                     </div>
                     <div  class="col-xs-20">
-                      {{ trip.from_town }}
+                      {{ trip.from_town.slice(0,23) + '' + (trip.from_town.length > 34 ? '...' : '')}}
                     </div>
                 </div>
                 <div class="row trip_location_to">
@@ -77,7 +77,7 @@
                     <i class="fa fa-map-marker" aria-hidden="true"></i>
                   </div>
                   <div class="col-xs-20">
-                    {{ trip.to_town }}
+                    {{ trip.to_town.slice(0,23) + '' + (trip.to_town.length > 34 ? '...' : '')}}
                   </div>
                 </div>
               </template>
