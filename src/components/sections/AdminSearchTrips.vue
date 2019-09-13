@@ -4,7 +4,7 @@
             <div class="foreignCountry-select_wrapper">
                 <input type="checkbox" v-model="allowForeignPoints" id="cbxAllowForeignPoints" class="cbx" />
                 <label for="cbxAllowForeignPoints" class="cbx_label">
-                    Origen o destino fuera de Argentina
+                    Origen o destino fuera de {{ config.country_name }}
                 </label>
                 <span class="tooltip-bottom" data-tooltip="Marcando esta opción vas a poder seleccionar origen o destino fuera de Argentina. Recordá averiguar con la aseguradora del auto, si tenés cobertura contra terceros fuera de la Argentina. Si no es así, averiguá con ella para obtener la extensión fuera de Argentina, de forma de tener cobertura durante el viaje"></span>
                 <i class="fa fa-info-circle" aria-hidden="true"></i>
@@ -28,7 +28,7 @@
                 <div class="foreignCountry-select_wrapper">
                     <input type="checkbox" v-model="allowForeignPoints" id="cbxAllowForeignPoints" class="cbx" />
                     <label for="cbxAllowForeignPoints" class="cbx_label">
-                        Origen o destino fuera de Argentina
+                        Origen o destino fuera de {{ config.country_name }}
                     </label>
                     <span class="tooltip-bottom" data-tooltip="Marcando esta opción vas a poder seleccionar origen o destino fuera de Argentina. Recordá averiguar con la aseguradora del auto, si tenés cobertura contra terceros fuera de la Argentina. Si no es así, averiguá con ella para obtener la extensión fuera de Argentina, de forma de tener cobertura durante el viaje"></span>
                     <i class="fa fa-info-circle" aria-hidden="true"></i>
@@ -161,7 +161,8 @@ export default {
     methods: {
         ...mapActions({
             search: 'trips/tripsSearch',
-            searchUsers: 'admin/searchUsers'
+            searchUsers: 'admin/searchUsers',
+            config: 'auth/appConfig'
         }),
         onSearchUsers () {
             this.showAutocomplete = true;
