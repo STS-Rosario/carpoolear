@@ -140,6 +140,43 @@
                                     </li>
                                 </ul>
                             </fieldset>
+                            <legend class="label-for-group"> Preferencias del viaje </legend>
+                            <br> 
+                            <div class="preferences row">
+                                <div class="col-md-8">
+                                    <div class="col-md-12">
+                                        <input type="checkbox" id="smoking" v-model="trip.allow_smoking"/>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <SvgItem icon="no-smoking" :size="24"></SvgItem>
+                                    </div>
+                                    <div class="col-md-24">
+                                        <label for="allow-smoking" class="label-soft preferences-text">No fumar</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-8 row">
+                                    <div class="col-md-12">
+                                        <input type="checkbox" id="animals" v-model="trip.allow_animals"/>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <SvgItem icon="no-animals" :size="24"></SvgItem>
+                                    </div>
+                                    <div class="col-md-24 no-padding">
+                                        <label for="allow-animals" class="label-soft preferences-text">No animales</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="col-md-12">
+                                        <input type="checkbox" id="kids" v-model="trip.allow_kids"/>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <SvgItem icon="no-kids" :size="24"></SvgItem>
+                                    </div>
+                                    <div class="col-md-24 no-padding">
+                                        <label for="allow-kids" class="label-soft preferences-text">No niños</label>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="row row-showReturnTrip">
                                 <hr class="col-md-24" />
                                 <div class="checkbox-trip-return col-md-24">
@@ -266,6 +303,44 @@
                                     </li>
                                 </ul>
                             </fieldset>
+                            <legend class="label-for-group"> Preferencias del viaje </legend>
+                            <br> 
+                            <div class="preferences row">
+                                <div class="col-md-8">
+                                    <div class="col-md-12">
+                                        <input type="checkbox" id="smoking" v-model="otherTrip.trip.allow_smoking" />
+                                    </div>
+                                    <div class="col-md-12">
+                                        <SvgItem icon="no-smoking" :size="24"></SvgItem>
+                                    </div>
+                                    <div class="col-md-24">
+                                        <label for="allow-smoking" class="label-soft preferences-text">No fumar</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-8 row">
+                                    <div class="col-md-12">
+                                        <input type="checkbox" id="animals" v-model="otherTrip.trip.allow_animals"/>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <SvgItem icon="no-animals" :size="24"></SvgItem>
+                                    </div>
+                                    <div class="col-md-24 no-padding">
+                                        <label for="allow-animals" class="label-soft preferences-text">No animales</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="col-md-12">
+                                        <input type="checkbox" id="kids" v-model="otherTrip.trip.allow_kids"/>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <SvgItem icon="no-kids" :size="24"></SvgItem>
+                                    </div>
+
+                                    <div class="col-md-24 no-padding">
+                                        <label for="allow-kids" class="label-soft preferences-text">No niños</label>
+                                    </div>
+                                </div>
+                            </div>
                             <button class="trip-create btn btn-primary btn-lg btn-shadowed" @click="save" :disabled="saving">
                                 <span v-if="!updatingTrip">CREAR</span>
                                 <span v-else>Actualizar</span>
@@ -312,6 +387,7 @@ import moment from 'moment';
 import { last } from 'lodash';
 import OsmApi from '../../services/api/Osm';
 import OsmAutocomplete from '../OsmAutocomplete';
+import SvgItem from '../SvgItem';
 // import { LMap, LTileLayer } from 'vue2-leaflet';
 
 // import 'leaflet-routing-machine';
@@ -335,6 +411,7 @@ export default {
     },
     components: {
         DatePicker,
+        SvgItem,
         OsmAutocomplete /* ,
         LMap,
         LTileLayer */
@@ -383,6 +460,9 @@ export default {
                 'distance': 0.0,
                 'co2': 0.0,
                 'description': '',
+                'allow_kids': true,
+                'allow_smoking': true,
+                'allow_animals': true,
                 'car_id': null,
                 'enc_path': '123',
                 'points': [] /* address json_address lat lng */
@@ -437,6 +517,9 @@ export default {
                     'description': '',
                     'car_id': null,
                     'enc_path': '123',
+                    'allow_kids': true,
+                    'allow_smoking': true,
+                    'allow_animals': true,
                     'points': [] /* address json_address lat lng */
                 }
             }
@@ -474,6 +557,7 @@ export default {
         distanceString () {
             return Math.floor(this.trip.distance / 1000) + ' Km';
         },
+
         estimatedTimeString () {
             const totalMinutes = Math.floor(this.duration / 60);
             const minutes = Math.floor(totalMinutes % 60);
@@ -772,22 +856,31 @@ export default {
             this.trip = this.getSaveInfo(this, this.estimatedTimeString);
 
             if (!this.updatingTrip) {
-                this.createTrip(this.trip).then((t) => {
+                // FIXME not saving
+                let trip = JSON.parse(JSON.stringify(this.trip));
+                trip.allow_kids = !trip.allow_kids;
+                trip.allow_animals = !trip.allow_animals;
+                trip.allow_smoking = !trip.allow_smoking;
+                console.log(trip);
+                this.createTrip(trip).then((t) => {
                     return new Promise((resolve, reject) => {
                         if (!this.showReturnTrip) {
                             return resolve();
                         } else {
-                            const otherTrip = this.getSaveInfo(this.otherTrip, this.otherTripEstimatedTimeString);
-
+                            let otherTrip = this.getSaveInfo(this.otherTrip, this.otherTripEstimatedTimeString);
                             otherTrip.parent_trip_id = t.id;
-
+                            otherTrip = JSON.parse(JSON.stringify(otherTrip));
+                            otherTrip.allow_kids = !otherTrip.allow_kids;
+                            otherTrip.allow_animals = !otherTrip.allow_animals;
+                            otherTrip.allow_smoking = !otherTrip.allow_smoking;
+                            console.log(otherTrip);
                             this.createTrip(otherTrip).then((ot) => {
                                 return resolve(ot);
                             });
                         }
                     }).then((ot) => {
                         this.saving = false;
-                        this.$router.replace({ name: 'detail_trip', params: { id: t.id } });
+                        // this.$router.replace({ name: 'detail_trip', params: { id: t.id } });
                     });
                 }).catch((err) => {
                     console.log('error_creating', err);
@@ -803,7 +896,7 @@ export default {
                 this.trip.id = this.updatingTrip.id;
                 this.updateTrip(this.trip).then(() => {
                     this.saving = false;
-                    this.$router.replace({ name: 'detail_trip', params: { id: this.trip.id } });
+                    // this.$router.replace({ name: 'detail_trip', params: { id: this.trip.id } });
                 }).catch(() => { this.saving = false; });
             }
         },
@@ -931,6 +1024,13 @@ export default {
 </script>
 
 <style scoped>
+    .no-padding {
+        padding: 0;
+    }
+
+    .preferences-text {
+        font-size: 0.8em;   
+    }
     .container {
         padding-top: 0;
     }

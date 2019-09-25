@@ -84,6 +84,7 @@ export default {
         openTrip (viaje) {
             this.currentViaje = viaje;
             this.showTrip = true;
+            console.log('trip', viaje);
         },
         closeTrip () {
             this.currentViaje = {};
