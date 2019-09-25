@@ -31,6 +31,18 @@ export default {
             fbLogin: 'cordova/facebookLogin'
         })
     },
+    beforeMount () {
+        if (this.appConfig && this.appConfig.country_name) {
+            switch (this.appConfig.country_name) {
+                case 'Argentina':
+                    this.$root.$i18n.locale = 'arg';
+                    break;
+                case 'Chile':
+                    this.$root.$i18n.locale = 'ch';
+                    break;
+            }
+        }
+    },
     mounted () {
         if (this.isFacebookApp) {
             if (!this.logged) {
@@ -43,7 +55,8 @@ export default {
         backgroundStyle: 'background/backgroundStyle',
         resolution: 'device/resolution',
         logged: 'auth/checkLogin',
-        isFacebokApp: 'device/isFacebokApp'
+        isFacebokApp: 'device/isFacebokApp',
+        appConfig: 'auth/appConfig'
     }),
     watch: {
         deviceReady: () => {

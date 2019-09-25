@@ -50,7 +50,7 @@
                     <span class="error textarea" v-if="descError.state"> {{descError.message}} </span>
                 </div>
                 <div class="form-group">
-                    <label for="input-dni">Número de documento <span class="description">(Solo números). Dales un extra de confianza al resto de los carpooleros certificándoles que este es tu DNI al momento de viajar.</span></label>
+                    <label for="input-dni">{{ $t('documento') }} <span class="description">(Solo números). Dales un extra de confianza al resto de los carpooleros certificándoles que este es tu {{ $t('doc') }} al momento de viajar.</span></label>
                     <input v-numberMask="'dniRawValue'" type="text" data-max-length="8" v-model="user.nro_doc" class="form-control" id="input-dni" placeholder="DNI" :class="{'has-error': dniError.state }">
                     <span class="error" v-if="dniError.state"> {{dniError.message}} </span>
                 </div>
