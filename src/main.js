@@ -21,6 +21,9 @@ import bootstrapCss from './styles/bootstrap/css/bootstrap.min.css';
 import cssHelpers from './styles/helpers';
 import css from './styles/main';
 
+import VueI18n from 'vue-i18n';
+import messages from './language/i18n';
+
 import bus from './services/bus-event';
 import { DebugApi } from './services/api';
 
@@ -40,6 +43,9 @@ require('moment/locale/es');
 require('font-awesome-webpack-4');
 
 Vue.use(VueResource);
+
+Vue.use(VueI18n);
+const i18n = new VueI18n({ locale: 'arg', fallbackLocale: 'arg', messages });
 
 Vue.use(VueAnalytics, {
     id: 'UA-40995702-4'
@@ -88,7 +94,8 @@ bus.on('system-ready', () => {
         router,
         store,
         template: '<App/>',
-        components: { App }
+        components: { App },
+        i18n
     });
 });
 /* eslint-enable no-unused-vars */
