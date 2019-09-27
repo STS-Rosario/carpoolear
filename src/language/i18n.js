@@ -3,7 +3,6 @@ const messages = {
         documento: 'Número de documento',
         doc: 'DNI',
         requisitosRegister: 'Se requiere que cargue: licencia de conductor, seguro del vehículo ...'
-        
     },
     'ch': {
         documento: 'Número de RUT',

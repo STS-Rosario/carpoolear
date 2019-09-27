@@ -42,7 +42,7 @@
                         <i class="fa fa-id-card" aria-hidden="true"></i>
                         <div class="list-group-item--content">{{profile.nro_doc}}</div>
                     </div>-->
-                    <div class="list-group-item" v-if="profile.email && (profile.id == user.id || user.is_admin)">
+                    <div class="list-group-item" v-if="profile.email ">
                         <i class="fa fa-envelope" aria-hidden="true"></i>
                         <div class="list-group-item--content">{{profile.email}}</div>
                     </div>
