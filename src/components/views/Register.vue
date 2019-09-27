@@ -35,7 +35,7 @@
       <div class="form-group text-left" v-if="settings.module_validated_drivers && showBeDriver">
         <label for="driver_documentation">Ingrese la documentación</label>
         <input type="file" id="driver_documentation" multiple @change="onDriverDocumentChange" />
-        <p class="help-block">Se requiere que cargue: licencia de conductor, seguro del vehículo ...</p>
+        <p class="help-block">{{ $t('requisitosRegister') }}</p>
       </div>
       <div class="terms text-left">
         <input v-jump:click="'ipt_submit'" ref="ipt_terms" name="ipt_terms" type="checkbox" id="cbx_terms" v-model='termsAndConditions' />
