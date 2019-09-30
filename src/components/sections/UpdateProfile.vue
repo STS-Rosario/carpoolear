@@ -3,15 +3,15 @@
     <div class="alert alert-info" v-if="!user.image || user.image.length === 0 || !user.description || user.description.length === 0">
         <div class='alert-icon'><i class="fa fa-exclamation" aria-hidden="true"></i></div>
         <div class='alert-message'>
-            Hola <strong>{{user.name}}</strong>!! Bienvenido a Carpoolear, para comenzar a subirte a viajes y crear tus propios viajes, debes terminar de completar tu perfil.
+            {{ $t('hola') }} <strong>{{user.name}}</strong> {{ $t('bienvenidoACarpoolear') }}
             <span v-if="(!user.image || user.image.length === 0) && (!user.description || user.description.length === 0)">
-                Completa tu <strong>imagen de perfil</strong> y tu <strong>descripción</strong> para comenzar a viajar.
+                {{ $t('completaTu') }} <strong>{{ $t('imagenPerfil') }}</strong> {{ $t('yTu') }} <strong>{{ $t('descripcion') }}</strong> {{ $t('comenzarViajar') }}
             </span>
             <span v-if="(!user.image || user.image.length === 0) && !(!user.description || user.description.length === 0)">
-                Completa tu <strong>imagen de perfil</strong> para comenzar a viajar.
+                {{ $t('completaTu') }} <strong>{{ $t('imagenPerfil') }}</strong> {{ $t('comenzarViajar') }}
             </span>
             <span v-if="!(!user.image || user.image.length === 0) && (!user.description || user.description.length === 0)">
-                Completa tu <strong>descripción</strong> para comenzar a viajar.
+                {{ $t('completaTu') }} <strong>{{ $t('descripcion') }}</strong> {{ $t('comenzarViajar') }}
             </span>
         </div>
     </div>
@@ -28,10 +28,10 @@
         <div class="col-xs-24 col-sm-16 col-sm-pull-8">
             <div class='form'>
                 <div class="alert alert-info">
-                    Generá confianza con el resto de la comunidad carpoolear, usá una foto tuya y contales un poco acerca de vos. Con eso aumentás tus chances de que alguien quiera compartir viaje con vos... es verdad, llevar torta para compartir también ayuda mucho :D
+                    {{ $t('incentivoFoto') }}
                 </div>
                 <div class="form-group">
-                    <label for="input-name">Nombre y apellido <span class="required-field-flag" title="Campo requerido">(*)</span></label>
+                    <label for="input-name">{{ $t('nombreYapellido') }} <span class="required-field-flag" title="Campo requerido">(*)</span></label>
                     <input maxlength="25" v-model="user.name" type="text" class="form-control" id="input-name" placeholder="Nombre" :class="{'has-error': nombreError.state }" :disabled="!firstTime" />
                     <span class="error" v-if="nombreError.state"> {{nombreError.message}} </span>
                 </div>
@@ -45,59 +45,59 @@
                     <span class="error" v-if="birthdayError.state"> {{birthdayError.message}} </span>
                 </div>-->
                 <div class="form-group">
-                    <label for="input-description">Acerca de mi <span class="required-field-flag" title="Campo requerido">(*)</span><span class="description"> Contale de vos al resto de los carpooleros así te suman a sus viajes! Qué te gusta hacer, en qué andas metido ahora, si estás con alguna idea, si te gustan los colores, etc.</span></label>
+                    <label for="input-description">{{ $t('acercaDeMi') }} <span class="required-field-flag" title="Campo requerido">(*)</span><span class="description"> {{ $t('incentivoDescripcion') }}</span></label>
                     <textarea maxlength="1000" v-model="user.description" placeholder="Descripción" :class="{'has-error': descError.state }" ></textarea>
                     <span class="error textarea" v-if="descError.state"> {{descError.message}} </span>
                 </div>
                 <div class="form-group">
-                    <label for="input-dni">{{ $t('documento') }} <span class="description">(Solo números). Dales un extra de confianza al resto de los carpooleros certificándoles que este es tu {{ $t('doc') }} al momento de viajar.</span></label>
+                    <label for="input-dni">{{ $t('documento') }} <span class="description">({{ $t('soloNumeros') }}). {{ $t('incentivoDoc') }} {{ $t('doc') }} {{ $t('momentoViajar') }}</span></label>
                     <input v-numberMask="'dniRawValue'" type="text" data-max-length="8" v-model="user.nro_doc" class="form-control" id="input-dni" placeholder="DNI" :class="{'has-error': dniError.state }">
                     <span class="error" v-if="dniError.state"> {{dniError.message}} </span>
                 </div>
                 <div class="form-group">
-                    <label for="input-telefono">Número de teléfono <span class="description">(Código área + teléfono. Ej: 0341156708223). Por si querés que el resto de los carpooleros también te puedan contactar por ahí.</span></label>
+                    <label for="input-telefono">{{ $t('nroTel') }} <span class="description">({{ $t('ejemploTelefono') }}). {{ $t('incentivoTelefono') }}</span></label>
                     <input maxlength="20" @keydown="isNumber" v-on:paste='isNumber' v-model="user.mobile_phone" type="tel" class="form-control" id="input-phone" placeholder="Número de teléfono (al menos 7 números)" :class="{'has-error': phoneError.state }">
                     <span class="error" v-if="phoneError.state"> {{phoneError.message}} </span>
                 </div>
 
                 <div class="checkbox">
                     <label>
-                    <input type="checkbox" v-model="user.emails_notifications"> Recibir notificaciones por correo electrónico.
+                    <input type="checkbox" v-model="user.emails_notifications"> {{ $t('notificacionesPorCorreo') }}
                     </label>
                 </div>
                 <hr />
                 <div class="checkbox">
                     <label >
-                        <input type="checkbox"  @change="changeShowPassword"> Cambiar contraseña
+                        <input type="checkbox"  @change="changeShowPassword"> {{ $t('cambiarPassword') }}
                     </label>
                 </div>
                 <div class="form-group" v-if="showChangePassword">
-                    <label for="input-pass">Ingrese su nueva contraseña</label>
+                    <label for="input-pass">{{ $t('ingreseNuevaPassword') }}</label>
                     <input maxlength="40" v-model="pass.password" type="password" class="form-control" id="input-pass" placeholder="Contraseña">
                     <input maxlength="40" v-model="pass.password_confirmation" type="password" class="form-control" id="input-pass-confirm" placeholder="Repetir contraseña">
                 </div>
                 <hr />
                 <div class="checkbox" v-if="settings.module_validated_drivers && !user.driver_is_verified">
                     <label >
-                        <input type="checkbox" @change="changeBeDriver" v-model="this.showBeDriver"> Solicitar ser chofer
+                        <input type="checkbox" @change="changeBeDriver" v-model="this.showBeDriver"> {{ $t('solicitarSerChofer') }}
                     </label>
                 </div>
                 <div class="form-group" v-if="settings.module_validated_drivers && showBeDriver&& !user.driver_is_verified">
-                    <label for="driver_documentation">Ingrese la documentación</label>
+                    <label for="driver_documentation">{{ $t('ingreseDocumentacion') }}</label>
                     <input type="file" id="driver_documentation" multiple @change="onDriverDocumentChange" />
-                    <p class="help-block">Se requiere que cargue: licencia de conductor, seguro del vehículo ...</p>
+                    <p class="help-block">{{ $t('seRequiereDocumentacion') }}</p>
                 </div>
                 <div v-if="user.driver_is_verified">
                     <i class="fa fa-check-circle check-driver-verified" aria-hidden="true"></i>
-                    <strong>Ya eres un chofer verificado.</strong>
+                    <strong>{{ $t('choferVerificado') }}</strong>
                 </div>
                 <div class="row" v-if="user.driver_data_docs && user.driver_data_docs.length">
                     <div v-imgSrc:docs="img"  v-for="img in user.driver_data_docs" class="img-doc col-md-8 col-sm-12"></div>
                 </div>
 
                 <div class="btn-container">
-                    <button class="btn btn-primary" @click="grabar" :disabled="loading"> <span v-if="!loading">Guardar cambios</span><span v-if="loading">Guardando ...</span> </button>
-                    <span class="required-field-flag" v-bind:class="{ 'required-field-info': isMobile }">Los campos marcados con (*) son obligatorios.</span>
+                    <button class="btn btn-primary" @click="grabar" :disabled="loading"> <span v-if="!loading">{{ $t('guardarCambios') }}</span><span v-if="loading">{{ $t('guardando') }}</span> </button>
+                    <span class="required-field-flag" v-bind:class="{ 'required-field-info': isMobile }">{{ $t('camposObligatorios') }}</span>
                 </div>
                 <span v-if="error">{{error}}</span>
                 <Uploadfile :name="'profile'" @change="onPhotoChange" ref="file"></Uploadfile>

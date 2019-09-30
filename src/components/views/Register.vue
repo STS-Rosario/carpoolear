@@ -4,50 +4,50 @@
         <img :src="carpoolear_logo" />
     </router-link>
     <img v-if="isMobile" :src="carpoolear_logo" />
-    <h1 v-if="!(success && isMobile)"> Registrar nuevo usuario </h1>
+    <h1 v-if="!(success && isMobile)"> {{ $t('RegistrarNuevoUsuario') }} </h1>
     <div class='form row' v-if="!success">
-      <div class="campos-obligatorios">Los campos marcados con (*) son obligatorios.</div>
+      <div class="campos-obligatorios">{{ $t('camposObligatorios') }}</div>
       <br />
-      <label for="txt_name">Nombre <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
+      <label for="txt_name">{{ $t('nombre') }} <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
       <input autofocus v-jump:focus="'txt_surename'" ref="txt_name" name="txt_name" maxlength="25" type="text" id="txt_name" v-model='name' :class="{'has-error': nombreError.state }"/>
       <span class="error" v-if="nombreError.state"> {{nombreError.message}} </span>
-      <label for="txt_surename">Apellido <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
+      <label for="txt_surename">{{ $t('apellido') }} <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
       <input v-jump:focus="'txt_email'" ref="txt_surename" name="txt_surename" maxlength="25" type="text" id="txt_surename" v-model='sureName' :class="{'has-error': apellidoError.state }"/>
       <span class="error" v-if="apellidoError.state"> {{apellidoError.message}} </span>
-      <label for="txt_email">Email <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
+      <label for="txt_email">{{ $t('email') }} <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
       <input v-jump:focus="'txt_birthday'" ref="txt_email" name="txt_email" maxlength="40" type="text" id="txt_email" v-model='email' :class="{'has-error': emailError.state }"/>
       <span class="error" v-if="emailError.state"> {{emailError.message}} </span>
       <!--<label for="">Fecha de nacimiento <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
       <DatePicker :value="birthday" ref="ipt_calendar" name="ipt_calendar" :maxDate="maxDate" :minDate="minDate" :class="{'has-error': birthdayError.state}" ></DatePicker>-->
       <span class="error" v-if="birthdayError.state"> {{birthdayError.message}} </span>
-      <label for="txt_password">Contraseña <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
+      <label for="txt_password">{{ $t('password') }} <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
       <input v-jump:focus="'txt_password_confirmation'" ref="txt_password" name="txt_password" maxlength="40" type="password" id="txt_password" v-model='password' :class="{'has-error': passwordError.state }"/>
       <span class="error" v-if="passwordError.state"> {{passwordError.message}} </span>
-      <label for="txt_password_confirmation">Ingrese nuevamente su contraseña <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
+      <label for="txt_password_confirmation">{{ $t('ingresePassword') }} <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
       <input v-jump:focus="'ipt_terms'" ref="txt_password_confirmation" name="txt_password_confirmation" maxlength="40" type="password" id="txt_password_confirmation" v-model='passwordConfirmation' :class="{'has-error': passwordError.state }" />
       <span class="error" v-if="passwordError.state"> {{passwordError.message}} </span>
       <div class="text-left checkbox-container" v-if="settings.module_validated_drivers">
         <input type="checkbox" @change="changeBeDriver" id="change_be_driver">
         <label for="change_be_driver" class="label-cbx">
-            Solicitar ser chofer
+            {{ $t('solicitarChofer') }}
         </label>
       </div>
       <div class="form-group text-left" v-if="settings.module_validated_drivers && showBeDriver">
-        <label for="driver_documentation">Ingrese la documentación</label>
+        <label for="driver_documentation">{{ $t('ingresarDocumentacion') }}</label>
         <input type="file" id="driver_documentation" multiple @change="onDriverDocumentChange" />
         <p class="help-block">{{ $t('requisitosRegister') }}</p>
       </div>
       <div class="terms text-left">
         <input v-jump:click="'ipt_submit'" ref="ipt_terms" name="ipt_terms" type="checkbox" id="cbx_terms" v-model='termsAndConditions' />
         <label for="cbx_terms" class="label-cbx">
-            He leído y acepto los <router-link :to="{name: 'terms'}">términos y condiciones</router-link>.
+            {{ $t('leidoTerminos1') }} <router-link :to="{name: 'terms'}">{{ $t('leidoTerminos2') }}</router-link>.
         </label>
-        <button ref="ipt_submit" name="ipt_submit" @click="register" class="btn-primary" :disabled="progress || !termsAndConditions"> Registrarme </button>
+        <button ref="ipt_submit" name="ipt_submit" @click="register" class="btn-primary" :disabled="progress || !termsAndConditions"> {{ $t('registrarme') }} </button>
       </div>
     </div>
     <div class='form row register-success' v-else>
-        <h2>Registro Exitoso! </h2>
-        <p>Te hemos enviado un código de verificación a tu e-mail para que puedas activar tu cuenta y comenzar a compartir viajes. </p>
+        <h2> {{ $t('registroExitoso') }} </h2>
+        <p>{{ $t('enviadoCodigoVerificacion') }} </p>
     </div>
   </div>
 </template>
