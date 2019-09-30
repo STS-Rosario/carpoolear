@@ -38,20 +38,21 @@
                         <i class="fa fa-quote-left" aria-hidden="true"></i>
                         <div class="list-group-item--content italic"> {{profile.description}} </div>
                     </div>
-                    <!--<div class="list-group-item" v-if="profile.nro_doc">
-                        <i class="fa fa-id-card" aria-hidden="true"></i>
-                        <div class="list-group-item--content">{{profile.nro_doc}}</div>
-                    </div>-->
+
                     <div class="list-group-item" v-if="profile.email ">
                         <i class="fa fa-envelope" aria-hidden="true"></i>
                         <div class="list-group-item--content">{{profile.email}}</div>
                     </div>
+                    <div class="list-group-item" v-if="profile.nro_doc">
+                        <i class="fa fa-id-card" aria-hidden="true"></i>
+                        <div class="list-group-item--content">{{profile.nro_doc}}</div>
+                    </div>
 
-
-                    <!--<div class="list-group-item" v-if="profile.mobile_phone">
+                    <div class="list-group-item" v-if="profile.mobile_phone">
                         <i class="fa fa-mobile bigger" aria-hidden="true"></i>
                         <div class="list-group-item--content">{{profile.mobile_phone}}</div>
-                    </div>-->
+                    </div>
+
                 </div>
                 <div class="edit-action" v-if="user.is_admin">
                     <button class="btn btn-primary btn-circle" v-on:click="messageUser()">
