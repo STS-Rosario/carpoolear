@@ -736,7 +736,7 @@ export default {
             return !this.owner && !this.trip.request;
         },
         isPassenger () {
-            return this.trip.passenger.findIndex(item => item.id === this.user.id) >= 0;
+            return this.trip.passenger.findIndex(item => item.user_id === this.user.id) >= 0;
         },
         getUserImage () {
             return this.user.id === this.trip.user.id ? this.user.image : this.trip.user.image;
