@@ -31,7 +31,7 @@
                     {{ trip.user.name }}
                   </div>
                   <div class="trip_driver_ratings">
-                    {{ trip.user.positive_ratings + trip.user.negative_ratings }} calificaciones
+                    {{ trip.user.positive_ratings + trip.user.negative_ratings }} {{ $t('calificaciones') }}
 
                   </div>
                 </div>
@@ -105,20 +105,20 @@
                     <div class="trip_seats-available col-xs-offset-2 col-xs-12" v-if="!trip.is_passenger">
                         <span class="trip_seats-available_value pull-left">{{ trip.seats_available }}</span>
                         <span class="trip_seats-available_label" v-if="trip.seats_available > 1">
-                            <span>Lugares</span><span>libres</span>
+                            <span>{{ $t('Lugares') }}</span><span>{{ $t('libres') }}</span>
                         </span>
                         <span class="trip_seats-available_label" v-else="trip.seats_available > 1">
-                            <span>Lugar</span><span>libre</span>
+                            <span>{{ $t('Lugar') }}</span><span>{{ $t('libre') }}</span>
                         </span>
                     </div>
                     <div class="col-xs-offset-2 col-xs-12" v-else></div>
                     <div class="trip_actions col-xs-10">
-                        <div class="btn btn-default btn-lg btn-trip-detail">Ver</div>
+                        <div class="btn btn-default btn-lg btn-trip-detail">{{ $t('Ver') }}</div>
                     </div>
                 </div>
                 <div v-if="trip.seats_available === 0" class="row row--carpooleado">
                     <div class="trip_seats-available col-xs-offset-6 col-xs-18 carpooleado">
-                        <span>Carpooleado</span>
+                        <span>{{ $t('Carpooleado') }}</span>
                     </div>
                 </div>
             </template>
@@ -135,13 +135,13 @@
                             +
                         </button>
                         <span class="trip_seats-available_label" v-if="seats_available > 1">
-                            <span>Lugares libres</span>
+                            <span>{{ $t('Lugares') }} {{ $t('libres') }}</span>
                         </span>
                         <span class="trip_seats-available_label" v-if="seats_available === 1">
-                            <span>Lugar libre</span>
+                            <span>{{ $t('Lugar') }} {{ $t('libre') }}</span>
                         </span>
                         <span class="trip_seats-available_label" v-if="seats_available === 0">
-                            Carpooleado
+                            {{ $t('Carpooleado') }}
                         </span>
                     </div>
                     <div class="trip-inline-controls row">

@@ -42,7 +42,14 @@ const messages = {
         seRequiereDocumentacion: 'Se requiere que cargue: licencia de conductor, seguro del vehículo ...',
         choferVerificado: 'Ya eres un chofer verificado.',
         guardarCambio: 'Guardar cambios',
-        guardando: 'Guardando ...'
+        guardando: 'Guardando ...',
+        calificaciones: 'calificaciones',
+        Lugares: 'Lugares',
+        libres: 'libres',
+        Lugar: 'Lugar',
+        libre: 'libre',
+        Ver: 'Ver',
+        Carpooleado: 'Carpooleado',
 
     },
     'ch': {
@@ -88,7 +95,14 @@ const messages = {
         seRequiereDocumentacion: 'Se requiere que cargue: licencia de conductor, seguro del vehículo ...',
         choferVerificado: 'Ya eres un chofer verificado.',
         guardarCambio: 'Guardar cambios',
-        guardando: 'Guardando ...'
+        guardando: 'Guardando ...',
+        calificaciones: 'calificaciones',
+        Lugares: 'Lugares',
+        libres: 'libres',
+        Lugar: 'Lugar',
+        libre: 'libre',
+        Ver: 'Ver',
+        Carpooleado: 'Carpooleado',
     }
 };
 export default messages;
