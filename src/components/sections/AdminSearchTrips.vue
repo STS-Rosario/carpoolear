@@ -184,10 +184,11 @@ export default {
         getPlace (i, data) {
             console.log('getPlace', data);
             let obj = {};
-            if (data && data.boundingbox) {
+            // FIXME falta bounding box
+            if (data) {
                 let distance = pointDistance(parseFloat(data.boundingbox[1]), parseFloat(data.boundingbox[3]), parseFloat(data.boundingbox[0]), parseFloat(data.boundingbox[2]));
                 obj = {
-                    name: data.display_name,
+                    name: data.name,
                     location: {
                         lat: parseFloat(data.lat),
                         lng: parseFloat(data.lon)
