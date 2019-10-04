@@ -45,6 +45,10 @@ class TripApi extends TaggedApi {
     userTrips (id, asDriver) {
         return this.get('/api/trips', { 'user_id': id, 'as_driver': asDriver });
     }
+
+    autocomplete (name, country, multicountry) {
+        return this.get('/api/trips/autocomplete', { 'name': name, 'country': country, 'multicountry': multicountry });
+    }
 }
 
 export { TripApi as default };
