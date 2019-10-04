@@ -19,6 +19,7 @@ import { mapGetters } from 'vuex';
 export default {
     name: 'autocomplete',
     watch: {
+        // FIXME borra la primera vez que haces click en algo
         value (n, o) {
             if (!n) {
                 this.input = '';

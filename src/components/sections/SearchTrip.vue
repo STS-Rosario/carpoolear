@@ -35,7 +35,7 @@
                 </div>
             </div>
             <div class="col-xs-24 col-md-5 gmap-autocomplete origin">
-                <OsmAutocomplete :placeholder="'Origen'" name="from_town" ref="from_town" :value="from_town.name" v-on:place_changed="(data) => getPlace(0, data)" :classes="'form-control form-control-with-icon form-control-map-autocomplete'" :country="allowForeignPoints ? null : 'AR'"></OsmAutocomplete>
+                <autocomplete :placeholder="'Origen'" name="from_town" ref="from_town" :value="from_town.name" v-on:place_changed="(data) => getPlace(0, data)" :classes="'form-control form-control-with-icon form-control-map-autocomplete'" :country="allowForeignPoints ? null : 'AR'"></autocomplete>
                 <!-- <GmapAutocomplete name="from_town" ref="from_town" :selectFirstOnEnter="true" :types="['(cities)']"  :componentRestrictions="allowForeignPoints ? null : {country: 'AR'}"  placeholder="Origen"  :value="from_town.name" v-on:place_changed="(data) => getPlace(0, data)" class="form-control form-control-with-icon form-control-map-autocomplete"> </GmapAutocomplete>-->
                 <div class="date-picker--cross">
                     <i v-on:click="resetInput('from_town')" class="fa fa-times" aria-hidden="true"></i>
@@ -47,7 +47,7 @@
                 </div>
             </div>
             <div class="col-xs-24 col-md-5 gmap-autocomplete destiny">
-                <OsmAutocomplete :placeholder="'Destino'" name="to_town" ref="to_town" :value="to_town.name" v-on:place_changed="(data) => getPlace(1, data)" :classes="'form-control form-control-with-icon form-control-map-autocomplete'" :country="allowForeignPoints ? null : 'AR'"></OsmAutocomplete>
+                <autocomplete :placeholder="'Destino'" name="to_town" ref="to_town" :value="to_town.name" v-on:place_changed="(data) => getPlace(1, data)" :classes="'form-control form-control-with-icon form-control-map-autocomplete'" :country="allowForeignPoints ? null : 'AR'"></autocomplete>
                 <!-- <GmapAutocomplete name="to_town" ref="to_town" :selectFirstOnEnter="true" :types="['(cities)']"  :componentRestrictions="allowForeignPoints ? null : {country: 'AR'}"  placeholder="Destino"  :value="to_town.name" v-on:place_changed="(data) => getPlace(1, data)" class="form-control form-control-with-icon form-control-map-autocomplete"> </GmapAutocomplete> -->
                 <div class="date-picker--cross">
                     <i v-on:click="resetInput('to_town')" class="fa fa-times" aria-hidden="true"></i>
@@ -70,7 +70,7 @@
 import { mapGetters } from 'vuex';
 import { pointDistance } from '../../services/maps.js';
 import DatePicker from '../DatePicker';
-import OsmAutocomplete from '../OsmAutocomplete';
+import autocomplete from '../Autocomplete.vue';
 import bus from '../../services/bus-event.js';
 import moment from 'moment';
 import dialogs from '../../services/dialogs.js';
@@ -302,7 +302,7 @@ export default {
     ],
     components: {
         DatePicker,
-        OsmAutocomplete
+        autocomplete
     }
 };
 </script>

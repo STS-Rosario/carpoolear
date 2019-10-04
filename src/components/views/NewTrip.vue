@@ -48,7 +48,7 @@
                                 <div v-for="(m, index) in points" class="trip_point gmap-autocomplete" :class="{'trip-error' : m.error.state}" :key="index">
                                     <span v-if="index == 0" class="sr-only">Origen</span>
                                     <span v-if="index == points.length - 1" class="sr-only">Destino</span>
-                                    <OsmAutocomplete :placeholder="getPlaceholder(index)" name="'input-' + index" ref="'input-' + index" :value="m.name" v-on:place_changed="(data) => getPlace(index, data)" :classes="'form-control form-control-with-icon form-control-map-autocomplete'" :country="allowForeignPoints ? null : 'AR'"  :class="{'has-error': m.error.state}"></OsmAutocomplete>
+                                    <autocomplete :placeholder="getPlaceholder(index)" name="'input-' + index" ref="'input-' + index" :value="m.name" v-on:place_changed="(data) => getPlace(index, data)" :classes="'form-control form-control-with-icon form-control-map-autocomplete'" :country="allowForeignPoints ? null : 'AR'"  :class="{'has-error': m.error.state}"></autocomplete>
                                     <!-- <GmapAutocomplete  :selectFirstOnEnter="true" :types="['(cities)']" :componentRestrictions="allowForeignPoints ? null : {country: 'AR'}" :placeholder="getPlaceholder(index)"  :value="m.name" :name="'input-' + index" :ref="'input-' + index" v-on:place_changed="(data) => getPlace(index, data)" class="form-control form-control-with-icon form-control-map-autocomplete" :class="{'has-error': m.error.state}"> </GmapAutocomplete> -->
                                     <div @click="m.name = ''" class="date-picker--cross"><i aria-hidden="true" class="fa fa-times"></i></div>
                                     <span class="error" v-if="m.error.state"> {{m.error.message}} </span>
@@ -201,7 +201,7 @@
                                 <div v-for="(m, index) in otherTrip.points" class="trip_point gmap-autocomplete" :class="{'trip-error' : m.error.state}" :key="index">
                                     <span v-if="index == 0" class="sr-only">Origen</span>
                                     <span v-if="index == points.length - 1" class="sr-only">Destino</span>
-                                    <OsmAutocomplete
+                                    <autocomplete
                                         :placeholder="getPlaceholder(index)"
                                         name="'input-return-trip' + index"
                                         ref="'input-return-trip' + index"
@@ -210,7 +210,7 @@
                                         :classes="'form-control form-control-with-icon form-control-map-autocomplete'"
                                         :country="allowForeignPoints ? null : 'AR'" :class="{'has-error': m.error.state}"
                                         >
-                                    </OsmAutocomplete>
+                                    </autocomplete>
                                     <div @click="m.name = ''" class="date-picker--cross">
                                         <i aria-hidden="true" class="fa fa-times"></i>
                                     </div>
@@ -386,7 +386,7 @@ import dialogs from '../../services/dialogs.js';
 import moment from 'moment';
 import { last } from 'lodash';
 import OsmApi from '../../services/api/Osm';
-import OsmAutocomplete from '../OsmAutocomplete';
+import autocomplete from '../Autocomplete';
 import SvgItem from '../SvgItem';
 // import { LMap, LTileLayer } from 'vue2-leaflet';
 
@@ -412,7 +412,7 @@ export default {
     components: {
         DatePicker,
         SvgItem,
-        OsmAutocomplete /* ,
+        autocomplete /* ,
         LMap,
         LTileLayer */
     },
