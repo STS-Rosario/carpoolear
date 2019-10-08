@@ -46,8 +46,12 @@
                     <i class="fa fa-map-marker" aria-hidden="true"></i>
                   </div>
                   <div class="col-xs-20">
-                    <span class="trip_location_from_city" :style="originLongName ? LONG_NAME_STYLE : {}">{{ trip.points[0].json_address.ciudad }}</span>
-                    <span class="trip_location_from_state-country">{{ trip.points[0].json_address.provincia | googleInfoClean }}</span>
+                    <span class="trip_location_from_city" :style="originLongName ? LONG_NAME_STYLE : {}">
+                        {{ getLocationName(trip.points[0]) }}
+                    </span>
+                    <span class="trip_location_from_state-country">
+                        {{ getStateName(trip.points[0]) | googleInfoClean }}
+                    </span>
                   </div>
                 </div>
                 <div class="row trip_location_to">
@@ -55,8 +59,12 @@
                     <i class="fa fa-map-marker" aria-hidden="true"></i>
                   </div>
                   <div class="col-xs-20">
-                    <span class="trip_location_from_city" :style="destinyLongName ? LONG_NAME_STYLE : {}">{{ trip.points[trip.points.length - 1].json_address.ciudad }}</span>
-                    <span class="trip_location_from_state-country">{{ trip.points[trip.points.length - 1].json_address.provincia | googleInfoClean }}</span>
+                    <span class="trip_location_from_city" :style="destinyLongName ? LONG_NAME_STYLE : {}">
+                        {{ getLocationName(trip.points[trip.points.length - 1]) }}
+                    </span>
+                    <span class="trip_location_from_state-country">
+                        {{ getStateName(trip.points[trip.points.length - 1]) | googleInfoClean }}
+                    </span>
                   </div>
                 </div>
                 <div class="col-xs-4 trip_location-dot-line">
@@ -295,6 +303,28 @@ export default {
         },
         closeModal () {
             this.showTrip = false;
+        },
+        getLocationName (location) {
+            if (location.json_address) {
+                if (location.json_address.ciudad) {
+                    return location.json_address.ciudad;
+                }
+                if (location.json_address.name) {
+                    return location.json_address.name;
+                }
+            }
+            return location.address;
+        },
+        getStateName (location) {
+            if (location.json_address) {
+                if (location.json_address.provincia) {
+                    return location.json_address.provincia;
+                }
+                if (location.json_address.state) {
+                    return location.json_address.state;
+                }
+            }
+            return '';
         }
     },
     data () {
@@ -311,22 +341,16 @@ export default {
     computed: {
         originLongName () {
             if (this.trip.points) {
-                if (this.trip.points[0].json_address.ciudad) {
-                    return this.trip.points[0].json_address.ciudad.length > this.CITY_NAME_LONG_LENGTH;
-                } else {
-                    return false;
-                }
+                let name = this.getLocationName(this.trip.points[0]);
+                return name.length > this.CITY_NAME_LONG_LENGTH;
             } else {
                 return false;
             }
         },
         destinyLongName () {
             if (this.trip.points) {
-                if (this.trip.points[this.trip.points.length - 1].json_address.ciudad) {
-                    return this.trip.points[this.trip.points.length - 1].json_address.ciudad.length > this.CITY_NAME_LONG_LENGTH;
-                } else {
-                    return false;
-                }
+                let name = this.getLocationName(this.trip.points[this.trip.points.length - 1]);
+                return name.length > this.CITY_NAME_LONG_LENGTH;
             } else {
                 return false;
             }
