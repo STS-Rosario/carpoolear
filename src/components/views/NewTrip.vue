@@ -48,7 +48,7 @@
                                 <div v-for="(m, index) in points" class="trip_point gmap-autocomplete" :class="{'trip-error' : m.error.state}" :key="index">
                                     <span v-if="index == 0" class="sr-only">Origen</span>
                                     <span v-if="index == points.length - 1" class="sr-only">Destino</span>
-                                    <autocomplete :placeholder="getPlaceholder(index)" name="'input-' + index" ref="'input-' + index" :value="m.name" v-on:place_changed="(data) => `getPlace`(index, data)" :classes="'form-control form-control-with-icon form-control-map-autocomplete'" :country="allowForeignPoints ? null : 'AR'"  :class="{'has-error': m.error.state}"></autocomplete>
+                                    <autocomplete :placeholder="getPlaceholder(index)" name="'input-' + index" ref="'input-' + index" :value="m.name" v-on:place_changed="(data) =>  getPlace(index, data)" :classes="'form-control form-control-with-icon form-control-map-autocomplete'" :country="allowForeignPoints ? null : 'AR'"  :class="{'has-error': m.error.state}"></autocomplete>
                                     <!-- <GmapAutocomplete  :selectFirstOnEnter="true" :types="['(cities)']" :componentRestrictions="allowForeignPoints ? null : {country: 'AR'}" :placeholder="getPlaceholder(index)"  :value="m.name" :name="'input-' + index" :ref="'input-' + index" v-on:place_changed="(data) => getPlace(index, data)" class="form-control form-control-with-icon form-control-map-autocomplete" :class="{'has-error': m.error.state}"> </GmapAutocomplete> -->
                                     <div @click="m.name = ''" class="date-picker--cross"><i aria-hidden="true" class="fa fa-times"></i></div>
                                     <span class="error" v-if="m.error.state"> {{m.error.message}} </span>
@@ -380,7 +380,7 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import { parseOsmStreet } from '../../services/maps.js';
+// import { parseOsmStreet } from '../../services/maps.js';
 import DatePicker from '../DatePicker';
 import dialogs from '../../services/dialogs.js';
 import moment from 'moment';
@@ -909,11 +909,11 @@ export default {
             trip.points[i].place = data;
             trip.points[i].name = data.name;
             // TODO: Recordar parseStreet
-            trip.points[i].json = parseOsmStreet(data);
+            // trip.points[i].json = parseOsmStreet(data);
             trip.points[i].error.state = false;
             trip.center = trip.points[i].location = {
                 lat: parseFloat(data.lat),
-                lng: parseFloat(data.lon)
+                lng: parseFloat(data.lng)
             };
 
             if ((i === 0 || i === trip.points.length - 1) && trip.sameCity) {
@@ -930,16 +930,15 @@ export default {
 
                 point.place = data;
                 point.name = data.display_name;
-                point.json = parseOsmStreet(data);
+                // point.json = parseOsmStreet(data);
                 point.error.state = false;
                 this.otherTrip.center = point.location = {
                     lat: parseFloat(data.lat),
-                    lng: parseFloat(data.lon)
+                    lng: parseFloat(data.lng)
                 };
 
                 this.calcRoute('returnTrip');
             }
-
             this.calcRoute(type);
         },
 

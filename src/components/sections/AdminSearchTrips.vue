@@ -186,15 +186,13 @@ export default {
             let obj = {};
             // FIXME falta bounding box
             if (data) {
-                let distance = pointDistance(parseFloat(data.boundingbox[1]), parseFloat(data.boundingbox[3]), parseFloat(data.boundingbox[0]), parseFloat(data.boundingbox[2]));
                 obj = {
                     name: data.name,
                     location: {
                         lat: parseFloat(data.lat),
                         lng: parseFloat(data.lon)
                     },
-                    radio: distance,
-                    country: data.country_code
+                    country: data.country
                 };
             }
             if (i === 0) {

@@ -173,14 +173,12 @@ export default {
             if (data) {
                 // var viewport = JSON.parse((JSON.stringify(data.geometry.viewport)));
 
-                let distance = pointDistance(parseFloat(data.boundingbox[1]), parseFloat(data.boundingbox[3]), parseFloat(data.boundingbox[0]), parseFloat(data.boundingbox[2]));
                 obj = {
                     name: data.name,
                     location: {
                         lat: parseFloat(data.lat),
                         lng: parseFloat(data.lng)
                     },
-                    radio: distance,
                     country: data.country
                 };
             }

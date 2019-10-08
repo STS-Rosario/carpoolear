@@ -68,8 +68,7 @@ const messages = {
         cargandoMasResultados: 'Cargando más resultados',
         noHayViajes: '¡Ups! No hay viajes con los criterios indicados en la búsqueda.',
         subscribirteAViajes: 'Ahora podés suscribirte para que te avisemos cuando haya un nuevo viaje que concuerde con lo que estas buscando.',
-        cargandoViajes: 'Cargando viajes ...',
-
+        cargandoViajes: 'Cargando viajes ...'
     },
     'ch': {
         documento: 'Número de RUT',
@@ -122,7 +121,7 @@ const messages = {
         libre: 'libre',
         Ver: 'Ver',
         Carpooleado: 'Carpooleado',
-         buscaConQuien: 'Buscá con quién compartir tu próximo viaje!',
+        buscaConQuien: 'Buscá con quién compartir tu próximo viaje!',
         elegiDatos: '¡Elegí fecha, origen o destino y encontralo!',
         ingresORegistrate: 'Ingresá con tu usuario o registrate',
         aqui: 'aquí',
