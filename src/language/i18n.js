@@ -95,7 +95,18 @@ const messages = {
         cargarViajeRegreso: 'Cargar viaje de regreso',
         crear: 'CREAR',
         actualizar: 'Actualizar',
-        privacidadViajeVuelta: 'Privacidad del viaje de vuelta'
+        privacidadViajeVuelta: 'Privacidad del viaje de vuelta',
+        olvidoEmail: 'Olvido ingresar su email.',
+        ingreseEmailValido: 'Ingrese un email válido.',
+        olvidoContrasena: 'Olvido ingresar su contraseña.',
+        contraCorta: 'Las contraseña debe tener al menos 8 caracteres.',
+        olvidoConfirmarContra: 'Olvido confirmar su contraseña.',
+        contraNoCoinciden: 'Las contraseñas no coinciden.',
+        olvidoNombre: 'Olvido ingresar su nombre.',
+        olvidoApellido: 'Olvido ingresar su apellido.',
+        debeCorregirCampos: 'Debe corregir o completar algunos campos para finalizar su registro.',
+        mailEnUso: 'La cuenta de email ingresada se encuentra en uso.',
+        errorRegistro: 'Ocurrió un error al procesar el registro, por favor vuelva a intentar.'
     },
     'ch': {
         documento: 'Número de RUT',
@@ -193,7 +204,20 @@ const messages = {
         cargarViajeRegreso: 'Cargar viaje de regreso',
         crear: 'CREAR',
         actualizar: 'Actualizar',
-        privacidadViajeVuelta: 'Privacidad del viaje de vuelta'
+        privacidadViajeVuelta: 'Privacidad del viaje de vuelta',
+        privacidadViajeVuelta: 'Privacidad del viaje de vuelta',
+        olvidoEmail: 'Olvido ingresar su email.',
+        ingreseEmailValido: 'Ingrese un email válido.',
+        olvidoContrasena: 'Olvido ingresar su contraseña.',
+        contraCorta: 'Las contraseña debe tener al menos 8 caracteres.',
+        olvidoConfirmarContra: 'Olvido confirmar su contraseña.',
+        contraNoCoinciden: 'Las contraseñas no coinciden.',
+        olvidoNombre: 'Olvido ingresar su nombre.',
+        olvidoApellido: 'Olvido ingresar su apellido.',
+        debeCorregirCampos: 'Debe corregir o completar algunos campos para finalizar su registro.',
+        mailEnUso: 'La cuenta de email ingresada se encuentra en uso.',
+        errorRegistro: 'Ocurrió un error al procesar el registro, por favor vuelva a intentar.'
+
     }
 };
 export default messages;
