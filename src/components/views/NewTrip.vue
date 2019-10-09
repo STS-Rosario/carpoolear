@@ -924,7 +924,6 @@ export default {
                 lng: parseFloat(data.lng)
             };
 
-
             if ((i === 0 || i === trip.points.length - 1) && trip.sameCity) {
                 trip.points[0].error.state = false;
                 last(trip.points).error.state = false;
