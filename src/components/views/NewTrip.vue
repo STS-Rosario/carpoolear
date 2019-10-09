@@ -141,7 +141,7 @@
                                 </ul>
                             </fieldset>
                             <legend class="label-for-group"> Preferencias del viaje </legend>
-                            <br> 
+                            <br>
                             <div class="preferences row">
                                 <div class="col-md-8">
                                     <div class="col-md-12">
@@ -304,7 +304,7 @@
                                 </ul>
                             </fieldset>
                             <legend class="label-for-group"> Preferencias del viaje </legend>
-                            <br> 
+                            <br>
                             <div class="preferences row">
                                 <div class="col-md-8">
                                     <div class="col-md-12">
@@ -675,7 +675,9 @@ export default {
                     p.error.message = 'Seleccione una localidad válida.';
                     globalError = true;
                 } else {
-                    foreignPoints += (p.json.pais === 'Argentina' ? 0 : 1);
+                    // FIXME hardcode argentina
+                    console.log('COUNTRY', p.json.country);
+                    foreignPoints += (p.json.country === 'ARG' ? 0 : 1);
                 }
             });
             if (foreignPoints > 1) {
@@ -689,10 +691,13 @@ export default {
                 this.otherTrip.points.forEach(p => {
                     if (!p.json) {
                         p.error.state = true;
+                        // FIXME harcode language
                         p.error.message = 'Seleccione una localidad válida.';
                         globalError = true;
                     } else {
-                        foreignPoints += (p.json.pais === 'Argentina' ? 0 : 1);
+                        // FIXME hardcode argentina
+                        console.log('COUNTRY', p.json.country);
+                        foreignPoints += (p.json.country === 'ARG' ? 0 : 1);
                     }
                 });
                 if (foreignPoints > 1) {
@@ -826,11 +831,13 @@ export default {
 
         getSaveInfo (tripObj, estimatedTime) {
             const points = tripObj.points.map(p => {
+                console.log('p point', p);
                 return {
                     address: p.name,
                     json_address: p.json,
                     lat: p.location.lat,
-                    lng: p.location.lng
+                    lng: p.location.lng,
+                    node_id: p.place.id
                 };
             });
 
@@ -854,7 +861,6 @@ export default {
             this.saving = true;
 
             this.trip = this.getSaveInfo(this, this.estimatedTimeString);
-
             if (!this.updatingTrip) {
                 // FIXME not saving
                 let trip = JSON.parse(JSON.stringify(this.trip));
@@ -880,6 +886,7 @@ export default {
                         }
                     }).then((ot) => {
                         this.saving = false;
+                        // FIXME uncomented me
                         // this.$router.replace({ name: 'detail_trip', params: { id: t.id } });
                     });
                 }).catch((err) => {
@@ -902,6 +909,7 @@ export default {
         },
 
         getPlace (i, data, type) {
+            console.log('getPlace', i, data, type);
             type = type || 'trip';
 
             const trip = type === 'trip' ? this : this.otherTrip;
@@ -909,12 +917,13 @@ export default {
             trip.points[i].place = data;
             trip.points[i].name = data.name;
             // TODO: Recordar parseStreet
-            // trip.points[i].json = parseOsmStreet(data);
+            trip.points[i].json = data;
             trip.points[i].error.state = false;
             trip.center = trip.points[i].location = {
                 lat: parseFloat(data.lat),
                 lng: parseFloat(data.lng)
             };
+
 
             if ((i === 0 || i === trip.points.length - 1) && trip.sameCity) {
                 trip.points[0].error.state = false;
@@ -1028,7 +1037,7 @@ export default {
     }
 
     .preferences-text {
-        font-size: 0.8em;   
+        font-size: 0.8em;
     }
     .container {
         padding-top: 0;
