@@ -268,33 +268,33 @@ export default {
                         let error = response.data.errors.error[0];
                         switch (error) {
                         case 'trip_seats_greater_than_zero':
-                            errorMessage = $t('asientosMenorACero');
+                            errorMessage = this.$t('asientosMenorACero');
                             break;
                         case 'trip_seats_less_than_four':
-                            errorMessage = $t('masDeCuatroAsientos');
+                            errorMessage = this.$t('masDeCuatroAsientos');
                             break;
                         case 'trip_invalid_seats':
-                            errorMessage = $t('noPuedesDisminuirAsientos');
+                            errorMessage = this.$t('noPuedesDisminuirAsientos');
                             break;
                         default:
-                            errorMessage = $t('errorACambiarAsientos');
+                            errorMessage = this.$t('errorACambiarAsientos');
                             break;
                         }
                     } else {
-                        errorMessage =  $t('errorACambiarAsientos');
+                        errorMessage = this.$t('errorACambiarAsientos');
                     }
                 } else {
-                    errorMessage = $t('errorACambiarAsientos');
+                    errorMessage = this.$t('errorACambiarAsientos');
                 }
                 dialogs.message(errorMessage, { estado: 'error' });
             });
         },
         deleteTrip: function () {
-            if (window.confirm($t('seguroCancelar'))) {
+            if (window.confirm(this.$t('seguroCancelar'))) {
                 this.remove(this.trip.id).then(() => {
-                    dialogs.message($t('viajeCancelado'), { estado: 'error' });
+                    dialogs.message(this.$t('viajeCancelado'), { estado: 'error' });
                 }).catch(() => {
-                    dialogs.message($t('errorAlCancelar'), { estado: 'error' });
+                    dialogs.message(this.$t('errorAlCancelar'), { estado: 'error' });
                 });
             }
         },

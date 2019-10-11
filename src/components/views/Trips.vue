@@ -260,7 +260,7 @@ export default {
                 };
                 this.registerDonation(data);
             } else {
-                dialogs.message($t('valorDonacion'), { duration: 10, estado: 'error' });
+                dialogs.message(this.$t('valorDonacion'), { duration: 10, estado: 'error' });
             }
         },
         onDonateMonthly () {
@@ -288,7 +288,7 @@ export default {
                 };
                 this.registerDonation(data);
             } else {
-                dialogs.message($t('valorDonacion'), { duration: 10, estado: 'error' });
+                dialogs.message(this.$t('valorDonacion'), { duration: 10, estado: 'error' });
             }
         },
         subscribeSearch () {
@@ -318,12 +318,12 @@ export default {
 
             this.subscribeToSearch(data).then(() => {
                 this.alreadySubscribe = true;
-                dialogs.message($t('correctamenteSubscripto'), { duration: 10, estado: 'success' });
+                dialogs.message(this.$t('correctamenteSubscripto'), { duration: 10, estado: 'success' });
             }).catch((response) => {
                 console.log(response);
                 if (response.data.errors && response.data.errors.error) {
                     if (response.data.errors.error[0] === 'subscription_exist') {
-                        dialogs.message($t('yaTienesSubscripcion'), { duration: 10, estado: 'error' });
+                        dialogs.message(this.$t('yaTienesSubscripcion'), { duration: 10, estado: 'error' });
                     }
                 }
             });

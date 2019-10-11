@@ -154,10 +154,10 @@ const messages = {
         verAmigos: 'Ver amigos',
         noCalificaciones: 'No hay calificaciones',
         cargandoNotificaciones: 'Cargando calificaciones ...',
-        calificaciones: 'Calificaciones',
+        Calificaciones: 'Calificaciones',
         misViajes: 'Mis viajes',
-        viajes: 'Viajes',
-        
+        viajes: 'Viajes'
+
     },
     'ch': {
         documento: 'Número de RUT',
@@ -255,7 +255,6 @@ const messages = {
         cargarViajeRegreso: 'Cargar viaje de regreso',
         crear: 'CREAR',
         actualizar: 'Actualizar',
-        privacidadViajeVuelta: 'Privacidad del viaje de vuelta',
         privacidadViajeVuelta: 'Privacidad del viaje de vuelta',
         olvidoEmail: 'Olvido ingresar su email.',
         ingreseEmailValido: 'Ingrese un email válido.',
