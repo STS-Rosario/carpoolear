@@ -69,7 +69,7 @@
 
 
             <div class="col-xs-24 col-md-8 gmap-autocomplete origin">
-                <div class="search-users"> 
+                <div class="search-users">
                     <input v-model="userSearch" v-on:keyup="onSearchUsers" type="text" class="form-control form-control-with-icon search-users-input" placeholder="Escribe un nombre" />
                     <div v-if="userSearch.length != 0 && showAutocomplete">
                         <loading class="autocomplete-users" :data="userList">
@@ -107,7 +107,6 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-// import { pointDistance } from '../../services/maps.js';
 import DatePicker from '../DatePicker';
 import moment from 'moment';
 import dialogs from '../../services/dialogs.js';
@@ -209,6 +208,7 @@ export default {
                 params.origin_lng = this.from_town.location.lng;
                 params.origin_radio = this.from_town.radio;
                 params.origin_name = this.from_town.name;
+                params.origin_id = this.from_town.id;
             } else {
                 params.origin_name = this.$refs['from_town'].input;
             }
@@ -220,6 +220,7 @@ export default {
                 params.destination_lng = this.to_town.location.lng;
                 params.destination_radio = this.to_town.radio;
                 params.destination_name = this.to_town.name;
+                params.destination_id = this.to_town.id;
             } else {
                 params.destination_name = this.$refs['to_town'].input;
             }

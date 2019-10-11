@@ -68,7 +68,6 @@
 
 <script>
 import { mapGetters } from 'vuex';
-// import { pointDistance } from '../../services/maps.js';
 import DatePicker from '../DatePicker';
 import autocomplete from '../Autocomplete.vue';
 import bus from '../../services/bus-event.js';
@@ -141,55 +140,19 @@ export default {
         },
         getPlace (i, data) {
             console.log('getPlace', data);
-            /*
-                {
-                    place_id: "221733657",
-                    licence: "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
-                    osm_type: "relation",
-                    osm_id: "1224652",
-                    boundingbox: [
-                        "-34.705637",
-                        "-34.5265535",
-                        "-58.5314588",
-                        "-58.3351249"
-                    ],
-                    lat: "-34.6075616",
-                    lon: "-58.437076",
-                    display_name: "Buenos Aires, Ciudad Autónoma de Buenos Aires, Argentina",
-                    class: "place",
-                    type: "city",
-                    importance: 0.76879583938391,
-                    icon: "https://nominatim.openstreetmap.org/images/mapicons/poi_place_city.p.20.png",
-                    address: {
-                        city: "Buenos Aires",
-                        state: "Ciudad Autónoma de Buenos Aires",
-                        country: "Argentina",
-                        country_code: "ar"
-                    }
-                }
-            */
             let obj = {};
             // FIXME falta bounding box
             if (data) {
-                // var viewport = JSON.parse((JSON.stringify(data.geometry.viewport)));
-
                 obj = {
                     name: data.name,
                     location: {
                         lat: parseFloat(data.lat),
                         lng: parseFloat(data.lng)
                     },
-                    country: data.country
+                    country: data.country,
+                    id: data.id
                 };
             }
-            /* if (data && data.address_components) {
-                for (let j = 0; j < data.address_components.length; j++) {
-                    let addrComp = data.address_components[j];
-                    if (addrComp.types.indexOf('country') >= 0) {
-                        obj.country = addrComp.short_name;
-                    }
-                }
-            } */
             if (i === 0) {
                 this.from_town = obj;
             } else {
@@ -200,14 +163,16 @@ export default {
             let params = {};
             let foreignCountry = 0;
             if (this.from_town.location) {
+                console.log('from_town', this.from_town);
                 params.origin_lat = this.from_town.location.lat;
                 params.origin_lng = this.from_town.location.lng;
                 params.origin_radio = this.from_town.radio;
                 params.origin_name = this.from_town.name;
+                params.origin_id = this.from_town.id;
             } else {
                 params.origin_name = this.$refs['from_town'].input;
             }
-            if (this.from_town && this.from_town.country && this.from_town.country.toLowerCase() !== 'AR'.toLowerCase()) {
+            if (this.from_town && this.from_town.country && this.from_town.country.toLowerCase() !== this.config.osm_country.toLowerCase()) {
                 foreignCountry++;
             }
             if (this.to_town.location) {
@@ -215,10 +180,11 @@ export default {
                 params.destination_lng = this.to_town.location.lng;
                 params.destination_radio = this.to_town.radio;
                 params.destination_name = this.to_town.name;
+                params.destination_id = this.to_town.id;
             } else {
                 params.destination_name = this.$refs['to_town'].input;
             }
-            if (this.to_town && this.to_town.country && this.to_town.country.toLowerCase() !== 'AR'.toLowerCase()) {
+            if (this.to_town && this.to_town.country && this.to_town.country.toLowerCase() !== this.config.osm_country.toLowerCase()) {
                 foreignCountry++;
             }
             if (this.dateAnswer) {
@@ -265,6 +231,7 @@ export default {
                         lng: parameters.origin_lng
                     };
                     this.from_town.radio = parameters.origin_radio;
+                    this.from_town.id = parameters.origin_id;
                 } else {
                     this.resetInput('from_town');
                 }
@@ -276,6 +243,7 @@ export default {
                         lng: parameters.destination_lng
                     };
                     this.to_town.radio = parameters.destination_radio;
+                    this.to_town.id = parameters.destination_id;
                 } else {
                     this.resetInput('to_town');
                 }
