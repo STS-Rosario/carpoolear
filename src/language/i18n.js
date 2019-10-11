@@ -155,6 +155,8 @@ const messages = {
         noCalificaciones: 'No hay calificaciones',
         cargandoNotificaciones: 'Cargando calificaciones ...',
         calificaciones: 'Calificaciones',
+        misViajes: 'Mis viajes',
+        viajes: 'Viajes',
         
     },
     'ch': {

@@ -56,7 +56,7 @@ export default {
             'profile': 'profile/user'
         }),
         viajesHeaderTitle () {
-            return (this.id === 'me' || this.id === this.user.id) ? 'Mis viajes' : 'Viajes';
+            return (this.id === 'me' || this.id === this.user.id) ? $t('misViajes') : $t('viajes');
         },
         isMyOwnProfile () {
             return (this.id === 'me' || this.id === this.user.id);
