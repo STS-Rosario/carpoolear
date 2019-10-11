@@ -3,7 +3,7 @@
         <div class="list-group">
             <div class="pic-info col-sm-6">
                 <div v-if="profile.has_pin == 1" class="user_pin">
-                    <img src="https://carpoolear.com.ar/static/img/pin.png" alt="" title="Aportante en la campaña mi media naranja carpoolera" />
+                    <img src="https://carpoolear.com.ar/static/img/pin.png" alt="" :title="$t('aportanteMediaNaranja')" />
                 </div>
                 <div class="circle-box profile" v-imgSrc:profile="profile.image"></div>
                 <div class="profile-info">
@@ -13,20 +13,20 @@
                         <i class="fa fa-thumbs-down" aria-hidden="true"></i> <span> {{profile.negative_ratings}} </span>
                     </div>
                     <div v-if="profile.is_member == 1" class="">
-                        <img src="https://carpoolear.com.ar/static/img/pin_member.png" alt="" title="Miembro del equipo de Carpoolear" />
+                        <img src="https://carpoolear.com.ar/static/img/pin_member.png" alt="" :title="$t('miembroEquipo')" />
                     </div>
                 </div>
                 <div class="profile-social-accounts" >
                     <div v-for="account in profile.accounts" class="row">
                         <div class="col-xs-24">
-                            <a :href="'https://www.facebook.com/search/top/?q=' + encodeURIComponent(profile.name)" target="_blank" class="btn-primary btn-search" style="border: 0" title="Facebook cambio sus políticas y no podemos llevarte al perfil de esta persona, pero te ayudamos a buscarlo.">
-                                <span class=''>Buscar en Facebook</span>
+                            <a :href="'https://www.facebook.com/search/top/?q=' + encodeURIComponent(profile.name)" target="_blank" class="btn-primary btn-search" style="border: 0" :title="$t('cambioFacebook')">
+                                <span class=''>{{ $t('buscarFacebook') }}</span>
                             </a><!-- app_scoped_user_id -->
                         </div>
                     </div>
                     <div class="row" v-if="profile.accounts && profile.accounts.length">
                         <div class="col-xs-24">
-                            <small>Facebook cambió sus políticas y no podemos llevarte al perfil de esta persona, pero te ayudamos a buscarlo.</small>
+                            <small>{{ $t('cambioFacebook') }}</small>
                         </div>
                     </div>
                 </div>
@@ -57,12 +57,12 @@
                 <div class="edit-action" v-if="user.is_admin">
                     <button class="btn btn-primary btn-circle" v-on:click="messageUser()">
                         <!-- <i class="fa fa-comments medium-icon" aria-hidden="true"></i> -->
-                        Enviar mensaje
+                        {{ $t('enviarMensaje') }}
                     </button>
                 </div>
                 <div class="edit-action" v-if="profile.id == user.id">
-                    <router-link class="btn btn-primary" tag="button" :to="{name:'profile_update'}"> Editar perfil</router-link>
-                    <router-link class="btn btn-primary" tag="button" :to="{name:'friends_setting'}"> Ver amigos</router-link>
+                    <router-link class="btn btn-primary" tag="button" :to="{name:'profile_update'}"> {{ $t('editarPerfil') }}</router-link>
+                    <router-link class="btn btn-primary" tag="button" :to="{name:'friends_setting'}"> {{ $t('verAmigos') }}</router-link>
                 </div>
             </div>
         </div>

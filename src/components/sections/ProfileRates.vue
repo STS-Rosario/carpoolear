@@ -1,6 +1,6 @@
 <template>
     <div class="profile-rates-component container clearfix">
-        <h2>Calificaciones</h2>
+        <h2>{{ $t('calificaciones') }}</h2>
         <Loading :data="rates">
             <div class="list-group">
                 <div class="column-rating">
@@ -25,10 +25,10 @@
             </div>
             -->
 
-            <p slot="no-data" class="alert alert-warning"  role="alert">No hay calificaciones</p>
+            <p slot="no-data" class="alert alert-warning"  role="alert">{{ $t('noCalificaciones') }}</p>
             <p slot="loading" class="alert alert-info" role="alert">
                 <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
-                Cargando calificaciones ...
+                {{ $t('cargandoNotificaciones') }}
             </p>
         </Loading>
 

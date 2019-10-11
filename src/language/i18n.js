@@ -145,6 +145,16 @@ const messages = {
         tienesQueSerConductor: 'Tienes que ser verificado como conductor para poder cargar viajes.',
         problemaAlCargarElViaje: 'Ocurrió un problema al cargar el viaje. Por favor vuelva a intentarlo.',
         ingresePuntoIntermedio: 'Ingrese punto intermedio',
+        buscarFacebook: 'Buscar en Facebook',
+        aportanteMediaNaranja: 'Aportante en la campaña mi media naranja carpoolera',
+        miembroEquipo: 'Miembro del equipo de Carpoolear',
+        cambioFacebook: 'Facebook cambio sus políticas y no podemos llevarte al perfil de esta persona, pero te ayudamos a buscarlo.',
+        enviarMensaje: 'Enviar mensaje',
+        editarPerfil: 'Editar perfil',
+        verAmigos: 'Ver amigos',
+        noCalificaciones: 'No hay calificaciones',
+        cargandoNotificaciones: 'Cargando calificaciones ...',
+        calificaciones: 'Calificaciones',
         
     },
     'ch': {
