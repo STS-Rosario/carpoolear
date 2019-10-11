@@ -156,7 +156,18 @@ const messages = {
         cargandoNotificaciones: 'Cargando calificaciones ...',
         Calificaciones: 'Calificaciones',
         misViajes: 'Mis viajes',
-        viajes: 'Viajes'
+        viajes: 'Viajes',
+        acercaDe: 'Acerca de',
+        tyc: 'Términos y Condiciones',
+        cerrarSesion: 'Cerrar sesión',
+        invitarAmigos: 'Invitar a amigos',
+        inicio: 'Inicio',
+        misViajes: 'Mis Viajes',
+        mensajes: 'Mensajes',
+        perfil: 'Perfil',
+        administracion: 'Administracion',
+        cerrarSesion: 'Cerrar sesión',
+        crearViaje: 'Crear Viaje',
 
     },
     'ch': {
