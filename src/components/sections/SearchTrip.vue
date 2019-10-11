@@ -172,7 +172,7 @@ export default {
             } else {
                 params.origin_name = this.$refs['from_town'].input;
             }
-            if (this.from_town && this.from_town.country && this.from_town.country.toLowerCase() !== 'AR'.toLowerCase()) {
+            if (this.from_town && this.from_town.country && this.from_town.country.toLowerCase() !== this.config.osm_country.toLowerCase()) {
                 foreignCountry++;
             }
             if (this.to_town.location) {
@@ -184,7 +184,7 @@ export default {
             } else {
                 params.destination_name = this.$refs['to_town'].input;
             }
-            if (this.to_town && this.to_town.country && this.to_town.country.toLowerCase() !== 'AR'.toLowerCase()) {
+            if (this.to_town && this.to_town.country && this.to_town.country.toLowerCase() !== this.config.osm_country.toLowerCase()) {
                 foreignCountry++;
             }
             if (this.dateAnswer) {
