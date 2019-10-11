@@ -133,13 +133,13 @@
             <template v-else>
                 <div class="row">
                     <div v-if="!trip.is_passenger" class="trip-seats-control col-xs-offset-2">
-                        <button aria-label="Disminuir en uno la cantidad de asientos" v-on:click.stop="changeSeatsNumber(-1)" :disabled="sending || trip.total_seats < 1" class="btn btn-default">
+                        <button :aria-label="$t('disminuirAsientos')" v-on:click.stop="changeSeatsNumber(-1)" :disabled="sending || trip.total_seats < 1" class="btn btn-default">
                             -
                         </button>
                         <span class="trip_seats-available_value">
                             {{ seats_available }}
                         </span>
-                        <button aria-label="Aumentar en uno la cantidad de asientos" v-on:click.stop="changeSeatsNumber(1)" :disabled="sending || seats_available > 3" class="btn btn-default">
+                        <button :aria-label="$t('aumentarAsientos')" v-on:click.stop="changeSeatsNumber(1)" :disabled="sending || seats_available > 3" class="btn btn-default">
                             +
                         </button>
                         <span class="trip_seats-available_label" v-if="seats_available > 1">
@@ -268,33 +268,33 @@ export default {
                         let error = response.data.errors.error[0];
                         switch (error) {
                         case 'trip_seats_greater_than_zero':
-                            errorMessage = 'La cantidad de asientos no puede ser menor a cero.';
+                            errorMessage = $t('asientosMenorACero');
                             break;
                         case 'trip_seats_less_than_four':
-                            errorMessage = 'Un viaje no puede tener más de 4 asientos disponibles.';
+                            errorMessage = $t('masDeCuatroAsientos');
                             break;
                         case 'trip_invalid_seats':
-                            errorMessage = 'Ya tienes pasajeros subidos no puedes disminuir la cantidad de asientos.';
+                            errorMessage = $t('noPuedesDisminuirAsientos');
                             break;
                         default:
-                            errorMessage = 'Se produjo un error al cambiar la cantidad de asientos. Por favor vuelva a intentarlo.';
+                            errorMessage = $t('errorACambiarAsientos');
                             break;
                         }
                     } else {
-                        errorMessage = 'Se produjo un error al cambiar la cantidad de asientos. Por favor vuelva a intentarlo.';
+                        errorMessage =  $t('errorACambiarAsientos');
                     }
                 } else {
-                    errorMessage = 'Se produjo un error al cambiar la cantidad de asientos. Por favor vuelva a intentarlo.';
+                    errorMessage = $t('errorACambiarAsientos');
                 }
                 dialogs.message(errorMessage, { estado: 'error' });
             });
         },
         deleteTrip: function () {
-            if (window.confirm('¿Estás seguro que deseas cancelar el viaje?')) {
+            if (window.confirm($t('seguroCancelar'))) {
                 this.remove(this.trip.id).then(() => {
-                    dialogs.message('El viaje fue cancelado.', { estado: 'error' });
+                    dialogs.message($t('viajeCancelado'), { estado: 'error' });
                 }).catch(() => {
-                    dialogs.message('Ocurrió un error al cancelar el viaje.', { estado: 'error' });
+                    dialogs.message($t('errorAlCancelar'), { estado: 'error' });
                 });
             }
         },
