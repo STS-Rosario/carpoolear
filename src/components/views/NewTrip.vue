@@ -6,23 +6,23 @@
                     <fieldset class="trip-type-selection">
                         <div class="radio-option">
                             <input type="radio" id="type-driver" value="0" v-model="trip.is_passenger" :disabled="updatingTrip">
-                            <label for="type-driver"  class="control-label">Como conductor</label>
+                            <label for="type-driver"  class="control-label">{{ $t('comoConductor') }}</label>
                         </div>
                         <div class="radio-option">
                             <input type="radio" id="type-passenger" value="1" v-model="trip.is_passenger" :disabled="updatingTrip">
-                            <label for="type-passenger" class="control-label">Como pasajero</label>
+                            <label for="type-passenger" class="control-label">{{ $t('comoPasajero') }}</label>
                         </div>
                     </fieldset>
                     <div class="trip_terms">
                         <input type="checkbox" id="no-lucrar" v-model="no_lucrar" />
                         <div>
                             <label for="no-lucrar" class="trip_terms_label" :class="{'has-error': lucrarError.state }" >
-                                Me comprometo a no lucrar con el viaje.
+                                {{ $t('meComprometo') }}
                                 <span class="tooltip-bottom" data-tooltip="Al pedir una contribución por encima de la máxima, es posible que el viaje sea considerado con fin de lucro y por lo tanto un transporte ilegal de pasajeros, pudiendo ser invalidado el seguro particular automotor y la cobertura contra terceros asociada. Tengamos un buen viaje cuidándonos entre todos :-D">
                                     <i class="fa fa-info-circle" aria-hidden="true"></i>
                                 </span>
                                 <br />
-                                <small>La contribución máxima es igual a gastos de combustible + peaje dividido la cantidad de personas viajando en el auto. Durante la coordinación previa al viaje, cualquier persona puede pedir hacer la división con tickets de combustible y peaje en mano.</small>
+                                <small>{{ $t('contribucionMaxima') }}</small>
                             </label>
                         </div>
                     </div>
@@ -37,17 +37,17 @@
                                 <span>
                                     <input type="checkbox" v-model="allowForeignPoints" id="cbxAllowForeignPoints" />
                                     <label for="cbxAllowForeignPoints">
-                                        Origen o destino fuera de {{ config.country_name }}
+                                        {{ $t('origenOdestino') }} {{ config.country_name }}
                                     </label>
-                                    <span class="tooltip-bottom" data-tooltip="Habilita seleccionar origen o destino fuera de Argentina. Recordá averiguar con la aseguradora del auto, si tenés cobertura contra terceros fuera de la Argentina. Si no es así, tenés que sacar la extensión fuera de Argentina para tener cobertura durante el viaje">
+                                    <span class="tooltip-bottom" :data-tooltip="$t('habilitaOrigen')">
                                     <i class="fa fa-info-circle" aria-hidden="true"></i>
                                 </span>
                                 </span>
                             </div>
                             <div class="new-left trip_points col-sm-13 col-md-15">
                                 <div v-for="(m, index) in points" class="trip_point gmap-autocomplete" :class="{'trip-error' : m.error.state}" :key="index">
-                                    <span v-if="index == 0" class="sr-only">Origen</span>
-                                    <span v-if="index == points.length - 1" class="sr-only">Destino</span>
+                                    <span v-if="index == 0" class="sr-only">{{ $t('origen') }}</span>
+                                    <span v-if="index == points.length - 1" class="sr-only">{{ $t('destino') }}</span>
                                     <autocomplete :placeholder="getPlaceholder(index)" name="'input-' + index" ref="'input-' + index" :value="m.name" v-on:place_changed="(data) =>  getPlace(index, data)" :classes="'form-control form-control-with-icon form-control-map-autocomplete'" :country="allowForeignPoints ? null : 'AR'"  :class="{'has-error': m.error.state}"></autocomplete>
                                     <!-- <GmapAutocomplete  :selectFirstOnEnter="true" :types="['(cities)']" :componentRestrictions="allowForeignPoints ? null : {country: 'AR'}" :placeholder="getPlaceholder(index)"  :value="m.name" :name="'input-' + index" :ref="'input-' + index" v-on:place_changed="(data) => getPlace(index, data)" class="form-control form-control-with-icon form-control-map-autocomplete" :class="{'has-error': m.error.state}"> </GmapAutocomplete> -->
                                     <div @click="m.name = ''" class="date-picker--cross"><i aria-hidden="true" class="fa fa-times"></i></div>
@@ -58,15 +58,15 @@
                                 <div class="trip_information">
                                         <ul class="no-bullet">
                                             <li class="list_item">
-                                                <div class="label-soft">Distancia a recorrer</div>
+                                                <div class="label-soft">{{ $t('distanciaARecorrer') }}</div>
                                                 <div>{{distanceString}}</div>
                                             </li>
                                             <li class="list_item">
-                                                <div class="label-soft">Tiempo estimado de viaje</div>
+                                                <div class="label-soft">{{ $t('tiempoEstimado') }}</div>
                                                 <div>{{estimatedTimeString}}  </div>
                                             </li>
                                             <li class="list_item">
-                                                <div class="label-soft">Huella de carbono (<abbr title="Kilogramos dióxido de carbono equivalente">kg CO<sub>2eq</sub></abbr>)</div>
+                                                <div class="label-soft">{{ $t('huellaCarbono') }} (<abbr title="Kilogramos dióxido de carbono equivalente">kg CO<sub>2eq</sub></abbr>)</div>
                                                 <div>{{CO2String}}</div>
                                             </li>
                                         </ul>
@@ -78,7 +78,7 @@
                         <div class="new-left col-sm-13 col-md-15">
                             <div class="trip_datetime">
                                 <div class="trip_date">
-                                    <label for="date" class="sr-only">Día </label>
+                                    <label for="date" class="sr-only">{{ $t('dia') }} </label>
                                     <DatePicker
                                         :value="date"
                                         :minDate="minDate"
@@ -88,7 +88,7 @@
                                     <span class="error" v-if="dateError.state"> {{dateError.message}} </span>
                                 </div>
                                 <div class="trip_time">
-                                    <label for="time" class="sr-only">Hora</label>
+                                    <label for="time" class="sr-only">{{ $t('hora') }}</label>
                                     <input type="time" v-mask="'##:##'" v-model="time" class="form-control form-control-with-icon form-control-time" id="time" :class="{'has-error': timeError.state}" placeholder="Hora (12:00)" >
                                     <span class="error" v-if="timeError.state"> {{timeError.message}} </span>
                                     <!--<input type="text" v-model="time" />-->
@@ -96,7 +96,7 @@
                             </div>
                             <div class="trip_seats-available">
                                 <fieldset>
-                                    <legend class="label-for-group">Lugares disponibles</legend>
+                                    <legend class="label-for-group">{{ $t('lugaresDisponibles') }}</legend>
                                     <span class="radio-inline">
                                         <input type="radio" id="seats-one" value="1" v-model="trip.total_seats">
                                         <label for="seats-one">1</label>
@@ -117,30 +117,30 @@
                                 <span class="error" v-if="seatsError.state"> {{seatsError.message}} </span>
                             </div>
                             <div class="trip-comment">
-                                <label for="trip_comment"  class="label-for-group"> Comentario para los pasajeros </label>
+                                <label for="trip_comment"  class="label-for-group"> {{ $t('comentarioPasajeros') }} </label>
                                 <textarea maxlength="1000" v-model="trip.description" id="trp_comment" class="form-control"></textarea>
                                 <span class="error" v-if="commentError.state"> {{commentError.message}} </span>
                             </div>
                         </div>
                         <div class="col-sm-11 col-md-9">
                             <fieldset class="trip-privacity">
-                                <legend class="label-for-group"> Privacidad del viaje </legend>
+                                <legend class="label-for-group"> {{ $t('privacidadViaje') }} </legend>
                                 <ul class="no-bullet">
                                     <li>
                                         <input type="radio" id="privacity-public" value="2" v-model="trip.friendship_type_id">
-                                        <label for="privacity-public" class="label-soft">Público</label>
+                                        <label for="privacity-public" class="label-soft">{{ $t('publico') }}</label>
                                     </li>
                                     <li>
                                         <input type="radio" id="privacity-friendofriend" value="1" v-model="trip.friendship_type_id">
-                                        <label for="privacity-friendofriend" class="label-soft">Amigos de Amigos</label>
+                                        <label for="privacity-friendofriend" class="label-soft">{{ $t('amigosamigos') }}</label>
                                     </li>
                                     <li>
                                         <input type="radio" id="privacity-friend" value="0" v-model="trip.friendship_type_id">
-                                        <label for="privacity-friend" class="label-soft">Solo amigos</label>
+                                        <label for="privacity-friend" class="label-soft">{{ $t('soloAmigos') }}</label>
                                     </li>
                                 </ul>
                             </fieldset>
-                            <legend class="label-for-group"> Preferencias del viaje </legend>
+                            <legend class="label-for-group"> {{ $t('preferenciasViaje') }} </legend>
                             <br>
                             <div class="preferences row">
                                 <div class="col-md-8">
@@ -151,7 +151,7 @@
                                         <SvgItem icon="no-smoking" :size="24"></SvgItem>
                                     </div>
                                     <div class="col-md-24">
-                                        <label for="allow-smoking" class="label-soft preferences-text">No fumar</label>
+                                        <label for="allow-smoking" class="label-soft preferences-text">{{ $t('nofumar') }}</label>
                                     </div>
                                 </div>
                                 <div class="col-md-8 row">
@@ -162,7 +162,7 @@
                                         <SvgItem icon="no-animals" :size="24"></SvgItem>
                                     </div>
                                     <div class="col-md-24 no-padding">
-                                        <label for="allow-animals" class="label-soft preferences-text">No animales</label>
+                                        <label for="allow-animals" class="label-soft preferences-text">{{ $t('noanimales') }}</label>
                                     </div>
                                 </div>
                                 <div class="col-md-8">
@@ -173,7 +173,7 @@
                                         <SvgItem icon="no-kids" :size="24"></SvgItem>
                                     </div>
                                     <div class="col-md-24 no-padding">
-                                        <label for="allow-kids" class="label-soft preferences-text">No niños</label>
+                                        <label for="allow-kids" class="label-soft preferences-text">{{ $t('noninos') }}</label>
                                     </div>
                                 </div>
                             </div>
@@ -183,14 +183,14 @@
                                     <span>
                                         <input type="checkbox" v-model="showReturnTrip" id="cbxShowReturnTrip" />
                                         <label for="cbxShowReturnTrip">
-                                            Cargar viaje de regreso
+                                            {{ $t('cargarViajeRegreso') }}
                                         </label>
                                     </span>
                                 </div>
                             </div>
                             <button v-if="!showReturnTrip" class="trip-create btn btn-primary btn-lg btn-shadowed" @click="save" :disabled="saving">
-                                <span v-if="!updatingTrip">CREAR</span>
-                                <span v-else>Actualizar</span>
+                                <span v-if="!updatingTrip">{{ $t('crear') }}</span>
+                                <span v-else>{{ $t('actualizar') }}</span>
                             </button>
                         </div>
                     </div>
@@ -199,8 +199,8 @@
                         <div v-if="showReturnTrip">
                             <div class="new-left trip_points col-sm-13 col-md-15">
                                 <div v-for="(m, index) in otherTrip.points" class="trip_point gmap-autocomplete" :class="{'trip-error' : m.error.state}" :key="index">
-                                    <span v-if="index == 0" class="sr-only">Origen</span>
-                                    <span v-if="index == points.length - 1" class="sr-only">Destino</span>
+                                    <span v-if="index == 0" class="sr-only">{{ $t('origen') }}</span>
+                                    <span v-if="index == points.length - 1" class="sr-only">{{ $t('destino') }}</span>
                                     <autocomplete
                                         :placeholder="getPlaceholder(index)"
                                         name="'input-return-trip' + index"
@@ -221,15 +221,15 @@
                                 <div class="trip_information">
                                     <ul class="no-bullet">
                                         <li class="list_item">
-                                            <div class="label-soft">Distancia a recorrer</div>
+                                            <div class="label-soft">{{ $t('distanciaARecorrer') }}</div>
                                             <div>{{otherTripDistanceString}}</div>
                                         </li>
                                         <li class="list_item">
-                                            <div class="label-soft">Tiempo estimado de viaje</div>
+                                            <div class="label-soft">{{ $t('tiempoEstimado') }}</div>
                                             <div>{{otherTripEstimatedTimeString}} </div>
                                         </li>
                                         <li class="list_item">
-                                            <div class="label-soft">Huella de carbono (<abbr title="Kilogramos dióxido de carbono equivalente">kg CO<sub>2eq</sub></abbr>)</div>
+                                            <div class="label-soft">{{ $t('huellaCarbono') }} (<abbr title="Kilogramos dióxido de carbono equivalente">kg CO<sub>2eq</sub></abbr>)</div>
                                             <div>{{otherTripCO2String}}</div>
                                         </li>
                                     </ul>
@@ -241,7 +241,7 @@
                         <div class="new-left col-sm-13 col-md-15">
                             <div class="trip_datetime">
                                 <div class="trip_date">
-                                    <label class="sr-only">Día </label>
+                                    <label class="sr-only">{{ $t('dia') }} </label>
                                     <DatePicker
                                         :value="otherTrip.date"
                                         :minDate="otherTrip.minDate"
@@ -251,7 +251,7 @@
                                     <span class="error" v-if="otherTrip.dateError.state"> {{otherTrip.dateError.message}} </span>
                                 </div>
                                 <div class="trip_time">
-                                    <label for="otherTrip-time" class="sr-only">Hora</label>
+                                    <label for="otherTrip-time" class="sr-only">{{ $t('hora') }}</label>
                                     <input type="time" v-mask="'##:##'" v-model="otherTrip.time" class="form-control form-control-with-icon form-control-time" id="otherTrip-time" :class="{'has-error': otherTrip.timeError.state}" placeholder="Hora (12:00)">
                                     <span class="error" v-if="otherTrip.timeError.state"> {{otherTrip.timeError.message}} </span>
                                     <!--<input type="text" v-model="time" />-->
@@ -259,7 +259,7 @@
                             </div>
                             <div class="trip_seats-available">
                                 <fieldset>
-                                    <legend class="label-for-group">Lugares disponibles</legend>
+                                    <legend class="label-for-group">{{ $t('lugaresDisponibles') }}</legend>
                                     <span class="radio-inline">
                                             <input type="radio" id="otherTrip-seats-one" value="1" v-model="otherTrip.trip.total_seats">
                                             <label for="otherTrip-seats-one">1</label>
@@ -280,30 +280,30 @@
                                 <span class="error" v-if="otherTrip.seatsError.state"> {{otherTrip.seatsError.message}} </span>
                             </div>
                             <div class="trip-comment">
-                                <label for="otherTrip-trip_comment" class="label-for-group"> Comentario para los pasajeros </label>
+                                <label for="otherTrip-trip_comment" class="label-for-group"> {{ $t('comentarioPasajeros') }} </label>
                                 <textarea maxlength="1000" v-model="otherTrip.trip.description" id="otherTrip-trp_comment" class="form-control"></textarea>
                                 <span class="error" v-if="otherTrip.commentError.state"> {{otherTrip.commentError.message}} </span>
                             </div>
                         </div>
                         <div class="col-sm-11 col-md-9">
                             <fieldset class="trip-privacity">
-                                <legend class="label-for-group"> Privacidad del viaje de vuelta </legend>
+                                <legend class="label-for-group"> {{ $t('privacidadViajeVuelta') }} </legend>
                                 <ul class="no-bullet">
                                     <li>
                                         <input type="radio" id="otherTrip-privacity-public" value="2" v-model="otherTrip.trip.friendship_type_id" >
-                                        <label for="otherTrip-privacity-public" class="label-soft">Público</label>
+                                        <label for="otherTrip-privacity-public" class="label-soft">{{ $t('publico') }}</label>
                                     </li>
                                     <li>
                                         <input type="radio" id="otherTrip-privacity-friendofriend" value="1" v-model="otherTrip.trip.friendship_type_id" >
-                                        <label for="otherTrip-privacity-friendofriend" class="label-soft">Amigos de Amigos</label>
+                                        <label for="otherTrip-privacity-friendofriend" class="label-soft">{{ $t('amigosamigos') }}</label>
                                     </li>
                                     <li>
                                         <input type="radio" id="otherTrip-privacity-friend" value="0" v-model="otherTrip.trip.friendship_type_id" >
-                                        <label for="otherTrip-privacity-friend" class="label-soft">Solo amigos</label>
+                                        <label for="otherTrip-privacity-friend" class="label-soft">{{ $t('soloAmigos') }}</label>
                                     </li>
                                 </ul>
                             </fieldset>
-                            <legend class="label-for-group"> Preferencias del viaje </legend>
+                            <legend class="label-for-group"> {{ $t('preferenciasViaje') }} </legend>
                             <br>
                             <div class="preferences row">
                                 <div class="col-md-8">
@@ -314,7 +314,7 @@
                                         <SvgItem icon="no-smoking" :size="24"></SvgItem>
                                     </div>
                                     <div class="col-md-24">
-                                        <label for="allow-smoking" class="label-soft preferences-text">No fumar</label>
+                                        <label for="allow-smoking" class="label-soft preferences-text">{{ $t('nofumar') }}</label>
                                     </div>
                                 </div>
                                 <div class="col-md-8 row">
@@ -325,7 +325,7 @@
                                         <SvgItem icon="no-animals" :size="24"></SvgItem>
                                     </div>
                                     <div class="col-md-24 no-padding">
-                                        <label for="allow-animals" class="label-soft preferences-text">No animales</label>
+                                        <label for="allow-animals" class="label-soft preferences-text">{{ $t('noanimales') }}</label>
                                     </div>
                                 </div>
                                 <div class="col-md-8">
@@ -337,13 +337,13 @@
                                     </div>
 
                                     <div class="col-md-24 no-padding">
-                                        <label for="allow-kids" class="label-soft preferences-text">No niños</label>
+                                        <label for="allow-kids" class="label-soft preferences-text">{{ $t('noninos') }}</label>
                                     </div>
                                 </div>
                             </div>
                             <button class="trip-create btn btn-primary btn-lg btn-shadowed" @click="save" :disabled="saving">
-                                <span v-if="!updatingTrip">CREAR</span>
-                                <span v-else>Actualizar</span>
+                                <span v-if="!updatingTrip">{{ $t('crear') }}</span>
+                                <span v-else>{{ $t('actualizar') }}</span>
                             </button>
 
                         </div>
@@ -675,9 +675,8 @@ export default {
                     p.error.message = 'Seleccione una localidad válida.';
                     globalError = true;
                 } else {
-                    // FIXME hardcode argentina
                     console.log('COUNTRY', p.json.country);
-                    foreignPoints += (p.json.country === 'ARG' ? 0 : 1);
+                    foreignPoints += (p.json.country === this.config.osm_country ? 0 : 1);
                 }
             });
             if (foreignPoints > 1) {
@@ -691,13 +690,11 @@ export default {
                 this.otherTrip.points.forEach(p => {
                     if (!p.json) {
                         p.error.state = true;
-                        // FIXME harcode language
                         p.error.message = 'Seleccione una localidad válida.';
                         globalError = true;
                     } else {
-                        // FIXME hardcode argentina
                         console.log('COUNTRY', p.json.country);
-                        foreignPoints += (p.json.country === 'ARG' ? 0 : 1);
+                        foreignPoints += (p.json.country === this.config.osm_country ? 0 : 1);
                     }
                 });
                 if (foreignPoints > 1) {
@@ -862,7 +859,6 @@ export default {
 
             this.trip = this.getSaveInfo(this, this.estimatedTimeString);
             if (!this.updatingTrip) {
-                // FIXME not saving
                 let trip = JSON.parse(JSON.stringify(this.trip));
                 trip.allow_kids = !trip.allow_kids;
                 trip.allow_animals = !trip.allow_animals;
@@ -886,8 +882,7 @@ export default {
                         }
                     }).then((ot) => {
                         this.saving = false;
-                        // FIXME uncomented me
-                        // this.$router.replace({ name: 'detail_trip', params: { id: t.id } });
+                        this.$router.replace({ name: 'detail_trip', params: { id: t.id } });
                     });
                 }).catch((err) => {
                     console.log('error_creating', err);

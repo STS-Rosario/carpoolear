@@ -66,8 +66,6 @@ import { mapGetters, mapActions } from 'vuex';
 import Tab from '../elements/Tab';
 import Tabset from '../elements/Tabset';
 
-// FIXME: past trips sometimes dont load
-
 export default {
     name: 'profile-trip',
     data () {

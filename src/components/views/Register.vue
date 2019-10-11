@@ -118,41 +118,41 @@ export default {
             let globalError = false;
             if (this.email.length < 1) {
                 this.emailError.state = true;
-                this.emailError.message = 'Olvido ingresar su email.';
+                this.emailError.message = $t('olvidoEmail');
                 globalError = true;
             } else if (!emailRegex.test(this.email)) {
                 this.emailError.state = true;
-                this.emailError.message = 'Ingrese un email válido.';
+                this.emailError.message = $t('ingreseEmailValido');
                 globalError = true;
             }
 
             if (this.password.length < 1) {
                 this.passwordError.state = true;
-                this.passwordError.message = 'Olvido ingresar su contraseña.';
+                this.passwordError.message = $t('olvidoContrasena');
                 globalError = true;
             } else if (this.password.length < 8) {
                 this.passwordError.state = true;
-                this.passwordError.message = 'Las contraseña debe tener al menos 8 caracteres.';
+                this.passwordError.message = $t('contraCorta');
                 globalError = true;
             } else if (this.passwordConfirmation < 1) {
                 this.passwordError.state = true;
-                this.passwordError.message = 'Olvido confirmar su contraseña.';
+                this.passwordError.message = $t('olvidoConfirmarContra');
                 globalError = true;
             } else if (this.password !== this.passwordConfirmation) {
                 this.passwordError.state = true;
-                this.passwordError.message = 'Las contraseñas no coinciden.';
+                this.passwordError.message = $t('contraNoCoinciden');
                 globalError = true;
             }
 
             if (this.name.length < 1) {
                 this.nombreError.state = true;
-                this.nombreError.message = 'Olvido ingresar su nombre.';
+                this.nombreError.message = $t('olvidoNombre');
                 globalError = true;
             }
 
             if (this.sureName.length < 1) {
                 this.apellidoError.state = true;
-                this.apellidoError.message = 'Olvido ingresar su apellido.';
+                this.apellidoError.message = $t('olvidoApellido');
                 globalError = true;
             }
 
@@ -185,7 +185,7 @@ export default {
         },
         register (event) {
             if (this.validate()) {
-                dialogs.message('Debe corregir o completar algunos campos para finalizar su registro.', { duration: 10, estado: 'error' });
+                dialogs.message($t('debeCorregirCampos'), { duration: 10, estado: 'error' });
                 return;
             }
             this.progress = true;
@@ -221,14 +221,14 @@ export default {
                 if (err) {
                     if (err.status === 422) {
                         if (err.data && err.data.errors && err.data.errors.email) {
-                            dialogs.message('La cuenta de email ingresada se encuentra en uso.', { estado: 'error' });
+                            dialogs.message($t('mailEnUso'), { estado: 'error' });
                             this.emailError.state = true;
-                            this.emailError.message = 'La cuenta de email ingresada se encuentra en uso.';
+                            this.emailError.message = $t('mailEnUso');
                         } else {
-                            dialogs.message('Algunos de los campos ingresados no es válido.', { estado: 'error' });
+                            dialogs.message($t('debeCorregirCampos'), { estado: 'error' });
                         }
                     } else {
-                        dialogs.message('Ocurrió un error al procesar el registro, por favor vuelva a intentar.', { estado: 'error' });
+                        dialogs.message($t('errorRegistro'), { estado: 'error' });
                     }
                 }
                 this.progress = false;
