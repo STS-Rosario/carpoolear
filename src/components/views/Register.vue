@@ -118,41 +118,41 @@ export default {
             let globalError = false;
             if (this.email.length < 1) {
                 this.emailError.state = true;
-                this.emailError.message = $t('olvidoEmail');
+                this.emailError.message = this.$t('olvidoEmail');
                 globalError = true;
             } else if (!emailRegex.test(this.email)) {
                 this.emailError.state = true;
-                this.emailError.message = $t('ingreseEmailValido');
+                this.emailError.message = this.$t('ingreseEmailValido');
                 globalError = true;
             }
 
             if (this.password.length < 1) {
                 this.passwordError.state = true;
-                this.passwordError.message = $t('olvidoContrasena');
+                this.passwordError.message = this.$t('olvidoContrasena');
                 globalError = true;
             } else if (this.password.length < 8) {
                 this.passwordError.state = true;
-                this.passwordError.message = $t('contraCorta');
+                this.passwordError.message = this.$t('contraCorta');
                 globalError = true;
             } else if (this.passwordConfirmation < 1) {
                 this.passwordError.state = true;
-                this.passwordError.message = $t('olvidoConfirmarContra');
+                this.passwordError.message = this.$t('olvidoConfirmarContra');
                 globalError = true;
             } else if (this.password !== this.passwordConfirmation) {
                 this.passwordError.state = true;
-                this.passwordError.message = $t('contraNoCoinciden');
+                this.passwordError.message = this.$t('contraNoCoinciden');
                 globalError = true;
             }
 
             if (this.name.length < 1) {
                 this.nombreError.state = true;
-                this.nombreError.message = $t('olvidoNombre');
+                this.nombreError.message = this.$t('olvidoNombre');
                 globalError = true;
             }
 
             if (this.sureName.length < 1) {
                 this.apellidoError.state = true;
-                this.apellidoError.message = $t('olvidoApellido');
+                this.apellidoError.message = this.$t('olvidoApellido');
                 globalError = true;
             }
 
@@ -185,7 +185,7 @@ export default {
         },
         register (event) {
             if (this.validate()) {
-                dialogs.message($t('debeCorregirCampos'), { duration: 10, estado: 'error' });
+                dialogs.message(this.$t('debeCorregirCampos'), { duration: 10, estado: 'error' });
                 return;
             }
             this.progress = true;
@@ -221,14 +221,14 @@ export default {
                 if (err) {
                     if (err.status === 422) {
                         if (err.data && err.data.errors && err.data.errors.email) {
-                            dialogs.message($t('mailEnUso'), { estado: 'error' });
+                            dialogs.message(this.$t('mailEnUso'), { estado: 'error' });
                             this.emailError.state = true;
-                            this.emailError.message = $t('mailEnUso');
+                            this.emailError.message = this.$t('mailEnUso');
                         } else {
-                            dialogs.message($t('debeCorregirCampos'), { estado: 'error' });
+                            dialogs.message(this.$t('debeCorregirCampos'), { estado: 'error' });
                         }
                     } else {
-                        dialogs.message($t('errorRegistro'), { estado: 'error' });
+                        dialogs.message(this.$t('errorRegistro'), { estado: 'error' });
                     }
                 }
                 this.progress = false;

@@ -4,7 +4,7 @@
             <div class="actionbar_section actionbar_icon">
                 <span v-if="showLogo">
                     <router-link :to="{ name: 'trips', params: { clearSearch: true } }"  v-on:click.native="tripsClick">
-                        <img :src="carpoolear_logo" />
+                        <img :src="app_logo" />
                     </router-link>
                 </span>
                 <template v-else v-for="item in leftHeaderButton" v-if="item.show">
@@ -41,8 +41,7 @@
                 <div class="header_panel-left" v-if="logoHeaderVisibility" >
                     <img :src="background_desktop_mini" v-if="isNotLargeDesktop" />
                     <img :src="background_desktop" v-if="!isNotLargeDesktop" />
-                    <img :src="carpoolear_logo"/>
-                    <!--<router-link tag="h1" :to="{name: 'trips'}" class="header_title"> Carpoolear </router-link>-->
+                    <img :src="app_logo"/>
                 </div>
             </router-link>
             <div class="header_panel-right">
@@ -131,7 +130,7 @@ export default {
         return {
             background_desktop_mini: process.env.ROUTE_BASE + 'static/img/background_desktop_mini.png',
             background_desktop: process.env.ROUTE_BASE + 'static/img/background_desktop.png',
-            carpoolear_logo: process.env.ROUTE_BASE + 'static/img/carpoolear_logo.png',
+            app_logo: process.env.ROUTE_BASE + 'static/img/' + process.env.TARGET_APP + '_logo.png',
             showModal: false
         };
     },
@@ -154,7 +153,8 @@ export default {
             logoHeaderVisibility: 'actionbars/headerLogoVisibility',
             isNotLargeDesktop: 'device/isNotLargeDesktop',
             isFacebokApp: 'device/isFacebokApp',
-            isMobile: 'device/isMobile'
+            isMobile: 'device/isMobile',
+            config: 'auth/appConfig'
         }),
 
         showLogo () {

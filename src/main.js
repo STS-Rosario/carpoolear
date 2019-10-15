@@ -87,6 +87,7 @@ if (process.env.SERVE) {
         }, 2000);
     }
 }
+console.log('TARGET_APP', process.env.TARGET_APP);
 
 bus.on('system-ready', () => {
     let app = new Vue({

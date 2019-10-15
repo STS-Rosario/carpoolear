@@ -103,6 +103,7 @@ if (argv._.length > 0) {
             process.env.SERVE = true;
             process.env.CORDOVA = false;
             process.env.NODE_ENV = NODE_ENV;
+            process.env.TARGET_APP = TARGET;
             shell.exec('webpack-dev-server --inline --progress --config build/webpack.dev.conf.js',
                 {
                     env: process.env,
@@ -132,6 +133,7 @@ if (argv._.length > 0) {
             let buildEnv = PROD ? 'build.js' : 'build-dev.js';
             process.env.CORDOVA = false;
             process.env.NODE_ENV = 'production';
+            process.env.TARGET_APP = TARGET;
             let options = {
                 env: process.env
             };

@@ -106,7 +106,8 @@ const messages = {
         olvidoApellido: 'Olvido ingresar su apellido.',
         debeCorregirCampos: 'Debe corregir o completar algunos campos para finalizar su registro.',
         mailEnUso: 'La cuenta de email ingresada se encuentra en uso.',
-        errorRegistro: 'Ocurrió un error al procesar el registro, por favor vuelva a intentar.'
+        errorRegistro: 'Ocurrió un error al procesar el registro, por favor vuelva a intentar.',
+        ingresaORegistrate: ''
     },
     'ch': {
         documento: 'Número de RUT',
@@ -205,7 +206,6 @@ const messages = {
         crear: 'CREAR',
         actualizar: 'Actualizar',
         privacidadViajeVuelta: 'Privacidad del viaje de vuelta',
-        privacidadViajeVuelta: 'Privacidad del viaje de vuelta',
         olvidoEmail: 'Olvido ingresar su email.',
         ingreseEmailValido: 'Ingrese un email válido.',
         olvidoContrasena: 'Olvido ingresar su contraseña.',
@@ -216,8 +216,8 @@ const messages = {
         olvidoApellido: 'Olvido ingresar su apellido.',
         debeCorregirCampos: 'Debe corregir o completar algunos campos para finalizar su registro.',
         mailEnUso: 'La cuenta de email ingresada se encuentra en uso.',
-        errorRegistro: 'Ocurrió un error al procesar el registro, por favor vuelva a intentar.'
-
+        errorRegistro: 'Ocurrió un error al procesar el registro, por favor vuelva a intentar.',
+        ingresaORegistrate: ''
     }
 };
 export default messages;
