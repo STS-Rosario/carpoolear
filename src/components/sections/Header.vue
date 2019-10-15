@@ -29,9 +29,9 @@
                         <template slot="button">
                             <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
                         </template>
-                        <li><router-link tag="a" :to="{name: 'acerca_de'}"  >Acerca de</router-link></li>
-                        <li><router-link :to="{name: 'terms'}" tag="a">Términos y Condiciones</router-link></li>
-                        <li><a @click="logout" v-if="!isFacebokApp">Cerrar sesión</a></li>
+                        <li><router-link tag="a" :to="{name: 'acerca_de'}"  >{{ $t('acercaDe') }}</router-link></li>
+                        <li><router-link :to="{name: 'terms'}" tag="a">{{ $t('tyc') }}</router-link></li>
+                        <li><a @click="logout" v-if="!isFacebokApp">{{ $t('cerrarSesion') }}</a></li>
                     </dropdown>
                 </div>
             </div>
@@ -46,7 +46,7 @@
             </router-link>
             <div class="header_panel-right">
                 <modal :name="'modal'" v-if="showModal" @close="showModal = false" :title="'Test'" :body="'Body'">
-                    <h3 slot="header">Invitar a amigos</h3>
+                    <h3 slot="header">{{ $t('invitarAmigos') }}</h3>
                     <div slot="body" class="social-share">
                         <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fcarpoolear.com%2F" target="_blank" aria-label="Compartir en Facebook" class="lnk lnk-social-network lnk-facebook">
                             <i class="fa fa-facebook" aria-hidden="true"></i>
@@ -62,11 +62,11 @@
                         </a>
                     </div>
                 </modal>
-                <button @click="share" type="button" class="btn btn-link">Invitar amigos</button>
-                <router-link class="btn btn-link trips-link" :to="{name: 'trips', params: { clearSearch: true }}">Viajes</router-link>
+                <button @click="share" type="button" class="btn btn-link">{{ $t('invitarAmigos') }}</button>
+                <router-link class="btn btn-link trips-link" :to="{name: 'trips', params: { clearSearch: true }}">{{ $t('viajes') }}</router-link>
                 <!--<router-link class="btn btn-link" v-if="!logged" :to="{name: 'trips'}">Información</router-link>-->
                 <!--<router-link class="btn btn-link" v-if="!logged" :to="{name: 'register'}">Registrarme</router-link>-->
-                <router-link class="btn btn-primary" btn-lg v-if="!logged" :to="{name: 'login'}">Inicio</router-link>
+                <router-link class="btn btn-primary" btn-lg v-if="!logged" :to="{name: 'login'}">{{ $t('inicio') }}</router-link>
 
 
                 <span class="header_notifications" @click="toNotifications" v-if="logged">
@@ -84,16 +84,16 @@
                             <div class="circle-box header_profile_image" v-imgSrc:profile="user.image"></div>
                         </template>
                         <li>
-                            <router-link :to="{name: 'my-trips'}">Mis Viajes</router-link>
+                            <router-link :to="{name: 'my-trips'}">{{ $t('misViajes') }}</router-link>
                         </li>
                         <li>
-                            <router-link :to="{name: 'conversations-list'}">Mensajes</router-link>
+                            <router-link :to="{name: 'conversations-list'}">{{ $t('mensajes') }}</router-link>
                         </li>
                         <li>
-                            <router-link :to="{name: 'profile', params: {id: 'me'}}">Perfil</router-link>
+                            <router-link :to="{name: 'profile', params: {id: 'me'}}">{{ $t('perfil') }}</router-link>
                         </li>
                         <li v-if="user.is_admin">
-                            <router-link :to="{name: 'admin-page'}">Administracion</router-link>
+                            <router-link :to="{name: 'admin-page'}">{{ $t('administracion') }}</router-link>
                         </li>
                         <li role="separator" class="divider"></li>
                         <!--<li>
@@ -103,12 +103,12 @@
                         <li>
                             <router-link :to="{name: 'profile_update'}">Configuración</router-link>
                         </li>-->
-                        <li><a @click="logout" v-if="!isFacebokApp">Cerrar sesión</a></li>
+                        <li><a @click="logout" v-if="!isFacebokApp">{{ $t('cerrarSesion') }}</a></li>
                     </dropdown>
                 </div>
 
 
-                <router-link v-if="logged" :to="{name: 'new-trip'}" class="btn btn-primary btn-lg">Crear Viaje</router-link>
+                <router-link v-if="logged" :to="{name: 'new-trip'}" class="btn btn-primary btn-lg">{{ $t('crearViaje') }}</router-link>
 
             </div>
             <div class="cf"></div>

@@ -26,7 +26,7 @@
             <time class="trip_date_right" :datetime="trip.trip_date" v-if="tripCardTheme === 'light'">
                 <div class="trip_date_date">
                     <span class="trip_date_date_day">
-                        <span>{{ [ trip.trip_date ] | moment("dd") }}</span>
+                        <span>{{ [ trip.trip_date ] | moment("DD") }}</span>
                     </span>
                     <br />
                     <span class="trip_date_date_month">{{ [ trip.trip_date ] | moment("MMM") }}</span>
@@ -301,33 +301,33 @@ export default {
                         let error = response.data.errors.error[0];
                         switch (error) {
                         case 'trip_seats_greater_than_zero':
-                            errorMessage = 'La cantidad de asientos no puede ser menor a cero.';
+                            errorMessage = this.$t('asientosMenorACero');
                             break;
                         case 'trip_seats_less_than_four':
-                            errorMessage = 'Un viaje no puede tener más de 4 asientos disponibles.';
+                            errorMessage = this.$t('masDeCuatroAsientos');
                             break;
                         case 'trip_invalid_seats':
-                            errorMessage = 'Ya tienes pasajeros subidos no puedes disminuir la cantidad de asientos.';
+                            errorMessage = this.$t('noPuedesDisminuirAsientos');
                             break;
                         default:
-                            errorMessage = 'Se produjo un error al cambiar la cantidad de asientos. Por favor vuelva a intentarlo.';
+                            errorMessage = this.$t('errorACambiarAsientos');
                             break;
                         }
                     } else {
-                        errorMessage = 'Se produjo un error al cambiar la cantidad de asientos. Por favor vuelva a intentarlo.';
+                        errorMessage = this.$t('errorACambiarAsientos');
                     }
                 } else {
-                    errorMessage = 'Se produjo un error al cambiar la cantidad de asientos. Por favor vuelva a intentarlo.';
+                    errorMessage = this.$t('errorACambiarAsientos');
                 }
                 dialogs.message(errorMessage, { estado: 'error' });
             });
         },
         deleteTrip: function () {
-            if (window.confirm('¿Estás seguro que deseas cancelar el viaje?')) {
+            if (window.confirm(this.$t('seguroCancelar'))) {
                 this.remove(this.trip.id).then(() => {
-                    dialogs.message('El viaje fue cancelado.', { estado: 'error' });
+                    dialogs.message(this.$t('viajeCancelado'), { estado: 'error' });
                 }).catch(() => {
-                    dialogs.message('Ocurrió un error al cancelar el viaje.', { estado: 'error' });
+                    dialogs.message(this.$t('errorAlCancelar'), { estado: 'error' });
                 });
             }
         },

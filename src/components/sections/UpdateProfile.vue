@@ -235,14 +235,14 @@ export default {
         },
         grabar () {
             if (this.validate()) {
-                dialogs.message('Te faltaron completar campos obligatorios o ingresaste datos inválidos.', { duration: 10, estado: 'error' });
+                dialogs.message(this.$t('faltanCamposObligatorios'), { duration: 10, estado: 'error' });
                 return;
             }
             this.loading = true;
             var data = Object.assign({}, this.user);
             if (this.pass.password) {
                 if (this.pass.password !== this.pass.password_confirmation) {
-                    this.error = 'Password no coincide';
+                    this.error = this.$t('passwordNoCoincide');
                     return;
                 }
                 data.password = this.pass.password;
@@ -274,7 +274,7 @@ export default {
                 this.pass.password = '';
                 this.pass.password_confirmation = '';
                 this.loading = false;
-                dialogs.message('Perfil actualizado correctamente.');
+                dialogs.message(this.$t('perfilActualizadoCorrectamente'));
                 if (this.patente.length) {
                     if (this.car) {
                         this.car.patente = this.patente;
@@ -292,12 +292,12 @@ export default {
                     this.$router.rememberBack();
                 } else {
                     if (!(this.user.image && this.user.image.length > 0)) {
-                        dialogs.message('Debes cargar una imagen de perfil.', { duration: 10, estado: 'error' });
+                        dialogs.message(this.$t('debesImagenPerfil'), { duration: 10, estado: 'error' });
                     }
                 }
             }).catch(response => {
                 this.loading = false;
-                this.error = 'No se pudo grabar los datos. Intente de nuevo';
+                this.error = this.$t('errorDatos');
             });
         },
         validate () {
@@ -322,7 +322,7 @@ export default {
 
             if (!this.user.name || this.user.name.length < 1) {
                 this.nombreError.state = true;
-                this.nombreError.message = 'Olvidaste ingresar tu nombre y apellido.';
+                this.nombreError.message = this.$t('olvidasteNombre');
                 globalError = true;
             }
 
@@ -343,30 +343,30 @@ export default {
             if (this.patente && this.patente.length > 0) {
                 if (!patentRegex.test(this.patente)) {
                     this.patentError.state = true;
-                    this.patentError.message = 'La patente ingresada no tiene un formato válido.';
+                    this.patentError.message = this.$t('patenteNoValida');
                     globalError = true;
                 }
             }
 
             if (!this.user.description || this.user.description.length < 1) {
                 this.descError.state = true;
-                this.descError.message = 'Olvidaste completar tu descripción.';
+                this.descError.message = this.$t('olvidasteDescripcion');
                 globalError = true;
             } else if (this.user.description.replace(' ', '').length < 10) {
                 this.descError.state = true;
-                this.descError.message = 'Ups! Tu descripción es muy acotada. No seas tímido, contanos un poco más.';
+                this.descError.message = this.$t('descripcionCorta');
                 globalError = true;
             }
 
             if (this.dniRawValue && this.dniRawValue.length > 0 && this.dniRawValue.length < 7) {
                 this.dniError.state = true;
-                this.dniError.message = 'El DNI que ingresaste no es válido.';
+                this.dniError.message = this.$t('dniNoValido');
                 globalError = true;
             }
 
             if (this.user.mobile_phone && this.user.mobile_phone.length > 0 && this.user.mobile_phone.length < 6) {
                 this.phoneError.state = true;
-                this.phoneError.message = 'El teléfono que ingresaste no es válido.';
+                this.phoneError.message = this.$t('telefonoNoValido');
                 globalError = true;
             }
 

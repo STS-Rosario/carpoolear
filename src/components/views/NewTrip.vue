@@ -672,7 +672,7 @@ export default {
             this.points.forEach(p => {
                 if (!p.json) {
                     p.error.state = true;
-                    p.error.message = 'Seleccione una localidad válida.';
+                    p.error.message = this.$t('localidadValida');
                     globalError = true;
                 } else {
                     console.log('COUNTRY', p.json.country);
@@ -682,7 +682,7 @@ export default {
             if (foreignPoints > 1) {
                 globalError = true;
                 this.points[0].error.state = true;
-                this.points[0].error.message = 'El origen o el destino de tu viaje tiene que estar en Argentina.';
+                this.points[0].error.message = this.$t('origenDestinoArgentina');
             }
 
             if (this.showReturnTrip) {
@@ -690,7 +690,7 @@ export default {
                 this.otherTrip.points.forEach(p => {
                     if (!p.json) {
                         p.error.state = true;
-                        p.error.message = 'Seleccione una localidad válida.';
+                        p.error.message = this.$t('seleccioneLocalidadValida');
                         globalError = true;
                     } else {
                         console.log('COUNTRY', p.json.country);
@@ -700,13 +700,13 @@ export default {
                 if (foreignPoints > 1) {
                     globalError = true;
                     this.otherTrip.points[0].error.state = true;
-                    this.otherTrip.points[0].error.message = 'El origen o el destino de tu viaje tiene que estar en Argentina.';
+                    this.otherTrip.points[0].error.message = this.$t('origenDestinoArgentina');
                 }
             }
 
             if (!this.time || !moment(this.time, 'HH mm').isValid()) {
                 this.timeError.state = true;
-                this.timeError.message = 'No ingresaste un horario válido.';
+                this.timeError.message = this.$t('noHorarioValido');
                 globalError = true;
             } else {
                 validTime = true;
@@ -714,9 +714,9 @@ export default {
 
             if (this.points[0].json && last(this.points).json && this.points[0].name === last(this.points).name) {
                 this.points[0].error.state = true;
-                this.points[0].error.message = 'La localidad de origen y destino no deben ser la misma.';
+                this.points[0].error.message = this.$t('origenDestinoDistintos');
                 last(this.points).error.state = true;
-                last(this.points).error.message = 'La localidad de origen y destino no deben ser la misma.';
+                last(this.points).error.message = this.$t('origenDestinoDistintos');
                 this.sameCity = true;
                 globalError = true;
             }
@@ -724,21 +724,21 @@ export default {
             if (!(this.dateAnswer && this.dateAnswer.length) || !moment(this.dateAnswer).isValid()) {
                 globalError = true;
                 this.dateError.state = true;
-                this.dateError.message = 'Aún no ha ingresado ninguna fecha.';
+                this.dateError.message = this.$t('faltaFecha');
             } else {
                 validDate = true;
             }
             if (this.trip.total_seats < this.passengers) {
                 globalError = true;
                 this.seatsError.state = true;
-                this.seatsError.message = 'Ya tienes ' + this.trip.passengers + ' subidos en este viaje. No puedes cambiar el número de asientos por uno menor al de pasajeros ya subidos.';
-                dialogs.message('Ya tienes ' + this.trip.passengers + ' subidos en este viaje. No puedes cambiar el número de asientos por uno menor al de pasajeros ya subidos.', { estado: 'error' });
+                this.seatsError.message = this.$t('yaTienes') + this.trip.passengers + this.$t('pasajerosSubidos');
+                dialogs.message(this.$t('yaTienes') + this.trip.passengers + this.$t('pasajerosSubidos'), { estado: 'error' });
             } else if (globalError) {
-                dialogs.message('Algunos datos ingresados no son válidos.', { estado: 'error' });
+                dialogs.message(this.$t('algunosDatosNoValidos'), { estado: 'error' });
             } else if (!this.no_lucrar) {
                 this.lucrarError.state = true;
-                this.lucrarError.message = 'Debes indicar que te comprometes a no lucrar con el viaje.';
-                dialogs.message('Debes indicar que te comprometes a no lucrar con el viaje.', { estado: 'error' });
+                this.lucrarError.message = this.$t('teComprometesANoLucrar');
+                dialogs.message(this.$t('teComprometesANoLucrar'), { estado: 'error' });
                 globalError = true;
             }
             if (validDate && validTime) {
@@ -749,7 +749,7 @@ export default {
                     if (moment(this.time, 'HH mm').format('HH mm') < moment().format('HH mm')) {
                         console.log('es antes de ahora');
                         this.timeError.state = true;
-                        this.timeError.message = 'En Carpoolear no se permiten viajes hacia el pasado :), revisá la fecha y hora de tu viaje.';
+                        this.timeError.message = this.$t('viajesPasado');
                         globalError = true;
                     }
                 }
@@ -758,7 +758,7 @@ export default {
             if (this.showReturnTrip) {
                 if (!this.otherTrip.time || !moment(this.otherTrip.time, 'HH mm').isValid()) {
                     this.otherTrip.timeError.state = true;
-                    this.otherTrip.timeError.message = 'No ingresaste un horario válido.';
+                    this.otherTrip.timeError.message = this.$t('noHorarioValido');
                     globalError = true;
                 } else {
                     validOtherTripTime = true;
@@ -766,9 +766,9 @@ export default {
 
                 if (this.otherTrip.points[0].json && last(this.otherTrip.points).json && this.otherTrip.points[0].name === last(this.otherTrip.points).name) {
                     this.otherTrip.points[0].error.state = true;
-                    this.otherTrip.points[0].error.message = 'La localidad de origen y destino no deben ser la misma.';
+                    this.otherTrip.points[0].error.message = this.$t('origenDestinoDistintos');
                     last(this.otherTrip.points).error.state = true;
-                    last(this.otherTrip.points).error.message = 'La localidad de origen y destino no deben ser la misma.';
+                    last(this.otherTrip.points).error.message = this.$t('origenDestinoDistintos');
                     this.otherTrip.sameCity = true;
                     globalError = true;
                 }
@@ -776,12 +776,12 @@ export default {
                 if (!(this.otherTrip.dateAnswer && this.otherTrip.dateAnswer.length) || !moment(this.otherTrip.dateAnswer).isValid()) {
                     globalError = true;
                     this.otherTrip.dateError.state = true;
-                    this.otherTrip.dateError.message = 'Aún no ha ingresado ninguna fecha.';
+                    this.otherTrip.dateError.message = this.$t('faltaFecha');
                 } else {
                     validOtherTripDate = true;
                 }
                 if (globalError) {
-                    dialogs.message('Algunos datos ingresados no son válidos.', { estado: 'error' });
+                    dialogs.message(this.$t('algunosDatosNoValidos'), { estado: 'error' });
                 }
 
                 if (validOtherTripTime && validOtherTripDate) {
@@ -792,7 +792,7 @@ export default {
                         if (moment(this.otherTrip.time, 'HH mm').format('HH mm') < moment().format('HH mm')) {
                             console.log('es antes de ahora');
                             this.otherTrip.timeError.state = true;
-                            this.otherTrip.timeError.message = 'En Carpoolear no se permiten viajes hacia el pasado :), revisá la fecha y hora de tu viaje.';
+                            this.otherTrip.timeError.message = this.$t('viajesPasado');
                             globalError = true;
                         }
                     }
@@ -817,7 +817,7 @@ export default {
 
                     if (otherTripDate.isBefore(tripDate) || otherTripDate.isSame(tripDate)) {
                         this.otherTrip.timeError.state = true;
-                        this.otherTrip.timeError.message = 'La fecha y hora de tu viaje de regreso deben que ser mayores a la fecha y hora de tu viaje de ida.';
+                        this.otherTrip.timeError.message = this.$t('fechaHoraLogicas');
                         globalError = true;
                     }
                 }
@@ -887,9 +887,9 @@ export default {
                 }).catch((err) => {
                     console.log('error_creating', err);
                     if (err && err.data && err.data.errors && err.data.errors.driver_is_verified) {
-                        dialogs.message('Tienes que ser verificado como conductor para poder cargar viajes.', { estado: 'error' });
+                        dialogs.message(this.$t('tienesQueSerConductor'), { estado: 'error' });
                     } else {
-                        dialogs.message('Ocurrió un problema al cargar el viaje. Por favor vuelva a intentarlo.', { estado: 'error' });
+                        dialogs.message(this.$t('problemaAlCargarElViaje'), { estado: 'error' });
                     }
                     this.saving = false;
                 });
@@ -947,11 +947,11 @@ export default {
 
         getPlaceholder (index) {
             if (this.points.length - 1 === index) {
-                return 'Destino';
+                return this.$t('destino');
             } else if (index === 0) {
-                return 'Origen';
+                return this.$t('origen');
             } else {
-                return 'Ingrese punto intermedio';
+                return this.$t('ingresePuntoIntermedio');
             }
         },
 
