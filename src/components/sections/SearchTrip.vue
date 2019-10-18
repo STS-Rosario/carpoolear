@@ -13,15 +13,14 @@
         <div class="row search-section">
             <div class="col-xs-12 col-md-3">
                 <button class="btn btn-option" :class="{'active': !isPassenger}" @click="isPassenger = false" >
-                    <!--<img alt="" :src="isPassenger ? chofer_logo_gris : chofer_logo_blanco" />-->
                     <span class="fa fa-car" aria-hidden="true"></span>
-                    <span>Busco conductor</span>
+                    <span>{{ $t('buscoConductor') }}</span>
                 </button>
             </div>
             <div class="col-xs-12 col-md-3">
                 <button class="btn btn-option" :class="{'active': isPassenger}" @click="isPassenger = true" >
                     <img alt="" :src="isPassenger ? pasajero_logo_blanco : pasajero_logo_gris" />
-                    <span>Busco pasajero</span>
+                    <span>{{ $t('buscoPasajero') }}</span>
                 </button>
             </div>
             <div class="row text-center foreignCountry-select foreignCountry-select-mobile" v-show="isMobile">

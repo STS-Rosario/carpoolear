@@ -9,21 +9,28 @@
                                 <div class="trip_location">
                                     <template v-if="trip.points.length >= 2">
                                         <div class="row trip_location_from">
-                                            <div class="col-xs-4 text-right">
-                                                <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                            <div class="col-xs-4" v-if="tripCardTheme === 'light'">
+                                                <span class="trip_from_time">{{ trip.trip_date | moment("HH:mm") }} </span>
                                             </div>
-                                            <div class="col-xs-20">
-                                            <span class="trip_location_from_city">{{ trip.points[0].json_address.ciudad }}</span>
-                                            <span class="trip_location_from_state-country">{{ trip.points[0].json_address.provincia | googleInfoClean }}</span>
+                                            <div class="col-xs-2 text-right">
+                                                <i class="fa fa-map-marker" aria-hidden="true" v-if="tripCardTheme !== 'light'"></i>
+                                                <i class="fa fa-circle" aria-hidden="true" v-else></i>
+                                            </div>
+                                            <div class="col-xs-18">
+                                            <span class="trip_location_from_city">{{ getLocationName(trip.points[0]) }}</span>
+                                            <span class="trip_location_from_state-country">{{ getStateName(trip.points[0])| googleInfoClean }}</span>
                                             </div>
                                         </div>
                                         <div class="row trip_location_to">
-                                            <div class="col-xs-4 text-right">
+                                            <div class="col-xs-4" v-if="tripCardTheme === 'light'">
+                                                <span class="trip_to_time">{{ tripArrivingTime | moment("HH:mm") }} </span>
+                                            </div>
+                                            <div class="col-xs-2 text-right">
                                                 <i class="fa fa-map-marker" aria-hidden="true"></i>
                                             </div>
-                                            <div class="col-xs-20">
-                                                <span class="trip_location_from_city">{{ trip.points[trip.points.length - 1].json_address.ciudad }}</span>
-                                                <span class="trip_location_from_state-country">{{ trip.points[trip.points.length - 1].json_address.provincia | googleInfoClean }} </span>
+                                            <div class="col-xs-18">
+                                                <span class="trip_location_from_city">{{ getLocationName(trip.points[trip.points.length - 1]) }}</span>
+                                                <span class="trip_location_from_state-country">{{ getStateName(trip.points[trip.points.length - 1]) | googleInfoClean }} </span>
                                             </div>
                                         </div>
                                         <div class="col-xs-4 trip_location-dot-line">
@@ -50,13 +57,13 @@
                                     </template>
                                 </div>
                                 <div class="row">
-                                    <time class="trip_datetime col-xs-offset-4 col-xs-20" :datetime="trip.trip_date">
+                                    <time class="trip_datetime col-xs-offset-4 col-xs-20" :datetime="trip.trip_date" v-if="tripCardTheme !== 'light'">
                                         <span class="trip_datetime_date">{{ [ trip.trip_date ] | moment("DD MMMM YYYY") }}</span>
                                         -
                                         <span class="trip_datetime_time">{{ [ trip.trip_date ] | moment("HH:mm") }}</span>
                                     </time>
                                 </div>
-                                <div class="row"  v-if="!trip.is_passenger">
+                                <div class="row"  v-if="!trip.is_passenger && tripCardTheme !== 'light'">
                                     <div class="trip_seats-available col-xs-offset-4 col-sm-offset-4 col-xs-12">
                                         <span class="trip_seats-available_value pull-left">{{ trip.seats_available }}</span>
                                         <span class="trip_seats-available_label">Lugares<br>libres</span>
@@ -81,19 +88,49 @@
                                         <i class="fa fa-user" aria-hidden="true"></i>
                                         Sólo amigos
                                     </em>
+                                    <em v-if="trip.allow_smoking > 0">
+                                        <svgItem icon="smoking" size="18"></svgItem>
+                                        Se puede fumar
+                                    </em>
+                                    <em v-else>
+                                        <svgItem icon="no-smoking" size="18"></svgItem>
+                                        No fumar
+                                    </em>
+
+                                    <em v-if="trip.allow_pets > 0">
+                                        <svgItem icon="pets" size="18"></svgItem>
+                                        Mascotas
+                                    </em>
+                                    <em v-else>
+                                        <svgItem icon="no-animals" size="18"></svgItem>
+                                        No mascotas
+                                    </em>
+
+                                    <em v-if="trip.allow_kids > 0">
+                                        <svgItem icon="kids" size="18"></svgItem>
+                                        Niños
+                                    </em>
+                                    <em v-else>
+                                        <svgItem icon="no-kids" size="18"></svgItem>
+                                        No niños
+                                    </em>
                                 </div>
 
+                                <!-- link, leaf, clock -->
                                 <div class="row trip-stats"  v-if="!trip.is_passenger && !isPasssengersView">
                                     <div>
-                                        <span>Distancia a recorrer</span><br>
+                                        <i class="fa fa-link" aria-hidden="true" v-if="tripCardTheme === 'light'"></i>
+                                        <span v-if="tripCardTheme !== 'light'">Distancia a recorrer</span><br v-if="tripCardTheme !== 'light'">
                                         <span>{{ distanceString }} <abbr title="kilometros">km</abbr></span>
                                     </div>
                                     <div>
-                                        <span>Tiempo estimado de viaje</span><br>
+                                        <i class="fa fa-clock-o" aria-hidden="true" v-if="tripCardTheme === 'light'"></i>
+                                        <span v-if="tripCardTheme !== 'light'">Tiempo estimado de viaje</span><br v-if="tripCardTheme !== 'light'">
                                         <span>{{ trip.estimated_time }} horas</span>
                                     </div>
                                     <div>
-                                        <span>Huella de carbono (<abbr title="aproximada">aprox</abbr>)</span><br>
+                                        <i class="fa fa-leaf" aria-hidden="true" v-if="tripCardTheme === 'light'"></i>
+                                        <span v-if="tripCardTheme !== 'light'">Huella de carbono (<abbr title="aproximada">aprox</abbr>)</span><br v-if="tripCardTheme !== 'light'">
 
                                         <span>{{ (trip.distance / 1000 * 1.5).toFixed(2) }} <abbr title="kilogramos dióxido de carbono equivalente">kg CO<sub>2eq</sub></abbr></span>
                                     </div>
@@ -206,7 +243,10 @@
                                 </div>
                                 <div class="col-xs-15 driver-data">
                                     <div>{{trip.user.name}}</div>
-                                    <div class="profile-info--ratings">
+                                    <div class="trip_driver_ratings" v-if="config ? config.trip_stars : false && tripStars && tripStars.length > 0">
+                                        <svg-item v-for="value in tripStars" :size="14" :icon="'star' + value"></svg-item>
+                                    </div>
+                                    <div class="profile-info--ratings" v-else>
                                         <svgItem icon="thumbUp" size="18"></svgItem> <span> {{trip.user.positive_ratings}} </span>
                                         <svgItem icon="thumbDown" size="18"></svgItem> <span> {{trip.user.negative_ratings}} </span>
                                     </div>
@@ -220,7 +260,7 @@
                                     </div>
                                 </div>
                             </div>
-                             <div class="row">
+                             <div class="row" v-if="tripCardTheme !== 'light'">
                                 <div class="col-md-24">
                                     <router-link class="btn-primary btn-search btn-shadowed-black" :to="{name: 'profile', params: {id: getUserProfile, userProfile: trip.user}}"> Ver Perfil </router-link>
                                 </div>
@@ -702,6 +742,28 @@ export default {
                 });
             }
             this.showModalRequestSeat = false;
+        },
+        getLocationName (location) {
+            if (location.json_address) {
+                if (location.json_address.ciudad) {
+                    return location.json_address.ciudad;
+                }
+                if (location.json_address.name) {
+                    return location.json_address.name;
+                }
+            }
+            return location.address;
+        },
+        getStateName (location) {
+            if (location.json_address) {
+                if (location.json_address.provincia) {
+                    return location.json_address.provincia;
+                }
+                if (location.json_address.state) {
+                    return location.json_address.state;
+                }
+            }
+            return '';
         }
     },
 
@@ -724,7 +786,8 @@ export default {
         ...mapGetters({
             user: 'auth/user',
             trip: 'trips/currentTrip',
-            isMobile: 'device/isMobile'
+            isMobile: 'device/isMobile',
+            config: 'auth/appConfig'
         }),
         expired () {
             return moment(this.trip.trip_date).format() < moment().format();
@@ -755,6 +818,44 @@ export default {
                 return this.location === 'passenger';
             }
             return false;
+        },
+        tripCardTheme () {
+            return this.config ? this.config.trip_card_design : '';
+        },
+        tripArrivingTime () {
+            if (this.trip && this.trip.estimated_time) {
+                let minutes = 0;
+                minutes = parseInt(this.trip.estimated_time.split(':')[0]) * 60;
+                minutes += parseInt(this.trip.estimated_time.split(':')[1]);
+                return moment(this.trip.trip_date).add(minutes, 'minutes');
+            }
+            return '';
+        },
+        tripStars () {
+            if (this.trip && this.trip.user) {
+                let value = this.trip.user.positive_ratings / (this.trip.user.positive_ratings + this.trip.user.negative_ratings) * 5;
+                let integerPart = Math.floor(value);
+                let decimalPart = value - integerPart;
+                let stars = [];
+                for (let i = 1; i <= 5; i++) {
+                    if (i < integerPart) {
+                        stars.push('');
+                    } else {
+                        if (i === integerPart) {
+                            if (decimalPart >= 0.5) {
+                                stars.push('');
+                            } else {
+                                stars.push('-half');
+                            }
+                        } else {
+                            stars.push('-empty');
+                        }
+                    }
+                }
+                return stars;
+            } else {
+                return [];
+            }
         }
     },
 
@@ -778,6 +879,7 @@ export default {
         --trip-mostly-free-color: #91B64C;
         --secondary-background: #016587;
     }
+
     .user_pin {
         margin-top: 1em;
     }
@@ -1032,5 +1134,21 @@ export default {
             max-height: auto;
             float: none;
         }
+    }
+    .trip-data em {
+        display: inline-block;
+        width: 49%;
+        padding-top: 6px;
+    }
+    .trip-data em > * {
+        vertical-align: middle;
+    }
+    .trip-data em .fa {
+        padding-right: 6px;
+    }
+    .trip-data em .svgItem {
+        height: 25px;
+        display: inline-block;
+        padding-right: 6px;
     }
 </style>

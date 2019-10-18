@@ -1,7 +1,7 @@
 <template>
     <div class="conversation_chat" v-if="conversation">
         <div class="list-group">
-            <div class="list-group-item">
+            <div class="list-group-item conversation_user_header">
                 <router-link v-if="conversation.users.length === 2" :to="{ name: 'profile', params: userProfile() }" v-show="isMobile">
                     <div class="conversation_image conversation_image_chat circle-box" v-imgSrc="conversation.image" ></div>
                 </router-link>

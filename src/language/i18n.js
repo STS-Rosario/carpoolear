@@ -166,7 +166,9 @@ const messages = {
         mensajes: 'Mensajes',
         perfil: 'Perfil',
         administracion: 'Administracion',
-        crearViaje: 'Crear Viaje'
+        crearViaje: 'Crear Viaje',
+        buscoConductor: 'Busco Conductor',
+        buscoPasajero: 'Busco Pasajero'
     },
     'ch': {
         documento: 'Número de RUT',
@@ -276,7 +278,10 @@ const messages = {
         debeCorregirCampos: 'Debe corregir o completar algunos campos para finalizar su registro.',
         mailEnUso: 'La cuenta de email ingresada se encuentra en uso.',
         errorRegistro: 'Ocurrió un error al procesar el registro, por favor vuelva a intentar.',
-        ingresaORegistrate: ''
+        ingresaORegistrate: '',
+        ingresaORegistrate: '',
+        buscoConductor: 'Conductor',
+        buscoPasajero: 'Pasajero'
     }
 };
 export default messages;

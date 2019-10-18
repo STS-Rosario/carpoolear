@@ -1,5 +1,5 @@
 <template>
-  <div class="col-lg-6 col-md-8 col-sm-12" v-on:click='clickModal ? openModal() : goToDetail(false)'>
+  <div :class="tripCardCountClass" v-on:click='clickModal ? openModal() : goToDetail(false)'>
     <tripDisplay v-if="showTrip && clickModal" :trip="trip" :clickOutside="closeModal.bind(this)"></tripDisplay>
     <div class="trip" :class="{ 'trip-fill': seats_available === 0, 'trip-almost-fill': seats_available === 1, 'trip-mostly-available': seats_available > 3, 'trip-with-driver': user, 'trip-with-control': enableChangeSeats }">
         <div class="panel panel-default panel-card card card-trip" :class="[tripCardClass]">
@@ -65,7 +65,7 @@
             <div class="trip_location">
               <template v-if="trip.points.length >= 2">
                 <div class="row trip_location_from">
-                  <div class="col-xs-4">
+                  <div class="col-xs-4" v-if="tripCardTheme === 'light'">
                     <span class="trip_from_time">{{ trip.trip_date | moment("HH:mm") }} </span>
                   </div>
                   <div class="col-xs-2 text-right">
@@ -82,7 +82,7 @@
                   </div>
                 </div>
                 <div class="row trip_location_to">
-                  <div class="col-xs-4">
+                  <div class="col-xs-4" v-if="tripCardTheme === 'light'">
                     <span class="trip_to_time">{{ tripArrivingTime | moment("HH:mm") }} </span>
                   </div>
                   <div class="col-xs-2 text-right">
@@ -375,6 +375,17 @@ export default {
         ...mapGetters({
             config: 'auth/appConfig'
         }),
+        tripCardCountClass () {
+            if (this.config) {
+                if (this.config.max_cards_per_row === 3) {
+                    return 'col-lg-8 col-md-8 col-sm-12';
+                } else {
+                    return 'col-lg-6 col-md-8 col-sm-12';
+                }
+            } else {
+                return 'col-lg-6 col-md-8 col-sm-12';
+            }
+        },
         tripCardClass () {
             return this.config ? ('card-trip-theme-' + this.config.trip_card_design) : '';
         },
