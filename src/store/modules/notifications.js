@@ -14,9 +14,9 @@ const getters = {
 };
 
 const actions = {
-    index (store, mark = false) {
+    index (store, data = {}) {
         store.commit(types.NOTIFICATIONS_SET, null);
-        return notificationApi.index({ mark }).then(response => {
+        return notificationApi.index(data).then(response => {
             store.commit(types.NOTIFICATIONS_SET, response.data);
             return Promise.resolve(response.data);
         }).catch(() => {
