@@ -94,6 +94,12 @@
                                     <!--<input type="text" v-model="time" />-->
                                 </div>
                             </div>
+                            <div class="trip_price">
+                                <legend class="label-for-group">{{ $t('precioAsiento') }}</legend>
+
+                                <input type="number" v-model="price" class="form-control form-control-with-icon form-control-price" id="price" :class="{'has-error': priceError.state}" :placeholder="suggestedPrice" >
+                                <span class="error" v-if="priceError.state"> {{priceError.message}} </span>
+                            </div>
                             <div class="trip_seats-available">
                                 <fieldset>
                                     <legend class="label-for-group">{{ $t('lugaresDisponibles') }}</legend>
@@ -422,6 +428,7 @@ export default {
             lucrarError: new Error(),
             dateError: new Error(),
             timeError: new Error(),
+            priceError: new Error(),
             commentError: new Error(),
             seatsError: new Error(),
             no_lucrar: false,
@@ -447,6 +454,8 @@ export default {
             date: '',
             dateAnswer: this.date,
             time: '12:00',
+            price: 0,
+            suggestedPrice: 0,
             duration: 0,
             passengers: 0,
             trip: {

@@ -168,7 +168,9 @@ const messages = {
         administracion: 'Administracion',
         crearViaje: 'Crear Viaje',
         buscoConductor: 'Busco Conductor',
-        buscoPasajero: 'Busco Pasajero'
+        buscoPasajero: 'Busco Pasajero',
+        precioAsiento: 'Precio del asiento'
+        
     },
     'ch': {
         documento: 'Número de RUT',
