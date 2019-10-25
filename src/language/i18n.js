@@ -170,7 +170,7 @@ const messages = {
         buscoConductor: 'Busco Conductor',
         buscoPasajero: 'Busco Pasajero',
         precioAsiento: 'Precio del asiento'
-        
+
     },
     'ch': {
         documento: 'Número de RUT',
