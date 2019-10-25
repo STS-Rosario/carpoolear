@@ -279,7 +279,6 @@ const messages = {
         mailEnUso: 'La cuenta de email ingresada se encuentra en uso.',
         errorRegistro: 'Ocurrió un error al procesar el registro, por favor vuelva a intentar.',
         ingresaORegistrate: '',
-        ingresaORegistrate: '',
         buscoConductor: 'Conductor',
         buscoPasajero: 'Pasajero'
     }
