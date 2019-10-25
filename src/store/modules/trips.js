@@ -90,6 +90,10 @@ const actions = {
         });
     },
 
+    price (store, data) {
+        return tripsApi.price(data);
+    },
+
     refreshList (store, status) {
         store.commit(types.TRIPS_REFRESH, status);
     },

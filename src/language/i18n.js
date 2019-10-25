@@ -81,7 +81,7 @@ const messages = {
         tiempoEstimado: 'Tiempo estimado de viaje',
         huellaCarbono: 'Huella de carbono',
         dia: 'Día',
-        ora: 'Hora',
+        hora: 'Hora',
         lugaresDisponibles: 'Lugares disponibles',
         comentarioPasajeros: 'Comentario para los pasajeros',
         privacidadViaje: 'Privacidad del viaje',
@@ -168,7 +168,9 @@ const messages = {
         administracion: 'Administracion',
         crearViaje: 'Crear Viaje',
         buscoConductor: 'Busco Conductor',
-        buscoPasajero: 'Busco Pasajero'
+        buscoPasajero: 'Busco Pasajero',
+        precioAsiento: 'Precio del asiento'
+
     },
     'ch': {
         documento: 'Número de RUT',
@@ -252,7 +254,7 @@ const messages = {
         tiempoEstimado: 'Tiempo estimado de viaje',
         huellaCarbono: 'Huella de carbono',
         dia: 'Día',
-        ora: 'Hora',
+        hora: 'Hora',
         lugaresDisponibles: 'Lugares disponibles',
         comentarioPasajeros: 'Comentario para los pasajeros',
         privacidadViaje: 'Privacidad del viaje',
