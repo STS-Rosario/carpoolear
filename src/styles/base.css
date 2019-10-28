@@ -879,13 +879,17 @@
   .trip_location-dot-line > div {
       float: right;
       width: 1px;
-      margin-right: 13px;
+      margin-right: 51px;
       height: 50px;
       content: '\A0';
       border: 0;
       border-left: solid 1px #777;
       border-style: dashed;
   }
+  .trip_location-dot-line-small > div {
+      margin-right: 21px;
+  }
+
   .trip_datetime {
       color: var(--medium-font-color);
       margin-bottom: 1.5em;
