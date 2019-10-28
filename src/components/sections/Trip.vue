@@ -97,7 +97,7 @@
                     </span>
                   </div>
                 </div>
-                <div class="col-xs-4 trip_location-dot-line">
+                <div class="col-xs-4 trip_location-dot-line trip_location-dot-line-small">
                   <div></div>
                 </div>
               </template>

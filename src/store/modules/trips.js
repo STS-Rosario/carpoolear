@@ -124,6 +124,9 @@ const actions = {
             let users = [];
             for (let i = 0; i < trips.data.length; i++) {
                 let t = trips.data[i];
+                if (t.id === trip.id) {
+                    continue;
+                }
                 if (moment(trip.trip_date).format('YYYY-MM-DD') === moment(t.trip_date).format('YYYY-MM-DD')) {
                     const i = users.findIndex(item => t.user && item.id === t.user.id);
                     if (i < 0) {
