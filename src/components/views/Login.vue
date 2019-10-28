@@ -3,56 +3,56 @@
     <router-link v-if="!isMobile"  :to="{name: 'trips'}">
         <img :src="carpoolear_logo" />
     </router-link>
-    <h1 v-if="!(hasScroll && isMobile)"> Ingresá con tu cuenta de <span class='brand'>Carpoolear</span> </h1>
+    <h1 v-if="!(hasScroll && isMobile)"> {{ $t('ingresaCuenta') }} <span class='brand'>{{ $t('carpoolear') }}</span> </h1>
     <div class='form row'>
       <div class="alert alert-warning" role="alert" v-if="!isUnderstood">
-        Si carpooleabas antes del 5/8/17, tenés que entrar al sistema mediante el botón "ingresar con facebook" para seguir usando el mismo usuario y recuperar tus calificaciones. Si no podés entrar, escribinos a <a href="mailto:carpoolear@stsrosario.org.ar">carpoolear@stsrosario.org.ar</a> o a nuestro facebook así te ayudamos :)
+        {{ $t('recuperarDeFacebook') }} <a href="mailto:carpoolear@stsrosario.org.ar">{{ $t('carpoolearMail') }}</a> {{ $t('recuperarDeFacebook2') }}
         <div class="row form-inline form-warning-login">
             <div class="col-sm-24 text-right">
                 <div class="checkbox">
                     <label>
                         <input type="checkbox" v-model="dontShowAgain">
-                        <span>No volver a mostrar</span>
+                        <span>{{ $t('noMostrar') }}</span>
                     </label>
                 </div>
-                <button type="button" class="btn btn-default" @click="fbWarningGetIt">ENTENDIDO!</button>
+                <button type="button" class="btn btn-default" @click="fbWarningGetIt">{{ $t('entendido') }}</button>
             </div>
         </div>
       </div>
       <div class="col-sm-12 col-md-12" v-show="isMobile">
         <button class="btn-primary btn-search btn-facebook btn-with-icon" @click="facebookLogin" :disabled="fbLoading"><span class="btn-with-icon--icon"><i class="fa fa-facebook" aria-hidden="true"></i></span><span class='btn-with-icon--label'> <span v-if="!fbLoading">Ingresá con Facebook</span><spinner class="blue" v-if="fbLoading"></spinner></span></button>
-        <div class="fb-terms">Al ingresar con Facebook estas aceptando nuestros <router-link :to="{name: 'terms'}">términos y condiciones</router-link>.</div>
+        <div class="fb-terms">{{ $t('alIngresarFacebook') }} <router-link :to="{name: 'terms'}">{{ $t('tyc') }}</router-link>.</div>
         <hr />
-        <button ref="btn_show_login" id="btn_show_login" class="btn btn-primary btn-shadowed-black" @click="showLogin" v-show="!isShowLogin"> <span>Ingresá con tu cuenta</span></button>
+        <button ref="btn_show_login" id="btn_show_login" class="btn btn-primary btn-shadowed-black" @click="showLogin" v-show="!isShowLogin"> <span>{{ $t('ingresaConCuenta') }}</span></button>
       </div>
 
       <div class="col-sm-12 col-md-12 login-box" v-show="isShowLogin || !isMobile">
-        <label for="txt_user">Email</label>
+        <label for="txt_user">{{ $t('email') }}</label>
         <div class='visual-trick'>
             <input placeholder="El email con el que te registraste" ref="txt_user" type="email" id="txt_user" v-model="email" v-jump:focus="'txt_password'" />
-            <label for="txt_password" v-show="!isMobile">Contraseña</label>
+            <label for="txt_password" v-show="!isMobile">{{ $t('password') }}</label>
             <input  placeholder="Contraseña" ref="txt_password" type="password" id="txt_password" v-jump:click.blur="'btn_login'" v-model='password' />
             <div class="alert alert-info" role="alert" v-if="showUserNotActiveInfo">
-                 Para ingresar debe activar su cuenta, te hemos enviado un código de verificación a tu e-mail para que puedas activar tu cuenta.
+                 {{ $t('debeActivarCuenta') }}
             </div>
-            <button ref="btn_login" id="btn_login" class="btn btn-primary btn-shadowed-black" @click="login" :disabled="loading"> <span v-if="!loading">Ingresar</span> <spinner class="blue" v-if="loading"></spinner></button>
+            <button ref="btn_login" id="btn_login" class="btn btn-primary btn-shadowed-black" @click="login" :disabled="loading"> <span v-if="!loading">{{ $t('ingresar') }}</span> <spinner class="blue" v-if="loading"></spinner></button>
         </div>
         <div class='pass-options' v-if="!isMobile">
-            <input id="checkbox_remember" type="checkbox" /><label for="checkbox_remember">Recordarme</label><span> - </span><router-link class='login-forget' :to="{name:'reset-password'}">Olvidé mi contraseña </router-link>
+            <input id="checkbox_remember" type="checkbox" /><label for="checkbox_remember">{{ $t('recordarme') }}</label><span> - </span><router-link class='login-forget' :to="{name:'reset-password'}">{{ $t('olvideContra') }} </router-link>
         </div>
 
       </div>
       <div style="margin: 1em 0"  v-show="isShowLogin && isMobile" >
-        <router-link class='password-not' :to="{name:'reset-password'}">Olvidé mi contraseña </router-link>
+        <router-link class='password-not' :to="{name:'reset-password'}">{{ $t('olvideContra') }} </router-link>
       </div>
       <div  class="col-sm-12 col-md-12"  v-show="isMobile">
-        <span class="register" v-if="isMobile">¿No tenés cuenta? Ingresá con Facebook o <router-link class='login-register' :to="{name:'register'}"> Registrate acá. </router-link></span>
+        <span class="register" v-if="isMobile">{{ $t('noTenesFace') }} <router-link class='login-register' :to="{name:'register'}"> {{ $t('registrateAca') }} </router-link></span>
 
       </div>
       <div class="col-sm-12 col-md-12 facebook-box"  v-show="!isMobile" >
-        <span class="register">¿No tenés cuenta?  Ingresá con Facebook o <router-link class='login-register' :to="{name:'register'}"> Registrate acá. </router-link></span>
-        <button class="btn-primary btn-search btn-facebook btn-with-icon" @click="facebookLogin" :disabled="fbLoading"><span class="btn-with-icon--icon"><i class="fa fa-facebook" aria-hidden="true"></i></span><span class='btn-with-icon--label'> <span v-if="!fbLoading">Ingresá con Facebook</span><spinner class="blue" v-if="fbLoading"></spinner></span></button>
-        <div>Al ingresar con Facebook estas aceptando nuestros <router-link :to="{name: 'terms'}">términos y condiciones</router-link>.</div>
+        <span class="register">{{ $t('noTenesFace') }} <router-link class='login-register' :to="{name:'register'}"> {{ $t('registrateAca') }} </router-link></span>
+        <button class="btn-primary btn-search btn-facebook btn-with-icon" @click="facebookLogin" :disabled="fbLoading"><span class="btn-with-icon--icon"><i class="fa fa-facebook" aria-hidden="true"></i></span><span class='btn-with-icon--label'> <span v-if="!fbLoading">{{ $t('ingresaConFace') }}</span></span><spinner class="blue" v-if="fbLoading"></spinner></span></button>
+        <div>{{ $t('alIngresarFace') }} <router-link :to="{name: 'terms'}">{{ $t('tyc') }}</router-link>.</div>
       </div>
       <!--<span v-if="loading"> Loading... </span>-->
     </div>
@@ -112,7 +112,7 @@ export default {
                     // router.rememberBack();
                 }, error => {
                     const userNotActive = error && error.message === 'user_not_active';
-                    const message = userNotActive ? 'Para ingresar debe activar su cuenta primero.' : 'Email o password incorrecto.';
+                    const message = userNotActive ? $t('paraIngresarCuenta') : $t('emailOContra');
                     this.showUserNotActiveInfo = userNotActive;
 
                     dialogs.message(message, { duration: 10, estado: 'error' });
@@ -122,7 +122,7 @@ export default {
                     this.loading = false;
                 });
             } else {
-                dialogs.message('Su solicitud ya fue enviada, aguarde un momento por favor.', { duration: 10, estado: 'error' });
+                dialogs.message($t('solicitudEnviada'), { duration: 10, estado: 'error' });
             }
         },
         showLogin () {
@@ -134,11 +134,11 @@ export default {
                 this.fbLoading = true;
                 this.fbLogin().catch((response) => {
                     if (response.errors && response.errors.email) {
-                        dialogs.message('El correo asociado a su cuenta de facebook, ya tiene asociada una cuenta en Carpoolear. Por favor, ingresé utilizando el login por email. Si no recuerda su clave, cliqueé en olvidé mi contraseña.', { duration: 10, estado: 'error' });
+                        dialogs.message($t('correoUsado'), { duration: 10, estado: 'error' });
                     }
                 });
             } else {
-                dialogs.message('Su solicitud ya fue enviada, aguarde un momento por favor.', { duration: 10, estado: 'error' });
+                dialogs.message($t('solicitudEnviada'), { duration: 10, estado: 'error' });
             }
         },
 
