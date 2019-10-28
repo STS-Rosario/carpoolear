@@ -962,7 +962,7 @@ export default {
                 this.trip.id = this.updatingTrip.id;
                 this.updateTrip(this.trip).then(() => {
                     this.saving = false;
-                    // this.$router.replace({ name: 'detail_trip', params: { id: this.trip.id } });
+                    this.$router.replace({ name: 'detail_trip', params: { id: this.trip.id } });
                 }).catch(() => {
                     this.saving = false;
                 });
