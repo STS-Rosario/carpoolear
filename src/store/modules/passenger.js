@@ -8,16 +8,24 @@ import globalStore from '../index';
 let passengerApi = new PassengerApi();
 
 const state = {
-    pendingRequest: null
+    pendingRequest: null,
+    pendingPaymentRequests: null
 };
 
 // getters
 const getters = {
-    pendingRequest: state => state.pendingRequest
+    pendingRequest: state => state.pendingRequest,
+    pendingPaymentRequests: state => state.pendingPaymentRequests
 };
 
 // actions
 const actions = {
+    getPendingPaymentRequests (store) {
+        return passengerApi.pendingPaymentRequests().then(response => {
+            store.commit(types.PASSENGER_SET_PENDING_PAYMENT, response.data);
+        });
+    },
+
     getPendingRequest (store) {
         return passengerApi.allRequest().then(response => {
             store.commit(types.PASSENGER_SET_PENDING, response.data);
@@ -59,8 +67,11 @@ const actions = {
         });
     },
 
-    cancel (store, { user, trip }) {
+    cancel (store, { user, trip, cancelTripForPayment }) {
         return passengerApi.cancel(trip.id, user.id).then(response => {
+            if (cancelTripForPayment) {
+                globalStore.commit('passenger/' + types.PASSENGER_REMOVE_PENDING_PAYMENT, { trip_id: trip.id, value: '' });
+            }
             if (trip.request !== 'send') {
                 globalStore.commit('trips/' + types.TRIPS_REMOVE_PASSENGER, { id: trip.id, user });
                 globalStore.commit('myTrips/' + types.MYTRIPS_REMOVE_PASSENGER, { id: trip.id, user });
@@ -79,8 +90,24 @@ const actions = {
 
 // mutations
 const mutations = {
+    [types.PASSENGER_SET_PENDING_PAYMENT] (state, list) {
+        state.pendingPaymentRequests = list;
+    },
+
     [types.PASSENGER_SET_PENDING] (state, list) {
         state.pendingRequest = list;
+    },
+
+    [types.PASSENGER_REMOVE_PENDING_PAYMENT] (state, data) {
+        let index = 0;
+        if (state.pendingPaymentRequests && state.pendingPaymentRequests.length) {
+            state.pendingPaymentRequests.forEach((item, i) => {
+                if (item.trip_id === data.trip_id) {
+                    index = i;
+                }
+            });
+            state.pendingPaymentRequests.splice(index, 1);
+        }
     },
 
     [types.PASSENGER_REMOVE_PENDING] (state, data) {
