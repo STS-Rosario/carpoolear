@@ -62,7 +62,8 @@ export default {
     },
     computed: {
         ...mapGetters({
-            currentUser: 'auth/user'
+            currentUser: 'auth/user',
+            config: 'auth/appConfig'
         })
     },
     methods: {
@@ -74,7 +75,7 @@ export default {
         }),
 
         onAcceptRequest () {
-            if (this.currentUser.do_not_alert_accept_passenger) {
+            if (this.currentUser.do_not_alert_accept_passenger || this.config.disable_user_hints) {
                 this.toAcceptRequest();
             } else {
                 this.showModalRequestSeat = true;

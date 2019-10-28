@@ -228,7 +228,7 @@ export default {
             this.registerDonation(data);
         },
         hasToShowModal (tripId) {
-            let tripRateds = parseFloat(this.appConfig.donation.trips_rated);
+            let tripRateds = parseFloat(this.config.donation.trips_rated);
             if (this.user && !this.user.monthly_donate) { // solo si el usuario no es donador mensual
                 if (!this.user.donations) {
                     // no tengo intento de donaciones este mes debe aparecer
@@ -269,7 +269,7 @@ export default {
         },
         pendingRates: function (newValue, oldValue) {
             this.updateScroll();
-            if (!this.user.do_not_alert_pending_rates) {
+            if (!this.user.do_not_alert_pending_rates && !this.config.disable_user_hints) {
                 console.log('pendingRates', newValue, oldValue);
                 if (newValue && newValue.length > 0 && !this.alreadyAlerted) {
                     this.alreadyAlerted = true;
