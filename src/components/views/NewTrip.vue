@@ -50,7 +50,7 @@
                                     <span v-if="index == points.length - 1" class="sr-only">{{ $t('destino') }}</span>
                                     <autocomplete :placeholder="getPlaceholder(index)" name="'input-' + index" ref="'input-' + index" :value="m.name" v-on:place_changed="(data) =>  getPlace(index, data)" :classes="'form-control form-control-with-icon form-control-map-autocomplete'" :country="allowForeignPoints ? null : 'AR'"  :class="{'has-error': m.error.state}"></autocomplete>
                                     <!-- <GmapAutocomplete  :selectFirstOnEnter="true" :types="['(cities)']" :componentRestrictions="allowForeignPoints ? null : {country: 'AR'}" :placeholder="getPlaceholder(index)"  :value="m.name" :name="'input-' + index" :ref="'input-' + index" v-on:place_changed="(data) => getPlace(index, data)" class="form-control form-control-with-icon form-control-map-autocomplete" :class="{'has-error': m.error.state}"> </GmapAutocomplete> -->
-                                    <div @click="m.name = ''" class="date-picker--cross"><i aria-hidden="true" class="fa fa-times"></i></div>
+                                    <div @click="resetPoints(m, index)" class="date-picker--cross"><i aria-hidden="true" class="fa fa-times"></i></div>
                                     <span class="error" v-if="m.error.state"> {{m.error.message}} </span>
                                 </div>
                             </div>
@@ -404,6 +404,7 @@ import {
 import OsmApi from '../../services/api/Osm';
 import autocomplete from '../Autocomplete';
 import SvgItem from '../SvgItem';
+import { point } from 'leaflet';
 // import { LMap, LTileLayer } from 'vue2-leaflet';
 
 // import 'leaflet-routing-machine';
@@ -937,12 +938,12 @@ export default {
                         }
                     }).then((ot) => {
                         this.saving = false;
-                        // this.$router.replace({
-                        //     name: 'detail_trip',
-                        //     params: {
-                        //         id: t.id
-                        //     }
-                        // });
+                        this.$router.replace({
+                            name: 'detail_trip',
+                            params: {
+                                id: t.id
+                            }
+                        });
                     });
                 }).catch((err) => {
                     console.log('error_creating', err);
@@ -984,11 +985,12 @@ export default {
                 lat: parseFloat(data.lat),
                 lng: parseFloat(data.lng)
             };
-
             if ((i === 0 || i === trip.points.length - 1) && trip.sameCity) {
                 trip.points[0].error.state = false;
                 last(trip.points).error.state = false;
             }
+
+            this.addPoint();
 
             if (type === 'trip') {
                 let point = this.otherTrip.points[0];
@@ -1021,6 +1023,27 @@ export default {
             }
         },
 
+        addPoint() {
+            if ((this.points.filter(point => point.name == '')).length == 0) {
+                let newp = {
+                    name: '',
+                    place: null,
+                    json: null,
+                    location: null,
+                    error: new Error()
+                };
+                this.points.splice(this.points.length - 1, 0, newp);
+            }
+        },
+        resetPoints (m, index) {
+            if (index === 0 || index === this.points.length - 1) {
+                m.name = '';
+            } else {
+                console.log(index);
+                this.points.splice(index, 1);
+            }
+        },
+
         calcRoute (type) {
             type = type || 'trip';
 
@@ -1028,14 +1051,21 @@ export default {
 
             console.log('calc route', trip.points);
 
-            for (let i = 0; i < trip.points.length; i++) {
-                if (!trip.points[i].name) {
-                    return;
-                }
+            let points = trip.points.filter(point => point.name);
+            
+            if (points.length < 2) {
+                return;
             }
+            // for (let i = 0; i < trip.points.length; i++) {
+            //     if (!trip.points[i].name) {
+            //         return;
+            //     }
+            // }
+
+
+            console.log('LLEGO');
             let data = {
-                origin: trip.points[0].location,
-                destiny: last(trip.points).location
+                points: points.map(point => point.location)
             };
             osmApi.route(data).then((result) => {
                 console.log('osm route result', result);

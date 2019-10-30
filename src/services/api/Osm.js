@@ -27,7 +27,17 @@ class OsmApi {
         });
     }
     route (data = {}) {
-        let url = `https://router.project-osrm.org/route/v1/driving/${data.origin.lng},${data.origin.lat};${data.destiny.lng},${data.destiny.lat}?overview=false&alternatives=true&steps=true&hints=`; // &countrycodes=ar
+        
+        let coords = '';
+        data.points.forEach( point => {
+            if (coords) {
+                coords += ';';
+            }
+            coords += point.lng + ',';
+            coords += point.lat;
+        });
+        console.log('coords', coords);
+        let url = 'https://router.project-osrm.org/route/v1/driving/' + coords + '?overview=false&alternatives=true&steps=true&hints='; // &countrycodes=ar
         return axios.get(url).then((result) => {
             if (result.status === 200) {
                 return Promise.resolve(result.data);
