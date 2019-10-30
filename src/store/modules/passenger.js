@@ -35,7 +35,7 @@ const actions = {
     makeRequest (store, tripId) {
         return passengerApi.make(tripId).then(response => {
             globalStore.commit('trips/' + types.TRIPS_SET_REQUEST, { id: tripId, value: 'send' });
-            return Promise.resolve();
+            return Promise.resolve(response);
         }).catch(error => {
             return Promise.reject(error);
         });

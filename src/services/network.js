@@ -31,6 +31,10 @@ class MyPromise {
 export default {
     pendingRequest: new TaggedList(),
 
+    getBaseURL () {
+        return API_URL;
+    },
+
     addRequest (xhr, tags) {
         this.pendingRequest.add(tags, xhr);
     },

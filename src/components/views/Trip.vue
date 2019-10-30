@@ -151,14 +151,14 @@
                                 </div>
 
                                 <div class="row passengers" v-if="!trip.is_passenger">
-                                    <div class="col-xs-24" v-if="owner">
+                                    <div class="col-xs-24" v-if="owner && acceptedPassengers.length">
                                         <h4 class="title-margined">
                                             <strong>Pasajeros subidos</strong>
                                         </h4>
-                                        <div v-for="p in trip.passenger" v-if="trip.passenger.length" class="list-item">
+                                        <div v-for="p in acceptedPassengers" class="list-item" v-bind:key="p.id">
                                             <span @click="toUserProfile(p)" class="trip_driver_img circle-box passenger trip_passenger_image" v-imgSrc:profile="p.image"></span>
                                             <a href="#" @click="toUserProfile(p)" class="trip_passenger_name">
-                                                {{ p.name }}
+                                                {{ p.user ? p.user.name : p.name }}
                                             </a>
                                             <a href="#" @click="toUserMessages(p)" aria-label="Ir a mensajes" class="trip_passenger-chat">
                                                  <i class="fa fa-comments" aria-hidden="true"></i>
@@ -172,6 +172,23 @@
                                         </div>
                                     </div>
                                     <div v-else style="height: 2em;"></div>
+                                    <div class="col-xs-24" v-if="owner && waitingForPaymentsPassengers.length">
+                                        <h4 class="title-margined">
+                                            <strong>Pasajeros pendiente de pago</strong>
+                                        </h4>
+                                        <div v-for="p in waitingForPaymentsPassengers" class="list-item" v-bind:key="p.id">
+                                            <span @click="toUserProfile(p)" class="trip_driver_img circle-box passenger trip_passenger_image" v-imgSrc:profile="p.image"></span>
+                                            <a href="#" @click="toUserProfile(p)" class="trip_passenger_name">
+                                                {{ p.user ? p.user.name : p.name }}
+                                            </a>
+                                            <a href="#" @click="toUserMessages(p)" aria-label="Ir a mensajes" class="trip_passenger-chat">
+                                                 <i class="fa fa-comments" aria-hidden="true"></i>
+                                            </a>
+                                            <button @click="removePassenger(p)" class="trip_passenger-remove pull-right" aria-label="Bajar pasajero del viaje">
+                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <modal :name="'modal'" v-if="showModalRequestSeat" @close="onModalClose" :title="'Test'" :body="'Body'">
@@ -213,10 +230,21 @@
                                 <template v-if="!owner && !trip.is_passenger && !expired">
                                     <template v-if="!isPassenger">
                                         <button class="btn btn-primary" @click="onMakeRequest" v-if="canRequest && trip.seats_available > 0" :disabled="sending">
-                                            Solicitar asiento
+                                            <template v-if="trip.user.autoaccept_requests">
+                                                <template v-if="config && config.module_trip_seats_payment">
+                                                    Reservar $ {{ trip.seat_price }}
+                                                </template>
+                                                <template v-else>
+                                                    Reservar
+                                                </template>
+                                            </template>
+                                            <template v-else>
+                                                Solicitar asiento
+                                            </template>
+
                                         </button>
                                         <button class="btn" v-if="!canRequest" @click="cancelRequest" :disabled="sending">
-                                            Solicitud enviada
+                                            Solicitado (RETIRAR)
                                         </button>
                                     </template>
 
@@ -315,22 +343,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- <gmap-map
-                            :center="center"
-                            :zoom="zoom"
-                            style="height: 524px"
-                            ref="map"
-                        >
-                            <gmap-marker
-                                :key="index"
-                                v-for="(m, index) in points"
-                                :position="m.location"
-                                :clickable="true"
-                                :draggable="true"
-                                @click="center=m.location"
-                                v-if="m.location"
-                            ></gmap-marker>
-                        </gmap-map> -->
                         <l-map :zoom="zoom" :center="center" style="width: calc(100% + 20px); height: 461px; overflow: hidden; margin-left: -10px; z-index: 0;" ref="map">
                             <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
                         </l-map>
@@ -353,6 +365,7 @@ import svgItem from '../SvgItem';
 import modal from '../Modal';
 import moment from 'moment';
 import dialogs from '../../services/dialogs.js';
+import network from '../../services/network.js';
 
 import Vue from 'vue';
 import VueRouter from 'vue-router';
@@ -425,7 +438,8 @@ export default {
             remove: 'trips/remove',
             searchMatchers: 'trips/searchMatchers',
             sendToAll: 'conversations/sendToAll',
-            changeProperty: 'profile/changeProperty'
+            changeProperty: 'profile/changeProperty',
+            appConfig: 'auth/appConfig'
         }),
         profileComplete () {
             if (!this.user.image || this.user.image.length === 0 || !this.user.description || this.user.description.length === 0) {
@@ -507,12 +521,10 @@ export default {
 
         onMakeRequest () {
             if (this.profileComplete()) {
-                if (this.user.do_not_alert_request_seat) {
+                if (this.user.do_not_alert_request_seat || this.config.disable_user_hints) {
                     this.toMakeRequest();
-                    // console.log('1:' + this.trip.do_not_alert_accept_passenger);
                 } else {
                     this.showModalRequestSeat = true;
-                    // console.log('2:' + this.trip.do_not_alert_accept_passenger);
                 }
             }
         },
@@ -530,12 +542,35 @@ export default {
             if (this.profileComplete()) {
                 this.sending = true;
                 this.showModalRequestSeat = false;
-                this.make(this.trip.id).then(() => {
-                    dialogs.message('La solicitud fue enviada.');
+                this.make(this.trip.id).then((response) => {
                     this.sending = false;
                     this.trip.request = 'send';
+                    if (response && response.data && response.data.request_state) {
+                        if (response.data.request_state === 0) {
+                            dialogs.message('La solicitud fue enviada.');
+                        } else if (response.data.request_state === 1) {
+                            dialogs.message('Te has subido al viaje.');
+                        } else if (response.data.request_state === 4 && this.config.module_trip_seats_payment) {
+                            let baseUrl = network.getBaseURL();
+                            let url = baseUrl + '/transbank?tp_id=' + response.data.id;
+                            if (window.location.protocol.indexOf('http') >= 0) {
+                                window.location.href = url;
+                            } else {
+                                var popup = window.open(url, '_blank', 'location=no,hidden=yes,zoom=no');
+                                popup.addEventListener('message', (params) => {
+                                    console.log('message', params);
+                                    popup.close();
+                                }, false);
+                            }
+                        } else {
+                            dialogs.message('La solicitud fue enviada.');
+                        }
+                    } else {
+                        dialogs.message('La solicitud fue enviada.');
+                    }
                 }).catch(() => {
                     this.sending = false;
+                    dialogs.message('Ocurrió un problema al solicitar, por favor intente nuevamente luego.', { estado: 'error' });
                 });
             }
         },
@@ -605,13 +640,6 @@ export default {
 
         renderMap () {
             if (this.$refs.map) {
-                /* eslint-disable no-undef */
-                /* this.$refs.map.$mapCreated.then(() => {
-                    this.directionsService = new google.maps.DirectionsService();
-                    this.directionsDisplay = new google.maps.DirectionsRenderer();
-                    this.directionsDisplay.setMap(this.$refs.map.$mapObject);
-                    this.restoreData(this.trip);
-                }); */
                 let map = this.$refs.map.mapObject;
                 console.log('trip', this.trip);
                 let data = {
@@ -626,35 +654,6 @@ export default {
                     ],
                     language: 'es'
                 });
-                /* control.on('routeselected', function (e) {
-                    console.log('routeselected', e);
-                    var coord = e.route.coordinates;
-                    var instr = e.route.instructions;
-                    var formatter = new L.Routing.Formatter({ langague: 'es' });
-                    var instrPts = {
-                        type: 'FeatureCollection',
-                        features: []
-                    };
-                    for (var i = 0; i < instr.length; ++i) {
-                        var g = {
-                            'type': 'Point',
-                            'coordinates': [
-                                coord[instr[i].index].lng,
-                                coord[instr[i].index].lat
-                            ]
-                        };
-                        var p = {
-                            'instruction': formatter.formatInstruction(instr[i]),
-                            '_instruction': instr[i]
-                        };
-                        instrPts.features.push({
-                            'geometry': g,
-                            'type': 'Feature',
-                            'properties': p
-                        });
-                    }
-                    console.log(instrPts);
-                }); */
                 control.addTo(map);
             }
         },
@@ -690,33 +689,6 @@ export default {
                     return;
                 }
             }
-
-            /* this.directionsService.route({
-                origin: this.points[0].name,
-                destination: this.points[this.points.length - 1].name,
-                travelMode: 'DRIVING'
-            }, (response, status) => {
-                if (status === 'OK') {
-                    this.directionsDisplay.setDirections(response);
-
-                    let path = response.routes[0].overview_path;
-                    let encodeString = google.maps.geometry.encoding.encodePath(path);
-                    this.trip.enc_path = encodeString;
-
-                    let totalDistance = 0;
-                    let totalDuration = 0;
-                    let legs = response.routes[0].legs;
-                    for (let i = 0; i < legs.length; ++i) {
-                        totalDistance += legs[i].distance.value;
-                        totalDuration += legs[i].duration.value;
-                    }
-                    this.trip.distance = totalDistance;
-                    this.duration = totalDuration;
-                    this.co2 = parseFloat(totalDistance * 0.15).toFixed(2);
-                } else {
-                    console.log('Directions request failed due to ' + status);
-                }
-            }); */
         },
         onSendToAll () {
             let users = this.matchingUsers.filter(u => this.selectedMatchingUser.indexOf(u.id) >= 0);
@@ -856,6 +828,12 @@ export default {
             } else {
                 return [];
             }
+        },
+        acceptedPassengers () {
+            return this.trip.passenger ? this.trip.passenger.filter(item => item.request_state === 1) : [];
+        },
+        waitingForPaymentsPassengers () {
+            return this.trip.passenger ? this.trip.passenger.filter(item => item.request_state === 4) : [];
         }
     },
 

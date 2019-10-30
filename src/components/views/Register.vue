@@ -111,7 +111,7 @@ export default {
     },
     methods: {
         ...mapActions({
-            doRegister: 'auth/register',
+            doRegister: 'auth/register'
         }),
         validate () {
             let globalError = false;
@@ -240,7 +240,6 @@ export default {
     mounted () {
         bus.on('back-click', this.onBackClick);
         bus.on('date-change', this.dateChange);
-
     },
 
     beforeDestroy () {

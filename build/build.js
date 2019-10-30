@@ -11,7 +11,7 @@ const webpack = require('webpack')
 const config = require('../config')
 const webpackConfig = require('./webpack.prod.conf')
 
-console.log('CORDOVA=', process.env.CORDOVA);
+console.log('CORDOVA =', process.env.CORDOVA);
 const spinner = ora('Building for production...')
 spinner.start();
 

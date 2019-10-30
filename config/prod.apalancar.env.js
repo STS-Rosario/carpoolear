@@ -7,7 +7,7 @@ config = {
 
 }
 
-if (!process.env.PLATFORM || process.env.PLATFORM == 'DESKTOP') {
+if (!process.env.PLATFORM || process.env.PLATFORM == 'DESKTOP' || process.env.PLATFORM == 'browser') {
   config.HISTORY_MODE = '"history"';
 } else {
   config.HISTORY_MODE = '"hash"';
@@ -17,7 +17,7 @@ var isWin = /^win/.test(process.platform);
 if (isWin && config.NODE_ENV === "production") {
   config.ROUTE_BASE = '"/app/"';
 } else {
-  if (process.env.PLATFORM && process.env.PLATFORM == 'DESKTOP') {
+  if (process.env.PLATFORM && (process.env.PLATFORM == 'DESKTOP' || process.env.PLATFORM == 'browser')) {
     config.ROUTE_BASE = '"/app/"';
   } else {
     if (process.env.SERVE) {
