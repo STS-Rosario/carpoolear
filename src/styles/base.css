@@ -1212,7 +1212,20 @@
   .trip-detail-component .trip_location_to_state-country {
       color: #777;
       font-size: .95rem;
-      min-height: 3em;
+  }
+  .trip-detail-component .trip_location_inner_city {
+      font-weight: 400;   
+      color: #392;
+  }
+  .trip-detail-component .trip_location_inner_state-country {
+      color: #777;
+      font-size: .75rem;
+      min-height: 2em;
+  }
+
+  .trip-detail-component .trip_inner_points {
+      margin-top: 0.7rem;
+      margin-bottom: 0.7rem;
   }
   .trip-detail-component .trip_location-dot-line > div {
       height: 3.6rem;

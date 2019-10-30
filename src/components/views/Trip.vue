@@ -21,6 +21,20 @@
                                             <span class="trip_location_from_state-country">{{ getStateName(trip.points[0])| googleInfoClean }}</span>
                                             </div>
                                         </div>
+                                        <div class="row trip_inner_points">
+                                            <div class="trip_point" v-for="(p, index) in trip.points.slice(1, trip.points.length - 1)">
+                                                <div class="col-xs-4" v-if="tripCardTheme === 'light'">
+                                                    <span class="trip_to_time"> </span>
+                                                </div>
+                                                <div class="col-xs-2 text-right">
+                                                    <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                                </div>
+                                                <div class="col-xs-18">
+                                                    <span class="trip_location_inner_city">{{ getLocationName(p) }}</span>
+                                                    <span class="trip_location_inner_state-country">{{ getStateName(p) | googleInfoClean }} </span>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="row trip_location_to">
                                             <div class="col-xs-4" v-if="tripCardTheme === 'light'">
                                                 <span class="trip_to_time">{{ tripArrivingTime | moment("HH:mm") }} </span>
@@ -33,9 +47,9 @@
                                                 <span class="trip_location_from_state-country">{{ getStateName(trip.points[trip.points.length - 1]) | googleInfoClean }} </span>
                                             </div>
                                         </div>
-                                        <div class="col-xs-4 trip_location-dot-line">
+                                        <!-- <div class="col-xs-4 trip_location-dot-line">
                                             <div></div>
-                                        </div>
+                                        </div> -->
                                     </template>
                                     <template v-else>
                                         <div class="row trip_location_from">

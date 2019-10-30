@@ -146,7 +146,6 @@
 .trip_location_to_state-country {
     display: block;
     font-size: 0.8rem;
-    min-height: 3em;
 }
 .trip_seats-available .seat-free,
 .trip_seats-available .seat-taken {
