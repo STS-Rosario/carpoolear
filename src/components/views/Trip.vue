@@ -656,16 +656,11 @@ export default {
             if (this.$refs.map) {
                 let map = this.$refs.map.mapObject;
                 console.log('trip', this.trip);
-                let data = {
-                    origin: this.trip.points[0],
-                    destiny: this.trip.points[this.trip.points.length - 1]
-                };
+
+                let points = this.trip.points.map(point => L.latLng(point.lat, point.lng));
                 /* eslint-disable no-undef */
                 let control = L.Routing.control({
-                    waypoints: [
-                        L.latLng(data.origin.lat, data.origin.lng),
-                        L.latLng(data.destiny.lat, data.destiny.lng)
-                    ],
+                    waypoints: points,
                     language: 'es'
                 });
                 control.addTo(map);
