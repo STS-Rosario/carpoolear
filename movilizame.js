@@ -9,7 +9,7 @@ console.log('Movilizame builder -- Starting building');
 const TARGET = process.env.TARGET_APP || argv.target || 'default';
 const PROD = argv.prod || false;
 const PLATFORM = argv.platform || 'android';
-if (PLATFORM === 'ios' || PLATFORM === 'android') {
+if (PLATFORM === 'ios' || PLATFORM === 'android' || PLATFORM === 'browser') {
     process.env.CORDOVA = true;
 }
 const NODE_ENV = PROD ? 'production' : 'development';

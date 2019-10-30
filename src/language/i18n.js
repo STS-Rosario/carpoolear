@@ -190,8 +190,7 @@ const messages = {
         paraIngresarCuenta: 'Para ingresar debe activar su cuenta primero.',
         emailOContra: 'Email o password incorrecto.',
         solicitudEnviada: 'Su solicitud ya fue enviada, aguarde un momento por favor.',
-        correoUsado: 'El correo asociado a su cuenta de facebook, ya tiene asociada una cuenta en Carpoolear. Por favor, ingresé utilizando el login por email. Si no recuerda su clave, cliqueé en olvidé mi contraseña.',
-        
+        correoUsado: 'El correo asociado a su cuenta de facebook, ya tiene asociada una cuenta en Carpoolear. Por favor, ingresé utilizando el login por email. Si no recuerda su clave, cliqueé en olvidé mi contraseña.'
 
     },
     'ch': {

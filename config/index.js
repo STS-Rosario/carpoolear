@@ -5,13 +5,14 @@ const PLATFORM = process.env.PLATFORM || 'android';
 const isSERVED = process.env.SERVE;
 const NODE_ENV = process.env.NODE_ENV;
 const dFlag = (process.env.PLATFORM && process.env.PLATFORM == 'DESKTOP');
+console.log('PLATFORM= ' + PLATFORM);
 
 module.exports = {
   build: {
     index: path.resolve(__dirname, `../dist/${TARGET}/${NODE_ENV}/www/index.html`),
     assetsRoot: path.resolve(__dirname, `../dist/${TARGET}/${NODE_ENV}/www/`),
     assetsSubDirectory: 'static',
-    assetsPublicPath: dFlag ? '/app/' : (isSERVED ? '/' : ''),
+    assetsPublicPath: (dFlag || PLATFORM === 'browser') ? '/app/' : (isSERVED ? '/' : ''),
     productionSourceMap: true,
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.

@@ -112,7 +112,7 @@ export default {
                     // router.rememberBack();
                 }, error => {
                     const userNotActive = error && error.message === 'user_not_active';
-                    const message = userNotActive ? $t('paraIngresarCuenta') : $t('emailOContra');
+                    const message = userNotActive ? this.$t('paraIngresarCuenta') : this.$t('emailOContra');
                     this.showUserNotActiveInfo = userNotActive;
 
                     dialogs.message(message, { duration: 10, estado: 'error' });
@@ -122,7 +122,7 @@ export default {
                     this.loading = false;
                 });
             } else {
-                dialogs.message($t('solicitudEnviada'), { duration: 10, estado: 'error' });
+                dialogs.message(this.$t('solicitudEnviada'), { duration: 10, estado: 'error' });
             }
         },
         showLogin () {
@@ -134,14 +134,13 @@ export default {
                 this.fbLoading = true;
                 this.fbLogin().catch((response) => {
                     if (response.errors && response.errors.email) {
-                        dialogs.message($t('correoUsado'), { duration: 10, estado: 'error' });
+                        dialogs.message(this.$t('correoUsado'), { duration: 10, estado: 'error' });
                     }
                 });
             } else {
-                dialogs.message($t('solicitudEnviada'), { duration: 10, estado: 'error' });
+                dialogs.message(this.$t('solicitudEnviada'), { duration: 10, estado: 'error' });
             }
         },
-
         onClearClick () {
             router.back();
         }
