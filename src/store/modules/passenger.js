@@ -41,6 +41,10 @@ const actions = {
         });
     },
 
+    transactions (store) {
+        return passengerApi.transactions();
+    },
+
     accept (store, { user, trip }) {
         return passengerApi.accept(trip.id, user.id).then(response => {
             let data = {

@@ -32,6 +32,10 @@ class PassengerApi extends TaggedApi {
     reject (id, userId) {
         return this.takeDesision(id, userId, 'reject');
     }
+
+    transactions () {
+        return this.get('/api/trips/transactions', {});
+    }
 }
 
 export { PassengerApi as default };

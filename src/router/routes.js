@@ -343,6 +343,19 @@ export default [
         }
     },
     {
+        path: '/transactions',
+        name: 'transacciones',
+        component: require('../components/views/transactions').default,
+        meta: {
+            actionbar: {
+                header: {
+                    title: 'transacciones',
+                    buttons: ['back']
+                }
+            }
+        }
+    },
+    {
         path: '/terminos',
         name: 'terms',
         component: require('../components/views/TermsAndConditions').default,

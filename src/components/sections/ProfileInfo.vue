@@ -63,6 +63,7 @@
                 <div class="edit-action" v-if="profile.id == user.id">
                     <router-link class="btn btn-primary" tag="button" :to="{name:'profile_update'}"> {{ $t('editarPerfil') }}</router-link>
                     <router-link class="btn btn-primary" tag="button" :to="{name:'friends_setting'}"> {{ $t('verAmigos') }}</router-link>
+                    <router-link class="btn btn-primary" tag="button" :to="{name:'transacciones'}"> transacciones </router-link>
                 </div>
             </div>
         </div>

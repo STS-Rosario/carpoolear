@@ -404,7 +404,6 @@ import {
 import OsmApi from '../../services/api/Osm';
 import autocomplete from '../Autocomplete';
 import SvgItem from '../SvgItem';
-import { point } from 'leaflet';
 // import { LMap, LTileLayer } from 'vue2-leaflet';
 
 // import 'leaflet-routing-machine';
@@ -1023,8 +1022,8 @@ export default {
             }
         },
 
-        addPoint() {
-            if ((this.points.filter(point => point.name == '')).length == 0) {
+        addPoint () {
+            if ((this.points.filter(point => point.name === '')).length === 0) {
                 let newp = {
                     name: '',
                     place: null,
@@ -1061,8 +1060,6 @@ export default {
             //         return;
             //     }
             // }
-
-
             console.log('LLEGO');
             let data = {
                 points: points.map(point => point.location)
