@@ -46,7 +46,23 @@ require('font-awesome-webpack-4');
 Vue.use(VueResource);
 
 Vue.use(VueI18n);
-const i18n = new VueI18n({ locale: 'arg', fallbackLocale: 'arg', messages });
+const i18n = new VueI18n({
+    locale: 'arg',
+    fallbackLocale: 'arg',
+    messages,
+    numberFormats: {
+        'arg': {
+            currency: {
+                style: 'currency', currency: 'ARS', currencyDisplay: 'symbol'
+            }
+        },
+        'ch': {
+            currency: {
+                style: 'currency', currency: 'ARS', currencyDisplay: 'symbol'
+            }
+        }
+    }
+});
 
 Vue.use(VueAnalytics, {
     id: 'UA-40995702-4'
