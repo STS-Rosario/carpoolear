@@ -80,6 +80,10 @@ class UserApi extends TaggedApi {
         return this.post('/api/users/donation', data);
     }
 
+    getBankData (data) {
+        return this.get('/api/users/bank-data', data);
+    }
+
     changeProperty (data) {
         return this.post('/api/users/change/' + data.property + '/' + data.value, null);
     }

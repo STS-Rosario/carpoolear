@@ -51,7 +51,7 @@ export default {
         })
     },
     mounted () {
-        this.history().then( data => {
+        this.history().then(data => {
             console.log('transaction data', data);
             this.transactions = data;
         });

@@ -82,7 +82,7 @@
                         <input type="checkbox" @change="changeBeDriver" v-model="this.showBeDriver"> {{ $t('solicitarSerChofer') }}
                     </label>
                 </div>
-                <div class="form-group" v-if="settings.module_validated_drivers && showBeDriver&& !user.driver_is_verified">
+                <div class="form-group" v-if="settings.module_validated_drivers && showBeDriver && !user.driver_is_verified">
                     <label for="driver_documentation">{{ $t('ingreseDocumentacion') }}</label>
                     <input type="file" id="driver_documentation" multiple @change="onDriverDocumentChange" />
                     <p class="help-block">{{ $t('seRequiereDocumentacion') }}</p>
@@ -90,6 +90,40 @@
                 <div v-if="user.driver_is_verified">
                     <i class="fa fa-check-circle check-driver-verified" aria-hidden="true"></i>
                     <strong>{{ $t('choferVerificado') }}</strong>
+                </div>
+                <div v-if="user.driver_is_verified || (settings.module_validated_drivers && showBeDriver)">
+                    <div class="form-group">
+                        <label for="tipoDeCuenta">
+                            {{ $t('tipoDeCuenta') }}
+                            <span class="required-field-flag" title="Campo requerido">(*)</span>
+                        </label>
+                        <select v-model="user.account_type" id="tipoDeCuenta" class="form-control">
+                            <option v-for="option in accountTypes" v-bind:value="option.id">
+                                {{ option.name }}
+                            </option>
+                        </select>
+                        <span class="error" v-if="accountTypeError.state"> {{accountTypeError.message}} </span>
+                    </div>
+                    <div class="form-group">
+                        <label for="bancoDeCuenta">
+                            {{ $t('bancoDeCuenta') }}
+                            <span class="required-field-flag" title="Campo requerido">(*)</span>
+                        </label>
+                        <select v-model="user.account_bank" id="" class="form-control">
+                            <option v-for="option in banks" v-bind:value="option.id">
+                                {{ option.name }}
+                            </option>
+                        </select>
+                        <span class="error" v-if="accountBankError.state"> {{accountBankError.message}} </span>
+                    </div>
+                    <div class="form-group">
+                        <label for="accountNumber">
+                            {{ $t('numeroDeCuenta') }}
+                            <span class="required-field-flag" title="Campo requerido">(*)</span>
+                        </label>
+                        <input v-model="user.account_number" type="text" class="form-control" id="accountNumber" :placeholder="$t('numeroDeCuenta')">
+                        <span class="error" v-if="accountNumberError.state"> {{accountNumberError.message}} </span>
+                    </div>
                 </div>
                 <div class="row" v-if="user.driver_data_docs && user.driver_data_docs.length">
                     <div v-imgSrc:docs="img"  v-for="img in user.driver_data_docs" class="img-doc col-md-8 col-sm-12"></div>
@@ -149,13 +183,18 @@ export default {
             dniError: new Error(),
             phoneError: new Error(),
             emailError: new Error(),
+            accountNumberError: new Error(),
+            accountTypeError: new Error(),
+            accountBankError: new Error(),
             maxDate: moment().toDate(),
             minDate: moment('1900-01-01').toDate(),
             birthday: '',
             birthdayAnswer: '',
             showChangePassword: false,
             showBeDriver: false,
-            driverFiles: null
+            driverFiles: null,
+            banks: [],
+            accountTypes: []
         };
     },
     computed: {
@@ -202,7 +241,8 @@ export default {
             update: 'auth/update',
             updatePhoto: 'auth/updatePhoto',
             carCreate: 'cars/create',
-            carUpdate: 'cars/update'
+            carUpdate: 'cars/update',
+            getBankData: 'profile/getBankData'
         }),
         changeShowPassword () {
             this.showChangePassword = !this.showChangePassword;
@@ -370,6 +410,24 @@ export default {
                 globalError = true;
             }
 
+            if (this.user.driver_is_verified || (this.settings.module_validated_drivers && this.showBeDriver)) {
+                if (!this.user.account_number) {
+                    this.accountNumberError.state = true;
+                    this.accountNumberError.message = this.$t('campoObligatorio');
+                    globalError = true;
+                }
+                if (!this.user.account_type) {
+                    this.accountTypeError.state = true;
+                    this.accountTypeError.message = this.$t('campoObligatorio');
+                    globalError = true;
+                }
+                if (!this.user.account_bank) {
+                    this.accountBankError.state = true;
+                    this.accountBankError.message = this.$t('campoObligatorio');
+                    globalError = true;
+                }
+            }
+
             return globalError;
         }
     },
@@ -407,6 +465,11 @@ export default {
     },
 
     mounted () {
+        this.getBankData().then((data) => {
+            console.log('get bank data', data);
+            this.banks = data.banks;
+            this.accountTypes = data.cc;
+        });
         bus.on('date-change', this.dateChange);
         this.user = this.userData;
         if (this.user.driver_data_docs && this.user.driver_data_docs.length) {

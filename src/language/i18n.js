@@ -199,7 +199,13 @@ const messages = {
         transaccionOk: 'Pagada',
         transaccionOkConTarjeta: 'Pagada con tarjeta finalizada en {0}',
         llevastePasajero: 'Recibiste de {0} por el viaje hacia {1}.',
-        fuistePasajero: 'Pagaste a {0} por el viaje hacia {1}.'
+        fuistePasajero: 'Pagaste a {0} por el viaje hacia {1}.',
+        solicitarSerChofer: 'Quiero ofrecer viajes',
+        guardarCambios: 'Guardar cambios',
+        numeroDeCuenta: 'Número de cuenta',
+        tipoDeCuenta: 'Tipo de cuenta',
+        bancoDeCuenta: 'Banco',
+        campoObligatorio: 'Dato requerido'
     },
     'ch': {
         documento: 'Número de RUT',
