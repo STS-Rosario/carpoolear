@@ -209,7 +209,7 @@ const messages = {
         bancoDeCuenta: 'Banco',
         campoObligatorio: 'Dato requerido'
     },
-    'ch': {
+    'chl': {
         loginUsuarioPlaceholder: 'Usuario',
         documento: 'Número de RUT',
         doc: 'RUT',

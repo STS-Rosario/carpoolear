@@ -33,18 +33,7 @@ export default {
         })
     },
     beforeMount () {
-        this.getConfig().then(data => {
-            if (this.appConfig && this.appConfig.country_name) {
-                switch (this.appConfig.country_name) {
-                case 'Argentina':
-                    this.$root.$i18n.locale = 'arg';
-                    break;
-                case 'Chile':
-                    this.$root.$i18n.locale = 'ch';
-                    break;
-                }
-            }
-        });
+        this.getConfig();
     },
     mounted () {
         if (this.isFacebookApp) {
@@ -69,6 +58,11 @@ export default {
     watch: {
         deviceReady: () => {
             console.log('Device ready from components');
+        },
+        appConfig: (value) => {
+            if (value && value.locale) {
+                this.$root.$i18n.locale = value.locale;
+            }
         }
     },
     data () {

@@ -25,7 +25,7 @@
         </div>
       </div>
       <div class="col-sm-12 col-md-12" v-show="isMobile">
-        <button class="btn-primary btn-search btn-facebook btn-with-icon" @click="facebookLogin" :disabled="fbLoading"><span class="btn-with-icon--icon"><i class="fa fa-facebook" aria-hidden="true"></i></span><span class='btn-with-icon--label'> <span v-if="!fbLoading">Ingresá con Facebook</span><spinner class="blue" v-if="fbLoading"></spinner></span></button>
+        <button class="btn btn-primary btn-search btn-facebook btn-with-icon" @click="facebookLogin" :disabled="fbLoading"><span class="btn-with-icon--icon"><i class="fa fa-facebook" aria-hidden="true"></i></span><span class='btn-with-icon--label'> <span v-if="!fbLoading">Ingresá con Facebook</span><spinner class="blue" v-if="fbLoading"></spinner></span></button>
         <div class="fb-terms">{{ $t('alIngresarFacebook') }} <router-link :to="{name: 'terms'}">{{ $t('tyc') }}</router-link>.</div>
         <hr />
         <button ref="btn_show_login" id="btn_show_login" class="btn btn-primary btn-shadowed-black" @click="showLogin" v-show="!isShowLogin"> <span>{{ $t('ingresaConCuenta') }}</span></button>
@@ -165,7 +165,7 @@ export default {
         }
 
         if (this.config.login_custom_header) {
-            this.showLogin = true;
+            this.isShowLogin = true;
         }
 
         this.hasScroll = document.body.scrollHeight > viewPort;

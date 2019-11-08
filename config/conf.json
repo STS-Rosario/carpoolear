@@ -1,0 +1,26 @@
+{
+    "admin_email": "pabloluisbotta@gmail.com",
+    "banner": {
+        "image": "",
+        "url": ""
+    },
+    "country_name": "Argentina",
+    "locale": "arg",
+    "osm_country": "ARG",
+    "donation": {
+        "ammount_needed": 1000,
+        "month_days": 0,
+        "trips_count": 20,
+        "trips_offset": 0,
+        "trips_rated": 2
+    },
+    "max_cards_per_row": 4,
+    "disable_user_hints": false,
+    "login_custom_header": false,
+    "module_trip_seats_payment": false,
+    "module_validated_drivers": false,
+    "trip_stars": false,
+    "api_price": false,
+    "fuel_price": 4.15,
+    "trip_card_design": "default"
+}

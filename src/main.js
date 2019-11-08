@@ -56,9 +56,9 @@ const i18n = new VueI18n({
                 style: 'currency', currency: 'ARS', currencyDisplay: 'symbol'
             }
         },
-        'ch': {
+        'chl': {
             currency: {
-                style: 'currency', currency: 'ARS', currencyDisplay: 'symbol'
+                style: 'currency', currency: 'CHL', currencyDisplay: 'symbol'
             }
         }
     }

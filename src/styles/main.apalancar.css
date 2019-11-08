@@ -38,7 +38,7 @@
 .btn-primary:hover {
     border: 2px solid #FFFFFF;
     color: #FFFFFF;
-    background: var(--primary-color);
+    background: #015286;
 }
 .trip-detail-component .btn {
     border-radius: 25px;
@@ -488,7 +488,7 @@
     font-size: 1.2em;
 }
 .login input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-    color: #0070b8;
+    color: #7eb0cf;
 }
 .login #txt_password {
     margin-top: 1em;
@@ -506,4 +506,21 @@
 }
 .login .view-container {
     padding-top: .4em;
+}
+.btn-with-icon:focus,
+.btn-with-icon:active,
+.btn-sarch:active:hover,
+.btn-with-icon.active:hover,
+.open > .dropdown-toggle.btn-with-icon:hover,
+.btn-with-icon:active:focus,
+.btn-with-icon.active:focus,
+.open > .dropdown-toggle.btn-with-icon:focus,
+.btn-with-icon.focus:active,
+.btn-with-icon.active.focus,
+.open > .dropdown-toggle.btn-with-icon.focus {
+    background-color: #015286;
+}
+.btn-primary:active:hover, .btn-primary.active:hover, .open > .dropdown-toggle.btn-primary:hover, .btn-primary:active:focus, .btn-primary.active:focus, .open > .dropdown-toggle.btn-primary:focus, .btn-primary.focus:active, .btn-primary.active.focus, .open > .dropdown-toggle.btn-primary.focus {
+    color: white;
+    background-color: #015286;
 }
