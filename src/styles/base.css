@@ -19,6 +19,8 @@
 
 
     --actionbar-bakground: #F0F0F0;
+
+    --calification-star-size: 14;
   }
   html {
       font-size: 100%;

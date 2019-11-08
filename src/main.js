@@ -54,6 +54,7 @@ Vue.use(VueAnalytics, {
 
 Vue.use(VueMoment);
 require('./filters.js');
+require('./prototypes.js');
 
 /* import * as VueGoogleMaps from 'vue2-google-maps';
 

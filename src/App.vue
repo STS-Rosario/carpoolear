@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container" :class="[backgroundStyle]">
+  <div class="app-container" :class="[backgroundStyle, viewName]">
     <headerApp></headerApp>
     <main id="main">
       <div class="view-container clearfix">
@@ -53,14 +53,20 @@ export default {
             }
         }
     },
-    computed: mapGetters({
-        deviceReady: 'cordova/deviceReady',
-        backgroundStyle: 'background/backgroundStyle',
-        resolution: 'device/resolution',
-        logged: 'auth/checkLogin',
-        isFacebokApp: 'device/isFacebokApp',
-        appConfig: 'auth/appConfig'
-    }),
+    computed: {
+        ...mapGetters({
+            deviceReady: 'cordova/deviceReady',
+            backgroundStyle: 'background/backgroundStyle',
+            resolution: 'device/resolution',
+            logged: 'auth/checkLogin',
+            isFacebokApp: 'device/isFacebokApp',
+            appConfig: 'auth/appConfig'
+        }),
+        viewName () {
+            console.log(this.$route.name, this.backgroundStyle);
+            return this.$route.name;
+        }
+    },
     watch: {
         deviceReady: () => {
             console.log('Device ready from components');

@@ -14,13 +14,15 @@ processEnv.SERVE = serveMode;
 
 console.log('TARGET = ' + TARGET);
 if (TARGET === 'default') {
-    extensions = ['.js', '.vue', '.json', '.css'];
+    extensions = ['.js', '.vue', '.json', '.css', 'jpg', 'png'];
 } else {
     extensions = [
         '.' + TARGET + '.js', '.js',
         '.' + TARGET + '.vue', '.vue',
         '.' + TARGET + '.json', '.json',
-        '.' + TARGET + '.css', '.css'
+        '.' + TARGET + '.css', '.css',
+        '.' + TARGET + '.jpg', '.jpg',
+        '.' + TARGET + '.png', '.png',
     ];
 }
 
@@ -42,6 +44,7 @@ module.exports = {
     extensions: extensions,
     // fallback: [path.join(__dirname, '../node_modules')],
     alias: {
+      '@': path.resolve(__dirname, './'),
       'vue$': 'vue/dist/vue.esm.js',
       'src': path.resolve(__dirname, '../src'),
       'assets': path.resolve(__dirname, '../src/assets'),

@@ -3,7 +3,12 @@
     <router-link v-if="!isMobile"  :to="{name: 'trips'}">
         <img :src="carpoolear_logo" />
     </router-link>
-    <h1 v-if="!(hasScroll && isMobile)"> {{ $t('ingresaCuenta') }} <span class='brand'>{{ $t('carpoolear') }}</span> </h1>
+    <div class="login-header">
+      <h1 v-if="!(hasScroll && isMobile)"> {{ $t('ingresaCuenta') }} <span class='brand' v-if="!loginCustomHeader">{{ $t('carpoolear') }}</span> </h1>
+      <div class="col-sm-12 col-md-12" v-show="isMobile && loginCustomHeader">
+          <img class="login-custom-header--logo" :src="app_logo"/>
+      </div>
+    </div>
     <div class='form row'>
       <div class="alert alert-warning" role="alert" v-if="!isUnderstood">
         {{ $t('recuperarDeFacebook') }} <a href="mailto:carpoolear@stsrosario.org.ar">{{ $t('carpoolearMail') }}</a> {{ $t('recuperarDeFacebook2') }}
@@ -29,9 +34,9 @@
       <div class="col-sm-12 col-md-12 login-box" v-show="isShowLogin || !isMobile">
         <label for="txt_user">{{ $t('email') }}</label>
         <div class='visual-trick'>
-            <input placeholder="El email con el que te registraste" ref="txt_user" type="email" id="txt_user" v-model="email" v-jump:focus="'txt_password'" />
+            <input :placeholder="$t('loginUsuarioPlaceholder')" ref="txt_user" type="email" id="txt_user" v-model="email" v-jump:focus="'txt_password'" />
             <label for="txt_password" v-show="!isMobile">{{ $t('password') }}</label>
-            <input  placeholder="Contraseña" ref="txt_password" type="password" id="txt_password" v-jump:click.blur="'btn_login'" v-model='password' />
+            <input  :placeholder="$t('loginPasswordPlaceholder')" ref="txt_password" type="password" id="txt_password" v-jump:click.blur="'btn_login'" v-model='password' />
             <div class="alert alert-info" role="alert" v-if="showUserNotActiveInfo">
                  {{ $t('debeActivarCuenta') }}
             </div>
@@ -80,14 +85,19 @@ export default {
             isUnderstood: true,
             dontShowAgain: false,
             isShowLogin: false,
-            showUserNotActiveInfo: false
+            showUserNotActiveInfo: false,
+            app_logo: process.env.ROUTE_BASE + 'static/img/' + process.env.TARGET_APP + '_logo_full.png'
         };
     },
     computed: {
         ...mapGetters({
             checkLogin: 'auth/checkLogin',
-            isMobile: 'device/isMobile'
-        })
+            isMobile: 'device/isMobile',
+            config: 'auth/appConfig'
+        }),
+        loginCustomHeader () {
+            return this.config ? this.config.login_custom_header : '';
+        }
     },
     methods: {
         ...mapActions({

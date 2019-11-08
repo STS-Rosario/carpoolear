@@ -23,7 +23,6 @@
 import bus from '../../services/bus-event.js';
 import { mapActions } from 'vuex';
 
-
 export default {
     name: 'transacciones',
     data () {
@@ -32,8 +31,7 @@ export default {
         };
     },
     mounted () {
-
-        this.history().then( data => {
+        this.history().then(data => {
             this.transactions = data.trip_passengers;
             // TODO terminar front
             // LLega lista de entitys passenger, con su user incluido (el que paga), el trip y en el trip el duenio (el que cobra)

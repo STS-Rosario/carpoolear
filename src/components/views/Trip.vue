@@ -286,7 +286,7 @@
                                 <div class="col-xs-15 driver-data">
                                     <div>{{trip.user.name}}</div>
                                     <div class="trip_driver_ratings" v-if="config ? config.trip_stars : false && tripStars && tripStars.length > 0">
-                                        <svg-item v-for="value in tripStars" :size="14" :icon="'star' + value"></svg-item>
+                                        <svg-item v-for="value in tripStars" :size="$cssvar('--calification-star-size')" :icon="'star' + value"></svg-item>
                                     </div>
                                     <div class="profile-info--ratings" v-else>
                                         <svgItem icon="thumbUp" size="18"></svgItem> <span> {{trip.user.positive_ratings}} </span>
@@ -656,9 +656,8 @@ export default {
             if (this.$refs.map) {
                 let map = this.$refs.map.mapObject;
                 console.log('trip', this.trip);
-
-                let points = this.trip.points.map(point => L.latLng(point.lat, point.lng));
                 /* eslint-disable no-undef */
+                let points = this.trip.points.map(point => L.latLng(point.lat, point.lng));
                 let control = L.Routing.control({
                     waypoints: points,
                     language: 'es'
