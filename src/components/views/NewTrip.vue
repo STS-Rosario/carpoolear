@@ -45,7 +45,7 @@
                                 </span>
                             </div>
                             <div class="new-left trip_points col-sm-13 col-md-15">
-                                <div v-for="(m, index) in points" class="trip_point gmap-autocomplete" :class="{'trip-error' : m.error.state}" :key="index">
+                                <div v-for="(m, index) in points" class="trip_point gmap-autocomplete" :class="{'trip-error' : m.error.state}" :key="m.id">
                                     <span v-if="index == 0" class="sr-only">{{ $t('origen') }}</span>
                                     <span v-if="index == points.length - 1" class="sr-only">{{ $t('destino') }}</span>
                                     <autocomplete :placeholder="getPlaceholder(index)" name="'input-' + index" ref="'input-' + index" :value="m.name" v-on:place_changed="(data) =>  getPlace(index, data)" :classes="'form-control form-control-with-icon form-control-map-autocomplete'" :country="allowForeignPoints ? null : 'AR'"  :class="{'has-error': m.error.state}"></autocomplete>
@@ -452,14 +452,16 @@ export default {
                 place: null,
                 json: null,
                 location: null,
-                error: new Error()
+                error: new Error(),
+                id: 0
             },
             {
                 name: '',
                 place: null,
                 json: null,
                 location: null,
-                error: new Error()
+                error: new Error(),
+                id: 1
             }
             ],
             date: '',
@@ -714,6 +716,11 @@ export default {
             let validOtherTripTime = false;
             let validOtherTripDate = false;
 
+            this.points = this.points.filter( point => point.place);
+            this.points = this.points.map( point => {
+                delete point.id;
+                return point;
+            });
             this.points.forEach(p => {
                 if (!p.json) {
                     p.error.state = true;
@@ -1024,14 +1031,17 @@ export default {
 
         addPoint () {
             if ((this.points.filter(point => point.name === '')).length === 0) {
+                let newArr = this.points.splice(0);
                 let newp = {
                     name: '',
                     place: null,
                     json: null,
                     location: null,
-                    error: new Error()
+                    error: new Error(),
+                    id: new Date().getTime()
                 };
-                this.points.splice(this.points.length - 1, 0, newp);
+                newArr.splice(this.points.length - 1, 0, newp);
+                this.points = newArr;
             }
         },
         resetPoints (m, index) {
