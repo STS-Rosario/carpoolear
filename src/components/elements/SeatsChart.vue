@@ -13,10 +13,10 @@ export default {
     name: 'seats-chart',
     props: {
         minDate: {
-            default: moment(Date(new Date().getFullYear(), 0, 1)).format('YYYY-MM')
+            default: moment(Date(new Date().getFullYear(), 0, 1), 'YYYY-MM')
         },
         maxDate: {
-            default: moment(Date()).format('YYYY-MM')
+            default: moment(Date(), 'YYYY-MM')
         }
     },
     data () {

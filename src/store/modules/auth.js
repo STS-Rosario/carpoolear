@@ -130,7 +130,7 @@ function fetchUser (store) {
 
 function getConfig (store) {
     return authApi.config().then((response) => {
-        console.log('config response', response);
+        console.log('Loading config from server: ', response);
         store.commit('AUTH_APP_CONFIG', response);
         return response;
     });

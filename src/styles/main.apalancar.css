@@ -496,3 +496,14 @@
 .login #btn_login {
     margin-top: .5em;
 }
+.btn-with-icon--icon {
+    border-radius: 1em 0 0 1em;
+    background-color: #354f88;
+    top: 0;
+    width: 54px;
+    line-height: 62px;
+    height: 100%;
+}
+.login .view-container {
+    padding-top: .4em;
+}

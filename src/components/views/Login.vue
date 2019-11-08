@@ -164,6 +164,10 @@ export default {
             this.$refs.txt_user.focus();
         }
 
+        if (this.config.login_custom_header) {
+            this.showLogin = true;
+        }
+
         this.hasScroll = document.body.scrollHeight > viewPort;
         cache.getItem('fbLoginWarningDontShow').then((value) => {
             console.log('fbLoginWarningDontShow', value);

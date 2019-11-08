@@ -18,8 +18,8 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import footerApp from './components/sections/Footer.vue';
-import headerApp from './components/sections/Header.vue';
+import footerApp from './components/sections/FooterApp.vue';
+import headerApp from './components/sections/HeaderApp.vue';
 
 export default {
     name: 'app',
@@ -63,7 +63,6 @@ export default {
             appConfig: 'auth/appConfig'
         }),
         viewName () {
-            console.log(this.$route.name, this.backgroundStyle);
             return this.$route.name;
         }
     },
