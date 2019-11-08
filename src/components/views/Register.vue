@@ -36,6 +36,38 @@
         <label for="driver_documentation">{{ $t('ingresarDocumentacion') }}</label>
         <input type="file" id="driver_documentation" multiple @change="onDriverDocumentChange" />
         <p class="help-block">{{ $t('requisitosRegister') }}</p>
+        <div class="form-group">
+            <label for="tipoDeCuenta">
+                {{ $t('tipoDeCuenta') }}
+                <span class="required-field-flag" title="Campo requerido">(*)</span>
+            </label>
+            <select v-model="account_type" id="tipoDeCuenta" class="form-control">
+                <option v-for="option in accountTypes" v-bind:value="option.id">
+                    {{ option.name }}
+                </option>
+            </select>
+            <span class="error" v-if="accountTypeError.state"> {{accountTypeError.message}} </span>
+        </div>
+        <div class="form-group">
+            <label for="bancoDeCuenta">
+                {{ $t('bancoDeCuenta') }}
+                <span class="required-field-flag" title="Campo requerido">(*)</span>
+            </label>
+            <select v-model="account_bank" id="" class="form-control">
+                <option v-for="option in banks" v-bind:value="option.id">
+                    {{ option.name }}
+                </option>
+            </select>
+            <span class="error" v-if="accountBankError.state"> {{accountBankError.message}} </span>
+        </div>
+        <div class="form-group">
+            <label for="accountNumber">
+                {{ $t('numeroDeCuenta') }}
+                <span class="required-field-flag" title="Campo requerido">(*)</span>
+            </label>
+            <input v-model="account_number" type="text" class="form-control" id="accountNumber" :placeholder="$t('numeroDeCuenta')">
+            <span class="error" v-if="accountNumberError.state"> {{accountNumberError.message}} </span>
+        </div>
       </div>
       <div class="terms text-left">
         <input v-jump:click="'ipt_submit'" ref="ipt_terms" name="ipt_terms" type="checkbox" id="cbx_terms" v-model='termsAndConditions' />
@@ -77,6 +109,9 @@ export default {
             name: '',
             sureName: '',
             birthday: '',
+            account_number: '',
+            account_type: '',
+            account_bank: '',
             termsAndConditions: false,
             carpoolear_logo: process.env.ROUTE_BASE + 'static/img/carpoolear_logo.png',
             progress: false,
@@ -86,10 +121,15 @@ export default {
             nombreError: new Error(),
             apellidoError: new Error(),
             birthdayError: new Error(),
+            accountNumberError: new Error(),
+            accountTypeError: new Error(),
+            accountBankError: new Error(),
             maxDate: moment().toDate(),
             minDate: moment('1900-01-01').toDate(),
             showBeDriver: false,
-            driverFiles: null
+            driverFiles: null,
+            banks: [],
+            accountTypes: []
         };
     },
     computed: {
@@ -111,7 +151,8 @@ export default {
     },
     methods: {
         ...mapActions({
-            doRegister: 'auth/register'
+            doRegister: 'auth/register',
+            getBankData: 'profile/getBankData'
         }),
         validate () {
             let globalError = false;
@@ -168,6 +209,24 @@ export default {
                     globalError = true;
                 }
             } */
+
+            if (this.settings.module_validated_drivers && this.showBeDriver) {
+                if (!this.account_number) {
+                    this.accountNumberError.state = true;
+                    this.accountNumberError.message = this.$t('campoObligatorio');
+                    globalError = true;
+                }
+                if (!this.account_type) {
+                    this.accountTypeError.state = true;
+                    this.accountTypeError.message = this.$t('campoObligatorio');
+                    globalError = true;
+                }
+                if (!this.account_bank) {
+                    this.accountBankError.state = true;
+                    this.accountBankError.message = this.$t('campoObligatorio');
+                    globalError = true;
+                }
+            }
             return globalError;
         },
         onDriverDocumentChange (event) {
@@ -194,7 +253,10 @@ export default {
                 password_confirmation: this.passwordConfirmation,
                 name: this.name + ' ' + this.sureName,
                 terms_and_conditions: this.termsAndConditions,
-                birthday: this.birthdayAnswer
+                birthday: this.birthdayAnswer,
+                account_number: this.account_number,
+                account_type: this.account_type,
+                account_bank: this.account_bank
             };
             /* global FormData */
             let bodyFormData = new FormData();
@@ -240,6 +302,11 @@ export default {
     mounted () {
         bus.on('back-click', this.onBackClick);
         bus.on('date-change', this.dateChange);
+        this.getBankData().then((data) => {
+            console.log('get bank data', data);
+            this.banks = data.banks;
+            this.accountTypes = data.cc;
+        });
     },
 
     beforeDestroy () {

@@ -349,7 +349,7 @@ export default [
         meta: {
             actionbar: {
                 header: {
-                    title: 'transacciones',
+                    title: 'Transacciones',
                     buttons: ['back']
                 }
             }

@@ -84,6 +84,38 @@
                                 <h4 class="col-xs-24">Documentación del chofer</h4>
                                 <div v-imgSrc:docs="img"  v-for="img in newInfo.driver_data_docs" class="img-doc col-md-8 col-sm-12"></div>
                             </div>
+                            <div class="form-group">
+                                <label for="tipoDeCuenta">
+                                    {{ $t('tipoDeCuenta') }}
+                                    <span class="required-field-flag" title="Campo requerido">(*)</span>
+                                </label>
+                                <select v-model="newInfo.account_type" id="tipoDeCuenta" class="form-control">
+                                    <option v-for="option in accountTypes" v-bind:value="option.id">
+                                        {{ option.name }}
+                                    </option>
+                                </select>
+                                <span class="error" v-if="accountTypeError.state"> {{accountTypeError.message}} </span>
+                            </div>
+                            <div class="form-group">
+                                <label for="bancoDeCuenta">
+                                    {{ $t('bancoDeCuenta') }}
+                                    <span class="required-field-flag" title="Campo requerido">(*)</span>
+                                </label>
+                                <select v-model="newInfo.account_bank" id="" class="form-control">
+                                    <option v-for="option in banks" v-bind:value="option.id">
+                                        {{ option.name }}
+                                    </option>
+                                </select>
+                                <span class="error" v-if="accountBankError.state"> {{accountBankError.message}} </span>
+                            </div>
+                            <div class="form-group">
+                                <label for="accountNumber">
+                                    {{ $t('numeroDeCuenta') }}
+                                    <span class="required-field-flag" title="Campo requerido">(*)</span>
+                                </label>
+                                <input v-model="newInfo.account_number" type="text" class="form-control" id="accountNumber" :placeholder="$t('numeroDeCuenta')">
+                                <span class="error" v-if="accountNumberError.state"> {{accountNumberError.message}} </span>
+                            </div>
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" v-model="newInfo.driver_is_verified"> Es chofer
@@ -144,7 +176,10 @@ export default {
                 active: '',
                 banned: '',
                 driver_is_verified: 0,
-                driver_data_docs: []
+                driver_data_docs: [],
+                account_number: '',
+                account_type: '',
+                account_bank: ''
             },
             error: null,
             globalError: false,
@@ -154,7 +189,12 @@ export default {
             dniError: new Error(),
             phoneError: new Error(),
             emailError: new Error(),
-            keyUpTimerId: 0
+            accountNumberError: new Error(),
+            accountTypeError: new Error(),
+            accountBankError: new Error(),
+            keyUpTimerId: 0,
+            banks: [],
+            accountTypes: []
         };
     },
 
@@ -169,7 +209,8 @@ export default {
         ...mapActions({
             update: 'admin/adminUpdate',
             search: 'admin/searchUsers',
-            lookConversation: 'conversations/createConversation'
+            lookConversation: 'conversations/createConversation',
+            getBankData: 'profile/getBankData'
         }),
 
         onSearchUsers () {
@@ -186,6 +227,7 @@ export default {
         },
         selectUser (user) {
             this.currentUser = user;
+            console.log('selectUser', user);
             this.newInfo = {
                 name: this.currentUser.name,
                 email: this.currentUser.email,
@@ -196,7 +238,10 @@ export default {
                 active: this.currentUser.active,
                 user: {},
                 driver_is_verified: this.currentUser.driver_is_verified,
-                driver_data_docs: this.currentUser.driver_data_docs
+                driver_data_docs: this.currentUser.driver_data_docs,
+                account_number: this.currentUser.account_number,
+                account_type: this.currentUser.account_type,
+                account_bank: this.currentUser.account_bank
             };
         },
         toUserMessages (user) {
@@ -217,6 +262,9 @@ export default {
             this.dniError = new Error();
             this.emailError = new Error();
             this.phoneError = new Error();
+            this.accountNumberError = new Error();
+            this.accountTypeError = new Error();
+            this.accountBankError = new Error();
 
             if (!this.newInfo.name || this.newInfo.name.length < 1) {
                 this.nombreError.state = true;
@@ -253,6 +301,9 @@ export default {
                 this.passError = 'Password no coincide';
                 globalError = true;
             }
+
+            console.log('error', globalError);
+
             if (globalError) {
                 this.$forceUpdate();
             }
@@ -294,6 +345,11 @@ export default {
     },
 
     mounted () {
+        this.getBankData().then((data) => {
+            console.log('get bank data', data);
+            this.banks = data.banks;
+            this.accountTypes = data.cc;
+        });
         this.conversationsSearch();
         this.thread = new Thread(() => {
             this.unreadMessage();
