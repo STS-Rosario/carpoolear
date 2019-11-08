@@ -1,5 +1,7 @@
 const messages = {
     'arg': {
+        loginUsuarioPlaceholder: 'El email con el que te registraste',
+        loginPasswordPlaceholder: 'Contraseña',
         documento: 'Número de documento',
         doc: 'DNI',
         requisitosRegister: 'Se requiere que cargue: licencia de conductor, seguro del vehículo ...',
@@ -207,7 +209,8 @@ const messages = {
         bancoDeCuenta: 'Banco',
         campoObligatorio: 'Dato requerido'
     },
-    'ch': {
+    'chl': {
+        loginUsuarioPlaceholder: 'Usuario',
         documento: 'Número de RUT',
         doc: 'RUT',
         requisitosRegister: 'Se requiere que cargue: licencia de conductor, seguro del vehículo ...',
@@ -317,7 +320,8 @@ const messages = {
         errorRegistro: 'Ocurrió un error al procesar el registro, por favor vuelva a intentar.',
         ingresaORegistrate: '',
         buscoConductor: 'Conductor',
-        buscoPasajero: 'Pasajero'
+        buscoPasajero: 'Pasajero',
+        ingresaCuenta: 'Comparte auto para llegar al lugar donde quierés ir'
     }
 };
 export default messages;

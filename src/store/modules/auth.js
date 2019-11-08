@@ -2,7 +2,7 @@ import * as types from '../mutation-types';
 import { AuthApi, UserApi } from '../../services/api';
 import router from '../../router';
 import cache, { keys } from '../../services/cache';
-
+import localConfig from '../../../config/conf';
 import globalStore from '../index';
 
 let authApi = new AuthApi();
@@ -129,8 +129,9 @@ function fetchUser (store) {
 }
 
 function getConfig (store) {
+    store.commit('AUTH_APP_CONFIG', localConfig);
     return authApi.config().then((response) => {
-        console.log('config response', response);
+        console.log('Loading config from server: ', response);
         store.commit('AUTH_APP_CONFIG', response);
         return response;
     });

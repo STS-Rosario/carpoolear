@@ -7,7 +7,7 @@ import { Thread, stopThreads } from '../classes/Threads';
 let tripsApi = new TripApi();
 
 export const init = (store) => {
-    console.log('starting application');
+    console.log('Starting app.');
 
     let promises = [];
     let loadStateMap = [
@@ -39,7 +39,7 @@ export const init = (store) => {
     });
 
     return Promise.all(promises).then(() => {
-        console.log('State loaded from cache');
+        console.log('State loaded from cache.');
         if (store.state.auth.token) {
             store.dispatch('auth/retoken').then(() => startApp(store));
         } else {

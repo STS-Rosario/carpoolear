@@ -3,7 +3,12 @@
     <router-link v-if="!isMobile"  :to="{name: 'trips'}">
         <img :src="carpoolear_logo" />
     </router-link>
-    <h1 v-if="!(hasScroll && isMobile)"> {{ $t('ingresaCuenta') }} <span class='brand'>{{ $t('carpoolear') }}</span> </h1>
+    <div class="login-header">
+      <h1 v-if="!(hasScroll && isMobile)"> {{ $t('ingresaCuenta') }} <span class='brand' v-if="!loginCustomHeader">{{ $t('carpoolear') }}</span> </h1>
+      <div class="col-sm-12 col-md-12" v-show="isMobile && loginCustomHeader">
+          <img class="login-custom-header--logo" :src="app_logo"/>
+      </div>
+    </div>
     <div class='form row'>
       <div class="alert alert-warning" role="alert" v-if="!isUnderstood">
         {{ $t('recuperarDeFacebook') }} <a href="mailto:carpoolear@stsrosario.org.ar">{{ $t('carpoolearMail') }}</a> {{ $t('recuperarDeFacebook2') }}
@@ -19,19 +24,19 @@
             </div>
         </div>
       </div>
-      <div class="col-sm-12 col-md-12" v-show="isMobile">
-        <button class="btn-primary btn-search btn-facebook btn-with-icon" @click="facebookLogin" :disabled="fbLoading"><span class="btn-with-icon--icon"><i class="fa fa-facebook" aria-hidden="true"></i></span><span class='btn-with-icon--label'> <span v-if="!fbLoading">Ingresá con Facebook</span><spinner class="blue" v-if="fbLoading"></spinner></span></button>
+      <div class="col-sm-12 col-md-12" v-show="isMobile && !loginCustomHeader">
+        <button class="btn btn-primary btn-search btn-facebook btn-with-icon" @click="facebookLogin" :disabled="fbLoading"><span class="btn-with-icon--icon"><i class="fa fa-facebook" aria-hidden="true"></i></span><span class='btn-with-icon--label'> <span v-if="!fbLoading">Ingresá con Facebook</span><spinner class="blue" v-if="fbLoading"></spinner></span></button>
         <div class="fb-terms">{{ $t('alIngresarFacebook') }} <router-link :to="{name: 'terms'}">{{ $t('tyc') }}</router-link>.</div>
         <hr />
         <button ref="btn_show_login" id="btn_show_login" class="btn btn-primary btn-shadowed-black" @click="showLogin" v-show="!isShowLogin"> <span>{{ $t('ingresaConCuenta') }}</span></button>
       </div>
 
       <div class="col-sm-12 col-md-12 login-box" v-show="isShowLogin || !isMobile">
-        <label for="txt_user">{{ $t('email') }}</label>
+        <label v-show="!loginCustomHeader" for="txt_user">{{ $t('email') }}</label>
         <div class='visual-trick'>
-            <input placeholder="El email con el que te registraste" ref="txt_user" type="email" id="txt_user" v-model="email" v-jump:focus="'txt_password'" />
+            <input :placeholder="$t('loginUsuarioPlaceholder')" ref="txt_user" type="email" id="txt_user" v-model="email" v-jump:focus="'txt_password'" />
             <label for="txt_password" v-show="!isMobile">{{ $t('password') }}</label>
-            <input  placeholder="Contraseña" ref="txt_password" type="password" id="txt_password" v-jump:click.blur="'btn_login'" v-model='password' />
+            <input  :placeholder="$t('loginPasswordPlaceholder')" ref="txt_password" type="password" id="txt_password" v-jump:click.blur="'btn_login'" v-model='password' />
             <div class="alert alert-info" role="alert" v-if="showUserNotActiveInfo">
                  {{ $t('debeActivarCuenta') }}
             </div>
@@ -42,7 +47,7 @@
         </div>
 
       </div>
-      <div style="margin: 1em 0"  v-show="isShowLogin && isMobile" >
+      <div style="col-12 margin: 1em 0"  v-show="isShowLogin && isMobile" >
         <router-link class='password-not' :to="{name:'reset-password'}">{{ $t('olvideContra') }} </router-link>
       </div>
       <div  class="col-sm-12 col-md-12"  v-show="isMobile">
@@ -53,6 +58,12 @@
         <span class="register">{{ $t('noTenesFace') }} <router-link class='login-register' :to="{name:'register'}"> {{ $t('registrateAca') }} </router-link></span>
         <button class="btn-primary btn-search btn-facebook btn-with-icon" @click="facebookLogin" :disabled="fbLoading"><span class="btn-with-icon--icon"><i class="fa fa-facebook" aria-hidden="true"></i></span><span class='btn-with-icon--label'> <span v-if="!fbLoading">{{ $t('ingresaConFace') }}</span></span><spinner class="blue" v-if="fbLoading"></spinner></span></button>
         <div>{{ $t('alIngresarFace') }} <router-link :to="{name: 'terms'}">{{ $t('tyc') }}</router-link>.</div>
+      </div>
+      <div class="col-sm-12 col-md-12" v-show="isMobile && loginCustomHeader">
+        <button class="btn btn-primary btn-search btn-facebook btn-with-icon" @click="facebookLogin" :disabled="fbLoading"><span class="btn-with-icon--icon"><i class="fa fa-facebook" aria-hidden="true"></i></span><span class='btn-with-icon--label'> <span v-if="!fbLoading">Ingresá con Facebook</span><spinner class="blue" v-if="fbLoading"></spinner></span></button>
+        <div class="fb-terms">{{ $t('alIngresarFacebook') }} <router-link :to="{name: 'terms'}">{{ $t('tyc') }}</router-link>.</div>
+        <hr />
+        <button ref="btn_show_login" id="btn_show_login" class="btn btn-primary btn-shadowed-black" @click="showLogin" v-show="!isShowLogin"> <span>{{ $t('ingresaConCuenta') }}</span></button>
       </div>
       <!--<span v-if="loading"> Loading... </span>-->
     </div>
@@ -80,14 +91,19 @@ export default {
             isUnderstood: true,
             dontShowAgain: false,
             isShowLogin: false,
-            showUserNotActiveInfo: false
+            showUserNotActiveInfo: false,
+            app_logo: process.env.ROUTE_BASE + 'static/img/' + process.env.TARGET_APP + '_logo_full.png'
         };
     },
     computed: {
         ...mapGetters({
             checkLogin: 'auth/checkLogin',
-            isMobile: 'device/isMobile'
-        })
+            isMobile: 'device/isMobile',
+            config: 'auth/appConfig'
+        }),
+        loginCustomHeader () {
+            return this.config ? this.config.login_custom_header : '';
+        }
     },
     methods: {
         ...mapActions({
@@ -152,6 +168,10 @@ export default {
 
         if (!this.isMobile) {
             this.$refs.txt_user.focus();
+        }
+
+        if (this.config.login_custom_header) {
+            this.isShowLogin = true;
         }
 
         this.hasScroll = document.body.scrollHeight > viewPort;
