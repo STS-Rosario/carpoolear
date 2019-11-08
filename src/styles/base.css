@@ -2837,3 +2837,6 @@
       min-width: auto;
       padding: .8em .6em;
   }
+  .conversation_header .media-body {
+      min-width: 250px;
+  }

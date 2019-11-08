@@ -26,6 +26,9 @@
                                     <span v-if="conversation.last_message"> {{ conversation.last_message.text ? conversation.last_message.text.substring(0, conversation.last_message.text.length < 50 ? conversation.last_message.text.length : 50) + (conversation.last_message.text.length < 50 ? '' : ' ...') : '' }} </span>
                                     <span class="conversation-timestamp" v-if="false">{{ conversation.updated_at | moment("h:mm a") }}</span>
                                   </div>
+                                  <div class="media-right" v-if="conversation.last_message">
+                                      {{ $moment(conversation.last_message.created_at).fromNow() }}
+                                  </div>
                                 </div>
                             </li>
                             <li v-if="moreConversations" class="list-group-item" >
@@ -66,6 +69,7 @@ import { mapGetters, mapActions } from 'vuex';
 import { Thread } from '../../classes/Threads.js';
 import Loading from '../Loading.vue';
 import router from '../../router';
+import moment from 'moment';
 
 export default {
     name: 'conversation-list',
@@ -263,5 +267,8 @@ export default {
             overflow-y: auto;
             border-bottom: 1px solid #ddd;
         }
+    }
+    .media-right {
+        font-size: 10px;
     }
 </style>

@@ -1,53 +1,76 @@
 <template>
-    <div class="rate-item">
-        <div class="image-width">
-            <div class="trip_driver_img circle-box" v-imgSrc:profile="rate.from.image"></div>
-        </div>
-        <div class="text-width">
-            <div class="rate-item-title">
-                <div>
-                    <strong>{{rate.from.name}}</strong>
-                    <span class="rate-item-value">
-                        <i class="fa fa-thumbs-up" aria-hidden="true" v-if="rate.rating == 1"></i>
-                        <i class="fa fa-thumbs-down" aria-hidden="true" v-if="rate.rating == 0"></i>
-                    </span>
-                    <span class="pull-right clickeable" v-if="!rate.reply_comment && user.id === id" @click="showReply = !showReply">
-                        <i class="fa fa-reply" aria-hidden="true"></i>
-                    </span>
-                </div>
-                <div class="rate-item-detail" v-if="rate.trip.points.length > 0">
-                    Viajó a {{rate.trip.points[rate.trip.points.length - 1].json_address.ciudad}} como {{rateType}}
-                        - {{rate.rate_at | moment("DD/MM/YYYY")}}
-                </div>
-                <div class="rate-item-detail" v-else>
-                    Viajó a {{ rate.trip.to_town }} como {{rateType}}
-                        - {{rate.rate_at | moment("DD/MM/YYYY")}}
-                </div>
-            </div>
+    <div class="rate-item" :class="themeClass">
+        <template v-if="tripCardTheme === 'light'">
             <div class="rate-item-comment">
                 {{rate.comment}}
             </div>
-            <div class="rate-item-datetime">
 
+            <div class="rate-item-value">
+                <span v-if="rate.rating == 1">
+                    Positiva
+                    <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                </span>
+                <span v-if="rate.rating == 0">
+                    Negativa
+                    <i class="fa fa-thumbs-down" aria-hidden="true"></i>
+                </span>
             </div>
-            <div v-if="showReply">
-                <textarea v-model="comment"></textarea>
-                <button class="btn btn-primary" @click="onReply"> Responder </button>
-                <button class="btn btn-primary" @click="onCancelReply"> Cancelar </button>
+
+            <div class="rate-item-profile">
+                <div class="trip_driver_img circle-box" v-imgSrc:profile="rate.from.image"></div>
+                <strong>{{rate.from.name}}</strong>
             </div>
-            <div class="reply_comment_content" v-if="rate.reply_comment">
-                <div class="reply_comment">
-                    {{rate.reply_comment}}
+        </template>
+        <template v-else>
+            <div class="image-width">
+                <div class="trip_driver_img circle-box" v-imgSrc:profile="rate.from.image"></div>
+            </div>
+            <div class="text-width">
+                <div class="rate-item-title">
+                    <div>
+                        <strong>{{rate.from.name}}</strong>
+                        <span class="rate-item-value">
+                            <i class="fa fa-thumbs-up" aria-hidden="true" v-if="rate.rating == 1"></i>
+                            <i class="fa fa-thumbs-down" aria-hidden="true" v-if="rate.rating == 0"></i>
+                        </span>
+                        <span class="pull-right clickeable" v-if="!rate.reply_comment && user.id === id" @click="showReply = !showReply">
+                            <i class="fa fa-reply" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <div class="rate-item-detail" v-if="rate.trip.points.length > 0">
+                        Viajó a {{rate.trip.points[rate.trip.points.length - 1].json_address.ciudad}} como {{rateType}}
+                            - {{rate.rate_at | moment("DD/MM/YYYY")}}
+                    </div>
+                    <div class="rate-item-detail" v-else>
+                        Viajó a {{ rate.trip.to_town }} como {{rateType}}
+                            - {{rate.rate_at | moment("DD/MM/YYYY")}}
+                    </div>
                 </div>
-                <div class="reply_comment_date">
-                    {{rate.reply_comment_created_at | moment("calendar")}}
+                <div class="rate-item-comment">
+                    {{rate.comment}}
+                </div>
+                <div class="rate-item-datetime">
+
+                </div>
+                <div v-if="showReply">
+                    <textarea v-model="comment"></textarea>
+                    <button class="btn btn-primary" @click="onReply"> Responder </button>
+                    <button class="btn btn-primary" @click="onCancelReply"> Cancelar </button>
+                </div>
+                <div class="reply_comment_content" v-if="rate.reply_comment">
+                    <div class="reply_comment">
+                        {{rate.reply_comment}}
+                    </div>
+                    <div class="reply_comment_date">
+                        {{rate.reply_comment_created_at | moment("calendar")}}
+                    </div>
                 </div>
             </div>
-        </div>
+        </template>
     </div>
 </template>
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import moment from 'moment';
 export default {
     data () {
@@ -79,8 +102,17 @@ export default {
         }
     },
     computed: {
+        ...mapGetters({
+            config: 'auth/appConfig'
+        }),
         rateType () {
             return this.rate.user_to_type === 0 ? 'pasajero' : 'conductor';
+        },
+        tripCardTheme () {
+            return this.config ? this.config.trip_card_design : '';
+        },
+        themeClass () {
+            return this.config ? 'rate-item-' + this.config.trip_card_design : ' rate-item-default';
         }
     },
     props: [
@@ -90,3 +122,31 @@ export default {
     ]
 };
 </script>
+<style scoped>
+    .rate-item-light .rate-item-comment {
+        color: var(--primary-color);
+        margin-bottom: .6rem;
+    }
+    .rate-item-light .rate-item-value {
+        color: var(--secondary-color);
+        font-size: 14px;
+    }
+    .rate-item-light .rate-item-value .fa {
+        color: var(--secondary-color);
+        font-size: 14px;
+        margin-bottom: .6rem;
+        margin-left: .25rem;
+        padding-left: 0;
+    }
+    .rate-item-profile .trip_driver_img {
+        max-width: 30px;
+        height: 30px;
+        border: 1px solid #DDD;
+        vertical-align: middle;
+        margin-right: .25rem;
+    }
+    .rate-item-profile strong {
+        vertical-align: middle;
+        font-size: 14px;
+    }
+</style>

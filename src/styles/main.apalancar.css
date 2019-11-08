@@ -393,3 +393,31 @@
 .profile-info-component .profile-info--name {
     padding-top: 1em;
 }
+
+
+.tab-content .profile-rates-component .list-group-item {
+    padding: 1em;
+    margin-bottom: 1rem;
+}
+
+@media only screen and (min-width: 768px) {
+    .tab-content .profile-rates-component .list-group-item {
+        background-color: white;
+        border: 1px solid #ddd;
+        box-shadow: none;
+        margin: 1em;
+        padding: 1em;
+    }
+
+}
+.conversation_image {
+    width: 40px;
+    height: 40px;
+}
+.conversation_header h4 {
+    font-size: 16px;
+}
+.conversation_header .media-body {
+    color: #999;
+    font-size: 13px;
+}
