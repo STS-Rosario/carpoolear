@@ -59,7 +59,7 @@ export default {
         deviceReady: () => {
             console.log('Device ready from components');
         },
-        appConfig: (value) => {
+        appConfig (value) {
             if (value && value.locale) {
                 this.$root.$i18n.locale = value.locale;
             }
