@@ -74,7 +74,11 @@
   .no-bullet .label-soft {
       font-weight: 400;
   }
-
+  select.form-control {
+    height: 40px;
+    padding: 6px 12px;
+    border-radius: 0!important;
+  }
   /* Overriding Bootstrap */
   .input-group-btn:last-child>.btn,
   .input-group-btn:last-child>.btn-group {
@@ -1216,7 +1220,7 @@
       font-size: .95rem;
   }
   .trip-detail-component .trip_location_inner_city {
-      font-weight: 400;   
+      font-weight: 400;
       color: #392;
   }
   .trip-detail-component .trip_location_inner_state-country {

@@ -43,6 +43,14 @@ const actions = {
             return Promise.reject(error);
         });
     },
+    getBankData (store, data) {
+        return userApi.getBankData(data).then((response) => {
+            console.log('getBankData', response);
+            return Promise.resolve(response);
+        }).catch((error) => {
+            return Promise.reject(error);
+        });
+    },
 
     changeProperty (store, data) {
         return userApi.changeProperty(data).then((response) => {
