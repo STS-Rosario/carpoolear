@@ -34,13 +34,13 @@
       <div class="col-sm-12 col-md-12 login-box" v-show="isShowLogin || !isMobile">
         <label v-show="!loginCustomHeader" for="txt_user">{{ $t('email') }}</label>
         <div class='visual-trick'>
-            <input :placeholder="$t('loginUsuarioPlaceholder')" ref="txt_user" type="email" id="txt_user" v-model="email" v-jump:focus="'txt_password'" />
+            <input :placeholder="$t('loginUsuarioPlaceholder')" ref="txt_user" type="email" id="txt_user" v-model="email" v-jump />
             <label for="txt_password" v-show="!isMobile">{{ $t('password') }}</label>
-            <input  :placeholder="$t('loginPasswordPlaceholder')" ref="txt_password" type="password" id="txt_password" v-jump:click.blur="'btn_login'" v-model='password' />
+            <input  :placeholder="$t('loginPasswordPlaceholder')" ref="txt_password" type="password" id="txt_password" v-jump v-model='password' />
             <div class="alert alert-info" role="alert" v-if="showUserNotActiveInfo">
                  {{ $t('debeActivarCuenta') }}
             </div>
-            <button ref="btn_login" id="btn_login" class="btn btn-primary btn-shadowed-black" @click="login" :disabled="loading"> <span v-if="!loading">{{ $t('ingresar') }}</span> <spinner class="blue" v-if="loading"></spinner></button>
+            <button v-jump ref="btn_login" id="btn_login" class="btn btn-primary btn-shadowed-black" @click="login" :disabled="loading"> <span v-if="!loading">{{ $t('ingresar') }}</span> <spinner class="blue" v-if="loading"></spinner></button>
         </div>
         <div class='pass-options' v-if="!isMobile">
             <input id="checkbox_remember" type="checkbox" /><label for="checkbox_remember">{{ $t('recordarme') }}</label><span> - </span><router-link class='login-forget' :to="{name:'reset-password'}">{{ $t('olvideContra') }} </router-link>
@@ -62,10 +62,7 @@
       <div class="col-sm-12 col-md-12" v-show="isMobile && loginCustomHeader">
         <button class="btn btn-primary btn-search btn-facebook btn-with-icon" @click="facebookLogin" :disabled="fbLoading"><span class="btn-with-icon--icon"><i class="fa fa-facebook" aria-hidden="true"></i></span><span class='btn-with-icon--label'> <span v-if="!fbLoading">Ingresá con Facebook</span><spinner class="blue" v-if="fbLoading"></spinner></span></button>
         <div class="fb-terms">{{ $t('alIngresarFacebook') }} <router-link :to="{name: 'terms'}">{{ $t('tyc') }}</router-link>.</div>
-        <hr />
-        <button ref="btn_show_login" id="btn_show_login" class="btn btn-primary btn-shadowed-black" @click="showLogin" v-show="!isShowLogin"> <span>{{ $t('ingresaConCuenta') }}</span></button>
       </div>
-      <!--<span v-if="loading"> Loading... </span>-->
     </div>
   </div>
 </template>
@@ -74,7 +71,7 @@ import { mapGetters, mapActions } from 'vuex';
 import dialogs from '../../services/dialogs.js';
 import router from '../../router';
 import bus from '../../services/bus-event';
-import spinner from '../Spinner.vue';
+import Spinner from '../Spinner.vue';
 import cache from '../../services/cache';
 
 export default {
@@ -188,7 +185,7 @@ export default {
     },
 
     components: {
-        spinner
+        Spinner
     }
 };
 </script>

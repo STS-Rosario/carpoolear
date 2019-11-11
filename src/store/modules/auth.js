@@ -88,9 +88,7 @@ function resetPassword (store, email) {
     return authApi.resetPassword({ email }).then(() => {
         return Promise.resolve();
     }).catch((err) => {
-        if (err) {
-            return Promise.reject(new Error());
-        }
+        return Promise.reject(err);
     });
 }
 
@@ -100,7 +98,7 @@ function changePassword (store, { token, data }) {
         return Promise.resolve();
     }).catch((err) => {
         if (err) {
-            return Promise.reject(new Error());
+            return Promise.reject(err);
         }
     });
 }
@@ -109,13 +107,7 @@ function register (store, data) {
     return userApi.register(data).then((data) => {
         return Promise.resolve();
     }).catch((err) => {
-        if (err.response) {
-        } else {
-            if (err.message === 'Could not create new user.') {
-
-            }
-        }
-        return Promise.reject(new Error());
+        return Promise.reject(err);
     });
 }
 

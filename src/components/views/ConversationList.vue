@@ -69,7 +69,6 @@ import { mapGetters, mapActions } from 'vuex';
 import { Thread } from '../../classes/Threads.js';
 import Loading from '../Loading.vue';
 import router from '../../router';
-import moment from 'moment';
 
 export default {
     name: 'conversation-list',

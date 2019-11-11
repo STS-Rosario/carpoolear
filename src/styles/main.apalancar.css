@@ -525,7 +525,7 @@
     margin-top: .5em;
 }
 .btn-with-icon--icon {
-    border-radius: 1em 0 0 1em;
+    border-radius: 2em 0 0 2em;
     background-color: #354f88;
     top: 0;
     width: 54px;
@@ -551,4 +551,53 @@
 .btn-primary:active:hover, .btn-primary.active:hover, .open > .dropdown-toggle.btn-primary:hover, .btn-primary:active:focus, .btn-primary.active:focus, .open > .dropdown-toggle.btn-primary:focus, .btn-primary.focus:active, .btn-primary.active.focus, .open > .dropdown-toggle.btn-primary.focus {
     color: white;
     background-color: #015286;
+}
+.login-header {
+    padding-top: .8em;
+    padding-bottom: .8em;
+}
+.register[data-v-918632f0]::after {
+    border-bottom: solid 1px white;
+}
+.app-container.blue {
+    background: #0070b8;
+}
+.user-form img {
+    max-width: 100px;
+}
+.user-form h1 {
+    padding-top: .3em;
+    font-size: 1.8em;
+}
+.user-form input[type='email'], .user-form input[type='text'], .user-form input[type='password'] {
+    height: 46px;
+}
+.campo-obligatorio[data-v-56604554], .campos-obligatorios[data-v-56604554] {
+    color: #ddd;
+    font-weight: bold;
+}
+.blue .loader {
+    margin-left: 1.4em;
+}
+.btn-primary:disabled, .btn-primary.disabled:hover, .btn-primary[disabled]:hover, fieldset[disabled] .btn-primary:hover, .btn-primary.disabled:focus, .btn-primary[disabled]:focus, fieldset[disabled] .btn-primary:focus, .btn-primary.disabled.focus, .btn-primary[disabled].focus, fieldset[disabled] .btn-primary.focus {
+    background-color: rgb(86, 137, 169);
+    opacity: 1;
+}
+select.form-control {
+    color: black;
+    font-size: 1.2em;     
+}
+.btn-primary.btn-outline {
+    border: white 1px solid;
+}
+span.error {
+    color: #290000 !important;
+    font-weight: bold;
+}
+.user-form input.has-error,
+input.has-error,
+select.has-error,
+option.has-error,
+textarea.has-error {
+    border: 2px solid var(--main-error);
 }
