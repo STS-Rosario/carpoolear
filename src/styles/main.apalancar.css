@@ -601,3 +601,6 @@ option.has-error,
 textarea.has-error {
     border: 2px solid var(--main-error);
 }
+.login .alert {
+    margin-top: 20px;
+}
