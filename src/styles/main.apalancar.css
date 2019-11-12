@@ -565,11 +565,14 @@
 .user-form img {
     max-width: 100px;
 }
+.login .user-form img {
+    max-width: 180px;
+}
 .user-form h1 {
     padding-top: .3em;
     font-size: 1.8em;
 }
-.user-form input[type='email'], .user-form input[type='text'], .user-form input[type='password'] {
+.register .user-form input[type='email'], .register .user-form input[type='text'], .register .user-form input[type='password'] {
     height: 46px;
 }
 .campo-obligatorio[data-v-56604554], .campos-obligatorios[data-v-56604554] {
@@ -603,4 +606,121 @@ textarea.has-error {
 }
 .login .alert {
     margin-top: 20px;
+}
+/* Desktop Login */
+@media only screen and (min-width: 768px) {
+    .visual-trick {
+        border-right: 0 !important;
+        margin-right: 0 !important;
+        padding-right: 0 !important;
+        text-align: left !important;
+    }
+    .visual-trick input {
+        padding-left: 2em !important;
+        text-align: left !important;
+        max-width: 420px;
+    }
+    .login .user-form .form {
+        box-shadow: none;
+        border-top: 0;
+        width: 100%;
+        padding: 2em 0 0 0;
+        background: #0070b8;
+        max-width: 400px;
+    }
+    .login .user-form.container {
+        background: #0070b8;
+        margin: 0;
+        width: 50%;
+        max-width: none;
+        float: right;
+        color: white !important;
+        padding: 1em 6em;
+        min-height: 100vh;
+    }
+    .login .col-sm-12.col-md-12 {
+        margin: 0;
+        width: 100%;
+    }
+    .login-box {
+        width: 100%;
+        border-right: 0;
+        padding-right: 0;
+    }
+    .login .visual-trick label {
+        display: none;
+    }
+    #btn_login {
+        float: left;
+        margin-right: 1em;
+        width: 50%;
+        box-shadow: none;
+        border: white 1px solid;
+    }
+    .login .user-form .btn-primary {
+        max-width: none;
+    }
+    .login .user-form.container > a,
+    .login header,
+    .login .app-container.blue .header::after,
+    .login .header_content  {
+        display: none;
+    }
+    .login-header {
+        font-size: 1.4em;
+    }
+    .login .view-container {
+        padding-top: 0;
+        background-image: url('../../static/img/custom_login_desktop_header.apalancar.jpg');
+        background-repeat: no-repeat;
+        background-size: auto 100%;
+        background-position-x: left;
+        background-position-y: top;
+        background-color: #0070b8;
+        min-height: 100vh;
+    }
+    .footer-component {
+        margin-top: 0;
+    }
+    .login .pass-options a {
+        font-size: 1em;
+        display: block;
+        color: #ddd;
+        width: 100%;
+        float: right;
+        margin-top: .8em;
+    }
+    .login .user-form .pass-options label, .login .user-form .pass-options span, .login .register {
+        color: white;
+    }
+    .login .register {
+         font-size: 1.1em;
+    }
+    .login .facebook-box {
+        padding: 2em 0;
+    }
+    .login .pass-options a {
+        font-size: 1.2em;
+        font-weight: bold;
+        padding-left: 1.5em;
+    }
+    .user-form a {
+        color: #96e3ff;
+    }
+    .user-form .btn-primary.btn-facebook {
+        max-width: none !important;
+        border: white 1px solid;
+    }
+}
+@media only screen and (min-width: 1050px) {
+    .login #btn_login {
+        padding-left: 5em;
+        text-align: left;
+    }
+    .login .user-form .form {
+        margin-left: 3em;
+    }
+    .login-header {
+        margin-left: 3em;
+    }
 }

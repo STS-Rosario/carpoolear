@@ -43,7 +43,7 @@
             <button v-jump ref="btn_login" id="btn_login" class="btn btn-primary btn-shadowed-black" @click="login" :disabled="loading"> <span v-if="!loading">{{ $t('ingresar') }}</span> <spinner class="blue" v-if="loading"></spinner></button>
         </div>
         <div class='pass-options' v-if="!isMobile">
-            <input id="checkbox_remember" type="checkbox" /><label for="checkbox_remember">{{ $t('recordarme') }}</label><span> - </span><router-link class='login-forget' :to="{name:'reset-password'}">{{ $t('olvideContra') }} </router-link>
+            <input id="checkbox_remember" type="checkbox" /><label for="checkbox_remember">{{ $t('recordarme') }}</label><span v-show="!loginCustomHeader"> - </span><router-link class='login-forget' :to="{name:'reset-password'}">{{ $t('olvideContra') }} </router-link>
         </div>
 
       </div>
