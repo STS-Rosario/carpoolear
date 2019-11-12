@@ -8,6 +8,7 @@
     --soft-font-color: #BBBBBB;
 
     --primary-color: #0070B8;
+    --primary-soft-color: #bedbed;
     --secondary-color: #FF8F47;
 
     --trip-almost-fill-color: #D72521;
@@ -23,6 +24,8 @@
     --button-facebook-blue-right: #3b5997;
 
     --actionbar-bakground: #FFECE1;
+
+    --calification-star-size: 17;
 }
 .btn-primary {
     border: 2px solid #FFFFFF;
@@ -35,7 +38,7 @@
 .btn-primary:hover {
     border: 2px solid #FFFFFF;
     color: #FFFFFF;
-    background: var(--primary-color);
+    background: #015286;
 }
 .trip-detail-component .btn {
     border-radius: 25px;
@@ -121,9 +124,9 @@
     display: none!important;
 }
 .card-trip {
-    height: 332px;
+    height: 280px !important;
     border-radius: .4em;
-    border: 1px solid var(--primary-color);
+    border: 2px solid var(--primary-soft-color);
 }
 .card-trip .card_heading {
     color: var(--medium-font-color);
@@ -134,13 +137,19 @@
 .card-trip .card_heading .trip_driver_name {
     font-weight: bold;
 }
+.trip_driver_name {
+    font-size: 15px;
+}
 .trip_location_from_state-country,
 .trip_location_from {
+    margin-bottom: .4em;
     color: var(--primary-color);
+    font-weight: bold;
 }
 .trip_location_to_state-country,
 .trip_location_to {
     color: var(--secondary-color);
+    font-weight: bold;
 }
 .trip_location_from_state-country,
 .trip_location_to_state-country {
@@ -165,20 +174,27 @@
     padding-right: 16px;
 }
 .trip-with-driver .card_body {
-    padding-top: 1.5em;
+    padding-top: .4em;
 }
 .trip_date_right .trip_date_date_day {
     font-size: 32px;
 }
 .trip_date_right .trip_date_date_month {
-    font-size: 16px;
+    font-size: 20px;
     text-transform: capitalize;
 }
 .card-trip-theme-light .trip_driver_img {
     box-shadow: none;
 }
+.card-trip .trip_driver_img {
+    max-width: 66px;
+    height: 66px;
+}
+.trip_driver_img_container {
+    width: 90px;
+}
 .card-trip-theme-light .trip_driver_details {
-    padding-top: 0.75em;
+    padding-top: 0.35em;
 }
 .trip_location_from .trip_from_time,
 .trip_location_to .trip_to_time {
@@ -188,7 +204,7 @@
 }
 .trip_seats-available_with-icons {
     position: absolute;
-    right: 4px;
+    right: 8px;
     width: 80px;
 }
 .trip_driver_ratings svg {
@@ -392,4 +408,196 @@
 }
 .profile-info-component .profile-info--name {
     padding-top: 1em;
+}
+
+
+.tab-content .profile-rates-component .list-group-item {
+    padding: 1em;
+    margin-bottom: 1rem;
+}
+
+@media only screen and (min-width: 768px) {
+    .tab-content .profile-rates-component .list-group-item {
+        background-color: white;
+        border: 1px solid #ddd;
+        box-shadow: none;
+        margin: 1em;
+        padding: 1em;
+    }
+
+}
+.conversation_image {
+    width: 40px;
+    height: 40px;
+}
+.conversation_header h4 {
+    font-size: 16px;
+}
+.conversation_header .media-body {
+    color: #999;
+    font-size: 13px;
+}
+.trip_location-dot-line > div {
+    width: 2px;
+    height: 44px;
+    border-left: solid 2px #777;
+    border-style: none;
+    margin-right: -44%;
+}
+.trip_location_to .text-right {
+    text-align: center;
+}
+.trip_seats-available_with-icons {
+    right: 8px;
+    bottom: 2.6em;
+}
+.not-logged .trip_seats-available_with-icons {
+    bottom: 1em;
+}
+.not-logged .panel-heading {
+    position: absolute;
+    width: 100%;
+}
+.not-logged .trip_date_right {
+    margin-top: -14px;
+}
+.not-logged .trip-location {
+    margin-top: 14px;
+}
+.not-logged .card-trip {
+    height: 200px !important;
+}
+.user-form h1 {
+    font-size: 1.6em;
+    line-height: 1.4em;
+    font-weight: 100;
+    max-width: 350px;
+    margin: 0 auto;
+}
+.login .actionbar-top,
+.login .header {
+    background: transparent;
+}
+.login .actionbar_icon,
+.login .actionbar_title {
+    display: none;
+}
+.login-custom-header--logo {
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+.login #main {
+    background-color: var(--primary-color);
+}
+.login .form {
+    background-image: url('../../static/img/custom_login_header.apalancar.jpg');
+    border-top: 1px solid #e5e5e5;
+    margin-bottom: 0;
+    border-radius: 0;
+    padding-top: 3em;
+    padding-bottom: 2em;
+    background-size: cover;
+    background-position: center center;
+}
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary:hover,
+.btn-primary {
+    border: 0;
+}
+.user-form input[type='email'],
+.user-form input[type='text'],
+.user-form input[type='password'] {
+    height: 56px;
+    text-align: center;
+    border-radius: 25px;
+    border: 2px solid #FFFFFF;
+    color: black;
+    font-size: 1.2em;
+}
+.login input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #7eb0cf;
+}
+.login #txt_password {
+    margin-top: 1em;
+}
+.login #btn_login {
+    margin-top: .5em;
+}
+.btn-with-icon--icon {
+    border-radius: 2em 0 0 2em;
+    background-color: #354f88;
+    top: 0;
+    width: 54px;
+    line-height: 62px;
+    height: 100%;
+}
+.login .view-container {
+    padding-top: .4em;
+}
+.btn-with-icon:focus,
+.btn-with-icon:active,
+.btn-sarch:active:hover,
+.btn-with-icon.active:hover,
+.open > .dropdown-toggle.btn-with-icon:hover,
+.btn-with-icon:active:focus,
+.btn-with-icon.active:focus,
+.open > .dropdown-toggle.btn-with-icon:focus,
+.btn-with-icon.focus:active,
+.btn-with-icon.active.focus,
+.open > .dropdown-toggle.btn-with-icon.focus {
+    background-color: #015286;
+}
+.btn-primary:active:hover, .btn-primary.active:hover, .open > .dropdown-toggle.btn-primary:hover, .btn-primary:active:focus, .btn-primary.active:focus, .open > .dropdown-toggle.btn-primary:focus, .btn-primary.focus:active, .btn-primary.active.focus, .open > .dropdown-toggle.btn-primary.focus {
+    color: white;
+    background-color: #015286;
+}
+.login-header {
+    padding-top: .8em;
+    padding-bottom: .8em;
+}
+.register[data-v-918632f0]::after {
+    border-bottom: solid 1px white;
+}
+.app-container.blue {
+    background: #0070b8;
+}
+.user-form img {
+    max-width: 100px;
+}
+.user-form h1 {
+    padding-top: .3em;
+    font-size: 1.8em;
+}
+.user-form input[type='email'], .user-form input[type='text'], .user-form input[type='password'] {
+    height: 46px;
+}
+.campo-obligatorio[data-v-56604554], .campos-obligatorios[data-v-56604554] {
+    color: #ddd;
+    font-weight: bold;
+}
+.blue .loader {
+    margin-left: 1.4em;
+}
+.btn-primary:disabled, .btn-primary.disabled:hover, .btn-primary[disabled]:hover, fieldset[disabled] .btn-primary:hover, .btn-primary.disabled:focus, .btn-primary[disabled]:focus, fieldset[disabled] .btn-primary:focus, .btn-primary.disabled.focus, .btn-primary[disabled].focus, fieldset[disabled] .btn-primary.focus {
+    background-color: rgb(86, 137, 169);
+    opacity: 1;
+}
+select.form-control {
+    color: black;
+    font-size: 1.2em;     
+}
+.btn-primary.btn-outline {
+    border: white 1px solid;
+}
+span.error {
+    color: #290000 !important;
+    font-weight: bold;
+}
+.user-form input.has-error,
+input.has-error,
+select.has-error,
+option.has-error,
+textarea.has-error {
+    border: 2px solid var(--main-error);
 }

@@ -2,7 +2,7 @@ import * as types from '../mutation-types';
 import { AuthApi, UserApi } from '../../services/api';
 import router from '../../router';
 import cache, { keys } from '../../services/cache';
-
+import localConfig from '../../../config/conf';
 import globalStore from '../index';
 
 let authApi = new AuthApi();
@@ -88,9 +88,7 @@ function resetPassword (store, email) {
     return authApi.resetPassword({ email }).then(() => {
         return Promise.resolve();
     }).catch((err) => {
-        if (err) {
-            return Promise.reject(new Error());
-        }
+        return Promise.reject(err);
     });
 }
 
@@ -100,7 +98,7 @@ function changePassword (store, { token, data }) {
         return Promise.resolve();
     }).catch((err) => {
         if (err) {
-            return Promise.reject(new Error());
+            return Promise.reject(err);
         }
     });
 }
@@ -109,13 +107,7 @@ function register (store, data) {
     return userApi.register(data).then((data) => {
         return Promise.resolve();
     }).catch((err) => {
-        if (err.response) {
-        } else {
-            if (err.message === 'Could not create new user.') {
-
-            }
-        }
-        return Promise.reject(new Error());
+        return Promise.reject(err);
     });
 }
 
@@ -129,8 +121,9 @@ function fetchUser (store) {
 }
 
 function getConfig (store) {
+    store.commit('AUTH_APP_CONFIG', localConfig);
     return authApi.config().then((response) => {
-        console.log('config response', response);
+        console.log('Loading config from server: ', response);
         store.commit('AUTH_APP_CONFIG', response);
         return response;
     });

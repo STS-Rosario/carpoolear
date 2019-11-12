@@ -41,7 +41,7 @@
                     {{ trip.user.name }}
                   </div>
                   <div class="trip_driver_ratings" v-if="config ? config.trip_stars : false && tripStars && tripStars.length > 0">
-                    <svg-item v-for="value in tripStars" :size="14" :icon="'star' + value"></svg-item>
+                    <svg-item v-for="{value, id} in tripStars" :key="id" :size="14" :icon="'star' + value"></svg-item>
                   </div>
                   <div class="trip_driver_ratings" v-else>
                     {{ trip.user.positive_ratings + trip.user.negative_ratings }} {{ $t('calificaciones') }}
@@ -428,16 +428,28 @@ export default {
                 let stars = [];
                 for (let i = 1; i <= 5; i++) {
                     if (i < integerPart) {
-                        stars.push('');
+                        stars.push({
+                            id: i,
+                            value: ''
+                        });
                     } else {
                         if (i === integerPart) {
                             if (decimalPart >= 0.5) {
-                                stars.push('');
+                                stars.push({
+                                    id: i,
+                                    value: ''
+                                });
                             } else {
-                                stars.push('-half');
+                                stars.push({
+                                    id: i,
+                                    value: '-half'
+                                });
                             }
                         } else {
-                            stars.push('-empty');
+                            stars.push({
+                                id: i,
+                                value: '-empty'
+                            });
                         }
                     }
                 }

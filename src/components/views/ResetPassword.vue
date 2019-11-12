@@ -3,28 +3,27 @@
         <router-link v-if="!isMobile"  :to="{name: 'trips'}">
             <img :src="carpoolear_logo" />
         </router-link>
-        <h1> Recuperar contraseña </h1>
+        <h1> {{ $t('recuperarContraseña') }} </h1>
         <div class="form row" v-if="send">
             <h3> Se ha enviado un email a su casilla de correo con las indicaciones para restablecer su contraseña. </h3>
         </div>
         <div class="form row message" v-else-if="!token">
             <label for="txt_email">E-mail</label>
-            <input type="text" id="txt_email" v-model='email'/>
-
-            <button class="btn btn-primary btn-shadowed-black" @click="reset"> Recuperar contraseña </button>
-            <span v-if="loading" class='loading'> Espere... </span>
-            <span v-if="error"> {{error}} </span>
+            <input v-jump type="text" id="txt_email" v-model='email'/>
+            <span class="error" v-if="error"> {{ error }} </span>
+            <button v-jump class="btn btn-primary btn-shadowed-black btn-outline" @click="reset" :disabled="loading"> 
+                <span v-if="!loading">Recuperar contraseña</span><spinner class="blue" v-if="loading"></spinner>
+            </button>
         </div>
         <div class='form row' v-else-if="token">
             <label for="txt_password">Password</label>
-            <input  type="password" id="txt_password" v-model='password' />
-
+            <input v-jump type="password" id="txt_password" v-model='password' />
             <label for="txt_password">Repetir Password </label>
-            <input  type="password" id="txt_password" v-model='password_confirmation' />
-
-            <button class="btn btn-primary" @click="change"> Cambiar contraseña </button>
-            <span v-if="loading" class='loading'> Espere... </span>
-            <span v-if="error"> {{error}} </span>
+            <input v-jump type="password" id="txt_password" v-model='password_confirmation' />
+            <span class="error" v-if="error"> {{ error }} </span>
+            <button v-jump class="btn btn-primary" @click="change" :disabled="loading">
+                <span v-if="!loading">Cambiar contraseña</span><spinner class="blue" v-if="loading"></spinner>
+            </button>
         </div>
     </div>
 </template>
@@ -33,7 +32,7 @@
 import { mapActions, mapGetters } from 'vuex';
 import bus from '../../services/bus-event';
 import router from '../../router';
-
+import Spinner from '../Spinner.vue';
 let emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 
 export default {
@@ -113,6 +112,10 @@ export default {
 
     beforeDestroy () {
         bus.off('back-click', this.onBackClick);
+    },
+
+    components: {
+        Spinner
     }
 };
 </script>

@@ -37,7 +37,6 @@
 import bus from '../../services/bus-event.js';
 import { mapActions, mapGetters } from 'vuex';
 
-
 export default {
     name: 'transacciones',
     data () {

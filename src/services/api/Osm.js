@@ -28,7 +28,7 @@ class OsmApi {
     }
     route (data = {}) {
         let coords = '';
-        data.points.forEach( point => {
+        data.points.forEach(point => {
             if (coords) {
                 coords += ';';
             }

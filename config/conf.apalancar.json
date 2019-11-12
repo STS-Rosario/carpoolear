@@ -1,0 +1,20 @@
+{
+    "admin_email": "pabloluisbotta@gmail.com",
+    "banner": {
+        "image": "",
+        "url": ""
+    },
+    "country_name": "Chile",
+    "locale": "chl",
+    "donation": null,
+    "disable_user_hints": true,
+    "login_custom_header": true,
+    "max_cards_per_row": 3,
+    "module_trip_seats_payment": true,
+    "module_validated_drivers": true,
+    "api_price": true,
+    "fuel_price": 61,
+    "osm_country": "CHL",
+    "trip_card_design": "light",
+    "trip_stars": true
+}

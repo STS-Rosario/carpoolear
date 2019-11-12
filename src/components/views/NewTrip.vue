@@ -1061,7 +1061,7 @@ export default {
             console.log('calc route', trip.points);
 
             let points = trip.points.filter(point => point.name);
-            
+
             if (points.length < 2) {
                 return;
             }
