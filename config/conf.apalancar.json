@@ -16,5 +16,6 @@
     "fuel_price": 61,
     "osm_country": "CHL",
     "trip_card_design": "light",
-    "trip_stars": true
+    "trip_stars": true,
+    "app_name": "Apalancar"
 }

@@ -84,6 +84,10 @@ class UserApi extends TaggedApi {
         return this.get('/api/users/bank-data', data);
     }
 
+    getTermsText (lang) {
+        return this.get('/api/users/terms' + (lang ? ('?lang=' + lang) : ''));
+    }
+
     changeProperty (data) {
         return this.post('/api/users/change/' + data.property + '/' + data.value, null);
     }
