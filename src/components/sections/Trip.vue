@@ -72,7 +72,7 @@
                     <i class="fa fa-map-marker" aria-hidden="true" v-if="tripCardTheme !== 'light'"></i>
                     <i class="fa fa-circle" aria-hidden="true" v-else></i>
                   </div>
-                  <div class="col-xs-18">
+                  <div :class="config && config.trip_card_design === 'light'? 'col-xs-14' : 'col-xs-18'">
                     <span class="trip_location_from_city" :style="originLongName ? LONG_NAME_STYLE : {}">
                         {{ getLocationName(trip.points[0]) }}
                     </span>
@@ -88,7 +88,7 @@
                   <div class="col-xs-2 text-right">
                     <i class="fa fa-map-marker" aria-hidden="true"></i>
                   </div>
-                  <div class="col-xs-18">
+                  <div :class="config && config.trip_card_design === 'light'? 'col-xs-14' : 'col-xs-18'">
                     <span class="trip_location_to_city" :style="destinyLongName ? LONG_NAME_STYLE : {}">
                         {{ getLocationName(trip.points[trip.points.length - 1]) }}
                     </span>
@@ -251,7 +251,8 @@ export default {
     methods: {
         ...mapActions({
             changeSeats: 'trips/changeSeats',
-            remove: 'trips/remove'
+            remove: 'trips/remove',
+            config: 'auth/config'
         }),
         goToDetail: function (goToEdit, passengerView) {
             if (goToEdit) {
@@ -378,7 +379,7 @@ export default {
         tripCardCountClass () {
             if (this.config) {
                 if (this.config.max_cards_per_row === 3) {
-                    return 'col-lg-8 col-md-8 col-sm-12';
+                    return 'col-lg-8 col-md-12 col-sm-12';
                 } else {
                     return 'col-lg-6 col-md-8 col-sm-12';
                 }

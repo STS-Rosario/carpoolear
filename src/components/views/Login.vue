@@ -31,7 +31,7 @@
         <button ref="btn_show_login" id="btn_show_login" class="btn btn-primary btn-shadowed-black" @click="showLogin" v-show="!isShowLogin"> <span>{{ $t('ingresaConCuenta') }}</span></button>
       </div>
 
-      <div class="col-sm-12 col-md-12 login-box" v-show="isShowLogin || !isMobile">
+      <div class="login-box" :class="[righPanelclass]" v-show="isShowLogin || !isMobile">
         <label v-show="!loginCustomHeader" for="txt_user">{{ $t('email') }}</label>
         <div class='visual-trick'>
             <input :placeholder="$t('loginUsuarioPlaceholder')" ref="txt_user" type="email" id="txt_user" v-model="email" v-jump />
@@ -54,7 +54,7 @@
         <span class="register" v-if="isMobile">{{ $t('noTenesFace') }} <router-link class='login-register' :to="{name:'register'}"> {{ $t('registrateAca') }} </router-link></span>
 
       </div>
-      <div class="col-sm-12 col-md-12 facebook-box"  v-show="!isMobile" >
+      <div class="facebook-box" :class="[righPanelclass]" v-show="!isMobile" >
         <span class="register">{{ $t('noTenesFace') }} <router-link class='login-register' :to="{name:'register'}"> {{ $t('registrateAca') }} </router-link></span>
         <button class="btn-primary btn-search btn-facebook btn-with-icon" @click="facebookLogin" :disabled="fbLoading"><span class="btn-with-icon--icon"><i class="fa fa-facebook" aria-hidden="true"></i></span><span class='btn-with-icon--label'> <span v-if="!fbLoading">{{ $t('ingresaConFace') }}</span></span><spinner class="blue" v-if="fbLoading"></spinner></span></button>
         <div>{{ $t('alIngresarFace') }} <router-link :to="{name: 'terms'}">{{ $t('tyc') }}</router-link>.</div>
@@ -100,6 +100,17 @@ export default {
         }),
         loginCustomHeader () {
             return this.config ? this.config.login_custom_header : '';
+        },
+        righPanelclass () {
+            if (this.config) {
+                if (this.config.trip_card_design === 'light') {
+                    return 'col-sm-24 col-md-24';
+                } else {
+                    return 'col-sm-12 col-md-12';
+                }
+            } else {
+                return 'col-sm-12 col-md-12';
+            }
         }
     },
     methods: {

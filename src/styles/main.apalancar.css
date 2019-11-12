@@ -92,6 +92,10 @@
         height: 50px;
     }
 }
+.trips-list {
+    width: 90%;
+    margin: 0 auto;
+}
 .search-section .picker.form-control,
 .form-control-map-autocomplete {
     border-radius: 25px;
@@ -607,8 +611,14 @@ textarea.has-error {
 .login .alert {
     margin-top: 20px;
 }
+.trip-fill .trip_location-dot-line > div {
+    border-left: none;
+}
 /* Desktop Login */
 @media only screen and (min-width: 768px) {
+    .trips-list {
+        width: 100%;
+    }
     .visual-trick {
         border-right: 0 !important;
         margin-right: 0 !important;
@@ -635,12 +645,8 @@ textarea.has-error {
         max-width: none;
         float: right;
         color: white !important;
-        padding: 1em 6em;
+        padding: 1em 2em 1em 3em;
         min-height: 100vh;
-    }
-    .login .col-sm-12.col-md-12 {
-        margin: 0;
-        width: 100%;
     }
     .login-box {
         width: 100%;
@@ -711,6 +717,27 @@ textarea.has-error {
         max-width: none !important;
         border: white 1px solid;
     }
+    /* Desktop trips view */
+    .header .header_panel-left > img:last-child {
+        left: 0;
+        height: 50px;
+        top: 0;
+    }
+    .header {
+        margin: 0;
+    }
+    .trip_date_right {
+        padding-right: 2em;
+    }
+    .not-logged .trip_seats-available_with-icons {
+        bottom: 2em;
+        right: 1em;
+    }
+}
+@media only screen and (min-width: 968px) {
+    .login .user-form.container {
+        padding: 1em 6em;
+    }
 }
 @media only screen and (min-width: 1050px) {
     .login #btn_login {
@@ -722,5 +749,10 @@ textarea.has-error {
     }
     .login-header {
         margin-left: 3em;
+    }
+}
+@media only screen and (min-width: 1600px) {
+    .login-header {
+        margin-top: 2em;
     }
 }
