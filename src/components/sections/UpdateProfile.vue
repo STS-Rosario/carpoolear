@@ -51,7 +51,7 @@
                 </div>
                 <div class="form-group">
                     <label for="input-dni">{{ $t('documento') }} <span class="description">({{ $t('soloNumeros') }}). {{ $t('incentivoDoc') }} {{ $t('doc') }} {{ $t('momentoViajar') }}</span></label>
-                    <input v-numberMask="'dniRawValue'" type="text" data-max-length="8" v-model="user.nro_doc" class="form-control" id="input-dni" placeholder="DNI" :class="{'has-error': dniError.state }">
+                    <input v-numberMask="'dniRawValue'" type="text" data-max-length="8" v-model="user.nro_doc" class="form-control" id="input-dni" :placeholder="$t('doc')" :class="{'has-error': dniError.state }">
                     <span class="error" v-if="dniError.state"> {{dniError.message}} </span>
                 </div>
                 <div class="form-group">
@@ -125,7 +125,7 @@
                         <span class="error" v-if="accountNumberError.state"> {{accountNumberError.message}} </span>
                     </div>
                 </div>
-                <div class="row" v-if="user.driver_data_docs && user.driver_data_docs.length">
+                <div class="row" v-if="Array.isArray(user.driver_data_docs) && user.driver_data_docs.length">
                     <div v-imgSrc:docs="img"  v-for="img in user.driver_data_docs" class="img-doc col-md-8 col-sm-12"></div>
                 </div>
 
@@ -472,7 +472,8 @@ export default {
         });
         bus.on('date-change', this.dateChange);
         this.user = this.userData;
-        if (this.user.driver_data_docs && this.user.driver_data_docs.length) {
+        console.log('USUARIO', this.userData);
+        if (Array.isArray(this.user.driver_data_docs) && this.user.driver_data_docs.length) {
             this.showBeDriver = true;
         }
         if (this.cars) {

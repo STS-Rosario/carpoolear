@@ -207,7 +207,8 @@ const messages = {
         tipoDeCuenta: 'Tipo de cuenta',
         bancoDeCuenta: 'Banco',
         campoObligatorio: 'Dato requerido',
-        recuperarContraseña: 'Recuperar contraseña'
+        recuperarContraseña: 'Recuperar contraseña',
+        noCalificado: 'No fue calificado aún'
     },
     'chl': {
         loginUsuarioPlaceholder: 'Usuario',
@@ -239,7 +240,7 @@ const messages = {
         nombreYapellido: 'nombre y apellido',
         acercaDeMi: 'Acerca de mi',
         soloNumeros: 'solo numeros',
-        incenctivoDescripcion: 'Contale de vos al resto de los carpooleros así te suman a sus viajes! Qué te gusta hacer, en qué andas metido ahora, si estás con alguna idea, si te gustan los colores, etc.',
+        incentivoDescripcion: 'Contale de vos al resto de los carpooleros así te suman a sus viajes! Qué te gusta hacer, en qué andas metido ahora, si estás con alguna idea, si te gustan los colores, etc.',
         incentivoDoc: 'Dales un extra de confianza al resto de los carpooleros certificándoles que este es tu',
         momentoViajar: 'al momento de viajar.',
         nroTel: 'Número de teléfono',
@@ -324,7 +325,8 @@ const messages = {
         ingresaCuenta: 'Comparte auto para llegar al lugar donde quierés ir',
         carpoolear: 'Apalan-car',
         recuperarContraseña: 'Recuperar contraseña',
-        registrateAca: 'Registrate aquí.'
+        registrateAca: 'Registrate aquí.',
+        noCalificado: 'No fue calificado aún'
     }
 };
 export default messages;
