@@ -325,8 +325,8 @@ const messages = {
         ingresaCuenta: 'Comparte auto para llegar al lugar donde quierés ir',
         carpoolear: 'Apalan-car',
         recuperarContraseña: 'Recuperar contraseña',
+        registrateAca: 'Registrate aquí.',
         noCalificado: 'No fue calificado aún'
-
     }
 };
 export default messages;
