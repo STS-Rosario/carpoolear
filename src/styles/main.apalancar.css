@@ -718,10 +718,25 @@ textarea.has-error {
         border: white 1px solid;
     }
     /* Desktop trips view */
+    .header .header_panel-left > img {
+        margin-top: 26px;
+        margin-left: 1em;
+        height: 28px;
+    }
     .header .header_panel-left > img:last-child {
         left: 0;
         height: 50px;
         top: 0;
+        float: left;
+        position: initial;
+        margin-top: 18px;
+        margin-left: 0;
+    }
+    .header .header_panel-left {
+        width: 400px;
+        height: 0;
+        border-right: 60px solid transparent;
+        border-bottom: 86px solid #0070b8;
     }
     .header {
         margin: 0;
@@ -732,6 +747,14 @@ textarea.has-error {
     .not-logged .trip_seats-available_with-icons {
         bottom: 2em;
         right: 1em;
+    }
+    .header-component {
+        background: white;
+        border-bottom: 1px solid #e5e5e5;;
+    }
+    .header_panel-left {
+        padding: 0 0 0 1.5em;
+        margin: 0;
     }
 }
 @media only screen and (min-width: 968px) {
