@@ -34,12 +34,12 @@ export default {
     },
     beforeMount () {
         this.getConfig().then(data => {
-            if (this.appConfig && this.appConfig.country_name) {
+            if (this.appConfig && this.appConfig.osm_country) {
                 switch (this.appConfig.country_name) {
-                case 'Argentina':
+                case 'ARG':
                     this.$root.$i18n.locale = 'arg';
                     break;
-                case 'Chile':
+                case 'CHL':
                     this.$root.$i18n.locale = 'ch';
                     break;
                 }

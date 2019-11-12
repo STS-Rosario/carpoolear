@@ -83,13 +83,13 @@ export default {
                 name: '',
                 location: null,
                 radio: 0,
-                country: 'AR'
+                country: 'ARG'
             },
             to_town: {
                 name: '',
                 location: null,
                 radio: 0,
-                country: 'AR'
+                country: 'ARG'
             },
             date: '',
             dateAnswer: '',
@@ -205,7 +205,7 @@ export default {
                 name: '',
                 location: null,
                 radio: 0,
-                country: 'AR'
+                country: this.config.osm_country
             };
         },
         swapCities () {
