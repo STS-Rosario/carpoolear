@@ -23,7 +23,7 @@ let countDots = function (str) {
 
 let formatNumber = function (id) {
     numberFormatter[id].rawValue = cleanDots(numberFormatter[id].el.value);
-    //cambiar esta regex para que matche 2 6 1 en vez de 3 3 3
+    // cambiar esta regex para que matche 2 6 1 en vez de 3 3 3
     numberFormatter[id].value = numberFormatter[id].rawValue.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     numberFormatter[id].el.value = numberFormatter[id].value;
     numberFormatter[id].context[numberFormatter[id].expression] = numberFormatter[id].rawValue;

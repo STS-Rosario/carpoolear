@@ -615,6 +615,11 @@ textarea.has-error {
     border-left: none;
 }
 /* Desktop Login */
+.header .header_panel-right {
+    height: 86px;
+    line-height: 86px;
+    min-width: 0 !important;
+}
 @media only screen and (min-width: 768px) {
     .trips-list {
         width: 100%;
@@ -777,5 +782,10 @@ textarea.has-error {
 @media only screen and (min-width: 1600px) {
     .login-header {
         margin-top: 2em;
+    }
+}
+@media only screen and (max-width: 1080px) {
+    .header_panel-left img:first-child {
+        display: inline-block;
     }
 }
