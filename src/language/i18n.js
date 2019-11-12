@@ -207,7 +207,8 @@ const messages = {
         tipoDeCuenta: 'Tipo de cuenta',
         bancoDeCuenta: 'Banco',
         campoObligatorio: 'Dato requerido',
-        recuperarContraseña: 'Recuperar contraseña'
+        recuperarContraseña: 'Recuperar contraseña',
+        noCalificado: 'No fue calificado aún'
     },
     'chl': {
         loginUsuarioPlaceholder: 'Usuario',
@@ -323,7 +324,9 @@ const messages = {
         buscoPasajero: 'Pasajero',
         ingresaCuenta: 'Comparte auto para llegar al lugar donde quierés ir',
         carpoolear: 'Apalan-car',
-        recuperarContraseña: 'Recuperar contraseña'
+        recuperarContraseña: 'Recuperar contraseña',
+        noCalificado: 'No fue calificado aún'
+
     }
 };
 export default messages;

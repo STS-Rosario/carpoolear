@@ -286,7 +286,12 @@
                                 <div class="col-xs-15 driver-data">
                                     <div>{{trip.user.name}}</div>
                                     <div class="trip_driver_ratings" v-if="config ? config.trip_stars : false && tripStars && tripStars.length > 0">
-                                        <svg-item v-for="{value, id} in tripStars" :key="id" :size="$cssvar('--calification-star-size')" :icon="'star' + value"></svg-item>
+                                        <div v-if="this.trip.user.positive_ratings || this.trip.user.positive_ratings">
+                                            <svg-item v-for="{value, id} in tripStars" :key="id" :size="$cssvar('--calification-star-size')" :icon="'star' + value"></svg-item>
+                                        </div>
+                                        <div v-else>
+                                            {{ $t('noCalificado') }}
+                                        </div>
                                     </div>
                                     <div class="profile-info--ratings" v-else>
                                         <svgItem icon="thumbUp" size="18"></svgItem> <span> {{trip.user.positive_ratings}} </span>
@@ -813,6 +818,7 @@ export default {
         },
         tripStars () {
             if (this.trip && this.trip.user) {
+                console.log('USUARIO', this.trip.user);
                 let value = this.trip.user.positive_ratings / (this.trip.user.positive_ratings + this.trip.user.negative_ratings) * 5;
                 let integerPart = Math.floor(value);
                 let decimalPart = value - integerPart;
