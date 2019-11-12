@@ -614,6 +614,17 @@ textarea.has-error {
 .trip-fill .trip_location-dot-line > div {
     border-left: none;
 }
+.trip-fill .card-trip {
+    background: rgb(0, 112, 184);
+    background: -webkit-gradient(left bottom, right top, color-stop(0%, rgba(0, 112, 184, 1)), color-stop(50%, rgba(44, 142, 205, 1)), color-stop(100%, rgba(0, 112, 184, 1)));
+    background: linear-gradient(90deg, rgb(0, 112, 184) 0%, rgb(44, 142, 205) 50%, rgb(0, 112, 184) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#016789', endColorstr='#009de0', GradientType=1 );
+}
+.trip-fill .card-trip .trip_from_time,
+.trip-fill .card-trip .trip_to_time,
+.trip-fill .card-trip .trip_date_date {
+    color: white;
+}
 /* Desktop Login */
 .header .header_panel-right {
     height: 86px;
