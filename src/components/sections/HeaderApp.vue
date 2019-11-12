@@ -39,8 +39,8 @@
         <div class="header_content hidden-xs">
             <router-link :to="{ name: 'trips', params: { clearSearch: true } }"  v-on:click.native="tripsClick">
                 <div class="header_panel-left" v-if="logoHeaderVisibility" >
-                    <img :src="background_desktop_mini" v-if="isNotLargeDesktop" />
-                    <img :src="background_desktop" v-if="!isNotLargeDesktop" />
+                    <img :src="background_desktop_mini" v-if="isNotLargeDesktop || config.theme.trip_card_design === 'light'" />
+                    <img :src="background_desktop" v-if="!isNotLargeDesktop && config.trip_card_design !== 'light'" />
                     <img :src="app_logo"/>
                 </div>
             </router-link>
@@ -62,8 +62,8 @@
                         </a>
                     </div>
                 </modal>
-                <button @click="share" type="button" class="btn btn-link">{{ $t('invitarAmigos') }}</button>
-                <router-link class="btn btn-link trips-link" :to="{name: 'trips', params: { clearSearch: true }}">{{ $t('viajes') }}</router-link>
+                <button v-if="config.trip_card_design !== 'light'" @click="share" type="button" class="btn btn-link">{{ $t('invitarAmigos') }}</button>
+                <router-link v-if="config.trip_card_design !== 'light'" class="btn btn-link trips-link" :to="{name: 'trips', params: { clearSearch: true }}">{{ $t('viajes') }}</router-link>
                 <!--<router-link class="btn btn-link" v-if="!logged" :to="{name: 'trips'}">Información</router-link>-->
                 <!--<router-link class="btn btn-link" v-if="!logged" :to="{name: 'register'}">Registrarme</router-link>-->
                 <router-link class="btn btn-primary" btn-lg v-if="!logged" :to="{name: 'login'}">{{ $t('inicio') }}</router-link>

@@ -251,8 +251,7 @@ export default {
     methods: {
         ...mapActions({
             changeSeats: 'trips/changeSeats',
-            remove: 'trips/remove',
-            config: 'auth/config'
+            remove: 'trips/remove'
         }),
         goToDetail: function (goToEdit, passengerView) {
             if (goToEdit) {
