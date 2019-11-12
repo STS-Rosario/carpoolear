@@ -323,7 +323,8 @@ const messages = {
         buscoPasajero: 'Pasajero',
         ingresaCuenta: 'Comparte auto para llegar al lugar donde quierés ir',
         carpoolear: 'Apalan-car',
-        recuperarContraseña: 'Recuperar contraseña'
+        recuperarContraseña: 'Recuperar contraseña',
+        registrateAca: 'Registrate aquí.'
     }
 };
 export default messages;
