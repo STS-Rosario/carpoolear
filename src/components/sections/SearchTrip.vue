@@ -83,13 +83,13 @@ export default {
                 name: '',
                 location: null,
                 radio: 0,
-                country: 'ARG'
+                country: ''
             },
             to_town: {
                 name: '',
                 location: null,
                 radio: 0,
-                country: 'ARG'
+                country: ''
             },
             date: '',
             dateAnswer: '',
@@ -116,6 +116,8 @@ export default {
     mounted () {
         bus.on('date-change', this.dateChange);
         this.loadParams(this.params);
+        this.from_town.country = this.config.osm_country;
+        this.to_town.country = this.config.osm_country;
         this.$refs['from_town'].$el.addEventListener('input', this.checkInput);
         this.$refs['to_town'].$el.addEventListener('input', this.checkInput);
     },

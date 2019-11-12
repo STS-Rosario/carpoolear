@@ -716,8 +716,8 @@ export default {
             let validOtherTripTime = false;
             let validOtherTripDate = false;
 
-            this.points = this.points.filter( point => point.place);
-            this.points = this.points.map( point => {
+            this.points = this.points.filter(point => point.place);
+            this.points = this.points.map(point => {
                 delete point.id;
                 return point;
             });
