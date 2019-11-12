@@ -123,13 +123,13 @@ export default {
                 name: '',
                 location: null,
                 radio: 0,
-                country: 'AR'
+                country: 'ARG'
             },
             to_town: {
                 name: '',
                 location: null,
                 radio: 0,
-                country: 'AR'
+                country: 'ARG'
             },
             from_date: '',
             to_date: '',
@@ -212,7 +212,7 @@ export default {
             } else {
                 params.origin_name = this.$refs['from_town'].input;
             }
-            if (this.from_town && this.from_town.country && this.from_town.country.toLowerCase() !== 'AR'.toLowerCase()) {
+            if (this.from_town && this.from_town.country && this.from_town.country.toLowerCase() !== this.config.osm_country.toLowerCase()) {
                 foreignCountry++;
             }
             if (this.to_town.location) {
@@ -224,7 +224,7 @@ export default {
             } else {
                 params.destination_name = this.$refs['to_town'].input;
             }
-            if (this.to_town && this.to_town.country && this.to_town.country.toLowerCase() !== 'AR'.toLowerCase()) {
+            if (this.to_town && this.to_town.country && this.to_town.country.toLowerCase() !== this.config.osm_country.toLowerCase()) {
                 foreignCountry++;
             }
             if (this.from_date) {
@@ -255,7 +255,7 @@ export default {
                 name: '',
                 location: null,
                 radio: 0,
-                country: 'AR'
+                country: this.config.osm_country
             };
         },
         resetUser () {
