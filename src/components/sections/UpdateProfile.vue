@@ -130,7 +130,10 @@
                 </div>
 
                 <div class="btn-container">
-                    <button class="btn btn-primary" @click="grabar" :disabled="loading"> <span v-if="!loading">{{ $t('guardarCambios') }}</span><span v-if="loading">{{ $t('guardando') }}</span> </button>
+                    <button class="btn btn-primary" @click="grabar" :disabled="loading">
+                        <span v-if="!loading">{{ $t('guardarCambios') }}</span>
+                        <spinner class="blue" v-if="loading"></spinner>
+                    </button>
                     <span class="required-field-flag" v-bind:class="{ 'required-field-info': isMobile }">{{ $t('camposObligatorios') }}</span>
                 </div>
                 <span v-if="error">{{error}}</span>
@@ -150,6 +153,7 @@ import SvgItem from '../SvgItem';
 import dialogs from '../../services/dialogs.js';
 import moment from 'moment';
 import bus from '../../services/bus-event';
+import Spinner from '../Spinner.vue';
 
 class Error {
     constructor (state = false, message = '') {
@@ -498,7 +502,8 @@ export default {
     components: {
         DatePicker,
         Uploadfile,
-        SvgItem
+        SvgItem,
+        Spinner
     }
 };
 </script>

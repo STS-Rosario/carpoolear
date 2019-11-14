@@ -1,5 +1,6 @@
 /* jshint esversion: 6 */
 import { auth, guest, profileComplete, authAdmin } from './middleware.js';
+import globalStore from '../store/index';
 
 export default [
     {
@@ -30,7 +31,7 @@ export default [
             actionbar: {
                 header: {
                     logo: {
-                        show: false
+                        show: globalStore['auth/appConfig'] && globalStore['auth/appConfig'].trip_card_design === 'light'
                     },
                     buttons: ['back']
                 }

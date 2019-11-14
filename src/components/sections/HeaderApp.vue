@@ -108,7 +108,7 @@
                 </div>
 
 
-                <router-link v-if="logged" :to="{name: 'new-trip'}" class="btn btn-primary btn-lg">{{ $t('crearViaje') }}</router-link>
+                <router-link v-if="logged" :to="{name: 'new-trip'}" id="btn-create-trip" class="btn btn-primary btn-lg">{{ $t('crearViaje') }}</router-link>
 
             </div>
             <div class="cf"></div>

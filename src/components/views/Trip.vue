@@ -145,7 +145,6 @@
                                     <div>
                                         <i class="fa fa-leaf" aria-hidden="true" v-if="tripCardTheme === 'light'"></i>
                                         <span v-if="tripCardTheme !== 'light'">Huella de carbono (<abbr title="aproximada">aprox</abbr>)</span><br v-if="tripCardTheme !== 'light'">
-
                                         <span>{{ (trip.distance / 1000 * 1.5).toFixed(2) }} <abbr title="kilogramos dióxido de carbono equivalente">kg CO<sub>2eq</sub></abbr></span>
                                     </div>
                                 </div>
