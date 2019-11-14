@@ -173,11 +173,14 @@
     font-weight: bold;
 }
 .trip_seats-available svg {
+    fill: white;
+}
+.create .trip_seats-available svg {
     display: inline-block;
     padding-right: .8em;
     width: 40px;
     height: 40px;
-    fill: #ff8f47 !important;
+    fill: #ff8f47;
 }
 .trip_seats-available {
     display: inline-block;
@@ -188,7 +191,7 @@
     width: max-content;
     display: inline-block;
 }
-.trip_seats-available .svgItem {
+.create .trip_seats-available .svgItem {
     vertical-align: -14px;
 }
 .total_seats {
@@ -316,9 +319,7 @@
 .trip_seats-available .seat-free {
     background: gray;
 }
-.trip_seats-available svg {
-    fill: white;
-}
+
 .trip_date_right {
     float: right;
     padding-right: 16px;
