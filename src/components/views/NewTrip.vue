@@ -148,7 +148,7 @@
                                 <span class="error" v-if="commentError.state"> {{commentError.message}} </span>
                             </div>
                         </div>
-                        <div class="col-sm-11 col-md-9">
+                        <div class="col-sm-11 col-md-9 preferences-container">
                             <fieldset class="trip-privacity">
                                 <legend class="label-for-group"> {{ $t('privacidadViaje') }} </legend>
                                 <ul class="no-bullet">
@@ -180,7 +180,7 @@
                                         <label for="allow-smoking" class="label-soft preferences-text">{{ $t('nofumar') }}</label>
                                     </div>
                                 </div>
-                                <div class="col-md-8 row">
+                                <div class="col-md-8">
                                     <div class="col-md-12">
                                         <input type="checkbox" id="animals" v-model="trip.allow_animals"/>
                                     </div>
@@ -322,14 +322,17 @@
                                 <ul class="no-bullet">
                                     <li>
                                         <input type="radio" id="otherTrip-privacity-public" value="2" v-model="otherTrip.trip.friendship_type_id" >
+                                        <SvgItem icon="world" :size="24"></SvgItem>
                                         <label for="otherTrip-privacity-public" class="label-soft">{{ $t('publico') }}</label>
                                     </li>
                                     <li>
                                         <input type="radio" id="otherTrip-privacity-friendofriend" value="1" v-model="otherTrip.trip.friendship_type_id" >
+                                        <SvgItem icon="candado-abierto" :size="24"></SvgItem>
                                         <label for="otherTrip-privacity-friendofriend" class="label-soft">{{ $t('amigosamigos') }}</label>
                                     </li>
                                     <li>
                                         <input type="radio" id="otherTrip-privacity-friend" value="0" v-model="otherTrip.trip.friendship_type_id" >
+                                        <SvgItem icon="candado-cerrado" :size="24"></SvgItem>
                                         <label for="otherTrip-privacity-friend" class="label-soft">{{ $t('soloAmigos') }}</label>
                                     </li>
                                 </ul>
@@ -348,7 +351,7 @@
                                         <label for="allow-smoking" class="label-soft preferences-text">{{ $t('nofumar') }}</label>
                                     </div>
                                 </div>
-                                <div class="col-md-8 row">
+                                <div class="col-md-8">
                                     <div class="col-md-12">
                                         <input type="checkbox" id="animals" v-model="otherTrip.trip.allow_animals"/>
                                     </div>
