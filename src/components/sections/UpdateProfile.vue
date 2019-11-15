@@ -248,6 +248,13 @@ export default {
             carUpdate: 'cars/update',
             getBankData: 'profile/getBankData'
         }),
+        jumpToError () {
+            let hasError = document.getElementsByClassName('has-error');
+            if (hasError.length) {
+                let element = hasError[0];
+                this.$scrollToElement(element, -270);
+            }
+        },
         changeShowPassword () {
             this.showChangePassword = !this.showChangePassword;
         },
@@ -279,7 +286,10 @@ export default {
         },
         grabar () {
             if (this.validate()) {
-                dialogs.message(this.$t('faltanCamposObligatorios'), { duration: 10, estado: 'error' });
+                this.$nextTick(() => {
+                    this.jumpToError();
+                    dialogs.message(this.$t('faltanCamposObligatorios'), { duration: 10, estado: 'error' });
+                });
                 return;
             }
             this.loading = true;
@@ -339,9 +349,11 @@ export default {
                         dialogs.message(this.$t('debesImagenPerfil'), { duration: 10, estado: 'error' });
                     }
                 }
-            }).catch(response => {
+            }).catch(err => {
+                console.error(err);
                 this.loading = false;
                 this.error = this.$t('errorDatos');
+                this.jumpToError();
             });
         },
         validate () {

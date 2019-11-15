@@ -859,7 +859,7 @@ textarea.has-error {
 .trip-detail-component .driver-container::after {
     display: none;
 }
-.detail_trip .long-description {
+.detail_trip .quote {
     margin-right: 1em;
     margin-top: 1.6em;
     color: #0070b8;
@@ -868,6 +868,9 @@ textarea.has-error {
 .detail_trip .trip-detail-component .quote i {
     color: #0070b8;
     text-shadow: none;
+}
+.detail_trip .carpooled-trip {
+    margin-top: 1em;
 }
 /* Desktop Login */
 .header .header_panel-right {
@@ -1135,7 +1138,7 @@ input[type="checkbox"] {
     cursor: pointer;
     height: 0;
     width: 0;
-  }
+}
 input[type="checkbox"]:before {
     -webkit-transition: -webkit-transform 0.4s cubic-bezier(0.45, 1.8, 0.5, 0.75);
     -moz-transition: -moz-transform 0.4s cubic-bezier(0.45, 1.8, 0.5, 0.75);
@@ -1228,6 +1231,13 @@ input[type=checkbox] + label, input[type=radio] + label {
     width: 30px;
     top: -10px;
     left: 10px;
+}
+.settings-component input[type="checkbox"] {
+    left: 20px;
+    top: auto;
+}
+.settings-component .radio label, .settings-component .checkbox label {
+    padding-left: 30px;
 }
 .profile-info-component {
     padding-bottom: 0;
