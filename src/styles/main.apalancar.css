@@ -217,9 +217,6 @@
     .search-section .gmap-autocomplete .date-picker--cross {
         top: 13px;
     }
-    .vdp-datepicker input {
-        line-height: 22px;
-    }
     .search-section .form-control-map-autocomplete {
         line-height: 24px;
     }
@@ -882,6 +879,9 @@ textarea.has-error {
     body {
         overflow-x: hidden;   
     }
+    .new-trip-component .form-trip {
+        padding-bottom: 0;
+    }
 }
 @media only screen and (min-width: 768px) {
     /* Desktop Login */
@@ -1277,4 +1277,11 @@ input[type=checkbox] + label, input[type=radio] + label {
     .profile-info-component .edit-action button:nth-child(2) {
         margin-right: .8em;
     }
+}
+#cbxAllowForeignPoints + label {
+    vertical-align: -5px;
+    margin-left: -10px;
+}
+#cbxAllowForeignPoints + label + span {
+    vertical-align: -5px;
 }
