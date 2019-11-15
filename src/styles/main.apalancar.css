@@ -367,6 +367,11 @@
 .trip_driver_ratings svg {
     fill: var(--secondary-color);
 }
+.trip_driver_ratings {
+    color: #ff8f47;
+    font-weight: bold;
+    font-size: .7rem;
+}
 .trip_seats-available .seat-free,
 .trip_seats-available .seat-taken {
     background: #DDD;
@@ -811,10 +816,63 @@ textarea.has-error {
     margin-bottom: .4em;
     font-weight: normal;
 }
+.detail_trip .trip_driver_img_container {
+    width: 40px;
+    height: 40px;
+}
+.detail_trip .trip_driver_img.circle-box {
+    width: 60px !important;
+    height: 60px !important;
+}
+.detail_trip .trip_driver_details {
+    padding-left: 30px;
+}
+.detail_trip .trip_driver_name {
+    font-weight: bold;
+}
+.detail_trip a.trip_driver_name {
+    color: black;
+}
+.detail_trip .trip-detail-component div.column:nth-of-type(2) {
+    padding: 0;
+    padding-left: 25px;
+}
+.detail_trip .trip-data {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.detail_trip .trip-data em {
+    padding-bottom: 1em;
+}
+.detail_trip .trip_seats-available_with-icons {
+    bottom: 0;
+}
+.detail_trip .buttons-container button + button {
+    margin-left: .8em;
+}
+.detail_trip .trip-detail-component .buttons-container button:first-child {
+    margin-right: 0;
+}
+.detail_trip .trip-detail-component .buttons-container {
+    margin-top: 1.6em;
+}
+.trip-detail-component .driver-container::after {
+    display: none;
+}
+.detail_trip .long-description {
+    margin-right: 1em;
+    margin-top: 1.6em;
+    color: #0070b8;
+    font-weight: 400;
+}
+.detail_trip .trip-detail-component .quote i {
+    color: #0070b8;
+    text-shadow: none;
+}
 /* Desktop Login */
 .header .header_panel-right {
-    height: 86px;
-    line-height: 86px;
+    height: 96px;
+    line-height: 96px;
     min-width: 0 !important;
 }
 @media only screen and (max-width: 769px) {
@@ -823,6 +881,25 @@ textarea.has-error {
     }
 }
 @media only screen and (min-width: 768px) {
+    /* Desktop Login */
+    .header .header_panel-right {
+        height: 86px;
+        line-height: 86px;
+        min-width: 0 !important;
+    }
+    .app-container {
+        min-height: calc(100vh - 86px);
+    }
+    .view-container {
+        padding-top: 86px;
+    }
+    .header {
+        height: 86px;
+    }
+    .trips.container {
+        padding-top: 2em;
+        padding-bottom: 5em;
+    }
     .register-success h2,
     .register-succes p {
         color: white !important;
@@ -1148,7 +1225,12 @@ input[type=checkbox] + label, input[type=radio] + label {
     margin-left: 20px;
 }
 #cbxAllowForeignPoints {
-    top: -1em;
+    width: 30px;
+    top: -10px;
+    left: 10px;
+}
+.profile-info-component {
+    padding-bottom: 0;
 }
 #no-lucrar {
     top: 0;
@@ -1173,4 +1255,16 @@ input[type=checkbox] + label, input[type=radio] + label {
 }
 .preferences >.col-md-8 >div.col-md-24 label{ 
     font-size: 1em;
+}
+
+@media only screen and (max-width: 500px) {
+    .profile-info-component .edit-action button {
+        margin: .4em 0;
+        width: 80%;
+    }
+}
+@media only screen and (min-width: 500px) {
+    .profile-info-component .edit-action button:nth-child(2) {
+        margin-right: .8em;
+    }
 }

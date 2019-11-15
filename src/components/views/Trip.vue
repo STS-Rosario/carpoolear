@@ -8,6 +8,52 @@
                             <div class="col-sm-14 col-md-14 column">
                                 <div class="trip_location">
                                     <template v-if="trip.points.length >= 2">
+                                        <div class="panel-heading card_heading" v-if="tripCardTheme === 'light'">
+                                            <div class="panel-title card-trip_title row">
+                                                <time class="trip_date_right" :datetime="trip.trip_date">
+                                                    <div class="trip_date_date">
+                                                        <span class="trip_date_date_day">
+                                                            <span>{{ [ trip.trip_date ] | moment("DD") }}</span>
+                                                        </span>
+                                                        <br />
+                                                        <span class="trip_date_date_month">{{ [ trip.trip_date ] | moment("MMM") }}</span>
+                                                    </div>
+                                                </time>
+                                                <template v-if="trip && trip.user">
+                                                    <div class="trip_driver_img_container" v-on:click='goToProfile'>
+                                                        <div class="trip_driver_img circle-box" v-imgSrc:profile="getUserImage">
+                                                        </div>
+                                                    </div>
+                                                    <div class="trip_driver_details">
+                                                        <a class="btn-link trip_driver_name" @click='goToProfile'>
+                                                            {{ trip.user.name }}
+                                                        </a>
+                                                        <div class="trip_driver_ratings" v-if="config ? config.trip_stars : false && tripStars && tripStars.length > 0">
+                                                            <div v-if="trip.user.positive_ratings || trip.user.positive_ratings">
+                                                                <svg-item v-for="{value, id} in tripStars" :key="id" :size="24" :icon="'star' + value"></svg-item>
+                                                            </div>
+                                                            <div v-else>
+                                                                {{ $t('noCalificado') }}
+                                                            </div>
+                                                        </div>
+                                                        <div class="trip_driver_ratings" v-else>
+                                                            {{ trip.user.positive_ratings + trip.user.negative_ratings }} {{ $t('calificaciones') }}
+                                                        </div>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </div>
+                                        <template  v-if="tripCardTheme === 'light'">
+                                            <div class="trip_seats-available_with-icons">
+                                                <div class="trip_seats-available" v-if="!trip.is_passenger">
+                                                    <template v-for="n in trip.total_seats">
+                                                        <span :class="n < (trip.total_seats - trip.seats_available) ? 'seat-taken' : 'seat-free'">
+                                                            <svg-item :icon="'seat'" :size="18"></svg-item>
+                                                        </span>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </template>
                                         <div class="row trip_location_from">
                                             <div class="col-xs-4" v-if="tripCardTheme === 'light'">
                                                 <span class="trip_from_time">{{ trip.trip_date | moment("HH:mm") }} </span>
@@ -16,9 +62,9 @@
                                                 <i class="fa fa-map-marker" aria-hidden="true" v-if="tripCardTheme !== 'light'"></i>
                                                 <i class="fa fa-circle" aria-hidden="true" v-else></i>
                                             </div>
-                                            <div class="col-xs-18">
-                                            <span class="trip_location_from_city">{{ getLocationName(trip.points[0]) }}</span>
-                                            <span class="trip_location_from_state-country">{{ getStateName(trip.points[0])| googleInfoClean }}</span>
+                                            <div class="col-xs-14">
+                                                <span class="trip_location_from_city">{{ getLocationName(trip.points[0]) }}</span>
+                                                <span class="trip_location_from_state-country">{{ getStateName(trip.points[0])| googleInfoClean }}</span>
                                             </div>
                                         </div>
                                         <div class="row trip_inner_points">
@@ -29,7 +75,7 @@
                                                 <div class="col-xs-2 text-right">
                                                     <i class="fa fa-map-marker" aria-hidden="true"></i>
                                                 </div>
-                                                <div class="col-xs-18">
+                                                <div class="col-xs-14">
                                                     <span class="trip_location_inner_city">{{ getLocationName(p) }}</span>
                                                     <span class="trip_location_inner_state-country">{{ getStateName(p) | googleInfoClean }} </span>
                                                 </div>
@@ -148,6 +194,10 @@
                                         <span>{{ (trip.distance / 1000 * 1.5).toFixed(2) }} <abbr title="kilogramos dióxido de carbono equivalente">kg CO<sub>2eq</sub></abbr></span>
                                     </div>
                                 </div>
+                                <div class="row italic quote" :class="descriptionLength" v-if="trip.description && trip.description.length && tripCardTheme === 'light'">
+                                    <i class="fa fa-quote-left" aria-hidden="true"></i>
+                                    <span> {{trip.description}} </span>
+                                </div>
                                 <div class="trip_share row"  v-if="!isPasssengersView">
                                     <a  :href="'https://www.facebook.com/sharer/sharer.php?u=' + currentUrl" target="_blank" aria-label="Compartir en Facebook" class="lnk lnk-social-network lnk-facebook" @click="onShareLinkClick">
                                         <i class="fa fa-facebook" aria-hidden="true"></i>
@@ -163,7 +213,7 @@
                                     </a>
                                 </div>
 
-                                <div class="row passengers" v-if="!trip.is_passenger">
+                                <div class="row passengers" v-if="!trip.is_passenger && owner && acceptedPassengers.length">
                                     <div class="col-xs-24" v-if="owner && acceptedPassengers.length">
                                         <h4 class="title-margined">
                                             <strong>Pasajeros subidos</strong>
@@ -276,7 +326,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-24 col-sm-9 col-sm-pull-15 col-md-8 col-md-pull-16 col-lg-7 col-lg-pull-17 driver-container" v-if="!isPasssengersView">
+                    <div class="col-xs-24 col-sm-9 col-sm-pull-15 col-md-8 col-md-pull-16 col-lg-7 col-lg-pull-17 driver-container" v-if="!isPasssengersView && tripCardTheme !== 'light'">
                         <div class="driver-profile">
                             <div class="row">
                                 <div class="col-xs-9 col-md-8 col-lg-8">
@@ -306,7 +356,7 @@
                                     </div>
                                 </div>
                             </div>
-                             <div class="row" v-if="tripCardTheme !== 'light'">
+                             <div class="row">
                                 <div class="col-md-24">
                                     <router-link class="btn-primary btn-search btn-shadowed-black" :to="{name: 'profile', params: {id: getUserProfile, userProfile: trip.user}}"> Ver Perfil </router-link>
                                 </div>
@@ -465,6 +515,17 @@ export default {
             } else {
                 return true;
             }
+        },
+        goToProfile: function (event) {
+            event.stopPropagation();
+            this.$router.push({
+                name: 'profile',
+                params: {
+                    id: this.trip.user.id,
+                    userProfile: this.trip.user,
+                    activeTab: 1
+                }
+            });
         },
         deleteTrip () {
             if (window.confirm('¿Estás seguro que deseas cancelar el viaje?')) {

@@ -41,7 +41,12 @@
                     {{ trip.user.name }}
                   </div>
                   <div class="trip_driver_ratings" v-if="config ? config.trip_stars : false && tripStars && tripStars.length > 0">
-                    <svg-item v-for="{value, id} in tripStars" :key="id" :size="24" :icon="'star' + value"></svg-item>
+                    <div v-if="trip.user.positive_ratings || trip.user.positive_ratings">
+                        <svg-item v-for="{value, id} in tripStars" :key="id" :size="24" :icon="'star' + value"></svg-item>
+                    </div>
+                    <div v-else>
+                        {{ $t('noCalificado') }}
+                    </div>                  
                   </div>
                   <div class="trip_driver_ratings" v-else>
                     {{ trip.user.positive_ratings + trip.user.negative_ratings }} {{ $t('calificaciones') }}

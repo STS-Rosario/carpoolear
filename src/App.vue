@@ -46,7 +46,6 @@ export default {
         ...mapGetters({
             deviceReady: 'cordova/deviceReady',
             backgroundStyle: 'background/backgroundStyle',
-            resolution: 'device/resolution',
             logged: 'auth/checkLogin',
             isFacebokApp: 'device/isFacebokApp',
             appConfig: 'auth/appConfig'

@@ -92,15 +92,13 @@ router.push = function (data, fnSuccess, fnFailure) {
 
 router.replace = function (data) {
     // console.log('replace', JSON.stringify(router.stack), JSON.stringify(data));
-    if (router.app._route.name !== data.name) {
-        if (data.name !== 'trips') {
-            router.stack.pop();
-            router.stack.push(data);
-        } else {
-            router.stack = [];
-        }
-        router._push(data);
+    if (data.name !== 'trips') {
+        router.stack.pop();
+        router.stack.push(data);
+    } else {
+        router.stack = [];
     }
+    router._push(data);
 };
 
 router.go = function (number) {
