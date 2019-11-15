@@ -58,7 +58,7 @@ export default [
             actionbar: {
                 header: {
                     logo: {
-                        show: false
+                        show: globalStore['auth/appConfig'] && globalStore['auth/appConfig'].trip_card_design === 'light'
                     },
                     buttons: ['back']
                 }

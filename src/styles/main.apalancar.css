@@ -83,6 +83,9 @@
     border-radius: 25px;
     color: #777;
 }
+.pic-info {
+    margin: 4em 0;
+}
 .trip-type-selection--light {
     background: transparent;
     margin-top: 1em;
@@ -567,6 +570,7 @@
 }
 .profile-info-component .profile-info--name {
     padding-top: 1em;
+    font-weight: bold;
 }
 .tab-content .profile-rates-component .list-group-item {
     padding: 1em;
@@ -589,7 +593,23 @@
 .nav-tabs::after {
     border: 4px solid var(--primary-color);
 }
+.profile-info--ratings {
+    margin-top: 1em;
+}
 @media only screen and (min-width: 768px) {
+    .profile-info--ratings {
+        text-align: center;
+    }
+    .pic-info {
+        margin: 1.6em 0 0 0;
+    }
+    .profile-info-component .circle-box.profile {
+        float: none;
+        margin-right: 0;
+    }
+    .tab-content .list-group-item {
+        padding: 3em 0 0 3em;
+    }
     .tab-content .profile-rates-component .list-group-item {
         background-color: white;
         border: 1px solid #ddd;
@@ -654,6 +674,10 @@
 .login .actionbar_icon,
 .login .actionbar_title {
     display: none;
+}
+.login .actionbar_icon.pull-right {
+    display: block;
+    margin-top: -1em;
 }
 .login-custom-header--logo {
     margin-top: 2em;
@@ -875,6 +899,10 @@ textarea.has-error {
     line-height: 96px;
     min-width: 0 !important;
 }
+.profile .data-info {
+    color: #000000;
+    clear: none;
+}
 @media only screen and (max-width: 769px) {
     body {
         overflow-x: hidden;   
@@ -884,7 +912,42 @@ textarea.has-error {
     }
 }
 @media only screen and (min-width: 768px) {
+    /* Register */
+    .register .form.row,
+    .reset-password .form.row {
+        padding: 1em 2em 3em 2em;
+    }
+    .register .form.row h1,
+    .reset-password .form.row h1 {
+        font-weight: 300;
+        color: #0070b8;
+        font-size: 2.8em;
+        max-width: 100%;
+    }
+    .register .campos-obligatorios {
+        color: red;
+    }
+    .register .user-form input[type='email'], .register .user-form input[type='text'], .register .user-form input[type='password'],
+    .reset-password .user-form input[type='email'], .reset-password .user-form input[type='text'], .reset-password .user-form input[type='password'] {
+        text-align: left;
+        border: 1px solid #ccc;
+    }
+    .register label,
+    .reset-password label {
+        font-weight: bold;
+    }
+    .register input[type=checkbox] + label, .register input[type=radio] + label {
+        margin-top: -4px;
+        margin-left: 0;
+    }
     /* Desktop Login */
+    .register .register-component.user-form.container > a > img,
+    .reset-password .user-form.container > a > img {
+        display: none;
+    }
+    .reset-password .user-form .btn-primary {
+        max-width: 300px;
+    }
     .header .header_panel-right {
         height: 86px;
         line-height: 86px;
@@ -1100,6 +1163,9 @@ textarea.has-error {
     .form {
         -webkit-box-shadow: 0 0 1px 1px #CCCCCC;
         box-shadow: 0 0 1px 1px #CCCCCC;
+    }
+    .login #checkbox_remember {
+        margin-top: 4px !important;
     }
 }
 @media only screen and (min-width: 968px) {
