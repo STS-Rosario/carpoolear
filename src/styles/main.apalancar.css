@@ -231,6 +231,9 @@
         padding: 4px 10px;
         height: 50px;
     }
+    .trips .search-section .picker.form-control {
+        padding: .1em .6em;;
+    }
 }
 .trips-list {
     width: 90%;
@@ -1167,6 +1170,9 @@ textarea.has-error {
     .login #checkbox_remember {
         margin-top: 4px !important;
     }
+    .trip-type-selection--light {
+        padding: .8em;
+    }
 }
 @media only screen and (min-width: 968px) {
     .login .user-form.container {
@@ -1344,10 +1350,10 @@ input[type=checkbox] + label, input[type=radio] + label {
         margin-right: .8em;
     }
 }
-#cbxAllowForeignPoints + label {
+.new-trip #cbxAllowForeignPoints + label {
     vertical-align: -5px;
     margin-left: -10px;
 }
-#cbxAllowForeignPoints + label + span {
+.new-trip #cbxAllowForeignPoints + label + span {
     vertical-align: -5px;
 }
