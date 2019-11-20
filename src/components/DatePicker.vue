@@ -272,15 +272,17 @@ export default {
     }
     @media only screen and (max-width: 991px) {
         .vdp-datepicker .vdp-datepicker__calendar {
+            font-size: 1.6em;
             box-shadow: 2px 2px 11px;
             z-index: 100;
-            padding: 5em 1em;
+            padding: 2.5em 1em;
             position: fixed;
-            height: 80%;
-            width: 80%;
+            /* height: 40%; */
+            width: 90%;
             top: 0px;
             left: 0px;
-            margin: 10%;
+            margin: 5%;
+            margin-top: 40%;
         }
     }
 </style>
