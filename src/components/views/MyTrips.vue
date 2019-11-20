@@ -11,6 +11,8 @@
                     Cargando...
                 </p>
             </Loading>
+        </div>
+        <div class="col-xs-24">
             <Loading :data="pendingRequest" :hideOnEmpty="true">
                 <h2 slot="title"> Pendientes <strong>de contestar</strong> </h2>
                 <div class="request-list">
