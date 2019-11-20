@@ -89,10 +89,11 @@ const actions = {
     setTitle (store, title = '') {
         let getters = globalStore.getters;
         let config = getters['auth/appConfig'];
-        let appName = config ? config.app_name : process.env.TARGET_APP;
+        let appName = config ? config.name_app : process.env.TARGET_APP;
         if (appName && appName.length) {
             appName = appName.charAt(0).toUpperCase() + appName.slice(1);
         }
+        console.log('APPNAME', appName);
         store.commit(types.HEADER_SET_TITLE, title);
         if (document) {
             document.title = title + (title !== appName ? (' - ' + appName) : '');
