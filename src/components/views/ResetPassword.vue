@@ -3,11 +3,12 @@
         <router-link v-if="!isMobile"  :to="{name: 'trips'}">
             <img :src="carpoolear_logo" />
         </router-link>
-        <h1> {{ $t('recuperarContraseña') }} </h1>
+        <h1 v-if="tripCardTheme !== 'light'"> {{ $t('recuperarContraseña') }} </h1>
         <div class="form row" v-if="send">
             <h3> Se ha enviado un email a su casilla de correo con las indicaciones para restablecer su contraseña. </h3>
         </div>
         <div class="form row message" v-else-if="!token">
+            <h1 v-if="tripCardTheme === 'light'"> {{ $t('recuperarContraseña') }} </h1>
             <label for="txt_email">E-mail</label>
             <input v-jump type="text" id="txt_email" v-model='email'/>
             <span class="error" v-if="error"> {{ error }} </span>
@@ -57,8 +58,12 @@ export default {
     },
     computed: {
         ...mapGetters({
-            isMobile: 'device/isMobile'
-        })
+            isMobile: 'device/isMobile',
+            settings: 'auth/appConfig'
+        }),
+        tripCardTheme () {
+            return this.settings ? this.settings.trip_card_design : '';
+        }
     },
 
     methods: {

@@ -3,7 +3,7 @@
         <div class="form form-trip">
             <div class="row">
                 <div class="col-sm-8">
-                    <fieldset class="trip-type-selection">
+                    <fieldset class="trip-type-selection" v-if="tripCardTheme !== 'light'">
                         <div class="radio-option">
                             <input type="radio" id="type-driver" value="0" v-model="trip.is_passenger" :disabled="updatingTrip">
                             <label for="type-driver"  class="control-label">{{ $t('comoConductor') }}</label>
@@ -13,7 +13,17 @@
                             <label for="type-passenger" class="control-label">{{ $t('comoPasajero') }}</label>
                         </div>
                     </fieldset>
-                    <div class="trip_terms">
+                    <fieldset class="trip-type-selection--light" v-if="tripCardTheme === 'light'">
+                        <div class="row">
+                            <div class="col-xs-12 col-md-12 col-lg-12">
+                                <button class="btn btn-option" @click="trip.is_passenger = 0" :disabled="updatingTrip" :class="trip.is_passenger === 0 ? 'active' : ''">{{ $t('buscoConductor') }}</button>
+                            </div>
+                            <div class="col-xs-12 col-md-12 col-lg-12">
+                                <button class="btn btn-option" @click="trip.is_passenger = 1" :disabled="updatingTrip" :class="trip.is_passenger === 1 ? 'active' : ''">{{ $t('buscoPasajero') }}</button>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <div class="trip_terms" v-if="trip.is_passenger === 0">
                         <input type="checkbox" id="no-lucrar" v-model="no_lucrar" />
                         <div>
                             <label for="no-lucrar" class="trip_terms_label" :class="{'has-error': lucrarError.state }" >
@@ -30,7 +40,7 @@
                 <div class="col-sm-16">
                     <div class="row">
                         <div class="panel-trip-data">
-                            <div class="col-md-24" v-show="isMobile">
+                            <div class="col-md-24" v-show="isMobile && !tripCardTheme === 'light'">
                                 <hr />
                             </div>
                             <div class="trip_allow-foreign col-md-24">
@@ -58,15 +68,18 @@
                                 <div class="trip_information">
                                         <ul class="no-bullet">
                                             <li class="list_item">
-                                                <div class="label-soft">{{ $t('distanciaARecorrer') }}</div>
+                                                <i class="fa fa-link" aria-hidden="true" v-if="tripCardTheme === 'light'"></i>
+                                                <div class="label-soft" v-if="tripCardTheme !== 'light'">{{ $t('distanciaARecorrer') }}</div>
                                                 <div>{{distanceString}}</div>
                                             </li>
                                             <li class="list_item">
-                                                <div class="label-soft">{{ $t('tiempoEstimado') }}</div>
+                                                <i class="fa fa-clock-o" aria-hidden="true" v-if="tripCardTheme === 'light'"></i>
+                                                <div class="label-soft" v-if="tripCardTheme !== 'light'">{{ $t('tiempoEstimado') }}</div>
                                                 <div>{{estimatedTimeString}}  </div>
                                             </li>
                                             <li class="list_item">
-                                                <div class="label-soft">{{ $t('huellaCarbono') }} (<abbr title="Kilogramos dióxido de carbono equivalente">kg CO<sub>2eq</sub></abbr>)</div>
+                                                <i class="fa fa-leaf" aria-hidden="true" v-if="tripCardTheme === 'light'"></i>
+                                                <div class="label-soft" v-if="tripCardTheme !== 'light'">{{ $t('huellaCarbono') }} (<abbr title="Kilogramos dióxido de carbono equivalente">kg CO<sub>2eq</sub></abbr>)</div>
                                                 <div>{{CO2String}}</div>
                                             </li>
                                         </ul>
@@ -102,22 +115,29 @@
                             </div>
                             <div class="trip_seats-available">
                                 <fieldset>
-                                    <legend class="label-for-group">{{ $t('lugaresDisponibles') }}</legend>
-                                    <span class="radio-inline">
-                                        <input type="radio" id="seats-one" value="1" v-model="trip.total_seats">
-                                        <label for="seats-one">1</label>
+                                    <span class="label-for-group"><svg-item v-if="tripCardTheme === 'light'" :size="28" :icon="'icono-sentado'"></svg-item>{{ $t('lugaresDisponibles') }}</span>
+                                    <span v-if="tripCardTheme !== 'light'">
+                                        <span class="radio-inline">
+                                            <input type="radio" id="seats-one" value="1" v-model="trip.total_seats">
+                                            <label for="seats-one">1</label>
+                                        </span>
+                                        <span class="radio-inline">
+                                            <input type="radio" id="seats-two" value="2" v-model="trip.total_seats">
+                                            <label for="seats-two">2</label>
+                                        </span>
+                                        <span class="radio-inline">
+                                            <input type="radio" id="seats-three" value="3" v-model="trip.total_seats">
+                                            <label for="seats-three">3</label>
+                                        </span>
+                                        <span class="radio-inline">
+                                            <input type="radio" id="seats-four" value="4" v-model="trip.total_seats">
+                                            <label for="seats-four">4</label>
+                                        </span>
                                     </span>
-                                    <span class="radio-inline">
-                                        <input type="radio" id="seats-two" value="2" v-model="trip.total_seats">
-                                        <label for="seats-two">2</label>
-                                    </span>
-                                    <span class="radio-inline">
-                                        <input type="radio" id="seats-three" value="3" v-model="trip.total_seats">
-                                        <label for="seats-three">3</label>
-                                    </span>
-                                    <span class="radio-inline">
-                                        <input type="radio" id="seats-four" value="4" v-model="trip.total_seats">
-                                        <label for="seats-four">4</label>
+                                    <span class="seats-widget" v-if="tripCardTheme === 'light'">
+                                        <button type="button" @click="() => trip.total_seats < 4 ? trip.total_seats++ : trip.total_seats" class="btn btn-link" :disabled="trip.total_seats === 4"><svg-item :size="28" :icon="'add'"></svg-item></button>
+                                        <span class="total_seats">{{ trip.total_seats }}</span>
+                                        <button type="button" @click="() => trip.total_seats > 1 ? trip.total_seats-- : trip.total_seats" class="btn btn-link" :disabled="trip.total_seats === 1"><svg-item :size="28" :icon="'remove'"></svg-item></button>
                                     </span>
                                 </fieldset>
                                 <span class="error" v-if="seatsError.state"> {{seatsError.message}} </span>
@@ -128,7 +148,7 @@
                                 <span class="error" v-if="commentError.state"> {{commentError.message}} </span>
                             </div>
                         </div>
-                        <div class="col-sm-11 col-md-9">
+                        <div class="col-sm-11 col-md-9 preferences-container">
                             <fieldset class="trip-privacity">
                                 <legend class="label-for-group"> {{ $t('privacidadViaje') }} </legend>
                                 <ul class="no-bullet">
@@ -160,7 +180,7 @@
                                         <label for="allow-smoking" class="label-soft preferences-text">{{ $t('nofumar') }}</label>
                                     </div>
                                 </div>
-                                <div class="col-md-8 row">
+                                <div class="col-md-8">
                                     <div class="col-md-12">
                                         <input type="checkbox" id="animals" v-model="trip.allow_animals"/>
                                     </div>
@@ -302,14 +322,17 @@
                                 <ul class="no-bullet">
                                     <li>
                                         <input type="radio" id="otherTrip-privacity-public" value="2" v-model="otherTrip.trip.friendship_type_id" >
+                                        <SvgItem icon="world" :size="24"></SvgItem>
                                         <label for="otherTrip-privacity-public" class="label-soft">{{ $t('publico') }}</label>
                                     </li>
                                     <li>
                                         <input type="radio" id="otherTrip-privacity-friendofriend" value="1" v-model="otherTrip.trip.friendship_type_id" >
+                                        <SvgItem icon="candado-abierto" :size="24"></SvgItem>
                                         <label for="otherTrip-privacity-friendofriend" class="label-soft">{{ $t('amigosamigos') }}</label>
                                     </li>
                                     <li>
                                         <input type="radio" id="otherTrip-privacity-friend" value="0" v-model="otherTrip.trip.friendship_type_id" >
+                                        <SvgItem icon="candado-cerrado" :size="24"></SvgItem>
                                         <label for="otherTrip-privacity-friend" class="label-soft">{{ $t('soloAmigos') }}</label>
                                     </li>
                                 </ul>
@@ -328,7 +351,7 @@
                                         <label for="allow-smoking" class="label-soft preferences-text">{{ $t('nofumar') }}</label>
                                     </div>
                                 </div>
-                                <div class="col-md-8 row">
+                                <div class="col-md-8">
                                     <div class="col-md-12">
                                         <input type="checkbox" id="animals" v-model="otherTrip.trip.allow_animals"/>
                                     </div>
@@ -598,6 +621,9 @@ export default {
         },
         otherTripCO2String () {
             return Math.floor(this.otherTrip.trip.distance / 1000) * 1.5 + ' Kg';
+        },
+        tripCardTheme () {
+            return this.config ? this.config.trip_card_design : '';
         }
     },
     watch: {
@@ -791,7 +817,7 @@ export default {
                 dialogs.message(this.$t('algunosDatosNoValidos'), {
                     estado: 'error'
                 });
-            } else if (!this.no_lucrar) {
+            } else if (!this.no_lucrar && this.trip.is_passenger !== 1) {
                 this.lucrarError.state = true;
                 this.lucrarError.message = this.$t('teComprometesANoLucrar');
                 dialogs.message(this.$t('teComprometesANoLucrar'), {
@@ -924,6 +950,9 @@ export default {
                 trip.allow_animals = !trip.allow_animals;
                 trip.allow_smoking = !trip.allow_smoking;
                 trip.seat_price = this.price;
+                if (trip.is_passenger === 1) {
+                    trip.no_lucrar = 1;
+                }
                 console.log('tt', trip);
                 this.createTrip(trip).then((t) => {
                     return new Promise((resolve, reject) => {

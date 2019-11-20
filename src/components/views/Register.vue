@@ -4,8 +4,9 @@
         <img :src="carpoolear_logo" />
     </router-link>
     <img v-if="isMobile" :src="carpoolear_logo" />
-    <h1 v-if="!(success && isMobile)"> {{ $t('RegistrarNuevoUsuario') }} </h1>
+    <h1 v-if="tripCardTheme !== 'light' && !(success && isMobile)"> {{ $t('RegistrarNuevoUsuario') }} </h1>
     <div class='form row' v-if="!success">
+      <h1 v-if="tripCardTheme === 'light' && !(success && isMobile)"> {{ $t('RegistrarNuevoUsuario') }} </h1>
       <div class="campos-obligatorios">{{ $t('camposObligatorios') }}</div>
       <br />
       <label for="txt_name">{{ $t('nombre') }} <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
@@ -140,7 +141,10 @@ export default {
             checkLogin: 'auth/checkLogin',
             isMobile: 'device/isMobile',
             settings: 'auth/appConfig'
-        })
+        }),
+        tripCardTheme () {
+            return this.settings ? this.settings.trip_card_design : '';
+        }
     },
     watch: {
         email: function () { this.emailError.state = false; },

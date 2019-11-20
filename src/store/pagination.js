@@ -40,7 +40,11 @@ export function makeMutations (name) {
     };
 
     mutations[name.toUpperCase() + '_ADD'] = (state, items) => {
-        state[name] = [...state[name], ...items];
+        if (state[name] && items) {
+            state[name] = [...state[name], ...items];
+        } else {
+            console.error(state[name], items);
+        }
     };
 
     mutations[name.toUpperCase() + '_NEXT_PAGE'] = (state) => {

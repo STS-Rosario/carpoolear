@@ -39,8 +39,8 @@
         <div class="header_content hidden-xs">
             <router-link :to="{ name: 'trips', params: { clearSearch: true } }"  v-on:click.native="tripsClick">
                 <div class="header_panel-left" v-if="logoHeaderVisibility" >
-                    <img :src="background_desktop_mini" v-if="isNotLargeDesktop || config.theme.trip_card_design === 'light'" />
-                    <img :src="background_desktop" v-if="!isNotLargeDesktop && config.trip_card_design !== 'light'" />
+                    <img :src="background_desktop_mini" v-if="isNotLargeDesktop || (config && config.trip_card_design === 'light')" />
+                    <img :src="background_desktop" v-if="!isNotLargeDesktop && config && config.trip_card_design !== 'light'" />
                     <img :src="app_logo"/>
                 </div>
             </router-link>
@@ -108,7 +108,7 @@
                 </div>
 
 
-                <router-link v-if="logged" :to="{name: 'new-trip'}" class="btn btn-primary btn-lg">{{ $t('crearViaje') }}</router-link>
+                <router-link v-if="logged" :to="{name: 'new-trip'}" id="btn-create-trip" class="btn btn-primary btn-lg">{{ $t('crearViaje') }}</router-link>
 
             </div>
             <div class="cf"></div>

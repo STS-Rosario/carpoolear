@@ -130,7 +130,10 @@
                 </div>
 
                 <div class="btn-container">
-                    <button class="btn btn-primary" @click="grabar" :disabled="loading"> <span v-if="!loading">{{ $t('guardarCambios') }}</span><span v-if="loading">{{ $t('guardando') }}</span> </button>
+                    <button class="btn btn-primary" @click="grabar" :disabled="loading">
+                        <span v-if="!loading">{{ $t('guardarCambios') }}</span>
+                        <spinner class="blue" v-if="loading"></spinner>
+                    </button>
                     <span class="required-field-flag" v-bind:class="{ 'required-field-info': isMobile }">{{ $t('camposObligatorios') }}</span>
                 </div>
                 <span v-if="error">{{error}}</span>
@@ -150,6 +153,7 @@ import SvgItem from '../SvgItem';
 import dialogs from '../../services/dialogs.js';
 import moment from 'moment';
 import bus from '../../services/bus-event';
+import Spinner from '../Spinner.vue';
 
 class Error {
     constructor (state = false, message = '') {
@@ -244,6 +248,13 @@ export default {
             carUpdate: 'cars/update',
             getBankData: 'profile/getBankData'
         }),
+        jumpToError () {
+            let hasError = document.getElementsByClassName('has-error');
+            if (hasError.length) {
+                let element = hasError[0];
+                this.$scrollToElement(element, -270);
+            }
+        },
         changeShowPassword () {
             this.showChangePassword = !this.showChangePassword;
         },
@@ -275,7 +286,10 @@ export default {
         },
         grabar () {
             if (this.validate()) {
-                dialogs.message(this.$t('faltanCamposObligatorios'), { duration: 10, estado: 'error' });
+                this.$nextTick(() => {
+                    this.jumpToError();
+                    dialogs.message(this.$t('faltanCamposObligatorios'), { duration: 10, estado: 'error' });
+                });
                 return;
             }
             this.loading = true;
@@ -335,9 +349,11 @@ export default {
                         dialogs.message(this.$t('debesImagenPerfil'), { duration: 10, estado: 'error' });
                     }
                 }
-            }).catch(response => {
+            }).catch(err => {
+                console.error(err);
                 this.loading = false;
                 this.error = this.$t('errorDatos');
+                this.jumpToError();
             });
         },
         validate () {
@@ -498,7 +514,8 @@ export default {
     components: {
         DatePicker,
         Uploadfile,
-        SvgItem
+        SvgItem,
+        Spinner
     }
 };
 </script>
