@@ -204,7 +204,7 @@
                                 </div>
                             </div>
                             <div class="row row-showReturnTrip">
-                                <hr class="col-md-24" />
+                                <hr class="col-md-20" />
                                 <div class="checkbox-trip-return col-md-24">
                                     <span>
                                         <input type="checkbox" v-model="showReturnTrip" id="cbxShowReturnTrip" />
@@ -1164,6 +1164,9 @@ export default {
 
     .preferences-text {
         font-size: 0.8em;
+    }
+    .preferences {
+        margin-right: 0px;
     }
     .container {
         padding-top: 0;
