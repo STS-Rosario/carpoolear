@@ -381,7 +381,9 @@ export default {
             console.log('onUserRated', data);
             if (data.rating) {
                 // vote positivo
-                this.hasToShowModal(data.trip_id);
+                if (this.config && this.config.donation && this.config.donation.month_days > 0) {
+                    this.hasToShowModal(data.trip_id);
+                }
             }
         }
     },
