@@ -428,6 +428,7 @@ import OsmApi from '../../services/api/Osm';
 import autocomplete from '../Autocomplete';
 import SvgItem from '../SvgItem';
 // import { LMap, LTileLayer } from 'vue2-leaflet';
+import bus from '../../services/bus-event.js';
 
 // import 'leaflet-routing-machine';
 
@@ -584,6 +585,9 @@ export default {
                 self.loadTrip();
             }
         }); */
+        bus.off('clear-click', this.onBackButton);
+        bus.on('clear-click', this.onBackButton);
+
         if (self.id) {
             self.loadTrip();
         }
@@ -1056,6 +1060,12 @@ export default {
             } else {
                 return this.$t('ingresePuntoIntermedio');
             }
+        },
+
+        onBackButton () {
+            this.$router.replace({
+                name: 'trips'
+            });
         },
 
         addPoint () {
