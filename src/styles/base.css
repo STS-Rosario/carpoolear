@@ -2100,8 +2100,19 @@
           text-align: left;
       }
   }
-
+  @media only screen and (min-width: 400px) and (max-width: 767px) {
+    .vue2leaflet-map {
+      width: calc(100% + 10px)!important;
+    }
+  }
   @media only screen and (max-width: 768px) {
+      .trip-detail-component .vue-map-container {
+          position: relative;
+          left: 0;
+          top: 0;
+          max-height: auto;
+          float: none;
+      }
       .conversation_chat--search .list-group-item {
           border-right-width: 0;
           border-left-width: 0;

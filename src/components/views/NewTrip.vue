@@ -2,7 +2,8 @@
     <div class="new-trip-component container">
         <div class="form form-trip">
             <div class="row">
-                <div class="col-sm-8">
+                <div :class="columnClass[0]">
+                    <h2 class="title--desktop" v-if="tripCardTheme === 'light' && !isMobile">Crear viaje</h2>
                     <fieldset class="trip-type-selection" v-if="tripCardTheme !== 'light'">
                         <div class="radio-option">
                             <input type="radio" id="type-driver" value="0" v-model="trip.is_passenger" :disabled="updatingTrip">
@@ -23,6 +24,27 @@
                             </div>
                         </div>
                     </fieldset>
+                    <div class="trip_allow-foreign" v-if="!isMobile && tripCardTheme === 'light'">
+                        <span>
+                            <input type="checkbox" v-model="allowForeignPoints" id="cbxAllowForeignPoints" />
+                            <label for="cbxAllowForeignPoints">
+                                {{ $t('origenOdestino') }} {{ config.country_name }}
+                            </label>
+                            <span class="tooltip-bottom" :data-tooltip="$t('habilitaOrigen')">
+                            <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        </span>
+                        </span>
+                    </div>
+                    <div class="new-left trip_points trip_points--left"  v-if="!isMobile && tripCardTheme === 'light'">
+                        <div v-for="(m, index) in points" class="trip_point gmap-autocomplete" :class="{'trip-error' : m.error.state}" :key="m.id">
+                            <span v-if="index == 0" class="sr-only">{{ $t('origen') }}</span>
+                            <span v-if="index == points.length - 1" class="sr-only">{{ $t('destino') }}</span>
+                            <autocomplete :placeholder="getPlaceholder(index)" name="'input-' + index" ref="'input-' + index" :value="m.name" v-on:place_changed="(data) =>  getPlace(index, data)" :classes="'form-control form-control-with-icon form-control-map-autocomplete'" :country="allowForeignPoints ? null : 'AR'"  :class="{'has-error': m.error.state}"></autocomplete>
+                            <!-- <GmapAutocomplete  :selectFirstOnEnter="true" :types="['(cities)']" :componentRestrictions="allowForeignPoints ? null : {country: 'AR'}" :placeholder="getPlaceholder(index)"  :value="m.name" :name="'input-' + index" :ref="'input-' + index" v-on:place_changed="(data) => getPlace(index, data)" class="form-control form-control-with-icon form-control-map-autocomplete" :class="{'has-error': m.error.state}"> </GmapAutocomplete> -->
+                            <div @click="resetPoints(m, index)" class="date-picker--cross"><i aria-hidden="true" class="fa fa-times"></i></div>
+                            <span class="error" v-if="m.error.state"> {{m.error.message}} </span>
+                        </div>
+                    </div>
                     <div class="trip_terms" v-if="trip.is_passenger === 0">
                         <input type="checkbox" id="no-lucrar" v-model="no_lucrar" />
                         <div>
@@ -37,13 +59,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-16">
+                <div :class="columnClass[1]">
                     <div class="row">
                         <div class="panel-trip-data">
                             <div class="col-md-24" v-show="isMobile && !tripCardTheme === 'light'">
                                 <hr />
                             </div>
-                            <div class="trip_allow-foreign col-md-24">
+                            <div class="trip_allow-foreign col-md-24" v-if="isMobile || tripCardTheme !== 'light'">
                                 <span>
                                     <input type="checkbox" v-model="allowForeignPoints" id="cbxAllowForeignPoints" />
                                     <label for="cbxAllowForeignPoints">
@@ -54,7 +76,7 @@
                                 </span>
                                 </span>
                             </div>
-                            <div class="new-left trip_points col-sm-13 col-md-15">
+                            <div class="new-left trip_points col-sm-13 col-md-15" v-if="isMobile || tripCardTheme !== 'light'">
                                 <div v-for="(m, index) in points" class="trip_point gmap-autocomplete" :class="{'trip-error' : m.error.state}" :key="m.id">
                                     <span v-if="index == 0" class="sr-only">{{ $t('origen') }}</span>
                                     <span v-if="index == points.length - 1" class="sr-only">{{ $t('destino') }}</span>
@@ -64,25 +86,25 @@
                                     <span class="error" v-if="m.error.state"> {{m.error.message}} </span>
                                 </div>
                             </div>
-                            <div class="col-sm-11 col-md-9">
+                            <div v-if="tripCardTheme !== 'light' || isMobile" class="col-sm-11 col-md-9">
                                 <div class="trip_information">
-                                        <ul class="no-bullet">
-                                            <li class="list_item">
-                                                <i class="fa fa-link" aria-hidden="true" v-if="tripCardTheme === 'light'"></i>
-                                                <div class="label-soft" v-if="tripCardTheme !== 'light'">{{ $t('distanciaARecorrer') }}</div>
-                                                <div>{{distanceString}}</div>
-                                            </li>
-                                            <li class="list_item">
-                                                <i class="fa fa-clock-o" aria-hidden="true" v-if="tripCardTheme === 'light'"></i>
-                                                <div class="label-soft" v-if="tripCardTheme !== 'light'">{{ $t('tiempoEstimado') }}</div>
-                                                <div>{{estimatedTimeString}}  </div>
-                                            </li>
-                                            <li class="list_item">
-                                                <i class="fa fa-leaf" aria-hidden="true" v-if="tripCardTheme === 'light'"></i>
-                                                <div class="label-soft" v-if="tripCardTheme !== 'light'">{{ $t('huellaCarbono') }} (<abbr title="Kilogramos dióxido de carbono equivalente">kg CO<sub>2eq</sub></abbr>)</div>
-                                                <div>{{CO2String}}</div>
-                                            </li>
-                                        </ul>
+                                    <ul class="no-bullet">
+                                        <li class="list_item">
+                                            <i class="fa fa-link" aria-hidden="true" v-if="tripCardTheme === 'light'"></i>
+                                            <div class="label-soft" v-if="tripCardTheme !== 'light'">{{ $t('distanciaARecorrer') }}</div>
+                                            <div>{{distanceString}}</div>
+                                        </li>
+                                        <li class="list_item">
+                                            <i class="fa fa-clock-o" aria-hidden="true" v-if="tripCardTheme === 'light'"></i>
+                                            <div class="label-soft" v-if="tripCardTheme !== 'light'">{{ $t('tiempoEstimado') }}</div>
+                                            <div>{{estimatedTimeString}}  </div>
+                                        </li>
+                                        <li class="list_item">
+                                            <i class="fa fa-leaf" aria-hidden="true" v-if="tripCardTheme === 'light'"></i>
+                                            <div class="label-soft" v-if="tripCardTheme !== 'light'">{{ $t('huellaCarbono') }} (<abbr title="Kilogramos dióxido de carbono equivalente">kg CO<sub>2eq</sub></abbr>)</div>
+                                            <div>{{CO2String}}</div>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -168,7 +190,7 @@
                             </fieldset>
                             <legend class="label-for-group"> {{ $t('preferenciasViaje') }} </legend>
                             <br>
-                            <div class="preferences row">
+                            <div class="preferences row" v-if="tripCardTheme !== 'light' || isMobile">
                                 <div class="col-md-8">
                                     <div class="col-md-12">
                                         <input type="checkbox" id="smoking" v-model="trip.allow_smoking"/>
@@ -203,6 +225,23 @@
                                     </div>
                                 </div>
                             </div>
+                            <ul class="no-bullet preferences row" v-if="tripCardTheme === 'light' && !isMobile">
+                                <li>
+                                    <input type="checkbox" id="smoking" v-model="trip.allow_smoking" />
+                                    <SvgItem icon="no-smoking" :size="24"></SvgItem>
+                                    <label for="allow-smoking" class="label-soft preferences-text">{{ $t('nofumar') }}</label>
+                                </li>
+                                <li>
+                                    <input type="checkbox" id="animals" v-model="trip.allow_animals"/>
+                                    <SvgItem icon="no-animals" :size="24"></SvgItem>
+                                    <label for="allow-animals" class="label-soft preferences-text">{{ $t('noanimales') }}</label>
+                                </li>
+                                <li>
+                                    <input type="checkbox" id="kids" v-model="trip.allow_kids"/>
+                                    <SvgItem icon="no-kids" :size="24"></SvgItem>
+                                    <label for="allow-kids" class="label-soft preferences-text">{{ $t('noninos') }}</label>
+                                </li>
+                            </ul>
                             <div class="row row-showReturnTrip">
                                 <hr class="col-md-24" />
                                 <div class="checkbox-trip-return col-md-24">
@@ -214,17 +253,61 @@
                                     </span>
                                 </div>
                             </div>
-                            <button v-if="!showReturnTrip" class="trip-create btn btn-primary btn-lg btn-shadowed" @click="save" :disabled="saving">
+                            <button v-if="!showReturnTrip" class="trip-create btn btn-primary btn-lg" @click="save" :disabled="saving">
                                 <span v-if="!updatingTrip">{{ $t('crear') }}</span>
                                 <span v-else>{{ $t('actualizar') }}</span>
                             </button>
                         </div>
                     </div>
-                    <div class="row" v-if="!updatingTrip">
-                        <hr  v-if="showReturnTrip" class="col-md-24" />
-                        <div v-if="showReturnTrip">
-                            <div class="new-left trip_points col-sm-13 col-md-15">
-                                <div v-for="(m, index) in otherTrip.points" class="trip_point gmap-autocomplete" :class="{'trip-error' : m.error.state}" :key="index">
+
+                </div>
+            </div>
+            <div v-if="tripCardTheme === 'light' && !isMobile" class="trip_information trip_information--light">
+                <ul class="no-bullet">
+                    <li class="list_item">
+                        <i class="fa fa-link" aria-hidden="true" v-if="tripCardTheme === 'light'"></i>
+                        <div class="label-soft">{{ $t('distanciaARecorrer') }}</div>
+                        <div>{{distanceString}}</div>
+                    </li>
+                    <li class="list_item">
+                        <i class="fa fa-clock-o" aria-hidden="true" v-if="tripCardTheme === 'light'"></i>
+                        <div class="label-soft">{{ $t('tiempoEstimado') }}</div>
+                        <div>{{estimatedTimeString}}  </div>
+                    </li>
+                    <li class="list_item">
+                        <i class="fa fa-leaf" aria-hidden="true" v-if="tripCardTheme === 'light'"></i>
+                        <div class="label-soft">{{ $t('huellaCarbono') }} (<abbr title="Kilogramos dióxido de carbono equivalente">kg CO<sub>2eq</sub></abbr>)</div>
+                        <div>{{CO2String}}</div>
+                    </li>
+                </ul>
+            </div>
+            <div class="row show-return-trip" v-if="!updatingTrip && showReturnTrip">
+                <hr  class="col-xs-24 hidden-sm hidden-md hidden-lg" />
+                <div v-if="showReturnTrip" :class="columnClass[0]">
+                    <div class="new-left trip_points trip_points--left"  v-if="!isMobile && tripCardTheme === 'light'">
+                        <div v-for="(m, index) in otherTrip.points" class="trip_point gmap-autocomplete" :class="{'trip-error' : m.error.state}" :key="m.id">
+                            <span v-if="index == 0" class="sr-only">{{ $t('origen') }}</span>
+                            <span v-if="index == points.length - 1" class="sr-only">{{ $t('destino') }}</span>
+                            <autocomplete
+                                :placeholder="getPlaceholder(index)"
+                                name="'input-return-trip' + index"
+                                ref="'input-return-trip' + index"
+                                :value="m.name"
+                                v-on:place_changed="(data) => getPlace(index, data, 'returnTrip')"
+                                :classes="'form-control form-control-with-icon form-control-map-autocomplete'"
+                                :country="allowForeignPoints ? null : 'AR'" :class="{'has-error': m.error.state}"
+                                >
+                            </autocomplete>                            <!-- <GmapAutocomplete  :selectFirstOnEnter="true" :types="['(cities)']" :componentRestrictions="allowForeignPoints ? null : {country: 'AR'}" :placeholder="getPlaceholder(index)"  :value="m.name" :name="'input-' + index" :ref="'input-' + index" v-on:place_changed="(data) => getPlace(index, data)" class="form-control form-control-with-icon form-control-map-autocomplete" :class="{'has-error': m.error.state}"> </GmapAutocomplete> -->
+                            <div @click="m.name = ''" class="date-picker--cross"><i aria-hidden="true" class="fa fa-times"></i></div>
+                            <span class="error" v-if="m.error.state"> {{m.error.message}} </span>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="showReturnTrip" :class="columnClass[1]">
+                    <div class="row">
+                        <div class="panel-other-trip-data">
+                            <div class="new-left trip_points col-sm-13 col-md-15" v-if="isMobile || tripCardTheme !== 'light'">
+                                <div v-for="(m, index) in otherTrip.points" class="trip_point gmap-autocomplete" :class="{'trip-error' : m.error.state}" :key="m.id">
                                     <span v-if="index == 0" class="sr-only">{{ $t('origen') }}</span>
                                     <span v-if="index == points.length - 1" class="sr-only">{{ $t('destino') }}</span>
                                     <autocomplete
@@ -236,26 +319,27 @@
                                         :classes="'form-control form-control-with-icon form-control-map-autocomplete'"
                                         :country="allowForeignPoints ? null : 'AR'" :class="{'has-error': m.error.state}"
                                         >
-                                    </autocomplete>
-                                    <div @click="m.name = ''" class="date-picker--cross">
-                                        <i aria-hidden="true" class="fa fa-times"></i>
-                                    </div>
+                                    </autocomplete>                                      <!-- <GmapAutocomplete  :selectFirstOnEnter="true" :types="['(cities)']" :componentRestrictions="allowForeignPoints ? null : {country: 'AR'}" :placeholder="getPlaceholder(index)"  :value="m.name" :name="'input-' + index" :ref="'input-' + index" v-on:place_changed="(data) => getPlace(index, data)" class="form-control form-control-with-icon form-control-map-autocomplete" :class="{'has-error': m.error.state}"> </GmapAutocomplete> -->
+                                    <div @click="m.name = ''" class="date-picker--cross"><i aria-hidden="true" class="fa fa-times"></i></div>
                                     <span class="error" v-if="m.error.state"> {{m.error.message}} </span>
                                 </div>
                             </div>
-                            <div class="col-sm-11 col-md-9">
+                            <div v-if="tripCardTheme !== 'light' || isMobile" class="col-sm-11 col-md-9">
                                 <div class="trip_information">
                                     <ul class="no-bullet">
                                         <li class="list_item">
-                                            <div class="label-soft">{{ $t('distanciaARecorrer') }}</div>
+                                            <i class="fa fa-link" aria-hidden="true" v-if="tripCardTheme === 'light'"></i>
+                                            <div class="label-soft" v-if="tripCardTheme !== 'light'">{{ $t('distanciaARecorrer') }}</div>
                                             <div>{{otherTripDistanceString}}</div>
                                         </li>
                                         <li class="list_item">
-                                            <div class="label-soft">{{ $t('tiempoEstimado') }}</div>
-                                            <div>{{otherTripEstimatedTimeString}} </div>
+                                            <i class="fa fa-clock-o" aria-hidden="true" v-if="tripCardTheme === 'light'"></i>
+                                            <div class="label-soft" v-if="tripCardTheme !== 'light'">{{ $t('tiempoEstimado') }}</div>
+                                            <div>{{otherTripEstimatedTimeString}}  </div>
                                         </li>
                                         <li class="list_item">
-                                            <div class="label-soft">{{ $t('huellaCarbono') }} (<abbr title="Kilogramos dióxido de carbono equivalente">kg CO<sub>2eq</sub></abbr>)</div>
+                                            <i class="fa fa-leaf" aria-hidden="true" v-if="tripCardTheme === 'light'"></i>
+                                            <div class="label-soft" v-if="tripCardTheme !== 'light'">{{ $t('huellaCarbono') }} (<abbr title="Kilogramos dióxido de carbono equivalente">kg CO<sub>2eq</sub></abbr>)</div>
                                             <div>{{otherTripCO2String}}</div>
                                         </li>
                                     </ul>
@@ -263,86 +347,90 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row" v-if="showReturnTrip">
+                    <div class="row">
                         <div class="new-left col-sm-13 col-md-15">
                             <div class="trip_datetime">
                                 <div class="trip_date">
-                                    <label class="sr-only">{{ $t('dia') }} </label>
+                                    <label for="date" class="sr-only">{{ $t('dia') }} </label>
                                     <DatePicker
                                         :value="otherTrip.date"
                                         :minDate="otherTrip.minDate"
                                         :class="{'has-error': otherTrip.dateError.state}"
                                         v-on:date_changed="(date) => this.otherTrip.dateAnswer = date">
-                                    </DatePicker>
+                                      </DatePicker>
                                     <span class="error" v-if="otherTrip.dateError.state"> {{otherTrip.dateError.message}} </span>
                                 </div>
                                 <div class="trip_time">
                                     <label for="otherTrip-time" class="sr-only">{{ $t('hora') }}</label>
-                                    <input type="time" v-mask="'##:##'" v-model="otherTrip.time" class="form-control form-control-with-icon form-control-time" id="otherTrip-time" :class="{'has-error': otherTrip.timeError.state}" placeholder="Hora (12:00)">
+                                    <input type="time" v-mask="'##:##'" v-model="otherTrip.time" class="form-control form-control-with-icon form-control-time" id="otherTrip-time" :class="{'has-error': otherTrip.timeError.state}" placeholder="Hora (12:00)" >
                                     <span class="error" v-if="otherTrip.timeError.state"> {{otherTrip.timeError.message}} </span>
                                     <!--<input type="text" v-model="time" />-->
                                 </div>
-                                <div class="trip_price">
-                                    <legend class="label-for-group">{{ $t('precioAsiento') }}</legend>
-                                    <input type="number" v-model="returnPrice" class="form-control form-control-with-icon form-control-price" id="return-price" :class="{'has-error': returnPriceError.state}" :placeholder="returnPrice" >
-                                    <span class="error" v-if="returnPriceError.state"> {{returnPriceError.message}} </span>
-                                </div>
+                            </div>
+                            <div class="trip_price">
+                                <legend class="label-for-group">{{ $t('precioAsiento') }}</legend>
+                                <input type="number" v-model="returnPrice" class="form-control form-control-with-icon form-control-price" id="return-price" :class="{'has-error': returnPriceError.state}" :placeholder="price" >
+                                <span class="error" v-if="returnPriceError.state"> {{returnPriceError.message}} </span>
                             </div>
                             <div class="trip_seats-available">
                                 <fieldset>
-                                    <legend class="label-for-group">{{ $t('lugaresDisponibles') }}</legend>
-                                    <span class="radio-inline">
+                                    <span class="label-for-group"><svg-item v-if="tripCardTheme === 'light'" :size="28" :icon="'icono-sentado'"></svg-item>{{ $t('lugaresDisponibles') }}</span>
+                                    <span v-if="tripCardTheme !== 'light'">
+                                        <span class="radio-inline">
                                             <input type="radio" id="otherTrip-seats-one" value="1" v-model="otherTrip.trip.total_seats">
                                             <label for="otherTrip-seats-one">1</label>
                                         </span>
-                                    <span class="radio-inline">
+                                        <span class="radio-inline">
                                             <input type="radio" id="otherTrip-seats-two" value="2" v-model="otherTrip.trip.total_seats">
                                             <label for="otherTrip-seats-two">2</label>
                                         </span>
-                                    <span class="radio-inline">
+                                        <span class="radio-inline">
                                             <input type="radio" id="otherTrip-seats-three" value="3" v-model="otherTrip.trip.total_seats">
                                             <label for="otherTrip-seats-three">3</label>
                                         </span>
-                                    <span class="radio-inline">
+                                        <span class="radio-inline">
                                             <input type="radio" id="otherTrip-seats-four" value="4" v-model="otherTrip.trip.total_seats">
                                             <label for="otherTrip-seats-four">4</label>
                                         </span>
+                                    </span>
+                                    <span class="seats-widget" v-if="tripCardTheme === 'light'">
+                                        <button type="button" @click="() => otherTrip.trip.total_seats < 4 ? otherTrip.trip.total_seats++ : otherTrip.trip.total_seats" class="btn btn-link" :disabled="otherTrip.trip.total_seats === 4"><svg-item :size="28" :icon="'add'"></svg-item></button>
+                                        <span class="total_seats">{{ otherTrip.trip.total_seats }}</span>
+                                        <button type="button" @click="() => otherTrip.trip.total_seats > 1 ? otherTrip.trip.total_seats-- : otherTrip.trip.total_seats" class="btn btn-link" :disabled="otherTrip.trip.total_seats === 1"><svg-item :size="28" :icon="'remove'"></svg-item></button>
+                                    </span>
                                 </fieldset>
                                 <span class="error" v-if="otherTrip.seatsError.state"> {{otherTrip.seatsError.message}} </span>
                             </div>
                             <div class="trip-comment">
-                                <label for="otherTrip-trip_comment" class="label-for-group"> {{ $t('comentarioPasajeros') }} </label>
-                                <textarea maxlength="1000" v-model="otherTrip.trip.description" id="otherTrip-trp_comment" class="form-control"></textarea>
-                                <span class="error" v-if="otherTrip.commentError.state"> {{otherTrip.commentError.message}} </span>
+                                <label for="otherTrip-trip_comment"  class="label-for-group"> {{ $t('comentarioPasajeros') }} </label>
+                                <textarea maxlength="1000" v-model="trip.description" id="trp_comment" class="form-control"></textarea>
+                                <span class="error" v-if="commentError.state"> {{commentError.message}} </span>
                             </div>
                         </div>
-                        <div class="col-sm-11 col-md-9">
+                        <div class="col-sm-11 col-md-9 preferences-container">
                             <fieldset class="trip-privacity">
-                                <legend class="label-for-group"> {{ $t('privacidadViajeVuelta') }} </legend>
+                                <legend class="label-for-group"> {{ $t('privacidadViaje') }} </legend>
                                 <ul class="no-bullet">
                                     <li>
-                                        <input type="radio" id="otherTrip-privacity-public" value="2" v-model="otherTrip.trip.friendship_type_id" >
-                                        <SvgItem icon="world" :size="24"></SvgItem>
+                                        <input type="radio" id="otherTrip-privacity-public" value="2" v-model="otherTrip.trip.friendship_type_id">
                                         <label for="otherTrip-privacity-public" class="label-soft">{{ $t('publico') }}</label>
                                     </li>
                                     <li>
-                                        <input type="radio" id="otherTrip-privacity-friendofriend" value="1" v-model="otherTrip.trip.friendship_type_id" >
-                                        <SvgItem icon="candado-abierto" :size="24"></SvgItem>
+                                        <input type="radio" id="otherTrip-privacity-friendofriend" value="1" v-model="otherTrip.trip.friendship_type_id">
                                         <label for="otherTrip-privacity-friendofriend" class="label-soft">{{ $t('amigosamigos') }}</label>
                                     </li>
                                     <li>
-                                        <input type="radio" id="otherTrip-privacity-friend" value="0" v-model="otherTrip.trip.friendship_type_id" >
-                                        <SvgItem icon="candado-cerrado" :size="24"></SvgItem>
+                                        <input type="radio" id="otherTrip-privacity-friend" value="0" v-model="otherTrip.trip.friendship_type_id">
                                         <label for="otherTrip-privacity-friend" class="label-soft">{{ $t('soloAmigos') }}</label>
                                     </li>
                                 </ul>
                             </fieldset>
                             <legend class="label-for-group"> {{ $t('preferenciasViaje') }} </legend>
                             <br>
-                            <div class="preferences row">
+                            <div class="preferences row" v-if="tripCardTheme !== 'light' || isMobile">
                                 <div class="col-md-8">
                                     <div class="col-md-12">
-                                        <input type="checkbox" id="smoking" v-model="otherTrip.trip.allow_smoking" />
+                                        <input type="checkbox" id="smoking" v-model="otherTrip.trip.allow_smoking"/>
                                     </div>
                                     <div class="col-md-12">
                                         <SvgItem icon="no-smoking" :size="24"></SvgItem>
@@ -369,20 +457,54 @@
                                     <div class="col-md-12">
                                         <SvgItem icon="no-kids" :size="24"></SvgItem>
                                     </div>
-
                                     <div class="col-md-24 no-padding">
                                         <label for="allow-kids" class="label-soft preferences-text">{{ $t('noninos') }}</label>
                                     </div>
                                 </div>
                             </div>
-                            <button class="trip-create btn btn-primary btn-lg btn-shadowed" @click="save" :disabled="saving">
+                            <ul class="no-bullet preferences row" v-if="tripCardTheme === 'light' && !isMobile">
+                                <li>
+                                    <input type="checkbox" id="smoking" v-model="otherTrip.trip.allow_smoking" />
+                                    <SvgItem icon="no-smoking" :size="24"></SvgItem>
+                                    <label for="allow-smoking" class="label-soft preferences-text">{{ $t('nofumar') }}</label>
+                                </li>
+                                <li>
+                                    <input type="checkbox" id="animals" v-model="otherTrip.trip.allow_animals"/>
+                                    <SvgItem icon="no-animals" :size="24"></SvgItem>
+                                    <label for="allow-animals" class="label-soft preferences-text">{{ $t('noanimales') }}</label>
+                                </li>
+                                <li>
+                                    <input type="checkbox" id="kids" v-model="otherTrip.trip.allow_kids"/>
+                                    <SvgItem icon="no-kids" :size="24"></SvgItem>
+                                    <label for="allow-kids" class="label-soft preferences-text">{{ $t('noninos') }}</label>
+                                </li>
+                            </ul>
+                            <button v-if="showReturnTrip" class="trip-create btn btn-primary btn-lg" @click="save" :disabled="saving">
                                 <span v-if="!updatingTrip">{{ $t('crear') }}</span>
                                 <span v-else>{{ $t('actualizar') }}</span>
                             </button>
-
                         </div>
                     </div>
                 </div>
+            </div>
+            <div v-if="!updatingTrip && showReturnTrip && tripCardTheme === 'light' && !isMobile" class="trip_information trip_information--light">
+                <ul class="no-bullet">
+                    <li class="list_item">
+                        <i class="fa fa-link" aria-hidden="true" v-if="tripCardTheme === 'light'"></i>
+                        <div class="label-soft">{{ $t('distanciaARecorrer') }}</div>
+                        <div>{{distanceString}}</div>
+                    </li>
+                    <li class="list_item">
+                        <i class="fa fa-clock-o" aria-hidden="true" v-if="tripCardTheme === 'light'"></i>
+                        <div class="label-soft">{{ $t('tiempoEstimado') }}</div>
+                        <div>{{estimatedTimeString}}  </div>
+                    </li>
+                    <li class="list_item">
+                        <i class="fa fa-leaf" aria-hidden="true" v-if="tripCardTheme === 'light'"></i>
+                        <div class="label-soft">{{ $t('huellaCarbono') }} (<abbr title="Kilogramos dióxido de carbono equivalente">kg CO<sub>2eq</sub></abbr>)</div>
+                        <div>{{CO2String}}</div>
+                    </li>
+                </ul>
             </div>
             <div class="row">
                 <div class="col-xs-24 map">
@@ -595,8 +717,16 @@ export default {
             user: 'auth/user',
             cars: 'cars/cars',
             isMobile: 'device/isMobile',
-            config: 'auth/appConfig'
+            config: 'auth/appConfig',
+            tripCardTheme: 'auth/tripCardTheme'
         }),
+        columnClass () {
+            return !this.isMobile && this.tripCardTheme === 'light' ? [
+                'col-sm-10', 'col-sm-14'
+            ] : [
+                'col-sm-8', 'col-sm-16'
+            ];
+        },
         distanceString () {
             return Math.floor(this.trip.distance / 1000) + ' Km';
         },
@@ -1158,10 +1288,16 @@ export default {
 </script>
 
 <style scoped>
+    hr {
+        border-top: 1px solid var(--primary-color);
+        margin: 1em;
+    }
     .no-padding {
         padding: 0;
     }
-
+    .show-return-trip {
+        margin-top: 1em;
+    }
     .preferences-text {
         font-size: 0.8em;
     }
@@ -1182,7 +1318,21 @@ export default {
     span.error.textarea {
         margin-top: .8em;
     }
+    .trip_points--left {
+        margin-left: .5rem;
+    }
+    .title--desktop {
+        margin-left: .5em;
+        margin-bottom: 20px;
+        color: var(--primary-color);
+    }
     @media only screen and (min-width: 768px) {
+        .row-showReturnTrip hr {
+            padding-top: 1em;
+        }
+        hr {
+            width: 68%;
+        }
         .container {
             padding-top: 1.5em;
         }
@@ -1191,12 +1341,12 @@ export default {
         }
         span.error {
             font-weight: 300;
+        }      
+        .row-showReturnTrip {
+            margin-bottom: 1.5rem;
         }
     }
     .tooltip-bottom {
         color: var(--trip-almost-fill-color);
-    }
-    .row-showReturnTrip {
-        margin-bottom: 1.5rem;
     }
 </style>

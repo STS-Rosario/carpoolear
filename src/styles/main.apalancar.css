@@ -43,6 +43,9 @@
 .trip-detail-component .btn {
     border-radius: 25px;
 }
+.trip-detail-component .white-background {
+    background-color: transparent;
+}
 .trips .trips_title {
     margin-bottom: 15px;
     padding-left: 10px;
@@ -51,6 +54,12 @@
     text-align: left;
     font-size: 28px;
     margin-bottom: 15px;
+}
+.trip-detail-component .trip_location_from_state-country {
+    color: var(--primary-color);
+}
+.trip-detail-component .trip_location_to .trip_location_from_state-country {
+    color: var(--secondary-color);
 }
 .trips_title h3 {
     display: none;
@@ -147,9 +156,18 @@
     font-weight: normal;
 }
 .trip_information .list_item {
-        display: inline-block;
-        padding-bottom: 1.2em;
-        width: 49%;
+    display: inline-block;
+    padding-bottom: 1.2em;
+    width: 49%;
+}
+.trip_information--light .list_item {
+    width: 32%;
+    text-align: center;
+}
+.trip_information--light .list_item > div:last-child {
+    font-size: 1.4em;
+    font-weight: normal;
+    display: block;
 }
 .trip_terms input[type="checkbox"] {
     width: initial;
@@ -178,7 +196,7 @@
 .trip_seats-available svg {
     fill: white;
 }
-.create .trip_seats-available svg {
+.new-trip .trip_seats-available svg {
     display: inline-block;
     padding-right: .8em;
     width: 40px;
@@ -280,7 +298,7 @@
     display: none!important;
 }
 .card-trip {
-    height: 280px !important;
+    min-height: 280px !important;
     border-radius: 1em;
     border: 2px solid var(--primary-soft-color);
 }
@@ -362,6 +380,7 @@
     font-size: 16px;
     font-weight: bold;
 }
+.trip-seats,
 .trip_seats-available_with-icons {
     position: absolute;
     right: 8px;
@@ -450,8 +469,8 @@
 }
 .trip-stats {
     background: #FFF1E9;
-    border-top: 2px solid var(--secondary-color);
-    border-bottom: 2px solid var(--secondary-color);
+    border-top: 1px solid var(--secondary-color);
+    border-bottom: 1px solid var(--secondary-color);
 
     padding: 20px 20px 0 20px;
     position: relative;
@@ -468,9 +487,20 @@
 .trip-detail-component .trip-data {
     border-bottom: 1px solid transparent;
 }
+.trip-detail-component .trip_location_from_city,
+.trip-detail-component .trip_location_to_city {
+    font-weight: bold;
+}
+.trip-detail-component .quote span {
+    color: #555;
+}
+.trip-detail-component .trip_location_from_state-country, .trip-detail-component .trip_location_to_state-country {
+    font-weight: 400;
+}
 .trip-detail-component .trip-stats > div > span:last-child {
-    font-size: 14px;
+    font-size: 1.4em;
     font-weight: normal;
+    display: block;
 }
 .trip-stats .fa {
     font-size: 18px;
@@ -599,7 +629,46 @@
 .profile-info--ratings {
     margin-top: 1em;
 }
+.new-trip .trip_seats-available svg {
+    vertical-align: -13px;
+}
 @media only screen and (min-width: 768px) {
+    .new-trip .no-bullet.preferences li {
+        padding-bottom: 1em;
+    }
+    .new-trip .no-bullet.preferences.row input {
+        top: -22px;
+    }
+    .new-trip .no-bullet.preferences .svgItem,
+    .new-trip .no-bullet.preferences .label-soft.preferences-text {
+        padding-left: 1.2em;
+    }
+    .new-trip .no-bullet.preferences .label-soft.preferences-text {
+        font-size: 1em;
+        vertical-align: top;
+    }
+    .new-trip .trip-stats {
+        left: 0;
+        width: calc(100% + 20px);
+        margin-bottom: .8em;
+    }
+    .new-trip .trip-detail-component .trip-stats>div {
+        width: 32%;
+        text-align: center;
+    }
+    .trip-seats {
+        position: relative;
+    }
+    .trip-detail-component .structure-div[data-v-73b8ae56] {
+        margin-top: 2rem;
+    }
+    .trip-detail-component .buttons-container {
+        left: 0 !important;
+        bottom: 0 !important;
+        position: relative !important;
+        padding: 0;
+        z-index: 1 !important;
+    }
     .profile-info--ratings {
         text-align: center;
     }
@@ -643,10 +712,12 @@
 .trip_location_to .text-right {
     text-align: center;
 }
+.trip-seats,
 .trip_seats-available_with-icons {
     right: 8px;
     bottom: 2.6em;
 }
+.not-logged .trip-seats,
 .not-logged .trip_seats-available_with-icons {
     bottom: 1em;
 }
@@ -822,6 +893,9 @@ textarea.has-error {
     background: linear-gradient(90deg, rgb(0, 112, 184) 0%, rgb(44, 142, 205) 50%, rgb(0, 112, 184) 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#016789', endColorstr='#009de0', GradientType=1 );
 }
+.trip_date_date {
+    color: black;
+}
 .trip-fill .card-trip .trip_from_time,
 .trip-fill .card-trip .trip_to_time,
 .trip-fill .card-trip .trip_date_date {
@@ -859,7 +933,8 @@ textarea.has-error {
 }
 .detail_trip .trip-detail-component div.column:nth-of-type(2) {
     padding: 0;
-    padding-left: 25px;
+    padding-left: 15px;
+    padding-top: 2em;
 }
 .detail_trip .trip-data {
     padding-left: 10px;
@@ -868,6 +943,7 @@ textarea.has-error {
 .detail_trip .trip-data em {
     padding-bottom: 1em;
 }
+.detail_trip .trip-seats,
 .detail_trip .trip_seats-available_with-icons {
     bottom: 0;
 }
@@ -915,6 +991,36 @@ textarea.has-error {
     }
 }
 @media only screen and (min-width: 768px) {
+    .panel-title {
+        margin-top: 0;
+    }
+    .trip-detail-component .quote {
+        padding-left: 55px;
+    }
+    .detail_trip .trip-detail-component .quote i {
+        left: .2em;
+    }
+    .detail_trip .trip-detail-component .buttons-container {
+        margin-top: 0;
+        margin-bottom: 2em;
+    }
+    .trip_seats-available { 
+        margin-top: 1em;
+    }
+    .trip-data em {
+        width: 100% !important;
+        display: block !important;
+        padding-bottom: .2em !important;
+    }
+    .trip-data--subtitle {
+        color: black;
+    }
+    .trip-data em + span.trip-data--subtitle {
+        margin-top: 1.4em;
+    }
+    .detail_trip .trip-detail-component div.column:nth-of-type(2) {
+        padding: 2em 1em 2em 1em;
+    }
     /* Register */
     .register .form.row,
     .reset-password .form.row {
@@ -1105,6 +1211,7 @@ textarea.has-error {
     .trip_date_right {
         padding-right: 2em;
     }
+    .not-logged .trip-seats,
     .not-logged .trip_seats-available_with-icons {
         bottom: 2em;
         right: 1em;

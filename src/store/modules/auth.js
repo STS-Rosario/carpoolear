@@ -22,7 +22,8 @@ const getters = {
     authHeader: state => state.auth ? { 'Authorization': 'Bearer ' + state.token } : {},
     user: state => state.user,
     firstTime: state => state.firstTime,
-    appConfig: state => state.appConfig
+    appConfig: state => state.appConfig,
+    tripCardTheme: state => state.appConfig ? state.appConfig.trip_card_design : ''
 };
 
 // actions
