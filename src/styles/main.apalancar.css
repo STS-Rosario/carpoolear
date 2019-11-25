@@ -633,6 +633,10 @@
     vertical-align: -13px;
 }
 @media only screen and (min-width: 768px) {
+    .trip-stats {
+        left: 0;
+        width: calc(100% + 20px);
+    }
     .new-trip .no-bullet.preferences li {
         padding-bottom: 1em;
     }
