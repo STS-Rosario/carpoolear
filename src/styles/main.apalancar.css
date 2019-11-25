@@ -865,7 +865,7 @@
 }
 select.form-control {
     color: black;
-    font-size: 1.2em;     
+    font-size: 1.2em;
 }
 .btn-primary.btn-outline {
     border: white 1px solid;
@@ -880,6 +880,9 @@ select.has-error,
 option.has-error,
 textarea.has-error {
     border: 2px solid var(--main-error);
+}
+.register-success * {
+    color: #FFF!important;
 }
 .login .alert {
     margin-top: 20px;

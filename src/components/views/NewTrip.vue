@@ -243,7 +243,7 @@
                                 </li>
                             </ul>
                             <div class="row row-showReturnTrip">
-                                <hr class="col-md-24" />
+                                <hr class="col-md-20" />
                                 <div class="checkbox-trip-return col-md-24">
                                     <span>
                                         <input type="checkbox" v-model="showReturnTrip" id="cbxShowReturnTrip" />
@@ -550,6 +550,7 @@ import OsmApi from '../../services/api/Osm';
 import autocomplete from '../Autocomplete';
 import SvgItem from '../SvgItem';
 // import { LMap, LTileLayer } from 'vue2-leaflet';
+import bus from '../../services/bus-event.js';
 
 // import 'leaflet-routing-machine';
 
@@ -706,6 +707,9 @@ export default {
                 self.loadTrip();
             }
         }); */
+        bus.off('clear-click', this.onBackButton);
+        bus.on('clear-click', this.onBackButton);
+
         if (self.id) {
             self.loadTrip();
         }
@@ -1188,6 +1192,12 @@ export default {
             }
         },
 
+        onBackButton () {
+            this.$router.replace({
+                name: 'trips'
+            });
+        },
+
         addPoint () {
             if ((this.points.filter(point => point.name === '')).length === 0) {
                 let newArr = this.points.splice(0);
@@ -1300,6 +1310,9 @@ export default {
     }
     .preferences-text {
         font-size: 0.8em;
+    }
+    .preferences {
+        margin-right: 0px;
     }
     .container {
         padding-top: 0;

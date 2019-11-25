@@ -77,11 +77,16 @@
                 {{ $t('cargandoMasResultados') }}
             </div>
             <p slot="no-data" class="alert alert-warning"  role="alert"  :class="isMobile ? 'mobile-alert' : ''">
-                <span class="sentence">{{ $t('noHayViajes') }}</span>
-                <span class="sentence" v-if="!alreadySubscribe">
-                    <strong :class="isMobile ? 'sentence' : ''"> {{ $t('subscribirteAViajes') }}</strong>
-                    <button class="btn btn-primary" v-if="user" @click="subscribeSearch" >{{ $t('crearAlerta') }}</button>
-                </span>
+                <template v-if="filtered">
+                    <span class="sentence">{{ $t('noHayViajes') }}</span>
+                    <span class="sentence" v-if="!alreadySubscribe">
+                        <strong :class="isMobile ? 'sentence' : ''"> {{ $t('subscribirteAViajes') }}</strong>
+                        <button class="btn btn-primary" v-if="user" @click="subscribeSearch" >{{ $t('crearAlerta') }}</button>
+                    </span>
+                </template>
+                <template v-else>
+                    <span class="sentence">{{ $t('noHayViajesCargadosAun') }}</span>
+                </template>
             </p>
             <p slot="loading" class="alert alert-info" role="alert">
                 <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />

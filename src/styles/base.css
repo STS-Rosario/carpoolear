@@ -2853,3 +2853,34 @@
   .conversation_header .media-body {
       min-width: 250px;
   }
+
+  .terms-page {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 0 5px 6px #CCC;
+    margin: 3em auto;
+    padding: 2em;
+}
+.terms-page ul {
+    color: #555;
+}
+@media (max-width: 767px) {
+    .terms-page {
+        box-shadow: none;
+        margin: 0 auto;
+    }
+}
+.terms-page h1 {
+    color: #E0191C;
+}
+.terms-page .list {
+    color: #555555;
+    list-style-type: circle;
+    padding-left: 40px;
+}
+.terms-page h2 {
+    color: #016386;
+}
+.terms-page .img-ES {
+    max-width: 100%;
+}

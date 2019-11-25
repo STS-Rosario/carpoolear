@@ -294,6 +294,7 @@ export default {
             }
             this.loading = true;
             var data = Object.assign({}, this.user);
+            console.log('data.user', data);
             if (this.pass.password) {
                 if (this.pass.password !== this.pass.password_confirmation) {
                     this.error = this.$t('passwordNoCoincide');
@@ -312,7 +313,15 @@ export default {
             let bodyFormData = new FormData();
             for (const key in data) {
                 if (data.hasOwnProperty(key)) {
-                    bodyFormData.append(key, data[key]);
+                    console.log(key, Array.isArray(data[key]));
+                    if (Array.isArray(data[key])) {
+                        for (let index = 0; index < data[key].length; index++) {
+                            const element = data[key][index];
+                            bodyFormData.append(key + '[]', element);
+                        }
+                    } else {
+                        bodyFormData.append(key, data[key]);
+                    }
                 }
             }
             if (this.driverFiles) {
@@ -323,6 +332,8 @@ export default {
                     console.log('file', file);
                     bodyFormData.append('driver_data_docs[]', file);
                 }
+            } else {
+
             }
             this.update(bodyFormData).then(() => {
                 this.pass.password = '';
