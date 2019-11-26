@@ -633,6 +633,11 @@
     vertical-align: -13px;
 }
 @media only screen and (min-width: 768px) {
+    .message > span {
+        display: block;
+        color: red !important;
+        margin-left: 0;
+    }
     .trip-stats {
         left: 0;
         width: calc(100% + 20px);
