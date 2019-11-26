@@ -160,7 +160,9 @@
     padding-bottom: 1.2em;
     width: 49%;
 }
-.trip_information--light .list_item {
+.trip_information--light .list_item,
+.trip-detail-component .trip-stats>div {
+    margin-bottom: .6rem;
     width: 32%;
     text-align: center;
 }
@@ -641,6 +643,7 @@
     .trip-stats {
         left: 0;
         width: calc(100% + 20px);
+        margin-bottom: .8em;
     }
     .new-trip .no-bullet.preferences li {
         padding-bottom: 1em;
