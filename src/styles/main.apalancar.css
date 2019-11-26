@@ -1006,6 +1006,9 @@ textarea.has-error {
     .panel-title {
         margin-top: 0;
     }
+    .not-logged .trip_date_right {
+        margin-top: 0;
+    }
     .trip-detail-component .quote {
         padding-left: 55px;
     }
