@@ -160,7 +160,9 @@
     padding-bottom: 1.2em;
     width: 49%;
 }
-.trip_information--light .list_item {
+.trip_information--light .list_item,
+.trip-detail-component .trip-stats>div {
+    margin-bottom: .6rem;
     width: 32%;
     text-align: center;
 }
@@ -633,9 +635,15 @@
     vertical-align: -13px;
 }
 @media only screen and (min-width: 768px) {
+    .message > span {
+        display: block;
+        color: red !important;
+        margin-left: 0;
+    }
     .trip-stats {
         left: 0;
         width: calc(100% + 20px);
+        margin-bottom: .8em;
     }
     .new-trip .no-bullet.preferences.row input {
         top: -22px;
@@ -996,6 +1004,9 @@ textarea.has-error {
 }
 @media only screen and (min-width: 768px) {
     .panel-title {
+        margin-top: 0;
+    }
+    .not-logged .trip_date_right {
         margin-top: 0;
     }
     .trip-detail-component .quote {
