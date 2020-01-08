@@ -34,6 +34,7 @@ import * as VueGoogleMaps from 'vue2-google-maps';
 let debugApi = new DebugApi();
 let cordovaTag = document.createElement('script');
 let cordovaPath = 'cordova.js';
+console.log('ROUTE_BASE', process.env.ROUTE_BASE, cordovaPath);
 cordovaTag.setAttribute('src', process.env.ROUTE_BASE + cordovaPath);
 document.head.appendChild(cordovaTag);
 

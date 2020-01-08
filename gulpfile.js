@@ -29,7 +29,7 @@ var path = require('path');
 var exec = require('child_process').exec;
 
 gulp.task('build-cordova', function (cb) { // DEPRECATED
- /*   
+ /*
     var command = argv.production ? '--release' : '';
 
     exec('cd cordova && cordova build browser ' + command + ' && cd ..', function (err, stdout, stderr) {
@@ -39,16 +39,16 @@ gulp.task('build-cordova', function (cb) { // DEPRECATED
 */
 });
 
-gulp.task('deploy', ['build-cordova'], function () {
+gulp.task('deploy', function () {
   // Dirs and Files to sync
     rsyncPaths = [
-        'cordova/platforms/browser/www/*.*',
-        'cordova/platforms/browser/www/cordova-js-src',
-        'cordova/platforms/browser/www/static',
-        'cordova/platforms/browser/www/plugins',
-        'cordova/platforms/browser/www/fonts'
+        'dist/' + argv.project + '/production/platforms/browser/www/*.*',
+        'dist/' + argv.project + '/production/platforms/browser/www/cordova-js-src',
+        'dist/' + argv.project + '/production/platforms/browser/www/static',
+        'dist/' + argv.project + '/production/platforms/browser/www/plugins',
+        'dist/' + argv.project + '/production/platforms/browser/www/fonts'
     ];
-
+    console.log(rsyncPaths);
   // Default options for rsync
     rsyncConf = {
         progress: true,
@@ -74,8 +74,11 @@ gulp.task('deploy', ['build-cordova'], function () {
         rsyncConf.hostname = '104.131.15.228'; // hostname
         rsyncConf.username = argv.user || 'movilizame'; // ssh username
         rsyncConf.destination = '/home/movilizame/sites/carpoolear_dev/public/app/'; // path where uploaded files go
-
-  // Missing/Invalid Target
+    } else if (argv.apalancar) {
+        rsyncConf.port = 2200;
+        rsyncConf.hostname = '45.55.196.14'; // hostname
+        rsyncConf.username = argv.user || 'movilizame'; // ssh username
+        rsyncConf.destination = '/home/movilizame/sites/apalancar/public/app/'; // path where uploaded files go
     } else {
         throwError('deploy', gutil.colors.red('Missing or invalid target'));
     }

@@ -13,6 +13,7 @@ processEnv = process.env.NODE_ENV && process.env.NODE_ENV === 'production' ? req
 processEnv.SERVE = serveMode;
 
 console.log('TARGET = ' + TARGET);
+console.log('config = ' + JSON.stringify(config));
 if (TARGET === 'default') {
     extensions = ['.js', '.vue', '.json', '.css', 'jpg', 'png'];
 } else {

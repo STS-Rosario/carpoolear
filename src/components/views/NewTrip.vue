@@ -26,9 +26,10 @@
                     </fieldset>
                     <div class="trip_allow-foreign" v-if="!isMobile && tripCardTheme === 'light'">
                         <span>
-                            <input type="checkbox" v-model="allowForeignPoints" id="cbxAllowForeignPoints" />
-                            <label for="cbxAllowForeignPoints">
-                                {{ $t('origenOdestino') }} {{ config.country_name }}
+                            <input type="checkbox" v-model="allowForeignPoints" id="cbxAllowForeignPoints" class="checkbox-button" />
+                            <label for="cbxAllowForeignPoints" class="checkbox-click-target">
+                                <span class="checkbox-box"></span>
+                                <span>{{ $t('origenOdestino') }} {{ config.country_name }}</span>
                             </label>
                             <span class="tooltip-bottom" :data-tooltip="$t('habilitaOrigen')">
                             <i class="fa fa-info-circle" aria-hidden="true"></i>
@@ -46,17 +47,18 @@
                         </div>
                     </div>
                     <div class="trip_terms" v-if="trip.is_passenger === 0">
-                        <input type="checkbox" id="no-lucrar" v-model="no_lucrar" />
-                        <div>
-                            <label for="no-lucrar" class="trip_terms_label" :class="{'has-error': lucrarError.state }" >
+                        <input type="checkbox" id="no-lucrar" v-model="no_lucrar" class="checkbox-button" />
+                        <label for="no-lucrar" class="trip_terms_label checkbox-click-target" :class="{'has-error': lucrarError.state }">
+                            <span class="checkbox-box"></span>
+                            <span>
                                 {{ $t('meComprometo') }}
                                 <span class="tooltip-bottom" data-tooltip="Al pedir una contribución por encima de la máxima, es posible que el viaje sea considerado con fin de lucro y por lo tanto un transporte ilegal de pasajeros, pudiendo ser invalidado el seguro particular automotor y la cobertura contra terceros asociada. Tengamos un buen viaje cuidándonos entre todos :-D">
                                     <i class="fa fa-info-circle" aria-hidden="true"></i>
                                 </span>
                                 <br />
                                 <small>{{ $t('contribucionMaxima') }}</small>
-                            </label>
-                        </div>
+                            </span>
+                        </label>
                     </div>
                 </div>
                 <div :class="columnClass[1]">
@@ -227,19 +229,28 @@
                             </div>
                             <ul class="no-bullet preferences row" v-if="tripCardTheme === 'light' && !isMobile">
                                 <li>
-                                    <input type="checkbox" id="smoking" v-model="trip.allow_smoking" />
-                                    <SvgItem icon="no-smoking" :size="24"></SvgItem>
-                                    <label for="allow-smoking" class="label-soft preferences-text">{{ $t('nofumar') }}</label>
+                                    <input type="checkbox" id="smoking" v-model="trip.allow_smoking" class="checkbox-button" />
+                                    <label for="smoking" class="label-soft preferences-text checkbox-click-target">
+                                        <span class="checkbox-box"></span>
+                                        <SvgItem icon="no-smoking" :size="24"></SvgItem>
+                                        {{ $t('nofumar') }}
+                                    </label>
                                 </li>
                                 <li>
-                                    <input type="checkbox" id="animals" v-model="trip.allow_animals"/>
-                                    <SvgItem icon="no-animals" :size="24"></SvgItem>
-                                    <label for="allow-animals" class="label-soft preferences-text">{{ $t('noanimales') }}</label>
+                                    <input type="checkbox" id="animals" v-model="trip.allow_animals" class="checkbox-button"/>
+                                    <label for="animals" class="label-soft preferences-text checkbox-click-target">
+                                        <span class="checkbox-box"></span>
+                                        <SvgItem icon="no-animals" :size="24"></SvgItem>
+                                        {{ $t('noanimales') }}
+                                    </label>
                                 </li>
                                 <li>
-                                    <input type="checkbox" id="kids" v-model="trip.allow_kids"/>
-                                    <SvgItem icon="no-kids" :size="24"></SvgItem>
-                                    <label for="allow-kids" class="label-soft preferences-text">{{ $t('noninos') }}</label>
+                                    <input type="checkbox" id="kids" v-model="trip.allow_kids" class="checkbox-button"/>
+                                    <label for="allow-kids" class="label-soft preferences-text checkbox-click-target">
+                                        <span class="checkbox-box"></span>
+                                        <SvgItem icon="kids" :size="24"></SvgItem>
+                                        {{ $t('noninos') }}
+                                    </label>
                                 </li>
                             </ul>
                             <div class="row row-showReturnTrip">
@@ -508,27 +519,6 @@
             </div>
             <div class="row">
                 <div class="col-xs-24 map">
-                    <!-- <div class="map_warning">* El recorrido del mapa es de referencia, puede no coincidir con el recorrido planeado por ud.</div> -->
-                    <!-- <gmap-map
-                        :center="center"
-                        :zoom="zoom"
-                        style="width: 100%; height: 300px"
-                        ref="map"
-                    >
-                        <gmap-marker
-                        :key="index"
-                        v-for="(m, index) in points"
-                        :position="m.location"
-                        :clickable="true"
-                        :draggable="true"
-                        @click="center=m.location"
-                        v-if="m.location"
-                        ></gmap-marker>
-                    </gmap-map> -->
-
-                    <!-- <l-map :zoom="zoom" :center="center" style="width: 100%; height: 300px; overflow: hidden;" ref="map">
-                        <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
-                    </l-map> -->
                 </div>
             </div>
         </div>
@@ -549,10 +539,7 @@ import {
 import OsmApi from '../../services/api/Osm';
 import autocomplete from '../Autocomplete';
 import SvgItem from '../SvgItem';
-// import { LMap, LTileLayer } from 'vue2-leaflet';
 import bus from '../../services/bus-event.js';
-
-// import 'leaflet-routing-machine';
 
 let osmApi = new OsmApi();
 
@@ -575,9 +562,6 @@ export default {
         DatePicker,
         SvgItem,
         autocomplete
-        /* ,
-               LMap,
-               LTileLayer */
     },
     data () {
         return {
@@ -600,16 +584,14 @@ export default {
                 location: null,
                 error: new Error(),
                 id: 0
-            },
-            {
+            }, {
                 name: '',
                 place: null,
                 json: null,
                 location: null,
                 error: new Error(),
                 id: 1
-            }
-            ],
+            }],
             date: '',
             dateAnswer: this.date,
             time: '12:00',
@@ -697,16 +679,6 @@ export default {
         let self = this;
         this.time = moment().add(1, 'hours').format('HH:00');
         this.otherTrip.time = moment().add(2, 'hours').format('HH:00');
-        /* this.$refs.map.$mapCreated.then(() => {
-            console.log('Map was created');
-            / * eslint-disable no-undef * /
-            this.directionsService = new google.maps.DirectionsService();
-            this.directionsDisplay = new google.maps.DirectionsRenderer();
-            this.directionsDisplay.setMap(this.$refs.map.$mapObject);
-            if (self.id) {
-                self.loadTrip();
-            }
-        }); */
         bus.off('clear-click', this.onBackButton);
         bus.on('clear-click', this.onBackButton);
 
@@ -875,8 +847,10 @@ export default {
             let validDate = false;
             let validOtherTripTime = false;
             let validOtherTripDate = false;
-
             this.points = this.points.filter(point => point.place);
+            for (let index = this.points.length; index < 2; index++) {
+                this.addPoint(true);
+            }
             this.points = this.points.map(point => {
                 delete point.id;
                 return point;
@@ -1198,8 +1172,8 @@ export default {
             });
         },
 
-        addPoint () {
-            if ((this.points.filter(point => point.name === '')).length === 0) {
+        addPoint (force) {
+            if ((this.points.filter(point => point.name === '')).length === 0 || force) {
                 let newArr = this.points.splice(0);
                 let newp = {
                     name: '',
@@ -1234,12 +1208,6 @@ export default {
             if (points.length < 2) {
                 return;
             }
-            // for (let i = 0; i < trip.points.length; i++) {
-            //     if (!trip.points[i].name) {
-            //         return;
-            //     }
-            // }
-            console.log('LLEGO');
             let data = {
                 points: points.map(point => point.location)
             };
@@ -1264,34 +1232,6 @@ export default {
                     ]
                 }).addTo(map);
             }
-
-            /* this.directionsService.route({
-                origin: this.points[0].location,
-                destination: this.points[this.points.length - 1].location,
-                travelMode: 'DRIVING'
-            }, (response, status) => {
-                if (status === 'OK') {
-                    this.directionsDisplay.setDirections(response);
-
-                    let path = response.routes[0].overview_path;
-                    let encodeString = google.maps.geometry.encoding.encodePath(path);
-                    this.trip.enc_path = encodeString;
-
-                    let totalDistance = 0;
-                    let totalDuration = 0;
-                    let legs = response.routes[0].legs;
-                    for (let i = 0; i < legs.length; ++i) {
-                        totalDistance += legs[i].distance.value;
-                        totalDuration += legs[i].duration.value;
-                    }
-                    this.trip.distance = totalDistance;
-                    this.duration = totalDuration;
-                    this.trip.co2 = totalDistance * 0.15;
-                } else {
-                    console.log(this.points[0].name, this.points[this.points.length - 1].name, 'DRIVING');
-                    console.log('Directions request failed due to ' + status);
-                }
-            }); */
         }
     }
 };
@@ -1354,7 +1294,7 @@ export default {
         }
         span.error {
             font-weight: 300;
-        }      
+        }
         .row-showReturnTrip {
             margin-bottom: 1.5rem;
         }
