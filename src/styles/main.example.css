@@ -1678,6 +1678,7 @@ textarea {
 }
 
 .actionbar-bottom .actionbar_item {
+    vertical-align: middle;
     display: inline-block;
     color: var(--medium-font-color);
     font-size: 26px;
@@ -1698,6 +1699,7 @@ textarea {
 }
 
 .actionbar-bottom .actionbar_item span {
+    vertical-align: middle;
     padding: 2px 6px;
 }
 
