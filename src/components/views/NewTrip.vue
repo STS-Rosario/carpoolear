@@ -17,10 +17,10 @@
                     <fieldset class="trip-type-selection--light" v-if="tripCardTheme === 'light'">
                         <div class="row">
                             <div class="col-xs-12 col-md-12 col-lg-12">
-                                <button class="btn btn-option" @click="trip.is_passenger = 0" :disabled="updatingTrip" :class="trip.is_passenger === 0 ? 'active' : ''">{{ $t('buscoConductor') }}</button>
+                                <button class="btn btn-option" @click="$set(trip, is_passenger, 0)" :disabled="updatingTrip" :class="trip.is_passenger === 0 ? 'active' : ''">{{ $t('buscoConductor') }}</button>
                             </div>
                             <div class="col-xs-12 col-md-12 col-lg-12">
-                                <button class="btn btn-option" @click="trip.is_passenger = 1" :disabled="updatingTrip" :class="trip.is_passenger === 1 ? 'active' : ''">{{ $t('buscoPasajero') }}</button>
+                                <button class="btn btn-option" @click="$set(trip, is_passenger, 1)" :disabled="updatingTrip" :class="trip.is_passenger === 1 ? 'active' : ''">{{ $t('buscoPasajero') }}</button>
                             </div>
                         </div>
                     </fieldset>
@@ -45,7 +45,7 @@
                             <span class="error" v-if="m.error.state"> {{m.error.message}} </span>
                         </div>
                     </div>
-                    <div class="trip_terms" v-if="trip.is_passenger === 0">
+                    <div class="trip_terms" v-if="trip.is_passenger == 0">
                         <input type="checkbox" id="no-lucrar" v-model="no_lucrar" />
                         <div>
                             <label for="no-lucrar" class="trip_terms_label" :class="{'has-error': lucrarError.state }" >
