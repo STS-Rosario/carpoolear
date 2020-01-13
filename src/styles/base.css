@@ -1981,7 +1981,31 @@
   .desktop {
       display: none;
   }
-
+  .admin-page .nav-pills a {
+      margin-top: 1em;
+      padding: .5em 1em;
+      border-right: 2px solid #337ab7;
+      border-radius: 0;
+  }
+  .admin-trips .nav-tabs,
+  .admin-users .nav-tabs,
+  .admin-page .nav-tabs {
+    margin-bottom: 1em;
+}
+  .admin-trips .nav-tabs::after,
+  .admin-users .nav-tabs::after,
+  .admin-page .nav-tabs::after {
+    display: none!important;
+}
+.admin-trips .nav-tabs .router-link-exact-active,
+.admin-users .nav-tabs .router-link-exact-active,
+.admin-page .nav-tabs .router-link-exact-active {
+    color: black;
+    font-weight: bold;
+}
+.admin-users .conversation_header .media-body {
+    min-width: 190px;
+}
   @media only screen and (min-width: 300px) {
       .nav-tabs>li>a {
           font-size: 12px;

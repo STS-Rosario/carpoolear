@@ -1,5 +1,3 @@
-
-
 function wrapElement (el) {
     let orgHtml = el.outerHTML;
     let newHtml = '<div class="fancy-cbx">' + orgHtml + '<span class="cbx-before"></span><span class="cbx-after"></span></div>';

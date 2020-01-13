@@ -302,7 +302,7 @@ export default {
                 globalError = true;
             }
 
-            console.log('error', globalError);
+            console.log('error', this);
 
             if (globalError) {
                 this.$forceUpdate();

@@ -1510,3 +1510,6 @@ input[type=checkbox] + label, input[type=radio] + label {
     background: #56788e;
 }
 
+.btn-info .caret {
+    color: #56788e;
+}
