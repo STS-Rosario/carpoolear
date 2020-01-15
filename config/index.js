@@ -2,10 +2,11 @@
 const path = require('path')
 const TARGET = process.env.TARGET_APP || 'default';
 const PLATFORM = process.env.PLATFORM || 'android';
-const isSERVED = process.env.SERVE;
+const isSERVED = typeof process.env.SERVE === 'string' ? process.env.SERVE === 'true' : process.env.SERVE;
 const NODE_ENV = process.env.NODE_ENV;
 const dFlag = (process.env.PLATFORM && process.env.PLATFORM == 'DESKTOP');
 console.log('PLATFORM= ' + PLATFORM);
+console.log('isSERVED= ' + typeof isSERVED);
 
 module.exports = {
   build: {

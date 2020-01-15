@@ -56,12 +56,21 @@
       </div>
       <div class="facebook-box" :class="[righPanelclass]" v-show="!isMobile" >
         <span class="register">{{ $t('noTenesFace') }} <router-link class='login-register' :to="{name:'register'}"> {{ $t('registrateAca') }} </router-link></span>
-        <button class="btn-primary btn-search btn-facebook btn-with-icon" @click="facebookLogin" :disabled="fbLoading"><span class="btn-with-icon--icon"><i class="fa fa-facebook" aria-hidden="true"></i></span><span class='btn-with-icon--label'> <span v-if="!fbLoading">{{ $t('ingresaConFace') }}</span></span><spinner class="blue" v-if="fbLoading"></spinner></span></button>
-        <div>{{ $t('alIngresarFace') }} <router-link :to="{name: 'terms'}">{{ $t('tyc') }}</router-link>.</div>
+        <button class="btn-primary btn-search btn-facebook btn-with-icon" @click="facebookLogin" :disabled="fbLoading" v-show="config.enable_facebook">
+            <span class="btn-with-icon--icon">
+                <i class="fa fa-facebook" aria-hidden="true"></i>
+            </span>
+            <span class='btn-with-icon--label'>
+                <span v-if="!fbLoading">{{ $t('ingresaConFace') }}</span>
+            </span>
+            <spinner class="blue" v-if="fbLoading"></spinner></span></button>
+        <div v-show="config.enable_facebook">
+            {{ $t('alIngresarFace') }} <router-link :to="{name: 'terms'}">{{ $t('tyc') }}</router-link>.
+        </div>
       </div>
       <div class="col-sm-12 col-md-12" v-show="isMobile && loginCustomHeader">
-        <button class="btn btn-primary btn-search btn-facebook btn-with-icon" @click="facebookLogin" :disabled="fbLoading"><span class="btn-with-icon--icon"><i class="fa fa-facebook" aria-hidden="true"></i></span><span class='btn-with-icon--label'> <span v-if="!fbLoading">Ingresá con Facebook</span><spinner class="blue" v-if="fbLoading"></spinner></span></button>
-        <div class="fb-terms">{{ $t('alIngresarFacebook') }} <router-link :to="{name: 'terms'}">{{ $t('tyc') }}</router-link>.</div>
+        <button class="btn btn-primary btn-search btn-facebook btn-with-icon" @click="facebookLogin" :disabled="fbLoading" v-show="config.enable_facebook"><span class="btn-with-icon--icon"><i class="fa fa-facebook" aria-hidden="true"></i></span><span class='btn-with-icon--label'> <span v-if="!fbLoading">Ingresá con Facebook</span><spinner class="blue" v-if="fbLoading"></spinner></span></button>
+        <div class="fb-terms" v-show="config.enable_facebook">{{ $t('alIngresarFacebook') }} <router-link :to="{name: 'terms'}">{{ $t('tyc') }}</router-link>.</div>
       </div>
     </div>
   </div>
