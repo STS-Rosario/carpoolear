@@ -1163,14 +1163,14 @@ export default {
                 }
 
                 point.place = data;
-                point.name = data.display_name;
+                point.name = data.name;
+                point.json = data;
                 // point.json = parseOsmStreet(data);
                 point.error.state = false;
                 this.otherTrip.center = point.location = {
                     lat: parseFloat(data.lat),
                     lng: parseFloat(data.lng)
                 };
-
                 this.calcRoute('returnTrip');
             }
             this.calcRoute(type);
