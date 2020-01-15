@@ -200,10 +200,6 @@ export default {
             sendToAll: 'conversations/sendToAll',
             changeProperty: 'profile/changeProperty'
         }),
-        getMinHeight () {
-            console.log('OKKKK',this.$refs, this.$refs.rightPanel.clientHeight);
-            return !this.isMobile && this.$refs.rightPanel ? { 'min-height': this.$refs.rightPanel.clientHeight + 'px' } : {};
-        },
         profileComplete () {
             if (!this.user.image || this.user.image.length === 0 || !this.user.description || this.user.description.length === 0) {
                 router.replace({ name: 'profile_update' });
@@ -661,6 +657,7 @@ export default {
         }
         .trip-detail-component .structure-div {
             margin-top: 0;
+            margin-bottom: 2rem;
         }
         .trip-detail-component .column,
         .trip-detail-component .column:first-of-type {
