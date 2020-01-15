@@ -439,6 +439,7 @@
       text-align: center;
   }
   .trip_point > div {
+      background-color: white;
      margin-left: 4px;
   }
   .trip_point:first-child .form-control-map-autocomplete {
@@ -882,6 +883,7 @@
       font-size: 1.5rem;
   }
   .trip_location-dot-line {
+      z-index: -1;
       position: absolute;
       top: 28px;
   }
