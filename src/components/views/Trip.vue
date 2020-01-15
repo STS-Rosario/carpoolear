@@ -354,19 +354,6 @@ export default {
             }
         },
 
-        removePassenger (user) {
-            if (window.confirm('¿Estás seguro que deseas bajar a este pasajero de tu viaje?')) {
-                this.sending = true;
-                this.cancel({ user: user, trip: this.trip }).then(() => {
-                    this.sending = false;
-                    let index = this.trip.passenger.findIndex(item => item.id === user.id);
-                    this.trip.passenger.splice(index, 1);
-                }).catch(() => {
-                    this.sending = false;
-                });
-            }
-        },
-
         onBackClick () {
             router.back();
         },
