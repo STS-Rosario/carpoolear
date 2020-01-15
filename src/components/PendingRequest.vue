@@ -7,7 +7,7 @@
                     </div>
                 </router-link>
             </div>
-            <modal :name="'modal'" v-if="showModalRequestSeat" @close="onModalClose" :title="'Test'" :body="'Body'">
+            <modal :name="'modal'" v-if="showModalRequestSeat" @close="onModalClose" :title="'Carpoodatos'" :body="'Body'">
                 <h3 slot="header">
                     <span>¡Carpoodatos!</span>
                     <i v-on:click="onModalClose" class="fa fa-times float-right-close"></i>

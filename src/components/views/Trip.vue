@@ -20,7 +20,7 @@
                                     <component :is="childComponent" :key="childComponent._scopeId"></component>
                                 </template>
                             </div>
-                            <modal :name="'modal'" v-if="showModalRequestSeat" @close="onModalClose" :title="'Test'" :body="'Body'">
+                            <modal :name="'modal'" v-if="showModalRequestSeat" @close="onModalClose" :title="'Carpoodatos'" :body="'Body'">
                                 <h3 slot="header">
                                     <span>¡Carpoodatos!</span>
                                     <i v-on:click="onModalClose" class="fa fa-times float-right-close"></i>
@@ -48,7 +48,7 @@
                         <TripButtons @deleteTrip="deleteTrip()" @toMessages="toMessages()" @onMakeRequest="onMakeRequest()" @cancelRequest="cancelRequest()" :sending="sending" :isPassengersView="isPassengersView" />
                         <TripStats v-if="!isMobile && tripCardTheme === 'light'" />
                     </div>
-                    <div :style="!this.isMobile && $refs.rightPanel ? { 'min-height': $refs.rightPanel.clientHeight + 'px' } : {}" class="col-xs-24 col-sm-9 col-sm-pull-15 col-md-8 col-md-pull-16 col-lg-7 col-lg-pull-17 driver-container" v-if="!isPassengersView && tripCardTheme !== 'light'">
+                    <div :style="!this.isMobile ? { 'min-height': $refs.rightPanel ? $refs.rightPanel.clientHeight + 'px' : '440px' } : {}" class="col-xs-24 col-sm-9 col-sm-pull-15 col-md-8 col-md-pull-16 col-lg-7 col-lg-pull-17 driver-container" v-if="!isPassengersView && tripCardTheme !== 'light'">
                         <TripDriver />
                     </div>
 
@@ -641,6 +641,7 @@ export default {
         }
         .trip-detail-component .white-background {
             padding-top: 0;
+            min-height: 440px;
         }
         .trip-detail-component .driver-container {
             margin-top: 0;

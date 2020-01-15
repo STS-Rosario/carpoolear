@@ -627,6 +627,12 @@
       position: absolute;
   }
 
+  .passenger-looking-for-trip {
+    margin-bottom: 1em;
+    color: #777;
+    padding-left: 1.4em;
+  }
+
   .trip_seats-available_label > span{
       display:block;
       margin: 7px 0;
@@ -1188,10 +1194,6 @@
 
   .trip-detail-component .column {
       padding: 2em 1em 2em 1em;
-  }
-
-  .trip-detail-component .driver-profile div.row:last-child {
-      height: 9rem;
   }
 
   .trip-detail-component .trip_driver_img {
@@ -2902,6 +2904,9 @@
     .terms-page {
         box-shadow: none;
         margin: 0 auto;
+    }
+    .trip_share {
+        padding-bottom: 2rem;
     }
 }
 .terms-page h1 {

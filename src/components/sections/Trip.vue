@@ -154,7 +154,11 @@
                                 <span>{{ $t('Lugar') }}</span><span>{{ $t('libre') }}</span>
                             </span>
                         </div>
-                        <div class="col-xs-offset-2 col-xs-12" v-else></div>
+                        <div class="col-xs-offset-2 col-xs-12" v-else>
+                            <div class="passenger-looking-for-trip" v-if="tripCardTheme !== 'light' && trip.is_passenger">
+                                <strong class="warning-is-passenger">Pasajero que busca viaje</strong>
+                            </div>
+                        </div>
                         <div class="trip_actions col-xs-10">
                             <div class="btn btn-default btn-lg btn-trip-detail">{{ $t('Ver') }}</div>
                         </div>

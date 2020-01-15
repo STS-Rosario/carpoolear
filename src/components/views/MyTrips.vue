@@ -27,7 +27,7 @@
         </div>
 
         <div class="col-xs-24">
-            <modal :name="'modal'" v-if="showModalPendingRates" @close="toPendingRates" :title="'Test'" :body="'Body'" :hide-footer="true">
+            <modal :name="'modal'" v-if="showModalPendingRates" @close="toPendingRates" :title="'Carpoodatos'" :body="'Body'" :hide-footer="true">
                 <h3 slot="header">
                     <span>¡Carpoodatos!</span>
                     <i v-on:click="toPendingRates" class="fa fa-times float-right-close"></i>

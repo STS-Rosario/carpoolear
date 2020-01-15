@@ -1197,10 +1197,6 @@ textarea {
     padding: 2em 1em 2em 1em;
 }
 
-.trip-detail-component .driver-profile div.row:last-child {
-    height: 9rem;
-}
-
 .trip-detail-component .trip_driver_img {
     border: 1px solid #F6F6F6;
     margin-bottom: 0;
