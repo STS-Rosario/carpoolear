@@ -2774,7 +2774,9 @@
       padding-bottom: .5em;
       margin-bottom: .5em;
   }
-
+  .list-item:last-of-type {
+      border-bottom: none;
+  }
   .suscription-item-detail--content strong {
       color: var(--secondary-background);
   }

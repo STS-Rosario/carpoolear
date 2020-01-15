@@ -262,9 +262,7 @@ export default {
 
         toUserMessages (user) {
             this.lookConversation(user).then(conversation => {
-                // this.selectConversation(conversation.id).then(data => {
                 router.push({ name: 'conversation-chat', params: { id: conversation.id } });
-                // });
             }).catch(error => {
                 console.error(error);
                 this.sending = false;
@@ -272,7 +270,6 @@ export default {
         },
 
         toUserProfile (user) {
-            console.log('toUserProfile replace');
             router.replace({
                 name: 'profile',
                 params: {
@@ -503,9 +500,6 @@ export default {
                 return this.location === 'passenger';
             }
             return false;
-        },
-        waitingForPaymentsPassengers () {
-            return this.trip.passenger ? this.trip.passenger.filter(item => item.request_state === 4) : [];
         }
     },
 
