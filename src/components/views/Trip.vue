@@ -536,7 +536,7 @@ export default {
 <style scoped>
     .trip-detail-component .structure-div {
         margin-top: 1rem;
-        z-index: -3;
+        z-index: 0;
         position: relative;
         min-height: 418px;
         /* overflow: hidden; */
@@ -570,7 +570,6 @@ export default {
         padding: 0 1em;
     }
     .trip-detail-component .white-background {
-        z-index: -2;
         padding-top: 1.1rem;
     }
     .matcheo-passengers {
