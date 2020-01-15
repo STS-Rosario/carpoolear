@@ -57,9 +57,13 @@
 .trip_location_to {
     color: var(--trip-mostly-free-color);
 }
+.trip_location_to.has_points {
+    margin-top: 1.6rem;
+}
 .trip_location_from_state-country,
 .trip_location_to_state-country {
     display: block;
     font-size: 0.8rem;
     color: var(--soft-font-color);
+    min-height: 3em;
 }

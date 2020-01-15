@@ -82,6 +82,9 @@ export default {
             config: 'auth/appConfig',
             isMobile: 'device/isMobile'
         }),
+        getUserProfile () {
+            return this.trip.user.id === this.user.id ? 'me' : this.trip.user.id;
+        },
         getUserImage () {
             return this.user.id === this.trip.user.id ? this.user.image : this.trip.user.image;
         },

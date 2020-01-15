@@ -438,6 +438,9 @@
       width: 100%;
       text-align: center;
   }
+  .trip_point > div {
+     margin-left: 4px;
+  }
   .trip_point:first-child .form-control-map-autocomplete {
       border-color: var(--trip-half-free-color);
       background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4QQeFSkEDUzeggAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAEdklEQVRYw62XS+hVVRTGf986ouTARw9KJfVvEYTRe9ADH5glgRIVlgMpbOYgaBoURU2CRkVRIKQNHKiEkNjA6A2BUEETaVT/wMLICgUN5X/W12Cfc+65lv97JA8c7r377r3X2mt96/vWlk8dhwXL+O8ngcA2SAgw9D4TOxA1VoXIbqUJxORnzqz/OkBQTBdnxowTSImpyiABrbNDrJcVszzKsq+KMdLFkJu/u5NmMShwCA80PtkByoG6aSFQFsvNmJptiqvZpOUyOWCLECR1k9/sTpw506SlvGF1eAllF6X/hQFJGAgq7BpJ6Mxf8M1bxPd7PuLU9MOeKeH34qkjun3HJu7eCfOvhoFp0KAqaEH3w0H4cOdPnPl9pSOITIgKqMGQCnTFVdPa8vaUb946yIdZHTC9gxw7APu32U5EQGRjtIFFqAUMGRVs3a+4+bEyJBp8xKVhoC05/30SDu38JUWH9lGOAwcNCBtgZk0c2nGGM78hlemtccMYPiZWATY6+hY++8fScEkJkdSAoyJcsBLZpExCBPXZ0/P9za6xaHZVo0twQBJ8v/egY4SLNFRL7niNpz4RL52Xtn+qXHrrG6loTCUVwHe7vsR144AvcCaxPQEDdim5V+c5sibVcKENT38spjaUsjQw/Rm8v9EtgWFwNRe9cE7diRs8lIqqBmBAJelRl1OEwWlQBVMbmgqpscAr7qd4MuIA1efH8aJ236obmkBEBViuircFhA3f//h5s4EwRtNfk4oGpYFdMNIadi/0l1AFwiQsXH4EF2MzynLS/VtPMP0FpIifv4IDj5/ANUUICjlpwfIj/YpqaRuPcDi7Gracf9OWTRx904Vmg3TAuT+vjT3rbQuHkHN0mibsuXrrpnBdUpZFJdGYnk9IAeWwuu3pEuwAZRLMEI1ISSacWNERjlXkWbc8UYy7CFlfJVMeRkQIWHInrFy7rSnz3rIkW2BldkFOarxq/TYtuauHgQtzrwEghCZ04PWv7LPVGMwRC3aR6LSbKkHrXt7XZ6AOA27BPYSImu7GrtGKNWjVA5s11uokERpHtgRTGzezYt0FYhKdJ63KDuSBUrcIvOWdw5q74HRhvDb0va0E9bwrf/Uj7x4eNS5ctDewPSAFvcV55Y1wz3ML1dZ6VNhQt3ggqO59dpkW3fAfAjAu8xqshm3O04Xf172Irr/vmVRCXeq9krAhVq7ZnmufHzWoPfDZ9QhTLRdIA8So6Y4dahZX+NHduz3/umOSu1jl/MUneWTP3qDq962dDEtVQysai8oEB3KsZov2ghZNUT2+d7WjgqxIoHryg2tYtBIkUjm0I5vkQHQ121ZtB4lVG9CDryvnQDz0hli+vgt91V5mhjw+dRzbF33TNZnt77p8Zj36/u17OGdwOyd78wa8szelLiDURRvFC4YSiOYSw7DGeLIWjN33erel9pYE1LgX8uHGB6hhjolSGevdkhpH5sRI5eye2Ol/RqCU0OiWK/XZL8cd6eZkw555GSLwL0KgZ1QTzhSDtv0HA/lOUhgOeYAAAAAASUVORK5CYII=') no-repeat center left white;
@@ -885,17 +888,13 @@
   .trip_location-dot-line > div {
       float: right;
       width: 1px;
-      margin-right: 51px;
+      margin-right: 13px;
       height: 50px;
       content: '\A0';
       border: 0;
       border-left: solid 1px #777;
       border-style: dashed;
   }
-  .trip_location-dot-line-small > div {
-      margin-right: 21px;
-  }
-
   .trip_datetime {
       color: var(--medium-font-color);
       margin-bottom: 1.5em;
@@ -1167,12 +1166,12 @@
       margin-top: 1rem;
   }
   .trip_point + .trip_point {
-      margin-top: 2.5em;
+      margin-top: 1.2em;
   }
 
   .trip-detail-component .driver-container {
       background-color: var(--secondary-background);
-      border-radius: .4rem;
+      border-radius: .4rem 0 0 0;
       z-index: 1;
   }
 

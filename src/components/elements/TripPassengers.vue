@@ -57,6 +57,9 @@ export default {
         }),
         owner () {
             return this.trip && this.user && this.user.id === this.trip.user.id;
+        },
+        acceptedPassengers () {
+            return this.trip.passenger ? this.trip.passenger.filter(item => item.request_state === 1) : [];
         }
     },
     props: [],

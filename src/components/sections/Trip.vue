@@ -73,7 +73,7 @@
                   <div class="col-xs-4" v-if="tripCardTheme === 'light'">
                     <span class="trip_from_time">{{ trip.trip_date | moment("HH:mm") }} </span>
                   </div>
-                  <div class="col-xs-2 text-right">
+                  <div class="text-right" :class="tripCardTheme === 'light' ? 'col-xs-2' : 'col-xs-4'">
                     <i class="fa fa-map-marker" aria-hidden="true" v-if="tripCardTheme !== 'light'"></i>
                     <i class="fa fa-circle" aria-hidden="true" v-else></i>
                   </div>
@@ -90,7 +90,7 @@
                   <div class="col-xs-4" v-if="tripCardTheme === 'light'">
                     <span class="trip_to_time">{{ tripArrivingTime | moment("HH:mm") }} </span>
                   </div>
-                  <div class="col-xs-2 text-right">
+                  <div class="text-right" :class="tripCardTheme === 'light' ? 'col-xs-2' : 'col-xs-4'">
                     <i class="fa fa-map-marker" aria-hidden="true"></i>
                   </div>
                   <div :class="config && config.trip_card_design === 'light'? 'col-xs-14' : 'col-xs-18'">

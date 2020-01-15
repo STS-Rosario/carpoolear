@@ -3,7 +3,7 @@
         <template v-if="trip">
             <div class="trip-detail-component">
                 <div class="row form">
-                    <div class="white-background" :class="themeClasses">
+                    <div ref="rightPanel" class="white-background" :class="themeClasses">
                         <div class='row'>
                             <div :class="columnClass[0]" class="column" v-if="columnComponent[0] && columnComponent[0].length">
                                 <template v-for="childComponent in columnComponent[0]">
@@ -48,7 +48,7 @@
                         <TripButtons @deleteTrip="deleteTrip()" @toMessages="toMessages()" @onMakeRequest="onMakeRequest()" @cancelRequest="cancelRequest()" :sending="sending" :isPassengersView="isPassengersView" />
                         <TripStats v-if="!isMobile && tripCardTheme === 'light'" />
                     </div>
-                    <div class="col-xs-24 col-sm-9 col-sm-pull-15 col-md-8 col-md-pull-16 col-lg-7 col-lg-pull-17 driver-container" v-if="!isPassengersView && tripCardTheme !== 'light'">
+                    <div :style="!this.isMobile && $refs.rightPanel ? { 'min-height': $refs.rightPanel.clientHeight + 'px' } : {}" class="col-xs-24 col-sm-9 col-sm-pull-15 col-md-8 col-md-pull-16 col-lg-7 col-lg-pull-17 driver-container" v-if="!isPassengersView && tripCardTheme !== 'light'">
                         <TripDriver />
                     </div>
 
@@ -200,6 +200,10 @@ export default {
             sendToAll: 'conversations/sendToAll',
             changeProperty: 'profile/changeProperty'
         }),
+        getMinHeight () {
+            console.log('OKKKK',this.$refs, this.$refs.rightPanel.clientHeight);
+            return !this.isMobile && this.$refs.rightPanel ? { 'min-height': this.$refs.rightPanel.clientHeight + 'px' } : {};
+        },
         profileComplete () {
             if (!this.user.image || this.user.image.length === 0 || !this.user.description || this.user.description.length === 0) {
                 router.replace({ name: 'profile_update' });
@@ -498,17 +502,11 @@ export default {
         owner () {
             return this.trip && this.user && this.user.id === this.trip.user.id;
         },
-        getUserProfile () {
-            return this.trip.user.id === this.user.id ? 'me' : this.trip.user.id;
-        },
         isPassengersView () {
             if (this.location) {
                 return this.location === 'passenger';
             }
             return false;
-        },
-        acceptedPassengers () {
-            return this.trip.passenger ? this.trip.passenger.filter(item => item.request_state === 1) : [];
         },
         waitingForPaymentsPassengers () {
             return this.trip.passenger ? this.trip.passenger.filter(item => item.request_state === 4) : [];
@@ -546,7 +544,7 @@ export default {
         position: relative;
         min-height: 418px;
         /* overflow: hidden; */
-        top: -43px;
+        top: 0;
     }
     .trip-detail-component .driver-container {
         margin-top: 0;
