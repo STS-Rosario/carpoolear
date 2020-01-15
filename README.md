@@ -93,6 +93,7 @@ In the config table in your carpoolear DB you can configure the following parame
 | donation                    | JSON    | With donation you can configure donation campaigns. Object must be: {"ammount_needed": 1000, "month_days": 0, "trips_count": 20, "trips_offset": 0, "trips_rated": 2} |
 | module_trip_seats_payment   | BOOLEAN | If enabled, online payment if required to travel.                                                                                                                     |
 | module_user_request_limited | JSON    | Object must be: {"enabled": false, "hours_range": 8}     
+
 You must respect this linting configuration: /*jshint esversion: 6*/
 
 All the variable and methods name must be in english.
