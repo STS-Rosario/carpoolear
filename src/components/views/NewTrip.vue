@@ -791,6 +791,13 @@ export default {
             'getTrip': 'getTrip',
             'getPrice': 'trips/price'
         }),
+        jumpToError () {
+            let hasError = document.getElementsByClassName('has-error');
+            if (hasError.length) {
+                let element = hasError[0];
+                this.$scrollToElement(element);
+            }
+        },
         restoreData (trip) {
             this.no_lucrar = true;
             this.points = [];
@@ -1046,6 +1053,10 @@ export default {
 
         save () {
             if (this.validate()) {
+                // Jump To Error
+                this.$nextTick(() => {
+                    this.jumpToError();
+                });
                 return;
             }
             /* eslint-disable no-unreachable */
@@ -1099,6 +1110,7 @@ export default {
                             estado: 'error'
                         });
                     }
+                    this.jumpToError();
                     this.saving = false;
                 });
             } else {
