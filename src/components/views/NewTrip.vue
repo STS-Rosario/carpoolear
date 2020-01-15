@@ -193,36 +193,36 @@
                             <legend class="label-for-group"> {{ $t('preferenciasViaje') }} </legend>
                             <br>
                             <div class="preferences row" v-if="tripCardTheme !== 'light' || isMobile">
-                                <div class="col-md-8">
-                                    <div class="col-md-12">
+                                <div class="col-xs-8">
+                                    <div class="col-xs-12">
                                         <input type="checkbox" id="smoking" v-model="trip.allow_smoking"/>
                                     </div>
-                                    <div class="col-md-12">
+                                    <div class="col-xs-12">
                                         <SvgItem icon="no-smoking" :size="24"></SvgItem>
                                     </div>
-                                    <div class="col-md-24">
+                                    <div class="col-xs-24">
                                         <label for="allow-smoking" class="label-soft preferences-text">{{ $t('nofumar') }}</label>
                                     </div>
                                 </div>
-                                <div class="col-md-8">
-                                    <div class="col-md-12">
+                                <div class="col-xs-8">
+                                    <div class="col-xs-12">
                                         <input type="checkbox" id="animals" v-model="trip.allow_animals"/>
                                     </div>
-                                    <div class="col-md-12">
+                                    <div class="col-xs-12">
                                         <SvgItem icon="no-animals" :size="24"></SvgItem>
                                     </div>
-                                    <div class="col-md-24 no-padding">
+                                    <div class="col-xs-24 no-padding">
                                         <label for="allow-animals" class="label-soft preferences-text">{{ $t('noanimales') }}</label>
                                     </div>
                                 </div>
-                                <div class="col-md-8">
-                                    <div class="col-md-12">
+                                <div class="col-xs-8">
+                                    <div class="col-xs-12">
                                         <input type="checkbox" id="kids" v-model="trip.allow_kids"/>
                                     </div>
-                                    <div class="col-md-12">
+                                    <div class="col-xs-12">
                                         <SvgItem icon="no-kids" :size="24"></SvgItem>
                                     </div>
-                                    <div class="col-md-24 no-padding">
+                                    <div class="col-xs-24 no-padding">
                                         <label for="allow-kids" class="label-soft preferences-text">{{ $t('noninos') }}</label>
                                     </div>
                                 </div>
@@ -439,36 +439,36 @@
                             <legend class="label-for-group"> {{ $t('preferenciasViaje') }} </legend>
                             <br>
                             <div class="preferences row" v-if="tripCardTheme !== 'light' || isMobile">
-                                <div class="col-md-8">
-                                    <div class="col-md-12">
+                                <div class="col-xs-8">
+                                    <div class="col-xs-12">
                                         <input type="checkbox" id="smoking" v-model="otherTrip.trip.allow_smoking"/>
                                     </div>
-                                    <div class="col-md-12">
+                                    <div class="col-xs-12">
                                         <SvgItem icon="no-smoking" :size="24"></SvgItem>
                                     </div>
-                                    <div class="col-md-24">
+                                    <div class="col-xs-24">
                                         <label for="allow-smoking" class="label-soft preferences-text">{{ $t('nofumar') }}</label>
                                     </div>
                                 </div>
-                                <div class="col-md-8">
-                                    <div class="col-md-12">
+                                <div class="col-xs-8">
+                                    <div class="col-xs-12">
                                         <input type="checkbox" id="animals" v-model="otherTrip.trip.allow_animals"/>
                                     </div>
-                                    <div class="col-md-12">
+                                    <div class="col-xs-12">
                                         <SvgItem icon="no-animals" :size="24"></SvgItem>
                                     </div>
-                                    <div class="col-md-24 no-padding">
+                                    <div class="col-xs-24 no-padding">
                                         <label for="allow-animals" class="label-soft preferences-text">{{ $t('noanimales') }}</label>
                                     </div>
                                 </div>
-                                <div class="col-md-8">
-                                    <div class="col-md-12">
+                                <div class="col-xs-8">
+                                    <div class="col-xs-12">
                                         <input type="checkbox" id="kids" v-model="otherTrip.trip.allow_kids"/>
                                     </div>
-                                    <div class="col-md-12">
+                                    <div class="col-xs-12">
                                         <SvgItem icon="no-kids" :size="24"></SvgItem>
                                     </div>
-                                    <div class="col-md-24 no-padding">
+                                    <div class="col-xs-24 no-padding">
                                         <label for="allow-kids" class="label-soft preferences-text">{{ $t('noninos') }}</label>
                                     </div>
                                 </div>
