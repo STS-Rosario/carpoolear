@@ -74,25 +74,31 @@ Happy coding!
 
 In the config table in your carpoolear DB you can configure the following parameters:
 
-| Property                    | Type    | Description                                                                                                                                                           |
-|-----------------------------|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| admin_email                 | STRING  | Email of the admin.                                                                                                                                                   |
-| name_app                    | STRING  | Name of the app.                                                                                                                                                      |
-| target_app                  | STRING  | Only in development. (target project name)                                                                                                                            |
-| osm_country                 | STRING  | Country locale for Open Street Map.                                                                                                                                   |
-| country_name                | STRING  | Your country name.                                                                                                                                                    |
-| locale                      | STRING  | Country locale.                                                                                                                                                       |
-| home_redirection            | STRING  | Your home website url.                                                                                                                                                |
-| module_validated_drivers    | BOOLEAN | If enabled, drivers must be valdiated.                                                                                                                                |
-| trip_card_design            | STRING  | 'default' or 'light' // 'default is the custom carpoolear theme. 'light' is an optional carpoolear theme. You can make your own themes.                               |
-| trip_stars                  | BOOLEAN | If enabled, the punctuation of users is shown as stars, if not as numbers.                                                                                            |
-| max_cards_per_row           | INT     | How many trip cards must be shown per row. Default: 4                                                                                                                 |
-| disable_user_hints          | BOOLEAN | If enabled, user hints are hidden.                                                                                                                                    |
-| login_custom_header         | BOOLEAN | If enabled, you can use a custom header.                                                                                                                              |
-| enable_footer               | BOOLEAN | If enabled, you can login by facebook.                                                                                                                                |
-| donation                    | JSON    | With donation you can configure donation campaigns. Object must be: {"ammount_needed": 1000, "month_days": 0, "trips_count": 20, "trips_offset": 0, "trips_rated": 2} |
-| module_trip_seats_payment   | BOOLEAN | If enabled, online payment if required to travel.                                                                                                                     |
-| module_user_request_limited | JSON    | Object must be: {"enabled": false, "hours_range": 8}     
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| admin_email | STRING  | Email of the admin.|
+| name_app | STRING | Name of the app. |
+| target_app | STRING | Only in development. (target project name) |
+| osm_country | STRING | Country locale for Open Street Map. |
+| country_name | STRING | Your country name. |
+| locale | STRING | Country locale. |
+| home_redirection | STRING | Your home website url. |
+| module_validated_drivers | BOOLEAN | If enabled, drivers must be valdiated. |
+| trip_card_design | STRING | 'default' or 'light' // 'default is the custom carpoolear theme. 'light' is an optional carpoolear theme. You can make your own themes. |
+| trip_stars | BOOLEAN | If enabled, the punctuation of users is shown as stars, if not as numbers.|
+| max_cards_per_row | INT | How many trip cards must be shown per row. Default: 4 |
+| disable_user_hints | BOOLEAN | If enabled, user hints are hidden. |
+| login_custom_header | BOOLEAN | If enabled, you can use a custom header. |
+| enable_footer | BOOLEAN | If enabled, you can login by facebook. |
+| donation | JSON | With donation you can configure donation campaigns. Object must be: {"ammount_needed": 1000, "month_days": 0, "trips_count": 20, "trips_offset": 0, "trips_rated": 2} |
+| module_trip_seats_payment | BOOLEAN | If enabled, online payment if required to travel. |
+| module_user_request_limited | JSON | Object must be: {"enabled": false, "hours_range": 8} |
+| api_crice | BOOLEAN | If enabled, active the api that calculate the trip price. |
+| fuel_price | FLOAT | The local fuel price, to stimate the trip price. |
+| enable_facebook | BOOLEAN | If enabled, you can login with facebook. |
+---
+
+## Important
 
 You must respect this linting configuration: /*jshint esversion: 6*/
 
