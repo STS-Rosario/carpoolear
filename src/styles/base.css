@@ -439,8 +439,10 @@
       text-align: center;
   }
   .trip_point > div {
-      background-color: white;
       margin-left: 4px;
+  }
+  .trip_point > div i {
+      background-color: white;
   }
   .trip_point div:first-of-type {
       z-index: 2;
