@@ -120,7 +120,7 @@
                                         :value="date"
                                         :minDate="minDate"
                                         :class="{'has-error': dateError.state}"
-                                        v-on:date_changed="(date) => this.dateAnswer = date">
+                                        v-on:date_changed="changeDate">
                                       </DatePicker>
                                     <span class="error" v-if="dateError.state"> {{dateError.message}} </span>
                                 </div>
@@ -367,7 +367,7 @@
                                         :value="otherTrip.date"
                                         :minDate="otherTrip.minDate"
                                         :class="{'has-error': otherTrip.dateError.state}"
-                                        v-on:date_changed="(date) => this.otherTrip.dateAnswer = date">
+                                        v-on:date_changed="changeOtherTripDate">
                                       </DatePicker>
                                     <span class="error" v-if="otherTrip.dateError.state"> {{otherTrip.dateError.message}} </span>
                                 </div>
@@ -791,6 +791,14 @@ export default {
             'getTrip': 'getTrip',
             'getPrice': 'trips/price'
         }),
+        changeOtherTripDate (date) {
+            this.$set(this.otherTrip.dateError, 'state', false);
+            this.otherTrip.dateAnswer = date;
+        },
+        changeDate (date) {
+            this.$set(this.dateError, 'state', false);
+            this.dateAnswer = date;
+        },
         jumpToError () {
             let hasError = document.getElementsByClassName('has-error');
             if (hasError.length) {
