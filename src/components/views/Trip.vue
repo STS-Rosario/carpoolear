@@ -203,7 +203,9 @@ export default {
             remove: 'trips/remove',
             searchMatchers: 'trips/searchMatchers',
             sendToAll: 'conversations/sendToAll',
-            changeProperty: 'profile/changeProperty'
+            changeProperty: 'profile/changeProperty',
+            removeTrip: 'myTrips/removeTrip',
+            searchAgain: 'trips/searchAgain'
         }),
         calculateHeight () {
             this.$nextTick(() => {
@@ -248,9 +250,18 @@ export default {
                 }
             }).catch(error => {
                 if (error) {
+                    if (error.status === 422) {
+                        if (error.data && error.data.errors && error.data.errors.error && error.data.errors.error.length) {
+                            for (let i = 0; i < error.data.errors.error.length; i++) {
+                                let errorMessage = error.data.errors.error[i];
+                                if (errorMessage === 'trip_not_foound') {
+                                    this.removeTrip(this.id);
+                                    this.searchAgain();
+                                }
+                            }
+                        }
+                    }
                     router.replace({ name: 'trips' });
-                    // Ver que hacer
-                    // this.trip = null;
                 }
             });
         },
@@ -344,7 +355,6 @@ export default {
                     console.error(error);
                     dialogs.message('Ocurrió un problema al solicitar, por favor aguarde unos instante e intentelo nuevamente.', { estado: 'error' });
                 }).finally(() => {
-                    console.log('ok');
                     this.$set(this.sending, 'requestAction', false);
                 });
             }
@@ -362,7 +372,6 @@ export default {
                     console.error(error);
                     dialogs.message('Ocurrió un problema al solicitar, por favor aguarde unos instante e intentelo nuevamente.', { estado: 'error' });
                 }).finally(() => {
-                    console.log('ok');
                     this.$set(this.sending, 'requestAction', false);
                 });
             }

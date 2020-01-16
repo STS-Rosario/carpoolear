@@ -2137,6 +2137,10 @@
       body {
           font-size: 12px;
       }
+      .btn,
+      .btn-primary {
+          line-height: 24px;
+      }
       .user-form .btn-primary.btn-facebook {
           width: 100%;
           padding-left: 0;
@@ -2834,6 +2838,10 @@
           box-sizing: border-box;
           padding: 0;
           margin-left: 21px;
+      }
+      .pending-buttons button {
+        min-width: 0;
+        width: calc(50% - 12px);
       }
   }
   @media (min-width: 768px) {

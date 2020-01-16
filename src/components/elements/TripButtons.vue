@@ -4,19 +4,19 @@
             Editar
         </router-link>
         <a class="btn btn-primary" v-if="owner && !expired" @click="$emit('deleteTrip')" :disabled="sendingStatus">
-            <spinner class="blue" v-if="sending.deleteAction"></spinner>
+            <spinner class="blue" v-if="sending && sending.deleteAction"></spinner>
             <span v-else>Cancelar Viaje</span>
         </a>
         <template v-if="!owner && !expired">
             <button class="btn btn-primary" @click="$emit('toMessages')" v-if="!owner" :disabled="sendingStatus">
-                <spinner class="blue" v-if="sending.sendMessageAction"></spinner>
+                <spinner class="blue" v-if="sending && sending.sendMessageAction"></spinner>
                 <span v-else>Enviar mensaje</span>
             </button>
         </template>
         <template v-if="!owner && !trip.is_passenger && !expired">
             <template v-if="!isPassenger">
                 <button class="btn btn-primary" @click="$emit('onMakeRequest')" v-if="canRequest && trip.seats_available > 0" :disabled="sendingStatus">
-                    <template v-if="sending.requestAction">
+                    <template v-if="sending && sending.requestAction">
                         <spinner class="blue"></spinner>
                     </template>
                     <template v-else>
@@ -34,14 +34,14 @@
                     </template>
                 </button>
                 <button class="btn" v-if="!canRequest" @click="$emit('cancelRequest')" :disabled="sendingStatus">
-                    <spinner class="blue" v-if="sending.requestAction"></spinner>
+                    <spinner class="blue" v-if="sending && sending.requestAction"></spinner>
                     <span v-else>Solicitado (RETIRAR)</span>
                 </button>
             </template>
 
             <template v-if="isPassenger">
                 <button class="btn btn-primary" @click="$emit('cancelRequest')" v-if="canRequest" :disabled="sendingStatus">
-                    <spinner class="blue" v-if="sending.requestAction"></spinner>
+                    <spinner class="blue" v-if="sending && sending.requestAction"></spinner>
                     <span v-else>Bajarme del viaje</span>
                 </button>
             </template>
@@ -76,7 +76,7 @@ export default {
             Object.keys(this.sending).some(k => this.sending[k] === true);
         },
         isPassenger () {
-            return this.trip.passenger.findIndex(item => item.user_id === this.user.id) >= 0;
+            return this.trip.passenger.findIndex(item => item.user_id === this.user.id && (item.request_state === 1 || item.request_state === 4)) >= 0;
         },
         expired () {
             return moment(this.trip.trip_date).format() < moment().format();
