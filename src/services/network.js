@@ -26,6 +26,13 @@ class MyPromise {
         myTempPromise.abort = this.abort;
         return myTempPromise;
     }
+
+    finally (func) {
+        let tempPromise = this.promise.finally(func);
+        let myTempPromise = new MyPromise(null, null, tempPromise);
+        myTempromise.abort = this.abort;
+        return myTempPromise;
+    }
 }
 
 export default {

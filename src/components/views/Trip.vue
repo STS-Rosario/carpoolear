@@ -141,7 +141,11 @@ export default {
     name: 'trip',
     data () {
         return {
-            sending: false,
+            sending: {
+                deleteAction: false,
+                requestAction: false,
+                sendMessageAction: false
+            },
             carpoolear_logo: process.env.ROUTE_BASE + 'static/img/carpoolear_logo.png',
             zoom: 4,
             center: { lat: -29.0, lng: -60.0 },
@@ -215,14 +219,14 @@ export default {
         },
         deleteTrip () {
             if (window.confirm(this.$t('seguroCancelar'))) {
-                this.sending = true;
+                this.$set(this.sending, 'deleteAction', true);
                 this.remove(this.trip.id).then(() => {
                     dialogs.message(this.$t('viajeCancelado'), { estado: 'success' });
                     this.$router.replace({ name: 'trips' });
                 }).catch((error) => {
                     console.error(error);
                     dialogs.message(this.$t('errorAlCancelar'), { estado: 'error' });
-                    this.sending = false;
+                    this.$set(this.sending, 'deleteAction', false);
                 });
             }
         },
@@ -263,17 +267,17 @@ export default {
             }
 
             if (this.profileComplete()) {
-                this.sending = true;
                 this.toUserMessages(this.trip.user);
             }
         },
 
         toUserMessages (user) {
+            this.$set(this.sending, 'sendMessageAction', true);
             this.lookConversation(user).then(conversation => {
                 router.push({ name: 'conversation-chat', params: { id: conversation.id } });
             }).catch(error => {
                 console.error(error);
-                this.sending = false;
+                this.$set(this.sending, 'sendMessageAction', false);
             });
         },
 
@@ -309,10 +313,9 @@ export default {
                 });
             }
             if (this.profileComplete()) {
-                this.sending = true;
+                this.$set(this.sending, 'requestAction', true);
                 this.showModalRequestSeat = false;
                 this.make(this.trip.id).then((response) => {
-                    this.sending = false;
                     this.trip.request = 'send';
                     if (response && response.data && response.data.request_state) {
                         if (response.data.request_state === 0) {
@@ -337,24 +340,30 @@ export default {
                     } else {
                         dialogs.message('La solicitud fue enviada.');
                     }
-                }).catch(() => {
-                    this.sending = false;
-                    dialogs.message('Ocurrió un problema al solicitar, por favor intente nuevamente luego.', { estado: 'error' });
+                }).catch((error) => {
+                    console.error(error);
+                    dialogs.message('Ocurrió un problema al solicitar, por favor aguarde unos instante e intentelo nuevamente.', { estado: 'error' });
+                }).finally(() => {
+                    console.log('ok');
+                    this.$set(this.sending, 'requestAction', false);
                 });
             }
         },
 
         cancelRequest () {
             if (window.confirm('¿Estás seguro que deseas bajarte del viaje?')) {
-                this.sending = true;
+                this.$set(this.sending, 'requestAction', true);
                 this.cancel({ user: this.user, trip: this.trip }).then(() => {
-                    this.sending = false;
                     dialogs.message('Te has bajado del viaje.');
                     if (this.trip.request === 'send') {
                         this.trip.request = '';
                     }
-                }).catch(() => {
-                    this.sending = false;
+                }).catch((error) => {
+                    console.error(error);
+                    dialogs.message('Ocurrió un problema al solicitar, por favor aguarde unos instante e intentelo nuevamente.', { estado: 'error' });
+                }).finally(() => {
+                    console.log('ok');
+                    this.$set(this.sending, 'requestAction', false);
                 });
             }
         },

@@ -1137,10 +1137,15 @@
       border: 0;
       min-width: auto;
       font-size: 13px;
+      position: relative;
   }
   .btn-accept-request:hover, .btn-accept-request:focus, .btn-accept-request.focus {
       color: #fff;
       background-color: #0fa30f;
+  }
+  .pending-buttons button {
+      min-width: 8.5rem;
+      min-height: 2.7rem;
   }
   .request-list .btn-primary,
   .friend-card .pending-buttons .btn-primary {
@@ -1299,10 +1304,12 @@
 
   .trip-detail-component .btn {
       font-weight: 500;
-      min-width: 8rem;
       border-radius: .2em;
       padding: .8em 1.2em;
       text-transform: uppercase;
+      min-height: 3rem;
+      min-width: 11rem;
+      position: relative;
   }
 
   .trip-detail-component .quote {
