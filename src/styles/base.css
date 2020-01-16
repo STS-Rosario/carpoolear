@@ -444,7 +444,7 @@
   .trip_point > div i {
       background-color: white;
   }
-  .trip_point div:first-of-type {
+  .trip_inner_points .trip_point div:first-of-type {
       z-index: 2;
   }
   .trip_point:first-child .form-control-map-autocomplete {

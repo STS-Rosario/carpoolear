@@ -334,8 +334,9 @@ export default {
         deleteTrip: function () {
             if (window.confirm(this.$t('seguroCancelar'))) {
                 this.remove(this.trip.id).then(() => {
-                    dialogs.message(this.$t('viajeCancelado'), { estado: 'error' });
-                }).catch(() => {
+                    dialogs.message(this.$t('viajeCancelado'), { estado: 'success' });
+                }).catch((error) => {
+                    console.error(error);
                     dialogs.message(this.$t('errorAlCancelar'), { estado: 'error' });
                 });
             }

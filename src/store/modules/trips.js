@@ -163,6 +163,11 @@ const mutations = {
         }
     },
 
+    [types.TRIPS_CURRENT_REMOVE_PASSENGER_BY_ID] (state, userId) {
+        let index = state.current_trip.passenger.findIndex(item => item.id === userId && (item.request_state === 1 || item.request_state === 4));
+        state.current_trip.passenger[index].request_state = 4;
+    },
+
     [types.TRIPS_SET_REQUEST] (state, { id, value }) {
         for (let i = 0; i < state.trips.length; i++) {
             if (state.trips[i].id === id) {

@@ -48,7 +48,7 @@
                         <TripButtons @deleteTrip="deleteTrip()" @toMessages="toMessages()" @onMakeRequest="onMakeRequest()" @cancelRequest="cancelRequest()" :sending="sending" :isPassengersView="isPassengersView" />
                         <TripStats v-if="!isMobile && tripCardTheme === 'light'" />
                     </div>
-                    <div :style="!this.isMobile ? { 'min-height': $refs.rightPanel ? $refs.rightPanel.clientHeight + 'px' : '440px' } : {}" class="col-xs-24 col-sm-9 col-sm-pull-15 col-md-8 col-md-pull-16 col-lg-7 col-lg-pull-17 driver-container" v-if="!isPassengersView && tripCardTheme !== 'light'">
+                    <div :style="calculatedHeight" class="col-xs-24 col-sm-9 col-sm-pull-15 col-md-8 col-md-pull-16 col-lg-7 col-lg-pull-17 driver-container" v-if="!isPassengersView && tripCardTheme !== 'light'">
                         <TripDriver />
                     </div>
 
@@ -165,7 +165,8 @@ export default {
             url: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
             attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
             showModalRequestSeat: false,
-            acceptPassengerValue: 0
+            acceptPassengerValue: 0,
+            calculatedHeight: {}
         };
     },
 
@@ -200,6 +201,11 @@ export default {
             sendToAll: 'conversations/sendToAll',
             changeProperty: 'profile/changeProperty'
         }),
+        calculateHeight () {
+            this.$nextTick(() => {
+                this.calculatedHeight = !this.isMobile ? { 'min-height': this.$refs.rightPanel ? this.$refs.rightPanel.clientHeight + 'px' : '440px' } : {};
+            });
+        },
         profileComplete () {
             if (!this.user.image || this.user.image.length === 0 || !this.user.description || this.user.description.length === 0) {
                 router.replace({ name: 'profile_update' });
@@ -208,11 +214,14 @@ export default {
             }
         },
         deleteTrip () {
-            if (window.confirm('¿Estás seguro que deseas cancelar el viaje?')) {
+            if (window.confirm(this.$t('seguroCancelar'))) {
                 this.sending = true;
                 this.remove(this.trip.id).then(() => {
+                    dialogs.message(this.$t('viajeCancelado'), { estado: 'success' });
                     this.$router.replace({ name: 'trips' });
-                }).catch(() => {
+                }).catch((error) => {
+                    console.error(error);
+                    dialogs.message(this.$t('errorAlCancelar'), { estado: 'error' });
                     this.sending = false;
                 });
             }
@@ -222,10 +231,10 @@ export default {
                 // this.trip = trip;
                 this.points = trip.points;
                 var self = this;
+                this.calculateHeight();
                 setTimeout(() => { self.renderMap(); }, 500);
                 if (this.owner) {
                     this.searchMatchers({ trip: this.trip }).then(users => {
-                        console.log('matching', users);
                         this.matchingUsers = users;
                         if (users && users.length) {
                             this.selectedMatchingUser = users.map(u => u.id);
@@ -243,7 +252,6 @@ export default {
         },
 
         toMessages () {
-            console.log('tomessages');
             if (this.acceptPassengerValue) {
                 let data = {
                     property: 'do_not_alert_request_seat',
@@ -342,10 +350,7 @@ export default {
                 this.cancel({ user: this.user, trip: this.trip }).then(() => {
                     this.sending = false;
                     dialogs.message('Te has bajado del viaje.');
-                    if (this.trip.request !== 'send') {
-                        let index = this.trip.passenger.findIndex(item => item.id === this.user.id);
-                        this.trip.passenger.splice(index, 1);
-                    } else {
+                    if (this.trip.request === 'send') {
                         this.trip.request = '';
                     }
                 }).catch(() => {
@@ -361,7 +366,6 @@ export default {
         renderMap () {
             if (this.$refs.map) {
                 let map = this.$refs.map.mapObject;
-                console.log('trip', this.trip);
                 /* eslint-disable no-undef */
                 let points = this.trip.points.map(point => L.latLng(point.lat, point.lng));
                 let control = L.Routing.control({
@@ -434,15 +438,23 @@ export default {
     mounted () {
         this.loadTrip();
         bus.on('back-click', this.onBackClick);
+        bus.on('calculate-height', this.calculateHeight);
+        this.$nextTick(() => {
+            this.calculateHeight();
+        });
     },
 
     beforeDestroy () {
         bus.off('back-click', this.onBackClick);
+        bus.off('calculate-height', this.calculateHeight);
     },
 
     watch: {
         'id': function (value) {
             this.loadTrip();
+        },
+        'resolutionWidth': function () {
+            this.calculateHeight();
         }
     },
 
@@ -452,8 +464,12 @@ export default {
             trip: 'trips/currentTrip',
             config: 'auth/appConfig',
             tripCardTheme: 'auth/tripCardTheme',
-            isMobile: 'device/isMobile'
+            isMobile: 'device/isMobile',
+            resolution: 'device/resolution'
         }),
+        resolutionWidth () {
+            return this.resolution.width;
+        },
         themeClasses () {
             return this.tripCardTheme === 'light' ? 'col-xs-24' : 'col-xs-24 col-sm-push-9 col-sm-15 col-md-push-8 col-md-16 col-lg-17 col-lg-push-7';
         },

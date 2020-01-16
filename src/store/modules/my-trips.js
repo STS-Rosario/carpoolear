@@ -102,9 +102,9 @@ const mutations = {
                 if (!state.driver_trip[i].passenger) {
                     return;
                 }
-                var index = state.driver_trip[i].passenger.findIndex(item => item.id === user.id);
+                let index = state.driver_trip[i].passenger.findIndex(item => item.id === user.id && (item.request_state === 1 || item.request_state === 4));
                 if (index >= 0) {
-                    state.driver_trip[i].passenger.splice(index, 1);
+                    state.driver_trip[i].passenger[index].request_state = 4;
                 }
                 return;
             }

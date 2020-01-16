@@ -43,6 +43,8 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import router from '../../router';
+import dialogs from '../../services/dialogs.js';
+import bus from '../../services/bus-event';
 export default {
     name: 'TripPassengers',
     data () {
@@ -69,10 +71,19 @@ export default {
     props: [],
     components: {
     },
+    mounted () {
+        this.calculateHeight();
+    },
     methods: {
         ...mapActions({
-            lookConversation: 'conversations/createConversation'
+            lookConversation: 'conversations/createConversation',
+            cancel: 'passenger/cancel'
         }),
+        calculateHeight () {
+            this.$nextTick(() => {
+                bus.emit('calculate-height');
+            });
+        },
         toUserMessages (user) {
             this.lookConversation(user).then(conversation => {
                 router.push({ name: 'conversation-chat', params: { id: conversation.id } });
@@ -96,12 +107,19 @@ export default {
                 this.sending = true;
                 this.cancel({ user: user, trip: this.trip }).then(() => {
                     this.sending = false;
-                    let index = this.trip.passenger.findIndex(item => item.id === user.id);
-                    this.trip.passenger.splice(index, 1);
+                    dialogs.message(this.$t('removerPasajeroExitoso'), { estado: 'success' });
                 }).catch(() => {
                     this.sending = false;
                 });
             }
+        }
+    },
+    watch: {
+        acceptedPassengers () {
+            this.calculateHeight();
+        },
+        waitingForPaymentsPassengers () {
+            this.calculateHeight();
         }
     }
 };
