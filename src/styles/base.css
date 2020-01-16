@@ -397,6 +397,11 @@
       background: #d72322;
   }
 
+  .trip-create {
+     min-width: 8rem;
+     min-height: 3.2rem;
+  }
+
   .form {
       margin-bottom: 2rem;
   }

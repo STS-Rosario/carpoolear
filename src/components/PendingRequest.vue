@@ -106,12 +106,12 @@ export default {
             let user = this.user;
             let trip = this.trip;
             this.acceptInProcess = true;
-            this.passengerAccept({ user, trip }).catch((resp) => {
-                if (resp.status === 422) {
-                    if (resp.data && resp.data.errors && resp.data.errors.error && resp.data.errors.error.length) {
-                        for (let i = 0; i < resp.data.errors.error.length; i++) {
-                            let error = resp.data.errors.error[i];
-                            if (error === 'not_seat_available') {
+            this.passengerAccept({ user, trip }).catch((error) => {
+                if (error.status === 422) {
+                    if (error.data && error.data.errors && error.data.errors.error && error.data.errors.error.length) {
+                        for (let i = 0; i < error.data.errors.error.length; i++) {
+                            let errorMessage = error.data.errors.error[i];
+                            if (errorMessage === 'not_seat_available') {
                                 dialogs.message('No puedes aceptar esta solicitud, todos los asientos del viaje están ocupados.', { duration: 10, estado: 'error' });
                                 return;
                             }

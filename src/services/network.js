@@ -30,7 +30,7 @@ class MyPromise {
     finally (func) {
         let tempPromise = this.promise.finally(func);
         let myTempPromise = new MyPromise(null, null, tempPromise);
-        myTempromise.abort = this.abort;
+        myTempPromise.abort = this.abort;
         return myTempPromise;
     }
 }

@@ -265,8 +265,14 @@
                                 </div>
                             </div>
                             <button v-if="!showReturnTrip" class="trip-create btn btn-primary btn-lg" @click="save" :disabled="saving">
-                                <span v-if="!updatingTrip">{{ $t('crear') }}</span>
-                                <span v-else>{{ $t('actualizar') }}</span>
+                                <span v-if="!updatingTrip">
+                                    <spinner class="blue" v-if="saving"></spinner>
+                                    <span v-else>{{ $t('crear') }}</span>
+                                </span>
+                                <span v-else>
+                                    <spinner class="blue" v-if="saving"></spinner>
+                                    <span v-else>{{ $t('actualizar') }}</span>
+                                </span>
                             </button>
                         </div>
                     </div>
@@ -491,8 +497,14 @@
                                 </li>
                             </ul>
                             <button v-if="showReturnTrip" class="trip-create btn btn-primary btn-lg" @click="save" :disabled="saving">
-                                <span v-if="!updatingTrip">{{ $t('crear') }}</span>
-                                <span v-else>{{ $t('actualizar') }}</span>
+                                <span v-if="!updatingTrip">
+                                    <spinner class="blue" v-if="saving"></spinner>
+                                    <span v-else>{{ $t('crear') }}</span>
+                                </span>
+                                <span v-else>
+                                    <spinner class="blue" v-if="saving"></spinner>
+                                    <span v-else>{{ $t('actualizar') }}</span>
+                                </span>
                             </button>
                         </div>
                     </div>
@@ -532,6 +544,7 @@ import {
 // import { parseOsmStreet } from '../../services/maps.js';
 import DatePicker from '../DatePicker';
 import dialogs from '../../services/dialogs.js';
+import spinner from '../Spinner.vue';
 import moment from 'moment';
 import {
     last
@@ -561,7 +574,8 @@ export default {
     components: {
         DatePicker,
         SvgItem,
-        autocomplete
+        autocomplete,
+        spinner
     },
     data () {
         return {

@@ -2074,6 +2074,7 @@ ul {
     }
     .trip-create {
         width: 100%;
+        min-width: 100%;
         margin: 1em 0;
     }
     .profile_image .circle-box {

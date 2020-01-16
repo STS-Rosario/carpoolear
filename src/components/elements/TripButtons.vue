@@ -1,5 +1,5 @@
 <template>
-    <div class="buttons-container"  v-if="!isPassengersView">
+    <div class="buttons-container"  v-if="!isPassengersView || (isPassengersView && owner)">
         <router-link class="btn btn-primary" v-if="owner && !expired" :to="{name: 'update-trip', params: { id: trip.id}}">
             Editar
         </router-link>
