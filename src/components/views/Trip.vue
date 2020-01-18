@@ -353,7 +353,11 @@ export default {
                     }
                 }).catch((error) => {
                     console.error(error);
-                    dialogs.message('Ocurrió un problema al solicitar, por favor aguarde unos instante e intentelo nuevamente.', { estado: 'error' });
+                    if (this.$checkError(error, 'user_has_another_similar_trip')) {
+                        dialogs.message('Ya te encuentras subido en un viaje con el mismo origen y destino en esa fecha.', { duration: 10, estado: 'error' });
+                    } else {
+                        dialogs.message('Ocurrió un problema al solicitar, por favor aguarde unos instante e intentelo nuevamente.', { estado: 'error' });
+                    }
                 }).finally(() => {
                     this.$set(this.sending, 'requestAction', false);
                 });
