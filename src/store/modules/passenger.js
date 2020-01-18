@@ -77,14 +77,21 @@ const actions = {
                 globalStore.commit('passenger/' + types.PASSENGER_REMOVE_PENDING_PAYMENT, { trip_id: trip.id, value: '' });
             }
             if (trip.request !== 'send') {
+                if (globalStore.getters['trips/currentTrip'] && globalStore.getters['trips/currentTrip'].id === trip.id) {
+                    globalStore.commit('trips/' + types.TRIPS_CURRENT_REMOVE_PASSENGER_BY_ID, user.id);
+                }
                 globalStore.commit('trips/' + types.TRIPS_REMOVE_PASSENGER, { id: trip.id, user });
-                globalStore.commit('myTrips/' + types.MYTRIPS_REMOVE_PASSENGER, { id: trip.id, user });
-                if (trip.user.id !== user.id) {
+                let myUser = globalStore.getters['auth/user'];
+                if (trip.user.id !== myUser.id) {
+                    globalStore.commit('myTrips/' + types.MYTRIPS_REMOVE_PASSENGER, { id: trip.id, user, passenger: true });
                     globalStore.commit('myTrips/' + types.MYTRIPS_REMOVE_PASSENGER_TRIP, trip.id);
+                } else {
+                    globalStore.commit('myTrips/' + types.MYTRIPS_REMOVE_PASSENGER, { id: trip.id, user });
                 }
             } else {
                 globalStore.commit('trips/' + types.TRIPS_SET_REQUEST, { id: trip.id, value: '' });
             }
+            return Promise.resolve(response);
         }).catch(error => {
             return Promise.reject(error);
         });

@@ -3,7 +3,7 @@
         <template v-if="trip">
             <div class="trip-detail-component">
                 <div class="row form">
-                    <div class="white-background" :class="themeClasses">
+                    <div ref="rightPanel" class="white-background" :class="themeClasses">
                         <div class='row'>
                             <div :class="columnClass[0]" class="column" v-if="columnComponent[0] && columnComponent[0].length">
                                 <template v-for="childComponent in columnComponent[0]">
@@ -20,7 +20,7 @@
                                     <component :is="childComponent" :key="childComponent._scopeId"></component>
                                 </template>
                             </div>
-                            <modal :name="'modal'" v-if="showModalRequestSeat" @close="onModalClose" :title="'Test'" :body="'Body'">
+                            <modal :name="'modal'" v-if="showModalRequestSeat" @close="onModalClose" :title="'Carpoodatos'" :body="'Body'">
                                 <h3 slot="header">
                                     <span>¡Carpoodatos!</span>
                                     <i v-on:click="onModalClose" class="fa fa-times float-right-close"></i>
@@ -48,7 +48,7 @@
                         <TripButtons @deleteTrip="deleteTrip()" @toMessages="toMessages()" @onMakeRequest="onMakeRequest()" @cancelRequest="cancelRequest()" :sending="sending" :isPassengersView="isPassengersView" />
                         <TripStats v-if="!isMobile && tripCardTheme === 'light'" />
                     </div>
-                    <div class="col-xs-24 col-sm-9 col-sm-pull-15 col-md-8 col-md-pull-16 col-lg-7 col-lg-pull-17 driver-container" v-if="!isPassengersView && tripCardTheme !== 'light'">
+                    <div :style="calculatedHeight" class="col-xs-24 col-sm-9 col-sm-pull-15 col-md-8 col-md-pull-16 col-lg-7 col-lg-pull-17 driver-container" v-if="!isPassengersView && tripCardTheme !== 'light'">
                         <TripDriver />
                     </div>
 
@@ -141,7 +141,11 @@ export default {
     name: 'trip',
     data () {
         return {
-            sending: false,
+            sending: {
+                deleteAction: false,
+                requestAction: false,
+                sendMessageAction: false
+            },
             carpoolear_logo: process.env.ROUTE_BASE + 'static/img/carpoolear_logo.png',
             zoom: 4,
             center: { lat: -29.0, lng: -60.0 },
@@ -165,7 +169,8 @@ export default {
             url: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
             attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
             showModalRequestSeat: false,
-            acceptPassengerValue: 0
+            acceptPassengerValue: 0,
+            calculatedHeight: {}
         };
     },
 
@@ -198,8 +203,15 @@ export default {
             remove: 'trips/remove',
             searchMatchers: 'trips/searchMatchers',
             sendToAll: 'conversations/sendToAll',
-            changeProperty: 'profile/changeProperty'
+            changeProperty: 'profile/changeProperty',
+            removeTrip: 'myTrips/removeTrip',
+            searchAgain: 'trips/searchAgain'
         }),
+        calculateHeight () {
+            this.$nextTick(() => {
+                this.calculatedHeight = !this.isMobile ? { 'min-height': this.$refs.rightPanel ? this.$refs.rightPanel.clientHeight + 'px' : '440px' } : {};
+            });
+        },
         profileComplete () {
             if (!this.user.image || this.user.image.length === 0 || !this.user.description || this.user.description.length === 0) {
                 router.replace({ name: 'profile_update' });
@@ -208,12 +220,15 @@ export default {
             }
         },
         deleteTrip () {
-            if (window.confirm('¿Estás seguro que deseas cancelar el viaje?')) {
-                this.sending = true;
+            if (window.confirm(this.$t('seguroCancelar'))) {
+                this.$set(this.sending, 'deleteAction', true);
                 this.remove(this.trip.id).then(() => {
+                    dialogs.message(this.$t('viajeCancelado'), { estado: 'success' });
                     this.$router.replace({ name: 'trips' });
-                }).catch(() => {
-                    this.sending = false;
+                }).catch((error) => {
+                    console.error(error);
+                    dialogs.message(this.$t('errorAlCancelar'), { estado: 'error' });
+                    this.$set(this.sending, 'deleteAction', false);
                 });
             }
         },
@@ -222,10 +237,10 @@ export default {
                 // this.trip = trip;
                 this.points = trip.points;
                 var self = this;
+                this.calculateHeight();
                 setTimeout(() => { self.renderMap(); }, 500);
                 if (this.owner) {
                     this.searchMatchers({ trip: this.trip }).then(users => {
-                        console.log('matching', users);
                         this.matchingUsers = users;
                         if (users && users.length) {
                             this.selectedMatchingUser = users.map(u => u.id);
@@ -235,15 +250,23 @@ export default {
                 }
             }).catch(error => {
                 if (error) {
+                    if (error.status === 422) {
+                        if (error.data && error.data.errors && error.data.errors.error && error.data.errors.error.length) {
+                            for (let i = 0; i < error.data.errors.error.length; i++) {
+                                let errorMessage = error.data.errors.error[i];
+                                if (errorMessage === 'trip_not_foound') {
+                                    this.removeTrip(this.id);
+                                    this.searchAgain();
+                                }
+                            }
+                        }
+                    }
                     router.replace({ name: 'trips' });
-                    // Ver que hacer
-                    // this.trip = null;
                 }
             });
         },
 
         toMessages () {
-            console.log('tomessages');
             if (this.acceptPassengerValue) {
                 let data = {
                     property: 'do_not_alert_request_seat',
@@ -255,24 +278,21 @@ export default {
             }
 
             if (this.profileComplete()) {
-                this.sending = true;
                 this.toUserMessages(this.trip.user);
             }
         },
 
         toUserMessages (user) {
+            this.$set(this.sending, 'sendMessageAction', true);
             this.lookConversation(user).then(conversation => {
-                // this.selectConversation(conversation.id).then(data => {
                 router.push({ name: 'conversation-chat', params: { id: conversation.id } });
-                // });
             }).catch(error => {
                 console.error(error);
-                this.sending = false;
+                this.$set(this.sending, 'sendMessageAction', false);
             });
         },
 
         toUserProfile (user) {
-            console.log('toUserProfile replace');
             router.replace({
                 name: 'profile',
                 params: {
@@ -304,10 +324,9 @@ export default {
                 });
             }
             if (this.profileComplete()) {
-                this.sending = true;
+                this.$set(this.sending, 'requestAction', true);
                 this.showModalRequestSeat = false;
                 this.make(this.trip.id).then((response) => {
-                    this.sending = false;
                     this.trip.request = 'send';
                     if (response && response.data && response.data.request_state) {
                         if (response.data.request_state === 0) {
@@ -332,40 +351,28 @@ export default {
                     } else {
                         dialogs.message('La solicitud fue enviada.');
                     }
-                }).catch(() => {
-                    this.sending = false;
-                    dialogs.message('Ocurrió un problema al solicitar, por favor intente nuevamente luego.', { estado: 'error' });
+                }).catch((error) => {
+                    console.error(error);
+                    dialogs.message('Ocurrió un problema al solicitar, por favor aguarde unos instante e intentelo nuevamente.', { estado: 'error' });
+                }).finally(() => {
+                    this.$set(this.sending, 'requestAction', false);
                 });
             }
         },
 
         cancelRequest () {
             if (window.confirm('¿Estás seguro que deseas bajarte del viaje?')) {
-                this.sending = true;
+                this.$set(this.sending, 'requestAction', true);
                 this.cancel({ user: this.user, trip: this.trip }).then(() => {
-                    this.sending = false;
                     dialogs.message('Te has bajado del viaje.');
-                    if (this.trip.request !== 'send') {
-                        let index = this.trip.passenger.findIndex(item => item.id === this.user.id);
-                        this.trip.passenger.splice(index, 1);
-                    } else {
+                    if (this.trip.request === 'send') {
                         this.trip.request = '';
                     }
-                }).catch(() => {
-                    this.sending = false;
-                });
-            }
-        },
-
-        removePassenger (user) {
-            if (window.confirm('¿Estás seguro que deseas bajar a este pasajero de tu viaje?')) {
-                this.sending = true;
-                this.cancel({ user: user, trip: this.trip }).then(() => {
-                    this.sending = false;
-                    let index = this.trip.passenger.findIndex(item => item.id === user.id);
-                    this.trip.passenger.splice(index, 1);
-                }).catch(() => {
-                    this.sending = false;
+                }).catch((error) => {
+                    console.error(error);
+                    dialogs.message('Ocurrió un problema al solicitar, por favor aguarde unos instante e intentelo nuevamente.', { estado: 'error' });
+                }).finally(() => {
+                    this.$set(this.sending, 'requestAction', false);
                 });
             }
         },
@@ -377,7 +384,6 @@ export default {
         renderMap () {
             if (this.$refs.map) {
                 let map = this.$refs.map.mapObject;
-                console.log('trip', this.trip);
                 /* eslint-disable no-undef */
                 let points = this.trip.points.map(point => L.latLng(point.lat, point.lng));
                 let control = L.Routing.control({
@@ -450,15 +456,23 @@ export default {
     mounted () {
         this.loadTrip();
         bus.on('back-click', this.onBackClick);
+        bus.on('calculate-height', this.calculateHeight);
+        this.$nextTick(() => {
+            this.calculateHeight();
+        });
     },
 
     beforeDestroy () {
         bus.off('back-click', this.onBackClick);
+        bus.off('calculate-height', this.calculateHeight);
     },
 
     watch: {
         'id': function (value) {
             this.loadTrip();
+        },
+        'resolutionWidth': function () {
+            this.calculateHeight();
         }
     },
 
@@ -468,8 +482,12 @@ export default {
             trip: 'trips/currentTrip',
             config: 'auth/appConfig',
             tripCardTheme: 'auth/tripCardTheme',
-            isMobile: 'device/isMobile'
+            isMobile: 'device/isMobile',
+            resolution: 'device/resolution'
         }),
+        resolutionWidth () {
+            return this.resolution.width;
+        },
         themeClasses () {
             return this.tripCardTheme === 'light' ? 'col-xs-24' : 'col-xs-24 col-sm-push-9 col-sm-15 col-md-push-8 col-md-16 col-lg-17 col-lg-push-7';
         },
@@ -498,20 +516,11 @@ export default {
         owner () {
             return this.trip && this.user && this.user.id === this.trip.user.id;
         },
-        getUserProfile () {
-            return this.trip.user.id === this.user.id ? 'me' : this.trip.user.id;
-        },
         isPassengersView () {
             if (this.location) {
                 return this.location === 'passenger';
             }
             return false;
-        },
-        acceptedPassengers () {
-            return this.trip.passenger ? this.trip.passenger.filter(item => item.request_state === 1) : [];
-        },
-        waitingForPaymentsPassengers () {
-            return this.trip.passenger ? this.trip.passenger.filter(item => item.request_state === 4) : [];
         }
     },
 
@@ -546,7 +555,7 @@ export default {
         position: relative;
         min-height: 418px;
         /* overflow: hidden; */
-        top: -43px;
+        top: 0;
     }
     .trip-detail-component .driver-container {
         margin-top: 0;
@@ -647,6 +656,7 @@ export default {
         }
         .trip-detail-component .white-background {
             padding-top: 0;
+            min-height: 440px;
         }
         .trip-detail-component .driver-container {
             margin-top: 0;
@@ -663,6 +673,7 @@ export default {
         }
         .trip-detail-component .structure-div {
             margin-top: 0;
+            margin-bottom: 2rem;
         }
         .trip-detail-component .column,
         .trip-detail-component .column:first-of-type {

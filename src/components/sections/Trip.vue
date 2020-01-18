@@ -73,7 +73,7 @@
                   <div class="col-xs-4" v-if="tripCardTheme === 'light'">
                     <span class="trip_from_time">{{ trip.trip_date | moment("HH:mm") }} </span>
                   </div>
-                  <div class="col-xs-2 text-right">
+                  <div class="text-right" :class="tripCardTheme === 'light' ? 'col-xs-2' : 'col-xs-4'">
                     <i class="fa fa-map-marker" aria-hidden="true" v-if="tripCardTheme !== 'light'"></i>
                     <i class="fa fa-circle" aria-hidden="true" v-else></i>
                   </div>
@@ -90,7 +90,7 @@
                   <div class="col-xs-4" v-if="tripCardTheme === 'light'">
                     <span class="trip_to_time">{{ tripArrivingTime | moment("HH:mm") }} </span>
                   </div>
-                  <div class="col-xs-2 text-right">
+                  <div class="text-right" :class="tripCardTheme === 'light' ? 'col-xs-2' : 'col-xs-4'">
                     <i class="fa fa-map-marker" aria-hidden="true"></i>
                   </div>
                   <div :class="config && config.trip_card_design === 'light'? 'col-xs-14' : 'col-xs-18'">
@@ -154,7 +154,11 @@
                                 <span>{{ $t('Lugar') }}</span><span>{{ $t('libre') }}</span>
                             </span>
                         </div>
-                        <div class="col-xs-offset-2 col-xs-12" v-else></div>
+                        <div class="col-xs-offset-2 col-xs-12" v-else>
+                            <div class="passenger-looking-for-trip" v-if="tripCardTheme !== 'light' && trip.is_passenger">
+                                <strong class="warning-is-passenger">Pasajero que busca viaje</strong>
+                            </div>
+                        </div>
                         <div class="trip_actions col-xs-10">
                             <div class="btn btn-default btn-lg btn-trip-detail">{{ $t('Ver') }}</div>
                         </div>
@@ -330,8 +334,9 @@ export default {
         deleteTrip: function () {
             if (window.confirm(this.$t('seguroCancelar'))) {
                 this.remove(this.trip.id).then(() => {
-                    dialogs.message(this.$t('viajeCancelado'), { estado: 'error' });
-                }).catch(() => {
+                    dialogs.message(this.$t('viajeCancelado'), { estado: 'success' });
+                }).catch((error) => {
+                    console.error(error);
                     dialogs.message(this.$t('errorAlCancelar'), { estado: 'error' });
                 });
             }

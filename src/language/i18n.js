@@ -208,7 +208,8 @@ const messages = {
         bancoDeCuenta: 'Banco',
         campoObligatorio: 'Dato requerido',
         recuperarContraseña: 'Recuperar contraseña',
-        noCalificado: 'No fue calificado aún'
+        noCalificado: 'No fue calificado aún',
+        removerPasajeroExitoso: 'El pasajero fue bajado del viaje exitosamente.'
     },
     'chl': {
         loginUsuarioPlaceholder: 'Usuario',

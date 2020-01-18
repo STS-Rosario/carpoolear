@@ -29,6 +29,10 @@ const actions = {
         return tripsApi.tag(['trips']).search(data);
     }),
 
+    searchAgain (store, data) {
+        store.dispatch('tripsSearch', store.state.tripsSearchParam.data);
+    },
+
     create (store, data) {
         return tripsApi.create(data).then(response => {
             globalStore.commit('myTrips/' + types.MYTRIPS_ADD_TRIPS, response.data);
@@ -163,6 +167,13 @@ const mutations = {
         }
     },
 
+    [types.TRIPS_CURRENT_REMOVE_PASSENGER_BY_ID] (state, userId) {
+        let index = state.current_trip.passenger.findIndex(item => item.id === userId && (item.request_state === 1 || item.request_state === 4));
+        state.current_trip.passenger[index].request_state = 3;
+        state.current_trip.seats_available++;
+        state.current_trip.passenger_count--;
+    },
+
     [types.TRIPS_SET_REQUEST] (state, { id, value }) {
         for (let i = 0; i < state.trips.length; i++) {
             if (state.trips[i].id === id) {
@@ -187,12 +198,14 @@ const mutations = {
     [types.TRIPS_REMOVE_PASSENGER] (state, { id, user }) {
         for (let i = 0; i < state.trips.length; i++) {
             if (state.trips[i].id === id) {
-                if (!state.trips[i].passenger) {
+                if (!state.trips[i].passenger || !state.trips[i].passenger.length) {
                     return;
                 }
-                var index = state.trips[i].passenger.findIndex(item => item.id === user.id);
+                var index = state.trips[i].passenger.findIndex(item => item.id === user.id && (item.request_state === 1 || item.request_state === 4));
                 if (index >= 0) {
-                    state.trips[i].passenger.splice(index, 1);
+                    state.trips[i].passenger[index].request_state = 3;
+                    state.trips[i].seats_available++;
+                    state.trips[i].passenger_count--;
                 }
                 return;
             }

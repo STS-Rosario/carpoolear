@@ -17,10 +17,10 @@
                     <fieldset class="trip-type-selection--light" v-if="tripCardTheme === 'light'">
                         <div class="row">
                             <div class="col-xs-12 col-md-12 col-lg-12">
-                                <button class="btn btn-option" @click="trip.is_passenger = 0" :disabled="updatingTrip" :class="trip.is_passenger === 0 ? 'active' : ''">{{ $t('buscoConductor') }}</button>
+                                <button class="btn btn-option" @click="$set(trip, is_passenger, 0)" :disabled="updatingTrip" :class="trip.is_passenger === 0 ? 'active' : ''">{{ $t('buscoConductor') }}</button>
                             </div>
                             <div class="col-xs-12 col-md-12 col-lg-12">
-                                <button class="btn btn-option" @click="trip.is_passenger = 1" :disabled="updatingTrip" :class="trip.is_passenger === 1 ? 'active' : ''">{{ $t('buscoPasajero') }}</button>
+                                <button class="btn btn-option" @click="$set(trip, is_passenger, 1)" :disabled="updatingTrip" :class="trip.is_passenger === 1 ? 'active' : ''">{{ $t('buscoPasajero') }}</button>
                             </div>
                         </div>
                     </fieldset>
@@ -120,7 +120,7 @@
                                         :value="date"
                                         :minDate="minDate"
                                         :class="{'has-error': dateError.state}"
-                                        v-on:date_changed="(date) => this.dateAnswer = date">
+                                        v-on:date_changed="changeDate">
                                       </DatePicker>
                                     <span class="error" v-if="dateError.state"> {{dateError.message}} </span>
                                 </div>
@@ -193,36 +193,36 @@
                             <legend class="label-for-group"> {{ $t('preferenciasViaje') }} </legend>
                             <br>
                             <div class="preferences row" v-if="tripCardTheme !== 'light' || isMobile">
-                                <div class="col-md-8">
-                                    <div class="col-md-12">
+                                <div class="col-xs-8">
+                                    <div class="col-xs-12">
                                         <input type="checkbox" id="smoking" v-model="trip.allow_smoking"/>
                                     </div>
-                                    <div class="col-md-12">
+                                    <div class="col-xs-12">
                                         <SvgItem icon="no-smoking" :size="24"></SvgItem>
                                     </div>
-                                    <div class="col-md-24">
+                                    <div class="col-xs-24">
                                         <label for="allow-smoking" class="label-soft preferences-text">{{ $t('nofumar') }}</label>
                                     </div>
                                 </div>
-                                <div class="col-md-8">
-                                    <div class="col-md-12">
+                                <div class="col-xs-8">
+                                    <div class="col-xs-12">
                                         <input type="checkbox" id="animals" v-model="trip.allow_animals"/>
                                     </div>
-                                    <div class="col-md-12">
+                                    <div class="col-xs-12">
                                         <SvgItem icon="no-animals" :size="24"></SvgItem>
                                     </div>
-                                    <div class="col-md-24 no-padding">
+                                    <div class="col-xs-24 no-padding">
                                         <label for="allow-animals" class="label-soft preferences-text">{{ $t('noanimales') }}</label>
                                     </div>
                                 </div>
-                                <div class="col-md-8">
-                                    <div class="col-md-12">
+                                <div class="col-xs-8">
+                                    <div class="col-xs-12">
                                         <input type="checkbox" id="kids" v-model="trip.allow_kids"/>
                                     </div>
-                                    <div class="col-md-12">
+                                    <div class="col-xs-12">
                                         <SvgItem icon="no-kids" :size="24"></SvgItem>
                                     </div>
-                                    <div class="col-md-24 no-padding">
+                                    <div class="col-xs-24 no-padding">
                                         <label for="allow-kids" class="label-soft preferences-text">{{ $t('noninos') }}</label>
                                     </div>
                                 </div>
@@ -265,8 +265,14 @@
                                 </div>
                             </div>
                             <button v-if="!showReturnTrip" class="trip-create btn btn-primary btn-lg" @click="save" :disabled="saving">
-                                <span v-if="!updatingTrip">{{ $t('crear') }}</span>
-                                <span v-else>{{ $t('actualizar') }}</span>
+                                <span v-if="!updatingTrip">
+                                    <spinner class="blue" v-if="saving"></spinner>
+                                    <span v-else>{{ $t('crear') }}</span>
+                                </span>
+                                <span v-else>
+                                    <spinner class="blue" v-if="saving"></spinner>
+                                    <span v-else>{{ $t('actualizar') }}</span>
+                                </span>
                             </button>
                         </div>
                     </div>
@@ -367,7 +373,7 @@
                                         :value="otherTrip.date"
                                         :minDate="otherTrip.minDate"
                                         :class="{'has-error': otherTrip.dateError.state}"
-                                        v-on:date_changed="(date) => this.otherTrip.dateAnswer = date">
+                                        v-on:date_changed="changeOtherTripDate">
                                       </DatePicker>
                                     <span class="error" v-if="otherTrip.dateError.state"> {{otherTrip.dateError.message}} </span>
                                 </div>
@@ -439,36 +445,36 @@
                             <legend class="label-for-group"> {{ $t('preferenciasViaje') }} </legend>
                             <br>
                             <div class="preferences row" v-if="tripCardTheme !== 'light' || isMobile">
-                                <div class="col-md-8">
-                                    <div class="col-md-12">
+                                <div class="col-xs-8">
+                                    <div class="col-xs-12">
                                         <input type="checkbox" id="smoking" v-model="otherTrip.trip.allow_smoking"/>
                                     </div>
-                                    <div class="col-md-12">
+                                    <div class="col-xs-12">
                                         <SvgItem icon="no-smoking" :size="24"></SvgItem>
                                     </div>
-                                    <div class="col-md-24">
+                                    <div class="col-xs-24">
                                         <label for="allow-smoking" class="label-soft preferences-text">{{ $t('nofumar') }}</label>
                                     </div>
                                 </div>
-                                <div class="col-md-8">
-                                    <div class="col-md-12">
+                                <div class="col-xs-8">
+                                    <div class="col-xs-12">
                                         <input type="checkbox" id="animals" v-model="otherTrip.trip.allow_animals"/>
                                     </div>
-                                    <div class="col-md-12">
+                                    <div class="col-xs-12">
                                         <SvgItem icon="no-animals" :size="24"></SvgItem>
                                     </div>
-                                    <div class="col-md-24 no-padding">
+                                    <div class="col-xs-24 no-padding">
                                         <label for="allow-animals" class="label-soft preferences-text">{{ $t('noanimales') }}</label>
                                     </div>
                                 </div>
-                                <div class="col-md-8">
-                                    <div class="col-md-12">
+                                <div class="col-xs-8">
+                                    <div class="col-xs-12">
                                         <input type="checkbox" id="kids" v-model="otherTrip.trip.allow_kids"/>
                                     </div>
-                                    <div class="col-md-12">
+                                    <div class="col-xs-12">
                                         <SvgItem icon="no-kids" :size="24"></SvgItem>
                                     </div>
-                                    <div class="col-md-24 no-padding">
+                                    <div class="col-xs-24 no-padding">
                                         <label for="allow-kids" class="label-soft preferences-text">{{ $t('noninos') }}</label>
                                     </div>
                                 </div>
@@ -491,8 +497,14 @@
                                 </li>
                             </ul>
                             <button v-if="showReturnTrip" class="trip-create btn btn-primary btn-lg" @click="save" :disabled="saving">
-                                <span v-if="!updatingTrip">{{ $t('crear') }}</span>
-                                <span v-else>{{ $t('actualizar') }}</span>
+                                <span v-if="!updatingTrip">
+                                    <spinner class="blue" v-if="saving"></spinner>
+                                    <span v-else>{{ $t('crear') }}</span>
+                                </span>
+                                <span v-else>
+                                    <spinner class="blue" v-if="saving"></spinner>
+                                    <span v-else>{{ $t('actualizar') }}</span>
+                                </span>
                             </button>
                         </div>
                     </div>
@@ -532,6 +544,7 @@ import {
 // import { parseOsmStreet } from '../../services/maps.js';
 import DatePicker from '../DatePicker';
 import dialogs from '../../services/dialogs.js';
+import spinner from '../Spinner.vue';
 import moment from 'moment';
 import {
     last
@@ -561,7 +574,8 @@ export default {
     components: {
         DatePicker,
         SvgItem,
-        autocomplete
+        autocomplete,
+        spinner
     },
     data () {
         return {
@@ -791,6 +805,21 @@ export default {
             'getTrip': 'getTrip',
             'getPrice': 'trips/price'
         }),
+        changeOtherTripDate (date) {
+            this.$set(this.otherTrip.dateError, 'state', false);
+            this.otherTrip.dateAnswer = date;
+        },
+        changeDate (date) {
+            this.$set(this.dateError, 'state', false);
+            this.dateAnswer = date;
+        },
+        jumpToError () {
+            let hasError = document.getElementsByClassName('has-error');
+            if (hasError.length) {
+                let element = hasError[0];
+                this.$scrollToElement(element);
+            }
+        },
         restoreData (trip) {
             this.no_lucrar = true;
             this.points = [];
@@ -1046,6 +1075,10 @@ export default {
 
         save () {
             if (this.validate()) {
+                // Jump To Error
+                this.$nextTick(() => {
+                    this.jumpToError();
+                });
                 return;
             }
             /* eslint-disable no-unreachable */
@@ -1099,6 +1132,7 @@ export default {
                             estado: 'error'
                         });
                     }
+                    this.jumpToError();
                     this.saving = false;
                 });
             } else {
@@ -1143,14 +1177,14 @@ export default {
                 }
 
                 point.place = data;
-                point.name = data.display_name;
+                point.name = data.name;
+                point.json = data;
                 // point.json = parseOsmStreet(data);
                 point.error.state = false;
                 this.otherTrip.center = point.location = {
                     lat: parseFloat(data.lat),
                     lng: parseFloat(data.lng)
                 };
-
                 this.calcRoute('returnTrip');
             }
             this.calcRoute(type);

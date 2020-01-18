@@ -1,6 +1,8 @@
 /* jshint esversion: 6 */
 import { auth, guest, profileComplete, authAdmin } from './middleware.js';
-import globalStore from '../store/index';
+import store from '../store/index';
+
+const getters = store.getters;
 
 export default [
     {
@@ -31,7 +33,7 @@ export default [
             actionbar: {
                 header: {
                     logo: {
-                        show: globalStore['auth/appConfig'] && globalStore['auth/appConfig'].trip_card_design === 'light'
+                        show: getters && getters['auth/appConfig'] && getters['auth/appConfig'].trip_card_design === 'light'
                     },
                     buttons: ['back']
                 }
@@ -58,7 +60,7 @@ export default [
             actionbar: {
                 header: {
                     logo: {
-                        show: globalStore['auth/appConfig'] && globalStore['auth/appConfig'].trip_card_design === 'light'
+                        show: getters && getters['auth/appConfig'] && getters['auth/appConfig'].trip_card_design === 'light'
                     },
                     buttons: ['back']
                 }

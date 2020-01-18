@@ -1197,10 +1197,6 @@ textarea {
     padding: 2em 1em 2em 1em;
 }
 
-.trip-detail-component .driver-profile div.row:last-child {
-    height: 9rem;
-}
-
 .trip-detail-component .trip_driver_img {
     border: 1px solid #F6F6F6;
     margin-bottom: 0;
@@ -1678,6 +1674,7 @@ textarea {
 }
 
 .actionbar-bottom .actionbar_item {
+    vertical-align: middle;
     display: inline-block;
     color: var(--medium-font-color);
     font-size: 26px;
@@ -1698,6 +1695,7 @@ textarea {
 }
 
 .actionbar-bottom .actionbar_item span {
+    vertical-align: middle;
     padding: 2px 6px;
 }
 
@@ -2076,6 +2074,7 @@ ul {
     }
     .trip-create {
         width: 100%;
+        min-width: 100%;
         margin: 1em 0;
     }
     .profile_image .circle-box {

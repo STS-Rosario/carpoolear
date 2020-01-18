@@ -41,7 +41,10 @@
     </div>
 </template>
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
+import router from '../../router';
+import dialogs from '../../services/dialogs.js';
+import bus from '../../services/bus-event';
 export default {
     name: 'TripPassengers',
     data () {
@@ -57,12 +60,67 @@ export default {
         }),
         owner () {
             return this.trip && this.user && this.user.id === this.trip.user.id;
+        },
+        acceptedPassengers () {
+            return this.trip.passenger ? this.trip.passenger.filter(item => item.request_state === 1) : [];
+        },
+        waitingForPaymentsPassengers () {
+            return this.trip.passenger ? this.trip.passenger.filter(item => item.request_state === 4) : [];
         }
     },
     props: [],
     components: {
     },
+    mounted () {
+        this.calculateHeight();
+    },
     methods: {
+        ...mapActions({
+            lookConversation: 'conversations/createConversation',
+            cancel: 'passenger/cancel'
+        }),
+        calculateHeight () {
+            this.$nextTick(() => {
+                bus.emit('calculate-height');
+            });
+        },
+        toUserMessages (user) {
+            this.lookConversation(user).then(conversation => {
+                router.push({ name: 'conversation-chat', params: { id: conversation.id } });
+            }).catch(error => {
+                console.error(error);
+                this.sending = false;
+            });
+        },
+        toUserProfile (user) {
+            router.replace({
+                name: 'profile',
+                params: {
+                    id: user.id,
+                    userProfile: user,
+                    activeTab: 1
+                }
+            });
+        },
+        removePassenger (user) {
+            if (window.confirm('¿Estás seguro que deseas bajar a este pasajero de tu viaje?')) {
+                this.sending = true;
+                this.cancel({ user: user, trip: this.trip }).then(() => {
+                    this.sending = false;
+                    dialogs.message(this.$t('removerPasajeroExitoso'), { estado: 'success' });
+                }).catch(() => {
+                    this.sending = false;
+                });
+            }
+        }
+    },
+    watch: {
+        acceptedPassengers () {
+            this.calculateHeight();
+        },
+        waitingForPaymentsPassengers () {
+            this.calculateHeight();
+        }
     }
 };
 </script>

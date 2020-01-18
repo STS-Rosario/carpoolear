@@ -247,7 +247,6 @@ export default {
         toUserMessages (user) {
             this.lookConversation(user).then(conversation => {
                 router.push({ name: 'conversation-chat', params: { id: conversation.id } });
-                // });
             });
         },
 

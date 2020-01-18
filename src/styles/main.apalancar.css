@@ -181,9 +181,13 @@
     border-color: var(--primary-color);
     border-radius: 1em;
 }
+.trip_point + .trip_point {
+    margin-top: 2.5em;
+}
 .new-left .trip_point + .trip_point {
     margin-top: 1.4em;
 }
+
 .new-left .vdp-datepicker ::-webkit-input-placeholder,
 .new-left .vdp-datepicker :-ms-input-placeholder,
 .new-left .vdp-datepicker ::-moz-placeholder {
@@ -329,6 +333,7 @@
 }
 .trip_location_from_state-country,
 .trip_location_to_state-country {
+    min-height: auto;
     display: block;
     font-size: 0.8rem;
 }
@@ -712,11 +717,15 @@
     font-size: 13px;
 }
 .trip_location-dot-line > div {
+    margin-right: 51px;
     width: 2px;
     height: 44px;
     border-left: solid 2px #777;
     border-style: none;
     margin-right: -44%;
+}
+.trip_location-dot-line-small > div {
+    margin-right: 21px;
 }
 .trip_location_to .text-right {
     text-align: center;

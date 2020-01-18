@@ -6,7 +6,7 @@
                 <div class="col-xs-4" v-if="tripCardTheme === 'light'">
                     <span class="trip_from_time">{{ trip.trip_date | moment("HH:mm") }} </span>
                 </div>
-                <div class="col-xs-2 text-right">
+                <div class="text-right" :class="tripCardTheme === 'light' ? 'col-xs-2' : 'col-xs-4'">
                     <i class="fa fa-map-marker" aria-hidden="true" v-if="tripCardTheme !== 'light'"></i>
                     <i class="fa fa-circle" aria-hidden="true" v-else></i>
                 </div>
@@ -15,12 +15,12 @@
                     <span class="trip_location_from_state-country">{{ getStateName(trip.points[0])| googleInfoClean }}</span>
                 </div>
             </div>
-            <div class="row trip_inner_points">
-                <div class="trip_point" v-for="(p, index) in trip.points.slice(1, trip.points.length - 1)">
+            <div class="row trip_inner_points" v-if="trip.points.length && trip.points.length > 2">
+                <div class="trip_point" :class="tripCardTheme === 'light' ? '':'row'" v-for="(p, index) in trip.points.slice(1, trip.points.length - 1)">
                     <div class="col-xs-4" v-if="tripCardTheme === 'light'">
                         <span class="trip_to_time"> </span>
                     </div>
-                    <div class="col-xs-2 text-right">
+                    <div class="text-right" :class="tripCardTheme === 'light' ? 'col-xs-2' : 'col-xs-4'">
                         <i class="fa fa-map-marker" aria-hidden="true"></i>
                     </div>
                     <div :class="widthLocationClass">
@@ -29,11 +29,11 @@
                     </div>
                 </div>
             </div>
-            <div class="row trip_location_to">
+            <div class="row trip_location_to" :class="tripCardTheme !== 'light' && trip.points.length && trip.points.length > 2 ? 'has_points' : ''">
                 <div class="col-xs-4" v-if="tripCardTheme === 'light'">
                     <span class="trip_to_time">{{ tripArrivingTime | moment("HH:mm") }} </span>
                 </div>
-                <div class="col-xs-2 text-right" >
+                <div class="text-right" :class="tripCardTheme === 'light' ? 'col-xs-2' : 'col-xs-4'">
                     <i class="fa fa-map-marker" aria-hidden="true"></i>
                 </div>
                 <div :class="widthLocationClass">
@@ -41,16 +41,16 @@
                     <span class="trip_location_from_state-country">{{ getStateName(trip.points[trip.points.length - 1]) | googleInfoClean }} </span>
                 </div>
             </div>
-            <!-- <div class="col-xs-4 trip_location-dot-line">
-                <div></div>
-            </div> -->
+            <div class="col-xs-4 trip_location-dot-line" v-if="tripCardTheme !== 'light'">
+                <div :style="{height: trip.points.length && trip.points.length <= 2 ? '3.6rem' : `${4.8 + 2.3 * (trip.points.length - 2)}rem`}"></div>
+            </div>
         </template>
         <template v-else>
             <div class="row trip_location_from">
                 <div class="col-xs-4 text-right">
                     <i class="fa fa-map-marker" aria-hidden="true"></i>
                 </div>
-                <div  class="col-xs-20">
+                <div class="col-xs-20">
                     {{ trip.from_town }}
                 </div>
             </div>
