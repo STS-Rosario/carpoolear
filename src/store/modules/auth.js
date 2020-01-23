@@ -23,7 +23,8 @@ const getters = {
     user: state => state.user,
     firstTime: state => state.firstTime,
     appConfig: state => state.appConfig,
-    tripCardTheme: state => state.appConfig ? state.appConfig.trip_card_design : ''
+    tripCardTheme: state => state.appConfig ? state.appConfig.trip_card_design : '',
+    isRemoteConfig: state => state.appConfig && !state.appConfig.__isLocal
 };
 
 // actions
@@ -79,6 +80,10 @@ function activate (store, activationToken) {
     });
 }
 
+function onBoardingViewed (store) {
+    return authApi.onBoardingViewed();
+}
+
 function searchUsers (store, name) {
     if (store.state.user.is_admin) {
         return userApi.searchUsers({ name: name });
@@ -122,8 +127,10 @@ function fetchUser (store) {
 }
 
 function getConfig (store) {
+    localConfig.__isLocal = true;
     store.commit('AUTH_APP_CONFIG', localConfig);
     return authApi.config().then((response) => {
+        response.__isLocal = false;
         console.log('Loading config from server: ', response);
         store.commit('AUTH_APP_CONFIG', response);
         return response;
@@ -205,7 +212,8 @@ const actions = {
     onLoggin,
     searchUsers,
     adminUpdate,
-    getConfig
+    getConfig,
+    onBoardingViewed
 };
 
 // mutations

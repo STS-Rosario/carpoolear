@@ -1,5 +1,6 @@
 <template>
   <div class="app-container" :class="[backgroundStyle, viewName]">
+    <onBoarding key="1" v-if="onBoardingVisibility"></onBoarding>
     <headerApp></headerApp>
     <main id="main">
       <div class="view-container clearfix">
@@ -20,6 +21,7 @@
 import { mapGetters, mapActions } from 'vuex';
 import footerApp from './components/sections/FooterApp.vue';
 import headerApp from './components/sections/HeaderApp.vue';
+import onBoarding from './components/sections/OnBoarding.vue';
 
 export default {
     name: 'app',
@@ -48,8 +50,14 @@ export default {
             backgroundStyle: 'background/backgroundStyle',
             logged: 'auth/checkLogin',
             isFacebokApp: 'device/isFacebokApp',
-            appConfig: 'auth/appConfig'
+            appConfig: 'auth/appConfig',
+            isRemoteConfig: 'auth/isRemoteConfig',
+            firsTimeMobileAppOpen: 'device/firsTimeMobileAppOpen',
+            user: 'auth/user'
         }),
+        onBoardingVisibility () {
+            return this.appConfig && this.isRemoteConfig && this.appConfig.module_on_boarding_new_user && this.appConfig.module_on_boarding_new_user.enabled && !this.firsTimeMobileAppOpen && this.user && this.user.on_boarding_view !== 1;
+        },
         viewName () {
             return this.$route.name;
         }
@@ -71,7 +79,8 @@ export default {
     },
     components: {
         headerApp,
-        footerApp
+        footerApp,
+        onBoarding
     }
 };
 </script>
