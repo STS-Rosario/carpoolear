@@ -53,10 +53,14 @@ export default {
             appConfig: 'auth/appConfig',
             isRemoteConfig: 'auth/isRemoteConfig',
             firsTimeMobileAppOpen: 'device/firsTimeMobileAppOpen',
-            user: 'auth/user'
+            user: 'auth/user',
+            isBrowser: 'device/isBrowser'
         }),
         onBoardingVisibility () {
-            return this.appConfig && this.isRemoteConfig && this.appConfig.module_on_boarding_new_user && this.appConfig.module_on_boarding_new_user.enabled && !this.firsTimeMobileAppOpen && this.user && this.user.on_boarding_view !== 1;
+            let moduleEnabled = this.appConfig && this.isRemoteConfig && this.appConfig.module_on_boarding_new_user && this.appConfig.module_on_boarding_new_user.enabled;
+            let mustShowMobile = !this.isBrowser && !this.firsTimeMobileAppOpen;
+            let mustShowGeneral = this.user && this.user.on_boarding_view !== 1;
+            return moduleEnabled && (mustShowMobile || mustShowGeneral);
         },
         viewName () {
             return this.$route.name;
