@@ -6,9 +6,9 @@
                 <ul class="list-group">
                     <li class="list-group-item">
                         <div class="input-group">
-                            <input v-model="textSearch" type="text" class="form-control" placeholder="Escribe un nombre y presiona buscar" />
+                            <input v-jump:click="'btn-search'" v-model="textSearch" type="text" class="form-control" placeholder="Escribe un nombre y presiona buscar" />
                             <span class="input-group-btn"><!--  -->
-                                <button class="btn btn-default" type="button" @click="onSearchUser" >
+                                <button v-jump id="btn-search" class="btn btn-default" type="button" @click="onSearchUser" >
                                     <i class="fa fa-search" aria-hidden="true"></i>
                                 </button>
                             </span>

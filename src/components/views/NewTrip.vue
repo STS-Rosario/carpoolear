@@ -168,7 +168,7 @@
                             </div>
                             <div class="trip-comment">
                                 <label for="trip_comment"  class="label-for-group"> {{ $t('comentarioPasajeros') }} </label>
-                                <textarea maxlength="1000" v-model="trip.description" id="trp_comment" class="form-control"></textarea>
+                                <textarea maxlength="2000" v-model="trip.description" id="trp_comment" class="form-control"></textarea>
                                 <span class="error" v-if="commentError.state"> {{commentError.message}} </span>
                             </div>
                         </div>
@@ -420,7 +420,7 @@
                             </div>
                             <div class="trip-comment">
                                 <label for="otherTrip-trip_comment"  class="label-for-group"> {{ $t('comentarioPasajeros') }} </label>
-                                <textarea maxlength="1000" v-model="trip.description" id="trp_comment" class="form-control"></textarea>
+                                <textarea maxlength="2000" v-model="trip.description" id="trp_comment" class="form-control"></textarea>
                                 <span class="error" v-if="commentError.state"> {{commentError.message}} </span>
                             </div>
                         </div>
@@ -1335,5 +1335,9 @@ export default {
     }
     .tooltip-bottom {
         color: var(--trip-almost-fill-color);
+    }
+    textarea.form-control {
+        min-height: 14em;
+        height: auto;
     }
 </style>
