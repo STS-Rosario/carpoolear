@@ -70,7 +70,8 @@ export default {
             trip: 'trips/currentTrip',
             tripCardTheme: 'auth/tripCardTheme',
             user: 'auth/user',
-            isMobile: 'device/isMobile'
+            isMobile: 'device/isMobile',
+            config: 'auth/appConfig'
         }),
         sendingStatus () {
             Object.keys(this.sending).some(k => this.sending[k] === true);

@@ -62,7 +62,7 @@
                 <div class="edit-action" v-if="profile.id == user.id">
                     <router-link class="btn btn-primary" tag="button" :to="{name:'profile_update'}"> {{ $t('editarPerfil') }}</router-link>
                     <router-link class="btn btn-primary" tag="button" :to="{name:'friends_setting'}"> {{ $t('verAmigos') }}</router-link>
-                    <router-link class="btn btn-primary" tag="button" :to="{name:'transacciones'}"> transacciones </router-link>
+                    <router-link v-if="config && config.module_trip_seats_payment" class="btn btn-primary" tag="button" :to="{name:'transacciones'}"> transacciones </router-link>
                 </div>
             </div>
         </div>
@@ -80,7 +80,8 @@ export default {
     computed: {
         ...mapGetters({
             'user': 'auth/user',
-            'profile': 'profile/user'
+            'profile': 'profile/user',
+            'config': 'auth/appConfig',
         })
     },
     methods: {
