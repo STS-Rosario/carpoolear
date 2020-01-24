@@ -432,8 +432,7 @@
   textarea {
       border-color: #BBBBBB;
       padding: .8em;
-      height: 10em;
-      height: 8.9em;
+      height: 12em;
   }
   .clickeable {
       cursor: pointer;

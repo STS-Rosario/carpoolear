@@ -53,7 +53,7 @@
 
                 </div>
                 <div v-if="showReply">
-                    <textarea v-model="comment"></textarea>
+                    <textarea maxlength="260" v-model="comment"></textarea>
                     <button class="btn btn-primary" @click="onReply"> Responder </button>
                     <button class="btn btn-primary" @click="onCancelReply"> Cancelar </button>
                 </div>
