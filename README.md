@@ -97,6 +97,7 @@ In the config table in your carpoolear DB you can configure the following parame
 | fuel_price | FLOAT | The local fuel price, to stimate the trip price. |
 | enable_facebook | BOOLEAN | If enabled, you can login with facebook. |
 | module_on_boarding_new_user | JSON | Object must be: {"enabled": true, "cards": 4} |
+| allow_rating_reply | BOOLEAN | If enabled, you can reply a comment of another user |
 ---
 
 ## Important

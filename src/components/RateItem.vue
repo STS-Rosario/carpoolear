@@ -14,6 +14,10 @@
                     Negativa
                     <i class="fa fa-thumbs-down" aria-hidden="true"></i>
                 </span>
+
+                <span class="pull-right clickeable" v-if="!rate.reply_comment && user.id === me.id && config.allow_rating_reply" @click="showReply = !showReply"> <!--   -->
+                    <i class="fa fa-reply" aria-hidden="true"></i>
+                </span>
             </div>
 
             <div class="rate-item-profile">
@@ -33,7 +37,7 @@
                             <i class="fa fa-thumbs-up" aria-hidden="true" v-if="rate.rating == 1"></i>
                             <i class="fa fa-thumbs-down" aria-hidden="true" v-if="rate.rating == 0"></i>
                         </span>
-                        <span class="pull-right clickeable" v-if="!rate.reply_comment && user.id === id" @click="showReply = !showReply">
+                        <span class="pull-right clickeable" v-if="!rate.reply_comment && user.id === me.id && config.allow_rating_reply" @click="showReply = !showReply">
                             <i class="fa fa-reply" aria-hidden="true"></i>
                         </span>
                     </div>
@@ -52,21 +56,25 @@
                 <div class="rate-item-datetime">
 
                 </div>
-                <div v-if="showReply">
-                    <textarea maxlength="260" v-model="comment"></textarea>
-                    <button class="btn btn-primary" @click="onReply"> Responder </button>
-                    <button class="btn btn-primary" @click="onCancelReply"> Cancelar </button>
-                </div>
-                <div class="reply_comment_content" v-if="rate.reply_comment">
-                    <div class="reply_comment">
-                        {{rate.reply_comment}}
-                    </div>
-                    <div class="reply_comment_date">
-                        {{rate.reply_comment_created_at | moment("calendar")}}
-                    </div>
-                </div>
             </div>
         </template>
+        <div class="reply-box" v-if="showReply">
+            <label for="reply" class="label label-reply">Responder a la calificación</label>
+            <textarea maxlength="260" v-model="comment" id="reply"></textarea>
+            <div class="reply-btns">
+                <button class="btn btn-primary" @click="onReply"> Responder </button>
+                <button class="btn btn-primary" @click="onCancelReply"> Cancelar </button>
+            </div>
+        </div>
+        <div class="reply_comment_content" v-if="rate.reply_comment">
+            <div class="reply_comment">
+                <strong>{{ profile.name }} respondió: </strong>
+                {{ rate.reply_comment }}
+            </div>
+            <div class="reply_comment_date">
+                {{ rate.reply_comment_created_at | moment("calendar") }}
+            </div>
+        </div>
     </div>
 </template>
 <script>
@@ -103,7 +111,9 @@ export default {
     },
     computed: {
         ...mapGetters({
-            config: 'auth/appConfig'
+            config: 'auth/appConfig',
+            me: 'auth/user',
+            profile: 'profile/user'
         }),
         rateType () {
             return this.rate.user_to_type === 0 ? 'pasajero' : 'conductor';
@@ -148,5 +158,44 @@ export default {
     .rate-item-profile strong {
         vertical-align: middle;
         font-size: 14px;
+    }
+    .reply_comment_content {
+        margin-top: 1.25em;
+        padding-left: 1em;
+        font-size: 0.9em;
+    }
+    .reply_comment_content .reply_comment_date {
+        font-size: 0.95em;
+        font-style: italic;
+        margin-top: .5em;
+        color: #999;
+    }
+    .reply-btns {
+        margin-top: 1em;
+    }
+    .label-reply {
+        display: block;
+        font-weight: bold;
+        margin-top: 1.5em;
+
+        padding: 0;
+        font-size: 0.9rem;
+        font-weight: bold;
+        line-height: 1.5em;
+        color: #333;
+        text-align: left;
+        border-radius: 0;
+    }
+    .reply-box {
+        width: 100%;
+        float: left;
+    }
+    textarea {
+        height: 6.6em;
+    }
+    .reply_comment_content[data-v-79e4aac3] {
+        word-wrap: break-word;
+        float: left;
+        width: 100%;
     }
 </style>
