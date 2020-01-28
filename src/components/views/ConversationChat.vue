@@ -1,7 +1,7 @@
 <template>
     <div class="conversation_chat" v-if="conversation">
         <div class="list-group">
-            <div class="list-group-item conversation_user_header">
+            <div class="list-group-item conversation_user_header hidden-xs">
                 <router-link v-if="conversation.users.length === 2" :to="{ name: 'profile', params: userProfile() }" v-show="isMobile">
                     <div class="conversation_image conversation_image_chat circle-box" v-imgSrc="conversation.image" ></div>
                 </router-link>
@@ -9,6 +9,14 @@
                     <h2> {{conversation.title}} </h2>
                 </router-link>
                 <h2 v-else> {{conversation.title}} </h2>
+                <div class="trip_actions" v-if="conversation && conversation.trip">
+                    <div class="trip_actions-detail">
+                        Viaje desde <strong>{{ conversation.trip.from_town }}</strong> 
+                        hacia <strong>{{ conversation.trip.to_town }}</strong> 
+                    </div>
+                    <button class="btn btn-primary" @click="()=>{}">Solicitar asiento ida <strong>({{ conversation.trip.trip_date | moment("DD/MM/YYYY")}}</strong> - <strong>{{ conversation.trip.trip_date | moment("HH:mm")}})</strong></button>
+                    <button class="btn btn-primary" v-if="conversation.return_trip" @click="()=>{}">Solicitar asiento vuelta <strong>({{ conversation.return_trip.trip_date | moment("DD/MM/YYYY")}}</strong> - <strong>{{ conversation.return_trip.trip_date | moment("HH:mm")}})</strong></button>
+                </div>
                 <p class="chat_last_connection">
                     <strong>Última conexión: </strong>
                     <span class="">{{lastConnection | moment("calendar")}}</span>
@@ -60,7 +68,6 @@ export default {
             'user': 'auth/user',
             'messages': 'conversations/messagesList',
             'lastPageConversation': 'conversations/lastPageConversation',
-            'timestampConversation': 'conversations/timestampConversation',
             'title': 'actionbars/title',
             'isMobile': 'device/isMobile'
         }),
@@ -211,6 +218,19 @@ export default {
         }
         #messagesWrapper {
             padding-top: 0;
+        }
+    }
+</style>
+
+<style scoped>
+    .trip_actions .btn-primary {
+        font-size: .9em;
+        width: 100%;
+    }
+    @media only screen and (min-width: 1100px) {
+        .trip_actions .btn-primary {
+            float: left;
+            width: 50%;
         }
     }
 </style>

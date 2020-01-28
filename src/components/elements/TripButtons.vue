@@ -7,7 +7,7 @@
             <spinner class="blue" v-if="sending && sending.deleteAction"></spinner>
             <span v-else>Cancelar Viaje</span>
         </a>
-        <template v-if="!owner && !expired">
+        <template v-if="!owner && !expired && (!config.module_coordinate_by_message || (config.module_coordinate_by_message && isPassenger))">
             <button class="btn btn-primary" @click="$emit('toMessages')" v-if="!owner" :disabled="sendingStatus">
                 <spinner class="blue" v-if="sending && sending.sendMessageAction"></spinner>
                 <span v-else>Enviar mensaje</span>
@@ -27,6 +27,9 @@
                             <template v-else>
                                 Reservar
                             </template>
+                        </template>
+                        <template v-else-if="config.module_coordinate_by_message">
+                            Coordinar viaje
                         </template>
                         <template v-else>
                             Solicitar asiento

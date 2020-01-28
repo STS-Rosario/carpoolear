@@ -1,64 +1,74 @@
 <template>
-<div class="conversation-component container" :class="config.enable_footer ? 'with-footer' : 'without-footer'">
-    <div class="row">
-        <div class="col-sm-8 col-md-8" :class="{'hidden-xs': hide}">
-            <div class="conversation_list">
-                <ul class="list-group">
-                    <li class="list-group-item">
-                        <div class="input-group">
-                            <input v-jump:click="'btn-search'" v-model="textSearch" type="text" class="form-control" placeholder="Escribe un nombre y presiona buscar" />
-                            <span class="input-group-btn"><!--  -->
-                                <button v-jump id="btn-search" class="btn btn-default" type="button" @click="onSearchUser" >
-                                    <i class="fa fa-search" aria-hidden="true"></i>
-                                </button>
-                            </span>
-                        </div>
-                    </li>
-                    <template v-if="textSearch.length == 0">
-                        <Loading class="conversation_chat--chats" :data="conversations">
-                            <li v-for="conversation in conversations" class="list-group-item conversation_header" @click="onChangeConversation(conversation)" :class="{'unread': conversation.unread, 'active': selected && conversation.id === selected.id  }" v-bind:key="conversation.id">
-                                <div class="media">
-                                  <div class="media-left">
-                                    <div class="conversation_image circle-box" v-imgSrc:conversation="conversation.image"></div>
-                                  </div>
-                                  <div class="media-body">
-                                    <h4 class="media-heading"><span class="conversation-title">{{ conversation.title }}</span></h4>
-                                    <span v-if="conversation.last_message"> {{ conversation.last_message.text ? conversation.last_message.text.substring(0, conversation.last_message.text.length < 50 ? conversation.last_message.text.length : 50) + (conversation.last_message.text.length < 50 ? '' : ' ...') : '' }} </span>
-                                    <span class="conversation-timestamp" v-if="false">{{ conversation.updated_at | moment("h:mm a") }}</span>
-                                  </div>
-                                  <div class="media-right" v-if="conversation.last_message">
-                                      {{ $moment(conversation.last_message.created_at).fromNow() }}
-                                  </div>
-                                </div>
-                            </li>
-                            <li v-if="moreConversations" class="list-group-item" >
-                                <button class="btn btn-primary btn-block" @click="nextPage">Más resultados</button>
-                            </li>
-                            <li slot="no-data" class="list-group-item alert alert-warning"  role="alert">No tienes conversaciones...</li>
-                            <li slot="loading" class="list-group-item alert alert-info" role="alert">
-                                <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
-                                Cargando conversaciones ...
-                            </li>
-                        </Loading>
-                    </template>
-                    <template v-else>
-                        <Loading class="conversation_chat--search" :data="users" >
-                            <li v-for="user in users" class="list-group-item" @click="createConversation(user)" v-bind:key="user.id">
-                                <div class="conversation_image circle-box" v-imgSrc:profile="user.image"></div>
-                                {{user.name}}
-                            </li>
-                            <li slot="no-data" class="list-group-item alert alert-warning"  role="alert">No hay concidencias</li>
-                            <li slot="loading" class="list-group-item alert alert-info" role="alert">
-                                Tipeá un nombre y buscá
-                            </li>
-                        </Loading>
-                    </template>
-                </ul>
-            </div>
+<div>
+    <div class="trip_actions" v-if="selected && selected.trip" v-show="isMobile">
+        <div class="trip_actions-detail">
+            Desde <strong>{{ selected.trip.from_town }}</strong> 
+            hacia <strong>{{ selected.trip.to_town }}</strong> 
         </div>
-        <div class="col-xs-24 col-sm-16 col-md-16">
-            <div class="">
-                <router-view></router-view>
+        <button class="btn btn-primary" @click="()=>{}">Solicitar asiento ida <strong>({{ selected.trip.trip_date | moment("DD/MM/YYYY")}}</strong> - <strong>{{ selected.trip.trip_date | moment("HH:mm")}})</strong></button>
+        <button class="btn btn-primary" v-if="selected.return_trip" @click="()=>{}">Solicitar asiento vuelta <strong>({{ selected.return_trip.trip_date | moment("DD/MM/YYYY")}}</strong> - <strong>{{ selected.return_trip.trip_date | moment("HH:mm")}})</strong></button>
+    </div>
+    <div class="conversation-component container" :class="config.enable_footer ? 'with-footer' : 'without-footer'">
+        <div class="row">
+            <div class="col-sm-8 col-md-8" :class="{'hidden-xs': hide}">
+                <div class="conversation_list">
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <div class="input-group">
+                                <input v-jump:click="'btn-search'" v-model="textSearch" type="text" class="form-control" placeholder="Escribe un nombre y presiona buscar" />
+                                <span class="input-group-btn"><!--  -->
+                                    <button v-jump id="btn-search" class="btn btn-default" type="button" @click="onSearchUser" >
+                                        <i class="fa fa-search" aria-hidden="true"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </li>
+                        <template v-if="textSearch.length == 0">
+                            <Loading class="conversation_chat--chats" :data="conversations">
+                                <li v-for="conversation in conversations" class="list-group-item conversation_header" @click="onChangeConversation(conversation)" :class="{'unread': conversation.unread, 'active': selected && conversation.id === selected.id  }" v-bind:key="conversation.id">
+                                    <div class="media">
+                                    <div class="media-left">
+                                        <div class="conversation_image circle-box" v-imgSrc:conversation="conversation.image"></div>
+                                    </div>
+                                    <div class="media-body">
+                                        <h4 class="media-heading"><span class="conversation-title">{{ conversation.title }}</span></h4>
+                                        <span v-if="conversation.last_message"> {{ conversation.last_message.text ? conversation.last_message.text.substring(0, conversation.last_message.text.length < 50 ? conversation.last_message.text.length : 50) + (conversation.last_message.text.length < 50 ? '' : ' ...') : '' }} </span>
+                                        <span class="conversation-timestamp" v-if="false">{{ conversation.updated_at | moment("h:mm a") }}</span>
+                                    </div>
+                                    <div class="media-right" v-if="conversation.last_message">
+                                        {{ $moment(conversation.last_message.created_at).fromNow() }}
+                                    </div>
+                                    </div>
+                                </li>
+                                <li v-if="moreConversations" class="list-group-item" >
+                                    <button class="btn btn-primary btn-block" @click="nextPage">Más resultados</button>
+                                </li>
+                                <li slot="no-data" class="list-group-item alert alert-warning"  role="alert">No tienes conversaciones...</li>
+                                <li slot="loading" class="list-group-item alert alert-info" role="alert">
+                                    <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
+                                    Cargando conversaciones ...
+                                </li>
+                            </Loading>
+                        </template>
+                        <template v-else>
+                            <Loading class="conversation_chat--search" :data="users" >
+                                <li v-for="user in users" class="list-group-item" @click="createConversation(user)" v-bind:key="user.id">
+                                    <div class="conversation_image circle-box" v-imgSrc:profile="user.image"></div>
+                                    {{user.name}}
+                                </li>
+                                <li slot="no-data" class="list-group-item alert alert-warning"  role="alert">No hay concidencias</li>
+                                <li slot="loading" class="list-group-item alert alert-info" role="alert">
+                                    Tipeá un nombre y buscá
+                                </li>
+                            </Loading>
+                        </template>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-xs-24 col-sm-16 col-md-16">
+                <div class="conversation-container">
+                    <router-view></router-view>
+                </div>
             </div>
         </div>
     </div>
@@ -243,7 +253,7 @@ export default {
         .conversation_chat > div,
         .conversation-component.container .row,
         .conversation-component > .row > div,
-        .conversation-component > .row > div > div,
+        .conversation-container,
         .conversation_list .list-group
         {
             height: 100%;
@@ -273,5 +283,30 @@ export default {
     }
     .media-right {
         font-size: 10px;
+    }
+</style>
+
+<style scoped>
+    .trip_actions {
+        padding: .4em .8em;
+        width: 100%;
+        border-radius: 0;
+        box-shadow: 1px 1px 1px rgba(0,0,0, .4);
+        font-size: .9em;
+        position: fixed;
+        z-index: 10;
+        background-color: #f6f6f6;
+    }
+    .trip_actions .btn-primary {
+        display: block;
+        width: 100%;
+        font-size: 11px;
+        margin-bottom: 0;
+        margin: 0;
+        padding: 0;
+    }
+    .trip_actions-detail {
+        padding-bottom: .3em;
+        padding-left: .4em;
     }
 </style>

@@ -81,7 +81,7 @@ export default {
         ...mapGetters({
             'user': 'auth/user',
             'profile': 'profile/user',
-            'config': 'auth/appConfig',
+            'config': 'auth/appConfig'
         })
     },
     methods: {
