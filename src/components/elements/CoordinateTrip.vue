@@ -14,7 +14,7 @@
         </div>
         <template v-if="!owner">
             <button 
-                :disabled="sending.trip" 
+                :disabled="sending.trip || expiredTrip" 
                 :style="!conversation.return_trip ? {float: 'none', width: '100%'} : {}"  
                 class="btn btn-primary" 
                 @click="isPassengerTrip || conversation.trip.request === 'send' ? cancelRequest(false) : doRequest(false)"
@@ -24,7 +24,17 @@
                 <span v-else-if="sending.trip">
                     <spinner class="blue" v-if="sending && sending.trip"></spinner>
                 </span>
-                <span v-else>Solicitar asiento <template v-if="conversation.return_trip">de ida</template></span>
+                <span v-else-if="expiredTrip">
+                    ¡ Viaje Carpooleado !
+                </span>
+                <span v-else>
+                    <template v-if="config && config.module_trip_seats_payment">
+                        Reservar $ {{ conversation.trip.seat_price }} <template v-if="conversation.return_trip"> de ida</template>
+                    </template>
+                    <template v-else>
+                        Solicitar asiento <template v-if="conversation.return_trip"> de ida</template>
+                    </template>
+                </span>
                 <template v-if="!sending.trip">
                     <strong>({{ conversation.trip.trip_date | moment("DD/MM/YYYY")}}</strong> - <strong>{{ conversation.trip.trip_date | moment("HH:mm")}})</strong>
                 </template>
@@ -32,7 +42,7 @@
         </template>
         <template v-if="conversation.return_trip">
             <button 
-                :disabled="sending.returnTrip" 
+                :disabled="sending.returnTrip || expiredReturnTrip" 
                 class="btn btn-primary" 
                 @click="isPassengerReturnTrip || conversation.return_trip.request === 'send' ? cancelRequest(true) : doRequest(true)"
             >
@@ -41,8 +51,18 @@
                 <span v-else-if="sending.returnTrip">
                     <spinner class="blue" v-if="sending.returnTrip"></spinner>
                 </span>
-                <span v-else>Solicitar asiento de vuelta </span>
-                <template  v-if="!sending.returnTrip">
+                <span v-else-if="expiredReturnTrip">
+                    ¡ Viaje Carpooleado !
+                </span>
+                <span v-else>
+                    <template v-if="config && config.module_trip_seats_payment">
+                        Reservar $ {{ conversation.return_trip.seat_price }} de vuelta
+                    </template>
+                    <template v-else>
+                        Solicitar asiento de vuelta 
+                    </template>
+                </span>
+                <template v-if="!sending.returnTrip">
                     <strong>({{ conversation.return_trip.trip_date | moment("DD/MM/YYYY")}}</strong> - <strong>{{ conversation.return_trip.trip_date | moment("HH:mm")}})</strong>
                 </template>
             </button>
@@ -54,6 +74,7 @@
 import { mapGetters, mapActions } from 'vuex';
 import dialogs from '../../services/dialogs.js';
 import spinner from '../Spinner.vue';
+import moment from 'moment';
 
 export default {
     name: 'conversation-chat',
@@ -79,6 +100,12 @@ export default {
         },
         isPassengerReturnTrip () {
             return this.conversation.return_trip && this.conversation.return_trip.passenger.findIndex(item => item.user_id === this.user.id && (item.request_state === 1 || item.request_state === 4)) >= 0;
+        },
+        expiredTrip () {
+            return moment(this.conversation.trip.trip_date).format() < moment().format();
+        },
+        expiredReturnTrip () {
+            return moment(this.conversation.return_trip.trip_date).format() < moment().format();
         }
     },
     methods: {

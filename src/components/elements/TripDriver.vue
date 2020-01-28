@@ -161,7 +161,6 @@ export default {
     }
     @media only screen and (min-width: 768px) {
         .driver-profile div.row:last-child {
-            max-height: 12rem;
             min-height: 11rem;
         }
         .driver-data div:first-child {
