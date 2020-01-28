@@ -15,7 +15,7 @@
                     <i class="fa fa-thumbs-down" aria-hidden="true"></i>
                 </span>
 
-                <span class="pull-right clickeable" v-if="!rate.reply_comment && user.id === me.id && config.allow_rating_reply" @click="showReply = !showReply"> <!--   -->
+                <span class="pull-right clickeable" v-if="!rate.reply_comment && user.id === profile.id && config.allow_rating_reply" @click="showReply = !showReply"> <!--   -->
                     <i class="fa fa-reply" aria-hidden="true"></i>
                 </span>
             </div>
@@ -37,7 +37,7 @@
                             <i class="fa fa-thumbs-up" aria-hidden="true" v-if="rate.rating == 1"></i>
                             <i class="fa fa-thumbs-down" aria-hidden="true" v-if="rate.rating == 0"></i>
                         </span>
-                        <span class="pull-right clickeable" v-if="!rate.reply_comment && user.id === me.id && config.allow_rating_reply" @click="showReply = !showReply">
+                        <span class="pull-right clickeable" v-if="!rate.reply_comment && user.id === profile.id && config.allow_rating_reply" @click="showReply = !showReply">
                             <i class="fa fa-reply" aria-hidden="true"></i>
                         </span>
                     </div>

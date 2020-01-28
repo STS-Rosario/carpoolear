@@ -685,6 +685,9 @@
       font-size: 11px;
       margin-bottom: .5em;
   }
+  .column-rating .list-group-item {
+      margin-bottom: 1em;
+  }
   .on-boarding--overlay {
     transition: 500ms;
     z-index: 9999;
