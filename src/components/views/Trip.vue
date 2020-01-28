@@ -291,7 +291,7 @@ export default {
             let data = {
                 user: user,
                 tripId: this.trip.id
-            }
+            };
             this.lookConversation(data).then(conversation => {
                 console.log(conversation);
                 router.push({ name: 'conversation-chat', params: { id: conversation.id } });
@@ -335,6 +335,7 @@ export default {
             if (this.profileComplete()) {
                 if (this.config.module_coordinate_by_message) {
                     this.toMessages();
+                    return;
                 }
                 this.$set(this.sending, 'requestAction', true);
                 this.showModalRequestSeat = false;

@@ -1,13 +1,6 @@
 <template>
-<div>
-    <div class="trip_actions" v-if="selected && selected.trip" v-show="isMobile">
-        <div class="trip_actions-detail">
-            Desde <strong>{{ selected.trip.from_town }}</strong> 
-            hacia <strong>{{ selected.trip.to_town }}</strong> 
-        </div>
-        <button class="btn btn-primary" @click="()=>{}">Solicitar asiento ida <strong>({{ selected.trip.trip_date | moment("DD/MM/YYYY")}}</strong> - <strong>{{ selected.trip.trip_date | moment("HH:mm")}})</strong></button>
-        <button class="btn btn-primary" v-if="selected.return_trip" @click="()=>{}">Solicitar asiento vuelta <strong>({{ selected.return_trip.trip_date | moment("DD/MM/YYYY")}}</strong> - <strong>{{ selected.return_trip.trip_date | moment("HH:mm")}})</strong></button>
-    </div>
+<div :class="config.module_coordinate_by_message ? 'module--coordinate-by-message' : ''">
+    <CoordinateTrip v-show="isMobile"></CoordinateTrip>
     <div class="conversation-component container" :class="config.enable_footer ? 'with-footer' : 'without-footer'">
         <div class="row">
             <div class="col-sm-8 col-md-8" :class="{'hidden-xs': hide}">
@@ -32,7 +25,7 @@
                                     </div>
                                     <div class="media-body">
                                         <h4 class="media-heading"><span class="conversation-title">{{ conversation.title }}</span></h4>
-                                        <span v-if="conversation.last_message"> {{ conversation.last_message.text ? conversation.last_message.text.substring(0, conversation.last_message.text.length < 50 ? conversation.last_message.text.length : 50) + (conversation.last_message.text.length < 50 ? '' : ' ...') : '' }} </span>
+                                        <span class="conversation-lastmessage" v-if="conversation.last_message"> {{ conversation.last_message.text ? conversation.last_message.text.substring(0, conversation.last_message.text.length < 50 ? conversation.last_message.text.length : 50) + (conversation.last_message.text.length < 50 ? '' : ' ...') : '' }} </span>
                                         <span class="conversation-timestamp" v-if="false">{{ conversation.updated_at | moment("h:mm a") }}</span>
                                     </div>
                                     <div class="media-right" v-if="conversation.last_message">
@@ -79,6 +72,7 @@ import { mapGetters, mapActions } from 'vuex';
 import { Thread } from '../../classes/Threads.js';
 import Loading from '../Loading.vue';
 import router from '../../router';
+import CoordinateTrip from '../elements/CoordinateTrip';
 
 export default {
     name: 'conversation-list',
@@ -172,7 +166,8 @@ export default {
     updated () {
     },
     components: {
-        Loading
+        Loading,
+        CoordinateTrip
     }
 };
 </script>
@@ -283,30 +278,5 @@ export default {
     }
     .media-right {
         font-size: 10px;
-    }
-</style>
-
-<style scoped>
-    .trip_actions {
-        padding: .4em .8em;
-        width: 100%;
-        border-radius: 0;
-        box-shadow: 1px 1px 1px rgba(0,0,0, .4);
-        font-size: .9em;
-        position: fixed;
-        z-index: 10;
-        background-color: #f6f6f6;
-    }
-    .trip_actions .btn-primary {
-        display: block;
-        width: 100%;
-        font-size: 11px;
-        margin-bottom: 0;
-        margin: 0;
-        padding: 0;
-    }
-    .trip_actions-detail {
-        padding-bottom: .3em;
-        padding-left: .4em;
     }
 </style>

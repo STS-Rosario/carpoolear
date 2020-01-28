@@ -7,7 +7,7 @@
             <spinner class="blue" v-if="sending && sending.deleteAction"></spinner>
             <span v-else>Cancelar Viaje</span>
         </a>
-        <template v-if="!owner && !expired && (!config.module_coordinate_by_message || (config.module_coordinate_by_message && isPassenger))">
+        <template v-if="!owner && !expired && (!canRequest || !config.module_coordinate_by_message || (config.module_coordinate_by_message && isPassenger))">
             <button class="btn btn-primary" @click="$emit('toMessages')" v-if="!owner" :disabled="sendingStatus">
                 <spinner class="blue" v-if="sending && sending.sendMessageAction"></spinner>
                 <span v-else>Enviar mensaje</span>
@@ -61,6 +61,7 @@
 import { mapGetters } from 'vuex';
 import moment from 'moment';
 import spinner from '../Spinner.vue';
+
 export default {
     name: 'TripButtons',
     data () {

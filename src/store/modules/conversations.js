@@ -63,7 +63,7 @@ const actions = {
         }
     },
 
-    createConversation (store, {user, tripId}) {
+    createConversation (store, { user, tripId }) {
         return conversationApi.create(user.id, tripId).then((response) => {
             // globalStore.dispatch('conversations/listSearch');
             return Promise.resolve(response.data);
