@@ -1,37 +1,73 @@
 <template>
-    <div class="profile-rates-component container clearfix">
-        <h2>{{ $t('calificaciones') }}</h2>
-        <Loading :data="rates">
-            <div class="list-group">
-                <div class="column-rating">
-                    <div class="list-group-item clearfix" v-for="rate in rating.col1">
-                        <RateItem :user="user" :id="id" :rate="rate"></RateItem>
+    <div class="profile-rates-component container">
+        <div class="clearfix">
+            <h2>{{ $t('calificaciones') }}</h2>
+            <Loading :data="rates">
+                <div class="list-group">
+                    <div class="column-rating">
+                        <div class="list-group-item clearfix" v-for="rate in rating.col1">
+                            <RateItem :user="user" :id="id" :rate="rate"></RateItem>
+                        </div>
+                    </div>
+                    <div class="column-rating">
+                        <div class="list-group-item clearfix" v-for="rate in rating.col2">
+                            <RateItem :user="user" :id="id" :rate="rate"></RateItem>
+                        </div>
+                    </div>
+                    <div class="column-rating">
+                        <div class="list-group-item clearfix" v-for="rate in rating.col3">
+                            <RateItem :user="user" :id="id" :rate="rate"></RateItem>
+                        </div>
                     </div>
                 </div>
-                <div class="column-rating">
-                    <div class="list-group-item clearfix" v-for="rate in rating.col2">
-                        <RateItem :user="user" :id="id" :rate="rate"></RateItem>
-                    </div>
+                <!--
+                <div v-if="morePages">
+                    <button class="btn btn-primary" @click="nextPage">Más resultados</button>
                 </div>
-                <div class="column-rating">
-                    <div class="list-group-item clearfix" v-for="rate in rating.col3">
-                        <RateItem :user="user" :id="id" :rate="rate"></RateItem>
-                    </div>
-                </div>
-            </div>
-            <!--
-            <div v-if="morePages">
-                <button class="btn btn-primary" @click="nextPage">Más resultados</button>
-            </div>
-            -->
+                -->
 
-            <p slot="no-data" class="alert alert-warning"  role="alert">{{ $t('noCalificaciones') }}</p>
-            <p slot="loading" class="alert alert-info" role="alert">
-                <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
-                {{ $t('cargandoNotificaciones') }}
-            </p>
-        </Loading>
+                <p slot="no-data" class="alert alert-warning"  role="alert">{{ $t('noCalificaciones') }}</p>
+                <p slot="loading" class="alert alert-info" role="alert">
+                    <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
+                    {{ $t('cargandoNotificaciones') }}
+                </p>
+            </Loading>
+        </div>
 
+        <template v-if="config && config.module_references">
+            <div class="clearfix">
+                <h2>{{ $t('referencias') }}</h2>
+                <Loading :data="references">
+                    <div class="list-group">
+                        <div class="column-rating">
+                            <div class="list-group-item clearfix" v-for="reference in referencesCol.col1">
+                                <RateItem :notReply="true" :user="user" :id="id" :rate="reference"></RateItem>
+                            </div>
+                        </div>
+                        <div class="column-rating">
+                            <div class="list-group-item clearfix" v-for="reference in referencesCol.col2">
+                                <RateItem :notReply="true" :user="user" :id="id" :rate="reference"></RateItem>
+                            </div>
+                        </div>
+                        <div class="column-rating">
+                            <div class="list-group-item clearfix" v-for="reference in referencesCol.col3">
+                                <RateItem :notReply="true" :user="user" :id="id" :rate="reference"></RateItem>
+                            </div>
+                        </div>
+                    </div>
+                    <!--
+                    <div v-if="morePages">
+                        <button class="btn btn-primary" @click="nextPage">Más resultados</button>
+                    </div>
+                    -->
+                    <p slot="no-data" class="alert alert-warning"  role="alert">{{ $t('noReferences') }}</p>
+                    <p slot="loading" class="alert alert-info" role="alert">
+                        <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
+                        {{ $t('cargandoNotificaciones') }}
+                    </p>
+                </Loading>
+            </div>
+        </template>
 
     </div>
 </template>
@@ -40,59 +76,37 @@ import { mapGetters } from 'vuex';
 import Loading from '../Loading.vue';
 import RateItem from '../RateItem';
 
+let emptyCols = {
+    col1: [],
+    col2: [],
+    col3: []
+};
+
 export default {
     data () {
         return {
-            rating: {
-                col1: [],
-                col2: [],
-                col3: []
-            }
+            rating: {},
+            referencesCol: {}
         };
     },
     methods: {
-        makeRows () {
-            if (this.rates) {
-                this.rating = {
-                    col1: [],
-                    col2: [],
-                    col3: []
-                };
-                let i;
-                let temp = [];
+        cleanCols (array) {
+            this[array] = JSON.parse(JSON.stringify(emptyCols));
+        },
+        makeRows (arrayToCheck, arrayToPush) {
+            if (this[arrayToCheck]) {
+                this.cleanCols(arrayToPush);
                 if (this.isMobile) {
-                    this.rating.col1 = this.rates;
-                } else if (this.isTablet) {
-                    i = 0;
-                    for (i; i < this.rates.length; i += 2) {
-                        temp.push(this.rates[i]);
-                    }
-                    this.rating.col1 = temp;
-                    temp = [];
-                    i = 1;
-                    for (i; i < this.rates.length; i += 2) {
-                        temp.push(this.rates[i]);
-                    }
-                    this.rating.col2 = temp;
+                    this[arrayToPush].col1 = this[arrayToCheck].slice(0);
                 } else {
-                    i = 0;
-                    temp = [];
-                    for (i; i < this.rates.length; i += 3) {
-                        temp.push(this.rates[i]);
+                    let i, j;
+                    let rows = this.isTablet ? 2 : 3;
+                    for (j = 0; j < rows; j++) {
+                        i = j;
+                        for (i; i < this[arrayToCheck].length; i += rows) {
+                            this[arrayToPush][`col${j + 1}`].push(this[arrayToCheck][i]);
+                        }
                     }
-                    this.rating.col1 = temp;
-                    i = 1;
-                    temp = [];
-                    for (i; i < this.rates.length; i += 3) {
-                        temp.push(this.rates[i]);
-                    }
-                    this.rating.col2 = temp;
-                    i = 2;
-                    temp = [];
-                    for (i; i < this.rates.length; i += 3) {
-                        temp.push(this.rates[i]);
-                    }
-                    this.rating.col3 = temp;
                 }
             }
         }
@@ -101,25 +115,41 @@ export default {
         ...mapGetters({
             'user': 'auth/user',
             'rates': 'profile/rates',
-            'isMobile:': 'device/isMobile',
+            'isMobile': 'device/isMobile',
             'isTablet': 'device/isTablet',
-            'isDesktop': 'device/isDesktop'
+            'isDesktop': 'device/isDesktop',
+            'config': 'auth/appConfig',
+            'references': 'profile/references'
         })
     },
     watch: {
         rates: {
             handler: function (val, oldVal) {
-                this.makeRows();
+                this.makeRows('rates', 'rating');
+            }
+        },
+        references: {
+            handler: function (val, oldVal) {
+                if (this.config && this.config.module_references) {
+                    this.makeRows('references', 'referencesCol');
+                }
             }
         },
         isMobile: {
             handler: function (val, oldVal) {
-                this.makeRows();
+                console.log('isMobileChange');
+                this.makeRows('rates', 'rating');
+                if (this.config && this.config.module_references) {
+                    this.makeRows('references', 'referencesCol');
+                }
             }
         },
         isDesktop: {
             handler: function (val, oldVal) {
-                this.makeRows();
+                this.makeRows('rates', 'rating');
+                if (this.config && this.config.module_references) {
+                    this.makeRows('references', 'referencesCol');
+                }
             }
         }
     },

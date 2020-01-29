@@ -195,7 +195,6 @@ import RatePending from '../RatePending';
 import { mapGetters, mapActions } from 'vuex';
 
 import Tab from '../elements/Tab';
-import Tabset from '../elements/Tabset';
 import modal from '../Modal';
 import dialogs from '../../services/dialogs.js';
 
@@ -429,7 +428,6 @@ export default {
         PendingPaymentRequest,
         RatePending,
         Tab,
-        Tabset,
         subscriptionItem,
         modal
     }

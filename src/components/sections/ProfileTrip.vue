@@ -64,7 +64,6 @@ import Loading from '../Loading.vue';
 import { mapGetters, mapActions } from 'vuex';
 
 import Tab from '../elements/Tab';
-import Tabset from '../elements/Tabset';
 
 export default {
     name: 'profile-trip',
@@ -115,8 +114,7 @@ export default {
     components: {
         Trip,
         Loading,
-        Tab,
-        Tabset
+        Tab
     }
 };
 </script>

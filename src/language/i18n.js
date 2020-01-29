@@ -153,8 +153,15 @@ const messages = {
         cambioFacebook: 'Facebook cambio sus políticas y no podemos llevarte al perfil de esta persona, pero te ayudamos a buscarlo.',
         enviarMensaje: 'Enviar mensaje',
         editarPerfil: 'Editar perfil',
+        enviarReferencia: 'Escribir referencia',
+        referenciaExitosa: 'El comentario fue enviado exitosamente',
+        referenciaError: 'Ocurrió un problema al enviar el comentario.',
+        referenciaExist: 'Ya has realizado una referencia a este usuario anteriormente',
+        referenciaSameUser: 'No puedes enviarte una referencia a ti mismo',
+        userDoesntExist: 'El usuario no existe',
         verAmigos: 'Ver amigos',
         noCalificaciones: 'No hay calificaciones',
+        noReferences: 'No hay referencias',
         cargandoNotificaciones: 'Cargando calificaciones ...',
         calificaciones: 'Calificaciones',
         misViajes: 'Mis viajes',
@@ -213,7 +220,8 @@ const messages = {
         onBoardingcardMessage1: '¡Bienvenido! Somos una red de personas que compartimos viajes en auto',
         onBoardingcardMessage2: 'Compartí tus viajes por Argentina como conductor y/o pasajero',
         onBoardingcardMessage3: 'Conocé nuevas historias/personas, cuidá el medio ambiente y ahorrá dinero',
-        onBoardingcardMessage4: 'Somos un proyecto de gestión colectiva, sin fines de lucro y código libre'
+        onBoardingcardMessage4: 'Somos un proyecto de gestión colectiva, sin fines de lucro y código libre',
+        referencias: 'Referencias'
     },
     'chl': {
         loginUsuarioPlaceholder: 'Usuario',

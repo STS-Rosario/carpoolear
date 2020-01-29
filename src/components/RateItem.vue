@@ -5,7 +5,7 @@
                 {{rate.comment}}
             </div>
 
-            <div class="rate-item-value">
+            <div v-if="!notReply" class="rate-item-value">
                 <span v-if="rate.rating == 1">
                     Positiva
                     <i class="fa fa-thumbs-up" aria-hidden="true"></i>
@@ -33,28 +33,34 @@
                 <div class="rate-item-title">
                     <div>
                         <strong>{{rate.from.name}}</strong>
-                        <span class="rate-item-value">
-                            <i class="fa fa-thumbs-up" aria-hidden="true" v-if="rate.rating == 1"></i>
-                            <i class="fa fa-thumbs-down" aria-hidden="true" v-if="rate.rating == 0"></i>
-                        </span>
-                        <span class="pull-right clickeable" v-if="!rate.reply_comment && user.id === profile.id && config.allow_rating_reply" @click="showReply = !showReply">
-                            <i class="fa fa-reply" aria-hidden="true"></i>
-                        </span>
+                        <template v-if="!notReply">
+                            <span class="rate-item-value">
+                                <i class="fa fa-thumbs-up" aria-hidden="true" v-if="rate.rating == 1"></i>
+                                <i class="fa fa-thumbs-down" aria-hidden="true" v-if="rate.rating == 0"></i>
+                            </span>
+                            <span class="pull-right clickeable" v-if="!rate.reply_comment && user.id === profile.id && config.allow_rating_reply" @click="showReply = !showReply">
+                                <i class="fa fa-reply" aria-hidden="true"></i>
+                            </span>
+                        </template>
                     </div>
-                    <div class="rate-item-detail" v-if="rate.trip.points.length > 0">
-                        Viajó a {{rate.trip.points[rate.trip.points.length - 1].json_address.ciudad}} como {{rateType}}
-                            - {{rate.rate_at | moment("DD/MM/YYYY")}}
-                    </div>
-                    <div class="rate-item-detail" v-else>
-                        Viajó a {{ rate.trip.to_town }} como {{rateType}}
-                            - {{rate.rate_at | moment("DD/MM/YYYY")}}
-                    </div>
+                    <template v-if="!notReply">
+                        <div class="rate-item-detail" v-if="rate.trip.points.length > 0">
+                            Viajó a {{rate.trip.points[rate.trip.points.length - 1].json_address.ciudad}} como {{rateType}}
+                                - {{rate.rate_at | moment("DD/MM/YYYY")}}
+                        </div>
+                        <div class="rate-item-detail" v-else>
+                            Viajó a {{ rate.trip.to_town }} como {{rateType}}
+                                - {{rate.rate_at | moment("DD/MM/YYYY")}}
+                        </div>
+                    </template>
+                    <template v-else>
+                        <div class="rate-item-detail">
+                            {{rate.created_at | moment("DD/MM/YYYY")}}
+                        </div>
+                    </template>
                 </div>
                 <div class="rate-item-comment">
                     {{rate.comment}}
-                </div>
-                <div class="rate-item-datetime">
-
                 </div>
             </div>
         </template>
@@ -66,7 +72,7 @@
                 <button class="btn btn-primary" @click="onCancelReply"> Cancelar </button>
             </div>
         </div>
-        <div class="reply_comment_content" v-if="rate.reply_comment">
+        <div class="reply_comment_content" v-if="!notReply && rate.reply_comment">
             <div class="reply_comment">
                 <strong>{{ profile.name }} respondió: </strong>
                 {{ rate.reply_comment }}
@@ -128,7 +134,8 @@ export default {
     props: [
         'user',
         'rate',
-        'id'
+        'id',
+        'notReply'
     ]
 };
 </script>
