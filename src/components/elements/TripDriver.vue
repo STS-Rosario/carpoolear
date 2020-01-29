@@ -64,6 +64,9 @@
             </div>
             <TripDescription />
         </div>
+        <div class="alert alert-info clearfix cf" v-if="config.module_conversation_average_delay">
+            Velocidad de respuesta: {{ averageDelay }}
+        </div>
     </div>
 </template>
 <script>
@@ -125,12 +128,44 @@ export default {
             } else {
                 return [];
             }
+        },
+        averageDelay () {
+            var delay = '';
+            if (this.trip && this.trip.user) {
+                if (this.trip.user.conversation_opened_count) {
+                    var time = this.trip.user.answer_delay_sum / this.trip.user.conversation_opened_count;
+                    // var hours = Math.floor(time / 60 / 60);
+                    // var minutes = Math.floor(time / 60) % 60;
+                    // var seconds = Math.floor(time - minutes * 60 - hours * 3600);
+                    // delay = hours + ':' + minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
+                    if (time / 3600 > 24) {
+                        delay = 'Más de un día';
+                    } else if (time / 3600 > 12) {
+                        delay = 'En el día';
+                    } else if (time / 3600 > 1) {
+                        delay = 'En un par de horas';
+                    } else {
+                        delay = 'En el momento';
+                    }
+                } else {
+                    delay = 'Sin datos';
+                }
+            }
+            return delay;
         }
     },
     components: {
         SvgItem,
         TripDate,
         TripDescription
+    },
+
+    secondsToHms(d) {
+        var time = Number(d);
+        var hours = Math.floor(time / 60 / 60);
+        var minutes = Math.floor(time / 60) % 60;
+        var seconds = Math.floor(time - minutes * 60);
+        hour + ':' + minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
     }
 };
 </script>
