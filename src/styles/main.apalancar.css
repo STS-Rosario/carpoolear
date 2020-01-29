@@ -936,8 +936,8 @@ textarea.has-error {
     font-weight: normal;
 }
 .detail_trip .trip_driver_img_container {
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 60px;
 }
 .detail_trip .trip_driver_img.circle-box {
     width: 60px !important;

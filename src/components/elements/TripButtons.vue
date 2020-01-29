@@ -52,6 +52,9 @@
         <template v-if="trip.seats_available === 0 && !trip.is_passenger">
             <div class="carpooled-trip"> Viaje Carpooleado </div>
         </template>
+        <div class="alert alert-warning" role="alert" v-if="appConfig.module_show_pending_request_count && !isPassengersView && !owner && trip.passengerPending_count > 2">
+            Atención! Este viaje está siendo muy solicitado: {{ trip.passengerPending_count }} lo están personas solicitando
+        </div>
     </div>
 </template>
 <script>
@@ -70,7 +73,8 @@ export default {
             trip: 'trips/currentTrip',
             tripCardTheme: 'auth/tripCardTheme',
             user: 'auth/user',
-            isMobile: 'device/isMobile'
+            isMobile: 'device/isMobile',
+            appConfig: 'auth/appConfig'
         }),
         sendingStatus () {
             Object.keys(this.sending).some(k => this.sending[k] === true);
@@ -148,5 +152,9 @@ export default {
             padding-bottom: 0;
             z-index: 1;
         }
+    }
+    .alert-warning {
+        max-width: 400px;
+        margin: 1em auto;
     }
 </style>
