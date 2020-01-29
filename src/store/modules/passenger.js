@@ -1,6 +1,8 @@
 import { PassengerApi } from '../../services/api';
 import * as types from '../mutation-types';
 import globalStore from '../index';
+import { checkError } from '../../../utils/helpers';
+import dialogs from '../../services/dialogs.js';
 
 /* eslint-disable no-undef */
 
@@ -35,8 +37,39 @@ const actions = {
     makeRequest (store, tripId) {
         return passengerApi.make(tripId).then(response => {
             globalStore.commit('trips/' + types.TRIPS_SET_REQUEST, { id: tripId, value: 'send' });
+
+            // HANDLE SUCCESS
+            if (response && response.data && response.data.request_state) {
+                if (response.data.request_state === 0) {
+                    dialogs.message('La solicitud fue enviada.');
+                } else if (response.data.request_state === 1) {
+                    dialogs.message('Te has subido al viaje.');
+                } else if (response.data.request_state === 4 && this.config.module_trip_seats_payment) {
+                    let baseUrl = network.getBaseURL();
+                    let url = baseUrl + '/transbank?tp_id=' + response.data.id;
+                    if (window.location.protocol.indexOf('http') >= 0) {
+                        window.location.href = url;
+                    } else {
+                        var popup = window.open(url, '_blank', 'location=no,hidden=yes,zoom=no');
+                        popup.addEventListener('message', (params) => {
+                            console.log('message', params);
+                            popup.close();
+                        }, false);
+                    }
+                } else {
+                    dialogs.message('La solicitud fue enviada.');
+                }
+            } else {
+                dialogs.message('La solicitud fue enviada.');
+            }
             return Promise.resolve(response);
         }).catch(error => {
+            console.error(error);
+            if (checkError(error, 'user_has_another_similar_trip')) {
+                dialogs.message('Ya te encuentras subido en un viaje con el mismo origen y destino en esa fecha.', { duration: 10, estado: 'error' });
+            } else {
+                dialogs.message('Ocurrió un problema al solicitar, por favor aguarde unos instante e intentelo nuevamente.', { estado: 'error' });
+            }
             return Promise.reject(error);
         });
     },

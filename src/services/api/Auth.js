@@ -37,7 +37,7 @@ class AuthApi extends TaggedApi {
      * @return {}
     */
     logout () {
-        return this.post('/api//logout');
+        return this.post('/api/logout');
     }
 
     /**

@@ -15,7 +15,7 @@
                     <i class="fa fa-thumbs-down" aria-hidden="true"></i>
                 </span>
 
-                <span class="pull-right clickeable" v-if="!rate.reply_comment && user.id === me.id && config.allow_rating_reply" @click="showReply = !showReply"> <!--   -->
+                <span class="pull-right clickeable" v-if="!rate.reply_comment && user.id === profile.id && config.allow_rating_reply" @click="showReply = !showReply"> <!--   -->
                     <i class="fa fa-reply" aria-hidden="true"></i>
                 </span>
             </div>
@@ -37,7 +37,7 @@
                             <i class="fa fa-thumbs-up" aria-hidden="true" v-if="rate.rating == 1"></i>
                             <i class="fa fa-thumbs-down" aria-hidden="true" v-if="rate.rating == 0"></i>
                         </span>
-                        <span class="pull-right clickeable" v-if="!rate.reply_comment && user.id === id" @click="showReply = !showReply">
+                        <span class="pull-right clickeable" v-if="!rate.reply_comment && user.id === profile.id && config.allow_rating_reply" @click="showReply = !showReply">
                             <i class="fa fa-reply" aria-hidden="true"></i>
                         </span>
                     </div>
@@ -58,9 +58,9 @@
                 </div>
             </div>
         </template>
-        <div v-if="showReply">
+        <div class="reply-box" v-if="showReply">
             <label for="reply" class="label label-reply">Responder a la calificación</label>
-            <textarea v-model="comment" id="reply"></textarea>
+            <textarea maxlength="260" v-model="comment" id="reply"></textarea>
             <div class="reply-btns">
                 <button class="btn btn-primary" @click="onReply"> Responder </button>
                 <button class="btn btn-primary" @click="onCancelReply"> Cancelar </button>
@@ -185,5 +185,17 @@ export default {
         color: #333;
         text-align: left;
         border-radius: 0;
+    }
+    .reply-box {
+        width: 100%;
+        float: left;
+    }
+    textarea {
+        height: 6.6em;
+    }
+    .reply_comment_content[data-v-79e4aac3] {
+        word-wrap: break-word;
+        float: left;
+        width: 100%;
     }
 </style>

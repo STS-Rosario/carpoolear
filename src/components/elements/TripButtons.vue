@@ -7,7 +7,7 @@
             <spinner class="blue" v-if="sending && sending.deleteAction"></spinner>
             <span v-else>Cancelar Viaje</span>
         </a>
-        <template v-if="!owner && !expired">
+        <template v-if="!owner && !expired && (!canRequest || !config.module_coordinate_by_message || (config.module_coordinate_by_message && isPassenger))">
             <button class="btn btn-primary" @click="$emit('toMessages')" v-if="!owner" :disabled="sendingStatus">
                 <spinner class="blue" v-if="sending && sending.sendMessageAction"></spinner>
                 <span v-else>Enviar mensaje</span>
@@ -27,6 +27,9 @@
                             <template v-else>
                                 Reservar
                             </template>
+                        </template>
+                        <template v-else-if="config.module_coordinate_by_message">
+                            Coordinar viaje
                         </template>
                         <template v-else>
                             Solicitar asiento
@@ -52,7 +55,7 @@
         <template v-if="trip.seats_available === 0 && !trip.is_passenger">
             <div class="carpooled-trip"> Viaje Carpooleado </div>
         </template>
-        <div class="alert alert-warning" role="alert" v-if="appConfig.module_show_pending_request_count && !isPassengersView && !owner && trip.passengerPending_count > 2">
+        <div class="alert alert-warning" role="alert" v-if="config.module_show_pending_request_count && !isPassengersView && !owner && trip.passengerPending_count > 2">
             Atención! Este viaje está siendo muy solicitado: {{ trip.passengerPending_count }} lo están personas solicitando
         </div>
     </div>
@@ -61,6 +64,7 @@
 import { mapGetters } from 'vuex';
 import moment from 'moment';
 import spinner from '../Spinner.vue';
+
 export default {
     name: 'TripButtons',
     data () {
@@ -74,7 +78,7 @@ export default {
             tripCardTheme: 'auth/tripCardTheme',
             user: 'auth/user',
             isMobile: 'device/isMobile',
-            appConfig: 'auth/appConfig'
+            config: 'auth/appConfig'
         }),
         sendingStatus () {
             Object.keys(this.sending).some(k => this.sending[k] === true);

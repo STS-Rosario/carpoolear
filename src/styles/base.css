@@ -432,8 +432,7 @@
   textarea {
       border-color: #BBBBBB;
       padding: .8em;
-      height: 10em;
-      height: 8.9em;
+      height: 12em;
   }
   .clickeable {
       cursor: pointer;
@@ -685,6 +684,57 @@
       font-weight: bold;
       font-size: 11px;
       margin-bottom: .5em;
+  }
+  .column-rating .list-group-item {
+      margin-bottom: 1em;
+  }
+  .on-boarding--overlay {
+    transition: 500ms;
+    z-index: 9999;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000000db;
+    opacity: 0;
+    padding: 10em;
+  }
+  .on-boarding--overlay.show {
+      opacity: 1;
+      padding: 0;
+  }
+  .on-boarding--container {
+      width: 100%;
+      height: 100%;
+      float: left;
+      background-color: #fff;
+      text-align: center;
+      position: relative;
+  }
+  .on-boarding--top-container {
+        height: 80%;
+        width: 100%;
+  }
+  .on-boarding--img {
+    width: 100%;
+    padding-top: 2em;
+    -o-object-fit: contain;
+    object-fit: contain;
+    max-height: 80%;
+  }
+  .on-boarding--container h1 {
+      color: black;
+      margin: .8em;
+      line-height: 1.3em;
+      font-size: 2.1em;
+  }
+  .on-boarding--bottom-container {
+    vertical-align: bottom;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100px;
+    left: 0;
+    line-height: 100px;
   }
 
   .tab-content .profile-rates-component .list-group-item {

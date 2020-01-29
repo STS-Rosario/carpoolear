@@ -14,5 +14,6 @@ export default cache;
 export const keys = {
     'TOKEN_KEY': 'TOKEN',
     'USER_KEY': 'USER',
-    'DEVICE_KEY': 'CURRENT_DEVICE'
+    'DEVICE_KEY': 'CURRENT_DEVICE',
+    'FIRST_TIME_APP_KEY': 'FIRST_TIME_APP'
 };

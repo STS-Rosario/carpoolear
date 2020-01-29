@@ -3,6 +3,28 @@ export function cssvar (name) {
     return getComputedStyle(document.documentElement).getPropertyValue(name);
 }
 
+export function checkError (error, message) {
+    if (error.status === 422) {
+        if (error.data && error.data.errors && error.data.errors.error && error.data.errors.error.length) {
+            for (let i = 0; i < error.data.errors.error.length; i++) {
+                let errorMessage = error.data.errors.error[i];
+                if (errorMessage === message) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+export function getErrors (error) {
+    if (error.status === 422) {
+        if (error.data && error.data.errors && error.data.errors.error && error.data.errors.error.length) {
+            return error.data.errors.error;
+        }
+    }
+}
+
 export function scrollToElement (element, offset) {
     if (typeof element === 'string') {
         element = document.getElementById('targetElement');

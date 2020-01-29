@@ -22,5 +22,9 @@
     "trip_stars": false,
     "api_price": false,
     "fuel_price": 4.15,
-    "trip_card_design": "default"
+    "trip_card_design": "default",
+    "module_on_boarding_new_user": {
+        "enabled": true,
+        "cards": 4
+    }
 }

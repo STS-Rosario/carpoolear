@@ -210,7 +210,11 @@ const messages = {
         campoObligatorio: 'Dato requerido',
         recuperarContraseña: 'Recuperar contraseña',
         noCalificado: 'No fue calificado aún',
-        removerPasajeroExitoso: 'El pasajero fue bajado del viaje exitosamente.'
+        removerPasajeroExitoso: 'El pasajero fue bajado del viaje exitosamente.',
+        onBoardingcardMessage1: '¡Bienvenido! Somos una red de personas que compartimos viajes en auto',
+        onBoardingcardMessage2: 'Compartí tus viajes por Argentina como conductor y/o pasajero',
+        onBoardingcardMessage3: 'Conocé nuevas historias/personas, cuidá el medio ambiente y ahorrá dinero',
+        onBoardingcardMessage4: 'Somos un proyecto de gestión colectiva, sin fines de lucro y código libre'
     },
     'chl': {
         loginUsuarioPlaceholder: 'Usuario',

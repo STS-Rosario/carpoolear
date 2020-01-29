@@ -39,8 +39,13 @@
                                         </label>
                                     </div>
                                     <div class="text-center">
-                                      <button class="btn btn-primary" @click="toMessages" v-if="!owner">Enviar mensaje</button>
-                                      <button class="btn btn-primary" @click="toMakeRequest">Solicitar asiento</button>
+                                      <template v-if="config.module_coordinate_by_message">
+                                        <button class="btn btn-primary" @click="toMakeRequest" v-if="!owner">Coordinar viaje</button>
+                                      </template>
+                                      <template v-else>
+                                        <button class="btn btn-primary" @click="toMessages" v-if="!owner">Enviar mensaje</button>
+                                        <button class="btn btn-primary" @click="toMakeRequest">Solicitar asiento</button>
+                                      </template>
                                     </div>
                                 </div>
                             </modal>
@@ -117,7 +122,6 @@ import svgItem from '../SvgItem';
 import modal from '../Modal';
 import moment from 'moment';
 import dialogs from '../../services/dialogs.js';
-import network from '../../services/network.js';
 import TripLocation from '../elements/TripLocation';
 import TripDriver from '../elements/TripDriver';
 import TripDate from '../elements/TripDate';
@@ -284,7 +288,12 @@ export default {
 
         toUserMessages (user) {
             this.$set(this.sending, 'sendMessageAction', true);
-            this.lookConversation(user).then(conversation => {
+            let data = {
+                user: user,
+                tripId: this.trip.id
+            };
+            this.lookConversation(data).then(conversation => {
+                console.log(conversation);
                 router.push({ name: 'conversation-chat', params: { id: conversation.id } });
             }).catch(error => {
                 console.error(error);
@@ -324,36 +333,14 @@ export default {
                 });
             }
             if (this.profileComplete()) {
+                if (this.config.module_coordinate_by_message) {
+                    this.toMessages();
+                    return;
+                }
                 this.$set(this.sending, 'requestAction', true);
                 this.showModalRequestSeat = false;
                 this.make(this.trip.id).then((response) => {
                     this.trip.request = 'send';
-                    if (response && response.data && response.data.request_state) {
-                        if (response.data.request_state === 0) {
-                            dialogs.message('La solicitud fue enviada.');
-                        } else if (response.data.request_state === 1) {
-                            dialogs.message('Te has subido al viaje.');
-                        } else if (response.data.request_state === 4 && this.config.module_trip_seats_payment) {
-                            let baseUrl = network.getBaseURL();
-                            let url = baseUrl + '/transbank?tp_id=' + response.data.id;
-                            if (window.location.protocol.indexOf('http') >= 0) {
-                                window.location.href = url;
-                            } else {
-                                var popup = window.open(url, '_blank', 'location=no,hidden=yes,zoom=no');
-                                popup.addEventListener('message', (params) => {
-                                    console.log('message', params);
-                                    popup.close();
-                                }, false);
-                            }
-                        } else {
-                            dialogs.message('La solicitud fue enviada.');
-                        }
-                    } else {
-                        dialogs.message('La solicitud fue enviada.');
-                    }
-                }).catch((error) => {
-                    console.error(error);
-                    dialogs.message('Ocurrió un problema al solicitar, por favor aguarde unos instante e intentelo nuevamente.', { estado: 'error' });
                 }).finally(() => {
                     this.$set(this.sending, 'requestAction', false);
                 });

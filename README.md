@@ -92,10 +92,13 @@ In the config table in your carpoolear DB you can configure the following parame
 | enable_footer | BOOLEAN | If enabled, you can login by facebook. |
 | donation | JSON | With donation you can configure donation campaigns. Object must be: {"ammount_needed": 1000, "month_days": 0, "trips_count": 20, "trips_offset": 0, "trips_rated": 2} |
 | module_trip_seats_payment | BOOLEAN | If enabled, online payment if required to travel. |
-| module_user_request_limited | JSON | Object must be: {"enabled": false, "hours_range": 8} |
+| module_user_request_limited | JSON | Object must be: {"enabled": true, "hours_range": 8} |
 | api_crice | BOOLEAN | If enabled, active the api that calculate the trip price. |
 | fuel_price | FLOAT | The local fuel price, to stimate the trip price. |
 | enable_facebook | BOOLEAN | If enabled, you can login with facebook. |
+| module_on_boarding_new_user | JSON | Object must be: {"enabled": true, "cards": 4} |
+| allow_rating_reply | BOOLEAN | If enabled, you can reply a comment of another user |
+| module_coordinate_by_message | BOOLEAN | If enabled, the trip coordination is in the chat view |
 ---
 
 ## Important
