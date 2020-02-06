@@ -4,6 +4,8 @@ const messages = {
         loginPasswordPlaceholder: 'Contraseña',
         documento: 'Número de documento',
         doc: 'DNI',
+        unaswered_messages_limit: 'Límites de consultas por un viaje',
+        unaswered_messages_limitDescription: 'Establece un máximo de consultas (solicitudes o mensajes) que podés recibir por un viaje.',
         requisitosRegister: 'Se requiere que cargue: licencia de conductor, seguro del vehículo ...',
         RegistrarNuevoUsuario: 'Registrar nuevo usuario',
         camposObligatorios: 'Los campos marcados con (*) son obligatorios.',

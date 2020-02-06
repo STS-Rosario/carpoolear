@@ -131,7 +131,7 @@
                                     <!--<input type="text" v-model="time" />-->
                                 </div>
                             </div>
-                            <div class="trip_price">
+                            <div class="trip_price" v-if="config.module_seat_price">
                                 <legend class="label-for-group">{{ $t('precioAsiento') }}</legend>
 
                                 <input type="number" v-model="price" class="form-control form-control-with-icon form-control-price" id="price" :class="{'has-error': priceError.state}" :placeholder="price" >

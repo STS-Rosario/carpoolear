@@ -67,6 +67,8 @@ const actions = {
             console.error(error);
             if (checkError(error, 'user_has_another_similar_trip')) {
                 dialogs.message('Ya te encuentras subido en un viaje con el mismo origen y destino en esa fecha.', { duration: 10, estado: 'error' });
+            } else if (checkError(error, 'user_has_reach_request_limit')) {
+                dialogs.message('Se ha alcanzado el límite de consultas que el usuario acepta por este viaje.', { duration: 10, estado: 'error' });
             } else {
                 dialogs.message('Ocurrió un problema al solicitar, por favor aguarde unos instante e intentelo nuevamente.', { estado: 'error' });
             }

@@ -76,6 +76,13 @@
                     <input maxlength="40" v-model="pass.password" type="password" class="form-control" id="input-pass" placeholder="Contraseña">
                     <input maxlength="40" v-model="pass.password_confirmation" type="password" class="form-control" id="input-pass-confirm" placeholder="Repetir contraseña">
                 </div>
+
+                <hr v-if="settings.module_unaswered_message_limit" />
+                <div class="form-group" v-if="settings.module_unaswered_message_limit">
+                    <label for="input-unaswered_messages_limit">{{ $t('unaswered_messages_limit') }} <span class="description">({{ $t('unaswered_messages_limitDescription') }})</span></label>
+                    <input type="numer" data-max-length="8" v-model="user.unaswered_messages_limit" class="form-control" id="input-unaswered_messages_limit" :class="{'has-error': unaswered_messages_limitError.state }">
+                    <span class="error" v-if="unaswered_messages_limitError.state"> {{unaswered_messages_limitError.message}} </span>
+                </div>
                 <hr />
                 <div class="checkbox" v-if="settings.module_validated_drivers && !user.driver_is_verified">
                     <label >
@@ -185,6 +192,7 @@ export default {
             birthdayError: new Error(),
             patentError: new Error(),
             dniError: new Error(),
+            unaswered_messages_limitError: new Error(),
             phoneError: new Error(),
             emailError: new Error(),
             accountNumberError: new Error(),
@@ -293,6 +301,7 @@ export default {
                 return;
             }
             this.loading = true;
+            console.log('this.user', this.user);
             var data = Object.assign({}, this.user);
             console.log('data.user', data);
             if (this.pass.password) {
@@ -313,23 +322,24 @@ export default {
             let bodyFormData = new FormData();
             for (const key in data) {
                 if (data.hasOwnProperty(key)) {
-                    console.log(key, Array.isArray(data[key]));
                     if (Array.isArray(data[key])) {
                         for (let index = 0; index < data[key].length; index++) {
                             const element = data[key][index];
                             bodyFormData.append(key + '[]', element);
                         }
                     } else {
-                        bodyFormData.append(key, data[key]);
+                        if (data[key] !== null) {
+                            bodyFormData.append(key, data[key]);
+                        } else {
+                            // bodyFormData.append(key, '');
+                        }
                     }
                 }
             }
             if (this.driverFiles) {
                 bodyFormData.append('user_be_driver', true);
-                console.log('file', this.driverFiles);
                 for (let index = 0; index < this.driverFiles.length; index++) {
                     const file = this.driverFiles[index];
-                    console.log('file', file);
                     bodyFormData.append('driver_data_docs[]', file);
                 }
             } else {
@@ -354,7 +364,9 @@ export default {
                 }
                 // this.user.birthday = this.birthdayAnswer;
                 if ((this.user.image && this.user.image.length > 0) && (this.user.description && this.user.description.length > 0)) {
-                    this.$router.rememberBack();
+                    if (this.$router.rememberRoute) {
+                        this.$router.rememberBack();
+                    }
                 } else {
                     if (!(this.user.image && this.user.image.length > 0)) {
                         dialogs.message(this.$t('debesImagenPerfil'), { duration: 10, estado: 'error' });
@@ -492,6 +504,7 @@ export default {
     },
 
     mounted () {
+        console.log('touter', this.$router);
         this.getBankData().then((data) => {
             console.log('get bank data', data);
             this.banks = data.banks;

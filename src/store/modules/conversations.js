@@ -4,6 +4,8 @@ import * as pagination from '../pagination';
 import globalStore from '../index';
 import Vue from 'vue';
 import moment from 'moment';
+import { checkError } from '../../../utils/helpers';
+import dialogs from '../../services/dialogs.js';
 
 let conversationApi = new ConversationApi();
 let pageSize = 20;
@@ -69,6 +71,11 @@ const actions = {
             return Promise.resolve(response.data);
         }).catch((error) => {
             console.log(error);
+            if (checkError(error, 'user_has_reach_request_limit')) {
+                dialogs.message('Se ha alcanzado el límite de consultas que el usuario acepta por este viaje.', { duration: 10, estado: 'error' });
+            } else {
+                dialogs.message('Ocurrió al crear la conversación. Vuelva a intentarlo más tarde.', { estado: 'error' });
+            }
         });
     },
 

@@ -186,6 +186,19 @@ export default {
             }
             return isComplementary;
         },
+        // TODO filter trips that not are main route
+        // REVIEW wich is the best way to do it?
+        // maybe rethink render
+        isMainRoute (trip, searchParams, index) {
+            let isMainRoute = true;
+            if (searchParams.data && (searchParams.data.destination_id || searchParams.data.origin_id)) {
+                // trip.points[i].json_address.id
+                if (trip.points && trip.points.length) {
+
+                }
+            }
+            return isMainRoute;
+        },
 
         onSearchButton () {
             console.log('onSearchButton');

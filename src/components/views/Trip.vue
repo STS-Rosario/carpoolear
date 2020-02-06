@@ -179,11 +179,11 @@ export default {
     },
 
     head: {
-        title: function () {
+        /* title: function () {
             return {
                 inner: 'Viaje'
             };
-        },
+        }, */
         meta: function () {
             if (this.trip) {
                 return [

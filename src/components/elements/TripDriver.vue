@@ -27,6 +27,9 @@
                     </div>
                 </template>
             </div>
+            <div class="alert alert-info clearfix cf" v-if="config.module_conversation_average_delay">
+                Velocidad de respuesta: {{ averageDelay }}
+            </div>
         </div>
         <div class="driver-profile" v-else>
             <div class="row">
@@ -57,15 +60,15 @@
                     </div>
                 </div>
             </div>
+            <div class="alert alert-info clearfix cf" v-if="config.module_conversation_average_delay">
+                Velocidad de respuesta: {{ averageDelay }}
+            </div>
             <div class="row">
                 <div class="col-md-24">
                     <router-link class="btn-primary btn-search btn-shadowed-black" :to="{name: 'profile', params: {id: getUserProfile, userProfile: trip.user}}"> Ver Perfil </router-link>
                 </div>
             </div>
             <TripDescription />
-        </div>
-        <div class="alert alert-info clearfix cf" v-if="config.module_conversation_average_delay">
-            Velocidad de respuesta: {{ averageDelay }}
         </div>
     </div>
 </template>
