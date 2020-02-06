@@ -1,10 +1,11 @@
 import * as types from '../mutation-types';
-import { UserApi, RateApi } from '../../services/api';
+import { UserApi, RateApi, ReferencesApi } from '../../services/api';
 import * as pagination from '../pagination';
 import globalStore from '../index';
 
 let userApi = new UserApi();
 let rateApi = new RateApi();
+let referencesApi = new ReferencesApi();
 
 const state = {
     user: null,
@@ -15,6 +16,13 @@ const state = {
 const getters = {
     user: state => state.user,
     registerData: state => state.registerData,
+    references: state => {
+        if (state.user) {
+            return state.user.references;
+        } else {
+            return null;
+        }
+    },
     ...pagination.makeGetters('rates')
 };
 
@@ -38,7 +46,6 @@ const actions = {
     },
     registerDonation (store, data) {
         return userApi.registerDonation(data).then((response) => {
-            console.log('registerDonation', response);
             globalStore.commit('auth/' + types.DONATION_INTENT_PUSH, response.donation);
             return Promise.resolve();
         }).catch((error) => {
@@ -86,12 +93,21 @@ const actions = {
         commit(types.PROFILE_CLEAN_REGISTER_DATA);
     },
 
+    makeReference ({ commit }, data) {
+        return referencesApi.create(data).then((response) => {
+            commit(types.PROFILE_REFERENCE_ADD, response);
+            return Promise.resolve(response);
+        }).catch((error) => {
+            console.error(error);
+            return Promise.reject(error);
+        });
+    },
+
     ...pagination.makeActions('rates', ({ store, data }) => {
         // TODO: Pagination not working
         data.page_size = 200;
         return rateApi.index(store.state.user.id, data);
     })
-
 };
 
 const mutations = {
@@ -116,6 +132,13 @@ const mutations = {
 
     [types.PROFILE_CLEAN_REGISTER_DATA] (state, data) {
         state.registerData = null;
+    },
+
+    [types.PROFILE_REFERENCE_ADD] (state, reference) {
+        if (!state.user.references) {
+            state.user.references = [];
+        }
+        state.user.references.push(reference);
     }
 };
 
