@@ -49,6 +49,10 @@
                     <textarea maxlength="2000" v-model="user.description" placeholder="Descripción" :class="{'has-error': descError.state }" ></textarea>
                     <span class="error textarea" v-if="descError.state"> {{descError.message}} </span>
                 </div>
+                <hr />
+                <p class="form-group">
+                    {{ $t('siSosConductorDatosVisibles') }}
+                </p>
                 <div class="form-group">
                     <label for="input-dni">{{ $t('documento') }} <span class="description">({{ $t('soloNumeros') }}). {{ $t('incentivoDoc') }} {{ $t('doc') }} {{ $t('momentoViajar') }}</span></label>
                     <input v-numberMask="'dniRawValue'" type="text" data-max-length="8" v-model="user.nro_doc" class="form-control" id="input-dni" :placeholder="$t('doc')" :class="{'has-error': dniError.state }">
@@ -59,7 +63,16 @@
                     <input maxlength="20" @keydown="isNumber" v-on:paste='isNumber' v-model="user.mobile_phone" type="tel" class="form-control" id="input-phone" placeholder="Número de teléfono (al menos 7 números)" :class="{'has-error': phoneError.state }">
                     <span class="error" v-if="phoneError.state"> {{phoneError.message}} </span>
                 </div>
-
+                <div class="checkbox">
+                    <label>
+                    <input type="checkbox" v-model="user.data_visibility" true-value="1"
+  false-value="0"> {{ $t('datosVisiblesCheck') }}
+                    </label>
+                    <div>
+                        {{ $t('tildaOpcionDatosVisibles') }}
+                    </div>
+                </div>
+                <hr />
                 <div class="checkbox">
                     <label>
                     <input type="checkbox" v-model="user.emails_notifications"> {{ $t('notificacionesPorCorreo') }}
@@ -583,5 +596,9 @@ export default {
         vertical-align: -2px;
         margin-right: 5px;
         color: var(--trip-mostly-free-color);
+    }
+
+    hr {
+        border-top: 1px solid #CCCCCC;
     }
 </style>

@@ -193,7 +193,6 @@ export default {
 <style scoped>
     .osm-autocomplete {
         position: relative;
-        height: 65px;
     }
     .osm-autocomplete-results {
         position: absolute;

@@ -70,7 +70,7 @@
                         <label for="reply" class="label label-reply">Escribe una referencia sobre el usuario</label>
                         <textarea ref="reference" maxlength="260" v-model="referenceComment" id="reference"></textarea>
                         <div class="reply-btns">
-                            <button class="btn btn-primary" @click="sendReference" :disabled="sending"> 
+                            <button class="btn btn-primary" @click="sendReference" :disabled="sending">
                                 <template v-if="sending">
                                     <spinner class="blue"></spinner>
                                 </template>

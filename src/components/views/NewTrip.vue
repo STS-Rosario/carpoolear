@@ -963,7 +963,8 @@ export default {
                 dialogs.message(this.$t('algunosDatosNoValidos'), {
                     estado: 'error'
                 });
-            } else if (!this.no_lucrar && this.trip.is_passenger !== 1) {
+            } else if (!this.no_lucrar && this.trip.is_passenger.toString() !== '1') {
+                console.log('this.trip.is_passenger', this.trip.is_passenger, this.trip.is_passenger !== 1);
                 this.lucrarError.state = true;
                 this.lucrarError.message = this.$t('teComprometesANoLucrar');
                 dialogs.message(this.$t('teComprometesANoLucrar'), {

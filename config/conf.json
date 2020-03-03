@@ -26,5 +26,7 @@
     "module_on_boarding_new_user": {
         "enabled": true,
         "cards": 4
-    }
+    },
+    "allow_rating_reply": true,
+    "module_references": true
 }

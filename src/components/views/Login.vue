@@ -4,7 +4,10 @@
         <img :src="carpoolear_logo" />
     </router-link>
     <div class="login-header">
-      <h1 v-if="!(hasScroll && isMobile)"> {{ $t('ingresaCuenta') }} <span class='brand' v-if="!loginCustomHeader">{{ $t('carpoolear') }}</span> </h1>
+      <h1 v-if="!(hasScroll && isMobile)">
+          {{ $t('iniciarSesion') }}
+          <!-- <span class='brand' v-if="!loginCustomHeader">{{ $t('carpoolear') }}</span> -->
+      </h1>
       <div class="col-sm-12 col-md-12" v-show="isMobile && loginCustomHeader">
           <img class="login-custom-header--logo" :src="app_logo"/>
       </div>
@@ -25,10 +28,25 @@
         </div>
       </div>
       <div class="col-sm-12 col-md-12" v-show="isMobile && !loginCustomHeader">
-        <button class="btn btn-primary btn-search btn-facebook btn-with-icon" @click="facebookLogin" :disabled="fbLoading"><span class="btn-with-icon--icon"><i class="fa fa-facebook" aria-hidden="true"></i></span><span class='btn-with-icon--label'> <span v-if="!fbLoading">Ingresá con Facebook</span><spinner class="blue" v-if="fbLoading"></spinner></span></button>
-        <div class="fb-terms">{{ $t('alIngresarFacebook') }} <router-link :to="{name: 'terms'}">{{ $t('tyc') }}</router-link>.</div>
+        <button class="btn btn-primary btn-search btn-facebook btn-with-icon" @click="facebookLogin" :disabled="fbLoading">
+            <span class="btn-with-icon--icon">
+                <i class="fa fa-facebook" aria-hidden="true"></i>
+            </span>
+            <span class='btn-with-icon--label'>
+                <span v-if="!fbLoading">Facebook</span>
+                <spinner class="blue" v-if="fbLoading"></spinner>
+            </span>
+        </button>
+        <!-- <div class="fb-terms">{{ $t('alIngresarFacebook') }} <router-link :to="{name: 'terms'}">{{ $t('tyc') }}</router-link>.</div> -->
         <hr />
-        <button ref="btn_show_login" id="btn_show_login" class="btn btn-primary btn-shadowed-black" @click="showLogin" v-show="!isShowLogin"> <span>{{ $t('ingresaConCuenta') }}</span></button>
+        <button ref="btn_show_login" id="btn_show_login" class="btn btn-primary btn-shadowed-black btn-with-icon btn-email" @click="showLogin" v-show="!isShowLogin">
+            <span class="btn-with-icon--icon">
+                <i class="fa fa-envelope" aria-hidden="true"></i>
+            </span>
+            <span class='btn-with-icon--label'>
+                <span>{{ $t('ingresaConCuenta') }}</span>
+            </span>
+        </button>
       </div>
 
       <div class="login-box" :class="[righPanelclass]" v-show="isShowLogin || !isMobile">
@@ -247,10 +265,10 @@ label {
   color: var(--secondary-background);
 }
 
-.user-form .btn-primary.btn-facebook {
+/* .user-form .btn-primary.btn-facebook {
   width: 90%;
   margin: 1em auto;
-}
+} */
 
 .description {
   font-size: 11px;
@@ -283,7 +301,7 @@ label {
 
 .register::after {
   position: absolute;
-  border-bottom: solid 1px #2793ff;
+  border-bottom: solid 1px #AAA;
   width: 90%;
   margin-left: 5%;
   content: " ";
@@ -382,8 +400,8 @@ label {
 }
 
 #btn_show_login {
-  border: 2px solid rgba(215, 37, 33, 0.8);
+  border: 2px solid #333;
   color: #FFF;
-  background: rgba(215, 37, 33, 0.8);
+  background: #444;
 }
 </style>

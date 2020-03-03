@@ -189,7 +189,7 @@ export default {
                     name: data.name,
                     location: {
                         lat: parseFloat(data.lat),
-                        lng: parseFloat(data.lon)
+                        lng: parseFloat(data.lng)
                     },
                     country: data.country
                 };
@@ -204,6 +204,7 @@ export default {
             let params = {};
             let foreignCountry = 0;
             if (this.from_town.location) {
+                console.log('emit', this.from_town.location);
                 params.origin_lat = this.from_town.location.lat;
                 params.origin_lng = this.from_town.location.lng;
                 params.origin_radio = this.from_town.radio;

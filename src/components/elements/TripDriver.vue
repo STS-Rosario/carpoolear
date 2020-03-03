@@ -28,7 +28,8 @@
                 </template>
             </div>
             <div class="alert alert-info clearfix cf" v-if="config.module_conversation_average_delay">
-                Velocidad de respuesta: {{ averageDelay }}
+                <strong>Velocidad de respuesta:</strong> {{ averageDelay }}. <br />
+                <strong>Porcentaje de respuestas:</strong> {{ percentageResponse }}
             </div>
         </div>
         <div class="driver-profile" v-else>
@@ -61,7 +62,8 @@
                 </div>
             </div>
             <div class="alert alert-info clearfix cf" v-if="config.module_conversation_average_delay">
-                Velocidad de respuesta: {{ averageDelay }}
+                <strong>Velocidad de respuesta:</strong> {{ averageDelay }}. <br />
+                <strong>Porcentaje de respuestas:</strong> {{ percentageResponse }}
             </div>
             <div class="row">
                 <div class="col-md-24">
@@ -135,8 +137,8 @@ export default {
         averageDelay () {
             var delay = '';
             if (this.trip && this.trip.user) {
-                if (this.trip.user.conversation_opened_count) {
-                    var time = this.trip.user.answer_delay_sum / this.trip.user.conversation_opened_count;
+                if (this.trip.user.conversation_answered_count) {
+                    var time = this.trip.user.answer_delay_sum / this.trip.user.conversation_answered_count;
                     // var hours = Math.floor(time / 60 / 60);
                     // var minutes = Math.floor(time / 60) % 60;
                     // var seconds = Math.floor(time - minutes * 60 - hours * 3600);
@@ -155,6 +157,18 @@ export default {
                 }
             }
             return delay;
+        },
+        percentageResponse () {
+            var response = '';
+            if (this.trip && this.trip.user) {
+                if (this.trip.user.conversation_opened_count) {
+                    var percentage = this.trip.user.conversation_answered_count / this.trip.user.conversation_opened_count;
+                    response = Math.round(percentage * 100).toFixed(0) + '%';
+                } else {
+                    response = 'No ha conversado aún.';
+                }
+            }
+            return response;
         }
     },
     components: {
@@ -163,12 +177,12 @@ export default {
         TripDescription
     },
 
-    secondsToHms(d) {
+    secondsToHms (d) {
         var time = Number(d);
         var hours = Math.floor(time / 60 / 60);
         var minutes = Math.floor(time / 60) % 60;
         var seconds = Math.floor(time - minutes * 60);
-        hour + ':' + minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
+        return hours + ':' + minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
     }
 };
 </script>

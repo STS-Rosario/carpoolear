@@ -105,6 +105,7 @@ export default {
                 this.$set(this.sending, 'message', true);
                 this.send(this.message).finally(() => {
                     this.$set(this.sending, 'message', false);
+                    this.$forceUpdate();
                 });
                 this.message = '';
             }
@@ -186,6 +187,7 @@ export default {
 <style scoped>
     #btn-more {
         padding: 1em 0;
+        margin-top: 1.5rem;
     }
     #btn-send {
         color: #ccc;

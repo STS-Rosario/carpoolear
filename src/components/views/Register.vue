@@ -3,81 +3,91 @@
     <router-link v-if="!isMobile"  :to="{name: 'trips'}">
         <img :src="carpoolear_logo" />
     </router-link>
-    <img v-if="isMobile" :src="carpoolear_logo" />
+    <!-- <img v-if="isMobile" :src="carpoolear_logo" /> -->
     <h1 v-if="tripCardTheme !== 'light' && !(success && isMobile)"> {{ $t('RegistrarNuevoUsuario') }} </h1>
     <div class='form row' v-if="!success">
+      <div v-if="settings.enable_facebook" v-show="!showRegisterForm">
+        <div class="text">Con</div>
+        <button class="btn btn-primary btn-search btn-facebook btn-with-icon" @click="facebookLogin" :disabled="fbLoading"><span class="btn-with-icon--icon"><i class="fa fa-facebook" aria-hidden="true"></i></span><span class='btn-with-icon--label'> <span v-if="!fbLoading">Facebook</span><spinner class="blue" v-if="fbLoading"></spinner></span></button>
+        <div class="fb-terms">{{ $t('alIngresarFacebook') }} <router-link :to="{name: 'terms'}">{{ $t('tyc') }}</router-link>.</div>
+        <hr />
+        <div class="text">O creando una cuenta con</div>
+        <button ref="btn_show_register" id="btn_show_register" class="btn btn-primary btn-shadowed-black" @click="onShowRegister"> <span>{{ $t('ingresaConCuenta') }}</span></button>
+      </div>
       <h1 v-if="tripCardTheme === 'light' && !(success && isMobile)"> {{ $t('RegistrarNuevoUsuario') }} </h1>
-      <div class="campos-obligatorios">{{ $t('camposObligatorios') }}</div>
-      <br />
-      <label for="txt_name">{{ $t('nombre') }} <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
-      <input :placeholder="$t('nombre')" autofocus v-jump ref="txt_name" name="txt_name" maxlength="25" type="text" id="txt_name" v-model='name' :class="{'has-error': nombreError.state }"/>
-      <span class="error" v-if="nombreError.state"> {{nombreError.message}} </span>
-      <label for="txt_surename">{{ $t('apellido') }} <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
-      <input :placeholder="$t('apellido')" v-jump ref="txt_surename" name="txt_surename" maxlength="25" type="text" id="txt_surename" v-model='sureName' :class="{'has-error': apellidoError.state }"/>
-      <span class="error" v-if="apellidoError.state"> {{apellidoError.message}} </span>
-      <label for="txt_email">{{ $t('email') }} <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
-      <input :placeholder="$t('email')" v-jump ref="txt_email" name="txt_email" maxlength="40" type="text" id="txt_email" v-model='email' :class="{'has-error': emailError.state }"/>
-      <span class="error" v-if="emailError.state"> {{emailError.message}} </span>
-      <!--<label for="">Fecha de nacimiento <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
-      <DatePicker :value="birthday" ref="ipt_calendar" name="ipt_calendar" :maxDate="maxDate" :minDate="minDate" :class="{'has-error': birthdayError.state}" ></DatePicker>-->
-      <span class="error" v-if="birthdayError.state"> {{birthdayError.message}} </span>
-      <label for="txt_password">{{ $t('password') }} <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
-      <input :placeholder="$t('password')" v-jump ref="txt_password" name="txt_password" maxlength="40" type="password" id="txt_password" v-model='password' :class="{'has-error': passwordError.state }"/>
-      <span class="error" v-if="passwordError.state"> {{passwordError.message}} </span>
-      <label for="txt_password_confirmation">{{ $t('ingresePassword') }} <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
-      <input :placeholder="$t('ingresePassword')" v-jump ref="txt_password_confirmation" name="txt_password_confirmation" maxlength="40" type="password" id="txt_password_confirmation" v-model='passwordConfirmation' :class="{'has-error': passwordError.state }" />
-      <span class="error" v-if="passwordError.state"> {{passwordError.message}} </span>
-      <div class="text-left checkbox-container" v-if="settings.module_validated_drivers">
-        <input v-jump type="checkbox" @change="changeBeDriver" id="change_be_driver">
-        <label for="change_be_driver" class="label-cbx">
-            {{ $t('solicitarChofer') }}
-        </label>
-      </div>
-      <div class="form-group text-left" v-if="settings.module_validated_drivers && showBeDriver">
-        <label for="driver_documentation">{{ $t('ingresarDocumentacion') }}</label>
-        <input type="file" id="driver_documentation" multiple @change="onDriverDocumentChange" />
-        <p class="help-block">{{ $t('requisitosRegister') }}</p>
-        <div class="form-group">
-            <label for="tipoDeCuenta">
-                {{ $t('tipoDeCuenta') }}
-                <span class="required-field-flag" title="Campo requerido">(*)</span>
+      <div v-if="showRegisterForm">
+        <div class="campos-obligatorios">{{ $t('camposObligatorios') }}</div>
+        <br />
+        <label for="txt_name">{{ $t('nombre') }} <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
+        <input :placeholder="$t('nombre')" autofocus v-jump ref="txt_name" name="txt_name" maxlength="25" type="text" id="txt_name" v-model='name' :class="{'has-error': nombreError.state }"/>
+        <span class="error" v-if="nombreError.state"> {{nombreError.message}} </span>
+        <label for="txt_surename">{{ $t('apellido') }} <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
+        <input :placeholder="$t('apellido')" v-jump ref="txt_surename" name="txt_surename" maxlength="25" type="text" id="txt_surename" v-model='sureName' :class="{'has-error': apellidoError.state }"/>
+        <span class="error" v-if="apellidoError.state"> {{apellidoError.message}} </span>
+        <label for="txt_email">{{ $t('email') }} <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
+        <input :placeholder="$t('email')" v-jump ref="txt_email" name="txt_email" maxlength="40" type="text" id="txt_email" v-model='email' :class="{'has-error': emailError.state }"/>
+        <span class="error" v-if="emailError.state"> {{emailError.message}} </span>
+        <!--<label for="">Fecha de nacimiento <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
+        <DatePicker :value="birthday" ref="ipt_calendar" name="ipt_calendar" :maxDate="maxDate" :minDate="minDate" :class="{'has-error': birthdayError.state}" ></DatePicker>-->
+        <span class="error" v-if="birthdayError.state"> {{birthdayError.message}} </span>
+        <label for="txt_password">{{ $t('password') }} <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
+        <input :placeholder="$t('password')" v-jump ref="txt_password" name="txt_password" maxlength="40" type="password" id="txt_password" v-model='password' :class="{'has-error': passwordError.state }"/>
+        <span class="error" v-if="passwordError.state"> {{passwordError.message}} </span>
+        <label for="txt_password_confirmation">{{ $t('ingresePassword') }} <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
+        <input :placeholder="$t('ingresePassword')" v-jump ref="txt_password_confirmation" name="txt_password_confirmation" maxlength="40" type="password" id="txt_password_confirmation" v-model='passwordConfirmation' :class="{'has-error': passwordError.state }" />
+        <span class="error" v-if="passwordError.state"> {{passwordError.message}} </span>
+        <div class="text-left checkbox-container" v-if="settings.module_validated_drivers">
+            <input v-jump type="checkbox" @change="changeBeDriver" id="change_be_driver">
+            <label for="change_be_driver" class="label-cbx">
+                {{ $t('solicitarChofer') }}
             </label>
-            <select v-model="account_type" id="tipoDeCuenta" class="form-control" :class="{'has-error': accountTypeError.state }">
-                <option v-for="option in accountTypes" v-bind:value="option.id">
-                    {{ option.name }}
-                </option>
-            </select>
-            <span class="error" v-if="accountTypeError.state"> {{accountTypeError.message}} </span>
         </div>
-        <div class="form-group">
-            <label for="bancoDeCuenta">
-                {{ $t('bancoDeCuenta') }}
-                <span class="required-field-flag" title="Campo requerido">(*)</span>
+        <div class="form-group text-left" v-if="settings.module_validated_drivers && showBeDriver">
+            <label for="driver_documentation">{{ $t('ingresarDocumentacion') }}</label>
+            <input type="file" id="driver_documentation" multiple @change="onDriverDocumentChange" />
+            <p class="help-block">{{ $t('requisitosRegister') }}</p>
+            <div class="form-group">
+                <label for="tipoDeCuenta">
+                    {{ $t('tipoDeCuenta') }}
+                    <span class="required-field-flag" title="Campo requerido">(*)</span>
+                </label>
+                <select v-model="account_type" id="tipoDeCuenta" class="form-control" :class="{'has-error': accountTypeError.state }">
+                    <option v-for="option in accountTypes" v-bind:value="option.id">
+                        {{ option.name }}
+                    </option>
+                </select>
+                <span class="error" v-if="accountTypeError.state"> {{accountTypeError.message}} </span>
+            </div>
+            <div class="form-group">
+                <label for="bancoDeCuenta">
+                    {{ $t('bancoDeCuenta') }}
+                    <span class="required-field-flag" title="Campo requerido">(*)</span>
+                </label>
+                <select v-model="account_bank" id="" class="form-control" :class="{'has-error': accountBankError.state }">
+                    <option v-for="option in banks" v-bind:value="option.id">
+                        {{ option.name }}
+                    </option>
+                </select>
+                <span class="error" v-if="accountBankError.state"> {{accountBankError.message}} </span>
+            </div>
+            <div class="form-group">
+                <label for="accountNumber">
+                    {{ $t('numeroDeCuenta') }}
+                    <span class="required-field-flag" title="Campo requerido">(*)</span>
+                </label>
+                <input v-model="account_number" type="text" id="accountNumber" :placeholder="$t('numeroDeCuenta')" :class="{'has-error': accountNumberError.state }" />
+                <span class="error" v-if="accountNumberError.state"> {{accountNumberError.message}} </span>
+            </div>
+        </div>
+        <div class="terms text-left">
+            <input v-jump ref="ipt_terms" name="ipt_terms" type="checkbox" id="cbx_terms" v-model='termsAndConditions' />
+            <label for="cbx_terms" class="label-cbx">
+                {{ $t('leidoTerminos1') }} <router-link :to="{name: 'terms'}">{{ $t('leidoTerminos2') }}</router-link>.
             </label>
-            <select v-model="account_bank" id="" class="form-control" :class="{'has-error': accountBankError.state }">
-                <option v-for="option in banks" v-bind:value="option.id">
-                    {{ option.name }}
-                </option>
-            </select>
-            <span class="error" v-if="accountBankError.state"> {{accountBankError.message}} </span>
+            <button v-jump ref="ipt_submit" name="ipt_submit" @click="register" class="btn-primary btn-outline" :disabled="progress || !termsAndConditions">
+                <span v-if="!progress">{{ $t('registrarme') }}</span><spinner class="blue" v-if="progress"></spinner>
+            </button>
         </div>
-        <div class="form-group">
-            <label for="accountNumber">
-                {{ $t('numeroDeCuenta') }}
-                <span class="required-field-flag" title="Campo requerido">(*)</span>
-            </label>
-            <input v-model="account_number" type="text" id="accountNumber" :placeholder="$t('numeroDeCuenta')" :class="{'has-error': accountNumberError.state }" />
-            <span class="error" v-if="accountNumberError.state"> {{accountNumberError.message}} </span>
-        </div>
-      </div>
-      <div class="terms text-left">
-        <input v-jump ref="ipt_terms" name="ipt_terms" type="checkbox" id="cbx_terms" v-model='termsAndConditions' />
-        <label for="cbx_terms" class="label-cbx">
-            {{ $t('leidoTerminos1') }} <router-link :to="{name: 'terms'}">{{ $t('leidoTerminos2') }}</router-link>.
-        </label>
-        <button v-jump ref="ipt_submit" name="ipt_submit" @click="register" class="btn-primary btn-outline" :disabled="progress || !termsAndConditions"> 
-            <span v-if="!progress">{{ $t('registrarme') }}</span><spinner class="blue" v-if="progress"></spinner>
-        </button>
       </div>
     </div>
     <div class='form row register-success' v-else>
@@ -133,7 +143,10 @@ export default {
             showBeDriver: false,
             driverFiles: null,
             banks: [],
-            accountTypes: []
+            accountTypes: [],
+            loading: false,
+            fbLoading: false,
+            showRegister: false
         };
     },
     computed: {
@@ -145,6 +158,9 @@ export default {
         }),
         tripCardTheme () {
             return this.settings ? this.settings.trip_card_design : '';
+        },
+        showRegisterForm () {
+            return !this.settings.enable_facebook || this.showRegister;
         }
     },
     watch: {
@@ -163,8 +179,24 @@ export default {
             doRegister: 'auth/register',
             getBankData: 'profile/getBankData',
             saveRegisterData: 'profile/saveRegisterData',
-            cleanRegisterData: 'profile/cleanRegisterData'
+            cleanRegisterData: 'profile/cleanRegisterData',
+            fbLogin: 'cordova/facebookLogin'
         }),
+        onShowRegister () {
+            this.showRegister = true;
+        },
+        facebookLogin () {
+            if (!this.loading) {
+                this.fbLoading = true;
+                this.fbLogin().catch((response) => {
+                    if (response.errors && response.errors.email) {
+                        dialogs.message(this.$t('correoUsado'), { duration: 10, estado: 'error' });
+                    }
+                });
+            } else {
+                dialogs.message(this.$t('solicitudEnviada'), { duration: 10, estado: 'error' });
+            }
+        },
         validate () {
             let globalError = false;
             if (this.email.length < 1) {
@@ -419,5 +451,9 @@ export default {
     }
     input[type=file] {
         color: white;
+    }
+    #btn_show_register {
+        border-color: #222;
+        background: #444;
     }
 </style>
