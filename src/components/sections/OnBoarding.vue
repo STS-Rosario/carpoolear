@@ -69,7 +69,9 @@ export default {
             setFirstTimeAppOpenInDevice: 'device/setFirstTimeAppOpenInDevice'
         }),
         srcCard (number) {
-            return `/static/img/onBoarding/${process.env.TARGET_APP}_placa${number}.jpg`;
+            let src = process.env.ROUTE_BASE + `static/img/onBoarding/${process.env.TARGET_APP}_placa${number}.jpg`;
+            console.log('src', src);
+            return src;
         },
         firstTransitionEnd () {
             this.cardsLength = this.appConfig.module_on_boarding_new_user && this.appConfig.module_on_boarding_new_user.cards;
