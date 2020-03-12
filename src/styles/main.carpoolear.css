@@ -1772,11 +1772,10 @@ textarea {
     border-left: 0;
     border-right: 0;
     border-bottom: 0;
-    padding-top: 1.4em;
-    padding-bottom: 4em;
-    margin-bottom: 2em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    margin-bottom: 1em;
 }
-
 .profile-info-component .edit-action button:first-child {
     margin-right: .8em;
 }
@@ -2048,6 +2047,9 @@ textarea {
     background: -ms-linear-gradient(-45deg, rgba(1, 155, 225, 1) 0%, rgba(1, 101, 135, 1) 100%);
     background: linear-gradient(135deg, rgba(1, 155, 225, 1) 0%, rgba(1, 101, 135, 1) 100%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#019be1', endColorstr='#016587', GradientType=1);
+}
+.app-container.blue.reset-password .user-form .btn-primary {
+    max-width: 100%;
 }
 @media (max-width: 768px) {
     .app-container.blue.register,

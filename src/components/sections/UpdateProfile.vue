@@ -54,14 +54,20 @@
                     {{ $t('siSosConductorDatosVisibles') }}
                 </p>
                 <div class="form-group">
-                    <label for="input-dni">{{ $t('documento') }} <span class="description">({{ $t('soloNumeros') }}). {{ $t('incentivoDoc') }} {{ $t('doc') }} {{ $t('momentoViajar') }}</span></label>
+                    <label for="input-dni">{{ $t('documento') }} <span class="required-field-flag" title="Campo requerido">(*)</span> <span class="description">({{ $t('soloNumeros') }}). {{ $t('incentivoDoc') }} {{ $t('doc') }} {{ $t('momentoViajar') }}</span></label>
                     <input v-numberMask="'dniRawValue'" type="text" data-max-length="8" v-model="user.nro_doc" class="form-control" id="input-dni" :placeholder="$t('doc')" :class="{'has-error': dniError.state }">
                     <span class="error" v-if="dniError.state"> {{dniError.message}} </span>
                 </div>
                 <div class="form-group">
-                    <label for="input-telefono">{{ $t('nroTel') }} <span class="description">({{ $t('ejemploTelefono') }}). {{ $t('incentivoTelefono') }}</span></label>
-                    <input maxlength="20" @keydown="isNumber" v-on:paste='isNumber' v-model="user.mobile_phone" type="tel" class="form-control" id="input-phone" placeholder="Número de teléfono (al menos 7 números)" :class="{'has-error': phoneError.state }">
+                    <label for="input-telefono">{{ $t('nroTel') }}<span class="required-field-flag" title="Campo requerido">(*)</span> <span class="description">({{ $t('ejemploTelefono') }}). {{ $t('incentivoTelefono') }}</span></label>
+                    <input maxlength="20" @keydown="isNumber" v-on:paste='isNumber' v-model="user.mobile_phone" type="tel" class="form-control" id="input-telefono" placeholder="Número de teléfono (al menos 7 números)" :class="{'has-error': phoneError.state }">
                     <span class="error" v-if="phoneError.state"> {{phoneError.message}} </span>
+                </div>
+
+                <div class="form-group">
+                    <label for="input-telefono">{{ $t('patente') }} <span class="description"> ({{ $t('soloConductores') }}). {{ $t('incentivoPatente') }}</span></label>
+                    <input maxlength="20" v-model="patente" type="text" class="form-control" id="input-phone" :class="{'has-error': patentError.state }">
+                    <span class="error" v-if="patentError.state"> {{patentError.message}} </span>
                 </div>
                 <div class="checkbox">
                     <label>
@@ -450,13 +456,22 @@ export default {
                 globalError = true;
             }
 
-            if (this.dniRawValue && this.dniRawValue.length > 0 && this.dniRawValue.length < 7) {
+
+            if (!this.dniRawValue || this.dniRawValue.length < 1) {
+                this.dniError.state = true;
+                this.dniError.message = this.$t('olvidasteDni');
+                globalError = true;
+            } else if (this.dniRawValue && this.dniRawValue.length > 0 && this.dniRawValue.length < 7) {
                 this.dniError.state = true;
                 this.dniError.message = this.$t('dniNoValido');
                 globalError = true;
             }
 
-            if (this.user.mobile_phone && this.user.mobile_phone.length > 0 && this.user.mobile_phone.length < 6) {
+            if (!this.user.mobile_phone || this.user.mobile_phone.length < 1) {
+                this.phoneError.state = true;
+                this.phoneError.message = this.$t('olvidasteTel');
+                globalError = true;
+            } else if (this.user.mobile_phone && this.user.mobile_phone.length > 0 && this.user.mobile_phone.length < 6) {
                 this.phoneError.state = true;
                 this.phoneError.message = this.$t('telefonoNoValido');
                 globalError = true;
@@ -485,6 +500,7 @@ export default {
     },
     watch: {
         cars: function () {
+            console.log('cars', this.cars);
             if (this.cars.length > 0) {
                 this.car = this.cars[0];
                 this.patente = this.car.patente;

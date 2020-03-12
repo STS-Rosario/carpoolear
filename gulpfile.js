@@ -49,6 +49,7 @@ gulp.task('deploy', function () {
         'dist/' + argv.project + '/production/platforms/browser/www/fonts'
     ];
     console.log(rsyncPaths);
+    console.log(argv);
   // Default options for rsync
     rsyncConf = {
         progress: true,

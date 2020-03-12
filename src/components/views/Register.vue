@@ -7,12 +7,15 @@
     <h1 v-if="tripCardTheme !== 'light' && !(success && isMobile)"> {{ $t('RegistrarNuevoUsuario') }} </h1>
     <div class='form row' v-if="!success">
       <div v-if="settings.enable_facebook" v-show="!showRegisterForm">
-        <div class="text">Con</div>
-        <button class="btn btn-primary btn-search btn-facebook btn-with-icon" @click="facebookLogin" :disabled="fbLoading"><span class="btn-with-icon--icon"><i class="fa fa-facebook" aria-hidden="true"></i></span><span class='btn-with-icon--label'> <span v-if="!fbLoading">Facebook</span><spinner class="blue" v-if="fbLoading"></spinner></span></button>
-        <div class="fb-terms">{{ $t('alIngresarFacebook') }} <router-link :to="{name: 'terms'}">{{ $t('tyc') }}</router-link>.</div>
-        <hr />
-        <div class="text">O creando una cuenta con</div>
-        <button ref="btn_show_register" id="btn_show_register" class="btn btn-primary btn-shadowed-black" @click="onShowRegister"> <span>{{ $t('ingresaConCuenta') }}</span></button>
+        <div class="col-md-12">
+            <div class="text">Con</div>
+            <button ref="btn_show_register" id="btn_show_register" class="btn btn-primary btn-shadowed-black" @click="onShowRegister"> <span>{{ $t('ingresaConCuenta') }}</span></button>
+        </div>
+        <div class="col-md-12">
+            <div class="text">O creando una cuenta con</div>
+            <button class="btn btn-primary btn-search btn-facebook btn-with-icon" @click="facebookLogin" :disabled="fbLoading"><span class="btn-with-icon--icon"><i class="fa fa-facebook" aria-hidden="true"></i></span><span class='btn-with-icon--label'> <span v-if="!fbLoading">Facebook</span><spinner class="blue" v-if="fbLoading"></spinner></span></button>
+            <div class="fb-terms">{{ $t('alIngresarFacebook') }} <router-link :to="{name: 'terms'}">{{ $t('tyc') }}</router-link>.</div>
+        </div>
       </div>
       <h1 v-if="tripCardTheme === 'light' && !(success && isMobile)"> {{ $t('RegistrarNuevoUsuario') }} </h1>
       <div v-if="showRegisterForm">
@@ -424,8 +427,9 @@ export default {
     @media only screen and (min-width: 768px) {
         .user-form .btn-primary {
             text-align: center;
-            max-width: 170px;
+            max-width: 280px;
             padding: 1em;
+            margin-bottom: 1em;
         }
         h2 {
             color: #036686;
@@ -455,5 +459,8 @@ export default {
     #btn_show_register {
         border-color: #222;
         background: #444;
+    }
+    .fb-terms {
+        font-size: 0.9em;
     }
 </style>

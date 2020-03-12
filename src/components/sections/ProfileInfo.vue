@@ -53,6 +53,11 @@
                         <div class="list-group-item--content">{{profile.mobile_phone}}</div>
                     </div>
 
+                    <div class="list-group-item" v-if="profile.cars && profile.cars.length">
+                        <i class="fa fa-car" aria-hidden="true"></i>
+                        <div class="list-group-item--content">{{profile.cars[0].patente}}</div>
+                    </div>
+
                 </div>
                 <div class="edit-action" v-if="user.is_admin && profile.id !== user.id">
                     <button class="btn btn-primary btn-circle" v-on:click="messageUser()">
@@ -64,7 +69,7 @@
                     <router-link class="btn btn-primary" tag="button" :to="{name:'friends_setting'}"> {{ $t('verAmigos') }}</router-link>
                     <router-link v-if="config && config.module_trip_seats_payment" class="btn btn-primary" tag="button" :to="{name:'transacciones'}"> transacciones </router-link>
                 </div>
-                <div class="edit-action" v-else-if="config && config.module_references && !userReferenceWritten">
+                <div class="edit-action edit-action-reference" v-else-if="config && config.module_references && !userReferenceWritten">
                     <button v-if="!sendReferenceFormVisibility" class="btn btn-primary" tag="button" @click="showReferenceForm">{{ $t('enviarReferencia') }}</button>
                     <div v-else class="reply-box">
                         <label for="reply" class="label label-reply">Escribe una referencia sobre el usuario</label>

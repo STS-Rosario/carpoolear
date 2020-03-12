@@ -62,10 +62,11 @@ export default {
             return this.trip && this.user && this.user.id === this.trip.user.id;
         },
         acceptedPassengers () {
-            return this.trip.passenger ? this.trip.passenger.filter(item => item.request_state === 1) : [];
+            console.log('acceptedPassengers', this.trip);
+            return this.trip.allPassengerRequest ? this.trip.allPassengerRequest.filter(item => item.request_state === 1) : [];
         },
         waitingForPaymentsPassengers () {
-            return this.trip.passenger ? this.trip.passenger.filter(item => item.request_state === 4) : [];
+            return this.trip.allPassengerRequest ? this.trip.allPassengerRequest.filter(item => item.request_state === 4) : [];
         }
     },
     props: [],

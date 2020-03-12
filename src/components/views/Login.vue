@@ -1,6 +1,6 @@
 <template>
   <div class="user-form container" >
-    <router-link v-if="!isMobile"  :to="{name: 'trips'}">
+    <router-link v-if="isDesktop"  :to="{name: 'trips'}">
         <img :src="carpoolear_logo" />
     </router-link>
     <div class="login-header">
@@ -48,32 +48,48 @@
             </span>
         </button>
       </div>
-
-      <div class="login-box" :class="[righPanelclass]" v-show="isShowLogin || !isMobile">
+    <div class="login-box" :class="[righPanelclass]" v-show="!isShowLogin && isDesktop">
+        <div class='visual-trick'>
+            <button ref="btn_show_login" id="btn_show_login" class="btn btn-primary btn-shadowed-black btn-with-icon btn-email" @click="showLogin" v-show="!isShowLogin">
+                <span class="btn-with-icon--icon">
+                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                </span>
+                <span class='btn-with-icon--label'>
+                    <span>{{ $t('ingresaConCuenta') }}</span>
+                </span>
+            </button>
+        </div>
+        <div>
+            <span class="register">{{ $t('noTenesFace') }} <router-link class='login-register' :to="{name:'register'}"> {{ $t('registrateAca') }} </router-link></span>
+        </div>
+    </div>
+      <div class="login-box" :class="[righPanelclass]" v-show="isShowLogin && isDesktop">
         <label v-show="!loginCustomHeader" for="txt_user">{{ $t('email') }}</label>
         <div class='visual-trick'>
             <input :placeholder="$t('loginUsuarioPlaceholder')" ref="txt_user" type="email" id="txt_user" v-model="email" v-jump />
-            <label for="txt_password" v-show="!isMobile">{{ $t('password') }}</label>
+            <label for="txt_password" v-show="isDesktop">{{ $t('password') }}</label>
             <input  :placeholder="$t('loginPasswordPlaceholder')" ref="txt_password" type="password" id="txt_password" v-jump v-model='password' />
             <div class="alert alert-info" role="alert" v-if="showUserNotActiveInfo">
                  {{ $t('debeActivarCuenta') }}
             </div>
             <button v-jump ref="btn_login" id="btn_login" class="btn btn-primary btn-shadowed-black" @click="login" :disabled="loading"> <span v-if="!loading">{{ $t('ingresar') }}</span> <spinner class="blue" v-if="loading"></spinner></button>
         </div>
-        <div class='pass-options' v-if="!isMobile">
-            <input id="checkbox_remember" type="checkbox" /><label for="checkbox_remember">{{ $t('recordarme') }}</label><span v-show="!loginCustomHeader"> - </span><router-link class='login-forget' :to="{name:'reset-password'}">{{ $t('olvideContra') }} </router-link>
+        <div class='pass-options' v-if="isDesktop">
+            <input id="checkbox_remember" type="checkbox" /><label for="checkbox_remember">{{ $t('recordarme') }}</label>
+            <span v-show="!loginCustomHeader"> - </span>
+            <router-link class='login-forget' :to="{name:'reset-password'}">{{ $t('olvideContra') }} </router-link>
         </div>
 
       </div>
-      <div style="col-12 margin: 1em 0"  v-show="isShowLogin && isMobile" >
+      <div style="col-sm-12"  v-show="isShowLogin && isMobile" >
         <router-link class='password-not' :to="{name:'reset-password'}">{{ $t('olvideContra') }} </router-link>
       </div>
       <div  class="col-sm-12 col-md-12"  v-show="isMobile">
         <span class="register" v-if="isMobile">{{ $t('noTenesFace') }} <router-link class='login-register' :to="{name:'register'}"> {{ $t('registrateAca') }} </router-link></span>
 
       </div>
-      <div class="facebook-box" :class="[righPanelclass]" v-show="!isMobile" >
-        <span class="register">{{ $t('noTenesFace') }} <router-link class='login-register' :to="{name:'register'}"> {{ $t('registrateAca') }} </router-link></span>
+      <div class="facebook-box" :class="[righPanelclass]" v-show="isDesktop" >
+        <span class="register" v-show="isShowLogin">{{ $t('noTenesFace') }} <router-link class='login-register' :to="{name:'register'}"> {{ $t('registrateAca') }} </router-link></span>
         <button class="btn-primary btn-search btn-facebook btn-with-icon" @click="facebookLogin" :disabled="fbLoading" v-show="config.enable_facebook">
             <span class="btn-with-icon--icon">
                 <i class="fa fa-facebook" aria-hidden="true"></i>
@@ -125,6 +141,9 @@ export default {
             isMobile: 'device/isMobile',
             config: 'auth/appConfig'
         }),
+        isDesktop () {
+            return !this.isMobile;
+        },
         loginCustomHeader () {
             return this.config ? this.config.login_custom_header : '';
         },
@@ -287,6 +306,8 @@ label {
   padding: 1.4em 0;
   position: relative;
   display: inline-block;
+  margin-top: 1em;
+  margin-bottom: 1em;
 }
 
 .register::before {
@@ -359,7 +380,7 @@ label {
   .user-form .btn-primary.btn-facebook {
     width: 100%;
     max-width: 280px;
-    margin: 1.6em 0 0.6em 0;
+    margin: 0.5em 0 0.6em 0;
   }
   .register::before {
     display: none;
@@ -403,5 +424,7 @@ label {
   border: 2px solid #333;
   color: #FFF;
   background: #444;
+  width: 100%;
+  max-width: 280px;
 }
 </style>
