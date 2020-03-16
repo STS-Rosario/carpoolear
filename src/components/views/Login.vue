@@ -44,7 +44,7 @@
                 <i class="fa fa-envelope" aria-hidden="true"></i>
             </span>
             <span class='btn-with-icon--label'>
-                <span>{{ $t('ingresaConCuenta') }}</span>
+                <span>{{ $t('ingresaEmail') }}</span>
             </span>
         </button>
       </div>
@@ -411,6 +411,13 @@ label {
   margin-top: 0em;
 }
 
+#btn_show_login {
+  border: 2px solid #333;
+  color: #FFF;
+  background: #444;
+  width: 100%;
+}
+
 @media only screen and (min-width: 768px) {
   .form-warning-login button {
     margin-top: 0.5em;
@@ -418,13 +425,9 @@ label {
   [type="checkbox"] {
     margin-top: 0;
   }
+  #btn_show_login {
+    max-width: 280px;
+  }
 }
 
-#btn_show_login {
-  border: 2px solid #333;
-  color: #FFF;
-  background: #444;
-  width: 100%;
-  max-width: 280px;
-}
 </style>
