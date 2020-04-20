@@ -63,7 +63,7 @@
             <span class="register">{{ $t('noTenesFace') }} <router-link class='login-register' :to="{name:'register'}"> {{ $t('registrateAca') }} </router-link></span>
         </div>
     </div>
-      <div class="login-box" :class="[righPanelclass]" v-show="isShowLogin && isDesktop">
+      <div class="login-box" :class="[righPanelclass]" v-show="isShowLogin">
         <label v-show="!loginCustomHeader" for="txt_user">{{ $t('email') }}</label>
         <div class='visual-trick'>
             <input :placeholder="$t('loginUsuarioPlaceholder')" ref="txt_user" type="email" id="txt_user" v-model="email" v-jump />

@@ -3,7 +3,7 @@ config = {
   API_URL: '"https://apalancar.movilizame.com.ar"',
   // API_URL: '"http://carpoolear.192.168.0.74.nip.io"',
   MAPS_API: '"AIzaSyBlRfNi2qDcy_zwjR53VVOyD-csjYSq4Qo"',
-  FACEBOOK_API: '"231460834703207"',
+  FACEBOOK_API: '"2589420954502746"',
   TARGET_APP: '"apalancar"'
 
 }

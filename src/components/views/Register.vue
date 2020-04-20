@@ -8,11 +8,20 @@
     <div class='form row' v-if="!success">
       <div v-if="settings.enable_facebook" v-show="!showRegisterForm">
         <div class="col-md-12">
-            <div class="text">Con</div>
-            <button ref="btn_show_register" id="btn_show_register" class="btn btn-primary btn-shadowed-black" @click="onShowRegister"> <span>{{ $t('ingresaConCuenta') }}</span></button>
+            <div class="text text-with">con</div>
+            <!-- <button ref="btn_show_register" id="btn_show_register" class="btn btn-primary btn-shadowed-black" @click="onShowRegister"> <span>{{ $t('ingresaEmail') }}</span></button> -->
+
+            <button ref="btn_show_register" id="btn_show_register" class="btn btn-primary btn-shadowed-black btn-with-icon btn-email" @click="onShowRegister">
+                <span class="btn-with-icon--icon">
+                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                </span>
+                <span class='btn-with-icon--label'>
+                    <span>{{ $t('ingresaEmail') }}</span>
+                </span>
+            </button>
         </div>
         <div class="col-md-12">
-            <div class="text">O creando una cuenta con</div>
+            <div class="text text-creating-with-fb">o creando una cuenta con</div>
             <button class="btn btn-primary btn-search btn-facebook btn-with-icon" @click="facebookLogin" :disabled="fbLoading"><span class="btn-with-icon--icon"><i class="fa fa-facebook" aria-hidden="true"></i></span><span class='btn-with-icon--label'> <span v-if="!fbLoading">Facebook</span><spinner class="blue" v-if="fbLoading"></spinner></span></button>
             <div class="fb-terms">{{ $t('alIngresarFacebook') }} <router-link :to="{name: 'terms'}">{{ $t('tyc') }}</router-link>.</div>
         </div>
@@ -462,5 +471,18 @@ export default {
     }
     .fb-terms {
         font-size: 0.9em;
+    }
+    .text-creating-with-fb {
+        margin: 1em 0;
+    }
+    @media (min-width: 768px) {
+        .text-with,
+        .text-creating-with-fb {
+            margin: 0.5em 0;
+        }
+        .text-with::first-letter,
+        .text-creating-with-fb::first-letter {
+            text-transform: capitalize;
+        }
     }
 </style>

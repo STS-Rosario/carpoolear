@@ -35,7 +35,11 @@ router.beforeEach((to, from, next) => {
     }
     let getters = store.getters;
     let config = getters['auth/appConfig'];
-    let appName = config ? config.app_name : process.env.TARGET_APP;
+    console.log('config app name', config);
+    let appName = process.env.TARGET_APP;
+    if (config) {
+        appName = config.app_name ? config.app_name : config.name_app;
+    }
     if (appName && appName.length) {
         appName = appName.charAt(0).toUpperCase() + appName.slice(1);
     }
@@ -44,8 +48,10 @@ router.beforeEach((to, from, next) => {
         store.dispatch('actionbars/setSubTitle', '');
         store.dispatch('actionbars/setImgTitle', '');
         if (actionbar.header.title) {
+            console.log('actionbar.header.title', actionbar.header.title);
             store.dispatch('actionbars/setTitle', actionbar.header.title);
         } else {
+            console.log('actionbar appName', appName);
             store.dispatch('actionbars/setTitle', appName);
         }
         if (actionbar.header.buttons) {

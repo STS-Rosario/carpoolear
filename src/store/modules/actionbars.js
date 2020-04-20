@@ -87,6 +87,7 @@ const getters = {
 
 const actions = {
     setTitle (store, title = '') {
+        console.log('setTitle', title);
         let getters = globalStore.getters;
         let config = getters['auth/appConfig'];
         let appName = config ? config.name_app : process.env.TARGET_APP;

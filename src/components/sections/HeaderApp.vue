@@ -203,7 +203,11 @@ export default {
         }
 
     },
-
+    watch: {
+        title (_old, _new) {
+            console.log('titlee change', this.title);
+        }
+    },
     components: {
         dropdown,
         modal

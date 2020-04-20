@@ -30,7 +30,7 @@ class Notification {
 
 export default {
     init () {
-        console.log(window.cordova.platformId);
+        console.log('push init', window.cordova.platformId);
         if (window.cordova.platformId === 'browser') {
             return;
         }

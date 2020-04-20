@@ -8,7 +8,7 @@ export default {
         return new Promise((resolve, reject) => {
             var doLogin = function () {
                 console.log('do facebook login');
-                window.facebookConnectPlugin.login(['public_profile', 'email', 'user_friends'], // , 'user_birthday'
+                window.facebookConnectPlugin.login(['public_profile', 'email'], // , 'user_birthday', 'user_friends'
                     function (response) {
                         console.log(JSON.stringify(response));
                         resolve(response);

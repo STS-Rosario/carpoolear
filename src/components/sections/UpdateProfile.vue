@@ -456,7 +456,6 @@ export default {
                 globalError = true;
             }
 
-
             if (!this.dniRawValue || this.dniRawValue.length < 1) {
                 this.dniError.state = true;
                 this.dniError.message = this.$t('olvidasteDni');
