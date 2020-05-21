@@ -249,9 +249,13 @@ export default {
         .conversation-component.container .row,
         .conversation-component > .row > div,
         .conversation-container,
+        .conversation_list,
         .conversation_list .list-group
         {
             height: 100%;
+        }
+        .conversation_list {
+            height: 85%;
         }
         .conversation_chat .list-group-item:nth-child(2) {
             height: calc(100% - 99px);

@@ -216,6 +216,7 @@ export default {
         }
         #messagesWrapper {
             padding-top: 0;
+            padding-bottom: 65px;
         }
     }
 </style>
