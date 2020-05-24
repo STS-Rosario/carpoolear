@@ -855,6 +855,9 @@ export default {
             this.trip.distance = trip.distance;
             this.trip.description = trip.description;
 
+            this.trip.allow_kids = !(trip.allow_kids > 0);
+            this.trip.allow_animals = !(trip.allow_animals > 0);
+            this.trip.allow_smoking = !(trip.allow_smoking > 0);
             // this.calcRoute();
         },
 
@@ -1097,9 +1100,10 @@ export default {
             this.trip = this.getSaveInfo(this, this.estimatedTimeString);
             if (!this.updatingTrip) {
                 let trip = JSON.parse(JSON.stringify(this.trip));
-                trip.allow_kids = !trip.allow_kids;
-                trip.allow_animals = !trip.allow_animals;
-                trip.allow_smoking = !trip.allow_smoking;
+                console.log('updating trip', trip);
+                trip.allow_kids = !(trip.allow_kids > 0);
+                trip.allow_animals = !(trip.allow_animals > 0);
+                trip.allow_smoking = !(trip.allow_smoking > 0);
                 trip.seat_price = this.price;
                 if (trip.is_passenger === 1) {
                     trip.no_lucrar = 1;
