@@ -121,6 +121,7 @@ export default {
             makeReference: 'profile/makeReference'
         }),
         messageUser () {
+            console.log('messageUser profileInfo', this.profile);
             this.lookConversation(this.profile).then(conversation => {
                 router.push({ name: 'conversation-chat', params: { id: conversation.id } });
             });

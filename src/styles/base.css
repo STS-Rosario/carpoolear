@@ -1964,6 +1964,7 @@
       width: 100%;
       border: 1px solid #ccc;
       line-height: 28px;
+      color: #222;
   }
 
   .user-form input.has-error,

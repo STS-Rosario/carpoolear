@@ -19,7 +19,7 @@
                                     <li v-for="user in userList" class="list-group-item conversation_header" @click="selectUser(user)"  v-bind:key="user.id">
                                         <div class="media">
                                           <div class="media-right pull-right">
-                                              <button class="btn btn-success btn-circle" v-on:click="toUserMessages(user)">
+                                              <button class="btn btn-success btn-circle" v-on:click.stop="toUserMessages(user)">
                                                   <i class="fa fa-comments medium-icon" aria-hidden="true"></i>
                                               </button>
                                           </div>
@@ -80,11 +80,11 @@
                                 <span class="error" v-if="passError.state"> {{phoneError.message}} </span>
                             </div>
                             <hr />
-                            <div class="row" v-if="newInfo.driver_data_docs && newInfo.driver_data_docs.length">
+                            <div class="row" v-if="newInfo.driver_data_docs && newInfo.driver_data_docs.length && settings.module_validated_drivers">
                                 <h4 class="col-xs-24">Documentación del chofer</h4>
                                 <div v-imgSrc:docs="img"  v-for="img in newInfo.driver_data_docs" class="img-doc col-md-8 col-sm-12"></div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" v-if="settings.module_validated_drivers">
                                 <label for="tipoDeCuenta">
                                     {{ $t('tipoDeCuenta') }}
                                     <span class="required-field-flag" title="Campo requerido">(*)</span>
@@ -96,7 +96,7 @@
                                 </select>
                                 <span class="error" v-if="accountTypeError.state"> {{accountTypeError.message}} </span>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" v-if="settings.module_validated_drivers">
                                 <label for="bancoDeCuenta">
                                     {{ $t('bancoDeCuenta') }}
                                     <span class="required-field-flag" title="Campo requerido">(*)</span>
@@ -108,7 +108,7 @@
                                 </select>
                                 <span class="error" v-if="accountBankError.state"> {{accountBankError.message}} </span>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" v-if="settings.module_validated_drivers">
                                 <label for="accountNumber">
                                     {{ $t('numeroDeCuenta') }}
                                     <span class="required-field-flag" title="Campo requerido">(*)</span>
@@ -116,7 +116,7 @@
                                 <input v-model="newInfo.account_number" type="text" class="form-control" id="accountNumber" :placeholder="$t('numeroDeCuenta')">
                                 <span class="error" v-if="accountNumberError.state"> {{accountNumberError.message}} </span>
                             </div>
-                            <div class="checkbox">
+                            <div class="checkbox" v-if="settings.module_validated_drivers">
                                 <label>
                                     <input type="checkbox" v-model="newInfo.driver_is_verified"> Es chofer
                                 </label>
@@ -241,11 +241,15 @@ export default {
                 driver_data_docs: this.currentUser.driver_data_docs,
                 account_number: this.currentUser.account_number,
                 account_type: this.currentUser.account_type,
-                account_bank: this.currentUser.account_bank
+                account_bank: this.currentUser.account_bank,
+                banned: this.currentUser.banned > 0,
+                active: this.currentUser.active > 0
             };
         },
         toUserMessages (user) {
-            this.lookConversation(user).then(conversation => {
+            console.log('toUserMessages');
+            this.lookConversation({ user: user, tripId: null }).then(conversation => {
+            console.log('toUserMessages then', conversation);
                 router.push({ name: 'conversation-chat', params: { id: conversation.id } });
             });
         },

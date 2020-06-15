@@ -65,7 +65,16 @@ const actions = {
         }
     },
 
-    createConversation (store, { user, tripId }) {
+    createConversation (store, param) {
+        let user = param;
+        if (param.user) {
+            user = param.user;
+        }
+        let tripId = undefined;
+        if (param.tripId) {
+            tripId = param.tripId;
+        }
+        console.log('createConversation', user, tripId);
         return conversationApi.create(user.id, tripId).then((response) => {
             // globalStore.dispatch('conversations/listSearch');
             return Promise.resolve(response.data);

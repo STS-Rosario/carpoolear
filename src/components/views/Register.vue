@@ -344,11 +344,12 @@ export default {
                 this.progress = false;
                 this.success = true;
             }).catch((err) => {
-                console.log(err);
+                console.log('catch', err);
                 if (err) {
-                    console.log(err);
+                    console.log('err register', err);
                     if (err.status === 422) {
-                        if (err.data && err.data.errors && err.data.errors.email) {
+                        console.log('err st', err.data.errors.email);
+                        if (err.data && err.data.errors && err.data.errors.email && Array.isArray(err.data.errors.email) && err.data.errors.email.length > 0 && err.data.errors.email[0].indexOf('been taken') >= 0) {
                             dialogs.message(this.$t('mailEnUso'), { estado: 'error' });
                             this.emailError.state = true;
                             this.emailError.message = this.$t('mailEnUso');
