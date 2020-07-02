@@ -98,6 +98,10 @@ const actions = {
         return tripsApi.price(data);
     },
 
+    changeVisibility (store, data) {
+        return tripsApi.changeVisibility(data);
+    },
+
     refreshList (store, status) {
         store.commit(types.TRIPS_REFRESH, status);
     },

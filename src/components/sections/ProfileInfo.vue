@@ -112,7 +112,7 @@ export default {
             'config': 'auth/appConfig'
         }),
         userReferenceWritten () {
-            return this.profile.references && this.profile.references.length && this.profile.references.findIndex(item => item.user_id_from === this.user.id) >= 0;
+            return this.profile.references_data && this.profile.references_data.length && this.profile.references_data.findIndex(item => item.user_id_from === this.user.id) >= 0;
         }
     },
     methods: {

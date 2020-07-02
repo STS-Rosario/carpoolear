@@ -119,6 +119,7 @@ export default {
         return {
             minDate: moment().toDate(),
             isPassenger: false,
+            isAdmin: true,
             from_town: {
                 name: '',
                 location: null,
@@ -242,6 +243,7 @@ export default {
                 params.user_id = this.user.id;
             }
             params.is_passenger = this.isPassenger;
+            params.is_admin = this.isAdmin;
             if (foreignCountry < 2) {
                 this.$emit('admin-trip-search', params);
             } else {

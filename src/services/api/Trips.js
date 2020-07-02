@@ -53,6 +53,10 @@ class TripApi extends TaggedApi {
     price (data) {
         return this.post('/api/trips/price', data);
     }
+
+    changeVisibility (data) {
+        return this.post('/api/trips/' + data.id + '/change-visibility', data);
+    }
 }
 
 export { TripApi as default };

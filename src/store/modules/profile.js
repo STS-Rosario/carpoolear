@@ -18,7 +18,7 @@ const getters = {
     registerData: state => state.registerData,
     references: state => {
         if (state.user) {
-            return state.user.references;
+            return state.user.references_data;
         } else {
             return null;
         }
@@ -135,10 +135,11 @@ const mutations = {
     },
 
     [types.PROFILE_REFERENCE_ADD] (state, reference) {
-        if (!state.user.references) {
-            state.user.references = [];
+        if (!state.user.references_data) {
+            state.user.references_data = [];
         }
-        state.user.references.push(reference);
+        console.log('PROFILE_REFERENCE_ADD', state.user);
+        state.user.references_data.push(reference);
     }
 };
 

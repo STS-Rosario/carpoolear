@@ -72,6 +72,9 @@
             <div class="alert alert-info" role="alert" v-if="showUserNotActiveInfo">
                  {{ $t('debeActivarCuenta') }}
             </div>
+            <div class="alert alert-info" role="alert" v-if="showUserBannedInfo">
+                 {{ $t('usuarioBanneado') }}
+            </div>
             <button v-jump ref="btn_login" id="btn_login" class="btn btn-primary btn-shadowed-black" @click="login" :disabled="loading"> <span v-if="!loading">{{ $t('ingresar') }}</span> <spinner class="blue" v-if="loading"></spinner></button>
         </div>
         <div class='pass-options' v-if="isDesktop">
@@ -132,6 +135,7 @@ export default {
             dontShowAgain: false,
             isShowLogin: false,
             showUserNotActiveInfo: false,
+            showUserBannedInfo: false,
             app_logo: process.env.ROUTE_BASE + 'static/img/' + process.env.TARGET_APP + '_logo_full.png'
         };
     },
@@ -173,6 +177,7 @@ export default {
         login () {
             if (!this.fbLoading) {
                 this.showUserNotActiveInfo = false;
+                this.showUserBannedInfo = false;
                 this.loading = true;
                 let email = this.email;
                 let password = this.password;
@@ -182,9 +187,10 @@ export default {
                     // router.rememberBack();
                 }, error => {
                     const userNotActive = error && error.message === 'user_not_active';
-                    const message = userNotActive ? this.$t('paraIngresarCuenta') : this.$t('emailOContra');
+                    const userBanned = error && error.message === 'user_banned';
+                    const message = userNotActive ? this.$t('paraIngresarCuenta') : (userBanned ? this.$t('usuarioBanneado') :  this.$t('emailOContra'));
                     this.showUserNotActiveInfo = userNotActive;
-
+                    this.showUserBannedInfo = userBanned;
                     dialogs.message(message, { duration: 10, estado: 'error' });
                     if (error) {
                         this.error = error.error;

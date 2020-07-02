@@ -21,6 +21,7 @@
                         <th scope="col">Asientos Totales</th>
                         <th scope="col">Ocupados</th>
                         <th scope="col">Solicitudes</th>
+                        <th scope="col">Estado</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -28,11 +29,16 @@
                             <th scope="row">{{ viaje.user.name }}</th>
                             <td> {{ viaje.from_town }} </td>
                             <td> {{ viaje.to_town }} </td>
-                            <td>  {{ viaje.trip_date.slice(0,10) }} </td>
-                            <td>  {{ viaje.trip_date.slice(10,20) }} </td>
-                            <td>  {{ viaje.total_seats }} </td>
+                            <td> {{ viaje.trip_date.slice(0,10) }} </td>
+                            <td> {{ viaje.trip_date.slice(10,20) }} </td>
+                            <td> {{ viaje.total_seats }} </td>
                             <td> {{ viaje.passengerAccepted_count }} </td>
                             <td> {{ viaje.request_count }} </td>
+                            <td> {{ viaje.hidden ? 'Oculto' : viaje.deleted ? 'Borrado' : 'Activo' }}
+                                <button v-if="!viaje.deleted" class="btn btn-primary" v-on:click.stop="onChangeVisibility(viaje.id)">
+                                    {{ viaje.hidden ? 'Activar' : 'Ocultar' }}
+                                </button>
+                            </td>
                         </tr>
                     </tbody>
                     </table>
@@ -64,9 +70,11 @@ export default {
     methods: {
         ...mapActions({
             search: 'trips/tripsSearch',
-            show: 'trips/show'
+            show: 'trips/show',
+            changeVisibility: 'trips/changeVisibility'
         }),
         research (params) {
+            console.log('research', params);
             this.query = params;
             this.search(params)
                 .then((data) => {
@@ -89,6 +97,17 @@ export default {
         closeTrip () {
             this.currentViaje = {};
             this.showTrip = false;
+        },
+        onChangeVisibility (id) {
+            this.changeVisibility({ id: id }).then((trip) => {
+                for (let index = 0; index < this.viajes.length; index++) {
+                    console.log('changeVisibility', this.viajes[index].id === trip.data.id);
+                    if (this.viajes[index].id === trip.data.id) {
+                        this.viajes[index] = trip.data;
+                        this.$forceUpdate();
+                    }
+                }
+            });
         }
     },
     components: {
