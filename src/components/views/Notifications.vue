@@ -15,6 +15,9 @@
                     </div>
                 </div>
             </div>
+            <div class="text-right">
+                <button class="btn btn-primary" v-on:click="nextPage()">Siguiente</button>
+            </div>
             <p slot="no-data" class="alert alert-warning"  role="alert">No hay notificaciones</p>
             <p slot="loading" class="alert alert-info" role="alert">
                 <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
@@ -26,7 +29,7 @@
 
 <script>
 import Loading from '../Loading';
-import {mapActions, mapGetters} from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import router from '../../router';
 
 export default {
@@ -34,7 +37,11 @@ export default {
 
     data () {
         return {
-
+            query: {
+                page: 1,
+                page_size: 25,
+                mark: true
+            }
         };
     },
 
@@ -44,14 +51,15 @@ export default {
         }),
 
         onNotificationClick (n) {
+            console.log('onNotificationClick', n);
             if (n.extras) {
                 console.log(n.extras);
                 switch (n.extras.type) {
                 case 'trip':
-                    router.push({name: 'detail_trip', params: { id: n.extras.trip_id }});
+                    router.push({ name: 'detail_trip', params: { id: n.extras.trip_id } });
                     break;
                 case 'friends':
-                    router.push({name: 'friends_setting'});
+                    router.push({ name: 'friends_setting' });
                     break;
                 case 'subscription':
                     router.push({ name: 'my-trips', query: { loc: 'suscriptions' } });
@@ -64,6 +72,10 @@ export default {
                     break;
                 }
             }
+        },
+        nextPage () {
+            this.query.page += 1;
+            this.search(this.query);
         }
     },
 
@@ -74,7 +86,7 @@ export default {
     },
 
     mounted () {
-        this.search(true);
+        this.search(this.query);
     },
 
     components: {

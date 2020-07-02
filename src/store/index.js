@@ -7,7 +7,6 @@ import cordova from './modules/cordova';
 import trips from './modules/trips';
 import device from './modules/device';
 import myTrips from './modules/my-trips';
-import userTrips from './modules/user-trips';
 import conversations from './modules/conversations';
 import cars from './modules/car';
 import friends from './modules/friends';
@@ -18,6 +17,7 @@ import actionbars from './modules/actionbars';
 import profile from './modules/profile';
 import background from './modules/background';
 import subscriptions from './modules/subscriptions';
+import admin from './modules/admin';
 
 Vue.use(Vuex);
 
@@ -42,7 +42,7 @@ export default new Vuex.Store({
         actionbars,
         profile,
         background,
-        userTrips,
-        subscriptions
+        subscriptions,
+        admin
     }
 });

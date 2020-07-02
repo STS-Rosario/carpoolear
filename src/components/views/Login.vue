@@ -1,60 +1,114 @@
 <template>
   <div class="user-form container" >
-    <router-link v-if="!isMobile"  :to="{name: 'trips'}">
+    <router-link v-if="isDesktop"  :to="{name: 'trips'}">
         <img :src="carpoolear_logo" />
     </router-link>
-    <h1 v-if="!(hasScroll && isMobile)"> Ingresá con tu cuenta de <span class='brand'>Carpoolear</span> </h1>
+    <div class="login-header">
+      <h1 v-if="!(hasScroll && isMobile)">
+          {{ $t('iniciarSesion') }}
+          <!-- <span class='brand' v-if="!loginCustomHeader">{{ $t('carpoolear') }}</span> -->
+      </h1>
+      <div class="col-sm-12 col-md-12" v-show="isMobile && loginCustomHeader">
+          <img class="login-custom-header--logo" :src="app_logo"/>
+      </div>
+    </div>
     <div class='form row'>
       <div class="alert alert-warning" role="alert" v-if="!isUnderstood">
-        Si carpooleabas antes del 5/8/17, tenés que entrar al sistema mediante el botón "ingresar con facebook" para seguir usando el mismo usuario y recuperar tus calificaciones. Si no podés entrar, escribinos a <a href="mailto:carpoolear@stsrosario.org.ar">carpoolear@stsrosario.org.ar</a> o a nuestro facebook así te ayudamos :)
+        {{ $t('recuperarDeFacebook') }} <a href="mailto:carpoolear@stsrosario.org.ar">{{ $t('carpoolearMail') }}</a> {{ $t('recuperarDeFacebook2') }}
         <div class="row form-inline form-warning-login">
             <div class="col-sm-24 text-right">
                 <div class="checkbox">
                     <label>
                         <input type="checkbox" v-model="dontShowAgain">
-                        <span>No volver a mostrar</span>
+                        <span>{{ $t('noMostrar') }}</span>
                     </label>
                 </div>
-                <button type="button" class="btn btn-default" @click="fbWarningGetIt">ENTENDIDO!</button>
+                <button type="button" class="btn btn-default" @click="fbWarningGetIt">{{ $t('entendido') }}</button>
             </div>
         </div>
       </div>
-      <div class="col-sm-12 col-md-12" v-show="isMobile">
-        <button class="btn-primary btn-search btn-facebook btn-with-icon" @click="facebookLogin" :disabled="fbLoading"><span class="btn-with-icon--icon"><i class="fa fa-facebook" aria-hidden="true"></i></span><span class='btn-with-icon--label'> <span v-if="!fbLoading">Ingresá con Facebook</span><spinner class="blue" v-if="fbLoading"></spinner></span></button>
-        <div class="fb-terms">Al ingresar con Facebook estas aceptando nuestros <router-link :to="{name: 'terms'}">términos y condiciones</router-link>.</div>
+      <div class="col-sm-12 col-md-12" v-show="isMobile && !loginCustomHeader">
+        <button class="btn btn-primary btn-search btn-facebook btn-with-icon" @click="facebookLogin" :disabled="fbLoading">
+            <span class="btn-with-icon--icon">
+                <i class="fa fa-facebook" aria-hidden="true"></i>
+            </span>
+            <span class='btn-with-icon--label'>
+                <span v-if="!fbLoading">Facebook</span>
+                <spinner class="blue" v-if="fbLoading"></spinner>
+            </span>
+        </button>
+        <!-- <div class="fb-terms">{{ $t('alIngresarFacebook') }} <router-link :to="{name: 'terms'}">{{ $t('tyc') }}</router-link>.</div> -->
         <hr />
-        <button ref="btn_show_login" id="btn_show_login" class="btn btn-primary btn-shadowed-black" @click="showLogin" v-show="!isShowLogin"> <span>Ingresá con tu cuenta</span></button>
+        <button ref="btn_show_login" id="btn_show_login" class="btn btn-primary btn-shadowed-black btn-with-icon btn-email" @click="showLogin" v-show="!isShowLogin">
+            <span class="btn-with-icon--icon">
+                <i class="fa fa-envelope" aria-hidden="true"></i>
+            </span>
+            <span class='btn-with-icon--label'>
+                <span>{{ $t('ingresaEmail') }}</span>
+            </span>
+        </button>
       </div>
-
-      <div class="col-sm-12 col-md-12 login-box" v-show="isShowLogin || !isMobile">
-        <label for="txt_user">Email</label>
+    <div class="login-box" :class="[righPanelclass]" v-show="!isShowLogin && isDesktop">
         <div class='visual-trick'>
-            <input placeholder="El email con el que te registraste" ref="txt_user" type="email" id="txt_user" v-model="email" v-jump:focus="'txt_password'" />
-            <label for="txt_password" v-show="!isMobile">Contraseña</label>
-            <input  placeholder="Contraseña" ref="txt_password" type="password" id="txt_password" v-jump:click.blur="'btn_login'" v-model='password' />
-            <div class="alert alert-info" role="alert" v-if="showUserNotActiveInfo">
-                 Para ingresar debe activar su cuenta, te hemos enviado un código de verificación a tu e-mail para que puedas activar tu cuenta.
-            </div>
-            <button ref="btn_login" id="btn_login" class="btn btn-primary btn-shadowed-black" @click="login" :disabled="loading"> <span v-if="!loading">Ingresar</span> <spinner class="blue" v-if="loading"></spinner></button>
+            <button ref="btn_show_login" id="btn_show_login" class="btn btn-primary btn-shadowed-black btn-with-icon btn-email" @click="showLogin" v-show="!isShowLogin">
+                <span class="btn-with-icon--icon">
+                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                </span>
+                <span class='btn-with-icon--label'>
+                    <span>{{ $t('ingresaConCuenta') }}</span>
+                </span>
+            </button>
         </div>
-        <div class='pass-options' v-if="!isMobile">
-            <input id="checkbox_remember" type="checkbox" /><label for="checkbox_remember">Recordarme</label><span> - </span><router-link class='login-forget' :to="{name:'reset-password'}">Olvidé mi contraseña </router-link>
+        <div>
+            <span class="register">{{ $t('noTenesFace') }} <router-link class='login-register' :to="{name:'register'}"> {{ $t('registrateAca') }} </router-link></span>
+        </div>
+    </div>
+      <div class="login-box" :class="[righPanelclass]" v-show="isShowLogin">
+        <label v-show="!loginCustomHeader" for="txt_user">{{ $t('email') }}</label>
+        <div class='visual-trick'>
+            <input :placeholder="$t('loginUsuarioPlaceholder')" ref="txt_user" type="email" id="txt_user" v-model="email" v-jump />
+            <label for="txt_password" v-show="isDesktop">{{ $t('password') }}</label>
+            <input  :placeholder="$t('loginPasswordPlaceholder')" ref="txt_password" type="password" id="txt_password" v-jump v-model='password' />
+            <div class="alert alert-info" role="alert" v-if="showUserNotActiveInfo">
+                 {{ $t('debeActivarCuenta') }}
+            </div>
+            <div class="alert alert-info" role="alert" v-if="showUserBannedInfo">
+                 {{ $t('usuarioBanneado') }}
+            </div>
+            <button v-jump ref="btn_login" id="btn_login" class="btn btn-primary btn-shadowed-black" @click="login" :disabled="loading"> <span v-if="!loading">{{ $t('ingresar') }}</span> <spinner class="blue" v-if="loading"></spinner></button>
+        </div>
+        <div class='pass-options' v-if="isDesktop">
+            <input id="checkbox_remember" type="checkbox" /><label for="checkbox_remember">{{ $t('recordarme') }}</label>
+            <span v-show="!loginCustomHeader"> - </span>
+            <router-link class='login-forget' :to="{name:'reset-password'}">{{ $t('olvideContra') }} </router-link>
         </div>
 
       </div>
-      <div style="margin: 1em 0"  v-show="isShowLogin && isMobile" >
-        <router-link class='password-not' :to="{name:'reset-password'}">Olvidé mi contraseña </router-link>
+      <div style="col-sm-12"  v-show="isShowLogin && isMobile" >
+        <router-link class='password-not' :to="{name:'reset-password'}">{{ $t('olvideContra') }} </router-link>
       </div>
       <div  class="col-sm-12 col-md-12"  v-show="isMobile">
-        <span class="register" v-if="isMobile">¿No tenés cuenta? Ingresá con Facebook o <router-link class='login-register' :to="{name:'register'}"> Registrate acá. </router-link></span>
+        <span class="register" v-if="isMobile">{{ $t('noTenesFace') }} <router-link class='login-register' :to="{name:'register'}"> {{ $t('registrateAca') }} </router-link></span>
 
       </div>
-      <div class="col-sm-12 col-md-12 facebook-box"  v-show="!isMobile" >
-        <span class="register">¿No tenés cuenta?  Ingresá con Facebook o <router-link class='login-register' :to="{name:'register'}"> Registrate acá. </router-link></span>
-        <button class="btn-primary btn-search btn-facebook btn-with-icon" @click="facebookLogin" :disabled="fbLoading"><span class="btn-with-icon--icon"><i class="fa fa-facebook" aria-hidden="true"></i></span><span class='btn-with-icon--label'> <span v-if="!fbLoading">Ingresá con Facebook</span><spinner class="blue" v-if="fbLoading"></spinner></span></button>
-        <div>Al ingresar con Facebook estas aceptando nuestros <router-link :to="{name: 'terms'}">términos y condiciones</router-link>.</div>
+      <div class="facebook-box" :class="[righPanelclass]" v-show="isDesktop" >
+        <span class="register" v-show="isShowLogin">{{ $t('noTenesFace') }} <router-link class='login-register' :to="{name:'register'}"> {{ $t('registrateAca') }} </router-link></span>
+        <button class="btn-primary btn-search btn-facebook btn-with-icon" @click="facebookLogin" :disabled="fbLoading" v-show="config.enable_facebook">
+            <span class="btn-with-icon--icon">
+                <i class="fa fa-facebook" aria-hidden="true"></i>
+            </span>
+            <span class='btn-with-icon--label'>
+                <span v-if="!fbLoading">{{ $t('ingresaConFace') }}</span>
+            </span>
+            <spinner class="blue" v-if="fbLoading"></spinner></span></button>
+        <div v-show="config.enable_facebook">
+            {{ $t('alIngresarFace') }} <router-link :to="{name: 'terms'}">{{ $t('tyc') }}</router-link>.
+        </div>
       </div>
-      <!--<span v-if="loading"> Loading... </span>-->
+      <div class="col-sm-12 col-md-12" v-show="isMobile && loginCustomHeader">
+        <button class="btn btn-primary btn-search btn-facebook btn-with-icon" @click="facebookLogin" :disabled="fbLoading" v-show="config.enable_facebook"><span class="btn-with-icon--icon"><i class="fa fa-facebook" aria-hidden="true"></i></span><span class='btn-with-icon--label'> <span v-if="!fbLoading">Ingresá con Facebook</span><spinner class="blue" v-if="fbLoading"></spinner></span></button>
+        <div class="fb-terms" v-show="config.enable_facebook">{{ $t('alIngresarFacebook') }} <router-link :to="{name: 'terms'}">{{ $t('tyc') }}</router-link>.</div>
+      </div>
     </div>
   </div>
 </template>
@@ -63,7 +117,7 @@ import { mapGetters, mapActions } from 'vuex';
 import dialogs from '../../services/dialogs.js';
 import router from '../../router';
 import bus from '../../services/bus-event';
-import spinner from '../Spinner.vue';
+import Spinner from '../Spinner.vue';
 import cache from '../../services/cache';
 
 export default {
@@ -80,14 +134,34 @@ export default {
             isUnderstood: true,
             dontShowAgain: false,
             isShowLogin: false,
-            showUserNotActiveInfo: false
+            showUserNotActiveInfo: false,
+            showUserBannedInfo: false,
+            app_logo: process.env.ROUTE_BASE + 'static/img/' + process.env.TARGET_APP + '_logo_full.png'
         };
     },
     computed: {
         ...mapGetters({
             checkLogin: 'auth/checkLogin',
-            isMobile: 'device/isMobile'
-        })
+            isMobile: 'device/isMobile',
+            config: 'auth/appConfig'
+        }),
+        isDesktop () {
+            return !this.isMobile;
+        },
+        loginCustomHeader () {
+            return this.config ? this.config.login_custom_header : '';
+        },
+        righPanelclass () {
+            if (this.config) {
+                if (this.config.trip_card_design === 'light') {
+                    return 'col-sm-24 col-md-24';
+                } else {
+                    return 'col-sm-12 col-md-12';
+                }
+            } else {
+                return 'col-sm-12 col-md-12';
+            }
+        }
     },
     methods: {
         ...mapActions({
@@ -103,18 +177,20 @@ export default {
         login () {
             if (!this.fbLoading) {
                 this.showUserNotActiveInfo = false;
+                this.showUserBannedInfo = false;
                 this.loading = true;
                 let email = this.email;
                 let password = this.password;
-                this.doLogin({email, password}).then(data => {
+                this.doLogin({ email, password }).then(data => {
                     this.loading = false;
                     // router.push({ name: 'trips' });
                     // router.rememberBack();
                 }, error => {
                     const userNotActive = error && error.message === 'user_not_active';
-                    const message = userNotActive ? 'Para ingresar debe activar su cuenta primero.' : 'Email o password incorrecto.';
+                    const userBanned = error && error.message === 'user_banned';
+                    const message = userNotActive ? this.$t('paraIngresarCuenta') : (userBanned ? this.$t('usuarioBanneado') :  this.$t('emailOContra'));
                     this.showUserNotActiveInfo = userNotActive;
-
+                    this.showUserBannedInfo = userBanned;
                     dialogs.message(message, { duration: 10, estado: 'error' });
                     if (error) {
                         this.error = error.error;
@@ -122,7 +198,7 @@ export default {
                     this.loading = false;
                 });
             } else {
-                dialogs.message('Su solicitud ya fue enviada, aguarde un momento por favor.', { duration: 10, estado: 'error' });
+                dialogs.message(this.$t('solicitudEnviada'), { duration: 10, estado: 'error' });
             }
         },
         showLogin () {
@@ -134,14 +210,13 @@ export default {
                 this.fbLoading = true;
                 this.fbLogin().catch((response) => {
                     if (response.errors && response.errors.email) {
-                        dialogs.message('El correo asociado a su cuenta de facebook, ya tiene asociada una cuenta en Carpoolear. Por favor, ingresé utilizando el login por email. Si no recuerda su clave, cliqueé en olvidé mi contraseña.', { duration: 10, estado: 'error' });
+                        dialogs.message(this.$t('correoUsado'), { duration: 10, estado: 'error' });
                     }
                 });
             } else {
-                dialogs.message('Su solicitud ya fue enviada, aguarde un momento por favor.', { duration: 10, estado: 'error' });
+                dialogs.message(this.$t('solicitudEnviada'), { duration: 10, estado: 'error' });
             }
         },
-
         onClearClick () {
             router.back();
         }
@@ -153,6 +228,10 @@ export default {
 
         if (!this.isMobile) {
             this.$refs.txt_user.focus();
+        }
+
+        if (this.config.login_custom_header) {
+            this.isShowLogin = true;
         }
 
         this.hasScroll = document.body.scrollHeight > viewPort;
@@ -169,7 +248,7 @@ export default {
     },
 
     components: {
-        spinner
+        Spinner
     }
 };
 </script>
@@ -208,13 +287,13 @@ label {
 .login-forget {
   font-weight: bold;
   padding-left: 12px;
-  color: #016587;
+  color: var(--secondary-background);
 }
 
-.user-form .btn-primary.btn-facebook {
+/* .user-form .btn-primary.btn-facebook {
   width: 90%;
   margin: 1em auto;
-}
+} */
 
 .description {
   font-size: 11px;
@@ -230,10 +309,11 @@ label {
 .register {
   font-weight: 300;
   font-size: 16px;
-  display: block;
   padding: 1.4em 0;
   position: relative;
   display: inline-block;
+  margin-top: 1em;
+  margin-bottom: 1em;
 }
 
 .register::before {
@@ -248,7 +328,7 @@ label {
 
 .register::after {
   position: absolute;
-  border-bottom: solid 1px #2793ff;
+  border-bottom: solid 1px #AAA;
   width: 90%;
   margin-left: 5%;
   content: " ";
@@ -287,6 +367,9 @@ label {
   }
   .register {
     color: #555;
+    margin-bottom: 0;
+    padding: 0;
+    font-weight: 400;
   }
   .description {
     display: inline;
@@ -303,12 +386,7 @@ label {
   .user-form .btn-primary.btn-facebook {
     width: 100%;
     max-width: 280px;
-    margin: 1.6em 0 0.6em 0;
-  }
-  .register {
-    display: inline;
-    margin-bottom: 2em;
-    font-weight: 400;
+    margin: 0.5em 0 0.6em 0;
   }
   .register::before {
     display: none;
@@ -339,6 +417,13 @@ label {
   margin-top: 0em;
 }
 
+#btn_show_login {
+  border: 2px solid #333;
+  color: #FFF;
+  background: #444;
+  width: 100%;
+}
+
 @media only screen and (min-width: 768px) {
   .form-warning-login button {
     margin-top: 0.5em;
@@ -346,11 +431,9 @@ label {
   [type="checkbox"] {
     margin-top: 0;
   }
+  #btn_show_login {
+    max-width: 280px;
+  }
 }
 
-#btn_show_login {
-  border: 2px solid rgba(215, 37, 33, 0.8);
-  color: #FFF;
-  background: rgba(215, 37, 33, 0.8);
-}
 </style>

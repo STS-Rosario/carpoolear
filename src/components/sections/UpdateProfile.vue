@@ -3,15 +3,15 @@
     <div class="alert alert-info" v-if="!user.image || user.image.length === 0 || !user.description || user.description.length === 0">
         <div class='alert-icon'><i class="fa fa-exclamation" aria-hidden="true"></i></div>
         <div class='alert-message'>
-            Hola <strong>{{user.name}}</strong>!! Bienvenido a Carpoolear, para comenzar a subirte a viajes y crear tus propios viajes, debes terminar de completar tu perfil.
+            {{ $t('hola') }} <strong>{{user.name}}</strong> {{ $t('bienvenidoACarpoolear') }}
             <span v-if="(!user.image || user.image.length === 0) && (!user.description || user.description.length === 0)">
-                Completa tu <strong>imagen de perfil</strong> y tu <strong>descripción</strong> para comenzar a viajar.
+                {{ $t('completaTu') }} <strong>{{ $t('imagenPerfil') }}</strong> {{ $t('yTu') }} <strong>{{ $t('descripcion') }}</strong> {{ $t('comenzarViajar') }}
             </span>
             <span v-if="(!user.image || user.image.length === 0) && !(!user.description || user.description.length === 0)">
-                Completa tu <strong>imagen de perfil</strong> para comenzar a viajar.
+                {{ $t('completaTu') }} <strong>{{ $t('imagenPerfil') }}</strong> {{ $t('comenzarViajar') }}
             </span>
             <span v-if="!(!user.image || user.image.length === 0) && (!user.description || user.description.length === 0)">
-                Completa tu <strong>descripción</strong> para comenzar a viajar.
+                {{ $t('completaTu') }} <strong>{{ $t('descripcion') }}</strong> {{ $t('comenzarViajar') }}
             </span>
         </div>
     </div>
@@ -28,10 +28,10 @@
         <div class="col-xs-24 col-sm-16 col-sm-pull-8">
             <div class='form'>
                 <div class="alert alert-info">
-                    Generá confianza con el resto de la comunidad carpoolear, usá una foto tuya y contales un poco acerca de vos. Con eso aumentás tus chances de que alguien quiera compartir viaje con vos... es verdad, llevar torta para compartir también ayuda mucho :D
+                    {{ $t('incentivoFoto') }}
                 </div>
                 <div class="form-group">
-                    <label for="input-name">Nombre y apellido <span class="required-field-flag" title="Campo requerido">(*)</span></label>
+                    <label for="input-name">{{ $t('nombreYapellido') }} <span class="required-field-flag" title="Campo requerido">(*)</span></label>
                     <input maxlength="25" v-model="user.name" type="text" class="form-control" id="input-name" placeholder="Nombre" :class="{'has-error': nombreError.state }" :disabled="!firstTime" />
                     <span class="error" v-if="nombreError.state"> {{nombreError.message}} </span>
                 </div>
@@ -45,46 +45,122 @@
                     <span class="error" v-if="birthdayError.state"> {{birthdayError.message}} </span>
                 </div>-->
                 <div class="form-group">
-                    <label for="input-description">Acerca de mi <span class="required-field-flag" title="Campo requerido">(*)</span><span class="description"> Contale de vos al resto de los carpooleros así te suman a sus viajes! Qué te gusta hacer, en qué andas metido ahora, si estás con alguna idea, si te gustan los colores, etc.</span></label>
-                    <textarea maxlength="1000" v-model="user.description" placeholder="Descripción" :class="{'has-error': descError.state }" ></textarea>
+                    <label for="input-description">{{ $t('acercaDeMi') }} <span class="required-field-flag" title="Campo requerido">(*)</span><span class="description"> {{ $t('incentivoDescripcion') }}</span></label>
+                    <textarea maxlength="2000" v-model="user.description" placeholder="Descripción" :class="{'has-error': descError.state }" ></textarea>
                     <span class="error textarea" v-if="descError.state"> {{descError.message}} </span>
                 </div>
+                <hr />
+                <p class="form-group">
+                    {{ $t('siSosConductorDatosVisibles') }}
+                </p>
                 <div class="form-group">
-                    <label for="input-dni">Número de documento <span class="description">(Solo números). Dales un extra de confianza al resto de los carpooleros certificándoles que este es tu DNI al momento de viajar.</span></label>
-                    <input v-numberMask="'dniRawValue'" type="text" data-max-length="8" v-model="user.nro_doc" class="form-control" id="input-dni" placeholder="DNI" :class="{'has-error': dniError.state }">
+                    <label for="input-dni">{{ $t('documento') }} <span class="required-field-flag" title="Campo requerido">(*)</span> <span class="description">({{ $t('soloNumeros') }}). {{ $t('incentivoDoc') }} {{ $t('doc') }} {{ $t('momentoViajar') }}</span></label>
+                    <input v-numberMask="'dniRawValue'" type="text" data-max-length="8" v-model="user.nro_doc" class="form-control" id="input-dni" :placeholder="$t('doc')" :class="{'has-error': dniError.state }">
                     <span class="error" v-if="dniError.state"> {{dniError.message}} </span>
                 </div>
                 <div class="form-group">
-                    <label for="input-telefono">Número de teléfono <span class="description">(Código área + teléfono. Ej: 0341156708223). Por si querés que el resto de los carpooleros también te puedan contactar por ahí.</span></label>
-                    <input maxlength="20" @keydown="isNumber" v-on:paste='isNumber' v-model="user.mobile_phone" type="tel" class="form-control" id="input-phone" placeholder="Número de teléfono (al menos 7 números)" :class="{'has-error': phoneError.state }">
+                    <label for="input-telefono">{{ $t('nroTel') }}<span class="required-field-flag" title="Campo requerido">(*)</span> <span class="description">({{ $t('ejemploTelefono') }}). {{ $t('incentivoTelefono') }}</span></label>
+                    <input maxlength="20" @keydown="isNumber" v-on:paste='isNumber' v-model="user.mobile_phone" type="tel" class="form-control" id="input-telefono" placeholder="Número de teléfono (al menos 7 números)" :class="{'has-error': phoneError.state }">
                     <span class="error" v-if="phoneError.state"> {{phoneError.message}} </span>
                 </div>
+
                 <div class="form-group">
-                    <label for="input-patente">Patente <span class="description">(Sin espacios. Ej: ABC123 o AA123AA). Dale un extra de confianza a los carpooleros que viajen con vos identificando tu auto.</span></label>
-                    <input :style="patente.length > 0 ? 'text-transform: uppercase' : ''" v-mask="'AAN##NA'" v-model="patente" type="text" class="form-control" id="input-patente" placeholder="Patentes válidas (AAA111 o AA111BB)" :class="{'has-error': patentError.state }">
+                    <label for="input-telefono">{{ $t('patente') }} <span class="description"> ({{ $t('soloConductores') }}). {{ $t('incentivoPatente') }}</span></label>
+                    <input maxlength="20" v-model="patente" type="text" class="form-control" id="input-phone" :class="{'has-error': patentError.state }">
                     <span class="error" v-if="patentError.state"> {{patentError.message}} </span>
                 </div>
-
                 <div class="checkbox">
                     <label>
-                    <input type="checkbox" v-model="user.emails_notifications"> Recibir notificaciones por correo electrónico.
+                    <input type="checkbox" v-model="user.data_visibility" true-value="1"
+  false-value="0"> {{ $t('datosVisiblesCheck') }}
+                    </label>
+                    <div>
+                        {{ $t('tildaOpcionDatosVisibles') }}
+                    </div>
+                </div>
+                <hr />
+                <div class="checkbox">
+                    <label>
+                    <input type="checkbox" v-model="user.emails_notifications"> {{ $t('notificacionesPorCorreo') }}
                     </label>
                 </div>
                 <hr />
-                <div class="checkbox" >
+                <div class="checkbox">
                     <label >
-                        <input type="checkbox"  @change="changeShowPassword"> Cambiar contraseña
+                        <input type="checkbox"  @change="changeShowPassword"> {{ $t('cambiarPassword') }}
                     </label>
                 </div>
                 <div class="form-group" v-if="showChangePassword">
-                    <label for="input-pass">Ingrese su nueva contraseña</label>
+                    <label for="input-pass">{{ $t('ingreseNuevaPassword') }}</label>
                     <input maxlength="40" v-model="pass.password" type="password" class="form-control" id="input-pass" placeholder="Contraseña">
                     <input maxlength="40" v-model="pass.password_confirmation" type="password" class="form-control" id="input-pass-confirm" placeholder="Repetir contraseña">
                 </div>
 
+                <hr v-if="settings.module_unaswered_message_limit" />
+                <div class="form-group" v-if="settings.module_unaswered_message_limit">
+                    <label for="input-unaswered_messages_limit">{{ $t('unaswered_messages_limit') }} <span class="description">({{ $t('unaswered_messages_limitDescription') }})</span></label>
+                    <input type="numer" data-max-length="8" v-model="user.unaswered_messages_limit" class="form-control" id="input-unaswered_messages_limit" :class="{'has-error': unaswered_messages_limitError.state }">
+                    <span class="error" v-if="unaswered_messages_limitError.state"> {{unaswered_messages_limitError.message}} </span>
+                </div>
+                <hr />
+                <div class="checkbox" v-if="settings.module_validated_drivers && !user.driver_is_verified">
+                    <label >
+                        <input type="checkbox" @change="changeBeDriver" v-model="this.showBeDriver"> {{ $t('solicitarSerChofer') }}
+                    </label>
+                </div>
+                <div class="form-group" v-if="settings.module_validated_drivers && showBeDriver && !user.driver_is_verified">
+                    <label for="driver_documentation">{{ $t('ingreseDocumentacion') }}</label>
+                    <input type="file" id="driver_documentation" multiple @change="onDriverDocumentChange" />
+                    <p class="help-block">{{ $t('seRequiereDocumentacion') }}</p>
+                </div>
+                <div v-if="user.driver_is_verified">
+                    <i class="fa fa-check-circle check-driver-verified" aria-hidden="true"></i>
+                    <strong>{{ $t('choferVerificado') }}</strong>
+                </div>
+                <div v-if="user.driver_is_verified || (settings.module_validated_drivers && showBeDriver)">
+                    <div class="form-group">
+                        <label for="tipoDeCuenta">
+                            {{ $t('tipoDeCuenta') }}
+                            <span class="required-field-flag" title="Campo requerido">(*)</span>
+                        </label>
+                        <select v-model="user.account_type" id="tipoDeCuenta" class="form-control">
+                            <option v-for="option in accountTypes" v-bind:value="option.id">
+                                {{ option.name }}
+                            </option>
+                        </select>
+                        <span class="error" v-if="accountTypeError.state"> {{accountTypeError.message}} </span>
+                    </div>
+                    <div class="form-group">
+                        <label for="bancoDeCuenta">
+                            {{ $t('bancoDeCuenta') }}
+                            <span class="required-field-flag" title="Campo requerido">(*)</span>
+                        </label>
+                        <select v-model="user.account_bank" id="" class="form-control">
+                            <option v-for="option in banks" v-bind:value="option.id">
+                                {{ option.name }}
+                            </option>
+                        </select>
+                        <span class="error" v-if="accountBankError.state"> {{accountBankError.message}} </span>
+                    </div>
+                    <div class="form-group">
+                        <label for="accountNumber">
+                            {{ $t('numeroDeCuenta') }}
+                            <span class="required-field-flag" title="Campo requerido">(*)</span>
+                        </label>
+                        <input v-model="user.account_number" type="text" class="form-control" id="accountNumber" :placeholder="$t('numeroDeCuenta')">
+                        <span class="error" v-if="accountNumberError.state"> {{accountNumberError.message}} </span>
+                    </div>
+                </div>
+                <div class="row" v-if="Array.isArray(user.driver_data_docs) && user.driver_data_docs.length">
+                    <div v-imgSrc:docs="img"  v-for="img in user.driver_data_docs" class="img-doc col-md-8 col-sm-12"></div>
+                </div>
+
                 <div class="btn-container">
-                    <button class="btn btn-primary" @click="grabar" :disabled="loading"> <span v-if="!loading">Guardar cambios</span><span v-if="loading">Guardando ...</span> </button>
-                    <span class="required-field-flag" v-bind:class="{ 'required-field-info': isMobile }">Los campos marcados con (*) son obligatorios.</span>
+                    <button class="btn btn-primary" @click="grabar" :disabled="loading">
+                        <span v-if="!loading">{{ $t('guardarCambios') }}</span>
+                        <spinner class="blue" v-if="loading"></spinner>
+                    </button>
+                    <span class="required-field-flag" v-bind:class="{ 'required-field-info': isMobile }">{{ $t('camposObligatorios') }}</span>
                 </div>
                 <span v-if="error">{{error}}</span>
                 <Uploadfile :name="'profile'" @change="onPhotoChange" ref="file"></Uploadfile>
@@ -103,6 +179,7 @@ import SvgItem from '../SvgItem';
 import dialogs from '../../services/dialogs.js';
 import moment from 'moment';
 import bus from '../../services/bus-event';
+import Spinner from '../Spinner.vue';
 
 class Error {
     constructor (state = false, message = '') {
@@ -134,13 +211,21 @@ export default {
             birthdayError: new Error(),
             patentError: new Error(),
             dniError: new Error(),
+            unaswered_messages_limitError: new Error(),
             phoneError: new Error(),
             emailError: new Error(),
+            accountNumberError: new Error(),
+            accountTypeError: new Error(),
+            accountBankError: new Error(),
             maxDate: moment().toDate(),
             minDate: moment('1900-01-01').toDate(),
             birthday: '',
             birthdayAnswer: '',
-            showChangePassword: false
+            showChangePassword: false,
+            showBeDriver: false,
+            driverFiles: null,
+            banks: [],
+            accountTypes: []
         };
     },
     computed: {
@@ -148,7 +233,8 @@ export default {
             userData: 'auth/user',
             firstTime: 'auth/firstTime',
             cars: 'cars/cars',
-            isMobile: 'device/isMobile'
+            isMobile: 'device/isMobile',
+            settings: 'auth/appConfig'
         }),
         iptUser () {
             if (this.user) {
@@ -186,10 +272,21 @@ export default {
             update: 'auth/update',
             updatePhoto: 'auth/updatePhoto',
             carCreate: 'cars/create',
-            carUpdate: 'cars/update'
+            carUpdate: 'cars/update',
+            getBankData: 'profile/getBankData'
         }),
+        jumpToError () {
+            let hasError = document.getElementsByClassName('has-error');
+            if (hasError.length) {
+                let element = hasError[0];
+                this.$scrollToElement(element, -270);
+            }
+        },
         changeShowPassword () {
             this.showChangePassword = !this.showChangePassword;
+        },
+        changeBeDriver () {
+            this.showBeDriver = !this.showBeDriver;
         },
         isNumber (value) {
             inputIsNumber(value);
@@ -203,6 +300,11 @@ export default {
                 this.loadingImg = false;
             });
         },
+        onDriverDocumentChange (event) {
+            if (event.target.files) {
+                this.driverFiles = event.target.files;
+            }
+        },
         dateChange (value) {
             this.birthdayAnswer = value;
         },
@@ -211,14 +313,19 @@ export default {
         },
         grabar () {
             if (this.validate()) {
-                dialogs.message('Te faltaron completar campos obligatorios o ingresaste datos inválidos.', { duration: 10, estado: 'error' });
+                this.$nextTick(() => {
+                    this.jumpToError();
+                    dialogs.message(this.$t('faltanCamposObligatorios'), { duration: 10, estado: 'error' });
+                });
                 return;
             }
             this.loading = true;
+            console.log('this.user', this.user);
             var data = Object.assign({}, this.user);
+            console.log('data.user', data);
             if (this.pass.password) {
                 if (this.pass.password !== this.pass.password_confirmation) {
-                    this.error = 'Password no coincide';
+                    this.error = this.$t('passwordNoCoincide');
                     return;
                 }
                 data.password = this.pass.password;
@@ -230,11 +337,38 @@ export default {
                 console.log(this.user.birthday);
             } */
             data.nro_doc = this.dniRawValue;
-            this.update(data).then(() => {
+            /* global FormData */
+            let bodyFormData = new FormData();
+            for (const key in data) {
+                if (data.hasOwnProperty(key)) {
+                    if (Array.isArray(data[key])) {
+                        for (let index = 0; index < data[key].length; index++) {
+                            const element = data[key][index];
+                            bodyFormData.append(key + '[]', element);
+                        }
+                    } else {
+                        if (data[key] !== null) {
+                            bodyFormData.append(key, data[key]);
+                        } else {
+                            // bodyFormData.append(key, '');
+                        }
+                    }
+                }
+            }
+            if (this.driverFiles) {
+                bodyFormData.append('user_be_driver', true);
+                for (let index = 0; index < this.driverFiles.length; index++) {
+                    const file = this.driverFiles[index];
+                    bodyFormData.append('driver_data_docs[]', file);
+                }
+            } else {
+
+            }
+            this.update(bodyFormData).then(() => {
                 this.pass.password = '';
                 this.pass.password_confirmation = '';
                 this.loading = false;
-                dialogs.message('Perfil actualizado correctamente.');
+                dialogs.message(this.$t('perfilActualizadoCorrectamente'));
                 if (this.patente.length) {
                     if (this.car) {
                         this.car.patente = this.patente;
@@ -249,15 +383,19 @@ export default {
                 }
                 // this.user.birthday = this.birthdayAnswer;
                 if ((this.user.image && this.user.image.length > 0) && (this.user.description && this.user.description.length > 0)) {
-                    this.$router.rememberBack();
+                    if (this.$router.rememberRoute) {
+                        this.$router.rememberBack();
+                    }
                 } else {
                     if (!(this.user.image && this.user.image.length > 0)) {
-                        dialogs.message('Debes cargar una imagen de perfil.', { duration: 10, estado: 'error' });
+                        dialogs.message(this.$t('debesImagenPerfil'), { duration: 10, estado: 'error' });
                     }
                 }
-            }).catch(response => {
+            }).catch(err => {
+                console.error(err);
                 this.loading = false;
-                this.error = 'No se pudo grabar los datos. Intente de nuevo';
+                this.error = this.$t('errorDatos');
+                this.jumpToError();
             });
         },
         validate () {
@@ -282,7 +420,7 @@ export default {
 
             if (!this.user.name || this.user.name.length < 1) {
                 this.nombreError.state = true;
-                this.nombreError.message = 'Olvidaste ingresar tu nombre y apellido.';
+                this.nombreError.message = this.$t('olvidasteNombre');
                 globalError = true;
             }
 
@@ -303,31 +441,57 @@ export default {
             if (this.patente && this.patente.length > 0) {
                 if (!patentRegex.test(this.patente)) {
                     this.patentError.state = true;
-                    this.patentError.message = 'La patente ingresada no tiene un formato válido.';
+                    this.patentError.message = this.$t('patenteNoValida');
                     globalError = true;
                 }
             }
 
             if (!this.user.description || this.user.description.length < 1) {
                 this.descError.state = true;
-                this.descError.message = 'Olvidaste completar tu descripción.';
+                this.descError.message = this.$t('olvidasteDescripcion');
                 globalError = true;
             } else if (this.user.description.replace(' ', '').length < 10) {
                 this.descError.state = true;
-                this.descError.message = 'Ups! Tu descripción es muy acotada. No seas tímido, contanos un poco más.';
+                this.descError.message = this.$t('descripcionCorta');
                 globalError = true;
             }
 
-            if (this.dniRawValue && this.dniRawValue.length > 0 && this.dniRawValue.length < 7) {
+            if (!this.dniRawValue || this.dniRawValue.length < 1) {
                 this.dniError.state = true;
-                this.dniError.message = 'El DNI que ingresaste no es válido.';
+                this.dniError.message = this.$t('olvidasteDni');
+                globalError = true;
+            } else if (this.dniRawValue && this.dniRawValue.length > 0 && this.dniRawValue.length < 7) {
+                this.dniError.state = true;
+                this.dniError.message = this.$t('dniNoValido');
                 globalError = true;
             }
 
-            if (this.user.mobile_phone && this.user.mobile_phone.length > 0 && this.user.mobile_phone.length < 6) {
+            if (!this.user.mobile_phone || this.user.mobile_phone.length < 1) {
                 this.phoneError.state = true;
-                this.phoneError.message = 'El teléfono que ingresaste no es válido.';
+                this.phoneError.message = this.$t('olvidasteTel');
                 globalError = true;
+            } else if (this.user.mobile_phone && this.user.mobile_phone.length > 0 && this.user.mobile_phone.length < 6) {
+                this.phoneError.state = true;
+                this.phoneError.message = this.$t('telefonoNoValido');
+                globalError = true;
+            }
+
+            if (this.user.driver_is_verified || (this.settings.module_validated_drivers && this.showBeDriver)) {
+                if (!this.user.account_number) {
+                    this.accountNumberError.state = true;
+                    this.accountNumberError.message = this.$t('campoObligatorio');
+                    globalError = true;
+                }
+                if (!this.user.account_type) {
+                    this.accountTypeError.state = true;
+                    this.accountTypeError.message = this.$t('campoObligatorio');
+                    globalError = true;
+                }
+                if (!this.user.account_bank) {
+                    this.accountBankError.state = true;
+                    this.accountBankError.message = this.$t('campoObligatorio');
+                    globalError = true;
+                }
             }
 
             return globalError;
@@ -335,6 +499,7 @@ export default {
     },
     watch: {
         cars: function () {
+            console.log('cars', this.cars);
             if (this.cars.length > 0) {
                 this.car = this.cars[0];
                 this.patente = this.car.patente;
@@ -367,8 +532,18 @@ export default {
     },
 
     mounted () {
+        console.log('touter', this.$router);
+        this.getBankData().then((data) => {
+            console.log('get bank data', data);
+            this.banks = data.banks;
+            this.accountTypes = data.cc;
+        });
         bus.on('date-change', this.dateChange);
         this.user = this.userData;
+        console.log('USUARIO', this.userData);
+        if (Array.isArray(this.user.driver_data_docs) && this.user.driver_data_docs.length) {
+            this.showBeDriver = true;
+        }
         if (this.cars) {
             if (this.cars.length > 0) {
                 this.car = this.cars[0];
@@ -391,7 +566,8 @@ export default {
     components: {
         DatePicker,
         Uploadfile,
-        SvgItem
+        SvgItem,
+        Spinner
     }
 };
 </script>
@@ -425,5 +601,19 @@ export default {
         span.error {
             font-weight: 300;
         }
+    }
+    .img-doc {
+        height: 320px;
+        background-size: cover;
+    }
+    .check-driver-verified {
+        font-size: 24px;
+        vertical-align: -2px;
+        margin-right: 5px;
+        color: var(--trip-mostly-free-color);
+    }
+
+    hr {
+        border-top: 1px solid #CCCCCC;
     }
 </style>

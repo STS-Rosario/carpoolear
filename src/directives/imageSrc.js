@@ -7,6 +7,8 @@ function changePhoto (el, binding, node) {
     }
     if (binding.arg === 'conversation') {
         arg = null;
+    } else {
+        arg = '/image/' + binding.arg + '/';
     }
     el.style.backgroundImage = 'url(' + getRoute(binding.value, arg) + ')';
 };

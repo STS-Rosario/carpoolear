@@ -7,7 +7,7 @@
                     </div>
                 </router-link>
             </div>
-            <modal :name="'modal'" v-if="showModalRequestSeat" @close="onModalClose" :title="'Test'" :body="'Body'">
+            <modal :name="'modal'" v-if="showModalRequestSeat" @close="onModalClose" :title="'Carpoodatos'" :body="'Body'">
                 <h3 slot="header">
                     <span>¡Carpoodatos!</span>
                     <i v-on:click="onModalClose" class="fa fa-times float-right-close"></i>
@@ -26,7 +26,10 @@
                         </label>
                     </div>
                     <div class="text-center">
-                        <button class="btn btn-accept-request" :disabled="acceptInProcess" @click="toAcceptRequest"> Aceptar </button>
+                        <button class="btn btn-accept-request" :disabled="acceptInProcess" @click="toAcceptRequest"> 
+                            <spinner class="blue" v-if="acceptInProcess"></spinner>
+                            <span v-else>Aceptar</span>    
+                        </button>
                         <button class="btn btn-secondary"  @click="onModalToChat"> Enviar Mensaje </button>
                     </div>
                 </div>
@@ -35,8 +38,14 @@
                 <div class="rate-pending-message--content">
                     <strong>{{user.name}}</strong> quiere subirse al viaje hacia <strong>{{trip.points[trip.points.length - 1].json_address.ciudad}}</strong> del día {{ trip.trip_date | moment("DD/MM/YYYY") }} a las  {{ trip.trip_date | moment("HH:mm") }}.
                     <div class='pending-buttons'>
-                        <button class="btn btn-accept-request" :disabled="acceptInProcess" @click="onAcceptRequest"> Aceptar </button>
-                        <button class="btn btn-primary" :disabled="rejectInProcess" @click="reject"> Rechazar </button>
+                        <button class="btn btn-accept-request" :disabled="acceptInProcess || rejectInProcess" @click="onAcceptRequest"> 
+                            <spinner class="blue" v-if="acceptInProcess"></spinner>
+                            <span v-else>Aceptar</span>
+                        </button>
+                        <button class="btn btn-primary" :disabled="rejectInProcess || acceptInProcess" @click="reject">
+                            <spinner class="blue" v-if="rejectInProcess"></spinner>
+                            <span v-else>Rechazar</span>
+                        </button>
                     </div>
                     <div class="message-button">
                         <button class="btn btn-secondary"  @click="chat"> Enviar Mensaje </button>
@@ -51,6 +60,7 @@ import { mapActions, mapGetters } from 'vuex';
 import router from '../router';
 import modal from './Modal';
 import dialogs from '../services/dialogs.js';
+import spinner from './Spinner.vue';
 export default {
     data () {
         return {
@@ -62,7 +72,8 @@ export default {
     },
     computed: {
         ...mapGetters({
-            currentUser: 'auth/user'
+            currentUser: 'auth/user',
+            config: 'auth/appConfig'
         })
     },
     methods: {
@@ -74,7 +85,7 @@ export default {
         }),
 
         onAcceptRequest () {
-            if (this.currentUser.do_not_alert_accept_passenger) {
+            if (this.currentUser.do_not_alert_accept_passenger || this.config.disable_user_hints) {
                 this.toAcceptRequest();
             } else {
                 this.showModalRequestSeat = true;
@@ -95,20 +106,14 @@ export default {
             let user = this.user;
             let trip = this.trip;
             this.acceptInProcess = true;
-            this.passengerAccept({user, trip}).then(() => {
-                this.acceptInProcess = false;
-            }).catch((resp) => {
-                this.acceptInProcess = false;
-                if (resp.status === 422) {
-                    if (resp.data && resp.data.errors && resp.data.errors.error && resp.data.errors.error.length) {
-                        for (let i = 0; i < resp.data.errors.error.length; i++) {
-                            let error = resp.data.errors.error[i];
-                            if (error === 'not_seat_available') {
-                                dialogs.message('No puedes aceptar esta solicitud, todos los asientos del viaje están ocupados.', { duration: 10, estado: 'error' });
-                            }
-                        }
-                    }
+            this.passengerAccept({ user, trip }).catch((error) => {
+                if (this.$checkError(error, 'not_seat_available')) {
+                    dialogs.message('No puedes aceptar esta solicitud, todos los asientos del viaje están ocupados.', { duration: 10, estado: 'error' });
+                    return;
                 }
+                console.error(error);
+            }).finally(() => {
+                this.acceptInProcess = false;
             });
         },
 
@@ -126,9 +131,9 @@ export default {
             let user = this.user;
             let trip = this.trip;
             this.rejectInProcess = true;
-            this.passengerReject({user, trip}).then(() => {
-                this.rejectInProcess = false;
-            }).catch((resp) => {
+            this.passengerReject({ user, trip }).catch((error) => {
+                console.error(error);
+            }).finally(() => {
                 this.rejectInProcess = false;
             });
         },
@@ -171,7 +176,8 @@ export default {
     },
 
     components: {
-        modal
+        modal,
+        spinner
     },
 
     props: [

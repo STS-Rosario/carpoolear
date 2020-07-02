@@ -1,4 +1,4 @@
-import {TripApi, RateApi} from '../../services/api';
+import { TripApi, RateApi } from '../../services/api';
 import * as types from '../mutation-types';
 
 let tripsApi = new TripApi();
@@ -51,6 +51,10 @@ const actions = {
         return tripsApi.myOldTrips(false).then(response => {
             store.commit(types.MYTRIPS_SET_PASSENGER_TRIPS_OLD, response.data);
         });
+    },
+
+    removeTrip (store, tripId) {
+        return store.commit(types.MYTRIPS_DELETE_TRIPS, tripId);
     }
 };
 
@@ -84,7 +88,7 @@ const mutations = {
         state.pending_rates = rates;
     },
 
-    [types.MYTRIPS_ADD_PASSENGER] (state, {id, user}) {
+    [types.MYTRIPS_ADD_PASSENGER] (state, { id, user }) {
         for (let i = 0; i < state.driver_trip.length; i++) {
             if (state.driver_trip[i].id === id) {
                 if (!state.driver_trip[i].passenger) {
@@ -96,15 +100,18 @@ const mutations = {
         }
     },
 
-    [types.MYTRIPS_REMOVE_PASSENGER] (state, {id, user}) {
-        for (let i = 0; i < state.driver_trip.length; i++) {
-            if (state.driver_trip[i].id === id) {
-                if (!state.driver_trip[i].passenger) {
+    [types.MYTRIPS_REMOVE_PASSENGER] (state, { id, user, passenger = false }) {
+        let tripTarget = passenger ? 'passenger_trip' : 'driver_trip';
+        for (let i = 0; i < state[tripTarget].length; i++) {
+            if (state[tripTarget][i].id === id) {
+                if (!state[tripTarget][i].passenger || !state[tripTarget][i].passenger.length) {
                     return;
                 }
-                var index = state.driver_trip[i].passenger.findIndex(item => item.id === user.id);
+                let index = state[tripTarget][i].passenger.findIndex(item => item.id === user.id && (item.request_state === 1 || item.request_state === 4));
                 if (index >= 0) {
-                    state.driver_trip[i].passenger.splice(index, 1);
+                    state[tripTarget][i].passenger[index].request_state = 3;
+                    state[tripTarget][i].seats_available++;
+                    state[tripTarget][i].passenger_count--;
                 }
                 return;
             }

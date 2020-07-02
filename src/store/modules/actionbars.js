@@ -1,9 +1,12 @@
 import * as types from '../mutation-types';
 import router from '../../router';
 import globalStore from '../index';
-
+let appName = process.env.TARGET_APP;
+if (appName && appName.length) {
+    appName = appName.charAt(0).toUpperCase() + appName.slice(1);
+}
 const state = {
-    title: 'Carpoolear',
+    title: appName,
     subTitle: '',
     imgTitle: '',
     showMenu: false,
@@ -83,10 +86,18 @@ const getters = {
 };
 
 const actions = {
-    setTitle (store, title = 'Carpoolear') {
+    setTitle (store, title = '') {
+        console.log('setTitle', title);
+        let getters = globalStore.getters;
+        let config = getters['auth/appConfig'];
+        let appName = config ? config.name_app : process.env.TARGET_APP;
+        if (appName && appName.length) {
+            appName = appName.charAt(0).toUpperCase() + appName.slice(1);
+        }
+        console.log('APPNAME', appName);
         store.commit(types.HEADER_SET_TITLE, title);
         if (document) {
-            document.title = title + (title !== 'Carpoolear' ? ' - Carpoolear' : '');
+            document.title = title + (title !== appName ? ((title !== '' ? ' - ' : '') + appName) : '');
         }
     },
 
@@ -124,7 +135,7 @@ const actions = {
             globalStore.dispatch('trips/tripsSearch', { is_passenger: false });
             globalStore.dispatch('trips/refreshList', true);
         }
-        router.push({name: item.url, params});
+        router.push({ name: item.url, params });
     }
 
 };

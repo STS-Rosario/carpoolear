@@ -1,7 +1,6 @@
 import TaggedApi from '../../classes/TaggedApi';
 
 class SubscriptionsApi extends TaggedApi {
-
     show (id) {
         return this.get('/api/subscriptions/' + id);
     }
@@ -21,7 +20,6 @@ class SubscriptionsApi extends TaggedApi {
     remove (data = {}) {
         return this.delete('/api/subscriptions/' + data.id, {});
     }
-
 }
 
 export { SubscriptionsApi as default };

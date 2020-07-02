@@ -1,7 +1,6 @@
 import network from '../services/network.js';
 
 class TaggedApi {
-
     constructor () {
         this._pendingRequest = network.pendingRequest;
         this._tags = [];

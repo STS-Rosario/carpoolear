@@ -1,6 +1,6 @@
 import * as types from '../mutation-types';
 import facebook from '../../cordova/facebook.js';
-import {AuthApi} from '../../services/api';
+import { AuthApi } from '../../services/api';
 import globalStore from '../index';
 import router from '../../router';
 import bus from '../../services/bus-event.js';
@@ -64,10 +64,10 @@ const actions = {
     facebookLogin (context) {
         return facebook.login().then((response) => {
             let accessToken = response.authResponse.accessToken;
-            authApi.loginWithProvider('facebook', {access_token: accessToken}).then((response) => {
+            authApi.loginWithProvider('facebook', { access_token: accessToken }).then((response) => {
                 let token = response.token;
                 globalStore.dispatch('auth/onLoggin', token);
-                authApi.matchFriendsWithProvider('facebook', {access_token: accessToken});
+                authApi.matchFriendsWithProvider('facebook', { access_token: accessToken });
             });
         });
     },
@@ -127,4 +127,3 @@ export default {
     actions,
     mutations
 };
-

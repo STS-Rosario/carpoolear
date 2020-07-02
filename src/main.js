@@ -1,13 +1,6 @@
 /* jshint esversion: 6 */
 
-let cordovaTag = document.createElement('script');
-cordovaTag.setAttribute('src', process.env.ROUTE_BASE + 'cordova.js');
-document.head.appendChild(cordovaTag);
-
 import 'babel-polyfill';
-
-var moment = require('moment-timezone');
-moment.tz.setDefault('America/Argentina');
 
 import Vue from 'vue';
 import App from './App';
@@ -15,7 +8,6 @@ import App from './App';
 import VueResource from 'vue-resource';
 import VueAnalytics from 'vue-analytics';
 import VueMoment from 'vue-moment';
-require('moment/locale/es');
 
 import router from './router';
 import store from './store';
@@ -23,21 +15,55 @@ import store from './store';
 /* eslint-disable no-unused-vars */
 import cordova from './cordova';
 import directives from './directives';
-require('font-awesome-webpack');
 
 import bootstrapCss from './styles/bootstrap/css/bootstrap.min.css';
 
-import cssHelpers from './styles/helpers.css';
-import css from './styles/main.css';
+import cssHelpers from './styles/helpers';
+import css from './styles/main';
+
+import VueI18n from 'vue-i18n';
+import messages from './language/i18n';
 
 import bus from './services/bus-event';
 import { DebugApi } from './services/api';
 
 import Vue2Leaflet from 'vue2-leaflet';
 
+import * as VueGoogleMaps from 'vue2-google-maps';
+
 let debugApi = new DebugApi();
+let cordovaTag = document.createElement('script');
+let cordovaPath = 'cordova.js';
+console.log('ROUTE_BASE', process.env.ROUTE_BASE, cordovaPath);
+cordovaTag.setAttribute('src', process.env.ROUTE_BASE + cordovaPath);
+document.head.appendChild(cordovaTag);
+
+var moment = require('moment-timezone');
+moment.tz.setDefault('America/Argentina');
+require('moment/locale/es');
+require('font-awesome-webpack-4');
 
 Vue.use(VueResource);
+
+Vue.use(VueI18n);
+const i18n = new VueI18n({
+    locale: 'arg',
+    fallbackLocale: 'arg',
+    messages,
+    silentFallbackWarn: true,
+    numberFormats: {
+        'arg': {
+            currency: {
+                style: 'currency', currency: 'ARS', currencyDisplay: 'symbol'
+            }
+        },
+        'chl': {
+            currency: {
+                style: 'currency', currency: 'CHL', currencyDisplay: 'symbol'
+            }
+        }
+    }
+});
 
 Vue.use(VueAnalytics, {
     id: 'UA-40995702-4'
@@ -45,6 +71,7 @@ Vue.use(VueAnalytics, {
 
 Vue.use(VueMoment);
 require('./filters.js');
+require('./prototypes.js');
 
 /* import * as VueGoogleMaps from 'vue2-google-maps';
 
@@ -65,15 +92,28 @@ Vue.config.errorHandler = function (err, vm, info) {
     debugApi.log(data);
 };
 window.store = store;
-if (process.env.NODE_ENV === 'development') {
-    console.log('In development wait for cordova');
-    setTimeout(function () {
-        if (!window.cordova) {
-            console.log('Not running in cordova');
-            store.dispatch('init');
-        }
-    }, 2000);
+if (process.env.SERVE) {
+    console.log('Not running in cordova.');
+    store.dispatch('init');
+} else {
+    if (process.env.NODE_ENV === 'development') {
+        setTimeout(function () {
+            if (!window.cordova) {
+                console.log('Not running in cordova.');
+                store.dispatch('init');
+            }
+        }, 2000);
+    } else {
+        console.log('no process at all', process.env.NODE_ENV);
+        setTimeout(function () {
+            if (!window.cordova) {
+                console.log('Not running in cordova.');
+                store.dispatch('init');
+            }
+        }, 2000);
+    }
 }
+console.log('APP NAME: ' + process.env.TARGET_APP);
 
 bus.on('system-ready', () => {
     let app = new Vue({
@@ -81,7 +121,8 @@ bus.on('system-ready', () => {
         router,
         store,
         template: '<App/>',
-        components: { App }
+        components: { App },
+        i18n
     });
 });
 /* eslint-enable no-unused-vars */

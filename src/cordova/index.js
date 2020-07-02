@@ -47,6 +47,7 @@ let doInit = () => {
     store.commit('cordova/' + types.CORDOVA_DEVICEREADY);
     store.commit('cordova/' + types.CORDOVA_SET_DEVICE, window.device);
 
+    console.log('window.PushNotification?', window.PushNotification);
     if (window.PushNotification) {
         console.log('push init');
         push.init();

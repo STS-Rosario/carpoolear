@@ -24,4 +24,4 @@ class NativeStorage {
     }
 }
 
-export {NativeStorage as default};
+export { NativeStorage as default };

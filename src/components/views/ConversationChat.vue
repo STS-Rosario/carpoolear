@@ -1,7 +1,7 @@
 <template>
     <div class="conversation_chat" v-if="conversation">
         <div class="list-group">
-            <div class="list-group-item">
+            <div class="list-group-item conversation_user_header hidden-xs">
                 <router-link v-if="conversation.users.length === 2" :to="{ name: 'profile', params: userProfile() }" v-show="isMobile">
                     <div class="conversation_image conversation_image_chat circle-box" v-imgSrc="conversation.image" ></div>
                 </router-link>
@@ -9,6 +9,7 @@
                     <h2> {{conversation.title}} </h2>
                 </router-link>
                 <h2 v-else> {{conversation.title}} </h2>
+                <CoordinateTrip></CoordinateTrip>
                 <p class="chat_last_connection">
                     <strong>Última conexión: </strong>
                     <span class="">{{lastConnection | moment("calendar")}}</span>
@@ -18,13 +19,13 @@
                 <div>
                     <button id='btn-more' @click="searchMore" v-if="!lastPageConversation" class="btn text-center btn-full-width"> Ver más mensajes </button>
                 </div>
-                <MessageView v-for="m in messages" :message="m" :user="user" :users="conversation.users"></MessageView>
+                <MessageView v-for="m in messages" v-bind:key="m.id" :message="m" :user="user" :users="conversation.users"></MessageView>
             </div>
             <div class="list-group-item">
                 <div class="input-group">
-                    <input ref="ipt-text" id="ipt-text" v-model="message" type="text" class="form-control" placeholder="Escribir mensaje..." v-jump:click="'btn-send'" maxlength="255">
+                    <input ref="ipt-text" id="ipt-text" v-model="message" type="text" class="form-control" placeholder="Escribir mensaje..." v-jump:click="'btn-send'" maxlength="800">
                     <span class="input-group-btn">
-                        <button ref="btn-send" id="btn-send" class="btn btn-default" :class="message.length > 0 ? 'active' : ''" type="button" @click="sendMessage" v-jump:focus="'ipt-text'" :disabled="sending">
+                        <button ref="btn-send" id="btn-send" class="btn btn-default" :class="message.length > 0 ? 'active' : ''" type="button" @click="sendMessage" v-jump:focus="'ipt-text'" :disabled="sending.message">
                             <i class="fa fa-play" aria-hidden="true"></i>
                         </button>
                     </span>
@@ -39,11 +40,12 @@
     </div>
 </template>
 <script>
-import {mapGetters, mapActions} from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import MessageView from '../MessageView';
 import router from '../../router';
 import moment from 'moment';
 import bus from '../../services/bus-event.js';
+import CoordinateTrip from '../elements/CoordinateTrip';
 
 export default {
     name: 'conversation-chat',
@@ -51,7 +53,9 @@ export default {
         return {
             message: '',
             mustJump: false,
-            sending: false
+            sending: {
+                message: false
+            }
         };
     },
     computed: {
@@ -60,9 +64,9 @@ export default {
             'user': 'auth/user',
             'messages': 'conversations/messagesList',
             'lastPageConversation': 'conversations/lastPageConversation',
-            'timestampConversation': 'conversations/timestampConversation',
             'title': 'actionbars/title',
-            'isMobile': 'device/isMobile'
+            'isMobile': 'device/isMobile',
+            'config': 'auth/appConfig'
         }),
         lastConnection () {
             let users = this.conversation.users.filter(item => item.id !== this.user.id);
@@ -98,11 +102,10 @@ export default {
 
         sendMessage () {
             if (this.message.length) {
-                this.sending = true;
-                this.send(this.message).then(data => {
-                    this.sending = false;
-                }).catch(() => {
-                    this.sending = false;
+                this.$set(this.sending, 'message', true);
+                this.send(this.message).finally(() => {
+                    this.$set(this.sending, 'message', false);
+                    this.$forceUpdate();
                 });
                 this.message = '';
             }
@@ -125,7 +128,7 @@ export default {
         },
 
         searchMore () {
-            this.findMessage({more: true});
+            this.findMessage({ more: true });
         },
 
         refresh () {
@@ -175,7 +178,8 @@ export default {
         'id'
     ],
     components: {
-        MessageView
+        MessageView,
+        CoordinateTrip
     }
 };
 </script>
@@ -183,6 +187,7 @@ export default {
 <style scoped>
     #btn-more {
         padding: 1em 0;
+        margin-top: 1.5rem;
     }
     #btn-send {
         color: #ccc;
@@ -211,6 +216,7 @@ export default {
         }
         #messagesWrapper {
             padding-top: 0;
+            padding-bottom: 65px;
         }
     }
 </style>

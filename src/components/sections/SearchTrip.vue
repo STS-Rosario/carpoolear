@@ -4,7 +4,7 @@
             <div class="foreignCountry-select_wrapper">
                 <input type="checkbox" v-model="allowForeignPoints" id="cbxAllowForeignPoints" class="cbx" />
                 <label for="cbxAllowForeignPoints" class="cbx_label">
-                    Origen o destino fuera de Argentina
+                    Origen o destino fuera de {{ config ? config.country_name : '' }}
                 </label>
                 <span class="tooltip-bottom" data-tooltip="Marcando esta opción vas a poder seleccionar origen o destino fuera de Argentina. Recordá averiguar con la aseguradora del auto, si tenés cobertura contra terceros fuera de la Argentina. Si no es así, averiguá con ella para obtener la extensión fuera de Argentina, de forma de tener cobertura durante el viaje"></span>
                 <i class="fa fa-info-circle" aria-hidden="true"></i>
@@ -13,29 +13,28 @@
         <div class="row search-section">
             <div class="col-xs-12 col-md-3">
                 <button class="btn btn-option" :class="{'active': !isPassenger}" @click="isPassenger = false" >
-                    <!--<img alt="" :src="isPassenger ? chofer_logo_gris : chofer_logo_blanco" />-->
                     <span class="fa fa-car" aria-hidden="true"></span>
-                    <span>Busco conductor</span>
+                    <span>{{ $t('buscoConductor') }}</span>
                 </button>
             </div>
             <div class="col-xs-12 col-md-3">
                 <button class="btn btn-option" :class="{'active': isPassenger}" @click="isPassenger = true" >
                     <img alt="" :src="isPassenger ? pasajero_logo_blanco : pasajero_logo_gris" />
-                    <span>Busco pasajero</span>
+                    <span>{{ $t('buscoPasajero') }}</span>
                 </button>
             </div>
             <div class="row text-center foreignCountry-select foreignCountry-select-mobile" v-show="isMobile">
                 <div class="foreignCountry-select_wrapper">
                     <input type="checkbox" v-model="allowForeignPoints" id="cbxAllowForeignPoints" class="cbx" />
                     <label for="cbxAllowForeignPoints" class="cbx_label">
-                        Origen o destino fuera de Argentina
+                        Origen o destino fuera de {{ config ? config.country_name : '' }}
                     </label>
                     <span class="tooltip-bottom" data-tooltip="Marcando esta opción vas a poder seleccionar origen o destino fuera de Argentina. Recordá averiguar con la aseguradora del auto, si tenés cobertura contra terceros fuera de la Argentina. Si no es así, averiguá con ella para obtener la extensión fuera de Argentina, de forma de tener cobertura durante el viaje"></span>
                     <i class="fa fa-info-circle" aria-hidden="true"></i>
                 </div>
             </div>
             <div class="col-xs-24 col-md-5 gmap-autocomplete origin">
-                <OsmAutocomplete :placeholder="'Origen'" name="from_town" ref="from_town" :value="from_town.name" v-on:place_changed="(data) => getPlace(0, data)" :classes="'form-control form-control-with-icon form-control-map-autocomplete'" :country="allowForeignPoints ? null : 'AR'"></OsmAutocomplete>
+                <autocomplete :placeholder="'Origen'" name="from_town" ref="from_town" :value="from_town.name" v-on:place_changed="(data) => getPlace(0, data)" :classes="'form-control form-control-with-icon form-control-map-autocomplete'" :country="allowForeignPoints ? null : 'AR'"></autocomplete>
                 <!-- <GmapAutocomplete name="from_town" ref="from_town" :selectFirstOnEnter="true" :types="['(cities)']"  :componentRestrictions="allowForeignPoints ? null : {country: 'AR'}"  placeholder="Origen"  :value="from_town.name" v-on:place_changed="(data) => getPlace(0, data)" class="form-control form-control-with-icon form-control-map-autocomplete"> </GmapAutocomplete>-->
                 <div class="date-picker--cross">
                     <i v-on:click="resetInput('from_town')" class="fa fa-times" aria-hidden="true"></i>
@@ -47,7 +46,7 @@
                 </div>
             </div>
             <div class="col-xs-24 col-md-5 gmap-autocomplete destiny">
-                <OsmAutocomplete :placeholder="'Destino'" name="to_town" ref="to_town" :value="to_town.name" v-on:place_changed="(data) => getPlace(1, data)" :classes="'form-control form-control-with-icon form-control-map-autocomplete'" :country="allowForeignPoints ? null : 'AR'"></OsmAutocomplete>
+                <autocomplete :placeholder="'Destino'" name="to_town" ref="to_town" :value="to_town.name" v-on:place_changed="(data) => getPlace(1, data)" :classes="'form-control form-control-with-icon form-control-map-autocomplete'" :country="allowForeignPoints ? null : 'AR'"></autocomplete>
                 <!-- <GmapAutocomplete name="to_town" ref="to_town" :selectFirstOnEnter="true" :types="['(cities)']"  :componentRestrictions="allowForeignPoints ? null : {country: 'AR'}"  placeholder="Destino"  :value="to_town.name" v-on:place_changed="(data) => getPlace(1, data)" class="form-control form-control-with-icon form-control-map-autocomplete"> </GmapAutocomplete> -->
                 <div class="date-picker--cross">
                     <i v-on:click="resetInput('to_town')" class="fa fa-times" aria-hidden="true"></i>
@@ -68,9 +67,8 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import {pointDistance} from '../../services/maps.js';
 import DatePicker from '../DatePicker';
-import OsmAutocomplete from '../OsmAutocomplete';
+import autocomplete from '../Autocomplete.vue';
 import bus from '../../services/bus-event.js';
 import moment from 'moment';
 import dialogs from '../../services/dialogs.js';
@@ -85,13 +83,13 @@ export default {
                 name: '',
                 location: null,
                 radio: 0,
-                country: 'AR'
+                country: ''
             },
             to_town: {
                 name: '',
                 location: null,
                 radio: 0,
-                country: 'AR'
+                country: ''
             },
             date: '',
             dateAnswer: '',
@@ -111,12 +109,15 @@ export default {
     },
     computed: {
         ...mapGetters({
-            isMobile: 'device/isMobile'
+            isMobile: 'device/isMobile',
+            config: 'auth/appConfig'
         })
     },
     mounted () {
         bus.on('date-change', this.dateChange);
         this.loadParams(this.params);
+        this.from_town.country = this.config.osm_country;
+        this.to_town.country = this.config.osm_country;
         this.$refs['from_town'].$el.addEventListener('input', this.checkInput);
         this.$refs['to_town'].$el.addEventListener('input', this.checkInput);
     },
@@ -140,56 +141,19 @@ export default {
         },
         getPlace (i, data) {
             console.log('getPlace', data);
-            /*
-                {
-                    place_id: "221733657",
-                    licence: "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
-                    osm_type: "relation",
-                    osm_id: "1224652",
-                    boundingbox: [
-                        "-34.705637",
-                        "-34.5265535",
-                        "-58.5314588",
-                        "-58.3351249"
-                    ],
-                    lat: "-34.6075616",
-                    lon: "-58.437076",
-                    display_name: "Buenos Aires, Ciudad Autónoma de Buenos Aires, Argentina",
-                    class: "place",
-                    type: "city",
-                    importance: 0.76879583938391,
-                    icon: "https://nominatim.openstreetmap.org/images/mapicons/poi_place_city.p.20.png",
-                    address: {
-                        city: "Buenos Aires",
-                        state: "Ciudad Autónoma de Buenos Aires",
-                        country: "Argentina",
-                        country_code: "ar"
-                    }
-                }
-            */
             let obj = {};
-            if (data && data.boundingbox) {
-                // var viewport = JSON.parse((JSON.stringify(data.geometry.viewport)));
-
-                let distance = pointDistance(parseFloat(data.boundingbox[1]), parseFloat(data.boundingbox[3]), parseFloat(data.boundingbox[0]), parseFloat(data.boundingbox[2]));
+            // FIXME falta bounding box
+            if (data) {
                 obj = {
-                    name: data.display_name,
+                    name: data.name,
                     location: {
                         lat: parseFloat(data.lat),
-                        lng: parseFloat(data.lon)
+                        lng: parseFloat(data.lng)
                     },
-                    radio: distance,
-                    country: data.country_code
+                    country: data.country,
+                    id: data.id
                 };
             }
-            /* if (data && data.address_components) {
-                for (let j = 0; j < data.address_components.length; j++) {
-                    let addrComp = data.address_components[j];
-                    if (addrComp.types.indexOf('country') >= 0) {
-                        obj.country = addrComp.short_name;
-                    }
-                }
-            } */
             if (i === 0) {
                 this.from_town = obj;
             } else {
@@ -200,14 +164,16 @@ export default {
             let params = {};
             let foreignCountry = 0;
             if (this.from_town.location) {
+                console.log('from_town', this.from_town);
                 params.origin_lat = this.from_town.location.lat;
                 params.origin_lng = this.from_town.location.lng;
                 params.origin_radio = this.from_town.radio;
                 params.origin_name = this.from_town.name;
+                params.origin_id = this.from_town.id;
             } else {
                 params.origin_name = this.$refs['from_town'].input;
             }
-            if (this.from_town && this.from_town.country && this.from_town.country.toLowerCase() !== 'AR'.toLowerCase()) {
+            if (this.from_town && this.from_town.country && this.from_town.country.toLowerCase() !== this.config.osm_country.toLowerCase()) {
                 foreignCountry++;
             }
             if (this.to_town.location) {
@@ -215,10 +181,11 @@ export default {
                 params.destination_lng = this.to_town.location.lng;
                 params.destination_radio = this.to_town.radio;
                 params.destination_name = this.to_town.name;
+                params.destination_id = this.to_town.id;
             } else {
                 params.destination_name = this.$refs['to_town'].input;
             }
-            if (this.to_town && this.to_town.country && this.to_town.country.toLowerCase() !== 'AR'.toLowerCase()) {
+            if (this.to_town && this.to_town.country && this.to_town.country.toLowerCase() !== this.config.osm_country.toLowerCase()) {
                 foreignCountry++;
             }
             if (this.dateAnswer) {
@@ -240,7 +207,7 @@ export default {
                 name: '',
                 location: null,
                 radio: 0,
-                country: 'AR'
+                country: this.config.osm_country
             };
         },
         swapCities () {
@@ -265,6 +232,7 @@ export default {
                         lng: parameters.origin_lng
                     };
                     this.from_town.radio = parameters.origin_radio;
+                    this.from_town.id = parameters.origin_id;
                 } else {
                     this.resetInput('from_town');
                 }
@@ -276,6 +244,7 @@ export default {
                         lng: parameters.destination_lng
                     };
                     this.to_town.radio = parameters.destination_radio;
+                    this.to_town.id = parameters.destination_id;
                 } else {
                     this.resetInput('to_town');
                 }
@@ -301,7 +270,7 @@ export default {
     ],
     components: {
         DatePicker,
-        OsmAutocomplete
+        autocomplete
     }
 };
 </script>

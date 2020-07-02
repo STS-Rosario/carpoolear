@@ -12,8 +12,8 @@ export default {
                 position: message.position ? message.position : 'center'
             },
             onSuccess, // optional
-            onError    // optional
-        );
+            onError // optional
+            );
         } else {
             console.error('ERROR: Se llamó al toast plugin pero no se encontró');
         }

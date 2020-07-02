@@ -26,14 +26,14 @@
                 </div>
             </div>
             <div class="rate--comment-box" v-show="expanded">
-                <textarea maxlength="1000" class="rate_comment" v-model="comment" placeholder="Incluya un comentario..."></textarea>
+                <textarea maxlength="600" class="rate_comment" v-model="comment" placeholder="Incluya un comentario..."></textarea>
                 <button class="btn btn-primary" @click="makeVote" :disabled="sending"> Calificar </button>
             </div>
         </div>
     </div>
 </template>
 <script>
-import {mapActions, mapGetters} from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import dialogs from '../services/dialogs.js';
 
 export default {

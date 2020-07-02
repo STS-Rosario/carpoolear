@@ -9,7 +9,7 @@ Vue.use(VueRouter);
 
 const router = new VueRouter({
     routes: routes,
-  // esto hay que atarlo a si estoy en cordova o no
+    // esto hay que atarlo a si estoy en cordova o no
     mode: process.env.HISTORY_MODE,
     base: process.env.ROUTE_BASE
 
@@ -33,14 +33,26 @@ router.beforeEach((to, from, next) => {
     } else {
         store.dispatch('actionbars/showFooter', false);
     }
-
+    let getters = store.getters;
+    let config = getters['auth/appConfig'];
+    console.log('config app name', config);
+    let appName = process.env.TARGET_APP;
+    if (config) {
+        appName = config.app_name ? config.app_name : config.name_app;
+    }
+    if (appName && appName.length) {
+        appName = appName.charAt(0).toUpperCase() + appName.slice(1);
+    }
+    console.log('app name', appName);
     if (actionbar.header) {
         store.dispatch('actionbars/setSubTitle', '');
         store.dispatch('actionbars/setImgTitle', '');
         if (actionbar.header.title) {
+            console.log('actionbar.header.title', actionbar.header.title);
             store.dispatch('actionbars/setTitle', actionbar.header.title);
         } else {
-            store.dispatch('actionbars/setTitle', 'Carpoolear');
+            console.log('actionbar appName', appName);
+            store.dispatch('actionbars/setTitle', appName);
         }
         if (actionbar.header.buttons) {
             store.dispatch('actionbars/setHeaderButtons', actionbar.header.buttons);
@@ -53,7 +65,7 @@ router.beforeEach((to, from, next) => {
             store.dispatch('actionbars/showHeaderLogo', true);
         }
     } else {
-        store.dispatch('actionbars/setTitle', 'Carpoolear');
+        store.dispatch('actionbars/setTitle', appName);
         store.dispatch('actionbars/setHeaderButtons', []);
         store.dispatch('actionbars/showHeaderLogo', true);
     }
@@ -76,7 +88,7 @@ router.rememberBack = function () {
         router.push(router.rememberRoute);
         router.rememberRoute = null;
     } else {
-        router.replace({name: 'trips'});
+        router.replace({ name: 'trips' });
     }
 };
 

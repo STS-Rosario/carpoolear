@@ -1,0 +1,40 @@
+{
+    "project_info": {
+      "project_number": "590132455420",
+      "firebase_url": "https://apalancar-45e26.firebaseio.com",
+      "project_id": "apalancar-45e26",
+      "storage_bucket": "apalancar-45e26.appspot.com"
+    },
+    "client": [
+      {
+        "client_info": {
+          "mobilesdk_app_id": "1:590132455420:android:4cfa04826abaad96707479",
+          "android_client_info": {
+            "package_name": "com.movilizame.apalancar"
+          }
+        },
+        "oauth_client": [
+          {
+            "client_id": "590132455420-t7448c2t3pd7stkjrnqf2nuf5snavmbb.apps.googleusercontent.com",
+            "client_type": 3
+          }
+        ],
+        "api_key": [
+          {
+            "current_key": "AIzaSyDgc4UX-EI00O-JpceoW6vMmeOTOeIb190"
+          }
+        ],
+        "services": {
+          "appinvite_service": {
+            "other_platform_oauth_client": [
+              {
+                "client_id": "590132455420-t7448c2t3pd7stkjrnqf2nuf5snavmbb.apps.googleusercontent.com",
+                "client_type": 3
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "configuration_version": "1"
+  }

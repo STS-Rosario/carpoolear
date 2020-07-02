@@ -1,6 +1,9 @@
 import TaggedApi from '../../classes/TaggedApi';
 
 class PassengerApi extends TaggedApi {
+    pendingPaymentRequests () {
+        return this.get('/api/users/payment-pending', {});
+    }
 
     allRequest () {
         return this.get('/api/users/requests', {});
@@ -28,6 +31,10 @@ class PassengerApi extends TaggedApi {
 
     reject (id, userId) {
         return this.takeDesision(id, userId, 'reject');
+    }
+
+    transactions () {
+        return this.get('/api/trips/transactions', {});
     }
 }
 

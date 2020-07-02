@@ -5,7 +5,7 @@ let inputHandler = debounce(
     function () {
         debounceFunction();
     },
-800);
+    800);
 
 export default {
     bind: function (el, binding, node) {

@@ -1,7 +1,7 @@
 <template>
     <tabset ref="tabs" :keytabset="'profile'" :rememberTab="isMyOwnProfile">
         <tab :header="viajesHeaderTitle">
-            <component :is="currentView"></component>
+            <component :is="currentView" :userId="id"></component>
         </tab>
         <tab header="Perfil">
             <ProfileInfo></ProfileInfo>
@@ -14,7 +14,7 @@
 <script>
 import Tab from '../elements/Tab';
 import Tabset from '../elements/Tabset';
-import {mapActions, mapGetters} from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import ProfileInfo from '../sections/ProfileInfo';
 import ProfileRates from '../sections/ProfileRates';
 import MyTrips from './MyTrips';
@@ -56,7 +56,7 @@ export default {
             'profile': 'profile/user'
         }),
         viajesHeaderTitle () {
-            return (this.id === 'me' || this.id === this.user.id) ? 'Mis viajes' : 'Viajes';
+            return (this.id === 'me' || this.id === this.user.id) ? this.$t('misViajes') : this.$t('viajes');
         },
         isMyOwnProfile () {
             return (this.id === 'me' || this.id === this.user.id);
@@ -67,8 +67,7 @@ export default {
         ...mapActions({
             setTitle: 'actionbars/setTitle',
             setProfile: 'profile/setUser',
-            setProfileByID: 'profile/setUserByID',
-            setUserByID: 'userTrips/setUserByID'
+            setProfileByID: 'profile/setUserByID'
 
         }),
         updateProfile () {
@@ -80,12 +79,11 @@ export default {
                 if (this.userProfile) {
                     this.setTitle(this.userProfile.name);
                 }
-                this.setProfileByID({id: this.id, userProfile: this.userProfile}).then(() => {
+                this.setProfileByID({ id: this.id, userProfile: this.userProfile }).then(() => {
                     this.setTitle(this.profile.name);
                 }).catch(() => {
-                    this.$router.replace({name: 'trips'});
+                    this.$router.replace({ name: 'trips' });
                 });
-                this.setUserByID(this.id);
                 this.currentView = 'profile-trip';
             }
         }

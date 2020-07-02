@@ -1,10 +1,22 @@
 <template>
   <div class="trips container">
         <div class="col-xs-24">
+            <Loading :data="pendingPaymentRequests" :hideOnEmpty="true">
+                <h2 slot="title"> <strong>Pago pendiente</strong> para confirmar </h2>
+                <div class="request-list">
+                    <PendingPaymentRequest v-for="r in pendingPaymentRequests" v-bind:key="r.id" :request="r"></PendingPaymentRequest>
+                </div>
+                <p slot="loading" class="alert alert-info" role="alert">
+                    <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
+                    Cargando...
+                </p>
+            </Loading>
+        </div>
+        <div class="col-xs-24">
             <Loading :data="pendingRequest" :hideOnEmpty="true">
                 <h2 slot="title"> Pendientes <strong>de contestar</strong> </h2>
                 <div class="request-list">
-                    <PendingRequest v-for="r in pendingRequest" :user="r.user" :trip="findTrip(r.trip_id)"></PendingRequest>
+                    <PendingRequest v-for="r in pendingRequest" v-bind:key="r.id" :user="r.user" :trip="findTrip(r.trip_id)"></PendingRequest>
                 </div>
                 <p slot="no-data" class="alert alert-warning"  role="alert">No hay pedientes de contestar</p>
                 <p slot="loading" class="alert alert-info" role="alert">
@@ -15,7 +27,7 @@
         </div>
 
         <div class="col-xs-24">
-            <modal :name="'modal'" v-if="showModalPendingRates" @close="toPendingRates" :title="'Test'" :body="'Body'" :hide-footer="true">
+            <modal :name="'modal'" v-if="showModalPendingRates" @close="toPendingRates" :title="'Carpoodatos'" :body="'Body'" :hide-footer="true">
                 <h3 slot="header">
                     <span>¡Carpoodatos!</span>
                     <i v-on:click="toPendingRates" class="fa fa-times float-right-close"></i>
@@ -87,7 +99,7 @@
             <Loading :data="pendingRates" :hideOnEmpty="true">
                 <h2 slot="title"> Calificaciones <strong>pendientes </strong></h2>
                 <div class="request-list">
-                    <RatePending v-for="rate in pendingRates" :rate="rate" @rated="onUserRated" />
+                    <RatePending v-for="rate in pendingRates" v-bind:key="rate.id" :rate="rate" @rated="onUserRated" />
                 </div>
                 <p slot="no-data" class="alert alert-warning"  role="alert">No hay calificaciones pendientes</p>
                 <p slot="loading" class="alert alert-info" role="alert">
@@ -101,7 +113,7 @@
             <h2>Mis <strong>próximos</strong> viajes</h2>
             <Loading :data="trips">
                 <div class="trips-list">
-                    <Trip v-for="trip in trips" :trip="trip" :user="user" :enableChangeSeats="true"></Trip>
+                    <Trip v-for="trip in trips" v-bind:key="trip.id" :trip="trip" :user="user" :enableChangeSeats="true"></Trip>
                 </div>
                 <p slot="no-data" class="alert alert-warning"  role="alert">No tenés viajes creados</p>
                 <p slot="loading" class="alert alert-info" role="alert">
@@ -115,7 +127,7 @@
             <Loading :data="passengerTrips" :hideOnEmpty="true">
                 <h2 slot="title" > Viajes a los que <strong>estoy subido</strong> </h2>
                 <div class="trips-list">
-                    <Trip v-for="trip in passengerTrips" :trip="trip" :user="user"></Trip>
+                    <Trip v-for="trip in passengerTrips" v-bind:key="trip.id" :trip="trip" :user="user"></Trip>
                 </div>
                 <p slot="no-data" class="alert alert-warning"  role="alert">No estas subido a ningún viaje.</p>
                 <p slot="loading" class="alert alert-info" role="alert">
@@ -128,7 +140,7 @@
             <Loading :data="subscriptions" :hideOnEmpty="true">
                 <h2 slot="title" > Suscripciones a viajes</h2>
                 <div class="trips-list row">
-                    <div class="col-xs-24 col-md-12" v-for="subs in subscriptions" :key="subs.id">
+                    <div class="col-xs-24 col-md-12" v-for="subs in subscriptions" v-bind:key="subs.id" :key="subs.id">
                         <subscriptionItem :subscription="subs" :user="user"></subscriptionItem>
                     </div>
 
@@ -146,9 +158,9 @@
             <h2>Mis viajes pasados</h2>
             <Loading :data="oldTrips">
                 <div class="trips-list">
-                    <Trip v-for="trip in oldTrips" :trip="trip" :user="user"></Trip>
+                    <Trip v-for="trip in oldTrips" v-bind:key="trip.id" :trip="trip" :user="user"></Trip>
                 </div>
-                <p slot="no-data" class="alert alert-warning"  role="alert">No create ningún viaje</p>
+                <p slot="no-data" class="alert alert-warning"  role="alert">No has realizado ningún viaje aún</p>
                 <p slot="loading" class="alert alert-info" role="alert">
                     <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
                     Cargando viajes ...
@@ -160,7 +172,7 @@
             <Loading :data="oldPassengerTrips" :hideOnEmpty="true">
                 <h2 slot="title" > Viajes a los que me <strong>subí</strong> </h2>
                 <div class="trips-list">
-                    <Trip v-for="trip in oldPassengerTrips" :trip="trip" :user="user"></Trip>
+                    <Trip v-for="trip in oldPassengerTrips" v-bind:key="trip.id" :trip="trip" :user="user"></Trip>
                 </div>
                 <p slot="no-data" class="alert alert-warning"  role="alert">No te has subido a ningún viaje.</p>
                 <p slot="loading" class="alert alert-info" role="alert">
@@ -178,11 +190,11 @@ import subscriptionItem from '../sections/SubscriptionItem.vue';
 import Trip from '../sections/Trip.vue';
 import Loading from '../Loading.vue';
 import PendingRequest from '../PendingRequest';
+import PendingPaymentRequest from '../PendingPaymentRequest';
 import RatePending from '../RatePending';
 import { mapGetters, mapActions } from 'vuex';
 
 import Tab from '../elements/Tab';
-import Tabset from '../elements/Tabset';
 import modal from '../Modal';
 import dialogs from '../../services/dialogs.js';
 
@@ -206,6 +218,7 @@ export default {
             this.oldTripsAsDriver();
             this.oldTripsAsPassenger();
         });
+        this.getPendingPaymentRequests();
         this.findSubscriptions();
     },
     computed: {
@@ -214,11 +227,12 @@ export default {
             passengerTrips: 'myTrips/passengerTrips',
             pendingRates: 'rates/pendingRates',
             pendingRequest: 'passenger/pendingRequest',
+            pendingPaymentRequests: 'passenger/pendingPaymentRequests',
             user: 'auth/user',
             oldTrips: 'myTrips/myOldTrips',
             oldPassengerTrips: 'myTrips/passengerOldTrips',
             subscriptions: 'subscriptions/subscriptions',
-            appConfig: 'auth/appConfig'
+            config: 'auth/appConfig'
         })
     },
 
@@ -228,6 +242,7 @@ export default {
             tripAsPassenger: 'myTrips/tripAsPassenger',
             pendingRate: 'rates/pendingRates',
             getPendingRequest: 'passenger/getPendingRequest',
+            getPendingPaymentRequests: 'passenger/getPendingPaymentRequests',
             oldTripsAsDriver: 'myTrips/oldTripsAsDriver',
             oldTripsAsPassenger: 'myTrips/oldTripsAsPassenger',
             findSubscriptions: 'subscriptions/index',
@@ -339,7 +354,7 @@ export default {
             this.registerDonation(data);
         },
         hasToShowModal (tripId) {
-            let tripRateds = parseFloat(this.appConfig.donation.trips_rated);
+            let tripRateds = parseFloat(this.config.donation.trips_rated);
             if (this.user && !this.user.monthly_donate) { // solo si el usuario no es donador mensual
                 if (!this.user.donations) {
                     // no tengo intento de donaciones este mes debe aparecer
@@ -367,7 +382,9 @@ export default {
             console.log('onUserRated', data);
             if (data.rating) {
                 // vote positivo
-                this.hasToShowModal(data.trip_id);
+                if (this.config && this.config.donation && this.config.donation.month_days > 0) {
+                    this.hasToShowModal(data.trip_id);
+                }
             }
         }
     },
@@ -380,7 +397,7 @@ export default {
         },
         pendingRates: function (newValue, oldValue) {
             this.updateScroll();
-            if (!this.user.do_not_alert_pending_rates) {
+            if (!this.user.do_not_alert_pending_rates && !this.config.disable_user_hints) {
                 console.log('pendingRates', newValue, oldValue);
                 if (newValue && newValue.length > 0 && !this.alreadyAlerted) {
                     this.alreadyAlerted = true;
@@ -408,9 +425,9 @@ export default {
         Trip,
         Loading,
         PendingRequest,
+        PendingPaymentRequest,
         RatePending,
         Tab,
-        Tabset,
         subscriptionItem,
         modal
     }

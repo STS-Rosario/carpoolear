@@ -1,4 +1,4 @@
-import {RateApi} from '../../services/api';
+import { RateApi } from '../../services/api';
 import * as types from '../mutation-types';
 import globalStore from '../index';
 import moment from 'moment';

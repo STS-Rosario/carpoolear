@@ -1,13 +1,13 @@
 import * as types from './mutation-types';
-import cache, {keys} from '../services/cache';
+import cache, { keys } from '../services/cache';
 import bus from '../services/bus-event';
-import {TripApi} from '../services/api';
-import {Thread, stopThreads} from '../classes/Threads';
+import { TripApi } from '../services/api';
+import { Thread, stopThreads } from '../classes/Threads';
 
 let tripsApi = new TripApi();
 
 export const init = (store) => {
-    console.log('starting application');
+    console.log('Starting app.');
 
     let promises = [];
     let loadStateMap = [
@@ -22,6 +22,10 @@ export const init = (store) => {
         {
             key: keys.DEVICE_KEY,
             mutation: 'device/' + types.DEVICE_SET_CURRENT_DEVICE
+        },
+        {
+            key: keys.FIRST_TIME_APP_KEY,
+            mutation: 'device/' + types.DEVICE_SET_FIRST_TIME_APP_OPEN
         }
     ];
 
@@ -39,7 +43,7 @@ export const init = (store) => {
     });
 
     return Promise.all(promises).then(() => {
-        console.log('State loaded from cache');
+        console.log('State loaded from cache.');
         if (store.state.auth.token) {
             store.dispatch('auth/retoken').then(() => startApp(store));
         } else {
