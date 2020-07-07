@@ -372,9 +372,15 @@ fieldset[disabled] .btn-facebook.focus {
 .btn-with-icon:hover .btn-with-icon--icon {
     background-color: #2c406d;
 }
+.btn-apple.btn-with-icon:hover .btn-with-icon--icon {
+    background-color: #DDD;
+}
 
 .btn-with-icon:hover {
     background-color: rgb(48, 75, 130);
+}
+.btn-apple.btn-with-icon:hover {
+    background-color: #DDD;
 }
 
 .btn-with-icon:focus,

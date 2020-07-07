@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container" :class="[backgroundStyle, viewName]">
+  <div class="app-container" :class="[backgroundStyle, viewName, deviceClass]">
     <onBoarding key="1" v-if="onBoardingVisibility"></onBoarding>
     <headerApp></headerApp>
     <main id="main">
@@ -64,7 +64,10 @@ export default {
         },
         viewName () {
             return this.$route.name;
-        }
+        },
+        deviceClass () {
+            return window.device && window.device.platform ? window.device.platform.toLowerCase() : '';
+        },
     },
     watch: {
         deviceReady: () => {

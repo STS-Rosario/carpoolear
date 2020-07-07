@@ -1,5 +1,6 @@
 import * as types from '../mutation-types';
 import facebook from '../../cordova/facebook.js';
+import apple from '../../cordova/apple.js';
 import { AuthApi } from '../../services/api';
 import globalStore from '../index';
 import router from '../../router';
@@ -68,6 +69,20 @@ const actions = {
                 let token = response.token;
                 globalStore.dispatch('auth/onLoggin', token);
                 authApi.matchFriendsWithProvider('facebook', { access_token: accessToken });
+            });
+        });
+    },
+
+    appleLogin (context) {
+        return apple.login().then((response) => {
+            let data = {
+                access_token: response.identityToken
+            };
+            data = Object.assign(data, response);
+
+            authApi.loginWithProvider('apple', data).then((response) => {
+                let token = response.token;
+                globalStore.dispatch('auth/onLoggin', token);
             });
         });
     },

@@ -134,6 +134,8 @@ const messages = {
         perfilActualizadoCorrectamente: 'Perfil actualizado correctamente.',
         debesImagenPerfil: 'Debes cargar una imagen de perfil.',
         errorDatos: 'No se pudo grabar los datos. Intente de nuevo',
+        nroDocYaRegistrado: 'Ya existe un usuario registrado con este número de documento.',
+        nroTelYaRegistrado: 'Ya existe un usuario registrado con este número de teléfono.',
         olvidasteNombre: 'Olvidaste ingresar tu nombre y apellido.',
         patente: 'Patente',
         patenteNoValida: 'La patente ingresada no tiene un formato válido.',
