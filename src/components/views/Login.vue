@@ -42,7 +42,7 @@
                 <i class="fa fa-apple" aria-hidden="true"></i>
             </span>
             <span class='btn-with-icon--label'>
-                <span v-if="!iosLoading">Apple</span>
+                <span v-if="!iosLoading">{{ $t('ingresaConApple') }}</span>
                 <spinner class="blue" v-if="iosLoading"></spinner>
             </span>
         </button>
@@ -109,9 +109,23 @@
             <span class='btn-with-icon--label'>
                 <span v-if="!fbLoading">{{ $t('ingresaConFace') }}</span>
             </span>
-            <spinner class="blue" v-if="fbLoading"></spinner></span></button>
+            <spinner class="blue" v-if="fbLoading"></spinner></span>
+        </button>
         <div v-show="config.enable_facebook">
             {{ $t('alIngresarFace') }} <router-link :to="{name: 'terms'}">{{ $t('tyc') }}</router-link>.
+        </div>
+
+        <button class="btn btn-primary btn-search btn-apple btn-with-icon" @click="appleLogin" :disabled="iosLoading" v-if="isApple">
+            <span class="btn-with-icon--icon">
+                <i class="fa fa-apple" aria-hidden="true"></i>
+            </span>
+            <span class='btn-with-icon--label'>
+                <span v-if="!iosLoading">{{ $t('ingresaConApple') }}</span>
+                <spinner class="blue" v-if="iosLoading"></spinner>
+            </span>
+        </button>
+        <div v-show="isApple">
+            {{ $t('alIngresarApple') }} <router-link :to="{name: 'terms'}">{{ $t('tyc') }}</router-link>.
         </div>
       </div>
       <div class="col-sm-12 col-md-12" v-show="isMobile && loginCustomHeader">
@@ -154,12 +168,13 @@ export default {
             checkLogin: 'auth/checkLogin',
             isMobile: 'device/isMobile',
             config: 'auth/appConfig',
-            deviceData: 'cordova/device',
+            deviceData: 'cordova/device'
         }),
         isDesktop () {
             return !this.isMobile;
         },
         isApple () {
+            // return true;
             console.log('isApple', window.cordova.platformId);
             return window.cordova && window.cordova.platformId.toLowerCase() === 'ios';
         },
@@ -204,7 +219,7 @@ export default {
                 }, error => {
                     const userNotActive = error && error.message === 'user_not_active';
                     const userBanned = error && error.message === 'user_banned';
-                    const message = userNotActive ? this.$t('paraIngresarCuenta') : (userBanned ? this.$t('usuarioBanneado') :  this.$t('emailOContra'));
+                    const message = userNotActive ? this.$t('paraIngresarCuenta') : (userBanned ? this.$t('usuarioBanneado') : this.$t('emailOContra'));
                     this.showUserNotActiveInfo = userNotActive;
                     this.showUserBannedInfo = userBanned;
                     dialogs.message(message, { duration: 10, estado: 'error' });
@@ -412,6 +427,11 @@ label {
     padding-left: 4em;
   }
   .user-form .btn-primary.btn-facebook {
+    width: 100%;
+    max-width: 280px;
+    margin: 0.5em 0 0.6em 0;
+  }
+  .user-form .btn-primary.btn-apple {
     width: 100%;
     max-width: 280px;
     margin: 0.5em 0 0.6em 0;

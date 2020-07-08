@@ -235,7 +235,6 @@ export default {
                 nro_doc: this.currentUser.nro_doc,
                 mobile_phone: this.currentUser.mobile_phone,
                 pass: {},
-                active: this.currentUser.active,
                 user: {},
                 driver_is_verified: this.currentUser.driver_is_verified,
                 driver_data_docs: this.currentUser.driver_data_docs,
@@ -249,7 +248,7 @@ export default {
         toUserMessages (user) {
             console.log('toUserMessages');
             this.lookConversation({ user: user, tripId: null }).then(conversation => {
-            console.log('toUserMessages then', conversation);
+                console.log('toUserMessages then', conversation);
                 router.push({ name: 'conversation-chat', params: { id: conversation.id } });
             });
         },

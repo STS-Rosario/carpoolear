@@ -67,7 +67,7 @@ export default {
         },
         deviceClass () {
             return window.device && window.device.platform ? window.device.platform.toLowerCase() : '';
-        },
+        }
     },
     watch: {
         deviceReady: () => {

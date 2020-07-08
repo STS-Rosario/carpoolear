@@ -44,7 +44,7 @@
                     </div>
                 </modal>
                 <template v-for="(trip, index) in trips">
-                    <template v-if="isDonationTime() && !user.monthly_donate"><!-- solo si el usuario no es donador mensual -->
+                    <template v-if="isDonationTime() && (!user || !user.monthly_donate)"><!-- solo si el usuario no es donador mensual -->
                         <div class="panel panel-default panel-donar" v-if="((index + parseFloat(appConfig.donation.trips_offset))  % parseFloat(appConfig.donation.trips_count) === 0)">
                             <div class="panel-body">
                                 <button class="btn btn-success pull-right btn-donar" @click="onDonate">Donar</button>

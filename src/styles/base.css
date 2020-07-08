@@ -374,12 +374,17 @@
       margin-left: 40px;
     }
     .btn-apple.btn-with-icon {
-        background-color: #EEE;
-        color: #222;
+        background-color: #FFF;
+        color: #000;
+        border: 1px solid #000;
     }
     .btn-apple .btn-with-icon--icon {
-      background-color: #DDD;
-      color: #222;
+      background-color: #FFF;
+      color: #000;
+    }
+    .btn-apple .btn-with-icon--label {
+        margin-left: 0;
+        display: inline-block;
     }
 
       .btn-facebook:disabled span:first-child {

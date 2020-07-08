@@ -402,7 +402,6 @@ export default {
                 if (err && err.errors && err.errors.mobile_phone && err.errors.mobile_phone[0].indexOf('taken') >= 0) {
                     dialogs.message(this.$t('nroTelYaRegistrado'), { duration: 10, estado: 'error' });
                 }
-
             });
         },
         validate () {
