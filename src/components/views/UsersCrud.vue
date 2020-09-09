@@ -268,7 +268,7 @@ export default {
             this.accountTypeError = new Error();
             this.accountBankError = new Error();
 
-            if (!this.newInfo.name || this.newInfo.name.length < 1) {
+            /* if (!this.newInfo.name || this.newInfo.name.length < 1) {
                 this.nombreError.state = true;
                 this.nombreError.message = 'Olvidaste ingresar tu nombre y apellido.';
                 globalError = true;
@@ -302,7 +302,7 @@ export default {
             if (this.newInfo.pass.password && this.newInfo.pass.password !== this.newInfo.pass.password_confirmation) {
                 this.passError = 'Password no coincide';
                 globalError = true;
-            }
+            } */
 
             console.log('error', this);
 

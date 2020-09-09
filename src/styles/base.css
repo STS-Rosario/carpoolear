@@ -379,7 +379,7 @@
         border: 1px solid #000;
     }
     .btn-apple .btn-with-icon--icon {
-      background-color: #FFF;
+      background-color: transparent;
       color: #000;
     }
     .btn-apple .btn-with-icon--label {

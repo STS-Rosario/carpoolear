@@ -174,7 +174,7 @@ export default {
             return !this.isMobile;
         },
         isApple () {
-            // return true;
+            return true;
             console.log('isApple', window.cordova.platformId);
             return window.cordova && window.cordova.platformId.toLowerCase() === 'ios';
         },
@@ -435,6 +435,11 @@ label {
     width: 100%;
     max-width: 280px;
     margin: 0.5em 0 0.6em 0;
+    text-transform: none;
+    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 20px;
+    padding: .7em 2em;
+    border-color: black;
   }
   .register::before {
     display: none;

@@ -210,7 +210,7 @@ const messages = {
         noTenesFace: '¿No tenés cuenta?',
         registrateAca: 'Registrate acá.',
         ingresaConFace: 'Ingresá con Facebook',
-        ingresaConApple: 'Ingresá con Apple',
+        ingresaConApple: 'Iniciar Sesión con Apple',
         alIngresarApple: 'Al ingresar con Apple estas aceptando nuestros',
         alIngresarFace: 'Al ingresar con Facebook estas aceptando nuestros',
         usuarioBanneado: 'Tu cuenta se encuentra desactivada por el equipo de Carpoolear. Ponte en contacto con nosotros a contacto@carpoolear.com para solucionar el inconveniente.',

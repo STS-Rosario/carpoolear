@@ -39,27 +39,30 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6"><span><h5>Aceptadas:</h5>
-                                <div v-for="pas in trip.passenger" v-on:click="openProfile(pas.user.id)">{{ pas.request_state == 1 ? pas.user.name : '' }}</div>
+                                <div v-for="pas in trip.allPassengerRequest" v-on:click="openProfile(pas.user.id)">{{ pas.request_state == 1 ? pas.user.name : '' }}</div>
                             </span></div>
                             <div class="col-md-6"><span><h5>Rechazadas:</h5>
-                                <div v-for="pas in trip.passenger" v-on:click="openProfile(pas.user.id)">{{ pas.request_state == 2 ? pas.user.name : '' }}</div>
+                                <div v-for="pas in trip.allPassengerRequest" v-on:click="openProfile(pas.user.id)">{{ pas.request_state == 2 ? pas.user.name : '' }}</div>
                             </span></div>
                             <div class="col-md-6"><span><h5>Canceladas:</h5>
-                                <div v-for="pas in trip.passenger" v-on:click="openProfile(pas.user.id)">{{ pas.request_state == 3 ? pas.user.name : '' }}</div>
+                                <div v-for="pas in trip.allPassengerRequest" v-on:click="openProfile(pas.user.id)">{{ pas.request_state == 3 ? pas.user.name : '' }}</div>
                             </span></div>
                             <div class="col-md-6"><span><h5>Pendientes:</h5>
-                                <div v-for="pas in trip.passenger" v-on:click="openProfile(pas.user.id)">{{ pas.request_state == 0 ? pas.user.name : '' }}</div>
+                                <div v-for="pas in trip.allPassengerRequest" v-on:click="openProfile(pas.user.id)">{{ pas.request_state == 0 ? pas.user.name : '' }}</div>
                             </span></div>
                         </div>
                         <div class="row">
-                            <div class="col-md-24"><span><h4>Calficacion:</h4>
-                                <div v-for="rating in trip.ratings">
-                                    <span>
-                                        <strong>{{ rating.from.name }}</strong> califico a <strong> {{ rating.to.name }}</strong> como {{ rating.rating ? 'positivo' : 'negativo'}} en {{ rating.rate_at ? rating.rate_at.slice(0, 10) : 'undefined' }} {{ rating.comment ? 'con el comentario: ' + rating.comment : ''}}
-                                    </span>
-                                    <br>
-                                </div>
-                            </span></div>
+                            <div class="col-md-24">
+                                <span v-if="Array.isArray(trip.ratings)">
+                                    <h4>Calficacion:</h4>
+                                    <div v-for="rating in trip.ratings.filter(r => r.voted > 0)">
+                                        <span>
+                                            <strong>{{ rating.from.name }}</strong> califico a <strong> {{ rating.to.name }}</strong> como {{ rating.rating ? 'positivo' : 'negativo'}} en {{ rating.rate_at ? rating.rate_at.slice(0, 10) : 'undefined' }} {{ rating.comment ? 'con el comentario: ' + rating.comment : ''}}
+                                        </span>
+                                        <br>
+                                    </div>
+                                </span>
+                            </div>
                         </div>
                 </div>
             </div>
