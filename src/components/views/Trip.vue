@@ -40,7 +40,7 @@
                                     </div>
                                     <div class="text-center">
                                       <template v-if="config.module_coordinate_by_message">
-                                        <button class="btn btn-primary" @click="toMakeRequest" v-if="!owner">Coordinar viaje</button>
+                                        <button class="btn btn-primary" @click="toMakeRequest" v-if="!owner">Enviar mensaje</button>
                                       </template>
                                       <template v-else>
                                         <button class="btn btn-primary" @click="toMessages" v-if="!owner">Enviar mensaje</button>

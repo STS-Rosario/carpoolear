@@ -29,7 +29,7 @@
                             </template>
                         </template>
                         <template v-else-if="config.module_coordinate_by_message">
-                            Coordinar viaje
+                            Enviar mensaje
                         </template>
                         <template v-else>
                             Solicitar asiento
