@@ -49,6 +49,27 @@
                                     </div>
                                 </div>
                             </modal>
+                            <modal :name="'modal'" v-if="showModalPricing" @close="onModalClose" :title="'Carpoodatos'" :body="'Body'">
+                                <h3 slot="header">
+                                    <span>¡Carpoodatos!</span>
+                                    <i v-on:click="onModalClose" class="fa fa-times float-right-close"></i>
+                                </h3>
+                                <div slot="body">
+                                    <div class="text-left carpoodatos">
+                                        <p>Antes de confirmar el viaje y para evitar sorpresas, tené en cuenta de coordinar y acordar el punto de encuentro, el horario, la disponibilidad de espacio para equipaje, la cantidad total de pasajeros y la contribución por los gastos de combustible y peaje.</p>
+                                        <p>La contribución máxima que puede pedir un conductor es igual a gastos de combustible + peaje dividido la cantidad de personas viajando en el auto. Durante la coordinación previa al viaje, cualquier persona puede pedir hacer la división con tickets de combustible y peaje en mano.</p>
+                                        <p>Cualquier duda escribinos a <a href="mailto:carpoolear@stsrosario.org.ar">carpoolear@stsrosario.org.ar</a> o por mensaje privado a nuestras redes sociales (facebook,instagram y tweeter).</p>
+                                    </div>
+                                    <div class="check" style="margin-bottom:10px;">
+                                        <label class="check-inline">
+                                            <input type="checkbox" name="acceptPricing" value="0" v-model="acceptPricing"><span> No volver a mostrar mensaje</span>
+                                        </label>
+                                    </div>
+                                    <div class="text-center">
+                                        <button class="btn btn-primary" @click="toMessageForce" v-if="!owner">Enviar mensaje</button>
+                                    </div>
+                                </div>
+                            </modal>
                         </div>
                         <TripButtons @deleteTrip="deleteTrip()" @toMessages="toMessages()" @onMakeRequest="onMakeRequest()" @cancelRequest="cancelRequest()" :sending="sending" :isPassengersView="isPassengersView" />
                         <TripStats v-if="!isMobile && tripCardTheme === 'light'" />
@@ -173,7 +194,9 @@ export default {
             url: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
             attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
             showModalRequestSeat: false,
+            showModalPricing: false,
             acceptPassengerValue: 0,
+            acceptPricing: 0,
             calculatedHeight: {}
         };
     },
@@ -269,20 +292,36 @@ export default {
                 }
             });
         },
+        toMessageForce () {
+            this.toMessages(true);
+        },
 
-        toMessages () {
-            if (this.acceptPassengerValue) {
+        toMessages (force) {
+            if (this.acceptPricing) {
                 let data = {
-                    property: 'do_not_alert_request_seat',
+                    property: 'do_not_alert_pricing',
                     value: 1
                 };
                 this.changeProperty(data).then(() => {
                     console.log('do not alert success');
                 });
             }
+            if (this.user.do_not_alert_pricing || this.config.disable_user_hints || force) {
+                if (this.acceptPassengerValue) {
+                    let data = {
+                        property: 'do_not_alert_request_seat',
+                        value: 1
+                    };
+                    this.changeProperty(data).then(() => {
+                        console.log('do not alert success');
+                    });
+                }
 
-            if (this.profileComplete()) {
-                this.toUserMessages(this.trip.user);
+                if (this.profileComplete()) {
+                    this.toUserMessages(this.trip.user);
+                }
+            } else {
+                this.showModalPricing = true;
             }
         },
 
@@ -436,7 +475,17 @@ export default {
                     console.log('do not alert success');
                 });
             }
+            if (this.acceptPricing) {
+                let data = {
+                    property: 'do_not_alert_pricing',
+                    value: 1
+                };
+                this.changeProperty(data).then(() => {
+                    console.log('do not prcing success');
+                });
+            }
             this.showModalRequestSeat = false;
+            this.showModalPricing = false;
         }
     },
 
