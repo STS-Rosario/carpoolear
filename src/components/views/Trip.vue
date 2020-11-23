@@ -329,7 +329,7 @@ export default {
             this.$set(this.sending, 'sendMessageAction', true);
             let data = {
                 user: user,
-                tripId: this.trip.id
+                tripId: this.trip.is_passenger ? undefined : this.trip.id
             };
             this.lookConversation(data).then(conversation => {
                 console.log(conversation);

@@ -36,7 +36,7 @@ class OsmApi {
             coords += point.lat;
         });
         console.log('coords', coords);
-        let url = 'https://router.project-osrm.org/route/v1/driving/' + coords + '?overview=false&alternatives=true&steps=true&hints='; // &countrycodes=ar
+        let url = 'https://router.project-osrm.org/route/v1/driving/' + coords + '?overview=false&alternatives=true&steps=true'; // &countrycodes=ar
         return axios.get(url).then((result) => {
             if (result.status === 200) {
                 return Promise.resolve(result.data);

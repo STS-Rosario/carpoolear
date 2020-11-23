@@ -137,6 +137,18 @@
                                 <input type="number" v-model="price" class="form-control form-control-with-icon form-control-price" id="price" :class="{'has-error': priceError.state}" :placeholder="price" >
                                 <span class="error" v-if="priceError.state"> {{priceError.message}} </span>
                             </div>
+
+                            <div class="list_item">
+                                <i class="fa fa-link" aria-hidden="true" v-if="tripCardTheme === 'light'"></i>
+                                <div class="label-soft" v-if="tripCardTheme !== 'light'" style='color: var(--trip-almost-fill-color); font-weight: bold'>{{ 'Total de combustible aprox.' }}</div>
+                                <div><span style='color: var(--trip-almost-fill-color)'>$ {{priceAproxString}}</span> (nafta premium, consumo promedio, sin peajes)</div>
+                            </div>
+                            <div class="trip_price">
+                                <label class="label-for-group" style="font-weight: bold; color: #111;">{{ 'Total combustibles + peajes a compartir' }}</label>
+
+                                <input type="number" v-model="price" class="form-control form-control-with-icon form-control-price" id="price" :class="{'has-error': priceError.state}" :placeholder="price" >
+                                <span class="error" v-if="priceError.state"> {{priceError.message}} </span>
+                            </div>
                             <div class="trip_seats-available">
                                 <fieldset>
                                     <span class="label-for-group">
@@ -726,6 +738,9 @@ export default {
         distanceString () {
             return Math.floor(this.trip.distance / 1000) + ' Km';
         },
+        priceAproxString () {
+            return Math.ceil(this.trip.distance / 1000 / this.config.kilometer_by_liter * this.config.fuel_price);
+        },
 
         estimatedTimeString () {
             const totalMinutes = Math.floor(this.duration / 60);
@@ -782,15 +797,17 @@ export default {
             this.otherTrip.trip.friendship_type_id = this.trip.friendship_type_id;
         },
         'trip.distance': function () {
-            let data = {
-                from: this.points[0].place,
-                to: last(this.points).place,
-                distance: this.trip.distance
-            };
-            this.getPrice(data).then(price => {
-                this.price = price;
-                console.log(this.price);
-            });
+            if (this.config.module_seat_price) {
+                let data = {
+                    from: this.points[0].place,
+                    to: last(this.points).place,
+                    distance: this.trip.distance
+                };
+                this.getPrice(data).then(price => {
+                    this.price = price;
+                    console.log(this.price);
+                });
+            }
         },
         'otherTrip.distance': function () {
             let data = {
@@ -989,6 +1006,24 @@ export default {
                 }
             }
 
+            if (!this.config.module_seat_price) {
+                let aprox = Math.ceil(this.trip.distance / 1000 / this.config.kilometer_by_liter * this.config.fuel_price) * (1 + this.config.price_variance / 100);
+                console.log('MAX APROX', (1 + this.config.price_variance / 100), aprox);
+                if (this.price > aprox) {
+                    globalError = true;
+                    this.priceError.state = true;
+                    this.priceError.message = 'El precio total no puede superar un ' + this.config.price_variance + '% al aproximado de combustible.';
+                } else {
+                    if (this.price < 1) {
+                        globalError = true;
+                        this.priceError.state = true;
+                        this.priceError.message = 'El precio total debe estar completo.';
+                    } else {
+                        this.priceError.state = false;
+                    }
+                }
+            }
+
             if (this.showReturnTrip) {
                 if (!this.otherTrip.time || !moment(this.otherTrip.time, 'HH mm').isValid()) {
                     this.otherTrip.timeError.state = true;
@@ -1056,6 +1091,8 @@ export default {
                         this.otherTrip.timeError.message = this.$t('fechaHoraLogicas');
                         globalError = true;
                     }
+
+
                 }
             }
 
@@ -1104,7 +1141,12 @@ export default {
                 trip.allow_kids = !(trip.allow_kids > 0);
                 trip.allow_animals = !(trip.allow_animals > 0);
                 trip.allow_smoking = !(trip.allow_smoking > 0);
-                trip.seat_price = this.price;
+
+                if (this.config.module_seat_price) {
+                    trip.seat_price = this.price;
+                } else {
+                    trip.total_price = this.price;
+                }
                 if (trip.is_passenger === 1) {
                     trip.no_lucrar = 1;
                 }
