@@ -30,7 +30,7 @@
         <splash density="port-xhdpi" src="res/screen/android/screen-xhdpi-portrait.png" />
         <preference name="AndroidLaunchMode" value="singleTop" />
         <preference name="loadUrlTimeoutValue" value="700000" />
-        <preference name="android-targetSdkVersion" value="28" />
+        <preference name="android-targetSdkVersion" value="29" />
         <config-file parent="/resources" target="./res/values/strings.xml">
 			<string name="fb_app_id">147151221990591</string>
 			<string name="fb_app_name">Carpoolear</string>
