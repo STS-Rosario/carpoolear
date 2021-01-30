@@ -17,10 +17,10 @@
                     <fieldset class="trip-type-selection--light" v-if="tripCardTheme === 'light'">
                         <div class="row">
                             <div class="col-xs-12 col-md-12 col-lg-12">
-                                <button class="btn btn-option" @click="setIsPassenger(0)" :disabled="updatingTrip" :class="trip.is_passenger === 0 ? 'active' : ''">{{ $t('buscoConductor') }}</button>
+                                <button class="btn btn-option" @click="setIsPassenger(0)" :disabled="updatingTrip" :class="trip.is_passenger == 0 ? 'active' : ''">{{ $t('buscoConductor') }}</button>
                             </div>
                             <div class="col-xs-12 col-md-12 col-lg-12">
-                                <button class="btn btn-option" @click="setIsPassenger(1)" :disabled="updatingTrip" :class="trip.is_passenger === 1 ? 'active' : ''">{{ $t('buscoPasajero') }}</button>
+                                <button class="btn btn-option" @click="setIsPassenger(1)" :disabled="updatingTrip" :class="trip.is_passenger == 1 ? 'active' : ''">{{ $t('buscoPasajero') }}</button>
                             </div>
                         </div>
                     </fieldset>
@@ -46,7 +46,7 @@
                             <span class="error" v-if="m.error.state"> {{m.error.message}} </span>
                         </div>
                     </div>
-                    <div class="trip_terms" v-if="trip.is_passenger === 0">
+                    <div class="trip_terms" v-if="trip.is_passenger == 0">
                         <input type="checkbox" id="no-lucrar" v-model="no_lucrar" class="checkbox-button" />
                         <label for="no-lucrar" class="trip_terms_label checkbox-click-target" :class="{'has-error': lucrarError.state }">
                             <span class="checkbox-box"></span>
@@ -138,12 +138,12 @@
                                 <span class="error" v-if="priceError.state"> {{priceError.message}} </span>
                             </div>
 
-                            <div class="list_item">
+                            <div class="list_item" v-if="trip.is_passenger == 0 ">
                                 <i class="fa fa-link" aria-hidden="true" v-if="tripCardTheme === 'light'"></i>
                                 <div class="label-soft" v-if="tripCardTheme !== 'light'" style='color: var(--trip-almost-fill-color); font-weight: bold'>{{ 'Total de combustible aprox.' }}</div>
                                 <div><span style='color: var(--trip-almost-fill-color)'>$ {{priceAproxString}}</span> (nafta premium, consumo promedio, sin peajes)</div>
                             </div>
-                            <div class="trip_price">
+                            <div class="trip_price" v-if="trip.is_passenger == 0 ">
                                 <label class="label-for-group" style="font-weight: bold; color: #111;">{{ 'Total combustibles + peajes a compartir' }}</label>
 
                                 <input type="number" v-model="price" class="form-control form-control-with-icon form-control-price" id="price" :class="{'has-error': priceError.state}" :placeholder="price" >
@@ -153,7 +153,7 @@
                                 <fieldset>
                                     <span class="label-for-group">
                                         <svg-item v-if="tripCardTheme === 'light'" :size="28" :icon="'icono-sentado'"></svg-item>
-                                        {{ trip.is_passenger ? $t('cuposNecesarios') : $t('lugaresDisponibles') }}
+                                        {{ trip.is_passenger == 0 ? $t('lugaresDisponibles') : $t('cuposNecesarios') }}
                                     </span>
                                     <span v-if="tripCardTheme !== 'light'">
                                         <span class="radio-inline">
@@ -182,7 +182,7 @@
                                 <span class="error" v-if="seatsError.state"> {{seatsError.message}} </span>
                             </div>
                             <div class="trip-comment">
-                                <label for="trip_comment"  class="label-for-group"> {{ $t('comentarioPasajeros') }} </label>
+                                <label for="trip_comment"  class="label-for-group"> {{ trip.is_passenger == 0 ? $t('comentarioPasajeros') : 'Comentario' }} </label>
                                 <textarea maxlength="2000" v-model="trip.description" id="trp_comment" class="form-control"></textarea>
                                 <span class="error" v-if="commentError.state"> {{commentError.message}} </span>
                             </div>
@@ -829,6 +829,7 @@ export default {
             'getPrice': 'trips/price'
         }),
         setIsPassenger (value) {
+            console.log('setIsPassenger', value);
             this.$set(this.trip, 'is_passenger', value);
         },
         changeOtherTripDate (date) {
@@ -1006,7 +1007,7 @@ export default {
                 }
             }
 
-            if (!this.config.module_seat_price) {
+            if (!this.config.module_seat_price && this.trip.is_passenger == 0 ) {
                 let aprox = Math.ceil(this.trip.distance / 1000 / this.config.kilometer_by_liter * this.config.fuel_price) * (1 + this.config.price_variance / 100);
                 console.log('MAX APROX', (1 + this.config.price_variance / 100), aprox);
                 if (this.price > aprox) {

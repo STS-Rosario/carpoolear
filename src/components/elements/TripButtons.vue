@@ -74,6 +74,7 @@
 import { mapGetters } from 'vuex';
 import moment from 'moment';
 import spinner from '../Spinner.vue';
+import Transactions from '../views/transactions.vue';
 
 export default {
     name: 'TripButtons',
@@ -94,7 +95,7 @@ export default {
             Object.keys(this.sending).some(k => this.sending[k] === true);
         },
         isPassenger () {
-            return this.trip.passenger.findIndex(item => item.user_id === this.user.id && (item.request_state === 1 || item.request_state === 4)) >= 0;
+            return Array.isArray(this.trip.allPassengerRequest) ? this.trip.allPassengerRequest.findIndex(item => item.user_id === this.user.id && (item.request_state === 1 || item.request_state === 4)) >= 0 : false;
         },
         expired () {
             return moment(this.trip.trip_date).format() < moment().format();
@@ -110,7 +111,8 @@ export default {
         }
     },
     components: {
-        spinner
+        spinner,
+        Transactions
     },
     methods: {
         onShareLinkClick (event) {

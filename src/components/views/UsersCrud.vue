@@ -319,9 +319,20 @@ export default {
                     this.newInfo.password = this.newInfo.pass.password;
                     this.newInfo.password_confirmation = this.newInfo.pass.password_confirmation;
                 }
-                this.update(this.newInfo);
+                this.update(this.newInfo).then(() => {
+                    dialogs.message('Perfil actualizado correctamente.');
+                }).catch((err) => {
+                    console.log(err);
+                    let mensajeErr = 'Error al actualizar: ';
+                    for (const key in err.errors) {
+                        if (Object.hasOwnProperty.call(err.errors, key)) {
+                            mensajeErr += err.errors[key] + ' ';
+
+                        }
+                    }
+                    dialogs.message(mensajeErr, { duration: 10, estado: 'error' });
+                });
                 this.onSearchUsers();
-                dialogs.message('Perfil actualizado correctamente.');
             } else {
                 dialogs.message('Verifique los campos', { estado: 'error' });
             }
