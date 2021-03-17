@@ -327,7 +327,6 @@ export default {
                     for (const key in err.errors) {
                         if (Object.hasOwnProperty.call(err.errors, key)) {
                             mensajeErr += err.errors[key] + ' ';
-
                         }
                     }
                     dialogs.message(mensajeErr, { duration: 10, estado: 'error' });
