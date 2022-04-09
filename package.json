@@ -27,7 +27,7 @@
     "font-awesome-webpack-4": "^1.0.0",
     "leaflet-routing-machine": "^3.2.12",
     "lodash": "^4.17.4",
-    "minimist": "^1.2.0",
+    "minimist": "^1.2.6",
     "moment-timezone": "^0.5.13",
     "node-notifier": "^5.4.1",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
