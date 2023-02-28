@@ -1,0 +1,16 @@
+version: '2'
+services:
+  carpoolear_frontend:
+    build: .
+    container_name: carpoolear_frontend
+    environment:
+      HOST: '0.0.0.0'
+    ports:
+      - 8081:8080
+    networks:
+      - esnet
+    volumes:
+      - .:/app
+networks:
+  esnet:
+    driver: bridge
