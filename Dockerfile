@@ -1,4 +1,4 @@
-FROM node:16
+FROM node:13
 WORKDIR /app
 RUN npm install -g @vue/cli
-CMD yarn install && yarn dev
+CMD npm install && npm run dev

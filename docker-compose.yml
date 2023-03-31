@@ -2,6 +2,7 @@ version: '2'
 services:
   carpoolear_frontend:
     build: .
+    tty: true   
     container_name: carpoolear_frontend
     environment:
       HOST: '0.0.0.0'
