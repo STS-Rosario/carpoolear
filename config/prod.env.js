@@ -1,6 +1,6 @@
 config = {
   NODE_ENV: '"production"',
-  API_URL: '"http://192.168.0.74"',
+  API_URL: '"http://localhost:8080"',
   MAPS_API: '"AIzaSyDz9fNRr5-nfCFN6ULDZaLt0xUckgKl3z4"',
   FACEBOOK_API: '"147151221990591"',
   TARGET_APP: '"carpoolear"'

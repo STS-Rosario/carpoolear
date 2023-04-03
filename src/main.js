@@ -126,3 +126,16 @@ bus.on('system-ready', () => {
     });
 });
 /* eslint-enable no-unused-vars */
+
+// pwa service worker instalation only in browser
+if (process.env.NODE_ENV === 'production'  && process.env.HISTORY_MODE==='history') {
+    if (navigator.serviceWorker.controller) {
+        console.log("Active service worker found");
+     } else {
+         navigator.serviceWorker.register("static/sw.js", {
+         scope: "/app/"
+         }).then(function (reg) {
+           console.log("Service worker  registered");
+         });
+     }
+}
