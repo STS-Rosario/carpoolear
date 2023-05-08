@@ -31,11 +31,13 @@ import Vue2Leaflet from 'vue2-leaflet';
 
 import * as VueGoogleMaps from 'vue2-google-maps';
 
+const ROUTE_BASE = process.env.ROUTE_BASE;
+
 let debugApi = new DebugApi();
 let cordovaTag = document.createElement('script');
 let cordovaPath = 'cordova.js';
-console.log('ROUTE_BASE', process.env.ROUTE_BASE, cordovaPath);
-cordovaTag.setAttribute('src', process.env.ROUTE_BASE + cordovaPath);
+console.log('ROUTE_BASE', ROUTE_BASE, cordovaPath);
+cordovaTag.setAttribute('src', ROUTE_BASE + cordovaPath);
 document.head.appendChild(cordovaTag);
 
 var moment = require('moment-timezone');
@@ -125,61 +127,3 @@ bus.on('system-ready', () => {
         i18n
     });
 });
-/* eslint-enable no-unused-vars */
-
-
-// notifications and pwa functions
-import { onMessage } from "firebase/messaging";
-import { getMessaging, getToken } from "firebase/messaging";
-import { initializeApp } from "firebase/app";
-
-// pwa service worker instalation only in browser
-if (process.env.NODE_ENV === 'production' && process.env.HISTORY_MODE === 'history') {
-    if (navigator.serviceWorker.controller) {
-        console.log("Active service worker found");
-    } else {
-        navigator.serviceWorker.register("static/sw.js", {
-            scope: "/app/static/"
-        }).then(function (reg) {
-            console.log("Service worker  registered");
-        });
-    }
-
-    
-    // Initialize the Firebase app in the service worker by passing in
-    // your app's Firebase config object.
-    // https://firebase.google.com/docs/web/setup#config-object
-    if (process.env.FIREBASE_PARAMS !== undefined) {
-        const firebaseApp = initializeApp(process.env.FIREBASE_PARAMS);
-        // Get registration token. Initially this makes a network call, once retrieved
-        // subsequent calls to getToken will return from cache.
-        const messaging = getMessaging(firebaseApp);
-        getToken(messaging, { vapidKey: process.env.FIRABASE_VAPID_KEY }).then((currentToken) => {
-            if (currentToken) {
-                // Send the token to your server and update the UI if necessary
-                console.log(currentToken);
-                // ...
-            } else {
-                // Show permission request UI
-                console.log('No registration token available. Request permission to generate one.');
-                // ...
-            }
-        }).catch((err) => {
-            console.log('An error occurred while retrieving token. ', err);
-            // ...
-        });
-
-        // Handle incoming messages. Called when:
-        // - a message is received while the app has focus
-        // - the user clicks on an app notification created by a service worker
-        //   `messaging.onBackgroundMessage` handler.
-
-
-        onMessage(messaging, (payload) => {
-            console.log('Message received. ', payload);
-            // ...
-        });
-    }
-}
-
-

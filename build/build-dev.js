@@ -11,13 +11,15 @@ const chalk = require('chalk')
 const webpack = require('webpack')
 const config = require('../config')
 const webpackConfig = require('./webpack.dev-build.conf')
+const SWwebpackConfig = require('./service-worker.webpack.config')
 
 const spinner = ora('Building for development...')
 spinner.start()
 
 rm (path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
   if (err) throw err
-  webpack(webpackConfig, function (err, stats) {
+  webpack(SWwebpackConfig, function (err2, stats2) {
+    webpack(webpackConfig, function (err, stats) {
     spinner.stop()
     if (err) throw err
     process.stdout.write(stats.toString({
@@ -39,4 +41,5 @@ rm (path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => 
       '  Opening index.html over file:// won\'t work.\n'
     ))
   })
+    })
 })

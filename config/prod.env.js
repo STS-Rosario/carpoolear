@@ -1,12 +1,12 @@
 config = {
   NODE_ENV: '"production"',
-  API_URL: '"http://localhost:8080"',
+  API_URL: '"https://localhost"',
   MAPS_API: '"AIzaSyDz9fNRr5-nfCFN6ULDZaLt0xUckgKl3z4"',
   FACEBOOK_API: '"147151221990591"',
   TARGET_APP: '"carpoolear"',
 
 }
- config.FIREBASE_PARAMS = { 
+config.FIREBASE_PARAMS = {
   apiKey: '"AIzaSyCDmmniKPGXV8BSAq2sV0kMea_hh39YXMU"',
   authDomain: '"prueba-carpoolear.firebaseapp.com"',
   projectId: '"prueba-carpoolear"',
