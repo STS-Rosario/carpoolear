@@ -60,11 +60,14 @@ export default {
                     });
 
                     onMessage(messaging, (payload) => {
-                        store.dispatch('cordova/notificationArrive', payload);
-                        console.log('Message received. ', payload);
-                        const notificationTitle = payload.notification.title;
+                        const notification = payload.notification;
+                        notification.data = payload.data && payload.data['gcm.notification.data'] && JSON.parse(payload.data['gcm.notification.data']);
+                        notification.url = payload.fcmOptions && payload.fcmOptions.link;
+
+                        // [PENDING] Mostramos notificaciones en desktop? Sino borrar este código.
+                        const notificationTitle = notification.title;
                         const notificationOptions = {
-                            body: payload.notification.body,
+                            body: notification.body,
                         };
                         reg.showNotification(notificationTitle, notificationOptions);
                     });
