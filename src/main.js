@@ -31,11 +31,13 @@ import Vue2Leaflet from 'vue2-leaflet';
 
 import * as VueGoogleMaps from 'vue2-google-maps';
 
+const ROUTE_BASE = process.env.ROUTE_BASE;
+
 let debugApi = new DebugApi();
 let cordovaTag = document.createElement('script');
 let cordovaPath = 'cordova.js';
-console.log('ROUTE_BASE', process.env.ROUTE_BASE, cordovaPath);
-cordovaTag.setAttribute('src', process.env.ROUTE_BASE + cordovaPath);
+console.log('ROUTE_BASE', ROUTE_BASE, cordovaPath);
+cordovaTag.setAttribute('src', ROUTE_BASE + cordovaPath);
 document.head.appendChild(cordovaTag);
 
 var moment = require('moment-timezone');
@@ -125,4 +127,3 @@ bus.on('system-ready', () => {
         i18n
     });
 });
-/* eslint-enable no-unused-vars */

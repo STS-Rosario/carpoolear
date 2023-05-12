@@ -10,14 +10,16 @@
             </a>
         </template>
         <div v-show="!user && isMobile">
-            <router-link :to="{name: 'login'}" class="login_usuario"> {{ $t('ingresaORegistrate') }} <span class='underline'> {{ $t('aqui') }} </span> {{ $t('paraComenzar') }} </router-link>
+            <router-link :to="{ name: 'login' }" class="login_usuario"> {{ $t('ingresaORegistrate') }} <span
+                    class='underline'> {{ $t('aqui') }} </span> {{ $t('paraComenzar') }} </router-link>
         </div>
-        <SearchBox :params="searchParams" v-on:trip-search="research" v-show="!isMobile || lookSearch" ref="searchBox"></SearchBox>
+        <SearchBox :params="searchParams" v-on:trip-search="research" v-show="!isMobile || lookSearch" ref="searchBox">
+        </SearchBox>
         <Loading :data="trips" v-if="showingTrips">
             <div class="trips-list row">
                 <modal :name="'modal'" v-if="showModal" @close="showModal = false" :title="'Test'" :body="'Body'">
                     <h3 slot="header">
-                        <span> {{ $t('donaA') }}  </span>
+                        <span> {{ $t('donaA') }} </span>
                         <br class="hidden-sm hidden-md hidden-lg">
                         <small> {{ $t('proyectoDe') }} </small>
                         <img width="90" alt="STS Rosario" src="https://carpoolear.com.ar/img/logo_sts_nuevo_color.png">
@@ -25,32 +27,56 @@
                     <div slot="body" class="donation">
                         <div class="radio">
                             <label class="radio-inline">
-                                <input type="radio" name="donationValor" id="donation50" value="50" v-model="donateValue"><span>$ 50</span>
+                                <input type="radio" name="donationValor" id="donation50" value="50"
+                                    v-model="donateValue"><span>$ 50</span>
                             </label>
                             <label class="radio-inline">
-                                <input type="radio" name="donationValor" id="donation100" value="100" v-model="donateValue"><span>$ 100</span>
+                                <input type="radio" name="donationValor" id="donation100" value="100"
+                                    v-model="donateValue"><span>$ 100</span>
                             </label>
                             <label class="radio-inline">
-                                <input type="radio" name="donationValor" id="donation200" value="200" v-model="donateValue"><span>$ 200</span>
+                                <input type="radio" name="donationValor" id="donation200" value="200"
+                                    v-model="donateValue"><span>$ 200</span>
                             </label>
                             <label class="radio-inline">
-                                <input type="radio" name="donationValor" id="donation500" value="500" v-model="donateValue"><span>$ 500</span>
+                                <input type="radio" name="donationValor" id="donation500" value="500"
+                                    v-model="donateValue"><span>$ 500</span>
                             </label>
                         </div>
                         <div>
-                            <button class="btn btn-success btn-unica-vez" @click="onDonateOnceTime"> {{ $t('unicaVez') }} </button>
-                            <button class="btn btn-info btn-mensualmente" @click="onDonateMonthly">{{ $t('MENSUAL') }} <br />( {{ $t('cancelaCuando') }})</button>
+                            <button class="btn btn-success btn-unica-vez" @click="onDonateOnceTime"> {{ $t('unicaVez') }}
+                            </button>
+                            <button class="btn btn-info btn-mensualmente" @click="onDonateMonthly">{{ $t('MENSUAL') }}
+                                <br />( {{ $t('cancelaCuando') }})</button>
                         </div>
                     </div>
                 </modal>
+                <modal :name="'modal'" v-if='showModalInstallApp' @close="showModalInstallApp = false" :title="'Test'"
+                    :body="'Body'">
+                    <h3 slot="header">
+                        <span>Instalar App</span>
+                    </h3>
+                    <div slot="body" class="">
+                        <p>La aplicacion movil de Carpoolear pronto quedara fuera de servicio, instala la nueva web app para
+                            no perderte de nada.</p>
+                        <div style="margin-bottom: 10px;">
+                            <button class="btn btn-danger " @click="installApp()">Instalar</button>
+
+                        </div>
+                    </div>
+
+                </modal>
                 <template v-for="(trip, index) in trips">
-                    <template v-if="isDonationTime() && !user.monthly_donate"><!-- solo si el usuario no es donador mensual -->
-                        <div class="panel panel-default panel-donar" v-if="((index + parseFloat(appConfig.donation.trips_offset))  % parseFloat(appConfig.donation.trips_count) === 0)">
+                    <template
+                        v-if="isDonationTime() && !user.monthly_donate"><!-- solo si el usuario no es donador mensual -->
+                        <div class="panel panel-default panel-donar"
+                            v-if="((index + parseFloat(appConfig.donation.trips_offset)) % parseFloat(appConfig.donation.trips_count) === 0)">
                             <div class="panel-body">
                                 <button class="btn btn-success pull-right btn-donar" @click="onDonate">Donar</button>
                                 <h2> {{ $t('ayudanos') }} </h2>
 
-                                <a href="/donar" target="_blank" v-on:click.prevent="onOpenLink('https://carpoolear.com.ar/donar?u=' + user.id)">
+                                <a href="/donar" target="_blank"
+                                    v-on:click.prevent="onOpenLink('https://carpoolear.com.ar/donar?u=' + user.id)">
                                     {{ $t('porQueDonar') }}
                                 </a>
                             </div>
@@ -65,10 +91,12 @@
                 </template>
             </div>
             <div class="row">
-                <p class="alert alert-warning"  role="alert"  :class="isMobile ? 'mobile-alert' : ''" v-if="resultaOfSearch && !alreadySubscribe">
+                <p class="alert alert-warning" role="alert" :class="isMobile ? 'mobile-alert' : ''"
+                    v-if="resultaOfSearch && !alreadySubscribe">
                     <span class="sentence">
                         <strong :class="isMobile ? 'sentence' : ''"> {{ $t('podesSubscribirte') }}</strong>
-                        <button class="btn btn-primary" v-if="user && !searchParams.data.is_passenger" @click="subscribeSearch" > {{ $t('crearAlerta') }}</button>
+                        <button class="btn btn-primary" v-if="user && !searchParams.data.is_passenger"
+                            @click="subscribeSearch"> {{ $t('crearAlerta') }}</button>
                     </span>
                 </p>
             </div>
@@ -76,12 +104,13 @@
                 <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
                 {{ $t('cargandoMasResultados') }}
             </div>
-            <p slot="no-data" class="alert alert-warning"  role="alert"  :class="isMobile ? 'mobile-alert' : ''">
+            <p slot="no-data" class="alert alert-warning" role="alert" :class="isMobile ? 'mobile-alert' : ''">
                 <template v-if="filtered">
                     <span class="sentence">{{ $t('noHayViajes') }}</span>
                     <span class="sentence" v-if="!alreadySubscribe">
                         <strong :class="isMobile ? 'sentence' : ''"> {{ $t('subscribirteAViajes') }}</strong>
-                        <button class="btn btn-primary" v-if="user" @click="subscribeSearch" >{{ $t('crearAlerta') }}</button>
+                        <button class="btn btn-primary" v-if="user" @click="subscribeSearch">{{ $t('crearAlerta')
+                        }}</button>
                     </span>
                 </template>
                 <template v-else>
@@ -100,9 +129,11 @@
     display: block;
     margin-bottom: .5em;
 }
+
 .mobile-alert .sentence {
     margin-bottom: 1em;
 }
+
 .mobile-alert .btn {
     margin: 0 auto;
     display: block;
@@ -121,7 +152,7 @@ import modal from '../Modal';
 
 export default {
     name: 'trips',
-    data () {
+    data() {
         return {
             lookSearch: false,
             filtered: false,
@@ -129,6 +160,8 @@ export default {
             alreadySubscribe: false,
             resultaOfSearch: false,
             showModal: false,
+            showModalInstallApp: false,
+            installAppEvent:null,
             donateValue: 0
         };
     },
@@ -146,14 +179,24 @@ export default {
             // morePagesActions: 'trips/tripMorePage',
             // setActionButton: 'actionbars/setHeaderButtons'
         }),
-        isDonationTime () {
+        isDonationTime() {
             if (this.appConfig) {
                 return moment().date() < parseFloat(this.appConfig.donation.month_days);
             } else {
                 return false;
             }
         },
-        research (params) {
+        async installApp() {
+            this.showModalInstallApp=false;
+            if(this.installAppEvent!==null){
+                this.installAppEvent.prompt();
+                // Espera a que el usuario responda al mensaje
+                const { outcome } = await this.installAppEvent.userChoice;
+                
+            }
+
+        },
+        research(params) {
             this.resultaOfSearch = true;
             this.lookSearch = false;
             this.filtered = true;
@@ -163,14 +206,14 @@ export default {
             this.findSubscriptions();
             // this.setActionButton(['clear']);
         },
-        nextPage () {
+        nextPage() {
             this.search({ next: true });
         },
-        onTripClick () {
+        onTripClick() {
             let scrolloffset = window.scrollY;
             this.setScrollOffset(scrolloffset);
         },
-        isComplementary (trip, searchParams, index) {
+        isComplementary(trip, searchParams, index) {
             let isComplementary = false;
             if (searchParams.data && searchParams.data.date) {
                 var searchDate = moment(searchParams.data.date).toDate();
@@ -189,7 +232,7 @@ export default {
         // TODO filter trips that not are main route
         // REVIEW wich is the best way to do it?
         // maybe rethink render
-        isMainRoute (trip, searchParams, index) {
+        isMainRoute(trip, searchParams, index) {
             let isMainRoute = true;
             if (searchParams.data && (searchParams.data.destination_id || searchParams.data.origin_id)) {
                 // trip.points[i].json_address.id
@@ -200,7 +243,7 @@ export default {
             return isMainRoute;
         },
 
-        onSearchButton () {
+        onSearchButton() {
             console.log('onSearchButton');
             this.lookSearch = true;
             // this.setActionButton(['clear']);
@@ -208,7 +251,7 @@ export default {
             // Desactivo reaccionar al Scroll
         },
 
-        onClearButton () {
+        onClearButton() {
             bus.off('backbutton', this.onBackBottom);
             bus.on('scroll-bottom', this.onScrollBottom);
             // this.setActionButton(['search']);
@@ -220,7 +263,7 @@ export default {
                 this.$refs.searchBox.clear();
             }
         },
-        onScrollBottom () {
+        onScrollBottom() {
             if (this.morePages && !this.lookSearch) { // Hay páginas y no estoy en búsquedas;
                 if (!this.runningSearch) {
                     this.runningSearch = true;
@@ -231,32 +274,32 @@ export default {
                 }
             }
         },
-        onBackBottom () {
+        onBackBottom() {
             bus.off('backbutton', this.onBackBottom);
             this.lookSearch = false;
             this.alreadySubscribe = false;
         },
-        onDonate () {
+        onDonate() {
             this.showModal = true;
         },
-        onOpenLink (link) {
+        onOpenLink(link) {
             window.open(link, '_blank');
         },
-        onDonateOnceTime () {
+        onDonateOnceTime() {
             if (this.donateValue > 0) {
                 var url = 'http://mpago.la/jgap'; // 50
                 switch (this.donateValue) {
-                case '100':
-                    url = 'http://mpago.la/CaSZ';
-                    break;
-                case '200':
-                    url = 'http://mpago.la/xntw';
-                    break;
-                case '500':
-                    url = 'http://mpago.la/QEiN';
-                    break;
-                default:
-                    break;
+                    case '100':
+                        url = 'http://mpago.la/CaSZ';
+                        break;
+                    case '200':
+                        url = 'http://mpago.la/xntw';
+                        break;
+                    case '500':
+                        url = 'http://mpago.la/QEiN';
+                        break;
+                    default:
+                        break;
                 }
                 window.open(url, '_blank');
                 this.showModal = false;
@@ -270,21 +313,21 @@ export default {
                 dialogs.message(this.$t('valorDonacion'), { duration: 10, estado: 'error' });
             }
         },
-        onDonateMonthly () {
+        onDonateMonthly() {
             if (this.donateValue > 0) {
                 var url = 'http://mpago.la/1w3aci'; // 50
                 switch (this.donateValue) {
-                case '100':
-                    url = 'http://mpago.la/BfZ';
-                    break;
-                case '200':
-                    url = 'http://mpago.la/P02H';
-                    break;
-                case '500':
-                    url = 'http://mpago.la/k8Xp';
-                    break;
-                default:
-                    break;
+                    case '100':
+                        url = 'http://mpago.la/BfZ';
+                        break;
+                    case '200':
+                        url = 'http://mpago.la/P02H';
+                        break;
+                    case '500':
+                        url = 'http://mpago.la/k8Xp';
+                        break;
+                    default:
+                        break;
                 }
                 window.open(url, '_blank');
                 this.showModal = false;
@@ -298,7 +341,7 @@ export default {
                 dialogs.message(this.$t('valorDonacion'), { duration: 10, estado: 'error' });
             }
         },
-        subscribeSearch () {
+        subscribeSearch() {
             let params = this.searchParams.data;
             let data = {};
             if (params.date) {
@@ -336,7 +379,7 @@ export default {
             });
         }
     },
-    mounted () {
+    mounted() {
         // Clear search
         if (this.clearSearch) {
             this.onClearButton();
@@ -358,6 +401,17 @@ export default {
             });
         }
 
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Previene a la mini barra de información que aparezca en smartphones
+            e.preventDefault();
+            // Guarda el evento para que se dispare más tarde
+            this.installAppEvent = e;
+            // Actualizar la IU para notificarle al usuario que se puede instalar tu PWA
+            this.showModalInstallApp =true;
+            // De manera opcional, envía el evento de analíticos para saber si se mostró la promoción a a instalación del PWA
+            console.log(`'beforeinstallprompt' event was fired.`);
+        });
+
         // bus.event
         bus.off('search-click', this.onSearchButton);
         bus.on('search-click', this.onSearchButton);
@@ -370,11 +424,11 @@ export default {
 
         router.stack = [];
     },
-    updated (a) {
+    updated(a) {
 
         // Pendiente, no se limpia el buscador, si los search params están vacios
     },
-    beforeDestroy () {
+    beforeDestroy() {
         bus.off('search-click', this.onSearchButton);
         bus.off('clear-click', this.onClearButton);
         bus.off('scroll-bottom', this.onScrollBottom);
@@ -404,7 +458,7 @@ export default {
             scrollPosition: 'trips/scrollOffset'
         }),
 
-        showingTrips () {
+        showingTrips() {
             return !this.isMobile || !this.lookSearch;
         }
     },
@@ -417,21 +471,23 @@ export default {
 };
 </script>
 <style scoped>
-    .banner {
-        display: block;
-        margin: -1em auto 1em;
-        text-align: center;
-    }
-    .banner img {
-        border: 1px solid #999;
-        width: 100%;
-        max-width: 934px;
-    }
-    .btn-donar {
-        margin-left: 2em;
-        margin-right: 2em;
-        margin-top: 1em;
-        padding: 1em 2em;
-        font-size: 1.3em;
-    }
+.banner {
+    display: block;
+    margin: -1em auto 1em;
+    text-align: center;
+}
+
+.banner img {
+    border: 1px solid #999;
+    width: 100%;
+    max-width: 934px;
+}
+
+.btn-donar {
+    margin-left: 2em;
+    margin-right: 2em;
+    margin-top: 1em;
+    padding: 1em 2em;
+    font-size: 1.3em;
+}
 </style>
