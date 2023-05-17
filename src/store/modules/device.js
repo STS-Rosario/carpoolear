@@ -125,12 +125,14 @@ const actions = {
 const mutations = {
     [types.DEVICE_SET_CURRENT_DEVICE] (state, device) {
         state.current = device;
-        cache.setItem(keys.DEVICE_KEY, device);
-        let i = state.devices.findIndex((i) => i.id === device.id);
-        if (i >= 0) {
-            state.devices[i] = device;
-        } else {
-            state.devices.push(device);
+        if (device) {
+            cache.setItem(keys.DEVICE_KEY, device);
+            let i = state.devices.findIndex((i) => i.id === device.id);
+            if (i >= 0) {
+                state.devices[i] = device;
+            } else {
+                state.devices.push(device);
+            }
         }
     },
 
