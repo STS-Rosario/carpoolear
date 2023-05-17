@@ -57,7 +57,7 @@
                 <div class="carpooled-trip"> Viaje Carpooleado </div>
             </template>
             <div class="alert alert-warning" role="alert" v-if="config.module_show_pending_request_count && !isPassengersView && !owner && trip.passengerPending_count > 2">
-                Atención! Este viaje está siendo muy solicitado: {{ trip.passengerPending_count }} lo están personas solicitando
+                Atención! Este viaje está siendo muy solicitado: {{ trip.passengerPending_count }} personas lo están solicitando
             </div>
         </div>
         <div class="buttons-container"  v-if="(isPassengersView && !owner)">

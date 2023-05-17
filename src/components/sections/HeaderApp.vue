@@ -199,7 +199,7 @@ export default {
         },
 
         onHeaderChange () {
-            console.log('header-change', this.title);
+            // console.log('header-change', this.title);
         }
 
     },
