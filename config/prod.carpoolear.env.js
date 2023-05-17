@@ -10,15 +10,15 @@ config = {
 }
 
 config.FIREBASE_PARAMS = {
-    apiKey: '"AIzaSyCDmmniKPGXV8BSAq2sV0kMea_hh39YXMU"',
-    authDomain: '"prueba-carpoolear.firebaseapp.com"',
-    projectId: '"prueba-carpoolear"',
-    storageBucket: '"prueba-carpoolear.appspot.com"',
-    messagingSenderId: '"820267556059"',
-    appId: '"1:820267556059:web:5f051e64066f8f9795c0fe"',
+    apiKey: '"AIzaSyD3_qWVjgLG3zUqA6jV8L7FvSB13-qtZMc"',
+    authDomain: '"carpoolear-test.firebaseapp.com"',
+    projectId: '"carpoolear-test"',
+    storageBucket: '"carpoolear-test.appspot.com"',
+    messagingSenderId: '"1027904610758"',
+    appId: '"1:1027904610758:web:332a2f97f41a6d1fd592c7"',
     measurementId: '"G-VM6DM1Z4QG"'
 }
-config.FIRABASE_VAPID_KEY = '"BBuYehy8DBuGqhmwDt-3fe7TdHKidkm7O4ng2DDntk91818WWK17oQc2Q7DzFBTOazT-7u_WcB0Y-SJSGYXbPq8"';
+config.FIRABASE_VAPID_KEY = '"BFuboNq1jLHnGseZ9rsLj3rcCHi5uc4Dlz4QYLEBR5BonK2PsXGVWtRzguvDl4FYtom0Zy8gqxx81i1eTJ4F6_M"';
 
 if (!process.env.PLATFORM || process.env.PLATFORM == 'DESKTOP' || process.env.PLATFORM == 'browser') {
   config.HISTORY_MODE = '"history"';
