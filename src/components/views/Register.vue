@@ -39,6 +39,11 @@
         <label for="txt_email">{{ $t('email') }} <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
         <input :placeholder="$t('email')" v-jump ref="txt_email" name="txt_email" maxlength="40" type="text" id="txt_email" v-model='email' :class="{'has-error': emailError.state }"/>
         <span class="error" v-if="emailError.state"> {{emailError.message}} </span>
+
+        <label for="txt_email_verification">{{ $t('emailVerification') }} <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
+        <input :placeholder="$t('emailVerificationPlaceholder')" v-jump ref="txt_email_verification" name="txt_email_verification" maxlength="40" type="text" id="txt_email_verification" v-model='email_verification' :class="{'has-error': emailError.state }"/>
+        <span class="error" v-if="emailError.state"> {{emailError.message}} </span>
+
         <!--<label for="">Fecha de nacimiento <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
         <DatePicker :value="birthday" ref="ipt_calendar" name="ipt_calendar" :maxDate="maxDate" :minDate="minDate" :class="{'has-error': birthdayError.state}" ></DatePicker>-->
         <span class="error" v-if="birthdayError.state"> {{birthdayError.message}} </span>
@@ -143,6 +148,7 @@ export default {
             progress: false,
             success: false,
             emailError: new Error(),
+            emailVerificationError: new Error(),
             passwordError: new Error(),
             nombreError: new Error(),
             apellidoError: new Error(),
@@ -177,6 +183,7 @@ export default {
     },
     watch: {
         email: function () { this.emailError.state = false; },
+        emailVerification: function () { this.emailVerificationError.state = false; },
         name: function () { this.nombreError.state = false; },
         sureName: function () { this.apellidoError.state = false; },
         password: function () { this.passwordError.state = false; },
@@ -218,6 +225,20 @@ export default {
             } else if (!emailRegex.test(this.email)) {
                 this.emailError.state = true;
                 this.emailError.message = this.$t('ingreseEmailValido');
+                globalError = true;
+            }
+
+            if (this.emailVerification.length < 1) {
+                this.emailVerificationError.state = true;
+                this.emailVerificationError.message = this.$t('olvidoEmail');
+                globalError = true;
+            } else if (!emailRegex.test(this.emailVerification)) {
+                this.emailVerificationError.state = true;
+                this.emailVerificationError.message = this.$t('ingreseEmailValido');
+                globalError = true;
+            } else if (this.email !== this.emailVerification) {
+                this.emailVerificationError.state = true;
+                this.emailVerificationError.message = this.$t('emailsNoCoinciden');
                 globalError = true;
             }
 
