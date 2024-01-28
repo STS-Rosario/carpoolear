@@ -41,8 +41,8 @@
         <span class="error" v-if="emailError.state"> {{emailError.message}} </span>
 
         <label for="txt_email_verification">{{ $t('emailVerification') }} <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
-        <input :placeholder="$t('emailVerification')" v-jump ref="txt_email_verification" name="txt_email_verification" maxlength="40" type="text" id="txt_email_verification" v-model='email_verification' :class="{'has-error': emailError.state }"/>
-        <span class="error" v-if="emailError.state"> {{emailError.message}} </span>
+        <input :placeholder="$t('emailVerification')" v-jump ref="txt_email_verification" name="txt_email_verification" maxlength="40" type="text" id="txt_email_verification" v-model='emailVerification' :class="{'has-error': emailVerificationError.state }"/>
+        <span class="error" v-if="emailVerificationError.state"> {{emailVerificationError.message}} </span>
 
         <!--<label for="">Fecha de nacimiento <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
         <DatePicker :value="birthday" ref="ipt_calendar" name="ipt_calendar" :maxDate="maxDate" :minDate="minDate" :class="{'has-error': birthdayError.state}" ></DatePicker>-->
@@ -102,9 +102,7 @@
                 {{ $t('leidoTerminos1') }} <router-link :to="{name: 'terms'}">{{ $t('leidoTerminos2') }}</router-link>.
             </label>
             <button v-jump ref="ipt_submit" name="ipt_submit" @click="register" class="btn-primary btn-outline g-recaptcha" :disabled="progress || !termsAndConditions" 
-                data-sitekey="6LcCZF4pAAAAALvlLVbVUkNOYlTyGMzXOq2yscOj" 
-                data-callback='register' 
-                data-action='submit'>
+                data-sitekey="6LcCZF4pAAAAALvlLVbVUkNOYlTyGMzXOq2yscOj">
                 <span v-if="!progress">{{ $t('registrarme') }}</span><spinner class="blue" v-if="progress"></spinner>
             </button>
         </div>
@@ -138,6 +136,7 @@ export default {
     data () {
         return {
             email: '',
+            emailVerification: '',
             password: '',
             passwordConfirmation: '',
             name: '',
@@ -328,64 +327,73 @@ export default {
             }
         },
         register (event) {
-            if (this.validate()) {
-                // Jump To Error
-                this.$nextTick(() => {
-                    this.jumpToError();
-                    dialogs.message(this.$t('debeCorregirCampos'), { duration: 10, estado: 'error' });
-                });
-                return;
-            }
-            this.progress = true;
-            let data = {
-                email: this.email,
-                password: this.password,
-                password_confirmation: this.passwordConfirmation,
-                name: this.name + ' ' + this.sureName,
-                terms_and_conditions: this.termsAndConditions,
-                birthday: this.birthdayAnswer,
-                account_number: this.account_number,
-                account_type: this.account_type,
-                account_bank: this.account_bank
-            };
-            /* global FormData */
-            let bodyFormData = new FormData();
-            for (const key in data) {
-                if (data.hasOwnProperty(key)) {
-                    bodyFormData.append(key, data[key]);
-                }
-            }
-            if (this.driverFiles) {
-                bodyFormData.append('user_be_driver', true);
-                console.log('file', this.driverFiles);
-                for (let index = 0; index < this.driverFiles.length; index++) {
-                    const file = this.driverFiles[index];
-                    console.log('file', file);
-                    bodyFormData.append('driver_data_docs[]', file);
-                }
-            }
-            this.doRegister(bodyFormData).then(() => {
-                this.progress = false;
-                this.success = true;
-            }).catch((err) => {
-                console.log('catch', err);
-                if (err) {
-                    console.log('err register', err);
-                    if (err.status === 422) {
-                        console.log('err st', err.data.errors.email);
-                        if (err.data && err.data.errors && err.data.errors.email && Array.isArray(err.data.errors.email) && err.data.errors.email.length > 0 && err.data.errors.email[0].indexOf('been taken') >= 0) {
-                            dialogs.message(this.$t('mailEnUso'), { estado: 'error' });
-                            this.emailError.state = true;
-                            this.emailError.message = this.$t('mailEnUso');
-                            this.jumpToError();
-                        } else {
-                            dialogs.message(this.$t('debeCorregirCampos'), { estado: 'error' });
-                        }
-                    } else {
-                        dialogs.message(this.$t('errorRegistro'), { estado: 'error' });
+            console.log('REGISTER? this',this, 'event',event)
+            const that = this;
+            grecaptcha.ready(function() {
+                grecaptcha.execute('6LcCZF4pAAAAALvlLVbVUkNOYlTyGMzXOq2yscOj', {action: 'submit'}).then(function(token) {
+                    // Add your logic to submit to your backend server here.
+                    console.log('THIS',this)
+                    if (that.validate()) {
+                        // Jump To Error
+                        that.$nextTick(() => {
+                            that.jumpToError();
+                            dialogs.message(that.$t('debeCorregirCampos'), { duration: 10, estado: 'error' });
+                        });
+                        return;
                     }
-                }
-                this.progress = false;
+                    that.progress = true;
+                    let data = {
+                        email: that.email,
+                        password: that.password,
+                        password_confirmation: that.passwordConfirmation,
+                        name: that.name + ' ' + that.sureName,
+                        terms_and_conditions: that.termsAndConditions,
+                        birthday: that.birthdayAnswer,
+                        account_number: that.account_number,
+                        account_type: that.account_type,
+                        account_bank: that.account_bank,
+                        token
+                    };
+                    /* global FormData */
+                    let bodyFormData = new FormData();
+                    for (const key in data) {
+                        if (data.hasOwnProperty(key)) {
+                            bodyFormData.append(key, data[key]);
+                        }
+                    }
+                    if (that.driverFiles) {
+                        bodyFormData.append('user_be_driver', true);
+                        console.log('file', that.driverFiles);
+                        for (let index = 0; index < that.driverFiles.length; index++) {
+                            const file = that.driverFiles[index];
+                            console.log('file', file);
+                            bodyFormData.append('driver_data_docs[]', file);
+                        }
+                    }
+                    that.doRegister(bodyFormData).then(() => {
+                        that.progress = false;
+                        that.success = true;
+                    }).catch((err) => {
+                        console.log('catch', err);
+                        if (err) {
+                            console.log('err register', err);
+                            if (err.status === 422) {
+                                console.log('err st', err.data.errors.email);
+                                if (err.data && err.data.errors && err.data.errors.email && Array.isArray(err.data.errors.email) && err.data.errors.email.length > 0 && err.data.errors.email[0].indexOf('been taken') >= 0) {
+                                    dialogs.message(that.$t('mailEnUso'), { estado: 'error' });
+                                    that.emailError.state = true;
+                                    that.emailError.message = that.$t('mailEnUso');
+                                    that.jumpToError();
+                                } else {
+                                    dialogs.message(that.$t('debeCorregirCampos'), { estado: 'error' });
+                                }
+                            } else {
+                                dialogs.message(that.$t('errorRegistro'), { estado: 'error' });
+                            }
+                        }
+                        that.progress = false;
+                    });
+                });
             });
         },
         onBackClick () {
@@ -405,7 +413,7 @@ export default {
         });
 
         let recaptchaScript = document.createElement('script')
-        recaptchaScript.setAttribute('src', 'https://www.google.com/recaptcha/api.js')
+        recaptchaScript.setAttribute('src', 'https://www.google.com/recaptcha/api.js?render=6LcCZF4pAAAAALvlLVbVUkNOYlTyGMzXOq2yscOj')
         document.head.appendChild(recaptchaScript)
     },
 
