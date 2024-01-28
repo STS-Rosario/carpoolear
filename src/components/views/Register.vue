@@ -41,7 +41,7 @@
         <span class="error" v-if="emailError.state"> {{emailError.message}} </span>
 
         <label for="txt_email_verification">{{ $t('emailVerification') }} <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
-        <input :placeholder="$t('emailVerificationPlaceholder')" v-jump ref="txt_email_verification" name="txt_email_verification" maxlength="40" type="text" id="txt_email_verification" v-model='email_verification' :class="{'has-error': emailError.state }"/>
+        <input :placeholder="$t('emailVerification')" v-jump ref="txt_email_verification" name="txt_email_verification" maxlength="40" type="text" id="txt_email_verification" v-model='email_verification' :class="{'has-error': emailError.state }"/>
         <span class="error" v-if="emailError.state"> {{emailError.message}} </span>
 
         <!--<label for="">Fecha de nacimiento <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
