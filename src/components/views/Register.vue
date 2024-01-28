@@ -101,7 +101,10 @@
             <label for="cbx_terms" class="label-cbx">
                 {{ $t('leidoTerminos1') }} <router-link :to="{name: 'terms'}">{{ $t('leidoTerminos2') }}</router-link>.
             </label>
-            <button v-jump ref="ipt_submit" name="ipt_submit" @click="register" class="btn-primary btn-outline" :disabled="progress || !termsAndConditions">
+            <button v-jump ref="ipt_submit" name="ipt_submit" @click="register" class="btn-primary btn-outline g-recaptcha" :disabled="progress || !termsAndConditions" 
+                data-sitekey="6LcCZF4pAAAAALvlLVbVUkNOYlTyGMzXOq2yscOj" 
+                data-callback='register' 
+                data-action='submit'>
                 <span v-if="!progress">{{ $t('registrarme') }}</span><spinner class="blue" v-if="progress"></spinner>
             </button>
         </div>
@@ -400,6 +403,10 @@ export default {
             this.banks = data.banks;
             this.accountTypes = data.cc;
         });
+
+        let recaptchaScript = document.createElement('script')
+        recaptchaScript.setAttribute('src', 'https://www.google.com/recaptcha/api.js')
+        document.head.appendChild(recaptchaScript)
     },
 
     beforeDestroy () {
