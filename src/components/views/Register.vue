@@ -102,7 +102,7 @@
                 {{ $t('leidoTerminos1') }} <router-link :to="{name: 'terms'}">{{ $t('leidoTerminos2') }}</router-link>.
             </label>
             <button v-jump ref="ipt_submit" name="ipt_submit" @click="register" class="btn-primary btn-outline g-recaptcha" :disabled="progress || !termsAndConditions" 
-                data-sitekey="6LcCZF4pAAAAALvlLVbVUkNOYlTyGMzXOq2yscOj">
+                v-bind:data-sitekey="RECAPTCHA_SITE_KEY" >
                 <span v-if="!progress">{{ $t('registrarme') }}</span><spinner class="blue" v-if="progress"></spinner>
             </button>
         </div>
@@ -134,6 +134,7 @@ class Error {
 export default {
     name: 'register',
     data () {
+        console.log('process.env', process.env)
         return {
             email: '',
             emailVerification: '',
@@ -147,6 +148,7 @@ export default {
             account_bank: '',
             termsAndConditions: false,
             carpoolear_logo: process.env.ROUTE_BASE + 'static/img/' + process.env.TARGET_APP + '_logo.png',
+            RECAPTCHA_SITE_KEY: process.env.RECAPTCHA_SITE_KEY,
             progress: false,
             success: false,
             emailError: new Error(),
@@ -330,7 +332,7 @@ export default {
             console.log('REGISTER? this',this, 'event',event)
             const that = this;
             grecaptcha.ready(function() {
-                grecaptcha.execute('6LcCZF4pAAAAALvlLVbVUkNOYlTyGMzXOq2yscOj', {action: 'submit'}).then(function(token) {
+                grecaptcha.execute(process.env.RECAPTCHA_SITE_KEY, {action: 'submit'}).then(function(token) {
                     // Add your logic to submit to your backend server here.
                     console.log('THIS',this)
                     if (that.validate()) {
@@ -413,7 +415,7 @@ export default {
         });
 
         let recaptchaScript = document.createElement('script')
-        recaptchaScript.setAttribute('src', 'https://www.google.com/recaptcha/api.js?render=6LcCZF4pAAAAALvlLVbVUkNOYlTyGMzXOq2yscOj')
+        recaptchaScript.setAttribute('src', `https://www.google.com/recaptcha/api.js?render=${process.env.RECAPTCHA_SITE_KEY}`)
         document.head.appendChild(recaptchaScript)
     },
 
