@@ -24,6 +24,8 @@ const messages = {
         registroExitoso: 'Registro Exitoso!',
         enviadoCodigoVerificacion:
             'Te hemos enviado un código de verificación a tu e-mail para que puedas activar tu cuenta y comenzar a compartir viajes.',
+        usuarioRegistrado:
+            'Usuario registrado. Ya podés comenzar a compartir viajes.',
         registrarme: 'Registrarme',
         hola: 'Hola',
         bienvenidoACarpoolear:
@@ -311,6 +313,8 @@ const messages = {
         registroExitoso: 'Registro Exitoso!',
         enviadoCodigoVerificacion:
             'Te hemos enviado un código de verificación a tu e-mail para que puedas activar tu cuenta y comenzar a compartir viajes.',
+        usuarioRegistrado:
+            'Usuario registrado. Ya podés comenzar a compartir viajes.',
         registrarme: 'Registrarme',
         hola: 'Hola',
         bienvenidoACarpoolear:

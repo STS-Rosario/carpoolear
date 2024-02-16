@@ -110,7 +110,7 @@
     </div>
     <div class='form row register-success' v-else>
         <h2> {{ $t('registroExitoso') }} </h2>
-        <p>{{ $t('enviadoCodigoVerificacion') }} </p>
+        <p>{{ this.active ? $t('usuarioRegistrado') : $t('enviadoCodigoVerificacion') }} </p>
     </div>
   </div>
 </template>
@@ -134,8 +134,8 @@ class Error {
 export default {
     name: 'register',
     data () {
-        console.log('process.env', process.env)
         return {
+            active: false,
             email: '',
             emailVerification: '',
             password: '',
@@ -372,7 +372,10 @@ export default {
                             bodyFormData.append('driver_data_docs[]', file);
                         }
                     }
-                    that.doRegister(bodyFormData).then(() => {
+                    that.doRegister(bodyFormData).then((registerData) => {
+                        if (registerData && registerData.data && registerData.data.active) {
+                            that.active = true;
+                        }
                         that.progress = false;
                         that.success = true;
                     }).catch((err) => {
