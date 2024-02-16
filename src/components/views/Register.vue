@@ -329,12 +329,10 @@ export default {
             }
         },
         register (event) {
-            console.log('REGISTER? this',this, 'event',event)
             const that = this;
             grecaptcha.ready(function() {
                 grecaptcha.execute(process.env.RECAPTCHA_SITE_KEY, {action: 'submit'}).then(function(token) {
                     // Add your logic to submit to your backend server here.
-                    console.log('THIS',this)
                     if (that.validate()) {
                         // Jump To Error
                         that.$nextTick(() => {
