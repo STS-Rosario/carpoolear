@@ -39,6 +39,11 @@
         <label for="txt_email">{{ $t('email') }} <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
         <input :placeholder="$t('email')" v-jump ref="txt_email" name="txt_email" maxlength="40" type="text" id="txt_email" v-model='email' :class="{'has-error': emailError.state }"/>
         <span class="error" v-if="emailError.state"> {{emailError.message}} </span>
+
+        <label for="txt_email_verification">{{ $t('emailVerification') }} <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
+        <input :placeholder="$t('emailVerification')" v-jump ref="txt_email_verification" name="txt_email_verification" maxlength="40" type="text" id="txt_email_verification" v-model='emailVerification' :class="{'has-error': emailVerificationError.state }"/>
+        <span class="error" v-if="emailVerificationError.state"> {{emailVerificationError.message}} </span>
+
         <!--<label for="">Fecha de nacimiento <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
         <DatePicker :value="birthday" ref="ipt_calendar" name="ipt_calendar" :maxDate="maxDate" :minDate="minDate" :class="{'has-error': birthdayError.state}" ></DatePicker>-->
         <span class="error" v-if="birthdayError.state"> {{birthdayError.message}} </span>
@@ -96,7 +101,8 @@
             <label for="cbx_terms" class="label-cbx">
                 {{ $t('leidoTerminos1') }} <router-link :to="{name: 'terms'}">{{ $t('leidoTerminos2') }}</router-link>.
             </label>
-            <button v-jump ref="ipt_submit" name="ipt_submit" @click="register" class="btn-primary btn-outline" :disabled="progress || !termsAndConditions">
+            <button v-jump ref="ipt_submit" name="ipt_submit" @click="register" class="btn-primary btn-outline g-recaptcha" :disabled="progress || !termsAndConditions" 
+                v-bind:data-sitekey="RECAPTCHA_SITE_KEY" >
                 <span v-if="!progress">{{ $t('registrarme') }}</span><spinner class="blue" v-if="progress"></spinner>
             </button>
         </div>
@@ -104,7 +110,7 @@
     </div>
     <div class='form row register-success' v-else>
         <h2> {{ $t('registroExitoso') }} </h2>
-        <p>{{ $t('enviadoCodigoVerificacion') }} </p>
+        <p>{{ this.active ? $t('usuarioRegistrado') : $t('enviadoCodigoVerificacion') }} </p>
     </div>
   </div>
 </template>
@@ -129,7 +135,9 @@ export default {
     name: 'register',
     data () {
         return {
+            active: false,
             email: '',
+            emailVerification: '',
             password: '',
             passwordConfirmation: '',
             name: '',
@@ -140,9 +148,11 @@ export default {
             account_bank: '',
             termsAndConditions: false,
             carpoolear_logo: process.env.ROUTE_BASE + 'static/img/' + process.env.TARGET_APP + '_logo.png',
+            RECAPTCHA_SITE_KEY: process.env.RECAPTCHA_SITE_KEY,
             progress: false,
             success: false,
             emailError: new Error(),
+            emailVerificationError: new Error(),
             passwordError: new Error(),
             nombreError: new Error(),
             apellidoError: new Error(),
@@ -177,6 +187,7 @@ export default {
     },
     watch: {
         email: function () { this.emailError.state = false; },
+        emailVerification: function () { this.emailVerificationError.state = false; },
         name: function () { this.nombreError.state = false; },
         sureName: function () { this.apellidoError.state = false; },
         password: function () { this.passwordError.state = false; },
@@ -218,6 +229,20 @@ export default {
             } else if (!emailRegex.test(this.email)) {
                 this.emailError.state = true;
                 this.emailError.message = this.$t('ingreseEmailValido');
+                globalError = true;
+            }
+
+            if (this.emailVerification.length < 1) {
+                this.emailVerificationError.state = true;
+                this.emailVerificationError.message = this.$t('olvidoEmail');
+                globalError = true;
+            } else if (!emailRegex.test(this.emailVerification)) {
+                this.emailVerificationError.state = true;
+                this.emailVerificationError.message = this.$t('ingreseEmailValido');
+                globalError = true;
+            } else if (this.email !== this.emailVerification) {
+                this.emailVerificationError.state = true;
+                this.emailVerificationError.message = this.$t('emailsNoCoinciden');
                 globalError = true;
             }
 
@@ -304,64 +329,74 @@ export default {
             }
         },
         register (event) {
-            if (this.validate()) {
-                // Jump To Error
-                this.$nextTick(() => {
-                    this.jumpToError();
-                    dialogs.message(this.$t('debeCorregirCampos'), { duration: 10, estado: 'error' });
-                });
-                return;
-            }
-            this.progress = true;
-            let data = {
-                email: this.email,
-                password: this.password,
-                password_confirmation: this.passwordConfirmation,
-                name: this.name + ' ' + this.sureName,
-                terms_and_conditions: this.termsAndConditions,
-                birthday: this.birthdayAnswer,
-                account_number: this.account_number,
-                account_type: this.account_type,
-                account_bank: this.account_bank
-            };
-            /* global FormData */
-            let bodyFormData = new FormData();
-            for (const key in data) {
-                if (data.hasOwnProperty(key)) {
-                    bodyFormData.append(key, data[key]);
-                }
-            }
-            if (this.driverFiles) {
-                bodyFormData.append('user_be_driver', true);
-                console.log('file', this.driverFiles);
-                for (let index = 0; index < this.driverFiles.length; index++) {
-                    const file = this.driverFiles[index];
-                    console.log('file', file);
-                    bodyFormData.append('driver_data_docs[]', file);
-                }
-            }
-            this.doRegister(bodyFormData).then(() => {
-                this.progress = false;
-                this.success = true;
-            }).catch((err) => {
-                console.log('catch', err);
-                if (err) {
-                    console.log('err register', err);
-                    if (err.status === 422) {
-                        console.log('err st', err.data.errors.email);
-                        if (err.data && err.data.errors && err.data.errors.email && Array.isArray(err.data.errors.email) && err.data.errors.email.length > 0 && err.data.errors.email[0].indexOf('been taken') >= 0) {
-                            dialogs.message(this.$t('mailEnUso'), { estado: 'error' });
-                            this.emailError.state = true;
-                            this.emailError.message = this.$t('mailEnUso');
-                            this.jumpToError();
-                        } else {
-                            dialogs.message(this.$t('debeCorregirCampos'), { estado: 'error' });
-                        }
-                    } else {
-                        dialogs.message(this.$t('errorRegistro'), { estado: 'error' });
+            const that = this;
+            grecaptcha.ready(function() {
+                grecaptcha.execute(process.env.RECAPTCHA_SITE_KEY, {action: 'submit'}).then(function(token) {
+                    // Add your logic to submit to your backend server here.
+                    if (that.validate()) {
+                        // Jump To Error
+                        that.$nextTick(() => {
+                            that.jumpToError();
+                            dialogs.message(that.$t('debeCorregirCampos'), { duration: 10, estado: 'error' });
+                        });
+                        return;
                     }
-                }
-                this.progress = false;
+                    that.progress = true;
+                    let data = {
+                        email: that.email,
+                        password: that.password,
+                        password_confirmation: that.passwordConfirmation,
+                        name: that.name + ' ' + that.sureName,
+                        terms_and_conditions: that.termsAndConditions,
+                        birthday: that.birthdayAnswer,
+                        account_number: that.account_number,
+                        account_type: that.account_type,
+                        account_bank: that.account_bank,
+                        token
+                    };
+                    /* global FormData */
+                    let bodyFormData = new FormData();
+                    for (const key in data) {
+                        if (data.hasOwnProperty(key)) {
+                            bodyFormData.append(key, data[key]);
+                        }
+                    }
+                    if (that.driverFiles) {
+                        bodyFormData.append('user_be_driver', true);
+                        console.log('file', that.driverFiles);
+                        for (let index = 0; index < that.driverFiles.length; index++) {
+                            const file = that.driverFiles[index];
+                            console.log('file', file);
+                            bodyFormData.append('driver_data_docs[]', file);
+                        }
+                    }
+                    that.doRegister(bodyFormData).then((registerData) => {
+                        if (registerData && registerData.data && registerData.data.active) {
+                            that.active = true;
+                        }
+                        that.progress = false;
+                        that.success = true;
+                    }).catch((err) => {
+                        console.log('catch', err);
+                        if (err) {
+                            console.log('err register', err);
+                            if (err.status === 422) {
+                                console.log('err st', err.data.errors.email);
+                                if (err.data && err.data.errors && err.data.errors.email && Array.isArray(err.data.errors.email) && err.data.errors.email.length > 0 && err.data.errors.email[0].indexOf('been taken') >= 0) {
+                                    dialogs.message(that.$t('mailEnUso'), { estado: 'error' });
+                                    that.emailError.state = true;
+                                    that.emailError.message = that.$t('mailEnUso');
+                                    that.jumpToError();
+                                } else {
+                                    dialogs.message(that.$t('debeCorregirCampos'), { estado: 'error' });
+                                }
+                            } else {
+                                dialogs.message(that.$t('errorRegistro'), { estado: 'error' });
+                            }
+                        }
+                        that.progress = false;
+                    });
+                });
             });
         },
         onBackClick () {
@@ -379,6 +414,10 @@ export default {
             this.banks = data.banks;
             this.accountTypes = data.cc;
         });
+
+        let recaptchaScript = document.createElement('script')
+        recaptchaScript.setAttribute('src', `https://www.google.com/recaptcha/api.js?render=${process.env.RECAPTCHA_SITE_KEY}`)
+        document.head.appendChild(recaptchaScript)
     },
 
     beforeDestroy () {
