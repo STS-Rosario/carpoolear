@@ -101,7 +101,7 @@
             <label for="cbx_terms" class="label-cbx">
                 {{ $t('leidoTerminos1') }} <router-link :to="{name: 'terms'}">{{ $t('leidoTerminos2') }}</router-link>.
             </label>
-            <button v-jump ref="ipt_submit" name="ipt_submit" @click="register" class="btn-primary btn-outline g-recaptcha" :disabled="progress || !termsAndConditions" 
+            <button v-jump ref="ipt_submit" name="ipt_submit" @click="register" class="btn-primary btn-outline g-recaptcha" :disabled="progress || !termsAndConditions"
                 v-bind:data-sitekey="RECAPTCHA_SITE_KEY" >
                 <span v-if="!progress">{{ $t('registrarme') }}</span><spinner class="blue" v-if="progress"></spinner>
             </button>
@@ -130,7 +130,7 @@ class Error {
         this.message = '';
     }
 }
-
+console.log('RECAPTCHA_SECRET_KEY', process.env.RECAPTCHA_SITE_KEY)
 export default {
     name: 'register',
     data () {

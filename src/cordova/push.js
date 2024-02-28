@@ -34,7 +34,7 @@ export default {
     init () {
         console.log('push init', window.cordova.platformId);
         if (window.cordova.platformId === 'browser') {
-            if (process.env.FIREBASE_PARAMS !== undefined) { // process.env.ROUTE_BASE
+            if (process.env.FIREBASE_PARAMS !== undefined && window.Notification && window.Notification.requestPermission) { // process.env.ROUTE_BASE
                 const serviceWorker = navigator.serviceWorker.register('/dev/' + 'firebase-messaging-sw.js', {
                     // scope: '/static/'
                 });
@@ -42,6 +42,8 @@ export default {
                     if (permission === 'granted') {
                         return true;
                     }
+                    return Promise.reject(new Error());
+                }).catch(() => {
                     return Promise.reject(new Error());
                 });
 
