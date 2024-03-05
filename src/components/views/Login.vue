@@ -105,15 +105,31 @@
             {{ $t('alIngresarFace') }} <router-link :to="{name: 'terms'}">{{ $t('tyc') }}</router-link>.
         </div>
       </div>
-      <div class="col-sm-12 col-md-12" v-show="isMobile && loginCustomHeader">
-        <button class="btn btn-primary btn-search btn-facebook btn-with-icon" @click="facebookLogin" :disabled="fbLoading" v-show="config.enable_facebook"><span class="btn-with-icon--icon"><i class="fa fa-facebook" aria-hidden="true"></i></span><span class='btn-with-icon--label'> <span v-if="!fbLoading">Ingresá con Facebook</span><spinner class="blue" v-if="fbLoading"></spinner></span></button>
-        <div class="fb-terms" v-show="config.enable_facebook">{{ $t('alIngresarFacebook') }} <router-link :to="{name: 'terms'}">{{ $t('tyc') }}</router-link>.</div>
+      <div class="col-sm-12 col-md-12">
+        <button class="btn btn-primary btn-search btn-facebook btn-with-icon" @click="toggleModalFBLogin"><span class="btn-with-icon--icon"><i class="fa fa-facebook" aria-hidden="true"></i></span><span class='btn-with-icon--label'> <span v-if="!fbLoading">Ingresá con Facebook</span><spinner class="blue" v-if="fbLoading"></spinner></span></button>
       </div>
+
+      <modal :name="'modal'" v-if="showModalFBLogin" @close="toggleModalFBLogin" :body="'Body'">
+        <h3 slot="header">
+            <span>¿Tenías cuenta de Carpoolear vinculada a tu cuenta de Facebook?</span>
+            <i v-on:click="toggleModalFBLogin" class="fa fa-times float-right-close"></i>
+        </h3>
+        <div slot="body">
+            <div class="text-left color-black loginFBmodal">
+              <p>El ingreso/registro via Facebook ya no funciona más.</p>
+              <p>Escribinos a la mesa de ayuda de Carpoolear para poder recuperar tu cuenta y migrarla a una vinculada a mail.</p>
+              <p>La mesa de ayuda de Carpoolear funciona desde <a href="mailto:carpoolear@stsrosario.org.ar">carpoolear@stsrosario.org.ar</a>, y <a href="https://facebook.com/carpoolear">mensaje privado de Facebook</a>.</p>
+
+              <p>¡Buenas rutas!</p>
+            </div>
+        </div>
+      </modal>
     </div>
   </div>
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import modal from '../Modal';
 import dialogs from '../../services/dialogs.js';
 import router from '../../router';
 import bus from '../../services/bus-event';
@@ -135,6 +151,7 @@ export default {
             dontShowAgain: false,
             isShowLogin: false,
             showUserNotActiveInfo: false,
+            showModalFBLogin: false,
             showUserBannedInfo: false,
             app_logo: process.env.ROUTE_BASE + 'static/img/' + process.env.TARGET_APP + '_logo_full.png'
         };
@@ -173,6 +190,13 @@ export default {
             if (this.dontShowAgain) {
                 cache.setItem('fbLoginWarningDontShow', true);
             }
+        },
+        toggleModalFBLogin () {
+          this.showModalFBLogin = !this.showModalFBLogin;
+        },
+
+        onModalClose () {
+          toggleModalFBLogin()
         },
         login () {
             if (!this.fbLoading) {
@@ -248,7 +272,8 @@ export default {
     },
 
     components: {
-        Spinner
+        Spinner,
+        modal
     }
 };
 </script>
