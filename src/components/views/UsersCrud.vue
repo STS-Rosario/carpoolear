@@ -29,6 +29,7 @@
                                           <div class="media-body">
                                             <h4 class="media-heading"><span class="conversation-title">{{ user.name }}</span></h4>
                                             <span> {{ user.email }} </span>
+                                            <span style="display:block"> {{ user.nro_doc }} - {{ user.mobile_phone }}</span>
                                           </div>
                                         </div>
                                     </li>
