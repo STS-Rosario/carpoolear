@@ -151,7 +151,8 @@ function getConfig(store) {
     return authApi.config().then(response => {
         response.__isLocal = false;
         console.log('Loading config from server: ', response);
-        store.commit('AUTH_APP_CONFIG', response);
+        const config = { ...localConfig, ...response };
+        store.commit('AUTH_APP_CONFIG', config);
         return response;
     });
 }
