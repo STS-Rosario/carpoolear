@@ -29,6 +29,8 @@
                                           <div class="media-body">
                                             <h4 class="media-heading"><span class="conversation-title">{{ user.name }}</span></h4>
                                             <span> {{ user.email }} </span>
+                                            <span style="display:block"> {{ user.nro_doc }} - {{ user.mobile_phone }}</span>
+                                            <span style="display:block"> {{ user.last_connection }}</span>
                                           </div>
                                         </div>
                                     </li>
@@ -59,6 +61,11 @@
                                 <label for="input-description">Acerca de mi</label>
                                 <textarea maxlength="1000" v-model="newInfo.description" placeholder="Descripción"></textarea>
                                 <span class="error textarea" v-if="descError.state"> {{descError.message}} </span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="input-private-note">Nota privada</label>
+                                <textarea maxlength="1000" v-model="newInfo.private_note" placeholder="Nota sólo visible por admins"></textarea>
                             </div>
 
                             <div class="form-group">
@@ -170,6 +177,7 @@ export default {
                 name: '',
                 email: '',
                 description: '',
+                private_note: '',
                 nro_doc: '',
                 mobile_phone: '',
                 pass: {},
@@ -232,6 +240,7 @@ export default {
                 name: this.currentUser.name,
                 email: this.currentUser.email,
                 description: this.currentUser.description,
+                private_note: this.currentUser.private_note,
                 nro_doc: this.currentUser.nro_doc,
                 mobile_phone: this.currentUser.mobile_phone,
                 pass: {},
