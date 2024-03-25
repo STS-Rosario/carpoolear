@@ -62,6 +62,11 @@
                             </div>
 
                             <div class="form-group">
+                                <label for="input-private-note">Nota privada</label>
+                                <textarea maxlength="1000" v-model="newInfo.private_note" placeholder="Nota sólo visible por admins"></textarea>
+                            </div>
+
+                            <div class="form-group">
                                 <label for="input-dni">Número de documento</label>
                                 <input v-numberMask="'dniRawValue'" type="text" data-max-length="8" v-model="newInfo.nro_doc" class="form-control" id="input-dni" placeholder="DNI">
                                 <span class="error" v-if="dniError.state"> {{dniError.message}} </span>
@@ -170,6 +175,7 @@ export default {
                 name: '',
                 email: '',
                 description: '',
+                private_note: '',
                 nro_doc: '',
                 mobile_phone: '',
                 pass: {},
@@ -232,6 +238,7 @@ export default {
                 name: this.currentUser.name,
                 email: this.currentUser.email,
                 description: this.currentUser.description,
+                private_note: this.currentUser.private_note,
                 nro_doc: this.currentUser.nro_doc,
                 mobile_phone: this.currentUser.mobile_phone,
                 pass: {},
