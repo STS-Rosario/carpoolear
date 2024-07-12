@@ -35,6 +35,10 @@
                     </dropdown>
                 </div>
             </div>
+
+            <div class="actionbar_section actionbar_icon pull-right">
+                <a href="/donar" class="btn btn-primary btn-donar-header btn-header-small btn-lg">Donar</a>
+            </div>
         </div>
         <div class="header_content hidden-xs">
             <router-link :to="{ name: 'trips', params: { clearSearch: true } }"  v-on:click.native="tripsClick">
@@ -107,7 +111,7 @@
                     </dropdown>
                 </div>
 
-
+                <a href="/donar" class="btn btn-primary btn-donar-header btn-lg">Donar</a>
                 <router-link v-if="logged" :to="{name: 'new-trip'}" id="btn-create-trip" class="btn btn-primary btn-lg">{{ $t('crearViaje') }}</router-link>
 
             </div>
