@@ -19,6 +19,7 @@ import ProfileInfo from '../sections/ProfileInfo';
 import ProfileRates from '../sections/ProfileRates';
 import MyTrips from './MyTrips';
 import ProfileTrip from '../sections/ProfileTrip';
+import bus from '../../services/bus-event.js';
 import router from '../../router';
 
 export default {
@@ -86,7 +87,10 @@ export default {
                 });
                 this.currentView = 'profile-trip';
             }
-        }
+        },
+        onBackClick () {
+            router.back();
+        },
     },
     watch: {
         '$route': function () {
@@ -106,6 +110,10 @@ export default {
         }
         this.$refs.tabs.activateTab(index);
         this.updateProfile();
-    }
+        bus.on('back-click', this.onBackClick);
+    },
+    beforeDestroy () {
+        bus.off('back-click', this.onBackClick);
+    },
 };
 </script>

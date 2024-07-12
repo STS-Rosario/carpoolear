@@ -104,7 +104,7 @@ export default [
                 },
                 header: {
                     title: 'Mi Perfil',
-                    buttons: ['menu']
+                    buttons: ['back', 'menu']
                 }
             }
         }

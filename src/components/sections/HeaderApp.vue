@@ -15,9 +15,10 @@
             </div>
             <div class="actionbar_section actionbar_title" :class="subTitle !== '' ? 'header--with-subtitle' : ''">
                 <div class="header--image circle-box" v-imgSrc="imgTitle" v-show="imgTitle" ></div>
-                <span class='header--title'>{{title}}</span>
+                <span v-if="!titleLink.name" class='header--title'>{{title}}</span>
+                <router-link v-if="titleLink.name" :to="{name: titleLink.name, params: titleLink.params}" class='header--title'><span>{{title}}</span></router-link>
                 <span class='header--subtitle'>{{subTitle}}</span>
-            </div>
+            </div>   
             <div class="actionbar_section actionbar_icon pull-right">
                 <template v-for="item in rightHeaderButton" v-if="item.show">
                     <span @click="onClick(item)">
@@ -147,6 +148,7 @@ export default {
             user: 'auth/user',
             notificationsCount: 'notifications/count',
             title: 'actionbars/title',
+            titleLink: 'actionbars/titleLink',
             subTitle: 'actionbars/subTitle',
             imgTitle: 'actionbars/imgTitle',
             showMenu: 'actionbars/showMenu',
