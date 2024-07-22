@@ -587,6 +587,11 @@
       vertical-align: top;
       display: block;
       line-height: 1em;
+      color: var(--secondary-font-color);
+  }
+
+  .header--with-subtitle .header--title:active {
+    color: var(--secondary-font-color);
   }
 
   .header--with-subtitle .header--subtitle {

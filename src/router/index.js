@@ -46,6 +46,7 @@ router.beforeEach((to, from, next) => {
     console.log('app name', appName);
     if (actionbar.header) {
         store.dispatch('actionbars/setSubTitle', '');
+        store.dispatch('actionbars/setTitleLink', {});
         store.dispatch('actionbars/setImgTitle', '');
         if (actionbar.header.title) {
             console.log('actionbar.header.title', actionbar.header.title);
