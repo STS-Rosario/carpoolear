@@ -3,6 +3,7 @@ config = {
   API_URL: '"https://localhost"',
   MAPS_API: '"AIzaSyDz9fNRr5-nfCFN6ULDZaLt0xUckgKl3z4"',
   FACEBOOK_API: '"147151221990591"',
+  RECAPTCHA_SITE_KEY: '"6LeVu34pAAAAAMpDut-0e0Wahe2vy1amM5MpANQz"',
   TARGET_APP: '"carpoolear"',
 
 }

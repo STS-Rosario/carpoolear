@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.sts.carpoolear" version="2.5.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.sts.carpoolear" version="2.6.7" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Carpoolear</name>
     <description>
         Aplicación para compartir viajes de media y larga distancia.
@@ -30,7 +30,7 @@
         <splash density="port-xhdpi" src="res/screen/android/screen-xhdpi-portrait.png" />
         <preference name="AndroidLaunchMode" value="singleTop" />
         <preference name="loadUrlTimeoutValue" value="700000" />
-        <preference name="android-targetSdkVersion" value="28" />
+        <preference name="android-targetSdkVersion" value="29" />
         <config-file parent="/resources" target="./res/values/strings.xml">
 			<string name="fb_app_id">147151221990591</string>
 			<string name="fb_app_name">Carpoolear</string>
@@ -68,6 +68,8 @@
         <splash height="1334" src="res/screen/ios/Default-667h.png" width="750" />
         <splash height="1242" src="res/screen/ios/Default-736h.png" width="2208" />
         <splash height="2208" src="res/screen/ios/Default-Landscape-736h.png" width="1242" />
+        <splash height="2436" src="res/screen/ios/Default-2436h.png" width="1125" />
+        <splash height="1125" src="res/screen/ios/Default-1125h.png" width="2436" />
     </platform>
     <platform name="browser">
         <preference name="AutoHideSplashScreen" value="true" />

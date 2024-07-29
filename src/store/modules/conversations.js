@@ -70,7 +70,7 @@ const actions = {
         if (param.user) {
             user = param.user;
         }
-        let tripId = undefined;
+        let tripId;
         if (param.tripId) {
             tripId = param.tripId;
         }

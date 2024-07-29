@@ -37,6 +37,15 @@
                 <spinner class="blue" v-if="fbLoading"></spinner>
             </span>
         </button>
+        <button class="btn btn-primary btn-search btn-apple btn-with-icon" @click="appleLogin" :disabled="iosLoading" v-if="isApple">
+            <span class="btn-with-icon--icon">
+                <i class="fa fa-apple" aria-hidden="true"></i>
+            </span>
+            <span class='btn-with-icon--label'>
+                <span v-if="!iosLoading">{{ $t('ingresaConApple') }}</span>
+                <spinner class="blue" v-if="iosLoading"></spinner>
+            </span>
+        </button>
         <!-- <div class="fb-terms">{{ $t('alIngresarFacebook') }} <router-link :to="{name: 'terms'}">{{ $t('tyc') }}</router-link>.</div> -->
         <hr />
         <button ref="btn_show_login" id="btn_show_login" class="btn btn-primary btn-shadowed-black btn-with-icon btn-email" @click="showLogin" v-show="!isShowLogin">
@@ -100,9 +109,23 @@
             <span class='btn-with-icon--label'>
                 <span v-if="!fbLoading">{{ $t('ingresaConFace') }}</span>
             </span>
-            <spinner class="blue" v-if="fbLoading"></spinner></span></button>
+            <spinner class="blue" v-if="fbLoading"></spinner></span>
+        </button>
         <div v-show="config.enable_facebook">
             {{ $t('alIngresarFace') }} <router-link :to="{name: 'terms'}">{{ $t('tyc') }}</router-link>.
+        </div>
+
+        <button class="btn btn-primary btn-search btn-apple btn-with-icon" @click="appleLogin" :disabled="iosLoading" v-if="isApple">
+            <span class="btn-with-icon--icon">
+                <i class="fa fa-apple" aria-hidden="true"></i>
+            </span>
+            <span class='btn-with-icon--label'>
+                <span v-if="!iosLoading">{{ $t('ingresaConApple') }}</span>
+                <spinner class="blue" v-if="iosLoading"></spinner>
+            </span>
+        </button>
+        <div v-show="isApple">
+            {{ $t('alIngresarApple') }} <router-link :to="{name: 'terms'}">{{ $t('tyc') }}</router-link>.
         </div>
       </div>
       <div class="col-sm-12 col-md-12">
@@ -144,6 +167,7 @@ export default {
             password: '',
             loading: false,
             fbLoading: false,
+            iosLoading: false,
             error: '',
             carpoolear_logo: process.env.ROUTE_BASE + 'static/img/carpoolear_logo.png',
             hasScroll: false,
@@ -160,10 +184,16 @@ export default {
         ...mapGetters({
             checkLogin: 'auth/checkLogin',
             isMobile: 'device/isMobile',
-            config: 'auth/appConfig'
+            config: 'auth/appConfig',
+            deviceData: 'cordova/device'
         }),
         isDesktop () {
             return !this.isMobile;
+        },
+        isApple () {
+            return true;
+            console.log('isApple', window.cordova.platformId);
+            return window.cordova && window.cordova.platformId.toLowerCase() === 'ios';
         },
         loginCustomHeader () {
             return this.config ? this.config.login_custom_header : '';
@@ -183,7 +213,8 @@ export default {
     methods: {
         ...mapActions({
             doLogin: 'auth/login', // map this.add() to this.$store.dispatch('increment')
-            fbLogin: 'cordova/facebookLogin'
+            fbLogin: 'cordova/facebookLogin',
+            appleLogin: 'cordova/appleLogin'
         }),
         fbWarningGetIt () {
             this.isUnderstood = true;
@@ -212,7 +243,7 @@ export default {
                 }, error => {
                     const userNotActive = error && error.message === 'user_not_active';
                     const userBanned = error && error.message === 'user_banned';
-                    const message = userNotActive ? this.$t('paraIngresarCuenta') : (userBanned ? this.$t('usuarioBanneado') :  this.$t('emailOContra'));
+                    const message = userNotActive ? this.$t('paraIngresarCuenta') : (userBanned ? this.$t('usuarioBanneado') : this.$t('emailOContra'));
                     this.showUserNotActiveInfo = userNotActive;
                     this.showUserBannedInfo = userBanned;
                     dialogs.message(message, { duration: 10, estado: 'error' });
@@ -233,6 +264,18 @@ export default {
             if (!this.loading) {
                 this.fbLoading = true;
                 this.fbLogin().catch((response) => {
+                    if (response.errors && response.errors.email) {
+                        dialogs.message(this.$t('correoUsado'), { duration: 10, estado: 'error' });
+                    }
+                });
+            } else {
+                dialogs.message(this.$t('solicitudEnviada'), { duration: 10, estado: 'error' });
+            }
+        },
+        iosLogin () {
+            if (!this.loading) {
+                this.iosLoading = true;
+                this.appleLogin().catch((response) => {
                     if (response.errors && response.errors.email) {
                         dialogs.message(this.$t('correoUsado'), { duration: 10, estado: 'error' });
                     }
@@ -412,6 +455,16 @@ label {
     width: 100%;
     max-width: 280px;
     margin: 0.5em 0 0.6em 0;
+  }
+  .user-form .btn-primary.btn-apple {
+    width: 100%;
+    max-width: 280px;
+    margin: 0.5em 0 0.6em 0;
+    text-transform: none;
+    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 20px;
+    padding: .7em 2em;
+    border-color: black;
   }
   .register::before {
     display: none;

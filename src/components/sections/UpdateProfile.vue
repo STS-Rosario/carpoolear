@@ -396,6 +396,12 @@ export default {
                 this.loading = false;
                 this.error = this.$t('errorDatos');
                 this.jumpToError();
+                if (err && err.errors && err.errors.nro_doc && err.errors.nro_doc[0].indexOf('taken') >= 0) {
+                    dialogs.message(this.$t('nroDocYaRegistrado'), { duration: 10, estado: 'error' });
+                }
+                if (err && err.errors && err.errors.mobile_phone && err.errors.mobile_phone[0].indexOf('taken') >= 0) {
+                    dialogs.message(this.$t('nroTelYaRegistrado'), { duration: 10, estado: 'error' });
+                }
             });
         },
         validate () {

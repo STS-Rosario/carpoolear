@@ -244,7 +244,6 @@ export default {
                 nro_doc: this.currentUser.nro_doc,
                 mobile_phone: this.currentUser.mobile_phone,
                 pass: {},
-                active: this.currentUser.active,
                 user: {},
                 driver_is_verified: this.currentUser.driver_is_verified,
                 driver_data_docs: this.currentUser.driver_data_docs,
@@ -258,7 +257,7 @@ export default {
         toUserMessages (user) {
             console.log('toUserMessages');
             this.lookConversation({ user: user, tripId: null }).then(conversation => {
-            console.log('toUserMessages then', conversation);
+                console.log('toUserMessages then', conversation);
                 router.push({ name: 'conversation-chat', params: { id: conversation.id } });
             });
         },
@@ -278,7 +277,7 @@ export default {
             this.accountTypeError = new Error();
             this.accountBankError = new Error();
 
-            if (!this.newInfo.name || this.newInfo.name.length < 1) {
+            /* if (!this.newInfo.name || this.newInfo.name.length < 1) {
                 this.nombreError.state = true;
                 this.nombreError.message = 'Olvidaste ingresar tu nombre y apellido.';
                 globalError = true;
@@ -312,7 +311,7 @@ export default {
             if (this.newInfo.pass.password && this.newInfo.pass.password !== this.newInfo.pass.password_confirmation) {
                 this.passError = 'Password no coincide';
                 globalError = true;
-            }
+            } */
 
             console.log('error', this);
 
@@ -329,9 +328,19 @@ export default {
                     this.newInfo.password = this.newInfo.pass.password;
                     this.newInfo.password_confirmation = this.newInfo.pass.password_confirmation;
                 }
-                this.update(this.newInfo);
+                this.update(this.newInfo).then(() => {
+                    dialogs.message('Perfil actualizado correctamente.');
+                }).catch((err) => {
+                    console.log(err);
+                    let mensajeErr = 'Error al actualizar: ';
+                    for (const key in err.errors) {
+                        if (Object.hasOwnProperty.call(err.errors, key)) {
+                            mensajeErr += err.errors[key] + ' ';
+                        }
+                    }
+                    dialogs.message(mensajeErr, { duration: 10, estado: 'error' });
+                });
                 this.onSearchUsers();
-                dialogs.message('Perfil actualizado correctamente.');
             } else {
                 dialogs.message('Verifique los campos', { estado: 'error' });
             }

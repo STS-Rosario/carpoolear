@@ -1,5 +1,11 @@
 <template>
     <div class="row trip-stats" v-if="!trip.is_passenger && !isPassengersView">
+
+        <div class="list_item" v-if="trip.total_price > 0">
+            <i class="fa fa-link" aria-hidden="true" v-if="tripCardTheme === 'light'"></i>
+            <div class="label-soft" v-if="tripCardTheme !== 'light'" style='color: var(--trip-almost-fill-color); font-weight: bold'>{{ 'Total de combustible + peajes a compartir' }}</div>
+            <div><span style='color: var(--trip-almost-fill-color)'>$ {{trip.total_price}}</span> (estimado por el conductor)</div>
+        </div>
         <div>
             <i class="fa fa-link" aria-hidden="true" v-if="tripCardTheme === 'light'"></i>
             <span v-if="tripCardTheme !== 'light' || !isMobile">Distancia a recorrer</span><br v-if="tripCardTheme !== 'light'">
