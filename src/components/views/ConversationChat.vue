@@ -84,6 +84,7 @@ export default {
             'findMessage': 'conversations/findMessage',
             'unreadMessage': 'conversations/getUnreadMessages',
             'setTitle': 'actionbars/setTitle',
+            'setTitleLink': 'actionbars/setTitleLink',
             'setSubTitle': 'actionbars/setSubTitle',
             'setImgTitle': 'actionbars/setImgTitle'
         }),
@@ -136,6 +137,14 @@ export default {
                 bus.on('back-click', this.onBackClick);
                 if (this.conversation) {
                     this.setTitle(this.conversation.title);
+                    this.setTitleLink({
+                        name: 'profile', 
+                        params: { 
+                            id: this.conversation.users[0].id, 
+                            userProfile: this.conversation.users[0],
+                            activeTab: 1 
+                        }
+                    });
                     this.setSubTitle('Última conexión: ' + moment(this.lastConnection).calendar());
                     this.setImgTitle(this.conversation.image);
                 }
@@ -155,6 +164,14 @@ export default {
         }
         if (this.conversation) {
             this.setTitle(this.conversation.title);
+            this.setTitleLink({
+                name: 'profile', 
+                params: { 
+                    id: this.conversation.users[0].id, 
+                    userProfile: this.conversation.users[0],
+                    activeTab: 1 
+                }
+            });
             this.setSubTitle('Última conexión: ' + moment(this.lastConnection).calendar());
             this.setImgTitle(this.conversation.image);
 

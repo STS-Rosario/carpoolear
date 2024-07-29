@@ -15,9 +15,10 @@
             </div>
             <div class="actionbar_section actionbar_title" :class="subTitle !== '' ? 'header--with-subtitle' : ''">
                 <div class="header--image circle-box" v-imgSrc="imgTitle" v-show="imgTitle" ></div>
-                <span class='header--title'>{{title}}</span>
+                <span v-if="!titleLink.name" class='header--title'>{{title}}</span>
+                <router-link v-if="titleLink.name" :to="{name: titleLink.name, params: titleLink.params}" class='header--title'><span>{{title}}</span></router-link>
                 <span class='header--subtitle'>{{subTitle}}</span>
-            </div>
+            </div>   
             <div class="actionbar_section actionbar_icon pull-right">
                 <template v-for="item in rightHeaderButton" v-if="item.show">
                     <span @click="onClick(item)">
@@ -34,6 +35,10 @@
                         <li><a @click="logout" v-if="!isFacebokApp">{{ $t('cerrarSesion') }}</a></li>
                     </dropdown>
                 </div>
+            </div>
+
+            <div class="actionbar_section actionbar_icon pull-right">
+                <a href="/donar" class="btn btn-primary btn-donar-header btn-header-small btn-lg">Donar</a>
             </div>
         </div>
         <div class="header_content hidden-xs">
@@ -107,7 +112,7 @@
                     </dropdown>
                 </div>
 
-
+                <a href="/donar" class="btn btn-primary btn-donar-header btn-lg">Donar</a>
                 <router-link v-if="logged" :to="{name: 'new-trip'}" id="btn-create-trip" class="btn btn-primary btn-lg">{{ $t('crearViaje') }}</router-link>
 
             </div>
@@ -147,6 +152,7 @@ export default {
             user: 'auth/user',
             notificationsCount: 'notifications/count',
             title: 'actionbars/title',
+            titleLink: 'actionbars/titleLink',
             subTitle: 'actionbars/subTitle',
             imgTitle: 'actionbars/imgTitle',
             showMenu: 'actionbars/showMenu',

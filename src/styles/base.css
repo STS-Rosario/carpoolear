@@ -615,6 +615,11 @@
       vertical-align: top;
       display: block;
       line-height: 1em;
+      color: var(--secondary-font-color);
+  }
+
+  .header--with-subtitle .header--title:active {
+    color: var(--secondary-font-color);
   }
 
   .header--with-subtitle .header--subtitle {
@@ -2906,6 +2911,26 @@
       font-size: 1.1em;
       white-space: normal;
   }
+    .btn-donar-header, 
+    .btn-donar-header:active, 
+    .btn-donar-header:focus {
+        margin-right: 0.5em;
+        background: #5cb85c;
+        border-color: white;
+        color: white;
+    }
+
+    .btn-donar-header:active:focus,
+    .btn-donar-header:active:hover,
+    .btn-donar-header:hover {
+        background: #6cd86c;
+        color:white;
+    }
+
+    .btn-header-small {
+        padding: 0.5em 0.75em;
+        font-size: 0.5em;
+    }
   .panel-donar {
       float: none;
       clear: both;

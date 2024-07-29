@@ -7,6 +7,7 @@ if (appName && appName.length) {
 }
 const state = {
     title: appName,
+    titleLink: {},
     subTitle: '',
     imgTitle: '',
     showMenu: false,
@@ -77,8 +78,11 @@ const getters = {
     subTitle: state => state.subTitle,
     imgTitle: state => state.imgTitle,
     showMenu: state => state.showMenu,
-    leftHeaderButton: state => state.header_buttons.filter(item => item.position === 'left'),
-    rightHeaderButton: state => state.header_buttons.filter(item => item.position === 'right'),
+    titleLink: state => state.titleLink,
+    leftHeaderButton: state =>
+        state.header_buttons.filter(item => item.position === 'left'),
+    rightHeaderButton: state =>
+        state.header_buttons.filter(item => item.position === 'right'),
     headerLogoVisibility: state => state.header_logo_visibility,
 
     footerShow: state => state.footer_visibility,
@@ -99,7 +103,11 @@ const actions = {
         }
     },
 
-    setSubTitle (store, newSubTitle = '') {
+    setTitleLink(store, newTitleLink = {}) {
+        store.commit(types.HEADER_SET_TITLE_LINK, newTitleLink);
+    },
+
+    setSubTitle(store, newSubTitle = '') {
         store.commit(types.HEADER_SET_SUB_TITLE, newSubTitle);
     },
 
@@ -143,7 +151,11 @@ const mutations = {
         state.title = title;
     },
 
-    [types.HEADER_SET_SUB_TITLE] (state, newSubTitle) {
+    [types.HEADER_SET_TITLE_LINK](state, titleLink) {
+        state.titleLink = titleLink;
+    },
+
+    [types.HEADER_SET_SUB_TITLE](state, newSubTitle) {
         state.subTitle = newSubTitle;
     },
     [types.HEADER_SET_IMG_TITLE] (state, newImgTitle) {
