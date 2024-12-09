@@ -172,8 +172,13 @@ const mutations = {
     },
 
     [types.TRIPS_CURRENT_REMOVE_PASSENGER_BY_ID] (state, userId) {
-        let index = state.current_trip.passenger.findIndex(item => item.id === userId && (item.request_state === 1 || item.request_state === 4));
-        state.current_trip.passenger[index].request_state = 3;
+        let index = state.current_trip.passenger.findIndex(item => item.id === userId);
+        state.current_trip.passenger.splice(index, 1);
+        if (state.current_trip.allPassengerRequest) {
+            let index2 = state.current_trip.allPassengerRequest.findIndex(item => item.id === userId && (item.request_state === 1 || item.request_state === 4));
+            state.current_trip.allPassengerRequest.splice(index2, 1);
+        }
+
         state.current_trip.seats_available++;
         state.current_trip.passenger_count--;
     },
