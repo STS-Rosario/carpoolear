@@ -49,6 +49,7 @@
                         <span v-else>Bajarme del viaje</span>
                     </button>
                 </template>
+                    
             </template>
             <template v-if="expired">
                 <button class="btn btn-primary" disabled> Finalizado  </button>
