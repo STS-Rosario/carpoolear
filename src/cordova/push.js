@@ -35,7 +35,7 @@ export default {
         console.log('push init', window.cordova.platformId);
         if (window.cordova.platformId === 'browser') {
             if (process.env.FIREBASE_PARAMS !== undefined && window.Notification && window.Notification.requestPermission) { // process.env.ROUTE_BASE
-                const serviceWorker = navigator.serviceWorker.register('/dev/' + 'firebase-messaging-sw.js', {
+                const serviceWorker = navigator.serviceWorker.register('/app/' + 'firebase-messaging-sw.js', {
                     // scope: '/static/'
                 });
                 const permissionNotification = window.Notification.requestPermission().then((permission) => {
@@ -69,7 +69,7 @@ export default {
                         // [PENDING] Mostramos notificaciones en desktop? Sino borrar este código.
                         const notificationTitle = notification.title;
                         const notificationOptions = {
-                            body: notification.body,
+                            body: notification.body
                         };
                         reg.showNotification(notificationTitle, notificationOptions);
                     });

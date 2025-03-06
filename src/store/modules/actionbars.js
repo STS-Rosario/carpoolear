@@ -1,7 +1,7 @@
-import * as types from '../mutation-types';
 import router from '../../router';
 import globalStore from '../index';
-let appName = process.env.TARGET_APP;
+import * as types from '../mutation-types';
+let appName = process.env.TARGET_APP || 'Carpoolear';
 if (appName && appName.length) {
     appName = appName.charAt(0).toUpperCase() + appName.slice(1);
 }
@@ -103,11 +103,11 @@ const actions = {
         }
     },
 
-    setTitleLink(store, newTitleLink = {}) {
+    setTitleLink (store, newTitleLink = {}) {
         store.commit(types.HEADER_SET_TITLE_LINK, newTitleLink);
     },
 
-    setSubTitle(store, newSubTitle = '') {
+    setSubTitle (store, newSubTitle = '') {
         store.commit(types.HEADER_SET_SUB_TITLE, newSubTitle);
     },
 
@@ -151,11 +151,11 @@ const mutations = {
         state.title = title;
     },
 
-    [types.HEADER_SET_TITLE_LINK](state, titleLink) {
+    [types.HEADER_SET_TITLE_LINK] (state, titleLink) {
         state.titleLink = titleLink;
     },
 
-    [types.HEADER_SET_SUB_TITLE](state, newSubTitle) {
+    [types.HEADER_SET_SUB_TITLE] (state, newSubTitle) {
         state.subTitle = newSubTitle;
     },
     [types.HEADER_SET_IMG_TITLE] (state, newImgTitle) {

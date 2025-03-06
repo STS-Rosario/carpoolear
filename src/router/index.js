@@ -2,8 +2,8 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
-import routes from './routes.js';
 import store from '../store';
+import routes from './routes.js';
 
 Vue.use(VueRouter);
 
@@ -12,7 +12,6 @@ const router = new VueRouter({
     // esto hay que atarlo a si estoy en cordova o no
     mode: process.env.HISTORY_MODE,
     base: process.env.ROUTE_BASE
-
 });
 
 router.rememberRoute = null;
@@ -28,7 +27,10 @@ router.beforeEach((to, from, next) => {
             store.dispatch('actionbars/showFooter', false);
         }
         if (actionbar.footer.active_id) {
-            store.dispatch('actionbars/setActiveFooter', actionbar.footer.active_id);
+            store.dispatch(
+                'actionbars/setActiveFooter',
+                actionbar.footer.active_id
+            );
         }
     } else {
         store.dispatch('actionbars/showFooter', false);
@@ -36,7 +38,7 @@ router.beforeEach((to, from, next) => {
     let getters = store.getters;
     let config = getters['auth/appConfig'];
     console.log('config app name', config);
-    let appName = process.env.TARGET_APP;
+    let appName = process.env.TARGET_APP || 'Carpoolear';
     if (config) {
         appName = config.app_name ? config.app_name : config.name_app;
     }
@@ -56,12 +58,18 @@ router.beforeEach((to, from, next) => {
             store.dispatch('actionbars/setTitle', appName);
         }
         if (actionbar.header.buttons) {
-            store.dispatch('actionbars/setHeaderButtons', actionbar.header.buttons);
+            store.dispatch(
+                'actionbars/setHeaderButtons',
+                actionbar.header.buttons
+            );
         } else {
             store.dispatch('actionbars/setHeaderButtons', []);
         }
         if (actionbar.header.logo) {
-            store.dispatch('actionbars/showHeaderLogo', actionbar.header.logo.show);
+            store.dispatch(
+                'actionbars/showHeaderLogo',
+                actionbar.header.logo.show
+            );
         } else {
             store.dispatch('actionbars/showHeaderLogo', true);
         }
@@ -84,7 +92,7 @@ router._push = router.push;
 router._replace = router.replace;
 router._go = router.go;
 
-router.rememberBack = function () {
+router.rememberBack = function() {
     if (router.rememberRoute) {
         router.push(router.rememberRoute);
         router.rememberRoute = null;
@@ -93,7 +101,7 @@ router.rememberBack = function () {
     }
 };
 
-router.push = function (data, fnSuccess, fnFailure) {
+router.push = function(data, fnSuccess, fnFailure) {
     // console.log('push', JSON.stringify(router.stack), JSON.stringify(data));
     if (data.name !== 'trips') {
         router.stack.push(data);
@@ -103,7 +111,7 @@ router.push = function (data, fnSuccess, fnFailure) {
     router._push(data, fnSuccess, fnFailure);
 };
 
-router.replace = function (data) {
+router.replace = function(data) {
     // console.log('replace', JSON.stringify(router.stack), JSON.stringify(data));
     if (data.name !== 'trips') {
         router.stack.pop();
@@ -114,7 +122,7 @@ router.replace = function (data) {
     router._push(data);
 };
 
-router.go = function (number) {
+router.go = function(number) {
     // console.log('go', JSON.stringify(router.stack), number);
     router.stack.splice(-1, -number);
     router._go(number);
