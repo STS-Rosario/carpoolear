@@ -167,7 +167,10 @@ function retoken(store) {
             .then(response => {
                 console.log('retoken response', response);
                 store.commit(types.AUTH_SET_TOKEN, response.token);
-                store.commit('AUTH_APP_CONFIG', response.config);
+                store.commit('AUTH_APP_CONFIG', {
+                    ...localConfig,
+                    ...response.config,
+                });
                 resolve();
             })
             .catch(({ data, status }) => {
