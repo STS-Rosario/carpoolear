@@ -28,5 +28,7 @@
         "cards": 4
     },
     "allow_rating_reply": true,
-    "module_references": true
+    "module_references": true,
+    "name_app": "Carpoolear",
+    "app_name": "Inicio"
 }
