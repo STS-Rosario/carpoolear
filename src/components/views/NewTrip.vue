@@ -992,6 +992,12 @@ export default {
                     estado: 'error'
                 });
                 globalError = true;
+            } else if (!this.trip.description) {
+                this.commentError.state = true;
+                this.commentError.message = this.$t('olvidasteDescripcion');
+                dialogs.message(this.$t('olvidasteDescripcion'), {
+                    estado: 'error'
+                });
             }
             if (validDate && validTime) {
                 console.log('valid date time');
