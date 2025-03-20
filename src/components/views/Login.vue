@@ -72,16 +72,6 @@
 
       </div>
     <div class="login-box" :class="[righPanelclass]" v-show="!isShowLogin && isDesktop">
-        <div class='visual-trick'>
-            <button ref="btn_show_login" id="btn_show_login" class="btn btn-primary btn-shadowed-black btn-with-icon btn-email" @click="showLogin" v-show="!isShowLogin">
-                <span class="btn-with-icon--icon">
-                    <i class="fa fa-envelope" aria-hidden="true"></i>
-                </span>
-                <span class='btn-with-icon--label'>
-                    <span>{{ $t('ingresaConCuenta') }}</span>
-                </span>
-            </button>
-        </div>
         <div>
             <span class="register">{{ $t('noTenesFace') }} <router-link class='login-register' :to="{name:'register'}"> {{ $t('registrateAca') }} </router-link></span>
         </div>
