@@ -2911,6 +2911,9 @@
       font-size: 1.1em;
       white-space: normal;
   }
+  .btn-login-header {
+    margin-right: 0.5em;
+  }
     .btn-donar-header, 
     .btn-donar-header:active, 
     .btn-donar-header:focus {
@@ -2994,8 +2997,12 @@
     padding: 10px 19px;
   }
 
-  .loginFBmodal p {
+  .loginFBmodal p, .blue .loginFBmodal p {
     color: #000;
+ }
+
+ .loginFBmodal p a, .blue .loginFBmodal p a {
+    color: #009bde;
  }
 
   @media (max-width: 800px) {
