@@ -72,13 +72,13 @@
                     </div>
                     <div class="radio">
                         <label class="radio-inline">
-                            <input type="radio" name="donationValor" id="donation50" value="200" v-model="donateValue"><span>$ 200</span>
+                            <input type="radio" name="donationValor" id="donation50" value="1000" v-model="donateValue"><span>$ 1000</span>
                         </label>
                         <label class="radio-inline">
-                            <input type="radio" name="donationValor" id="donation100" value="400" v-model="donateValue"><span>$ 400</span>
+                            <input type="radio" name="donationValor" id="donation100" value="2000" v-model="donateValue"><span>$ 2000</span>
                         </label>
                         <label class="radio-inline">
-                            <input type="radio" name="donationValor" id="donation200" value="1000" v-model="donateValue"><span>$ 1000</span>
+                            <input type="radio" name="donationValor" id="donation200" value="5000" v-model="donateValue"><span>$ 5000</span>
                         </label>
                         <label class="radio-inline">
                             <input type="radio" name="donationValor" id="donation500" value="0" v-model="donateValue"><span>Elegí tu propia aventura (solo mensual)</span>
