@@ -183,7 +183,7 @@
                             </div>
                             <div class="trip-comment">
                                 <label for="trip_comment"  class="label-for-group"> {{ trip.is_passenger == 0 ? $t('comentarioPasajeros') : 'Comentario' }} </label>
-                                <textarea maxlength="2000" v-model="trip.description" id="trp_comment" class="form-control"></textarea>
+                                <textarea maxlength="2000" v-model="trip.description" id="trp_comment" class="form-control" :placeholder="$t('placeholderComentarioPasajeros')"></textarea>
                                 <span class="error" v-if="commentError.state"> {{commentError.message}} </span>
                             </div>
                         </div>
@@ -438,7 +438,7 @@
                             </div>
                             <div class="trip-comment">
                                 <label for="otherTrip-trip_comment"  class="label-for-group"> {{ $t('comentarioPasajeros') }} </label>
-                                <textarea maxlength="2000" v-model="trip.description" id="trp_comment" class="form-control"></textarea>
+                                <textarea maxlength="2000" v-model="trip.description" id="trp_comment" class="form-control" :placeholder="$t('placeholderComentarioPasajeros')" ></textarea>
                                 <span class="error" v-if="commentError.state"> {{commentError.message}} </span>
                             </div>
                         </div>

@@ -112,7 +112,9 @@ const messages = {
         hora: 'Hora',
         lugaresDisponibles: 'Lugares disponibles',
         cuposNecesarios: 'Cuantos cupos necesitas',
-        comentarioPasajeros: 'Comentario para los pasajeros',
+        comentarioPasajeros: 'Detalles extra del viaje',
+        placeholderComentarioPasajeros:
+            'Ejemplo:\nPunto/Zona/Barrio de referencia de partida y llegada del viaje\nTamaño de mochila/bolso\nContribución de combustible y peaje\nParadas Intermedias\nHorario Flexible',
         privacidadViaje: 'Privacidad del viaje',
         publico: 'Público',
         amigosamigos: 'Amigos de Amigos',
@@ -401,7 +403,9 @@ const messages = {
         hora: 'Hora',
         lugaresDisponibles: 'Lugares disponibles',
         cuposNecesarios: 'Cuantos cupos necesitas',
-        comentarioPasajeros: 'Comentario para los pasajeros',
+        comentarioPasajeros: 'Detalles extra del viaje',
+        placeholderComentarioPasajeros:
+            'Ejemplo:\nPunto/Zona/Barrio de referencia de partida y llegada del viaje\nTamaño de mochila/bolso\nContribución de combustible y peaje\nParadas Intermedias\nHorario Flexible',
         privacidadViaje: 'Privacidad del viaje',
         publico: 'Público',
         amigosamigos: 'Amigos de Amigos',
