@@ -27,52 +27,8 @@
             </div>
         </div>
       </div>
-      <div class="col-sm-12 col-md-12" v-show="isMobile && !loginCustomHeader">
-        <button class="btn btn-primary btn-search btn-facebook btn-with-icon" @click="facebookLogin" :disabled="fbLoading">
-            <span class="btn-with-icon--icon">
-                <i class="fa fa-facebook" aria-hidden="true"></i>
-            </span>
-            <span class='btn-with-icon--label'>
-                <span v-if="!fbLoading">Facebook</span>
-                <spinner class="blue" v-if="fbLoading"></spinner>
-            </span>
-        </button>
-        <button class="btn btn-primary btn-search btn-apple btn-with-icon" @click="appleLogin" :disabled="iosLoading" v-if="isApple">
-            <span class="btn-with-icon--icon">
-                <i class="fa fa-apple" aria-hidden="true"></i>
-            </span>
-            <span class='btn-with-icon--label'>
-                <span v-if="!iosLoading">{{ $t('ingresaConApple') }}</span>
-                <spinner class="blue" v-if="iosLoading"></spinner>
-            </span>
-        </button>
-        <!-- <div class="fb-terms">{{ $t('alIngresarFacebook') }} <router-link :to="{name: 'terms'}">{{ $t('tyc') }}</router-link>.</div> -->
-        <hr />
-        <button ref="btn_show_login" id="btn_show_login" class="btn btn-primary btn-shadowed-black btn-with-icon btn-email" @click="showLogin" v-show="!isShowLogin">
-            <span class="btn-with-icon--icon">
-                <i class="fa fa-envelope" aria-hidden="true"></i>
-            </span>
-            <span class='btn-with-icon--label'>
-                <span>{{ $t('ingresaEmail') }}</span>
-            </span>
-        </button>
-      </div>
-    <div class="login-box" :class="[righPanelclass]" v-show="!isShowLogin && isDesktop">
-        <div class='visual-trick'>
-            <button ref="btn_show_login" id="btn_show_login" class="btn btn-primary btn-shadowed-black btn-with-icon btn-email" @click="showLogin" v-show="!isShowLogin">
-                <span class="btn-with-icon--icon">
-                    <i class="fa fa-envelope" aria-hidden="true"></i>
-                </span>
-                <span class='btn-with-icon--label'>
-                    <span>{{ $t('ingresaConCuenta') }}</span>
-                </span>
-            </button>
-        </div>
-        <div>
-            <span class="register">{{ $t('noTenesFace') }} <router-link class='login-register' :to="{name:'register'}"> {{ $t('registrateAca') }} </router-link></span>
-        </div>
-    </div>
-      <div class="login-box" :class="[righPanelclass]" v-show="isShowLogin">
+
+      <div class="login-box" :class="[righPanelclass]">
         <label v-show="!loginCustomHeader" for="txt_user">{{ $t('email') }}</label>
         <div class='visual-trick'>
             <input :placeholder="$t('loginUsuarioPlaceholder')" ref="txt_user" type="email" id="txt_user" v-model="email" v-jump />
@@ -93,13 +49,44 @@
         </div>
 
       </div>
-      <div style="col-sm-12"  v-show="isShowLogin && isMobile" >
+      <div style="col-sm-12"  v-show="isMobile" >
         <router-link class='password-not' :to="{name:'reset-password'}">{{ $t('olvideContra') }} </router-link>
       </div>
       <div  class="col-sm-12 col-md-12"  v-show="isMobile">
         <span class="register" v-if="isMobile">{{ $t('noTenesFace') }} <router-link class='login-register' :to="{name:'register'}"> {{ $t('registrateAca') }} </router-link></span>
+      </div>
+      
+      <div class="col-sm-12 col-md-12" v-show="isMobile && !loginCustomHeader">
+        <hr />
+        <button class="btn btn-primary btn-search btn-apple btn-with-icon" @click="appleLogin" :disabled="iosLoading" v-if="isApple">
+            <span class="btn-with-icon--icon">
+                <i class="fa fa-apple" aria-hidden="true"></i>
+            </span>
+            <span class='btn-with-icon--label'>
+                <span v-if="!iosLoading">{{ $t('ingresaConApple') }}</span>
+                <spinner class="blue" v-if="iosLoading"></spinner>
+            </span>
+        </button>
+        <!-- <div class="fb-terms">{{ $t('alIngresarFacebook') }} <router-link :to="{name: 'terms'}">{{ $t('tyc') }}</router-link>.</div> -->
+        
 
       </div>
+    <div class="login-box" :class="[righPanelclass]" v-show="!isShowLogin && isDesktop">
+        <div class='visual-trick'>
+            <button ref="btn_show_login" id="btn_show_login" class="btn btn-primary btn-shadowed-black btn-with-icon btn-email" @click="showLogin" v-show="!isShowLogin">
+                <span class="btn-with-icon--icon">
+                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                </span>
+                <span class='btn-with-icon--label'>
+                    <span>{{ $t('ingresaConCuenta') }}</span>
+                </span>
+            </button>
+        </div>
+        <div>
+            <span class="register">{{ $t('noTenesFace') }} <router-link class='login-register' :to="{name:'register'}"> {{ $t('registrateAca') }} </router-link></span>
+        </div>
+    </div>
+
       <div class="facebook-box" :class="[righPanelclass]" v-show="isDesktop" >
         <span class="register" v-show="isShowLogin">{{ $t('noTenesFace') }} <router-link class='login-register' :to="{name:'register'}"> {{ $t('registrateAca') }} </router-link></span>
         <button class="btn-primary btn-search btn-facebook btn-with-icon" @click="facebookLogin" :disabled="fbLoading" v-show="config.enable_facebook">
@@ -380,8 +367,7 @@ label {
   padding: 1.4em 0;
   position: relative;
   display: inline-block;
-  margin-top: 1em;
-  margin-bottom: 1em;
+  margin-top: 1em; 
 }
 
 .register::before {
@@ -391,16 +377,6 @@ label {
   margin-left: 5%;
   content: " ";
   top: 0;
-  left: 0;
-}
-
-.register::after {
-  position: absolute;
-  border-bottom: solid 1px #AAA;
-  width: 90%;
-  margin-left: 5%;
-  content: " ";
-  bottom: 0;
   left: 0;
 }
 
@@ -435,7 +411,7 @@ label {
   }
   .register {
     color: #555;
-    margin-bottom: 0;
+    margin-bottom: 1em;
     padding: 0;
     font-weight: 400;
   }
