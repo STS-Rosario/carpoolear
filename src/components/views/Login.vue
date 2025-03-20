@@ -367,7 +367,7 @@ label {
   padding: 1.4em 0;
   position: relative;
   display: inline-block;
-  margin-top: 1em;
+  margin-top: 1em; 
 }
 
 .register::before {
@@ -411,7 +411,7 @@ label {
   }
   .register {
     color: #555;
-    margin-bottom: 0;
+    margin-bottom: 1em;
     padding: 0;
     font-weight: 400;
   }
