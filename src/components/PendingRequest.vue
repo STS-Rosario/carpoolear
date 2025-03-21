@@ -61,6 +61,8 @@ import router from '../router';
 import modal from './Modal';
 import dialogs from '../services/dialogs.js';
 import spinner from './Spinner.vue';
+import bus from '../services/bus-event.js';
+
 export default {
     data () {
         return {
@@ -114,6 +116,7 @@ export default {
                 console.error(error);
             }).finally(() => {
                 this.acceptInProcess = false;
+                bus.emit('request-status-changed');
             });
         },
 
@@ -135,6 +138,7 @@ export default {
                 console.error(error);
             }).finally(() => {
                 this.rejectInProcess = false;
+                bus.emit('request-status-changed');
             });
         },
 

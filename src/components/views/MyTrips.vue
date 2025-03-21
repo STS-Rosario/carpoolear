@@ -197,6 +197,7 @@ import { mapGetters, mapActions } from 'vuex';
 import Tab from '../elements/Tab';
 import modal from '../Modal';
 import dialogs from '../../services/dialogs.js';
+import bus from '../../services/bus-event.js';
 
 export default {
     name: 'my-trips',
@@ -220,6 +221,16 @@ export default {
         });
         this.getPendingPaymentRequests();
         this.findSubscriptions();
+
+        bus.on('request-status-changed', () => {
+            this.getPendingRequest().then(() => {
+                this.oldTripsAsDriver();
+                this.oldTripsAsPassenger();
+            });
+        });
+    },
+    beforeDestroy() {
+        bus.off('request-status-changed');
     },
     computed: {
         ...mapGetters({
