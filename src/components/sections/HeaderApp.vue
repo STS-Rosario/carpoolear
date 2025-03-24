@@ -40,7 +40,7 @@
             <div class="actionbar_section actionbar_icon pull-right" v-if="isMobile && !isTripsPage">
                 <a href="/donar" class="btn btn-primary btn-donar-header btn-header-small btn-lg">Donar</a>
             </div>
-            <div class="actionbar_section actionbar_icon pull-right" v-if="isMobile && isTripsPage">
+            <div class="actionbar_section actionbar_icon pull-right" v-if="isMobile && isTripsPage && !user">
                 <router-link tag="a" :to="{name: 'login'}" class="btn btn-primary btn-login-header btn-header-small btn-lg">Ingresar</router-link>
             </div>
         </div>
