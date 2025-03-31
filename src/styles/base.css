@@ -1863,7 +1863,7 @@
       font-weight: 300;
       margin-left: .5em;
 
-      max-width: 70%;
+      max-width: 60%;
       text-overflow: ellipsis;
 
       /* Required for text-overflow to do anything */
@@ -2914,18 +2914,18 @@
   .btn-login-header {
     margin-right: 0.5em;
   }
-    .btn-donar-header, 
-    .btn-donar-header:active, 
-    .btn-donar-header:focus {
+    .btn-primary.btn-donar-header, 
+    .btn-primary.btn-donar-header:active, 
+    .btn-primary.btn-donar-header:focus {
         margin-right: 0.5em;
         background: #5cb85c;
         border-color: white;
         color: white;
     }
 
-    .btn-donar-header:active:focus,
-    .btn-donar-header:active:hover,
-    .btn-donar-header:hover {
+    .btn-primary.btn-donar-header:active:focus,
+    .btn-primary.btn-donar-header:active:hover,
+    .btn-primary.btn-donar-header:hover {
         background: #6cd86c;
         color:white;
     }
