@@ -17,12 +17,18 @@ const getters = {
 
 // actions
 const actions = {
-    index (store, data = {}) {
-        return subscriptionApi.index(data).then(response => {
-            store.commit(types.SUBSCRIPTION_SET, response.subscriptions ? response.subscriptions : []);
-        }).catch(err => {
-            console.log(err);
-        });
+    index(store, data = {}) {
+        return subscriptionApi
+            .index(data)
+            .then((response) => {
+                store.commit(
+                    types.SUBSCRIPTION_SET,
+                    response.data ? response.data : []
+                );
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     },
 
     create (store, data = {}) {
