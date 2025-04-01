@@ -137,11 +137,12 @@ export default {
                 bus.on('back-click', this.onBackClick);
                 if (this.conversation) {
                     this.setTitle(this.conversation.title);
+                    const otherUser = this.conversation.users.find(user => user.id !== this.user.id);
                     this.setTitleLink({
                         name: 'profile', 
                         params: { 
-                            id: this.conversation.users[0].id, 
-                            userProfile: this.conversation.users[0],
+                            id: otherUser.id, 
+                            userProfile: otherUser,
                             activeTab: 1 
                         }
                     });
@@ -164,11 +165,12 @@ export default {
         }
         if (this.conversation) {
             this.setTitle(this.conversation.title);
+            const otherUser = this.conversation.users.find(user => user.id !== this.user.id);
             this.setTitleLink({
                 name: 'profile', 
                 params: { 
-                    id: this.conversation.users[0].id, 
-                    userProfile: this.conversation.users[0],
+                    id: otherUser.id, 
+                    userProfile: otherUser,
                     activeTab: 1 
                 }
             });
