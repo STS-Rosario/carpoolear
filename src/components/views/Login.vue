@@ -92,7 +92,7 @@
             {{ $t('alIngresarFace') }} <router-link :to="{name: 'terms'}">{{ $t('tyc') }}</router-link>.
         </div>
 
-        <button class="btn btn-primary btn-search btn-apple btn-with-icon" @click="appleLogin" :disabled="iosLoading" v-if="isApple">
+        <button class="btn btn-primary btn-search btn-apple btn-with-icon" @click="toggleModalAppleLogin" :disabled="iosLoading" v-if="isApple">
             <span class="btn-with-icon--icon">
                 <i class="fa fa-apple" aria-hidden="true"></i>
             </span>
@@ -117,6 +117,22 @@
         <div slot="body">
             <div class="text-left color-black loginFBmodal">
               <p>El ingreso/registro via Facebook ya no funciona más.</p>
+              <p>Escribinos a la mesa de ayuda de Carpoolear para poder recuperar tu cuenta y migrarla a una vinculada a mail.</p>
+              <p>La mesa de ayuda de Carpoolear funciona desde <a href="mailto:carpoolear@stsrosario.org.ar">carpoolear@stsrosario.org.ar</a>, y <a href="https://facebook.com/carpoolear">mensaje privado de Facebook</a>.</p>
+
+              <p>¡Buenas rutas!</p>
+            </div>
+        </div>
+      </modal>
+
+      <modal :name="'modal-apple-login'" v-if="showModalAppleLogin" @close="toggleModalAppleLogin" :body="'Body'">
+        <h3 slot="header">
+            <span>¿Tenías cuenta de Carpoolear vinculada a tu cuenta de Apple?</span>
+            <i v-on:click="toggleModalAppleLogin" class="fa fa-times float-right-close"></i>
+        </h3>
+        <div slot="body">
+            <div class="text-left color-black loginApplemodal">
+              <p>El ingreso/registro via Apple ya no funciona más.</p>
               <p>Escribinos a la mesa de ayuda de Carpoolear para poder recuperar tu cuenta y migrarla a una vinculada a mail.</p>
               <p>La mesa de ayuda de Carpoolear funciona desde <a href="mailto:carpoolear@stsrosario.org.ar">carpoolear@stsrosario.org.ar</a>, y <a href="https://facebook.com/carpoolear">mensaje privado de Facebook</a>.</p>
 
@@ -153,6 +169,7 @@ export default {
             isShowLogin: false,
             showUserNotActiveInfo: false,
             showModalFBLogin: false,
+            showModalAppleLogin: false,
             showUserBannedInfo: false,
             app_logo: process.env.ROUTE_BASE + 'static/img/' + process.env.TARGET_APP + '_logo_full.png'
         };
@@ -203,8 +220,13 @@ export default {
           this.showModalFBLogin = !this.showModalFBLogin;
         },
 
+        toggleModalAppleLogin () {
+          console.log('clicked toggle modal apple login');
+          this.showModalAppleLogin = !this.showModalAppleLogin;
+        },
         onModalClose () {
-          toggleModalFBLogin()
+          this.toggleModalFBLogin();
+          this.toggleModalAppleLogin();
         },
         login () {
             if (!this.fbLoading) {
@@ -285,6 +307,8 @@ export default {
                 this.isUnderstood = true;
             }
         });
+
+        console.log('this.showModalAppleLogin', this.showModalAppleLogin)
     },
 
     beforeDestroy () {

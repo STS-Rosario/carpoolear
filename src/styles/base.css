@@ -2997,11 +2997,13 @@
     padding: 10px 19px;
   }
 
-  .loginFBmodal p, .blue .loginFBmodal p {
+  .loginFBmodal p, .blue .loginFBmodal p,
+  .loginApplemodal p, .blue .loginApplemodal p {
     color: #000;
  }
 
- .loginFBmodal p a, .blue .loginFBmodal p a {
+ .loginFBmodal p a, .blue .loginFBmodal p a,
+ .loginApplemodal p a, .blue .loginApplemodal p a {
     color: #009bde;
  }
 
