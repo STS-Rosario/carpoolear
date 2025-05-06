@@ -304,7 +304,6 @@ export default {
             }
         });
 
-        console.log('this.showModalAppleLogin', this.showModalAppleLogin)
     },
 
     beforeDestroy () {
