@@ -92,7 +92,7 @@
             {{ $t('alIngresarFace') }} <router-link :to="{name: 'terms'}">{{ $t('tyc') }}</router-link>.
         </div>
 
-        <button class="btn btn-primary btn-search btn-apple btn-with-icon" @click="appleLogin" :disabled="iosLoading" v-if="isApple">
+        <button class="btn btn-primary btn-search btn-apple btn-with-icon" @click="toggleModalLogin('apple')" :disabled="iosLoading" v-if="isApple">
             <span class="btn-with-icon--icon">
                 <i class="fa fa-apple" aria-hidden="true"></i>
             </span>
@@ -106,17 +106,25 @@
         </div>
       </div>
       <div class="col-sm-12 col-md-12">
-        <button class="btn btn-primary btn-search btn-facebook btn-with-icon" @click="toggleModalFBLogin"><span class="btn-with-icon--icon"><i class="fa fa-facebook" aria-hidden="true"></i></span><span class='btn-with-icon--label'> <span v-if="!fbLoading">Ingresá con Facebook</span><spinner class="blue" v-if="fbLoading"></spinner></span></button>
+        <button class="btn btn-primary btn-search btn-facebook btn-with-icon" @click="toggleModalLogin('facebook')">
+          <span class="btn-with-icon--icon">
+            <i class="fa fa-facebook" aria-hidden="true"></i>
+          </span>
+          <span class='btn-with-icon--label'> 
+            <span v-if="!fbLoading">Ingresá con Facebook</span>
+            <spinner class="blue" v-if="fbLoading"></spinner>
+          </span>
+        </button>
       </div>
 
-      <modal :name="'modal'" v-if="showModalFBLogin" @close="toggleModalFBLogin" :body="'Body'">
+      <modal :name="'modal'" v-if="showModalLogin" @close="toggleModalLogin" :body="'Body'">
         <h3 slot="header">
-            <span>¿Tenías cuenta de Carpoolear vinculada a tu cuenta de Facebook?</span>
-            <i v-on:click="toggleModalFBLogin" class="fa fa-times float-right-close"></i>
+            <span>¿Tenías cuenta de Carpoolear vinculada a tu cuenta de {{ modalType === 'facebook' ? 'Facebook' : 'Apple' }}?</span>
+            <i v-on:click="toggleModalLogin" class="fa fa-times float-right-close"></i>
         </h3>
         <div slot="body">
-            <div class="text-left color-black loginFBmodal">
-              <p>El ingreso/registro via Facebook ya no funciona más.</p>
+            <div class="text-left color-black login-modal">
+              <p>El ingreso/registro via {{ modalType === 'facebook' ? 'Facebook' : 'Apple' }} ya no funciona más.</p>
               <p>Escribinos a la mesa de ayuda de Carpoolear para poder recuperar tu cuenta y migrarla a una vinculada a mail.</p>
               <p>La mesa de ayuda de Carpoolear funciona desde <a href="mailto:carpoolear@stsrosario.org.ar">carpoolear@stsrosario.org.ar</a>, y <a href="https://facebook.com/carpoolear">mensaje privado de Facebook</a>.</p>
 
@@ -152,7 +160,8 @@ export default {
             dontShowAgain: false,
             isShowLogin: false,
             showUserNotActiveInfo: false,
-            showModalFBLogin: false,
+            showModalLogin: false,
+            modalType: 'facebook',
             showUserBannedInfo: false,
             app_logo: process.env.ROUTE_BASE + 'static/img/' + process.env.TARGET_APP + '_logo_full.png'
         };
@@ -200,11 +209,20 @@ export default {
             }
         },
         toggleModalFBLogin () {
-          this.showModalFBLogin = !this.showModalFBLogin;
+          this.modalType = 'facebook';
+          this.showModalLogin = !this.showModalLogin;
         },
 
-        onModalClose () {
-          toggleModalFBLogin()
+        toggleModalAppleLogin () {
+          this.modalType = 'apple';
+          this.showModalLogin = !this.showModalLogin;
+        },
+
+        toggleModalLogin (type) {
+          if (type) {
+            this.modalType = type;
+          }
+          this.showModalLogin = !this.showModalLogin;
         },
         login () {
             if (!this.fbLoading) {
@@ -285,6 +303,7 @@ export default {
                 this.isUnderstood = true;
             }
         });
+
     },
 
     beforeDestroy () {
@@ -413,9 +432,6 @@ label {
   .visual-trick {
     border-right: solid 1px #ccc;
     padding-right: 4rem;
-  }
-  .form > div:last-child {
-    padding-left: 4em;
   }
   .user-form .btn-primary.btn-facebook {
     width: 100%;
