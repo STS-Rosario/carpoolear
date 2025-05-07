@@ -293,14 +293,14 @@ const mutations = {
             if (state.list) {
                 state.list.forEach(c => {
                     if (c.id.toString() === item.conversation_id.toString()) {
-                        c.update_at = item.created_at;
+                        c.updated_at = item.created_at;
                         c.last_message = item;
                     }
                 });
                 let arrayClone = state.list.slice(0);
                 arrayClone.sort((a, b) => {
-                    let dateA = moment(a.update_at).toDate();
-                    let dateB = moment(b.update_at).toDate();
+                    let dateA = moment(a.updated_at).toDate();
+                    let dateB = moment(b.updated_at).toDate();
                     return dateB - dateA;
                 });
                 state.list = arrayClone;
@@ -329,7 +329,12 @@ const mutations = {
         conv.updated_at = msg.created_at;
         conv.last_message = msg;
 
-        state.list.sort((a, b) => a.updated_at <= b.updated_at);
+        state.list.sort((a, b) => {
+            let dateA = moment(a.updated_at).toDate();
+            let dateB = moment(b.updated_at).toDate();
+            return dateB - dateA;
+        });
+        
         if (!state.messages[msg.conversation_id].timestamp) {
             state.messages[msg.conversation_id].timestamp = msg.created_at;
         }
