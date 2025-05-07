@@ -5,7 +5,7 @@ module.exports = {
         sourceType: 'module'
     },
     // https://github.com/feross/standard/blob/master/RULES.md#javascript-standard-style
-    extends: 'standard',
+    extends: ['standard', 'plugin:prettier/recommended'],
     // required to lint *.vue files
     plugins: ['html'],
     // add your custom rules here
@@ -28,6 +28,10 @@ module.exports = {
 
         'handle-callback-err': 1,
 
-        'no-unused-vars': 1
+        'no-unused-vars': 1,
+
+        // Disable trailing comma rules
+        'comma-dangle': 'off',
+        'comma-style': 'off'
     }
 };

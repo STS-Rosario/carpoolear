@@ -1,31 +1,31 @@
 import TaggedApi from '../../classes/TaggedApi';
 
 class FriendApi extends TaggedApi {
-    index (data = {}) {
+    index(data = {}) {
         return this.get('/api/friends', data);
     }
 
-    pending (data = {}) {
+    pending(data = {}) {
         return this.get('/api/friends/pedings', data);
     }
 
-    make (verb, userId) {
+    make(verb, userId) {
         return this.post('/api/friends/' + verb + '/' + userId, {});
     }
 
-    accept (userId) {
+    accept(userId) {
         return this.make('accept', userId);
     }
 
-    delete (userId) {
+    delete(userId) {
         return this.make('delete', userId);
     }
 
-    reject (userId) {
+    reject(userId) {
         return this.make('reject', userId);
     }
 
-    request (userId) {
+    request(userId) {
         return this.make('request', userId);
     }
 }

@@ -1,26 +1,43 @@
 <template>
-    <div class="suscription-item_component panel panel-default" @click="search(true)">
+    <div
+        class="suscription-item_component panel panel-default"
+        @click="search(true)"
+    >
         <div class="row panel-body">
             <div class="col-xs-20">
-                <div class="suscription-item-detail" v-if="subscription.from_address">
+                <div
+                    class="suscription-item-detail"
+                    v-if="subscription.from_address"
+                >
                     <div class="suscription-item-detail--content">
                         <span>Origen:</span>
                         <strong>{{ subscription.from_address }}</strong>
                     </div>
                 </div>
-                <div class="suscription-item-detail" v-if="subscription.to_address">
+                <div
+                    class="suscription-item-detail"
+                    v-if="subscription.to_address"
+                >
                     <div class="suscription-item-detail--content">
                         <span>Destino:</span>
                         <strong>{{ subscription.to_address }}</strong>
                     </div>
                 </div>
-                <div class="suscription-item-detail" v-if="subscription.trip_date">
+                <div
+                    class="suscription-item-detail"
+                    v-if="subscription.trip_date"
+                >
                     <div class="suscription-item-detail--content">
                         <span>Fecha aproximada:</span>
-                        <strong>{{ subscription.trip_date | moment("DD/MM/YYYY") }}</strong>
+                        <strong>{{
+                            subscription.trip_date | moment('DD/MM/YYYY')
+                        }}</strong>
                     </div>
                 </div>
-                <div class="suscription-item-detail" v-if="subscription.is_passenger == 1">
+                <div
+                    class="suscription-item-detail"
+                    v-if="subscription.is_passenger == 1"
+                >
                     <div class="suscription-item-detail--content">
                         <span>Busco pasajeros</span>
                     </div>
@@ -34,15 +51,18 @@
                         </span>
                     </div>
                 </div>
-
             </div>
             <div class="col-xs-4">
-                <button v-on:click.stop="remove" :disabled="inProgress" class="btn btn-default"  aria-label="Eliminar suscripción">
+                <button
+                    v-on:click.stop="remove"
+                    :disabled="inProgress"
+                    class="btn btn-default"
+                    aria-label="Eliminar suscripción"
+                >
                     <i class="fa fa-trash-o" aria-hidden="true"></i>
                 </button>
             </div>
         </div>
-
     </div>
 </template>
 <script>
@@ -51,14 +71,14 @@ import moment from 'moment';
 export default {
     name: 'subscriptions-item',
     props: {
-        'subscription': {
+        subscription: {
             type: Object,
             required: false,
             default: () => {
                 return {};
             }
         },
-        'user': {
+        user: {
             type: Object,
             required: false,
             default: () => {
@@ -66,13 +86,13 @@ export default {
             }
         }
     },
-    data () {
+    data() {
         return {
             inProgress: false,
             resultCount: 0
         };
     },
-    mounted () {
+    mounted() {
         this.search(false);
     },
     methods: {
@@ -80,18 +100,22 @@ export default {
             removeStore: 'subscriptions/remove',
             searchTrip: 'trips/tripsSearch'
         }),
-        remove () {
+        remove() {
             this.inProgress = true;
-            this.removeStore(this.subscription).then(() => {
-                this.inProgress = false;
-            }).catch(() => {
-                this.inProgress = false;
-            });
+            this.removeStore(this.subscription)
+                .then(() => {
+                    this.inProgress = false;
+                })
+                .catch(() => {
+                    this.inProgress = false;
+                });
         },
-        search (redirect) {
+        search(redirect) {
             let params = {};
             if (this.subscription.trip_date) {
-                params.date = moment(this.subscription.trip_date).format('YYYY-MM-DD');
+                params.date = moment(this.subscription.trip_date).format(
+                    'YYYY-MM-DD'
+                );
             }
             if (this.subscription.from_address) {
                 params.origin_name = this.subscription.from_address;
@@ -114,14 +138,17 @@ export default {
                 this.resultCount = res.data.length;
             });
             if (redirect) {
-                this.$router.replace({ name: 'trips', params: { keepSearch: true } });
+                this.$router.replace({
+                    name: 'trips',
+                    params: { keepSearch: true }
+                });
             }
         }
     }
 };
 </script>
 <style scoped>
-    .badge {
-        background: red;
-    }
+.badge {
+    background: red;
+}
 </style>

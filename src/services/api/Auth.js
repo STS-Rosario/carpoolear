@@ -4,47 +4,47 @@ class AuthApi extends TaggedApi {
     /** AUTH API **/
 
     // data = {access_token}
-    loginWithProvider (provider, data) {
+    loginWithProvider(provider, data) {
         return this.post('/api/social/login/' + provider, data);
     }
 
-    updateWithProvider (provider, data) {
+    updateWithProvider(provider, data) {
         return this.put('/api/social/update/' + provider, data);
     }
 
-    matchFriendsWithProvider (provider, data) {
+    matchFriendsWithProvider(provider, data) {
         return this.post('/api/social/friends/' + provider, data);
     }
 
     /**
-   * User login
-   * @param {Object} creds {
-   *    @param {String} email
-   *    @param {String} password
-   *    @param {String} device_id
-   *    @param {String} device_type
-   *    @param {Integer} app_version
-   *  }
-   * @return {} token
-  */
+     * User login
+     * @param {Object} creds {
+     *    @param {String} email
+     *    @param {String} password
+     *    @param {String} device_id
+     *    @param {String} device_type
+     *    @param {Integer} app_version
+     *  }
+     * @return {} token
+     */
 
-    login (creds) {
+    login(creds) {
         return this.post('/api/login', creds);
     }
 
     /**
      * User logout.
      * @return {}
-    */
-    logout () {
+     */
+    logout() {
         return this.post('/api/logout');
     }
 
     /**
      * Get Config
      * @return {} config object
-    */
-    config () {
+     */
+    config() {
         return this.get('/api/config');
     }
     /**
@@ -53,8 +53,8 @@ class AuthApi extends TaggedApi {
      *    @param {Integer} app_version
      *  }
      * @return {} token
-    */
-    retoken (data) {
+     */
+    retoken(data) {
         return this.post('/api/retoken', data);
     }
 
@@ -67,8 +67,8 @@ class AuthApi extends TaggedApi {
      *  }
      * @param {String} activationToken
      * @return {} token
-    */
-    activate (activationToken, data) {
+     */
+    activate(activationToken, data) {
         return this.post('/api/activate/' + activationToken, data);
     }
 
@@ -78,8 +78,8 @@ class AuthApi extends TaggedApi {
      *    @param {String} email
      *  }
      * @return {}
-    */
-    resetPassword (data) {
+     */
+    resetPassword(data) {
         return this.post('/api/reset-password', data);
     }
 
@@ -90,8 +90,8 @@ class AuthApi extends TaggedApi {
      *    @param {String} password_confirmation
      *  }
      * @return {}
-    */
-    changePassword (token, data) {
+     */
+    changePassword(token, data) {
         return this.post('/api/change-password/' + token, data);
     }
 }

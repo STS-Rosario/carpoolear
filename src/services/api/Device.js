@@ -1,19 +1,19 @@
 import TaggedApi from '../../classes/TaggedApi';
 
 class DeviceApi extends TaggedApi {
-    index () {
+    index() {
         return this.get('/api/devices');
     }
 
-    update (id, data) {
+    update(id, data) {
         return this.put('/api/devices/' + id, data);
     }
 
-    remove (id) {
+    remove(id) {
         return this.delete('/api/devices/' + id);
     }
 
-    create (data) {
+    create(data) {
         return this.post('/api/devices', data);
     }
 }

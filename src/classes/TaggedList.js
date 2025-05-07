@@ -1,11 +1,11 @@
 class TaggedList {
-    constructor () {
+    constructor() {
         this.map = {};
     }
 
-    add (tags, value) {
+    add(tags, value) {
         tags = tags ? (tags.constructor === Array ? tags : [tags]) : [];
-        tags.forEach(tag => {
+        tags.forEach((tag) => {
             if (!this.map[tag]) {
                 this.map[tag] = [];
             }
@@ -13,11 +13,11 @@ class TaggedList {
         });
     }
 
-    deleteAll (tag) {
+    deleteAll(tag) {
         this.map[tag] = undefined;
     }
 
-    _delete (tag, value) {
+    _delete(tag, value) {
         if (!this.map[tag]) {
             return;
         }
@@ -27,22 +27,22 @@ class TaggedList {
         }
     }
 
-    delete (tags, value) {
+    delete(tags, value) {
         tags = tags ? (tags.constructor === Array ? tags : [tags]) : [];
         if (tags) {
-            tags.forEach(tag => this._delete(tag, value));
+            tags.forEach((tag) => this._delete(tag, value));
         }
     }
 
-    deleteValue (value) {
+    deleteValue(value) {
         this.delete(this.keys, value);
     }
 
-    get (tag) {
+    get(tag) {
         return this.map[tag];
     }
 
-    keys () {
+    keys() {
         let temp = [];
         for (let i in this.map) {
             if (this.map[i] && this.map[i].length > 0) {

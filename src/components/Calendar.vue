@@ -1,8 +1,19 @@
 <template>
     <div>
-        <datePicker :date="date" ref="calendar" :option="option" v-on:change="updateDate" :limit="limit" class='date-picker'></datePicker>
+        <datePicker
+            :date="date"
+            ref="calendar"
+            :option="option"
+            v-on:change="updateDate"
+            :limit="limit"
+            class="date-picker"
+        ></datePicker>
         <div class="date-picker--cross">
-            <i v-on:click="resetDatePicker" class="fa fa-times" aria-hidden="true"></i>
+            <i
+                v-on:click="resetDatePicker"
+                class="fa fa-times"
+                aria-hidden="true"
+            ></i>
         </div>
     </div>
 </template>
@@ -14,7 +25,7 @@ import moment from 'moment';
 export default {
     name: 'calendar',
     watch: {
-        'value': function () {
+        value: function () {
             let format = 'YYYY-MM-DD';
             if (this.value.indexOf('/') >= 0) {
                 format = 'DD/MM/YYYY';
@@ -24,7 +35,7 @@ export default {
             this.date.time = moment(this.value, format).format('DD/MM/YYYY');
         }
     },
-    data () {
+    data() {
         return {
             date: {
                 time: this.value
@@ -32,16 +43,29 @@ export default {
             option: {
                 type: 'day',
                 week: ['Lu', 'Ma', 'Mie', 'Ju', 'Vi', 'Sa', 'Do'],
-                month: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                month: [
+                    'Enero',
+                    'Febrero',
+                    'Marzo',
+                    'Abril',
+                    'Mayo',
+                    'Junio',
+                    'Julio',
+                    'Agosto',
+                    'Septiembre',
+                    'Octubre',
+                    'Noviembre',
+                    'Diciembre'
+                ],
                 format: this.format,
                 placeholder: 'Fecha',
                 inputStyle: {
-                    'display': 'inline-block',
+                    display: 'inline-block',
                     'line-height': '22px',
                     'border-radius': '2px',
-                    'color': '#5F5F5F',
-                    'width': '100%',
-                    'border': 'none'
+                    color: '#5F5F5F',
+                    width: '100%',
+                    border: 'none'
                 },
                 wrapperClass: this.class,
                 color: {
@@ -58,40 +82,38 @@ export default {
             limit: [this.limitFilter]
         };
     },
-    mounted () {
-
-    },
+    mounted() {},
     computed: {
         dateSys: function () {
             return moment(this.date.time, this.format).format('YYYY-MM-DD');
         }
     },
     methods: {
-        updateDate (date) {
+        updateDate(date) {
             this.$emit('change', this.dateSys);
         },
-        resetDatePicker () {
+        resetDatePicker() {
             this.date.time = '';
             this.$emit('change', '');
         }
     },
     props: {
-        'format': {
+        format: {
             type: String,
             required: false,
             default: 'DD/MM/YYYY'
         },
-        'class': {
+        class: {
             type: String,
             required: false,
             default: ''
         },
-        'value': {
+        value: {
             type: String,
             required: false,
             default: ''
         },
-        'limitFilter': {
+        limitFilter: {
             type: Object,
             required: false,
             default: () => {
@@ -106,21 +128,20 @@ export default {
 </script>
 
 <style scoped>
-    .date-picker--cross {
-        position: absolute;
-    }
-    .date-picker--cross i {
-        cursor: pointer;
-    }
-    .date-picker {
-        width: 100%;
-        border: none;
-        vertical-align: middle;
-    }
-    .form-control {
-        position: relative;
-        vertical-align: middle;
-        cursor: pointer;
-    }
-
+.date-picker--cross {
+    position: absolute;
+}
+.date-picker--cross i {
+    cursor: pointer;
+}
+.date-picker {
+    width: 100%;
+    border: none;
+    vertical-align: middle;
+}
+.form-control {
+    position: relative;
+    vertical-align: middle;
+    cursor: pointer;
+}
 </style>

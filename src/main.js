@@ -54,14 +54,18 @@ const i18n = new VueI18n({
     messages,
     silentFallbackWarn: true,
     numberFormats: {
-        'arg': {
+        arg: {
             currency: {
-                style: 'currency', currency: 'ARS', currencyDisplay: 'symbol'
+                style: 'currency',
+                currency: 'ARS',
+                currencyDisplay: 'symbol'
             }
         },
-        'chl': {
+        chl: {
             currency: {
-                style: 'currency', currency: 'CHL', currencyDisplay: 'symbol'
+                style: 'currency',
+                currency: 'CHL',
+                currencyDisplay: 'symbol'
             }
         }
     }

@@ -1,6 +1,11 @@
 <template>
     <div class="card">
-        <LineChart class="chart" v-if="usersData"  :chartdata="usersData" :options="usersOptions"></LineChart>
+        <LineChart
+            class="chart"
+            v-if="usersData"
+            :chartdata="usersData"
+            :options="usersOptions"
+        ></LineChart>
     </div>
 </template>
 
@@ -19,7 +24,7 @@ export default {
             default: moment(Date(), 'YYYY-MM')
         }
     },
-    data () {
+    data() {
         return {
             users: {},
             usersData: {},
@@ -39,38 +44,50 @@ export default {
                     intersect: true
                 },
                 scales: {
-                    xAxes: [{
-                        display: true,
-                        scaleLabel: {
+                    xAxes: [
+                        {
                             display: true,
-                            labelString: 'Mes'
-                        },
-                        stacked: true
-                    }],
-                    yAxes: [{
-                        display: true,
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Cantidad'
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Mes'
+                            },
+                            stacked: true
                         }
-                    }]
+                    ],
+                    yAxes: [
+                        {
+                            display: true,
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Cantidad'
+                            }
+                        }
+                    ]
                 }
             }
         };
     },
     watch: {
-        'minDate': function () {
-            this.usersData = this.processUsers(this.users, this.minDate, this.maxDate);
+        minDate: function () {
+            this.usersData = this.processUsers(
+                this.users,
+                this.minDate,
+                this.maxDate
+            );
         },
-        'maxDate': function () {
-            this.usersData = this.processUsers(this.users, this.minDate, this.maxDate);
+        maxDate: function () {
+            this.usersData = this.processUsers(
+                this.users,
+                this.minDate,
+                this.maxDate
+            );
         }
     },
     methods: {
         ...mapActions({
             getUsers: 'admin/getUserStats'
         }),
-        processUsers (usuarios, minDate, maxDate) {
+        processUsers(usuarios, minDate, maxDate) {
             let labels = [];
             let datasetTotales = [];
             let total = 0;
@@ -83,25 +100,31 @@ export default {
             });
             return {
                 labels: labels,
-                datasets: [{
-                    label: 'Usuarios',
-                    backgroundColor: '#0F0',
-                    borderColor: '#0F0',
-                    data: datasetTotales,
-                    fill: false
-                }]
+                datasets: [
+                    {
+                        label: 'Usuarios',
+                        backgroundColor: '#0F0',
+                        borderColor: '#0F0',
+                        data: datasetTotales,
+                        fill: false
+                    }
+                ]
             };
         },
-        async loadData () {
+        async loadData() {
             this.users = await this.getUsers();
             this.users = this.users.users;
-            this.usersData = this.processUsers(this.users, this.minDate, this.maxDate);
+            this.usersData = this.processUsers(
+                this.users,
+                this.minDate,
+                this.maxDate
+            );
         }
     },
     components: {
         LineChart
     },
-    mounted () {
+    mounted() {
         this.loadData();
     }
 };

@@ -1,21 +1,21 @@
 import Vue from 'vue';
 
 class EventBuffer {
-    constructor () {
+    constructor() {
         this.buffer = new Vue();
     }
 
-    emit (name, params) {
+    emit(name, params) {
         let b = this.buffer._events[name] && this.buffer._events[name].length;
         this.buffer.$emit(name, params);
         return b;
     }
 
-    on (name, callback) {
+    on(name, callback) {
         this.buffer.$on(name, callback);
     }
 
-    off (name, callback) {
+    off(name, callback) {
         this.buffer.$off(name, callback);
     }
 }
@@ -24,6 +24,4 @@ let bus = new EventBuffer();
 
 export default bus;
 
-export {
-    EventBuffer
-};
+export { EventBuffer };

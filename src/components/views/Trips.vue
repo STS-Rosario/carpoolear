@@ -1,7 +1,7 @@
 <template>
     <div class="trips container" :class="!user ? 'not-logged' : ''">
         <div class="trips_title" v-show="!isMobile">
-            <h1> {{ $t('buscaConQuien') }} </h1>
+            <h1>{{ $t('buscaConQuien') }}</h1>
             <h3>{{ $t('elegiDatos') }}</h3>
         </div>
         <template v-if="appConfig && appConfig.banner && appConfig.banner.url">
@@ -10,67 +10,166 @@
             </a>
         </template>
         <div v-show="!user && isMobile">
-            <router-link :to="{ name: 'login' }" class="login_usuario"> {{ $t('ingresaORegistrate') }} <span
-                    class='underline'> {{ $t('aqui') }} </span> {{ $t('paraComenzar') }} </router-link>
+            <router-link :to="{ name: 'login' }" class="login_usuario">
+                {{ $t('ingresaORegistrate') }}
+                <span class="underline">{{ $t('aqui') }}</span>
+                {{ $t('paraComenzar') }}
+            </router-link>
         </div>
-        <SearchBox :params="searchParams" v-on:trip-search="research" v-show="!isMobile || lookSearch" ref="searchBox">
-        </SearchBox>
+        <SearchBox
+            :params="searchParams"
+            v-on:trip-search="research"
+            v-show="!isMobile || lookSearch"
+            ref="searchBox"
+        ></SearchBox>
         <Loading :data="trips" v-if="showingTrips">
             <div class="trips-list row">
-                <modal :name="'modal'" v-if="showModal" @close="showModal = false" :title="'Test'" :body="'Body'">
+                <modal
+                    :name="'modal'"
+                    v-if="showModal"
+                    @close="showModal = false"
+                    :title="'Test'"
+                    :body="'Body'"
+                >
                     <h3 slot="header">
-                        <span> {{ $t('donaA') }} </span>
-                        <br class="hidden-sm hidden-md hidden-lg">
-                        <small> {{ $t('proyectoDe') }} </small>
-                        <img width="90" alt="STS Rosario" src="https://carpoolear.com.ar/img/logo_sts_nuevo_color.png">
+                        <span>{{ $t('donaA') }}</span>
+                        <br class="hidden-sm hidden-md hidden-lg" />
+                        <small>{{ $t('proyectoDe') }}</small>
+                        <img
+                            width="90"
+                            alt="STS Rosario"
+                            src="https://carpoolear.com.ar/img/logo_sts_nuevo_color.png"
+                        />
                     </h3>
                     <div slot="body" class="donation">
                         <div class="radio">
                             <label class="radio-inline">
-                                <input type="radio" name="donationValor" id="donation50" value="1000" v-model="donateValue"><span>$ 1000</span>
+                                <input
+                                    type="radio"
+                                    name="donationValor"
+                                    id="donation50"
+                                    value="1000"
+                                    v-model="donateValue"
+                                />
+                                <span>$ 1000</span>
                             </label>
                             <label class="radio-inline">
-                                <input type="radio" name="donationValor" id="donation100" value="2000" v-model="donateValue"><span>$ 2000</span>
+                                <input
+                                    type="radio"
+                                    name="donationValor"
+                                    id="donation100"
+                                    value="2000"
+                                    v-model="donateValue"
+                                />
+                                <span>$ 2000</span>
                             </label>
                             <label class="radio-inline">
-                                <input type="radio" name="donationValor" id="donation200" value="5000" v-model="donateValue"><span>$ 5000</span>
+                                <input
+                                    type="radio"
+                                    name="donationValor"
+                                    id="donation200"
+                                    value="5000"
+                                    v-model="donateValue"
+                                />
+                                <span>$ 5000</span>
                             </label>
                             <label class="radio-inline">
-                                <input type="radio" name="donationValor" id="donation500" value="0" v-model="donateValue"><span>Elegí tu propia aventura (solo mensual)</span>
+                                <input
+                                    type="radio"
+                                    name="donationValor"
+                                    id="donation500"
+                                    value="0"
+                                    v-model="donateValue"
+                                />
+                                <span
+                                    >Elegí tu propia aventura (solo
+                                    mensual)</span
+                                >
                             </label>
                         </div>
                         <div>
-                            <button class="btn btn-success btn-unica-vez" @click="onDonateOnceTime"> {{ $t('unicaVez') }}
+                            <button
+                                class="btn btn-success btn-unica-vez"
+                                @click="onDonateOnceTime"
+                            >
+                                {{ $t('unicaVez') }}
                             </button>
-                            <button class="btn btn-info btn-mensualmente" @click="onDonateMonthly">{{ $t('MENSUAL') }}
-                                <br />( {{ $t('cancelaCuando') }})</button>
+                            <button
+                                class="btn btn-info btn-mensualmente"
+                                @click="onDonateMonthly"
+                            >
+                                {{ $t('MENSUAL') }}
+                                <br />
+                                ( {{ $t('cancelaCuando') }})
+                            </button>
                         </div>
                     </div>
                 </modal>
-                <modal :name="'modal'" v-if='showModalInstallApp' @close="showModalInstallApp = false" :title="'Test'"
-                    :body="'Body'">
+                <modal
+                    :name="'modal'"
+                    v-if="showModalInstallApp"
+                    @close="showModalInstallApp = false"
+                    :title="'Test'"
+                    :body="'Body'"
+                >
                     <h3 slot="header">
                         <span>Instalar App</span>
                     </h3>
                     <div slot="body" class="">
-                        <p>La aplicacion movil de Carpoolear pronto quedara fuera de servicio, instala la nueva web app para
-                            no perderte de nada.</p>
-                        <div style="margin-bottom: 10px;">
-                            <button class="btn btn-danger " @click="installApp()">Instalar</button>
-
+                        <p>
+                            La aplicacion movil de Carpoolear pronto quedara
+                            fuera de servicio, instala la nueva web app para no
+                            perderte de nada.
+                        </p>
+                        <div style="margin-bottom: 10px">
+                            <button
+                                class="btn btn-danger"
+                                @click="installApp()"
+                            >
+                                Instalar
+                            </button>
                         </div>
                     </div>
-
                 </modal>
                 <template v-for="(trip, index) in trips">
-                    <template v-if="isDonationTime() && (!user || !user.monthly_donate)"><!-- solo si el usuario no es donador mensual -->
-                        <div class="panel panel-default panel-donar" v-if="((index + parseFloat(appConfig.donation.trips_offset))  % parseFloat(appConfig.donation.trips_count) === 0)">
+                    <template
+                        v-if="
+                            isDonationTime() && (!user || !user.monthly_donate)
+                        "
+                    >
+                        <!-- solo si el usuario no es donador mensual -->
+                        <div
+                            class="panel panel-default panel-donar"
+                            v-if="
+                                (index +
+                                    parseFloat(
+                                        appConfig.donation.trips_offset
+                                    )) %
+                                    parseFloat(
+                                        appConfig.donation.trips_count
+                                    ) ===
+                                0
+                            "
+                        >
                             <div class="panel-body">
-                                <button class="btn btn-success pull-right btn-donar" @click="onDonate">Donar</button>
-                                <h2> {{ $t('ayudanos') }} </h2>
+                                <button
+                                    class="btn btn-success pull-right btn-donar"
+                                    @click="onDonate"
+                                >
+                                    Donar
+                                </button>
+                                <h2>{{ $t('ayudanos') }}</h2>
 
-                                <a href="/donar" target="_blank"
-                                    v-on:click.prevent="onOpenLink('https://carpoolear.com.ar/donar?u=' + user.id)">
+                                <a
+                                    href="/donar"
+                                    target="_blank"
+                                    v-on:click.prevent="
+                                        onOpenLink(
+                                            'https://carpoolear.com.ar/donar?u=' +
+                                                user.id
+                                        )
+                                    "
+                                >
                                     {{ $t('porQueDonar') }}
                                 </a>
                             </div>
@@ -78,41 +177,74 @@
                     </template>
                     <template v-if="isComplementary(trip, searchParams, index)">
                         <div class="trip-complementary">
-                            <h2> {{ $t('resultadosCercanos') }} </h2>
+                            <h2>{{ $t('resultadosCercanos') }}</h2>
                         </div>
                     </template>
                     <Trip :trip="trip" :user="user"></Trip>
                 </template>
             </div>
             <div class="row">
-                <p class="alert alert-warning" role="alert" :class="isMobile ? 'mobile-alert' : ''"
-                    v-if="resultaOfSearch && !alreadySubscribe">
+                <p
+                    class="alert alert-warning"
+                    role="alert"
+                    :class="isMobile ? 'mobile-alert' : ''"
+                    v-if="resultaOfSearch && !alreadySubscribe"
+                >
                     <span class="sentence">
-                        <strong :class="isMobile ? 'sentence' : ''"> {{ $t('podesSubscribirte') }}</strong>
-                        <button class="btn btn-primary" v-if="user && !searchParams.data.is_passenger"
-                            @click="subscribeSearch"> {{ $t('crearAlerta') }}</button>
+                        <strong :class="isMobile ? 'sentence' : ''">
+                            {{ $t('podesSubscribirte') }}
+                        </strong>
+                        <button
+                            class="btn btn-primary"
+                            v-if="user && !searchParams.data.is_passenger"
+                            @click="subscribeSearch"
+                        >
+                            {{ $t('crearAlerta') }}
+                        </button>
                     </span>
                 </p>
             </div>
             <div v-if="runningSearch" class="more-trips-loading">
-                <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
+                <img
+                    src="https://carpoolear.com.ar/static/img/loader.gif"
+                    alt=""
+                    class="ajax-loader"
+                />
                 {{ $t('cargandoMasResultados') }}
             </div>
-            <p slot="no-data" class="alert alert-warning" role="alert" :class="isMobile ? 'mobile-alert' : ''">
+            <p
+                slot="no-data"
+                class="alert alert-warning"
+                role="alert"
+                :class="isMobile ? 'mobile-alert' : ''"
+            >
                 <template v-if="filtered">
                     <span class="sentence">{{ $t('noHayViajes') }}</span>
                     <span class="sentence" v-if="!alreadySubscribe">
-                        <strong :class="isMobile ? 'sentence' : ''"> {{ $t('subscribirteAViajes') }}</strong>
-                        <button class="btn btn-primary" v-if="user" @click="subscribeSearch">{{ $t('crearAlerta')
-                        }}</button>
+                        <strong :class="isMobile ? 'sentence' : ''">
+                            {{ $t('subscribirteAViajes') }}
+                        </strong>
+                        <button
+                            class="btn btn-primary"
+                            v-if="user"
+                            @click="subscribeSearch"
+                        >
+                            {{ $t('crearAlerta') }}
+                        </button>
                     </span>
                 </template>
                 <template v-else>
-                    <span class="sentence">{{ $t('noHayViajesCargadosAun') }}</span>
+                    <span class="sentence">{{
+                        $t('noHayViajesCargadosAun')
+                    }}</span>
                 </template>
             </p>
             <p slot="loading" class="alert alert-info" role="alert">
-                <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
+                <img
+                    src="https://carpoolear.com.ar/static/img/loader.gif"
+                    alt=""
+                    class="ajax-loader"
+                />
                 {{ $t('cargandoViajes') }}
             </p>
         </Loading>
@@ -121,7 +253,7 @@
 <style scoped>
 .sentence {
     display: block;
-    margin-bottom: .5em;
+    margin-bottom: 0.5em;
 }
 
 .mobile-alert .sentence {
@@ -155,13 +287,11 @@ export default {
             resultaOfSearch: false,
             showModal: false,
             showModalInstallApp: false,
-            installAppEvent:null,
+            installAppEvent: null,
             donateValue: 0
         };
     },
-    props: [
-        'clearSearch', 'keepSearch'
-    ],
+    props: ['clearSearch', 'keepSearch'],
     methods: {
         ...mapActions({
             search: 'trips/tripsSearch',
@@ -175,20 +305,21 @@ export default {
         }),
         isDonationTime() {
             if (this.appConfig) {
-                return moment().date() < parseFloat(this.appConfig.donation.month_days);
+                return (
+                    moment().date() <
+                    parseFloat(this.appConfig.donation.month_days)
+                );
             } else {
                 return false;
             }
         },
         async installApp() {
-            this.showModalInstallApp=false;
-            if(this.installAppEvent!==null){
+            this.showModalInstallApp = false;
+            if (this.installAppEvent !== null) {
                 this.installAppEvent.prompt();
                 // Espera a que el usuario responda al mensaje
                 const { outcome } = await this.installAppEvent.userChoice;
-
             }
-
         },
         research(params) {
             this.resultaOfSearch = true;
@@ -228,10 +359,13 @@ export default {
         // maybe rethink render
         isMainRoute(trip, searchParams, index) {
             let isMainRoute = true;
-            if (searchParams.data && (searchParams.data.destination_id || searchParams.data.origin_id)) {
+            if (
+                searchParams.data &&
+                (searchParams.data.destination_id ||
+                    searchParams.data.origin_id)
+            ) {
                 // trip.points[i].json_address.id
                 if (trip.points && trip.points.length) {
-
                 }
             }
             return isMainRoute;
@@ -258,7 +392,8 @@ export default {
             }
         },
         onScrollBottom() {
-            if (this.morePages && !this.lookSearch) { // Hay páginas y no estoy en búsquedas;
+            if (this.morePages && !this.lookSearch) {
+                // Hay páginas y no estoy en búsquedas;
                 if (!this.runningSearch) {
                     this.runningSearch = true;
                     let done = () => {
@@ -284,13 +419,16 @@ export default {
                 var url = 'http://mpago.la/jgap'; // 50
                 switch (this.donateValue) {
                     case '200':
-                        url = 'https://www.mercadopago.com.ar/checkout/v1/redirect?preference-id=201279444-f94a3145-7336-4d79-9eb9-76c5402894fa';
+                        url =
+                            'https://www.mercadopago.com.ar/checkout/v1/redirect?preference-id=201279444-f94a3145-7336-4d79-9eb9-76c5402894fa';
                         break;
                     case '400':
-                        url = 'https://www.mercadopago.com.ar/checkout/v1/redirect?preference-id=201279444-42de1d74-f967-455f-80bf-a7a77650db06';
+                        url =
+                            'https://www.mercadopago.com.ar/checkout/v1/redirect?preference-id=201279444-42de1d74-f967-455f-80bf-a7a77650db06';
                         break;
                     case '1000':
-                        url = 'https://www.mercadopago.com.ar/checkout/v1/redirect?preference-id=201279444-c693bd88-7fd4-49d8-9f22-2b80151d184e';
+                        url =
+                            'https://www.mercadopago.com.ar/checkout/v1/redirect?preference-id=201279444-c693bd88-7fd4-49d8-9f22-2b80151d184e';
                         break;
                     default:
                         break;
@@ -304,24 +442,27 @@ export default {
                 };
                 this.registerDonation(data);
             } else {
-                dialogs.message(this.$t('valorDonacion'), { duration: 10, estado: 'error' });
+                dialogs.message(this.$t('valorDonacion'), {
+                    duration: 10,
+                    estado: 'error'
+                });
             }
         },
-        onDonateMonthly () {
+        onDonateMonthly() {
             if (this.donateValue >= 0) {
                 var url = 'http://mpago.la/2XdoxpF'; // 50
                 switch (this.donateValue) {
-                case '200':
-                    url = 'http://mpago.la/2k6JFz6';
-                    break;
-                case '400':
-                    url = 'http://mpago.la/1FE4px6';
-                    break;
-                case '1000':
-                    url = 'http://mpago.la/1EcA6f4';
-                    break;
-                default:
-                    break;
+                    case '200':
+                        url = 'http://mpago.la/2k6JFz6';
+                        break;
+                    case '400':
+                        url = 'http://mpago.la/1FE4px6';
+                        break;
+                    case '1000':
+                        url = 'http://mpago.la/1EcA6f4';
+                        break;
+                    default:
+                        break;
                 }
                 window.open(url, '_blank');
                 this.showModal = false;
@@ -332,7 +473,10 @@ export default {
                 };
                 this.registerDonation(data);
             } else {
-                dialogs.message(this.$t('valorDonacion'), { duration: 10, estado: 'error' });
+                dialogs.message(this.$t('valorDonacion'), {
+                    duration: 10,
+                    estado: 'error'
+                });
             }
         },
         subscribeSearch() {
@@ -360,17 +504,28 @@ export default {
 
             data.is_passenger = params.is_passenger;
 
-            this.subscribeToSearch(data).then(() => {
-                this.alreadySubscribe = true;
-                dialogs.message(this.$t('correctamenteSubscripto'), { duration: 10, estado: 'success' });
-            }).catch((response) => {
-                console.log(response);
-                if (response.data.errors && response.data.errors.error) {
-                    if (response.data.errors.error[0] === 'subscription_exist') {
-                        dialogs.message(this.$t('yaTienesSubscripcion'), { duration: 10, estado: 'error' });
+            this.subscribeToSearch(data)
+                .then(() => {
+                    this.alreadySubscribe = true;
+                    dialogs.message(this.$t('correctamenteSubscripto'), {
+                        duration: 10,
+                        estado: 'success'
+                    });
+                })
+                .catch((response) => {
+                    console.log(response);
+                    if (response.data.errors && response.data.errors.error) {
+                        if (
+                            response.data.errors.error[0] ===
+                            'subscription_exist'
+                        ) {
+                            dialogs.message(this.$t('yaTienesSubscripcion'), {
+                                duration: 10,
+                                estado: 'error'
+                            });
+                        }
                     }
-                }
-            });
+                });
         }
     },
     mounted() {
@@ -401,7 +556,7 @@ export default {
             // Guarda el evento para que se dispare más tarde
             this.installAppEvent = e;
             // Actualizar la IU para notificarle al usuario que se puede instalar tu PWA
-            this.showModalInstallApp =true;
+            this.showModalInstallApp = true;
             // De manera opcional, envía el evento de analíticos para saber si se mostró la promoción a a instalación del PWA
             console.log(`'beforeinstallprompt' event was fired.`);
         });
@@ -419,7 +574,6 @@ export default {
         router.stack = [];
     },
     updated(a) {
-
         // Pendiente, no se limpia el buscador, si los search params están vacios
     },
     beforeDestroy() {

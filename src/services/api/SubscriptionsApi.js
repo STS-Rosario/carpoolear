@@ -1,23 +1,23 @@
 import TaggedApi from '../../classes/TaggedApi';
 
 class SubscriptionsApi extends TaggedApi {
-    show (id) {
+    show(id) {
         return this.get('/api/subscriptions/' + id);
     }
 
-    index (data = {}) {
+    index(data = {}) {
         return this.get('/api/subscriptions');
     }
 
-    create (data = {}) {
+    create(data = {}) {
         return this.post('/api/subscriptions', data);
     }
 
-    update (data = {}) {
+    update(data = {}) {
         return this.put('/api/subscriptions/' + data.id, data);
     }
 
-    remove (data = {}) {
+    remove(data = {}) {
         return this.delete('/api/subscriptions/' + data.id, {});
     }
 }

@@ -12,7 +12,7 @@ const state = {
 
 // getters
 const getters = {
-    subscriptions: state => state.subscriptions
+    subscriptions: (state) => state.subscriptions
 };
 
 // actions
@@ -31,60 +31,71 @@ const actions = {
             });
     },
 
-    create (store, data = {}) {
-        return subscriptionApi.create(data).then(response => {
-            store.commit(types.SUBSCRIPTION_ADD, response.data);
-            return Promise.resolve(response.data);
-        }).catch(err => {
-            if (err) {
-                return Promise.reject(err);
-            }
-        });
+    create(store, data = {}) {
+        return subscriptionApi
+            .create(data)
+            .then((response) => {
+                store.commit(types.SUBSCRIPTION_ADD, response.data);
+                return Promise.resolve(response.data);
+            })
+            .catch((err) => {
+                if (err) {
+                    return Promise.reject(err);
+                }
+            });
     },
 
-    update (store, data = {}) {
-        return subscriptionApi.update(data).then(response => {
-            store.commit(types.SUBSCRIPTION_UPDATE, response.data);
-            return Promise.resolve(response.data);
-        }).catch(err => {
-            if (err) {
-                return Promise.reject(err);
-            }
-        });
+    update(store, data = {}) {
+        return subscriptionApi
+            .update(data)
+            .then((response) => {
+                store.commit(types.SUBSCRIPTION_UPDATE, response.data);
+                return Promise.resolve(response.data);
+            })
+            .catch((err) => {
+                if (err) {
+                    return Promise.reject(err);
+                }
+            });
     },
 
-    remove (store, data = {}) {
-        return subscriptionApi.remove(data).then(response => {
-            store.commit(types.SUBSCRIPTION_DELETE, data);
-            return Promise.resolve();
-        }).catch(err => {
-            if (err) {
-                return Promise.reject(err);
-            }
-        });
+    remove(store, data = {}) {
+        return subscriptionApi
+            .remove(data)
+            .then((response) => {
+                store.commit(types.SUBSCRIPTION_DELETE, data);
+                return Promise.resolve();
+            })
+            .catch((err) => {
+                if (err) {
+                    return Promise.reject(err);
+                }
+            });
     }
 };
 
 // mutations
 const mutations = {
-    [types.SUBSCRIPTION_SET] (state, items) {
+    [types.SUBSCRIPTION_SET](state, items) {
         state.subscriptions = items;
     },
-    [types.SUBSCRIPTION_ADD] (state, subs) {
+    [types.SUBSCRIPTION_ADD](state, subs) {
         if (!state.subscriptions) {
             state.subscriptions = [];
         }
         state.subscriptions.push(subs);
     },
-    [types.SUBSCRIPTION_UPDATE] (state, subs) {
+    [types.SUBSCRIPTION_UPDATE](state, subs) {
         for (let i = 0; i < state.subscriptions.length; i++) {
             if (state.subscriptions[i].id === subs.id) {
                 state.subscriptions[i] = subs;
             }
         }
     },
-    [types.SUBSCRIPTION_DELETE] (state, subs) {
-        state.subscriptions = state.subscriptions.filter(item => item.id !== subs.id);
+    [types.SUBSCRIPTION_DELETE](state, subs) {
+        state.subscriptions = state.subscriptions.filter(
+            (item) => item.id !== subs.id
+        );
     }
 };
 

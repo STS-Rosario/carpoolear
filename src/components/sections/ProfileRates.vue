@@ -5,18 +5,39 @@
             <Loading :data="rates">
                 <div class="list-group">
                     <div class="column-rating">
-                        <div class="list-group-item clearfix" v-for="rate in rating.col1">
-                            <RateItem :user="user" :id="id" :rate="rate"></RateItem>
+                        <div
+                            class="list-group-item clearfix"
+                            v-for="rate in rating.col1"
+                        >
+                            <RateItem
+                                :user="user"
+                                :id="id"
+                                :rate="rate"
+                            ></RateItem>
                         </div>
                     </div>
                     <div class="column-rating">
-                        <div class="list-group-item clearfix" v-for="rate in rating.col2">
-                            <RateItem :user="user" :id="id" :rate="rate"></RateItem>
+                        <div
+                            class="list-group-item clearfix"
+                            v-for="rate in rating.col2"
+                        >
+                            <RateItem
+                                :user="user"
+                                :id="id"
+                                :rate="rate"
+                            ></RateItem>
                         </div>
                     </div>
                     <div class="column-rating">
-                        <div class="list-group-item clearfix" v-for="rate in rating.col3">
-                            <RateItem :user="user" :id="id" :rate="rate"></RateItem>
+                        <div
+                            class="list-group-item clearfix"
+                            v-for="rate in rating.col3"
+                        >
+                            <RateItem
+                                :user="user"
+                                :id="id"
+                                :rate="rate"
+                            ></RateItem>
                         </div>
                     </div>
                 </div>
@@ -26,9 +47,15 @@
                 </div>
                 -->
 
-                <p slot="no-data" class="alert alert-warning"  role="alert">{{ $t('noCalificaciones') }}</p>
+                <p slot="no-data" class="alert alert-warning" role="alert">
+                    {{ $t('noCalificaciones') }}
+                </p>
                 <p slot="loading" class="alert alert-info" role="alert">
-                    <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
+                    <img
+                        src="https://carpoolear.com.ar/static/img/loader.gif"
+                        alt=""
+                        class="ajax-loader"
+                    />
                     {{ $t('cargandoNotificaciones') }}
                 </p>
             </Loading>
@@ -40,18 +67,42 @@
                 <Loading :data="references">
                     <div class="list-group">
                         <div class="column-rating">
-                            <div class="list-group-item clearfix" v-for="reference in referencesCol.col1">
-                                <RateItem :notReply="true" :user="user" :id="id" :rate="reference"></RateItem>
+                            <div
+                                class="list-group-item clearfix"
+                                v-for="reference in referencesCol.col1"
+                            >
+                                <RateItem
+                                    :notReply="true"
+                                    :user="user"
+                                    :id="id"
+                                    :rate="reference"
+                                ></RateItem>
                             </div>
                         </div>
                         <div class="column-rating">
-                            <div class="list-group-item clearfix" v-for="reference in referencesCol.col2">
-                                <RateItem :notReply="true" :user="user" :id="id" :rate="reference"></RateItem>
+                            <div
+                                class="list-group-item clearfix"
+                                v-for="reference in referencesCol.col2"
+                            >
+                                <RateItem
+                                    :notReply="true"
+                                    :user="user"
+                                    :id="id"
+                                    :rate="reference"
+                                ></RateItem>
                             </div>
                         </div>
                         <div class="column-rating">
-                            <div class="list-group-item clearfix" v-for="reference in referencesCol.col3">
-                                <RateItem :notReply="true" :user="user" :id="id" :rate="reference"></RateItem>
+                            <div
+                                class="list-group-item clearfix"
+                                v-for="reference in referencesCol.col3"
+                            >
+                                <RateItem
+                                    :notReply="true"
+                                    :user="user"
+                                    :id="id"
+                                    :rate="reference"
+                                ></RateItem>
                             </div>
                         </div>
                     </div>
@@ -60,15 +111,20 @@
                         <button class="btn btn-primary" @click="nextPage">Más resultados</button>
                     </div>
                     -->
-                    <p slot="no-data" class="alert alert-warning"  role="alert">{{ $t('noReferences') }}</p>
+                    <p slot="no-data" class="alert alert-warning" role="alert">
+                        {{ $t('noReferences') }}
+                    </p>
                     <p slot="loading" class="alert alert-info" role="alert">
-                        <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
+                        <img
+                            src="https://carpoolear.com.ar/static/img/loader.gif"
+                            alt=""
+                            class="ajax-loader"
+                        />
                         {{ $t('cargandoNotificaciones') }}
                     </p>
                 </Loading>
             </div>
         </template>
-
     </div>
 </template>
 <script>
@@ -83,17 +139,17 @@ let emptyCols = {
 };
 
 export default {
-    data () {
+    data() {
         return {
             rating: {},
             referencesCol: {}
         };
     },
     methods: {
-        cleanCols (array) {
+        cleanCols(array) {
             this[array] = JSON.parse(JSON.stringify(emptyCols));
         },
-        makeRows (arrayToCheck, arrayToPush) {
+        makeRows(arrayToCheck, arrayToPush) {
             if (this[arrayToCheck]) {
                 this.cleanCols(arrayToPush);
                 if (this.isMobile) {
@@ -104,7 +160,9 @@ export default {
                     for (j = 0; j < rows; j++) {
                         i = j;
                         for (i; i < this[arrayToCheck].length; i += rows) {
-                            this[arrayToPush][`col${j + 1}`].push(this[arrayToCheck][i]);
+                            this[arrayToPush][`col${j + 1}`].push(
+                                this[arrayToCheck][i]
+                            );
                         }
                     }
                 }
@@ -113,13 +171,13 @@ export default {
     },
     computed: {
         ...mapGetters({
-            'user': 'auth/user',
-            'rates': 'profile/rates',
-            'isMobile': 'device/isMobile',
-            'isTablet': 'device/isTablet',
-            'isDesktop': 'device/isDesktop',
-            'config': 'auth/appConfig',
-            'references': 'profile/references'
+            user: 'auth/user',
+            rates: 'profile/rates',
+            isMobile: 'device/isMobile',
+            isTablet: 'device/isTablet',
+            isDesktop: 'device/isDesktop',
+            config: 'auth/appConfig',
+            references: 'profile/references'
         })
     },
     watch: {
@@ -157,13 +215,11 @@ export default {
         Loading,
         RateItem
     },
-    props: [
-        'id'
-    ]
+    props: ['id']
 };
 </script>
 <style scoped>
-    .profile-rates-component {
-        padding-bottom: 6em;
-    }
+.profile-rates-component {
+    padding-bottom: 6em;
+}
 </style>

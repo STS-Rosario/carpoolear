@@ -33,7 +33,11 @@ export default [
             actionbar: {
                 header: {
                     logo: {
-                        show: getters && getters['auth/appConfig'] && getters['auth/appConfig'].trip_card_design === 'light'
+                        show:
+                            getters &&
+                            getters['auth/appConfig'] &&
+                            getters['auth/appConfig'].trip_card_design ===
+                                'light'
                     },
                     buttons: ['back']
                 }
@@ -60,7 +64,11 @@ export default [
             actionbar: {
                 header: {
                     logo: {
-                        show: getters && getters['auth/appConfig'] && getters['auth/appConfig'].trip_card_design === 'light'
+                        show:
+                            getters &&
+                            getters['auth/appConfig'] &&
+                            getters['auth/appConfig'].trip_card_design ===
+                                'light'
                     },
                     buttons: ['back']
                 }
@@ -240,7 +248,8 @@ export default [
             {
                 path: 'profile',
                 name: 'profile_update',
-                component: require('../components/sections/UpdateProfile.vue').default,
+                component: require('../components/sections/UpdateProfile.vue')
+                    .default,
                 meta: {
                     tab: 'profile',
                     actionbar: {
@@ -258,7 +267,8 @@ export default [
             {
                 path: 'friends',
                 name: 'friends_setting',
-                component: require('../components/sections/FriendsSetting.vue').default,
+                component: require('../components/sections/FriendsSetting.vue')
+                    .default,
                 meta: {
                     tab: 'friends',
                     actionbar: {
@@ -276,7 +286,8 @@ export default [
             {
                 path: 'friends/search',
                 name: 'friends_search',
-                component: require('../components/sections/FriendsRequest.vue').default,
+                component: require('../components/sections/FriendsRequest.vue')
+                    .default,
                 meta: {
                     tab: 'friends',
                     actionbar: {
@@ -312,7 +323,8 @@ export default [
             {
                 path: ':id',
                 name: 'conversation-chat',
-                component: require('../components/views/ConversationChat').default,
+                component: require('../components/views/ConversationChat')
+                    .default,
                 props: true,
                 meta: {
                     hide: true,

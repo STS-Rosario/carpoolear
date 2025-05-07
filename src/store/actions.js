@@ -29,15 +29,18 @@ export const init = (store) => {
         }
     ];
 
-    loadStateMap.forEach(obj => {
+    loadStateMap.forEach((obj) => {
         var p = new Promise((resolve, reject) => {
-            cache.getItem(obj.key).then((value) => {
-                // console.log(value);
-                store.commit(obj.mutation, value);
-                resolve();
-            }).catch(() => {
-                resolve();
-            });
+            cache
+                .getItem(obj.key)
+                .then((value) => {
+                    // console.log(value);
+                    store.commit(obj.mutation, value);
+                    resolve();
+                })
+                .catch(() => {
+                    resolve();
+                });
         });
         promises.push(p);
     });
@@ -105,7 +108,7 @@ export const getTrip = (store, id) => {
         }
     }
 
-    return tripsApi.show(id).then(response => {
+    return tripsApi.show(id).then((response) => {
         store.commit('trips/' + types.TRIPS_SET_CURRENT, response.data);
         return Promise.resolve(response.data);
     });

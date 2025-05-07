@@ -1,5 +1,4 @@
-
-export function makeState (name) {
+export function makeState(name) {
     let obj = {};
     obj[name] = null;
     obj[name + 'SearchParam'] = {
@@ -12,21 +11,24 @@ export function makeState (name) {
     return obj;
 }
 
-export function makeGetters (name) {
+export function makeGetters(name) {
     let getters = {};
-    getters[name] = state => state[name];
-    getters[name + 'MorePage'] = state => !state[name + 'SearchParam'].lastPage;
-    getters[name + 'SearchParam'] = state => state[name + 'SearchParam'];
+    getters[name] = (state) => state[name];
+    getters[name + 'MorePage'] = (state) =>
+        !state[name + 'SearchParam'].lastPage;
+    getters[name + 'SearchParam'] = (state) => state[name + 'SearchParam'];
     return getters;
 }
 
-export function makeMutations (name) {
+export function makeMutations(name) {
     let mutations = {};
     mutations[name.toUpperCase() + '_SET'] = (state, items) => {
         if (items) {
             if (state[name] && state[name].length) {
-                items.forEach(item => {
-                    let foundItem = state[name].find(i => i.id.toString() === item.id.toString());
+                items.forEach((item) => {
+                    let foundItem = state[name].find(
+                        (i) => i.id.toString() === item.id.toString()
+                    );
                     if (!foundItem) {
                         state[name].push(item);
                     }
@@ -67,7 +69,7 @@ export function makeMutations (name) {
     return mutations;
 }
 
-export function makeActions (name, requestGeneration, callback) {
+export function makeActions(name, requestGeneration, callback) {
     let actions = {};
     actions[name + 'Search'] = (store, data = {}, next = false) => {
         let params = null;
@@ -88,25 +90,31 @@ export function makeActions (name, requestGeneration, callback) {
             params.page_size = store.state[name + 'SearchParam'].pageSize;
         }
         let promises = requestGeneration({ store, data: params });
-        promises.then(response => {
-            if (response.meta.pagination.total_pages === response.meta.pagination.current_page) {
-                store.commit(name.toUpperCase() + '_SET_LASTPAGE');
-            }
-            if (data.next) {
-                if (response.meta.pagination.current_page === store.state[name + 'SearchParam'].page) {
-
+        promises
+            .then((response) => {
+                if (
+                    response.meta.pagination.total_pages ===
+                    response.meta.pagination.current_page
+                ) {
+                    store.commit(name.toUpperCase() + '_SET_LASTPAGE');
                 }
-                store.commit(name.toUpperCase() + '_ADD', response.data);
-            } else {
-                store.commit(name.toUpperCase() + '_SET', response.data);
-            }
-            return Promise.resolve(response.data);
-        }).catch(error => {
-            if (error) {
-
-            }
-            return Promise.reject(error);
-        });
+                if (data.next) {
+                    if (
+                        response.meta.pagination.current_page ===
+                        store.state[name + 'SearchParam'].page
+                    ) {
+                    }
+                    store.commit(name.toUpperCase() + '_ADD', response.data);
+                } else {
+                    store.commit(name.toUpperCase() + '_SET', response.data);
+                }
+                return Promise.resolve(response.data);
+            })
+            .catch((error) => {
+                if (error) {
+                }
+                return Promise.reject(error);
+            });
         if (callback) {
             callback(store, promises);
         }

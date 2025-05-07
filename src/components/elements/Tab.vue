@@ -1,5 +1,10 @@
 <template>
-    <div role="tabpanel" class="tab-pane container" :class="{ active: active }" :id="id">
+    <div
+        role="tabpanel"
+        class="tab-pane container"
+        :class="{ active: active }"
+        :id="id"
+    >
         <slot></slot>
     </div>
 </template>
@@ -29,7 +34,9 @@ export default {
     },
     computed: {
         active: {
-            get: function () { return this.$data._active; },
+            get: function () {
+                return this.$data._active;
+            },
             set: function (val) {
                 this.$data._active = val;
                 if (val) {

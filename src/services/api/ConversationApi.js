@@ -1,39 +1,41 @@
 import TaggedApi from '../../classes/TaggedApi';
 
 class ConversationApi extends TaggedApi {
-    list (data = {}) {
+    list(data = {}) {
         return this.get('/api/conversations', data);
     }
 
-    show (id) {
+    show(id) {
         return this.get('/api/conversations/show/' + id);
     }
 
-    userList (data) {
+    userList(data) {
         return this.get('/api/conversations/user-list', data);
     }
 
-    create (userId, tripId) {
+    create(userId, tripId) {
         return this.post('/api/conversations', { to: userId, tripId: tripId });
     }
 
-    getMessages (id, data) {
+    getMessages(id, data) {
         return this.get('/api/conversations/' + id, data);
     }
 
-    getUsers (id) {
+    getUsers(id) {
         return this.get('/api/conversations/' + id + '/users', {});
     }
 
-    send (id, text) {
-        return this.post('/api/conversations/' + id + '/send', { message: text });
+    send(id, text) {
+        return this.post('/api/conversations/' + id + '/send', {
+            message: text
+        });
     }
 
-    sendToAll (data) {
+    sendToAll(data) {
         return this.post('/api/conversations/multi-send', data);
     }
 
-    unread (data = {}) {
+    unread(data = {}) {
         return this.get('/api/conversations/unread', data);
     }
 }

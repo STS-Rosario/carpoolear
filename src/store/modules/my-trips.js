@@ -14,62 +14,62 @@ const state = {
 
 // getters
 const getters = {
-    myTrips: state => state.driver_trip,
-    passengerTrips: state => state.passenger_trip,
-    pendingRates: state => state.pending_rates,
-    myOldTrips: state => state.driver_old_trips,
-    passengerOldTrips: state => state.passenger_old_trips
+    myTrips: (state) => state.driver_trip,
+    passengerTrips: (state) => state.passenger_trip,
+    pendingRates: (state) => state.pending_rates,
+    myOldTrips: (state) => state.driver_old_trips,
+    passengerOldTrips: (state) => state.passenger_old_trips
 };
 
 // actions
 const actions = {
-    tripAsDriver (store, data) {
-        return tripsApi.myTrips(true).then(response => {
+    tripAsDriver(store, data) {
+        return tripsApi.myTrips(true).then((response) => {
             store.commit(types.MYTRIPS_SET_DRIVER_TRIPS, response.data);
         });
     },
 
-    tripAsPassenger (store, data) {
-        return tripsApi.myTrips(false).then(response => {
+    tripAsPassenger(store, data) {
+        return tripsApi.myTrips(false).then((response) => {
             store.commit(types.MYTRIPS_SET_PASSENGER_TRIPS, response.data);
         });
     },
 
-    pendingRates (store) {
-        return rateApi.pending(null).then(response => {
+    pendingRates(store) {
+        return rateApi.pending(null).then((response) => {
             store.commit(types.MYTRIPS_SET_PENDING_RATES, response.data);
         });
     },
 
-    oldTripsAsDriver (store, data) {
-        return tripsApi.myOldTrips(true).then(response => {
+    oldTripsAsDriver(store, data) {
+        return tripsApi.myOldTrips(true).then((response) => {
             store.commit(types.MYTRIPS_SET_DRIVER_TRIPS_OLD, response.data);
         });
     },
 
-    oldTripsAsPassenger (store, data) {
-        return tripsApi.myOldTrips(false).then(response => {
+    oldTripsAsPassenger(store, data) {
+        return tripsApi.myOldTrips(false).then((response) => {
             store.commit(types.MYTRIPS_SET_PASSENGER_TRIPS_OLD, response.data);
         });
     },
 
-    removeTrip (store, tripId) {
+    removeTrip(store, tripId) {
         return store.commit(types.MYTRIPS_DELETE_TRIPS, tripId);
     }
 };
 
 // mutations
 const mutations = {
-    [types.MYTRIPS_SET_DRIVER_TRIPS] (state, trips) {
+    [types.MYTRIPS_SET_DRIVER_TRIPS](state, trips) {
         state.driver_trip = trips;
     },
-    [types.MYTRIPS_SET_PASSENGER_TRIPS] (state, trips) {
+    [types.MYTRIPS_SET_PASSENGER_TRIPS](state, trips) {
         state.passenger_trip = trips;
     },
-    [types.MYTRIPS_ADD_TRIPS] (state, trip) {
+    [types.MYTRIPS_ADD_TRIPS](state, trip) {
         state.driver_trip.push(trip);
     },
-    [types.MYTRIPS_UPDATE_TRIPS] (state, trip) {
+    [types.MYTRIPS_UPDATE_TRIPS](state, trip) {
         for (let i = 0; i < state.driver_trip.length; i++) {
             if (state.driver_trip[i].id === trip.id) {
                 state.driver_trip[i] = trip;
@@ -77,18 +77,18 @@ const mutations = {
             }
         }
     },
-    [types.MYTRIPS_DELETE_TRIPS] (state, id) {
-        let index = state.driver_trip.findIndex(item => item.id === id);
+    [types.MYTRIPS_DELETE_TRIPS](state, id) {
+        let index = state.driver_trip.findIndex((item) => item.id === id);
         if (index >= 0) {
             state.driver_trip.splice(index, 1);
         }
     },
 
-    [types.MYTRIPS_SET_PENDING_RATES] (state, rates) {
+    [types.MYTRIPS_SET_PENDING_RATES](state, rates) {
         state.pending_rates = rates;
     },
 
-    [types.MYTRIPS_ADD_PASSENGER] (state, { id, user }) {
+    [types.MYTRIPS_ADD_PASSENGER](state, { id, user }) {
         for (let i = 0; i < state.driver_trip.length; i++) {
             if (state.driver_trip[i].id === id) {
                 if (!state.driver_trip[i].passenger) {
@@ -100,14 +100,21 @@ const mutations = {
         }
     },
 
-    [types.MYTRIPS_REMOVE_PASSENGER] (state, { id, user, passenger = false }) {
+    [types.MYTRIPS_REMOVE_PASSENGER](state, { id, user, passenger = false }) {
         let tripTarget = passenger ? 'passenger_trip' : 'driver_trip';
         for (let i = 0; i < state[tripTarget].length; i++) {
             if (state[tripTarget][i].id === id) {
-                if (!state[tripTarget][i].passenger || !state[tripTarget][i].passenger.length) {
+                if (
+                    !state[tripTarget][i].passenger ||
+                    !state[tripTarget][i].passenger.length
+                ) {
                     return;
                 }
-                let index = state[tripTarget][i].passenger.findIndex(item => item.id === user.id && (item.request_state === 1 || item.request_state === 4));
+                let index = state[tripTarget][i].passenger.findIndex(
+                    (item) =>
+                        item.id === user.id &&
+                        (item.request_state === 1 || item.request_state === 4)
+                );
                 if (index >= 0) {
                     state[tripTarget][i].passenger[index].request_state = 3;
                     state[tripTarget][i].seats_available++;
@@ -118,17 +125,17 @@ const mutations = {
         }
     },
 
-    [types.MYTRIPS_REMOVE_PASSENGER_TRIP] (state, id) {
-        let index = state.passenger_trip.findIndex(item => item.id === id);
+    [types.MYTRIPS_REMOVE_PASSENGER_TRIP](state, id) {
+        let index = state.passenger_trip.findIndex((item) => item.id === id);
         if (index >= 0) {
             state.passenger_trip.splice(index, 1);
         }
     },
 
-    [types.MYTRIPS_SET_DRIVER_TRIPS_OLD] (state, trips) {
+    [types.MYTRIPS_SET_DRIVER_TRIPS_OLD](state, trips) {
         state.driver_old_trips = trips;
     },
-    [types.MYTRIPS_SET_PASSENGER_TRIPS_OLD] (state, trips) {
+    [types.MYTRIPS_SET_PASSENGER_TRIPS_OLD](state, trips) {
         state.passenger_old_trips = trips;
     }
 };

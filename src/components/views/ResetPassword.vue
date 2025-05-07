@@ -1,29 +1,58 @@
 <template>
-    <div class="user-form container " >
-        <router-link v-if="!isMobile"  :to="{name: 'trips'}">
+    <div class="user-form container">
+        <router-link v-if="!isMobile" :to="{ name: 'trips' }">
             <img :src="carpoolear_logo" />
         </router-link>
-        <h1 v-if="tripCardTheme !== 'light'"> {{ $t('recuperarContraseña') }} </h1>
+        <h1 v-if="tripCardTheme !== 'light'">
+            {{ $t('recuperarContraseña') }}
+        </h1>
         <div class="form row" v-if="send">
-            <h3> Se ha enviado un email a su casilla de correo con las indicaciones para restablecer su contraseña. </h3>
+            <h3>
+                Se ha enviado un email a su casilla de correo con las
+                indicaciones para restablecer su contraseña.
+            </h3>
         </div>
         <div class="form row message" v-else-if="!token">
-            <h1 v-if="tripCardTheme === 'light'"> {{ $t('recuperarContraseña') }} </h1>
+            <h1 v-if="tripCardTheme === 'light'">
+                {{ $t('recuperarContraseña') }}
+            </h1>
             <label for="txt_email">E-mail</label>
-            <input v-jump type="text" id="txt_email" v-model='email'/>
-            <span class="error" v-if="error"> {{ error }} </span>
-            <button v-jump class="btn btn-primary btn-shadowed-black btn-outline" @click="reset" :disabled="loading"> 
-                <span v-if="!loading">Recuperar contraseña</span><spinner class="blue" v-if="loading"></spinner>
+            <input v-jump type="text" id="txt_email" v-model="email" />
+            <span class="error" v-if="error">{{ error }}</span>
+            <button
+                v-jump
+                class="btn btn-primary btn-shadowed-black btn-outline"
+                @click="reset"
+                :disabled="loading"
+            >
+                <span v-if="!loading">Recuperar contraseña</span>
+                <spinner class="blue" v-if="loading"></spinner>
             </button>
         </div>
-        <div class='form row' v-else-if="token">
+        <div class="form row" v-else-if="token">
             <label for="txt_password">Password</label>
-            <input v-jump type="password" id="txt_password" v-model='password' />
-            <label for="txt_password">Repetir Password </label>
-            <input v-jump type="password" id="txt_password" v-model='password_confirmation' />
-            <span class="error" v-if="error"> {{ error }} </span>
-            <button v-jump class="btn btn-primary" @click="change" :disabled="loading">
-                <span v-if="!loading">Cambiar contraseña</span><spinner class="blue" v-if="loading"></spinner>
+            <input
+                v-jump
+                type="password"
+                id="txt_password"
+                v-model="password"
+            />
+            <label for="txt_password">Repetir Password</label>
+            <input
+                v-jump
+                type="password"
+                id="txt_password"
+                v-model="password_confirmation"
+            />
+            <span class="error" v-if="error">{{ error }}</span>
+            <button
+                v-jump
+                class="btn btn-primary"
+                @click="change"
+                :disabled="loading"
+            >
+                <span v-if="!loading">Cambiar contraseña</span>
+                <spinner class="blue" v-if="loading"></spinner>
             </button>
         </div>
     </div>
@@ -34,18 +63,19 @@ import { mapActions, mapGetters } from 'vuex';
 import bus from '../../services/bus-event';
 import router from '../../router';
 import Spinner from '../Spinner.vue';
-let emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+let emailRegex =
+    /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 
 export default {
     name: 'reset-password',
     props: {
-        'token': {
+        token: {
             type: String,
             required: false
         }
     },
 
-    data () {
+    data() {
         return {
             email: '',
             loading: false,
@@ -53,7 +83,8 @@ export default {
             send: false,
             password_confirmation: '',
             password: '',
-            carpoolear_logo: process.env.ROUTE_BASE + 'static/img/carpoolear_logo.png'
+            carpoolear_logo:
+                process.env.ROUTE_BASE + 'static/img/carpoolear_logo.png'
         };
     },
     computed: {
@@ -61,34 +92,38 @@ export default {
             isMobile: 'device/isMobile',
             settings: 'auth/appConfig'
         }),
-        tripCardTheme () {
+        tripCardTheme() {
             return this.settings ? this.settings.trip_card_design : '';
         }
     },
 
     methods: {
         ...mapActions({
-            'resetPassword': 'auth/resetPassword',
-            'changePassword': 'auth/changePassword'
+            resetPassword: 'auth/resetPassword',
+            changePassword: 'auth/changePassword'
         }),
 
-        reset () {
+        reset() {
             this.error = null;
             if (emailRegex.test(this.email)) {
                 this.loading = true;
-                this.resetPassword(this.email).then(() => {
-                    this.loading = false;
-                    this.send = true;
-                }, () => {
-                    this.loading = false;
-                    this.error = 'El e-mail ingresado no pertenece a ningún usuario.';
-                });
+                this.resetPassword(this.email).then(
+                    () => {
+                        this.loading = false;
+                        this.send = true;
+                    },
+                    () => {
+                        this.loading = false;
+                        this.error =
+                            'El e-mail ingresado no pertenece a ningún usuario.';
+                    }
+                );
             } else {
                 this.error = 'Ingrese un e-mail valido.';
             }
         },
 
-        change () {
+        change() {
             this.error = null;
             if (this.password === this.password_confirmation) {
                 this.loading = true;
@@ -96,26 +131,29 @@ export default {
                 data.password = this.password;
                 data.password_confirmation = this.password_confirmation;
                 let token = this.token;
-                this.changePassword({ token, data }).then(() => {
-                    this.$router.replace({ name: 'login' });
-                }, () => {
-                    this.loading = false;
-                    this.error = 'Token invalido';
-                });
+                this.changePassword({ token, data }).then(
+                    () => {
+                        this.$router.replace({ name: 'login' });
+                    },
+                    () => {
+                        this.loading = false;
+                        this.error = 'Token invalido';
+                    }
+                );
             } else {
                 this.error = 'No coicide los campos';
             }
         },
-        onBackClick () {
+        onBackClick() {
             router.back();
         }
     },
 
-    mounted () {
+    mounted() {
         bus.on('back-click', this.onBackClick);
     },
 
-    beforeDestroy () {
+    beforeDestroy() {
         bus.off('back-click', this.onBackClick);
     },
 
@@ -126,38 +164,38 @@ export default {
 </script>
 
 <style>
-  .app-container {
+.app-container {
     min-height: 100vh;
-  }
+}
 </style>
 
 <style scoped>
+h3 {
+    margin-bottom: 2em;
+    font-size: 18px;
+}
+label {
+    display: block;
+    margin-top: 0.3em;
+    margin-bottom: 0.6em;
+}
+input {
+    margin-bottom: 0.8em;
+}
+loading {
+    margin-left: 1em;
+}
+.message > span {
+    vertical-align: -0.6em;
+    color: red;
+    margin-left: 2em;
+}
+h3 {
+    color: #fff;
+}
+@media only screen and (min-width: 768px) {
     h3 {
-        margin-bottom: 2em;
-        font-size: 18px;
+        color: #036686;
     }
-    label {
-        display: block;
-        margin-top: .3em;
-        margin-bottom: .6em;
-    }
-    input {
-        margin-bottom: 0.8em;
-    }
-    loading {
-        margin-left: 1em;
-    }
-    .message > span {
-        vertical-align: -.6em;
-        color: red;
-        margin-left: 2em;
-    }
-    h3 {
-        color: #fff;
-    }
-    @media only screen and (min-width: 768px) {
-        h3 {
-            color: #036686;
-        }
-    }
+}
 </style>

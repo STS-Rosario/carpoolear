@@ -15,11 +15,10 @@ export default {
             this.renderChart(this.chartInfo, this.options);
         }
     },
-    mounted () {
+    mounted() {
         this.renderChart(this.chartInfo, this.options);
     }
 };
 </script>
 
-<style>
-</style>
+<style></style>

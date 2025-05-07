@@ -1,22 +1,20 @@
 <template>
-    <input ref="input" type="file" @change="onFileChange" v-show="false">
+    <input ref="input" type="file" @change="onFileChange" v-show="false" />
 </template>
 
 <script>
 export default {
     name: 'uploadfile',
-    data () {
-        return {
-        };
+    data() {
+        return {};
     },
-    mounted () {
-    },
+    mounted() {},
     methods: {
-        show () {
+        show() {
             this.$refs.input.click();
         },
 
-        onFileChange (e) {
+        onFileChange(e) {
             let files = e.target.files || e.dataTransfer.files;
             if (!files.length) {
                 return;
@@ -24,7 +22,7 @@ export default {
             this.createImage(files[0]);
         },
 
-        createImage (file) {
+        createImage(file) {
             /* eslint-disable no-undef */
             let reader = new FileReader();
             let vm = this;

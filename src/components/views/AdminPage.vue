@@ -8,18 +8,33 @@
                 <div class="card chart-card">
                     <div class="row">
                         <div class="col-md-9 col-md-offset-1">
-                            <datePicker class="picker"
+                            <datePicker
+                                class="picker"
                                 :value="dateLimits.start"
-                                :class="{'has-error': dateLimits.dateError.state}"
-                                v-on:date_changed="(date) => this.dateLimits.start = formatDate(date)"
-                                :format="'YYYY-MM'"></datePicker>
+                                :class="{
+                                    'has-error': dateLimits.dateError.state
+                                }"
+                                v-on:date_changed="
+                                    (date) =>
+                                        (this.dateLimits.start =
+                                            formatDate(date))
+                                "
+                                :format="'YYYY-MM'"
+                            ></datePicker>
                         </div>
                         <div class="col-md-9 col-md-offset-4">
-                            <datePicker class="picker"
+                            <datePicker
+                                class="picker"
                                 :value="dateLimits.end"
-                                :class="{'has-error': dateLimits.dateError.state}"               
-                                v-on:date_changed="(date) => this.dateLimits.end = formatDate(date)"
-                                :format="'YYYY-MM'"></datePicker>
+                                :class="{
+                                    'has-error': dateLimits.dateError.state
+                                }"
+                                v-on:date_changed="
+                                    (date) =>
+                                        (this.dateLimits.end = formatDate(date))
+                                "
+                                :format="'YYYY-MM'"
+                            ></datePicker>
                         </div>
                     </div>
                 </div>
@@ -27,20 +42,34 @@
         </div>
         <div class="row">
             <div class="col-md-9 col-md-offset-2">
-                <TripsChart class="chart-card"
-                :minDate="dateLimits.start"
-                :maxDate="dateLimits.end"></TripsChart>
-                <MonthlyUsersChart class="chart-card"
-                :minDate="dateLimits.start"
-                :maxDate="dateLimits.end">></MonthlyUsersChart>
+                <TripsChart
+                    class="chart-card"
+                    :minDate="dateLimits.start"
+                    :maxDate="dateLimits.end"
+                ></TripsChart>
+                <MonthlyUsersChart
+                    class="chart-card"
+                    :minDate="dateLimits.start"
+                    :maxDate="dateLimits.end"
+                >
+                    >
+                </MonthlyUsersChart>
             </div>
             <div class="col-md-9 col-md-offset-2">
-                <SeatsChart class="chart-card"
-                :minDate="dateLimits.start"
-                :maxDate="dateLimits.end">></SeatsChart>
-                <TotalUsersChart class="chart-card"
-                :minDate="dateLimits.start"
-                :maxDate="dateLimits.end">></TotalUsersChart>
+                <SeatsChart
+                    class="chart-card"
+                    :minDate="dateLimits.start"
+                    :maxDate="dateLimits.end"
+                >
+                    >
+                </SeatsChart>
+                <TotalUsersChart
+                    class="chart-card"
+                    :minDate="dateLimits.start"
+                    :maxDate="dateLimits.end"
+                >
+                    >
+                </TotalUsersChart>
             </div>
         </div>
     </div>
@@ -58,20 +87,22 @@ import adminNav from '../sections/adminNav';
 
 export default {
     name: 'admin-page',
-    data () {
+    data() {
         return {
             dateLimits: {
-                start: moment(new Date(new Date().getFullYear(), 0, 1)).format('YYYY-MM'),
+                start: moment(new Date(new Date().getFullYear(), 0, 1)).format(
+                    'YYYY-MM'
+                ),
                 end: moment().format('YYYY-MM'),
                 dateError: new Error()
             }
         };
     },
     methods: {
-        goToAbm () {
+        goToAbm() {
             router.replace({ name: 'admin-users' });
         },
-        formatDate (date) {
+        formatDate(date) {
             return date.slice(0, 7);
         }
     },
@@ -83,8 +114,7 @@ export default {
         datePicker,
         adminNav
     },
-    mounted () {
-    }
+    mounted() {}
 };
 </script>
 
@@ -99,5 +129,4 @@ export default {
 .picker {
     margin-top: 1em;
 }
-
 </style>

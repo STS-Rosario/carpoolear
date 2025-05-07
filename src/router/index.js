@@ -92,7 +92,7 @@ router._push = router.push;
 router._replace = router.replace;
 router._go = router.go;
 
-router.rememberBack = function() {
+router.rememberBack = function () {
     if (router.rememberRoute) {
         router.push(router.rememberRoute);
         router.rememberRoute = null;
@@ -101,7 +101,7 @@ router.rememberBack = function() {
     }
 };
 
-router.push = function(data, fnSuccess, fnFailure) {
+router.push = function (data, fnSuccess, fnFailure) {
     // console.log('push', JSON.stringify(router.stack), JSON.stringify(data));
     if (data.name !== 'trips') {
         router.stack.push(data);
@@ -111,7 +111,7 @@ router.push = function(data, fnSuccess, fnFailure) {
     router._push(data, fnSuccess, fnFailure);
 };
 
-router.replace = function(data) {
+router.replace = function (data) {
     // console.log('replace', JSON.stringify(router.stack), JSON.stringify(data));
     if (data.name !== 'trips') {
         router.stack.pop();
@@ -122,7 +122,7 @@ router.replace = function(data) {
     router._push(data);
 };
 
-router.go = function(number) {
+router.go = function (number) {
     // console.log('go', JSON.stringify(router.stack), number);
     router.stack.splice(-1, -number);
     router._go(number);

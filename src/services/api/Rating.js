@@ -1,7 +1,7 @@
 import TaggedApi from '../../classes/TaggedApi';
 
 class RateApi extends TaggedApi {
-    index (id, data = {}) {
+    index(id, data = {}) {
         if (id) {
             return this.get('/api/users/' + id + '/ratings', data);
         } else {
@@ -9,16 +9,16 @@ class RateApi extends TaggedApi {
         }
     }
 
-    pending (data) {
+    pending(data) {
         return this.get('/api/users/ratings/pending', data);
     }
 
     // data = {comment, rating, hash = null }
-    rate (tripId, userId, data) {
+    rate(tripId, userId, data) {
         return this.post('/api/trips/' + tripId + '/rate/' + userId, data);
     }
 
-    reply (tripId, userId, data) {
+    reply(tripId, userId, data) {
         return this.post('/api/trips/' + tripId + '/reply/' + userId, data);
     }
 }

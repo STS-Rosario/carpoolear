@@ -1,6 +1,6 @@
 import { getRoute } from '../services/utility';
 
-function changePhoto (el, binding, node) {
+function changePhoto(el, binding, node) {
     let arg;
     if (binding.arg === 'profile') {
         arg = '/image/profile/';
@@ -11,7 +11,7 @@ function changePhoto (el, binding, node) {
         arg = '/image/' + binding.arg + '/';
     }
     el.style.backgroundImage = 'url(' + getRoute(binding.value, arg) + ')';
-};
+}
 
 export default {
     inserted: function (el, binding, node) {

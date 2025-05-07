@@ -5,8 +5,14 @@ let first = 0;
 let inputHandler = function (event) {
     let position = this.selectionStart;
     let dots = countDots(this.value);
-    if (cleanDots(this.value).length + 1 > numberFormatter[this.id].el.dataset.maxLength) {
-        this.value = cleanDots(this.value).slice(0, numberFormatter[this.id].el.dataset.maxLength);
+    if (
+        cleanDots(this.value).length + 1 >
+        numberFormatter[this.id].el.dataset.maxLength
+    ) {
+        this.value = cleanDots(this.value).slice(
+            0,
+            numberFormatter[this.id].el.dataset.maxLength
+        );
     }
     formatNumber(this.id);
     let modifyer = countDots(this.value) - dots;
@@ -18,24 +24,36 @@ let cleanDots = function (str) {
 };
 
 let countDots = function (str) {
-    return (str.split('.').length - 1);
+    return str.split('.').length - 1;
 };
 
 let formatNumber = function (id) {
     numberFormatter[id].rawValue = cleanDots(numberFormatter[id].el.value);
     // cambiar esta regex para que matche 2 6 1 en vez de 3 3 3
-    numberFormatter[id].value = numberFormatter[id].rawValue.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    numberFormatter[id].value = numberFormatter[id].rawValue.replace(
+        /\B(?=(\d{3})+(?!\d))/g,
+        '.'
+    );
     numberFormatter[id].el.value = numberFormatter[id].value;
-    numberFormatter[id].context[numberFormatter[id].expression] = numberFormatter[id].rawValue;
+    numberFormatter[id].context[numberFormatter[id].expression] =
+        numberFormatter[id].rawValue;
 };
 
 /* This prevent insert chars, that are not numbers */
 let keyDownHandler = function (event) {
-    if (!eventNumberKeyInput(event) || (isDigit(event.keyCode) && numberFormatter[this.id].rawValue.length + 1 > numberFormatter[this.id].el.dataset.maxLength)) {
+    if (
+        !eventNumberKeyInput(event) ||
+        (isDigit(event.keyCode) &&
+            numberFormatter[this.id].rawValue.length + 1 >
+                numberFormatter[this.id].el.dataset.maxLength)
+    ) {
         event.preventDefault();
         return false;
     }
-    if (event.key.toUpperCase() === 'DELETE' || event.key.toUpperCase() === 'BACKSPACE') {
+    if (
+        event.key.toUpperCase() === 'DELETE' ||
+        event.key.toUpperCase() === 'BACKSPACE'
+    ) {
         let position = this.selectionStart;
         if (event.key.toUpperCase() === 'BACKSPACE') {
             if (this.selectionStart !== 0) {

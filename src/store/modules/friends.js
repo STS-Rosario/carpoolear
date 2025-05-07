@@ -16,9 +16,9 @@ const state = {
 // getters
 const getters = {
     ...pagination.makeGetters('friends'),
-    pendings: state => state.pendings,
-    users: state => state.users,
-    searching: state => state.searching
+    pendings: (state) => state.pendings,
+    users: (state) => state.users,
+    searching: (state) => state.searching
 };
 
 // actions
@@ -27,46 +27,46 @@ const actions = {
         return friendsApi.index(data);
     }),
 
-    pending (store) {
+    pending(store) {
         store.commit(types.FRIENDS_SET_PENDING, null);
-        return friendsApi.pending().then(response => {
+        return friendsApi.pending().then((response) => {
             store.commit(types.FRIENDS_SET_PENDING, response.data);
             return Promise.resolve(response.data);
         });
     },
 
-    request (store, userId) {
-        return friendsApi.request(userId).then(response => {
+    request(store, userId) {
+        return friendsApi.request(userId).then((response) => {
             store.commit(types.FRIENDS_SET_REQUEST, userId);
             return Promise.resolve();
         });
     },
 
-    accept (store, userId) {
-        return friendsApi.accept(userId).then(response => {
+    accept(store, userId) {
+        return friendsApi.accept(userId).then((response) => {
             store.commit(types.FRIENDS_REMOVE_PENDING, userId);
         });
     },
 
-    reject (store, userId) {
-        return friendsApi.reject(userId).then(response => {
+    reject(store, userId) {
+        return friendsApi.reject(userId).then((response) => {
             store.commit(types.FRIENDS_REMOVE_PENDING, userId);
         });
     },
 
-    delete (store, userId) {
-        return friendsApi.delete(userId).then(response => {
+    delete(store, userId) {
+        return friendsApi.delete(userId).then((response) => {
             store.commit(types.FRIENDS_REMOVE, userId);
         });
     },
 
-    searchUsers (store, value) {
+    searchUsers(store, value) {
         if (value.length > 0) {
             store.commit(types.FRIENDS_SET_USERS, null);
             if (store.state.searching) {
                 store.state.searching.abort();
             }
-            let promise = userApi.list({ value }).then(response => {
+            let promise = userApi.list({ value }).then((response) => {
                 store.commit(types.FRIENDS_SET_USERS, response.data);
                 store.commit(types.FRIENDS_SET_SEARCHING, null);
                 return Promise.resolve(response.data);
@@ -84,34 +84,33 @@ const actions = {
 const mutations = {
     ...pagination.makeMutations('friends'),
 
-    [types.FRIENDS_SET_PENDING] (state, list) {
+    [types.FRIENDS_SET_PENDING](state, list) {
         state.pendings = list;
     },
 
-    [types.FRIENDS_REMOVE_PENDING] (state, userID) {
-        state.pendings = state.pendings.filter(item => item.id !== userID);
+    [types.FRIENDS_REMOVE_PENDING](state, userID) {
+        state.pendings = state.pendings.filter((item) => item.id !== userID);
     },
 
-    [types.FRIENDS_REMOVE] (state, userID) {
-        state.friends = state.friends.filter(item => item.id !== userID);
+    [types.FRIENDS_REMOVE](state, userID) {
+        state.friends = state.friends.filter((item) => item.id !== userID);
     },
 
-    [types.FRIENDS_SET_USERS] (state, users) {
+    [types.FRIENDS_SET_USERS](state, users) {
         state.users = users;
     },
-    [types.FRIENDS_SET_SEARCHING] (state, promise) {
+    [types.FRIENDS_SET_SEARCHING](state, promise) {
         state.searching = promise;
     },
 
-    [types.FRIENDS_SET_REQUEST] (state, userId) {
-        state.users = state.users.map(item => {
+    [types.FRIENDS_SET_REQUEST](state, userId) {
+        state.users = state.users.map((item) => {
             if (item.id === userId) {
                 item.state = 'pending';
             }
             return item;
         });
     }
-
 };
 
 export default {

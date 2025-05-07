@@ -18,15 +18,15 @@ const state = {
 
 // getters
 const getters = {
-    checkLogin: state => state.auth,
-    authHeader: state =>
+    checkLogin: (state) => state.auth,
+    authHeader: (state) =>
         state.auth ? { Authorization: 'Bearer ' + state.token } : {},
-    user: state => state.user,
-    firstTime: state => state.firstTime,
-    appConfig: state => state.appConfig,
-    tripCardTheme: state =>
+    user: (state) => state.user,
+    firstTime: (state) => state.firstTime,
+    appConfig: (state) => state.appConfig,
+    tripCardTheme: (state) =>
         state.appConfig ? state.appConfig.trip_card_design : '',
-    isRemoteConfig: state => state.appConfig && !state.appConfig.__isLocal
+    isRemoteConfig: (state) => state.appConfig && !state.appConfig.__isLocal
 };
 
 // actions
@@ -58,7 +58,7 @@ function login(store, { email, password }) {
     creds.password = password;
 
     return authApi.login(creds).then(
-        response => {
+        (response) => {
             onLoggin(store, response.token);
             return Promise.resolve();
         },
@@ -78,10 +78,10 @@ function activate(store, activationToken) {
     firstTime(store, true);
     return authApi
         .activate(activationToken, {})
-        .then(response => {
+        .then((response) => {
             onLoggin(store, response.token);
         })
-        .catch(err => {
+        .catch((err) => {
             if (err) {
             }
         });
@@ -103,7 +103,7 @@ function resetPassword(store, email) {
         .then(() => {
             return Promise.resolve();
         })
-        .catch(err => {
+        .catch((err) => {
             return Promise.reject(err);
         });
 }
@@ -115,7 +115,7 @@ function changePassword(store, { token, data }) {
             router.push({ name: 'login' });
             return Promise.resolve();
         })
-        .catch(err => {
+        .catch((err) => {
             if (err) {
                 return Promise.reject(err);
             }
@@ -125,10 +125,10 @@ function changePassword(store, { token, data }) {
 function register(store, data) {
     return userApi
         .register(data)
-        .then(data => {
+        .then((data) => {
             return Promise.resolve(data);
         })
-        .catch(err => {
+        .catch((err) => {
             return Promise.reject(err);
         });
 }
@@ -136,7 +136,7 @@ function register(store, data) {
 function fetchUser(store) {
     return userApi
         .show()
-        .then(response => {
+        .then((response) => {
             console.log('fetch user', response.data);
             store.commit(types.AUTH_SET_USER, response.data);
         })
@@ -148,7 +148,7 @@ function fetchUser(store) {
 function getConfig(store) {
     localConfig.__isLocal = true;
     store.commit('AUTH_APP_CONFIG', localConfig);
-    return authApi.config().then(response => {
+    return authApi.config().then((response) => {
         response.__isLocal = false;
         console.log('Loading config from server: ', response);
         const config = { ...localConfig, ...response };
@@ -164,12 +164,12 @@ function retoken(store) {
     return new Promise((resolve, reject) => {
         authApi
             .retoken(data)
-            .then(response => {
+            .then((response) => {
                 console.log('retoken response', response);
                 store.commit(types.AUTH_SET_TOKEN, response.token);
                 store.commit('AUTH_APP_CONFIG', {
                     ...localConfig,
-                    ...response.config,
+                    ...response.config
                 });
                 resolve();
             })
@@ -197,7 +197,7 @@ function logout(store) {
 function update(store, data) {
     return userApi
         .update(data)
-        .then(response => {
+        .then((response) => {
             firstTime(store, false);
             store.commit(types.AUTH_SET_USER, response.data);
             return Promise.resolve(response.data);
@@ -210,7 +210,7 @@ function update(store, data) {
 function adminUpdate(store, data) {
     return userApi
         .adminUpdate(data)
-        .then(response => {
+        .then((response) => {
             return Promise.resolve(response.data);
         })
         .catch(({ data, status }) => {
@@ -222,7 +222,7 @@ function adminUpdate(store, data) {
 function updatePhoto(store, data) {
     return userApi
         .updatePhoto(data)
-        .then(response => {
+        .then((response) => {
             console.log(response);
             store.commit(types.AUTH_SET_USER, response.data);
             return Promise.resolve(response.data);

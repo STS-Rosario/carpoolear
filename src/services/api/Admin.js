@@ -2,24 +2,24 @@ import TaggedApi from '../../classes/TaggedApi';
 
 class AdminApi extends TaggedApi {
     // modify user data.user with data
-    adminUpdate (data) {
+    adminUpdate(data) {
         return this.put('/api/users/modify', data);
     }
 
     // search users by name or email
-    searchUsers (data) {
+    searchUsers(data) {
         return this.get('/api/users/search', data);
     }
 
-    getTrips () {
+    getTrips() {
         return this.get('/api/data/trips');
     }
 
-    getSeats () {
+    getSeats() {
         return this.get('/api/data/seats');
     }
 
-    getUserStats () {
+    getUserStats() {
         return this.get('/api/data/users');
     }
 }

@@ -47,11 +47,15 @@ const messages = {
         momentoViajar: 'al momento de viajar.',
         nroTel: 'Número de teléfono',
         ejemploTelefono: 'Código área + teléfono. Ej: 011 1551111111',
-        incentivoTelefono: 'Después de haber coordinado el viaje (definir detalles del viaje + envío y aceptación de solicitud de asiento) intercambien celulares para tener un contacto más ágil.',
+        incentivoTelefono:
+            'Después de haber coordinado el viaje (definir detalles del viaje + envío y aceptación de solicitud de asiento) intercambien celulares para tener un contacto más ágil.',
         soloConductores: 'Sólo para conductores',
-        incentivoPatente: 'Antes de comenzar el viaje, verifica que la patente se corresponda con la informada por la otra persona.',
-        siSosConductorDatosVisibles: 'Si sos conductor, estos datos son visibles para los pasajero que hayas confirmado en tu viaje. Si sos pasajero, estos datos son visibles para el conductor del viaje al que te haya subido y estés confirmado.',
-        tildaOpcionDatosVisibles: 'Seleccioná esta opción y guardá los cambios si quieres que estos datos sean visibles para cualquier usuario que acceda tu perfil. Sino estos datos solo serán visibles para los pasajeros que confirmes en tu viaje, o para el conductor del viaje al que te subas y te confirme.',
+        incentivoPatente:
+            'Antes de comenzar el viaje, verifica que la patente se corresponda con la informada por la otra persona.',
+        siSosConductorDatosVisibles:
+            'Si sos conductor, estos datos son visibles para los pasajero que hayas confirmado en tu viaje. Si sos pasajero, estos datos son visibles para el conductor del viaje al que te haya subido y estés confirmado.',
+        tildaOpcionDatosVisibles:
+            'Seleccioná esta opción y guardá los cambios si quieres que estos datos sean visibles para cualquier usuario que acceda tu perfil. Sino estos datos solo serán visibles para los pasajeros que confirmes en tu viaje, o para el conductor del viaje al que te subas y te confirme.',
         datosVisiblesCheck: 'Datos públicos',
         notificacionesPorCorreo:
             'Recibir notificaciones por correo electrónico.',
@@ -164,8 +168,10 @@ const messages = {
         perfilActualizadoCorrectamente: 'Perfil actualizado correctamente.',
         debesImagenPerfil: 'Debes cargar una imagen de perfil.',
         errorDatos: 'No se pudo grabar los datos. Intente de nuevo',
-        nroDocYaRegistrado: 'Ya existe un usuario registrado con este número de documento.',
-        nroTelYaRegistrado: 'Ya existe un usuario registrado con este número de teléfono.',
+        nroDocYaRegistrado:
+            'Ya existe un usuario registrado con este número de documento.',
+        nroTelYaRegistrado:
+            'Ya existe un usuario registrado con este número de teléfono.',
         olvidasteNombre: 'Olvidaste ingresar tu nombre y apellido.',
         patente: 'Patente',
         patenteNoValida: 'La patente ingresada no tiene un formato válido.',
@@ -204,7 +210,8 @@ const messages = {
         aportanteMediaNaranja:
             'Aportante en la campaña mi media naranja carpoolera',
         miembroEquipo: 'Miembro del equipo de Carpoolear',
-        cambioFacebook: 'Facebook cambió sus políticas y no podemos llevarte al perfil de esta persona, pero te ayudamos a buscarlo.',
+        cambioFacebook:
+            'Facebook cambió sus políticas y no podemos llevarte al perfil de esta persona, pero te ayudamos a buscarlo.',
         enviarMensaje: 'Enviar mensaje',
         editarPerfil: 'Editar perfil',
         enviarReferencia: 'Escribir una referencia del usuario',
@@ -236,7 +243,8 @@ const messages = {
         iniciarSesion: 'Iniciar sesión',
         ingresaCuenta: 'Ingresá con tu cuenta de',
         carpoolear: 'Carpoolear',
-        recuperarDeFacebook: 'Si carpooleabas antes del 5/8/17, tenés que entrar al sistema mediante el botón "ingresar con Facebook" para seguir usando el mismo usuario y recuperar tus calificaciones. Si no podés entrar, escribinos a',
+        recuperarDeFacebook:
+            'Si carpooleabas antes del 5/8/17, tenés que entrar al sistema mediante el botón "ingresar con Facebook" para seguir usando el mismo usuario y recuperar tus calificaciones. Si no podés entrar, escribinos a',
         carpoolearMail: 'carpoolear@stsrosario.org.ar',
         recuperarDeFacebook2: 'o a nuestro Facebook así te ayudamos :)',
         noMostrar: 'No volver a mostrar',
@@ -260,8 +268,10 @@ const messages = {
         paraIngresarCuenta:
             'Esta cuenta no se encuentra confirmada. Debes activarla desde tu correo, busca en tu bandeja de entrada/spam por un correo nuestro. Sino encuentras el correo ponte en contacto con nosotros a contacto@carpoolear.com',
         emailOContra: 'Email o password incorrecto.',
-        solicitudEnviada: 'Su solicitud ya fue enviada, aguarde un momento por favor.',
-        correoUsado: 'El correo asociado a su cuenta de Facebook, ya tiene asociada una cuenta en Carpoolear. Por favor, ingrese utilizando el login por email. Si no recuerda su clave, cliqueé en olvidé mi contraseña.',
+        solicitudEnviada:
+            'Su solicitud ya fue enviada, aguarde un momento por favor.',
+        correoUsado:
+            'El correo asociado a su cuenta de Facebook, ya tiene asociada una cuenta en Carpoolear. Por favor, ingrese utilizando el login por email. Si no recuerda su clave, cliqueé en olvidé mi contraseña.',
         fecha: 'Fecha',
         monto: 'Monto',
         estado: 'Estado',
@@ -337,11 +347,15 @@ const messages = {
         patenteNoValida: 'La placa ingresada no tiene un formato válido.',
         olvidastePatente: 'Olvidaste completar ingresar la placa.',
         ejemploTelefono: 'Código área + teléfono. Ej: 562 1111 11 11',
-        incentivoTelefono: 'Por si querés que el resto de los usuarios también te puedan contactar por ahí.',
+        incentivoTelefono:
+            'Por si querés que el resto de los usuarios también te puedan contactar por ahí.',
         soloConductores: 'Sólo para conductores',
-        incentivoPatente: 'Antes de comenzar el viaje, verifica que la patente se corresponda con la informada por la otra persona.',
-        siSosConductorDatosVisibles: 'Si sos conductor, estos datos son visibles para los pasajero que hayas confirmado en tu viaje. Si sos pasajero, estos datos son visibles para el conductor del viaje al que te haya subido y estés confirmado.',
-        tildaOpcionDatosVisibles: 'Tilda esta opción (y guardá cambios) si quieres que estos datos sean visibles para cualquier usuario que acceda tu perfil. Sino estos datos solo serán visibles para los pasajeros que confirmes en tu viaje, o para el conductor del viaje al que te subas y te confirme.',
+        incentivoPatente:
+            'Antes de comenzar el viaje, verifica que la patente se corresponda con la informada por la otra persona.',
+        siSosConductorDatosVisibles:
+            'Si sos conductor, estos datos son visibles para los pasajero que hayas confirmado en tu viaje. Si sos pasajero, estos datos son visibles para el conductor del viaje al que te haya subido y estés confirmado.',
+        tildaOpcionDatosVisibles:
+            'Tilda esta opción (y guardá cambios) si quieres que estos datos sean visibles para cualquier usuario que acceda tu perfil. Sino estos datos solo serán visibles para los pasajeros que confirmes en tu viaje, o para el conductor del viaje al que te subas y te confirme.',
         datosVisiblesCheck: 'RUT y teléfono visibles',
         notificacionesPorCorreo:
             'Recibir notificaciones por correo electrónico.',
