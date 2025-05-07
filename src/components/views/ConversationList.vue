@@ -56,7 +56,7 @@
                                             unread: conversation.unread,
                                             active:
                                                 selected &&
-                                                conversation.id === selected.id,
+                                                conversation.id === selected.id
                                         }"
                                         v-bind:key="conversation.id"
                                     >
@@ -220,7 +220,7 @@ export default {
     name: 'conversation-list',
     data() {
         return {
-            textSearch: '',
+            textSearch: ''
         };
     },
 
@@ -231,12 +231,12 @@ export default {
             users: 'conversations/users',
             selected: 'conversations/selectedConversation',
             isMobile: 'device/isMobile',
-            config: 'auth/appConfig',
+            config: 'auth/appConfig'
         }),
 
         hide() {
             return this.$route.meta.hide;
-        },
+        }
     },
 
     methods: {
@@ -246,7 +246,7 @@ export default {
             create: 'conversations/createConversation',
             unreadMessage: 'conversations/getUnreaded',
             select: 'conversations/select',
-            clear: 'conversations/clearUserList',
+            clear: 'conversations/clearUserList'
         }),
 
         nextPage() {
@@ -264,7 +264,7 @@ export default {
                     this.clear();
                     router.push({
                         name: 'conversation-chat',
-                        params: { id: c.id },
+                        params: { id: c.id }
                     });
                 })
                 .catch(() => {});
@@ -273,9 +273,9 @@ export default {
         onChangeConversation(conversation) {
             router.push({
                 name: 'conversation-chat',
-                params: { id: conversation.id },
+                params: { id: conversation.id }
             });
-        },
+        }
     },
 
     beforeDestroy() {
@@ -298,7 +298,7 @@ export default {
             if (oldValue.length === 0 && newValue.length > 0) {
                 this.clear();
             }
-        },
+        }
     },
 
     mounted() {
@@ -314,8 +314,8 @@ export default {
     updated() {},
     components: {
         Loading,
-        CoordinateTrip,
-    },
+        CoordinateTrip
+    }
 };
 </script>
 

@@ -13,20 +13,20 @@ export const init = (store) => {
     let loadStateMap = [
         {
             key: keys.TOKEN_KEY,
-            mutation: 'auth/' + types.AUTH_SET_TOKEN,
+            mutation: 'auth/' + types.AUTH_SET_TOKEN
         },
         {
             key: keys.USER_KEY,
-            mutation: 'auth/' + types.AUTH_SET_USER,
+            mutation: 'auth/' + types.AUTH_SET_USER
         },
         {
             key: keys.DEVICE_KEY,
-            mutation: 'device/' + types.DEVICE_SET_CURRENT_DEVICE,
+            mutation: 'device/' + types.DEVICE_SET_CURRENT_DEVICE
         },
         {
             key: keys.FIRST_TIME_APP_KEY,
-            mutation: 'device/' + types.DEVICE_SET_FIRST_TIME_APP_OPEN,
-        },
+            mutation: 'device/' + types.DEVICE_SET_FIRST_TIME_APP_OPEN
+        }
     ];
 
     loadStateMap.forEach((obj) => {

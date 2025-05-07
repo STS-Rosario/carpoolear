@@ -10,7 +10,7 @@ const state = {
     ...pagination.makeState('friends'),
     pendings: null,
     users: [],
-    searching: null,
+    searching: null
 };
 
 // getters
@@ -18,7 +18,7 @@ const getters = {
     ...pagination.makeGetters('friends'),
     pendings: (state) => state.pendings,
     users: (state) => state.users,
-    searching: (state) => state.searching,
+    searching: (state) => state.searching
 };
 
 // actions
@@ -77,7 +77,7 @@ const actions = {
             store.commit(types.FRIENDS_SET_USERS, []);
             return Promise.resolve();
         }
-    },
+    }
 };
 
 // mutations
@@ -110,7 +110,7 @@ const mutations = {
             }
             return item;
         });
-    },
+    }
 };
 
 export default {
@@ -118,5 +118,5 @@ export default {
     state,
     getters,
     actions,
-    mutations,
+    mutations
 };

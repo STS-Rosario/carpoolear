@@ -11,7 +11,7 @@ const router = new VueRouter({
     routes: routes,
     // esto hay que atarlo a si estoy en cordova o no
     mode: process.env.HISTORY_MODE,
-    base: process.env.ROUTE_BASE,
+    base: process.env.ROUTE_BASE
 });
 
 router.rememberRoute = null;

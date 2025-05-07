@@ -15,7 +15,7 @@
                 'trip-almost-fill': seats_available === 1,
                 'trip-mostly-available': seats_available > 3,
                 'trip-with-driver': user,
-                'trip-with-control': enableChangeSeats,
+                'trip-with-control': enableChangeSeats
             }"
         >
             <div
@@ -349,9 +349,7 @@
                                 </div>
                                 <div class="col-xs-10">
                                     <span class="trip_datetime_time">
-                                        {{
-                                            [trip.trip_date] | moment('HH:mm')
-                                        }}
+                                        {{ [trip.trip_date] | moment('HH:mm') }}
                                         hs
                                     </span>
                                 </div>
@@ -549,51 +547,51 @@ export default {
             required: false,
             default: () => {
                 return {};
-            },
+            }
         },
         user: {
             type: Object,
             required: false,
             default: () => {
                 return {};
-            },
+            }
         },
         enableChangeSeats: {
             type: Boolean,
             required: false,
-            default: false,
+            default: false
         },
         clickModal: {
             required: false,
-            default: false,
-        },
+            default: false
+        }
     },
 
     methods: {
         ...mapActions({
             changeSeats: 'trips/changeSeats',
-            remove: 'trips/remove',
+            remove: 'trips/remove'
         }),
         goToDetail: function (goToEdit, passengerView) {
             if (goToEdit) {
                 this.$router.push({
                     name: 'update-trip',
-                    params: { id: this.trip.id },
+                    params: { id: this.trip.id }
                 });
             } else {
                 if (!passengerView) {
                     bus.emit('trip-click');
                     this.$router.push({
                         name: 'detail_trip',
-                        params: { id: this.trip.id },
+                        params: { id: this.trip.id }
                     });
                 } else {
                     this.$router.push({
                         name: 'detail_trip_location',
                         params: {
                             id: this.trip.id,
-                            location: 'passenger',
-                        },
+                            location: 'passenger'
+                        }
                     });
                 }
             }
@@ -605,15 +603,15 @@ export default {
                 params: {
                     id: this.trip.user.id,
                     userProfile: this.trip.user,
-                    activeTab: 1,
-                },
+                    activeTab: 1
+                }
             });
         },
         changeSeatsNumber: function (increment) {
             this.sending = true;
             let data = {
                 id: this.trip.id,
-                increment: increment,
+                increment: increment
             };
             this.changeSeats(data)
                 .then((data) => {
@@ -667,13 +665,13 @@ export default {
                 this.remove(this.trip.id)
                     .then(() => {
                         dialogs.message(this.$t('viajeCancelado'), {
-                            estado: 'success',
+                            estado: 'success'
                         });
                     })
                     .catch((error) => {
                         console.error(error);
                         dialogs.message(this.$t('errorAlCancelar'), {
-                            estado: 'error',
+                            estado: 'error'
                         });
                     });
             }
@@ -705,7 +703,7 @@ export default {
                 }
             }
             return '';
-        },
+        }
     },
     data() {
         return {
@@ -713,14 +711,14 @@ export default {
             seats_available: 0,
             CITY_NAME_LONG_LENGTH: 16,
             LONG_NAME_STYLE: {
-                'font-size': '17px',
+                'font-size': '17px'
             },
-            showTrip: false,
+            showTrip: false
         };
     },
     computed: {
         ...mapGetters({
-            config: 'auth/appConfig',
+            config: 'auth/appConfig'
         }),
         tripCardCountClass() {
             if (this.config) {
@@ -787,25 +785,25 @@ export default {
                     if (i < integerPart) {
                         stars.push({
                             id: i,
-                            value: '',
+                            value: ''
                         });
                     } else {
                         if (i === integerPart) {
                             if (decimalPart >= 0.5) {
                                 stars.push({
                                     id: i,
-                                    value: '',
+                                    value: ''
                                 });
                             } else {
                                 stars.push({
                                     id: i,
-                                    value: '-half',
+                                    value: '-half'
                                 });
                             }
                         } else {
                             stars.push({
                                 id: i,
-                                value: '-empty',
+                                value: '-empty'
                             });
                         }
                     }
@@ -814,18 +812,18 @@ export default {
             } else {
                 return [];
             }
-        },
+        }
     },
     components: {
         tripDisplay,
-        SvgItem,
+        SvgItem
     },
     mounted() {
         if (this.trip) {
             this.seats_available = this.trip.seats_available;
         }
     },
-    updated() {},
+    updated() {}
 };
 </script>
 <style scoped>

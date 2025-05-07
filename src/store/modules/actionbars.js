@@ -16,26 +16,26 @@ const state = {
             id: 'back',
             icon: 'fa-angle-left',
             show: false,
-            position: 'left',
+            position: 'left'
         },
         {
             id: 'clear',
             icon: 'fa-times',
             show: false,
-            position: 'right',
+            position: 'right'
         },
         {
             id: 'share',
             icon: 'fa-share-alt',
             show: false,
-            position: 'right',
+            position: 'right'
         },
         {
             id: 'search',
             icon: 'fa-search',
             show: false,
-            position: 'right',
-        },
+            position: 'right'
+        }
     ],
     header_logo_visibility: true,
     footer_visibility: true,
@@ -44,33 +44,33 @@ const state = {
             id: 'home',
             icon: 'home',
             url: 'trips',
-            active: true,
+            active: true
         },
         {
             id: 'profile',
             icon: 'contact',
             url: 'profile',
-            active: false,
+            active: false
         },
         {
             id: 'new-trip',
             icon: 'add',
             url: 'new-trip',
-            active: false,
+            active: false
         },
         {
             id: 'conversations',
             icon: 'message',
             url: 'conversations-list',
-            active: false,
+            active: false
         },
         {
             id: 'notifications',
             icon: 'bell',
             url: 'notifications',
-            active: false,
-        },
-    ],
+            active: false
+        }
+    ]
 };
 
 const getters = {
@@ -86,7 +86,7 @@ const getters = {
     headerLogoVisibility: (state) => state.header_logo_visibility,
 
     footerShow: (state) => state.footer_visibility,
-    footerButtons: (state) => state.footer_buttons,
+    footerButtons: (state) => state.footer_buttons
 };
 
 const actions = {
@@ -146,7 +146,7 @@ const actions = {
             globalStore.dispatch('trips/refreshList', true);
         }
         router.push({ name: item.url, params });
-    },
+    }
 };
 
 const mutations = {
@@ -197,7 +197,7 @@ const mutations = {
                 item.active = false;
             }
         });
-    },
+    }
 };
 
 export default {
@@ -205,5 +205,5 @@ export default {
     state,
     getters,
     actions,
-    mutations,
+    mutations
 };

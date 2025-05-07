@@ -2,7 +2,7 @@ module.exports = {
     root: true,
     parser: 'babel-eslint',
     parserOptions: {
-        sourceType: 'module',
+        sourceType: 'module'
     },
     // https://github.com/feross/standard/blob/master/RULES.md#javascript-standard-style
     extends: ['standard', 'plugin:prettier/recommended'],
@@ -29,5 +29,9 @@ module.exports = {
         'handle-callback-err': 1,
 
         'no-unused-vars': 1,
-    },
+
+        // Disable trailing comma rules
+        'comma-dangle': 'off',
+        'comma-style': 'off'
+    }
 };

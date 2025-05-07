@@ -328,7 +328,7 @@ export default {
                 process.env.ROUTE_BASE +
                 'static/img/' +
                 process.env.TARGET_APP +
-                '_logo_full.png',
+                '_logo_full.png'
         };
     },
     computed: {
@@ -336,7 +336,7 @@ export default {
             checkLogin: 'auth/checkLogin',
             isMobile: 'device/isMobile',
             config: 'auth/appConfig',
-            deviceData: 'cordova/device',
+            deviceData: 'cordova/device'
         }),
         isDesktop() {
             return !this.isMobile;
@@ -362,13 +362,13 @@ export default {
             } else {
                 return 'col-sm-12 col-md-12';
             }
-        },
+        }
     },
     methods: {
         ...mapActions({
             doLogin: 'auth/login', // map this.add() to this.$store.dispatch('increment')
             fbLogin: 'cordova/facebookLogin',
-            appleLogin: 'cordova/appleLogin',
+            appleLogin: 'cordova/appleLogin'
         }),
         fbWarningGetIt() {
             this.isUnderstood = true;
@@ -419,7 +419,7 @@ export default {
                         this.showUserBannedInfo = userBanned;
                         dialogs.message(message, {
                             duration: 10,
-                            estado: 'error',
+                            estado: 'error'
                         });
                         if (error) {
                             this.error = error.error;
@@ -430,7 +430,7 @@ export default {
             } else {
                 dialogs.message(this.$t('solicitudEnviada'), {
                     duration: 10,
-                    estado: 'error',
+                    estado: 'error'
                 });
             }
         },
@@ -445,14 +445,14 @@ export default {
                     if (response.errors && response.errors.email) {
                         dialogs.message(this.$t('correoUsado'), {
                             duration: 10,
-                            estado: 'error',
+                            estado: 'error'
                         });
                     }
                 });
             } else {
                 dialogs.message(this.$t('solicitudEnviada'), {
                     duration: 10,
-                    estado: 'error',
+                    estado: 'error'
                 });
             }
         },
@@ -463,20 +463,20 @@ export default {
                     if (response.errors && response.errors.email) {
                         dialogs.message(this.$t('correoUsado'), {
                             duration: 10,
-                            estado: 'error',
+                            estado: 'error'
                         });
                     }
                 });
             } else {
                 dialogs.message(this.$t('solicitudEnviada'), {
                     duration: 10,
-                    estado: 'error',
+                    estado: 'error'
                 });
             }
         },
         onClearClick() {
             router.back();
-        },
+        }
     },
 
     mounted() {
@@ -509,8 +509,8 @@ export default {
 
     components: {
         Spinner,
-        modal,
-    },
+        modal
+    }
 };
 </script>
 

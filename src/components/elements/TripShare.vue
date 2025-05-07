@@ -53,18 +53,18 @@ export default {
         return {
             currentUrl: encodeURIComponent(
                 'https://carpoolear.com.ar/app' + this.$route.fullPath
-            ),
+            )
         };
     },
     computed: {
         ...mapGetters({
             trip: 'trips/currentTrip',
             tripCardTheme: 'auth/tripCardTheme',
-            isMobile: 'device/isMobile',
+            isMobile: 'device/isMobile'
         }),
         isPassengersView() {
             return this.trip.is_passenger;
-        },
+        }
     },
     components: {},
     methods: {
@@ -114,8 +114,8 @@ export default {
                     );
                 }
             }
-        },
-    },
+        }
+    }
 };
 </script>
 <style scoped></style>

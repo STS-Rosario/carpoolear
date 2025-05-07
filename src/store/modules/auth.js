@@ -13,7 +13,7 @@ const state = {
     user: null,
     token: null,
     firstTime: false,
-    appConfig: null,
+    appConfig: null
 };
 
 // getters
@@ -26,7 +26,7 @@ const getters = {
     appConfig: (state) => state.appConfig,
     tripCardTheme: (state) =>
         state.appConfig ? state.appConfig.trip_card_design : '',
-    isRemoteConfig: (state) => state.appConfig && !state.appConfig.__isLocal,
+    isRemoteConfig: (state) => state.appConfig && !state.appConfig.__isLocal
 };
 
 // actions
@@ -169,7 +169,7 @@ function retoken(store) {
                 store.commit(types.AUTH_SET_TOKEN, response.token);
                 store.commit('AUTH_APP_CONFIG', {
                     ...localConfig,
-                    ...response.config,
+                    ...response.config
                 });
                 resolve();
             })
@@ -248,7 +248,7 @@ const actions = {
     searchUsers,
     adminUpdate,
     getConfig,
-    onBoardingViewed,
+    onBoardingViewed
 };
 
 // mutations
@@ -283,7 +283,7 @@ const mutations = {
             }
             state.user.donations.push(donation);
         }
-    },
+    }
 };
 
 export default {
@@ -291,5 +291,5 @@ export default {
     state,
     getters,
     actions,
-    mutations,
+    mutations
 };

@@ -14,15 +14,15 @@ export default [
             actionbar: {
                 header: {
                     logo: {
-                        show: false,
+                        show: false
                     },
-                    buttons: ['clear'],
-                },
+                    buttons: ['clear']
+                }
             },
             background: {
-                style: 'blue',
-            },
-        },
+                style: 'blue'
+            }
+        }
     },
     {
         path: '/register',
@@ -37,22 +37,22 @@ export default [
                             getters &&
                             getters['auth/appConfig'] &&
                             getters['auth/appConfig'].trip_card_design ===
-                                'light',
+                                'light'
                     },
-                    buttons: ['back'],
-                },
+                    buttons: ['back']
+                }
             },
             background: {
-                style: 'blue',
-            },
-        },
+                style: 'blue'
+            }
+        }
     },
     {
         path: '/activate/:token',
         name: 'activate',
         beforeEnter: guest,
         component: require('../components/views/Activate').default,
-        props: true,
+        props: true
     },
     {
         path: '/reset-password',
@@ -68,15 +68,15 @@ export default [
                             getters &&
                             getters['auth/appConfig'] &&
                             getters['auth/appConfig'].trip_card_design ===
-                                'light',
+                                'light'
                     },
-                    buttons: ['back'],
-                },
+                    buttons: ['back']
+                }
             },
             background: {
-                style: 'blue',
-            },
-        },
+                style: 'blue'
+            }
+        }
     },
     {
         path: '/reset-password/:token',
@@ -88,15 +88,15 @@ export default [
             actionbar: {
                 header: {
                     logo: {
-                        show: false,
+                        show: false
                     },
-                    buttons: ['back'],
-                },
+                    buttons: ['back']
+                }
             },
             background: {
-                style: 'blue',
-            },
-        },
+                style: 'blue'
+            }
+        }
     },
     {
         path: '/profile/:id',
@@ -108,14 +108,14 @@ export default [
             actionbar: {
                 footer: {
                     show: true,
-                    active_id: 'profile',
+                    active_id: 'profile'
                 },
                 header: {
                     title: 'Mi Perfil',
-                    buttons: ['back', 'menu'],
-                },
-            },
-        },
+                    buttons: ['back', 'menu']
+                }
+            }
+        }
     },
     {
         path: '/my-trips',
@@ -126,14 +126,14 @@ export default [
             actionbar: {
                 footer: {
                     show: true,
-                    active_id: 'profile',
+                    active_id: 'profile'
                 },
                 header: {
                     title: 'Mis Viajes',
-                    buttons: [],
-                },
-            },
-        },
+                    buttons: []
+                }
+            }
+        }
     },
     {
         path: '/trips',
@@ -144,13 +144,13 @@ export default [
             actionbar: {
                 footer: {
                     show: true,
-                    active_id: 'home',
+                    active_id: 'home'
                 },
                 header: {
-                    buttons: ['search'],
-                },
-            },
-        },
+                    buttons: ['search']
+                }
+            }
+        }
     },
     {
         path: '/trips/create',
@@ -164,10 +164,10 @@ export default [
             actionbar: {
                 header: {
                     title: 'Crear viaje',
-                    buttons: ['clear'],
-                },
-            },
-        },
+                    buttons: ['clear']
+                }
+            }
+        }
     },
     {
         path: '/trips/update/:id',
@@ -179,10 +179,10 @@ export default [
             actionbar: {
                 header: {
                     title: 'Editar viaje',
-                    buttons: ['clear'],
-                },
-            },
-        },
+                    buttons: ['clear']
+                }
+            }
+        }
     },
     {
         path: '/trips/:id',
@@ -194,14 +194,14 @@ export default [
             actionbar: {
                 footer: {
                     show: true,
-                    active_id: 'home',
+                    active_id: 'home'
                 },
                 header: {
                     title: 'Viaje',
-                    buttons: ['back'],
-                },
-            },
-        },
+                    buttons: ['back']
+                }
+            }
+        }
     },
     {
         path: '/trips/:id/:location',
@@ -213,14 +213,14 @@ export default [
             actionbar: {
                 footer: {
                     show: true,
-                    active_id: 'home',
+                    active_id: 'home'
                 },
                 header: {
                     title: 'Viaje',
-                    buttons: ['back'],
-                },
-            },
-        },
+                    buttons: ['back']
+                }
+            }
+        }
     },
     {
         path: '/notifications',
@@ -232,13 +232,13 @@ export default [
             actionbar: {
                 footer: {
                     show: true,
-                    active_id: 'notifications',
+                    active_id: 'notifications'
                 },
                 header: {
-                    title: 'Notificaciones',
-                },
-            },
-        },
+                    title: 'Notificaciones'
+                }
+            }
+        }
     },
     {
         path: '/setting',
@@ -255,14 +255,14 @@ export default [
                     actionbar: {
                         footer: {
                             show: true,
-                            active_id: 'profile',
+                            active_id: 'profile'
                         },
                         header: {
                             title: 'Editar perfil',
-                            buttons: ['menu'],
-                        },
-                    },
-                },
+                            buttons: ['menu']
+                        }
+                    }
+                }
             },
             {
                 path: 'friends',
@@ -274,14 +274,14 @@ export default [
                     actionbar: {
                         footer: {
                             show: true,
-                            active_id: 'profile',
+                            active_id: 'profile'
                         },
                         header: {
                             title: 'Amigos',
-                            buttons: ['menu'],
-                        },
-                    },
-                },
+                            buttons: ['menu']
+                        }
+                    }
+                }
             },
             {
                 path: 'friends/search',
@@ -293,12 +293,12 @@ export default [
                     actionbar: {
                         header: {
                             title: 'Buscar Amigos',
-                            buttons: ['back'],
-                        },
-                    },
-                },
-            },
-        ],
+                            buttons: ['back']
+                        }
+                    }
+                }
+            }
+        ]
     },
     {
         path: '/conversations',
@@ -309,15 +309,15 @@ export default [
             actionbar: {
                 footer: {
                     show: true,
-                    active_id: 'conversations',
+                    active_id: 'conversations'
                 },
                 header: {
-                    title: 'Mensajes',
-                },
+                    title: 'Mensajes'
+                }
             },
             background: {
-                style: 'white',
-            },
+                style: 'white'
+            }
         },
         children: [
             {
@@ -330,19 +330,19 @@ export default [
                     hide: true,
                     actionbar: {
                         footer: {
-                            active_id: 'conversations',
+                            active_id: 'conversations'
                         },
                         header: {
                             title: 'Conversación',
-                            buttons: ['back'],
-                        },
+                            buttons: ['back']
+                        }
                     },
                     background: {
-                        style: 'white',
-                    },
-                },
-            },
-        ],
+                        style: 'white'
+                    }
+                }
+            }
+        ]
     },
     {
         path: '/about',
@@ -352,10 +352,10 @@ export default [
             actionbar: {
                 header: {
                     title: 'Acerca de',
-                    buttons: ['back'],
-                },
-            },
-        },
+                    buttons: ['back']
+                }
+            }
+        }
     },
     {
         path: '/transactions',
@@ -365,10 +365,10 @@ export default [
             actionbar: {
                 header: {
                     title: 'Transacciones',
-                    buttons: ['back'],
-                },
-            },
-        },
+                    buttons: ['back']
+                }
+            }
+        }
     },
     {
         path: '/terminos',
@@ -378,10 +378,10 @@ export default [
             actionbar: {
                 header: {
                     title: 'Términos',
-                    buttons: ['back'],
-                },
-            },
-        },
+                    buttons: ['back']
+                }
+            }
+        }
     },
     {
         path: '/admin',
@@ -392,14 +392,14 @@ export default [
             actionbar: {
                 footer: {
                     show: true,
-                    active_id: 'admin',
+                    active_id: 'admin'
                 },
                 header: {
                     title: 'Admin Page',
-                    buttons: [],
-                },
-            },
-        },
+                    buttons: []
+                }
+            }
+        }
     },
     {
         path: '/admin/users',
@@ -410,14 +410,14 @@ export default [
             actionbar: {
                 footer: {
                     show: true,
-                    active_id: 'admin',
+                    active_id: 'admin'
                 },
                 header: {
                     title: 'Admin users',
-                    buttons: [],
-                },
-            },
-        },
+                    buttons: []
+                }
+            }
+        }
     },
     {
         path: '/admin/trips',
@@ -428,17 +428,17 @@ export default [
             actionbar: {
                 footer: {
                     show: true,
-                    active_id: 'admin',
+                    active_id: 'admin'
                 },
                 header: {
                     title: 'Admin trips',
-                    buttons: [],
-                },
-            },
-        },
+                    buttons: []
+                }
+            }
+        }
     },
     {
         path: '/*',
-        redirect: '/trips',
-    },
+        redirect: '/trips'
+    }
 ];

@@ -135,14 +135,14 @@ import RateItem from '../RateItem';
 let emptyCols = {
     col1: [],
     col2: [],
-    col3: [],
+    col3: []
 };
 
 export default {
     data() {
         return {
             rating: {},
-            referencesCol: {},
+            referencesCol: {}
         };
     },
     methods: {
@@ -167,7 +167,7 @@ export default {
                     }
                 }
             }
-        },
+        }
     },
     computed: {
         ...mapGetters({
@@ -177,21 +177,21 @@ export default {
             isTablet: 'device/isTablet',
             isDesktop: 'device/isDesktop',
             config: 'auth/appConfig',
-            references: 'profile/references',
-        }),
+            references: 'profile/references'
+        })
     },
     watch: {
         rates: {
             handler: function (val, oldVal) {
                 this.makeRows('rates', 'rating');
-            },
+            }
         },
         references: {
             handler: function (val, oldVal) {
                 if (this.config && this.config.module_references) {
                     this.makeRows('references', 'referencesCol');
                 }
-            },
+            }
         },
         isMobile: {
             handler: function (val, oldVal) {
@@ -200,7 +200,7 @@ export default {
                 if (this.config && this.config.module_references) {
                     this.makeRows('references', 'referencesCol');
                 }
-            },
+            }
         },
         isDesktop: {
             handler: function (val, oldVal) {
@@ -208,14 +208,14 @@ export default {
                 if (this.config && this.config.module_references) {
                     this.makeRows('references', 'referencesCol');
                 }
-            },
-        },
+            }
+        }
     },
     components: {
         Loading,
-        RateItem,
+        RateItem
     },
-    props: ['id'],
+    props: ['id']
 };
 </script>
 <style scoped>

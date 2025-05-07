@@ -11,13 +11,13 @@ let passengerApi = new PassengerApi();
 
 const state = {
     pendingRequest: null,
-    pendingPaymentRequests: null,
+    pendingPaymentRequests: null
 };
 
 // getters
 const getters = {
     pendingRequest: (state) => state.pendingRequest,
-    pendingPaymentRequests: (state) => state.pendingPaymentRequests,
+    pendingPaymentRequests: (state) => state.pendingPaymentRequests
 };
 
 // actions
@@ -40,7 +40,7 @@ const actions = {
             .then((response) => {
                 globalStore.commit('trips/' + types.TRIPS_SET_REQUEST, {
                     id: tripId,
-                    value: 'send',
+                    value: 'send'
                 });
 
                 // HANDLE SUCCESS
@@ -113,16 +113,16 @@ const actions = {
             .then((response) => {
                 let data = {
                     user_id: user.id,
-                    trip_id: trip.id,
+                    trip_id: trip.id
                 };
                 store.commit(types.PASSENGER_REMOVE_PENDING, data);
                 globalStore.commit('trips/' + types.TRIPS_ADD_PASSENGER, {
                     id: trip.id,
-                    user,
+                    user
                 });
                 globalStore.commit('myTrips/' + types.MYTRIPS_ADD_PASSENGER, {
                     id: trip.id,
-                    user,
+                    user
                 });
             })
             .catch((error) => {
@@ -136,7 +136,7 @@ const actions = {
             .then((response) => {
                 let data = {
                     user_id: user.id,
-                    trip_id: trip.id,
+                    trip_id: trip.id
                 };
                 store.commit(types.PASSENGER_REMOVE_PENDING, data);
             })
@@ -154,7 +154,7 @@ const actions = {
                         'passenger/' + types.PASSENGER_REMOVE_PENDING_PAYMENT,
                         {
                             trip_id: trip.id,
-                            value: '',
+                            value: ''
                         }
                     );
                 }
@@ -173,7 +173,7 @@ const actions = {
                         'trips/' + types.TRIPS_REMOVE_PASSENGER,
                         {
                             id: trip.id,
-                            user,
+                            user
                         }
                     );
                     let myUser = globalStore.getters['auth/user'];
@@ -183,7 +183,7 @@ const actions = {
                             {
                                 id: trip.id,
                                 user,
-                                passenger: true,
+                                passenger: true
                             }
                         );
                         globalStore.commit(
@@ -195,14 +195,14 @@ const actions = {
                             'myTrips/' + types.MYTRIPS_REMOVE_PASSENGER,
                             {
                                 id: trip.id,
-                                user,
+                                user
                             }
                         );
                     }
                 } else {
                     globalStore.commit('trips/' + types.TRIPS_SET_REQUEST, {
                         id: trip.id,
-                        value: '',
+                        value: ''
                     });
                 }
                 return Promise.resolve(response);
@@ -210,7 +210,7 @@ const actions = {
             .catch((error) => {
                 return Promise.reject(error);
             });
-    },
+    }
 };
 
 // mutations
@@ -251,7 +251,7 @@ const mutations = {
             });
             state.pendingRequest.splice(index, 1);
         }
-    },
+    }
 };
 
 export default {
@@ -259,5 +259,5 @@ export default {
     state,
     getters,
     actions,
-    mutations,
+    mutations
 };

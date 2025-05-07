@@ -11,7 +11,7 @@ export default {
         var defaultOptions = {
             duration: 2,
             position: 'center',
-            estado: 'success',
+            estado: 'success'
         };
         if (!options) {
             options = {};
@@ -37,5 +37,5 @@ export default {
                 successCallback
             );
         }
-    },
+    }
 };

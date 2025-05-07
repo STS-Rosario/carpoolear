@@ -149,8 +149,8 @@
                             name: 'profile',
                             params: {
                                 id: getUserProfile,
-                                userProfile: trip.user,
-                            },
+                                userProfile: trip.user
+                            }
                         }"
                     >
                         Ver Perfil
@@ -175,7 +175,7 @@ export default {
             trip: 'trips/currentTrip',
             tripCardTheme: 'auth/tripCardTheme',
             config: 'auth/appConfig',
-            isMobile: 'device/isMobile',
+            isMobile: 'device/isMobile'
         }),
         getUserProfile() {
             return this.trip.user.id === this.user.id
@@ -201,25 +201,25 @@ export default {
                     if (i < integerPart) {
                         stars.push({
                             id: i,
-                            value: '',
+                            value: ''
                         });
                     } else {
                         if (i === integerPart) {
                             if (decimalPart >= 0.5) {
                                 stars.push({
                                     id: i,
-                                    value: '',
+                                    value: ''
                                 });
                             } else {
                                 stars.push({
                                     id: i,
-                                    value: '-half',
+                                    value: '-half'
                                 });
                             }
                         } else {
                             stars.push({
                                 id: i,
-                                value: '-empty',
+                                value: '-empty'
                             });
                         }
                     }
@@ -268,12 +268,12 @@ export default {
                 }
             }
             return response;
-        },
+        }
     },
     components: {
         SvgItem,
         TripDate,
-        TripDescription,
+        TripDescription
     },
 
     secondsToHms(d) {
@@ -288,7 +288,7 @@ export default {
             ':' +
             seconds.toString().padStart(2, '0')
         );
-    },
+    }
 };
 </script>
 <style scoped>

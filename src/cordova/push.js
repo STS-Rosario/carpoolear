@@ -66,7 +66,7 @@ export default {
                         const messaging = getMessaging(firebaseApp);
                         getToken(messaging, {
                             vapidKey: process.env.FIRABASE_VAPID_KEY,
-                            serviceWorkerRegistration: reg,
+                            serviceWorkerRegistration: reg
                         })
                             .then((currentToken) => {
                                 if (currentToken) {
@@ -103,7 +103,7 @@ export default {
                             // [PENDING] Mostramos notificaciones en desktop? Sino borrar este código.
                             const notificationTitle = notification.title;
                             const notificationOptions = {
-                                body: notification.body,
+                                body: notification.body
                             };
                             reg.showNotification(
                                 notificationTitle,
@@ -119,7 +119,7 @@ export default {
                     clearBadge: true,
                     senderID: '147151221990591',
                     icon: 'icon',
-                    iconColor: '#d72521',
+                    iconColor: '#d72521'
                 },
                 // browser: {
                 //     pushServiceURL: 'http://push.api.phonegap.com/v1/push'
@@ -135,18 +135,18 @@ export default {
                                 callback: 'app.acceptViaje',
                                 title: 'Accept',
                                 foreground: false,
-                                destructive: false,
+                                destructive: false
                             },
                             no: {
                                 callback: 'app.rejectViaje',
                                 title: 'Reject',
                                 foreground: false,
-                                destructive: true,
-                            },
-                        },
-                    },
+                                destructive: true
+                            }
+                        }
+                    }
                 },
-                windows: {},
+                windows: {}
             });
 
             // Registro Exitoso
@@ -172,5 +172,5 @@ export default {
                 console.log('notification error', e, f);
             });
         }
-    },
+    }
 };

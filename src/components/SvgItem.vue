@@ -338,8 +338,8 @@ export default {
             } else {
                 return this.size;
             }
-        },
-    },
+        }
+    }
 };
 </script>
 

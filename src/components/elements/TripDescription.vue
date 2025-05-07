@@ -15,15 +15,15 @@ export default {
     computed: {
         ...mapGetters({
             trip: 'trips/currentTrip',
-            tripCardTheme: 'auth/tripCardTheme',
+            tripCardTheme: 'auth/tripCardTheme'
         }),
         descriptionLength() {
             return this.trip.description.length > 215 ? 'long-description' : '';
-        },
+        }
     },
     props: [],
     components: {},
-    methods: {},
+    methods: {}
 };
 </script>
 <style scoped>

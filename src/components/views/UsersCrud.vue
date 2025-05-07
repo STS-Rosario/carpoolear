@@ -428,7 +428,7 @@ export default {
                 driver_data_docs: [],
                 account_number: '',
                 account_type: '',
-                account_bank: '',
+                account_bank: ''
             },
             error: null,
             globalError: false,
@@ -443,15 +443,15 @@ export default {
             accountBankError: new Error(),
             keyUpTimerId: 0,
             banks: [],
-            accountTypes: [],
+            accountTypes: []
         };
     },
 
     computed: {
         ...mapGetters({
             isMobile: 'device/isMobile',
-            settings: 'auth/appConfig',
-        }),
+            settings: 'auth/appConfig'
+        })
     },
 
     methods: {
@@ -459,7 +459,7 @@ export default {
             update: 'admin/adminUpdate',
             search: 'admin/searchUsers',
             lookConversation: 'conversations/createConversation',
-            getBankData: 'profile/getBankData',
+            getBankData: 'profile/getBankData'
         }),
 
         onSearchUsers() {
@@ -492,7 +492,7 @@ export default {
                 account_type: this.currentUser.account_type,
                 account_bank: this.currentUser.account_bank,
                 banned: this.currentUser.banned > 0,
-                active: this.currentUser.active > 0,
+                active: this.currentUser.active > 0
             };
         },
         toUserMessages(user) {
@@ -502,7 +502,7 @@ export default {
                     console.log('toUserMessages then', conversation);
                     router.push({
                         name: 'conversation-chat',
-                        params: { id: conversation.id },
+                        params: { id: conversation.id }
                     });
                 }
             );
@@ -589,14 +589,14 @@ export default {
                         }
                         dialogs.message(mensajeErr, {
                             duration: 10,
-                            estado: 'error',
+                            estado: 'error'
                         });
                     });
                 this.onSearchUsers();
             } else {
                 dialogs.message('Verifique los campos', { estado: 'error' });
             }
-        },
+        }
     },
 
     beforeDestroy() {
@@ -614,7 +614,7 @@ export default {
             if (oldValue.length === 0 && newValue.length > 0) {
                 this.clear();
             }
-        },
+        }
     },
 
     mounted() {
@@ -632,8 +632,8 @@ export default {
     updated() {},
     components: {
         Loading,
-        adminNav,
-    },
+        adminNav
+    }
 };
 </script>
 

@@ -12,7 +12,7 @@ export default {
     name: 'about',
     data() {
         return {
-            termText: '',
+            termText: ''
         };
     },
     mounted() {
@@ -29,14 +29,14 @@ export default {
     },
     methods: {
         ...mapActions({
-            getTermsText: 'profile/getTermsText',
+            getTermsText: 'profile/getTermsText'
         }),
         onBackClick() {
             router.back();
-        },
+        }
     },
     beforeDestroy() {
         bus.off('back-click', this.onBackClick);
-    },
+    }
 };
 </script>

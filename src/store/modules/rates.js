@@ -7,12 +7,12 @@ let rateApi = new RateApi();
 
 // initial state
 const state = {
-    pending_rates: null,
+    pending_rates: null
 };
 
 // getters
 const getters = {
-    pendingRates: (state) => state.pending_rates,
+    pendingRates: (state) => state.pending_rates
 };
 
 // actions
@@ -26,7 +26,7 @@ const actions = {
     vote(store, data) {
         let obj = {
             comment: data.comment,
-            rating: data.rating,
+            rating: data.rating
         };
         return rateApi
             .rate(data.trip_id, data.user_id, obj)
@@ -41,7 +41,7 @@ const actions = {
 
     reply(store, data) {
         let obj = {
-            comment: data.comment,
+            comment: data.comment
         };
         return rateApi
             .reply(data.trip_id, data.user_id, obj)
@@ -53,7 +53,7 @@ const actions = {
             .catch((error) => {
                 return Promise.reject(error);
             });
-    },
+    }
 };
 
 // mutations
@@ -67,7 +67,7 @@ const mutations = {
         if (index >= 0) {
             state.pending_rates.splice(index, 1);
         }
-    },
+    }
 };
 
 export default {
@@ -75,5 +75,5 @@ export default {
     state,
     getters,
     actions,
-    mutations,
+    mutations
 };

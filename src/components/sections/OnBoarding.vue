@@ -72,7 +72,7 @@ export default {
             cardsLength: 0,
             onBoardingVisibilityClass: '',
             styleContainerObject: {},
-            styleCardObject: {},
+            styleCardObject: {}
         };
     },
     mounted() {
@@ -89,12 +89,12 @@ export default {
     },
     computed: {
         ...mapGetters({
-            appConfig: 'auth/appConfig',
-        }),
+            appConfig: 'auth/appConfig'
+        })
     },
     methods: {
         ...mapActions({
-            setFirstTimeAppOpenInDevice: 'device/setFirstTimeAppOpenInDevice',
+            setFirstTimeAppOpenInDevice: 'device/setFirstTimeAppOpenInDevice'
         }),
         srcCard(number) {
             let src =
@@ -110,10 +110,10 @@ export default {
             this.styleContainerObject = {
                 width: `${this.cardsLength * 100}%`,
                 transform: 'translate(0)',
-                transition: 'transform 0.5s',
+                transition: 'transform 0.5s'
             };
             this.styleCardObject = {
-                width: '100vw',
+                width: '100vw'
             };
             this.$refs.overlay.removeEventListener(
                 'transitionend',
@@ -124,7 +124,7 @@ export default {
         complete() {
             this.cardsLength = 0;
             this.styleContainerObject = {
-                transition: 'none',
+                transition: 'none'
             };
             this.styleCardObject = {};
             this.$nextTick(() => {
@@ -151,7 +151,7 @@ export default {
             this.$set(document.documentElement.style, 'overflow', 'auto');
             this.$set(document.body, 'scroll', 'yes');
             this.setFirstTimeAppOpenInDevice();
-        },
+        }
     },
     watch: {
         cardNumber(value) {
@@ -160,8 +160,8 @@ export default {
                 'transform',
                 `translate(${(value - 1) * -100}vw)`
             );
-        },
-    },
+        }
+    }
 };
 </script>
 

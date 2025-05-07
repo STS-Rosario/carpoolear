@@ -217,11 +217,11 @@ export default {
     mounted() {},
     props: {
         trip: {
-            required: true,
+            required: true
         },
         clickOutside: {
-            required: false,
-        },
+            required: false
+        }
     },
     methods: {
         openProfile(id) {
@@ -238,11 +238,11 @@ export default {
                 default:
                     return 'Indefinido';
             }
-        },
+        }
     },
     components: {
-        Modal,
-    },
+        Modal
+    }
 };
 </script>
 

@@ -58,21 +58,21 @@ const i18n = new VueI18n({
             currency: {
                 style: 'currency',
                 currency: 'ARS',
-                currencyDisplay: 'symbol',
-            },
+                currencyDisplay: 'symbol'
+            }
         },
         chl: {
             currency: {
                 style: 'currency',
                 currency: 'CHL',
-                currencyDisplay: 'symbol',
-            },
-        },
-    },
+                currencyDisplay: 'symbol'
+            }
+        }
+    }
 });
 
 Vue.use(VueAnalytics, {
-    id: 'UA-40995702-4',
+    id: 'UA-40995702-4'
 });
 
 Vue.use(VueMoment);
@@ -128,6 +128,6 @@ bus.on('system-ready', () => {
         store,
         template: '<App/>',
         components: { App },
-        i18n,
+        i18n
     });
 });

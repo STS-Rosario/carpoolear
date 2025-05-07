@@ -3,7 +3,7 @@ import {
     cssvar,
     scrollToElement,
     checkError,
-    getErrors,
+    getErrors
 } from './../utils/helpers';
 
 Vue.prototype.$cssvar = cssvar;

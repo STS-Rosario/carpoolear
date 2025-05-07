@@ -71,8 +71,8 @@ export default {
     props: {
         token: {
             type: String,
-            required: false,
-        },
+            required: false
+        }
     },
 
     data() {
@@ -84,23 +84,23 @@ export default {
             password_confirmation: '',
             password: '',
             carpoolear_logo:
-                process.env.ROUTE_BASE + 'static/img/carpoolear_logo.png',
+                process.env.ROUTE_BASE + 'static/img/carpoolear_logo.png'
         };
     },
     computed: {
         ...mapGetters({
             isMobile: 'device/isMobile',
-            settings: 'auth/appConfig',
+            settings: 'auth/appConfig'
         }),
         tripCardTheme() {
             return this.settings ? this.settings.trip_card_design : '';
-        },
+        }
     },
 
     methods: {
         ...mapActions({
             resetPassword: 'auth/resetPassword',
-            changePassword: 'auth/changePassword',
+            changePassword: 'auth/changePassword'
         }),
 
         reset() {
@@ -146,7 +146,7 @@ export default {
         },
         onBackClick() {
             router.back();
-        },
+        }
     },
 
     mounted() {
@@ -158,8 +158,8 @@ export default {
     },
 
     components: {
-        Spinner,
-    },
+        Spinner
+    }
 };
 </script>
 

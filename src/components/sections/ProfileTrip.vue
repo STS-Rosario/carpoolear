@@ -129,18 +129,18 @@ export default {
             driverTrips: [],
             passengerTrips: [],
             oldDriverTrips: [],
-            oldPassengerTrips: [],
+            oldPassengerTrips: []
         };
     },
     props: {
         userId: {
-            required: false,
-        },
+            required: false
+        }
     },
     computed: {
         ...mapGetters({
-            user: 'auth/user',
-        }),
+            user: 'auth/user'
+        })
     },
     mounted() {
         this.loadTrips();
@@ -151,7 +151,7 @@ export default {
             tripAsDriver: 'trips/tripsAsDriver',
             tripAsPassenger: 'trips/tripsAsPassenger',
             oldTripsAsDriver: 'trips/oldTripsAsDriver',
-            oldTripsAsPassenger: 'trips/oldTripsAsPassenger',
+            oldTripsAsPassenger: 'trips/oldTripsAsPassenger'
         }),
 
         async loadTrips() {
@@ -167,14 +167,14 @@ export default {
             console.log(this.oldPassengerTrips);
             console.log(this.driverTrips);
             console.log(this.oldDriverTrips);
-        },
+        }
     },
 
     components: {
         Trip,
         Loading,
-        Tab,
-    },
+        Tab
+    }
 };
 </script>
 

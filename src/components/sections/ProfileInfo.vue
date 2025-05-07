@@ -195,14 +195,14 @@ export default {
         return {
             sendReferenceFormVisibility: false,
             referenceComment: '',
-            sending: false,
+            sending: false
         };
     },
     computed: {
         ...mapGetters({
             user: 'auth/user',
             profile: 'profile/user',
-            config: 'auth/appConfig',
+            config: 'auth/appConfig'
         }),
         userReferenceWritten() {
             return (
@@ -212,19 +212,19 @@ export default {
                     (item) => item.user_id_from === this.user.id
                 ) >= 0
             );
-        },
+        }
     },
     methods: {
         ...mapActions({
             lookConversation: 'conversations/createConversation',
-            makeReference: 'profile/makeReference',
+            makeReference: 'profile/makeReference'
         }),
         messageUser() {
             console.log('messageUser profileInfo', this.profile);
             this.lookConversation(this.profile).then((conversation) => {
                 router.push({
                     name: 'conversation-chat',
-                    params: { id: conversation.id },
+                    params: { id: conversation.id }
                 });
             });
         },
@@ -232,7 +232,7 @@ export default {
             this.sending = true;
             this.makeReference({
                 user_id_to: this.profile.id,
-                comment: this.referenceComment,
+                comment: this.referenceComment
             })
                 .then(() => {
                     dialogs.message(this.$t('referenciaExitosa'));
@@ -258,11 +258,11 @@ export default {
             this.$nextTick(() => {
                 this.$refs.reference.focus();
             });
-        },
+        }
     },
     components: {
-        Spinner,
-    },
+        Spinner
+    }
 };
 </script>
 <style scoped>

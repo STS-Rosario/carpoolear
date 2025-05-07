@@ -86,7 +86,7 @@ export default {
             axios.get(API_URL + url, {
                 params: params,
                 headers: this.getHeader(headers),
-                cancelToken: source.token,
+                cancelToken: source.token
             }),
             source
         );
@@ -97,7 +97,7 @@ export default {
         return this.processResponse(
             axios.post(API_URL + url, body, {
                 headers: this.getHeader(headers),
-                cancelToken: source.token,
+                cancelToken: source.token
             }),
             source
         );
@@ -109,7 +109,7 @@ export default {
             axios.delete(API_URL + url, {
                 params: params,
                 headers: this.getHeader(headers),
-                cancelToken: source.token,
+                cancelToken: source.token
             }),
             source
         );
@@ -120,9 +120,9 @@ export default {
         return this.processResponse(
             axios.put(API_URL + url, body, {
                 headers: this.getHeader(headers),
-                cancelToken: source.token,
+                cancelToken: source.token
             }),
             source
         );
-    },
+    }
 };

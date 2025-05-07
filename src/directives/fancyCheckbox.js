@@ -14,5 +14,5 @@ export default {
     update: function (el, binding, node) {
         // wrapElement(el);
     },
-    unbind: function (el, binding, node) {},
+    unbind: function (el, binding, node) {}
 };

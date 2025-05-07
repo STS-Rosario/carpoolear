@@ -50,7 +50,7 @@ export default {
             } else {
                 this.input = n;
             }
-        },
+        }
     },
     data() {
         return {
@@ -61,7 +61,7 @@ export default {
             results: [],
             lastResults: [],
             indexAutocomplete: -1,
-            resultFilterWatcher: null,
+            resultFilterWatcher: null
         };
     },
     mounted() {
@@ -70,8 +70,8 @@ export default {
     },
     computed: {
         ...mapGetters({
-            config: 'auth/appConfig',
-        }),
+            config: 'auth/appConfig'
+        })
     },
     methods: {
         onFocus($event) {
@@ -141,7 +141,7 @@ export default {
                     'ArrowDown',
                     'ArrowLeft',
                     'ArrowRight',
-                    'Enter',
+                    'Enter'
                 ].indexOf(event.key) > -1
             ) {
                 return;
@@ -189,40 +189,40 @@ export default {
             this.$emit('place_changed', item);
             this.results = [];
             this.input = item.name;
-        },
+        }
     },
     props: {
         name: {
             type: String,
-            required: false,
+            required: false
         },
         placeholder: {
             type: String,
             required: false,
-            default: '',
+            default: ''
         },
         disabled: {
             type: Boolean,
             required: false,
-            default: false,
+            default: false
         },
         inputCallback: {
             type: Function,
-            required: false,
+            required: false
         },
         vJumpDisabled: {
-            required: false,
+            required: false
         },
         value: {
-            required: false,
+            required: false
         },
         classes: {
-            required: false,
+            required: false
         },
         country: {
-            required: false,
-        },
-    },
+            required: false
+        }
+    }
 };
 </script>
 

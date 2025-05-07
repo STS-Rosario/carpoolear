@@ -5,7 +5,7 @@ export function makeState(name) {
         page: 1,
         pageSize: 20,
         lastPage: false,
-        data: {},
+        data: {}
     };
     obj[name + 'CurrentPage'] = 1;
     return obj;

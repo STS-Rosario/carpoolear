@@ -33,12 +33,12 @@ export default {
             let time = moment(this.value, format).format('DD/MM/YYYY');
             this.$refs.calendar.showDay(time);
             this.date.time = moment(this.value, format).format('DD/MM/YYYY');
-        },
+        }
     },
     data() {
         return {
             date: {
-                time: this.value,
+                time: this.value
             },
             option: {
                 type: 'day',
@@ -55,7 +55,7 @@ export default {
                     'Septiembre',
                     'Octubre',
                     'Noviembre',
-                    'Diciembre',
+                    'Diciembre'
                 ],
                 format: this.format,
                 placeholder: 'Fecha',
@@ -65,28 +65,28 @@ export default {
                     'border-radius': '2px',
                     color: '#5F5F5F',
                     width: '100%',
-                    border: 'none',
+                    border: 'none'
                 },
                 wrapperClass: this.class,
                 color: {
                     header: '#016587',
-                    headerText: '#FFF',
+                    headerText: '#FFF'
                 },
                 buttons: {
                     ok: 'Aceptar',
-                    cancel: 'Cancelar',
+                    cancel: 'Cancelar'
                 },
                 overlayOpacity: 0.5, // 0.5 as default
-                dismissible: true, // as true as default
+                dismissible: true // as true as default
             },
-            limit: [this.limitFilter],
+            limit: [this.limitFilter]
         };
     },
     mounted() {},
     computed: {
         dateSys: function () {
             return moment(this.date.time, this.format).format('YYYY-MM-DD');
-        },
+        }
     },
     methods: {
         updateDate(date) {
@@ -95,35 +95,35 @@ export default {
         resetDatePicker() {
             this.date.time = '';
             this.$emit('change', '');
-        },
+        }
     },
     props: {
         format: {
             type: String,
             required: false,
-            default: 'DD/MM/YYYY',
+            default: 'DD/MM/YYYY'
         },
         class: {
             type: String,
             required: false,
-            default: '',
+            default: ''
         },
         value: {
             type: String,
             required: false,
-            default: '',
+            default: ''
         },
         limitFilter: {
             type: Object,
             required: false,
             default: () => {
                 return {};
-            },
-        },
+            }
+        }
     },
     components: {
-        datePicker,
-    },
+        datePicker
+    }
 };
 </script>
 

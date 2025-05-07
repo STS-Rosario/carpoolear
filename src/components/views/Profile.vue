@@ -29,32 +29,32 @@ export default {
         ProfileInfo,
         ProfileRates,
         MyTrips,
-        ProfileTrip,
+        ProfileTrip
     },
 
     props: {
         id: {
             required: false,
-            default: 'me',
+            default: 'me'
         },
         userProfile: {
-            required: false,
+            required: false
         },
         activeTab: {
-            required: false,
-        },
+            required: false
+        }
     },
 
     data() {
         return {
-            currentView: null,
+            currentView: null
         };
     },
 
     computed: {
         ...mapGetters({
             user: 'auth/user',
-            profile: 'profile/user',
+            profile: 'profile/user'
         }),
         viajesHeaderTitle() {
             return this.id === 'me' || this.id === this.user.id
@@ -63,14 +63,14 @@ export default {
         },
         isMyOwnProfile() {
             return this.id === 'me' || this.id === this.user.id;
-        },
+        }
     },
 
     methods: {
         ...mapActions({
             setTitle: 'actionbars/setTitle',
             setProfile: 'profile/setUser',
-            setProfileByID: 'profile/setUserByID',
+            setProfileByID: 'profile/setUserByID'
         }),
         updateProfile() {
             if (this.id === 'me' || this.id === this.user.id) {
@@ -83,7 +83,7 @@ export default {
                 }
                 this.setProfileByID({
                     id: this.id,
-                    userProfile: this.userProfile,
+                    userProfile: this.userProfile
                 })
                     .then(() => {
                         this.setTitle(this.profile.name);
@@ -96,12 +96,12 @@ export default {
         },
         onBackClick() {
             router.back();
-        },
+        }
     },
     watch: {
         $route: function () {
             this.updateProfile();
-        },
+        }
     },
 
     mounted() {
@@ -124,6 +124,6 @@ export default {
     },
     beforeDestroy() {
         bus.off('back-click', this.onBackClick);
-    },
+    }
 };
 </script>

@@ -32,8 +32,8 @@ export default {
         },
         ...mapActions({
             fbLogin: 'cordova/facebookLogin',
-            getConfig: 'auth/getConfig',
-        }),
+            getConfig: 'auth/getConfig'
+        })
     },
     beforeMount() {
         this.getConfig();
@@ -55,7 +55,7 @@ export default {
             isRemoteConfig: 'auth/isRemoteConfig',
             firsTimeMobileAppOpen: 'device/firsTimeMobileAppOpen',
             user: 'auth/user',
-            isBrowser: 'device/isBrowser',
+            isBrowser: 'device/isBrowser'
         }),
         onBoardingVisibility() {
             let moduleEnabled =
@@ -74,7 +74,7 @@ export default {
             return window.device && window.device.platform
                 ? window.device.platform.toLowerCase()
                 : '';
-        },
+        }
     },
     watch: {
         deviceReady: () => {
@@ -84,18 +84,18 @@ export default {
             if (value && value.locale) {
                 this.$root.$i18n.locale = value.locale;
             }
-        },
+        }
     },
     data() {
         return {
-            actualRouteName: '',
+            actualRouteName: ''
         };
     },
     components: {
         headerApp,
         footerApp,
-        onBoarding,
-    },
+        onBoarding
+    }
 };
 </script>
 

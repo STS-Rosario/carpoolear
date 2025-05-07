@@ -49,13 +49,13 @@ export default {
             acceptInProcess: false,
             rejectInProcess: false,
             acceptRequestValue: 0,
-            trip: null,
+            trip: null
         };
     },
     computed: {
         ...mapGetters({
-            currentUser: 'auth/user',
-        }),
+            currentUser: 'auth/user'
+        })
     },
     mounted() {
         this.getTrip(this.request.trip_id).then((trip) => {
@@ -67,7 +67,7 @@ export default {
         ...mapActions({
             getTrip: 'getTrip',
             passengerAccept: 'passenger/accept',
-            cancel: 'passenger/cancel',
+            cancel: 'passenger/cancel'
         }),
 
         onAcceptRequest() {
@@ -99,7 +99,7 @@ export default {
                 this.cancel({
                     user: this.currentUser,
                     trip: this.trip,
-                    cancelTripForPayment: true,
+                    cancelTripForPayment: true
                 })
                     .then(() => {
                         this.rejectInProcess = false;
@@ -109,13 +109,13 @@ export default {
                         this.rejectInProcess = false;
                     });
             }
-        },
+        }
     },
 
     props: [
         // 'user',
         // 'trip',
-        'request',
-    ],
+        'request'
+    ]
 };
 </script>

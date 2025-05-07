@@ -9,7 +9,7 @@ const state = {
     driver_trip: null,
     passenger_trip: null,
     driver_old_trips: null,
-    passenger_old_trips: null,
+    passenger_old_trips: null
 };
 
 // getters
@@ -18,7 +18,7 @@ const getters = {
     passengerTrips: (state) => state.passenger_trip,
     pendingRates: (state) => state.pending_rates,
     myOldTrips: (state) => state.driver_old_trips,
-    passengerOldTrips: (state) => state.passenger_old_trips,
+    passengerOldTrips: (state) => state.passenger_old_trips
 };
 
 // actions
@@ -55,7 +55,7 @@ const actions = {
 
     removeTrip(store, tripId) {
         return store.commit(types.MYTRIPS_DELETE_TRIPS, tripId);
-    },
+    }
 };
 
 // mutations
@@ -137,7 +137,7 @@ const mutations = {
     },
     [types.MYTRIPS_SET_PASSENGER_TRIPS_OLD](state, trips) {
         state.passenger_old_trips = trips;
-    },
+    }
 };
 
 export default {
@@ -145,5 +145,5 @@ export default {
     state,
     getters,
     actions,
-    mutations,
+    mutations
 };

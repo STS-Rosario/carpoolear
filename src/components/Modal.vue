@@ -37,7 +37,7 @@ export default {
     name: 'modal',
     data() {
         return {
-            clickOutsideHandler: () => {},
+            clickOutsideHandler: () => {}
         };
     },
     mounted() {
@@ -49,15 +49,15 @@ export default {
 
     props: {
         hideFooter: {
-            required: false,
+            required: false
         },
         clickOutside: {
-            required: false,
+            required: false
         },
         name: {
-            required: false,
-        },
-    },
+            required: false
+        }
+    }
 };
 </script>
 

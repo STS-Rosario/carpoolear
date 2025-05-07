@@ -46,13 +46,13 @@ export default {
     name: 'transacciones',
     data() {
         return {
-            transactions: [],
+            transactions: []
         };
     },
     computed: {
         ...mapGetters({
-            user: 'auth/user',
-        }),
+            user: 'auth/user'
+        })
     },
     mounted() {
         this.history().then((data) => {
@@ -67,7 +67,7 @@ export default {
 
     methods: {
         ...mapActions({
-            history: 'passenger/transactions',
+            history: 'passenger/transactions'
         }),
         onBackClick() {
             this.$router.back();
@@ -76,12 +76,12 @@ export default {
             if (transaction.user_id === this.user.id) {
                 return this.$t('fuistePasajero', [
                     transaction.trip.user.name,
-                    transaction.trip.to_town,
+                    transaction.trip.to_town
                 ]);
             } else {
                 return this.$t('llevastePasajero', [
                     transaction.user.name,
-                    transaction.trip.to_town,
+                    transaction.trip.to_town
                 ]);
             }
         },
@@ -93,15 +93,15 @@ export default {
                     transaction.user_id === this.user.id
                 ) {
                     return this.$t('transaccionOkConTarjeta', [
-                        transaction.payment_info.cardDetail.cardNumber,
+                        transaction.payment_info.cardDetail.cardNumber
                     ]);
                 }
                 return this.$t('transaccionOk');
             } else {
                 return this.$t('transaccionNoCompletada');
             }
-        },
-    },
+        }
+    }
 };
 </script>
 <style scoped>

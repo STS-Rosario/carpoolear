@@ -42,12 +42,12 @@ export default {
         ...mapGetters({
             trip: 'trips/currentTrip',
             tripCardTheme: 'auth/tripCardTheme',
-            isMobile: 'device/isMobile',
-        }),
+            isMobile: 'device/isMobile'
+        })
     },
     components: {
-        SvgItem,
-    },
+        SvgItem
+    }
 };
 </script>
 <style scoped>

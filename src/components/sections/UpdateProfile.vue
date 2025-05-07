@@ -295,8 +295,7 @@
                             class="form-control"
                             id="input-unaswered_messages_limit"
                             :class="{
-                                'has-error':
-                                    unaswered_messages_limitError.state,
+                                'has-error': unaswered_messages_limitError.state
                             }"
                         />
                         <span
@@ -500,7 +499,7 @@ export default {
             patente: '',
             pass: {
                 password: '',
-                password_confirmation: '',
+                password_confirmation: ''
             },
             error: null,
             loading: false,
@@ -526,7 +525,7 @@ export default {
             showBeDriver: false,
             driverFiles: null,
             banks: [],
-            accountTypes: [],
+            accountTypes: []
         };
     },
     computed: {
@@ -535,7 +534,7 @@ export default {
             firstTime: 'auth/firstTime',
             cars: 'cars/cars',
             isMobile: 'device/isMobile',
-            settings: 'auth/appConfig',
+            settings: 'auth/appConfig'
         }),
         iptUser() {
             if (this.user) {
@@ -566,7 +565,7 @@ export default {
             if (this.user) {
                 return this.user.mobile_phone;
             }
-        },
+        }
     },
     methods: {
         ...mapActions({
@@ -574,7 +573,7 @@ export default {
             updatePhoto: 'auth/updatePhoto',
             carCreate: 'cars/create',
             carUpdate: 'cars/update',
-            getBankData: 'profile/getBankData',
+            getBankData: 'profile/getBankData'
         }),
         jumpToError() {
             let hasError = document.getElementsByClassName('has-error');
@@ -620,7 +619,7 @@ export default {
                     this.jumpToError();
                     dialogs.message(this.$t('faltanCamposObligatorios'), {
                         duration: 10,
-                        estado: 'error',
+                        estado: 'error'
                     });
                 });
                 return;
@@ -682,7 +681,7 @@ export default {
                         } else {
                             let car = {
                                 description: 'NOT USED YET',
-                                patente: this.patente,
+                                patente: this.patente
                             };
                             this.carCreate(car);
                         }
@@ -701,7 +700,7 @@ export default {
                         if (!(this.user.image && this.user.image.length > 0)) {
                             dialogs.message(this.$t('debesImagenPerfil'), {
                                 duration: 10,
-                                estado: 'error',
+                                estado: 'error'
                             });
                         }
                     }
@@ -719,7 +718,7 @@ export default {
                     ) {
                         dialogs.message(this.$t('nroDocYaRegistrado'), {
                             duration: 10,
-                            estado: 'error',
+                            estado: 'error'
                         });
                     }
                     if (
@@ -730,7 +729,7 @@ export default {
                     ) {
                         dialogs.message(this.$t('nroTelYaRegistrado'), {
                             duration: 10,
-                            estado: 'error',
+                            estado: 'error'
                         });
                     }
                 });
@@ -844,7 +843,7 @@ export default {
             }
 
             return globalError;
-        },
+        }
     },
     watch: {
         cars: function () {
@@ -877,7 +876,7 @@ export default {
         },
         patente() {
             this.patentError.state = false;
-        },
+        }
     },
 
     mounted() {
@@ -919,8 +918,8 @@ export default {
         DatePicker,
         Uploadfile,
         SvgItem,
-        Spinner,
-    },
+        Spinner
+    }
 };
 </script>
 

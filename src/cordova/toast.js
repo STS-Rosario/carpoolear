@@ -15,7 +15,7 @@ export default {
                 {
                     message: message,
                     duration: message.duration ? message.duration : 2000, // which is 2000 ms. "long" is 4000. Or specify the nr of ms yourself.
-                    position: message.position ? message.position : 'center',
+                    position: message.position ? message.position : 'center'
                 },
                 onSuccess, // optional
                 onError // optional
@@ -25,5 +25,5 @@ export default {
                 'ERROR: Se llamó al toast plugin pero no se encontró'
             );
         }
-    },
+    }
 };

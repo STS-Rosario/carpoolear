@@ -35,17 +35,17 @@ export default {
     },
     computed: {
         ...mapGetters({
-            isMobile: 'device/isMobile',
+            isMobile: 'device/isMobile'
         }),
         tabActive() {
             return this.$route.meta.tab;
-        },
+        }
     },
     methods: {},
     watch: {},
 
     mounted() {},
-    components: {},
+    components: {}
 };
 </script>
 

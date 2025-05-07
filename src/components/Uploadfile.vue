@@ -33,8 +33,8 @@ export default {
                 vm.$emit('change', data);
             };
             reader.readAsDataURL(file);
-        },
+        }
     },
-    props: ['name'],
+    props: ['name']
 };
 </script>

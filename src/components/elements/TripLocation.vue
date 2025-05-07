@@ -105,7 +105,7 @@
                         height:
                             trip.points.length && trip.points.length <= 2
                                 ? '3.6rem'
-                                : `${4.8 + 2.3 * (trip.points.length - 2)}rem`,
+                                : `${4.8 + 2.3 * (trip.points.length - 2)}rem`
                     }"
                 ></div>
             </div>
@@ -145,7 +145,7 @@ export default {
         ...mapGetters({
             isMobile: 'device/isMobile',
             trip: 'trips/currentTrip',
-            tripCardTheme: 'auth/tripCardTheme',
+            tripCardTheme: 'auth/tripCardTheme'
         }),
         widthLocationClass() {
             return this.tripCardTheme === 'light' ? 'col-xs-14' : 'col-xs-18';
@@ -158,7 +158,7 @@ export default {
                 return moment(this.trip.trip_date).add(minutes, 'minutes');
             }
             return '';
-        },
+        }
     },
     methods: {
         goToProfile: function (event) {
@@ -168,8 +168,8 @@ export default {
                 params: {
                     id: this.trip.user.id,
                     userProfile: this.trip.user,
-                    activeTab: 1,
-                },
+                    activeTab: 1
+                }
             });
         },
         getLocationName(location) {
@@ -193,11 +193,11 @@ export default {
                 }
             }
             return '';
-        },
+        }
     },
     components: {
         svgItem,
-        TripSeats,
-    },
+        TripSeats
+    }
 };
 </script>

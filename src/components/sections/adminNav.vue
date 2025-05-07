@@ -20,10 +20,10 @@ export default {
     name: 'admin-nav',
     data() {
         return {
-            selected: '',
+            selected: ''
         };
     },
-    mounted() {},
+    mounted() {}
 };
 </script>
 

@@ -13,9 +13,9 @@ const state = {
     current: null,
     resolution: {
         width: screen.width,
-        height: screen.height,
+        height: screen.height
     },
-    firsTimeMobileAppOpen: false,
+    firsTimeMobileAppOpen: false
 };
 
 // getters
@@ -36,7 +36,7 @@ const getters = {
         }
         return isBrowser;
     },
-    firsTimeMobileAppOpen: (state) => state.firsTimeMobileAppOpen,
+    firsTimeMobileAppOpen: (state) => state.firsTimeMobileAppOpen
 };
 
 // actions
@@ -134,11 +134,11 @@ const actions = {
         if (user && !user.on_boarding_view) {
             let data = {
                 property: 'on_boarding_view',
-                value: 1,
+                value: 1
             };
             dispatch('profile/changeProperty', data, { root: true });
         }
-    },
+    }
 };
 
 // mutations
@@ -174,7 +174,7 @@ const mutations = {
 
     [types.DEVICE_SET_FIRST_TIME_APP_OPEN](state, value) {
         state.firsTimeMobileAppOpen = value;
-    },
+    }
 };
 
 export default {
@@ -182,7 +182,7 @@ export default {
     state,
     getters,
     actions,
-    mutations,
+    mutations
 };
 
 window.addEventListener('resize', actions.resize, false);

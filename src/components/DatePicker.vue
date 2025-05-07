@@ -19,7 +19,7 @@
                 :format="'dd/MM/yyyy'"
                 :disabled="{
                     to: min,
-                    from: max,
+                    from: max
                 }"
                 :disabled-picker="disabledPicker"
                 autocomplete="off"
@@ -64,7 +64,7 @@ export default {
             focus: false,
             nextYear: moment().add(2, 'years').format('YYYY-MM-DD'),
             lastCentury: moment().subtract(100, 'years').format('YYYY-MM-DD'),
-            niceDate: '',
+            niceDate: ''
         };
     },
     mounted() {
@@ -105,7 +105,7 @@ export default {
                 mode: 'date',
                 minDate: Date.parse(moment(this.min).toDate()),
                 maxDate: Date.parse(moment(this.max).toDate()),
-                androidTheme: 3,
+                androidTheme: 3
             };
 
             function onSuccess(date) {
@@ -120,7 +120,7 @@ export default {
             }
 
             window.datePicker.show(options, onSuccess, onError);
-        },
+        }
     },
     watch: {
         dateBrowser: function (value) {
@@ -142,36 +142,36 @@ export default {
             this.dateBrowser = moment(this.value).toDate();
             this.dateMobile = this.value;
             this.niceDate = moment(this.value).format('DD/MM/YYYY');
-        },
+        }
     },
     props: {
         format: {
             type: String,
             required: false,
-            default: 'DD/MM/YYYY',
+            default: 'DD/MM/YYYY'
         },
         value: {
             type: String,
-            required: false,
+            required: false
         },
         minDate: {
             type: Date,
-            required: false,
+            required: false
         },
         maxDate: {
             type: Date,
-            required: false,
+            required: false
         },
         disabledPicker: {
             type: Boolean,
             required: false,
-            default: false,
-        },
+            default: false
+        }
     },
     computed: {
         ...mapGetters({
             isMobile: 'device/isMobile',
-            device: 'cordova/device',
+            device: 'cordova/device'
         }),
         browser() {
             if (this.device) {
@@ -213,11 +213,11 @@ export default {
             } else {
                 return moment(answer).format('YYYY-MM-DD');
             }
-        },
+        }
     },
     components: {
-        DatepickerSystem,
-    },
+        DatepickerSystem
+    }
 };
 </script>
 

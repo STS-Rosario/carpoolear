@@ -26,15 +26,15 @@ export default {
     },
     props: {
         data: {
-            required: true,
+            required: true
         },
         hideOnEmpty: {
             type: Boolean,
-            default: false,
-        },
+            default: false
+        }
     },
     components: {
-        spinner,
-    },
+        spinner
+    }
 };
 </script>

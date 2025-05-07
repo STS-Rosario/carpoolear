@@ -33,8 +33,8 @@
                                         params: {
                                             id: user.id,
                                             userProfile: user,
-                                            activeTab: 1,
-                                        },
+                                            activeTab: 1
+                                        }
                                     }"
                                 >
                                     <div
@@ -125,18 +125,18 @@ export default {
         return {
             text: '',
             idRequesting: {},
-            searchingRequest: null,
+            searchingRequest: null
         };
     },
     computed: {
         ...mapGetters({
-            users: 'friends/users',
-        }),
+            users: 'friends/users'
+        })
     },
     methods: {
         ...mapActions({
             search: 'friends/searchUsers',
-            request: 'friends/request',
+            request: 'friends/request'
         }),
         onTextChange() {
             this.search(this.text);
@@ -155,7 +155,7 @@ export default {
         },
         onBackClick() {
             this.$router.back();
-        },
+        }
     },
 
     mounted() {
@@ -168,8 +168,8 @@ export default {
     components: {
         Loading,
         FriendCard,
-        spinner,
-    },
+        spinner
+    }
 };
 </script>
 

@@ -301,7 +301,7 @@ export default {
                 'static/img/' +
                 process.env.TARGET_APP +
                 '_logo.png',
-            showModal: false,
+            showModal: false
         };
     },
 
@@ -327,7 +327,7 @@ export default {
             isNotLargeDesktop: 'device/isNotLargeDesktop',
             isFacebokApp: 'device/isFacebokApp',
             isMobile: 'device/isMobile',
-            config: 'auth/appConfig',
+            config: 'auth/appConfig'
         }),
 
         showLogo() {
@@ -340,7 +340,7 @@ export default {
         },
         isTripsPage() {
             return this.$route.name === 'trips';
-        },
+        }
     },
 
     methods: {
@@ -374,17 +374,17 @@ export default {
 
         onHeaderChange() {
             // console.log('header-change', this.title);
-        },
+        }
     },
     watch: {
         title(_old, _new) {
             console.log('titlee change', this.title);
-        },
+        }
     },
     components: {
         dropdown,
-        modal,
-    },
+        modal
+    }
 };
 </script>
 

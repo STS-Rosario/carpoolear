@@ -10,7 +10,7 @@
                 <span
                     :class="{
                         big: item.id === 'new-trip',
-                        'width-badges': item.id === 'notifications',
+                        'width-badges': item.id === 'notifications'
                     }"
                     class=""
                 >
@@ -150,17 +150,17 @@ export default {
             footerButtons: 'actionbars/footerButtons',
             footerShow: 'actionbars/footerShow',
             notificationsCount: 'notifications/count',
-            config: 'auth/appConfig',
-        }),
+            config: 'auth/appConfig'
+        })
     },
     methods: {
         ...mapActions({
-            onClick: 'actionbars/footerButtonClick',
-        }),
+            onClick: 'actionbars/footerButtonClick'
+        })
     },
     components: {
-        svgItem,
-    },
+        svgItem
+    }
 };
 </script>
 

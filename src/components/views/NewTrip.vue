@@ -327,7 +327,7 @@
                                         :value="date"
                                         :minDate="minDate"
                                         :class="{
-                                            'has-error': dateError.state,
+                                            'has-error': dateError.state
                                         }"
                                         v-on:date_changed="changeDate"
                                     ></DatePicker>
@@ -346,7 +346,7 @@
                                         class="form-control form-control-with-icon form-control-time"
                                         id="time"
                                         :class="{
-                                            'has-error': timeError.state,
+                                            'has-error': timeError.state
                                         }"
                                         placeholder="Hora (12:00)"
                                     />
@@ -1023,7 +1023,7 @@
                                         :minDate="otherTrip.minDate"
                                         :class="{
                                             'has-error':
-                                                otherTrip.dateError.state,
+                                                otherTrip.dateError.state
                                         }"
                                         v-on:date_changed="changeOtherTripDate"
                                     ></DatePicker>
@@ -1046,7 +1046,7 @@
                                         id="otherTrip-time"
                                         :class="{
                                             'has-error':
-                                                otherTrip.timeError.state,
+                                                otherTrip.timeError.state
                                         }"
                                         placeholder="Hora (12:00)"
                                     />
@@ -1059,10 +1059,29 @@
                                     <!--<input type="text" v-model="time" />-->
                                 </div>
                             </div>
-                            <div class="trip_price" v-if="config.module_seat_price">
-                                <legend class="label-for-group">{{ $t('precioAsiento') }}</legend>
-                                <input type="number" v-model="returnPrice" class="form-control form-control-with-icon form-control-price" id="return-price" :class="{'has-error': returnPriceError.state}" :placeholder="price" >
-                                <span class="error" v-if="returnPriceError.state"> {{returnPriceError.message}} </span>
+                            <div
+                                class="trip_price"
+                                v-if="config.module_seat_price"
+                            >
+                                <legend class="label-for-group">
+                                    {{ $t('precioAsiento') }}
+                                </legend>
+                                <input
+                                    type="number"
+                                    v-model="returnPrice"
+                                    class="form-control form-control-with-icon form-control-price"
+                                    id="return-price"
+                                    :class="{
+                                        'has-error': returnPriceError.state
+                                    }"
+                                    :placeholder="price"
+                                />
+                                <span
+                                    class="error"
+                                    v-if="returnPriceError.state"
+                                >
+                                    {{ returnPriceError.message }}
+                                </span>
                             </div>
                             <div class="trip_seats-available">
                                 <fieldset>
@@ -1191,9 +1210,24 @@
                                 </span>
                             </div>
                             <div class="trip-comment">
-                                <label for="otherTrip-trip_comment"  class="label-for-group"> {{ $t('comentarioPasajeros') }} </label>
-                                <textarea maxlength="2000" v-model="otherTrip.trip.description" id="other_trp_comment" class="form-control" :placeholder="$t('placeholderComentarioPasajeros')" ></textarea>
-                                <span class="error" v-if="commentError.state"> {{commentError.message}} </span>
+                                <label
+                                    for="otherTrip-trip_comment"
+                                    class="label-for-group"
+                                >
+                                    {{ $t('comentarioPasajeros') }}
+                                </label>
+                                <textarea
+                                    maxlength="2000"
+                                    v-model="otherTrip.trip.description"
+                                    id="other_trp_comment"
+                                    class="form-control"
+                                    :placeholder="
+                                        $t('placeholderComentarioPasajeros')
+                                    "
+                                ></textarea>
+                                <span class="error" v-if="commentError.state">
+                                    {{ commentError.message }}
+                                </span>
                             </div>
                         </div>
                         <div class="col-sm-11 col-md-9 preferences-container">
@@ -1501,14 +1535,14 @@ export default {
     props: {
         id: {
             type: [String, Number],
-            required: false,
-        },
+            required: false
+        }
     },
     components: {
         DatePicker,
         SvgItem,
         autocomplete,
-        spinner,
+        spinner
     },
     data() {
         return {
@@ -1531,7 +1565,7 @@ export default {
                     json: null,
                     location: null,
                     error: new Error(),
-                    id: 0,
+                    id: 0
                 },
                 {
                     name: '',
@@ -1539,8 +1573,8 @@ export default {
                     json: null,
                     location: null,
                     error: new Error(),
-                    id: 1,
-                },
+                    id: 1
+                }
             ],
             date: '',
             dateAnswer: this.date,
@@ -1565,7 +1599,7 @@ export default {
                 allow_animals: true,
                 car_id: null,
                 enc_path: '123',
-                points: [] /* address json_address lat lng */,
+                points: [] /* address json_address lat lng */
             },
             updatingTrip: null,
             saving: false,
@@ -1590,15 +1624,15 @@ export default {
                         place: null,
                         json: null,
                         location: null,
-                        error: new Error(),
+                        error: new Error()
                     },
                     {
                         name: '',
                         place: null,
                         json: null,
                         location: null,
-                        error: new Error(),
-                    },
+                        error: new Error()
+                    }
                 ],
                 date: '',
                 dateAnswer: this.date,
@@ -1622,9 +1656,9 @@ export default {
                     allow_smoking: true,
                     allow_animals: true,
                     seat_price: 0,
-                    points: [] /* address json_address lat lng */,
-                },
-            },
+                    points: [] /* address json_address lat lng */
+                }
+            }
         };
     },
     mounted() {
@@ -1646,7 +1680,7 @@ export default {
             cars: 'cars/cars',
             isMobile: 'device/isMobile',
             config: 'auth/appConfig',
-            tripCardTheme: 'auth/tripCardTheme',
+            tripCardTheme: 'auth/tripCardTheme'
         }),
         columnClass() {
             return !this.isMobile && this.tripCardTheme === 'light'
@@ -1700,7 +1734,7 @@ export default {
         },
         tripCardTheme() {
             return this.config ? this.config.trip_card_design : '';
-        },
+        }
     },
     watch: {
         no_lucrar: function () {
@@ -1737,7 +1771,7 @@ export default {
                 let data = {
                     from: this.points[0].place,
                     to: last(this.points).place,
-                    distance: this.trip.distance,
+                    distance: this.trip.distance
                 };
                 this.getPrice(data).then((price) => {
                     this.price = price;
@@ -1749,20 +1783,20 @@ export default {
             let data = {
                 from: this.otherTrip.points[0].place,
                 to: last(this.otherTrip.points).place,
-                distance: this.otherTrip.distance,
+                distance: this.otherTrip.distance
             };
             this.getPrice(data).then((price) => {
                 this.returnPrice = price;
                 console.log(this.returnPrice);
             });
-        },
+        }
     },
     methods: {
         ...mapActions({
             createTrip: 'trips/create',
             updateTrip: 'trips/update',
             getTrip: 'getTrip',
-            getPrice: 'trips/price',
+            getPrice: 'trips/price'
         }),
         setIsPassenger(value) {
             console.log('setIsPassenger', value);
@@ -1793,10 +1827,10 @@ export default {
                     json: p.json_address,
                     location: {
                         lat: p.lat,
-                        lng: p.lng,
+                        lng: p.lng
                     },
                     place: JSON.stringify(p.json_address),
-                    error: new Error(),
+                    error: new Error()
                 };
                 this.points.push(point);
             });
@@ -1825,7 +1859,7 @@ export default {
                         this.restoreData(trip);
                     } else {
                         this.$router.replace({
-                            name: 'trips',
+                            name: 'trips'
                         });
                     }
                 })
@@ -1833,7 +1867,7 @@ export default {
                     console.log(error);
                     if (error) {
                         this.$router.replace({
-                            name: 'trips',
+                            name: 'trips'
                         });
                     }
                 });
@@ -1942,12 +1976,12 @@ export default {
                         this.trip.passengers +
                         this.$t('pasajerosSubidos'),
                     {
-                        estado: 'error',
+                        estado: 'error'
                     }
                 );
             } else if (globalError) {
                 dialogs.message(this.$t('algunosDatosNoValidos'), {
-                    estado: 'error',
+                    estado: 'error'
                 });
             } else if (
                 !this.no_lucrar &&
@@ -1961,14 +1995,14 @@ export default {
                 this.lucrarError.state = true;
                 this.lucrarError.message = this.$t('teComprometesANoLucrar');
                 dialogs.message(this.$t('teComprometesANoLucrar'), {
-                    estado: 'error',
+                    estado: 'error'
                 });
                 globalError = true;
             } else if (!this.trip.description) {
                 this.commentError.state = true;
                 this.commentError.message = this.$t('olvidasteDescripcion');
                 dialogs.message(this.$t('olvidasteDescripcion'), {
-                    estado: 'error',
+                    estado: 'error'
                 });
             }
             if (validDate && validTime) {
@@ -2078,7 +2112,7 @@ export default {
                 }
                 if (globalError) {
                     dialogs.message(this.$t('algunosDatosNoValidos'), {
-                        estado: 'error',
+                        estado: 'error'
                     });
                 }
 
@@ -2117,7 +2151,7 @@ export default {
                     tripDate.set({
                         hour: time.get('hour'),
                         minute: time.get('minute'),
-                        second: time.get('second'),
+                        second: time.get('second')
                     });
 
                     time = moment(this.otherTrip.time, 'HH:mm');
@@ -2125,7 +2159,7 @@ export default {
                     otherTripDate.set({
                         hour: time.get('hour'),
                         minute: time.get('minute'),
-                        second: time.get('second'),
+                        second: time.get('second')
                     });
 
                     if (
@@ -2151,7 +2185,7 @@ export default {
                     json_address: p.json,
                     lat: p.location.lat,
                     lng: p.location.lng,
-                    node_id: p.place.id,
+                    node_id: p.place.id
                 };
             });
 
@@ -2161,7 +2195,7 @@ export default {
                 to_town: last(points).address,
                 trip_date: tripObj.dateAnswer + ' ' + tripObj.time + ':00',
                 estimated_time: estimatedTime,
-                car_id: this.cars.length > 0 ? this.cars[0].id : undefined,
+                car_id: this.cars.length > 0 ? this.cars[0].id : undefined
             };
 
             return Object.assign({}, tripObj.trip, tripInfo);
@@ -2225,8 +2259,8 @@ export default {
                             this.$router.replace({
                                 name: 'detail_trip',
                                 params: {
-                                    id: t.id,
-                                },
+                                    id: t.id
+                                }
                             });
                         });
                     })
@@ -2239,13 +2273,13 @@ export default {
                             err.data.errors.driver_is_verified
                         ) {
                             dialogs.message(this.$t('tienesQueSerConductor'), {
-                                estado: 'error',
+                                estado: 'error'
                             });
                         } else {
                             dialogs.message(
                                 this.$t('problemaAlCargarElViaje'),
                                 {
-                                    estado: 'error',
+                                    estado: 'error'
                                 }
                             );
                         }
@@ -2260,7 +2294,7 @@ export default {
                         this.saving = false;
                         this.$router.replace({
                             name: 'detail_trip',
-                            params: { id: this.trip.id },
+                            params: { id: this.trip.id }
                         });
                     })
                     .catch(() => {
@@ -2282,7 +2316,7 @@ export default {
             trip.points[i].error.state = false;
             trip.center = trip.points[i].location = {
                 lat: parseFloat(data.lat),
-                lng: parseFloat(data.lng),
+                lng: parseFloat(data.lng)
             };
             if ((i === 0 || i === trip.points.length - 1) && trip.sameCity) {
                 trip.points[0].error.state = false;
@@ -2305,7 +2339,7 @@ export default {
                 point.error.state = false;
                 this.otherTrip.center = point.location = {
                     lat: parseFloat(data.lat),
-                    lng: parseFloat(data.lng),
+                    lng: parseFloat(data.lng)
                 };
                 this.calcRoute('returnTrip');
             }
@@ -2324,7 +2358,7 @@ export default {
 
         onBackButton() {
             this.$router.replace({
-                name: 'trips',
+                name: 'trips'
             });
         },
 
@@ -2340,7 +2374,7 @@ export default {
                     json: null,
                     location: null,
                     error: new Error(),
-                    id: new Date().getTime(),
+                    id: new Date().getTime()
                 };
                 newArr.splice(this.points.length - 1, 0, newp);
                 this.points = newArr;
@@ -2368,7 +2402,7 @@ export default {
                 return;
             }
             let data = {
-                points: points.map((point) => point.location),
+                points: points.map((point) => point.location)
             };
             osmApi.route(data).then((result) => {
                 console.log('osm route result', result);
@@ -2393,12 +2427,12 @@ export default {
                 L.Routing.control({
                     waypoints: [
                         L.latLng(data.origin.lat, data.origin.lng),
-                        L.latLng(data.destiny.lat, data.destiny.lng),
-                    ],
+                        L.latLng(data.destiny.lat, data.destiny.lng)
+                    ]
                 }).addTo(map);
             }
-        },
-    },
+        }
+    }
 };
 </script>
 

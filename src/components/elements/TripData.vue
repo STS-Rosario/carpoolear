@@ -63,15 +63,15 @@ export default {
     computed: {
         ...mapGetters({
             trip: 'trips/currentTrip',
-            tripCardTheme: 'auth/tripCardTheme',
+            tripCardTheme: 'auth/tripCardTheme'
         }),
         isPassengersView() {
             return this.trip.is_passenger;
-        },
+        }
     },
     components: {
-        SvgItem,
-    },
+        SvgItem
+    }
 };
 </script>
 <style scoped>

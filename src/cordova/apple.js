@@ -8,10 +8,10 @@ export default {
                     window.SignInWithApple.request({
                         requestedScopes: [
                             window.SignInWithApple.Scope.Email,
-                            window.SignInWithApple.Scope.FullName,
+                            window.SignInWithApple.Scope.FullName
                         ],
                         requestedOperation:
-                            window.SignInWithApple.Operation.Login,
+                            window.SignInWithApple.Operation.Login
                     }).then(function (credential) {
                         console.log(
                             'SignInWithApple credentials: ',
@@ -22,5 +22,5 @@ export default {
                 }
             });
         });
-    },
+    }
 };

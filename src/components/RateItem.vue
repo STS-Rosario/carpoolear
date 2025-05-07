@@ -139,18 +139,18 @@ export default {
     data() {
         return {
             showReply: false,
-            comment: '',
+            comment: ''
         };
     },
     methods: {
         ...mapActions({
-            reply: 'rates/reply',
+            reply: 'rates/reply'
         }),
         onReply() {
             let data = {
                 trip_id: this.rate.trip.id,
                 user_id: this.rate.from.id,
-                comment: this.comment,
+                comment: this.comment
             };
             this.reply(data).then(() => {
                 this.showReply = false;
@@ -164,13 +164,13 @@ export default {
         onCancelReply() {
             this.comment = '';
             this.showReply = false;
-        },
+        }
     },
     computed: {
         ...mapGetters({
             config: 'auth/appConfig',
             me: 'auth/user',
-            profile: 'profile/user',
+            profile: 'profile/user'
         }),
         rateType() {
             return this.rate.user_to_type === 0 ? 'pasajero' : 'conductor';
@@ -182,9 +182,9 @@ export default {
             return this.config
                 ? 'rate-item-' + this.config.trip_card_design
                 : ' rate-item-default';
-        },
+        }
     },
-    props: ['user', 'rate', 'id', 'notReply'],
+    props: ['user', 'rate', 'id', 'notReply']
 };
 </script>
 <style scoped>

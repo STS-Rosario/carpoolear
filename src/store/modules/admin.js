@@ -37,7 +37,7 @@ const actions = {
     adminUpdate,
     getTrips,
     getSeats,
-    getUserStats,
+    getUserStats
 };
 
 // const state = {
@@ -55,5 +55,5 @@ export default {
     // state,
     // getters,
     // mutations,
-    actions,
+    actions
 };

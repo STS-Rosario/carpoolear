@@ -162,19 +162,19 @@ export default {
                 name: '',
                 location: null,
                 radio: 0,
-                country: '',
+                country: ''
             },
             to_town: {
                 name: '',
                 location: null,
                 radio: 0,
-                country: '',
+                country: ''
             },
             date: '',
             dateAnswer: '',
             dateError: {
                 message: '',
-                state: '',
+                state: ''
             },
             chofer_logo_blanco:
                 process.env.ROUTE_BASE +
@@ -190,14 +190,14 @@ export default {
             swap_vertical:
                 process.env.ROUTE_BASE + 'static/img/flechas_verticales.png',
             allowForeignPoints: false,
-            options: [],
+            options: []
         };
     },
     computed: {
         ...mapGetters({
             isMobile: 'device/isMobile',
-            config: 'auth/appConfig',
-        }),
+            config: 'auth/appConfig'
+        })
     },
     mounted() {
         bus.on('date-change', this.dateChange);
@@ -236,10 +236,10 @@ export default {
                     name: data.name,
                     location: {
                         lat: parseFloat(data.lat),
-                        lng: parseFloat(data.lng),
+                        lng: parseFloat(data.lng)
                     },
                     country: data.country,
-                    id: data.id,
+                    id: data.id
                 };
             }
             if (i === 0) {
@@ -298,7 +298,7 @@ export default {
                     'Origen y destino no pueden ser ambos del exterior.',
                     {
                         duration: 10,
-                        estado: 'error',
+                        estado: 'error'
                     }
                 );
             }
@@ -311,7 +311,7 @@ export default {
                 name: '',
                 location: null,
                 radio: 0,
-                country: this.config.osm_country,
+                country: this.config.osm_country
             };
         },
         swapCities() {
@@ -333,7 +333,7 @@ export default {
                     this.from_town.name = parameters.origin_name;
                     this.from_town.location = {
                         lat: parameters.origin_lat,
-                        lng: parameters.origin_lng,
+                        lng: parameters.origin_lng
                     };
                     this.from_town.radio = parameters.origin_radio;
                     this.from_town.id = parameters.origin_id;
@@ -345,7 +345,7 @@ export default {
                     this.to_town.name = parameters.destination_name;
                     this.to_town.location = {
                         lat: parameters.destination_lat,
-                        lng: parameters.destination_lng,
+                        lng: parameters.destination_lng
                     };
                     this.to_town.radio = parameters.destination_radio;
                     this.to_town.id = parameters.destination_id;
@@ -367,13 +367,13 @@ export default {
         onSearch(search, loading) {
             loading(true);
             this.search(loading, search, this);
-        },
+        }
     },
     props: ['params'],
     components: {
         DatePicker,
-        autocomplete,
-    },
+        autocomplete
+    }
 };
 </script>
 

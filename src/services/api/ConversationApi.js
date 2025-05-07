@@ -27,7 +27,7 @@ class ConversationApi extends TaggedApi {
 
     send(id, text) {
         return this.post('/api/conversations/' + id + '/send', {
-            message: text,
+            message: text
         });
     }
 

@@ -13,7 +13,7 @@ const state = {
     deviceReady: false,
     deviceOnline: false,
     device: null,
-    deviceId: null,
+    deviceId: null
 };
 
 // getters
@@ -35,7 +35,7 @@ const getters = {
             data.device_id = state.deviceId;
         }
         return data;
-    },
+    }
 };
 
 // actions
@@ -52,7 +52,7 @@ const actions = {
                     notification.data.conversation_id
                 ) {
                     globalStore.dispatch('conversations/findConversation', {
-                        id: notification.data.conversation_id,
+                        id: notification.data.conversation_id
                     });
                 }
             }
@@ -79,7 +79,7 @@ const actions = {
                     let token = response.token;
                     globalStore.dispatch('auth/onLoggin', token);
                     authApi.matchFriendsWithProvider('facebook', {
-                        access_token: accessToken,
+                        access_token: accessToken
                     });
                 });
         });
@@ -88,7 +88,7 @@ const actions = {
     appleLogin(context) {
         return apple.login().then((response) => {
             let data = {
-                access_token: response.identityToken,
+                access_token: response.identityToken
             };
             data = Object.assign(data, response);
 
@@ -124,7 +124,7 @@ const actions = {
                 navigator.Backbutton.goHome();
             }
         }
-    },
+    }
 };
 
 // mutations
@@ -143,7 +143,7 @@ const mutations = {
     },
     [types.CORDOVA_DEVICE_REGISTER](state, id) {
         state.deviceId = id;
-    },
+    }
 };
 
 export default {
@@ -151,5 +151,5 @@ export default {
     state,
     getters,
     actions,
-    mutations,
+    mutations
 };

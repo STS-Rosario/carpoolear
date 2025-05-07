@@ -153,15 +153,15 @@ export default {
         return {
             sending: {
                 trip: false,
-                returnTrip: false,
-            },
+                returnTrip: false
+            }
         };
     },
     computed: {
         ...mapGetters({
             conversation: 'conversations/selectedConversation',
             config: 'auth/appConfig',
-            user: 'auth/user',
+            user: 'auth/user'
         }),
         owner() {
             return (
@@ -201,12 +201,12 @@ export default {
                 moment(this.conversation.return_trip.trip_date).format() <
                 moment().format()
             );
-        },
+        }
     },
     methods: {
         ...mapActions({
             make: 'passenger/makeRequest',
-            cancel: 'passenger/cancel',
+            cancel: 'passenger/cancel'
         }),
 
         doRequest(isReturnTrip = false) {
@@ -287,11 +287,11 @@ export default {
                         });
                 }
             }
-        },
+        }
     },
     components: {
-        spinner,
-    },
+        spinner
+    }
 };
 </script>
 

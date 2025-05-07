@@ -9,8 +9,8 @@
                             params: {
                                 id: user.id,
                                 userProfile: user,
-                                activeTab: 1,
-                            },
+                                activeTab: 1
+                            }
                         }"
                     >
                         <div
@@ -34,7 +34,7 @@ export default {
     data() {
         return {};
     },
-    mounted() {},
+    mounted() {}
 };
 </script>
 

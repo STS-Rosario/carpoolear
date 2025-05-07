@@ -7,12 +7,12 @@ import * as types from '../mutation-types';
 let carApi = new CarApi();
 
 const state = {
-    cars: null,
+    cars: null
 };
 
 // getters
 const getters = {
-    cars: (state) => state.cars,
+    cars: (state) => state.cars
 };
 
 // actions
@@ -71,7 +71,7 @@ const actions = {
                     return Promise.reject(err);
                 }
             });
-    },
+    }
 };
 
 // mutations
@@ -94,7 +94,7 @@ const mutations = {
     },
     [types.CARS_DELETE](state, car) {
         state.cars = state.cars.filter((item) => item.id === car.id);
-    },
+    }
 };
 
 export default {
@@ -102,5 +102,5 @@ export default {
     state,
     getters,
     actions,
-    mutations,
+    mutations
 };

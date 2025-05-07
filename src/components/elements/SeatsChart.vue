@@ -18,11 +18,11 @@ export default {
     name: 'seats-chart',
     props: {
         minDate: {
-            default: moment(Date(new Date().getFullYear(), 0, 1), 'YYYY-MM'),
+            default: moment(Date(new Date().getFullYear(), 0, 1), 'YYYY-MM')
         },
         maxDate: {
-            default: moment(Date(), 'YYYY-MM'),
-        },
+            default: moment(Date(), 'YYYY-MM')
+        }
     },
     data() {
         return {
@@ -34,15 +34,15 @@ export default {
                 maintainAspectRatio: false,
                 title: {
                     display: true,
-                    text: 'Asientos',
+                    text: 'Asientos'
                 },
                 tooltips: {
                     mode: 'index',
-                    intersect: false,
+                    intersect: false
                 },
                 hover: {
                     mode: 'nearest',
-                    intersect: true,
+                    intersect: true
                 },
                 scales: {
                     xAxes: [
@@ -50,23 +50,23 @@ export default {
                             display: true,
                             scaleLabel: {
                                 display: true,
-                                labelString: 'Mes',
+                                labelString: 'Mes'
                             },
-                            stacked: true,
-                        },
+                            stacked: true
+                        }
                     ],
                     yAxes: [
                         {
                             display: true,
                             scaleLabel: {
                                 display: true,
-                                labelString: 'Cantidad',
+                                labelString: 'Cantidad'
                             },
-                            stacked: true,
-                        },
-                    ],
-                },
-            },
+                            stacked: true
+                        }
+                    ]
+                }
+            }
         };
     },
     watch: {
@@ -85,12 +85,12 @@ export default {
                 this.minDate,
                 this.maxDate
             );
-        },
+        }
     },
     methods: {
         ...mapActions({
             getTrips: 'admin/getTrips',
-            getSeats: 'admin/getSeats',
+            getSeats: 'admin/getSeats'
         }),
         processTrips(viajes, asientos, minDate, maxDate) {
             let etiquetas = [];
@@ -137,16 +137,16 @@ export default {
                             borderColor: 'blue',
                             data: ocupados,
                             backgroundColor: 'rgb(0, 0, 255, 0.5)',
-                            fill: true,
+                            fill: true
                         },
                         {
                             label: 'No ocupados',
                             backgroundColor: 'rgb(255, 0, 0, 0.5)',
                             borderColor: '#F00',
                             data: desocupados,
-                            fill: true,
-                        },
-                    ],
+                            fill: true
+                        }
+                    ]
                 };
             }
         },
@@ -161,14 +161,14 @@ export default {
                 this.minDate,
                 this.maxDate
             );
-        },
+        }
     },
     components: {
-        LineChart,
+        LineChart
     },
     mounted() {
         this.loadData();
-    },
+    }
 };
 </script>
 

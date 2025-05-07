@@ -18,11 +18,11 @@ export default {
     name: 'monthly-users-chart',
     props: {
         minDate: {
-            default: moment(Date(new Date().getFullYear(), 0, 1), 'YYYY-MM'),
+            default: moment(Date(new Date().getFullYear(), 0, 1), 'YYYY-MM')
         },
         maxDate: {
-            default: moment(Date(), 'YYYY-MM'),
-        },
+            default: moment(Date(), 'YYYY-MM')
+        }
     },
     data() {
         return {
@@ -33,15 +33,15 @@ export default {
                 maintainAspectRatio: false,
                 title: {
                     display: true,
-                    text: 'Usuarios registrados por mes',
+                    text: 'Usuarios registrados por mes'
                 },
                 tooltips: {
                     mode: 'index',
-                    intersect: false,
+                    intersect: false
                 },
                 hover: {
                     mode: 'nearest',
-                    intersect: true,
+                    intersect: true
                 },
                 scales: {
                     xAxes: [
@@ -49,22 +49,22 @@ export default {
                             display: true,
                             scaleLabel: {
                                 display: true,
-                                labelString: 'Mes',
+                                labelString: 'Mes'
                             },
-                            stacked: true,
-                        },
+                            stacked: true
+                        }
                     ],
                     yAxes: [
                         {
                             display: true,
                             scaleLabel: {
                                 display: true,
-                                labelString: 'Cantidad',
-                            },
-                        },
-                    ],
-                },
-            },
+                                labelString: 'Cantidad'
+                            }
+                        }
+                    ]
+                }
+            }
         };
     },
     watch: {
@@ -81,11 +81,11 @@ export default {
                 this.minDate,
                 this.maxDate
             );
-        },
+        }
     },
     methods: {
         ...mapActions({
-            getUsers: 'admin/getUserStats',
+            getUsers: 'admin/getUserStats'
         }),
         processUsers(usuarios, minDate, maxDate) {
             let labels = [];
@@ -106,9 +106,9 @@ export default {
                         backgroundColor: '#0F0',
                         borderColor: '#0F0',
                         data: datasetTotales,
-                        fill: false,
-                    },
-                ],
+                        fill: false
+                    }
+                ]
             };
         },
         async loadData() {
@@ -119,14 +119,14 @@ export default {
                 this.minDate,
                 this.maxDate
             );
-        },
+        }
     },
     components: {
-        LineChart,
+        LineChart
     },
     mounted() {
         this.loadData();
-    },
+    }
 };
 </script>
 

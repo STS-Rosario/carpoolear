@@ -60,14 +60,14 @@ export default {
             query: {
                 page: 1,
                 page_size: 25,
-                mark: true,
-            },
+                mark: true
+            }
         };
     },
 
     methods: {
         ...mapActions({
-            search: 'notifications/index',
+            search: 'notifications/index'
         }),
 
         onNotificationClick(n) {
@@ -78,7 +78,7 @@ export default {
                     case 'trip':
                         router.push({
                             name: 'detail_trip',
-                            params: { id: n.extras.trip_id },
+                            params: { id: n.extras.trip_id }
                         });
                         break;
                     case 'friends':
@@ -87,7 +87,7 @@ export default {
                     case 'subscription':
                         router.push({
                             name: 'my-trips',
-                            query: { loc: 'suscriptions' },
+                            query: { loc: 'suscriptions' }
                         });
                         break;
                     case 'my-trips':
@@ -96,7 +96,7 @@ export default {
                     case 'conversation':
                         router.push({
                             name: 'conversation-chat',
-                            params: { id: n.extras.conversation_id },
+                            params: { id: n.extras.conversation_id }
                         });
                         break;
                 }
@@ -105,13 +105,13 @@ export default {
         nextPage() {
             this.query.page += 1;
             this.search(this.query);
-        },
+        }
     },
 
     computed: {
         ...mapGetters({
-            notifications: 'notifications/index',
-        }),
+            notifications: 'notifications/index'
+        })
     },
 
     mounted() {
@@ -119,8 +119,8 @@ export default {
     },
 
     components: {
-        Loading,
-    },
+        Loading
+    }
 };
 </script>
 

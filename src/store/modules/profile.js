@@ -10,7 +10,7 @@ let referencesApi = new ReferencesApi();
 const state = {
     user: null,
     registerData: null,
-    ...pagination.makeState('rates'),
+    ...pagination.makeState('rates')
 };
 
 const getters = {
@@ -23,7 +23,7 @@ const getters = {
             return null;
         }
     },
-    ...pagination.makeGetters('rates'),
+    ...pagination.makeGetters('rates')
 };
 
 const actions = {
@@ -131,7 +131,7 @@ const actions = {
         // TODO: Pagination not working
         data.page_size = 200;
         return rateApi.index(store.state.user.id, data);
-    }),
+    })
 };
 
 const mutations = {
@@ -167,7 +167,7 @@ const mutations = {
         }
         console.log('PROFILE_REFERENCE_ADD', state.user);
         state.user.references_data.push(reference);
-    },
+    }
 };
 
 export default {
@@ -175,5 +175,5 @@ export default {
     state,
     getters,
     actions,
-    mutations,
+    mutations
 };

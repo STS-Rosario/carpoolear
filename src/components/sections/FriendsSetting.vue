@@ -120,13 +120,13 @@ export default {
     data() {
         return {
             text: '',
-            idRequesting: 0,
+            idRequesting: 0
         };
     },
     computed: {
         ...mapGetters({
             friends: 'friends/friends',
-            pendings: 'friends/pendings',
+            pendings: 'friends/pendings'
         }),
 
         noResult() {
@@ -135,7 +135,7 @@ export default {
             } else {
                 return 'No tienes ningún amigo aún.';
             }
-        },
+        }
     },
     methods: {
         ...mapActions({
@@ -143,7 +143,7 @@ export default {
             lookPeginds: 'friends/pending',
             accept: 'friends/accept',
             reject: 'friends/reject',
-            delete: 'friends/delete',
+            delete: 'friends/delete'
         }),
 
         onTextChange() {
@@ -184,7 +184,7 @@ export default {
                     this.idRequesting = 0;
                 }
             );
-        },
+        }
     },
 
     mounted() {
@@ -194,8 +194,8 @@ export default {
     components: {
         Loading,
         FriendCard,
-        FriendRequestCard,
-    },
+        FriendRequestCard
+    }
 };
 </script>
 

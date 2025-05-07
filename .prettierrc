@@ -1,4 +1,5 @@
 {
     "vueIndentScriptAndStyle": false,
-    "singleAttributePerLine": false
+    "singleAttributePerLine": false,
+    "trailingComma": "none"
 } 

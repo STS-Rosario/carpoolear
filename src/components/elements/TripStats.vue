@@ -78,19 +78,19 @@ export default {
         ...mapGetters({
             trip: 'trips/currentTrip',
             tripCardTheme: 'auth/tripCardTheme',
-            isMobile: 'device/isMobile',
+            isMobile: 'device/isMobile'
         }),
         distanceString() {
             return Math.floor(this.trip.distance / 1000);
         },
         isPassengersView() {
             return this.trip.is_passenger;
-        },
+        }
     },
     components: {
-        SvgItem,
+        SvgItem
     },
-    methods: {},
+    methods: {}
 };
 </script>
 <style scoped></style>

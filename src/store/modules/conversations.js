@@ -23,7 +23,7 @@ const state = {
             }
         */
     },
-    timestamp: null,
+    timestamp: null
 };
 
 // getters
@@ -40,7 +40,7 @@ const getters = {
     lastPageConversation: (state) =>
         state.messages[state.selectedID]
             ? state.messages[state.selectedID].lastPage
-            : true,
+            : true
 };
 
 // actions
@@ -128,7 +128,7 @@ const actions = {
                 store.commit(types.CONVERSATION_CREATE_MESSAGES, id);
                 globalStore.dispatch('conversations/findConversation', {
                     id,
-                    more: false,
+                    more: false
                 });
 
                 return Promise.resolve(conversationTemp);
@@ -136,7 +136,7 @@ const actions = {
                 return globalStore
                     .dispatch('conversations/findConversation', {
                         id,
-                        more: false,
+                        more: false
                     })
                     .then((conversation) => {
                         conversation.unread = false;
@@ -165,7 +165,7 @@ const actions = {
             .getMessages(id, { read, unread, pageSize })
             .then((response) => {
                 store.commit(types.CONVERSATION_INSERT_MESSAGE, {
-                    messages: response.data.reverse(),
+                    messages: response.data.reverse()
                 });
             })
             .catch((error) => {
@@ -206,7 +206,7 @@ const actions = {
                         // Tengo la conversacion, inserto el mensaje
                         // store.commit(types.CONVERSATION_CREATE_MESSAGES, msg.conversation_id);
                         store.commit(types.CONVERSATION_INSERT_MESSAGE, {
-                            messages: [msg],
+                            messages: [msg]
                         });
                         // store.commit(types.CONVERSATION_UPDATE, msg);
                     });
@@ -241,7 +241,7 @@ const actions = {
                     );
                     globalStore.dispatch('conversations/findMessage', {
                         id,
-                        more: false,
+                        more: false
                     });
                 }
                 return Promise.resolve(response.data);
@@ -275,7 +275,7 @@ const actions = {
                     let messages = response.data.reverse();
                     store.commit(types.CONVERSATION_ADD_MESSAGE, {
                         messages,
-                        id,
+                        id
                     });
                 }
             })
@@ -291,7 +291,7 @@ const actions = {
             .then((response) => {
                 store.commit(types.CONVERSATION_INSERT_MESSAGE, {
                     messages: [response.data],
-                    id,
+                    id
                 });
                 return Promise.resolve(response.data);
             })
@@ -303,7 +303,7 @@ const actions = {
     sendToAll(store, { message, users }) {
         users = users.map((item) => item.id);
         return conversationApi.sendToAll({ message, users });
-    },
+    }
 };
 
 // mutations
@@ -352,7 +352,7 @@ const mutations = {
         if (!state.messages[id]) {
             let obj = {
                 list: [],
-                lastPage: false,
+                lastPage: false
             };
             Vue.set(state.messages, id, obj);
         }
@@ -401,7 +401,7 @@ const mutations = {
         let obj = {};
         obj[id] = {
             list: [...messages, ...state.messages[id].list],
-            lastPage: state.messages[id].lastPage,
+            lastPage: state.messages[id].lastPage
         };
         state.messages = Object.assign({}, state.messages, obj);
     },
@@ -440,7 +440,7 @@ const mutations = {
         state.messages[id].lastPage = false;
         state.messages[id].list = [];
         // state.messages[id].timestamp = null;
-    },
+    }
 };
 
 export default {
@@ -448,5 +448,5 @@ export default {
     state,
     getters,
     actions,
-    mutations,
+    mutations
 };

@@ -62,8 +62,8 @@ export default {
         },
         grupalChat() {
             return false;
-        },
+        }
     },
-    props: ['users', 'message', 'user'],
+    props: ['users', 'message', 'user']
 };
 </script>

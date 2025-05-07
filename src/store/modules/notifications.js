@@ -5,12 +5,12 @@ const notificationApi = new NotificationApi();
 
 const state = {
     list: null,
-    count: 0,
+    count: 0
 };
 
 const getters = {
     index: (state) => state.list,
-    count: (state) => state.count,
+    count: (state) => state.count
 };
 
 const actions = {
@@ -42,7 +42,7 @@ const actions = {
     add(store) {
         store.commit(types.NOTIFICATIONS_COUNT, store.state.count + 1);
         console.log(store.state);
-    },
+    }
 };
 
 const mutations = {
@@ -61,7 +61,7 @@ const mutations = {
         } else {
             console.error('Notifications not found on delete');
         }
-    },
+    }
 };
 
 export default {
@@ -69,5 +69,5 @@ export default {
     state,
     getters,
     actions,
-    mutations,
+    mutations
 };

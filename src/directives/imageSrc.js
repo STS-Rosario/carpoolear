@@ -22,5 +22,5 @@ export default {
     },
     unbind: function (el, binding, node) {
         el.style.backgroundImage = null;
-    },
+    }
 };

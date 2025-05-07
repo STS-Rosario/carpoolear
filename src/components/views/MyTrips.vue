@@ -424,7 +424,7 @@ export default {
             modalTripId: 0,
             showModalPendingRates: false,
             pendingRatesValue: 0,
-            alreadyAlerted: false,
+            alreadyAlerted: false
         };
     },
     mounted() {
@@ -459,8 +459,8 @@ export default {
             oldTrips: 'myTrips/myOldTrips',
             oldPassengerTrips: 'myTrips/passengerOldTrips',
             subscriptions: 'subscriptions/subscriptions',
-            config: 'auth/appConfig',
-        }),
+            config: 'auth/appConfig'
+        })
     },
 
     methods: {
@@ -474,7 +474,7 @@ export default {
             oldTripsAsPassenger: 'myTrips/oldTripsAsPassenger',
             findSubscriptions: 'subscriptions/index',
             registerDonation: 'profile/registerDonation',
-            changeProperty: 'profile/changeProperty',
+            changeProperty: 'profile/changeProperty'
         }),
         findTrip(id) {
             if (this.trips) {
@@ -514,7 +514,7 @@ export default {
                     has_donated: 1,
                     has_denied: 0,
                     ammount: parseFloat(this.donateValue),
-                    trip_id: this.modalTripId,
+                    trip_id: this.modalTripId
                 };
                 this.registerDonation(data);
             } else {
@@ -522,7 +522,7 @@ export default {
                     'Tienes que seleccionar un valor de donación.',
                     {
                         duration: 10,
-                        estado: 'error',
+                        estado: 'error'
                     }
                 );
             }
@@ -549,7 +549,7 @@ export default {
                     has_donated: 1,
                     has_denied: 0,
                     ammount: parseFloat(this.donateValue),
-                    trip_id: this.modalTripId,
+                    trip_id: this.modalTripId
                 };
                 this.registerDonation(data);
             } else {
@@ -557,7 +557,7 @@ export default {
                     'Tienes que seleccionar un valor de donación.',
                     {
                         duration: 10,
-                        estado: 'error',
+                        estado: 'error'
                     }
                 );
             }
@@ -567,7 +567,7 @@ export default {
             if (this.pendingRatesValue) {
                 let data = {
                     property: 'do_not_alert_pending_rates',
-                    value: 1,
+                    value: 1
                 };
                 this.changeProperty(data).then(() => {
                     console.log('do not alert success');
@@ -581,7 +581,7 @@ export default {
                 has_donated: 0,
                 has_denied: 1,
                 ammount: 0,
-                trip_id: this.modalTripId,
+                trip_id: this.modalTripId
             };
             this.registerDonation(data);
         },
@@ -591,7 +591,7 @@ export default {
                 has_donated: 0,
                 has_denied: 1,
                 ammount: 0,
-                trip_id: this.modalTripId,
+                trip_id: this.modalTripId
             };
             this.registerDonation(data);
         },
@@ -641,7 +641,7 @@ export default {
                     this.hasToShowModal(data.trip_id);
                 }
             }
-        },
+        }
     },
     watch: {
         trips: function () {
@@ -677,7 +677,7 @@ export default {
         } /* ,
         subscriptions: function () {
             this.updateScroll();
-        } */,
+        } */
     },
     components: {
         Trip,
@@ -687,8 +687,8 @@ export default {
         RatePending,
         Tab,
         subscriptionItem,
-        modal,
-    },
+        modal
+    }
 };
 </script>
 

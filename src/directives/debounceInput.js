@@ -12,5 +12,5 @@ export default {
     },
     unbind: function (el, binding, node) {
         el.removeEventListener('input', inputHandler, false);
-    },
+    }
 };

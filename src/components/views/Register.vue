@@ -404,7 +404,7 @@ export default {
             accountTypes: [],
             loading: false,
             fbLoading: false,
-            showRegister: false,
+            showRegister: false
         };
     },
     computed: {
@@ -412,14 +412,14 @@ export default {
             checkLogin: 'auth/checkLogin',
             isMobile: 'device/isMobile',
             settings: 'auth/appConfig',
-            registerData: 'profile/registerData',
+            registerData: 'profile/registerData'
         }),
         tripCardTheme() {
             return this.settings ? this.settings.trip_card_design : '';
         },
         showRegisterForm() {
             return !this.settings.enable_facebook || this.showRegister;
-        },
+        }
     },
     watch: {
         email: function () {
@@ -439,11 +439,11 @@ export default {
         },
         birthdayAnswer: function () {
             this.birthdayError.state = false;
-        },
+        }
     },
     components: {
         DatePicker,
-        Spinner,
+        Spinner
     },
     methods: {
         ...mapActions({
@@ -451,7 +451,7 @@ export default {
             getBankData: 'profile/getBankData',
             saveRegisterData: 'profile/saveRegisterData',
             cleanRegisterData: 'profile/cleanRegisterData',
-            fbLogin: 'cordova/facebookLogin',
+            fbLogin: 'cordova/facebookLogin'
         }),
         onShowRegister() {
             this.showRegister = true;
@@ -463,14 +463,14 @@ export default {
                     if (response.errors && response.errors.email) {
                         dialogs.message(this.$t('correoUsado'), {
                             duration: 10,
-                            estado: 'error',
+                            estado: 'error'
                         });
                     }
                 });
             } else {
                 dialogs.message(this.$t('solicitudEnviada'), {
                     duration: 10,
-                    estado: 'error',
+                    estado: 'error'
                 });
             }
         },
@@ -590,7 +590,7 @@ export default {
             grecaptcha.ready(function () {
                 grecaptcha
                     .execute(process.env.RECAPTCHA_SITE_KEY, {
-                        action: 'submit',
+                        action: 'submit'
                     })
                     .then(function (token) {
                         // Add your logic to submit to your backend server here.
@@ -600,7 +600,7 @@ export default {
                                 that.jumpToError();
                                 dialogs.message(that.$t('debeCorregirCampos'), {
                                     duration: 10,
-                                    estado: 'error',
+                                    estado: 'error'
                                 });
                             });
                             return;
@@ -616,7 +616,7 @@ export default {
                             account_number: that.account_number,
                             account_type: that.account_type,
                             account_bank: that.account_bank,
-                            token,
+                            token
                         };
                         /* global FormData */
                         let bodyFormData = new FormData();
@@ -674,7 +674,7 @@ export default {
                                             dialogs.message(
                                                 that.$t('mailEnUso'),
                                                 {
-                                                    estado: 'error',
+                                                    estado: 'error'
                                                 }
                                             );
                                             that.emailError.state = true;
@@ -685,7 +685,7 @@ export default {
                                             dialogs.message(
                                                 that.$t('debeCorregirCampos'),
                                                 {
-                                                    estado: 'error',
+                                                    estado: 'error'
                                                 }
                                             );
                                         }
@@ -693,7 +693,7 @@ export default {
                                         dialogs.message(
                                             that.$t('errorRegistro'),
                                             {
-                                                estado: 'error',
+                                                estado: 'error'
                                             }
                                         );
                                     }
@@ -705,7 +705,7 @@ export default {
         },
         onBackClick() {
             router.back();
-        },
+        }
     },
     mounted() {
         bus.on('back-click', this.onBackClick);
@@ -736,7 +736,7 @@ export default {
         }
         bus.off('back-click', this.onBackClick);
         bus.off('date-change', this.dateChange);
-    },
+    }
 };
 </script>
 

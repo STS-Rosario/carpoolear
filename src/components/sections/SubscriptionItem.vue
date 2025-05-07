@@ -76,20 +76,20 @@ export default {
             required: false,
             default: () => {
                 return {};
-            },
+            }
         },
         user: {
             type: Object,
             required: false,
             default: () => {
                 return {};
-            },
-        },
+            }
+        }
     },
     data() {
         return {
             inProgress: false,
-            resultCount: 0,
+            resultCount: 0
         };
     },
     mounted() {
@@ -98,7 +98,7 @@ export default {
     methods: {
         ...mapActions({
             removeStore: 'subscriptions/remove',
-            searchTrip: 'trips/tripsSearch',
+            searchTrip: 'trips/tripsSearch'
         }),
         remove() {
             this.inProgress = true;
@@ -140,11 +140,11 @@ export default {
             if (redirect) {
                 this.$router.replace({
                     name: 'trips',
-                    params: { keepSearch: true },
+                    params: { keepSearch: true }
                 });
             }
-        },
-    },
+        }
+    }
 };
 </script>
 <style scoped>

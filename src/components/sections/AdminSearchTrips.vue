@@ -236,20 +236,20 @@ export default {
                 name: '',
                 location: null,
                 radio: 0,
-                country: 'ARG',
+                country: 'ARG'
             },
             to_town: {
                 name: '',
                 location: null,
                 radio: 0,
-                country: 'ARG',
+                country: 'ARG'
             },
             from_date: '',
             to_date: '',
             dateAnswer: '',
             dateError: {
                 message: '',
-                state: '',
+                state: ''
             },
             user: '',
             showAutocomplete: false,
@@ -269,19 +269,19 @@ export default {
             swap_vertical:
                 process.env.ROUTE_BASE + 'static/img/flechas_verticales.png',
             allowForeignPoints: false,
-            options: [],
+            options: []
         };
     },
     computed: {
         ...mapGetters({
             isMobile: 'device/isMobile',
-            config: 'auth/appConfig',
-        }),
+            config: 'auth/appConfig'
+        })
     },
     methods: {
         ...mapActions({
             search: 'trips/tripsSearch',
-            searchUsers: 'admin/searchUsers',
+            searchUsers: 'admin/searchUsers'
         }),
         onSearchUsers() {
             this.showAutocomplete = true;
@@ -309,9 +309,9 @@ export default {
                     name: data.name,
                     location: {
                         lat: parseFloat(data.lat),
-                        lng: parseFloat(data.lng),
+                        lng: parseFloat(data.lng)
                     },
-                    country: data.country,
+                    country: data.country
                 };
             }
             if (i === 0) {
@@ -380,7 +380,7 @@ export default {
                     'Origen y destino no pueden ser ambos del exterior.',
                     {
                         duration: 10,
-                        estado: 'error',
+                        estado: 'error'
                     }
                 );
             }
@@ -393,7 +393,7 @@ export default {
                 name: '',
                 location: null,
                 radio: 0,
-                country: this.config.osm_country,
+                country: this.config.osm_country
             };
         },
         resetUser() {
@@ -416,14 +416,14 @@ export default {
         onSearch(search, loading) {
             loading(true);
             this.search(loading, search, this);
-        },
+        }
     },
     props: ['params'],
     components: {
         DatePicker,
         Autocomplete,
-        loading,
-    },
+        loading
+    }
 };
 </script>
 

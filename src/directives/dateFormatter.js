@@ -89,5 +89,5 @@ export default {
         el.removeEventListener('keydown', keyDownHandler, false);
         el.removeEventListener('input', inputHandler, false);
         numberFormatter[el.id] = undefined;
-    },
+    }
 };

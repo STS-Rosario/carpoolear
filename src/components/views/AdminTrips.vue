@@ -92,14 +92,14 @@ export default {
             viajes: [],
             query: {},
             currentViaje: {},
-            showTrip: false,
+            showTrip: false
         };
     },
     methods: {
         ...mapActions({
             search: 'trips/tripsSearch',
             show: 'trips/show',
-            changeVisibility: 'trips/changeVisibility',
+            changeVisibility: 'trips/changeVisibility'
         }),
         research(params) {
             console.log('research', params);
@@ -137,14 +137,14 @@ export default {
                     }
                 }
             });
-        },
+        }
     },
     components: {
         adminNav,
         adminSearchTrip,
-        tripDisplay,
+        tripDisplay
     },
-    mounted() {},
+    mounted() {}
 };
 </script>
 

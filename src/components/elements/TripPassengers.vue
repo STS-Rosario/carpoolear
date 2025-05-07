@@ -102,7 +102,7 @@ export default {
         ...mapGetters({
             trip: 'trips/currentTrip',
             tripCardTheme: 'auth/tripCardTheme',
-            user: 'auth/user',
+            user: 'auth/user'
         }),
         owner() {
             return this.trip && this.user && this.user.id === this.trip.user.id;
@@ -121,7 +121,7 @@ export default {
                       (item) => item.request_state === 4
                   )
                 : [];
-        },
+        }
     },
     props: [],
     components: {},
@@ -131,7 +131,7 @@ export default {
     methods: {
         ...mapActions({
             lookConversation: 'conversations/createConversation',
-            cancel: 'passenger/cancel',
+            cancel: 'passenger/cancel'
         }),
         calculateHeight() {
             this.$nextTick(() => {
@@ -143,7 +143,7 @@ export default {
                 .then((conversation) => {
                     router.push({
                         name: 'conversation-chat',
-                        params: { id: conversation.id },
+                        params: { id: conversation.id }
                     });
                 })
                 .catch((error) => {
@@ -157,8 +157,8 @@ export default {
                 params: {
                     id: user.id,
                     userProfile: user,
-                    activeTab: 1,
-                },
+                    activeTab: 1
+                }
             });
         },
         removePassenger(user) {
@@ -172,14 +172,14 @@ export default {
                     .then(() => {
                         this.sending = false;
                         dialogs.message(this.$t('removerPasajeroExitoso'), {
-                            estado: 'success',
+                            estado: 'success'
                         });
                     })
                     .catch(() => {
                         this.sending = false;
                     });
             }
-        },
+        }
     },
     watch: {
         acceptedPassengers() {
@@ -187,8 +187,8 @@ export default {
         },
         waitingForPaymentsPassengers() {
             this.calculateHeight();
-        },
-    },
+        }
+    }
 };
 </script>
 <style scoped>

@@ -432,7 +432,7 @@ export default {
             sending: {
                 deleteAction: false,
                 requestAction: false,
-                sendMessageAction: false,
+                sendMessageAction: false
             },
             carpoolear_logo:
                 process.env.ROUTE_BASE + 'static/img/carpoolear_logo.png',
@@ -443,14 +443,14 @@ export default {
                     name: '',
                     place: null,
                     json: null,
-                    location: null,
+                    location: null
                 },
                 {
                     name: '',
                     place: null,
                     json: null,
-                    location: null,
-                },
+                    location: null
+                }
             ],
             matchingUsers: [],
             messageToUsers: '',
@@ -462,7 +462,7 @@ export default {
             showModalPricing: false,
             acceptPassengerValue: 0,
             acceptPricing: 0,
-            calculatedHeight: {},
+            calculatedHeight: {}
         };
     },
 
@@ -486,14 +486,14 @@ export default {
                             ' | ' +
                             moment(this.trip.trip_date).format(
                                 'dddd DD/MM hh:mm'
-                            ),
+                            )
                     },
-                    { p: 'og:image', c: this.carpoolear_logo },
+                    { p: 'og:image', c: this.carpoolear_logo }
                 ];
             } else {
                 return [];
             }
-        },
+        }
     },
 
     methods: {
@@ -508,7 +508,7 @@ export default {
             sendToAll: 'conversations/sendToAll',
             changeProperty: 'profile/changeProperty',
             removeTrip: 'myTrips/removeTrip',
-            searchAgain: 'trips/searchAgain',
+            searchAgain: 'trips/searchAgain'
         }),
         calculateHeight() {
             this.$nextTick(() => {
@@ -516,7 +516,7 @@ export default {
                     ? {
                           'min-height': this.$refs.rightPanel
                               ? this.$refs.rightPanel.clientHeight + 'px'
-                              : '440px',
+                              : '440px'
                       }
                     : {};
             });
@@ -539,14 +539,14 @@ export default {
                 this.remove(this.trip.id)
                     .then(() => {
                         dialogs.message(this.$t('viajeCancelado'), {
-                            estado: 'success',
+                            estado: 'success'
                         });
                         this.$router.replace({ name: 'trips' });
                     })
                     .catch((error) => {
                         console.error(error);
                         dialogs.message(this.$t('errorAlCancelar'), {
-                            estado: 'error',
+                            estado: 'error'
                         });
                         this.$set(this.sending, 'deleteAction', false);
                     });
@@ -611,7 +611,7 @@ export default {
             if (this.acceptPricing) {
                 let data = {
                     property: 'do_not_alert_pricing',
-                    value: 1,
+                    value: 1
                 };
                 this.changeProperty(data).then(() => {
                     console.log('do not alert success');
@@ -625,7 +625,7 @@ export default {
                 if (this.acceptPassengerValue) {
                     let data = {
                         property: 'do_not_alert_request_seat',
-                        value: 1,
+                        value: 1
                     };
                     this.changeProperty(data).then(() => {
                         console.log('do not alert success');
@@ -644,14 +644,14 @@ export default {
             this.$set(this.sending, 'sendMessageAction', true);
             let data = {
                 user: user,
-                tripId: this.trip.is_passenger ? undefined : this.trip.id,
+                tripId: this.trip.is_passenger ? undefined : this.trip.id
             };
             this.lookConversation(data)
                 .then((conversation) => {
                     console.log(conversation);
                     router.push({
                         name: 'conversation-chat',
-                        params: { id: conversation.id },
+                        params: { id: conversation.id }
                     });
                 })
                 .catch((error) => {
@@ -666,8 +666,8 @@ export default {
                 params: {
                     id: user.id,
                     userProfile: user,
-                    activeTab: 1,
-                },
+                    activeTab: 1
+                }
             });
         },
 
@@ -688,7 +688,7 @@ export default {
             if (this.acceptPassengerValue) {
                 let data = {
                     property: 'do_not_alert_request_seat',
-                    value: 1,
+                    value: 1
                 };
                 this.changeProperty(data).then(() => {
                     console.log('do not alert success');
@@ -747,7 +747,7 @@ export default {
                 );
                 let control = L.Routing.control({
                     waypoints: points,
-                    language: 'es',
+                    language: 'es'
                 });
                 control.addTo(map);
             }
@@ -761,9 +761,9 @@ export default {
                     json: p.json_address,
                     location: {
                         lat: p.lat,
-                        lng: p.lng,
+                        lng: p.lng
                     },
-                    place: null,
+                    place: null
                 };
                 this.points.push(point);
             });
@@ -793,7 +793,7 @@ export default {
             if (this.messageToUsers && users && users.length) {
                 this.sendToAll({
                     message: this.messageToUsers,
-                    users: users,
+                    users: users
                 }).then(() => {
                     this.messageToUsers = '';
                     dialogs.message('El mensaje fue enviado.');
@@ -804,7 +804,7 @@ export default {
             if (this.acceptPassengerValue) {
                 let data = {
                     property: 'do_not_alert_request_seat',
-                    value: 1,
+                    value: 1
                 };
                 this.changeProperty(data).then(() => {
                     console.log('do not alert success');
@@ -813,7 +813,7 @@ export default {
             if (this.acceptPricing) {
                 let data = {
                     property: 'do_not_alert_pricing',
-                    value: 1,
+                    value: 1
                 };
                 this.changeProperty(data).then(() => {
                     console.log('do not prcing success');
@@ -821,7 +821,7 @@ export default {
             }
             this.showModalRequestSeat = false;
             this.showModalPricing = false;
-        },
+        }
     },
 
     mounted() {
@@ -844,7 +844,7 @@ export default {
         },
         resolutionWidth: function () {
             this.calculateHeight();
-        },
+        }
     },
 
     computed: {
@@ -854,7 +854,7 @@ export default {
             config: 'auth/appConfig',
             tripCardTheme: 'auth/tripCardTheme',
             isMobile: 'device/isMobile',
-            resolution: 'device/resolution',
+            resolution: 'device/resolution'
         }),
         resolutionWidth() {
             return this.resolution.width;
@@ -869,7 +869,7 @@ export default {
                 ? [
                       'col-sm-8 col-md-8 col-lg-7',
                       'col-sm-9 col-md-10 col-lg-11',
-                      'col-sm-7 col-md-6 col-lg-5',
+                      'col-sm-7 col-md-6 col-lg-5'
                   ]
                 : ['col-sm-14 col-md-14', 'col-sm-10 col-md-10'];
         },
@@ -882,19 +882,19 @@ export default {
                         TripStats,
                         TripDescription,
                         TripShare,
-                        TripPassengers,
-                    ],
+                        TripPassengers
+                    ]
                 ];
             } else if (this.tripCardTheme === 'light') {
                 return [
                     [TripDriver, TripDescription],
                     [TripLocation, TripDate, TripSeats, TripPassengers],
-                    [TripData],
+                    [TripData]
                 ];
             } else {
                 return [
                     [TripLocation, TripDate, TripSeats],
-                    [TripData, TripStats, TripShare, TripPassengers],
+                    [TripData, TripStats, TripShare, TripPassengers]
                 ];
             }
         },
@@ -906,7 +906,7 @@ export default {
                 return this.location === 'passenger';
             }
             return false;
-        },
+        }
     },
 
     components: {
@@ -923,10 +923,10 @@ export default {
         TripDescription,
         TripShare,
         TripPassengers,
-        TripButtons,
+        TripButtons
     },
 
-    props: ['id', 'location'],
+    props: ['id', 'location']
 };
 </script>
 

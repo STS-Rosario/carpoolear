@@ -56,27 +56,27 @@ export default {
     props: {
         orientation: {
             type: String,
-            default: 'top',
+            default: 'top'
         },
         keytabset: {
             type: String,
-            default: 'tabset',
+            default: 'tabset'
         },
         rememberTab: {
             type: Boolean,
-            default: false,
-        },
+            default: false
+        }
     },
     data: function () {
         return {
             tabs: [],
-            activeTabIndex: 0,
+            activeTabIndex: 0
         };
     },
     computed: {
         activeTabClass: function () {
             return 'active-' + this.activeTabIndex;
-        },
+        }
     },
     methods: {
         orientationClass: function () {
@@ -137,7 +137,7 @@ export default {
                 this.tabs.splice(index, 1);
             }
             this.ensureActiveTab();
-        },
-    },
+        }
+    }
 };
 </script>

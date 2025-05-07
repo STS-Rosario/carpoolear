@@ -8,16 +8,16 @@ export default {
     computed: {
         chartInfo: function () {
             return this.chartdata;
-        },
+        }
     },
     watch: {
         chartInfo: function () {
             this.renderChart(this.chartInfo, this.options);
-        },
+        }
     },
     mounted() {
         this.renderChart(this.chartInfo, this.options);
-    },
+    }
 };
 </script>
 

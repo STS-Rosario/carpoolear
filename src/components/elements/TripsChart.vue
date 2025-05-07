@@ -17,11 +17,11 @@ export default {
     name: 'trips-chart',
     props: {
         minDate: {
-            default: moment(Date(new Date().getFullYear(), 0, 1), 'YYYY-MM'),
+            default: moment(Date(new Date().getFullYear(), 0, 1), 'YYYY-MM')
         },
         maxDate: {
-            default: moment(Date(), 'YYYY-MM'),
-        },
+            default: moment(Date(), 'YYYY-MM')
+        }
     },
     data() {
         return {
@@ -32,15 +32,15 @@ export default {
                 maintainAspectRatio: false,
                 title: {
                     display: true,
-                    text: 'Viajes de conductores en la plataforma',
+                    text: 'Viajes de conductores en la plataforma'
                 },
                 tooltips: {
                     mode: 'index',
-                    intersect: false,
+                    intersect: false
                 },
                 hover: {
                     mode: 'nearest',
-                    intersect: true,
+                    intersect: true
                 },
                 scales: {
                     xAxes: [
@@ -48,21 +48,21 @@ export default {
                             display: true,
                             scaleLabel: {
                                 display: true,
-                                labelString: 'Mes',
-                            },
-                        },
+                                labelString: 'Mes'
+                            }
+                        }
                     ],
                     yAxes: [
                         {
                             display: true,
                             scaleLabel: {
                                 display: true,
-                                labelString: 'Cantidad',
-                            },
-                        },
-                    ],
-                },
-            },
+                                labelString: 'Cantidad'
+                            }
+                        }
+                    ]
+                }
+            }
         };
     },
     watch: {
@@ -79,11 +79,11 @@ export default {
                 this.minDate,
                 this.maxDate
             );
-        },
+        }
     },
     methods: {
         ...mapActions({
-            getTrips: 'admin/getTrips',
+            getTrips: 'admin/getTrips'
         }),
         processTrips(viajes, minDate, maxDate) {
             let etiquetas = [];
@@ -113,9 +113,9 @@ export default {
                             backgroundColor: '#F00',
                             borderColor: '#F00',
                             data: datos,
-                            fill: false,
-                        },
-                    ],
+                            fill: false
+                        }
+                    ]
                 };
             }
         },
@@ -127,14 +127,14 @@ export default {
                 this.minDate,
                 this.maxDate
             );
-        },
+        }
     },
     components: {
-        LineChart,
+        LineChart
     },
     mounted() {
         this.loadData();
-    },
+    }
 };
 </script>
 

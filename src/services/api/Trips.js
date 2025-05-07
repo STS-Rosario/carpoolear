@@ -37,14 +37,14 @@ class TripApi extends TaggedApi {
     getTrips(id, asDriver) {
         return this.get('/api/users/get-trips', {
             as_driver: asDriver,
-            user_id: id,
+            user_id: id
         });
     }
 
     getOldTrips(id, asDriver) {
         return this.get('/api/users/get-old-trips', {
             as_driver: asDriver,
-            user_id: id,
+            user_id: id
         });
     }
 
@@ -56,7 +56,7 @@ class TripApi extends TaggedApi {
         return this.get('/api/trips/autocomplete', {
             name: name,
             country: country,
-            multicountry: multicountry,
+            multicountry: multicountry
         });
     }
 

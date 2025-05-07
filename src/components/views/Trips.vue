@@ -288,7 +288,7 @@ export default {
             showModal: false,
             showModalInstallApp: false,
             installAppEvent: null,
-            donateValue: 0,
+            donateValue: 0
         };
     },
     props: ['clearSearch', 'keepSearch'],
@@ -299,7 +299,7 @@ export default {
             subscribeToSearch: 'subscriptions/create',
             findSubscriptions: 'subscriptions/index',
             registerDonation: 'profile/registerDonation',
-            setScrollOffset: 'trips/setScrollOffset',
+            setScrollOffset: 'trips/setScrollOffset'
             // morePagesActions: 'trips/tripMorePage',
             // setActionButton: 'actionbars/setHeaderButtons'
         }),
@@ -438,13 +438,13 @@ export default {
                 let data = {
                     has_donated: 1,
                     has_denied: 0,
-                    ammount: parseFloat(this.donateValue),
+                    ammount: parseFloat(this.donateValue)
                 };
                 this.registerDonation(data);
             } else {
                 dialogs.message(this.$t('valorDonacion'), {
                     duration: 10,
-                    estado: 'error',
+                    estado: 'error'
                 });
             }
         },
@@ -469,13 +469,13 @@ export default {
                 let data = {
                     has_donated: 1,
                     has_denied: 0,
-                    ammount: parseFloat(this.donateValue),
+                    ammount: parseFloat(this.donateValue)
                 };
                 this.registerDonation(data);
             } else {
                 dialogs.message(this.$t('valorDonacion'), {
                     duration: 10,
-                    estado: 'error',
+                    estado: 'error'
                 });
             }
         },
@@ -509,7 +509,7 @@ export default {
                     this.alreadySubscribe = true;
                     dialogs.message(this.$t('correctamenteSubscripto'), {
                         duration: 10,
-                        estado: 'success',
+                        estado: 'success'
                     });
                 })
                 .catch((response) => {
@@ -521,12 +521,12 @@ export default {
                         ) {
                             dialogs.message(this.$t('yaTienesSubscripcion'), {
                                 duration: 10,
-                                estado: 'error',
+                                estado: 'error'
                             });
                         }
                     }
                 });
-        },
+        }
     },
     mounted() {
         // Clear search
@@ -590,7 +590,7 @@ export default {
                 this.resultaOfSearch = false;
                 this.$refs.searchBox.clear();
             }
-        },
+        }
     },
     computed: {
         ...mapGetters({
@@ -603,19 +603,19 @@ export default {
             refreshList: 'trips/refreshList',
             subscriptions: 'subscriptions/subscriptions',
             appConfig: 'auth/appConfig',
-            scrollPosition: 'trips/scrollOffset',
+            scrollPosition: 'trips/scrollOffset'
         }),
 
         showingTrips() {
             return !this.isMobile || !this.lookSearch;
-        },
+        }
     },
     components: {
         Trip,
         Loading,
         SearchBox,
-        modal,
-    },
+        modal
+    }
 };
 </script>
 <style scoped>

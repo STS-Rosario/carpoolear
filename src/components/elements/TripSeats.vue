@@ -43,11 +43,11 @@ export default {
     computed: {
         ...mapGetters({
             trip: 'trips/currentTrip',
-            tripCardTheme: 'auth/tripCardTheme',
-        }),
+            tripCardTheme: 'auth/tripCardTheme'
+        })
     },
     components: {
-        SvgItem,
-    },
+        SvgItem
+    }
 };
 </script>

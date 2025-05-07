@@ -7,12 +7,12 @@ import * as types from '../mutation-types';
 let subscriptionApi = new SubscriptionApi();
 
 const state = {
-    subscriptions: null,
+    subscriptions: null
 };
 
 // getters
 const getters = {
-    subscriptions: (state) => state.subscriptions,
+    subscriptions: (state) => state.subscriptions
 };
 
 // actions
@@ -71,7 +71,7 @@ const actions = {
                     return Promise.reject(err);
                 }
             });
-    },
+    }
 };
 
 // mutations
@@ -96,7 +96,7 @@ const mutations = {
         state.subscriptions = state.subscriptions.filter(
             (item) => item.id !== subs.id
         );
-    },
+    }
 };
 
 export default {
@@ -104,5 +104,5 @@ export default {
     state,
     getters,
     actions,
-    mutations,
+    mutations
 };

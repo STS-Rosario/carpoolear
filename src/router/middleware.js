@@ -9,7 +9,7 @@ export function auth(to, from, next) {
         next(false);
         router.rememberRoute = {
             name: to.name,
-            params: to.params,
+            params: to.params
         };
         router.replace({ name: 'login' });
     }
@@ -24,7 +24,7 @@ export function authAdmin(to, from, next) {
         next(false);
         router.rememberRoute = {
             name: to.name,
-            params: to.params,
+            params: to.params
         };
         router.replace({ name: 'login' });
     }
@@ -49,7 +49,7 @@ export function profileComplete(to, from, next) {
     ) {
         router.rememberRoute = {
             name: to.name,
-            params: to.params,
+            params: to.params
         };
         console.log('problem');
         next(false);

@@ -161,7 +161,7 @@ export default {
             tripCardTheme: 'auth/tripCardTheme',
             user: 'auth/user',
             isMobile: 'device/isMobile',
-            config: 'auth/appConfig',
+            config: 'auth/appConfig'
         }),
         sendingStatus() {
             Object.keys(this.sending).some((k) => this.sending[k] === true);
@@ -186,11 +186,11 @@ export default {
         },
         isPassengersView() {
             return this.trip.is_passenger;
-        },
+        }
     },
     components: {
         spinner,
-        Transactions,
+        Transactions
     },
     methods: {
         onShareLinkClick(event) {
@@ -239,8 +239,8 @@ export default {
                     );
                 }
             }
-        },
-    },
+        }
+    }
 };
 </script>
 <style scoped>

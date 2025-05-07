@@ -42,5 +42,5 @@ export default {
                 'ERROR: Se llamó al social plugin pero no se encontró'
             );
         }
-    },
+    }
 };

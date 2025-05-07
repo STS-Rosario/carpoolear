@@ -13,12 +13,12 @@ export default {
 
     methods: {
         ...mapActions({
-            activateAccount: 'auth/activate',
-        }),
+            activateAccount: 'auth/activate'
+        })
     },
 
     mounted() {
         this.activateAccount(this.token);
-    },
+    }
 };
 </script>

@@ -5,7 +5,7 @@
                 <router-link
                     :to="{
                         name: 'profile',
-                        params: { id: to.id, userProfile: to, activeTab: 1 },
+                        params: { id: to.id, userProfile: to, activeTab: 1 }
                     }"
                 >
                     <div
@@ -84,13 +84,13 @@ export default {
             vote: null,
             expanded: false,
             comment: '',
-            sending: false,
+            sending: false
         };
     },
 
     methods: {
         ...mapActions({
-            emit: 'rates/vote',
+            emit: 'rates/vote'
         }),
 
         setRate(value) {
@@ -110,7 +110,7 @@ export default {
                 trip_id: this.trip.id,
                 user_id: this.to.id,
                 comment: this.comment,
-                rating: this.vote,
+                rating: this.vote
             };
             let ok = false;
             if (!this.vote) {
@@ -140,12 +140,12 @@ export default {
             } else {
                 this.sending = false;
             }
-        },
+        }
     },
 
     computed: {
         ...mapGetters({
-            user: 'auth/user',
+            user: 'auth/user'
         }),
 
         to() {
@@ -154,9 +154,9 @@ export default {
 
         trip() {
             return this.rate.trip;
-        },
+        }
     },
 
-    props: ['rate'],
+    props: ['rate']
 };
 </script>

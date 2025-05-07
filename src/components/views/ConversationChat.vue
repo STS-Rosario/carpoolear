@@ -101,8 +101,8 @@ export default {
             message: '',
             mustJump: false,
             sending: {
-                message: false,
-            },
+                message: false
+            }
         };
     },
     computed: {
@@ -113,7 +113,7 @@ export default {
             lastPageConversation: 'conversations/lastPageConversation',
             title: 'actionbars/title',
             isMobile: 'device/isMobile',
-            config: 'auth/appConfig',
+            config: 'auth/appConfig'
         }),
         lastConnection() {
             let users = this.conversation.users.filter(
@@ -124,7 +124,7 @@ export default {
             } else {
                 return users[0].last_connection;
             }
-        },
+        }
     },
     methods: {
         ...mapActions({
@@ -135,7 +135,7 @@ export default {
             setTitle: 'actionbars/setTitle',
             setTitleLink: 'actionbars/setTitleLink',
             setSubTitle: 'actionbars/setSubTitle',
-            setImgTitle: 'actionbars/setImgTitle',
+            setImgTitle: 'actionbars/setImgTitle'
         }),
 
         userProfile() {
@@ -146,7 +146,7 @@ export default {
             return {
                 id: this.conversation.users[id].id,
                 userProfile: this.conversation.users[id],
-                activeTab: 1,
+                activeTab: 1
             };
         },
 
@@ -194,8 +194,8 @@ export default {
                         params: {
                             id: otherUser.id,
                             userProfile: otherUser,
-                            activeTab: 1,
-                        },
+                            activeTab: 1
+                        }
                     });
                     this.setSubTitle(
                         'Última conexión: ' +
@@ -204,7 +204,7 @@ export default {
                     this.setImgTitle(this.conversation.image);
                 }
             });
-        },
+        }
     },
     beforeDestroy() {
         bus.off('back-click', this.onBackClick);
@@ -227,8 +227,8 @@ export default {
                 params: {
                     id: otherUser.id,
                     userProfile: otherUser,
-                    activeTab: 1,
-                },
+                    activeTab: 1
+                }
             });
             this.setSubTitle(
                 'Última conexión: ' + moment(this.lastConnection).calendar()
@@ -249,13 +249,13 @@ export default {
         },
         messages: function () {
             this.mustJump = true;
-        },
+        }
     },
     props: ['id'],
     components: {
         MessageView,
-        CoordinateTrip,
-    },
+        CoordinateTrip
+    }
 };
 </script>
 

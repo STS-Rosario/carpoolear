@@ -12,7 +12,7 @@
                                 class="picker"
                                 :value="dateLimits.start"
                                 :class="{
-                                    'has-error': dateLimits.dateError.state,
+                                    'has-error': dateLimits.dateError.state
                                 }"
                                 v-on:date_changed="
                                     (date) =>
@@ -27,7 +27,7 @@
                                 class="picker"
                                 :value="dateLimits.end"
                                 :class="{
-                                    'has-error': dateLimits.dateError.state,
+                                    'has-error': dateLimits.dateError.state
                                 }"
                                 v-on:date_changed="
                                     (date) =>
@@ -94,8 +94,8 @@ export default {
                     'YYYY-MM'
                 ),
                 end: moment().format('YYYY-MM'),
-                dateError: new Error(),
-            },
+                dateError: new Error()
+            }
         };
     },
     methods: {
@@ -104,7 +104,7 @@ export default {
         },
         formatDate(date) {
             return date.slice(0, 7);
-        },
+        }
     },
     components: {
         TripsChart,
@@ -112,9 +112,9 @@ export default {
         MonthlyUsersChart,
         TotalUsersChart,
         datePicker,
-        adminNav,
+        adminNav
     },
-    mounted() {},
+    mounted() {}
 };
 </script>
 

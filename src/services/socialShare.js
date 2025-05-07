@@ -9,7 +9,7 @@ export default {
             subject: 'Carpoolear', // fi. for email
             files: [], // an array of filenames either locally or remotely
             url: 'https://carpoolear.com.ar',
-            chooserTitle: 'Compartir con ...', // Android only, you can override the default share sheet title
+            chooserTitle: 'Compartir con ...' // Android only, you can override the default share sheet title
         };
         if (!opts) {
             opts = {};
@@ -29,5 +29,5 @@ export default {
                 'Warning: Social share without cordova not implemented yet.'
             );
         }
-    },
+    }
 };

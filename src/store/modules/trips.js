@@ -12,7 +12,7 @@ const state = {
     ...pagination.makeState('trips'),
     current_trip: null,
     refresh_list: false,
-    scroll_offset: 0,
+    scroll_offset: 0
 };
 
 // getters
@@ -20,7 +20,7 @@ const getters = {
     ...pagination.makeGetters('trips'),
     currentTrip: (state) => state.current_trip,
     refreshList: (state) => state.refresh_list,
-    scrollOffset: (state) => state.scroll_offset,
+    scrollOffset: (state) => state.scroll_offset
 };
 
 // actions
@@ -134,7 +134,7 @@ const actions = {
             destination_lat: lastPoint.lat,
             destination_lng: lastPoint.lng,
             destination_radio: 25000, // Por ahora hardcoreado
-            destination_name: lastPoint.address,
+            destination_name: lastPoint.address
         };
         return tripsApi
             .tag(['trips'])
@@ -163,7 +163,7 @@ const actions = {
                 }
                 return Promise.resolve(users);
             });
-    },
+    }
 };
 
 // mutations
@@ -252,7 +252,7 @@ const mutations = {
 
     [types.TRIPS_SET_SCROLL](state, scrollOffset) {
         state.scroll_offset = scrollOffset;
-    },
+    }
 };
 
 export default {
@@ -260,5 +260,5 @@ export default {
     state,
     getters,
     actions,
-    mutations,
+    mutations
 };

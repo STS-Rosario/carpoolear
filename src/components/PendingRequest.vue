@@ -8,8 +8,8 @@
                         params: {
                             id: user.id,
                             userProfile: user,
-                            activeTab: 1,
-                        },
+                            activeTab: 1
+                        }
                     }"
                 >
                     <div
@@ -155,21 +155,21 @@ export default {
             acceptInProcess: false,
             rejectInProcess: false,
             showModalRequestSeat: false,
-            acceptRequestValue: 0,
+            acceptRequestValue: 0
         };
     },
     computed: {
         ...mapGetters({
             currentUser: 'auth/user',
-            config: 'auth/appConfig',
-        }),
+            config: 'auth/appConfig'
+        })
     },
     methods: {
         ...mapActions({
             passengerAccept: 'passenger/accept',
             passengerReject: 'passenger/reject',
             lookConversation: 'conversations/createConversation',
-            changeProperty: 'profile/changeProperty',
+            changeProperty: 'profile/changeProperty'
         }),
 
         onAcceptRequest() {
@@ -187,7 +187,7 @@ export default {
             if (this.acceptRequestValue) {
                 let data = {
                     property: 'do_not_alert_accept_passenger',
-                    value: 1,
+                    value: 1
                 };
                 this.changeProperty(data).then(() => {
                     console.log('do not alert success');
@@ -218,7 +218,7 @@ export default {
             if (this.acceptRequestValue) {
                 let data = {
                     property: 'do_not_alert_accept_passenger',
-                    value: 1,
+                    value: 1
                 };
                 this.changeProperty(data).then(() => {
                     console.log('do not alert success');
@@ -244,7 +244,7 @@ export default {
             this.lookConversation(user).then((conversation) => {
                 router.push({
                     name: 'conversation-chat',
-                    params: { id: conversation.id },
+                    params: { id: conversation.id }
                 });
             });
         },
@@ -254,7 +254,7 @@ export default {
             if (this.acceptRequestValue) {
                 let data = {
                     property: 'do_not_alert_accept_passenger',
-                    value: 1,
+                    value: 1
                 };
                 this.changeProperty(data).then(() => {
                     console.log('do not alert success');
@@ -269,20 +269,20 @@ export default {
             if (this.acceptRequestValue) {
                 let data = {
                     property: 'do_not_alert_accept_passenger',
-                    value: 1,
+                    value: 1
                 };
                 this.changeProperty(data).then(() => {
                     console.log('do not alert success');
                 });
             }
-        },
+        }
     },
 
     components: {
         modal,
-        spinner,
+        spinner
     },
 
-    props: ['user', 'trip'],
+    props: ['user', 'trip']
 };
 </script>
