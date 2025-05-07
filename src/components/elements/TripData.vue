@@ -28,9 +28,9 @@
                     No fumar
                 </em>
 
-                <em v-if="trip.allow_pets > 0">
+                <em v-if="trip.allow_animals > 0">
                     <svgItem icon="pets" size="18"></svgItem>
-                    Mascotas
+                    Acepta mascotas
                 </em>
                 <em v-else>
                     <svgItem icon="no-animals" size="18"></svgItem>
@@ -39,7 +39,7 @@
 
                 <em v-if="trip.allow_kids > 0">
                     <svgItem icon="kids" size="18"></svgItem>
-                    Niños
+                    Acepta niños
                 </em>
                 <em v-else>
                     <svgItem icon="no-kids" size="18"></svgItem>
