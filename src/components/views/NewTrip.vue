@@ -399,7 +399,7 @@
                                     <!--<input type="text" v-model="time" />-->
                                 </div>
                             </div>
-                            <div class="trip_price">
+                            <div class="trip_price" v-if="config.module_seat_price">
                                 <legend class="label-for-group">{{ $t('precioAsiento') }}</legend>
                                 <input type="number" v-model="returnPrice" class="form-control form-control-with-icon form-control-price" id="return-price" :class="{'has-error': returnPriceError.state}" :placeholder="price" >
                                 <span class="error" v-if="returnPriceError.state"> {{returnPriceError.message}} </span>
@@ -438,7 +438,7 @@
                             </div>
                             <div class="trip-comment">
                                 <label for="otherTrip-trip_comment"  class="label-for-group"> {{ $t('comentarioPasajeros') }} </label>
-                                <textarea maxlength="2000" v-model="trip.description" id="trp_comment" class="form-control" :placeholder="$t('placeholderComentarioPasajeros')" ></textarea>
+                                <textarea maxlength="2000" v-model="otherTrip.trip.description" id="other_trp_comment" class="form-control" :placeholder="$t('placeholderComentarioPasajeros')" ></textarea>
                                 <span class="error" v-if="commentError.state"> {{commentError.message}} </span>
                             </div>
                         </div>
