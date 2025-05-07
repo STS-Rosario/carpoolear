@@ -2,32 +2,68 @@
     <div class="col-xs-24 col-md-16 col-lg-12">
         <div class="rate-pending_component clearfix">
             <div class="rate-pending_photo">
-                <router-link :to="{ name: 'profile', params: { id: to.id, userProfile: to, activeTab: 1} }">
-                    <div class="trip_driver_img circle-box" v-imgSrc:profile="to.image">
-                    </div>
+                <router-link
+                    :to="{
+                        name: 'profile',
+                        params: { id: to.id, userProfile: to, activeTab: 1 },
+                    }"
+                >
+                    <div
+                        class="trip_driver_img circle-box"
+                        v-imgSrc:profile="to.image"
+                    ></div>
                 </router-link>
             </div>
             <div class="rate-pending-message">
                 <div class="rate-pending-message--content">
-                    ¿Cómo calificarías a <strong>{{ to.name }}</strong> como
-                    <span v-if="rate.user_to_type === DRIVER"> conductor </span>
-                    <span v-if="rate.user_to_type === PASSENGER"> pasajero </span>
-                    en el viaje hacía <strong>{{ trip.points[trip.points.length - 1].json_address.ciudad }}</strong> el día <strong>{{ trip.trip_date | moment('dddd DD [de] MMMM') }}</strong> ?
+                    ¿Cómo calificarías a
+                    <strong>{{ to.name }}</strong>
+                    como
+                    <span v-if="rate.user_to_type === DRIVER">conductor</span>
+                    <span v-if="rate.user_to_type === PASSENGER">pasajero</span>
+                    en el viaje hacía
+                    <strong>{{
+                        trip.points[trip.points.length - 1].json_address.ciudad
+                    }}</strong>
+                    el día
+                    <strong>{{
+                        trip.trip_date | moment('dddd DD [de] MMMM')
+                    }}</strong>
+                    ?
                 </div>
             </div>
             <div class="float-margin">
-                <div class='rate-buttons'>
-                    <button class="btn rate-positive" @click="setRate(1)" :class="{active: vote === 1}">
+                <div class="rate-buttons">
+                    <button
+                        class="btn rate-positive"
+                        @click="setRate(1)"
+                        :class="{ active: vote === 1 }"
+                    >
                         <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
                     </button>
-                    <button class="btn rate-negative" @click="setRate(0)" :class="{active: vote === 0}">
+                    <button
+                        class="btn rate-negative"
+                        @click="setRate(0)"
+                        :class="{ active: vote === 0 }"
+                    >
                         <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
                     </button>
                 </div>
             </div>
             <div class="rate--comment-box" v-show="expanded">
-                <textarea maxlength="600" class="rate_comment" v-model="comment" placeholder="Incluya un comentario..."></textarea>
-                <button class="btn btn-primary" @click="makeVote" :disabled="sending"> Calificar </button>
+                <textarea
+                    maxlength="600"
+                    class="rate_comment"
+                    v-model="comment"
+                    placeholder="Incluya un comentario..."
+                ></textarea>
+                <button
+                    class="btn btn-primary"
+                    @click="makeVote"
+                    :disabled="sending"
+                >
+                    Calificar
+                </button>
             </div>
         </div>
     </div>
@@ -39,7 +75,7 @@ import dialogs from '../services/dialogs.js';
 export default {
     name: 'rate-pending',
 
-    data () {
+    data() {
         return {
             ACCEPTED: 1,
             CANCELED: 3,
@@ -48,16 +84,16 @@ export default {
             vote: null,
             expanded: false,
             comment: '',
-            sending: false
+            sending: false,
         };
     },
 
     methods: {
         ...mapActions({
-            emit: 'rates/vote'
+            emit: 'rates/vote',
         }),
 
-        setRate (value) {
+        setRate(value) {
             if (this.vote === value) {
                 this.vote = null;
                 this.expanded = false;
@@ -67,20 +103,23 @@ export default {
             }
         },
 
-        makeVote () {
+        makeVote() {
             this.sending = true;
             let data = {
                 id: this.rate.id,
                 trip_id: this.trip.id,
                 user_id: this.to.id,
                 comment: this.comment,
-                rating: this.vote
+                rating: this.vote,
             };
             let ok = false;
             if (!this.vote) {
                 if (!this.comment) {
                     // Voto negativo y comentario vacio
-                    dialogs.message('El comentario no puede estar vacío para los votos negativos.', { duration: 10, estado: 'error' });
+                    dialogs.message(
+                        'El comentario no puede estar vacío para los votos negativos.',
+                        { duration: 10, estado: 'error' }
+                    );
                 } else {
                     ok = true;
                 }
@@ -90,34 +129,34 @@ export default {
             if (ok) {
                 console.log('emit rated');
                 this.$emit('rated', data);
-                this.emit(data).then(() => {
-                    this.comment = '';
-                    this.sending = false;
-                }).catch(() => {
-                    this.sending = false;
-                });
+                this.emit(data)
+                    .then(() => {
+                        this.comment = '';
+                        this.sending = false;
+                    })
+                    .catch(() => {
+                        this.sending = false;
+                    });
             } else {
                 this.sending = false;
             }
-        }
+        },
     },
 
     computed: {
         ...mapGetters({
-            user: 'auth/user'
+            user: 'auth/user',
         }),
 
-        to () {
+        to() {
             return this.rate.to;
         },
 
-        trip () {
+        trip() {
             return this.rate.trip;
-        }
+        },
     },
 
-    props: [
-        'rate'
-    ]
+    props: ['rate'],
 };
 </script>

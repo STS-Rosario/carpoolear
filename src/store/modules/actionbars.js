@@ -16,26 +16,26 @@ const state = {
             id: 'back',
             icon: 'fa-angle-left',
             show: false,
-            position: 'left'
+            position: 'left',
         },
         {
             id: 'clear',
             icon: 'fa-times',
             show: false,
-            position: 'right'
+            position: 'right',
         },
         {
             id: 'share',
             icon: 'fa-share-alt',
             show: false,
-            position: 'right'
+            position: 'right',
         },
         {
             id: 'search',
             icon: 'fa-search',
             show: false,
-            position: 'right'
-        }
+            position: 'right',
+        },
     ],
     header_logo_visibility: true,
     footer_visibility: true,
@@ -44,53 +44,53 @@ const state = {
             id: 'home',
             icon: 'home',
             url: 'trips',
-            active: true
+            active: true,
         },
         {
             id: 'profile',
             icon: 'contact',
             url: 'profile',
-            active: false
+            active: false,
         },
         {
             id: 'new-trip',
             icon: 'add',
             url: 'new-trip',
-            active: false
+            active: false,
         },
         {
             id: 'conversations',
             icon: 'message',
             url: 'conversations-list',
-            active: false
+            active: false,
         },
         {
             id: 'notifications',
             icon: 'bell',
             url: 'notifications',
-            active: false
-        }
-    ]
+            active: false,
+        },
+    ],
 };
 
 const getters = {
-    title: state => state.title,
-    subTitle: state => state.subTitle,
-    imgTitle: state => state.imgTitle,
-    showMenu: state => state.showMenu,
-    titleLink: state => state.titleLink,
-    leftHeaderButton: state =>
-        state.header_buttons.filter(item => item.position === 'left'),
-    rightHeaderButton: state =>
-        state.header_buttons.filter(item => item.position === 'right'),
-    headerLogoVisibility: state => state.header_logo_visibility,
+    title: (state) => state.title,
+    subTitle: (state) => state.subTitle,
+    imgTitle: (state) => state.imgTitle,
+    showMenu: (state) => state.showMenu,
+    titleLink: (state) => state.titleLink,
+    leftHeaderButton: (state) =>
+        state.header_buttons.filter((item) => item.position === 'left'),
+    rightHeaderButton: (state) =>
+        state.header_buttons.filter((item) => item.position === 'right'),
+    headerLogoVisibility: (state) => state.header_logo_visibility,
 
-    footerShow: state => state.footer_visibility,
-    footerButtons: state => state.footer_buttons
+    footerShow: (state) => state.footer_visibility,
+    footerButtons: (state) => state.footer_buttons,
 };
 
 const actions = {
-    setTitle (store, title = '') {
+    setTitle(store, title = '') {
         let getters = globalStore.getters;
         let config = getters['auth/appConfig'];
         let appName = config ? config.name_app : process.env.TARGET_APP;
@@ -99,39 +99,43 @@ const actions = {
         }
         store.commit(types.HEADER_SET_TITLE, title);
         if (document) {
-            document.title = title + (title !== appName ? ((title !== '' ? ' - ' : '') + appName) : '');
+            document.title =
+                title +
+                (title !== appName
+                    ? (title !== '' ? ' - ' : '') + appName
+                    : '');
         }
     },
 
-    setTitleLink (store, newTitleLink = {}) {
+    setTitleLink(store, newTitleLink = {}) {
         store.commit(types.HEADER_SET_TITLE_LINK, newTitleLink);
     },
 
-    setSubTitle (store, newSubTitle = '') {
+    setSubTitle(store, newSubTitle = '') {
         store.commit(types.HEADER_SET_SUB_TITLE, newSubTitle);
     },
 
-    setImgTitle (store, newImgTitle = '') {
+    setImgTitle(store, newImgTitle = '') {
         store.commit(types.HEADER_SET_IMG_TITLE, newImgTitle);
     },
 
-    setHeaderButtons (store, items) {
+    setHeaderButtons(store, items) {
         store.commit(types.HEADER_SET_VISIBILITY, items);
     },
 
-    showHeaderLogo (store, show = true) {
+    showHeaderLogo(store, show = true) {
         store.commit(types.HEADER_LOGO_SET_VISIBILITY, show);
     },
 
-    showFooter (store, show) {
+    showFooter(store, show) {
         store.commit(types.FOOTER_SET_VISIBILITY, show);
     },
 
-    setActiveFooter (store, id) {
+    setActiveFooter(store, id) {
         store.commit(types.FOOTER_SET_ACTIVE, id);
     },
 
-    footerButtonClick (store, item) {
+    footerButtonClick(store, item) {
         let params = {};
         if (item.url === 'profile') {
             params.id = 'me';
@@ -142,33 +146,32 @@ const actions = {
             globalStore.dispatch('trips/refreshList', true);
         }
         router.push({ name: item.url, params });
-    }
-
+    },
 };
 
 const mutations = {
-    [types.HEADER_SET_TITLE] (state, title) {
+    [types.HEADER_SET_TITLE](state, title) {
         state.title = title;
     },
 
-    [types.HEADER_SET_TITLE_LINK] (state, titleLink) {
+    [types.HEADER_SET_TITLE_LINK](state, titleLink) {
         state.titleLink = titleLink;
     },
 
-    [types.HEADER_SET_SUB_TITLE] (state, newSubTitle) {
+    [types.HEADER_SET_SUB_TITLE](state, newSubTitle) {
         state.subTitle = newSubTitle;
     },
-    [types.HEADER_SET_IMG_TITLE] (state, newImgTitle) {
+    [types.HEADER_SET_IMG_TITLE](state, newImgTitle) {
         state.imgTitle = newImgTitle;
     },
 
-    [types.FOOTER_SET_VISIBILITY] (state, show) {
+    [types.FOOTER_SET_VISIBILITY](state, show) {
         state.footer_visibility = show;
     },
 
-    [types.HEADER_SET_VISIBILITY] (state, items) {
-        state.header_buttons.forEach(item => {
-            let index = items.findIndex(ids => ids === item.id);
+    [types.HEADER_SET_VISIBILITY](state, items) {
+        state.header_buttons.forEach((item) => {
+            let index = items.findIndex((ids) => ids === item.id);
             if (index < 0) {
                 item.show = false;
             } else {
@@ -182,19 +185,19 @@ const mutations = {
         }
     },
 
-    [types.HEADER_LOGO_SET_VISIBILITY] (state, show) {
+    [types.HEADER_LOGO_SET_VISIBILITY](state, show) {
         state.header_logo_visibility = show;
     },
 
-    [types.FOOTER_SET_ACTIVE] (state, id) {
-        state.footer_buttons.forEach(item => {
+    [types.FOOTER_SET_ACTIVE](state, id) {
+        state.footer_buttons.forEach((item) => {
             if (item.id === id) {
                 item.active = true;
             } else {
                 item.active = false;
             }
         });
-    }
+    },
 };
 
 export default {
@@ -202,5 +205,5 @@ export default {
     state,
     getters,
     actions,
-    mutations
+    mutations,
 };

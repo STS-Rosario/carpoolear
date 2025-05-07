@@ -3,10 +3,10 @@ import axios from 'axios';
 const CancelToken = axios.CancelToken;
 
 class OsmApi {
-    constructor () {
+    constructor() {
         this.requestSource = null;
     }
-    search (data = {}) {
+    search(data = {}) {
         if (this.requestSource) {
             this.requestSource.cancel();
         }
@@ -15,20 +15,23 @@ class OsmApi {
         if (data.country) {
             url += '&countrycodes=' + data.country;
         }
-        return axios.get(url, { cancelToken: this.requestSource.token }).then((result) => {
-            if (result.status === 200) {
-                return Promise.resolve(result.data);
-            } else {
-                console.log('osm api error then', result);
-                return Promise.reject(result);
-            }
-        }).catch((err) => {
-            console.log('osm api error', axios.isCancel(err));
-        });
+        return axios
+            .get(url, { cancelToken: this.requestSource.token })
+            .then((result) => {
+                if (result.status === 200) {
+                    return Promise.resolve(result.data);
+                } else {
+                    console.log('osm api error then', result);
+                    return Promise.reject(result);
+                }
+            })
+            .catch((err) => {
+                console.log('osm api error', axios.isCancel(err));
+            });
     }
-    route (data = {}) {
+    route(data = {}) {
         let coords = '';
-        data.points.forEach(point => {
+        data.points.forEach((point) => {
             if (coords) {
                 coords += ';';
             }
@@ -36,7 +39,10 @@ class OsmApi {
             coords += point.lat;
         });
         console.log('coords', coords);
-        let url = 'https://router.project-osrm.org/route/v1/driving/' + coords + '?overview=false&alternatives=true&steps=true'; // &countrycodes=ar
+        let url =
+            'https://router.project-osrm.org/route/v1/driving/' +
+            coords +
+            '?overview=false&alternatives=true&steps=true'; // &countrycodes=ar
         return axios.get(url).then((result) => {
             if (result.status === 200) {
                 return Promise.resolve(result.data);

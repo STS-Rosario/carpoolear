@@ -1,5 +1,5 @@
 class LocalStorage {
-    setItem (key, value) {
+    setItem(key, value) {
         if (typeof value === 'string' || typeof value === 'number') {
             window.localStorage.setItem(key, value);
         } else {
@@ -8,12 +8,12 @@ class LocalStorage {
         return Promise.resolve();
     }
 
-    removeItem (key) {
+    removeItem(key) {
         window.localStorage.removeItem(key);
         return Promise.resolve();
     }
 
-    getItem (key) {
+    getItem(key) {
         var temp = window.localStorage.getItem(key);
         if (temp && temp !== 'undefined') {
             try {
@@ -27,7 +27,7 @@ class LocalStorage {
         }
     }
 
-    clear () {
+    clear() {
         window.localStorage.clear();
         return Promise.resolve();
     }

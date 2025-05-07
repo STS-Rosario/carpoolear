@@ -1,7 +1,7 @@
 import TaggedApi from '../../classes/TaggedApi';
 
 class ReferencesApi extends TaggedApi {
-    create (data) {
+    create(data) {
         return this.post('/api/references', data);
     }
 }

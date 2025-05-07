@@ -1,23 +1,23 @@
 import * as types from '../mutation-types';
 
 const state = {
-    background_style: 'white'
+    background_style: 'white',
 };
 
 const getters = {
-    backgroundStyle: state => state.background_style
+    backgroundStyle: (state) => state.background_style,
 };
 
 const actions = {
-    setBackgroundStyle (store, style) {
+    setBackgroundStyle(store, style) {
         store.commit(types.BACKGROUND_SET_STYLE, style);
-    }
+    },
 };
 
 const mutations = {
-    [types.BACKGROUND_SET_STYLE] (state, style) {
+    [types.BACKGROUND_SET_STYLE](state, style) {
         state.background_style = style;
-    }
+    },
 };
 
 export default {
@@ -25,5 +25,5 @@ export default {
     state,
     getters,
     actions,
-    mutations
+    mutations,
 };

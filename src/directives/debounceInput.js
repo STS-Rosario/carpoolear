@@ -1,11 +1,9 @@
 import { debounce } from '../services/utility';
 
 let debounceFunction = null;
-let inputHandler = debounce(
-    function () {
-        debounceFunction();
-    },
-    800);
+let inputHandler = debounce(function () {
+    debounceFunction();
+}, 800);
 
 export default {
     bind: function (el, binding, node) {
@@ -14,5 +12,5 @@ export default {
     },
     unbind: function (el, binding, node) {
         el.removeEventListener('input', inputHandler, false);
-    }
+    },
 };

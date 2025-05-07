@@ -1,6 +1,10 @@
 <template>
     <div class="card column">
-        <LineChart class="chart" :chartdata="viajesData" :options="viajesOptions"></LineChart>
+        <LineChart
+            class="chart"
+            :chartdata="viajesData"
+            :options="viajesOptions"
+        ></LineChart>
     </div>
 </template>
 
@@ -13,13 +17,13 @@ export default {
     name: 'trips-chart',
     props: {
         minDate: {
-            default: moment(Date(new Date().getFullYear(), 0, 1), 'YYYY-MM')
+            default: moment(Date(new Date().getFullYear(), 0, 1), 'YYYY-MM'),
         },
         maxDate: {
-            default: moment(Date(), 'YYYY-MM')
-        }
+            default: moment(Date(), 'YYYY-MM'),
+        },
     },
-    data () {
+    data() {
         return {
             viajes: {},
             viajesData: {},
@@ -28,48 +32,60 @@ export default {
                 maintainAspectRatio: false,
                 title: {
                     display: true,
-                    text: 'Viajes de conductores en la plataforma'
+                    text: 'Viajes de conductores en la plataforma',
                 },
                 tooltips: {
                     mode: 'index',
-                    intersect: false
+                    intersect: false,
                 },
                 hover: {
                     mode: 'nearest',
-                    intersect: true
+                    intersect: true,
                 },
                 scales: {
-                    xAxes: [{
-                        display: true,
-                        scaleLabel: {
+                    xAxes: [
+                        {
                             display: true,
-                            labelString: 'Mes'
-                        }
-                    }],
-                    yAxes: [{
-                        display: true,
-                        scaleLabel: {
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Mes',
+                            },
+                        },
+                    ],
+                    yAxes: [
+                        {
                             display: true,
-                            labelString: 'Cantidad'
-                        }
-                    }]
-                }
-            }
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Cantidad',
+                            },
+                        },
+                    ],
+                },
+            },
         };
     },
     watch: {
-        'minDate': function () {
-            this.viajesData = this.processTrips(this.viajes, this.minDate, this.maxDate);
+        minDate: function () {
+            this.viajesData = this.processTrips(
+                this.viajes,
+                this.minDate,
+                this.maxDate
+            );
         },
-        'maxDate': function () {
-            this.viajesData = this.processTrips(this.viajes, this.minDate, this.maxDate);
-        }
+        maxDate: function () {
+            this.viajesData = this.processTrips(
+                this.viajes,
+                this.minDate,
+                this.maxDate
+            );
+        },
     },
     methods: {
         ...mapActions({
-            getTrips: 'admin/getTrips'
+            getTrips: 'admin/getTrips',
         }),
-        processTrips (viajes, minDate, maxDate) {
+        processTrips(viajes, minDate, maxDate) {
             let etiquetas = [];
             let datos = [];
             if (viajes) {
@@ -91,28 +107,34 @@ export default {
                 }
                 return {
                     labels: etiquetas,
-                    datasets: [{
-                        label: 'Cantidad de viajes',
-                        backgroundColor: '#F00',
-                        borderColor: '#F00',
-                        data: datos,
-                        fill: false
-                    }]
+                    datasets: [
+                        {
+                            label: 'Cantidad de viajes',
+                            backgroundColor: '#F00',
+                            borderColor: '#F00',
+                            data: datos,
+                            fill: false,
+                        },
+                    ],
                 };
             }
         },
-        async loadData () {
+        async loadData() {
             let viajes = await this.getTrips();
             this.viajes = viajes.trips;
-            this.viajesData = this.processTrips(this.viajes, this.minDate, this.maxDate);
-        }
+            this.viajesData = this.processTrips(
+                this.viajes,
+                this.minDate,
+                this.maxDate
+            );
+        },
     },
     components: {
-        LineChart
+        LineChart,
     },
-    mounted () {
+    mounted() {
         this.loadData();
-    }
+    },
 };
 </script>
 

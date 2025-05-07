@@ -1,6 +1,4 @@
-<template>
-
-</template>
+<template></template>
 
 <script>
 import { mapActions } from 'vuex';
@@ -9,20 +7,18 @@ export default {
     name: 'activate',
     props: ['token'],
 
-    data () {
-        return {
-
-        };
+    data() {
+        return {};
     },
 
     methods: {
         ...mapActions({
-            activateAccount: 'auth/activate'
-        })
+            activateAccount: 'auth/activate',
+        }),
     },
 
-    mounted () {
+    mounted() {
         this.activateAccount(this.token);
-    }
+    },
 };
 </script>

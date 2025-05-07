@@ -1,21 +1,22 @@
 <template>
-  <div class="app-container" :class="[backgroundStyle, viewName, deviceClass]">
-    <onBoarding key="1" v-if="onBoardingVisibility"></onBoarding>
-    <headerApp></headerApp>
-    <main id="main">
-      <div class="view-container clearfix">
-        <router-view></router-view>
-      </div>
-    </main>
-    <footerApp></footerApp>
-    <!--
+    <div
+        class="app-container"
+        :class="[backgroundStyle, viewName, deviceClass]"
+    >
+        <onBoarding key="1" v-if="onBoardingVisibility"></onBoarding>
+        <headerApp></headerApp>
+        <main id="main">
+            <div class="view-container clearfix">
+                <router-view></router-view>
+            </div>
+        </main>
+        <footerApp></footerApp>
+        <!--
     <pre>
             {{this.$store.state}}
     </pre>
-    -->
-  </div>
+    --></div>
 </template>
-
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
@@ -31,13 +32,13 @@ export default {
         },
         ...mapActions({
             fbLogin: 'cordova/facebookLogin',
-            getConfig: 'auth/getConfig'
-        })
+            getConfig: 'auth/getConfig',
+        }),
     },
-    beforeMount () {
+    beforeMount() {
         this.getConfig();
     },
-    mounted () {
+    mounted() {
         if (this.isFacebookApp) {
             if (!this.logged) {
                 this.fbLogin();
@@ -54,51 +55,57 @@ export default {
             isRemoteConfig: 'auth/isRemoteConfig',
             firsTimeMobileAppOpen: 'device/firsTimeMobileAppOpen',
             user: 'auth/user',
-            isBrowser: 'device/isBrowser'
+            isBrowser: 'device/isBrowser',
         }),
-        onBoardingVisibility () {
-            let moduleEnabled = this.appConfig && this.isRemoteConfig && this.appConfig.module_on_boarding_new_user && this.appConfig.module_on_boarding_new_user.enabled;
+        onBoardingVisibility() {
+            let moduleEnabled =
+                this.appConfig &&
+                this.isRemoteConfig &&
+                this.appConfig.module_on_boarding_new_user &&
+                this.appConfig.module_on_boarding_new_user.enabled;
             let mustShowMobile = !this.isBrowser && !this.firsTimeMobileAppOpen;
             let mustShowGeneral = this.user && this.user.on_boarding_view !== 1;
             return moduleEnabled && (mustShowMobile || mustShowGeneral);
         },
-        viewName () {
+        viewName() {
             return this.$route.name;
         },
-        deviceClass () {
-            return window.device && window.device.platform ? window.device.platform.toLowerCase() : '';
-        }
+        deviceClass() {
+            return window.device && window.device.platform
+                ? window.device.platform.toLowerCase()
+                : '';
+        },
     },
     watch: {
         deviceReady: () => {
             console.log('Device ready from components');
         },
-        appConfig (value) {
+        appConfig(value) {
             if (value && value.locale) {
                 this.$root.$i18n.locale = value.locale;
             }
-        }
+        },
     },
-    data () {
+    data() {
         return {
-            actualRouteName: ''
+            actualRouteName: '',
         };
     },
     components: {
         headerApp,
         footerApp,
-        onBoarding
-    }
+        onBoarding,
+    },
 };
 </script>
 
-<style >
+<style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    margin-top: 60px;
 }
 </style>

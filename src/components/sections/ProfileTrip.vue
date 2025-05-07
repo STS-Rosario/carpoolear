@@ -1,28 +1,58 @@
 <template>
-  <div class="profile-trip-component container">
+    <div class="profile-trip-component container">
         <div class="col-xs-24">
-            <h2>Viajes <strong>Creados</strong></h2>
+            <h2>
+                Viajes
+                <strong>Creados</strong>
+            </h2>
             <Loading :data="driverTrips">
                 <div class="trips-list">
-                    <Trip v-for="trip in driverTrips" v-bind:key="trip.id" :clickModal="user.is_admin" :trip="trip" :user="user" ></Trip>
+                    <Trip
+                        v-for="trip in driverTrips"
+                        v-bind:key="trip.id"
+                        :clickModal="user.is_admin"
+                        :trip="trip"
+                        :user="user"
+                    ></Trip>
                 </div>
-                <p slot="no-data" class="alert alert-warning"  role="alert">No hay viajes</p>
+                <p slot="no-data" class="alert alert-warning" role="alert">
+                    No hay viajes
+                </p>
                 <p slot="loading" class="alert alert-info" role="alert">
-                    <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
+                    <img
+                        src="https://carpoolear.com.ar/static/img/loader.gif"
+                        alt=""
+                        class="ajax-loader"
+                    />
                     Cargando viajes ...
                 </p>
             </Loading>
-        </div v-if="user.is_admin">
-            <div>
-                <div class="col-xs-24">
-                <h2>Viajes <strong>Pasajero</strong></h2>
+        </div>
+        <div v-if="user.is_admin">
+            <div class="col-xs-24">
+                <h2>
+                    Viajes
+                    <strong>Pasajero</strong>
+                </h2>
                 <Loading :data="passengerTrips">
                     <div class="trips-list">
-                        <Trip v-for="trip in passengerTrips" v-bind:key="trip.id" :trip="trip" :clickModal="user.is_admin"  :user="user"></Trip>
+                        <Trip
+                            v-for="trip in passengerTrips"
+                            v-bind:key="trip.id"
+                            :trip="trip"
+                            :clickModal="user.is_admin"
+                            :user="user"
+                        ></Trip>
                     </div>
-                    <p slot="no-data" class="alert alert-warning"  role="alert">No estas subido a ningún viaje.</p>
+                    <p slot="no-data" class="alert alert-warning" role="alert">
+                        No estas subido a ningún viaje.
+                    </p>
                     <p slot="loading" class="alert alert-info" role="alert">
-                        <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
+                        <img
+                            src="https://carpoolear.com.ar/static/img/loader.gif"
+                            alt=""
+                            class="ajax-loader"
+                        />
                         Cargando viajes ...
                     </p>
                 </Loading>
@@ -31,11 +61,23 @@
                 <h2>Mis viajes pasados</h2>
                 <Loading :data="oldDriverTrips">
                     <div class="trips-list">
-                        <Trip v-for="trip in oldDriverTrips" v-bind:key="trip.id" :clickModal="user.is_admin" :trip="trip" :user="user"></Trip>
+                        <Trip
+                            v-for="trip in oldDriverTrips"
+                            v-bind:key="trip.id"
+                            :clickModal="user.is_admin"
+                            :trip="trip"
+                            :user="user"
+                        ></Trip>
                     </div>
-                    <p slot="no-data" class="alert alert-warning"  role="alert">No hay ningún viaje pasado</p>
+                    <p slot="no-data" class="alert alert-warning" role="alert">
+                        No hay ningún viaje pasado
+                    </p>
                     <p slot="loading" class="alert alert-info" role="alert">
-                        <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
+                        <img
+                            src="https://carpoolear.com.ar/static/img/loader.gif"
+                            alt=""
+                            class="ajax-loader"
+                        />
                         Cargando viajes ...
                     </p>
                 </Loading>
@@ -43,13 +85,28 @@
 
             <div class="col-xs-24" v-if="oldPassengerTrips">
                 <Loading :data="oldPassengerTrips">
-                    <h2 slot="title" > Viajes a los que me <strong>subí</strong> </h2>
+                    <h2 slot="title">
+                        Viajes a los que me
+                        <strong>subí</strong>
+                    </h2>
                     <div class="trips-list">
-                        <Trip v-for="trip in oldPassengerTrips" v-bind:key="trip.id" :clickModal="user.is_admin" :trip="trip" :user="user"></Trip>
+                        <Trip
+                            v-for="trip in oldPassengerTrips"
+                            v-bind:key="trip.id"
+                            :clickModal="user.is_admin"
+                            :trip="trip"
+                            :user="user"
+                        ></Trip>
                     </div>
-                    <p slot="no-data" class="alert alert-warning"  role="alert">No te has subido a ningún viaje.</p>
+                    <p slot="no-data" class="alert alert-warning" role="alert">
+                        No te has subido a ningún viaje.
+                    </p>
                     <p slot="loading" class="alert alert-info" role="alert">
-                        <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
+                        <img
+                            src="https://carpoolear.com.ar/static/img/loader.gif"
+                            alt=""
+                            class="ajax-loader"
+                        />
                         Cargando viajes ...
                     </p>
                 </Loading>
@@ -67,25 +124,25 @@ import Tab from '../elements/Tab';
 
 export default {
     name: 'profile-trip',
-    data () {
+    data() {
         return {
             driverTrips: [],
             passengerTrips: [],
             oldDriverTrips: [],
-            oldPassengerTrips: []
+            oldPassengerTrips: [],
         };
     },
     props: {
         userId: {
-            required: false
-        }
+            required: false,
+        },
     },
     computed: {
         ...mapGetters({
-            user: 'auth/user'
-        })
+            user: 'auth/user',
+        }),
     },
-    mounted () {
+    mounted() {
         this.loadTrips();
     },
 
@@ -94,33 +151,35 @@ export default {
             tripAsDriver: 'trips/tripsAsDriver',
             tripAsPassenger: 'trips/tripsAsPassenger',
             oldTripsAsDriver: 'trips/oldTripsAsDriver',
-            oldTripsAsPassenger: 'trips/oldTripsAsPassenger'
+            oldTripsAsPassenger: 'trips/oldTripsAsPassenger',
         }),
 
-        async loadTrips () {
+        async loadTrips() {
             this.driverTrips = await this.tripAsDriver(this.userId);
             if (this.user.is_admin) {
                 this.passengerTrips = await this.tripAsPassenger(this.userId);
                 this.oldDriverTrips = await this.oldTripsAsDriver(this.userId);
-                this.oldPassengerTrips = await this.oldTripsAsPassenger(this.userId);
+                this.oldPassengerTrips = await this.oldTripsAsPassenger(
+                    this.userId
+                );
             }
             console.log(this.passengerTrips);
             console.log(this.oldPassengerTrips);
             console.log(this.driverTrips);
             console.log(this.oldDriverTrips);
-        }
+        },
     },
 
     components: {
         Trip,
         Loading,
-        Tab
-    }
+        Tab,
+    },
 };
 </script>
 
 <style scoped>
-    h2 {
-        font-weight: 300;
-    }
+h2 {
+    font-weight: 300;
+}
 </style>

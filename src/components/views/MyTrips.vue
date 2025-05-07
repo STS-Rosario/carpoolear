@@ -1,123 +1,285 @@
 <template>
-  <div class="trips container">
+    <div class="trips container">
         <div class="col-xs-24">
             <Loading :data="pendingPaymentRequests" :hideOnEmpty="true">
-                <h2 slot="title"> <strong>Pago pendiente</strong> para confirmar </h2>
+                <h2 slot="title">
+                    <strong>Pago pendiente</strong>
+                    para confirmar
+                </h2>
                 <div class="request-list">
-                    <PendingPaymentRequest v-for="r in pendingPaymentRequests" v-bind:key="r.id" :request="r"></PendingPaymentRequest>
+                    <PendingPaymentRequest
+                        v-for="r in pendingPaymentRequests"
+                        v-bind:key="r.id"
+                        :request="r"
+                    ></PendingPaymentRequest>
                 </div>
                 <p slot="loading" class="alert alert-info" role="alert">
-                    <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
+                    <img
+                        src="https://carpoolear.com.ar/static/img/loader.gif"
+                        alt=""
+                        class="ajax-loader"
+                    />
                     Cargando...
                 </p>
             </Loading>
         </div>
         <div class="col-xs-24">
             <Loading :data="pendingRequest" :hideOnEmpty="true">
-                <h2 slot="title"> Pendientes <strong>de contestar</strong> </h2>
+                <h2 slot="title">
+                    Pendientes
+                    <strong>de contestar</strong>
+                </h2>
                 <div class="request-list">
-                    <PendingRequest v-for="r in pendingRequest" v-bind:key="r.id" :user="r.user" :trip="findTrip(r.trip_id)"></PendingRequest>
+                    <PendingRequest
+                        v-for="r in pendingRequest"
+                        v-bind:key="r.id"
+                        :user="r.user"
+                        :trip="findTrip(r.trip_id)"
+                    ></PendingRequest>
                 </div>
-                <p slot="no-data" class="alert alert-warning"  role="alert">No hay pedientes de contestar</p>
+                <p slot="no-data" class="alert alert-warning" role="alert">
+                    No hay pedientes de contestar
+                </p>
                 <p slot="loading" class="alert alert-info" role="alert">
-                    <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
+                    <img
+                        src="https://carpoolear.com.ar/static/img/loader.gif"
+                        alt=""
+                        class="ajax-loader"
+                    />
                     Cargando...
                 </p>
             </Loading>
         </div>
 
         <div class="col-xs-24">
-            <modal :name="'modal'" v-if="showModalPendingRates" @close="toPendingRates" :title="'Carpoodatos'" :body="'Body'" :hide-footer="true">
+            <modal
+                :name="'modal'"
+                v-if="showModalPendingRates"
+                @close="toPendingRates"
+                :title="'Carpoodatos'"
+                :body="'Body'"
+                :hide-footer="true"
+            >
                 <h3 slot="header">
                     <span>¡Carpoodatos!</span>
-                    <i v-on:click="toPendingRates" class="fa fa-times float-right-close"></i>
+                    <i
+                        v-on:click="toPendingRates"
+                        class="fa fa-times float-right-close"
+                    ></i>
                 </h3>
                 <div slot="body">
                     <div class="text-left carpoodatos">
-                      <p>
-                        <b>Es muy muy importante calificar</b>. Las calificaciones permiten conocernos mejor y poder decidir a la hora de compartir un viaje, son muy importantes para toda la comunidad carpoolera.
-                      </p>
-                      <p>
-                        <b>Tomate el tiempo para calificar pero no tanto...</b>. Tenés 14 días para calificar contando a partir del momento en que se habilita la posibilidad, 24hs posteriores al comienzo del viaje.
-                      </p>
-                      <p>
-                        <b>No se borra con el codo ni hay líquido corrector</b>. Tené en cuenta que no podés ni borrar ni editar la calificación que hagas.
-                      </p>
-                      <p>
-                        <b>Decí lo que pensás :D</b>. Las calificación que vos hagas y la que recibas de la otra persona se mostrarán al mismo tiempo en los perfiles. Nunca se mostrará una antes que la otra. Solamente cuando la otra persona te califique o se venza el plazo de tiempo para calificar, aparecerá la calificación en el perfil.
-                      </p>
-                      <p>Cualquier duda escribinos a <a href="mailto:carpoolear@stsrosario.org.ar">carpoolear@stsrosario.org.ar</a> o nuestras redes sociales.</p>
+                        <p>
+                            <b>Es muy muy importante calificar</b>
+                            . Las calificaciones permiten conocernos mejor y
+                            poder decidir a la hora de compartir un viaje, son
+                            muy importantes para toda la comunidad carpoolera.
+                        </p>
+                        <p>
+                            <b
+                                >Tomate el tiempo para calificar pero no
+                                tanto...</b
+                            >
+                            . Tenés 14 días para calificar contando a partir del
+                            momento en que se habilita la posibilidad, 24hs
+                            posteriores al comienzo del viaje.
+                        </p>
+                        <p>
+                            <b
+                                >No se borra con el codo ni hay líquido
+                                corrector</b
+                            >
+                            . Tené en cuenta que no podés ni borrar ni editar la
+                            calificación que hagas.
+                        </p>
+                        <p>
+                            <b>Decí lo que pensás :D</b>
+                            . Las calificación que vos hagas y la que recibas de
+                            la otra persona se mostrarán al mismo tiempo en los
+                            perfiles. Nunca se mostrará una antes que la otra.
+                            Solamente cuando la otra persona te califique o se
+                            venza el plazo de tiempo para calificar, aparecerá
+                            la calificación en el perfil.
+                        </p>
+                        <p>
+                            Cualquier duda escribinos a
+                            <a href="mailto:carpoolear@stsrosario.org.ar">
+                                carpoolear@stsrosario.org.ar
+                            </a>
+                            o nuestras redes sociales.
+                        </p>
                     </div>
-                    <div class="check" style="margin-bottom:10px;">
+                    <div class="check" style="margin-bottom: 10px">
                         <label class="check-inline">
-                            <input type="checkbox" name="pendingRatesValor" value="0" v-model="pendingRatesValue"><span> No volver a mostrar mensaje</span>
+                            <input
+                                type="checkbox"
+                                name="pendingRatesValor"
+                                value="0"
+                                v-model="pendingRatesValue"
+                            />
+                            <span>No volver a mostrar mensaje</span>
                         </label>
                     </div>
                     <div class="text-center">
-                      <button class="btn btn-accept-request" @click="toPendingRates"> !Entiendo! </button>
+                        <button
+                            class="btn btn-accept-request"
+                            @click="toPendingRates"
+                        >
+                            !Entiendo!
+                        </button>
                     </div>
                 </div>
             </modal>
-            <modal :name="'modal'" v-if="showModalRequestDonation" @close="onModalClose" :title="'Test'" :body="'Body'">
+            <modal
+                :name="'modal'"
+                v-if="showModalRequestDonation"
+                @close="onModalClose"
+                :title="'Test'"
+                :body="'Body'"
+            >
                 <h3 slot="header">
                     <span>Doná a Carpoolear</span>
-                    <br class="hidden-sm hidden-md hidden-lg">
-                    <small>un proyecto de </small>
-                    <img width="90" alt="STS Rosario" src="https://carpoolear.com.ar/img/logo_sts_nuevo_color.png">
+                    <br class="hidden-sm hidden-md hidden-lg" />
+                    <small>un proyecto de</small>
+                    <img
+                        width="90"
+                        alt="STS Rosario"
+                        src="https://carpoolear.com.ar/img/logo_sts_nuevo_color.png"
+                    />
                 </h3>
                 <div slot="body" class="donation">
                     <div class="text-center donation-text">
-                        <p>Buenisimo que hayas encontrado con quien compartir tu viaje!</p>
-                        Ayudanos a seguir siendo una plataforma abierta, colaborativa y sin fines de lucro
+                        <p>
+                            Buenisimo que hayas encontrado con quien compartir
+                            tu viaje!
+                        </p>
+                        Ayudanos a seguir siendo una plataforma abierta,
+                        colaborativa y sin fines de lucro
                     </div>
                     <div class="radio">
                         <label class="radio-inline">
-                            <input type="radio" name="donationValor" id="donation50" value="1000" v-model="donateValue"><span>$ 1000</span>
+                            <input
+                                type="radio"
+                                name="donationValor"
+                                id="donation50"
+                                value="1000"
+                                v-model="donateValue"
+                            />
+                            <span>$ 1000</span>
                         </label>
                         <label class="radio-inline">
-                            <input type="radio" name="donationValor" id="donation100" value="2000" v-model="donateValue"><span>$ 2000</span>
+                            <input
+                                type="radio"
+                                name="donationValor"
+                                id="donation100"
+                                value="2000"
+                                v-model="donateValue"
+                            />
+                            <span>$ 2000</span>
                         </label>
                         <label class="radio-inline">
-                            <input type="radio" name="donationValor" id="donation200" value="5000" v-model="donateValue"><span>$ 5000</span>
+                            <input
+                                type="radio"
+                                name="donationValor"
+                                id="donation200"
+                                value="5000"
+                                v-model="donateValue"
+                            />
+                            <span>$ 5000</span>
                         </label>
                         <label class="radio-inline">
-                            <input type="radio" name="donationValor" id="donation500" value="0" v-model="donateValue"><span>Elegí tu propia aventura (solo mensual)</span>
+                            <input
+                                type="radio"
+                                name="donationValor"
+                                id="donation500"
+                                value="0"
+                                v-model="donateValue"
+                            />
+                            <span>Elegí tu propia aventura (solo mensual)</span>
                         </label>
                     </div>
                     <div>
-                        <button class="btn btn-success btn-unica-vez" @click="onDonateOnceTime">ÚNICA VEZ</button>
-                        <button class="btn btn-info btn-mensualmente" @click="onDonateMonthly">MENSUAL <br />(cancelá cuando quieras)</button>
+                        <button
+                            class="btn btn-success btn-unica-vez"
+                            @click="onDonateOnceTime"
+                        >
+                            ÚNICA VEZ
+                        </button>
+                        <button
+                            class="btn btn-info btn-mensualmente"
+                            @click="onDonateMonthly"
+                        >
+                            MENSUAL
+                            <br />
+                            (cancelá cuando quieras)
+                        </button>
                     </div>
                     <div class="text-center">
                         <br />
-                        <a href="/donar" target="_blank" v-on:click.prevent="onOpenLink('https://carpoolear.com.ar/donar')">
+                        <a
+                            href="/donar"
+                            target="_blank"
+                            v-on:click.prevent="
+                                onOpenLink('https://carpoolear.com.ar/donar')
+                            "
+                        >
                             Conocé más acerca de por qué donar
                         </a>
                     </div>
                 </div>
             </modal>
             <Loading :data="pendingRates" :hideOnEmpty="true">
-                <h2 slot="title"> Calificaciones <strong>pendientes </strong></h2>
+                <h2 slot="title">
+                    Calificaciones
+                    <strong>pendientes</strong>
+                </h2>
                 <div class="request-list">
-                    <RatePending v-for="rate in pendingRates" v-bind:key="rate.id" :rate="rate" @rated="onUserRated" />
+                    <RatePending
+                        v-for="rate in pendingRates"
+                        v-bind:key="rate.id"
+                        :rate="rate"
+                        @rated="onUserRated"
+                    />
                 </div>
-                <p slot="no-data" class="alert alert-warning"  role="alert">No hay calificaciones pendientes</p>
+                <p slot="no-data" class="alert alert-warning" role="alert">
+                    No hay calificaciones pendientes
+                </p>
                 <p slot="loading" class="alert alert-info" role="alert">
-                    <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
+                    <img
+                        src="https://carpoolear.com.ar/static/img/loader.gif"
+                        alt=""
+                        class="ajax-loader"
+                    />
                     Cargando calificaciones ...
                 </p>
             </Loading>
         </div>
 
         <div class="col-xs-24">
-            <h2>Mis <strong>próximos</strong> viajes</h2>
+            <h2>
+                Mis
+                <strong>próximos</strong>
+                viajes
+            </h2>
             <Loading :data="trips">
                 <div class="trips-list">
-                    <Trip v-for="trip in trips" v-bind:key="trip.id" :trip="trip" :user="user" :enableChangeSeats="true"></Trip>
+                    <Trip
+                        v-for="trip in trips"
+                        v-bind:key="trip.id"
+                        :trip="trip"
+                        :user="user"
+                        :enableChangeSeats="true"
+                    ></Trip>
                 </div>
-                <p slot="no-data" class="alert alert-warning"  role="alert">No tenés viajes creados</p>
+                <p slot="no-data" class="alert alert-warning" role="alert">
+                    No tenés viajes creados
+                </p>
                 <p slot="loading" class="alert alert-info" role="alert">
-                    <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
+                    <img
+                        src="https://carpoolear.com.ar/static/img/loader.gif"
+                        alt=""
+                        class="ajax-loader"
+                    />
                     Cargando viajes ...
                 </p>
             </Loading>
@@ -125,44 +287,85 @@
 
         <div class="col-xs-24">
             <Loading :data="passengerTrips" :hideOnEmpty="true">
-                <h2 slot="title" > Viajes a los que <strong>estoy subido</strong> </h2>
+                <h2 slot="title">
+                    Viajes a los que
+                    <strong>estoy subido</strong>
+                </h2>
                 <div class="trips-list">
-                    <Trip v-for="trip in passengerTrips" v-bind:key="trip.id" :trip="trip" :user="user"></Trip>
+                    <Trip
+                        v-for="trip in passengerTrips"
+                        v-bind:key="trip.id"
+                        :trip="trip"
+                        :user="user"
+                    ></Trip>
                 </div>
-                <p slot="no-data" class="alert alert-warning"  role="alert">No estas subido a ningún viaje.</p>
+                <p slot="no-data" class="alert alert-warning" role="alert">
+                    No estas subido a ningún viaje.
+                </p>
                 <p slot="loading" class="alert alert-info" role="alert">
-                    <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
+                    <img
+                        src="https://carpoolear.com.ar/static/img/loader.gif"
+                        alt=""
+                        class="ajax-loader"
+                    />
                     Cargando viajes ...
                 </p>
             </Loading>
         </div>
-        <div class="col-xs-24" v-if="subscriptions && subscriptions.length" id="suscriptions">
+        <div
+            class="col-xs-24"
+            v-if="subscriptions && subscriptions.length"
+            id="suscriptions"
+        >
             <Loading :data="subscriptions" :hideOnEmpty="true">
-                <h2 slot="title" > Suscripciones a viajes</h2>
+                <h2 slot="title">Suscripciones a viajes</h2>
                 <div class="trips-list row">
-                    <div class="col-xs-24 col-md-12" v-for="subs in subscriptions" v-bind:key="subs.id" :key="subs.id">
-                        <subscriptionItem :subscription="subs" :user="user"></subscriptionItem>
+                    <div
+                        class="col-xs-24 col-md-12"
+                        v-for="subs in subscriptions"
+                        v-bind:key="subs.id"
+                        :key="subs.id"
+                    >
+                        <subscriptionItem
+                            :subscription="subs"
+                            :user="user"
+                        ></subscriptionItem>
                     </div>
-
                 </div>
-                <p slot="no-data" class="alert alert-warning"  role="alert">No tienes ninguna suscripción.</p>
+                <p slot="no-data" class="alert alert-warning" role="alert">
+                    No tienes ninguna suscripción.
+                </p>
                 <p slot="loading" class="alert alert-info" role="alert">
-                    <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
+                    <img
+                        src="https://carpoolear.com.ar/static/img/loader.gif"
+                        alt=""
+                        class="ajax-loader"
+                    />
                     Cargando suscripciones ...
                 </p>
             </Loading>
         </div>
 
-
         <div class="col-xs-24" v-if="oldTrips">
             <h2>Mis viajes pasados</h2>
             <Loading :data="oldTrips">
                 <div class="trips-list">
-                    <Trip v-for="trip in oldTrips" v-bind:key="trip.id" :trip="trip" :user="user"></Trip>
+                    <Trip
+                        v-for="trip in oldTrips"
+                        v-bind:key="trip.id"
+                        :trip="trip"
+                        :user="user"
+                    ></Trip>
                 </div>
-                <p slot="no-data" class="alert alert-warning"  role="alert">No has realizado ningún viaje aún</p>
+                <p slot="no-data" class="alert alert-warning" role="alert">
+                    No has realizado ningún viaje aún
+                </p>
                 <p slot="loading" class="alert alert-info" role="alert">
-                    <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
+                    <img
+                        src="https://carpoolear.com.ar/static/img/loader.gif"
+                        alt=""
+                        class="ajax-loader"
+                    />
                     Cargando viajes ...
                 </p>
             </Loading>
@@ -170,18 +373,31 @@
 
         <div class="col-xs-24" v-if="oldPassengerTrips">
             <Loading :data="oldPassengerTrips" :hideOnEmpty="true">
-                <h2 slot="title" > Viajes a los que me <strong>subí</strong> </h2>
+                <h2 slot="title">
+                    Viajes a los que me
+                    <strong>subí</strong>
+                </h2>
                 <div class="trips-list">
-                    <Trip v-for="trip in oldPassengerTrips" v-bind:key="trip.id" :trip="trip" :user="user"></Trip>
+                    <Trip
+                        v-for="trip in oldPassengerTrips"
+                        v-bind:key="trip.id"
+                        :trip="trip"
+                        :user="user"
+                    ></Trip>
                 </div>
-                <p slot="no-data" class="alert alert-warning"  role="alert">No te has subido a ningún viaje.</p>
+                <p slot="no-data" class="alert alert-warning" role="alert">
+                    No te has subido a ningún viaje.
+                </p>
                 <p slot="loading" class="alert alert-info" role="alert">
-                    <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
+                    <img
+                        src="https://carpoolear.com.ar/static/img/loader.gif"
+                        alt=""
+                        class="ajax-loader"
+                    />
                     Cargando viajes ...
                 </p>
             </Loading>
         </div>
-
     </div>
 </template>
 
@@ -201,17 +417,17 @@ import bus from '../../services/bus-event.js';
 
 export default {
     name: 'my-trips',
-    data () {
+    data() {
         return {
             showModalRequestDonation: false,
             donateValue: 0,
             modalTripId: 0,
             showModalPendingRates: false,
             pendingRatesValue: 0,
-            alreadyAlerted: false
+            alreadyAlerted: false,
         };
     },
-    mounted () {
+    mounted() {
         this.tripAsDriver();
         this.tripAsPassenger();
         this.pendingRate();
@@ -243,8 +459,8 @@ export default {
             oldTrips: 'myTrips/myOldTrips',
             oldPassengerTrips: 'myTrips/passengerOldTrips',
             subscriptions: 'subscriptions/subscriptions',
-            config: 'auth/appConfig'
-        })
+            config: 'auth/appConfig',
+        }),
     },
 
     methods: {
@@ -258,14 +474,14 @@ export default {
             oldTripsAsPassenger: 'myTrips/oldTripsAsPassenger',
             findSubscriptions: 'subscriptions/index',
             registerDonation: 'profile/registerDonation',
-            changeProperty: 'profile/changeProperty'
+            changeProperty: 'profile/changeProperty',
         }),
-        findTrip (id) {
+        findTrip(id) {
             if (this.trips) {
-                return this.trips.find(item => item.id === id);
+                return this.trips.find((item) => item.id === id);
             }
         },
-        updateScroll () {
+        updateScroll() {
             if (this.$route.query.loc) {
                 // window.scrollTo(0, document.body.scrollHeight);
                 // window.location.hash = this.$route.query.loc;
@@ -273,18 +489,21 @@ export default {
                 window.scrollTo(0, domNode.offsetTop - 150);
             }
         },
-        onDonateOnceTime () {
+        onDonateOnceTime() {
             if (this.donateValue > 0) {
                 var url = 'http://mpago.la/jgap'; // 50
                 switch (this.donateValue) {
                     case '200':
-                        url = 'https://www.mercadopago.com.ar/checkout/v1/redirect?preference-id=201279444-f94a3145-7336-4d79-9eb9-76c5402894fa';
+                        url =
+                            'https://www.mercadopago.com.ar/checkout/v1/redirect?preference-id=201279444-f94a3145-7336-4d79-9eb9-76c5402894fa';
                         break;
                     case '400':
-                        url = 'https://www.mercadopago.com.ar/checkout/v1/redirect?preference-id=201279444-42de1d74-f967-455f-80bf-a7a77650db06';
+                        url =
+                            'https://www.mercadopago.com.ar/checkout/v1/redirect?preference-id=201279444-42de1d74-f967-455f-80bf-a7a77650db06';
                         break;
                     case '1000':
-                        url = 'https://www.mercadopago.com.ar/checkout/v1/redirect?preference-id=201279444-c693bd88-7fd4-49d8-9f22-2b80151d184e';
+                        url =
+                            'https://www.mercadopago.com.ar/checkout/v1/redirect?preference-id=201279444-c693bd88-7fd4-49d8-9f22-2b80151d184e';
                         break;
                     default:
                         break;
@@ -295,28 +514,34 @@ export default {
                     has_donated: 1,
                     has_denied: 0,
                     ammount: parseFloat(this.donateValue),
-                    trip_id: this.modalTripId
+                    trip_id: this.modalTripId,
                 };
                 this.registerDonation(data);
             } else {
-                dialogs.message('Tienes que seleccionar un valor de donación.', { duration: 10, estado: 'error' });
+                dialogs.message(
+                    'Tienes que seleccionar un valor de donación.',
+                    {
+                        duration: 10,
+                        estado: 'error',
+                    }
+                );
             }
         },
-        onDonateMonthly () {
+        onDonateMonthly() {
             if (this.donateValue > 0) {
                 var url = 'http://mpago.la/2XdoxpF'; // 50
                 switch (this.donateValue) {
-                case '200':
-                    url = 'http://mpago.la/2k6JFz6';
-                    break;
-                case '400':
-                    url = 'http://mpago.la/1FE4px6';
-                    break;
-                case '1000':
-                    url = 'http://mpago.la/1EcA6f4';
-                    break;
-                default:
-                    break;
+                    case '200':
+                        url = 'http://mpago.la/2k6JFz6';
+                        break;
+                    case '400':
+                        url = 'http://mpago.la/1FE4px6';
+                        break;
+                    case '1000':
+                        url = 'http://mpago.la/1EcA6f4';
+                        break;
+                    default:
+                        break;
                 }
                 window.open(url, '_blank');
                 this.showModalRequestDonation = false;
@@ -324,19 +549,25 @@ export default {
                     has_donated: 1,
                     has_denied: 0,
                     ammount: parseFloat(this.donateValue),
-                    trip_id: this.modalTripId
+                    trip_id: this.modalTripId,
                 };
                 this.registerDonation(data);
             } else {
-                dialogs.message('Tienes que seleccionar un valor de donación.', { duration: 10, estado: 'error' });
+                dialogs.message(
+                    'Tienes que seleccionar un valor de donación.',
+                    {
+                        duration: 10,
+                        estado: 'error',
+                    }
+                );
             }
         },
 
-        toPendingRates () {
+        toPendingRates() {
             if (this.pendingRatesValue) {
                 let data = {
                     property: 'do_not_alert_pending_rates',
-                    value: 1
+                    value: 1,
                 };
                 this.changeProperty(data).then(() => {
                     console.log('do not alert success');
@@ -344,60 +575,73 @@ export default {
             }
             this.showModalPendingRates = false;
         },
-        onMessageModalClose () {
+        onMessageModalClose() {
             this.showModalRequestDonation = false;
             let data = {
                 has_donated: 0,
                 has_denied: 1,
                 ammount: 0,
-                trip_id: this.modalTripId
+                trip_id: this.modalTripId,
             };
             this.registerDonation(data);
         },
-        onModalClose () {
+        onModalClose() {
             this.showModalRequestDonation = false;
             let data = {
                 has_donated: 0,
                 has_denied: 1,
                 ammount: 0,
-                trip_id: this.modalTripId
+                trip_id: this.modalTripId,
             };
             this.registerDonation(data);
         },
-        hasToShowModal (tripId) {
+        hasToShowModal(tripId) {
             let tripRateds = parseFloat(this.config.donation.trips_rated);
-            if (this.user && !this.user.monthly_donate) { // solo si el usuario no es donador mensual
+            if (this.user && !this.user.monthly_donate) {
+                // solo si el usuario no es donador mensual
                 if (!this.user.donations) {
                     // no tengo intento de donaciones este mes debe aparecer
                     this.showModalRequestDonation = true;
                     this.modalTripId = tripId;
                 } else {
                     // debe aparecerme una vez por viaje
-                    let donation = this.user.donations.find(d => d.trip_id === tripId);
+                    let donation = this.user.donations.find(
+                        (d) => d.trip_id === tripId
+                    );
                     if (!donation) {
                         // para la cantidad de `tripRated` viajes mensuales
-                        let donations = this.user.donations.filter(d => d.trip_id !== null);
+                        let donations = this.user.donations.filter(
+                            (d) => d.trip_id !== null
+                        );
                         if (donations && donations.length < tripRateds) {
                             this.showModalRequestDonation = true;
                             this.modalTripId = tripId;
                         } else {
-                            console.log('hasToShowModal: ya interactue con al menos dos viajes');
+                            console.log(
+                                'hasToShowModal: ya interactue con al menos dos viajes'
+                            );
                         }
                     } else {
-                        console.log('hasToShowModal: ya interactue con este viaje');
+                        console.log(
+                            'hasToShowModal: ya interactue con este viaje'
+                        );
                     }
                 }
             }
         },
-        onUserRated (data) {
+        onUserRated(data) {
             console.log('onUserRated', data);
             if (data.rating) {
                 // vote positivo
-                if (this.config && this.config.donation && this.config.donation.month_days > 0) {
+                if (
+                    this.config &&
+                    this.config.donation &&
+                    this.config.donation.month_days > 0
+                ) {
                     this.hasToShowModal(data.trip_id);
                 }
             }
-        }
+        },
     },
     watch: {
         trips: function () {
@@ -408,7 +652,10 @@ export default {
         },
         pendingRates: function (newValue, oldValue) {
             this.updateScroll();
-            if (!this.user.do_not_alert_pending_rates && !this.config.disable_user_hints) {
+            if (
+                !this.user.do_not_alert_pending_rates &&
+                !this.config.disable_user_hints
+            ) {
                 console.log('pendingRates', newValue, oldValue);
                 if (newValue && newValue.length > 0 && !this.alreadyAlerted) {
                     this.alreadyAlerted = true;
@@ -427,10 +674,10 @@ export default {
         },
         oldPassengerTrips: function () {
             this.updateScroll();
-        }/* ,
+        } /* ,
         subscriptions: function () {
             this.updateScroll();
-        } */
+        } */,
     },
     components: {
         Trip,
@@ -440,21 +687,21 @@ export default {
         RatePending,
         Tab,
         subscriptionItem,
-        modal
-    }
+        modal,
+    },
 };
 </script>
 
 <style scoped>
-    h2 {
-        font-weight: 300;
-    }
-    .donation-text {
-        margin-bottom: 1.5rem;
-    }
-    .donation-text p {
-        margin-top: -1rem;
-        font-size: 1.1rem;
-        margin-bottom: .5rem;
-    }
+h2 {
+    font-weight: 300;
+}
+.donation-text {
+    margin-bottom: 1.5rem;
+}
+.donation-text p {
+    margin-top: -1rem;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
 </style>

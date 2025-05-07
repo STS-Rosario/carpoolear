@@ -25,7 +25,7 @@ export default new Vuex.Store({
     actions,
     getters,
     state: {
-        appVersion: 3
+        appVersion: 3,
     },
     modules: {
         auth,
@@ -43,6 +43,6 @@ export default new Vuex.Store({
         profile,
         background,
         subscriptions,
-        admin
-    }
+        admin,
+    },
 });

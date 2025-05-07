@@ -1,6 +1,10 @@
 <template>
     <div class="date-picker">
-        <div v-if="browser" class="form-control picker" :class="focus ? 'input-border' : ''">
+        <div
+            v-if="browser"
+            class="form-control picker"
+            :class="focus ? 'input-border' : ''"
+        >
             <DatepickerSystem
                 :clear-button="true"
                 :clear-button-icon="'fa fa-times'"
@@ -15,22 +19,25 @@
                 :format="'dd/MM/yyyy'"
                 :disabled="{
                     to: min,
-                    from: max
+                    from: max,
                 }"
-                :disabled-picker = "disabledPicker"
-                autocomplete="off">
-            </DatepickerSystem>
+                :disabled-picker="disabledPicker"
+                autocomplete="off"
+            ></DatepickerSystem>
         </div>
-        <div v-if="!browser" class="form-control form-control-with-icon form-control-date">
+        <div
+            v-if="!browser"
+            class="form-control form-control-with-icon form-control-date"
+        >
             <input
                 @focus="openNativeDatePicker"
                 @blur="focus = false"
-                :value = "niceDate"
+                :value="niceDate"
                 @change="changeMobileValue"
                 type="text"
                 id="datepicker-mobile"
-                :min="min| moment('YYYY-MM-DD')"
-                :max="max| moment('YYYY-MM-DD')"
+                :min="min | moment('YYYY-MM-DD')"
+                :max="max | moment('YYYY-MM-DD')"
                 autocomplete="off"
                 :placeholder="'dd/mm/yyyy'"
             />
@@ -48,7 +55,7 @@ import bus from '../services/bus-event';
 */
 export default {
     name: 'datePicker',
-    data () {
+    data() {
         return {
             dateBrowser: '',
             dateMobile: '',
@@ -57,10 +64,10 @@ export default {
             focus: false,
             nextYear: moment().add(2, 'years').format('YYYY-MM-DD'),
             lastCentury: moment().subtract(100, 'years').format('YYYY-MM-DD'),
-            niceDate: ''
+            niceDate: '',
         };
     },
-    mounted () {
+    mounted() {
         if (this.value !== '') {
             this.dateBrowser = moment(this.value).toDate();
             this.dateMobile = this.value;
@@ -68,24 +75,24 @@ export default {
         }
     },
 
-    updated () {
+    updated() {
         if (this.value !== '') {
             this.niceDate = moment(this.value).format('DD/MM/YYYY');
         }
     },
     methods: {
-        clear () {
+        clear() {
             this.dateBrowser = '';
             this.dateMobile = '';
             this.niceDate = '';
         },
-        changeValue (value) {
+        changeValue(value) {
             this.dateBrowser = value;
         },
-        changeMobileValue (el) {
+        changeMobileValue(el) {
             this.dateMobile = el.target.value;
         },
-        openNativeDatePicker (event) {
+        openNativeDatePicker(event) {
             event.target.blur();
             var context = this;
             this.focus = true;
@@ -98,26 +105,27 @@ export default {
                 mode: 'date',
                 minDate: Date.parse(moment(this.min).toDate()),
                 maxDate: Date.parse(moment(this.max).toDate()),
-                androidTheme: 3
+                androidTheme: 3,
             };
 
-            function onSuccess (date) {
+            function onSuccess(date) {
                 context.dateMobile = moment(date).format('YYYY-MM-DD');
                 context.niceDate = moment(date).format('DD/MM/YYYY');
             }
 
-            function onError (error) { // Android only
+            function onError(error) {
+                // Android only
                 console.log(error);
                 // window.alert('Error: ' + error);
             }
 
             window.datePicker.show(options, onSuccess, onError);
-        }
-
+        },
     },
     watch: {
         dateBrowser: function (value) {
-            value = value && value !== '' ? moment(value).format('YYYY-MM-DD') : '';
+            value =
+                value && value !== '' ? moment(value).format('YYYY-MM-DD') : '';
 
             bus.emit('date-change', value);
 
@@ -134,38 +142,38 @@ export default {
             this.dateBrowser = moment(this.value).toDate();
             this.dateMobile = this.value;
             this.niceDate = moment(this.value).format('DD/MM/YYYY');
-        }
+        },
     },
     props: {
-        'format': {
+        format: {
             type: String,
             required: false,
-            default: 'DD/MM/YYYY'
+            default: 'DD/MM/YYYY',
         },
-        'value': {
+        value: {
             type: String,
-            required: false
+            required: false,
         },
-        'minDate': {
+        minDate: {
             type: Date,
-            required: false
+            required: false,
         },
-        'maxDate': {
+        maxDate: {
             type: Date,
-            required: false
+            required: false,
         },
-        'disabledPicker': {
+        disabledPicker: {
             type: Boolean,
             required: false,
-            default: false
-        }
+            default: false,
+        },
     },
     computed: {
         ...mapGetters({
             isMobile: 'device/isMobile',
-            device: 'cordova/device'
+            device: 'cordova/device',
         }),
-        browser () {
+        browser() {
             if (this.device) {
                 if (this.device.platform === 'browser') {
                     return true;
@@ -176,7 +184,7 @@ export default {
                 return true;
             }
         },
-        max () {
+        max() {
             let answer;
             if (this.maxDate) {
                 answer = this.maxDate;
@@ -189,7 +197,7 @@ export default {
                 return moment(answer).format('YYYY-MM-DD');
             }
         },
-        min () {
+        min() {
             let answer;
             if (this.minDate) {
                 answer = this.minDate;
@@ -205,84 +213,85 @@ export default {
             } else {
                 return moment(answer).format('YYYY-MM-DD');
             }
-        }
+        },
     },
     components: {
-        DatepickerSystem
-    }
+        DatepickerSystem,
+    },
 };
 </script>
 
 <style>
-    .vdp-datepicker i {
-        font-size: 16px;
-        padding-left: 4px;
-    }
-    .vdp-datepicker i.fa-times {
-        font-size: 14.4px;
-    }
+.vdp-datepicker i {
+    font-size: 16px;
+    padding-left: 4px;
+}
+.vdp-datepicker i.fa-times {
+    font-size: 14.4px;
+}
 
-    .vdp-datepicker__calendar-button {
-        width: 18px;
-    }
-    .vdp-datepicker input,
-    .user-form .vdp-datepicker input[type='text'] {
-        border: 0;
-        width: calc(100% - 44px);
-        padding-left: .4em;
-        line-height: 40px;
-        font-size: 13px;
-    }
+.vdp-datepicker__calendar-button {
+    width: 18px;
+}
+.vdp-datepicker input,
+.user-form .vdp-datepicker input[type='text'] {
+    border: 0;
+    width: calc(100% - 44px);
+    padding-left: 0.4em;
+    line-height: 40px;
+    font-size: 13px;
+}
 
-    .user-form .vdp-datepicker input[type='text'] {
-        display: inline-block;
-        padding: 0;
-        margin-bottom: 0;
-        padding-left: .4em;
-    }
+.user-form .vdp-datepicker input[type='text'] {
+    display: inline-block;
+    padding: 0;
+    margin-bottom: 0;
+    padding-left: 0.4em;
+}
 
-    .date-picker--cross {
-        position: absolute;
+.date-picker--cross {
+    position: absolute;
+}
+.date-picker--cross i {
+    cursor: pointer;
+}
+.date-picker {
+    width: 100%;
+    border: none;
+    vertical-align: middle;
+}
+.form-control {
+    position: relative;
+    vertical-align: middle;
+    cursor: pointer;
+}
+.picker.form-control {
+    padding: 0.1em 0.6em;
+}
+@media only screen and (min-width: 992px) {
+    .search-section .picker.form-control {
+        padding: 0.8em 0.6em;
     }
-    .date-picker--cross i {
-        cursor: pointer;
+}
+.input-border.form-control {
+    border-color: #66afe9;
+    outline: 0;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
+        0 0 8px rgba(102, 175, 233, 0.6);
+}
+@media only screen and (max-width: 991px) {
+    .vdp-datepicker .vdp-datepicker__calendar {
+        font-size: 1.6em;
+        box-shadow: 2px 2px 11px;
+        z-index: 100;
+        padding: 2.5em 1em;
+        position: fixed;
+        /* height: 40%; */
+        width: 90%;
+        top: 0px;
+        left: 0px;
+        margin: 5%;
+        margin-top: 40%;
     }
-    .date-picker {
-        width: 100%;
-        border: none;
-        vertical-align: middle;
-    }
-    .form-control {
-        position: relative;
-        vertical-align: middle;
-        cursor: pointer;
-    }
-    .picker.form-control {
-        padding: .1em .6em;
-    }
-    @media only screen and (min-width: 992px) {
-        .search-section .picker.form-control {
-            padding: .8em .6em;
-        }
-    }
-    .input-border.form-control {
-        border-color: #66afe9;
-        outline: 0;
-        box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
-    }
-    @media only screen and (max-width: 991px) {
-        .vdp-datepicker .vdp-datepicker__calendar {
-            font-size: 1.6em;
-            box-shadow: 2px 2px 11px;
-            z-index: 100;
-            padding: 2.5em 1em;
-            position: fixed;
-            /* height: 40%; */
-            width: 90%;
-            top: 0px;
-            left: 0px;
-            margin: 5%;
-            margin-top: 40%;
-        }
-    }
+}
 </style>

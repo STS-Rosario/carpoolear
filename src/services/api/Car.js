@@ -1,23 +1,23 @@
 import TaggedApi from '../../classes/TaggedApi';
 
 class CarApi extends TaggedApi {
-    show (id) {
+    show(id) {
         return this.get('/api/cars/' + id);
     }
 
-    index (data = {}) {
+    index(data = {}) {
         return this.get('/api/cars');
     }
 
-    create (data = {}) {
+    create(data = {}) {
         return this.post('/api/cars', data);
     }
 
-    update (data = {}) {
+    update(data = {}) {
         return this.put('/api/cars/' + data.id, data);
     }
 
-    delete (data = {}) {
+    delete(data = {}) {
         return this.delete('/api/cars/' + data.id, data);
     }
 }

@@ -1,60 +1,70 @@
 import TaggedApi from '../../classes/TaggedApi';
 
 class TripApi extends TaggedApi {
-    search (data) {
+    search(data) {
         return this.get('/api/trips', data);
     }
 
-    create (data) {
+    create(data) {
         return this.post('/api/trips', data);
     }
 
-    update (data) {
+    update(data) {
         return this.put('/api/trips/' + data.id, data);
     }
 
-    changeSeats (data) {
+    changeSeats(data) {
         // data.increment = +1 / -1
         return this.post('/api/trips/' + data.id + '/changeSeats', data);
     }
 
-    remove (id) {
+    remove(id) {
         return this.delete('/api/trips/' + id);
     }
 
-    show (id) {
+    show(id) {
         return this.get('/api/trips/' + id);
     }
 
-    myTrips (asDriver) {
-        return this.get('/api/users/get-trips', { 'as_driver': asDriver });
+    myTrips(asDriver) {
+        return this.get('/api/users/get-trips', { as_driver: asDriver });
     }
 
-    myOldTrips (asDriver) {
-        return this.get('/api/users/get-old-trips', { 'as_driver': asDriver });
+    myOldTrips(asDriver) {
+        return this.get('/api/users/get-old-trips', { as_driver: asDriver });
     }
 
-    getTrips (id, asDriver) {
-        return this.get('/api/users/get-trips', { 'as_driver': asDriver, 'user_id': id });
+    getTrips(id, asDriver) {
+        return this.get('/api/users/get-trips', {
+            as_driver: asDriver,
+            user_id: id,
+        });
     }
 
-    getOldTrips (id, asDriver) {
-        return this.get('/api/users/get-old-trips', { 'as_driver': asDriver, 'user_id': id });
+    getOldTrips(id, asDriver) {
+        return this.get('/api/users/get-old-trips', {
+            as_driver: asDriver,
+            user_id: id,
+        });
     }
 
-    userTrips (id, asDriver) {
-        return this.get('/api/trips', { 'user_id': id, 'as_driver': asDriver });
+    userTrips(id, asDriver) {
+        return this.get('/api/trips', { user_id: id, as_driver: asDriver });
     }
 
-    autocomplete (name, country, multicountry) {
-        return this.get('/api/trips/autocomplete', { 'name': name, 'country': country, 'multicountry': multicountry });
+    autocomplete(name, country, multicountry) {
+        return this.get('/api/trips/autocomplete', {
+            name: name,
+            country: country,
+            multicountry: multicountry,
+        });
     }
 
-    price (data) {
+    price(data) {
         return this.post('/api/trips/price', data);
     }
 
-    changeVisibility (data) {
+    changeVisibility(data) {
         return this.post('/api/trips/' + data.id + '/change-visibility', data);
     }
 }

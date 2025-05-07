@@ -4,45 +4,110 @@
             <TripSeats v-if="tripCardTheme === 'light' && isMobile" />
             <div class="row trip_location_from">
                 <div class="col-xs-4" v-if="tripCardTheme === 'light'">
-                    <span class="trip_from_time">{{ trip.trip_date | moment("HH:mm") }} </span>
+                    <span class="trip_from_time">{{
+                        trip.trip_date | moment('HH:mm')
+                    }}</span>
                 </div>
-                <div class="text-right" :class="tripCardTheme === 'light' ? 'col-xs-2' : 'col-xs-4'">
-                    <i class="fa fa-map-marker" aria-hidden="true" v-if="tripCardTheme !== 'light'"></i>
+                <div
+                    class="text-right"
+                    :class="tripCardTheme === 'light' ? 'col-xs-2' : 'col-xs-4'"
+                >
+                    <i
+                        class="fa fa-map-marker"
+                        aria-hidden="true"
+                        v-if="tripCardTheme !== 'light'"
+                    ></i>
                     <i class="fa fa-circle" aria-hidden="true" v-else></i>
                 </div>
                 <div :class="widthLocationClass">
-                    <span class="trip_location_from_city">{{ getLocationName(trip.points[0]) }}</span>
-                    <span class="trip_location_from_state-country">{{ getStateName(trip.points[0])| googleInfoClean }}</span>
+                    <span class="trip_location_from_city">
+                        {{ getLocationName(trip.points[0]) }}
+                    </span>
+                    <span class="trip_location_from_state-country">
+                        {{ getStateName(trip.points[0]) | googleInfoClean }}
+                    </span>
                 </div>
             </div>
-            <div class="row trip_inner_points" v-if="trip.points.length && trip.points.length > 2">
-                <div class="trip_point" :class="tripCardTheme === 'light' ? '':'row'" v-for="(p, index) in trip.points.slice(1, trip.points.length - 1)">
+            <div
+                class="row trip_inner_points"
+                v-if="trip.points.length && trip.points.length > 2"
+            >
+                <div
+                    class="trip_point"
+                    :class="tripCardTheme === 'light' ? '' : 'row'"
+                    v-for="(p, index) in trip.points.slice(
+                        1,
+                        trip.points.length - 1
+                    )"
+                >
                     <div class="col-xs-4" v-if="tripCardTheme === 'light'">
-                        <span class="trip_to_time"> </span>
+                        <span class="trip_to_time"></span>
                     </div>
-                    <div class="text-right" :class="tripCardTheme === 'light' ? 'col-xs-2' : 'col-xs-4'">
+                    <div
+                        class="text-right"
+                        :class="
+                            tripCardTheme === 'light' ? 'col-xs-2' : 'col-xs-4'
+                        "
+                    >
                         <i class="fa fa-map-marker" aria-hidden="true"></i>
                     </div>
                     <div :class="widthLocationClass">
-                        <span class="trip_location_inner_city">{{ getLocationName(p) }}</span>
-                        <span class="trip_location_inner_state-country">{{ getStateName(p) | googleInfoClean }} </span>
+                        <span class="trip_location_inner_city">{{
+                            getLocationName(p)
+                        }}</span>
+                        <span class="trip_location_inner_state-country">
+                            {{ getStateName(p) | googleInfoClean }}
+                        </span>
                     </div>
                 </div>
             </div>
-            <div class="row trip_location_to" :class="tripCardTheme !== 'light' && trip.points.length && trip.points.length > 2 ? 'has_points' : ''">
+            <div
+                class="row trip_location_to"
+                :class="
+                    tripCardTheme !== 'light' &&
+                    trip.points.length &&
+                    trip.points.length > 2
+                        ? 'has_points'
+                        : ''
+                "
+            >
                 <div class="col-xs-4" v-if="tripCardTheme === 'light'">
-                    <span class="trip_to_time">{{ tripArrivingTime | moment("HH:mm") }} </span>
+                    <span class="trip_to_time">{{
+                        tripArrivingTime | moment('HH:mm')
+                    }}</span>
                 </div>
-                <div class="text-right" :class="tripCardTheme === 'light' ? 'col-xs-2' : 'col-xs-4'">
+                <div
+                    class="text-right"
+                    :class="tripCardTheme === 'light' ? 'col-xs-2' : 'col-xs-4'"
+                >
                     <i class="fa fa-map-marker" aria-hidden="true"></i>
                 </div>
                 <div :class="widthLocationClass">
-                    <span class="trip_location_from_city">{{ getLocationName(trip.points[trip.points.length - 1]) }}</span>
-                    <span class="trip_location_from_state-country">{{ getStateName(trip.points[trip.points.length - 1]) | googleInfoClean }} </span>
+                    <span class="trip_location_from_city">
+                        {{
+                            getLocationName(trip.points[trip.points.length - 1])
+                        }}
+                    </span>
+                    <span class="trip_location_from_state-country">
+                        {{
+                            getStateName(trip.points[trip.points.length - 1])
+                                | googleInfoClean
+                        }}
+                    </span>
                 </div>
             </div>
-            <div class="col-xs-4 trip_location-dot-line" v-if="tripCardTheme !== 'light'">
-                <div :style="{height: trip.points.length && trip.points.length <= 2 ? '3.6rem' : `${4.8 + 2.3 * (trip.points.length - 2)}rem`}"></div>
+            <div
+                class="col-xs-4 trip_location-dot-line"
+                v-if="tripCardTheme !== 'light'"
+            >
+                <div
+                    :style="{
+                        height:
+                            trip.points.length && trip.points.length <= 2
+                                ? '3.6rem'
+                                : `${4.8 + 2.3 * (trip.points.length - 2)}rem`,
+                    }"
+                ></div>
             </div>
         </template>
         <template v-else>
@@ -73,19 +138,19 @@ import TripSeats from './TripSeats';
 
 export default {
     name: 'tripLocation',
-    data () {
+    data() {
         return {};
     },
     computed: {
         ...mapGetters({
             isMobile: 'device/isMobile',
             trip: 'trips/currentTrip',
-            tripCardTheme: 'auth/tripCardTheme'
+            tripCardTheme: 'auth/tripCardTheme',
         }),
-        widthLocationClass () {
+        widthLocationClass() {
             return this.tripCardTheme === 'light' ? 'col-xs-14' : 'col-xs-18';
         },
-        tripArrivingTime () {
+        tripArrivingTime() {
             if (this.trip && this.trip.estimated_time) {
                 let minutes = 0;
                 minutes = parseInt(this.trip.estimated_time.split(':')[0]) * 60;
@@ -93,7 +158,7 @@ export default {
                 return moment(this.trip.trip_date).add(minutes, 'minutes');
             }
             return '';
-        }
+        },
     },
     methods: {
         goToProfile: function (event) {
@@ -103,11 +168,11 @@ export default {
                 params: {
                     id: this.trip.user.id,
                     userProfile: this.trip.user,
-                    activeTab: 1
-                }
+                    activeTab: 1,
+                },
             });
         },
-        getLocationName (location) {
+        getLocationName(location) {
             if (location.json_address) {
                 if (location.json_address.ciudad) {
                     return location.json_address.ciudad;
@@ -118,7 +183,7 @@ export default {
             }
             return location.address;
         },
-        getStateName (location) {
+        getStateName(location) {
             if (location.json_address) {
                 if (location.json_address.provincia) {
                     return location.json_address.provincia;
@@ -128,11 +193,11 @@ export default {
                 }
             }
             return '';
-        }
+        },
     },
     components: {
         svgItem,
-        TripSeats
-    }
+        TripSeats,
+    },
 };
 </script>

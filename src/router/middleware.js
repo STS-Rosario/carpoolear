@@ -2,32 +2,35 @@
 import store from '../store';
 import router from '../router';
 
-export function auth (to, from, next) {
+export function auth(to, from, next) {
     if (store.getters['auth/checkLogin']) {
         next();
     } else {
         next(false);
         router.rememberRoute = {
             name: to.name,
-            params: to.params
+            params: to.params,
         };
         router.replace({ name: 'login' });
     }
 }
-export function authAdmin (to, from, next) {
-    if (store.getters['auth/checkLogin'] && store.getters['auth/user'].is_admin) {
+export function authAdmin(to, from, next) {
+    if (
+        store.getters['auth/checkLogin'] &&
+        store.getters['auth/user'].is_admin
+    ) {
         next();
     } else {
         next(false);
         router.rememberRoute = {
             name: to.name,
-            params: to.params
+            params: to.params,
         };
         router.replace({ name: 'login' });
     }
 }
 
-export function guest (to, from, next) {
+export function guest(to, from, next) {
     if (!store.getters['auth/checkLogin']) {
         next();
     } else {
@@ -36,12 +39,17 @@ export function guest (to, from, next) {
     }
 }
 
-export function profileComplete (to, from, next) {
+export function profileComplete(to, from, next) {
     let user = store.getters['auth/user'];
-    if (!user.image || user.image.length === 0 || !user.description || user.description.length === 0) {
+    if (
+        !user.image ||
+        user.image.length === 0 ||
+        !user.description ||
+        user.description.length === 0
+    ) {
         router.rememberRoute = {
             name: to.name,
-            params: to.params
+            params: to.params,
         };
         console.log('problem');
         next(false);

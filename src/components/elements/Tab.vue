@@ -1,5 +1,10 @@
 <template>
-    <div role="tabpanel" class="tab-pane container" :class="{ active: active }" :id="id">
+    <div
+        role="tabpanel"
+        class="tab-pane container"
+        :class="{ active: active }"
+        :id="id"
+    >
         <slot></slot>
     </div>
 </template>
@@ -10,33 +15,35 @@
 export default {
     props: {
         header: {
-            type: String
+            type: String,
         },
         disabled: {
             type: Boolean,
-            default: false
+            default: false,
         },
         onSelected: {
             type: Function,
-            default: () => {}
-        }
+            default: () => {},
+        },
     },
     data: function () {
         return {
             id: '',
-            _active: false
+            _active: false,
         };
     },
     computed: {
         active: {
-            get: function () { return this.$data._active; },
+            get: function () {
+                return this.$data._active;
+            },
             set: function (val) {
                 this.$data._active = val;
                 if (val) {
                     this.onSelected();
                 } // end if
-            }
-        }
+            },
+        },
     },
     mounted: function () {
         this.$parent.registerTab(this);
@@ -53,6 +60,6 @@ export default {
             headerElem.remove();
         } // end if
         */
-    }
+    },
 };
 </script>

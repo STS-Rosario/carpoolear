@@ -1,14 +1,29 @@
 <template>
-  <div class="trips container">
+    <div class="trips container">
         <div class="col-xs-24">
-            <h2>Mis <strong>próximos</strong> viajes</h2>
+            <h2>
+                Mis
+                <strong>próximos</strong>
+                viajes
+            </h2>
             <Loading :data="trips">
                 <div class="trips-list">
-                    <Trip v-for="trip in trips" :trip="trip" :user="user" :enableChangeSeats="true"></Trip>
+                    <Trip
+                        v-for="trip in trips"
+                        :trip="trip"
+                        :user="user"
+                        :enableChangeSeats="true"
+                    ></Trip>
                 </div>
-                <p slot="no-data" class="alert alert-warning"  role="alert">No tenés viajes creados</p>
+                <p slot="no-data" class="alert alert-warning" role="alert">
+                    No tenés viajes creados
+                </p>
                 <p slot="loading" class="alert alert-info" role="alert">
-                    <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
+                    <img
+                        src="https://carpoolear.com.ar/static/img/loader.gif"
+                        alt=""
+                        class="ajax-loader"
+                    />
                     Cargando viajes ...
                 </p>
             </Loading>
@@ -16,13 +31,26 @@
 
         <div class="col-xs-24">
             <Loading :data="passengerTrips" :hideOnEmpty="true">
-                <h2 slot="title" > Viajes a los que <strong>estoy subido</strong> </h2>
+                <h2 slot="title">
+                    Viajes a los que
+                    <strong>estoy subido</strong>
+                </h2>
                 <div class="trips-list">
-                    <Trip v-for="trip in passengerTrips" :trip="trip" :user="user"></Trip>
+                    <Trip
+                        v-for="trip in passengerTrips"
+                        :trip="trip"
+                        :user="user"
+                    ></Trip>
                 </div>
-                <p slot="no-data" class="alert alert-warning"  role="alert">No estas subido a ningún viaje.</p>
+                <p slot="no-data" class="alert alert-warning" role="alert">
+                    No estas subido a ningún viaje.
+                </p>
                 <p slot="loading" class="alert alert-info" role="alert">
-                    <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
+                    <img
+                        src="https://carpoolear.com.ar/static/img/loader.gif"
+                        alt=""
+                        class="ajax-loader"
+                    />
                     Cargando viajes ...
                 </p>
             </Loading>
@@ -31,11 +59,21 @@
             <h2>Mis viajes pasados</h2>
             <Loading :data="oldDriverTrips">
                 <div class="trips-list">
-                    <Trip v-for="trip in oldDriverTrips" :trip="trip" :user="user"></Trip>
+                    <Trip
+                        v-for="trip in oldDriverTrips"
+                        :trip="trip"
+                        :user="user"
+                    ></Trip>
                 </div>
-                <p slot="no-data" class="alert alert-warning"  role="alert">No has realizado ningún viaje aún</p>
+                <p slot="no-data" class="alert alert-warning" role="alert">
+                    No has realizado ningún viaje aún
+                </p>
                 <p slot="loading" class="alert alert-info" role="alert">
-                    <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
+                    <img
+                        src="https://carpoolear.com.ar/static/img/loader.gif"
+                        alt=""
+                        class="ajax-loader"
+                    />
                     Cargando viajes ...
                 </p>
             </Loading>
@@ -43,18 +81,30 @@
 
         <div class="col-xs-24" v-if="oldPassengerTrips">
             <Loading :data="oldPassengerTrips" :hideOnEmpty="true">
-                <h2 slot="title" > Viajes a los que me <strong>subí</strong> </h2>
+                <h2 slot="title">
+                    Viajes a los que me
+                    <strong>subí</strong>
+                </h2>
                 <div class="trips-list">
-                    <Trip v-for="trip in oldPassengerTrips" :trip="trip" :user="user"></Trip>
+                    <Trip
+                        v-for="trip in oldPassengerTrips"
+                        :trip="trip"
+                        :user="user"
+                    ></Trip>
                 </div>
-                <p slot="no-data" class="alert alert-warning"  role="alert">No te has subido a ningún viaje.</p>
+                <p slot="no-data" class="alert alert-warning" role="alert">
+                    No te has subido a ningún viaje.
+                </p>
                 <p slot="loading" class="alert alert-info" role="alert">
-                    <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
+                    <img
+                        src="https://carpoolear.com.ar/static/img/loader.gif"
+                        alt=""
+                        class="ajax-loader"
+                    />
                     Cargando viajes ...
                 </p>
             </Loading>
         </div>
-
     </div>
 </template>
 
@@ -72,7 +122,7 @@ import dialogs from '../../services/dialogs.js';
 
 export default {
     name: 'my-trips',
-    data () {
+    data() {
         return {
             showModalRequestDonation: false,
             donateValue: 0,
@@ -83,16 +133,16 @@ export default {
             driverTrips: [],
             passengerTrips: [],
             oldDriverTrips: [],
-            oldPassengerTrips: []
+            oldPassengerTrips: [],
         };
     },
     props: {
         id: {
             required: false,
-            default: 'me'
-        }
+            default: 'me',
+        },
     },
-    mounted () {
+    mounted() {
         this.driverTrips = this.tripAsDriver();
         this.passengerTrips = this.tripAsPassenger();
         this.pendingRate();
@@ -108,8 +158,8 @@ export default {
             oldTrips: 'myTrips/myOldTrips',
             oldPassengerTrips: 'myTrips/passengerOldTrips',
             subscriptions: 'subscriptions/subscriptions',
-            appConfig: 'auth/appConfig'
-        })
+            appConfig: 'auth/appConfig',
+        }),
     },
 
     methods: {
@@ -120,14 +170,14 @@ export default {
             oldTripsAsPassenger: 'trips/oldTripsAsPassenger',
             findSubscriptions: 'subscriptions/index',
             registerDonation: 'profile/registerDonation',
-            changeProperty: 'profile/changeProperty'
+            changeProperty: 'profile/changeProperty',
         }),
-        findTrip (id) {
+        findTrip(id) {
             if (this.trips) {
-                return this.trips.find(item => item.id === id);
+                return this.trips.find((item) => item.id === id);
             }
         },
-        updateScroll () {
+        updateScroll() {
             if (this.$route.query.loc) {
                 // window.scrollTo(0, document.body.scrollHeight);
                 // window.location.hash = this.$route.query.loc;
@@ -135,21 +185,21 @@ export default {
                 window.scrollTo(0, domNode.offsetTop - 150);
             }
         },
-        onDonateOnceTime () {
+        onDonateOnceTime() {
             if (this.donateValue > 0) {
                 var url = 'http://mpago.la/jgap'; // 50
                 switch (this.donateValue) {
-                case '100':
-                    url = 'http://mpago.la/CaSZ';
-                    break;
-                case '200':
-                    url = 'http://mpago.la/xntw';
-                    break;
-                case '500':
-                    url = 'http://mpago.la/QEiN';
-                    break;
-                default:
-                    break;
+                    case '100':
+                        url = 'http://mpago.la/CaSZ';
+                        break;
+                    case '200':
+                        url = 'http://mpago.la/xntw';
+                        break;
+                    case '500':
+                        url = 'http://mpago.la/QEiN';
+                        break;
+                    default:
+                        break;
                 }
                 window.open(url, '_blank');
                 this.showModalRequestDonation = false;
@@ -157,28 +207,34 @@ export default {
                     has_donated: 1,
                     has_denied: 0,
                     ammount: parseFloat(this.donateValue),
-                    trip_id: this.modalTripId
+                    trip_id: this.modalTripId,
                 };
                 this.registerDonation(data);
             } else {
-                dialogs.message('Tienes que seleccionar un valor de donación.', { duration: 10, estado: 'error' });
+                dialogs.message(
+                    'Tienes que seleccionar un valor de donación.',
+                    {
+                        duration: 10,
+                        estado: 'error',
+                    }
+                );
             }
         },
-        onDonateMonthly () {
+        onDonateMonthly() {
             if (this.donateValue > 0) {
                 var url = 'http://mpago.la/1w3aci'; // 50
                 switch (this.donateValue) {
-                case '100':
-                    url = 'http://mpago.la/BfZ';
-                    break;
-                case '200':
-                    url = 'http://mpago.la/P02H';
-                    break;
-                case '500':
-                    url = 'http://mpago.la/k8Xp';
-                    break;
-                default:
-                    break;
+                    case '100':
+                        url = 'http://mpago.la/BfZ';
+                        break;
+                    case '200':
+                        url = 'http://mpago.la/P02H';
+                        break;
+                    case '500':
+                        url = 'http://mpago.la/k8Xp';
+                        break;
+                    default:
+                        break;
                 }
                 window.open(url, '_blank');
                 this.showModalRequestDonation = false;
@@ -186,19 +242,25 @@ export default {
                     has_donated: 1,
                     has_denied: 0,
                     ammount: parseFloat(this.donateValue),
-                    trip_id: this.modalTripId
+                    trip_id: this.modalTripId,
                 };
                 this.registerDonation(data);
             } else {
-                dialogs.message('Tienes que seleccionar un valor de donación.', { duration: 10, estado: 'error' });
+                dialogs.message(
+                    'Tienes que seleccionar un valor de donación.',
+                    {
+                        duration: 10,
+                        estado: 'error',
+                    }
+                );
             }
         },
 
-        toPendingRates () {
+        toPendingRates() {
             if (this.pendingRatesValue) {
                 let data = {
                     property: 'do_not_alert_pending_rates',
-                    value: 1
+                    value: 1,
                 };
                 this.changeProperty(data).then(() => {
                     console.log('do not alert success');
@@ -206,58 +268,67 @@ export default {
             }
             this.showModalPendingRates = false;
         },
-        onMessageModalClose () {
+        onMessageModalClose() {
             this.showModalRequestDonation = false;
             let data = {
                 has_donated: 0,
                 has_denied: 1,
                 ammount: 0,
-                trip_id: this.modalTripId
+                trip_id: this.modalTripId,
             };
             this.registerDonation(data);
         },
-        onModalClose () {
+        onModalClose() {
             this.showModalRequestDonation = false;
             let data = {
                 has_donated: 0,
                 has_denied: 1,
                 ammount: 0,
-                trip_id: this.modalTripId
+                trip_id: this.modalTripId,
             };
             this.registerDonation(data);
         },
-        hasToShowModal (tripId) {
+        hasToShowModal(tripId) {
             let tripRateds = parseFloat(this.config.donation.trips_rated);
-            if (this.user && !this.user.monthly_donate) { // solo si el usuario no es donador mensual
+            if (this.user && !this.user.monthly_donate) {
+                // solo si el usuario no es donador mensual
                 if (!this.user.donations) {
                     // no tengo intento de donaciones este mes debe aparecer
                     this.showModalRequestDonation = true;
                     this.modalTripId = tripId;
                 } else {
                     // debe aparecerme una vez por viaje
-                    let donation = this.user.donations.find(d => d.trip_id === tripId);
+                    let donation = this.user.donations.find(
+                        (d) => d.trip_id === tripId
+                    );
                     if (!donation) {
                         // para la cantidad de `tripRated` viajes mensuales
-                        let donations = this.user.donations.filter(d => d.trip_id !== null);
+                        let donations = this.user.donations.filter(
+                            (d) => d.trip_id !== null
+                        );
                         if (donations && donations.length < tripRateds) {
                             this.showModalRequestDonation = true;
                             this.modalTripId = tripId;
                         } else {
-                            console.log('hasToShowModal: ya interactue con al menos dos viajes');
+                            console.log(
+                                'hasToShowModal: ya interactue con al menos dos viajes'
+                            );
                         }
                     } else {
-                        console.log('hasToShowModal: ya interactue con este viaje');
+                        console.log(
+                            'hasToShowModal: ya interactue con este viaje'
+                        );
                     }
                 }
             }
         },
-        onUserRated (data) {
+        onUserRated(data) {
             console.log('onUserRated', data);
             if (data.rating) {
                 // vote positivo
                 this.hasToShowModal(data.trip_id);
             }
-        }
+        },
     },
     watch: {
         trips: function () {
@@ -268,7 +339,10 @@ export default {
         },
         pendingRates: function (newValue, oldValue) {
             this.updateScroll();
-            if (!this.user.do_not_alert_pending_rates && !this.config.disable_user_hints) {
+            if (
+                !this.user.do_not_alert_pending_rates &&
+                !this.config.disable_user_hints
+            ) {
                 console.log('pendingRates', newValue, oldValue);
                 if (newValue && newValue.length > 0 && !this.alreadyAlerted) {
                     this.alreadyAlerted = true;
@@ -287,10 +361,10 @@ export default {
         },
         oldPassengerTrips: function () {
             this.updateScroll();
-        }/* ,
+        } /* ,
         subscriptions: function () {
             this.updateScroll();
-        } */
+        } */,
     },
     components: {
         Trip,
@@ -299,21 +373,21 @@ export default {
         RatePending,
         Tab,
         subscriptionItem,
-        modal
-    }
+        modal,
+    },
 };
 </script>
 
 <style scoped>
-    h2 {
-        font-weight: 300;
-    }
-    .donation-text {
-        margin-bottom: 1.5rem;
-    }
-    .donation-text p {
-        margin-top: -1rem;
-        font-size: 1.1rem;
-        margin-bottom: .5rem;
-    }
+h2 {
+    font-weight: 300;
+}
+.donation-text {
+    margin-bottom: 1.5rem;
+}
+.donation-text p {
+    margin-top: -1rem;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
 </style>

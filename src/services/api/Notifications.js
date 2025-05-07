@@ -1,15 +1,15 @@
 import TaggedApi from '../../classes/TaggedApi';
 
 class NotificationApi extends TaggedApi {
-    index (data = {}) {
+    index(data = {}) {
         return this.get('/api/notifications', data);
     }
 
-    count () {
+    count() {
         return this.get('/api/notifications/count');
     }
 
-    delete (id) {
+    delete(id) {
         return this.delete('/api/notifications/' + id);
     }
 }

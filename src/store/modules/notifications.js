@@ -5,57 +5,63 @@ const notificationApi = new NotificationApi();
 
 const state = {
     list: null,
-    count: 0
+    count: 0,
 };
 
 const getters = {
-    index: state => state.list,
-    count: state => state.count
+    index: (state) => state.list,
+    count: (state) => state.count,
 };
 
 const actions = {
-    index (store, data = {}) {
+    index(store, data = {}) {
         store.commit(types.NOTIFICATIONS_SET, null);
-        return notificationApi.index(data).then(response => {
-            store.commit(types.NOTIFICATIONS_SET, response.data);
-            return Promise.resolve(response.data);
-        }).catch(() => {
-            return Promise.reject(new Error());
-        });
+        return notificationApi
+            .index(data)
+            .then((response) => {
+                store.commit(types.NOTIFICATIONS_SET, response.data);
+                return Promise.resolve(response.data);
+            })
+            .catch(() => {
+                return Promise.reject(new Error());
+            });
     },
 
-    count (store) {
-        return notificationApi.count().then(response => {
-            store.commit(types.NOTIFICATIONS_COUNT, response.data);
-            return Promise.resolve(response.data);
-        }).catch(() => {
-            return Promise.reject(new Error());
-        });
+    count(store) {
+        return notificationApi
+            .count()
+            .then((response) => {
+                store.commit(types.NOTIFICATIONS_COUNT, response.data);
+                return Promise.resolve(response.data);
+            })
+            .catch(() => {
+                return Promise.reject(new Error());
+            });
     },
 
-    add (store) {
+    add(store) {
         store.commit(types.NOTIFICATIONS_COUNT, store.state.count + 1);
         console.log(store.state);
-    }
+    },
 };
 
 const mutations = {
-    [types.NOTIFICATIONS_SET] (state, list) {
+    [types.NOTIFICATIONS_SET](state, list) {
         state.list = list;
     },
 
-    [types.NOTIFICATIONS_COUNT] (state, count) {
+    [types.NOTIFICATIONS_COUNT](state, count) {
         state.count = count;
     },
 
-    [types.NOTIFICATIONS_DELETE] (state, id) {
-        let index = state.list.findIndex(item => item.id === id);
+    [types.NOTIFICATIONS_DELETE](state, id) {
+        let index = state.list.findIndex((item) => item.id === id);
         if (index >= 0) {
             state.list.splice(index, 1);
         } else {
             console.error('Notifications not found on delete');
         }
-    }
+    },
 };
 
 export default {
@@ -63,5 +69,5 @@ export default {
     state,
     getters,
     actions,
-    mutations
+    mutations,
 };

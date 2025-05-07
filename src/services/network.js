@@ -6,28 +6,28 @@ import axios from 'axios';
 const API_URL = process.env.API_URL;
 
 class MyPromise {
-    constructor (resolve, reject, promise = null) {
+    constructor(resolve, reject, promise = null) {
         if (!promise) {
             this.promise = new Promise(resolve, reject);
         } else {
             this.promise = promise;
         }
     }
-    then (callback, onError) {
+    then(callback, onError) {
         let tempPromise = this.promise.then(callback, onError);
         let myTempPromise = new MyPromise(null, null, tempPromise);
         myTempPromise.abort = this.abort;
         return myTempPromise;
     }
 
-    catch (func) {
+    catch(func) {
         let tempPromise = this.promise.catch(func);
         let myTempPromise = new MyPromise(null, null, tempPromise);
         myTempPromise.abort = this.abort;
         return myTempPromise;
     }
 
-    finally (func) {
+    finally(func) {
         let tempPromise = this.promise.finally(func);
         let myTempPromise = new MyPromise(null, null, tempPromise);
         myTempPromise.abort = this.abort;
@@ -38,39 +38,41 @@ class MyPromise {
 export default {
     pendingRequest: new TaggedList(),
 
-    getBaseURL () {
+    getBaseURL() {
         return API_URL;
     },
 
-    addRequest (xhr, tags) {
+    addRequest(xhr, tags) {
         this.pendingRequest.add(tags, xhr);
     },
 
-    getHeader (headers) {
+    getHeader(headers) {
         let authHeader = store.getters['auth/authHeader'];
         Object.assign(headers, authHeader);
         return headers;
     },
 
-    newCancelToken () {
+    newCancelToken() {
         let CancelToken = axios.CancelToken;
         return CancelToken.source();
     },
 
-    processResponse (response, source) {
+    processResponse(response, source) {
         let promise = new MyPromise((resolve, reject) => {
-            response.then((response) => {
-                resolve(response.data);
-            }).catch((resp) => {
-                // Revisar el tipo de error!
-                if (resp.response) {
-                    let data = resp.response.data;
-                    let status = resp.response.status;
-                    reject({ data, status });
-                } else {
-                    reject(resp);
-                }
-            });
+            response
+                .then((response) => {
+                    resolve(response.data);
+                })
+                .catch((resp) => {
+                    // Revisar el tipo de error!
+                    if (resp.response) {
+                        let data = resp.response.data;
+                        let status = resp.response.status;
+                        reject({ data, status });
+                    } else {
+                        reject(resp);
+                    }
+                });
         });
         promise.abort = () => {
             source.cancel('Abort by the system');
@@ -78,53 +80,49 @@ export default {
         return promise;
     },
 
-    get (url, params, headers = {}) {
+    get(url, params, headers = {}) {
         let source = this.newCancelToken();
-        return this.processResponse(axios.get(
-            API_URL + url,
-            {
+        return this.processResponse(
+            axios.get(API_URL + url, {
                 params: params,
                 headers: this.getHeader(headers),
-                cancelToken: source.token
-            }
-        ), source);
+                cancelToken: source.token,
+            }),
+            source
+        );
     },
 
-    post (url, body, headers = {}) {
+    post(url, body, headers = {}) {
         let source = this.newCancelToken();
-        return this.processResponse(axios.post(
-            API_URL + url,
-            body,
-            {
+        return this.processResponse(
+            axios.post(API_URL + url, body, {
                 headers: this.getHeader(headers),
-                cancelToken: source.token
-            }
-        )
-        , source);
+                cancelToken: source.token,
+            }),
+            source
+        );
     },
 
-    delete (url, params, headers = {}) {
+    delete(url, params, headers = {}) {
         let source = this.newCancelToken();
-        return this.processResponse(axios.delete(
-            API_URL + url,
-            {
+        return this.processResponse(
+            axios.delete(API_URL + url, {
                 params: params,
                 headers: this.getHeader(headers),
-                cancelToken: source.token
-            }
-        ), source);
+                cancelToken: source.token,
+            }),
+            source
+        );
     },
 
-    put (url, body, headers = {}) {
+    put(url, body, headers = {}) {
         let source = this.newCancelToken();
-        return this.processResponse(axios.put(
-            API_URL + url,
-            body,
-            {
+        return this.processResponse(
+            axios.put(API_URL + url, body, {
                 headers: this.getHeader(headers),
-                cancelToken: source.token
-            }
-        ), source);
-    }
-
+                cancelToken: source.token,
+            }),
+            source
+        );
+    },
 };

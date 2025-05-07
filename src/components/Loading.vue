@@ -1,12 +1,10 @@
 <template>
     <div v-if="(data && data.length > 0) || !hideOnEmpty">
-        <slot name="title" ></slot>
+        <slot name="title"></slot>
         <template v-if="data != null">
-            <slot v-if="data.length > 0">
-
-            </slot>
+            <slot v-if="data.length > 0"></slot>
             <slot name="no-data" v-else>
-                <p class="alert alert-warning"  role="alert">No hay viajes</p>
+                <p class="alert alert-warning" role="alert">No hay viajes</p>
             </slot>
         </template>
         <slot name="loading" v-else>
@@ -23,20 +21,20 @@ import spinner from './Spinner.vue';
 
 export default {
     name: 'loading',
-    mounted () {
+    mounted() {
         // this.search();
     },
     props: {
         data: {
-            required: true
+            required: true,
         },
         hideOnEmpty: {
             type: Boolean,
-            default: false
-        }
+            default: false,
+        },
     },
     components: {
-        spinner
-    }
+        spinner,
+    },
 };
 </script>

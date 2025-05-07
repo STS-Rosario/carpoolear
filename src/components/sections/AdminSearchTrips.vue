@@ -1,106 +1,218 @@
 <template>
     <div>
-        <div class="row text-center foreignCountry-select foreignCountry-select-desktop" v-show="!isMobile">
+        <div
+            class="row text-center foreignCountry-select foreignCountry-select-desktop"
+            v-show="!isMobile"
+        >
             <div class="foreignCountry-select_wrapper">
-                <input type="checkbox" v-model="allowForeignPoints" id="cbxAllowForeignPoints" class="cbx" />
+                <input
+                    type="checkbox"
+                    v-model="allowForeignPoints"
+                    id="cbxAllowForeignPoints"
+                    class="cbx"
+                />
                 <label for="cbxAllowForeignPoints" class="cbx_label">
-                    Origen o destino fuera de {{ config ? config.country_name : '' }}
+                    Origen o destino fuera de
+                    {{ config ? config.country_name : '' }}
                 </label>
-                <span class="tooltip-bottom" data-tooltip="Marcando esta opción vas a poder seleccionar origen o destino fuera de Argentina. Recordá averiguar con la aseguradora del auto, si tenés cobertura contra terceros fuera de la Argentina. Si no es así, averiguá con ella para obtener la extensión fuera de Argentina, de forma de tener cobertura durante el viaje"></span>
+                <span
+                    class="tooltip-bottom"
+                    data-tooltip="Marcando esta opción vas a poder seleccionar origen o destino fuera de Argentina. Recordá averiguar con la aseguradora del auto, si tenés cobertura contra terceros fuera de la Argentina. Si no es así, averiguá con ella para obtener la extensión fuera de Argentina, de forma de tener cobertura durante el viaje"
+                ></span>
                 <i class="fa fa-info-circle" aria-hidden="true"></i>
             </div>
         </div>
         <div class="row search-section">
             <div class="col-xs-12 col-md-4">
-                <button class="btn btn-option" :class="{'active': !isPassenger}" @click="isPassenger = false" >
+                <button
+                    class="btn btn-option"
+                    :class="{ active: !isPassenger }"
+                    @click="isPassenger = false"
+                >
                     <!--<img alt="" :src="isPassenger ? chofer_logo_gris : chofer_logo_blanco" />-->
                     <span class="fa fa-car" aria-hidden="true"></span>
                     <span>conductor</span>
                 </button>
             </div>
             <div class="col-xs-12 col-md-4">
-                <button class="btn btn-option" :class="{'active': isPassenger}" @click="isPassenger = true" >
-                    <img alt="" :src="isPassenger ? pasajero_logo_blanco : pasajero_logo_gris" />
+                <button
+                    class="btn btn-option"
+                    :class="{ active: isPassenger }"
+                    @click="isPassenger = true"
+                >
+                    <img
+                        alt=""
+                        :src="
+                            isPassenger
+                                ? pasajero_logo_blanco
+                                : pasajero_logo_gris
+                        "
+                    />
                     <span>pasajero</span>
                 </button>
             </div>
-            <div class="row text-center foreignCountry-select foreignCountry-select-mobile" v-show="isMobile">
+            <div
+                class="row text-center foreignCountry-select foreignCountry-select-mobile"
+                v-show="isMobile"
+            >
                 <div class="foreignCountry-select_wrapper">
-                    <input type="checkbox" v-model="allowForeignPoints" id="cbxAllowForeignPoints" class="cbx" />
+                    <input
+                        type="checkbox"
+                        v-model="allowForeignPoints"
+                        id="cbxAllowForeignPoints"
+                        class="cbx"
+                    />
                     <label for="cbxAllowForeignPoints" class="cbx_label">
-                        Origen o destino fuera de {{ config ? config.country_name : '' }}
+                        Origen o destino fuera de
+                        {{ config ? config.country_name : '' }}
                     </label>
-                    <span class="tooltip-bottom" data-tooltip="Marcando esta opción vas a poder seleccionar origen o destino fuera de Argentina. Recordá averiguar con la aseguradora del auto, si tenés cobertura contra terceros fuera de la Argentina. Si no es así, averiguá con ella para obtener la extensión fuera de Argentina, de forma de tener cobertura durante el viaje"></span>
+                    <span
+                        class="tooltip-bottom"
+                        data-tooltip="Marcando esta opción vas a poder seleccionar origen o destino fuera de Argentina. Recordá averiguar con la aseguradora del auto, si tenés cobertura contra terceros fuera de la Argentina. Si no es así, averiguá con ella para obtener la extensión fuera de Argentina, de forma de tener cobertura durante el viaje"
+                    ></span>
                     <i class="fa fa-info-circle" aria-hidden="true"></i>
                 </div>
             </div>
 
             <div class="col-xs-24 col-md-8 gmap-autocomplete origin">
-                <Autocomplete :placeholder="'Origen'" name="from_town" ref="from_town" :value="from_town.name" v-on:place_changed="(data) => getPlace(0, data)" :classes="'form-control form-control-with-icon form-control-map-autocomplete'" :country="allowForeignPoints ? null : 'AR'"></Autocomplete>
+                <Autocomplete
+                    :placeholder="'Origen'"
+                    name="from_town"
+                    ref="from_town"
+                    :value="from_town.name"
+                    v-on:place_changed="(data) => getPlace(0, data)"
+                    :classes="'form-control form-control-with-icon form-control-map-autocomplete'"
+                    :country="allowForeignPoints ? null : 'AR'"
+                ></Autocomplete>
                 <!-- <GmapAutocomplete name="from_town" ref="from_town" :selectFirstOnEnter="true" :types="['(cities)']"  :componentRestrictions="allowForeignPoints ? null : {country: 'AR'}"  placeholder="Origen"  :value="from_town.name" v-on:place_changed="(data) => getPlace(0, data)" class="form-control form-control-with-icon form-control-map-autocomplete"> </GmapAutocomplete>-->
                 <div class="date-picker--cross">
-                    <i v-on:click="resetInput('from_town')" class="fa fa-times" aria-hidden="true"></i>
+                    <i
+                        v-on:click="resetInput('from_town')"
+                        class="fa fa-times"
+                        aria-hidden="true"
+                    ></i>
                 </div>
                 <div class="optional-warning text-center">(opcional)</div>
                 <div class="swap btn">
-                    <img alt="swap" class='swap-horizontal' :src="swap_horizontal" @click="swapCities" />
-                    <img alt="swap" class='swap-vertical' :src="swap_vertical" @click="swapCities" />
+                    <img
+                        alt="swap"
+                        class="swap-horizontal"
+                        :src="swap_horizontal"
+                        @click="swapCities"
+                    />
+                    <img
+                        alt="swap"
+                        class="swap-vertical"
+                        :src="swap_vertical"
+                        @click="swapCities"
+                    />
                 </div>
             </div>
             <div class="col-xs-24 col-md-8 gmap-autocomplete destiny">
-                <Autocomplete :placeholder="'Destino'" name="to_town" ref="to_town" :value="to_town.name" v-on:place_changed="(data) => getPlace(1, data)" :classes="'form-control form-control-with-icon form-control-map-autocomplete'" :country="allowForeignPoints ? null : 'AR'"></Autocomplete>
+                <Autocomplete
+                    :placeholder="'Destino'"
+                    name="to_town"
+                    ref="to_town"
+                    :value="to_town.name"
+                    v-on:place_changed="(data) => getPlace(1, data)"
+                    :classes="'form-control form-control-with-icon form-control-map-autocomplete'"
+                    :country="allowForeignPoints ? null : 'AR'"
+                ></Autocomplete>
                 <!-- <GmapAutocomplete name="to_town" ref="to_town" :selectFirstOnEnter="true" :types="['(cities)']"  :componentRestrictions="allowForeignPoints ? null : {country: 'AR'}"  placeholder="Destino"  :value="to_town.name" v-on:place_changed="(data) => getPlace(1, data)" class="form-control form-control-with-icon form-control-map-autocomplete"> </GmapAutocomplete> -->
                 <div class="date-picker--cross">
-                    <i v-on:click="resetInput('to_town')" class="fa fa-times" aria-hidden="true"></i>
+                    <i
+                        v-on:click="resetInput('to_town')"
+                        class="fa fa-times"
+                        aria-hidden="true"
+                    ></i>
                 </div>
                 <div class="optional-warning text-center">(opcional)</div>
             </div>
 
-
             <div class="col-xs-24 col-md-4 no-padding">
-                <DatePicker ref="datepicker" :value="from_date" :class="{'has-error': dateError.state}" v-on:date_changed="(date) => this.from_date = date"></DatePicker>
+                <DatePicker
+                    ref="datepicker"
+                    :value="from_date"
+                    :class="{ 'has-error': dateError.state }"
+                    v-on:date_changed="(date) => (this.from_date = date)"
+                ></DatePicker>
                 <div class="optional-warning text-center">(opcional)</div>
             </div>
             <div class="col-xs-24 col-md-4 no-padding">
-                <DatePicker ref="datepicker" :value="to_date" :class="{'has-error': dateError.state}" v-on:date_changed="(date) => this.to_date = date"></DatePicker>
+                <DatePicker
+                    ref="datepicker"
+                    :value="to_date"
+                    :class="{ 'has-error': dateError.state }"
+                    v-on:date_changed="(date) => (this.to_date = date)"
+                ></DatePicker>
                 <div class="optional-warning text-center">(opcional)</div>
             </div>
-
-
 
             <div class="col-xs-24 col-md-8 gmap-autocomplete origin">
                 <div class="search-users">
-                    <input v-model="userSearch" v-on:keyup="onSearchUsers" type="text" class="form-control form-control-with-icon search-users-input" placeholder="Escribe un nombre" />
+                    <input
+                        v-model="userSearch"
+                        v-on:keyup="onSearchUsers"
+                        type="text"
+                        class="form-control form-control-with-icon search-users-input"
+                        placeholder="Escribe un nombre"
+                    />
                     <div v-if="userSearch.length != 0 && showAutocomplete">
                         <loading class="autocomplete-users" :data="userList">
-                            <li v-for="user in userList" class="list-group-item conversation_header" @click="selectUser(user)"  v-bind:key="user.id">
+                            <li
+                                v-for="user in userList"
+                                class="list-group-item conversation_header"
+                                @click="selectUser(user)"
+                                v-bind:key="user.id"
+                            >
                                 <div class="media">
-                                  <div class="media-body">
-                                    <h4 class="media-heading"><span class="conversation-title">{{ user.name }}</span></h4>
-                                    <span> {{ user.email }} </span>
-                                  </div>
+                                    <div class="media-body">
+                                        <h4 class="media-heading">
+                                            <span class="conversation-title">{{
+                                                user.name
+                                            }}</span>
+                                        </h4>
+                                        <span>{{ user.email }}</span>
+                                    </div>
                                 </div>
                             </li>
-                            <li slot="no-data" class="list-group-item alert alert-warning"  role="alert">No se encontro ningun usuario</li>
-                            <li slot="loading" class="list-group-item alert alert-info" role="alert">
-                                <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
+                            <li
+                                slot="no-data"
+                                class="list-group-item alert alert-warning"
+                                role="alert"
+                            >
+                                No se encontro ningun usuario
+                            </li>
+                            <li
+                                slot="loading"
+                                class="list-group-item alert alert-info"
+                                role="alert"
+                            >
+                                <img
+                                    src="https://carpoolear.com.ar/static/img/loader.gif"
+                                    alt=""
+                                    class="ajax-loader"
+                                />
                                 Cargando usuarios ...
                             </li>
                         </loading>
                     </div>
                 </div>
                 <div class="date-picker--cross">
-                    <i v-on:click="resetUser()" class="fa fa-times" aria-hidden="true"></i>
+                    <i
+                        v-on:click="resetUser()"
+                        class="fa fa-times"
+                        aria-hidden="true"
+                    ></i>
                 </div>
                 <div class="optional-warning text-center">(opcional)</div>
             </div>
 
-
-
             <div class="col-xs-24 col-md-8 col-lg-8">
-                <button class="btn btn-primary btn-search" @click="emit">Buscar</button>
+                <button class="btn btn-primary btn-search" @click="emit">
+                    Buscar
+                </button>
             </div>
-
         </div>
     </div>
 </template>
@@ -115,7 +227,7 @@ import Autocomplete from '../Autocomplete';
 
 export default {
     name: 'search-trip',
-    data () {
+    data() {
         return {
             minDate: moment().toDate(),
             isPassenger: false,
@@ -124,47 +236,54 @@ export default {
                 name: '',
                 location: null,
                 radio: 0,
-                country: 'ARG'
+                country: 'ARG',
             },
             to_town: {
                 name: '',
                 location: null,
                 radio: 0,
-                country: 'ARG'
+                country: 'ARG',
             },
             from_date: '',
             to_date: '',
             dateAnswer: '',
             dateError: {
                 message: '',
-                state: ''
+                state: '',
             },
             user: '',
             showAutocomplete: false,
             userSearch: '',
             userList: [],
-            chofer_logo_blanco: process.env.ROUTE_BASE + 'static/img/icono-conductor-blanco.png',
-            pasajero_logo_blanco: process.env.ROUTE_BASE + 'static/img/icono-pasajero-blanco.png',
-            chofer_logo_gris: process.env.ROUTE_BASE + 'static/img/icono-conductor-gris.png',
-            pasajero_logo_gris: process.env.ROUTE_BASE + 'static/img/icono-pasajero-gris.png',
-            swap_horizontal: process.env.ROUTE_BASE + 'static/img/flechas_horizontales.png',
-            swap_vertical: process.env.ROUTE_BASE + 'static/img/flechas_verticales.png',
+            chofer_logo_blanco:
+                process.env.ROUTE_BASE +
+                'static/img/icono-conductor-blanco.png',
+            pasajero_logo_blanco:
+                process.env.ROUTE_BASE + 'static/img/icono-pasajero-blanco.png',
+            chofer_logo_gris:
+                process.env.ROUTE_BASE + 'static/img/icono-conductor-gris.png',
+            pasajero_logo_gris:
+                process.env.ROUTE_BASE + 'static/img/icono-pasajero-gris.png',
+            swap_horizontal:
+                process.env.ROUTE_BASE + 'static/img/flechas_horizontales.png',
+            swap_vertical:
+                process.env.ROUTE_BASE + 'static/img/flechas_verticales.png',
             allowForeignPoints: false,
-            options: []
+            options: [],
         };
     },
     computed: {
         ...mapGetters({
             isMobile: 'device/isMobile',
-            config: 'auth/appConfig'
-        })
+            config: 'auth/appConfig',
+        }),
     },
     methods: {
         ...mapActions({
             search: 'trips/tripsSearch',
-            searchUsers: 'admin/searchUsers'
+            searchUsers: 'admin/searchUsers',
         }),
-        onSearchUsers () {
+        onSearchUsers() {
             this.showAutocomplete = true;
             this.searchUsers(this.userSearch)
                 .then((data) => {
@@ -175,13 +294,13 @@ export default {
                     this.userList = [];
                 });
         },
-        selectUser (user) {
+        selectUser(user) {
             this.showAutocomplete = false;
             this.userList = null;
             this.userSearch = user.name;
             this.user = user;
         },
-        getPlace (i, data) {
+        getPlace(i, data) {
             console.log('getPlace', data);
             let obj = {};
             // FIXME falta bounding box
@@ -190,9 +309,9 @@ export default {
                     name: data.name,
                     location: {
                         lat: parseFloat(data.lat),
-                        lng: parseFloat(data.lng)
+                        lng: parseFloat(data.lng),
                     },
-                    country: data.country
+                    country: data.country,
                 };
             }
             if (i === 0) {
@@ -201,7 +320,7 @@ export default {
                 this.to_town = obj;
             }
         },
-        emit () {
+        emit() {
             let params = {};
             let foreignCountry = 0;
             if (this.from_town.location) {
@@ -214,7 +333,12 @@ export default {
             } else {
                 params.origin_name = this.$refs['from_town'].input;
             }
-            if (this.from_town && this.from_town.country && this.from_town.country.toLowerCase() !== this.config.osm_country.toLowerCase()) {
+            if (
+                this.from_town &&
+                this.from_town.country &&
+                this.from_town.country.toLowerCase() !==
+                    this.config.osm_country.toLowerCase()
+            ) {
                 foreignCountry++;
             }
             if (this.to_town.location) {
@@ -226,7 +350,12 @@ export default {
             } else {
                 params.destination_name = this.$refs['to_town'].input;
             }
-            if (this.to_town && this.to_town.country && this.to_town.country.toLowerCase() !== this.config.osm_country.toLowerCase()) {
+            if (
+                this.to_town &&
+                this.to_town.country &&
+                this.to_town.country.toLowerCase() !==
+                    this.config.osm_country.toLowerCase()
+            ) {
                 foreignCountry++;
             }
             if (this.from_date) {
@@ -247,10 +376,16 @@ export default {
             if (foreignCountry < 2) {
                 this.$emit('admin-trip-search', params);
             } else {
-                dialogs.message('Origen y destino no pueden ser ambos del exterior.', { duration: 10, estado: 'error' });
+                dialogs.message(
+                    'Origen y destino no pueden ser ambos del exterior.',
+                    {
+                        duration: 10,
+                        estado: 'error',
+                    }
+                );
             }
         },
-        resetInput (input) {
+        resetInput(input) {
             if (this.$refs[input]) {
                 this.$refs[input].input = '';
             }
@@ -258,192 +393,190 @@ export default {
                 name: '',
                 location: null,
                 radio: 0,
-                country: this.config.osm_country
+                country: this.config.osm_country,
             };
         },
-        resetUser () {
+        resetUser() {
             this.user = {};
             this.userSearch = '';
         },
-        swapCities () {
+        swapCities() {
             let temp;
             temp = this['to_town'];
             this['to_town'] = Object.assign({}, this['from_town']);
             this['from_town'] = Object.assign({}, temp);
         },
-        clear () {
+        clear() {
             this.resetInput('from_town');
             this.$refs['from_town'].input = '';
             this.resetInput('to_town');
             this.$refs['to_town'].input = '';
             this.$refs.datepicker.clear();
         },
-        onSearch (search, loading) {
+        onSearch(search, loading) {
             loading(true);
             this.search(loading, search, this);
-        }
+        },
     },
-    props: [
-        'params'
-    ],
+    props: ['params'],
     components: {
         DatePicker,
         Autocomplete,
-        loading
-    }
+        loading,
+    },
 };
 </script>
 
 <style scoped>
+.search-section {
+    padding-left: 0;
+    padding-right: 0;
+}
+.search-section .btn-option {
+    width: 100%;
+    margin-bottom: 1em;
+}
+.search-users {
+    position: relative;
+}
+
+.search-users-input {
+    line-height: 42px;
+}
+
+.autocomplete-users {
+    position: absolute;
+    top: 100%;
+    z-index: 100;
+    width: 100%;
+    cursor: pointer;
+}
+
+.btn-option {
+    height: 72px;
+}
+.btn-option .fa,
+.btn-option img {
+    width: 20px;
+    display: inline-block;
+    top: 10px;
+    margin-right: 0;
+    font-size: 20px;
+}
+.btn-option span {
+    vertical-align: middle;
+    display: inline-block;
+    width: calc(100% - 30px);
+}
+.swap {
+    display: none;
+}
+.swap-horizontal {
+    display: none;
+}
+.foreignCountry-select {
+    margin-bottom: 1em;
+}
+.foreignCountry-select-mobile {
+    width: 100%;
+}
+.foreignCountry-select-desktop .foreignCountry-select_wrapper {
+    margin-left: -10%;
+}
+.cbx,
+.cbx_label {
+    vertical-align: middle;
+    margin: 0;
+}
+.cbx_label {
+    margin-left: 0.5em;
+}
+.optional-warning {
+    font-size: 0.8em;
+    color: #999;
+    position: relative;
+    top: -0.8em;
+    clear: both;
+}
+@media only screen and (min-width: 300px) {
+    .swap {
+        bottom: -6px;
+        left: -30px;
+        border-radius: 0;
+        position: absolute;
+        z-index: 1;
+        text-align: center;
+        cursor: pointer;
+        background-color: #eee;
+        box-sizing: border-box;
+        padding: 2px 6px 3px;
+        border: 1px solid #aaa;
+        display: inline-block;
+        margin: 0em;
+    }
+    .search-section {
+        margin-left: 30px;
+        padding-right: 15px;
+    }
+}
+@media only screen and (min-width: 429px) {
+    .btn-option {
+        height: initial;
+    }
+    .btn-option img {
+        width: initial;
+        display: initial;
+        top: initial;
+        margin-right: 6px;
+    }
+    .btn-option span {
+        display: initial;
+        width: initial;
+    }
+}
+@media only screen and (min-width: 768px) {
     .search-section {
         padding-left: 0;
         padding-right: 0;
+        width: calc(100% - 30px);
     }
-    .search-section .btn-option {
+}
+@media only screen and (min-width: 856px) {
+    .search-section {
         width: 100%;
-        margin-bottom: 1em;
+        margin-left: 0;
+        padding-left: 0;
     }
-    .search-users {
-        position: relative;
+}
+@media only screen and (min-width: 992px) {
+    .swap {
+        bottom: unset;
+        top: 20px;
+        right: -17px;
+        left: unset;
     }
-
-    .search-users-input {
-        line-height: 42px;
-    }
-
-    .autocomplete-users {
-        position: absolute;
-        top: 100%;
-        z-index: 100;
-        width: 100%;
-        cursor: pointer;
-    }
-
     .btn-option {
-        height: 72px;
-    }
-    .btn-option .fa,
-    .btn-option img {
-        width: 20px;
-        display: inline-block;
-        top: 10px;
-        margin-right: 0;
-        font-size: 20px;
+        height: 66px;
+        padding: 1em 0.4em;
     }
     .btn-option span {
         vertical-align: middle;
         display: inline-block;
         width: calc(100% - 30px);
     }
-    .swap {
-        display: none;
+    .btn-option img {
+        width: 20px;
+        display: inline-block;
+        top: 10px;
+        margin-right: 0;
     }
+}
+@media only screen and (min-width: 992px) {
     .swap-horizontal {
+        display: block;
+    }
+    .swap-vertical {
         display: none;
     }
-    .foreignCountry-select {
-        margin-bottom: 1em;
-    }
-    .foreignCountry-select-mobile {
-        width: 100%;
-    }
-    .foreignCountry-select-desktop .foreignCountry-select_wrapper {
-        margin-left: -10%;
-    }
-    .cbx,
-    .cbx_label {
-        vertical-align: middle;
-        margin: 0;
-    }
-    .cbx_label {
-        margin-left: .5em;
-    }
-    .optional-warning {
-        font-size: .8em;
-        color: #999;
-        position: relative;
-        top: -.8em;
-        clear: both;
-    }
-    @media only screen and (min-width: 300px) {
-        .swap {
-            bottom: -6px;
-            left: -30px;
-            border-radius: 0;
-            position: absolute;
-            z-index: 1;
-            text-align: center;
-            cursor: pointer;
-            background-color: #eee;
-            box-sizing: border-box;
-            padding: 2px 6px 3px;
-            border: 1px solid #aaa;
-            display: inline-block;
-            margin: 0em;
-        }
-        .search-section {
-            margin-left: 30px;
-            padding-right: 15px;
-        }
-    }
-    @media only screen and (min-width: 429px) {
-        .btn-option {
-            height: initial;
-        }
-        .btn-option img {
-            width: initial;
-            display: initial;
-            top: initial;
-            margin-right: 6px;
-        }
-        .btn-option span {
-            display: initial;
-            width: initial;
-        }
-    }
-    @media only screen and (min-width: 768px) {
-        .search-section {
-            padding-left: 0;
-            padding-right: 0;
-            width: calc(100% - 30px);
-        }
-    }
-    @media only screen and (min-width: 856px) {
-        .search-section {
-             width: 100%;
-             margin-left: 0;
-             padding-left: 0;
-        }
-    }
-    @media only screen and (min-width: 992px) {
-        .swap {
-            bottom: unset;
-            top: 20px;
-            right: -17px;
-            left: unset;
-        }
-        .btn-option {
-            height: 66px;
-            padding: 1em .4em;
-        }
-        .btn-option span {
-            vertical-align: middle;
-            display: inline-block;
-            width: calc(100% - 30px);
-        }
-        .btn-option img {
-            width: 20px;
-            display: inline-block;
-            top: 10px;
-            margin-right: 0;
-        }
-    }
-    @media only screen and (min-width: 992px) {
-        .swap-horizontal {
-            display: block;
-        }
-        .swap-vertical {
-            display: none;
-        }
-    }
+}
 </style>

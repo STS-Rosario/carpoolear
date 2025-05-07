@@ -1,3 +1,3 @@
-export const dummyGetter = state => {
+export const dummyGetter = (state) => {
     return 'Hello world!';
 };

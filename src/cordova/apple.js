@@ -1,6 +1,6 @@
 /* jshint esversion: 6 */
 export default {
-    login () {
+    login() {
         return new Promise((resolve, reject) => {
             window.SignInWithApple.isAvailable().then(function (isAvailable) {
                 console.log('SignInWithApple', isAvailable);
@@ -8,15 +8,19 @@ export default {
                     window.SignInWithApple.request({
                         requestedScopes: [
                             window.SignInWithApple.Scope.Email,
-                            window.SignInWithApple.Scope.FullName
+                            window.SignInWithApple.Scope.FullName,
                         ],
-                        requestedOperation: window.SignInWithApple.Operation.Login
+                        requestedOperation:
+                            window.SignInWithApple.Operation.Login,
                     }).then(function (credential) {
-                        console.log('SignInWithApple credentials: ', credential);
+                        console.log(
+                            'SignInWithApple credentials: ',
+                            credential
+                        );
                         resolve(credential);
                     });
                 }
             });
         });
-    }
+    },
 };

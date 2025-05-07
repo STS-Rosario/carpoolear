@@ -27,5 +27,5 @@ export {
     NotificationApi,
     SubscriptionApi,
     AdminApi,
-    ReferencesApi
+    ReferencesApi,
 };

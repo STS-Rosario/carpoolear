@@ -29,49 +29,50 @@ export default {
         ProfileInfo,
         ProfileRates,
         MyTrips,
-        ProfileTrip
+        ProfileTrip,
     },
 
     props: {
         id: {
             required: false,
-            default: 'me'
+            default: 'me',
         },
         userProfile: {
-            required: false
+            required: false,
         },
         activeTab: {
-            required: false
-        }
+            required: false,
+        },
     },
 
-    data () {
+    data() {
         return {
-            currentView: null
+            currentView: null,
         };
     },
 
     computed: {
         ...mapGetters({
-            'user': 'auth/user',
-            'profile': 'profile/user'
+            user: 'auth/user',
+            profile: 'profile/user',
         }),
-        viajesHeaderTitle () {
-            return (this.id === 'me' || this.id === this.user.id) ? this.$t('misViajes') : this.$t('viajes');
+        viajesHeaderTitle() {
+            return this.id === 'me' || this.id === this.user.id
+                ? this.$t('misViajes')
+                : this.$t('viajes');
         },
-        isMyOwnProfile () {
-            return (this.id === 'me' || this.id === this.user.id);
-        }
+        isMyOwnProfile() {
+            return this.id === 'me' || this.id === this.user.id;
+        },
     },
 
     methods: {
         ...mapActions({
             setTitle: 'actionbars/setTitle',
             setProfile: 'profile/setUser',
-            setProfileByID: 'profile/setUserByID'
-
+            setProfileByID: 'profile/setUserByID',
         }),
-        updateProfile () {
+        updateProfile() {
             if (this.id === 'me' || this.id === this.user.id) {
                 this.setTitle('Mi Perfil');
                 this.setProfile(this.user);
@@ -80,27 +81,36 @@ export default {
                 if (this.userProfile) {
                     this.setTitle(this.userProfile.name);
                 }
-                this.setProfileByID({ id: this.id, userProfile: this.userProfile }).then(() => {
-                    this.setTitle(this.profile.name);
-                }).catch(() => {
-                    this.$router.replace({ name: 'trips' });
-                });
+                this.setProfileByID({
+                    id: this.id,
+                    userProfile: this.userProfile,
+                })
+                    .then(() => {
+                        this.setTitle(this.profile.name);
+                    })
+                    .catch(() => {
+                        this.$router.replace({ name: 'trips' });
+                    });
                 this.currentView = 'profile-trip';
             }
         },
-        onBackClick () {
+        onBackClick() {
             router.back();
         },
     },
     watch: {
-        '$route': function () {
+        $route: function () {
             this.updateProfile();
-        }
+        },
     },
 
-    mounted () {
+    mounted() {
         let index = 1;
-        if (router.history && router.history.current && router.history.current.hash) {
+        if (
+            router.history &&
+            router.history.current &&
+            router.history.current.hash
+        ) {
             index = parseInt(router.history.current.hash.replace('#', ''), 10);
         }
         if (this.activeTab) {
@@ -112,7 +122,7 @@ export default {
         this.updateProfile();
         bus.on('back-click', this.onBackClick);
     },
-    beforeDestroy () {
+    beforeDestroy() {
         bus.off('back-click', this.onBackClick);
     },
 };
