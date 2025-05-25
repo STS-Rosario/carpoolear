@@ -1517,11 +1517,13 @@ import spinner from '../Spinner.vue';
 import moment from 'moment';
 import { last } from 'lodash';
 import TripApi from '../../services/api/Trips';
+import UserApi from '../../services/api/User';
 import autocomplete from '../Autocomplete';
 import SvgItem from '../SvgItem';
 import bus from '../../services/bus-event.js';
 
 let tripApi = new TripApi();
+let userApi = new UserApi();
 
 class Error {
     constructor(state = false, message = '') {
@@ -1580,6 +1582,7 @@ export default {
             dateAnswer: this.date,
             time: '12:00',
             price: 0,
+            needsToPayForNextTrip: false,
             returnPrice: 0,
             duration: 0,
             passengers: 0,
@@ -1672,9 +1675,10 @@ export default {
             self.loadTrip();
         }
 
-        // TODO: call API to check if user needs to pay for the trip, if so
-        // show a message telling they need to pay. if not, show that they will
-        // need to pay in X trips.
+        userApi.selladoViaje().then((result) => {
+            console.log('sellado viaje result', result);
+            this.needsToPayForNextTrip = result.data.needsToPayForNextTrip;
+        });
     },
     beforeDestroy() {},
 

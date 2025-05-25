@@ -94,6 +94,10 @@ class UserApi extends TaggedApi {
             null
         );
     }
+
+    selladoViaje() {
+        return this.get('/api/users/sellado-viaje');
+    }
 }
 
 export { UserApi as default };
