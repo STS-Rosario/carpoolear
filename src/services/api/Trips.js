@@ -64,6 +64,11 @@ class TripApi extends TaggedApi {
         return this.post('/api/trips/price', data);
     }
 
+    getTripInfo(data) {
+        console.log('get trip info', data);
+        return this.post('/api/trips/trip-info', data);
+    }
+
     changeVisibility(data) {
         return this.post('/api/trips/' + data.id + '/change-visibility', data);
     }

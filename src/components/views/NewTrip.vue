@@ -1516,12 +1516,12 @@ import dialogs from '../../services/dialogs.js';
 import spinner from '../Spinner.vue';
 import moment from 'moment';
 import { last } from 'lodash';
-import OsmApi from '../../services/api/Osm';
+import TripApi from '../../services/api/Trips';
 import autocomplete from '../Autocomplete';
 import SvgItem from '../SvgItem';
 import bus from '../../services/bus-event.js';
 
-let osmApi = new OsmApi();
+let tripApi = new TripApi();
 
 class Error {
     constructor(state = false, message = '') {
@@ -1671,6 +1671,10 @@ export default {
         if (self.id) {
             self.loadTrip();
         }
+
+        // TODO: call API to check if user needs to pay for the trip, if so
+        // show a message telling they need to pay. if not, show that they will
+        // need to pay in X trips.
     },
     beforeDestroy() {},
 
@@ -2404,19 +2408,14 @@ export default {
             let data = {
                 points: points.map((point) => point.location)
             };
-            osmApi.route(data).then((result) => {
-                console.log('osm route result', result);
+            tripApi.getTripInfo(data).then((result) => {
+                console.log('trip info result', result);
                 if (
-                    result.code === 'Ok' &&
-                    result.routes &&
-                    result.routes.length
+                    result.status === true
                 ) {
-                    let route = result.routes[0];
-                    trip.trip.distance = route.distance;
-                    trip.duration = route.duration;
-                    trip.trip.co2 =
-                        route.distance *
-                        0.15; /* distancia por 0.15 kilos co2 en promedio por KM recorrido  */
+                    trip.trip.distance = result.data.distance;
+                    trip.duration = result.data.duration;
+                    trip.trip.co2 = result.data.co2;
                 }
             });
 
