@@ -162,16 +162,6 @@
                                 type="radio"
                                 name="donationValor"
                                 id="donation50"
-                                value="1000"
-                                v-model="donateValue"
-                            />
-                            <span>$ 1000</span>
-                        </label>
-                        <label class="radio-inline">
-                            <input
-                                type="radio"
-                                name="donationValor"
-                                id="donation100"
                                 value="2000"
                                 v-model="donateValue"
                             />
@@ -181,11 +171,21 @@
                             <input
                                 type="radio"
                                 name="donationValor"
-                                id="donation200"
+                                id="donation100"
                                 value="5000"
                                 v-model="donateValue"
                             />
                             <span>$ 5000</span>
+                        </label>
+                        <label class="radio-inline">
+                            <input
+                                type="radio"
+                                name="donationValor"
+                                id="donation200"
+                                value="10000"
+                                v-model="donateValue"
+                            />
+                            <span>$ 10000</span>
                         </label>
                         <label class="radio-inline">
                             <input
@@ -495,15 +495,15 @@ export default {
                 switch (this.donateValue) {
                     case '200':
                         url =
-                            'https://www.mercadopago.com.ar/checkout/v1/redirect?preference-id=201279444-f94a3145-7336-4d79-9eb9-76c5402894fa';
+                            'https://mpago.la/1WhaoLf';
                         break;
                     case '400':
                         url =
-                            'https://www.mercadopago.com.ar/checkout/v1/redirect?preference-id=201279444-42de1d74-f967-455f-80bf-a7a77650db06';
+                            'https://mpago.la/1SB6on8';
                         break;
                     case '1000':
                         url =
-                            'https://www.mercadopago.com.ar/checkout/v1/redirect?preference-id=201279444-c693bd88-7fd4-49d8-9f22-2b80151d184e';
+                            'https://mpago.la/2USgEBv';
                         break;
                     default:
                         break;
@@ -532,13 +532,13 @@ export default {
                 var url = 'http://mpago.la/2XdoxpF'; // 50
                 switch (this.donateValue) {
                     case '200':
-                        url = 'http://mpago.la/2k6JFz6';
+                        url = 'https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=2c9380848a2fd5c9018a33702cc50181';
                         break;
                     case '400':
-                        url = 'http://mpago.la/1FE4px6';
+                        url = 'https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=2c9380848cee0ea5018d0e9ea71016d7';
                         break;
                     case '1000':
-                        url = 'http://mpago.la/1EcA6f4';
+                        url = 'https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=2c93808497030fc7019705478b370068';
                         break;
                     default:
                         break;
