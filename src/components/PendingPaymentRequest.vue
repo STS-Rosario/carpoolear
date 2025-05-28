@@ -17,7 +17,7 @@
                         {{ trip.trip_date | moment('HH:mm') }}
                     </strong>
                     ahora debes realizar el pago de
-                    <strong>$ {{ trip.seat_price }}</strong>
+                    <strong>{{ $n(trip.seat_price_cents / 100, 'currency') }}</strong>
                     para confirmar tu asiento.
                     <div class="pending-buttons">
                         <button

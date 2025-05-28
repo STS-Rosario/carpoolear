@@ -26,7 +26,7 @@
                     </td>
                     <td>
                         <span class="th visible-xs">{{ $t('monto') }}</span>
-                        {{ $n(transaction.trip.seat_price, 'currency') }}
+                        {{ $n(transaction.trip.seat_price_cents / 100, 'currency') }}
                     </td>
                     <td>
                         <span class="th visible-xs">{{ $t('estado') }}</span>

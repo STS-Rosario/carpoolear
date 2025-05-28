@@ -1658,7 +1658,7 @@ export default {
                     allow_kids: true,
                     allow_smoking: true,
                     allow_animals: true,
-                    seat_price: 0,
+                    seat_price_cents: 0,
                     points: [] /* address json_address lat lng */
                 }
             }
@@ -2229,7 +2229,7 @@ export default {
                 trip.allow_smoking = !(trip.allow_smoking > 0);
 
                 if (this.config.module_seat_price) {
-                    trip.seat_price = this.price;
+                    trip.seat_price_cents = this.price * 100;
                 } else {
                     trip.total_price = this.price;
                 }
@@ -2256,7 +2256,7 @@ export default {
                                     !otherTrip.allow_animals;
                                 otherTrip.allow_smoking =
                                     !otherTrip.allow_smoking;
-                                otherTrip.seat_price = this.returnPrice;
+                                otherTrip.seat_price_cents = this.returnPrice * 100;
                                 console.log(otherTrip);
                                 this.createTrip(otherTrip).then((ot) => {
                                     return resolve(ot);

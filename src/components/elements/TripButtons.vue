@@ -64,7 +64,7 @@
                                         config.module_trip_seats_payment
                                     "
                                 >
-                                    Reservar $ {{ trip.seat_price }}
+                                    Reservar {{ $n(trip.seat_price_cents / 100, 'currency') }}
                                 </template>
                                 <template v-else>Reservar</template>
                             </template>

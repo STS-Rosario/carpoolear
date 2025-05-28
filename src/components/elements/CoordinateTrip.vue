@@ -65,7 +65,7 @@
                 <span v-else-if="expiredTrip">¡ Viaje Carpooleado !</span>
                 <span v-else>
                     <template v-if="config && config.module_trip_seats_payment">
-                        Reservar $ {{ conversation.trip.seat_price }}
+                        Reservar {{ $n(conversation.trip.seat_price_cents / 100, 'currency') }}
                         <template v-if="conversation.return_trip"
                             >de ida</template
                         >
@@ -115,7 +115,7 @@
                 <span v-else-if="expiredReturnTrip">¡ Viaje Carpooleado !</span>
                 <span v-else>
                     <template v-if="config && config.module_trip_seats_payment">
-                        Reservar $ {{ conversation.return_trip.seat_price }} de
+                        Reservar {{ $n(conversation.return_trip.seat_price_cents / 100, 'currency') }} de
                         vuelta
                     </template>
                     <template v-else>Solicitar asiento de vuelta</template>
