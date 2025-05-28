@@ -1676,7 +1676,7 @@ export default {
         }
 
         userApi.selladoViaje().then((result) => {
-            console.log('sellado viaje result', result);
+            // if user is over the free trips limit, show a message telling them they need to pay for the next trip
             this.needsToPayForNextTrip = result.data.needsToPayForNextTrip;
         });
     },
