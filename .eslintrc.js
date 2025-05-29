@@ -5,7 +5,7 @@ module.exports = {
         sourceType: 'module'
     },
     // https://github.com/feross/standard/blob/master/RULES.md#javascript-standard-style
-    extends: ['standard', 'plugin:prettier/recommended'],
+    extends: ['standard'],
     // required to lint *.vue files
     plugins: ['html'],
     // add your custom rules here
@@ -32,6 +32,9 @@ module.exports = {
 
         // Disable trailing comma rules
         'comma-dangle': 'off',
-        'comma-style': 'off'
+        'comma-style': 'off',
+
+        // Disable space before function parentheses
+        'space-before-function-paren': 'off'
     }
 };
