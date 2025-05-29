@@ -279,13 +279,9 @@
                         <p>
                             La mesa de ayuda de Carpoolear funciona desde
                             <a href="mailto:carpoolear@stsrosario.org.ar">
-                                carpoolear@stsrosario.org.ar
-                            </a>
-                            , y
-                            <a href="https://facebook.com/carpoolear">
-                                mensaje privado de Facebook
-                            </a>
-                            .
+                                carpoolear@stsrosario.org.ar</a>,  
+                                mensaje privado de <a href="https://instagram.com/carpoolear">Instagram</a> y
+                            <a href="https://facebook.com/carpoolear">Facebook</a>.
                         </p>
 
                         <p>¡Buenas rutas!</p>
