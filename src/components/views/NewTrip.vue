@@ -1,5 +1,15 @@
 <template>
     <div class="new-trip-component container">
+        <div class="alert alert-info alert-sellado-viaje" v-if="this.tripCreationPaymentEnabled">
+            <p>Mensaje contando sobre el Sellado de Viaje.</p>
+            <p>Podés hacer {{ this.freeTripsAmount }} viajes gratis.</p>
+            <div v-if="this.tripsCreatedByUserAmount >= this.freeTripsAmount">
+                <p>Ya creaste {{ this.tripsCreatedByUserAmount }} viajes, por lo que tenés que pagar el Sellado de Viaje.</p>
+            </div>
+            <div v-if="this.tripsCreatedByUserAmount < this.freeTripsAmount">
+                <p>Te queda{{ (remainingFreeTrips) === 1 ? '' : 'n' }} {{ remainingFreeTrips }} viaje{{ (remainingFreeTrips) === 1 ? '' : 's' }} gratis, luego tendrás que pagar el Sellado de Viaje.</p>
+            </div>
+        </div>
         <div class="form form-trip">
             <div class="row">
                 <div :class="columnClass[0]">
@@ -358,10 +368,19 @@
                             </div>
                             <div
                                 class="trip_price"
-                                v-if="config.module_seat_price"
+                                v-if="this.tripCreationPaymentEnabled"
                             >
-                                <legend class="label-for-group">
-                                    {{ $t('precioAsiento') }}
+                                <legend class="label-for-group label-tooltip">
+                                    {{ $t('precioAsiento') }}  
+                                <span
+                                    class="tooltip-bottom tooltip-seat-price"
+                                    data-tooltip="El precio que pagará cada pasajero. Incluye el proporcional de peajes y Sellado de Viaje."
+                                >
+                                    <i
+                                        class="fa fa-info-circle"
+                                        aria-hidden="true"
+                                    ></i>
+                                </span>
                                 </legend>
 
                                 <input
@@ -1061,7 +1080,7 @@
                             </div>
                             <div
                                 class="trip_price"
-                                v-if="config.module_seat_price"
+                                v-if="this.tripCreationPaymentEnabled"
                             >
                                 <legend class="label-for-group">
                                     {{ $t('precioAsiento') }}
@@ -1582,7 +1601,10 @@ export default {
             dateAnswer: this.date,
             time: '12:00',
             price: 0,
+            tripCreationPaymentEnabled: false,
             needsToPayForNextTrip: false,
+            freeTripsAmount: 0,
+            tripsCreatedByUserAmount: 0,
             returnPrice: 0,
             duration: 0,
             passengers: 0,
@@ -1677,7 +1699,14 @@ export default {
 
         userApi.selladoViaje().then((result) => {
             // if user is over the free trips limit, show a message telling them they need to pay for the next trip
-            this.needsToPayForNextTrip = result.data.needsToPayForNextTrip;
+            this.tripCreationPaymentEnabled = result.data.tripCreationPaymentEnabled;
+            this.needsToPayForNextTrip = result.data.tripCreationPaymentEnabled && result.data.userOverFreeLimit;
+            this.freeTripsAmount = result.data.freeTripsAmount;
+            this.tripsCreatedByUserAmount = result.data.tripsCreatedByUserAmount;
+            console.log('tripCreationPaymentEnabled', this.tripCreationPaymentEnabled);
+            console.log('needsToPayForNextTrip', this.needsToPayForNextTrip);
+            console.log('freeTripsAmount', this.freeTripsAmount);
+            console.log('tripsCreatedByUserAmount', this.tripsCreatedByUserAmount);
         });
     },
     beforeDestroy() {},
@@ -1742,6 +1771,9 @@ export default {
         },
         tripCardTheme() {
             return this.config ? this.config.trip_card_design : '';
+        },
+        remainingFreeTrips() {
+            return this.freeTripsAmount - this.tripsCreatedByUserAmount;
         }
     },
     watch: {
@@ -1775,7 +1807,8 @@ export default {
                 this.trip.friendship_type_id;
         },
         'trip.distance': function () {
-            if (this.config.module_seat_price) {
+            // TODO: FIX THIS
+            if (this.this.tripCreationPaymentEnabled) {
                 let data = {
                     from: this.points[0].place,
                     to: last(this.points).place,
@@ -2037,8 +2070,9 @@ export default {
                 }
             }
 
+            // TODO: FIX THIS
             if (
-                !this.config.module_seat_price &&
+                !this.tripCreationPaymentEnabled &&
                 this.trip.is_passenger == 0 &&
                 this.config.module_max_price
             ) {
@@ -2228,7 +2262,7 @@ export default {
                 trip.allow_animals = !(trip.allow_animals > 0);
                 trip.allow_smoking = !(trip.allow_smoking > 0);
 
-                if (this.config.module_seat_price) {
+                if (this.tripCreationPaymentEnabled) {
                     trip.seat_price_cents = this.price * 100;
                 } else {
                     trip.total_price = this.price;
@@ -2508,4 +2542,16 @@ textarea.form-control {
     min-height: 14em;
     height: auto;
 }
+.alert-sellado-viaje {
+    margin-top: -1em;
+}
+
+.label-tooltip {
+    width: 100%;
+}
+
+.tooltip-seat-price::before {
+    width: 30em;
+}
+
 </style>
