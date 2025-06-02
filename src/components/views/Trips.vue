@@ -117,9 +117,7 @@
                     </h3>
                     <div slot="body" class="">
                         <p>
-                            La aplicacion movil de Carpoolear pronto quedara
-                            fuera de servicio, instala la nueva web app para no
-                            perderte de nada.
+                            Instalá la web app (PWA) para tener notificaciones en tu celular/PC ante cualquier novedad
                         </p>
                         <div style="margin-bottom: 10px">
                             <button
