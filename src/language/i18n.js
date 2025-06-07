@@ -205,7 +205,7 @@ const messages = {
             'Tienes que ser verificado como conductor para poder cargar viajes.',
         problemaAlCargarElViaje:
             'Ocurrió un problema al cargar el viaje. Por favor vuelva a intentarlo.',
-        ingresePuntoIntermedio: 'Ingrese punto intermedio',
+        ingresePuntoIntermedio: 'Ingrese punto intermedio (opcional)',
         buscarFacebook: 'Buscar en Facebook',
         aportanteMediaNaranja:
             'Aportante en la campaña mi media naranja carpoolera',
