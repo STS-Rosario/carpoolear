@@ -568,10 +568,6 @@ export default {
                     setTimeout(() => {
                         self.renderMap();
                     }, 500);
-                    // Only enable payment if SDK is loaded
-                    if (this.mp && trip.payment_id && trip.state === 'awaiting_payment') {
-                        this.enablePayment();
-                    }
                     if (this.owner) {
                         this.searchMatchers({ trip: this.trip }).then(
                             (users) => {
@@ -837,6 +833,12 @@ export default {
                 return;
             }
 
+            // Check if the button is already rendered by checking if container has children
+            const container = document.getElementById('walletBrick_container');
+            if (container && container.children.length > 0) {
+                return;
+            }
+
             // Create the payment button
             const bricksBuilder = this.mp.bricks();
             const renderWalletBrick = async (bricksBuilder) => {
@@ -846,12 +848,11 @@ export default {
                     }
                 });
             };
-
             // Create container for the payment button if it doesn't exist
-            if (!document.getElementById('walletBrick_container')) {
-                const container = document.createElement('div');
-                container.id = 'walletBrick_container';
-                document.querySelector('.alert-sellado-viaje').appendChild(container);
+            if (!container) {
+                const newContainer = document.createElement('div');
+                newContainer.id = 'walletBrick_container';
+                document.querySelector('.alert-sellado-viaje').appendChild(newContainer);
             }
 
             // Render the payment button
