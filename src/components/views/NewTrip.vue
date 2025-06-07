@@ -2474,6 +2474,7 @@ export default {
             // The maximum_trip_price_cents is the total price for the entire trip (including driver)
             this.maximum_seat_price_cents = Math.round(this.maximum_trip_price_cents / (this.trip.total_seats + 1));
             this.recommended_seat_price_cents = Math.round(this.recommended_trip_price_cents / (this.trip.total_seats + 1));
+            this.validatePrice()
         }
     }
 };
