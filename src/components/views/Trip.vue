@@ -2,6 +2,11 @@
     <div class="container">
         <template v-if="trip">
             <div class="trip-detail-component">
+                <div class="alert alert-info alert-sellado-viaje" v-if="this.trip.state == 'awaiting_payment'">
+                    <p>Este viaje aún no es visible para el resto de los usuarios. Una vez que pagues el Sellado de Viaje, la gente podrá verlo.</p>
+                    <p>Hacé click en el botón para pagar el Sellado de Viaje ({{ $n(this.config.module_trip_creation_payment_amount_cents / 100, 'currency') }} en Mercado Pago).</p>
+                    <div id="walletBrick_container"></div>
+                </div>
                 <div class="row form">
                     <div
                         ref="rightPanel"
@@ -462,7 +467,8 @@ export default {
             showModalPricing: false,
             acceptPassengerValue: 0,
             acceptPricing: 0,
-            calculatedHeight: {}
+            calculatedHeight: {},
+            mp: null, // Mercado Pago instance
         };
     },
 
@@ -562,6 +568,10 @@ export default {
                     setTimeout(() => {
                         self.renderMap();
                     }, 500);
+                    // Only enable payment if SDK is loaded
+                    if (this.mp && trip.payment_id && trip.state === 'awaiting_payment') {
+                        this.enablePayment();
+                    }
                     if (this.owner) {
                         this.searchMatchers({ trip: this.trip }).then(
                             (users) => {
@@ -577,6 +587,7 @@ export default {
                     }
                 })
                 .catch((error) => {
+                    console.log('Error loading trip:', error);
                     if (error) {
                         if (error.status === 422) {
                             if (
@@ -648,7 +659,6 @@ export default {
             };
             this.lookConversation(data)
                 .then((conversation) => {
-                    console.log(conversation);
                     router.push({
                         name: 'conversation-chat',
                         params: { id: conversation.id }
@@ -789,7 +799,6 @@ export default {
             let users = this.matchingUsers.filter(
                 (u) => this.selectedMatchingUser.indexOf(u.id) >= 0
             );
-            console.log(users, this.messageToUsers);
             if (this.messageToUsers && users && users.length) {
                 this.sendToAll({
                     message: this.messageToUsers,
@@ -821,6 +830,32 @@ export default {
             }
             this.showModalRequestSeat = false;
             this.showModalPricing = false;
+        },
+        enablePayment() {
+            // only enable payment if the trip is awaiting payment
+            if (!this.trip.payment_id || this.trip.state !== 'awaiting_payment') {
+                return;
+            }
+
+            // Create the payment button
+            const bricksBuilder = this.mp.bricks();
+            const renderWalletBrick = async (bricksBuilder) => {
+                await bricksBuilder.create("wallet", "walletBrick_container", {
+                    initialization: {
+                        preferenceId: this.trip.payment_id
+                    }
+                });
+            };
+
+            // Create container for the payment button if it doesn't exist
+            if (!document.getElementById('walletBrick_container')) {
+                const container = document.createElement('div');
+                container.id = 'walletBrick_container';
+                document.querySelector('.alert-sellado-viaje').appendChild(container);
+            }
+
+            // Render the payment button
+            renderWalletBrick(bricksBuilder);
         }
     },
 
@@ -831,6 +866,18 @@ export default {
         this.$nextTick(() => {
             this.calculateHeight();
         });
+
+        // Initialize Mercado Pago SDK
+        const script = document.createElement('script');
+        script.src = 'https://sdk.mercadopago.com/js/v2';
+        script.onload = () => {
+            this.mp = new MercadoPago(process.env.MERCADO_PAGO_PUBLIC_KEY);
+            // After SDK is loaded, enable payment if needed
+            if (this.trip && this.trip.payment_id && this.trip.state === 'awaiting_payment') {
+                this.enablePayment();
+            }
+        };
+        document.body.appendChild(script);
     },
 
     beforeDestroy() {
@@ -1085,5 +1132,8 @@ export default {
         margin: 0;
         padding: 1em 0;
     }
+}
+#walletBrick_container {
+    margin-top: 1rem;
 }
 </style>
