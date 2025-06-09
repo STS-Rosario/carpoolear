@@ -2,6 +2,16 @@
     <div class="container">
         <template v-if="trip">
             <div class="trip-detail-component">
+                <div class="alert alert-info alert-sellado-viaje" v-if="this.trip.state == 'payment_failed'">
+                    <p>PAGO FALLÓ</p>
+                    <p>Este viaje aún no es visible para el resto de los usuarios. El pago del Sellado de Viaje falló, intentalo de nuevo.</p>
+                    <p>Hacé click en el botón para pagar el Sellado de Viaje ({{ $n(this.config.module_trip_creation_payment_amount_cents / 100, 'currency') }} en Mercado Pago).</p>
+                    <div id="walletBrick_container"></div>
+                </div>
+                <div class="alert alert-info alert-sellado-viaje" v-if="this.trip.state == 'pending_payment'">
+                    <p>PAGO EN RAPI PAGO</p>
+                    <p>Este viaje aún no es visible para el resto de los usuarios. Una vez que pagues el Sellado de Viaje en Rapi Pago, la gente podrá verlo.</p>
+                </div>
                 <div class="alert alert-info alert-sellado-viaje" v-if="this.trip.state == 'awaiting_payment'">
                     <p>Este viaje aún no es visible para el resto de los usuarios. Una vez que pagues el Sellado de Viaje, la gente podrá verlo.</p>
                     <p>Hacé click en el botón para pagar el Sellado de Viaje ({{ $n(this.config.module_trip_creation_payment_amount_cents / 100, 'currency') }} en Mercado Pago).</p>
@@ -874,7 +884,7 @@ export default {
         script.onload = () => {
             this.mp = new MercadoPago(process.env.MERCADO_PAGO_PUBLIC_KEY);
             // After SDK is loaded, enable payment if needed
-            if (this.trip && this.trip.payment_id && this.trip.state === 'awaiting_payment') {
+            if (this.trip && this.trip.payment_id && (this.trip.state === 'awaiting_payment' || this.trip.state === 'payment_failed')) {
                 this.enablePayment();
             }
         };
