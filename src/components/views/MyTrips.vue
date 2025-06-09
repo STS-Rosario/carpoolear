@@ -192,7 +192,7 @@
                                 type="radio"
                                 name="donationValor"
                                 id="donation500"
-                                value="0"
+                                value="10000"
                                 v-model="donateValue"
                             />
                             <span>Elegí tu propia aventura (solo mensual)</span>
@@ -493,15 +493,15 @@ export default {
             if (this.donateValue > 0) {
                 var url = 'http://mpago.la/jgap'; // 50
                 switch (this.donateValue) {
-                    case '200':
+                    case '2000':
                         url =
                             'https://mpago.la/1WhaoLf';
                         break;
-                    case '400':
+                    case '5000':
                         url =
                             'https://mpago.la/1SB6on8';
                         break;
-                    case '1000':
+                    case '10000':
                         url =
                             'https://mpago.la/2USgEBv';
                         break;
@@ -531,13 +531,13 @@ export default {
             if (this.donateValue > 0) {
                 var url = 'http://mpago.la/2XdoxpF'; // 50
                 switch (this.donateValue) {
-                    case '200':
+                    case '2000':
                         url = 'https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=2c9380848a2fd5c9018a33702cc50181';
                         break;
-                    case '400':
+                    case '5000':
                         url = 'https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=2c9380848cee0ea5018d0e9ea71016d7';
                         break;
-                    case '1000':
+                    case '10000':
                         url = 'https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=2c93808497030fc7019705478b370068';
                         break;
                     default:
