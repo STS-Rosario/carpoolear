@@ -425,6 +425,7 @@ import TripLocation from '../elements/TripLocation';
 import TripDriver from '../elements/TripDriver';
 import TripDate from '../elements/TripDate';
 import TripSeats from '../elements/TripSeats';
+import TripPrice from '../elements/TripPrice';
 import TripData from '../elements/TripData';
 import TripStats from '../elements/TripStats';
 import TripDescription from '../elements/TripDescription';
@@ -946,12 +947,12 @@ export default {
             } else if (this.tripCardTheme === 'light') {
                 return [
                     [TripDriver, TripDescription],
-                    [TripLocation, TripDate, TripSeats, TripPassengers],
+                    [TripLocation, TripDate, TripSeats, TripPrice, TripPassengers],
                     [TripData]
                 ];
             } else {
                 return [
-                    [TripLocation, TripDate, TripSeats],
+                    [TripLocation, TripDate, TripSeats, TripPrice],
                     [TripData, TripStats, TripShare, TripPassengers]
                 ];
             }
@@ -981,7 +982,8 @@ export default {
         TripDescription,
         TripShare,
         TripPassengers,
-        TripButtons
+        TripButtons,
+        TripPrice
     },
 
     props: ['id', 'location']
