@@ -109,6 +109,7 @@ export default {
                 id: this.rate.id,
                 trip_id: this.trip.id,
                 user_id: this.to.id,
+                trip: this.rate.trip,
                 comment: this.comment,
                 rating: this.vote
             };

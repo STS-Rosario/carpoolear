@@ -636,7 +636,8 @@ export default {
                 if (
                     this.config &&
                     this.config.donation &&
-                    this.config.donation.month_days > 0
+                    this.config.donation.month_days > 0 &&
+                    !data.trip.needs_sellado // do not show donation modal if the trip had Sellado de viaje
                 ) {
                     this.hasToShowModal(data.trip_id);
                 }
