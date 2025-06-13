@@ -2271,11 +2271,8 @@ export default {
                 trip.allow_animals = !(trip.allow_animals > 0);
                 trip.allow_smoking = !(trip.allow_smoking > 0);
 
-                if (this.config.module_trip_creation_payment_enabled) {
-                    trip.seat_price_cents = this.price * 100;
-                } else {
-                    trip.total_price = this.price;
-                }
+                trip.seat_price_cents = this.price * 100;
+                
                 if (trip.is_passenger === 1) {
                     trip.no_lucrar = 1;
                 }
