@@ -512,31 +512,7 @@
                                     aria-hidden="true"
                                     v-if="tripCardTheme === 'light'"
                                 ></i>
-                                <div v-if="trip.is_passenger == 0 && this.trip.distance > 0">
-                                    <div
-                                    class="label-soft"
-                                    v-if="tripCardTheme !== 'light'"
-                                    style="
-                                        color: var(--trip-almost-fill-color);
-                                        font-weight: bold;
-                                    "
-                                    >
-                                        {{ 'Total de combustible aprox.' }}
-                                    </div>
-                                    <div>
-                                        <span
-                                            style="
-                                                color: var(
-                                                    --trip-almost-fill-color
-                                                );
-                                            "
-                                        >
-                                            $ {{ priceAproxString }}
-                                        </span>
-                                        (nafta premium, consumo promedio, sin
-                                        peajes, con sellado de viaje)
-                                    </div>
-                                </div>
+                                
 
                             </div>
                             <div
@@ -548,9 +524,8 @@
                             >
                                 <label
                                     class="label-for-group"
-                                    style="font-weight: bold; color: #111"
                                 >
-                                    Precio por pasajero
+                                    Contribución por persona (incluído el conductor)
                                 </label>
 
                                 <input
@@ -566,6 +541,44 @@
                                 <span class="error" v-if="priceError.state">
                                     {{ priceError.message }}
                                 </span>
+                            </div>
+
+                            <div v-if="trip.is_passenger == 0 && this.trip.distance > 0">
+                                <div
+                                class="label-soft"
+                                v-if="tripCardTheme !== 'light'"
+                                style="
+                                    color: var(--trip-mostly-free-color);
+                                    font-weight: bold;
+                                    margin-bottom: 10px;
+                                    font-size: 1.1rem;
+                                "
+                                >
+                                    {{ 'Contribución recomendada' }}
+
+                                    <span
+                                        style="
+                                            color: var(
+                                                --trip-almost-fill-color
+                                            );
+                                        "
+                                    >
+                                        $ {{ recommendedSeatPrice }}
+
+                                    <span>
+                                        
+                                        <span
+                                            class="tooltip-seat-price"
+                                            data-tooltip="Calculado en base a nafta premium, consumo promedio alto, peajes y Sellado de Viaje incluídos (si aplica)"
+                                        >
+                                            <i
+                                                class="fa fa-info-circle"
+                                                aria-hidden="true"
+                                            ></i>
+                                        </span>
+                                    </span>
+                                    </span>
+                                </div>
                             </div>
 
                             <div class="trip-comment">
@@ -1739,8 +1752,8 @@ export default {
         distanceString() {
             return Math.floor(this.trip.distance / 1000) + ' Km';
         },
-        priceAproxString() {
-            return Math.floor(this.recommended_trip_price_cents / 100);
+        recommendedSeatPrice() {
+            return Math.floor((this.recommended_seat_price_cents / 100) * 1.1) ;
         },
 
         estimatedTimeString() {

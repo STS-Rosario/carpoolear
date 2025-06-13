@@ -4,19 +4,40 @@
         class="trip-seats"
         v-if="tripCardTheme === 'light' || !trip.is_passenger"
     >
-        <div class="row" v-if="tripCardTheme !== 'light'">
-            <div
-                class="trip_seats-available col-xs-offset-4 col-sm-offset-4 col-xs-12"
-            >
-                Precio asiento: <span>{{ $n(trip.seat_price_cents / 100, 'currency') }}</span>
+        <div v-if="tripCardTheme !== 'light'" class="price-container">
+            <div class="price-item">
+                <span class="trip_seat-price_value">{{ $n(trip.seat_price_cents / 100, 'currency') }}</span>
+                <span class="trip_seats-available_label">
+                    Contribución 
+                    <br />
+                    por persona
+                </span>
             </div>
-            <span v-if="!trip.owner">Precio recomendado: <span>{{ $n(recommendedPricePerSeat, 'currency') }}</span></span>
+            <div class="price-item">
+                <span class="trip_seat-price_value trip_seat-price_recommended_value">{{ $n(recommendedPricePerSeat, 'currency') }}</span>
+                <span class="trip_seats-available_label">
+                    Contribución 
+                    <br />
+                    recomendada
+                    <span>            
+                        <span
+                            class="tooltip-seat-price tooltip-seat-price-passenger"
+                            data-tooltip="Calculado en base a nafta premium, consumo promedio alto, peajes y Sellado de Viaje incluídos (si aplica)"
+                        >
+                            <i
+                                class="fa fa-info-circle"
+                                aria-hidden="true"
+                            ></i>
+                        </span>
+                    </span>
+                </span>
+            </div>
         </div>
         <div v-if="tripCardTheme !== 'light'" style="height: 3.5em"></div>
         <template v-else>
             <div class="trip_seats-available" v-if="!trip.is_passenger">
                 <template v-for="n in trip.total_seats">
-                    Precio asiento: <span>{{ $n(trip.seat_price_cents / 100, 'currency') }}</span>
+                    Contribución por persona: <span>{{ $n(trip.seat_price_cents / 100, 'currency') }}</span>
                 </template>
             </div>
         </template>
@@ -68,3 +89,27 @@ export default {
     }
 };
 </script>
+
+<style scoped>
+.price-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+.price-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+.trip_seats-available_label > span {
+    display: inline;
+}
+.tooltip-seat-price-passenger::before {
+    width: 20em;
+    display: inline;
+    text-transform: none;
+}
+</style>

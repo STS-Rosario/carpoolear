@@ -947,12 +947,12 @@ export default {
             } else if (this.tripCardTheme === 'light') {
                 return [
                     [TripDriver, TripDescription],
-                    [TripLocation, TripDate, TripSeats, TripPrice, TripPassengers],
+                    [TripLocation, TripDate,TripPrice, TripSeats, TripPassengers],
                     [TripData]
                 ];
             } else {
                 return [
-                    [TripLocation, TripDate, TripSeats, TripPrice],
+                    [TripLocation, TripDate, TripPrice, TripSeats],
                     [TripData, TripStats, TripShare, TripPassengers]
                 ];
             }

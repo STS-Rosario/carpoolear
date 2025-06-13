@@ -17,7 +17,7 @@
                 </span>
             </div>
         </div>
-        <div v-if="tripCardTheme !== 'light'" style="height: 3.5em"></div>
+        <div v-if="tripCardTheme !== 'light'" style="height: 2em"></div>
         <template v-else>
             <div class="trip_seats-available" v-if="!trip.is_passenger">
                 <template v-for="n in trip.total_seats">

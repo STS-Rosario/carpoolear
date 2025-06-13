@@ -1024,6 +1024,15 @@
       color: var(--trip-half-free-color);
       font-weight:bold;
   }
+  .trip_seat-price_value {
+    font-size: 1.1em;
+    margin-right: .3em;
+    color: var(--trip-half-free-color);
+    font-weight:bold;
+  }
+  .trip_seat-price_recommended_value {
+    color: var(--trip-mostly-free-color);
+  }
   .trip-almost-fill .trip_seats-available_value {
       color: var(--trip-almost-fill-color);
   }
