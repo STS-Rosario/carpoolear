@@ -1197,7 +1197,7 @@
                                             );
                                         "
                                     >
-                                        $ {{ recommendedSeatPrice }}
+                                        $ {{ recommendedReturnSeatPrice }}
 
                                     <span>
                                         
@@ -1719,6 +1719,10 @@ export default {
             recommended_trip_price_cents: 0,
             maximum_seat_price_cents: 0,
             recommended_seat_price_cents: 0,
+            maximum_return_trip_price_cents: 0,
+            recommended_return_trip_price_cents: 0,
+            maximum_return_seat_price_cents: 0,
+            recommended_return_seat_price_cents: 0,
             free_trips_amount: 0,
             trips_created_by_user_amount: 0,
             route_needs_payment: false,
@@ -1843,6 +1847,10 @@ export default {
             return Math.floor((this.recommended_seat_price_cents / 100) * 1.1) ;
         },
 
+        recommendedReturnSeatPrice() {
+            return Math.floor((this.recommended_return_seat_price_cents / 100) * 1.1) ;
+        },
+
         estimatedTimeString() {
             const totalMinutes = Math.floor(this.duration / 60);
             const minutes = Math.floor(totalMinutes % 60);
@@ -1894,6 +1902,11 @@ export default {
                 // The maximum_trip_price_cents is constant based on distance
                 // We just need to recalculate the per-seat prices
                 this.recalculateRecommendedPrice();
+            }
+        },
+        'otherTrip.trip.total_seats': function(newValue) {
+            if (this.otherTrip.trip.distance > 0) {
+                this.recalculateRecommendedReturnPrice();
             }
         },
         dateAnswer: function (value) {
@@ -2551,16 +2564,21 @@ export default {
                 points: points.map((point) => point.location)
             };
             tripApi.getTripInfo(data).then((result) => {
-                if (
-                    result.status === true
-                ) {
+                if (result.status === true) {
                     trip.trip.distance = result.data.distance;
                     trip.duration = result.data.duration;
                     trip.trip.co2 = result.data.co2;
                     trip.route_needs_payment = result.data.route_needs_payment;
-                    this.maximum_trip_price_cents = result.data.maximum_trip_price_cents;
-                    this.recommended_trip_price_cents = result.data.recommended_trip_price_cents;
-                    this.recalculateRecommendedPrice();
+                    
+                    if (type === 'trip') {
+                        this.maximum_trip_price_cents = result.data.maximum_trip_price_cents;
+                        this.recommended_trip_price_cents = result.data.recommended_trip_price_cents;
+                        this.recalculateRecommendedPrice();
+                    } else {
+                        this.maximum_return_trip_price_cents = result.data.maximum_trip_price_cents;
+                        this.recommended_return_trip_price_cents = result.data.recommended_trip_price_cents;
+                        this.recalculateRecommendedReturnPrice();
+                    }
                 }
             });
 
@@ -2595,7 +2613,20 @@ export default {
             // The maximum_trip_price_cents is the total price for the entire trip (including driver)
             this.maximum_seat_price_cents = Math.round(this.maximum_trip_price_cents / (this.trip.total_seats + 1));
             this.recommended_seat_price_cents = Math.round(this.recommended_trip_price_cents / (this.trip.total_seats + 1));
-            this.validatePrice()
+            this.validatePrice();
+        },
+        recalculateRecommendedReturnPrice() {
+            this.maximum_return_seat_price_cents = Math.round(this.maximum_return_trip_price_cents / (this.otherTrip.trip.total_seats + 1));
+            this.recommended_return_seat_price_cents = Math.round(this.recommended_return_trip_price_cents / (this.otherTrip.trip.total_seats + 1));
+            this.validateReturnPrice();
+        },
+        validateReturnPrice() {
+            if (this.returnPrice > this.maximum_return_seat_price_cents / 100) {
+                this.returnPriceError.state = true;
+                this.returnPriceError.message = this.$t('precioMaximoExcedido');
+            } else {
+                this.returnPriceError.state = false;
+            }
         },
         resetReturnPoints(m, index) {
             if (index === 0 || index === this.otherTrip.points.length - 1) {
