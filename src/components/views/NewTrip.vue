@@ -2544,10 +2544,17 @@ export default {
         },
         resetPoints(m, index) {
             if (index === 0 || index === this.points.length - 1) {
+                // If removing origin or destination, clear the point
                 m.name = '';
+                m.place = null;
+                m.json = null;
+                m.location = null;
             } else {
+                // If removing intermediate point, remove it and shift remaining points
                 this.points.splice(index, 1);
             }
+            // Always recalculate trip info
+            this.calcRoute('trip');
         },
 
         calcRoute(type) {
@@ -2557,12 +2564,15 @@ export default {
 
             let points = trip.points.filter((point) => point.name);
 
+            // Only proceed if we have at least 2 points with names
             if (points.length < 2) {
                 return;
             }
+
             let data = {
                 points: points.map((point) => point.location)
             };
+
             tripApi.getTripInfo(data).then((result) => {
                 if (result.status === true) {
                     trip.trip.distance = result.data.distance;
@@ -2587,10 +2597,7 @@ export default {
 
                 /* eslint-disable no-undef */
                 L.Routing.control({
-                    waypoints: [
-                        L.latLng(data.origin.lat, data.origin.lng),
-                        L.latLng(data.destiny.lat, data.destiny.lng)
-                    ]
+                    waypoints: points.map(point => L.latLng(point.location.lat, point.location.lng))
                 }).addTo(map);
             }
         },
@@ -2630,10 +2637,17 @@ export default {
         },
         resetReturnPoints(m, index) {
             if (index === 0 || index === this.otherTrip.points.length - 1) {
+                // If removing origin or destination, clear the point
                 m.name = '';
+                m.place = null;
+                m.json = null;
+                m.location = null;
             } else {
+                // If removing intermediate point, remove it and shift remaining points
                 this.otherTrip.points.splice(index, 1);
             }
+            // Always recalculate trip info
+            this.calcRoute('returnTrip');
         }
     }
 };
