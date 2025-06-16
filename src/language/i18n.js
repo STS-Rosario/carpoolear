@@ -239,7 +239,7 @@ const messages = {
         crearViaje: 'Crear Viaje',
         buscoConductor: 'Busco Conductor',
         buscoPasajero: 'Busco Pasajero',
-        precioAsiento: 'Precio del asiento',
+        precioAsiento: 'Contribución por persona (incluído el conductor)',
         iniciarSesion: 'Iniciar sesión',
         ingresaCuenta: 'Ingresá con tu cuenta de',
         carpoolear: 'Carpoolear',
