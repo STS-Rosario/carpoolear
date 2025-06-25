@@ -2182,39 +2182,9 @@ export default {
                 }
             }
 
-            // TODO: FIX THIS
-            if (
-                !this.config.module_trip_creation_payment_enabled &&
-                this.trip.is_passenger == 0 &&
-                this.config.module_max_price_enabled
-            ) {
-                let aprox =
-                    Math.ceil(
-                        (this.trip.distance /
-                            1000 /
-                            this.config.module_max_price_kilometer_by_liter) *
-                            this.config.module_max_price_fuel_price
-                    ) *
-                    (1 + this.config.module_max_price_price_variance / 100);
-                if (this.price > aprox) {
-                    globalError = true;
-                    this.priceError.state = true;
-                    this.priceError.message =
-                        'El precio total no puede superar un ' +
-                        this.config.module_max_price_price_variance +
-                        '% al aproximado de combustible.';
-                } else {
-                    if (this.price < 1) {
-                        globalError = true;
-                        this.priceError.state = true;
-                        this.priceError.message =
-                            'El precio total debe estar completo.';
-                    } else {
-                        this.priceError.state = false;
-                    }
-                }
-            } else if (this.config.module_trip_creation_payment_enabled) {
-                // Validate seat_price_cents when config.module_trip_creation_payment_enabled is true
+            if (this.config.module_max_price_enabled 
+                && this.trip.is_passenger == 0 
+                && this.config.module_trip_creation_payment_enabled) {
                 if (!this.price || this.price < 1) {
                     globalError = true;
                     this.priceError.state = true;
