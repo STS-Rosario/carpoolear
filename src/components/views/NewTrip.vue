@@ -1844,11 +1844,11 @@ export default {
             return Math.floor(this.trip.distance / 1000) + ' Km';
         },
         recommendedSeatPrice() {
-            return Math.floor((this.recommended_seat_price_cents / 100) * 1.1) ;
+            return Math.floor((this.recommended_seat_price_cents / 100)) ;
         },
 
         recommendedReturnSeatPrice() {
-            return Math.floor((this.recommended_return_seat_price_cents / 100) * 1.1) ;
+            return Math.floor((this.recommended_return_seat_price_cents / 100)) ;
         },
 
         estimatedTimeString() {
@@ -2185,11 +2185,7 @@ export default {
             if (this.config.module_max_price_enabled 
                 && this.trip.is_passenger == 0 
                 && this.config.module_trip_creation_payment_enabled) {
-                if (!this.price || this.price < 1) {
-                    globalError = true;
-                    this.priceError.state = true;
-                    this.priceError.message = 'El precio del asiento es obligatorio.';
-                } else if (this.price > this.maximum_seat_price_cents / 100) {
+                if (this.price > this.maximum_seat_price_cents / 100) {
                     globalError = true;
                     this.priceError.state = true;
                     this.priceError.message = 'El precio del asiento no puede superar ' + this.$n(this.maximum_seat_price_cents / 100, 'currency');

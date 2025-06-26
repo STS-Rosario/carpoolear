@@ -66,22 +66,45 @@ export default {
             console.log('this.trip', this.trip);
             console.log('this.config',this.config);
             
+            // If the trip already has a recommended price, use that
+            if (this.trip.recommended_trip_price_cents) {
+                // Convert from cents to dollars and divide by total seats including driver
+                return Math.floor(this.trip.recommended_trip_price_cents / 100 / (this.trip.total_seats + 1));
+            }
+            
+            // Otherwise, calculate the recommended price from scratch
             // Get configuration values
-            const kmPerLiter = this.config.module_max_price_kilometer_by_liter || 10; // km/l
-            const literPrice = this.config.module_max_price_fuel_price || 1500; // $/l
+            const fuelPrice = this.config.module_max_price_fuel_price || 1500; // $/l
+            const kilometersPerLiter = this.config.module_max_price_kilometer_by_liter || 10; // km/l
+            const pricePerKilometer = fuelPrice / kilometersPerLiter; // $/km
+            
+            // Get sellado viaje price (convert from cents to dollars)
+            const selladoViajePrice = this.config.module_trip_creation_payment_enabled ? 
+                (this.config.module_trip_creation_payment_amount_cents || 0) / 100 : 0;
+            
+            // Get tolls variance percentage (e.g., 10 for 10% extra)
+            const tollsVariancePercent = this.config.module_max_price_price_variance_tolls || 0;
+            
+            // Get maximum price variance percentage (e.g., 15 for 15% extra)
+            const maxPriceVariancePercent = this.config.module_max_price_price_variance_max_extra || 15;
             
             // Convert distance from meters to kilometers
             const distanceInKm = this.trip.distance / 1000;
             
-            // Calculate total fuel cost in dollars
-            // (km / (km/l)) * ($/l) = l * ($/l) = $
-            const totalFuelCost = (distanceInKm / kmPerLiter) * literPrice;
+            // Calculate base price without sellado (convert to cents for consistency with PHP)
+            const basePriceCents = Math.round(distanceInKm * pricePerKilometer * 100);
+            
+            // Calculate tolls variance amount
+            const tollsVarianceCents = Math.round(basePriceCents * (tollsVariancePercent / 100));
+            
+            // Recommended trip price: base + tolls variance + sellado (in cents)
+            const recommendedTripPriceCents = basePriceCents + tollsVarianceCents + (selladoViajePrice * 100);
             
             // Calculate price per seat (including driver)
-            // $ / (seats + 1) = $/seat
-            const recommendedPrice = totalFuelCost / (this.trip.total_seats + 1);
+            // Convert back to dollars and divide by total seats including driver
+            const recommendedPricePerSeat = recommendedTripPriceCents / 100 / (this.trip.total_seats + 1);
             
-            return Math.round(recommendedPrice);
+            return Math.round(recommendedPricePerSeat);
         }
     },
     components: {
