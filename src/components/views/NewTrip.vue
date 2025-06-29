@@ -470,13 +470,13 @@
                             </div>
                             <div
                                 class="trip_price"
-                                v-if="trip.is_passenger == 0 && !config.module_max_price_enabled"
+                                v-if="trip.is_passenger == 0 && !config.module_max_price_enabled && config.module_seat_price_enabled"
                             >
                                 <legend class="label-for-group label-tooltip">
                                     {{ $t('precioAsiento') }}  
                                 <span
                                     class="tooltip-bottom tooltip-seat-price"
-                                    :data-tooltip="'El precio que pagará cada pasajero. Incluye el proporcional de peajes y Sellado de Viaje.' + ((this.recommended_seat_price_cents !== 0 && this.maximum_seat_price_cents !== 0) ? ' Precio máximo recomendado: ' + $n(this.recommended_seat_price_cents / 100, 'currency') + '. Precio máximo: ' + $n(this.maximum_seat_price_cents / 100, 'currency') : '')"
+                                    :data-tooltip="'El precio que pagará cada pasajero. Incluye el proporcional de peajes'+ ((this.config.module_trip_creation_payment_enabled) ? ' y Sellado de Viaje.' : '')"
                                 >
                                     <i
                                         class="fa fa-info-circle"
@@ -515,14 +515,15 @@
                                 class="trip_price"
                                 v-if="
                                     trip.is_passenger == 0 &&
-                                    config.module_max_price_enabled
+                                    config.module_max_price_enabled && 
+                                    config.module_seat_price_enabled
                                 "
                             >
                                 <legend class="label-for-group label-tooltip">
                                     {{ $t('precioAsiento') }}  
                                     <span
                                         class="tooltip-bottom tooltip-seat-price"
-                                        :data-tooltip="'El precio que pagará cada pasajero. Incluye el proporcional de peajes y Sellado de Viaje.' + ((this.recommended_seat_price_cents !== 0 && this.maximum_seat_price_cents !== 0) ? ' Precio máximo recomendado: ' + $n(this.recommended_seat_price_cents / 100, 'currency') + '. Precio máximo: ' + $n(this.maximum_seat_price_cents / 100, 'currency') : '')"
+                                        :data-tooltip="'El precio que pagará cada pasajero. Incluye el proporcional de peajes'+ ((this.config.module_trip_creation_payment_enabled) ? ' y Sellado de Viaje.' : '')"
                                     >
                                         <i
                                             class="fa fa-info-circle"
@@ -1114,13 +1115,15 @@
                             </div>
                             <div
                                 class="trip_price"
-                                v-if="trip.is_passenger == 0 && !config.module_max_price_enabled"
+                                v-if="trip.is_passenger == 0 && 
+                                !config.module_max_price_enabled && 
+                                config.module_seat_price_enabled"
                             >
                                 <legend class="label-for-group label-tooltip">
                                     {{ $t('precioAsiento') }}  
                                 <span
                                     class="tooltip-bottom tooltip-seat-price"
-                                    :data-tooltip="'El precio que pagará cada pasajero. Incluye el proporcional de peajes y Sellado de Viaje.' + ((this.recommended_seat_price_cents !== 0 && this.maximum_seat_price_cents !== 0) ? ' Precio máximo recomendado: ' + $n(this.recommended_seat_price_cents / 100, 'currency') + '. Precio máximo: ' + $n(this.maximum_seat_price_cents / 100, 'currency') : '')"
+                                    :data-tooltip="'El precio que pagará cada pasajero. Incluye el proporcional de peajes'+ ((this.config.module_trip_creation_payment_enabled) ? ' y Sellado de Viaje.' : '')"
                                 >
                                     <i
                                         class="fa fa-info-circle"
@@ -1143,13 +1146,13 @@
                             </div>
                             <div
                                 class="trip_price"
-                                v-if="this.config.module_trip_creation_payment_enabled"
+                                v-if="this.config.module_trip_creation_payment_enabled && config.module_seat_price_enabled"
                             >
                                 <legend class="label-for-group label-tooltip">
                                     {{ $t('precioAsiento') }}  
                                     <span
                                         class="tooltip-bottom tooltip-seat-price"
-                                        :data-tooltip="'El precio que pagará cada pasajero. Incluye el proporcional de peajes y Sellado de Viaje.' + ((this.recommended_seat_price_cents !== 0 && this.maximum_seat_price_cents !== 0) ? ' Precio máximo recomendado: ' + $n(this.recommended_seat_price_cents / 100, 'currency') + '. Precio máximo: ' + $n(this.maximum_seat_price_cents / 100, 'currency') : '')"
+                                        :data-tooltip="'El precio que pagará cada pasajero. Incluye el proporcional de peajes'+ ((this.config.module_trip_creation_payment_enabled) ? ' y Sellado de Viaje.' : '')"
                                     >
                                         <i
                                             class="fa fa-info-circle"
@@ -1177,7 +1180,7 @@
                                 </span>
                             </div>
 
-                            <div v-if="trip.is_passenger == 0 && this.trip.distance > 0">
+                            <div v-if="trip.is_passenger == 0 && this.trip.distance > 0 && config.module_seat_price_enabled">
                                 <div
                                 class="label-soft"
                                 v-if="tripCardTheme !== 'light'"
@@ -2183,8 +2186,7 @@ export default {
             }
 
             if (this.config.module_max_price_enabled 
-                && this.trip.is_passenger == 0 
-                && this.config.module_trip_creation_payment_enabled) {
+                && this.trip.is_passenger == 0) {
                 if (this.price > this.maximum_seat_price_cents / 100) {
                     globalError = true;
                     this.priceError.state = true;
