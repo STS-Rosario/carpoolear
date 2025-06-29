@@ -2,7 +2,7 @@
     
     <div
         class="trip-seats"
-        v-if="tripCardTheme === 'light' || !trip.is_passenger"
+        v-if="this.config.module_seat_price_enabled && (tripCardTheme === 'light' || !trip.is_passenger)"
     >
         <div v-if="tripCardTheme !== 'light'" class="price-container">
             <div class="price-item">
