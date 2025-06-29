@@ -547,7 +547,7 @@
                                 </span>
                             </div>
 
-                            <div v-if="trip.is_passenger == 0 && this.trip.distance > 0">
+                            <div v-if="trip.is_passenger == 0 && this.trip.distance > 0 && config.module_seat_price_enabled">
                                 <div
                                 class="label-soft"
                                 v-if="tripCardTheme !== 'light'"
