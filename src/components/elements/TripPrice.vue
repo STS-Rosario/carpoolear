@@ -13,7 +13,7 @@
                     por persona
                 </span>
             </div>
-            <div class="price-item">
+            <div class="price-item" v-if="this.config.module_max_price_enabled">
                 <span class="trip_seat-price_value trip_seat-price_recommended_value">{{ $n(recommendedPricePerSeat, 'currency') }}</span>
                 <span class="trip_seats-available_label">
                     Contribución 
