@@ -107,24 +107,32 @@
                 </modal>
                 <modal
                     :name="'modal'"
-                    v-if="showModalInstallApp"
-                    @close="showModalInstallApp = false"
+                    v-if="showModalInstallApp && shouldShowInstallModal()"
+                    @close="closeInstallModal()"
                     :title="'Test'"
                     :body="'Body'"
                 >
                     <h3 slot="header">
-                        <span>Instalar App</span>
+                        <span>{{ getInstallModalContent() && getInstallModalContent().title || 'Instalar App' }}</span>
                     </h3>
                     <div slot="body" class="">
-                        <p>
-                            Instalá la web app (PWA) para tener notificaciones en tu celular/PC ante cualquier novedad
+                        <p style="white-space: pre-line;">
+                            {{ getInstallModalContent() && getInstallModalContent().message || 'Instalá la web app (PWA) para tener notificaciones en tu celular/PC ante cualquier novedad.' }}
                         </p>
                         <div style="margin-bottom: 10px">
                             <button
+                                v-if="getInstallModalContent() && getInstallModalContent().showInstallButton"
                                 class="btn btn-danger"
                                 @click="installApp()"
                             >
                                 Instalar
+                            </button>
+                            <button
+                                v-if="getInstallModalContent() && getInstallModalContent().showCloseButton"
+                                class="btn btn-primary"
+                                @click="closeInstallModal()"
+                            >
+                                Entendido
                             </button>
                         </div>
                     </div>
@@ -301,6 +309,33 @@ export default {
             // morePagesActions: 'trips/tripMorePage',
             // setActionButton: 'actionbars/setHeaderButtons'
         }),
+        isIOS() {
+            return /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+        },
+        shouldShowInstallModal() {
+            // Show modal if we have install event (Android) or if we're on iOS
+            return this.installAppEvent !== null || this.isIOS();
+        },
+        getInstallModalContent() {
+            if (this.installAppEvent !== null) {
+                // Android - show install button
+                return {
+                    title: 'Instalar App',
+                    message: 'Instalá la web app (PWA) para tener notificaciones en tu celular/PC ante cualquier novedad.',
+                    showInstallButton: true,
+                    showCloseButton: false
+                };
+            } else if (this.isIOS()) {
+                // iOS - show installation instructions
+                return {
+                    title: 'Instalar App en iOS',
+                    message: 'Para instalar Carpoolear en tu iPhone o iPad:\n\n1. Toca el botón Compartir (cuadrado con flecha hacia arriba)\n2. Desplázate hacia abajo y selecciona "Agregar a inicio"\n3. Toca "Añadir" para confirmar\n\n¡Listo! Ahora tendrás acceso rápido a Carpoolear desde tu pantalla de inicio.',
+                    showInstallButton: false,
+                    showCloseButton: true
+                };
+            }
+            return null;
+        },
         isDonationTime() {
             if (this.appConfig) {
                 return (
@@ -317,6 +352,13 @@ export default {
                 this.installAppEvent.prompt();
                 // Espera a que el usuario responda al mensaje
                 const { outcome } = await this.installAppEvent.userChoice;
+            }
+        },
+        closeInstallModal() {
+            this.showModalInstallApp = false;
+            // Mark that we've shown the iOS install modal to this user
+            if (this.isIOS()) {
+                localStorage.setItem('ios_install_modal_shown', 'true');
             }
         },
         research(params) {
@@ -559,6 +601,18 @@ export default {
             // De manera opcional, envía el evento de analíticos para saber si se mostró la promoción a a instalación del PWA
             console.log(`'beforeinstallprompt' event was fired.`);
         });
+
+        // Show install modal for iOS users (since beforeinstallprompt doesn't fire on iOS)
+        if (this.isIOS()) {
+            // Check if user hasn't dismissed this before (you might want to use localStorage for this)
+            const hasShownIOSInstallModal = localStorage.getItem('ios_install_modal_shown');
+            if (!hasShownIOSInstallModal) {
+                // Show modal after a short delay to ensure the page is loaded
+                setTimeout(() => {
+                    this.showModalInstallApp = true;
+                }, 2000);
+            }
+        }
 
         // bus.event
         bus.off('search-click', this.onSearchButton);
