@@ -134,6 +134,14 @@
                             >
                                 Entendido
                             </button>
+                            <button
+                                v-if="getInstallModalContent() && getInstallModalContent().showDontShowAgainButton"
+                                class="btn btn-default"
+                                @click="dontShowAgainInstallModal()"
+                                style="margin-left: 10px;"
+                            >
+                                No mostrar de nuevo
+                            </button>
                         </div>
                     </div>
                 </modal>
@@ -323,7 +331,8 @@ export default {
                     title: 'Instalar App',
                     message: 'Instalá la web app (PWA) para tener notificaciones en tu celular/PC ante cualquier novedad.',
                     showInstallButton: true,
-                    showCloseButton: false
+                    showCloseButton: false,
+                    showDontShowAgainButton: false
                 };
             } else if (this.isIOS()) {
                 // iOS - show installation instructions
@@ -331,7 +340,8 @@ export default {
                     title: 'Instalar App en iOS',
                     message: 'Para instalar Carpoolear en tu iPhone o iPad:\n\n1. Toca el botón Compartir (cuadrado con flecha hacia arriba)\n2. Desplázate hacia abajo y selecciona "Agregar a inicio"\n3. Toca "Añadir" para confirmar\n\n¡Listo! Ahora tendrás acceso rápido a Carpoolear desde tu pantalla de inicio.',
                     showInstallButton: false,
-                    showCloseButton: true
+                    showCloseButton: true,
+                    showDontShowAgainButton: true
                 };
             }
             return null;
@@ -356,7 +366,11 @@ export default {
         },
         closeInstallModal() {
             this.showModalInstallApp = false;
-            // Mark that we've shown the iOS install modal to this user
+            // For iOS, this just closes temporarily - no localStorage flag
+        },
+        dontShowAgainInstallModal() {
+            this.showModalInstallApp = false;
+            // Mark that we've shown the iOS install modal to this user permanently
             if (this.isIOS()) {
                 localStorage.setItem('ios_install_modal_shown', 'true');
             }
@@ -604,7 +618,7 @@ export default {
 
         // Show install modal for iOS users (since beforeinstallprompt doesn't fire on iOS)
         if (this.isIOS()) {
-            // Check if user hasn't dismissed this before (you might want to use localStorage for this)
+            // Check if user hasn't permanently dismissed this before
             const hasShownIOSInstallModal = localStorage.getItem('ios_install_modal_shown');
             if (!hasShownIOSInstallModal) {
                 // Show modal after a short delay to ensure the page is loaded
