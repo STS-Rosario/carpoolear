@@ -332,7 +332,7 @@ export default {
                     message: 'Instalá la web app (PWA) para tener notificaciones en tu celular/PC ante cualquier novedad.',
                     showInstallButton: true,
                     showCloseButton: false,
-                    showDontShowAgainButton: false
+                    showDontShowAgainButton: true
                 };
             } else if (this.isIOS()) {
                 // iOS - show installation instructions
@@ -370,10 +370,8 @@ export default {
         },
         dontShowAgainInstallModal() {
             this.showModalInstallApp = false;
-            // Mark that we've shown the iOS install modal to this user permanently
-            if (this.isIOS()) {
-                localStorage.setItem('ios_install_modal_shown', 'true');
-            }
+            // Mark that we've shown the install modal to this user permanently
+            localStorage.setItem('pwa_install_modal_dismissed', 'true');
         },
         research(params) {
             this.resultaOfSearch = true;
@@ -610,8 +608,13 @@ export default {
             e.preventDefault();
             // Guarda el evento para que se dispare más tarde
             this.installAppEvent = e;
-            // Actualizar la IU para notificarle al usuario que se puede instalar tu PWA
-            this.showModalInstallApp = true;
+            
+            // Check if user has permanently dismissed the install modal
+            const hasDismissedInstallModal = localStorage.getItem('pwa_install_modal_dismissed');
+            if (!hasDismissedInstallModal) {
+                // Actualizar la IU para notificarle al usuario que se puede instalar tu PWA
+                this.showModalInstallApp = true;
+            }
             // De manera opcional, envía el evento de analíticos para saber si se mostró la promoción a a instalación del PWA
             console.log(`'beforeinstallprompt' event was fired.`);
         });
@@ -619,8 +622,8 @@ export default {
         // Show install modal for iOS users (since beforeinstallprompt doesn't fire on iOS)
         if (this.isIOS()) {
             // Check if user hasn't permanently dismissed this before
-            const hasShownIOSInstallModal = localStorage.getItem('ios_install_modal_shown');
-            if (!hasShownIOSInstallModal) {
+            const hasDismissedInstallModal = localStorage.getItem('pwa_install_modal_dismissed');
+            if (!hasDismissedInstallModal) {
                 // Show modal after a short delay to ensure the page is loaded
                 setTimeout(() => {
                     this.showModalInstallApp = true;
