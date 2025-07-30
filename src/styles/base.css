@@ -1863,7 +1863,7 @@
       font-weight: 300;
       margin-left: .5em;
 
-      max-width: 60%;
+      max-width: 50%;
       text-overflow: ellipsis;
 
       /* Required for text-overflow to do anything */
