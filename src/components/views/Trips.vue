@@ -116,6 +116,7 @@
                         <span>{{ getInstallModalContent() && getInstallModalContent().title || 'Instalar App' }}</span>
                     </h3>
                     <div slot="body" class="">
+                        <p v-if="isIOS()" style="color: red; font-weight: bold; margin-bottom: 0; font-size: 1.6em;">Sólo en Safari (no en Chrome)</p>
                         <p style="white-space: pre-line;">
                             {{ getInstallModalContent() && getInstallModalContent().message || 'Instalá la web app (PWA) para tener notificaciones en tu celular/PC ante cualquier novedad.' }}
                         </p>
@@ -338,7 +339,7 @@ export default {
                 // iOS - show installation instructions
                 return {
                     title: 'Instalar App en iOS',
-                    message: 'Para instalar Carpoolear en tu iPhone o iPad:\n\n1. Toca el botón Compartir (cuadrado con flecha hacia arriba)\n2. Desplázate hacia abajo y selecciona "Agregar a inicio"\n3. Toca "Añadir" para confirmar\n\n¡Listo! Ahora tendrás acceso rápido a Carpoolear desde tu pantalla de inicio.',
+                    message: 'Para instalar Carpoolear en tu iPhone o iPad:\n\n1. Toca el botón Compartir (cuadrado con flecha hacia arriba)\n2. Desplázate hacia abajo y selecciona "Agregar a inicio"\n3. Toca "Añadir" para confirmar\n\n¡Listo! Ahora tendrás notificaciones y acceso rápido como cualquier app en tu teléfono.',
                     showInstallButton: false,
                     showCloseButton: true,
                     showDontShowAgainButton: true
