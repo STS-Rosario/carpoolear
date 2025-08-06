@@ -116,7 +116,7 @@
                         <span>{{ getInstallModalContent() && getInstallModalContent().title || 'Instalar App' }}</span>
                     </h3>
                     <div slot="body" class="">
-                        <p v-if="isIOS()" style="color: red; font-weight: bold; margin-bottom: 0; font-size: 1.6em;">Sólo en Safari (no en Chrome)</p>
+                        <p v-if="isIOS()" class="ios-safari-warning">Sólo en Safari (no en Chrome)</p>
                         <p style="white-space: pre-line;">
                             {{ getInstallModalContent() && getInstallModalContent().message || 'Instalá la web app (PWA) para tener notificaciones en tu celular/PC ante cualquier novedad.' }}
                         </p>
@@ -708,5 +708,12 @@ export default {
     margin-top: 1em;
     padding: 1em 2em;
     font-size: 1.3em;
+}
+
+.ios-safari-warning {
+    color: red;
+    font-weight: bold;
+    margin-bottom: 0;
+    font-size: 1.6em;
 }
 </style>
