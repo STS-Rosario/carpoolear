@@ -75,19 +75,7 @@
                         </template>
                     </div>
                     <template v-if="!notReply">
-                        <div
-                            class="rate-item-detail"
-                            v-if="rate.trip.points.length > 0"
-                        >
-                            Viajó a
-                            {{
-                                rate.trip.points[rate.trip.points.length - 1]
-                                    .json_address.ciudad
-                            }}
-                            como {{ rateType }} -
-                            {{ rate.rate_at | moment('DD/MM/YYYY') }}
-                        </div>
-                        <div class="rate-item-detail" v-else>
+                        <div class="rate-item-detail">
                             Viajó a {{ rate.trip.to_town }} como
                             {{ rateType }} -
                             {{ rate.rate_at | moment('DD/MM/YYYY') }}
