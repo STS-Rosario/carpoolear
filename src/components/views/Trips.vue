@@ -1,5 +1,31 @@
 <template>
     <div class="trips container" :class="!user ? 'not-logged' : ''">
+        <!-- iOS Safari Notification Permission Warning -->
+        <div 
+            v-if="isSafari() && isPWA() && !hasNotificationPermission && showNotificationWarning" 
+            class="alert alert-warning ios-notification-warning"
+            role="alert"
+        >
+            <h4>⚠️ No tenés habilitadas las notificaciones</h4>
+            <p>
+                Parece que no aceptaste los permisos para que te podamos enviar notificaciones (en nuevos mensajes, etc.), presioná el botón para hacerlo:
+            </p>
+            <div class="notification-warning-buttons">
+                <button 
+                    class="btn btn-success" 
+                    @click="requestNotificationPermission"
+                >
+                    Otorgar permisos
+                </button>
+                <button 
+                    class="btn btn-default" 
+                    @click="dismissNotificationWarning"
+                    style="margin-left: 10px;"
+                >
+                    No mostrar de nuevo
+                </button>
+            </div>
+        </div>
         <div class="trips_title" v-show="!isMobile">
             <h1>{{ $t('buscaConQuien') }}</h1>
             <h3>{{ $t('elegiDatos') }}</h3>
@@ -24,6 +50,7 @@
         ></SearchBox>
         <Loading :data="trips" v-if="showingTrips">
             <div class="trips-list row">
+                
                 <modal
                     :name="'modal'"
                     v-if="showModal"
@@ -116,9 +143,7 @@
                         <span>{{ getInstallModalContent() && getInstallModalContent().title || 'Instalar App' }}</span>
                     </h3>
                     <div slot="body" class="">
-                        <p v-if="isIOS()" class="ios-safari-warning">Sólo en Safari (no en Chrome)</p>
-                        <p style="white-space: pre-line;">
-                            {{ getInstallModalContent() && getInstallModalContent().message || 'Instalá la web app (PWA) para tener notificaciones en tu celular/PC ante cualquier novedad.' }}
+                        <p style="white-space: pre-line;" v-html="getInstallModalContent() && getInstallModalContent().message || 'Instalá la web app (PWA) para tener notificaciones en tu celular/PC ante cualquier novedad.'">
                         </p>
                         <div style="margin-bottom: 10px">
                             <button
@@ -290,6 +315,7 @@ import moment from 'moment';
 import router from '../../router';
 import dialogs from '../../services/dialogs.js';
 import modal from '../Modal';
+import push from '../../cordova/push.js';
 
 export default {
     name: 'trips',
@@ -303,7 +329,9 @@ export default {
             showModal: false,
             showModalInstallApp: false,
             installAppEvent: null,
-            donateValue: 0
+            donateValue: 0,
+            hasNotificationPermission: false, // New state variable
+            showNotificationWarning: true // New state variable
         };
     },
     props: ['clearSearch', 'keepSearch'],
@@ -320,6 +348,16 @@ export default {
         }),
         isIOS() {
             return /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+        },
+        isSafari() {
+            const userAgent = window.navigator.userAgent.toLowerCase();
+            return /iphone|ipad|ipod/.test(userAgent) && /safari/.test(userAgent) && !/chrome/.test(userAgent);
+        },
+        isPWA() {
+            // Check if running as PWA (standalone mode)
+            return window.navigator.standalone === true || 
+                   window.matchMedia('(display-mode: standalone)').matches ||
+                   window.matchMedia('(display-mode: window-controls-overlay)').matches;
         },
         shouldShowInstallModal() {
             // Show modal if we have install event (Android) or if we're on iOS
@@ -339,7 +377,7 @@ export default {
                 // iOS - show installation instructions
                 return {
                     title: 'Instalar App en iOS',
-                    message: 'Para instalar Carpoolear en tu iPhone o iPad:\n\n1. Toca el botón Compartir (cuadrado con flecha hacia arriba)\n2. Desplázate hacia abajo y selecciona "Agregar a inicio"\n3. Toca "Añadir" para confirmar\n\n¡Listo! Ahora tendrás notificaciones y acceso rápido como cualquier app en tu teléfono.',
+                    message: 'Para instalar Carpoolear en tu iPhone o iPad:\n\n<strong style="color: red;">1. Ingresar a navegador Safari</strong>\n 2. Toca el botón Compartir (cuadrado con flecha hacia arriba)\n3. Desplázate hacia abajo y selecciona "Agregar a inicio"\n4. Toca "Añadir" para confirmar\n\n¡Listo! Ahora tendrás notificaciones y acceso rápido como cualquier app en tu teléfono.',
                     showInstallButton: false,
                     showCloseButton: true,
                     showDontShowAgainButton: true
@@ -580,6 +618,51 @@ export default {
                         }
                     }
                 });
+        },
+        checkNotificationPermission() {
+            if (window.Notification && window.Notification.permission) {
+                if (window.Notification.permission === 'granted') {
+                    this.hasNotificationPermission = true;
+                    this.showNotificationWarning = false;
+                } else if (window.Notification.permission === 'denied') {
+                    this.hasNotificationPermission = false;
+                    // Check if user has dismissed this warning before
+                    const hasDismissedNotificationWarning = localStorage.getItem('pwa_notification_warning_dismissed');
+                    this.showNotificationWarning = !hasDismissedNotificationWarning;
+                } else if (window.Notification.permission === 'default') {
+                    this.hasNotificationPermission = false;
+                    // Check if user has dismissed this warning before
+                    const hasDismissedNotificationWarning = localStorage.getItem('pwa_notification_warning_dismissed');
+                    this.showNotificationWarning = !hasDismissedNotificationWarning;
+                }
+            }
+        },
+        requestNotificationPermission() {
+            Notification.requestPermission().then(permission => {
+                if (permission === 'granted') {
+                    this.hasNotificationPermission = true;
+                    this.showNotificationWarning = false;
+                    // Initialize push.js after permission is granted
+                    try {
+                        push.init();
+                    } catch (error) {
+                        console.log('Error initializing push notifications:', error);
+                    }
+                    dialogs.message(this.$t('notificacionesPermitidas'), {
+                        duration: 10,
+                        estado: 'success'
+                    });
+                } else {
+                    dialogs.message(this.$t('notificacionesDenegadas'), {
+                        duration: 10,
+                        estado: 'error'
+                    });
+                }
+            });
+        },
+        dismissNotificationWarning() {
+            this.showNotificationWarning = false;
+            localStorage.setItem('pwa_notification_warning_dismissed', 'true');
         }
     },
     mounted() {
@@ -630,6 +713,11 @@ export default {
                     this.showModalInstallApp = true;
                 }, 2000);
             }
+        }
+        
+        // Check notification permission status for Safari users
+        if (this.isSafari() && this.isPWA()) {
+            this.checkNotificationPermission();
         }
 
         // bus.event
@@ -715,5 +803,45 @@ export default {
     font-weight: bold;
     margin-bottom: 0;
     font-size: 1.6em;
+}
+
+.ios-notification-warning {
+    margin-top: 1em;
+    padding: 1em;
+    text-align: center;
+    border: 2px solid orange;
+    border-radius: 20px;
+}
+
+.ios-notification-warning h4 {
+    margin-bottom: 0.5em;
+}
+
+.ios-notification-warning p {
+    margin-bottom: 1em;
+}
+
+.notification-warning-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.notification-warning-buttons .btn {
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .notification-warning-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .notification-warning-buttons .btn {
+        margin-bottom: 10px;
+        width: 100%;
+        max-width: 200px;
+    }
 }
 </style>
