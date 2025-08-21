@@ -4,8 +4,7 @@ function changePhoto(el, binding, node) {
     let arg;
     if (binding.arg === 'profile') {
         arg = '/image/profile/';
-    }
-    if (binding.arg === 'conversation') {
+    } else if (binding.arg === 'conversation') {
         arg = null;
     } else {
         arg = '/image/' + binding.arg + '/';
