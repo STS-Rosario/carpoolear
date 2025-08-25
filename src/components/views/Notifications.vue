@@ -99,6 +99,12 @@ export default {
                             params: { id: n.extras.conversation_id }
                         });
                         break;
+                    case 'announcement':
+                        // open external url
+                        if (n.extras.external_url) {
+                            window.open(n.extras.external_url);
+                        }
+                        break;
                 }
             }
         },
