@@ -184,6 +184,11 @@ function retoken(store) {
 }
 
 function logout(store) {
+    // Call the logout API endpoint
+    authApi.logout().catch((error) => {
+        console.error('Logout API call failed:', error);
+    });
+
     let device = globalStore.state.device.current;
     if (device) {
         globalStore.dispatch('device/delete', device.id);
