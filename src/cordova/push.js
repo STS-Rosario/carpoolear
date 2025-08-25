@@ -46,20 +46,37 @@ export default {
                         // scope: '/static/'
                     }
                 );
-                const permissionNotification =
-                    window.Notification.requestPermission()
-                        .then((permission) => {
-                            if (permission === 'granted') {
-                                return true;
-                            }
-                            return Promise.reject(new Error());
-                        })
-                        .catch(() => {
-                            return Promise.reject(new Error());
-                        });
 
-                Promise.all([serviceWorker, permissionNotification]).then(
-                    ([reg]) => {
+                // Check if permissions are already granted
+                let permissionNotification;
+                if (window.Notification.permission === 'granted') {
+                    // Permissions already granted, no need to request again
+                    console.log(
+                        'Notifications already granted, proceeding with setup'
+                    );
+                    permissionNotification = Promise.resolve('granted');
+                } else {
+                    // Request permissions only if not already granted
+                    console.log('Requesting notification permissions...');
+                    permissionNotification =
+                        window.Notification.requestPermission()
+                            .then((permission) => {
+                                if (permission === 'granted') {
+                                    return 'granted';
+                                }
+                                return Promise.reject(
+                                    new Error('Permission denied')
+                                );
+                            })
+                            .catch(() => {
+                                return Promise.reject(
+                                    new Error('Permission request failed')
+                                );
+                            });
+                }
+
+                Promise.all([serviceWorker, permissionNotification])
+                    .then(([reg]) => {
                         const firebaseApp = initializeApp(
                             process.env.FIREBASE_PARAMS
                         );
@@ -110,8 +127,10 @@ export default {
                                 notificationOptions
                             );
                         });
-                    }
-                );
+                    })
+                    .catch((error) => {
+                        console.log('Error during push initialization:', error);
+                    });
             }
         } else {
             let push = window.PushNotification.init({
