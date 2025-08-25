@@ -2921,6 +2921,7 @@
         background: #5cb85c;
         border-color: white;
         color: white;
+        margin-right: 1.4em;
     }
 
     .btn-primary.btn-donar-header:active:focus,
