@@ -1,26 +1,51 @@
+import { Preferences } from '@capacitor/preferences';
+
 class NativeStorage {
-    setItem(key, value) {
-        return new Promise((resolve, reject) => {
-            window.NativeStorage.setItem(key, value, resolve, reject);
-        });
+    async setItem(key, value) {
+        try {
+            // Convert value to string for Capacitor Preferences compatibility
+            const stringValue = typeof value === 'string' ? value : JSON.stringify(value);
+            await Preferences.set({ key, value: stringValue });
+            return Promise.resolve();
+        } catch (error) {
+            return Promise.reject(error);
+        }
     }
 
-    removeItem(key) {
-        return new Promise((resolve, reject) => {
-            window.NativeStorage.remove(key, resolve, reject);
-        });
+    async removeItem(key) {
+        try {
+            await Preferences.remove({ key });
+            return Promise.resolve();
+        } catch (error) {
+            return Promise.reject(error);
+        }
     }
 
-    getItem(key) {
-        return new Promise((resolve, reject) => {
-            window.NativeStorage.getItem(key, resolve, reject);
-        });
+    async getItem(key) {
+        try {
+            const result = await Preferences.get({ key });
+            if (result.value === null) {
+                throw new Error('Item not found');
+            }
+            
+            // Try to parse as JSON, fallback to string if parsing fails
+            try {
+                return JSON.parse(result.value);
+            } catch {
+                return result.value;
+            }
+        } catch (error) {
+            return Promise.reject(error);
+        }
     }
 
-    clear() {
-        return new Promise((resolve, reject) => {
-            window.NativeStorage.clear(resolve, reject);
-        });
+    async clear() {
+        try {
+            await Preferences.clear();
+            return Promise.resolve();
+        } catch (error) {
+            return Promise.reject(error);
+        }
     }
 }
 
