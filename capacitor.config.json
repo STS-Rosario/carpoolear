@@ -4,5 +4,8 @@
   "webDir": "dist/default/production/www",
   "server": {
     "androidScheme": "https"
+  },
+  "ios": {
+    "minVersion": "14.0"
   }
 }
