@@ -27,6 +27,11 @@ import messages from './language/i18n';
 import bus from './services/bus-event';
 import { DebugApi } from './services/api';
 
+// Capacitor plugins
+import { StatusBar, Style } from '@capacitor/status-bar';
+import { SplashScreen } from '@capacitor/splash-screen';
+import { App as CapacitorApp } from '@capacitor/app';
+
 import Vue2Leaflet from 'vue2-leaflet';
 
 import * as VueGoogleMaps from 'vue2-google-maps';
@@ -97,6 +102,29 @@ Vue.config.errorHandler = function (err, vm, info) {
     data.log = err.stack;
     debugApi.log(data);
 };
+
+// Initialize Capacitor plugins
+const initializeCapacitorPlugins = async () => {
+    try {
+        // Configure StatusBar to fix overlay issues
+        await StatusBar.setStyle({ style: Style.Light });
+        await StatusBar.setBackgroundColor({ color: '#ffffff' });
+        await StatusBar.setOverlaysWebView({ overlay: false });
+        
+        // Hide splash screen after app loads
+        setTimeout(async () => {
+            await SplashScreen.hide();
+        }, 1000);
+        
+        console.log('Capacitor plugins initialized');
+    } catch (error) {
+        console.log('Capacitor plugins not available (running in browser):', error);
+    }
+};
+
+// Initialize plugins when app is ready
+initializeCapacitorPlugins();
+
 window.store = store;
 if (process.env.SERVE) {
     console.log('Not running in cordova.');

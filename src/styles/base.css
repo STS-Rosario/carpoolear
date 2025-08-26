@@ -1791,6 +1791,8 @@
       border-top: 1px solid var(--medium-font-color);
       text-align: center;
       padding: 7px 0;
+      /* iOS safe area support for Capacitor */
+      padding-bottom: calc(7px + env(safe-area-inset-bottom));
   }
 
   .actionbar-top {
