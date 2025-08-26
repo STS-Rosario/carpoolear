@@ -1,51 +1,61 @@
 import { Preferences } from '@capacitor/preferences';
 
 class NativeStorage {
-    async setItem(key, value) {
-        try {
-            // Convert value to string for Capacitor Preferences compatibility
-            const stringValue = typeof value === 'string' ? value : JSON.stringify(value);
-            await Preferences.set({ key, value: stringValue });
-            return Promise.resolve();
-        } catch (error) {
-            return Promise.reject(error);
-        }
-    }
-
-    async removeItem(key) {
-        try {
-            await Preferences.remove({ key });
-            return Promise.resolve();
-        } catch (error) {
-            return Promise.reject(error);
-        }
-    }
-
-    async getItem(key) {
-        try {
-            const result = await Preferences.get({ key });
-            if (result.value === null) {
-                throw new Error('Item not found');
-            }
-            
-            // Try to parse as JSON, fallback to string if parsing fails
+    setItem(key, value) {
+        return new Promise(async (resolve, reject) => {
             try {
-                return JSON.parse(result.value);
-            } catch {
-                return result.value;
+                // Convert value to string for Capacitor Preferences compatibility
+                const stringValue = typeof value === 'string' ? value : JSON.stringify(value);
+                await Preferences.set({ key, value: stringValue });
+                resolve();
+            } catch (error) {
+                reject(error);
             }
-        } catch (error) {
-            return Promise.reject(error);
-        }
+        });
     }
 
-    async clear() {
-        try {
-            await Preferences.clear();
-            return Promise.resolve();
-        } catch (error) {
-            return Promise.reject(error);
-        }
+    removeItem(key) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await Preferences.remove({ key });
+                resolve();
+            } catch (error) {
+                reject(error);
+            }
+        });
+    }
+
+    getItem(key) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const result = await Preferences.get({ key });
+                if (result.value === null) {
+                    reject(new Error('Item not found'));
+                    return;
+                }
+                
+                // Try to parse as JSON, fallback to string if parsing fails
+                try {
+                    const parsed = JSON.parse(result.value);
+                    resolve(parsed);
+                } catch {
+                    resolve(result.value);
+                }
+            } catch (error) {
+                reject(error);
+            }
+        });
+    }
+
+    clear() {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await Preferences.clear();
+                resolve();
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
 }
 
