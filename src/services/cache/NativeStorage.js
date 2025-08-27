@@ -38,7 +38,7 @@ class NativeStorage {
                 try {
                     const parsed = JSON.parse(result.value);
                     resolve(parsed);
-                } catch {
+                } catch (parseError) {
                     resolve(result.value);
                 }
             } catch (error) {
