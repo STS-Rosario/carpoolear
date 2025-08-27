@@ -54,12 +54,14 @@ class Notification {
 export default {
     async init() {
         console.log('Push notifications init for platform:', Capacitor.getPlatform());
+        console.log('Is native platform?', Capacitor.isNativePlatform());
         
         if (Capacitor.getPlatform() === 'web') {
             // Web/PWA push notifications using Firebase
             await this.initWebPush();
         } else {
             // Native push notifications using Capacitor
+            console.log('Detected native platform, checking for Firebase...');
             await this.initNativePush();
         }
     },
@@ -155,12 +157,30 @@ export default {
 
             console.log('Initializing Capacitor push notifications...');
 
+            // For Android, we need to check if Firebase is configured
+            // Otherwise we'll skip push notification setup
+            const platform = Capacitor.getPlatform();
+            console.log('Checking platform:', platform);
+            
+            if (platform === 'android') {
+                console.log('Android platform detected - skipping push notifications');
+                console.warn('Skipping push notifications on Android - Firebase configuration not available');
+                console.warn('To enable push notifications on Android, add google-services.json to android/app/');
+                return;
+            }
+
             // Request permission to use push notifications
             const result = await PushNotifications.requestPermissions();
             
             if (result.receive === 'granted') {
                 // Register with Apple / Google to receive push via APNS/FCM
-                await PushNotifications.register();
+                try {
+                    await PushNotifications.register();
+                } catch (registrationError) {
+                    console.error('Push notification registration failed:', registrationError);
+                    console.warn('This might be due to missing Firebase configuration for Android');
+                    return;
+                }
             } else {
                 console.log('Push notification permissions denied');
                 return;
