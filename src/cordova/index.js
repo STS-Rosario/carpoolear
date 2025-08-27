@@ -1,7 +1,7 @@
 /* jshint esversion: 6 */
 
 import store from '../store';
-import push from './push.js';
+import push from './push-capacitor.js';
 import facebook from './facebook.js';
 import * as types from '../store/mutation-types';
 import cache from '../services/cache';
@@ -47,11 +47,9 @@ let doInit = () => {
     store.commit('cordova/' + types.CORDOVA_DEVICEREADY);
     store.commit('cordova/' + types.CORDOVA_SET_DEVICE, window.device);
 
-    console.log('window.PushNotification?', window.PushNotification);
-    if (window.PushNotification) {
-        console.log('push init');
-        push.init();
-    }
+    // Initialize push notifications with Capacitor
+    console.log('Initializing push notifications...');
+    push.init();
     store.dispatch('init');
 
     document.addEventListener('backbutton', onBackbutton, false);

@@ -171,6 +171,11 @@
   resolved "https://registry.yarnpkg.com/@capacitor/preferences/-/preferences-7.0.2.tgz#9557bd817b2f4cde942d3ce1cdf5abdb1292357f"
   integrity sha512-JVCy0/oc6RsRencLOZ8rMqjNxAlHs7awPJU/MXqangsJ48oO2PnYGHfCvci6WgIJlqyC0QhvWZaO1BR1lVkHWQ==
 
+"@capacitor/push-notifications@^7.0.2":
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/@capacitor/push-notifications/-/push-notifications-7.0.2.tgz#755c2eeed58626304ab72d19d08626ace89916d5"
+  integrity sha512-naw1R61V0qlEBa4CsF7+w3ay7V1PdZ4bQ1cJum+lgZB/yz3ASb6fRHm5GPjJFgTR9ET8zN0Q9y7lfgMTBgDOiA==
+
 "@capacitor/splash-screen@^7.0.2":
   version "7.0.2"
   resolved "https://registry.yarnpkg.com/@capacitor/splash-screen/-/splash-screen-7.0.2.tgz#bca893c78e93b3ff8c01c336e0da726492c55f7b"
