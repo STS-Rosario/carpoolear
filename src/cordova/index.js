@@ -1,16 +1,21 @@
 /* jshint esversion: 6 */
 
+alert('CORDOVA INDEX.JS IS LOADING!');
+console.log('CORDOVA INDEX.JS IS LOADING!');
+
 import store from '../store';
 import push from './push-capacitor.js';
 import facebook from './facebook.js';
 import * as types from '../store/mutation-types';
 import cache from '../services/cache';
+import { Capacitor } from '@capacitor/core';
 
 window.facebook = facebook;
 window.appVersion = '2.2.2';
 
 let onDeviceReady = () => {
     console.log('Device ready');
+    alert('Device ready event fired!');
     let hasToDoInit = true;
     /* if (window.device && window.device.platform) {
         if (window.device.platform.toLowerCase() === 'android' || window.device.platform.toLowerCase() === 'ios') {
@@ -44,11 +49,13 @@ let onDeviceReady = () => {
 
 let doInit = () => {
     console.log('do Init');
+    alert('doInit called - about to initialize push!');
     store.commit('cordova/' + types.CORDOVA_DEVICEREADY);
     store.commit('cordova/' + types.CORDOVA_SET_DEVICE, window.device);
 
     // Initialize push notifications with Capacitor
     console.log('Initializing push notifications...');
+    alert('About to call push.init()');
     push.init();
     store.dispatch('init');
 
@@ -85,3 +92,22 @@ document.addEventListener('offline', onOffline, false);
 
 document.addEventListener('pause', onPause, false);
 document.addEventListener('resumen', onResumen, false);
+
+// For Capacitor: Initialize immediately if running on native platform
+console.log('Checking platform:', Capacitor.getPlatform());
+console.log('Is native platform:', Capacitor.isNativePlatform());
+alert('Platform check: ' + Capacitor.getPlatform() + ' - Native: ' + Capacitor.isNativePlatform());
+
+if (Capacitor.isNativePlatform()) {
+    console.log('Capacitor native platform detected - initializing immediately');
+    alert('Capacitor detected - initializing push now!');
+    
+    // Wait a bit for Capacitor to be fully ready
+    setTimeout(() => {
+        alert('About to call onDeviceReady() manually');
+        onDeviceReady();
+    }, 1000);
+} else {
+    console.log('Web platform or Cordova - waiting for deviceready event');
+    alert('Web platform detected - waiting for deviceready');
+}

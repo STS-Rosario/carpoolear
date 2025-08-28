@@ -53,14 +53,19 @@ class Notification {
 
 export default {
     async init() {
+        console.log('🚀 Starting push notifications initialization...');
         console.log('Push notifications init for platform:', Capacitor.getPlatform());
         console.log('Is native platform?', Capacitor.isNativePlatform());
         
+        alert('Push init started for platform: ' + Capacitor.getPlatform());
+        
         if (Capacitor.getPlatform() === 'web') {
             // Web/PWA push notifications using Firebase
+            alert('Initializing web push...');
             await this.initWebPush();
         } else {
             // Native push notifications using Capacitor
+            alert('Initializing native push...');
             await this.initNativePush();
         }
     },
@@ -174,26 +179,45 @@ export default {
 
             // On success, we should be able to receive notifications
             PushNotifications.addListener('registration', (token) => {
-                console.log('Push registration success, token: ' + token.value);
+                console.log('🎯 Push registration success!');
+                console.log('Firebase token:', token.value);
+                console.log('Token length:', token.value.length);
+                alert('Push token registered: ' + token.value.substring(0, 20) + '...');
                 store.commit('cordova/' + types.CORDOVA_DEVICE_REGISTER, token.value);
             });
 
             // Some issue with our setup and push will not work
             PushNotifications.addListener('registrationError', (error) => {
-                console.log('Error on registration: ' + JSON.stringify(error));
+                console.log('❌ Error on registration: ' + JSON.stringify(error));
+                alert('Push registration failed: ' + JSON.stringify(error));
             });
 
             // Show us the notification payload if the app is open on our device
             PushNotifications.addListener('pushNotificationReceived', (notification) => {
                 try {
-                    console.log('Push received: ' + JSON.stringify(notification));
+                    console.log('🔔 Push notification received!');
+                    console.log('Raw notification data:', JSON.stringify(notification, null, 2));
+                    console.log('Title:', notification.title);
+                    console.log('Body:', notification.body);
+                    console.log('Data:', notification.data);
+                    
+                    // Show alert to confirm receipt
+                    alert('Push received! Title: ' + (notification.title || 'No title') + ' Body: ' + (notification.body || 'No body'));
+                    
                     const n = new Notification({
                         title: notification.title || '',
                         body: notification.body || '',
                         data: notification.data || {}
                     });
                     n.foreground = true;
+                    
+                    console.log('Dispatching to store:', n);
                     store.dispatch('cordova/notificationArrive', n);
+                    
+                    // Try to show a system notification as well
+                    if (Capacitor.isNativePlatform()) {
+                        console.log('Native platform - notification should appear in system tray');
+                    }
                 } catch (error) {
                     console.error('Error handling push notification received:', error);
                 }

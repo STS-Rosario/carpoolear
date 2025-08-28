@@ -1,5 +1,7 @@
 /* jshint esversion: 6 */
 
+alert('MAIN.JS IS LOADING!!!');
+
 import 'babel-polyfill';
 
 import Vue from 'vue';
@@ -116,9 +118,61 @@ const initializeCapacitorPlugins = async () => {
             await SplashScreen.hide();
         }, 1000);
         
+        // Initialize push notifications directly here
+        await initializePushNotifications();
+        
         console.log('Capacitor plugins initialized');
     } catch (error) {
         console.log('Capacitor plugins not available (running in browser):', error);
+    }
+};
+
+// Direct push notification initialization
+const initializePushNotifications = async () => {
+    try {
+        const { Capacitor } = await import('@capacitor/core');
+        
+        alert('Push init - Platform: ' + Capacitor.getPlatform() + ' - Native: ' + Capacitor.isNativePlatform());
+        
+        if (Capacitor.isNativePlatform()) {
+            const { PushNotifications } = await import('@capacitor/push-notifications');
+            
+            alert('Requesting push permissions...');
+            const result = await PushNotifications.requestPermissions();
+            
+            if (result.receive === 'granted') {
+                alert('Push permissions granted - registering...');
+                await PushNotifications.register();
+                
+                // Listen for registration success
+                PushNotifications.addListener('registration', (token) => {
+                    alert('Push token received: ' + token.value.substring(0, 20) + '...');
+                    console.log('Push registration token:', token.value);
+                });
+                
+                // Listen for registration errors
+                PushNotifications.addListener('registrationError', (error) => {
+                    alert('Push registration error: ' + JSON.stringify(error));
+                });
+                
+                // Listen for incoming push notifications
+                PushNotifications.addListener('pushNotificationReceived', (notification) => {
+                    alert('Push received: ' + notification.title + ' - ' + notification.body);
+                });
+                
+                // Listen for notification tap
+                PushNotifications.addListener('pushNotificationActionPerformed', (notification) => {
+                    alert('Push tapped: ' + notification.notification.title);
+                });
+            } else {
+                alert('Push permissions denied');
+            }
+        } else {
+            alert('Not native platform - push notifications not initialized');
+        }
+    } catch (error) {
+        alert('Error initializing push notifications: ' + error.message);
+        console.error('Push notification initialization error:', error);
     }
 };
 
