@@ -53,16 +53,40 @@ class Notification {
 
 export default {
     async init() {
-        console.log('Push notifications init for platform:', Capacitor.getPlatform());
-        console.log('Is native platform?', Capacitor.isNativePlatform());
-        
-        if (Capacitor.getPlatform() === 'web') {
-            // Web/PWA push notifications using Firebase
-            await this.initWebPush();
-        } else {
-            // Native push notifications using Capacitor
-            console.log('Detected native platform, checking for Firebase...');
-            await this.initNativePush();
+        try {
+            console.log('=== DEBUG: Starting push notification init ===');
+            console.log('Push notifications init for platform:', Capacitor.getPlatform());
+            console.log('Is native platform?', Capacitor.isNativePlatform());
+            
+            console.log('=== DEBUG: COMPLETELY DISABLING push notifications for Android ===');
+            
+            // Completely disable push notifications for Android until Firebase is properly configured
+            const platform = Capacitor.getPlatform();
+            console.log('=== DEBUG: Platform retrieved:', platform);
+            
+            if (platform === 'android') {
+                console.log('=== DEBUG: Android detected - skipping ALL push notification setup ===');
+                console.warn('Push notifications disabled on Android - Firebase configuration required');
+                return;
+            }
+            
+            console.log('=== DEBUG: About to check platform type ===');
+            
+            if (platform === 'web') {
+                console.log('=== DEBUG: Web platform detected, initializing web push ===');
+                // Web/PWA push notifications using Firebase
+                await this.initWebPush();
+            } else {
+                console.log('=== DEBUG: Native platform detected, calling initNativePush ===');
+                // Native push notifications using Capacitor
+                console.log('Detected native platform, checking for Firebase...');
+                await this.initNativePush();
+            }
+            
+            console.log('=== DEBUG: Push notification init completed ===');
+        } catch (error) {
+            console.error('=== DEBUG: Error in push notification init:', error);
+            console.error('=== DEBUG: Error stack:', error.stack);
         }
     },
 
@@ -144,12 +168,15 @@ export default {
 
     async initNativePush() {
         try {
+            console.log('=== DEBUG: Entering initNativePush ===');
+            
             // Import push notifications plugin dynamically
             // This will work even if the plugin isn't installed yet
             let PushNotifications;
             try {
                 const module = await import('@capacitor/push-notifications');
                 PushNotifications = module.PushNotifications;
+                console.log('=== DEBUG: Push Notifications plugin loaded ===');
             } catch (error) {
                 console.warn('Push Notifications plugin not available:', error);
                 return;
@@ -160,14 +187,17 @@ export default {
             // For Android, we need to check if Firebase is configured
             // Otherwise we'll skip push notification setup
             const platform = Capacitor.getPlatform();
-            console.log('Checking platform:', platform);
+            console.log('=== DEBUG: Checking platform:', platform);
+            console.log('=== DEBUG: Platform comparison (platform === "android"):', platform === 'android');
             
             if (platform === 'android') {
-                console.log('Android platform detected - skipping push notifications');
+                console.log('=== DEBUG: Android platform detected - SHOULD SKIP push notifications ===');
                 console.warn('Skipping push notifications on Android - Firebase configuration not available');
                 console.warn('To enable push notifications on Android, add google-services.json to android/app/');
                 return;
             }
+            
+            console.log('=== DEBUG: Not Android, proceeding with push notifications ===');
 
             // Request permission to use push notifications
             const result = await PushNotifications.requestPermissions();

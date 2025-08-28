@@ -23,7 +23,6 @@
     "@capacitor/core": "^7.4.3",
     "@capacitor/ios": "^7.4.3",
     "@capacitor/preferences": "^7.0.2",
-    "@capacitor/push-notifications": "^7.0.2",
     "@capacitor/splash-screen": "^7.0.2",
     "@capacitor/status-bar": "^7.0.2",
     "@movilizame/vue-jumper": "^2.0.2",
