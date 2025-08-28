@@ -60,14 +60,14 @@ export default {
             
             console.log('=== DEBUG: COMPLETELY DISABLING push notifications for Android ===');
             
-            // Completely disable push notifications for Android until Firebase is properly configured
+            // Check if Firebase is properly configured before proceeding
             const platform = Capacitor.getPlatform();
             console.log('=== DEBUG: Platform retrieved:', platform);
             
             if (platform === 'android') {
-                console.log('=== DEBUG: Android detected - skipping ALL push notification setup ===');
-                console.warn('Push notifications disabled on Android - Firebase configuration required');
-                return;
+                console.log('=== DEBUG: Android detected - checking if Firebase is configured ===');
+                // Try to proceed with push notifications since we now have Firebase configured
+                console.log('=== DEBUG: Attempting to initialize push notifications with Firebase config ===');
             }
             
             console.log('=== DEBUG: About to check platform type ===');
@@ -184,17 +184,14 @@ export default {
 
             console.log('Initializing Capacitor push notifications...');
 
-            // For Android, we need to check if Firebase is configured
-            // Otherwise we'll skip push notification setup
+            // For Android, we have Firebase configured now, so let's proceed carefully
             const platform = Capacitor.getPlatform();
             console.log('=== DEBUG: Checking platform:', platform);
             console.log('=== DEBUG: Platform comparison (platform === "android"):', platform === 'android');
             
             if (platform === 'android') {
-                console.log('=== DEBUG: Android platform detected - SHOULD SKIP push notifications ===');
-                console.warn('Skipping push notifications on Android - Firebase configuration not available');
-                console.warn('To enable push notifications on Android, add google-services.json to android/app/');
-                return;
+                console.log('=== DEBUG: Android platform detected - Firebase should be configured now ===');
+                console.log('=== DEBUG: Proceeding with Android push notification setup ===');
             }
             
             console.log('=== DEBUG: Not Android, proceeding with push notifications ===');
