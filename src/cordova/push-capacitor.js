@@ -53,40 +53,15 @@ class Notification {
 
 export default {
     async init() {
-        try {
-            console.log('=== DEBUG: Starting push notification init ===');
-            console.log('Push notifications init for platform:', Capacitor.getPlatform());
-            console.log('Is native platform?', Capacitor.isNativePlatform());
-            
-            console.log('=== DEBUG: COMPLETELY DISABLING push notifications for Android ===');
-            
-            // Check if Firebase is properly configured before proceeding
-            const platform = Capacitor.getPlatform();
-            console.log('=== DEBUG: Platform retrieved:', platform);
-            
-            if (platform === 'android') {
-                console.log('=== DEBUG: Android detected - checking if Firebase is configured ===');
-                // Try to proceed with push notifications since we now have Firebase configured
-                console.log('=== DEBUG: Attempting to initialize push notifications with Firebase config ===');
-            }
-            
-            console.log('=== DEBUG: About to check platform type ===');
-            
-            if (platform === 'web') {
-                console.log('=== DEBUG: Web platform detected, initializing web push ===');
-                // Web/PWA push notifications using Firebase
-                await this.initWebPush();
-            } else {
-                console.log('=== DEBUG: Native platform detected, calling initNativePush ===');
-                // Native push notifications using Capacitor
-                console.log('Detected native platform, checking for Firebase...');
-                await this.initNativePush();
-            }
-            
-            console.log('=== DEBUG: Push notification init completed ===');
-        } catch (error) {
-            console.error('=== DEBUG: Error in push notification init:', error);
-            console.error('=== DEBUG: Error stack:', error.stack);
+        console.log('Push notifications init for platform:', Capacitor.getPlatform());
+        console.log('Is native platform?', Capacitor.isNativePlatform());
+        
+        if (Capacitor.getPlatform() === 'web') {
+            // Web/PWA push notifications using Firebase
+            await this.initWebPush();
+        } else {
+            // Native push notifications using Capacitor
+            await this.initNativePush();
         }
     },
 
@@ -168,33 +143,17 @@ export default {
 
     async initNativePush() {
         try {
-            console.log('=== DEBUG: Entering initNativePush ===');
-            
             // Import push notifications plugin dynamically
-            // This will work even if the plugin isn't installed yet
             let PushNotifications;
             try {
                 const module = await import('@capacitor/push-notifications');
                 PushNotifications = module.PushNotifications;
-                console.log('=== DEBUG: Push Notifications plugin loaded ===');
             } catch (error) {
                 console.warn('Push Notifications plugin not available:', error);
                 return;
             }
 
             console.log('Initializing Capacitor push notifications...');
-
-            // For Android, we have Firebase configured now, so let's proceed carefully
-            const platform = Capacitor.getPlatform();
-            console.log('=== DEBUG: Checking platform:', platform);
-            console.log('=== DEBUG: Platform comparison (platform === "android"):', platform === 'android');
-            
-            if (platform === 'android') {
-                console.log('=== DEBUG: Android platform detected - Firebase should be configured now ===');
-                console.log('=== DEBUG: Proceeding with Android push notification setup ===');
-            }
-            
-            console.log('=== DEBUG: Not Android, proceeding with push notifications ===');
 
             // Request permission to use push notifications
             const result = await PushNotifications.requestPermissions();
@@ -226,28 +185,36 @@ export default {
 
             // Show us the notification payload if the app is open on our device
             PushNotifications.addListener('pushNotificationReceived', (notification) => {
-                console.log('Push received: ' + JSON.stringify(notification));
-                const n = new Notification({
-                    title: notification.title,
-                    body: notification.body,
-                    data: notification.data
-                });
-                n.foreground = true;
-                store.dispatch('cordova/notificationArrive', n);
+                try {
+                    console.log('Push received: ' + JSON.stringify(notification));
+                    const n = new Notification({
+                        title: notification.title || '',
+                        body: notification.body || '',
+                        data: notification.data || {}
+                    });
+                    n.foreground = true;
+                    store.dispatch('cordova/notificationArrive', n);
+                } catch (error) {
+                    console.error('Error handling push notification received:', error);
+                }
             });
 
             // Method called when tapping on a notification
             PushNotifications.addListener('pushNotificationActionPerformed', (notification) => {
-                console.log('Push action performed: ' + JSON.stringify(notification));
-                const n = new Notification({
-                    title: notification.notification.title,
-                    body: notification.notification.body,
-                    data: notification.notification.data,
-                    actionId: notification.actionId
-                });
-                n.foreground = false;
-                n.coldstart = true;
-                store.dispatch('cordova/notificationArrive', n);
+                try {
+                    console.log('Push action performed: ' + JSON.stringify(notification));
+                    const n = new Notification({
+                        title: (notification.notification && notification.notification.title) || '',
+                        body: (notification.notification && notification.notification.body) || '',
+                        data: (notification.notification && notification.notification.data) || {},
+                        actionId: notification.actionId
+                    });
+                    n.foreground = false;
+                    n.coldstart = true;
+                    store.dispatch('cordova/notificationArrive', n);
+                } catch (error) {
+                    console.error('Error handling push notification action:', error);
+                }
             });
 
         } catch (error) {
