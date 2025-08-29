@@ -166,6 +166,11 @@
   resolved "https://registry.yarnpkg.com/@capacitor/ios/-/ios-7.4.3.tgz#22c3438d139347a0f61c9ec14abd7dd0c8fbc241"
   integrity sha512-VNm7cHODgh3KK/4ZC2rXU9gBlvHii/mYFLI+XMXwq24nhB679QxHhz+pUuI7PatYoM2q4MAL0NR/dRgehKCaSA==
 
+"@capacitor/network@^7.0.2":
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/@capacitor/network/-/network-7.0.2.tgz#8dd91aba31ab3243052d8f18fb68227f5c82ff11"
+  integrity sha512-KKkiUvGfMVKIcYaG+KlGAxrQtoRnwJtT+9yhTkCFzZWeYrY91sBZKOVOfnNHO8RiOxqbKn5VSUlyFLQQiyyfyg==
+
 "@capacitor/preferences@^7.0.2":
   version "7.0.2"
   resolved "https://registry.yarnpkg.com/@capacitor/preferences/-/preferences-7.0.2.tgz#9557bd817b2f4cde942d3ce1cdf5abdb1292357f"

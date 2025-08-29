@@ -8,6 +8,7 @@ import facebook from './facebook.js';
 import * as types from '../store/mutation-types';
 import cache from '../services/cache';
 import { Capacitor } from '@capacitor/core';
+import { Network } from '@capacitor/network';
 
 window.facebook = facebook;
 window.appVersion = '2.2.2';
@@ -53,18 +54,62 @@ let doInit = () => {
     // Initialize push notifications with Capacitor
     console.log('Initializing push notifications...');
     push.init();
+    
+    // Initialize network monitoring with Capacitor
+    initNetworkMonitoring();
+    
     store.dispatch('init');
 
     document.addEventListener('backbutton', onBackbutton, false);
 };
 
+let initNetworkMonitoring = async () => {
+    if (Capacitor.isNativePlatform()) {
+        console.log('Initializing Capacitor network monitoring...');
+        
+        try {
+            // Get initial network status
+            const status = await Network.getStatus();
+            console.log('Initial network status:', status);
+            
+            if (status.connected) {
+                store.dispatch('cordova/deviceOnline');
+            } else {
+                store.dispatch('cordova/deviceOffline');
+            }
+            
+            // Listen for network changes
+            Network.addListener('networkStatusChange', (status) => {
+                console.log('Network status changed:', status);
+                if (status.connected) {
+                    store.dispatch('cordova/deviceOnline');
+                } else {
+                    store.dispatch('cordova/deviceOffline');
+                }
+            });
+        } catch (error) {
+            console.error('Error initializing network monitoring:', error);
+            // Fallback to browser events
+            initBrowserNetworkEvents();
+        }
+    } else {
+        console.log('Web platform - using browser network events');
+        initBrowserNetworkEvents();
+    }
+};
+
+let initBrowserNetworkEvents = () => {
+    document.addEventListener('online', onOnline, false);
+    document.addEventListener('offline', onOffline, false);
+};
+
 let onOnline = () => {
-    console.log('Device online');
+    console.log('Device online (browser event)');
     store.dispatch('cordova/deviceOnline');
 };
 
 let onOffline = () => {
-    console.log('Device offline');
+    console.log('Device offline (browser event)');
     store.dispatch('cordova/deviceOffline');
 };
 
@@ -83,8 +128,6 @@ let onResumen = () => {
 };
 
 document.addEventListener('deviceready', onDeviceReady, false);
-document.addEventListener('online', onOnline, false);
-document.addEventListener('offline', onOffline, false);
 
 document.addEventListener('pause', onPause, false);
 document.addEventListener('resumen', onResumen, false);
