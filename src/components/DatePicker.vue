@@ -30,16 +30,15 @@
             class="form-control form-control-with-icon form-control-date"
         >
             <input
-                @focus="openNativeDatePicker"
+                @focus="focus = true"
                 @blur="focus = false"
-                :value="niceDate"
+                :value="dateMobile"
                 @change="changeMobileValue"
-                type="text"
+                type="date"
                 id="datepicker-mobile"
                 :min="min | moment('YYYY-MM-DD')"
                 :max="max | moment('YYYY-MM-DD')"
                 autocomplete="off"
-                :placeholder="'dd/mm/yyyy'"
             />
         </div>
     </div>
@@ -91,35 +90,12 @@ export default {
         },
         changeMobileValue(el) {
             this.dateMobile = el.target.value;
-        },
-        openNativeDatePicker(event) {
-            event.target.blur();
-            var context = this;
-            this.focus = true;
-            let date = new Date();
-            if (context.dateMobile) {
-                date = moment(context.dateMobile).toDate();
+            // Update the nice formatted date for consistency
+            if (el.target.value) {
+                this.niceDate = moment(el.target.value).format('DD/MM/YYYY');
+            } else {
+                this.niceDate = '';
             }
-            var options = {
-                date: date,
-                mode: 'date',
-                minDate: Date.parse(moment(this.min).toDate()),
-                maxDate: Date.parse(moment(this.max).toDate()),
-                androidTheme: 3
-            };
-
-            function onSuccess(date) {
-                context.dateMobile = moment(date).format('YYYY-MM-DD');
-                context.niceDate = moment(date).format('DD/MM/YYYY');
-            }
-
-            function onError(error) {
-                // Android only
-                console.log(error);
-                // window.alert('Error: ' + error);
-            }
-
-            window.datePicker.show(options, onSuccess, onError);
         }
     },
     watch: {
