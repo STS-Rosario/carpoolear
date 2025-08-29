@@ -56,16 +56,22 @@ export default {
         console.log('🚀 Starting push notifications initialization...');
         console.log('Push notifications init for platform:', Capacitor.getPlatform());
         console.log('Is native platform?', Capacitor.isNativePlatform());
+        console.log('⚠️ CALLING INIT ALERT!');
         
         alert('Push init started for platform: ' + Capacitor.getPlatform());
+        console.log('⚠️ INIT ALERT COMPLETED');
         
         if (Capacitor.getPlatform() === 'web') {
             // Web/PWA push notifications using Firebase
+            console.log('⚠️ CALLING WEB PUSH ALERT!');
             alert('Initializing web push...');
+            console.log('⚠️ WEB PUSH ALERT COMPLETED');
             await this.initWebPush();
         } else {
             // Native push notifications using Capacitor
+            console.log('⚠️ CALLING NATIVE PUSH ALERT!');
             alert('Initializing native push...');
+            console.log('⚠️ NATIVE PUSH ALERT COMPLETED');
             await this.initNativePush();
         }
     },
@@ -182,7 +188,20 @@ export default {
                 console.log('🎯 Push registration success!');
                 console.log('Firebase token:', token.value);
                 console.log('Token length:', token.value.length);
+                console.log('⚠️ CALLING ALERT FOR TOKEN REGISTRATION!');
+                
+                // Multiple ways to show the token registration
                 alert('Push token registered: ' + token.value.substring(0, 20) + '...');
+                console.log('⚠️ ALERT CALL COMPLETED');
+                
+                // Also try using confirm dialog as backup
+                try {
+                    const result = confirm('Push token registered! Click OK to copy token to clipboard. Token: ' + token.value.substring(0, 30) + '...');
+                    console.log('Confirm dialog result:', result);
+                } catch (e) {
+                    console.log('Confirm dialog failed:', e);
+                }
+                
                 store.commit('cordova/' + types.CORDOVA_DEVICE_REGISTER, token.value);
             });
 
@@ -200,9 +219,19 @@ export default {
                     console.log('Title:', notification.title);
                     console.log('Body:', notification.body);
                     console.log('Data:', notification.data);
+                    console.log('⚠️ CALLING ALERT FOR PUSH RECEIVED!');
                     
                     // Show alert to confirm receipt
                     alert('Push received! Title: ' + (notification.title || 'No title') + ' Body: ' + (notification.body || 'No body'));
+                    console.log('⚠️ PUSH RECEIVED ALERT CALL COMPLETED');
+                    
+                    // Also try confirm dialog
+                    try {
+                        const result = confirm('Push notification arrived! Title: ' + (notification.title || 'No title'));
+                        console.log('Push confirm dialog result:', result);
+                    } catch (e) {
+                        console.log('Push confirm dialog failed:', e);
+                    }
                     
                     const n = new Notification({
                         title: notification.title || '',
@@ -217,6 +246,8 @@ export default {
                     // Try to show a system notification as well
                     if (Capacitor.isNativePlatform()) {
                         console.log('Native platform - notification should appear in system tray');
+                        // The push notification should automatically appear as a system notification
+                        // when the app is in background, but when in foreground we need to handle it
                     }
                 } catch (error) {
                     console.error('Error handling push notification received:', error);
