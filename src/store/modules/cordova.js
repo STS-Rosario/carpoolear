@@ -121,7 +121,12 @@ const actions = {
             if (router.stack.length > 0) {
                 router.go(-1);
             } else {
-                navigator.Backbutton.goHome();
+                // In Capacitor, use App.exitApp() instead of navigator.Backbutton.goHome()
+                if (window.Capacitor && window.Capacitor.isNativePlatform()) {
+                    import('@capacitor/app').then(({ App }) => {
+                        App.exitApp();
+                    });
+                }
             }
         }
     }

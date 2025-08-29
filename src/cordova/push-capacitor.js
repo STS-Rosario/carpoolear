@@ -53,27 +53,24 @@ class Notification {
 
 export default {
     async init() {
-        console.log('🚀 Starting push notifications initialization...');
-        console.log('Push notifications init for platform:', Capacitor.getPlatform());
-        console.log('Is native platform?', Capacitor.isNativePlatform());
-        console.log('⚠️ CALLING INIT ALERT!');
-        
-        alert('Push init started for platform: ' + Capacitor.getPlatform());
-        console.log('⚠️ INIT ALERT COMPLETED');
+        console.log('🚀 === PUSH NOTIFICATION INIT STARTED ===');
+        console.log('📱 Platform:', Capacitor.getPlatform());
+        console.log('🔧 Is native platform?', Capacitor.isNativePlatform());
+        console.log('📍 Capacitor available?', !!window.Capacitor);
+        console.log('🔧 Starting push initialization...');
         
         if (Capacitor.getPlatform() === 'web') {
             // Web/PWA push notifications using Firebase
-            console.log('⚠️ CALLING WEB PUSH ALERT!');
-            alert('Initializing web push...');
-            console.log('⚠️ WEB PUSH ALERT COMPLETED');
+            console.log('🌐 === WEB PUSH INITIALIZATION ===');
+            console.log('🔧 Initializing web push notifications...');
             await this.initWebPush();
         } else {
             // Native push notifications using Capacitor
-            console.log('⚠️ CALLING NATIVE PUSH ALERT!');
-            alert('Initializing native push...');
-            console.log('⚠️ NATIVE PUSH ALERT COMPLETED');
+            console.log('📱 === NATIVE PUSH INITIALIZATION ===');
+            console.log('🔧 Initializing native push notifications...');
             await this.initNativePush();
         }
+        console.log('✅ === PUSH NOTIFICATION INIT COMPLETED ===');
     },
 
     async initWebPush() {
@@ -153,86 +150,93 @@ export default {
     },
 
     async initNativePush() {
+        console.log('📱 === NATIVE PUSH INIT START ===');
         try {
+            console.log('📦 Importing PushNotifications plugin...');
             // Import push notifications plugin dynamically
             let PushNotifications;
             try {
                 const module = await import('@capacitor/push-notifications');
                 PushNotifications = module.PushNotifications;
+                console.log('✅ PushNotifications plugin imported successfully');
             } catch (error) {
-                console.warn('Push Notifications plugin not available:', error);
+                console.error('❌ Push Notifications plugin not available:', error);
                 return;
             }
 
-            console.log('Initializing Capacitor push notifications...');
+            console.log('🔧 Initializing Capacitor push notifications...');
 
             // Request permission to use push notifications
+            console.log('🔑 Requesting push notification permissions...');
             const result = await PushNotifications.requestPermissions();
+            console.log('🔑 Permission result:', result);
             
             if (result.receive === 'granted') {
+                console.log('✅ Push notification permissions GRANTED');
                 // Register with Apple / Google to receive push via APNS/FCM
+                console.log('📝 Starting push notification registration...');
                 try {
                     await PushNotifications.register();
+                    console.log('✅ Push notification registration initiated successfully');
                 } catch (registrationError) {
-                    console.error('Push notification registration failed:', registrationError);
+                    console.error('❌ Push notification registration FAILED:', registrationError);
                     console.warn('This might be due to missing Firebase configuration for Android');
                     return;
                 }
             } else {
-                console.log('Push notification permissions denied');
+                console.log('❌ Push notification permissions DENIED:', result);
                 return;
             }
 
             // On success, we should be able to receive notifications
+            console.log('🎧 Setting up push notification event listeners...');
+            
             PushNotifications.addListener('registration', (token) => {
-                console.log('🎯 Push registration success!');
-                console.log('Firebase token:', token.value);
-                console.log('Token length:', token.value.length);
-                console.log('⚠️ CALLING ALERT FOR TOKEN REGISTRATION!');
+                console.log('🎯 === TOKEN REGISTRATION SUCCESS ===');
+                console.log('🔐 Firebase token received:', token.value);
+                console.log('📏 Token length:', token.value.length);
+                console.log('🔗 Token first 50 chars:', token.value.substring(0, 50) + '...');
+                console.log('📊 Full token object:', JSON.stringify(token, null, 2));
+                console.log('🔗 Proceeding with token storage...');
                 
-                // Multiple ways to show the token registration
-                alert('Push token registered: ' + token.value.substring(0, 20) + '...');
-                console.log('⚠️ ALERT CALL COMPLETED');
-                
-                // Also try using confirm dialog as backup
-                try {
-                    const result = confirm('Push token registered! Click OK to copy token to clipboard. Token: ' + token.value.substring(0, 30) + '...');
-                    console.log('Confirm dialog result:', result);
-                } catch (e) {
-                    console.log('Confirm dialog failed:', e);
-                }
-                
+                console.log('💾 Storing token in Vuex store...');
                 store.commit('cordova/' + types.CORDOVA_DEVICE_REGISTER, token.value);
+                console.log('✅ Token stored in store successfully');
+                
+                console.log('📡 Starting device registration with backend...');
+                store.dispatch('device/register').then(() => {
+                    console.log('✅ Device registration completed successfully');
+                }).catch(error => {
+                    console.error('❌ Device registration failed:', error);
+                });
+                console.log('🎯 === TOKEN REGISTRATION COMPLETED ===');
             });
 
             // Some issue with our setup and push will not work
+            console.log('🚨 Setting up registration error listener...');
             PushNotifications.addListener('registrationError', (error) => {
-                console.log('❌ Error on registration: ' + JSON.stringify(error));
-                alert('Push registration failed: ' + JSON.stringify(error));
+                console.log('💥 === PUSH REGISTRATION ERROR ===');
+                console.log('❌ Registration error details:', JSON.stringify(error, null, 2));
+                console.log('🔍 Error type:', typeof error);
+                console.log('📄 Error message:', error.message || 'No message');
+                console.log('🔧 Will continue without push registration...');
+                console.log('💥 === PUSH REGISTRATION ERROR LOGGED ===');
             });
 
             // Show us the notification payload if the app is open on our device
+            console.log('📥 Setting up push notification received listener...');
             PushNotifications.addListener('pushNotificationReceived', (notification) => {
                 try {
-                    console.log('🔔 Push notification received!');
-                    console.log('Raw notification data:', JSON.stringify(notification, null, 2));
-                    console.log('Title:', notification.title);
-                    console.log('Body:', notification.body);
-                    console.log('Data:', notification.data);
-                    console.log('⚠️ CALLING ALERT FOR PUSH RECEIVED!');
+                    console.log('🔔 === PUSH NOTIFICATION RECEIVED ===');
+                    console.log('📦 Raw notification object:', JSON.stringify(notification, null, 2));
+                    console.log('📝 Title:', notification.title || 'No title');
+                    console.log('📄 Body:', notification.body || 'No body');
+                    console.log('📊 Data payload:', JSON.stringify(notification.data || {}, null, 2));
+                    console.log('🏷️ Notification ID:', notification.id || 'No ID');
+                    console.log('⏰ Timestamp:', new Date().toISOString());
+                    console.log('🔧 Processing received notification...');
                     
-                    // Show alert to confirm receipt
-                    alert('Push received! Title: ' + (notification.title || 'No title') + ' Body: ' + (notification.body || 'No body'));
-                    console.log('⚠️ PUSH RECEIVED ALERT CALL COMPLETED');
-                    
-                    // Also try confirm dialog
-                    try {
-                        const result = confirm('Push notification arrived! Title: ' + (notification.title || 'No title'));
-                        console.log('Push confirm dialog result:', result);
-                    } catch (e) {
-                        console.log('Push confirm dialog failed:', e);
-                    }
-                    
+                    console.log('🏗️ Creating internal Notification object...');
                     const n = new Notification({
                         title: notification.title || '',
                         body: notification.body || '',
@@ -240,24 +244,39 @@ export default {
                     });
                     n.foreground = true;
                     
-                    console.log('Dispatching to store:', n);
+                    console.log('📤 Dispatching notification to Vuex store...');
+                    console.log('📤 Notification object to dispatch:', JSON.stringify(n, null, 2));
                     store.dispatch('cordova/notificationArrive', n);
+                    console.log('✅ Notification dispatched to store successfully');
                     
                     // Try to show a system notification as well
                     if (Capacitor.isNativePlatform()) {
-                        console.log('Native platform - notification should appear in system tray');
+                        console.log('📱 Native platform detected - checking system notification behavior');
+                        console.log('ℹ️ System notifications appear automatically when app is in background');
+                        console.log('ℹ️ Foreground notifications are handled by this listener');
                         // The push notification should automatically appear as a system notification
                         // when the app is in background, but when in foreground we need to handle it
                     }
+                    console.log('🔔 === PUSH NOTIFICATION PROCESSING COMPLETED ===');
                 } catch (error) {
-                    console.error('Error handling push notification received:', error);
+                    console.error('💥 === ERROR HANDLING PUSH NOTIFICATION ===');
+                    console.error('❌ Error details:', error);
+                    console.error('🔍 Error stack:', error.stack);
+                    console.error('💥 === PUSH NOTIFICATION ERROR LOGGED ===');
                 }
             });
 
             // Method called when tapping on a notification
+            console.log('👆 Setting up push notification tap listener...');
             PushNotifications.addListener('pushNotificationActionPerformed', (notification) => {
                 try {
-                    console.log('Push action performed: ' + JSON.stringify(notification));
+                    console.log('👆 === PUSH NOTIFICATION TAPPED ===');
+                    console.log('📱 User tapped on notification');
+                    console.log('📦 Action notification object:', JSON.stringify(notification, null, 2));
+                    console.log('🎬 Action ID:', notification.actionId || 'No action ID');
+                    console.log('⏰ Tap timestamp:', new Date().toISOString());
+                    
+                    console.log('🏗️ Creating notification object for tap action...');
                     const n = new Notification({
                         title: (notification.notification && notification.notification.title) || '',
                         body: (notification.notification && notification.notification.body) || '',
@@ -266,11 +285,22 @@ export default {
                     });
                     n.foreground = false;
                     n.coldstart = true;
+                    
+                    console.log('📤 Dispatching tap action to store...');
+                    console.log('📤 Tap notification object:', JSON.stringify(n, null, 2));
                     store.dispatch('cordova/notificationArrive', n);
+                    console.log('✅ Tap action dispatched successfully');
+                    console.log('👆 === PUSH NOTIFICATION TAP COMPLETED ===');
                 } catch (error) {
-                    console.error('Error handling push notification action:', error);
+                    console.error('💥 === ERROR HANDLING PUSH TAP ===');
+                    console.error('❌ Tap error details:', error);
+                    console.error('🔍 Tap error stack:', error.stack);
+                    console.error('💥 === PUSH TAP ERROR LOGGED ===');
                 }
             });
+            
+            console.log('✅ All push notification listeners configured');
+            console.log('📱 === NATIVE PUSH SETUP COMPLETED ===');
 
         } catch (error) {
             console.log('Error during native push initialization:', error);
