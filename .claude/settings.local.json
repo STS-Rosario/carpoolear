@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx cap:*)",
+      "Bash(sed:*)",
+      "Bash(git add:*)",
+      "Bash(npm install:*)",
+      "Bash(cp:*)",
+      "Bash(adb:*)",
+      "Bash(TARGET_APP=carpoolear PLATFORM=android NODE_ENV=production node build/build.js)",
+      "Bash(java:*)",
+      "Bash(find:*)",
+      "Bash(PLATFORM=android node movilizame.js)",
+      "Bash(grep:*)",
+      "Bash(rm:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

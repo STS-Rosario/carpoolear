@@ -1,7 +1,7 @@
 {
   "appId": "com.sts.carpoolear",
   "appName": "Carpoolear",
-  "webDir": "dist/default/production/www",
+  "webDir": "www",
   "server": {
     "androidScheme": "https"
   },

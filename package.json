@@ -26,6 +26,7 @@
     "@capacitor/push-notifications": "^7.0.2",
     "@capacitor/splash-screen": "^7.0.2",
     "@capacitor/status-bar": "^7.0.2",
+    "@capacitor/toast": "^7.0.2",
     "@movilizame/vue-jumper": "^2.0.2",
     "alertifyjs": "^1.10.0",
     "axios": "^0.16.0",
