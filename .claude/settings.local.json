@@ -12,7 +12,8 @@
       "Bash(find:*)",
       "Bash(PLATFORM=android node movilizame.js)",
       "Bash(grep:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(printenv)"
     ],
     "deny": [],
     "ask": []

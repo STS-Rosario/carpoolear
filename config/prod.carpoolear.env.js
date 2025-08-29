@@ -1,7 +1,7 @@
 config = {
     NODE_ENV: '"production"',
     // API_URL: '"https://localhost"',
-    API_URL: '"https://carpoolear.com.ar"',
+    API_URL: '"https://neutral-crucial-ram.ngrok-free.app"',
     // API_URL: '"http://carpoolear.127.0.0.1.nip.io"',
     MAPS_API: '"AIzaSyBlRfNi2qDcy_zwjR53VVOyD-csjYSq4Qo"',
     FACEBOOK_API: '"147151221990591"',
@@ -10,12 +10,12 @@ config = {
 };
 
 config.FIREBASE_PARAMS = {
-    apiKey: '"AIzaSyCwecybmdmiWUehjZBT30RZXWKgiNnP7XI"',
-    authDomain: '"carpoolear-production.firebaseapp.com"',
-    projectId: '"carpoolear-production"',
-    storageBucket: '"carpoolear-production.firebasestorage.app"',
-    messagingSenderId: '"726271358034"',
-    appId: '"1:726271358034:web:f09d2d38fae5f185f01b8b"',
+    apiKey: '"AIzaSyBUf0Fy6D6cN1RePR1PihyllE95bj4nYA8"',
+    authDomain: '"carpoolear-local-dev.firebaseapp.com"',
+    projectId: '"carpoolear-local-dev"',
+    storageBucket: '"carpoolear-local-dev.firebasestorage.app"',
+    messagingSenderId: '"523389793480"',
+    appId: '"1:523389793480:android:c76a5210a49879383021fd"',
     measurementId: '"G-V8ZHPQJ6HV"'
 };
 config.FIRABASE_VAPID_KEY =

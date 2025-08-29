@@ -21,6 +21,7 @@
     "@capacitor/app": "^7.0.2",
     "@capacitor/cli": "^6.2.1",
     "@capacitor/core": "^7.4.3",
+    "@capacitor/device": "^7.0.2",
     "@capacitor/ios": "^7.4.3",
     "@capacitor/network": "^7.0.2",
     "@capacitor/preferences": "^7.0.2",

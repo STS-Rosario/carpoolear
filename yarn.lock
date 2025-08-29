@@ -161,6 +161,11 @@
   dependencies:
     tslib "^2.1.0"
 
+"@capacitor/device@^7.0.2":
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/@capacitor/device/-/device-7.0.2.tgz#406bde129d3fcf55f0de0b691509535e2a00e315"
+  integrity sha512-OMGMBjLbh7ApaqW1oOJIV73iyrFK/T5v2MzuQYq3GLT+jnGvCuj/y82Ofq2Fz9/hlJ2fukztPwG1K80jyk0i6w==
+
 "@capacitor/ios@^7.4.3":
   version "7.4.3"
   resolved "https://registry.yarnpkg.com/@capacitor/ios/-/ios-7.4.3.tgz#22c3438d139347a0f61c9ec14abd7dd0c8fbc241"
