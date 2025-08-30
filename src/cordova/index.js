@@ -10,6 +10,7 @@ import cache from '../services/cache';
 import { Capacitor } from '@capacitor/core';
 import { Network } from '@capacitor/network';
 import { Device } from '@capacitor/device';
+import { SplashScreen } from '@capacitor/splash-screen';
 
 window.facebook = facebook;
 window.appVersion = '2.2.2';
