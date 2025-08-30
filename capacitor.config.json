@@ -15,9 +15,12 @@
       "overlaysWebView": false
     },
     "SplashScreen": {
-      "launchShowDuration": 2000,
+      "launchShowDuration": 3000,
       "backgroundColor": "#ffffff",
-      "showSpinner": false
+      "showSpinner": false,
+      "androidSplashResourceName": "splash",
+      "splashFullScreen": true,
+      "splashImmersive": true
     }
   }
 }
