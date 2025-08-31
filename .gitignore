@@ -13,3 +13,5 @@ npm-debug.log
 # Firebase configuration files (contain sensitive API keys)
 android/app/google-services.json*
 ios/App/GoogleService-Info.plist*
+
+www/*
