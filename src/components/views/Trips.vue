@@ -26,11 +26,6 @@
                 </button>
             </div>
         </div>
-        <div class="trips_title" v-show="!isMobile">
-            <h1>{{ $t('buscaConQuien') }}</h1>
-            <h3>{{ $t('elegiDatos') }}</h3>
-            <small style="color: #999; font-size: 10px;">Version 54</small>
-        </div>
         <template v-if="appConfig && appConfig.banner && appConfig.banner.url">
             <a :href="appConfig.banner.url" target="_blank" class="banner">
                 <img alt="" :src="appConfig.banner.image" />
@@ -50,9 +45,7 @@
             ref="searchBox"
         ></SearchBox>
         <Loading :data="trips" v-if="showingTrips">
-            <div class="trips-list row">
-                <small style="color: #999; font-size: 10px; margin: 5px;">Version 54</small>
-                
+            <div class="trips-list row">                
                 <modal
                     :name="'modal'"
                     v-if="showModal"
