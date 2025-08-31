@@ -6,6 +6,7 @@
         <!-- Custom Splash Screen -->
         <div v-if="showCustomSplash" class="custom-splash-screen">
             <img src="/static/img/splash-android-1280x1920.png" alt="Carpoolear" class="splash-image" />
+            <div class="splash-version">Version 54</div>
         </div>
         
         <onBoarding key="1" v-if="onBoardingVisibility"></onBoarding>
@@ -136,6 +137,15 @@ export default {
     justify-content: center;
     align-items: center;
     z-index: 9999;
+}
+
+.splash-version {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    color: #999;
+    font-size: 12px;
+    font-family: Arial, sans-serif;
 }
 
 .splash-image {
