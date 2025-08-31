@@ -13,7 +13,10 @@
       "Bash(PLATFORM=android node movilizame.js)",
       "Bash(grep:*)",
       "Bash(rm:*)",
-      "Bash(printenv)"
+      "Bash(printenv)",
+      "Bash(npm run build:*)",
+      "Bash(./gradlew:*)",
+      "Bash(./android/gradlew:*)"
     ],
     "deny": [],
     "ask": []
