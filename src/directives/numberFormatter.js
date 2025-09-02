@@ -1,7 +1,6 @@
 import { eventNumberKeyInput, isDigit } from '../services/utility';
 
 let numberFormatter = {};
-let first = 0;
 let inputHandler = function (event) {
     let position = this.selectionStart;
     let dots = countDots(this.value);
@@ -29,11 +28,13 @@ let countDots = function (str) {
 
 let formatNumber = function (id) {
     numberFormatter[id].rawValue = cleanDots(numberFormatter[id].el.value);
-    // cambiar esta regex para que matche 2 6 1 en vez de 3 3 3
-    numberFormatter[id].value = numberFormatter[id].rawValue.replace(
-        /\B(?=(\d{3})+(?!\d))/g,
-        '.'
-    );
+
+    // More reliable method: reverse the string, add dots every 3 chars, then reverse back
+    // This ensures dots are always placed correctly from right to left
+    let reversed = numberFormatter[id].rawValue.split('').reverse().join('');
+    let withDots = reversed.replace(/(\d{3})(?=\d)/g, '$1.');
+    numberFormatter[id].value = withDots.split('').reverse().join('');
+
     numberFormatter[id].el.value = numberFormatter[id].value;
     numberFormatter[id].context[numberFormatter[id].expression] =
         numberFormatter[id].rawValue;
@@ -88,8 +89,9 @@ export default {
         el.addEventListener('input', inputHandler, false);
     },
     update: function (el, binding, node) {
-        if (el.value.length > 0 && first < 3) {
-            first++;
+        // Always format the number when the directive updates
+        // This ensures proper formatting even after form submission errors
+        if (el.value.length > 0) {
             formatNumber(el.id);
         }
     },
