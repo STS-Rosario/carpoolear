@@ -206,6 +206,24 @@
                             </div>
 
                             <div class="form-group">
+                                <label for="input-patente"
+                                    >{{ $t('patente') }}</label
+                                >
+                                <input
+                                    maxlength="20"
+                                    v-model="newInfo.patente"
+                                    type="text"
+                                    class="form-control"
+                                    id="input-patente"
+                                    :class="{ 'has-error': patenteError.state }"
+                                    :placeholder="$t('patente')"
+                                />
+                                <span class="error" v-if="patenteError.state">
+                                    {{ patenteError.message }}
+                                </span>
+                            </div>
+
+                            <div class="form-group">
                                 <label for="input-pass"
                                     >Ingrese su nueva contraseña</label
                                 >
@@ -428,7 +446,9 @@ export default {
                 driver_data_docs: [],
                 account_number: '',
                 account_type: '',
-                account_bank: ''
+                account_bank: '',
+                cars: [],
+                patente: ''
             },
             error: null,
             globalError: false,
@@ -441,6 +461,7 @@ export default {
             accountNumberError: new Error(),
             accountTypeError: new Error(),
             accountBankError: new Error(),
+            patenteError: new Error(),
             keyUpTimerId: 0,
             banks: [],
             accountTypes: []
@@ -492,7 +513,9 @@ export default {
                 account_type: this.currentUser.account_type,
                 account_bank: this.currentUser.account_bank,
                 banned: this.currentUser.banned > 0,
-                active: this.currentUser.active > 0
+                active: this.currentUser.active > 0,
+                cars: this.currentUser.cars || [],
+                patente: this.currentUser.cars && this.currentUser.cars.length > 0 ? this.currentUser.cars[0].patente : ''
             };
         },
         toUserMessages(user) {
@@ -511,6 +534,40 @@ export default {
         isNumber(value) {
             inputIsNumber(value);
         },
+        clear() {
+            this.currentUser = '';
+            this.newInfo = {
+                name: '',
+                email: '',
+                description: '',
+                private_note: '',
+                nro_doc: '',
+                mobile_phone: '',
+                pass: {},
+                active: '',
+                banned: '',
+                driver_is_verified: 0,
+                driver_data_docs: [],
+                account_number: '',
+                account_type: '',
+                account_bank: '',
+                cars: [],
+                patente: ''
+            };
+        },
+        conversationsSearch() {
+            // Placeholder method - may be implemented later
+        },
+        unreadMessage() {
+            // Placeholder method - may be implemented later
+        },
+        select(user) {
+            if (user) {
+                this.selectUser(user);
+            } else {
+                this.clear();
+            }
+        },
         validate() {
             let globalError = false;
             this.nombreError = new Error();
@@ -522,6 +579,7 @@ export default {
             this.accountNumberError = new Error();
             this.accountTypeError = new Error();
             this.accountBankError = new Error();
+            this.patenteError = new Error();
 
             /* if (!this.newInfo.name || this.newInfo.name.length < 1) {
                 this.nombreError.state = true;
@@ -559,6 +617,16 @@ export default {
                 globalError = true;
             } */
 
+            // Validate patente if provided - allow all strings
+            if (this.newInfo.patente && this.newInfo.patente.length > 0) {
+                // Basic validation: just check it's not empty and has reasonable length
+                if (this.newInfo.patente.length > 20) {
+                    this.patenteError.state = true;
+                    this.patenteError.message = 'La patente no puede tener más de 20 caracteres';
+                    globalError = true;
+                }
+            }
+
             console.log('error', this);
 
             if (globalError) {
@@ -575,6 +643,19 @@ export default {
                     this.newInfo.password_confirmation =
                         this.newInfo.pass.password_confirmation;
                 }
+                
+                // Handle patente data - if user has cars, update the first car's patente
+                // If no cars but patente is provided, the backend will create a new car
+                if (this.newInfo.patente && this.newInfo.patente.length > 0) {
+                    if (this.newInfo.cars && this.newInfo.cars.length > 0) {
+                        // Update existing car's patente
+                        this.newInfo.cars[0].patente = this.newInfo.patente;
+                    } else {
+                        // Create new car with patente - backend will handle this
+                        this.newInfo.cars = [{ patente: this.newInfo.patente }];
+                    }
+                }
+                
                 this.update(this.newInfo)
                     .then(() => {
                         dialogs.message('Perfil actualizado correctamente.');
@@ -614,6 +695,9 @@ export default {
             if (oldValue.length === 0 && newValue.length > 0) {
                 this.clear();
             }
+        },
+        'newInfo.patente': function () {
+            this.patenteError.state = false;
         }
     },
 

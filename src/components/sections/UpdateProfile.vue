@@ -488,8 +488,6 @@ class Error {
     }
 }
 
-let patentRegex = /([A-Za-z]{3}[0-9]{3})|([A-Za-z]{2}[0-9]{3}[A-Za-z]{2})/;
-
 export default {
     name: 'upddate-profile',
     data() {
@@ -774,13 +772,8 @@ export default {
                 }
             } */
 
-            if (this.patente && this.patente.length > 0) {
-                if (!patentRegex.test(this.patente)) {
-                    this.patentError.state = true;
-                    this.patentError.message = this.$t('patenteNoValida');
-                    globalError = true;
-                }
-            }
+            // Patente validation removed - now allows all strings
+            // Only basic length validation is handled by the input maxlength attribute
 
             if (!this.user.description || this.user.description.length < 1) {
                 this.descError.state = true;
