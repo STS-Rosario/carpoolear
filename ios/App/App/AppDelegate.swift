@@ -1,13 +1,18 @@
 import UIKit
 import Capacitor
+import UserNotifications
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        // Configure push notifications
+        UNUserNotificationCenter.current().delegate = self
+        
         return true
     }
 
@@ -44,6 +49,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Feel free to add additional processing here, but if you want the App API to support
         // tracking app url opens, make sure to keep this call
         return ApplicationDelegateProxy.shared.application(application, continue: userActivity, restorationHandler: restorationHandler)
+    }
+
+    // MARK: - Push Notifications
+    
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        // Forward the device token to Capacitor
+        NotificationCenter.default.post(name: NSNotification.Name("capacitorDidRegisterForRemoteNotifications"), object: deviceToken)
+    }
+    
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        // Forward the error to Capacitor
+        NotificationCenter.default.post(name: NSNotification.Name("capacitorDidFailToRegisterForRemoteNotifications"), object: error)
     }
 
 }
