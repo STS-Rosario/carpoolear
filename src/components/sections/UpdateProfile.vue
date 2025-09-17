@@ -573,6 +573,7 @@ export default {
             updatePhoto: 'auth/updatePhoto',
             carCreate: 'cars/create',
             carUpdate: 'cars/update',
+            carIndex: 'cars/index',
             getBankData: 'profile/getBankData'
         }),
         jumpToError() {
@@ -885,6 +886,19 @@ export default {
             console.log('get bank data', data);
             this.banks = data.banks;
             this.accountTypes = data.cc;
+        });
+        
+        // Load user's cars to populate patente field
+        this.carIndex().then(() => {
+            console.log('Cars loaded for profile update');
+            // Ensure patente is set if cars are loaded
+            if (this.cars && this.cars.length > 0) {
+                this.car = this.cars[0];
+                this.patente = this.car.patente;
+                console.log('Patente set from loaded car:', this.patente);
+            }
+        }).catch((error) => {
+            console.error('Failed to load cars:', error);
         });
         bus.on('date-change', this.dateChange);
         this.user = this.userData;
