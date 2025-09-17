@@ -44,7 +44,7 @@ const actions = {
     register(store) {
         let data = Object.assign({}, store.rootGetters['cordova/deviceData']);
         data.app_version = store.rootState.appVersion;
-        data.device_type = 'browser';
+        // device_type is already set correctly in cordova/deviceData based on the actual platform
 
         return deviceApi
             .create(data)
