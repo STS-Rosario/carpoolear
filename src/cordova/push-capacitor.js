@@ -200,7 +200,6 @@ export default {
         }
 
         try {
-
             console.log('📦 Importing PushNotifications plugin...');
 
             // Visual debug - show plugin import start
@@ -335,6 +334,21 @@ export default {
                             '📦 Raw notification object:',
                             JSON.stringify(notification, null, 2)
                         );
+
+                        // Visual debug - show notification received with full details
+                        if (window.alert) {
+                            window.alert(
+                                `🔔 NOTIFICATION RECEIVED!\nTitle: ${
+                                    notification.title || 'No title'
+                                }\nBody: ${
+                                    notification.body || 'No body'
+                                }\nFull JSON:\n${JSON.stringify(
+                                    notification,
+                                    null,
+                                    2
+                                )}`
+                            );
+                        }
                         console.log(
                             '📝 Title:',
                             notification.title || 'No title'
@@ -439,6 +453,27 @@ export default {
                             '📦 Action notification object:',
                             JSON.stringify(notification, null, 2)
                         );
+
+                        // Visual debug - show notification tap with full details
+                        if (window.alert) {
+                            const title =
+                                (notification.notification &&
+                                    notification.notification.title) ||
+                                'No title';
+                            const body =
+                                (notification.notification &&
+                                    notification.notification.body) ||
+                                'No body';
+                            window.alert(
+                                `👆 NOTIFICATION TAPPED!\nTitle: ${title}\nBody: ${body}\nAction ID: ${
+                                    notification.actionId || 'No action ID'
+                                }\nFull JSON:\n${JSON.stringify(
+                                    notification,
+                                    null,
+                                    2
+                                )}`
+                            );
+                        }
                         console.log(
                             '🎬 Action ID:',
                             notification.actionId || 'No action ID'
@@ -512,7 +547,10 @@ export default {
             console.log('🔑 Requesting push notification permissions...');
             const result = await PushNotifications.requestPermissions();
             console.log('🔑 Permission result:', result);
-            console.log('🔍 Permission result details:', JSON.stringify(result, null, 2));
+            console.log(
+                '🔍 Permission result details:',
+                JSON.stringify(result, null, 2)
+            );
 
             // Visual debug - show permission result
             if (window.alert) {
