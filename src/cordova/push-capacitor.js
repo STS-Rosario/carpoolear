@@ -300,6 +300,13 @@ export default {
             // On success, we should be able to receive notifications
             console.log('🎧 Setting up push notification event listeners...');
 
+            // Visual debug - show listener setup
+            if (window.alert) {
+                window.alert(
+                    `🎧 SETTING UP LISTENERS!\nConfiguring registration, error, and notification listeners...`
+                );
+            }
+
             PushNotifications.addListener('registration', (token) => {
                 console.log('🎯 === TOKEN REGISTRATION SUCCESS ===');
                 console.log('📱 Platform:', Capacitor.getPlatform());
