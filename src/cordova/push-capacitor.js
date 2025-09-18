@@ -200,6 +200,7 @@ export default {
         }
 
         try {
+
             console.log('📦 Importing PushNotifications plugin...');
 
             // Visual debug - show plugin import start
@@ -241,65 +242,10 @@ export default {
                 return;
             }
 
-            console.log('🔧 Initializing Capacitor push notifications...');
-
-            // Request permission to use push notifications
-            console.log('🔑 Requesting push notification permissions...');
-            const result = await PushNotifications.requestPermissions();
-            console.log('🔑 Permission result:', result);
-
-            // Visual debug - show permission result
-            if (window.alert) {
-                window.alert(
-                    `🔑 PERMISSION RESULT!\nReceive: ${
-                        result.receive
-                    }\nFull result: ${JSON.stringify(result)}`
-                );
-            }
-
-            if (result.receive === 'granted') {
-                console.log('✅ Push notification permissions GRANTED');
-                // Register with Apple / Google to receive push via APNS/FCM
-                console.log('📝 Starting push notification registration...');
-                try {
-                    await PushNotifications.register();
-                    console.log(
-                        '✅ Push notification registration initiated successfully'
-                    );
-
-                    // Visual debug - show registration success
-                    if (window.alert) {
-                        window.alert(
-                            `✅ REGISTRATION INITIATED!\nPushNotifications.register() succeeded\nWaiting for token...`
-                        );
-                    }
-                } catch (registrationError) {
-                    console.error(
-                        '❌ Push notification registration FAILED:',
-                        registrationError
-                    );
-                    console.warn(
-                        'This might be due to missing Firebase configuration for Android'
-                    );
-
-                    // Visual debug - show registration error
-                    if (window.alert) {
-                        window.alert(
-                            `❌ REGISTRATION FAILED!\nError: ${
-                                registrationError.message || 'Unknown error'
-                            }\nDetails: ${JSON.stringify(registrationError)}`
-                        );
-                    }
-                    return;
-                }
-            } else {
-                console.log('❌ Push notification permissions DENIED:', result);
-                return;
-            }
-
-            // On success, we should be able to receive notifications
+            // IMPORTANTE: Configurar listeners ANTES de registrar
             console.log('🎧 Setting up push notification event listeners...');
 
+            // Listener para el token de registro - DEBE estar antes del register()
             PushNotifications.addListener('registration', (token) => {
                 console.log('🎯 === TOKEN REGISTRATION SUCCESS ===');
                 console.log('📱 Platform:', Capacitor.getPlatform());
@@ -355,7 +301,7 @@ export default {
                 console.log('🎯 === TOKEN REGISTRATION COMPLETED ===');
             });
 
-            // Some issue with our setup and push will not work
+            // Listener para errores de registro - DEBE estar antes del register()
             console.log('🚨 Setting up registration error listener...');
             PushNotifications.addListener('registrationError', (error) => {
                 console.log('💥 === PUSH REGISTRATION ERROR ===');
@@ -378,7 +324,7 @@ export default {
                 }
             });
 
-            // Show us the notification payload if the app is open on our device
+            // Listener para notificaciones recibidas
             console.log('📥 Setting up push notification received listener...');
             PushNotifications.addListener(
                 'pushNotificationReceived',
@@ -481,7 +427,7 @@ export default {
                 }
             );
 
-            // Method called when tapping on a notification
+            // Listener para taps en notificaciones
             console.log('👆 Setting up push notification tap listener...');
             PushNotifications.addListener(
                 'pushNotificationActionPerformed',
@@ -560,6 +506,63 @@ export default {
             );
 
             console.log('✅ All push notification listeners configured');
+            console.log('🔧 Initializing Capacitor push notifications...');
+
+            // Request permission to use push notifications
+            console.log('🔑 Requesting push notification permissions...');
+            const result = await PushNotifications.requestPermissions();
+            console.log('🔑 Permission result:', result);
+            console.log('🔍 Permission result details:', JSON.stringify(result, null, 2));
+
+            // Visual debug - show permission result
+            if (window.alert) {
+                window.alert(
+                    `🔑 PERMISSION RESULT!\nReceive: ${
+                        result.receive
+                    }\nFull result: ${JSON.stringify(result)}`
+                );
+            }
+
+            if (result.receive === 'granted') {
+                console.log('✅ Push notification permissions GRANTED');
+                // Register with Apple / Google to receive push via APNS/FCM
+                console.log('📝 Starting push notification registration...');
+                try {
+                    await PushNotifications.register();
+                    console.log(
+                        '✅ Push notification registration initiated successfully'
+                    );
+
+                    // Visual debug - show registration success
+                    if (window.alert) {
+                        window.alert(
+                            `✅ REGISTRATION INITIATED!\nPushNotifications.register() succeeded\nWaiting for token...`
+                        );
+                    }
+                } catch (registrationError) {
+                    console.error(
+                        '❌ Push notification registration FAILED:',
+                        registrationError
+                    );
+                    console.warn(
+                        'This might be due to missing Firebase configuration for Android'
+                    );
+
+                    // Visual debug - show registration error
+                    if (window.alert) {
+                        window.alert(
+                            `❌ REGISTRATION FAILED!\nError: ${
+                                registrationError.message || 'Unknown error'
+                            }\nDetails: ${JSON.stringify(registrationError)}`
+                        );
+                    }
+                    return;
+                }
+            } else {
+                console.log('❌ Push notification permissions DENIED:', result);
+                return;
+            }
+
             console.log('📱 === NATIVE PUSH SETUP COMPLETED ===');
         } catch (error) {
             console.log('Error during native push initialization:', error);
