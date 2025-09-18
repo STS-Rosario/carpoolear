@@ -46,26 +46,8 @@ const actions = {
         data.app_version = store.rootState.appVersion;
         // device_type is already set correctly in cordova/deviceData based on the actual platform
 
-        console.log('🔧 === DEVICE REGISTRATION DEBUG ===');
-        console.log(
-            '📱 Platform:',
-            store.rootGetters['cordova/deviceData'].device_type
-        );
-        console.log(
-            '🔐 Device ID (Firebase token):',
-            store.rootGetters['cordova/deviceData'].device_id
-        );
-        console.log(
-            '📊 Full registration data:',
-            JSON.stringify(data, null, 2)
-        );
-        console.log('🔧 === DEVICE REGISTRATION DEBUG END ===');
-
         // Check if we have a Firebase token before registering
         if (!data.device_id) {
-            console.log(
-                '⚠️ No Firebase token available, skipping device registration'
-            );
             return Promise.resolve();
         }
 
@@ -76,7 +58,7 @@ const actions = {
                 store.commit(types.DEVICE_SET_CURRENT_DEVICE, response.data);
             })
             .catch((err) => {
-                console.log(err);
+                console.error('Device registration failed:', err);
             });
     },
 
@@ -94,7 +76,7 @@ const actions = {
                     );
                 })
                 .catch((err) => {
-                    console.log(err);
+                    console.error('Device update failed:', err);
                 });
         }
     },
@@ -106,7 +88,7 @@ const actions = {
                 store.commit(types.DEVICE_DELETE, id);
             })
             .catch((err) => {
-                console.log(err);
+                console.error('Device deletion failed:', err);
             });
     },
 
@@ -117,7 +99,7 @@ const actions = {
                 store.commit(types.DEVICE_SET_DEVICES, response);
             })
             .catch((err) => {
-                console.log(err);
+                console.error('Device fetch failed:', err);
             });
     },
     resize() {
