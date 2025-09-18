@@ -46,14 +46,49 @@ const actions = {
         data.app_version = store.rootState.appVersion;
         // device_type is already set correctly in cordova/deviceData based on the actual platform
 
+        console.log('🔧 === DEVICE REGISTRATION DEBUG ===');
+        console.log(
+            '📱 Platform:',
+            store.rootGetters['cordova/deviceData'].device_type
+        );
+        console.log(
+            '🔐 Device ID (Firebase token):',
+            store.rootGetters['cordova/deviceData'].device_id
+        );
+        console.log(
+            '📊 Full registration data:',
+            JSON.stringify(data, null, 2)
+        );
+        console.log('🔧 === DEVICE REGISTRATION DEBUG END ===');
+
         return deviceApi
             .create(data)
             .then((response) => {
                 response.data.notifications = true;
                 store.commit(types.DEVICE_SET_CURRENT_DEVICE, response.data);
+
+                // Visual debug - show success alert
+                if (window.alert) {
+                    window.alert(
+                        `✅ DEVICE REGISTERED!\nPlatform: ${
+                            data.device_type
+                        }\nDevice ID: ${
+                            data.device_id ? 'Present' : 'Missing'
+                        }\nApp Version: ${data.app_version}`
+                    );
+                }
             })
             .catch((err) => {
                 console.log(err);
+
+                // Visual debug - show error alert
+                if (window.alert) {
+                    window.alert(
+                        `❌ DEVICE REGISTRATION FAILED!\nError: ${
+                            err.message || 'Unknown error'
+                        }\nData sent: ${JSON.stringify(data, null, 2)}`
+                    );
+                }
             });
     },
 
