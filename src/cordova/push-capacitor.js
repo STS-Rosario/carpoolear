@@ -67,6 +67,13 @@ export default {
         console.log('📍 Capacitor available?', !!window.Capacitor);
         console.log('🔧 Starting push initialization...');
 
+        // Visual debug - show initialization start
+        if (window.alert) {
+            window.alert(
+                `🚀 PUSH INIT STARTED!\nPlatform: ${Capacitor.getPlatform()}\nNative: ${Capacitor.isNativePlatform()}`
+            );
+        }
+
         if (Capacitor.getPlatform() === 'web') {
             // Web/PWA push notifications using Firebase
             console.log('🌐 === WEB PUSH INITIALIZATION ===');
@@ -76,6 +83,14 @@ export default {
             // Native push notifications using Capacitor
             console.log('📱 === NATIVE PUSH INITIALIZATION ===');
             console.log('🔧 Initializing native push notifications...');
+
+            // Visual debug - show native init start
+            if (window.alert) {
+                window.alert(
+                    `📱 NATIVE PUSH INIT!\nPlatform: ${Capacitor.getPlatform()}\nStarting native push setup...`
+                );
+            }
+
             await this.initNativePush();
         }
         console.log('✅ === PUSH NOTIFICATION INIT COMPLETED ===');
@@ -176,8 +191,24 @@ export default {
 
     async initNativePush() {
         console.log('📱 === NATIVE PUSH INIT START ===');
+
+        // Visual debug - show native init start
+        if (window.alert) {
+            window.alert(
+                `📱 NATIVE PUSH INIT START!\nStarting native push setup...`
+            );
+        }
+
         try {
             console.log('📦 Importing PushNotifications plugin...');
+
+            // Visual debug - show plugin import start
+            if (window.alert) {
+                window.alert(
+                    `📦 IMPORTING PLUGIN!\nTrying to import @capacitor/push-notifications...`
+                );
+            }
+
             // Import push notifications plugin dynamically
             let PushNotifications;
             try {
@@ -186,11 +217,27 @@ export default {
                 console.log(
                     '✅ PushNotifications plugin imported successfully'
                 );
+
+                // Visual debug - show plugin import success
+                if (window.alert) {
+                    window.alert(
+                        `✅ PLUGIN IMPORTED!\nPushNotifications plugin loaded successfully`
+                    );
+                }
             } catch (error) {
                 console.error(
                     '❌ Push Notifications plugin not available:',
                     error
                 );
+
+                // Visual debug - show plugin import error
+                if (window.alert) {
+                    window.alert(
+                        `❌ PLUGIN IMPORT FAILED!\nError: ${
+                            error.message || 'Unknown error'
+                        }\nDetails: ${JSON.stringify(error)}`
+                    );
+                }
                 return;
             }
 
@@ -201,6 +248,15 @@ export default {
             const result = await PushNotifications.requestPermissions();
             console.log('🔑 Permission result:', result);
 
+            // Visual debug - show permission result
+            if (window.alert) {
+                window.alert(
+                    `🔑 PERMISSION RESULT!\nReceive: ${
+                        result.receive
+                    }\nFull result: ${JSON.stringify(result)}`
+                );
+            }
+
             if (result.receive === 'granted') {
                 console.log('✅ Push notification permissions GRANTED');
                 // Register with Apple / Google to receive push via APNS/FCM
@@ -210,6 +266,13 @@ export default {
                     console.log(
                         '✅ Push notification registration initiated successfully'
                     );
+
+                    // Visual debug - show registration success
+                    if (window.alert) {
+                        window.alert(
+                            `✅ REGISTRATION INITIATED!\nPushNotifications.register() succeeded\nWaiting for token...`
+                        );
+                    }
                 } catch (registrationError) {
                     console.error(
                         '❌ Push notification registration FAILED:',
@@ -218,6 +281,15 @@ export default {
                     console.warn(
                         'This might be due to missing Firebase configuration for Android'
                     );
+
+                    // Visual debug - show registration error
+                    if (window.alert) {
+                        window.alert(
+                            `❌ REGISTRATION FAILED!\nError: ${
+                                registrationError.message || 'Unknown error'
+                            }\nDetails: ${JSON.stringify(registrationError)}`
+                        );
+                    }
                     return;
                 }
             } else {
@@ -450,6 +522,17 @@ export default {
             console.log('📱 === NATIVE PUSH SETUP COMPLETED ===');
         } catch (error) {
             console.log('Error during native push initialization:', error);
+
+            // Visual debug - show initialization error
+            if (window.alert) {
+                window.alert(
+                    `💥 NATIVE PUSH INIT ERROR!\nError: ${
+                        error.message || 'Unknown error'
+                    }\nDetails: ${JSON.stringify(error)}\nStack: ${
+                        error.stack || 'No stack trace'
+                    }`
+                );
+            }
         }
     }
 };

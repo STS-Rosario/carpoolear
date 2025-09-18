@@ -61,6 +61,19 @@ const actions = {
         );
         console.log('🔧 === DEVICE REGISTRATION DEBUG END ===');
 
+        // Check if we have a Firebase token before registering
+        if (!data.device_id) {
+            console.log(
+                '⚠️ No Firebase token available, skipping device registration'
+            );
+            if (window.alert) {
+                window.alert(
+                    '⚠️ DEVICE REGISTRATION SKIPPED!\nReason: No Firebase token available\nWill retry when token is received'
+                );
+            }
+            return Promise.resolve();
+        }
+
         return deviceApi
             .create(data)
             .then((response) => {
