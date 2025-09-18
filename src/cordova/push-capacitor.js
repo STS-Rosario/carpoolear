@@ -427,6 +427,19 @@ export default {
                             '✅ Notification dispatched to store successfully'
                         );
 
+                        // Visual debug - show notification received
+                        if (window.alert) {
+                            window.alert(
+                                `🔔 NOTIFICATION RECEIVED!\nTitle: ${
+                                    notification.title || 'No title'
+                                }\nBody: ${
+                                    notification.body || 'No body'
+                                }\nData: ${JSON.stringify(
+                                    notification.data || {}
+                                )}`
+                            );
+                        }
+
                         // Try to show a system notification as well
                         if (Capacitor.isNativePlatform()) {
                             console.log(
@@ -453,6 +466,17 @@ export default {
                         console.error(
                             '💥 === PUSH NOTIFICATION ERROR LOGGED ==='
                         );
+
+                        // Visual debug - show notification error
+                        if (window.alert) {
+                            window.alert(
+                                `💥 NOTIFICATION ERROR!\nError: ${
+                                    error.message || 'Unknown error'
+                                }\nDetails: ${JSON.stringify(error)}\nStack: ${
+                                    error.stack || 'No stack trace'
+                                }`
+                            );
+                        }
                     }
                 }
             );
@@ -509,6 +533,23 @@ export default {
                         console.log(
                             '👆 === PUSH NOTIFICATION TAP COMPLETED ==='
                         );
+
+                        // Visual debug - show notification tap
+                        if (window.alert) {
+                            window.alert(
+                                `👆 NOTIFICATION TAPPED!\nTitle: ${
+                                    (notification.notification &&
+                                        notification.notification.title) ||
+                                    'No title'
+                                }\nBody: ${
+                                    (notification.notification &&
+                                        notification.notification.body) ||
+                                    'No body'
+                                }\nAction: ${
+                                    notification.actionId || 'No action'
+                                }`
+                            );
+                        }
                     } catch (error) {
                         console.error('💥 === ERROR HANDLING PUSH TAP ===');
                         console.error('❌ Tap error details:', error);
