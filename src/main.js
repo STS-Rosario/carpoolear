@@ -1,5 +1,6 @@
 /* jshint esversion: 6 */
 
+
 import 'babel-polyfill';
 
 import Vue from 'vue';
@@ -26,6 +27,11 @@ import messages from './language/i18n';
 
 import bus from './services/bus-event';
 import { DebugApi } from './services/api';
+
+// Capacitor plugins
+import { StatusBar, Style } from '@capacitor/status-bar';
+import { SplashScreen } from '@capacitor/splash-screen';
+import { App as CapacitorApp } from '@capacitor/app';
 
 import Vue2Leaflet from 'vue2-leaflet';
 
@@ -97,6 +103,71 @@ Vue.config.errorHandler = function (err, vm, info) {
     data.log = err.stack;
     debugApi.log(data);
 };
+
+// Initialize Capacitor plugins
+const initializeCapacitorPlugins = async () => {
+    try {
+        // Configure StatusBar to fix overlay issues
+        await StatusBar.setStyle({ style: Style.Light });
+        await StatusBar.setBackgroundColor({ color: '#ffffff' });
+        await StatusBar.setOverlaysWebView({ overlay: false });
+        
+        // Hide splash screen after app loads
+        setTimeout(async () => {
+            await SplashScreen.hide();
+        }, 1000);
+        
+        // Initialize push notifications directly here
+        await initializePushNotifications();
+        
+        console.log('Capacitor plugins initialized');
+    } catch (error) {
+        console.log('Capacitor plugins not available (running in browser):', error);
+    }
+};
+
+// Direct push notification initialization
+const initializePushNotifications = async () => {
+    try {
+        const { Capacitor } = await import('@capacitor/core');
+        
+        
+        if (Capacitor.isNativePlatform()) {
+            const { PushNotifications } = await import('@capacitor/push-notifications');
+            
+            const result = await PushNotifications.requestPermissions();
+            
+            if (result.receive === 'granted') {
+                await PushNotifications.register();
+                
+                // Listen for registration success
+                PushNotifications.addListener('registration', (token) => {
+                    console.log('Push registration token:', token.value);
+                });
+                
+                // Listen for registration errors
+                PushNotifications.addListener('registrationError', (error) => {
+                });
+                
+                // Listen for incoming push notifications
+                PushNotifications.addListener('pushNotificationReceived', (notification) => {
+                });
+                
+                // Listen for notification tap
+                PushNotifications.addListener('pushNotificationActionPerformed', (notification) => {
+                });
+            } else {
+            }
+        } else {
+        }
+    } catch (error) {
+        console.error('Push notification initialization error:', error);
+    }
+};
+
+// Initialize plugins when app is ready
+initializeCapacitorPlugins();
+
 window.store = store;
 if (process.env.SERVE) {
     console.log('Not running in cordova.');

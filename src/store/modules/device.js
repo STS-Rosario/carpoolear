@@ -44,7 +44,12 @@ const actions = {
     register(store) {
         let data = Object.assign({}, store.rootGetters['cordova/deviceData']);
         data.app_version = store.rootState.appVersion;
-        data.device_type = 'browser';
+        // device_type is already set correctly in cordova/deviceData based on the actual platform
+
+        // Check if we have a Firebase token before registering
+        if (!data.device_id) {
+            return Promise.resolve();
+        }
 
         return deviceApi
             .create(data)
@@ -53,7 +58,7 @@ const actions = {
                 store.commit(types.DEVICE_SET_CURRENT_DEVICE, response.data);
             })
             .catch((err) => {
-                console.log(err);
+                console.error('Device registration failed:', err);
             });
     },
 
@@ -71,7 +76,7 @@ const actions = {
                     );
                 })
                 .catch((err) => {
-                    console.log(err);
+                    console.error('Device update failed:', err);
                 });
         }
     },
@@ -83,7 +88,7 @@ const actions = {
                 store.commit(types.DEVICE_DELETE, id);
             })
             .catch((err) => {
-                console.log(err);
+                console.error('Device deletion failed:', err);
             });
     },
 
@@ -94,7 +99,7 @@ const actions = {
                 store.commit(types.DEVICE_SET_DEVICES, response);
             })
             .catch((err) => {
-                console.log(err);
+                console.error('Device fetch failed:', err);
             });
     },
     resize() {

@@ -23,7 +23,7 @@ const actions = {
             .then((response) => {
                 store.commit(
                     types.CARS_SET,
-                    response.cars ? response.cars : []
+                    response.data ? response.data : []
                 );
             })
             .catch((err) => {

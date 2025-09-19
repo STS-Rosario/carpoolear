@@ -3,6 +3,12 @@
         class="app-container"
         :class="[backgroundStyle, viewName, deviceClass]"
     >
+        <!-- Custom Splash Screen -->
+        <div v-if="showCustomSplash" class="custom-splash-screen">
+            <img src="/static/img/splash-android-1280x1920.png" alt="Carpoolear" class="splash-image" />
+            <div class="splash-version">Version 54</div>
+        </div>
+        
         <onBoarding key="1" v-if="onBoardingVisibility"></onBoarding>
         <headerApp></headerApp>
         <main id="main">
@@ -44,6 +50,16 @@ export default {
                 this.fbLogin();
             }
         }
+
+        // Custom splash screen handling
+        if (window.SplashScreen && window.SplashScreen.hide) {
+            window.SplashScreen.hide();
+        }
+        
+        // Show custom splash for 3 seconds
+        setTimeout(() => {
+            this.showCustomSplash = false;
+        }, 3000);
     },
     computed: {
         ...mapGetters({
@@ -88,7 +104,8 @@ export default {
     },
     data() {
         return {
-            actualRouteName: ''
+            actualRouteName: '',
+            showCustomSplash: true
         };
     },
     components: {
@@ -107,5 +124,35 @@ export default {
     text-align: center;
     color: #2c3e50;
     margin-top: 60px;
+}
+
+.custom-splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #FFFFFF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.splash-version {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    color: #999;
+    font-size: 12px;
+    font-family: Arial, sans-serif;
+}
+
+.splash-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    max-width: 100%;
+    max-height: 100%;
 }
 </style>

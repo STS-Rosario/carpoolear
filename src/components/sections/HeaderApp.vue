@@ -73,7 +73,7 @@
 
             <div
                 class="actionbar_section actionbar_icon pull-right"
-                v-if="isMobile && !user"
+                v-if="isMobile && user"
             >
                 <a
                     href="/donar"

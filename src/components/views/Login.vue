@@ -135,7 +135,7 @@
                 <hr />
                 <button
                     class="btn btn-primary btn-search btn-apple btn-with-icon"
-                    @click="appleLogin"
+                    @click="toggleModalLogin('apple')"
                     :disabled="iosLoading"
                     v-if="isApple"
                 >

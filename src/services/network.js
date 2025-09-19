@@ -49,6 +49,12 @@ export default {
     getHeader(headers) {
         let authHeader = store.getters['auth/authHeader'];
         Object.assign(headers, authHeader);
+        
+        // Add ngrok bypass header for ngrok domains
+        if (API_URL && API_URL.includes('ngrok')) {
+            headers['ngrok-skip-browser-warning'] = 'any';
+        }
+        
         return headers;
     },
 
