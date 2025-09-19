@@ -2,6 +2,21 @@
     <div class="container">
         <template v-if="trip">
             <div class="trip-detail-component">
+                <div class="alert alert-info alert-sellado-viaje" v-if="this.trip.state == 'payment_failed'">
+                    <p>PAGO FALLÓ</p>
+                    <p>Este viaje aún no es visible para el resto de los usuarios. El pago del Sellado de Viaje falló, intentalo de nuevo.</p>
+                    <p>Hacé click en el botón para pagar el Sellado de Viaje ({{ $n(this.config.module_trip_creation_payment_amount_cents / 100, 'currency') }} en Mercado Pago).</p>
+                    <div id="walletBrick_container"></div>
+                </div>
+                <div class="alert alert-info alert-sellado-viaje" v-if="this.trip.state == 'pending_payment'">
+                    <p>PAGO EN RAPI PAGO</p>
+                    <p>Este viaje aún no es visible para el resto de los usuarios. Una vez que pagues el Sellado de Viaje en Rapi Pago, la gente podrá verlo.</p>
+                </div>
+                <div class="alert alert-info alert-sellado-viaje" v-if="this.trip.state == 'awaiting_payment'">
+                    <p>Este viaje aún no es visible para el resto de los usuarios. Una vez que pagues el Sellado de Viaje, la gente podrá verlo.</p>
+                    <p>Hacé click en el botón para pagar el Sellado de Viaje ({{ $n(this.config.module_trip_creation_payment_amount_cents / 100, 'currency') }} en Mercado Pago).</p>
+                    <div id="walletBrick_container"></div>
+                </div>
                 <div class="row form">
                     <div
                         ref="rightPanel"
@@ -410,6 +425,7 @@ import TripLocation from '../elements/TripLocation';
 import TripDriver from '../elements/TripDriver';
 import TripDate from '../elements/TripDate';
 import TripSeats from '../elements/TripSeats';
+import TripPrice from '../elements/TripPrice';
 import TripData from '../elements/TripData';
 import TripStats from '../elements/TripStats';
 import TripDescription from '../elements/TripDescription';
@@ -462,7 +478,8 @@ export default {
             showModalPricing: false,
             acceptPassengerValue: 0,
             acceptPricing: 0,
-            calculatedHeight: {}
+            calculatedHeight: {},
+            mp: null, // Mercado Pago instance
         };
     },
 
@@ -577,6 +594,7 @@ export default {
                     }
                 })
                 .catch((error) => {
+                    console.log('Error loading trip:', error);
                     if (error) {
                         if (error.status === 422) {
                             if (
@@ -648,7 +666,6 @@ export default {
             };
             this.lookConversation(data)
                 .then((conversation) => {
-                    console.log(conversation);
                     router.push({
                         name: 'conversation-chat',
                         params: { id: conversation.id }
@@ -789,7 +806,6 @@ export default {
             let users = this.matchingUsers.filter(
                 (u) => this.selectedMatchingUser.indexOf(u.id) >= 0
             );
-            console.log(users, this.messageToUsers);
             if (this.messageToUsers && users && users.length) {
                 this.sendToAll({
                     message: this.messageToUsers,
@@ -821,6 +837,37 @@ export default {
             }
             this.showModalRequestSeat = false;
             this.showModalPricing = false;
+        },
+        enablePayment() {
+            // only enable payment if the trip is awaiting payment
+            if (!this.trip.payment_id || this.trip.state !== 'awaiting_payment') {
+                return;
+            }
+
+            // Check if the button is already rendered by checking if container has children
+            const container = document.getElementById('walletBrick_container');
+            if (container && container.children.length > 0) {
+                return;
+            }
+
+            // Create the payment button
+            const bricksBuilder = this.mp.bricks();
+            const renderWalletBrick = async (bricksBuilder) => {
+                await bricksBuilder.create("wallet", "walletBrick_container", {
+                    initialization: {
+                        preferenceId: this.trip.payment_id
+                    }
+                });
+            };
+            // Create container for the payment button if it doesn't exist
+            if (!container) {
+                const newContainer = document.createElement('div');
+                newContainer.id = 'walletBrick_container';
+                document.querySelector('.alert-sellado-viaje').appendChild(newContainer);
+            }
+
+            // Render the payment button
+            renderWalletBrick(bricksBuilder);
         }
     },
 
@@ -831,6 +878,18 @@ export default {
         this.$nextTick(() => {
             this.calculateHeight();
         });
+
+        // Initialize Mercado Pago SDK
+        const script = document.createElement('script');
+        script.src = 'https://sdk.mercadopago.com/js/v2';
+        script.onload = () => {
+            this.mp = new MercadoPago(process.env.MERCADO_PAGO_PUBLIC_KEY);
+            // After SDK is loaded, enable payment if needed
+            if (this.trip && this.trip.payment_id && (this.trip.state === 'awaiting_payment' || this.trip.state === 'payment_failed')) {
+                this.enablePayment();
+            }
+        };
+        document.body.appendChild(script);
     },
 
     beforeDestroy() {
@@ -888,12 +947,12 @@ export default {
             } else if (this.tripCardTheme === 'light') {
                 return [
                     [TripDriver, TripDescription],
-                    [TripLocation, TripDate, TripSeats, TripPassengers],
+                    [TripLocation, TripDate,TripPrice, TripSeats, TripPassengers],
                     [TripData]
                 ];
             } else {
                 return [
-                    [TripLocation, TripDate, TripSeats],
+                    [TripLocation, TripDate, TripPrice, TripSeats],
                     [TripData, TripStats, TripShare, TripPassengers]
                 ];
             }
@@ -923,7 +982,8 @@ export default {
         TripDescription,
         TripShare,
         TripPassengers,
-        TripButtons
+        TripButtons,
+        TripPrice
     },
 
     props: ['id', 'location']
@@ -1085,5 +1145,8 @@ export default {
         margin: 0;
         padding: 1em 0;
     }
+}
+#walletBrick_container {
+    margin-top: 1rem;
 }
 </style>

@@ -205,7 +205,7 @@ const messages = {
             'Tienes que ser verificado como conductor para poder cargar viajes.',
         problemaAlCargarElViaje:
             'Ocurrió un problema al cargar el viaje. Por favor vuelva a intentarlo.',
-        ingresePuntoIntermedio: 'Ingrese punto intermedio',
+        ingresePuntoIntermedio: 'Ingrese punto intermedio (opcional)',
         buscarFacebook: 'Buscar en Facebook',
         aportanteMediaNaranja:
             'Aportante en la campaña mi media naranja carpoolera',
@@ -239,7 +239,7 @@ const messages = {
         crearViaje: 'Crear Viaje',
         buscoConductor: 'Busco Conductor',
         buscoPasajero: 'Busco Pasajero',
-        precioAsiento: 'Precio del asiento',
+        precioAsiento: 'Contribución por persona (incluído el conductor)',
         iniciarSesion: 'Iniciar sesión',
         ingresaCuenta: 'Ingresá con tu cuenta de',
         carpoolear: 'Carpoolear',

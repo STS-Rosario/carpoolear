@@ -1,5 +1,16 @@
 <template>
     <div class="new-trip-component container">
+        <div class="alert alert-info alert-sellado-viaje" v-if="this.config.module_trip_creation_payment_enabled">
+            <p>Mensaje contando sobre el Sellado de Viaje.</p>
+            <p>Podés hacer {{ this.free_trips_amount }} viajes gratis.</p>
+            <div v-if="this.trips_created_by_user_amount >= this.free_trips_amount">
+                <p>Ya creaste {{ this.trips_created_by_user_amount }} viajes, por lo que tenés que pagar el Sellado de Viaje.</p>
+            </div>
+            <div v-if="this.trips_created_by_user_amount < this.free_trips_amount">
+                <p>Te queda{{ (remainingFreeTrips) === 1 ? '' : 'n' }} {{ remainingFreeTrips }} viaje{{ (remainingFreeTrips) === 1 ? '' : 's' }} gratis, luego tendrás que pagar el Sellado de Viaje.</p>
+            </div>
+        </div>
+
         <div class="form form-trip">
             <div class="row">
                 <div :class="columnClass[0]">
@@ -173,6 +184,10 @@
                             </span>
                         </label>
                     </div>
+                    <!-- <pre style="background: #f5f5f5; padding: 10px; margin: 10px; border-radius: 4px; font-size: 12px;">
+{{ JSON.stringify({
+    ...this
+}, null, 2) }}</pre> -->
                 </div>
                 <div :class="columnClass[1]">
                     <div class="row">
@@ -356,91 +371,6 @@
                                     <!--<input type="text" v-model="time" />-->
                                 </div>
                             </div>
-                            <div
-                                class="trip_price"
-                                v-if="config.module_seat_price"
-                            >
-                                <legend class="label-for-group">
-                                    {{ $t('precioAsiento') }}
-                                </legend>
-
-                                <input
-                                    type="number"
-                                    v-model="price"
-                                    class="form-control form-control-with-icon form-control-price"
-                                    id="price"
-                                    :class="{ 'has-error': priceError.state }"
-                                    :placeholder="price"
-                                />
-                                <span class="error" v-if="priceError.state">
-                                    {{ priceError.message }}
-                                </span>
-                            </div>
-
-                            <div
-                                class="list_item"
-                                v-if="
-                                    trip.is_passenger == 0 &&
-                                    config.module_max_price
-                                "
-                            >
-                                <i
-                                    class="fa fa-link"
-                                    aria-hidden="true"
-                                    v-if="tripCardTheme === 'light'"
-                                ></i>
-                                <div
-                                    class="label-soft"
-                                    v-if="tripCardTheme !== 'light'"
-                                    style="
-                                        color: var(--trip-almost-fill-color);
-                                        font-weight: bold;
-                                    "
-                                >
-                                    {{ 'Total de combustible aprox.' }}
-                                </div>
-                                <div>
-                                    <span
-                                        style="
-                                            color: var(
-                                                --trip-almost-fill-color
-                                            );
-                                        "
-                                    >
-                                        $ {{ priceAproxString }}
-                                    </span>
-                                    (nafta premium, consumo promedio, sin
-                                    peajes)
-                                </div>
-                            </div>
-                            <div
-                                class="trip_price"
-                                v-if="
-                                    trip.is_passenger == 0 &&
-                                    config.module_max_price
-                                "
-                            >
-                                <label
-                                    class="label-for-group"
-                                    style="font-weight: bold; color: #111"
-                                >
-                                    {{
-                                        'Total combustibles + peajes a compartir'
-                                    }}
-                                </label>
-
-                                <input
-                                    type="number"
-                                    v-model="price"
-                                    class="form-control form-control-with-icon form-control-price"
-                                    id="price"
-                                    :class="{ 'has-error': priceError.state }"
-                                    :placeholder="price"
-                                />
-                                <span class="error" v-if="priceError.state">
-                                    {{ priceError.message }}
-                                </span>
-                            </div>
                             <div class="trip_seats-available">
                                 <fieldset>
                                     <span class="label-for-group">
@@ -460,8 +390,8 @@
                                             <input
                                                 type="radio"
                                                 id="seats-one"
-                                                value="1"
-                                                v-model="trip.total_seats"
+                                                :value="1"
+                                                v-model.number="trip.total_seats"
                                             />
                                             <label for="seats-one">1</label>
                                         </span>
@@ -469,8 +399,8 @@
                                             <input
                                                 type="radio"
                                                 id="seats-two"
-                                                value="2"
-                                                v-model="trip.total_seats"
+                                                :value="2"
+                                                v-model.number="trip.total_seats"
                                             />
                                             <label for="seats-two">2</label>
                                         </span>
@@ -478,8 +408,8 @@
                                             <input
                                                 type="radio"
                                                 id="seats-three"
-                                                value="3"
-                                                v-model="trip.total_seats"
+                                                :value="3"
+                                                v-model.number="trip.total_seats"
                                             />
                                             <label for="seats-three">3</label>
                                         </span>
@@ -487,8 +417,8 @@
                                             <input
                                                 type="radio"
                                                 id="seats-four"
-                                                value="4"
-                                                v-model="trip.total_seats"
+                                                :value="4"
+                                                v-model.number="trip.total_seats"
                                             />
                                             <label for="seats-four">4</label>
                                         </span>
@@ -538,6 +468,123 @@
                                     {{ seatsError.message }}
                                 </span>
                             </div>
+                            <div
+                                class="trip_price"
+                                v-if="trip.is_passenger == 0 && !config.module_max_price_enabled && config.module_seat_price_enabled"
+                            >
+                                <legend class="label-for-group label-tooltip">
+                                    {{ $t('precioAsiento') }}  
+                                <span
+                                    class="tooltip-bottom tooltip-seat-price"
+                                    :data-tooltip="'El precio que pagará cada pasajero. Incluye el proporcional de peajes'+ ((this.config.module_trip_creation_payment_enabled) ? ' y Sellado de Viaje.' : '')"
+                                >
+                                    <i
+                                        class="fa fa-info-circle"
+                                        aria-hidden="true"
+                                    ></i>
+                                </span>
+                                </legend>
+
+                                <input
+                                    type="number"
+                                    v-model="price"
+                                    class="form-control form-control-with-icon form-control-price"
+                                    id="price"
+                                    :class="{ 'has-error': priceError.state }"
+                                    :placeholder="price"
+                                />
+                                <span class="error" v-if="priceError.state">
+                                    {{ priceError.message }}
+                                </span>
+                            </div>
+
+                            <div
+                                class="list_item"
+                                v-if="
+                                    trip.is_passenger == 0 &&
+                                    config.module_max_price_enabled
+                                "
+                            >
+                                <i
+                                    class="fa fa-link"
+                                    aria-hidden="true"
+                                    v-if="tripCardTheme === 'light'"
+                                ></i>
+                            </div>
+                            <div
+                                class="trip_price"
+                                v-if="
+                                    trip.is_passenger == 0 &&
+                                    config.module_max_price_enabled && 
+                                    config.module_seat_price_enabled
+                                "
+                            >
+                                <legend class="label-for-group label-tooltip">
+                                    {{ $t('precioAsiento') }}  
+                                    <span
+                                        class="tooltip-bottom tooltip-seat-price"
+                                        :data-tooltip="'El precio que pagará cada pasajero. Incluye el proporcional de peajes'+ ((this.config.module_trip_creation_payment_enabled) ? ' y Sellado de Viaje.' : '')"
+                                    >
+                                        <i
+                                            class="fa fa-info-circle"
+                                            aria-hidden="true"
+                                        ></i>
+                                    </span>
+                                </legend>
+
+                                <input
+                                    type="number"
+                                    v-model="price"
+                                    class="form-control form-control-with-icon form-control-price"
+                                    id="price"
+                                    :class="{ 'has-error': priceError.state }"
+                                    :placeholder="price"
+                                    :max="maximum_seat_price_cents / 100"
+                                    @input="validatePrice"
+                                />
+                                <span class="error" v-if="priceError.state">
+                                    {{ priceError.message }}
+                                </span>
+                            </div>
+
+                            <div v-if="trip.is_passenger == 0 && this.trip.distance > 0 && config.module_seat_price_enabled">
+                                <div
+                                class="label-soft"
+                                v-if="tripCardTheme !== 'light'"
+                                style="
+                                    color: var(--trip-mostly-free-color);
+                                    font-weight: bold;
+                                    margin-bottom: 10px;
+                                    font-size: 1.1rem;
+                                "
+                                >
+                                    {{ 'Contribución recomendada' }}
+
+                                    <span
+                                        style="
+                                            color: var(
+                                                --trip-almost-fill-color
+                                            );
+                                        "
+                                    >
+                                        $ {{ recommendedSeatPrice }}
+
+                                    <span>
+                                        
+                                        <span
+                                            class="tooltip-seat-price"
+                                            data-tooltip="Calculado en base a nafta premium, consumo promedio alto, peajes y Sellado de Viaje incluídos (si aplica)"
+                                        >
+                                            <i
+                                                class="fa fa-info-circle"
+                                                aria-hidden="true"
+                                            ></i>
+                                        </span>
+                                    </span>
+                                    </span>
+                                </div>
+                            </div>
+
                             <div class="trip-comment">
                                 <label
                                     for="trip_comment"
@@ -564,7 +611,7 @@
                             </div>
                         </div>
                         <div class="col-sm-11 col-md-9 preferences-container">
-                            <fieldset class="trip-privacity">
+                            <!-- <fieldset class="trip-privacity">
                                 <legend class="label-for-group">
                                     {{ $t('privacidadViaje') }}
                                 </legend>
@@ -612,7 +659,7 @@
                                         </label>
                                     </li>
                                 </ul>
-                            </fieldset>
+                            </fieldset> -->
                             <legend class="label-for-group">
                                 {{ $t('preferenciasViaje') }}
                             </legend>
@@ -858,7 +905,7 @@
                                 $t('origen')
                             }}</span>
                             <span
-                                v-if="index == points.length - 1"
+                                v-if="index == otherTrip.points.length - 1"
                                 class="sr-only"
                             >
                                 {{ $t('destino') }}
@@ -870,18 +917,26 @@
                                 :value="m.name"
                                 v-on:place_changed="
                                     (data) =>
-                                        getPlace(index, data, 'returnTrip')
+                                        getPlace(
+                                            index,
+                                            data,
+                                            'returnTrip'
+                                        )
                                 "
                                 :classes="'form-control form-control-with-icon form-control-map-autocomplete'"
-                                :country="allowForeignPoints ? null : 'AR'"
+                                :country="
+                                    allowForeignPoints ? null : 'AR'
+                                "
                                 :class="{ 'has-error': m.error.state }"
                             ></autocomplete>
-                            <!-- <GmapAutocomplete  :selectFirstOnEnter="true" :types="['(cities)']" :componentRestrictions="allowForeignPoints ? null : {country: 'AR'}" :placeholder="getPlaceholder(index)"  :value="m.name" :name="'input-' + index" :ref="'input-' + index" v-on:place_changed="(data) => getPlace(index, data)" class="form-control form-control-with-icon form-control-map-autocomplete" :class="{'has-error': m.error.state}"> </GmapAutocomplete> -->
                             <div
-                                @click="m.name = ''"
+                                @click="resetReturnPoints(m, index)"
                                 class="date-picker--cross"
                             >
-                                <i aria-hidden="true" class="fa fa-times"></i>
+                                <i
+                                    aria-hidden="true"
+                                    class="fa fa-times"
+                                ></i>
                             </div>
                             <span class="error" v-if="m.error.state">
                                 {{ m.error.message }}
@@ -906,7 +961,7 @@
                                         {{ $t('origen') }}
                                     </span>
                                     <span
-                                        v-if="index == points.length - 1"
+                                        v-if="index == otherTrip.points.length - 1"
                                         class="sr-only"
                                     >
                                         {{ $t('destino') }}
@@ -930,9 +985,8 @@
                                         "
                                         :class="{ 'has-error': m.error.state }"
                                     ></autocomplete>
-                                    <!-- <GmapAutocomplete  :selectFirstOnEnter="true" :types="['(cities)']" :componentRestrictions="allowForeignPoints ? null : {country: 'AR'}" :placeholder="getPlaceholder(index)"  :value="m.name" :name="'input-' + index" :ref="'input-' + index" v-on:place_changed="(data) => getPlace(index, data)" class="form-control form-control-with-icon form-control-map-autocomplete" :class="{'has-error': m.error.state}"> </GmapAutocomplete> -->
                                     <div
-                                        @click="m.name = ''"
+                                        @click="resetReturnPoints(m, index)"
                                         class="date-picker--cross"
                                     >
                                         <i
@@ -1061,10 +1115,50 @@
                             </div>
                             <div
                                 class="trip_price"
-                                v-if="config.module_seat_price"
+                                v-if="trip.is_passenger == 0 && 
+                                !config.module_max_price_enabled && 
+                                config.module_seat_price_enabled"
                             >
-                                <legend class="label-for-group">
-                                    {{ $t('precioAsiento') }}
+                                <legend class="label-for-group label-tooltip">
+                                    {{ $t('precioAsiento') }}  
+                                <span
+                                    class="tooltip-bottom tooltip-seat-price"
+                                    :data-tooltip="'El precio que pagará cada pasajero. Incluye el proporcional de peajes'+ ((this.config.module_trip_creation_payment_enabled) ? ' y Sellado de Viaje.' : '')"
+                                >
+                                    <i
+                                        class="fa fa-info-circle"
+                                        aria-hidden="true"
+                                    ></i>
+                                </span>
+                                </legend>
+
+                                <input
+                                    type="number"
+                                    v-model="returnPrice"
+                                    class="form-control form-control-with-icon form-control-price"
+                                    id="return-price"
+                                    :class="{ 'has-error': returnPriceError.state }"
+                                    :placeholder="returnPrice"
+                                />
+                                <span class="error" v-if="returnPriceError.state">
+                                    {{ returnPriceError.message }}
+                                </span>
+                            </div>
+                            <div
+                                class="trip_price"
+                                v-if="this.config.module_trip_creation_payment_enabled && config.module_seat_price_enabled"
+                            >
+                                <legend class="label-for-group label-tooltip">
+                                    {{ $t('precioAsiento') }}  
+                                    <span
+                                        class="tooltip-bottom tooltip-seat-price"
+                                        :data-tooltip="'El precio que pagará cada pasajero. Incluye el proporcional de peajes'+ ((this.config.module_trip_creation_payment_enabled) ? ' y Sellado de Viaje.' : '')"
+                                    >
+                                        <i
+                                            class="fa fa-info-circle"
+                                            aria-hidden="true"
+                                        ></i>
+                                    </span>
                                 </legend>
                                 <input
                                     type="number"
@@ -1075,6 +1169,8 @@
                                         'has-error': returnPriceError.state
                                     }"
                                     :placeholder="price"
+                                    :max="maximum_seat_price_cents / 100"
+                                    @input="validatePrice"
                                 />
                                 <span
                                     class="error"
@@ -1083,6 +1179,45 @@
                                     {{ returnPriceError.message }}
                                 </span>
                             </div>
+
+                            <div v-if="trip.is_passenger == 0 && this.trip.distance > 0 && config.module_seat_price_enabled">
+                                <div
+                                class="label-soft"
+                                v-if="tripCardTheme !== 'light'"
+                                style="
+                                    color: var(--trip-mostly-free-color);
+                                    font-weight: bold;
+                                    margin-bottom: 10px;
+                                    font-size: 1.1rem;
+                                "
+                                >
+                                    {{ 'Contribución recomendada' }}
+
+                                    <span
+                                        style="
+                                            color: var(
+                                                --trip-almost-fill-color
+                                            );
+                                        "
+                                    >
+                                        $ {{ recommendedReturnSeatPrice }}
+
+                                    <span>
+                                        
+                                        <span
+                                            class="tooltip-seat-price"
+                                            data-tooltip="Calculado en base a nafta premium, consumo promedio alto, peajes y Sellado de Viaje incluídos (si aplica)"
+                                        >
+                                            <i
+                                                class="fa fa-info-circle"
+                                                aria-hidden="true"
+                                            ></i>
+                                        </span>
+                                    </span>
+                                    </span>
+                                </div>
+                            </div>
+
                             <div class="trip_seats-available">
                                 <fieldset>
                                     <span class="label-for-group">
@@ -1102,8 +1237,8 @@
                                             <input
                                                 type="radio"
                                                 id="otherTrip-seats-one"
-                                                value="1"
-                                                v-model="
+                                                :value="1"
+                                                v-model.number="
                                                     otherTrip.trip.total_seats
                                                 "
                                             />
@@ -1115,8 +1250,8 @@
                                             <input
                                                 type="radio"
                                                 id="otherTrip-seats-two"
-                                                value="2"
-                                                v-model="
+                                                :value="2"
+                                                v-model.number="
                                                     otherTrip.trip.total_seats
                                                 "
                                             />
@@ -1128,8 +1263,8 @@
                                             <input
                                                 type="radio"
                                                 id="otherTrip-seats-three"
-                                                value="3"
-                                                v-model="
+                                                :value="3"
+                                                v-model.number="
                                                     otherTrip.trip.total_seats
                                                 "
                                             />
@@ -1141,8 +1276,8 @@
                                             <input
                                                 type="radio"
                                                 id="otherTrip-seats-four"
-                                                value="4"
-                                                v-model="
+                                                :value="4"
+                                                v-model.number="
                                                     otherTrip.trip.total_seats
                                                 "
                                             />
@@ -1516,12 +1651,14 @@ import dialogs from '../../services/dialogs.js';
 import spinner from '../Spinner.vue';
 import moment from 'moment';
 import { last } from 'lodash';
-import OsmApi from '../../services/api/Osm';
+import TripApi from '../../services/api/Trips';
+import UserApi from '../../services/api/User';
 import autocomplete from '../Autocomplete';
 import SvgItem from '../SvgItem';
 import bus from '../../services/bus-event.js';
 
-let osmApi = new OsmApi();
+let tripApi = new TripApi();
+let userApi = new UserApi();
 
 class Error {
     constructor(state = false, message = '') {
@@ -1580,6 +1717,18 @@ export default {
             dateAnswer: this.date,
             time: '12:00',
             price: 0,
+            needs_to_pay_for_next_trip: false,
+            maximum_trip_price_cents: 0,
+            recommended_trip_price_cents: 0,
+            maximum_seat_price_cents: 0,
+            recommended_seat_price_cents: 0,
+            maximum_return_trip_price_cents: 0,
+            recommended_return_trip_price_cents: 0,
+            maximum_return_seat_price_cents: 0,
+            recommended_return_seat_price_cents: 0,
+            free_trips_amount: 0,
+            trips_created_by_user_amount: 0,
+            route_needs_payment: false,
             returnPrice: 0,
             duration: 0,
             passengers: 0,
@@ -1655,7 +1804,7 @@ export default {
                     allow_kids: true,
                     allow_smoking: true,
                     allow_animals: true,
-                    seat_price: 0,
+                    seat_price_cents: 0,
                     points: [] /* address json_address lat lng */
                 }
             }
@@ -1671,6 +1820,13 @@ export default {
         if (self.id) {
             self.loadTrip();
         }
+
+        userApi.selladoViaje().then((result) => {
+            // if user is over the free trips limit, show a message telling them they need to pay for the next trip
+            this.needs_to_pay_for_next_trip = this.config.module_trip_creation_payment_enabled && result.data.user_over_free_limit;
+            this.free_trips_amount = result.data.free_trips_amount;
+            this.trips_created_by_user_amount = result.data.trips_created_by_user_amount;
+        });
     },
     beforeDestroy() {},
 
@@ -1690,11 +1846,12 @@ export default {
         distanceString() {
             return Math.floor(this.trip.distance / 1000) + ' Km';
         },
-        priceAproxString() {
-            return Math.ceil(
-                (this.trip.distance / 1000 / this.config.kilometer_by_liter) *
-                    this.config.fuel_price
-            );
+        recommendedSeatPrice() {
+            return Math.floor((this.recommended_seat_price_cents / 100)) ;
+        },
+
+        recommendedReturnSeatPrice() {
+            return Math.floor((this.recommended_return_seat_price_cents / 100)) ;
         },
 
         estimatedTimeString() {
@@ -1734,11 +1891,26 @@ export default {
         },
         tripCardTheme() {
             return this.config ? this.config.trip_card_design : '';
+        },
+        remainingFreeTrips() {
+            return this.free_trips_amount - this.trips_created_by_user_amount;
         }
     },
     watch: {
         no_lucrar: function () {
             this.lucrarError.state = false;
+        },
+        'trip.total_seats': function(newValue) {
+            if (this.trip.distance > 0) {
+                // The maximum_trip_price_cents is constant based on distance
+                // We just need to recalculate the per-seat prices
+                this.recalculateRecommendedPrice();
+            }
+        },
+        'otherTrip.trip.total_seats': function(newValue) {
+            if (this.otherTrip.trip.distance > 0) {
+                this.recalculateRecommendedReturnPrice();
+            }
         },
         dateAnswer: function (value) {
             if (!this.showReturnTrip || !this.otherTrip.dateAnswer) {
@@ -1762,34 +1934,34 @@ export default {
             this.otherTrip.timeError.state = false;
         },
         'trip.friendship_type_id': function () {
-            console.log('change');
             this.otherTrip.trip.friendship_type_id =
                 this.trip.friendship_type_id;
         },
-        'trip.distance': function () {
-            if (this.config.module_seat_price) {
-                let data = {
-                    from: this.points[0].place,
-                    to: last(this.points).place,
-                    distance: this.trip.distance
-                };
-                this.getPrice(data).then((price) => {
-                    this.price = price;
-                    console.log(this.price);
-                });
-            }
-        },
-        'otherTrip.distance': function () {
-            let data = {
-                from: this.otherTrip.points[0].place,
-                to: last(this.otherTrip.points).place,
-                distance: this.otherTrip.distance
-            };
-            this.getPrice(data).then((price) => {
-                this.returnPrice = price;
-                console.log(this.returnPrice);
-            });
-        }
+        // 'trip.distance': function () {
+        //     // TODO: FIX THIS
+        //     if (this.config.module_trip_creation_payment_enabled) {
+        //         let data = {
+        //             from: this.points[0].place,
+        //             to: last(this.points).place,
+        //             distance: this.trip.distance
+        //         };
+        //         this.getPrice(data).then((price) => {
+        //             this.price = price;
+        //             console.log(this.price);
+        //         });
+        //     }
+        // },
+        // 'otherTrip.distance': function () {
+        //     let data = {
+        //         from: this.otherTrip.points[0].place,
+        //         to: last(this.otherTrip.points).place,
+        //         distance: this.otherTrip.distance
+        //     };
+        //     this.getPrice(data).then((price) => {
+        //         this.returnPrice = price;
+        //         console.log(this.returnPrice);
+        //     });
+        // }
     },
     methods: {
         ...mapActions({
@@ -1799,7 +1971,6 @@ export default {
             getPrice: 'trips/price'
         }),
         setIsPassenger(value) {
-            console.log('setIsPassenger', value);
             this.$set(this.trip, 'is_passenger', value);
         },
         changeOtherTripDate(date) {
@@ -1820,7 +1991,6 @@ export default {
         restoreData(trip) {
             this.no_lucrar = true;
             this.points = [];
-            console.log(trip);
             trip.points.forEach((p) => {
                 let point = {
                     name: p.address,
@@ -1894,7 +2064,6 @@ export default {
                     p.error.message = this.$t('localidadValida');
                     globalError = true;
                 } else {
-                    console.log('COUNTRY', p.json.country);
                     foreignPoints +=
                         p.json.country === this.config.osm_country ? 0 : 1;
                 }
@@ -1915,7 +2084,6 @@ export default {
                         p.error.message = this.$t('seleccioneLocalidadValida');
                         globalError = true;
                     } else {
-                        console.log('COUNTRY', p.json.country);
                         foreignPoints +=
                             p.json.country === this.config.osm_country ? 0 : 1;
                     }
@@ -1987,11 +2155,6 @@ export default {
                 !this.no_lucrar &&
                 this.trip.is_passenger.toString() !== '1'
             ) {
-                console.log(
-                    'this.trip.is_passenger',
-                    this.trip.is_passenger,
-                    this.trip.is_passenger !== 1
-                );
                 this.lucrarError.state = true;
                 this.lucrarError.message = this.$t('teComprometesANoLucrar');
                 dialogs.message(this.$t('teComprometesANoLucrar'), {
@@ -2006,22 +2169,15 @@ export default {
                 });
             }
             if (validDate && validTime) {
-                console.log('valid date time');
                 if (
                     moment(this.dateAnswer).format('YYYY-MM-DD') ===
                     moment().format('YYYY-MM-DD')
                 ) {
-                    console.log(
-                        'es hoy',
-                        moment(this.time, 'HH mm').format('HH mm'),
-                        moment().format('HH mm')
-                    );
                     // la fecha es de hoy, la hora no debería poder ser anterior
                     if (
                         moment(this.time, 'HH mm').format('HH mm') <
                         moment().format('HH mm')
                     ) {
-                        console.log('es antes de ahora');
                         this.timeError.state = true;
                         this.timeError.message = this.$t('viajesPasado');
                         globalError = true;
@@ -2029,40 +2185,14 @@ export default {
                 }
             }
 
-            if (
-                !this.config.module_seat_price &&
-                this.trip.is_passenger == 0 &&
-                this.config.module_max_price
-            ) {
-                let aprox =
-                    Math.ceil(
-                        (this.trip.distance /
-                            1000 /
-                            this.config.kilometer_by_liter) *
-                            this.config.fuel_price
-                    ) *
-                    (1 + this.config.price_variance / 100);
-                console.log(
-                    'MAX APROX',
-                    1 + this.config.price_variance / 100,
-                    aprox
-                );
-                if (this.price > aprox) {
+            if (this.config.module_max_price_enabled 
+                && this.trip.is_passenger == 0) {
+                if (this.price > this.maximum_seat_price_cents / 100) {
                     globalError = true;
                     this.priceError.state = true;
-                    this.priceError.message =
-                        'El precio total no puede superar un ' +
-                        this.config.price_variance +
-                        '% al aproximado de combustible.';
+                    this.priceError.message = 'El precio del asiento no puede superar ' + this.$n(this.maximum_seat_price_cents / 100, 'currency');
                 } else {
-                    if (this.price < 1) {
-                        globalError = true;
-                        this.priceError.state = true;
-                        this.priceError.message =
-                            'El precio total debe estar completo.';
-                    } else {
-                        this.priceError.state = false;
-                    }
+                    this.priceError.state = false;
                 }
             }
 
@@ -2117,26 +2247,17 @@ export default {
                 }
 
                 if (validOtherTripTime && validOtherTripDate) {
-                    console.log('valid date time');
                     if (
                         moment(this.otherTrip.dateAnswer).format(
                             'YYYY-MM-DD'
                         ) === moment().format('YYYY-MM-DD')
                     ) {
-                        console.log(
-                            'es hoy',
-                            moment(this.otherTrip.time, 'HH mm').format(
-                                'HH mm'
-                            ),
-                            moment().format('HH mm')
-                        );
                         // la fecha es de hoy, la hora no debería poder ser anterior
                         if (
                             moment(this.otherTrip.time, 'HH mm').format(
                                 'HH mm'
                             ) < moment().format('HH mm')
                         ) {
-                            console.log('es antes de ahora');
                             this.otherTrip.timeError.state = true;
                             this.otherTrip.timeError.message =
                                 this.$t('viajesPasado');
@@ -2179,7 +2300,6 @@ export default {
 
         getSaveInfo(tripObj, estimatedTime) {
             const points = tripObj.points.map((p) => {
-                console.log('p point', p);
                 return {
                     address: p.name,
                     json_address: p.json,
@@ -2215,20 +2335,15 @@ export default {
             this.trip = this.getSaveInfo(this, this.estimatedTimeString);
             if (!this.updatingTrip) {
                 let trip = JSON.parse(JSON.stringify(this.trip));
-                console.log('updating trip', trip);
                 trip.allow_kids = !(trip.allow_kids > 0);
                 trip.allow_animals = !(trip.allow_animals > 0);
                 trip.allow_smoking = !(trip.allow_smoking > 0);
 
-                if (this.config.module_seat_price) {
-                    trip.seat_price = this.price;
-                } else {
-                    trip.total_price = this.price;
-                }
+                trip.seat_price_cents = this.price * 100;
+                
                 if (trip.is_passenger === 1) {
                     trip.no_lucrar = 1;
                 }
-                console.log('tt', trip);
                 this.createTrip(trip)
                     .then((t) => {
                         return new Promise((resolve, reject) => {
@@ -2248,8 +2363,7 @@ export default {
                                     !otherTrip.allow_animals;
                                 otherTrip.allow_smoking =
                                     !otherTrip.allow_smoking;
-                                otherTrip.seat_price = this.returnPrice;
-                                console.log(otherTrip);
+                                otherTrip.seat_price_cents = this.returnPrice * 100;
                                 this.createTrip(otherTrip).then((ot) => {
                                     return resolve(ot);
                                 });
@@ -2287,7 +2401,6 @@ export default {
                         this.saving = false;
                     });
             } else {
-                console.log(this.trip);
                 this.trip.id = this.updatingTrip.id;
                 this.updateTrip(this.trip)
                     .then(() => {
@@ -2304,7 +2417,6 @@ export default {
         },
 
         getPlace(i, data, type) {
-            console.log('getPlace', i, data, type);
             type = type || 'trip';
 
             const trip = type === 'trip' ? this : this.otherTrip;
@@ -2323,27 +2435,27 @@ export default {
                 last(trip.points).error.state = false;
             }
 
-            this.addPoint();
-
             if (type === 'trip') {
-                let point = this.otherTrip.points[0];
-
-                if (i === 0) {
-                    point = last(this.otherTrip.points);
-                }
-
-                point.place = data;
-                point.name = data.name;
-                point.json = data;
-                // point.json = parseOsmStreet(data);
-                point.error.state = false;
-                this.otherTrip.center = point.location = {
-                    lat: parseFloat(data.lat),
-                    lng: parseFloat(data.lng)
-                };
+                this.addPoint();
+                // Mirror the entire points array
+                this.otherTrip.points = this.points.slice().reverse().map(point => ({
+                    name: point.name,
+                    place: point.place,
+                    json: point.json,
+                    location: point.location,
+                    error: new Error(),
+                    id: point.id  // Preserve the original ID
+                }));
+                
+                // Update the center to the first point of the return trip
+                this.otherTrip.center = this.otherTrip.points[0].location;
                 this.calcRoute('returnTrip');
+            } else {
+                this.addReturnPoint();
             }
+
             this.calcRoute(type);
+            this.recalculateRecommendedPrice();
         },
 
         getPlaceholder(index) {
@@ -2380,13 +2492,37 @@ export default {
                 this.points = newArr;
             }
         },
+        addReturnPoint(force) {
+            if (
+                this.otherTrip.points.filter((point) => point.name === '').length === 0 ||
+                force
+            ) {
+                let newArr = this.otherTrip.points.splice(0);
+                let newp = {
+                    name: '',
+                    place: null,
+                    json: null,
+                    location: null,
+                    error: new Error(),
+                    id: new Date().getTime()
+                };
+                newArr.splice(this.otherTrip.points.length - 1, 0, newp);
+                this.otherTrip.points = newArr;
+            }
+        },
         resetPoints(m, index) {
             if (index === 0 || index === this.points.length - 1) {
+                // If removing origin or destination, clear the point
                 m.name = '';
+                m.place = null;
+                m.json = null;
+                m.location = null;
             } else {
-                console.log(index);
+                // If removing intermediate point, remove it and shift remaining points
                 this.points.splice(index, 1);
             }
+            // Always recalculate trip info
+            this.calcRoute('trip');
         },
 
         calcRoute(type) {
@@ -2394,29 +2530,33 @@ export default {
 
             const trip = type === 'trip' ? this : this.otherTrip;
 
-            console.log('calc route', trip.points);
-
             let points = trip.points.filter((point) => point.name);
 
+            // Only proceed if we have at least 2 points with names
             if (points.length < 2) {
                 return;
             }
+
             let data = {
                 points: points.map((point) => point.location)
             };
-            osmApi.route(data).then((result) => {
-                console.log('osm route result', result);
-                if (
-                    result.code === 'Ok' &&
-                    result.routes &&
-                    result.routes.length
-                ) {
-                    let route = result.routes[0];
-                    trip.trip.distance = route.distance;
-                    trip.duration = route.duration;
-                    trip.trip.co2 =
-                        route.distance *
-                        0.15; /* distancia por 0.15 kilos co2 en promedio por KM recorrido  */
+
+            tripApi.getTripInfo(data).then((result) => {
+                if (result.status === true) {
+                    trip.trip.distance = result.data.distance;
+                    trip.duration = result.data.duration;
+                    trip.trip.co2 = result.data.co2;
+                    trip.route_needs_payment = result.data.route_needs_payment;
+                    
+                    if (type === 'trip') {
+                        this.maximum_trip_price_cents = result.data.maximum_trip_price_cents;
+                        this.recommended_trip_price_cents = result.data.recommended_trip_price_cents;
+                        this.recalculateRecommendedPrice();
+                    } else {
+                        this.maximum_return_trip_price_cents = result.data.maximum_trip_price_cents;
+                        this.recommended_return_trip_price_cents = result.data.recommended_trip_price_cents;
+                        this.recalculateRecommendedReturnPrice();
+                    }
                 }
             });
 
@@ -2425,12 +2565,57 @@ export default {
 
                 /* eslint-disable no-undef */
                 L.Routing.control({
-                    waypoints: [
-                        L.latLng(data.origin.lat, data.origin.lng),
-                        L.latLng(data.destiny.lat, data.destiny.lng)
-                    ]
+                    waypoints: points.map(point => L.latLng(point.location.lat, point.location.lng))
                 }).addTo(map);
             }
+        },
+        validatePrice() {
+            if (this.price > this.maximum_seat_price_cents / 100) {
+                this.priceError.state = true;
+                this.priceError.message = 'El precio no puede superar ' + this.$n(this.maximum_seat_price_cents / 100, 'currency');
+            } else {
+                this.priceError.state = false;
+            }
+
+            if (this.returnPrice > this.maximum_seat_price_cents / 100) {
+                this.priceError.state = true;
+                this.priceError.message = 'El precio no puede superar ' + this.$n(this.maximum_seat_price_cents / 100, 'currency');
+            } else {
+                this.priceError.state = false;
+            }
+        },
+        recalculateRecommendedPrice() {
+            // The maximum_trip_price_cents is the total price for the entire trip (including driver)
+            this.maximum_seat_price_cents = Math.round(this.maximum_trip_price_cents / (this.trip.total_seats + 1));
+            this.recommended_seat_price_cents = Math.round(this.recommended_trip_price_cents / (this.trip.total_seats + 1));
+            this.validatePrice();
+        },
+        recalculateRecommendedReturnPrice() {
+            this.maximum_return_seat_price_cents = Math.round(this.maximum_return_trip_price_cents / (this.otherTrip.trip.total_seats + 1));
+            this.recommended_return_seat_price_cents = Math.round(this.recommended_return_trip_price_cents / (this.otherTrip.trip.total_seats + 1));
+            this.validateReturnPrice();
+        },
+        validateReturnPrice() {
+            if (this.returnPrice > this.maximum_return_seat_price_cents / 100) {
+                this.returnPriceError.state = true;
+                this.returnPriceError.message = this.$t('precioMaximoExcedido');
+            } else {
+                this.returnPriceError.state = false;
+            }
+        },
+        resetReturnPoints(m, index) {
+            if (index === 0 || index === this.otherTrip.points.length - 1) {
+                // If removing origin or destination, clear the point
+                m.name = '';
+                m.place = null;
+                m.json = null;
+                m.location = null;
+            } else {
+                // If removing intermediate point, remove it and shift remaining points
+                this.otherTrip.points.splice(index, 1);
+            }
+            // Always recalculate trip info
+            this.calcRoute('returnTrip');
         }
     }
 };
@@ -2505,4 +2690,16 @@ textarea.form-control {
     min-height: 14em;
     height: auto;
 }
+.alert-sellado-viaje {
+    margin-top: -1em;
+}
+
+.label-tooltip {
+    width: 100%;
+}
+
+.tooltip-seat-price::before {
+    width: 30em;
+}
+
 </style>
