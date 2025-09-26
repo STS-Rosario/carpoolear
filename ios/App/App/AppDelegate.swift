@@ -1,7 +1,6 @@
 import UIKit
 import Capacitor
 import UserNotifications
-import Firebase
 
 
 @UIApplicationMain
