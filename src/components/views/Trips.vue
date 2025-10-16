@@ -69,66 +69,8 @@
                         />
                     </h3>
                     <div slot="body" class="donation">
-                        <div class="radio">
-                            <label class="radio-inline">
-                                <input
-                                    type="radio"
-                                    name="donationValor"
-                                    id="donation50"
-                                    value="2000"
-                                    v-model="donateValue"
-                                />
-                                <span>$ 2000</span>
-                            </label>
-                            <label class="radio-inline">
-                                <input
-                                    type="radio"
-                                    name="donationValor"
-                                    id="donation100"
-                                    value="5000"
-                                    v-model="donateValue"
-                                />
-                                <span>$ 5000</span>
-                            </label>
-                            <label class="radio-inline">
-                                <input
-                                    type="radio"
-                                    name="donationValor"
-                                    id="donation200"
-                                    value="10000"
-                                    v-model="donateValue"
-                                />
-                                <span>$ 10000</span>
-                            </label>
-                            <label class="radio-inline">
-                                <input
-                                    type="radio"
-                                    name="donationValor"
-                                    id="donation500"
-                                    value="50"
-                                    v-model="donateValue"
-                                />
-                                <span
-                                    >Elegí tu propia aventura (solo
-                                    mensual)</span
-                                >
-                            </label>
-                        </div>
-                        <div>
-                            <button
-                                class="btn btn-success btn-unica-vez"
-                                @click="onDonateOnceTime"
-                            >
-                                {{ $t('unicaVez') }}
-                            </button>
-                            <button
-                                class="btn btn-info btn-mensualmente"
-                                @click="onDonateMonthly"
-                            >
-                                {{ $t('MENSUAL') }}
-                                <br />
-                                ( {{ $t('cancelaCuando') }})
-                            </button>
+                        <div class="text-center" style="margin-top: 20px; margin-bottom: 20px;">
+                            <a href="https://carpoolear.com.ar/campaigns/mas-seguro-mas-justo-mas-simple" class="btn btn-primary btn-donar-header btn-lg">Donar</a>
                         </div>
                     </div>
                 </modal>
@@ -201,7 +143,7 @@
                                 <h2>{{ $t('ayudanos') }}</h2>
 
                                 <a
-                                    href="/donar"
+                                    href="https://carpoolear.com.ar/campaigns/mas-seguro-mas-justo-mas-simple"
                                     target="_blank"
                                     v-on:click.prevent="
                                         onOpenLink(
