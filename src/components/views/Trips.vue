@@ -114,11 +114,7 @@
                     </div>
                 </modal>
                 <template v-for="(trip, index) in trips">
-                    <template
-                        v-if="
-                            isDonationTime() && (!user || !user.monthly_donate)
-                        "
-                    >
+                    <template>
                         <!-- solo si el usuario no es donador mensual -->
                         <div
                             class="panel panel-default panel-donar"
@@ -130,29 +126,12 @@
                                     parseFloat(
                                         appConfig.donation.trips_count
                                     ) ===
-                                0
+                                0 
                             "
                         >
                             <div class="panel-body">
-                                <button
-                                    class="btn btn-success pull-right btn-donar"
-                                    @click="onDonate"
-                                >
-                                    Donar
-                                </button>
-                                <h2>{{ $t('ayudanos') }}</h2>
-
-                                <a
-                                    href="https://carpoolear.com.ar/campaigns/mas-seguro-mas-justo-mas-simple"
-                                    target="_blank"
-                                    v-on:click.prevent="
-                                        onOpenLink(
-                                            'https://carpoolear.com.ar/donar?u=' +
-                                                user.id
-                                        )
-                                    "
-                                >
-                                    {{ $t('porQueDonar') }}
+                                <a href="https://carpoolear.com.ar/campaigns/mas-seguro-mas-justo-mas-simple" target="_blank">
+                                    <img src="https://carpoolear.com.ar/img/banner_mas.jpg" alt="Donar" style="width: 100%; height: auto;">
                                 </a>
                             </div>
                         </div>
