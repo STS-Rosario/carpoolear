@@ -126,7 +126,7 @@
                                     parseFloat(
                                         appConfig.donation.trips_count
                                     ) ===
-                                0 
+                                0 && index !== 0
                             "
                         >
                             <div class="panel-body">
