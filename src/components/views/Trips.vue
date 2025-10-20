@@ -31,8 +31,11 @@
             <h3>{{ $t('elegiDatos') }}</h3>
         </div>
         <template v-if="appConfig && appConfig.banner && appConfig.banner.url">
-            <a :href="appConfig.banner.url" target="_blank" class="banner">
+            <a :href="appConfig.banner.url" target="_blank" class="banner" v-if="!isMobile">
                 <img alt="" :src="appConfig.banner.image" />
+            </a>
+            <a :href="appConfig.banner.url_mobile" target="_blank" class="banner" v-if="isMobile">
+                <img alt="" :src="appConfig.banner.image_mobile" />
             </a>
         </template>
         <div v-show="!user && isMobile">
@@ -131,7 +134,8 @@
                         >
                             <div class="panel-body">
                                 <a href="https://carpoolear.com.ar/campaigns/mas-seguro-mas-justo-mas-simple" target="_blank">
-                                    <img src="https://carpoolear.com.ar/img/banner_mas.jpg" alt="Donar" style="width: 100%; height: auto;">
+                                    <img src="https://carpoolear.com.ar/img/banner_mas.jpg" alt="Donar" style="width: 100%; height: auto;" v-if="!isMobile">
+                                    <img src="https://carpoolear.com.ar/img/banner_mas_mobile.jpg" alt="Donar" style="width: 100%; height: auto;" v-if="isMobile">
                                 </a>
                             </div>
                         </div>
