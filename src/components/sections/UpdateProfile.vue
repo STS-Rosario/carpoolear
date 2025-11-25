@@ -443,7 +443,7 @@
 
                     <div class="btn-container">
                         <button
-                            class="btn btn-primary"
+                            class="btn btn-primary btn-donar-header"
                             @click="grabar"
                             :disabled="loading"
                         >
@@ -459,6 +459,16 @@
                             {{ $t('camposObligatorios') }}
                         </span>
                     </div>
+                    <hr />
+                    <div class="delete-account-container">
+                        <button
+                            class="btn btn-danger pull-right"
+                            @click="toggleModalDeleteAccount"
+                        >
+                            Eliminar cuenta
+                        </button>
+                    </div>
+                    
                     <span v-if="error">{{ error }}</span>
                     <Uploadfile
                         :name="'profile'"
@@ -468,6 +478,39 @@
                 </div>
             </div>
         </div>
+
+        <modal
+            :name="'modal-delete-account'"
+            v-if="showModalDeleteAccount"
+            @close="toggleModalDeleteAccount"
+            :body="'Body'"
+        >
+            <h3 slot="header">
+                <span>¿Estás seguro que querés eliminar tu cuenta?</span>
+                <i
+                    v-on:click="toggleModalDeleteAccount"
+                    class="fa fa-times float-right-close"
+                ></i>
+            </h3>
+            <div slot="body">
+                <div class="text-left color-black">
+                    <p>
+                        Si querés eliminar tu cuenta, tené en cuenta que este
+                        proceso es IRREVERSIBLE. Una vez que la cuenta se
+                        elimine, no podrás deshacerlo ni volver a acceder a
+                        Carpoolear en un futuro ya que se elimina el acceso a la
+                        persona.
+                    </p>
+                    <p>
+                        Si querés eliminarla, enviá un email a
+                        <a
+                            href="mailto:carpoolear@stsrosario.org.ar?subject=Eliminar cuenta"
+                            >carpoolear@stsrosario.org.ar</a
+                        >.
+                    </p>
+                </div>
+            </div>
+        </modal>
     </div>
 </template>
 <script>
@@ -480,6 +523,7 @@ import dialogs from '../../services/dialogs.js';
 import moment from 'moment';
 import bus from '../../services/bus-event';
 import Spinner from '../Spinner.vue';
+import modal from '../Modal';
 
 class Error {
     constructor(state = false, message = '') {
@@ -525,7 +569,8 @@ export default {
             showBeDriver: false,
             driverFiles: null,
             banks: [],
-            accountTypes: []
+            accountTypes: [],
+            showModalDeleteAccount: false
         };
     },
     computed: {
@@ -844,6 +889,9 @@ export default {
             }
 
             return globalError;
+        },
+        toggleModalDeleteAccount() {
+            this.showModalDeleteAccount = !this.showModalDeleteAccount;
         }
     },
     watch: {
@@ -932,13 +980,18 @@ export default {
         DatePicker,
         Uploadfile,
         SvgItem,
-        Spinner
+        Spinner,
+        modal
     }
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.delete-account-container {
+    display: flex;
+    justify-content: flex-end;
+}
 .required-field-flag {
     color: red;
 }
