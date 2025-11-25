@@ -76,7 +76,7 @@
                 v-if="isMobile && !user"
             >
                 <a
-                    href="/donar"
+                    href="https://carpoolear.com.ar/campaigns/mas-seguro-mas-justo-mas-simple"
                     class="btn btn-primary btn-donar-header btn-header-small btn-lg"
                 >
                     Donar
@@ -257,7 +257,7 @@
                     </dropdown>
                 </div>
 
-                <a href="/donar" class="btn btn-primary btn-donar-header btn-lg"
+                <a href="https://carpoolear.com.ar/campaigns/mas-seguro-mas-justo-mas-simple" class="btn btn-primary btn-donar-header btn-lg"
                     >Donar</a
                 >
                 <router-link
