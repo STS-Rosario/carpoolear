@@ -9,3 +9,9 @@ npm-debug.log
 /projects/*/cordova/www/
 /projects/*/cordova/package.json
 /projects/*/cordova/package-lock.json
+
+# Firebase configuration files (contain sensitive API keys)
+android/app/google-services.json*
+ios/App/GoogleService-Info.plist*
+
+www/*

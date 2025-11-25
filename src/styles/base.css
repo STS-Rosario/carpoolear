@@ -1,3 +1,10 @@
+/* iOS Capacitor fixes */
+html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+    position: relative;
+}
+
 :root {
     --main-background: #F0F0F0;
     --main-font-color: #555;
@@ -36,8 +43,13 @@
   .app-container {
       /* this is with bottom bar */
       min-height: calc(100vh - 64px);
+      /* iOS safe area support for Capacitor */
+      min-height: calc(100vh - 64px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
       padding: 0;
       margin: 0;
+      /* Prevent horizontal overflow on iOS */
+      max-width: 100vw;
+      overflow-x: hidden;
   }
   p {
       margin: 1.5rem 0;
@@ -1800,6 +1812,8 @@
       border-top: 1px solid var(--medium-font-color);
       text-align: center;
       padding: 7px 0;
+      /* iOS safe area support for Capacitor */
+      padding-bottom: calc(7px + env(safe-area-inset-bottom));
   }
 
   .actionbar-top {
@@ -2941,7 +2955,7 @@
     }
 
     .btn-header-small {
-        padding: 0.5em 0.75em;
+        padding: 0.75em 0.75em 0 0.75em;
         font-size: 0.5em;
     }
   .panel-donar {

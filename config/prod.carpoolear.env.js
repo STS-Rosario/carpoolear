@@ -1,9 +1,7 @@
 config = {
     NODE_ENV: '"production"',
-    // API_URL: '"https://localhost"',
     API_URL: '"https://carpoolear.com.ar"',
-    // API_URL: '"http://carpoolear.127.0.0.1.nip.io"',
-    MAPS_API: '"AIzaSyBlRfNi2qDcy_zwjR53VVOyD-csjYSq4Qo"',
+    MAPS_API: '"AIzaSyDz9fNRr5-nfCFN6ULDZaLt0xUckgKl3z4"',
     FACEBOOK_API: '"147151221990591"',
     RECAPTCHA_SITE_KEY: '"6LcJyuoqAAAAAFycfjGz2xTiOjhNmWP_wYudIiJT"',
     TARGET_APP: '"carpoolear"'

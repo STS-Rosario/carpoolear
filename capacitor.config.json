@@ -1,0 +1,22 @@
+{
+  "appId": "com.sts.carpoolear",
+  "appName": "Carpoolear",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  },
+  "ios": {
+    "minVersion": "14.0"
+  },
+  "plugins": {
+    "StatusBar": {
+      "style": "LIGHT",
+      "backgroundColor": "#ffffff",
+      "overlaysWebView": false
+    },
+    "SplashScreen": {
+      "launchAutoHide": true,
+      "launchShowDuration": 0
+    }
+  }
+}

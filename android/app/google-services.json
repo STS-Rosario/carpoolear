@@ -1,0 +1,29 @@
+{
+    "project_info": {
+      "project_number": "726271358034",
+      "project_id": "carpoolear-production",
+      "storage_bucket": "carpoolear-production.firebasestorage.app"
+    },
+    "client": [
+      {
+        "client_info": {
+          "mobilesdk_app_id": "1:726271358034:android:8d4eb9824bbf4989f01b8b",
+          "android_client_info": {
+            "package_name": "com.sts.carpoolear"
+          }
+        },
+        "oauth_client": [],
+        "api_key": [
+          {
+            "current_key": "AIzaSyDb84DoYIMU6ARX1ynx5-E8DIFg5olz1Mg"
+          }
+        ],
+        "services": {
+          "appinvite_service": {
+            "other_platform_oauth_client": []
+          }
+        }
+      }
+    ],
+    "configuration_version": "1"
+  }
