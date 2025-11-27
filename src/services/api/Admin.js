@@ -22,6 +22,14 @@ class AdminApi extends TaggedApi {
     getUserStats() {
         return this.get('/api/data/users');
     }
+
+    getAccountDeleteList() {
+        return this.get('/api/admin/users/account-delete-list');
+    }
+
+    updateAccountDelete(data) {
+        return this.post('/api/admin/users/account-delete-update', data);
+    }
 }
 
 export { AdminApi as default };

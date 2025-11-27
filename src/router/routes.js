@@ -438,6 +438,24 @@ export default [
         }
     },
     {
+        path: '/admin/users-delete-list',
+        name: 'admin-users-delete-list',
+        component: require('../components/views/UsersDeleteList.vue').default,
+        beforeEnter: authAdmin,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'admin'
+                },
+                header: {
+                    title: 'Pedidos de eliminación de cuenta',
+                    buttons: []
+                }
+            }
+        }
+    },
+    {
         path: '/*',
         redirect: '/trips'
     }

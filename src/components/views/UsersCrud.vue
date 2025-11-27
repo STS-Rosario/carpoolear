@@ -5,6 +5,13 @@
         </div>
         <div class="conversation-component container">
             <div class="row">
+                <router-link
+                        :to="{ name: 'admin-users-delete-list' }"
+                        class="btn btn-link"
+                        style="display: block; text-align: center; margin-top: -10px;margin-bottom: 10px;font-size: 16px;"
+                    >
+                        Pedidos de eliminación de cuenta
+                    </router-link>
                 <div class="col-md-20 col-md-offset-2">
                     <div class="col-sm-8 col-md-8">
                         <div class="conversation_list">
