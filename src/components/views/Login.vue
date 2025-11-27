@@ -130,7 +130,7 @@
 
             <div
                 class="col-sm-12 col-md-12"
-                v-show="isMobile && !loginCustomHeader"
+                v-show="isMobile"
             >
                 <hr />
                 <button
