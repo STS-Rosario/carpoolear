@@ -501,13 +501,18 @@
                         Carpoolear en un futuro ya que se elimina el acceso a la
                         persona.
                     </p>
-                    <p>
-                        Si querés eliminarla, enviá un email a
-                        <a
-                            href="mailto:carpoolear@stsrosario.org.ar?subject=Eliminar cuenta"
-                            >carpoolear@stsrosario.org.ar</a
-                        >.
-                    </p>
+                    <div class="text-center" style="margin-top: 1.5em;">
+                        <button
+                            class="btn btn-danger"
+                            @click="deleteAccountRequest"
+                            :disabled="loadingDeleteAccount"
+                        >
+                            <span v-if="!loadingDeleteAccount"
+                                >Eliminar cuenta</span
+                            >
+                            <spinner class="blue" v-if="loadingDeleteAccount"></spinner>
+                        </button>
+                    </div>
                 </div>
             </div>
         </modal>
@@ -524,6 +529,7 @@ import moment from 'moment';
 import bus from '../../services/bus-event';
 import Spinner from '../Spinner.vue';
 import modal from '../Modal';
+import { UserApi } from '../../services/api';
 
 class Error {
     constructor(state = false, message = '') {
@@ -568,7 +574,9 @@ export default {
             driverFiles: null,
             banks: [],
             accountTypes: [],
-            showModalDeleteAccount: false
+            showModalDeleteAccount: false,
+            loadingDeleteAccount: false,
+            userApi: null
         };
     },
     computed: {
@@ -885,6 +893,33 @@ export default {
         },
         toggleModalDeleteAccount() {
             this.showModalDeleteAccount = !this.showModalDeleteAccount;
+        },
+        deleteAccountRequest() {
+            this.loadingDeleteAccount = true;
+            this.userApi
+                .deleteAccountRequest()
+                .then(() => {
+                    this.loadingDeleteAccount = false;
+                    this.showModalDeleteAccount = false;
+                    dialogs.message(
+                        'El pedido de eliminación de cuenta ha sido enviado exitosamente',
+                        {
+                            duration: 5,
+                            estado: 'success'
+                        }
+                    );
+                })
+                .catch((error) => {
+                    this.loadingDeleteAccount = false;
+                    console.error('Error deleting account request:', error);
+                    dialogs.message(
+                        'Hubo un error al enviar el pedido de eliminación de cuenta',
+                        {
+                            duration: 5,
+                            estado: 'error'
+                        }
+                    );
+                });
         }
     },
     watch: {
@@ -922,6 +957,7 @@ export default {
     },
 
     mounted() {
+        this.userApi = new UserApi();
         console.log('touter', this.$router);
         this.getBankData().then((data) => {
             console.log('get bank data', data);

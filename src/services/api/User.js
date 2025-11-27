@@ -98,6 +98,10 @@ class UserApi extends TaggedApi {
     selladoViaje() {
         return this.get('/api/users/sellado-viaje');
     }
+
+    deleteAccountRequest() {
+        return this.post('/api/users/delete-account-request', {});
+    }
 }
 
 export { UserApi as default };
