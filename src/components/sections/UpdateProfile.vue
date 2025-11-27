@@ -501,6 +501,9 @@
                         Carpoolear en un futuro ya que se elimina el acceso a la
                         persona.
                     </p>
+                    <p>El pedido de eliminación de cuenta será procesado en un plazo 
+                        de 7 hábiles y serás notificado por correo electrónico 
+                        cuando se haya procesado.</p>
                     <div class="text-center" style="margin-top: 1.5em;">
                         <button
                             class="btn btn-danger"
