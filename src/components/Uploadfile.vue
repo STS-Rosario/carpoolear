@@ -18,7 +18,11 @@ export default {
     methods: {
         async show() {
             if (this.isNative) {
-                await this.showNativePicker();
+                const success = await this.showNativePicker();
+                // If native picker failed (not user cancellation), fallback to web input
+                if (!success) {
+                    this.$refs.input.click();
+                }
             } else {
                 this.$refs.input.click();
             }
@@ -40,10 +44,27 @@ export default {
                     const data = {};
                     data[this.name] = imageData;
                     this.$emit('change', data);
+                    return true; // Success
                 }
+                return false; // Incomplete response
             } catch (error) {
-                console.error('Error picking image:', error);
-                // If user cancels or there's an error, silently fail
+                // Check if error is due to user cancellation
+                const errorMessage = error.message || error.toString() || '';
+                const isUserCancellation = 
+                    errorMessage.includes('User cancelled') ||
+                    errorMessage.includes('canceled') ||
+                    errorMessage.includes('cancelled') ||
+                    error.code === 'USER_CANCELLED' ||
+                    error.code === 'CANCELLED';
+
+                if (isUserCancellation) {
+                    // User cancelled - this is expected behavior, don't fallback
+                    return true; // Return true to prevent fallback
+                } else {
+                    // Actual error (permissions, plugin issue, etc.) - log and allow fallback
+                    console.error('Error picking image:', error);
+                    return false; // Return false to trigger fallback
+                }
             }
         },
 
