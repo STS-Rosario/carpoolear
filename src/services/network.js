@@ -2,6 +2,7 @@
 import store from '../store';
 import TaggedList from '../classes/TaggedList';
 import axios from 'axios';
+import { Capacitor } from '@capacitor/core';
 
 const API_URL = process.env.API_URL;
 
@@ -49,12 +50,17 @@ export default {
     getHeader(headers) {
         let authHeader = store.getters['auth/authHeader'];
         Object.assign(headers, authHeader);
-        
+
+        // Add Capacitor platform header when running on native platform
+        if (Capacitor.isNativePlatform()) {
+            headers['X-App-Platform'] = 'capacitor';
+        }
+
         // Add ngrok bypass header for ngrok domains
         if (API_URL && API_URL.includes('ngrok')) {
             headers['ngrok-skip-browser-warning'] = 'any';
         }
-        
+
         return headers;
     },
 
