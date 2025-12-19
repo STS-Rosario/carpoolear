@@ -14,11 +14,13 @@
     "build-dev": "node movilizame build",
     "build-dev:ios": "node movilizame build --platform=ios",
     "build-dev:android": "node movilizame build --platform=android",
+    "build-capacitor-android-local": "npm run build:android && cp -r dist/default/production/www/* www/ && npx cap run android --target d59fb3c7",
     "lint:fix": "eslint --ext .js,.vue -f ./node_modules/eslint-friendly-formatter --fix src"
   },
   "dependencies": {
     "@capacitor/android": "^7.4.3",
     "@capacitor/app": "^7.0.2",
+    "@capacitor/camera": "^7.0.2",
     "@capacitor/cli": "^6.2.1",
     "@capacitor/core": "^7.4.3",
     "@capacitor/device": "^7.0.2",
