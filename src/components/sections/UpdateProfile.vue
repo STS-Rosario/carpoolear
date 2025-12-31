@@ -158,7 +158,7 @@
                         </label>
                         <input
                             v-numberMask="'dniRawValue'"
-                            type="text"
+                            type="tel"
                             data-max-length="8"
                             v-model="user.nro_doc"
                             class="form-control"
