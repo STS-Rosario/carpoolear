@@ -45,7 +45,8 @@
                     <span v-else>Enviar mensaje</span>
                 </button>
             </template>
-            <template v-if="!owner && !trip.is_passenger && !expired">
+            <!-- hidden button to request seat Solicitar Asiento -->
+            <!-- <template v-if="!owner && !trip.is_passenger && !expired">
                 <template v-if="!isPassenger">
                     <button
                         class="btn btn-primary"
