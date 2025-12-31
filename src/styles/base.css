@@ -933,16 +933,16 @@ html, body {
       font-weight: 300;
   }
 
-  .trip-almost-fill .card_heading {
+  .trip-almost-fill .card-trip .card_heading {
       background: var(--trip-almost-fill-color);
   }
-  .trip-almost-fill .card_heading:after {
+  .trip-almost-fill .card-trip .card_heading:after {
       border-top-color: var(--trip-almost-fill-color);
   }
-  .trip-mostly-available .card_heading {
+  .trip-mostly-available .card-trip .card_heading {
       background: var(--trip-mostly-free-color);
   }
-  .trip-mostly-available  .card_heading:after {
+  .trip-mostly-available .card-trip .card_heading:after {
       border-top-color: var(--trip-mostly-free-color);
   }
   .trip_visibility {
