@@ -157,14 +157,16 @@
                             </span>
                         </label>
                         <input
-                            v-numberMask="'dniRawValue'"
                             type="tel"
-                            data-max-length="8"
-                            v-model="user.nro_doc"
+                            v-model="dniFormatted"
+                            @input="handleDniInput"
+                            @keydown="handleDniKeydown"
+                            @paste="handleDniPaste"
                             class="form-control"
                             id="input-dni"
                             :placeholder="$t('doc')"
                             :class="{ 'has-error': dniError.state }"
+                            maxlength="11"
                         />
                         <span class="error" v-if="dniError.state">
                             {{ dniError.message }}
@@ -555,7 +557,6 @@ export default {
             error: null,
             loading: false,
             loadingImg: false,
-            dniRawValue: '',
             globalError: false,
             nombreError: new Error(),
             descError: new Error(),
@@ -619,6 +620,26 @@ export default {
             if (this.user) {
                 return this.user.mobile_phone;
             }
+        },
+        // Computed property for DNI with formatting for display
+        dniFormatted: {
+            get() {
+                if (!this.user || !this.user.nro_doc) {
+                    return '';
+                }
+                // Ensure we're working with raw value (strip any existing dots)
+                const rawValue = String(this.user.nro_doc).replace(/\./g, '');
+                // Format with dots as thousand separators
+                return this.formatDni(rawValue);
+            },
+            set(value) {
+                if (!this.user) return;
+                // Strip all non-numeric characters and store raw value
+                const rawValue = String(value || '').replace(/[^\d]/g, '');
+                // Limit to 8 digits
+                const limitedValue = rawValue.slice(0, 8);
+                this.user.nro_doc = limitedValue;
+            }
         }
     },
     methods: {
@@ -668,6 +689,73 @@ export default {
         changePhoto() {
             this.$refs.file.show();
         },
+        // Format DNI with dots as thousand separators (e.g., 1234567 -> 1.234.567)
+        formatDni(value) {
+            if (!value) return '';
+            const numericOnly = String(value).replace(/\./g, '');
+            if (!numericOnly) return '';
+            // Reverse, add dots every 3 chars, reverse back
+            const reversed = numericOnly.split('').reverse().join('');
+            const withDots = reversed.replace(/(\d{3})(?=\d)/g, '$1.');
+            return withDots.split('').reverse().join('');
+        },
+        // Handle DNI input to preserve cursor position when formatting changes
+        handleDniInput(event) {
+            const input = event.target;
+            const cursorPos = input.selectionStart || 0;
+            const oldValue = input.value;
+            
+            // Extract raw value from what user typed (v-model setter already stored it)
+            const rawValue = this.user && this.user.nro_doc ? String(this.user.nro_doc).replace(/\./g, '') : '';
+            const formatted = this.formatDni(rawValue);
+            
+            // Only update display if formatting changed (to avoid infinite loops)
+            if (oldValue !== formatted) {
+                // Calculate new cursor position based on numeric characters before cursor
+                const numericCharsBeforeCursor = oldValue.substring(0, cursorPos).replace(/\./g, '').length;
+                const newFormattedBeforeCursor = this.formatDni(rawValue.substring(0, numericCharsBeforeCursor));
+                const newCursorPos = newFormattedBeforeCursor.length;
+                
+                // Update input value
+                input.value = formatted;
+                
+                // Restore cursor position
+                this.$nextTick(() => {
+                    if (input.setSelectionRange) {
+                        input.setSelectionRange(newCursorPos, newCursorPos);
+                    }
+                });
+            }
+        },
+        // Handle DNI keydown - prevent non-numeric input
+        handleDniKeydown(event) {
+            // Allow: backspace, delete, tab, escape, enter, and arrow keys
+            if ([8, 9, 27, 13, 46, 37, 38, 39, 40].indexOf(event.keyCode) !== -1 ||
+                // Allow Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
+                (event.keyCode === 65 && event.ctrlKey === true) ||
+                (event.keyCode === 67 && event.ctrlKey === true) ||
+                (event.keyCode === 86 && event.ctrlKey === true) ||
+                (event.keyCode === 88 && event.ctrlKey === true)) {
+                return;
+            }
+            // Ensure that it is a number and stop the keypress
+            if ((event.shiftKey || (event.keyCode < 48 || event.keyCode > 57)) && (event.keyCode < 96 || event.keyCode > 105)) {
+                event.preventDefault();
+            }
+            // Check max length
+            if (this.user && this.user.nro_doc && this.user.nro_doc.length >= 8 && 
+                !([8, 46, 37, 39].indexOf(event.keyCode) !== -1)) {
+                event.preventDefault();
+            }
+        },
+        // Handle DNI paste - clean and format pasted content
+        handleDniPaste(event) {
+            event.preventDefault();
+            const pastedText = (event.clipboardData || window.clipboardData).getData('text');
+            const numericOnly = pastedText.replace(/[^\d]/g, '').slice(0, 8);
+            // Set the computed property which will format it automatically
+            this.dniFormatted = numericOnly;
+        },
         grabar() {
             if (this.validate()) {
                 this.$nextTick(() => {
@@ -680,6 +768,10 @@ export default {
                 return;
             }
             this.loading = true;
+            // Ensure user.nro_doc is raw value (no dots) before sending
+            if (this.user && this.user.nro_doc) {
+                this.user.nro_doc = String(this.user.nro_doc).replace(/\./g, '');
+            }
             console.log('this.user', this.user);
             var data = Object.assign({}, this.user);
             console.log('data.user', data);
@@ -696,7 +788,7 @@ export default {
                 data.birthday = this.birthdayAnswer;
                 console.log(this.user.birthday);
             } */
-            data.nro_doc = this.dniRawValue;
+            // nro_doc is already raw value (no dots) from user object
             /* global FormData */
             let bodyFormData = new FormData();
             for (const key in data) {
@@ -842,15 +934,16 @@ export default {
                 globalError = true;
             }
 
-            if (!this.dniRawValue || this.dniRawValue.length < 1) {
+            // Get raw DNI value (strip any dots that might be present)
+            const dniRaw = this.user && this.user.nro_doc 
+                ? String(this.user.nro_doc).replace(/\./g, '') 
+                : '';
+            
+            if (!dniRaw || dniRaw.length < 1) {
                 this.dniError.state = true;
                 this.dniError.message = this.$t('olvidasteDni');
                 globalError = true;
-            } else if (
-                this.dniRawValue &&
-                this.dniRawValue.length > 0 &&
-                this.dniRawValue.length < 7
-            ) {
+            } else if (dniRaw.length > 0 && dniRaw.length < 7) {
                 this.dniError.state = true;
                 this.dniError.message = this.$t('dniNoValido');
                 globalError = true;
@@ -934,7 +1027,12 @@ export default {
             }
         },
         userData: function () {
+            console.log('userData', this.userData);
             this.user = this.userData;
+            // Ensure nro_doc is stored as raw value (no dots) when loaded from backend
+            if (this.user && this.user.nro_doc) {
+                this.user.nro_doc = String(this.user.nro_doc).replace(/\./g, '');
+            }
         },
         iptUser() {
             this.nombreError.state = false;
