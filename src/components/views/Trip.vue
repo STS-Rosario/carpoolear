@@ -164,7 +164,7 @@
                                                 Enviar mensaje
                                             </button>
                                         </template>
-                                        <template v-else>
+                                        <!-- <template v-else>
                                             <button
                                                 class="btn btn-primary"
                                                 @click="toMessages"
@@ -178,7 +178,7 @@
                                             >
                                                 Solicitar asiento
                                             </button>
-                                        </template>
+                                        </template> -->
                                     </div>
                                 </div>
                             </modal>
