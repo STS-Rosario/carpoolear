@@ -431,11 +431,13 @@ import { inputIsNumber } from '../../services/utility';
 import dialogs from '../../services/dialogs.js';
 import router from '../../router';
 import adminNav from '../sections/adminNav';
+import dniFormatter from '../../mixins/dniFormatter';
 
 export default {
     // TODO fix css names
     // TODO search by facebook
     name: 'admin-users',
+    mixins: [dniFormatter],
     data() {
         return {
             textSearch: '',
@@ -481,27 +483,7 @@ export default {
         ...mapGetters({
             isMobile: 'device/isMobile',
             settings: 'auth/appConfig'
-        }),
-        // Computed property for DNI with formatting for display
-        dniFormatted: {
-            get() {
-                if (!this.newInfo || !this.newInfo.nro_doc) {
-                    return '';
-                }
-                // Ensure we're working with raw value (strip any existing dots)
-                const rawValue = String(this.newInfo.nro_doc).replace(/\./g, '');
-                // Format with dots as thousand separators
-                return this.formatDni(rawValue);
-            },
-            set(value) {
-                if (!this.newInfo) return;
-                // Strip all non-numeric characters and store raw value
-                const rawValue = String(value || '').replace(/[^\d]/g, '');
-                // Limit to 8 digits
-                const limitedValue = rawValue.slice(0, 8);
-                this.newInfo.nro_doc = limitedValue;
-            }
-        }
+        })
     },
 
     methods: {
@@ -529,7 +511,7 @@ export default {
             console.log('selectUser', user);
             // Ensure nro_doc is stored as raw value (no dots) when loaded from backend
             const nroDocRaw = this.currentUser.nro_doc 
-                ? String(this.currentUser.nro_doc).replace(/\./g, '') 
+                ? this.cleanDniValue(this.currentUser.nro_doc)
                 : '';
             this.newInfo = {
                 name: this.currentUser.name,
@@ -567,72 +549,17 @@ export default {
         isNumber(value) {
             inputIsNumber(value);
         },
-        // Format DNI with dots as thousand separators (e.g., 1234567 -> 1.234.567)
-        formatDni(value) {
-            if (!value) return '';
-            const numericOnly = String(value).replace(/\./g, '');
-            if (!numericOnly) return '';
-            // Reverse, add dots every 3 chars, reverse back
-            const reversed = numericOnly.split('').reverse().join('');
-            const withDots = reversed.replace(/(\d{3})(?=\d)/g, '$1.');
-            return withDots.split('').reverse().join('');
+        // Override mixin methods to specify the DNI field path
+        getDniValue() {
+            if (this.newInfo && this.newInfo.nro_doc) {
+                return this.newInfo.nro_doc;
+            }
+            return '';
         },
-        // Handle DNI input to preserve cursor position when formatting changes
-        handleDniInput(event) {
-            const input = event.target;
-            const cursorPos = input.selectionStart || 0;
-            const oldValue = input.value;
-            
-            // Extract raw value from what user typed (v-model setter already stored it)
-            const rawValue = this.newInfo && this.newInfo.nro_doc ? String(this.newInfo.nro_doc).replace(/\./g, '') : '';
-            const formatted = this.formatDni(rawValue);
-            
-            // Only update display if formatting changed (to avoid infinite loops)
-            if (oldValue !== formatted) {
-                // Calculate new cursor position based on numeric characters before cursor
-                const numericCharsBeforeCursor = oldValue.substring(0, cursorPos).replace(/\./g, '').length;
-                const newFormattedBeforeCursor = this.formatDni(rawValue.substring(0, numericCharsBeforeCursor));
-                const newCursorPos = newFormattedBeforeCursor.length;
-                
-                // Update input value
-                input.value = formatted;
-                
-                // Restore cursor position
-                this.$nextTick(() => {
-                    if (input.setSelectionRange) {
-                        input.setSelectionRange(newCursorPos, newCursorPos);
-                    }
-                });
+        setDniValue(value) {
+            if (this.newInfo) {
+                this.newInfo.nro_doc = value;
             }
-        },
-        // Handle DNI keydown - prevent non-numeric input
-        handleDniKeydown(event) {
-            // Allow: backspace, delete, tab, escape, enter, and arrow keys
-            if ([8, 9, 27, 13, 46, 37, 38, 39, 40].indexOf(event.keyCode) !== -1 ||
-                // Allow Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
-                (event.keyCode === 65 && event.ctrlKey === true) ||
-                (event.keyCode === 67 && event.ctrlKey === true) ||
-                (event.keyCode === 86 && event.ctrlKey === true) ||
-                (event.keyCode === 88 && event.ctrlKey === true)) {
-                return;
-            }
-            // Ensure that it is a number and stop the keypress
-            if ((event.shiftKey || (event.keyCode < 48 || event.keyCode > 57)) && (event.keyCode < 96 || event.keyCode > 105)) {
-                event.preventDefault();
-            }
-            // Check max length
-            if (this.newInfo && this.newInfo.nro_doc && this.newInfo.nro_doc.length >= 8 && 
-                !([8, 46, 37, 39].indexOf(event.keyCode) !== -1)) {
-                event.preventDefault();
-            }
-        },
-        // Handle DNI paste - clean and format pasted content
-        handleDniPaste(event) {
-            event.preventDefault();
-            const pastedText = (event.clipboardData || window.clipboardData).getData('text');
-            const numericOnly = pastedText.replace(/[^\d]/g, '').slice(0, 8);
-            // Set the computed property which will format it automatically
-            this.dniFormatted = numericOnly;
         },
         clear() {
             this.currentUser = '';
@@ -746,7 +673,7 @@ export default {
                 
                 // Ensure nro_doc is raw value (no dots) before sending
                 if (this.newInfo.nro_doc) {
-                    this.newInfo.nro_doc = String(this.newInfo.nro_doc).replace(/\./g, '');
+                    this.newInfo.nro_doc = this.cleanDniValue(this.newInfo.nro_doc);
                 }
                 
                 // Handle patente data - if user has cars, update the first car's patente
