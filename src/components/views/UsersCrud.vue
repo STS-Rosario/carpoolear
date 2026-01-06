@@ -180,13 +180,15 @@
                                     >Número de documento</label
                                 >
                                 <input
-                                    v-numberMask="'dniRawValue'"
-                                    type="text"
-                                    data-max-length="8"
-                                    v-model="newInfo.nro_doc"
+                                    type="tel"
+                                    v-model="dniFormatted"
+                                    @input="handleDniInput"
+                                    @keydown="handleDniKeydown"
+                                    @paste="handleDniPaste"
                                     class="form-control"
                                     id="input-dni"
                                     placeholder="DNI"
+                                    maxlength="11"
                                 />
                                 <span class="error" v-if="dniError.state">
                                     {{ dniError.message }}
@@ -429,11 +431,13 @@ import { inputIsNumber } from '../../services/utility';
 import dialogs from '../../services/dialogs.js';
 import router from '../../router';
 import adminNav from '../sections/adminNav';
+import dniFormatter from '../../mixins/dniFormatter';
 
 export default {
     // TODO fix css names
     // TODO search by facebook
     name: 'admin-users',
+    mixins: [dniFormatter],
     data() {
         return {
             textSearch: '',
@@ -505,12 +509,16 @@ export default {
         selectUser(user) {
             this.currentUser = user;
             console.log('selectUser', user);
+            // Ensure nro_doc is stored as raw value (no dots) when loaded from backend
+            const nroDocRaw = this.currentUser.nro_doc 
+                ? this.cleanDniValue(this.currentUser.nro_doc)
+                : '';
             this.newInfo = {
                 name: this.currentUser.name,
                 email: this.currentUser.email,
                 description: this.currentUser.description,
                 private_note: this.currentUser.private_note,
-                nro_doc: this.currentUser.nro_doc,
+                nro_doc: nroDocRaw,
                 mobile_phone: this.currentUser.mobile_phone,
                 pass: {},
                 user: {},
@@ -540,6 +548,18 @@ export default {
 
         isNumber(value) {
             inputIsNumber(value);
+        },
+        // Override mixin methods to specify the DNI field path
+        getDniValue() {
+            if (this.newInfo && this.newInfo.nro_doc) {
+                return this.newInfo.nro_doc;
+            }
+            return '';
+        },
+        setDniValue(value) {
+            if (this.newInfo) {
+                this.newInfo.nro_doc = value;
+            }
         },
         clear() {
             this.currentUser = '';
@@ -649,6 +669,11 @@ export default {
                     this.newInfo.password = this.newInfo.pass.password;
                     this.newInfo.password_confirmation =
                         this.newInfo.pass.password_confirmation;
+                }
+                
+                // Ensure nro_doc is raw value (no dots) before sending
+                if (this.newInfo.nro_doc) {
+                    this.newInfo.nro_doc = this.cleanDniValue(this.newInfo.nro_doc);
                 }
                 
                 // Handle patente data - if user has cars, update the first car's patente

@@ -27,11 +27,8 @@
             </div>
         </div>
         <template v-if="appConfig && appConfig.banner && appConfig.banner.url">
-            <a :href="appConfig.banner.url" target="_blank" class="banner" v-if="!isMobile">
+            <a :href="appConfig.banner.url" target="_blank" class="banner">
                 <img alt="" :src="appConfig.banner.image" />
-            </a>
-            <a :href="appConfig.banner.url_mobile" target="_blank" class="banner" v-if="isMobile">
-                <img alt="" :src="appConfig.banner.image_mobile" />
             </a>
         </template>
         <div v-show="!user && isMobile">
@@ -67,8 +64,66 @@
                         />
                     </h3>
                     <div slot="body" class="donation">
-                        <div class="text-center" style="margin-top: 20px; margin-bottom: 20px;">
-                            <a href="https://carpoolear.com.ar/campaigns/mas-seguro-mas-justo-mas-simple" class="btn btn-primary btn-donar-header btn-lg">Donar</a>
+                        <div class="radio">
+                            <label class="radio-inline">
+                                <input
+                                    type="radio"
+                                    name="donationValor"
+                                    id="donation50"
+                                    value="2000"
+                                    v-model="donateValue"
+                                />
+                                <span>$ 2000</span>
+                            </label>
+                            <label class="radio-inline">
+                                <input
+                                    type="radio"
+                                    name="donationValor"
+                                    id="donation100"
+                                    value="5000"
+                                    v-model="donateValue"
+                                />
+                                <span>$ 5000</span>
+                            </label>
+                            <label class="radio-inline">
+                                <input
+                                    type="radio"
+                                    name="donationValor"
+                                    id="donation200"
+                                    value="10000"
+                                    v-model="donateValue"
+                                />
+                                <span>$ 10000</span>
+                            </label>
+                            <label class="radio-inline">
+                                <input
+                                    type="radio"
+                                    name="donationValor"
+                                    id="donation500"
+                                    value="50"
+                                    v-model="donateValue"
+                                />
+                                <span
+                                    >Elegí tu propia aventura (solo
+                                    mensual)</span
+                                >
+                            </label>
+                        </div>
+                        <div>
+                            <button
+                                class="btn btn-success btn-unica-vez"
+                                @click="onDonateOnceTime"
+                            >
+                                {{ $t('unicaVez') }}
+                            </button>
+                            <button
+                                class="btn btn-info btn-mensualmente"
+                                @click="onDonateMonthly"
+                            >
+                                {{ $t('MENSUAL') }}
+                                <br />
+                                ( {{ $t('cancelaCuando') }})
+                            </button>
                         </div>
                     </div>
                 </modal>
@@ -112,7 +167,11 @@
                     </div>
                 </modal>
                 <template v-for="(trip, index) in trips">
-                    <template>
+                    <template
+                        v-if="
+                            isDonationTime() && (!user || !user.monthly_donate)
+                        "
+                    >
                         <!-- solo si el usuario no es donador mensual -->
                         <div
                             class="panel panel-default panel-donar"
@@ -124,13 +183,29 @@
                                     parseFloat(
                                         appConfig.donation.trips_count
                                     ) ===
-                                0 && index !== 0
+                                0
                             "
                         >
                             <div class="panel-body">
-                                <a href="https://carpoolear.com.ar/campaigns/mas-seguro-mas-justo-mas-simple" target="_blank">
-                                    <img src="https://carpoolear.com.ar/img/banner_mas.jpg" alt="Donar" style="width: 100%; height: auto;" v-if="!isMobile">
-                                    <img src="https://carpoolear.com.ar/img/banner_mas_mobile.jpg" alt="Donar" style="width: 100%; height: auto;" v-if="isMobile">
+                                <button
+                                    class="btn btn-success pull-right btn-donar"
+                                    @click="onDonate"
+                                >
+                                    Donar
+                                </button>
+                                <h2>{{ $t('ayudanos') }}</h2>
+
+                                <a
+                                    href="/donar"
+                                    target="_blank"
+                                    v-on:click.prevent="
+                                        onOpenLink(
+                                            'https://carpoolear.com.ar/donar?u=' +
+                                                user.id
+                                        )
+                                    "
+                                >
+                                    {{ $t('porQueDonar') }}
                                 </a>
                             </div>
                         </div>

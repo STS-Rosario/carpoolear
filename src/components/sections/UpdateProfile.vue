@@ -157,14 +157,16 @@
                             </span>
                         </label>
                         <input
-                            v-numberMask="'dniRawValue'"
-                            type="text"
-                            data-max-length="8"
-                            v-model="user.nro_doc"
+                            type="tel"
+                            v-model="dniFormatted"
+                            @input="handleDniInput"
+                            @keydown="handleDniKeydown"
+                            @paste="handleDniPaste"
                             class="form-control"
                             id="input-dni"
                             :placeholder="$t('doc')"
                             :class="{ 'has-error': dniError.state }"
+                            maxlength="11"
                         />
                         <span class="error" v-if="dniError.state">
                             {{ dniError.message }}
@@ -533,6 +535,7 @@ import bus from '../../services/bus-event';
 import Spinner from '../Spinner.vue';
 import modal from '../Modal';
 import { UserApi } from '../../services/api';
+import dniFormatter from '../../mixins/dniFormatter';
 
 class Error {
     constructor(state = false, message = '') {
@@ -543,6 +546,7 @@ class Error {
 
 export default {
     name: 'upddate-profile',
+    mixins: [dniFormatter],
     data() {
         return {
             user: null,
@@ -555,7 +559,6 @@ export default {
             error: null,
             loading: false,
             loadingImg: false,
-            dniRawValue: '',
             globalError: false,
             nombreError: new Error(),
             descError: new Error(),
@@ -668,6 +671,18 @@ export default {
         changePhoto() {
             this.$refs.file.show();
         },
+        // Override mixin methods to specify the DNI field path
+        getDniValue() {
+            if (this.user && this.user.nro_doc) {
+                return this.user.nro_doc;
+            }
+            return '';
+        },
+        setDniValue(value) {
+            if (this.user) {
+                this.user.nro_doc = value;
+            }
+        },
         grabar() {
             if (this.validate()) {
                 this.$nextTick(() => {
@@ -680,6 +695,10 @@ export default {
                 return;
             }
             this.loading = true;
+            // Ensure user.nro_doc is raw value (no dots) before sending
+            if (this.user && this.user.nro_doc) {
+                this.user.nro_doc = this.cleanDniValue(this.user.nro_doc);
+            }
             console.log('this.user', this.user);
             var data = Object.assign({}, this.user);
             console.log('data.user', data);
@@ -696,7 +715,7 @@ export default {
                 data.birthday = this.birthdayAnswer;
                 console.log(this.user.birthday);
             } */
-            data.nro_doc = this.dniRawValue;
+            // nro_doc is already raw value (no dots) from user object
             /* global FormData */
             let bodyFormData = new FormData();
             for (const key in data) {
@@ -842,15 +861,16 @@ export default {
                 globalError = true;
             }
 
-            if (!this.dniRawValue || this.dniRawValue.length < 1) {
+            // Get raw DNI value (strip any dots that might be present)
+            const dniRaw = this.user && this.user.nro_doc 
+                ? this.cleanDniValue(this.user.nro_doc)
+                : '';
+            
+            if (!dniRaw || dniRaw.length < 1) {
                 this.dniError.state = true;
                 this.dniError.message = this.$t('olvidasteDni');
                 globalError = true;
-            } else if (
-                this.dniRawValue &&
-                this.dniRawValue.length > 0 &&
-                this.dniRawValue.length < 7
-            ) {
+            } else if (dniRaw.length > 0 && dniRaw.length < 7) {
                 this.dniError.state = true;
                 this.dniError.message = this.$t('dniNoValido');
                 globalError = true;
@@ -934,7 +954,12 @@ export default {
             }
         },
         userData: function () {
+            console.log('userData', this.userData);
             this.user = this.userData;
+            // Ensure nro_doc is stored as raw value (no dots) when loaded from backend
+            if (this.user && this.user.nro_doc) {
+                this.user.nro_doc = this.cleanDniValue(this.user.nro_doc);
+            }
         },
         iptUser() {
             this.nombreError.state = false;
