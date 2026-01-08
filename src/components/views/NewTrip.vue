@@ -2402,7 +2402,11 @@ export default {
                     });
             } else {
                 this.trip.id = this.updatingTrip.id;
-                this.updateTrip(this.trip)
+                let trip = JSON.parse(JSON.stringify(this.trip));
+                trip.allow_kids = !(trip.allow_kids > 0);
+                trip.allow_animals = !(trip.allow_animals > 0);
+                trip.allow_smoking = !(trip.allow_smoking > 0);
+                this.updateTrip(trip)
                     .then(() => {
                         this.saving = false;
                         this.$router.replace({
