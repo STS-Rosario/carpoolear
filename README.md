@@ -15,11 +15,19 @@ It is and ad-hoc customization for Argentina with carpooling philosophy, with co
 ## Start coding
 
 ``` bash
-# git clone
-git clone https://github.com/STS-Rosario/carpoolear.git
+# Clone repo
+gh repo clone STS-Rosario/carpoolear
 
-# install dependencies
+# Set v12 as Node version
+cd carpoolear
+nvm install 12 - you will need to install nvm first
+nvm use 12
+
+# install dependencies (this will take a long time)
 npm install
+
+# change the backend URL if needed
+change API_URL in config/dev.env.js
 
 # serve with hot reload at localhost:8080
 npm run dev
