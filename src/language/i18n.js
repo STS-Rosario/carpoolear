@@ -694,7 +694,7 @@ const messages = {
         administracion: 'Administration',
         crearViaje: 'Create Trip',
         buscoConductor: 'Looking for Driver',
-        buscoPasajero: 'Looking for Passenger',
+        buscoPasajero: 'Looking for Passengers',
         precioAsiento: 'Contribution per person (including driver)',
         iniciarSesion: 'Log in',
         ingresaCuenta: 'Log in with your',
