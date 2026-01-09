@@ -2315,7 +2315,7 @@ export default {
                 to_town: last(points).address,
                 trip_date: tripObj.dateAnswer + ' ' + tripObj.time + ':00',
                 estimated_time: estimatedTime,
-                car_id: this.cars.length > 0 ? this.cars[0].id : undefined
+                car_id: this.cars && this.cars.length > 0 ? this.cars[0].id : undefined
             };
 
             return Object.assign({}, tripObj.trip, tripInfo);
