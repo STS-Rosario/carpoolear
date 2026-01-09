@@ -299,7 +299,9 @@ const messages = {
             'Conocé nuevas historias/personas, cuidá el medio ambiente y ahorrá',
         onBoardingcardMessage4:
             'Somos un proyecto de gestión colectiva, sin fines de lucro y código libre',
-        referencias: 'Referencias'
+        referencias: 'Referencias',
+        buscar: 'Buscar',
+        opcional: 'opcional'
     },
     chl: {
         loginUsuarioPlaceholder: 'Usuario',
@@ -453,7 +455,9 @@ const messages = {
         recuperarContraseña: 'Recuperar contraseña',
         registrateAca: 'Registrate aquí.',
         noCalificado: 'No fue calificado aún',
-        noTenesFace: '¿No tenés cuenta?'
+        noTenesFace: '¿No tenés cuenta?',
+        buscar: 'Buscar',
+        opcional: 'opcional'
     }
 };
 export default messages;
