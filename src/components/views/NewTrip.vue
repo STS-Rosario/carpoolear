@@ -172,7 +172,7 @@
                                 {{ $t('meComprometo') }}
                                 <span
                                     class="tooltip-bottom"
-                                    data-tooltip="Al pedir una contribución por encima de la máxima, es posible que el viaje sea considerado con fin de lucro y por lo tanto un transporte ilegal de pasajeros, pudiendo ser invalidado el seguro particular automotor y la cobertura contra terceros asociada. Tengamos un buen viaje cuidándonos entre todos :-D"
+                                    :data-tooltip="$t('contribucionMaximaPista')"
                                 >
                                     <i
                                         class="fa fa-info-circle"

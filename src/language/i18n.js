@@ -104,6 +104,8 @@ const messages = {
         meComprometo: 'Me comprometo a no lucrar con el viaje.',
         contribucionMaxima:
             'La contribución máxima es igual a gastos de combustible + peaje dividido la cantidad de personas viajando en el auto. Durante la coordinación previa al viaje, cualquier persona puede pedir hacer la división con tickets de combustible y peaje en mano.',
+        contribucionMaximaPista:
+            'Al pedir una contribución por encima de la máxima, es posible que el viaje sea considerado con fin de lucro y por lo tanto un transporte ilegal de pasajeros, pudiendo ser invalidado el seguro particular automotor y la cobertura contra terceros asociada. Tengamos un buen viaje cuidándonos entre todos :-D',
         origenOdestino: 'Origen o destino fuera de',
         habilitaOrigen:
             'Habilita seleccionar origen o destino fuera de Argentina. Recordá averiguar con la aseguradora del auto, si tenés cobertura contra terceros fuera de la Argentina. Si no es así, tenés que sacar la extensión fuera de Argentina para tener cobertura durante el viaje',
@@ -407,6 +409,8 @@ const messages = {
         meComprometo: 'Me comprometo a no lucrar con el viaje.',
         contribucionMaxima:
             'La contribución máxima es igual a gastos de combustible + peaje dividido la cantidad de personas viajando en el auto. Durante la coordinación previa al viaje, cualquier persona puede pedir hacer la división con tickets de combustible y peaje en mano.',
+        contribucionMaximaPista:
+            'Al pedir una contribución por encima de la máxima, es posible que el viaje sea considerado con fin de lucro y por lo tanto un transporte ilegal de pasajeros, pudiendo ser invalidado el seguro particular automotor y la cobertura contra terceros asociada. Tengamos un buen viaje cuidándonos entre todos :-D',
         origenOdestino: 'Origen o destino fuera de',
         habilitaOrigen:
             'Habilita seleccionar origen o destino fuera de Argentina. Recordá averiguar con la aseguradora del auto, si tenés cobertura contra terceros fuera de la Argentina. Si no es así, tenés que sacar la extensión fuera de Argentina para tener cobertura durante el viaje',
@@ -561,6 +565,8 @@ const messages = {
         meComprometo: 'I commit to not profit from the trip.',
         contribucionMaxima:
             'The maximum contribution equals fuel costs + tolls divided by the number of people traveling in the car. During pre-trip coordination, anyone can request to do the division with fuel and toll receipts in hand.',
+        contribucionMaximaPista:
+            "When requesting a contribution above the maximum, the trip may be considered for-profit and therefore an illegal transport of passengers, which could invalidate your personal auto insurance and the associated third-party coverage. Let's have a safe trip by looking out for each other :-D",
         origenOdestino: 'Origin or destination outside',
         habilitaOrigen:
             'Enable selecting origin or destination outside Argentina. Remember to check with your car insurance company if you have third-party coverage outside Argentina. If not, you need to get the extension outside Argentina to have coverage during the trip.',
