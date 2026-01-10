@@ -9,7 +9,7 @@
                 v-if="owner && !expired"
                 :to="{ name: 'update-trip', params: { id: trip.id } }"
             >
-                Editar
+                {{ $t('editar') }}
             </router-link>
             <a
                 class="btn btn-primary"
@@ -21,7 +21,7 @@
                     class="blue"
                     v-if="sending && sending.deleteAction"
                 ></spinner>
-                <span v-else>Cancelar Viaje</span>
+                <span v-else>{{ $t('cancelarViaje') }}</span>
             </a>
             <template
                 v-if="
