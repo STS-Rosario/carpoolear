@@ -153,7 +153,7 @@
                             }
                         }"
                     >
-                        Ver Perfil
+                        {{ $t('verPerfil') }}
                     </router-link>
                 </div>
             </div>

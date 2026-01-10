@@ -392,7 +392,7 @@
                                         "
                                     >
                                         <strong class="warning-is-passenger">
-                                            Pasajero que busca viaje
+                                            {{ $t('pasajeroBuscaViaje') }}
                                         </strong>
                                     </div>
                                 </div>

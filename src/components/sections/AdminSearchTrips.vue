@@ -76,7 +76,7 @@
 
             <div class="col-xs-24 col-md-8 gmap-autocomplete origin">
                 <Autocomplete
-                    :placeholder="'Origen'"
+                    :placeholder="$t('origen')"
                     name="from_town"
                     ref="from_town"
                     :value="from_town.name"
@@ -92,7 +92,7 @@
                         aria-hidden="true"
                     ></i>
                 </div>
-                <div class="optional-warning text-center">(opcional)</div>
+                <div class="optional-warning text-center">({{ $t('opcional') }})</div>
                 <div class="swap btn">
                     <img
                         alt="swap"
@@ -110,7 +110,7 @@
             </div>
             <div class="col-xs-24 col-md-8 gmap-autocomplete destiny">
                 <Autocomplete
-                    :placeholder="'Destino'"
+                    :placeholder="$t('destino')"
                     name="to_town"
                     ref="to_town"
                     :value="to_town.name"
@@ -126,7 +126,7 @@
                         aria-hidden="true"
                     ></i>
                 </div>
-                <div class="optional-warning text-center">(opcional)</div>
+                <div class="optional-warning text-center">({{ $t('opcional') }})</div>
             </div>
 
             <div class="col-xs-24 col-md-4 no-padding">
@@ -136,7 +136,7 @@
                     :class="{ 'has-error': dateError.state }"
                     v-on:date_changed="(date) => (this.from_date = date)"
                 ></DatePicker>
-                <div class="optional-warning text-center">(opcional)</div>
+                <div class="optional-warning text-center">({{ $t('opcional') }})</div>
             </div>
             <div class="col-xs-24 col-md-4 no-padding">
                 <DatePicker
@@ -145,7 +145,7 @@
                     :class="{ 'has-error': dateError.state }"
                     v-on:date_changed="(date) => (this.to_date = date)"
                 ></DatePicker>
-                <div class="optional-warning text-center">(opcional)</div>
+                <div class="optional-warning text-center">({{ $t('opcional') }})</div>
             </div>
 
             <div class="col-xs-24 col-md-8 gmap-autocomplete origin">
@@ -205,7 +205,7 @@
                         aria-hidden="true"
                     ></i>
                 </div>
-                <div class="optional-warning text-center">(opcional)</div>
+                <div class="optional-warning text-center">({{ $t('opcional') }})</div>
             </div>
 
             <div class="col-xs-24 col-md-8 col-lg-8">

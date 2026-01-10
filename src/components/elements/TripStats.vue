@@ -7,7 +7,7 @@
                 v-if="tripCardTheme === 'light'"
             ></i>
             <span v-if="tripCardTheme !== 'light' || !isMobile"
-                >Distancia a recorrer</span
+                >{{ $t('distanciaARecorrer') }}</span
             >
             <br v-if="tripCardTheme !== 'light'" />
             <span>
@@ -22,7 +22,7 @@
                 v-if="tripCardTheme === 'light'"
             ></i>
             <span v-if="tripCardTheme !== 'light' || !isMobile"
-                >Tiempo estimado de viaje</span
+                >{{ $t('tiempoEstimado') }}</span
             >
             <br v-if="tripCardTheme !== 'light'" />
             <span>{{ trip.estimated_time }} horas</span>
@@ -34,7 +34,7 @@
                 v-if="tripCardTheme === 'light'"
             ></i>
             <span v-if="tripCardTheme !== 'light' || !isMobile">
-                Huella de carbono (
+                {{ $t('huellaCarbono') }} (
                 <abbr title="aproximada">aprox</abbr>
                 )
             </span>

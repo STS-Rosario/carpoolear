@@ -150,6 +150,11 @@ export default {
         endActions() {
             this.$set(document.documentElement.style, 'overflow', 'auto');
             this.$set(document.body, 'scroll', 'yes');
+            
+            if (this.$refs.overlay) {
+                this.$refs.overlay.style.display = 'none';
+            }
+            
             this.setFirstTimeAppOpenInDevice();
         }
     },
