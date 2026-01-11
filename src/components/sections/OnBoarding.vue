@@ -22,21 +22,21 @@
                         v-if="number > 1"
                         @click="number > 1 && cardNumber--"
                     >
-                        Anterior
+                        {{ $t('anterior') }}
                     </button>
                     <button
                         class="btn btn-success"
                         @click="complete"
                         v-if="number === cardsLength"
                     >
-                        ¡Comenzar!
+                        {{ $t('comenzar') }}
                     </button>
                     <button
                         v-else
                         class="btn btn-primary"
                         @click="number < cardsLength && cardNumber++"
                     >
-                        Siguiente
+                        {{ $t('siguiente') }}
                     </button>
                 </div>
             </div>
@@ -49,12 +49,12 @@
                 </div>
                 <div class="on-boarding--bottom-container">
                     <button class="btn btn-secondary" v-if="cardNumber > 1">
-                        Anterior
+                        {{ $t('anterior') }}
                     </button>
                     <button class="btn btn-success" v-if="cardNumber > 1">
-                        ¡Comenzar!
+                        {{ $t('comenzar') }}
                     </button>
-                    <button class="btn btn-primary" v-else>Siguiente</button>
+                    <button class="btn btn-primary" v-else>{{ $t('siguiente') }}</button>
                 </div>
             </div>
         </template>

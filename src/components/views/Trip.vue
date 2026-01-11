@@ -3,18 +3,18 @@
         <template v-if="trip">
             <div class="trip-detail-component">
                 <div class="alert alert-info alert-sellado-viaje" v-if="this.trip.state == 'payment_failed'">
-                    <p>PAGO FALLÓ</p>
-                    <p>Este viaje aún no es visible para el resto de los usuarios. El pago del Sellado de Viaje falló, intentalo de nuevo.</p>
-                    <p>Hacé click en el botón para pagar el Sellado de Viaje ({{ $n(this.config.module_trip_creation_payment_amount_cents / 100, 'currency') }} en Mercado Pago).</p>
+                    <p>{{ $t('pagoFallo') }}</p>
+                    <p>{{ $t('viajeNoVisiblePagoFallo') }}</p>
+                    <p>{{ $t('pagarSelladoViaje', { amount: $n(this.config.module_trip_creation_payment_amount_cents / 100, 'currency') }) }}</p>
                     <div id="walletBrick_container"></div>
                 </div>
                 <div class="alert alert-info alert-sellado-viaje" v-if="this.trip.state == 'pending_payment'">
-                    <p>PAGO EN RAPI PAGO</p>
-                    <p>Este viaje aún no es visible para el resto de los usuarios. Una vez que pagues el Sellado de Viaje en Rapi Pago, la gente podrá verlo.</p>
+                    <p>{{ $t('pagoRapiPago') }}</p>
+                    <p>{{ $t('viajeNoVisibleRapiPago') }}</p>
                 </div>
                 <div class="alert alert-info alert-sellado-viaje" v-if="this.trip.state == 'awaiting_payment'">
-                    <p>Este viaje aún no es visible para el resto de los usuarios. Una vez que pagues el Sellado de Viaje, la gente podrá verlo.</p>
-                    <p>Hacé click en el botón para pagar el Sellado de Viaje ({{ $n(this.config.module_trip_creation_payment_amount_cents / 100, 'currency') }} en Mercado Pago).</p>
+                    <p>{{ $t('viajeNoVisible') }}</p>
+                    <p>{{ $t('pagarSelladoViaje', { amount: $n(this.config.module_trip_creation_payment_amount_cents / 100, 'currency') }) }}</p>
                     <div id="walletBrick_container"></div>
                 </div>
                 <div class="row form">
@@ -79,11 +79,11 @@
                                 :name="'modal'"
                                 v-if="showModalRequestSeat"
                                 @close="onModalClose"
-                                :title="'Carpoodatos'"
+                                :title="$t('carpoodatos')"
                                 :body="'Body'"
                             >
                                 <h3 slot="header">
-                                    <span>¡Carpoodatos!</span>
+                                    <span>{{ $t('carpoodatos') }}</span>
                                     <i
                                         v-on:click="onModalClose"
                                         class="fa fa-times float-right-close"
@@ -92,45 +92,19 @@
                                 <div slot="body">
                                     <div class="text-left carpoodatos">
                                         <p>
-                                            Antes de mandar solicitud de
-                                            asiento, mandale mensaje a la otra
-                                            persona para coordinar todo lo
-                                            vinculado al viaje: punto de
-                                            encuentro, punto de llegada,tamaño
-                                            de bolsos, contribución para
-                                            combustible y peajes, etc.
+                                            {{ $t('carpoodatosAntesSolicitud') }}
                                         </p>
                                         <p>
-                                            Si mandaste solicitud de asiento y
-                                            te aceptan el pedido, se genera el
-                                            compromiso de viaje. Habilitándose
-                                            la posibilidad de calificación 24hs
-                                            después de comenzado el viaje.
-                                            Tendrán 14 días para calificarse
+                                            {{ $t('carpoodatosCompromisoViaje') }}
                                         </p>
                                         <p>
-                                            Podrán calificarse aunque el viaje
-                                            se cancele, te bajen o te bajes del
-                                            viaje.
+                                            {{ $t('carpoodatosCalificarCancelar') }}
                                         </p>
                                         <p>
-                                            No pidas asiento si no tenés
-                                            seguridad de que vas a viajar,
-                                            muchas personas también están
-                                            buscando el mismo viaje que vos. Si
-                                            ocurriera algo que te impida viajar,
-                                            avisale lo más rápido que puedas a
-                                            la persona con que ibas a compartir
-                                            el viaje.
+                                            {{ $t('carpoodatosNoPidasAsiento') }}
                                         </p>
                                         <p>
-                                            Cualquier duda escribinos a
-                                            <a
-                                                href="mailto:carpoolear@stsrosario.org.ar"
-                                            >
-                                                carpoolear@stsrosario.org.ar
-                                            </a>
-                                            o nuestras redes sociales.
+                                            {{ $t('carpoodatosContactoEmail', { email: 'carpoolear@stsrosario.org.ar' }) }}
                                         </p>
                                     </div>
                                     <div
@@ -145,8 +119,7 @@
                                                 v-model="acceptPassengerValue"
                                             />
                                             <span
-                                                >No volver a mostrar
-                                                mensaje</span
+                                                >{{ $t('noVolverAMostrarMensaje') }}</span
                                             >
                                         </label>
                                     </div>
@@ -161,7 +134,7 @@
                                                 @click="toMakeRequest"
                                                 v-if="!owner"
                                             >
-                                                Enviar mensaje
+                                                {{ $t('enviarMensaje') }}
                                             </button>
                                         </template>
                                         <template v-else>
@@ -170,13 +143,13 @@
                                                 @click="toMessages"
                                                 v-if="!owner"
                                             >
-                                                Enviar mensaje
+                                                {{ $t('enviarMensaje') }}
                                             </button>
                                             <button
                                                 class="btn btn-primary"
                                                 @click="toMakeRequest"
                                             >
-                                                Solicitar asiento
+                                                {{ $t('solicitarAsiento') }}
                                             </button>
                                         </template>
                                     </div>
@@ -186,11 +159,11 @@
                                 :name="'modal'"
                                 v-if="showModalPricing"
                                 @close="onModalClose"
-                                :title="'Carpoodatos'"
+                                :title="$t('carpoodatos')"
                                 :body="'Body'"
                             >
                                 <h3 slot="header">
-                                    <span>¡Carpoodatos!</span>
+                                    <span>{{ $t('carpoodatos') }}</span>
                                     <i
                                         v-on:click="onModalClose"
                                         class="fa fa-times float-right-close"
@@ -199,35 +172,13 @@
                                 <div slot="body">
                                     <div class="text-left carpoodatos">
                                         <p>
-                                            Antes de confirmar el viaje y para
-                                            evitar sorpresas, tené en cuenta de
-                                            coordinar y acordar el punto de
-                                            encuentro, el horario, la
-                                            disponibilidad de espacio para
-                                            equipaje, la cantidad total de
-                                            pasajeros y la contribución por los
-                                            gastos de combustible y peaje.
+                                            {{ $t('carpoodatosAntesConfirmar') }}
                                         </p>
                                         <p>
-                                            La contribución máxima que puede
-                                            pedir un conductor es igual a gastos
-                                            de combustible + peaje dividido la
-                                            cantidad de personas viajando en el
-                                            auto. Durante la coordinación previa
-                                            al viaje, cualquier persona puede
-                                            pedir hacer la división con tickets
-                                            de combustible y peaje en mano.
+                                            {{ $t('carpoodatosContribucionMaxima') }}
                                         </p>
                                         <p>
-                                            Cualquier duda escribinos a
-                                            <a
-                                                href="mailto:carpoolear@stsrosario.org.ar"
-                                            >
-                                                carpoolear@stsrosario.org.ar
-                                            </a>
-                                            o por mensaje privado a nuestras
-                                            redes sociales (facebook,instagram y
-                                            tweeter).
+                                            {{ $t('carpoodatosContactoRedes', { email: 'carpoolear@stsrosario.org.ar' }) }}
                                         </p>
                                     </div>
                                     <div
@@ -242,8 +193,7 @@
                                                 v-model="acceptPricing"
                                             />
                                             <span
-                                                >No volver a mostrar
-                                                mensaje</span
+                                                >{{ $t('noVolverAMostrarMensaje') }}</span
                                             >
                                         </label>
                                     </div>
@@ -253,7 +203,7 @@
                                             @click="toMessageForce"
                                             v-if="!owner"
                                         >
-                                            Enviar mensaje
+                                            {{ $t('enviarMensaje') }}
                                         </button>
                                     </div>
                                 </div>
@@ -290,7 +240,7 @@
                             <div>
                                 <div v-if="owner">
                                     <h3 class="title-margined">
-                                        Matcheos del viaje
+                                        {{ $t('matcheosDelViaje') }}
                                     </h3>
                                     <div class="row matching-user-list">
                                         <div
@@ -321,7 +271,7 @@
                                                 </a>
                                                 <button
                                                     @click="toUserMessages(p)"
-                                                    aria-label="Ir a mensajes"
+                                                    :aria-label="$t('irAMensajes')"
                                                     class="trip_passenger-chat"
                                                 >
                                                     <i
@@ -332,7 +282,7 @@
                                             </div>
                                             <div>
                                                 <small>
-                                                    Viaja el
+                                                    {{ $t('viajaEl') }}
                                                     {{
                                                         p.tripMatch.trip_date
                                                             | moment('DD/MM')
@@ -359,14 +309,13 @@
                                                     for="message_all"
                                                     class="sr-only"
                                                 >
-                                                    Mensaje para los usuarios
-                                                    seleccionados
+                                                    {{ $t('mensajeParaUsuariosSeleccionados') }}
                                                 </label>
                                                 <input
                                                     type="text"
                                                     id="message_all"
                                                     class="form-control"
-                                                    placeholder="Envía a los seleccionados"
+                                                    :placeholder="$t('enviaASeleccionados')"
                                                     v-model="messageToUsers"
                                                 />
                                                 <span class="input-group-btn">
@@ -409,7 +358,7 @@
             </div>
         </template>
         <template v-else>
-            <div>Buscando el viaje, aguarde un segundo.</div>
+            <div>{{ $t('buscandoViaje') }}</div>
         </template>
     </div>
 </template>
@@ -729,11 +678,11 @@ export default {
         },
 
         cancelRequest() {
-            if (window.confirm('¿Estás seguro que deseas bajarte del viaje?')) {
+            if (window.confirm(this.$t('seguroBajarteViaje'))) {
                 this.$set(this.sending, 'requestAction', true);
                 this.cancel({ user: this.user, trip: this.trip })
                     .then(() => {
-                        dialogs.message('Te has bajado del viaje.');
+                        dialogs.message(this.$t('teHasBajadoViaje'));
                         if (this.trip.request === 'send') {
                             this.trip.request = '';
                         }
@@ -741,7 +690,7 @@ export default {
                     .catch((error) => {
                         console.error(error);
                         dialogs.message(
-                            'Ocurrió un problema al solicitar, por favor aguarde unos instante e intentelo nuevamente.',
+                            this.$t('problemaSolicitar'),
                             { estado: 'error' }
                         );
                     })
@@ -812,7 +761,7 @@ export default {
                     users: users
                 }).then(() => {
                     this.messageToUsers = '';
-                    dialogs.message('El mensaje fue enviado.');
+                    dialogs.message(this.$t('mensajeEnviado'));
                 });
             }
         },

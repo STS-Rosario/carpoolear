@@ -131,7 +131,7 @@
                         tag="button"
                         :to="{ name: 'transacciones' }"
                     >
-                        transacciones
+                        {{ $t('transacciones') }}
                     </router-link>
                 </div>
                 <div
@@ -152,7 +152,7 @@
                     </button>
                     <div v-else class="reply-box">
                         <label for="reply" class="label label-reply">
-                            Escribe una referencia sobre el usuario
+                            {{ $t('escribeUnaReferenciaSobreElUsuario') }}
                         </label>
                         <textarea
                             ref="reference"
@@ -169,13 +169,13 @@
                                 <template v-if="sending">
                                     <spinner class="blue"></spinner>
                                 </template>
-                                <template v-else>Comentar</template>
+                                <template v-else>{{ $t('comentar') }}</template>
                             </button>
                             <button
                                 class="btn btn-primary"
                                 @click="sendReferenceFormVisibility = false"
                             >
-                                Cancelar
+                                {{ $t('cancelar') }}
                             </button>
                         </div>
                     </div>

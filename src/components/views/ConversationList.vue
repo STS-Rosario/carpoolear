@@ -22,7 +22,7 @@
                                         v-model="textSearch"
                                         type="text"
                                         class="form-control"
-                                        placeholder="Escribe un nombre y presiona buscar"
+                                        :placeholder="$t('escribeUnNombreYPresionaBuscar')"
                                     />
                                     <span class="input-group-btn">
                                         <!--  -->
@@ -140,7 +140,7 @@
                                             class="btn btn-primary btn-block"
                                             @click="nextPage"
                                         >
-                                            Más resultados
+                                            {{ $t('masResultados') }}
                                         </button>
                                     </li>
                                     <li
@@ -148,7 +148,7 @@
                                         class="list-group-item alert alert-warning"
                                         role="alert"
                                     >
-                                        No tienes conversaciones...
+                                        {{ $t('noTienesConversaciones') }}
                                     </li>
                                     <li
                                         slot="loading"
@@ -160,7 +160,7 @@
                                             alt=""
                                             class="ajax-loader"
                                         />
-                                        Cargando conversaciones ...
+                                        {{ $t('cargandoConversaciones') }}
                                     </li>
                                 </Loading>
                             </template>
@@ -186,14 +186,14 @@
                                         class="list-group-item alert alert-warning"
                                         role="alert"
                                     >
-                                        No hay concidencias
+                                        {{ $t('noHayConcidiencias') }}
                                     </li>
                                     <li
                                         slot="loading"
                                         class="list-group-item alert alert-info"
                                         role="alert"
                                     >
-                                        Tipeá un nombre y buscá
+                                        {{ $t('tipeaUnNombreYBusca') }}
                                     </li>
                                 </Loading>
                             </template>

@@ -3,8 +3,8 @@
         <div class="col-xs-24">
             <Loading :data="pendingPaymentRequests" :hideOnEmpty="true">
                 <h2 slot="title">
-                    <strong>Pago pendiente</strong>
-                    para confirmar
+                    <strong>{{ $t('pagoPendiente') }}</strong>
+                    {{ $t('pagoPendienteParaConfirmar') }}
                 </h2>
                 <div class="request-list">
                     <PendingPaymentRequest
@@ -19,15 +19,14 @@
                         alt=""
                         class="ajax-loader"
                     />
-                    Cargando...
+                    {{ $t('cargando') }}
                 </p>
             </Loading>
         </div>
         <div class="col-xs-24">
             <Loading :data="pendingRequest" :hideOnEmpty="true">
                 <h2 slot="title">
-                    Pendientes
-                    <strong>de contestar</strong>
+                    {{ $t('pendientesDeContestar') }}
                 </h2>
                 <div class="request-list">
                     <PendingRequest
@@ -38,7 +37,7 @@
                     ></PendingRequest>
                 </div>
                 <p slot="no-data" class="alert alert-warning" role="alert">
-                    No hay pedientes de contestar
+                    {{ $t('noHayPendientesDeContestar') }}
                 </p>
                 <p slot="loading" class="alert alert-info" role="alert">
                     <img
@@ -46,7 +45,7 @@
                         alt=""
                         class="ajax-loader"
                     />
-                    Cargando...
+                    {{ $t('cargando') }}
                 </p>
             </Loading>
         </div>
@@ -61,7 +60,7 @@
                 :hide-footer="true"
             >
                 <h3 slot="header">
-                    <span>¡Carpoodatos!</span>
+                    <span>{{ $t('carpoodatos') }}</span>
                     <i
                         v-on:click="toPendingRates"
                         class="fa fa-times float-right-close"
@@ -70,43 +69,31 @@
                 <div slot="body">
                     <div class="text-left carpoodatos">
                         <p>
-                            <b>Es muy muy importante calificar</b>
-                            . Las calificaciones permiten conocernos mejor y
-                            poder decidir a la hora de compartir un viaje, son
-                            muy importantes para toda la comunidad carpoolera.
+                            <b>{{ $t('carpoodatosImportanteCalificar').split('.')[0] }}</b>
+                            {{ $t('carpoodatosImportanteCalificar').split('.')[1] }}
                         </p>
                         <p>
                             <b
-                                >Tomate el tiempo para calificar pero no
-                                tanto...</b
+                                >{{ $t('carpoodatosTiempoCalificar').split('.')[0] }}</b
                             >
-                            . Tenés 14 días para calificar contando a partir del
-                            momento en que se habilita la posibilidad, 24hs
-                            posteriores al comienzo del viaje.
+                            {{ $t('carpoodatosTiempoCalificar').split('.')[1] }}
                         </p>
                         <p>
                             <b
-                                >No se borra con el codo ni hay líquido
-                                corrector</b
+                                >{{ $t('carpoodatosNoBorrar').split('.')[0] }}</b
                             >
-                            . Tené en cuenta que no podés ni borrar ni editar la
-                            calificación que hagas.
+                            {{ $t('carpoodatosNoBorrar').split('.')[1] }}
                         </p>
                         <p>
-                            <b>Decí lo que pensás :D</b>
-                            . Las calificación que vos hagas y la que recibas de
-                            la otra persona se mostrarán al mismo tiempo en los
-                            perfiles. Nunca se mostrará una antes que la otra.
-                            Solamente cuando la otra persona te califique o se
-                            venza el plazo de tiempo para calificar, aparecerá
-                            la calificación en el perfil.
+                            <b>{{ $t('carpoodatosDeciLoQuePensas').split('.')[0] }}</b>
+                            {{ $t('carpoodatosDeciLoQuePensas').split('.')[1] }}
                         </p>
                         <p>
-                            Cualquier duda escribinos a
+                            {{ $t('carpoodatosContacto') }}
                             <a href="mailto:carpoolear@stsrosario.org.ar">
                                 carpoolear@stsrosario.org.ar
                             </a>
-                            o nuestras redes sociales.
+                            {{ $t('oNuestrasRedesSociales') }}
                         </p>
                     </div>
                     <div class="check" style="margin-bottom: 10px">
@@ -117,7 +104,7 @@
                                 value="0"
                                 v-model="pendingRatesValue"
                             />
-                            <span>No volver a mostrar mensaje</span>
+                            <span>{{ $t('carpoodatosNoVolverAMostrar') }}</span>
                         </label>
                     </div>
                     <div class="text-center">
@@ -125,7 +112,7 @@
                             class="btn btn-accept-request"
                             @click="toPendingRates"
                         >
-                            !Entiendo!
+                            {{ $t('carpoodatosEntiendo') }}
                         </button>
                     </div>
                 </div>
@@ -138,9 +125,9 @@
                 :body="'Body'"
             >
                 <h3 slot="header">
-                    <span>Doná a Carpoolear</span>
+                    <span>{{ $t('donaACarpoolear') }}</span>
                     <br class="hidden-sm hidden-md hidden-lg" />
-                    <small>un proyecto de</small>
+                    <small>{{ $t('proyectoDe') }}</small>
                     <img
                         width="90"
                         alt="STS Rosario"
@@ -150,11 +137,9 @@
                 <div slot="body" class="donation">
                     <div class="text-center donation-text">
                         <p>
-                            Buenisimo que hayas encontrado con quien compartir
-                            tu viaje!
+                            {{ $t('buenisimoCompartirViaje') }}
                         </p>
-                        Ayudanos a seguir siendo una plataforma abierta,
-                        colaborativa y sin fines de lucro
+                        {{ $t('ayudanosPlataforma') }}
                     </div>
                     <div class="radio">
                         <label class="radio-inline">
@@ -195,7 +180,7 @@
                                 value="10000"
                                 v-model="donateValue"
                             />
-                            <span>Elegí tu propia aventura (solo mensual)</span>
+                            <span>{{ $t('elegiPropiaAventura') }}</span>
                         </label>
                     </div>
                     <div>
@@ -203,15 +188,15 @@
                             class="btn btn-success btn-unica-vez"
                             @click="onDonateOnceTime"
                         >
-                            ÚNICA VEZ
+                            {{ $t('unicaVez') }}
                         </button>
                         <button
                             class="btn btn-info btn-mensualmente"
                             @click="onDonateMonthly"
                         >
-                            MENSUAL
+                            {{ $t('MENSUAL') }}
                             <br />
-                            (cancelá cuando quieras)
+                            {{ $t('cancelaCuando') }}
                         </button>
                     </div>
                     <div class="text-center">
@@ -223,15 +208,14 @@
                                 onOpenLink('https://carpoolear.com.ar/donar')
                             "
                         >
-                            Conocé más acerca de por qué donar
+                            {{ $t('conoceMasDonar') }}
                         </a>
                     </div>
                 </div>
             </modal>
             <Loading :data="pendingRates" :hideOnEmpty="true">
                 <h2 slot="title">
-                    Calificaciones
-                    <strong>pendientes</strong>
+                    {{ $t('calificacionesPendientes') }}
                 </h2>
                 <div class="request-list">
                     <RatePending
@@ -242,7 +226,7 @@
                     />
                 </div>
                 <p slot="no-data" class="alert alert-warning" role="alert">
-                    No hay calificaciones pendientes
+                    {{ $t('noHayCalificacionesPendientes') }}
                 </p>
                 <p slot="loading" class="alert alert-info" role="alert">
                     <img
@@ -250,16 +234,14 @@
                         alt=""
                         class="ajax-loader"
                     />
-                    Cargando calificaciones ...
+                    {{ $t('cargandoCalificaciones') }}
                 </p>
             </Loading>
         </div>
 
         <div class="col-xs-24">
             <h2>
-                Mis
-                <strong>próximos</strong>
-                viajes
+                {{ $t('misProximosViajes') }}
             </h2>
             <Loading :data="trips">
                 <div class="trips-list">
@@ -272,7 +254,7 @@
                     ></Trip>
                 </div>
                 <p slot="no-data" class="alert alert-warning" role="alert">
-                    No tenés viajes creados
+                    {{ $t('noTenesViajesCreados') }}
                 </p>
                 <p slot="loading" class="alert alert-info" role="alert">
                     <img
@@ -280,7 +262,7 @@
                         alt=""
                         class="ajax-loader"
                     />
-                    Cargando viajes ...
+                    {{ $t('cargandoViajes') }}
                 </p>
             </Loading>
         </div>
@@ -288,8 +270,7 @@
         <div class="col-xs-24">
             <Loading :data="passengerTrips" :hideOnEmpty="true">
                 <h2 slot="title">
-                    Viajes a los que
-                    <strong>estoy subido</strong>
+                    {{ $t('viajesEstoySubido') }}
                 </h2>
                 <div class="trips-list">
                     <Trip
@@ -300,7 +281,7 @@
                     ></Trip>
                 </div>
                 <p slot="no-data" class="alert alert-warning" role="alert">
-                    No estas subido a ningún viaje.
+                    {{ $t('noEstasSubidoViaje') }}
                 </p>
                 <p slot="loading" class="alert alert-info" role="alert">
                     <img
@@ -308,7 +289,7 @@
                         alt=""
                         class="ajax-loader"
                     />
-                    Cargando viajes ...
+                    {{ $t('cargandoViajes') }}
                 </p>
             </Loading>
         </div>
@@ -318,7 +299,7 @@
             id="suscriptions"
         >
             <Loading :data="subscriptions" :hideOnEmpty="true">
-                <h2 slot="title">Suscripciones a viajes</h2>
+                <h2 slot="title">{{ $t('suscripcionesViajes') }}</h2>
                 <div class="trips-list row">
                     <div
                         class="col-xs-24 col-md-12"
@@ -333,7 +314,7 @@
                     </div>
                 </div>
                 <p slot="no-data" class="alert alert-warning" role="alert">
-                    No tienes ninguna suscripción.
+                    {{ $t('noTienesSuscripcion') }}
                 </p>
                 <p slot="loading" class="alert alert-info" role="alert">
                     <img
@@ -341,13 +322,13 @@
                         alt=""
                         class="ajax-loader"
                     />
-                    Cargando suscripciones ...
+                    {{ $t('cargandoSuscripciones') }}
                 </p>
             </Loading>
         </div>
 
         <div class="col-xs-24" v-if="oldTrips">
-            <h2>Mis viajes pasados</h2>
+            <h2>{{ $t('misViajesPasados') }}</h2>
             <Loading :data="oldTrips">
                 <div class="trips-list">
                     <Trip
@@ -358,7 +339,7 @@
                     ></Trip>
                 </div>
                 <p slot="no-data" class="alert alert-warning" role="alert">
-                    No has realizado ningún viaje aún
+                    {{ $t('noHasRealizadoViaje') }}
                 </p>
                 <p slot="loading" class="alert alert-info" role="alert">
                     <img
@@ -366,7 +347,7 @@
                         alt=""
                         class="ajax-loader"
                     />
-                    Cargando viajes ...
+                    {{ $t('cargandoViajes') }}
                 </p>
             </Loading>
         </div>
@@ -374,8 +355,7 @@
         <div class="col-xs-24" v-if="oldPassengerTrips">
             <Loading :data="oldPassengerTrips" :hideOnEmpty="true">
                 <h2 slot="title">
-                    Viajes a los que me
-                    <strong>subí</strong>
+                    {{ $t('viajesMeSubi') }}
                 </h2>
                 <div class="trips-list">
                     <Trip
@@ -386,7 +366,7 @@
                     ></Trip>
                 </div>
                 <p slot="no-data" class="alert alert-warning" role="alert">
-                    No te has subido a ningún viaje.
+                    {{ $t('noTeHasSubidoViaje') }}
                 </p>
                 <p slot="loading" class="alert alert-info" role="alert">
                     <img
@@ -394,7 +374,7 @@
                         alt=""
                         class="ajax-loader"
                     />
-                    Cargando viajes ...
+                    {{ $t('cargandoViajes') }}
                 </p>
             </Loading>
         </div>
@@ -519,7 +499,7 @@ export default {
                 this.registerDonation(data);
             } else {
                 dialogs.message(
-                    'Tienes que seleccionar un valor de donación.',
+                    $t('tienesQueSeleccionarDonacion'),
                     {
                         duration: 10,
                         estado: 'error'
@@ -554,7 +534,7 @@ export default {
                 this.registerDonation(data);
             } else {
                 dialogs.message(
-                    'Tienes que seleccionar un valor de donación.',
+                    $t('tienesQueSeleccionarDonacion'),
                     {
                         duration: 10,
                         estado: 'error'
