@@ -6,23 +6,23 @@
             class="alert alert-warning ios-notification-warning"
             role="alert"
         >
-            <h4>⚠️ No tenés habilitadas las notificaciones</h4>
+            <h4>⚠️ {{ $t('notificacionesNoHabilitadas') }}</h4>
             <p>
-                Parece que no aceptaste los permisos para que te podamos enviar notificaciones (en nuevos mensajes, etc.), presioná el botón para hacerlo:
+                {{ $t('notificacionesNoAceptastePermisos') }}
             </p>
             <div class="notification-warning-buttons">
                 <button 
                     class="btn btn-success" 
                     @click="requestNotificationPermission"
                 >
-                    Otorgar permisos
+                    {{ $t('otorgarPermisos') }}
                 </button>
                 <button 
                     class="btn btn-default" 
                     @click="dismissNotificationWarning"
                     style="margin-left: 10px;"
                 >
-                    No mostrar de nuevo
+                    {{ $t('noMostrarDeNuevo') }}
                 </button>
             </div>
         </div>
@@ -104,8 +104,7 @@
                                     v-model="donateValue"
                                 />
                                 <span
-                                    >Elegí tu propia aventura (solo
-                                    mensual)</span
+                                    >{{ $t('elegirPropiaAventuraSoloMensual') }}</span
                                 >
                             </label>
                         </div>
@@ -135,10 +134,10 @@
                     :body="'Body'"
                 >
                     <h3 slot="header">
-                        <span>{{ getInstallModalContent() && getInstallModalContent().title || 'Instalar App' }}</span>
+                        <span>{{ getInstallModalContent() && getInstallModalContent().title || $t('instalarApp') }}</span>
                     </h3>
                     <div slot="body" class="">
-                        <p style="white-space: pre-line;" v-html="getInstallModalContent() && getInstallModalContent().message || 'Instalá la web app (PWA) para tener notificaciones en tu celular/PC ante cualquier novedad.'">
+                        <p style="white-space: pre-line;" v-html="getInstallModalContent() && getInstallModalContent().message || $t('instalarWebAppPWA')">
                         </p>
                         <div style="margin-bottom: 10px">
                             <button
@@ -146,14 +145,14 @@
                                 class="btn btn-danger"
                                 @click="installApp()"
                             >
-                                Instalar
+                                {{ $t('instalar') }}
                             </button>
                             <button
                                 v-if="getInstallModalContent() && getInstallModalContent().showCloseButton"
                                 class="btn btn-primary"
                                 @click="closeInstallModal()"
                             >
-                                Entendido
+                                {{ $t('entendido') }}
                             </button>
                             <button
                                 v-if="getInstallModalContent() && getInstallModalContent().showDontShowAgainButton"
@@ -161,7 +160,7 @@
                                 @click="dontShowAgainInstallModal()"
                                 style="margin-left: 10px;"
                             >
-                                No mostrar de nuevo
+                                {{ $t('noMostrarDeNuevo') }}
                             </button>
                         </div>
                     </div>
@@ -191,7 +190,7 @@
                                     class="btn btn-success pull-right btn-donar"
                                     @click="onDonate"
                                 >
-                                    Donar
+                                    {{ $t('donar') }}
                                 </button>
                                 <h2>{{ $t('ayudanos') }}</h2>
 
@@ -362,8 +361,8 @@ export default {
             if (this.installAppEvent !== null) {
                 // Android - show install button
                 return {
-                    title: 'Instalar App',
-                    message: 'Instalá la web app (PWA) para tener notificaciones en tu celular/PC ante cualquier novedad.',
+                    title: $t('instalarApp'),
+                    message: $t('instalarWebAppPWA'),
                     showInstallButton: true,
                     showCloseButton: false,
                     showDontShowAgainButton: true
@@ -371,8 +370,8 @@ export default {
             } else if (this.isIOS()) {
                 // iOS - show installation instructions
                 return {
-                    title: 'Instalar App en iOS',
-                    message: 'Para instalar Carpoolear en tu iPhone o iPad:\n\n<strong style="color: red;">1. Ingresar a navegador Safari</strong>\n 2. Toca el botón Compartir (cuadrado con flecha hacia arriba)\n3. Desplázate hacia abajo y selecciona "Agregar a inicio"\n4. Toca "Añadir" para confirmar\n\n¡Listo! Ahora tendrás notificaciones y acceso rápido como cualquier app en tu teléfono.',
+                    title: $t('instalarAppEnIos'),
+                    message: $t('instalarAppEnIosInstrucciones'),
                     showInstallButton: false,
                     showCloseButton: true,
                     showDontShowAgainButton: true
@@ -396,6 +395,7 @@ export default {
                 this.installAppEvent.prompt();
                 // Espera a que el usuario responda al mensaje
                 const { outcome } = await this.installAppEvent.userChoice;
+                // {{ $t('esperaUsuarioResponda') }}
             }
         },
         closeInstallModal() {
@@ -683,15 +683,15 @@ export default {
         }
 
         window.addEventListener('beforeinstallprompt', (e) => {
-            // Previene a la mini barra de información que aparezca en smartphones
+            // {{ $t('previeneMiniBarraInformacion') }}
             e.preventDefault();
-            // Guarda el evento para que se dispare más tarde
+            // {{ $t('guardaEventoDispareMasTarde') }}
             this.installAppEvent = e;
             
             // Check if user has permanently dismissed the install modal
             const hasDismissedInstallModal = localStorage.getItem('pwa_install_modal_dismissed');
             if (!hasDismissedInstallModal) {
-                // Actualizar la IU para notificarle al usuario que se puede instalar tu PWA
+                // {{ $t('actualizarIUNotificarUsuario') }}
                 this.showModalInstallApp = true;
             }
             // De manera opcional, envía el evento de analíticos para saber si se mostró la promoción a a instalación del PWA
@@ -728,7 +728,7 @@ export default {
         router.stack = [];
     },
     updated(a) {
-        // Pendiente, no se limpia el buscador, si los search params están vacios
+        // {{ $t('pendienteNoSeLimpiaBuscador') }}
     },
     beforeDestroy() {
         bus.off('search-click', this.onSearchButton);

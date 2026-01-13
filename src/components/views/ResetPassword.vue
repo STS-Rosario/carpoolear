@@ -8,15 +8,14 @@
         </h1>
         <div class="form row" v-if="send">
             <h3>
-                Se ha enviado un email a su casilla de correo con las
-                indicaciones para restablecer su contraseña.
+                {{ $t('seHaEnviadoEmailIndicacionesRestablecerContrasena') }}
             </h3>
         </div>
         <div class="form row message" v-else-if="!token">
             <h1 v-if="tripCardTheme === 'light'">
                 {{ $t('recuperarContraseña') }}
             </h1>
-            <label for="txt_email">E-mail</label>
+            <label for="txt_email">{{ $t('email') }}</label>
             <input v-jump type="text" id="txt_email" v-model="email" />
             <span class="error" v-if="error">{{ error }}</span>
             <button
@@ -25,7 +24,7 @@
                 @click="reset"
                 :disabled="loading"
             >
-                <span v-if="!loading">Recuperar contraseña</span>
+                <span v-if="!loading">{{ $t('recuperarContraseña') }}</span>
                 <spinner class="blue" v-if="loading"></spinner>
             </button>
         </div>
@@ -37,7 +36,7 @@
                 id="txt_password"
                 v-model="password"
             />
-            <label for="txt_password">Repetir Password</label>
+            <label for="txt_password">{{ $t('repetirContrasena') }}</label>
             <input
                 v-jump
                 type="password"
@@ -51,7 +50,7 @@
                 @click="change"
                 :disabled="loading"
             >
-                <span v-if="!loading">Cambiar contraseña</span>
+                <span v-if="!loading">{{ $t('cambiarPassword') }}</span>
                 <spinner class="blue" v-if="loading"></spinner>
             </button>
         </div>
@@ -115,11 +114,11 @@ export default {
                     () => {
                         this.loading = false;
                         this.error =
-                            'El e-mail ingresado no pertenece a ningún usuario.';
+                            this.$t('emailIngresadoNoPerteneceUsuario');
                     }
                 );
             } else {
-                this.error = 'Ingrese un e-mail valido.';
+                this.error = this.$t('ingreseEmailValido');
             }
         },
 
@@ -137,11 +136,11 @@ export default {
                     },
                     () => {
                         this.loading = false;
-                        this.error = 'Token invalido';
+                        this.error = this.$t('tokenInvalido');
                     }
                 );
             } else {
-                this.error = 'No coicide los campos';
+                this.error = this.$t('noCoincidenCampos');
             }
         },
         onBackClick() {

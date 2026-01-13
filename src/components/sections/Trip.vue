@@ -465,7 +465,6 @@
                                             >{{ $t('Lugar') }}
                                             {{ $t('libre') }}</span
                                         >
-                                        >
                                     </span>
                                     <span
                                         class="trip_seats-available_label"

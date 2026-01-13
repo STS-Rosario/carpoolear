@@ -21,7 +21,7 @@
                 <h2 v-else>{{ conversation.title }}</h2>
                 <CoordinateTrip></CoordinateTrip>
                 <p class="chat_last_connection">
-                    <strong>Última conexión:</strong>
+                    <strong>{{ $t('ultimaConexion') }}</strong>
                     <span class="">{{
                         lastConnection | moment('calendar')
                     }}</span>
@@ -39,7 +39,7 @@
                         v-if="!lastPageConversation"
                         class="btn text-center btn-full-width"
                     >
-                        Ver más mensajes
+                        {{ $t('verMasMensajes') }}
                     </button>
                 </div>
                 <MessageView
@@ -58,7 +58,7 @@
                         v-model="message"
                         type="text"
                         class="form-control"
-                        placeholder="Escribir mensaje..."
+                        :placeholder="$t('escribirMensaje')"
                         v-jump:click="'btn-send'"
                         maxlength="800"
                     />
@@ -82,7 +82,7 @@
     </div>
     <div v-else>
         <p slot="no-data" class="alert alert-warning" role="alert">
-            Seleccione alguna conversación
+            {{ $t('seleccioneAlgunaConversacion') }}
         </p>
     </div>
 </template>
@@ -198,7 +198,7 @@ export default {
                         }
                     });
                     this.setSubTitle(
-                        'Última conexión: ' +
+                        this.$t('ultimaConexion') +
                             moment(this.lastConnection).calendar()
                     );
                     this.setImgTitle(this.conversation.image);
@@ -231,7 +231,7 @@ export default {
                 }
             });
             this.setSubTitle(
-                'Última conexión: ' + moment(this.lastConnection).calendar()
+                this.$t('ultimaConexion') + moment(this.lastConnection).calendar()
             );
             this.setImgTitle(this.conversation.image);
 

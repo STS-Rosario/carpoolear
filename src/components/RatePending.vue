@@ -16,16 +16,16 @@
             </div>
             <div class="rate-pending-message">
                 <div class="rate-pending-message--content">
-                    ¿Cómo calificarías a
+                    {{ $t('ratePendingComoCalificariasA') }}
                     <strong>{{ to.name }}</strong>
-                    como
-                    <span v-if="rate.user_to_type === DRIVER">conductor</span>
-                    <span v-if="rate.user_to_type === PASSENGER">pasajero</span>
-                    en el viaje hacía
+                    {{ $t('como') }}
+                    <span v-if="rate.user_to_type === DRIVER">{{ $t('ratePendingConductor') }}</span>
+                    <span v-if="rate.user_to_type === PASSENGER">{{ $t('ratePendingPasajero') }}</span>
+                    {{ $t('ratePendingEnElViajeHacia') }}
                     <strong>{{
                         trip.points[trip.points.length - 1].json_address.ciudad
                     }}</strong>
-                    el día
+                    {{ $t('ratePendingElDia') }}
                     <strong>{{
                         trip.trip_date | moment('dddd DD [de] MMMM')
                     }}</strong>
@@ -55,14 +55,14 @@
                     maxlength="600"
                     class="rate_comment"
                     v-model="comment"
-                    placeholder="Incluya un comentario..."
+                    :placeholder="$t('ratePendingIncluyaUnComentario')"
                 ></textarea>
                 <button
                     class="btn btn-primary"
                     @click="makeVote"
                     :disabled="sending"
                 >
-                    Calificar
+                    {{ $t('ratePendingCalificar') }}
                 </button>
             </div>
         </div>
@@ -118,7 +118,7 @@ export default {
                 if (!this.comment) {
                     // Voto negativo y comentario vacio
                     dialogs.message(
-                        'El comentario no puede estar vacío para los votos negativos.',
+                        this.$t('ratePendingComentarioNoPuedeEstarVacio'),
                         { duration: 10, estado: 'error' }
                     );
                 } else {

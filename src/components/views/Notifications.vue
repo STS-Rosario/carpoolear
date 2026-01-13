@@ -29,11 +29,11 @@
             </div>
             <div class="text-right">
                 <button class="btn btn-primary" v-on:click="nextPage()">
-                    Siguiente
+                    {{ $t('siguiente') }}
                 </button>
             </div>
             <p slot="no-data" class="alert alert-warning" role="alert">
-                No hay notificaciones
+                {{ $t('noHayNotificaciones') }}
             </p>
             <p slot="loading" class="alert alert-info" role="alert">
                 <img
@@ -41,7 +41,7 @@
                     alt=""
                     class="ajax-loader"
                 />
-                Cargando notificaciones ...
+                {{ $t('cargandoNotificaciones') }}
             </p>
         </Loading>
     </div>

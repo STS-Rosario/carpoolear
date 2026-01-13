@@ -4,7 +4,7 @@
         <template v-if="data != null">
             <slot v-if="data.length > 0"></slot>
             <slot name="no-data" v-else>
-                <p class="alert alert-warning" role="alert">No hay viajes</p>
+                <p class="alert alert-warning" role="alert">{{ $t('noHayViajes') }}</p>
             </slot>
         </template>
         <slot name="loading" v-else>

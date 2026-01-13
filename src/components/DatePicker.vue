@@ -11,11 +11,11 @@
                 :calendar-button="true"
                 :calendar-button-icon="'fa fa-calendar'"
                 :value="dateBrowser"
-                :language="'es'"
+                :language="datePickerLanguage"
                 v-on:opened="focus = true"
                 v-on:closed="focus = false"
                 v-on:selected="changeValue"
-                :placeholder="'dd/mm/yyyy'"
+                :placeholder="this.$t('fecha')"
                 :format="'dd/MM/yyyy'"
                 :disabled="{
                     to: min,
@@ -149,6 +149,19 @@ export default {
             isMobile: 'device/isMobile',
             device: 'cordova/device'
         }),
+        datePickerLanguage() {
+            const locale = this.$i18n.locale || 'arg';
+            switch (locale) {
+                case 'en':
+                    return 'en';
+                case 'arg':
+                    return 'es';
+                case 'chl':
+                    return 'es';
+                default:
+                    return 'es';
+            } 
+        },
         browser() {
             if (this.device) {
                 if (this.device.platform === 'browser') {

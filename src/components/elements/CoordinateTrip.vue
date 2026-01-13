@@ -1,29 +1,29 @@
 <template>
     <div class="trip_actions" v-if="conversation && conversation.trip">
         <div class="trip_actions-detail">
-            <span v-if="owner">Te envía una consulta por tu viaje desde</span>
-            <span v-else>Viaje desde</span>
+            <span v-if="owner">{{ $t('coordinateTripTeEnviaUnaConsultaPorTuViajeDesde') }}</span>
+            <span v-else>{{ $t('coordinateTripViajeDesde') }}</span>
             <strong>{{ conversation.trip.from_town }}</strong>
-            hacia
+            {{ $t('coordinateTripHacia') }}
             <strong>{{ conversation.trip.to_town }}</strong>
             <span v-if="owner">
-                del día
+                {{ $t('coordinateTripDelDia') }}
                 <strong>{{
                     conversation.trip.trip_date | moment('DD/MM/YYYY')
                 }}</strong>
-                a las
+                {{ $t('coordinateTripALas') }}
                 <strong
                     >{{
                         conversation.trip.trip_date | moment('HH:mm')
                     }})</strong
                 >
                 <template v-if="conversation.trip.return_trip">
-                    y vuelta el día
+                    {{ $t('coordinateTripYVueltaElDia') }}
                     <strong>{{
                         conversation.return_trip.trip_date
                             | moment('DD/MM/YYYY')
                     }}</strong>
-                    a las
+                    {{ $t('coordinateTripALas2') }}
                     <strong
                         >{{
                             conversation.return_trip.trip_date
@@ -49,12 +49,12 @@
                 "
             >
                 <span v-if="isPassengerTrip">
-                    Bajarme del viaje
-                    <template v-if="conversation.return_trip">de ida</template>
+                    {{ $t('bajarmeViaje') }}
+                    <template v-if="conversation.return_trip">{{ $t('deIda') }}</template>
                 </span>
                 <span v-else-if="conversation.trip.request === 'send'">
-                    Retirar solicitud de asiento
-                    <template v-if="conversation.return_trip">de ida</template>
+                    {{ $t('retirarSolicitudDeAsiento') }}
+                    <template v-if="conversation.return_trip">{{ $t('deIda') }}</template>
                 </span>
                 <span v-else-if="sending.trip">
                     <spinner
@@ -62,18 +62,18 @@
                         v-if="sending && sending.trip"
                     ></spinner>
                 </span>
-                <span v-else-if="expiredTrip">¡ Viaje Carpooleado !</span>
+                <span v-else-if="expiredTrip">{{ $t('viajeCarpooleado') }}</span>
                 <span v-else>
                     <template v-if="config && config.module_trip_seats_payment">
-                        Reservar {{ $n(conversation.trip.seat_price_cents / 100, 'currency') }}
+                        {{ $t('reservar') }} {{ $n(conversation.trip.seat_price_cents / 100, 'currency') }}
                         <template v-if="conversation.return_trip"
-                            >de ida</template
+                            >{{ $t('deIda') }}</template
                         >
                     </template>
                     <template v-else>
-                        Solicitar asiento
+                        {{ $t('solicitarAsiento') }}
                         <template v-if="conversation.return_trip"
-                            >de ida</template
+                            >{{ $t('deIda') }}</template
                         >
                     </template>
                 </span>
@@ -104,21 +104,20 @@
                 "
             >
                 <span v-if="isPassengerReturnTrip"
-                    >Bajarme del viaje de vuelta</span
+                    >{{ $t('bajarmeDelViajeDeVuelta') }}</span
                 >
                 <span v-else-if="conversation.return_trip.request === 'send'">
-                    Retirar solicitud de asiento de vuelta
+                    {{ $t('retirarSolicitudDeAsientoDeVuelta') }}
                 </span>
                 <span v-else-if="sending.returnTrip">
                     <spinner class="blue" v-if="sending.returnTrip"></spinner>
                 </span>
-                <span v-else-if="expiredReturnTrip">¡ Viaje Carpooleado !</span>
+                <span v-else-if="expiredReturnTrip">{{ $t('viajeCarpooleado') }}</span>
                 <span v-else>
                     <template v-if="config && config.module_trip_seats_payment">
-                        Reservar {{ $n(conversation.return_trip.seat_price_cents / 100, 'currency') }} de
-                        vuelta
+                        {{ $t('reservar') }} {{ $n(conversation.return_trip.seat_price_cents / 100, 'currency') }} {{ $t('deVuelta') }}
                     </template>
-                    <template v-else>Solicitar asiento de vuelta</template>
+                    <template v-else>{{ $t('solicitarAsientoDeVuelta') }}</template>
                 </span>
                 <template v-if="!sending.returnTrip">
                     <strong>
@@ -237,7 +236,7 @@ export default {
             if (this.config.module_coordinate_by_message) {
                 if (
                     window.confirm(
-                        '¿Estás seguro que deseas bajarte del viaje?'
+                        this.$t('seguroBajarteViaje')
                     )
                 ) {
                     this.$set(
@@ -250,7 +249,7 @@ export default {
                         : this.conversation.trip;
                     this.cancel({ user: this.user, trip: trip })
                         .then(() => {
-                            dialogs.message('Te has bajado del viaje.');
+                            dialogs.message(this.$t('teHasBajadoViaje'));
                             if (trip.request === 'send') {
                                 trip.request = '';
                             }
@@ -274,7 +273,7 @@ export default {
                         .catch((error) => {
                             console.error(error);
                             dialogs.message(
-                                'Ocurrió un problema al solicitar, por favor aguarde unos instante e intentelo nuevamente.',
+                                this.$t('problemaSolicitar'),
                                 { estado: 'error' }
                             );
                         })

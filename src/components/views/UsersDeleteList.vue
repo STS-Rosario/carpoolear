@@ -5,17 +5,17 @@
         </div>
         <div class="row">
             <div class="col-md-22 col-md-offset-1">
-                <h2>Pedidos de eliminación de cuenta</h2>
+                <h2>{{ $t('pedidosDeEliminacionDeCuenta') }}</h2>
                 <Loading :data="deleteRequests">
                     <table class="table table-hover table-bordered">
                         <thead>
                             <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">Usuario</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Fecha de solicitud</th>
-                                <th scope="col">Estado</th>
-                                <th scope="col">Fecha de acción</th>
+                                <th scope="col">{{ $t('id') }}</th>
+                                <th scope="col">{{ $t('usuario') }}</th>
+                                <th scope="col">{{ $t('email') }}</th>
+                                <th scope="col">{{ $t('fechaDeSolicitud') }}</th>
+                                <th scope="col">{{ $t('estado') }}</th>
+                                <th scope="col">{{ $t('fechaDeAccion') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -26,8 +26,8 @@
                                 class="table-row-clickable"
                             >
                                 <th scope="row">{{ request.id }}</th>
-                                <td>{{ request.user ? request.user.name : 'N/A' }}</td>
-                                <td>{{ request.user ? request.user.email : 'N/A' }}</td>
+                                <td>{{ request.user ? request.user.name : $t('na') }}</td>
+                                <td>{{ request.user ? request.user.email : $t('na') }}</td>
                                 <td>{{ formatDate(request.date_requested) }}</td>
                                 <td>
                                     <span
@@ -48,7 +48,7 @@
                     </table>
                     <div slot="no-data" class="text-center" style="margin-top: 20px;">
                         <div class="alert alert-info">
-                            No hay pedidos de eliminación de cuenta
+                            {{ $t('noHayPedidosEliminacion') }}
                         </div>
                     </div>
                     <div slot="loading" class="text-center" style="margin-top: 20px;">
@@ -57,7 +57,7 @@
                             alt=""
                             class="ajax-loader"
                         />
-                        <p>Cargando pedidos...</p>
+                        <p>{{ $t('cargandoPedidos') }}</p>
                     </div>
                 </Loading>
 
@@ -68,7 +68,7 @@
                     :body="'Body'"
                 >
                     <h3 slot="header">
-                        <span>Editar pedido de eliminación de cuenta</span>
+                        <span>{{ $t('editarPedidoEliminacion') }}</span>
                         <i
                             v-on:click="closeModal"
                             class="fa fa-times float-right-close"
@@ -77,30 +77,30 @@
                     <div slot="body">
                         <div class="text-left color-black">
                             <div class="form-group" v-if="currentRequest">
-                                <label><strong>ID:</strong> {{ currentRequest.id }}</label>
+                                <label>{{ $t('idLabel') }} {{ currentRequest.id }}</label>
                             </div>
                             <div class="form-group" v-if="currentRequest && currentRequest.user">
-                                <label><strong>Usuario:</strong> {{ currentRequest.user.name }}</label>
+                                <label>{{ $t('usuarioLabel') }} {{ currentRequest.user.name }}</label>
                             </div>
                             <div class="form-group" v-if="currentRequest && currentRequest.user">
-                                <label><strong>Email:</strong> {{ currentRequest.user.email }}</label>
+                                <label>{{ $t('emailLabel') }} {{ currentRequest.user.email }}</label>
                             </div>
                             <div class="form-group" v-if="currentRequest">
                                 <label
-                                    ><strong>Fecha de solicitud:</strong>
+                                    >{{ $t('fechaDeSolicitudLabel') }}
                                     {{ formatDate(currentRequest.date_requested) }}</label
                                 >
                             </div>
                             <div class="form-group">
-                                <label for="action-taken">Acción tomada:</label>
+                                <label for="action-taken">{{ $t('accionTomada') }}</label>
                                 <select
                                     v-model="editForm.action_taken"
                                     id="action-taken"
                                     class="form-control"
                                 >
-                                    <option :value="0">Solicitado</option>
-                                    <option :value="1">Eliminado</option>
-                                    <option :value="2">Rechazado</option>
+                                    <option :value="0">{{ $t('solicitado') }}</option>
+                                    <option :value="1">{{ $t('eliminado') }}</option>
+                                    <option :value="2">{{ $t('rechazado') }}</option>
                                 </select>
                             </div>
                             <div class="text-center" style="margin-top: 1.5em;">
@@ -109,7 +109,7 @@
                                     @click="submitUpdate"
                                     :disabled="loading"
                                 >
-                                    <span v-if="!loading">Guardar</span>
+                                    <span v-if="!loading">{{ $t('guardar') }}</span>
                                     <spinner class="blue" v-if="loading"></spinner>
                                 </button>
                             </div>
@@ -150,12 +150,10 @@ export default {
             return moment(dateString).format('DD/MM/YYYY HH:mm');
         },
         getActionTakenLabel(actionTaken) {
-            const labels = {
-                0: 'Solicitado',
-                1: 'Eliminado',
-                2: 'Rechazado'
-            };
-            return labels[actionTaken] || 'Desconocido';
+            return this.$t('solicitado');
+            if (actionTaken === 1) return this.$t('eliminado');
+            if (actionTaken === 2) return this.$t('rechazado');
+            return this.$t('desconocido');
         },
         getActionTakenBadgeClass(actionTaken) {
             const classes = {
@@ -188,7 +186,7 @@ export default {
                 .then(() => {
                     this.loading = false;
                     this.closeModal();
-                    dialogs.message('Pedido de eliminación de cuenta actualizado exitosamente', {
+                    dialogs.message(this.$t('pedidoEliminacionActualizadoExitosamente'), {
                         duration: 5,
                         estado: 'success'
                     });
@@ -197,7 +195,7 @@ export default {
                 .catch((error) => {
                     this.loading = false;
                     console.error('Error updating delete request:', error);
-                    dialogs.message('Error al actualizar el pedido de eliminación de cuenta', {
+                    dialogs.message(this.$t('errorActualizarPedidoEliminacion'), {
                         duration: 5,
                         estado: 'error'
                     });
@@ -213,7 +211,7 @@ export default {
                 .catch((error) => {
                     console.error('Error loading delete requests:', error);
                     this.deleteRequests = [];
-                    dialogs.message('Error al cargar los pedidos de eliminación de cuenta', {
+                    dialogs.message(this.$t('errorCargarPedidosEliminacion'), {
                         duration: 5,
                         estado: 'error'
                     });

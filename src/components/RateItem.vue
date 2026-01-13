@@ -7,13 +7,13 @@
 
             <div v-if="!notReply" class="rate-item-value">
                 <span v-if="rate.rating == 1">
-                    Positiva
-                    <i class="fa fa-thumbs-up" aria-hidden="true"></i>
-                </span>
-                <span v-if="rate.rating == 0">
-                    Negativa
-                    <i class="fa fa-thumbs-down" aria-hidden="true"></i>
-                </span>
+                        {{ $t('rateItemPositiva') }}
+                        <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                    </span>
+                    <span v-if="rate.rating == 0">
+                        {{ $t('rateItemNegativa') }}
+                        <i class="fa fa-thumbs-down" aria-hidden="true"></i>
+                    </span>
 
                 <span
                     class="pull-right clickeable"
@@ -76,7 +76,7 @@
                     </div>
                     <template v-if="!notReply">
                         <div class="rate-item-detail">
-                            Viajó a {{ rate.trip.to_town }} como
+                            {{ $t('rateItemViajoAComo') }} {{ rate.trip.to_town }} {{ $t('rateItemComo') }}
                             {{ rateType }} -
                             {{ rate.rate_at | moment('DD/MM/YYYY') }}
                         </div>
@@ -94,15 +94,15 @@
         </template>
         <div class="reply-box" v-if="showReply">
             <label for="reply" class="label label-reply"
-                >Responder a la calificación</label
+                >{{ $t('rateItemResponderALaCalificacion') }}</label>
             >
             <textarea maxlength="260" v-model="comment" id="reply"></textarea>
             <div class="reply-btns">
                 <button class="btn btn-primary" @click="onReply">
-                    Responder
+                    {{ $t('rateItemResponder') }}
                 </button>
                 <button class="btn btn-primary" @click="onCancelReply">
-                    Cancelar
+                    {{ $t('rateItemCancelar') }}
                 </button>
             </div>
         </div>
@@ -111,7 +111,7 @@
             v-if="!notReply && rate.reply_comment"
         >
             <div class="reply_comment">
-                <strong>{{ profile.name }} respondió:</strong>
+                <strong>{{ profile.name }} {{ $t('rateItemRespondio') }}</strong>
                 {{ rate.reply_comment }}
             </div>
             <div class="reply_comment_date">

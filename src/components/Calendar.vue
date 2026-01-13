@@ -66,7 +66,7 @@ export default {
                     this.$t('diciembre')
                 ],
                 format: this.format,
-                placeholder: 'Fecha',
+                placeholder: this.$t('fecha'),
                 inputStyle: {
                     display: 'inline-block',
                     'line-height': '22px',

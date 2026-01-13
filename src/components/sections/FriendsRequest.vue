@@ -1,7 +1,7 @@
 <template>
     <div class="friends-component">
         <div class="clearfix">
-            <h2>Buscar contacto</h2>
+            <h2>{{ $t('buscarContacto') }}</h2>
             <li class="list-group-item">
                 <div class="input-group">
                     <input
@@ -10,7 +10,7 @@
                         type="text"
                         class="form-control"
                         id="input-name"
-                        placeholder="Buscar personas"
+                        :placeholder="$t('buscarPersonas')"
                     />
                     <span class="input-group-btn">
                         <button class="btn btn-default" type="button">
@@ -67,7 +67,7 @@
                                             !idRequesting[user.id]
                                         "
                                     >
-                                        Agregar
+                                        {{ $t('agregar') }}
                                         <i
                                             class="fa fa-plus"
                                             aria-hidden="true"
@@ -82,7 +82,7 @@
                                         <spinner class="blue"></spinner>
                                     </span>
                                     <span v-if="user.state != 'none'"
-                                        >Solicitud enviada</span
+                                        >{{ $t('solicitudEnviada') }}</span
                                     >
                                 </button>
                             </div>
@@ -93,7 +93,7 @@
                         class="list-group-item alert alert-warning"
                         role="alert"
                     >
-                        No se encontraron contactos.
+                        {{ $t('noSeEncontraronContactos') }}
                     </li>
                     <li
                         slot="loading"
@@ -105,7 +105,7 @@
                             alt=""
                             class="ajax-loader"
                         />
-                        Buscando contactos..
+                        {{ $t('buscandoContactos') }}
                     </li>
                 </Loading>
             </template>

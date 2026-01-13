@@ -90,8 +90,8 @@
                         </p>
                         <p>
                             {{ $t('carpoodatosContacto') }}
-                            <a href="mailto:carpoolear@stsrosario.org.ar">
-                                carpoolear@stsrosario.org.ar
+                            <a :href="'mailto:' + config.admin_email">
+                                {{ config.admin_email }}
                             </a>
                             {{ $t('oNuestrasRedesSociales') }}
                         </p>

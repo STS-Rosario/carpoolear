@@ -104,7 +104,7 @@
                                             {{ $t('carpoodatosNoPidasAsiento') }}
                                         </p>
                                         <p>
-                                            {{ $t('carpoodatosContactoEmail', { email: 'carpoolear@stsrosario.org.ar' }) }}
+                                            {{ $t('carpoodatosContactoEmail', { email: config.admin_email }) }}
                                         </p>
                                     </div>
                                     <div
@@ -178,7 +178,7 @@
                                             {{ $t('carpoodatosContribucionMaxima') }}
                                         </p>
                                         <p>
-                                            {{ $t('carpoodatosContactoRedes', { email: 'carpoolear@stsrosario.org.ar' }) }}
+                                            {{ $t('carpoodatosContactoRedes', { email: config.admin_email }) }}
                                         </p>
                                     </div>
                                     <div

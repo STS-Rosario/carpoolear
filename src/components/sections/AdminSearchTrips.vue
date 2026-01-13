@@ -12,12 +12,12 @@
                     class="cbx"
                 />
                 <label for="cbxAllowForeignPoints" class="cbx_label">
-                    Origen o destino fuera de
+                    {{ $t('origenODestinoFueraDe') }}
                     {{ config ? config.country_name : '' }}
                 </label>
                 <span
                     class="tooltip-bottom"
-                    data-tooltip="Marcando esta opción vas a poder seleccionar origen o destino fuera de Argentina. Recordá averiguar con la aseguradora del auto, si tenés cobertura contra terceros fuera de la Argentina. Si no es así, averiguá con ella para obtener la extensión fuera de Argentina, de forma de tener cobertura durante el viaje"
+                    :data-tooltip="$t('marcandoEstaOpcionPodrasSeleccionar')"
                 ></span>
                 <i class="fa fa-info-circle" aria-hidden="true"></i>
             </div>
@@ -31,7 +31,7 @@
                 >
                     <!--<img alt="" :src="isPassenger ? chofer_logo_gris : chofer_logo_blanco" />-->
                     <span class="fa fa-car" aria-hidden="true"></span>
-                    <span>conductor</span>
+                    <span>{{ $t('conductor') }}</span>
                 </button>
             </div>
             <div class="col-xs-12 col-md-4">
@@ -48,7 +48,7 @@
                                 : pasajero_logo_gris
                         "
                     />
-                    <span>pasajero</span>
+                    <span>{{ $t('pasajero') }}</span>
                 </button>
             </div>
             <div
@@ -63,12 +63,12 @@
                         class="cbx"
                     />
                     <label for="cbxAllowForeignPoints" class="cbx_label">
-                        Origen o destino fuera de
+                        {{ $t('origenODestinoFueraDe') }}
                         {{ config ? config.country_name : '' }}
                     </label>
                     <span
                         class="tooltip-bottom"
-                        data-tooltip="Marcando esta opción vas a poder seleccionar origen o destino fuera de Argentina. Recordá averiguar con la aseguradora del auto, si tenés cobertura contra terceros fuera de la Argentina. Si no es así, averiguá con ella para obtener la extensión fuera de Argentina, de forma de tener cobertura durante el viaje"
+                        :data-tooltip="$t('marcandoEstaOpcionPodrasSeleccionar')"
                     ></span>
                     <i class="fa fa-info-circle" aria-hidden="true"></i>
                 </div>
@@ -155,7 +155,7 @@
                         v-on:keyup="onSearchUsers"
                         type="text"
                         class="form-control form-control-with-icon search-users-input"
-                        placeholder="Escribe un nombre"
+                        :placeholder="$t('escribeUnNombre')"
                     />
                     <div v-if="userSearch.length != 0 && showAutocomplete">
                         <loading class="autocomplete-users" :data="userList">
@@ -181,7 +181,7 @@
                                 class="list-group-item alert alert-warning"
                                 role="alert"
                             >
-                                No se encontro ningun usuario
+                                {{ $t('noSeEncontroNingunUsuario') }}
                             </li>
                             <li
                                 slot="loading"
@@ -193,7 +193,7 @@
                                     alt=""
                                     class="ajax-loader"
                                 />
-                                Cargando usuarios ...
+                                {{ $t('cargandoUsuarios') }}
                             </li>
                         </loading>
                     </div>
@@ -210,7 +210,7 @@
 
             <div class="col-xs-24 col-md-8 col-lg-8">
                 <button class="btn btn-primary btn-search" @click="emit">
-                    Buscar
+                    {{ $t('buscar') }}
                 </button>
             </div>
         </div>
@@ -377,7 +377,7 @@ export default {
                 this.$emit('admin-trip-search', params);
             } else {
                 dialogs.message(
-                    'Origen y destino no pueden ser ambos del exterior.',
+                    this.$t('origenYDestinoNoPuedenSerAmbosDelExterior'),
                     {
                         duration: 10,
                         estado: 'error'

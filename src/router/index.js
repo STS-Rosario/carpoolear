@@ -1,6 +1,7 @@
 /* jshint esversion: 6 */
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import { i18n } from '../main';
 
 import store from '../store';
 import routes from './routes.js';
@@ -17,9 +18,9 @@ const router = new VueRouter({
 router.rememberRoute = null;
 
 router.beforeEach((to, from, next) => {
-    let actionbar = to.meta.actionbar || {};
-    let background = to.meta.background || {};
-    let user = store.getters['auth/checkLogin'];
+    const actionbar = to.meta.actionbar || {};
+    const background = to.meta.background || {};
+    const user = store.getters['auth/checkLogin'];
     if (user && actionbar.footer) {
         if (actionbar.footer.show) {
             store.dispatch('actionbars/showFooter', true);
@@ -35,8 +36,8 @@ router.beforeEach((to, from, next) => {
     } else {
         store.dispatch('actionbars/showFooter', false);
     }
-    let getters = store.getters;
-    let config = getters['auth/appConfig'];
+    const getters = store.getters;
+    const config = getters['auth/appConfig'];
     console.log('config app name', config);
     let appName = process.env.TARGET_APP || 'Carpoolear';
     if (config) {
@@ -50,9 +51,10 @@ router.beforeEach((to, from, next) => {
         store.dispatch('actionbars/setSubTitle', '');
         store.dispatch('actionbars/setTitleLink', {});
         store.dispatch('actionbars/setImgTitle', '');
-        if (actionbar.header.title) {
-            console.log('actionbar.header.title', actionbar.header.title);
-            store.dispatch('actionbars/setTitle', actionbar.header.title);
+        if (actionbar.header.titleKey) {
+            console.log('actionbar.header.titleKey', actionbar.header.titleKey);
+            const title = i18n.t(actionbar.header.titleKey);
+            store.dispatch('actionbars/setTitle', title);
         } else {
             console.log('actionbar appName', appName);
             store.dispatch('actionbars/setTitle', appName);

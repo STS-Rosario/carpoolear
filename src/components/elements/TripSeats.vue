@@ -11,9 +11,9 @@
                     trip.seats_available
                 }}</span>
                 <span class="trip_seats-available_label">
-                    Lugares
+                    {{ $t('Lugares') }}
                     <br />
-                    libres
+                    {{ $t('libres') }}
                 </span>
             </div>
         </div>

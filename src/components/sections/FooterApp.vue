@@ -30,7 +30,7 @@
         <div class="container hidden-xs" v-if="config.enable_footer">
             <div class="row">
                 <div class="col-xs-6 col-md-6">
-                    <h3>Acerca de ...</h3>
+                    <h3>{{ $t('footerAcercaDe') }}</h3>
                     <ul>
                         <li>
                             <router-link tag="a" :to="{ name: 'acerca_de' }">
@@ -42,7 +42,7 @@
                                 href="https://carpoolear.com.ar/acerca-de-equipo"
                                 target="_blank"
                             >
-                                Equipo
+                                {{ $t('footerEquipo') }}
                             </a>
                         </li>
                         <li>
@@ -55,7 +55,7 @@
                     </ul>
                 </div>
                 <div class="col-xs-6 col-md-6">
-                    <h3>Ayuda</h3>
+                    <h3>{{ $t('footerAyuda') }}</h3>
                     <ul>
                         <!--<li><a href="https://carpoolear.com.ar/tutoriales.php" target="_blank">Tutoriales de uso</a></li>-->
                         <li>
@@ -63,7 +63,7 @@
                                 href="https://carpoolear.com.ar/plataforma-preguntas-frecuentes"
                                 target="_blank"
                             >
-                                Preguntas frecuentas (FAQ)
+                                {{ $t('footerPreguntasFrecuentes') }}
                             </a>
                         </li>
                         <li>
@@ -71,13 +71,13 @@
                                 href="https://carpoolear.com.ar/plataforma-recomendaciones"
                                 target="_blank"
                             >
-                                Recomendaciones
+                                {{ $t('footerRecomendaciones') }}
                             </a>
                         </li>
                     </ul>
                 </div>
                 <div class="col-xs-6 col-md-6">
-                    <h3>Encontranos en</h3>
+                    <h3>{{ $t('footerEncontranosEn') }}</h3>
                     <ul>
                         <li>
                             <a href="https://www.facebook.com/Carpoolear">
@@ -85,13 +85,13 @@
                                     class="fa fa-facebook"
                                     aria-hidden="true"
                                 ></i>
-                                <span>Facebook</span>
+                                <span>{{ $t('footerFacebook') }}</span>
                             </a>
                         </li>
                         <li>
                             <a href="https://twitter.com/carpoolear">
                                 <i class="fa fa-twitter" aria-hidden="true"></i>
-                                <span>Twitter</span>
+                                <span>{{ $t('footerTwitter') }}</span>
                             </a>
                         </li>
                         <li>
@@ -102,33 +102,33 @@
                                     class="fa fa-instagram"
                                     aria-hidden="true"
                                 ></i>
-                                <span>Instagram</span>
+                                <span>{{ $t('footerInstagram') }}</span>
                             </a>
                         </li>
                         <li>
                             <a href="https://github.com/STS-Rosario">
                                 <i class="fa fa-github" aria-hidden="true"></i>
-                                <span>Github</span>
+                                <span>{{ $t('footerGithub') }}</span>
                             </a>
                         </li>
                         <li>
-                            <a href="mailto://carpoolear@stsrosario.org.ar">
+                            <a :href="'mailto:' + config.admin_email">
                                 <i
                                     class="fa fa-envelope-o"
                                     aria-hidden="true"
                                 ></i>
-                                <span>Correo</span>
+                                <span>{{ $t('footerCorreo') }}</span>
                             </a>
                         </li>
                     </ul>
                 </div>
                 <div class="col-xs-6 col-md-6">
-                    <h3>Información legal</h3>
+                    <h3>{{ $t('footerInformacionLegal') }}</h3>
                     <p>
-                        En ruta desde el año 2013
+                        {{ $t('footerEnRutaDesde') }}
                         <br />
                         <router-link :to="{ name: 'terms' }"
-                            >Términos y condiciones</router-link
+                            >{{ $t('footerTerminosCondiciones') }}</router-link
                         >
                     </p>
                 </div>

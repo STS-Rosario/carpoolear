@@ -33,7 +33,7 @@ export default {
                 maintainAspectRatio: false,
                 title: {
                     display: true,
-                    text: 'Usuarios registrados por mes'
+                    text: this.$t('chartUsuariosRegistradosPorMes')
                 },
                 tooltips: {
                     mode: 'index',
@@ -49,7 +49,7 @@ export default {
                             display: true,
                             scaleLabel: {
                                 display: true,
-                                labelString: 'Mes'
+                                labelString: this.$t('chartMes')
                             },
                             stacked: true
                         }
@@ -59,7 +59,7 @@ export default {
                             display: true,
                             scaleLabel: {
                                 display: true,
-                                labelString: 'Cantidad'
+                                labelString: this.$t('chartCantidad')
                             }
                         }
                     ]
@@ -102,7 +102,7 @@ export default {
                 labels: labels,
                 datasets: [
                     {
-                        label: 'Usuarios',
+                        label: this.$t('chartUsuarios'),
                         backgroundColor: '#0F0',
                         borderColor: '#0F0',
                         data: datasetTotales,

@@ -5,12 +5,12 @@
                 <ul class="nav nav-pills nav-stacked">
                     <li :class="{ active: tabActive === 'profile' }">
                         <router-link :to="{ name: 'profile_update' }"
-                            >Perfil</router-link
+                            >{{ $t('perfil') }}</router-link
                         >
                     </li>
                     <li :class="{ active: tabActive === 'friends' }">
                         <router-link :to="{ name: 'friends_setting' }"
-                            >Amigos</router-link
+                            >{{ $t('amigos') }}</router-link
                         >
                     </li>
                     <!--
