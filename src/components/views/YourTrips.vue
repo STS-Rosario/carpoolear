@@ -31,9 +31,7 @@
 
         <div class="col-xs-24">
             <Loading :data="passengerTrips" :hideOnEmpty="true">
-                <h2 slot="title">
-                    {{ $t('viajesEstoySubido') }}
-                </h2>
+                <h2 slot="title" v-html="$t('viajesEstoySubido')"></h2>
                 <div class="trips-list">
                     <Trip
                         v-for="trip in passengerTrips"
@@ -80,9 +78,7 @@
 
         <div class="col-xs-24" v-if="oldPassengerTrips">
             <Loading :data="oldPassengerTrips" :hideOnEmpty="true">
-                <h2 slot="title">
-                    {{ $t('viajesMeSubi') }}
-                </h2>
+                <h2 slot="title" v-html="$t('viajesMeSubi')"></h2>
                 <div class="trips-list">
                     <Trip
                         v-for="trip in oldPassengerTrips"

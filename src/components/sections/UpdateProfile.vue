@@ -107,9 +107,8 @@
                             type="text"
                             class="form-control"
                             id="input-email"
-                            :placeholder="$t('placeholderNombre')"
-                            :class="{ 'has-error': nombreError.state }"
-                            :disabled="!firstTime"
+                            :placeholder="$t('eMail')"
+                            disabled
                         />
                     </div>
                     <!--<div class="form-group">

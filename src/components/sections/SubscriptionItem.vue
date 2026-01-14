@@ -10,7 +10,7 @@
                     v-if="subscription.from_address"
                 >
                     <div class="suscription-item-detail--content">
-                        <span>{{ $t('origen') }}</span>
+                        <span>{{ $t('origen') }}:</span>
                         <strong>{{ subscription.from_address }}</strong>
                     </div>
                 </div>
@@ -19,7 +19,7 @@
                     v-if="subscription.to_address"
                 >
                     <div class="suscription-item-detail--content">
-                        <span>{{ $t('destino') }}</span>
+                        <span>{{ $t('destino') }}:</span>
                         <strong>{{ subscription.to_address }}</strong>
                     </div>
                 </div>
@@ -28,7 +28,7 @@
                     v-if="subscription.trip_date"
                 >
                     <div class="suscription-item-detail--content">
-                        <span>{{ $t('fechaAproximada') }}</span>
+                        <span>{{ $t('fechaAproximada') }}:</span>
                         <strong>{{
                             subscription.trip_date | moment('DD/MM/YYYY')
                         }}</strong>
@@ -44,7 +44,7 @@
                 </div>
                 <div class="suscription-item-detail" v-if="resultCount > 0">
                     <div class="suscription-item-detail--content">
-                        <span>{{ $t('coincidencias') }}</span>
+                        <span>{{ $t('coincidencias') }}:</span>
                         <span class="badge">
                             {{ resultCount }}
                             {{ resultCount === 20 ? '+' : '' }}

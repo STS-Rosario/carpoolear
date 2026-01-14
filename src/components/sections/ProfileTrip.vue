@@ -85,9 +85,7 @@
 
             <div class="col-xs-24" v-if="oldPassengerTrips">
                 <Loading :data="oldPassengerTrips">
-                    <h2 slot="title">
-                        {{ $t('viajesMeSubi') }}
-                    </h2>
+                    <h2 slot="title" v-html="$t('viajesMeSubi')"></h2>
                     <div class="trips-list">
                         <Trip
                             v-for="trip in oldPassengerTrips"

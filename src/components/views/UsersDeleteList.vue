@@ -77,7 +77,7 @@
                     <div slot="body">
                         <div class="text-left color-black">
                             <div class="form-group" v-if="currentRequest">
-                                <label>{{ $t('idLabel') }} {{ currentRequest.id }}</label>
+                                <label><strong>{{ $t('idLabel') }}:</strong> {{ currentRequest.id }}</label>
                             </div>
                             <div class="form-group" v-if="currentRequest && currentRequest.user">
                                 <label>{{ $t('usuarioLabel') }} {{ currentRequest.user.name }}</label>

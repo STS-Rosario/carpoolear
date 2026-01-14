@@ -8,14 +8,14 @@
             <div class="price-item">
                 <span class="trip_seat-price_value">{{ $n(trip.seat_price_cents / 100, 'currency') }}</span>
                 <span class="trip_seats-available_label">
-                    {{ $t('contribucionPorPersona') }} {{ $t('porPersona') }}
+                    {{ $t('contribucionPorPersona') }} <br/> {{ $t('porPersona') }}
                     <br />
                 </span>
             </div>
             <div class="price-item" v-if="this.config.module_max_price_enabled">
                 <span class="trip_seat-price_value trip_seat-price_recommended_value">{{ $n(recommendedPricePerSeat, 'currency') }}</span>
                 <span class="trip_seats-available_label">
-                    {{ $t('contribucionRecomendada') }}
+                    <span v-html="$t('contribucionRecomendada')"></span>
                     <span>
                         <span
                             class="tooltip-seat-price tooltip-seat-price-passenger"

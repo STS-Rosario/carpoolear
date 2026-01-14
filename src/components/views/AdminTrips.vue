@@ -20,7 +20,7 @@
                             <th scope="col">{{ $t('destino') }}</th>
                             <th scope="col">{{ $t('fecha') }}</th>
                             <th scope="col">{{ $t('hora') }}</th>
-                            <th scope="col">{{ $t('lugaresDisponibles') }}</th>
+                            <th scope="col">{{ $t('asientosTotales') }}</th>
                             <th scope="col">{{ $t('ocupados') }}</th>
                             <th scope="col">{{ $t('solicitudes') }}</th>
                             <th scope="col">{{ $t('estado') }}</th>

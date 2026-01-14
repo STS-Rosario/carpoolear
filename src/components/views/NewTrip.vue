@@ -62,8 +62,8 @@
                                     :class="
                                         trip.is_passenger == 0 ? 'active' : ''
                                     "
+                                    v-html="$t('buscoConductor')"
                                 >
-                                    {{ $t('buscoConductor') }}
                                 </button>
                             </div>
                             <div class="col-xs-12 col-md-12 col-lg-12">

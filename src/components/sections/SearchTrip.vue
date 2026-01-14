@@ -30,7 +30,7 @@
                     @click="isPassenger = false"
                 >
                     <span class="fa fa-car" aria-hidden="true"></span>
-                    <span>{{ $t('buscoConductor') }}</span>
+                    <span v-html="$t('buscoConductor')"></span>
                 </button>
             </div>
             <div class="col-xs-12 col-md-3">

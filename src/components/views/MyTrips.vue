@@ -26,7 +26,7 @@
         <div class="col-xs-24">
             <Loading :data="pendingRequest" :hideOnEmpty="true">
                 <h2 slot="title">
-                    {{ $t('pendientesDeContestar') }}
+                    <strong>{{ $t('pendientesDeContestar') }}</strong>
                 </h2>
                 <div class="request-list">
                     <PendingRequest
@@ -241,7 +241,7 @@
 
         <div class="col-xs-24">
             <h2>
-                {{ $t('misProximosViajes') }}
+                <strong>{{ $t('misProximosViajes') }}</strong>
             </h2>
             <Loading :data="trips">
                 <div class="trips-list">
@@ -269,9 +269,7 @@
 
         <div class="col-xs-24">
             <Loading :data="passengerTrips" :hideOnEmpty="true">
-                <h2 slot="title">
-                    {{ $t('viajesEstoySubido') }}
-                </h2>
+                <h2 slot="title" v-html="$t('viajesEstoySubido')"></h2>
                 <div class="trips-list">
                     <Trip
                         v-for="trip in passengerTrips"
@@ -354,9 +352,7 @@
 
         <div class="col-xs-24" v-if="oldPassengerTrips">
             <Loading :data="oldPassengerTrips" :hideOnEmpty="true">
-                <h2 slot="title">
-                    {{ $t('viajesMeSubi') }}
-                </h2>
+                <h2 slot="title" v-html="$t('viajesMeSubi')"></h2>
                 <div class="trips-list">
                     <Trip
                         v-for="trip in oldPassengerTrips"
