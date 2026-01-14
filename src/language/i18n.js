@@ -954,7 +954,7 @@ const messages = {
         cargandoCalificaciones: 'Cargando calificaciones',
         mis: 'Mis',
         proximos: 'próximos',
-        misProximosViajes: 'Mis próximos viajes',
+        misProximosViajes: 'Mis <strong>próximos</strong> viajes',
         noTenesViajesCreados: 'No tenés viajes creados',
         viajesEstoySubido: 'Viajes a los que <strong>estoy subido</strong>',
         noEstasSubidoViaje: 'No estás subido a ningún viaje',
@@ -2085,7 +2085,7 @@ const messages = {
         retirarSolicitudDeAsientoDeVuelta: 'Withdraw return seat request',
         solicitarAsientoDeVuelta: 'Request return seat',
         coordinateTripTeEnviaUnaConsultaPorTuViajeDesde:
-            'Sends you a query about your trip from',
+            'Sent you a query about your trip from',
         coordinateTripViajeDesde: 'Trip from',
         coordinateTripHacia: 'to',
         coordinateTripDelDia: 'on',

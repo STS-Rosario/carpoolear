@@ -240,8 +240,7 @@
         </div>
 
         <div class="col-xs-24">
-            <h2>
-                <strong>{{ $t('misProximosViajes') }}</strong>
+            <h2 v-html="$t('misProximosViajes')">
             </h2>
             <Loading :data="trips">
                 <div class="trips-list">
