@@ -92,7 +92,7 @@
                 </div>
             </div>
         </template>
-        <div class="reply-box" v-if="showReply">
+        <div class="reply-box" c>
             <label for="reply" class="label label-reply"
                 >{{ $t('rateItemResponderALaCalificacion') }}</label>
             >
