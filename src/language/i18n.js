@@ -275,6 +275,8 @@ const messages = {
         ingresaConCuenta: 'Ingresá con Email',
         debeActivarCuenta:
             'Para ingresar debes activar tu cuenta, te hemos enviado un link de activación a tu email para que puedas activar tu cuenta.',
+        instalar: 'Instalar',
+        donar: 'Donar',
         ingresar: 'Ingresar',
         recordarme: 'Recordarme',
         olvideContra: 'Recuperar contraseña de mi cuenta',
@@ -1634,6 +1636,8 @@ const messages = {
         ingresaConCuenta: 'Log in with Email',
         debeActivarCuenta:
             'To log in you must activate your account, we have sent an activation link to your email so you can activate your account.',
+        instalar: 'Install',
+        donar: 'Donnate',
         ingresar: 'Log in',
         recordarme: 'Remember me',
         olvideContra: 'Recover my account password',
