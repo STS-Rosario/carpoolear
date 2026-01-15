@@ -769,7 +769,11 @@ const messages = {
         noHayNotificaciones: 'No hay notificaciones',
         adminPage: 'Admin Page',
         adminUsers: 'Admin users',
-        adminTrips: 'Admin trips'
+        adminTrips: 'Admin trips',
+        ocupados: 'Ocupados',
+        activar: 'Activar',
+        ocultar: 'Ocultar',
+        precioMaximoExcedido: 'El precio máximo ha sido excedido'
     },
     chl: {
         loginUsuarioPlaceholder: 'Usuario',
@@ -2113,7 +2117,11 @@ const messages = {
         noHayNotificaciones: 'No notifications',
         adminPage: 'Admin Page',
         adminUsers: 'Admin users',
-        adminTrips: 'Admin trips'
+        adminTrips: 'Admin trips',
+        ocupados: 'Occupied',
+        activar: 'Activate',
+        ocultar: 'Hide',
+        precioMaximoExcedido: 'Maximum price exceeded'
     }
 };
 export default messages;
