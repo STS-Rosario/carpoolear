@@ -409,6 +409,7 @@ const messages = {
             'Escribe una referencia sobre el usuario',
         comentar: 'Comentar',
         cancelar: 'Cancelar',
+        cargando: 'Cargando ...',
         misAmigos: 'Mis amigos',
         deseaSerTuAmigo: 'desea ser tu amigo.',
         enProceso: 'En proceso...',
@@ -1438,7 +1439,7 @@ const messages = {
         Ver: 'View',
         Carpooleado: 'Carpooled',
         buscaConQuien: 'Find someone to share your next trip with!',
-        elegiDatos: 'Choose date, origin or destination and find it!',
+        elegiDatos: 'Choose date, departure or destination and find it!',
         ingresaORegistrate: 'Log in with your account or register',
         aqui: 'here',
         paraComenzar: 'to start Carpooling!',
@@ -1471,10 +1472,10 @@ const messages = {
             'The maximum contribution equals fuel costs + tolls divided by the number of people traveling in the car. During pre-trip coordination, anyone can request to do the division with fuel and toll receipts in hand.',
         contribucionMaximaPista:
             "By requesting a contribution above the maximum, the trip may be considered for-profit and therefore illegal passenger transport, potentially invalidating private car insurance and associated third-party coverage. Let's have a good trip by taking care of each other :-D",
-        origenOdestino: 'Origin or destination outside of',
+        origenOdestino: 'Departure or destination outside of',
         habilitaOrigen:
-            'Enables selecting origin or destination outside of Argentina. Remember to check with the car insurance company if you have third-party coverage outside of Argentina. If not, you need to get an extension outside of Argentina to have coverage during the trip',
-        origen: 'Origin',
+            'Enables selecting departure or destination outside of Argentina. Remember to check with the car insurance company if you have third-party coverage outside of Argentina. If not, you need to get an extension outside of Argentina to have coverage during the trip',
+        origen: 'Departure',
         destino: 'Destination',
         distanciaARecorrer: 'Distance to travel',
         tiempoEstimado: 'Estimated travel time',
@@ -1554,11 +1555,11 @@ const messages = {
         telefonoNoValido: 'The phone number you entered is not valid.',
         localidadValida: 'Select a valid location.',
         origenDestinoArgentina:
-            'The origin or destination of your trip must be in Argentina.',
+            'The departure or destination of your trip must be in Argentina.',
         seleccioneLocalidadValida: 'Select a valid location.',
         noHorarioValido: 'You did not enter a valid time.',
         origenDestinoDistintos:
-            'Origin and destination locations must not be the same.',
+            'Departure and destination locations must not be the same.',
         faltaFecha: 'You have not entered any date yet.',
         yaTienes: 'You have not entered any date yet.',
         pasajerosSubidos:
@@ -1768,6 +1769,7 @@ const messages = {
         escribeUnaReferenciaSobreElUsuario: 'Write a review for the user',
         comentar: 'Comment',
         cancelar: 'Cancel',
+        cargando: 'Loading...',
         misAmigos: 'My friends',
         deseaSerTuAmigo: 'wants to be your friend.',
         enProceso: 'In progress...',
@@ -1910,11 +1912,11 @@ const messages = {
         amigosDeAmigos: 'Friends of friends',
         indefinido: 'Undefined',
         km: 'km',
-        origenODestinoFueraDe: 'Origin or destination outside of',
+        origenODestinoFueraDe: 'Departure or destination outside of',
         marcandoEstaOpcionPodrasSeleccionar:
-            'By checking this option you will be able to select origin or destination outside of Argentina. Remember to check with the car insurance company if you have third-party coverage outside of Argentina. If not, check with them to get an extension outside of Argentina, in order to have coverage during the trip',
+            'By checking this option you will be able to select departure or destination outside of Argentina. Remember to check with the car insurance company if you have third-party coverage outside of Argentina. If not, check with them to get an extension outside of Argentina, in order to have coverage during the trip',
         origenYDestinoNoPuedenSerAmbosDelExterior:
-            'Origin and destination cannot both be foreign.',
+            'Departure and destination cannot both be foreign.',
         escribeUnNombre: 'Type a name',
         noSeEncontroNingunUsuario: 'No user found',
         cargandoUsuarios: 'Loading users...',
@@ -2045,7 +2047,7 @@ const messages = {
         rateItemNegativa: 'Negative',
         rateItemViajoAComo: 'Traveled to',
         rateItemComo: 'as',
-        rateItemResponderALaCalificacion: 'Reply to rating',
+        rateItemResponderALaCalificacion: 'Reply to review',
         rateItemResponder: 'Reply',
         rateItemCancelar: 'Cancel',
         rateItemRespondio: 'replied:',
@@ -2115,7 +2117,7 @@ const messages = {
         solicitudFueEnviada: 'The request was sent.',
         teHasSubidoAlViaje: 'You have joined the trip.',
         yaSubidoMismoViaje:
-            'You are already on a trip with the same origin and destination on that date.',
+            'You are already on a trip with the same departure and destination on that date.',
         seHaAlcanzadoElLimiteDeConsultas:
             'The query limit that the user accepts for this trip has been reached.',
         ocurrioUnProblemaAlSolicitar:
