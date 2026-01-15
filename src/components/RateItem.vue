@@ -95,7 +95,6 @@
         <div class="reply-box" c>
             <label for="reply" class="label label-reply"
                 >{{ $t('rateItemResponderALaCalificacion') }}</label>
-            >
             <textarea maxlength="260" v-model="comment" id="reply"></textarea>
             <div class="reply-btns">
                 <button class="btn btn-primary" @click="onReply">
