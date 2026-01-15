@@ -1621,7 +1621,7 @@ const messages = {
         perfil: 'Profile',
         administracion: 'Administration',
         buscoConductor: 'Looking for <strong>Driver</strong>',
-        buscoPasajero: 'Looking for Passenger',
+        buscoPasajero: 'Looking for Passengers',
         precioAsiento: 'Contribution per person (including the driver)',
         iniciarSesion: 'Log in',
         ingresaCuenta: 'Log in with your',
