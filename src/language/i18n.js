@@ -1456,7 +1456,7 @@ const messages = {
         oCreandoUnaCuentaCon: 'or by creating an account with',
         resultadosCercanos: 'Nearby results',
         podesSubscribirte:
-            'You can now subscribe so we can notify you when there is a new trip that matches what you are looking for.',
+            "However, you can subscribe and we'll notify you when a new trip matches your query.",
         crearAlerta: 'Create Alert',
         cargandoMasResultados: 'Loading more results',
         noHayViajes: 'Oops! There are no trips matching the search criteria.',
