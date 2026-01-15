@@ -628,6 +628,7 @@ const messages = {
         y: 'y',
         buenasRutas: '¡Buenas rutas!',
         apple: 'Apple',
+        facebook: 'Facebook',
         notificacionesNoHabilitadas: 'No tenés habilitadas las notificaciones',
         notificacionesNoAceptastePermisos:
             'Parece que no aceptaste los permisos para que te podamos enviar notificaciones (en nuevos mensajes, etc.), presioná el botón para hacerlo:',
@@ -1981,6 +1982,7 @@ const messages = {
         y: 'and',
         buenasRutas: 'Safe travels!',
         apple: 'Apple',
+        facebook: 'Facebook',
         notificacionesNoHabilitadas: "You don't have notifications enabled",
         notificacionesNoAceptastePermisos:
             "It seems you didn't accept the permissions for us to send you notifications (for new messages, etc.), press the button to do so:",
