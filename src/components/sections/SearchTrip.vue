@@ -30,7 +30,7 @@
                     @click="isPassenger = false"
                 >
                     <span class="fa fa-car" aria-hidden="true"></span>
-                    <span>{{ $t('buscoConductor') }}</span>
+                    <span v-html="$t('buscoConductor')"></span>
                 </button>
             </div>
             <div class="col-xs-12 col-md-3">
@@ -74,7 +74,7 @@
             </div>
             <div class="col-xs-24 col-md-5 gmap-autocomplete origin">
                 <autocomplete
-                    :placeholder="'Origen'"
+                    :placeholder="$t('origen')"
                     name="from_town"
                     ref="from_town"
                     :value="from_town.name"
@@ -90,7 +90,7 @@
                         aria-hidden="true"
                     ></i>
                 </div>
-                <div class="optional-warning text-center">(opcional)</div>
+                <div class="optional-warning text-center">({{ $t('opcional') }})</div>
                 <div class="swap btn">
                     <img
                         alt="swap"
@@ -108,7 +108,7 @@
             </div>
             <div class="col-xs-24 col-md-5 gmap-autocomplete destiny">
                 <autocomplete
-                    :placeholder="'Destino'"
+                    :placeholder="$t('destino')"
                     name="to_town"
                     ref="to_town"
                     :value="to_town.name"
@@ -124,7 +124,7 @@
                         aria-hidden="true"
                     ></i>
                 </div>
-                <div class="optional-warning text-center">(opcional)</div>
+                <div class="optional-warning text-center">({{ $t('opcional') }})</div>
             </div>
             <div class="col-xs-24 col-md-4 no-padding">
                 <DatePicker
@@ -133,11 +133,11 @@
                     :minDate="minDate"
                     :class="{ 'has-error': dateError.state }"
                 ></DatePicker>
-                <div class="optional-warning text-center">(opcional)</div>
+                <div class="optional-warning text-center">({{ $t('opcional') }})</div>
             </div>
             <div class="col-xs-24 col-md-3 col-lg-4">
                 <button class="btn btn-primary btn-search" @click="emit">
-                    Buscar
+                    {{ $t('buscar') }} 
                 </button>
             </div>
         </div>

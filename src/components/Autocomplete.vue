@@ -32,7 +32,7 @@
                     class="ajax-loader"
                     v-if="this.waiting"
                 />
-                <span>© OpenStreetMap</span>
+                <span class="osm-copyright">© OpenStreetMap</span>
             </small>
         </div>
     </div>

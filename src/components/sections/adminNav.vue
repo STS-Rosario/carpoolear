@@ -2,15 +2,15 @@
     <div class="col-md-20 col-md-offset-2">
         <div class="nav nav-tabs">
             <li>
-                <router-link :to="{ name: 'admin-page' }">Graficos</router-link>
+                <router-link :to="{ name: 'admin-page' }">{{ $t('adminNavGraficos') }}</router-link>
             </li>
             <li>
                 <router-link :to="{ name: 'admin-users' }"
-                    >Usuarios</router-link
+                    >{{ $t('adminNavUsuarios') }}</router-link
                 >
             </li>
             <li>
-                <router-link :to="{ name: 'admin-trips' }">Viajes</router-link>
+                <router-link :to="{ name: 'admin-trips' }">{{ $t('adminNavViajes') }}</router-link>
             </li>
         </div>
     </div>

@@ -22,11 +22,11 @@
                 :name="'modal'"
                 v-if="showModalRequestSeat"
                 @close="onModalClose"
-                :title="'Carpoodatos'"
+                :title="$t('pendingRequestCarpoodatos')"
                 :body="'Body'"
             >
                 <h3 slot="header">
-                    <span>¡Carpoodatos!</span>
+                    <span>{{ $t('pendingRequestCarpoodatos') }}</span>
                     <i
                         v-on:click="onModalClose"
                         class="fa fa-times float-right-close"
@@ -35,35 +35,23 @@
                 <div slot="body">
                     <div class="text-left carpoodatos">
                         <p>
-                            Antes de aceptar solicitud de asiento, mandale
-                            mensaje a la otra persona para coordinar todo lo
-                            vinculado al viaje: punto de encuentro, punto de
-                            llegada, tamaño de bolsos, contribución para
-                            combustible y peajes, etc.
+                            {{ $t('pendingRequestAntesDeAceptarSolicitud') }}
                         </p>
                         <p>
-                            Si aceptás una solicitud de asiento, se genera el
-                            compromiso de viajar entre vos y la otra persona,
-                            habilitándose la posibilidad de calificación 24hs
-                            después de comenzado el viaje. Tendrán 14 días para
-                            calificarse.
+                            {{ $t('pendingRequestSiAceptasUnaSolicitud') }}
                         </p>
                         <p>
-                            Se podrán calificar aunque canceles el viaje o bajes
-                            a / se baje la otra persona.
+                            {{ $t('pendingRequestPodranCalificarseAunque') }}
                         </p>
                         <p>
-                            No ofrezcas un viaje si no tenés seguridad de que
-                            vas a viajar. Si ocurriera algo que te obligue a
-                            cancelarlo, avisale lo más rápido que puedas a las
-                            personas que iban a viajar.
+                            {{ $t('pendingRequestNoPidasAsiento') }}
                         </p>
                         <p>
-                            Cualquier duda escribinos a
-                            <a href="mailto:carpoolear@stsrosario.org.ar">
-                                carpoolear@stsrosario.org.ar
+                            {{ $t('pendingRequestCualquierDudaEscribinos') }}
+                            <a :href="'mailto:' + config.admin_email">
+                                {{ config.admin_email }}
                             </a>
-                            o nuestras redes sociales.
+                            {{ $t('pendingRequestONuestrasRedesSociales') }}
                         </p>
                     </div>
                     <div class="check" style="margin-bottom: 10px">
@@ -74,7 +62,7 @@
                                 value="0"
                                 v-model="acceptRequestValue"
                             />
-                            <span>No volver a mostrar mensaje</span>
+                            <span>{{ $t('pendingRequestNoVolverAMostrarMensaje') }}</span>
                         </label>
                     </div>
                     <div class="text-center">
@@ -87,13 +75,13 @@
                                 class="blue"
                                 v-if="acceptInProcess"
                             ></spinner>
-                            <span v-else>Aceptar</span>
+                            <span v-else>{{ $t('pendingRequestAceptar') }}</span>
                         </button>
                         <button
                             class="btn btn-secondary"
                             @click="onModalToChat"
                         >
-                            Enviar Mensaje
+                            {{ $t('pendingRequestEnviarMensaje') }}
                         </button>
                     </div>
                 </div>
@@ -101,11 +89,11 @@
             <div class="rate-pending-message">
                 <div class="rate-pending-message--content">
                     <strong>{{ user.name }}</strong>
-                    quiere subirse al viaje hacia
+                    {{ $t('pendingRequestQuiereSubirseAlViaje') }}
                     <strong>{{
                         trip.points[trip.points.length - 1].json_address.ciudad
                     }}</strong>
-                    del día {{ trip.trip_date | moment('DD/MM/YYYY') }} a las
+                    {{ $t('pendingRequestDelDia') }} {{ trip.trip_date | moment('DD/MM/YYYY') }} {{ $t('pendingRequestALas') }} las
                     {{ trip.trip_date | moment('HH:mm') }}.
                     <div class="pending-buttons">
                         <button
@@ -117,7 +105,7 @@
                                 class="blue"
                                 v-if="acceptInProcess"
                             ></spinner>
-                            <span v-else>Aceptar</span>
+                            <span v-else>{{ $t('pendingRequestAceptar') }}</span>
                         </button>
                         <button
                             class="btn btn-primary"
@@ -128,12 +116,12 @@
                                 class="blue"
                                 v-if="rejectInProcess"
                             ></spinner>
-                            <span v-else>Rechazar</span>
+                            <span v-else>{{ $t('pendingRequestRechazar') }}</span>
                         </button>
                     </div>
                     <div class="message-button">
                         <button class="btn btn-secondary" @click="chat">
-                            Enviar Mensaje
+                            {{ $t('pendingRequestEnviarMensaje') }}
                         </button>
                     </div>
                 </div>
@@ -201,7 +189,7 @@ export default {
                 .catch((error) => {
                     if (this.$checkError(error, 'not_seat_available')) {
                         dialogs.message(
-                            'No puedes aceptar esta solicitud, todos los asientos del viaje están ocupados.',
+                            this.$t('pendingRequestNoPuedesAceptarEstaSolicitud'),
                             { duration: 10, estado: 'error' }
                         );
                         return;

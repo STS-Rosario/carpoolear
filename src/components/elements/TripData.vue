@@ -2,54 +2,54 @@
     <div class="trip-data--container">
         <div class="row trip-data" v-if="trip.is_passenger">
             <strong class="warning-is-passenger"
-                >Pasajero que busca viaje</strong
+                >{{ $t('pasajeroQueBuscaViaje') }}</strong
             >
         </div>
         <div class="row trip-data">
             <span class="trip-data--subtitle" v-if="tripCardTheme === 'light'">
-                Privacidad del viaje
+                {{ $t('privacidadViaje') }}
             </span>
             <em v-if="trip.friendship_type_id == 2">
                 <i class="fa fa-globe" aria-hidden="true"></i>
-                Viaje público
+                {{ $t('publico') }}
             </em>
             <em v-if="trip.friendship_type_id == 1">
                 <i class="fa fa-users" aria-hidden="true"></i>
-                Amigos de amigos
+                {{ $t('amigosamigos') }}
             </em>
             <em v-if="trip.friendship_type_id == 0">
                 <i class="fa fa-user" aria-hidden="true"></i>
-                Sólo amigos
+                {{ $t('soloAmigos') }}
             </em>
             <span class="trip-data--subtitle" v-if="tripCardTheme === 'light'">
-                Preferencias del viaje
+                {{ $t('preferenciasViaje') }}
             </span>
             <template v-if="!isPassengersView">
                 <em v-if="trip.allow_smoking > 0">
                     <svgItem icon="smoking" size="18"></svgItem>
-                    Se puede fumar
+                    {{ $t('sePuedeFumar') }}
                 </em>
                 <em v-else>
                     <svgItem icon="no-smoking" size="18"></svgItem>
-                    No fumar
+                    {{ $t('nofumar') }}
                 </em>
 
                 <em v-if="trip.allow_animals > 0">
                     <svgItem icon="pets" size="18"></svgItem>
-                    Acepta mascotas
+                    {{ $t('aceptaMascotas') }}
                 </em>
                 <em v-else>
                     <svgItem icon="no-animals" size="18"></svgItem>
-                    No mascotas
+                    {{ $t('noanimales') }}
                 </em>
 
                 <em v-if="trip.allow_kids > 0">
                     <svgItem icon="kids" size="18"></svgItem>
-                    Acepta niños
+                    {{ $t('aceptaNinos') }}
                 </em>
                 <em v-else>
                     <svgItem icon="no-kids" size="18"></svgItem>
-                    No niños
+                    {{ $t('noninos') }}
                 </em>
             </template>
         </div>

@@ -3,8 +3,8 @@
         <div class="rate-pending_component clearfix" v-if="trip">
             <div class="rate-pending-message">
                 <div class="rate-pending-message--content">
-                    <h3>Confirmá tu asiento</h3>
-                    Te han aceptado en el viaje hacia
+                    <h3>{{ $t('pendingPaymentConfirmarTuAsiento') }}</h3>
+                    {{ $t('pendingPaymentTeHanAceptadoEnElViajeHacia') }}
                     <strong>
                         {{
                             trip.points[trip.points.length - 1].json_address
@@ -12,27 +12,26 @@
                                       .json_address.name
                                 : trip.points[trip.points.length - 1].address
                         }}
-                        del día {{ trip.trip_date | moment('DD/MM/YYYY') }} a
-                        las
+                        {{ $t('pendingRequestDelDia') }} {{ trip.trip_date | moment('DD/MM/YYYY') }} {{ $t('pendingRequestALas') }}
                         {{ trip.trip_date | moment('HH:mm') }}
                     </strong>
-                    ahora debes realizar el pago de
+                    {{ $t('pendingPaymentAhoraDebesRealizarElPagoDe') }}
                     <strong>{{ $n(trip.seat_price_cents / 100, 'currency') }}</strong>
-                    para confirmar tu asiento.
+                    {{ $t('pendingPaymentParaConfirmarTuAsiento') }}
                     <div class="pending-buttons">
                         <button
                             class="btn btn-accept-request"
                             :disabled="acceptInProcess"
                             @click="onAcceptRequest"
                         >
-                            Pagar
+                            {{ $t('pendingPaymentPagar') }}
                         </button>
                         <button
                             class="btn btn-default"
                             :disabled="rejectInProcess"
                             @click="onCancelRequest"
                         >
-                            Cancelar
+                            {{ $t('cancelar') }}
                         </button>
                     </div>
                 </div>
@@ -94,7 +93,7 @@ export default {
         },
 
         onCancelRequest() {
-            if (window.confirm('¿Estás seguro que deseas bajarte del viaje?')) {
+            if (window.confirm(this.$t('seguroBajarteViaje'))) {
                 this.rejectInProcess = true;
                 this.cancel({
                     user: this.currentUser,
@@ -103,7 +102,7 @@ export default {
                 })
                     .then(() => {
                         this.rejectInProcess = false;
-                        dialogs.message('Te has bajado del viaje.');
+                        dialogs.message(this.$t('teHasBajadoViaje'));
                     })
                     .catch(() => {
                         this.rejectInProcess = false;

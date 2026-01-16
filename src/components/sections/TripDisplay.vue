@@ -2,14 +2,14 @@
     <div v-if="trip">
         <Modal :clickOutside="clickOutside" :name="'tripModel_' + trip.id">
             <div slot="header" class="trip-display-title">
-                Detalles del viaje
+                {{ $t('detallesDelViaje') }}
             </div>
             <div slot="body">
                 <div class="row">
                     <div class="row">
                         <div class="col-md-24">
                             <span>
-                                <h4>Itinerario:</h4>
+                                <h4>{{ $t('itinerario') }}:</h4>
                                 <div v-for="point in trip.points">
                                     {{ point.address }}
                                 </div>
@@ -22,27 +22,27 @@
                             v-on:click="openProfile(trip.user.id)"
                         >
                             <span>
-                                <h4>Nombre:</h4>
+                                <h4>{{ $t('nombre') }}:</h4>
                                 {{ trip.user.name }}
                             </span>
                         </div>
                         <div class="col-md-6">
                             <span>
-                                <h4>Tipo:</h4>
+                                <h4>{{ $t('tipo') }}:</h4>
                                 {{
-                                    trip.is_passenger ? 'pasajero' : 'conductor'
+                                    trip.is_passenger ? $t('pasajero') : $t('conductor')
                                 }}
                             </span>
                         </div>
                         <div class="col-md-6">
                             <span>
-                                <h4>Fecha:</h4>
+                                <h4>{{ $t('fecha') }}:</h4>
                                 {{ trip.trip_date.slice(0, 10) }}
                             </span>
                         </div>
                         <div class="col-md-6">
                             <span>
-                                <h4>Hora:</h4>
+                                <h4>{{ $t('hora') }}:</h4>
                                 {{ trip.trip_date.slice(10, 20) }}
                             </span>
                         </div>
@@ -50,7 +50,7 @@
                     <div class="row">
                         <div class="col-md-24">
                             <span>
-                                <h4>Descripción:</h4>
+                                <h4>{{ $t('descripcion') }}:</h4>
                                 {{ trip.description }}
                             </span>
                         </div>
@@ -58,13 +58,13 @@
                     <div class="row">
                         <div class="col-md-24">
                             <h4>
-                                Estado:
+                                {{ $t('estado') }}:
                                 {{
                                     trip.hidden
-                                        ? 'Oculto'
+                                        ? $t('oculto')
                                         : trip.deleted
-                                        ? 'Borrado'
-                                        : 'Activo'
+                                        ? $t('borrado')
+                                        : $t('activo')
                                 }}
                             </h4>
                         </div>
@@ -72,38 +72,38 @@
                     <div class="row">
                         <div class="col-md-6">
                             <span>
-                                <h4>Asientos:</h4>
+                                <h4>{{ $t('asientos') }}:</h4>
                                 {{ trip.total_seats }}
                             </span>
                         </div>
                         <div class="col-md-6">
                             <span>
-                                <h4>Visibilidad:</h4>
+                                <h4>{{ $t('visibilidad') }}:</h4>
                                 {{ visibilityParser(trip.friendship_type_id) }}
                             </span>
                         </div>
                         <div class="col-md-6">
                             <span>
-                                <h4>Distancia:</h4>
-                                {{ Math.round(trip.distance / 1000) + 'km' }}
+                                <h4>{{ $t('distancia') }}:</h4>
+                                {{ Math.round(trip.distance / 1000) + $t('km') }}
                             </span>
                         </div>
                         <div class="col-md-6" v-if="trip.car">
                             <span>
-                                <h4>Auto:</h4>
+                                <h4>{{ $t('auto') }}:</h4>
                                 {{ trip.car.patente }}
                             </span>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <span><h4>Solicitudes:</h4></span>
+                            <span><h4>{{ $t('solicitudes') }}:</h4></span>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <span>
-                                <h5>Aceptadas:</h5>
+                                <h5>{{ $t('aceptadas') }}:</h5>
                                 <div
                                     v-for="pas in trip.allPassengerRequest"
                                     v-on:click="openProfile(pas.user.id)"
@@ -118,7 +118,7 @@
                         </div>
                         <div class="col-md-6">
                             <span>
-                                <h5>Rechazadas:</h5>
+                                <h5>{{ $t('rechazadas') }}:</h5>
                                 <div
                                     v-for="pas in trip.allPassengerRequest"
                                     v-on:click="openProfile(pas.user.id)"
@@ -133,7 +133,7 @@
                         </div>
                         <div class="col-md-6">
                             <span>
-                                <h5>Canceladas:</h5>
+                                <h5>{{ $t('canceladas') }}:</h5>
                                 <div
                                     v-for="pas in trip.allPassengerRequest"
                                     v-on:click="openProfile(pas.user.id)"
@@ -148,7 +148,7 @@
                         </div>
                         <div class="col-md-6">
                             <span>
-                                <h5>Pendientes:</h5>
+                                <h5>{{ $t('pendientes') }}:</h5>
                                 <div
                                     v-for="pas in trip.allPassengerRequest"
                                     v-on:click="openProfile(pas.user.id)"
@@ -165,7 +165,7 @@
                     <div class="row">
                         <div class="col-md-24">
                             <span v-if="Array.isArray(trip.ratings)">
-                                <h4>Calficacion:</h4>
+                                <h4>{{ $t('calificacion') }}:</h4>
                                 <div
                                     v-for="rating in trip.ratings.filter(
                                         (r) => r.voted > 0
@@ -173,23 +173,23 @@
                                 >
                                     <span>
                                         <strong>{{ rating.from.name }}</strong>
-                                        califico a
+                                        {{ $t('calificadoA') }}
                                         <strong>{{ rating.to.name }}</strong>
-                                        como
+                                        {{ $t('como') }}
                                         {{
                                             rating.rating
-                                                ? 'positivo'
-                                                : 'negativo'
+                                                ? $t('positivo')
+                                                : $t('negativo')
                                         }}
-                                        en
+                                        {{ $t('en') }}
                                         {{
                                             rating.rate_at
                                                 ? rating.rate_at.slice(0, 10)
-                                                : 'undefined'
+                                                : $t('indefinido')
                                         }}
                                         {{
                                             rating.comment
-                                                ? 'con el comentario: ' +
+                                                ? $t('conElComentario') + ': ' +
                                                   rating.comment
                                                 : ''
                                         }}
@@ -230,13 +230,13 @@ export default {
         visibilityParser(id) {
             switch (id) {
                 case 0:
-                    return 'Amigos';
+                    return this.$t('amigos');
                 case 1:
-                    return 'Amigos de amigos';
+                    return this.$t('amigosDeAmigos');
                 case 2:
-                    return 'Publico';
+                    return this.$t('publico');
                 default:
-                    return 'Indefinido';
+                    return this.$t('indefinido');
             }
         }
     },

@@ -3,6 +3,7 @@ import * as types from '../mutation-types';
 import globalStore from '../index';
 import { checkError } from '../../../utils/helpers';
 import dialogs from '../../services/dialogs.js';
+import { i18n } from '../../main';
 
 /* eslint-disable no-undef */
 
@@ -46,9 +47,9 @@ const actions = {
                 // HANDLE SUCCESS
                 if (response && response.data && response.data.request_state) {
                     if (response.data.request_state === 0) {
-                        dialogs.message('La solicitud fue enviada.');
+                        dialogs.message(i18n.t('solicitudFueEnviada'));
                     } else if (response.data.request_state === 1) {
-                        dialogs.message('Te has subido al viaje.');
+                        dialogs.message(i18n.t('teHasSubidoAlViaje'));
                     } else if (
                         response.data.request_state === 4 &&
                         this.config.module_trip_seats_payment
@@ -74,30 +75,29 @@ const actions = {
                             );
                         }
                     } else {
-                        dialogs.message('La solicitud fue enviada.');
+                        dialogs.message(i18n.t('solicitudFueEnviada'));
                     }
                 } else {
-                    dialogs.message('La solicitud fue enviada.');
+                    dialogs.message(i18n.t('solicitudFueEnviada'));
                 }
                 return Promise.resolve(response);
             })
             .catch((error) => {
                 console.error(error);
                 if (checkError(error, 'user_has_another_similar_trip')) {
-                    dialogs.message(
-                        'Ya te encuentras subido en un viaje con el mismo origen y destino en esa fecha.',
-                        { duration: 10, estado: 'error' }
-                    );
+                    dialogs.message(i18n.t('yaSubidoMismoViaje'), {
+                        duration: 10,
+                        estado: 'error'
+                    });
                 } else if (checkError(error, 'user_has_reach_request_limit')) {
                     dialogs.message(
-                        'Se ha alcanzado el límite de consultas que el usuario acepta por este viaje.',
+                        i18n.t('seHaAlcanzadoElLimiteDeConsultas'),
                         { duration: 10, estado: 'error' }
                     );
                 } else {
-                    dialogs.message(
-                        'Ocurrió un problema al solicitar, por favor aguarde unos instante e intentelo nuevamente.',
-                        { estado: 'error' }
-                    );
+                    dialogs.message(i18n.t('ocurrioUnProblemaAlSolicitar'), {
+                        estado: 'error'
+                    });
                 }
                 return Promise.reject(error);
             });

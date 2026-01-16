@@ -32,7 +32,7 @@ export default {
                 maintainAspectRatio: false,
                 title: {
                     display: true,
-                    text: 'Viajes de conductores en la plataforma'
+                    text: this.$t('chartViajesDeConductoresEnLaPlataforma')
                 },
                 tooltips: {
                     mode: 'index',
@@ -48,7 +48,7 @@ export default {
                             display: true,
                             scaleLabel: {
                                 display: true,
-                                labelString: 'Mes'
+                                labelString: this.$t('chartMes')
                             }
                         }
                     ],
@@ -57,7 +57,7 @@ export default {
                             display: true,
                             scaleLabel: {
                                 display: true,
-                                labelString: 'Cantidad'
+                                labelString: this.$t('chartCantidad')
                             }
                         }
                     ]
@@ -109,7 +109,7 @@ export default {
                     labels: etiquetas,
                     datasets: [
                         {
-                            label: 'Cantidad de viajes',
+                            label: this.$t('chartCantidadDeViajes'),
                             backgroundColor: '#F00',
                             borderColor: '#F00',
                             data: datos,

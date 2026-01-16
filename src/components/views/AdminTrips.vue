@@ -15,15 +15,15 @@
                 <table class="table table-dark">
                     <thead>
                         <tr>
-                            <th scope="col">Usuario</th>
-                            <th scope="col">Desde</th>
-                            <th scope="col">Hasta</th>
-                            <th scope="col">Fecha</th>
-                            <th scope="col">Hora</th>
-                            <th scope="col">Asientos Totales</th>
-                            <th scope="col">Ocupados</th>
-                            <th scope="col">Solicitudes</th>
-                            <th scope="col">Estado</th>
+                            <th scope="col">{{ $t('usuario') }}</th>
+                            <th scope="col">{{ $t('origen') }}</th>
+                            <th scope="col">{{ $t('destino') }}</th>
+                            <th scope="col">{{ $t('fecha') }}</th>
+                            <th scope="col">{{ $t('hora') }}</th>
+                            <th scope="col">{{ $t('asientosTotales') }}</th>
+                            <th scope="col">{{ $t('ocupados') }}</th>
+                            <th scope="col">{{ $t('solicitudes') }}</th>
+                            <th scope="col">{{ $t('estado') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -42,10 +42,10 @@
                             <td>
                                 {{
                                     viaje.hidden
-                                        ? 'Oculto'
-                                        : viaje.deleted
-                                        ? 'Borrado'
-                                        : 'Activo'
+                                        ? $t('oculto')
+                                            : viaje.deleted
+                                            ? $t('borrado')
+                                            : $t('activo')
                                 }}
                                 <button
                                     v-if="!viaje.deleted"
@@ -54,7 +54,7 @@
                                         onChangeVisibility(viaje.id)
                                     "
                                 >
-                                    {{ viaje.hidden ? 'Activar' : 'Ocultar' }}
+                                    {{ viaje.hidden ? $t('activar') : $t('ocultar') }}
                                 </button>
                             </td>
                         </tr>

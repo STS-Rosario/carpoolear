@@ -66,7 +66,7 @@
             las charlas del viaje. Surgiendo posibilidades de trabajo y nuevos
             contactos, intercambiando puntos de vista sobre distintos temas,
             generando confianza entre la gente, formando hasta un sentimiento de
-            “comunidad carpoolera”. Esto va logrando un cambio cultural frente a
+            "comunidad carpoolera". Esto va logrando un cambio cultural frente a
             las personas desconocidas, además de viajes mucho más entretenidos y
             divertidos.
         </p>
@@ -109,7 +109,7 @@
             El carpooling tiene diferentes impactos positivos sobre la sociedad,
             alienta la sociabilización entre desconocidos, disminuye la cantidad
             de autos circulantes con los beneficios que esto significa y
-            representa un beneficio económico para los usuarios. Por eso creemos
+            representa un beneficio económico para los usuarios. Por eso creamos
             importante alentar esta práctica y concientizar a las personas para
             que hagan un uso más racional del automóvil.
         </p>
@@ -130,18 +130,18 @@
         <h2>Premios</h2>
 
         <ul class="list">
-            <li>Ashoka - “Avancemos” (2011 y 2012)</li>
+            <li>Ashoka - "Avancemos" (2011 y 2012)</li>
 
-            <li>Gobierno de la Provincia de Santa Fe - “Ingenia 3” (2012)</li>
+            <li>Gobierno de la Provincia de Santa Fe - "Ingenia 3" (2012)</li>
 
             <li>
-                Seleccionado por el Programa “Jóvenes Líderes Emprendedores
-                Sociales” (Ashoka Avancemos-SAP) (2012)
+                Seleccionado por el Programa "Jóvenes Líderes Emprendedores
+                Sociales" (Ashoka Avancemos-SAP) (2012)
             </li>
 
             <li>
-                1º Mención del Premio Schiffrin, 12ª Convocatoria “Innovación
-                por el Ambiente” de la fundación FARN Argentina (2013)
+                1º Mención del Premio Schiffrin, 12ª Convocatoria "Innovación
+                por el Ambiente" de la fundación FARN Argentina (2013)
             </li>
 
             <li>Espacio Santafesino (2016)</li>

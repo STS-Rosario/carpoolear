@@ -34,7 +34,7 @@ export default {
                 maintainAspectRatio: false,
                 title: {
                     display: true,
-                    text: 'Asientos'
+                    text: this.$t('chartAsientos')
                 },
                 tooltips: {
                     mode: 'index',
@@ -50,7 +50,7 @@ export default {
                             display: true,
                             scaleLabel: {
                                 display: true,
-                                labelString: 'Mes'
+                                labelString: this.$t('chartMes')
                             },
                             stacked: true
                         }
@@ -60,7 +60,7 @@ export default {
                             display: true,
                             scaleLabel: {
                                 display: true,
-                                labelString: 'Cantidad'
+                                labelString: this.$t('chartCantidad')
                             },
                             stacked: true
                         }
@@ -133,14 +133,14 @@ export default {
                     labels: etiquetas,
                     datasets: [
                         {
-                            label: 'Ocupados',
+                            label: this.$t('chartOcupados'),
                             borderColor: 'blue',
                             data: ocupados,
                             backgroundColor: 'rgb(0, 0, 255, 0.5)',
                             fill: true
                         },
                         {
-                            label: 'No ocupados',
+                            label: this.$t('chartNoOcupados'),
                             backgroundColor: 'rgb(255, 0, 0, 0.5)',
                             borderColor: '#F00',
                             data: desocupados,

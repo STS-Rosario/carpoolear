@@ -8,21 +8,18 @@
             <div class="price-item">
                 <span class="trip_seat-price_value">{{ $n(trip.seat_price_cents / 100, 'currency') }}</span>
                 <span class="trip_seats-available_label">
-                    Contribución 
+                    {{ $t('contribucionPorPersona') }} <br/> {{ $t('porPersona') }}
                     <br />
-                    por persona
                 </span>
             </div>
             <div class="price-item" v-if="this.config.module_max_price_enabled">
                 <span class="trip_seat-price_value trip_seat-price_recommended_value">{{ $n(recommendedPricePerSeat, 'currency') }}</span>
                 <span class="trip_seats-available_label">
-                    Contribución 
-                    <br />
-                    recomendada
-                    <span>            
+                    <span v-html="$t('contribucionRecomendada')"></span>
+                    <span>
                         <span
                             class="tooltip-seat-price tooltip-seat-price-passenger"
-                            data-tooltip="Calculado en base a nafta premium, consumo promedio alto, peajes y Sellado de Viaje incluídos (si aplica)"
+                            :data-tooltip="$t('calculadoEnBaseNafta')"
                         >
                             <i
                                 class="fa fa-info-circle"

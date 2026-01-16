@@ -10,7 +10,7 @@
                         class="btn btn-link"
                         style="display: block; text-align: center; margin-top: -10px;margin-bottom: 10px;font-size: 16px;"
                     >
-                        Pedidos de eliminación de cuenta
+                        {{ $t('pedidosDeEliminacionDeCuenta') }}
                     </router-link>
                 <div class="col-md-20 col-md-offset-2">
                     <div class="col-sm-8 col-md-8">
@@ -23,7 +23,7 @@
                                             v-on:keyup="onSearchUsers"
                                             type="text"
                                             class="form-control"
-                                            placeholder="Escribe un nombre y presiona buscar"
+                                            :placeholder="$t('escribeUnNombreYPresionaBuscar')"
                                         />
                                     </div>
                                 </li>
@@ -94,7 +94,7 @@
                                             class="list-group-item alert alert-warning"
                                             role="alert"
                                         >
-                                            No se encontro ningun usuario
+                                            {{ $t('noSeEncontroNingunUsuario') }}
                                         </li>
                                         <li
                                             slot="loading"
@@ -106,7 +106,7 @@
                                                 alt=""
                                                 class="ajax-loader"
                                             />
-                                            Cargando usuarios ...
+                                            {{ $t('cargandoUsuarios') }}
                                         </li>
                                     </Loading>
                                 </template>
@@ -120,7 +120,7 @@
                         <div class="settings-container">
                             <div class="form-group">
                                 <label for="input-name"
-                                    >Nombre y apellido</label
+                                    >{{ $t('nombreYApellido') }}</label
                                 >
                                 <input
                                     maxlength="25"
@@ -128,7 +128,7 @@
                                     type="text"
                                     class="form-control"
                                     id="input-name"
-                                    placeholder="Nombre"
+                                    :placeholder="$t('nombre')"
                                 />
                                 <span class="error" v-if="nombreError.state">
                                     {{ nombreError.message }}
@@ -136,25 +136,25 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="input-email">E-mail</label>
+                                <label for="input-email">{{ $t('eMail') }}</label>
                                 <input
                                     maxlength="40"
                                     v-model="newInfo.email"
                                     type="text"
                                     class="form-control"
                                     id="input-email"
-                                    placeholder="E-mail"
+                                    :placeholder="$t('eMail')"
                                 />
                             </div>
 
                             <div class="form-group">
                                 <label for="input-description"
-                                    >Acerca de mi</label
+                                    >{{ $t('acercaDeMi') }}</label
                                 >
                                 <textarea
                                     maxlength="1000"
                                     v-model="newInfo.description"
-                                    placeholder="Descripción"
+                                    :placeholder="$t('descripcion')"
                                 ></textarea>
                                 <span
                                     class="error textarea"
@@ -166,18 +166,18 @@
 
                             <div class="form-group">
                                 <label for="input-private-note"
-                                    >Nota privada</label
+                                    >{{ $t('notaPrivada') }}</label
                                 >
                                 <textarea
                                     maxlength="1000"
                                     v-model="newInfo.private_note"
-                                    placeholder="Nota sólo visible por admins"
+                                    :placeholder="$t('notaSoloVisiblePorAdmins')"
                                 ></textarea>
                             </div>
 
                             <div class="form-group">
                                 <label for="input-dni"
-                                    >Número de documento</label
+                                    >{{ $t('numeroDeDocumento') }}</label
                                 >
                                 <input
                                     type="tel"
@@ -187,7 +187,7 @@
                                     @paste="handleDniPaste"
                                     class="form-control"
                                     id="input-dni"
-                                    placeholder="DNI"
+                                    :placeholder="$t('doc')"
                                     maxlength="11"
                                 />
                                 <span class="error" v-if="dniError.state">
@@ -197,7 +197,7 @@
 
                             <div class="form-group">
                                 <label for="input-telefono"
-                                    >Número de teléfono</label
+                                    >{{ $t('numeroDeTelefono') }}</label
                                 >
                                 <input
                                     maxlength="20"
@@ -207,7 +207,7 @@
                                     type="tel"
                                     class="form-control"
                                     id="input-phone"
-                                    placeholder="Número de teléfono (al menos 7 números)"
+                                    :placeholder="$t('numeroDeTelefonoAlMenos7Numeros')"
                                 />
                                 <span class="error" v-if="phoneError.state">
                                     {{ phoneError.message }}
@@ -234,7 +234,7 @@
 
                             <div class="form-group">
                                 <label for="input-pass"
-                                    >Ingrese su nueva contraseña</label
+                                    >{{ $t('ingreseSuNuevaContrasena') }}</label
                                 >
                                 <input
                                     maxlength="40"
@@ -242,7 +242,7 @@
                                     type="password"
                                     class="form-control"
                                     id="input-pass"
-                                    placeholder="Contraseña"
+                                    :placeholder="$t('contrasena')"
                                 />
                                 <input
                                     maxlength="40"
@@ -250,7 +250,7 @@
                                     type="password"
                                     class="form-control"
                                     id="input-pass-confirm"
-                                    placeholder="Repetir contraseña"
+                                    :placeholder="$t('repetirContrasena')"
                                 />
                                 <span class="error" v-if="passError.state">
                                     {{ phoneError.message }}
@@ -266,7 +266,7 @@
                                 "
                             >
                                 <h4 class="col-xs-24">
-                                    Documentación del chofer
+                                    {{ $t('documentacionDelChofer') }}
                                 </h4>
                                 <div
                                     v-imgSrc:docs="img"
@@ -282,7 +282,7 @@
                                     {{ $t('tipoDeCuenta') }}
                                     <span
                                         class="required-field-flag"
-                                        title="Campo requerido"
+                                        :title="$t('tituloCampoRequerido')"
                                     >
                                         (*)
                                     </span>
@@ -314,7 +314,7 @@
                                     {{ $t('bancoDeCuenta') }}
                                     <span
                                         class="required-field-flag"
-                                        title="Campo requerido"
+                                        :title="$t('tituloCampoRequerido')"
                                     >
                                         (*)
                                     </span>
@@ -346,7 +346,7 @@
                                     {{ $t('numeroDeCuenta') }}
                                     <span
                                         class="required-field-flag"
-                                        title="Campo requerido"
+                                        :title="$t('tituloCampoRequerido')"
                                     >
                                         (*)
                                     </span>
@@ -374,7 +374,7 @@
                                         type="checkbox"
                                         v-model="newInfo.driver_is_verified"
                                     />
-                                    Es chofer
+                                    {{ $t('esChofer') }}
                                 </label>
                             </div>
                             <hr />
@@ -384,7 +384,7 @@
                                         type="checkbox"
                                         v-model="newInfo.active"
                                     />
-                                    Usuario activo
+                                    {{ $t('usuarioActivo') }}
                                 </label>
                             </div>
 
@@ -395,7 +395,7 @@
                                             type="checkbox"
                                             v-model="newInfo.banned"
                                         />
-                                        Usuario suspendido
+                                        {{ $t('usuarioSuspendido') }}
                                     </label>
                                 </div>
                                 <div class="col-md-5 text-right">
@@ -403,7 +403,7 @@
                                         class="btn btn-primary"
                                         v-on:click="save"
                                     >
-                                        Grabar
+                                        {{ $t('grabar') }}
                                     </button>
                                 </div>
                             </div>
@@ -415,7 +415,7 @@
                             class="alert alert-warning"
                             role="alert"
                         >
-                            Seleccione alguna persona
+                            {{ $t('seleccioneAlgunaPersona') }}
                         </p>
                     </div>
                 </div>
@@ -649,7 +649,7 @@ export default {
                 // Basic validation: just check it's not empty and has reasonable length
                 if (this.newInfo.patente.length > 20) {
                     this.patenteError.state = true;
-                    this.patenteError.message = 'La patente no puede tener más de 20 caracteres';
+                    this.patenteError.message = this.$t('patenteNoValida');
                     globalError = true;
                 }
             }
@@ -690,11 +690,11 @@ export default {
                 
                 this.update(this.newInfo)
                     .then(() => {
-                        dialogs.message('Perfil actualizado correctamente.');
+                        dialogs.message(this.$t('perfilActualizadoCorrectamente'));
                     })
                     .catch((err) => {
                         console.log(err);
-                        let mensajeErr = 'Error al actualizar: ';
+                        let mensajeErr = this.$t('errorAlActualizar');
                         for (const key in err.errors) {
                             if (Object.hasOwnProperty.call(err.errors, key)) {
                                 mensajeErr += err.errors[key] + ' ';
@@ -707,7 +707,7 @@ export default {
                     });
                 this.onSearchUsers();
             } else {
-                dialogs.message('Verifique los campos', { estado: 'error' });
+                dialogs.message(this.$t('verifiqueLosCampos'), { estado: 'error' });
             }
         }
     },

@@ -7,12 +7,12 @@
                 v-if="tripCardTheme === 'light'"
             ></i>
             <span v-if="tripCardTheme !== 'light' || !isMobile"
-                >Distancia a recorrer</span
+                >{{ $t('distanciaARecorrer') }}</span
             >
             <br v-if="tripCardTheme !== 'light'" />
             <span>
                 {{ distanceString }}
-                <abbr title="kilometros">km</abbr>
+                <abbr :title="$t('kilometros')">{{ $t('km') }}</abbr>
             </span>
         </div>
         <div>
@@ -22,10 +22,10 @@
                 v-if="tripCardTheme === 'light'"
             ></i>
             <span v-if="tripCardTheme !== 'light' || !isMobile"
-                >Tiempo estimado de viaje</span
+                >{{ $t('tiempoEstimado') }}</span
             >
             <br v-if="tripCardTheme !== 'light'" />
-            <span>{{ trip.estimated_time }} horas</span>
+            <span>{{ trip.estimated_time }} {{ $t('horas') }}</span>
         </div>
         <div>
             <i
@@ -34,15 +34,15 @@
                 v-if="tripCardTheme === 'light'"
             ></i>
             <span v-if="tripCardTheme !== 'light' || !isMobile">
-                Huella de carbono (
-                <abbr title="aproximada">aprox</abbr>
+                {{ $t('huellaCarbono') }} (
+                <abbr :title="$t('aproximada')">{{ $t('aprox') }}</abbr>
                 )
             </span>
             <br v-if="tripCardTheme !== 'light'" />
             <span>
                 {{ ((trip.distance / 1000) * 1.5).toFixed(2) }}
-                <abbr title="kilogramos dióxido de carbono equivalente">
-                    kg CO
+                <abbr :title="$t('kilogramosDioxidoCarbono')">
+                    {{ $t('co2eq') }}
                     <sub>2eq</sub>
                 </abbr>
             </span>

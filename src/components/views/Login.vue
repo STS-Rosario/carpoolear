@@ -18,7 +18,7 @@
         <div class="form row">
             <div class="alert alert-warning" role="alert" v-if="!isUnderstood">
                 {{ $t('recuperarDeFacebook') }}
-                <a href="mailto:carpoolear@stsrosario.org.ar">{{
+                <a :href="'mailto:' + config.admin_email">{{
                     $t('carpoolearMail')
                 }}</a>
                 {{ $t('recuperarDeFacebook2') }}
@@ -240,7 +240,7 @@
                         <i class="fa fa-facebook" aria-hidden="true"></i>
                     </span>
                     <span class="btn-with-icon--label">
-                        <span v-if="!fbLoading">Ingresá con Facebook</span>
+                        <span v-if="!fbLoading">{{ $t('ingresaConFace') }}</span>
                         <spinner class="blue" v-if="fbLoading"></spinner>
                     </span>
                 </button>
@@ -254,8 +254,7 @@
             >
                 <h3 slot="header">
                     <span>
-                        ¿Tenías cuenta de Carpoolear vinculada a tu cuenta de
-                        {{ modalType === 'facebook' ? 'Facebook' : 'Apple' }}?
+                        {{ $t('teniasCuentaVinculada') }} {{ modalType === 'facebook' ? $t('facebook') : $t('apple') }}?
                     </span>
                     <i
                         v-on:click="toggleModalLogin"
@@ -265,26 +264,20 @@
                 <div slot="body">
                     <div class="text-left color-black login-modal">
                         <p>
-                            El ingreso/registro via
-                            {{
-                                modalType === 'facebook' ? 'Facebook' : 'Apple'
-                            }}
-                            ya no funciona más.
+                            {{ $t('ingresoRegistroYaNoFunciona') }} {{ modalType === 'facebook' ? $t('facebook') : $t('apple') }}.
                         </p>
                         <p>
-                            Escribinos a la mesa de ayuda de Carpoolear para
-                            poder recuperar tu cuenta y migrarla a una vinculada
-                            a mail.
+                            {{ $t('escribinosMesaAyuda') }}
                         </p>
                         <p>
-                            La mesa de ayuda de Carpoolear funciona desde
-                            <a href="mailto:carpoolear@stsrosario.org.ar">
-                                carpoolear@stsrosario.org.ar</a>,  
-                                mensaje privado de <a href="https://instagram.com/carpoolear">Instagram</a> y
+                            {{ $t('mesaAyudaFuncionaDesde') }}
+                            <a :href="'mailto:' + config.admin_email">
+                                {{ config.admin_email }}</a>,
+                                {{ $t('mensajePrivadoDe') }} <a href="https://instagram.com/carpoolear">Instagram</a> {{ $t('y') }}
                             <a href="https://facebook.com/carpoolear">Facebook</a>.
                         </p>
 
-                        <p>¡Buenas rutas!</p>
+                        <p>{{ $t('buenasRutas') }}</p>
                     </div>
                 </div>
             </modal>

@@ -3,7 +3,7 @@
         <a
             :href="'https://www.facebook.com/sharer/sharer.php?u=' + currentUrl"
             target="_blank"
-            aria-label="Compartir en Facebook"
+            :aria-label="$t('compartirEnFacebook')"
             class="lnk lnk-social-network lnk-facebook"
             @click="onShareLinkClick"
         >
@@ -11,11 +11,11 @@
         </a>
         <a
             :href="
-                'https://twitter.com/intent/tweet/?text=Publiqu%C3%A9%20un%20viaje%20para%20compartir%20en%20Carpoolear%20&via=carpoolear&url=' +
-                currentUrl
+                'https://twitter.com/intent/tweet/?text=' + encodeURIComponent(this.$t('publicarUnViajeCompartir')) + '&via=carpoolear&url=' +
+                    currentUrl
             "
             target="_blank"
-            aria-label="Compartir en Twitter"
+            :aria-label="$t('compartirEnTwitter')"
             class="lnk lnk-social-network lnk-twitter"
             @click="onShareLinkClick"
         >
@@ -24,7 +24,7 @@
         <a
             :href="'https://plus.google.com/share?url=' + currentUrl"
             target="_blank"
-            aria-label="Compartir en Google+"
+            :aria-label="$t('compartirEnGooglePlus')"
             class="lnk lnk-social-network lnk-google-plus"
             @click="onShareLinkClick"
         >
@@ -32,11 +32,11 @@
         </a>
         <a
             :href="
-                'whatsapp://send?text=Publiqu%C3%A9%20un%20viaje%20para%20compartir%20en%20Carpoolear%20' +
-                currentUrl
+                'whatsapp://send?text=' + encodeURIComponent(this.$t('publicarUnViajeCompartir')) + '%20' +
+                    currentUrl
             "
             target="_blank"
-            aria-label="Compartir en Whats App"
+            :aria-label="$t('compartirEnWhatsApp')"
             class="lnk lnk-social-network lnk-whatsapp"
             v-if="isMobile"
             @click="onWhatsAppShareClick"
@@ -64,6 +64,9 @@ export default {
         }),
         isPassengersView() {
             return this.trip.is_passenger;
+        },
+        publicarUnViajeCompartir() {
+            return this.$t('publicarUnViajeCompartir');
         }
     },
     components: {},
@@ -99,8 +102,7 @@ export default {
                     window.plugins.socialsharing &&
                     window.plugins.socialsharing.shareWithOptions
                 ) {
-                    let message =
-                        'Publiqué un viaje para compartir en Carpoolear';
+                    let message = this.$t('publicarUnViajeCompartir');
                     window.plugins.socialsharing.shareViaWhatsApp(
                         message,
                         null /* img */,

@@ -74,7 +74,7 @@
                             {{ $t('nombreYapellido') }}
                             <span
                                 class="required-field-flag"
-                                title="Campo requerido"
+                                :title="$t('tituloCampoRequerido')"
                                 >(*)</span
                             >
                         </label>
@@ -84,7 +84,7 @@
                             type="text"
                             class="form-control"
                             id="input-name"
-                            placeholder="Nombre"
+                            :placeholder="$t('placeholderNombre')"
                             :class="{ 'has-error': nombreError.state }"
                             :disabled="!firstTime"
                         />
@@ -94,10 +94,10 @@
                     </div>
                     <div class="form-group">
                         <label for="input-email">
-                            E-mail
+                            {{ $t('email') }}
                             <span
                                 class="required-field-flag"
-                                title="Campo requerido"
+                                :title="$t('tituloCampoRequerido')"
                                 >(*)</span
                             >
                         </label>
@@ -107,7 +107,7 @@
                             type="text"
                             class="form-control"
                             id="input-email"
-                            placeholder="E-mail"
+                            :placeholder="$t('eMail')"
                             disabled
                         />
                     </div>
@@ -121,7 +121,7 @@
                             {{ $t('acercaDeMi') }}
                             <span
                                 class="required-field-flag"
-                                title="Campo requerido"
+                                :title="$t('tituloCampoRequerido')"
                                 >(*)</span
                             >
                             <span class="description">
@@ -131,7 +131,7 @@
                         <textarea
                             maxlength="2000"
                             v-model="user.description"
-                            placeholder="Descripción"
+                            :placeholder="$t('placeholderDescripcion')"
                             :class="{ 'has-error': descError.state }"
                         ></textarea>
                         <span class="error textarea" v-if="descError.state">
@@ -147,7 +147,7 @@
                             {{ $t('documento') }}
                             <span
                                 class="required-field-flag"
-                                title="Campo requerido"
+                                :title="$t('tituloCampoRequerido')"
                                 >(*)</span
                             >
                             <span class="description">
@@ -177,7 +177,7 @@
                             {{ $t('nroTel') }}
                             <span
                                 class="required-field-flag"
-                                title="Campo requerido"
+                                :title="$t('tituloCampoRequerido')"
                                 >(*)</span
                             >
                             <span class="description">
@@ -193,7 +193,7 @@
                             type="tel"
                             class="form-control"
                             id="input-telefono"
-                            placeholder="Número de teléfono (al menos 7 números)"
+                            :placeholder="$t('placeholderTelefono')"
                             :class="{ 'has-error': phoneError.state }"
                         />
                         <span class="error" v-if="phoneError.state">
@@ -265,7 +265,7 @@
                             type="password"
                             class="form-control"
                             id="input-pass"
-                            placeholder="Contraseña"
+                            :placeholder="$t('placeholderContrasena')"
                         />
                         <input
                             maxlength="40"
@@ -273,7 +273,7 @@
                             type="password"
                             class="form-control"
                             id="input-pass-confirm"
-                            placeholder="Repetir contraseña"
+                            :placeholder="$t('placeholderRepetirContrasena')"
                         />
                     </div>
 
@@ -363,7 +363,7 @@
                                 {{ $t('tipoDeCuenta') }}
                                 <span
                                     class="required-field-flag"
-                                    title="Campo requerido"
+                                    :title="$t('tituloCampoRequerido')"
                                     >(*)</span
                                 >
                             </label>
@@ -388,7 +388,7 @@
                                 {{ $t('bancoDeCuenta') }}
                                 <span
                                     class="required-field-flag"
-                                    title="Campo requerido"
+                                    :title="$t('tituloCampoRequerido')"
                                     >(*)</span
                                 >
                             </label>
@@ -413,7 +413,7 @@
                                 {{ $t('numeroDeCuenta') }}
                                 <span
                                     class="required-field-flag"
-                                    title="Campo requerido"
+                                    :title="$t('tituloCampoRequerido')"
                                     >(*)</span
                                 >
                             </label>
@@ -467,7 +467,7 @@
                             class="btn btn-danger pull-right"
                             @click="toggleModalDeleteAccount"
                         >
-                            Eliminar cuenta
+                            {{ $t('eliminarCuenta') }}
                         </button>
                     </div>
                     
@@ -488,7 +488,7 @@
             :body="'Body'"
         >
             <h3 slot="header">
-                <span>¿Estás seguro que querés eliminar tu cuenta?</span>
+                <span>{{ $t('seguroEliminarCuenta') }}</span>
                 <i
                     v-on:click="toggleModalDeleteAccount"
                     class="fa fa-times float-right-close"
@@ -497,15 +497,9 @@
             <div slot="body">
                 <div class="text-left color-black">
                     <p>
-                        Si querés eliminar tu cuenta, tené en cuenta que este
-                        proceso es IRREVERSIBLE. Una vez que la cuenta se
-                        elimine, no podrás deshacerlo ni volver a acceder a
-                        Carpoolear en un futuro ya que se elimina el acceso a la
-                        persona.
+                        {{ $t('eliminacionCuentaIrreversible') }}
                     </p>
-                    <p>El pedido de eliminación de cuenta será procesado en un plazo 
-                        de 7 hábiles y serás notificado por correo electrónico 
-                        cuando se haya procesado.</p>
+                    <p>{{ $t('eliminacionCuentaPlazo') }}</p>
                     <div class="text-center" style="margin-top: 1.5em;">
                         <button
                             class="btn btn-danger"
@@ -513,7 +507,7 @@
                             :disabled="loadingDeleteAccount"
                         >
                             <span v-if="!loadingDeleteAccount"
-                                >Eliminar cuenta</span
+                                >{{ $t('eliminarCuenta') }}</span
                             >
                             <spinner class="blue" v-if="loadingDeleteAccount"></spinner>
                         </button>
@@ -925,7 +919,7 @@ export default {
                     this.loadingDeleteAccount = false;
                     this.showModalDeleteAccount = false;
                     dialogs.message(
-                        'El pedido de eliminación de cuenta ha sido enviado exitosamente',
+                        this.$t('pedidoEliminacionEnviado'),
                         {
                             duration: 5,
                             estado: 'success'
@@ -936,7 +930,7 @@ export default {
                     this.loadingDeleteAccount = false;
                     console.error('Error deleting account request:', error);
                     dialogs.message(
-                        'Hubo un error al enviar el pedido de eliminación de cuenta',
+                        this.$t('errorEnviarPedidoEliminacion'),
                         {
                             duration: 5,
                             estado: 'error'

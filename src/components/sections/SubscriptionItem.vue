@@ -10,7 +10,7 @@
                     v-if="subscription.from_address"
                 >
                     <div class="suscription-item-detail--content">
-                        <span>Origen:</span>
+                        <span>{{ $t('origen') }}:</span>
                         <strong>{{ subscription.from_address }}</strong>
                     </div>
                 </div>
@@ -19,7 +19,7 @@
                     v-if="subscription.to_address"
                 >
                     <div class="suscription-item-detail--content">
-                        <span>Destino:</span>
+                        <span>{{ $t('destino') }}:</span>
                         <strong>{{ subscription.to_address }}</strong>
                     </div>
                 </div>
@@ -28,7 +28,7 @@
                     v-if="subscription.trip_date"
                 >
                     <div class="suscription-item-detail--content">
-                        <span>Fecha aproximada:</span>
+                        <span>{{ $t('fechaAproximada') }}:</span>
                         <strong>{{
                             subscription.trip_date | moment('DD/MM/YYYY')
                         }}</strong>
@@ -39,12 +39,12 @@
                     v-if="subscription.is_passenger == 1"
                 >
                     <div class="suscription-item-detail--content">
-                        <span>Busco pasajeros</span>
+                        <span>{{ $t('buscoPasajeros') }}</span>
                     </div>
                 </div>
                 <div class="suscription-item-detail" v-if="resultCount > 0">
                     <div class="suscription-item-detail--content">
-                        <span>Coincidencias:</span>
+                        <span>{{ $t('coincidencias') }}:</span>
                         <span class="badge">
                             {{ resultCount }}
                             {{ resultCount === 20 ? '+' : '' }}
@@ -57,7 +57,7 @@
                     v-on:click.stop="remove"
                     :disabled="inProgress"
                     class="btn btn-default"
-                    aria-label="Eliminar suscripción"
+                    :aria-label="$t('eliminarSuscripcion')"
                 >
                     <i class="fa fa-trash-o" aria-hidden="true"></i>
                 </button>

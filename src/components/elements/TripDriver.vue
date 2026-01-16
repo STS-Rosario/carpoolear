@@ -6,7 +6,7 @@
         >
             <div class="panel-title card-trip_title row">
                 <span class="trip-data--subtitle" v-if="!isMobile"
-                    >Conductor</span
+                    >{{ $t('conductor') }}</span
                 >
                 <TripDate v-if="isMobile" />
                 <template v-if="trip && trip.user">
@@ -65,10 +65,10 @@
                 class="alert alert-info clearfix cf"
                 v-if="config.module_conversation_average_delay"
             >
-                <strong>Velocidad de respuesta:</strong>
+                <strong>{{ $t('velocidadDeRespuesta') }}</strong>
                 {{ averageDelay }}.
                 <br />
-                <strong>Porcentaje de respuestas:</strong>
+                <strong>{{ $t('porcentajeDeRespuestas') }}</strong>
                 {{ percentageResponse }}
             </div>
         </div>
@@ -118,14 +118,14 @@
                             <img
                                 src="https://carpoolear.com.ar/static/img/pin.png"
                                 alt=""
-                                title="Aportante en la campaña mi media naranja carpoolera"
+                                :title="$t('aportanteMediaNaranja')"
                             />
                         </span>
                         <span v-if="trip.user.is_member == 1">
                             <img
                                 src="https://carpoolear.com.ar/static/img/pin_member.png"
                                 alt=""
-                                title="Miembro del equipo de Carpoolear"
+                                :title="$t('miembroEquipo')"
                             />
                         </span>
                     </div>
@@ -135,10 +135,10 @@
                 class="alert alert-info clearfix cf"
                 v-if="config.module_conversation_average_delay"
             >
-                <strong>Velocidad de respuesta:</strong>
+                <strong>{{ $t('velocidadDeRespuesta') }}</strong>
                 {{ averageDelay }}.
                 <br />
-                <strong>Porcentaje de respuestas:</strong>
+                <strong>{{ $t('porcentajeDeRespuestas') }}</strong>
                 {{ percentageResponse }}
             </div>
             <div class="row">
@@ -153,7 +153,7 @@
                             }
                         }"
                     >
-                        Ver Perfil
+                        {{ $t('verPerfil') }}
                     </router-link>
                 </div>
             </div>
@@ -241,16 +241,16 @@ export default {
                     // var seconds = Math.floor(time - minutes * 60 - hours * 3600);
                     // delay = hours + ':' + minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
                     if (time / 3600 > 24) {
-                        delay = 'Más de un día';
+                        delay = this.$t('masDeUnDia');
                     } else if (time / 3600 > 12) {
-                        delay = 'En el día';
+                        delay = this.$t('enElDia');
                     } else if (time / 3600 > 1) {
-                        delay = 'En un par de horas';
+                        delay = this.$t('enUnParDeHoras');
                     } else {
-                        delay = 'En el momento';
+                        delay = this.$t('enElMomento');
                     }
                 } else {
-                    delay = 'Sin datos';
+                    delay = this.$t('sinDatos');
                 }
             }
             return delay;
@@ -264,7 +264,7 @@ export default {
                         this.trip.user.conversation_opened_count;
                     response = Math.round(percentage * 100).toFixed(0) + '%';
                 } else {
-                    response = 'No ha conversado aún.';
+                    response = this.$t('noHaConversado');
                 }
             }
             return response;

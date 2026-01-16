@@ -111,7 +111,7 @@ export default [
                     active_id: 'profile'
                 },
                 header: {
-                    title: 'Mi Perfil',
+                    titleKey: 'miPerfil',
                     buttons: ['back', 'menu']
                 }
             }
@@ -129,7 +129,7 @@ export default [
                     active_id: 'profile'
                 },
                 header: {
-                    title: 'Mis Viajes',
+                    titleKey: 'misViajes',
                     buttons: []
                 }
             }
@@ -163,7 +163,7 @@ export default [
         meta: {
             actionbar: {
                 header: {
-                    title: 'Crear viaje',
+                    titleKey: 'crearViaje',
                     buttons: ['clear']
                 }
             }
@@ -178,7 +178,7 @@ export default [
         meta: {
             actionbar: {
                 header: {
-                    title: 'Editar viaje',
+                    titleKey: 'editarViaje',
                     buttons: ['clear']
                 }
             }
@@ -197,7 +197,7 @@ export default [
                     active_id: 'home'
                 },
                 header: {
-                    title: 'Viaje',
+                    titleKey: 'viaje',
                     buttons: ['back']
                 }
             }
@@ -216,7 +216,7 @@ export default [
                     active_id: 'home'
                 },
                 header: {
-                    title: 'Viaje',
+                    titleKey: 'viaje',
                     buttons: ['back']
                 }
             }
@@ -235,7 +235,7 @@ export default [
                     active_id: 'notifications'
                 },
                 header: {
-                    title: 'Notificaciones'
+                    titleKey: 'notificaciones'
                 }
             }
         }
@@ -258,7 +258,7 @@ export default [
                             active_id: 'profile'
                         },
                         header: {
-                            title: 'Editar perfil',
+                            titleKey: 'editarPerfil',
                             buttons: ['menu']
                         }
                     }
@@ -277,7 +277,7 @@ export default [
                             active_id: 'profile'
                         },
                         header: {
-                            title: 'Amigos',
+                            titleKey: 'amigos',
                             buttons: ['menu']
                         }
                     }
@@ -292,7 +292,7 @@ export default [
                     tab: 'friends',
                     actionbar: {
                         header: {
-                            title: 'Buscar Amigos',
+                            titleKey: 'buscarAmigos',
                             buttons: ['back']
                         }
                     }
@@ -312,7 +312,7 @@ export default [
                     active_id: 'conversations'
                 },
                 header: {
-                    title: 'Mensajes'
+                    titleKey: 'mensajes'
                 }
             },
             background: {
@@ -333,7 +333,7 @@ export default [
                             active_id: 'conversations'
                         },
                         header: {
-                            title: 'Conversación',
+                            titleKey: 'conversacion',
                             buttons: ['back']
                         }
                     },
@@ -351,7 +351,7 @@ export default [
         meta: {
             actionbar: {
                 header: {
-                    title: 'Acerca de',
+                    titleKey: 'acercaDe',
                     buttons: ['back']
                 }
             }
@@ -364,7 +364,7 @@ export default [
         meta: {
             actionbar: {
                 header: {
-                    title: 'Transacciones',
+                    titleKey: 'transacciones',
                     buttons: ['back']
                 }
             }
@@ -377,7 +377,7 @@ export default [
         meta: {
             actionbar: {
                 header: {
-                    title: 'Términos',
+                    titleKey: 'terminos',
                     buttons: ['back']
                 }
             }
@@ -395,7 +395,7 @@ export default [
                     active_id: 'admin'
                 },
                 header: {
-                    title: 'Admin Page',
+                    titleKey: 'adminPage',
                     buttons: []
                 }
             }
@@ -413,7 +413,7 @@ export default [
                     active_id: 'admin'
                 },
                 header: {
-                    title: 'Admin users',
+                    titleKey: 'adminUsers',
                     buttons: []
                 }
             }
@@ -431,7 +431,7 @@ export default [
                     active_id: 'admin'
                 },
                 header: {
-                    title: 'Admin trips',
+                    titleKey: 'adminTrips',
                     buttons: []
                 }
             }
@@ -449,7 +449,7 @@ export default [
                     active_id: 'admin'
                 },
                 header: {
-                    title: 'Pedidos de eliminación de cuenta',
+                    titleKey: 'pedidosDeEliminacionDeCuenta',
                     buttons: []
                 }
             }

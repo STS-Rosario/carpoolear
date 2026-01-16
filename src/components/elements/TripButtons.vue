@@ -9,7 +9,7 @@
                 v-if="owner && !expired"
                 :to="{ name: 'update-trip', params: { id: trip.id } }"
             >
-                Editar
+                {{ $t('editar') }}
             </router-link>
             <a
                 class="btn btn-primary"
@@ -21,7 +21,7 @@
                     class="blue"
                     v-if="sending && sending.deleteAction"
                 ></spinner>
-                <span v-else>Cancelar Viaje</span>
+                <span v-else>{{ $t('cancelarViaje') }}</span>
             </a>
             <template
                 v-if="
@@ -42,7 +42,7 @@
                         class="blue"
                         v-if="sending && sending.sendMessageAction"
                     ></spinner>
-                    <span v-else>Enviar mensaje</span>
+                    <span v-else>{{ $t('enviarMensaje') }}</span>
                 </button>
             </template>
             <template v-if="!owner && !trip.is_passenger && !expired">
@@ -64,16 +64,16 @@
                                         config.module_trip_seats_payment
                                     "
                                 >
-                                    Reservar {{ $n(trip.seat_price_cents / 100, 'currency') }}
+                                    {{ $t('reservar') }} {{ $n(trip.seat_price_cents / 100, 'currency') }}
                                 </template>
-                                <template v-else>Reservar</template>
+                                <template v-else>{{ $t('reservar') }}</template>
                             </template>
                             <template
                                 v-else-if="config.module_coordinate_by_message"
                             >
-                                Enviar mensaje
+                                {{ $t('enviarMensaje') }}
                             </template>
-                            <template v-else>Solicitar asiento</template>
+                            <template v-else>{{ $t('solicitarAsiento') }}</template>
                         </template>
                     </button>
                     <button
@@ -86,7 +86,7 @@
                             class="blue"
                             v-if="sending && sending.requestAction"
                         ></spinner>
-                        <span v-else>Solicitado (RETIRAR)</span>
+                        <span v-else>{{ $t('solicitadoRetirar') }}</span>
                     </button>
                 </template>
 
@@ -101,15 +101,15 @@
                             class="blue"
                             v-if="sending && sending.requestAction"
                         ></spinner>
-                        <span v-else>Bajarme del viaje</span>
+                        <span v-else>{{ $t('bajarmeViaje') }}</span>
                     </button>
                 </template>
             </template>
             <template v-if="expired">
-                <button class="btn btn-primary" disabled>Finalizado</button>
+                <button class="btn btn-primary" disabled>{{ $t('finalizado') }}</button>
             </template>
             <template v-if="trip.seats_available === 0 && !trip.is_passenger">
-                <div class="carpooled-trip">Viaje Carpooleado</div>
+                <div class="carpooled-trip">{{ $t('viajeCarpooleado') }}</div>
             </template>
             <div
                 class="alert alert-warning"
@@ -120,10 +120,9 @@
                     !owner &&
                     trip.passengerPending_count > 2
                 "
-            >
-                Atención! Este viaje está siendo muy solicitado:
-                {{ trip.passengerPending_count }} personas lo están solicitando
-            </div>
+                >
+                    {{ $t('atencionViajeSolicitado', { count: trip.passengerPending_count }) }}
+                </div>
         </div>
         <div class="buttons-container" v-if="isPassengersView && !owner">
             <template v-if="true">
@@ -137,7 +136,7 @@
                         class="blue"
                         v-if="sending && sending.sendMessageAction"
                     ></spinner>
-                    <span v-else>Enviar mensaje</span>
+                    <span v-else>{{ $t('enviarMensaje') }}</span>
                 </button>
             </template>
         </div>
@@ -199,7 +198,7 @@ export default {
                 window.device.platform &&
                 window.device.platform.toLowerCase() !== 'browser'
             ) {
-                // Estoy en movil
+                // {{ $t('estoyEnMovil') }}
                 event.preventDefault();
                 let href = event.target.getAttribute('href');
                 if (!href) {
@@ -216,7 +215,7 @@ export default {
                 window.device.platform &&
                 window.device.platform.toLowerCase() !== 'browser'
             ) {
-                // Estoy en movil
+                // {{ $t('estoyEnMovil') }}
                 event.preventDefault();
                 if (
                     window &&
@@ -224,8 +223,7 @@ export default {
                     window.plugins.socialsharing &&
                     window.plugins.socialsharing.shareWithOptions
                 ) {
-                    let message =
-                        'Publiqué un viaje para compartir en Carpoolear';
+                    let message = this.$t('publicarUnViajeCompartir');
                     window.plugins.socialsharing.shareViaWhatsApp(
                         message,
                         null /* img */,

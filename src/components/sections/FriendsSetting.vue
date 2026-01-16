@@ -2,7 +2,7 @@
     <div class="friends-component">
         <div class="clearfix">
             <Loading :data="pendings" :hideOnEmpty="true">
-                <h2 slot="title">Solicitudes de amistad</h2>
+                <h2 slot="title">{{ $t('solicitudesDeAmistad') }}</h2>
                 <div id="friends-list">
                     <FriendCard
                         v-for="user in pendings"
@@ -10,7 +10,7 @@
                         :user="user"
                     >
                         <template slot>
-                            <span>desea ser tu amigo.</span>
+                            <span>{{ $t('deseaSerTuAmigo') }}</span>
                             <div class="pending-buttons">
                                 <button
                                     @click="onAcceptClick(user)"
@@ -31,14 +31,14 @@
                                     ></i>
                                 </button>
                                 <span v-if="idRequesting == user.id"
-                                    >En proceso...</span
+                                    >{{ $t('enProceso') }}</span
                                 >
                             </div>
                         </template>
                     </FriendCard>
                 </div>
                 <p slot="no-data" class="alert alert-warning" role="alert">
-                    No hay solicitudes nuevas
+                    {{ $t('noHaySolicitudesNuevas') }}
                 </p>
                 <p slot="loading" class="alert alert-info" role="alert">
                     <img
@@ -46,30 +46,30 @@
                         alt=""
                         class="ajax-loader"
                     />
-                    Cargando solicitudes ...
+                    {{ $t('cargandoSolicitudes') }}
                 </p>
             </Loading>
         </div>
 
-        <h2>Amigos</h2>
+        <h2>{{ $t('amigos') }}</h2>
         <router-link
             :to="{ name: 'friends_search' }"
             tag="button"
             class="btn btn-primary search-more"
         >
-            Buscar nuevos amigos
+            {{ $t('buscarNuevosAmigos') }}
         </router-link>
-        <h2>Mis amigos</h2>
+        <h2>{{ $t('misAmigos') }}</h2>
         <div class="friend-form form-inline form-inline-with-margin">
             <div class="form-group">
-                <label for="input-name">Filtrar por nombre:</label>
+                <label for="input-name">{{ $t('filtrarPorNombre') }}</label>
                 <input
                     v-on:input="onTextChange"
                     v-model="text"
                     type="text"
                     class="form-control"
                     id="input-name"
-                    placeholder="Ingrese nombre..."
+                    :placeholder="$t('ingresarNombre')"
                 />
             </div>
         </div>
@@ -89,7 +89,7 @@
                                 <i class="fa fa-times" aria-hidden="true"></i>
                             </div>
                             <span v-if="idRequesting == user.id"
-                                >En proceso...</span
+                                >{{ $t('enProceso') }}</span
                             >
                         </div>
                     </template>
@@ -104,7 +104,7 @@
                     alt=""
                     class="ajax-loader"
                 />
-                Cargando amigos ...
+                {{ $t('cargandoAmigos') }}
             </p>
         </Loading>
     </div>
@@ -131,9 +131,9 @@ export default {
 
         noResult() {
             if (this.text.length) {
-                return 'No hay resultados';
+                return this.$t('noHayResultados');
             } else {
-                return 'No tienes ningún amigo aún.';
+                return this.$t('noTienesNingunAmigoAun');
             }
         }
     },

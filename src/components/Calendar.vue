@@ -42,23 +42,31 @@ export default {
             },
             option: {
                 type: 'day',
-                week: ['Lu', 'Ma', 'Mie', 'Ju', 'Vi', 'Sa', 'Do'],
+                week: [
+                    this.$t('lunes'),
+                    this.$t('martes'),
+                    this.$t('miercoles'),
+                    this.$t('jueves'),
+                    this.$t('viernes'),
+                    this.$t('sabado'),
+                    this.$t('domingo')
+                ],
                 month: [
-                    'Enero',
-                    'Febrero',
-                    'Marzo',
-                    'Abril',
-                    'Mayo',
-                    'Junio',
-                    'Julio',
-                    'Agosto',
-                    'Septiembre',
-                    'Octubre',
-                    'Noviembre',
-                    'Diciembre'
+                    this.$t('enero'),
+                    this.$t('febrero'),
+                    this.$t('marzo'),
+                    this.$t('abril'),
+                    this.$t('mayo'),
+                    this.$t('junio'),
+                    this.$t('julio'),
+                    this.$t('agosto'),
+                    this.$t('septiembre'),
+                    this.$t('octubre'),
+                    this.$t('noviembre'),
+                    this.$t('diciembre')
                 ],
                 format: this.format,
-                placeholder: 'Fecha',
+                placeholder: this.$t('fecha'),
                 inputStyle: {
                     display: 'inline-block',
                     'line-height': '22px',
@@ -73,8 +81,8 @@ export default {
                     headerText: '#FFF'
                 },
                 buttons: {
-                    ok: 'Aceptar',
-                    cancel: 'Cancelar'
+                    ok: this.$t('aceptar'),
+                    cancel: this.$t('cancelar')
                 },
                 overlayOpacity: 0.5, // 0.5 as default
                 dismissible: true // as true as default

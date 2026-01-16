@@ -21,7 +21,7 @@
                                 class="modal-default-button btn btn-link"
                                 @click="$emit('close')"
                             >
-                                Cerrar
+                                {{ $t('cerrar') }}
                             </button>
                         </slot>
                     </div>

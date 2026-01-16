@@ -26,7 +26,7 @@
                     <span
                         class="message_seen"
                         v-if="message.no_of_read - 1 > 0"
-                        title="Mensaje visto por el usuario"
+                        :title="$t('mensajeVistoPorElUsuario')"
                     >
                         <i class="fa fa-check-circle" aria-hidden="true"></i>
                     </span>

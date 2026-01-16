@@ -46,7 +46,7 @@ console.log('ROUTE_BASE', ROUTE_BASE, cordovaPath);
 cordovaTag.setAttribute('src', ROUTE_BASE + cordovaPath);
 document.head.appendChild(cordovaTag);
 
-var moment = require('moment-timezone');
+const moment = require('moment-timezone');
 moment.tz.setDefault('America/Argentina');
 require('moment/locale/es');
 require('font-awesome-webpack-4');
@@ -76,6 +76,8 @@ const i18n = new VueI18n({
         }
     }
 });
+
+export { i18n };
 
 Vue.use(VueAnalytics, {
     id: 'UA-40995702-4'
@@ -200,5 +202,19 @@ bus.on('system-ready', () => {
         template: '<App/>',
         components: { App },
         i18n
+    });
+    
+    // Set moment locale based on i18n language
+    const momentLocaleMap = {
+        arg: 'es',
+        chl: 'es',
+        en: 'en'
+    };
+    const currentLocale = i18n.locale || 'arg';
+    moment.locale(momentLocaleMap[currentLocale] || 'es');
+    
+    // Watch for language changes and update moment locale
+    app.$watch('$i18n.locale', (newLocale) => {
+        moment.locale(momentLocaleMap[newLocale] || 'es');
     });
 });

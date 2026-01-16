@@ -1,12 +1,12 @@
 <template>
     <div class="trips container">
         <div class="col-xs-24">
-            <h2>
-                Mis
-                <strong>próximos</strong>
-                viajes
-            </h2>
-            <Loading :data="trips">
+        <h2>
+            {{ $t('mis') }}
+            <strong>{{ $t('proximos') }}</strong>
+            {{ $t('viajes') }}
+        </h2>
+        <Loading :data="trips">
                 <div class="trips-list">
                     <Trip
                         v-for="trip in trips"
@@ -16,7 +16,7 @@
                     ></Trip>
                 </div>
                 <p slot="no-data" class="alert alert-warning" role="alert">
-                    No tenés viajes creados
+                    {{ $t('noTenesViajesCreados') }}
                 </p>
                 <p slot="loading" class="alert alert-info" role="alert">
                     <img
@@ -24,17 +24,14 @@
                         alt=""
                         class="ajax-loader"
                     />
-                    Cargando viajes ...
+                    {{ $t('cargandoViajes') }}
                 </p>
             </Loading>
         </div>
 
         <div class="col-xs-24">
             <Loading :data="passengerTrips" :hideOnEmpty="true">
-                <h2 slot="title">
-                    Viajes a los que
-                    <strong>estoy subido</strong>
-                </h2>
+                <h2 slot="title" v-html="$t('viajesEstoySubido')"></h2>
                 <div class="trips-list">
                     <Trip
                         v-for="trip in passengerTrips"
@@ -43,7 +40,7 @@
                     ></Trip>
                 </div>
                 <p slot="no-data" class="alert alert-warning" role="alert">
-                    No estas subido a ningún viaje.
+                    {{ $t('noEstasSubidoViaje') }}
                 </p>
                 <p slot="loading" class="alert alert-info" role="alert">
                     <img
@@ -51,12 +48,12 @@
                         alt=""
                         class="ajax-loader"
                     />
-                    Cargando viajes ...
+                    {{ $t('cargandoViajes') }}
                 </p>
             </Loading>
         </div>
         <div class="col-xs-24" v-if="oldDriverTrips">
-            <h2>Mis viajes pasados</h2>
+            <h2>{{ $t('misViajesPasados') }}</h2>
             <Loading :data="oldDriverTrips">
                 <div class="trips-list">
                     <Trip
@@ -66,7 +63,7 @@
                     ></Trip>
                 </div>
                 <p slot="no-data" class="alert alert-warning" role="alert">
-                    No has realizado ningún viaje aún
+                    {{ $t('noHasRealizadoViaje') }}
                 </p>
                 <p slot="loading" class="alert alert-info" role="alert">
                     <img
@@ -74,17 +71,14 @@
                         alt=""
                         class="ajax-loader"
                     />
-                    Cargando viajes ...
+                    {{ $t('cargandoViajes') }}
                 </p>
             </Loading>
         </div>
 
         <div class="col-xs-24" v-if="oldPassengerTrips">
             <Loading :data="oldPassengerTrips" :hideOnEmpty="true">
-                <h2 slot="title">
-                    Viajes a los que me
-                    <strong>subí</strong>
-                </h2>
+                <h2 slot="title" v-html="$t('viajesMeSubi')"></h2>
                 <div class="trips-list">
                     <Trip
                         v-for="trip in oldPassengerTrips"
@@ -93,7 +87,7 @@
                     ></Trip>
                 </div>
                 <p slot="no-data" class="alert alert-warning" role="alert">
-                    No te has subido a ningún viaje.
+                    {{ $t('noTeHasSubidoViaje') }}
                 </p>
                 <p slot="loading" class="alert alert-info" role="alert">
                     <img
@@ -101,7 +95,7 @@
                         alt=""
                         class="ajax-loader"
                     />
-                    Cargando viajes ...
+                    {{ $t('cargandoViajes') }}
                 </p>
             </Loading>
         </div>

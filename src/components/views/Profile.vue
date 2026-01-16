@@ -3,10 +3,10 @@
         <tab :header="viajesHeaderTitle">
             <component :is="currentView" :userId="id"></component>
         </tab>
-        <tab header="Perfil">
+        <tab :header="$t('perfil')">
             <ProfileInfo></ProfileInfo>
         </tab>
-        <tab header="Calificaciones">
+        <tab :header="$t('calificaciones')">
             <ProfileRates :id="id"></ProfileRates>
         </tab>
     </tabset>
@@ -74,7 +74,7 @@ export default {
         }),
         updateProfile() {
             if (this.id === 'me' || this.id === this.user.id) {
-                this.setTitle('Mi Perfil');
+                // this.setTitle('Mi Perfil');
                 this.setProfile(this.user);
                 this.currentView = 'my-trips';
             } else {

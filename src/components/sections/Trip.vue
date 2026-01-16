@@ -28,12 +28,12 @@
                             <span class="trip_visibility">
                                 <span
                                     v-if="trip.friendship_type_id === 0"
-                                    title="Visibilidad: Solo amigos"
+                                    :title="$t('visibilidadSoloAmigos')"
                                 >
                                     <span
                                         class="tooltip"
-                                        title="Visibilidad: Solo amigos"
-                                        data-tooltip="Solo amigos."
+                                        :title="$t('visibilidadSoloAmigos')"
+                                        :data-tooltip="$t('soloAmigosTooltip')"
                                     >
                                         <i
                                             class="fa fa-user"
@@ -43,7 +43,7 @@
                                 </span>
                                 <span
                                     v-else-if="trip.friendship_type_id === 1"
-                                    title="Visibilidad: Amigos de amigos"
+                                    :title="$t('visibilidadAmigosDeAmigos')"
                                 >
                                     <i
                                         class="fa fa-users"
@@ -52,12 +52,12 @@
                                 </span>
                                 <span
                                     v-else-if="trip.friendship_type_id === 2"
-                                    title="Visilidad: Público"
+                                    :title="$t('visibilidadPublico')"
                                 >
                                     <span
                                         class="tooltip-bottom"
-                                        title="Visibilidad: Público"
-                                        data-tooltip="Público"
+                                        :title="$t('visibilidadAmigosDeAmigos')"
+                                        :data-tooltip="$t('publicoTooltip')"
                                     >
                                         <i
                                             class="fa fa-globe"
@@ -75,9 +75,9 @@
                         >
                             <div class="trip_date_date">
                                 <span class="trip_date_date_day">
-                                    <span>{{
-                                        [trip.trip_date] | moment('DD')
-                                    }}</span>
+                                    <span style="text-transform: uppercase">
+                                        {{ [trip.trip_date] | moment('ddd') }}
+                                    </span>
                                 </span>
                                 <br />
                                 <span class="trip_date_date_month">
@@ -350,7 +350,7 @@
                                 <div class="col-xs-10">
                                     <span class="trip_datetime_time">
                                         {{ [trip.trip_date] | moment('HH:mm') }}
-                                        hs
+                                        {{ $t('horas') }}
                                     </span>
                                 </div>
                             </div>
@@ -392,7 +392,7 @@
                                         "
                                     >
                                         <strong class="warning-is-passenger">
-                                            Pasajero que busca viaje
+                                            {{ $t('pasajeroQueBuscaViaje') }}
                                         </strong>
                                     </div>
                                 </div>
@@ -422,7 +422,9 @@
                                     class="trip-seats-control col-xs-offset-2"
                                 >
                                     <button
-                                        aria-label="Disminuir en uno la cantidad de asientos"
+                                        :aria-label="
+                                            $t('disminuirCantidadAsientos')
+                                        "
                                         v-on:click.stop="changeSeatsNumber(-1)"
                                         :disabled="
                                             sending || trip.total_seats < 1
@@ -435,7 +437,9 @@
                                         {{ seats_available }}
                                     </span>
                                     <button
-                                        aria-label="Aumentar en uno la cantidad de asientos"
+                                        :aria-label="
+                                            $t('aumentarCantidadAsientos')
+                                        "
                                         v-on:click.stop="changeSeatsNumber(1)"
                                         :disabled="
                                             sending || seats_available > 3
@@ -474,7 +478,7 @@
                                         <button
                                             v-on:click.stop="goToDetail(false)"
                                             class="btn btn-default"
-                                            aria-label="Ver detalle del viaje"
+                                            :aria-label="$t('verDetalleViaje')"
                                         >
                                             <i
                                                 class="fa fa-eye"
@@ -490,7 +494,9 @@
                                             v-if="!trip.is_passenger"
                                             :disabled="!trip.passenger.length"
                                             class="btn btn-default"
-                                            aria-label="Ver pasajeros subidos"
+                                            :aria-label="
+                                                $t('verPasajerosSubidos')
+                                            "
                                         >
                                             <i
                                                 class="fa fa-users"
@@ -502,7 +508,7 @@
                                         <button
                                             v-on:click.stop="goToDetail(true)"
                                             class="btn btn-default"
-                                            aria-label="Editar viaje"
+                                            :aria-label="$t('editarViaje')"
                                         >
                                             <i
                                                 class="fa fa-pencil"
@@ -514,7 +520,7 @@
                                         <button
                                             v-on:click.stop="deleteTrip"
                                             class="btn btn-default"
-                                            aria-label="Eliminar viaje"
+                                            :aria-label="$t('eliminarViaje')"
                                         >
                                             <i
                                                 class="fa fa-trash-o"
@@ -649,7 +655,6 @@ export default {
                                     errorMessage = this.$t(
                                         'errorACambiarAsientos'
                                     );
-                                    break;
                             }
                         } else {
                             errorMessage = this.$t('errorACambiarAsientos');
@@ -861,7 +866,6 @@ export default {
 .trip-inline-controls {
     margin-top: 1em;
 }
-
 .trip-inline-controls .btn[disabled] {
     opacity: 0.2;
 }

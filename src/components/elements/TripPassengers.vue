@@ -5,7 +5,7 @@
     >
         <div class="col-xs-24" v-if="owner && acceptedPassengers.length">
             <h4 class="title-margined">
-                <strong>Pasajeros subidos</strong>
+                <strong>{{ $t('pasajerosSubidos') }}</strong>
             </h4>
             <div
                 v-for="p in acceptedPassengers"
@@ -27,7 +27,7 @@
                 <a
                     href="#"
                     @click="toUserMessages(p)"
-                    aria-label="Ir a mensajes"
+                    :aria-label="$t('irAMensajes')"
                     class="trip_passenger-chat"
                 >
                     <i class="fa fa-comments" aria-hidden="true"></i>
@@ -35,13 +35,13 @@
                 <button
                     @click="removePassenger(p)"
                     class="trip_passenger-remove pull-right"
-                    aria-label="Bajar pasajero del viaje"
+                    :aria-label="$t('bajarPasajeroViaje')"
                 >
                     <i class="fa fa-times" aria-hidden="true"></i>
                 </button>
             </div>
             <div v-if="trip.passenger.length === 0">
-                Aún no hay pasajeros subidos a este viaje.
+                {{ $t('aunNoHayPasajeros') }}
             </div>
         </div>
         <div v-else style="height: 2em"></div>
@@ -50,7 +50,7 @@
             v-if="owner && waitingForPaymentsPassengers.length"
         >
             <h4 class="title-margined">
-                <strong>Pasajeros pendiente de pago</strong>
+                <strong>{{ $t('pasajerosPendientePago') }}</strong>
             </h4>
             <div
                 v-for="p in waitingForPaymentsPassengers"
@@ -72,7 +72,7 @@
                 <a
                     href="#"
                     @click="toUserMessages(p)"
-                    aria-label="Ir a mensajes"
+                    :aria-label="$t('irAMensajes')"
                     class="trip_passenger-chat"
                 >
                     <i class="fa fa-comments" aria-hidden="true"></i>
@@ -80,7 +80,7 @@
                 <button
                     @click="removePassenger(p)"
                     class="trip_passenger-remove pull-right"
-                    aria-label="Bajar pasajero del viaje"
+                    :aria-label="$t('bajarPasajeroViaje')"
                 >
                     <i class="fa fa-times" aria-hidden="true"></i>
                 </button>
@@ -164,7 +164,7 @@ export default {
         removePassenger(user) {
             if (
                 window.confirm(
-                    '¿Estás seguro que deseas bajar a este pasajero de tu viaje?'
+                    this.$t('seguroBajarPasajero')
                 )
             ) {
                 this.sending = true;
