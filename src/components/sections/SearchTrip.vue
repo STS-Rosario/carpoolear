@@ -551,6 +551,5 @@ export default {
   justify-content: center;
   align-items: stretch;
   flex-wrap: wrap;
-  margin-bottom: 30px;
 }
 </style>
