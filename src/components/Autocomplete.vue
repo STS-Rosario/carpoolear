@@ -256,7 +256,7 @@ export default {
     color: #aaa;
 }
 .osm-autocomplete-results button.selected {
-    background-color: red;
+    background-color: #e0e0e0;
 }
 .osm-autocomplete-results .copy {
     white-space: nowrap;

@@ -1,24 +1,25 @@
 config = {
     NODE_ENV: '"production"',
-    API_URL: '"https://carpoolear.com.ar"',
+    // API_URL: '"https://carpoolear.com.ar"',
+    API_URL: '"https://repeace.com/carpool/public"',
     MAPS_API: '"AIzaSyDz9fNRr5-nfCFN6ULDZaLt0xUckgKl3z4"',
     FACEBOOK_API: '"147151221990591"',
-    RECAPTCHA_SITE_KEY: '"6LcJyuoqAAAAAFycfjGz2xTiOjhNmWP_wYudIiJT"',
+    RECAPTCHA_SITE_KEY: '"6LeNPUQsAAAAAHEGTbSrhKsHpcoMVtwoMKjKVtjC"',
     TARGET_APP: '"carpoolear"'
 };
 
 config.FIREBASE_PARAMS = {
-    apiKey: '"AIzaSyCwecybmdmiWUehjZBT30RZXWKgiNnP7XI"',
-    authDomain: '"carpoolear-production.firebaseapp.com"',
-    projectId: '"carpoolear-production"',
-    storageBucket: '"carpoolear-production.firebasestorage.app"',
-    messagingSenderId: '"726271358034"',
-    appId: '"1:726271358034:web:f09d2d38fae5f185f01b8b"',
-    measurementId: '"G-V8ZHPQJ6HV"'
+    apiKey: '"AIzaSyBUsc8Cy42lV12hlcJ6jy5lW9bgrBEBnR8"',
+    authDomain: '"pool-d978d.firebaseapp.com"',
+    projectId: '"pool-d978d"',
+    storageBucket: '"pool-d978d.firebasestorage.app"',
+    messagingSenderId: '"699932647760"',
+    appId: '"1:699932647760:web:daa317feb5f59ed8038c55"',
+    measurementId: '"G-JGTXCKG92C"'
 };
 
 config.FIRABASE_VAPID_KEY =
-    '"BGtEjSYLZ36eiHMUpeHzondfyJFGvCvpOXyvBpa21cqxBpfXlV3s1FOrfiRyxbgSpx3m3fDjBb-Eb7FR7dlqZ-k"';
+    '"BKc8OfgMBi0QiUv5pNPN4qy1xOJVNiy9mj1lTfjhm9AMG8SR7VWl-QgBfEqeLRaU6qvsa4XWftdc_4LP_TCS5K0 "';
 
 if (
     !process.env.PLATFORM ||

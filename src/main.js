@@ -27,6 +27,7 @@ import messages from './language/i18n';
 
 import bus from './services/bus-event';
 import { DebugApi } from './services/api';
+import config from '../config/conf.json';
 
 // Capacitor plugins
 import { StatusBar, Style } from '@capacitor/status-bar';
@@ -55,7 +56,7 @@ Vue.use(VueResource);
 
 Vue.use(VueI18n);
 const i18n = new VueI18n({
-    locale: 'arg',
+    locale: config.locale || 'arg',
     fallbackLocale: 'arg',
     messages,
     silentFallbackWarn: true,

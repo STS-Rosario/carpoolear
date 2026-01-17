@@ -135,7 +135,7 @@
                 ></DatePicker>
                 <div class="optional-warning text-center">({{ $t('opcional') }})</div>
             </div>
-            <div class="col-xs-24 col-md-3 col-lg-4">
+            <div v-if="!autoSearch" class="col-xs-24 col-md-3 col-lg-4">
                 <button class="btn btn-primary btn-search" @click="emit">
                     {{ $t('buscar') }} 
                 </button>
@@ -197,7 +197,32 @@ export default {
         ...mapGetters({
             isMobile: 'device/isMobile',
             config: 'auth/appConfig'
-        })
+        }),
+        autoSearch() {
+            return this.config.auto_search_trips && !this.isMobile;
+        }
+    },
+    watch: {
+        'from_town.id'(newVal) {
+            if (this.autoSearch) {
+                this.emit();
+            }
+        },
+        'to_town.id'(newVal) {
+            if (this.autoSearch) {
+                this.emit();
+            }
+        },
+        dateAnswer(newVal) {
+            if (this.autoSearch) {
+                this.emit();
+            }
+        },
+        isPassenger() {
+            if (this.autoSearch) {
+                this.emit();
+            }
+        }
     },
     mounted() {
         bus.on('date-change', this.dateChange);
@@ -244,8 +269,10 @@ export default {
             }
             if (i === 0) {
                 this.from_town = obj;
+                this.$refs.to_town.focus();
             } else {
                 this.to_town = obj;
+                this.$refs.datepicker.setFocus();
             }
         },
         emit() {
@@ -306,6 +333,7 @@ export default {
         resetInput(input) {
             if (this.$refs[input]) {
                 this.$refs[input].input = '';
+                this.$refs[input].focus();
             }
             this[input] = {
                 name: '',
@@ -319,6 +347,11 @@ export default {
             temp = this['to_town'];
             this['to_town'] = Object.assign({}, this['from_town']);
             this['from_town'] = Object.assign({}, temp);
+            
+            // Search will only auto-trigger on desktop
+            if (!this.isMobile) {
+                this.emit();
+            }
         },
         clear() {
             this.resetInput('from_town');
@@ -512,5 +545,12 @@ export default {
     .swap-vertical {
         display: none;
     }
+}
+.search-section {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
 }
 </style>
