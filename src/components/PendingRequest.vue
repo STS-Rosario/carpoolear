@@ -93,7 +93,7 @@
                     <strong>{{
                         trip.points[trip.points.length - 1].json_address.ciudad
                     }}</strong>
-                    {{ $t('pendingRequestDelDia') }} {{ trip.trip_date | moment('DD/MM/YYYY') }} {{ $t('pendingRequestALas') }} las
+                    {{ $t('pendingRequestDelDia') }} {{ trip.trip_date | moment('DD/MM/YYYY') }} {{ $t('pendingRequestALas') }}
                     {{ trip.trip_date | moment('HH:mm') }}.
                     <div class="pending-buttons">
                         <button
