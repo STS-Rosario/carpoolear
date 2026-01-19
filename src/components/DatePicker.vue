@@ -6,6 +6,7 @@
             :class="focus ? 'input-border' : ''"
         >
             <DatepickerSystem
+                ref="datepickerSystem"
                 :clear-button="true"
                 :clear-button-icon="'fa fa-times'"
                 :calendar-button="true"
@@ -30,6 +31,7 @@
             class="form-control form-control-with-icon form-control-date"
         >
             <input
+                ref="mobileInput"
                 @focus="focus = true"
                 @blur="focus = false"
                 :value="dateMobile"
@@ -95,6 +97,13 @@ export default {
                 this.niceDate = moment(el.target.value).format('DD/MM/YYYY');
             } else {
                 this.niceDate = '';
+            }
+        },
+        setFocus() {
+            if (this.browser) {
+                this.$refs.datepickerSystem.showCalendar();
+            } else {
+                this.$refs.mobileInput.focus();
             }
         }
     },

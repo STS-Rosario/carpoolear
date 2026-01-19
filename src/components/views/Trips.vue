@@ -230,7 +230,7 @@
                         </strong>
                         <button
                             class="btn btn-primary"
-                            v-if="user && !searchParams.data.is_passenger"
+                            v-if="user"
                             @click="subscribeSearch"
                         >
                             {{ $t('crearAlerta') }}
