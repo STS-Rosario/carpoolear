@@ -21,6 +21,7 @@
                 @click="onItemClick(result)"
                 v-if="results.length"
                 :key="index"
+                :class="{ 'selected': index === indexAutocomplete }"
             >
                 {{ result.name }}
                 <small>{{ result.state }}, {{ result.country }}</small>
@@ -30,7 +31,7 @@
                     src="https://carpoolear.com.ar/static/img/loader.gif"
                     alt=""
                     class="ajax-loader"
-                    v-if="this.waiting"
+                    v-if="this.input !== '' && this.waiting"
                 />
                 <span class="osm-copyright">© OpenStreetMap</span>
             </small>
@@ -176,6 +177,9 @@ export default {
                             return b.importance - a.importance;
                         });
                         this.results = data;
+                        if (this.config.autocomplete_select_first) {
+                            this.indexAutocomplete = 0;
+                        }
                     } else {
                         this.results = [];
                     }
@@ -253,6 +257,9 @@ export default {
 .osm-autocomplete-results button small {
     font-size: 11px;
     color: #aaa;
+}
+.osm-autocomplete-results button.selected {
+    background-color: #e0e0e0;
 }
 .osm-autocomplete-results .copy {
     white-space: nowrap;

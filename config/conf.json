@@ -30,5 +30,8 @@
     "allow_rating_reply": true,
     "module_references": true,
     "name_app": "Carpoolear",
-    "app_name": "Inicio"
+    "app_name": "Inicio",
+    "trips_auto_search": true,
+    "trips_focus_next": true,
+    "autocomplete_select_first": true
 }
