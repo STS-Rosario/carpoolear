@@ -310,6 +310,8 @@ import router from '../../router';
 import dialogs from '../../services/dialogs.js';
 import modal from '../Modal';
 import push from '../../cordova/push.js';
+import { App } from '@capacitor/app';
+import { Capacitor } from '@capacitor/core';
 
 export default {
     name: 'trips',
@@ -494,13 +496,38 @@ export default {
             this.lookSearch = false;
             this.alreadySubscribe = false;
         },
-        onDonate() {
+        async onDonate() {
+            // if we're in Capacitor iOS, do not show the modal, just open the link in the browser
+            if (Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'ios') {
+                let url = 'https://carpoolear.com.ar/donar';
+                if (this.user && this.user.id) {
+                    url = `${url}?u=${this.user.id}`;
+                }
+                await this.openExternalBrowser(url);
+                return;
+            }
             this.showModal = true;
         },
-        onOpenLink(link) {
-            window.open(link, '_blank');
+        async openExternalBrowser(url) {
+            // On iOS Capacitor, use App.openUrl() to open in external browser (Safari)
+            // This makes the user leave the app, which is required for donations
+            if (Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'ios') {
+                try {
+                    await App.openUrl({ url });
+                } catch (error) {
+                    console.error('Error opening URL in external browser:', error);
+                    // Fallback to window.open if App.openUrl fails
+                    window.open(url, '_blank');
+                }
+            } else {
+                // For web or Android, use window.open
+                window.open(url, '_blank');
+            }
         },
-        onDonateOnceTime() {
+        onOpenLink(link) {
+            this.openExternalBrowser(link);
+        },
+        async onDonateOnceTime() {
             if (this.donateValue > 0) {
                 var url = 'http://mpago.la/jgap'; // 50
                 switch (this.donateValue) {
@@ -520,7 +547,13 @@ export default {
                         url = 'https://mpago.la/jgap';
                         break;
                 }
-                window.open(url, '_blank');
+                // Add userId parameter for tracking
+                if (this.user && this.user.id) {
+                    const separator = url.includes('?') ? '&' : '?';
+                    url = `${url}${separator}u=${this.user.id}`;
+                }
+                // Open in external browser (required for iOS donations)
+                await this.openExternalBrowser(url);
                 this.showModal = false;
                 let data = {
                     has_donated: 1,
@@ -535,7 +568,7 @@ export default {
                 });
             }
         },
-        onDonateMonthly() {
+        async onDonateMonthly() {
             if (this.donateValue >= 0) {
                 var url = 'http://mpago.la/2XdoxpF'; // 50
                 switch (this.donateValue) {
@@ -551,7 +584,13 @@ export default {
                     default:
                         break;
                 }
-                window.open(url, '_blank');
+                // Add userId parameter for tracking
+                if (this.user && this.user.id) {
+                    const separator = url.includes('?') ? '&' : '?';
+                    url = `${url}${separator}u=${this.user.id}`;
+                }
+                // Open in external browser (required for iOS donations)
+                await this.openExternalBrowser(url);
                 this.showModal = false;
                 let data = {
                     has_donated: 1,
