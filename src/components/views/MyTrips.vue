@@ -205,7 +205,7 @@
                             href="/donar"
                             target="_blank"
                             v-on:click.prevent="
-                                onOpenLink('https://carpoolear.com.ar/donar')
+                                openDonationLink()
                             "
                         >
                             {{ $t('conoceMasDonar') }}
@@ -389,6 +389,8 @@ import Tab from '../elements/Tab';
 import modal from '../Modal';
 import dialogs from '../../services/dialogs.js';
 import bus from '../../services/bus-event.js';
+import { App } from '@capacitor/app';
+import { Capacitor } from '@capacitor/core';
 
 export default {
     name: 'my-trips',
@@ -464,7 +466,31 @@ export default {
                 window.scrollTo(0, domNode.offsetTop - 150);
             }
         },
-        onDonateOnceTime() {
+        async openExternalBrowser(url) {
+            // On iOS Capacitor, use App.openUrl() to open in external browser (Safari)
+            // This makes the user leave the app, which is required for donations
+            if (Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'ios') {
+                try {
+                    await App.openUrl({ url });
+                } catch (error) {
+                    console.error('Error opening URL in external browser:', error);
+                    // Fallback to window.open if App.openUrl fails
+                    window.open(url, '_blank');
+                }
+            } else {
+                // For web or Android, use window.open
+                window.open(url, '_blank');
+            }
+        },
+        async openDonationLink() {
+            let url = 'https://carpoolear.com.ar/donar';
+            // Add userId parameter for tracking
+            if (this.user && this.user.id) {
+                url = `${url}?u=${this.user.id}`;
+            }
+            await this.openExternalBrowser(url);
+        },
+        async onDonateOnceTime() {
             if (this.donateValue > 0) {
                 var url = 'http://mpago.la/jgap'; // 50
                 switch (this.donateValue) {
@@ -483,7 +509,13 @@ export default {
                     default:
                         break;
                 }
-                window.open(url, '_blank');
+                // Add userId parameter for tracking
+                if (this.user && this.user.id) {
+                    const separator = url.includes('?') ? '&' : '?';
+                    url = `${url}${separator}u=${this.user.id}`;
+                }
+                // Open in external browser (required for iOS donations)
+                await this.openExternalBrowser(url);
                 this.showModalRequestDonation = false;
                 let data = {
                     has_donated: 1,
@@ -494,7 +526,7 @@ export default {
                 this.registerDonation(data);
             } else {
                 dialogs.message(
-                    $t('tienesQueSeleccionarDonacion'),
+                    this.$t('tienesQueSeleccionarDonacion'),
                     {
                         duration: 10,
                         estado: 'error'
@@ -502,7 +534,7 @@ export default {
                 );
             }
         },
-        onDonateMonthly() {
+        async onDonateMonthly() {
             if (this.donateValue > 0) {
                 var url = 'http://mpago.la/2XdoxpF'; // 50
                 switch (this.donateValue) {
@@ -518,7 +550,13 @@ export default {
                     default:
                         break;
                 }
-                window.open(url, '_blank');
+                // Add userId parameter for tracking
+                if (this.user && this.user.id) {
+                    const separator = url.includes('?') ? '&' : '?';
+                    url = `${url}${separator}u=${this.user.id}`;
+                }
+                // Open in external browser (required for iOS donations)
+                await this.openExternalBrowser(url);
                 this.showModalRequestDonation = false;
                 let data = {
                     has_donated: 1,
@@ -529,7 +567,7 @@ export default {
                 this.registerDonation(data);
             } else {
                 dialogs.message(
-                    $t('tienesQueSeleccionarDonacion'),
+                    this.$t('tienesQueSeleccionarDonacion'),
                     {
                         duration: 10,
                         estado: 'error'
