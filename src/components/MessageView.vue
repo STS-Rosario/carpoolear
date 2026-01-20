@@ -1,7 +1,7 @@
 <template>
     <div
         class="message-wrapper"
-        v-bind:class="[author.id == user.id ? 'message-wrapper-me' : '']"
+        v-bind:class="[message.user_id == user.id ? 'message-wrapper-me' : '']"
     >
         <div class="message media">
             <div class="media-left" v-if="grupalChat">
