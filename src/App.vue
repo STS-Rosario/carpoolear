@@ -5,7 +5,7 @@
     >
         <!-- Custom Splash Screen -->
         <div v-if="showCustomSplash" class="custom-splash-screen">
-            <img src="https://carpoolear.com.ar/app/static/img/splash-android-1280x1920.png" alt="Carpoolear" class="splash-image" />
+            <img src="static/img/splash-android-1280x1920.png" alt="Carpoolear" class="splash-image" />
             <div class="splash-version">Version 77</div>
         </div>
         

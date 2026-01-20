@@ -134,7 +134,7 @@
                             <autocomplete
                                 :placeholder="getPlaceholder(index)"
                                 name="'input-' + index"
-                                ref="'input-' + index"
+                                :ref="'input-' + index"
                                 :value="m.name"
                                 v-on:place_changed="
                                     (data) => getPlace(index, data)
@@ -245,7 +245,7 @@
                                     <autocomplete
                                         :placeholder="getPlaceholder(index)"
                                         name="'input-' + index"
-                                        ref="'input-' + index"
+                                        :ref="'input-' + index"
                                         :value="m.name"
                                         v-on:place_changed="
                                             (data) => getPlace(index, data)
@@ -913,7 +913,7 @@
                             <autocomplete
                                 :placeholder="getPlaceholder(index)"
                                 name="'input-return-trip' + index"
-                                ref="'input-return-trip' + index"
+                                :ref="'input-return-trip' + index"
                                 :value="m.name"
                                 v-on:place_changed="
                                     (data) =>
@@ -969,7 +969,7 @@
                                     <autocomplete
                                         :placeholder="getPlaceholder(index)"
                                         name="'input-return-trip' + index"
-                                        ref="'input-return-trip' + index"
+                                        :ref="'input-return-trip' + index"
                                         :value="m.name"
                                         v-on:place_changed="
                                             (data) =>
