@@ -42,6 +42,14 @@
                         <span>{{ $t('buscoPasajeros') }}</span>
                     </div>
                 </div>
+                <div
+                    class="suscription-item-detail"
+                    v-else
+                >
+                    <div class="suscription-item-detail--content">
+                        <span v-html="$t('buscoConductor')"></span>
+                    </div>
+                </div>
                 <div class="suscription-item-detail" v-if="resultCount > 0">
                     <div class="suscription-item-detail--content">
                         <span>{{ $t('coincidencias') }}:</span>
