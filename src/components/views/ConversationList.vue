@@ -220,8 +220,7 @@ export default {
     name: 'conversation-list',
     data() {
         return {
-            textSearch: '',
-            searchDebounceTimer: null
+            textSearch: ''
         };
     },
 
@@ -295,17 +294,10 @@ export default {
                 router.push({ name: 'conversation-chat' });
             }
         },
-        textSearch: function (newValue) {
-            if (this.searchDebounceTimer) {
-                clearTimeout(this.searchDebounceTimer);
+        textSearch: function (newValue, oldValue) {
+            if (oldValue.length === 0 && newValue.length > 0) {
+                this.clear();
             }
-            this.searchDebounceTimer = setTimeout(() => {
-                if (newValue.length > 0) {
-                    this.searchUser(newValue);
-                } else {
-                    this.clear();
-                }
-            }, 500);
         }
     },
 
