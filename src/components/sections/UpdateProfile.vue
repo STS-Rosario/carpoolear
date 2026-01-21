@@ -158,15 +158,13 @@
                         </label>
                         <input
                             type="tel"
-                            v-model="dniFormatted"
+                            v-model="user.nro_doc"
                             @input="handleDniInput"
-                            @keydown="handleDniKeydown"
-                            @paste="handleDniPaste"
                             class="form-control"
                             id="input-dni"
                             :placeholder="$t('doc')"
                             :class="{ 'has-error': dniError.state }"
-                            maxlength="11"
+                            :maxlength="(config.profile_id_format).length"
                         />
                         <span class="error" v-if="dniError.state">
                             {{ dniError.message }}
@@ -531,7 +529,6 @@ import bus from '../../services/bus-event';
 import Spinner from '../Spinner.vue';
 import modal from '../Modal';
 import { UserApi } from '../../services/api';
-import dniFormatter from '../../mixins/dniFormatter';
 
 class Error {
     constructor(state = false, message = '') {
@@ -542,7 +539,6 @@ class Error {
 
 export default {
     name: 'upddate-profile',
-    mixins: [dniFormatter],
     data() {
         return {
             user: null,
@@ -587,7 +583,8 @@ export default {
             firstTime: 'auth/firstTime',
             cars: 'cars/cars',
             isMobile: 'device/isMobile',
-            settings: 'auth/appConfig'
+            settings: 'auth/appConfig',
+            config: 'auth/appConfig'
         }),
         iptUser() {
             if (this.user) {
@@ -667,17 +664,51 @@ export default {
         changePhoto() {
             this.$refs.file.show();
         },
-        // Override mixin methods to specify the DNI field path
-        getDniValue() {
-            if (this.user && this.user.nro_doc) {
-                return this.user.nro_doc;
+        // Format ID based on pattern from config
+        // Pattern: # for numbers, A for letters, other characters are literal separators
+        formatId(value, pattern) {
+            const cleaned = String(value || '').replace(/[^a-zA-Z0-9]/g, '');
+            
+            let formatted = '';
+            let cleanedIndex = 0;
+            
+            for (let i = 0; i < pattern.length && cleanedIndex < cleaned.length; i++) {
+                if (pattern[i] === '#') {
+                    if (/[0-9]/.test(cleaned[cleanedIndex])) {
+                        formatted += cleaned[cleanedIndex];
+                        cleanedIndex++;
+                    } else {
+                        break;
+                    }
+                } else if (pattern[i] === 'A') {
+                    if (/[a-zA-Z]/.test(cleaned[cleanedIndex])) {
+                        formatted += cleaned[cleanedIndex].toUpperCase();
+                        cleanedIndex++;
+                    } else {
+                        break;
+                    }
+                } else {
+                    formatted += pattern[i];
+                }
             }
-            return '';
+            
+            return formatted;
         },
-        setDniValue(value) {
-            if (this.user) {
-                this.user.nro_doc = value;
-            }
+        // Handle DNI input - format using pattern
+        handleDniInput(event) {
+            const formatted = this.formatId(event.target.value, this.config.profile_id_format);
+            event.target.value = formatted;
+            // Update the Vue data model with the formatted value
+            this.user.nro_doc = formatted;
+        },
+        // Clean DNI value by removing separators
+        cleanDniValue(value) {
+            if (!value) return '';
+            const pattern = this.config.profile_id_format;
+            // Remove any characters that are separators in the pattern
+            const separators = pattern.replace(/[#A]/g, '');
+            const separatorRegex = new RegExp('[' + separators.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + ']', 'g');
+            return String(value).replace(separatorRegex, '');
         },
         grabar() {
             if (this.validate()) {
@@ -952,9 +983,9 @@ export default {
         userData: function () {
             console.log('userData', this.userData);
             this.user = this.userData;
-            // Ensure nro_doc is stored as raw value (no dots) when loaded from backend
+            // Format nro_doc with pattern when loaded from backend
             if (this.user && this.user.nro_doc) {
-                this.user.nro_doc = this.cleanDniValue(this.user.nro_doc);
+                this.user.nro_doc = this.formatId(this.user.nro_doc, this.config.profile_id_format);
             }
         },
         iptUser() {
@@ -1003,6 +1034,10 @@ export default {
         });
         bus.on('date-change', this.dateChange);
         this.user = this.userData;
+        // Format nro_doc with pattern when page loads
+        if (this.user && this.user.nro_doc) {
+            this.user.nro_doc = this.formatId(this.user.nro_doc, this.config.profile_id_format);
+        }
         console.log('USUARIO', this.userData);
         if (
             Array.isArray(this.user.driver_data_docs) &&
@@ -1088,3 +1123,4 @@ hr {
     border-top: 1px solid #cccccc;
 }
 </style>
+

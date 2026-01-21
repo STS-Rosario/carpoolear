@@ -33,5 +33,6 @@
     "app_name": "Inicio",
     "trips_auto_search": false,
     "trips_focus_next": false,
-    "autocomplete_select_first": false
+    "autocomplete_select_first": false,
+    "profile_id_format": "##.###.###"
 }
