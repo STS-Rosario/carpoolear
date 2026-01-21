@@ -21,13 +21,14 @@ const actions = {
         return carApi
             .index(data)
             .then((response) => {
-                store.commit(
-                    types.CARS_SET,
-                    response.data ? response.data : []
-                );
+                const cars = Array.isArray(response)
+                    ? response
+                    : response.data || [];
+                store.commit(types.CARS_SET, cars);
+                return cars;
             })
             .catch((err) => {
-                console.log(err);
+                console.error('CarApi index error:', err);
             });
     },
 
@@ -35,8 +36,9 @@ const actions = {
         return carApi
             .create(data)
             .then((response) => {
-                store.commit(types.CARS_ADD, response.data);
-                return Promise.resolve(response.data);
+                const car = response.data || response;
+                store.commit(types.CARS_ADD, car);
+                return Promise.resolve(car);
             })
             .catch((err) => {
                 if (err) {
@@ -49,8 +51,9 @@ const actions = {
         return carApi
             .update(data)
             .then((response) => {
-                store.commit(types.CARS_UPDATE, response.data);
-                return Promise.resolve(response.data);
+                const car = response.data || response;
+                store.commit(types.CARS_UPDATE, car);
+                return Promise.resolve(car);
             })
             .catch((err) => {
                 if (err) {
