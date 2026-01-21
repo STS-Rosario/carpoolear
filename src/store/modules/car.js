@@ -21,8 +21,11 @@ const actions = {
         return carApi
             .index(data)
             .then((response) => {
-                store.commit(types.CARS_SET, response);
-                return response;
+                const cars = Array.isArray(response)
+                    ? response
+                    : response.data || [];
+                store.commit(types.CARS_SET, cars);
+                return cars;
             })
             .catch((err) => {
                 console.error('CarApi index error:', err);
