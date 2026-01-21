@@ -25,7 +25,6 @@ const actions = {
                     ? response
                     : response.data || [];
                 store.commit(types.CARS_SET, cars);
-                return cars;
             })
             .catch((err) => {
                 console.error('CarApi index error:', err);
