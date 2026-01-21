@@ -1411,9 +1411,9 @@ const messages = {
             'Before starting the trip, verify that the ID matches the one uploaded by the other person.',
         momentoViajar: 'when traveling.',
         nroTel: 'Phone number',
-        ejemploTelefono: 'Your phone number e.g 5555 5555',
+        ejemploTelefono: 'e.g 5555 5555',
         incentivoTelefono:
-            'After coordinating the trip (defining trip details + sending and accepting seat request) exchange phone numbers for quicker contact.',
+            'After coordinating the trip (defining trip details and sending/accepting seat request) exchange phone numbers for quicker contact.',
         soloConductores: 'For drivers only',
         incentivoPatente:
             'Before starting the trip, verify that the license plate matches the one provided by the other person.',
