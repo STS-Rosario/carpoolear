@@ -158,7 +158,7 @@
                         </label>
                         <input
                             type="tel"
-                            v-model="dniFormatted"
+                            v-model="formattedId"
                             @input="handleDniInput"
                             @keydown="handleDniKeydown"
                             @paste="handleDniPaste"
@@ -166,7 +166,7 @@
                             id="input-dni"
                             :placeholder="$t('doc')"
                             :class="{ 'has-error': dniError.state }"
-                            maxlength="11"
+                            :maxlength="useNID ? 15 : 11"
                         />
                         <span class="error" v-if="dniError.state">
                             {{ dniError.message }}
@@ -530,6 +530,7 @@ import Spinner from '../Spinner.vue';
 import modal from '../Modal';
 import { UserApi } from '../../services/api';
 import dniFormatter from '../../mixins/dniFormatter';
+import nidFormatter from '../../mixins/nidFormatter';
 
 class Error {
     constructor(state = false, message = '') {
@@ -540,7 +541,7 @@ class Error {
 
 export default {
     name: 'upddate-profile',
-    mixins: [dniFormatter],
+    mixins: [dniFormatter, nidFormatter],
     data() {
         return {
             user: null,
@@ -585,8 +586,24 @@ export default {
             firstTime: 'auth/firstTime',
             cars: 'cars/cars',
             isMobile: 'device/isMobile',
-            settings: 'auth/appConfig'
+            settings: 'auth/appConfig',
+            config: 'auth/appConfig'
         }),
+        useNID() {
+            return this.config.profile_use_national_id;
+        },
+        formatter() {
+            return this.useNID ? nidFormatter : dniFormatter;
+        },
+        formattedId: {
+            get() {
+                if (!this.getDniValue()) return '';
+                return this.formatter.computed.dniFormatted.get.call(this);
+            },
+            set(value) {
+                this.formatter.computed.dniFormatted.set.call(this, value);
+            }
+        },
         iptUser() {
             if (this.user) {
                 return this.user.name;
@@ -676,6 +693,21 @@ export default {
             if (this.user) {
                 this.user.nro_doc = value;
             }
+        },
+        formatDni(value) {
+            return this.formatter.methods.formatDni.call(this, value);
+        },
+        handleDniInput(event) {
+            return this.formatter.methods.handleDniInput.call(this, event);
+        },
+        handleDniKeydown(event) {
+            return this.formatter.methods.handleDniKeydown.call(this, event);
+        },
+        handleDniPaste(event) {
+            return this.formatter.methods.handleDniPaste.call(this, event);
+        },
+        cleanDniValue(value) {
+            return this.formatter.methods.cleanDniValue.call(this, value);
         },
         grabar() {
             if (this.validate()) {
