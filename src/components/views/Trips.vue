@@ -190,9 +190,6 @@
                                     class="btn btn-success pull-right btn-donar"
                                     @click="onDonate"
                                 >
-                                <!-- apply this check to the Donar button
-                                  if (Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'ios') {
-                                } -->
                                     {{ Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'ios' ? $t('donarEnSafari') : $t('donar') }}
                                 </button>
                                 <h2>{{ $t('ayudanos') }}</h2>
