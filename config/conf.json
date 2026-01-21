@@ -1,12 +1,12 @@
 {
-    "admin_email": "ziadjkhan@gmail.com",
+    "admin_email": "pabloluisbotta@gmail.com",
     "banner": {
         "image": "",
         "url": ""
     },
-    "country_name": "Mauritius",
-    "locale": "en",
-    "osm_country": "MUS",
+    "country_name": "Argentina",
+    "locale": "arg",
+    "osm_country": "ARG",
     "donation": {
         "ammount_needed": 1000,
         "month_days": 0,
@@ -29,10 +29,9 @@
     },
     "allow_rating_reply": true,
     "module_references": true,
-    "name_app": "Carpooling",
-    "app_name": "Trips",
-    "trips_auto_search": true,
-    "trips_focus_next": true,
-    "autocomplete_select_first": true,
-    "profile_use_national_id": true
+    "name_app": "Carpoolear",
+    "app_name": "Inicio",
+    "trips_auto_search": false,
+    "trips_focus_next": false,
+    "autocomplete_select_first": false
 }
