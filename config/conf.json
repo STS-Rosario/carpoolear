@@ -34,5 +34,5 @@
     "trips_auto_search": false,
     "trips_focus_next": false,
     "autocomplete_select_first": false,
-    "profile_use_national_id": false
+    "profile_id_format": "##.###.###"
 }

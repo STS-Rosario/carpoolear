@@ -158,15 +158,13 @@
                         </label>
                         <input
                             type="tel"
-                            v-model="formattedId"
+                            v-model="user.nro_doc"
                             @input="handleDniInput"
-                            @keydown="handleDniKeydown"
-                            @paste="handleDniPaste"
                             class="form-control"
                             id="input-dni"
                             :placeholder="$t('doc')"
                             :class="{ 'has-error': dniError.state }"
-                            :maxlength="useNID ? 15 : 11"
+                            :maxlength="(config.profile_id_format).length"
                         />
                         <span class="error" v-if="dniError.state">
                             {{ dniError.message }}
@@ -529,8 +527,6 @@ import bus from '../../services/bus-event';
 import Spinner from '../Spinner.vue';
 import modal from '../Modal';
 import { UserApi } from '../../services/api';
-import dniFormatter from '../../mixins/dniFormatter';
-import nidFormatter from '../../mixins/nidFormatter';
 
 class Error {
     constructor(state = false, message = '') {
@@ -541,7 +537,6 @@ class Error {
 
 export default {
     name: 'upddate-profile',
-    mixins: [dniFormatter, nidFormatter],
     data() {
         return {
             user: null,
@@ -589,21 +584,6 @@ export default {
             settings: 'auth/appConfig',
             config: 'auth/appConfig'
         }),
-        useNID() {
-            return this.config.profile_use_national_id;
-        },
-        formatter() {
-            return this.useNID ? nidFormatter : dniFormatter;
-        },
-        formattedId: {
-            get() {
-                if (!this.getDniValue()) return '';
-                return this.formatter.computed.dniFormatted.get.call(this);
-            },
-            set(value) {
-                this.formatter.computed.dniFormatted.set.call(this, value);
-            }
-        },
         iptUser() {
             if (this.user) {
                 return this.user.name;
@@ -682,32 +662,52 @@ export default {
         changePhoto() {
             this.$refs.file.show();
         },
-        // Override mixin methods to specify the DNI field path
-        getDniValue() {
-            if (this.user && this.user.nro_doc) {
-                return this.user.nro_doc;
+        // Format ID based on pattern from config
+        // Pattern: # for numbers, A for letters, other characters are literal separators
+        formatId(value, pattern) {
+            const cleaned = String(value || '').replace(/[^a-zA-Z0-9]/g, '');
+            
+            let formatted = '';
+            let cleanedIndex = 0;
+            
+            for (let i = 0; i < pattern.length && cleanedIndex < cleaned.length; i++) {
+                if (pattern[i] === '#') {
+                    if (/[0-9]/.test(cleaned[cleanedIndex])) {
+                        formatted += cleaned[cleanedIndex];
+                        cleanedIndex++;
+                    } else {
+                        break;
+                    }
+                } else if (pattern[i] === 'A') {
+                    if (/[a-zA-Z]/.test(cleaned[cleanedIndex])) {
+                        formatted += cleaned[cleanedIndex].toUpperCase();
+                        cleanedIndex++;
+                    } else {
+                        break;
+                    }
+                } else {
+                    formatted += pattern[i];
+                }
             }
-            return '';
+            
+            return formatted;
         },
-        setDniValue(value) {
-            if (this.user) {
-                this.user.nro_doc = value;
-            }
-        },
-        formatDni(value) {
-            return this.formatter.methods.formatDni.call(this, value);
-        },
+        // Handle DNI input - format using pattern
         handleDniInput(event) {
-            return this.formatter.methods.handleDniInput.call(this, event);
+            const pattern = this.config.profile_id_format;
+            const formatted = this.formatId(event.target.value, pattern);
+            event.target.value = formatted;
+            // Update the Vue data model with the formatted value
+            this.user.nro_doc = formatted;
         },
-        handleDniKeydown(event) {
-            return this.formatter.methods.handleDniKeydown.call(this, event);
-        },
-        handleDniPaste(event) {
-            return this.formatter.methods.handleDniPaste.call(this, event);
-        },
+        // Clean DNI value by removing separators
         cleanDniValue(value) {
-            return this.formatter.methods.cleanDniValue.call(this, value);
+            if (!value) return '';
+            const pattern = this.config.profile_id_format;
+            // Remove any characters that are separators in the pattern
+            const separators = pattern.replace(/[#A]/g, '');
+            const separatorRegex = new RegExp('[' + separators.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + ']', 'g');
+            return String(value).replace(separatorRegex, '');
         },
         grabar() {
             if (this.validate()) {
@@ -982,9 +982,10 @@ export default {
         userData: function () {
             console.log('userData', this.userData);
             this.user = this.userData;
-            // Ensure nro_doc is stored as raw value (no dots) when loaded from backend
+            // Format nro_doc with pattern when loaded from backend
             if (this.user && this.user.nro_doc) {
-                this.user.nro_doc = this.cleanDniValue(this.user.nro_doc);
+                const pattern = this.config.profile_id_format;
+                this.user.nro_doc = this.formatId(this.user.nro_doc, pattern);
             }
         },
         iptUser() {
@@ -1033,6 +1034,11 @@ export default {
         });
         bus.on('date-change', this.dateChange);
         this.user = this.userData;
+        // Format nro_doc with pattern when page loads
+        if (this.user && this.user.nro_doc) {
+            const pattern = this.config.profile_id_format;
+            this.user.nro_doc = this.formatId(this.user.nro_doc, pattern);
+        }
         console.log('USUARIO', this.userData);
         if (
             Array.isArray(this.user.driver_data_docs) &&
@@ -1118,3 +1124,4 @@ hr {
     border-top: 1px solid #cccccc;
 }
 </style>
+
