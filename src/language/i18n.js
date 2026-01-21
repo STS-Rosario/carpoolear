@@ -1406,7 +1406,7 @@ const messages = {
         acercaDeMi: 'About me',
         soloNumeros: 'Numbers only',
         incentivoDescripcion:
-            "Tell others about yourself so they add you to their trips! What you like to do, what you're up to now, if you have any ideas, your favorite color, etc.",
+            "Introduce yourself to potential travel companions! Talk about your interests, what you're doing these days, your hobbies, or anything else you'd like to share.",
         incentivoDoc:
             'Before starting the trip, verify that the ID matches the one uploaded by the other person.',
         momentoViajar: 'when traveling.',
