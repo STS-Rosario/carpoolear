@@ -21,13 +21,13 @@ const actions = {
         return carApi
             .index(data)
             .then((response) => {
-                store.commit(
-                    types.CARS_SET,
-                    response.data ? response.data : []
-                );
+                const cars = Array.isArray(response)
+                    ? response
+                    : response.data || [];
+                store.commit(types.CARS_SET, cars);
             })
             .catch((err) => {
-                console.log(err);
+                console.error('CarApi index error:', err);
             });
     },
 
