@@ -36,9 +36,8 @@ const actions = {
         return carApi
             .create(data)
             .then((response) => {
-                const car = response.data || response;
-                store.commit(types.CARS_ADD, car);
-                return Promise.resolve(car);
+                store.commit(types.CARS_ADD, response.data);
+                return Promise.resolve(response.data);
             })
             .catch((err) => {
                 if (err) {
@@ -51,9 +50,8 @@ const actions = {
         return carApi
             .update(data)
             .then((response) => {
-                const car = response.data || response;
-                store.commit(types.CARS_UPDATE, car);
-                return Promise.resolve(car);
+                store.commit(types.CARS_UPDATE, response.data);
+                return Promise.resolve(response.data);
             })
             .catch((err) => {
                 if (err) {
