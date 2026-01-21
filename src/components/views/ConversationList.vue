@@ -20,6 +20,7 @@
                                     <input
                                         v-jump:click="'btn-search'"
                                         v-model="textSearch"
+                                        v-debounceInput="onSearchUser"
                                         type="text"
                                         class="form-control"
                                         :placeholder="$t('escribeUnNombreYPresionaBuscar')"
