@@ -694,8 +694,7 @@ export default {
         },
         // Handle DNI input - format using pattern
         handleDniInput(event) {
-            const pattern = this.config.profile_id_format;
-            const formatted = this.formatId(event.target.value, pattern);
+            const formatted = this.formatId(event.target.value, this.config.profile_id_format);
             event.target.value = formatted;
             // Update the Vue data model with the formatted value
             this.user.nro_doc = formatted;
@@ -984,8 +983,7 @@ export default {
             this.user = this.userData;
             // Format nro_doc with pattern when loaded from backend
             if (this.user && this.user.nro_doc) {
-                const pattern = this.config.profile_id_format;
-                this.user.nro_doc = this.formatId(this.user.nro_doc, pattern);
+                this.user.nro_doc = this.formatId(this.user.nro_doc, this.config.profile_id_format);
             }
         },
         iptUser() {
@@ -1036,8 +1034,7 @@ export default {
         this.user = this.userData;
         // Format nro_doc with pattern when page loads
         if (this.user && this.user.nro_doc) {
-            const pattern = this.config.profile_id_format;
-            this.user.nro_doc = this.formatId(this.user.nro_doc, pattern);
+            this.user.nro_doc = this.formatId(this.user.nro_doc, this.config.profile_id_format);
         }
         console.log('USUARIO', this.userData);
         if (
