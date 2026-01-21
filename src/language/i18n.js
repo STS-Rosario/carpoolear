@@ -277,6 +277,7 @@ const messages = {
             'Para ingresar debes activar tu cuenta, te hemos enviado un link de activación a tu email para que puedas activar tu cuenta.',
         instalar: 'Instalar',
         donar: 'Donar',
+        donarEnSafari: 'Conocer más',
         ingresar: 'Ingresar',
         recordarme: 'Recordarme',
         olvideContra: 'Recuperar contraseña de mi cuenta',
