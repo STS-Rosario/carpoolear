@@ -1420,7 +1420,7 @@ const messages = {
         siSosConductorDatosVisibles:
             'This information is shared between drivers and their confirmed passengers on a trip.',
         tildaOpcionDatosVisibles:
-            'Enable this option to make your information publicly visible on your profile. If disabled, only trip participants you\'ve confirmed (or who\'ve confirmed you) will be able to see this information.',
+            'Toggle this on to let anyone view your information. Leave it off to keep it private between you and your confirmed trip partners.',
         datosVisiblesCheck: 'Public data',
         notificacionesPorCorreo: 'Receive notifications by email.',
         cambiarPassword: 'Change password',
