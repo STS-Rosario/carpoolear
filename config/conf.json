@@ -5,7 +5,7 @@
         "url": ""
     },
     "country_name": "Argentina",
-    "country_coordinates": "[-29.0, -60.0]",
+    "country_coordinates": [-29.0, -60.0],
     "locale": "arg",
     "osm_country": "ARG",
     "donation": {
