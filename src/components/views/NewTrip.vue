@@ -1867,7 +1867,7 @@ export default {
             );
         },
         CO2String() {
-            return Math.floor(this.trip.distance / 1000) * 1.5 + ' Kg';
+            return Math.floor(this.trip.distance / 1000) * 0.15 + ' Kg';
         },
         otherTripDistanceString() {
             return Math.floor(this.otherTrip.trip.distance / 1000) + ' Km';
@@ -1886,7 +1886,7 @@ export default {
         },
         otherTripCO2String() {
             return (
-                Math.floor(this.otherTrip.trip.distance / 1000) * 1.5 + ' Kg'
+                Math.floor(this.otherTrip.trip.distance / 1000) * 0.15 + ' Kg'
             );
         },
         tripCardTheme() {
