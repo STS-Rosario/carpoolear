@@ -2454,7 +2454,7 @@ export default {
                 }));
                 
                 // Update the center to the first point of the return trip
-                this.otherTrip.center = this.center;
+                this.otherTrip.center = this.otherTrip.points[0].location;
                 this.calcRoute('returnTrip');
             } else {
                 this.addReturnPoint();
