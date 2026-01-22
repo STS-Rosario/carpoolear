@@ -369,9 +369,7 @@ const mutations = {
                     (i) => i.id === item.id
                 )
             ) {
-                // Use Vue.set to ensure proper reactivity when adding to nested array
-                let newList = [...state.messages[item.conversation_id].list, item];
-                Vue.set(state.messages[item.conversation_id], 'list', newList);
+                state.messages[item.conversation_id].list.push(item);
                 if (!id) {
                     // marcar conversacion como no leida
                     let conv = state.list.find(
