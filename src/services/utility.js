@@ -133,3 +133,53 @@ export function getCityName(data) {
     }
     return name;
 }
+
+/**
+ * Format ID based on pattern
+ * Pattern: # for numbers, A for letters, other characters are literal separators
+ * @param {string} value - The raw ID value to format
+ * @param {string} pattern - The pattern to use for formatting (e.g., '##.###.###' or 'AA###AAA')
+ * @returns {string} The formatted ID value
+ */
+export function formatId(value, pattern) {
+    const cleaned = String(value || '').replace(/[^a-zA-Z0-9]/g, '');
+    
+    let formatted = '';
+    let cleanedIndex = 0;
+    
+    for (let i = 0; i < pattern.length && cleanedIndex < cleaned.length; i++) {
+        if (pattern[i] === '#') {
+            if (/[0-9]/.test(cleaned[cleanedIndex])) {
+                formatted += cleaned[cleanedIndex];
+                cleanedIndex++;
+            } else {
+                break;
+            }
+        } else if (pattern[i] === 'A') {
+            if (/[a-zA-Z]/.test(cleaned[cleanedIndex])) {
+                formatted += cleaned[cleanedIndex].toUpperCase();
+                cleanedIndex++;
+            } else {
+                break;
+            }
+        } else {
+            formatted += pattern[i];
+        }
+    }
+    
+    return formatted;
+}
+
+/**
+ * Clean ID by removing separators based on pattern
+ * @param {string} value - The ID value to clean
+ * @param {string} pattern - The pattern used for formatting
+ * @returns {string} The cleaned ID value (raw, no separators)
+ */
+export function cleanId(value, pattern) {
+    if (!value) return '';
+    // Remove any characters that are separators in the pattern
+    const separators = pattern.replace(/[#A]/g, '');
+    const separatorRegex = new RegExp('[' + separators.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + ']', 'g');
+    return String(value).replace(separatorRegex, '');
+}
