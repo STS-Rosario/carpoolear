@@ -1694,7 +1694,6 @@ export default {
             no_lucrar: false,
             sameCity: false,
             zoom: 4,
-            center: [-29.0, -60.0],
             points: [
                 {
                     name: '',
@@ -1766,7 +1765,6 @@ export default {
                 no_lucrar: false,
                 sameCity: false,
                 zoom: 4,
-                center: [-29.0, -60.0],
                 points: [
                     {
                         name: '',
@@ -1894,6 +1892,12 @@ export default {
         },
         remainingFreeTrips() {
             return this.free_trips_amount - this.trips_created_by_user_amount;
+        },
+        center() {
+            return this.config.country_coordinates;
+        },
+        otherTripCenter() {
+            return this.config.country_coordinates;
         }
     },
     watch: {
@@ -2452,7 +2456,7 @@ export default {
                 }));
                 
                 // Update the center to the first point of the return trip
-                this.otherTrip.center = this.otherTrip.points[0].location;
+                this.otherTrip.center = this.otherTripCenter;
                 this.calcRoute('returnTrip');
             } else {
                 this.addReturnPoint();
