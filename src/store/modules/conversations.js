@@ -33,10 +33,14 @@ const getters = {
     selectedConversation: (state) => state.conversationSelected,
 
     msgObj: (state) => state.messages[state.selectedID],
-    messagesList: (state) =>
-        state.messages[state.selectedID]
-            ? state.messages[state.selectedID].list
-            : [],
+    messagesList: (state) => {
+        const messages = state.messages[state.selectedID];
+        if (!messages) return [];
+
+        return [...messages.list].sort((a, b) => 
+            new Date(a.created_at) - new Date(b.created_at)
+        );
+    },
     lastPageConversation: (state) =>
         state.messages[state.selectedID]
             ? state.messages[state.selectedID].lastPage
