@@ -1693,7 +1693,6 @@ export default {
             seatsError: new Error(),
             no_lucrar: false,
             sameCity: false,
-            zoom: 4, // Will be overridden by computed property
             points: [
                 {
                     name: '',
