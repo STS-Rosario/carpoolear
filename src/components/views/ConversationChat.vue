@@ -275,13 +275,16 @@ export default {
     .list-group-item {
         border: 0;
     }
+    .list-group {
+        overflow: hidden;
+    }
     .list-group-item:last-child {
         border-top: 1px solid #ddd;
         bottom: 0;
         left: 0;
         width: 100%;
         position: fixed;
-    }
+    }    
     .conversation_chat .input-group-btn:last-child > .btn {
         height: 44px;
     }
@@ -293,8 +296,8 @@ export default {
         margin-bottom: 1em;
     }
     #messagesWrapper {
-        padding-top: 0;
-        padding-bottom: 65px;
+        padding-top: 45px;
+        padding-bottom: 60px;
     }
 }
 </style>
