@@ -6,8 +6,10 @@ function changePhoto(el, binding, node) {
         arg = '/image/profile/';
     } else if (binding.arg === 'conversation') {
         arg = null;
-    } else {
+    } else if (binding.arg) {
         arg = '/image/' + binding.arg + '/';
+    } else {
+        arg = null;
     }
     el.style.backgroundImage = 'url(' + getRoute(binding.value, arg) + ')';
 }
