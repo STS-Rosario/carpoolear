@@ -33,10 +33,14 @@ const getters = {
     selectedConversation: (state) => state.conversationSelected,
 
     msgObj: (state) => state.messages[state.selectedID],
-    messagesList: (state) =>
-        state.messages[state.selectedID]
-            ? state.messages[state.selectedID].list
-            : [],
+    messagesList: (state) => {
+        const messages = state.messages[state.selectedID];
+        if (!messages) return [];
+
+        return [...messages.list].sort((a, b) => 
+            new Date(a.created_at) - new Date(b.created_at)
+        );
+    },
     lastPageConversation: (state) =>
         state.messages[state.selectedID]
             ? state.messages[state.selectedID].lastPage
@@ -365,7 +369,9 @@ const mutations = {
                     (i) => i.id === item.id
                 )
             ) {
-                state.messages[item.conversation_id].list.push(item);
+                // Use Vue.set to ensure proper reactivity when adding to nested array
+                let newList = [...state.messages[item.conversation_id].list, item];
+                Vue.set(state.messages[item.conversation_id], 'list', newList);
                 if (!id) {
                     // marcar conversacion como no leida
                     let conv = state.list.find(
