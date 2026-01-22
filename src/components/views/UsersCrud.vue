@@ -181,14 +181,12 @@
                                 >
                                 <input
                                     type="tel"
-                                    v-model="dniFormatted"
+                                    v-model="newInfo.nro_doc"
                                     @input="handleDniInput"
-                                    @keydown="handleDniKeydown"
-                                    @paste="handleDniPaste"
                                     class="form-control"
                                     id="input-dni"
                                     :placeholder="$t('doc')"
-                                    maxlength="11"
+                                    :maxlength="(settings.profile_id_format).length"
                                 />
                                 <span class="error" v-if="dniError.state">
                                     {{ dniError.message }}
@@ -243,6 +241,7 @@
                                     class="form-control"
                                     id="input-pass"
                                     :placeholder="$t('contrasena')"
+                                    autocomplete="new-password"
                                 />
                                 <input
                                     maxlength="40"
@@ -251,6 +250,7 @@
                                     class="form-control"
                                     id="input-pass-confirm"
                                     :placeholder="$t('repetirContrasena')"
+                                    autocomplete="new-password"
                                 />
                                 <span class="error" v-if="passError.state">
                                     {{ phoneError.message }}
@@ -392,9 +392,9 @@
                                 <div class="checkbox col-md-19">
                                     <label>
                                         <input
-                                            type="checkbox"
-                                            v-model="newInfo.banned"
-                                        />
+                                                type="checkbox"
+                                                v-model="newInfo.banned"
+                                            />
                                         {{ $t('usuarioSuspendido') }}
                                     </label>
                                 </div>
@@ -427,17 +427,15 @@
 import { mapGetters, mapActions } from 'vuex';
 import { Thread } from '../../classes/Threads.js';
 import Loading from '../Loading.vue';
-import { inputIsNumber } from '../../services/utility';
+import { inputIsNumber, formatId, cleanId } from '../../services/utility';
 import dialogs from '../../services/dialogs.js';
 import router from '../../router';
 import adminNav from '../sections/adminNav';
-import dniFormatter from '../../mixins/dniFormatter';
 
 export default {
     // TODO fix css names
     // TODO search by facebook
     name: 'admin-users',
-    mixins: [dniFormatter],
     data() {
         return {
             textSearch: '',
@@ -510,8 +508,8 @@ export default {
             this.currentUser = user;
             console.log('selectUser', user);
             // Ensure nro_doc is stored as raw value (no dots) when loaded from backend
-            const nroDocRaw = this.currentUser.nro_doc 
-                ? this.cleanDniValue(this.currentUser.nro_doc)
+            const nroDocRaw = this.currentUser.nro_doc
+                ? cleanId(this.currentUser.nro_doc, this.settings.profile_id_format)
                 : '';
             this.newInfo = {
                 name: this.currentUser.name,
@@ -532,6 +530,10 @@ export default {
                 cars: this.currentUser.cars || [],
                 patente: this.currentUser.cars && this.currentUser.cars.length > 0 ? this.currentUser.cars[0].patente : ''
             };
+            // Format nro_doc for display after loading
+            if (this.newInfo.nro_doc) {
+                this.newInfo.nro_doc = formatId(this.newInfo.nro_doc, this.settings.profile_id_format);
+            }
         },
         toUserMessages(user) {
             console.log('toUserMessages');
@@ -549,18 +551,15 @@ export default {
         isNumber(value) {
             inputIsNumber(value);
         },
-        // Override mixin methods to specify the DNI field path
-        getDniValue() {
-            if (this.newInfo && this.newInfo.nro_doc) {
-                return this.newInfo.nro_doc;
-            }
-            return '';
+
+        // Handle DNI input - format using pattern
+        handleDniInput(event) {
+            const formatted = formatId(event.target.value, this.settings.profile_id_format);
+            event.target.value = formatted;
+            // Update the Vue data model with the formatted value
+            this.newInfo.nro_doc = formatted;
         },
-        setDniValue(value) {
-            if (this.newInfo) {
-                this.newInfo.nro_doc = value;
-            }
-        },
+
         clear() {
             this.currentUser = '';
             this.newInfo = {
@@ -673,11 +672,11 @@ export default {
                 
                 // Ensure nro_doc is raw value (no dots) before sending
                 if (this.newInfo.nro_doc) {
-                    this.newInfo.nro_doc = this.cleanDniValue(this.newInfo.nro_doc);
+                    this.newInfo.nro_doc = cleanId(this.newInfo.nro_doc, this.settings.profile_id_format);
                 }
                 
-                // Handle patente data - if user has cars, update the first car's patente
-                // If no cars but patente is provided, the backend will create a new car
+                // Handle patente data - if user has cars, update first car's patente
+                // If no cars but patente is provided, backend will create a new car
                 if (this.newInfo.patente && this.newInfo.patente.length > 0) {
                     if (this.newInfo.cars && this.newInfo.cars.length > 0) {
                         // Update existing car's patente

@@ -75,10 +75,10 @@
                             {{ profile.email }}
                         </div>
                     </div>
-                    <div class="list-group-item" v-if="profile.nro_doc">
+                    <div class="list-group-item">
                         <i class="fa fa-id-card" aria-hidden="true"></i>
                         <div class="list-group-item--content">
-                            {{ profile.nro_doc }}
+                            {{ formattedNroDoc }}
                         </div>
                     </div>
 
@@ -189,6 +189,7 @@ import { mapGetters, mapActions } from 'vuex';
 import router from '../../router';
 import Spinner from '../Spinner.vue';
 import dialogs from '../../services/dialogs.js';
+import { formatId } from '../../services/utility';
 
 export default {
     data() {
@@ -207,11 +208,14 @@ export default {
         userReferenceWritten() {
             return (
                 this.profile.references_data &&
-                this.profile.references_data.length &&
-                this.profile.references_data.findIndex(
-                    (item) => item.user_id_from === this.user.id
-                ) >= 0
+                    this.profile.references_data.length &&
+                    this.profile.references_data.findIndex(
+                        (item) => item.user_id_from === this.user.id
+                    ) >= 0
             );
+        },
+        formattedNroDoc() {
+            return formatId(this.profile.nro_doc, this.config.profile_id_format);
         }
     },
     methods: {

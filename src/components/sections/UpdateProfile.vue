@@ -519,7 +519,7 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import { inputIsNumber } from '../../services/utility';
+import { inputIsNumber, formatId, cleanId } from '../../services/utility';
 import Uploadfile from '../Uploadfile';
 import DatePicker from '../DatePicker';
 import SvgItem from '../SvgItem';
@@ -642,6 +642,13 @@ export default {
         isNumber(value) {
             inputIsNumber(value);
         },
+        // Handle DNI input - format using pattern
+        handleDniInput(event) {
+            const formatted = formatId(event.target.value, this.config.profile_id_format);
+            event.target.value = formatted;
+            // Update the Vue data model with the formatted value
+            this.user.nro_doc = formatted;
+        },
         onPhotoChange(data) {
             this.loadingImg = true;
             this.updatePhoto(data)
@@ -664,52 +671,6 @@ export default {
         changePhoto() {
             this.$refs.file.show();
         },
-        // Format ID based on pattern from config
-        // Pattern: # for numbers, A for letters, other characters are literal separators
-        formatId(value, pattern) {
-            const cleaned = String(value || '').replace(/[^a-zA-Z0-9]/g, '');
-            
-            let formatted = '';
-            let cleanedIndex = 0;
-            
-            for (let i = 0; i < pattern.length && cleanedIndex < cleaned.length; i++) {
-                if (pattern[i] === '#') {
-                    if (/[0-9]/.test(cleaned[cleanedIndex])) {
-                        formatted += cleaned[cleanedIndex];
-                        cleanedIndex++;
-                    } else {
-                        break;
-                    }
-                } else if (pattern[i] === 'A') {
-                    if (/[a-zA-Z]/.test(cleaned[cleanedIndex])) {
-                        formatted += cleaned[cleanedIndex].toUpperCase();
-                        cleanedIndex++;
-                    } else {
-                        break;
-                    }
-                } else {
-                    formatted += pattern[i];
-                }
-            }
-            
-            return formatted;
-        },
-        // Handle DNI input - format using pattern
-        handleDniInput(event) {
-            const formatted = this.formatId(event.target.value, this.config.profile_id_format);
-            event.target.value = formatted;
-            // Update the Vue data model with the formatted value
-            this.user.nro_doc = formatted;
-        },
-        // Clean DNI value by removing separators
-        cleanDniValue(value) {
-            if (!value) return '';
-            const pattern = this.config.profile_id_format;
-            // Remove any characters that are separators in the pattern
-            const separators = pattern.replace(/[#A]/g, '');
-            const separatorRegex = new RegExp('[' + separators.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + ']', 'g');
-            return String(value).replace(separatorRegex, '');
-        },
         grabar() {
             if (this.validate()) {
                 this.$nextTick(() => {
@@ -724,7 +685,7 @@ export default {
             this.loading = true;
             // Ensure user.nro_doc is raw value (no dots) before sending
             if (this.user && this.user.nro_doc) {
-                this.user.nro_doc = this.cleanDniValue(this.user.nro_doc);
+                this.user.nro_doc = cleanId(this.user.nro_doc, this.config.profile_id_format);
             }
             console.log('this.user', this.user);
             var data = Object.assign({}, this.user);
@@ -889,8 +850,8 @@ export default {
             }
 
             // Get raw DNI value (strip any dots that might be present)
-            const dniRaw = this.user && this.user.nro_doc 
-                ? this.cleanDniValue(this.user.nro_doc)
+            const dniRaw = this.user && this.user.nro_doc
+                ? cleanId(this.user.nro_doc, this.config.profile_id_format)
                 : '';
             
             if (!dniRaw || dniRaw.length < 1) {
@@ -985,7 +946,7 @@ export default {
             this.user = this.userData;
             // Format nro_doc with pattern when loaded from backend
             if (this.user && this.user.nro_doc) {
-                this.user.nro_doc = this.formatId(this.user.nro_doc, this.config.profile_id_format);
+                this.user.nro_doc = formatId(this.user.nro_doc, this.config.profile_id_format);
             }
         },
         iptUser() {
@@ -1036,7 +997,7 @@ export default {
         this.user = this.userData;
         // Format nro_doc with pattern when page loads
         if (this.user && this.user.nro_doc) {
-            this.user.nro_doc = this.formatId(this.user.nro_doc, this.config.profile_id_format);
+            this.user.nro_doc = formatId(this.user.nro_doc, this.config.profile_id_format);
         }
         console.log('USUARIO', this.userData);
         if (
