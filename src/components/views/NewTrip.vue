@@ -1895,9 +1895,6 @@ export default {
         },
         center() {
             return this.config.country_coordinates;
-        },
-        otherTripCenter() {
-            return this.config.country_coordinates;
         }
     },
     watch: {
@@ -2456,7 +2453,7 @@ export default {
                 }));
                 
                 // Update the center to the first point of the return trip
-                this.otherTrip.center = this.otherTripCenter;
+                this.otherTrip.center = this.center;
                 this.calcRoute('returnTrip');
             } else {
                 this.addReturnPoint();
