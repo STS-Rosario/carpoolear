@@ -1693,7 +1693,7 @@ export default {
             seatsError: new Error(),
             no_lucrar: false,
             sameCity: false,
-            zoom: 4,
+            zoom: 4, // Will be overridden by computed property
             points: [
                 {
                     name: '',
@@ -1764,7 +1764,6 @@ export default {
                 seatsError: new Error(),
                 no_lucrar: false,
                 sameCity: false,
-                zoom: 4,
                 points: [
                     {
                         name: '',
@@ -1894,7 +1893,10 @@ export default {
             return this.free_trips_amount - this.trips_created_by_user_amount;
         },
         center() {
-            return this.config.country_coordinates;
+            return this.config.map_coordinates;
+        },
+        zoom() {
+            return this.config.map_zoom;
         }
     },
     watch: {

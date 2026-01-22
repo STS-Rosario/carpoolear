@@ -6,6 +6,7 @@
     },
     "country_name": "Argentina",
     "country_coordinates": [-29.0, -60.0],
+    "map_zoom": 4,
     "locale": "arg",
     "osm_country": "ARG",
     "donation": {

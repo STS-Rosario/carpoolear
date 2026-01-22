@@ -401,7 +401,6 @@ export default {
             },
             carpoolear_logo:
                 process.env.ROUTE_BASE + 'static/img/carpoolear_logo.png',
-            zoom: 4,
             points: [
                 {
                     name: '',
@@ -916,9 +915,12 @@ export default {
         },
         center() {
             return {
-                lat: this.config.country_coordinates[0],
-                lng: this.config.country_coordinates[1]
+                lat: this.config.map_coordinates[0],
+                lng: this.config.map_coordinates[1]
             };
+        },
+        zoom() {
+            return this.config.map_zoom;
         }
     },
 
