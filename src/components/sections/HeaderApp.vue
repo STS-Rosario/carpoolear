@@ -130,7 +130,7 @@
                     <h3 slot="header">{{ $t('invitarAmigos') }}</h3>
                     <div slot="body" class="social-share">
                         <a
-                            href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fcarpoolear.com%2F"
+                            :href="'https://www.facebook.com/sharer/sharer.php?u=' + shareUrl"
                             target="_blank"
                             aria-label="Compartir en Facebook"
                             class="lnk lnk-social-network lnk-facebook"
@@ -138,15 +138,7 @@
                             <i class="fa fa-facebook" aria-hidden="true"></i>
                         </a>
                         <a
-                            href="https://plus.google.com/share?url=https%3A%2F%2carpoolear.com%2F"
-                            target="_blank"
-                            aria-label="Compartir en Google+"
-                            class="lnk lnk-social-network lnk-google-plus"
-                        >
-                            <i class="fa fa-google-plus" aria-hidden="true"></i>
-                        </a>
-                        <a
-                            href="https://twitter.com/intent/tweet/?text=Carpoolear%3A%20plataforma%20para%20compartir%20viajes%20en%20autos&url=https%3A%2F%2Fcarpoolear.com&via=carpoolear&hashtags=carpooling"
+                            :href="'https://twitter.com/intent/tweet/?text=' + encodeURIComponent(this.$t('compartirPlataforma')) + '&url=' + shareUrl + '&via=' + config.name_app.toLowerCase() + '&hashtags=carpooling'"
                             target="_blank"
                             aria-label="Compartir en Twitter"
                             class="lnk lnk-social-network lnk-twitter"
@@ -154,7 +146,7 @@
                             <i class="fa fa-twitter" aria-hidden="true"></i>
                         </a>
                         <a
-                            href="whatsapp://send?text=Carpoolear%3A%20plataforma%20para%20compartir%20viajes%20en%20autos%20https%3A%2F%2carpoolear.com%2F"
+                            :href="'whatsapp://send?text=' + encodeURIComponent(this.$t('compartirPlataforma')) + '%20' + shareUrl"
                             target="_blank"
                             aria-label="Compartir en Whats App"
                             class="lnk lnk-social-network lnk-whatsapp"
@@ -301,7 +293,8 @@ export default {
                 'static/img/' +
                 process.env.TARGET_APP +
                 '_logo.png',
-            showModal: false
+            showModal: false,
+            shareUrl: encodeURIComponent(new URL(process.env.WEB_URL).origin)
         };
     },
 

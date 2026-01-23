@@ -22,15 +22,6 @@
             <i class="fa fa-twitter" aria-hidden="true"></i>
         </a>
         <a
-            :href="'https://plus.google.com/share?url=' + currentUrl"
-            target="_blank"
-            :aria-label="$t('compartirEnGooglePlus')"
-            class="lnk lnk-social-network lnk-google-plus"
-            @click="onShareLinkClick"
-        >
-            <i class="fa fa-google-plus" aria-hidden="true"></i>
-        </a>
-        <a
             :href="
                 'whatsapp://send?text=' + encodeURIComponent(this.$t('publicarUnViajeCompartir')) + '%20' +
                     currentUrl
@@ -52,7 +43,7 @@ export default {
     data() {
         return {
             currentUrl: encodeURIComponent(
-                'https://carpoolear.com.ar/app' + this.$route.fullPath
+                process.env.WEB_URL + this.$route.fullPath
             )
         };
     },

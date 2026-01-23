@@ -516,6 +516,7 @@ const messages = {
         compartirEnWhatsApp: 'Compartir en WhatsApp',
         publicarUnViajeCompartir:
             'Publicar un viaje para compartir en Carpoolear',
+        compartirPlataforma: 'Carpoolear: plataforma para compartir viajes en autos',
         estoyEnMovil: 'Estoy en móvil',
         contribucionPorPersona: 'Contribución por persona',
         porPersona: 'por persona',
@@ -1122,6 +1123,7 @@ const messages = {
         compartirEnWhatsApp: 'Compartir en WhatsApp',
         publicarUnViajeCompartir:
             'Publicar un viaje para compartir en Apalan-car',
+        compartirPlataforma: 'Apalan-car: plataforma para compartir viajes en autos',
         estoyEnMovil: 'Estoy en móvil',
         contribucionPorPersona: 'Contribución por persona',
         porPersona: 'por persona',
@@ -1874,6 +1876,7 @@ const messages = {
         compartirEnGooglePlus: 'Share on Google+',
         compartirEnWhatsApp: 'Share on WhatsApp',
         publicarUnViajeCompartir: 'Post a trip to share on Carpoolear',
+        compartirPlataforma: 'Carpoolear: platform to share car rides',
         estoyEnMovil: "I'm on mobile",
         contribucionPorPersona: 'Contribution per person',
         porPersona: 'per person',
