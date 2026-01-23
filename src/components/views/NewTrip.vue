@@ -1690,8 +1690,6 @@ export default {
             seatsError: new Error(),
             no_lucrar: false,
             sameCity: false,
-            zoom: 4,
-            center: [-29.0, -60.0],
             points: [
                 {
                     name: '',
@@ -1762,8 +1760,6 @@ export default {
                 seatsError: new Error(),
                 no_lucrar: false,
                 sameCity: false,
-                zoom: 4,
-                center: [-29.0, -60.0],
                 points: [
                     {
                         name: '',
@@ -1891,6 +1887,12 @@ export default {
         },
         remainingFreeTrips() {
             return this.free_trips_amount - this.trips_created_by_user_amount;
+        },
+        center() {
+            return this.config.map_coordinates;
+        },
+        zoom() {
+            return this.config.map_zoom;
         }
     },
     watch: {
