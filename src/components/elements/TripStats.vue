@@ -40,10 +40,9 @@
             </span>
             <br v-if="tripCardTheme !== 'light'" />
             <span>
-                {{ ((trip.distance / 1000) * 1.5).toFixed(2) }}
+                {{ ((trip.distance / 1000) * 0.15).toFixed(2) }}
                 <abbr :title="$t('kilogramosDioxidoCarbono')">
-                    {{ $t('co2eq') }}
-                    <sub>2eq</sub>
+                    kg CO<sub>2</sub> eq.
                 </abbr>
             </span>
         </div>

@@ -316,11 +316,8 @@
                                                 v-if="tripCardTheme !== 'light'"
                                             >
                                                 {{ $t('huellaCarbono') }} (
-                                                <abbr
-                                                    title="Kilogramos dióxido de carbono equivalente"
-                                                >
-                                                    kg CO
-                                                    <sub>2eq</sub>
+                                                <abbr :title="$t('kilogramosDioxidoCarbono')">
+                                                    kg CO<sub>2</sub> eq.
                                                 </abbr>
                                                 )
                                             </div>
