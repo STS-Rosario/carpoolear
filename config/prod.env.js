@@ -1,6 +1,7 @@
 config = {
     NODE_ENV: '"production"',
     API_URL: '"https://carpoolear.com.ar"',
+    WEB_URL: '"https://carpoolear.com.ar/app"',
     MAPS_API: '"AIzaSyDz9fNRr5-nfCFN6ULDZaLt0xUckgKl3z4"',
     FACEBOOK_API: '"147151221990591"',
     RECAPTCHA_SITE_KEY: '"6LcJyuoqAAAAAFycfjGz2xTiOjhNmWP_wYudIiJT"',
