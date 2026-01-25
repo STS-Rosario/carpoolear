@@ -2288,7 +2288,6 @@ export default {
                     }
                 }
 
-                // Validate return trip description
                 if (!this.otherTrip.trip.description) {
                     this.otherTrip.commentError.state = true;
                     this.otherTrip.commentError.message = this.$t('olvidasteDescripcion');
