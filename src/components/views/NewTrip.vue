@@ -1357,8 +1357,8 @@
                                         $t('placeholderComentarioPasajeros')
                                     "
                                 ></textarea>
-                                <span class="error" v-if="commentError.state">
-                                    {{ commentError.message }}
+                                <span class="error" v-if="otherTrip.commentError.state">
+                                    {{ otherTrip.commentError.message }}
                                 </span>
                             </div>
                         </div>
@@ -2239,11 +2239,6 @@ export default {
                 } else {
                     validOtherTripDate = true;
                 }
-                if (globalError) {
-                    dialogs.message(this.$t('algunosDatosNoValidos'), {
-                        estado: 'error'
-                    });
-                }
 
                 if (validOtherTripTime && validOtherTripDate) {
                     if (
@@ -2291,6 +2286,15 @@ export default {
                             this.$t('fechaHoraLogicas');
                         globalError = true;
                     }
+                }
+
+                // Validate return trip description
+                if (!this.otherTrip.trip.description) {
+                    this.otherTrip.commentError.state = true;
+                    this.otherTrip.commentError.message = this.$t('olvidasteDescripcion');
+                    dialogs.message(this.$t('olvidasteDescripcion'), {
+                        estado: 'error'
+                    });
                 }
             }
 
