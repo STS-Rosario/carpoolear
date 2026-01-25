@@ -1860,7 +1860,7 @@ export default {
             );
         },
         CO2String() {
-            return Math.floor(this.trip.distance / 1000) * 0.15 + ' Kg';
+            return (Math.floor(this.trip.distance / 1000) * 0.15).toFixed(1)  + ' Kg';
         },
         otherTripDistanceString() {
             return Math.floor(this.otherTrip.trip.distance / 1000) + ' Km';
