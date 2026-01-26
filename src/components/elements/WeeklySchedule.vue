@@ -44,10 +44,7 @@
 <script>
 import moment from 'moment';
 
-/**
- * Weekly schedule constants
- * Defines the days of the week with their corresponding bitmask values
- */
+// Defines the days of the week with their corresponding bitmask values
 const WEEKLY_DAYS = [
     { key: 'domingo', bit: 64 },
     { key: 'lunes', bit: 1 },
@@ -58,12 +55,6 @@ const WEEKLY_DAYS = [
     { key: 'sabado', bit: 32 }
 ];
 
-/**
- * Check if a specific day is selected in the weekly schedule bitmask
- * @param {number} weeklySchedule - The weekly schedule bitmask
- * @param {number} bitValue - The bitmask value for the day to check
- * @returns {boolean} - True if the day is selected
- */
 function isDaySelected(weeklySchedule, bitValue) {
     if (!weeklySchedule) {
         return false;
@@ -224,7 +215,6 @@ export default {
     user-select: none;
 }
 
-/* Edit mode - interactive checkboxes */
 .weekly-day-checkbox {
     display: inline-flex;
     align-items: center;
@@ -268,7 +258,6 @@ export default {
     }
 }
 
-/* Light theme specific styles */
 .weekly-schedule-wrapper.light-theme {
     margin: 0;
 }
