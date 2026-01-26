@@ -165,6 +165,13 @@ export default {
 </script>
 
 <style scoped>
+.weekly-schedule-wrapper {
+    margin: 1rem 0 1.2em;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
 .weekly-days-container {
     display: flex;
     flex-direction: row;
@@ -173,18 +180,9 @@ export default {
     margin-bottom: 8px;
 }
 
-.weekly-schedule-wrapper {
-    margin-bottom: 1.2em;
-    margin-top: 1rem;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-}
-
 .weekly-days {
     display: flex;
     flex-wrap: wrap;
-    gap: 0;
     align-items: center;
     justify-content: flex-end;
 }
@@ -200,7 +198,6 @@ export default {
     margin-left: -1px;
     border: 1px solid #ccc;
     border-radius: 0;
-    /* background-color: #f5f5f5; */
     font-size: 0.65em;
     font-weight: 500;
     color: #666;
@@ -250,7 +247,7 @@ export default {
 /* Time container */
 .weekly-schedule-time-container {
     display: flex;
-    justify-content: right;
+    justify-content: flex-end;
     margin-top: 4px;
 }
 
@@ -273,22 +270,12 @@ export default {
 
 /* Light theme specific styles */
 .weekly-schedule-wrapper.light-theme {
-    margin-bottom: 0;
-    margin-top: 0;
-}
-
-.weekly-schedule-wrapper.light-theme .weekly-schedule-time-container {
-    display: flex;
-    justify-content: right;
-    margin-top: 4px;
+    margin: 0;
 }
 
 .weekly-schedule-wrapper.light-theme .weekly-schedule-time {
-    display: inline-flex;
-    align-items: center;
     font-size: 1em;
     font-weight: 600;
-    color: var(--trip-half-free-color);
 }
 </style>
 
