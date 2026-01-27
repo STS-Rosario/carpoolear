@@ -168,7 +168,7 @@ export default {
     flex-direction: row;
     align-items: center;
     gap: 4px;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
 }
 
 .weekly-days {
@@ -190,7 +190,7 @@ export default {
     border: 1px solid #ccc;
     border-radius: 0;
     font-size: 0.65em;
-    font-weight: 500;
+    font-weight: 400;
     color: #666;
     cursor: default;
     transition: all 0.2s ease;
@@ -208,7 +208,7 @@ export default {
     background-color: var(--trip-half-free-color);
     border-color: var(--trip-half-free-color);
     color: white;
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .weekly-day-box .day-name {
@@ -247,15 +247,6 @@ export default {
     color: var(--trip-half-free-color);
 }
 
-@media only screen and (min-width: 768px) {
-    .weekly-day-box {
-        min-width: 28px;
-        height: 24px;
-        padding: 2px 5px;
-        font-size: 0.7em;
-    }
-}
-
 .weekly-schedule-wrapper.light-theme {
     margin: 0;
 }
@@ -265,17 +256,17 @@ export default {
     font-weight: 600;
 }
 
-/* Edit mode - align to left */
 .edit-mode {
     align-items: flex-start;
     
-    .weekly-days {
-        justify-content: flex-start;
-    }
-    
+    .weekly-days,
     .weekly-schedule-time-container {
         justify-content: flex-start;
         width: 100%;
+    }
+
+    .weekly-days-container {
+        margin-bottom: 12px;
     }
 }
 </style>
