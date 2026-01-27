@@ -56,10 +56,7 @@ const WEEKLY_DAYS = [
 ];
 
 function isDaySelected(weeklySchedule, bitValue) {
-    if (!weeklySchedule) {
-        return false;
-    }
-    return (weeklySchedule & bitValue) !== 0;
+    return weeklySchedule && (weeklySchedule & bitValue) !== 0;
 }
 
 export default {
@@ -130,13 +127,8 @@ export default {
             return isDaySelected(this.localBitmask, bitValue);
         },
         toggleDay(bitValue) {
-            if (this.localBitmask & bitValue) {
-                // Day is currently selected, deselect it
-                this.localBitmask = this.localBitmask & ~bitValue;
-            } else {
-                // Day is currently not selected, select it
-                this.localBitmask = this.localBitmask | bitValue;
-            }
+            // Toggle the bit using XOR
+            this.localBitmask ^= bitValue;
             this.$emit('update:weeklySchedule', this.localBitmask);
         },
         dayId(dayKey) {
