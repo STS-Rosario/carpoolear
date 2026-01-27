@@ -2,25 +2,21 @@
     <div class="weekly-schedule-wrapper" :class="{ 'edit-mode': !readonly }">
         <div class="weekly-days-container">
             <div class="weekly-days">
-                <!-- Display mode -->
-                <template v-if="readonly">
-                    <div
-                        v-for="day in weeklyDays"
-                        :key="day.key"
-                        class="weekly-day-box"
-                        :class="{ active: isDaySelected(day.bit) }"
-                    >
-                        <span class="day-name">{{ $t(day.key) }}</span>
-                    </div>
-                </template>
+                <div
+                    v-for="day in weeklyDays"
+                    :key="day.key"
+                    :class="[
+                        readonly ? 'weekly-day-box' : 'weekly-day-checkbox',
+                        { active: readonly && isDaySelected(day.bit) }
+                    ]"
+                >
+                    <!-- Display mode -->
+                    <span v-if="readonly" class="day-name">
+                        {{ $t(day.key) }}
+                    </span>
 
-                <!-- Edit mode -->
-                <template v-else>
-                    <div
-                        v-for="day in weeklyDays"
-                        :key="day.key"
-                        class="weekly-day-checkbox"
-                    >
+                    <!-- Edit mode -->
+                    <template v-else>
                         <input
                             type="checkbox"
                             :id="dayId(day.key)"
@@ -30,20 +26,21 @@
                         <label :for="dayId(day.key)" class="checkbox-label">
                             {{ $t(day.key) }}
                         </label>
-                    </div>
-                </template>
+                    </template>
+                </div>
             </div>
         </div>
 
         <!-- Time display/input -->
         <div class="weekly-schedule-time-container">
             <span v-if="readonly" class="weekly-schedule-time">
-                {{ [weeklyScheduleTime] | moment('HH:mm') }} {{ $t('horas') }}
+                {{ weeklyScheduleTime | moment('HH:mm') }} {{ $t('horas') }}
             </span>
             <input
                 v-else
                 type="time"
-                v-model="weeklyScheduleTime"
+                :value="weeklyScheduleTime"
+                @input="$emit('update:weeklyScheduleTime', $event.target.value)"
                 v-mask="'##:##'"
                 class="form-control form-control-with-icon form-control-time"
                 :class="{ 'has-error': hasError }"
@@ -53,9 +50,6 @@
 </template>
 
 <script>
-import moment from 'moment';
-
-// Defines the days of the week with their corresponding bitmask values
 const WEEKLY_DAYS = [
     { key: 'domingo', bit: 64 },
     { key: 'lunes', bit: 1 },
@@ -66,31 +60,21 @@ const WEEKLY_DAYS = [
     { key: 'sabado', bit: 32 }
 ];
 
-function isDaySelected(weeklySchedule, bitValue) {
-    return weeklySchedule && (weeklySchedule & bitValue) !== 0;
-}
-
 export default {
     name: 'WeeklySchedule',
+    
     props: {
-        // Weekly schedule bitmask (e.g., 127 for all days, 0 for none)
         weeklySchedule: {
             type: Number,
             default: 0
         },
-
         weeklyScheduleTime: {
             type: String,
             default: '12:00'
         },
-
         readonly: {
             type: Boolean,
             default: false
-        },
-        theme: {
-            type: String,
-            default: 'default'
         },
         idPrefix: {
             type: String,
@@ -101,51 +85,23 @@ export default {
             default: false
         }
     },
-    data() {
-        return {
-            localBitmask: this.weeklySchedule,
-            localDays: {}
-        };
-    },
+
     computed: {
-        weeklyDays() {
-            return WEEKLY_DAYS;
-        }
+        weeklyDays: () => WEEKLY_DAYS
     },
-    watch: {
-        weeklyScheduleTime(newVal) {
-            this.$emit('update:weeklyScheduleTime', newVal);
-        },
-        weeklySchedule(newVal) {
-            this.localBitmask = newVal;
-            this.syncLocalDays();
-        },
-        localBitmask(newVal) {
-            this.$emit('update:weeklySchedule', newVal);
-            this.syncLocalDays();
-        }
-    },
+
     methods: {
         isDaySelected(bitValue) {
-            return isDaySelected(this.localBitmask, bitValue);
+            return (this.weeklySchedule & bitValue) !== 0;
         },
+        
         toggleDay(bitValue) {
-            // Toggle the bit using XOR
-            this.localBitmask ^= bitValue;
-            this.$emit('update:weeklySchedule', this.localBitmask);
+            this.$emit('update:weeklySchedule', this.weeklySchedule ^ bitValue);
         },
+        
         dayId(dayKey) {
             return `${this.idPrefix}-${dayKey}`;
-        },
-        syncLocalDays() {
-            // Sync localDays object with localBitmask
-            this.weeklyDays.forEach((day) => {
-                this.$set(this.localDays, day.key, this.isDaySelected(day.bit));
-            });
         }
-    },
-    mounted() {
-        this.syncLocalDays();
     }
 };
 </script>
