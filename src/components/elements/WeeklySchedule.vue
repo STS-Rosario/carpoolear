@@ -1,5 +1,5 @@
 <template>
-    <div class="weekly-schedule-wrapper">
+    <div class="weekly-schedule-wrapper" :class="{ 'edit-mode': !readonly }">
         <div class="weekly-days-container">
             <div class="weekly-days">
                 <!-- Display mode -->
@@ -168,7 +168,7 @@ export default {
     flex-direction: row;
     align-items: center;
     gap: 4px;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
 }
 
 .weekly-days {
@@ -234,7 +234,6 @@ export default {
     user-select: none;
 }
 
-/* Time container */
 .weekly-schedule-time-container {
     display: flex;
     justify-content: flex-end;
@@ -248,7 +247,6 @@ export default {
     color: var(--trip-half-free-color);
 }
 
-/* Responsive styles */
 @media only screen and (min-width: 768px) {
     .weekly-day-box {
         min-width: 28px;
@@ -266,5 +264,20 @@ export default {
     font-size: 1em;
     font-weight: 600;
 }
+
+/* Edit mode - align to left */
+.edit-mode {
+    align-items: flex-start;
+    
+    .weekly-days {
+        justify-content: flex-start;
+    }
+    
+    .weekly-schedule-time-container {
+        justify-content: flex-start;
+        width: 100%;
+    }
+}
 </style>
+
 
