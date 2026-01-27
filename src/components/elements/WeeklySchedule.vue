@@ -3,21 +3,30 @@
         <div class="weekly-days-container">
             <div class="weekly-days">
                 <!-- Display mode -->
-                <template v-if="readonly">   
-                    <div v-for="day in weeklyDays" :key="day.key" 
-                        class="weekly-day-box" :class="{ 'active': isDaySelected(day.bit) }">
+                <template v-if="readonly">
+                    <div
+                        v-for="day in weeklyDays"
+                        :key="day.key"
+                        class="weekly-day-box"
+                        :class="{ active: isDaySelected(day.bit) }"
+                    >
                         <span class="day-name">{{ $t(day.key) }}</span>
                     </div>
                 </template>
 
                 <!-- Edit mode -->
                 <template v-else>
-                    <div v-for="day in weeklyDays" :key="day.key" 
-                        class="weekly-day-checkbox">
-                        <input type="checkbox" 
-                            :id="dayId(day.key)" 
+                    <div
+                        v-for="day in weeklyDays"
+                        :key="day.key"
+                        class="weekly-day-checkbox"
+                    >
+                        <input
+                            type="checkbox"
+                            :id="dayId(day.key)"
                             :checked="isDaySelected(day.bit)"
-                            @change="toggleDay(day.bit)" />
+                            @change="toggleDay(day.bit)"
+                        />
                         <label :for="dayId(day.key)" class="checkbox-label">
                             {{ $t(day.key) }}
                         </label>
@@ -25,18 +34,20 @@
                 </template>
             </div>
         </div>
-        
+
         <!-- Time display/input -->
         <div class="weekly-schedule-time-container">
             <span v-if="readonly" class="weekly-schedule-time">
-                {{ formattedTime }} {{ $t('horas') }}
+                {{ [weeklyScheduleTime] | moment('HH:mm') }} {{ $t('horas') }}
             </span>
-            <input v-else 
-                   type="time" 
-                   v-model="localTime"
-                   v-mask="'##:##'"
-                   class="form-control form-control-with-icon form-control-time"
-                   :class="{ 'has-error': hasError }" />
+            <input
+                v-else
+                type="time"
+                v-model="weeklyScheduleTime"
+                v-mask="'##:##'"
+                class="form-control form-control-with-icon form-control-time"
+                :class="{ 'has-error': hasError }"
+            />
         </div>
     </div>
 </template>
@@ -92,7 +103,6 @@ export default {
     },
     data() {
         return {
-            localTime: this.weeklyScheduleTime,
             localBitmask: this.weeklySchedule,
             localDays: {}
         };
@@ -100,17 +110,10 @@ export default {
     computed: {
         weeklyDays() {
             return WEEKLY_DAYS;
-        },
-        formattedTime() {
-            if (!this.localTime) return '';
-            return moment(this.localTime, 'HH:mm').format('HH:mm');
         }
     },
     watch: {
         weeklyScheduleTime(newVal) {
-            this.localTime = newVal;
-        },
-        localTime(newVal) {
             this.$emit('update:weeklyScheduleTime', newVal);
         },
         weeklySchedule(newVal) {
@@ -136,7 +139,7 @@ export default {
         },
         syncLocalDays() {
             // Sync localDays object with localBitmask
-            this.weeklyDays.forEach(day => {
+            this.weeklyDays.forEach((day) => {
                 this.$set(this.localDays, day.key, this.isDaySelected(day.bit));
             });
         }
@@ -213,7 +216,7 @@ export default {
     gap: 4px;
 }
 
-.weekly-day-checkbox input[type="checkbox"] {
+.weekly-day-checkbox input[type='checkbox'] {
     width: 16px;
     height: 16px;
     cursor: pointer;
@@ -250,7 +253,7 @@ export default {
 
 .edit-mode {
     align-items: flex-start;
-    
+
     .weekly-days,
     .weekly-schedule-time-container {
         justify-content: flex-start;
@@ -262,5 +265,3 @@ export default {
     }
 }
 </style>
-
-
