@@ -779,7 +779,11 @@ const messages = {
         ocupados: 'Ocupados',
         activar: 'Activar',
         ocultar: 'Ocultar',
-        precioMaximoExcedido: 'El precio máximo ha sido excedido'
+        precioMaximoExcedido: 'El precio máximo ha sido excedido',
+        unaVez: 'Una vez',
+        programaSemanal: 'Semanal',
+        faltaFechaOProgramaSemanal:
+            'Debe seleccionar una fecha o un programa semanal'
     },
     chl: {
         loginUsuarioPlaceholder: 'Usuario',
@@ -1366,7 +1370,11 @@ const messages = {
         buscarAmigos: 'Buscar Amigos',
         adminPage: 'Admin Page',
         adminUsers: 'Admin users',
-        adminTrips: 'Admin trips'
+        adminTrips: 'Admin trips',
+        unaVez: 'Once',
+        programaSemanal: 'Semanal',
+        faltaFechaOProgramaSemanal:
+            'Debe seleccionar una fecha o un programa semanal'
     },
     en: {
         loginUsuarioPlaceholder: 'The email you registered with',
@@ -1423,7 +1431,7 @@ const messages = {
         siSosConductorDatosVisibles:
             'This information is shared between drivers and their confirmed passengers on a trip.',
         tildaOpcionDatosVisibles:
-            'Toggle this on to let anyone view your information. Leave it off to keep it private between you and your confirmed trip partners.',
+            'Let anyone view your information. Leave this off to keep it private between you and your confirmed trip partners.',
         datosVisiblesCheck: 'Public data',
         notificacionesPorCorreo: 'Receive notifications by email.',
         cambiarPassword: 'Change password',
@@ -2133,7 +2141,11 @@ const messages = {
         ocupados: 'Occupied',
         activar: 'Activate',
         ocultar: 'Hide',
-        precioMaximoExcedido: 'Maximum price exceeded'
+        precioMaximoExcedido: 'Maximum price exceeded',
+        unaVez: 'Once',
+        programaSemanal: 'Weekly',
+        faltaFechaOProgramaSemanal:
+            'You must select a date or a weekly schedule'
     }
 };
 export default messages;

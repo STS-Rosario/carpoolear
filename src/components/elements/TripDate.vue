@@ -1,6 +1,6 @@
 <template>
     <div class="trip-date">
-        <div class="row" v-if="tripCardTheme !== 'light'">
+        <div class="row" v-if="tripCardTheme !== 'light' && trip.trip_date">
             <time
                 class="trip_datetime col-xs-offset-4 col-xs-20"
                 :datetime="trip.trip_date"
@@ -15,7 +15,17 @@
                 }}</span>
             </time>
         </div>
-        <template v-else>
+        <div class="row" v-else-if="tripCardTheme !== 'light' && !trip.trip_date">
+            <div class="col-xs-offset-4 col-xs-20">
+                <WeeklySchedule
+                    :weeklySchedule="trip.weekly_schedule"
+                    :weeklyScheduleTime="trip.weekly_schedule_time"
+                    readonly
+                    :theme="tripCardTheme"
+                />
+            </div>
+        </div>
+        <template v-else-if="tripCardTheme === 'light' && trip.trip_date">
             <time class="trip_date_right" :datetime="trip.trip_date">
                 <div class="trip_date_date">
                     <span class="trip_date_date_day">
@@ -31,10 +41,21 @@
                 </div>
             </time>
         </template>
+        <template v-else-if="tripCardTheme === 'light' && !trip.trip_date">
+            <div class="trip_date_right">
+                <WeeklySchedule
+                    :weeklySchedule="trip.weekly_schedule"
+                    :weeklyScheduleTime="trip.weekly_schedule_time"
+                    readonly
+                    :theme="tripCardTheme"
+                />
+            </div>
+        </template>
     </div>
 </template>
 <script>
 import { mapGetters } from 'vuex';
+import WeeklySchedule from './WeeklySchedule';
 import SvgItem from '../SvgItem';
 export default {
     name: 'TripDate',
@@ -46,6 +67,7 @@ export default {
         })
     },
     components: {
+        WeeklySchedule,
         SvgItem
     }
 };
@@ -67,5 +89,8 @@ export default {
     .trip_date_date_month {
         padding-left: 0.4em;
     }
+}
+:deep(.weekly-schedule-wrapper) {
+    display: inline-block;
 }
 </style>

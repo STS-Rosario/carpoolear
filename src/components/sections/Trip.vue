@@ -71,7 +71,7 @@
                         <time
                             class="trip_date_right"
                             :datetime="trip.trip_date"
-                            v-if="tripCardTheme === 'light'"
+                            v-if="tripCardTheme === 'light' && trip.trip_date"
                         >
                             <div class="trip_date_date">
                                 <span class="trip_date_date_day">
@@ -85,6 +85,16 @@
                                 </span>
                             </div>
                         </time>
+                        <template v-else-if="tripCardTheme === 'light' && !trip.trip_date">
+                            <div class="trip_date_right">
+                                <WeeklySchedule
+                                    :weeklySchedule="trip.weekly_schedule"
+                                    :weeklyScheduleTime="trip.weekly_schedule_time"
+                                    readonly
+                                    :theme="tripCardTheme"
+                                />
+                            </div>
+                        </template>
                         <template v-if="user">
                             <div
                                 class="trip_driver_img_container"
@@ -328,7 +338,7 @@
                         <time
                             class="trip_datetime col-xs-24"
                             :datetime="trip.trip_date"
-                            v-if="tripCardTheme !== 'light'"
+                            v-if="tripCardTheme !== 'light' && trip.trip_date"
                         >
                             <div class="row">
                                 <div class="col-xs-14 trip_datetime_date">
@@ -355,6 +365,14 @@
                                 </div>
                             </div>
                         </time>
+                        <div v-else-if="tripCardTheme !== 'light' && !trip.trip_date" class="col-xs-24">
+                            <WeeklySchedule
+                                :weeklySchedule="trip.weekly_schedule"
+                                :weeklyScheduleTime="trip.weekly_schedule_time"
+                                readonly
+                                :theme="tripCardTheme"
+                            />
+                        </div>
                     </div>
                     <template v-if="tripCardTheme !== 'light'">
                         <template v-if="!enableChangeSeats">
@@ -542,6 +560,7 @@ import { mapActions, mapGetters } from 'vuex';
 import dialogs from '../../services/dialogs.js';
 import bus from '../../services/bus-event.js';
 import tripDisplay from './TripDisplay';
+import WeeklySchedule from '../elements/WeeklySchedule';
 import moment from 'moment';
 import SvgItem from '../SvgItem';
 
@@ -821,6 +840,7 @@ export default {
     },
     components: {
         tripDisplay,
+        WeeklySchedule,
         SvgItem
     },
     mounted() {
