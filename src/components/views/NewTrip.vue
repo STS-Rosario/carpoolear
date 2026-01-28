@@ -1858,8 +1858,8 @@ export default {
         let self = this;
         this.time = moment().add(1, 'hours').format('HH:00');
         this.otherTrip.time = moment().add(2, 'hours').format('HH:00');
-        this.weeklyScheduleTime = moment().add(1, 'hours').format('HH:mm');
-        this.weeklyScheduleReturnTime = moment().add(2, 'hours').format('HH:mm');
+        this.weeklyScheduleTime = moment().add(1, 'hours').format('HH:00');
+        this.weeklyScheduleReturnTime = moment().add(2, 'hours').format('HH:00');
         bus.off('clear-click', this.onBackButton);
         bus.on('clear-click', this.onBackButton);
 
@@ -2067,7 +2067,7 @@ export default {
         });
 
         // Restore weekly schedule FIRST before date/time
-        if (trip.weekly_schedule && trip.weekly_schedule > 0) {
+        if (trip.weekly_schedule > 0) {
             this.useWeeklySchedule = true;
             this.weeklySchedule = trip.weekly_schedule;
             console.log('restoreData: set weeklySchedule to', this.weeklySchedule, 'from trip.weekly_schedule', trip.weekly_schedule);
@@ -2445,7 +2445,7 @@ export default {
             const result = Object.assign({}, tripObj.trip, tripInfo);
 
             if (!useWeeklySchedule) {
-                result.weekly_schedule = null;
+                result.weekly_schedule = 0;
             } else {
                 result.trip_date = null;
             }
