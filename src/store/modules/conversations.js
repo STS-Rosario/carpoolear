@@ -10,6 +10,22 @@ import dialogs from '../../services/dialogs.js';
 let conversationApi = new ConversationApi();
 let pageSize = 20;
 
+/** Normalise conversation/message id to number for consistent comparison. */
+function normalizeId(id) {
+    if (id == null || id === '') return null;
+    const n = parseInt(id, 10);
+    return isNaN(n) ? null : n;
+}
+
+/** Normalise conversation from API: ensure id and updated_at. */
+function normalizeConversation(conv) {
+    if (!conv) return conv;
+    const c = { ...conv };
+    c.id = normalizeId(c.id);
+    c.updated_at = c.updated_at || c.update_at || null;
+    return c;
+}
+
 const state = {
     ...pagination.makeState('list'),
     userList: null,
@@ -26,19 +42,42 @@ const state = {
     timestamp: null
 };
 
+/** Deduplicate list by normalized id (keep first occurrence) and normalise each item. */
+function deduplicateList(list) {
+    if (!list || !list.length) return list || [];
+    const seen = new Set();
+    return list
+        .filter((item) => {
+            const id = normalizeId(item.id);
+            if (id == null || seen.has(id)) return false;
+            seen.add(id);
+            return true;
+        })
+        .map((item) => {
+            const c = normalizeConversation(item);
+            return { ...item, ...c };
+        });
+}
+
 // getters
 const getters = {
     ...pagination.makeGetters('list'),
+    /** Raw list from state (for internal use). list getter below overrides with deduplicated. */
+    listRaw: (state) => state.list,
+    /** Deduplicated list for UI (single source for left bar). */
+    list: (state) => deduplicateList(state.list),
     users: (state) => state.userList,
     selectedConversation: (state) => state.conversationSelected,
+    /** Selected conversation id (number) for active row highlight. */
+    selectedId: (state) => state.selectedID,
 
     msgObj: (state) => state.messages[state.selectedID],
     messagesList: (state) => {
         const messages = state.messages[state.selectedID];
         if (!messages) return [];
 
-        return [...messages.list].sort((a, b) => 
-            new Date(a.created_at) - new Date(b.created_at)
+        return [...messages.list].sort(
+            (a, b) => new Date(a.created_at) - new Date(b.created_at)
         );
     },
     lastPageConversation: (state) =>
@@ -56,8 +95,11 @@ const actions = {
         },
         (store, p) => {
             p.then((list) => {
-                list.data.forEach((item) => {
-                    store.commit(types.CONVERSATION_CREATE_MESSAGES, item.id);
+                (list.data || []).forEach((item) => {
+                    store.commit(
+                        types.CONVERSATION_CREATE_MESSAGES,
+                        normalizeId(item.id)
+                    );
                 });
             });
         }
@@ -117,10 +159,12 @@ const actions = {
     },
 
     select(store, id) {
-        if (id) {
-            let conversationTemp = store.state.list
-                ? store.state.list.find((item) => item.id === id)
-                : null;
+        const nid = normalizeId(id);
+        if (nid) {
+            const list = store.state.list || [];
+            let conversationTemp = list.find(
+                (item) => normalizeId(item.id) === nid
+            );
 
             if (conversationTemp) {
                 conversationTemp.unread = false;
@@ -128,10 +172,10 @@ const actions = {
                     types.CONVERSATION_SET_CONVERSATION,
                     conversationTemp
                 );
-                store.commit(types.CONVERSATION_SET_SELECTED, id);
-                store.commit(types.CONVERSATION_CREATE_MESSAGES, id);
+                store.commit(types.CONVERSATION_SET_SELECTED, nid);
+                store.commit(types.CONVERSATION_CREATE_MESSAGES, nid);
                 globalStore.dispatch('conversations/findConversation', {
-                    id,
+                    id: nid,
                     more: false
                 });
 
@@ -139,17 +183,17 @@ const actions = {
             } else {
                 return globalStore
                     .dispatch('conversations/findConversation', {
-                        id,
+                        id: nid,
                         more: false
                     })
                     .then((conversation) => {
                         conversation.unread = false;
-                        store.commit(types.CONVERSATION_CREATE_MESSAGES, id);
+                        store.commit(types.CONVERSATION_CREATE_MESSAGES, nid);
                         store.commit(
                             types.CONVERSATION_SET_CONVERSATION,
                             conversation
                         );
-                        store.commit(types.CONVERSATION_SET_SELECTED, id);
+                        store.commit(types.CONVERSATION_SET_SELECTED, nid);
                         return Promise.resolve(conversation);
                     })
                     .catch((err) => Promise.reject(err));
@@ -187,39 +231,31 @@ const actions = {
         }
         return conversationApi
             .unread(data)
-            .then((response) => {
-                response.data.reverse().forEach((msg) => {
-                    new Promise((resolve, reject) => {
-                        if (!store.state.messages[msg.conversation_id]) {
-                            // Si la conversacion no está cargada la busco en el backend
-                            conversationApi
-                                .show(msg.conversation_id)
-                                .then((response) => {
-                                    store.commit(
-                                        types.CONVERSATION_PUSH,
-                                        response.data
-                                    );
-                                    resolve();
-                                })
-                                .catch(reject);
-                        } else {
-                            // Si la conversación ya está listada no la necesito ir a buscar
-                            resolve();
+            .then(async (response) => {
+                const messages = response.data.reverse();
+                for (const msg of messages) {
+                    const convId = normalizeId(msg.conversation_id);
+                    if (!store.state.messages[convId]) {
+                        try {
+                            const res = await conversationApi.show(convId);
+                            if (res.data) {
+                                store.commit(
+                                    types.CONVERSATION_PUSH,
+                                    normalizeConversation(res.data)
+                                );
+                            }
+                        } catch (e) {
+                            // skip this message if conversation fetch fails
                         }
-                    }).then(() => {
-                        // Tengo la conversacion, inserto el mensaje
-                        // store.commit(types.CONVERSATION_CREATE_MESSAGES, msg.conversation_id);
-                        store.commit(types.CONVERSATION_INSERT_MESSAGE, {
-                            messages: [msg]
-                        });
-                        // store.commit(types.CONVERSATION_UPDATE, msg);
+                    }
+                    store.commit(types.CONVERSATION_INSERT_MESSAGE, {
+                        messages: [msg]
                     });
-                });
-                if (response.data.length > 0) {
-                    let first = response.data[0];
+                }
+                if (messages.length > 0) {
                     store.commit(
                         types.CONVERSATION_SET_TIMESTAMP,
-                        first.created_at
+                        messages[0].created_at
                     );
                 }
             })
@@ -229,22 +265,18 @@ const actions = {
     },
 
     findConversation(store, { id } = {}) {
-        if (!id) {
-            id = store.state.selectedID;
-        }
+        const nid = id != null ? normalizeId(id) : store.state.selectedID;
+        if (!nid) return Promise.reject(new Error('No conversation id'));
         return conversationApi
-            .show(id)
+            .show(nid)
             .then((response) => {
                 if (response.data) {
-                    store.commit(types.CONVERSATION_CREATE_MESSAGES, id);
-                    store.commit(types.CONVERSATION_PUSH, response.data);
-                    store.commit(types.CONVERSATION_GET, response.data);
-                    store.commit(
-                        types.CONVERSATION_SET_CONVERSATION,
-                        response.data
-                    );
+                    const conv = normalizeConversation(response.data);
+                    store.commit(types.CONVERSATION_CREATE_MESSAGES, conv.id);
+                    store.commit(types.CONVERSATION_PUSH, conv);
+                    store.commit(types.CONVERSATION_SET_CONVERSATION, conv);
                     globalStore.dispatch('conversations/findMessage', {
-                        id,
+                        id: conv.id,
                         more: false
                     });
                 }
@@ -256,30 +288,33 @@ const actions = {
     },
 
     findMessage(store, { id, more } = {}) {
-        if (!id) {
-            id = store.state.selectedID;
-        }
-        let msgObj = store.state.messages[id];
+        const nid = id != null ? normalizeId(id) : store.state.selectedID;
+        if (!nid) return Promise.reject(new Error('No conversation id'));
+        let msgObj = store.state.messages[nid];
         let timestamp = null;
-        if (more && msgObj.list.length) {
+        if (more && msgObj && msgObj.list.length) {
             timestamp = msgObj.list[0].created_at;
         }
 
         let unread = false;
         let read = true;
         return conversationApi
-            .getMessages(id, { read, unread, pageSize, timestamp })
+            .getMessages(nid, { read, unread, pageSize, timestamp })
             .then((response) => {
                 if (!more) {
-                    store.commit(types.CONVERSATION_BLANK_MESSAGES, { id });
+                    store.commit(types.CONVERSATION_BLANK_MESSAGES, {
+                        id: nid
+                    });
                 }
                 if (response.data.length === 0) {
-                    store.commit(types.CONVERSATION_SET_LAST_PAGE);
+                    store.commit(types.CONVERSATION_SET_LAST_PAGE, {
+                        id: nid
+                    });
                 } else {
                     let messages = response.data.reverse();
                     store.commit(types.CONVERSATION_ADD_MESSAGE, {
                         messages,
-                        id
+                        id: nid
                     });
                 }
             })
@@ -289,7 +324,8 @@ const actions = {
     },
 
     sendMessage(store, message) {
-        let id = store.state.selectedID;
+        const id = store.state.selectedID;
+        if (!id) return Promise.reject(new Error('No conversation selected'));
         return conversationApi
             .send(id, message)
             .then((response) => {
@@ -314,14 +350,44 @@ const actions = {
 const mutations = {
     ...pagination.makeMutations('list'),
 
+    /** Override: SET list with normalized conversations. */
+    LIST_SET(state, items) {
+        if (!items) {
+            state.list = items;
+            return;
+        }
+        state.list = items.map(normalizeConversation);
+    },
+
+    /** Override: ADD page with deduplication by normalized id. */
+    LIST_ADD(state, items) {
+        if (!items || !items.length) return;
+        const normalized = items.map(normalizeConversation);
+        if (!state.list || !state.list.length) {
+            state.list = normalized;
+            return;
+        }
+        const existingIds = new Set(
+            state.list.map((i) => normalizeId(i.id)).filter((x) => x != null)
+        );
+        const toAdd = normalized.filter((item) => {
+            const id = normalizeId(item.id);
+            return id != null && !existingIds.has(id);
+        });
+        if (toAdd.length) {
+            state.list = [...state.list, ...toAdd];
+        }
+    },
+
     [types.CONVERSATION_PUSH](state, conv) {
-        // Agrega una conversación a la lista si no existe
+        const normalized = normalizeConversation(conv);
         if (!state.list) {
             state.list = [];
         }
-        if (!state.list.find((i) => i.id === conv.id)) {
-            // uso unshift para agregarlo primero, se asume una nueva conversacion
-            state.list.unshift(conv);
+        const nid = normalizeId(normalized.id);
+        if (nid == null) return;
+        if (!state.list.some((i) => normalizeId(i.id) === nid)) {
+            state.list.unshift(normalized);
         }
     },
 
@@ -334,9 +400,9 @@ const mutations = {
     },
 
     [types.CONVERSATION_SET_SELECTED](state, id) {
-        if (id) {
-            id = parseInt(id);
-            state.selectedID = id;
+        const nid = normalizeId(id);
+        if (nid != null) {
+            state.selectedID = nid;
         } else {
             state.selectedID = null;
             state.conversationSelected = null;
@@ -352,45 +418,44 @@ const mutations = {
     },
 
     [types.CONVERSATION_CREATE_MESSAGES](state, id) {
-        id = parseInt(id);
-        if (!state.messages[id]) {
-            let obj = {
+        const nid = normalizeId(id);
+        if (nid == null) return;
+        if (!state.messages[nid]) {
+            Vue.set(state.messages, nid, {
                 list: [],
                 lastPage: false
-            };
-            Vue.set(state.messages, id, obj);
+            });
         }
     },
 
     [types.CONVERSATION_INSERT_MESSAGE](state, { messages, id }) {
         messages.forEach((item) => {
-            if (
-                !state.messages[item.conversation_id].list.find(
-                    (i) => i.id === item.id
-                )
-            ) {
-                state.messages[item.conversation_id].list.push(item);
+            const convId = normalizeId(item.conversation_id);
+            const msgBucket = state.messages[convId];
+            if (!msgBucket) return;
+            const exists = msgBucket.list.some(
+                (i) => normalizeId(i.id) === normalizeId(item.id)
+            );
+            if (!exists) {
+                msgBucket.list.push(item);
                 if (!id) {
-                    // marcar conversacion como no leida
-                    let conv = state.list.find(
-                        (c) => c.id === item.conversation_id
+                    const conv = (state.list || []).find(
+                        (c) => normalizeId(c.id) === convId
                     );
-                    if (conv) {
-                        conv.unread = true;
-                    }
+                    if (conv) conv.unread = true;
                 }
             }
-            if (state.list) {
+            if (state.list && state.list.length) {
                 state.list.forEach((c) => {
-                    if (c.id.toString() === item.conversation_id.toString()) {
+                    if (normalizeId(c.id) === convId) {
                         c.updated_at = item.created_at;
                         c.last_message = item;
                     }
                 });
-                let arrayClone = state.list.slice(0);
+                const arrayClone = state.list.slice(0);
                 arrayClone.sort((a, b) => {
-                    let dateA = moment(a.updated_at).toDate();
-                    let dateB = moment(b.updated_at).toDate();
+                    const dateA = moment(a.updated_at || a.update_at).toDate();
+                    const dateB = moment(b.updated_at || b.update_at).toDate();
                     return dateB - dateA;
                 });
                 state.list = arrayClone;
@@ -399,56 +464,48 @@ const mutations = {
     },
 
     [types.CONVERSATION_ADD_MESSAGE](state, { messages, id }) {
-        if (!id) {
-            id = state.selectedID;
-        }
-        let obj = {};
-        obj[id] = {
-            list: [...messages, ...state.messages[id].list],
-            lastPage: state.messages[id].lastPage
-        };
-        state.messages = Object.assign({}, state.messages, obj);
-    },
-    [types.CONVERSATION_GET](state, conversation) {
-        state.conversation = Object.assign(
-            {},
-            state.conversation,
-            conversation
-        );
+        const nid = id != null ? normalizeId(id) : state.selectedID;
+        if (nid == null || !state.messages[nid]) return;
+        Vue.set(state.messages, nid, {
+            list: [...messages, ...state.messages[nid].list],
+            lastPage: state.messages[nid].lastPage
+        });
     },
 
     [types.CONVERSATION_UPDATE](state, msg) {
-        let conv = state.list.find((item) => item.id === msg.conversation_id);
+        const convId = normalizeId(msg.conversation_id);
+        const conv = (state.list || []).find(
+            (item) => normalizeId(item.id) === convId
+        );
+        if (!conv) return;
         conv.unread = true;
         conv.updated_at = msg.created_at;
         conv.last_message = msg;
 
         state.list.sort((a, b) => {
-            let dateA = moment(a.updated_at).toDate();
-            let dateB = moment(b.updated_at).toDate();
+            const dateA = moment(a.updated_at || a.update_at).toDate();
+            const dateB = moment(b.updated_at || b.update_at).toDate();
             return dateB - dateA;
         });
-        
-        if (!state.messages[msg.conversation_id].timestamp) {
-            state.messages[msg.conversation_id].timestamp = msg.created_at;
+
+        if (state.messages[convId] && !state.messages[convId].timestamp) {
+            state.messages[convId].timestamp = msg.created_at;
         }
     },
 
     [types.CONVERSATION_SET_LAST_PAGE](state, { id } = {}) {
-        if (!id) {
-            id = state.selectedID;
+        const nid = id != null ? normalizeId(id) : state.selectedID;
+        if (nid != null && state.messages[nid]) {
+            state.messages[nid].lastPage = true;
         }
-        state.messages[id].lastPage = true;
     },
 
     [types.CONVERSATION_BLANK_MESSAGES](state, { id }) {
-        id = parseInt(id);
-        if (!id) {
-            id = state.selectedID;
+        const nid = id != null ? normalizeId(id) : state.selectedID;
+        if (nid != null && state.messages[nid]) {
+            state.messages[nid].lastPage = false;
+            state.messages[nid].list = [];
         }
-        state.messages[id].lastPage = false;
-        state.messages[id].list = [];
-        // state.messages[id].timestamp = null;
     }
 };
 

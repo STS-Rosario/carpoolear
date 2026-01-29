@@ -44,7 +44,7 @@
                 </div>
                 <MessageView
                     v-for="m in messages"
-                    v-bind:key="m.id"
+                    :key="m.id"
                     :message="m"
                     :user="user"
                     :users="conversation.users"
@@ -182,7 +182,7 @@ export default {
         },
 
         refresh() {
-            this.select(parseInt(this.id)).then(() => {
+            this.select(this.id).then(() => {
                 bus.on('back-click', this.onBackClick);
                 if (this.conversation) {
                     this.setTitle(this.conversation.title);
