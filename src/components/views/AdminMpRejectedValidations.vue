@@ -15,7 +15,6 @@
                                 <th scope="col">{{ $t('nombre') }}</th>
                                 <th scope="col">{{ $t('doc') }}</th>
                                 <th scope="col">{{ $t('estado') }}</th>
-                                <th scope="col">{{ $t('revision') }}</th>
                                 <th scope="col">{{ $t('motivoRechazo') }}</th>
                                 <th scope="col">{{ $t('fecha') }}</th>
                                 <th scope="col">{{ $t('acciones') }}</th>
@@ -87,18 +86,6 @@ export default {
             if (reason === 'dni_mismatch') return this.$t('rechazoDniMismatch');
             if (reason === 'name_mismatch') return this.$t('rechazoNameMismatch');
             return reason || '-';
-        },
-        getReviewStatusLabel(status) {
-            if (status === 'pending') return this.$t('estadoPendienteRevision');
-            if (status === 'approved' || status === 'approve') return this.$t('estadoAprobado');
-            if (status === 'rejected' || status === 'reject') return this.$t('estadoRechazado');
-            return status || '-';
-        },
-        getReviewStatusBadgeClass(item) {
-            const status = item.review_status;
-            if (status === 'approved' || status === 'approve') return 'label label-success';
-            if (status === 'rejected' || status === 'reject') return 'label label-danger';
-            return 'label label-warning';
         },
         fetchList() {
             const api = new AdminApi();
