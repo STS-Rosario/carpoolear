@@ -56,10 +56,10 @@
                                         :class="{
                                             unread: conversation.unread,
                                             active:
-                                                selected &&
-                                                conversation.id === selected.id
+                                                selectedId != null &&
+                                                conversation.id === selectedId
                                         }"
-                                        v-bind:key="conversation.id"
+                                        :key="conversation.id"
                                     >
                                         <div class="media">
                                             <div class="media-left">
@@ -230,7 +230,7 @@ export default {
             conversations: 'conversations/list',
             moreConversations: 'conversations/listMorePage',
             users: 'conversations/users',
-            selected: 'conversations/selectedConversation',
+            selectedId: 'conversations/selectedId',
             isMobile: 'device/isMobile',
             config: 'auth/appConfig'
         }),
