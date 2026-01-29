@@ -37,5 +37,5 @@
     "trips_focus_next": false,
     "autocomplete_select_first": false,
     "profile_id_format": "##.###.###",
-    "weekly_schedule_support": true
+    "enable_weekly_schedule": true
 }

@@ -330,7 +330,7 @@
                     </div>
                     <div class="row">
                         <div class="new-left col-sm-13 col-md-15">
-                            <div class="trip_schedule-toggle" v-if="config.weekly_schedule_support">
+                            <div class="trip_schedule-toggle" v-if="config.enable_weekly_schedule">
                                 <div class="schedule-toggle-buttons">
                                     <button type="button" class="btn btn-option schedule-tab" @click="useWeeklySchedule = false" :class="!useWeeklySchedule ? 'active' : ''">
                                         {{ $t('unaVez') }}
@@ -378,7 +378,7 @@
                                     <!--<input type="text" v-model="time" />-->
                                 </div>
                             </div>
-                            <div class="trip_weekly_schedule" v-if="useWeeklySchedule && config.weekly_schedule_support">
+                            <div class="trip_weekly_schedule" v-if="useWeeklySchedule && config.enable_weekly_schedule">
                                 <WeeklySchedule
                                     :weeklySchedule.sync="weeklySchedule"
                                     :weeklyScheduleTime.sync="weeklyScheduleTime"
@@ -1086,7 +1086,7 @@
                     </div>
                     <div class="row">
                         <div class="new-left col-sm-13 col-md-15">
-                            <div class="trip_schedule-toggle" v-if="config.weekly_schedule_support">
+                            <div class="trip_schedule-toggle" v-if="config.enable_weekly_schedule">
                                 <div class="schedule-toggle-buttons">
                                     <button type="button" class="btn btn-option schedule-tab" @click="useWeeklySchedule = false" :class="!useWeeklySchedule ? 'active' : ''">
                                         {{ $t('unaVez') }}
@@ -1142,7 +1142,7 @@
                                     <!--<input type="text" v-model="time" />-->
                                 </div>
                             </div>
-                            <div class="trip_weekly_schedule" v-if="useWeeklySchedule && config.weekly_schedule_support">
+                            <div class="trip_weekly_schedule" v-if="useWeeklySchedule && config.enable_weekly_schedule">
                                 <WeeklySchedule
                                     :weeklySchedule.sync="weeklySchedule"
                                     :weeklyScheduleTime.sync="weeklyScheduleReturnTime"
