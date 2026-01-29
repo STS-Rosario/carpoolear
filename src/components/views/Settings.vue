@@ -13,6 +13,11 @@
                             >{{ $t('amigos') }}</router-link
                         >
                     </li>
+                    <li v-if="identityValidationAvailable" :class="{ active: tabActive === 'identity_validation' }">
+                        <router-link :to="{ name: 'identity_validation' }"
+                            >{{ $t('validarIdentidad') }}</router-link
+                        >
+                    </li>
                     <!--
                     <li>
                         <a href="#">Dispositivos</a>
@@ -35,10 +40,15 @@ export default {
     },
     computed: {
         ...mapGetters({
-            isMobile: 'device/isMobile'
+            isMobile: 'device/isMobile',
+            config: 'auth/appConfig'
         }),
         tabActive() {
             return this.$route.meta.tab;
+        },
+        identityValidationAvailable() {
+            const c = this.config;
+            return c && (c.identity_validation_mercado_pago_enabled === true || c.identity_validation_manual_enabled === true);
         }
     },
     methods: {},

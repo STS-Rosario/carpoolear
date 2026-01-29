@@ -75,7 +75,10 @@
                                                     <span
                                                         class="conversation-title"
                                                     >
-                                                        {{ conversation.title }}
+                                                        <UserNameWithBadge
+                                                            :name="conversation.title"
+                                                            :showBadge="!!conversation.other_user_identity_validated_at"
+                                                        />
                                                     </span>
                                                 </h4>
                                                 <span
@@ -180,7 +183,7 @@
                                             class="conversation_image circle-box"
                                             v-imgSrc:profile="user.image"
                                         ></div>
-                                        {{ user.name }}
+                                        <UserNameWithBadge :user="user" />
                                     </li>
                                     <li
                                         slot="no-data"
@@ -214,6 +217,7 @@
 import { mapGetters, mapActions } from 'vuex';
 import { Thread } from '../../classes/Threads.js';
 import Loading from '../Loading.vue';
+import UserNameWithBadge from '../elements/UserNameWithBadge.vue';
 import router from '../../router';
 import CoordinateTrip from '../elements/CoordinateTrip';
 
@@ -318,7 +322,8 @@ export default {
     updated() {},
     components: {
         Loading,
-        CoordinateTrip
+        CoordinateTrip,
+        UserNameWithBadge
     }
 };
 </script>

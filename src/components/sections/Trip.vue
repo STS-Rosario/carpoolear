@@ -110,7 +110,7 @@
                                     class="trip_driver_name"
                                     v-on:click="goToProfile"
                                 >
-                                    {{ trip.user.name }}
+                                    <UserNameWithBadge :user="trip.user" />
                                 </div>
                                 <div
                                     class="trip_driver_ratings"
@@ -561,6 +561,7 @@ import dialogs from '../../services/dialogs.js';
 import bus from '../../services/bus-event.js';
 import tripDisplay from './TripDisplay';
 import WeeklySchedule from '../elements/WeeklySchedule';
+import UserNameWithBadge from '../elements/UserNameWithBadge.vue';
 import moment from 'moment';
 import SvgItem from '../SvgItem';
 
@@ -841,12 +842,11 @@ export default {
     components: {
         tripDisplay,
         WeeklySchedule,
-        SvgItem
+        SvgItem,
+        UserNameWithBadge
     },
     mounted() {
-        if (this.trip) {
-            this.seats_available = this.trip.seats_available;
-        }
+        this.seats_available = this.trip.seats_available;
     },
     updated() {}
 };
