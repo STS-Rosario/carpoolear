@@ -151,7 +151,6 @@
                                 >(*)</span
                             >
                             <span class="description">
-                                ({{ $t('soloNumeros') }}).
                                 {{ $t('incentivoDoc') }} {{ $t('doc') }}
                                 {{ $t('momentoViajar') }}
                             </span>
@@ -162,7 +161,7 @@
                             @input="handleDniInput"
                             class="form-control"
                             id="input-dni"
-                            :placeholder="$t('doc')"
+                            :placeholder="config.profile_id_format"
                             :class="{ 'has-error': dniError.state }"
                             :maxlength="(config.profile_id_format).length"
                         />
