@@ -46,6 +46,49 @@ class AdminApi extends TaggedApi {
     banAndAnonymizeUser(userId, note = '') {
         return this.post(`/api/admin/users/${userId}/ban-and-anonymize`, { note });
     }
+
+    getManualIdentityValidations() {
+        return this.get('/api/admin/manual-identity-validations', {});
+    }
+
+    getManualIdentityValidation(id) {
+        return this.get('/api/admin/manual-identity-validations/' + id, {});
+    }
+
+    reviewManualIdentityValidation(id, action, note) {
+        return this.post(
+            '/api/admin/manual-identity-validations/' + id + '/review',
+            {
+                action,
+                note
+            }
+        );
+    }
+
+    purgeManualIdentityValidation(id) {
+        return this.post(
+            '/api/admin/manual-identity-validations/' + id + '/purge',
+            {}
+        );
+    }
+
+    getMercadoPagoRejectedValidations() {
+        return this.get('/api/admin/mercado-pago-rejected-validations', {});
+    }
+
+    getMercadoPagoRejectedValidation(id) {
+        return this.get(
+            '/api/admin/mercado-pago-rejected-validations/' + id,
+            {}
+        );
+    }
+
+    approveMercadoPagoRejectedValidation(id) {
+        return this.post(
+            '/api/admin/mercado-pago-rejected-validations/' + id + '/approve',
+            {}
+        );
+    }
 }
 
 export { AdminApi as default };

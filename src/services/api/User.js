@@ -118,6 +118,34 @@ class UserApi extends TaggedApi {
     deleteAccount() {
         return this.post('/api/users/delete-account', {});
     }
+
+    getMercadoPagoOAuthUrl() {
+        return this.get('/api/users/mercadopago-oauth-url', {});
+    }
+
+    getManualIdentityValidationCost() {
+        return this.get('/api/users/manual-identity-validation-cost', {});
+    }
+
+    getManualIdentityValidationStatus() {
+        return this.get('/api/users/manual-identity-validation', {});
+    }
+
+    createManualIdentityValidationPreference() {
+        return this.post(
+            '/api/users/manual-identity-validation/preference',
+            {}
+        );
+    }
+
+    submitManualIdentityValidation(requestId, formData) {
+        if (formData && !formData.get('request_id')) {
+            formData.append('request_id', requestId);
+        }
+        return this.post('/api/users/manual-identity-validation', formData, {
+            'Content-Type': 'multipart/form-data'
+        });
+    }
 }
 
 export { UserApi as default };

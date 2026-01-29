@@ -1655,6 +1655,12 @@
       line-height: 20px;
   }
 
+  .profile-info-component .identity-validated-badge i {
+      color: #5cb85c;
+      float: none;
+      width: auto;
+  }
+
   .data-info .list-group-item:last-child {
       margin-bottom: -1px;
       border-bottom-right-radius: 4px;
@@ -1812,6 +1818,9 @@
   .trips-list > div {
       padding-left: 0;
       padding-right: 0;
+  }
+  .trips-list .identity-validated-badge i {
+      color: white;
   }
   .conversation_chat .input-group-btn:last-child>.btn, .input-group-btn:last-child>.btn-group {
       height: 44px;
