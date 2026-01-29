@@ -168,7 +168,9 @@
                 <template v-for="(trip, index) in trips">
                     <template
                         v-if="
-                            isDonationTime() && (!user || !user.monthly_donate)
+                            isDonationTime() &&
+                            (!user || !user.monthly_donate) &&
+                            !shouldHideDonationOnIOSCapacitor(user)
                         "
                     >
                         <!-- solo si el usuario no es donador mensual -->
@@ -190,7 +192,7 @@
                                     class="btn btn-success pull-right btn-donar"
                                     @click="onDonate"
                                 >
-                                    {{ Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'ios' ? $t('donarEnSafari') : $t('donar') }}
+                                    {{ $t('donar') }}
                                 </button>
                                 <h2>{{ $t('ayudanos') }}</h2>
 
@@ -312,6 +314,10 @@ import modal from '../Modal';
 import push from '../../cordova/push.js';
 import { App } from '@capacitor/app';
 import { Capacitor } from '@capacitor/core';
+import {
+    isIOSCapacitor,
+    shouldHideDonationOnIOSCapacitor
+} from '../../services/capacitor.js';
 
 export default {
     name: 'trips',
@@ -390,6 +396,9 @@ export default {
             } else {
                 return false;
             }
+        },
+        shouldHideDonationOnIOSCapacitor(user) {
+            return shouldHideDonationOnIOSCapacitor(user);
         },
         async installApp() {
             this.showModalInstallApp = false;
@@ -801,6 +810,9 @@ export default {
 
         showingTrips() {
             return !this.isMobile || !this.lookSearch;
+        },
+        isIOSCapacitor() {
+            return isIOSCapacitor();
         }
     },
     components: {

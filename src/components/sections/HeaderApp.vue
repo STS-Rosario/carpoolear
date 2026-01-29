@@ -73,7 +73,7 @@
 
             <div
                 class="actionbar_section actionbar_icon pull-right"
-                v-if="isMobile && user"
+                v-if="isMobile && user && !shouldHideDonationOnIOSCapacitor(user)"
             >
                 <a
                     href="/donar"
@@ -249,7 +249,10 @@
                     </dropdown>
                 </div>
 
-                <a href="/donar" class="btn btn-primary btn-donar-header btn-lg"
+                <a
+                    v-if="!shouldHideDonationOnIOSCapacitor(user)"
+                    href="/donar"
+                    class="btn btn-primary btn-donar-header btn-lg"
                     >Donar</a
                 >
                 <router-link
@@ -272,6 +275,7 @@ import { dropdown } from 'vue-strap';
 import router from '../../router';
 import bus from '../../services/bus-event.js';
 import modal from '../Modal';
+import { shouldHideDonationOnIOSCapacitor } from '../../services/capacitor.js';
 
 export default {
     name: 'headerApp',
@@ -337,6 +341,9 @@ export default {
     },
 
     methods: {
+        shouldHideDonationOnIOSCapacitor(user) {
+            return shouldHideDonationOnIOSCapacitor(user);
+        },
         share() {
             // dialogs.message('Message example');
             /* if (window && window.plugins && window.plugins.socialsharing && window.plugins.socialsharing.shareWithOptions) {
