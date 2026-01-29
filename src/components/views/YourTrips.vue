@@ -113,6 +113,7 @@ import { mapGetters, mapActions } from 'vuex';
 import Tab from '../elements/Tab';
 import modal from '../Modal';
 import dialogs from '../../services/dialogs.js';
+import { shouldHideDonationOnIOSCapacitor } from '../../services/capacitor.js';
 
 export default {
     name: 'my-trips',
@@ -283,6 +284,9 @@ export default {
             this.registerDonation(data);
         },
         hasToShowModal(tripId) {
+            if (shouldHideDonationOnIOSCapacitor(this.user)) {
+                return;
+            }
             let tripRateds = parseFloat(this.config.donation.trips_rated);
             if (this.user && !this.user.monthly_donate) {
                 // solo si el usuario no es donador mensual
