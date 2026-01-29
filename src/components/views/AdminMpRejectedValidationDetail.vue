@@ -24,6 +24,16 @@
                                 {{ item.user_identity_validated ? $t('identidadValidada') : $t('identidadNoValidada') }}
                             </span>
                         </p>
+                        <p v-if="item.review_status" class="review-status-display">
+                            <strong>{{ $t('revisionAdmin') }}:</strong>
+                            <span :class="getStatusBadgeClass(item)">{{ getStatusLabel(item.review_status) }}</span>
+                        </p>
+                        <p v-if="item.review_note && item.review_note.trim()" class="review-note-display">
+                            <strong>{{ $t('comentarioRevision') }}:</strong> {{ item.review_note }}
+                        </p>
+                        <p v-if="item.reviewed_at">
+                            <strong>{{ $t('revisadoPor') }}:</strong> {{ item.reviewed_by_name || $t('na') }} {{ $t('el') }} {{ formatDate(item.reviewed_at) }}
+                        </p>
                         <p><strong>{{ $t('usuario') }} ID:</strong> {{ item.user_id }}</p>
                         <p><strong>{{ $t('nombre') }}:</strong>
                             <router-link v-if="item.user_id" :to="{ name: 'profile', params: { id: item.user_id } }" target="_blank">
@@ -36,18 +46,36 @@
                         <p><strong>{{ $t('motivoRechazo') }}:</strong> {{ getRejectReasonLabel(item.reject_reason) }}</p>
                         <p><strong>{{ $t('fecha') }}:</strong> {{ formatDate(item.created_at) }}</p>
 
-                        <div v-if="item.approved_at" class="alert alert-success">
-                            <strong>{{ $t('validadoPor') }}:</strong> {{ item.approved_by_name || $t('na') }} {{ $t('el') }} {{ formatDate(item.approved_at) }}
-                        </div>
-                        <div v-else-if="!item.user_identity_validated" class="mt-3">
+                        <div v-if="!item.review_status" class="review-actions mt-3">
+                            <h4>{{ $t('accion') }}</h4>
+                            <div class="form-group">
+                                <label>{{ $t('comentarioRevisar') }}</label>
+                                <textarea v-model="reviewNote" class="form-control" rows="3" :placeholder="$t('comentarioRevisar')"></textarea>
+                            </div>
                             <button
                                 class="btn btn-success"
-                                :disabled="approving"
-                                @click="approveUser"
+                                :disabled="submitting"
+                                @click="review('approve')"
                             >
-                                {{ approving ? $t('cargando') : $t('validarUsuario') }}
+                                {{ $t('aprobar') }}
                             </button>
-                            <p v-if="approveError" class="text-danger mt-2">{{ approveError }}</p>
+                            <button
+                                class="btn btn-warning"
+                                :disabled="!hasComment || submitting"
+                                :title="!hasComment ? $t('comentarioRequeridoParaAccion') : ''"
+                                @click="review('pending')"
+                            >
+                                {{ $t('marcarPendiente') }}
+                            </button>
+                            <button
+                                class="btn btn-danger"
+                                :disabled="!hasComment || submitting"
+                                :title="!hasComment ? $t('comentarioRequeridoParaAccion') : ''"
+                                @click="review('reject')"
+                            >
+                                {{ $t('rechazar') }}
+                            </button>
+                            <p v-if="reviewError" class="text-danger">{{ reviewError }}</p>
                         </div>
 
                         <h4 class="mt-4">{{ $t('payloadMercadoPago') }}</h4>
@@ -62,6 +90,7 @@
 <script>
 import adminNav from '../sections/adminNav';
 import { AdminApi } from '../../services/api';
+import dialogs from '../../services/dialogs.js';
 
 export default {
     name: 'AdminMpRejectedValidationDetail',
@@ -75,11 +104,15 @@ export default {
         return {
             item: null,
             loading: true,
-            approving: false,
-            approveError: null
+            reviewNote: '',
+            submitting: false,
+            reviewError: null
         };
     },
     computed: {
+        hasComment() {
+            return this.reviewNote && this.reviewNote.trim() !== '';
+        },
         mpPayloadFormatted() {
             if (!this.item || !this.item.mp_payload) return '-';
             try {
@@ -99,6 +132,18 @@ export default {
             if (reason === 'name_mismatch') return this.$t('rechazoNameMismatch');
             return reason || '-';
         },
+        getStatusLabel(status) {
+            if (status === 'pending') return this.$t('estadoPendienteRevision');
+            if (status === 'approved' || status === 'approve') return this.$t('estadoAprobado');
+            if (status === 'rejected' || status === 'reject') return this.$t('estadoRechazado');
+            return status || '-';
+        },
+        getStatusBadgeClass(item) {
+            const status = item.review_status;
+            if (status === 'approved' || status === 'approve') return 'label label-success';
+            if (status === 'rejected' || status === 'reject') return 'label label-danger';
+            return 'label label-warning';
+        },
         fetchItem() {
             const api = new AdminApi();
             return api.getMercadoPagoRejectedValidation(this.id).then((res) => {
@@ -110,22 +155,30 @@ export default {
                 this.loading = false;
             });
         },
-        approveUser() {
-            this.approving = true;
-            this.approveError = null;
+        review(action) {
+            if (action !== 'approve' && !this.hasComment) return;
+            this.submitting = true;
+            this.reviewError = null;
             const api = new AdminApi();
-            api.approveMercadoPagoRejectedValidation(this.id)
+            const note = (this.reviewNote && this.reviewNote.trim()) || '';
+            api.reviewMercadoPagoRejectedValidation(this.id, action, note)
                 .then((res) => {
                     const data = res.data || res;
                     if (data.data) {
                         this.item = data.data;
                     }
+                    const messageKey = action === 'approve' ? 'estadoAprobado' : action === 'reject' ? 'estadoRechazado' : 'accionMarcadoPendiente';
+                    const estado = action === 'approve' ? 'success' : action === 'reject' ? 'error' : 'warning';
+                    dialogs.message(this.$t(messageKey), { duration: 3, estado });
+                    setTimeout(() => {
+                        this.$router.push({ name: 'admin-mp-rejected-validations' });
+                    }, 3000);
                 })
                 .catch((err) => {
-                    this.approveError = (err.response && err.response.data && err.response.data.error) || this.$t('resultError');
+                    this.reviewError = (err.response && err.response.data && err.response.data.error) || this.$t('resultError');
                 })
                 .finally(() => {
-                    this.approving = false;
+                    this.submitting = false;
                 });
         }
     },
@@ -155,4 +208,7 @@ export default {
     font-size: 0.9em;
 }
 .mt-4 { margin-top: 1.5em; }
+.review-note-display {
+    word-break: break-word;
+}
 </style>
