@@ -28,6 +28,9 @@
                         <p><strong>{{ $t('fechaEnvio') }}:</strong> {{ item.submitted_at ? formatDate(item.submitted_at) : '-' }}</p>
                         <p><strong>{{ $t('pagado') }}:</strong> {{ item.paid ? $t('si') : $t('no') }}</p>
                         <p><strong>{{ $t('estado') }}:</strong> {{ getStatusLabel(item.review_status) }}</p>
+                        <p v-if="item.review_note && item.review_note.trim()" class="review-note-display">
+                            <strong>{{ $t('comentarioRevision') }}:</strong> {{ item.review_note }}
+                        </p>
 
                         <div v-if="item.has_images" class="images-section">
                             <h4>{{ $t('fotos') }}</h4>
@@ -72,26 +75,28 @@
                         <div v-if="item.paid" class="review-actions">
                             <h4>{{ $t('accion') }}</h4>
                             <div class="form-group">
-                                <label>{{ $t('comentarioObligatorio') }}</label>
-                                <textarea v-model="reviewNote" class="form-control" rows="3" :placeholder="$t('comentarioObligatorio')"></textarea>
+                                <label>{{ $t('comentarioRevisar') }}</label>
+                                <textarea v-model="reviewNote" class="form-control" rows="3" :placeholder="$t('comentarioRevisar')"></textarea>
                             </div>
                             <button
                                 class="btn btn-success"
-                                :disabled="!reviewNote || reviewNote.trim() === '' || submitting"
+                                :disabled="submitting"
                                 @click="review('approve')"
                             >
                                 {{ $t('aprobar') }}
                             </button>
                             <button
                                 class="btn btn-warning"
-                                :disabled="!reviewNote || reviewNote.trim() === '' || submitting"
+                                :disabled="!hasComment || submitting"
+                                :title="!hasComment ? $t('comentarioRequeridoParaAccion') : ''"
                                 @click="review('pending')"
                             >
                                 {{ $t('marcarPendiente') }}
                             </button>
                             <button
                                 class="btn btn-danger"
-                                :disabled="!reviewNote || reviewNote.trim() === '' || submitting"
+                                :disabled="!hasComment || submitting"
+                                :title="!hasComment ? $t('comentarioRequeridoParaAccion') : ''"
                                 @click="review('reject')"
                             >
                                 {{ $t('rechazar') }}
@@ -101,10 +106,11 @@
                         <div v-else class="alert alert-warning">{{ $t('noPagadoNoRevisar') }}</div>
 
                         <div class="purge-section mt-3">
+                            <p class="text-muted purge-warning">{{ $t('purgarFotosAdvertencia') }}</p>
                             <button
                                 class="btn btn-default"
                                 :disabled="!item.has_images || purging"
-                                @click="purge"
+                                @click="confirmPurge"
                             >
                                 {{ $t('purgarFotos') }}
                             </button>
@@ -126,6 +132,7 @@ import axios from 'axios';
 import adminNav from '../sections/adminNav';
 import { AdminApi } from '../../services/api';
 import store from '../../store';
+import dialogs from '../../services/dialogs.js';
 
 export default {
     name: 'AdminManualIdentityValidationReview',
@@ -146,6 +153,11 @@ export default {
             reviewError: null,
             purging: false
         };
+    },
+    computed: {
+        hasComment() {
+            return this.reviewNote && this.reviewNote.trim() !== '';
+        }
     },
     methods: {
         formatDate(value) {
@@ -190,14 +202,19 @@ export default {
             this.fullSizeImage = this.blobUrls[type] || null;
         },
         review(action) {
-            if (!this.reviewNote || this.reviewNote.trim() === '') return;
+            if (action !== 'approve' && !this.hasComment) return;
             this.submitting = true;
             this.reviewError = null;
             const api = new AdminApi();
-            api.reviewManualIdentityValidation(this.id, action, this.reviewNote.trim())
+            const note = (this.reviewNote && this.reviewNote.trim()) || '';
+            api.reviewManualIdentityValidation(this.id, action, note)
                 .then(() => {
-                    this.fetchItem();
-                    this.reviewNote = '';
+                    const messageKey = action === 'approve' ? 'estadoAprobado' : action === 'reject' ? 'estadoRechazado' : 'accionMarcadoPendiente';
+                    const estado = action === 'approve' ? 'success' : action === 'reject' ? 'error' : 'warning';
+                    dialogs.message(this.$t(messageKey), { duration: 3, estado });
+                    setTimeout(() => {
+                        this.$router.push({ name: 'admin-manual-identity-validations' });
+                    }, 2000);
                 })
                 .catch((err) => {
                     this.reviewError = (err.response && err.response.data && err.response.data.error) || this.$t('resultError');
@@ -206,8 +223,11 @@ export default {
                     this.submitting = false;
                 });
         },
-        purge() {
+        confirmPurge() {
             if (!confirm(this.$t('confirmarPurgarFotos'))) return;
+            this.doPurge();
+        },
+        doPurge() {
             this.purging = true;
             const api = new AdminApi();
             api.purgeManualIdentityValidation(this.id)
@@ -263,5 +283,11 @@ export default {
     max-width: 95%;
     max-height: 95%;
     object-fit: contain;
+}
+.purge-section .purge-warning {
+    margin-bottom: 0.5em;
+}
+.review-note-display {
+    word-break: break-word;
 }
 </style>

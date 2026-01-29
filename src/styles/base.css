@@ -184,6 +184,13 @@
   .alertify-notifier .ajs-message.ajs-success {
       color: #fff;
   }
+  .alertify-notifier .ajs-message.ajs-error {
+      color: #fff;
+  }
+  .alertify-notifier .ajs-message.ajs-warning {
+      background: rgba(240, 173, 78, 0.95);
+      color: #333;
+  }
   .alert-icon {
       width: 40px;
       float:left;

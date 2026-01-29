@@ -259,6 +259,10 @@ const messages = {
         validarIdentidad: 'Validar identidad',
         identidadValidada: 'Identidad validada',
         identidadValidadaTooltip: 'Identidad validada',
+        removerValidacionIdentidad: 'Remover validación de identidad',
+        confirmarRemoverValidacionIdentidad:
+            '¿Remover la validación de identidad de este usuario? Se borrarán todos los datos de validación.',
+        validacionIdentidadRemovida: 'Validación de identidad removida.',
         validadoEl: 'Validado el',
         validarConMercadoPago: 'Validar con Mercado Pago',
         validarConMercadoPagoDesc:
@@ -312,6 +316,7 @@ const messages = {
         todosLosArchivosRequeridos: 'Debés subir las tres imágenes.',
         validacionesManuales: 'Validaciones manuales',
         revisarSolicitud: 'Revisar solicitud',
+        revision: 'Revisión',
         fechaPago: 'Fecha de pago',
         fechaEnvio: 'Fecha de envío',
         pagado: 'Pagado',
@@ -334,6 +339,7 @@ const messages = {
         identidadNoValidada: 'No validado',
         validarUsuario: 'Validar usuario',
         validadoPor: 'Validado por',
+        revisadoPor: 'Revisado por',
         el: 'el',
         cargando: 'Cargando...',
         fotos: 'Fotos',
@@ -342,11 +348,19 @@ const messages = {
         selfieDocumento: 'Selfie con documento',
         fotosPurgadas: 'Fotos eliminadas',
         comentarioObligatorio: 'Comentario (obligatorio)',
+        comentarioRevisar:
+            'Comentario (obligatorio para rechazar o marcar pendiente)',
+        comentarioRequeridoParaAccion:
+            'Debe escribir un comentario si quiere tomar esta acción',
+        comentarioRevision: 'Comentario de revisión',
         aprobar: 'Aprobar',
         marcarPendiente: 'Marcar como pendiente',
+        accionMarcadoPendiente: 'Marcado como pendiente',
         rechazar: 'Rechazar',
         noPagadoNoRevisar: 'No pagado. No se puede revisar.',
         purgarFotos: 'Purgar fotos (eliminar solo las imágenes)',
+        purgarFotosAdvertencia:
+            'Las fotos se eliminarán de forma permanente. Esta acción no se puede deshacer.',
         confirmarPurgarFotos:
             '¿Eliminar las fotos de esta solicitud? Se mantendrá el registro de la revisión.',
         volver: 'Volver',
@@ -1118,6 +1132,10 @@ const messages = {
         validarIdentidad: 'Validar identidad',
         identidadValidada: 'Identidad validada',
         identidadValidadaTooltip: 'Identidad validada',
+        removerValidacionIdentidad: 'Remover validación de identidad',
+        confirmarRemoverValidacionIdentidad:
+            '¿Remover la validación de identidad de este usuario? Se borrarán todos los datos de validación.',
+        validacionIdentidadRemovida: 'Validación de identidad removida.',
         validadoEl: 'Validado el',
         validarConMercadoPago: 'Validar con Mercado Pago',
         validarConMercadoPagoDesc:
@@ -1171,6 +1189,7 @@ const messages = {
         todosLosArchivosRequeridos: 'Debés subir las tres imágenes.',
         validacionesManuales: 'Validaciones manuales',
         revisarSolicitud: 'Revisar solicitud',
+        revision: 'Revisión',
         fechaPago: 'Fecha de pago',
         fechaEnvio: 'Fecha de envío',
         pagado: 'Pagado',
@@ -1195,11 +1214,19 @@ const messages = {
         selfieDocumento: 'Selfie con documento',
         fotosPurgadas: 'Fotos eliminadas',
         comentarioObligatorio: 'Comentario (obligatorio)',
+        comentarioRevisar:
+            'Comentario (obligatorio para rechazar o marcar pendiente)',
+        comentarioRequeridoParaAccion:
+            'Debe escribir un comentario si quiere tomar esta acción',
+        comentarioRevision: 'Comentario de revisión',
         aprobar: 'Aprobar',
         marcarPendiente: 'Marcar como pendiente',
+        accionMarcadoPendiente: 'Marcado como pendiente',
         rechazar: 'Rechazar',
         noPagadoNoRevisar: 'No pagado. No se puede revisar.',
         purgarFotos: 'Purgar fotos (eliminar solo las imágenes)',
+        purgarFotosAdvertencia:
+            'Las fotos se eliminarán de forma permanente. Esta acción no se puede deshacer.',
         confirmarPurgarFotos:
             '¿Eliminar las fotos de esta solicitud? Se mantendrá el registro de la revisión.',
         volver: 'Volver',
@@ -1871,6 +1898,7 @@ const messages = {
         todosLosArchivosRequeridos: 'You must upload all three images.',
         validacionesManuales: 'Manual validations',
         revisarSolicitud: 'Review request',
+        revision: 'Review',
         fechaPago: 'Payment date',
         fechaEnvio: 'Submission date',
         pagado: 'Paid',
@@ -1891,9 +1919,14 @@ const messages = {
         estadoIdentidad: 'Identity status',
         identidadValidada: 'Validated',
         identidadValidadaTooltip: 'Identity validated',
+        removerValidacionIdentidad: 'Remove identity validation',
+        confirmarRemoverValidacionIdentidad:
+            'Remove identity validation for this user? All validation data will be cleared.',
+        validacionIdentidadRemovida: 'Identity validation removed.',
         identidadNoValidada: 'Not validated',
         validarUsuario: 'Validate user',
         validadoPor: 'Validated by',
+        revisadoPor: 'Reviewed by',
         el: 'on',
         cargando: 'Loading...',
         fotos: 'Photos',
@@ -1902,11 +1935,18 @@ const messages = {
         selfieDocumento: 'Selfie with document',
         fotosPurgadas: 'Photos purged',
         comentarioObligatorio: 'Comment (required)',
+        comentarioRevisar: 'Comment (required to reject or mark as pending)',
+        comentarioRevision: 'Review comment',
+        comentarioRequeridoParaAccion:
+            'You must write a comment to take this action.',
         aprobar: 'Approve',
         marcarPendiente: 'Mark as pending',
+        accionMarcadoPendiente: 'Marked as pending',
         rechazar: 'Reject',
         noPagadoNoRevisar: 'Unpaid. Cannot review.',
         purgarFotos: 'Purge photos (delete images only)',
+        purgarFotosAdvertencia:
+            'Photos will be permanently deleted. This action cannot be undone.',
         confirmarPurgarFotos:
             'Delete the photos for this request? The review record will be kept.',
         volver: 'Back',

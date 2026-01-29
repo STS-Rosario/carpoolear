@@ -82,14 +82,16 @@ export default {
         },
         getStatusLabel(item) {
             if (!item.paid) return this.$t('estadoPendientePago');
-            if (item.review_status === 'pending') return this.$t('estadoPendienteRevision');
-            if (item.review_status === 'approved') return this.$t('estadoAprobado');
-            if (item.review_status === 'rejected') return this.$t('estadoRechazado');
-            return item.review_status || '-';
+            const status = item.review_status;
+            if (status === 'pending') return this.$t('estadoPendienteRevision');
+            if (status === 'approved' || status === 'approve') return this.$t('estadoAprobado');
+            if (status === 'rejected' || status === 'reject') return this.$t('estadoRechazado');
+            return status || '-';
         },
         getStatusBadgeClass(item) {
-            if (item.review_status === 'approved') return 'label label-success';
-            if (item.review_status === 'rejected') return 'label label-danger';
+            const status = item.review_status;
+            if (status === 'approved' || status === 'approve') return 'label label-success';
+            if (status === 'rejected' || status === 'reject') return 'label label-danger';
             if (!item.paid) return 'label label-default';
             return 'label label-warning';
         },

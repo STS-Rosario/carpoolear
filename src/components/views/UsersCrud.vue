@@ -230,6 +230,24 @@
                                 </span>
                             </div>
 
+                            <div
+                                v-if="newInfo.identity_validated_at"
+                                class="form-group"
+                            >
+                                <label>{{ $t('identidadValidada') }}</label>
+                                <p class="text-muted">
+                                    {{ $t('identidadValidadaTooltip') }}
+                                </p>
+                                <button
+                                    type="button"
+                                    class="btn btn-warning"
+                                    :disabled="clearingIdentity"
+                                    @click="confirmClearIdentityValidation"
+                                >
+                                    {{ $t('removerValidacionIdentidad') }}
+                                </button>
+                            </div>
+
                             <div class="form-group">
                                 <label for="input-pass"
                                     >{{ $t('ingreseSuNuevaContrasena') }}</label
@@ -431,6 +449,7 @@ import { inputIsNumber, formatId, cleanId } from '../../services/utility';
 import dialogs from '../../services/dialogs.js';
 import router from '../../router';
 import adminNav from '../sections/adminNav';
+import { AdminApi } from '../../services/api';
 
 export default {
     // TODO fix css names
@@ -473,7 +492,8 @@ export default {
             patenteError: new Error(),
             keyUpTimerId: 0,
             banks: [],
-            accountTypes: []
+            accountTypes: [],
+            clearingIdentity: false
         };
     },
 
@@ -504,6 +524,30 @@ export default {
                 });
             }, 750);
         },
+        confirmClearIdentityValidation() {
+            if (!this.currentUser || !this.currentUser.id) return;
+            if (!confirm(this.$t('confirmarRemoverValidacionIdentidad'))) return;
+            this.doClearIdentityValidation();
+        },
+        doClearIdentityValidation() {
+            if (!this.currentUser || !this.currentUser.id) return;
+            this.clearingIdentity = true;
+            const api = new AdminApi();
+            api.clearIdentityValidation(this.currentUser.id)
+                .then(() => {
+                    this.newInfo.identity_validated = false;
+                    this.newInfo.identity_validated_at = null;
+                    this.currentUser.identity_validated = false;
+                    this.currentUser.identity_validated_at = null;
+                    dialogs.message(this.$t('validacionIdentidadRemovida'));
+                })
+                .catch(() => {
+                    dialogs.message(this.$t('resultError'), { estado: 'error' });
+                })
+                .finally(() => {
+                    this.clearingIdentity = false;
+                });
+        },
         selectUser(user) {
             this.currentUser = user;
             console.log('selectUser', user);
@@ -528,7 +572,9 @@ export default {
                 banned: this.currentUser.banned > 0,
                 active: this.currentUser.active > 0,
                 cars: this.currentUser.cars || [],
-                patente: this.currentUser.cars && this.currentUser.cars.length > 0 ? this.currentUser.cars[0].patente : ''
+                patente: this.currentUser.cars && this.currentUser.cars.length > 0 ? this.currentUser.cars[0].patente : '',
+                identity_validated: this.currentUser.identity_validated,
+                identity_validated_at: this.currentUser.identity_validated_at
             };
             // Format nro_doc for display after loading
             if (this.newInfo.nro_doc) {
