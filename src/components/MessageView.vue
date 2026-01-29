@@ -16,7 +16,7 @@
                     class="message_author"
                     v-if="author.id != user.id && grupalChat"
                 >
-                    <strong>{{ author.name }}</strong>
+                    <strong><UserNameWithBadge :user="author" /></strong>
                 </div>
                 <div class="message_text">
                     {{ message.text }}
@@ -37,7 +37,12 @@
 </template>
 <script>
 import moment from 'moment';
+import UserNameWithBadge from './elements/UserNameWithBadge.vue';
+
 export default {
+    components: {
+        UserNameWithBadge
+    },
     data() {
         return {};
     },

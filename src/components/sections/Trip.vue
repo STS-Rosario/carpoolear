@@ -100,7 +100,7 @@
                                     class="trip_driver_name"
                                     v-on:click="goToProfile"
                                 >
-                                    {{ trip.user.name }}
+                                    <UserNameWithBadge :user="trip.user" />
                                 </div>
                                 <div
                                     class="trip_driver_ratings"
@@ -542,6 +542,7 @@ import { mapActions, mapGetters } from 'vuex';
 import dialogs from '../../services/dialogs.js';
 import bus from '../../services/bus-event.js';
 import tripDisplay from './TripDisplay';
+import UserNameWithBadge from '../elements/UserNameWithBadge.vue';
 import moment from 'moment';
 import SvgItem from '../SvgItem';
 
@@ -821,7 +822,8 @@ export default {
     },
     components: {
         tripDisplay,
-        SvgItem
+        SvgItem,
+        UserNameWithBadge
     },
     mounted() {
         if (this.trip) {

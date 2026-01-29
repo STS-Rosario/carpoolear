@@ -12,6 +12,12 @@
             <li>
                 <router-link :to="{ name: 'admin-trips' }">{{ $t('adminNavViajes') }}</router-link>
             </li>
+            <li>
+                <router-link :to="{ name: 'admin-manual-identity-validations' }">{{ $t('validacionesManuales') }}</router-link>
+            </li>
+            <li>
+                <router-link :to="{ name: 'admin-mp-rejected-validations' }">{{ $t('rechazosMercadoPago') }}</router-link>
+            </li>
         </div>
     </div>
 </template>
