@@ -36,13 +36,13 @@
                                         v-if="item.user_id"
                                         :to="{ name: 'profile', params: { id: item.user_id } }"
                                         target="_blank"
-                                        class="btn btn-default btn-sm"
+                                        class="btn btn-link btn-sm"
                                     >
                                         {{ $t('verPerfil') }}
                                     </router-link>
                                     <router-link
                                         :to="{ name: 'admin-manual-identity-validation-review', params: { id: item.id } }"
-                                        class="btn btn-primary btn-sm"
+                                        class="btn btn-primary-blue btn-sm"
                                     >
                                         {{ $t('revisarSolicitud') }}
                                     </router-link>
