@@ -183,14 +183,14 @@ export default {
             });
         },
         loadImages() {
-            if (!this.item) return;
+            if (!this.item || !this.item.has_images) return;
             const authHeader = store.getters['auth/authHeader'];
             const baseUrl = (process.env.API_URL || '').replace(/\/$/, '');
+            if (!baseUrl) return;
+            // Always request images from the backend (API_URL), not from the URL in the response (which may use APP_URL = frontend)
             ['front', 'back', 'selfie'].forEach((type) => {
-                const urlKey = type + '_image_url';
-                const url = this.item[urlKey];
-                if (!url) return;
-                const fullUrl = url.startsWith('http') ? url : baseUrl + url;
+                const path = '/api/admin/manual-identity-validations/' + this.id + '/image/' + type;
+                const fullUrl = baseUrl + path;
                 axios.get(fullUrl, { responseType: 'blob', headers: authHeader })
                     .then((res) => {
                         this.blobUrls[type] = URL.createObjectURL(res.data);
