@@ -721,6 +721,8 @@ const messages = {
         verifiqueLosCampos: 'Verifique los campos',
         campoRequerido: 'Campo requerido',
         tituloCampoRequerido: 'Campo requerido',
+        dniValidadoContacteSoporte:
+            'Su identidad ya fue validada, para editar el DNI contacte a soporte.',
         ultimaConexion: 'Última conexión:',
         verMasMensajes: 'Ver más mensajes',
         escribirMensaje: 'Escribir mensaje...',
@@ -1476,6 +1478,8 @@ const messages = {
         verifiqueLosCampos: 'Verifique los campos',
         campoRequerido: 'Required field',
         tituloCampoRequerido: 'Required field',
+        dniValidadoContacteSoporte:
+            'Su identidad ya fue validada, para editar el DNI contacte a soporte.',
         ultimaConexion: 'Última conexión:',
         verMasMensajes: 'Ver más mensajes',
         escribirMensaje: 'Escribir mensaje...',
@@ -2396,6 +2400,8 @@ const messages = {
         verifiqueLosCampos: 'Verify the fields',
         campoRequerido: 'Required field',
         tituloCampoRequerido: 'Required field',
+        dniValidadoContacteSoporte:
+            'Your identity has been validated; to edit your document number contact support.',
         ultimaConexion: 'Last connection:',
         verMasMensajes: 'View more messages',
         escribirMensaje: 'Write message...',
