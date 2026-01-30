@@ -16,11 +16,10 @@
             {{ $t('documentacionEnviada') }}
         </div>
 
-        <div v-if="user && user.identity_validated" class="alert alert-info">
+        <!-- Only show Validado when we have both flag and date (avoids showing for new users or bad data) -->
+        <div v-if="user && user.identity_validated && user.identity_validated_at" class="alert alert-info">
             <strong>{{ $t('identidadValidada') }}</strong>
-            <span v-if="user.identity_validated_at">
-                {{ $t('validadoEl') }} {{ formatDate(user.identity_validated_at) }}
-            </span>
+            {{ $t('validadoEl') }} {{ formatDate(user.identity_validated_at) }}
             <span v-if="user.identity_validation_type"> ({{ user.identity_validation_type }})</span>
         </div>
 
