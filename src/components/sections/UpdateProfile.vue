@@ -165,6 +165,8 @@
                             :placeholder="$t('doc')"
                             :class="{ 'has-error': dniError.state }"
                             :maxlength="(config.profile_id_format).length"
+                            :disabled="isDniLockedByValidation"
+                            :title="dniInputTitle"
                         />
                         <span class="error" v-if="dniError.state">
                             {{ dniError.message }}
@@ -610,6 +612,18 @@ export default {
             if (this.user) {
                 return this.user.nro_doc;
             }
+        },
+        isDniLockedByValidation() {
+            return !!(
+                this.user &&
+                this.user.identity_validated &&
+                this.user.identity_validated_at
+            );
+        },
+        dniInputTitle() {
+            return this.isDniLockedByValidation
+                ? this.$t('dniValidadoContacteSoporte')
+                : '';
         },
         iptPhone() {
             if (this.user) {
