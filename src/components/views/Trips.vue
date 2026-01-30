@@ -192,11 +192,7 @@
                                     class="btn btn-success pull-right btn-donar"
                                     @click="onDonate"
                                 >
-<<<<<<< Updated upstream
                                     {{ $t('donar') }}
-=======
-                                    {{ isIOSCapacitor ? $t('donarEnSafari') : $t('donar') }}
->>>>>>> Stashed changes
                                 </button>
                                 <h2>{{ $t('ayudanos') }}</h2>
 
