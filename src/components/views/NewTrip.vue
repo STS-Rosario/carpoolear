@@ -2856,12 +2856,12 @@ textarea.form-control {
 }
 
 .schedule-toggle-buttons .schedule-tab:hover {
-    background: var(--trip-almost-fill-color);
+    background: var(--secondary-background);
     color: white;
 }
 
 .schedule-toggle-buttons .schedule-tab.active {
-    background: var(--trip-almost-fill-color);
+    background: var(--secondary-background);
     color: white;
 }
 
