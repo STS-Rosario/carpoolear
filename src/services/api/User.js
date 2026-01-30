@@ -138,6 +138,13 @@ class UserApi extends TaggedApi {
         );
     }
 
+    createManualIdentityValidationQrOrder() {
+        return this.post(
+            '/api/users/manual-identity-validation/qr-order',
+            {}
+        );
+    }
+
     submitManualIdentityValidation(requestId, formData) {
         if (formData && !formData.get('request_id')) {
             formData.append('request_id', requestId);

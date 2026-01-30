@@ -311,6 +311,9 @@ const messages = {
             'Si no querés o no podés usar Mercado Pago (RENAPER) para validar tu identidad, podés solicitar una validación manual. Un equipo revisará tu documentación. Tiene un costo que se abona con Mercado Pago.',
         costoValidacionManual: 'Costo de la validación manual',
         pagarYContinuar: 'Pagar y continuar',
+        pagarConQR: 'Pagar con QR',
+        escaneáConAppMercadoPago: 'Escaneá con la app de Mercado Pago',
+        qrExpiraEn: 'El QR expira en 15 minutos.',
         validacionManualNoDisponible:
             'La validación manual no está disponible en este momento.',
         validacionIdentidadNoDisponible:
@@ -1231,6 +1234,9 @@ const messages = {
             'Si no querés o no podés usar Mercado Pago (RENAPER) para validar tu identidad, podés solicitar una validación manual. Un equipo revisará tu documentación. Tiene un costo que se abona con Mercado Pago.',
         costoValidacionManual: 'Costo de la validación manual',
         pagarYContinuar: 'Pagar y continuar',
+        pagarConQR: 'Pagar con QR',
+        escaneáConAppMercadoPago: 'Escaneá con la app de Mercado Pago',
+        qrExpiraEn: 'El QR expira en 15 minutos.',
         validacionManualNoDisponible:
             'La validación manual no está disponible en este momento.',
         validacionIdentidadNoDisponible:
@@ -1983,6 +1989,9 @@ const messages = {
             "If you don't want or can't use Mercado Pago (RENAPER) to validate your identity, you can request manual validation. A team will review your documentation. There is a cost payable via Mercado Pago.",
         costoValidacionManual: 'Manual validation cost',
         pagarYContinuar: 'Pay and continue',
+        pagarConQR: 'Pay with QR',
+        escaneáConAppMercadoPago: 'Scan with the Mercado Pago app',
+        qrExpiraEn: 'The QR code expires in 15 minutes.',
         validacionManualNoDisponible:
             'Manual validation is not available at this time.',
         validacionIdentidadNoDisponible:

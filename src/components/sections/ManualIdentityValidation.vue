@@ -29,14 +29,37 @@
                 <p>{{ $t('debesPagarParaContinuar') }}</p>
             </div>
             <p><strong>{{ $t('costoValidacionManual') }}:</strong> {{ formattedCost }}</p>
-            <button
-                class="btn btn-primary btn-lg"
-                :disabled="loadingPreference || costCents <= 0"
-                @click="createPreferenceAndRedirect"
-            >
-                <span v-if="loadingPreference">{{ $t('guardando') }}</span>
-                <span v-else>{{ unpaidPending ? $t('pagarAhora') : $t('pagarYContinuar') }}</span>
-            </button>
+            <div class="pay-buttons">
+                <button
+                    class="btn btn-primary btn-lg"
+                    :disabled="loadingPreference || loadingQr || costCents <= 0"
+                    @click="createPreferenceAndRedirect"
+                >
+                    <span v-if="loadingPreference">{{ $t('guardando') }}</span>
+                    <span v-else>{{ unpaidPending ? $t('pagarAhora') : $t('pagarYContinuar') }}</span>
+                </button>
+                <button
+                    v-if="identityValidationManualQrEnabled"
+                    class="btn btn-default btn-lg pay-qr-btn"
+                    :disabled="loadingPreference || loadingQr || costCents <= 0"
+                    @click="createQrOrderAndShow"
+                >
+                    <span v-if="loadingQr">{{ $t('guardando') }}</span>
+                    <span v-else>{{ $t('pagarConQR') }}</span>
+                </button>
+            </div>
+            <!-- QR payment: show QR and poll until paid -->
+            <div v-if="showQrPanel" class="qr-payment-panel panel panel-default">
+                <div class="panel-body text-center">
+                    <p class="qr-instruction">{{ $t('escaneáConAppMercadoPago') }}</p>
+                    <div v-if="qrImageUrl" class="qr-image-wrap">
+                        <img :src="qrImageUrl" alt="QR" class="qr-image" />
+                    </div>
+                    <p v-else class="text-muted">{{ $t('cargando') }}...</p>
+                    <p class="qr-expiry text-muted small">{{ $t('qrExpiraEn') }}</p>
+                    <button class="btn btn-default btn-sm mt-2" @click="closeQrPanel">{{ $t('cerrar') }}</button>
+                </div>
+            </div>
             <p v-if="costCents <= 0" class="text-muted small">{{ $t('validacionManualNoDisponible') }}</p>
         </div>
 
@@ -97,6 +120,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import { UserApi } from '../../services/api';
+import QRCode from 'qrcode';
 
 export default {
     name: 'ManualIdentityValidation',
@@ -109,8 +133,13 @@ export default {
             statusPaidAt: null,
             statusSubmittedAt: null,
             loadingPreference: false,
+            loadingQr: false,
             submitting: false,
             submitError: null,
+            showQrPanel: false,
+            qrImageUrl: null,
+            qrData: null,
+            pollIntervalId: null,
             files: {
                 front: null,
                 back: null,
@@ -124,6 +153,9 @@ export default {
         }),
         identityValidationManualEnabled() {
             return this.config && this.config.identity_validation_manual_enabled === true;
+        },
+        identityValidationManualQrEnabled() {
+            return this.config && this.config.identity_validation_manual_qr_enabled === true;
         },
         canUpload() {
             return this.requestId && this.paymentSuccess;
@@ -197,6 +229,53 @@ export default {
                     this.loadingPreference = false;
                 });
         },
+        createQrOrderAndShow() {
+            this.loadingQr = true;
+            this.submitError = null;
+            const userApi = new UserApi();
+            userApi.createManualIdentityValidationQrOrder()
+                .then((res) => {
+                    const data = res.data || res;
+                    const qrData = data.qr_data;
+                    const requestId = data.request_id;
+                    if (qrData && requestId) {
+                        this.requestId = requestId;
+                        this.qrData = qrData;
+                        this.showQrPanel = true;
+                        this.qrImageUrl = null;
+                        QRCode.toDataURL(qrData, { width: 256, margin: 2 }, (err, url) => {
+                            if (!err) this.qrImageUrl = url;
+                        });
+                        this.startPollingStatus();
+                    }
+                    this.loadingQr = false;
+                })
+                .catch(() => {
+                    this.loadingQr = false;
+                });
+        },
+        closeQrPanel() {
+            this.showQrPanel = false;
+            this.qrData = null;
+            this.qrImageUrl = null;
+            this.stopPollingStatus();
+        },
+        startPollingStatus() {
+            this.stopPollingStatus();
+            this.pollIntervalId = setInterval(() => {
+                this.fetchStatus().then(() => {
+                    if (this.paymentSuccess) {
+                        this.closeQrPanel();
+                    }
+                });
+            }, 3000);
+        },
+        stopPollingStatus() {
+            if (this.pollIntervalId) {
+                clearInterval(this.pollIntervalId);
+                this.pollIntervalId = null;
+            }
+        },
         onFileChange(event, type) {
             const file = event.target.files && event.target.files[0];
             this.files[type] = file || null;
@@ -238,6 +317,9 @@ export default {
         this.parseQuery();
         this.fetchCost();
         this.fetchStatus();
+    },
+    beforeDestroy() {
+        this.stopPollingStatus();
     }
 };
 </script>
@@ -252,6 +334,31 @@ export default {
 .pay-section,
 .upload-section {
     margin-top: 1em;
+}
+.pay-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em;
+    align-items: center;
+}
+.pay-qr-btn {
+    margin-left: 0;
+}
+.qr-payment-panel {
+    margin-top: 1em;
+}
+.qr-image-wrap {
+    margin: 1em 0;
+}
+.qr-image {
+    max-width: 256px;
+    height: auto;
+}
+.qr-instruction {
+    font-weight: bold;
+}
+.qr-expiry {
+    margin-top: 0.5em;
 }
 .required {
     color: #c00;
