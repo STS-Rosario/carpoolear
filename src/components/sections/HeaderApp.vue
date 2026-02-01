@@ -75,6 +75,17 @@
                 class="actionbar_section actionbar_icon pull-right"
                 v-if="isMobile && user && !shouldHideDonationOnIOSCapacitor(user)"
             >
+                <dropdown type="icon">
+                    <template slot="button">
+                        {{ currentLocaleShortLabel }}
+                    </template>
+                    <li>
+                        <a @click="setLocale('arg')">Español</a>
+                    </li>
+                    <li>
+                        <a @click="setLocale('en')">English</a>
+                    </li>
+                </dropdown>
                 <a
                     href="/donar"
                     class="btn btn-primary btn-donar-header btn-header-small btn-lg"
@@ -84,9 +95,21 @@
             </div>
             <div
                 class="actionbar_section actionbar_icon pull-right"
-                v-if="isMobile && isTripsPage && !user"
+                v-if="isMobile && !user"
             >
+                <dropdown type="icon">
+                    <template slot="button">
+                        {{ currentLocaleShortLabel }}
+                    </template>
+                    <li>
+                        <a @click="setLocale('arg')">Español</a>
+                    </li>
+                    <li>
+                        <a @click="setLocale('en')">English</a>
+                    </li>
+                </dropdown>
                 <router-link
+                    v-if="isTripsPage"
                     tag="a"
                     :to="{ name: 'login' }"
                     class="btn btn-primary btn-login-header btn-header-small btn-lg"
@@ -173,6 +196,17 @@
                 </router-link>
                 <!--<router-link class="btn btn-link" v-if="!logged" :to="{name: 'trips'}">Información</router-link>-->
                 <!--<router-link class="btn btn-link" v-if="!logged" :to="{name: 'register'}">Registrarme</router-link>-->
+                <dropdown type="link" v-if="!logged">
+                    <template slot="button">
+                        {{ currentLocaleShortLabel }}
+                    </template>
+                    <li>
+                        <a @click="setLocale('arg')">Español</a>
+                    </li>
+                    <li>
+                        <a @click="setLocale('en')">English</a>
+                    </li>
+                </dropdown>
                 <router-link
                     class="btn btn-primary"
                     btn-lg
@@ -232,6 +266,13 @@
                             <router-link :to="{ name: 'admin-page' }">
                                 {{ $t('administracion') }}
                             </router-link>
+                        </li>
+                        <li role="separator" class="divider"></li>
+                        <li>
+                            <a @click="setLocale('arg')">Español</a>
+                        </li>
+                        <li>
+                            <a @click="setLocale('en')">English</a>
                         </li>
                         <li role="separator" class="divider"></li>
                         <!--<li>
@@ -337,6 +378,14 @@ export default {
         },
         isTripsPage() {
             return this.$route.name === 'trips';
+        },
+        currentLocaleLabel() {
+            const labels = { arg: 'Español', en: 'English' };
+            return labels[this.$i18n.locale] || 'Español';
+        },
+        currentLocaleShortLabel() {
+            const short = { arg: 'ES', en: 'EN' };
+            return short[this.$i18n.locale] || 'ES';
         }
     },
 
@@ -374,6 +423,11 @@ export default {
 
         onHeaderChange() {
             // console.log('header-change', this.title);
+        },
+
+        setLocale(locale) {
+            this.$root.$i18n.locale = locale;
+            localStorage.setItem('app_locale', locale);
         }
     },
     watch: {

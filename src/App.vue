@@ -41,6 +41,12 @@ export default {
             getConfig: 'auth/getConfig'
         })
     },
+    created() {
+        const stored = localStorage.getItem('app_locale');
+        if (stored) {
+            this.$i18n.locale = stored;
+        }
+    },
     beforeMount() {
         this.getConfig();
     },
@@ -97,7 +103,7 @@ export default {
             console.log('Device ready from components');
         },
         appConfig(value) {
-            if (value && value.locale) {
+            if (value && value.locale && !localStorage.getItem('app_locale')) {
                 this.$root.$i18n.locale = value.locale;
             }
         }
