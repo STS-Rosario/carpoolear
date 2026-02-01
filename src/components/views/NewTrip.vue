@@ -2356,11 +2356,6 @@ export default {
                 } else {
                     validOtherTripDate = true;
                 }
-                if (globalError) {
-                    dialogs.message(this.$t('algunosDatosNoValidos'), {
-                        estado: 'error'
-                    });
-                }
 
                 if (validOtherTripTime && validOtherTripDate && !this.useWeeklySchedule) {
                     if (
@@ -2408,6 +2403,14 @@ export default {
                             this.$t('fechaHoraLogicas');
                         globalError = true;
                     }
+                }
+
+                if (!this.otherTrip.trip.description) {
+                    this.otherTrip.commentError.state = true;
+                    this.otherTrip.commentError.message = this.$t('olvidasteDescripcion');
+                    dialogs.message(this.$t('olvidasteDescripcion'), {
+                        estado: 'error'
+                    });
                 }
             }
 
