@@ -39,7 +39,6 @@ const messages = {
             'Generá confianza con el resto de la comunidad carpoolear, usá una foto tuya y contales un poco acerca de vos. Con eso aumentás tus chances de que alguien quiera compartir viaje con vos... es verdad, llevar torta para compartir también ayuda mucho :D',
         nombreYapellido: 'Nombre y apellido',
         acercaDeMi: 'Acerca de mi',
-        soloNumeros: 'Solo números',
         incentivoDescripcion:
             'Contale de vos al resto de los usuarios así te suman a sus viajes! Qué te gusta hacer, en qué andas metido ahora, si estás con alguna idea, si te gustan los colores, etc.',
         incentivoDoc:
@@ -516,7 +515,8 @@ const messages = {
         compartirEnWhatsApp: 'Compartir en WhatsApp',
         publicarUnViajeCompartir:
             'Publicar un viaje para compartir en Carpoolear',
-        compartirPlataforma: 'Carpoolear: plataforma para compartir viajes en autos',
+        compartirPlataforma:
+            'Carpoolear: plataforma para compartir viajes en autos',
         estoyEnMovil: 'Estoy en móvil',
         contribucionPorPersona: 'Contribución por persona',
         porPersona: 'por persona',
@@ -816,7 +816,6 @@ const messages = {
             'Generá confianza con el resto de la comunidad Apalan-car, usá una foto tuya y contales un poco acerca de vos. Con eso aumentás tus chances de que alguien quiera compartir viaje.',
         nombreYapellido: 'Nombre y apellido',
         acercaDeMi: 'Acerca de mi',
-        soloNumeros: 'Solo números',
         incentivoDescripcion:
             'Contale de vos al resto de los usuarios así te suman a sus viajes! Qué te gusta hacer, en qué andas metido ahora, si estás con alguna idea, si te gustan los colores, etc.',
         incentivoDoc:
@@ -1123,7 +1122,8 @@ const messages = {
         compartirEnWhatsApp: 'Compartir en WhatsApp',
         publicarUnViajeCompartir:
             'Publicar un viaje para compartir en Apalan-car',
-        compartirPlataforma: 'Apalan-car: plataforma para compartir viajes en autos',
+        compartirPlataforma:
+            'Apalan-car: plataforma para compartir viajes en autos',
         estoyEnMovil: 'Estoy en móvil',
         contribucionPorPersona: 'Contribución por persona',
         porPersona: 'por persona',
@@ -1371,7 +1371,7 @@ const messages = {
     en: {
         loginUsuarioPlaceholder: 'The email you registered with',
         loginPasswordPlaceholder: 'Password',
-        documento: 'Document number',
+        documento: 'ID number',
         doc: 'ID',
         unaswered_messages_limit: 'Query limits per trip',
         unaswered_messages_limitDescription:
@@ -1407,7 +1407,6 @@ const messages = {
             'Build trust with the rest of the Carpoolear community, use a photo of yourself and tell them a little about you. This increases your chances of someone wanting to share a ride with you.',
         nombreYapellido: 'Full name',
         acercaDeMi: 'About me',
-        soloNumeros: 'Numbers only',
         incentivoDescripcion:
             "Introduce yourself to potential travel companions! Talk about your interests, what you're doing these days, your hobbies, or anything else you'd like to share.",
         incentivoDoc:
