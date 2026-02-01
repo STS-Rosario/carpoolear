@@ -330,7 +330,17 @@
                     </div>
                     <div class="row">
                         <div class="new-left col-sm-13 col-md-15">
-                            <div class="trip_datetime">
+                            <div class="trip_schedule-toggle" v-if="config.weekly_schedule">
+                                <div class="schedule-toggle-buttons">
+                                    <button type="button" class="btn btn-option schedule-tab" @click="useWeeklySchedule = false" :class="!useWeeklySchedule ? 'active' : ''">
+                                        {{ $t('unaVez') }}
+                                    </button>
+                                    <button type="button" class="btn btn-option schedule-tab" @click="useWeeklySchedule = true" :class="useWeeklySchedule ? 'active' : ''">
+                                        {{ $t('programaSemanal') }}
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="trip_datetime" v-if="!useWeeklySchedule">
                                 <div class="trip_date">
                                     <label for="date" class="sr-only">{{
                                         $t('dia')
@@ -367,6 +377,18 @@
                                     </span>
                                     <!--<input type="text" v-model="time" />-->
                                 </div>
+                            </div>
+                            <div class="trip_weekly_schedule" v-if="useWeeklySchedule && config.weekly_schedule">
+                                <WeeklySchedule
+                                    :weeklySchedule.sync="weeklySchedule"
+                                    :weeklyScheduleTime.sync="weeklyScheduleTime"
+                                    :readonly="false"
+                                    :theme="tripCardTheme"
+                                    :hasError="timeError.state"
+                                />
+                                <span class="error" v-if="timeError.state">
+                                    {{ timeError.message }}
+                                </span>
                             </div>
                             <div class="trip_seats-available">
                                 <fieldset>
@@ -1064,7 +1086,17 @@
                     </div>
                     <div class="row">
                         <div class="new-left col-sm-13 col-md-15">
-                            <div class="trip_datetime">
+                            <div class="trip_schedule-toggle" v-if="config.weekly_schedule">
+                                <div class="schedule-toggle-buttons">
+                                    <button type="button" class="btn btn-option schedule-tab" @click="useWeeklySchedule = false" :class="!useWeeklySchedule ? 'active' : ''">
+                                        {{ $t('unaVez') }}
+                                    </button>
+                                    <button type="button" class="btn btn-option schedule-tab" @click="useWeeklySchedule = true" :class="useWeeklySchedule ? 'active' : ''">
+                                        {{ $t('programaSemanal') }}
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="trip_datetime" v-if="!useWeeklySchedule">
                                 <div class="trip_date">
                                     <label for="date" class="sr-only">{{
                                         $t('dia')
@@ -1109,6 +1141,19 @@
                                     </span>
                                     <!--<input type="text" v-model="time" />-->
                                 </div>
+                            </div>
+                            <div class="trip_weekly_schedule" v-if="useWeeklySchedule && config.weekly_schedule">
+                                <WeeklySchedule
+                                    :weeklySchedule.sync="weeklySchedule"
+                                    :weeklyScheduleTime.sync="weeklyScheduleReturnTime"
+                                    :readonly="false"
+                                    :theme="tripCardTheme"
+                                    :hasError="otherTrip.timeError.state"
+                                    :idPrefix="'return-ws'"
+                                />
+                                <span class="error" v-if="otherTrip.timeError.state">
+                                    {{ otherTrip.timeError.message }}
+                                </span>
                             </div>
                             <div
                                 class="trip_price"
@@ -1357,8 +1402,8 @@
                                         $t('placeholderComentarioPasajeros')
                                     "
                                 ></textarea>
-                                <span class="error" v-if="commentError.state">
-                                    {{ commentError.message }}
+                                <span class="error" v-if="otherTrip.commentError.state">
+                                    {{ otherTrip.commentError.message }}
                                 </span>
                             </div>
                         </div>
@@ -1652,6 +1697,7 @@ import TripApi from '../../services/api/Trips';
 import UserApi from '../../services/api/User';
 import autocomplete from '../Autocomplete';
 import SvgItem from '../SvgItem';
+import WeeklySchedule from '../elements/WeeklySchedule';
 import bus from '../../services/bus-event.js';
 
 let tripApi = new TripApi();
@@ -1674,6 +1720,7 @@ export default {
     },
     components: {
         DatePicker,
+        WeeklySchedule,
         SvgItem,
         autocomplete,
         spinner
@@ -1800,13 +1847,19 @@ export default {
                     seat_price_cents: 0,
                     points: [] /* address json_address lat lng */
                 }
-            }
+            },
+            useWeeklySchedule: false,
+            weeklySchedule: 0,
+            weeklyScheduleTime: '12:00',
+            weeklyScheduleReturnTime: '12:00',
         };
     },
     mounted() {
         let self = this;
         this.time = moment().add(1, 'hours').format('HH:00');
         this.otherTrip.time = moment().add(2, 'hours').format('HH:00');
+        this.weeklyScheduleTime = moment().add(1, 'hours').format('HH:00');
+        this.weeklyScheduleReturnTime = moment().add(2, 'hours').format('HH:00');
         bus.off('clear-click', this.onBackButton);
         bus.on('clear-click', this.onBackButton);
 
@@ -1926,11 +1979,20 @@ export default {
         time: function () {
             this.timeError.state = false;
         },
+        weeklyScheduleTime: function () {
+            this.timeError.state = false;
+        },
+        weeklyScheduleReturnTime: function () {
+            this.otherTrip.timeError.state = false;
+        },
         'otherTrip.dateAnswer': function () {
             this.otherTrip.dateError.state = false;
         },
         'otherTrip.time': function () {
             this.otherTrip.timeError.state = false;
+        },
+        'otherTrip.trip.description': function () {
+            this.otherTrip.commentError.state = false;
         },
         'trip.friendship_type_id': function () {
             this.otherTrip.trip.friendship_type_id =
@@ -1987,38 +2049,56 @@ export default {
                 this.$scrollToElement(element);
             }
         },
-        restoreData(trip) {
-            this.no_lucrar = true;
-            this.points = [];
-            trip.points.forEach((p) => {
-                let point = {
-                    name: p.address,
-                    json: p.json_address,
-                    location: {
-                        lat: p.lat,
-                        lng: p.lng
-                    },
-                    place: JSON.stringify(p.json_address),
-                    error: new Error()
-                };
-                this.points.push(point);
-            });
-            this.date = moment(trip.trip_date.split(' ')[0]).format(
-                'YYYY-MM-DD'
-            );
-            this.time = trip.trip_date.split(' ')[1];
-            this.trip.is_passenger = trip.is_passenger ? 1 : 0;
-            this.passengers = trip.passenger_count;
-            this.trip.total_seats = trip.total_seats;
-            this.trip.friendship_type_id = trip.friendship_type_id;
-            this.trip.distance = trip.distance;
-            this.trip.description = trip.description;
+    restoreData(trip) {
+        this.no_lucrar = true;
+        this.points = [];
+        trip.points.forEach((p) => {
+            let point = {
+                name: p.address,
+                json: p.json_address,
+                location: {
+                    lat: p.lat,
+                    lng: p.lng
+                },
+                place: JSON.stringify(p.json_address),
+                error: new Error()
+            };
+            this.points.push(point);
+        });
 
-            this.trip.allow_kids = !(trip.allow_kids > 0);
-            this.trip.allow_animals = !(trip.allow_animals > 0);
-            this.trip.allow_smoking = !(trip.allow_smoking > 0);
-            // this.calcRoute();
-        },
+        // Restore weekly schedule FIRST before date/time
+        if (trip.weekly_schedule > 0) {
+            this.useWeeklySchedule = true;
+            this.weeklySchedule = trip.weekly_schedule;
+            console.log('restoreData: set weeklySchedule to', this.weeklySchedule, 'from trip.weekly_schedule', trip.weekly_schedule);
+
+            // Restore weekly schedule time
+            if (trip.weekly_schedule_time) {
+                this.weeklyScheduleTime = moment(trip.weekly_schedule_time).format('HH:mm');
+            }
+        } else {
+            this.useWeeklySchedule = false;
+
+            // Only restore date/time if NOT using weekly schedule
+            if (trip.trip_date) {
+                this.date = moment(trip.trip_date.split(' ')[0]).format('YYYY-MM-DD');
+                this.dateAnswer = moment(trip.trip_date.split(' ')[0]).format('YYYY-MM-DD');
+                this.time = trip.trip_date.split(' ')[1];
+            }
+        }
+        
+        this.trip.is_passenger = trip.is_passenger ? 1 : 0;
+        this.passengers = trip.passenger_count;
+        this.trip.total_seats = trip.total_seats;
+        this.trip.friendship_type_id = trip.friendship_type_id;
+        this.trip.distance = trip.distance;
+        this.trip.description = trip.description;
+        
+        this.trip.allow_kids = !(trip.allow_kids > 0);
+        this.trip.allow_animals = !(trip.allow_animals > 0);
+        this.trip.allow_smoking = !(trip.allow_smoking > 0);
+        // this.calcRoute();
+    },
 
         loadTrip() {
             this.getTrip(this.id)
@@ -2049,6 +2129,7 @@ export default {
             let validDate = false;
             let validOtherTripTime = false;
             let validOtherTripDate = false;
+            let validWeeklySchedule = false;
             this.points = this.points.filter((point) => point.place);
             for (let index = this.points.length; index < 2; index++) {
                 this.addPoint(true);
@@ -2121,7 +2202,23 @@ export default {
                 globalError = true;
             }
 
-            if (
+            if (this.useWeeklySchedule) {
+                // Check if at least one day is selected for weekly schedule
+                if (this.weeklySchedule === 0) {
+                    globalError = true;
+                    this.dateError.state = true;
+                    this.dateError.message = this.$t('faltaFechaOProgramaSemanal');
+                } else {
+                    validWeeklySchedule = true;
+                }
+                
+                // Validate weekly schedule time
+                if (!this.weeklyScheduleTime || !moment(this.weeklyScheduleTime, 'HH:mm').isValid()) {
+                    this.timeError.state = true;
+                    this.timeError.message = this.$t('noHorarioValido');
+                    globalError = true;
+                }
+            } else if (
                 !(this.dateAnswer && this.dateAnswer.length) ||
                 !moment(this.dateAnswer).isValid()
             ) {
@@ -2196,16 +2293,36 @@ export default {
             }
 
             if (this.showReturnTrip) {
-                if (
-                    !this.otherTrip.time ||
-                    !moment(this.otherTrip.time, 'HH mm').isValid()
-                ) {
-                    this.otherTrip.timeError.state = true;
-                    this.otherTrip.timeError.message =
-                        this.$t('noHorarioValido');
-                    globalError = true;
+                if (this.useWeeklySchedule) {
+                    // Check if at least one day is selected for weekly schedule
+                    if (this.weeklySchedule === 0) {
+                        globalError = true;
+                        this.otherTrip.dateError.state = true;
+                        this.otherTrip.dateError.message = this.$t('faltaFechaOProgramaSemanal');
+                    } else {
+                        validOtherTripDate = true;
+                    }
+                    
+                    // Validate weekly schedule time
+                    if (!this.weeklyScheduleReturnTime || !moment(this.weeklyScheduleReturnTime, 'HH:mm').isValid()) {
+                        this.otherTrip.timeError.state = true;
+                        this.otherTrip.timeError.message = this.$t('noHorarioValido');
+                        globalError = true;
+                    } else {
+                        validOtherTripTime = true;
+                    }
                 } else {
-                    validOtherTripTime = true;
+                    if (
+                        !this.otherTrip.time ||
+                        !moment(this.otherTrip.time, 'HH mm').isValid()
+                    ) {
+                        this.otherTrip.timeError.state = true;
+                        this.otherTrip.timeError.message =
+                            this.$t('noHorarioValido');
+                        globalError = true;
+                    } else {
+                        validOtherTripTime = true;
+                    }
                 }
 
                 if (
@@ -2245,7 +2362,7 @@ export default {
                     });
                 }
 
-                if (validOtherTripTime && validOtherTripDate) {
+                if (validOtherTripTime && validOtherTripDate && !this.useWeeklySchedule) {
                     if (
                         moment(this.otherTrip.dateAnswer).format(
                             'YYYY-MM-DD'
@@ -2297,7 +2414,7 @@ export default {
             return globalError;
         },
 
-        getSaveInfo(tripObj, estimatedTime) {
+        getSaveInfo(tripObj, estimatedTime, useWeeklySchedule = this.useWeeklySchedule, weeklyScheduleTime = this.weeklyScheduleTime) {
             const points = tripObj.points.map((p) => {
                 return {
                     address: p.name,
@@ -2312,12 +2429,22 @@ export default {
                 points,
                 from_town: points[0].address,
                 to_town: last(points).address,
-                trip_date: tripObj.dateAnswer + ' ' + tripObj.time + ':00',
                 estimated_time: estimatedTime,
                 car_id: this.cars.length > 0 ? this.cars[0].id : undefined
             };
 
-            return Object.assign({}, tripObj.trip, tripInfo);
+            if (!useWeeklySchedule) {
+                // Only include trip_date when in specific date view (not using weekly schedule)
+                tripInfo.trip_date = tripObj.dateAnswer + ' ' + tripObj.time + ':00';
+            } else {
+                // Only include weekly_schedule when in weekly schedule view
+                tripInfo.weekly_schedule = this.weeklySchedule;
+                tripInfo.weekly_schedule_time = weeklyScheduleTime + ':00';
+            }
+
+            const result = Object.assign({}, tripObj.trip, tripInfo);
+            
+            return result;
         },
 
         save() {
@@ -2351,7 +2478,9 @@ export default {
                             } else {
                                 let otherTrip = this.getSaveInfo(
                                     this.otherTrip,
-                                    this.otherTripEstimatedTimeString
+                                    this.otherTripEstimatedTimeString,
+                                    this.useWeeklySchedule,
+                                    this.weeklyScheduleReturnTime
                                 );
                                 otherTrip.parent_trip_id = t.id;
                                 otherTrip = JSON.parse(
@@ -2705,4 +2834,38 @@ textarea.form-control {
     width: 30em;
 }
 
+.trip_schedule-toggle {
+    margin-bottom: 1em;
+}
+
+.schedule-toggle-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 0.5em;
+}
+
+.schedule-toggle-buttons .schedule-tab {
+    flex: 1;
+    padding: 8px 16px;
+    border: 1px solid var(--primary-color);
+    background: transparent;
+    color: var(--primary-color);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.schedule-toggle-buttons .schedule-tab:hover {
+    background: var(--secondary-background);
+    color: white;
+}
+
+.schedule-toggle-buttons .schedule-tab.active {
+    background: var(--secondary-background);
+    color: white;
+}
+
+.trip_weekly_schedule {
+    margin-bottom: 1em;
+}
 </style>
