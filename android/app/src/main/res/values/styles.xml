@@ -13,6 +13,9 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:background">@null</item>
+        <!-- Disable edge-to-edge on Android 15+ (API 35): content stays below status bar and above nav bar.
+             Required when targeting SDK 35; ignored on older devices. May be deprecated in a future SDK. -->
+        <item name="android:windowOptOutEdgeToEdgeEnforcement">true</item>
     </style>
 
 
