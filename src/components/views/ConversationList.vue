@@ -304,10 +304,13 @@ export default {
 
     mounted() {
         this.conversationsSearch();
-        this.thread = new Thread(() => {
-            this.unreadMessage();
-        });
-        this.thread.run(20000);
+        if (!this.config.web_push_notification || window.Notification.permission !== 'granted') {
+            this.thread = new Thread(() => {
+                this.unreadMessage();
+            });
+            this.thread.run(20000);
+        }
+
         if (!this.isMobile) {
             router.push({ name: 'conversation-chat' });
         }

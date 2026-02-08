@@ -1,31 +1,5 @@
 <template>
-    <div class="trips container" :class="!user ? 'not-logged' : ''">
-        <!-- iOS Safari Notification Permission Warning -->
-        <div 
-            v-if="isSafari() && isPWA() && !hasNotificationPermission && showNotificationWarning" 
-            class="alert alert-warning ios-notification-warning"
-            role="alert"
-        >
-            <h4>⚠️ {{ $t('notificacionesNoHabilitadas') }}</h4>
-            <p>
-                {{ $t('notificacionesNoAceptastePermisos') }}
-            </p>
-            <div class="notification-warning-buttons">
-                <button 
-                    class="btn btn-success" 
-                    @click="requestNotificationPermission"
-                >
-                    {{ $t('otorgarPermisos') }}
-                </button>
-                <button 
-                    class="btn btn-default" 
-                    @click="dismissNotificationWarning"
-                    style="margin-left: 10px;"
-                >
-                    {{ $t('noMostrarDeNuevo') }}
-                </button>
-            </div>
-        </div>
+    <div class="trips container" :class="!user ? 'not-logged' : ''"> 
         <template v-if="appConfig && appConfig.banner && appConfig.banner.url">
             <a :href="appConfig.banner.url" target="_blank" class="banner">
                 <img alt="" :src="appConfig.banner.image" />
@@ -662,51 +636,6 @@ export default {
                     }
                 });
         },
-        checkNotificationPermission() {
-            if (window.Notification && window.Notification.permission) {
-                if (window.Notification.permission === 'granted') {
-                    this.hasNotificationPermission = true;
-                    this.showNotificationWarning = false;
-                } else if (window.Notification.permission === 'denied') {
-                    this.hasNotificationPermission = false;
-                    // Check if user has dismissed this warning before
-                    const hasDismissedNotificationWarning = localStorage.getItem('pwa_notification_warning_dismissed');
-                    this.showNotificationWarning = !hasDismissedNotificationWarning;
-                } else if (window.Notification.permission === 'default') {
-                    this.hasNotificationPermission = false;
-                    // Check if user has dismissed this warning before
-                    const hasDismissedNotificationWarning = localStorage.getItem('pwa_notification_warning_dismissed');
-                    this.showNotificationWarning = !hasDismissedNotificationWarning;
-                }
-            }
-        },
-        requestNotificationPermission() {
-            Notification.requestPermission().then(permission => {
-                if (permission === 'granted') {
-                    this.hasNotificationPermission = true;
-                    this.showNotificationWarning = false;
-                    // Initialize push.js after permission is granted
-                    try {
-                        push.init();
-                    } catch (error) {
-                        console.log('Error initializing push notifications:', error);
-                    }
-                    dialogs.message(this.$t('notificacionesPermitidas'), {
-                        duration: 10,
-                        estado: 'success'
-                    });
-                } else {
-                    dialogs.message(this.$t('notificacionesDenegadas'), {
-                        duration: 10,
-                        estado: 'error'
-                    });
-                }
-            });
-        },
-        dismissNotificationWarning() {
-            this.showNotificationWarning = false;
-            localStorage.setItem('pwa_notification_warning_dismissed', 'true');
-        }
     },
     mounted() {
         // Clear search
@@ -758,11 +687,6 @@ export default {
             }
         }
         
-        // Check notification permission status for Safari users
-        if (this.isSafari() && this.isPWA()) {
-            this.checkNotificationPermission();
-        }
-
         // bus.event
         bus.off('search-click', this.onSearchButton);
         bus.on('search-click', this.onSearchButton);

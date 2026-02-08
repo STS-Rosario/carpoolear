@@ -77,40 +77,29 @@ export default {
             window.Notification.requestPermission
         ) {
             try {
-                // Register service worker with correct path
-                const serviceWorker = navigator.serviceWorker.register(
-                    'firebase-messaging-sw.js',
-                    {
-                        scope: '/'
-                    }
-                );
+                const firebaseParamsString = new URLSearchParams(
+                    process.env.FIREBASE_PARAMS
+                ).toString();
 
-                // Check if permissions are already granted
-                let permissionNotification;
-                if (window.Notification.permission === 'granted') {
-                    permissionNotification = Promise.resolve('granted');
-                } else {
-                    permissionNotification =
-                        window.Notification.requestPermission()
-                            .then((permission) => {
-                                if (permission === 'granted') {
-                                    return 'granted';
-                                }
-                                return Promise.reject(
-                                    new Error('Permission denied')
-                                );
-                            })
-                            .catch(() => {
-                                return Promise.reject(
-                                    new Error('Permission request failed')
-                                );
-                            });
-                }
+                // Get service worker path based on environment
+                let serviceWorkerPath =
+                    process.env.NODE_ENV === 'production'
+                        ? process.env.ROUTE_BASE + 'firebase-messaging-sw.js'
+                        : '/static/firebase-messaging-sw.js';
 
-                const [reg] = await Promise.all([
-                    serviceWorker,
-                    permissionNotification
-                ]);
+                // Append firebase params as query since service workers can't access process.env
+                serviceWorkerPath += '?' + firebaseParamsString;
+
+                const serviceWorker = navigator.serviceWorker
+                    .register(serviceWorkerPath)
+                    .catch((error) => {
+                        console.error(
+                            'Service worker registration failed:',
+                            error
+                        );
+                    });
+
+                const reg = await serviceWorker;
 
                 const firebaseApp = initializeApp(process.env.FIREBASE_PARAMS);
                 const messaging = getMessaging(firebaseApp);
@@ -126,29 +115,47 @@ export default {
                         'cordova/' + types.CORDOVA_DEVICE_REGISTER,
                         currentToken
                     );
-                } else {
                 }
 
-                // Listen for foreground messages
-                onMessage(messaging, (payload) => {
+                const handleNotification = (payload, isBackgroundMessage) => {
                     const notification = new Notification({
                         notification: payload.notification,
                         data: payload.data
                     });
 
                     store.dispatch('cordova/notificationArrive', notification);
+                    // store.dispatch('conversations/getUnreaded');
+                    // store.dispatch('notifications/count');
+
+                    // Background messages already open a notification
+                    if (isBackgroundMessage) {
+                        return;
+                    }
 
                     // Show native notification for web
                     const notificationTitle = payload.notification.title;
                     const notificationOptions = {
                         body: payload.notification.body,
-                        data: payload.data
+                        data: payload.data,
+                        icon: payload.notification.icon // process.env.ROUTE_BASE + 'static/img/icon-192.png'
                     };
-                    reg.showNotification(
-                        notificationTitle,
-                        notificationOptions
-                    );
+
+                    if (payload.data.url !== window.location.pathname) {
+                        reg.showNotification(
+                            notificationTitle,
+                            notificationOptions
+                        );
+                    }
+                };
+
+                navigator.serviceWorker.addEventListener('message', (event) => {
+                    if (event.data.type === 'firebase-background-message') {
+                        handleNotification(event.data.payload, true);
+                    }
                 });
+
+                // Listen for foreground messages
+                onMessage(messaging, handleNotification);
             } catch (error) {
                 console.error('Web push initialization error:', error);
             }
