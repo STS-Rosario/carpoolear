@@ -112,7 +112,7 @@ export default {
                 } else {
                     this.hasNotificationPermission = false;
                     const dismissedAt = parseInt(localStorage.getItem('pwa_notification_dismiss'));
-                    this.showNotificationWarning = !dismissedAt || Date.now() - dismissedAt > 7 * 24 * 3600 * 1000;
+                    this.showNotificationWarning = !dismissedAt || Date.now() - dismissedAt > 14 * 24 * 3600 * 1000;
                 }
             }
         },
@@ -200,7 +200,7 @@ export default {
 
     mounted() {
         this.search(this.query);
-        
+
         if (this.isPWA()) {
             this.checkNotificationPermission();
         }
