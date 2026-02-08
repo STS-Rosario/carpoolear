@@ -2073,8 +2073,7 @@ export default {
                 place: null,
                 json: null,
                 location: null,
-                error: new Error(),
-                id: new Date().getTime()
+                error: new Error()
             };
             this.points.splice(this.points.length - 1, 0, newPoint);
         }
