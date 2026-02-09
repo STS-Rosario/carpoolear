@@ -378,7 +378,7 @@
                                     <!--<input type="text" v-model="time" />-->
                                 </div>
                             </div>
-                            <div class="trip_weekly_schedule" v-if="useWeeklySchedule && config.weekly_schedule">
+                            <div class="trip-weekly-schedule" v-if="useWeeklySchedule && config.weekly_schedule">
                                 <WeeklySchedule
                                     :weeklySchedule.sync="weeklySchedule"
                                     :weeklyScheduleTime.sync="weeklyScheduleTime"
@@ -819,7 +819,7 @@
                                     </label>
                                 </li>
                             </ul>
-                            <div class="row row-showReturnTrip">
+                            <div v-if="!updatingTrip" class="row row-showReturnTrip">
                                 <hr class="col-md-20" />
                                 <div class="checkbox-trip-return col-md-24">
                                     <span>
@@ -837,6 +837,7 @@
                             <button
                                 v-if="!showReturnTrip"
                                 class="trip-create btn btn-primary btn-lg"
+                                :class="{ 'trip-create--update': updatingTrip && !showReturnTrip }"
                                 @click="save"
                                 :disabled="saving"
                             >
@@ -905,8 +906,8 @@
                 </ul>
             </div>
             <div
+                v-if="showReturnTrip"
                 class="row show-return-trip"
-                v-if="!updatingTrip && showReturnTrip"
             >
                 <hr class="col-xs-24 hidden-sm hidden-md hidden-lg" />
                 <div v-if="showReturnTrip" :class="columnClass[0]">
@@ -1142,7 +1143,7 @@
                                     <!--<input type="text" v-model="time" />-->
                                 </div>
                             </div>
-                            <div class="trip_weekly_schedule" v-if="useWeeklySchedule && config.weekly_schedule">
+                            <div class="trip-weekly-schedule" v-if="useWeeklySchedule && config.weekly_schedule">
                                 <WeeklySchedule
                                     :weeklySchedule.sync="weeklySchedule"
                                     :weeklyScheduleTime.sync="weeklyScheduleReturnTime"
@@ -2066,6 +2067,18 @@ export default {
             this.points.push(point);
         });
 
+        // In update mode, add an empty point for adding new intermediary locations
+        if (this.updatingTrip && this.points.length >= 2) {
+            let newPoint = {
+                name: '',
+                place: null,
+                json: null,
+                location: null,
+                error: new Error()
+            };
+            this.points.splice(this.points.length - 1, 0, newPoint);
+        }
+
         // Restore weekly schedule FIRST before date/time
         if (trip.weekly_schedule > 0) {
             this.useWeeklySchedule = true;
@@ -2097,7 +2110,8 @@ export default {
         this.trip.allow_kids = !(trip.allow_kids > 0);
         this.trip.allow_animals = !(trip.allow_animals > 0);
         this.trip.allow_smoking = !(trip.allow_smoking > 0);
-        // this.calcRoute();
+        
+        this.calcRoute();
     },
 
         loadTrip() {
@@ -2868,7 +2882,11 @@ textarea.form-control {
     color: white;
 }
 
-.trip_weekly_schedule {
+.trip-weekly-schedule {
     margin-bottom: 1em;
+}
+
+.trip-create--update {
+    margin-top: 2em;
 }
 </style>
