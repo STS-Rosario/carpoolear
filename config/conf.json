@@ -38,5 +38,5 @@
     "autocomplete_select_first": false,
     "profile_id_format": "##.###.###",
     "weekly_schedule": false,
-    "web_push_notification": true
+    "web_push_notification": false
 }
