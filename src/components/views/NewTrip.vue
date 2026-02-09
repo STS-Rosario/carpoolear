@@ -819,7 +819,7 @@
                                     </label>
                                 </li>
                             </ul>
-                            <div class="row row-showReturnTrip" v-if="!updatingTrip">
+                            <div v-if="!updatingTrip" class="row row-showReturnTrip">
                                 <hr class="col-md-20" />
                                 <div class="checkbox-trip-return col-md-24">
                                     <span>
@@ -906,8 +906,8 @@
                 </ul>
             </div>
             <div
-                class="row show-return-trip"
                 v-if="showReturnTrip"
+                class="row show-return-trip"
             >
                 <hr class="col-xs-24 hidden-sm hidden-md hidden-lg" />
                 <div v-if="showReturnTrip" :class="columnClass[0]">
