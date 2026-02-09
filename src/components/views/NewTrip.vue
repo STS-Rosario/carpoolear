@@ -819,7 +819,7 @@
                                     </label>
                                 </li>
                             </ul>
-                            <div class="row row-showReturnTrip">
+                            <div v-if="!updatingTrip" class="row row-showReturnTrip">
                                 <hr class="col-md-20" />
                                 <div class="checkbox-trip-return col-md-24">
                                     <span>
@@ -837,6 +837,7 @@
                             <button
                                 v-if="!showReturnTrip"
                                 class="trip-create btn btn-primary btn-lg"
+                                :class="{ 'trip-create--update': updatingTrip && !showReturnTrip }"
                                 @click="save"
                                 :disabled="saving"
                             >
@@ -905,8 +906,8 @@
                 </ul>
             </div>
             <div
+                v-if="showReturnTrip"
                 class="row show-return-trip"
-                v-if="!updatingTrip && showReturnTrip"
             >
                 <hr class="col-xs-24 hidden-sm hidden-md hidden-lg" />
                 <div v-if="showReturnTrip" :class="columnClass[0]">
@@ -2870,5 +2871,9 @@ textarea.form-control {
 
 .trip-weekly-schedule {
     margin-bottom: 1em;
+}
+
+.trip-create--update {
+    margin-top: 2em;
 }
 </style>
