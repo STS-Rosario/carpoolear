@@ -2098,7 +2098,8 @@ export default {
         this.trip.allow_kids = !(trip.allow_kids > 0);
         this.trip.allow_animals = !(trip.allow_animals > 0);
         this.trip.allow_smoking = !(trip.allow_smoking > 0);
-        // this.calcRoute();
+        
+        this.calcRoute();
     },
 
         loadTrip() {
