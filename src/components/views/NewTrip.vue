@@ -2067,6 +2067,18 @@ export default {
             this.points.push(point);
         });
 
+        // In update mode, add an empty point for adding new intermediary locations
+        if (this.updatingTrip && this.points.length >= 2) {
+            let newPoint = {
+                name: '',
+                place: null,
+                json: null,
+                location: null,
+                error: new Error()
+            };
+            this.points.splice(this.points.length - 1, 0, newPoint);
+        }
+
         // Restore weekly schedule FIRST before date/time
         if (trip.weekly_schedule > 0) {
             this.useWeeklySchedule = true;
