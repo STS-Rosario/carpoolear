@@ -2098,7 +2098,6 @@ export default {
         this.trip.allow_animals = !(trip.allow_animals > 0);
         this.trip.allow_smoking = !(trip.allow_smoking > 0);
         
-        // Calculate route to get duration and other trip info
         this.calcRoute();
     },
 
