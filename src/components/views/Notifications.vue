@@ -202,7 +202,7 @@ export default {
     mounted() {
         this.search(this.query);
 
-        if (this.appConfig.web_push_notification && this.isPWA()) {
+        if (this.appConfig.web_push_notification && this.isPWA()) { 
             this.checkNotificationPermission();
         }
     },
