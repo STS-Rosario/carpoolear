@@ -1,6 +1,33 @@
 <template>
     <div>
         <Loading class="container" :data="notifications">
+            <div
+                v-if="isPWA() && !hasNotificationPermission && showNotificationWarning"
+                class="alert alert-warning ios-notification-warning"
+                style="text-align: center"
+                role="alert"
+            >
+                <h4>⚠️ {{ $t('notificacionesNoHabilitadas') }}</h4>
+                <p>
+                    {{ $t('notificacionesNoAceptastePermisos') }}
+                </p>
+                <br/>
+                <div class="notification-warning-buttons">
+                    <button
+                        class="btn btn-success"
+                        @click="requestNotificationPermission"
+                    >
+                        {{ $t('otorgarPermisos') }}
+                    </button>
+                    <button
+                        class="btn btn-default"
+                        @click="dismissNotificationWarning"
+                        style="margin-left: 10px"
+                    >
+                        {{ $t('noMostrarDeNuevo') }}
+                    </button>
+                </div>
+            </div>
             <div class="notifications-list list-group">
                 <div
                     class="list-group-item"
@@ -51,6 +78,9 @@
 import Loading from '../Loading';
 import { mapActions, mapGetters } from 'vuex';
 import router from '../../router';
+import dialogs from '../../services/dialogs.js';
+import push from '../../cordova/push-capacitor.js';
+
 
 export default {
     name: 'notifications',
@@ -61,7 +91,9 @@ export default {
                 page: 1,
                 page_size: 25,
                 mark: true
-            }
+            },
+            hasNotificationPermission: false,
+            showNotificationWarning: false
         };
     },
 
@@ -69,7 +101,53 @@ export default {
         ...mapActions({
             search: 'notifications/index'
         }),
-
+        isPWA() {
+            return !window.Capacitor || window.Capacitor.getPlatform() === 'web';
+        },
+        checkNotificationPermission() {
+            if (window.Notification && window.Notification.permission) {
+                if (window.Notification.permission === 'granted') {
+                    this.hasNotificationPermission = true;
+                    this.showNotificationWarning = false;
+                } else {
+                    this.hasNotificationPermission = false;
+                    const dismissedAt = parseInt(localStorage.getItem('pwa_notification_dismiss'));
+                    this.showNotificationWarning = !dismissedAt || Date.now() - dismissedAt > 14 * 24 * 3600 * 1000;
+                }
+            }
+        },
+        requestNotificationPermission() {
+            Notification.requestPermission().then((permission) => {
+                if (permission === 'granted') {
+                    this.hasNotificationPermission = true;
+                    this.showNotificationWarning = false;
+                    // Initialize push-capacitor.js after permission is granted
+                    try {
+                        setTimeout(() => {
+                            push.init();
+                        }, 3000);
+                    } catch (error) {
+                        console.log(
+                            'Error initializing push notifications:',
+                            error
+                        );
+                    }
+                    dialogs.message(this.$t('notificacionesPermitidas'), {
+                        duration: 10,
+                        estado: 'success'
+                    });
+                } else {
+                    dialogs.message(this.$t('notificacionesDenegadas'), {
+                        duration: 10,
+                        estado: 'error'
+                    });
+                }
+            });
+        },
+        dismissNotificationWarning() {
+            this.showNotificationWarning = false;
+            localStorage.setItem('pwa_notification_dismiss', Date.now());
+        },
         onNotificationClick(n) {
             console.log('onNotificationClick', n);
             if (n.extras) {
@@ -116,12 +194,17 @@ export default {
 
     computed: {
         ...mapGetters({
-            notifications: 'notifications/index'
+            notifications: 'notifications/index',
+            appConfig: 'auth/appConfig'
         })
     },
 
     mounted() {
         this.search(this.query);
+
+        if (this.appConfig.web_push_notification && this.isPWA()) {
+            this.checkNotificationPermission();
+        }
     },
 
     components: {

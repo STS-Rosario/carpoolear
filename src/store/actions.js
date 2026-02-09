@@ -115,6 +115,14 @@ export const getTrip = (store, id) => {
 };
 
 export const startThread = (store) => {
+    const config = store.getters['auth/appConfig'];
+    if (
+        config.web_push_notification &&
+        window.Notification.permission === 'granted'
+    ) {
+        return;
+    }
+
     let fn = function () {
         store.dispatch('notifications/count');
     };

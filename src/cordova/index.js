@@ -11,6 +11,7 @@ import { Capacitor } from '@capacitor/core';
 import { Network } from '@capacitor/network';
 import { Device } from '@capacitor/device';
 import { SplashScreen } from '@capacitor/splash-screen';
+import config from '../../config/conf.json';
 
 window.facebook = facebook;
 window.appVersion = '2.2.2';
@@ -51,17 +52,17 @@ let onDeviceReady = () => {
 let doInit = async () => {
     console.log('do Init');
     store.commit('cordova/' + types.CORDOVA_DEVICEREADY);
-    
+
     // Initialize device info with Capacitor
     await initDeviceInfo();
 
     // Initialize push notifications with Capacitor
     console.log('Initializing push notifications...');
     push.init();
-    
+
     // Initialize network monitoring with Capacitor
     initNetworkMonitoring();
-    
+
     store.dispatch('init');
 
     document.addEventListener('backbutton', onBackbutton, false);
@@ -70,11 +71,11 @@ let doInit = async () => {
 let initDeviceInfo = async () => {
     if (Capacitor.isNativePlatform()) {
         console.log('Initializing Capacitor device info...');
-        
+
         try {
             const deviceInfo = await Device.getInfo();
             console.log('Device info:', deviceInfo);
-            
+
             // Create a device object compatible with the old Cordova format
             const compatibleDevice = {
                 platform: deviceInfo.platform,
@@ -84,10 +85,10 @@ let initDeviceInfo = async () => {
                 isVirtual: deviceInfo.isVirtual,
                 webViewVersion: deviceInfo.webViewVersion
             };
-            
+
             // Set the device globally for backward compatibility
             window.device = compatibleDevice;
-            
+
             // Update the store
             store.commit('cordova/' + types.CORDOVA_SET_DEVICE, compatibleDevice);
         } catch (error) {
@@ -108,7 +109,7 @@ let initDeviceInfo = async () => {
             isVirtual: false,
             webViewVersion: navigator.userAgent
         };
-        
+
         window.device = webDevice;
         store.commit('cordova/' + types.CORDOVA_SET_DEVICE, webDevice);
     }
@@ -117,18 +118,18 @@ let initDeviceInfo = async () => {
 let initNetworkMonitoring = async () => {
     if (Capacitor.isNativePlatform()) {
         console.log('Initializing Capacitor network monitoring...');
-        
+
         try {
             // Get initial network status
             const status = await Network.getStatus();
             console.log('Initial network status:', status);
-            
+
             if (status.connected) {
                 store.dispatch('cordova/deviceOnline');
             } else {
                 store.dispatch('cordova/deviceOffline');
             }
-            
+
             // Listen for network changes
             Network.addListener('networkStatusChange', (status) => {
                 console.log('Network status changed:', status);
@@ -181,7 +182,7 @@ let onResumen = () => {
 document.addEventListener('deviceready', onDeviceReady, false);
 
 document.addEventListener('pause', onPause, false);
-document.addEventListener('resumen', onResumen, false);
+document.addEventListener('resume', onResumen, false);
 
 // For Capacitor: Initialize immediately if running on native platform
 console.log('Checking platform:', Capacitor.getPlatform());
@@ -189,11 +190,16 @@ console.log('Is native platform:', Capacitor.isNativePlatform());
 
 if (Capacitor.isNativePlatform()) {
     console.log('Capacitor native platform detected - initializing immediately');
-    
+
     // Wait a bit for Capacitor to be fully ready
     setTimeout(() => {
         onDeviceReady();
     }, 1000);
 } else {
-    console.log('Web platform or Cordova - waiting for deviceready event');
+    if (
+        config.web_push_notification &&
+        window.Notification.permission === 'granted'
+    ) {
+        onDeviceReady();
+    }
 }
