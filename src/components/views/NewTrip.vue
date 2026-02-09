@@ -378,7 +378,7 @@
                                     <!--<input type="text" v-model="time" />-->
                                 </div>
                             </div>
-                            <div class="trip_weekly_schedule" v-if="useWeeklySchedule && config.weekly_schedule">
+                            <div class="trip-weekly-schedule" v-if="useWeeklySchedule && config.weekly_schedule">
                                 <WeeklySchedule
                                     :weeklySchedule.sync="weeklySchedule"
                                     :weeklyScheduleTime.sync="weeklyScheduleTime"
@@ -1142,7 +1142,7 @@
                                     <!--<input type="text" v-model="time" />-->
                                 </div>
                             </div>
-                            <div class="trip_weekly_schedule" v-if="useWeeklySchedule && config.weekly_schedule">
+                            <div class="trip-weekly-schedule" v-if="useWeeklySchedule && config.weekly_schedule">
                                 <WeeklySchedule
                                     :weeklySchedule.sync="weeklySchedule"
                                     :weeklyScheduleTime.sync="weeklyScheduleReturnTime"
@@ -2868,7 +2868,7 @@ textarea.form-control {
     color: white;
 }
 
-.trip_weekly_schedule {
+.trip-weekly-schedule {
     margin-bottom: 1em;
 }
 </style>
