@@ -169,7 +169,6 @@ export default {
 .weekly-day-checkbox {
     display: inline-flex;
     align-items: center;
-    gap: 0;
 }
 
 .weekly-day-checkbox input[type='checkbox'] {
