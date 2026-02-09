@@ -115,6 +115,9 @@ export default {
                         'cordova/' + types.CORDOVA_DEVICE_REGISTER,
                         currentToken
                     );
+                    store.dispatch('device/register').catch((error) => {
+                        console.error('❌ Device registration failed:', error);
+                    });
                 }
 
                 const handleNotification = (payload, isBackgroundMessage) => {
