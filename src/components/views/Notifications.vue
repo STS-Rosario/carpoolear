@@ -93,7 +93,7 @@ export default {
                 mark: true
             },
             hasNotificationPermission: false,
-            showNotificationWarning: true
+            showNotificationWarning: false
         };
     },
 
@@ -194,14 +194,15 @@ export default {
 
     computed: {
         ...mapGetters({
-            notifications: 'notifications/index'
+            notifications: 'notifications/index',
+            appConfig: 'auth/appConfig'
         })
     },
 
     mounted() {
         this.search(this.query);
 
-        if (this.isPWA()) {
+        if (this.appConfig.web_push_notification && this.isPWA()) {
             this.checkNotificationPermission();
         }
     },
