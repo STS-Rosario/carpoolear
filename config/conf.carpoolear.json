@@ -5,7 +5,8 @@
         "url": ""
     },
     "country_name": "Argentina",
-    "country_coordinates": "[-29.0, -60.0]",
+    "map_coordinates": [-29.0, -60.0],
+    "map_zoom": 4,
     "locale": "arg",
     "osm_country": "ARG",
     "donation": {
@@ -35,5 +36,7 @@
     "trips_auto_search": false,
     "trips_focus_next": false,
     "autocomplete_select_first": false,
-    "profile_id_format": "##.###.###"
+    "profile_id_format": "##.###.###",
+    "weekly_schedule": false,
+    "web_push_notification": false
 }
