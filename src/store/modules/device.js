@@ -52,10 +52,10 @@ const actions = {
         }
 
         // Check if device with same device_id already exists to prevent duplicates
-        if (state.current && state.current.device_id === data.device_id) {
-            // Update existing device instead of creating a new one
-            return store.dispatch('device/update', data);
-        }
+        //if (state.current && state.current.device_id === data.device_id) {
+        // Update existing device instead of creating a new one
+        // return store.dispatch('device/update', data);
+        //}
 
         return deviceApi
             .create(data)
