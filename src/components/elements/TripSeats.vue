@@ -10,11 +10,20 @@
                 <span class="trip_seats-available_value pull-left">{{
                     trip.seats_available
                 }}</span>
-                <span class="trip_seats-available_label">
+                <span v-if="trip.seats_available == 1" 
+                    class="trip_seats-available_label"
+                >
+                    {{ $t('Lugar') }}
+                    <br />
+                    {{ $t('libre') }}
+                </span>
+                <span v-if="trip.seats_available > 1" 
+                    class="trip_seats-available_label"
+                >
                     {{ $t('Lugares') }}
                     <br />
                     {{ $t('libres') }}
-                </span>
+                </span>            
             </div>
         </div>
         <div v-if="tripCardTheme !== 'light'" style="height: 2em"></div>
