@@ -5,6 +5,8 @@
         "url": ""
     },
     "country_name": "Argentina",
+    "map_coordinates": [-29.0, -60.0],
+    "map_zoom": 4,
     "locale": "arg",
     "osm_country": "ARG",
     "donation": {
@@ -30,5 +32,11 @@
     "allow_rating_reply": true,
     "module_references": true,
     "name_app": "Carpoolear",
-    "app_name": "Inicio"
+    "app_name": "Inicio",
+    "trips_auto_search": false,
+    "trips_focus_next": false,
+    "autocomplete_select_first": false,
+    "profile_id_format": "##.###.###",
+    "weekly_schedule": false,
+    "web_push_notification": false
 }
