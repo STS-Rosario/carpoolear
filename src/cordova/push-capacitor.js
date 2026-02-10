@@ -118,6 +118,16 @@ export default {
                     store.dispatch('device/register').catch((error) => {
                         console.error('❌ Device registration failed:', error);
                     });
+
+                    // Monitor notification permission changes and reload if revoked to initialize polling
+                    const permissionStatus = await navigator.permissions.query({ name: 'notifications' });
+                    permissionStatus.onchange = function() {
+                        if (this.state !== 'granted') {
+                            window.location.reload();
+                        }
+                    };
+                } else {
+                    console.warn('Failed to get FCM token');
                 }
 
                 const handleNotification = (payload, isBackgroundMessage) => {
