@@ -433,7 +433,7 @@ export default {
     head: {
         /* title: function () {
             return {
-                inner: 'Viaje'
+                inner: this.$t('viaje')
             };
         }, */
         meta: function () {

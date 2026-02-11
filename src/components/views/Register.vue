@@ -29,7 +29,7 @@
                 </div>
                 <div class="col-md-12">
                     <div class="text text-creating-with-fb">
-                        o creando una cuenta con
+                        {{ $t('creandoUnaCuenta') }}
                     </div>
                     <button
                         class="btn btn-primary btn-search btn-facebook btn-with-icon"

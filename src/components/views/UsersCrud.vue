@@ -639,7 +639,7 @@ export default {
             }
 
             if (this.newInfo.pass.password && this.newInfo.pass.password !== this.newInfo.pass.password_confirmation) {
-                this.passError = 'Password no coincide';
+                this.passError = this.$t('passwordNoCoincide');
                 globalError = true;
             } */
 
