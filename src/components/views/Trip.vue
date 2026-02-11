@@ -711,7 +711,7 @@ export default {
                 );
                 let control = L.Routing.control({
                     waypoints: points,
-                    language: 'es'
+                    language: this.$i18n.locale
                 });
                 control.addTo(map);
             }
