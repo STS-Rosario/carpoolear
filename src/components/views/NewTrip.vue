@@ -534,15 +534,15 @@
                                 class="trip_price"
                                 v-if="
                                     trip.is_passenger == 0 &&
-                                    config.module_max_price_enabled && 
+                                    config.module_max_price_enabled &&
                                     config.module_seat_price_enabled
                                 "
                             >
                                 <legend class="label-for-group label-tooltip">
-                                    {{ $t('precioAsiento') }}  
+                                    {{ $t('precioAsiento') }}
                                     <span
                                         class="tooltip-bottom tooltip-seat-price"
-                                        :data-tooltip="'El precio que pagará cada pasajero. Incluye el proporcional de peajes'+ ((this.config.module_trip_creation_payment_enabled) ? ' y Sellado de Viaje.' : '')"
+                                        :data-tooltip="$t('precioAsientoTooltip', { sellado: this.config.module_trip_creation_payment_enabled ? ' y Sellado de Viaje.' : '' })"
                                     >
                                         <i
                                             class="fa fa-info-circle"
@@ -1070,9 +1070,9 @@
                                                 v-if="tripCardTheme !== 'light'"
                                             >
                                                 {{ $t('huellaCarbono') }} (
-                                                <abbr
-                                                    title="Kilogramos dióxido de carbono equivalente"
-                                                >
+                                                    <abbr
+                                                        :title="$t('kilogramosDioxidoDeCarbonoEquivalente')"
+                                                    >
                                                     kg CO
                                                     <sub>2eq</sub>
                                                 </abbr>
@@ -1192,10 +1192,10 @@
                                 v-if="this.config.module_trip_creation_payment_enabled && config.module_seat_price_enabled"
                             >
                                 <legend class="label-for-group label-tooltip">
-                                    {{ $t('precioAsiento') }}  
+                                    {{ $t('precioAsiento') }}
                                     <span
                                         class="tooltip-bottom tooltip-seat-price"
-                                        :data-tooltip="'El precio que pagará cada pasajero. Incluye el proporcional de peajes'+ ((this.config.module_trip_creation_payment_enabled) ? ' y Sellado de Viaje.' : '')"
+                                        :data-tooltip="$t('precioAsientoTooltip', { sellado: this.config.module_trip_creation_payment_enabled ? ' y Sellado de Viaje.' : '' })"
                                     >
                                         <i
                                             class="fa fa-info-circle"

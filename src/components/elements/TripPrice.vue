@@ -34,7 +34,7 @@
         <template v-else>
             <div class="trip_seats-available" v-if="!trip.is_passenger">
                 <template v-for="n in trip.total_seats">
-                    Contribución por persona: <span>{{ $n(trip.seat_price_cents / 100, 'currency') }}</span>
+                    {{ $t('contribucionPorPersona') }}: <span>{{ $n(trip.seat_price_cents / 100, 'currency') }}</span>
                 </template>
             </div>
         </template>
