@@ -799,19 +799,19 @@ export default {
             let globalError = false;
             /* if (this.password.length < 1) {
                 this.passwordError.state = true;
-                this.passwordError.message = 'Olvidó ingresar su contraseña.';
+                this.passwordError.message = this.$t('olvidoContrasena');
                 globalError = true;
             } else if (this.password.length < 8) {
                 this.passwordError.state = true;
-                this.passwordError.message = 'Las contraseña debe tener al menos 8 caracteres.';
+                this.passwordError.message = this.$t('contraCorta');
                 globalError = true;
             } else if (this.passwordConfirmation < 1) {
                 this.passwordError.state = true;
-                this.passwordError.message = 'Olvidó confirmar su contraseña.';
+                this.passwordError.message = this.$t('olvidoConfirmarContra');
                 globalError = true;
             } else if (this.password !== this.passwordConfirmation) {
                 this.passwordError.state = true;
-                this.passwordError.message = 'Las contraseñas no coinciden.';
+                this.passwordError.message = this.$t('contraNoCoinciden');
                 globalError = true;
             } */
 
@@ -824,13 +824,13 @@ export default {
             /* console.log(this.birthdayAnswer);
             if (!this.birthdayAnswer || this.birthdayAnswer.length < 1) {
                 this.birthdayError.state = true;
-                this.birthdayError.message = 'Olvidaste ingresar tu fecha de nacimiento.';
+                this.birthdayError.message = this.$t('olvidasteFechaNacimiento');
                 globalError = true;
             } else {
                 let birthday = moment(this.birthdayAnswer);
                 if (moment().diff(birthday, 'years') < 18) {
                     this.birthdayError.state = true;
-                    this.birthdayError.message = 'Pareciera que no eres mayor de edad. Revisa si ingresaste bien tu fecha de nacimiento y recuerda que debes ser mayor de edad para utilizar Carpoolear. Para más información te recomendamos volver a leer los términos y condiciones.';
+                    this.birthdayError.message = this.$t('debesSerMayorDeEdad');
                     globalError = true;
                 }
             } */

@@ -55,7 +55,7 @@
                 :name="'modal'"
                 v-if="showModalPendingRates"
                 @close="toPendingRates"
-                :title="'Carpoodatos'"
+                :title="$t('carpoodatos')"
                 :body="'Body'"
                 :hide-footer="true"
             >

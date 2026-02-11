@@ -207,7 +207,7 @@ export default {
                 this.registerDonation(data);
             } else {
                 dialogs.message(
-                    'Tienes que seleccionar un valor de donación.',
+                    this.$t('valorDonacion'),
                     {
                         duration: 10,
                         estado: 'error'
@@ -242,7 +242,7 @@ export default {
                 this.registerDonation(data);
             } else {
                 dialogs.message(
-                    'Tienes que seleccionar un valor de donación.',
+                    this.$t('valorDonacion'),
                     {
                         duration: 10,
                         estado: 'error'

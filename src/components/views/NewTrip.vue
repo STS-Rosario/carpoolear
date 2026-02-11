@@ -1,13 +1,13 @@
 <template>
     <div class="new-trip-component container">
         <div class="alert alert-info alert-sellado-viaje" v-if="this.config.module_trip_creation_payment_enabled">
-            <p>Mensaje contando sobre el Sellado de Viaje.</p>
-            <p>Podés hacer {{ this.free_trips_amount }} viajes gratis.</p>
+            <p>{{ $t('mensajeContandoSobreSelladoViaje') }}</p>
+            <p>{{ $t('podesHacerViajesGratis', { free_trips_amount: this.free_trips_amount }) }}</p>
             <div v-if="this.trips_created_by_user_amount >= this.free_trips_amount">
-                <p>Ya creaste {{ this.trips_created_by_user_amount }} viajes, por lo que tenés que pagar el Sellado de Viaje.</p>
+                <p>{{ $t('yaCreasteViajes', { trips_created_by_user_amount: this.trips_created_by_user_amount }) }} {{ $t('luegoTendrasQuePagarSelladoViaje') }}</p>
             </div>
             <div v-if="this.trips_created_by_user_amount < this.free_trips_amount">
-                <p>Te queda{{ (remainingFreeTrips) === 1 ? '' : 'n' }} {{ remainingFreeTrips }} viaje{{ (remainingFreeTrips) === 1 ? '' : 's' }} gratis, luego tendrás que pagar el Sellado de Viaje.</p>
+                <p>{{ $t('teQuedaViajesGratis', { remainingFreeTrips: remainingFreeTrips }) }} viaje{{ (remainingFreeTrips) === 1 ? '' : 's' }} gratis, {{ $t('luegoTendrasQuePagarSelladoViaje') }}</p>
             </div>
         </div>
 
@@ -18,7 +18,7 @@
                         class="title--desktop"
                         v-if="tripCardTheme === 'light' && !isMobile"
                     >
-                        Crear viaje
+                        {{ $t('crearViaje') }}
                     </h2>
                     <fieldset
                         class="trip-type-selection"
@@ -492,10 +492,10 @@
                                 v-if="trip.is_passenger == 0 && !config.module_max_price_enabled && config.module_seat_price_enabled"
                             >
                                 <legend class="label-for-group label-tooltip">
-                                    {{ $t('precioAsiento') }}  
+                                    {{ $t('precioAsiento') }}
                                 <span
                                     class="tooltip-bottom tooltip-seat-price"
-                                    :data-tooltip="'El precio que pagará cada pasajero. Incluye el proporcional de peajes'+ ((this.config.module_trip_creation_payment_enabled) ? ' y Sellado de Viaje.' : '')"
+                                    :data-tooltip="$t('precioAsientoTooltip', { sellado: this.config.module_trip_creation_payment_enabled ? ' y Sellado de Viaje.' : '' })"
                                 >
                                     <i
                                         class="fa fa-info-circle"
@@ -534,15 +534,15 @@
                                 class="trip_price"
                                 v-if="
                                     trip.is_passenger == 0 &&
-                                    config.module_max_price_enabled && 
+                                    config.module_max_price_enabled &&
                                     config.module_seat_price_enabled
                                 "
                             >
                                 <legend class="label-for-group label-tooltip">
-                                    {{ $t('precioAsiento') }}  
+                                    {{ $t('precioAsiento') }}
                                     <span
                                         class="tooltip-bottom tooltip-seat-price"
-                                        :data-tooltip="'El precio que pagará cada pasajero. Incluye el proporcional de peajes'+ ((this.config.module_trip_creation_payment_enabled) ? ' y Sellado de Viaje.' : '')"
+                                        :data-tooltip="$t('precioAsientoTooltip', { sellado: this.config.module_trip_creation_payment_enabled ? ' y Sellado de Viaje.' : '' })"
                                     >
                                         <i
                                             class="fa fa-info-circle"
@@ -577,7 +577,7 @@
                                     font-size: 1.1rem;
                                 "
                                 >
-                                    {{ 'Contribución recomendada' }}
+                                    {{ $t('contribucionRecomendadaLabel') }}
 
                                     <span
                                         style="
@@ -589,10 +589,10 @@
                                         $ {{ recommendedSeatPrice }}
 
                                     <span>
-                                        
+
                                         <span
                                             class="tooltip-seat-price"
-                                            data-tooltip="Calculado en base a nafta premium, consumo promedio alto, peajes y Sellado de Viaje incluídos (si aplica)"
+                                            :data-tooltip="$t('calculadoEnBaseNaftaTooltip')"
                                         >
                                             <i
                                                 class="fa fa-info-circle"
@@ -612,7 +612,7 @@
                                     {{
                                         trip.is_passenger == 0
                                             ? $t('comentarioPasajeros')
-                                            : 'Comentario'
+                                            : $t('comentario')
                                     }}
                                 </label>
                                 <textarea
@@ -894,7 +894,7 @@
                         <div class="label-soft">
                             {{ $t('huellaCarbono') }} (
                             <abbr
-                                title="Kilogramos dióxido de carbono equivalente"
+                                :title="$t('kilogramosDioxidoDeCarbonoEquivalente')"
                             >
                                 kg CO
                                 <sub>2eq</sub>
@@ -1070,9 +1070,9 @@
                                                 v-if="tripCardTheme !== 'light'"
                                             >
                                                 {{ $t('huellaCarbono') }} (
-                                                <abbr
-                                                    title="Kilogramos dióxido de carbono equivalente"
-                                                >
+                                                    <abbr
+                                                        :title="$t('kilogramosDioxidoDeCarbonoEquivalente')"
+                                                    >
                                                     kg CO
                                                     <sub>2eq</sub>
                                                 </abbr>
@@ -1163,10 +1163,10 @@
                                 config.module_seat_price_enabled"
                             >
                                 <legend class="label-for-group label-tooltip">
-                                    {{ $t('precioAsiento') }}  
+                                    {{ $t('precioAsiento') }}
                                 <span
                                     class="tooltip-bottom tooltip-seat-price"
-                                    :data-tooltip="'El precio que pagará cada pasajero. Incluye el proporcional de peajes'+ ((this.config.module_trip_creation_payment_enabled) ? ' y Sellado de Viaje.' : '')"
+                                    :data-tooltip="$t('precioAsientoTooltip', { sellado: this.config.module_trip_creation_payment_enabled ? ' y Sellado de Viaje.' : '' })"
                                 >
                                     <i
                                         class="fa fa-info-circle"
@@ -1192,10 +1192,10 @@
                                 v-if="this.config.module_trip_creation_payment_enabled && config.module_seat_price_enabled"
                             >
                                 <legend class="label-for-group label-tooltip">
-                                    {{ $t('precioAsiento') }}  
+                                    {{ $t('precioAsiento') }}
                                     <span
                                         class="tooltip-bottom tooltip-seat-price"
-                                        :data-tooltip="'El precio que pagará cada pasajero. Incluye el proporcional de peajes'+ ((this.config.module_trip_creation_payment_enabled) ? ' y Sellado de Viaje.' : '')"
+                                        :data-tooltip="$t('precioAsientoTooltip', { sellado: this.config.module_trip_creation_payment_enabled ? ' y Sellado de Viaje.' : '' })"
                                     >
                                         <i
                                             class="fa fa-info-circle"
@@ -1234,7 +1234,7 @@
                                     font-size: 1.1rem;
                                 "
                                 >
-                                    {{ 'Contribución recomendada' }}
+                                    {{ $t('contribucionRecomendadaLabel') }}
 
                                     <span
                                         style="
@@ -1246,10 +1246,10 @@
                                         $ {{ recommendedReturnSeatPrice }}
 
                                     <span>
-                                        
+
                                         <span
                                             class="tooltip-seat-price"
-                                            data-tooltip="Calculado en base a nafta premium, consumo promedio alto, peajes y Sellado de Viaje incluídos (si aplica)"
+                                            :data-tooltip="$t('calculadoEnBaseNaftaTooltip')"
                                         >
                                             <i
                                                 class="fa fa-info-circle"
@@ -1669,7 +1669,7 @@
                         <div class="label-soft">
                             {{ $t('huellaCarbono') }} (
                             <abbr
-                                title="Kilogramos dióxido de carbono equivalente"
+                                :title="$t('kilogramosDioxidoDeCarbonoEquivalente')"
                             >
                                 kg CO
                                 <sub>2eq</sub>
@@ -2295,12 +2295,12 @@ export default {
                 }
             }
 
-            if (this.config.module_max_price_enabled 
+            if (this.config.module_max_price_enabled
                 && this.trip.is_passenger == 0) {
                 if (this.price > this.maximum_seat_price_cents / 100) {
                     globalError = true;
                     this.priceError.state = true;
-                    this.priceError.message = 'El precio del asiento no puede superar ' + this.$n(this.maximum_seat_price_cents / 100, 'currency');
+                    this.priceError.message = this.$t('precioMaximoExcedido');
                 } else {
                     this.priceError.state = false;
                 }
@@ -2721,14 +2721,14 @@ export default {
         validatePrice() {
             if (this.price > this.maximum_seat_price_cents / 100) {
                 this.priceError.state = true;
-                this.priceError.message = 'El precio no puede superar ' + this.$n(this.maximum_seat_price_cents / 100, 'currency');
+                this.priceError.message = this.$t('precioMaximoExcedido');
             } else {
                 this.priceError.state = false;
             }
 
             if (this.returnPrice > this.maximum_seat_price_cents / 100) {
                 this.priceError.state = true;
-                this.priceError.message = 'El precio no puede superar ' + this.$n(this.maximum_seat_price_cents / 100, 'currency');
+                this.priceError.message = this.$t('precioMaximoExcedido');
             } else {
                 this.priceError.state = false;
             }

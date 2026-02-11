@@ -433,7 +433,7 @@ export default {
     head: {
         /* title: function () {
             return {
-                inner: 'Viaje'
+                inner: this.$t('viaje')
             };
         }, */
         meta: function () {
@@ -711,7 +711,7 @@ export default {
                 );
                 let control = L.Routing.control({
                     waypoints: points,
-                    language: 'es'
+                    language: this.$i18n.locale
                 });
                 control.addTo(map);
             }

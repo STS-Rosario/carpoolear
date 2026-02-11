@@ -90,7 +90,7 @@
                     href="/donar"
                     class="btn btn-primary btn-donar-header btn-header-small btn-lg"
                 >
-                    Donar
+                    {{ $t('donar') }}
                 </a>
             </div>
             <div
@@ -294,7 +294,7 @@
                     v-if="!shouldHideDonationOnIOSCapacitor(user)"
                     href="/donar"
                     class="btn btn-primary btn-donar-header btn-lg"
-                    >Donar</a
+                    >{{ $t('donar') }}</a
                 >
                 <router-link
                     v-if="logged"

@@ -10,7 +10,7 @@
         <slot name="loading" v-else>
             <p class="alert alert-info" role="alert">
                 <spinner></spinner>
-                Cargando viajes ...
+                {{ $t('cargandoViajes') }}
             </p>
         </slot>
     </div>

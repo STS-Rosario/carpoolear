@@ -29,7 +29,7 @@
             </button>
         </div>
         <div class="form row" v-else-if="token">
-            <label for="txt_password">Password</label>
+            <label for="txt_password">{{ $t('password') }}</label>
             <input
                 v-jump
                 type="password"
