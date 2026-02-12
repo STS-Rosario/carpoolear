@@ -1,5 +1,14 @@
 <template>
-    <div class="trips container" :class="!user ? 'not-logged' : ''"> 
+    <div class="trips container" :class="!user ? 'not-logged' : ''">
+        <pre class="capacitor-donation-debug">Capacitor / donation debug:
+  isNativePlatform: {{ capacitorDonationDebug.isNativePlatform }}
+  platform: {{ capacitorDonationDebug.platform }}
+  isIOSCapacitor: {{ capacitorDonationDebug.isIOSCapacitor }}
+  userId: {{ capacitorDonationDebug.userId }}
+  loggedOut: {{ capacitorDonationDebug.loggedOut }}
+  hiddenUserId (constant): {{ capacitorDonationDebug.hiddenUserId }}
+  userMatchesHiddenUser: {{ capacitorDonationDebug.userMatchesHiddenUser }}
+  shouldHideDonationOnIOSCapacitor: {{ capacitorDonationDebug.shouldHideDonation }}</pre>
         <template v-if="appConfig && appConfig.banner && appConfig.banner.url">
             <a :href="appConfig.banner.url" target="_blank" class="banner">
                 <img alt="" :src="appConfig.banner.image" />
@@ -290,7 +299,8 @@ import { App } from '@capacitor/app';
 import { Capacitor } from '@capacitor/core';
 import {
     isIOSCapacitor,
-    shouldHideDonationOnIOSCapacitor
+    shouldHideDonationOnIOSCapacitor,
+    DONATION_HIDDEN_USER_ID_IOS_CAPACITOR
 } from '../../services/capacitor.js';
 
 export default {
@@ -737,6 +747,22 @@ export default {
         },
         isIOSCapacitor() {
             return isIOSCapacitor();
+        },
+        capacitorDonationDebug() {
+            const user = this.user;
+            const isIOSCap = isIOSCapacitor();
+            return {
+                isNativePlatform: Capacitor.isNativePlatform(),
+                platform: Capacitor.getPlatform(),
+                isIOSCapacitor: isIOSCap,
+                userId: user ? user.id : 'logged out',
+                loggedOut: !user,
+                hiddenUserId: DONATION_HIDDEN_USER_ID_IOS_CAPACITOR,
+                userMatchesHiddenUser: user
+                    ? user.id === DONATION_HIDDEN_USER_ID_IOS_CAPACITOR
+                    : 'N/A (logged out)',
+                shouldHideDonation: shouldHideDonationOnIOSCapacitor(user)
+            };
         }
     },
     components: {
@@ -748,6 +774,16 @@ export default {
 };
 </script>
 <style scoped>
+.capacitor-donation-debug {
+    margin: 0 0 1em;
+    padding: 0.5em;
+    font-size: 0.75rem;
+    text-align: left;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow-x: auto;
+}
 .banner {
     display: block;
     margin: -1em auto 1em;
