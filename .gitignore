@@ -15,3 +15,8 @@ android/app/google-services.json*
 ios/App/GoogleService-Info.plist*
 
 www/*
+
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/
