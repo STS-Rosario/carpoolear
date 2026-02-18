@@ -66,7 +66,7 @@
                         class="btn btn-default pull-right"
                         v-on:click="nextPage"
                     >
-                        Siguiente
+                        {{ $t('siguiente') }}
                     </button>
                 </div>
                 <tripDisplay

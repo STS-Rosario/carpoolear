@@ -29,7 +29,7 @@
                 </div>
                 <div class="col-md-12">
                     <div class="text text-creating-with-fb">
-                        o creando una cuenta con
+                        {{ $t('creandoUnaCuenta') }}
                     </div>
                     <button
                         class="btn btn-primary btn-search btn-facebook btn-with-icon"
@@ -64,9 +64,9 @@
                 <label for="txt_name">
                     {{ $t('nombre') }}
                     <span
-                        aria-label="Campo obligatorio"
+                        :aria-label="$t('campoObligatorio')"
                         class="campo-obligatorio"
-                        >*</span
+                        >*</span>
                     >
                 </label>
                 <input
@@ -87,7 +87,7 @@
                 <label for="txt_surename">
                     {{ $t('apellido') }}
                     <span
-                        aria-label="Campo obligatorio"
+                        :aria-label="$t('campoObligatorio')"
                         class="campo-obligatorio"
                         >*</span
                     >
@@ -109,7 +109,7 @@
                 <label for="txt_email">
                     {{ $t('email') }}
                     <span
-                        aria-label="Campo obligatorio"
+                        :aria-label="$t('campoObligatorio')"
                         class="campo-obligatorio"
                         >*</span
                     >
@@ -132,7 +132,7 @@
                 <label for="txt_email_verification">
                     {{ $t('emailVerification') }}
                     <span
-                        aria-label="Campo obligatorio"
+                        :aria-label="$t('campoObligatorio')"
                         class="campo-obligatorio"
                         >*</span
                     >
@@ -160,7 +160,7 @@
                 <label for="txt_password">
                     {{ $t('password') }}
                     <span
-                        aria-label="Campo obligatorio"
+                        :aria-label="$t('campoObligatorio')"
                         class="campo-obligatorio"
                         >*</span
                     >
@@ -182,7 +182,7 @@
                 <label for="txt_password_confirmation">
                     {{ $t('ingresePassword') }}
                     <span
-                        aria-label="Campo obligatorio"
+                        :aria-label="$t('campoObligatorio')"
                         class="campo-obligatorio"
                         >*</span
                     >
@@ -234,7 +234,7 @@
                             {{ $t('tipoDeCuenta') }}
                             <span
                                 class="required-field-flag"
-                                title="Campo requerido"
+                                :title="$t('tituloCampoRequerido')"
                                 >(*)</span
                             >
                         </label>
@@ -260,7 +260,7 @@
                             {{ $t('bancoDeCuenta') }}
                             <span
                                 class="required-field-flag"
-                                title="Campo requerido"
+                                :title="$t('tituloCampoRequerido')"
                                 >(*)</span
                             >
                         </label>
@@ -286,7 +286,7 @@
                             {{ $t('numeroDeCuenta') }}
                             <span
                                 class="required-field-flag"
-                                title="Campo requerido"
+                                :title="$t('tituloCampoRequerido')"
                                 >(*)</span
                             >
                         </label>

@@ -186,6 +186,8 @@ const messages = {
         olvidasteDescripcion: 'Olvidaste completar tu descripción.',
         olvidasteDni: 'Olvidaste completar el documento.',
         olvidasteTel: 'Olvidaste completar el télefono.',
+        olvidasteFechaNacimiento: 'Olvidaste ingresar su fecha de nacimiento.',
+        debesSerMayorDeEdad: 'Lo sentimos, debes ser mayor de edad para usar el servicio. Para más información te recomendamos leer los términos y condiciones.',
         descripcionCorta:
             'Ups! Tu descripción es muy acotada. No seas tímido, contanos un poco más.',
         dniNoValido: 'El DNI que ingresaste no es válido.',
@@ -783,7 +785,13 @@ const messages = {
         unaVez: 'Una vez',
         programaSemanal: 'Semanal',
         faltaFechaOProgramaSemanal:
-            'Debe seleccionar una fecha o un programa semanal'
+            'Debe seleccionar una fecha o un programa semanal',
+        crearViajeTitulo: 'Crear viaje',
+        precioAsientoTooltip: 'El precio que pagará cada pasajero. Incluye el proporcional de peajes{sellado}',
+        contribucionRecomendadaLabel: 'Contribución recomendada',
+        calculadoEnBaseNaftaTooltip: 'Calculado en base a nafta premium, consumo promedio alto, peajes y Sellado de Viaje incluídos (si aplica)',
+        comentario: 'Comentario',
+        kilogramosDioxidoDeCarbonoEquivalente: 'Kilogramos dióxido de carbono equivalente'
     },
     chl: {
         loginUsuarioPlaceholder: 'Usuario',
@@ -1405,7 +1413,7 @@ const messages = {
         registrarme: 'Register',
         hola: 'Hello',
         bienvenidoACarpoolear:
-            '!! Welcome to Carpoolear, to start joining rides and creating your own trips, you need to complete your profile.',
+            'Welcome to Carpoolear! To join rides and create your own trips, you need to complete your profile.',
         completaTu: 'Complete your',
         imagenPerfil: 'profile picture',
         yTu: 'and your',
@@ -1559,6 +1567,8 @@ const messages = {
         olvidasteDescripcion: 'You forgot to complete your description.',
         olvidasteDni: 'You forgot to complete the document.',
         olvidasteTel: 'You forgot to complete the phone number.',
+        olvidasteFechaNacimiento: 'You forgot to enter your date of birth.',
+        debesSerMayorDeEdad: 'Sorry, you must be of legal age to use the service. For more information, we recommend reading the terms and conditions.',
         descripcionCorta:
             "Oops! Your description is too short. Don't be shy, tell us a little more.",
         dniNoValido: 'The ID you entered is not valid.',
@@ -2144,7 +2154,13 @@ const messages = {
         unaVez: 'Once',
         programaSemanal: 'Weekly',
         faltaFechaOProgramaSemanal:
-            'You must select a date or a weekly schedule'
+            'You must select a date or a weekly schedule',
+        crearViajeTitulo: 'Create trip',
+        precioAsientoTooltip: 'The price each passenger will pay. Includes proportional of tolls{sellado}',
+        contribucionRecomendadaLabel: 'Recommended contribution',
+        calculadoEnBaseNaftaTooltip: 'Calculated based on premium gasoline, high average consumption, tolls and Trip Seal included (if applicable)',
+        comentario: 'Comment',
+        kilogramosDioxidoDeCarbonoEquivalente: 'Kilograms of carbon dioxide equivalent'
     }
 };
 export default messages;
