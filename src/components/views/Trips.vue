@@ -285,7 +285,6 @@ import moment from 'moment';
 import router from '../../router';
 import dialogs from '../../services/dialogs.js';
 import modal from '../Modal';
-import push from '../../cordova/push.js';
 import { App } from '@capacitor/app';
 import { Capacitor } from '@capacitor/core';
 import {

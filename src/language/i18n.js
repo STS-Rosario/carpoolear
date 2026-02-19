@@ -2010,9 +2010,9 @@ const messages = {
         buenasRutas: 'Safe travels!',
         apple: 'Apple',
         facebook: 'Facebook',
-        notificacionesNoHabilitadas: "You don't have notifications enabled",
+        notificacionesNoHabilitadas: 'Notifications are disabled',
         notificacionesNoAceptastePermisos:
-            "It seems you didn't accept the permissions for us to send you notifications (for new messages, etc.), press the button to do so:",
+            'Enable notifications to get alerts for new messages and updates. Click below to proceed:',
         otorgarPermisos: 'Grant permissions',
         noMostrarDeNuevo: 'Do not show again',
         elegirPropiaAventuraSoloMensual:
