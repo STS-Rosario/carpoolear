@@ -70,12 +70,14 @@ export default {
         ...mapActions({
             setTitle: 'actionbars/setTitle',
             setProfile: 'profile/setUser',
-            setProfileByID: 'profile/setUserByID'
+            setProfileByID: 'profile/setUserByID',
+            fetchBadges: 'profile/fetchBadges'
         }),
         updateProfile() {
             if (this.id === 'me' || this.id === this.user.id) {
                 // this.setTitle('Mi Perfil');
                 this.setProfile(this.user);
+                this.fetchBadges(this.user ? this.user.id : 'me');
                 this.currentView = 'my-trips';
             } else {
                 if (this.userProfile) {
@@ -87,6 +89,7 @@ export default {
                 })
                     .then(() => {
                         this.setTitle(this.profile.name);
+                        this.fetchBadges(this.id);
                     })
                     .catch(() => {
                         this.$router.replace({ name: 'trips' });
