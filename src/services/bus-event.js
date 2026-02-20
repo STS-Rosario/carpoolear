@@ -6,7 +6,7 @@ class EventBuffer {
     }
 
     emit(name, params) {
-        let b = this.buffer._events[name] && this.buffer._events[name].length;
+        const b = this.buffer._events[name] && this.buffer._events[name].length;
         this.buffer.$emit(name, params);
         return b;
     }
@@ -20,7 +20,7 @@ class EventBuffer {
     }
 }
 
-let bus = new EventBuffer();
+const bus = new EventBuffer();
 
 export default bus;
 

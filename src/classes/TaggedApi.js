@@ -29,28 +29,28 @@ class TaggedApi {
     }
 
     get(url, params, headers) {
-        let xhr = network.get(url, params, headers);
+        const xhr = network.get(url, params, headers);
         this._addTags(xhr);
 
         return xhr;
     }
 
     post(url, body, headers) {
-        let xhr = network.post(url, body, headers);
+        const xhr = network.post(url, body, headers);
         this._addTags(xhr);
 
         return xhr;
     }
 
     put(url, body, headers) {
-        let xhr = network.put(url, body, headers);
+        const xhr = network.put(url, body, headers);
         this._addTags(xhr);
 
         return xhr;
     }
 
     delete(url, params, headers) {
-        let xhr = network.delete(url, params, headers);
+        const xhr = network.delete(url, params, headers);
         this._addTags(xhr);
 
         return xhr;

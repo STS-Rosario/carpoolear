@@ -7,7 +7,7 @@ import router from '../../router';
 import bus from '../../services/bus-event.js';
 import toast from '../../cordova/toast.js';
 
-let authApi = new AuthApi();
+const authApi = new AuthApi();
 // initial state
 const state = {
     deviceReady: false,
@@ -27,7 +27,7 @@ const getters = {
     deviceId: (state) => state.deviceId,
 
     deviceData: (state) => {
-        let data = {};
+        const data = {};
         if (state.device) {
             data.device_type = state.device.platform;
         }
@@ -72,11 +72,11 @@ const actions = {
     },
     facebookLogin(context) {
         return facebook.login().then((response) => {
-            let accessToken = response.authResponse.accessToken;
+            const accessToken = response.authResponse.accessToken;
             authApi
                 .loginWithProvider('facebook', { access_token: accessToken })
                 .then((response) => {
-                    let token = response.token;
+                    const token = response.token;
                     globalStore.dispatch('auth/onLoggin', token);
                     authApi.matchFriendsWithProvider('facebook', {
                         access_token: accessToken
@@ -93,7 +93,7 @@ const actions = {
             data = Object.assign(data, response);
 
             authApi.loginWithProvider('apple', data).then((response) => {
-                let token = response.token;
+                const token = response.token;
                 globalStore.dispatch('auth/onLoggin', token);
             });
         });
@@ -116,7 +116,7 @@ const actions = {
     },
 
     onBackButton(store) {
-        let result = bus.emit('backbutton');
+        const result = bus.emit('backbutton');
         if (!result) {
             if (router.stack.length > 0) {
                 router.go(-1);

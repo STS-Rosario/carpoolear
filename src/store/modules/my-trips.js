@@ -1,8 +1,8 @@
 import { TripApi, RateApi } from '../../services/api';
 import * as types from '../mutation-types';
 
-let tripsApi = new TripApi();
-let rateApi = new RateApi();
+const tripsApi = new TripApi();
+const rateApi = new RateApi();
 
 // initial state
 const state = {
@@ -78,7 +78,7 @@ const mutations = {
         }
     },
     [types.MYTRIPS_DELETE_TRIPS](state, id) {
-        let index = state.driver_trip.findIndex((item) => item.id === id);
+        const index = state.driver_trip.findIndex((item) => item.id === id);
         if (index >= 0) {
             state.driver_trip.splice(index, 1);
         }
@@ -101,7 +101,7 @@ const mutations = {
     },
 
     [types.MYTRIPS_REMOVE_PASSENGER](state, { id, user, passenger = false }) {
-        let tripTarget = passenger ? 'passenger_trip' : 'driver_trip';
+        const tripTarget = passenger ? 'passenger_trip' : 'driver_trip';
         for (let i = 0; i < state[tripTarget].length; i++) {
             if (state[tripTarget][i].id === id) {
                 if (
@@ -110,7 +110,7 @@ const mutations = {
                 ) {
                     return;
                 }
-                let index = state[tripTarget][i].passenger.findIndex(
+                const index = state[tripTarget][i].passenger.findIndex(
                     (item) =>
                         item.id === user.id &&
                         (item.request_state === 1 || item.request_state === 4)
@@ -126,7 +126,7 @@ const mutations = {
     },
 
     [types.MYTRIPS_REMOVE_PASSENGER_TRIP](state, id) {
-        let index = state.passenger_trip.findIndex((item) => item.id === id);
+        const index = state.passenger_trip.findIndex((item) => item.id === id);
         if (index >= 0) {
             state.passenger_trip.splice(index, 1);
         }

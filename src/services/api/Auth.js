@@ -47,6 +47,7 @@ class AuthApi extends TaggedApi {
     config() {
         return this.get('/api/config');
     }
+
     /**
      * Retoken.
      * @param {Object} data {

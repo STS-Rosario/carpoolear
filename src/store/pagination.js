@@ -1,5 +1,5 @@
 export function makeState(name) {
-    let obj = {};
+    const obj = {};
     obj[name] = null;
     obj[name + 'SearchParam'] = {
         page: 1,
@@ -12,7 +12,7 @@ export function makeState(name) {
 }
 
 export function makeGetters(name) {
-    let getters = {};
+    const getters = {};
     getters[name] = (state) => state[name];
     getters[name + 'MorePage'] = (state) =>
         !state[name + 'SearchParam'].lastPage;
@@ -21,12 +21,12 @@ export function makeGetters(name) {
 }
 
 export function makeMutations(name) {
-    let mutations = {};
+    const mutations = {};
     mutations[name.toUpperCase() + '_SET'] = (state, items) => {
         if (items) {
             if (state[name] && state[name].length) {
                 items.forEach((item) => {
-                    let foundItem = state[name].find(
+                    const foundItem = state[name].find(
                         (i) => i.id.toString() === item.id.toString()
                     );
                     if (!foundItem) {
@@ -70,7 +70,7 @@ export function makeMutations(name) {
 }
 
 export function makeActions(name, requestGeneration, callback) {
-    let actions = {};
+    const actions = {};
     actions[name + 'Search'] = (store, data = {}, next = false) => {
         let params = null;
         if (data.next) {
@@ -89,7 +89,7 @@ export function makeActions(name, requestGeneration, callback) {
             params.page = store.state[name + 'SearchParam'].page;
             params.page_size = store.state[name + 'SearchParam'].pageSize;
         }
-        let promises = requestGeneration({ store, data: params });
+        const promises = requestGeneration({ store, data: params });
         promises
             .then((response) => {
                 if (

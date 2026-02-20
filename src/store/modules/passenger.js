@@ -8,7 +8,7 @@ import { i18n } from '../../main';
 /* eslint-disable no-undef */
 
 // initial state
-let passengerApi = new PassengerApi();
+const passengerApi = new PassengerApi();
 
 const state = {
     pendingRequest: null,
@@ -54,13 +54,13 @@ const actions = {
                         response.data.request_state === 4 &&
                         this.config.module_trip_seats_payment
                     ) {
-                        let baseUrl = network.getBaseURL();
-                        let url =
+                        const baseUrl = network.getBaseURL();
+                        const url =
                             baseUrl + '/transbank?tp_id=' + response.data.id;
                         if (window.location.protocol.indexOf('http') >= 0) {
                             window.location.href = url;
                         } else {
-                            var popup = window.open(
+                            const popup = window.open(
                                 url,
                                 '_blank',
                                 'location=no,hidden=yes,zoom=no'
@@ -111,7 +111,7 @@ const actions = {
         return passengerApi
             .accept(trip.id, user.id)
             .then((response) => {
-                let data = {
+                const data = {
                     user_id: user.id,
                     trip_id: trip.id
                 };
@@ -134,7 +134,7 @@ const actions = {
         return passengerApi
             .reject(trip.id, user.id)
             .then((response) => {
-                let data = {
+                const data = {
                     user_id: user.id,
                     trip_id: trip.id
                 };
@@ -176,7 +176,7 @@ const actions = {
                             user
                         }
                     );
-                    let myUser = globalStore.getters['auth/user'];
+                    const myUser = globalStore.getters['auth/user'];
                     if (trip.user.id !== myUser.id) {
                         globalStore.commit(
                             'myTrips/' + types.MYTRIPS_REMOVE_PASSENGER,

@@ -1,6 +1,6 @@
 function wrapElement(el) {
-    let orgHtml = el.outerHTML;
-    let newHtml =
+    const orgHtml = el.outerHTML;
+    const newHtml =
         '<div class="fancy-cbx">' +
         orgHtml +
         '<span class="cbx-before"></span><span class="cbx-after"></span></div>';

@@ -3,7 +3,7 @@ import * as types from '../mutation-types';
 import globalStore from '../index';
 import moment from 'moment';
 
-let rateApi = new RateApi();
+const rateApi = new RateApi();
 
 // initial state
 const state = {
@@ -24,7 +24,7 @@ const actions = {
     },
 
     vote(store, data) {
-        let obj = {
+        const obj = {
             comment: data.comment,
             rating: data.rating
         };
@@ -40,7 +40,7 @@ const actions = {
     },
 
     reply(store, data) {
-        let obj = {
+        const obj = {
             comment: data.comment
         };
         return rateApi
@@ -63,7 +63,7 @@ const mutations = {
     },
 
     [types.RATES_REMOVE](state, id) {
-        var index = state.pending_rates.findIndex((item) => item.id === id);
+        const index = state.pending_rates.findIndex((item) => item.id === id);
         if (index >= 0) {
             state.pending_rates.splice(index, 1);
         }

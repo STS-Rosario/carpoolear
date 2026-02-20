@@ -6,12 +6,13 @@ class OsmApi {
     constructor() {
         this.requestSource = null;
     }
+
     search(data = {}) {
         if (this.requestSource) {
             this.requestSource.cancel();
         }
         this.requestSource = CancelToken.source();
-        let url = `https://nominatim.openstreetmap.org/search/?city=${data.input}&limit=20&format=json&addressdetails=1&accept-language=es`; // &countrycodes=ar
+        let url = 'https://nominatim.openstreetmap.org/search/?city=' + data.input + '&limit=20&format=json&addressdetails=1&accept-language=es'; // &countrycodes=ar
         if (data.country) {
             url += '&countrycodes=' + data.country;
         }
@@ -29,6 +30,7 @@ class OsmApi {
                 console.log('osm api error', axios.isCancel(err));
             });
     }
+
     route(data = {}) {
         let coords = '';
         data.points.forEach((point) => {
@@ -39,7 +41,7 @@ class OsmApi {
             coords += point.lat;
         });
         console.log('coords', coords);
-        let url =
+        const url =
             'https://router.project-osrm.org/route/v1/driving/' +
             coords +
             '?overview=false&alternatives=true&steps=true'; // &countrycodes=ar

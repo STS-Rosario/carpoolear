@@ -14,7 +14,7 @@ class LocalStorage {
     }
 
     getItem(key) {
-        var temp = window.localStorage.getItem(key);
+        let temp = window.localStorage.getItem(key);
         if (temp && temp !== 'undefined') {
             try {
                 temp = JSON.parse(temp);

@@ -1,33 +1,33 @@
 import { eventNumberKeyInput, isDigit } from '../services/utility';
 
-let numberFormatter = {};
-let inputHandler = function (event) {
+const numberFormatter = {};
+const inputHandler = function (event) {
     // On mobile, filter out non-numeric characters as a fallback
     // since keydown might not prevent them
-    let currentValue = this.value;
+    const currentValue = this.value;
     let numericOnly = currentValue.replace(/[^\d]/g, '');
-    
+
     // Apply max length limit
     const maxLength = parseInt(numberFormatter[this.id].el.dataset.maxLength) || 999;
     if (numericOnly.length > maxLength) {
         numericOnly = numericOnly.slice(0, maxLength);
     }
-    
+
     // Only update if value changed (to avoid infinite loops)
     if (currentValue !== numericOnly) {
         this.value = numericOnly;
     }
-    
+
     // Store selection position before formatting (if available)
-    let position = (typeof this.selectionStart === 'number') ? this.selectionStart : null;
-    let dots = countDots(this.value);
-    
+    const position = (typeof this.selectionStart === 'number') ? this.selectionStart : null;
+    const dots = countDots(this.value);
+
     formatNumber(this.id);
-    
+
     // Restore cursor position after formatting (if available)
     if (position !== null && typeof this.setSelectionRange === 'function') {
-        let modifyer = countDots(this.value) - dots;
-        let newPosition = Math.min(position + modifyer, this.value.length);
+        const modifyer = countDots(this.value) - dots;
+        const newPosition = Math.min(position + modifyer, this.value.length);
         // Use setTimeout to ensure the value is set before moving cursor
         setTimeout(() => {
             this.setSelectionRange(newPosition, newPosition);
@@ -35,27 +35,27 @@ let inputHandler = function (event) {
     }
 };
 
-let cleanDots = function (str) {
+const cleanDots = function (str) {
     if (!str) return '';
     return str.replace(/\./g, '');
 };
 
-let countDots = function (str) {
+const countDots = function (str) {
     if (!str) return 0;
     return str.split('.').length - 1;
 };
 
-let formatNumber = function (id) {
+const formatNumber = function (id) {
     if (!numberFormatter[id] || !numberFormatter[id].el) {
         return;
     }
-    
+
     numberFormatter[id].rawValue = cleanDots(numberFormatter[id].el.value);
 
     // More reliable method: reverse the string, add dots every 3 chars, then reverse back
     // This ensures dots are always placed correctly from right to left
-    let reversed = numberFormatter[id].rawValue.split('').reverse().join('');
-    let withDots = reversed.replace(/(\d{3})(?=\d)/g, '$1.');
+    const reversed = numberFormatter[id].rawValue.split('').reverse().join('');
+    const withDots = reversed.replace(/(\d{3})(?=\d)/g, '$1.');
     numberFormatter[id].value = withDots.split('').reverse().join('');
 
     numberFormatter[id].el.value = numberFormatter[id].value;
@@ -66,7 +66,7 @@ let formatNumber = function (id) {
 };
 
 /* This prevent insert chars, that are not numbers */
-let keyDownHandler = function (event) {
+const keyDownHandler = function (event) {
     if (
         !eventNumberKeyInput(event) ||
         (isDigit(event.keyCode) &&
@@ -103,48 +103,48 @@ let keyDownHandler = function (event) {
 };
 
 /* Handle paste events - clean and format pasted content */
-let pasteHandler = function (event) {
+const pasteHandler = function (event) {
     event.preventDefault();
     let pastedText = '';
-    
+
     if (event.clipboardData && event.clipboardData.getData) {
         pastedText = event.clipboardData.getData('text/plain');
     } else if (window.clipboardData && window.clipboardData.getData) {
         pastedText = window.clipboardData.getData('Text');
     }
-    
+
     // Extract only numbers from pasted text
     let numericOnly = pastedText.replace(/[^\d]/g, '');
-    
+
     // Apply max length limit
     const maxLength = parseInt(numberFormatter[this.id].el.dataset.maxLength) || 999;
     if (numericOnly.length > maxLength) {
         numericOnly = numericOnly.slice(0, maxLength);
     }
-    
+
     // Get current selection
-    let start = (typeof this.selectionStart === 'number') ? this.selectionStart : 0;
-    let end = (typeof this.selectionEnd === 'number') ? this.selectionEnd : 0;
-    let currentValue = this.value;
-    
+    const start = (typeof this.selectionStart === 'number') ? this.selectionStart : 0;
+    const end = (typeof this.selectionEnd === 'number') ? this.selectionEnd : 0;
+    const currentValue = this.value;
+
     // Replace selected text with pasted numeric value
     let newValue = currentValue.slice(0, start) + numericOnly + currentValue.slice(end);
     // Remove all dots and non-numeric characters
     newValue = newValue.replace(/[^\d]/g, '');
-    
+
     // Apply max length again after combining
     if (newValue.length > maxLength) {
         newValue = newValue.slice(0, maxLength);
     }
-    
+
     this.value = newValue;
-    
+
     // Format the number
     formatNumber(this.id);
-    
+
     // Set cursor position after paste
     if (typeof this.setSelectionRange === 'function') {
-        let newPosition = Math.min(start + numericOnly.length, this.value.length);
+        const newPosition = Math.min(start + numericOnly.length, this.value.length);
         setTimeout(() => {
             this.setSelectionRange(newPosition, newPosition);
         }, 0);
@@ -152,7 +152,7 @@ let pasteHandler = function (event) {
 };
 
 /* Handle beforeinput for better mobile support */
-let beforeInputHandler = function (event) {
+const beforeInputHandler = function (event) {
     // Prevent non-numeric input on mobile
     if (event.inputType === 'insertText' || event.inputType === 'insertCompositionText') {
         const text = event.data || '';
@@ -177,7 +177,7 @@ export default {
             console.warn('numberMask directive requires element to have an id attribute');
             return;
         }
-        
+
         numberFormatter[el.id] = {};
         numberFormatter[el.id].name = el.id;
         numberFormatter[el.id].value = el.value || '';
@@ -185,17 +185,17 @@ export default {
         numberFormatter[el.id].el = el;
         numberFormatter[el.id].context = node.context;
         numberFormatter[el.id].expression = binding.value;
-        
+
         // Format initial value if present
         if (el.value && el.value.length > 0) {
             formatNumber(el.id);
         }
-        
+
         // Add event listeners
         el.addEventListener('keydown', keyDownHandler, false);
         el.addEventListener('input', inputHandler, false);
         el.addEventListener('paste', pasteHandler, false);
-        
+
         // Add beforeinput for better mobile support (if available)
         // Store reference for cleanup
         if (typeof InputEvent !== 'undefined' && 'inputType' in InputEvent.prototype) {
@@ -209,7 +209,7 @@ export default {
             numberFormatter[el.id].context = node.context;
             numberFormatter[el.id].expression = binding.value;
         }
-        
+
         // Always format the number when the directive updates
         // This ensures proper formatting even after form submission errors
         if (el.value && el.value.length > 0) {
@@ -220,16 +220,16 @@ export default {
         if (!el.id || !numberFormatter[el.id]) {
             return;
         }
-        
+
         el.removeEventListener('keydown', keyDownHandler, false);
         el.removeEventListener('input', inputHandler, false);
         el.removeEventListener('paste', pasteHandler, false);
-        
+
         // Remove beforeinput handler if it was added
         if (numberFormatter[el.id].beforeInputHandler) {
             el.removeEventListener('beforeinput', numberFormatter[el.id].beforeInputHandler, false);
         }
-        
+
         // Clean up
         numberFormatter[el.id] = undefined;
     }

@@ -4,6 +4,10 @@ module.exports = {
     parserOptions: {
         sourceType: 'module'
     },
+    env: {
+        browser: true,
+        es6: true
+    },
     // https://github.com/feross/standard/blob/master/RULES.md#javascript-standard-style
     extends: ['standard'],
     // required to lint *.vue files
@@ -27,14 +31,23 @@ module.exports = {
         'func-call-spacing': 1,
 
         'handle-callback-err': 1,
+        'node/handle-callback-err': 1,
 
         'no-unused-vars': 1,
+
+        // Downgrade pre-existing issues to warnings
+        'no-empty': 1,
+        'no-async-promise-executor': 1,
+        'no-useless-escape': 1,
 
         // Disable trailing comma rules
         'comma-dangle': 'off',
         'comma-style': 'off',
 
         // Disable space before function parentheses
-        'space-before-function-paren': 'off'
+        'space-before-function-paren': 'off',
+
+        // Disable template-curly-spacing to avoid ESLint 7 crash on certain template literals
+        'template-curly-spacing': 'off'
     }
 };

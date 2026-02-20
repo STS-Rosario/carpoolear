@@ -40,7 +40,7 @@ export function guest(to, from, next) {
 }
 
 export function profileComplete(to, from, next) {
-    let user = store.getters['auth/user'];
+    const user = store.getters['auth/user'];
     if (
         !user.image ||
         user.image.length === 0 ||

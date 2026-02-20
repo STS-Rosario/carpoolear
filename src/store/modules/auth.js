@@ -5,8 +5,8 @@ import cache, { keys } from '../../services/cache';
 import localConfig from '../../../config/conf';
 import globalStore from '../index';
 
-let authApi = new AuthApi();
-let userApi = new UserApi();
+const authApi = new AuthApi();
+const userApi = new UserApi();
 
 const state = {
     auth: false,
@@ -53,7 +53,7 @@ function onLoggin(store, token) {
 }
 
 function login(store, { email, password }) {
-    let creds = {};
+    const creds = {};
     creds.email = email;
     creds.password = password;
 
@@ -158,7 +158,7 @@ function getConfig(store) {
 }
 
 function retoken(store) {
-    let data = {};
+    const data = {};
     // data.app_version = store.rootState.appVersion;
 
     return new Promise((resolve, reject) => {
@@ -189,7 +189,7 @@ function logout(store) {
         console.error('Logout API call failed:', error);
     });
 
-    let device = globalStore.state.device.current;
+    const device = globalStore.state.device.current;
     if (device) {
         globalStore.dispatch('device/delete', device.id);
     }

@@ -1,8 +1,8 @@
 export function today() {
-    let _today = new Date();
+    const _today = new Date();
     let dd = _today.getDate();
     let mm = _today.getMonth() + 1;
-    let yyyy = _today.getFullYear();
+    const yyyy = _today.getFullYear();
     if (dd < 10) {
         dd = '0' + dd;
     }
@@ -40,7 +40,7 @@ export function inputIsNumber(event) {
 }
 
 export function isDigit(code) {
-    let stringCode = String.fromCharCode(code);
+    const stringCode = String.fromCharCode(code);
     return /^\d$/.test(stringCode);
 }
 
@@ -76,23 +76,23 @@ export function eventNumberPaste(event) {
 }
 
 export function clipboardIsNumeric(event) {
-    var clipboardData = event.clipboardData
+    const clipboardData = event.clipboardData
         ? event.clipboardData.getData('Text')
         : window.clipboardData.getData('Text');
-    var isNumber = /^\d+$/.test(clipboardData);
+    const isNumber = /^\d+$/.test(clipboardData);
     return isNumber;
 }
 
 export function debounce(func, wait, immediate) {
     let timeout;
     return function () {
-        let context = this;
-        let args = arguments;
-        let later = function () {
+        const context = this;
+        const args = arguments;
+        const later = function () {
             timeout = null;
             if (!immediate) func.apply(context, args);
         };
-        let callNow = immediate && !timeout;
+        const callNow = immediate && !timeout;
         clearTimeout(timeout);
         timeout = setTimeout(later, wait);
         if (callNow) func.apply(context, args);
@@ -143,10 +143,10 @@ export function getCityName(data) {
  */
 export function formatId(value, pattern) {
     const cleaned = String(value || '').replace(/[^a-zA-Z0-9]/g, '');
-    
+
     let formatted = '';
     let cleanedIndex = 0;
-    
+
     for (let i = 0; i < pattern.length && cleanedIndex < cleaned.length; i++) {
         if (pattern[i] === '#') {
             if (/[0-9]/.test(cleaned[cleanedIndex])) {
@@ -166,7 +166,7 @@ export function formatId(value, pattern) {
             formatted += pattern[i];
         }
     }
-    
+
     return formatted;
 }
 

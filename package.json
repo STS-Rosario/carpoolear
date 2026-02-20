@@ -15,7 +15,8 @@
     "build-dev:ios": "node movilizame build --platform=ios",
     "build-dev:android": "node movilizame build --platform=android",
     "build-capacitor-android-local": "npm run build:android && cp -r dist/default/production/www/* www/ && npx cap run android --target d59fb3c7",
-    "lint:fix": "eslint --ext .js,.vue -f ./node_modules/eslint-friendly-formatter --fix src",
+    "lint": "eslint --ext .js -f ./node_modules/eslint-friendly-formatter src",
+    "lint:fix": "eslint --ext .js -f ./node_modules/eslint-friendly-formatter --fix src",
     "test:e2e": "npx playwright test",
     "test:e2e:ui": "npx playwright test --ui"
   },

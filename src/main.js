@@ -1,6 +1,5 @@
 /* jshint esversion: 6 */
 
-
 import 'babel-polyfill';
 
 import Vue from 'vue';
@@ -39,9 +38,9 @@ import * as VueGoogleMaps from 'vue2-google-maps';
 
 const ROUTE_BASE = process.env.ROUTE_BASE;
 
-let debugApi = new DebugApi();
-let cordovaTag = document.createElement('script');
-let cordovaPath = 'cordova.js';
+const debugApi = new DebugApi();
+const cordovaTag = document.createElement('script');
+const cordovaPath = 'cordova.js';
 console.log('ROUTE_BASE', ROUTE_BASE, cordovaPath);
 cordovaTag.setAttribute('src', ROUTE_BASE + cordovaPath);
 document.head.appendChild(cordovaTag);
@@ -101,7 +100,7 @@ Vue.config.errorHandler = function (err, vm, info) {
     // handle error
     // `info` is a Vue-specific error info, e.g. which lifecycle hook
     // the error was found in. Only available in 2.2.0+
-    let data = {};
+    const data = {};
     data.log = err.stack;
     debugApi.log(data);
 };
@@ -113,15 +112,15 @@ const initializeCapacitorPlugins = async () => {
         await StatusBar.setStyle({ style: Style.Light });
         await StatusBar.setBackgroundColor({ color: '#ffffff' });
         await StatusBar.setOverlaysWebView({ overlay: false });
-        
+
         // Hide splash screen after app loads
         setTimeout(async () => {
             await SplashScreen.hide();
         }, 1000);
-        
+
         // Initialize push notifications directly here
         await initializePushNotifications();
-        
+
         console.log('Capacitor plugins initialized');
     } catch (error) {
         console.log('Capacitor plugins not available (running in browser):', error);
@@ -132,29 +131,28 @@ const initializeCapacitorPlugins = async () => {
 const initializePushNotifications = async () => {
     try {
         const { Capacitor } = await import('@capacitor/core');
-        
-        
+
         if (Capacitor.isNativePlatform()) {
             const { PushNotifications } = await import('@capacitor/push-notifications');
-            
+
             const result = await PushNotifications.requestPermissions();
-            
+
             if (result.receive === 'granted') {
                 await PushNotifications.register();
-                
+
                 // Listen for registration success
                 PushNotifications.addListener('registration', (token) => {
                     console.log('Push registration token:', token.value);
                 });
-                
+
                 // Listen for registration errors
                 PushNotifications.addListener('registrationError', (error) => {
                 });
-                
+
                 // Listen for incoming push notifications
                 PushNotifications.addListener('pushNotificationReceived', (notification) => {
                 });
-                
+
                 // Listen for notification tap
                 PushNotifications.addListener('pushNotificationActionPerformed', (notification) => {
                 });
@@ -195,7 +193,7 @@ if (process.env.SERVE) {
 console.log('APP NAME: ' + process.env.TARGET_APP);
 
 bus.on('system-ready', () => {
-    let app = new Vue({
+    const app = new Vue({
         el: '#app',
         router,
         store,
@@ -203,7 +201,7 @@ bus.on('system-ready', () => {
         components: { App },
         i18n
     });
-    
+
     // Set moment locale based on i18n language
     const momentLocaleMap = {
         arg: 'es',
@@ -212,7 +210,7 @@ bus.on('system-ready', () => {
     };
     const currentLocale = i18n.locale || 'arg';
     moment.locale(momentLocaleMap[currentLocale] || 'es');
-    
+
     // Watch for language changes and update moment locale
     app.$watch('$i18n.locale', (newLocale) => {
         moment.locale(momentLocaleMap[newLocale] || 'es');

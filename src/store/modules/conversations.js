@@ -7,8 +7,8 @@ import moment from 'moment';
 import { checkError } from '../../../utils/helpers';
 import dialogs from '../../services/dialogs.js';
 
-let conversationApi = new ConversationApi();
-let pageSize = 20;
+const conversationApi = new ConversationApi();
+const pageSize = 20;
 
 /** Normalise conversation/message id to number for consistent comparison. */
 function normalizeId(id) {
@@ -162,7 +162,7 @@ const actions = {
         const nid = normalizeId(id);
         if (nid) {
             const list = store.state.list || [];
-            let conversationTemp = list.find(
+            const conversationTemp = list.find(
                 (item) => normalizeId(item.id) === nid
             );
 
@@ -207,8 +207,8 @@ const actions = {
         if (!id) {
             id = store.state.selectedID;
         }
-        let unread = true;
-        let read = true;
+        const unread = true;
+        const read = true;
         return conversationApi
             .getMessages(id, { read, unread, pageSize })
             .then((response) => {
@@ -222,7 +222,7 @@ const actions = {
     },
 
     getUnreaded(store) {
-        let data = {};
+        const data = {};
         if (store.state.selectedID) {
             data.conversation_id = store.state.selectedID;
         }
@@ -290,14 +290,14 @@ const actions = {
     findMessage(store, { id, more } = {}) {
         const nid = id != null ? normalizeId(id) : store.state.selectedID;
         if (!nid) return Promise.reject(new Error('No conversation id'));
-        let msgObj = store.state.messages[nid];
+        const msgObj = store.state.messages[nid];
         let timestamp = null;
         if (more && msgObj && msgObj.list.length) {
             timestamp = msgObj.list[0].created_at;
         }
 
-        let unread = false;
-        let read = true;
+        const unread = false;
+        const read = true;
         return conversationApi
             .getMessages(nid, { read, unread, pageSize, timestamp })
             .then((response) => {
@@ -311,7 +311,7 @@ const actions = {
                         id: nid
                     });
                 } else {
-                    let messages = response.data.reverse();
+                    const messages = response.data.reverse();
                     store.commit(types.CONVERSATION_ADD_MESSAGE, {
                         messages,
                         id: nid

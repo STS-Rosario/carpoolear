@@ -1,9 +1,9 @@
 import { eventNumberKeyInput, isDigit } from '../services/utility';
 
-let numberFormatter = {};
-let inputHandler = function (event) {
-    let position = this.selectionStart;
-    let dots = countDots(this.value);
+const numberFormatter = {};
+const inputHandler = function (event) {
+    const position = this.selectionStart;
+    const dots = countDots(this.value);
     if (
         cleanDots(this.value).length + 1 >
         numberFormatter[this.id].el.dataset.maxLength
@@ -14,19 +14,19 @@ let inputHandler = function (event) {
         );
     }
     formatNumber(this.id);
-    let modifyer = countDots(this.value) - dots;
+    const modifyer = countDots(this.value) - dots;
     this.selectionEnd = position + modifyer;
 };
 
-let cleanDots = function (str) {
+const cleanDots = function (str) {
     return str.replace(/\/$/, '');
 };
 
-let countDots = function (str) {
+const countDots = function (str) {
     return str.split('/').length - 1;
 };
 
-let formatNumber = function (id) {
+const formatNumber = function (id) {
     numberFormatter[id].rawValue = cleanDots(numberFormatter[id].el.value);
     numberFormatter[id].value = numberFormatter[id].rawValue.replace(
         /^(\d{2})(\d{2})(\d{4})$/,
@@ -38,7 +38,7 @@ let formatNumber = function (id) {
 };
 
 /* This prevent insert chars, that are not numbers */
-let keyDownHandler = function (event) {
+const keyDownHandler = function (event) {
     if (
         !eventNumberKeyInput(event) ||
         (isDigit(event.keyCode) &&

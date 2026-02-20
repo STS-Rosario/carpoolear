@@ -55,7 +55,7 @@ const mutations = {
     },
 
     [types.NOTIFICATIONS_DELETE](state, id) {
-        let index = state.list.findIndex((item) => item.id === id);
+        const index = state.list.findIndex((item) => item.id === id);
         if (index >= 0) {
             state.list.splice(index, 1);
         } else {

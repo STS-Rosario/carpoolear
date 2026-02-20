@@ -21,7 +21,7 @@ class TaggedList {
         if (!this.map[tag]) {
             return;
         }
-        let i = this.map[tag].indexOf(value);
+        const i = this.map[tag].indexOf(value);
         if (i !== -1) {
             this.map[tag].splice(i, 1);
         }
@@ -43,8 +43,8 @@ class TaggedList {
     }
 
     keys() {
-        let temp = [];
-        for (let i in this.map) {
+        const temp = [];
+        for (const i in this.map) {
             if (this.map[i] && this.map[i].length > 0) {
                 temp.push(i);
             }

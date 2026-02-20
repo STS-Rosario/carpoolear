@@ -20,7 +20,7 @@ class UserApi extends TaggedApi {
      * @return {}
      */
     register(data) {
-        let customHeaders = {
+        const customHeaders = {
             'Content-Type': 'multipart/form-data'
         };
         return this.post('/api/users', data, customHeaders);
@@ -42,7 +42,7 @@ class UserApi extends TaggedApi {
      * @return {}
      */
     update(data) {
-        let customHeaders = {
+        const customHeaders = {
             'Content-Type': 'multipart/form-data'
         };
         data.append('_method', 'PUT');

@@ -1,7 +1,7 @@
 import { debounce } from '../services/utility';
 
 let debounceFunction = null;
-let inputHandler = debounce(function () {
+const inputHandler = debounce(function () {
     debounceFunction();
 }, 800);
 

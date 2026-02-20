@@ -4,13 +4,13 @@ import bus from '../services/bus-event';
 import { TripApi } from '../services/api';
 import { Thread, stopThreads } from '../classes/Threads';
 
-let tripsApi = new TripApi();
+const tripsApi = new TripApi();
 
 export const init = (store) => {
     console.log('Starting app.');
 
-    let promises = [];
-    let loadStateMap = [
+    const promises = [];
+    const loadStateMap = [
         {
             key: keys.TOKEN_KEY,
             mutation: 'auth/' + types.AUTH_SET_TOKEN
@@ -30,7 +30,7 @@ export const init = (store) => {
     ];
 
     loadStateMap.forEach((obj) => {
-        var p = new Promise((resolve, reject) => {
+        const p = new Promise((resolve, reject) => {
             cache
                 .getItem(obj.key)
                 .then((value) => {
@@ -75,7 +75,7 @@ export const startApp = (store) => {
 };
 
 export const getTrip = (store, id) => {
-    let trips = store.getters['trips/trips'];
+    const trips = store.getters['trips/trips'];
     if (trips) {
         for (let i = 0; i < trips.length; i++) {
             if (trips[i].id === id) {
@@ -123,10 +123,10 @@ export const startThread = (store) => {
         return;
     }
 
-    let fn = function () {
+    const fn = function () {
         store.dispatch('notifications/count');
     };
-    let th = new Thread(fn, 'NOTIFICATIONS');
+    const th = new Thread(fn, 'NOTIFICATIONS');
     th.run(30000, true);
 };
 

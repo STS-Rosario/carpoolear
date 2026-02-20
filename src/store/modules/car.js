@@ -4,7 +4,7 @@ import * as types from '../mutation-types';
 /* eslint-disable no-undef */
 
 // initial state
-let carApi = new CarApi();
+const carApi = new CarApi();
 
 const state = {
     cars: null
