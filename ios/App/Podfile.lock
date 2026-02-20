@@ -59,18 +59,18 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/toast"
 
 SPEC CHECKSUMS:
-  Capacitor: 28d6c01026a9a3f7156529498ec1f389a2a28dbc
-  CapacitorApp: 1f6922c9c5c8b1c538d7fbe92ebe44a81b34bed3
-  CapacitorCamera: f9e54db0a18bb218a8dc360907d63aaefe9209ff
+  Capacitor: b4741ca7affb32c1b70debd03df92cbf522d8a80
+  CapacitorApp: efc1e9748a8ea5d3e789cd82a4f451341cc7ac93
+  CapacitorCamera: 6e18d54c8ab30d7dc7b8cd93d96f9b4f57e9202a
   CapacitorCordova: 435121e81a2df4d0034f0fb11fcefab5104cfdb5
-  CapacitorDevice: 81ae78d5d1942707caad79276badd458bf6ec603
-  CapacitorNetwork: 695069886b3c5ed514db69aa3d026b8dc3c03a6b
-  CapacitorPreferences: 65107ed7437d96ee72583df5763985e3c0ff2bc2
-  CapacitorPushNotifications: 7c0659b349b149ee3936a682da31a9d269de9582
-  CapacitorSplashScreen: 157947576b59d913792063a8d442a79e6d283ee5
-  CapacitorStatusBar: e04d05e121d5a5979c29eb4249186a4e4a84cacb
-  CapacitorToast: 166611aea815418fc08894b77a915773e3d059d5
+  CapacitorDevice: a50a45f0d075e55e2392c7a4be5404d4f69515de
+  CapacitorNetwork: 9b9eaeb417ec0ffa22e2bc33a4c71df10e1d6f06
+  CapacitorPreferences: b583b5deb74e564c35968189d25d32c0fd41200d
+  CapacitorPushNotifications: 6ffcf5df95f17d71a1b02893549bc4727f80540c
+  CapacitorSplashScreen: 8d6c8cb0542a8e81585c593815db8785ed8ce454
+  CapacitorStatusBar: 5526833b87fa9c96a2a90c1322bb1f663c04505f
+  CapacitorToast: e32c2b61a70d6fbd0633309c0807b4b9811768b4
 
 PODFILE CHECKSUM: e02f00042f51e877a6f10afefcebe663c91ff5dc
 
-COCOAPODS: 1.16.2
+COCOAPODS: 1.15.2

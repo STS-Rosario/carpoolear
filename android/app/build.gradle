@@ -7,8 +7,8 @@ android {
         applicationId "com.sts.carpoolear"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 302
-        versionName "3.0.2"
+        versionCode 300090
+        versionName "3.0.9"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
@@ -22,7 +22,7 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file("carpoolear.keystore") // o la ruta correcta
+            storeFile file("../../projects/carpoolear/cordova/carpoolear.keystore") // o la ruta correcta
             storePassword "sts2015"
             keyAlias "carpoolear"
             keyPassword "sts2015"
