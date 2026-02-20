@@ -17,6 +17,6 @@ jobs:
           node-version: '18'
           cache: 'npm'
 
-      - run: npm ci
+      - run: npm ci --ignore-scripts
 
       - run: npm run lint
