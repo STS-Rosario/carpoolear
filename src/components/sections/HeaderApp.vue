@@ -47,7 +47,7 @@
                         <i :class="'fa ' + item.icon" aria-hidden="true"></i>
                     </span>
                 </template>
-                <div class="dropdown-right" v-if="showMenu">
+                <div class="dropdown-right" v-if="showMenu || isMobile">
                     <dropdown type="icon">
                         <template slot="button">
                             <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
@@ -62,7 +62,19 @@
                                 {{ $t('tyc') }}
                             </router-link>
                         </li>
+                        <li role="separator" class="divider"></li>
                         <li>
+                            <a @click="setLocale('arg')">Español</a>
+                        </li>
+                        <li>
+                            <a @click="setLocale('en')">English</a>
+                        </li>
+                        <li
+                            v-if="user"
+                            role="separator"
+                            class="divider"
+                        ></li>
+                        <li v-if="user">
                             <a @click="logout" v-if="!isFacebokApp">{{
                                 $t('cerrarSesion')
                             }}</a>
@@ -75,17 +87,6 @@
                 class="actionbar_section actionbar_icon pull-right"
                 v-if="isMobile && user && !shouldHideDonationOnIOSCapacitor(user)"
             >
-                <dropdown type="icon">
-                    <template slot="button">
-                        {{ currentLocaleShortLabel }}
-                    </template>
-                    <li>
-                        <a @click="setLocale('arg')">Español</a>
-                    </li>
-                    <li>
-                        <a @click="setLocale('en')">English</a>
-                    </li>
-                </dropdown>
                 <a
                     href="/donar"
                     class="btn btn-primary btn-donar-header btn-header-small btn-lg"
@@ -97,17 +98,6 @@
                 class="actionbar_section actionbar_icon pull-right"
                 v-if="isMobile && !user"
             >
-                <dropdown type="icon">
-                    <template slot="button">
-                        {{ currentLocaleShortLabel }}
-                    </template>
-                    <li>
-                        <a @click="setLocale('arg')">Español</a>
-                    </li>
-                    <li>
-                        <a @click="setLocale('en')">English</a>
-                    </li>
-                </dropdown>
                 <router-link
                     v-if="isTripsPage"
                     tag="a"
