@@ -150,6 +150,12 @@ const messages = {
         debeCorregirCampos:
             'Debe corregir o completar algunos campos para finalizar su registro.',
         mailEnUso: 'La cuenta de email ingresada se encuentra en uso.',
+        emailYaTomado: 'El email ya ha sido tomado.',
+        emailYaTomadoDescripcion:
+            'Ya existe un usuario con este email, si es tuyo y querés recuperar tu cuenta, contactanos a la mesa de ayuda',
+        datosEnUso: 'Datos en uso',
+        datosEnUsoDescripcion:
+            'Ya existe un usuario con este número de documento o número de teléfono, si es tuyo y querés recuperar tu cuenta, contactanos a la mesa de ayuda',
         errorRegistro:
             'Ocurrió un error al procesar el registro, por favor vuelva a intentar.',
         valorDonacion: 'Tienes que seleccionar un valor de donación.',
@@ -940,6 +946,12 @@ const messages = {
         debeCorregirCampos:
             'Debe corregir o completar algunos campos para finalizar su registro.',
         mailEnUso: 'La cuenta de email ingresada se encuentra en uso.',
+        emailYaTomado: 'El email ya ha sido tomado.',
+        emailYaTomadoDescripcion:
+            'Ya existe un usuario con este email, si es tuyo y querés recuperar tu cuenta, contactanos a la mesa de ayuda',
+        datosEnUso: 'Datos en uso',
+        datosEnUsoDescripcion:
+            'Ya existe un usuario con este número de documento o número de teléfono, si es tuyo y querés recuperar tu cuenta, contactanos a la mesa de ayuda',
         errorRegistro:
             'Ocurrió un error al procesar el registro, por favor vuelva a intentar.',
         buscoConductor: 'Conductor',
@@ -1532,6 +1544,12 @@ const messages = {
         debeCorregirCampos:
             'You must correct or complete some fields to finish your registration.',
         mailEnUso: 'The email account entered is already in use.',
+        emailYaTomado: 'The email has already been taken.',
+        emailYaTomadoDescripcion:
+            'A user with this email already exists. If it\'s yours and you want to recover your account, contact us at the help desk',
+        datosEnUso: 'Data in use',
+        datosEnUsoDescripcion:
+            'A user with this document number or phone number already exists. If it\'s yours and you want to recover your account, contact us at the help desk',
         errorRegistro:
             'An error occurred while processing the registration, please try again.',
         valorDonacion: 'You must select a donation amount.',

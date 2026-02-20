@@ -17,11 +17,7 @@
 
                 <span
                     class="pull-right clickeable"
-                    v-if="
-                        !rate.reply_comment &&
-                        user.id === profile.id &&
-                        config.allow_rating_reply
-                    "
+                    v-if="canReply"
                     @click="showReply = !showReply"
                 >
                     <!--   -->
@@ -63,11 +59,7 @@
                             </span>
                             <span
                                 class="pull-right clickeable"
-                                v-if="
-                                    !rate.reply_comment &&
-                                    user.id === profile.id &&
-                                    config.allow_rating_reply
-                                "
+                                v-if="canReply"
                                 @click="showReply = !showReply"
                             >
                                 <i class="fa fa-reply" aria-hidden="true"></i>
@@ -92,7 +84,7 @@
                 </div>
             </div>
         </template>
-        <div class="reply-box" c>
+        <div class="reply-box" v-if="showReply && canReply">
             <label for="reply" class="label label-reply"
                 >{{ $t('rateItemResponderALaCalificacion') }}</label>
             <textarea maxlength="260" v-model="comment" id="reply"></textarea>
@@ -159,6 +151,16 @@ export default {
             me: 'auth/user',
             profile: 'profile/user'
         }),
+        canReply() {
+            return (
+                !this.rate.reply_comment &&
+                this.me &&
+                this.profile &&
+                this.me.id === this.profile.id &&
+                this.config &&
+                this.config.allow_rating_reply
+            );
+        },
         rateType() {
             return this.rate.user_to_type === 0 ? this.$t('pasajero') : this.$t('conductor');
         },

@@ -514,6 +514,39 @@
                 </div>
             </div>
         </modal>
+
+        <modal
+            name="datosEnUsoModal"
+            v-if="showDatosEnUsoModal"
+            @close="toggleDatosEnUsoModal"
+        >
+            <h3 slot="header">
+                <span>{{ $t('datosEnUso') }}</span>
+                <i
+                    v-on:click="toggleDatosEnUsoModal"
+                    class="fa fa-times float-right-close"
+                ></i>
+            </h3>
+            <div slot="body">
+                <div class="text-left color-black login-modal">
+                    <p>
+                        {{ $t('datosEnUsoDescripcion') }}
+                    </p>
+                    <p>
+                        {{ $t('escribinosMesaAyuda') }}
+                    </p>
+                    <p>
+                        {{ $t('mesaAyudaFuncionaDesde') }}
+                        <a :href="'mailto:' + config.admin_email">
+                            {{ config.admin_email }}</a>,
+                        {{ $t('mensajePrivadoDe') }}
+                        <a href="https://instagram.com/carpoolear">Instagram</a>
+                        {{ $t('y') }}
+                        <a href="https://facebook.com/carpoolear">Facebook</a>.
+                    </p>
+                </div>
+            </div>
+        </modal>
     </div>
 </template>
 <script>
@@ -573,6 +606,7 @@ export default {
             accountTypes: [],
             showModalDeleteAccount: false,
             loadingDeleteAccount: false,
+            showDatosEnUsoModal: false,
             userApi: null
         };
     },
@@ -771,27 +805,28 @@ export default {
                     this.loading = false;
                     this.error = this.$t('errorDatos');
                     this.jumpToError();
-                    if (
+                    const isDocTaken =
                         err &&
                         err.errors &&
                         err.errors.nro_doc &&
-                        err.errors.nro_doc[0].indexOf('taken') >= 0
-                    ) {
-                        dialogs.message(this.$t('nroDocYaRegistrado'), {
-                            duration: 10,
-                            estado: 'error'
-                        });
-                    }
-                    if (
+                        Array.isArray(err.errors.nro_doc) &&
+                        err.errors.nro_doc.length > 0 &&
+                        (err.errors.nro_doc[0].indexOf('taken') >= 0 ||
+                            err.errors.nro_doc[0].indexOf(
+                                'ya ha sido tomado'
+                            ) >= 0);
+                    const isPhoneTaken =
                         err &&
                         err.errors &&
                         err.errors.mobile_phone &&
-                        err.errors.mobile_phone[0].indexOf('taken') >= 0
-                    ) {
-                        dialogs.message(this.$t('nroTelYaRegistrado'), {
-                            duration: 10,
-                            estado: 'error'
-                        });
+                        Array.isArray(err.errors.mobile_phone) &&
+                        err.errors.mobile_phone.length > 0 &&
+                        (err.errors.mobile_phone[0].indexOf('taken') >= 0 ||
+                            err.errors.mobile_phone[0].indexOf(
+                                'ya ha sido tomado'
+                            ) >= 0);
+                    if (isDocTaken || isPhoneTaken) {
+                        this.showDatosEnUsoModal = true;
                     }
                 });
         },
@@ -903,6 +938,9 @@ export default {
         },
         toggleModalDeleteAccount() {
             this.showModalDeleteAccount = !this.showModalDeleteAccount;
+        },
+        toggleDatosEnUsoModal() {
+            this.showDatosEnUsoModal = !this.showDatosEnUsoModal;
         },
         deleteAccountRequest() {
             this.loadingDeleteAccount = true;
