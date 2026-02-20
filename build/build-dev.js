@@ -6,7 +6,7 @@ process.env.SERVE = false;;
 
 const util = require('util');
 const ora = require('ora');
-const rm = require('rimraf');
+const rimraf = require('rimraf');
 const path = require('path');
 const chalk = require('chalk');
 const webpack = require('webpack');
@@ -17,10 +17,10 @@ const SWwebpackConfig = require('./service-worker.webpack.config');
 const spinner = ora('Building for development...');
 spinner.start();
 
-const rmP = util.promisify(rm);
+// rimraf v4+ already returns a Promise, no need for util.promisify
 const webpackP = util.promisify(webpack);
 
-rmP(path.join(config.build.assetsRoot, config.build.assetsSubDirectory)).then(() => {
+rimraf(path.join(config.build.assetsRoot, config.build.assetsSubDirectory)).then(() => {
     return webpackP(SWwebpackConfig);
 }).then(() => {
     return webpackP(webpackConfig);

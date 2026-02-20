@@ -22,6 +22,12 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Carpoolear necesita acceso a la cámara para poder cambiar la foto de perfil</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Carpoolear necesita acceso a la cámara para poder cambiar la foto de perfil</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Carpoolear necesita acceso a la cámara para poder cambiar la foto de perfil</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>
@@ -49,11 +55,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
-	<key>NSCameraUsageDescription</key>
-	<string>This app needs access to your camera to take photos for your profile.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app needs access to your photo library to select photos for your profile.</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>This app needs access to save photos to your photo library.</string>
 </dict>
 </plist>
