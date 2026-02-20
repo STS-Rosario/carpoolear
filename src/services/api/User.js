@@ -72,6 +72,18 @@ class UserApi extends TaggedApi {
         return this.get('/api/users/' + id, {});
     }
 
+    /**
+     * Get visible badges for a user.
+     * @param {string|number} id - User id or 'me'
+     * @return {Promise}
+     */
+    getBadges(id) {
+        if (!id) {
+            id = 'me';
+        }
+        return this.get('/api/users/' + id + '/badges', {});
+    }
+
     list(data) {
         return this.get('/api/users/list', data);
     }

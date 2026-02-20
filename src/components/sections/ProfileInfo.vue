@@ -2,13 +2,6 @@
     <div class="profile-info-component" v-if="profile">
         <div class="list-group">
             <div class="pic-info col-sm-6">
-                <div v-if="profile.has_pin == 1" class="user_pin">
-                    <img
-                        src="https://carpoolear.com.ar/static/img/pin.png"
-                        alt=""
-                        :title="$t('aportanteMediaNaranja')"
-                    />
-                </div>
                 <div
                     class="circle-box profile"
                     v-imgSrc:profile="profile.image"
@@ -23,13 +16,16 @@
                         <i class="fa fa-thumbs-down" aria-hidden="true"></i>
                         <span>{{ profile.negative_ratings }}</span>
                     </div>
-                    <div v-if="profile.is_member == 1" class="member_pin">
-                        <img
-                            src="https://carpoolear.com.ar/static/img/pin_member.png"
-                            alt=""
-                            :title="$t('miembroEquipo')"
-                        />
-                    </div>
+                </div>
+                <div v-if="badges.length" class="profile-badges">
+                    <img
+                        v-for="badge in badges"
+                        :key="badge.id"
+                        :src="badgeImageUrl(badge.image_path)"
+                        :alt="badge.title"
+                        :title="badge.description || badge.title"
+                        class="profile-badge"
+                    />
                 </div>
                 <div class="profile-social-accounts">
                     <div v-for="account in profile.accounts" class="row">
@@ -203,6 +199,7 @@ export default {
         ...mapGetters({
             user: 'auth/user',
             profile: 'profile/user',
+            badges: 'profile/badges',
             config: 'auth/appConfig'
         }),
         userReferenceWritten() {
@@ -262,6 +259,14 @@ export default {
             this.$nextTick(() => {
                 this.$refs.reference.focus();
             });
+        },
+        badgeImageUrl(imagePath) {
+            if (!imagePath) return '';
+            if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+                return imagePath;
+            }
+            const base = process.env.ROUTE_BASE + 'static/img';
+            return base + (base && !imagePath.startsWith('/') ? '/' : '') + imagePath;
         }
     },
     components: {
@@ -270,6 +275,21 @@ export default {
 };
 </script>
 <style scoped>
+.profile-badges {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
+.profile-badge {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+}
+
 .btn-primary {
     display: inline-block;
 }

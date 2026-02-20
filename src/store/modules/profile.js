@@ -10,12 +10,14 @@ let referencesApi = new ReferencesApi();
 const state = {
     user: null,
     registerData: null,
+    badges: [],
     ...pagination.makeState('rates')
 };
 
 const getters = {
     user: (state) => state.user,
     registerData: (state) => state.registerData,
+    badges: (state) => state.badges,
     references: (state) => {
         if (state.user) {
             return state.user.references_data;
@@ -30,6 +32,9 @@ const actions = {
     setUser(store, user) {
         store.commit(types.PROFILE_SET_USER, user);
         store.dispatch('ratesSearch');
+        if (user && user.id) {
+            store.dispatch('profile/fetchBadges', user.id);
+        }
     },
 
     setUserByID(store, { id, userProfile }) {
@@ -41,10 +46,25 @@ const actions = {
             .then((response) => {
                 store.commit(types.PROFILE_SET_USER, response.data);
                 store.dispatch('ratesSearch');
+                store.dispatch('profile/fetchBadges', id);
                 return Promise.resolve(response.data);
             })
             .catch((error) => {
                 return Promise.reject(error);
+            });
+    },
+
+    fetchBadges(store, userId) {
+        return userApi
+            .getBadges(userId)
+            .then((response) => {
+                const badges = response.data.data || response.data;
+                store.commit(types.PROFILE_SET_BADGES, Array.isArray(badges) ? badges : []);
+                return Promise.resolve(badges);
+            })
+            .catch(() => {
+                store.commit(types.PROFILE_SET_BADGES, []);
+                return Promise.resolve([]);
             });
     },
     registerDonation(store, data) {
@@ -139,6 +159,11 @@ const mutations = {
 
     [types.PROFILE_SET_USER](state, user) {
         state.user = user;
+        state.badges = [];
+    },
+
+    [types.PROFILE_SET_BADGES](state, badges) {
+        state.badges = badges;
     },
 
     [types.PROFILE_SET_REPLY](state, rate) {
