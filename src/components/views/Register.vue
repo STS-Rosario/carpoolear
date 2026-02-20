@@ -67,7 +67,7 @@
                         :aria-label="$t('campoObligatorio')"
                         class="campo-obligatorio"
                         >*</span>
-                    >
+                    
                 </label>
                 <input
                     :placeholder="$t('nombre')"
@@ -332,6 +332,40 @@
                     </button>
                 </div>
             </div>
+
+            <modal
+                name="emailTakenModal"
+                v-if="showEmailTakenModal"
+                @close="toggleEmailTakenModal"
+            >
+                <h3 slot="header">
+                    <span>{{ $t('emailYaTomado') }}</span>
+                    <i
+                        v-on:click="toggleEmailTakenModal"
+                        class="fa fa-times float-right-close"
+                    ></i>
+                </h3>
+                <div slot="body">
+                    <div class="text-left color-black login-modal">
+                        <p>
+                            {{ $t('emailYaTomadoDescripcion') }}
+                        </p>
+                        <p>
+                            {{ $t('mesaAyudaFuncionaDesde') }}
+                            <a :href="'mailto:' + settings.admin_email">
+                                {{ settings.admin_email }}</a>,
+                            {{ $t('mensajePrivadoDe') }}
+                            <a href="https://instagram.com/carpoolear"
+                                >Instagram</a
+                            >
+                            {{ $t('y') }}
+                            <a href="https://facebook.com/carpoolear"
+                                >Facebook</a
+                            >.
+                        </p>
+                    </div>
+                </div>
+            </modal>
         </div>
         <div class="form row register-success" v-else>
             <h2>{{ $t('registroExitoso') }}</h2>
@@ -352,6 +386,7 @@ import dialogs from '../../services/dialogs.js';
 import bus from '../../services/bus-event';
 import router from '../../router';
 import DatePicker from '../DatePicker';
+import modal from '../Modal';
 import moment from 'moment';
 import Spinner from '../Spinner.vue';
 let emailRegex =
@@ -404,7 +439,8 @@ export default {
             accountTypes: [],
             loading: false,
             fbLoading: false,
-            showRegister: false
+            showRegister: false,
+            showEmailTakenModal: false
         };
     },
     computed: {
@@ -443,6 +479,7 @@ export default {
     },
     components: {
         DatePicker,
+        modal,
         Spinner
     },
     methods: {
@@ -455,6 +492,9 @@ export default {
         }),
         onShowRegister() {
             this.showRegister = true;
+        },
+        toggleEmailTakenModal() {
+            this.showEmailTakenModal = !this.showEmailTakenModal;
         },
         facebookLogin() {
             if (!this.loading) {
@@ -659,6 +699,15 @@ export default {
                                             'err st',
                                             err.data.errors.email
                                         );
+                                        const emailErrorMsg =
+                                            err.data.errors.email[0] || '';
+                                        const isEmailTaken =
+                                            emailErrorMsg.indexOf(
+                                                'been taken'
+                                            ) >= 0 ||
+                                            emailErrorMsg.indexOf(
+                                                'ya ha sido tomado'
+                                            ) >= 0;
                                         if (
                                             err.data &&
                                             err.data.errors &&
@@ -667,19 +716,12 @@ export default {
                                                 err.data.errors.email
                                             ) &&
                                             err.data.errors.email.length > 0 &&
-                                            err.data.errors.email[0].indexOf(
-                                                'been taken'
-                                            ) >= 0
+                                            isEmailTaken
                                         ) {
-                                            dialogs.message(
-                                                that.$t('mailEnUso'),
-                                                {
-                                                    estado: 'error'
-                                                }
-                                            );
+                                            that.showEmailTakenModal = true;
                                             that.emailError.state = true;
                                             that.emailError.message =
-                                                that.$t('mailEnUso');
+                                                that.$t('emailYaTomado');
                                             that.jumpToError();
                                         } else {
                                             dialogs.message(
