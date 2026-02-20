@@ -160,7 +160,7 @@ export default {
             profile: 'profile/user'
         }),
         rateType() {
-            return this.rate.user_to_type === 0 ? 'pasajero' : 'conductor';
+            return this.rate.user_to_type === 0 ? this.$t('pasajero') : this.$t('conductor');
         },
         tripCardTheme() {
             return this.config ? this.config.trip_card_design : '';

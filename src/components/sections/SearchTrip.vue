@@ -12,12 +12,12 @@
                     class="cbx"
                 />
                 <label for="cbxAllowForeignPoints" class="cbx_label">
-                    Origen o destino fuera de
+                    {{ $t('origenODestinoFueraDe') }}
                     {{ config ? config.country_name : '' }}
                 </label>
                 <span
                     class="tooltip-bottom"
-                    data-tooltip="Marcando esta opción vas a poder seleccionar origen o destino fuera de Argentina. Recordá averiguar con la aseguradora del auto, si tenés cobertura contra terceros fuera de la Argentina. Si no es así, averiguá con ella para obtener la extensión fuera de Argentina, de forma de tener cobertura durante el viaje"
+                    :data-tooltip="$t('marcandoEstaOpcionPodrasSeleccionar')"
                 ></span>
                 <i class="fa fa-info-circle" aria-hidden="true"></i>
             </div>
@@ -61,14 +61,14 @@
                         id="cbxAllowForeignPoints"
                         class="cbx"
                     />
-                    <label for="cbxAllowForeignPoints" class="cbx_label">
-                        Origen o destino fuera de
-                        {{ config ? config.country_name : '' }}
-                    </label>
-                    <span
-                        class="tooltip-bottom"
-                        data-tooltip="Marcando esta opción vas a poder seleccionar origen o destino fuera de Argentina. Recordá averiguar con la aseguradora del auto, si tenés cobertura contra terceros fuera de la Argentina. Si no es así, averiguá con ella para obtener la extensión fuera de Argentina, de forma de tener cobertura durante el viaje"
-                    ></span>
+                <label for="cbxAllowForeignPoints" class="cbx_label">
+                    {{ $t('origenODestinoFueraDe') }}
+                    {{ config ? config.country_name : '' }}
+                </label>
+                <span
+                    class="tooltip-bottom"
+                    :data-tooltip="$t('marcandoEstaOpcionPodrasSeleccionar')"
+                ></span>
                     <i class="fa fa-info-circle" aria-hidden="true"></i>
                 </div>
             </div>
@@ -326,7 +326,7 @@ export default {
                 this.$emit('trip-search', params);
             } else {
                 dialogs.message(
-                    'Origen y destino no pueden ser ambos del exterior.',
+                    this.$t('origenYDestinoNoPuedenSerAmbosDelExterior'),
                     {
                         duration: 10,
                         estado: 'error'

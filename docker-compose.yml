@@ -1,17 +1,20 @@
-version: '2'
 services:
   carpoolear_frontend:
-    build: .
-    tty: true   
+    build:
+      context: .
+      target: dev
+    tty: true
     container_name: carpoolear_frontend
+    command: npm run dev
     environment:
       HOST: '0.0.0.0'
     ports:
-      - 8081:8080
+      - 8080:8080
     networks:
       - esnet
     volumes:
       - .:/app
+      - /app/node_modules
 networks:
   esnet:
     driver: bridge
