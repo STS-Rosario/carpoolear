@@ -1,7 +1,5 @@
 const { test, expect } = require('@playwright/test');
 
-const API_URL = process.env.API_URL || 'http://localhost:8000';
-
 /**
  * Thorough e2e test for the trip request flow:
  * - 6 users (user0..user5 from TestingSeeder)
@@ -18,16 +16,6 @@ const USERS = Array.from({ length: 6 }, (_, i) => ({
 }));
 
 // --- Helpers ---
-
-/** Login via API and return the JWT token */
-async function apiLogin(request, email, password) {
-  const res = await request.post(`${API_URL}/api/login`, {
-    data: { email, password },
-  });
-  expect(res.ok()).toBeTruthy();
-  const json = await res.json();
-  return { token: json.token, config: json.config };
-}
 
 /** Login via the UI in the given page */
 async function uiLogin(page, email, password) {
@@ -120,30 +108,7 @@ async function setupRouteMocks(page) {
 test.describe('Trip request flow with 6 users', () => {
   test.setTimeout(240000); // 4 minutes for the full multi-user flow
 
-  test('driver creates trip, 5 passengers request, driver accepts 4 and rejects 1', async ({ browser, request }) => {
-    // =========================================================================
-    // SETUP: Clean any previous trip data and get API tokens
-    // =========================================================================
-
-    // Get API tokens for all 6 users
-    const tokens = [];
-    const userIds = [];
-    for (const u of USERS) {
-      const { token } = await apiLogin(request, u.email, u.password);
-      tokens.push(token);
-    }
-
-    // Get user IDs
-    for (let i = 0; i < 6; i++) {
-      const res = await request.get(`${API_URL}/api/users/me`, {
-        headers: { Authorization: `Bearer ${tokens[i]}` },
-      });
-      const json = await res.json();
-      userIds.push(json.data.id);
-    }
-
-    console.log('User IDs:', userIds);
-
+  test('driver creates trip, 5 passengers request, driver accepts 4 and rejects 1', async ({ browser }) => {
     // =========================================================================
     // STEP 1: Driver (user0) creates a trip with 4 seats via UI
     // =========================================================================
@@ -222,18 +187,9 @@ test.describe('Trip request flow with 6 users', () => {
       await expect(page.getByText('Rosario, Santa Fe').first()).toBeVisible({ timeout: 10000 });
 
       // Click "Solicitar Asiento" button
-      // The button text depends on config; with our mock it should say "Solicitar Asiento"
       const requestBtn = page.locator('.buttons-container button.btn-primary').filter({ hasText: /Solicitar Asiento/i });
-      if (await requestBtn.isVisible({ timeout: 5000 }).catch(() => false)) {
-        await requestBtn.click();
-      } else {
-        // Fallback: the button might say "Enviar Mensaje" if config override didn't work
-        // In that case, use API
-        console.log(`User ${i}: UI request button not found, using API fallback`);
-        await request.post(`${API_URL}/api/trips/${tripId}/requests`, {
-          headers: { Authorization: `Bearer ${tokens[i]}` },
-        });
-      }
+      await requestBtn.waitFor({ state: 'visible', timeout: 5000 });
+      await requestBtn.click();
 
       // Wait for the request to be processed
       await page.waitForTimeout(2000);
@@ -250,15 +206,36 @@ test.describe('Trip request flow with 6 users', () => {
     }
 
     // =========================================================================
-    // STEP 3: Passengers 3, 4, 5 request to join via API
+    // STEP 3: Passengers 3, 4, 5 request to join via UI
     // =========================================================================
 
     for (const i of [3, 4, 5]) {
-      const res = await request.post(`${API_URL}/api/trips/${tripId}/requests`, {
-        headers: { Authorization: `Bearer ${tokens[i]}` },
-      });
-      expect(res.ok()).toBeTruthy();
-      console.log(`Passenger user${i} requested via API`);
+      const ctx = await browser.newContext();
+      const page = await ctx.newPage();
+      await setupRouteMocks(page);
+      await uiLogin(page, USERS[i].email, USERS[i].password);
+
+      // Navigate to the trip
+      await page.goto(`/trips/${tripId}`);
+      await expect(page.getByText('Rosario, Santa Fe').first()).toBeVisible({ timeout: 10000 });
+
+      // Click "Solicitar Asiento" button
+      const requestBtn = page.locator('.buttons-container button.btn-primary').filter({ hasText: /Solicitar Asiento/i });
+      await requestBtn.waitFor({ state: 'visible', timeout: 5000 });
+      await requestBtn.click();
+
+      // Wait for the request to be processed
+      await page.waitForTimeout(2000);
+
+      // If a modal appeared (e.g. carpoodatos hint), handle it
+      const modalRequestBtn = page.locator('.modal-content button.btn-primary').filter({ hasText: /Solicitar Asiento/i });
+      if (await modalRequestBtn.isVisible({ timeout: 1000 }).catch(() => false)) {
+        await modalRequestBtn.click();
+        await page.waitForTimeout(2000);
+      }
+
+      console.log(`Passenger user${i} requested via UI`);
+      await ctx.close();
     }
 
     // =========================================================================
@@ -271,13 +248,13 @@ test.describe('Trip request flow with 6 users', () => {
       await setupRouteMocks(page);
       await uiLogin(page, USERS[i].email, USERS[i].password);
 
-      // Navigate to the trip
-      await page.goto(`/trips/${tripId}`);
-      await expect(page.getByText('Rosario, Santa Fe').first()).toBeVisible({ timeout: 10000 });
+      // Navigate to the trip (use networkidle so the SPA fully renders)
+      await page.goto(`/trips/${tripId}`, { waitUntil: 'networkidle' });
+      await expect(page.getByText('Rosario, Santa Fe').first()).toBeVisible({ timeout: 15000 });
 
       // Click "Enviar Mensaje" button
       const msgBtn = page.locator('.buttons-container button.btn-primary').filter({ hasText: /Enviar Mensaje/i });
-      await msgBtn.waitFor({ state: 'visible', timeout: 10000 });
+      await msgBtn.waitFor({ state: 'visible', timeout: 15000 });
       await msgBtn.click();
 
       // Wait for navigation to conversation chat page
@@ -295,19 +272,6 @@ test.describe('Trip request flow with 6 users', () => {
       console.log(`Passenger user${i} sent message via UI: "${msgText.substring(0, 40)}..."`);
       await ctx.close();
     }
-
-    // =========================================================================
-    // STEP 5: Verify all 5 pending requests via API
-    // =========================================================================
-
-    const pendingRes = await request.get(`${API_URL}/api/trips/${tripId}/requests`, {
-      headers: { Authorization: `Bearer ${tokens[0]}` },
-    });
-    expect(pendingRes.ok()).toBeTruthy();
-    const pendingData = await pendingRes.json();
-    const pendingRequests = pendingData.data || pendingData;
-    console.log('Pending requests count:', pendingRequests.length);
-    expect(pendingRequests.length).toBe(5);
 
     // =========================================================================
     // STEP 6: Driver views pending requests on my-trips page via UI
@@ -376,27 +340,7 @@ test.describe('Trip request flow with 6 users', () => {
     console.log('No more pending requests on my-trips page');
 
     // =========================================================================
-    // STEP 9: Verify trip has 4 accepted passengers and 0 seats via API
-    // =========================================================================
-
-    // Re-login to get a fresh token (original may be stale after long test)
-    const { token: freshDriverToken } = await apiLogin(request, USERS[0].email, USERS[0].password);
-
-    const tripRes = await request.get(`${API_URL}/api/trips/${tripId}`, {
-      headers: { Authorization: `Bearer ${freshDriverToken}` },
-    });
-    expect(tripRes.ok()).toBeTruthy();
-    const tripData = await tripRes.json();
-    const trip = tripData.data || tripData;
-    console.log('Passenger count:', trip.passenger_count);
-    console.log('Seats available:', trip.seats_available);
-    console.log('Accepted passengers in response:', (trip.passenger || []).length);
-    expect(trip.passenger_count).toBe(4);
-    expect(trip.seats_available).toBe(0);
-    expect((trip.passenger || []).length).toBe(4);
-
-    // =========================================================================
-    // STEP 11: Verify trip shows as full on the trip detail page via UI
+    // STEP 9+11: Verify trip is full with 4 passengers via UI
     // =========================================================================
 
     await driverPage.goto(`/trips/${tripId}`);
@@ -407,32 +351,49 @@ test.describe('Trip request flow with 6 users', () => {
     await expect(fullTripIndicator).toBeVisible({ timeout: 10000 });
     console.log('Trip shows as full (Viaje Carpooleado) on detail page');
 
+    // Verify 4 accepted passengers are listed
+    const passengerItems = driverPage.locator('.passengers .list-item');
+    await expect(passengerItems).toHaveCount(4, { timeout: 10000 });
+    console.log('Trip shows 4 accepted passengers');
+
+    // Verify 0 seats available in the seats display
+    const seatsText = driverPage.locator('.trip_seats-available_value');
+    await expect(seatsText).toContainText('0', { timeout: 5000 });
+    console.log('Trip shows 0 seats available');
+
     // =========================================================================
     // STEP 12: Verify conversations exist for passengers who sent messages
     // =========================================================================
 
-    const convsRes = await request.get(`${API_URL}/api/conversations`, {
-      headers: { Authorization: `Bearer ${tokens[0]}` },
-    });
-    expect(convsRes.ok()).toBeTruthy();
-    const convsData = await convsRes.json();
-    const conversations = convsData.data || convsData;
-    console.log('Driver conversations count:', conversations.length);
+    await driverPage.goto('/conversations');
+    await driverPage.waitForTimeout(3000);
+
+    // Count conversation list items
+    const conversationItems = driverPage.locator('.list-group-item.conversation_header');
+    const conversationCount = await conversationItems.count();
+    console.log('Driver conversations count:', conversationCount);
     // Should have at least 2 conversations (from users 2 and 4)
-    expect(conversations.length).toBeGreaterThanOrEqual(2);
+    expect(conversationCount).toBeGreaterThanOrEqual(2);
 
     // =========================================================================
     // STEP 13: Verify rejected user cannot see themselves as a passenger
     // =========================================================================
 
-    // Check the rejected user's request state via API
-    const rejectedUserPendingRes = await request.get(`${API_URL}/api/users/requests`, {
-      headers: { Authorization: `Bearer ${tokens[5]}` },
-    });
-    const rejectedPending = await rejectedUserPendingRes.json();
-    const rejectedPendingData = rejectedPending.data || rejectedPending;
-    // Rejected user should have no pending requests
-    expect(rejectedPendingData.length).toBe(0);
+    const rejectedCtx = await browser.newContext();
+    const rejectedPage = await rejectedCtx.newPage();
+    await setupRouteMocks(rejectedPage);
+    await uiLogin(rejectedPage, USERS[5].email, USERS[5].password);
+
+    // Navigate to the trip page
+    await rejectedPage.goto(`/trips/${tripId}`);
+    await expect(rejectedPage.getByText('Rosario, Santa Fe').first()).toBeVisible({ timeout: 10000 });
+
+    // Rejected user should NOT see "Cancelar" or "Bajarme" (which would indicate they're a passenger)
+    const cancelBtn = rejectedPage.locator('.buttons-container button').filter({ hasText: /Cancelar|Bajarme/i });
+    await expect(cancelBtn).toHaveCount(0, { timeout: 5000 });
+    console.log('Rejected user does not see passenger actions on trip page');
+
+    await rejectedCtx.close();
 
     // =========================================================================
     // STEP 14: Verify an accepted passenger can see the trip in their trips
@@ -454,13 +415,25 @@ test.describe('Trip request flow with 6 users', () => {
     await passengerCtx.close();
 
     // =========================================================================
-    // CLEANUP: Delete the trip to avoid affecting other tests
+    // CLEANUP: Delete the trip via UI
     // =========================================================================
 
-    const deleteRes = await request.delete(`${API_URL}/api/trips/${tripId}`, {
-      headers: { Authorization: `Bearer ${tokens[0]}` },
+    await driverPage.goto(`/trips/${tripId}`);
+    await driverPage.waitForTimeout(2000);
+
+    // Handle the confirmation dialog that appears when canceling a trip
+    driverPage.on('dialog', async (dialog) => {
+      await dialog.accept();
     });
-    console.log('Cleanup: trip deleted, status:', deleteRes.status());
+
+    // Click the "Cancelar Viaje" link (rendered as an <a> tag with btn class)
+    const cancelTripBtn = driverPage.locator('.buttons-container a.btn').filter({ hasText: /Cancelar Viaje/i });
+    await cancelTripBtn.waitFor({ state: 'visible', timeout: 10000 });
+    await cancelTripBtn.click();
+
+    // Wait for the trip to be deleted and verify redirect
+    await driverPage.waitForTimeout(3000);
+    console.log('Cleanup: trip deleted via UI');
 
     await driverContext.close();
 

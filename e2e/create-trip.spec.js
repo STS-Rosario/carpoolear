@@ -1,5 +1,7 @@
 const { test, expect } = require('@playwright/test');
 
+const API_URL = process.env.API_URL || 'http://localhost:8000';
+
 test.describe('Create trip flow', () => {
   test.setTimeout(90000);
 
@@ -135,7 +137,7 @@ test.describe('Create trip flow', () => {
 
     // 18. Cleanup: delete the created trip to avoid hitting rate limits on reruns
     const token = await page.evaluate(() => localStorage.getItem('TOKEN'));
-    await page.request.delete(`http://localhost:8000/api/trips/${tripId}`, {
+    await page.request.delete(`${API_URL}/api/trips/${tripId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
   });
