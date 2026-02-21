@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 
-const API_URL = 'http://localhost:8000';
+const API_URL = process.env.API_URL || 'http://localhost:8000';
 
 /**
  * Thorough e2e test for the trip request flow:
@@ -41,12 +41,12 @@ async function uiLogin(page, email, password) {
   const onboarding = page.locator('.on-boarding--overlay');
   if (await onboarding.isVisible({ timeout: 2000 }).catch(() => false)) {
     while (await page.locator('.on-boarding--overlay button.btn-primary').isVisible().catch(() => false)) {
-      await page.locator('.on-boarding--overlay button.btn-primary').click();
+      await page.locator('.on-boarding--overlay button.btn-primary').dispatchEvent('click');
       await page.waitForTimeout(800);
     }
     const comenzar = page.locator('.on-boarding--overlay button.btn-success');
     if (await comenzar.isVisible().catch(() => false)) {
-      await comenzar.click();
+      await comenzar.dispatchEvent('click');
     }
     await page.waitForTimeout(1000);
   }
@@ -90,12 +90,14 @@ async function setupRouteMocks(page) {
   });
 
   // Override /api/login response to disable module_coordinate_by_message
-  // so the "Solicitar Asiento" button makes a direct request
+  // so the "Solicitar Asiento" button makes a direct request,
+  // and disable_user_hints to skip modal popups (pricing, carpoodatos)
   await page.route('**/api/login', async (route) => {
     const response = await route.fetch();
     const json = await response.json();
     if (json.config) {
       json.config.module_coordinate_by_message = false;
+      json.config.disable_user_hints = true;
     }
     await route.fulfill({ response, json });
   });
@@ -106,8 +108,10 @@ async function setupRouteMocks(page) {
     const json = await response.json();
     if (json.config) {
       json.config.module_coordinate_by_message = false;
+      json.config.disable_user_hints = true;
     } else if (json.module_coordinate_by_message !== undefined) {
       json.module_coordinate_by_message = false;
+      json.disable_user_hints = true;
     }
     await route.fulfill({ response, json });
   });
@@ -258,30 +262,38 @@ test.describe('Trip request flow with 6 users', () => {
     }
 
     // =========================================================================
-    // STEP 4: Passengers 2 and 4 send messages to the driver
+    // STEP 4: Passengers 2 and 4 send messages to the driver via UI
     // =========================================================================
 
     for (const i of [2, 4]) {
-      // Create or find conversation with the driver for this trip
-      const convRes = await request.post(`${API_URL}/api/conversations`, {
-        headers: { Authorization: `Bearer ${tokens[i]}` },
-        data: { to: userIds[0], tripId: parseInt(tripId) },
-      });
-      expect(convRes.ok()).toBeTruthy();
-      const convData = await convRes.json();
-      const conversationId = convData.data ? convData.data.id : convData.id;
+      const ctx = await browser.newContext();
+      const page = await ctx.newPage();
+      await setupRouteMocks(page);
+      await uiLogin(page, USERS[i].email, USERS[i].password);
 
-      // Send a message
+      // Navigate to the trip
+      await page.goto(`/trips/${tripId}`);
+      await expect(page.getByText('Rosario, Santa Fe').first()).toBeVisible({ timeout: 10000 });
+
+      // Click "Enviar Mensaje" button
+      const msgBtn = page.locator('.buttons-container button.btn-primary').filter({ hasText: /Enviar Mensaje/i });
+      await msgBtn.waitFor({ state: 'visible', timeout: 10000 });
+      await msgBtn.click();
+
+      // Wait for navigation to conversation chat page
+      await expect(page).toHaveURL(/\/conversations\/\d+/, { timeout: 15000 });
+
+      // Type the message and send it
       const msgText = i === 2
         ? 'Hola! Me encantaria sumarme al viaje. Soy puntual y puedo compartir gastos.'
         : 'Buenas! Puedo llevar algo para el viaje si necesitan. Avisame si me aceptas!';
 
-      const msgRes = await request.post(`${API_URL}/api/conversations/${conversationId}/send`, {
-        headers: { Authorization: `Bearer ${tokens[i]}` },
-        form: { message: msgText },
-      });
-      expect(msgRes.ok()).toBeTruthy();
-      console.log(`Passenger user${i} sent message: "${msgText.substring(0, 40)}..."`);
+      await page.fill('#ipt-text', msgText);
+      await page.click('#btn-send');
+      await page.waitForTimeout(2000);
+
+      console.log(`Passenger user${i} sent message via UI: "${msgText.substring(0, 40)}..."`);
+      await ctx.close();
     }
 
     // =========================================================================

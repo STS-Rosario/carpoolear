@@ -4,12 +4,13 @@ services:
       context: .
       target: dev
     tty: true
-    container_name: carpoolear_frontend
+    container_name: ${CONTAINER_PREFIX:-carpoolear}_frontend
     command: npm run dev
     environment:
       HOST: '0.0.0.0'
+      API_URL: ${API_URL:-http://localhost:8000}
     ports:
-      - 8080:8080
+      - ${FRONTEND_PORT:-8080}:8080
     networks:
       - esnet
     volumes:
