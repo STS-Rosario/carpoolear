@@ -7,22 +7,19 @@
         >
             <DatepickerSystem
                 ref="datepickerSystem"
-                :clear-button="true"
-                :clear-button-icon="'fa fa-times'"
-                :calendar-button="true"
-                :calendar-button-icon="'fa fa-calendar'"
-                :value="dateBrowser"
-                :language="datePickerLanguage"
-                v-on:opened="focus = true"
-                v-on:closed="focus = false"
-                v-on:selected="changeValue"
+                :clearable="true"
+                :model-value="dateBrowser"
+                :locale="datePickerLanguage"
+                @open="focus = true"
+                @closed="focus = false"
+                @update:model-value="changeValue"
                 :placeholder="t('fecha')"
                 :format="'dd/MM/yyyy'"
-                :disabled="{
-                    to: min,
-                    from: max
-                }"
-                :disabled-picker="disabledPicker"
+                :min-date="min"
+                :max-date="max"
+                :disabled="disabledPicker"
+                :enable-time-picker="false"
+                :auto-apply="true"
                 autocomplete="off"
             ></DatepickerSystem>
         </div>
@@ -196,7 +193,7 @@ function changeMobileValue(el) {
 
 function setFocus() {
     if (browser.value) {
-        datepickerSystem.value.showCalendar();
+        datepickerSystem.value.openMenu();
     } else {
         mobileInput.value.focus();
     }

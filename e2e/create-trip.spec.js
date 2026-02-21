@@ -1,14 +1,15 @@
 import { test, expect } from '@playwright/test';
-import { login, dismissOnboarding, getToken, createTripViaAPI } from './helpers.js';
+import { login, dismissOnboarding, getToken, setupAutocompleteMocks, createTripViaUI, deleteTripViaAPI } from './helpers.js';
 
 test.describe('Trip creation flow', () => {
     test.setTimeout(90000);
 
     test('create trip form renders all required fields', async ({ page }) => {
+        await setupAutocompleteMocks(page);
         await login(page);
         await dismissOnboarding(page);
 
-        // Navigate to create trip
+        // Navigate to create trip via header link
         await page.getByRole('link', { name: /crear viaje/i }).click();
         await expect(page).toHaveURL(/\/trips\/create/);
 
@@ -24,32 +25,34 @@ test.describe('Trip creation flow', () => {
         await expect(page.getByText('Lugares disponibles')).toBeVisible();
 
         // Verify submit button
-        const submitBtn = page.locator('button.trip-create');
-        await expect(submitBtn).toBeVisible({ timeout: 10000 });
+        await expect(page.locator('button.trip-create')).toBeVisible({ timeout: 10000 });
     });
 
-    test('create trip via API and verify in my-trips', async ({ page }) => {
-        // Login and get token
+    test('login, create a trip via UI, verify in my-trips', async ({ page }) => {
+        await setupAutocompleteMocks(page);
         await login(page);
         await dismissOnboarding(page);
-        const token = await getToken(page);
 
-        // Create trip via API
-        const { tripId, tripBody } = await createTripViaAPI(page, token);
+        // Create trip through the full UI form
+        const tripId = await createTripViaUI(page, {
+            origin: 'Rosario',
+            destination: 'Mendoza',
+            description: 'Viaje de prueba e2e - Rosario a Mendoza',
+        });
         expect(tripId).toBeTruthy();
+
+        // Verify we're on the trip detail page
+        await expect(page).toHaveURL(/\/trips\/\d+/);
 
         // Navigate to my-trips and verify the trip appears
         await page.goto('/my-trips');
         await page.waitForLoadState('networkidle');
-        await expect(page).toHaveURL(/\/my-trips/, { timeout: 15000 });
-
-        // Verify a trip card appears
+        await expect(page).toHaveURL(/\/my-trips/);
         await expect(page.getByText('Rosario').first()).toBeVisible({ timeout: 15000 });
 
         // Cleanup
-        await page.request.delete(`http://localhost:8000/api/trips/${tripId}`, {
-            headers: { Authorization: `Bearer ${token}` },
-        });
+        const token = await getToken(page);
+        await deleteTripViaAPI(page, tripId, token);
     });
 
     test('shows validation errors when submitting empty trip form', async ({ page }) => {
@@ -65,7 +68,7 @@ test.describe('Trip creation flow', () => {
         await expect(submitBtn).toBeVisible({ timeout: 10000 });
         await submitBtn.click();
 
-        // Should show validation errors (red borders, error messages, etc.)
+        // Should show validation errors
         const errors = page.locator('.error, .has-error, .trip-error, .ajs-message.ajs-error');
         await expect(errors.first()).toBeVisible({ timeout: 5000 });
     });

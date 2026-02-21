@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { login, dismissOnboarding, getToken, mockAutocomplete } from './helpers.js';
+import { login, dismissOnboarding, getToken, setupAutocompleteMocks } from './helpers.js';
 
 test.describe('Search and filtering', () => {
     test.setTimeout(60000);
@@ -33,7 +33,7 @@ test.describe('Search and filtering', () => {
     });
 
     test('can search for trips by origin', async ({ page }) => {
-        await mockAutocomplete(page);
+        await setupAutocompleteMocks(page);
         await page.goto('/trips');
 
         // Type in origin field
@@ -79,7 +79,7 @@ test.describe('Search and filtering', () => {
     });
 
     test('search persists after navigating back', async ({ page }) => {
-        await mockAutocomplete(page);
+        await setupAutocompleteMocks(page);
         await login(page);
         await dismissOnboarding(page);
 

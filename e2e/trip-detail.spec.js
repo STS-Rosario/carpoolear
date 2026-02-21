@@ -1,77 +1,53 @@
 import { test, expect } from '@playwright/test';
-import { login, dismissOnboarding, createTripViaAPI } from './helpers.js';
+import { login, dismissOnboarding, getToken, setupAutocompleteMocks, createTripViaUI, deleteTripViaAPI } from './helpers.js';
 
 test.describe('Trip detail page', () => {
     test.setTimeout(90000);
 
-    test('create trip and view detail page', async ({ page }) => {
-        // Login via API to get token
-        const loginRes = await page.request.post('http://localhost:8000/api/login', {
-            data: { email: 'user0@g.com', password: '123456' },
-        });
-        const authToken = (await loginRes.json()).token;
+    test('create trip via UI and view detail page', async ({ page }) => {
+        await setupAutocompleteMocks(page);
+        await login(page);
+        await dismissOnboarding(page);
 
-        // Create a trip with all required fields
-        const { tripId } = await createTripViaAPI(page, authToken, {
+        // Create trip through the UI form
+        const tripId = await createTripViaUI(page, {
             description: 'Trip for e2e detail test',
         });
         expect(tripId).toBeTruthy();
 
-        // Login via UI
-        await login(page);
-        await dismissOnboarding(page);
+        // We're already on the trip detail page after creation
+        await expect(page).toHaveURL(/\/trips\/\d+/);
 
-        // Navigate to trip detail
-        await page.goto(`/trips/${tripId}`);
-        await page.waitForLoadState('networkidle');
-
-        // Wait for trip detail component to render (not the "searching" state)
+        // Wait for trip detail component to render
         const tripDetail = page.locator('.trip-detail-component');
         await expect(tripDetail).toBeVisible({ timeout: 20000 });
 
-        // Verify description is shown
+        // Verify trip description is shown
         await expect(page.getByText('Trip for e2e detail test')).toBeVisible({ timeout: 10000 });
 
+        // Verify origin and destination are shown
+        await expect(page.getByText('Rosario').first()).toBeVisible({ timeout: 10000 });
+        await expect(page.getByText('Mendoza').first()).toBeVisible({ timeout: 10000 });
+
         // Cleanup
-        await page.request.delete(`http://localhost:8000/api/trips/${tripId}`, {
-            headers: { Authorization: `Bearer ${authToken}` },
-        });
+        const token = await getToken(page);
+        await deleteTripViaAPI(page, tripId, token);
     });
 
     test('trip detail shows map container', async ({ page }) => {
-        const loginRes = await page.request.post('http://localhost:8000/api/login', {
-            data: { email: 'user0@g.com', password: '123456' },
-        });
-        const authToken = (await loginRes.json()).token;
-
-        const { tripId } = await createTripViaAPI(page, authToken, {
-            from_town: 'Buenos Aires',
-            to_town: 'La Plata',
-            description: 'Map test trip',
-            points: [
-                {
-                    address: 'Buenos Aires',
-                    json_address: { name: 'Buenos Aires', ciudad: 'Buenos Aires', provincia: 'Buenos Aires', lat: -34.6037, lng: -58.3816 },
-                    lat: -34.6037,
-                    lng: -58.3816,
-                },
-                {
-                    address: 'La Plata',
-                    json_address: { name: 'La Plata', ciudad: 'La Plata', provincia: 'Buenos Aires', lat: -34.9215, lng: -57.9545 },
-                    lat: -34.9215,
-                    lng: -57.9545,
-                },
-            ],
-        });
-        expect(tripId).toBeTruthy();
-
+        await setupAutocompleteMocks(page);
         await login(page);
         await dismissOnboarding(page);
 
-        await page.goto(`/trips/${tripId}`);
-        await page.waitForLoadState('networkidle');
+        // Create trip through the UI form
+        const tripId = await createTripViaUI(page, {
+            origin: 'Buenos',
+            destination: 'Cordoba',
+            description: 'Map test trip',
+        });
+        expect(tripId).toBeTruthy();
 
-        // Trip detail component should render
+        // We're on the trip detail page - wait for it to load
         const tripDetail = page.locator('.trip-detail-component');
         await expect(tripDetail).toBeVisible({ timeout: 20000 });
 
@@ -81,13 +57,12 @@ test.describe('Trip detail page', () => {
         if (mapVisible) {
             await expect(map).toBeVisible();
         } else {
-            // Map tiles may not load in headless - verify trip detail loaded
+            // Map tiles may not load in headless mode - trip detail verified above
             console.log('Map not rendered in headless mode - trip detail verified');
         }
 
         // Cleanup
-        await page.request.delete(`http://localhost:8000/api/trips/${tripId}`, {
-            headers: { Authorization: `Bearer ${authToken}` },
-        });
+        const token = await getToken(page);
+        await deleteTripViaAPI(page, tripId, token);
     });
 });

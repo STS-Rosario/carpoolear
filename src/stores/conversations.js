@@ -350,7 +350,7 @@ export const useConversationsStore = defineStore('conversations', () => {
     return {
         list,
         listMorePage: pagination.morePage,
-        userList,
+        users: userList,
         selectedConversation,
         selectedId,
         msgObj,

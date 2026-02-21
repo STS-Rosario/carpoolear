@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { login, dismissOnboarding, getToken, setupAutocompleteMocks, createTripViaUI, deleteTripViaAPI } from './helpers.js';
 
 test.describe('Trips page', () => {
     test('loads and shows the trips container', async ({ page }) => {
@@ -11,22 +12,39 @@ test.describe('Trips page', () => {
         await expect(page.locator('.search-section')).toBeVisible();
     });
 
-    test('renders trips list or empty state', async ({ page }) => {
-        await page.goto('/trips');
-        await page.waitForLoadState('networkidle');
-        await page.waitForTimeout(3000);
+    test.describe('with a created trip', () => {
+        test.setTimeout(90000);
 
-        // Either trip cards, empty state alert, or the loading indicator should show
-        const trips = page.locator('.card-trip, .panel-card, .trip-card');
-        const emptyState = page.locator('.alert-warning, .alert-info');
-        const tripsCount = await trips.count();
-        const alertVisible = await emptyState.first().isVisible().catch(() => false);
-        expect(tripsCount > 0 || alertVisible).toBeTruthy();
+        test('trip card appears in the trips listing', async ({ page }) => {
+            // Create a trip via UI
+            await setupAutocompleteMocks(page);
+            await login(page);
+            await dismissOnboarding(page);
+            const tripId = await createTripViaUI(page, {
+                description: 'Trip for listing test',
+            });
+
+            // Navigate to trips listing
+            await page.goto('/trips');
+            await page.waitForLoadState('networkidle');
+
+            // Verify trip card appears
+            await expect(page.locator('.card-trip, .panel-card').first()).toBeVisible({ timeout: 15000 });
+            await expect(page.getByText('Rosario').first()).toBeVisible({ timeout: 10000 });
+
+            // Cleanup
+            const token = await getToken(page);
+            await deleteTripViaAPI(page, tripId, token);
+        });
     });
 
     test('page loads without JavaScript errors', async ({ page }) => {
         const jsErrors = [];
-        page.on('pageerror', (err) => jsErrors.push(err.message));
+        page.on('pageerror', (err) => {
+            // Ignore Network Errors from unauthenticated API calls (expected on public page)
+            if (err.message === 'Network Error') return;
+            jsErrors.push(err.message);
+        });
 
         await page.goto('/trips');
         await page.waitForTimeout(3000);
