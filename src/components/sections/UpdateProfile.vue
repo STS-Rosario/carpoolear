@@ -1,52 +1,52 @@
 <template>
-    <div class="update-profile-component" v-if="user">
+    <div class="update-profile-component" v-if="localUser">
         <div
             class="alert alert-info"
             v-if="
-                !user.image ||
-                user.image.length === 0 ||
-                !user.description ||
-                user.description.length === 0
+                !localUser.image ||
+                localUser.image.length === 0 ||
+                !localUser.description ||
+                localUser.description.length === 0
             "
         >
             <div class="alert-icon">
                 <i class="fa fa-exclamation" aria-hidden="true"></i>
             </div>
             <div class="alert-message">
-                {{ $t('hola') }}
-                <strong>{{ user.name }}</strong>
-                {{ $t('bienvenidoACarpoolear') }}
+                {{ t('hola') }}
+                <strong>{{ localUser.name }}</strong>
+                {{ t('bienvenidoACarpoolear') }}
                 <span
                     v-if="
-                        (!user.image || user.image.length === 0) &&
-                        (!user.description || user.description.length === 0)
+                        (!localUser.image || localUser.image.length === 0) &&
+                        (!localUser.description || localUser.description.length === 0)
                     "
                 >
-                    {{ $t('completaTu') }}
-                    <strong>{{ $t('imagenPerfil') }}</strong>
-                    {{ $t('yTu') }}
-                    <strong>{{ $t('descripcion') }}</strong>
-                    {{ $t('comenzarViajar') }}
+                    {{ t('completaTu') }}
+                    <strong>{{ t('imagenPerfil') }}</strong>
+                    {{ t('yTu') }}
+                    <strong>{{ t('descripcion') }}</strong>
+                    {{ t('comenzarViajar') }}
                 </span>
                 <span
                     v-if="
-                        (!user.image || user.image.length === 0) &&
-                        !(!user.description || user.description.length === 0)
+                        (!localUser.image || localUser.image.length === 0) &&
+                        !(!localUser.description || localUser.description.length === 0)
                     "
                 >
-                    {{ $t('completaTu') }}
-                    <strong>{{ $t('imagenPerfil') }}</strong>
-                    {{ $t('comenzarViajar') }}
+                    {{ t('completaTu') }}
+                    <strong>{{ t('imagenPerfil') }}</strong>
+                    {{ t('comenzarViajar') }}
                 </span>
                 <span
                     v-if="
-                        !(!user.image || user.image.length === 0) &&
-                        (!user.description || user.description.length === 0)
+                        !(!localUser.image || localUser.image.length === 0) &&
+                        (!localUser.description || localUser.description.length === 0)
                     "
                 >
-                    {{ $t('completaTu') }}
-                    <strong>{{ $t('descripcion') }}</strong>
-                    {{ $t('comenzarViajar') }}
+                    {{ t('completaTu') }}
+                    <strong>{{ t('descripcion') }}</strong>
+                    {{ t('comenzarViajar') }}
                 </span>
             </div>
         </div>
@@ -55,7 +55,7 @@
                 <div class="profile_image-container">
                     <div
                         class="circle-box"
-                        v-imgSrc:profile="user.image"
+                        v-imgSrc:profile="localUser.image"
                         :class="{ loading: loadingImg }"
                     >
                         <div @click="changePhoto" class="profile_image-edit">
@@ -67,24 +67,24 @@
             <div class="col-xs-24 col-sm-16 col-sm-pull-8">
                 <div class="form">
                     <div class="alert alert-info">
-                        {{ $t('incentivoFoto') }}
+                        {{ t('incentivoFoto') }}
                     </div>
                     <div class="form-group">
                         <label for="input-name">
-                            {{ $t('nombreYapellido') }}
+                            {{ t('nombreYapellido') }}
                             <span
                                 class="required-field-flag"
-                                :title="$t('tituloCampoRequerido')"
+                                :title="t('tituloCampoRequerido')"
                                 >(*)</span
                             >
                         </label>
                         <input
                             maxlength="25"
-                            v-model="user.name"
+                            v-model="localUser.name"
                             type="text"
                             class="form-control"
                             id="input-name"
-                            :placeholder="$t('placeholderNombre')"
+                            :placeholder="t('placeholderNombre')"
                             :class="{ 'has-error': nombreError.state }"
                             :disabled="!firstTime"
                         />
@@ -94,44 +94,39 @@
                     </div>
                     <div class="form-group">
                         <label for="input-email">
-                            {{ $t('email') }}
+                            {{ t('email') }}
                             <span
                                 class="required-field-flag"
-                                :title="$t('tituloCampoRequerido')"
+                                :title="t('tituloCampoRequerido')"
                                 >(*)</span
                             >
                         </label>
                         <input
                             maxlength="40"
-                            v-model="user.email"
+                            v-model="localUser.email"
                             type="text"
                             class="form-control"
                             id="input-email"
-                            :placeholder="$t('eMail')"
+                            :placeholder="t('eMail')"
                             disabled
                         />
                     </div>
-                    <!--<div class="form-group">
-                    <label for="">Fecha de nacimiento <span class="required-field-flag" title="Campo requerido">(*)</span></label>
-                    <DatePicker :value="birthday | moment('YYYY-MM-DD') " ref="ipt_calendar" name="ipt_calendar" :maxDate="maxDate" :minDate="minDate" :class="{'has-error': birthdayError.state}" ></DatePicker>
-                    <span class="error" v-if="birthdayError.state"> {{birthdayError.message}} </span>
-                </div>-->
                     <div class="form-group">
                         <label for="input-description">
-                            {{ $t('acercaDeMi') }}
+                            {{ t('acercaDeMi') }}
                             <span
                                 class="required-field-flag"
-                                :title="$t('tituloCampoRequerido')"
+                                :title="t('tituloCampoRequerido')"
                                 >(*)</span
                             >
                             <span class="description">
-                                {{ $t('incentivoDescripcion') }}
+                                {{ t('incentivoDescripcion') }}
                             </span>
                         </label>
                         <textarea
                             maxlength="2000"
-                            v-model="user.description"
-                            :placeholder="$t('placeholderDescripcion')"
+                            v-model="localUser.description"
+                            :placeholder="t('placeholderDescripcion')"
                             :class="{ 'has-error': descError.state }"
                         ></textarea>
                         <span class="error textarea" v-if="descError.state">
@@ -140,24 +135,24 @@
                     </div>
                     <hr />
                     <p class="form-group">
-                        {{ $t('siSosConductorDatosVisibles') }}
+                        {{ t('siSosConductorDatosVisibles') }}
                     </p>
                     <div class="form-group">
                         <label for="input-dni">
-                            {{ $t('documento') }}
+                            {{ t('documento') }}
                             <span
                                 class="required-field-flag"
-                                :title="$t('tituloCampoRequerido')"
+                                :title="t('tituloCampoRequerido')"
                                 >(*)</span
                             >
                             <span class="description">
-                                {{ $t('incentivoDoc') }} {{ $t('doc') }}
-                                {{ $t('momentoViajar') }}
+                                {{ t('incentivoDoc') }} {{ t('doc') }}
+                                {{ t('momentoViajar') }}
                             </span>
                         </label>
                         <input
                             type="tel"
-                            v-model="user.nro_doc"
+                            v-model="localUser.nro_doc"
                             @input="handleDniInput"
                             class="form-control"
                             id="input-dni"
@@ -173,26 +168,26 @@
                     </div>
                     <div class="form-group">
                         <label for="input-telefono">
-                            {{ $t('nroTel') }}
+                            {{ t('nroTel') }}
                             <span
                                 class="required-field-flag"
-                                :title="$t('tituloCampoRequerido')"
+                                :title="t('tituloCampoRequerido')"
                                 >(*)</span
                             >
                             <span class="description">
-                                ({{ $t('ejemploTelefono') }}).
-                                {{ $t('incentivoTelefono') }}
+                                ({{ t('ejemploTelefono') }}).
+                                {{ t('incentivoTelefono') }}
                             </span>
                         </label>
                         <input
                             maxlength="20"
                             @keydown="isNumber"
                             v-on:paste="isNumber"
-                            v-model="user.mobile_phone"
+                            v-model="localUser.mobile_phone"
                             type="tel"
                             class="form-control"
                             id="input-telefono"
-                            :placeholder="$t('placeholderTelefono')"
+                            :placeholder="t('placeholderTelefono')"
                             :class="{ 'has-error': phoneError.state }"
                         />
                         <span class="error" v-if="phoneError.state">
@@ -202,10 +197,10 @@
 
                     <div class="form-group">
                         <label for="input-telefono">
-                            {{ $t('patente') }}
+                            {{ t('patente') }}
                             <span class="description">
-                                ({{ $t('soloConductores') }}).
-                                {{ $t('incentivoPatente') }}
+                                ({{ t('soloConductores') }}).
+                                {{ t('incentivoPatente') }}
                             </span>
                         </label>
                         <input
@@ -224,14 +219,14 @@
                         <label>
                             <input
                                 type="checkbox"
-                                v-model="user.data_visibility"
+                                v-model="localUser.data_visibility"
                                 true-value="1"
                                 false-value="0"
                             />
-                            {{ $t('datosVisiblesCheck') }}
+                            {{ t('datosVisiblesCheck') }}
                         </label>
                         <div>
-                            {{ $t('tildaOpcionDatosVisibles') }}
+                            {{ t('tildaOpcionDatosVisibles') }}
                         </div>
                     </div>
                     <hr />
@@ -239,9 +234,9 @@
                         <label>
                             <input
                                 type="checkbox"
-                                v-model="user.emails_notifications"
+                                v-model="localUser.emails_notifications"
                             />
-                            {{ $t('notificacionesPorCorreo') }}
+                            {{ t('notificacionesPorCorreo') }}
                         </label>
                     </div>
                     <hr />
@@ -251,12 +246,12 @@
                                 type="checkbox"
                                 @change="changeShowPassword"
                             />
-                            {{ $t('cambiarPassword') }}
+                            {{ t('cambiarPassword') }}
                         </label>
                     </div>
                     <div class="form-group" v-if="showChangePassword">
                         <label for="input-pass">{{
-                            $t('ingreseNuevaPassword')
+                            t('ingreseNuevaPassword')
                         }}</label>
                         <input
                             maxlength="40"
@@ -265,7 +260,7 @@
                             autocomplete="new-password"
                             class="form-control"
                             id="input-pass"
-                            :placeholder="$t('placeholderContrasena')"
+                            :placeholder="t('placeholderContrasena')"
                         />
                         <input
                             maxlength="40"
@@ -274,7 +269,7 @@
                             autocomplete="new-password"
                             class="form-control"
                             id="input-pass-confirm"
-                            :placeholder="$t('placeholderRepetirContrasena')"
+                            :placeholder="t('placeholderRepetirContrasena')"
                         />
                     </div>
 
@@ -284,17 +279,17 @@
                         v-if="settings.module_unaswered_message_limit"
                     >
                         <label for="input-unaswered_messages_limit">
-                            {{ $t('unaswered_messages_limit') }}
+                            {{ t('unaswered_messages_limit') }}
                             <span class="description">
                                 ({{
-                                    $t('unaswered_messages_limitDescription')
+                                    t('unaswered_messages_limitDescription')
                                 }})
                             </span>
                         </label>
                         <input
                             type="numer"
                             data-max-length="8"
-                            v-model="user.unaswered_messages_limit"
+                            v-model="localUser.unaswered_messages_limit"
                             class="form-control"
                             id="input-unaswered_messages_limit"
                             :class="{
@@ -313,16 +308,16 @@
                         class="checkbox"
                         v-if="
                             settings.module_validated_drivers &&
-                            !user.driver_is_verified
+                            !localUser.driver_is_verified
                         "
                     >
                         <label>
                             <input
                                 type="checkbox"
                                 @change="changeBeDriver"
-                                v-model="this.showBeDriver"
+                                v-model="showBeDriver"
                             />
-                            {{ $t('solicitarSerChofer') }}
+                            {{ t('solicitarSerChofer') }}
                         </label>
                     </div>
                     <div
@@ -330,11 +325,11 @@
                         v-if="
                             settings.module_validated_drivers &&
                             showBeDriver &&
-                            !user.driver_is_verified
+                            !localUser.driver_is_verified
                         "
                     >
                         <label for="driver_documentation">{{
-                            $t('ingreseDocumentacion')
+                            t('ingreseDocumentacion')
                         }}</label>
                         <input
                             type="file"
@@ -343,33 +338,33 @@
                             @change="onDriverDocumentChange"
                         />
                         <p class="help-block">
-                            {{ $t('seRequiereDocumentacion') }}
+                            {{ t('seRequiereDocumentacion') }}
                         </p>
                     </div>
-                    <div v-if="user.driver_is_verified">
+                    <div v-if="localUser.driver_is_verified">
                         <i
                             class="fa fa-check-circle check-driver-verified"
                             aria-hidden="true"
                         ></i>
-                        <strong>{{ $t('choferVerificado') }}</strong>
+                        <strong>{{ t('choferVerificado') }}</strong>
                     </div>
                     <div
                         v-if="
-                            user.driver_is_verified ||
+                            localUser.driver_is_verified ||
                             (settings.module_validated_drivers && showBeDriver)
                         "
                     >
                         <div class="form-group">
                             <label for="tipoDeCuenta">
-                                {{ $t('tipoDeCuenta') }}
+                                {{ t('tipoDeCuenta') }}
                                 <span
                                     class="required-field-flag"
-                                    :title="$t('tituloCampoRequerido')"
+                                    :title="t('tituloCampoRequerido')"
                                     >(*)</span
                                 >
                             </label>
                             <select
-                                v-model="user.account_type"
+                                v-model="localUser.account_type"
                                 id="tipoDeCuenta"
                                 class="form-control"
                             >
@@ -386,15 +381,15 @@
                         </div>
                         <div class="form-group">
                             <label for="bancoDeCuenta">
-                                {{ $t('bancoDeCuenta') }}
+                                {{ t('bancoDeCuenta') }}
                                 <span
                                     class="required-field-flag"
-                                    :title="$t('tituloCampoRequerido')"
+                                    :title="t('tituloCampoRequerido')"
                                     >(*)</span
                                 >
                             </label>
                             <select
-                                v-model="user.account_bank"
+                                v-model="localUser.account_bank"
                                 id=""
                                 class="form-control"
                             >
@@ -411,19 +406,19 @@
                         </div>
                         <div class="form-group">
                             <label for="accountNumber">
-                                {{ $t('numeroDeCuenta') }}
+                                {{ t('numeroDeCuenta') }}
                                 <span
                                     class="required-field-flag"
-                                    :title="$t('tituloCampoRequerido')"
+                                    :title="t('tituloCampoRequerido')"
                                     >(*)</span
                                 >
                             </label>
                             <input
-                                v-model="user.account_number"
+                                v-model="localUser.account_number"
                                 type="text"
                                 class="form-control"
                                 id="accountNumber"
-                                :placeholder="$t('numeroDeCuenta')"
+                                :placeholder="t('numeroDeCuenta')"
                             />
                             <span class="error" v-if="accountNumberError.state">
                                 {{ accountNumberError.message }}
@@ -433,13 +428,13 @@
                     <div
                         class="row"
                         v-if="
-                            Array.isArray(user.driver_data_docs) &&
-                            user.driver_data_docs.length
+                            Array.isArray(localUser.driver_data_docs) &&
+                            localUser.driver_data_docs.length
                         "
                     >
                         <div
                             v-imgSrc:docs="img"
-                            v-for="img in user.driver_data_docs"
+                            v-for="img in localUser.driver_data_docs"
                             class="img-doc col-md-8 col-sm-12"
                         ></div>
                     </div>
@@ -451,7 +446,7 @@
                             :disabled="loading"
                         >
                             <span v-if="!loading">{{
-                                $t('guardarCambios')
+                                t('guardarCambios')
                             }}</span>
                             <spinner class="blue" v-if="loading"></spinner>
                         </button>
@@ -459,7 +454,7 @@
                             class="required-field-flag"
                             v-bind:class="{ 'required-field-info': isMobile }"
                         >
-                            {{ $t('camposObligatorios') }}
+                            {{ t('camposObligatorios') }}
                         </span>
                     </div>
                     <hr />
@@ -468,15 +463,15 @@
                             class="btn btn-danger pull-right"
                             @click="toggleModalDeleteAccount"
                         >
-                            {{ $t('eliminarCuenta') }}
+                            {{ t('eliminarCuenta') }}
                         </button>
                     </div>
-                    
+
                     <span v-if="error">{{ error }}</span>
                     <Uploadfile
                         :name="'profile'"
                         @change="onPhotoChange"
-                        ref="file"
+                        ref="fileRef"
                     ></Uploadfile>
                 </div>
             </div>
@@ -488,25 +483,27 @@
             @close="toggleModalDeleteAccount"
             :body="'Body'"
         >
-            <h3 slot="header">
-                <span>{{ $t('seguroEliminarCuenta') }}</span>
-                <i
-                    v-on:click="toggleModalDeleteAccount"
-                    class="fa fa-times float-right-close"
-                ></i>
-            </h3>
-            <div slot="body">
+            <template #header>
+                <h3>
+                    <span>{{ t('seguroEliminarCuenta') }}</span>
+                    <i
+                        v-on:click="toggleModalDeleteAccount"
+                        class="fa fa-times float-right-close"
+                    ></i>
+                </h3>
+            </template>
+            <template #body>
                 <div class="text-left color-black" v-if="!showNegativeRatingsInModal">
-                    <p>{{ $t('eliminacionCuentaRecuperarCuenta') }}</p>
+                    <p>{{ t('eliminacionCuentaRecuperarCuenta') }}</p>
                     <div class="text-center" style="margin-top: 1em;">
                         <button
                             class="btn btn-default"
                             @click="openMesaAyudaFromDelete"
                         >
-                            {{ $t('contactarMesaAyuda') }}
+                            {{ t('contactarMesaAyuda') }}
                         </button>
                     </div>
-                    <p style="margin-top: 1.5em;">{{ $t('eliminacionCuentaOtroMotivo') }}</p>
+                    <p style="margin-top: 1.5em;">{{ t('eliminacionCuentaOtroMotivo') }}</p>
                     <div class="text-center" style="margin-top: 1.5em;">
                         <button
                             class="btn btn-danger"
@@ -514,28 +511,28 @@
                             :disabled="loadingDeleteAccount"
                         >
                             <span v-if="!loadingDeleteAccount"
-                                >{{ $t('eliminarCuenta') }}</span
+                                >{{ t('eliminarCuenta') }}</span
                             >
                             <spinner class="blue" v-if="loadingDeleteAccount"></spinner>
                         </button>
                     </div>
                 </div>
                 <div class="text-left color-black" v-else>
-                    <p>{{ $t('eliminacionCuentaNegativas') }}</p>
-                    <p>{{ $t('eliminacionCuentaIrreversible') }}</p>
-                    <p>{{ $t('eliminacionCuentaPlazo') }}</p>
+                    <p>{{ t('eliminacionCuentaNegativas') }}</p>
+                    <p>{{ t('eliminacionCuentaIrreversible') }}</p>
+                    <p>{{ t('eliminacionCuentaPlazo') }}</p>
                     <div class="text-center" style="margin-top: 1.5em;">
                         <button
                             class="btn btn-primary"
                             @click="requestAccountDeletion"
                             :disabled="loadingDeleteAccount"
                         >
-                            <span v-if="!loadingDeleteAccount">{{ $t('solicitarEliminacionCuenta') }}</span>
+                            <span v-if="!loadingDeleteAccount">{{ t('solicitarEliminacionCuenta') }}</span>
                             <spinner class="blue" v-if="loadingDeleteAccount"></spinner>
                         </button>
                     </div>
                 </div>
-            </div>
+            </template>
         </modal>
 
         <modal
@@ -543,26 +540,28 @@
             v-if="showMesaAyudaModal"
             @close="showMesaAyudaModal = false"
         >
-            <h3 slot="header">
-                <span>{{ $t('mesaAyuda') }}</span>
-                <i
-                    v-on:click="showMesaAyudaModal = false"
-                    class="fa fa-times float-right-close"
-                ></i>
-            </h3>
-            <div slot="body">
+            <template #header>
+                <h3>
+                    <span>{{ t('mesaAyuda') }}</span>
+                    <i
+                        v-on:click="showMesaAyudaModal = false"
+                        class="fa fa-times float-right-close"
+                    ></i>
+                </h3>
+            </template>
+            <template #body>
                 <div class="text-left color-black login-modal">
                     <p>
-                        {{ $t('mesaAyudaFuncionaDesde') }}
+                        {{ t('mesaAyudaFuncionaDesde') }}
                         <a :href="'mailto:' + config.admin_email">
                             {{ config.admin_email }}</a>,
-                        {{ $t('mensajePrivadoDe') }}
+                        {{ t('mensajePrivadoDe') }}
                         <a href="https://instagram.com/carpoolear">Instagram</a>
-                        {{ $t('y') }}
+                        {{ t('y') }}
                         <a href="https://facebook.com/carpoolear">Facebook</a>.
                     </p>
                 </div>
-            </div>
+            </template>
         </modal>
 
         <modal
@@ -570,32 +569,34 @@
             v-if="showBannedDniModal"
             @close="toggleBannedDniModal"
         >
-            <h3 slot="header">
-                <span>{{ $t('errorAlGuardar') }}</span>
-                <i
-                    v-on:click="toggleBannedDniModal"
-                    class="fa fa-times float-right-close"
-                ></i>
-            </h3>
-            <div slot="body">
+            <template #header>
+                <h3>
+                    <span>{{ t('errorAlGuardar') }}</span>
+                    <i
+                        v-on:click="toggleBannedDniModal"
+                        class="fa fa-times float-right-close"
+                    ></i>
+                </h3>
+            </template>
+            <template #body>
                 <div class="text-left color-black login-modal">
                     <p>
-                        {{ $t('errorAlGuardarContactarMesaAyuda') }}
+                        {{ t('errorAlGuardarContactarMesaAyuda') }}
                     </p>
                     <p>
-                        {{ $t('escribinosMesaAyuda') }}
+                        {{ t('escribinosMesaAyuda') }}
                     </p>
                     <p>
-                        {{ $t('mesaAyudaFuncionaDesde') }}
+                        {{ t('mesaAyudaFuncionaDesde') }}
                         <a :href="'mailto:' + config.admin_email">
                             {{ config.admin_email }}</a>,
-                        {{ $t('mensajePrivadoDe') }}
+                        {{ t('mensajePrivadoDe') }}
                         <a href="https://instagram.com/carpoolear">Instagram</a>
-                        {{ $t('y') }}
+                        {{ t('y') }}
                         <a href="https://facebook.com/carpoolear">Facebook</a>.
                     </p>
                 </div>
-            </div>
+            </template>
         </modal>
 
         <modal
@@ -603,37 +604,45 @@
             v-if="showDatosEnUsoModal"
             @close="toggleDatosEnUsoModal"
         >
-            <h3 slot="header">
-                <span>{{ $t('datosEnUso') }}</span>
-                <i
-                    v-on:click="toggleDatosEnUsoModal"
-                    class="fa fa-times float-right-close"
-                ></i>
-            </h3>
-            <div slot="body">
+            <template #header>
+                <h3>
+                    <span>{{ t('datosEnUso') }}</span>
+                    <i
+                        v-on:click="toggleDatosEnUsoModal"
+                        class="fa fa-times float-right-close"
+                    ></i>
+                </h3>
+            </template>
+            <template #body>
                 <div class="text-left color-black login-modal">
                     <p>
-                        {{ $t('datosEnUsoDescripcion') }}
+                        {{ t('datosEnUsoDescripcion') }}
                     </p>
                     <p>
-                        {{ $t('escribinosMesaAyuda') }}
+                        {{ t('escribinosMesaAyuda') }}
                     </p>
                     <p>
-                        {{ $t('mesaAyudaFuncionaDesde') }}
+                        {{ t('mesaAyudaFuncionaDesde') }}
                         <a :href="'mailto:' + config.admin_email">
                             {{ config.admin_email }}</a>,
-                        {{ $t('mensajePrivadoDe') }}
+                        {{ t('mensajePrivadoDe') }}
                         <a href="https://instagram.com/carpoolear">Instagram</a>
-                        {{ $t('y') }}
+                        {{ t('y') }}
                         <a href="https://facebook.com/carpoolear">Facebook</a>.
                     </p>
                 </div>
-            </div>
+            </template>
         </modal>
     </div>
 </template>
-<script>
-import { mapGetters, mapActions } from 'vuex';
+<script setup>
+import { ref, reactive, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
+import { useCarsStore } from '@/stores/cars';
+import { useDeviceStore } from '@/stores/device';
+import { useProfileStore } from '@/stores/profile';
 import { inputIsNumber, formatId, cleanId } from '../../services/utility';
 import Uploadfile from '../Uploadfile';
 import DatePicker from '../DatePicker';
@@ -644,571 +653,524 @@ import bus from '../../services/bus-event';
 import Spinner from '../Spinner.vue';
 import modal from '../Modal';
 import { UserApi } from '../../services/api';
+import { scrollToElement } from '../../../utils/helpers';
 
-class Error {
+const { t } = useI18n();
+const router = useRouter();
+const authStore = useAuthStore();
+const carsStore = useCarsStore();
+const deviceStore = useDeviceStore();
+const profileStore = useProfileStore();
+
+class ValidationError {
     constructor(state = false, message = '') {
         this.state = false;
         this.message = '';
     }
 }
 
-export default {
-    name: 'upddate-profile',
-    data() {
-        return {
-            user: null,
-            car: null,
-            patente: '',
-            pass: {
-                password: '',
-                password_confirmation: ''
-            },
-            error: null,
-            loading: false,
-            loadingImg: false,
-            globalError: false,
-            nombreError: new Error(),
-            descError: new Error(),
-            birthdayError: new Error(),
-            patentError: new Error(),
-            dniError: new Error(),
-            unaswered_messages_limitError: new Error(),
-            phoneError: new Error(),
-            emailError: new Error(),
-            accountNumberError: new Error(),
-            accountTypeError: new Error(),
-            accountBankError: new Error(),
-            maxDate: moment().toDate(),
-            minDate: moment('1900-01-01').toDate(),
-            birthday: '',
-            birthdayAnswer: '',
-            showChangePassword: false,
-            showBeDriver: false,
-            driverFiles: null,
-            banks: [],
-            accountTypes: [],
-            showModalDeleteAccount: false,
-            loadingDeleteAccount: false,
-            showDatosEnUsoModal: false,
-            showBannedDniModal: false,
-            showNegativeRatingsInModal: false,
-            showMesaAyudaModal: false,
-            userApi: null
-        };
-    },
-    computed: {
-        ...mapGetters({
-            userData: 'auth/user',
-            firstTime: 'auth/firstTime',
-            cars: 'cars/cars',
-            isMobile: 'device/isMobile',
-            settings: 'auth/appConfig',
-            config: 'auth/appConfig'
-        }),
-        iptUser() {
-            if (this.user) {
-                return this.user.name;
-            }
-        },
-        iptEmail() {
-            if (this.user) {
-                return this.user.email;
-            }
-        },
-        iptBirthday() {
-            if (this.user) {
-                return this.user.birthdayAnswer;
-            }
-        },
-        iptDescription() {
-            if (this.user) {
-                return this.user.description;
-            }
-        },
-        iptDni() {
-            if (this.user) {
-                return this.user.nro_doc;
-            }
-        },
-        isDniLockedByValidation() {
-            return !!(
-                this.user &&
-                this.user.identity_validated &&
-                this.user.identity_validated_at
-            );
-        },
-        dniInputTitle() {
-            return this.isDniLockedByValidation
-                ? this.$t('dniValidadoContacteSoporte')
-                : '';
-        },
-        iptPhone() {
-            if (this.user) {
-                return this.user.mobile_phone;
+const fileRef = ref(null);
+
+const localUser = ref(null);
+const car = ref(null);
+const patente = ref('');
+const pass = reactive({
+    password: '',
+    password_confirmation: ''
+});
+const error = ref(null);
+const loading = ref(false);
+const loadingImg = ref(false);
+const globalError = ref(false);
+const nombreError = reactive(new ValidationError());
+const descError = reactive(new ValidationError());
+const birthdayError = reactive(new ValidationError());
+const patentError = reactive(new ValidationError());
+const dniError = reactive(new ValidationError());
+const unaswered_messages_limitError = reactive(new ValidationError());
+const phoneError = reactive(new ValidationError());
+const emailError = reactive(new ValidationError());
+const accountNumberError = reactive(new ValidationError());
+const accountTypeError = reactive(new ValidationError());
+const accountBankError = reactive(new ValidationError());
+const maxDate = moment().toDate();
+const minDate = moment('1900-01-01').toDate();
+const birthday = ref('');
+const birthdayAnswer = ref('');
+const showChangePassword = ref(false);
+const showBeDriver = ref(false);
+const driverFiles = ref(null);
+const banks = ref([]);
+const accountTypes = ref([]);
+const showModalDeleteAccount = ref(false);
+const loadingDeleteAccount = ref(false);
+const showDatosEnUsoModal = ref(false);
+const showBannedDniModal = ref(false);
+const showNegativeRatingsInModal = ref(false);
+const showMesaAyudaModal = ref(false);
+const userApi = ref(null);
+
+const userData = computed(() => authStore.user);
+const firstTime = computed(() => authStore.firstTime);
+const cars = computed(() => carsStore.cars);
+const isMobile = computed(() => deviceStore.isMobile);
+const settings = computed(() => authStore.appConfig);
+const config = computed(() => authStore.appConfig);
+
+const iptUser = computed(() => {
+    if (localUser.value) {
+        return localUser.value.name;
+    }
+});
+const iptEmail = computed(() => {
+    if (localUser.value) {
+        return localUser.value.email;
+    }
+});
+const iptBirthday = computed(() => {
+    if (localUser.value) {
+        return localUser.value.birthdayAnswer;
+    }
+});
+const iptDescription = computed(() => {
+    if (localUser.value) {
+        return localUser.value.description;
+    }
+});
+const iptDni = computed(() => {
+    if (localUser.value) {
+        return localUser.value.nro_doc;
+    }
+});
+const isDniLockedByValidation = computed(() => {
+    return !!(
+        localUser.value &&
+        localUser.value.identity_validated &&
+        localUser.value.identity_validated_at
+    );
+});
+const dniInputTitle = computed(() => {
+    return isDniLockedByValidation.value
+        ? t('dniValidadoContacteSoporte')
+        : '';
+});
+const iptPhone = computed(() => {
+    if (localUser.value) {
+        return localUser.value.mobile_phone;
+    }
+});
+
+function jumpToError() {
+    let hasError = document.getElementsByClassName('has-error');
+    if (hasError.length) {
+        let element = hasError[0];
+        scrollToElement(element, -270);
+    }
+}
+
+function changeShowPassword() {
+    showChangePassword.value = !showChangePassword.value;
+}
+
+function changeBeDriver() {
+    showBeDriver.value = !showBeDriver.value;
+}
+
+function isNumber(value) {
+    inputIsNumber(value);
+}
+
+function handleDniInput(event) {
+    const formatted = formatId(event.target.value, config.value.profile_id_format);
+    event.target.value = formatted;
+    localUser.value.nro_doc = formatted;
+}
+
+function onPhotoChange(data) {
+    loadingImg.value = true;
+    authStore.updatePhoto(data)
+        .then((u) => {
+            localUser.value.image = u.image;
+            loadingImg.value = false;
+        })
+        .catch(() => {
+            loadingImg.value = false;
+        });
+}
+
+function onDriverDocumentChange(event) {
+    if (event.target.files) {
+        driverFiles.value = event.target.files;
+    }
+}
+
+function dateChange(value) {
+    birthdayAnswer.value = value;
+}
+
+function changePhoto() {
+    fileRef.value.show();
+}
+
+function grabar() {
+    if (validate()) {
+        nextTick(() => {
+            jumpToError();
+            dialogs.message(t('faltanCamposObligatorios'), {
+                duration: 10,
+                estado: 'error'
+            });
+        });
+        return;
+    }
+    loading.value = true;
+    // Ensure localUser.nro_doc is raw value (no dots) before sending
+    if (localUser.value && localUser.value.nro_doc) {
+        localUser.value.nro_doc = cleanId(localUser.value.nro_doc, config.value.profile_id_format);
+    }
+    console.log('localUser', localUser.value);
+    var data = Object.assign({}, localUser.value);
+    console.log('data.user', data);
+    if (pass.password) {
+        if (pass.password !== pass.password_confirmation) {
+            error.value = t('passwordNoCoincide');
+            return;
+        }
+        data.password = pass.password;
+        data.password_confirmation = pass.password_confirmation;
+    }
+    /* global FormData */
+    let bodyFormData = new FormData();
+    for (const key in data) {
+        if (data.hasOwnProperty(key)) {
+            if (Array.isArray(data[key])) {
+                for (let index = 0; index < data[key].length; index++) {
+                    const element = data[key][index];
+                    bodyFormData.append(key + '[]', element);
+                }
+            } else {
+                if (data[key] !== null) {
+                    bodyFormData.append(key, data[key]);
+                }
             }
         }
-    },
-    methods: {
-        ...mapActions({
-            update: 'auth/update',
-            updatePhoto: 'auth/updatePhoto',
-            carCreate: 'cars/create',
-            carUpdate: 'cars/update',
-            carIndex: 'cars/index',
-            getBankData: 'profile/getBankData'
-        }),
-        jumpToError() {
-            let hasError = document.getElementsByClassName('has-error');
-            if (hasError.length) {
-                let element = hasError[0];
-                this.$scrollToElement(element, -270);
+    }
+    if (driverFiles.value) {
+        bodyFormData.append('user_be_driver', true);
+        for (let index = 0; index < driverFiles.value.length; index++) {
+            const file = driverFiles.value[index];
+            bodyFormData.append('driver_data_docs[]', file);
+        }
+    }
+    authStore.update(bodyFormData)
+        .then(() => {
+            pass.password = '';
+            pass.password_confirmation = '';
+            loading.value = false;
+            dialogs.message(t('perfilActualizadoCorrectamente'));
+            if (patente.value.length) {
+                if (car.value) {
+                    car.value.patente = patente.value;
+                    carsStore.update(car.value);
+                } else {
+                    let carData = {
+                        description: 'NOT USED YET',
+                        patente: patente.value
+                    };
+                    carsStore.create(carData);
+                }
             }
-        },
-        changeShowPassword() {
-            this.showChangePassword = !this.showChangePassword;
-        },
-        changeBeDriver() {
-            this.showBeDriver = !this.showBeDriver;
-        },
-        isNumber(value) {
-            inputIsNumber(value);
-        },
-        // Handle DNI input - format using pattern
-        handleDniInput(event) {
-            const formatted = formatId(event.target.value, this.config.profile_id_format);
-            event.target.value = formatted;
-            // Update the Vue data model with the formatted value
-            this.user.nro_doc = formatted;
-        },
-        onPhotoChange(data) {
-            this.loadingImg = true;
-            this.updatePhoto(data)
-                .then((user) => {
-                    this.user.image = user.image;
-                    this.loadingImg = false;
-                })
-                .catch(() => {
-                    this.loadingImg = false;
-                });
-        },
-        onDriverDocumentChange(event) {
-            if (event.target.files) {
-                this.driverFiles = event.target.files;
-            }
-        },
-        dateChange(value) {
-            this.birthdayAnswer = value;
-        },
-        changePhoto() {
-            this.$refs.file.show();
-        },
-        grabar() {
-            if (this.validate()) {
-                this.$nextTick(() => {
-                    this.jumpToError();
-                    dialogs.message(this.$t('faltanCamposObligatorios'), {
+            if (
+                localUser.value.image &&
+                localUser.value.image.length > 0 &&
+                localUser.value.description &&
+                localUser.value.description.length > 0
+            ) {
+                if (router.rememberRoute) {
+                    router.rememberBack();
+                }
+            } else {
+                if (!(localUser.value.image && localUser.value.image.length > 0)) {
+                    dialogs.message(t('debesImagenPerfil'), {
                         duration: 10,
                         estado: 'error'
                     });
-                });
-                return;
-            }
-            this.loading = true;
-            // Ensure user.nro_doc is raw value (no dots) before sending
-            if (this.user && this.user.nro_doc) {
-                this.user.nro_doc = cleanId(this.user.nro_doc, this.config.profile_id_format);
-            }
-            console.log('this.user', this.user);
-            var data = Object.assign({}, this.user);
-            console.log('data.user', data);
-            if (this.pass.password) {
-                if (this.pass.password !== this.pass.password_confirmation) {
-                    this.error = this.$t('passwordNoCoincide');
-                    return;
-                }
-                data.password = this.pass.password;
-                data.password_confirmation = this.pass.password_confirmation;
-            }
-            /* if (moment(this.birthdayAnswer, 'YYYY-MM-DD').isValid()) {
-                console.log('valid date');
-                data.birthday = this.birthdayAnswer;
-                console.log(this.user.birthday);
-            } */
-            // nro_doc is already raw value (no dots) from user object
-            /* global FormData */
-            let bodyFormData = new FormData();
-            for (const key in data) {
-                if (data.hasOwnProperty(key)) {
-                    if (Array.isArray(data[key])) {
-                        for (let index = 0; index < data[key].length; index++) {
-                            const element = data[key][index];
-                            bodyFormData.append(key + '[]', element);
-                        }
-                    } else {
-                        if (data[key] !== null) {
-                            bodyFormData.append(key, data[key]);
-                        } else {
-                            // bodyFormData.append(key, '');
-                        }
-                    }
                 }
             }
-            if (this.driverFiles) {
-                bodyFormData.append('user_be_driver', true);
-                for (let index = 0; index < this.driverFiles.length; index++) {
-                    const file = this.driverFiles[index];
-                    bodyFormData.append('driver_data_docs[]', file);
-                }
-            } else {
+        })
+        .catch((err) => {
+            console.error(err);
+            loading.value = false;
+            error.value = t('errorDatos');
+            jumpToError();
+            const isDocTaken =
+                err &&
+                err.errors &&
+                err.errors.nro_doc &&
+                Array.isArray(err.errors.nro_doc) &&
+                err.errors.nro_doc.length > 0 &&
+                (err.errors.nro_doc[0].indexOf('taken') >= 0 ||
+                    err.errors.nro_doc[0].indexOf(
+                        'ya ha sido tomado'
+                    ) >= 0);
+            const isPhoneTaken =
+                err &&
+                err.errors &&
+                err.errors.mobile_phone &&
+                Array.isArray(err.errors.mobile_phone) &&
+                err.errors.mobile_phone.length > 0 &&
+                (err.errors.mobile_phone[0].indexOf('taken') >= 0 ||
+                    err.errors.mobile_phone[0].indexOf(
+                        'ya ha sido tomado'
+                    ) >= 0);
+            if (isDocTaken || isPhoneTaken) {
+                showDatosEnUsoModal.value = true;
             }
-            this.update(bodyFormData)
-                .then(() => {
-                    this.pass.password = '';
-                    this.pass.password_confirmation = '';
-                    this.loading = false;
-                    dialogs.message(this.$t('perfilActualizadoCorrectamente'));
-                    if (this.patente.length) {
-                        if (this.car) {
-                            this.car.patente = this.patente;
-                            this.carUpdate(this.car);
-                        } else {
-                            let car = {
-                                description: 'NOT USED YET',
-                                patente: this.patente
-                            };
-                            this.carCreate(car);
-                        }
-                    }
-                    // this.user.birthday = this.birthdayAnswer;
-                    if (
-                        this.user.image &&
-                        this.user.image.length > 0 &&
-                        this.user.description &&
-                        this.user.description.length > 0
-                    ) {
-                        if (this.$router.rememberRoute) {
-                            this.$router.rememberBack();
-                        }
-                    } else {
-                        if (!(this.user.image && this.user.image.length > 0)) {
-                            dialogs.message(this.$t('debesImagenPerfil'), {
-                                duration: 10,
-                                estado: 'error'
-                            });
-                        }
-                    }
-                })
-                .catch((err) => {
-                    console.error(err);
-                    this.loading = false;
-                    this.error = this.$t('errorDatos');
-                    this.jumpToError();
-                    const isDocTaken =
-                        err &&
-                        err.errors &&
-                        err.errors.nro_doc &&
-                        Array.isArray(err.errors.nro_doc) &&
-                        err.errors.nro_doc.length > 0 &&
-                        (err.errors.nro_doc[0].indexOf('taken') >= 0 ||
-                            err.errors.nro_doc[0].indexOf(
-                                'ya ha sido tomado'
-                            ) >= 0);
-                    const isPhoneTaken =
-                        err &&
-                        err.errors &&
-                        err.errors.mobile_phone &&
-                        Array.isArray(err.errors.mobile_phone) &&
-                        err.errors.mobile_phone.length > 0 &&
-                        (err.errors.mobile_phone[0].indexOf('taken') >= 0 ||
-                            err.errors.mobile_phone[0].indexOf(
-                                'ya ha sido tomado'
-                            ) >= 0);
-                    if (isDocTaken || isPhoneTaken) {
-                        this.showDatosEnUsoModal = true;
-                    }
-                    const isBannedDni =
-                        err &&
-                        err.errors &&
-                        err.errors.error === 'banned_dni';
-                    if (isBannedDni) {
-                        this.showBannedDniModal = true;
-                    }
-                });
-        },
-        validate() {
-            let globalError = false;
-            /* if (this.password.length < 1) {
-                this.passwordError.state = true;
-                this.passwordError.message = this.$t('olvidoContrasena');
-                globalError = true;
-            } else if (this.password.length < 8) {
-                this.passwordError.state = true;
-                this.passwordError.message = this.$t('contraCorta');
-                globalError = true;
-            } else if (this.passwordConfirmation < 1) {
-                this.passwordError.state = true;
-                this.passwordError.message = this.$t('olvidoConfirmarContra');
-                globalError = true;
-            } else if (this.password !== this.passwordConfirmation) {
-                this.passwordError.state = true;
-                this.passwordError.message = this.$t('contraNoCoinciden');
-                globalError = true;
-            } */
-
-            if (!this.user.name || this.user.name.length < 1) {
-                this.nombreError.state = true;
-                this.nombreError.message = this.$t('olvidasteNombre');
-                globalError = true;
+            const isBannedDni =
+                err &&
+                err.errors &&
+                err.errors.error === 'banned_dni';
+            if (isBannedDni) {
+                showBannedDniModal.value = true;
             }
-
-            /* console.log(this.birthdayAnswer);
-            if (!this.birthdayAnswer || this.birthdayAnswer.length < 1) {
-                this.birthdayError.state = true;
-                this.birthdayError.message = this.$t('olvidasteFechaNacimiento');
-                globalError = true;
-            } else {
-                let birthday = moment(this.birthdayAnswer);
-                if (moment().diff(birthday, 'years') < 18) {
-                    this.birthdayError.state = true;
-                    this.birthdayError.message = this.$t('debesSerMayorDeEdad');
-                    globalError = true;
-                }
-            } */
-
-            // Patente validation removed - now allows all strings
-            // Only basic length validation is handled by the input maxlength attribute
-
-            if (!this.user.description || this.user.description.length < 1) {
-                this.descError.state = true;
-                this.descError.message = this.$t('olvidasteDescripcion');
-                globalError = true;
-            } else if (this.user.description.replace(' ', '').length < 10) {
-                this.descError.state = true;
-                this.descError.message = this.$t('descripcionCorta');
-                globalError = true;
-            }
-
-            // Get raw DNI value (strip any dots that might be present)
-            const dniRaw = this.user && this.user.nro_doc
-                ? cleanId(this.user.nro_doc, this.config.profile_id_format)
-                : '';
-            
-            if (!dniRaw || dniRaw.length < 1) {
-                this.dniError.state = true;
-                this.dniError.message = this.$t('olvidasteDni');
-                globalError = true;
-            } else if (dniRaw.length > 0 && dniRaw.length < 7) {
-                this.dniError.state = true;
-                this.dniError.message = this.$t('dniNoValido');
-                globalError = true;
-            }
-
-            if (!this.user.mobile_phone || this.user.mobile_phone.length < 1) {
-                this.phoneError.state = true;
-                this.phoneError.message = this.$t('olvidasteTel');
-                globalError = true;
-            } else if (
-                this.user.mobile_phone &&
-                this.user.mobile_phone.length > 0 &&
-                this.user.mobile_phone.length < 6
-            ) {
-                this.phoneError.state = true;
-                this.phoneError.message = this.$t('telefonoNoValido');
-                globalError = true;
-            }
-
-            if (
-                this.user.driver_is_verified ||
-                (this.settings.module_validated_drivers && this.showBeDriver)
-            ) {
-                if (!this.user.account_number) {
-                    this.accountNumberError.state = true;
-                    this.accountNumberError.message =
-                        this.$t('campoObligatorio');
-                    globalError = true;
-                }
-                if (!this.user.account_type) {
-                    this.accountTypeError.state = true;
-                    this.accountTypeError.message = this.$t('campoObligatorio');
-                    globalError = true;
-                }
-                if (!this.user.account_bank) {
-                    this.accountBankError.state = true;
-                    this.accountBankError.message = this.$t('campoObligatorio');
-                    globalError = true;
-                }
-            }
-
-            return globalError;
-        },
-        toggleModalDeleteAccount() {
-            this.showModalDeleteAccount = !this.showModalDeleteAccount;
-            this.showNegativeRatingsInModal = false;
-        },
-        openMesaAyudaFromDelete() {
-            this.showModalDeleteAccount = false;
-            this.showMesaAyudaModal = true;
-        },
-        toggleDatosEnUsoModal() {
-            this.showDatosEnUsoModal = !this.showDatosEnUsoModal;
-        },
-        toggleBannedDniModal() {
-            this.showBannedDniModal = !this.showBannedDniModal;
-        },
-        deleteAccount() {
-            this.loadingDeleteAccount = true;
-            this.userApi
-                .deleteAccount()
-                .then((response) => {
-                    this.loadingDeleteAccount = false;
-                    this.showModalDeleteAccount = false;
-                    const action = response && response.action;
-                    const message = action === 'deleted'
-                        ? this.$t('usuarioEliminadoExitosamente')
-                        : action === 'anonymized'
-                            ? this.$t('usuarioAnonimizadoExitosamente')
-                            : (response && response.message) || this.$t('pedidoEliminacionEnviado');
-                    dialogs.message(message, {
-                        duration: 5,
-                        estado: 'success'
-                    });
-                    window.location.href = this.$router.resolve({ name: 'trips' }).href;
-                })
-                .catch((error) => {
-                    this.loadingDeleteAccount = false;
-                    if (error.data && error.data.error === 'negative_ratings') {
-                        this.showNegativeRatingsInModal = true;
-                    } else {
-                        const message = (error.data && error.data.message) || this.$t('errorEnviarPedidoEliminacion');
-                        dialogs.message(message, {
-                            duration: 5,
-                            estado: 'error'
-                        });
-                    }
-                });
-        },
-        requestAccountDeletion() {
-            this.loadingDeleteAccount = true;
-            this.userApi
-                .deleteAccountRequest()
-                .then(() => {
-                    this.loadingDeleteAccount = false;
-                    this.showModalDeleteAccount = false;
-                    this.showNegativeRatingsInModal = false;
-                    dialogs.message(this.$t('pedidoEliminacionEnviado'), {
-                        duration: 5,
-                        estado: 'success'
-                    });
-                })
-                .catch(() => {
-                    this.loadingDeleteAccount = false;
-                    dialogs.message(this.$t('errorEnviarPedidoEliminacion'), {
-                        duration: 5,
-                        estado: 'error'
-                    });
-                });
-        }
-    },
-    watch: {
-        cars: function () {
-            console.log('cars', this.cars);
-            if (this.cars.length > 0) {
-                this.car = this.cars[0];
-                this.patente = this.car.patente;
-            }
-        },
-        userData: function () {
-            console.log('userData', this.userData);
-            this.user = this.userData;
-            // Format nro_doc with pattern when loaded from backend
-            if (this.user && this.user.nro_doc) {
-                this.user.nro_doc = formatId(this.user.nro_doc, this.config.profile_id_format);
-            }
-        },
-        iptUser() {
-            this.nombreError.state = false;
-        },
-        iptEmail() {
-            this.emailError.state = false;
-        },
-        birthdayAnswer: function () {
-            this.birthdayError.state = false;
-        },
-        iptDescription() {
-            this.descError.state = false;
-        },
-        iptDni() {
-            this.dniError.state = false;
-        },
-        iptPhone() {
-            this.phoneError.state = false;
-        },
-        patente() {
-            this.patentError.state = false;
-        }
-    },
-
-    mounted() {
-        this.userApi = new UserApi();
-        console.log('touter', this.$router);
-        this.getBankData().then((data) => {
-            console.log('get bank data', data);
-            this.banks = data.banks;
-            this.accountTypes = data.cc;
         });
-        
-        // Load user's cars to populate patente field
-        this.carIndex().then(() => {
-            console.log('Cars loaded for profile update');
-            // Ensure patente is set if cars are loaded
-            if (this.cars && this.cars.length > 0) {
-                this.car = this.cars[0];
-                this.patente = this.car.patente;
-                console.log('Patente set from loaded car:', this.patente);
-            }
-        }).catch((error) => {
-            console.error('Failed to load cars:', error);
-        });
-        bus.on('date-change', this.dateChange);
-        this.user = this.userData;
-        // Format nro_doc with pattern when page loads
-        if (this.user && this.user.nro_doc) {
-            this.user.nro_doc = formatId(this.user.nro_doc, this.config.profile_id_format);
-        }
-        console.log('USUARIO', this.userData);
-        if (
-            Array.isArray(this.user.driver_data_docs) &&
-            this.user.driver_data_docs.length
-        ) {
-            this.showBeDriver = true;
-        }
-        if (this.cars) {
-            if (this.cars.length > 0) {
-                this.car = this.cars[0];
-                this.patente = this.car.patente;
-            }
-        }
-        try {
-            if (moment(this.user.birthday, 'YYYY-MM-DD').isValid()) {
-                this.birthday = moment(this.user.birthday, 'YYYY-MM-DD');
-            } else {
-                this.birthday = '';
-            }
-        } catch (ex) {
-            console.log('exception', ex);
-        }
-    },
-    beforeDestroy() {
-        bus.off('date-change', this.dateChange);
-    },
-    components: {
-        DatePicker,
-        Uploadfile,
-        SvgItem,
-        Spinner,
-        modal
+}
+
+function validate() {
+    let hasGlobalError = false;
+
+    if (!localUser.value.name || localUser.value.name.length < 1) {
+        nombreError.state = true;
+        nombreError.message = t('olvidasteNombre');
+        hasGlobalError = true;
     }
-};
+
+    if (!localUser.value.description || localUser.value.description.length < 1) {
+        descError.state = true;
+        descError.message = t('olvidasteDescripcion');
+        hasGlobalError = true;
+    } else if (localUser.value.description.replace(' ', '').length < 10) {
+        descError.state = true;
+        descError.message = t('descripcionCorta');
+        hasGlobalError = true;
+    }
+
+    const dniRaw = localUser.value && localUser.value.nro_doc
+        ? cleanId(localUser.value.nro_doc, config.value.profile_id_format)
+        : '';
+
+    if (!dniRaw || dniRaw.length < 1) {
+        dniError.state = true;
+        dniError.message = t('olvidasteDni');
+        hasGlobalError = true;
+    } else if (dniRaw.length > 0 && dniRaw.length < 7) {
+        dniError.state = true;
+        dniError.message = t('dniNoValido');
+        hasGlobalError = true;
+    }
+
+    if (!localUser.value.mobile_phone || localUser.value.mobile_phone.length < 1) {
+        phoneError.state = true;
+        phoneError.message = t('olvidasteTel');
+        hasGlobalError = true;
+    } else if (
+        localUser.value.mobile_phone &&
+        localUser.value.mobile_phone.length > 0 &&
+        localUser.value.mobile_phone.length < 6
+    ) {
+        phoneError.state = true;
+        phoneError.message = t('telefonoNoValido');
+        hasGlobalError = true;
+    }
+
+    if (
+        localUser.value.driver_is_verified ||
+        (settings.value.module_validated_drivers && showBeDriver.value)
+    ) {
+        if (!localUser.value.account_number) {
+            accountNumberError.state = true;
+            accountNumberError.message = t('campoObligatorio');
+            hasGlobalError = true;
+        }
+        if (!localUser.value.account_type) {
+            accountTypeError.state = true;
+            accountTypeError.message = t('campoObligatorio');
+            hasGlobalError = true;
+        }
+        if (!localUser.value.account_bank) {
+            accountBankError.state = true;
+            accountBankError.message = t('campoObligatorio');
+            hasGlobalError = true;
+        }
+    }
+
+    return hasGlobalError;
+}
+
+function toggleModalDeleteAccount() {
+    showModalDeleteAccount.value = !showModalDeleteAccount.value;
+    showNegativeRatingsInModal.value = false;
+}
+
+function openMesaAyudaFromDelete() {
+    showModalDeleteAccount.value = false;
+    showMesaAyudaModal.value = true;
+}
+
+function toggleDatosEnUsoModal() {
+    showDatosEnUsoModal.value = !showDatosEnUsoModal.value;
+}
+
+function toggleBannedDniModal() {
+    showBannedDniModal.value = !showBannedDniModal.value;
+}
+
+function deleteAccount() {
+    loadingDeleteAccount.value = true;
+    userApi.value
+        .deleteAccount()
+        .then((response) => {
+            loadingDeleteAccount.value = false;
+            showModalDeleteAccount.value = false;
+            const action = response && response.action;
+            const message = action === 'deleted'
+                ? t('usuarioEliminadoExitosamente')
+                : action === 'anonymized'
+                    ? t('usuarioAnonimizadoExitosamente')
+                    : (response && response.message) || t('pedidoEliminacionEnviado');
+            dialogs.message(message, {
+                duration: 5,
+                estado: 'success'
+            });
+            window.location.href = router.resolve({ name: 'trips' }).href;
+        })
+        .catch((err) => {
+            loadingDeleteAccount.value = false;
+            if (err.data && err.data.error === 'negative_ratings') {
+                showNegativeRatingsInModal.value = true;
+            } else {
+                const message = (err.data && err.data.message) || t('errorEnviarPedidoEliminacion');
+                dialogs.message(message, {
+                    duration: 5,
+                    estado: 'error'
+                });
+            }
+        });
+}
+
+function requestAccountDeletion() {
+    loadingDeleteAccount.value = true;
+    userApi.value
+        .deleteAccountRequest()
+        .then(() => {
+            loadingDeleteAccount.value = false;
+            showModalDeleteAccount.value = false;
+            showNegativeRatingsInModal.value = false;
+            dialogs.message(t('pedidoEliminacionEnviado'), {
+                duration: 5,
+                estado: 'success'
+            });
+        })
+        .catch(() => {
+            loadingDeleteAccount.value = false;
+            dialogs.message(t('errorEnviarPedidoEliminacion'), {
+                duration: 5,
+                estado: 'error'
+            });
+        });
+}
+
+watch(cars, () => {
+    console.log('cars', cars.value);
+    if (cars.value && cars.value.length > 0) {
+        car.value = cars.value[0];
+        patente.value = car.value.patente;
+    }
+});
+
+watch(userData, () => {
+    console.log('userData', userData.value);
+    localUser.value = userData.value;
+    if (localUser.value && localUser.value.nro_doc) {
+        localUser.value.nro_doc = formatId(localUser.value.nro_doc, config.value.profile_id_format);
+    }
+});
+
+watch(iptUser, () => {
+    nombreError.state = false;
+});
+watch(iptEmail, () => {
+    emailError.state = false;
+});
+watch(birthdayAnswer, () => {
+    birthdayError.state = false;
+});
+watch(iptDescription, () => {
+    descError.state = false;
+});
+watch(iptDni, () => {
+    dniError.state = false;
+});
+watch(iptPhone, () => {
+    phoneError.state = false;
+});
+watch(patente, () => {
+    patentError.state = false;
+});
+
+onMounted(() => {
+    userApi.value = new UserApi();
+    console.log('router', router);
+    profileStore.getBankData().then((data) => {
+        console.log('get bank data', data);
+        banks.value = data.banks;
+        accountTypes.value = data.cc;
+    });
+
+    // Load user's cars to populate patente field
+    carsStore.index().then(() => {
+        console.log('Cars loaded for profile update');
+        if (cars.value && cars.value.length > 0) {
+            car.value = cars.value[0];
+            patente.value = car.value.patente;
+            console.log('Patente set from loaded car:', patente.value);
+        }
+    }).catch((err) => {
+        console.error('Failed to load cars:', err);
+    });
+    bus.on('date-change', dateChange);
+    localUser.value = userData.value;
+    // Format nro_doc with pattern when page loads
+    if (localUser.value && localUser.value.nro_doc) {
+        localUser.value.nro_doc = formatId(localUser.value.nro_doc, config.value.profile_id_format);
+    }
+    console.log('USUARIO', userData.value);
+    if (
+        Array.isArray(localUser.value.driver_data_docs) &&
+        localUser.value.driver_data_docs.length
+    ) {
+        showBeDriver.value = true;
+    }
+    if (cars.value) {
+        if (cars.value.length > 0) {
+            car.value = cars.value[0];
+            patente.value = car.value.patente;
+        }
+    }
+    try {
+        if (moment(localUser.value.birthday, 'YYYY-MM-DD').isValid()) {
+            birthday.value = moment(localUser.value.birthday, 'YYYY-MM-DD');
+        } else {
+            birthday.value = '';
+        }
+    } catch (ex) {
+        console.log('exception', ex);
+    }
+});
+
+onBeforeUnmount(() => {
+    bus.off('date-change', dateChange);
+});
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -1260,4 +1222,3 @@ hr {
     border-top: 1px solid #cccccc;
 }
 </style>
-

@@ -2,15 +2,15 @@ import { debounce } from '../services/utility';
 
 let debounceFunction = null;
 const inputHandler = debounce(function () {
-    debounceFunction();
+    if (debounceFunction) debounceFunction();
 }, 800);
 
 export default {
-    bind: function (el, binding, node) {
+    beforeMount: function (el, binding) {
         debounceFunction = binding.value;
         el.addEventListener('input', inputHandler, false);
     },
-    unbind: function (el, binding, node) {
+    unmounted: function (el) {
         el.removeEventListener('input', inputHandler, false);
     }
 };

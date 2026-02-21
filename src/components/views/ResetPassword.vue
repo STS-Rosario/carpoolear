@@ -4,18 +4,18 @@
             <img :src="carpoolear_logo" />
         </router-link>
         <h1 v-if="tripCardTheme !== 'light'">
-            {{ $t('recuperarContraseña') }}
+            {{ t('recuperarContraseña') }}
         </h1>
         <div class="form row" v-if="send">
             <h3>
-                {{ $t('seHaEnviadoEmailIndicacionesRestablecerContrasena') }}
+                {{ t('seHaEnviadoEmailIndicacionesRestablecerContrasena') }}
             </h3>
         </div>
         <div class="form row message" v-else-if="!token">
             <h1 v-if="tripCardTheme === 'light'">
-                {{ $t('recuperarContraseña') }}
+                {{ t('recuperarContraseña') }}
             </h1>
-            <label for="txt_email">{{ $t('email') }}</label>
+            <label for="txt_email">{{ t('email') }}</label>
             <input v-jump type="text" id="txt_email" v-model="email" />
             <span class="error" v-if="error">{{ error }}</span>
             <button
@@ -24,19 +24,19 @@
                 @click="reset"
                 :disabled="loading"
             >
-                <span v-if="!loading">{{ $t('recuperarContraseña') }}</span>
+                <span v-if="!loading">{{ t('recuperarContraseña') }}</span>
                 <spinner class="blue" v-if="loading"></spinner>
             </button>
         </div>
         <div class="form row" v-else-if="token">
-            <label for="txt_password">{{ $t('password') }}</label>
+            <label for="txt_password">{{ t('password') }}</label>
             <input
                 v-jump
                 type="password"
                 id="txt_password"
                 v-model="password"
             />
-            <label for="txt_password">{{ $t('repetirContrasena') }}</label>
+            <label for="txt_password">{{ t('repetirContrasena') }}</label>
             <input
                 v-jump
                 type="password"
@@ -50,116 +50,104 @@
                 @click="change"
                 :disabled="loading"
             >
-                <span v-if="!loading">{{ $t('cambiarPassword') }}</span>
+                <span v-if="!loading">{{ t('cambiarPassword') }}</span>
                 <spinner class="blue" v-if="loading"></spinner>
             </button>
         </div>
     </div>
 </template>
 
-<script>
-import { mapActions, mapGetters } from 'vuex';
+<script setup>
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+import { useAuthStore } from '@/stores/auth';
+import { useDeviceStore } from '@/stores/device';
 import bus from '../../services/bus-event';
-import router from '../../router';
 import Spinner from '../Spinner.vue';
+
+const { t } = useI18n();
+const router = useRouter();
+const authStore = useAuthStore();
+const deviceStore = useDeviceStore();
+
 let emailRegex =
     /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 
-export default {
-    name: 'reset-password',
-    props: {
-        token: {
-            type: String,
-            required: false
-        }
-    },
+const props = defineProps({
+    token: {
+        type: String,
+        required: false
+    }
+});
 
-    data() {
-        return {
-            email: '',
-            loading: false,
-            error: null,
-            send: false,
-            password_confirmation: '',
-            password: '',
-            carpoolear_logo:
-                process.env.ROUTE_BASE + 'static/img/carpoolear_logo.png'
-        };
-    },
-    computed: {
-        ...mapGetters({
-            isMobile: 'device/isMobile',
-            settings: 'auth/appConfig'
-        }),
-        tripCardTheme() {
-            return this.settings ? this.settings.trip_card_design : '';
-        }
-    },
+const email = ref('');
+const loading = ref(false);
+const error = ref(null);
+const send = ref(false);
+const password_confirmation = ref('');
+const password = ref('');
+const ROUTE_BASE = import.meta.env.VITE_ROUTE_BASE || '/';
+const carpoolear_logo = ROUTE_BASE + 'static/img/carpoolear_logo.png';
 
-    methods: {
-        ...mapActions({
-            resetPassword: 'auth/resetPassword',
-            changePassword: 'auth/changePassword'
-        }),
+const isMobile = computed(() => deviceStore.isMobile);
+const settings = computed(() => authStore.appConfig);
+const tripCardTheme = computed(() => {
+    return settings.value ? settings.value.trip_card_design : '';
+});
 
-        reset() {
-            this.error = null;
-            if (emailRegex.test(this.email)) {
-                this.loading = true;
-                this.resetPassword(this.email).then(
-                    () => {
-                        this.loading = false;
-                        this.send = true;
-                    },
-                    () => {
-                        this.loading = false;
-                        this.error =
-                            this.$t('emailIngresadoNoPerteneceUsuario');
-                    }
-                );
-            } else {
-                this.error = this.$t('ingreseEmailValido');
+const reset = () => {
+    error.value = null;
+    if (emailRegex.test(email.value)) {
+        loading.value = true;
+        authStore.resetPassword(email.value).then(
+            () => {
+                loading.value = false;
+                send.value = true;
+            },
+            () => {
+                loading.value = false;
+                error.value = t('emailIngresadoNoPerteneceUsuario');
             }
-        },
-
-        change() {
-            this.error = null;
-            if (this.password === this.password_confirmation) {
-                this.loading = true;
-                let data = {};
-                data.password = this.password;
-                data.password_confirmation = this.password_confirmation;
-                let token = this.token;
-                this.changePassword({ token, data }).then(
-                    () => {
-                        this.$router.replace({ name: 'login' });
-                    },
-                    () => {
-                        this.loading = false;
-                        this.error = this.$t('tokenInvalido');
-                    }
-                );
-            } else {
-                this.error = this.$t('noCoincidenCampos');
-            }
-        },
-        onBackClick() {
-            router.back();
-        }
-    },
-
-    mounted() {
-        bus.on('back-click', this.onBackClick);
-    },
-
-    beforeDestroy() {
-        bus.off('back-click', this.onBackClick);
-    },
-
-    components: {
-        Spinner
+        );
+    } else {
+        error.value = t('ingreseEmailValido');
     }
 };
+
+const change = () => {
+    error.value = null;
+    if (password.value === password_confirmation.value) {
+        loading.value = true;
+        let data = {};
+        data.password = password.value;
+        data.password_confirmation = password_confirmation.value;
+        let token = props.token;
+        authStore.changePassword({ token, data }).then(
+            () => {
+                router.replace({ name: 'login' });
+            },
+            () => {
+                loading.value = false;
+                error.value = t('tokenInvalido');
+            }
+        );
+    } else {
+        error.value = t('noCoincidenCampos');
+    }
+};
+
+const onBackClick = () => {
+    router.back();
+};
+
+onMounted(() => {
+    bus.on('back-click', onBackClick);
+});
+
+onBeforeUnmount(() => {
+    bus.off('back-click', onBackClick);
+});
 </script>
 
 <style>

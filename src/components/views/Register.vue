@@ -5,13 +5,12 @@
         </router-link>
         <!-- <img v-if="isMobile" :src="carpoolear_logo" /> -->
         <h1 v-if="tripCardTheme !== 'light' && !(success && isMobile)">
-            {{ $t('RegistrarNuevoUsuario') }}
+            {{ t('RegistrarNuevoUsuario') }}
         </h1>
         <div class="form row" v-if="!success">
             <div v-if="settings.enable_facebook" v-show="!showRegisterForm">
                 <div class="col-md-12">
                     <div class="text text-with">con</div>
-                    <!-- <button ref="btn_show_register" id="btn_show_register" class="btn btn-primary btn-shadowed-black" @click="onShowRegister"> <span>{{ $t('ingresaEmail') }}</span></button> -->
 
                     <button
                         ref="btn_show_register"
@@ -23,13 +22,13 @@
                             <i class="fa fa-envelope" aria-hidden="true"></i>
                         </span>
                         <span class="btn-with-icon--label">
-                            <span>{{ $t('ingresaEmail') }}</span>
+                            <span>{{ t('ingresaEmail') }}</span>
                         </span>
                     </button>
                 </div>
                 <div class="col-md-12">
                     <div class="text text-creating-with-fb">
-                        {{ $t('creandoUnaCuenta') }}
+                        {{ t('creandoUnaCuenta') }}
                     </div>
                     <button
                         class="btn btn-primary btn-search btn-facebook btn-with-icon"
@@ -45,32 +44,32 @@
                         </span>
                     </button>
                     <div class="fb-terms">
-                        {{ $t('alIngresarFacebook') }}
+                        {{ t('alIngresarFacebook') }}
                         <router-link :to="{ name: 'terms' }">{{
-                            $t('tyc')
+                            t('tyc')
                         }}</router-link>
                         .
                     </div>
                 </div>
             </div>
             <h1 v-if="tripCardTheme === 'light' && !(success && isMobile)">
-                {{ $t('RegistrarNuevoUsuario') }}
+                {{ t('RegistrarNuevoUsuario') }}
             </h1>
             <div v-if="showRegisterForm">
                 <div class="campos-obligatorios">
-                    {{ $t('camposObligatorios') }}
+                    {{ t('camposObligatorios') }}
                 </div>
                 <br />
                 <label for="txt_name">
-                    {{ $t('nombre') }}
+                    {{ t('nombre') }}
                     <span
-                        :aria-label="$t('campoObligatorio')"
+                        :aria-label="t('campoObligatorio')"
                         class="campo-obligatorio"
                         >*</span>
-                    
+
                 </label>
                 <input
-                    :placeholder="$t('nombre')"
+                    :placeholder="t('nombre')"
                     autofocus
                     v-jump
                     ref="txt_name"
@@ -85,15 +84,15 @@
                     {{ nombreError.message }}
                 </span>
                 <label for="txt_surename">
-                    {{ $t('apellido') }}
+                    {{ t('apellido') }}
                     <span
-                        :aria-label="$t('campoObligatorio')"
+                        :aria-label="t('campoObligatorio')"
                         class="campo-obligatorio"
                         >*</span
                     >
                 </label>
                 <input
-                    :placeholder="$t('apellido')"
+                    :placeholder="t('apellido')"
                     v-jump
                     ref="txt_surename"
                     name="txt_surename"
@@ -107,15 +106,15 @@
                     {{ apellidoError.message }}
                 </span>
                 <label for="txt_email">
-                    {{ $t('email') }}
+                    {{ t('email') }}
                     <span
-                        :aria-label="$t('campoObligatorio')"
+                        :aria-label="t('campoObligatorio')"
                         class="campo-obligatorio"
                         >*</span
                     >
                 </label>
                 <input
-                    :placeholder="$t('email')"
+                    :placeholder="t('email')"
                     v-jump
                     ref="txt_email"
                     name="txt_email"
@@ -130,15 +129,15 @@
                 </span>
 
                 <label for="txt_email_verification">
-                    {{ $t('emailVerification') }}
+                    {{ t('emailVerification') }}
                     <span
-                        :aria-label="$t('campoObligatorio')"
+                        :aria-label="t('campoObligatorio')"
                         class="campo-obligatorio"
                         >*</span
                     >
                 </label>
                 <input
-                    :placeholder="$t('emailVerification')"
+                    :placeholder="t('emailVerification')"
                     v-jump
                     ref="txt_email_verification"
                     name="txt_email_verification"
@@ -152,21 +151,19 @@
                     {{ emailVerificationError.message }}
                 </span>
 
-                <!--<label for="">Fecha de nacimiento <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
-        <DatePicker :value="birthday" ref="ipt_calendar" name="ipt_calendar" :maxDate="maxDate" :minDate="minDate" :class="{'has-error': birthdayError.state}" ></DatePicker>-->
                 <span class="error" v-if="birthdayError.state">
                     {{ birthdayError.message }}
                 </span>
                 <label for="txt_password">
-                    {{ $t('password') }}
+                    {{ t('password') }}
                     <span
-                        :aria-label="$t('campoObligatorio')"
+                        :aria-label="t('campoObligatorio')"
                         class="campo-obligatorio"
                         >*</span
                     >
                 </label>
                 <input
-                    :placeholder="$t('password')"
+                    :placeholder="t('password')"
                     v-jump
                     ref="txt_password"
                     name="txt_password"
@@ -180,15 +177,15 @@
                     {{ passwordError.message }}
                 </span>
                 <label for="txt_password_confirmation">
-                    {{ $t('ingresePassword') }}
+                    {{ t('ingresePassword') }}
                     <span
-                        :aria-label="$t('campoObligatorio')"
+                        :aria-label="t('campoObligatorio')"
                         class="campo-obligatorio"
                         >*</span
                     >
                 </label>
                 <input
-                    :placeholder="$t('ingresePassword')"
+                    :placeholder="t('ingresePassword')"
                     v-jump
                     ref="txt_password_confirmation"
                     name="txt_password_confirmation"
@@ -212,7 +209,7 @@
                         id="change_be_driver"
                     />
                     <label for="change_be_driver" class="label-cbx">
-                        {{ $t('solicitarChofer') }}
+                        {{ t('solicitarChofer') }}
                     </label>
                 </div>
                 <div
@@ -220,7 +217,7 @@
                     v-if="settings.module_validated_drivers && showBeDriver"
                 >
                     <label for="driver_documentation">{{
-                        $t('ingresarDocumentacion')
+                        t('ingresarDocumentacion')
                     }}</label>
                     <input
                         type="file"
@@ -228,13 +225,13 @@
                         multiple
                         @change="onDriverDocumentChange"
                     />
-                    <p class="help-block">{{ $t('requisitosRegister') }}</p>
+                    <p class="help-block">{{ t('requisitosRegister') }}</p>
                     <div class="form-group">
                         <label for="tipoDeCuenta">
-                            {{ $t('tipoDeCuenta') }}
+                            {{ t('tipoDeCuenta') }}
                             <span
                                 class="required-field-flag"
-                                :title="$t('tituloCampoRequerido')"
+                                :title="t('tituloCampoRequerido')"
                                 >(*)</span
                             >
                         </label>
@@ -257,10 +254,10 @@
                     </div>
                     <div class="form-group">
                         <label for="bancoDeCuenta">
-                            {{ $t('bancoDeCuenta') }}
+                            {{ t('bancoDeCuenta') }}
                             <span
                                 class="required-field-flag"
-                                :title="$t('tituloCampoRequerido')"
+                                :title="t('tituloCampoRequerido')"
                                 >(*)</span
                             >
                         </label>
@@ -283,10 +280,10 @@
                     </div>
                     <div class="form-group">
                         <label for="accountNumber">
-                            {{ $t('numeroDeCuenta') }}
+                            {{ t('numeroDeCuenta') }}
                             <span
                                 class="required-field-flag"
-                                :title="$t('tituloCampoRequerido')"
+                                :title="t('tituloCampoRequerido')"
                                 >(*)</span
                             >
                         </label>
@@ -294,7 +291,7 @@
                             v-model="account_number"
                             type="text"
                             id="accountNumber"
-                            :placeholder="$t('numeroDeCuenta')"
+                            :placeholder="t('numeroDeCuenta')"
                             :class="{ 'has-error': accountNumberError.state }"
                         />
                         <span class="error" v-if="accountNumberError.state">
@@ -312,9 +309,9 @@
                         v-model="termsAndConditions"
                     />
                     <label for="cbx_terms" class="label-cbx">
-                        {{ $t('leidoTerminos1') }}
+                        {{ t('leidoTerminos1') }}
                         <router-link :to="{ name: 'terms' }">
-                            {{ $t('leidoTerminos2') }}
+                            {{ t('leidoTerminos2') }}
                         </router-link>
                         .
                     </label>
@@ -327,7 +324,7 @@
                         :disabled="progress || !termsAndConditions"
                         v-bind:data-sitekey="RECAPTCHA_SITE_KEY"
                     >
-                        <span v-if="!progress">{{ $t('registrarme') }}</span>
+                        <span v-if="!progress">{{ t('registrarme') }}</span>
                         <spinner class="blue" v-if="progress"></spinner>
                     </button>
                 </div>
@@ -338,448 +335,409 @@
                 v-if="showEmailTakenModal"
                 @close="toggleEmailTakenModal"
             >
-                <h3 slot="header">
-                    <span>{{ $t('emailYaTomado') }}</span>
-                    <i
-                        v-on:click="toggleEmailTakenModal"
-                        class="fa fa-times float-right-close"
-                    ></i>
-                </h3>
-                <div slot="body">
+                <template #header>
+                    <h3>
+                        <span>{{ t('emailYaTomado') }}</span>
+                        <i
+                            v-on:click="toggleEmailTakenModal"
+                            class="fa fa-times float-right-close"
+                        ></i>
+                    </h3>
+                </template>
+                <template #body>
                     <div class="text-left color-black login-modal">
                         <p>
-                            {{ $t('emailYaTomadoDescripcion') }}
+                            {{ t('emailYaTomadoDescripcion') }}
                         </p>
                         <p>
-                            {{ $t('mesaAyudaFuncionaDesde') }}
+                            {{ t('mesaAyudaFuncionaDesde') }}
                             <a :href="'mailto:' + settings.admin_email">
                                 {{ settings.admin_email }}</a>,
-                            {{ $t('mensajePrivadoDe') }}
+                            {{ t('mensajePrivadoDe') }}
                             <a href="https://instagram.com/carpoolear"
                                 >Instagram</a
                             >
-                            {{ $t('y') }}
+                            {{ t('y') }}
                             <a href="https://facebook.com/carpoolear"
                                 >Facebook</a
                             >.
                         </p>
                     </div>
-                </div>
+                </template>
             </modal>
         </div>
         <div class="form row register-success" v-else>
-            <h2>{{ $t('registroExitoso') }}</h2>
+            <h2>{{ t('registroExitoso') }}</h2>
             <p>
                 {{
-                    this.active
-                        ? $t('usuarioRegistrado')
-                        : $t('enviadoCodigoVerificacion')
+                    active
+                        ? t('usuarioRegistrado')
+                        : t('enviadoCodigoVerificacion')
                 }}
             </p>
         </div>
     </div>
 </template>
 
-<script>
-import { mapGetters, mapActions } from 'vuex';
+<script setup>
+import { ref, reactive, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+import { useAuthStore } from '@/stores/auth';
+import { useDeviceStore } from '@/stores/device';
+import { useProfileStore } from '@/stores/profile';
+import { useCordovaStore } from '@/stores/cordova';
 import dialogs from '../../services/dialogs.js';
 import bus from '../../services/bus-event';
-import router from '../../router';
 import DatePicker from '../DatePicker';
 import modal from '../Modal';
 import moment from 'moment';
 import Spinner from '../Spinner.vue';
+
 let emailRegex =
     /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-class Error {
+
+class FieldError {
     constructor(state = false, message = '') {
         this.state = false;
         this.message = '';
     }
 }
-console.log('RECAPTCHA_SECRET_KEY', process.env.RECAPTCHA_SITE_KEY);
-export default {
-    name: 'register',
-    data() {
-        return {
-            active: false,
-            email: '',
-            emailVerification: '',
-            password: '',
-            passwordConfirmation: '',
-            name: '',
-            sureName: '',
-            birthday: '',
-            account_number: '',
-            account_type: '',
-            account_bank: '',
-            termsAndConditions: false,
-            carpoolear_logo:
-                process.env.ROUTE_BASE +
-                'static/img/' +
-                process.env.TARGET_APP +
-                '_logo.png',
-            RECAPTCHA_SITE_KEY: process.env.RECAPTCHA_SITE_KEY,
-            progress: false,
-            success: false,
-            emailError: new Error(),
-            emailVerificationError: new Error(),
-            passwordError: new Error(),
-            nombreError: new Error(),
-            apellidoError: new Error(),
-            birthdayError: new Error(),
-            accountNumberError: new Error(),
-            accountTypeError: new Error(),
-            accountBankError: new Error(),
-            maxDate: moment().toDate(),
-            minDate: moment('1900-01-01').toDate(),
-            showBeDriver: false,
-            driverFiles: null,
-            banks: [],
-            accountTypes: [],
-            loading: false,
-            fbLoading: false,
-            showRegister: false,
-            showEmailTakenModal: false
-        };
-    },
-    computed: {
-        ...mapGetters({
-            checkLogin: 'auth/checkLogin',
-            isMobile: 'device/isMobile',
-            settings: 'auth/appConfig',
-            registerData: 'profile/registerData'
-        }),
-        tripCardTheme() {
-            return this.settings ? this.settings.trip_card_design : '';
-        },
-        showRegisterForm() {
-            return !this.settings.enable_facebook || this.showRegister;
-        }
-    },
-    watch: {
-        email: function () {
-            this.emailError.state = false;
-        },
-        emailVerification: function () {
-            this.emailVerificationError.state = false;
-        },
-        name: function () {
-            this.nombreError.state = false;
-        },
-        sureName: function () {
-            this.apellidoError.state = false;
-        },
-        password: function () {
-            this.passwordError.state = false;
-        },
-        birthdayAnswer: function () {
-            this.birthdayError.state = false;
-        }
-    },
-    components: {
-        DatePicker,
-        modal,
-        Spinner
-    },
-    methods: {
-        ...mapActions({
-            doRegister: 'auth/register',
-            getBankData: 'profile/getBankData',
-            saveRegisterData: 'profile/saveRegisterData',
-            cleanRegisterData: 'profile/cleanRegisterData',
-            fbLogin: 'cordova/facebookLogin'
-        }),
-        onShowRegister() {
-            this.showRegister = true;
-        },
-        toggleEmailTakenModal() {
-            this.showEmailTakenModal = !this.showEmailTakenModal;
-        },
-        facebookLogin() {
-            if (!this.loading) {
-                this.fbLoading = true;
-                this.fbLogin().catch((response) => {
-                    if (response.errors && response.errors.email) {
-                        dialogs.message(this.$t('correoUsado'), {
-                            duration: 10,
-                            estado: 'error'
-                        });
-                    }
-                });
-            } else {
-                dialogs.message(this.$t('solicitudEnviada'), {
+
+const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY || '';
+
+const { t } = useI18n();
+const route = useRoute();
+const router = useRouter();
+const authStore = useAuthStore();
+const deviceStore = useDeviceStore();
+const profileStore = useProfileStore();
+const cordovaStore = useCordovaStore();
+
+const active = ref(false);
+const email = ref('');
+const emailVerification = ref('');
+const password = ref('');
+const passwordConfirmation = ref('');
+const name = ref('');
+const sureName = ref('');
+const birthday = ref('');
+const account_number = ref('');
+const account_type = ref('');
+const account_bank = ref('');
+const termsAndConditions = ref(false);
+const ROUTE_BASE = import.meta.env.VITE_ROUTE_BASE || '/';
+const TARGET_APP = import.meta.env.VITE_TARGET_APP || 'carpoolear';
+const carpoolear_logo = ROUTE_BASE + 'static/img/' + TARGET_APP + '_logo.png';
+const progress = ref(false);
+const success = ref(false);
+const emailError = reactive(new FieldError());
+const emailVerificationError = reactive(new FieldError());
+const passwordError = reactive(new FieldError());
+const nombreError = reactive(new FieldError());
+const apellidoError = reactive(new FieldError());
+const birthdayError = reactive(new FieldError());
+const accountNumberError = reactive(new FieldError());
+const accountTypeError = reactive(new FieldError());
+const accountBankError = reactive(new FieldError());
+const maxDate = moment().toDate();
+const minDate = moment('1900-01-01').toDate();
+const showBeDriver = ref(false);
+const driverFiles = ref(null);
+const banks = ref([]);
+const accountTypes = ref([]);
+const loading = ref(false);
+const fbLoading = ref(false);
+const showRegister = ref(false);
+const showEmailTakenModal = ref(false);
+
+const checkLogin = computed(() => authStore.checkLogin);
+const isMobile = computed(() => deviceStore.isMobile);
+const settings = computed(() => authStore.appConfig);
+const registerData = computed(() => profileStore.registerData);
+
+const tripCardTheme = computed(() => {
+    return settings.value ? settings.value.trip_card_design : '';
+});
+
+const showRegisterForm = computed(() => {
+    return !settings.value.enable_facebook || showRegister.value;
+});
+
+watch(email, () => { emailError.state = false; });
+watch(emailVerification, () => { emailVerificationError.state = false; });
+watch(name, () => { nombreError.state = false; });
+watch(sureName, () => { apellidoError.state = false; });
+watch(password, () => { passwordError.state = false; });
+
+const onShowRegister = () => {
+    showRegister.value = true;
+};
+
+const toggleEmailTakenModal = () => {
+    showEmailTakenModal.value = !showEmailTakenModal.value;
+};
+
+const facebookLogin = () => {
+    if (!loading.value) {
+        fbLoading.value = true;
+        cordovaStore.facebookLogin().catch((response) => {
+            if (response.errors && response.errors.email) {
+                dialogs.message(t('correoUsado'), {
                     duration: 10,
                     estado: 'error'
                 });
             }
-        },
-        validate() {
-            let globalError = false;
-            if (this.email.length < 1) {
-                this.emailError.state = true;
-                this.emailError.message = this.$t('olvidoEmail');
-                globalError = true;
-            } else if (!emailRegex.test(this.email)) {
-                this.emailError.state = true;
-                this.emailError.message = this.$t('ingreseEmailValido');
-                globalError = true;
-            }
-
-            if (this.emailVerification.length < 1) {
-                this.emailVerificationError.state = true;
-                this.emailVerificationError.message = this.$t('olvidoEmail');
-                globalError = true;
-            } else if (!emailRegex.test(this.emailVerification)) {
-                this.emailVerificationError.state = true;
-                this.emailVerificationError.message =
-                    this.$t('ingreseEmailValido');
-                globalError = true;
-            } else if (this.email !== this.emailVerification) {
-                this.emailVerificationError.state = true;
-                this.emailVerificationError.message =
-                    this.$t('emailsNoCoinciden');
-                globalError = true;
-            }
-
-            if (this.password.length < 1) {
-                this.passwordError.state = true;
-                this.passwordError.message = this.$t('olvidoContrasena');
-                globalError = true;
-            } else if (this.password.length < 8) {
-                this.passwordError.state = true;
-                this.passwordError.message = this.$t('contraCorta');
-                globalError = true;
-            } else if (this.passwordConfirmation < 1) {
-                this.passwordError.state = true;
-                this.passwordError.message = this.$t('olvidoConfirmarContra');
-                globalError = true;
-            } else if (this.password !== this.passwordConfirmation) {
-                this.passwordError.state = true;
-                this.passwordError.message = this.$t('contraNoCoinciden');
-                globalError = true;
-            }
-
-            if (this.name.length < 1) {
-                this.nombreError.state = true;
-                this.nombreError.message = this.$t('olvidoNombre');
-                globalError = true;
-            }
-
-            if (this.sureName.length < 1) {
-                this.apellidoError.state = true;
-                this.apellidoError.message = this.$t('olvidoApellido');
-                globalError = true;
-            }
-
-            /* console.log(this.birthdayAnswer);
-            if (!this.birthdayAnswer || this.birthdayAnswer.length < 1) {
-                this.birthdayError.state = true;
-                this.birthdayError.message = 'Olvido ingresar su fecha de nacimiento.';
-                globalError = true;
-            } else {
-                let birthday = moment(this.birthdayAnswer);
-                if (moment().diff(birthday, 'years') < 18) {
-                    this.birthdayError.state = true;
-                    this.birthdayError.message = 'Lo sentimos, debes ser mayor de edad para usar el servicio. Para más información te recomendamos leer los términos y condiciones.';
-                    globalError = true;
-                }
-            } */
-
-            if (this.settings.module_validated_drivers && this.showBeDriver) {
-                if (!this.account_number) {
-                    this.accountNumberError.state = true;
-                    this.accountNumberError.message =
-                        this.$t('campoObligatorio');
-                    globalError = true;
-                }
-                if (!this.account_type) {
-                    this.accountTypeError.state = true;
-                    this.accountTypeError.message = this.$t('campoObligatorio');
-                    globalError = true;
-                }
-                if (!this.account_bank) {
-                    this.accountBankError.state = true;
-                    this.accountBankError.message = this.$t('campoObligatorio');
-                    globalError = true;
-                }
-            }
-            return globalError;
-        },
-        onDriverDocumentChange(event) {
-            console.log('file input ', event);
-            if (event.target.files) {
-                this.driverFiles = event.target.files;
-            }
-        },
-        changeBeDriver() {
-            this.showBeDriver = !this.showBeDriver;
-        },
-        dateChange(value) {
-            this.birthdayAnswer = value;
-        },
-        jumpToError() {
-            let hasError = document.getElementsByClassName('has-error');
-            if (hasError.length) {
-                let element = hasError[0];
-                this.$scrollToElement(element);
-            }
-        },
-        register(event) {
-            const that = this;
-            grecaptcha.ready(function () {
-                grecaptcha
-                    .execute(process.env.RECAPTCHA_SITE_KEY, {
-                        action: 'submit'
-                    })
-                    .then(function (token) {
-                        // Add your logic to submit to your backend server here.
-                        if (that.validate()) {
-                            // Jump To Error
-                            that.$nextTick(() => {
-                                that.jumpToError();
-                                dialogs.message(that.$t('debeCorregirCampos'), {
-                                    duration: 10,
-                                    estado: 'error'
-                                });
-                            });
-                            return;
-                        }
-                        that.progress = true;
-                        let data = {
-                            email: that.email,
-                            password: that.password,
-                            password_confirmation: that.passwordConfirmation,
-                            name: that.name + ' ' + that.sureName,
-                            terms_and_conditions: that.termsAndConditions,
-                            birthday: that.birthdayAnswer,
-                            account_number: that.account_number,
-                            account_type: that.account_type,
-                            account_bank: that.account_bank,
-                            token
-                        };
-                        /* global FormData */
-                        let bodyFormData = new FormData();
-                        for (const key in data) {
-                            if (data.hasOwnProperty(key)) {
-                                bodyFormData.append(key, data[key]);
-                            }
-                        }
-                        if (that.driverFiles) {
-                            bodyFormData.append('user_be_driver', true);
-                            console.log('file', that.driverFiles);
-                            for (
-                                let index = 0;
-                                index < that.driverFiles.length;
-                                index++
-                            ) {
-                                const file = that.driverFiles[index];
-                                console.log('file', file);
-                                bodyFormData.append('driver_data_docs[]', file);
-                            }
-                        }
-                        that.doRegister(bodyFormData)
-                            .then((registerData) => {
-                                if (
-                                    registerData &&
-                                    registerData.data &&
-                                    registerData.data.active
-                                ) {
-                                    that.active = true;
-                                }
-                                that.progress = false;
-                                that.success = true;
-                            })
-                            .catch((err) => {
-                                console.log('catch', err);
-                                if (err) {
-                                    console.log('err register', err);
-                                    if (err.status === 422) {
-                                        console.log(
-                                            'err st',
-                                            err.data.errors.email
-                                        );
-                                        const emailErrorMsg =
-                                            err.data.errors.email[0] || '';
-                                        const isEmailTaken =
-                                            emailErrorMsg.indexOf(
-                                                'been taken'
-                                            ) >= 0 ||
-                                            emailErrorMsg.indexOf(
-                                                'ya ha sido tomado'
-                                            ) >= 0;
-                                        if (
-                                            err.data &&
-                                            err.data.errors &&
-                                            err.data.errors.email &&
-                                            Array.isArray(
-                                                err.data.errors.email
-                                            ) &&
-                                            err.data.errors.email.length > 0 &&
-                                            isEmailTaken
-                                        ) {
-                                            that.showEmailTakenModal = true;
-                                            that.emailError.state = true;
-                                            that.emailError.message =
-                                                that.$t('emailYaTomado');
-                                            that.jumpToError();
-                                        } else {
-                                            dialogs.message(
-                                                that.$t('debeCorregirCampos'),
-                                                {
-                                                    estado: 'error'
-                                                }
-                                            );
-                                        }
-                                    } else {
-                                        dialogs.message(
-                                            that.$t('errorRegistro'),
-                                            {
-                                                estado: 'error'
-                                            }
-                                        );
-                                    }
-                                }
-                                that.progress = false;
-                            });
-                    });
-            });
-        },
-        onBackClick() {
-            router.back();
-        }
-    },
-    mounted() {
-        bus.on('back-click', this.onBackClick);
-        bus.on('date-change', this.dateChange);
-        if (this.registerData) {
-            Object.assign(this, this.registerData);
-        }
-        this.getBankData().then((data) => {
-            console.log('get bank data', data);
-            this.banks = data.banks;
-            this.accountTypes = data.cc;
         });
-
-        let recaptchaScript = document.createElement('script');
-        recaptchaScript.setAttribute(
-            'src',
-            `https://www.google.com/recaptcha/api.js?render=${process.env.RECAPTCHA_SITE_KEY}`
-        );
-        document.head.appendChild(recaptchaScript);
-    },
-
-    beforeDestroy() {
-        console.log(this.$route.name);
-        if (this.$route.name === 'terms') {
-            this.saveRegisterData(this.$data);
-        } else {
-            this.cleanRegisterData();
-        }
-        bus.off('back-click', this.onBackClick);
-        bus.off('date-change', this.dateChange);
+    } else {
+        dialogs.message(t('solicitudEnviada'), {
+            duration: 10,
+            estado: 'error'
+        });
     }
 };
+
+const validate = () => {
+    let globalError = false;
+    if (email.value.length < 1) {
+        emailError.state = true;
+        emailError.message = t('olvidoEmail');
+        globalError = true;
+    } else if (!emailRegex.test(email.value)) {
+        emailError.state = true;
+        emailError.message = t('ingreseEmailValido');
+        globalError = true;
+    }
+
+    if (emailVerification.value.length < 1) {
+        emailVerificationError.state = true;
+        emailVerificationError.message = t('olvidoEmail');
+        globalError = true;
+    } else if (!emailRegex.test(emailVerification.value)) {
+        emailVerificationError.state = true;
+        emailVerificationError.message = t('ingreseEmailValido');
+        globalError = true;
+    } else if (email.value !== emailVerification.value) {
+        emailVerificationError.state = true;
+        emailVerificationError.message = t('emailsNoCoinciden');
+        globalError = true;
+    }
+
+    if (password.value.length < 1) {
+        passwordError.state = true;
+        passwordError.message = t('olvidoContrasena');
+        globalError = true;
+    } else if (password.value.length < 8) {
+        passwordError.state = true;
+        passwordError.message = t('contraCorta');
+        globalError = true;
+    } else if (passwordConfirmation.value < 1) {
+        passwordError.state = true;
+        passwordError.message = t('olvidoConfirmarContra');
+        globalError = true;
+    } else if (password.value !== passwordConfirmation.value) {
+        passwordError.state = true;
+        passwordError.message = t('contraNoCoinciden');
+        globalError = true;
+    }
+
+    if (name.value.length < 1) {
+        nombreError.state = true;
+        nombreError.message = t('olvidoNombre');
+        globalError = true;
+    }
+
+    if (sureName.value.length < 1) {
+        apellidoError.state = true;
+        apellidoError.message = t('olvidoApellido');
+        globalError = true;
+    }
+
+    if (settings.value.module_validated_drivers && showBeDriver.value) {
+        if (!account_number.value) {
+            accountNumberError.state = true;
+            accountNumberError.message = t('campoObligatorio');
+            globalError = true;
+        }
+        if (!account_type.value) {
+            accountTypeError.state = true;
+            accountTypeError.message = t('campoObligatorio');
+            globalError = true;
+        }
+        if (!account_bank.value) {
+            accountBankError.state = true;
+            accountBankError.message = t('campoObligatorio');
+            globalError = true;
+        }
+    }
+    return globalError;
+};
+
+const onDriverDocumentChange = (event) => {
+    console.log('file input ', event);
+    if (event.target.files) {
+        driverFiles.value = event.target.files;
+    }
+};
+
+const changeBeDriver = () => {
+    showBeDriver.value = !showBeDriver.value;
+};
+
+const dateChange = (value) => {
+    birthday.value = value;
+};
+
+const jumpToError = () => {
+    let hasError = document.getElementsByClassName('has-error');
+    if (hasError.length) {
+        let element = hasError[0];
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+};
+
+const register = (event) => {
+    grecaptcha.ready(function () {
+        grecaptcha
+            .execute(RECAPTCHA_SITE_KEY, {
+                action: 'submit'
+            })
+            .then(function (token) {
+                if (validate()) {
+                    nextTick(() => {
+                        jumpToError();
+                        dialogs.message(t('debeCorregirCampos'), {
+                            duration: 10,
+                            estado: 'error'
+                        });
+                    });
+                    return;
+                }
+                progress.value = true;
+                let data = {
+                    email: email.value,
+                    password: password.value,
+                    password_confirmation: passwordConfirmation.value,
+                    name: name.value + ' ' + sureName.value,
+                    terms_and_conditions: termsAndConditions.value,
+                    birthday: birthday.value,
+                    account_number: account_number.value,
+                    account_type: account_type.value,
+                    account_bank: account_bank.value,
+                    token
+                };
+                let bodyFormData = new FormData();
+                for (const key in data) {
+                    if (data.hasOwnProperty(key)) {
+                        bodyFormData.append(key, data[key]);
+                    }
+                }
+                if (driverFiles.value) {
+                    bodyFormData.append('user_be_driver', true);
+                    for (let index = 0; index < driverFiles.value.length; index++) {
+                        const file = driverFiles.value[index];
+                        bodyFormData.append('driver_data_docs[]', file);
+                    }
+                }
+                authStore.register(bodyFormData)
+                    .then((registerDataResult) => {
+                        if (
+                            registerDataResult &&
+                            registerDataResult.data &&
+                            registerDataResult.data.active
+                        ) {
+                            active.value = true;
+                        }
+                        progress.value = false;
+                        success.value = true;
+                    })
+                    .catch((err) => {
+                        console.log('catch', err);
+                        if (err) {
+                            if (err.status === 422) {
+                                const emailErrorMsg =
+                                    err.data.errors.email[0] || '';
+                                const isEmailTaken =
+                                    emailErrorMsg.indexOf('been taken') >= 0 ||
+                                    emailErrorMsg.indexOf('ya ha sido tomado') >= 0;
+                                if (
+                                    err.data &&
+                                    err.data.errors &&
+                                    err.data.errors.email &&
+                                    Array.isArray(err.data.errors.email) &&
+                                    err.data.errors.email.length > 0 &&
+                                    isEmailTaken
+                                ) {
+                                    showEmailTakenModal.value = true;
+                                    emailError.state = true;
+                                    emailError.message = t('emailYaTomado');
+                                    jumpToError();
+                                } else {
+                                    dialogs.message(t('debeCorregirCampos'), {
+                                        estado: 'error'
+                                    });
+                                }
+                            } else {
+                                dialogs.message(t('errorRegistro'), {
+                                    estado: 'error'
+                                });
+                            }
+                        }
+                        progress.value = false;
+                    });
+            });
+    });
+};
+
+const onBackClick = () => {
+    router.back();
+};
+
+onMounted(() => {
+    bus.on('back-click', onBackClick);
+    bus.on('date-change', dateChange);
+    if (registerData.value) {
+        // Restore saved register data
+        const rd = registerData.value;
+        if (rd.email) email.value = rd.email;
+        if (rd.emailVerification) emailVerification.value = rd.emailVerification;
+        if (rd.name) name.value = rd.name;
+        if (rd.sureName) sureName.value = rd.sureName;
+        if (rd.password) password.value = rd.password;
+        if (rd.passwordConfirmation) passwordConfirmation.value = rd.passwordConfirmation;
+        if (rd.termsAndConditions) termsAndConditions.value = rd.termsAndConditions;
+    }
+    profileStore.getBankData().then((data) => {
+        console.log('get bank data', data);
+        banks.value = data.banks;
+        accountTypes.value = data.cc;
+    });
+
+    let recaptchaScript = document.createElement('script');
+    recaptchaScript.setAttribute(
+        'src',
+        `https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_SITE_KEY}`
+    );
+    document.head.appendChild(recaptchaScript);
+});
+
+onBeforeUnmount(() => {
+    if (route.name === 'terms') {
+        profileStore.saveRegisterData({
+            email: email.value,
+            emailVerification: emailVerification.value,
+            name: name.value,
+            sureName: sureName.value,
+            password: password.value,
+            passwordConfirmation: passwordConfirmation.value,
+            termsAndConditions: termsAndConditions.value
+        });
+    } else {
+        profileStore.cleanRegisterData();
+    }
+    bus.off('back-click', onBackClick);
+    bus.off('date-change', dateChange);
+});
 </script>
 
 <style>

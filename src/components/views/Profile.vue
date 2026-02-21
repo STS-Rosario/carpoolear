@@ -3,130 +3,120 @@
         <tab :header="viajesHeaderTitle">
             <component :is="currentView" :userId="id"></component>
         </tab>
-        <tab :header="$t('perfil')">
+        <tab :header="t('perfil')">
             <ProfileInfo></ProfileInfo>
         </tab>
-        <tab :header="$t('calificaciones')">
+        <tab :header="t('calificaciones')">
             <ProfileRates :id="id"></ProfileRates>
         </tab>
     </tabset>
 </template>
-<script>
+<script setup>
+import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+import { useAuthStore } from '@/stores/auth';
+import { useProfileStore } from '@/stores/profile';
+import { useActionbarsStore } from '@/stores/actionbars';
 import Tab from '../elements/Tab';
 import Tabset from '../elements/Tabset';
-import { mapActions, mapGetters } from 'vuex';
 import ProfileInfo from '../sections/ProfileInfo';
 import ProfileRates from '../sections/ProfileRates';
 import MyTrips from './MyTrips';
 import ProfileTrip from '../sections/ProfileTrip';
 import bus from '../../services/bus-event.js';
-import router from '../../router';
 
-export default {
-    components: {
-        Tab,
-        Tabset,
-        ProfileInfo,
-        ProfileRates,
-        MyTrips,
-        ProfileTrip
-    },
+const { t } = useI18n();
+const route = useRoute();
+const router = useRouter();
+const authStore = useAuthStore();
+const profileStore = useProfileStore();
+const actionbarsStore = useActionbarsStore();
 
-    props: {
-        id: {
-            required: false,
-            default: 'me'
-        },
-        userProfile: {
-            required: false
-        },
-        activeTab: {
-            required: false
-        }
-    },
+const tabs = ref(null);
 
-    data() {
-        return {
-            currentView: null
-        };
+const props = defineProps({
+    id: {
+        required: false,
+        default: 'me'
     },
+    userProfile: {
+        required: false
+    },
+    activeTab: {
+        required: false
+    }
+});
 
-    computed: {
-        ...mapGetters({
-            user: 'auth/user',
-            profile: 'profile/user'
-        }),
-        viajesHeaderTitle() {
-            return this.id === 'me' || this.id === this.user.id
-                ? this.$t('misViajes')
-                : this.$t('viajes');
-        },
-        isMyOwnProfile() {
-            return this.id === 'me' || this.id === this.user.id;
-        }
-    },
+const currentView = ref(null);
 
-    methods: {
-        ...mapActions({
-            setTitle: 'actionbars/setTitle',
-            setProfile: 'profile/setUser',
-            setProfileByID: 'profile/setUserByID',
-            fetchBadges: 'profile/fetchBadges'
-        }),
-        updateProfile() {
-            if (this.id === 'me' || this.id === this.user.id) {
-                // this.setTitle('Mi Perfil');
-                this.setProfile(this.user);
-                this.fetchBadges(this.user ? this.user.id : 'me');
-                this.currentView = 'my-trips';
-            } else {
-                if (this.userProfile) {
-                    this.setTitle(this.userProfile.name);
-                }
-                this.setProfileByID({
-                    id: this.id,
-                    userProfile: this.userProfile
-                })
-                    .then(() => {
-                        this.setTitle(this.profile.name);
-                        this.fetchBadges(this.id);
-                    })
-                    .catch(() => {
-                        this.$router.replace({ name: 'trips' });
-                    });
-                this.currentView = 'profile-trip';
-            }
-        },
-        onBackClick() {
-            router.back();
-        }
-    },
-    watch: {
-        $route: function () {
-            this.updateProfile();
-        }
-    },
+const user = computed(() => authStore.user);
+const profile = computed(() => profileStore.user);
 
-    mounted() {
-        let index = 1;
-        if (
-            router.history &&
-            router.history.current &&
-            router.history.current.hash
-        ) {
-            index = parseInt(router.history.current.hash.replace('#', ''), 10);
+const viajesHeaderTitle = computed(() => {
+    return props.id === 'me' || props.id === user.value.id
+        ? t('misViajes')
+        : t('viajes');
+});
+
+const isMyOwnProfile = computed(() => {
+    return props.id === 'me' || props.id === user.value.id;
+});
+
+const updateProfile = () => {
+    if (props.id === 'me' || props.id === user.value.id) {
+        profileStore.setUser(user.value);
+        profileStore.fetchBadges(user.value ? user.value.id : 'me');
+        currentView.value = MyTrips;
+    } else {
+        if (props.userProfile) {
+            actionbarsStore.setTitle(props.userProfile.name);
         }
-        if (this.activeTab) {
-            index = parseInt(this.activeTab, 10);
-        } else {
-            index = this.$refs.tabs.getRememberedTab(1);
-        }
-        this.$refs.tabs.activateTab(index);
-        this.updateProfile();
-        bus.on('back-click', this.onBackClick);
-    },
-    beforeDestroy() {
-        bus.off('back-click', this.onBackClick);
+        profileStore.setUserByID({
+            id: props.id,
+            userProfile: props.userProfile
+        })
+            .then(() => {
+                actionbarsStore.setTitle(profile.value.name);
+                profileStore.fetchBadges(props.id);
+            })
+            .catch(() => {
+                router.replace({ name: 'trips' });
+            });
+        currentView.value = ProfileTrip;
     }
 };
+
+const onBackClick = () => {
+    router.back();
+};
+
+watch(() => route.fullPath, () => {
+    updateProfile();
+});
+
+onMounted(() => {
+    let index = 1;
+    if (
+        router.currentRoute &&
+        router.currentRoute.value &&
+        router.currentRoute.value.hash
+    ) {
+        index = parseInt(router.currentRoute.value.hash.replace('#', ''), 10);
+    }
+    if (props.activeTab) {
+        index = parseInt(props.activeTab, 10);
+    } else if (tabs.value) {
+        index = tabs.value.getRememberedTab(1);
+    }
+    if (tabs.value) {
+        tabs.value.activateTab(index);
+    }
+    updateProfile();
+    bus.on('back-click', onBackClick);
+});
+
+onBeforeUnmount(() => {
+    bus.off('back-click', onBackClick);
+});
 </script>

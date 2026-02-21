@@ -7,9 +7,9 @@
                 style="text-align: center"
                 role="alert"
             >
-                <h4>⚠️ {{ $t('notificacionesNoHabilitadas') }}</h4>
+                <h4>{{ t('notificacionesNoHabilitadas') }}</h4>
                 <p>
-                    {{ $t('notificacionesNoAceptastePermisos') }}
+                    {{ t('notificacionesNoAceptastePermisos') }}
                 </p>
                 <br/>
                 <div class="notification-warning-buttons">
@@ -17,14 +17,14 @@
                         class="btn btn-success"
                         @click="requestNotificationPermission"
                     >
-                        {{ $t('otorgarPermisos') }}
+                        {{ t('otorgarPermisos') }}
                     </button>
                     <button
                         class="btn btn-default"
                         @click="dismissNotificationWarning"
                         style="margin-left: 10px"
                     >
-                        {{ $t('noMostrarDeNuevo') }}
+                        {{ t('noMostrarDeNuevo') }}
                     </button>
                 </div>
             </div>
@@ -43,7 +43,7 @@
                                 v-show="!n.readed"
                             ></i>
                             <strong>{{ n.text }}</strong>
-                            <em>{{ n.created_at | moment('calendar') }}</em>
+                            <em>{{ formatDate(n.created_at, 'calendar') }}</em>
                         </div>
                         <span class="col-xs-2 text-right">
                             <i
@@ -56,161 +56,155 @@
             </div>
             <div class="text-right">
                 <button class="btn btn-primary" v-on:click="nextPage()">
-                    {{ $t('siguiente') }}
+                    {{ t('siguiente') }}
                 </button>
             </div>
-            <p slot="no-data" class="alert alert-warning" role="alert">
-                {{ $t('noHayNotificaciones') }}
-            </p>
-            <p slot="loading" class="alert alert-info" role="alert">
-                <img
-                    src="https://carpoolear.com.ar/static/img/loader.gif"
-                    alt=""
-                    class="ajax-loader"
-                />
-                {{ $t('cargandoNotificaciones') }}
-            </p>
+            <template #no-data>
+                <p class="alert alert-warning" role="alert">
+                    {{ t('noHayNotificaciones') }}
+                </p>
+            </template>
+            <template #loading>
+                <p class="alert alert-info" role="alert">
+                    <img
+                        src="https://carpoolear.com.ar/static/img/loader.gif"
+                        alt=""
+                        class="ajax-loader"
+                    />
+                    {{ t('cargandoNotificaciones') }}
+                </p>
+            </template>
         </Loading>
     </div>
 </template>
 
-<script>
+<script setup>
+import { ref, reactive, computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+import { useNotificationsStore } from '@/stores/notifications';
+import { useAuthStore } from '@/stores/auth';
+import { formatDate } from '@/composables/useFormatters';
 import Loading from '../Loading';
-import { mapActions, mapGetters } from 'vuex';
-import router from '../../router';
 import dialogs from '../../services/dialogs.js';
 import push from '../../cordova/push-capacitor.js';
 
+const { t } = useI18n();
+const router = useRouter();
+const notificationsStore = useNotificationsStore();
+const authStore = useAuthStore();
 
-export default {
-    name: 'notifications',
+const query = reactive({
+    page: 1,
+    page_size: 25,
+    mark: true
+});
+const hasNotificationPermission = ref(false);
+const showNotificationWarning = ref(false);
 
-    data() {
-        return {
-            query: {
-                page: 1,
-                page_size: 25,
-                mark: true
-            },
-            hasNotificationPermission: false,
-            showNotificationWarning: false
-        };
-    },
+const notifications = computed(() => notificationsStore.list);
+const appConfig = computed(() => authStore.appConfig);
 
-    methods: {
-        ...mapActions({
-            search: 'notifications/index'
-        }),
-        isPWA() {
-            return !window.Capacitor || window.Capacitor.getPlatform() === 'web';
-        },
-        checkNotificationPermission() {
-            if (window.Notification && window.Notification.permission) {
-                if (window.Notification.permission === 'granted') {
-                    this.hasNotificationPermission = true;
-                    this.showNotificationWarning = false;
-                } else {
-                    this.hasNotificationPermission = false;
-                    const dismissedAt = parseInt(localStorage.getItem('pwa_notification_dismiss'));
-                    this.showNotificationWarning = !dismissedAt || Date.now() - dismissedAt > 14 * 24 * 3600 * 1000;
-                }
-            }
-        },
-        requestNotificationPermission() {
-            Notification.requestPermission().then((permission) => {
-                if (permission === 'granted') {
-                    this.hasNotificationPermission = true;
-                    this.showNotificationWarning = false;
-                    // Initialize push-capacitor.js after permission is granted
-                    try {
-                        setTimeout(() => {
-                            push.init();
-                        }, 3000);
-                    } catch (error) {
-                        console.log(
-                            'Error initializing push notifications:',
-                            error
-                        );
-                    }
-                    dialogs.message(this.$t('notificacionesPermitidas'), {
-                        duration: 10,
-                        estado: 'success'
-                    });
-                } else {
-                    dialogs.message(this.$t('notificacionesDenegadas'), {
-                        duration: 10,
-                        estado: 'error'
-                    });
-                }
-            });
-        },
-        dismissNotificationWarning() {
-            this.showNotificationWarning = false;
-            localStorage.setItem('pwa_notification_dismiss', Date.now());
-        },
-        onNotificationClick(n) {
-            console.log('onNotificationClick', n);
-            if (n.extras) {
-                console.log(n.extras);
-                switch (n.extras.type) {
-                    case 'trip':
-                        router.push({
-                            name: 'detail_trip',
-                            params: { id: n.extras.trip_id }
-                        });
-                        break;
-                    case 'friends':
-                        router.push({ name: 'friends_setting' });
-                        break;
-                    case 'subscription':
-                        router.push({
-                            name: 'my-trips',
-                            query: { loc: 'suscriptions' }
-                        });
-                        break;
-                    case 'my-trips':
-                        router.push({ name: 'my-trips' });
-                        break;
-                    case 'conversation':
-                        router.push({
-                            name: 'conversation-chat',
-                            params: { id: n.extras.conversation_id }
-                        });
-                        break;
-                    case 'announcement':
-                        // open external url
-                        if (n.extras.external_url) {
-                            window.open(n.extras.external_url);
-                        }
-                        break;
-                }
-            }
-        },
-        nextPage() {
-            this.query.page += 1;
-            this.search(this.query);
+const isPWA = () => {
+    return !window.Capacitor || window.Capacitor.getPlatform() === 'web';
+};
+
+const checkNotificationPermission = () => {
+    if (window.Notification && window.Notification.permission) {
+        if (window.Notification.permission === 'granted') {
+            hasNotificationPermission.value = true;
+            showNotificationWarning.value = false;
+        } else {
+            hasNotificationPermission.value = false;
+            const dismissedAt = parseInt(localStorage.getItem('pwa_notification_dismiss'));
+            showNotificationWarning.value = !dismissedAt || Date.now() - dismissedAt > 14 * 24 * 3600 * 1000;
         }
-    },
-
-    computed: {
-        ...mapGetters({
-            notifications: 'notifications/index',
-            appConfig: 'auth/appConfig'
-        })
-    },
-
-    mounted() {
-        this.search(this.query);
-
-        if (this.appConfig.web_push_notification && this.isPWA()) {
-            this.checkNotificationPermission();
-        }
-    },
-
-    components: {
-        Loading
     }
 };
+
+const requestNotificationPermission = () => {
+    Notification.requestPermission().then((permission) => {
+        if (permission === 'granted') {
+            hasNotificationPermission.value = true;
+            showNotificationWarning.value = false;
+            try {
+                setTimeout(() => {
+                    push.init();
+                }, 3000);
+            } catch (error) {
+                console.log(
+                    'Error initializing push notifications:',
+                    error
+                );
+            }
+            dialogs.message(t('notificacionesPermitidas'), {
+                duration: 10,
+                estado: 'success'
+            });
+        } else {
+            dialogs.message(t('notificacionesDenegadas'), {
+                duration: 10,
+                estado: 'error'
+            });
+        }
+    });
+};
+
+const dismissNotificationWarning = () => {
+    showNotificationWarning.value = false;
+    localStorage.setItem('pwa_notification_dismiss', Date.now());
+};
+
+const onNotificationClick = (n) => {
+    console.log('onNotificationClick', n);
+    if (n.extras) {
+        console.log(n.extras);
+        switch (n.extras.type) {
+            case 'trip':
+                router.push({
+                    name: 'detail_trip',
+                    params: { id: n.extras.trip_id }
+                });
+                break;
+            case 'friends':
+                router.push({ name: 'friends_setting' });
+                break;
+            case 'subscription':
+                router.push({
+                    name: 'my-trips',
+                    query: { loc: 'suscriptions' }
+                });
+                break;
+            case 'my-trips':
+                router.push({ name: 'my-trips' });
+                break;
+            case 'conversation':
+                router.push({
+                    name: 'conversation-chat',
+                    params: { id: n.extras.conversation_id }
+                });
+                break;
+            case 'announcement':
+                if (n.extras.external_url) {
+                    window.open(n.extras.external_url);
+                }
+                break;
+        }
+    }
+};
+
+const nextPage = () => {
+    query.page += 1;
+    notificationsStore.index(query);
+};
+
+onMounted(() => {
+    notificationsStore.index(query);
+
+    if (appConfig.value.web_push_notification && isPWA()) {
+        checkNotificationPermission();
+    }
+});
 </script>
 
 <style scoped>

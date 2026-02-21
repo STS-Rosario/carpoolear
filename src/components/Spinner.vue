@@ -5,6 +5,9 @@
     </div>
 </template>
 
+<script setup>
+</script>
+
 <style>
 .loader-container {
     position: absolute;

@@ -1,59 +1,59 @@
-/* jshint esversion: 6 */
-
-import 'babel-polyfill';
-
-import Vue from 'vue';
-import App from './App';
-
-import VueResource from 'vue-resource';
-import VueAnalytics from 'vue-analytics';
-import VueMoment from 'vue-moment';
-
+import { createApp } from 'vue';
+import { createPinia } from 'pinia';
+import { createI18n } from 'vue-i18n';
+import App from './App.vue';
 import router from './router';
-import store from './store';
-
-/* eslint-disable no-unused-vars */
-import cordova from './cordova';
-import directives from './directives';
-
-import bootstrapCss from './styles/bootstrap/css/bootstrap.min.css';
-
-import cssHelpers from './styles/helpers';
-import css from './styles/main';
-
-import VueI18n from 'vue-i18n';
+import { registerDirectives } from './directives';
 import messages from './language/i18n';
-
 import bus from './services/bus-event';
 import { DebugApi } from './services/api';
+import {
+    cssvar,
+    scrollToElement,
+    checkError,
+    getErrors
+} from '../utils/helpers';
+
+// Styles
+import './styles/bootstrap/css/bootstrap.min.css';
+import './styles/helpers.css';
+import './styles/main.css';
+import 'font-awesome/css/font-awesome.min.css';
 
 // Capacitor plugins
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { SplashScreen } from '@capacitor/splash-screen';
-import { App as CapacitorApp } from '@capacitor/app';
 
-import Vue2Leaflet from 'vue2-leaflet';
+// Moment timezone setup
+import moment from 'moment-timezone';
+moment.tz.setDefault('America/Argentina');
+import 'moment/locale/es';
 
-import * as VueGoogleMaps from 'vue2-google-maps';
+// Store imports
+import { useAuthStore } from './stores/auth';
+import { useTripsStore } from './stores/trips';
+import { useMyTripsStore } from './stores/myTrips';
+import { useRatesStore } from './stores/rates';
+import { usePassengerStore } from './stores/passenger';
+import { useCarsStore } from './stores/cars';
+import { useCordovaStore } from './stores/cordova';
+import { useDeviceStore } from './stores/device';
+import { useNotificationsStore } from './stores/notifications';
+import { initApp, startApp, startThread } from './stores/index';
 
-const ROUTE_BASE = process.env.ROUTE_BASE;
+const ROUTE_BASE = import.meta.env.VITE_ROUTE_BASE || '/';
 
 const debugApi = new DebugApi();
+
+// Cordova script injection (for mobile builds)
 const cordovaTag = document.createElement('script');
 const cordovaPath = 'cordova.js';
-console.log('ROUTE_BASE', ROUTE_BASE, cordovaPath);
 cordovaTag.setAttribute('src', ROUTE_BASE + cordovaPath);
 document.head.appendChild(cordovaTag);
 
-const moment = require('moment-timezone');
-moment.tz.setDefault('America/Argentina');
-require('moment/locale/es');
-require('font-awesome-webpack-4');
-
-Vue.use(VueResource);
-
-Vue.use(VueI18n);
-const i18n = new VueI18n({
+// i18n setup
+export const i18n = createI18n({
+    legacy: false,
     locale: 'arg',
     fallbackLocale: 'arg',
     messages,
@@ -76,58 +76,24 @@ const i18n = new VueI18n({
     }
 });
 
-export { i18n };
-
-Vue.use(VueAnalytics, {
-    id: 'UA-40995702-4'
-});
-
-Vue.use(VueMoment);
-require('./filters.js');
-require('./prototypes.js');
-
-/* import * as VueGoogleMaps from 'vue2-google-maps';
-
-Vue.use(VueGoogleMaps, {
-    load: {
-        key: process.env.MAPS_API,
-        libraries: 'places',
-        installComponents: true
-    }
-}); */
-
-Vue.config.errorHandler = function (err, vm, info) {
-    // handle error
-    // `info` is a Vue-specific error info, e.g. which lifecycle hook
-    // the error was found in. Only available in 2.2.0+
-    const data = {};
-    data.log = err.stack;
-    debugApi.log(data);
-};
-
-// Initialize Capacitor plugins
+// Capacitor initialization
 const initializeCapacitorPlugins = async () => {
     try {
-        // Configure StatusBar to fix overlay issues
         await StatusBar.setStyle({ style: Style.Light });
         await StatusBar.setBackgroundColor({ color: '#ffffff' });
         await StatusBar.setOverlaysWebView({ overlay: false });
 
-        // Hide splash screen after app loads
         setTimeout(async () => {
             await SplashScreen.hide();
         }, 1000);
 
-        // Initialize push notifications directly here
         await initializePushNotifications();
-
         console.log('Capacitor plugins initialized');
     } catch (error) {
         console.log('Capacitor plugins not available (running in browser):', error);
     }
 };
 
-// Direct push notification initialization
 const initializePushNotifications = async () => {
     try {
         const { Capacitor } = await import('@capacitor/core');
@@ -140,79 +106,96 @@ const initializePushNotifications = async () => {
             if (result.receive === 'granted') {
                 await PushNotifications.register();
 
-                // Listen for registration success
                 PushNotifications.addListener('registration', (token) => {
                     console.log('Push registration token:', token.value);
                 });
 
-                // Listen for registration errors
-                PushNotifications.addListener('registrationError', (error) => {
-                });
-
-                // Listen for incoming push notifications
-                PushNotifications.addListener('pushNotificationReceived', (notification) => {
-                });
-
-                // Listen for notification tap
-                PushNotifications.addListener('pushNotificationActionPerformed', (notification) => {
-                });
-            } else {
+                PushNotifications.addListener('registrationError', (error) => {});
+                PushNotifications.addListener('pushNotificationReceived', (notification) => {});
+                PushNotifications.addListener('pushNotificationActionPerformed', (notification) => {});
             }
-        } else {
         }
     } catch (error) {
         console.error('Push notification initialization error:', error);
     }
 };
 
-// Initialize plugins when app is ready
 initializeCapacitorPlugins();
 
-window.store = store;
-if (process.env.SERVE) {
-    console.log('Not running in cordova.');
-    store.dispatch('init');
-} else {
-    if (process.env.NODE_ENV === 'development') {
-        setTimeout(function () {
-            if (!window.cordova) {
-                console.log('Not running in cordova.');
-                store.dispatch('init');
-            }
-        }, 2000);
+// Create app
+const pinia = createPinia();
+
+// Initialize stores and start app
+const initStores = async () => {
+    const authStore = useAuthStore();
+    const tripsStore = useTripsStore();
+    const myTripsStore = useMyTripsStore();
+    const ratesStore = useRatesStore();
+    const passengerStore = usePassengerStore();
+    const carsStore = useCarsStore();
+    const cordovaStore = useCordovaStore();
+    const deviceStore = useDeviceStore();
+    const notificationsStore = useNotificationsStore();
+
+    if (import.meta.env.VITE_ROUTE_BASE) {
+        console.log('Not running in cordova.');
+        await initApp(authStore, deviceStore, cordovaStore);
+        startApp(authStore, tripsStore, myTripsStore, ratesStore, passengerStore, carsStore, cordovaStore, deviceStore);
     } else {
-        console.log('no process at all', process.env.NODE_ENV);
-        setTimeout(function () {
+        setTimeout(async function () {
             if (!window.cordova) {
                 console.log('Not running in cordova.');
-                store.dispatch('init');
+                await initApp(authStore, deviceStore, cordovaStore);
+                startApp(authStore, tripsStore, myTripsStore, ratesStore, passengerStore, carsStore, cordovaStore, deviceStore);
             }
         }, 2000);
     }
-}
-console.log('APP NAME: ' + process.env.TARGET_APP);
+
+    // Start notification thread after login
+    bus.on('system-ready', () => {
+        if (authStore.auth) {
+            startThread(authStore, notificationsStore);
+        }
+    });
+};
+
+console.log('APP NAME: ' + import.meta.env.VITE_TARGET_APP);
 
 bus.on('system-ready', () => {
-    const app = new Vue({
-        el: '#app',
-        router,
-        store,
-        template: '<App/>',
-        components: { App },
-        i18n
-    });
+    const app = createApp(App);
 
-    // Set moment locale based on i18n language
-    const momentLocaleMap = {
-        arg: 'es',
-        chl: 'es',
-        en: 'en'
+    app.use(pinia);
+    app.use(router);
+    app.use(i18n);
+
+    // Register directives
+    registerDirectives(app);
+
+    // Global properties (replacing Vue.prototype)
+    app.config.globalProperties.$cssvar = cssvar;
+    app.config.globalProperties.$scrollToElement = scrollToElement;
+    app.config.globalProperties.$checkError = checkError;
+    app.config.globalProperties.$getErrors = getErrors;
+
+    // Error handler
+    app.config.errorHandler = function (err, vm, info) {
+        const data = {};
+        data.log = err.stack;
+        debugApi.log(data);
     };
-    const currentLocale = i18n.locale || 'arg';
-    moment.locale(momentLocaleMap[currentLocale] || 'es');
 
-    // Watch for language changes and update moment locale
-    app.$watch('$i18n.locale', (newLocale) => {
-        moment.locale(momentLocaleMap[newLocale] || 'es');
-    });
+    app.mount('#app');
+
+    // Set moment locale
+    const momentLocaleMap = { arg: 'es', chl: 'es', en: 'en' };
+    const currentLocale = i18n.global.locale.value || 'arg';
+    moment.locale(momentLocaleMap[currentLocale] || 'es');
 });
+
+// Pinia must be installed before stores can be used
+// We create a temporary app just to install pinia, then use stores
+const tempApp = createApp({ render: () => null });
+tempApp.use(pinia);
+
+// Now initialize stores (pinia is installed)
+initStores();

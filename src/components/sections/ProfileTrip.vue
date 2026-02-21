@@ -2,8 +2,8 @@
     <div class="profile-trip-component container">
         <div class="col-xs-24">
             <h2>
-                {{ $t('viajes') }}
-                <strong>{{ $t('creados') }}</strong>
+                {{ t('viajes') }}
+                <strong>{{ t('creados') }}</strong>
             </h2>
             <Loading :data="driverTrips">
                 <div class="trips-list">
@@ -15,24 +15,28 @@
                         :user="user"
                     ></Trip>
                 </div>
-                <p slot="no-data" class="alert alert-warning" role="alert">
-                    {{ $t('noHayViajes') }}
-                </p>
-                <p slot="loading" class="alert alert-info" role="alert">
-                    <img
-                        src="https://carpoolear.com.ar/static/img/loader.gif"
-                        alt=""
-                        class="ajax-loader"
-                    />
-                    {{ $t('cargandoViajes') }}
-                </p>
+                <template #no-data>
+                    <p class="alert alert-warning" role="alert">
+                        {{ t('noHayViajes') }}
+                    </p>
+                </template>
+                <template #loading>
+                    <p class="alert alert-info" role="alert">
+                        <img
+                            src="https://carpoolear.com.ar/static/img/loader.gif"
+                            alt=""
+                            class="ajax-loader"
+                        />
+                        {{ t('cargandoViajes') }}
+                    </p>
+                </template>
             </Loading>
         </div>
         <div v-if="user.is_admin">
             <div class="col-xs-24">
                 <h2>
-                    {{ $t('viajes') }}
-                    <strong>{{ $t('pasajero') }}</strong>
+                    {{ t('viajes') }}
+                    <strong>{{ t('pasajero') }}</strong>
                 </h2>
                 <Loading :data="passengerTrips">
                     <div class="trips-list">
@@ -44,21 +48,25 @@
                             :user="user"
                         ></Trip>
                     </div>
-                    <p slot="no-data" class="alert alert-warning" role="alert">
-                        {{ $t('noEstasSubidoViaje') }}
-                    </p>
-                    <p slot="loading" class="alert alert-info" role="alert">
-                        <img
-                            src="https://carpoolear.com.ar/static/img/loader.gif"
-                            alt=""
-                            class="ajax-loader"
-                        />
-                        {{ $t('cargandoViajes') }}
-                    </p>
+                    <template #no-data>
+                        <p class="alert alert-warning" role="alert">
+                            {{ t('noEstasSubidoViaje') }}
+                        </p>
+                    </template>
+                    <template #loading>
+                        <p class="alert alert-info" role="alert">
+                            <img
+                                src="https://carpoolear.com.ar/static/img/loader.gif"
+                                alt=""
+                                class="ajax-loader"
+                            />
+                            {{ t('cargandoViajes') }}
+                        </p>
+                    </template>
                 </Loading>
             </div>
             <div class="col-xs-24" v-if="oldDriverTrips">
-                <h2>{{ $t('misViajesPasados') }}</h2>
+                <h2>{{ t('misViajesPasados') }}</h2>
                 <Loading :data="oldDriverTrips">
                     <div class="trips-list">
                         <Trip
@@ -69,23 +77,27 @@
                             :user="user"
                         ></Trip>
                     </div>
-                    <p slot="no-data" class="alert alert-warning" role="alert">
-                        {{ $t('noHayNingunViajePasado') }}
-                    </p>
-                    <p slot="loading" class="alert alert-info" role="alert">
-                        <img
-                            src="https://carpoolear.com.ar/static/img/loader.gif"
-                            alt=""
-                            class="ajax-loader"
-                        />
-                        {{ $t('cargandoViajes') }}
-                    </p>
+                    <template #no-data>
+                        <p class="alert alert-warning" role="alert">
+                            {{ t('noHayNingunViajePasado') }}
+                        </p>
+                    </template>
+                    <template #loading>
+                        <p class="alert alert-info" role="alert">
+                            <img
+                                src="https://carpoolear.com.ar/static/img/loader.gif"
+                                alt=""
+                                class="ajax-loader"
+                            />
+                            {{ t('cargandoViajes') }}
+                        </p>
+                    </template>
                 </Loading>
             </div>
 
             <div class="col-xs-24" v-if="oldPassengerTrips">
                 <Loading :data="oldPassengerTrips">
-                    <h2 slot="title" v-html="$t('viajesMeSubi')"></h2>
+                    <template #title><h2 v-html="t('viajesMeSubi')"></h2></template>
                     <div class="trips-list">
                         <Trip
                             v-for="trip in oldPassengerTrips"
@@ -95,84 +107,68 @@
                             :user="user"
                         ></Trip>
                     </div>
-                    <p slot="no-data" class="alert alert-warning" role="alert">
-                        {{ $t('noTeHasSubidoViaje') }}
-                    </p>
-                    <p slot="loading" class="alert alert-info" role="alert">
-                        <img
-                            src="https://carpoolear.com.ar/static/img/loader.gif"
-                            alt=""
-                            class="ajax-loader"
-                        />
-                        {{ $t('cargandoViajes') }}
-                    </p>
+                    <template #no-data>
+                        <p class="alert alert-warning" role="alert">
+                            {{ t('noTeHasSubidoViaje') }}
+                        </p>
+                    </template>
+                    <template #loading>
+                        <p class="alert alert-info" role="alert">
+                            <img
+                                src="https://carpoolear.com.ar/static/img/loader.gif"
+                                alt=""
+                                class="ajax-loader"
+                            />
+                            {{ t('cargandoViajes') }}
+                        </p>
+                    </template>
                 </Loading>
             </div>
         </div>
     </div>
 </template>
 
-<script>
+<script setup>
+import { ref, computed, onMounted } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useAuthStore } from '@/stores/auth';
+import { useTripsStore } from '@/stores/trips';
 import Trip from '../sections/Trip.vue';
 import Loading from '../Loading.vue';
-import { mapGetters, mapActions } from 'vuex';
 
-import Tab from '../elements/Tab';
+const { t } = useI18n();
+const authStore = useAuthStore();
+const tripsStore = useTripsStore();
 
-export default {
-    name: 'profile-trip',
-    data() {
-        return {
-            driverTrips: [],
-            passengerTrips: [],
-            oldDriverTrips: [],
-            oldPassengerTrips: []
-        };
-    },
-    props: {
-        userId: {
-            required: false
-        }
-    },
-    computed: {
-        ...mapGetters({
-            user: 'auth/user'
-        })
-    },
-    mounted() {
-        this.loadTrips();
-    },
-
-    methods: {
-        ...mapActions({
-            tripAsDriver: 'trips/tripsAsDriver',
-            tripAsPassenger: 'trips/tripsAsPassenger',
-            oldTripsAsDriver: 'trips/oldTripsAsDriver',
-            oldTripsAsPassenger: 'trips/oldTripsAsPassenger'
-        }),
-
-        async loadTrips() {
-            this.driverTrips = await this.tripAsDriver(this.userId);
-            if (this.user.is_admin) {
-                this.passengerTrips = await this.tripAsPassenger(this.userId);
-                this.oldDriverTrips = await this.oldTripsAsDriver(this.userId);
-                this.oldPassengerTrips = await this.oldTripsAsPassenger(
-                    this.userId
-                );
-            }
-            console.log(this.passengerTrips);
-            console.log(this.oldPassengerTrips);
-            console.log(this.driverTrips);
-            console.log(this.oldDriverTrips);
-        }
-    },
-
-    components: {
-        Trip,
-        Loading,
-        Tab
+const props = defineProps({
+    userId: {
+        required: false
     }
-};
+});
+
+const driverTrips = ref([]);
+const passengerTrips = ref([]);
+const oldDriverTrips = ref([]);
+const oldPassengerTrips = ref([]);
+
+const user = computed(() => authStore.user);
+
+async function loadTrips() {
+    driverTrips.value = await tripsStore.tripsAsDriver(props.userId);
+    if (user.value.is_admin) {
+        passengerTrips.value = await tripsStore.tripsAsPassenger(props.userId);
+        oldDriverTrips.value = await tripsStore.oldTripsAsDriver(props.userId);
+        oldPassengerTrips.value = await tripsStore.oldTripsAsPassenger(props.userId);
+    }
+    console.log(passengerTrips.value);
+    console.log(oldPassengerTrips.value);
+    console.log(driverTrips.value);
+    console.log(oldDriverTrips.value);
+}
+
+onMounted(() => {
+    loadTrips();
+});
 </script>
 
 <style scoped>

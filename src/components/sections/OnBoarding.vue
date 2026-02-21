@@ -14,7 +14,7 @@
             >
                 <div class="on-boarding--top-container">
                     <img class="on-boarding--img" :src="srcCard(number)" />
-                    <h1>{{ $t(`onBoardingcardMessage${number}`) }}</h1>
+                    <h1>{{ t(`onBoardingcardMessage${number}`) }}</h1>
                 </div>
                 <div class="on-boarding--bottom-container">
                     <button
@@ -22,21 +22,21 @@
                         v-if="number > 1"
                         @click="number > 1 && cardNumber--"
                     >
-                        {{ $t('anterior') }}
+                        {{ t('anterior') }}
                     </button>
                     <button
                         class="btn btn-success"
                         @click="complete"
                         v-if="number === cardsLength"
                     >
-                        {{ $t('comenzar') }}
+                        {{ t('comenzar') }}
                     </button>
                     <button
                         v-else
                         class="btn btn-primary"
                         @click="number < cardsLength && cardNumber++"
                     >
-                        {{ $t('siguiente') }}
+                        {{ t('siguiente') }}
                     </button>
                 </div>
             </div>
@@ -45,124 +45,122 @@
             <div :style="styleCardObject" class="on-boarding--container">
                 <div class="on-boarding--top-container">
                     <img class="on-boarding--img" :src="srcCard(cardNumber)" />
-                    <h1>{{ $t(`onBoardingcardMessage${cardNumber}`) }}</h1>
+                    <h1>{{ t(`onBoardingcardMessage${cardNumber}`) }}</h1>
                 </div>
                 <div class="on-boarding--bottom-container">
                     <button class="btn btn-secondary" v-if="cardNumber > 1">
-                        {{ $t('anterior') }}
+                        {{ t('anterior') }}
                     </button>
                     <button class="btn btn-success" v-if="cardNumber > 1">
-                        {{ $t('comenzar') }}
+                        {{ t('comenzar') }}
                     </button>
-                    <button class="btn btn-primary" v-else>{{ $t('siguiente') }}</button>
+                    <button class="btn btn-primary" v-else>{{ t('siguiente') }}</button>
                 </div>
             </div>
         </template>
     </div>
 </template>
 
-<script>
-import { mapGetters, mapActions } from 'vuex';
+<script setup>
+import { ref, reactive, computed, watch, onMounted, nextTick } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useAuthStore } from '@/stores/auth';
+import { useDeviceStore } from '@/stores/device';
 
-export default {
-    name: 'onBoarding',
-    data() {
-        return {
-            cardNumber: 1,
-            cardsLength: 0,
-            onBoardingVisibilityClass: '',
-            styleContainerObject: {},
-            styleCardObject: {}
-        };
-    },
-    mounted() {
-        setTimeout(() => {
-            this.onBoardingVisibilityClass = 'show';
-            this.$refs.overlay.addEventListener(
+const { t } = useI18n();
+const authStore = useAuthStore();
+const deviceStore = useDeviceStore();
+
+const ROUTE_BASE = import.meta.env.VITE_ROUTE_BASE || '/';
+const TARGET_APP = import.meta.env.VITE_TARGET_APP || 'carpoolear';
+
+const overlay = ref(null);
+const cardNumber = ref(1);
+const cardsLength = ref(0);
+const onBoardingVisibilityClass = ref('');
+const styleContainerObject = ref({});
+const styleCardObject = ref({});
+
+const appConfig = computed(() => authStore.appConfig);
+
+function srcCard(number) {
+    let src = ROUTE_BASE + `static/img/onBoarding/${TARGET_APP}_placa${number}.jpg`;
+    console.log('src', src);
+    return src;
+}
+
+function firstTransitionEnd() {
+    cardsLength.value =
+        appConfig.value.module_on_boarding_new_user &&
+        appConfig.value.module_on_boarding_new_user.cards;
+    styleContainerObject.value = {
+        width: `${cardsLength.value * 100}%`,
+        transform: 'translate(0)',
+        transition: 'transform 0.5s'
+    };
+    styleCardObject.value = {
+        width: '100vw'
+    };
+    overlay.value.removeEventListener(
+        'transitionend',
+        firstTransitionEnd,
+        false
+    );
+}
+
+function complete() {
+    cardsLength.value = 0;
+    styleContainerObject.value = {
+        transition: 'none'
+    };
+    styleCardObject.value = {};
+    nextTick(() => {
+        styleContainerObject.value = {};
+        nextTick(() => {
+            onBoardingVisibilityClass.value = '';
+            overlay.value.addEventListener(
                 'transitionend',
-                this.firstTransitionEnd,
+                finalTransitionEnd,
                 false
             );
-        }, 600);
-        document.documentElement.style.overflow = 'hidden';
-        document.body.scroll = 'no';
-    },
-    computed: {
-        ...mapGetters({
-            appConfig: 'auth/appConfig'
-        })
-    },
-    methods: {
-        ...mapActions({
-            setFirstTimeAppOpenInDevice: 'device/setFirstTimeAppOpenInDevice'
-        }),
-        srcCard(number) {
-            let src =
-                process.env.ROUTE_BASE +
-                `static/img/onBoarding/${process.env.TARGET_APP}_placa${number}.jpg`;
-            console.log('src', src);
-            return src;
-        },
-        firstTransitionEnd() {
-            this.cardsLength =
-                this.appConfig.module_on_boarding_new_user &&
-                this.appConfig.module_on_boarding_new_user.cards;
-            this.styleContainerObject = {
-                width: `${this.cardsLength * 100}%`,
-                transform: 'translate(0)',
-                transition: 'transform 0.5s'
-            };
-            this.styleCardObject = {
-                width: '100vw'
-            };
-            this.$refs.overlay.removeEventListener(
-                'transitionend',
-                this.firstTransitionEnd,
-                false
-            );
-        },
-        complete() {
-            this.cardsLength = 0;
-            this.styleContainerObject = {
-                transition: 'none'
-            };
-            this.styleCardObject = {};
-            this.$nextTick(() => {
-                this.styleContainerObject = {};
-                this.$nextTick(() => {
-                    this.onBoardingVisibilityClass = '';
-                    this.$refs.overlay.addEventListener(
-                        'transitionend',
-                        this.finalTransitionEnd,
-                        false
-                    );
-                });
-            });
-        },
-        finalTransitionEnd() {
-            this.$refs.overlay.removeEventListener(
-                'transitionend',
-                this.finalTransitionEnd,
-                false
-            );
-            this.endActions();
-        },
-        endActions() {
-            this.$set(document.documentElement.style, 'overflow', 'auto');
-            this.$set(document.body, 'scroll', 'yes');
-            this.setFirstTimeAppOpenInDevice();
-        }
-    },
-    watch: {
-        cardNumber(value) {
-            this.$set(
-                this.styleContainerObject,
-                'transform',
-                `translate(${(value - 1) * -100}vw)`
-            );
-        }
-    }
-};
+        });
+    });
+}
+
+function finalTransitionEnd() {
+    overlay.value.removeEventListener(
+        'transitionend',
+        finalTransitionEnd,
+        false
+    );
+    endActions();
+}
+
+function endActions() {
+    document.documentElement.style.overflow = 'auto';
+    document.body.scroll = 'yes';
+    deviceStore.setFirstTimeAppOpenInDevice();
+}
+
+watch(cardNumber, (value) => {
+    styleContainerObject.value = {
+        ...styleContainerObject.value,
+        transform: `translate(${(value - 1) * -100}vw)`
+    };
+});
+
+onMounted(() => {
+    setTimeout(() => {
+        onBoardingVisibilityClass.value = 'show';
+        overlay.value.addEventListener(
+            'transitionend',
+            firstTransitionEnd,
+            false
+        );
+    }, 600);
+    document.documentElement.style.overflow = 'hidden';
+    document.body.scroll = 'no';
+});
 </script>
 
 <style scoped>

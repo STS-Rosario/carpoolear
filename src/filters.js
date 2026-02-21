@@ -1,18 +1,5 @@
-import Vue from 'vue';
-import { getRoute } from './services/utility';
-
-Vue.filter('profile-image', function (value) {
-    return getRoute(value, '/image/profile/');
-});
-
-Vue.filter('conversation-image', function (value) {
-    return getRoute(value);
-});
-
-Vue.filter('googleInfoClean', function (value) {
-    if (value && value.replace) {
-        return value.replace('Province', '');
-    } else {
-        return value;
-    }
-});
+// Vue 3: Filters are no longer supported.
+// Use the composables/useFormatters.js module instead:
+// import { profileImage, conversationImage, googleInfoClean, formatDate } from '@/composables/useFormatters'
+//
+// In templates: {{ date | moment('DD/MM') }} → {{ formatDate(date, 'DD/MM') }}

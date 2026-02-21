@@ -1,98 +1,114 @@
-/* jshint esversion: 6 */
-import Vue from 'vue';
-import VueRouter from 'vue-router';
-import { i18n } from '../main';
-
-import store from '../store';
+import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router';
 import routes from './routes.js';
+import { useAuthStore } from '../stores/auth';
+import { useActionbarsStore } from '../stores/actionbars';
+import { useBackgroundStore } from '../stores/background';
+import { i18n } from '../main.js';
 
-Vue.use(VueRouter);
+const historyMode = import.meta.env.VITE_HISTORY_MODE || 'hash';
+const routeBase = import.meta.env.VITE_ROUTE_BASE || '/';
 
-const router = new VueRouter({
-    routes: routes,
-    // esto hay que atarlo a si estoy en cordova o no
-    mode: process.env.HISTORY_MODE,
-    base: process.env.ROUTE_BASE
+const router = createRouter({
+    history: historyMode === 'history'
+        ? createWebHistory(routeBase)
+        : createWebHashHistory(routeBase),
+    routes
 });
 
 router.rememberRoute = null;
+router.stack = [];
 
 router.beforeEach((to, from, next) => {
+    const actionbarsStore = useActionbarsStore();
+    const backgroundStore = useBackgroundStore();
+    const authStore = useAuthStore();
+
     const actionbar = to.meta.actionbar || {};
     const background = to.meta.background || {};
-    const user = store.getters['auth/checkLogin'];
+    const user = authStore.checkLogin;
+
     if (user && actionbar.footer) {
-        if (actionbar.footer.show) {
-            store.dispatch('actionbars/showFooter', true);
-        } else {
-            store.dispatch('actionbars/showFooter', false);
-        }
+        actionbarsStore.showFooter(!!actionbar.footer.show);
         if (actionbar.footer.active_id) {
-            store.dispatch(
-                'actionbars/setActiveFooter',
-                actionbar.footer.active_id
-            );
+            actionbarsStore.setActiveFooter(actionbar.footer.active_id);
         }
     } else {
-        store.dispatch('actionbars/showFooter', false);
+        actionbarsStore.showFooter(false);
     }
-    const getters = store.getters;
-    const config = getters['auth/appConfig'];
-    console.log('config app name', config);
-    let appName = process.env.TARGET_APP || 'Carpoolear';
+
+    const config = authStore.appConfig;
+    let appName = import.meta.env.VITE_TARGET_APP || 'Carpoolear';
     if (config) {
         appName = config.app_name ? config.app_name : config.name_app;
     }
     if (appName && appName.length) {
         appName = appName.charAt(0).toUpperCase() + appName.slice(1);
     }
-    console.log('app name', appName);
+
     if (actionbar.header) {
-        store.dispatch('actionbars/setSubTitle', '');
-        store.dispatch('actionbars/setTitleLink', {});
-        store.dispatch('actionbars/setImgTitle', '');
+        actionbarsStore.setSubTitle('');
+        actionbarsStore.setTitleLink({});
+        actionbarsStore.setImgTitle('');
         if (actionbar.header.titleKey) {
-            console.log('actionbar.header.titleKey', actionbar.header.titleKey);
-            const title = i18n.t(actionbar.header.titleKey);
-            store.dispatch('actionbars/setTitle', title);
+            const title = i18n.global.t(actionbar.header.titleKey);
+            actionbarsStore.setTitle(title);
         } else {
-            console.log('actionbar appName', appName);
-            store.dispatch('actionbars/setTitle', appName);
+            actionbarsStore.setTitle(appName);
         }
         if (actionbar.header.buttons) {
-            store.dispatch(
-                'actionbars/setHeaderButtons',
-                actionbar.header.buttons
-            );
+            actionbarsStore.setHeaderButtons(actionbar.header.buttons);
         } else {
-            store.dispatch('actionbars/setHeaderButtons', []);
+            actionbarsStore.setHeaderButtons([]);
         }
         if (actionbar.header.logo) {
-            store.dispatch(
-                'actionbars/showHeaderLogo',
-                actionbar.header.logo.show
-            );
+            actionbarsStore.showHeaderLogo(actionbar.header.logo.show);
         } else {
-            store.dispatch('actionbars/showHeaderLogo', true);
+            actionbarsStore.showHeaderLogo(true);
         }
     } else {
-        store.dispatch('actionbars/setTitle', appName);
-        store.dispatch('actionbars/setHeaderButtons', []);
-        store.dispatch('actionbars/showHeaderLogo', true);
+        actionbarsStore.setTitle(appName);
+        actionbarsStore.setHeaderButtons([]);
+        actionbarsStore.showHeaderLogo(true);
     }
+
     if (background.style) {
-        store.dispatch('background/setBackgroundStyle', background.style);
+        backgroundStore.setBackgroundStyle(background.style);
     } else {
-        store.dispatch('background/setBackgroundStyle', 'gray');
+        backgroundStore.setBackgroundStyle('gray');
     }
+
     window.scrollTo(0, 0);
     next();
 });
 
-router.stack = [];
-router._push = router.push;
-router._replace = router.replace;
-router._go = router.go;
+// Navigation stack tracking
+const originalPush = router.push.bind(router);
+const originalReplace = router.replace.bind(router);
+const originalGo = router.go.bind(router);
+
+router.push = function (data) {
+    if (data.name !== 'trips') {
+        router.stack.push(data);
+    } else {
+        router.stack = [];
+    }
+    return originalPush(data);
+};
+
+router.replace = function (data) {
+    if (data.name !== 'trips') {
+        router.stack.pop();
+        router.stack.push(data);
+    } else {
+        router.stack = [];
+    }
+    return originalPush(data);
+};
+
+router.go = function (number) {
+    router.stack.splice(-1, -number);
+    return originalGo(number);
+};
 
 router.rememberBack = function () {
     if (router.rememberRoute) {
@@ -101,33 +117,6 @@ router.rememberBack = function () {
     } else {
         router.replace({ name: 'trips' });
     }
-};
-
-router.push = function (data, fnSuccess, fnFailure) {
-    // console.log('push', JSON.stringify(router.stack), JSON.stringify(data));
-    if (data.name !== 'trips') {
-        router.stack.push(data);
-    } else {
-        router.stack = [];
-    }
-    router._push(data, fnSuccess, fnFailure);
-};
-
-router.replace = function (data) {
-    // console.log('replace', JSON.stringify(router.stack), JSON.stringify(data));
-    if (data.name !== 'trips') {
-        router.stack.pop();
-        router.stack.push(data);
-    } else {
-        router.stack = [];
-    }
-    router._push(data);
-};
-
-router.go = function (number) {
-    // console.log('go', JSON.stringify(router.stack), number);
-    router.stack.splice(-1, -number);
-    router._go(number);
 };
 
 export default router;

@@ -34,7 +34,7 @@ export default {
             console.log('facebook login', window.cordova.platformId);
             if (window.cordova.platformId === 'browser') {
                 window.facebookConnectPlugin.browserInit(
-                    process.env.FACEBOOK_API
+                    import.meta.env.VITE_FACEBOOK_API
                 );
             }
             if (window.cordova.platformId.toLowerCase() === 'android') {

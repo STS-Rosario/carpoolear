@@ -1,0 +1,37 @@
+{
+    "background_color": "#FFF",
+    "display": "standalone",
+    "name": "Carpoolear",
+    "short_name": "Carpoolear",
+    "version": "com.sts.carpoolear",
+    "description": "Aplicación para compartir viajes de media y larga distancia.",
+    "author": "STS",
+    "start_url": "index.html",
+    "gcm_sender_id": "996231231186",
+    "icons": [
+        {
+          "src": "/app/static/img/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png",
+          "purpose": "any maskable"
+        },
+        {
+          "src": "/app/static/img/icon-512.png",
+          "sizes": "512x512",
+          "type": "image/png",
+          "purpose": "any maskable"
+        },
+        {
+          "src": "/app/static/img/icon-1024.png",
+          "sizes": "1024x1024",
+          "type": "image/png",
+          "purpose": "any maskable"
+        },
+        {
+          "src": "/app/static/img/icon-2048.png",
+          "sizes": "2048x2048",
+          "type": "image/png",
+          "purpose": "any maskable"
+        }
+    ]
+}

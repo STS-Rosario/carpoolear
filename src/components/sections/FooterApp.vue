@@ -30,7 +30,7 @@
         <div class="container hidden-xs" v-if="config.enable_footer">
             <div class="row">
                 <div class="col-xs-6 col-md-6">
-                    <h3>{{ $t('footerAcercaDe') }}</h3>
+                    <h3>{{ t('footerAcercaDe') }}</h3>
                     <ul>
                         <li>
                             <router-link tag="a" :to="{ name: 'acerca_de' }">
@@ -42,7 +42,7 @@
                                 href="https://carpoolear.com.ar/acerca-de-equipo"
                                 target="_blank"
                             >
-                                {{ $t('footerEquipo') }}
+                                {{ t('footerEquipo') }}
                             </a>
                         </li>
                         <li>
@@ -55,15 +55,14 @@
                     </ul>
                 </div>
                 <div class="col-xs-6 col-md-6">
-                    <h3>{{ $t('footerAyuda') }}</h3>
+                    <h3>{{ t('footerAyuda') }}</h3>
                     <ul>
-                        <!--<li><a href="https://carpoolear.com.ar/tutoriales.php" target="_blank">Tutoriales de uso</a></li>-->
                         <li>
                             <a
                                 href="https://carpoolear.com.ar/plataforma-preguntas-frecuentes"
                                 target="_blank"
                             >
-                                {{ $t('footerPreguntasFrecuentes') }}
+                                {{ t('footerPreguntasFrecuentes') }}
                             </a>
                         </li>
                         <li>
@@ -71,13 +70,13 @@
                                 href="https://carpoolear.com.ar/plataforma-recomendaciones"
                                 target="_blank"
                             >
-                                {{ $t('footerRecomendaciones') }}
+                                {{ t('footerRecomendaciones') }}
                             </a>
                         </li>
                     </ul>
                 </div>
                 <div class="col-xs-6 col-md-6">
-                    <h3>{{ $t('footerEncontranosEn') }}</h3>
+                    <h3>{{ t('footerEncontranosEn') }}</h3>
                     <ul>
                         <li>
                             <a href="https://www.facebook.com/Carpoolear">
@@ -85,13 +84,13 @@
                                     class="fa fa-facebook"
                                     aria-hidden="true"
                                 ></i>
-                                <span>{{ $t('footerFacebook') }}</span>
+                                <span>{{ t('footerFacebook') }}</span>
                             </a>
                         </li>
                         <li>
                             <a href="https://twitter.com/carpoolear">
                                 <i class="fa fa-twitter" aria-hidden="true"></i>
-                                <span>{{ $t('footerTwitter') }}</span>
+                                <span>{{ t('footerTwitter') }}</span>
                             </a>
                         </li>
                         <li>
@@ -102,13 +101,13 @@
                                     class="fa fa-instagram"
                                     aria-hidden="true"
                                 ></i>
-                                <span>{{ $t('footerInstagram') }}</span>
+                                <span>{{ t('footerInstagram') }}</span>
                             </a>
                         </li>
                         <li>
                             <a href="https://github.com/STS-Rosario">
                                 <i class="fa fa-github" aria-hidden="true"></i>
-                                <span>{{ $t('footerGithub') }}</span>
+                                <span>{{ t('footerGithub') }}</span>
                             </a>
                         </li>
                         <li>
@@ -117,18 +116,18 @@
                                     class="fa fa-envelope-o"
                                     aria-hidden="true"
                                 ></i>
-                                <span>{{ $t('footerCorreo') }}</span>
+                                <span>{{ t('footerCorreo') }}</span>
                             </a>
                         </li>
                     </ul>
                 </div>
                 <div class="col-xs-6 col-md-6">
-                    <h3>{{ $t('footerInformacionLegal') }}</h3>
+                    <h3>{{ t('footerInformacionLegal') }}</h3>
                     <p>
-                        {{ $t('footerEnRutaDesde') }}
+                        {{ t('footerEnRutaDesde') }}
                         <br />
                         <router-link :to="{ name: 'terms' }"
-                            >{{ $t('footerTerminosCondiciones') }}</router-link
+                            >{{ t('footerTerminosCondiciones') }}</router-link
                         >
                     </p>
                 </div>
@@ -136,32 +135,27 @@
         </div>
     </footer>
 </template>
-<script>
-import { mapActions, mapGetters } from 'vuex';
+<script setup>
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useActionbarsStore } from '@/stores/actionbars';
+import { useNotificationsStore } from '@/stores/notifications';
+import { useAuthStore } from '@/stores/auth';
 import svgItem from '../SvgItem';
 
-export default {
-    name: 'footerApp',
-    data() {
-        return {};
-    },
-    computed: {
-        ...mapGetters({
-            footerButtons: 'actionbars/footerButtons',
-            footerShow: 'actionbars/footerShow',
-            notificationsCount: 'notifications/count',
-            config: 'auth/appConfig'
-        })
-    },
-    methods: {
-        ...mapActions({
-            onClick: 'actionbars/footerButtonClick'
-        })
-    },
-    components: {
-        svgItem
-    }
-};
+const { t } = useI18n();
+const actionbarsStore = useActionbarsStore();
+const notificationsStore = useNotificationsStore();
+const authStore = useAuthStore();
+
+const footerButtons = computed(() => actionbarsStore.footerButtons);
+const footerShow = computed(() => actionbarsStore.footerShow);
+const notificationsCount = computed(() => notificationsStore.count);
+const config = computed(() => authStore.appConfig);
+
+function onClick(item) {
+    actionbarsStore.footerButtonClick(item);
+}
 </script>
 
 <style scoped>

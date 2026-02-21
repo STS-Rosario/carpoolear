@@ -8,8 +8,8 @@
             <img src="https://carpoolear.com.ar/app/static/img/splash-android-1280x1920.png" alt="Carpoolear" class="splash-image" />
             <div class="splash-version">Version 92</div>
         </div>
-        
-        <onBoarding key="1" v-if="onBoardingVisibility"></onBoarding>
+
+        <onBoarding v-if="onBoardingVisibility"></onBoarding>
         <headerApp></headerApp>
         <main id="main">
             <div class="view-container clearfix">
@@ -17,109 +17,93 @@
             </div>
         </main>
         <footerApp></footerApp>
-        <!--
-    <pre>
-            {{this.$store.state}}
-    </pre>
-    --></div>
+    </div>
 </template>
 
-<script>
-import { mapGetters, mapActions } from 'vuex';
+<script setup>
+import { ref, computed, watch, onMounted, onBeforeMount } from 'vue';
+import { useRoute } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+import { useAuthStore } from './stores/auth';
+import { useCordovaStore } from './stores/cordova';
+import { useBackgroundStore } from './stores/background';
+import { useDeviceStore } from './stores/device';
 import footerApp from './components/sections/FooterApp.vue';
 import headerApp from './components/sections/HeaderApp.vue';
 import onBoarding from './components/sections/OnBoarding.vue';
 
-export default {
-    name: 'app',
-    methods: {
-        setRouteClass: function (route) {
-            this.actualRouteName = 'route--' + route.name;
-        },
-        ...mapActions({
-            fbLogin: 'cordova/facebookLogin',
-            getConfig: 'auth/getConfig'
-        })
-    },
-    created() {
-        const stored = localStorage.getItem('app_locale');
-        if (stored) {
-            this.$i18n.locale = stored;
-        }
-    },
-    beforeMount() {
-        this.getConfig();
-    },
-    mounted() {
-        if (this.isFacebookApp) {
-            if (!this.logged) {
-                this.fbLogin();
-            }
-        }
+const route = useRoute();
+const { locale } = useI18n();
+const authStore = useAuthStore();
+const cordovaStore = useCordovaStore();
+const backgroundStore = useBackgroundStore();
+const deviceStore = useDeviceStore();
 
-        // Custom splash screen handling
-        if (window.SplashScreen && window.SplashScreen.hide) {
-            window.SplashScreen.hide();
+const showCustomSplash = ref(true);
+
+const backgroundStyle = computed(() => backgroundStore.backgroundStyle);
+const logged = computed(() => authStore.checkLogin);
+const appConfig = computed(() => authStore.appConfig);
+const isRemoteConfig = computed(() => authStore.isRemoteConfig);
+const user = computed(() => authStore.user);
+const isBrowser = computed(() => deviceStore.isBrowser);
+const firsTimeMobileAppOpen = computed(() => deviceStore.firsTimeMobileAppOpen);
+const isFacebokApp = computed(() => deviceStore.isFacebokApp);
+
+const onBoardingVisibility = computed(() => {
+    let moduleEnabled =
+        appConfig.value &&
+        isRemoteConfig.value &&
+        appConfig.value.module_on_boarding_new_user &&
+        appConfig.value.module_on_boarding_new_user.enabled;
+    let mustShowMobile = !isBrowser.value && !firsTimeMobileAppOpen.value;
+    let mustShowGeneral = user.value && user.value.on_boarding_view !== 1;
+    return moduleEnabled && (mustShowMobile || mustShowGeneral);
+});
+
+const viewName = computed(() => route.name);
+
+const deviceClass = computed(() => {
+    return window.device && window.device.platform
+        ? window.device.platform.toLowerCase()
+        : '';
+});
+
+// Load saved locale
+const stored = localStorage.getItem('app_locale');
+if (stored) {
+    locale.value = stored;
+}
+
+onBeforeMount(() => {
+    authStore.getConfig();
+});
+
+onMounted(() => {
+    if (isFacebokApp.value) {
+        if (!logged.value) {
+            cordovaStore.facebookLogin(authStore);
         }
-        
-        // Show custom splash for 3 seconds
-        setTimeout(() => {
-            this.showCustomSplash = false;
-        }, 3000);
-    },
-    computed: {
-        ...mapGetters({
-            deviceReady: 'cordova/deviceReady',
-            backgroundStyle: 'background/backgroundStyle',
-            logged: 'auth/checkLogin',
-            isFacebokApp: 'device/isFacebokApp',
-            appConfig: 'auth/appConfig',
-            isRemoteConfig: 'auth/isRemoteConfig',
-            firsTimeMobileAppOpen: 'device/firsTimeMobileAppOpen',
-            user: 'auth/user',
-            isBrowser: 'device/isBrowser'
-        }),
-        onBoardingVisibility() {
-            let moduleEnabled =
-                this.appConfig &&
-                this.isRemoteConfig &&
-                this.appConfig.module_on_boarding_new_user &&
-                this.appConfig.module_on_boarding_new_user.enabled;
-            let mustShowMobile = !this.isBrowser && !this.firsTimeMobileAppOpen;
-            let mustShowGeneral = this.user && this.user.on_boarding_view !== 1;
-            return moduleEnabled && (mustShowMobile || mustShowGeneral);
-        },
-        viewName() {
-            return this.$route.name;
-        },
-        deviceClass() {
-            return window.device && window.device.platform
-                ? window.device.platform.toLowerCase()
-                : '';
-        }
-    },
-    watch: {
-        deviceReady: () => {
-            console.log('Device ready from components');
-        },
-        appConfig(value) {
-            if (value && value.locale && !localStorage.getItem('app_locale')) {
-                this.$root.$i18n.locale = value.locale;
-            }
-        }
-    },
-    data() {
-        return {
-            actualRouteName: '',
-            showCustomSplash: true
-        };
-    },
-    components: {
-        headerApp,
-        footerApp,
-        onBoarding
     }
-};
+
+    if (window.SplashScreen && window.SplashScreen.hide) {
+        window.SplashScreen.hide();
+    }
+
+    setTimeout(() => {
+        showCustomSplash.value = false;
+    }, 3000);
+});
+
+watch(() => cordovaStore.deviceReady, () => {
+    console.log('Device ready from components');
+});
+
+watch(appConfig, (value) => {
+    if (value && value.locale && !localStorage.getItem('app_locale')) {
+        locale.value = value.locale;
+    }
+});
 </script>
 
 <style>

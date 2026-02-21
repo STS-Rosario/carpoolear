@@ -2,77 +2,76 @@
     <div class="trip-data--container">
         <div class="row trip-data" v-if="trip.is_passenger">
             <strong class="warning-is-passenger"
-                >{{ $t('pasajeroQueBuscaViaje') }}</strong
+                >{{ t('pasajeroQueBuscaViaje') }}</strong
             >
         </div>
         <div class="row trip-data">
             <span class="trip-data--subtitle" v-if="tripCardTheme === 'light'">
-                {{ $t('privacidadViaje') }}
+                {{ t('privacidadViaje') }}
             </span>
             <em v-if="trip.friendship_type_id == 2">
                 <i class="fa fa-globe" aria-hidden="true"></i>
-                {{ $t('publico') }}
+                {{ t('publico') }}
             </em>
             <em v-if="trip.friendship_type_id == 1">
                 <i class="fa fa-users" aria-hidden="true"></i>
-                {{ $t('amigosamigos') }}
+                {{ t('amigosamigos') }}
             </em>
             <em v-if="trip.friendship_type_id == 0">
                 <i class="fa fa-user" aria-hidden="true"></i>
-                {{ $t('soloAmigos') }}
+                {{ t('soloAmigos') }}
             </em>
             <span class="trip-data--subtitle" v-if="tripCardTheme === 'light'">
-                {{ $t('preferenciasViaje') }}
+                {{ t('preferenciasViaje') }}
             </span>
             <template v-if="!isPassengersView">
                 <em v-if="trip.allow_smoking > 0">
                     <svgItem icon="smoking" size="18"></svgItem>
-                    {{ $t('sePuedeFumar') }}
+                    {{ t('sePuedeFumar') }}
                 </em>
                 <em v-else>
                     <svgItem icon="no-smoking" size="18"></svgItem>
-                    {{ $t('nofumar') }}
+                    {{ t('nofumar') }}
                 </em>
 
                 <em v-if="trip.allow_animals > 0">
                     <svgItem icon="pets" size="18"></svgItem>
-                    {{ $t('aceptaMascotas') }}
+                    {{ t('aceptaMascotas') }}
                 </em>
                 <em v-else>
                     <svgItem icon="no-animals" size="18"></svgItem>
-                    {{ $t('noanimales') }}
+                    {{ t('noanimales') }}
                 </em>
 
                 <em v-if="trip.allow_kids > 0">
                     <svgItem icon="kids" size="18"></svgItem>
-                    {{ $t('aceptaNinos') }}
+                    {{ t('aceptaNinos') }}
                 </em>
                 <em v-else>
                     <svgItem icon="no-kids" size="18"></svgItem>
-                    {{ $t('noninos') }}
+                    {{ t('noninos') }}
                 </em>
             </template>
         </div>
     </div>
 </template>
-<script>
-import { mapGetters } from 'vuex';
+<script setup>
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useTripsStore } from '@/stores/trips';
+import { useAuthStore } from '@/stores/auth';
 import SvgItem from '../SvgItem';
-export default {
-    name: 'TripData',
-    computed: {
-        ...mapGetters({
-            trip: 'trips/currentTrip',
-            tripCardTheme: 'auth/tripCardTheme'
-        }),
-        isPassengersView() {
-            return this.trip.is_passenger;
-        }
-    },
-    components: {
-        SvgItem
-    }
-};
+
+const { t } = useI18n();
+const tripsStore = useTripsStore();
+const authStore = useAuthStore();
+
+const trip = computed(() => tripsStore.currentTrip);
+const tripCardTheme = computed(() => authStore.tripCardTheme);
+
+const isPassengersView = computed(() => {
+    return trip.value.is_passenger;
+});
 </script>
 <style scoped>
 .trip-data em {

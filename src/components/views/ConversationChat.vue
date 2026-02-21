@@ -21,9 +21,9 @@
                 <h2 v-else>{{ conversation.title }}</h2>
                 <CoordinateTrip></CoordinateTrip>
                 <p class="chat_last_connection">
-                    <strong>{{ $t('ultimaConexion') }}</strong>
+                    <strong>{{ t('ultimaConexion') }}</strong>
                     <span class="">{{
-                        lastConnection | moment('calendar')
+                        formatDate(lastConnection, 'calendar')
                     }}</span>
                 </p>
             </div>
@@ -39,7 +39,7 @@
                         v-if="!lastPageConversation"
                         class="btn text-center btn-full-width"
                     >
-                        {{ $t('verMasMensajes') }}
+                        {{ t('verMasMensajes') }}
                     </button>
                 </div>
                 <MessageView
@@ -53,18 +53,18 @@
             <div class="list-group-item">
                 <div class="input-group">
                     <input
-                        ref="ipt-text"
+                        ref="iptText"
                         id="ipt-text"
                         v-model="message"
                         type="text"
                         class="form-control"
-                        :placeholder="$t('escribirMensaje')"
+                        :placeholder="t('escribirMensaje')"
                         v-jump:click="'btn-send'"
                         maxlength="800"
                     />
                     <span class="input-group-btn">
                         <button
-                            ref="btn-send"
+                            ref="btnSend"
                             id="btn-send"
                             class="btn btn-default"
                             :class="message.length > 0 ? 'active' : ''"
@@ -81,148 +81,113 @@
         </div>
     </div>
     <div v-else>
-        <p slot="no-data" class="alert alert-warning" role="alert">
-            {{ $t('seleccioneAlgunaConversacion') }}
+        <p class="alert alert-warning" role="alert">
+            {{ t('seleccioneAlgunaConversacion') }}
         </p>
     </div>
 </template>
-<script>
-import { mapGetters, mapActions } from 'vuex';
+<script setup>
+import { ref, reactive, computed, watch, onMounted, onUpdated, onBeforeUnmount } from 'vue';
+import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+import { useConversationsStore } from '@/stores/conversations';
+import { useAuthStore } from '@/stores/auth';
+import { useActionbarsStore } from '@/stores/actionbars';
+import { useDeviceStore } from '@/stores/device';
+import { formatDate } from '@/composables/useFormatters';
 import MessageView from '../MessageView';
-import router from '../../router';
 import moment from 'moment';
 import bus from '../../services/bus-event.js';
 import CoordinateTrip from '../elements/CoordinateTrip';
 
-export default {
-    name: 'conversation-chat',
-    data() {
-        return {
-            message: '',
-            mustJump: false,
-            sending: {
-                message: false
-            }
-        };
-    },
-    computed: {
-        ...mapGetters({
-            conversation: 'conversations/selectedConversation',
-            user: 'auth/user',
-            messages: 'conversations/messagesList',
-            lastPageConversation: 'conversations/lastPageConversation',
-            title: 'actionbars/title',
-            isMobile: 'device/isMobile',
-            config: 'auth/appConfig'
-        }),
-        lastConnection() {
-            let users = this.conversation.users.filter(
-                (item) => item.id !== this.user.id
+const { t } = useI18n();
+const router = useRouter();
+const conversationsStore = useConversationsStore();
+const authStore = useAuthStore();
+const actionbarsStore = useActionbarsStore();
+const deviceStore = useDeviceStore();
+
+const props = defineProps({
+    id: {
+        type: [String, Number],
+        required: false
+    }
+});
+
+const message = ref('');
+const mustJump = ref(false);
+const sending = reactive({ message: false });
+const messagesWrapper = ref(null);
+
+const conversation = computed(() => conversationsStore.selectedConversation);
+const user = computed(() => authStore.user);
+const messages = computed(() => conversationsStore.messagesList);
+const lastPageConversation = computed(() => conversationsStore.lastPageConversation);
+const isMobile = computed(() => deviceStore.isMobile);
+const config = computed(() => authStore.appConfig);
+
+const lastConnection = computed(() => {
+    if (!conversation.value) return '';
+    let users = conversation.value.users.filter(
+        (item) => item.id !== user.value.id
+    );
+    if (users.length > 1) {
+        return '';
+    } else {
+        return users[0].last_connection;
+    }
+});
+
+const userProfile = () => {
+    let id = 0;
+    if (conversation.value.users[0].id === user.value.id) {
+        id = 1;
+    }
+    return {
+        id: conversation.value.users[id].id,
+        userProfile: conversation.value.users[id],
+        activeTab: 1
+    };
+};
+
+const sendMessage = () => {
+    if (message.value.length) {
+        sending.message = true;
+        conversationsStore.sendMessage(message.value).finally(() => {
+            sending.message = false;
+        });
+        message.value = '';
+    }
+};
+
+const onBackClick = () => {
+    router.push({ name: 'conversations-list' });
+};
+
+const jumpEndOfConversation = () => {
+    if (isMobile.value) {
+        window.scrollTo(0, document.body.scrollHeight);
+    } else {
+        let div = messagesWrapper.value;
+        if (div) {
+            div.scrollTop = div.scrollHeight;
+        }
+    }
+};
+
+const searchMore = () => {
+    conversationsStore.findMessage({ more: true });
+};
+
+const refresh = () => {
+    conversationsStore.select(props.id).then(() => {
+        bus.on('back-click', onBackClick);
+        if (conversation.value) {
+            actionbarsStore.setTitle(conversation.value.title);
+            const otherUser = conversation.value.users.find(
+                (u) => u.id !== user.value.id
             );
-            if (users.length > 1) {
-                return '';
-            } else {
-                return users[0].last_connection;
-            }
-        }
-    },
-    methods: {
-        ...mapActions({
-            select: 'conversations/select',
-            send: 'conversations/sendMessage',
-            findMessage: 'conversations/findMessage',
-            unreadMessage: 'conversations/getUnreadMessages',
-            setTitle: 'actionbars/setTitle',
-            setTitleLink: 'actionbars/setTitleLink',
-            setSubTitle: 'actionbars/setSubTitle',
-            setImgTitle: 'actionbars/setImgTitle'
-        }),
-
-        userProfile() {
-            let id = 0;
-            if (this.conversation.users[0].id === this.user.id) {
-                id = 1;
-            }
-            return {
-                id: this.conversation.users[id].id,
-                userProfile: this.conversation.users[id],
-                activeTab: 1
-            };
-        },
-
-        sendMessage() {
-            if (this.message.length) {
-                this.$set(this.sending, 'message', true);
-                this.send(this.message).finally(() => {
-                    this.$set(this.sending, 'message', false);
-                    this.$forceUpdate();
-                });
-                this.message = '';
-            }
-        },
-
-        onBackClick() {
-            // router.back();
-            router.push({ name: 'conversations-list' });
-        },
-
-        jumpEndOfConversation() {
-            if (this.isMobile) {
-                window.scrollTo(0, document.body.scrollHeight);
-            } else {
-                let div = this.$refs.messagesWrapper;
-                if (div) {
-                    div.scrollTop = div.scrollHeight;
-                }
-            }
-        },
-
-        searchMore() {
-            this.findMessage({ more: true });
-        },
-
-        refresh() {
-            this.select(this.id).then(() => {
-                bus.on('back-click', this.onBackClick);
-                if (this.conversation) {
-                    this.setTitle(this.conversation.title);
-                    const otherUser = this.conversation.users.find(
-                        (user) => user.id !== this.user.id
-                    );
-                    this.setTitleLink({
-                        name: 'profile',
-                        params: {
-                            id: otherUser.id,
-                            userProfile: otherUser,
-                            activeTab: 1
-                        }
-                    });
-                    this.setSubTitle(
-                        this.$t('ultimaConexion') +
-                            moment(this.lastConnection).calendar()
-                    );
-                    this.setImgTitle(this.conversation.image);
-                }
-            });
-        }
-    },
-    beforeDestroy() {
-        bus.off('back-click', this.onBackClick);
-    },
-    mounted() {
-        this.refresh();
-    },
-    updated() {
-        if (this.mustJump) {
-            this.jumpEndOfConversation();
-            this.mustJump = false;
-        }
-        if (this.conversation) {
-            this.setTitle(this.conversation.title);
-            const otherUser = this.conversation.users.find(
-                (user) => user.id !== this.user.id
-            );
-            this.setTitleLink({
+            actionbarsStore.setTitleLink({
                 name: 'profile',
                 params: {
                     id: otherUser.id,
@@ -230,33 +195,63 @@ export default {
                     activeTab: 1
                 }
             });
-            this.setSubTitle(
-                this.$t('ultimaConexion') + moment(this.lastConnection).calendar()
+            actionbarsStore.setSubTitle(
+                t('ultimaConexion') +
+                    moment(lastConnection.value).calendar()
             );
-            this.setImgTitle(this.conversation.image);
-
-            bus.emit('header-title-change');
+            actionbarsStore.setImgTitle(conversation.value.image);
         }
-    },
-    watch: {
-        id: function () {
-            this.refresh();
-        },
-        isMobile: function () {
-            if (!this.id && this.isMobile) {
-                router.push({ name: 'conversations-list' });
-            }
-        },
-        messages: function () {
-            this.mustJump = true;
-        }
-    },
-    props: ['id'],
-    components: {
-        MessageView,
-        CoordinateTrip
-    }
+    });
 };
+
+onBeforeUnmount(() => {
+    bus.off('back-click', onBackClick);
+});
+
+onMounted(() => {
+    refresh();
+});
+
+onUpdated(() => {
+    if (mustJump.value) {
+        jumpEndOfConversation();
+        mustJump.value = false;
+    }
+    if (conversation.value) {
+        actionbarsStore.setTitle(conversation.value.title);
+        const otherUser = conversation.value.users.find(
+            (u) => u.id !== user.value.id
+        );
+        actionbarsStore.setTitleLink({
+            name: 'profile',
+            params: {
+                id: otherUser.id,
+                userProfile: otherUser,
+                activeTab: 1
+            }
+        });
+        actionbarsStore.setSubTitle(
+            t('ultimaConexion') + moment(lastConnection.value).calendar()
+        );
+        actionbarsStore.setImgTitle(conversation.value.image);
+
+        bus.emit('header-title-change');
+    }
+});
+
+watch(() => props.id, () => {
+    refresh();
+});
+
+watch(isMobile, () => {
+    if (!props.id && isMobile.value) {
+        router.push({ name: 'conversations-list' });
+    }
+});
+
+watch(messages, () => {
+    mustJump.value = true;
+});
 </script>
 
 <style scoped>

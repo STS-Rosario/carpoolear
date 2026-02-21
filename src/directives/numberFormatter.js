@@ -171,8 +171,7 @@ const beforeInputHandler = function (event) {
 };
 
 export default {
-    bind: function (el, binding, node) {
-        // Ensure element has an ID (required for the directive to work)
+    beforeMount: function (el, binding) {
         if (!el.id) {
             console.warn('numberMask directive requires element to have an id attribute');
             return;
@@ -183,40 +182,31 @@ export default {
         numberFormatter[el.id].value = el.value || '';
         numberFormatter[el.id].rawValue = '';
         numberFormatter[el.id].el = el;
-        numberFormatter[el.id].context = node.context;
         numberFormatter[el.id].expression = binding.value;
 
-        // Format initial value if present
         if (el.value && el.value.length > 0) {
             formatNumber(el.id);
         }
 
-        // Add event listeners
         el.addEventListener('keydown', keyDownHandler, false);
         el.addEventListener('input', inputHandler, false);
         el.addEventListener('paste', pasteHandler, false);
 
-        // Add beforeinput for better mobile support (if available)
-        // Store reference for cleanup
         if (typeof InputEvent !== 'undefined' && 'inputType' in InputEvent.prototype) {
             numberFormatter[el.id].beforeInputHandler = beforeInputHandler;
             el.addEventListener('beforeinput', beforeInputHandler, false);
         }
     },
-    update: function (el, binding, node) {
-        // Update context and expression if they changed
+    updated: function (el, binding) {
         if (numberFormatter[el.id]) {
-            numberFormatter[el.id].context = node.context;
             numberFormatter[el.id].expression = binding.value;
         }
 
-        // Always format the number when the directive updates
-        // This ensures proper formatting even after form submission errors
         if (el.value && el.value.length > 0) {
             formatNumber(el.id);
         }
     },
-    unbind: function (el, binding, node) {
+    unmounted: function (el) {
         if (!el.id || !numberFormatter[el.id]) {
             return;
         }
@@ -225,12 +215,10 @@ export default {
         el.removeEventListener('input', inputHandler, false);
         el.removeEventListener('paste', pasteHandler, false);
 
-        // Remove beforeinput handler if it was added
         if (numberFormatter[el.id].beforeInputHandler) {
             el.removeEventListener('beforeinput', numberFormatter[el.id].beforeInputHandler, false);
         }
 
-        // Clean up
         numberFormatter[el.id] = undefined;
     }
 };

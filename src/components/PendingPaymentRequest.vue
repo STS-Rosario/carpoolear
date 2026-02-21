@@ -12,8 +12,8 @@
                                       .json_address.name
                                 : trip.points[trip.points.length - 1].address
                         }}
-                        {{ $t('pendingRequestDelDia') }} {{ trip.trip_date | moment('DD/MM/YYYY') }} {{ $t('pendingRequestALas') }}
-                        {{ trip.trip_date | moment('HH:mm') }}
+                        {{ $t('pendingRequestDelDia') }} {{ formatDate(trip.trip_date, 'DD/MM/YYYY') }} {{ $t('pendingRequestALas') }}
+                        {{ formatDate(trip.trip_date, 'HH:mm') }}
                     </strong>
                     {{ $t('pendingPaymentAhoraDebesRealizarElPagoDe') }}
                     <strong>{{ $n(trip.seat_price_cents / 100, 'currency') }}</strong>
@@ -39,82 +39,81 @@
         </div>
     </div>
 </template>
-<script>
-import { mapActions, mapGetters } from 'vuex';
+<script setup>
+import { ref, onMounted } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useAuthStore } from '@/stores/auth';
+import { useTripsStore } from '@/stores/trips';
+import { useMyTripsStore } from '@/stores/myTrips';
+import { usePassengerStore } from '@/stores/passenger';
+import { getTrip } from '@/stores/index';
 import dialogs from '../services/dialogs.js';
-export default {
-    data() {
-        return {
-            acceptInProcess: false,
-            rejectInProcess: false,
-            acceptRequestValue: 0,
-            trip: null
-        };
-    },
-    computed: {
-        ...mapGetters({
-            currentUser: 'auth/user'
-        })
-    },
-    mounted() {
-        this.getTrip(this.request.trip_id).then((trip) => {
-            console.log('trip to pay', trip);
-            this.trip = trip;
-        });
-    },
-    methods: {
-        ...mapActions({
-            getTrip: 'getTrip',
-            passengerAccept: 'passenger/accept',
-            cancel: 'passenger/cancel'
-        }),
+import { formatDate } from '@/composables/useFormatters';
 
-        onAcceptRequest() {
-            let baseUrl = process.env.API_URL;
-            let url = baseUrl + '/transbank?tp_id=' + this.request.id;
-            if (window.location.protocol.indexOf('http') >= 0) {
-                window.location.href = url;
-            } else {
-                var popup = window.open(
-                    url,
-                    '_blank',
-                    'location=no,hidden=yes,zoom=no'
-                );
-                console.log('onAcceptRequest', url);
-                popup.addEventListener(
-                    'message',
-                    (params) => {
-                        console.log('message', params);
-                        popup.close();
-                    },
-                    false
-                );
-            }
-        },
+const { t } = useI18n();
+const authStore = useAuthStore();
+const tripsStore = useTripsStore();
+const myTripsStore = useMyTripsStore();
+const passengerStore = usePassengerStore();
 
-        onCancelRequest() {
-            if (window.confirm(this.$t('seguroBajarteViaje'))) {
-                this.rejectInProcess = true;
-                this.cancel({
-                    user: this.currentUser,
-                    trip: this.trip,
-                    cancelTripForPayment: true
-                })
-                    .then(() => {
-                        this.rejectInProcess = false;
-                        dialogs.message(this.$t('teHasBajadoViaje'));
-                    })
-                    .catch(() => {
-                        this.rejectInProcess = false;
-                    });
-            }
-        }
-    },
+const props = defineProps({
+    request: {
+        required: true
+    }
+});
 
-    props: [
-        // 'user',
-        // 'trip',
-        'request'
-    ]
-};
+const currentUser = authStore.user;
+
+const acceptInProcess = ref(false);
+const rejectInProcess = ref(false);
+const acceptRequestValue = ref(0);
+const trip = ref(null);
+
+onMounted(() => {
+    getTrip(tripsStore, myTripsStore, props.request.trip_id).then((tripData) => {
+        console.log('trip to pay', tripData);
+        trip.value = tripData;
+    });
+});
+
+function onAcceptRequest() {
+    let baseUrl = import.meta.env.VITE_API_URL;
+    let url = baseUrl + '/transbank?tp_id=' + props.request.id;
+    if (window.location.protocol.indexOf('http') >= 0) {
+        window.location.href = url;
+    } else {
+        var popup = window.open(
+            url,
+            '_blank',
+            'location=no,hidden=yes,zoom=no'
+        );
+        console.log('onAcceptRequest', url);
+        popup.addEventListener(
+            'message',
+            (params) => {
+                console.log('message', params);
+                popup.close();
+            },
+            false
+        );
+    }
+}
+
+function onCancelRequest() {
+    if (window.confirm(t('seguroBajarteViaje'))) {
+        rejectInProcess.value = true;
+        passengerStore.cancel({
+            user: currentUser,
+            trip: trip.value,
+            cancelTripForPayment: true
+        }, authStore, tripsStore, myTripsStore)
+            .then(() => {
+                rejectInProcess.value = false;
+                dialogs.message(t('teHasBajadoViaje'));
+            })
+            .catch(() => {
+                rejectInProcess.value = false;
+            });
+    }
+}
 </script>

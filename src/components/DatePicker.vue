@@ -16,7 +16,7 @@
                 v-on:opened="focus = true"
                 v-on:closed="focus = false"
                 v-on:selected="changeValue"
-                :placeholder="this.$t('fecha')"
+                :placeholder="t('fecha')"
                 :format="'dd/MM/yyyy'"
                 :disabled="{
                     to: min,
@@ -38,185 +38,194 @@
                 @change="changeMobileValue"
                 type="date"
                 id="datepicker-mobile"
-                :min="min | moment('YYYY-MM-DD')"
-                :max="max | moment('YYYY-MM-DD')"
+                :min="formatDate(min, 'YYYY-MM-DD')"
+                :max="formatDate(max, 'YYYY-MM-DD')"
                 autocomplete="off"
             />
         </div>
     </div>
 </template>
 
-<script>
-import DatepickerSystem from 'vuejs-datepicker';
-import { mapGetters } from 'vuex';
+<script setup>
+import { ref, computed, watch, onMounted, onUpdated } from 'vue';
+import { useI18n } from 'vue-i18n';
+import DatepickerSystem from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
 import moment from 'moment';
 import bus from '../services/bus-event';
-/*
+import { useDeviceStore } from '@/stores/device';
+import { useCordovaStore } from '@/stores/cordova';
+import { formatDate } from '@/composables/useFormatters';
 
-*/
-export default {
-    name: 'datePicker',
-    data() {
-        return {
-            dateBrowser: '',
-            dateMobile: '',
-            date: '',
-            update: true,
-            focus: false,
-            nextYear: moment().add(2, 'years').format('YYYY-MM-DD'),
-            lastCentury: moment().subtract(100, 'years').format('YYYY-MM-DD'),
-            niceDate: ''
-        };
-    },
-    mounted() {
-        if (this.value !== '') {
-            this.dateBrowser = moment(this.value).toDate();
-            this.dateMobile = this.value;
-            this.niceDate = moment(this.value).format('DD/MM/YYYY');
-        }
-    },
+const { t, locale } = useI18n();
+const deviceStore = useDeviceStore();
+const cordovaStore = useCordovaStore();
 
-    updated() {
-        if (this.value !== '') {
-            this.niceDate = moment(this.value).format('DD/MM/YYYY');
-        }
+const props = defineProps({
+    format: {
+        type: String,
+        required: false,
+        default: 'DD/MM/YYYY'
     },
-    methods: {
-        clear() {
-            this.dateBrowser = '';
-            this.dateMobile = '';
-            this.niceDate = '';
-        },
-        changeValue(value) {
-            this.dateBrowser = value;
-        },
-        changeMobileValue(el) {
-            this.dateMobile = el.target.value;
-            // Update the nice formatted date for consistency
-            if (el.target.value) {
-                this.niceDate = moment(el.target.value).format('DD/MM/YYYY');
-            } else {
-                this.niceDate = '';
-            }
-        },
-        setFocus() {
-            if (this.browser) {
-                this.$refs.datepickerSystem.showCalendar();
-            } else {
-                this.$refs.mobileInput.focus();
-            }
-        }
+    value: {
+        type: String,
+        required: false
     },
-    watch: {
-        dateBrowser: function (value) {
-            value =
-                value && value !== '' ? moment(value).format('YYYY-MM-DD') : '';
-
-            bus.emit('date-change', value);
-
-            this.$emit('date_changed', value);
-        },
-        dateMobile: function (value) {
-            value = value && value !== '' ? value : '';
-
-            bus.emit('date-change', value);
-
-            this.$emit('date_changed', value);
-        },
-        value: function (value) {
-            this.dateBrowser = moment(this.value).toDate();
-            this.dateMobile = this.value;
-            this.niceDate = moment(this.value).format('DD/MM/YYYY');
-        }
+    minDate: {
+        type: Date,
+        required: false
     },
-    props: {
-        format: {
-            type: String,
-            required: false,
-            default: 'DD/MM/YYYY'
-        },
-        value: {
-            type: String,
-            required: false
-        },
-        minDate: {
-            type: Date,
-            required: false
-        },
-        maxDate: {
-            type: Date,
-            required: false
-        },
-        disabledPicker: {
-            type: Boolean,
-            required: false,
-            default: false
-        }
+    maxDate: {
+        type: Date,
+        required: false
     },
-    computed: {
-        ...mapGetters({
-            isMobile: 'device/isMobile',
-            device: 'cordova/device'
-        }),
-        datePickerLanguage() {
-            const locale = this.$i18n.locale || 'arg';
-            switch (locale) {
-                case 'en':
-                    return 'en';
-                case 'arg':
-                    return 'es';
-                case 'chl':
-                    return 'es';
-                default:
-                    return 'es';
-            } 
-        },
-        browser() {
-            if (this.device) {
-                if (this.device.platform === 'browser') {
-                    return true;
-                } else {
-                    return false;
-                }
-            } else {
-                return true;
-            }
-        },
-        max() {
-            let answer;
-            if (this.maxDate) {
-                answer = this.maxDate;
-            } else {
-                answer = this.nextYear;
-            }
-            if (this.browser) {
-                return moment(answer).toDate();
-            } else {
-                return moment(answer).format('YYYY-MM-DD');
-            }
-        },
-        min() {
-            let answer;
-            if (this.minDate) {
-                answer = this.minDate;
-            } else {
-                answer = this.lastCentury;
-            }
-            if (this.browser) {
-                let date = moment(answer).toDate();
-                date.setHours(0);
-                date.setMinutes(0);
-                date.setSeconds(0);
-                return date;
-            } else {
-                return moment(answer).format('YYYY-MM-DD');
-            }
-        }
-    },
-    components: {
-        DatepickerSystem
+    disabledPicker: {
+        type: Boolean,
+        required: false,
+        default: false
     }
-};
+});
+
+const emit = defineEmits(['date_changed']);
+
+const datepickerSystem = ref(null);
+const mobileInput = ref(null);
+
+const dateBrowser = ref('');
+const dateMobile = ref('');
+const date = ref('');
+const update = ref(true);
+const focus = ref(false);
+const nextYear = ref(moment().add(2, 'years').format('YYYY-MM-DD'));
+const lastCentury = ref(moment().subtract(100, 'years').format('YYYY-MM-DD'));
+const niceDate = ref('');
+
+const isMobile = computed(() => deviceStore.isMobile);
+const device = computed(() => cordovaStore.device);
+
+const datePickerLanguage = computed(() => {
+    const loc = locale.value || 'arg';
+    switch (loc) {
+        case 'en':
+            return 'en';
+        case 'arg':
+            return 'es';
+        case 'chl':
+            return 'es';
+        default:
+            return 'es';
+    }
+});
+
+const browser = computed(() => {
+    if (device.value) {
+        if (device.value.platform === 'browser') {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return true;
+    }
+});
+
+const max = computed(() => {
+    let answer;
+    if (props.maxDate) {
+        answer = props.maxDate;
+    } else {
+        answer = nextYear.value;
+    }
+    if (browser.value) {
+        return moment(answer).toDate();
+    } else {
+        return moment(answer).format('YYYY-MM-DD');
+    }
+});
+
+const min = computed(() => {
+    let answer;
+    if (props.minDate) {
+        answer = props.minDate;
+    } else {
+        answer = lastCentury.value;
+    }
+    if (browser.value) {
+        let d = moment(answer).toDate();
+        d.setHours(0);
+        d.setMinutes(0);
+        d.setSeconds(0);
+        return d;
+    } else {
+        return moment(answer).format('YYYY-MM-DD');
+    }
+});
+
+onMounted(() => {
+    if (props.value !== '') {
+        dateBrowser.value = moment(props.value).toDate();
+        dateMobile.value = props.value;
+        niceDate.value = moment(props.value).format('DD/MM/YYYY');
+    }
+});
+
+onUpdated(() => {
+    if (props.value !== '') {
+        niceDate.value = moment(props.value).format('DD/MM/YYYY');
+    }
+});
+
+function clear() {
+    dateBrowser.value = '';
+    dateMobile.value = '';
+    niceDate.value = '';
+}
+
+function changeValue(value) {
+    dateBrowser.value = value;
+}
+
+function changeMobileValue(el) {
+    dateMobile.value = el.target.value;
+    if (el.target.value) {
+        niceDate.value = moment(el.target.value).format('DD/MM/YYYY');
+    } else {
+        niceDate.value = '';
+    }
+}
+
+function setFocus() {
+    if (browser.value) {
+        datepickerSystem.value.showCalendar();
+    } else {
+        mobileInput.value.focus();
+    }
+}
+
+watch(dateBrowser, (value) => {
+    value =
+        value && value !== '' ? moment(value).format('YYYY-MM-DD') : '';
+
+    bus.emit('date-change', value);
+
+    emit('date_changed', value);
+});
+
+watch(dateMobile, (value) => {
+    value = value && value !== '' ? value : '';
+
+    bus.emit('date-change', value);
+
+    emit('date_changed', value);
+});
+
+watch(() => props.value, (value) => {
+    dateBrowser.value = moment(props.value).toDate();
+    dateMobile.value = props.value;
+    niceDate.value = moment(props.value).format('DD/MM/YYYY');
+});
+
+defineExpose({ clear, setFocus });
 </script>
 
 <style>

@@ -3,6 +3,12 @@ node_modules/
 dist/
 npm-debug.log
 
+# Environment files (contain API keys and secrets)
+.env
+.env.production
+.env.local
+.env.*.local
+
 /projects/*/cordova/node_modules/
 /projects/*/cordova/platforms/
 /projects/*/cordova/plugins/

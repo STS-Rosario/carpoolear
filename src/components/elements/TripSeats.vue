@@ -10,20 +10,20 @@
                 <span class="trip_seats-available_value pull-left">{{
                     trip.seats_available
                 }}</span>
-                <span v-if="trip.seats_available == 1" 
+                <span v-if="trip.seats_available == 1"
                     class="trip_seats-available_label"
                 >
-                    {{ $t('Lugar') }}
+                    {{ t('Lugar') }}
                     <br />
-                    {{ $t('libre') }}
+                    {{ t('libre') }}
                 </span>
-                <span v-if="trip.seats_available > 1" 
+                <span v-if="trip.seats_available > 1"
                     class="trip_seats-available_label"
                 >
-                    {{ $t('Lugares') }}
+                    {{ t('Lugares') }}
                     <br />
-                    {{ $t('libres') }}
-                </span>            
+                    {{ t('libres') }}
+                </span>
             </div>
         </div>
         <div v-if="tripCardTheme !== 'light'" style="height: 2em"></div>
@@ -44,19 +44,17 @@
         </template>
     </div>
 </template>
-<script>
-import { mapGetters } from 'vuex';
+<script setup>
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useTripsStore } from '@/stores/trips';
+import { useAuthStore } from '@/stores/auth';
 import SvgItem from '../SvgItem';
-export default {
-    name: 'TripSeats',
-    computed: {
-        ...mapGetters({
-            trip: 'trips/currentTrip',
-            tripCardTheme: 'auth/tripCardTheme'
-        })
-    },
-    components: {
-        SvgItem
-    }
-};
+
+const { t } = useI18n();
+const tripsStore = useTripsStore();
+const authStore = useAuthStore();
+
+const trip = computed(() => tripsStore.currentTrip);
+const tripCardTheme = computed(() => authStore.tripCardTheme);
 </script>

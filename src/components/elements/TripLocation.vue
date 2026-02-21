@@ -5,7 +5,7 @@
             <div class="row trip_location_from">
                 <div class="col-xs-4" v-if="tripCardTheme === 'light'">
                     <span class="trip_from_time">{{
-                        trip.trip_date | moment('HH:mm')
+                        formatDate(trip.trip_date, 'HH:mm')
                     }}</span>
                 </div>
                 <div
@@ -24,7 +24,7 @@
                         {{ getLocationName(trip.points[0]) }}
                     </span>
                     <span class="trip_location_from_state-country">
-                        {{ getStateName(trip.points[0]) | googleInfoClean }}
+                        {{ googleInfoClean(getStateName(trip.points[0])) }}
                     </span>
                 </div>
             </div>
@@ -56,7 +56,7 @@
                             getLocationName(p)
                         }}</span>
                         <span class="trip_location_inner_state-country">
-                            {{ getStateName(p) | googleInfoClean }}
+                            {{ googleInfoClean(getStateName(p)) }}
                         </span>
                     </div>
                 </div>
@@ -73,7 +73,7 @@
             >
                 <div class="col-xs-4" v-if="tripCardTheme === 'light'">
                     <span class="trip_to_time">{{
-                        tripArrivingTime | moment('HH:mm')
+                        formatDate(tripArrivingTime, 'HH:mm')
                     }}</span>
                 </div>
                 <div
@@ -90,8 +90,7 @@
                     </span>
                     <span class="trip_location_from_state-country">
                         {{
-                            getStateName(trip.points[trip.points.length - 1])
-                                | googleInfoClean
+                            googleInfoClean(getStateName(trip.points[trip.points.length - 1]))
                         }}
                     </span>
                 </div>
@@ -130,74 +129,73 @@
         </template>
     </div>
 </template>
-<script>
-import { mapGetters } from 'vuex';
+<script setup>
+import { computed } from 'vue';
+import { useRouter } from 'vue-router';
+import { useTripsStore } from '@/stores/trips';
+import { useAuthStore } from '@/stores/auth';
+import { useDeviceStore } from '@/stores/device';
+import { formatDate, googleInfoClean } from '@/composables/useFormatters';
 import svgItem from '../SvgItem';
 import moment from 'moment';
 import TripSeats from './TripSeats';
 
-export default {
-    name: 'tripLocation',
-    data() {
-        return {};
-    },
-    computed: {
-        ...mapGetters({
-            isMobile: 'device/isMobile',
-            trip: 'trips/currentTrip',
-            tripCardTheme: 'auth/tripCardTheme'
-        }),
-        widthLocationClass() {
-            return this.tripCardTheme === 'light' ? 'col-xs-14' : 'col-xs-18';
-        },
-        tripArrivingTime() {
-            if (this.trip && this.trip.estimated_time) {
-                let minutes = 0;
-                minutes = parseInt(this.trip.estimated_time.split(':')[0]) * 60;
-                minutes += parseInt(this.trip.estimated_time.split(':')[1]);
-                return moment(this.trip.trip_date).add(minutes, 'minutes');
-            }
-            return '';
-        }
-    },
-    methods: {
-        goToProfile: function (event) {
-            event.stopPropagation();
-            this.$router.push({
-                name: 'profile',
-                params: {
-                    id: this.trip.user.id,
-                    userProfile: this.trip.user,
-                    activeTab: 1
-                }
-            });
-        },
-        getLocationName(location) {
-            if (location.json_address) {
-                if (location.json_address.ciudad) {
-                    return location.json_address.ciudad;
-                }
-                if (location.json_address.name) {
-                    return location.json_address.name;
-                }
-            }
-            return location.address;
-        },
-        getStateName(location) {
-            if (location.json_address) {
-                if (location.json_address.provincia) {
-                    return location.json_address.provincia;
-                }
-                if (location.json_address.state) {
-                    return location.json_address.state;
-                }
-            }
-            return '';
-        }
-    },
-    components: {
-        svgItem,
-        TripSeats
+const router = useRouter();
+const tripsStore = useTripsStore();
+const authStore = useAuthStore();
+const deviceStore = useDeviceStore();
+
+const isMobile = computed(() => deviceStore.isMobile);
+const trip = computed(() => tripsStore.currentTrip);
+const tripCardTheme = computed(() => authStore.tripCardTheme);
+
+const widthLocationClass = computed(() => {
+    return tripCardTheme.value === 'light' ? 'col-xs-14' : 'col-xs-18';
+});
+
+const tripArrivingTime = computed(() => {
+    if (trip.value && trip.value.estimated_time) {
+        let minutes = 0;
+        minutes = parseInt(trip.value.estimated_time.split(':')[0]) * 60;
+        minutes += parseInt(trip.value.estimated_time.split(':')[1]);
+        return moment(trip.value.trip_date).add(minutes, 'minutes');
     }
-};
+    return '';
+});
+
+function goToProfile(event) {
+    event.stopPropagation();
+    router.push({
+        name: 'profile',
+        params: {
+            id: trip.value.user.id,
+            userProfile: trip.value.user,
+            activeTab: 1
+        }
+    });
+}
+
+function getLocationName(location) {
+    if (location.json_address) {
+        if (location.json_address.ciudad) {
+            return location.json_address.ciudad;
+        }
+        if (location.json_address.name) {
+            return location.json_address.name;
+        }
+    }
+    return location.address;
+}
+
+function getStateName(location) {
+    if (location.json_address) {
+        if (location.json_address.provincia) {
+            return location.json_address.provincia;
+        }
+        if (location.json_address.state) {
+            return location.json_address.state;
+        }
+    }
+    return '';
+}
 </script>

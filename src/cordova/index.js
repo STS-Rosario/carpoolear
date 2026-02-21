@@ -1,14 +1,13 @@
 /* jshint esversion: 6 */
 
-import store from '../store';
+import { useCordovaStore } from '../stores/cordova';
+import { useDeviceStore } from '../stores/device';
 import push from './push-capacitor.js';
 import facebook from './facebook.js';
-import * as types from '../store/mutation-types';
 import cache from '../services/cache';
 import { Capacitor } from '@capacitor/core';
 import { Network } from '@capacitor/network';
 import { Device } from '@capacitor/device';
-import { SplashScreen } from '@capacitor/splash-screen';
 import config from '../../config/conf.json';
 
 console.log('CORDOVA INDEX.JS IS LOADING!');
@@ -19,30 +18,6 @@ window.appVersion = '2.2.2';
 const onDeviceReady = () => {
     console.log('Device ready');
     const hasToDoInit = true;
-    /* if (window.device && window.device.platform) {
-        if (window.device.platform.toLowerCase() === 'android' || window.device.platform.toLowerCase() === 'ios') {
-            hasToDoInit = false;
-            cache.getItem('appVersion').then((appVersion) => {
-                console.log('appVersion', appVersion, window.appVersion !== appVersion);
-                if (window.appVersion !== appVersion) {
-                    console.log('Clear all cache on device start');
-                    cache.clear();
-                    window.CacheClear(function () {
-                        cache.setItem('appVersion', window.appVersion);
-                        console.log('Wipe all data');
-                        doInit();
-                        window.location.reload();
-                    }, function () {
-                        console.log('Failed to wipe all data');
-                        doInit();
-                    });
-                } else {
-                    console.log('Same version, do Init');
-                    doInit();
-                }
-            });
-        }
-    } */
     cache.setItem('appVersion', window.appVersion);
     if (hasToDoInit) {
         doInit();
@@ -51,7 +26,9 @@ const onDeviceReady = () => {
 
 const doInit = async () => {
     console.log('do Init');
-    store.commit('cordova/' + types.CORDOVA_DEVICEREADY);
+    const cordovaStore = useCordovaStore();
+
+    cordovaStore.setDeviceReady();
 
     // Initialize device info with Capacitor
     await initDeviceInfo();
@@ -63,12 +40,12 @@ const doInit = async () => {
     // Initialize network monitoring with Capacitor
     initNetworkMonitoring();
 
-    store.dispatch('init');
-
     document.addEventListener('backbutton', onBackbutton, false);
 };
 
 const initDeviceInfo = async () => {
+    const cordovaStore = useCordovaStore();
+
     if (Capacitor.isNativePlatform()) {
         console.log('Initializing Capacitor device info...');
 
@@ -90,12 +67,12 @@ const initDeviceInfo = async () => {
             window.device = compatibleDevice;
 
             // Update the store
-            store.commit('cordova/' + types.CORDOVA_SET_DEVICE, compatibleDevice);
+            cordovaStore.setDevice(compatibleDevice);
         } catch (error) {
             console.error('Error getting device info:', error);
             // Fallback to existing window.device if available
             if (window.device) {
-                store.commit('cordova/' + types.CORDOVA_SET_DEVICE, window.device);
+                cordovaStore.setDevice(window.device);
             }
         }
     } else {
@@ -111,11 +88,13 @@ const initDeviceInfo = async () => {
         };
 
         window.device = webDevice;
-        store.commit('cordova/' + types.CORDOVA_SET_DEVICE, webDevice);
+        cordovaStore.setDevice(webDevice);
     }
 };
 
 const initNetworkMonitoring = async () => {
+    const cordovaStore = useCordovaStore();
+
     if (Capacitor.isNativePlatform()) {
         console.log('Initializing Capacitor network monitoring...');
 
@@ -125,18 +104,18 @@ const initNetworkMonitoring = async () => {
             console.log('Initial network status:', status);
 
             if (status.connected) {
-                store.dispatch('cordova/deviceOnline');
+                cordovaStore.setDeviceOnline();
             } else {
-                store.dispatch('cordova/deviceOffline');
+                cordovaStore.setDeviceOffline();
             }
 
             // Listen for network changes
             Network.addListener('networkStatusChange', (status) => {
                 console.log('Network status changed:', status);
                 if (status.connected) {
-                    store.dispatch('cordova/deviceOnline');
+                    cordovaStore.setDeviceOnline();
                 } else {
-                    store.dispatch('cordova/deviceOffline');
+                    cordovaStore.setDeviceOffline();
                 }
             });
         } catch (error) {
@@ -157,32 +136,24 @@ const initBrowserNetworkEvents = () => {
 
 const onOnline = () => {
     console.log('Device online (browser event)');
-    store.dispatch('cordova/deviceOnline');
+    const cordovaStore = useCordovaStore();
+    cordovaStore.setDeviceOnline();
 };
 
 const onOffline = () => {
     console.log('Device offline (browser event)');
-    store.dispatch('cordova/deviceOffline');
+    const cordovaStore = useCordovaStore();
+    cordovaStore.setDeviceOffline();
 };
 
 //  cordova.fireDocumentEvent('backbutton'); for testing in console
 const onBackbutton = () => {
     console.log('Backbutton');
-    store.dispatch('cordova/onBackButton');
-};
-
-const onPause = () => {
-    store.dispatch('cordova/onPausa');
-};
-
-const onResumen = () => {
-    store.dispatch('cordova/onResumen');
+    const cordovaStore = useCordovaStore();
+    cordovaStore.onBackButton();
 };
 
 document.addEventListener('deviceready', onDeviceReady, false);
-
-document.addEventListener('pause', onPause, false);
-document.addEventListener('resume', onResumen, false);
 
 // For Capacitor: Initialize immediately if running on native platform
 console.log('Checking platform:', Capacitor.getPlatform());

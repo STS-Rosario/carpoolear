@@ -5,17 +5,15 @@
                 <span v-if="showLogo">
                     <router-link
                         :to="{ name: 'trips', params: { clearSearch: true } }"
-                        v-on:click.native="tripsClick"
+                        @click="tripsClick"
                     >
                         <img :src="app_logo" />
                     </router-link>
                 </span>
                 <template
-                    v-else
                     v-for="item in leftHeaderButton"
-                    v-if="item.show"
                 >
-                    <span @click="onClick(item)">
+                    <span v-if="item.show" @click="onClick(item)" :key="item.id">
                         <i :class="'fa ' + item.icon" aria-hidden="true"></i>
                     </span>
                 </template>
@@ -42,56 +40,58 @@
                 <span class="header--subtitle">{{ subTitle }}</span>
             </div>
             <div class="actionbar_section actionbar_icon pull-right">
-                <template v-for="item in rightHeaderButton" v-if="item.show">
-                    <span @click="onClick(item)">
+                <template v-for="item in rightHeaderButton">
+                    <span v-if="item.show" @click="onClick(item)" :key="item.id">
                         <i :class="'fa ' + item.icon" aria-hidden="true"></i>
                     </span>
                 </template>
                 <div class="dropdown-right" v-if="showMenu || isMobile">
-                    <dropdown type="icon">
-                        <template slot="button">
+                    <div class="dropdown">
+                        <button class="btn btn-link dropdown-toggle" type="button" @click="toggleMobileMenu">
                             <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-                        </template>
-                        <li>
-                            <router-link tag="a" :to="{ name: 'acerca_de' }">
-                                {{ $t('acercaDe') }}
-                            </router-link>
-                        </li>
-                        <li>
-                            <router-link :to="{ name: 'terms' }" tag="a">
-                                {{ $t('tyc') }}
-                            </router-link>
-                        </li>
-                        <li role="separator" class="divider"></li>
-                        <li>
-                            <a @click="setLocale('arg')">Español</a>
-                        </li>
-                        <li>
-                            <a @click="setLocale('en')">English</a>
-                        </li>
-                        <li
-                            v-if="user"
-                            role="separator"
-                            class="divider"
-                        ></li>
-                        <li v-if="user">
-                            <a @click="logout" v-if="!isFacebokApp">{{
-                                $t('cerrarSesion')
-                            }}</a>
-                        </li>
-                    </dropdown>
+                        </button>
+                        <ul class="dropdown-menu" :class="{ show: mobileMenuOpen }" v-if="mobileMenuOpen">
+                            <li>
+                                <router-link tag="a" :to="{ name: 'acerca_de' }" @click="mobileMenuOpen = false">
+                                    {{ t('acercaDe') }}
+                                </router-link>
+                            </li>
+                            <li>
+                                <router-link :to="{ name: 'terms' }" tag="a" @click="mobileMenuOpen = false">
+                                    {{ t('tyc') }}
+                                </router-link>
+                            </li>
+                            <li role="separator" class="divider"></li>
+                            <li>
+                                <a @click="setLocale('arg'); mobileMenuOpen = false">Espanol</a>
+                            </li>
+                            <li>
+                                <a @click="setLocale('en'); mobileMenuOpen = false">English</a>
+                            </li>
+                            <li
+                                v-if="user"
+                                role="separator"
+                                class="divider"
+                            ></li>
+                            <li v-if="user">
+                                <a @click="logout; mobileMenuOpen = false" v-if="!isFacebokApp">{{
+                                    t('cerrarSesion')
+                                }}</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
 
             <div
                 class="actionbar_section actionbar_icon pull-right"
-                v-if="isMobile && user && !shouldHideDonationOnIOSCapacitor(user)"
+                v-if="isMobile && user && !shouldHideDonationOnIOSCapacitorFn(user)"
             >
                 <a
                     href="/donar"
                     class="btn btn-primary btn-donar-header btn-header-small btn-lg"
                 >
-                    {{ $t('donar') }}
+                    {{ t('donar') }}
                 </a>
             </div>
             <div
@@ -100,7 +100,6 @@
             >
                 <router-link
                     v-if="isTripsPage"
-                    tag="a"
                     :to="{ name: 'login' }"
                     class="btn btn-primary btn-login-header btn-header-small btn-lg"
                 >
@@ -111,7 +110,7 @@
         <div class="header_content hidden-xs">
             <router-link
                 :to="{ name: 'trips', params: { clearSearch: true } }"
-                v-on:click.native="tripsClick"
+                @click="tripsClick"
             >
                 <div class="header_panel-left" v-if="logoHeaderVisibility">
                     <img
@@ -140,34 +139,36 @@
                     :title="'Test'"
                     :body="'Body'"
                 >
-                    <h3 slot="header">{{ $t('invitarAmigos') }}</h3>
-                    <div slot="body" class="social-share">
-                        <a
-                            :href="'https://www.facebook.com/sharer/sharer.php?u=' + shareUrl"
-                            target="_blank"
-                            aria-label="Compartir en Facebook"
-                            class="lnk lnk-social-network lnk-facebook"
-                        >
-                            <i class="fa fa-facebook" aria-hidden="true"></i>
-                        </a>
-                        <a
-                            :href="'https://twitter.com/intent/tweet/?text=' + encodeURIComponent(this.$t('compartirPlataforma')) + '&url=' + shareUrl + '&via=' + config.name_app.toLowerCase() + '&hashtags=carpooling'"
-                            target="_blank"
-                            aria-label="Compartir en Twitter"
-                            class="lnk lnk-social-network lnk-twitter"
-                        >
-                            <i class="fa fa-twitter" aria-hidden="true"></i>
-                        </a>
-                        <a
-                            :href="'whatsapp://send?text=' + encodeURIComponent(this.$t('compartirPlataforma')) + '%20' + shareUrl"
-                            target="_blank"
-                            aria-label="Compartir en Whats App"
-                            class="lnk lnk-social-network lnk-whatsapp"
-                            v-if="isMobile"
-                        >
-                            <i class="fa fa-whatsapp" aria-hidden="true"></i>
-                        </a>
-                    </div>
+                    <template #header><h3>{{ t('invitarAmigos') }}</h3></template>
+                    <template #body>
+                        <div class="social-share">
+                            <a
+                                :href="'https://www.facebook.com/sharer/sharer.php?u=' + shareUrl"
+                                target="_blank"
+                                aria-label="Compartir en Facebook"
+                                class="lnk lnk-social-network lnk-facebook"
+                            >
+                                <i class="fa fa-facebook" aria-hidden="true"></i>
+                            </a>
+                            <a
+                                :href="'https://twitter.com/intent/tweet/?text=' + encodeURIComponent(t('compartirPlataforma')) + '&url=' + shareUrl + '&via=' + config.name_app.toLowerCase() + '&hashtags=carpooling'"
+                                target="_blank"
+                                aria-label="Compartir en Twitter"
+                                class="lnk lnk-social-network lnk-twitter"
+                            >
+                                <i class="fa fa-twitter" aria-hidden="true"></i>
+                            </a>
+                            <a
+                                :href="'whatsapp://send?text=' + encodeURIComponent(t('compartirPlataforma')) + '%20' + shareUrl"
+                                target="_blank"
+                                aria-label="Compartir en Whats App"
+                                class="lnk lnk-social-network lnk-whatsapp"
+                                v-if="isMobile"
+                            >
+                                <i class="fa fa-whatsapp" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    </template>
                 </modal>
                 <button
                     v-if="config.trip_card_design !== 'light'"
@@ -175,35 +176,35 @@
                     type="button"
                     class="btn btn-link"
                 >
-                    {{ $t('invitarAmigos') }}
+                    {{ t('invitarAmigos') }}
                 </button>
                 <router-link
                     v-if="config.trip_card_design !== 'light'"
                     class="btn btn-link trips-link"
                     :to="{ name: 'trips', params: { clearSearch: true } }"
                 >
-                    {{ $t('viajes') }}
+                    {{ t('viajes') }}
                 </router-link>
-                <!--<router-link class="btn btn-link" v-if="!logged" :to="{name: 'trips'}">Información</router-link>-->
-                <!--<router-link class="btn btn-link" v-if="!logged" :to="{name: 'register'}">Registrarme</router-link>-->
-                <dropdown type="link" v-if="!logged">
-                    <template slot="button">
+                <div class="dropdown" v-if="!logged" style="display: inline-block">
+                    <button class="btn btn-link dropdown-toggle" type="button" @click="toggleLocaleMenu">
                         {{ currentLocaleShortLabel }}
-                    </template>
-                    <li>
-                        <a @click="setLocale('arg')">Español</a>
-                    </li>
-                    <li>
-                        <a @click="setLocale('en')">English</a>
-                    </li>
-                </dropdown>
+                    </button>
+                    <ul class="dropdown-menu" :class="{ show: localeMenuOpen }" v-if="localeMenuOpen">
+                        <li>
+                            <a @click="setLocale('arg'); localeMenuOpen = false">Espanol</a>
+                        </li>
+                        <li>
+                            <a @click="setLocale('en'); localeMenuOpen = false">English</a>
+                        </li>
+                    </ul>
+                </div>
                 <router-link
                     class="btn btn-primary"
                     btn-lg
                     v-if="!logged"
                     :to="{ name: 'login' }"
                 >
-                    {{ $t('inicio') }}
+                    {{ t('inicio') }}
                 </router-link>
 
                 <span
@@ -228,63 +229,59 @@
 
                 <div class="header_profile" v-if="user">
                     <span>{{ user.name }}</span>
-                    <dropdown type="info" v-if="logged">
-                        <template slot="button">
+                    <div class="dropdown" v-if="logged" style="display: inline-block">
+                        <button class="btn btn-link dropdown-toggle" type="button" @click="toggleProfileMenu">
                             <div
                                 class="circle-box header_profile_image"
                                 v-imgSrc:profile="user.image"
                             ></div>
-                        </template>
-                        <li>
-                            <router-link :to="{ name: 'my-trips' }">
-                                {{ $t('misViajes') }}
-                            </router-link>
-                        </li>
-                        <li>
-                            <router-link :to="{ name: 'conversations-list' }">
-                                {{ $t('mensajes') }}
-                            </router-link>
-                        </li>
-                        <li>
-                            <router-link
-                                :to="{ name: 'profile', params: { id: 'me' } }"
-                            >
-                                {{ $t('perfil') }}
-                            </router-link>
-                        </li>
-                        <li v-if="user.is_admin">
-                            <router-link :to="{ name: 'admin-page' }">
-                                {{ $t('administracion') }}
-                            </router-link>
-                        </li>
-                        <li role="separator" class="divider"></li>
-                        <li>
-                            <a @click="setLocale('arg')">Español</a>
-                        </li>
-                        <li>
-                            <a @click="setLocale('en')">English</a>
-                        </li>
-                        <li role="separator" class="divider"></li>
-                        <!--<li>
-                            <router-link :to="{name: 'acerca_de'}">Acerca</router-link>
-                        </li>
-                        <li role="separator" class="divider"></li>
-                        <li>
-                            <router-link :to="{name: 'profile_update'}">Configuración</router-link>
-                        </li>-->
-                        <li>
-                            <a @click="logout" v-if="!isFacebokApp">{{
-                                $t('cerrarSesion')
-                            }}</a>
-                        </li>
-                    </dropdown>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right" :class="{ show: profileMenuOpen }" v-if="profileMenuOpen">
+                            <li>
+                                <router-link :to="{ name: 'my-trips' }" @click="profileMenuOpen = false">
+                                    {{ t('misViajes') }}
+                                </router-link>
+                            </li>
+                            <li>
+                                <router-link :to="{ name: 'conversations-list' }" @click="profileMenuOpen = false">
+                                    {{ t('mensajes') }}
+                                </router-link>
+                            </li>
+                            <li>
+                                <router-link
+                                    :to="{ name: 'profile', params: { id: 'me' } }"
+                                    @click="profileMenuOpen = false"
+                                >
+                                    {{ t('perfil') }}
+                                </router-link>
+                            </li>
+                            <li v-if="user.is_admin">
+                                <router-link :to="{ name: 'admin-page' }" @click="profileMenuOpen = false">
+                                    {{ t('administracion') }}
+                                </router-link>
+                            </li>
+                            <li role="separator" class="divider"></li>
+                            <li>
+                                <a @click="setLocale('arg'); profileMenuOpen = false">Espanol</a>
+                            </li>
+                            <li>
+                                <a @click="setLocale('en'); profileMenuOpen = false">English</a>
+                            </li>
+                            <li role="separator" class="divider"></li>
+                            <li>
+                                <a @click="logout(); profileMenuOpen = false" v-if="!isFacebokApp">{{
+                                    t('cerrarSesion')
+                                }}</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
 
                 <a
-                    v-if="!shouldHideDonationOnIOSCapacitor(user)"
+                    v-if="!shouldHideDonationOnIOSCapacitorFn(user)"
                     href="/donar"
                     class="btn btn-primary btn-donar-header btn-lg"
-                    >{{ $t('donar') }}</a
+                    >{{ t('donar') }}</a
                 >
                 <router-link
                     v-if="logged"
@@ -292,7 +289,7 @@
                     id="btn-create-trip"
                     class="btn btn-primary btn-lg"
                 >
-                    {{ $t('crearViaje') }}
+                    {{ t('crearViaje') }}
                 </router-link>
             </div>
             <div class="cf"></div>
@@ -300,136 +297,142 @@
     </header>
 </template>
 
-<script>
-import { mapGetters } from 'vuex';
-import { dropdown } from 'vue-strap';
-import router from '../../router';
+<script setup>
+import { ref, computed, onMounted, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
+import { useNotificationsStore } from '@/stores/notifications';
+import { useActionbarsStore } from '@/stores/actionbars';
+import { useDeviceStore } from '@/stores/device';
+import { useTripsStore } from '@/stores/trips';
 import bus from '../../services/bus-event.js';
 import modal from '../Modal';
 import { shouldHideDonationOnIOSCapacitor } from '../../services/capacitor.js';
 
-export default {
-    name: 'headerApp',
+const { t, locale } = useI18n();
+const route = useRoute();
+const router = useRouter();
+const authStore = useAuthStore();
+const notificationsStore = useNotificationsStore();
+const actionbarsStore = useActionbarsStore();
+const deviceStore = useDeviceStore();
+const tripsStore = useTripsStore();
 
-    data() {
-        return {
-            background_desktop_mini:
-                process.env.ROUTE_BASE +
-                'static/img/' +
-                process.env.TARGET_APP +
-                '_background_desktop_mini.png',
-            background_desktop:
-                process.env.ROUTE_BASE +
-                'static/img/' +
-                process.env.TARGET_APP +
-                '_background_desktop.png',
-            app_logo:
-                process.env.ROUTE_BASE +
-                'static/img/' +
-                process.env.TARGET_APP +
-                '_logo.png',
-            showModal: false,
-            shareUrl: encodeURIComponent(new URL(process.env.WEB_URL).origin)
-        };
-    },
+const ROUTE_BASE = import.meta.env.VITE_ROUTE_BASE || '/';
+const TARGET_APP = import.meta.env.VITE_TARGET_APP || 'carpoolear';
+const WEB_URL = import.meta.env.VITE_WEB_URL || 'https://carpoolear.com.ar';
 
-    mounted() {
-        bus.on('header-title-change', this.onHeaderChange);
-        console.log('app_logo', this.app_logo);
-        console.log('ROUTE_BASE', process.env.ROUTE_BASE);
-    },
+const background_desktop_mini = ROUTE_BASE + 'static/img/' + TARGET_APP + '_background_desktop_mini.png';
+const background_desktop = ROUTE_BASE + 'static/img/' + TARGET_APP + '_background_desktop.png';
+const app_logo = ROUTE_BASE + 'static/img/' + TARGET_APP + '_logo.png';
+const showModal = ref(false);
+const shareUrl = encodeURIComponent(new URL(WEB_URL).origin);
 
-    computed: {
-        ...mapGetters({
-            logged: 'auth/checkLogin',
-            user: 'auth/user',
-            notificationsCount: 'notifications/count',
-            title: 'actionbars/title',
-            titleLink: 'actionbars/titleLink',
-            subTitle: 'actionbars/subTitle',
-            imgTitle: 'actionbars/imgTitle',
-            showMenu: 'actionbars/showMenu',
-            leftHeaderButton: 'actionbars/leftHeaderButton',
-            rightHeaderButton: 'actionbars/rightHeaderButton',
-            logoHeaderVisibility: 'actionbars/headerLogoVisibility',
-            isNotLargeDesktop: 'device/isNotLargeDesktop',
-            isFacebokApp: 'device/isFacebokApp',
-            isMobile: 'device/isMobile',
-            config: 'auth/appConfig'
-        }),
+const mobileMenuOpen = ref(false);
+const localeMenuOpen = ref(false);
+const profileMenuOpen = ref(false);
 
-        showLogo() {
-            for (let i = 0; i < this.leftHeaderButton.length; i++) {
-                if (this.leftHeaderButton[i].show) {
-                    return false;
-                }
-            }
-            return true;
-        },
-        isTripsPage() {
-            return this.$route.name === 'trips';
-        },
-        currentLocaleLabel() {
-            const labels = { arg: 'Español', en: 'English' };
-            return labels[this.$i18n.locale] || 'Español';
-        },
-        currentLocaleShortLabel() {
-            const short = { arg: 'ES', en: 'EN' };
-            return short[this.$i18n.locale] || 'ES';
+const logged = computed(() => authStore.checkLogin);
+const user = computed(() => authStore.user);
+const notificationsCount = computed(() => notificationsStore.count);
+const title = computed(() => actionbarsStore.title);
+const titleLink = computed(() => actionbarsStore.titleLink);
+const subTitle = computed(() => actionbarsStore.subTitle);
+const imgTitle = computed(() => actionbarsStore.imgTitle);
+const showMenu = computed(() => actionbarsStore.showMenu);
+const leftHeaderButton = computed(() => actionbarsStore.leftHeaderButton);
+const rightHeaderButton = computed(() => actionbarsStore.rightHeaderButton);
+const logoHeaderVisibility = computed(() => actionbarsStore.headerLogoVisibility);
+const isNotLargeDesktop = computed(() => deviceStore.isNotLargeDesktop);
+const isFacebokApp = computed(() => deviceStore.isFacebokApp);
+const isMobile = computed(() => deviceStore.isMobile);
+const config = computed(() => authStore.appConfig);
+
+const showLogo = computed(() => {
+    for (let i = 0; i < leftHeaderButton.value.length; i++) {
+        if (leftHeaderButton.value[i].show) {
+            return false;
         }
-    },
-
-    methods: {
-        shouldHideDonationOnIOSCapacitor(user) {
-            return shouldHideDonationOnIOSCapacitor(user);
-        },
-        share() {
-            // dialogs.message('Message example');
-            /* if (window && window.plugins && window.plugins.socialsharing && window.plugins.socialsharing.shareWithOptions) {
-                socialShare.share();
-            } else {
-                this.showModal = true;
-            } */
-            // Primero necesito ver cuando estoy en App y cuando en Web
-            this.showModal = true;
-        },
-
-        logout() {
-            this.$store.dispatch('auth/logout');
-        },
-
-        toNotifications() {
-            router.push({ name: 'notifications' });
-        },
-
-        onClick(item) {
-            bus.emit(item.id + '-click');
-        },
-
-        tripsClick() {
-            this.$store.dispatch('trips/refreshList', true);
-            this.$store.dispatch('trips/tripsSearch', { is_passenger: false });
-        },
-
-        onHeaderChange() {
-            // console.log('header-change', this.title);
-        },
-
-        setLocale(locale) {
-            this.$root.$i18n.locale = locale;
-            localStorage.setItem('app_locale', locale);
-        }
-    },
-    watch: {
-        title(_old, _new) {
-            console.log('titlee change', this.title);
-        }
-    },
-    components: {
-        dropdown,
-        modal
     }
-};
+    return true;
+});
+
+const isTripsPage = computed(() => {
+    return route.name === 'trips';
+});
+
+const currentLocaleLabel = computed(() => {
+    const labels = { arg: 'Espanol', en: 'English' };
+    return labels[locale.value] || 'Espanol';
+});
+
+const currentLocaleShortLabel = computed(() => {
+    const short = { arg: 'ES', en: 'EN' };
+    return short[locale.value] || 'ES';
+});
+
+function shouldHideDonationOnIOSCapacitorFn(u) {
+    return shouldHideDonationOnIOSCapacitor(u);
+}
+
+function share() {
+    showModal.value = true;
+}
+
+function logout() {
+    authStore.logout();
+}
+
+function toNotifications() {
+    router.push({ name: 'notifications' });
+}
+
+function onClick(item) {
+    bus.emit(item.id + '-click');
+}
+
+function tripsClick() {
+    tripsStore.refreshList(true);
+    tripsStore.tripsSearch({ is_passenger: false });
+}
+
+function onHeaderChange() {
+    // console.log('header-change', title.value);
+}
+
+function setLocale(loc) {
+    locale.value = loc;
+    localStorage.setItem('app_locale', loc);
+}
+
+function toggleMobileMenu() {
+    mobileMenuOpen.value = !mobileMenuOpen.value;
+    localeMenuOpen.value = false;
+    profileMenuOpen.value = false;
+}
+
+function toggleLocaleMenu() {
+    localeMenuOpen.value = !localeMenuOpen.value;
+    mobileMenuOpen.value = false;
+    profileMenuOpen.value = false;
+}
+
+function toggleProfileMenu() {
+    profileMenuOpen.value = !profileMenuOpen.value;
+    mobileMenuOpen.value = false;
+    localeMenuOpen.value = false;
+}
+
+watch(title, (_old, _new) => {
+    console.log('titlee change', title.value);
+});
+
+onMounted(() => {
+    bus.on('header-title-change', onHeaderChange);
+    console.log('app_logo', app_logo);
+    console.log('ROUTE_BASE', ROUTE_BASE);
+});
 </script>
 
 <style scoped>
@@ -449,5 +452,17 @@ export default {
     .header_panel-right {
         min-width: 70%;
     }
+}
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+.dropdown-menu.show {
+    display: block;
+}
+.dropdown-menu {
+    position: absolute;
+    right: 0;
+    z-index: 1000;
 }
 </style>

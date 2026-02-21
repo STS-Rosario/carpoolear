@@ -10,7 +10,7 @@
                         class="btn btn-link"
                         style="display: block; text-align: center; margin-top: -10px;margin-bottom: 10px;font-size: 16px;"
                     >
-                        {{ $t('pedidosDeEliminacionDeCuenta') }}
+                        {{ t('pedidosDeEliminacionDeCuenta') }}
                     </router-link>
                 <div class="col-md-20 col-md-offset-2">
                     <div class="col-sm-8 col-md-8">
@@ -23,7 +23,7 @@
                                             v-on:keyup="onSearchUsers"
                                             type="text"
                                             class="form-control"
-                                            :placeholder="$t('escribeUnNombreYPresionaBuscar')"
+                                            :placeholder="t('escribeUnNombreYPresionaBuscar')"
                                         />
                                     </div>
                                 </li>
@@ -89,25 +89,27 @@
                                                 </div>
                                             </div>
                                         </li>
-                                        <li
-                                            slot="no-data"
-                                            class="list-group-item alert alert-warning"
-                                            role="alert"
-                                        >
-                                            {{ $t('noSeEncontroNingunUsuario') }}
-                                        </li>
-                                        <li
-                                            slot="loading"
-                                            class="list-group-item alert alert-info"
-                                            role="alert"
-                                        >
-                                            <img
-                                                src="https://carpoolear.com.ar/static/img/loader.gif"
-                                                alt=""
-                                                class="ajax-loader"
-                                            />
-                                            {{ $t('cargandoUsuarios') }}
-                                        </li>
+                                        <template #no-data>
+                                            <li
+                                                class="list-group-item alert alert-warning"
+                                                role="alert"
+                                            >
+                                                {{ t('noSeEncontroNingunUsuario') }}
+                                            </li>
+                                        </template>
+                                        <template #loading>
+                                            <li
+                                                class="list-group-item alert alert-info"
+                                                role="alert"
+                                            >
+                                                <img
+                                                    src="https://carpoolear.com.ar/static/img/loader.gif"
+                                                    alt=""
+                                                    class="ajax-loader"
+                                                />
+                                                {{ t('cargandoUsuarios') }}
+                                            </li>
+                                        </template>
                                     </Loading>
                                 </template>
                             </ul>
@@ -120,7 +122,7 @@
                         <div class="settings-container">
                             <div class="form-group">
                                 <label for="input-name"
-                                    >{{ $t('nombreYApellido') }}</label
+                                    >{{ t('nombreYApellido') }}</label
                                 >
                                 <input
                                     maxlength="25"
@@ -128,7 +130,7 @@
                                     type="text"
                                     class="form-control"
                                     id="input-name"
-                                    :placeholder="$t('nombre')"
+                                    :placeholder="t('nombre')"
                                 />
                                 <span class="error" v-if="nombreError.state">
                                     {{ nombreError.message }}
@@ -136,25 +138,25 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="input-email">{{ $t('eMail') }}</label>
+                                <label for="input-email">{{ t('eMail') }}</label>
                                 <input
                                     maxlength="40"
                                     v-model="newInfo.email"
                                     type="text"
                                     class="form-control"
                                     id="input-email"
-                                    :placeholder="$t('eMail')"
+                                    :placeholder="t('eMail')"
                                 />
                             </div>
 
                             <div class="form-group">
                                 <label for="input-description"
-                                    >{{ $t('acercaDeMi') }}</label
+                                    >{{ t('acercaDeMi') }}</label
                                 >
                                 <textarea
                                     maxlength="1000"
                                     v-model="newInfo.description"
-                                    :placeholder="$t('descripcion')"
+                                    :placeholder="t('descripcion')"
                                 ></textarea>
                                 <span
                                     class="error textarea"
@@ -166,18 +168,18 @@
 
                             <div class="form-group">
                                 <label for="input-private-note"
-                                    >{{ $t('notaPrivada') }}</label
+                                    >{{ t('notaPrivada') }}</label
                                 >
                                 <textarea
                                     maxlength="1000"
                                     v-model="newInfo.private_note"
-                                    :placeholder="$t('notaSoloVisiblePorAdmins')"
+                                    :placeholder="t('notaSoloVisiblePorAdmins')"
                                 ></textarea>
                             </div>
 
                             <div class="form-group">
                                 <label for="input-dni"
-                                    >{{ $t('numeroDeDocumento') }}</label
+                                    >{{ t('numeroDeDocumento') }}</label
                                 >
                                 <input
                                     type="tel"
@@ -185,7 +187,7 @@
                                     @input="handleDniInput"
                                     class="form-control"
                                     id="input-dni"
-                                    :placeholder="$t('doc')"
+                                    :placeholder="t('doc')"
                                     :maxlength="(settings.profile_id_format).length"
                                 />
                                 <span class="error" v-if="dniError.state">
@@ -195,7 +197,7 @@
 
                             <div class="form-group">
                                 <label for="input-telefono"
-                                    >{{ $t('numeroDeTelefono') }}</label
+                                    >{{ t('numeroDeTelefono') }}</label
                                 >
                                 <input
                                     maxlength="20"
@@ -205,7 +207,7 @@
                                     type="tel"
                                     class="form-control"
                                     id="input-phone"
-                                    :placeholder="$t('numeroDeTelefonoAlMenos7Numeros')"
+                                    :placeholder="t('numeroDeTelefonoAlMenos7Numeros')"
                                 />
                                 <span class="error" v-if="phoneError.state">
                                     {{ phoneError.message }}
@@ -214,7 +216,7 @@
 
                             <div class="form-group">
                                 <label for="input-patente"
-                                    >{{ $t('patente') }}</label
+                                    >{{ t('patente') }}</label
                                 >
                                 <input
                                     maxlength="20"
@@ -223,7 +225,7 @@
                                     class="form-control"
                                     id="input-patente"
                                     :class="{ 'has-error': patenteError.state }"
-                                    :placeholder="$t('patente')"
+                                    :placeholder="t('patente')"
                                 />
                                 <span class="error" v-if="patenteError.state">
                                     {{ patenteError.message }}
@@ -250,7 +252,7 @@
 
                             <div class="form-group">
                                 <label for="input-pass"
-                                    >{{ $t('ingreseSuNuevaContrasena') }}</label
+                                    >{{ t('ingreseSuNuevaContrasena') }}</label
                                 >
                                 <input
                                     maxlength="40"
@@ -258,7 +260,7 @@
                                     type="password"
                                     class="form-control"
                                     id="input-pass"
-                                    :placeholder="$t('contrasena')"
+                                    :placeholder="t('contrasena')"
                                     autocomplete="new-password"
                                 />
                                 <input
@@ -267,7 +269,7 @@
                                     type="password"
                                     class="form-control"
                                     id="input-pass-confirm"
-                                    :placeholder="$t('repetirContrasena')"
+                                    :placeholder="t('repetirContrasena')"
                                     autocomplete="new-password"
                                 />
                                 <span class="error" v-if="passError.state">
@@ -284,7 +286,7 @@
                                 "
                             >
                                 <h4 class="col-xs-24">
-                                    {{ $t('documentacionDelChofer') }}
+                                    {{ t('documentacionDelChofer') }}
                                 </h4>
                                 <div
                                     v-imgSrc:docs="img"
@@ -297,10 +299,10 @@
                                 v-if="settings.module_validated_drivers"
                             >
                                 <label for="tipoDeCuenta">
-                                    {{ $t('tipoDeCuenta') }}
+                                    {{ t('tipoDeCuenta') }}
                                     <span
                                         class="required-field-flag"
-                                        :title="$t('tituloCampoRequerido')"
+                                        :title="t('tituloCampoRequerido')"
                                     >
                                         (*)
                                     </span>
@@ -329,10 +331,10 @@
                                 v-if="settings.module_validated_drivers"
                             >
                                 <label for="bancoDeCuenta">
-                                    {{ $t('bancoDeCuenta') }}
+                                    {{ t('bancoDeCuenta') }}
                                     <span
                                         class="required-field-flag"
-                                        :title="$t('tituloCampoRequerido')"
+                                        :title="t('tituloCampoRequerido')"
                                     >
                                         (*)
                                     </span>
@@ -361,10 +363,10 @@
                                 v-if="settings.module_validated_drivers"
                             >
                                 <label for="accountNumber">
-                                    {{ $t('numeroDeCuenta') }}
+                                    {{ t('numeroDeCuenta') }}
                                     <span
                                         class="required-field-flag"
-                                        :title="$t('tituloCampoRequerido')"
+                                        :title="t('tituloCampoRequerido')"
                                     >
                                         (*)
                                     </span>
@@ -374,7 +376,7 @@
                                     type="text"
                                     class="form-control"
                                     id="accountNumber"
-                                    :placeholder="$t('numeroDeCuenta')"
+                                    :placeholder="t('numeroDeCuenta')"
                                 />
                                 <span
                                     class="error"
@@ -392,7 +394,7 @@
                                         type="checkbox"
                                         v-model="newInfo.driver_is_verified"
                                     />
-                                    {{ $t('esChofer') }}
+                                    {{ t('esChofer') }}
                                 </label>
                             </div>
                             <hr />
@@ -402,7 +404,7 @@
                                         type="checkbox"
                                         v-model="newInfo.active"
                                     />
-                                    {{ $t('usuarioActivo') }}
+                                    {{ t('usuarioActivo') }}
                                 </label>
                             </div>
 
@@ -413,7 +415,7 @@
                                                 type="checkbox"
                                                 v-model="newInfo.banned"
                                             />
-                                        {{ $t('usuarioSuspendido') }}
+                                        {{ t('usuarioSuspendido') }}
                                     </label>
                                 </div>
                                 <div class="col-md-5 text-right">
@@ -421,7 +423,7 @@
                                         class="btn btn-primary"
                                         v-on:click="save"
                                     >
-                                        {{ $t('grabar') }}
+                                        {{ t('grabar') }}
                                     </button>
                                 </div>
                             </div>
@@ -433,20 +435,20 @@
                                         v-on:click="openConfirmModal('delete')"
                                         style="margin-right: 8px;"
                                     >
-                                        {{ $t('eliminarUsuario') }}
+                                        {{ t('eliminarUsuario') }}
                                     </button>
                                     <button
                                         class="btn btn-warning btn-sm"
                                         v-on:click="openConfirmModal('anonymize')"
                                         style="margin-right: 8px;"
                                     >
-                                        {{ $t('anonimizarUsuario') }}
+                                        {{ t('anonimizarUsuario') }}
                                     </button>
                                     <button
                                         class="btn btn-warning btn-sm"
                                         v-on:click="openConfirmModal('banAndAnonymize')"
                                     >
-                                        {{ $t('anonimizarYBloquearUsuario') }}
+                                        {{ t('anonimizarYBloquearUsuario') }}
                                     </button>
                                 </div>
                             </div>
@@ -454,11 +456,10 @@
                     </div>
                     <div v-else class="col-xs-24 col-sm-16 col-md-16">
                         <p
-                            slot="no-data"
                             class="alert alert-warning"
                             role="alert"
                         >
-                            {{ $t('seleccioneAlgunaPersona') }}
+                            {{ t('seleccioneAlgunaPersona') }}
                         </p>
                     </div>
                 </div>
@@ -470,15 +471,17 @@
             :name="'modal-confirm-admin-action'"
             @close="closeConfirmModal"
         >
-            <h3 slot="header">
-                <span>{{ confirmModalTitle }}</span>
-                <i v-on:click="closeConfirmModal" class="fa fa-times float-right-close"></i>
-            </h3>
-            <div slot="body">
+            <template #header>
+                <h3>
+                    <span>{{ confirmModalTitle }}</span>
+                    <i v-on:click="closeConfirmModal" class="fa fa-times float-right-close"></i>
+                </h3>
+            </template>
+            <template #body>
                 <div class="text-left color-black">
                     <p>{{ confirmModalMessage }}</p>
                     <div v-if="pendingAction === 'banAndAnonymize'" class="form-group">
-                        <label>{{ $t('nota') }} ({{ $t('opcional') }})</label>
+                        <label>{{ t('nota') }} ({{ t('opcional') }})</label>
                         <input v-model="banNote" type="text" class="form-control" />
                     </div>
                     <div class="text-center" style="margin-top: 1.5em;">
@@ -487,465 +490,413 @@
                             @click="executePendingAction"
                             :disabled="loadingAction"
                         >
-                            <span v-if="!loadingAction">{{ $t('confirmar') }}</span>
+                            <span v-if="!loadingAction">{{ t('confirmar') }}</span>
                             <spinner v-if="loadingAction" class="blue"></spinner>
                         </button>
                         <button class="btn btn-default" @click="closeConfirmModal" style="margin-left: 8px;">
-                            {{ $t('cancelar') }}
+                            {{ t('cancelar') }}
                         </button>
                     </div>
                 </div>
-            </div>
+            </template>
         </modal>
     </div>
 </template>
-<script>
-import { mapGetters, mapActions } from 'vuex';
+<script setup>
+import { ref, reactive, computed, watch, onMounted, onBeforeUnmount } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+import { useAuthStore } from '@/stores/auth';
+import { useDeviceStore } from '@/stores/device';
+import { useAdminStore } from '@/stores/admin';
+import { useConversationsStore } from '@/stores/conversations';
+import { useProfileStore } from '@/stores/profile';
 import { Thread } from '../../classes/Threads.js';
 import Loading from '../Loading.vue';
 import { inputIsNumber, formatId, cleanId } from '../../services/utility';
 import dialogs from '../../services/dialogs.js';
-import router from '../../router';
 import adminNav from '../sections/adminNav';
 import modal from '../Modal';
 import Spinner from '../Spinner.vue';
 import { AdminApi, UserApi } from '../../services/api';
 
-export default {
-    // TODO fix css names
-    // TODO search by facebook
-    name: 'admin-users',
-    data() {
-        return {
-            textSearch: '',
-            userList: [],
-            currentUser: '',
-            newInfo: {
-                name: '',
-                email: '',
-                description: '',
-                private_note: '',
-                nro_doc: '',
-                mobile_phone: '',
-                pass: {},
-                active: '',
-                banned: '',
-                driver_is_verified: 0,
-                driver_data_docs: [],
-                account_number: '',
-                account_type: '',
-                account_bank: '',
-                cars: [],
-                patente: ''
-            },
-            error: null,
-            globalError: false,
-            nombreError: new Error(),
-            descError: new Error(),
-            passError: new Error(),
-            dniError: new Error(),
-            phoneError: new Error(),
-            emailError: new Error(),
-            accountNumberError: new Error(),
-            accountTypeError: new Error(),
-            accountBankError: new Error(),
-            patenteError: new Error(),
-            keyUpTimerId: 0,
-            banks: [],
-            accountTypes: [],
-            showConfirmModal: false,
-            pendingAction: null,
-            loadingAction: false,
-            adminApi: null,
-            banNote: '',
-            clearingIdentity: false
-        };
-    },
+const { t } = useI18n();
+const router = useRouter();
+const route = useRoute();
+const authStore = useAuthStore();
+const deviceStore = useDeviceStore();
+const adminStore = useAdminStore();
+const conversationsStore = useConversationsStore();
+const profileStore = useProfileStore();
 
-    computed: {
-        ...mapGetters({
-            isMobile: 'device/isMobile',
-            settings: 'auth/appConfig'
-        }),
-        confirmModalTitle() {
-            if (this.pendingAction === 'delete') return this.$t('confirmarEliminarUsuario');
-            if (this.pendingAction === 'anonymize') return this.$t('confirmarAnonimizarUsuario');
-            if (this.pendingAction === 'banAndAnonymize') return this.$t('confirmarAnonimizarYBloquearUsuario');
-            return '';
-        },
-        confirmModalMessage() {
-            if (this.pendingAction === 'delete') return this.$t('confirmarEliminarUsuarioMensaje');
-            if (this.pendingAction === 'anonymize') return this.$t('confirmarAnonimizarUsuarioMensaje');
-            if (this.pendingAction === 'banAndAnonymize') return this.$t('confirmarAnonimizarYBloquearUsuarioMensaje');
-            return '';
-        }
-    },
+const textSearch = ref('');
+const userList = ref([]);
+const currentUser = ref('');
+const newInfo = reactive({
+    name: '',
+    email: '',
+    description: '',
+    private_note: '',
+    nro_doc: '',
+    mobile_phone: '',
+    pass: {},
+    active: '',
+    banned: '',
+    driver_is_verified: 0,
+    driver_data_docs: [],
+    account_number: '',
+    account_type: '',
+    account_bank: '',
+    cars: [],
+    patente: ''
+});
+const error = ref(null);
+const globalError = ref(false);
+const nombreError = reactive({ state: false, message: '' });
+const descError = reactive({ state: false, message: '' });
+const passError = reactive({ state: false, message: '' });
+const dniError = reactive({ state: false, message: '' });
+const phoneError = reactive({ state: false, message: '' });
+const emailError = reactive({ state: false, message: '' });
+const accountNumberError = reactive({ state: false, message: '' });
+const accountTypeError = reactive({ state: false, message: '' });
+const accountBankError = reactive({ state: false, message: '' });
+const patenteError = reactive({ state: false, message: '' });
+let keyUpTimerId = 0;
+const banks = ref([]);
+const accountTypes = ref([]);
+let thread = null;
+const showConfirmModal = ref(false);
+const pendingAction = ref(null);
+const loadingAction = ref(false);
+const banNote = ref('');
+const adminApi = ref(null);
+const userApi = ref(null);
 
-    methods: {
-        ...mapActions({
-            update: 'admin/adminUpdate',
-            search: 'admin/searchUsers',
-            lookConversation: 'conversations/createConversation',
-            getBankData: 'profile/getBankData'
-        }),
+const isMobile = computed(() => deviceStore.isMobile);
+const settings = computed(() => authStore.appConfig);
 
-        onSearchUsers() {
-            if (this.keyUpTimerId) {
-                clearTimeout(this.keyUpTimerId);
-            }
-            this.keyUpTimerId = setTimeout(() => {
-                this.search(this.textSearch).then((data) => {
-                    this.userList = data.data;
-                    // console.log('pas');
-                    // FIXME seleccionar usuario a veces congela la lista
-                });
-            }, 750);
-        },
-        confirmClearIdentityValidation() {
-            if (!this.currentUser || !this.currentUser.id) return;
-            if (!confirm(this.$t('confirmarRemoverValidacionIdentidad'))) return;
-            this.doClearIdentityValidation();
-        },
-        doClearIdentityValidation() {
-            if (!this.currentUser || !this.currentUser.id) return;
-            this.clearingIdentity = true;
-            const api = new AdminApi();
-            api.clearIdentityValidation(this.currentUser.id)
-                .then(() => {
-                    this.newInfo.identity_validated = false;
-                    this.newInfo.identity_validated_at = null;
-                    this.currentUser.identity_validated = false;
-                    this.currentUser.identity_validated_at = null;
-                    dialogs.message(this.$t('validacionIdentidadRemovida'));
-                })
-                .catch(() => {
-                    dialogs.message(this.$t('resultError'), { estado: 'error' });
-                })
-                .finally(() => {
-                    this.clearingIdentity = false;
-                });
-        },
-        selectUser(user) {
-            this.currentUser = user;
-            console.log('selectUser', user);
-            // Ensure nro_doc is stored as raw value (no dots) when loaded from backend
-            const nroDocRaw = this.currentUser.nro_doc
-                ? cleanId(this.currentUser.nro_doc, this.settings.profile_id_format)
-                : '';
-            this.newInfo = {
-                name: this.currentUser.name,
-                email: this.currentUser.email,
-                description: this.currentUser.description,
-                private_note: this.currentUser.private_note,
-                nro_doc: nroDocRaw,
-                mobile_phone: this.currentUser.mobile_phone,
-                pass: {},
-                user: {},
-                driver_is_verified: this.currentUser.driver_is_verified,
-                driver_data_docs: this.currentUser.driver_data_docs,
-                account_number: this.currentUser.account_number,
-                account_type: this.currentUser.account_type,
-                account_bank: this.currentUser.account_bank,
-                banned: this.currentUser.banned > 0,
-                active: this.currentUser.active > 0,
-                cars: this.currentUser.cars || [],
-                patente: this.currentUser.cars && this.currentUser.cars.length > 0 ? this.currentUser.cars[0].patente : '',
-                identity_validated: this.currentUser.identity_validated,
-                identity_validated_at: this.currentUser.identity_validated_at
-            };
-            // Format nro_doc for display after loading
-            if (this.newInfo.nro_doc) {
-                this.newInfo.nro_doc = formatId(this.newInfo.nro_doc, this.settings.profile_id_format);
-            }
-        },
-        toUserMessages(user) {
-            console.log('toUserMessages');
-            this.lookConversation({ user: user, tripId: null }).then(
-                (conversation) => {
-                    console.log('toUserMessages then', conversation);
-                    router.push({
-                        name: 'conversation-chat',
-                        params: { id: conversation.id }
-                    });
-                }
-            );
-        },
+const clearingIdentity = ref(false);
 
-        isNumber(value) {
-            inputIsNumber(value);
-        },
+const confirmModalTitle = computed(() => {
+    if (pendingAction.value === 'delete') return t('confirmarEliminarUsuario');
+    if (pendingAction.value === 'anonymize') return t('confirmarAnonimizarUsuario');
+    if (pendingAction.value === 'banAndAnonymize') return t('confirmarAnonimizarYBloquearUsuario');
+    return '';
+});
 
-        // Handle DNI input - format using pattern
-        handleDniInput(event) {
-            const formatted = formatId(event.target.value, this.settings.profile_id_format);
-            event.target.value = formatted;
-            // Update the Vue data model with the formatted value
-            this.newInfo.nro_doc = formatted;
-        },
+const confirmModalMessage = computed(() => {
+    if (pendingAction.value === 'delete') return t('confirmarEliminarUsuarioMensaje');
+    if (pendingAction.value === 'anonymize') return t('confirmarAnonimizarUsuarioMensaje');
+    if (pendingAction.value === 'banAndAnonymize') return t('confirmarAnonimizarYBloquearUsuarioMensaje');
+    return '';
+});
 
-        clear() {
-            this.currentUser = '';
-            this.newInfo = {
-                name: '',
-                email: '',
-                description: '',
-                private_note: '',
-                nro_doc: '',
-                mobile_phone: '',
-                pass: {},
-                active: '',
-                banned: '',
-                driver_is_verified: 0,
-                driver_data_docs: [],
-                account_number: '',
-                account_type: '',
-                account_bank: '',
-                cars: [],
-                patente: ''
-            };
-        },
-        loadUserFromQuery() {
-            const userId = this.$route.query.userId;
-            if (!userId) return;
-            this.userApi.show(userId).then((response) => {
-                const user = response.data;
-                if (user) {
-                    this.selectUser(user);
-                    this.textSearch = user.name || '';
-                    this.userList = [user];
-                }
-            }).catch(() => {
-                dialogs.message(this.$t('noSeEncontroNingunUsuario'), { estado: 'error' });
-            });
-        },
-        conversationsSearch() {
-            // Placeholder method - may be implemented later
-        },
-        unreadMessage() {
-            // Placeholder method - may be implemented later
-        },
-        select(user) {
-            if (user) {
-                this.selectUser(user);
-            } else {
-                this.clear();
-            }
-        },
-        openConfirmModal(action) {
-            this.pendingAction = action;
-            this.banNote = '';
-            this.showConfirmModal = true;
-        },
-        closeConfirmModal() {
-            this.showConfirmModal = false;
-            this.pendingAction = null;
-            this.banNote = '';
-        },
-        executePendingAction() {
-            if (!this.currentUser || !this.currentUser.id) return;
-            this.loadingAction = true;
-            const api = this.adminApi;
-            let promise;
-            if (this.pendingAction === 'delete') {
-                promise = api.deleteUser(this.currentUser.id);
-            } else if (this.pendingAction === 'anonymize') {
-                promise = api.anonymizeUser(this.currentUser.id);
-            } else if (this.pendingAction === 'banAndAnonymize') {
-                promise = api.banAndAnonymizeUser(this.currentUser.id, this.banNote);
-            } else {
-                this.loadingAction = false;
-                return;
-            }
-            const userId = this.currentUser.id;
-            promise
-                .then(() => {
-                    this.loadingAction = false;
-                    this.closeConfirmModal();
-                    this.clear();
-                    this.userList = this.userList.filter((u) => u.id !== userId);
-                    dialogs.message(this.$t('accionCompletadaExitosamente'), {
-                        duration: 5,
-                        estado: 'success'
-                    });
-                })
-                .catch((err) => {
-                    this.loadingAction = false;
-                    const msg = (err.response && err.response.data && err.response.data.message) || err.message || this.$t('errorAlActualizar');
-                    dialogs.message(msg, {
-                        duration: 5,
-                        estado: 'error'
-                    });
-                    if (err.response && err.response.data && err.response.data.error === 'requires_ban') {
-                        this.closeConfirmModal();
-                    }
-                });
-        },
-        validate() {
-            let globalError = false;
-            this.nombreError = new Error();
-            this.descError = new Error();
-            this.passError = new Error();
-            this.dniError = new Error();
-            this.emailError = new Error();
-            this.phoneError = new Error();
-            this.accountNumberError = new Error();
-            this.accountTypeError = new Error();
-            this.accountBankError = new Error();
-            this.patenteError = new Error();
-
-            /* if (!this.newInfo.name || this.newInfo.name.length < 1) {
-                this.nombreError.state = true;
-                this.nombreError.message = 'Olvidaste ingresar tu nombre y apellido.';
-                globalError = true;
-            }
-
-            if (!this.newInfo.description || this.newInfo.description.length < 1) {
-                this.descError.state = true;
-                this.descError.message = 'Olvidaste completar tu descripción.';
-                globalError = true;
-            } else if (this.newInfo.description.replace(' ', '').length < 10) {
-                this.descError.state = true;
-                this.descError.message = 'Ups! Tu descripción es muy acotada. No seas tímido, contanos un poco más.';
-                globalError = true;
-            }
-
-            if (this.newInfo.nro_doc && this.newInfo.nro_doc.length > 0 && this.newInfo.nro_doc.length < 7) {
-                // this.dniError.state = true;
-                // this.dniError.message = 'El DNI que ingresaste no es válido.';
-                this.$set(this.dniError, 'state', true);
-                this.$set(this.dniError, 'message', 'asdasdasdasd');
-
-                globalError = true;
-            }
-
-            if (this.newInfo.mobile_phone && this.newInfo.mobile_phone.length > 0 && this.newInfo.mobile_phone.length < 6) {
-                this.phoneError.state = true;
-                this.phoneError.message = 'El teléfono que ingresaste no es válido.';
-                globalError = true;
-            }
-
-            if (this.newInfo.pass.password && this.newInfo.pass.password !== this.newInfo.pass.password_confirmation) {
-                this.passError = this.$t('passwordNoCoincide');
-                globalError = true;
-            } */
-
-            // Validate patente if provided - allow all strings
-            if (this.newInfo.patente && this.newInfo.patente.length > 0) {
-                // Basic validation: just check it's not empty and has reasonable length
-                if (this.newInfo.patente.length > 20) {
-                    this.patenteError.state = true;
-                    this.patenteError.message = this.$t('patenteNoValida');
-                    globalError = true;
-                }
-            }
-
-            console.log('error', this);
-
-            if (globalError) {
-                this.$forceUpdate();
-            }
-            return globalError;
-        },
-
-        save() {
-            if (!this.validate()) {
-                this.newInfo.user = this.currentUser;
-                if (this.newInfo.pass && this.newInfo.pass.password) {
-                    this.newInfo.password = this.newInfo.pass.password;
-                    this.newInfo.password_confirmation =
-                        this.newInfo.pass.password_confirmation;
-                }
-                
-                // Ensure nro_doc is raw value (no dots) before sending
-                if (this.newInfo.nro_doc) {
-                    this.newInfo.nro_doc = cleanId(this.newInfo.nro_doc, this.settings.profile_id_format);
-                }
-                
-                // Handle patente data - if user has cars, update first car's patente
-                // If no cars but patente is provided, backend will create a new car
-                if (this.newInfo.patente && this.newInfo.patente.length > 0) {
-                    if (this.newInfo.cars && this.newInfo.cars.length > 0) {
-                        // Update existing car's patente
-                        this.newInfo.cars[0].patente = this.newInfo.patente;
-                    } else {
-                        // Create new car with patente - backend will handle this
-                        this.newInfo.cars = [{ patente: this.newInfo.patente }];
-                    }
-                }
-                
-                this.update(this.newInfo)
-                    .then(() => {
-                        dialogs.message(this.$t('perfilActualizadoCorrectamente'));
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                        let mensajeErr = this.$t('errorAlActualizar');
-                        for (const key in err.errors) {
-                            if (Object.hasOwnProperty.call(err.errors, key)) {
-                                mensajeErr += err.errors[key] + ' ';
-                            }
-                        }
-                        dialogs.message(mensajeErr, {
-                            duration: 10,
-                            estado: 'error'
-                        });
-                    });
-                this.onSearchUsers();
-            } else {
-                dialogs.message(this.$t('verifiqueLosCampos'), { estado: 'error' });
-            }
-        }
-    },
-
-    beforeDestroy() {
-        this.thread.stop();
-        this.select(null);
-    },
-
-    watch: {
-        isMobile: function () {
-            if (!this.isMobile) {
-                // router.push({ name: 'conversation-chat' });
-            }
-        },
-        textSearch: function (newValue, oldValue) {
-            if (oldValue.length === 0 && newValue.length > 0) {
-                this.clear();
-            }
-        },
-        'newInfo.patente': function () {
-            this.patenteError.state = false;
-        }
-    },
-
-    mounted() {
-        this.adminApi = new AdminApi();
-        this.userApi = new UserApi();
-        this.getBankData().then((data) => {
-            console.log('get bank data', data);
-            this.banks = data.banks;
-            this.accountTypes = data.cc;
+const onSearchUsers = () => {
+    if (keyUpTimerId) {
+        clearTimeout(keyUpTimerId);
+    }
+    keyUpTimerId = setTimeout(() => {
+        adminStore.searchUsers(textSearch.value).then((data) => {
+            userList.value = data.data;
         });
-        this.conversationsSearch();
-        this.thread = new Thread(() => {
-            this.unreadMessage();
+    }, 750);
+};
+
+const confirmClearIdentityValidation = () => {
+    if (!currentUser.value || !currentUser.value.id) return;
+    if (!confirm(t('confirmarRemoverValidacionIdentidad'))) return;
+    doClearIdentityValidation();
+};
+
+const doClearIdentityValidation = () => {
+    if (!currentUser.value || !currentUser.value.id) return;
+    clearingIdentity.value = true;
+    const api = new AdminApi();
+    api.clearIdentityValidation(currentUser.value.id)
+        .then(() => {
+            newInfo.identity_validated = false;
+            newInfo.identity_validated_at = null;
+            currentUser.value.identity_validated = false;
+            currentUser.value.identity_validated_at = null;
+            dialogs.message(t('validacionIdentidadRemovida'));
+        })
+        .catch(() => {
+            dialogs.message(t('resultError'), { estado: 'error' });
+        })
+        .finally(() => {
+            clearingIdentity.value = false;
         });
-        this.thread.run(20000);
-        this.loadUserFromQuery();
-    },
-    watch: {
-        '$route.query.userId'(userId) {
-            this.loadUserFromQuery();
-        }
-    },
-    updated() {},
-    components: {
-        Loading,
-        adminNav,
-        modal,
-        Spinner
+};
+
+const selectUser = (user) => {
+    currentUser.value = user;
+    const nroDocRaw = currentUser.value.nro_doc
+        ? cleanId(currentUser.value.nro_doc, settings.value.profile_id_format)
+        : '';
+    Object.assign(newInfo, {
+        name: currentUser.value.name,
+        email: currentUser.value.email,
+        description: currentUser.value.description,
+        private_note: currentUser.value.private_note,
+        nro_doc: nroDocRaw,
+        mobile_phone: currentUser.value.mobile_phone,
+        pass: {},
+        user: {},
+        driver_is_verified: currentUser.value.driver_is_verified,
+        driver_data_docs: currentUser.value.driver_data_docs,
+        account_number: currentUser.value.account_number,
+        account_type: currentUser.value.account_type,
+        account_bank: currentUser.value.account_bank,
+        banned: currentUser.value.banned > 0,
+        active: currentUser.value.active > 0,
+        cars: currentUser.value.cars || [],
+        patente: currentUser.value.cars && currentUser.value.cars.length > 0 ? currentUser.value.cars[0].patente : '',
+        identity_validated: currentUser.value.identity_validated,
+        identity_validated_at: currentUser.value.identity_validated_at
+    });
+    if (newInfo.nro_doc) {
+        newInfo.nro_doc = formatId(newInfo.nro_doc, settings.value.profile_id_format);
     }
 };
+
+const toUserMessages = (user) => {
+    console.log('toUserMessages');
+    conversationsStore.createConversation({ user: user, tripId: null }).then(
+        (conversation) => {
+            console.log('toUserMessages then', conversation);
+            router.push({
+                name: 'conversation-chat',
+                params: { id: conversation.id }
+            });
+        }
+    );
+};
+
+const isNumber = (value) => {
+    inputIsNumber(value);
+};
+
+const handleDniInput = (event) => {
+    const formatted = formatId(event.target.value, settings.value.profile_id_format);
+    event.target.value = formatted;
+    newInfo.nro_doc = formatted;
+};
+
+const clear = () => {
+    currentUser.value = '';
+    Object.assign(newInfo, {
+        name: '',
+        email: '',
+        description: '',
+        private_note: '',
+        nro_doc: '',
+        mobile_phone: '',
+        pass: {},
+        active: '',
+        banned: '',
+        driver_is_verified: 0,
+        driver_data_docs: [],
+        account_number: '',
+        account_type: '',
+        account_bank: '',
+        cars: [],
+        patente: ''
+    });
+};
+
+const conversationsSearch = () => {
+    // Placeholder method
+};
+
+const unreadMessage = () => {
+    // Placeholder method
+};
+
+const select = (user) => {
+    if (user) {
+        selectUser(user);
+    } else {
+        clear();
+    }
+};
+
+const loadUserFromQuery = () => {
+    const userId = route.query.userId;
+    if (!userId) return;
+    userApi.value.show(userId).then((response) => {
+        const user = response.data;
+        if (user) {
+            selectUser(user);
+            textSearch.value = user.name || '';
+            userList.value = [user];
+        }
+    }).catch(() => {
+        dialogs.message(t('noSeEncontroNingunUsuario'), { estado: 'error' });
+    });
+};
+
+const openConfirmModal = (action) => {
+    pendingAction.value = action;
+    banNote.value = '';
+    showConfirmModal.value = true;
+};
+
+const closeConfirmModal = () => {
+    showConfirmModal.value = false;
+    pendingAction.value = null;
+    banNote.value = '';
+};
+
+const executePendingAction = () => {
+    if (!currentUser.value || !currentUser.value.id) return;
+    loadingAction.value = true;
+    const api = adminApi.value;
+    let promise;
+    if (pendingAction.value === 'delete') {
+        promise = api.deleteUser(currentUser.value.id);
+    } else if (pendingAction.value === 'anonymize') {
+        promise = api.anonymizeUser(currentUser.value.id);
+    } else if (pendingAction.value === 'banAndAnonymize') {
+        promise = api.banAndAnonymizeUser(currentUser.value.id, banNote.value);
+    } else {
+        loadingAction.value = false;
+        return;
+    }
+    const userId = currentUser.value.id;
+    promise
+        .then(() => {
+            loadingAction.value = false;
+            closeConfirmModal();
+            clear();
+            userList.value = userList.value.filter((u) => u.id !== userId);
+            dialogs.message(t('accionCompletadaExitosamente'), {
+                duration: 5,
+                estado: 'success'
+            });
+        })
+        .catch((err) => {
+            loadingAction.value = false;
+            const msg = (err.response && err.response.data && err.response.data.message) || err.message || t('errorAlActualizar');
+            dialogs.message(msg, {
+                duration: 5,
+                estado: 'error'
+            });
+            if (err.response && err.response.data && err.response.data.error === 'requires_ban') {
+                closeConfirmModal();
+            }
+        });
+};
+
+const validate = () => {
+    let hasGlobalError = false;
+    Object.assign(nombreError, { state: false, message: '' });
+    Object.assign(descError, { state: false, message: '' });
+    Object.assign(passError, { state: false, message: '' });
+    Object.assign(dniError, { state: false, message: '' });
+    Object.assign(emailError, { state: false, message: '' });
+    Object.assign(phoneError, { state: false, message: '' });
+    Object.assign(accountNumberError, { state: false, message: '' });
+    Object.assign(accountTypeError, { state: false, message: '' });
+    Object.assign(accountBankError, { state: false, message: '' });
+    Object.assign(patenteError, { state: false, message: '' });
+
+    if (newInfo.patente && newInfo.patente.length > 0) {
+        if (newInfo.patente.length > 20) {
+            patenteError.state = true;
+            patenteError.message = t('patenteNoValida');
+            hasGlobalError = true;
+        }
+    }
+
+    return hasGlobalError;
+};
+
+const save = () => {
+    if (!validate()) {
+        newInfo.user = currentUser.value;
+        if (newInfo.pass && newInfo.pass.password) {
+            newInfo.password = newInfo.pass.password;
+            newInfo.password_confirmation = newInfo.pass.password_confirmation;
+        }
+
+        if (newInfo.nro_doc) {
+            newInfo.nro_doc = cleanId(newInfo.nro_doc, settings.value.profile_id_format);
+        }
+
+        if (newInfo.patente && newInfo.patente.length > 0) {
+            if (newInfo.cars && newInfo.cars.length > 0) {
+                newInfo.cars[0].patente = newInfo.patente;
+            } else {
+                newInfo.cars = [{ patente: newInfo.patente }];
+            }
+        }
+
+        adminStore.adminUpdate(newInfo)
+            .then(() => {
+                dialogs.message(t('perfilActualizadoCorrectamente'));
+            })
+            .catch((err) => {
+                console.log(err);
+                let mensajeErr = t('errorAlActualizar');
+                for (const key in err.errors) {
+                    if (Object.hasOwnProperty.call(err.errors, key)) {
+                        mensajeErr += err.errors[key] + ' ';
+                    }
+                }
+                dialogs.message(mensajeErr, {
+                    duration: 10,
+                    estado: 'error'
+                });
+            });
+        onSearchUsers();
+    } else {
+        dialogs.message(t('verifiqueLosCampos'), { estado: 'error' });
+    }
+};
+
+watch(isMobile, () => {
+    if (!isMobile.value) {
+        // router.push({ name: 'conversation-chat' });
+    }
+});
+
+watch(textSearch, (newValue, oldValue) => {
+    if (oldValue.length === 0 && newValue.length > 0) {
+        clear();
+    }
+});
+
+watch(() => newInfo.patente, () => {
+    patenteError.state = false;
+});
+
+watch(() => route.query.userId, () => {
+    loadUserFromQuery();
+});
+
+onMounted(() => {
+    adminApi.value = new AdminApi();
+    userApi.value = new UserApi();
+    profileStore.getBankData().then((data) => {
+        console.log('get bank data', data);
+        banks.value = data.banks;
+        accountTypes.value = data.cc;
+    });
+    conversationsSearch();
+    thread = new Thread(() => {
+        unreadMessage();
+    });
+    thread.run(20000);
+    loadUserFromQuery();
+});
+
+onBeforeUnmount(() => {
+    if (thread) {
+        thread.stop();
+    }
+    select(null);
+});
 </script>
 
 <style scoped>

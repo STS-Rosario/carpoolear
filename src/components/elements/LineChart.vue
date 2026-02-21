@@ -1,24 +1,43 @@
-<script>
-import { Line } from 'vue-chartjs';
+<template>
+    <Line v-if="chartdata" :data="chartdata" :options="options" />
+</template>
 
-export default {
-    name: 'linechart',
-    extends: Line,
-    props: ['chartdata', 'options'],
-    computed: {
-        chartInfo: function () {
-            return this.chartdata;
-        }
+<script setup>
+import { computed, watch, toRefs } from 'vue';
+import { Line } from 'vue-chartjs';
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend,
+    Filler
+} from 'chart.js';
+
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend,
+    Filler
+);
+
+const props = defineProps({
+    chartdata: {
+        type: Object,
+        default: null
     },
-    watch: {
-        chartInfo: function () {
-            this.renderChart(this.chartInfo, this.options);
-        }
-    },
-    mounted() {
-        this.renderChart(this.chartInfo, this.options);
+    options: {
+        type: Object,
+        default: () => ({})
     }
-};
+});
 </script>
 
 <style></style>

@@ -5,7 +5,7 @@
     >
         <div class="col-xs-24" v-if="owner && acceptedPassengers.length">
             <h4 class="title-margined">
-                <strong>{{ $t('pasajerosSubidos') }}</strong>
+                <strong>{{ t('pasajerosSubidos') }}</strong>
             </h4>
             <div
                 v-for="p in acceptedPassengers"
@@ -27,7 +27,7 @@
                 <a
                     href="#"
                     @click="toUserMessages(p)"
-                    :aria-label="$t('irAMensajes')"
+                    :aria-label="t('irAMensajes')"
                     class="trip_passenger-chat"
                 >
                     <i class="fa fa-comments" aria-hidden="true"></i>
@@ -35,13 +35,13 @@
                 <button
                     @click="removePassenger(p)"
                     class="trip_passenger-remove pull-right"
-                    :aria-label="$t('bajarPasajeroViaje')"
+                    :aria-label="t('bajarPasajeroViaje')"
                 >
                     <i class="fa fa-times" aria-hidden="true"></i>
                 </button>
             </div>
             <div v-if="trip.passenger.length === 0">
-                {{ $t('aunNoHayPasajeros') }}
+                {{ t('aunNoHayPasajeros') }}
             </div>
         </div>
         <div v-else style="height: 2em"></div>
@@ -50,7 +50,7 @@
             v-if="owner && waitingForPaymentsPassengers.length"
         >
             <h4 class="title-margined">
-                <strong>{{ $t('pasajerosPendientePago') }}</strong>
+                <strong>{{ t('pasajerosPendientePago') }}</strong>
             </h4>
             <div
                 v-for="p in waitingForPaymentsPassengers"
@@ -72,7 +72,7 @@
                 <a
                     href="#"
                     @click="toUserMessages(p)"
-                    :aria-label="$t('irAMensajes')"
+                    :aria-label="t('irAMensajes')"
                     class="trip_passenger-chat"
                 >
                     <i class="fa fa-comments" aria-hidden="true"></i>
@@ -80,7 +80,7 @@
                 <button
                     @click="removePassenger(p)"
                     class="trip_passenger-remove pull-right"
-                    :aria-label="$t('bajarPasajeroViaje')"
+                    :aria-label="t('bajarPasajeroViaje')"
                 >
                     <i class="fa fa-times" aria-hidden="true"></i>
                 </button>
@@ -88,108 +88,113 @@
         </div>
     </div>
 </template>
-<script>
-import { mapGetters, mapActions } from 'vuex';
-import router from '../../router';
+<script setup>
+import { ref, computed, watch, onMounted, nextTick } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
+import { useTripsStore } from '@/stores/trips';
+import { useAuthStore } from '@/stores/auth';
+import { useConversationsStore } from '@/stores/conversations';
+import { usePassengerStore } from '@/stores/passenger';
 import dialogs from '../../services/dialogs.js';
 import bus from '../../services/bus-event';
-export default {
-    name: 'TripPassengers',
-    data() {
-        return {};
-    },
-    computed: {
-        ...mapGetters({
-            trip: 'trips/currentTrip',
-            tripCardTheme: 'auth/tripCardTheme',
-            user: 'auth/user'
-        }),
-        owner() {
-            return this.trip && this.user && this.user.id === this.trip.user.id;
-        },
-        acceptedPassengers() {
-            console.log('acceptedPassengers', this.trip);
-            return this.trip.allPassengerRequest
-                ? this.trip.allPassengerRequest.filter(
-                      (item) => item.request_state === 1
-                  )
-                : [];
-        },
-        waitingForPaymentsPassengers() {
-            return this.trip.allPassengerRequest
-                ? this.trip.allPassengerRequest.filter(
-                      (item) => item.request_state === 4
-                  )
-                : [];
-        }
-    },
-    props: [],
-    components: {},
-    mounted() {
-        this.calculateHeight();
-    },
-    methods: {
-        ...mapActions({
-            lookConversation: 'conversations/createConversation',
-            cancel: 'passenger/cancel'
-        }),
-        calculateHeight() {
-            this.$nextTick(() => {
-                bus.emit('calculate-height');
+
+const { t } = useI18n();
+const router = useRouter();
+const tripsStore = useTripsStore();
+const authStore = useAuthStore();
+const conversationsStore = useConversationsStore();
+const passengerStore = usePassengerStore();
+
+const sending = ref(false);
+
+const trip = computed(() => tripsStore.currentTrip);
+const tripCardTheme = computed(() => authStore.tripCardTheme);
+const user = computed(() => authStore.user);
+
+const owner = computed(() => {
+    return trip.value && user.value && user.value.id === trip.value.user.id;
+});
+
+const acceptedPassengers = computed(() => {
+    console.log('acceptedPassengers', trip.value);
+    return trip.value.allPassengerRequest
+        ? trip.value.allPassengerRequest.filter(
+              (item) => item.request_state === 1
+          )
+        : [];
+});
+
+const waitingForPaymentsPassengers = computed(() => {
+    return trip.value.allPassengerRequest
+        ? trip.value.allPassengerRequest.filter(
+              (item) => item.request_state === 4
+          )
+        : [];
+});
+
+function calculateHeight() {
+    nextTick(() => {
+        bus.emit('calculate-height');
+    });
+}
+
+function toUserMessages(targetUser) {
+    conversationsStore.createConversation(targetUser)
+        .then((conversation) => {
+            router.push({
+                name: 'conversation-chat',
+                params: { id: conversation.id }
             });
-        },
-        toUserMessages(user) {
-            this.lookConversation(user)
-                .then((conversation) => {
-                    router.push({
-                        name: 'conversation-chat',
-                        params: { id: conversation.id }
-                    });
-                })
-                .catch((error) => {
-                    console.error(error);
-                    this.sending = false;
+        })
+        .catch((error) => {
+            console.error(error);
+            sending.value = false;
+        });
+}
+
+function toUserProfile(targetUser) {
+    router.replace({
+        name: 'profile',
+        params: {
+            id: targetUser.id,
+            userProfile: targetUser,
+            activeTab: 1
+        }
+    });
+}
+
+function removePassenger(targetUser) {
+    if (
+        window.confirm(
+            t('seguroBajarPasajero')
+        )
+    ) {
+        sending.value = true;
+        passengerStore.cancel({ user: targetUser, trip: trip.value })
+            .then(() => {
+                sending.value = false;
+                dialogs.message(t('removerPasajeroExitoso'), {
+                    estado: 'success'
                 });
-        },
-        toUserProfile(user) {
-            router.replace({
-                name: 'profile',
-                params: {
-                    id: user.id,
-                    userProfile: user,
-                    activeTab: 1
-                }
+            })
+            .catch(() => {
+                sending.value = false;
             });
-        },
-        removePassenger(user) {
-            if (
-                window.confirm(
-                    this.$t('seguroBajarPasajero')
-                )
-            ) {
-                this.sending = true;
-                this.cancel({ user: user, trip: this.trip })
-                    .then(() => {
-                        this.sending = false;
-                        dialogs.message(this.$t('removerPasajeroExitoso'), {
-                            estado: 'success'
-                        });
-                    })
-                    .catch(() => {
-                        this.sending = false;
-                    });
-            }
-        }
-    },
-    watch: {
-        acceptedPassengers() {
-            this.calculateHeight();
-        },
-        waitingForPaymentsPassengers() {
-            this.calculateHeight();
-        }
     }
-};
+}
+
+watch(acceptedPassengers, () => {
+    calculateHeight();
+});
+
+watch(waitingForPaymentsPassengers, () => {
+    calculateHeight();
+});
+
+onMounted(() => {
+    calculateHeight();
+});
 </script>
 <style scoped>
 .trip_driver_img.circle-box.passenger {

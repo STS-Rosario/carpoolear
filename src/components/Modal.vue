@@ -19,7 +19,7 @@
                         <slot name="footer">
                             <button
                                 class="modal-default-button btn btn-link"
-                                @click="$emit('close')"
+                                @click="emit('close')"
                             >
                                 {{ $t('cerrar') }}
                             </button>
@@ -31,34 +31,30 @@
     </transition>
 </template>
 
-<script>
-import { setTimeout } from 'timers';
-export default {
-    name: 'modal',
-    data() {
-        return {
-            clickOutsideHandler: () => {}
-        };
-    },
-    mounted() {
-        setTimeout(() => {
-            this.clickOutsideHandler = this.clickOutside;
-        }, 0);
-    },
-    methods: {},
+<script setup>
+import { ref, onMounted } from 'vue';
 
-    props: {
-        hideFooter: {
-            required: false
-        },
-        clickOutside: {
-            required: false
-        },
-        name: {
-            required: false
-        }
+const props = defineProps({
+    hideFooter: {
+        required: false
+    },
+    clickOutside: {
+        required: false
+    },
+    name: {
+        required: false
     }
-};
+});
+
+const emit = defineEmits(['close']);
+
+const clickOutsideHandler = ref(() => {});
+
+onMounted(() => {
+    setTimeout(() => {
+        clickOutsideHandler.value = props.clickOutside;
+    }, 0);
+});
 </script>
 
 <style scoped>

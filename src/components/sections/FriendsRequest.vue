@@ -1,7 +1,7 @@
 <template>
     <div class="friends-component">
         <div class="clearfix">
-            <h2>{{ $t('buscarContacto') }}</h2>
+            <h2>{{ t('buscarContacto') }}</h2>
             <li class="list-group-item">
                 <div class="input-group">
                     <input
@@ -10,7 +10,7 @@
                         type="text"
                         class="form-control"
                         id="input-name"
-                        :placeholder="$t('buscarPersonas')"
+                        :placeholder="t('buscarPersonas')"
                     />
                     <span class="input-group-btn">
                         <button class="btn btn-default" type="button">
@@ -67,7 +67,7 @@
                                             !idRequesting[user.id]
                                         "
                                     >
-                                        {{ $t('agregar') }}
+                                        {{ t('agregar') }}
                                         <i
                                             class="fa fa-plus"
                                             aria-hidden="true"
@@ -82,95 +82,85 @@
                                         <spinner class="blue"></spinner>
                                     </span>
                                     <span v-if="user.state != 'none'"
-                                        >{{ $t('solicitudEnviada') }}</span
+                                        >{{ t('solicitudEnviada') }}</span
                                     >
                                 </button>
                             </div>
                         </div>
                     </li>
-                    <li
-                        slot="no-data"
-                        class="list-group-item alert alert-warning"
-                        role="alert"
-                    >
-                        {{ $t('noSeEncontraronContactos') }}
-                    </li>
-                    <li
-                        slot="loading"
-                        class="list-group-item alert alert-info"
-                        role="alert"
-                    >
-                        <img
-                            src="https://carpoolear.com.ar/static/img/loader.gif"
-                            alt=""
-                            class="ajax-loader"
-                        />
-                        {{ $t('buscandoContactos') }}
-                    </li>
+                    <template #no-data>
+                        <li
+                            class="list-group-item alert alert-warning"
+                            role="alert"
+                        >
+                            {{ t('noSeEncontraronContactos') }}
+                        </li>
+                    </template>
+                    <template #loading>
+                        <li
+                            class="list-group-item alert alert-info"
+                            role="alert"
+                        >
+                            <img
+                                src="https://carpoolear.com.ar/static/img/loader.gif"
+                                alt=""
+                                class="ajax-loader"
+                            />
+                            {{ t('buscandoContactos') }}
+                        </li>
+                    </template>
                 </Loading>
             </template>
         </div>
     </div>
 </template>
-<script>
-import { mapGetters, mapActions } from 'vuex';
+<script setup>
+import { ref, reactive, computed, onMounted, onBeforeUnmount } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
+import { useFriendsStore } from '@/stores/friends';
 import Loading from '../Loading.vue';
 import FriendCard from './FriendCard';
 import bus from '../../services/bus-event.js';
 import spinner from '../Spinner.vue';
 
-export default {
-    name: 'friends_request',
-    data() {
-        return {
-            text: '',
-            idRequesting: {},
-            searchingRequest: null
-        };
-    },
-    computed: {
-        ...mapGetters({
-            users: 'friends/users'
-        })
-    },
-    methods: {
-        ...mapActions({
-            search: 'friends/searchUsers',
-            request: 'friends/request'
-        }),
-        onTextChange() {
-            this.search(this.text);
-        },
+const { t } = useI18n();
+const router = useRouter();
+const friendsStore = useFriendsStore();
 
-        onAddClick(user) {
-            this.$set(this.idRequesting, user.id, true);
-            this.request(user.id).then(
-                () => {
-                    this.$set(this.idRequesting, user.id, false);
-                },
-                () => {
-                    this.$set(this.idRequesting, user.id, false);
-                }
-            );
+const text = ref('');
+const idRequesting = reactive({});
+const searchingRequest = ref(null);
+
+const users = computed(() => friendsStore.users);
+
+function onTextChange() {
+    friendsStore.searchUsers(text.value);
+}
+
+function onAddClick(user) {
+    idRequesting[user.id] = true;
+    friendsStore.request(user.id).then(
+        () => {
+            idRequesting[user.id] = false;
         },
-        onBackClick() {
-            this.$router.back();
+        () => {
+            idRequesting[user.id] = false;
         }
-    },
+    );
+}
 
-    mounted() {
-        bus.on('back-click', this.onBackClick);
-    },
+function onBackClick() {
+    router.back();
+}
 
-    beforeDestroy() {
-        bus.off('back-click', this.onBackClick);
-    },
-    components: {
-        Loading,
-        FriendCard,
-        spinner
-    }
-};
+onMounted(() => {
+    bus.on('back-click', onBackClick);
+});
+
+onBeforeUnmount(() => {
+    bus.off('back-click', onBackClick);
+});
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

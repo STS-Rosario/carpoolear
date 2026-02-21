@@ -16,6 +16,3 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
-networks:
-  esnet:
-    driver: bridge

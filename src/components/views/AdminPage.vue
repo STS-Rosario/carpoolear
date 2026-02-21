@@ -16,8 +16,8 @@
                                 }"
                                 v-on:date_changed="
                                     (date) =>
-                                        (this.dateLimits.start =
-                                            formatDate(date))
+                                        (dateLimits.start =
+                                            formatDateSlice(date))
                                 "
                                 :format="'YYYY-MM'"
                             ></datePicker>
@@ -31,7 +31,7 @@
                                 }"
                                 v-on:date_changed="
                                     (date) =>
-                                        (this.dateLimits.end = formatDate(date))
+                                        (dateLimits.end = formatDateSlice(date))
                                 "
                                 :format="'YYYY-MM'"
                             ></datePicker>
@@ -75,8 +75,9 @@
     </div>
 </template>
 
-<script>
-import router from '../../router';
+<script setup>
+import { reactive } from 'vue';
+import { useRouter } from 'vue-router';
 import TripsChart from '../elements/TripsChart';
 import SeatsChart from '../elements/SeatsChart';
 import MonthlyUsersChart from '../elements/MonthlyUsersChart';
@@ -85,36 +86,20 @@ import datePicker from '../DatePicker';
 import moment from 'moment';
 import adminNav from '../sections/adminNav';
 
-export default {
-    name: 'admin-page',
-    data() {
-        return {
-            dateLimits: {
-                start: moment(new Date(new Date().getFullYear(), 0, 1)).format(
-                    'YYYY-MM'
-                ),
-                end: moment().format('YYYY-MM'),
-                dateError: new Error()
-            }
-        };
-    },
-    methods: {
-        goToAbm() {
-            router.replace({ name: 'admin-users' });
-        },
-        formatDate(date) {
-            return date.slice(0, 7);
-        }
-    },
-    components: {
-        TripsChart,
-        SeatsChart,
-        MonthlyUsersChart,
-        TotalUsersChart,
-        datePicker,
-        adminNav
-    },
-    mounted() {}
+const router = useRouter();
+
+const dateLimits = reactive({
+    start: moment(new Date(new Date().getFullYear(), 0, 1)).format('YYYY-MM'),
+    end: moment().format('YYYY-MM'),
+    dateError: new Error()
+});
+
+const goToAbm = () => {
+    router.replace({ name: 'admin-users' });
+};
+
+const formatDateSlice = (date) => {
+    return date.slice(0, 7);
 };
 </script>
 

@@ -12,12 +12,12 @@
                     class="cbx"
                 />
                 <label for="cbxAllowForeignPoints" class="cbx_label">
-                    {{ $t('origenODestinoFueraDe') }}
+                    {{ t('origenODestinoFueraDe') }}
                     {{ config ? config.country_name : '' }}
                 </label>
                 <span
                     class="tooltip-bottom"
-                    :data-tooltip="$t('marcandoEstaOpcionPodrasSeleccionar')"
+                    :data-tooltip="t('marcandoEstaOpcionPodrasSeleccionar')"
                 ></span>
                 <i class="fa fa-info-circle" aria-hidden="true"></i>
             </div>
@@ -31,7 +31,7 @@
                 >
                     <!--<img alt="" :src="isPassenger ? chofer_logo_gris : chofer_logo_blanco" />-->
                     <span class="fa fa-car" aria-hidden="true"></span>
-                    <span>{{ $t('conductor') }}</span>
+                    <span>{{ t('conductor') }}</span>
                 </button>
             </div>
             <div class="col-xs-12 col-md-4">
@@ -48,7 +48,7 @@
                                 : pasajero_logo_gris
                         "
                     />
-                    <span>{{ $t('pasajero') }}</span>
+                    <span>{{ t('pasajero') }}</span>
                 </button>
             </div>
             <div
@@ -63,12 +63,12 @@
                         class="cbx"
                     />
                     <label for="cbxAllowForeignPoints" class="cbx_label">
-                        {{ $t('origenODestinoFueraDe') }}
+                        {{ t('origenODestinoFueraDe') }}
                         {{ config ? config.country_name : '' }}
                     </label>
                     <span
                         class="tooltip-bottom"
-                        :data-tooltip="$t('marcandoEstaOpcionPodrasSeleccionar')"
+                        :data-tooltip="t('marcandoEstaOpcionPodrasSeleccionar')"
                     ></span>
                     <i class="fa fa-info-circle" aria-hidden="true"></i>
                 </div>
@@ -76,15 +76,14 @@
 
             <div class="col-xs-24 col-md-8 gmap-autocomplete origin">
                 <Autocomplete
-                    :placeholder="$t('origen')"
+                    :placeholder="t('origen')"
                     name="from_town"
-                    ref="from_town"
+                    ref="from_town_ref"
                     :value="from_town.name"
                     v-on:place_changed="(data) => getPlace(0, data)"
                     :classes="'form-control form-control-with-icon form-control-map-autocomplete'"
                     :country="allowForeignPoints ? null : 'AR'"
                 ></Autocomplete>
-                <!-- <GmapAutocomplete name="from_town" ref="from_town" :selectFirstOnEnter="true" :types="['(cities)']"  :componentRestrictions="allowForeignPoints ? null : {country: 'AR'}"  placeholder="Origen"  :value="from_town.name" v-on:place_changed="(data) => getPlace(0, data)" class="form-control form-control-with-icon form-control-map-autocomplete"> </GmapAutocomplete>-->
                 <div class="date-picker--cross">
                     <i
                         v-on:click="resetInput('from_town')"
@@ -92,7 +91,7 @@
                         aria-hidden="true"
                     ></i>
                 </div>
-                <div class="optional-warning text-center">({{ $t('opcional') }})</div>
+                <div class="optional-warning text-center">({{ t('opcional') }})</div>
                 <div class="swap btn">
                     <img
                         alt="swap"
@@ -110,15 +109,14 @@
             </div>
             <div class="col-xs-24 col-md-8 gmap-autocomplete destiny">
                 <Autocomplete
-                    :placeholder="$t('destino')"
+                    :placeholder="t('destino')"
                     name="to_town"
-                    ref="to_town"
+                    ref="to_town_ref"
                     :value="to_town.name"
                     v-on:place_changed="(data) => getPlace(1, data)"
                     :classes="'form-control form-control-with-icon form-control-map-autocomplete'"
                     :country="allowForeignPoints ? null : 'AR'"
                 ></Autocomplete>
-                <!-- <GmapAutocomplete name="to_town" ref="to_town" :selectFirstOnEnter="true" :types="['(cities)']"  :componentRestrictions="allowForeignPoints ? null : {country: 'AR'}"  placeholder="Destino"  :value="to_town.name" v-on:place_changed="(data) => getPlace(1, data)" class="form-control form-control-with-icon form-control-map-autocomplete"> </GmapAutocomplete> -->
                 <div class="date-picker--cross">
                     <i
                         v-on:click="resetInput('to_town')"
@@ -126,7 +124,7 @@
                         aria-hidden="true"
                     ></i>
                 </div>
-                <div class="optional-warning text-center">({{ $t('opcional') }})</div>
+                <div class="optional-warning text-center">({{ t('opcional') }})</div>
             </div>
 
             <div class="col-xs-24 col-md-4 no-padding">
@@ -134,18 +132,18 @@
                     ref="datepicker"
                     :value="from_date"
                     :class="{ 'has-error': dateError.state }"
-                    v-on:date_changed="(date) => (this.from_date = date)"
+                    v-on:date_changed="(date) => (from_date = date)"
                 ></DatePicker>
-                <div class="optional-warning text-center">({{ $t('opcional') }})</div>
+                <div class="optional-warning text-center">({{ t('opcional') }})</div>
             </div>
             <div class="col-xs-24 col-md-4 no-padding">
                 <DatePicker
                     ref="datepicker"
                     :value="to_date"
                     :class="{ 'has-error': dateError.state }"
-                    v-on:date_changed="(date) => (this.to_date = date)"
+                    v-on:date_changed="(date) => (to_date = date)"
                 ></DatePicker>
-                <div class="optional-warning text-center">({{ $t('opcional') }})</div>
+                <div class="optional-warning text-center">({{ t('opcional') }})</div>
             </div>
 
             <div class="col-xs-24 col-md-8 gmap-autocomplete origin">
@@ -155,7 +153,7 @@
                         v-on:keyup="onSearchUsers"
                         type="text"
                         class="form-control form-control-with-icon search-users-input"
-                        :placeholder="$t('escribeUnNombre')"
+                        :placeholder="t('escribeUnNombre')"
                     />
                     <div v-if="userSearch.length != 0 && showAutocomplete">
                         <loading class="autocomplete-users" :data="userList">
@@ -176,25 +174,27 @@
                                     </div>
                                 </div>
                             </li>
-                            <li
-                                slot="no-data"
-                                class="list-group-item alert alert-warning"
-                                role="alert"
-                            >
-                                {{ $t('noSeEncontroNingunUsuario') }}
-                            </li>
-                            <li
-                                slot="loading"
-                                class="list-group-item alert alert-info"
-                                role="alert"
-                            >
-                                <img
-                                    src="https://carpoolear.com.ar/static/img/loader.gif"
-                                    alt=""
-                                    class="ajax-loader"
-                                />
-                                {{ $t('cargandoUsuarios') }}
-                            </li>
+                            <template #no-data>
+                                <li
+                                    class="list-group-item alert alert-warning"
+                                    role="alert"
+                                >
+                                    {{ t('noSeEncontroNingunUsuario') }}
+                                </li>
+                            </template>
+                            <template #loading>
+                                <li
+                                    class="list-group-item alert alert-info"
+                                    role="alert"
+                                >
+                                    <img
+                                        src="https://carpoolear.com.ar/static/img/loader.gif"
+                                        alt=""
+                                        class="ajax-loader"
+                                    />
+                                    {{ t('cargandoUsuarios') }}
+                                </li>
+                            </template>
                         </loading>
                     </div>
                 </div>
@@ -205,226 +205,226 @@
                         aria-hidden="true"
                     ></i>
                 </div>
-                <div class="optional-warning text-center">({{ $t('opcional') }})</div>
+                <div class="optional-warning text-center">({{ t('opcional') }})</div>
             </div>
 
             <div class="col-xs-24 col-md-8 col-lg-8">
-                <button class="btn btn-primary btn-search" @click="emit">
-                    {{ $t('buscar') }}
+                <button class="btn btn-primary btn-search" @click="emitSearch">
+                    {{ t('buscar') }}
                 </button>
             </div>
         </div>
     </div>
 </template>
 
-<script>
-import { mapGetters, mapActions } from 'vuex';
+<script setup>
+import { ref, reactive, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useDeviceStore } from '@/stores/device';
+import { useAuthStore } from '@/stores/auth';
+import { useTripsStore } from '@/stores/trips';
+import { useAdminStore } from '@/stores/admin';
 import DatePicker from '../DatePicker';
 import moment from 'moment';
 import dialogs from '../../services/dialogs.js';
 import loading from '../Loading';
 import Autocomplete from '../Autocomplete';
 
-export default {
-    name: 'search-trip',
-    data() {
-        return {
-            minDate: moment().toDate(),
-            isPassenger: false,
-            isAdmin: true,
-            from_town: {
-                name: '',
-                location: null,
-                radio: 0,
-                country: 'ARG'
-            },
-            to_town: {
-                name: '',
-                location: null,
-                radio: 0,
-                country: 'ARG'
-            },
-            from_date: '',
-            to_date: '',
-            dateAnswer: '',
-            dateError: {
-                message: '',
-                state: ''
-            },
-            user: '',
-            showAutocomplete: false,
-            userSearch: '',
-            userList: [],
-            chofer_logo_blanco:
-                process.env.ROUTE_BASE +
-                'static/img/icono-conductor-blanco.png',
-            pasajero_logo_blanco:
-                process.env.ROUTE_BASE + 'static/img/icono-pasajero-blanco.png',
-            chofer_logo_gris:
-                process.env.ROUTE_BASE + 'static/img/icono-conductor-gris.png',
-            pasajero_logo_gris:
-                process.env.ROUTE_BASE + 'static/img/icono-pasajero-gris.png',
-            swap_horizontal:
-                process.env.ROUTE_BASE + 'static/img/flechas_horizontales.png',
-            swap_vertical:
-                process.env.ROUTE_BASE + 'static/img/flechas_verticales.png',
-            allowForeignPoints: false,
-            options: []
-        };
-    },
-    computed: {
-        ...mapGetters({
-            isMobile: 'device/isMobile',
-            config: 'auth/appConfig'
-        })
-    },
-    methods: {
-        ...mapActions({
-            search: 'trips/tripsSearch',
-            searchUsers: 'admin/searchUsers'
-        }),
-        onSearchUsers() {
-            this.showAutocomplete = true;
-            this.searchUsers(this.userSearch)
-                .then((data) => {
-                    this.userList = data.data.slice(0, 3);
-                })
-                .catch((err) => {
-                    console.log(err);
-                    this.userList = [];
-                });
-        },
-        selectUser(user) {
-            this.showAutocomplete = false;
-            this.userList = null;
-            this.userSearch = user.name;
-            this.user = user;
-        },
-        getPlace(i, data) {
-            console.log('getPlace', data);
-            let obj = {};
-            // FIXME falta bounding box
-            if (data) {
-                obj = {
-                    name: data.name,
-                    location: {
-                        lat: parseFloat(data.lat),
-                        lng: parseFloat(data.lng)
-                    },
-                    country: data.country
-                };
-            }
-            if (i === 0) {
-                this.from_town = obj;
-            } else {
-                this.to_town = obj;
-            }
-        },
-        emit() {
-            let params = {};
-            let foreignCountry = 0;
-            if (this.from_town.location) {
-                console.log('emit', this.from_town.location);
-                params.origin_lat = this.from_town.location.lat;
-                params.origin_lng = this.from_town.location.lng;
-                params.origin_radio = this.from_town.radio;
-                params.origin_name = this.from_town.name;
-                params.origin_id = this.from_town.id;
-            } else {
-                params.origin_name = this.$refs['from_town'].input;
-            }
-            if (
-                this.from_town &&
-                this.from_town.country &&
-                this.from_town.country.toLowerCase() !==
-                    this.config.osm_country.toLowerCase()
-            ) {
-                foreignCountry++;
-            }
-            if (this.to_town.location) {
-                params.destination_lat = this.to_town.location.lat;
-                params.destination_lng = this.to_town.location.lng;
-                params.destination_radio = this.to_town.radio;
-                params.destination_name = this.to_town.name;
-                params.destination_id = this.to_town.id;
-            } else {
-                params.destination_name = this.$refs['to_town'].input;
-            }
-            if (
-                this.to_town &&
-                this.to_town.country &&
-                this.to_town.country.toLowerCase() !==
-                    this.config.osm_country.toLowerCase()
-            ) {
-                foreignCountry++;
-            }
-            if (this.from_date) {
-                params.from_date = this.from_date;
-            }
-            if (this.to_date) {
-                params.to_date = this.to_date;
-            }
+const { t } = useI18n();
+const deviceStore = useDeviceStore();
+const authStore = useAuthStore();
+const adminStore = useAdminStore();
 
-            if (!this.from_date && !this.to_date) {
-                params.history = true;
-            }
-            if (this.user.id) {
-                params.user_id = this.user.id;
-            }
-            params.is_passenger = this.isPassenger;
-            params.is_admin = this.isAdmin;
-            if (foreignCountry < 2) {
-                this.$emit('admin-trip-search', params);
-            } else {
-                dialogs.message(
-                    this.$t('origenYDestinoNoPuedenSerAmbosDelExterior'),
-                    {
-                        duration: 10,
-                        estado: 'error'
-                    }
-                );
-            }
-        },
-        resetInput(input) {
-            if (this.$refs[input]) {
-                this.$refs[input].input = '';
-            }
-            this[input] = {
-                name: '',
-                location: null,
-                radio: 0,
-                country: this.config.osm_country
-            };
-        },
-        resetUser() {
-            this.user = {};
-            this.userSearch = '';
-        },
-        swapCities() {
-            let temp;
-            temp = this['to_town'];
-            this['to_town'] = Object.assign({}, this['from_town']);
-            this['from_town'] = Object.assign({}, temp);
-        },
-        clear() {
-            this.resetInput('from_town');
-            this.$refs['from_town'].input = '';
-            this.resetInput('to_town');
-            this.$refs['to_town'].input = '';
-            this.$refs.datepicker.clear();
-        },
-        onSearch(search, loading) {
-            loading(true);
-            this.search(loading, search, this);
-        }
-    },
-    props: ['params'],
-    components: {
-        DatePicker,
-        Autocomplete,
-        loading
+const props = defineProps(['params']);
+const emit = defineEmits(['admin-trip-search']);
+
+const from_town_ref = ref(null);
+const to_town_ref = ref(null);
+const datepicker = ref(null);
+
+const ROUTE_BASE = import.meta.env.VITE_ROUTE_BASE || '/';
+
+const minDate = ref(moment().toDate());
+const isPassenger = ref(false);
+const isAdmin = ref(true);
+const from_town = ref({
+    name: '',
+    location: null,
+    radio: 0,
+    country: 'ARG'
+});
+const to_town = ref({
+    name: '',
+    location: null,
+    radio: 0,
+    country: 'ARG'
+});
+const from_date = ref('');
+const to_date = ref('');
+const dateAnswer = ref('');
+const dateError = reactive({
+    message: '',
+    state: ''
+});
+const user = ref('');
+const showAutocomplete = ref(false);
+const userSearch = ref('');
+const userList = ref([]);
+const chofer_logo_blanco = ROUTE_BASE + 'static/img/icono-conductor-blanco.png';
+const pasajero_logo_blanco = ROUTE_BASE + 'static/img/icono-pasajero-blanco.png';
+const chofer_logo_gris = ROUTE_BASE + 'static/img/icono-conductor-gris.png';
+const pasajero_logo_gris = ROUTE_BASE + 'static/img/icono-pasajero-gris.png';
+const swap_horizontal = ROUTE_BASE + 'static/img/flechas_horizontales.png';
+const swap_vertical = ROUTE_BASE + 'static/img/flechas_verticales.png';
+const allowForeignPoints = ref(false);
+const options = ref([]);
+
+const isMobile = computed(() => deviceStore.isMobile);
+const config = computed(() => authStore.appConfig);
+
+function onSearchUsers() {
+    showAutocomplete.value = true;
+    adminStore.searchUsers(userSearch.value)
+        .then((data) => {
+            userList.value = data.data.slice(0, 3);
+        })
+        .catch((err) => {
+            console.log(err);
+            userList.value = [];
+        });
+}
+
+function selectUser(u) {
+    showAutocomplete.value = false;
+    userList.value = null;
+    userSearch.value = u.name;
+    user.value = u;
+}
+
+function getPlace(i, data) {
+    console.log('getPlace', data);
+    let obj = {};
+    if (data) {
+        obj = {
+            name: data.name,
+            location: {
+                lat: parseFloat(data.lat),
+                lng: parseFloat(data.lng)
+            },
+            country: data.country
+        };
     }
-};
+    if (i === 0) {
+        from_town.value = obj;
+    } else {
+        to_town.value = obj;
+    }
+}
+
+function emitSearch() {
+    let params = {};
+    let foreignCountry = 0;
+    if (from_town.value.location) {
+        console.log('emit', from_town.value.location);
+        params.origin_lat = from_town.value.location.lat;
+        params.origin_lng = from_town.value.location.lng;
+        params.origin_radio = from_town.value.radio;
+        params.origin_name = from_town.value.name;
+        params.origin_id = from_town.value.id;
+    } else {
+        params.origin_name = from_town_ref.value?.input;
+    }
+    if (
+        from_town.value &&
+        from_town.value.country &&
+        from_town.value.country.toLowerCase() !==
+            config.value.osm_country.toLowerCase()
+    ) {
+        foreignCountry++;
+    }
+    if (to_town.value.location) {
+        params.destination_lat = to_town.value.location.lat;
+        params.destination_lng = to_town.value.location.lng;
+        params.destination_radio = to_town.value.radio;
+        params.destination_name = to_town.value.name;
+        params.destination_id = to_town.value.id;
+    } else {
+        params.destination_name = to_town_ref.value?.input;
+    }
+    if (
+        to_town.value &&
+        to_town.value.country &&
+        to_town.value.country.toLowerCase() !==
+            config.value.osm_country.toLowerCase()
+    ) {
+        foreignCountry++;
+    }
+    if (from_date.value) {
+        params.from_date = from_date.value;
+    }
+    if (to_date.value) {
+        params.to_date = to_date.value;
+    }
+
+    if (!from_date.value && !to_date.value) {
+        params.history = true;
+    }
+    if (user.value.id) {
+        params.user_id = user.value.id;
+    }
+    params.is_passenger = isPassenger.value;
+    params.is_admin = isAdmin.value;
+    if (foreignCountry < 2) {
+        emit('admin-trip-search', params);
+    } else {
+        dialogs.message(
+            t('origenYDestinoNoPuedenSerAmbosDelExterior'),
+            {
+                duration: 10,
+                estado: 'error'
+            }
+        );
+    }
+}
+
+function resetInput(input) {
+    const refMap = { from_town: from_town_ref, to_town: to_town_ref };
+    const dataMap = { from_town, to_town };
+    if (refMap[input]?.value) {
+        refMap[input].value.input = '';
+    }
+    dataMap[input].value = {
+        name: '',
+        location: null,
+        radio: 0,
+        country: config.value.osm_country
+    };
+}
+
+function resetUser() {
+    user.value = {};
+    userSearch.value = '';
+}
+
+function swapCities() {
+    let temp = to_town.value;
+    to_town.value = Object.assign({}, from_town.value);
+    from_town.value = Object.assign({}, temp);
+}
+
+function clear() {
+    resetInput('from_town');
+    from_town_ref.value.input = '';
+    resetInput('to_town');
+    to_town_ref.value.input = '';
+    datepicker.value.clear();
+}
+
+function onSearch(search, loadingFn) {
+    loadingFn(true);
+}
+
+defineExpose({ clear });
 </script>
 
 <style scoped>
