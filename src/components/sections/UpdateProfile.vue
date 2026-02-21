@@ -494,7 +494,8 @@
                 ></i>
             </h3>
             <div slot="body">
-                <div class="text-left color-black">
+                <div class="text-left color-black" v-if="!showNegativeRatingsInModal">
+                    <p>{{ $t('eliminacionCuentaMesaAyuda') }}</p>
                     <p>
                         {{ $t('eliminacionCuentaIrreversible') }}
                     </p>
@@ -502,7 +503,7 @@
                     <div class="text-center" style="margin-top: 1.5em;">
                         <button
                             class="btn btn-danger"
-                            @click="deleteAccountRequest"
+                            @click="deleteAccount"
                             :disabled="loadingDeleteAccount"
                         >
                             <span v-if="!loadingDeleteAccount"
@@ -511,6 +512,52 @@
                             <spinner class="blue" v-if="loadingDeleteAccount"></spinner>
                         </button>
                     </div>
+                </div>
+                <div class="text-left color-black" v-else>
+                    <p>{{ $t('eliminacionCuentaNegativas') }}</p>
+                    <div class="text-center" style="margin-top: 1.5em;">
+                        <button
+                            class="btn btn-primary"
+                            @click="requestAccountDeletion"
+                            :disabled="loadingDeleteAccount"
+                        >
+                            <span v-if="!loadingDeleteAccount">{{ $t('solicitarEliminacionCuenta') }}</span>
+                            <spinner class="blue" v-if="loadingDeleteAccount"></spinner>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </modal>
+
+        <modal
+            name="errorAlGuardarModal"
+            v-if="showBannedDniModal"
+            @close="toggleBannedDniModal"
+        >
+            <h3 slot="header">
+                <span>{{ $t('errorAlGuardar') }}</span>
+                <i
+                    v-on:click="toggleBannedDniModal"
+                    class="fa fa-times float-right-close"
+                ></i>
+            </h3>
+            <div slot="body">
+                <div class="text-left color-black login-modal">
+                    <p>
+                        {{ $t('errorAlGuardarContactarMesaAyuda') }}
+                    </p>
+                    <p>
+                        {{ $t('escribinosMesaAyuda') }}
+                    </p>
+                    <p>
+                        {{ $t('mesaAyudaFuncionaDesde') }}
+                        <a :href="'mailto:' + config.admin_email">
+                            {{ config.admin_email }}</a>,
+                        {{ $t('mensajePrivadoDe') }}
+                        <a href="https://instagram.com/carpoolear">Instagram</a>
+                        {{ $t('y') }}
+                        <a href="https://facebook.com/carpoolear">Facebook</a>.
+                    </p>
                 </div>
             </div>
         </modal>
@@ -607,6 +654,8 @@ export default {
             showModalDeleteAccount: false,
             loadingDeleteAccount: false,
             showDatosEnUsoModal: false,
+            showBannedDniModal: false,
+            showNegativeRatingsInModal: false,
             userApi: null
         };
     },
@@ -828,6 +877,13 @@ export default {
                     if (isDocTaken || isPhoneTaken) {
                         this.showDatosEnUsoModal = true;
                     }
+                    const isBannedDni =
+                        err &&
+                        err.errors &&
+                        err.errors.error === 'banned_dni';
+                    if (isBannedDni) {
+                        this.showBannedDniModal = true;
+                    }
                 });
         },
         validate() {
@@ -938,35 +994,65 @@ export default {
         },
         toggleModalDeleteAccount() {
             this.showModalDeleteAccount = !this.showModalDeleteAccount;
+            this.showNegativeRatingsInModal = false;
         },
         toggleDatosEnUsoModal() {
             this.showDatosEnUsoModal = !this.showDatosEnUsoModal;
         },
-        deleteAccountRequest() {
+        toggleBannedDniModal() {
+            this.showBannedDniModal = !this.showBannedDniModal;
+        },
+        deleteAccount() {
+            this.loadingDeleteAccount = true;
+            this.userApi
+                .deleteAccount()
+                .then((response) => {
+                    this.loadingDeleteAccount = false;
+                    this.showModalDeleteAccount = false;
+                    const action = response && response.action;
+                    const message = action === 'deleted'
+                        ? this.$t('usuarioEliminadoExitosamente')
+                        : action === 'anonymized'
+                            ? this.$t('usuarioAnonimizadoExitosamente')
+                            : (response && response.message) || this.$t('pedidoEliminacionEnviado');
+                    dialogs.message(message, {
+                        duration: 5,
+                        estado: 'success'
+                    });
+                    this.$router.replace({ name: 'login' });
+                })
+                .catch((error) => {
+                    this.loadingDeleteAccount = false;
+                    if (error.data && error.data.error === 'negative_ratings') {
+                        this.showNegativeRatingsInModal = true;
+                    } else {
+                        const message = (error.data && error.data.message) || this.$t('errorEnviarPedidoEliminacion');
+                        dialogs.message(message, {
+                            duration: 5,
+                            estado: 'error'
+                        });
+                    }
+                });
+        },
+        requestAccountDeletion() {
             this.loadingDeleteAccount = true;
             this.userApi
                 .deleteAccountRequest()
                 .then(() => {
                     this.loadingDeleteAccount = false;
                     this.showModalDeleteAccount = false;
-                    dialogs.message(
-                        this.$t('pedidoEliminacionEnviado'),
-                        {
-                            duration: 5,
-                            estado: 'success'
-                        }
-                    );
+                    this.showNegativeRatingsInModal = false;
+                    dialogs.message(this.$t('pedidoEliminacionEnviado'), {
+                        duration: 5,
+                        estado: 'success'
+                    });
                 })
-                .catch((error) => {
+                .catch(() => {
                     this.loadingDeleteAccount = false;
-                    console.error('Error deleting account request:', error);
-                    dialogs.message(
-                        this.$t('errorEnviarPedidoEliminacion'),
-                        {
-                            duration: 5,
-                            estado: 'error'
-                        }
-                    );
+                    dialogs.message(this.$t('errorEnviarPedidoEliminacion'), {
+                        duration: 5,
+                        estado: 'error'
+                    });
                 });
         }
     },

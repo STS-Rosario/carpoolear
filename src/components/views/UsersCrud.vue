@@ -407,6 +407,31 @@
                                     </button>
                                 </div>
                             </div>
+                            <hr />
+                            <div class="row" style="margin-top: 1em;">
+                                <div class="col-md-24">
+                                    <button
+                                        class="btn btn-danger btn-sm"
+                                        v-on:click="openConfirmModal('delete')"
+                                        style="margin-right: 8px;"
+                                    >
+                                        {{ $t('eliminarUsuario') }}
+                                    </button>
+                                    <button
+                                        class="btn btn-warning btn-sm"
+                                        v-on:click="openConfirmModal('anonymize')"
+                                        style="margin-right: 8px;"
+                                    >
+                                        {{ $t('anonimizarUsuario') }}
+                                    </button>
+                                    <button
+                                        class="btn btn-warning btn-sm"
+                                        v-on:click="openConfirmModal('banAndAnonymize')"
+                                    >
+                                        {{ $t('anonimizarYBloquearUsuario') }}
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div v-else class="col-xs-24 col-sm-16 col-md-16">
@@ -421,6 +446,39 @@
                 </div>
             </div>
         </div>
+
+        <modal
+            v-if="showConfirmModal"
+            :name="'modal-confirm-admin-action'"
+            @close="closeConfirmModal"
+        >
+            <h3 slot="header">
+                <span>{{ confirmModalTitle }}</span>
+                <i v-on:click="closeConfirmModal" class="fa fa-times float-right-close"></i>
+            </h3>
+            <div slot="body">
+                <div class="text-left color-black">
+                    <p>{{ confirmModalMessage }}</p>
+                    <div v-if="pendingAction === 'banAndAnonymize'" class="form-group">
+                        <label>{{ $t('nota') }} ({{ $t('opcional') }})</label>
+                        <input v-model="banNote" type="text" class="form-control" />
+                    </div>
+                    <div class="text-center" style="margin-top: 1.5em;">
+                        <button
+                            class="btn btn-danger"
+                            @click="executePendingAction"
+                            :disabled="loadingAction"
+                        >
+                            <span v-if="!loadingAction">{{ $t('confirmar') }}</span>
+                            <spinner v-if="loadingAction" class="blue"></spinner>
+                        </button>
+                        <button class="btn btn-default" @click="closeConfirmModal" style="margin-left: 8px;">
+                            {{ $t('cancelar') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </modal>
     </div>
 </template>
 <script>
@@ -431,6 +489,9 @@ import { inputIsNumber, formatId, cleanId } from '../../services/utility';
 import dialogs from '../../services/dialogs.js';
 import router from '../../router';
 import adminNav from '../sections/adminNav';
+import modal from '../Modal';
+import Spinner from '../Spinner.vue';
+import { AdminApi, UserApi } from '../../services/api';
 
 export default {
     // TODO fix css names
@@ -473,7 +534,12 @@ export default {
             patenteError: new Error(),
             keyUpTimerId: 0,
             banks: [],
-            accountTypes: []
+            accountTypes: [],
+            showConfirmModal: false,
+            pendingAction: null,
+            loadingAction: false,
+            adminApi: null,
+            banNote: ''
         };
     },
 
@@ -481,7 +547,19 @@ export default {
         ...mapGetters({
             isMobile: 'device/isMobile',
             settings: 'auth/appConfig'
-        })
+        }),
+        confirmModalTitle() {
+            if (this.pendingAction === 'delete') return this.$t('confirmarEliminarUsuario');
+            if (this.pendingAction === 'anonymize') return this.$t('confirmarAnonimizarUsuario');
+            if (this.pendingAction === 'banAndAnonymize') return this.$t('confirmarAnonimizarYBloquearUsuario');
+            return '';
+        },
+        confirmModalMessage() {
+            if (this.pendingAction === 'delete') return this.$t('confirmarEliminarUsuarioMensaje');
+            if (this.pendingAction === 'anonymize') return this.$t('confirmarAnonimizarUsuarioMensaje');
+            if (this.pendingAction === 'banAndAnonymize') return this.$t('confirmarAnonimizarYBloquearUsuarioMensaje');
+            return '';
+        }
     },
 
     methods: {
@@ -581,6 +659,20 @@ export default {
                 patente: ''
             };
         },
+        loadUserFromQuery() {
+            const userId = this.$route.query.userId;
+            if (!userId) return;
+            this.userApi.show(userId).then((response) => {
+                const user = response.data;
+                if (user) {
+                    this.selectUser(user);
+                    this.textSearch = user.name || '';
+                    this.userList = [user];
+                }
+            }).catch(() => {
+                dialogs.message(this.$t('noSeEncontroNingunUsuario'), { estado: 'error' });
+            });
+        },
         conversationsSearch() {
             // Placeholder method - may be implemented later
         },
@@ -593,6 +685,55 @@ export default {
             } else {
                 this.clear();
             }
+        },
+        openConfirmModal(action) {
+            this.pendingAction = action;
+            this.banNote = '';
+            this.showConfirmModal = true;
+        },
+        closeConfirmModal() {
+            this.showConfirmModal = false;
+            this.pendingAction = null;
+            this.banNote = '';
+        },
+        executePendingAction() {
+            if (!this.currentUser || !this.currentUser.id) return;
+            this.loadingAction = true;
+            const api = this.adminApi;
+            let promise;
+            if (this.pendingAction === 'delete') {
+                promise = api.deleteUser(this.currentUser.id);
+            } else if (this.pendingAction === 'anonymize') {
+                promise = api.anonymizeUser(this.currentUser.id);
+            } else if (this.pendingAction === 'banAndAnonymize') {
+                promise = api.banAndAnonymizeUser(this.currentUser.id, this.banNote);
+            } else {
+                this.loadingAction = false;
+                return;
+            }
+            const userId = this.currentUser.id;
+            promise
+                .then(() => {
+                    this.loadingAction = false;
+                    this.closeConfirmModal();
+                    this.clear();
+                    this.userList = this.userList.filter((u) => u.id !== userId);
+                    dialogs.message(this.$t('accionCompletadaExitosamente'), {
+                        duration: 5,
+                        estado: 'success'
+                    });
+                })
+                .catch((err) => {
+                    this.loadingAction = false;
+                    const msg = (err.response && err.response.data && err.response.data.message) || err.message || this.$t('errorAlActualizar');
+                    dialogs.message(msg, {
+                        duration: 5,
+                        estado: 'error'
+                    });
+                    if (err.response && err.response.data && err.response.data.error === 'requires_ban') {
+                        this.closeConfirmModal();
+                    }
+                });
         },
         validate() {
             let globalError = false;
@@ -733,6 +874,8 @@ export default {
     },
 
     mounted() {
+        this.adminApi = new AdminApi();
+        this.userApi = new UserApi();
         this.getBankData().then((data) => {
             console.log('get bank data', data);
             this.banks = data.banks;
@@ -743,11 +886,19 @@ export default {
             this.unreadMessage();
         });
         this.thread.run(20000);
+        this.loadUserFromQuery();
+    },
+    watch: {
+        '$route.query.userId'(userId) {
+            this.loadUserFromQuery();
+        }
     },
     updated() {},
     components: {
         Loading,
-        adminNav
+        adminNav,
+        modal,
+        Spinner
     }
 };
 </script>

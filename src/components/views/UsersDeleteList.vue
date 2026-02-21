@@ -81,6 +81,21 @@
                             </div>
                             <div class="form-group" v-if="currentRequest && currentRequest.user">
                                 <label>{{ $t('usuarioLabel') }} {{ currentRequest.user.name }}</label>
+                                <div style="margin-top: 8px;">
+                                    <router-link
+                                        :to="{ name: 'profile', params: { id: currentRequest.user.id } }"
+                                        target="_blank"
+                                        class="btn btn-link btn-sm"
+                                    >
+                                        {{ $t('verPerfilPublico') }}
+                                    </router-link>
+                                    <router-link
+                                        :to="{ name: 'admin-users', query: { userId: currentRequest.user.id } }"
+                                        class="btn btn-link btn-sm"
+                                    >
+                                        {{ $t('editarEnAdmin') }}
+                                    </router-link>
+                                </div>
                             </div>
                             <div class="form-group" v-if="currentRequest && currentRequest.user">
                                 <label>{{ $t('emailLabel') }} {{ currentRequest.user.email }}</label>
@@ -150,7 +165,7 @@ export default {
             return moment(dateString).format('DD/MM/YYYY HH:mm');
         },
         getActionTakenLabel(actionTaken) {
-            return this.$t('solicitado');
+            if (actionTaken === 0) return this.$t('solicitado');
             if (actionTaken === 1) return this.$t('eliminado');
             if (actionTaken === 2) return this.$t('rechazado');
             return this.$t('desconocido');

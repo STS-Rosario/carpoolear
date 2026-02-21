@@ -114,6 +114,10 @@ class UserApi extends TaggedApi {
     deleteAccountRequest() {
         return this.post('/api/users/delete-account-request', {});
     }
+
+    deleteAccount() {
+        return this.post('/api/users/delete-account', {});
+    }
 }
 
 export { UserApi as default };
