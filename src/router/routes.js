@@ -456,6 +456,24 @@ export default [
         }
     },
     {
+        path: '/admin/banned-users',
+        name: 'admin-banned-users',
+        component: require('../components/views/BannedUsersList.vue').default,
+        beforeEnter: authAdmin,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'admin'
+                },
+                header: {
+                    titleKey: 'usuariosBloqueados',
+                    buttons: []
+                }
+            }
+        }
+    },
+    {
         path: '/*',
         redirect: '/trips'
     }

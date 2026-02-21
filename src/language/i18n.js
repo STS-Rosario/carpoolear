@@ -328,8 +328,17 @@ const messages = {
         seguroEliminarCuenta: '¿Estás seguro que querés eliminar tu cuenta?',
         eliminacionCuentaIrreversible:
             'Si querés eliminar tu cuenta, tené en cuenta que este proceso es IRREVERSIBLE. Una vez que la cuenta se elimine, no podrás deshacerlo ni volver a acceder a Carpoolear en un futuro ya que se elimina el acceso a la persona.',
+        eliminacionCuentaMesaAyuda:
+            'Si tenías una cuenta de Carpoolear y querés recuperarla y borrar esta, por favor contactanos en la mesa de ayuda. Si necesitás borrar esta cuenta por otro motivo, clickeá el botón de abajo, esta acción no se puede deshacer.',
         eliminacionCuentaPlazo:
             'El pedido de eliminación de cuenta será procesado en un plazo de 7 hábiles y serás notificado por correo electrónico cuando se haya procesado.',
+        errorAlGuardar: 'Error al guardar',
+        errorAlGuardarContactarMesaAyuda:
+            'Hubo un error al guardar la información, por favor contactar a mesa de ayuda',
+        usuarioEliminadoExitosamente: 'El usuario ha sido eliminado exitosamente',
+        usuarioAnonimizadoExitosamente: 'El usuario ha sido anonimizado exitosamente',
+        eliminacionCuentaNegativas: 'Debido a que tenés calificaciones negativas necesitamos que te pongas en contacto con la mesa de ayuda para proceder con el borrado de tu cuenta.',
+        solicitarEliminacionCuenta: 'Solicitar eliminación de cuenta',
         pedidoEliminacionEnviado:
             'El pedido de eliminación de cuenta ha sido enviado exitosamente',
         errorEnviarPedidoEliminacion:
@@ -607,6 +616,8 @@ const messages = {
         editarPedidoEliminacion: 'Editar pedido de eliminación de cuenta',
         idLabel: 'ID',
         usuarioLabel: 'Usuario:',
+        verPerfilPublico: 'Ver perfil público',
+        editarEnAdmin: 'Editar en administración',
         emailLabel: 'Email:',
         fechaDeSolicitudLabel: 'Fecha de solicitud:',
         accionTomada: 'Acción tomada:',
@@ -615,6 +626,24 @@ const messages = {
         rechazado: 'Rechazado',
         desconocido: 'Desconocido',
         guardar: 'Guardar',
+        usuariosBloqueados: 'Usuarios bloqueados',
+        noHayUsuariosBloqueados: 'No hay usuarios bloqueados',
+        bloqueadoPor: 'Bloqueado por',
+        nota: 'Nota',
+        usuarioAnonimo: 'Usuario anónimo',
+        sistema: 'Sistema',
+        eliminarUsuario: 'Eliminar usuario',
+        anonimizarUsuario: 'Anonimizar usuario',
+        anonimizarYBloquearUsuario: 'Anonimizar y bloquear DNI',
+        confirmarEliminarUsuario: 'Confirmar eliminar usuario',
+        confirmarEliminarUsuarioMensaje: '¿Está seguro que desea eliminar este usuario? Solo es posible si no tiene viajes, calificaciones ni referencias.',
+        confirmarAnonimizarUsuario: 'Confirmar anonimizar usuario',
+        confirmarAnonimizarUsuarioMensaje: '¿Está seguro que desea anonimizar este usuario? Sus datos personales serán eliminados y la cuenta desactivada.',
+        confirmarAnonimizarYBloquearUsuario: 'Confirmar anonimizar y bloquear DNI',
+        confirmarAnonimizarYBloquearUsuarioMensaje: '¿Está seguro? Se agregará el DNI a la lista de bloqueados y se anonimizará el usuario. Use esta opción para usuarios con calificaciones negativas.',
+        confirmar: 'Confirmar',
+        cancelar: 'Cancelar',
+        accionCompletadaExitosamente: 'Acción completada exitosamente',
         pedidoEliminacionActualizadoExitosamente:
             'Pedido de eliminación de cuenta actualizado exitosamente',
         errorActualizarPedidoEliminacion:
@@ -1197,8 +1226,17 @@ const messages = {
         seguroEliminarCuenta: '¿Estás seguro que querés eliminar tu cuenta?',
         eliminacionCuentaIrreversible:
             'Si querés eliminar tu cuenta, tené en cuenta que este proceso es IRREVERSIBLE. Una vez que la cuenta se elimine, no podrás deshacerlo ni volver a acceder a Apalan-car en un futuro ya que se elimina el acceso a la persona.',
+        eliminacionCuentaMesaAyuda:
+            'Si tenías una cuenta de Carpoolear y querés recuperarla y borrar esta, por favor contactanos en la mesa de ayuda. Si necesitás borrar esta cuenta por otro motivo, clickeá el botón de abajo, esta acción no se puede deshacer.',
         eliminacionCuentaPlazo:
             'El pedido de eliminación de cuenta será procesado en un plazo de 7 hábiles y serás notificado por correo electrónico cuando se haya procesado.',
+        errorAlGuardar: 'Error al guardar',
+        errorAlGuardarContactarMesaAyuda:
+            'Hubo un error al guardar la información, por favor contactar a mesa de ayuda',
+        usuarioEliminadoExitosamente: 'El usuario ha sido eliminado exitosamente',
+        usuarioAnonimizadoExitosamente: 'El usuario ha sido anonimizado exitosamente',
+        eliminacionCuentaNegativas: 'Debido a que tenés calificaciones negativas necesitamos que te pongas en contacto con la mesa de ayuda para proceder con el borrado de tu cuenta.',
+        solicitarEliminacionCuenta: 'Solicitar eliminación de cuenta',
         pedidoEliminacionEnviado:
             'El pedido de eliminación de cuenta ha sido enviado exitosamente',
         errorEnviarPedidoEliminacion:
@@ -1221,6 +1259,8 @@ const messages = {
         editarPedidoEliminacion: 'Editar pedido de eliminación de cuenta',
         idLabel: 'ID',
         usuarioLabel: 'Usuario:',
+        verPerfilPublico: 'Ver perfil público',
+        editarEnAdmin: 'Editar en administración',
         emailLabel: 'Email:',
         fechaDeSolicitudLabel: 'Fecha de solicitud:',
         accionTomada: 'Acción tomada:',
@@ -1229,6 +1269,24 @@ const messages = {
         rechazado: 'Rechazado',
         desconocido: 'Desconocido',
         guardar: 'Guardar',
+        usuariosBloqueados: 'Usuarios bloqueados',
+        noHayUsuariosBloqueados: 'No hay usuarios bloqueados',
+        bloqueadoPor: 'Bloqueado por',
+        nota: 'Nota',
+        usuarioAnonimo: 'Usuario anónimo',
+        sistema: 'Sistema',
+        eliminarUsuario: 'Eliminar usuario',
+        anonimizarUsuario: 'Anonimizar usuario',
+        anonimizarYBloquearUsuario: 'Anonimizar y bloquear DNI',
+        confirmarEliminarUsuario: 'Confirmar eliminar usuario',
+        confirmarEliminarUsuarioMensaje: '¿Está seguro que desea eliminar este usuario? Solo es posible si no tiene viajes, calificaciones ni referencias.',
+        confirmarAnonimizarUsuario: 'Confirmar anonimizar usuario',
+        confirmarAnonimizarUsuarioMensaje: '¿Está seguro que desea anonimizar este usuario? Sus datos personales serán eliminados y la cuenta desactivada.',
+        confirmarAnonimizarYBloquearUsuario: 'Confirmar anonimizar y bloquear DNI',
+        confirmarAnonimizarYBloquearUsuarioMensaje: '¿Está seguro? Se agregará el DNI a la lista de bloqueados y se anonimizará el usuario. Use esta opción para usuarios con calificaciones negativas.',
+        confirmar: 'Confirmar',
+        cancelar: 'Cancelar',
+        accionCompletadaExitosamente: 'Acción completada exitosamente',
         pedidoEliminacionActualizadoExitosamente:
             'Pedido de eliminación de cuenta actualizado exitosamente',
         errorActualizarPedidoEliminacion:
@@ -1720,8 +1778,17 @@ const messages = {
         seguroEliminarCuenta: 'Are you sure you want to delete your account?',
         eliminacionCuentaIrreversible:
             "If you want to delete your account, please note that this process is IRREVERSIBLE. Once the account is deleted, you will not be able to undo it or access Carpoolear again in the future as the person's access is deleted.",
+        eliminacionCuentaMesaAyuda:
+            'If you had a Carpoolear account and want to recover it and delete this one, please contact us at the help desk. If you need to delete this account for another reason, click the button below, this action cannot be undone.',
         eliminacionCuentaPlazo:
             'The account deletion request will be processed within 7 business days and you will be notified by email when it has been processed.',
+        errorAlGuardar: 'Error saving',
+        errorAlGuardarContactarMesaAyuda:
+            'There was an error saving the information, please contact the help desk',
+        usuarioEliminadoExitosamente: 'The user has been deleted successfully',
+        usuarioAnonimizadoExitosamente: 'The user has been anonymized successfully',
+        eliminacionCuentaNegativas: 'Due to negative ratings, you need to contact the help desk to proceed with account deletion.',
+        solicitarEliminacionCuenta: 'Request account deletion',
         pedidoEliminacionEnviado:
             'The account deletion request has been sent successfully',
         errorEnviarPedidoEliminacion:
@@ -1993,6 +2060,8 @@ const messages = {
         editarPedidoEliminacion: 'Edit account deletion request',
         idLabel: 'ID',
         usuarioLabel: 'User:',
+        verPerfilPublico: 'View public profile',
+        editarEnAdmin: 'Edit in admin',
         emailLabel: 'Email:',
         fechaDeSolicitudLabel: 'Request date:',
         accionTomada: 'Action taken:',
@@ -2001,6 +2070,24 @@ const messages = {
         rechazado: 'Rejected',
         desconocido: 'Unknown',
         guardar: 'Save',
+        usuariosBloqueados: 'Banned users',
+        noHayUsuariosBloqueados: 'No banned users',
+        bloqueadoPor: 'Banned by',
+        nota: 'Note',
+        usuarioAnonimo: 'Anonymous user',
+        sistema: 'System',
+        eliminarUsuario: 'Delete user',
+        anonimizarUsuario: 'Anonymize user',
+        anonimizarYBloquearUsuario: 'Anonymize and block DNI',
+        confirmarEliminarUsuario: 'Confirm delete user',
+        confirmarEliminarUsuarioMensaje: 'Are you sure you want to delete this user? Only possible if they have no trips, ratings, or references.',
+        confirmarAnonimizarUsuario: 'Confirm anonymize user',
+        confirmarAnonimizarUsuarioMensaje: 'Are you sure you want to anonymize this user? Their personal data will be removed and the account deactivated.',
+        confirmarAnonimizarYBloquearUsuario: 'Confirm anonymize and block DNI',
+        confirmarAnonimizarYBloquearUsuarioMensaje: 'Are you sure? The DNI will be added to the blocklist and the user will be anonymized. Use this option for users with negative ratings.',
+        confirmar: 'Confirm',
+        cancelar: 'Cancel',
+        accionCompletadaExitosamente: 'Action completed successfully',
         pedidoEliminacionActualizadoExitosamente:
             'Account deletion request updated successfully',
         errorActualizarPedidoEliminacion:

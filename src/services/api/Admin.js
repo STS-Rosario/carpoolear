@@ -30,6 +30,22 @@ class AdminApi extends TaggedApi {
     updateAccountDelete(data) {
         return this.post('/api/admin/users/account-delete-update', data);
     }
+
+    getBannedUsersList(params = {}) {
+        return this.get('/api/admin/banned-users', params);
+    }
+
+    deleteUser(userId) {
+        return this.post(`/api/admin/users/${userId}/delete`, {});
+    }
+
+    anonymizeUser(userId) {
+        return this.post(`/api/admin/users/${userId}/anonymize`, {});
+    }
+
+    banAndAnonymizeUser(userId, note = '') {
+        return this.post(`/api/admin/users/${userId}/ban-and-anonymize`, { note });
+    }
 }
 
 export { AdminApi as default };
