@@ -330,6 +330,12 @@ const messages = {
             'Si querés eliminar tu cuenta, tené en cuenta que este proceso es IRREVERSIBLE. Una vez que la cuenta se elimine, no podrás deshacerlo ni volver a acceder a Carpoolear en un futuro ya que se elimina el acceso a la persona.',
         eliminacionCuentaMesaAyuda:
             'Si tenías una cuenta de Carpoolear y querés recuperarla y borrar esta, por favor contactanos en la mesa de ayuda. Si necesitás borrar esta cuenta por otro motivo, clickeá el botón de abajo, esta acción no se puede deshacer.',
+        eliminacionCuentaRecuperarCuenta:
+            'Si tenías una cuenta de Carpoolear y querés recuperarla y borrar esta, por favor contactanos en la mesa de ayuda.',
+        eliminacionCuentaOtroMotivo:
+            'Si necesitás borrar esta cuenta por otro motivo, clickeá el botón de abajo, esta acción no se puede deshacer.',
+        contactarMesaAyuda: 'Contactar mesa de ayuda',
+        mesaAyuda: 'Mesa de ayuda',
         eliminacionCuentaPlazo:
             'El pedido de eliminación de cuenta será procesado en un plazo de 7 hábiles y serás notificado por correo electrónico cuando se haya procesado.',
         errorAlGuardar: 'Error al guardar',
@@ -1228,6 +1234,12 @@ const messages = {
             'Si querés eliminar tu cuenta, tené en cuenta que este proceso es IRREVERSIBLE. Una vez que la cuenta se elimine, no podrás deshacerlo ni volver a acceder a Apalan-car en un futuro ya que se elimina el acceso a la persona.',
         eliminacionCuentaMesaAyuda:
             'Si tenías una cuenta de Carpoolear y querés recuperarla y borrar esta, por favor contactanos en la mesa de ayuda. Si necesitás borrar esta cuenta por otro motivo, clickeá el botón de abajo, esta acción no se puede deshacer.',
+        eliminacionCuentaRecuperarCuenta:
+            'Si tenías una cuenta de Carpoolear y querés recuperarla y borrar esta, por favor contactanos en la mesa de ayuda.',
+        eliminacionCuentaOtroMotivo:
+            'Si necesitás borrar esta cuenta por otro motivo, clickeá el botón de abajo, esta acción no se puede deshacer.',
+        contactarMesaAyuda: 'Contactar mesa de ayuda',
+        mesaAyuda: 'Mesa de ayuda',
         eliminacionCuentaPlazo:
             'El pedido de eliminación de cuenta será procesado en un plazo de 7 hábiles y serás notificado por correo electrónico cuando se haya procesado.',
         errorAlGuardar: 'Error al guardar',
@@ -1780,6 +1792,12 @@ const messages = {
             "If you want to delete your account, please note that this process is IRREVERSIBLE. Once the account is deleted, you will not be able to undo it or access Carpoolear again in the future as the person's access is deleted.",
         eliminacionCuentaMesaAyuda:
             'If you had a Carpoolear account and want to recover it and delete this one, please contact us at the help desk. If you need to delete this account for another reason, click the button below, this action cannot be undone.',
+        eliminacionCuentaRecuperarCuenta:
+            'If you had a Carpoolear account and want to recover it and delete this one, please contact us at the help desk.',
+        eliminacionCuentaOtroMotivo:
+            'If you need to delete this account for another reason, click the button below, this action cannot be undone.',
+        contactarMesaAyuda: 'Contact help desk',
+        mesaAyuda: 'Help desk',
         eliminacionCuentaPlazo:
             'The account deletion request will be processed within 7 business days and you will be notified by email when it has been processed.',
         errorAlGuardar: 'Error saving',

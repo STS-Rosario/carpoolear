@@ -495,11 +495,16 @@
             </h3>
             <div slot="body">
                 <div class="text-left color-black" v-if="!showNegativeRatingsInModal">
-                    <p>{{ $t('eliminacionCuentaMesaAyuda') }}</p>
-                    <p>
-                        {{ $t('eliminacionCuentaIrreversible') }}
-                    </p>
-                    <p>{{ $t('eliminacionCuentaPlazo') }}</p>
+                    <p>{{ $t('eliminacionCuentaRecuperarCuenta') }}</p>
+                    <div class="text-center" style="margin-top: 1em;">
+                        <button
+                            class="btn btn-default"
+                            @click="openMesaAyudaFromDelete"
+                        >
+                            {{ $t('contactarMesaAyuda') }}
+                        </button>
+                    </div>
+                    <p style="margin-top: 1.5em;">{{ $t('eliminacionCuentaOtroMotivo') }}</p>
                     <div class="text-center" style="margin-top: 1.5em;">
                         <button
                             class="btn btn-danger"
@@ -515,6 +520,8 @@
                 </div>
                 <div class="text-left color-black" v-else>
                     <p>{{ $t('eliminacionCuentaNegativas') }}</p>
+                    <p>{{ $t('eliminacionCuentaIrreversible') }}</p>
+                    <p>{{ $t('eliminacionCuentaPlazo') }}</p>
                     <div class="text-center" style="margin-top: 1.5em;">
                         <button
                             class="btn btn-primary"
@@ -525,6 +532,33 @@
                             <spinner class="blue" v-if="loadingDeleteAccount"></spinner>
                         </button>
                     </div>
+                </div>
+            </div>
+        </modal>
+
+        <modal
+            name="mesaAyudaModal"
+            v-if="showMesaAyudaModal"
+            @close="showMesaAyudaModal = false"
+        >
+            <h3 slot="header">
+                <span>{{ $t('mesaAyuda') }}</span>
+                <i
+                    v-on:click="showMesaAyudaModal = false"
+                    class="fa fa-times float-right-close"
+                ></i>
+            </h3>
+            <div slot="body">
+                <div class="text-left color-black login-modal">
+                    <p>
+                        {{ $t('mesaAyudaFuncionaDesde') }}
+                        <a :href="'mailto:' + config.admin_email">
+                            {{ config.admin_email }}</a>,
+                        {{ $t('mensajePrivadoDe') }}
+                        <a href="https://instagram.com/carpoolear">Instagram</a>
+                        {{ $t('y') }}
+                        <a href="https://facebook.com/carpoolear">Facebook</a>.
+                    </p>
                 </div>
             </div>
         </modal>
@@ -656,6 +690,7 @@ export default {
             showDatosEnUsoModal: false,
             showBannedDniModal: false,
             showNegativeRatingsInModal: false,
+            showMesaAyudaModal: false,
             userApi: null
         };
     },
@@ -996,6 +1031,10 @@ export default {
             this.showModalDeleteAccount = !this.showModalDeleteAccount;
             this.showNegativeRatingsInModal = false;
         },
+        openMesaAyudaFromDelete() {
+            this.showModalDeleteAccount = false;
+            this.showMesaAyudaModal = true;
+        },
         toggleDatosEnUsoModal() {
             this.showDatosEnUsoModal = !this.showDatosEnUsoModal;
         },
@@ -1019,7 +1058,7 @@ export default {
                         duration: 5,
                         estado: 'success'
                     });
-                    this.$router.replace({ name: 'login' });
+                    window.location.href = this.$router.resolve({ name: 'trips' }).href;
                 })
                 .catch((error) => {
                     this.loadingDeleteAccount = false;
