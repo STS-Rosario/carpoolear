@@ -6,7 +6,7 @@
         <tripDisplay
             v-if="showTrip && clickModal"
             :trip="trip"
-            :clickOutside="closeModal.bind(this)"
+            :clickOutside="closeModal"
         ></tripDisplay>
         <div
             class="trip"
@@ -28,12 +28,12 @@
                             <span class="trip_visibility">
                                 <span
                                     v-if="trip.friendship_type_id === 0"
-                                    :title="$t('visibilidadSoloAmigos')"
+                                    :title="t('visibilidadSoloAmigos')"
                                 >
                                     <span
                                         class="tooltip"
-                                        :title="$t('visibilidadSoloAmigos')"
-                                        :data-tooltip="$t('soloAmigosTooltip')"
+                                        :title="t('visibilidadSoloAmigos')"
+                                        :data-tooltip="t('soloAmigosTooltip')"
                                     >
                                         <i
                                             class="fa fa-user"
@@ -43,7 +43,7 @@
                                 </span>
                                 <span
                                     v-else-if="trip.friendship_type_id === 1"
-                                    :title="$t('visibilidadAmigosDeAmigos')"
+                                    :title="t('visibilidadAmigosDeAmigos')"
                                 >
                                     <i
                                         class="fa fa-users"
@@ -52,12 +52,12 @@
                                 </span>
                                 <span
                                     v-else-if="trip.friendship_type_id === 2"
-                                    :title="$t('visibilidadPublico')"
+                                    :title="t('visibilidadPublico')"
                                 >
                                     <span
                                         class="tooltip-bottom"
-                                        :title="$t('visibilidadAmigosDeAmigos')"
-                                        :data-tooltip="$t('publicoTooltip')"
+                                        :title="t('visibilidadAmigosDeAmigos')"
+                                        :data-tooltip="t('publicoTooltip')"
                                     >
                                         <i
                                             class="fa fa-globe"
@@ -76,12 +76,12 @@
                             <div class="trip_date_date">
                                 <span class="trip_date_date_day">
                                     <span style="text-transform: uppercase">
-                                        {{ [trip.trip_date] | moment('ddd') }}
+                                        {{ formatDate(trip.trip_date, 'ddd') }}
                                     </span>
                                 </span>
                                 <br />
                                 <span class="trip_date_date_month">
-                                    {{ [trip.trip_date] | moment('MMM') }}
+                                    {{ formatDate(trip.trip_date, 'MMM') }}
                                 </span>
                             </div>
                         </time>
@@ -136,7 +136,7 @@
                                         ></svg-item>
                                     </div>
                                     <div v-else>
-                                        {{ $t('noCalificado') }}
+                                        {{ t('noCalificado') }}
                                     </div>
                                 </div>
                                 <div class="trip_driver_ratings" v-else>
@@ -144,7 +144,7 @@
                                         trip.user.positive_ratings +
                                         trip.user.negative_ratings
                                     }}
-                                    {{ $t('calificaciones') }}
+                                    {{ t('calificaciones') }}
                                 </div>
                             </div>
                         </template>
@@ -184,7 +184,7 @@
                                     v-if="tripCardTheme === 'light'"
                                 >
                                     <span class="trip_from_time">
-                                        {{ trip.trip_date | moment('HH:mm') }}
+                                        {{ formatDate(trip.trip_date, 'HH:mm') }}
                                     </span>
                                 </div>
                                 <div
@@ -228,8 +228,7 @@
                                         class="trip_location_from_state-country"
                                     >
                                         {{
-                                            getStateName(trip.points[0])
-                                                | googleInfoClean
+                                            googleInfoClean(getStateName(trip.points[0]))
                                         }}
                                     </span>
                                 </div>
@@ -240,7 +239,7 @@
                                     v-if="tripCardTheme === 'light'"
                                 >
                                     <span class="trip_to_time">
-                                        {{ tripArrivingTime | moment('HH:mm') }}
+                                        {{ formatDate(tripArrivingTime, 'HH:mm') }}
                                     </span>
                                 </div>
                                 <div
@@ -284,11 +283,11 @@
                                         class="trip_location_to_state-country"
                                     >
                                         {{
-                                            getStateName(
+                                            googleInfoClean(getStateName(
                                                 trip.points[
                                                     trip.points.length - 1
                                                 ]
-                                            ) | googleInfoClean
+                                            ))
                                         }}
                                     </span>
                                 </div>
@@ -345,22 +344,22 @@
                                     <span class="trip_datetime_date_day">
                                         <span style="text-transform: uppercase">
                                             {{
-                                                [trip.trip_date] | moment('ddd')
+                                                formatDate(trip.trip_date, 'ddd')
                                             }}
                                         </span>
                                         {{
-                                            [trip.trip_date] | moment('DD MMMM')
+                                            formatDate(trip.trip_date, 'DD MMMM')
                                         }}
                                     </span>
                                     <br />
                                     <span class="trip_datetime_date_year">
-                                        {{ [trip.trip_date] | moment('YYYY') }}
+                                        {{ formatDate(trip.trip_date, 'YYYY') }}
                                     </span>
                                 </div>
                                 <div class="col-xs-10">
                                     <span class="trip_datetime_time">
-                                        {{ [trip.trip_date] | moment('HH:mm') }}
-                                        {{ $t('horas') }}
+                                        {{ formatDate(trip.trip_date, 'HH:mm') }}
+                                        {{ t('horas') }}
                                     </span>
                                 </div>
                             </div>
@@ -390,15 +389,15 @@
                                         class="trip_seats-available_label"
                                         v-if="trip.seats_available > 1"
                                     >
-                                        <span>{{ $t('Lugares') }}</span>
-                                        <span>{{ $t('libres') }}</span>
+                                        <span>{{ t('Lugares') }}</span>
+                                        <span>{{ t('libres') }}</span>
                                     </span>
                                     <span
                                         class="trip_seats-available_label"
-                                        v-else="trip.seats_available > 1"
+                                        v-else
                                     >
-                                        <span>{{ $t('Lugar') }}</span>
-                                        <span>{{ $t('libre') }}</span>
+                                        <span>{{ t('Lugar') }}</span>
+                                        <span>{{ t('libre') }}</span>
                                     </span>
                                 </div>
                                 <div class="col-xs-offset-2 col-xs-12" v-else>
@@ -410,7 +409,7 @@
                                         "
                                     >
                                         <strong class="warning-is-passenger">
-                                            {{ $t('pasajeroQueBuscaViaje') }}
+                                            {{ t('pasajeroQueBuscaViaje') }}
                                         </strong>
                                     </div>
                                 </div>
@@ -418,7 +417,7 @@
                                     <div
                                         class="btn btn-default btn-lg btn-trip-detail"
                                     >
-                                        {{ $t('Ver') }}
+                                        {{ t('Ver') }}
                                     </div>
                                 </div>
                             </div>
@@ -429,7 +428,7 @@
                                 <div
                                     class="trip_seats-available col-xs-offset-6 col-xs-18 carpooleado"
                                 >
-                                    <span>{{ $t('Carpooleado') }}</span>
+                                    <span>{{ t('Carpooleado') }}</span>
                                 </div>
                             </div>
                         </template>
@@ -441,7 +440,7 @@
                                 >
                                     <button
                                         :aria-label="
-                                            $t('disminuirCantidadAsientos')
+                                            t('disminuirCantidadAsientos')
                                         "
                                         v-on:click.stop="changeSeatsNumber(-1)"
                                         :disabled="
@@ -456,7 +455,7 @@
                                     </span>
                                     <button
                                         :aria-label="
-                                            $t('aumentarCantidadAsientos')
+                                            t('aumentarCantidadAsientos')
                                         "
                                         v-on:click.stop="changeSeatsNumber(1)"
                                         :disabled="
@@ -471,8 +470,8 @@
                                         v-if="seats_available > 1"
                                     >
                                         <span
-                                            >{{ $t('Lugares') }}
-                                            {{ $t('libres') }}</span
+                                            >{{ t('Lugares') }}
+                                            {{ t('libres') }}</span
                                         >
                                     </span>
                                     <span
@@ -480,15 +479,15 @@
                                         v-if="seats_available === 1"
                                     >
                                         <span
-                                            >{{ $t('Lugar') }}
-                                            {{ $t('libre') }}</span
+                                            >{{ t('Lugar') }}
+                                            {{ t('libre') }}</span
                                         >
                                     </span>
                                     <span
                                         class="trip_seats-available_label"
                                         v-if="seats_available === 0"
                                     >
-                                        {{ $t('Carpooleado') }}
+                                        {{ t('Carpooleado') }}
                                     </span>
                                 </div>
                                 <div class="trip-inline-controls row">
@@ -496,7 +495,7 @@
                                         <button
                                             v-on:click.stop="goToDetail(false)"
                                             class="btn btn-default"
-                                            :aria-label="$t('verDetalleViaje')"
+                                            :aria-label="t('verDetalleViaje')"
                                         >
                                             <i
                                                 class="fa fa-eye"
@@ -513,7 +512,7 @@
                                             :disabled="!trip.passenger.length"
                                             class="btn btn-default"
                                             :aria-label="
-                                                $t('verPasajerosSubidos')
+                                                t('verPasajerosSubidos')
                                             "
                                         >
                                             <i
@@ -526,7 +525,7 @@
                                         <button
                                             v-on:click.stop="goToDetail(true)"
                                             class="btn btn-default"
-                                            :aria-label="$t('editarViaje')"
+                                            :aria-label="t('editarViaje')"
                                         >
                                             <i
                                                 class="fa fa-pencil"
@@ -538,7 +537,7 @@
                                         <button
                                             v-on:click.stop="deleteTrip"
                                             class="btn btn-default"
-                                            :aria-label="$t('eliminarViaje')"
+                                            :aria-label="t('eliminarViaje')"
                                         >
                                             <i
                                                 class="fa fa-trash-o"
@@ -555,8 +554,12 @@
         </div>
     </div>
 </template>
-<script>
-import { mapActions, mapGetters } from 'vuex';
+<script setup>
+import { ref, computed, onMounted } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
+import { useTripsStore } from '@/stores/trips';
 import dialogs from '../../services/dialogs.js';
 import bus from '../../services/bus-event.js';
 import tripDisplay from './TripDisplay';
@@ -564,292 +567,286 @@ import WeeklySchedule from '../elements/WeeklySchedule';
 import UserNameWithBadge from '../elements/UserNameWithBadge.vue';
 import moment from 'moment';
 import SvgItem from '../SvgItem';
+import { formatDate, googleInfoClean } from '@/composables/useFormatters';
 
-export default {
-    name: 'trip',
-    props: {
-        trip: {
-            type: Object,
-            required: false,
-            default: () => {
-                return {};
-            }
-        },
-        user: {
-            type: Object,
-            required: false,
-            default: () => {
-                return {};
-            }
-        },
-        enableChangeSeats: {
-            type: Boolean,
-            required: false,
-            default: false
-        },
-        clickModal: {
-            required: false,
-            default: false
+const { t } = useI18n();
+const router = useRouter();
+const authStore = useAuthStore();
+const tripsStore = useTripsStore();
+
+const props = defineProps({
+    trip: {
+        type: Object,
+        required: false,
+        default: () => {
+            return {};
         }
     },
-
-    methods: {
-        ...mapActions({
-            changeSeats: 'trips/changeSeats',
-            remove: 'trips/remove'
-        }),
-        goToDetail: function (goToEdit, passengerView) {
-            if (goToEdit) {
-                this.$router.push({
-                    name: 'update-trip',
-                    params: { id: this.trip.id }
-                });
-            } else {
-                if (!passengerView) {
-                    bus.emit('trip-click');
-                    this.$router.push({
-                        name: 'detail_trip',
-                        params: { id: this.trip.id }
-                    });
-                } else {
-                    this.$router.push({
-                        name: 'detail_trip_location',
-                        params: {
-                            id: this.trip.id,
-                            location: 'passenger'
-                        }
-                    });
-                }
-            }
-        },
-        goToProfile: function (event) {
-            event.stopPropagation();
-            this.$router.push({
-                name: 'profile',
-                params: {
-                    id: this.trip.user.id,
-                    userProfile: this.trip.user,
-                    activeTab: 1
-                }
-            });
-        },
-        changeSeatsNumber: function (increment) {
-            this.sending = true;
-            let data = {
-                id: this.trip.id,
-                increment: increment
-            };
-            this.changeSeats(data)
-                .then((data) => {
-                    this.sending = false;
-                    this.seats_available = data.seats_available;
-                    this.trip.total_seats += increment;
-                    this.$forceUpdate();
-                })
-                .catch((response) => {
-                    this.sending = false;
-                    let errorMessage = '';
-                    if (response.status === 422) {
-                        if (
-                            response.data.errors &&
-                            response.data.errors.error &&
-                            response.data.errors.error.length
-                        ) {
-                            let error = response.data.errors.error[0];
-                            switch (error) {
-                                case 'trip_seats_greater_than_zero':
-                                    errorMessage =
-                                        this.$t('asientosMenorACero');
-                                    break;
-                                case 'trip_seats_less_than_four':
-                                    errorMessage = this.$t(
-                                        'masDeCuatroAsientos'
-                                    );
-                                    break;
-                                case 'trip_invalid_seats':
-                                    errorMessage = this.$t(
-                                        'noPuedesDisminuirAsientos'
-                                    );
-                                    break;
-                                default:
-                                    errorMessage = this.$t(
-                                        'errorACambiarAsientos'
-                                    );
-                            }
-                        } else {
-                            errorMessage = this.$t('errorACambiarAsientos');
-                        }
-                    } else {
-                        errorMessage = this.$t('errorACambiarAsientos');
-                    }
-                    dialogs.message(errorMessage, { estado: 'error' });
-                });
-        },
-        deleteTrip: function () {
-            if (window.confirm(this.$t('seguroCancelar'))) {
-                this.remove(this.trip.id)
-                    .then(() => {
-                        dialogs.message(this.$t('viajeCancelado'), {
-                            estado: 'success'
-                        });
-                    })
-                    .catch((error) => {
-                        console.error(error);
-                        dialogs.message(this.$t('errorAlCancelar'), {
-                            estado: 'error'
-                        });
-                    });
-            }
-        },
-        openModal() {
-            this.showTrip = true;
-        },
-        closeModal() {
-            this.showTrip = false;
-        },
-        getLocationName(location) {
-            if (location.json_address) {
-                if (location.json_address.ciudad) {
-                    return location.json_address.ciudad;
-                }
-                if (location.json_address.name) {
-                    return location.json_address.name;
-                }
-            }
-            return location.address;
-        },
-        getStateName(location) {
-            if (location.json_address) {
-                if (location.json_address.provincia) {
-                    return location.json_address.provincia;
-                }
-                if (location.json_address.state) {
-                    return location.json_address.state;
-                }
-            }
-            return '';
+    user: {
+        type: Object,
+        required: false,
+        default: () => {
+            return {};
         }
     },
-    data() {
-        return {
-            sending: false,
-            seats_available: 0,
-            CITY_NAME_LONG_LENGTH: 16,
-            LONG_NAME_STYLE: {
-                'font-size': '17px'
-            },
-            showTrip: false
-        };
+    enableChangeSeats: {
+        type: Boolean,
+        required: false,
+        default: false
     },
-    computed: {
-        ...mapGetters({
-            config: 'auth/appConfig'
-        }),
-        tripCardCountClass() {
-            if (this.config) {
-                if (this.config.max_cards_per_row === 3) {
-                    return 'col-lg-8 col-md-12 col-sm-12';
-                } else {
-                    return 'col-lg-6 col-md-8 col-sm-12';
-                }
+    clickModal: {
+        required: false,
+        default: false
+    }
+});
+
+const sending = ref(false);
+const seats_available = ref(0);
+const CITY_NAME_LONG_LENGTH = 16;
+const LONG_NAME_STYLE = {
+    'font-size': '17px'
+};
+const showTrip = ref(false);
+
+const config = computed(() => authStore.appConfig);
+
+const tripCardCountClass = computed(() => {
+    if (config.value) {
+        if (config.value.max_cards_per_row === 3) {
+            return 'col-lg-8 col-md-12 col-sm-12';
+        } else {
+            return 'col-lg-6 col-md-8 col-sm-12';
+        }
+    } else {
+        return 'col-lg-6 col-md-8 col-sm-12';
+    }
+});
+
+const tripCardClass = computed(() => {
+    return config.value
+        ? 'card-trip-theme-' + config.value.trip_card_design
+        : '';
+});
+
+const tripCardTheme = computed(() => {
+    return config.value ? config.value.trip_card_design : '';
+});
+
+const originLongName = computed(() => {
+    if (props.trip.points) {
+        let name = getLocationName(props.trip.points[0]);
+        return name.length > CITY_NAME_LONG_LENGTH;
+    } else {
+        return false;
+    }
+});
+
+const destinyLongName = computed(() => {
+    if (props.trip.points) {
+        let name = getLocationName(
+            props.trip.points[props.trip.points.length - 1]
+        );
+        return name.length > CITY_NAME_LONG_LENGTH;
+    } else {
+        return false;
+    }
+});
+
+const getUserImage = computed(() => {
+    return props.user.id === props.trip.user.id
+        ? props.user.image
+        : props.trip.user.image;
+});
+
+const tripArrivingTime = computed(() => {
+    if (props.trip && props.trip.estimated_time) {
+        let minutes = 0;
+        minutes = parseInt(props.trip.estimated_time.split(':')[0]) * 60;
+        minutes += parseInt(props.trip.estimated_time.split(':')[1]);
+        return moment(props.trip.trip_date).add(minutes, 'minutes');
+    }
+    return '';
+});
+
+const tripStars = computed(() => {
+    if (props.trip && props.trip.user) {
+        let value =
+            (props.trip.user.positive_ratings /
+                (props.trip.user.positive_ratings +
+                    props.trip.user.negative_ratings)) *
+            5;
+        let integerPart = Math.floor(value);
+        let decimalPart = value - integerPart;
+        let stars = [];
+        for (let i = 1; i <= 5; i++) {
+            if (i < integerPart) {
+                stars.push({
+                    id: i,
+                    value: ''
+                });
             } else {
-                return 'col-lg-6 col-md-8 col-sm-12';
-            }
-        },
-        tripCardClass() {
-            return this.config
-                ? 'card-trip-theme-' + this.config.trip_card_design
-                : '';
-        },
-        tripCardTheme() {
-            return this.config ? this.config.trip_card_design : '';
-        },
-        originLongName() {
-            if (this.trip.points) {
-                let name = this.getLocationName(this.trip.points[0]);
-                return name.length > this.CITY_NAME_LONG_LENGTH;
-            } else {
-                return false;
-            }
-        },
-        destinyLongName() {
-            if (this.trip.points) {
-                let name = this.getLocationName(
-                    this.trip.points[this.trip.points.length - 1]
-                );
-                return name.length > this.CITY_NAME_LONG_LENGTH;
-            } else {
-                return false;
-            }
-        },
-        getUserImage() {
-            return this.user.id === this.trip.user.id
-                ? this.user.image
-                : this.trip.user.image;
-        },
-        tripArrivingTime() {
-            if (this.trip && this.trip.estimated_time) {
-                let minutes = 0;
-                minutes = parseInt(this.trip.estimated_time.split(':')[0]) * 60;
-                minutes += parseInt(this.trip.estimated_time.split(':')[1]);
-                return moment(this.trip.trip_date).add(minutes, 'minutes');
-            }
-            return '';
-        },
-        tripStars() {
-            if (this.trip && this.trip.user) {
-                let value =
-                    (this.trip.user.positive_ratings /
-                        (this.trip.user.positive_ratings +
-                            this.trip.user.negative_ratings)) *
-                    5;
-                let integerPart = Math.floor(value);
-                let decimalPart = value - integerPart;
-                let stars = [];
-                for (let i = 1; i <= 5; i++) {
-                    if (i < integerPart) {
+                if (i === integerPart) {
+                    if (decimalPart >= 0.5) {
                         stars.push({
                             id: i,
                             value: ''
                         });
                     } else {
-                        if (i === integerPart) {
-                            if (decimalPart >= 0.5) {
-                                stars.push({
-                                    id: i,
-                                    value: ''
-                                });
-                            } else {
-                                stars.push({
-                                    id: i,
-                                    value: '-half'
-                                });
-                            }
-                        } else {
-                            stars.push({
-                                id: i,
-                                value: '-empty'
-                            });
-                        }
+                        stars.push({
+                            id: i,
+                            value: '-half'
+                        });
                     }
+                } else {
+                    stars.push({
+                        id: i,
+                        value: '-empty'
+                    });
                 }
-                return stars;
-            } else {
-                return [];
             }
         }
-    },
-    components: {
-        tripDisplay,
-        WeeklySchedule,
-        SvgItem,
-        UserNameWithBadge
-    },
-    mounted() {
-        this.seats_available = this.trip.seats_available;
-    },
-    updated() {}
-};
+        return stars;
+    } else {
+        return [];
+    }
+});
+
+function goToDetail(goToEdit, passengerView) {
+    if (goToEdit) {
+        router.push({
+            name: 'update-trip',
+            params: { id: props.trip.id }
+        });
+    } else {
+        if (!passengerView) {
+            bus.emit('trip-click');
+            router.push({
+                name: 'detail_trip',
+                params: { id: props.trip.id }
+            });
+        } else {
+            router.push({
+                name: 'detail_trip_location',
+                params: {
+                    id: props.trip.id,
+                    location: 'passenger'
+                }
+            });
+        }
+    }
+}
+
+function goToProfile(event) {
+    event.stopPropagation();
+    router.push({
+        name: 'profile',
+        params: {
+            id: props.trip.user.id,
+            userProfile: props.trip.user,
+            activeTab: 1
+        }
+    });
+}
+
+function changeSeatsNumber(increment) {
+    sending.value = true;
+    let data = {
+        id: props.trip.id,
+        increment: increment
+    };
+    tripsStore.changeSeats(data)
+        .then((data) => {
+            sending.value = false;
+            seats_available.value = data.seats_available;
+            props.trip.total_seats += increment;
+        })
+        .catch((response) => {
+            sending.value = false;
+            let errorMessage = '';
+            if (response.status === 422) {
+                if (
+                    response.data.errors &&
+                    response.data.errors.error &&
+                    response.data.errors.error.length
+                ) {
+                    let error = response.data.errors.error[0];
+                    switch (error) {
+                        case 'trip_seats_greater_than_zero':
+                            errorMessage = t('asientosMenorACero');
+                            break;
+                        case 'trip_seats_less_than_four':
+                            errorMessage = t('masDeCuatroAsientos');
+                            break;
+                        case 'trip_invalid_seats':
+                            errorMessage = t('noPuedesDisminuirAsientos');
+                            break;
+                        default:
+                            errorMessage = t('errorACambiarAsientos');
+                    }
+                } else {
+                    errorMessage = t('errorACambiarAsientos');
+                }
+            } else {
+                errorMessage = t('errorACambiarAsientos');
+            }
+            dialogs.message(errorMessage, { estado: 'error' });
+        });
+}
+
+function deleteTrip() {
+    if (window.confirm(t('seguroCancelar'))) {
+        tripsStore.remove(props.trip.id)
+            .then(() => {
+                dialogs.message(t('viajeCancelado'), {
+                    estado: 'success'
+                });
+            })
+            .catch((error) => {
+                console.error(error);
+                dialogs.message(t('errorAlCancelar'), {
+                    estado: 'error'
+                });
+            });
+    }
+}
+
+function openModal() {
+    showTrip.value = true;
+}
+
+function closeModal() {
+    showTrip.value = false;
+}
+
+function getLocationName(location) {
+    if (location.json_address) {
+        if (location.json_address.ciudad) {
+            return location.json_address.ciudad;
+        }
+        if (location.json_address.name) {
+            return location.json_address.name;
+        }
+    }
+    return location.address;
+}
+
+function getStateName(location) {
+    if (location.json_address) {
+        if (location.json_address.provincia) {
+            return location.json_address.provincia;
+        }
+        if (location.json_address.state) {
+            return location.json_address.state;
+        }
+    }
+    return '';
+}
+
+onMounted(() => {
+    if (props.trip) {
+        seats_available.value = props.trip.seats_available;
+    }
+});
 </script>
 <style scoped>
 .trip-seats-control .trip_seats-available_value {

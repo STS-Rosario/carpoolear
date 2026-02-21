@@ -70,12 +70,12 @@
                         <div class="rate-item-detail">
                             {{ $t('rateItemViajoAComo') }} {{ rate.trip.to_town }} {{ $t('rateItemComo') }}
                             {{ rateType }} -
-                            {{ rate.rate_at | moment('DD/MM/YYYY') }}
+                            {{ formatDate(rate.rate_at, 'DD/MM/YYYY') }}
                         </div>
                     </template>
                     <template v-else>
                         <div class="rate-item-detail">
-                            {{ rate.created_at | moment('DD/MM/YYYY') }}
+                            {{ formatDate(rate.created_at, 'DD/MM/YYYY') }}
                         </div>
                     </template>
                 </div>
@@ -106,75 +106,92 @@
                 {{ rate.reply_comment }}
             </div>
             <div class="reply_comment_date">
-                {{ rate.reply_comment_created_at | moment('calendar') }}
+                {{ formatDate(rate.reply_comment_created_at, 'calendar') }}
             </div>
         </div>
     </div>
 </template>
-<script>
-import { mapActions, mapGetters } from 'vuex';
+<script setup>
+import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useAuthStore } from '@/stores/auth';
+import { useProfileStore } from '@/stores/profile';
+import { useRatesStore } from '@/stores/rates';
 import moment from 'moment';
-export default {
-    data() {
-        return {
-            showReply: false,
-            comment: ''
-        };
+import { formatDate } from '@/composables/useFormatters';
+
+const { t } = useI18n();
+const authStore = useAuthStore();
+const profileStore = useProfileStore();
+const ratesStore = useRatesStore();
+
+const props = defineProps({
+    user: {
+        required: false
     },
-    methods: {
-        ...mapActions({
-            reply: 'rates/reply'
-        }),
-        onReply() {
-            let data = {
-                trip_id: this.rate.trip.id,
-                user_id: this.rate.from.id,
-                comment: this.comment
-            };
-            this.reply(data).then(() => {
-                this.showReply = false;
-                this.rate.reply_comment = this.comment;
-                this.rate.reply_comment_created_at = moment(
-                    new Date()
-                ).format();
-                this.comment = '';
-            });
-        },
-        onCancelReply() {
-            this.comment = '';
-            this.showReply = false;
-        }
+    rate: {
+        required: true
     },
-    computed: {
-        ...mapGetters({
-            config: 'auth/appConfig',
-            me: 'auth/user',
-            profile: 'profile/user'
-        }),
-        canReply() {
-            return (
-                !this.rate.reply_comment &&
-                this.me &&
-                this.profile &&
-                this.me.id === this.profile.id &&
-                this.config &&
-                this.config.allow_rating_reply
-            );
-        },
-        rateType() {
-            return this.rate.user_to_type === 0 ? this.$t('pasajero') : this.$t('conductor');
-        },
-        tripCardTheme() {
-            return this.config ? this.config.trip_card_design : '';
-        },
-        themeClass() {
-            return this.config
-                ? 'rate-item-' + this.config.trip_card_design
-                : ' rate-item-default';
-        }
+    id: {
+        required: false
     },
-    props: ['user', 'rate', 'id', 'notReply']
-};
+    notReply: {
+        required: false
+    }
+});
+
+const config = computed(() => authStore.appConfig);
+const me = computed(() => authStore.user);
+const profile = computed(() => profileStore.user);
+
+const showReply = ref(false);
+const comment = ref('');
+
+const canReply = computed(() => {
+    return (
+        !props.rate.reply_comment &&
+        me.value &&
+        profile.value &&
+        me.value.id === profile.value.id &&
+        config.value &&
+        config.value.allow_rating_reply
+    );
+});
+
+const rateType = computed(() => {
+    return props.rate.user_to_type === 0 ? t('pasajero') : t('conductor');
+});
+
+const tripCardTheme = computed(() => {
+    return config.value ? config.value.trip_card_design : '';
+});
+
+const themeClass = computed(() => {
+    return config.value
+        ? 'rate-item-' + config.value.trip_card_design
+        : ' rate-item-default';
+});
+
+function onReply() {
+    let data = {
+        trip_id: props.rate.trip.id,
+        user_id: props.rate.from.id,
+        comment: comment.value
+    };
+    ratesStore.reply(data).then(() => {
+        showReply.value = false;
+        props.rate.reply_comment = comment.value;
+        props.rate.reply_comment_created_at = moment(
+            new Date()
+        ).format();
+        comment.value = '';
+    });
+}
+
+function onCancelReply() {
+    comment.value = '';
+    showReply.value = false;
+}
 </script>
 <style scoped>
 .rate-item-light .rate-item-comment {

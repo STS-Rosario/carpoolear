@@ -25,14 +25,16 @@
                 :title="$t('pendingRequestCarpoodatos')"
                 :body="'Body'"
             >
-                <h3 slot="header">
-                    <span>{{ $t('pendingRequestCarpoodatos') }}</span>
-                    <i
-                        v-on:click="onModalClose"
-                        class="fa fa-times float-right-close"
-                    ></i>
-                </h3>
-                <div slot="body">
+                <template #header>
+                    <h3>
+                        <span>{{ $t('pendingRequestCarpoodatos') }}</span>
+                        <i
+                            v-on:click="onModalClose"
+                            class="fa fa-times float-right-close"
+                        ></i>
+                    </h3>
+                </template>
+                <template #body>
                     <div class="text-left carpoodatos">
                         <p>
                             {{ $t('pendingRequestAntesDeAceptarSolicitud') }}
@@ -84,7 +86,7 @@
                             {{ $t('pendingRequestEnviarMensaje') }}
                         </button>
                     </div>
-                </div>
+                </template>
             </modal>
             <div class="rate-pending-message">
                 <div class="rate-pending-message--content">
@@ -93,8 +95,8 @@
                     <strong>{{
                         trip.points[trip.points.length - 1].json_address.ciudad
                     }}</strong>
-                    {{ $t('pendingRequestDelDia') }} {{ trip.trip_date | moment('DD/MM/YYYY') }} {{ $t('pendingRequestALas') }}
-                    {{ trip.trip_date | moment('HH:mm') }}.
+                    {{ $t('pendingRequestDelDia') }} {{ formatDate(trip.trip_date, 'DD/MM/YYYY') }} {{ $t('pendingRequestALas') }}
+                    {{ formatDate(trip.trip_date, 'HH:mm') }}.
                     <div class="pending-buttons">
                         <button
                             class="btn btn-accept-request"
@@ -129,148 +131,152 @@
         </div>
     </div>
 </template>
-<script>
-import { mapActions, mapGetters } from 'vuex';
-import router from '../router';
+<script setup>
+import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
+import { usePassengerStore } from '@/stores/passenger';
+import { useTripsStore } from '@/stores/trips';
+import { useMyTripsStore } from '@/stores/myTrips';
+import { useConversationsStore } from '@/stores/conversations';
+import { useProfileStore } from '@/stores/profile';
 import modal from './Modal';
 import dialogs from '../services/dialogs.js';
 import spinner from './Spinner.vue';
 import bus from '../services/bus-event.js';
+import { formatDate } from '@/composables/useFormatters';
+import { checkError } from '../../utils/helpers';
 
-export default {
-    data() {
-        return {
-            acceptInProcess: false,
-            rejectInProcess: false,
-            showModalRequestSeat: false,
-            acceptRequestValue: 0
+const { t } = useI18n();
+const router = useRouter();
+const authStore = useAuthStore();
+const passengerStore = usePassengerStore();
+const tripsStore = useTripsStore();
+const myTripsStore = useMyTripsStore();
+const conversationsStore = useConversationsStore();
+const profileStore = useProfileStore();
+
+const props = defineProps({
+    user: {
+        required: true
+    },
+    trip: {
+        required: true
+    }
+});
+
+const currentUser = authStore.user;
+const config = authStore.appConfig;
+
+const acceptInProcess = ref(false);
+const rejectInProcess = ref(false);
+const showModalRequestSeat = ref(false);
+const acceptRequestValue = ref(0);
+
+function onAcceptRequest() {
+    if (
+        currentUser.do_not_alert_accept_passenger ||
+        config.disable_user_hints
+    ) {
+        toAcceptRequest();
+    } else {
+        showModalRequestSeat.value = true;
+    }
+}
+
+function toAcceptRequest() {
+    if (acceptRequestValue.value) {
+        let data = {
+            property: 'do_not_alert_accept_passenger',
+            value: 1
         };
-    },
-    computed: {
-        ...mapGetters({
-            currentUser: 'auth/user',
-            config: 'auth/appConfig'
+        profileStore.changeProperty(data).then(() => {
+            console.log('do not alert success');
+        });
+    }
+
+    let user = props.user;
+    let trip = props.trip;
+    acceptInProcess.value = true;
+    passengerStore.accept({ user, trip }, tripsStore, myTripsStore)
+        .catch((error) => {
+            if (checkError(error, 'not_seat_available')) {
+                dialogs.message(
+                    t('pendingRequestNoPuedesAceptarEstaSolicitud'),
+                    { duration: 10, estado: 'error' }
+                );
+                return;
+            }
+            console.error(error);
         })
-    },
-    methods: {
-        ...mapActions({
-            passengerAccept: 'passenger/accept',
-            passengerReject: 'passenger/reject',
-            lookConversation: 'conversations/createConversation',
-            changeProperty: 'profile/changeProperty'
-        }),
+        .finally(() => {
+            acceptInProcess.value = false;
+            bus.emit('request-status-changed');
+        });
+}
 
-        onAcceptRequest() {
-            if (
-                this.currentUser.do_not_alert_accept_passenger ||
-                this.config.disable_user_hints
-            ) {
-                this.toAcceptRequest();
-            } else {
-                this.showModalRequestSeat = true;
-            }
-        },
+function reject() {
+    if (acceptRequestValue.value) {
+        let data = {
+            property: 'do_not_alert_accept_passenger',
+            value: 1
+        };
+        profileStore.changeProperty(data).then(() => {
+            console.log('do not alert success');
+        });
+    }
 
-        toAcceptRequest() {
-            if (this.acceptRequestValue) {
-                let data = {
-                    property: 'do_not_alert_accept_passenger',
-                    value: 1
-                };
-                this.changeProperty(data).then(() => {
-                    console.log('do not alert success');
-                });
-            }
+    let user = props.user;
+    let trip = props.trip;
+    rejectInProcess.value = true;
+    passengerStore.reject({ user, trip })
+        .catch((error) => {
+            console.error(error);
+        })
+        .finally(() => {
+            rejectInProcess.value = false;
+            bus.emit('request-status-changed');
+        });
+}
 
-            let user = this.user;
-            let trip = this.trip;
-            this.acceptInProcess = true;
-            this.passengerAccept({ user, trip })
-                .catch((error) => {
-                    if (this.$checkError(error, 'not_seat_available')) {
-                        dialogs.message(
-                            this.$t('pendingRequestNoPuedesAceptarEstaSolicitud'),
-                            { duration: 10, estado: 'error' }
-                        );
-                        return;
-                    }
-                    console.error(error);
-                })
-                .finally(() => {
-                    this.acceptInProcess = false;
-                    bus.emit('request-status-changed');
-                });
-        },
+function chat() {
+    let user = props.user;
 
-        reject() {
-            if (this.acceptRequestValue) {
-                let data = {
-                    property: 'do_not_alert_accept_passenger',
-                    value: 1
-                };
-                this.changeProperty(data).then(() => {
-                    console.log('do not alert success');
-                });
-            }
+    conversationsStore.createConversation(user).then((conversation) => {
+        router.push({
+            name: 'conversation-chat',
+            params: { id: conversation.id }
+        });
+    });
+}
 
-            let user = this.user;
-            let trip = this.trip;
-            this.rejectInProcess = true;
-            this.passengerReject({ user, trip })
-                .catch((error) => {
-                    console.error(error);
-                })
-                .finally(() => {
-                    this.rejectInProcess = false;
-                    bus.emit('request-status-changed');
-                });
-        },
+function onModalToChat() {
+    showModalRequestSeat.value = false;
 
-        chat() {
-            let user = this.user;
+    if (acceptRequestValue.value) {
+        let data = {
+            property: 'do_not_alert_accept_passenger',
+            value: 1
+        };
+        profileStore.changeProperty(data).then(() => {
+            console.log('do not alert success');
+        });
+    }
+    chat();
+}
 
-            this.lookConversation(user).then((conversation) => {
-                router.push({
-                    name: 'conversation-chat',
-                    params: { id: conversation.id }
-                });
-            });
-        },
-        onModalToChat() {
-            this.showModalRequestSeat = false;
+function onModalClose() {
+    showModalRequestSeat.value = false;
 
-            if (this.acceptRequestValue) {
-                let data = {
-                    property: 'do_not_alert_accept_passenger',
-                    value: 1
-                };
-                this.changeProperty(data).then(() => {
-                    console.log('do not alert success');
-                });
-            }
-            this.chat();
-        },
-
-        onModalClose() {
-            this.showModalRequestSeat = false;
-
-            if (this.acceptRequestValue) {
-                let data = {
-                    property: 'do_not_alert_accept_passenger',
-                    value: 1
-                };
-                this.changeProperty(data).then(() => {
-                    console.log('do not alert success');
-                });
-            }
-        }
-    },
-
-    components: {
-        modal,
-        spinner
-    },
-
-    props: ['user', 'trip']
-};
+    if (acceptRequestValue.value) {
+        let data = {
+            property: 'do_not_alert_accept_passenger',
+            value: 1
+        };
+        profileStore.changeProperty(data).then(() => {
+            console.log('do not alert success');
+        });
+    }
+}
 </script>

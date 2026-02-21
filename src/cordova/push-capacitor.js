@@ -1,6 +1,6 @@
 /* jshint esversion: 6 */
-import store from '../store';
-import * as types from '../store/mutation-types';
+import { useCordovaStore } from '../stores/cordova';
+import { useDeviceStore } from '../stores/device';
 import { onMessage, getMessaging, getToken } from 'firebase/messaging';
 import { initializeApp } from 'firebase/app';
 import { Capacitor } from '@capacitor/core';
@@ -71,23 +71,25 @@ export default {
     },
 
     async initWebPush() {
+        const firebaseParams = import.meta.env.VITE_FIREBASE_PARAMS;
         if (
-            process.env.FIREBASE_PARAMS !== undefined &&
+            firebaseParams !== undefined &&
             window.Notification &&
             window.Notification.requestPermission
         ) {
             try {
                 const firebaseParamsString = new URLSearchParams(
-                    process.env.FIREBASE_PARAMS
+                    firebaseParams
                 ).toString();
 
                 // Get service worker path based on environment
+                const routeBase = import.meta.env.VITE_ROUTE_BASE || '/';
                 let serviceWorkerPath =
-                    process.env.NODE_ENV === 'production'
-                        ? process.env.ROUTE_BASE + 'firebase-messaging-sw.js'
+                    import.meta.env.PROD
+                        ? routeBase + 'firebase-messaging-sw.js'
                         : '/static/firebase-messaging-sw.js';
 
-                // Append firebase params as query since service workers can't access process.env
+                // Append firebase params as query since service workers can't access import.meta.env
                 serviceWorkerPath += '?' + firebaseParamsString;
 
                 const serviceWorker = navigator.serviceWorker
@@ -101,22 +103,25 @@ export default {
 
                 const reg = await serviceWorker;
 
-                const firebaseApp = initializeApp(process.env.FIREBASE_PARAMS);
+                const firebaseApp = initializeApp(firebaseParams);
                 const messaging = getMessaging(firebaseApp);
 
                 // Get FCM token
                 const currentToken = await getToken(messaging, {
-                    vapidKey: process.env.FIRABASE_VAPID_KEY,
+                    vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
                     serviceWorkerRegistration: reg
                 });
 
+                const cordovaStore = useCordovaStore();
+                const deviceStore = useDeviceStore();
+
                 if (currentToken) {
-                    store.commit(
-                        'cordova/' + types.CORDOVA_DEVICE_REGISTER,
-                        currentToken
-                    );
-                    store.dispatch('device/register').catch((error) => {
-                        console.error('❌ Device registration failed:', error);
+                    cordovaStore.setDeviceId(currentToken);
+                    deviceStore.register(
+                        { cordovaDeviceData: cordovaStore.deviceData },
+                        { appVersion: import.meta.env.VITE_APP_VERSION || '1.0' }
+                    ).catch((error) => {
+                        console.error('Device registration failed:', error);
                     });
 
                     // Monitor notification permission changes and reload if revoked to initialize polling
@@ -136,9 +141,7 @@ export default {
                         data: payload.data
                     });
 
-                    store.dispatch('cordova/notificationArrive', notification);
-                    // store.dispatch('conversations/getUnreaded');
-                    // store.dispatch('notifications/count');
+                    cordovaStore.notificationArrive(notification);
 
                     // Background messages already open a notification
                     if (isBackgroundMessage) {
@@ -150,7 +153,7 @@ export default {
                     const notificationOptions = {
                         body: payload.notification.body,
                         data: payload.data,
-                        icon: payload.notification.icon // process.env.ROUTE_BASE + 'static/img/icon-192.png'
+                        icon: payload.notification.icon
                     };
 
                     if (payload.data.url !== window.location.pathname) {
@@ -184,28 +187,30 @@ export default {
                 PushNotifications = module.PushNotifications;
             } catch (error) {
                 console.error(
-                    '❌ Push Notifications plugin not available:',
+                    'Push Notifications plugin not available:',
                     error
                 );
 
                 return;
             }
 
+            const cordovaStore = useCordovaStore();
+            const deviceStore = useDeviceStore();
+
             // IMPORTANTE: Configurar listeners ANTES de registrar
             PushNotifications.addListener('registration', (token) => {
-                store.commit(
-                    'cordova/' + types.CORDOVA_DEVICE_REGISTER,
-                    token.value
-                );
+                cordovaStore.setDeviceId(token.value);
 
-                // Add a small delay to ensure Vuex state is updated before registering with backend
+                // Add a small delay to ensure state is updated before registering with backend
                 setTimeout(() => {
-                    store
-                        .dispatch('device/register')
+                    deviceStore.register(
+                        { cordovaDeviceData: cordovaStore.deviceData },
+                        { appVersion: import.meta.env.VITE_APP_VERSION || '1.0' }
+                    )
                         .then(() => {})
                         .catch((error) => {
                             console.error(
-                                '❌ Device registration failed:',
+                                'Device registration failed:',
                                 error
                             );
                         });
@@ -214,9 +219,9 @@ export default {
 
             // Listener para errores de registro - DEBE estar antes del register()
             PushNotifications.addListener('registrationError', (error) => {
-                console.error('💥 Push registration error:', error);
+                console.error('Push registration error:', error);
                 console.error(
-                    '📄 Error message:',
+                    'Error message:',
                     error.message || 'No message'
                 );
             });
@@ -232,7 +237,7 @@ export default {
                             data: notification.data || {}
                         });
                         n.foreground = true;
-                        store.dispatch('cordova/notificationArrive', n);
+                        cordovaStore.notificationArrive(n);
 
                         // Try to show a system notification as well
                         if (Capacitor.isNativePlatform()) {
@@ -241,12 +246,12 @@ export default {
                         }
                     } catch (error) {
                         console.error(
-                            '💥 === ERROR HANDLING PUSH NOTIFICATION ==='
+                            '=== ERROR HANDLING PUSH NOTIFICATION ==='
                         );
-                        console.error('❌ Error details:', error);
-                        console.error('🔍 Error stack:', error.stack);
+                        console.error('Error details:', error);
+                        console.error('Error stack:', error.stack);
                         console.error(
-                            '💥 === PUSH NOTIFICATION ERROR LOGGED ==='
+                            '=== PUSH NOTIFICATION ERROR LOGGED ==='
                         );
                     }
                 }
@@ -275,12 +280,12 @@ export default {
                         n.foreground = false;
                         n.coldstart = true;
 
-                        store.dispatch('cordova/notificationArrive', n);
+                        cordovaStore.notificationArrive(n);
                     } catch (error) {
-                        console.error('💥 === ERROR HANDLING PUSH TAP ===');
-                        console.error('❌ Tap error details:', error);
-                        console.error('🔍 Tap error stack:', error.stack);
-                        console.error('💥 === PUSH TAP ERROR LOGGED ===');
+                        console.error('=== ERROR HANDLING PUSH TAP ===');
+                        console.error('Tap error details:', error);
+                        console.error('Tap error stack:', error.stack);
+                        console.error('=== PUSH TAP ERROR LOGGED ===');
                     }
                 }
             );
@@ -293,7 +298,7 @@ export default {
                     await PushNotifications.register();
                 } catch (registrationError) {
                     console.error(
-                        '❌ Push notification registration failed:',
+                        'Push notification registration failed:',
                         registrationError
                     );
                     return;

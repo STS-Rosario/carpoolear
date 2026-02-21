@@ -5,17 +5,17 @@
         </div>
         <div class="row">
             <div class="col-md-22 col-md-offset-1">
-                <h2>{{ $t('pedidosDeEliminacionDeCuenta') }}</h2>
+                <h2>{{ t('pedidosDeEliminacionDeCuenta') }}</h2>
                 <Loading :data="deleteRequests">
                     <table class="table table-hover table-bordered">
                         <thead>
                             <tr>
-                                <th scope="col">{{ $t('id') }}</th>
-                                <th scope="col">{{ $t('usuario') }}</th>
-                                <th scope="col">{{ $t('email') }}</th>
-                                <th scope="col">{{ $t('fechaDeSolicitud') }}</th>
-                                <th scope="col">{{ $t('estado') }}</th>
-                                <th scope="col">{{ $t('fechaDeAccion') }}</th>
+                                <th scope="col">{{ t('id') }}</th>
+                                <th scope="col">{{ t('usuario') }}</th>
+                                <th scope="col">{{ t('email') }}</th>
+                                <th scope="col">{{ t('fechaDeSolicitud') }}</th>
+                                <th scope="col">{{ t('estado') }}</th>
+                                <th scope="col">{{ t('fechaDeAccion') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -26,9 +26,9 @@
                                 class="table-row-clickable"
                             >
                                 <th scope="row">{{ request.id }}</th>
-                                <td>{{ request.user ? request.user.name : $t('na') }}</td>
-                                <td>{{ request.user ? request.user.email : $t('na') }}</td>
-                                <td>{{ formatDate(request.date_requested) }}</td>
+                                <td>{{ request.user ? request.user.name : t('na') }}</td>
+                                <td>{{ request.user ? request.user.email : t('na') }}</td>
+                                <td>{{ formatDateLocal(request.date_requested) }}</td>
                                 <td>
                                     <span
                                         :class="getActionTakenBadgeClass(request.action_taken)"
@@ -39,26 +39,30 @@
                                 <td>
                                     {{
                                         request.action_taken_date
-                                            ? formatDate(request.action_taken_date)
+                                            ? formatDateLocal(request.action_taken_date)
                                             : '-'
                                     }}
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                    <div slot="no-data" class="text-center" style="margin-top: 20px;">
-                        <div class="alert alert-info">
-                            {{ $t('noHayPedidosEliminacion') }}
+                    <template #no-data>
+                        <div class="text-center" style="margin-top: 20px;">
+                            <div class="alert alert-info">
+                                {{ t('noHayPedidosEliminacion') }}
+                            </div>
                         </div>
-                    </div>
-                    <div slot="loading" class="text-center" style="margin-top: 20px;">
-                        <img
-                            src="https://carpoolear.com.ar/static/img/loader.gif"
-                            alt=""
-                            class="ajax-loader"
-                        />
-                        <p>{{ $t('cargandoPedidos') }}</p>
-                    </div>
+                    </template>
+                    <template #loading>
+                        <div class="text-center" style="margin-top: 20px;">
+                            <img
+                                src="https://carpoolear.com.ar/static/img/loader.gif"
+                                alt=""
+                                class="ajax-loader"
+                            />
+                            <p>{{ t('cargandoPedidos') }}</p>
+                        </div>
+                    </template>
                 </Loading>
 
                 <modal
@@ -67,55 +71,57 @@
                     @close="closeModal"
                     :body="'Body'"
                 >
-                    <h3 slot="header">
-                        <span>{{ $t('editarPedidoEliminacion') }}</span>
-                        <i
-                            v-on:click="closeModal"
-                            class="fa fa-times float-right-close"
-                        ></i>
-                    </h3>
-                    <div slot="body">
+                    <template #header>
+                        <h3>
+                            <span>{{ t('editarPedidoEliminacion') }}</span>
+                            <i
+                                v-on:click="closeModal"
+                                class="fa fa-times float-right-close"
+                            ></i>
+                        </h3>
+                    </template>
+                    <template #body>
                         <div class="text-left color-black">
                             <div class="form-group" v-if="currentRequest">
-                                <label><strong>{{ $t('idLabel') }}:</strong> {{ currentRequest.id }}</label>
+                                <label><strong>{{ t('idLabel') }}:</strong> {{ currentRequest.id }}</label>
                             </div>
                             <div class="form-group" v-if="currentRequest && currentRequest.user">
-                                <label>{{ $t('usuarioLabel') }} {{ currentRequest.user.name }}</label>
+                                <label>{{ t('usuarioLabel') }} {{ currentRequest.user.name }}</label>
                                 <div style="margin-top: 8px;">
                                     <router-link
                                         :to="{ name: 'profile', params: { id: currentRequest.user.id } }"
                                         target="_blank"
                                         class="btn btn-link btn-sm"
                                     >
-                                        {{ $t('verPerfilPublico') }}
+                                        {{ t('verPerfilPublico') }}
                                     </router-link>
                                     <router-link
                                         :to="{ name: 'admin-users', query: { userId: currentRequest.user.id } }"
                                         class="btn btn-link btn-sm"
                                     >
-                                        {{ $t('editarEnAdmin') }}
+                                        {{ t('editarEnAdmin') }}
                                     </router-link>
                                 </div>
                             </div>
                             <div class="form-group" v-if="currentRequest && currentRequest.user">
-                                <label>{{ $t('emailLabel') }} {{ currentRequest.user.email }}</label>
+                                <label>{{ t('emailLabel') }} {{ currentRequest.user.email }}</label>
                             </div>
                             <div class="form-group" v-if="currentRequest">
                                 <label
-                                    >{{ $t('fechaDeSolicitudLabel') }}
-                                    {{ formatDate(currentRequest.date_requested) }}</label
+                                    >{{ t('fechaDeSolicitudLabel') }}
+                                    {{ formatDateLocal(currentRequest.date_requested) }}</label
                                 >
                             </div>
                             <div class="form-group">
-                                <label for="action-taken">{{ $t('accionTomada') }}</label>
+                                <label for="action-taken">{{ t('accionTomada') }}</label>
                                 <select
                                     v-model="editForm.action_taken"
                                     id="action-taken"
                                     class="form-control"
                                 >
-                                    <option :value="0">{{ $t('solicitado') }}</option>
-                                    <option :value="1">{{ $t('eliminado') }}</option>
-                                    <option :value="2">{{ $t('rechazado') }}</option>
+                                    <option :value="0">{{ t('solicitado') }}</option>
+                                    <option :value="1">{{ t('eliminado') }}</option>
+                                    <option :value="2">{{ t('rechazado') }}</option>
                                 </select>
                             </div>
                             <div class="text-center" style="margin-top: 1.5em;">
@@ -124,18 +130,20 @@
                                     @click="submitUpdate"
                                     :disabled="loading"
                                 >
-                                    <span v-if="!loading">{{ $t('guardar') }}</span>
+                                    <span v-if="!loading">{{ t('guardar') }}</span>
                                     <spinner class="blue" v-if="loading"></spinner>
                                 </button>
                             </div>
                         </div>
-                    </div>
+                    </template>
                 </modal>
             </div>
         </div>
     </div>
 </template>
-<script>
+<script setup>
+import { ref, reactive, onMounted } from 'vue';
+import { useI18n } from 'vue-i18n';
 import adminNav from '../sections/adminNav';
 import Loading from '../Loading.vue';
 import modal from '../Modal';
@@ -144,106 +152,97 @@ import { AdminApi } from '../../services/api';
 import dialogs from '../../services/dialogs.js';
 import moment from 'moment';
 
-export default {
-    name: 'admin-users-delete-list',
-    data() {
-        return {
-            deleteRequests: null,
-            showModal: false,
-            currentRequest: null,
-            editForm: {
-                id: null,
-                action_taken: 0
-            },
-            loading: false,
-            adminApi: null
-        };
-    },
-    methods: {
-        formatDate(dateString) {
-            if (!dateString) return '-';
-            return moment(dateString).format('DD/MM/YYYY HH:mm');
-        },
-        getActionTakenLabel(actionTaken) {
-            if (actionTaken === 0) return this.$t('solicitado');
-            if (actionTaken === 1) return this.$t('eliminado');
-            if (actionTaken === 2) return this.$t('rechazado');
-            return this.$t('desconocido');
-        },
-        getActionTakenBadgeClass(actionTaken) {
-            const classes = {
-                0: 'badge badge-warning',
-                1: 'badge badge-danger',
-                2: 'badge badge-secondary'
-            };
-            return classes[actionTaken] || 'badge badge-default';
-        },
-        openModal(request) {
-            this.currentRequest = request;
-            this.editForm = {
-                id: request.id,
-                action_taken: request.action_taken
-            };
-            this.showModal = true;
-        },
-        closeModal() {
-            this.showModal = false;
-            this.currentRequest = null;
-            this.editForm = {
-                id: null,
-                action_taken: 0
-            };
-        },
-        submitUpdate() {
-            this.loading = true;
-            this.adminApi
-                .updateAccountDelete(this.editForm)
-                .then(() => {
-                    this.loading = false;
-                    this.closeModal();
-                    dialogs.message(this.$t('pedidoEliminacionActualizadoExitosamente'), {
-                        duration: 5,
-                        estado: 'success'
-                    });
-                    this.loadDeleteRequests();
-                })
-                .catch((error) => {
-                    this.loading = false;
-                    console.error('Error updating delete request:', error);
-                    dialogs.message(this.$t('errorActualizarPedidoEliminacion'), {
-                        duration: 5,
-                        estado: 'error'
-                    });
-                });
-        },
-        loadDeleteRequests() {
-            this.deleteRequests = null;
-            this.adminApi
-                .getAccountDeleteList()
-                .then((response) => {
-                    this.deleteRequests = response.data || [];
-                })
-                .catch((error) => {
-                    console.error('Error loading delete requests:', error);
-                    this.deleteRequests = [];
-                    dialogs.message(this.$t('errorCargarPedidosEliminacion'), {
-                        duration: 5,
-                        estado: 'error'
-                    });
-                });
-        }
-    },
-    components: {
-        adminNav,
-        Loading,
-        modal,
-        Spinner
-    },
-    mounted() {
-        this.adminApi = new AdminApi();
-        this.loadDeleteRequests();
-    }
+const { t } = useI18n();
+
+const deleteRequests = ref(null);
+const showModal = ref(false);
+const currentRequest = ref(null);
+const editForm = reactive({
+    id: null,
+    action_taken: 0
+});
+const loading = ref(false);
+let adminApi = null;
+
+const formatDateLocal = (dateString) => {
+    if (!dateString) return '-';
+    return moment(dateString).format('DD/MM/YYYY HH:mm');
 };
+
+const getActionTakenLabel = (actionTaken) => {
+    if (actionTaken === 0) return t('solicitado');
+    if (actionTaken === 1) return t('eliminado');
+    if (actionTaken === 2) return t('rechazado');
+    return t('desconocido');
+};
+
+const getActionTakenBadgeClass = (actionTaken) => {
+    const classes = {
+        0: 'badge badge-warning',
+        1: 'badge badge-danger',
+        2: 'badge badge-secondary'
+    };
+    return classes[actionTaken] || 'badge badge-default';
+};
+
+const openModal = (request) => {
+    currentRequest.value = request;
+    editForm.id = request.id;
+    editForm.action_taken = request.action_taken;
+    showModal.value = true;
+};
+
+const closeModal = () => {
+    showModal.value = false;
+    currentRequest.value = null;
+    editForm.id = null;
+    editForm.action_taken = 0;
+};
+
+const submitUpdate = () => {
+    loading.value = true;
+    adminApi
+        .updateAccountDelete(editForm)
+        .then(() => {
+            loading.value = false;
+            closeModal();
+            dialogs.message(t('pedidoEliminacionActualizadoExitosamente'), {
+                duration: 5,
+                estado: 'success'
+            });
+            loadDeleteRequests();
+        })
+        .catch((error) => {
+            loading.value = false;
+            console.error('Error updating delete request:', error);
+            dialogs.message(t('errorActualizarPedidoEliminacion'), {
+                duration: 5,
+                estado: 'error'
+            });
+        });
+};
+
+const loadDeleteRequests = () => {
+    deleteRequests.value = null;
+    adminApi
+        .getAccountDeleteList()
+        .then((response) => {
+            deleteRequests.value = response.data || [];
+        })
+        .catch((error) => {
+            console.error('Error loading delete requests:', error);
+            deleteRequests.value = [];
+            dialogs.message(t('errorCargarPedidosEliminacion'), {
+                duration: 5,
+                estado: 'error'
+            });
+        });
+};
+
+onMounted(() => {
+    adminApi = new AdminApi();
+    loadDeleteRequests();
+});
 </script>
 
 <style scoped>
@@ -304,4 +303,3 @@ export default {
     display: block;
 }
 </style>
-

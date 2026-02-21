@@ -9,123 +9,117 @@
     </div>
 </template>
 
-<script>
+<script setup>
+import { ref, watch, onMounted } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useAdminStore } from '@/stores/admin';
 import LineChart from './LineChart';
-import { mapActions } from 'vuex';
 import moment from 'moment';
 
-export default {
-    name: 'monthly-users-chart',
-    props: {
-        minDate: {
-            default: moment(Date(new Date().getFullYear(), 0, 1), 'YYYY-MM')
-        },
-        maxDate: {
-            default: moment(Date(), 'YYYY-MM')
-        }
+const { t } = useI18n();
+const adminStore = useAdminStore();
+
+const props = defineProps({
+    minDate: {
+        default: moment(Date(new Date().getFullYear(), 0, 1), 'YYYY-MM')
     },
-    data() {
-        return {
-            users: {},
-            usersData: {},
-            usersOptions: {
-                responsive: true,
-                maintainAspectRatio: false,
-                title: {
+    maxDate: {
+        default: moment(Date(), 'YYYY-MM')
+    }
+});
+
+const users = ref({});
+const usersData = ref({});
+const usersOptions = ref({
+    responsive: true,
+    maintainAspectRatio: false,
+    title: {
+        display: true,
+        text: t('chartUsuariosRegistradosPorMes')
+    },
+    tooltips: {
+        mode: 'index',
+        intersect: false
+    },
+    hover: {
+        mode: 'nearest',
+        intersect: true
+    },
+    scales: {
+        xAxes: [
+            {
+                display: true,
+                scaleLabel: {
                     display: true,
-                    text: this.$t('chartUsuariosRegistradosPorMes')
+                    labelString: t('chartMes')
                 },
-                tooltips: {
-                    mode: 'index',
-                    intersect: false
-                },
-                hover: {
-                    mode: 'nearest',
-                    intersect: true
-                },
-                scales: {
-                    xAxes: [
-                        {
-                            display: true,
-                            scaleLabel: {
-                                display: true,
-                                labelString: this.$t('chartMes')
-                            },
-                            stacked: true
-                        }
-                    ],
-                    yAxes: [
-                        {
-                            display: true,
-                            scaleLabel: {
-                                display: true,
-                                labelString: this.$t('chartCantidad')
-                            }
-                        }
-                    ]
+                stacked: true
+            }
+        ],
+        yAxes: [
+            {
+                display: true,
+                scaleLabel: {
+                    display: true,
+                    labelString: t('chartCantidad')
                 }
             }
-        };
-    },
-    watch: {
-        minDate: function () {
-            this.usersData = this.processUsers(
-                this.users,
-                this.minDate,
-                this.maxDate
-            );
-        },
-        maxDate: function () {
-            this.usersData = this.processUsers(
-                this.users,
-                this.minDate,
-                this.maxDate
-            );
-        }
-    },
-    methods: {
-        ...mapActions({
-            getUsers: 'admin/getUserStats'
-        }),
-        processUsers(usuarios, minDate, maxDate) {
-            let labels = [];
-            let dataset = [];
-            usuarios.forEach(function (el) {
-                if (el.key <= maxDate && el.key >= minDate) {
-                    labels.push(el.key);
-                    dataset.push(el.cantidad);
-                }
-            });
-            return {
-                labels: labels,
-                datasets: [
-                    {
-                        label: this.$t('chartUsuarios'),
-                        backgroundColor: '#F00',
-                        borderColor: '#F00',
-                        data: dataset,
-                        fill: false
-                    }
-                ]
-            };
-        },
-        async loadData() {
-            this.users = await this.getUsers();
-            this.users = this.users.users;
-            this.usersData = this.processUsers(
-                this.users,
-                this.minDate,
-                this.maxDate
-            );
-        }
-    },
-    components: {
-        LineChart
-    },
-    mounted() {
-        this.loadData();
+        ]
     }
-};
+});
+
+watch(() => props.minDate, () => {
+    usersData.value = processUsers(
+        users.value,
+        props.minDate,
+        props.maxDate
+    );
+});
+
+watch(() => props.maxDate, () => {
+    usersData.value = processUsers(
+        users.value,
+        props.minDate,
+        props.maxDate
+    );
+});
+
+function processUsers(usuarios, minDate, maxDate) {
+    let labels = [];
+    let dataset = [];
+    usuarios.forEach(function (el) {
+        if (el.key <= maxDate && el.key >= minDate) {
+            labels.push(el.key);
+            dataset.push(el.cantidad);
+        }
+    });
+    return {
+        labels: labels,
+        datasets: [
+            {
+                label: t('chartUsuarios'),
+                backgroundColor: '#F00',
+                borderColor: '#F00',
+                data: dataset,
+                fill: false
+            }
+        ]
+    };
+}
+
+async function loadData() {
+    let result = await adminStore.getUserStats();
+    users.value = result.users;
+    usersData.value = processUsers(
+        users.value,
+        props.minDate,
+        props.maxDate
+    );
+}
+
+onMounted(() => {
+    loadData();
+});
 </script>
 
 <style scoped>

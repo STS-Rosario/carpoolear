@@ -23,10 +23,9 @@
                                         v-debounceInput="onSearchUser"
                                         type="text"
                                         class="form-control"
-                                        :placeholder="$t('escribeUnNombreYPresionaBuscar')"
+                                        :placeholder="t('escribeUnNombreYPresionaBuscar')"
                                     />
                                     <span class="input-group-btn">
-                                        <!--  -->
                                         <button
                                             v-jump
                                             id="btn-search"
@@ -117,8 +116,7 @@
                                                     v-if="false"
                                                 >
                                                     {{
-                                                        conversation.updated_at
-                                                            | moment('h:mm a')
+                                                        formatDate(conversation.updated_at, 'h:mm a')
                                                     }}
                                                 </span>
                                             </div>
@@ -144,28 +142,30 @@
                                             class="btn btn-primary btn-block"
                                             @click="nextPage"
                                         >
-                                            {{ $t('masResultados') }}
+                                            {{ t('masResultados') }}
                                         </button>
                                     </li>
-                                    <li
-                                        slot="no-data"
-                                        class="list-group-item alert alert-warning"
-                                        role="alert"
-                                    >
-                                        {{ $t('noTienesConversaciones') }}
-                                    </li>
-                                    <li
-                                        slot="loading"
-                                        class="list-group-item alert alert-info"
-                                        role="alert"
-                                    >
-                                        <img
-                                            src="https://carpoolear.com.ar/static/img/loader.gif"
-                                            alt=""
-                                            class="ajax-loader"
-                                        />
-                                        {{ $t('cargandoConversaciones') }}
-                                    </li>
+                                    <template #no-data>
+                                        <li
+                                            class="list-group-item alert alert-warning"
+                                            role="alert"
+                                        >
+                                            {{ t('noTienesConversaciones') }}
+                                        </li>
+                                    </template>
+                                    <template #loading>
+                                        <li
+                                            class="list-group-item alert alert-info"
+                                            role="alert"
+                                        >
+                                            <img
+                                                src="https://carpoolear.com.ar/static/img/loader.gif"
+                                                alt=""
+                                                class="ajax-loader"
+                                            />
+                                            {{ t('cargandoConversaciones') }}
+                                        </li>
+                                    </template>
                                 </Loading>
                             </template>
                             <template v-else>
@@ -174,31 +174,33 @@
                                     :data="users"
                                 >
                                     <li
-                                        v-for="user in users"
+                                        v-for="u in users"
                                         class="list-group-item"
-                                        @click="createConversation(user)"
-                                        v-bind:key="user.id"
+                                        @click="createConversationHandler(u)"
+                                        v-bind:key="u.id"
                                     >
                                         <div
                                             class="conversation_image circle-box"
-                                            v-imgSrc:profile="user.image"
+                                            v-imgSrc:profile="u.image"
                                         ></div>
-                                        <UserNameWithBadge :user="user" />
+                                        <UserNameWithBadge :user="u" />
                                     </li>
-                                    <li
-                                        slot="no-data"
-                                        class="list-group-item alert alert-warning"
-                                        role="alert"
-                                    >
-                                        {{ $t('noHayConcidiencias') }}
-                                    </li>
-                                    <li
-                                        slot="loading"
-                                        class="list-group-item alert alert-info"
-                                        role="alert"
-                                    >
-                                        {{ $t('tipeaUnNombreYBusca') }}
-                                    </li>
+                                    <template #no-data>
+                                        <li
+                                            class="list-group-item alert alert-warning"
+                                            role="alert"
+                                        >
+                                            {{ t('noHayConcidiencias') }}
+                                        </li>
+                                    </template>
+                                    <template #loading>
+                                        <li
+                                            class="list-group-item alert alert-info"
+                                            role="alert"
+                                        >
+                                            {{ t('tipeaUnNombreYBusca') }}
+                                        </li>
+                                    </template>
                                 </Loading>
                             </template>
                         </ul>
@@ -213,119 +215,106 @@
         </div>
     </div>
 </template>
-<script>
-import { mapGetters, mapActions } from 'vuex';
+<script setup>
+import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+import { useConversationsStore } from '@/stores/conversations';
+import { useDeviceStore } from '@/stores/device';
+import { useAuthStore } from '@/stores/auth';
+import { formatDate } from '@/composables/useFormatters';
 import { Thread } from '../../classes/Threads.js';
 import Loading from '../Loading.vue';
 import UserNameWithBadge from '../elements/UserNameWithBadge.vue';
-import router from '../../router';
 import CoordinateTrip from '../elements/CoordinateTrip';
 
-export default {
-    name: 'conversation-list',
-    data() {
-        return {
-            textSearch: ''
-        };
-    },
+const { t } = useI18n();
+const route = useRoute();
+const router = useRouter();
+const conversationsStore = useConversationsStore();
+const deviceStore = useDeviceStore();
+const authStore = useAuthStore();
 
-    computed: {
-        ...mapGetters({
-            conversations: 'conversations/list',
-            moreConversations: 'conversations/listMorePage',
-            users: 'conversations/users',
-            selectedId: 'conversations/selectedId',
-            isMobile: 'device/isMobile',
-            config: 'auth/appConfig'
-        }),
+const textSearch = ref('');
+let thread = null;
 
-        hide() {
-            return this.$route.meta.hide;
-        }
-    },
+const conversations = computed(() => conversationsStore.list);
+const moreConversations = computed(() => conversationsStore.listMorePage);
+const users = computed(() => conversationsStore.users);
+const selectedId = computed(() => conversationsStore.selectedId);
+const isMobile = computed(() => deviceStore.isMobile);
+const config = computed(() => authStore.appConfig);
 
-    methods: {
-        ...mapActions({
-            conversationsSearch: 'conversations/listSearch',
-            searchUser: 'conversations/getUserList',
-            create: 'conversations/createConversation',
-            unreadMessage: 'conversations/getUnreaded',
-            select: 'conversations/select',
-            clear: 'conversations/clearUserList'
-        }),
+const hide = computed(() => {
+    return route.meta.hide;
+});
 
-        nextPage() {
-            this.conversationsSearch({ next: true });
-        },
+const nextPage = () => {
+    conversationsStore.listSearch({ next: true });
+};
 
-        onSearchUser() {
-            this.searchUser(this.textSearch);
-        },
+const onSearchUser = () => {
+    conversationsStore.getUserList(textSearch.value);
+};
 
-        createConversation(user) {
-            this.create(user)
-                .then((c) => {
-                    this.textSearch = '';
-                    this.clear();
-                    router.push({
-                        name: 'conversation-chat',
-                        params: { id: c.id }
-                    });
-                })
-                .catch(() => {});
-        },
-
-        onChangeConversation(conversation) {
+const createConversationHandler = (user) => {
+    conversationsStore.createConversation(user)
+        .then((c) => {
+            textSearch.value = '';
+            conversationsStore.clearUserList();
             router.push({
                 name: 'conversation-chat',
-                params: { id: conversation.id }
+                params: { id: c.id }
             });
-        }
-    },
-
-    beforeDestroy() {
-        this.thread.stop();
-        this.select(null);
-    },
-
-    watch: {
-        $route: function () {
-            if (!this.$route.meta.hide) {
-                this.select(null);
-            }
-        },
-        isMobile: function () {
-            if (!this.isMobile) {
-                router.push({ name: 'conversation-chat' });
-            }
-        },
-        textSearch: function (newValue, oldValue) {
-            if (oldValue.length === 0 && newValue.length > 0) {
-                this.clear();
-            }
-        }
-    },
-
-    mounted() {
-        this.conversationsSearch();
-        if (!this.config.web_push_notification || window.Notification.permission !== 'granted') {
-            this.thread = new Thread(() => {
-                this.unreadMessage();
-            });
-            this.thread.run(20000);
-        }
-
-        if (!this.isMobile) {
-            router.push({ name: 'conversation-chat' });
-        }
-    },
-    updated() {},
-    components: {
-        Loading,
-        CoordinateTrip,
-        UserNameWithBadge
-    }
+        })
+        .catch(() => {});
 };
+
+const onChangeConversation = (conversation) => {
+    router.push({
+        name: 'conversation-chat',
+        params: { id: conversation.id }
+    });
+};
+
+onBeforeUnmount(() => {
+    if (thread) {
+        thread.stop();
+    }
+    conversationsStore.select(null);
+});
+
+watch(() => route.fullPath, () => {
+    if (!route.meta.hide) {
+        conversationsStore.select(null);
+    }
+});
+
+watch(isMobile, () => {
+    if (!isMobile.value) {
+        router.push({ name: 'conversation-chat' });
+    }
+});
+
+watch(textSearch, (newValue, oldValue) => {
+    if (oldValue.length === 0 && newValue.length > 0) {
+        conversationsStore.clearUserList();
+    }
+});
+
+onMounted(() => {
+    conversationsStore.listSearch();
+    if (!config.value.web_push_notification || window.Notification.permission !== 'granted') {
+        thread = new Thread(() => {
+            conversationsStore.getUnreaded();
+        });
+        thread.run(20000);
+    }
+
+    if (!isMobile.value) {
+        router.push({ name: 'conversation-chat' });
+    }
+});
 </script>
 
 <style>

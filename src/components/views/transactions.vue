@@ -3,10 +3,10 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th scope="col">{{ $t('fecha') }}</th>
-                    <th scope="col">{{ $t('descripcion') }}</th>
-                    <th scope="col">{{ $t('monto') }}</th>
-                    <th scope="col">{{ $t('estado') }}</th>
+                    <th scope="col">{{ t('fecha') }}</th>
+                    <th scope="col">{{ t('descripcion') }}</th>
+                    <th scope="col">{{ t('monto') }}</th>
+                    <th scope="col">{{ t('estado') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -15,21 +15,21 @@
                     v-bind:key="transaction.id"
                 >
                     <td>
-                        <span class="th visible-xs">{{ $t('fecha') }}</span>
-                        {{ transaction.created_at | moment('DD/MM/YYYY') }}
+                        <span class="th visible-xs">{{ t('fecha') }}</span>
+                        {{ formatDate(transaction.created_at, 'DD/MM/YYYY') }}
                     </td>
                     <td>
                         <span class="th visible-xs">{{
-                            $t('descripcion')
+                            t('descripcion')
                         }}</span>
                         {{ generateDescription(transaction) }}
                     </td>
                     <td>
-                        <span class="th visible-xs">{{ $t('monto') }}</span>
+                        <span class="th visible-xs">{{ t('monto') }}</span>
                         {{ $n(transaction.trip.seat_price_cents / 100, 'currency') }}
                     </td>
                     <td>
-                        <span class="th visible-xs">{{ $t('estado') }}</span>
+                        <span class="th visible-xs">{{ t('estado') }}</span>
                         {{ generateStatus(transaction) }}
                     </td>
                 </tr>
@@ -38,69 +38,67 @@
     </div>
 </template>
 
-<script>
+<script setup>
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+import { useAuthStore } from '@/stores/auth';
+import { usePassengerStore } from '@/stores/passenger';
+import { formatDate } from '@/composables/useFormatters';
 import bus from '../../services/bus-event.js';
-import { mapActions, mapGetters } from 'vuex';
 
-export default {
-    name: 'transacciones',
-    data() {
-        return {
-            transactions: []
-        };
-    },
-    computed: {
-        ...mapGetters({
-            user: 'auth/user'
-        })
-    },
-    mounted() {
-        this.history().then((data) => {
-            console.log('transaction data', data);
-            this.transactions = data;
-        });
-    },
+const { t } = useI18n();
+const router = useRouter();
+const authStore = useAuthStore();
+const passengerStore = usePassengerStore();
 
-    beforeDestroy() {
-        bus.off('back-click', this.onBackClick);
-    },
+const transactions = ref([]);
 
-    methods: {
-        ...mapActions({
-            history: 'passenger/transactions'
-        }),
-        onBackClick() {
-            this.$router.back();
-        },
-        generateDescription(transaction) {
-            if (transaction.user_id === this.user.id) {
-                return this.$t('fuistePasajero', [
-                    transaction.trip.user.name,
-                    transaction.trip.to_town
-                ]);
-            } else {
-                return this.$t('llevastePasajero', [
-                    transaction.user.name,
-                    transaction.trip.to_town
-                ]);
-            }
-        },
-        generateStatus(transaction) {
-            if (transaction.payment_status === 'ok') {
-                if (
-                    transaction.payment_info &&
-                    transaction.payment_info.cardDetail &&
-                    transaction.user_id === this.user.id
-                ) {
-                    return this.$t('transaccionOkConTarjeta', [
-                        transaction.payment_info.cardDetail.cardNumber
-                    ]);
-                }
-                return this.$t('transaccionOk');
-            } else {
-                return this.$t('transaccionNoCompletada');
-            }
+const user = computed(() => authStore.user);
+
+const onBackClick = () => {
+    router.back();
+};
+
+onMounted(() => {
+    passengerStore.transactions().then((data) => {
+        console.log('transaction data', data);
+        transactions.value = data;
+    });
+});
+
+onBeforeUnmount(() => {
+    bus.off('back-click', onBackClick);
+});
+
+const generateDescription = (transaction) => {
+    if (transaction.user_id === user.value.id) {
+        return t('fuistePasajero', [
+            transaction.trip.user.name,
+            transaction.trip.to_town
+        ]);
+    } else {
+        return t('llevastePasajero', [
+            transaction.user.name,
+            transaction.trip.to_town
+        ]);
+    }
+};
+
+const generateStatus = (transaction) => {
+    if (transaction.payment_status === 'ok') {
+        if (
+            transaction.payment_info &&
+            transaction.payment_info.cardDetail &&
+            transaction.user_id === user.value.id
+        ) {
+            return t('transaccionOkConTarjeta', [
+                transaction.payment_info.cardDetail.cardNumber
+            ]);
         }
+        return t('transaccionOk');
+    } else {
+        return t('transaccionNoCompletada');
     }
 };
 </script>

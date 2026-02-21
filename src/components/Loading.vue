@@ -16,25 +16,16 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import spinner from './Spinner.vue';
 
-export default {
-    name: 'loading',
-    mounted() {
-        // this.search();
+defineProps({
+    data: {
+        required: true
     },
-    props: {
-        data: {
-            required: true
-        },
-        hideOnEmpty: {
-            type: Boolean,
-            default: false
-        }
-    },
-    components: {
-        spinner
+    hideOnEmpty: {
+        type: Boolean,
+        default: false
     }
-};
+});
 </script>

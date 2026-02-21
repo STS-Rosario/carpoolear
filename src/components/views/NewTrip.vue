@@ -1,12 +1,12 @@
 <template>
     <div class="new-trip-component container">
-        <div class="alert alert-info alert-sellado-viaje" v-if="this.config.module_trip_creation_payment_enabled">
+        <div class="alert alert-info alert-sellado-viaje" v-if="config.module_trip_creation_payment_enabled">
             <p>{{ $t('mensajeContandoSobreSelladoViaje') }}</p>
-            <p>{{ $t('podesHacerViajesGratis', { free_trips_amount: this.free_trips_amount }) }}</p>
-            <div v-if="this.trips_created_by_user_amount >= this.free_trips_amount">
-                <p>{{ $t('yaCreasteViajes', { trips_created_by_user_amount: this.trips_created_by_user_amount }) }} {{ $t('luegoTendrasQuePagarSelladoViaje') }}</p>
+            <p>{{ $t('podesHacerViajesGratis', { free_trips_amount: free_trips_amount }) }}</p>
+            <div v-if="trips_created_by_user_amount >= free_trips_amount">
+                <p>{{ $t('yaCreasteViajes', { trips_created_by_user_amount: trips_created_by_user_amount }) }} {{ $t('luegoTendrasQuePagarSelladoViaje') }}</p>
             </div>
-            <div v-if="this.trips_created_by_user_amount < this.free_trips_amount">
+            <div v-if="trips_created_by_user_amount < free_trips_amount">
                 <p>{{ $t('teQuedaViajesGratis', { remainingFreeTrips: remainingFreeTrips }) }} viaje{{ (remainingFreeTrips) === 1 ? '' : 's' }} gratis, {{ $t('luegoTendrasQuePagarSelladoViaje') }}</p>
             </div>
         </div>
@@ -143,7 +143,6 @@
                                 :country="allowForeignPoints ? null : 'AR'"
                                 :class="{ 'has-error': m.error.state }"
                             ></autocomplete>
-                            <!-- <GmapAutocomplete  :selectFirstOnEnter="true" :types="['(cities)']" :componentRestrictions="allowForeignPoints ? null : {country: 'AR'}" :placeholder="getPlaceholder(index)"  :value="m.name" :name="'input-' + index" :ref="'input-' + index" v-on:place_changed="(data) => getPlace(index, data)" class="form-control form-control-with-icon form-control-map-autocomplete" :class="{'has-error': m.error.state}"> </GmapAutocomplete> -->
                             <div
                                 @click="resetPoints(m, index)"
                                 class="date-picker--cross"
@@ -184,10 +183,6 @@
                             </span>
                         </label>
                     </div>
-                    <!-- <pre style="background: #f5f5f5; padding: 10px; margin: 10px; border-radius: 4px; font-size: 12px;">
-{{ JSON.stringify({
-    ...this
-}, null, 2) }}</pre> -->
                 </div>
                 <div :class="columnClass[1]">
                     <div class="row">
@@ -256,7 +251,6 @@
                                         "
                                         :class="{ 'has-error': m.error.state }"
                                     ></autocomplete>
-                                    <!-- <GmapAutocomplete  :selectFirstOnEnter="true" :types="['(cities)']" :componentRestrictions="allowForeignPoints ? null : {country: 'AR'}" :placeholder="getPlaceholder(index)"  :value="m.name" :name="'input-' + index" :ref="'input-' + index" v-on:place_changed="(data) => getPlace(index, data)" class="form-control form-control-with-icon form-control-map-autocomplete" :class="{'has-error': m.error.state}"> </GmapAutocomplete> -->
                                     <div
                                         @click="resetPoints(m, index)"
                                         class="date-picker--cross"
@@ -375,13 +369,12 @@
                                     <span class="error" v-if="timeError.state">
                                         {{ timeError.message }}
                                     </span>
-                                    <!--<input type="text" v-model="time" />-->
                                 </div>
                             </div>
                             <div class="trip-weekly-schedule" v-if="useWeeklySchedule && config.weekly_schedule">
                                 <WeeklySchedule
-                                    :weeklySchedule.sync="weeklySchedule"
-                                    :weeklyScheduleTime.sync="weeklyScheduleTime"
+                                    v-model:weeklySchedule="weeklySchedule"
+                                    v-model:weeklyScheduleTime="weeklyScheduleTime"
                                     :readonly="false"
                                     :theme="tripCardTheme"
                                     :hasError="timeError.state"
@@ -495,7 +488,7 @@
                                     {{ $t('precioAsiento') }}
                                 <span
                                     class="tooltip-bottom tooltip-seat-price"
-                                    :data-tooltip="$t('precioAsientoTooltip', { sellado: this.config.module_trip_creation_payment_enabled ? ' y Sellado de Viaje.' : '' })"
+                                    :data-tooltip="$t('precioAsientoTooltip', { sellado: config.module_trip_creation_payment_enabled ? ' y Sellado de Viaje.' : '' })"
                                 >
                                     <i
                                         class="fa fa-info-circle"
@@ -542,7 +535,7 @@
                                     {{ $t('precioAsiento') }}
                                     <span
                                         class="tooltip-bottom tooltip-seat-price"
-                                        :data-tooltip="$t('precioAsientoTooltip', { sellado: this.config.module_trip_creation_payment_enabled ? ' y Sellado de Viaje.' : '' })"
+                                        :data-tooltip="$t('precioAsientoTooltip', { sellado: config.module_trip_creation_payment_enabled ? ' y Sellado de Viaje.' : '' })"
                                     >
                                         <i
                                             class="fa fa-info-circle"
@@ -566,7 +559,7 @@
                                 </span>
                             </div>
 
-                            <div v-if="trip.is_passenger == 0 && this.trip.distance > 0 && config.module_seat_price_enabled">
+                            <div v-if="trip.is_passenger == 0 && trip.distance > 0 && config.module_seat_price_enabled">
                                 <div
                                 class="label-soft"
                                 v-if="tripCardTheme !== 'light'"
@@ -630,55 +623,6 @@
                             </div>
                         </div>
                         <div class="col-sm-11 col-md-9 preferences-container">
-                            <!-- <fieldset class="trip-privacity">
-                                <legend class="label-for-group">
-                                    {{ $t('privacidadViaje') }}
-                                </legend>
-                                <ul class="no-bullet">
-                                    <li>
-                                        <input
-                                            type="radio"
-                                            id="privacity-public"
-                                            value="2"
-                                            v-model="trip.friendship_type_id"
-                                        />
-                                        <label
-                                            for="privacity-public"
-                                            class="label-soft"
-                                        >
-                                            {{ $t('publico') }}
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <input
-                                            type="radio"
-                                            id="privacity-friendofriend"
-                                            value="1"
-                                            v-model="trip.friendship_type_id"
-                                        />
-                                        <label
-                                            for="privacity-friendofriend"
-                                            class="label-soft"
-                                        >
-                                            {{ $t('amigosamigos') }}
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <input
-                                            type="radio"
-                                            id="privacity-friend"
-                                            value="0"
-                                            v-model="trip.friendship_type_id"
-                                        />
-                                        <label
-                                            for="privacity-friend"
-                                            class="label-soft"
-                                        >
-                                            {{ $t('soloAmigos') }}
-                                        </label>
-                                    </li>
-                                </ul>
-                            </fieldset> -->
                             <legend class="label-for-group">
                                 {{ $t('preferenciasViaje') }}
                             </legend>
@@ -1140,13 +1084,12 @@
                                     >
                                         {{ otherTrip.timeError.message }}
                                     </span>
-                                    <!--<input type="text" v-model="time" />-->
                                 </div>
                             </div>
                             <div class="trip-weekly-schedule" v-if="useWeeklySchedule && config.weekly_schedule">
                                 <WeeklySchedule
-                                    :weeklySchedule.sync="weeklySchedule"
-                                    :weeklyScheduleTime.sync="weeklyScheduleReturnTime"
+                                    v-model:weeklySchedule="weeklySchedule"
+                                    v-model:weeklyScheduleTime="weeklyScheduleReturnTime"
                                     :readonly="false"
                                     :theme="tripCardTheme"
                                     :hasError="otherTrip.timeError.state"
@@ -1158,15 +1101,15 @@
                             </div>
                             <div
                                 class="trip_price"
-                                v-if="trip.is_passenger == 0 && 
-                                !config.module_max_price_enabled && 
+                                v-if="trip.is_passenger == 0 &&
+                                !config.module_max_price_enabled &&
                                 config.module_seat_price_enabled"
                             >
                                 <legend class="label-for-group label-tooltip">
                                     {{ $t('precioAsiento') }}
                                 <span
                                     class="tooltip-bottom tooltip-seat-price"
-                                    :data-tooltip="$t('precioAsientoTooltip', { sellado: this.config.module_trip_creation_payment_enabled ? ' y Sellado de Viaje.' : '' })"
+                                    :data-tooltip="$t('precioAsientoTooltip', { sellado: config.module_trip_creation_payment_enabled ? ' y Sellado de Viaje.' : '' })"
                                 >
                                     <i
                                         class="fa fa-info-circle"
@@ -1189,13 +1132,13 @@
                             </div>
                             <div
                                 class="trip_price"
-                                v-if="this.config.module_trip_creation_payment_enabled && config.module_seat_price_enabled"
+                                v-if="config.module_trip_creation_payment_enabled && config.module_seat_price_enabled"
                             >
                                 <legend class="label-for-group label-tooltip">
                                     {{ $t('precioAsiento') }}
                                     <span
                                         class="tooltip-bottom tooltip-seat-price"
-                                        :data-tooltip="$t('precioAsientoTooltip', { sellado: this.config.module_trip_creation_payment_enabled ? ' y Sellado de Viaje.' : '' })"
+                                        :data-tooltip="$t('precioAsientoTooltip', { sellado: config.module_trip_creation_payment_enabled ? ' y Sellado de Viaje.' : '' })"
                                     >
                                         <i
                                             class="fa fa-info-circle"
@@ -1223,7 +1166,7 @@
                                 </span>
                             </div>
 
-                            <div v-if="trip.is_passenger == 0 && this.trip.distance > 0 && config.module_seat_price_enabled">
+                            <div v-if="trip.is_passenger == 0 && trip.distance > 0 && config.module_seat_price_enabled">
                                 <div
                                 class="label-soft"
                                 v-if="tripCardTheme !== 'light'"
@@ -1686,9 +1629,16 @@
         </div>
     </div>
 </template>
-<script>
-import { mapActions, mapGetters } from 'vuex';
-// import { parseOsmStreet } from '../../services/maps.js';
+<script setup>
+import { ref, reactive, computed, watch, onMounted, nextTick } from 'vue';
+import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+import { useAuthStore } from '@/stores/auth';
+import { useTripsStore } from '@/stores/trips';
+import { useCarsStore } from '@/stores/cars';
+import { useDeviceStore } from '@/stores/device';
+import { getTrip as getTripFn } from '@/stores/index';
+import { useMyTripsStore } from '@/stores/myTrips';
 import DatePicker from '../DatePicker';
 import dialogs from '../../services/dialogs.js';
 import spinner from '../Spinner.vue';
@@ -1701,1079 +1651,1021 @@ import SvgItem from '../SvgItem';
 import WeeklySchedule from '../elements/WeeklySchedule';
 import bus from '../../services/bus-event.js';
 
-let tripApi = new TripApi();
-let userApi = new UserApi();
+const tripApi = new TripApi();
+const userApi = new UserApi();
 
-class Error {
+class FieldError {
     constructor(state = false, message = '') {
         this.state = false;
         this.message = '';
     }
 }
 
-export default {
-    name: 'new-trip',
-    props: {
-        id: {
-            type: [String, Number],
-            required: false
-        }
+const { t } = useI18n();
+const router = useRouter();
+const authStore = useAuthStore();
+const tripsStore = useTripsStore();
+const carsStore = useCarsStore();
+const deviceStore = useDeviceStore();
+const myTripsStore = useMyTripsStore();
+
+const props = defineProps({
+    id: {
+        type: [String, Number],
+        required: false
+    }
+});
+
+const user = computed(() => authStore.user);
+const cars = computed(() => carsStore.cars);
+const isMobile = computed(() => deviceStore.isMobile);
+const config = computed(() => authStore.appConfig);
+const tripCardTheme = computed(() => {
+    return config.value ? config.value.trip_card_design : '';
+});
+
+const minDate = ref(moment().toDate());
+const lucrarError = reactive(new FieldError());
+const dateError = reactive(new FieldError());
+const timeError = reactive(new FieldError());
+const priceError = reactive(new FieldError());
+const returnPriceError = reactive(new FieldError());
+const commentError = reactive(new FieldError());
+const seatsError = reactive(new FieldError());
+const no_lucrar = ref(false);
+const sameCity = ref(false);
+const points = ref([
+    {
+        name: '',
+        place: null,
+        json: null,
+        location: null,
+        error: new FieldError(),
+        id: 0
     },
-    components: {
-        DatePicker,
-        WeeklySchedule,
-        SvgItem,
-        autocomplete,
-        spinner
-    },
-    data() {
-        return {
-            minDate: moment().toDate(),
-            lucrarError: new Error(),
-            dateError: new Error(),
-            timeError: new Error(),
-            priceError: new Error(),
-            returnPriceError: new Error(),
-            commentError: new Error(),
-            seatsError: new Error(),
-            no_lucrar: false,
-            sameCity: false,
-            points: [
-                {
-                    name: '',
-                    place: null,
-                    json: null,
-                    location: null,
-                    error: new Error(),
-                    id: 0
-                },
-                {
-                    name: '',
-                    place: null,
-                    json: null,
-                    location: null,
-                    error: new Error(),
-                    id: 1
-                }
-            ],
-            date: '',
-            dateAnswer: this.date,
-            time: '12:00',
-            price: 0,
-            needs_to_pay_for_next_trip: false,
-            maximum_trip_price_cents: 0,
-            recommended_trip_price_cents: 0,
-            maximum_seat_price_cents: 0,
-            recommended_seat_price_cents: 0,
-            maximum_return_trip_price_cents: 0,
-            recommended_return_trip_price_cents: 0,
-            maximum_return_seat_price_cents: 0,
-            recommended_return_seat_price_cents: 0,
-            free_trips_amount: 0,
-            trips_created_by_user_amount: 0,
-            route_needs_payment: false,
-            returnPrice: 0,
-            duration: 0,
-            passengers: 0,
-            trip: {
-                is_passenger: 0,
-                from_town: '',
-                to_town: '',
-                trip_date: '',
-                total_seats: 2,
-                friendship_type_id: 2,
-                estimated_time: '00:00',
-                distance: 0.0,
-                co2: 0.0,
-                description: '',
-                allow_kids: true,
-                allow_smoking: true,
-                allow_animals: true,
-                car_id: null,
-                enc_path: '123',
-                points: [] /* address json_address lat lng */
-            },
-            updatingTrip: null,
-            saving: false,
-            allowForeignPoints: false,
-            url: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
-            attribution:
-                '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-            showReturnTrip: false,
-            otherTrip: {
-                minDate: moment().toDate(),
-                dateError: new Error(),
-                timeError: new Error(),
-                commentError: new Error(),
-                seatsError: new Error(),
-                no_lucrar: false,
-                sameCity: false,
-                points: [
-                    {
-                        name: '',
-                        place: null,
-                        json: null,
-                        location: null,
-                        error: new Error()
-                    },
-                    {
-                        name: '',
-                        place: null,
-                        json: null,
-                        location: null,
-                        error: new Error()
-                    }
-                ],
-                date: '',
-                dateAnswer: this.date,
-                time: '12:00',
-                duration: 0,
-                passengers: 0,
-                trip: {
-                    is_passenger: 0,
-                    from_town: '',
-                    to_town: '',
-                    trip_date: '',
-                    total_seats: 2,
-                    friendship_type_id: 2,
-                    estimated_time: '00:00',
-                    distance: 0.0,
-                    co2: 0.0,
-                    description: '',
-                    car_id: null,
-                    enc_path: '123',
-                    allow_kids: true,
-                    allow_smoking: true,
-                    allow_animals: true,
-                    seat_price_cents: 0,
-                    points: [] /* address json_address lat lng */
-                }
-            },
-            useWeeklySchedule: false,
-            weeklySchedule: 0,
-            weeklyScheduleTime: '12:00',
-            weeklyScheduleReturnTime: '12:00',
-        };
-    },
-    mounted() {
-        let self = this;
-        this.time = moment().add(1, 'hours').format('HH:00');
-        this.otherTrip.time = moment().add(2, 'hours').format('HH:00');
-        this.weeklyScheduleTime = moment().add(1, 'hours').format('HH:00');
-        this.weeklyScheduleReturnTime = moment().add(2, 'hours').format('HH:00');
-        bus.off('clear-click', this.onBackButton);
-        bus.on('clear-click', this.onBackButton);
-
-        if (self.id) {
-            self.loadTrip();
+    {
+        name: '',
+        place: null,
+        json: null,
+        location: null,
+        error: new FieldError(),
+        id: 1
+    }
+]);
+const date = ref('');
+const dateAnswer = ref('');
+const time = ref('12:00');
+const price = ref(0);
+const needs_to_pay_for_next_trip = ref(false);
+const maximum_trip_price_cents = ref(0);
+const recommended_trip_price_cents = ref(0);
+const maximum_seat_price_cents = ref(0);
+const recommended_seat_price_cents = ref(0);
+const maximum_return_trip_price_cents = ref(0);
+const recommended_return_trip_price_cents = ref(0);
+const maximum_return_seat_price_cents = ref(0);
+const recommended_return_seat_price_cents = ref(0);
+const free_trips_amount = ref(0);
+const trips_created_by_user_amount = ref(0);
+const route_needs_payment = ref(false);
+const returnPrice = ref(0);
+const duration = ref(0);
+const passengers = ref(0);
+const trip = reactive({
+    is_passenger: 0,
+    from_town: '',
+    to_town: '',
+    trip_date: '',
+    total_seats: 2,
+    friendship_type_id: 2,
+    estimated_time: '00:00',
+    distance: 0.0,
+    co2: 0.0,
+    description: '',
+    allow_kids: true,
+    allow_smoking: true,
+    allow_animals: true,
+    car_id: null,
+    enc_path: '123',
+    points: []
+});
+const updatingTrip = ref(null);
+const saving = ref(false);
+const allowForeignPoints = ref(false);
+const showReturnTrip = ref(false);
+const otherTrip = reactive({
+    minDate: moment().toDate(),
+    dateError: new FieldError(),
+    timeError: new FieldError(),
+    commentError: new FieldError(),
+    seatsError: new FieldError(),
+    no_lucrar: false,
+    sameCity: false,
+    points: [
+        {
+            name: '',
+            place: null,
+            json: null,
+            location: null,
+            error: new FieldError()
+        },
+        {
+            name: '',
+            place: null,
+            json: null,
+            location: null,
+            error: new FieldError()
         }
+    ],
+    date: '',
+    dateAnswer: '',
+    time: '12:00',
+    duration: 0,
+    passengers: 0,
+    trip: {
+        is_passenger: 0,
+        from_town: '',
+        to_town: '',
+        trip_date: '',
+        total_seats: 2,
+        friendship_type_id: 2,
+        estimated_time: '00:00',
+        distance: 0.0,
+        co2: 0.0,
+        description: '',
+        car_id: null,
+        enc_path: '123',
+        allow_kids: true,
+        allow_smoking: true,
+        allow_animals: true,
+        seat_price_cents: 0,
+        points: []
+    }
+});
+const useWeeklySchedule = ref(false);
+const weeklySchedule = ref(0);
+const weeklyScheduleTime = ref('12:00');
+const weeklyScheduleReturnTime = ref('12:00');
 
-        userApi.selladoViaje().then((result) => {
-            // if user is over the free trips limit, show a message telling them they need to pay for the next trip
-            this.needs_to_pay_for_next_trip = this.config.module_trip_creation_payment_enabled && result.data.user_over_free_limit;
-            this.free_trips_amount = result.data.free_trips_amount;
-            this.trips_created_by_user_amount = result.data.trips_created_by_user_amount;
-        });
-    },
-    beforeDestroy() {},
+const columnClass = computed(() => {
+    return !isMobile.value && tripCardTheme.value === 'light'
+        ? ['col-sm-10', 'col-sm-14']
+        : ['col-sm-8', 'col-sm-16'];
+});
 
-    computed: {
-        ...mapGetters({
-            user: 'auth/user',
-            cars: 'cars/cars',
-            isMobile: 'device/isMobile',
-            config: 'auth/appConfig',
-            tripCardTheme: 'auth/tripCardTheme'
-        }),
-        columnClass() {
-            return !this.isMobile && this.tripCardTheme === 'light'
-                ? ['col-sm-10', 'col-sm-14']
-                : ['col-sm-8', 'col-sm-16'];
-        },
-        distanceString() {
-            return Math.floor(this.trip.distance / 1000) + ' Km';
-        },
-        recommendedSeatPrice() {
-            return Math.floor((this.recommended_seat_price_cents / 100)) ;
-        },
+const distanceString = computed(() => {
+    return Math.floor(trip.distance / 1000) + ' Km';
+});
 
-        recommendedReturnSeatPrice() {
-            return Math.floor((this.recommended_return_seat_price_cents / 100)) ;
-        },
+const recommendedSeatPrice = computed(() => {
+    return Math.floor(recommended_seat_price_cents.value / 100);
+});
 
-        estimatedTimeString() {
-            const totalMinutes = Math.floor(this.duration / 60);
-            const minutes = Math.floor(totalMinutes % 60);
-            const hour = Math.floor(totalMinutes / 60);
-            return (
-                (hour < 10 ? '0' : '') +
-                hour +
-                ':' +
-                (minutes < 10 ? '0' : '') +
-                minutes
-            );
-        },
-        CO2String() {
-            return (Math.floor(this.trip.distance / 1000) * 0.15).toFixed(1)  + ' Kg';
-        },
-        otherTripDistanceString() {
-            return Math.floor(this.otherTrip.trip.distance / 1000) + ' Km';
-        },
-        otherTripEstimatedTimeString() {
-            const totalMinutes = Math.floor(this.otherTrip.duration / 60);
-            const minutes = Math.floor(totalMinutes % 60);
-            const hour = Math.floor(totalMinutes / 60);
-            return (
-                (hour < 10 ? '0' : '') +
-                hour +
-                ':' +
-                (minutes < 10 ? '0' : '') +
-                minutes
-            );
-        },
-        otherTripCO2String() {
-            return (
-                Math.floor(this.otherTrip.trip.distance / 1000) * 0.15 + ' Kg'
-            );
-        },
-        tripCardTheme() {
-            return this.config ? this.config.trip_card_design : '';
-        },
-        remainingFreeTrips() {
-            return this.free_trips_amount - this.trips_created_by_user_amount;
-        },
-        center() {
-            return this.config.map_coordinates;
-        },
-        zoom() {
-            return this.config.map_zoom;
-        }
-    },
-    watch: {
-        no_lucrar: function () {
-            this.lucrarError.state = false;
-        },
-        'trip.total_seats': function(newValue) {
-            if (this.trip.distance > 0) {
-                // The maximum_trip_price_cents is constant based on distance
-                // We just need to recalculate the per-seat prices
-                this.recalculateRecommendedPrice();
-            }
-        },
-        'otherTrip.trip.total_seats': function(newValue) {
-            if (this.otherTrip.trip.distance > 0) {
-                this.recalculateRecommendedReturnPrice();
-            }
-        },
-        dateAnswer: function (value) {
-            if (!this.showReturnTrip || !this.otherTrip.dateAnswer) {
-                // const v = moment(value);
-                // let date = '';
-                /* if (v.isValid()) {
-                    date = value;
-                } */
-                // this.otherTrip.date = date;
-                // this.otherTrip.dateAnswer = date;
-            }
-            // this.dateError.state = false;
-        },
-        time: function () {
-            this.timeError.state = false;
-        },
-        weeklyScheduleTime: function () {
-            this.timeError.state = false;
-        },
-        weeklyScheduleReturnTime: function () {
-            this.otherTrip.timeError.state = false;
-        },
-        'otherTrip.dateAnswer': function () {
-            this.otherTrip.dateError.state = false;
-        },
-        'otherTrip.time': function () {
-            this.otherTrip.timeError.state = false;
-        },
-        'otherTrip.trip.description': function () {
-            this.otherTrip.commentError.state = false;
-        },
-        'trip.friendship_type_id': function () {
-            this.otherTrip.trip.friendship_type_id =
-                this.trip.friendship_type_id;
-        },
-        // 'trip.distance': function () {
-        //     // TODO: FIX THIS
-        //     if (this.config.module_trip_creation_payment_enabled) {
-        //         let data = {
-        //             from: this.points[0].place,
-        //             to: last(this.points).place,
-        //             distance: this.trip.distance
-        //         };
-        //         this.getPrice(data).then((price) => {
-        //             this.price = price;
-        //             console.log(this.price);
-        //         });
-        //     }
-        // },
-        // 'otherTrip.distance': function () {
-        //     let data = {
-        //         from: this.otherTrip.points[0].place,
-        //         to: last(this.otherTrip.points).place,
-        //         distance: this.otherTrip.distance
-        //     };
-        //     this.getPrice(data).then((price) => {
-        //         this.returnPrice = price;
-        //         console.log(this.returnPrice);
-        //     });
-        // }
-    },
-    methods: {
-        ...mapActions({
-            createTrip: 'trips/create',
-            updateTrip: 'trips/update',
-            getTrip: 'getTrip',
-            getPrice: 'trips/price'
-        }),
-        setIsPassenger(value) {
-            this.$set(this.trip, 'is_passenger', value);
-        },
-        changeOtherTripDate(date) {
-            this.$set(this.otherTrip.dateError, 'state', false);
-            this.otherTrip.dateAnswer = date;
-        },
-        changeDate(date) {
-            this.$set(this.dateError, 'state', false);
-            this.dateAnswer = date;
-        },
-        jumpToError() {
-            let hasError = document.getElementsByClassName('has-error');
-            if (hasError.length) {
-                let element = hasError[0];
-                this.$scrollToElement(element);
-            }
-        },
-    restoreData(trip) {
-        this.no_lucrar = true;
-        this.points = [];
-        trip.points.forEach((p) => {
-            let point = {
-                name: p.address,
-                json: p.json_address,
-                location: {
-                    lat: p.lat,
-                    lng: p.lng
-                },
-                place: JSON.stringify(p.json_address),
-                error: new Error()
-            };
-            this.points.push(point);
-        });
+const recommendedReturnSeatPrice = computed(() => {
+    return Math.floor(recommended_return_seat_price_cents.value / 100);
+});
 
-        // In update mode, add an empty point for adding new intermediary locations
-        if (this.updatingTrip && this.points.length >= 2) {
-            let newPoint = {
-                name: '',
-                place: null,
-                json: null,
-                location: null,
-                error: new Error()
-            };
-            this.points.splice(this.points.length - 1, 0, newPoint);
-        }
+const estimatedTimeString = computed(() => {
+    const totalMinutes = Math.floor(duration.value / 60);
+    const minutes = Math.floor(totalMinutes % 60);
+    const hour = Math.floor(totalMinutes / 60);
+    return (
+        (hour < 10 ? '0' : '') +
+        hour +
+        ':' +
+        (minutes < 10 ? '0' : '') +
+        minutes
+    );
+});
 
-        // Restore weekly schedule FIRST before date/time
-        if (trip.weekly_schedule > 0) {
-            this.useWeeklySchedule = true;
-            this.weeklySchedule = trip.weekly_schedule;
-            console.log('restoreData: set weeklySchedule to', this.weeklySchedule, 'from trip.weekly_schedule', trip.weekly_schedule);
+const CO2String = computed(() => {
+    return (Math.floor(trip.distance / 1000) * 0.15).toFixed(1) + ' Kg';
+});
 
-            // Restore weekly schedule time
-            if (trip.weekly_schedule_time) {
-                this.weeklyScheduleTime = moment(trip.weekly_schedule_time).format('HH:mm');
-            }
-        } else {
-            this.useWeeklySchedule = false;
+const otherTripDistanceString = computed(() => {
+    return Math.floor(otherTrip.trip.distance / 1000) + ' Km';
+});
 
-            // Only restore date/time if NOT using weekly schedule
-            if (trip.trip_date) {
-                this.date = moment(trip.trip_date.split(' ')[0]).format('YYYY-MM-DD');
-                this.dateAnswer = moment(trip.trip_date.split(' ')[0]).format('YYYY-MM-DD');
-                this.time = trip.trip_date.split(' ')[1];
-            }
-        }
-        
-        this.trip.is_passenger = trip.is_passenger ? 1 : 0;
-        this.passengers = trip.passenger_count;
-        this.trip.total_seats = trip.total_seats;
-        this.trip.friendship_type_id = trip.friendship_type_id;
-        this.trip.distance = trip.distance;
-        this.trip.description = trip.description;
-        
-        this.trip.allow_kids = !(trip.allow_kids > 0);
-        this.trip.allow_animals = !(trip.allow_animals > 0);
-        this.trip.allow_smoking = !(trip.allow_smoking > 0);
-        
-        if (trip.seat_price_cents != null) {
-            this.price = trip.seat_price_cents / 100;
-            this.trip.seat_price_cents = trip.seat_price_cents;
-        }
-        
-        this.calcRoute();
-    },
+const otherTripEstimatedTimeString = computed(() => {
+    const totalMinutes = Math.floor(otherTrip.duration / 60);
+    const minutes = Math.floor(totalMinutes % 60);
+    const hour = Math.floor(totalMinutes / 60);
+    return (
+        (hour < 10 ? '0' : '') +
+        hour +
+        ':' +
+        (minutes < 10 ? '0' : '') +
+        minutes
+    );
+});
 
-        loadTrip() {
-            this.getTrip(this.id)
-                .then((trip) => {
-                    if (this.user.id === trip.user.id) {
-                        this.updatingTrip = trip;
-                        this.restoreData(trip);
-                    } else {
-                        this.$router.replace({
-                            name: 'trips'
-                        });
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                    if (error) {
-                        this.$router.replace({
-                            name: 'trips'
-                        });
-                    }
-                });
-        },
+const otherTripCO2String = computed(() => {
+    return (
+        Math.floor(otherTrip.trip.distance / 1000) * 0.15 + ' Kg'
+    );
+});
 
-        validate() {
-            let globalError = false;
-            let foreignPoints = 0;
-            let validTime = false;
-            let validDate = false;
-            let validOtherTripTime = false;
-            let validOtherTripDate = false;
-            let validWeeklySchedule = false;
-            this.points = this.points.filter((point) => point.place);
-            for (let index = this.points.length; index < 2; index++) {
-                this.addPoint(true);
-            }
-            this.points = this.points.map((point) => {
-                delete point.id;
-                return point;
-            });
-            this.points.forEach((p) => {
-                if (!p.json) {
-                    p.error.state = true;
-                    p.error.message = this.$t('localidadValida');
-                    globalError = true;
-                } else {
-                    foreignPoints +=
-                        p.json.country === this.config.osm_country ? 0 : 1;
-                }
-            });
-            if (foreignPoints > 1) {
-                globalError = true;
-                this.points[0].error.state = true;
-                this.points[0].error.message = this.$t(
-                    'origenDestinoArgentina'
-                );
-            }
+const remainingFreeTrips = computed(() => {
+    return free_trips_amount.value - trips_created_by_user_amount.value;
+});
 
-            if (this.showReturnTrip) {
-                foreignPoints = 0;
-                this.otherTrip.points.forEach((p) => {
-                    if (!p.json) {
-                        p.error.state = true;
-                        p.error.message = this.$t('seleccioneLocalidadValida');
-                        globalError = true;
-                    } else {
-                        foreignPoints +=
-                            p.json.country === this.config.osm_country ? 0 : 1;
-                    }
-                });
-                if (foreignPoints > 1) {
-                    globalError = true;
-                    this.otherTrip.points[0].error.state = true;
-                    this.otherTrip.points[0].error.message = this.$t(
-                        'origenDestinoArgentina'
-                    );
-                }
-            }
+const center = computed(() => {
+    return config.value.map_coordinates;
+});
 
-            if (!this.time || !moment(this.time, 'HH mm').isValid()) {
-                this.timeError.state = true;
-                this.timeError.message = this.$t('noHorarioValido');
-                globalError = true;
-            } else {
-                validTime = true;
-            }
+const zoom = computed(() => {
+    return config.value.map_zoom;
+});
 
-            if (
-                this.points[0].json &&
-                last(this.points).json &&
-                this.points[0].name === last(this.points).name
-            ) {
-                this.points[0].error.state = true;
-                this.points[0].error.message = this.$t(
-                    'origenDestinoDistintos'
-                );
-                last(this.points).error.state = true;
-                last(this.points).error.message = this.$t(
-                    'origenDestinoDistintos'
-                );
-                this.sameCity = true;
-                globalError = true;
-            }
+// Watchers
+watch(no_lucrar, () => {
+    lucrarError.state = false;
+});
 
-            if (this.useWeeklySchedule) {
-                // Check if at least one day is selected for weekly schedule
-                if (this.weeklySchedule === 0) {
-                    globalError = true;
-                    this.dateError.state = true;
-                    this.dateError.message = this.$t('faltaFechaOProgramaSemanal');
-                } else {
-                    validWeeklySchedule = true;
-                }
-                
-                // Validate weekly schedule time
-                if (!this.weeklyScheduleTime || !moment(this.weeklyScheduleTime, 'HH:mm').isValid()) {
-                    this.timeError.state = true;
-                    this.timeError.message = this.$t('noHorarioValido');
-                    globalError = true;
-                }
-            } else if (
-                !(this.dateAnswer && this.dateAnswer.length) ||
-                !moment(this.dateAnswer).isValid()
-            ) {
-                globalError = true;
-                this.dateError.state = true;
-                this.dateError.message = this.$t('faltaFecha');
-            } else {
-                validDate = true;
-            }
-            if (this.trip.total_seats < this.passengers) {
-                globalError = true;
-                this.seatsError.state = true;
-                this.seatsError.message =
-                    this.$t('yaTienes') +
-                    this.trip.passengers +
-                    this.$t('pasajerosSubidos');
-                dialogs.message(
-                    this.$t('yaTienes') +
-                        this.trip.passengers +
-                        this.$t('pasajerosSubidos'),
-                    {
-                        estado: 'error'
-                    }
-                );
-            } else if (globalError) {
-                dialogs.message(this.$t('algunosDatosNoValidos'), {
-                    estado: 'error'
-                });
-            } else if (
-                !this.no_lucrar &&
-                this.trip.is_passenger.toString() !== '1'
-            ) {
-                this.lucrarError.state = true;
-                this.lucrarError.message = this.$t('teComprometesANoLucrar');
-                dialogs.message(this.$t('teComprometesANoLucrar'), {
-                    estado: 'error'
-                });
-                globalError = true;
-            } else if (!this.trip.description) {
-                this.commentError.state = true;
-                this.commentError.message = this.$t('olvidasteDescripcion');
-                dialogs.message(this.$t('olvidasteDescripcion'), {
-                    estado: 'error'
-                });
-            }
-            if (validDate && validTime) {
-                if (
-                    moment(this.dateAnswer).format('YYYY-MM-DD') ===
-                    moment().format('YYYY-MM-DD')
-                ) {
-                    // la fecha es de hoy, la hora no debería poder ser anterior
-                    if (
-                        moment(this.time, 'HH mm').format('HH mm') <
-                        moment().format('HH mm')
-                    ) {
-                        this.timeError.state = true;
-                        this.timeError.message = this.$t('viajesPasado');
-                        globalError = true;
-                    }
-                }
-            }
+watch(() => trip.total_seats, (newValue) => {
+    if (trip.distance > 0) {
+        recalculateRecommendedPrice();
+    }
+});
 
-            if (this.config.module_max_price_enabled
-                && this.trip.is_passenger == 0) {
-                if (this.price > this.maximum_seat_price_cents / 100) {
-                    globalError = true;
-                    this.priceError.state = true;
-                    this.priceError.message = this.$t('precioMaximoExcedido');
-                } else {
-                    this.priceError.state = false;
-                }
-            }
+watch(() => otherTrip.trip.total_seats, (newValue) => {
+    if (otherTrip.trip.distance > 0) {
+        recalculateRecommendedReturnPrice();
+    }
+});
 
-            if (this.showReturnTrip) {
-                if (this.useWeeklySchedule) {
-                    // Check if at least one day is selected for weekly schedule
-                    if (this.weeklySchedule === 0) {
-                        globalError = true;
-                        this.otherTrip.dateError.state = true;
-                        this.otherTrip.dateError.message = this.$t('faltaFechaOProgramaSemanal');
-                    } else {
-                        validOtherTripDate = true;
-                    }
-                    
-                    // Validate weekly schedule time
-                    if (!this.weeklyScheduleReturnTime || !moment(this.weeklyScheduleReturnTime, 'HH:mm').isValid()) {
-                        this.otherTrip.timeError.state = true;
-                        this.otherTrip.timeError.message = this.$t('noHorarioValido');
-                        globalError = true;
-                    } else {
-                        validOtherTripTime = true;
-                    }
-                } else {
-                    if (
-                        !this.otherTrip.time ||
-                        !moment(this.otherTrip.time, 'HH mm').isValid()
-                    ) {
-                        this.otherTrip.timeError.state = true;
-                        this.otherTrip.timeError.message =
-                            this.$t('noHorarioValido');
-                        globalError = true;
-                    } else {
-                        validOtherTripTime = true;
-                    }
-                }
+watch(dateAnswer, (value) => {
+    if (!showReturnTrip.value || !otherTrip.dateAnswer) {
+        // placeholder for future logic
+    }
+});
 
-                if (
-                    this.otherTrip.points[0].json &&
-                    last(this.otherTrip.points).json &&
-                    this.otherTrip.points[0].name ===
-                        last(this.otherTrip.points).name
-                ) {
-                    this.otherTrip.points[0].error.state = true;
-                    this.otherTrip.points[0].error.message = this.$t(
-                        'origenDestinoDistintos'
-                    );
-                    last(this.otherTrip.points).error.state = true;
-                    last(this.otherTrip.points).error.message = this.$t(
-                        'origenDestinoDistintos'
-                    );
-                    this.otherTrip.sameCity = true;
-                    globalError = true;
-                }
+watch(time, () => {
+    timeError.state = false;
+});
 
-                if (
-                    !(
-                        this.otherTrip.dateAnswer &&
-                        this.otherTrip.dateAnswer.length
-                    ) ||
-                    !moment(this.otherTrip.dateAnswer).isValid()
-                ) {
-                    globalError = true;
-                    this.otherTrip.dateError.state = true;
-                    this.otherTrip.dateError.message = this.$t('faltaFecha');
-                } else {
-                    validOtherTripDate = true;
-                }
+watch(weeklyScheduleTime, () => {
+    timeError.state = false;
+});
 
-                if (validOtherTripTime && validOtherTripDate && !this.useWeeklySchedule) {
-                    if (
-                        moment(this.otherTrip.dateAnswer).format(
-                            'YYYY-MM-DD'
-                        ) === moment().format('YYYY-MM-DD')
-                    ) {
-                        // la fecha es de hoy, la hora no debería poder ser anterior
-                        if (
-                            moment(this.otherTrip.time, 'HH mm').format(
-                                'HH mm'
-                            ) < moment().format('HH mm')
-                        ) {
-                            this.otherTrip.timeError.state = true;
-                            this.otherTrip.timeError.message =
-                                this.$t('viajesPasado');
-                            globalError = true;
-                        }
-                    }
+watch(weeklyScheduleReturnTime, () => {
+    otherTrip.timeError.state = false;
+});
 
-                    const tripDate = moment(this.dateAnswer);
-                    const otherTripDate = moment(this.otherTrip.dateAnswer);
-                    let time = moment(this.time, 'HH:mm');
+watch(() => otherTrip.dateAnswer, () => {
+    otherTrip.dateError.state = false;
+});
 
-                    tripDate.set({
-                        hour: time.get('hour'),
-                        minute: time.get('minute'),
-                        second: time.get('second')
-                    });
+watch(() => otherTrip.time, () => {
+    otherTrip.timeError.state = false;
+});
 
-                    time = moment(this.otherTrip.time, 'HH:mm');
+watch(() => otherTrip.trip.description, () => {
+    otherTrip.commentError.state = false;
+});
 
-                    otherTripDate.set({
-                        hour: time.get('hour'),
-                        minute: time.get('minute'),
-                        second: time.get('second')
-                    });
+watch(() => trip.friendship_type_id, () => {
+    otherTrip.trip.friendship_type_id = trip.friendship_type_id;
+});
 
-                    if (
-                        otherTripDate.isBefore(tripDate) ||
-                        otherTripDate.isSame(tripDate)
-                    ) {
-                        this.otherTrip.timeError.state = true;
-                        this.otherTrip.timeError.message =
-                            this.$t('fechaHoraLogicas');
-                        globalError = true;
-                    }
-                }
+// Methods
+const setIsPassenger = (value) => {
+    trip.is_passenger = value;
+};
 
-                if (!this.otherTrip.trip.description) {
-                    this.otherTrip.commentError.state = true;
-                    this.otherTrip.commentError.message = this.$t('olvidasteDescripcion');
-                    dialogs.message(this.$t('olvidasteDescripcion'), {
-                        estado: 'error'
-                    });
-                }
-            }
+const changeOtherTripDate = (dateVal) => {
+    otherTrip.dateError.state = false;
+    otherTrip.dateAnswer = dateVal;
+};
 
-            return globalError;
-        },
+const changeDate = (dateVal) => {
+    dateError.state = false;
+    dateAnswer.value = dateVal;
+};
 
-        getSaveInfo(tripObj, estimatedTime, useWeeklySchedule = this.useWeeklySchedule, weeklyScheduleTime = this.weeklyScheduleTime) {
-            const points = tripObj.points.map((p) => {
-                return {
-                    address: p.name,
-                    json_address: p.json,
-                    lat: p.location.lat,
-                    lng: p.location.lng,
-                    node_id: p.place.id
-                };
-            });
-
-            const tripInfo = {
-                points,
-                from_town: points[0].address,
-                to_town: last(points).address,
-                estimated_time: estimatedTime,
-                car_id: this.cars.length > 0 ? this.cars[0].id : undefined
-            };
-
-            if (!useWeeklySchedule) {
-                // Only include trip_date when in specific date view (not using weekly schedule)
-                tripInfo.trip_date = tripObj.dateAnswer + ' ' + tripObj.time + ':00';
-            } else {
-                // Only include weekly_schedule when in weekly schedule view
-                tripInfo.weekly_schedule = this.weeklySchedule;
-                tripInfo.weekly_schedule_time = weeklyScheduleTime + ':00';
-            }
-
-            const result = Object.assign({}, tripObj.trip, tripInfo);
-            
-            return result;
-        },
-
-        save() {
-            if (this.validate()) {
-                // Jump To Error
-                this.$nextTick(() => {
-                    this.jumpToError();
-                });
-                return;
-            }
-            /* eslint-disable no-unreachable */
-            this.saving = true;
-
-            this.trip = this.getSaveInfo(this, this.estimatedTimeString);
-            if (!this.updatingTrip) {
-                let trip = JSON.parse(JSON.stringify(this.trip));
-                trip.allow_kids = !(trip.allow_kids > 0);
-                trip.allow_animals = !(trip.allow_animals > 0);
-                trip.allow_smoking = !(trip.allow_smoking > 0);
-
-                trip.seat_price_cents = this.price * 100;
-                
-                if (trip.is_passenger === 1) {
-                    trip.no_lucrar = 1;
-                }
-                this.createTrip(trip)
-                    .then((t) => {
-                        return new Promise((resolve, reject) => {
-                            if (!this.showReturnTrip) {
-                                return resolve();
-                            } else {
-                                let otherTrip = this.getSaveInfo(
-                                    this.otherTrip,
-                                    this.otherTripEstimatedTimeString,
-                                    this.useWeeklySchedule,
-                                    this.weeklyScheduleReturnTime
-                                );
-                                otherTrip.parent_trip_id = t.id;
-                                otherTrip = JSON.parse(
-                                    JSON.stringify(otherTrip)
-                                );
-                                otherTrip.allow_kids = !otherTrip.allow_kids;
-                                otherTrip.allow_animals =
-                                    !otherTrip.allow_animals;
-                                otherTrip.allow_smoking =
-                                    !otherTrip.allow_smoking;
-                                otherTrip.seat_price_cents = this.returnPrice * 100;
-                                this.createTrip(otherTrip).then((ot) => {
-                                    return resolve(ot);
-                                });
-                            }
-                        }).then((ot) => {
-                            this.saving = false;
-                            this.$router.replace({
-                                name: 'detail_trip',
-                                params: {
-                                    id: t.id
-                                }
-                            });
-                        });
-                    })
-                    .catch((err) => {
-                        console.log('error_creating', err);
-                        if (
-                            err &&
-                            err.data &&
-                            err.data.errors &&
-                            err.data.errors.driver_is_verified
-                        ) {
-                            dialogs.message(this.$t('tienesQueSerConductor'), {
-                                estado: 'error'
-                            });
-                        } else {
-                            dialogs.message(
-                                this.$t('problemaAlCargarElViaje'),
-                                {
-                                    estado: 'error'
-                                }
-                            );
-                        }
-                        this.jumpToError();
-                        this.saving = false;
-                    });
-            } else {
-                this.trip.id = this.updatingTrip.id;
-                let trip = JSON.parse(JSON.stringify(this.trip));
-                trip.allow_kids = !(trip.allow_kids > 0);
-                trip.allow_animals = !(trip.allow_animals > 0);
-                trip.allow_smoking = !(trip.allow_smoking > 0);
-                trip.seat_price_cents = Math.round(this.price * 100);
-                this.updateTrip(trip)
-                    .then(() => {
-                        this.saving = false;
-                        this.$router.replace({
-                            name: 'detail_trip',
-                            params: { id: this.trip.id }
-                        });
-                    })
-                    .catch(() => {
-                        this.saving = false;
-                    });
-            }
-        },
-
-        getPlace(i, data, type) {
-            type = type || 'trip';
-
-            const trip = type === 'trip' ? this : this.otherTrip;
-
-            trip.points[i].place = data;
-            trip.points[i].name = data.name;
-            // TODO: Recordar parseStreet
-            trip.points[i].json = data;
-            trip.points[i].error.state = false;
-            trip.center = trip.points[i].location = {
-                lat: parseFloat(data.lat),
-                lng: parseFloat(data.lng)
-            };
-            if ((i === 0 || i === trip.points.length - 1) && trip.sameCity) {
-                trip.points[0].error.state = false;
-                last(trip.points).error.state = false;
-            }
-
-            if (type === 'trip') {
-                this.addPoint();
-                // Mirror the entire points array
-                this.otherTrip.points = this.points.slice().reverse().map(point => ({
-                    name: point.name,
-                    place: point.place,
-                    json: point.json,
-                    location: point.location,
-                    error: new Error(),
-                    id: point.id  // Preserve the original ID
-                }));
-                
-                // Update the center to the first point of the return trip
-                this.otherTrip.center = this.otherTrip.points[0].location;
-                this.calcRoute('returnTrip');
-            } else {
-                this.addReturnPoint();
-            }
-
-            this.calcRoute(type);
-            this.recalculateRecommendedPrice();
-        },
-
-        getPlaceholder(index) {
-            if (this.points.length - 1 === index) {
-                return this.$t('destino');
-            } else if (index === 0) {
-                return this.$t('origen');
-            } else {
-                return this.$t('ingresePuntoIntermedio');
-            }
-        },
-
-        onBackButton() {
-            this.$router.replace({
-                name: 'trips'
-            });
-        },
-
-        addPoint(force) {
-            if (
-                this.points.filter((point) => point.name === '').length === 0 ||
-                force
-            ) {
-                let newArr = this.points.splice(0);
-                let newp = {
-                    name: '',
-                    place: null,
-                    json: null,
-                    location: null,
-                    error: new Error(),
-                    id: new Date().getTime()
-                };
-                newArr.splice(this.points.length - 1, 0, newp);
-                this.points = newArr;
-            }
-        },
-        addReturnPoint(force) {
-            if (
-                this.otherTrip.points.filter((point) => point.name === '').length === 0 ||
-                force
-            ) {
-                let newArr = this.otherTrip.points.splice(0);
-                let newp = {
-                    name: '',
-                    place: null,
-                    json: null,
-                    location: null,
-                    error: new Error(),
-                    id: new Date().getTime()
-                };
-                newArr.splice(this.otherTrip.points.length - 1, 0, newp);
-                this.otherTrip.points = newArr;
-            }
-        },
-        resetPoints(m, index) {
-            if (index === 0 || index === this.points.length - 1) {
-                // If removing origin or destination, clear the point
-                m.name = '';
-                m.place = null;
-                m.json = null;
-                m.location = null;
-            } else {
-                // If removing intermediate point, remove it and shift remaining points
-                this.points.splice(index, 1);
-            }
-            // Always recalculate trip info
-            this.calcRoute('trip');
-        },
-
-        calcRoute(type) {
-            type = type || 'trip';
-
-            const trip = type === 'trip' ? this : this.otherTrip;
-
-            let points = trip.points.filter((point) => point.name);
-
-            // Only proceed if we have at least 2 points with names
-            if (points.length < 2) {
-                return;
-            }
-
-            let data = {
-                points: points.map((point) => point.location)
-            };
-
-            tripApi.getTripInfo(data).then((result) => {
-                if (result.status === true) {
-                    trip.trip.distance = result.data.distance;
-                    trip.duration = result.data.duration;
-                    trip.trip.co2 = result.data.co2;
-                    trip.route_needs_payment = result.data.route_needs_payment;
-                    
-                    if (type === 'trip') {
-                        this.maximum_trip_price_cents = result.data.maximum_trip_price_cents;
-                        this.recommended_trip_price_cents = result.data.recommended_trip_price_cents;
-                        this.recalculateRecommendedPrice();
-                    } else {
-                        this.maximum_return_trip_price_cents = result.data.maximum_trip_price_cents;
-                        this.recommended_return_trip_price_cents = result.data.recommended_trip_price_cents;
-                        this.recalculateRecommendedReturnPrice();
-                    }
-                }
-            });
-
-            if (this.$refs.map && this.$refs.map.mapObject) {
-                let map = this.$refs.map.mapObject;
-
-                /* eslint-disable no-undef */
-                L.Routing.control({
-                    waypoints: points.map(point => L.latLng(point.location.lat, point.location.lng))
-                }).addTo(map);
-            }
-        },
-        validatePrice() {
-            if (this.price > this.maximum_seat_price_cents / 100) {
-                this.priceError.state = true;
-                this.priceError.message = this.$t('precioMaximoExcedido');
-            } else {
-                this.priceError.state = false;
-            }
-
-            if (this.returnPrice > this.maximum_seat_price_cents / 100) {
-                this.priceError.state = true;
-                this.priceError.message = this.$t('precioMaximoExcedido');
-            } else {
-                this.priceError.state = false;
-            }
-        },
-        recalculateRecommendedPrice() {
-            // The maximum_trip_price_cents is the total price for the entire trip (including driver)
-            this.maximum_seat_price_cents = Math.round(this.maximum_trip_price_cents / (this.trip.total_seats + 1));
-            this.recommended_seat_price_cents = Math.round(this.recommended_trip_price_cents / (this.trip.total_seats + 1));
-            this.validatePrice();
-        },
-        recalculateRecommendedReturnPrice() {
-            this.maximum_return_seat_price_cents = Math.round(this.maximum_return_trip_price_cents / (this.otherTrip.trip.total_seats + 1));
-            this.recommended_return_seat_price_cents = Math.round(this.recommended_return_trip_price_cents / (this.otherTrip.trip.total_seats + 1));
-            this.validateReturnPrice();
-        },
-        validateReturnPrice() {
-            if (this.returnPrice > this.maximum_return_seat_price_cents / 100) {
-                this.returnPriceError.state = true;
-                this.returnPriceError.message = this.$t('precioMaximoExcedido');
-            } else {
-                this.returnPriceError.state = false;
-            }
-        },
-        resetReturnPoints(m, index) {
-            if (index === 0 || index === this.otherTrip.points.length - 1) {
-                // If removing origin or destination, clear the point
-                m.name = '';
-                m.place = null;
-                m.json = null;
-                m.location = null;
-            } else {
-                // If removing intermediate point, remove it and shift remaining points
-                this.otherTrip.points.splice(index, 1);
-            }
-            // Always recalculate trip info
-            this.calcRoute('returnTrip');
-        }
+const jumpToError = () => {
+    let hasError = document.getElementsByClassName('has-error');
+    if (hasError.length) {
+        let element = hasError[0];
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 };
+
+const restoreData = (tripData) => {
+    no_lucrar.value = true;
+    points.value = [];
+    tripData.points.forEach((p) => {
+        let point = {
+            name: p.address,
+            json: p.json_address,
+            location: {
+                lat: p.lat,
+                lng: p.lng
+            },
+            place: JSON.stringify(p.json_address),
+            error: new FieldError()
+        };
+        points.value.push(point);
+    });
+
+    // In update mode, add an empty point for adding new intermediary locations
+    if (updatingTrip.value && points.value.length >= 2) {
+        let newPoint = {
+            name: '',
+            place: null,
+            json: null,
+            location: null,
+            error: new FieldError()
+        };
+        points.value.splice(points.value.length - 1, 0, newPoint);
+    }
+
+    // Restore weekly schedule FIRST before date/time
+    if (tripData.weekly_schedule > 0) {
+        useWeeklySchedule.value = true;
+        weeklySchedule.value = tripData.weekly_schedule;
+        console.log('restoreData: set weeklySchedule to', weeklySchedule.value, 'from trip.weekly_schedule', tripData.weekly_schedule);
+
+        if (tripData.weekly_schedule_time) {
+            weeklyScheduleTime.value = moment(tripData.weekly_schedule_time).format('HH:mm');
+        }
+    } else {
+        useWeeklySchedule.value = false;
+
+        if (tripData.trip_date) {
+            date.value = moment(tripData.trip_date.split(' ')[0]).format('YYYY-MM-DD');
+            dateAnswer.value = moment(tripData.trip_date.split(' ')[0]).format('YYYY-MM-DD');
+            time.value = tripData.trip_date.split(' ')[1];
+        }
+    }
+
+    trip.is_passenger = tripData.is_passenger ? 1 : 0;
+    passengers.value = tripData.passenger_count;
+    trip.total_seats = tripData.total_seats;
+    trip.friendship_type_id = tripData.friendship_type_id;
+    trip.distance = tripData.distance;
+    trip.description = tripData.description;
+
+    trip.allow_kids = !(tripData.allow_kids > 0);
+    trip.allow_animals = !(tripData.allow_animals > 0);
+    trip.allow_smoking = !(tripData.allow_smoking > 0);
+
+    if (tripData.seat_price_cents != null) {
+        price.value = tripData.seat_price_cents / 100;
+        trip.seat_price_cents = tripData.seat_price_cents;
+    }
+
+    calcRoute();
+};
+
+const loadTrip = () => {
+    getTripFn(tripsStore, myTripsStore, props.id)
+        .then((tripData) => {
+            if (user.value.id === tripData.user.id) {
+                updatingTrip.value = tripData;
+                restoreData(tripData);
+            } else {
+                router.replace({
+                    name: 'trips'
+                });
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+            if (error) {
+                router.replace({
+                    name: 'trips'
+                });
+            }
+        });
+};
+
+const validate = () => {
+    let globalError = false;
+    let foreignPoints = 0;
+    let validTime = false;
+    let validDate = false;
+    let validOtherTripTime = false;
+    let validOtherTripDate = false;
+    let validWeeklySchedule = false;
+    points.value = points.value.filter((point) => point.place);
+    for (let index = points.value.length; index < 2; index++) {
+        addPoint(true);
+    }
+    points.value = points.value.map((point) => {
+        delete point.id;
+        return point;
+    });
+    points.value.forEach((p) => {
+        if (!p.json) {
+            p.error.state = true;
+            p.error.message = t('localidadValida');
+            globalError = true;
+        } else {
+            foreignPoints +=
+                p.json.country === config.value.osm_country ? 0 : 1;
+        }
+    });
+    if (foreignPoints > 1) {
+        globalError = true;
+        points.value[0].error.state = true;
+        points.value[0].error.message = t('origenDestinoArgentina');
+    }
+
+    if (showReturnTrip.value) {
+        foreignPoints = 0;
+        otherTrip.points.forEach((p) => {
+            if (!p.json) {
+                p.error.state = true;
+                p.error.message = t('seleccioneLocalidadValida');
+                globalError = true;
+            } else {
+                foreignPoints +=
+                    p.json.country === config.value.osm_country ? 0 : 1;
+            }
+        });
+        if (foreignPoints > 1) {
+            globalError = true;
+            otherTrip.points[0].error.state = true;
+            otherTrip.points[0].error.message = t('origenDestinoArgentina');
+        }
+    }
+
+    if (!time.value || !moment(time.value, 'HH mm').isValid()) {
+        timeError.state = true;
+        timeError.message = t('noHorarioValido');
+        globalError = true;
+    } else {
+        validTime = true;
+    }
+
+    if (
+        points.value[0].json &&
+        last(points.value).json &&
+        points.value[0].name === last(points.value).name
+    ) {
+        points.value[0].error.state = true;
+        points.value[0].error.message = t('origenDestinoDistintos');
+        last(points.value).error.state = true;
+        last(points.value).error.message = t('origenDestinoDistintos');
+        sameCity.value = true;
+        globalError = true;
+    }
+
+    if (useWeeklySchedule.value) {
+        if (weeklySchedule.value === 0) {
+            globalError = true;
+            dateError.state = true;
+            dateError.message = t('faltaFechaOProgramaSemanal');
+        } else {
+            validWeeklySchedule = true;
+        }
+
+        if (!weeklyScheduleTime.value || !moment(weeklyScheduleTime.value, 'HH:mm').isValid()) {
+            timeError.state = true;
+            timeError.message = t('noHorarioValido');
+            globalError = true;
+        }
+    } else if (
+        !(dateAnswer.value && dateAnswer.value.length) ||
+        !moment(dateAnswer.value).isValid()
+    ) {
+        globalError = true;
+        dateError.state = true;
+        dateError.message = t('faltaFecha');
+    } else {
+        validDate = true;
+    }
+    if (trip.total_seats < passengers.value) {
+        globalError = true;
+        seatsError.state = true;
+        seatsError.message =
+            t('yaTienes') +
+            trip.passengers +
+            t('pasajerosSubidos');
+        dialogs.message(
+            t('yaTienes') +
+                trip.passengers +
+                t('pasajerosSubidos'),
+            {
+                estado: 'error'
+            }
+        );
+    } else if (globalError) {
+        dialogs.message(t('algunosDatosNoValidos'), {
+            estado: 'error'
+        });
+    } else if (
+        !no_lucrar.value &&
+        trip.is_passenger.toString() !== '1'
+    ) {
+        lucrarError.state = true;
+        lucrarError.message = t('teComprometesANoLucrar');
+        dialogs.message(t('teComprometesANoLucrar'), {
+            estado: 'error'
+        });
+        globalError = true;
+    } else if (!trip.description) {
+        commentError.state = true;
+        commentError.message = t('olvidasteDescripcion');
+        dialogs.message(t('olvidasteDescripcion'), {
+            estado: 'error'
+        });
+    }
+    if (validDate && validTime) {
+        if (
+            moment(dateAnswer.value).format('YYYY-MM-DD') ===
+            moment().format('YYYY-MM-DD')
+        ) {
+            if (
+                moment(time.value, 'HH mm').format('HH mm') <
+                moment().format('HH mm')
+            ) {
+                timeError.state = true;
+                timeError.message = t('viajesPasado');
+                globalError = true;
+            }
+        }
+    }
+
+    if (config.value.module_max_price_enabled
+        && trip.is_passenger == 0) {
+        if (price.value > maximum_seat_price_cents.value / 100) {
+            globalError = true;
+            priceError.state = true;
+            priceError.message = t('precioMaximoExcedido');
+        } else {
+            priceError.state = false;
+        }
+    }
+
+    if (showReturnTrip.value) {
+        if (useWeeklySchedule.value) {
+            if (weeklySchedule.value === 0) {
+                globalError = true;
+                otherTrip.dateError.state = true;
+                otherTrip.dateError.message = t('faltaFechaOProgramaSemanal');
+            } else {
+                validOtherTripDate = true;
+            }
+
+            if (!weeklyScheduleReturnTime.value || !moment(weeklyScheduleReturnTime.value, 'HH:mm').isValid()) {
+                otherTrip.timeError.state = true;
+                otherTrip.timeError.message = t('noHorarioValido');
+                globalError = true;
+            } else {
+                validOtherTripTime = true;
+            }
+        } else {
+            if (
+                !otherTrip.time ||
+                !moment(otherTrip.time, 'HH mm').isValid()
+            ) {
+                otherTrip.timeError.state = true;
+                otherTrip.timeError.message = t('noHorarioValido');
+                globalError = true;
+            } else {
+                validOtherTripTime = true;
+            }
+        }
+
+        if (
+            otherTrip.points[0].json &&
+            last(otherTrip.points).json &&
+            otherTrip.points[0].name ===
+                last(otherTrip.points).name
+        ) {
+            otherTrip.points[0].error.state = true;
+            otherTrip.points[0].error.message = t('origenDestinoDistintos');
+            last(otherTrip.points).error.state = true;
+            last(otherTrip.points).error.message = t('origenDestinoDistintos');
+            otherTrip.sameCity = true;
+            globalError = true;
+        }
+
+        if (
+            !(
+                otherTrip.dateAnswer &&
+                otherTrip.dateAnswer.length
+            ) ||
+            !moment(otherTrip.dateAnswer).isValid()
+        ) {
+            globalError = true;
+            otherTrip.dateError.state = true;
+            otherTrip.dateError.message = t('faltaFecha');
+        } else {
+            validOtherTripDate = true;
+        }
+
+        if (validOtherTripTime && validOtherTripDate && !useWeeklySchedule.value) {
+            if (
+                moment(otherTrip.dateAnswer).format(
+                    'YYYY-MM-DD'
+                ) === moment().format('YYYY-MM-DD')
+            ) {
+                if (
+                    moment(otherTrip.time, 'HH mm').format(
+                        'HH mm'
+                    ) < moment().format('HH mm')
+                ) {
+                    otherTrip.timeError.state = true;
+                    otherTrip.timeError.message = t('viajesPasado');
+                    globalError = true;
+                }
+            }
+
+            const tripDate = moment(dateAnswer.value);
+            const otherTripDate = moment(otherTrip.dateAnswer);
+            let timeVal = moment(time.value, 'HH:mm');
+
+            tripDate.set({
+                hour: timeVal.get('hour'),
+                minute: timeVal.get('minute'),
+                second: timeVal.get('second')
+            });
+
+            timeVal = moment(otherTrip.time, 'HH:mm');
+
+            otherTripDate.set({
+                hour: timeVal.get('hour'),
+                minute: timeVal.get('minute'),
+                second: timeVal.get('second')
+            });
+
+            if (
+                otherTripDate.isBefore(tripDate) ||
+                otherTripDate.isSame(tripDate)
+            ) {
+                otherTrip.timeError.state = true;
+                otherTrip.timeError.message = t('fechaHoraLogicas');
+                globalError = true;
+            }
+        }
+
+        if (!otherTrip.trip.description) {
+            otherTrip.commentError.state = true;
+            otherTrip.commentError.message = t('olvidasteDescripcion');
+            dialogs.message(t('olvidasteDescripcion'), {
+                estado: 'error'
+            });
+        }
+    }
+
+    return globalError;
+};
+
+const getSaveInfo = (tripObj, estimatedTimeVal, useWeekly = useWeeklySchedule.value, weeklySchedTime = weeklyScheduleTime.value) => {
+    const pts = tripObj.points.map((p) => {
+        return {
+            address: p.name,
+            json_address: p.json,
+            lat: p.location.lat,
+            lng: p.location.lng,
+            node_id: p.place.id
+        };
+    });
+
+    const tripInfo = {
+        points: pts,
+        from_town: pts[0].address,
+        to_town: last(pts).address,
+        estimated_time: estimatedTimeVal,
+        car_id: cars.value.length > 0 ? cars.value[0].id : undefined
+    };
+
+    if (!useWeekly) {
+        tripInfo.trip_date = tripObj.dateAnswer + ' ' + tripObj.time + ':00';
+    } else {
+        tripInfo.weekly_schedule = weeklySchedule.value;
+        tripInfo.weekly_schedule_time = weeklySchedTime + ':00';
+    }
+
+    const result = Object.assign({}, tripObj.trip, tripInfo);
+
+    return result;
+};
+
+const save = () => {
+    if (validate()) {
+        nextTick(() => {
+            jumpToError();
+        });
+        return;
+    }
+    saving.value = true;
+
+    // Build a temporary object that looks like `this` for getSaveInfo
+    const selfLike = {
+        points: points.value,
+        dateAnswer: dateAnswer.value,
+        time: time.value,
+        trip: trip
+    };
+    const tripData = getSaveInfo(selfLike, estimatedTimeString.value);
+    // Copy back to trip reactive
+    Object.assign(trip, tripData);
+
+    if (!updatingTrip.value) {
+        let tripCopy = JSON.parse(JSON.stringify(trip));
+        tripCopy.allow_kids = !(tripCopy.allow_kids > 0);
+        tripCopy.allow_animals = !(tripCopy.allow_animals > 0);
+        tripCopy.allow_smoking = !(tripCopy.allow_smoking > 0);
+
+        tripCopy.seat_price_cents = price.value * 100;
+
+        if (tripCopy.is_passenger === 1) {
+            tripCopy.no_lucrar = 1;
+        }
+        tripsStore.create(tripCopy)
+            .then((createdTrip) => {
+                return new Promise((resolve, reject) => {
+                    if (!showReturnTrip.value) {
+                        return resolve();
+                    } else {
+                        let otherTripData = getSaveInfo(
+                            otherTrip,
+                            otherTripEstimatedTimeString.value,
+                            useWeeklySchedule.value,
+                            weeklyScheduleReturnTime.value
+                        );
+                        otherTripData.parent_trip_id = createdTrip.id;
+                        otherTripData = JSON.parse(
+                            JSON.stringify(otherTripData)
+                        );
+                        otherTripData.allow_kids = !otherTripData.allow_kids;
+                        otherTripData.allow_animals =
+                            !otherTripData.allow_animals;
+                        otherTripData.allow_smoking =
+                            !otherTripData.allow_smoking;
+                        otherTripData.seat_price_cents = returnPrice.value * 100;
+                        tripsStore.create(otherTripData).then((ot) => {
+                            return resolve(ot);
+                        });
+                    }
+                }).then((ot) => {
+                    saving.value = false;
+                    router.replace({
+                        name: 'detail_trip',
+                        params: {
+                            id: createdTrip.id
+                        }
+                    });
+                });
+            })
+            .catch((err) => {
+                console.log('error_creating', err);
+                if (
+                    err &&
+                    err.data &&
+                    err.data.errors &&
+                    err.data.errors.driver_is_verified
+                ) {
+                    dialogs.message(t('tienesQueSerConductor'), {
+                        estado: 'error'
+                    });
+                } else {
+                    dialogs.message(
+                        t('problemaAlCargarElViaje'),
+                        {
+                            estado: 'error'
+                        }
+                    );
+                }
+                jumpToError();
+                saving.value = false;
+            });
+    } else {
+        trip.id = updatingTrip.value.id;
+        let tripCopy = JSON.parse(JSON.stringify(trip));
+        tripCopy.allow_kids = !(tripCopy.allow_kids > 0);
+        tripCopy.allow_animals = !(tripCopy.allow_animals > 0);
+        tripCopy.allow_smoking = !(tripCopy.allow_smoking > 0);
+        tripCopy.seat_price_cents = Math.round(price.value * 100);
+        tripsStore.update(tripCopy)
+            .then(() => {
+                saving.value = false;
+                router.replace({
+                    name: 'detail_trip',
+                    params: { id: trip.id }
+                });
+            })
+            .catch(() => {
+                saving.value = false;
+            });
+    }
+};
+
+const getPlace = (i, data, type) => {
+    type = type || 'trip';
+
+    const tripRef = type === 'trip' ? { points: points.value, sameCity: sameCity } : otherTrip;
+
+    tripRef.points[i].place = data;
+    tripRef.points[i].name = data.name;
+    tripRef.points[i].json = data;
+    tripRef.points[i].error.state = false;
+    const loc = {
+        lat: parseFloat(data.lat),
+        lng: parseFloat(data.lng)
+    };
+    tripRef.points[i].location = loc;
+    if ((i === 0 || i === tripRef.points.length - 1) && tripRef.sameCity) {
+        tripRef.points[0].error.state = false;
+        last(tripRef.points).error.state = false;
+    }
+
+    if (type === 'trip') {
+        addPoint();
+        // Mirror the entire points array
+        otherTrip.points = points.value.slice().reverse().map(point => ({
+            name: point.name,
+            place: point.place,
+            json: point.json,
+            location: point.location,
+            error: new FieldError(),
+            id: point.id
+        }));
+
+        calcRoute('returnTrip');
+    } else {
+        addReturnPoint();
+    }
+
+    calcRoute(type);
+    recalculateRecommendedPrice();
+};
+
+const getPlaceholder = (index) => {
+    if (points.value.length - 1 === index) {
+        return t('destino');
+    } else if (index === 0) {
+        return t('origen');
+    } else {
+        return t('ingresePuntoIntermedio');
+    }
+};
+
+const onBackButton = () => {
+    router.replace({
+        name: 'trips'
+    });
+};
+
+const addPoint = (force) => {
+    if (
+        points.value.filter((point) => point.name === '').length === 0 ||
+        force
+    ) {
+        let newArr = points.value.splice(0);
+        let newp = {
+            name: '',
+            place: null,
+            json: null,
+            location: null,
+            error: new FieldError(),
+            id: new Date().getTime()
+        };
+        newArr.splice(points.value.length - 1, 0, newp);
+        points.value = newArr;
+    }
+};
+
+const addReturnPoint = (force) => {
+    if (
+        otherTrip.points.filter((point) => point.name === '').length === 0 ||
+        force
+    ) {
+        let newArr = otherTrip.points.splice(0);
+        let newp = {
+            name: '',
+            place: null,
+            json: null,
+            location: null,
+            error: new FieldError(),
+            id: new Date().getTime()
+        };
+        newArr.splice(otherTrip.points.length - 1, 0, newp);
+        otherTrip.points = newArr;
+    }
+};
+
+const resetPoints = (m, index) => {
+    if (index === 0 || index === points.value.length - 1) {
+        m.name = '';
+        m.place = null;
+        m.json = null;
+        m.location = null;
+    } else {
+        points.value.splice(index, 1);
+    }
+    calcRoute('trip');
+};
+
+const calcRoute = (type) => {
+    type = type || 'trip';
+
+    const tripRef = type === 'trip' ? { points: points.value, trip: trip, duration: duration } : otherTrip;
+
+    let pts = tripRef.points.filter((point) => point.name);
+
+    if (pts.length < 2) {
+        return;
+    }
+
+    let data = {
+        points: pts.map((point) => point.location)
+    };
+
+    tripApi.getTripInfo(data).then((result) => {
+        if (result.status === true) {
+            tripRef.trip.distance = result.data.distance;
+            if (type === 'trip') {
+                duration.value = result.data.duration;
+            } else {
+                tripRef.duration = result.data.duration;
+            }
+            tripRef.trip.co2 = result.data.co2;
+
+            if (type === 'trip') {
+                maximum_trip_price_cents.value = result.data.maximum_trip_price_cents;
+                recommended_trip_price_cents.value = result.data.recommended_trip_price_cents;
+                recalculateRecommendedPrice();
+            } else {
+                maximum_return_trip_price_cents.value = result.data.maximum_trip_price_cents;
+                recommended_return_trip_price_cents.value = result.data.recommended_trip_price_cents;
+                recalculateRecommendedReturnPrice();
+            }
+        }
+    });
+};
+
+const validatePrice = () => {
+    if (price.value > maximum_seat_price_cents.value / 100) {
+        priceError.state = true;
+        priceError.message = t('precioMaximoExcedido');
+    } else {
+        priceError.state = false;
+    }
+
+    if (returnPrice.value > maximum_seat_price_cents.value / 100) {
+        priceError.state = true;
+        priceError.message = t('precioMaximoExcedido');
+    } else {
+        priceError.state = false;
+    }
+};
+
+const recalculateRecommendedPrice = () => {
+    maximum_seat_price_cents.value = Math.round(maximum_trip_price_cents.value / (trip.total_seats + 1));
+    recommended_seat_price_cents.value = Math.round(recommended_trip_price_cents.value / (trip.total_seats + 1));
+    validatePrice();
+};
+
+const recalculateRecommendedReturnPrice = () => {
+    maximum_return_seat_price_cents.value = Math.round(maximum_return_trip_price_cents.value / (otherTrip.trip.total_seats + 1));
+    recommended_return_seat_price_cents.value = Math.round(recommended_return_trip_price_cents.value / (otherTrip.trip.total_seats + 1));
+    validateReturnPrice();
+};
+
+const validateReturnPrice = () => {
+    if (returnPrice.value > maximum_return_seat_price_cents.value / 100) {
+        returnPriceError.state = true;
+        returnPriceError.message = t('precioMaximoExcedido');
+    } else {
+        returnPriceError.state = false;
+    }
+};
+
+const resetReturnPoints = (m, index) => {
+    if (index === 0 || index === otherTrip.points.length - 1) {
+        m.name = '';
+        m.place = null;
+        m.json = null;
+        m.location = null;
+    } else {
+        otherTrip.points.splice(index, 1);
+    }
+    calcRoute('returnTrip');
+};
+
+onMounted(() => {
+    time.value = moment().add(1, 'hours').format('HH:00');
+    otherTrip.time = moment().add(2, 'hours').format('HH:00');
+    weeklyScheduleTime.value = moment().add(1, 'hours').format('HH:00');
+    weeklyScheduleReturnTime.value = moment().add(2, 'hours').format('HH:00');
+    bus.off('clear-click', onBackButton);
+    bus.on('clear-click', onBackButton);
+
+    if (props.id) {
+        loadTrip();
+    }
+
+    userApi.selladoViaje().then((result) => {
+        needs_to_pay_for_next_trip.value = config.value.module_trip_creation_payment_enabled && result.data.user_over_free_limit;
+        free_trips_amount.value = result.data.free_trips_amount;
+        trips_created_by_user_amount.value = result.data.trips_created_by_user_amount;
+    });
+});
 </script>
 
 <style scoped>

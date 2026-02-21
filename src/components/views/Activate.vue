@@ -1,24 +1,19 @@
 <template></template>
 
-<script>
-import { mapActions } from 'vuex';
+<script setup>
+import { onMounted } from 'vue';
+import { useAuthStore } from '@/stores/auth';
 
-export default {
-    name: 'activate',
-    props: ['token'],
-
-    data() {
-        return {};
-    },
-
-    methods: {
-        ...mapActions({
-            activateAccount: 'auth/activate'
-        })
-    },
-
-    mounted() {
-        this.activateAccount(this.token);
+const props = defineProps({
+    token: {
+        type: String,
+        required: false
     }
-};
+});
+
+const authStore = useAuthStore();
+
+onMounted(() => {
+    authStore.activate(props.token);
+});
 </script>

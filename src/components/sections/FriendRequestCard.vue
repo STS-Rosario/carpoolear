@@ -27,15 +27,8 @@
         </div>
     </div>
 </template>
-<script>
-export default {
-    name: 'friend_card',
-    props: ['user'],
-    data() {
-        return {};
-    },
-    mounted() {}
-};
+<script setup>
+const props = defineProps(['user']);
 </script>
 
 <style scoped>

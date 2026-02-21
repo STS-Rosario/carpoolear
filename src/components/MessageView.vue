@@ -35,40 +35,44 @@
         </div>
     </div>
 </template>
-<script>
+<script setup>
+import { computed } from 'vue';
 import moment from 'moment';
 import UserNameWithBadge from './elements/UserNameWithBadge.vue';
 
-export default {
-    components: {
-        UserNameWithBadge
+const props = defineProps({
+    users: {
+        required: true
     },
-    data() {
-        return {};
+    message: {
+        required: true
     },
-    computed: {
-        author() {
-            let user = this.users.find(
-                (item) => this.message.user_id === item.id
-            );
-            return user || {};
-        },
-        date() {
-            var today = new Date();
-            today.setHours(0);
-            today.setMinutes(0);
-            today.setSeconds(0);
-            if (moment(this.message.created_at)._d < today) {
-                return moment(this.message.created_at).format(
-                    'DD/MM/YYYY HH:mm'
-                );
-            }
-            return moment(this.message.created_at).format('LT');
-        },
-        grupalChat() {
-            return false;
-        }
-    },
-    props: ['users', 'message', 'user']
-};
+    user: {
+        required: true
+    }
+});
+
+const author = computed(() => {
+    let u = props.users.find(
+        (item) => props.message.user_id === item.id
+    );
+    return u || {};
+});
+
+const date = computed(() => {
+    var today = new Date();
+    today.setHours(0);
+    today.setMinutes(0);
+    today.setSeconds(0);
+    if (moment(props.message.created_at)._d < today) {
+        return moment(props.message.created_at).format(
+            'DD/MM/YYYY HH:mm'
+        );
+    }
+    return moment(props.message.created_at).format('LT');
+});
+
+const grupalChat = computed(() => {
+    return false;
+});
 </script>

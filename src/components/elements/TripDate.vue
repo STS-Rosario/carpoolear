@@ -7,11 +7,11 @@
                 v-if="tripCardTheme !== 'light'"
             >
                 <span class="trip_datetime_date">
-                    {{ [trip.trip_date] | moment('DD MMMM YYYY') }}
+                    {{ formatDate(trip.trip_date, 'DD MMMM YYYY') }}
                 </span>
                 -
                 <span class="trip_datetime_time">{{
-                    [trip.trip_date] | moment('HH:mm')
+                    formatDate(trip.trip_date, 'HH:mm')
                 }}</span>
             </time>
         </div>
@@ -29,14 +29,14 @@
             <time class="trip_date_right" :datetime="trip.trip_date">
                 <div class="trip_date_date">
                     <span class="trip_date_date_day">
-                        <span>{{ [trip.trip_date] | moment('DD') }}</span>
+                        <span>{{ formatDate(trip.trip_date, 'DD') }}</span>
                     </span>
                     <br v-if="isMobile" />
                     <span v-if="isMobile" class="trip_date_date_month">
-                        {{ [trip.trip_date] | moment('MMM') }}
+                        {{ formatDate(trip.trip_date, 'MMM') }}
                     </span>
                     <span v-else class="trip_date_date_month">
-                        {{ [trip.trip_date] | moment('MMMM') }}
+                        {{ formatDate(trip.trip_date, 'MMMM') }}
                     </span>
                 </div>
             </time>
@@ -53,24 +53,22 @@
         </template>
     </div>
 </template>
-<script>
-import { mapGetters } from 'vuex';
+<script setup>
+import { computed } from 'vue';
+import { useTripsStore } from '@/stores/trips';
+import { useAuthStore } from '@/stores/auth';
+import { useDeviceStore } from '@/stores/device';
+import { formatDate } from '@/composables/useFormatters';
 import WeeklySchedule from './WeeklySchedule';
 import SvgItem from '../SvgItem';
-export default {
-    name: 'TripDate',
-    computed: {
-        ...mapGetters({
-            trip: 'trips/currentTrip',
-            tripCardTheme: 'auth/tripCardTheme',
-            isMobile: 'device/isMobile'
-        })
-    },
-    components: {
-        WeeklySchedule,
-        SvgItem
-    }
-};
+
+const tripsStore = useTripsStore();
+const authStore = useAuthStore();
+const deviceStore = useDeviceStore();
+
+const trip = computed(() => tripsStore.currentTrip);
+const tripCardTheme = computed(() => authStore.tripCardTheme);
+const isMobile = computed(() => deviceStore.isMobile);
 </script>
 <style scoped>
 .trip_datetime {

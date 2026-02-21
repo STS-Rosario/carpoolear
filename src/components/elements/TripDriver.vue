@@ -6,7 +6,7 @@
         >
             <div class="panel-title card-trip_title row">
                 <span class="trip-data--subtitle" v-if="!isMobile"
-                    >{{ $t('conductor') }}</span
+                    >{{ t('conductor') }}</span
                 >
                 <TripDate v-if="isMobile" />
                 <template v-if="trip && trip.user">
@@ -48,7 +48,7 @@
                                 ></svg-item>
                             </div>
                             <div v-else>
-                                {{ $t('noCalificado') }}
+                                {{ t('noCalificado') }}
                             </div>
                         </div>
                         <div class="trip_driver_ratings" v-else>
@@ -56,7 +56,7 @@
                                 trip.user.positive_ratings +
                                 trip.user.negative_ratings
                             }}
-                            {{ $t('calificaciones') }}
+                            {{ t('calificaciones') }}
                         </div>
                     </div>
                 </template>
@@ -65,10 +65,10 @@
                 class="alert alert-info clearfix cf"
                 v-if="config.module_conversation_average_delay"
             >
-                <strong>{{ $t('velocidadDeRespuesta') }}</strong>
+                <strong>{{ t('velocidadDeRespuesta') }}</strong>
                 {{ averageDelay }}.
                 <br />
-                <strong>{{ $t('porcentajeDeRespuestas') }}</strong>
+                <strong>{{ t('porcentajeDeRespuestas') }}</strong>
                 {{ percentageResponse }}
             </div>
         </div>
@@ -92,8 +92,8 @@
                     >
                         <div
                             v-if="
-                                this.trip.user.positive_ratings ||
-                                this.trip.user.positive_ratings
+                                trip.user.positive_ratings ||
+                                trip.user.positive_ratings
                             "
                         >
                             <svg-item
@@ -104,7 +104,7 @@
                             ></svg-item>
                         </div>
                         <div v-else>
-                            {{ $t('noCalificado') }}
+                            {{ t('noCalificado') }}
                         </div>
                     </div>
                     <div class="profile-info--ratings" v-else>
@@ -118,14 +118,14 @@
                             <img
                                 src="https://carpoolear.com.ar/static/img/pin.png"
                                 alt=""
-                                :title="$t('aportanteMediaNaranja')"
+                                :title="t('aportanteMediaNaranja')"
                             />
                         </span>
                         <span v-if="trip.user.is_member == 1">
                             <img
                                 src="https://carpoolear.com.ar/static/img/pin_member.png"
                                 alt=""
-                                :title="$t('miembroEquipo')"
+                                :title="t('miembroEquipo')"
                             />
                         </span>
                     </div>
@@ -135,10 +135,10 @@
                 class="alert alert-info clearfix cf"
                 v-if="config.module_conversation_average_delay"
             >
-                <strong>{{ $t('velocidadDeRespuesta') }}</strong>
+                <strong>{{ t('velocidadDeRespuesta') }}</strong>
                 {{ averageDelay }}.
                 <br />
-                <strong>{{ $t('porcentajeDeRespuestas') }}</strong>
+                <strong>{{ t('porcentajeDeRespuestas') }}</strong>
                 {{ percentageResponse }}
             </div>
             <div class="row">
@@ -153,7 +153,7 @@
                             }
                         }"
                     >
-                        {{ $t('verPerfil') }}
+                        {{ t('verPerfil') }}
                     </router-link>
                 </div>
             </div>
@@ -161,135 +161,145 @@
         </div>
     </div>
 </template>
-<script>
-import { mapGetters } from 'vuex';
+<script setup>
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
+import { useTripsStore } from '@/stores/trips';
+import { useAuthStore } from '@/stores/auth';
+import { useDeviceStore } from '@/stores/device';
 import TripDate from './TripDate';
 import TripDescription from './TripDescription';
 import SvgItem from '../SvgItem';
 
-export default {
-    name: 'TripDriver',
-    computed: {
-        ...mapGetters({
-            user: 'auth/user',
-            trip: 'trips/currentTrip',
-            tripCardTheme: 'auth/tripCardTheme',
-            config: 'auth/appConfig',
-            isMobile: 'device/isMobile'
-        }),
-        getUserProfile() {
-            return this.trip.user.id === this.user.id
-                ? 'me'
-                : this.trip.user.id;
-        },
-        getUserImage() {
-            return this.user.id === this.trip.user.id
-                ? this.user.image
-                : this.trip.user.image;
-        },
-        tripStars() {
-            if (this.trip && this.trip.user) {
-                let value =
-                    (this.trip.user.positive_ratings /
-                        (this.trip.user.positive_ratings +
-                            this.trip.user.negative_ratings)) *
-                    5;
-                let integerPart = Math.floor(value);
-                let decimalPart = value - integerPart;
-                let stars = [];
-                for (let i = 1; i <= 5; i++) {
-                    if (i < integerPart) {
+const { t } = useI18n();
+const router = useRouter();
+const tripsStore = useTripsStore();
+const authStore = useAuthStore();
+const deviceStore = useDeviceStore();
+
+const user = computed(() => authStore.user);
+const trip = computed(() => tripsStore.currentTrip);
+const tripCardTheme = computed(() => authStore.tripCardTheme);
+const config = computed(() => authStore.appConfig);
+const isMobile = computed(() => deviceStore.isMobile);
+
+const getUserProfile = computed(() => {
+    return trip.value.user.id === user.value.id
+        ? 'me'
+        : trip.value.user.id;
+});
+
+const getUserImage = computed(() => {
+    return user.value.id === trip.value.user.id
+        ? user.value.image
+        : trip.value.user.image;
+});
+
+const tripStars = computed(() => {
+    if (trip.value && trip.value.user) {
+        let value =
+            (trip.value.user.positive_ratings /
+                (trip.value.user.positive_ratings +
+                    trip.value.user.negative_ratings)) *
+            5;
+        let integerPart = Math.floor(value);
+        let decimalPart = value - integerPart;
+        let stars = [];
+        for (let i = 1; i <= 5; i++) {
+            if (i < integerPart) {
+                stars.push({
+                    id: i,
+                    value: ''
+                });
+            } else {
+                if (i === integerPart) {
+                    if (decimalPart >= 0.5) {
                         stars.push({
                             id: i,
                             value: ''
                         });
                     } else {
-                        if (i === integerPart) {
-                            if (decimalPart >= 0.5) {
-                                stars.push({
-                                    id: i,
-                                    value: ''
-                                });
-                            } else {
-                                stars.push({
-                                    id: i,
-                                    value: '-half'
-                                });
-                            }
-                        } else {
-                            stars.push({
-                                id: i,
-                                value: '-empty'
-                            });
-                        }
-                    }
-                }
-                return stars;
-            } else {
-                return [];
-            }
-        },
-        averageDelay() {
-            var delay = '';
-            if (this.trip && this.trip.user) {
-                if (this.trip.user.conversation_answered_count) {
-                    var time =
-                        this.trip.user.answer_delay_sum /
-                        this.trip.user.conversation_answered_count;
-                    // var hours = Math.floor(time / 60 / 60);
-                    // var minutes = Math.floor(time / 60) % 60;
-                    // var seconds = Math.floor(time - minutes * 60 - hours * 3600);
-                    // delay = hours + ':' + minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
-                    if (time / 3600 > 24) {
-                        delay = this.$t('masDeUnDia');
-                    } else if (time / 3600 > 12) {
-                        delay = this.$t('enElDia');
-                    } else if (time / 3600 > 1) {
-                        delay = this.$t('enUnParDeHoras');
-                    } else {
-                        delay = this.$t('enElMomento');
+                        stars.push({
+                            id: i,
+                            value: '-half'
+                        });
                     }
                 } else {
-                    delay = this.$t('sinDatos');
+                    stars.push({
+                        id: i,
+                        value: '-empty'
+                    });
                 }
             }
-            return delay;
-        },
-        percentageResponse() {
-            var response = '';
-            if (this.trip && this.trip.user) {
-                if (this.trip.user.conversation_opened_count) {
-                    var percentage =
-                        this.trip.user.conversation_answered_count /
-                        this.trip.user.conversation_opened_count;
-                    response = Math.round(percentage * 100).toFixed(0) + '%';
-                } else {
-                    response = this.$t('noHaConversado');
-                }
-            }
-            return response;
         }
-    },
-    components: {
-        SvgItem,
-        TripDate,
-        TripDescription
-    },
-
-    secondsToHms(d) {
-        var time = Number(d);
-        var hours = Math.floor(time / 60 / 60);
-        var minutes = Math.floor(time / 60) % 60;
-        var seconds = Math.floor(time - minutes * 60);
-        return (
-            hours +
-            ':' +
-            minutes.toString().padStart(2, '0') +
-            ':' +
-            seconds.toString().padStart(2, '0')
-        );
+        return stars;
+    } else {
+        return [];
     }
-};
+});
+
+const averageDelay = computed(() => {
+    var delay = '';
+    if (trip.value && trip.value.user) {
+        if (trip.value.user.conversation_answered_count) {
+            var time =
+                trip.value.user.answer_delay_sum /
+                trip.value.user.conversation_answered_count;
+            if (time / 3600 > 24) {
+                delay = t('masDeUnDia');
+            } else if (time / 3600 > 12) {
+                delay = t('enElDia');
+            } else if (time / 3600 > 1) {
+                delay = t('enUnParDeHoras');
+            } else {
+                delay = t('enElMomento');
+            }
+        } else {
+            delay = t('sinDatos');
+        }
+    }
+    return delay;
+});
+
+const percentageResponse = computed(() => {
+    var response = '';
+    if (trip.value && trip.value.user) {
+        if (trip.value.user.conversation_opened_count) {
+            var percentage =
+                trip.value.user.conversation_answered_count /
+                trip.value.user.conversation_opened_count;
+            response = Math.round(percentage * 100).toFixed(0) + '%';
+        } else {
+            response = t('noHaConversado');
+        }
+    }
+    return response;
+});
+
+function goToProfile() {
+    router.push({
+        name: 'profile',
+        params: {
+            id: getUserProfile.value,
+            userProfile: trip.value.user
+        }
+    });
+}
+
+function secondsToHms(d) {
+    var time = Number(d);
+    var hours = Math.floor(time / 60 / 60);
+    var minutes = Math.floor(time / 60) % 60;
+    var seconds = Math.floor(time - minutes * 60);
+    return (
+        hours +
+        ':' +
+        minutes.toString().padStart(2, '0') +
+        ':' +
+        seconds.toString().padStart(2, '0')
+    );
+}
 </script>
 <style scoped>
 .user_pin {

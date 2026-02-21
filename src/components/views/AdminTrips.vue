@@ -15,15 +15,15 @@
                 <table class="table table-dark">
                     <thead>
                         <tr>
-                            <th scope="col">{{ $t('usuario') }}</th>
-                            <th scope="col">{{ $t('origen') }}</th>
-                            <th scope="col">{{ $t('destino') }}</th>
-                            <th scope="col">{{ $t('fecha') }}</th>
-                            <th scope="col">{{ $t('hora') }}</th>
-                            <th scope="col">{{ $t('asientosTotales') }}</th>
-                            <th scope="col">{{ $t('ocupados') }}</th>
-                            <th scope="col">{{ $t('solicitudes') }}</th>
-                            <th scope="col">{{ $t('estado') }}</th>
+                            <th scope="col">{{ t('usuario') }}</th>
+                            <th scope="col">{{ t('origen') }}</th>
+                            <th scope="col">{{ t('destino') }}</th>
+                            <th scope="col">{{ t('fecha') }}</th>
+                            <th scope="col">{{ t('hora') }}</th>
+                            <th scope="col">{{ t('asientosTotales') }}</th>
+                            <th scope="col">{{ t('ocupados') }}</th>
+                            <th scope="col">{{ t('solicitudes') }}</th>
+                            <th scope="col">{{ t('estado') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -42,10 +42,10 @@
                             <td>
                                 {{
                                     viaje.hidden
-                                        ? $t('oculto')
+                                        ? t('oculto')
                                             : viaje.deleted
-                                            ? $t('borrado')
-                                            : $t('activo')
+                                            ? t('borrado')
+                                            : t('activo')
                                 }}
                                 <button
                                     v-if="!viaje.deleted"
@@ -54,7 +54,7 @@
                                         onChangeVisibility(viaje.id)
                                     "
                                 >
-                                    {{ viaje.hidden ? $t('activar') : $t('ocultar') }}
+                                    {{ viaje.hidden ? t('activar') : t('ocultar') }}
                                 </button>
                             </td>
                         </tr>
@@ -66,85 +66,74 @@
                         class="btn btn-default pull-right"
                         v-on:click="nextPage"
                     >
-                        {{ $t('siguiente') }}
+                        {{ t('siguiente') }}
                     </button>
                 </div>
                 <tripDisplay
                     v-if="showTrip"
                     :trip="currentViaje"
-                    :clickOutside="closeTrip.bind(this)"
+                    :clickOutside="closeTrip"
                 ></tripDisplay>
             </div>
         </div>
     </div>
 </template>
 
-<script>
+<script setup>
+import { ref, reactive, triggerRef } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useTripsStore } from '@/stores/trips';
 import adminNav from '../sections/adminNav';
 import adminSearchTrip from '../sections/AdminSearchTrips';
-import { mapActions } from 'vuex';
 import tripDisplay from '../sections/TripDisplay';
 
-export default {
-    name: 'admin-trips',
-    data() {
-        return {
-            viajes: [],
-            query: {},
-            currentViaje: {},
-            showTrip: false
-        };
-    },
-    methods: {
-        ...mapActions({
-            search: 'trips/tripsSearch',
-            show: 'trips/show',
-            changeVisibility: 'trips/changeVisibility'
-        }),
-        research(params) {
-            console.log('research', params);
-            this.query = params;
-            this.search(params).then((data) => {
-                this.viajes = data.data;
-            });
-        },
-        nextPage() {
-            this.query.next = true;
-            this.search(this.query).then((data) => {
-                this.viajes = data.data;
-            });
-            window.scrollTo({}, 0);
-        },
-        openTrip(viaje) {
-            this.currentViaje = viaje;
-            this.showTrip = true;
-            console.log('trip', viaje);
-        },
-        closeTrip() {
-            this.currentViaje = {};
-            this.showTrip = false;
-        },
-        onChangeVisibility(id) {
-            this.changeVisibility({ id: id }).then((trip) => {
-                for (let index = 0; index < this.viajes.length; index++) {
-                    console.log(
-                        'changeVisibility',
-                        this.viajes[index].id === trip.data.id
-                    );
-                    if (this.viajes[index].id === trip.data.id) {
-                        this.viajes[index] = trip.data;
-                        this.$forceUpdate();
-                    }
-                }
-            });
+const { t } = useI18n();
+const tripsStore = useTripsStore();
+
+const viajes = ref([]);
+const query = ref({});
+const currentViaje = ref({});
+const showTrip = ref(false);
+
+const research = (params) => {
+    console.log('research', params);
+    query.value = params;
+    tripsStore.tripsSearch(params).then((data) => {
+        viajes.value = data.data;
+    });
+};
+
+const nextPage = () => {
+    query.value.next = true;
+    tripsStore.tripsSearch(query.value).then((data) => {
+        viajes.value = data.data;
+    });
+    window.scrollTo({}, 0);
+};
+
+const openTrip = (viaje) => {
+    currentViaje.value = viaje;
+    showTrip.value = true;
+    console.log('trip', viaje);
+};
+
+const closeTrip = () => {
+    currentViaje.value = {};
+    showTrip.value = false;
+};
+
+const onChangeVisibility = (id) => {
+    tripsStore.changeVisibility({ id: id }).then((trip) => {
+        for (let index = 0; index < viajes.value.length; index++) {
+            console.log(
+                'changeVisibility',
+                viajes.value[index].id === trip.data.id
+            );
+            if (viajes.value[index].id === trip.data.id) {
+                viajes.value[index] = trip.data;
+            }
         }
-    },
-    components: {
-        adminNav,
-        adminSearchTrip,
-        tripDisplay
-    },
-    mounted() {}
+    });
 };
 </script>
 

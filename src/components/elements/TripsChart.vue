@@ -8,134 +8,128 @@
     </div>
 </template>
 
-<script>
+<script setup>
+import { ref, watch, onMounted } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useAdminStore } from '@/stores/admin';
 import LineChart from './LineChart';
-import { mapActions } from 'vuex';
 import moment from 'moment';
 
-export default {
-    name: 'trips-chart',
-    props: {
-        minDate: {
-            default: moment(Date(new Date().getFullYear(), 0, 1), 'YYYY-MM')
-        },
-        maxDate: {
-            default: moment(Date(), 'YYYY-MM')
-        }
+const { t } = useI18n();
+const adminStore = useAdminStore();
+
+const props = defineProps({
+    minDate: {
+        default: moment(Date(new Date().getFullYear(), 0, 1), 'YYYY-MM')
     },
-    data() {
-        return {
-            viajes: {},
-            viajesData: {},
-            viajesOptions: {
-                responsive: true,
-                maintainAspectRatio: false,
-                title: {
-                    display: true,
-                    text: this.$t('chartViajesDeConductoresEnLaPlataforma')
-                },
-                tooltips: {
-                    mode: 'index',
-                    intersect: false
-                },
-                hover: {
-                    mode: 'nearest',
-                    intersect: true
-                },
-                scales: {
-                    xAxes: [
-                        {
-                            display: true,
-                            scaleLabel: {
-                                display: true,
-                                labelString: this.$t('chartMes')
-                            }
-                        }
-                    ],
-                    yAxes: [
-                        {
-                            display: true,
-                            scaleLabel: {
-                                display: true,
-                                labelString: this.$t('chartCantidad')
-                            }
-                        }
-                    ]
-                }
-            }
-        };
-    },
-    watch: {
-        minDate: function () {
-            this.viajesData = this.processTrips(
-                this.viajes,
-                this.minDate,
-                this.maxDate
-            );
-        },
-        maxDate: function () {
-            this.viajesData = this.processTrips(
-                this.viajes,
-                this.minDate,
-                this.maxDate
-            );
-        }
-    },
-    methods: {
-        ...mapActions({
-            getTrips: 'admin/getTrips'
-        }),
-        processTrips(viajes, minDate, maxDate) {
-            let etiquetas = [];
-            let datos = [];
-            if (viajes) {
-                let arr = viajes.sort(function (a, b) {
-                    if (a.key < b.key) {
-                        return -1;
-                    }
-                    if (a.key > b.key) {
-                        return 1;
-                    }
-                    return 0;
-                });
-                for (let index = 0; index < arr.length; index++) {
-                    let element = viajes[index];
-                    if (element.key <= maxDate && element.key >= minDate) {
-                        etiquetas.push(element.key);
-                        datos.push(element.cantidad);
-                    }
-                }
-                return {
-                    labels: etiquetas,
-                    datasets: [
-                        {
-                            label: this.$t('chartCantidadDeViajes'),
-                            backgroundColor: '#F00',
-                            borderColor: '#F00',
-                            data: datos,
-                            fill: false
-                        }
-                    ]
-                };
-            }
-        },
-        async loadData() {
-            let viajes = await this.getTrips();
-            this.viajes = viajes.trips;
-            this.viajesData = this.processTrips(
-                this.viajes,
-                this.minDate,
-                this.maxDate
-            );
-        }
-    },
-    components: {
-        LineChart
-    },
-    mounted() {
-        this.loadData();
+    maxDate: {
+        default: moment(Date(), 'YYYY-MM')
     }
-};
+});
+
+const viajes = ref({});
+const viajesData = ref({});
+const viajesOptions = ref({
+    responsive: true,
+    maintainAspectRatio: false,
+    title: {
+        display: true,
+        text: t('chartViajesDeConductoresEnLaPlataforma')
+    },
+    tooltips: {
+        mode: 'index',
+        intersect: false
+    },
+    hover: {
+        mode: 'nearest',
+        intersect: true
+    },
+    scales: {
+        xAxes: [
+            {
+                display: true,
+                scaleLabel: {
+                    display: true,
+                    labelString: t('chartMes')
+                }
+            }
+        ],
+        yAxes: [
+            {
+                display: true,
+                scaleLabel: {
+                    display: true,
+                    labelString: t('chartCantidad')
+                }
+            }
+        ]
+    }
+});
+
+watch(() => props.minDate, () => {
+    viajesData.value = processTrips(
+        viajes.value,
+        props.minDate,
+        props.maxDate
+    );
+});
+
+watch(() => props.maxDate, () => {
+    viajesData.value = processTrips(
+        viajes.value,
+        props.minDate,
+        props.maxDate
+    );
+});
+
+function processTrips(viajesArr, minDate, maxDate) {
+    let etiquetas = [];
+    let datos = [];
+    if (viajesArr) {
+        let arr = viajesArr.sort(function (a, b) {
+            if (a.key < b.key) {
+                return -1;
+            }
+            if (a.key > b.key) {
+                return 1;
+            }
+            return 0;
+        });
+        for (let index = 0; index < arr.length; index++) {
+            let element = viajesArr[index];
+            if (element.key <= maxDate && element.key >= minDate) {
+                etiquetas.push(element.key);
+                datos.push(element.cantidad);
+            }
+        }
+        return {
+            labels: etiquetas,
+            datasets: [
+                {
+                    label: t('chartCantidadDeViajes'),
+                    backgroundColor: '#F00',
+                    borderColor: '#F00',
+                    data: datos,
+                    fill: false
+                }
+            ]
+        };
+    }
+}
+
+async function loadData() {
+    let result = await adminStore.getTrips();
+    viajes.value = result.trips;
+    viajesData.value = processTrips(
+        viajes.value,
+        props.minDate,
+        props.maxDate
+    );
+}
+
+onMounted(() => {
+    loadData();
+});
 </script>
 
 <style scoped>

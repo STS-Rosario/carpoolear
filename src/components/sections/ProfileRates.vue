@@ -1,7 +1,7 @@
 <template>
     <div class="profile-rates-component container">
         <div class="clearfix">
-            <h2>{{ $t('calificaciones') }}</h2>
+            <h2>{{ t('calificaciones') }}</h2>
             <Loading :data="rates">
                 <div class="list-group">
                     <div class="column-rating">
@@ -41,29 +41,28 @@
                         </div>
                     </div>
                 </div>
-                <!--
-                <div v-if="morePages">
-                    <button class="btn btn-primary" @click="nextPage">Más resultados</button>
-                </div>
-                -->
 
-                <p slot="no-data" class="alert alert-warning" role="alert">
-                    {{ $t('noCalificaciones') }}
-                </p>
-                <p slot="loading" class="alert alert-info" role="alert">
-                    <img
-                        src="https://carpoolear.com.ar/static/img/loader.gif"
-                        alt=""
-                        class="ajax-loader"
-                    />
-                    {{ $t('cargandoNotificaciones') }}
-                </p>
+                <template #no-data>
+                    <p class="alert alert-warning" role="alert">
+                        {{ t('noCalificaciones') }}
+                    </p>
+                </template>
+                <template #loading>
+                    <p class="alert alert-info" role="alert">
+                        <img
+                            src="https://carpoolear.com.ar/static/img/loader.gif"
+                            alt=""
+                            class="ajax-loader"
+                        />
+                        {{ t('cargandoNotificaciones') }}
+                    </p>
+                </template>
             </Loading>
         </div>
 
         <template v-if="config && config.module_references">
             <div class="clearfix">
-                <h2>{{ $t('referencias') }}</h2>
+                <h2>{{ t('referencias') }}</h2>
                 <Loading :data="references">
                     <div class="list-group">
                         <div class="column-rating">
@@ -106,117 +105,114 @@
                             </div>
                         </div>
                     </div>
-                    <!--
-                    <div v-if="morePages">
-                        <button class="btn btn-primary" @click="nextPage">Más resultados</button>
-                    </div>
-                    -->
-                    <p slot="no-data" class="alert alert-warning" role="alert">
-                        {{ $t('noReferences') }}
-                    </p>
-                    <p slot="loading" class="alert alert-info" role="alert">
-                        <img
-                            src="https://carpoolear.com.ar/static/img/loader.gif"
-                            alt=""
-                            class="ajax-loader"
-                        />
-                        {{ $t('cargandoNotificaciones') }}
-                    </p>
+                    <template #no-data>
+                        <p class="alert alert-warning" role="alert">
+                            {{ t('noReferences') }}
+                        </p>
+                    </template>
+                    <template #loading>
+                        <p class="alert alert-info" role="alert">
+                            <img
+                                src="https://carpoolear.com.ar/static/img/loader.gif"
+                                alt=""
+                                class="ajax-loader"
+                            />
+                            {{ t('cargandoNotificaciones') }}
+                        </p>
+                    </template>
                 </Loading>
             </div>
         </template>
     </div>
 </template>
-<script>
-import { mapGetters } from 'vuex';
+<script setup>
+import { ref, reactive, computed, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useAuthStore } from '@/stores/auth';
+import { useProfileStore } from '@/stores/profile';
+import { useDeviceStore } from '@/stores/device';
 import Loading from '../Loading.vue';
 import RateItem from '../RateItem';
 
-let emptyCols = {
+const { t } = useI18n();
+const authStore = useAuthStore();
+const profileStore = useProfileStore();
+const deviceStore = useDeviceStore();
+
+const props = defineProps(['id']);
+
+const emptyCols = {
     col1: [],
     col2: [],
     col3: []
 };
 
-export default {
-    data() {
-        return {
-            rating: {},
-            referencesCol: {}
-        };
-    },
-    methods: {
-        cleanCols(array) {
-            this[array] = JSON.parse(JSON.stringify(emptyCols));
-        },
-        makeRows(arrayToCheck, arrayToPush) {
-            if (this[arrayToCheck]) {
-                this.cleanCols(arrayToPush);
-                if (this.isMobile) {
-                    this[arrayToPush].col1 = this[arrayToCheck].slice(0);
-                } else {
-                    let i, j;
-                    let rows = this.isTablet ? 2 : 3;
-                    for (j = 0; j < rows; j++) {
-                        i = j;
-                        for (i; i < this[arrayToCheck].length; i += rows) {
-                            this[arrayToPush][`col${j + 1}`].push(
-                                this[arrayToCheck][i]
-                            );
-                        }
-                    }
+const rating = ref({});
+const referencesCol = ref({});
+
+const user = computed(() => authStore.user);
+const rates = computed(() => profileStore.rates);
+const isMobile = computed(() => deviceStore.isMobile);
+const isTablet = computed(() => deviceStore.isTablet);
+const isDesktop = computed(() => deviceStore.isDesktop);
+const config = computed(() => authStore.appConfig);
+const references = computed(() => profileStore.references);
+
+function cleanCols(array) {
+    if (array === 'rating') {
+        rating.value = JSON.parse(JSON.stringify(emptyCols));
+    } else {
+        referencesCol.value = JSON.parse(JSON.stringify(emptyCols));
+    }
+}
+
+function makeRows(arrayToCheck, arrayToPush) {
+    const sourceMap = { rates: rates, references: references };
+    const targetMap = { rating: rating, referencesCol: referencesCol };
+    const source = sourceMap[arrayToCheck]?.value;
+    if (source) {
+        cleanCols(arrayToPush);
+        if (isMobile.value) {
+            targetMap[arrayToPush].value.col1 = source.slice(0);
+        } else {
+            let i, j;
+            let rows = isTablet.value ? 2 : 3;
+            for (j = 0; j < rows; j++) {
+                i = j;
+                for (i; i < source.length; i += rows) {
+                    targetMap[arrayToPush].value[`col${j + 1}`].push(
+                        source[i]
+                    );
                 }
             }
         }
-    },
-    computed: {
-        ...mapGetters({
-            user: 'auth/user',
-            rates: 'profile/rates',
-            isMobile: 'device/isMobile',
-            isTablet: 'device/isTablet',
-            isDesktop: 'device/isDesktop',
-            config: 'auth/appConfig',
-            references: 'profile/references'
-        })
-    },
-    watch: {
-        rates: {
-            handler: function (val, oldVal) {
-                this.makeRows('rates', 'rating');
-            }
-        },
-        references: {
-            handler: function (val, oldVal) {
-                if (this.config && this.config.module_references) {
-                    this.makeRows('references', 'referencesCol');
-                }
-            }
-        },
-        isMobile: {
-            handler: function (val, oldVal) {
-                console.log('isMobileChange');
-                this.makeRows('rates', 'rating');
-                if (this.config && this.config.module_references) {
-                    this.makeRows('references', 'referencesCol');
-                }
-            }
-        },
-        isDesktop: {
-            handler: function (val, oldVal) {
-                this.makeRows('rates', 'rating');
-                if (this.config && this.config.module_references) {
-                    this.makeRows('references', 'referencesCol');
-                }
-            }
-        }
-    },
-    components: {
-        Loading,
-        RateItem
-    },
-    props: ['id']
-};
+    }
+}
+
+watch(rates, () => {
+    makeRows('rates', 'rating');
+});
+
+watch(references, () => {
+    if (config.value && config.value.module_references) {
+        makeRows('references', 'referencesCol');
+    }
+});
+
+watch(isMobile, () => {
+    console.log('isMobileChange');
+    makeRows('rates', 'rating');
+    if (config.value && config.value.module_references) {
+        makeRows('references', 'referencesCol');
+    }
+});
+
+watch(isDesktop, () => {
+    makeRows('rates', 'rating');
+    if (config.value && config.value.module_references) {
+        makeRows('references', 'referencesCol');
+    }
+});
 </script>
 <style scoped>
 .profile-rates-component {

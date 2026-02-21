@@ -2,19 +2,19 @@
     <div class="container">
         <template v-if="trip">
             <div class="trip-detail-component">
-                <div class="alert alert-info alert-sellado-viaje" v-if="this.trip.state == 'payment_failed'">
-                    <p>{{ $t('pagoFallo') }}</p>
-                    <p>{{ $t('viajeNoVisiblePagoFallo') }}</p>
-                    <p>{{ $t('pagarSelladoViaje', { amount: $n(this.config.module_trip_creation_payment_amount_cents / 100, 'currency') }) }}</p>
+                <div class="alert alert-info alert-sellado-viaje" v-if="trip.state == 'payment_failed'">
+                    <p>{{ t('pagoFallo') }}</p>
+                    <p>{{ t('viajeNoVisiblePagoFallo') }}</p>
+                    <p>{{ t('pagarSelladoViaje', { amount: $n(config.module_trip_creation_payment_amount_cents / 100, 'currency') }) }}</p>
                     <div id="walletBrick_container"></div>
                 </div>
-                <div class="alert alert-info alert-sellado-viaje" v-if="this.trip.state == 'pending_payment'">
-                    <p>{{ $t('pagoRapiPago') }}</p>
-                    <p>{{ $t('viajeNoVisibleRapiPago') }}</p>
+                <div class="alert alert-info alert-sellado-viaje" v-if="trip.state == 'pending_payment'">
+                    <p>{{ t('pagoRapiPago') }}</p>
+                    <p>{{ t('viajeNoVisibleRapiPago') }}</p>
                 </div>
-                <div class="alert alert-info alert-sellado-viaje" v-if="this.trip.state == 'awaiting_payment'">
-                    <p>{{ $t('viajeNoVisible') }}</p>
-                    <p>{{ $t('pagarSelladoViaje', { amount: $n(this.config.module_trip_creation_payment_amount_cents / 100, 'currency') }) }}</p>
+                <div class="alert alert-info alert-sellado-viaje" v-if="trip.state == 'awaiting_payment'">
+                    <p>{{ t('viajeNoVisible') }}</p>
+                    <p>{{ t('pagarSelladoViaje', { amount: $n(config.module_trip_creation_payment_amount_cents / 100, 'currency') }) }}</p>
                     <div id="walletBrick_container"></div>
                 </div>
                 <div class="row form">
@@ -34,10 +34,10 @@
                             >
                                 <template
                                     v-for="childComponent in columnComponent[0]"
+                                    :key="childComponent._scopeId"
                                 >
                                     <component
                                         :is="childComponent"
-                                        :key="childComponent._scopeId"
                                     ></component>
                                 </template>
                             </div>
@@ -51,10 +51,10 @@
                             >
                                 <template
                                     v-for="childComponent in columnComponent[1]"
+                                    :key="childComponent._scopeId"
                                 >
                                     <component
                                         :is="childComponent"
-                                        :key="childComponent._scopeId"
                                     ></component>
                                 </template>
                             </div>
@@ -68,10 +68,10 @@
                             >
                                 <template
                                     v-for="childComponent in columnComponent[2]"
+                                    :key="childComponent._scopeId"
                                 >
                                     <component
                                         :is="childComponent"
-                                        :key="childComponent._scopeId"
                                     ></component>
                                 </template>
                             </div>
@@ -79,32 +79,34 @@
                                 :name="'modal'"
                                 v-if="showModalRequestSeat"
                                 @close="onModalClose"
-                                :title="$t('carpoodatos')"
+                                :title="t('carpoodatos')"
                                 :body="'Body'"
                             >
-                                <h3 slot="header">
-                                    <span>{{ $t('carpoodatos') }}</span>
-                                    <i
-                                        v-on:click="onModalClose"
-                                        class="fa fa-times float-right-close"
-                                    ></i>
-                                </h3>
-                                <div slot="body">
+                                <template #header>
+                                    <h3>
+                                        <span>{{ t('carpoodatos') }}</span>
+                                        <i
+                                            v-on:click="onModalClose"
+                                            class="fa fa-times float-right-close"
+                                        ></i>
+                                    </h3>
+                                </template>
+                                <template #body>
                                     <div class="text-left carpoodatos">
                                         <p>
-                                            {{ $t('carpoodatosAntesSolicitud') }}
+                                            {{ t('carpoodatosAntesSolicitud') }}
                                         </p>
                                         <p>
-                                            {{ $t('carpoodatosCompromisoViaje') }}
+                                            {{ t('carpoodatosCompromisoViaje') }}
                                         </p>
                                         <p>
-                                            {{ $t('carpoodatosCalificarCancelar') }}
+                                            {{ t('carpoodatosCalificarCancelar') }}
                                         </p>
                                         <p>
-                                            {{ $t('carpoodatosNoPidasAsiento') }}
+                                            {{ t('carpoodatosNoPidasAsiento') }}
                                         </p>
                                         <p>
-                                            {{ $t('carpoodatosContactoEmail', { email: config.admin_email }) }}
+                                            {{ t('carpoodatosContactoEmail', { email: config.admin_email }) }}
                                         </p>
                                     </div>
                                     <div
@@ -118,9 +120,7 @@
                                                 value="0"
                                                 v-model="acceptPassengerValue"
                                             />
-                                            <span
-                                                >{{ $t('noVolverAMostrarMensaje') }}</span
-                                            >
+                                            <span>{{ t('noVolverAMostrarMensaje') }}</span>
                                         </label>
                                     </div>
                                     <div class="text-center">
@@ -134,7 +134,7 @@
                                                 @click="toMakeRequest"
                                                 v-if="!owner"
                                             >
-                                                {{ $t('enviarMensaje') }}
+                                                {{ t('enviarMensaje') }}
                                             </button>
                                         </template>
                                         <template v-else>
@@ -143,42 +143,44 @@
                                                 @click="toMessages"
                                                 v-if="!owner"
                                             >
-                                                {{ $t('enviarMensaje') }}
+                                                {{ t('enviarMensaje') }}
                                             </button>
                                             <button
                                                 class="btn btn-primary"
                                                 @click="toMakeRequest"
                                             >
-                                                {{ $t('solicitarAsiento') }}
+                                                {{ t('solicitarAsiento') }}
                                             </button>
                                         </template>
                                     </div>
-                                </div>
+                                </template>
                             </modal>
                             <modal
                                 :name="'modal'"
                                 v-if="showModalPricing"
                                 @close="onModalClose"
-                                :title="$t('carpoodatos')"
+                                :title="t('carpoodatos')"
                                 :body="'Body'"
                             >
-                                <h3 slot="header">
-                                    <span>{{ $t('carpoodatos') }}</span>
-                                    <i
-                                        v-on:click="onModalClose"
-                                        class="fa fa-times float-right-close"
-                                    ></i>
-                                </h3>
-                                <div slot="body">
+                                <template #header>
+                                    <h3>
+                                        <span>{{ t('carpoodatos') }}</span>
+                                        <i
+                                            v-on:click="onModalClose"
+                                            class="fa fa-times float-right-close"
+                                        ></i>
+                                    </h3>
+                                </template>
+                                <template #body>
                                     <div class="text-left carpoodatos">
                                         <p>
-                                            {{ $t('carpoodatosAntesConfirmar') }}
+                                            {{ t('carpoodatosAntesConfirmar') }}
                                         </p>
                                         <p>
-                                            {{ $t('carpoodatosContribucionMaxima') }}
+                                            {{ t('carpoodatosContribucionMaxima') }}
                                         </p>
                                         <p>
-                                            {{ $t('carpoodatosContactoRedes', { email: config.admin_email }) }}
+                                            {{ t('carpoodatosContactoRedes', { email: config.admin_email }) }}
                                         </p>
                                     </div>
                                     <div
@@ -192,9 +194,7 @@
                                                 value="0"
                                                 v-model="acceptPricing"
                                             />
-                                            <span
-                                                >{{ $t('noVolverAMostrarMensaje') }}</span
-                                            >
+                                            <span>{{ t('noVolverAMostrarMensaje') }}</span>
                                         </label>
                                     </div>
                                     <div class="text-center">
@@ -203,14 +203,14 @@
                                             @click="toMessageForce"
                                             v-if="!owner"
                                         >
-                                            {{ $t('enviarMensaje') }}
+                                            {{ t('enviarMensaje') }}
                                         </button>
                                     </div>
-                                </div>
+                                </template>
                             </modal>
                         </div>
                         <TripButtons
-                            @deleteTrip="deleteTrip()"
+                            @deleteTrip="deleteTripAction()"
                             @toMessages="toMessages()"
                             @onMakeRequest="onMakeRequest()"
                             @cancelRequest="cancelRequest()"
@@ -240,7 +240,7 @@
                             <div>
                                 <div v-if="owner">
                                     <h3 class="title-margined">
-                                        {{ $t('matcheosDelViaje') }}
+                                        {{ t('matcheosDelViaje') }}
                                     </h3>
                                     <div class="row matching-user-list">
                                         <div
@@ -271,7 +271,7 @@
                                                 </a>
                                                 <button
                                                     @click="toUserMessages(p)"
-                                                    :aria-label="$t('irAMensajes')"
+                                                    :aria-label="t('irAMensajes')"
                                                     class="trip_passenger-chat"
                                                 >
                                                     <i
@@ -282,19 +282,10 @@
                                             </div>
                                             <div>
                                                 <small>
-                                                    {{ $t('viajaEl') }}
-                                                    {{
-                                                        p.tripMatch.trip_date
-                                                            | moment('DD/MM')
-                                                    }}
+                                                    {{ t('viajaEl') }}
+                                                    {{ formatDate(p.tripMatch.trip_date, 'DD/MM') }}
                                                     <strong>
-                                                        {{
-                                                            p.tripMatch
-                                                                .trip_date
-                                                                | moment(
-                                                                    'HH:mm'
-                                                                )
-                                                        }}
+                                                        {{ formatDate(p.tripMatch.trip_date, 'HH:mm') }}
                                                     </strong>
                                                 </small>
                                             </div>
@@ -309,13 +300,13 @@
                                                     for="message_all"
                                                     class="sr-only"
                                                 >
-                                                    {{ $t('mensajeParaUsuariosSeleccionados') }}
+                                                    {{ t('mensajeParaUsuariosSeleccionados') }}
                                                 </label>
                                                 <input
                                                     type="text"
                                                     id="message_all"
                                                     class="form-control"
-                                                    :placeholder="$t('enviaASeleccionados')"
+                                                    :placeholder="t('enviaASeleccionados')"
                                                     v-model="messageToUsers"
                                                 />
                                                 <span class="input-group-btn">
@@ -346,10 +337,10 @@
                                 margin-left: -10px;
                                 z-index: 0;
                             "
-                            ref="map"
+                            ref="mapRef"
                         >
                             <l-tile-layer
-                                :url="url"
+                                :url="tileUrl"
                                 :attribution="attribution"
                             ></l-tile-layer>
                         </l-map>
@@ -358,13 +349,23 @@
             </div>
         </template>
         <template v-else>
-            <div>{{ $t('buscandoViaje') }}</div>
+            <div>{{ t('buscandoViaje') }}</div>
         </template>
     </div>
 </template>
-<script>
-import { mapGetters, mapActions } from 'vuex';
-import router from '../../router';
+<script setup>
+import { ref, reactive, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+import { useAuthStore } from '@/stores/auth';
+import { useTripsStore } from '@/stores/trips';
+import { useMyTripsStore } from '@/stores/myTrips';
+import { useDeviceStore } from '@/stores/device';
+import { useConversationsStore } from '@/stores/conversations';
+import { usePassengerStore } from '@/stores/passenger';
+import { useProfileStore } from '@/stores/profile';
+import { getTrip } from '@/stores/index';
+import { formatDate } from '@/composables/useFormatters';
 import bus from '../../services/bus-event';
 import svgItem from '../SvgItem';
 import modal from '../Modal';
@@ -381,569 +382,500 @@ import TripDescription from '../elements/TripDescription';
 import TripShare from '../elements/TripShare';
 import TripPassengers from '../elements/TripPassengers';
 import TripButtons from '../elements/TripButtons';
-
-import Vue from 'vue';
-import VueRouter from 'vue-router';
-import VueHead from 'vue-head';
-import { LMap, LTileLayer } from 'vue2-leaflet';
+import { LMap, LTileLayer } from '@vue-leaflet/vue-leaflet';
+import L from 'leaflet';
+// leaflet-routing-machine expects L to be a global
+if (typeof window !== 'undefined') window.L = L;
 import 'leaflet-routing-machine';
-Vue.use(VueHead);
-Vue.use(VueRouter);
 
-export default {
-    name: 'trip',
-    data() {
-        return {
-            sending: {
-                deleteAction: false,
-                requestAction: false,
-                sendMessageAction: false
-            },
-            carpoolear_logo:
-                process.env.ROUTE_BASE + 'static/img/carpoolear_logo.png',
-            points: [
-                {
-                    name: '',
-                    place: null,
-                    json: null,
-                    location: null
-                },
-                {
-                    name: '',
-                    place: null,
-                    json: null,
-                    location: null
-                }
-            ],
-            matchingUsers: [],
-            messageToUsers: '',
-            selectedMatchingUser: [],
-            url: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
-            attribution:
-                '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-            showModalRequestSeat: false,
-            showModalPricing: false,
-            acceptPassengerValue: 0,
-            acceptPricing: 0,
-            calculatedHeight: {},
-            mp: null, // Mercado Pago instance
-        };
+const { t } = useI18n();
+const router = useRouter();
+const authStore = useAuthStore();
+const tripsStore = useTripsStore();
+const myTripsStore = useMyTripsStore();
+const deviceStore = useDeviceStore();
+const conversationsStore = useConversationsStore();
+const passengerStore = usePassengerStore();
+const profileStore = useProfileStore();
+
+const props = defineProps(['id', 'location']);
+
+const sending = reactive({
+    deleteAction: false,
+    requestAction: false,
+    sendMessageAction: false
+});
+
+const carpoolear_logo = (import.meta.env.VITE_ROUTE_BASE || '/') + 'static/img/carpoolear_logo.png';
+
+const points = ref([
+    {
+        name: '',
+        place: null,
+        json: null,
+        location: null
     },
+    {
+        name: '',
+        place: null,
+        json: null,
+        location: null
+    }
+]);
+const matchingUsers = ref([]);
+const messageToUsers = ref('');
+const selectedMatchingUser = ref([]);
+const tileUrl = ref('https://{s}.tile.osm.org/{z}/{x}/{y}.png');
+const attribution = ref('&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors');
+const showModalRequestSeat = ref(false);
+const showModalPricing = ref(false);
+const acceptPassengerValue = ref(0);
+const acceptPricing = ref(0);
+const calculatedHeight = ref({});
+const mp = ref(null);
+const rightPanel = ref(null);
+const mapRef = ref(null);
 
-    head: {
-        /* title: function () {
-            return {
-                inner: this.$t('viaje')
-            };
-        }, */
-        meta: function () {
-            if (this.trip) {
-                return [
-                    { p: 'og:description', c: this.trip.description },
-                    {
-                        p: 'og:title',
-                        c:
-                            this.trip.points[0].json_address.ciudad +
-                            ' -> ' +
-                            this.trip.points[this.trip.points.length - 1]
-                                .json_address.ciudad +
-                            ' | ' +
-                            moment(this.trip.trip_date).format(
-                                'dddd DD/MM hh:mm'
-                            )
-                    },
-                    { p: 'og:image', c: this.carpoolear_logo }
-                ];
-            } else {
-                return [];
-            }
-        }
-    },
+const user = computed(() => authStore.user);
+const trip = computed(() => tripsStore.currentTrip);
+const config = computed(() => authStore.appConfig);
+const tripCardTheme = computed(() => authStore.tripCardTheme);
+const isMobile = computed(() => deviceStore.isMobile);
+const resolution = computed(() => deviceStore.resolution);
 
-    methods: {
-        ...mapActions({
-            getTrip: 'getTrip',
-            lookConversation: 'conversations/createConversation',
-            selectConversation: 'conversations/select',
-            make: 'passenger/makeRequest',
-            cancel: 'passenger/cancel',
-            remove: 'trips/remove',
-            searchMatchers: 'trips/searchMatchers',
-            sendToAll: 'conversations/sendToAll',
-            changeProperty: 'profile/changeProperty',
-            removeTrip: 'myTrips/removeTrip',
-            searchAgain: 'trips/searchAgain'
-        }),
-        calculateHeight() {
-            this.$nextTick(() => {
-                this.calculatedHeight = !this.isMobile
-                    ? {
-                          'min-height': this.$refs.rightPanel
-                              ? this.$refs.rightPanel.clientHeight + 'px'
-                              : '440px'
-                      }
-                    : {};
-            });
-        },
-        profileComplete() {
-            if (
-                !this.user.image ||
-                this.user.image.length === 0 ||
-                !this.user.description ||
-                this.user.description.length === 0
-            ) {
-                router.replace({ name: 'profile_update' });
-            } else {
-                return true;
-            }
-        },
-        deleteTrip() {
-            if (window.confirm(this.$t('seguroCancelar'))) {
-                this.$set(this.sending, 'deleteAction', true);
-                this.remove(this.trip.id)
-                    .then(() => {
-                        dialogs.message(this.$t('viajeCancelado'), {
-                            estado: 'success'
-                        });
-                        this.$router.replace({ name: 'trips' });
-                    })
-                    .catch((error) => {
-                        console.error(error);
-                        dialogs.message(this.$t('errorAlCancelar'), {
-                            estado: 'error'
-                        });
-                        this.$set(this.sending, 'deleteAction', false);
-                    });
-            }
-        },
-        loadTrip() {
-            this.getTrip(this.id)
-                .then((trip) => {
-                    // this.trip = trip;
-                    this.points = trip.points;
-                    var self = this;
-                    this.calculateHeight();
-                    setTimeout(() => {
-                        self.renderMap();
-                    }, 500);
-                    if (this.owner) {
-                        this.searchMatchers({ trip: this.trip }).then(
-                            (users) => {
-                                this.matchingUsers = users;
-                                if (users && users.length) {
-                                    this.selectedMatchingUser = users.map(
-                                        (u) => u.id
-                                    );
-                                    // console.log('selectedMatchingUser', users);
-                                }
-                            }
-                        );
-                    }
-                })
-                .catch((error) => {
-                    console.log('Error loading trip:', error);
-                    if (error) {
-                        if (error.status === 422) {
-                            if (
-                                error.data &&
-                                error.data.errors &&
-                                error.data.errors.error &&
-                                error.data.errors.error.length
-                            ) {
-                                for (
-                                    let i = 0;
-                                    i < error.data.errors.error.length;
-                                    i++
-                                ) {
-                                    let errorMessage =
-                                        error.data.errors.error[i];
-                                    if (errorMessage === 'trip_not_foound') {
-                                        this.removeTrip(this.id);
-                                        this.searchAgain();
-                                    }
-                                }
-                            }
-                        }
-                        router.replace({ name: 'trips' });
-                    }
-                });
-        },
-        toMessageForce() {
-            this.toMessages(true);
-        },
+const resolutionWidth = computed(() => resolution.value.width);
 
-        toMessages(force) {
-            if (this.acceptPricing) {
-                let data = {
-                    property: 'do_not_alert_pricing',
-                    value: 1
-                };
-                this.changeProperty(data).then(() => {
-                    console.log('do not alert success');
-                });
-            }
-            if (
-                this.user.do_not_alert_pricing ||
-                this.config.disable_user_hints ||
-                force
-            ) {
-                if (this.acceptPassengerValue) {
-                    let data = {
-                        property: 'do_not_alert_request_seat',
-                        value: 1
-                    };
-                    this.changeProperty(data).then(() => {
-                        console.log('do not alert success');
-                    });
-                }
+const themeClasses = computed(() => {
+    return tripCardTheme.value === 'light'
+        ? 'col-xs-24'
+        : 'col-xs-24 col-sm-push-9 col-sm-15 col-md-push-8 col-md-16 col-lg-17 col-lg-push-7';
+});
 
-                if (this.profileComplete()) {
-                    this.toUserMessages(this.trip.user);
-                }
-            } else {
-                this.showModalPricing = true;
-            }
-        },
+const columnClass = computed(() => {
+    return tripCardTheme.value === 'light'
+        ? [
+              'col-sm-8 col-md-8 col-lg-7',
+              'col-sm-9 col-md-10 col-lg-11',
+              'col-sm-7 col-md-6 col-lg-5'
+          ]
+        : ['col-sm-14 col-md-14', 'col-sm-10 col-md-10'];
+});
 
-        toUserMessages(user) {
-            this.$set(this.sending, 'sendMessageAction', true);
-            let data = {
-                user: user,
-                tripId: this.trip.is_passenger ? undefined : this.trip.id
-            };
-            this.lookConversation(data)
-                .then((conversation) => {
-                    router.push({
-                        name: 'conversation-chat',
-                        params: { id: conversation.id }
-                    });
-                })
-                .catch((error) => {
-                    console.error(error);
-                    this.$set(this.sending, 'sendMessageAction', false);
-                });
-        },
+const columnComponent = computed(() => {
+    if (tripCardTheme.value === 'light' && isMobile.value) {
+        return [
+            [TripDriver, TripLocation],
+            [
+                TripData,
+                TripStats,
+                TripDescription,
+                TripShare,
+                TripPassengers
+            ]
+        ];
+    } else if (tripCardTheme.value === 'light') {
+        return [
+            [TripDriver, TripDescription],
+            [TripLocation, TripDate, TripPrice, TripSeats, TripPassengers],
+            [TripData]
+        ];
+    } else {
+        return [
+            [TripLocation, TripDate, TripPrice, TripSeats],
+            [TripData, TripStats, TripShare, TripPassengers]
+        ];
+    }
+});
 
-        toUserProfile(user) {
-            router.replace({
-                name: 'profile',
-                params: {
-                    id: user.id,
-                    userProfile: user,
-                    activeTab: 1
-                }
-            });
-        },
+const owner = computed(() => {
+    return trip.value && user.value && user.value.id === trip.value.user.id;
+});
 
-        onMakeRequest() {
-            if (this.profileComplete()) {
-                if (
-                    this.user.do_not_alert_request_seat ||
-                    this.config.disable_user_hints
-                ) {
-                    this.toMakeRequest();
-                } else {
-                    this.showModalRequestSeat = true;
-                }
-            }
-        },
+const isPassengersView = computed(() => {
+    if (props.location) {
+        return props.location === 'passenger';
+    }
+    return false;
+});
 
-        toMakeRequest() {
-            if (this.acceptPassengerValue) {
-                let data = {
-                    property: 'do_not_alert_request_seat',
-                    value: 1
-                };
-                this.changeProperty(data).then(() => {
-                    console.log('do not alert success');
-                });
-            }
-            if (this.profileComplete()) {
-                if (this.config.module_coordinate_by_message) {
-                    this.toMessages();
-                    return;
-                }
-                this.$set(this.sending, 'requestAction', true);
-                this.showModalRequestSeat = false;
-                this.make(this.trip.id)
-                    .then((response) => {
-                        this.trip.request = 'send';
-                    })
-                    .finally(() => {
-                        this.$set(this.sending, 'requestAction', false);
-                    });
-            }
-        },
+const center = computed(() => {
+    return {
+        lat: config.value.map_coordinates[0],
+        lng: config.value.map_coordinates[1]
+    };
+});
 
-        cancelRequest() {
-            if (window.confirm(this.$t('seguroBajarteViaje'))) {
-                this.$set(this.sending, 'requestAction', true);
-                this.cancel({ user: this.user, trip: this.trip })
-                    .then(() => {
-                        dialogs.message(this.$t('teHasBajadoViaje'));
-                        if (this.trip.request === 'send') {
-                            this.trip.request = '';
-                        }
-                    })
-                    .catch((error) => {
-                        console.error(error);
-                        dialogs.message(
-                            this.$t('problemaSolicitar'),
-                            { estado: 'error' }
-                        );
-                    })
-                    .finally(() => {
-                        this.$set(this.sending, 'requestAction', false);
-                    });
-            }
-        },
+const zoom = computed(() => {
+    return config.value.map_zoom;
+});
 
-        onBackClick() {
-            router.back();
-        },
-
-        renderMap() {
-            if (this.$refs.map) {
-                let map = this.$refs.map.mapObject;
-                /* eslint-disable no-undef */
-                let points = this.trip.points.map((point) =>
-                    L.latLng(point.lat, point.lng)
-                );
-                let control = L.Routing.control({
-                    waypoints: points,
-                    language: this.$i18n.locale
-                });
-                control.addTo(map);
-            }
-        },
-
-        restoreData(trip) {
-            this.points = [];
-            trip.points.forEach((p) => {
-                let point = {
-                    name: p.address,
-                    json: p.json_address,
-                    location: {
-                        lat: p.lat,
-                        lng: p.lng
-                    },
-                    place: null
-                };
-                this.points.push(point);
-            });
-            this.date = trip.trip_date.split(' ')[0];
-            this.time = trip.trip_date.split(' ')[1];
-            this.trip.is_passenger = trip.is_passenger ? 1 : 0;
-            this.trip.total_seats = trip.total_seats;
-            this.trip.friendship_type_id = trip.friendship_type_id;
-            this.trip.distance = trip.distance;
-            this.trip.description = trip.description;
-
-            this.calcRoute();
-        },
-
-        calcRoute() {
-            for (let i = 0; i < this.points.length; i++) {
-                if (!this.points[i].name) {
-                    return;
-                }
-            }
-        },
-        onSendToAll() {
-            let users = this.matchingUsers.filter(
-                (u) => this.selectedMatchingUser.indexOf(u.id) >= 0
-            );
-            if (this.messageToUsers && users && users.length) {
-                this.sendToAll({
-                    message: this.messageToUsers,
-                    users: users
-                }).then(() => {
-                    this.messageToUsers = '';
-                    dialogs.message(this.$t('mensajeEnviado'));
-                });
-            }
-        },
-        onModalClose() {
-            if (this.acceptPassengerValue) {
-                let data = {
-                    property: 'do_not_alert_request_seat',
-                    value: 1
-                };
-                this.changeProperty(data).then(() => {
-                    console.log('do not alert success');
-                });
-            }
-            if (this.acceptPricing) {
-                let data = {
-                    property: 'do_not_alert_pricing',
-                    value: 1
-                };
-                this.changeProperty(data).then(() => {
-                    console.log('do not prcing success');
-                });
-            }
-            this.showModalRequestSeat = false;
-            this.showModalPricing = false;
-        },
-        enablePayment() {
-            // only enable payment if the trip is awaiting payment
-            if (!this.trip.payment_id || this.trip.state !== 'awaiting_payment') {
-                return;
-            }
-
-            // Check if the button is already rendered by checking if container has children
-            const container = document.getElementById('walletBrick_container');
-            if (container && container.children.length > 0) {
-                return;
-            }
-
-            // Create the payment button
-            const bricksBuilder = this.mp.bricks();
-            const renderWalletBrick = async (bricksBuilder) => {
-                await bricksBuilder.create("wallet", "walletBrick_container", {
-                    initialization: {
-                        preferenceId: this.trip.payment_id
-                    }
-                });
-            };
-            // Create container for the payment button if it doesn't exist
-            if (!container) {
-                const newContainer = document.createElement('div');
-                newContainer.id = 'walletBrick_container';
-                document.querySelector('.alert-sellado-viaje').appendChild(newContainer);
-            }
-
-            // Render the payment button
-            renderWalletBrick(bricksBuilder);
-        }
-    },
-
-    mounted() {
-        this.loadTrip();
-        bus.on('back-click', this.onBackClick);
-        bus.on('calculate-height', this.calculateHeight);
-        this.$nextTick(() => {
-            this.calculateHeight();
-        });
-
-        // Initialize Mercado Pago SDK
-        const script = document.createElement('script');
-        script.src = 'https://sdk.mercadopago.com/js/v2';
-        script.onload = () => {
-            this.mp = new MercadoPago(process.env.MERCADO_PAGO_PUBLIC_KEY);
-            // After SDK is loaded, enable payment if needed
-            if (this.trip && this.trip.payment_id && (this.trip.state === 'awaiting_payment' || this.trip.state === 'payment_failed')) {
-                this.enablePayment();
-            }
-        };
-        document.body.appendChild(script);
-    },
-
-    beforeDestroy() {
-        bus.off('back-click', this.onBackClick);
-        bus.off('calculate-height', this.calculateHeight);
-    },
-
-    watch: {
-        id: function (value) {
-            this.loadTrip();
-        },
-        resolutionWidth: function () {
-            this.calculateHeight();
-        }
-    },
-
-    computed: {
-        ...mapGetters({
-            user: 'auth/user',
-            trip: 'trips/currentTrip',
-            config: 'auth/appConfig',
-            tripCardTheme: 'auth/tripCardTheme',
-            isMobile: 'device/isMobile',
-            resolution: 'device/resolution'
-        }),
-        resolutionWidth() {
-            return this.resolution.width;
-        },
-        themeClasses() {
-            return this.tripCardTheme === 'light'
-                ? 'col-xs-24'
-                : 'col-xs-24 col-sm-push-9 col-sm-15 col-md-push-8 col-md-16 col-lg-17 col-lg-push-7';
-        },
-        columnClass() {
-            return this.tripCardTheme === 'light'
-                ? [
-                      'col-sm-8 col-md-8 col-lg-7',
-                      'col-sm-9 col-md-10 col-lg-11',
-                      'col-sm-7 col-md-6 col-lg-5'
-                  ]
-                : ['col-sm-14 col-md-14', 'col-sm-10 col-md-10'];
-        },
-        columnComponent() {
-            if (this.tripCardTheme === 'light' && this.isMobile) {
-                return [
-                    [TripDriver, TripLocation],
-                    [
-                        TripData,
-                        TripStats,
-                        TripDescription,
-                        TripShare,
-                        TripPassengers
-                    ]
-                ];
-            } else if (this.tripCardTheme === 'light') {
-                return [
-                    [TripDriver, TripDescription],
-                    [TripLocation, TripDate,TripPrice, TripSeats, TripPassengers],
-                    [TripData]
-                ];
-            } else {
-                return [
-                    [TripLocation, TripDate, TripPrice, TripSeats],
-                    [TripData, TripStats, TripShare, TripPassengers]
-                ];
-            }
-        },
-        owner() {
-            return this.trip && this.user && this.user.id === this.trip.user.id;
-        },
-        isPassengersView() {
-            if (this.location) {
-                return this.location === 'passenger';
-            }
-            return false;
-        },
-        center() {
-            return {
-                lat: this.config.map_coordinates[0],
-                lng: this.config.map_coordinates[1]
-            };
-        },
-        zoom() {
-            return this.config.map_zoom;
-        }
-    },
-
-    components: {
-        svgItem,
-        LMap,
-        LTileLayer,
-        modal,
-        TripLocation,
-        TripDriver,
-        TripDate,
-        TripSeats,
-        TripData,
-        TripStats,
-        TripDescription,
-        TripShare,
-        TripPassengers,
-        TripButtons,
-        TripPrice
-    },
-
-    props: ['id', 'location']
+const calculateHeight = () => {
+    nextTick(() => {
+        calculatedHeight.value = !isMobile.value
+            ? {
+                  'min-height': rightPanel.value
+                      ? rightPanel.value.clientHeight + 'px'
+                      : '440px'
+              }
+            : {};
+    });
 };
+
+const profileComplete = () => {
+    if (
+        !user.value.image ||
+        user.value.image.length === 0 ||
+        !user.value.description ||
+        user.value.description.length === 0
+    ) {
+        router.replace({ name: 'profile_update' });
+    } else {
+        return true;
+    }
+};
+
+const deleteTripAction = () => {
+    if (window.confirm(t('seguroCancelar'))) {
+        sending.deleteAction = true;
+        tripsStore.remove(trip.value.id)
+            .then(() => {
+                dialogs.message(t('viajeCancelado'), {
+                    estado: 'success'
+                });
+                router.replace({ name: 'trips' });
+            })
+            .catch((error) => {
+                console.error(error);
+                dialogs.message(t('errorAlCancelar'), {
+                    estado: 'error'
+                });
+                sending.deleteAction = false;
+            });
+    }
+};
+
+const loadTrip = () => {
+    getTrip(tripsStore, myTripsStore, props.id)
+        .then((tripData) => {
+            points.value = tripData.points;
+            calculateHeight();
+            setTimeout(() => {
+                renderMap();
+            }, 500);
+            if (owner.value) {
+                tripsStore.searchMatchers({ trip: trip.value }).then(
+                    (users) => {
+                        matchingUsers.value = users;
+                        if (users && users.length) {
+                            selectedMatchingUser.value = users.map(
+                                (u) => u.id
+                            );
+                        }
+                    }
+                );
+            }
+        })
+        .catch((error) => {
+            console.log('Error loading trip:', error);
+            if (error) {
+                if (error.status === 422) {
+                    if (
+                        error.data &&
+                        error.data.errors &&
+                        error.data.errors.error &&
+                        error.data.errors.error.length
+                    ) {
+                        for (
+                            let i = 0;
+                            i < error.data.errors.error.length;
+                            i++
+                        ) {
+                            let errorMessage =
+                                error.data.errors.error[i];
+                            if (errorMessage === 'trip_not_foound') {
+                                myTripsStore.deleteTrip(props.id);
+                                tripsStore.searchAgain();
+                            }
+                        }
+                    }
+                }
+                router.replace({ name: 'trips' });
+            }
+        });
+};
+
+const toMessageForce = () => {
+    toMessages(true);
+};
+
+const toMessages = (force) => {
+    if (acceptPricing.value) {
+        let data = {
+            property: 'do_not_alert_pricing',
+            value: 1
+        };
+        profileStore.changeProperty(data).then(() => {
+            console.log('do not alert success');
+        });
+    }
+    if (
+        user.value.do_not_alert_pricing ||
+        config.value.disable_user_hints ||
+        force
+    ) {
+        if (acceptPassengerValue.value) {
+            let data = {
+                property: 'do_not_alert_request_seat',
+                value: 1
+            };
+            profileStore.changeProperty(data).then(() => {
+                console.log('do not alert success');
+            });
+        }
+
+        if (profileComplete()) {
+            toUserMessages(trip.value.user);
+        }
+    } else {
+        showModalPricing.value = true;
+    }
+};
+
+const toUserMessages = (userObj) => {
+    sending.sendMessageAction = true;
+    let data = {
+        user: userObj,
+        tripId: trip.value.is_passenger ? undefined : trip.value.id
+    };
+    conversationsStore.createConversation(data)
+        .then((conversation) => {
+            router.push({
+                name: 'conversation-chat',
+                params: { id: conversation.id }
+            });
+        })
+        .catch((error) => {
+            console.error(error);
+            sending.sendMessageAction = false;
+        });
+};
+
+const toUserProfile = (userObj) => {
+    router.replace({
+        name: 'profile',
+        params: {
+            id: userObj.id,
+            userProfile: userObj,
+            activeTab: 1
+        }
+    });
+};
+
+const onMakeRequest = () => {
+    if (profileComplete()) {
+        if (
+            user.value.do_not_alert_request_seat ||
+            config.value.disable_user_hints
+        ) {
+            toMakeRequest();
+        } else {
+            showModalRequestSeat.value = true;
+        }
+    }
+};
+
+const toMakeRequest = () => {
+    if (acceptPassengerValue.value) {
+        let data = {
+            property: 'do_not_alert_request_seat',
+            value: 1
+        };
+        profileStore.changeProperty(data).then(() => {
+            console.log('do not alert success');
+        });
+    }
+    if (profileComplete()) {
+        if (config.value.module_coordinate_by_message) {
+            toMessages();
+            return;
+        }
+        sending.requestAction = true;
+        showModalRequestSeat.value = false;
+        passengerStore.makeRequest(trip.value.id)
+            .then((response) => {
+                trip.value.request = 'send';
+            })
+            .finally(() => {
+                sending.requestAction = false;
+            });
+    }
+};
+
+const cancelRequest = () => {
+    if (window.confirm(t('seguroBajarteViaje'))) {
+        sending.requestAction = true;
+        passengerStore.cancel({ user: user.value, trip: trip.value })
+            .then(() => {
+                dialogs.message(t('teHasBajadoViaje'));
+                if (trip.value.request === 'send') {
+                    trip.value.request = '';
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+                dialogs.message(
+                    t('problemaSolicitar'),
+                    { estado: 'error' }
+                );
+            })
+            .finally(() => {
+                sending.requestAction = false;
+            });
+    }
+};
+
+const onBackClick = () => {
+    router.back();
+};
+
+const renderMap = () => {
+    if (mapRef.value) {
+        let map = mapRef.value.leafletObject;
+        if (map && trip.value) {
+            /* eslint-disable no-undef */
+            let pts = trip.value.points.map((point) =>
+                L.latLng(point.lat, point.lng)
+            );
+            let control = L.Routing.control({
+                waypoints: pts,
+                language: useI18n().locale.value
+            });
+            control.addTo(map);
+        }
+    }
+};
+
+const restoreData = (tripData) => {
+    points.value = [];
+    tripData.points.forEach((p) => {
+        let point = {
+            name: p.address,
+            json: p.json_address,
+            location: {
+                lat: p.lat,
+                lng: p.lng
+            },
+            place: null
+        };
+        points.value.push(point);
+    });
+};
+
+const calcRoute = () => {
+    for (let i = 0; i < points.value.length; i++) {
+        if (!points.value[i].name) {
+            return;
+        }
+    }
+};
+
+const onSendToAll = () => {
+    let users = matchingUsers.value.filter(
+        (u) => selectedMatchingUser.value.indexOf(u.id) >= 0
+    );
+    if (messageToUsers.value && users && users.length) {
+        conversationsStore.sendToAll({
+            message: messageToUsers.value,
+            users: users
+        }).then(() => {
+            messageToUsers.value = '';
+            dialogs.message(t('mensajeEnviado'));
+        });
+    }
+};
+
+const onModalClose = () => {
+    if (acceptPassengerValue.value) {
+        let data = {
+            property: 'do_not_alert_request_seat',
+            value: 1
+        };
+        profileStore.changeProperty(data).then(() => {
+            console.log('do not alert success');
+        });
+    }
+    if (acceptPricing.value) {
+        let data = {
+            property: 'do_not_alert_pricing',
+            value: 1
+        };
+        profileStore.changeProperty(data).then(() => {
+            console.log('do not prcing success');
+        });
+    }
+    showModalRequestSeat.value = false;
+    showModalPricing.value = false;
+};
+
+const enablePayment = () => {
+    if (!trip.value.payment_id || trip.value.state !== 'awaiting_payment') {
+        return;
+    }
+
+    const container = document.getElementById('walletBrick_container');
+    if (container && container.children.length > 0) {
+        return;
+    }
+
+    const bricksBuilder = mp.value.bricks();
+    const renderWalletBrick = async (bricksBuilder) => {
+        await bricksBuilder.create("wallet", "walletBrick_container", {
+            initialization: {
+                preferenceId: trip.value.payment_id
+            }
+        });
+    };
+    if (!container) {
+        const newContainer = document.createElement('div');
+        newContainer.id = 'walletBrick_container';
+        document.querySelector('.alert-sellado-viaje').appendChild(newContainer);
+    }
+
+    renderWalletBrick(bricksBuilder);
+};
+
+watch(() => props.id, () => {
+    loadTrip();
+});
+
+watch(resolutionWidth, () => {
+    calculateHeight();
+});
+
+onMounted(() => {
+    loadTrip();
+    bus.on('back-click', onBackClick);
+    bus.on('calculate-height', calculateHeight);
+    nextTick(() => {
+        calculateHeight();
+    });
+
+    // Initialize Mercado Pago SDK
+    const script = document.createElement('script');
+    script.src = 'https://sdk.mercadopago.com/js/v2';
+    script.onload = () => {
+        mp.value = new MercadoPago(import.meta.env.VITE_MERCADO_PAGO_PUBLIC_KEY);
+        if (trip.value && trip.value.payment_id && (trip.value.state === 'awaiting_payment' || trip.value.state === 'payment_failed')) {
+            enablePayment();
+        }
+    };
+    document.body.appendChild(script);
+});
+
+onBeforeUnmount(() => {
+    bus.off('back-click', onBackClick);
+    bus.off('calculate-height', calculateHeight);
+});
 </script>
 
 <style scoped>

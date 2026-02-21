@@ -7,12 +7,12 @@
                 v-if="tripCardTheme === 'light'"
             ></i>
             <span v-if="tripCardTheme !== 'light' || !isMobile"
-                >{{ $t('distanciaARecorrer') }}</span
+                >{{ t('distanciaARecorrer') }}</span
             >
             <br v-if="tripCardTheme !== 'light'" />
             <span>
                 {{ distanceString }}
-                <abbr :title="$t('kilometros')">{{ $t('km') }}</abbr>
+                <abbr :title="t('kilometros')">{{ t('km') }}</abbr>
             </span>
         </div>
         <div>
@@ -22,10 +22,10 @@
                 v-if="tripCardTheme === 'light'"
             ></i>
             <span v-if="tripCardTheme !== 'light' || !isMobile"
-                >{{ $t('tiempoEstimado') }}</span
+                >{{ t('tiempoEstimado') }}</span
             >
             <br v-if="tripCardTheme !== 'light'" />
-            <span>{{ trip.estimated_time }} {{ $t('horas') }}</span>
+            <span>{{ trip.estimated_time }} {{ t('horas') }}</span>
         </div>
         <div>
             <i
@@ -34,42 +34,43 @@
                 v-if="tripCardTheme === 'light'"
             ></i>
             <span v-if="tripCardTheme !== 'light' || !isMobile">
-                {{ $t('huellaCarbono') }} (
-                <abbr :title="$t('aproximada')">{{ $t('aprox') }}</abbr>
+                {{ t('huellaCarbono') }} (
+                <abbr :title="t('aproximada')">{{ t('aprox') }}</abbr>
                 )
             </span>
             <br v-if="tripCardTheme !== 'light'" />
             <span>
                 {{ ((trip.distance / 1000) * 0.15).toFixed(2) }}
-                <abbr :title="$t('kilogramosDioxidoCarbono')">
+                <abbr :title="t('kilogramosDioxidoCarbono')">
                     kg CO<sub>2</sub> eq.
                 </abbr>
             </span>
         </div>
     </div>
 </template>
-<script>
-import { mapGetters } from 'vuex';
+<script setup>
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useTripsStore } from '@/stores/trips';
+import { useAuthStore } from '@/stores/auth';
+import { useDeviceStore } from '@/stores/device';
 import SvgItem from '../SvgItem';
-export default {
-    name: 'TripDate',
-    computed: {
-        ...mapGetters({
-            trip: 'trips/currentTrip',
-            tripCardTheme: 'auth/tripCardTheme',
-            isMobile: 'device/isMobile'
-        }),
-        distanceString() {
-            return Math.floor(this.trip.distance / 1000);
-        },
-        isPassengersView() {
-            return this.trip.is_passenger;
-        }
-    },
-    components: {
-        SvgItem
-    },
-    methods: {}
-};
+
+const { t } = useI18n();
+const tripsStore = useTripsStore();
+const authStore = useAuthStore();
+const deviceStore = useDeviceStore();
+
+const trip = computed(() => tripsStore.currentTrip);
+const tripCardTheme = computed(() => authStore.tripCardTheme);
+const isMobile = computed(() => deviceStore.isMobile);
+
+const distanceString = computed(() => {
+    return Math.floor(trip.value.distance / 1000);
+});
+
+const isPassengersView = computed(() => {
+    return trip.value.is_passenger;
+});
 </script>
 <style scoped></style>

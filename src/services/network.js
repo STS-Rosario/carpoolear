@@ -1,10 +1,10 @@
 /* jshint esversion: 6 */
-import store from '../store';
+import { useAuthStore } from '../stores/auth';
 import TaggedList from '../classes/TaggedList';
 import axios from 'axios';
 import { Capacitor } from '@capacitor/core';
 
-const API_URL = process.env.API_URL;
+const API_URL = import.meta.env.VITE_API_URL;
 
 class MyPromise {
     constructor(resolve, reject, promise = null) {
@@ -49,8 +49,8 @@ export default {
     },
 
     getHeader(headers) {
-        const authHeader = store.getters['auth/authHeader'];
-        Object.assign(headers, authHeader);
+        const authStore = useAuthStore();
+        Object.assign(headers, authStore.authHeader);
 
         // Add Capacitor platform header when running on native platform
         if (Capacitor.isNativePlatform()) {

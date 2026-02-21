@@ -18,121 +18,120 @@
     </div>
 </template>
 
-<script>
-import datePicker from 'vue-datepicker';
+<script setup>
+import { ref, reactive, computed, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+import datePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
 import moment from 'moment';
 
-export default {
-    name: 'calendar',
-    watch: {
-        value: function () {
-            let format = 'YYYY-MM-DD';
-            if (this.value.indexOf('/') >= 0) {
-                format = 'DD/MM/YYYY';
-            }
-            let time = moment(this.value, format).format('DD/MM/YYYY');
-            this.$refs.calendar.showDay(time);
-            this.date.time = moment(this.value, format).format('DD/MM/YYYY');
+const { t } = useI18n();
+
+const props = defineProps({
+    format: {
+        type: String,
+        required: false,
+        default: 'DD/MM/YYYY'
+    },
+    class: {
+        type: String,
+        required: false,
+        default: ''
+    },
+    value: {
+        type: String,
+        required: false,
+        default: ''
+    },
+    limitFilter: {
+        type: Object,
+        required: false,
+        default: () => {
+            return {};
         }
-    },
-    data() {
-        return {
-            date: {
-                time: this.value
-            },
-            option: {
-                type: 'day',
-                week: [
-                    this.$t('lunes'),
-                    this.$t('martes'),
-                    this.$t('miercoles'),
-                    this.$t('jueves'),
-                    this.$t('viernes'),
-                    this.$t('sabado'),
-                    this.$t('domingo')
-                ],
-                month: [
-                    this.$t('enero'),
-                    this.$t('febrero'),
-                    this.$t('marzo'),
-                    this.$t('abril'),
-                    this.$t('mayo'),
-                    this.$t('junio'),
-                    this.$t('julio'),
-                    this.$t('agosto'),
-                    this.$t('septiembre'),
-                    this.$t('octubre'),
-                    this.$t('noviembre'),
-                    this.$t('diciembre')
-                ],
-                format: this.format,
-                placeholder: this.$t('fecha'),
-                inputStyle: {
-                    display: 'inline-block',
-                    'line-height': '22px',
-                    'border-radius': '2px',
-                    color: '#5F5F5F',
-                    width: '100%',
-                    border: 'none'
-                },
-                wrapperClass: this.class,
-                color: {
-                    header: '#016587',
-                    headerText: '#FFF'
-                },
-                buttons: {
-                    ok: this.$t('aceptar'),
-                    cancel: this.$t('cancelar')
-                },
-                overlayOpacity: 0.5, // 0.5 as default
-                dismissible: true // as true as default
-            },
-            limit: [this.limitFilter]
-        };
-    },
-    mounted() {},
-    computed: {
-        dateSys: function () {
-            return moment(this.date.time, this.format).format('YYYY-MM-DD');
-        }
-    },
-    methods: {
-        updateDate(date) {
-            this.$emit('change', this.dateSys);
-        },
-        resetDatePicker() {
-            this.date.time = '';
-            this.$emit('change', '');
-        }
-    },
-    props: {
-        format: {
-            type: String,
-            required: false,
-            default: 'DD/MM/YYYY'
-        },
-        class: {
-            type: String,
-            required: false,
-            default: ''
-        },
-        value: {
-            type: String,
-            required: false,
-            default: ''
-        },
-        limitFilter: {
-            type: Object,
-            required: false,
-            default: () => {
-                return {};
-            }
-        }
-    },
-    components: {
-        datePicker
     }
-};
+});
+
+const emit = defineEmits(['change']);
+
+const calendar = ref(null);
+
+const date = reactive({
+    time: props.value
+});
+
+const option = reactive({
+    type: 'day',
+    week: [
+        t('lunes'),
+        t('martes'),
+        t('miercoles'),
+        t('jueves'),
+        t('viernes'),
+        t('sabado'),
+        t('domingo')
+    ],
+    month: [
+        t('enero'),
+        t('febrero'),
+        t('marzo'),
+        t('abril'),
+        t('mayo'),
+        t('junio'),
+        t('julio'),
+        t('agosto'),
+        t('septiembre'),
+        t('octubre'),
+        t('noviembre'),
+        t('diciembre')
+    ],
+    format: props.format,
+    placeholder: t('fecha'),
+    inputStyle: {
+        display: 'inline-block',
+        'line-height': '22px',
+        'border-radius': '2px',
+        color: '#5F5F5F',
+        width: '100%',
+        border: 'none'
+    },
+    wrapperClass: props.class,
+    color: {
+        header: '#016587',
+        headerText: '#FFF'
+    },
+    buttons: {
+        ok: t('aceptar'),
+        cancel: t('cancelar')
+    },
+    overlayOpacity: 0.5,
+    dismissible: true
+});
+
+const limit = ref([props.limitFilter]);
+
+const dateSys = computed(() => {
+    return moment(date.time, props.format).format('YYYY-MM-DD');
+});
+
+watch(() => props.value, () => {
+    let format = 'YYYY-MM-DD';
+    if (props.value.indexOf('/') >= 0) {
+        format = 'DD/MM/YYYY';
+    }
+    let time = moment(props.value, format).format('DD/MM/YYYY');
+    calendar.value.showDay(time);
+    date.time = moment(props.value, format).format('DD/MM/YYYY');
+});
+
+function updateDate() {
+    emit('change', dateSys.value);
+}
+
+function resetDatePicker() {
+    date.time = '';
+    emit('change', '');
+}
 </script>
 
 <style scoped>

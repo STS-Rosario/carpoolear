@@ -324,23 +324,25 @@
     </span>
 </template>
 
-<script>
-export default {
-    name: 'svgItem',
-    data() {
-        return {};
+<script setup>
+import { computed } from 'vue';
+
+const props = defineProps({
+    icon: {
+        required: true
     },
-    props: ['icon', 'size'],
-    computed: {
-        computedSize() {
-            if (!this.size) {
-                return 48;
-            } else {
-                return this.size;
-            }
-        }
+    size: {
+        required: false
     }
-};
+});
+
+const computedSize = computed(() => {
+    if (!props.size) {
+        return 48;
+    } else {
+        return props.size;
+    }
+});
 </script>
 
 <style>

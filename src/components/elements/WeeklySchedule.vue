@@ -12,7 +12,7 @@
                 >
                     <!-- Display mode -->
                     <span v-if="readonly" class="day-name">
-                        {{ $t(day.key) }}
+                        {{ t(day.key) }}
                     </span>
 
                     <!-- Edit mode -->
@@ -24,7 +24,7 @@
                             @change="toggleDay(day.bit)"
                         />
                         <label :for="dayId(day.key)" class="checkbox-label">
-                            {{ $t(day.key) }}
+                            {{ t(day.key) }}
                         </label>
                     </template>
                 </div>
@@ -34,13 +34,13 @@
         <!-- Time display/input -->
         <div class="weekly-schedule-time-container">
             <span v-if="readonly" class="weekly-schedule-time">
-                {{ weeklyScheduleTime | moment('HH:mm') }} {{ $t('horas') }}
+                {{ formatDate(weeklyScheduleTime, 'HH:mm') }} {{ t('horas') }}
             </span>
             <input
                 v-else
                 type="time"
                 :value="weeklyScheduleTime"
-                @input="$emit('update:weeklyScheduleTime', $event.target.value)"
+                @input="emit('update:weeklyScheduleTime', $event.target.value)"
                 v-mask="'##:##'"
                 class="form-control form-control-with-icon form-control-time"
                 :class="{ 'has-error': hasError }"
@@ -49,7 +49,12 @@
     </div>
 </template>
 
-<script>
+<script setup>
+import { useI18n } from 'vue-i18n';
+import { formatDate } from '@/composables/useFormatters';
+
+const { t } = useI18n();
+
 const WEEKLY_DAYS = [
     { key: 'domingo', bit: 64 },
     { key: 'lunes', bit: 1 },
@@ -60,50 +65,44 @@ const WEEKLY_DAYS = [
     { key: 'sabado', bit: 32 }
 ];
 
-export default {
-    name: 'WeeklySchedule',
-    
-    props: {
-        weeklySchedule: {
-            type: Number,
-            default: 0
-        },
-        weeklyScheduleTime: {
-            type: String,
-            default: '12:00'
-        },
-        readonly: {
-            type: Boolean,
-            default: false
-        },
-        idPrefix: {
-            type: String,
-            default: 'ws'
-        },
-        hasError: {
-            type: Boolean,
-            default: false
-        }
+const props = defineProps({
+    weeklySchedule: {
+        type: Number,
+        default: 0
     },
-
-    computed: {
-        weeklyDays: () => WEEKLY_DAYS
+    weeklyScheduleTime: {
+        type: String,
+        default: '12:00'
     },
-
-    methods: {
-        isDaySelected(bitValue) {
-            return (this.weeklySchedule & bitValue) !== 0;
-        },
-        
-        toggleDay(bitValue) {
-            this.$emit('update:weeklySchedule', this.weeklySchedule ^ bitValue);
-        },
-        
-        dayId(dayKey) {
-            return `${this.idPrefix}-${dayKey}`;
-        }
+    readonly: {
+        type: Boolean,
+        default: false
+    },
+    idPrefix: {
+        type: String,
+        default: 'ws'
+    },
+    hasError: {
+        type: Boolean,
+        default: false
     }
-};
+});
+
+const emit = defineEmits(['update:weeklySchedule', 'update:weeklyScheduleTime']);
+
+const weeklyDays = WEEKLY_DAYS;
+
+function isDaySelected(bitValue) {
+    return (props.weeklySchedule & bitValue) !== 0;
+}
+
+function toggleDay(bitValue) {
+    emit('update:weeklySchedule', props.weeklySchedule ^ bitValue);
+}
+
+function dayId(dayKey) {
+    return `${props.idPrefix}-${dayKey}`;
+}
 </script>
 
 <style scoped>

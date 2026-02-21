@@ -5,8 +5,8 @@
         </router-link>
         <div class="login-header">
             <h1 v-if="!(hasScroll && isMobile)">
-                {{ $t('iniciarSesion') }}
-                <!-- <span class='brand' v-if="!loginCustomHeader">{{ $t('carpoolear') }}</span> -->
+                {{ t('iniciarSesion') }}
+                <!-- <span class='brand' v-if="!loginCustomHeader">{{ t('carpoolear') }}</span> -->
             </h1>
             <div
                 class="col-sm-12 col-md-12"
@@ -17,11 +17,11 @@
         </div>
         <div class="form row">
             <div class="alert alert-warning" role="alert" v-if="!isUnderstood">
-                {{ $t('recuperarDeFacebook') }}
+                {{ t('recuperarDeFacebook') }}
                 <a :href="'mailto:' + config.admin_email">{{
-                    $t('carpoolearMail')
+                    t('carpoolearMail')
                 }}</a>
-                {{ $t('recuperarDeFacebook2') }}
+                {{ t('recuperarDeFacebook2') }}
                 <div class="row form-inline form-warning-login">
                     <div class="col-sm-24 text-right">
                         <div class="checkbox">
@@ -30,7 +30,7 @@
                                     type="checkbox"
                                     v-model="dontShowAgain"
                                 />
-                                <span>{{ $t('noMostrar') }}</span>
+                                <span>{{ t('noMostrar') }}</span>
                             </label>
                         </div>
                         <button
@@ -38,7 +38,7 @@
                             class="btn btn-default"
                             @click="fbWarningGetIt"
                         >
-                            {{ $t('entendido') }}
+                            {{ t('entendido') }}
                         </button>
                     </div>
                 </div>
@@ -46,11 +46,11 @@
 
             <div class="login-box" :class="[righPanelclass]">
                 <label v-show="!loginCustomHeader" for="txt_user">{{
-                    $t('email')
+                    t('email')
                 }}</label>
                 <div class="visual-trick">
                     <input
-                        :placeholder="$t('loginUsuarioPlaceholder')"
+                        :placeholder="t('loginUsuarioPlaceholder')"
                         ref="txt_user"
                         type="email"
                         id="txt_user"
@@ -58,10 +58,10 @@
                         v-jump
                     />
                     <label for="txt_password" v-show="isDesktop">{{
-                        $t('password')
+                        t('password')
                     }}</label>
                     <input
-                        :placeholder="$t('loginPasswordPlaceholder')"
+                        :placeholder="t('loginPasswordPlaceholder')"
                         ref="txt_password"
                         type="password"
                         id="txt_password"
@@ -73,14 +73,14 @@
                         role="alert"
                         v-if="showUserNotActiveInfo"
                     >
-                        {{ $t('debeActivarCuenta') }}
+                        {{ t('debeActivarCuenta') }}
                     </div>
                     <div
                         class="alert alert-info"
                         role="alert"
                         v-if="showUserBannedInfo"
                     >
-                        {{ $t('usuarioBanneado') }}
+                        {{ t('usuarioBanneado') }}
                     </div>
                     <button
                         v-jump
@@ -90,21 +90,21 @@
                         @click="login"
                         :disabled="loading"
                     >
-                        <span v-if="!loading">{{ $t('ingresar') }}</span>
+                        <span v-if="!loading">{{ t('ingresar') }}</span>
                         <spinner class="blue" v-if="loading"></spinner>
                     </button>
                 </div>
                 <div class="pass-options" v-if="isDesktop">
                     <input id="checkbox_remember" type="checkbox" />
                     <label for="checkbox_remember">{{
-                        $t('recordarme')
+                        t('recordarme')
                     }}</label>
                     <span v-show="!loginCustomHeader">-</span>
                     <router-link
                         class="login-forget"
                         :to="{ name: 'reset-password' }"
                     >
-                        {{ $t('olvideContra') }}
+                        {{ t('olvideContra') }}
                     </router-link>
                 </div>
             </div>
@@ -113,17 +113,17 @@
                     class="password-not"
                     :to="{ name: 'reset-password' }"
                 >
-                    {{ $t('olvideContra') }}
+                    {{ t('olvideContra') }}
                 </router-link>
             </div>
             <div class="col-sm-12 col-md-12" v-show="isMobile">
                 <span class="register" v-if="isMobile">
-                    {{ $t('noTenesFace') }}
+                    {{ t('noTenesFace') }}
                     <router-link
                         class="login-register"
                         :to="{ name: 'register' }"
                     >
-                        {{ $t('registrateAca') }}
+                        {{ t('registrateAca') }}
                     </router-link>
                 </span>
             </div>
@@ -144,12 +144,12 @@
                     </span>
                     <span class="btn-with-icon--label">
                         <span v-if="!iosLoading">{{
-                            $t('ingresaConApple')
+                            t('ingresaConApple')
                         }}</span>
                         <spinner class="blue" v-if="iosLoading"></spinner>
                     </span>
                 </button>
-                <!-- <div class="fb-terms">{{ $t('alIngresarFacebook') }} <router-link :to="{name: 'terms'}">{{ $t('tyc') }}</router-link>.</div> -->
+                <!-- <div class="fb-terms">{{ t('alIngresarFacebook') }} <router-link :to="{name: 'terms'}">{{ t('tyc') }}</router-link>.</div> -->
             </div>
             <div
                 class="login-box"
@@ -158,12 +158,12 @@
             >
                 <div>
                     <span class="register">
-                        {{ $t('noTenesFace') }}
+                        {{ t('noTenesFace') }}
                         <router-link
                             class="login-register"
                             :to="{ name: 'register' }"
                         >
-                            {{ $t('registrateAca') }}
+                            {{ t('registrateAca') }}
                         </router-link>
                     </span>
                 </div>
@@ -175,12 +175,12 @@
                 v-show="isDesktop"
             >
                 <span class="register" v-show="isShowLogin">
-                    {{ $t('noTenesFace') }}>
+                    {{ t('noTenesFace') }}>
                     <router-link
                         class="login-register"
                         :to="{ name: 'register' }"
                     >
-                        {{ $t('registrateAca') }}
+                        {{ t('registrateAca') }}
                     </router-link>
                 </span>
                 <button
@@ -194,15 +194,15 @@
                     </span>
                     <span class="btn-with-icon--label">
                         <span v-if="!fbLoading">{{
-                            $t('ingresaConFace')
+                            t('ingresaConFace')
                         }}</span>
                         <spinner class="blue" v-if="fbLoading"></spinner>
                     </span>
                 </button>
                 <div v-show="config.enable_facebook">
-                    {{ $t('alIngresarFace') }}
+                    {{ t('alIngresarFace') }}
                     <router-link :to="{ name: 'terms' }">{{
-                        $t('tyc')
+                        t('tyc')
                     }}</router-link>
                     .
                 </div>
@@ -218,15 +218,15 @@
                     </span>
                     <span class="btn-with-icon--label">
                         <span v-if="!iosLoading">{{
-                            $t('ingresaConApple')
+                            t('ingresaConApple')
                         }}</span>
                         <spinner class="blue" v-if="iosLoading"></spinner>
                     </span>
                 </button>
                 <div v-show="isApple">
-                    {{ $t('alIngresarApple') }}
+                    {{ t('alIngresarApple') }}
                     <router-link :to="{ name: 'terms' }">{{
-                        $t('tyc')
+                        t('tyc')
                     }}</router-link>
                     .
                 </div>
@@ -240,7 +240,7 @@
                         <i class="fa fa-facebook" aria-hidden="true"></i>
                     </span>
                     <span class="btn-with-icon--label">
-                        <span v-if="!fbLoading">{{ $t('ingresaConFace') }}</span>
+                        <span v-if="!fbLoading">{{ t('ingresaConFace') }}</span>
                         <spinner class="blue" v-if="fbLoading"></spinner>
                     </span>
                 </button>
@@ -252,255 +252,241 @@
                 @close="toggleModalLogin"
                 :body="'Body'"
             >
-                <h3 slot="header">
-                    <span>
-                        {{ $t('teniasCuentaVinculada') }} {{ modalType === 'facebook' ? $t('facebook') : $t('apple') }}?
-                    </span>
-                    <i
-                        v-on:click="toggleModalLogin"
-                        class="fa fa-times float-right-close"
-                    ></i>
-                </h3>
-                <div slot="body">
+                <template #header>
+                    <h3>
+                        <span>
+                            {{ t('teniasCuentaVinculada') }} {{ modalType === 'facebook' ? t('facebook') : t('apple') }}?
+                        </span>
+                        <i
+                            v-on:click="toggleModalLogin"
+                            class="fa fa-times float-right-close"
+                        ></i>
+                    </h3>
+                </template>
+                <template #body>
                     <div class="text-left color-black login-modal">
                         <p>
-                            {{ $t('ingresoRegistroYaNoFunciona') }} {{ modalType === 'facebook' ? $t('facebook') : $t('apple') }}.
+                            {{ t('ingresoRegistroYaNoFunciona') }} {{ modalType === 'facebook' ? t('facebook') : t('apple') }}.
                         </p>
                         <p>
-                            {{ $t('escribinosMesaAyuda') }}
+                            {{ t('escribinosMesaAyuda') }}
                         </p>
                         <p>
-                            {{ $t('mesaAyudaFuncionaDesde') }}
+                            {{ t('mesaAyudaFuncionaDesde') }}
                             <a :href="'mailto:' + config.admin_email">
                                 {{ config.admin_email }}</a>,
-                                {{ $t('mensajePrivadoDe') }} <a href="https://instagram.com/carpoolear">Instagram</a> {{ $t('y') }}
+                                {{ t('mensajePrivadoDe') }} <a href="https://instagram.com/carpoolear">Instagram</a> {{ t('y') }}
                             <a href="https://facebook.com/carpoolear">Facebook</a>.
                         </p>
 
-                        <p>{{ $t('buenasRutas') }}</p>
+                        <p>{{ t('buenasRutas') }}</p>
                     </div>
-                </div>
+                </template>
             </modal>
         </div>
     </div>
 </template>
-<script>
-import { mapGetters, mapActions } from 'vuex';
+<script setup>
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+import { useAuthStore } from '@/stores/auth';
+import { useDeviceStore } from '@/stores/device';
+import { useCordovaStore } from '@/stores/cordova';
+import { useTripsStore } from '@/stores/trips';
+import { useMyTripsStore } from '@/stores/myTrips';
+import { useRatesStore } from '@/stores/rates';
+import { useCarsStore } from '@/stores/cars';
+import { usePassengerStore } from '@/stores/passenger';
+import { onLoggin } from '@/stores/index';
 import modal from '../Modal';
 import dialogs from '../../services/dialogs.js';
-import router from '../../router';
 import bus from '../../services/bus-event';
 import Spinner from '../Spinner.vue';
 import cache from '../../services/cache';
 
-export default {
-    name: 'login',
-    data() {
-        return {
-            email: '',
-            password: '',
-            loading: false,
-            fbLoading: false,
-            iosLoading: false,
-            error: '',
-            carpoolear_logo:
-                process.env.ROUTE_BASE + 'static/img/carpoolear_logo.png',
-            hasScroll: false,
-            isUnderstood: true,
-            dontShowAgain: false,
-            isShowLogin: false,
-            showUserNotActiveInfo: false,
-            showModalLogin: false,
-            modalType: 'facebook',
-            showUserBannedInfo: false,
-            app_logo:
-                process.env.ROUTE_BASE +
-                'static/img/' +
-                process.env.TARGET_APP +
-                '_logo_full.png'
-        };
-    },
-    computed: {
-        ...mapGetters({
-            checkLogin: 'auth/checkLogin',
-            isMobile: 'device/isMobile',
-            config: 'auth/appConfig',
-            deviceData: 'cordova/device'
-        }),
-        isDesktop() {
-            return !this.isMobile;
-        },
-        isApple() {
-            return true;
-            console.log('isApple', window.cordova.platformId);
-            return (
-                window.cordova &&
-                window.cordova.platformId.toLowerCase() === 'ios'
-            );
-        },
-        loginCustomHeader() {
-            return this.config ? this.config.login_custom_header : '';
-        },
-        righPanelclass() {
-            if (this.config) {
-                if (this.config.trip_card_design === 'light') {
-                    return 'col-sm-24 col-md-24';
-                } else {
-                    return 'col-sm-12 col-md-12';
-                }
-            } else {
-                return 'col-sm-12 col-md-12';
-            }
+const { t } = useI18n();
+const router = useRouter();
+const authStore = useAuthStore();
+const deviceStore = useDeviceStore();
+const cordovaStore = useCordovaStore();
+const tripsStore = useTripsStore();
+const myTripsStore = useMyTripsStore();
+const ratesStore = useRatesStore();
+const carsStore = useCarsStore();
+const passengerStore = usePassengerStore();
+
+const email = ref('');
+const password = ref('');
+const loading = ref(false);
+const fbLoading = ref(false);
+const iosLoading = ref(false);
+const error = ref('');
+const ROUTE_BASE = import.meta.env.VITE_ROUTE_BASE || '/';
+const TARGET_APP = import.meta.env.VITE_TARGET_APP || 'carpoolear';
+const carpoolear_logo = ROUTE_BASE + 'static/img/carpoolear_logo.png';
+const hasScroll = ref(false);
+const isUnderstood = ref(true);
+const dontShowAgain = ref(false);
+const isShowLogin = ref(false);
+const showUserNotActiveInfo = ref(false);
+const showModalLogin = ref(false);
+const modalType = ref('facebook');
+const showUserBannedInfo = ref(false);
+const app_logo = ROUTE_BASE + 'static/img/' + TARGET_APP + '_logo_full.png';
+
+const txt_user = ref(null);
+
+const checkLogin = computed(() => authStore.checkLogin);
+const isMobile = computed(() => deviceStore.isMobile);
+const config = computed(() => authStore.appConfig);
+const deviceData = computed(() => cordovaStore.device);
+
+const isDesktop = computed(() => !isMobile.value);
+
+const isApple = computed(() => {
+    return true;
+});
+
+const loginCustomHeader = computed(() => {
+    return config.value ? config.value.login_custom_header : '';
+});
+
+const righPanelclass = computed(() => {
+    if (config.value) {
+        if (config.value.trip_card_design === 'light') {
+            return 'col-sm-24 col-md-24';
+        } else {
+            return 'col-sm-12 col-md-12';
         }
-    },
-    methods: {
-        ...mapActions({
-            doLogin: 'auth/login', // map this.add() to this.$store.dispatch('increment')
-            fbLogin: 'cordova/facebookLogin',
-            appleLogin: 'cordova/appleLogin'
-        }),
-        fbWarningGetIt() {
-            this.isUnderstood = true;
-            if (this.dontShowAgain) {
-                cache.setItem('fbLoginWarningDontShow', true);
-            }
-        },
-        toggleModalFBLogin() {
-            this.modalType = 'facebook';
-            this.showModalLogin = !this.showModalLogin;
-        },
+    } else {
+        return 'col-sm-12 col-md-12';
+    }
+});
 
-        toggleModalAppleLogin() {
-            this.modalType = 'apple';
-            this.showModalLogin = !this.showModalLogin;
-        },
-
-        toggleModalLogin(type) {
-            if (type) {
-                this.modalType = type;
-            }
-            this.showModalLogin = !this.showModalLogin;
-        },
-        login() {
-            if (!this.fbLoading) {
-                this.showUserNotActiveInfo = false;
-                this.showUserBannedInfo = false;
-                this.loading = true;
-                let email = this.email;
-                let password = this.password;
-                this.doLogin({ email, password }).then(
-                    (data) => {
-                        this.loading = false;
-                        // router.push({ name: 'trips' });
-                        // router.rememberBack();
-                    },
-                    (error) => {
-                        const userNotActive =
-                            error && error.message === 'user_not_active';
-                        const userBanned =
-                            error && error.message === 'user_banned';
-                        const message = userNotActive
-                            ? this.$t('paraIngresarCuenta')
-                            : userBanned
-                            ? this.$t('usuarioBanneado')
-                            : this.$t('emailOContra');
-                        this.showUserNotActiveInfo = userNotActive;
-                        this.showUserBannedInfo = userBanned;
-                        dialogs.message(message, {
-                            duration: 10,
-                            estado: 'error'
-                        });
-                        if (error) {
-                            this.error = error.error;
-                        }
-                        this.loading = false;
-                    }
-                );
-            } else {
-                dialogs.message(this.$t('solicitudEnviada'), {
-                    duration: 10,
-                    estado: 'error'
-                });
-            }
-        },
-        showLogin() {
-            this.isShowLogin = true;
-        },
-
-        facebookLogin() {
-            if (!this.loading) {
-                this.fbLoading = true;
-                this.fbLogin().catch((response) => {
-                    if (response.errors && response.errors.email) {
-                        dialogs.message(this.$t('correoUsado'), {
-                            duration: 10,
-                            estado: 'error'
-                        });
-                    }
-                });
-            } else {
-                dialogs.message(this.$t('solicitudEnviada'), {
-                    duration: 10,
-                    estado: 'error'
-                });
-            }
-        },
-        iosLogin() {
-            if (!this.loading) {
-                this.iosLoading = true;
-                this.appleLogin().catch((response) => {
-                    if (response.errors && response.errors.email) {
-                        dialogs.message(this.$t('correoUsado'), {
-                            duration: 10,
-                            estado: 'error'
-                        });
-                    }
-                });
-            } else {
-                dialogs.message(this.$t('solicitudEnviada'), {
-                    duration: 10,
-                    estado: 'error'
-                });
-            }
-        },
-        onClearClick() {
-            router.back();
-        }
-    },
-
-    mounted() {
-        bus.on('clear-click', this.onClearClick);
-        let viewPort = Math.max(
-            document.documentElement.clientHeight,
-            window.innerHeight || 0
-        );
-
-        if (!this.isMobile) {
-            this.$refs.txt_user.focus();
-        }
-
-        if (this.config.login_custom_header) {
-            this.isShowLogin = true;
-        }
-
-        this.hasScroll = document.body.scrollHeight > viewPort;
-        cache.getItem('fbLoginWarningDontShow').then((value) => {
-            console.log('fbLoginWarningDontShow', value);
-            if (value) {
-                this.isUnderstood = true;
-            }
-        });
-    },
-
-    beforeDestroy() {
-        bus.off('clear-click', this.onClearClick);
-    },
-
-    components: {
-        Spinner,
-        modal
+const fbWarningGetIt = () => {
+    isUnderstood.value = true;
+    if (dontShowAgain.value) {
+        cache.setItem('fbLoginWarningDontShow', true);
     }
 };
+
+const toggleModalLogin = (type) => {
+    if (type) {
+        modalType.value = type;
+    }
+    showModalLogin.value = !showModalLogin.value;
+};
+
+const login = () => {
+    if (!fbLoading.value) {
+        showUserNotActiveInfo.value = false;
+        showUserBannedInfo.value = false;
+        loading.value = true;
+        authStore.login({ email: email.value, password: password.value }).then(
+            (token) => {
+                loading.value = false;
+                onLoggin(token, authStore, tripsStore, myTripsStore, ratesStore, carsStore, passengerStore, cordovaStore, deviceStore, router);
+            },
+            (err) => {
+                const userNotActive =
+                    err && err.message === 'user_not_active';
+                const userBanned =
+                    err && err.message === 'user_banned';
+                const message = userNotActive
+                    ? t('paraIngresarCuenta')
+                    : userBanned
+                    ? t('usuarioBanneado')
+                    : t('emailOContra');
+                showUserNotActiveInfo.value = userNotActive;
+                showUserBannedInfo.value = userBanned;
+                dialogs.message(message, {
+                    duration: 10,
+                    estado: 'error'
+                });
+                if (err) {
+                    error.value = err.error;
+                }
+                loading.value = false;
+            }
+        );
+    } else {
+        dialogs.message(t('solicitudEnviada'), {
+            duration: 10,
+            estado: 'error'
+        });
+    }
+};
+
+const facebookLogin = () => {
+    if (!loading.value) {
+        fbLoading.value = true;
+        cordovaStore.facebookLogin().catch((response) => {
+            if (response.errors && response.errors.email) {
+                dialogs.message(t('correoUsado'), {
+                    duration: 10,
+                    estado: 'error'
+                });
+            }
+        });
+    } else {
+        dialogs.message(t('solicitudEnviada'), {
+            duration: 10,
+            estado: 'error'
+        });
+    }
+};
+
+const iosLogin = () => {
+    if (!loading.value) {
+        iosLoading.value = true;
+        cordovaStore.appleLogin().catch((response) => {
+            if (response.errors && response.errors.email) {
+                dialogs.message(t('correoUsado'), {
+                    duration: 10,
+                    estado: 'error'
+                });
+            }
+        });
+    } else {
+        dialogs.message(t('solicitudEnviada'), {
+            duration: 10,
+            estado: 'error'
+        });
+    }
+};
+
+const onClearClick = () => {
+    router.back();
+};
+
+onMounted(() => {
+    bus.on('clear-click', onClearClick);
+    let viewPort = Math.max(
+        document.documentElement.clientHeight,
+        window.innerHeight || 0
+    );
+
+    if (!isMobile.value && txt_user.value) {
+        txt_user.value.focus();
+    }
+
+    if (config.value.login_custom_header) {
+        isShowLogin.value = true;
+    }
+
+    hasScroll.value = document.body.scrollHeight > viewPort;
+    cache.getItem('fbLoginWarningDontShow').then((value) => {
+        console.log('fbLoginWarningDontShow', value);
+        if (value) {
+            isUnderstood.value = true;
+        }
+    });
+});
+
+onBeforeUnmount(() => {
+    bus.off('clear-click', onClearClick);
+});
 </script>
 
 <style>

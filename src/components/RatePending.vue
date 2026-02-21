@@ -27,7 +27,7 @@
                     }}</strong>
                     {{ $t('ratePendingElDia') }}
                     <strong>{{
-                        trip.trip_date | moment('dddd DD [de] MMMM')
+                        formatDate(trip.trip_date, 'dddd DD [de] MMMM')
                     }}</strong>
                     ?
                 </div>
@@ -68,96 +68,93 @@
         </div>
     </div>
 </template>
-<script>
-import { mapActions, mapGetters } from 'vuex';
+<script setup>
+import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useAuthStore } from '@/stores/auth';
+import { useRatesStore } from '@/stores/rates';
 import dialogs from '../services/dialogs.js';
+import { formatDate } from '@/composables/useFormatters';
 
-export default {
-    name: 'rate-pending',
+const { t } = useI18n();
+const authStore = useAuthStore();
+const ratesStore = useRatesStore();
 
-    data() {
-        return {
-            ACCEPTED: 1,
-            CANCELED: 3,
-            DRIVER: 0,
-            PASSENGER: 1,
-            vote: null,
-            expanded: false,
-            comment: '',
-            sending: false
-        };
-    },
+const props = defineProps({
+    rate: {
+        required: true
+    }
+});
 
-    methods: {
-        ...mapActions({
-            emit: 'rates/vote'
-        }),
+const emitEvent = defineEmits(['rated']);
 
-        setRate(value) {
-            if (this.vote === value) {
-                this.vote = null;
-                this.expanded = false;
-            } else {
-                this.vote = value;
-                this.expanded = true;
-            }
-        },
+const ACCEPTED = 1;
+const CANCELED = 3;
+const DRIVER = 0;
+const PASSENGER = 1;
 
-        makeVote() {
-            this.sending = true;
-            let data = {
-                id: this.rate.id,
-                trip_id: this.trip.id,
-                user_id: this.to.id,
-                trip: this.rate.trip,
-                comment: this.comment,
-                rating: this.vote
-            };
-            let ok = false;
-            if (!this.vote) {
-                if (!this.comment) {
-                    // Voto negativo y comentario vacio
-                    dialogs.message(
-                        this.$t('ratePendingComentarioNoPuedeEstarVacio'),
-                        { duration: 10, estado: 'error' }
-                    );
-                } else {
-                    ok = true;
-                }
-            } else {
-                ok = true;
-            }
-            if (ok) {
-                console.log('emit rated');
-                this.$emit('rated', data);
-                this.emit(data)
-                    .then(() => {
-                        this.comment = '';
-                        this.sending = false;
-                    })
-                    .catch(() => {
-                        this.sending = false;
-                    });
-            } else {
-                this.sending = false;
-            }
+const vote = ref(null);
+const expanded = ref(false);
+const comment = ref('');
+const sending = ref(false);
+
+const user = computed(() => authStore.user);
+
+const to = computed(() => {
+    return props.rate.to;
+});
+
+const trip = computed(() => {
+    return props.rate.trip;
+});
+
+function setRate(value) {
+    if (vote.value === value) {
+        vote.value = null;
+        expanded.value = false;
+    } else {
+        vote.value = value;
+        expanded.value = true;
+    }
+}
+
+function makeVote() {
+    sending.value = true;
+    let data = {
+        id: props.rate.id,
+        trip_id: trip.value.id,
+        user_id: to.value.id,
+        trip: props.rate.trip,
+        comment: comment.value,
+        rating: vote.value
+    };
+    let ok = false;
+    if (!vote.value) {
+        if (!comment.value) {
+            // Voto negativo y comentario vacio
+            dialogs.message(
+                t('ratePendingComentarioNoPuedeEstarVacio'),
+                { duration: 10, estado: 'error' }
+            );
+        } else {
+            ok = true;
         }
-    },
-
-    computed: {
-        ...mapGetters({
-            user: 'auth/user'
-        }),
-
-        to() {
-            return this.rate.to;
-        },
-
-        trip() {
-            return this.rate.trip;
-        }
-    },
-
-    props: ['rate']
-};
+    } else {
+        ok = true;
+    }
+    if (ok) {
+        console.log('emit rated');
+        emitEvent('rated', data);
+        ratesStore.vote(data)
+            .then(() => {
+                comment.value = '';
+                sending.value = false;
+            })
+            .catch(() => {
+                sending.value = false;
+            });
+    } else {
+        sending.value = false;
+    }
+}
 </script>

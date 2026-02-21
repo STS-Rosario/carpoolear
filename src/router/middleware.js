@@ -1,9 +1,9 @@
-/* jshint esversion: 6 */
-import store from '../store';
-import router from '../router';
+import { useAuthStore } from '../stores/auth';
+import router from './index';
 
 export function auth(to, from, next) {
-    if (store.getters['auth/checkLogin']) {
+    const authStore = useAuthStore();
+    if (authStore.checkLogin) {
         next();
     } else {
         next(false);
@@ -14,11 +14,10 @@ export function auth(to, from, next) {
         router.replace({ name: 'login' });
     }
 }
+
 export function authAdmin(to, from, next) {
-    if (
-        store.getters['auth/checkLogin'] &&
-        store.getters['auth/user'].is_admin
-    ) {
+    const authStore = useAuthStore();
+    if (authStore.checkLogin && authStore.user && authStore.user.is_admin) {
         next();
     } else {
         next(false);
@@ -31,7 +30,8 @@ export function authAdmin(to, from, next) {
 }
 
 export function guest(to, from, next) {
-    if (!store.getters['auth/checkLogin']) {
+    const authStore = useAuthStore();
+    if (!authStore.checkLogin) {
         next();
     } else {
         next(false);
@@ -40,7 +40,8 @@ export function guest(to, from, next) {
 }
 
 export function profileComplete(to, from, next) {
-    const user = store.getters['auth/user'];
+    const authStore = useAuthStore();
+    const user = authStore.user;
     if (
         !user.image ||
         user.image.length === 0 ||
@@ -51,7 +52,6 @@ export function profileComplete(to, from, next) {
             name: to.name,
             params: to.params
         };
-        console.log('problem');
         next(false);
         router.replace({ name: 'profile_update' });
     }

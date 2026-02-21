@@ -187,26 +187,22 @@ h2 {
 }
 </style>
 
-<script>
+<script setup>
+import { onMounted, onBeforeUnmount } from 'vue';
+import { useRouter } from 'vue-router';
 import bus from '../../services/bus-event.js';
 
-export default {
-    name: 'about',
-    data() {
-        return {};
-    },
-    mounted() {
-        bus.on('back-click', this.onBackClick);
-    },
+const router = useRouter();
 
-    beforeDestroy() {
-        bus.off('back-click', this.onBackClick);
-    },
-
-    methods: {
-        onBackClick() {
-            this.$router.back();
-        }
-    }
+const onBackClick = () => {
+    router.back();
 };
+
+onMounted(() => {
+    bus.on('back-click', onBackClick);
+});
+
+onBeforeUnmount(() => {
+    bus.off('back-click', onBackClick);
+});
 </script>

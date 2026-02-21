@@ -12,12 +12,12 @@
                     class="cbx"
                 />
                 <label for="cbxAllowForeignPoints" class="cbx_label">
-                    {{ $t('origenODestinoFueraDe') }}
+                    {{ t('origenODestinoFueraDe') }}
                     {{ config ? config.country_name : '' }}
                 </label>
                 <span
                     class="tooltip-bottom"
-                    :data-tooltip="$t('marcandoEstaOpcionPodrasSeleccionar')"
+                    :data-tooltip="t('marcandoEstaOpcionPodrasSeleccionar')"
                 ></span>
                 <i class="fa fa-info-circle" aria-hidden="true"></i>
             </div>
@@ -30,7 +30,7 @@
                     @click="isPassenger = false"
                 >
                     <span class="fa fa-car" aria-hidden="true"></span>
-                    <span v-html="$t('buscoConductor')"></span>
+                    <span v-html="t('buscoConductor')"></span>
                 </button>
             </div>
             <div class="col-xs-12 col-md-3">
@@ -47,7 +47,7 @@
                                 : pasajero_logo_gris
                         "
                     />
-                    <span>{{ $t('buscoPasajero') }}</span>
+                    <span>{{ t('buscoPasajero') }}</span>
                 </button>
             </div>
             <div
@@ -62,27 +62,26 @@
                         class="cbx"
                     />
                 <label for="cbxAllowForeignPoints" class="cbx_label">
-                    {{ $t('origenODestinoFueraDe') }}
+                    {{ t('origenODestinoFueraDe') }}
                     {{ config ? config.country_name : '' }}
                 </label>
                 <span
                     class="tooltip-bottom"
-                    :data-tooltip="$t('marcandoEstaOpcionPodrasSeleccionar')"
+                    :data-tooltip="t('marcandoEstaOpcionPodrasSeleccionar')"
                 ></span>
                     <i class="fa fa-info-circle" aria-hidden="true"></i>
                 </div>
             </div>
             <div class="col-xs-24 col-md-5 gmap-autocomplete origin">
                 <autocomplete
-                    :placeholder="$t('origen')"
+                    :placeholder="t('origen')"
                     name="from_town"
-                    ref="from_town"
+                    ref="from_town_ref"
                     :value="from_town.name"
                     v-on:place_changed="(data) => getPlace(0, data)"
                     :classes="'form-control form-control-with-icon form-control-map-autocomplete'"
                     :country="allowForeignPoints ? null : 'AR'"
                 ></autocomplete>
-                <!-- <GmapAutocomplete name="from_town" ref="from_town" :selectFirstOnEnter="true" :types="['(cities)']"  :componentRestrictions="allowForeignPoints ? null : {country: 'AR'}"  placeholder="Origen"  :value="from_town.name" v-on:place_changed="(data) => getPlace(0, data)" class="form-control form-control-with-icon form-control-map-autocomplete"> </GmapAutocomplete>-->
                 <div class="date-picker--cross">
                     <i
                         v-on:click="resetInput('from_town')"
@@ -90,7 +89,7 @@
                         aria-hidden="true"
                     ></i>
                 </div>
-                <div class="optional-warning text-center">({{ $t('opcional') }})</div>
+                <div class="optional-warning text-center">({{ t('opcional') }})</div>
                 <div class="swap btn">
                     <img
                         alt="swap"
@@ -108,15 +107,14 @@
             </div>
             <div class="col-xs-24 col-md-5 gmap-autocomplete destiny">
                 <autocomplete
-                    :placeholder="$t('destino')"
+                    :placeholder="t('destino')"
                     name="to_town"
-                    ref="to_town"
+                    ref="to_town_ref"
                     :value="to_town.name"
                     v-on:place_changed="(data) => getPlace(1, data)"
                     :classes="'form-control form-control-with-icon form-control-map-autocomplete'"
                     :country="allowForeignPoints ? null : 'AR'"
                 ></autocomplete>
-                <!-- <GmapAutocomplete name="to_town" ref="to_town" :selectFirstOnEnter="true" :types="['(cities)']"  :componentRestrictions="allowForeignPoints ? null : {country: 'AR'}"  placeholder="Destino"  :value="to_town.name" v-on:place_changed="(data) => getPlace(1, data)" class="form-control form-control-with-icon form-control-map-autocomplete"> </GmapAutocomplete> -->
                 <div class="date-picker--cross">
                     <i
                         v-on:click="resetInput('to_town')"
@@ -124,294 +122,295 @@
                         aria-hidden="true"
                     ></i>
                 </div>
-                <div class="optional-warning text-center">({{ $t('opcional') }})</div>
+                <div class="optional-warning text-center">({{ t('opcional') }})</div>
             </div>
             <div class="col-xs-24 col-md-4 no-padding">
                 <DatePicker
-                    ref="datepicker"
+                    ref="datepickerRef"
                     :value="date"
                     :minDate="minDate"
                     :class="{ 'has-error': dateError.state }"
                 ></DatePicker>
-                <div class="optional-warning text-center">({{ $t('opcional') }})</div>
+                <div class="optional-warning text-center">({{ t('opcional') }})</div>
             </div>
             <div v-if="!autoSearch" class="col-xs-24 col-md-3 col-lg-4">
-                <button class="btn btn-primary btn-search" @click="emit">
-                    {{ $t('buscar') }} 
+                <button class="btn btn-primary btn-search" @click="emitSearch">
+                    {{ t('buscar') }}
                 </button>
             </div>
         </div>
     </div>
 </template>
 
-<script>
-import { mapGetters } from 'vuex';
+<script setup>
+import { ref, reactive, computed, watch, onMounted, onBeforeUnmount } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useDeviceStore } from '@/stores/device';
+import { useAuthStore } from '@/stores/auth';
 import DatePicker from '../DatePicker';
 import autocomplete from '../Autocomplete.vue';
 import bus from '../../services/bus-event.js';
 import moment from 'moment';
 import dialogs from '../../services/dialogs.js';
 
-export default {
-    name: 'search-trip',
-    data() {
-        return {
-            minDate: moment().toDate(),
-            isPassenger: false,
-            from_town: {
-                name: '',
-                location: null,
-                radio: 0,
-                country: ''
-            },
-            to_town: {
-                name: '',
-                location: null,
-                radio: 0,
-                country: ''
-            },
-            date: '',
-            dateAnswer: '',
-            dateError: {
-                message: '',
-                state: ''
-            },
-            chofer_logo_blanco:
-                process.env.ROUTE_BASE +
-                'static/img/icono-conductor-blanco.png',
-            pasajero_logo_blanco:
-                process.env.ROUTE_BASE + 'static/img/icono-pasajero-blanco.png',
-            chofer_logo_gris:
-                process.env.ROUTE_BASE + 'static/img/icono-conductor-gris.png',
-            pasajero_logo_gris:
-                process.env.ROUTE_BASE + 'static/img/icono-pasajero-gris.png',
-            swap_horizontal:
-                process.env.ROUTE_BASE + 'static/img/flechas_horizontales.png',
-            swap_vertical:
-                process.env.ROUTE_BASE + 'static/img/flechas_verticales.png',
-            allowForeignPoints: false,
-            options: []
-        };
-    },
-    computed: {
-        ...mapGetters({
-            isMobile: 'device/isMobile',
-            config: 'auth/appConfig'
-        }),
-        autoSearch() {
-            return this.config.trips_auto_search && !this.isMobile;
-        }
-    },
-    watch: {
-        'from_town.id'(newVal) {
-            if (this.autoSearch) {
-                this.emit();
-            }
-        },
-        'to_town.id'(newVal) {
-            if (this.autoSearch) {
-                this.emit();
-            }
-        },
-        dateAnswer(newVal) {
-            if (this.autoSearch) {
-                this.emit();
-            }
-        },
-        isPassenger() {
-            if (this.autoSearch) {
-                this.emit();
-            }
-        }
-    },
-    mounted() {
-        bus.on('date-change', this.dateChange);
-        this.loadParams(this.params);
-        this.from_town.country = this.config.osm_country;
-        this.to_town.country = this.config.osm_country;
-        this.$refs['from_town'].$el.addEventListener('input', this.checkInput);
-        this.$refs['to_town'].$el.addEventListener('input', this.checkInput);
-    },
-    updated() {},
-    beforeDestroy() {
-        this.$refs['from_town'].$el.removeEventListener(
-            'input',
-            this.checkInput
-        );
-        this.$refs['to_town'].$el.removeEventListener('input', this.checkInput);
-        bus.off('date-change', this.dateChange);
-    },
-    methods: {
-        dateChange(value) {
-            this.dateAnswer = value;
-        },
-        checkInput(event) {
-            let value = event.target.value;
-            let name = event.target.name;
-            if (value === '') {
-                this[name] = '';
-            }
-        },
-        getPlace(i, data) {
-            console.log('getPlace', data);
-            let obj = {};
-            // FIXME falta bounding box
-            if (data) {
-                obj = {
-                    name: data.name,
-                    location: {
-                        lat: parseFloat(data.lat),
-                        lng: parseFloat(data.lng)
-                    },
-                    country: data.country,
-                    id: data.id
-                };
-            }
-            if (i === 0) {
-                this.from_town = obj;
-                if (this.config.trips_focus_next) {
-                    this.$refs.to_town.focus();
-                }
-            } else {
-                this.to_town = obj;
-                if (this.config.trips_focus_next) {
-                    this.$refs.datepicker.setFocus();
-                }
-            }
-        },
-        emit() {
-            let params = {};
-            let foreignCountry = 0;
-            if (this.from_town.location) {
-                console.log('from_town', this.from_town);
-                params.origin_lat = this.from_town.location.lat;
-                params.origin_lng = this.from_town.location.lng;
-                params.origin_radio = this.from_town.radio;
-                params.origin_name = this.from_town.name;
-                params.origin_id = this.from_town.id;
-            } else {
-                params.origin_name = this.$refs['from_town'].input;
-            }
-            if (
-                this.from_town &&
-                this.from_town.country &&
-                this.from_town.country.toLowerCase() !==
-                    this.config.osm_country.toLowerCase()
-            ) {
-                foreignCountry++;
-            }
-            if (this.to_town.location) {
-                params.destination_lat = this.to_town.location.lat;
-                params.destination_lng = this.to_town.location.lng;
-                params.destination_radio = this.to_town.radio;
-                params.destination_name = this.to_town.name;
-                params.destination_id = this.to_town.id;
-            } else {
-                params.destination_name = this.$refs['to_town'].input;
-            }
-            if (
-                this.to_town &&
-                this.to_town.country &&
-                this.to_town.country.toLowerCase() !==
-                    this.config.osm_country.toLowerCase()
-            ) {
-                foreignCountry++;
-            }
-            if (this.dateAnswer) {
-                params.date = this.dateAnswer;
-            }
-            params.is_passenger = this.isPassenger;
-            if (foreignCountry < 2) {
-                // console.log('trip-search', params);
-                this.$emit('trip-search', params);
-            } else {
-                dialogs.message(
-                    this.$t('origenYDestinoNoPuedenSerAmbosDelExterior'),
-                    {
-                        duration: 10,
-                        estado: 'error'
-                    }
-                );
-            }
-        },
-        resetInput(input) {
-            if (this.$refs[input]) {
-                this.$refs[input].input = '';
-                this.$refs[input].focus();
-            }
-            this[input] = {
-                name: '',
-                location: null,
-                radio: 0,
-                country: this.config.osm_country
-            };
-        },
-        swapCities() {
-            let temp;
-            temp = this['to_town'];
-            this['to_town'] = Object.assign({}, this['from_town']);
-            this['from_town'] = Object.assign({}, temp);
-            
-            // Search will only auto-trigger on desktop
-            if (!this.isMobile && this.autoSearch) {
-                this.emit();
-            }
-        },
-        clear() {
-            this.resetInput('from_town');
-            this.$refs['from_town'].input = '';
-            this.resetInput('to_town');
-            this.$refs['to_town'].input = '';
-            this.$refs.datepicker.clear();
-        },
-        loadParams(parameters) {
-            if (parameters) {
-                if (parameters.origin_name) {
-                    this.from_town.name = parameters.origin_name;
-                    this.from_town.location = {
-                        lat: parameters.origin_lat,
-                        lng: parameters.origin_lng
-                    };
-                    this.from_town.radio = parameters.origin_radio;
-                    this.from_town.id = parameters.origin_id;
-                } else {
-                    this.resetInput('from_town');
-                }
+const { t } = useI18n();
+const deviceStore = useDeviceStore();
+const authStore = useAuthStore();
 
-                if (parameters.destination_name) {
-                    this.to_town.name = parameters.destination_name;
-                    this.to_town.location = {
-                        lat: parameters.destination_lat,
-                        lng: parameters.destination_lng
-                    };
-                    this.to_town.radio = parameters.destination_radio;
-                    this.to_town.id = parameters.destination_id;
-                } else {
-                    this.resetInput('to_town');
-                }
-                if (parameters.is_passenger) {
-                    this.isPassenger = parameters.is_passenger;
-                } else {
-                    this.isPassenger = false;
-                }
-                if (parameters.date) {
-                    this.date = parameters.date;
-                } else {
-                    this.date = '';
-                }
-            }
-        },
-        onSearch(search, loading) {
-            loading(true);
-            this.search(loading, search, this);
+const props = defineProps(['params']);
+const emit = defineEmits(['trip-search']);
+
+const from_town_ref = ref(null);
+const to_town_ref = ref(null);
+const datepickerRef = ref(null);
+
+const ROUTE_BASE = import.meta.env.VITE_ROUTE_BASE || '/';
+
+const minDate = ref(moment().toDate());
+const isPassenger = ref(false);
+const from_town = ref({
+    name: '',
+    location: null,
+    radio: 0,
+    country: ''
+});
+const to_town = ref({
+    name: '',
+    location: null,
+    radio: 0,
+    country: ''
+});
+const date = ref('');
+const dateAnswer = ref('');
+const dateError = reactive({
+    message: '',
+    state: ''
+});
+const chofer_logo_blanco = ROUTE_BASE + 'static/img/icono-conductor-blanco.png';
+const pasajero_logo_blanco = ROUTE_BASE + 'static/img/icono-pasajero-blanco.png';
+const chofer_logo_gris = ROUTE_BASE + 'static/img/icono-conductor-gris.png';
+const pasajero_logo_gris = ROUTE_BASE + 'static/img/icono-pasajero-gris.png';
+const swap_horizontal = ROUTE_BASE + 'static/img/flechas_horizontales.png';
+const swap_vertical = ROUTE_BASE + 'static/img/flechas_verticales.png';
+const allowForeignPoints = ref(false);
+const options = ref([]);
+
+const isMobile = computed(() => deviceStore.isMobile);
+const config = computed(() => authStore.appConfig);
+const autoSearch = computed(() => {
+    return config.value.trips_auto_search && !isMobile.value;
+});
+
+function dateChange(value) {
+    dateAnswer.value = value;
+}
+
+function checkInput(event) {
+    let value = event.target.value;
+    let name = event.target.name;
+    if (value === '') {
+        if (name === 'from_town') {
+            from_town.value = '';
+        } else if (name === 'to_town') {
+            to_town.value = '';
         }
-    },
-    props: ['params'],
-    components: {
-        DatePicker,
-        autocomplete
     }
-};
+}
+
+function getPlace(i, data) {
+    console.log('getPlace', data);
+    let obj = {};
+    if (data) {
+        obj = {
+            name: data.name,
+            location: {
+                lat: parseFloat(data.lat),
+                lng: parseFloat(data.lng)
+            },
+            country: data.country,
+            id: data.id
+        };
+    }
+    if (i === 0) {
+        from_town.value = obj;
+        if (config.value.trips_focus_next) {
+            to_town_ref.value.focus();
+        }
+    } else {
+        to_town.value = obj;
+        if (config.value.trips_focus_next) {
+            datepickerRef.value.setFocus();
+        }
+    }
+}
+
+function emitSearch() {
+    let params = {};
+    let foreignCountry = 0;
+    if (from_town.value.location) {
+        console.log('from_town', from_town.value);
+        params.origin_lat = from_town.value.location.lat;
+        params.origin_lng = from_town.value.location.lng;
+        params.origin_radio = from_town.value.radio;
+        params.origin_name = from_town.value.name;
+        params.origin_id = from_town.value.id;
+    } else {
+        params.origin_name = from_town_ref.value?.input;
+    }
+    if (
+        from_town.value &&
+        from_town.value.country &&
+        from_town.value.country.toLowerCase() !==
+            config.value.osm_country.toLowerCase()
+    ) {
+        foreignCountry++;
+    }
+    if (to_town.value.location) {
+        params.destination_lat = to_town.value.location.lat;
+        params.destination_lng = to_town.value.location.lng;
+        params.destination_radio = to_town.value.radio;
+        params.destination_name = to_town.value.name;
+        params.destination_id = to_town.value.id;
+    } else {
+        params.destination_name = to_town_ref.value?.input;
+    }
+    if (
+        to_town.value &&
+        to_town.value.country &&
+        to_town.value.country.toLowerCase() !==
+            config.value.osm_country.toLowerCase()
+    ) {
+        foreignCountry++;
+    }
+    if (dateAnswer.value) {
+        params.date = dateAnswer.value;
+    }
+    params.is_passenger = isPassenger.value;
+    if (foreignCountry < 2) {
+        emit('trip-search', params);
+    } else {
+        dialogs.message(
+            t('origenYDestinoNoPuedenSerAmbosDelExterior'),
+            {
+                duration: 10,
+                estado: 'error'
+            }
+        );
+    }
+}
+
+function resetInput(input) {
+    const refMap = { from_town: from_town_ref, to_town: to_town_ref };
+    const dataMap = { from_town, to_town };
+    if (refMap[input]?.value) {
+        refMap[input].value.input = '';
+        refMap[input].value.focus();
+    }
+    dataMap[input].value = {
+        name: '',
+        location: null,
+        radio: 0,
+        country: config.value.osm_country
+    };
+}
+
+function swapCities() {
+    let temp = to_town.value;
+    to_town.value = Object.assign({}, from_town.value);
+    from_town.value = Object.assign({}, temp);
+
+    // Search will only auto-trigger on desktop
+    if (!isMobile.value && autoSearch.value) {
+        emitSearch();
+    }
+}
+
+function clear() {
+    resetInput('from_town');
+    from_town_ref.value.input = '';
+    resetInput('to_town');
+    to_town_ref.value.input = '';
+    datepickerRef.value.clear();
+}
+
+function loadParams(parameters) {
+    if (parameters) {
+        if (parameters.origin_name) {
+            from_town.value.name = parameters.origin_name;
+            from_town.value.location = {
+                lat: parameters.origin_lat,
+                lng: parameters.origin_lng
+            };
+            from_town.value.radio = parameters.origin_radio;
+            from_town.value.id = parameters.origin_id;
+        } else {
+            resetInput('from_town');
+        }
+
+        if (parameters.destination_name) {
+            to_town.value.name = parameters.destination_name;
+            to_town.value.location = {
+                lat: parameters.destination_lat,
+                lng: parameters.destination_lng
+            };
+            to_town.value.radio = parameters.destination_radio;
+            to_town.value.id = parameters.destination_id;
+        } else {
+            resetInput('to_town');
+        }
+        if (parameters.is_passenger) {
+            isPassenger.value = parameters.is_passenger;
+        } else {
+            isPassenger.value = false;
+        }
+        if (parameters.date) {
+            date.value = parameters.date;
+        } else {
+            date.value = '';
+        }
+    }
+}
+
+watch(() => from_town.value.id, (newVal) => {
+    if (autoSearch.value) {
+        emitSearch();
+    }
+});
+
+watch(() => to_town.value.id, (newVal) => {
+    if (autoSearch.value) {
+        emitSearch();
+    }
+});
+
+watch(dateAnswer, (newVal) => {
+    if (autoSearch.value) {
+        emitSearch();
+    }
+});
+
+watch(isPassenger, () => {
+    if (autoSearch.value) {
+        emitSearch();
+    }
+});
+
+onMounted(() => {
+    bus.on('date-change', dateChange);
+    loadParams(props.params);
+    from_town.value.country = config.value.osm_country;
+    to_town.value.country = config.value.osm_country;
+    from_town_ref.value?.$el.addEventListener('input', checkInput);
+    to_town_ref.value?.$el.addEventListener('input', checkInput);
+});
+
+onBeforeUnmount(() => {
+    from_town_ref.value?.$el.removeEventListener('input', checkInput);
+    to_town_ref.value?.$el.removeEventListener('input', checkInput);
+    bus.off('date-change', dateChange);
+});
+
+defineExpose({ clear });
 </script>
 
 <style scoped>

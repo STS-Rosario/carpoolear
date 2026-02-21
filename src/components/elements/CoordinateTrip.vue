@@ -1,33 +1,31 @@
 <template>
     <div class="trip_actions" v-if="conversation && conversation.trip">
         <div class="trip_actions-detail">
-            <span v-if="owner">{{ $t('coordinateTripTeEnviaUnaConsultaPorTuViajeDesde') }}</span>
-            <span v-else>{{ $t('coordinateTripViajeDesde') }}</span>
+            <span v-if="owner">{{ t('coordinateTripTeEnviaUnaConsultaPorTuViajeDesde') }}</span>
+            <span v-else>{{ t('coordinateTripViajeDesde') }}</span>
             <strong>{{ conversation.trip.from_town }}</strong>
-            {{ $t('coordinateTripHacia') }}
+            {{ t('coordinateTripHacia') }}
             <strong>{{ conversation.trip.to_town }}</strong>
             <span v-if="owner">
-                {{ $t('coordinateTripDelDia') }}
+                {{ t('coordinateTripDelDia') }}
                 <strong>{{
-                    conversation.trip.trip_date | moment('DD/MM/YYYY')
+                    formatDate(conversation.trip.trip_date, 'DD/MM/YYYY')
                 }}</strong>
-                {{ $t('coordinateTripALas') }}
+                {{ t('coordinateTripALas') }}
                 <strong
                     >{{
-                        conversation.trip.trip_date | moment('HH:mm')
+                        formatDate(conversation.trip.trip_date, 'HH:mm')
                     }})</strong
                 >
                 <template v-if="conversation.trip.return_trip">
-                    {{ $t('coordinateTripYVueltaElDia') }}
+                    {{ t('coordinateTripYVueltaElDia') }}
                     <strong>{{
-                        conversation.return_trip.trip_date
-                            | moment('DD/MM/YYYY')
+                        formatDate(conversation.return_trip.trip_date, 'DD/MM/YYYY')
                     }}</strong>
-                    {{ $t('coordinateTripALas2') }}
+                    {{ t('coordinateTripALas2') }}
                     <strong
                         >{{
-                            conversation.return_trip.trip_date
-                                | moment('HH:mm')
+                            formatDate(conversation.return_trip.trip_date, 'HH:mm')
                         }})</strong
                     >
                 </template>
@@ -49,12 +47,12 @@
                 "
             >
                 <span v-if="isPassengerTrip">
-                    {{ $t('bajarmeViaje') }}
-                    <template v-if="conversation.return_trip">{{ $t('deIda') }}</template>
+                    {{ t('bajarmeViaje') }}
+                    <template v-if="conversation.return_trip">{{ t('deIda') }}</template>
                 </span>
                 <span v-else-if="conversation.trip.request === 'send'">
-                    {{ $t('retirarSolicitudDeAsiento') }}
-                    <template v-if="conversation.return_trip">{{ $t('deIda') }}</template>
+                    {{ t('retirarSolicitudDeAsiento') }}
+                    <template v-if="conversation.return_trip">{{ t('deIda') }}</template>
                 </span>
                 <span v-else-if="sending.trip">
                     <spinner
@@ -62,31 +60,31 @@
                         v-if="sending && sending.trip"
                     ></spinner>
                 </span>
-                <span v-else-if="expiredTrip">{{ $t('viajeCarpooleado') }}</span>
+                <span v-else-if="expiredTrip">{{ t('viajeCarpooleado') }}</span>
                 <span v-else>
                     <template v-if="config && config.module_trip_seats_payment">
-                        {{ $t('reservar') }} {{ $n(conversation.trip.seat_price_cents / 100, 'currency') }}
+                        {{ t('reservar') }} {{ $n(conversation.trip.seat_price_cents / 100, 'currency') }}
                         <template v-if="conversation.return_trip"
-                            >{{ $t('deIda') }}</template
+                            >{{ t('deIda') }}</template
                         >
                     </template>
                     <template v-else>
-                        {{ $t('solicitarAsiento') }}
+                        {{ t('solicitarAsiento') }}
                         <template v-if="conversation.return_trip"
-                            >{{ $t('deIda') }}</template
+                            >{{ t('deIda') }}</template
                         >
                     </template>
                 </span>
                 <template v-if="!sending.trip">
                     <strong
                         >({{
-                            conversation.trip.trip_date | moment('DD/MM/YYYY')
+                            formatDate(conversation.trip.trip_date, 'DD/MM/YYYY')
                         }}</strong
                     >
                     -
                     <strong
                         >{{
-                            conversation.trip.trip_date | moment('HH:mm')
+                            formatDate(conversation.trip.trip_date, 'HH:mm')
                         }})</strong
                     >
                 </template>
@@ -104,33 +102,31 @@
                 "
             >
                 <span v-if="isPassengerReturnTrip"
-                    >{{ $t('bajarmeDelViajeDeVuelta') }}</span
+                    >{{ t('bajarmeDelViajeDeVuelta') }}</span
                 >
                 <span v-else-if="conversation.return_trip.request === 'send'">
-                    {{ $t('retirarSolicitudDeAsientoDeVuelta') }}
+                    {{ t('retirarSolicitudDeAsientoDeVuelta') }}
                 </span>
                 <span v-else-if="sending.returnTrip">
                     <spinner class="blue" v-if="sending.returnTrip"></spinner>
                 </span>
-                <span v-else-if="expiredReturnTrip">{{ $t('viajeCarpooleado') }}</span>
+                <span v-else-if="expiredReturnTrip">{{ t('viajeCarpooleado') }}</span>
                 <span v-else>
                     <template v-if="config && config.module_trip_seats_payment">
-                        {{ $t('reservar') }} {{ $n(conversation.return_trip.seat_price_cents / 100, 'currency') }} {{ $t('deVuelta') }}
+                        {{ t('reservar') }} {{ $n(conversation.return_trip.seat_price_cents / 100, 'currency') }} {{ t('deVuelta') }}
                     </template>
-                    <template v-else>{{ $t('solicitarAsientoDeVuelta') }}</template>
+                    <template v-else>{{ t('solicitarAsientoDeVuelta') }}</template>
                 </span>
                 <template v-if="!sending.returnTrip">
                     <strong>
                         ({{
-                            conversation.return_trip.trip_date
-                                | moment('DD/MM/YYYY')
+                            formatDate(conversation.return_trip.trip_date, 'DD/MM/YYYY')
                         }}
                     </strong>
                     -
                     <strong
                         >{{
-                            conversation.return_trip.trip_date
-                                | moment('HH:mm')
+                            formatDate(conversation.return_trip.trip_date, 'HH:mm')
                         }})</strong
                     >
                 </template>
@@ -139,158 +135,138 @@
     </div>
 </template>
 
-<script>
-import { mapGetters, mapActions } from 'vuex';
+<script setup>
+import { reactive, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useConversationsStore } from '@/stores/conversations';
+import { useAuthStore } from '@/stores/auth';
+import { usePassengerStore } from '@/stores/passenger';
+import { formatDate } from '@/composables/useFormatters';
 import dialogs from '../../services/dialogs.js';
 import spinner from '../Spinner.vue';
 import moment from 'moment';
 
-export default {
-    name: 'conversation-chat',
-    data() {
-        return {
-            sending: {
-                trip: false,
-                returnTrip: false
-            }
-        };
-    },
-    computed: {
-        ...mapGetters({
-            conversation: 'conversations/selectedConversation',
-            config: 'auth/appConfig',
-            user: 'auth/user'
-        }),
-        owner() {
-            return (
-                this.conversation.trip &&
-                this.user &&
-                this.user.id === this.conversation.trip.user.id
-            );
-        },
-        isPassengerTrip() {
-            return (
-                this.conversation.trip &&
-                this.conversation.trip.passenger.findIndex(
-                    (item) =>
-                        item.user_id === this.user.id &&
-                        (item.request_state === 1 || item.request_state === 4)
-                ) >= 0
-            );
-        },
-        isPassengerReturnTrip() {
-            return (
-                this.conversation.return_trip &&
-                this.conversation.return_trip.passenger.findIndex(
-                    (item) =>
-                        item.user_id === this.user.id &&
-                        (item.request_state === 1 || item.request_state === 4)
-                ) >= 0
-            );
-        },
-        expiredTrip() {
-            return (
-                moment(this.conversation.trip.trip_date).format() <
-                moment().format()
-            );
-        },
-        expiredReturnTrip() {
-            return (
-                moment(this.conversation.return_trip.trip_date).format() <
-                moment().format()
-            );
-        }
-    },
-    methods: {
-        ...mapActions({
-            make: 'passenger/makeRequest',
-            cancel: 'passenger/cancel'
-        }),
+const { t } = useI18n();
+const conversationsStore = useConversationsStore();
+const authStore = useAuthStore();
+const passengerStore = usePassengerStore();
 
-        doRequest(isReturnTrip = false) {
-            if (this.config.module_coordinate_by_message) {
-                this.$set(
-                    this.sending,
-                    isReturnTrip ? 'returnTrip' : 'trip',
-                    true
-                );
-                let trip = isReturnTrip
-                    ? this.conversation.return_trip
-                    : this.conversation.trip;
-                this.make(trip.id)
-                    .then((response) => {
-                        this.$set(trip, 'request', 'send');
-                    })
-                    .finally(() => {
-                        this.$set(
-                            this.sending,
-                            isReturnTrip ? 'returnTrip' : 'trip',
-                            false
-                        );
-                    });
-            }
-        },
+const sending = reactive({
+    trip: false,
+    returnTrip: false
+});
 
-        cancelRequest(isReturnTrip = false) {
-            if (this.config.module_coordinate_by_message) {
-                if (
-                    window.confirm(
-                        this.$t('seguroBajarteViaje')
-                    )
-                ) {
-                    this.$set(
-                        this.sending,
-                        isReturnTrip ? 'trip' : 'returnTrip',
-                        true
-                    );
-                    let trip = isReturnTrip
-                        ? this.conversation.return_trip
-                        : this.conversation.trip;
-                    this.cancel({ user: this.user, trip: trip })
-                        .then(() => {
-                            dialogs.message(this.$t('teHasBajadoViaje'));
-                            if (trip.request === 'send') {
-                                trip.request = '';
-                            }
-                            if (
-                                this.isPassengerTrip ||
-                                this.isPassengerReturnTrip
-                            ) {
-                                let index = trip.passenger.findIndex(
-                                    (item) =>
-                                        item.id === this.user.id &&
-                                        (item.request_state === 1 ||
-                                            item.request_state === 4)
-                                );
-                                if (index >= 0) {
-                                    trip.passenger[index].request_state = 3;
-                                    trip.seats_available++;
-                                    trip.passenger_count--;
-                                }
-                            }
-                        })
-                        .catch((error) => {
-                            console.error(error);
-                            dialogs.message(
-                                this.$t('problemaSolicitar'),
-                                { estado: 'error' }
-                            );
-                        })
-                        .finally(() => {
-                            this.$set(
-                                this.sending,
-                                isReturnTrip ? 'trip' : 'returnTrip',
-                                false
-                            );
-                        });
-                }
-            }
-        }
-    },
-    components: {
-        spinner
+const conversation = computed(() => conversationsStore.selectedConversation);
+const config = computed(() => authStore.appConfig);
+const user = computed(() => authStore.user);
+
+const owner = computed(() => {
+    return (
+        conversation.value.trip &&
+        user.value &&
+        user.value.id === conversation.value.trip.user.id
+    );
+});
+
+const isPassengerTrip = computed(() => {
+    return (
+        conversation.value.trip &&
+        conversation.value.trip.passenger.findIndex(
+            (item) =>
+                item.user_id === user.value.id &&
+                (item.request_state === 1 || item.request_state === 4)
+        ) >= 0
+    );
+});
+
+const isPassengerReturnTrip = computed(() => {
+    return (
+        conversation.value.return_trip &&
+        conversation.value.return_trip.passenger.findIndex(
+            (item) =>
+                item.user_id === user.value.id &&
+                (item.request_state === 1 || item.request_state === 4)
+        ) >= 0
+    );
+});
+
+const expiredTrip = computed(() => {
+    return (
+        moment(conversation.value.trip.trip_date).format() <
+        moment().format()
+    );
+});
+
+const expiredReturnTrip = computed(() => {
+    return (
+        moment(conversation.value.return_trip.trip_date).format() <
+        moment().format()
+    );
+});
+
+function doRequest(isReturnTrip = false) {
+    if (config.value.module_coordinate_by_message) {
+        sending[isReturnTrip ? 'returnTrip' : 'trip'] = true;
+        let trip = isReturnTrip
+            ? conversation.value.return_trip
+            : conversation.value.trip;
+        passengerStore.makeRequest(trip.id)
+            .then((response) => {
+                trip.request = 'send';
+            })
+            .finally(() => {
+                sending[isReturnTrip ? 'returnTrip' : 'trip'] = false;
+            });
     }
-};
+}
+
+function cancelRequest(isReturnTrip = false) {
+    if (config.value.module_coordinate_by_message) {
+        if (
+            window.confirm(
+                t('seguroBajarteViaje')
+            )
+        ) {
+            sending[isReturnTrip ? 'trip' : 'returnTrip'] = true;
+            let trip = isReturnTrip
+                ? conversation.value.return_trip
+                : conversation.value.trip;
+            passengerStore.cancel({ user: user.value, trip: trip })
+                .then(() => {
+                    dialogs.message(t('teHasBajadoViaje'));
+                    if (trip.request === 'send') {
+                        trip.request = '';
+                    }
+                    if (
+                        isPassengerTrip.value ||
+                        isPassengerReturnTrip.value
+                    ) {
+                        let index = trip.passenger.findIndex(
+                            (item) =>
+                                item.id === user.value.id &&
+                                (item.request_state === 1 ||
+                                    item.request_state === 4)
+                        );
+                        if (index >= 0) {
+                            trip.passenger[index].request_state = 3;
+                            trip.seats_available++;
+                            trip.passenger_count--;
+                        }
+                    }
+                })
+                .catch((error) => {
+                    console.error(error);
+                    dialogs.message(
+                        t('problemaSolicitar'),
+                        { estado: 'error' }
+                    );
+                })
+                .finally(() => {
+                    sending[isReturnTrip ? 'trip' : 'returnTrip'] = false;
+                });
+        }
+    }
+}
 </script>
 
 <style scoped>

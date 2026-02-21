@@ -38,9 +38,9 @@
                                 target="_blank"
                                 class="btn-primary btn-search"
                                 style="border: 0"
-                                :title="$t('cambioFacebook')"
+                                :title="t('cambioFacebook')"
                             >
-                                <span class="">{{ $t('buscarFacebook') }}</span>
+                                <span class="">{{ t('buscarFacebook') }}</span>
                             </a>
                             <!-- app_scoped_user_id -->
                         </div>
@@ -50,7 +50,7 @@
                         v-if="profile.accounts && profile.accounts.length"
                     >
                         <div class="col-xs-24">
-                            <small>{{ $t('cambioFacebook') }}</small>
+                            <small>{{ t('cambioFacebook') }}</small>
                         </div>
                     </div>
                 </div>
@@ -103,7 +103,7 @@
                         class="btn btn-primary btn-circle"
                         v-on:click="messageUser()"
                     >
-                        {{ $t('enviarMensaje') }}
+                        {{ t('enviarMensaje') }}
                     </button>
                 </div>
                 <div class="edit-action" v-if="profile.id === user.id">
@@ -112,14 +112,14 @@
                         tag="button"
                         :to="{ name: 'profile_update' }"
                     >
-                        {{ $t('editarPerfil') }}
+                        {{ t('editarPerfil') }}
                     </router-link>
                     <router-link
                         class="btn btn-primary"
                         tag="button"
                         :to="{ name: 'friends_setting' }"
                     >
-                        {{ $t('verAmigos') }}
+                        {{ t('verAmigos') }}
                     </router-link>
                     <router-link
                         v-if="config && config.module_trip_seats_payment"
@@ -127,7 +127,7 @@
                         tag="button"
                         :to="{ name: 'transacciones' }"
                     >
-                        {{ $t('transacciones') }}
+                        {{ t('transacciones') }}
                     </router-link>
                 </div>
                 <div
@@ -144,14 +144,14 @@
                         tag="button"
                         @click="showReferenceForm"
                     >
-                        {{ $t('enviarReferencia') }}
+                        {{ t('enviarReferencia') }}
                     </button>
                     <div v-else class="reply-box">
                         <label for="reply" class="label label-reply">
-                            {{ $t('escribeUnaReferenciaSobreElUsuario') }}
+                            {{ t('escribeUnaReferenciaSobreElUsuario') }}
                         </label>
                         <textarea
-                            ref="reference"
+                            ref="referenceEl"
                             maxlength="260"
                             v-model="referenceComment"
                             id="reference"
@@ -165,13 +165,13 @@
                                 <template v-if="sending">
                                     <spinner class="blue"></spinner>
                                 </template>
-                                <template v-else>{{ $t('comentar') }}</template>
+                                <template v-else>{{ t('comentar') }}</template>
                             </button>
                             <button
                                 class="btn btn-primary"
                                 @click="sendReferenceFormVisibility = false"
                             >
-                                {{ $t('cancelar') }}
+                                {{ t('cancelar') }}
                             </button>
                         </div>
                     </div>
@@ -180,101 +180,102 @@
         </div>
     </div>
 </template>
-<script>
-import { mapGetters, mapActions } from 'vuex';
-import router from '../../router';
+<script setup>
+import { ref, computed, nextTick } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
+import { useProfileStore } from '@/stores/profile';
+import { useConversationsStore } from '@/stores/conversations';
 import Spinner from '../Spinner.vue';
 import UserNameWithBadge from '../elements/UserNameWithBadge.vue';
 import dialogs from '../../services/dialogs.js';
 import { formatId } from '../../services/utility';
+import { checkError } from '../../../utils/helpers';
 
-export default {
-    data() {
-        return {
-            sendReferenceFormVisibility: false,
-            referenceComment: '',
-            sending: false
-        };
-    },
-    computed: {
-        ...mapGetters({
-            user: 'auth/user',
-            profile: 'profile/user',
-            badges: 'profile/badges',
-            config: 'auth/appConfig'
-        }),
-        userReferenceWritten() {
-            return (
-                this.profile.references_data &&
-                    this.profile.references_data.length &&
-                    this.profile.references_data.findIndex(
-                        (item) => item.user_id_from === this.user.id
-                    ) >= 0
-            );
-        },
-        formattedNroDoc() {
-            return formatId(this.profile.nro_doc, this.config.profile_id_format);
-        }
-    },
-    methods: {
-        ...mapActions({
-            lookConversation: 'conversations/createConversation',
-            makeReference: 'profile/makeReference'
-        }),
-        messageUser() {
-            console.log('messageUser profileInfo', this.profile);
-            this.lookConversation(this.profile).then((conversation) => {
-                router.push({
-                    name: 'conversation-chat',
-                    params: { id: conversation.id }
-                });
-            });
-        },
-        sendReference() {
-            this.sending = true;
-            this.makeReference({
-                user_id_to: this.profile.id,
-                comment: this.referenceComment
-            })
-                .then(() => {
-                    dialogs.message(this.$t('referenciaExitosa'));
-                    this.sendReferenceFormVisibility = false;
-                })
-                .catch((error) => {
-                    let errorMessage = this.$t('referenciaError');
-                    if (this.$checkError(error, 'reference_exist')) {
-                        errorMessage = this.$t('referenciaExist');
-                    } else if (this.$checkError(error, 'reference_same_user')) {
-                        errorMessage = this.$t('referenciaSameUser');
-                    } else if (this.$checkError(error, 'user_doesnt_exist')) {
-                        errorMessage = this.$t('userDoesntExist');
-                    }
-                    dialogs.message(errorMessage, { estado: 'error' });
-                })
-                .finally(() => {
-                    this.sending = false;
-                });
-        },
-        showReferenceForm() {
-            this.sendReferenceFormVisibility = true;
-            this.$nextTick(() => {
-                this.$refs.reference.focus();
-            });
-        },
-        badgeImageUrl(imagePath) {
-            if (!imagePath) return '';
-            if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
-                return imagePath;
+const { t } = useI18n();
+const router = useRouter();
+const authStore = useAuthStore();
+const profileStore = useProfileStore();
+const conversationsStore = useConversationsStore();
+
+const ROUTE_BASE = import.meta.env.VITE_ROUTE_BASE || '/';
+
+const referenceEl = ref(null);
+const sendReferenceFormVisibility = ref(false);
+const referenceComment = ref('');
+const sending = ref(false);
+
+const user = computed(() => authStore.user);
+const profile = computed(() => profileStore.user);
+const badges = computed(() => profileStore.badges);
+const config = computed(() => authStore.appConfig);
+
+const userReferenceWritten = computed(() => {
+    return (
+        profile.value.references_data &&
+            profile.value.references_data.length &&
+            profile.value.references_data.findIndex(
+                (item) => item.user_id_from === user.value.id
+            ) >= 0
+    );
+});
+
+const formattedNroDoc = computed(() => {
+    return formatId(profile.value.nro_doc, config.value.profile_id_format);
+});
+
+function messageUser() {
+    console.log('messageUser profileInfo', profile.value);
+    conversationsStore.createConversation(profile.value).then((conversation) => {
+        router.push({
+            name: 'conversation-chat',
+            params: { id: conversation.id }
+        });
+    });
+}
+
+function sendReference() {
+    sending.value = true;
+    profileStore.makeReference({
+        user_id_to: profile.value.id,
+        comment: referenceComment.value
+    })
+        .then(() => {
+            dialogs.message(t('referenciaExitosa'));
+            sendReferenceFormVisibility.value = false;
+        })
+        .catch((error) => {
+            let errorMessage = t('referenciaError');
+            if (checkError(error, 'reference_exist')) {
+                errorMessage = t('referenciaExist');
+            } else if (checkError(error, 'reference_same_user')) {
+                errorMessage = t('referenciaSameUser');
+            } else if (checkError(error, 'user_doesnt_exist')) {
+                errorMessage = t('userDoesntExist');
             }
-            const base = process.env.ROUTE_BASE + 'static/img';
-            return base + (base && !imagePath.startsWith('/') ? '/' : '') + imagePath;
-        }
-    },
-    components: {
-        Spinner,
-        UserNameWithBadge
+            dialogs.message(errorMessage, { estado: 'error' });
+        })
+        .finally(() => {
+            sending.value = false;
+        });
+}
+
+function showReferenceForm() {
+    sendReferenceFormVisibility.value = true;
+    nextTick(() => {
+        referenceEl.value.focus();
+    });
+}
+
+function badgeImageUrl(imagePath) {
+    if (!imagePath) return '';
+    if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+        return imagePath;
     }
-};
+    const base = ROUTE_BASE + 'static/img';
+    return base + (base && !imagePath.startsWith('/') ? '/' : '') + imagePath;
+}
 </script>
 <style scoped>
 .profile-badges {
