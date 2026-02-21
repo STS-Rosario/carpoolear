@@ -8,7 +8,7 @@
                 ></div>
                 <div class="profile-info">
                     <div class="profile-info--name mobile">
-                        {{ profile.name }}
+                        <UserNameWithBadge :user="profile" />
                     </div>
                     <div class="profile-info--ratings">
                         <i class="fa fa-thumbs-up" aria-hidden="true"></i>
@@ -56,7 +56,7 @@
                 </div>
             </div>
             <div class="data-info col-sm-offset-2 col-sm-16 col-md-offset-1">
-                <div class="profile-info--name desktop">{{ profile.name }}</div>
+                <div class="profile-info--name desktop"><UserNameWithBadge :user="profile" /></div>
                 <div class="list-container">
                     <div class="list-group-item" v-if="profile.description">
                         <i class="fa fa-quote-left" aria-hidden="true"></i>
@@ -184,6 +184,7 @@
 import { mapGetters, mapActions } from 'vuex';
 import router from '../../router';
 import Spinner from '../Spinner.vue';
+import UserNameWithBadge from '../elements/UserNameWithBadge.vue';
 import dialogs from '../../services/dialogs.js';
 import { formatId } from '../../services/utility';
 
@@ -270,7 +271,8 @@ export default {
         }
     },
     components: {
-        Spinner
+        Spinner,
+        UserNameWithBadge
     }
 };
 </script>

@@ -297,6 +297,46 @@ export default [
                         }
                     }
                 }
+            },
+            {
+                path: 'identity-validation',
+                name: 'identity_validation',
+                component:
+                    require('../components/sections/IdentityValidation.vue')
+                        .default,
+                meta: {
+                    tab: 'identity_validation',
+                    actionbar: {
+                        footer: {
+                            show: true,
+                            active_id: 'profile'
+                        },
+                        header: {
+                            titleKey: 'validarIdentidad',
+                            buttons: ['menu']
+                        }
+                    }
+                }
+            },
+            {
+                path: 'identity-validation/manual',
+                name: 'identity_validation_manual',
+                component:
+                    require('../components/sections/ManualIdentityValidation.vue')
+                        .default,
+                meta: {
+                    tab: 'identity_validation',
+                    actionbar: {
+                        footer: {
+                            show: true,
+                            active_id: 'profile'
+                        },
+                        header: {
+                            titleKey: 'validacionManual',
+                            buttons: ['back']
+                        }
+                    }
+                }
             }
         ]
     },
@@ -469,6 +509,87 @@ export default [
                 header: {
                     titleKey: 'usuariosBloqueados',
                     buttons: []
+                }
+            }
+        }
+    },
+    {
+        path: '/admin/manual-identity-validations',
+        name: 'admin-manual-identity-validations',
+        component:
+            require('../components/views/AdminManualIdentityValidations.vue')
+                .default,
+        beforeEnter: authAdmin,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'admin'
+                },
+                header: {
+                    titleKey: 'validacionesManuales',
+                    buttons: []
+                }
+            }
+        }
+    },
+    {
+        path: '/admin/manual-identity-validations/:id',
+        name: 'admin-manual-identity-validation-review',
+        component:
+            require('../components/views/AdminManualIdentityValidationReview.vue')
+                .default,
+        props: true,
+        beforeEnter: authAdmin,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'admin'
+                },
+                header: {
+                    titleKey: 'revisarSolicitud',
+                    buttons: ['back']
+                }
+            }
+        }
+    },
+    {
+        path: '/admin/mercado-pago-rejected-validations',
+        name: 'admin-mp-rejected-validations',
+        component: require('../components/views/AdminMpRejectedValidations.vue')
+            .default,
+        beforeEnter: authAdmin,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'admin'
+                },
+                header: {
+                    titleKey: 'rechazosMercadoPago',
+                    buttons: []
+                }
+            }
+        }
+    },
+    {
+        path: '/admin/mercado-pago-rejected-validations/:id',
+        name: 'admin-mp-rejected-validation-detail',
+        component:
+            require('../components/views/AdminMpRejectedValidationDetail.vue')
+                .default,
+        props: true,
+        beforeEnter: authAdmin,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'admin'
+                },
+                header: {
+                    titleKey: 'detalleRechazoMp',
+                    buttons: ['back']
                 }
             }
         }

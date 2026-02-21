@@ -161,6 +161,15 @@ input[type=radio]+label {
     color: #fff;
 }
 
+.alertify-notifier .ajs-message.ajs-error {
+    color: #fff;
+}
+
+.alertify-notifier .ajs-message.ajs-warning {
+    background: rgba(240, 173, 78, 0.95);
+    color: #333;
+}
+
 .alert-icon {
     width: 40px;
     float: left;
@@ -1731,6 +1740,12 @@ textarea {
     line-height: 20px;
 }
 
+.profile-info-component .identity-validated-badge i {
+    color: #5cb85c;
+    float: none;
+    width: auto;
+}
+
 .data-info .list-group-item:last-child {
     margin-bottom: -1px;
     border-bottom-right-radius: 4px;
@@ -1898,6 +1913,10 @@ textarea {
 .trips-list>div {
     padding-left: 0;
     padding-right: 0;
+}
+
+.trips-list .identity-validated-badge i {
+    color: white;
 }
 
 .conversation_chat .input-group-btn:last-child>.btn,

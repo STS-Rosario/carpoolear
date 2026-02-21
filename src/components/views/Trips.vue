@@ -735,7 +735,7 @@ export default {
             return !this.isMobile || !this.lookSearch;
         },
         isIOSCapacitor() {
-            return isIOSCapacitor();
+            return Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'ios';
         }
     },
     components: {

@@ -2111,6 +2111,11 @@ export default {
         this.trip.allow_animals = !(trip.allow_animals > 0);
         this.trip.allow_smoking = !(trip.allow_smoking > 0);
         
+        if (trip.seat_price_cents != null) {
+            this.price = trip.seat_price_cents / 100;
+            this.trip.seat_price_cents = trip.seat_price_cents;
+        }
+        
         this.calcRoute();
     },
 
@@ -2551,6 +2556,7 @@ export default {
                 trip.allow_kids = !(trip.allow_kids > 0);
                 trip.allow_animals = !(trip.allow_animals > 0);
                 trip.allow_smoking = !(trip.allow_smoking > 0);
+                trip.seat_price_cents = Math.round(this.price * 100);
                 this.updateTrip(trip)
                     .then(() => {
                         this.saving = false;

@@ -23,7 +23,7 @@
                         >
                             <span>
                                 <h4>{{ $t('nombre') }}:</h4>
-                                {{ trip.user.name }}
+                                <UserNameWithBadge :user="trip.user" />
                             </span>
                         </div>
                         <div class="col-md-6">
@@ -108,11 +108,7 @@
                                     v-for="pas in trip.allPassengerRequest"
                                     v-on:click="openProfile(pas.user.id)"
                                 >
-                                    {{
-                                        pas.request_state == 1
-                                            ? pas.user.name
-                                            : ''
-                                    }}
+                                    <UserNameWithBadge v-if="pas.request_state == 1" :user="pas.user" />
                                 </div>
                             </span>
                         </div>
@@ -123,11 +119,7 @@
                                     v-for="pas in trip.allPassengerRequest"
                                     v-on:click="openProfile(pas.user.id)"
                                 >
-                                    {{
-                                        pas.request_state == 2
-                                            ? pas.user.name
-                                            : ''
-                                    }}
+                                    <UserNameWithBadge v-if="pas.request_state == 2" :user="pas.user" />
                                 </div>
                             </span>
                         </div>
@@ -138,11 +130,7 @@
                                     v-for="pas in trip.allPassengerRequest"
                                     v-on:click="openProfile(pas.user.id)"
                                 >
-                                    {{
-                                        pas.request_state == 3
-                                            ? pas.user.name
-                                            : ''
-                                    }}
+                                    <UserNameWithBadge v-if="pas.request_state == 3" :user="pas.user" />
                                 </div>
                             </span>
                         </div>
@@ -153,11 +141,7 @@
                                     v-for="pas in trip.allPassengerRequest"
                                     v-on:click="openProfile(pas.user.id)"
                                 >
-                                    {{
-                                        pas.request_state == 0
-                                            ? pas.user.name
-                                            : ''
-                                    }}
+                                    <UserNameWithBadge v-if="pas.request_state == 0" :user="pas.user" />
                                 </div>
                             </span>
                         </div>
@@ -172,9 +156,9 @@
                                     )"
                                 >
                                     <span>
-                                        <strong>{{ rating.from.name }}</strong>
+                                        <strong><UserNameWithBadge :user="rating.from" /></strong>
                                         {{ $t('calificadoA') }}
-                                        <strong>{{ rating.to.name }}</strong>
+                                        <strong><UserNameWithBadge :user="rating.to" /></strong>
                                         {{ $t('como') }}
                                         {{
                                             rating.rating
@@ -208,6 +192,7 @@
 
 <script>
 import Modal from '../Modal';
+import UserNameWithBadge from '../elements/UserNameWithBadge.vue';
 import router from '../../router';
 
 // FIXME: Rate_at undefined
@@ -241,7 +226,8 @@ export default {
         }
     },
     components: {
-        Modal
+        Modal,
+        UserNameWithBadge
     }
 };
 </script>
