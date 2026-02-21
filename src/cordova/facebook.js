@@ -1,12 +1,12 @@
 /* jshint esversion: 6 */
 import { DebugApi } from '../services/api';
 
-let debugApi = new DebugApi();
+const debugApi = new DebugApi();
 
 export default {
     login() {
         return new Promise((resolve, reject) => {
-            var doLogin = function () {
+            const doLogin = function () {
                 console.log('do facebook login');
                 window.facebookConnectPlugin.login(
                     ['public_profile', 'email'], // , 'user_birthday', 'user_friends'
@@ -16,7 +16,7 @@ export default {
                     },
                     function (response) {
                         console.log(JSON.stringify(response));
-                        let data = {};
+                        const data = {};
                         data.log = JSON.stringify(response);
 
                         debugApi.log(data).then(

@@ -33,7 +33,7 @@ class NativeStorage {
                     reject(new Error('Item not found'));
                     return;
                 }
-                
+
                 // Try to parse as JSON, fallback to string if parsing fails
                 try {
                     const parsed = JSON.parse(result.value);

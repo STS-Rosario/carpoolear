@@ -3,9 +3,9 @@ import { UserApi, RateApi, ReferencesApi } from '../../services/api';
 import * as pagination from '../pagination';
 import globalStore from '../index';
 
-let userApi = new UserApi();
-let rateApi = new RateApi();
-let referencesApi = new ReferencesApi();
+const userApi = new UserApi();
+const rateApi = new RateApi();
+const referencesApi = new ReferencesApi();
 
 const state = {
     user: null,

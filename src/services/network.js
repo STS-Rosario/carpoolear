@@ -14,23 +14,24 @@ class MyPromise {
             this.promise = promise;
         }
     }
+
     then(callback, onError) {
-        let tempPromise = this.promise.then(callback, onError);
-        let myTempPromise = new MyPromise(null, null, tempPromise);
+        const tempPromise = this.promise.then(callback, onError);
+        const myTempPromise = new MyPromise(null, null, tempPromise);
         myTempPromise.abort = this.abort;
         return myTempPromise;
     }
 
     catch(func) {
-        let tempPromise = this.promise.catch(func);
-        let myTempPromise = new MyPromise(null, null, tempPromise);
+        const tempPromise = this.promise.catch(func);
+        const myTempPromise = new MyPromise(null, null, tempPromise);
         myTempPromise.abort = this.abort;
         return myTempPromise;
     }
 
     finally(func) {
-        let tempPromise = this.promise.finally(func);
-        let myTempPromise = new MyPromise(null, null, tempPromise);
+        const tempPromise = this.promise.finally(func);
+        const myTempPromise = new MyPromise(null, null, tempPromise);
         myTempPromise.abort = this.abort;
         return myTempPromise;
     }
@@ -48,7 +49,7 @@ export default {
     },
 
     getHeader(headers) {
-        let authHeader = store.getters['auth/authHeader'];
+        const authHeader = store.getters['auth/authHeader'];
         Object.assign(headers, authHeader);
 
         // Add Capacitor platform header when running on native platform
@@ -65,12 +66,12 @@ export default {
     },
 
     newCancelToken() {
-        let CancelToken = axios.CancelToken;
+        const CancelToken = axios.CancelToken;
         return CancelToken.source();
     },
 
     processResponse(response, source) {
-        let promise = new MyPromise((resolve, reject) => {
+        const promise = new MyPromise((resolve, reject) => {
             response
                 .then((response) => {
                     resolve(response.data);
@@ -78,8 +79,8 @@ export default {
                 .catch((resp) => {
                     // Revisar el tipo de error!
                     if (resp.response) {
-                        let data = resp.response.data;
-                        let status = resp.response.status;
+                        const data = resp.response.data;
+                        const status = resp.response.status;
                         reject({ data, status });
                     } else {
                         reject(resp);
@@ -93,7 +94,7 @@ export default {
     },
 
     get(url, params, headers = {}) {
-        let source = this.newCancelToken();
+        const source = this.newCancelToken();
         return this.processResponse(
             axios.get(API_URL + url, {
                 params: params,
@@ -105,7 +106,7 @@ export default {
     },
 
     post(url, body, headers = {}) {
-        let source = this.newCancelToken();
+        const source = this.newCancelToken();
         return this.processResponse(
             axios.post(API_URL + url, body, {
                 headers: this.getHeader(headers),
@@ -116,7 +117,7 @@ export default {
     },
 
     delete(url, params, headers = {}) {
-        let source = this.newCancelToken();
+        const source = this.newCancelToken();
         return this.processResponse(
             axios.delete(API_URL + url, {
                 params: params,
@@ -128,7 +129,7 @@ export default {
     },
 
     put(url, body, headers = {}) {
-        let source = this.newCancelToken();
+        const source = this.newCancelToken();
         return this.processResponse(
             axios.put(API_URL + url, body, {
                 headers: this.getHeader(headers),

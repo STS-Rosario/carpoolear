@@ -2,8 +2,8 @@ import { FriendsApi, UserApi } from '../../services/api';
 import * as types from '../mutation-types';
 import * as pagination from '../pagination';
 
-let friendsApi = new FriendsApi();
-let userApi = new UserApi();
+const friendsApi = new FriendsApi();
+const userApi = new UserApi();
 
 // initial state
 const state = {
@@ -66,7 +66,7 @@ const actions = {
             if (store.state.searching) {
                 store.state.searching.abort();
             }
-            let promise = userApi.list({ value }).then((response) => {
+            const promise = userApi.list({ value }).then((response) => {
                 store.commit(types.FRIENDS_SET_USERS, response.data);
                 store.commit(types.FRIENDS_SET_SEARCHING, null);
                 return Promise.resolve(response.data);

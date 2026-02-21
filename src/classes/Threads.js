@@ -56,7 +56,7 @@ export function stopThreads(tags) {
     }
 
     tags.forEach((tag) => {
-        let list = taggedList.get(tag);
+        const list = taggedList.get(tag);
         if (list) {
             list.forEach((thread) => {
                 clearTimeout(thread.id);

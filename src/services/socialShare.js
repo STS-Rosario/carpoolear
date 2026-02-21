@@ -3,7 +3,7 @@ import cordovaSocialShare from '../cordova/socialShare.js';
 
 export default {
     share(opts) {
-        var options = {
+        let options = {
             message:
                 'Aplicación para compartir viajes de autos dentro de Argentina', // not supported on some apps (Facebook, Instagram)
             subject: 'Carpoolear', // fi. for email

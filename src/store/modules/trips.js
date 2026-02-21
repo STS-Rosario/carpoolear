@@ -5,7 +5,7 @@ import moment from 'moment';
 
 import * as pagination from '../pagination';
 
-let tripsApi = new TripApi();
+const tripsApi = new TripApi();
 
 // initial state
 const state = {
@@ -121,9 +121,9 @@ const actions = {
     },
 
     searchMatchers(store, { trip }) {
-        let firstPoint = trip.points[0];
-        let lastPoint = trip.points[trip.points.length - 1];
-        let data = {
+        const firstPoint = trip.points[0];
+        const lastPoint = trip.points[trip.points.length - 1];
+        const data = {
             is_passenger: !trip.is_passenger,
             date: moment(trip.trip_date).format('YYYY-MM-DD'),
             origin_lat: firstPoint.lat,
@@ -140,9 +140,9 @@ const actions = {
             .tag(['trips'])
             .search(data)
             .then((trips) => {
-                let users = [];
+                const users = [];
                 for (let i = 0; i < trips.data.length; i++) {
-                    let t = trips.data[i];
+                    const t = trips.data[i];
                     if (t.id === trip.id) {
                         continue;
                     }
@@ -154,7 +154,7 @@ const actions = {
                             (item) => t.user && item.id === t.user.id
                         );
                         if (i < 0) {
-                            let user = t.user;
+                            const user = t.user;
                             delete t.user;
                             user.tripMatch = t;
                             users.push(user);
@@ -188,12 +188,12 @@ const mutations = {
     },
 
     [types.TRIPS_CURRENT_REMOVE_PASSENGER_BY_ID](state, userId) {
-        let index = state.current_trip.passenger.findIndex(
+        const index = state.current_trip.passenger.findIndex(
             (item) => item.id === userId
         );
         state.current_trip.passenger.splice(index, 1);
         if (state.current_trip.allPassengerRequest) {
-            let index2 = state.current_trip.allPassengerRequest.findIndex(
+            const index2 = state.current_trip.allPassengerRequest.findIndex(
                 (item) =>
                     item.id === userId &&
                     (item.request_state === 1 || item.request_state === 4)
@@ -235,7 +235,7 @@ const mutations = {
                 ) {
                     return;
                 }
-                var index = state.trips[i].passenger.findIndex(
+                const index = state.trips[i].passenger.findIndex(
                     (item) =>
                         item.id === user.id &&
                         (item.request_state === 1 || item.request_state === 4)

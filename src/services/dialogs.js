@@ -8,7 +8,7 @@ export default {
         if (typeof successCallback !== 'function') {
             successCallback = function () {};
         }
-        var defaultOptions = {
+        const defaultOptions = {
             duration: 2,
             position: 'center',
             estado: 'success'

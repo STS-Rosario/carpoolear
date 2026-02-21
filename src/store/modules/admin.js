@@ -1,7 +1,7 @@
 import { AdminApi } from '../../services/api';
 import globalStore from '../index';
 
-let adminApi = new AdminApi();
+const adminApi = new AdminApi();
 
 function adminUpdate(store, data) {
     return adminApi

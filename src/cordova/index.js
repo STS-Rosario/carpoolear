@@ -1,7 +1,5 @@
 /* jshint esversion: 6 */
 
-console.log('CORDOVA INDEX.JS IS LOADING!');
-
 import store from '../store';
 import push from './push-capacitor.js';
 import facebook from './facebook.js';
@@ -13,12 +11,14 @@ import { Device } from '@capacitor/device';
 import { SplashScreen } from '@capacitor/splash-screen';
 import config from '../../config/conf.json';
 
+console.log('CORDOVA INDEX.JS IS LOADING!');
+
 window.facebook = facebook;
 window.appVersion = '2.2.2';
 
-let onDeviceReady = () => {
+const onDeviceReady = () => {
     console.log('Device ready');
-    let hasToDoInit = true;
+    const hasToDoInit = true;
     /* if (window.device && window.device.platform) {
         if (window.device.platform.toLowerCase() === 'android' || window.device.platform.toLowerCase() === 'ios') {
             hasToDoInit = false;
@@ -49,7 +49,7 @@ let onDeviceReady = () => {
     }
 };
 
-let doInit = async () => {
+const doInit = async () => {
     console.log('do Init');
     store.commit('cordova/' + types.CORDOVA_DEVICEREADY);
 
@@ -68,7 +68,7 @@ let doInit = async () => {
     document.addEventListener('backbutton', onBackbutton, false);
 };
 
-let initDeviceInfo = async () => {
+const initDeviceInfo = async () => {
     if (Capacitor.isNativePlatform()) {
         console.log('Initializing Capacitor device info...');
 
@@ -115,7 +115,7 @@ let initDeviceInfo = async () => {
     }
 };
 
-let initNetworkMonitoring = async () => {
+const initNetworkMonitoring = async () => {
     if (Capacitor.isNativePlatform()) {
         console.log('Initializing Capacitor network monitoring...');
 
@@ -150,32 +150,32 @@ let initNetworkMonitoring = async () => {
     }
 };
 
-let initBrowserNetworkEvents = () => {
+const initBrowserNetworkEvents = () => {
     document.addEventListener('online', onOnline, false);
     document.addEventListener('offline', onOffline, false);
 };
 
-let onOnline = () => {
+const onOnline = () => {
     console.log('Device online (browser event)');
     store.dispatch('cordova/deviceOnline');
 };
 
-let onOffline = () => {
+const onOffline = () => {
     console.log('Device offline (browser event)');
     store.dispatch('cordova/deviceOffline');
 };
 
 //  cordova.fireDocumentEvent('backbutton'); for testing in console
-let onBackbutton = () => {
+const onBackbutton = () => {
     console.log('Backbutton');
     store.dispatch('cordova/onBackButton');
 };
 
-let onPause = () => {
+const onPause = () => {
     store.dispatch('cordova/onPausa');
 };
 
-let onResumen = () => {
+const onResumen = () => {
     store.dispatch('cordova/onResumen');
 };
 

@@ -1,25 +1,25 @@
 /* jshint esversion: 6 */
 export default {
     async toast(options, onSuccess, onError) {
-        var message = '';
+        let message = '';
         if (typeof options === 'string' || options instanceof String) {
             message = options;
         }
-        
+
         try {
             // Check if we're in Capacitor environment
             if (window.Capacitor && window.Capacitor.isNativePlatform()) {
                 // Use Capacitor Toast plugin for native platforms
                 const { Toast } = await import('@capacitor/toast');
-                
+
                 const toastOptions = {
                     text: message,
                     duration: message.duration === 4000 ? 'long' : 'short',
                     position: message.position === 'top' ? 'top' : message.position === 'bottom' ? 'bottom' : 'center'
                 };
-                
+
                 await Toast.show(toastOptions);
-                
+
                 if (onSuccess) onSuccess();
             } else if (
                 window &&

@@ -91,8 +91,8 @@ const getters = {
 
 const actions = {
     setTitle(store, title = '') {
-        let getters = globalStore.getters;
-        let config = getters['auth/appConfig'];
+        const getters = globalStore.getters;
+        const config = getters['auth/appConfig'];
         let appName = config ? config.name_app : process.env.TARGET_APP;
         if (appName && appName.length) {
             appName = appName.charAt(0).toUpperCase() + appName.slice(1);
@@ -136,7 +136,7 @@ const actions = {
     },
 
     footerButtonClick(store, item) {
-        let params = {};
+        const params = {};
         if (item.url === 'profile') {
             params.id = 'me';
         }
@@ -171,7 +171,7 @@ const mutations = {
 
     [types.HEADER_SET_VISIBILITY](state, items) {
         state.header_buttons.forEach((item) => {
-            let index = items.findIndex((ids) => ids === item.id);
+            const index = items.findIndex((ids) => ids === item.id);
             if (index < 0) {
                 item.show = false;
             } else {

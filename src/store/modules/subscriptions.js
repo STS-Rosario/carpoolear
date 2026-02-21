@@ -4,7 +4,7 @@ import * as types from '../mutation-types';
 /* eslint-disable no-undef */
 
 // initial state
-let subscriptionApi = new SubscriptionApi();
+const subscriptionApi = new SubscriptionApi();
 
 const state = {
     subscriptions: null

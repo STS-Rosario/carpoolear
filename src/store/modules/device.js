@@ -6,7 +6,7 @@ import cache, { keys } from '../../services/cache';
 /* eslint-disable no-undef */
 
 // initial state
-let deviceApi = new DeviceApi();
+const deviceApi = new DeviceApi();
 
 const state = {
     devices: [],
@@ -42,7 +42,7 @@ const getters = {
 // actions
 const actions = {
     register(store) {
-        let data = Object.assign({}, store.rootGetters['cordova/deviceData']);
+        const data = Object.assign({}, store.rootGetters['cordova/deviceData']);
         data.app_version = store.rootState.appVersion;
         // device_type is already set correctly in cordova/deviceData based on the actual platform
 
@@ -103,41 +103,41 @@ const actions = {
             });
     },
     resize() {
-        var w = window;
-        var d = document;
-        var e = d.documentElement;
-        var g = d.getElementsByTagName('body')[0];
-        var x = w.innerWidth || e.clientWidth || g.clientWidth;
-        var y = w.innerHeight || e.clientHeight || g.clientHeight;
+        const w = window;
+        const d = document;
+        const e = d.documentElement;
+        const g = d.getElementsByTagName('body')[0];
+        const x = w.innerWidth || e.clientWidth || g.clientWidth;
+        const y = w.innerHeight || e.clientHeight || g.clientHeight;
 
         state.resolution.width = x;
         state.resolution.height = y;
         bus.emit('resize', state.resolution);
     },
     scrolling() {
-        let realScroll = document.body.scrollHeight - state.resolution.height;
+        const realScroll = document.body.scrollHeight - state.resolution.height;
 
-        var supportPageOffset = window.pageXOffset !== undefined;
-        var isCSS1Compat = (document.compatMode || '') === 'CSS1Compat';
+        const supportPageOffset = window.pageXOffset !== undefined;
+        const isCSS1Compat = (document.compatMode || '') === 'CSS1Compat';
 
-        let scrollPosition = supportPageOffset
+        const scrollPosition = supportPageOffset
             ? window.pageYOffset
             : isCSS1Compat
-            ? document.documentElement.scrollTop
-            : document.body.scrollTop;
+                ? document.documentElement.scrollTop
+                : document.body.scrollTop;
 
         if (scrollPosition + 400 > realScroll) {
             bus.emit('scroll-bottom', state.resolution);
         }
     },
     setFirstTimeAppOpenInDevice({ commit, getters, rootGetters, dispatch }) {
-        if (!getters['isBrowser']) {
-            commit(types['DEVICE_SET_FIRST_TIME_APP_OPEN'], true);
-            cache.setItem(keys['FIRST_TIME_APP_KEY'], true);
+        if (!getters.isBrowser) {
+            commit(types.DEVICE_SET_FIRST_TIME_APP_OPEN, true);
+            cache.setItem(keys.FIRST_TIME_APP_KEY, true);
         }
-        let user = rootGetters['auth/user'];
+        const user = rootGetters['auth/user'];
         if (user && !user.on_boarding_view) {
-            let data = {
+            const data = {
                 property: 'on_boarding_view',
                 value: 1
             };
@@ -152,7 +152,7 @@ const mutations = {
         state.current = device;
         if (device) {
             cache.setItem(keys.DEVICE_KEY, device);
-            let i = state.devices.findIndex((i) => i.id === device.id);
+            const i = state.devices.findIndex((i) => i.id === device.id);
             if (i >= 0) {
                 state.devices[i] = device;
             } else {
@@ -167,7 +167,7 @@ const mutations = {
 
     [types.DEVICE_DELETE](state, id) {
         if (id) {
-            let i = state.devices.findIndex((i) => i.id === id);
+            const i = state.devices.findIndex((i) => i.id === id);
             if (i >= 0) {
                 state.devices.splice(i, 1);
             }
