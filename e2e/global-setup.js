@@ -12,6 +12,7 @@ export default async function globalSetup() {
     const backendDir = new URL('../../carpoolear_backend', import.meta.url).pathname;
     const resetUsers = `docker compose exec -T app php artisan tinker --execute="` +
         `\\STS\\Models\\User::where('email','like','user%@g.com')->update(['banned'=>false,'on_boarding_view'=>1,'image'=>'https://via.placeholder.com/150','description'=>'Test user for e2e','autoaccept_requests'=>false]);` +
+        `\\STS\\Models\\User::where('email','user0@g.com')->update(['is_admin'=>true]);` +
         `echo 'OK';"`;
 
     // Clean up friendships between user6-user9 (IDs 7-10) to avoid test pollution
