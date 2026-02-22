@@ -11,8 +11,6 @@ services:
       API_URL: ${API_URL:-http://localhost:8000}
     ports:
       - ${FRONTEND_PORT:-8080}:8080
-    networks:
-      - esnet
     volumes:
       - .:/app
       - /app/node_modules

@@ -9,10 +9,11 @@
  * @param {string} password
  */
 export async function login(page, email = 'user0@g.com', password = '123456') {
-    // Navigate to app first, then clear any existing session so we can re-login
-    await page.goto('/login');
+    // Navigate to any page first, clear session, then go to login
+    await page.goto('/trips', { waitUntil: 'domcontentloaded' });
     await page.evaluate(() => localStorage.clear());
-    await page.goto('/login');
+    // Reload to ensure the app re-initializes without cached auth
+    await page.goto('/login', { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState('networkidle');
     await page.locator('#txt_user').waitFor({ state: 'visible', timeout: 15000 });
     await page.fill('#txt_user', email);
@@ -29,13 +30,19 @@ export async function login(page, email = 'user0@g.com', password = '123456') {
 export async function dismissOnboarding(page) {
     const onboarding = page.locator('.on-boarding--overlay');
     if (await onboarding.isVisible({ timeout: 2000 }).catch(() => false)) {
-        while (await page.locator('.on-boarding--overlay button.btn-primary').isVisible().catch(() => false)) {
-            await page.locator('.on-boarding--overlay button.btn-primary').click();
-            await page.waitForTimeout(800);
+        // Click through "Siguiente" steps (use .first() for strict mode)
+        for (let i = 0; i < 10; i++) {
+            const nextBtn = page.locator('.on-boarding--overlay button.btn-primary').first();
+            if (await nextBtn.isVisible({ timeout: 1000 }).catch(() => false)) {
+                await nextBtn.click({ timeout: 3000 }).catch(() => {});
+                await page.waitForTimeout(800);
+            } else {
+                break;
+            }
         }
-        const comenzar = page.locator('.on-boarding--overlay button.btn-success');
-        if (await comenzar.isVisible().catch(() => false)) {
-            await comenzar.click();
+        const comenzar = page.locator('.on-boarding--overlay button.btn-success').first();
+        if (await comenzar.isVisible({ timeout: 1000 }).catch(() => false)) {
+            await comenzar.click({ timeout: 3000 }).catch(() => {});
         }
         await page.waitForTimeout(500);
     }

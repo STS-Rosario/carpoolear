@@ -109,130 +109,99 @@
     </div>
 </template>
 
-<script>
-import { mapGetters } from 'vuex';
+<script setup>
+import { ref, computed, onMounted, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
 import { UserApi } from '../../services/api';
 
-export default {
-    name: 'IdentityValidation',
-    data() {
-        return {
-            manualStatus: {
-                has_submission: false,
-                request_id: null,
-                paid: null,
-                paid_at: null,
-                review_status: null,
-                submitted_at: null,
-                review_note: null
-            },
-            loadingOAuth: false,
-            loadingPreference: false
-        };
-    },
-    computed: {
-        ...mapGetters({
-            user: 'auth/user',
-            config: 'auth/appConfig'
-        }),
-        identityValidationMpEnabled() {
-            return this.config && this.config.identity_validation_mercado_pago_enabled === true;
-        },
-        identityValidationManualEnabled() {
-            return this.config && this.config.identity_validation_manual_enabled === true;
-        },
-        identityValidationAvailable() {
-            return this.identityValidationMpEnabled || this.identityValidationManualEnabled;
-        },
-        resultMessage() {
-            return this.$route.query.result || null;
-        },
-        /** Why "Validar con Mercado Pago" is disabled (for debugging) */
-        mercadopagoButtonDisabledReason() {
-            if (!this.user) return 'no_user';
-            if (!this.user.nro_doc || String(this.user.nro_doc).trim() === '') return 'no_nro_doc';
-            if (this.loadingOAuth) return 'loading_oauth';
-            return null;
-        }
-    },
-    watch: {
-        user: {
-            handler(newUser) {
-                const reason = this.mercadopagoButtonDisabledReason;
-                console.log('[IdentityValidation] Mercado Pago button state', {
-                    hasUser: !!newUser,
-                    nro_doc: newUser ? (newUser.nro_doc != null ? newUser.nro_doc : '(undefined)') : 'N/A',
-                    loadingOAuth: this.loadingOAuth,
-                    disabledReason: reason,
-                    buttonDisabled: !!reason
-                });
-            },
-            immediate: true
-        }
-    },
-    methods: {
-        formatDate(value) {
-            if (!value) return '';
-            const d = new Date(value);
-            return d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        },
-        fetchManualStatus() {
-            const userApi = new UserApi();
-            return userApi.getManualIdentityValidationStatus()
-                .then((res) => {
-                    this.manualStatus = res.data || res;
-                })
-                .catch(() => {
-                    this.manualStatus = { has_submission: false };
-                });
-        },
-        payManualValidation() {
-            this.loadingPreference = true;
-            const userApi = new UserApi();
-            userApi.createManualIdentityValidationPreference()
-                .then((res) => {
-                    const data = res.data || res;
-                    const initPoint = data.init_point;
-                    if (initPoint) {
-                        window.location.href = initPoint;
-                    } else {
-                        this.loadingPreference = false;
-                    }
-                })
-                .catch(() => {
-                    this.loadingPreference = false;
-                });
-        },
-        startMercadoPagoOAuth() {
-            if (!this.user || this.loadingOAuth) return;
-            this.loadingOAuth = true;
-            const userApi = new UserApi();
-            userApi.getMercadoPagoOAuthUrl()
-                .then((res) => {
-                    const url = (res.data && res.data.authorization_url) || res.authorization_url;
-                    if (url) {
-                        window.location.href = url;
-                    } else {
-                        this.loadingOAuth = false;
-                    }
-                })
-                .catch(() => {
-                    this.loadingOAuth = false;
-                });
-        }
-    },
-    mounted() {
-        this.fetchManualStatus();
-        this.$nextTick(() => {
-            console.log('[IdentityValidation] mounted – Mercado Pago button', {
-                hasUser: !!this.user,
-                nro_doc: this.user ? (this.user.nro_doc != null ? this.user.nro_doc : '(undefined)') : 'N/A',
-                loadingOAuth: this.loadingOAuth,
-                disabledReason: this.mercadopagoButtonDisabledReason
-            });
+const route = useRoute();
+const authStore = useAuthStore();
+
+const user = computed(() => authStore.user);
+const config = computed(() => authStore.appConfig);
+
+const manualStatus = ref({
+    has_submission: false,
+    request_id: null,
+    paid: null,
+    paid_at: null,
+    review_status: null,
+    submitted_at: null,
+    review_note: null
+});
+const loadingOAuth = ref(false);
+const loadingPreference = ref(false);
+
+const identityValidationMpEnabled = computed(() => {
+    return config.value && config.value.identity_validation_mercado_pago_enabled === true;
+});
+const identityValidationManualEnabled = computed(() => {
+    return config.value && config.value.identity_validation_manual_enabled === true;
+});
+const identityValidationAvailable = computed(() => {
+    return identityValidationMpEnabled.value || identityValidationManualEnabled.value;
+});
+const resultMessage = computed(() => {
+    return route.query.result || null;
+});
+
+function formatDate(value) {
+    if (!value) return '';
+    const d = new Date(value);
+    return d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
+function fetchManualStatus() {
+    const userApi = new UserApi();
+    return userApi.getManualIdentityValidationStatus()
+        .then((res) => {
+            manualStatus.value = res.data || res;
+        })
+        .catch(() => {
+            manualStatus.value = { has_submission: false };
         });
-    }
-};
+}
+
+function payManualValidation() {
+    loadingPreference.value = true;
+    const userApi = new UserApi();
+    userApi.createManualIdentityValidationPreference()
+        .then((res) => {
+            const data = res.data || res;
+            const initPoint = data.init_point;
+            if (initPoint) {
+                window.location.href = initPoint;
+            } else {
+                loadingPreference.value = false;
+            }
+        })
+        .catch(() => {
+            loadingPreference.value = false;
+        });
+}
+
+function startMercadoPagoOAuth() {
+    if (!user.value || loadingOAuth.value) return;
+    loadingOAuth.value = true;
+    const userApi = new UserApi();
+    userApi.getMercadoPagoOAuthUrl()
+        .then((res) => {
+            const url = (res.data && res.data.authorization_url) || res.authorization_url;
+            if (url) {
+                window.location.href = url;
+            } else {
+                loadingOAuth.value = false;
+            }
+        })
+        .catch(() => {
+            loadingOAuth.value = false;
+        });
+}
+
+onMounted(() => {
+    fetchManualStatus();
+});
 </script>
 
 <style scoped>

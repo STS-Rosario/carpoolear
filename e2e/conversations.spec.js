@@ -50,7 +50,7 @@ test.describe('Messaging / Conversations', () => {
     });
 
     test('can create a conversation and send a message via UI', async ({ page }) => {
-        // Create a trip as user1 via UI so user1 is "chattable" (usersCanChat check)
+        // Create a trip as user1 via UI so user0 can message user1 via the trip page
         await setupAutocompleteMocks(page);
         await login(page, 'user1@g.com', '123456');
         await dismissOnboarding(page);
@@ -59,33 +59,25 @@ test.describe('Messaging / Conversations', () => {
         });
         const user1Token = await getToken(page);
 
-        // Get user1's actual name from the header (Faker names are random)
-        const user1Name = await page.request.get('http://localhost:8000/api/users/me', {
-            headers: { Authorization: `Bearer ${user1Token}` },
-        }).then(r => r.json()).then(d => d.data.name);
-
         // Login as user0
         await login(page, 'user0@g.com', '123456');
         await dismissOnboarding(page);
 
-        // Navigate to conversations page
-        await page.goto('/conversations');
+        // Navigate to the trip detail page where user0 can message the driver (user1)
+        await page.goto(`/trips/${user1TripId}`);
         await page.waitForLoadState('networkidle');
 
-        // Search for user1 in the search bar
-        const searchInput = page.locator('.conversation_list input[type="text"]');
-        await expect(searchInput).toBeVisible({ timeout: 10000 });
+        // Click the "Enviar Mensaje" button on the trip detail page (outside any modal)
+        const msgBtn = page.locator('.trip-detail button, .trip-detail a, main button, main a').filter({ hasText: /Enviar Mensaje/i }).first();
+        await msgBtn.waitFor({ state: 'visible', timeout: 15000 });
+        await msgBtn.click();
 
-        // Search by a unique part of user1's name (skip common prefixes like Mr./Mrs.)
-        const nameParts = user1Name.split(' ').filter(p => !p.match(/^(Mr|Mrs|Ms|Dr|Jr|Sr|II|III|IV|V)\.?$/i));
-        const searchTerm = nameParts[0] || user1Name.split(' ').pop();
-        await searchInput.fill(searchTerm);
-        await page.click('#btn-search');
-
-        // Wait for user results to appear and click first user
-        const userResult = page.locator('.conversation_chat--search .list-group-item').first();
-        await expect(userResult).toBeVisible({ timeout: 10000 });
-        await userResult.click();
+        // Handle "Carpoodatos" modal if it appears (user hint before sending message)
+        // The modal uses .modal-container (not .modal-content)
+        const modalMsgBtn = page.locator('.modal-container button').filter({ hasText: /Enviar Mensaje/i }).first();
+        if (await modalMsgBtn.isVisible({ timeout: 5000 }).catch(() => false)) {
+            await modalMsgBtn.click();
+        }
 
         // Should navigate to conversation chat
         await page.waitForURL(/\/conversations\/\d+/, { timeout: 15000 });
