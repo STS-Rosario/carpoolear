@@ -410,7 +410,7 @@ onBeforeUnmount(() => {
     bus.off('date-change', dateChange);
 });
 
-defineExpose({ clear });
+defineExpose({ clear, loadParams });
 </script>
 
 <style scoped>

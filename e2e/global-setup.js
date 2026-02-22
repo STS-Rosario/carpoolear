@@ -10,12 +10,17 @@ import { execSync } from 'child_process';
 
 export default async function globalSetup() {
     const backendDir = new URL('../../carpoolear_backend', import.meta.url).pathname;
-    const cmd = `docker compose exec -T app php artisan tinker --execute="` +
-        `\\STS\\Models\\User::where('email','like','user%@g.com')->update(['banned'=>false,'on_boarding_view'=>1,'image'=>'https://via.placeholder.com/150','description'=>'Test user for e2e']);` +
+    const resetUsers = `docker compose exec -T app php artisan tinker --execute="` +
+        `\\STS\\Models\\User::where('email','like','user%@g.com')->update(['banned'=>false,'on_boarding_view'=>1,'image'=>'https://via.placeholder.com/150','description'=>'Test user for e2e','autoaccept_requests'=>false]);` +
+        `echo 'OK';"`;
+
+    // Clean up friendships between user6-user9 (IDs 7-10) to avoid test pollution
+    const cleanFriends = `docker compose exec -T app php artisan tinker --execute="` +
+        `\\Illuminate\\Support\\Facades\\DB::table('friends')->where(function(\\$q){\\$q->whereIn('user_id',[7,8,9,10])->whereIn('friend_id',[7,8,9,10]);})->delete();` +
         `echo 'OK';"`;
 
     try {
-        const output = execSync(cmd, { cwd: backendDir, timeout: 15000, encoding: 'utf-8' });
+        const output = execSync(resetUsers, { cwd: backendDir, timeout: 15000, encoding: 'utf-8' });
         if (output.includes('OK')) {
             console.log('Global setup: test users reset successfully');
         } else {
@@ -23,5 +28,29 @@ export default async function globalSetup() {
         }
     } catch (err) {
         console.warn('Global setup: could not reset test users (backend may not be running):', err.message);
+    }
+
+    try {
+        const output = execSync(cleanFriends, { cwd: backendDir, timeout: 15000, encoding: 'utf-8' });
+        if (output.includes('OK')) {
+            console.log('Global setup: friendships cleaned for user6-user9');
+        }
+    } catch (err) {
+        console.warn('Global setup: could not clean friendships:', err.message);
+    }
+
+    // Delete all trips created by user8 and user9 (IDs 9, 10) to reset the trip creation counter
+    // This prevents the ban triggered by creating >5 trips in 24 hours
+    const cleanTrips = `docker compose exec -T app php artisan tinker --execute="` +
+        `\\STS\\Models\\Trip::whereIn('user_id',[9,10])->delete();` +
+        `echo 'OK';"`;
+
+    try {
+        const output = execSync(cleanTrips, { cwd: backendDir, timeout: 15000, encoding: 'utf-8' });
+        if (output.includes('OK')) {
+            console.log('Global setup: trips cleaned for user8-user9');
+        }
+    } catch (err) {
+        console.warn('Global setup: could not clean trips:', err.message);
     }
 }

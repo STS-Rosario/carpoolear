@@ -61,7 +61,7 @@ export const useCordovaStore = defineStore('cordova', () => {
                 .loginWithProvider('facebook', { access_token: accessToken })
                 .then((response) => {
                     const token = response.token;
-                    authStore.onLoggin(token);
+                    bus.emit('social-login', token);
                     authApi.matchFriendsWithProvider('facebook', {
                         access_token: accessToken
                     });
@@ -78,7 +78,7 @@ export const useCordovaStore = defineStore('cordova', () => {
 
             authApi.loginWithProvider('apple', data).then((response) => {
                 const token = response.token;
-                authStore.onLoggin(token);
+                bus.emit('social-login', token);
             });
         });
     }

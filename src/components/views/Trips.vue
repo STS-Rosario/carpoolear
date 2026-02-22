@@ -657,7 +657,7 @@ const subscribeSearch = () => {
         });
 };
 
-watch(trips, (oldValue, newValue) => {
+watch(trips, (newValue, oldValue) => {
     if (refreshList.value) {
         tripsStore.refreshList(false);
         lookSearch.value = false;

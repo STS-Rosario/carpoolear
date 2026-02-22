@@ -52,12 +52,12 @@
                         </button>
                         <ul class="dropdown-menu" :class="{ show: mobileMenuOpen }" v-if="mobileMenuOpen">
                             <li>
-                                <router-link tag="a" :to="{ name: 'acerca_de' }" @click="mobileMenuOpen = false">
+                                <router-link :to="{ name: 'acerca_de' }" @click="mobileMenuOpen = false">
                                     {{ t('acercaDe') }}
                                 </router-link>
                             </li>
                             <li>
-                                <router-link :to="{ name: 'terms' }" tag="a" @click="mobileMenuOpen = false">
+                                <router-link :to="{ name: 'terms' }" @click="mobileMenuOpen = false">
                                     {{ t('tyc') }}
                                 </router-link>
                             </li>
@@ -74,7 +74,7 @@
                                 class="divider"
                             ></li>
                             <li v-if="user">
-                                <a @click="logout; mobileMenuOpen = false" v-if="!isFacebokApp">{{
+                                <a @click="logout(); mobileMenuOpen = false" v-if="!isFacebokApp">{{
                                     t('cerrarSesion')
                                 }}</a>
                             </li>
@@ -199,8 +199,7 @@
                     </ul>
                 </div>
                 <router-link
-                    class="btn btn-primary"
-                    btn-lg
+                    class="btn btn-primary btn-lg"
                     v-if="!logged"
                     :to="{ name: 'login' }"
                 >

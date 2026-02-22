@@ -3,3 +3,6 @@ dist
 platforms
 plugins
 .git
+test-results
+playwright-report
+.claude

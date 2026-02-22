@@ -54,8 +54,8 @@ export function parseOsmStreet(result) {
         : result.address.county
             ? result.address.county
             : result.address.city;
-    ciudad.replace('Ciudad de ', '');
-    ciudad.replace('Municipio de ', '');
+    ciudad = ciudad.replace('Ciudad de ', '');
+    ciudad = ciudad.replace('Municipio de ', '');
     address.ciudad = ciudad;
     address.calle = '';
     address.numero = '';

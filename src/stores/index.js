@@ -30,7 +30,7 @@ export async function initApp(authStore, deviceStore, cordovaStore) {
     }
 }
 
-export function startApp(authStore, tripsStore, myTripsStore, ratesStore, passengerStore, carsStore, cordovaStore, deviceStore) {
+export function startApp(authStore, tripsStore, myTripsStore, ratesStore, passengerStore, carsStore, cordovaStore, deviceStore, notificationsStore) {
     tripsStore.tripsSearch({ is_passenger: false });
     if (authStore.auth) {
         authStore.fetchUser();
@@ -39,7 +39,7 @@ export function startApp(authStore, tripsStore, myTripsStore, ratesStore, passen
         ratesStore.fetchPendingRates();
         passengerStore.getPendingRequest();
         carsStore.index();
-        startThread(authStore);
+        startThread(authStore, notificationsStore);
         if (cordovaStore.device) {
             deviceStore.update();
         }
@@ -48,7 +48,7 @@ export function startApp(authStore, tripsStore, myTripsStore, ratesStore, passen
     bus.emit('system-ready');
 }
 
-export function onLoggin(token, authStore, tripsStore, myTripsStore, ratesStore, carsStore, passengerStore, cordovaStore, deviceStore, router) {
+export function onLoggin(token, authStore, tripsStore, myTripsStore, ratesStore, carsStore, passengerStore, cordovaStore, deviceStore, router, notificationsStore) {
     authStore.setToken(token);
     authStore.fetchUser();
     if (cordovaStore.device) {
@@ -60,7 +60,7 @@ export function onLoggin(token, authStore, tripsStore, myTripsStore, ratesStore,
     ratesStore.fetchPendingRates();
     carsStore.index();
     passengerStore.getPendingRequest();
-    startThread(authStore);
+    startThread(authStore, notificationsStore);
     if (authStore.firstTime) {
         router.replace({ name: 'profile_update' });
     } else {

@@ -1090,7 +1090,7 @@ watch(cars, () => {
 
 watch(userData, () => {
     console.log('userData', userData.value);
-    localUser.value = userData.value;
+    localUser.value = userData.value ? JSON.parse(JSON.stringify(userData.value)) : null;
     if (localUser.value && localUser.value.nro_doc) {
         localUser.value.nro_doc = formatId(localUser.value.nro_doc, config.value.profile_id_format);
     }
@@ -1139,7 +1139,7 @@ onMounted(() => {
         console.error('Failed to load cars:', err);
     });
     bus.on('date-change', dateChange);
-    localUser.value = userData.value;
+    localUser.value = userData.value ? JSON.parse(JSON.stringify(userData.value)) : null;
     // Format nro_doc with pattern when page loads
     if (localUser.value && localUser.value.nro_doc) {
         localUser.value.nro_doc = formatId(localUser.value.nro_doc, config.value.profile_id_format);

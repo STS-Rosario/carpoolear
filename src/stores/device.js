@@ -1,6 +1,8 @@
 import { ref, computed, reactive } from 'vue';
 import { defineStore } from 'pinia';
 import { DeviceApi } from '../services/api';
+import { useCordovaStore } from './cordova';
+import { useProfileStore } from './profile';
 import bus from '../services/bus-event';
 import cache, { keys } from '../services/cache';
 
@@ -30,9 +32,10 @@ export const useDeviceStore = defineStore('device', () => {
         return result;
     });
 
-    function register(rootGetters, rootState) {
-        const data = Object.assign({}, rootGetters.cordovaDeviceData);
-        data.app_version = rootState.appVersion;
+    function register() {
+        const cordovaStore = useCordovaStore();
+        const data = { ...cordovaStore.deviceData };
+        data.app_version = import.meta.env.VITE_APP_VERSION || '1.0.0';
 
         if (!data.device_id) {
             return Promise.resolve();
@@ -49,10 +52,11 @@ export const useDeviceStore = defineStore('device', () => {
             });
     }
 
-    function update(data = {}, rootGetters, rootState) {
+    function update(data = {}) {
         if (current.value) {
-            Object.assign(data, rootGetters.cordovaDeviceData);
-            data.app_version = rootState.appVersion;
+            const cordovaStore = useCordovaStore();
+            Object.assign(data, cordovaStore.deviceData);
+            data.app_version = import.meta.env.VITE_APP_VERSION || '1.0.0';
             data.notifications = current.value.notifications;
             return deviceApi
                 .update(current.value.id, data)
@@ -150,6 +154,13 @@ export const useDeviceStore = defineStore('device', () => {
     function setFirstTimeAppOpenInDevice() {
         if (!isBrowser.value) {
             setFirstTimeAppOpen(true);
+            // Persist to server so onboarding is not shown again after re-login
+            try {
+                const profileStore = useProfileStore();
+                profileStore.changeProperty({ on_boarding_view: 1 });
+            } catch (e) {
+                // profileStore may not be available
+            }
         }
     }
 

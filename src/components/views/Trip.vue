@@ -388,7 +388,7 @@ import L from 'leaflet';
 if (typeof window !== 'undefined') window.L = L;
 import 'leaflet-routing-machine';
 
-const { t } = useI18n();
+const { t, locale } = useI18n();
 const router = useRouter();
 const authStore = useAuthStore();
 const tripsStore = useTripsStore();
@@ -748,7 +748,7 @@ const renderMap = () => {
             );
             let control = L.Routing.control({
                 waypoints: pts,
-                language: useI18n().locale.value
+                language: locale.value
             });
             control.addTo(map);
         }

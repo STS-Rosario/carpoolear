@@ -3,7 +3,7 @@ import routes from './routes.js';
 import { useAuthStore } from '../stores/auth';
 import { useActionbarsStore } from '../stores/actionbars';
 import { useBackgroundStore } from '../stores/background';
-import { i18n } from '../main.js';
+import { i18n } from '../i18n';
 
 const historyMode = import.meta.env.VITE_HISTORY_MODE || 'hash';
 const routeBase = import.meta.env.VITE_ROUTE_BASE || '/';
@@ -102,7 +102,7 @@ router.replace = function (data) {
     } else {
         router.stack = [];
     }
-    return originalPush(data);
+    return originalReplace(data);
 };
 
 router.go = function (number) {

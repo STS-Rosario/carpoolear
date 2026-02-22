@@ -8,7 +8,7 @@ services:
     command: npm run dev
     environment:
       HOST: '0.0.0.0'
-      API_URL: ${API_URL:-http://localhost:8000}
+      VITE_API_URL: ${API_URL:-http://localhost:8000}
     ports:
       - ${FRONTEND_PORT:-8080}:8080
     volumes:

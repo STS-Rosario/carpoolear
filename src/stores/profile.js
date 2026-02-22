@@ -1,7 +1,8 @@
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
 import { UserApi, RateApi, ReferencesApi } from '../services/api';
 import { usePagination } from '../composables/usePagination';
+import { useAuthStore } from './auth';
 
 const userApi = new UserApi();
 const rateApi = new RateApi();
@@ -17,7 +18,7 @@ export const useProfileStore = defineStore('profile', () => {
         return rateApi.index(user.value.id, data);
     });
 
-    const references = ref(null);
+    const references = computed(() => user.value?.references_data || []);
 
     function setUser(newUser) {
         user.value = newUser;
@@ -63,6 +64,10 @@ export const useProfileStore = defineStore('profile', () => {
         return userApi
             .registerDonation(data)
             .then((response) => {
+                const authStore = useAuthStore();
+                if (response.data) {
+                    authStore.pushDonation(response.data);
+                }
                 return Promise.resolve(response);
             })
             .catch((error) => {
@@ -96,6 +101,10 @@ export const useProfileStore = defineStore('profile', () => {
         return userApi
             .changeProperty(data)
             .then((response) => {
+                const authStore = useAuthStore();
+                if (response.data) {
+                    authStore.setUser(response.data);
+                }
                 return Promise.resolve(response);
             })
             .catch((error) => {
@@ -147,7 +156,7 @@ export const useProfileStore = defineStore('profile', () => {
         user,
         registerData,
         badges,
-        references: ratesPagination.items,
+        references,
         rates: ratesPagination.items,
         ratesMorePage: ratesPagination.morePage,
         ratesSearch: ratesPagination.search,

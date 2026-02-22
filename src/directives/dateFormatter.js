@@ -33,8 +33,8 @@ const formatNumber = function (id) {
         '$1/$2/$3'
     );
     numberFormatter[id].el.value = numberFormatter[id].value;
-    numberFormatter[id].context[numberFormatter[id].expression] =
-        numberFormatter[id].rawValue;
+    // Trigger input event so Vue's v-model picks up the formatted value
+    numberFormatter[id].el.dispatchEvent(new Event('input', { bubbles: true }));
 };
 
 /* This prevent insert chars, that are not numbers */
@@ -77,7 +77,6 @@ export default {
         numberFormatter[el.id].value = el.value;
         numberFormatter[el.id].rawValue = '';
         numberFormatter[el.id].el = el;
-        numberFormatter[el.id].expression = binding.value;
         if (el.value.length > 0) {
             formatNumber(el.id);
         }

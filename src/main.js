@@ -1,10 +1,9 @@
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
-import { createI18n } from 'vue-i18n';
 import App from './App.vue';
 import router from './router';
 import { registerDirectives } from './directives';
-import messages from './language/i18n';
+import { i18n } from './i18n';
 import bus from './services/bus-event';
 import { DebugApi } from './services/api';
 import {
@@ -39,7 +38,7 @@ import { useCarsStore } from './stores/cars';
 import { useCordovaStore } from './stores/cordova';
 import { useDeviceStore } from './stores/device';
 import { useNotificationsStore } from './stores/notifications';
-import { initApp, startApp, startThread } from './stores/index';
+import { initApp, startApp, startThread, onLoggin } from './stores/index';
 
 const ROUTE_BASE = import.meta.env.VITE_ROUTE_BASE || '/';
 
@@ -51,30 +50,7 @@ const cordovaPath = 'cordova.js';
 cordovaTag.setAttribute('src', ROUTE_BASE + cordovaPath);
 document.head.appendChild(cordovaTag);
 
-// i18n setup
-export const i18n = createI18n({
-    legacy: false,
-    locale: 'arg',
-    fallbackLocale: 'arg',
-    messages,
-    silentFallbackWarn: true,
-    numberFormats: {
-        arg: {
-            currency: {
-                style: 'currency',
-                currency: 'ARS',
-                currencyDisplay: 'symbol'
-            }
-        },
-        chl: {
-            currency: {
-                style: 'currency',
-                currency: 'CHL',
-                currencyDisplay: 'symbol'
-            }
-        }
-    }
-});
+// i18n is imported from src/i18n.js (breaks circular import with router)
 
 // Capacitor initialization
 const initializeCapacitorPlugins = async () => {
@@ -140,13 +116,13 @@ const initStores = async () => {
     if (import.meta.env.VITE_ROUTE_BASE) {
         console.log('Not running in cordova.');
         await initApp(authStore, deviceStore, cordovaStore);
-        startApp(authStore, tripsStore, myTripsStore, ratesStore, passengerStore, carsStore, cordovaStore, deviceStore);
+        startApp(authStore, tripsStore, myTripsStore, ratesStore, passengerStore, carsStore, cordovaStore, deviceStore, notificationsStore);
     } else {
         setTimeout(async function () {
             if (!window.cordova) {
                 console.log('Not running in cordova.');
                 await initApp(authStore, deviceStore, cordovaStore);
-                startApp(authStore, tripsStore, myTripsStore, ratesStore, passengerStore, carsStore, cordovaStore, deviceStore);
+                startApp(authStore, tripsStore, myTripsStore, ratesStore, passengerStore, carsStore, cordovaStore, deviceStore, notificationsStore);
             }
         }, 2000);
     }
@@ -156,6 +132,11 @@ const initStores = async () => {
         if (authStore.auth) {
             startThread(authStore, notificationsStore);
         }
+    });
+
+    // Handle social login from cordova store
+    bus.on('social-login', (token) => {
+        onLoggin(token, authStore, tripsStore, myTripsStore, ratesStore, carsStore, passengerStore, cordovaStore, deviceStore, router, notificationsStore);
     });
 };
 
@@ -176,6 +157,7 @@ bus.on('system-ready', () => {
     app.config.globalProperties.$scrollToElement = scrollToElement;
     app.config.globalProperties.$checkError = checkError;
     app.config.globalProperties.$getErrors = getErrors;
+    app.config.globalProperties.$moment = moment;
 
     // Error handler
     app.config.errorHandler = function (err, vm, info) {

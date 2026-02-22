@@ -42,6 +42,10 @@ export function guest(to, from, next) {
 export function profileComplete(to, from, next) {
     const authStore = useAuthStore();
     const user = authStore.user;
+    if (!user) {
+        next();
+        return;
+    }
     if (
         !user.image ||
         user.image.length === 0 ||
@@ -54,5 +58,7 @@ export function profileComplete(to, from, next) {
         };
         next(false);
         router.replace({ name: 'profile_update' });
+    } else {
+        next();
     }
 }

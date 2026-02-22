@@ -2,6 +2,7 @@ import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
 import { TripApi } from '../services/api';
 import { usePagination } from '../composables/usePagination';
+import { useMyTripsStore } from './myTrips';
 import moment from 'moment';
 
 const tripsApi = new TripApi();
@@ -23,9 +24,20 @@ export const useTripsStore = defineStore('trips', () => {
         return pagination.search(data);
     }
 
+    function refreshMyTrips() {
+        try {
+            const myTripsStore = useMyTripsStore();
+            myTripsStore.tripAsDriver();
+            myTripsStore.tripAsPassenger();
+        } catch (e) {
+            // myTripsStore may not be initialized yet
+        }
+    }
+
     function create(data) {
         return tripsApi.create(data).then((response) => {
             pagination.search(pagination.searchParam.value.data);
+            refreshMyTrips();
             return Promise.resolve(response.data);
         });
     }
@@ -33,6 +45,7 @@ export const useTripsStore = defineStore('trips', () => {
     function update(data) {
         return tripsApi.update(data).then((response) => {
             pagination.search(pagination.searchParam.value.data);
+            refreshMyTrips();
             return Promise.resolve(response.data);
         });
     }
@@ -46,6 +59,7 @@ export const useTripsStore = defineStore('trips', () => {
     function remove(id) {
         return tripsApi.remove(id).then(() => {
             pagination.search(pagination.searchParam.value.data);
+            refreshMyTrips();
             return Promise.resolve({ status: 'ok' });
         });
     }

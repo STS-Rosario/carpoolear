@@ -65,6 +65,8 @@ const props = defineProps(['user']);
     padding-left: 0.4em;
     white-space: nowrap;
     word-break: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .pending-buttons button {
     width: calc(50% - 0.3em);

@@ -1,6 +1,7 @@
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import { RateApi } from '../services/api';
+import { useProfileStore } from './profile';
 import moment from 'moment';
 
 const rateApi = new RateApi();
@@ -41,7 +42,12 @@ export const useRatesStore = defineStore('rates', () => {
             .reply(data.trip_id, data.user_id, obj)
             .then(() => {
                 data.reply_comment_created_at = moment(new Date()).format();
-                // Profile store will need to handle this separately
+                try {
+                    const profileStore = useProfileStore();
+                    profileStore.setReply(data);
+                } catch (e) {
+                    // profile store may not be initialized
+                }
                 return Promise.resolve(data);
             })
             .catch((error) => {

@@ -114,10 +114,7 @@ export default [
         path: '/trips/create',
         name: 'new-trip',
         component: () => import('../components/views/NewTrip.vue'),
-        beforeEnter: (to, from, next) => {
-            auth(to, from, next);
-            profileComplete(to, from, next);
-        },
+        beforeEnter: [auth, profileComplete],
         meta: {
             actionbar: {
                 header: { titleKey: 'crearViaje', buttons: ['clear'] }

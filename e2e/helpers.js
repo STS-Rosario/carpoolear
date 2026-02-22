@@ -24,6 +24,26 @@ export async function login(page, email = 'user0@g.com', password = '123456') {
 }
 
 /**
+ * Wait for the 3-second splash screen overlay to disappear.
+ * The splash is a fixed overlay (z-index 9999) that appears on every page load.
+ * @param {import('@playwright/test').Page} page
+ */
+export async function waitForSplash(page) {
+    const splash = page.locator('.custom-splash-screen');
+    await splash.waitFor({ state: 'hidden', timeout: 10000 }).catch(() => {});
+}
+
+/**
+ * Navigate to a URL and wait for the splash screen to disappear.
+ * @param {import('@playwright/test').Page} page
+ * @param {string} url
+ */
+export async function navigateTo(page, url) {
+    await page.goto(url, { waitUntil: 'domcontentloaded' });
+    await waitForSplash(page);
+}
+
+/**
  * Dismiss the onboarding overlay if it appears after login.
  * @param {import('@playwright/test').Page} page
  */
@@ -195,4 +215,324 @@ export async function deleteTripViaAPI(page, tripId, token) {
             headers: { Authorization: `Bearer ${token}` },
         });
     }
+}
+
+// ---------------------------------------------------------------------------
+// API-based helpers for fast setup/teardown (avoid slow UI for non-UI tests)
+// ---------------------------------------------------------------------------
+
+const API_BASE = 'http://localhost:8000';
+
+/**
+ * Login via API and inject the token into localStorage.
+ * Returns { token, userId }.
+ */
+export async function loginViaAPI(page, email = 'user0@g.com', password = '123456') {
+    const res = await page.request.post(`${API_BASE}/api/login`, {
+        data: { email, password },
+    });
+    const json = await res.json();
+    const token = json.token;
+    // /api/login doesn't return user object, so fetch it separately
+    const meRes = await page.request.get(`${API_BASE}/api/users/me`, {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+    const meJson = await meRes.json();
+    const userId = meJson.data?.id || meJson.id;
+    // Ensure we're on a page so localStorage is accessible
+    if (page.url() === 'about:blank') {
+        await page.goto('/trips', { waitUntil: 'domcontentloaded' });
+    }
+    await page.evaluate((t) => localStorage.setItem('TOKEN', t), token);
+    return { token, userId };
+}
+
+/**
+ * Create a trip via API. Returns the trip object from the response.
+ */
+export async function createTripViaAPI(page, token, opts = {}) {
+    const futureDate = new Date(Date.now() + 14 * 86400000);
+    const dateStr = futureDate.toISOString().split('T')[0];
+    const data = {
+        is_passenger: 0,
+        trip_date: opts.trip_date || `${dateStr} 14:00:00`,
+        total_seats: opts.total_seats || 2,
+        friendship_type_id: 2, // PRIVACY_PUBLIC – visible to all users
+        description: opts.description || 'Viaje e2e via API',
+        return_trip: 0,
+        from_town: opts.from_town || 'Rosario, Santa Fe',
+        to_town: opts.to_town || 'Mendoza, Mendoza',
+        from_lat: -32.9468,
+        from_lng: -60.6393,
+        to_lat: -32.8895,
+        to_lng: -68.8458,
+        points: [
+            { lat: -32.9468, lng: -60.6393, address: 'Rosario, Santa Fe', json_address: { id: 1, name: 'Rosario, Santa Fe' } },
+            { lat: -32.8895, lng: -68.8458, address: 'Mendoza, Mendoza', json_address: { id: 2, name: 'Mendoza, Mendoza' } },
+        ],
+        estimated_time: '05:00',
+        distance: 400,
+        co2: 50,
+        ...opts,
+    };
+    const res = await page.request.post(`${API_BASE}/api/trips`, {
+        headers: { Authorization: `Bearer ${token}` },
+        data,
+    });
+    const json = await res.json();
+    if (json.errors || json.message?.includes('Could not')) {
+        // If banned or hit trip limit, unban via tinker (resets banned flag +
+        // deletes recent trips to avoid immediate re-ban) and retry
+        const { execSync } = await import('child_process');
+        const backendDir = new URL('../../carpoolear_backend', import.meta.url).pathname;
+        try {
+            execSync(
+                `docker compose exec -T app php artisan tinker --execute="` +
+                `\\STS\\Models\\User::where('banned',true)->update(['banned'=>false]);` +
+                `echo 'OK';"`,
+                { cwd: backendDir, timeout: 15000, encoding: 'utf-8' }
+            );
+        } catch (e) { /* ignore */ }
+        const retry = await page.request.post(`${API_BASE}/api/trips`, {
+            headers: { Authorization: `Bearer ${token}` },
+            data,
+        });
+        const retryJson = await retry.json();
+        if (retryJson.data?.id || retryJson.id) {
+            return retryJson.data || retryJson;
+        }
+        throw new Error(`createTripViaAPI failed: ${JSON.stringify(json)} | retry: ${JSON.stringify(retryJson)}`);
+    }
+    return json.data || json;
+}
+
+/**
+ * Request a seat on a trip via API.
+ */
+export async function requestSeatViaAPI(page, token, tripId) {
+    const res = await page.request.post(`${API_BASE}/api/trips/${tripId}/requests`, {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!res.ok()) {
+        const body = await res.text();
+        console.warn(`requestSeatViaAPI failed (${res.status()}):`, body.substring(0, 200));
+    }
+    return res.json();
+}
+
+/**
+ * Accept a passenger via API.
+ */
+export async function acceptPassengerViaAPI(page, driverToken, tripId, userId) {
+    const res = await page.request.post(`${API_BASE}/api/trips/${tripId}/requests/${userId}/accept`, {
+        headers: { Authorization: `Bearer ${driverToken}` },
+    });
+    if (!res.ok()) {
+        const body = await res.text();
+        console.warn(`acceptPassengerViaAPI failed (${res.status()}):`, body.substring(0, 200));
+    }
+    return res.json();
+}
+
+/**
+ * Cancel/remove a passenger via API.
+ */
+export async function cancelPassengerViaAPI(page, token, tripId, userId) {
+    const res = await page.request.post(`${API_BASE}/api/trips/${tripId}/requests/${userId}/cancel`, {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!res.ok()) {
+        const body = await res.text();
+        console.warn(`cancelPassengerViaAPI failed (${res.status()}):`, body.substring(0, 200));
+    }
+    return res.json();
+}
+
+/**
+ * Send a friend request via API.
+ */
+export async function sendFriendRequestViaAPI(page, token, userId) {
+    const res = await page.request.post(`${API_BASE}/api/friends/request/${userId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.json();
+}
+
+/**
+ * Accept a friend request via API.
+ */
+export async function acceptFriendViaAPI(page, token, userId) {
+    const res = await page.request.post(`${API_BASE}/api/friends/accept/${userId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.json();
+}
+
+/**
+ * Delete/unfriend a user via API.
+ */
+export async function deleteFriendViaAPI(page, token, userId) {
+    const res = await page.request.post(`${API_BASE}/api/friends/delete/${userId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.json();
+}
+
+/**
+ * Create a conversation and send a message via API. Returns conversation object.
+ */
+export async function createConversationViaAPI(page, token, toUserId, text) {
+    const convRes = await page.request.post(`${API_BASE}/api/conversations`, {
+        headers: { Authorization: `Bearer ${token}` },
+        data: { to: toUserId },
+    });
+    const conv = await convRes.json();
+    const convId = conv.id || conv.data?.id;
+    if (!convId) {
+        console.warn('createConversationViaAPI: no conversation id returned', JSON.stringify(conv));
+    }
+    if (convId && text) {
+        const sendRes = await page.request.post(`${API_BASE}/api/conversations/${convId}/send`, {
+            headers: { Authorization: `Bearer ${token}` },
+            data: { message: text },
+        });
+        const sendJson = await sendRes.json().catch(() => ({}));
+        if (!sendRes.ok()) {
+            console.warn('send message failed:', JSON.stringify(sendJson));
+        }
+    }
+    return conv;
+}
+
+/**
+ * Create a subscription via API.
+ */
+export async function createSubscriptionViaAPI(page, token, data = {}) {
+    const futureDate = new Date(Date.now() + 7 * 86400000);
+    const dateStr = futureDate.toISOString().split('T')[0];
+    const payload = {
+        is_passenger: true,
+        trip_date: data.trip_date || `${dateStr} 10:00:00`,
+        from_address: data.from_address || 'Rosario, Santa Fe',
+        from_lat: data.from_lat || -32.9468,
+        from_lng: data.from_lng || -60.6393,
+        to_address: data.to_address || 'Mendoza, Mendoza',
+        to_lat: data.to_lat || -32.8895,
+        to_lng: data.to_lng || -68.8458,
+        ...data,
+    };
+    const res = await page.request.post(`${API_BASE}/api/subscriptions`, {
+        headers: { Authorization: `Bearer ${token}` },
+        data: payload,
+    });
+    return res.json();
+}
+
+/**
+ * Delete a subscription via API.
+ */
+export async function deleteSubscriptionViaAPI(page, token, id) {
+    const res = await page.request.delete(`${API_BASE}/api/subscriptions/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+    return res;
+}
+
+/**
+ * Rate a user via API.
+ * @param {object} data - { comment, rating } where rating is 1 (positive) or -1 (negative)
+ */
+export async function rateUserViaAPI(page, token, tripId, userId, data) {
+    const res = await page.request.post(`${API_BASE}/api/trips/${tripId}/rate/${userId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+        data,
+    });
+    if (!res.ok()) {
+        const body = await res.text();
+        console.warn(`rateUserViaAPI failed (${res.status()}):`, body.substring(0, 200));
+        return { error: true, status: res.status() };
+    }
+    return res.json();
+}
+
+/**
+ * Override /api/login and /api/config responses to disable payment modals and
+ * coordinate-by-message so seat requests work directly.
+ */
+export async function setupConfigOverride(page, overrides = {}) {
+    const defaults = {
+        module_coordinate_by_message: false,
+        disable_user_hints: true,
+        ...overrides,
+    };
+    await page.route('**/api/login', async (route) => {
+        const response = await route.fetch();
+        const json = await response.json();
+        if (json.config) Object.assign(json.config, defaults);
+        await route.fulfill({ response, json });
+    });
+    await page.route('**/api/config', async (route) => {
+        const response = await route.fetch();
+        const json = await response.json();
+        if (json.config) Object.assign(json.config, defaults);
+        else Object.assign(json, defaults);
+        await route.fulfill({ response, json });
+    });
+}
+
+/**
+ * Unban a user via artisan tinker. Used when trip creation limit is exceeded mid-test.
+ */
+export async function unbanUserViaTinker(token) {
+    const { execSync } = await import('child_process');
+    const backendDir = new URL('../../carpoolear_backend', import.meta.url).pathname;
+    const cmd = `docker compose exec -T app php artisan tinker --execute="` +
+        `\\STS\\Models\\User::where('banned',true)->update(['banned'=>false]);echo 'OK';"`;
+    try {
+        execSync(cmd, { cwd: backendDir, timeout: 15000, encoding: 'utf-8' });
+    } catch (err) {
+        console.warn('unbanUserViaTinker failed:', err.message);
+    }
+}
+
+/**
+ * Backdate a trip via artisan tinker (for testing ratings which require past trips).
+ */
+export async function backdateTripViaTinker(tripId) {
+    const { execSync } = await import('child_process');
+    const backendDir = new URL('../../carpoolear_backend', import.meta.url).pathname;
+    const pastDate = new Date(Date.now() - 2 * 86400000).toISOString().slice(0, 19).replace('T', ' ');
+    const cmd = `docker compose exec -T app php artisan tinker --execute="` +
+        `\\STS\\Models\\Trip::find(${tripId})->update(['trip_date'=>'${pastDate}']);echo 'OK';"`;
+    try {
+        execSync(cmd, { cwd: backendDir, timeout: 15000, encoding: 'utf-8' });
+    } catch (err) {
+        console.warn('backdateTripViaTinker failed:', err.message);
+    }
+}
+
+/**
+ * Run the rate:create artisan command to generate pending ratings for past trips.
+ * Must be called AFTER backdating a trip that has accepted passengers.
+ */
+export async function triggerRateCreation() {
+    const { execSync } = await import('child_process');
+    const backendDir = new URL('../../carpoolear_backend', import.meta.url).pathname;
+    const cmd = `docker compose exec -T app php artisan rate:create`;
+    try {
+        const output = execSync(cmd, { cwd: backendDir, timeout: 15000, encoding: 'utf-8' });
+        return output;
+    } catch (err) {
+        console.warn('triggerRateCreation failed:', err.message);
+    }
+}
+
+/**
+ * Set a boolean user property via API (e.g. autoaccept_requests).
+ */
+export async function setUserPropertyViaAPI(page, token, property, value) {
+    const res = await page.request.post(`${API_BASE}/api/users/change/${property}/${value}`, {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.json();
 }

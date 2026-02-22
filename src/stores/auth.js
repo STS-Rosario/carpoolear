@@ -3,6 +3,9 @@ import { defineStore } from 'pinia';
 import { AuthApi, UserApi } from '../services/api';
 import cache, { keys } from '../services/cache';
 import localConfig from '../../config/conf.json';
+import { stopThread } from './index';
+import { useDeviceStore } from './device';
+import router from '../router';
 
 const authApi = new AuthApi();
 const userApi = new UserApi();
@@ -26,7 +29,7 @@ export const useAuthStore = defineStore('auth', () => {
     );
 
     function setToken(newToken) {
-        token.value = String(newToken).replace('"', '');
+        token.value = String(newToken).replaceAll('"', '');
         auth.value = true;
         cache.setItem(keys.TOKEN_KEY, newToken);
     }
@@ -41,6 +44,19 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     function logout() {
+        // Stop notification polling thread
+        stopThread();
+
+        // Delete device registration from backend
+        try {
+            const deviceStore = useDeviceStore();
+            if (deviceStore.current) {
+                deviceStore.deleteDevice(deviceStore.current.id);
+            }
+        } catch (e) {
+            console.error('Device cleanup on logout failed:', e);
+        }
+
         authApi.logout().catch((error) => {
             console.error('Logout API call failed:', error);
         });
@@ -49,6 +65,9 @@ export const useAuthStore = defineStore('auth', () => {
         user.value = null;
         auth.value = false;
         cache.clear();
+
+        // Navigate to trips page
+        router.replace({ name: 'trips' });
     }
 
     function setFirstTime(value) {
@@ -108,7 +127,10 @@ export const useAuthStore = defineStore('auth', () => {
     function changePassword({ token: pwToken, data }) {
         return authApi
             .changePassword(pwToken, data)
-            .then(() => Promise.resolve())
+            .then(() => {
+                router.replace({ name: 'login' });
+                return Promise.resolve();
+            })
             .catch((err) => Promise.reject(err));
     }
 

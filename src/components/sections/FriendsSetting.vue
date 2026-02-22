@@ -177,7 +177,7 @@ function onRejectClick(user) {
 
 function onDeleteClick(user) {
     idRequesting.value = user.id;
-    friendsStore.delete(user.id).then(
+    friendsStore.deleteFriend(user.id).then(
         () => {
             idRequesting.value = 0;
         },
@@ -189,7 +189,7 @@ function onDeleteClick(user) {
 
 onMounted(() => {
     friendsStore.friendsSearch({});
-    friendsStore.pending();
+    friendsStore.fetchPending();
 });
 </script>
 

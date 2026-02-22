@@ -1,13 +1,17 @@
 <template>
     <div>
-        <datePicker
-            :date="date"
+        <VueDatePicker
+            v-model="date"
             ref="calendar"
-            :option="option"
-            v-on:change="updateDate"
-            :limit="limit"
+            :format="displayFormat"
+            :locale="locale"
+            :min-date="minDate"
+            :placeholder="t('fecha')"
+            :auto-apply="true"
+            :enable-time-picker="false"
+            @update:model-value="updateDate"
             class="date-picker"
-        ></datePicker>
+        />
         <div class="date-picker--cross">
             <i
                 v-on:click="resetDatePicker"
@@ -19,13 +23,13 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, watch } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-import datePicker from '@vuepic/vue-datepicker';
+import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import moment from 'moment';
 
-const { t } = useI18n();
+const { t, locale: i18nLocale } = useI18n();
 
 const props = defineProps({
     format: {
@@ -46,9 +50,7 @@ const props = defineProps({
     limitFilter: {
         type: Object,
         required: false,
-        default: () => {
-            return {};
-        }
+        default: () => ({})
     }
 });
 
@@ -56,80 +58,45 @@ const emit = defineEmits(['change']);
 
 const calendar = ref(null);
 
-const date = reactive({
-    time: props.value
+const date = ref(props.value ? moment(props.value, props.format).toDate() : null);
+
+const locale = computed(() => {
+    const localeMap = { arg: 'es', chl: 'es', en: 'en' };
+    return localeMap[i18nLocale.value] || 'es';
 });
 
-const option = reactive({
-    type: 'day',
-    week: [
-        t('lunes'),
-        t('martes'),
-        t('miercoles'),
-        t('jueves'),
-        t('viernes'),
-        t('sabado'),
-        t('domingo')
-    ],
-    month: [
-        t('enero'),
-        t('febrero'),
-        t('marzo'),
-        t('abril'),
-        t('mayo'),
-        t('junio'),
-        t('julio'),
-        t('agosto'),
-        t('septiembre'),
-        t('octubre'),
-        t('noviembre'),
-        t('diciembre')
-    ],
-    format: props.format,
-    placeholder: t('fecha'),
-    inputStyle: {
-        display: 'inline-block',
-        'line-height': '22px',
-        'border-radius': '2px',
-        color: '#5F5F5F',
-        width: '100%',
-        border: 'none'
-    },
-    wrapperClass: props.class,
-    color: {
-        header: '#016587',
-        headerText: '#FFF'
-    },
-    buttons: {
-        ok: t('aceptar'),
-        cancel: t('cancelar')
-    },
-    overlayOpacity: 0.5,
-    dismissible: true
+const displayFormat = computed(() => {
+    return props.format.replace('DD', 'dd').replace('MM', 'MM').replace('YYYY', 'yyyy');
 });
 
-const limit = ref([props.limitFilter]);
-
-const dateSys = computed(() => {
-    return moment(date.time, props.format).format('YYYY-MM-DD');
-});
-
-watch(() => props.value, () => {
-    let format = 'YYYY-MM-DD';
-    if (props.value.indexOf('/') >= 0) {
-        format = 'DD/MM/YYYY';
+const minDate = computed(() => {
+    if (props.limitFilter && props.limitFilter.from) {
+        return new Date(props.limitFilter.from);
     }
-    let time = moment(props.value, format).format('DD/MM/YYYY');
-    calendar.value.showDay(time);
-    date.time = moment(props.value, format).format('DD/MM/YYYY');
+    return undefined;
 });
 
-function updateDate() {
-    emit('change', dateSys.value);
+watch(() => props.value, (newVal) => {
+    if (newVal) {
+        let format = 'YYYY-MM-DD';
+        if (newVal.indexOf('/') >= 0) {
+            format = 'DD/MM/YYYY';
+        }
+        date.value = moment(newVal, format).toDate();
+    } else {
+        date.value = null;
+    }
+});
+
+function updateDate(modelData) {
+    if (modelData) {
+        const formatted = moment(modelData).format('YYYY-MM-DD');
+        emit('change', formatted);
+    }
 }
 
 function resetDatePicker() {
-    date.time = '';
+    date.value = null;
     emit('change', '');
 }
 </script>

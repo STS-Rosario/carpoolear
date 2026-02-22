@@ -146,28 +146,23 @@ export const usePassengerStore = defineStore('passenger', () => {
 
     function removePending(data) {
         if (pendingRequest.value && pendingRequest.value.length) {
-            let index = 0;
-            pendingRequest.value.forEach((item, i) => {
-                if (
-                    item.user.id === data.user_id &&
-                    item.trip_id === data.trip_id
-                ) {
-                    index = i;
-                }
-            });
-            pendingRequest.value.splice(index, 1);
+            const index = pendingRequest.value.findIndex(
+                (item) => item.user.id === data.user_id && item.trip_id === data.trip_id
+            );
+            if (index >= 0) {
+                pendingRequest.value.splice(index, 1);
+            }
         }
     }
 
     function removePendingPayment(data) {
         if (pendingPaymentRequests.value && pendingPaymentRequests.value.length) {
-            let index = 0;
-            pendingPaymentRequests.value.forEach((item, i) => {
-                if (item.trip_id === data.trip_id) {
-                    index = i;
-                }
-            });
-            pendingPaymentRequests.value.splice(index, 1);
+            const index = pendingPaymentRequests.value.findIndex(
+                (item) => item.trip_id === data.trip_id
+            );
+            if (index >= 0) {
+                pendingPaymentRequests.value.splice(index, 1);
+            }
         }
     }
 

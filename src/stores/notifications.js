@@ -38,6 +38,7 @@ export const useNotificationsStore = defineStore('notifications', () => {
     }
 
     function remove(id) {
+        if (!list.value) return;
         const idx = list.value.findIndex((item) => item.id === id);
         if (idx >= 0) {
             list.value.splice(idx, 1);
