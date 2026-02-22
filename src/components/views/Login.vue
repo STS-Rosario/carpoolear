@@ -471,7 +471,7 @@ onMounted(() => {
         txt_user.value.focus();
     }
 
-    if (config.value.login_custom_header) {
+    if (config.value && config.value.login_custom_header) {
         isShowLogin.value = true;
     }
 

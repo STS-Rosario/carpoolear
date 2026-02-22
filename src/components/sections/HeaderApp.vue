@@ -297,7 +297,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
@@ -423,14 +423,18 @@ function toggleProfileMenu() {
     localeMenuOpen.value = false;
 }
 
-watch(title, (_old, _new) => {
-    console.log('titlee change', title.value);
+watch(title, (_new, _old) => {
+    console.log('title change', title.value);
 });
 
 onMounted(() => {
     bus.on('header-title-change', onHeaderChange);
     console.log('app_logo', app_logo);
     console.log('ROUTE_BASE', ROUTE_BASE);
+});
+
+onBeforeUnmount(() => {
+    bus.off('header-title-change', onHeaderChange);
 });
 </script>
 

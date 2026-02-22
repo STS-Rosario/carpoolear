@@ -713,12 +713,14 @@ onMounted(() => {
         accountTypes.value = data.cc;
     });
 
-    let recaptchaScript = document.createElement('script');
-    recaptchaScript.setAttribute(
-        'src',
-        `https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_SITE_KEY}`
-    );
-    document.head.appendChild(recaptchaScript);
+    if (!document.querySelector(`script[src*="recaptcha/api.js"]`)) {
+        let recaptchaScript = document.createElement('script');
+        recaptchaScript.setAttribute(
+            'src',
+            `https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_SITE_KEY}`
+        );
+        document.head.appendChild(recaptchaScript);
+    }
 });
 
 onBeforeUnmount(() => {

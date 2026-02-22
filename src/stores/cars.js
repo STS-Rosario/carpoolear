@@ -40,9 +40,11 @@ export const useCarsStore = defineStore('cars', () => {
         return carApi
             .update(data)
             .then((response) => {
-                for (let i = 0; i < cars.value.length; i++) {
-                    if (cars.value[i].id === response.data.id) {
-                        cars.value[i] = response.data;
+                if (cars.value) {
+                    for (let i = 0; i < cars.value.length; i++) {
+                        if (cars.value[i].id === response.data.id) {
+                            cars.value[i] = response.data;
+                        }
                     }
                 }
                 return Promise.resolve(response.data);
@@ -56,7 +58,9 @@ export const useCarsStore = defineStore('cars', () => {
         return carApi
             .delete(data)
             .then(() => {
-                cars.value = cars.value.filter((item) => item.id !== data.id);
+                if (cars.value) {
+                    cars.value = cars.value.filter((item) => item.id !== data.id);
+                }
                 return Promise.resolve();
             })
             .catch((err) => {

@@ -37,9 +37,11 @@ export const useSubscriptionsStore = defineStore('subscriptions', () => {
         return subscriptionApi
             .update(data)
             .then((response) => {
-                for (let i = 0; i < subscriptions.value.length; i++) {
-                    if (subscriptions.value[i].id === response.data.id) {
-                        subscriptions.value[i] = response.data;
+                if (subscriptions.value) {
+                    for (let i = 0; i < subscriptions.value.length; i++) {
+                        if (subscriptions.value[i].id === response.data.id) {
+                            subscriptions.value[i] = response.data;
+                        }
                     }
                 }
                 return Promise.resolve(response.data);
@@ -53,9 +55,11 @@ export const useSubscriptionsStore = defineStore('subscriptions', () => {
         return subscriptionApi
             .remove(data)
             .then(() => {
-                subscriptions.value = subscriptions.value.filter(
-                    (item) => item.id !== data.id
-                );
+                if (subscriptions.value) {
+                    subscriptions.value = subscriptions.value.filter(
+                        (item) => item.id !== data.id
+                    );
+                }
                 return Promise.resolve();
             })
             .catch((err) => {

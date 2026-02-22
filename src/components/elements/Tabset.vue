@@ -142,4 +142,9 @@ provide('tabset', {
     registerTab,
     removeTab
 });
+
+defineExpose({
+    activateTab,
+    getRememberedTab
+});
 </script>

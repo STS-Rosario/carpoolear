@@ -23,6 +23,7 @@ export const useRatesStore = defineStore('rates', () => {
         return rateApi
             .rate(data.trip_id, data.user_id, obj)
             .then(() => {
+                if (!pendingRates.value) return Promise.resolve();
                 const index = pendingRates.value.findIndex((item) => item.id === data.id);
                 if (index >= 0) {
                     pendingRates.value.splice(index, 1);

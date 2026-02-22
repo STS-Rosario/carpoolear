@@ -1,5 +1,5 @@
 import { createApp } from 'vue';
-import { createPinia } from 'pinia';
+import { createPinia, setActivePinia } from 'pinia';
 import App from './App.vue';
 import router from './router';
 import { registerDirectives } from './directives';
@@ -25,7 +25,7 @@ import { SplashScreen } from '@capacitor/splash-screen';
 
 // Moment timezone setup
 import moment from 'moment-timezone';
-moment.tz.setDefault('America/Argentina');
+moment.tz.setDefault('America/Argentina/Buenos_Aires');
 import 'moment/locale/es';
 
 // Store imports
@@ -38,7 +38,7 @@ import { useCarsStore } from './stores/cars';
 import { useCordovaStore } from './stores/cordova';
 import { useDeviceStore } from './stores/device';
 import { useNotificationsStore } from './stores/notifications';
-import { initApp, startApp, startThread, onLoggin } from './stores/index';
+import { initApp, startApp, onLoggin } from './stores/index';
 
 const ROUTE_BASE = import.meta.env.VITE_ROUTE_BASE || '/';
 
@@ -127,13 +127,6 @@ const initStores = async () => {
         }, 2000);
     }
 
-    // Start notification thread after login
-    bus.on('system-ready', () => {
-        if (authStore.auth) {
-            startThread(authStore, notificationsStore);
-        }
-    });
-
     // Handle social login from cordova store
     bus.on('social-login', (token) => {
         onLoggin(token, authStore, tripsStore, myTripsStore, ratesStore, carsStore, passengerStore, cordovaStore, deviceStore, router, notificationsStore);
@@ -174,10 +167,8 @@ bus.on('system-ready', () => {
     moment.locale(momentLocaleMap[currentLocale] || 'es');
 });
 
-// Pinia must be installed before stores can be used
-// We create a temporary app just to install pinia, then use stores
-const tempApp = createApp({ render: () => null });
-tempApp.use(pinia);
+// Activate pinia so stores can be used outside of components
+setActivePinia(pinia);
 
-// Now initialize stores (pinia is installed)
+// Now initialize stores (pinia is activated)
 initStores();

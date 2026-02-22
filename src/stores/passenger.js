@@ -3,6 +3,10 @@ import { defineStore } from 'pinia';
 import { PassengerApi } from '../services/api';
 import { checkError } from '../../utils/helpers';
 import dialogs from '../services/dialogs.js';
+import { useTripsStore } from './trips';
+import { useMyTripsStore } from './myTrips';
+import { useAuthStore } from './auth';
+import { i18n } from '../i18n';
 
 const passengerApi = new PassengerApi();
 
@@ -22,7 +26,11 @@ export const usePassengerStore = defineStore('passenger', () => {
         });
     }
 
-    function makeRequest(tripId, config, i18n, tripsStore) {
+    function makeRequest(tripId) {
+        const tripsStore = useTripsStore();
+        const authStore = useAuthStore();
+        const config = authStore.appConfig || {};
+        const { t } = i18n.global;
         return passengerApi
             .make(tripId)
             .then((response) => {
@@ -30,9 +38,9 @@ export const usePassengerStore = defineStore('passenger', () => {
 
                 if (response && response.data && response.data.request_state) {
                     if (response.data.request_state === 0) {
-                        dialogs.message(i18n.t('solicitudFueEnviada'));
+                        dialogs.message(t('solicitudFueEnviada'));
                     } else if (response.data.request_state === 1) {
-                        dialogs.message(i18n.t('teHasSubidoAlViaje'));
+                        dialogs.message(t('teHasSubidoAlViaje'));
                     } else if (
                         response.data.request_state === 4 &&
                         config.module_trip_seats_payment
@@ -58,27 +66,27 @@ export const usePassengerStore = defineStore('passenger', () => {
                             );
                         }
                     } else {
-                        dialogs.message(i18n.t('solicitudFueEnviada'));
+                        dialogs.message(t('solicitudFueEnviada'));
                     }
                 } else {
-                    dialogs.message(i18n.t('solicitudFueEnviada'));
+                    dialogs.message(t('solicitudFueEnviada'));
                 }
                 return Promise.resolve(response);
             })
             .catch((error) => {
                 console.error(error);
                 if (checkError(error, 'user_has_another_similar_trip')) {
-                    dialogs.message(i18n.t('yaSubidoMismoViaje'), {
+                    dialogs.message(t('yaSubidoMismoViaje'), {
                         duration: 10,
                         estado: 'error'
                     });
                 } else if (checkError(error, 'user_has_reach_request_limit')) {
                     dialogs.message(
-                        i18n.t('seHaAlcanzadoElLimiteDeConsultas'),
+                        t('seHaAlcanzadoElLimiteDeConsultas'),
                         { duration: 10, estado: 'error' }
                     );
                 } else {
-                    dialogs.message(i18n.t('ocurrioUnProblemaAlSolicitar'), {
+                    dialogs.message(t('ocurrioUnProblemaAlSolicitar'), {
                         estado: 'error'
                     });
                 }
@@ -90,7 +98,9 @@ export const usePassengerStore = defineStore('passenger', () => {
         return passengerApi.transactions();
     }
 
-    function accept({ user, trip }, tripsStore, myTripsStore) {
+    function accept({ user, trip }) {
+        const tripsStore = useTripsStore();
+        const myTripsStore = useMyTripsStore();
         return passengerApi
             .accept(trip.id, user.id)
             .then(() => {
@@ -110,7 +120,10 @@ export const usePassengerStore = defineStore('passenger', () => {
             .catch((error) => Promise.reject(error));
     }
 
-    function cancel({ user, trip, cancelTripForPayment }, authStore, tripsStore, myTripsStore) {
+    function cancel({ user, trip, cancelTripForPayment }) {
+        const tripsStore = useTripsStore();
+        const myTripsStore = useMyTripsStore();
+        const authStore = useAuthStore();
         return passengerApi
             .cancel(trip.id, user.id)
             .then((response) => {

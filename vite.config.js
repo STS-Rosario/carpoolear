@@ -23,6 +23,9 @@ export default defineConfig({
         host: true,
         open: false
     },
+    define: {
+        'process.env': {}
+    },
     build: {
         outDir: 'dist/default/production/www',
         assetsDir: 'static'

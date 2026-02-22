@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import {
     login, setupAutocompleteMocks, setupConfigOverride, waitForSplash,
-    loginViaAPI, createTripViaAPI, deleteTripViaAPI,
+    loginViaAPI, createTripViaAPI, deleteTripViaAPI, API_BASE,
 } from './helpers.js';
 
 test.describe('Trip Edit (user8)', () => {
@@ -46,7 +46,7 @@ test.describe('Trip Edit (user8)', () => {
         test.setTimeout(90000);
 
         // Update the trip description directly via API (PUT /api/trips/{id})
-        const res = await page.request.put(`http://localhost:8000/api/trips/${tripId}`, {
+        const res = await page.request.put(`${API_BASE}/api/trips/${tripId}`, {
             headers: { Authorization: `Bearer ${token}` },
             data: { description: 'Descripcion actualizada e2e' },
         });

@@ -109,25 +109,28 @@
                 <div class="edit-action" v-if="profile.id === user.id">
                     <router-link
                         class="btn btn-primary"
-                        tag="button"
                         :to="{ name: 'profile_update' }"
+                        custom
+                        v-slot="{ navigate }"
                     >
-                        {{ t('editarPerfil') }}
+                        <button class="btn btn-primary" @click="navigate">{{ t('editarPerfil') }}</button>
                     </router-link>
                     <router-link
                         class="btn btn-primary"
-                        tag="button"
                         :to="{ name: 'friends_setting' }"
+                        custom
+                        v-slot="{ navigate }"
                     >
-                        {{ t('verAmigos') }}
+                        <button class="btn btn-primary" @click="navigate">{{ t('verAmigos') }}</button>
                     </router-link>
                     <router-link
                         v-if="config && config.module_trip_seats_payment"
                         class="btn btn-primary"
-                        tag="button"
                         :to="{ name: 'transacciones' }"
+                        custom
+                        v-slot="{ navigate }"
                     >
-                        {{ t('transacciones') }}
+                        <button class="btn btn-primary" @click="navigate">{{ t('transacciones') }}</button>
                     </router-link>
                 </div>
                 <div

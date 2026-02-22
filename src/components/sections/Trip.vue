@@ -115,11 +115,10 @@
                                 <div
                                     class="trip_driver_ratings"
                                     v-if="
-                                        config
-                                            ? config.trip_stars
-                                            : false &&
-                                              tripStars &&
-                                              tripStars.length > 0
+                                        config &&
+                                        config.trip_stars &&
+                                        tripStars &&
+                                        tripStars.length > 0
                                     "
                                 >
                                     <div

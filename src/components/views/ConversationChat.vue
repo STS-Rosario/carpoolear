@@ -181,6 +181,7 @@ const searchMore = () => {
 
 const refresh = () => {
     conversationsStore.select(props.id).then(() => {
+        bus.off('back-click', onBackClick);
         bus.on('back-click', onBackClick);
         if (conversation.value) {
             actionbarsStore.setTitle(conversation.value.title);

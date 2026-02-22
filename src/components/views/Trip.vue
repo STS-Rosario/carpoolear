@@ -860,16 +860,23 @@ onMounted(() => {
         calculateHeight();
     });
 
-    // Initialize Mercado Pago SDK
-    const script = document.createElement('script');
-    script.src = 'https://sdk.mercadopago.com/js/v2';
-    script.onload = () => {
+    // Initialize Mercado Pago SDK (only add if not already present)
+    if (!document.querySelector('script[src="https://sdk.mercadopago.com/js/v2"]')) {
+        const script = document.createElement('script');
+        script.src = 'https://sdk.mercadopago.com/js/v2';
+        script.onload = () => {
+            mp.value = new MercadoPago(import.meta.env.VITE_MERCADO_PAGO_PUBLIC_KEY);
+            if (trip.value && trip.value.payment_id && (trip.value.state === 'awaiting_payment' || trip.value.state === 'payment_failed')) {
+                enablePayment();
+            }
+        };
+        document.body.appendChild(script);
+    } else if (window.MercadoPago) {
         mp.value = new MercadoPago(import.meta.env.VITE_MERCADO_PAGO_PUBLIC_KEY);
         if (trip.value && trip.value.payment_id && (trip.value.state === 'awaiting_payment' || trip.value.state === 'payment_failed')) {
             enablePayment();
         }
-    };
-    document.body.appendChild(script);
+    }
 });
 
 onBeforeUnmount(() => {

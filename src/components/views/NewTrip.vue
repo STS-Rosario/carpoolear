@@ -1630,7 +1630,7 @@
     </div>
 </template>
 <script setup>
-import { ref, reactive, computed, watch, onMounted, nextTick } from 'vue';
+import { ref, reactive, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useAuthStore } from '@/stores/auth';
@@ -2665,6 +2665,10 @@ onMounted(() => {
         free_trips_amount.value = result.data.free_trips_amount;
         trips_created_by_user_amount.value = result.data.trips_created_by_user_amount;
     });
+});
+
+onBeforeUnmount(() => {
+    bus.off('clear-click', onBackButton);
 });
 </script>
 

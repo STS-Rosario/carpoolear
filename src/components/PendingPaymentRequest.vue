@@ -106,7 +106,7 @@ function onCancelRequest() {
             user: currentUser,
             trip: trip.value,
             cancelTripForPayment: true
-        }, authStore, tripsStore, myTripsStore)
+        })
             .then(() => {
                 rejectInProcess.value = false;
                 dialogs.message(t('teHasBajadoViaje'));

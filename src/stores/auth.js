@@ -5,6 +5,13 @@ import cache, { keys } from '../services/cache';
 import localConfig from '../../config/conf.json';
 import { stopThread } from './index';
 import { useDeviceStore } from './device';
+import { useTripsStore } from './trips';
+import { useMyTripsStore } from './myTrips';
+import { usePassengerStore } from './passenger';
+import { useNotificationsStore } from './notifications';
+import { useConversationsStore } from './conversations';
+import { useRatesStore } from './rates';
+import { useCarsStore } from './cars';
 import router from '../router';
 
 const authApi = new AuthApi();
@@ -66,6 +73,39 @@ export const useAuthStore = defineStore('auth', () => {
         auth.value = false;
         cache.clear();
 
+        // Clear user-specific data from other stores
+        try {
+            const tripsStore = useTripsStore();
+            tripsStore.currentTrip = null;
+
+            const myTripsStore = useMyTripsStore();
+            myTripsStore.driverTrips = null;
+            myTripsStore.passengerTrips = null;
+            myTripsStore.driverOldTrips = null;
+            myTripsStore.passengerOldTrips = null;
+
+            const passengerStore = usePassengerStore();
+            passengerStore.pendingRequest = null;
+            passengerStore.pendingPaymentRequests = null;
+
+            const notificationsStore = useNotificationsStore();
+            notificationsStore.list = null;
+            notificationsStore.count = 0;
+
+            const conversationsStore = useConversationsStore();
+            conversationsStore.userList = null;
+            conversationsStore.selectedID = null;
+            conversationsStore.conversationSelected = null;
+
+            const ratesStore = useRatesStore();
+            ratesStore.pendingRates = null;
+
+            const carsStore = useCarsStore();
+            carsStore.cars = null;
+        } catch (e) {
+            console.error('Store cleanup on logout failed:', e);
+        }
+
         // Navigate to trips page
         router.replace({ name: 'trips' });
     }
@@ -115,6 +155,7 @@ export const useAuthStore = defineStore('auth', () => {
         if (user.value && user.value.is_admin) {
             return userApi.searchUsers({ name: name });
         }
+        return Promise.resolve([]);
     }
 
     function resetPassword(email) {

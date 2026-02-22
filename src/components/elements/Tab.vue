@@ -44,13 +44,15 @@ const active = computed({
 const tabset = inject('tabset');
 
 onMounted(() => {
-    tabset.registerTab({
+    const tab = {
         header: props.header,
         disabled: props.disabled,
-        id: id.value,
+        id: null,
         get active() { return active.value; },
         set active(val) { active.value = val; }
-    });
+    };
+    tabset.registerTab(tab);
+    id.value = tab.id;
 });
 
 onBeforeUnmount(() => {

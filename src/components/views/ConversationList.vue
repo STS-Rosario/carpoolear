@@ -304,7 +304,7 @@ watch(textSearch, (newValue, oldValue) => {
 
 onMounted(() => {
     conversationsStore.listSearch();
-    if (!config.value.web_push_notification || window.Notification.permission !== 'granted') {
+    if (!config.value || !config.value.web_push_notification || !window.Notification || window.Notification.permission !== 'granted') {
         thread = new Thread(() => {
             conversationsStore.getUnreaded();
         });

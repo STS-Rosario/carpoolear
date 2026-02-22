@@ -211,7 +211,7 @@ export async function createTripViaUI(page, options = {}) {
  */
 export async function deleteTripViaAPI(page, tripId, token) {
     if (tripId && token) {
-        await page.request.delete(`http://localhost:8000/api/trips/${tripId}`, {
+        await page.request.delete(`${API_BASE}/api/trips/${tripId}`, {
             headers: { Authorization: `Bearer ${token}` },
         });
     }
@@ -221,7 +221,7 @@ export async function deleteTripViaAPI(page, tripId, token) {
 // API-based helpers for fast setup/teardown (avoid slow UI for non-UI tests)
 // ---------------------------------------------------------------------------
 
-const API_BASE = 'http://localhost:8000';
+export const API_BASE = process.env.API_BASE_URL || 'http://localhost:8000';
 
 /**
  * Login via API and inject the token into localStorage.

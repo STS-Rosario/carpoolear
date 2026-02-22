@@ -2,8 +2,14 @@
 export default {
     async toast(options, onSuccess, onError) {
         let message = '';
+        let duration = 2000;
+        let position = 'center';
         if (typeof options === 'string' || options instanceof String) {
             message = options;
+        } else if (options && typeof options === 'object') {
+            message = options.message || '';
+            duration = options.duration || 2000;
+            position = options.position || 'center';
         }
 
         try {
@@ -14,8 +20,8 @@ export default {
 
                 const toastOptions = {
                     text: message,
-                    duration: message.duration === 4000 ? 'long' : 'short',
-                    position: message.position === 'top' ? 'top' : message.position === 'bottom' ? 'bottom' : 'center'
+                    duration: duration >= 4000 ? 'long' : 'short',
+                    position: position === 'top' ? 'top' : position === 'bottom' ? 'bottom' : 'center'
                 };
 
                 await Toast.show(toastOptions);
@@ -31,8 +37,8 @@ export default {
                 window.plugins.toast.showWithOptions(
                     {
                         message: message,
-                        duration: message.duration ? message.duration : 2000,
-                        position: message.position ? message.position : 'center'
+                        duration: duration,
+                        position: position
                     },
                     onSuccess,
                     onError

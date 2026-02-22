@@ -1,18 +1,22 @@
 function wrapElement(el) {
-    const orgHtml = el.outerHTML;
-    const newHtml =
-        '<div class="fancy-cbx">' +
-        orgHtml +
-        '<span class="cbx-before"></span><span class="cbx-after"></span></div>';
-    el.outerHTML = newHtml;
+    if (el.parentNode && !el.parentNode.classList.contains('fancy-cbx')) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'fancy-cbx';
+        el.parentNode.insertBefore(wrapper, el);
+        wrapper.appendChild(el);
+        const before = document.createElement('span');
+        before.className = 'cbx-before';
+        wrapper.appendChild(before);
+        const after = document.createElement('span');
+        after.className = 'cbx-after';
+        wrapper.appendChild(after);
+    }
 }
 
 export default {
     mounted: function (el) {
         wrapElement(el);
     },
-    updated: function () {
-        // wrapElement(el);
-    },
+    updated: function () {},
     unmounted: function () {}
 };

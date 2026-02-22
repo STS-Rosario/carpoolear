@@ -32,8 +32,6 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-
 const props = defineProps({
     hideFooter: {
         required: false
@@ -48,15 +46,11 @@ const props = defineProps({
 
 const emit = defineEmits(['close']);
 
-const clickOutsideHandler = ref(() => {});
-
-onMounted(() => {
-    setTimeout(() => {
-        if (typeof props.clickOutside === 'function') {
-            clickOutsideHandler.value = props.clickOutside;
-        }
-    }, 0);
-});
+function clickOutsideHandler(event, el) {
+    if (typeof props.clickOutside === 'function') {
+        props.clickOutside(event, el);
+    }
+}
 </script>
 
 <style scoped>

@@ -87,7 +87,8 @@ const originalReplace = router.replace.bind(router);
 const originalGo = router.go.bind(router);
 
 router.push = function (data) {
-    if (data.name !== 'trips') {
+    const name = typeof data === 'object' ? data.name : null;
+    if (name !== 'trips') {
         router.stack.push(data);
     } else {
         router.stack = [];
@@ -96,7 +97,8 @@ router.push = function (data) {
 };
 
 router.replace = function (data) {
-    if (data.name !== 'trips') {
+    const name = typeof data === 'object' ? data.name : null;
+    if (name !== 'trips') {
         router.stack.pop();
         router.stack.push(data);
     } else {
@@ -106,7 +108,10 @@ router.replace = function (data) {
 };
 
 router.go = function (number) {
-    router.stack.splice(-1, -number);
+    const count = Math.abs(number);
+    if (count > 0 && router.stack.length >= count) {
+        router.stack.splice(-count, count);
+    }
     return originalGo(number);
 };
 

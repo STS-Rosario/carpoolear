@@ -137,8 +137,6 @@ import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 import { usePassengerStore } from '@/stores/passenger';
-import { useTripsStore } from '@/stores/trips';
-import { useMyTripsStore } from '@/stores/myTrips';
 import { useConversationsStore } from '@/stores/conversations';
 import { useProfileStore } from '@/stores/profile';
 import modal from './Modal';
@@ -152,8 +150,6 @@ const { t } = useI18n();
 const router = useRouter();
 const authStore = useAuthStore();
 const passengerStore = usePassengerStore();
-const tripsStore = useTripsStore();
-const myTripsStore = useMyTripsStore();
 const conversationsStore = useConversationsStore();
 const profileStore = useProfileStore();
 
@@ -199,7 +195,7 @@ function toAcceptRequest() {
     let user = props.user;
     let trip = props.trip;
     acceptInProcess.value = true;
-    passengerStore.accept({ user, trip }, tripsStore, myTripsStore)
+    passengerStore.accept({ user, trip })
         .catch((error) => {
             if (checkError(error, 'not_seat_available')) {
                 dialogs.message(

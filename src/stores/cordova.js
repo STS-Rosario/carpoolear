@@ -41,15 +41,13 @@ export const useCordovaStore = defineStore('cordova', () => {
                 }
             }
         } else {
-            router.push(
-                { path: notification.url },
-                function () {
+            router.push({ path: notification.url })
+                .then(() => {
                     console.log('router success');
-                },
-                function () {
+                })
+                .catch(() => {
                     console.log('router abort');
-                }
-            );
+                });
         }
         notificationsStore.add();
     }

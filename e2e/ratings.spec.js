@@ -4,6 +4,7 @@ import {
     loginViaAPI, createTripViaAPI, deleteTripViaAPI,
     requestSeatViaAPI, acceptPassengerViaAPI,
     rateUserViaAPI, backdateTripViaTinker, triggerRateCreation,
+    API_BASE,
 } from './helpers.js';
 
 test.describe('Ratings (user8 driver + user9 passenger)', () => {
@@ -188,7 +189,7 @@ test.describe('Ratings (user8 driver + user9 passenger)', () => {
                     // The ratings API may have a backend issue (paginator type mismatch)
                     // Verify the rating exists via direct API call instead
                     const res = await page.request.get(
-                        `http://localhost:8000/api/users/${user9Id}/ratings?page=1&page_size=200`,
+                        `${API_BASE}/api/users/${user9Id}/ratings?page=1&page_size=200`,
                         { headers: { Authorization: `Bearer ${driverToken}` } }
                     );
                     const json = await res.json();

@@ -157,14 +157,18 @@ export const useTripsStore = defineStore('trips', () => {
         const index = currentTrip.value.passenger.findIndex(
             (item) => item.id === userId
         );
-        currentTrip.value.passenger.splice(index, 1);
+        if (index >= 0) {
+            currentTrip.value.passenger.splice(index, 1);
+        }
         if (currentTrip.value.allPassengerRequest) {
             const index2 = currentTrip.value.allPassengerRequest.findIndex(
                 (item) =>
                     item.id === userId &&
                     (item.request_state === 1 || item.request_state === 4)
             );
-            currentTrip.value.allPassengerRequest.splice(index2, 1);
+            if (index2 >= 0) {
+                currentTrip.value.allPassengerRequest.splice(index2, 1);
+            }
         }
         currentTrip.value.seats_available++;
         currentTrip.value.passenger_count--;

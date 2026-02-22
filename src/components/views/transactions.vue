@@ -61,6 +61,7 @@ const onBackClick = () => {
 };
 
 onMounted(() => {
+    bus.on('back-click', onBackClick);
     passengerStore.transactions().then((data) => {
         console.log('transaction data', data);
         transactions.value = data;

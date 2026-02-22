@@ -145,8 +145,8 @@ export const useProfileStore = defineStore('profile', () => {
                     rate.trip_id === item.trip.id &&
                     rate.user_id === item.from.id
                 ) {
-                    rate.reply_comment = item.comment;
-                    rate.reply_comment_created_at = item.reply_comment_created_at;
+                    item.reply_comment = rate.reply_comment;
+                    item.reply_comment_created_at = rate.reply_comment_created_at;
                 }
             });
         }

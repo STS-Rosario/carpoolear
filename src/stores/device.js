@@ -164,8 +164,10 @@ export const useDeviceStore = defineStore('device', () => {
         }
     }
 
-    // Set up window listeners
+    // Set up window listeners (remove first to avoid stacking on HMR)
+    window.removeEventListener('resize', resize, false);
     window.addEventListener('resize', resize, false);
+    document.removeEventListener('scroll', scrolling, false);
     document.addEventListener('scroll', scrolling, false);
 
     return {

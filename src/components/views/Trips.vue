@@ -668,6 +668,17 @@ watch(trips, (newValue, oldValue) => {
     }
 });
 
+const onBeforeInstallPrompt = (e) => {
+    e.preventDefault();
+    installAppEvent.value = e;
+
+    const hasDismissedInstallModal = localStorage.getItem('pwa_install_modal_dismissed');
+    if (!hasDismissedInstallModal) {
+        showModalInstallApp.value = true;
+    }
+    console.log('beforeinstallprompt event was fired.');
+};
+
 onMounted(() => {
     // Clear search
     if (props.clearSearch) {
@@ -691,16 +702,8 @@ onMounted(() => {
         });
     }
 
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        installAppEvent.value = e;
-
-        const hasDismissedInstallModal = localStorage.getItem('pwa_install_modal_dismissed');
-        if (!hasDismissedInstallModal) {
-            showModalInstallApp.value = true;
-        }
-        console.log('beforeinstallprompt event was fired.');
-    });
+    window.removeEventListener('beforeinstallprompt', onBeforeInstallPrompt);
+    window.addEventListener('beforeinstallprompt', onBeforeInstallPrompt);
 
     // Show install modal for iOS users
     if (isIOS()) {
@@ -729,7 +732,9 @@ onBeforeUnmount(() => {
     bus.off('search-click', onSearchButton);
     bus.off('clear-click', onClearButton);
     bus.off('scroll-bottom', onScrollBottom);
+    bus.off('trip-click', onTripClick);
     bus.off('backbutton', onBackBottom);
+    window.removeEventListener('beforeinstallprompt', onBeforeInstallPrompt);
 });
 </script>
 <style scoped>
