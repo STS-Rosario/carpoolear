@@ -699,7 +699,7 @@ onMounted(() => {
         if (!hasDismissedInstallModal) {
             showModalInstallApp.value = true;
         }
-        console.log(`'beforeinstallprompt' event was fired.`);
+        console.log('beforeinstallprompt event was fired.');
     });
 
     // Show install modal for iOS users

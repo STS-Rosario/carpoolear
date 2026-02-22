@@ -829,7 +829,7 @@ const enablePayment = () => {
 
     const bricksBuilder = mp.value.bricks();
     const renderWalletBrick = async (bricksBuilder) => {
-        await bricksBuilder.create("wallet", "walletBrick_container", {
+        await bricksBuilder.create('wallet', 'walletBrick_container', {
             initialization: {
                 preferenceId: trip.value.payment_id
             }

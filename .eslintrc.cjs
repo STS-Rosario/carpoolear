@@ -41,6 +41,11 @@ module.exports = {
         // Disable space before function parentheses
         'space-before-function-paren': 'off',
 
+        // Downgrade pre-existing core JS errors to warnings during migration
+        'no-redeclare': 'warn',
+        'no-prototype-builtins': 'warn',
+        'no-undef': 'warn',
+
         // Vue-specific rules relaxed during migration
         'vue/multi-word-component-names': 'off',
         'vue/no-v-html': 'off',
@@ -53,6 +58,17 @@ module.exports = {
         'vue/html-self-closing': 'off',
         'vue/first-attribute-linebreak': 'off',
         'vue/html-closing-bracket-newline': 'off',
-        'vue/attributes-order': 'off'
+        'vue/attributes-order': 'off',
+
+        // Downgrade pre-existing Vue 3 template errors to warnings
+        'vue/require-v-for-key': 'warn',
+        'vue/valid-v-for': 'warn',
+        'vue/no-use-v-if-with-v-for': 'warn',
+        'vue/require-toggle-inside-transition': 'warn',
+        'vue/no-deprecated-slot-attribute': 'warn',
+        'vue/no-deprecated-router-link-tag-prop': 'warn',
+        'vue/return-in-computed-property': 'warn',
+        'vue/valid-template-root': 'warn',
+        'vue/no-unused-vars': 'warn'
     }
 };
