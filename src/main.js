@@ -5,6 +5,8 @@ import router from './router';
 import { registerDirectives } from './directives';
 import { i18n } from './i18n';
 import bus from './services/bus-event';
+import 'leaflet/dist/leaflet.css';
+import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 import { DebugApi } from './services/api';
 import {
     cssvar,
