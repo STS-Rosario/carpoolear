@@ -386,6 +386,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import VueHead from 'vue-head';
 import { LMap, LTileLayer } from 'vue2-leaflet';
+import { appLocaleToRoutingLanguage } from '../../main';
 import 'leaflet-routing-machine';
 Vue.use(VueHead);
 Vue.use(VueRouter);
@@ -711,7 +712,7 @@ export default {
                 );
                 let control = L.Routing.control({
                     waypoints: points,
-                    language: this.$i18n.locale
+                    language: appLocaleToRoutingLanguage[this.$i18n.locale] || 'es'
                 });
                 control.addTo(map);
             }

@@ -63,12 +63,17 @@ const defaultCurrencyOptions = (fractionDigits = 2) => ({
     maximumFractionDigits: fractionDigits
 });
 
-// App locale -> Intl (BCP 47) locale for number formatting.
-// es-AR: Argentina (comma decimal, period thousands). es-CL: Chile.
-const numberFormatLocaleMap = {
+// App locale -> BCP 47 locale (for Intl number/currency formatting).
+export const appLocaleToBCP47 = {
     arg: 'es-AR',
     chl: 'es-CL'
 };
+// App locale -> leaflet-routing-machine language (base codes only; e.g. 'es' not 'es-AR').
+export const appLocaleToRoutingLanguage = {
+    arg: 'es',
+    chl: 'es'
+};
+const numberFormatLocaleMap = appLocaleToBCP47;
 
 const i18n = new VueI18n({
     locale: 'arg',

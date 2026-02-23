@@ -1688,6 +1688,7 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import { appLocaleToRoutingLanguage } from '../../main';
 // import { parseOsmStreet } from '../../services/maps.js';
 import DatePicker from '../DatePicker';
 import dialogs from '../../services/dialogs.js';
@@ -2720,7 +2721,8 @@ export default {
 
                 /* eslint-disable no-undef */
                 L.Routing.control({
-                    waypoints: points.map(point => L.latLng(point.location.lat, point.location.lng))
+                    waypoints: points.map(point => L.latLng(point.location.lat, point.location.lng)),
+                    language: appLocaleToRoutingLanguage[this.$i18n.locale] || 'es'
                 }).addTo(map);
             }
         },
