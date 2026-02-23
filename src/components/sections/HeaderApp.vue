@@ -50,7 +50,7 @@
                 </template>
                 <div class="dropdown-right" v-if="showMenu || isMobile">
                     <dropdown type="icon">
-                        <template slot="button">
+                        <template #button>
                             <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
                         </template>
                         <li>
@@ -141,8 +141,8 @@
                     :title="'Test'"
                     :body="'Body'"
                 >
-                    <h3 slot="header">{{ $t('invitarAmigos') }}</h3>
-                    <div slot="body" class="social-share">
+                    <template #header><h3>{{ $t('invitarAmigos') }}</h3></template>
+                    <template #body><div class="social-share">
                         <a
                             :href="'https://www.facebook.com/sharer/sharer.php?u=' + shareUrl"
                             target="_blank"
@@ -168,7 +168,7 @@
                         >
                             <i class="fa fa-whatsapp" aria-hidden="true"></i>
                         </a>
-                    </div>
+                    </div></template>
                 </modal>
                 <button
                     v-if="config.trip_card_design !== 'light'"
@@ -188,7 +188,7 @@
                 <!--<router-link class="btn btn-link" v-if="!logged" :to="{name: 'trips'}">Información</router-link>-->
                 <!--<router-link class="btn btn-link" v-if="!logged" :to="{name: 'register'}">Registrarme</router-link>-->
                 <dropdown type="link" v-if="!logged">
-                    <template slot="button">
+                    <template #button>
                         {{ currentLocaleShortLabel }}
                     </template>
                     <li>
@@ -230,7 +230,7 @@
                 <div class="header_profile" v-if="user">
                     <span>{{ user.name }}</span>
                     <dropdown type="info" v-if="logged">
-                        <template slot="button">
+                        <template #button>
                             <div
                                 class="circle-box header_profile_image"
                                 v-imgSrc:profile="user.image"
