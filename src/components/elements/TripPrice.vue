@@ -8,7 +8,7 @@
             <div class="price-item">
                 <span class="trip_seat-price_value">{{ $n(trip.seat_price_cents / 100, 'currency') }}</span>
                 <span class="trip_seats-available_label">
-                    {{ $t('contribucionPorPersona') }} <br/> {{ $t('porPersona') }}
+                    {{ $t('contribucionPorPersona') }}
                     <br />
                 </span>
             </div>
