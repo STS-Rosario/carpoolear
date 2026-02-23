@@ -50,32 +50,29 @@
                     :users="conversation.users"
                 ></MessageView>
             </div>
-            <div class="list-group-item">
-                <div class="input-group">
-                    <input
-                        ref="ipt-text"
-                        id="ipt-text"
-                        v-model="message"
-                        type="text"
-                        class="form-control"
-                        :placeholder="$t('escribirMensaje')"
-                        v-jump:click="'btn-send'"
-                        maxlength="800"
+            <div class="list-group-item message-composer">
+                <div class="message-composer-editor-wrap">
+                    <editor
+                        ref="messageEditor"
+                        :initial-value="editorInitialValue"
+                        initial-edit-type="wysiwyg"
+                        :options="editorOptionsWithPlaceholder"
+                        height="140px"
+                        class="message-composer-editor"
+                        @change="onEditorChange"
                     />
-                    <span class="input-group-btn">
-                        <button
-                            ref="btn-send"
-                            id="btn-send"
-                            class="btn btn-default"
-                            :class="message.length > 0 ? 'active' : ''"
-                            type="button"
-                            @click="sendMessage"
-                            v-jump:focus="'ipt-text'"
-                            :disabled="sending.message"
-                        >
-                            <i class="fa fa-play" aria-hidden="true"></i>
-                        </button>
-                    </span>
+                    <button
+                        ref="btn-send"
+                        id="btn-send"
+                        class="btn btn-default message-composer-send"
+                        :class="editorHasContent ? 'active' : ''"
+                        type="button"
+                        @click="sendMessage"
+                        :disabled="sending.message"
+                        :title="$t('enviarMensaje')"
+                    >
+                        <i class="fa fa-play" aria-hidden="true"></i>
+                    </button>
                 </div>
             </div>
         </div>
@@ -87,7 +84,9 @@
     </div>
 </template>
 <script>
+import '@toast-ui/editor/dist/toastui-editor.css';
 import { mapGetters, mapActions } from 'vuex';
+import { Editor } from '@toast-ui/vue-editor';
 import MessageView from '../MessageView';
 import router from '../../router';
 import moment from 'moment';
@@ -98,14 +97,30 @@ export default {
     name: 'conversation-chat',
     data() {
         return {
-            message: '',
+            editorInitialValue: '',
+            editorHasContent: false,
             mustJump: false,
             sending: {
                 message: false
+            },
+            editorOptions: {
+                usageStatistics: false,
+                hideModeSwitch: true,
+                toolbarItems: [
+                    ['bold', 'italic', 'strike'],
+                    ['ul', 'ol']
+                ],
+                minHeight: '100px'
             }
         };
     },
     computed: {
+        editorOptionsWithPlaceholder() {
+            return {
+                ...this.editorOptions,
+                placeholder: this.$t('escribirMensaje')
+            };
+        },
         ...mapGetters({
             conversation: 'conversations/selectedConversation',
             user: 'auth/user',
@@ -150,14 +165,25 @@ export default {
             };
         },
 
+        onEditorChange() {
+            const editor = this.$refs.messageEditor;
+            if (!editor) return;
+            const md = editor.invoke('getMarkdown') || '';
+            this.editorHasContent = md.trim().length > 0;
+        },
+
         sendMessage() {
-            if (this.message.length) {
+            const editor = this.$refs.messageEditor;
+            if (!editor) return;
+            const text = (editor.invoke('getMarkdown') || '').trim();
+            if (text.length) {
                 this.$set(this.sending, 'message', true);
-                this.send(this.message).finally(() => {
+                this.send(text).finally(() => {
                     this.$set(this.sending, 'message', false);
                     this.$forceUpdate();
                 });
-                this.message = '';
+                editor.invoke('setMarkdown', '');
+                this.editorHasContent = false;
             }
         },
 
@@ -253,6 +279,7 @@ export default {
     },
     props: ['id'],
     components: {
+        Editor,
         MessageView,
         CoordinateTrip
     }
@@ -271,6 +298,22 @@ export default {
 #btn-send.active {
     color: #333;
 }
+.message-composer-editor-wrap {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+}
+.message-composer-editor {
+    flex: 1;
+    min-width: 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.message-composer-send {
+    flex-shrink: 0;
+    height: 36px;
+    min-width: 44px;
+}
 @media only screen and (max-width: 768px) {
     .list-group-item {
         border: 0;
@@ -282,7 +325,10 @@ export default {
         width: 100%;
         position: fixed;
     }
-    .conversation_chat .input-group-btn:last-child > .btn {
+    .message-composer-editor-wrap {
+        align-items: stretch;
+    }
+    .message-composer-send {
         height: 44px;
     }
     .btn,
