@@ -147,11 +147,13 @@ function fetchUser(store) {
 
 function getConfig(store) {
     localConfig.__isLocal = true;
+    console.log('[config] localConfig (from config/conf):', { price_show_cents: localConfig.price_show_cents });
     store.commit('AUTH_APP_CONFIG', localConfig);
     return authApi.config().then((response) => {
         response.__isLocal = false;
         console.log('Loading config from server: ', response);
         const config = { ...localConfig, ...response };
+        console.log('[config] merged config (local + API):', { price_show_cents: config.price_show_cents });
         store.commit('AUTH_APP_CONFIG', config);
         return response;
     });
@@ -279,6 +281,9 @@ const mutations = {
 
     AUTH_APP_CONFIG(state, appConfig) {
         state.appConfig = appConfig;
+        if (appConfig && typeof appConfig.price_show_cents !== 'undefined') {
+            console.log('[config] AUTH_APP_CONFIG set, price_show_cents=', appConfig.price_show_cents);
+        }
     },
 
     [types.DONATION_INTENT_PUSH](state, donation) {
