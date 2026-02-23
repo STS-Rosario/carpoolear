@@ -53,6 +53,28 @@ require('font-awesome-webpack-4');
 Vue.use(VueResource);
 
 Vue.use(VueI18n);
+
+// Price format: controlled by config.price_show_cents (default: show cents).
+// Set price_show_cents: false in config to hide cents in currency display.
+const defaultCurrencyOptions = (fractionDigits = 2) => ({
+    style: 'currency',
+    currencyDisplay: 'symbol',
+    minimumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits
+});
+
+// App locale -> BCP 47 locale (for Intl number/currency formatting).
+export const appLocaleToBCP47 = {
+    arg: 'es-AR',
+    chl: 'es-CL'
+};
+// App locale -> leaflet-routing-machine language (base codes only; e.g. 'es' not 'es-AR').
+export const appLocaleToRoutingLanguage = {
+    arg: 'es',
+    chl: 'es'
+};
+const numberFormatLocaleMap = appLocaleToBCP47;
+
 const i18n = new VueI18n({
     locale: 'arg',
     fallbackLocale: 'arg',
@@ -63,16 +85,65 @@ const i18n = new VueI18n({
             currency: {
                 style: 'currency',
                 currency: 'ARS',
-                currencyDisplay: 'symbol'
+                ...defaultCurrencyOptions(2)
             }
         },
         chl: {
             currency: {
                 style: 'currency',
                 currency: 'CHL',
-                currencyDisplay: 'symbol'
+                ...defaultCurrencyOptions(2)
+            }
+        },
+        'es-AR': {
+            currency: {
+                style: 'currency',
+                currency: 'ARS',
+                ...defaultCurrencyOptions(2)
+            }
+        },
+        'es-CL': {
+            currency: {
+                style: 'currency',
+                currency: 'CLP',
+                ...defaultCurrencyOptions(2)
             }
         }
+    }
+});
+
+// Use correct Intl locale for currency so es-AR gets comma decimal, period thousands.
+const original$n = Vue.prototype.$n;
+Vue.prototype.$n = function (value, ...args) {
+    if (args[0] === 'currency') {
+        const intlLocale = numberFormatLocaleMap[this.$i18n.locale] || this.$i18n.locale;
+        if (args.length === 1) return this.$i18n.n(value, 'currency', intlLocale);
+        if (args.length === 2 && typeof args[1] === 'object') return this.$i18n.n(value, { key: 'currency', locale: intlLocale, ...args[1] });
+    }
+    return original$n.call(this, value, ...args);
+};
+
+function applyPriceFormat(showCents) {
+    const fractionDigits = showCents !== false ? 2 : 0;
+    const options = defaultCurrencyOptions(fractionDigits);
+    const formats = [
+        ['arg', 'ARS'],
+        ['chl', 'CHL'],
+        ['es-AR', 'ARS'],
+        ['es-CL', 'CLP']
+    ];
+    formats.forEach(([locale, currency]) => {
+        i18n.mergeNumberFormat(locale, {
+            currency: { style: 'currency', currency, ...options }
+        });
+    });
+}
+
+store.subscribe((mutation) => {
+    const isConfig = mutation.type === 'auth/AUTH_APP_CONFIG' || mutation.type === 'AUTH_APP_CONFIG';
+    if (isConfig && mutation.payload) {
+        const showCents = mutation.payload.price_show_cents !== false;
+        applyPriceFormat(showCents);
     }
 });
 

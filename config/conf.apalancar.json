@@ -17,5 +17,6 @@
     "osm_country": "CHL",
     "trip_card_design": "light",
     "trip_stars": true,
-    "app_name": "Apalancar"
+    "app_name": "Apalancar",
+    "price_show_cents": false
 }
