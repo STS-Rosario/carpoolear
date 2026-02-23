@@ -624,7 +624,7 @@ export default [
         }
     },
     {
-        path: '/*',
+        path: '/:pathMatch(.*)*',
         redirect: '/trips'
     }
 ];

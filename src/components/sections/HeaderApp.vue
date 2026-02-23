@@ -14,9 +14,9 @@
                 <template
                     v-else
                     v-for="item in leftHeaderButton"
-                    v-if="item.show"
+                    :key="item.id"
                 >
-                    <span @click="onClick(item)">
+                    <span v-if="item.show" @click="onClick(item)">
                         <i :class="'fa ' + item.icon" aria-hidden="true"></i>
                     </span>
                 </template>
@@ -43,8 +43,8 @@
                 <span class="header--subtitle">{{ subTitle }}</span>
             </div>
             <div class="actionbar_section actionbar_icon pull-right">
-                <template v-for="item in rightHeaderButton" v-if="item.show">
-                    <span @click="onClick(item)">
+                <template v-for="item in rightHeaderButton" :key="item.id">
+                    <span v-if="item.show" @click="onClick(item)">
                         <i :class="'fa ' + item.icon" aria-hidden="true"></i>
                     </span>
                 </template>

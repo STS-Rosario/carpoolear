@@ -32,11 +32,14 @@
                                     columnComponent[0].length
                                 "
                             >
-                                <component
+                                <template
                                     v-for="childComponent in columnComponent[0]"
                                     :key="childComponent._scopeId"
-                                    :is="childComponent"
-                                ></component>
+                                >
+                                    <component
+                                        :is="childComponent"
+                                    ></component>
+                                </template>
                             </div>
                             <div
                                 :class="columnClass[1]"
@@ -46,11 +49,14 @@
                                     columnComponent[1].length
                                 "
                             >
-                                <component
+                                <template
                                     v-for="childComponent in columnComponent[1]"
                                     :key="childComponent._scopeId"
-                                    :is="childComponent"
-                                ></component>
+                                >
+                                    <component
+                                        :is="childComponent"
+                                    ></component>
+                                </template>
                             </div>
                             <div
                                 :class="columnClass[2]"
@@ -60,11 +66,14 @@
                                     columnComponent[2].length
                                 "
                             >
-                                <component
+                                <template
                                     v-for="childComponent in columnComponent[2]"
                                     :key="childComponent._scopeId"
-                                    :is="childComponent"
-                                ></component>
+                                >
+                                    <component
+                                        :is="childComponent"
+                                    ></component>
+                                </template>
                             </div>
                             <modal
                                 :name="'modal'"
