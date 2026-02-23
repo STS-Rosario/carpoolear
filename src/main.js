@@ -137,16 +137,12 @@ function applyPriceFormat(showCents) {
             currency: { style: 'currency', currency, ...options }
         });
     });
-    console.log('[price-format] applyPriceFormat(showCents=', showCents, ') → fractionDigits=', fractionDigits);
 }
 
 store.subscribe((mutation) => {
     const isConfig = mutation.type === 'auth/AUTH_APP_CONFIG' || mutation.type === 'AUTH_APP_CONFIG';
     if (isConfig && mutation.payload) {
-        const payload = mutation.payload;
-        const showCents = payload.price_show_cents !== false;
-        console.log('[price-format] config received. mutation.type=', mutation.type, 'payload.price_show_cents=', payload.price_show_cents, '→ showCents=', showCents);
-        console.log('[price-format] full appConfig (relevant):', { price_show_cents: payload.price_show_cents });
+        const showCents = mutation.payload.price_show_cents !== false;
         applyPriceFormat(showCents);
     }
 });
