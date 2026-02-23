@@ -2,9 +2,8 @@
 
 import 'babel-polyfill';
 
-import { createApp } from 'vue';
+import Vue, { createApp } from 'vue';
 import App from './App';
-import Vue from 'vue';
 
 import VueResource from 'vue-resource';
 import VueAnalytics from 'vue-analytics';
