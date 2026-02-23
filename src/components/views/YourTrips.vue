@@ -15,23 +15,23 @@
                         :enableChangeSeats="true"
                     ></Trip>
                 </div>
-                <p slot="no-data" class="alert alert-warning" role="alert">
+                <template #no-data><p class="alert alert-warning" role="alert">
                     {{ $t('noTenesViajesCreados') }}
-                </p>
-                <p slot="loading" class="alert alert-info" role="alert">
+                </p></template>
+                <template #loading><p class="alert alert-info" role="alert">
                     <img
                         src="https://carpoolear.com.ar/static/img/loader.gif"
                         alt=""
                         class="ajax-loader"
                     />
                     {{ $t('cargandoViajes') }}
-                </p>
+                </p></template>
             </Loading>
         </div>
 
         <div class="col-xs-24">
             <Loading :data="passengerTrips" :hideOnEmpty="true">
-                <h2 slot="title" v-html="$t('viajesEstoySubido')"></h2>
+                <template #title><h2 v-html="$t('viajesEstoySubido')"></h2></template>
                 <div class="trips-list">
                     <Trip
                         v-for="trip in passengerTrips"
@@ -39,17 +39,17 @@
                         :user="user"
                     ></Trip>
                 </div>
-                <p slot="no-data" class="alert alert-warning" role="alert">
+                <template #no-data><p class="alert alert-warning" role="alert">
                     {{ $t('noEstasSubidoViaje') }}
-                </p>
-                <p slot="loading" class="alert alert-info" role="alert">
+                </p></template>
+                <template #loading><p class="alert alert-info" role="alert">
                     <img
                         src="https://carpoolear.com.ar/static/img/loader.gif"
                         alt=""
                         class="ajax-loader"
                     />
                     {{ $t('cargandoViajes') }}
-                </p>
+                </p></template>
             </Loading>
         </div>
         <div class="col-xs-24" v-if="oldDriverTrips">
@@ -62,23 +62,23 @@
                         :user="user"
                     ></Trip>
                 </div>
-                <p slot="no-data" class="alert alert-warning" role="alert">
+                <template #no-data><p class="alert alert-warning" role="alert">
                     {{ $t('noHasRealizadoViaje') }}
-                </p>
-                <p slot="loading" class="alert alert-info" role="alert">
+                </p></template>
+                <template #loading><p class="alert alert-info" role="alert">
                     <img
                         src="https://carpoolear.com.ar/static/img/loader.gif"
                         alt=""
                         class="ajax-loader"
                     />
                     {{ $t('cargandoViajes') }}
-                </p>
+                </p></template>
             </Loading>
         </div>
 
         <div class="col-xs-24" v-if="oldPassengerTrips">
             <Loading :data="oldPassengerTrips" :hideOnEmpty="true">
-                <h2 slot="title" v-html="$t('viajesMeSubi')"></h2>
+                <template #title><h2 v-html="$t('viajesMeSubi')"></h2></template>
                 <div class="trips-list">
                     <Trip
                         v-for="trip in oldPassengerTrips"
@@ -86,17 +86,17 @@
                         :user="user"
                     ></Trip>
                 </div>
-                <p slot="no-data" class="alert alert-warning" role="alert">
+                <template #no-data><p class="alert alert-warning" role="alert">
                     {{ $t('noTeHasSubidoViaje') }}
-                </p>
-                <p slot="loading" class="alert alert-info" role="alert">
+                </p></template>
+                <template #loading><p class="alert alert-info" role="alert">
                     <img
                         src="https://carpoolear.com.ar/static/img/loader.gif"
                         alt=""
                         class="ajax-loader"
                     />
                     {{ $t('cargandoViajes') }}
-                </p>
+                </p></template>
             </Loading>
         </div>
     </div>

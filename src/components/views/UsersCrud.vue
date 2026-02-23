@@ -89,15 +89,13 @@
                                                 </div>
                                             </div>
                                         </li>
-                                        <li
-                                            slot="no-data"
+                                        <template #no-data><li
                                             class="list-group-item alert alert-warning"
                                             role="alert"
                                         >
                                             {{ $t('noSeEncontroNingunUsuario') }}
-                                        </li>
-                                        <li
-                                            slot="loading"
+                                        </li></template>
+                                        <template #loading><li
                                             class="list-group-item alert alert-info"
                                             role="alert"
                                         >
@@ -107,7 +105,7 @@
                                                 class="ajax-loader"
                                             />
                                             {{ $t('cargandoUsuarios') }}
-                                        </li>
+                                        </li></template>
                                     </Loading>
                                 </template>
                             </ul>
@@ -454,7 +452,6 @@
                     </div>
                     <div v-else class="col-xs-24 col-sm-16 col-md-16">
                         <p
-                            slot="no-data"
                             class="alert alert-warning"
                             role="alert"
                         >
@@ -470,11 +467,11 @@
             :name="'modal-confirm-admin-action'"
             @close="closeConfirmModal"
         >
-            <h3 slot="header">
+            <template #header><h3>
                 <span>{{ confirmModalTitle }}</span>
                 <i v-on:click="closeConfirmModal" class="fa fa-times float-right-close"></i>
-            </h3>
-            <div slot="body">
+            </h3></template>
+            <template #body><div>
                 <div class="text-left color-black">
                     <p>{{ confirmModalMessage }}</p>
                     <div v-if="pendingAction === 'banAndAnonymize'" class="form-group">
@@ -495,7 +492,7 @@
                         </button>
                     </div>
                 </div>
-            </div>
+            </div></template>
         </modal>
     </div>
 </template>

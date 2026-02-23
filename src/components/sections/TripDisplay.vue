@@ -1,10 +1,10 @@
 <template>
     <div v-if="trip">
         <Modal :clickOutside="clickOutside" :name="'tripModel_' + trip.id">
-            <div slot="header" class="trip-display-title">
+            <template #header><div class="trip-display-title">
                 {{ $t('detallesDelViaje') }}
-            </div>
-            <div slot="body">
+            </div></template>
+            <template #body><div>
                 <div class="row">
                     <div class="row">
                         <div class="col-md-24">
@@ -184,8 +184,8 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div slot="footer"></div>
+            </div></template>
+            <template #footer><div></div></template>
         </Modal>
     </div>
 </template>

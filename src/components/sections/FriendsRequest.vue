@@ -88,15 +88,13 @@
                             </div>
                         </div>
                     </li>
-                    <li
-                        slot="no-data"
+                    <template #no-data><li
                         class="list-group-item alert alert-warning"
                         role="alert"
                     >
                         {{ $t('noSeEncontraronContactos') }}
-                    </li>
-                    <li
-                        slot="loading"
+                    </li></template>
+                    <template #loading><li
                         class="list-group-item alert alert-info"
                         role="alert"
                     >
@@ -106,7 +104,7 @@
                             class="ajax-loader"
                         />
                         {{ $t('buscandoContactos') }}
-                    </li>
+                    </li></template>
                 </Loading>
             </template>
         </div>

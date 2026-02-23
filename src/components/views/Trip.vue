@@ -82,14 +82,14 @@
                                 :title="$t('carpoodatos')"
                                 :body="'Body'"
                             >
-                                <h3 slot="header">
+                                <template #header><h3>
                                     <span>{{ $t('carpoodatos') }}</span>
                                     <i
                                         v-on:click="onModalClose"
                                         class="fa fa-times float-right-close"
                                     ></i>
-                                </h3>
-                                <div slot="body">
+                                </h3></template>
+                                <template #body><div>
                                     <div class="text-left carpoodatos">
                                         <p>
                                             {{ $t('carpoodatosAntesSolicitud') }}
@@ -153,7 +153,7 @@
                                             </button>
                                         </template>
                                     </div>
-                                </div>
+                                </div></template>
                             </modal>
                             <modal
                                 :name="'modal'"
@@ -162,14 +162,14 @@
                                 :title="$t('carpoodatos')"
                                 :body="'Body'"
                             >
-                                <h3 slot="header">
+                                <template #header><h3>
                                     <span>{{ $t('carpoodatos') }}</span>
                                     <i
                                         v-on:click="onModalClose"
                                         class="fa fa-times float-right-close"
                                     ></i>
-                                </h3>
-                                <div slot="body">
+                                </h3></template>
+                                <template #body><div>
                                     <div class="text-left carpoodatos">
                                         <p>
                                             {{ $t('carpoodatosAntesConfirmar') }}
@@ -206,7 +206,7 @@
                                             {{ $t('enviarMensaje') }}
                                         </button>
                                     </div>
-                                </div>
+                                </div></template>
                             </modal>
                         </div>
                         <TripButtons

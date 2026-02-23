@@ -2,7 +2,7 @@
     <div class="friends-component">
         <div class="clearfix">
             <Loading :data="pendings" :hideOnEmpty="true">
-                <h2 slot="title">{{ $t('solicitudesDeAmistad') }}</h2>
+                <template #title><h2>{{ $t('solicitudesDeAmistad') }}</h2></template>
                 <div id="friends-list">
                     <FriendCard
                         v-for="user in pendings"
@@ -37,17 +37,17 @@
                         </template>
                     </FriendCard>
                 </div>
-                <p slot="no-data" class="alert alert-warning" role="alert">
+                <template #no-data><p class="alert alert-warning" role="alert">
                     {{ $t('noHaySolicitudesNuevas') }}
-                </p>
-                <p slot="loading" class="alert alert-info" role="alert">
+                </p></template>
+                <template #loading><p class="alert alert-info" role="alert">
                     <img
                         src="https://carpoolear.com.ar/static/img/loader.gif"
                         alt=""
                         class="ajax-loader"
                     />
                     {{ $t('cargandoSolicitudes') }}
-                </p>
+                </p></template>
             </Loading>
         </div>
 
@@ -95,17 +95,17 @@
                     </template>
                 </FriendRequestCard>
             </div>
-            <p slot="no-data" class="alert alert-warning" role="alert">
+            <template #no-data><p class="alert alert-warning" role="alert">
                 {{ noResult }}
-            </p>
-            <p slot="loading" class="alert alert-info" role="alert">
+            </p></template>
+            <template #loading><p class="alert alert-info" role="alert">
                 <img
                     src="https://carpoolear.com.ar/static/img/loader.gif"
                     alt=""
                     class="ajax-loader"
                 />
                 {{ $t('cargandoAmigos') }}
-            </p>
+            </p></template>
         </Loading>
     </div>
 </template>

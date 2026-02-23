@@ -252,7 +252,7 @@
                 @close="toggleModalLogin"
                 :body="'Body'"
             >
-                <h3 slot="header">
+                <template #header><h3>
                     <span>
                         {{ $t('teniasCuentaVinculada') }} {{ modalType === 'facebook' ? $t('facebook') : $t('apple') }}?
                     </span>
@@ -260,8 +260,8 @@
                         v-on:click="toggleModalLogin"
                         class="fa fa-times float-right-close"
                     ></i>
-                </h3>
-                <div slot="body">
+                </h3></template>
+                <template #body><div>
                     <div class="text-left color-black login-modal">
                         <p>
                             {{ $t('ingresoRegistroYaNoFunciona') }} {{ modalType === 'facebook' ? $t('facebook') : $t('apple') }}.
@@ -276,10 +276,9 @@
                                 {{ $t('mensajePrivadoDe') }} <a href="https://instagram.com/carpoolear">Instagram</a> {{ $t('y') }}
                             <a href="https://facebook.com/carpoolear">Facebook</a>.
                         </p>
-
                         <p>{{ $t('buenasRutas') }}</p>
                     </div>
-                </div>
+                </div></template>
             </modal>
         </div>
     </div>

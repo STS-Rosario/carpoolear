@@ -47,17 +47,17 @@
                 </div>
                 -->
 
-                <p slot="no-data" class="alert alert-warning" role="alert">
+                <template #no-data><p class="alert alert-warning" role="alert">
                     {{ $t('noCalificaciones') }}
-                </p>
-                <p slot="loading" class="alert alert-info" role="alert">
+                </p></template>
+                <template #loading><p class="alert alert-info" role="alert">
                     <img
                         src="https://carpoolear.com.ar/static/img/loader.gif"
                         alt=""
                         class="ajax-loader"
                     />
                     {{ $t('cargandoNotificaciones') }}
-                </p>
+                </p></template>
             </Loading>
         </div>
 
@@ -111,17 +111,17 @@
                         <button class="btn btn-primary" @click="nextPage">Más resultados</button>
                     </div>
                     -->
-                    <p slot="no-data" class="alert alert-warning" role="alert">
+                    <template #no-data><p class="alert alert-warning" role="alert">
                         {{ $t('noReferences') }}
-                    </p>
-                    <p slot="loading" class="alert alert-info" role="alert">
+                    </p></template>
+                    <template #loading><p class="alert alert-info" role="alert">
                         <img
                             src="https://carpoolear.com.ar/static/img/loader.gif"
                             alt=""
                             class="ajax-loader"
                         />
                         {{ $t('cargandoNotificaciones') }}
-                    </p>
+                    </p></template>
                 </Loading>
             </div>
         </template>
