@@ -1,0 +1,57 @@
+name: Screenshot Tests
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  screenshot-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      # Install only Playwright and its browsers (skip full npm install
+      # which would pull the app's webpack/vue-loader deps for Node 12).
+      - name: Install Playwright
+        run: |
+          npm install --no-save @playwright/test
+          npx playwright install --with-deps chromium
+
+      # Use Docker to build and serve the app (needs Node 12 + its own deps)
+      - name: Start app via Docker
+        run: |
+          docker compose up -d --build
+          # Wait for the dev server to be ready
+          for i in $(seq 1 90); do
+            if curl -s -o /dev/null -w "%{http_code}" http://localhost:8080 2>/dev/null | grep -q "200"; then
+              echo "Dev server ready"
+              break
+            fi
+            if [ $i -eq 90 ]; then
+              echo "Timeout waiting for dev server"
+              docker compose logs --tail=50
+              exit 1
+            fi
+            sleep 2
+          done
+
+      - name: Run screenshot tests
+        run: npx playwright test e2e/screenshots.spec.js
+
+      - name: Stop Docker
+        if: always()
+        run: docker compose down
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: screenshot-test-results
+          path: test-results/
+          retention-days: 7
