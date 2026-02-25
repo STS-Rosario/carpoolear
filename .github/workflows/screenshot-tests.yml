@@ -17,12 +17,11 @@ jobs:
           node-version: '18'
           cache: 'npm'
 
-      # Install only Playwright and its browsers (skip full npm install
-      # which would pull the app's webpack/vue-loader deps for Node 12).
-      - name: Install Playwright
-        run: |
-          npm install --no-save @playwright/test
-          npx playwright install --with-deps chromium
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
 
       # Use Docker to build and serve the app (needs Node 12 + its own deps)
       - name: Start app via Docker
