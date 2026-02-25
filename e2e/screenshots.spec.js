@@ -193,15 +193,22 @@ const MOCK_NOTIFICATIONS = [
     id: 1,
     text: 'María García solicitó un asiento en tu viaje',
     created_at: '2026-02-20T10:00:00.000Z',
-    read: false,
+    readed: false,
     extras: { type: 'passenger_request', trip_id: 1 },
   },
   {
     id: 2,
     text: 'Tu viaje a Buenos Aires es mañana',
     created_at: '2026-02-19T08:00:00.000Z',
-    read: true,
+    readed: true,
     extras: { type: 'trip_reminder', trip_id: 1 },
+  },
+  {
+    id: 3,
+    text: 'Carlos López aceptó tu solicitud de asiento',
+    created_at: '2026-02-18T14:30:00.000Z',
+    readed: true,
+    extras: { type: 'request_accepted', trip_id: 2 },
   },
 ];
 
@@ -209,7 +216,7 @@ const MOCK_PENDING_REQUESTS = [
   {
     id: 1,
     user: { id: 201, name: 'Pasajero Pendiente', image: null },
-    trip: makeMockTrip(10, { user: MOCK_USER }),
+    trip_id: 10,
     request_state: 0,
     created_at: '2026-02-20T10:00:00.000Z',
   },
@@ -219,19 +226,35 @@ const MOCK_DELETE_REQUESTS = [
   {
     id: 1,
     user: { id: 50, name: 'User To Delete', email: 'delete@test.com' },
-    status: 'solicitado',
-    created_at: '2026-02-15T00:00:00.000Z',
-    reason: 'No uso más la app',
+    date_requested: '2026-02-15T00:00:00.000Z',
+    action_taken: 0,
+    action_taken_date: null,
+  },
+  {
+    id: 2,
+    user: { id: 51, name: 'Already Deleted', email: 'deleted@test.com' },
+    date_requested: '2026-01-20T00:00:00.000Z',
+    action_taken: 1,
+    action_taken_date: '2026-01-25T00:00:00.000Z',
   },
 ];
 
 const MOCK_BANNED_USERS = [
   {
     id: 1,
-    user: { id: 60, name: 'Banned User', nro_doc: '12345678' },
-    banned_by: { id: 99, name: 'Admin User' },
+    user: { id: 60, name: 'Banned User' },
+    nro_doc: '12345678',
+    banned_at: '2026-01-15T00:00:00.000Z',
+    banned_by: 0,
     note: 'Comportamiento inapropiado',
-    created_at: '2026-01-15T00:00:00.000Z',
+  },
+  {
+    id: 2,
+    user: { id: 61, name: 'Another Banned' },
+    nro_doc: '87654321',
+    banned_at: '2026-02-01T00:00:00.000Z',
+    banned_by: 99,
+    note: 'Spam repetido',
   },
 ];
 
@@ -274,13 +297,63 @@ const MOCK_MP_REJECTED_DETAIL = {
 const MOCK_TRANSACTIONS = [
   {
     id: 1,
-    trip_id: 1,
-    amount: 500,
-    status: 'completed',
-    description: 'Pago viaje Rosario - Buenos Aires',
     created_at: '2026-02-01T00:00:00.000Z',
-    trip: makeMockTrip(1),
+    user_id: 1,
+    user: { name: 'Juan Pérez' },
+    trip: {
+      seat_price_cents: 50000,
+      user: { name: 'María García' },
+      to_town: 'Buenos Aires',
+    },
+    payment_status: 'approved',
+    payment_info: { cardDetail: { cardNumber: '****1234' } },
   },
+  {
+    id: 2,
+    created_at: '2026-01-15T00:00:00.000Z',
+    user_id: 1,
+    user: { name: 'Juan Pérez' },
+    trip: {
+      seat_price_cents: 30000,
+      user: { name: 'Carlos López' },
+      to_town: 'Córdoba',
+    },
+    payment_status: 'pending',
+    payment_info: { cardDetail: { cardNumber: '****5678' } },
+  },
+];
+
+const MOCK_CHART_TRIPS = [
+  { key: '2025-07', cantidad: 120, asientos_ofrecidos_total: 480 },
+  { key: '2025-08', cantidad: 145, asientos_ofrecidos_total: 580 },
+  { key: '2025-09', cantidad: 160, asientos_ofrecidos_total: 640 },
+  { key: '2025-10', cantidad: 135, asientos_ofrecidos_total: 540 },
+  { key: '2025-11', cantidad: 170, asientos_ofrecidos_total: 680 },
+  { key: '2025-12', cantidad: 190, asientos_ofrecidos_total: 760 },
+  { key: '2026-01', cantidad: 200, asientos_ofrecidos_total: 800 },
+  { key: '2026-02', cantidad: 175, asientos_ofrecidos_total: 700 },
+];
+
+const MOCK_CHART_SEATS = [
+  { key: '2025-07', state: 1, cantidad: 350 },
+  { key: '2025-08', state: 1, cantidad: 420 },
+  { key: '2025-09', state: 1, cantidad: 470 },
+  { key: '2025-10', state: 1, cantidad: 390 },
+  { key: '2025-11', state: 1, cantidad: 510 },
+  { key: '2025-12', state: 1, cantidad: 580 },
+  { key: '2026-01', state: 1, cantidad: 620 },
+  { key: '2026-02', state: 1, cantidad: 530 },
+];
+
+const MOCK_CHART_USERS = [
+  { key: '2025-07', cantidad: 45 },
+  { key: '2025-08', cantidad: 62 },
+  { key: '2025-09', cantidad: 55 },
+  { key: '2025-10', cantidad: 70 },
+  { key: '2025-11', cantidad: 48 },
+  { key: '2025-12', cantidad: 80 },
+  { key: '2026-01', cantidad: 65 },
+  { key: '2026-02', cantidad: 58 },
 ];
 
 const MOCK_PROFILE_USER = {
@@ -355,7 +428,7 @@ async function setupCommonMocks(page) {
     route.fulfill({
       status: 200,
       contentType: 'application/json',
-      body: JSON.stringify({ count: 3 }),
+      body: JSON.stringify({ data: 3 }),
     });
   });
 
@@ -411,7 +484,7 @@ async function setupAuthState(page, user = MOCK_USER) {
     route.fulfill({
       status: 200,
       contentType: 'application/json',
-      body: JSON.stringify([]),
+      body: JSON.stringify({ data: [] }),
     });
   });
 
@@ -419,7 +492,7 @@ async function setupAuthState(page, user = MOCK_USER) {
     route.fulfill({
       status: 200,
       contentType: 'application/json',
-      body: JSON.stringify([]),
+      body: JSON.stringify({ data: [] }),
     });
   });
 
@@ -427,7 +500,7 @@ async function setupAuthState(page, user = MOCK_USER) {
     route.fulfill({
       status: 200,
       contentType: 'application/json',
-      body: JSON.stringify([]),
+      body: JSON.stringify({ data: [] }),
     });
   });
 
@@ -435,7 +508,7 @@ async function setupAuthState(page, user = MOCK_USER) {
     route.fulfill({
       status: 200,
       contentType: 'application/json',
-      body: JSON.stringify([]),
+      body: JSON.stringify({ data: [] }),
     });
   });
 
@@ -443,7 +516,7 @@ async function setupAuthState(page, user = MOCK_USER) {
     route.fulfill({
       status: 200,
       contentType: 'application/json',
-      body: JSON.stringify([]),
+      body: JSON.stringify({ data: [] }),
     });
   });
 
@@ -451,7 +524,15 @@ async function setupAuthState(page, user = MOCK_USER) {
     route.fulfill({
       status: 200,
       contentType: 'application/json',
-      body: JSON.stringify([]),
+      body: JSON.stringify({ data: [] }),
+    });
+  });
+
+  await page.route('**/api/friends/pedings**', (route) => {
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ data: [] }),
     });
   });
 }
@@ -547,7 +628,7 @@ test.describe('Screenshot tests', () => {
           status: 200,
           contentType: 'application/json',
           body: JSON.stringify({
-            data: '<h1>Términos y Condiciones</h1><p>Estos son los términos y condiciones de uso de Carpoolear.</p><p>Al utilizar esta plataforma, usted acepta los siguientes términos...</p>',
+            content: '<h1>Términos y Condiciones</h1><p>Estos son los términos y condiciones de uso de Carpoolear.</p><p>Al utilizar esta plataforma, usted acepta los siguientes términos de servicio.</p><h2>1. Uso de la plataforma</h2><p>Carpoolear es una plataforma de viajes compartidos. Los usuarios se comprometen a utilizar el servicio de manera responsable.</p><h2>2. Responsabilidad</h2><p>Cada usuario es responsable de la información que publica en la plataforma.</p>',
           }),
         });
       });
@@ -608,14 +689,14 @@ test.describe('Screenshot tests', () => {
         route.fulfill({
           status: 200,
           contentType: 'application/json',
-          body: JSON.stringify(data),
+          body: JSON.stringify({ data }),
         });
       });
       await page.route('**/api/users/requests', (route) => {
         route.fulfill({
           status: 200,
           contentType: 'application/json',
-          body: JSON.stringify(MOCK_PENDING_REQUESTS),
+          body: JSON.stringify({ data: MOCK_PENDING_REQUESTS }),
         });
       });
       await page.goto('/my-trips');
@@ -655,7 +736,7 @@ test.describe('Screenshot tests', () => {
         route.fulfill({
           status: 200,
           contentType: 'application/json',
-          body: JSON.stringify(MOCK_NOTIFICATIONS),
+          body: JSON.stringify({ data: MOCK_NOTIFICATIONS }),
         });
       });
       await page.goto('/notifications');
@@ -710,11 +791,14 @@ test.describe('Screenshot tests', () => {
     });
 
     test('settings - friends page', async ({ page }) => {
-      await page.route('**/api/friends**', (route) => {
+      await page.route(/\/api\/friends(\?.*)?$/, (route) => {
         route.fulfill({
           status: 200,
           contentType: 'application/json',
-          body: JSON.stringify([]),
+          body: JSON.stringify(paginated([
+            { id: 10, name: 'María García', image: null, email: 'maria@test.com' },
+            { id: 11, name: 'Carlos López', image: null, email: 'carlos@test.com' },
+          ])),
         });
       });
       await page.goto('/setting/friends');
@@ -723,11 +807,18 @@ test.describe('Screenshot tests', () => {
     });
 
     test('settings - friends search page', async ({ page }) => {
-      await page.route('**/api/friends**', (route) => {
+      await page.route(/\/api\/friends\/search(\?.*)?$/, (route) => {
         route.fulfill({
           status: 200,
           contentType: 'application/json',
-          body: JSON.stringify([]),
+          body: JSON.stringify(paginated([])),
+        });
+      });
+      await page.route(/\/api\/friends(\?.*)?$/, (route) => {
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify(paginated([])),
         });
       });
       await page.goto('/setting/friends/search');
@@ -797,25 +888,26 @@ test.describe('Screenshot tests', () => {
         route.fulfill({
           status: 200,
           contentType: 'application/json',
-          body: JSON.stringify({ data: [] }),
+          body: JSON.stringify({ trips: MOCK_CHART_TRIPS }),
         });
       });
       await page.route('**/api/data/seats**', (route) => {
         route.fulfill({
           status: 200,
           contentType: 'application/json',
-          body: JSON.stringify({ data: [] }),
+          body: JSON.stringify({ seats: MOCK_CHART_SEATS }),
         });
       });
       await page.route('**/api/data/users**', (route) => {
         route.fulfill({
           status: 200,
           contentType: 'application/json',
-          body: JSON.stringify({ data: [] }),
+          body: JSON.stringify({ users: MOCK_CHART_USERS }),
         });
       });
       await page.goto('/admin');
       await waitForPageReady(page);
+      await page.waitForTimeout(2000); // extra time for charts to render
       await expect(page).toHaveScreenshot('admin-dashboard.png', SCREENSHOT_OPTIONS);
     });
 
@@ -824,7 +916,7 @@ test.describe('Screenshot tests', () => {
         route.fulfill({
           status: 200,
           contentType: 'application/json',
-          body: JSON.stringify([]),
+          body: JSON.stringify({ data: [] }),
         });
       });
       await page.goto('/admin/users');
@@ -843,7 +935,7 @@ test.describe('Screenshot tests', () => {
         route.fulfill({
           status: 200,
           contentType: 'application/json',
-          body: JSON.stringify(MOCK_DELETE_REQUESTS),
+          body: JSON.stringify({ data: MOCK_DELETE_REQUESTS }),
         });
       });
       await page.goto('/admin/users-delete-list');
@@ -856,7 +948,7 @@ test.describe('Screenshot tests', () => {
         route.fulfill({
           status: 200,
           contentType: 'application/json',
-          body: JSON.stringify(MOCK_BANNED_USERS),
+          body: JSON.stringify({ data: MOCK_BANNED_USERS }),
         });
       });
       await page.goto('/admin/banned-users');
@@ -865,11 +957,11 @@ test.describe('Screenshot tests', () => {
     });
 
     test('admin manual identity validations page', async ({ page }) => {
-      await page.route('**/api/admin/manual-identity-validations', (route) => {
+      await page.route('**/api/admin/manual-identity-validations**', (route) => {
         route.fulfill({
           status: 200,
           contentType: 'application/json',
-          body: JSON.stringify(MOCK_MANUAL_VALIDATIONS),
+          body: JSON.stringify({ data: MOCK_MANUAL_VALIDATIONS }),
         });
       });
       await page.goto('/admin/manual-identity-validations');
@@ -882,7 +974,7 @@ test.describe('Screenshot tests', () => {
         route.fulfill({
           status: 200,
           contentType: 'application/json',
-          body: JSON.stringify(MOCK_MANUAL_VALIDATION_DETAIL),
+          body: JSON.stringify({ data: MOCK_MANUAL_VALIDATION_DETAIL }),
         });
       });
       await page.goto('/admin/manual-identity-validations/1');
@@ -891,11 +983,11 @@ test.describe('Screenshot tests', () => {
     });
 
     test('admin mercado pago rejected validations page', async ({ page }) => {
-      await page.route('**/api/admin/mercado-pago-rejected-validations', (route) => {
+      await page.route('**/api/admin/mercado-pago-rejected-validations**', (route) => {
         route.fulfill({
           status: 200,
           contentType: 'application/json',
-          body: JSON.stringify(MOCK_MP_REJECTED),
+          body: JSON.stringify({ data: MOCK_MP_REJECTED }),
         });
       });
       await page.goto('/admin/mercado-pago-rejected-validations');
@@ -908,7 +1000,7 @@ test.describe('Screenshot tests', () => {
         route.fulfill({
           status: 200,
           contentType: 'application/json',
-          body: JSON.stringify(MOCK_MP_REJECTED_DETAIL),
+          body: JSON.stringify({ data: MOCK_MP_REJECTED_DETAIL }),
         });
       });
       await page.goto('/admin/mercado-pago-rejected-validations/1');
