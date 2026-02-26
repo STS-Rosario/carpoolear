@@ -18,9 +18,10 @@
                 >
                     <strong><UserNameWithBadge :user="author" /></strong>
                 </div>
-                <div class="message_text">
-                    {{ message.text }}
-                </div>
+                <div
+                    class="message_text message_text--markdown"
+                    v-html="messageTextHtml"
+                ></div>
                 <div class="message_meta">
                     <span class="message_time">{{ date }}</span>
                     <span
@@ -38,6 +39,7 @@
 <script>
 import moment from 'moment';
 import UserNameWithBadge from './elements/UserNameWithBadge.vue';
+import { markdownToHtml } from '../services/markdown';
 
 export default {
     components: {
@@ -47,6 +49,9 @@ export default {
         return {};
     },
     computed: {
+        messageTextHtml() {
+            return markdownToHtml(this.message.text || '');
+        },
         author() {
             let user = this.users.find(
                 (item) => this.message.user_id === item.id
@@ -72,3 +77,36 @@ export default {
     props: ['users', 'message', 'user']
 };
 </script>
+<style scoped>
+.message_text--markdown >>> p {
+    margin: 0 0 0.5em;
+}
+.message_text--markdown >>> p:last-child {
+    margin-bottom: 0;
+}
+.message_text--markdown >>> strong {
+    font-weight: 700;
+}
+.message_text--markdown >>> em {
+    font-style: italic;
+}
+.message_text--markdown >>> del,
+.message_text--markdown >>> s {
+    text-decoration: line-through;
+}
+.message_text--markdown >>> code {
+    background: rgba(0, 0, 0, 0.06);
+    padding: 0.15em 0.35em;
+    border-radius: 3px;
+    font-size: 0.9em;
+}
+.message_text--markdown >>> a {
+    color: inherit;
+    text-decoration: underline;
+}
+.message_text--markdown >>> ul,
+.message_text--markdown >>> ol {
+    margin: 0.25em 0;
+    padding-left: 1.25em;
+}
+</style>
