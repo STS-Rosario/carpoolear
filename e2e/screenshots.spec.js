@@ -261,8 +261,8 @@ const MOCK_BANNED_USERS = [
 ];
 
 const MOCK_MANUAL_VALIDATIONS = [
-  { id: 1, user: { id: 70, name: 'Validation User' }, status: 'pending', created_at: '2026-02-10T00:00:00.000Z' },
-  { id: 2, user: { id: 71, name: 'Approved User' }, status: 'approved', created_at: '2026-02-08T00:00:00.000Z' },
+  { id: 1, user_id: 70, user_name: 'Validation User', paid: true, paid_at: '2026-02-09T00:00:00.000Z', submitted_at: '2026-02-10T00:00:00.000Z', review_status: 'pending', created_at: '2026-02-10T00:00:00.000Z' },
+  { id: 2, user_id: 71, user_name: 'Approved User', paid: true, paid_at: '2026-02-07T00:00:00.000Z', submitted_at: '2026-02-08T00:00:00.000Z', review_status: 'approved', created_at: '2026-02-08T00:00:00.000Z' },
 ];
 
 const MOCK_MANUAL_VALIDATION_DETAIL = {
@@ -285,7 +285,9 @@ const MOCK_MANUAL_VALIDATION_DETAIL = {
 const MOCK_MP_REJECTED = [
   {
     id: 1,
-    user: { id: 80, name: 'MP Rejected User' },
+    user_id: 80,
+    user_name: 'MP Rejected User',
+    user_nro_doc: '87654321',
     reject_reason: 'Documento no coincide',
     user_identity_validated: false,
     created_at: '2026-02-12T00:00:00.000Z',
