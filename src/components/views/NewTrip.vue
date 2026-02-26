@@ -2483,6 +2483,10 @@ export default {
 
             this.trip = this.getSaveInfo(this, this.estimatedTimeString);
             if (!this.updatingTrip) {
+                if (this.$redirectToIdentityValidationIfRequired()) {
+                    this.saving = false;
+                    return;
+                }
                 let trip = JSON.parse(JSON.stringify(this.trip));
                 trip.allow_kids = !(trip.allow_kids > 0);
                 trip.allow_animals = !(trip.allow_animals > 0);
@@ -2531,7 +2535,12 @@ export default {
                     })
                     .catch((err) => {
                         console.log('error_creating', err);
-                        if (
+                        if (this.$checkError(err, 'identity_validation_required')) {
+                            this.$router.push({ name: 'identity_validation' });
+                            dialogs.message(this.$t('debesValidarIdentidadParaAccion'), {
+                                estado: 'error'
+                            });
+                        } else if (
                             err &&
                             err.data &&
                             err.data.errors &&

@@ -172,6 +172,7 @@ export default {
         },
 
         toAcceptRequest() {
+            if (this.$redirectToIdentityValidationIfRequired()) return;
             if (this.acceptRequestValue) {
                 let data = {
                     property: 'do_not_alert_accept_passenger',
@@ -187,6 +188,13 @@ export default {
             this.acceptInProcess = true;
             this.passengerAccept({ user, trip })
                 .catch((error) => {
+                    if (this.$checkError(error, 'identity_validation_required')) {
+                        this.$router.push({ name: 'identity_validation' });
+                        dialogs.message(this.$t('debesValidarIdentidadParaAccion'), {
+                            estado: 'error'
+                        });
+                        return;
+                    }
                     if (this.$checkError(error, 'not_seat_available')) {
                         dialogs.message(
                             this.$t('pendingRequestNoPuedesAceptarEstaSolicitud'),
@@ -203,6 +211,7 @@ export default {
         },
 
         reject() {
+            if (this.$redirectToIdentityValidationIfRequired()) return;
             if (this.acceptRequestValue) {
                 let data = {
                     property: 'do_not_alert_accept_passenger',
@@ -218,7 +227,14 @@ export default {
             this.rejectInProcess = true;
             this.passengerReject({ user, trip })
                 .catch((error) => {
-                    console.error(error);
+                    if (this.$checkError(error, 'identity_validation_required')) {
+                        this.$router.push({ name: 'identity_validation' });
+                        dialogs.message(this.$t('debesValidarIdentidadParaAccion'), {
+                            estado: 'error'
+                        });
+                    } else {
+                        console.error(error);
+                    }
                 })
                 .finally(() => {
                     this.rejectInProcess = false;

@@ -1,3 +1,22 @@
+/**
+ * If identity validation is required for the current user and they are not validated,
+ * redirects to the identity validation page and returns true.
+ * Call before restricted actions (send message, request seat, accept/reject passenger, create trip).
+ * @param {object} store - Vuex store (e.g. this.$store)
+ * @param {object} router - Vue Router instance (e.g. this.$router)
+ * @returns {boolean} true if redirect was performed (caller should abort); false otherwise
+ */
+export function redirectToIdentityValidationIfRequired (store, router) {
+    const config = store.getters['auth/appConfig'];
+    const user = store.getters['auth/user'];
+    if (!config || !user) return false;
+    if (!config.identity_validation_required_new_users) return false;
+    if (!user.identity_validation_required_for_user) return false;
+    if (user.identity_validated) return false;
+    router.push({ name: 'identity_validation' });
+    return true;
+}
+
 export function cssvar (name) {
     /* eslint-disable no-undef */
     return getComputedStyle(document.documentElement).getPropertyValue(name);

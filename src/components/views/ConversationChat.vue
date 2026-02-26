@@ -91,6 +91,7 @@ import MessageView from '../MessageView';
 import router from '../../router';
 import moment from 'moment';
 import bus from '../../services/bus-event.js';
+import dialogs from '../../services/dialogs.js';
 import CoordinateTrip from '../elements/CoordinateTrip';
 
 export default {
@@ -173,15 +174,25 @@ export default {
         },
 
         sendMessage() {
+            if (this.$redirectToIdentityValidationIfRequired()) return;
             const editor = this.$refs.messageEditor;
             if (!editor) return;
             const text = (editor.invoke('getMarkdown') || '').trim();
             if (text.length) {
                 this.$set(this.sending, 'message', true);
-                this.send(text).finally(() => {
-                    this.$set(this.sending, 'message', false);
-                    this.$forceUpdate();
-                });
+                this.send(text)
+                    .catch((err) => {
+                        if (this.$checkError(err, 'identity_validation_required')) {
+                            this.$router.push({ name: 'identity_validation' });
+                            dialogs.message(this.$t('debesValidarIdentidadParaAccion'), {
+                                estado: 'error'
+                            });
+                        }
+                    })
+                    .finally(() => {
+                        this.$set(this.sending, 'message', false);
+                        this.$forceUpdate();
+                    });
                 editor.invoke('setMarkdown', '');
                 this.editorHasContent = false;
             }

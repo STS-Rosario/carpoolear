@@ -1,5 +1,5 @@
 /* jshint esversion: 6 */
-import { auth, guest, profileComplete, authAdmin } from './middleware.js';
+import { auth, guest, profileComplete, authAdmin, requireIdentityValidation } from './middleware.js';
 import store from '../store/index';
 
 const getters = store.getters;
@@ -121,7 +121,13 @@ export default [
         path: '/my-trips',
         name: 'my-trips',
         component: require('../components/views/MyTrips').default,
-        beforeEnter: auth,
+        beforeEnter: (to, from, next) => {
+            if (!store.getters['auth/checkLogin']) {
+                auth(to, from, next);
+                return;
+            }
+            requireIdentityValidation(to, from, next);
+        },
         meta: {
             actionbar: {
                 footer: {
@@ -157,8 +163,13 @@ export default [
         name: 'new-trip',
         component: require('../components/views/NewTrip').default,
         beforeEnter: (to, from, next) => {
-            auth(to, from, next);
-            profileComplete(to, from, next);
+            if (!store.getters['auth/checkLogin']) {
+                auth(to, from, next);
+                return;
+            }
+            requireIdentityValidation(to, from, ()=> {
+                profileComplete(to, from, next);
+            });
         },
         meta: {
             actionbar: {
@@ -188,7 +199,13 @@ export default [
         path: '/trips/:id',
         name: 'detail_trip',
         component: require('../components/views/Trip').default,
-        beforeEnter: auth,
+        beforeEnter: (to, from, next) => {
+            if (!store.getters['auth/checkLogin']) {
+                auth(to, from, next);
+                return;
+            }
+            requireIdentityValidation(to, from, next);
+        },
         props: true,
         meta: {
             actionbar: {
@@ -207,7 +224,13 @@ export default [
         path: '/trips/:id/:location',
         name: 'detail_trip_location',
         component: require('../components/views/Trip'),
-        beforeEnter: auth,
+        beforeEnter: (to, from, next) => {
+            if (!store.getters['auth/checkLogin']) {
+                auth(to, from, next);
+                return;
+            }
+            requireIdentityValidation(to, from, next);
+        },
         props: true,
         meta: {
             actionbar: {
@@ -344,7 +367,13 @@ export default [
         path: '/conversations',
         name: 'conversations-list',
         component: require('../components/views/ConversationList').default,
-        beforeEnter: auth,
+        beforeEnter: (to, from, next) => {
+            if (!store.getters['auth/checkLogin']) {
+                auth(to, from, next);
+                return;
+            }
+            requireIdentityValidation(to, from, next);
+        },
         meta: {
             actionbar: {
                 footer: {

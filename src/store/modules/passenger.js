@@ -4,6 +4,7 @@ import globalStore from '../index';
 import { checkError } from '../../../utils/helpers';
 import dialogs from '../../services/dialogs.js';
 import { i18n } from '../../main';
+import router from '../../router';
 
 /* eslint-disable no-undef */
 
@@ -84,7 +85,12 @@ const actions = {
             })
             .catch((error) => {
                 console.error(error);
-                if (checkError(error, 'user_has_another_similar_trip')) {
+                if (checkError(error, 'identity_validation_required')) {
+                    router.push({ name: 'identity_validation' });
+                    dialogs.message(i18n.t('debesValidarIdentidadParaAccion'), {
+                        estado: 'error'
+                    });
+                } else if (checkError(error, 'user_has_another_similar_trip')) {
                     dialogs.message(i18n.t('yaSubidoMismoViaje'), {
                         duration: 10,
                         estado: 'error'
@@ -126,6 +132,12 @@ const actions = {
                 });
             })
             .catch((error) => {
+                if (checkError(error, 'identity_validation_required')) {
+                    router.push({ name: 'identity_validation' });
+                    dialogs.message(i18n.t('debesValidarIdentidadParaAccion'), {
+                        estado: 'error'
+                    });
+                }
                 return Promise.reject(error);
             });
     },
@@ -141,6 +153,12 @@ const actions = {
                 store.commit(types.PASSENGER_REMOVE_PENDING, data);
             })
             .catch((error) => {
+                if (checkError(error, 'identity_validation_required')) {
+                    router.push({ name: 'identity_validation' });
+                    dialogs.message(i18n.t('debesValidarIdentidadParaAccion'), {
+                        estado: 'error'
+                    });
+                }
                 return Promise.reject(error);
             });
     },

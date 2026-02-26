@@ -32,14 +32,11 @@
                                     columnComponent[0].length
                                 "
                             >
-                                <template
+                                <component
                                     v-for="childComponent in columnComponent[0]"
-                                >
-                                    <component
-                                        :is="childComponent"
-                                        :key="childComponent._scopeId"
-                                    ></component>
-                                </template>
+                                    :key="childComponent._scopeId"
+                                    :is="childComponent"
+                                ></component>
                             </div>
                             <div
                                 :class="columnClass[1]"
@@ -49,14 +46,11 @@
                                     columnComponent[1].length
                                 "
                             >
-                                <template
+                                <component
                                     v-for="childComponent in columnComponent[1]"
-                                >
-                                    <component
-                                        :is="childComponent"
-                                        :key="childComponent._scopeId"
-                                    ></component>
-                                </template>
+                                    :key="childComponent._scopeId"
+                                    :is="childComponent"
+                                ></component>
                             </div>
                             <div
                                 :class="columnClass[2]"
@@ -66,14 +60,11 @@
                                     columnComponent[2].length
                                 "
                             >
-                                <template
+                                <component
                                     v-for="childComponent in columnComponent[2]"
-                                >
-                                    <component
-                                        :is="childComponent"
-                                        :key="childComponent._scopeId"
-                                    ></component>
-                                </template>
+                                    :key="childComponent._scopeId"
+                                    :is="childComponent"
+                                ></component>
                             </div>
                             <modal
                                 :name="'modal'"
@@ -650,6 +641,7 @@ export default {
         },
 
         toMakeRequest() {
+            if (this.$redirectToIdentityValidationIfRequired()) return;
             if (this.acceptPassengerValue) {
                 let data = {
                     property: 'do_not_alert_request_seat',
@@ -669,6 +661,14 @@ export default {
                 this.make(this.trip.id)
                     .then((response) => {
                         this.trip.request = 'send';
+                    })
+                    .catch((error) => {
+                        if (this.$checkError(error, 'identity_validation_required')) {
+                            this.$router.push({ name: 'identity_validation' });
+                            dialogs.message(this.$t('debesValidarIdentidadParaAccion'), {
+                                estado: 'error'
+                            });
+                        }
                     })
                     .finally(() => {
                         this.$set(this.sending, 'requestAction', false);
@@ -751,6 +751,7 @@ export default {
             }
         },
         onSendToAll() {
+            if (this.$redirectToIdentityValidationIfRequired()) return;
             let users = this.matchingUsers.filter(
                 (u) => this.selectedMatchingUser.indexOf(u.id) >= 0
             );
@@ -758,10 +759,19 @@ export default {
                 this.sendToAll({
                     message: this.messageToUsers,
                     users: users
-                }).then(() => {
-                    this.messageToUsers = '';
-                    dialogs.message(this.$t('mensajeEnviado'));
-                });
+                })
+                    .then(() => {
+                        this.messageToUsers = '';
+                        dialogs.message(this.$t('mensajeEnviado'));
+                    })
+                    .catch((error) => {
+                        if (this.$checkError(error, 'identity_validation_required')) {
+                            this.$router.push({ name: 'identity_validation' });
+                            dialogs.message(this.$t('debesValidarIdentidadParaAccion'), {
+                                estado: 'error'
+                            });
+                        }
+                    });
             }
         },
         onModalClose() {

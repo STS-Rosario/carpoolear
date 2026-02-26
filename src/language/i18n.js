@@ -271,6 +271,8 @@ const messages = {
         confirmarRemoverValidacionIdentidad:
             '¿Remover la validación de identidad de este usuario? Se borrarán todos los datos de validación.',
         validacionIdentidadRemovida: 'Validación de identidad removida.',
+        debesValidarIdentidadParaAccion:
+            'Debes validar tu identidad para realizar esta acción.',
         validadoEl: 'Validado el',
         validarConMercadoPago: 'Validar con Mercado Pago',
         validarConMercadoPagoDesc:
@@ -1202,6 +1204,8 @@ const messages = {
         confirmarRemoverValidacionIdentidad:
             '¿Remover la validación de identidad de este usuario? Se borrarán todos los datos de validación.',
         validacionIdentidadRemovida: 'Validación de identidad removida.',
+        debesValidarIdentidadParaAccion:
+            'Debes validar tu identidad para realizar esta acción.',
         validadoEl: 'Validado el',
         validarConMercadoPago: 'Validar con Mercado Pago',
         validarConMercadoPagoDesc:
@@ -2046,6 +2050,8 @@ const messages = {
         confirmarRemoverValidacionIdentidad:
             'Remove identity validation for this user? All validation data will be cleared.',
         validacionIdentidadRemovida: 'Identity validation removed.',
+        debesValidarIdentidadParaAccion:
+            'You must validate your identity to perform this action.',
         identidadNoValidada: 'Not validated',
         validarUsuario: 'Validate user',
         validadoPor: 'Validated by',

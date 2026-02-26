@@ -4,8 +4,10 @@ import * as pagination from '../pagination';
 import globalStore from '../index';
 import Vue from 'vue';
 import moment from 'moment';
-import { checkError } from '../../../utils/helpers';
+import { checkError, redirectToIdentityValidationIfRequired } from '../../../utils/helpers';
 import dialogs from '../../services/dialogs.js';
+import router from '../../router';
+import { i18n } from '../../main';
 
 const conversationApi = new ConversationApi();
 const pageSize = 20;
@@ -127,6 +129,9 @@ const actions = {
     },
 
     createConversation(store, param) {
+        if (redirectToIdentityValidationIfRequired(store, router)) {
+            return Promise.resolve();
+        }
         let user = param;
         if (param.user) {
             user = param.user;
@@ -144,7 +149,12 @@ const actions = {
             })
             .catch((error) => {
                 console.log(error);
-                if (checkError(error, 'user_has_reach_request_limit')) {
+                if (checkError(error, 'identity_validation_required')) {
+                    router.push({ name: 'identity_validation' });
+                    dialogs.message(i18n.t('debesValidarIdentidadParaAccion'), {
+                        estado: 'error'
+                    });
+                } else if (checkError(error, 'user_has_reach_request_limit')) {
                     dialogs.message(
                         'Se ha alcanzado el límite de consultas que el usuario acepta por este viaje.',
                         { duration: 10, estado: 'error' }
@@ -336,6 +346,12 @@ const actions = {
                 return Promise.resolve(response.data);
             })
             .catch((error) => {
+                if (checkError(error, 'identity_validation_required')) {
+                    router.push({ name: 'identity_validation' });
+                    dialogs.message(i18n.t('debesValidarIdentidadParaAccion'), {
+                        estado: 'error'
+                    });
+                }
                 return Promise.reject(error);
             });
     },
