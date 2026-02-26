@@ -78,6 +78,29 @@ This branch is multi project. You can handle multiple apps in only one source co
 
 Happy coding!
 
+## Testing
+
+Playwright is used for end-to-end screenshot tests that cover every view in the application. All backend requests are mocked so no running backend is needed.
+
+``` bash
+# install Playwright browsers (first time only)
+npx playwright install --with-deps chromium
+
+# start the dev server (requires Node 12 or Docker)
+npm run dev
+
+# run all e2e tests headless
+npm run test:e2e
+
+# run with the Playwright UI for debugging
+npm run test:e2e:ui
+
+# update golden screenshots after intentional UI changes
+npx playwright test e2e/screenshots.spec.js --update-snapshots
+```
+
+Screenshot tests also run automatically on every push and PR to `master` via the `Screenshot Tests` GitHub Action.
+
 ## Config
 
 In the config table in your carpoolear DB you can configure the following parameters:
