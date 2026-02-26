@@ -30,6 +30,13 @@
                                     <span :class="getStatusBadgeClass(item)">
                                         {{ getStatusLabel(item) }}
                                     </span>
+                                    <span
+                                        v-if="isApprovedWithImagesPending(item)"
+                                        class="label label-danger pending-images-pill"
+                                        :title="$t('faltaBorrarImagenes')"
+                                    >
+                                        {{ $t('faltaBorrarImagenes') }}
+                                    </span>
                                 </td>
                                 <td>
                                     <router-link
@@ -95,6 +102,11 @@ export default {
             if (!item.paid) return 'label label-default';
             return 'label label-warning';
         },
+        isApprovedWithImagesPending(item) {
+            const status = item.review_status;
+            const approved = status === 'approved' || status === 'approve';
+            return approved && item.has_images === true;
+        },
         fetchList() {
             const api = new AdminApi();
             return api.getManualIdentityValidations().then((res) => {
@@ -114,3 +126,8 @@ export default {
     }
 };
 </script>
+<style scoped>
+.pending-images-pill {
+    margin-left: 6px;
+}
+</style>
