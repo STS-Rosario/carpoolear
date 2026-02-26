@@ -92,11 +92,14 @@ npm run dev
 # run all e2e tests headless
 npm run test:e2e
 
+# run screenshot tests only
+npm run test:e2e:screenshots
+
 # run with the Playwright UI for debugging
 npm run test:e2e:ui
 
 # update golden screenshots after intentional UI changes
-npx playwright test e2e/screenshots.spec.js --update-snapshots
+npm run test:e2e:screenshots:update
 ```
 
 Screenshot tests also run automatically on every push and PR to `master` via the `Screenshot Tests` GitHub Action.
