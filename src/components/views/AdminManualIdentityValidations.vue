@@ -14,6 +14,7 @@
                                 <th scope="col">{{ $t('nombre') }}</th>
                                 <th scope="col">{{ $t('fechaPago') }}</th>
                                 <th scope="col">{{ $t('fechaEnvio') }}</th>
+                                <th scope="col">{{ $t('tiempoDeEspera') }}</th>
                                 <th scope="col">{{ $t('pagado') }}</th>
                                 <th scope="col">{{ $t('estado') }}</th>
                                 <th scope="col">{{ $t('acciones') }}</th>
@@ -25,10 +26,18 @@
                                 <td>{{ item.user_name || $t('na') }}</td>
                                 <td>{{ item.paid_at ? formatDate(item.paid_at) : '-' }}</td>
                                 <td>{{ item.submitted_at ? formatDate(item.submitted_at) : '-' }}</td>
+                                <td>{{ formatWaitingTime(item) }}</td>
                                 <td>{{ item.paid ? $t('si') : $t('no') }}</td>
                                 <td>
                                     <span :class="getStatusBadgeClass(item)">
                                         {{ getStatusLabel(item) }}
+                                    </span>
+                                    <span
+                                        v-if="isApprovedWithImagesPending(item)"
+                                        class="label label-danger pending-images-pill"
+                                        :title="$t('faltaBorrarImagenes')"
+                                    >
+                                        {{ $t('faltaBorrarImagenes') }}
                                     </span>
                                 </td>
                                 <td>
@@ -80,6 +89,24 @@ export default {
             if (!value) return '-';
             return new Date(value).toLocaleString();
         },
+        formatWaitingTime(item) {
+            const submitted = item.submitted_at ? new Date(item.submitted_at).getTime() : null;
+            if (!submitted) return '-';
+            const end = item.manual_validation_started_at
+                ? new Date(item.manual_validation_started_at).getTime()
+                : Date.now();
+            let diffMs = Math.max(0, end - submitted);
+            const days = Math.floor(diffMs / 86400000);
+            diffMs %= 86400000;
+            const hours = Math.floor(diffMs / 3600000);
+            diffMs %= 3600000;
+            const minutes = Math.floor(diffMs / 60000);
+            const parts = [];
+            if (days > 0) parts.push(`${days} ${this.$t('tiempoEsperaDias')}`);
+            if (hours > 0) parts.push(`${hours} ${this.$t('tiempoEsperaHoras')}`);
+            parts.push(`${minutes} ${this.$t('tiempoEsperaMinutos')}`);
+            return parts.join(' ');
+        },
         getStatusLabel(item) {
             if (!item.paid) return this.$t('estadoPendientePago');
             const status = item.review_status;
@@ -94,6 +121,11 @@ export default {
             if (status === 'rejected' || status === 'reject') return 'label label-danger';
             if (!item.paid) return 'label label-default';
             return 'label label-warning';
+        },
+        isApprovedWithImagesPending(item) {
+            const status = item.review_status;
+            const approved = status === 'approved' || status === 'approve';
+            return approved && item.has_images === true;
         },
         fetchList() {
             const api = new AdminApi();
@@ -114,3 +146,8 @@ export default {
     }
 };
 </script>
+<style scoped>
+.pending-images-pill {
+    margin-left: 6px;
+}
+</style>

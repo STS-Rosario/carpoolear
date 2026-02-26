@@ -271,6 +271,16 @@ const messages = {
         confirmarRemoverValidacionIdentidad:
             '¿Remover la validación de identidad de este usuario? Se borrarán todos los datos de validación.',
         validacionIdentidadRemovida: 'Validación de identidad removida.',
+        debesValidarIdentidadParaAccion:
+            'Debes validar tu identidad para realizar esta acción.',
+        validacionProntoBanner:
+            'Pronto tendrás que validar tu perfil para usar la app. Click acá para hacerlo. Tiempo restante: {countdown}',
+        validacionProntoBannerTiempoCumplido:
+            'Pronto tendrás que validar tu perfil para usar la app. Click acá para hacerlo. Tiempo cumplido.',
+        validacionProntoBannerDias: 'días',
+        validacionProntoBannerHs: 'hs',
+        validacionProntoBannerMin: 'min',
+        validacionProntoBannerS: 's',
         validadoEl: 'Validado el',
         validarConMercadoPago: 'Validar con Mercado Pago',
         validarConMercadoPagoDesc:
@@ -292,6 +302,7 @@ const messages = {
         estadoPendienteRevision: 'Pendiente de revisión',
         estadoAprobado: 'Aprobado',
         estadoRechazado: 'Rechazado',
+        faltaBorrarImagenes: 'Falta borrar imágenes',
         estado: 'Estado',
         enviadoEl: 'Enviado el',
         pagadoEl: 'Pagado el',
@@ -330,6 +341,10 @@ const messages = {
         revision: 'Revisión',
         fechaPago: 'Fecha de pago',
         fechaEnvio: 'Fecha de envío',
+        tiempoDeEspera: 'Tiempo de espera',
+        tiempoEsperaDias: 'días',
+        tiempoEsperaHoras: 'hs',
+        tiempoEsperaMinutos: 'min',
         pagado: 'Pagado',
         si: 'Sí',
         no: 'No',
@@ -364,6 +379,10 @@ const messages = {
         comentarioRequeridoParaAccion:
             'Debe escribir un comentario si quiere tomar esta acción',
         comentarioRevision: 'Comentario de revisión',
+        fechaAccionAdmin: 'Fecha de acción del admin',
+        fechaAprobacion: 'Fecha de aprobación',
+        fechaRechazo: 'Fecha de rechazo',
+        fechaMarcadoPendiente: 'Fecha de marcado pendiente',
         aprobar: 'Aprobar',
         marcarPendiente: 'Marcar como pendiente',
         accionMarcadoPendiente: 'Marcado como pendiente',
@@ -1202,6 +1221,16 @@ const messages = {
         confirmarRemoverValidacionIdentidad:
             '¿Remover la validación de identidad de este usuario? Se borrarán todos los datos de validación.',
         validacionIdentidadRemovida: 'Validación de identidad removida.',
+        debesValidarIdentidadParaAccion:
+            'Debes validar tu identidad para realizar esta acción.',
+        validacionProntoBanner:
+            'Pronto tendrás que validar tu perfil para usar la app. Click acá para hacerlo. Tiempo restante: {countdown}',
+        validacionProntoBannerTiempoCumplido:
+            'Pronto tendrás que validar tu perfil para usar la app. Click acá para hacerlo. Tiempo cumplido.',
+        validacionProntoBannerDias: 'días',
+        validacionProntoBannerHs: 'hs',
+        validacionProntoBannerMin: 'min',
+        validacionProntoBannerS: 's',
         validadoEl: 'Validado el',
         validarConMercadoPago: 'Validar con Mercado Pago',
         validarConMercadoPagoDesc:
@@ -1223,6 +1252,7 @@ const messages = {
         estadoPendienteRevision: 'Pendiente de revisión',
         estadoAprobado: 'Aprobado',
         estadoRechazado: 'Rechazado',
+        faltaBorrarImagenes: 'Falta borrar imágenes',
         estado: 'Estado',
         enviadoEl: 'Enviado el',
         pagadoEl: 'Pagado el',
@@ -1261,6 +1291,10 @@ const messages = {
         revision: 'Revisión',
         fechaPago: 'Fecha de pago',
         fechaEnvio: 'Fecha de envío',
+        tiempoDeEspera: 'Tiempo de espera',
+        tiempoEsperaDias: 'días',
+        tiempoEsperaHoras: 'hs',
+        tiempoEsperaMinutos: 'min',
         pagado: 'Pagado',
         si: 'Sí',
         no: 'No',
@@ -1288,6 +1322,10 @@ const messages = {
         comentarioRequeridoParaAccion:
             'Debe escribir un comentario si quiere tomar esta acción',
         comentarioRevision: 'Comentario de revisión',
+        fechaAccionAdmin: 'Fecha de acción del admin',
+        fechaAprobacion: 'Fecha de aprobación',
+        fechaRechazo: 'Fecha de rechazo',
+        fechaMarcadoPendiente: 'Fecha de marcado pendiente',
         aprobar: 'Aprobar',
         marcarPendiente: 'Marcar como pendiente',
         accionMarcadoPendiente: 'Marcado como pendiente',
@@ -1986,6 +2024,7 @@ const messages = {
         estadoPendienteRevision: 'Pending review',
         estadoAprobado: 'Approved',
         estadoRechazado: 'Rejected',
+        faltaBorrarImagenes: 'Images not deleted yet',
         estado: 'Status',
         enviadoEl: 'Submitted on',
         pagadoEl: 'Paid on',
@@ -2024,6 +2063,10 @@ const messages = {
         revision: 'Review',
         fechaPago: 'Payment date',
         fechaEnvio: 'Submission date',
+        tiempoDeEspera: 'Waiting time',
+        tiempoEsperaDias: 'd',
+        tiempoEsperaHoras: 'h',
+        tiempoEsperaMinutos: 'min',
         pagado: 'Paid',
         si: 'Yes',
         no: 'No',
@@ -2046,6 +2089,16 @@ const messages = {
         confirmarRemoverValidacionIdentidad:
             'Remove identity validation for this user? All validation data will be cleared.',
         validacionIdentidadRemovida: 'Identity validation removed.',
+        debesValidarIdentidadParaAccion:
+            'You must validate your identity to perform this action.',
+        validacionProntoBanner:
+            'You will soon need to validate your profile to use the app. Click here to do it. Time remaining: {countdown}',
+        validacionProntoBannerTiempoCumplido:
+            'You will soon need to validate your profile to use the app. Click here to do it. Time is up.',
+        validacionProntoBannerDias: 'days',
+        validacionProntoBannerHs: 'h',
+        validacionProntoBannerMin: 'min',
+        validacionProntoBannerS: 's',
         identidadNoValidada: 'Not validated',
         validarUsuario: 'Validate user',
         validadoPor: 'Validated by',
@@ -2060,6 +2113,10 @@ const messages = {
         comentarioObligatorio: 'Comment (required)',
         comentarioRevisar: 'Comment (required to reject or mark as pending)',
         comentarioRevision: 'Review comment',
+        fechaAccionAdmin: 'Admin action date',
+        fechaAprobacion: 'Approval date',
+        fechaRechazo: 'Rejection date',
+        fechaMarcadoPendiente: 'Marked pending date',
         comentarioRequeridoParaAccion:
             'You must write a comment to take this action.',
         aprobar: 'Approve',

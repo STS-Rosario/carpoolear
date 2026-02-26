@@ -28,6 +28,12 @@
                         <p><strong>{{ $t('fechaEnvio') }}:</strong> {{ item.submitted_at ? formatDate(item.submitted_at) : '-' }}</p>
                         <p><strong>{{ $t('pagado') }}:</strong> {{ item.paid ? $t('si') : $t('no') }}</p>
                         <p><strong>{{ $t('estado') }}:</strong> {{ getStatusLabel(item.review_status) }}</p>
+                        <p v-if="item.reviewed_at">
+                            <strong>{{ getActionDateLabel(item.review_status) }}:</strong> {{ formatDate(item.reviewed_at) }}
+                        </p>
+                        <p v-if="item.reviewed_by_name">
+                            <strong>{{ $t('revisadoPor') }}:</strong> {{ item.reviewed_by_name }}
+                        </p>
                         <p v-if="item.review_note && item.review_note.trim()" class="review-note-display">
                             <strong>{{ $t('comentarioRevision') }}:</strong> {{ item.review_note }}
                         </p>
@@ -169,6 +175,12 @@ export default {
             if (status === 'approved') return this.$t('estadoAprobado');
             if (status === 'rejected') return this.$t('estadoRechazado');
             return status || '-';
+        },
+        getActionDateLabel(reviewStatus) {
+            if (reviewStatus === 'approved' || reviewStatus === 'approve') return this.$t('fechaAprobacion');
+            if (reviewStatus === 'rejected' || reviewStatus === 'reject') return this.$t('fechaRechazo');
+            if (reviewStatus === 'pending') return this.$t('fechaMarcadoPendiente');
+            return this.$t('fechaAccionAdmin');
         },
         fetchItem() {
             const api = new AdminApi();
