@@ -273,6 +273,14 @@ const messages = {
         validacionIdentidadRemovida: 'Validación de identidad removida.',
         debesValidarIdentidadParaAccion:
             'Debes validar tu identidad para realizar esta acción.',
+        validacionProntoBanner:
+            'Pronto tendrás que validar tu perfil para usar la app. Click acá para hacerlo. Tiempo restante: {countdown}',
+        validacionProntoBannerTiempoCumplido:
+            'Pronto tendrás que validar tu perfil para usar la app. Click acá para hacerlo. Tiempo cumplido.',
+        validacionProntoBannerDias: 'días',
+        validacionProntoBannerHs: 'hs',
+        validacionProntoBannerMin: 'min',
+        validacionProntoBannerS: 's',
         validadoEl: 'Validado el',
         validarConMercadoPago: 'Validar con Mercado Pago',
         validarConMercadoPagoDesc:
@@ -1206,6 +1214,14 @@ const messages = {
         validacionIdentidadRemovida: 'Validación de identidad removida.',
         debesValidarIdentidadParaAccion:
             'Debes validar tu identidad para realizar esta acción.',
+        validacionProntoBanner:
+            'Pronto tendrás que validar tu perfil para usar la app. Click acá para hacerlo. Tiempo restante: {countdown}',
+        validacionProntoBannerTiempoCumplido:
+            'Pronto tendrás que validar tu perfil para usar la app. Click acá para hacerlo. Tiempo cumplido.',
+        validacionProntoBannerDias: 'días',
+        validacionProntoBannerHs: 'hs',
+        validacionProntoBannerMin: 'min',
+        validacionProntoBannerS: 's',
         validadoEl: 'Validado el',
         validarConMercadoPago: 'Validar con Mercado Pago',
         validarConMercadoPagoDesc:
@@ -2052,6 +2068,14 @@ const messages = {
         validacionIdentidadRemovida: 'Identity validation removed.',
         debesValidarIdentidadParaAccion:
             'You must validate your identity to perform this action.',
+        validacionProntoBanner:
+            'You will soon need to validate your profile to use the app. Click here to do it. Time remaining: {countdown}',
+        validacionProntoBannerTiempoCumplido:
+            'You will soon need to validate your profile to use the app. Click here to do it. Time is up.',
+        validacionProntoBannerDias: 'days',
+        validacionProntoBannerHs: 'h',
+        validacionProntoBannerMin: 'min',
+        validacionProntoBannerS: 's',
         identidadNoValidada: 'Not validated',
         validarUsuario: 'Validate user',
         validadoPor: 'Validated by',

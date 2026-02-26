@@ -115,6 +115,14 @@
                         {{ $t('editarPerfil') }}
                     </router-link>
                     <router-link
+                        v-if="identityValidationAvailable"
+                        class="btn btn-primary"
+                        tag="button"
+                        :to="{ name: 'identity_validation' }"
+                    >
+                        {{ $t('validarIdentidad') }}
+                    </router-link>
+                    <router-link
                         class="btn btn-primary"
                         tag="button"
                         :to="{ name: 'friends_setting' }"
@@ -211,6 +219,10 @@ export default {
                         (item) => item.user_id_from === this.user.id
                     ) >= 0
             );
+        },
+        identityValidationAvailable() {
+            const c = this.config;
+            return c && (c.identity_validation_mercado_pago_enabled === true || c.identity_validation_manual_enabled === true);
         },
         formattedNroDoc() {
             return formatId(this.profile.nro_doc, this.config.profile_id_format);
