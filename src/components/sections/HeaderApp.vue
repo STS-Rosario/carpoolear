@@ -1,5 +1,6 @@
 <template>
     <header class="header header-component">
+        <IdentityValidationCountdownBanner />
         <div class="actionbar actionbar-top visible-xs">
             <div class="actionbar_section actionbar_icon">
                 <span v-if="showLogo">
@@ -306,6 +307,7 @@ import { dropdown } from 'vue-strap';
 import router from '../../router';
 import bus from '../../services/bus-event.js';
 import modal from '../Modal';
+import IdentityValidationCountdownBanner from '../IdentityValidationCountdownBanner.vue';
 import { shouldHideDonationOnIOSCapacitor } from '../../services/capacitor.js';
 
 export default {
@@ -427,7 +429,8 @@ export default {
     },
     components: {
         dropdown,
-        modal
+        modal,
+        IdentityValidationCountdownBanner
     }
 };
 </script>
