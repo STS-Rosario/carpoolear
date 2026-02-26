@@ -58,6 +58,8 @@ const MOCK_USER = {
   nro_doc: '30123456',
   gender: 'male',
   mobile_phone: '3415551234',
+  positive_ratings: 10,
+  negative_ratings: 1,
   donations: [],
   monthly_donate: false,
   on_boarding_view: 1,
@@ -79,7 +81,7 @@ const MOCK_ADMIN_USER = {
 function makeMockTrip(id, overrides = {}) {
   return {
     id,
-    user: { id: id + 100, name: `Usuario ${id}`, image: null },
+    user: { id: id + 100, name: `Usuario ${id}`, image: null, positive_ratings: 5, negative_ratings: 0 },
     is_passenger: false,
     trip_date: '2026-04-15T14:00:00.000Z',
     from_town: 'Rosario, Santa Fe',
@@ -112,14 +114,14 @@ const MOCK_TRIPS = [
     from_town: 'Córdoba',
     to_town: 'Mendoza',
     trip_date: '2026-04-20T10:00:00.000Z',
-    user: { id: 202, name: 'María García', image: null },
+    user: { id: 202, name: 'María García', image: null, positive_ratings: 8, negative_ratings: 1 },
   }),
   makeMockTrip(3, {
     from_town: 'Santa Fe',
     to_town: 'Paraná',
     is_passenger: true,
     trip_date: '2026-04-22T08:00:00.000Z',
-    user: { id: 203, name: 'Carlos López', image: null },
+    user: { id: 203, name: 'Carlos López', image: null, positive_ratings: 3, negative_ratings: 0 },
   }),
 ];
 
@@ -145,7 +147,7 @@ const MOCK_DRIVER_TRIPS = [
 
 const MOCK_PASSENGER_TRIPS = [
   makeMockTrip(20, {
-    user: { id: 300, name: 'Ana Fernández', image: null },
+    user: { id: 300, name: 'Ana Fernández', image: null, positive_ratings: 12, negative_ratings: 2 },
     from_town: 'Córdoba',
     to_town: 'Rosario, Santa Fe',
     is_passenger: true,
@@ -215,7 +217,7 @@ const MOCK_NOTIFICATIONS = [
 const MOCK_PENDING_REQUESTS = [
   {
     id: 1,
-    user: { id: 201, name: 'Pasajero Pendiente', image: null },
+    user: { id: 201, name: 'Laura Martínez', image: null },
     trip_id: 10,
     request_state: 0,
     created_at: '2025-06-10T10:00:00.000Z',
@@ -265,11 +267,17 @@ const MOCK_MANUAL_VALIDATIONS = [
 
 const MOCK_MANUAL_VALIDATION_DETAIL = {
   id: 1,
-  user: { id: 70, name: 'Validation User', nro_doc: '30123456' },
-  status: 'pending',
-  front_image: null,
-  back_image: null,
-  selfie_image: null,
+  user_id: 70,
+  user_name: 'Validation User',
+  user_nro_doc: '30123456',
+  paid: true,
+  paid_at: '2026-02-09T00:00:00.000Z',
+  submitted_at: '2026-02-10T00:00:00.000Z',
+  review_status: 'pending',
+  has_images: true,
+  front_image: '/static/img/carpoolear_logo.png',
+  back_image: '/static/img/carpoolear_logo.png',
+  selfie_image: '/static/img/carpoolear_logo.png',
   created_at: '2026-02-10T00:00:00.000Z',
   review_note: null,
 };
@@ -286,10 +294,14 @@ const MOCK_MP_REJECTED = [
 
 const MOCK_MP_REJECTED_DETAIL = {
   id: 1,
-  user: { id: 80, name: 'MP Rejected User' },
+  user_id: 80,
+  user_name: 'MP Rejected User',
+  user_nro_doc: '87654321',
+  user_email: 'mprejected@test.com',
+  user_identity_validated: false,
   reject_reason: 'Documento no coincide',
   mp_payload: JSON.stringify({ status: 'rejected', reason: 'document_mismatch' }),
-  status: 'pending',
+  review_status: 'pending',
   review_note: null,
   created_at: '2026-02-12T00:00:00.000Z',
 };
@@ -324,36 +336,33 @@ const MOCK_TRANSACTIONS = [
 ];
 
 const MOCK_CHART_TRIPS = [
-  { key: '2025-07', cantidad: 120, asientos_ofrecidos_total: 480 },
-  { key: '2025-08', cantidad: 145, asientos_ofrecidos_total: 580 },
-  { key: '2025-09', cantidad: 160, asientos_ofrecidos_total: 640 },
-  { key: '2025-10', cantidad: 135, asientos_ofrecidos_total: 540 },
-  { key: '2025-11', cantidad: 170, asientos_ofrecidos_total: 680 },
-  { key: '2025-12', cantidad: 190, asientos_ofrecidos_total: 760 },
-  { key: '2026-01', cantidad: 200, asientos_ofrecidos_total: 800 },
-  { key: '2026-02', cantidad: 175, asientos_ofrecidos_total: 700 },
+  { key: '2025-01', cantidad: 120, asientos_ofrecidos_total: 480 },
+  { key: '2025-02', cantidad: 145, asientos_ofrecidos_total: 580 },
+  { key: '2025-03', cantidad: 160, asientos_ofrecidos_total: 640 },
+  { key: '2025-04', cantidad: 135, asientos_ofrecidos_total: 540 },
+  { key: '2025-05', cantidad: 170, asientos_ofrecidos_total: 680 },
+  { key: '2025-06', cantidad: 190, asientos_ofrecidos_total: 760 },
+  { key: '2025-07', cantidad: 200, asientos_ofrecidos_total: 800 },
 ];
 
 const MOCK_CHART_SEATS = [
-  { key: '2025-07', state: 1, cantidad: 350 },
-  { key: '2025-08', state: 1, cantidad: 420 },
-  { key: '2025-09', state: 1, cantidad: 470 },
-  { key: '2025-10', state: 1, cantidad: 390 },
-  { key: '2025-11', state: 1, cantidad: 510 },
-  { key: '2025-12', state: 1, cantidad: 580 },
-  { key: '2026-01', state: 1, cantidad: 620 },
-  { key: '2026-02', state: 1, cantidad: 530 },
+  { key: '2025-01', state: 1, cantidad: 350 },
+  { key: '2025-02', state: 1, cantidad: 420 },
+  { key: '2025-03', state: 1, cantidad: 470 },
+  { key: '2025-04', state: 1, cantidad: 390 },
+  { key: '2025-05', state: 1, cantidad: 510 },
+  { key: '2025-06', state: 1, cantidad: 580 },
+  { key: '2025-07', state: 1, cantidad: 620 },
 ];
 
 const MOCK_CHART_USERS = [
-  { key: '2025-07', cantidad: 45 },
-  { key: '2025-08', cantidad: 62 },
-  { key: '2025-09', cantidad: 55 },
-  { key: '2025-10', cantidad: 70 },
-  { key: '2025-11', cantidad: 48 },
-  { key: '2025-12', cantidad: 80 },
-  { key: '2026-01', cantidad: 65 },
-  { key: '2026-02', cantidad: 58 },
+  { key: '2025-01', cantidad: 45 },
+  { key: '2025-02', cantidad: 62 },
+  { key: '2025-03', cantidad: 55 },
+  { key: '2025-04', cantidad: 70 },
+  { key: '2025-05', cantidad: 48 },
+  { key: '2025-06', cantidad: 80 },
+  { key: '2025-07', cantidad: 65 },
 ];
 
 const MOCK_PROFILE_USER = {
