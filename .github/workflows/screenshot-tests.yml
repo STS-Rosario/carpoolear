@@ -38,10 +38,7 @@ jobs:
             sleep 2
           done
 
-      - name: Generate reference screenshots
-        run: npx playwright test e2e/screenshots.spec.js --update-snapshots
-
-      - name: Verify screenshots are stable
+      - name: Run screenshot tests
         run: npx playwright test e2e/screenshots.spec.js
 
       - uses: actions/upload-artifact@v4

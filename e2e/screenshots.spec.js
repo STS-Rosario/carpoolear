@@ -386,8 +386,17 @@ function paginated(data, page = 1, totalPages = 1) {
 // ============================================================
 
 /**
+ * Freeze the browser clock so time-dependent rendering (fromNow, calendar,
+ * "Última conexión", etc.) is always deterministic.
+ */
+async function freezeClock(page) {
+  await page.clock.setFixedTime(new Date('2025-07-15T12:00:00Z'));
+}
+
+/**
  * Register a catch-all for any unhandled /api/ requests.
  * Registered FIRST so specific mocks (registered later) take priority.
+ * Also blocks external requests (map tiles, fonts) to prevent non-determinism.
  */
 async function setupCatchAllMock(page) {
   await page.route(/\/api\//, (route) => {
@@ -396,6 +405,11 @@ async function setupCatchAllMock(page) {
       contentType: 'application/json',
       body: JSON.stringify({}),
     });
+  });
+
+  // Block map tile and external requests to prevent non-deterministic rendering
+  await page.route(/tile\.openstreetmap|unpkg\.com\/leaflet|\.tile\./, (route) => {
+    route.abort();
   });
 }
 
@@ -571,6 +585,7 @@ test.describe('Screenshot tests', () => {
   // ----------------------------------------------------------
   test.describe('Guest views', () => {
     test.beforeEach(async ({ page }) => {
+      await freezeClock(page);
       await setupCatchAllMock(page);
       await setupCommonMocks(page);
     });
@@ -605,6 +620,7 @@ test.describe('Screenshot tests', () => {
   // ----------------------------------------------------------
   test.describe('Public views', () => {
     test.beforeEach(async ({ page }) => {
+      await freezeClock(page);
       await setupCatchAllMock(page);
       await setupCommonMocks(page);
     });
@@ -643,6 +659,7 @@ test.describe('Screenshot tests', () => {
   // ----------------------------------------------------------
   test.describe('Authenticated views', () => {
     test.beforeEach(async ({ page }) => {
+      await freezeClock(page);
       await setupCatchAllMock(page);
       await setupCommonMocks(page);
       await setupAuthState(page);
@@ -878,6 +895,7 @@ test.describe('Screenshot tests', () => {
   // ----------------------------------------------------------
   test.describe('Admin views', () => {
     test.beforeEach(async ({ page }) => {
+      await freezeClock(page);
       await setupCatchAllMock(page);
       await setupCommonMocks(page);
       await setupAuthState(page, MOCK_ADMIN_USER);
