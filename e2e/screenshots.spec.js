@@ -159,8 +159,8 @@ const MOCK_CONVERSATIONS = [
     title: 'María García',
     image: null,
     other_user_identity_validated_at: null,
-    updated_at: '2026-02-20T10:30:00.000Z',
-    last_message: { id: 10, text: 'Hola, ¿a qué hora salís?', created_at: '2026-02-20T10:30:00.000Z' },
+    updated_at: '2025-06-10T10:30:00.000Z',
+    last_message: { id: 10, text: 'Hola, ¿a qué hora salís?', created_at: '2025-06-10T10:30:00.000Z' },
     unread: true,
     users: [
       { id: 1, name: 'Juan Pérez' },
@@ -172,8 +172,8 @@ const MOCK_CONVERSATIONS = [
     title: 'Carlos López',
     image: null,
     other_user_identity_validated_at: '2025-01-01T00:00:00.000Z',
-    updated_at: '2026-02-19T15:00:00.000Z',
-    last_message: { id: 20, text: 'Dale, nos vemos!', created_at: '2026-02-19T15:00:00.000Z' },
+    updated_at: '2025-06-08T15:00:00.000Z',
+    last_message: { id: 20, text: 'Dale, nos vemos!', created_at: '2025-06-08T15:00:00.000Z' },
     unread: false,
     users: [
       { id: 1, name: 'Juan Pérez' },
@@ -183,30 +183,30 @@ const MOCK_CONVERSATIONS = [
 ];
 
 const MOCK_MESSAGES = [
-  { id: 1, conversation_id: 1, text: 'Hola! Tenés lugar?', created_at: '2026-02-20T10:00:00.000Z', user: { id: 2, name: 'María García' } },
-  { id: 2, conversation_id: 1, text: 'Sí, hay 2 lugares disponibles', created_at: '2026-02-20T10:15:00.000Z', user: { id: 1, name: 'Juan Pérez' } },
-  { id: 3, conversation_id: 1, text: 'Hola, ¿a qué hora salís?', created_at: '2026-02-20T10:30:00.000Z', user: { id: 2, name: 'María García' } },
+  { id: 1, conversation_id: 1, text: 'Hola! Tenés lugar?', created_at: '2025-06-10T10:00:00.000Z', user: { id: 2, name: 'María García' } },
+  { id: 2, conversation_id: 1, text: 'Sí, hay 2 lugares disponibles', created_at: '2025-06-10T10:15:00.000Z', user: { id: 1, name: 'Juan Pérez' } },
+  { id: 3, conversation_id: 1, text: 'Hola, ¿a qué hora salís?', created_at: '2025-06-10T10:30:00.000Z', user: { id: 2, name: 'María García' } },
 ];
 
 const MOCK_NOTIFICATIONS = [
   {
     id: 1,
     text: 'María García solicitó un asiento en tu viaje',
-    created_at: '2026-02-20T10:00:00.000Z',
+    created_at: '2025-06-10T10:00:00.000Z',
     readed: false,
     extras: { type: 'passenger_request', trip_id: 1 },
   },
   {
     id: 2,
     text: 'Tu viaje a Buenos Aires es mañana',
-    created_at: '2026-02-19T08:00:00.000Z',
+    created_at: '2025-06-09T08:00:00.000Z',
     readed: true,
     extras: { type: 'trip_reminder', trip_id: 1 },
   },
   {
     id: 3,
     text: 'Carlos López aceptó tu solicitud de asiento',
-    created_at: '2026-02-18T14:30:00.000Z',
+    created_at: '2025-06-08T14:30:00.000Z',
     readed: true,
     extras: { type: 'request_accepted', trip_id: 2 },
   },
@@ -218,7 +218,7 @@ const MOCK_PENDING_REQUESTS = [
     user: { id: 201, name: 'Pasajero Pendiente', image: null },
     trip_id: 10,
     request_state: 0,
-    created_at: '2026-02-20T10:00:00.000Z',
+    created_at: '2025-06-10T10:00:00.000Z',
   },
 ];
 
