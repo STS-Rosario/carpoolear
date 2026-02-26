@@ -11,7 +11,6 @@
         
         <onBoarding key="1" v-if="onBoardingVisibility"></onBoarding>
         <headerApp></headerApp>
-        <IdentityValidationCountdownBanner />
         <main id="main">
             <div class="view-container clearfix">
                 <router-view></router-view>
@@ -30,7 +29,6 @@ import { mapGetters, mapActions } from 'vuex';
 import footerApp from './components/sections/FooterApp.vue';
 import headerApp from './components/sections/HeaderApp.vue';
 import onBoarding from './components/sections/OnBoarding.vue';
-import IdentityValidationCountdownBanner from './components/IdentityValidationCountdownBanner.vue';
 
 export default {
     name: 'app',
@@ -119,8 +117,7 @@ export default {
     components: {
         headerApp,
         footerApp,
-        onBoarding,
-        IdentityValidationCountdownBanner
+        onBoarding
     }
 };
 </script>

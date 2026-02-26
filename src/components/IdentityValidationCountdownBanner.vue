@@ -84,10 +84,6 @@ export default {
 
 <style scoped>
 .identity-validation-countdown-banner {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
     width: 100%;
     padding: 10px 14px;
     background: #c00;
@@ -97,7 +93,6 @@ export default {
     font-size: 14px;
     line-height: 1.4;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-    z-index: 10000;
 }
 .identity-validation-countdown-banner:hover {
     background: #a00;
