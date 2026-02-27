@@ -1,5 +1,5 @@
 export default {
-    bind: function (el, binding, vnode) {
+    beforeMount: function (el, binding) {
         el.event = function (event) {
             if (
                 !(
@@ -7,12 +7,12 @@ export default {
                     el.contains(event.target)
                 )
             ) {
-                vnode.context[binding.expression](event, el);
+                binding.value(event, el);
             }
         };
         document.body.addEventListener('click', el.event);
     },
-    unbind: function (el) {
+    unmounted: function (el) {
         document.body.removeEventListener('click', el.event);
     }
 };
