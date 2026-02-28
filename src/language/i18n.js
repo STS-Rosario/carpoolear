@@ -907,7 +907,7 @@ const messages = {
         yaCreasteViajes:
             'Ya creaste {tripsCreated} viajes, por lo que tenés que pagar el Sellado de Viaje.',
         teQuedaViajesGratis:
-            'Te queda{remaining} viaje{remaining} gratis, luego tendrás que pagar el Sellado de Viaje.',
+            'Te quedan {remaining} viajes gratis, luego tendrás que pagar el Sellado de Viaje.',
         pendingPaymentConfirmarTuAsiento: 'Confirmá tu asiento',
         pendingPaymentTeHanAceptadoEnElViajeHacia:
             'Te han aceptado en el viaje hacia',
