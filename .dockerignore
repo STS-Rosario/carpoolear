@@ -1,5 +1,15 @@
+.git
 node_modules
 dist
+www
 platforms
 plugins
-.git
+test-results
+playwright-report
+playwright/.cache
+npm-debug.log
+.DS_Store
+.env
+android
+ios
+e2e

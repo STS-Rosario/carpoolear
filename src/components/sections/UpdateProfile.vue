@@ -488,14 +488,14 @@
             @close="toggleModalDeleteAccount"
             :body="'Body'"
         >
-            <h3 slot="header">
+            <template #header><h3>
                 <span>{{ $t('seguroEliminarCuenta') }}</span>
                 <i
                     v-on:click="toggleModalDeleteAccount"
                     class="fa fa-times float-right-close"
                 ></i>
-            </h3>
-            <div slot="body">
+            </h3></template>
+            <template #body><div>
                 <div class="text-left color-black" v-if="!showNegativeRatingsInModal">
                     <p>{{ $t('eliminacionCuentaRecuperarCuenta') }}</p>
                     <div class="text-center" style="margin-top: 1em;">
@@ -535,7 +535,7 @@
                         </button>
                     </div>
                 </div>
-            </div>
+            </div></template>
         </modal>
 
         <modal
@@ -543,14 +543,14 @@
             v-if="showMesaAyudaModal"
             @close="showMesaAyudaModal = false"
         >
-            <h3 slot="header">
+            <template #header><h3>
                 <span>{{ $t('mesaAyuda') }}</span>
                 <i
                     v-on:click="showMesaAyudaModal = false"
                     class="fa fa-times float-right-close"
                 ></i>
-            </h3>
-            <div slot="body">
+            </h3></template>
+            <template #body><div>
                 <div class="text-left color-black login-modal">
                     <p>
                         {{ $t('mesaAyudaFuncionaDesde') }}
@@ -562,7 +562,7 @@
                         <a href="https://facebook.com/carpoolear">Facebook</a>.
                     </p>
                 </div>
-            </div>
+            </div></template>
         </modal>
 
         <modal
@@ -570,14 +570,14 @@
             v-if="showBannedDniModal"
             @close="toggleBannedDniModal"
         >
-            <h3 slot="header">
+            <template #header><h3>
                 <span>{{ $t('errorAlGuardar') }}</span>
                 <i
                     v-on:click="toggleBannedDniModal"
                     class="fa fa-times float-right-close"
                 ></i>
-            </h3>
-            <div slot="body">
+            </h3></template>
+            <template #body><div>
                 <div class="text-left color-black login-modal">
                     <p>
                         {{ $t('errorAlGuardarContactarMesaAyuda') }}
@@ -595,7 +595,7 @@
                         <a href="https://facebook.com/carpoolear">Facebook</a>.
                     </p>
                 </div>
-            </div>
+            </div></template>
         </modal>
 
         <modal
@@ -603,14 +603,14 @@
             v-if="showDatosEnUsoModal"
             @close="toggleDatosEnUsoModal"
         >
-            <h3 slot="header">
+            <template #header><h3>
                 <span>{{ $t('datosEnUso') }}</span>
                 <i
                     v-on:click="toggleDatosEnUsoModal"
                     class="fa fa-times float-right-close"
                 ></i>
-            </h3>
-            <div slot="body">
+            </h3></template>
+            <template #body><div>
                 <div class="text-left color-black login-modal">
                     <p>
                         {{ $t('datosEnUsoDescripcion') }}
@@ -628,7 +628,7 @@
                         <a href="https://facebook.com/carpoolear">Facebook</a>.
                     </p>
                 </div>
-            </div>
+            </div></template>
         </modal>
     </div>
 </template>

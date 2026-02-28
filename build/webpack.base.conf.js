@@ -6,7 +6,7 @@ const webpack = require('webpack');
 const TARGET = process.env.TARGET_APP || 'default';
 const serveMode = process.env.SERVE || false;
 const devMode = process.env.NODE_ENV !== 'production';
-const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const { VueLoaderPlugin } = require('vue-loader');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 processEnv = process.env.NODE_ENV && process.env.NODE_ENV === 'production' ? require(utils.prodEnvPath()) : require(utils.devEnvPath());
@@ -46,7 +46,7 @@ module.exports = {
     // fallback: [path.join(__dirname, '../node_modules')],
     alias: {
       '@': path.resolve(__dirname, './'),
-      'vue$': 'vue/dist/vue.esm.js',
+      'vue': '@vue/compat',
       'src': path.resolve(__dirname, '../src'),
       'assets': path.resolve(__dirname, '../src/assets'),
       'components': path.resolve(__dirname, '../src/components'),
@@ -72,6 +72,13 @@ module.exports = {
       {
         test: /\.vue$/,
         loader: 'vue-loader',
+        options: {
+          compilerOptions: {
+            compatConfig: {
+              MODE: 2
+            }
+          }
+        }
       },
       {
         test: /\.js$/,

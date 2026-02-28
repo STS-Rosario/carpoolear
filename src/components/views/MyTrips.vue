@@ -2,10 +2,10 @@
     <div class="trips container">
         <div class="col-xs-24">
             <Loading :data="pendingPaymentRequests" :hideOnEmpty="true">
-                <h2 slot="title">
+                <template #title><h2>
                     <strong>{{ $t('pagoPendiente') }}</strong>
                     {{ $t('pagoPendienteParaConfirmar') }}
-                </h2>
+                </h2></template>
                 <div class="request-list">
                     <PendingPaymentRequest
                         v-for="r in pendingPaymentRequests"
@@ -13,21 +13,21 @@
                         :request="r"
                     ></PendingPaymentRequest>
                 </div>
-                <p slot="loading" class="alert alert-info" role="alert">
+                <template #loading><p class="alert alert-info" role="alert">
                     <img
                         src="https://carpoolear.com.ar/static/img/loader.gif"
                         alt=""
                         class="ajax-loader"
                     />
                     {{ $t('cargando') }}
-                </p>
+                </p></template>
             </Loading>
         </div>
         <div class="col-xs-24">
             <Loading :data="pendingRequest" :hideOnEmpty="true">
-                <h2 slot="title">
+                <template #title><h2>
                     <strong>{{ $t('pendientesDeContestar') }}</strong>
-                </h2>
+                </h2></template>
                 <div class="request-list">
                     <PendingRequest
                         v-for="r in pendingRequest"
@@ -36,17 +36,17 @@
                         :trip="findTrip(r.trip_id)"
                     ></PendingRequest>
                 </div>
-                <p slot="no-data" class="alert alert-warning" role="alert">
+                <template #no-data><p class="alert alert-warning" role="alert">
                     {{ $t('noHayPendientesDeContestar') }}
-                </p>
-                <p slot="loading" class="alert alert-info" role="alert">
+                </p></template>
+                <template #loading><p class="alert alert-info" role="alert">
                     <img
                         src="https://carpoolear.com.ar/static/img/loader.gif"
                         alt=""
                         class="ajax-loader"
                     />
                     {{ $t('cargando') }}
-                </p>
+                </p></template>
             </Loading>
         </div>
 
@@ -59,14 +59,14 @@
                 :body="'Body'"
                 :hide-footer="true"
             >
-                <h3 slot="header">
+                <template #header><h3>
                     <span>{{ $t('carpoodatos') }}</span>
                     <i
                         v-on:click="toPendingRates"
                         class="fa fa-times float-right-close"
                     ></i>
-                </h3>
-                <div slot="body">
+                </h3></template>
+                <template #body><div>
                     <div class="text-left carpoodatos">
                         <p>
                             <b>{{ $t('carpoodatosImportanteCalificar').split('.')[0] }}</b>
@@ -115,7 +115,7 @@
                             {{ $t('carpoodatosEntiendo') }}
                         </button>
                     </div>
-                </div>
+                </div></template>
             </modal>
             <modal
                 :name="'modal'"
@@ -124,7 +124,7 @@
                 :title="'Test'"
                 :body="'Body'"
             >
-                <h3 slot="header">
+                <template #header><h3>
                     <span>{{ $t('donaACarpoolear') }}</span>
                     <br class="hidden-sm hidden-md hidden-lg" />
                     <small>{{ $t('proyectoDe') }}</small>
@@ -133,8 +133,8 @@
                         alt="STS Rosario"
                         src="https://carpoolear.com.ar/img/logo_sts_nuevo_color.png"
                     />
-                </h3>
-                <div slot="body" class="donation">
+                </h3></template>
+                <template #body><div class="donation">
                     <div class="text-center donation-text">
                         <p>
                             {{ $t('buenisimoCompartirViaje') }}
@@ -211,12 +211,12 @@
                             {{ $t('conoceMasDonar') }}
                         </a>
                     </div>
-                </div>
+                </div></template>
             </modal>
             <Loading :data="pendingRates" :hideOnEmpty="true">
-                <h2 slot="title">
+                <template #title><h2>
                     {{ $t('calificacionesPendientes') }}
-                </h2>
+                </h2></template>
                 <div class="request-list">
                     <RatePending
                         v-for="rate in pendingRates"
@@ -225,17 +225,17 @@
                         @rated="onUserRated"
                     />
                 </div>
-                <p slot="no-data" class="alert alert-warning" role="alert">
+                <template #no-data><p class="alert alert-warning" role="alert">
                     {{ $t('noHayCalificacionesPendientes') }}
-                </p>
-                <p slot="loading" class="alert alert-info" role="alert">
+                </p></template>
+                <template #loading><p class="alert alert-info" role="alert">
                     <img
                         src="https://carpoolear.com.ar/static/img/loader.gif"
                         alt=""
                         class="ajax-loader"
                     />
                     {{ $t('cargandoCalificaciones') }}
-                </p>
+                </p></template>
             </Loading>
         </div>
 
@@ -252,23 +252,23 @@
                         :enableChangeSeats="true"
                     ></Trip>
                 </div>
-                <p slot="no-data" class="alert alert-warning" role="alert">
+                <template #no-data><p class="alert alert-warning" role="alert">
                     {{ $t('noTenesViajesCreados') }}
-                </p>
-                <p slot="loading" class="alert alert-info" role="alert">
+                </p></template>
+                <template #loading><p class="alert alert-info" role="alert">
                     <img
                         src="https://carpoolear.com.ar/static/img/loader.gif"
                         alt=""
                         class="ajax-loader"
                     />
                     {{ $t('cargandoViajes') }}
-                </p>
+                </p></template>
             </Loading>
         </div>
 
         <div class="col-xs-24">
             <Loading :data="passengerTrips" :hideOnEmpty="true">
-                <h2 slot="title" v-html="$t('viajesEstoySubido')"></h2>
+                <template #title><h2 v-html="$t('viajesEstoySubido')"></h2></template>
                 <div class="trips-list">
                     <Trip
                         v-for="trip in passengerTrips"
@@ -277,17 +277,17 @@
                         :user="user"
                     ></Trip>
                 </div>
-                <p slot="no-data" class="alert alert-warning" role="alert">
+                <template #no-data><p class="alert alert-warning" role="alert">
                     {{ $t('noEstasSubidoViaje') }}
-                </p>
-                <p slot="loading" class="alert alert-info" role="alert">
+                </p></template>
+                <template #loading><p class="alert alert-info" role="alert">
                     <img
                         src="https://carpoolear.com.ar/static/img/loader.gif"
                         alt=""
                         class="ajax-loader"
                     />
                     {{ $t('cargandoViajes') }}
-                </p>
+                </p></template>
             </Loading>
         </div>
         <div
@@ -296,7 +296,7 @@
             id="suscriptions"
         >
             <Loading :data="subscriptions" :hideOnEmpty="true">
-                <h2 slot="title">{{ $t('suscripcionesViajes') }}</h2>
+                <template #title><h2>{{ $t('suscripcionesViajes') }}</h2></template>
                 <div class="trips-list row">
                     <div
                         class="col-xs-24 col-md-12"
@@ -310,17 +310,17 @@
                         ></subscriptionItem>
                     </div>
                 </div>
-                <p slot="no-data" class="alert alert-warning" role="alert">
+                <template #no-data><p class="alert alert-warning" role="alert">
                     {{ $t('noTienesSuscripcion') }}
-                </p>
-                <p slot="loading" class="alert alert-info" role="alert">
+                </p></template>
+                <template #loading><p class="alert alert-info" role="alert">
                     <img
                         src="https://carpoolear.com.ar/static/img/loader.gif"
                         alt=""
                         class="ajax-loader"
                     />
                     {{ $t('cargandoSuscripciones') }}
-                </p>
+                </p></template>
             </Loading>
         </div>
 
@@ -335,23 +335,23 @@
                         :user="user"
                     ></Trip>
                 </div>
-                <p slot="no-data" class="alert alert-warning" role="alert">
+                <template #no-data><p class="alert alert-warning" role="alert">
                     {{ $t('noHasRealizadoViaje') }}
-                </p>
-                <p slot="loading" class="alert alert-info" role="alert">
+                </p></template>
+                <template #loading><p class="alert alert-info" role="alert">
                     <img
                         src="https://carpoolear.com.ar/static/img/loader.gif"
                         alt=""
                         class="ajax-loader"
                     />
                     {{ $t('cargandoViajes') }}
-                </p>
+                </p></template>
             </Loading>
         </div>
 
         <div class="col-xs-24" v-if="oldPassengerTrips">
             <Loading :data="oldPassengerTrips" :hideOnEmpty="true">
-                <h2 slot="title" v-html="$t('viajesMeSubi')"></h2>
+                <template #title><h2 v-html="$t('viajesMeSubi')"></h2></template>
                 <div class="trips-list">
                     <Trip
                         v-for="trip in oldPassengerTrips"
@@ -360,17 +360,17 @@
                         :user="user"
                     ></Trip>
                 </div>
-                <p slot="no-data" class="alert alert-warning" role="alert">
+                <template #no-data><p class="alert alert-warning" role="alert">
                     {{ $t('noTeHasSubidoViaje') }}
-                </p>
-                <p slot="loading" class="alert alert-info" role="alert">
+                </p></template>
+                <template #loading><p class="alert alert-info" role="alert">
                     <img
                         src="https://carpoolear.com.ar/static/img/loader.gif"
                         alt=""
                         class="ajax-loader"
                     />
                     {{ $t('cargandoViajes') }}
-                </p>
+                </p></template>
             </Loading>
         </div>
     </div>
