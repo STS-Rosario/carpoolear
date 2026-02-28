@@ -167,7 +167,7 @@ export default [
                 auth(to, from, next);
                 return;
             }
-            requireIdentityValidation(to, from, ()=> {
+            requireIdentityValidation(to, from, () => {
                 profileComplete(to, from, next);
             });
         },
