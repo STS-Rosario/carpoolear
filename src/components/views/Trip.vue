@@ -424,6 +424,7 @@ export default {
                 '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
             showModalRequestSeat: false,
             showModalPricing: false,
+            paymentBrickRendering: false,
             acceptPassengerValue: 0,
             acceptPricing: 0,
             calculatedHeight: {}
@@ -809,29 +810,27 @@ export default {
             if (typeof MercadoPago === 'undefined') return;
             if (!this.trip || !this.trip.payment_id) return;
             if (this.trip.state !== 'awaiting_payment' && this.trip.state !== 'payment_failed') return;
+            if (this.paymentBrickRendering) return;
+            this.paymentBrickRendering = true;
 
-            // Check if the button is already rendered
+            // Get or create the container
             var container = document.getElementById('walletBrick_container');
-            if (container && container.children.length > 0) return;
-
-            // Create container if it doesn't exist
             if (!container) {
                 var banner = document.querySelector('.alert-sellado-viaje');
-                if (!banner) return;
+                if (!banner) { this.paymentBrickRendering = false; return; }
                 container = document.createElement('div');
                 container.id = 'walletBrick_container';
                 banner.appendChild(container);
             }
+            container.innerHTML = '';
 
             // Create a fresh MP instance and render the payment button
             var mp = new MercadoPago(process.env.MERCADO_PAGO_PUBLIC_KEY);
             var preferenceId = this.trip.payment_id;
-            var self = this;
             mp.bricks().create("wallet", "walletBrick_container", {
                 initialization: { preferenceId: preferenceId }
             }).catch(function (err) {
                 console.error('[MP] brick creation error, retrying...', err);
-                // Retry once after a delay
                 setTimeout(function () {
                     var c = document.getElementById('walletBrick_container');
                     if (c && c.children.length > 0) return;
