@@ -426,8 +426,7 @@ export default {
             showModalPricing: false,
             acceptPassengerValue: 0,
             acceptPricing: 0,
-            calculatedHeight: {},
-            mp: null, // Mercado Pago instance
+            calculatedHeight: {}
         };
     },
 
@@ -524,6 +523,7 @@ export default {
                     this.points = trip.points;
                     var self = this;
                     this.calculateHeight();
+                    this.$nextTick(function () { self.enablePayment(); });
                     setTimeout(() => {
                         self.renderMap();
                     }, 500);
@@ -806,35 +806,44 @@ export default {
             this.showModalPricing = false;
         },
         enablePayment() {
-            // only enable payment if the trip is awaiting payment
-            if (!this.trip.payment_id || this.trip.state !== 'awaiting_payment') {
-                return;
-            }
+            if (typeof MercadoPago === 'undefined') return;
+            if (!this.trip || !this.trip.payment_id) return;
+            if (this.trip.state !== 'awaiting_payment' && this.trip.state !== 'payment_failed') return;
 
-            // Check if the button is already rendered by checking if container has children
-            const container = document.getElementById('walletBrick_container');
-            if (container && container.children.length > 0) {
-                return;
-            }
+            // Check if the button is already rendered
+            var container = document.getElementById('walletBrick_container');
+            if (container && container.children.length > 0) return;
 
-            // Create the payment button
-            const bricksBuilder = this.mp.bricks();
-            const renderWalletBrick = async (bricksBuilder) => {
-                await bricksBuilder.create("wallet", "walletBrick_container", {
-                    initialization: {
-                        preferenceId: this.trip.payment_id
-                    }
-                });
-            };
-            // Create container for the payment button if it doesn't exist
+            // Create container if it doesn't exist
             if (!container) {
-                const newContainer = document.createElement('div');
-                newContainer.id = 'walletBrick_container';
-                document.querySelector('.alert-sellado-viaje').appendChild(newContainer);
+                var banner = document.querySelector('.alert-sellado-viaje');
+                if (!banner) return;
+                container = document.createElement('div');
+                container.id = 'walletBrick_container';
+                banner.appendChild(container);
             }
 
-            // Render the payment button
-            renderWalletBrick(bricksBuilder);
+            // Create a fresh MP instance and render the payment button
+            var mp = new MercadoPago(process.env.MERCADO_PAGO_PUBLIC_KEY);
+            var preferenceId = this.trip.payment_id;
+            var self = this;
+            mp.bricks().create("wallet", "walletBrick_container", {
+                initialization: { preferenceId: preferenceId }
+            }).catch(function (err) {
+                console.error('[MP] brick creation error, retrying...', err);
+                // Retry once after a delay
+                setTimeout(function () {
+                    var c = document.getElementById('walletBrick_container');
+                    if (c && c.children.length > 0) return;
+                    if (c) c.innerHTML = '';
+                    var mp2 = new MercadoPago(process.env.MERCADO_PAGO_PUBLIC_KEY);
+                    mp2.bricks().create("wallet", "walletBrick_container", {
+                        initialization: { preferenceId: preferenceId }
+                    }).catch(function (err2) {
+                        console.error('[MP] brick creation retry failed:', err2);
+                    });
+                }, 2000);
+            });
         }
     },
 
@@ -846,20 +855,19 @@ export default {
             this.calculateHeight();
         });
 
-        // Initialize Mercado Pago SDK
-        const script = document.createElement('script');
-        script.src = 'https://sdk.mercadopago.com/js/v2';
-        script.onload = () => {
-            this.mp = new MercadoPago(process.env.MERCADO_PAGO_PUBLIC_KEY);
-            // After SDK is loaded, enable payment if needed
-            if (this.trip && this.trip.payment_id && (this.trip.state === 'awaiting_payment' || this.trip.state === 'payment_failed')) {
-                this.enablePayment();
-            }
-        };
-        document.body.appendChild(script);
+        // Load Mercado Pago SDK if not already loaded
+        if (typeof MercadoPago === 'undefined') {
+            var self = this;
+            var script = document.createElement('script');
+            script.src = 'https://sdk.mercadopago.com/js/v2';
+            script.onload = function () {
+                self.$nextTick(function () { self.enablePayment(); });
+            };
+            document.body.appendChild(script);
+        }
     },
 
-    beforeDestroy() {
+    beforeUnmount() {
         bus.off('back-click', this.onBackClick);
         bus.off('calculate-height', this.calculateHeight);
     },
@@ -870,6 +878,13 @@ export default {
         },
         resolutionWidth: function () {
             this.calculateHeight();
+        },
+        trip: {
+            deep: true,
+            handler: function () {
+                var self = this;
+                this.$nextTick(function () { self.enablePayment(); });
+            }
         }
     },
 
