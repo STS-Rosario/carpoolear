@@ -818,9 +818,21 @@ export default {
             if (this.user && this.user.nro_doc) {
                 this.user.nro_doc = cleanId(this.user.nro_doc, this.config.profile_id_format);
             }
-            console.log('this.user', this.user);
-            var data = Object.assign({}, this.user);
-            console.log('data.user', data);
+            // Only send properties the backend allows for profile edit (name/email are read-only)
+            const allowedProfileUpdateKeys = [
+                'birthday', 'gender', 'description', 'mobile_phone', 'emails_notifications',
+                'nro_doc', 'data_visibility',
+                'do_not_alert_request_seat', 'do_not_alert_accept_passenger',
+                'do_not_alert_pending_rates', 'do_not_alert_pricing',
+                'autoaccept_requests', 'unaswered_messages_limit',
+                'account_number', 'account_type', 'account_bank'
+            ];
+            const data = {};
+            allowedProfileUpdateKeys.forEach((key) => {
+                if (this.user.hasOwnProperty(key) && this.user[key] !== undefined) {
+                    data[key] = this.user[key];
+                }
+            });
             if (this.pass.password) {
                 if (this.pass.password !== this.pass.password_confirmation) {
                     this.error = this.$t('passwordNoCoincide');
@@ -829,12 +841,6 @@ export default {
                 data.password = this.pass.password;
                 data.password_confirmation = this.pass.password_confirmation;
             }
-            /* if (moment(this.birthdayAnswer, 'YYYY-MM-DD').isValid()) {
-                console.log('valid date');
-                data.birthday = this.birthdayAnswer;
-                console.log(this.user.birthday);
-            } */
-            // nro_doc is already raw value (no dots) from user object
             /* global FormData */
             let bodyFormData = new FormData();
             for (const key in data) {
@@ -845,10 +851,8 @@ export default {
                             bodyFormData.append(key + '[]', element);
                         }
                     } else {
-                        if (data[key] !== null) {
+                        if (data[key] !== null && data[key] !== undefined) {
                             bodyFormData.append(key, data[key]);
-                        } else {
-                            // bodyFormData.append(key, '');
                         }
                     }
                 }
