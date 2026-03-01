@@ -1,0 +1,37 @@
+{
+  "ci": {
+    "collect": {
+      "url": [
+        "http://localhost:8080/#/trips",
+        "http://localhost:8080/#/login",
+        "http://localhost:8080/#/about"
+      ],
+      "numberOfRuns": 1,
+      "settings": {
+        "preset": "desktop",
+        "maxWaitForLoad": 60000,
+        "onlyCategories": [
+          "performance",
+          "accessibility",
+          "best-practices",
+          "seo"
+        ],
+        "skipAudits": [
+          "uses-text-compression"
+        ]
+      }
+    },
+    "assert": {
+      "assertions": {
+        "categories:performance": ["warn", { "minScore": 0.6 }],
+        "categories:accessibility": ["warn", { "minScore": 0.7 }],
+        "categories:best-practices": ["warn", { "minScore": 0.7 }],
+        "categories:seo": ["warn", { "minScore": 0.7 }]
+      }
+    },
+    "upload": {
+      "target": "filesystem",
+      "outputDir": ".lighthouseci"
+    }
+  }
+}

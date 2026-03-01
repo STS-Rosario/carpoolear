@@ -104,6 +104,25 @@ npm run test:e2e:screenshots:update
 
 Screenshot tests also run automatically on every push and PR to `master` via the `Screenshot Tests` GitHub Action.
 
+## Lighthouse Benchmarks
+
+[Lighthouse CI](https://github.com/GoogleChrome/lighthouse-ci) is configured to audit performance, accessibility, best practices, and SEO on public pages (`/trips`, `/login`, `/about`).
+
+``` bash
+# run lighthouse against the dev server (must be running on localhost:8080)
+npm run lighthouse
+
+# run with mobile throttling preset
+npm run lighthouse:mobile
+
+# view the HTML reports
+lhci open
+```
+
+Reports are saved to `.lighthouseci/` (gitignored). Lighthouse CI also runs automatically on every push via the `Lighthouse CI` GitHub Action.
+
+Configuration is in `lighthouserc.json`.
+
 ## Config
 
 In the config table in your carpoolear DB you can configure the following parameters:

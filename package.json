@@ -20,7 +20,10 @@
     "test:e2e": "npx playwright test",
     "test:e2e:ui": "npx playwright test --ui",
     "test:e2e:screenshots": "npx playwright test e2e/screenshots.spec.js",
-    "test:e2e:screenshots:update": "npx playwright test e2e/screenshots.spec.js --update-snapshots"
+    "test:e2e:screenshots:update": "npx playwright test e2e/screenshots.spec.js --update-snapshots",
+    "lighthouse": "lhci autorun --config=lighthouserc.json",
+    "lighthouse:desktop": "lhci autorun --config=lighthouserc.json",
+    "lighthouse:mobile": "lhci autorun --config=lighthouserc.json --collect.settings.preset=perf"
   },
   "dependencies": {
     "@capacitor/android": "^7.4.3",
