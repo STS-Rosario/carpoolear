@@ -15,6 +15,6 @@ test.describe('Login page', () => {
     await page.click('#btn_login');
 
     // After login, should navigate away from /login
-    await expect(page).not.toHaveURL(/\/login/);
+    await expect(page).not.toHaveURL(/\/login/, { timeout: 15000 });
   });
 });

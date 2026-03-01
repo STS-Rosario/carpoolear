@@ -1,5 +1,4 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+import { createStore } from 'vuex';
 import * as actions from './actions';
 import * as getters from './getters';
 import auth from './modules/auth';
@@ -19,9 +18,7 @@ import background from './modules/background';
 import subscriptions from './modules/subscriptions';
 import admin from './modules/admin';
 
-Vue.use(Vuex);
-
-export default new Vuex.Store({
+export default createStore({
     actions,
     getters,
     state: {

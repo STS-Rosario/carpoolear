@@ -2,7 +2,7 @@
 
 import 'babel-polyfill';
 
-import Vue from 'vue';
+import Vue, { createApp } from 'vue';
 import App from './App';
 
 import VueResource from 'vue-resource';
@@ -21,8 +21,7 @@ import bootstrapCss from './styles/bootstrap/css/bootstrap.min.css';
 import cssHelpers from './styles/helpers';
 import css from './styles/main';
 
-import VueI18n from 'vue-i18n';
-import messages from './language/i18n';
+import i18n, { appLocaleToBCP47, appLocaleToRoutingLanguage, applyPriceFormat } from './i18n';
 
 import bus from './services/bus-event';
 import { DebugApi } from './services/api';
@@ -35,6 +34,9 @@ import { App as CapacitorApp } from '@capacitor/app';
 import Vue2Leaflet from 'vue2-leaflet';
 
 import * as VueGoogleMaps from 'vue2-google-maps';
+
+// Re-export locale maps so existing imports from '../../main' still work
+export { appLocaleToBCP47, appLocaleToRoutingLanguage };
 
 const ROUTE_BASE = process.env.ROUTE_BASE;
 
@@ -52,67 +54,8 @@ require('font-awesome-webpack-4');
 
 Vue.use(VueResource);
 
-Vue.use(VueI18n);
-
-// Price format: controlled by config.price_show_cents (default: show cents).
-// Set price_show_cents: false in config to hide cents in currency display.
-const defaultCurrencyOptions = (fractionDigits = 2) => ({
-    style: 'currency',
-    currencyDisplay: 'symbol',
-    minimumFractionDigits: fractionDigits,
-    maximumFractionDigits: fractionDigits
-});
-
-// App locale -> BCP 47 locale (for Intl number/currency formatting).
-export const appLocaleToBCP47 = {
-    arg: 'es-AR',
-    chl: 'es-CL'
-};
-// App locale -> leaflet-routing-machine language (base codes only; e.g. 'es' not 'es-AR').
-export const appLocaleToRoutingLanguage = {
-    arg: 'es',
-    chl: 'es'
-};
-const numberFormatLocaleMap = appLocaleToBCP47;
-
-const i18n = new VueI18n({
-    locale: 'arg',
-    fallbackLocale: 'arg',
-    messages,
-    silentFallbackWarn: true,
-    numberFormats: {
-        arg: {
-            currency: {
-                style: 'currency',
-                currency: 'ARS',
-                ...defaultCurrencyOptions(2)
-            }
-        },
-        chl: {
-            currency: {
-                style: 'currency',
-                currency: 'CHL',
-                ...defaultCurrencyOptions(2)
-            }
-        },
-        'es-AR': {
-            currency: {
-                style: 'currency',
-                currency: 'ARS',
-                ...defaultCurrencyOptions(2)
-            }
-        },
-        'es-CL': {
-            currency: {
-                style: 'currency',
-                currency: 'CLP',
-                ...defaultCurrencyOptions(2)
-            }
-        }
-    }
-});
-
 // Use correct Intl locale for currency so es-AR gets comma decimal, period thousands.
+const numberFormatLocaleMap = appLocaleToBCP47;
 const original$n = Vue.prototype.$n;
 Vue.prototype.$n = function (value, ...args) {
     if (args[0] === 'currency') {
@@ -123,22 +66,6 @@ Vue.prototype.$n = function (value, ...args) {
     return original$n.call(this, value, ...args);
 };
 
-function applyPriceFormat(showCents) {
-    const fractionDigits = showCents !== false ? 2 : 0;
-    const options = defaultCurrencyOptions(fractionDigits);
-    const formats = [
-        ['arg', 'ARS'],
-        ['chl', 'CHL'],
-        ['es-AR', 'ARS'],
-        ['es-CL', 'CLP']
-    ];
-    formats.forEach(([locale, currency]) => {
-        i18n.mergeNumberFormat(locale, {
-            currency: { style: 'currency', currency, ...options }
-        });
-    });
-}
-
 store.subscribe((mutation) => {
     const isConfig = mutation.type === 'auth/AUTH_APP_CONFIG' || mutation.type === 'AUTH_APP_CONFIG';
     if (isConfig && mutation.payload) {
@@ -146,8 +73,6 @@ store.subscribe((mutation) => {
         applyPriceFormat(showCents);
     }
 });
-
-export { i18n };
 
 Vue.use(VueAnalytics, {
     id: 'UA-40995702-4'
@@ -264,14 +189,11 @@ if (process.env.SERVE) {
 console.log('APP NAME: ' + process.env.TARGET_APP);
 
 bus.on('system-ready', () => {
-    const app = new Vue({
-        el: '#app',
-        router,
-        store,
-        template: '<App/>',
-        components: { App },
-        i18n
-    });
+    const app = createApp(App);
+    app.use(router);
+    app.use(store);
+    app.use(i18n);
+    const vm = app.mount('#app');
 
     // Set moment locale based on i18n language
     const momentLocaleMap = {
@@ -279,11 +201,11 @@ bus.on('system-ready', () => {
         chl: 'es',
         en: 'en'
     };
-    const currentLocale = i18n.locale || 'arg';
+    const currentLocale = i18n.global.locale || 'arg';
     moment.locale(momentLocaleMap[currentLocale] || 'es');
 
     // Watch for language changes and update moment locale
-    app.$watch('$i18n.locale', (newLocale) => {
+    vm.$watch('$i18n.locale', (newLocale) => {
         moment.locale(momentLocaleMap[newLocale] || 'es');
     });
 });

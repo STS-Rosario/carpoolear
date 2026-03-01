@@ -25,14 +25,14 @@
                 :title="$t('pendingRequestCarpoodatos')"
                 :body="'Body'"
             >
-                <h3 slot="header">
+                <template #header><h3>
                     <span>{{ $t('pendingRequestCarpoodatos') }}</span>
                     <i
                         v-on:click="onModalClose"
                         class="fa fa-times float-right-close"
                     ></i>
-                </h3>
-                <div slot="body">
+                </h3></template>
+                <template #body><div>
                     <div class="text-left carpoodatos">
                         <p>
                             {{ $t('pendingRequestAntesDeAceptarSolicitud') }}
@@ -84,7 +84,7 @@
                             {{ $t('pendingRequestEnviarMensaje') }}
                         </button>
                     </div>
-                </div>
+                </div></template>
             </modal>
             <div class="rate-pending-message">
                 <div class="rate-pending-message--content">

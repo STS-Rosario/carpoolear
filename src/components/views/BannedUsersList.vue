@@ -33,19 +33,19 @@
                             </tr>
                         </tbody>
                     </table>
-                    <div slot="no-data" class="text-center" style="margin-top: 20px;">
+                    <template #no-data><div class="text-center" style="margin-top: 20px;">
                         <div class="alert alert-info">
                             {{ $t('noHayUsuariosBloqueados') }}
                         </div>
-                    </div>
-                    <div slot="loading" class="text-center" style="margin-top: 20px;">
+                    </div></template>
+                    <template #loading><div class="text-center" style="margin-top: 20px;">
                         <img
                             src="https://carpoolear.com.ar/static/img/loader.gif"
                             alt=""
                             class="ajax-loader"
                         />
                         <p>{{ $t('cargandoPedidos') }}</p>
-                    </div>
+                    </div></template>
                 </Loading>
             </div>
         </div>

@@ -2,12 +2,12 @@
     <div class="new-trip-component container">
         <div class="alert alert-info alert-sellado-viaje" v-if="this.config.module_trip_creation_payment_enabled">
             <p>{{ $t('mensajeContandoSobreSelladoViaje') }}</p>
-            <p>{{ $t('podesHacerViajesGratis', { free_trips_amount: this.free_trips_amount }) }}</p>
-            <div v-if="this.trips_created_by_user_amount >= this.free_trips_amount">
-                <p>{{ $t('yaCreasteViajes', { trips_created_by_user_amount: this.trips_created_by_user_amount }) }} {{ $t('luegoTendrasQuePagarSelladoViaje') }}</p>
+            <p>{{ $t('podesHacerViajesGratis', { freeTrips: free_trips_amount }) }}</p>
+            <div v-if="trips_created_by_user_amount >= free_trips_amount">
+                <p>{{ $t('yaCreasteViajes', { tripsCreated: trips_created_by_user_amount }) }}</p>
             </div>
-            <div v-if="this.trips_created_by_user_amount < this.free_trips_amount">
-                <p>{{ $t('teQuedaViajesGratis', { remainingFreeTrips: remainingFreeTrips }) }} viaje{{ (remainingFreeTrips) === 1 ? '' : 's' }} gratis, {{ $t('luegoTendrasQuePagarSelladoViaje') }}</p>
+            <div v-if="trips_created_by_user_amount < free_trips_amount">
+                <p>{{ $t('teQuedaViajesGratis', { remaining: remainingFreeTrips }) }}</p>
             </div>
         </div>
 

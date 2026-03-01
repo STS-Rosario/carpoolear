@@ -78,7 +78,7 @@
         </div>
     </div>
     <div v-else>
-        <p slot="no-data" class="alert alert-warning" role="alert">
+        <p class="alert alert-warning" role="alert">
             {{ $t('seleccioneAlgunaConversacion') }}
         </p>
     </div>

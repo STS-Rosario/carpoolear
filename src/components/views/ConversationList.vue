@@ -147,15 +147,13 @@
                                             {{ $t('masResultados') }}
                                         </button>
                                     </li>
-                                    <li
-                                        slot="no-data"
+                                    <template #no-data><li
                                         class="list-group-item alert alert-warning"
                                         role="alert"
                                     >
                                         {{ $t('noTienesConversaciones') }}
-                                    </li>
-                                    <li
-                                        slot="loading"
+                                    </li></template>
+                                    <template #loading><li
                                         class="list-group-item alert alert-info"
                                         role="alert"
                                     >
@@ -165,7 +163,7 @@
                                             class="ajax-loader"
                                         />
                                         {{ $t('cargandoConversaciones') }}
-                                    </li>
+                                    </li></template>
                                 </Loading>
                             </template>
                             <template v-else>
@@ -185,20 +183,18 @@
                                         ></div>
                                         <UserNameWithBadge :user="user" />
                                     </li>
-                                    <li
-                                        slot="no-data"
+                                    <template #no-data><li
                                         class="list-group-item alert alert-warning"
                                         role="alert"
                                     >
                                         {{ $t('noHayConcidiencias') }}
-                                    </li>
-                                    <li
-                                        slot="loading"
+                                    </li></template>
+                                    <template #loading><li
                                         class="list-group-item alert alert-info"
                                         role="alert"
                                     >
                                         {{ $t('tipeaUnNombreYBusca') }}
-                                    </li>
+                                    </li></template>
                                 </Loading>
                             </template>
                         </ul>

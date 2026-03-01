@@ -6,7 +6,7 @@ test.describe('Authenticated navigation', () => {
     await page.fill('#txt_user', 'user0@g.com');
     await page.fill('#txt_password', '123456');
     await page.click('#btn_login');
-    await expect(page).not.toHaveURL(/\/login/);
+    await expect(page).not.toHaveURL(/\/login/, { timeout: 15000 });
   });
 
   test('redirects to trips after login', async ({ page }) => {

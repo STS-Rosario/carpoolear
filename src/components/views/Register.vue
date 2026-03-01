@@ -338,14 +338,14 @@
                 v-if="showEmailTakenModal"
                 @close="toggleEmailTakenModal"
             >
-                <h3 slot="header">
+                <template #header><h3>
                     <span>{{ $t('emailYaTomado') }}</span>
                     <i
                         v-on:click="toggleEmailTakenModal"
                         class="fa fa-times float-right-close"
                     ></i>
-                </h3>
-                <div slot="body">
+                </h3></template>
+                <template #body><div>
                     <div class="text-left color-black login-modal">
                         <p>
                             {{ $t('emailYaTomadoDescripcion') }}
@@ -364,7 +364,7 @@
                             >.
                         </p>
                     </div>
-                </div>
+                </div></template>
             </modal>
         </div>
         <div class="form row register-success" v-else>
