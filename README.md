@@ -18,12 +18,12 @@ It is and ad-hoc customization for Argentina with carpooling philosophy, with co
 # Clone repo
 gh repo clone STS-Rosario/carpoolear
 
-# Set v12 as Node version
+# Set 22 as Node version
 cd carpoolear
-nvm install 12 - you will need to install nvm first
-nvm use 12
+nvm install 22 - you will need to install nvm first
+nvm use 22
 
-# install dependencies (this will take a long time)
+# install dependencies
 npm install
 
 # change the backend URL if needed
@@ -86,7 +86,7 @@ Playwright is used for end-to-end screenshot tests that cover every view in the 
 # install Playwright browsers (first time only)
 npx playwright install --with-deps chromium
 
-# start the dev server (requires Node 12 or Docker)
+# start the dev server (requires Node 22 or Docker)
 npm run dev
 
 # run all e2e tests headless

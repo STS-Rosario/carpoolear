@@ -46,7 +46,7 @@ npm run build:ios              # Build iOS via Capacitor
 
 ## Docker Setup
 
-- **Dev**: Node 12 container, port 8080, bind mount for hot reload
+- **Dev**: Node 22 container, port 8080, bind mount for hot reload
 - **Prod**: Multi-stage build → nginx serving static files on port 80
 - Frontend connects to backend API at `http://localhost:8000` (configurable in `config/dev.env.js`)
 

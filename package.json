@@ -4,6 +4,10 @@
   "description": "Carpoolear Open Source",
   "author": "STS Rosario",
   "private": true,
+  "engines": {
+    "node": ">=22.0.0",
+    "npm": ">=10.0.0"
+  },
   "scripts": {
     "dev": "node movilizame serve",
     "prod": "node movilizame serve --prod",
@@ -132,10 +136,6 @@
     "webpack-dev-server": "^3.7.2",
     "webpack-merge": "^4.2.1",
     "xml2js": "^0.4.19"
-  },
-  "engines": {
-    "node": ">= 4.0.0",
-    "npm": ">= 3.0.0"
   },
   "browserslist": {
     "production": [

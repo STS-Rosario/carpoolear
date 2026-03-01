@@ -1,5 +1,5 @@
 # --- Base stage: shared Node setup ---
-FROM node:18 AS base
+FROM node:22 AS base
 WORKDIR /app
 
 # --- Dev stage: for local development with bind mount ---
