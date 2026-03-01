@@ -9,6 +9,7 @@ services:
     environment:
       HOST: '0.0.0.0'
       API_URL: ${API_URL:-http://localhost:8000}
+      WEB_URL: ${WEB_URL:-https://carpoolear.com.ar/app}
       MERCADO_PAGO_PUBLIC_KEY: ${MERCADO_PAGO_PUBLIC_KEY:-}
     ports:
       - ${FRONTEND_PORT:-8080}:8080
