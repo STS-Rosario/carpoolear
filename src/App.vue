@@ -3,20 +3,23 @@
         class="app-container"
         :class="[backgroundStyle, viewName, deviceClass]"
     >
-        <!-- Custom Splash Screen -->
-        <div v-if="showCustomSplash" class="custom-splash-screen">
-            <img src="https://carpoolear.com.ar/app/static/img/splash-android-1280x1920.png" alt="Carpoolear" class="splash-image" />
-            <div class="splash-version">Version 93</div>
-        </div>
-        
-        <onBoarding key="1" v-if="onBoardingVisibility"></onBoarding>
-        <headerApp></headerApp>
-        <main id="main">
-            <div class="view-container clearfix">
-                <router-view></router-view>
+        <ForceUpgradeModal v-if="showForceUpgrade" />
+        <template v-if="!showForceUpgrade">
+            <!-- Custom Splash Screen -->
+            <div v-if="showCustomSplash" class="custom-splash-screen">
+                <img src="https://carpoolear.com.ar/app/static/img/splash-android-1280x1920.png" alt="Carpoolear" class="splash-image" />
+                <div class="splash-version">Version 96</div>
             </div>
-        </main>
-        <footerApp></footerApp>
+
+            <onBoarding key="1" v-if="onBoardingVisibility"></onBoarding>
+            <headerApp></headerApp>
+            <main id="main">
+                <div class="view-container clearfix">
+                    <router-view></router-view>
+                </div>
+            </main>
+            <footerApp></footerApp>
+        </template>
         <!--
     <pre>
             {{this.$store.state}}
@@ -26,13 +29,59 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import { Capacitor } from '@capacitor/core';
+import { AppUpdate } from '@capawesome/capacitor-app-update';
+import { compareAndroidVersion, compareSemver } from './utils/versionCompare';
 import footerApp from './components/sections/FooterApp.vue';
 import headerApp from './components/sections/HeaderApp.vue';
 import onBoarding from './components/sections/OnBoarding.vue';
+import ForceUpgradeModal from './components/ForceUpgradeModal.vue';
 
 export default {
     name: 'app',
     methods: {
+        async runVersionCheck(config) {
+            if (!Capacitor.isNativePlatform() || this.versionCheckDone) return;
+            if (!config || config.__isLocal) return;
+
+            const platform = Capacitor.getPlatform();
+            const minAndroid = config.min_version_android;
+            const minIos = config.min_version_ios;
+
+            if (platform === 'android' && (minAndroid === null || minAndroid === undefined)) return;
+            if (platform === 'ios' && (minIos === null || minIos === undefined || minIos === '')) return;
+
+            try {
+                let outdated = false;
+                let currentVersionCode = null;
+                let currentVersionName = null;
+
+                try {
+                    const result = await AppUpdate.getAppUpdateInfo();
+                    currentVersionCode = result.currentVersionCode;
+                    currentVersionName = result.currentVersionName;
+                } catch (pluginError) {
+                    console.warn('AppUpdate.getAppUpdateInfo failed, using window.appVersion fallback:', pluginError);
+                    const fallback = window.appVersion || '0';
+                    currentVersionCode = fallback;
+                    currentVersionName = fallback;
+                }
+
+                if (platform === 'android' && currentVersionCode != null) {
+                    outdated = compareAndroidVersion(currentVersionCode, minAndroid) < 0;
+                } else if (platform === 'ios' && currentVersionName != null) {
+                    outdated = compareSemver(currentVersionName, minIos) < 0;
+                }
+
+                if (outdated) {
+                    this.showForceUpgrade = true;
+                }
+            } catch (error) {
+                console.warn('Version check failed:', error);
+            } finally {
+                this.versionCheckDone = true;
+            }
+        },
         setRouteClass: function (route) {
             this.actualRouteName = 'route--' + route.name;
         },
@@ -106,18 +155,24 @@ export default {
             if (value && value.locale && !localStorage.getItem('app_locale')) {
                 this.$root.$i18n.locale = value.locale;
             }
+            if (value && !value.__isLocal) {
+                this.runVersionCheck(value);
+            }
         }
     },
     data() {
         return {
             actualRouteName: '',
-            showCustomSplash: true
+            showCustomSplash: true,
+            showForceUpgrade: false,
+            versionCheckDone: false
         };
     },
     components: {
         headerApp,
         footerApp,
-        onBoarding
+        onBoarding,
+        ForceUpgradeModal
     }
 };
 </script>

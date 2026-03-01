@@ -304,8 +304,8 @@ export default {
             showModalInstallApp: false,
             installAppEvent: null,
             donateValue: 0,
-            hasNotificationPermission: false, // New state variable
-            showNotificationWarning: true // New state variable
+            hasNotificationPermission: false,
+            showNotificationWarning: true
         };
     },
     props: ['clearSearch', 'keepSearch'],
