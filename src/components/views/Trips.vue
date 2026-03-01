@@ -5,6 +5,7 @@
                 <img alt="" :src="appConfig.banner.image" />
             </a>
         </template>
+        <pre v-if="versionDebug" class="version-debug-pre">{{ JSON.stringify(versionDebug, null, 2) }}</pre>
         <div v-show="!user && isMobile">
             <router-link :to="{ name: 'login' }" class="login_usuario">
                 {{ $t('ingresaORegistrate') }}
@@ -260,6 +261,17 @@
     </div>
 </template>
 <style scoped>
+.version-debug-pre {
+    margin: 10px 0;
+    padding: 10px;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 11px;
+    overflow-x: auto;
+    text-align: left;
+}
+
 .sentence {
     display: block;
     margin-bottom: 0.5em;
@@ -290,6 +302,8 @@ import {
     isIOSCapacitor,
     shouldHideDonationOnIOSCapacitor
 } from '../../services/capacitor.js';
+import { AppUpdate } from '@capawesome/capacitor-app-update';
+import { compareAndroidVersion, compareSemver } from '../../utils/versionCompare';
 
 export default {
     name: 'trips',
@@ -305,7 +319,8 @@ export default {
             installAppEvent: null,
             donateValue: 0,
             hasNotificationPermission: false,
-            showNotificationWarning: true
+            showNotificationWarning: true,
+            versionDebug: null
         };
     },
     props: ['clearSearch', 'keepSearch'],
@@ -389,6 +404,48 @@ export default {
             this.showModalInstallApp = false;
             // Mark that we've shown the install modal to this user permanently
             localStorage.setItem('pwa_install_modal_dismissed', 'true');
+        },
+        async loadVersionDebug() {
+            const config = this.appConfig || {};
+            const minAndroid = config.min_version_android;
+            const minIos = config.min_version_ios;
+            const isNative = Capacitor.isNativePlatform();
+            const platform = Capacitor.getPlatform();
+
+            const debug = {
+                min_version_android: minAndroid,
+                min_version_ios: minIos,
+                isNativePlatform: isNative,
+                platform
+            };
+
+            if (isNative) {
+                try {
+                    const result = await AppUpdate.getAppUpdateInfo();
+                    debug.currentVersionCode = result.currentVersionCode;
+                    debug.currentVersionName = result.currentVersionName;
+                    debug.updateAvailability = result.updateAvailability;
+
+                    let outdated = false;
+                    if (platform === 'android' && minAndroid != null) {
+                        outdated = compareAndroidVersion(result.currentVersionCode, minAndroid) < 0;
+                    } else if (platform === 'ios' && minIos) {
+                        outdated = compareSemver(result.currentVersionName || '0', minIos) < 0;
+                    }
+                    debug.outdated = outdated;
+                } catch (err) {
+                    debug.error = (err && err.message) || String(err);
+                }
+            } else {
+                debug.note = 'Web - version check skipped';
+            }
+
+            if (debug.currentVersionCode == null && debug.currentVersionName == null) {
+                debug.currentVersionCode = window.appVersion || 'N/A';
+                debug.currentVersionName = window.appVersion || 'N/A';
+            }
+
+            this.versionDebug = debug;
         },
         research(params) {
             this.resultaOfSearch = true;
@@ -696,6 +753,7 @@ export default {
         bus.on('trip-click', this.onTripClick);
 
         router.stack = [];
+        this.loadVersionDebug();
     },
     updated(a) {
         // {{ $t('pendienteNoSeLimpiaBuscador') }}
@@ -707,6 +765,12 @@ export default {
         bus.off('backbutton', this.onBackBottom);
     },
     watch: {
+        appConfig: {
+            handler() {
+                this.loadVersionDebug();
+            },
+            immediate: false
+        },
         trips: function (oldValue, newValue) {
             if (this.refreshList) {
                 this.refreshTrips(false);
