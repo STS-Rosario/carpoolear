@@ -1,4 +1,4 @@
-const { expect } = require('@playwright/test');
+import { expect } from '@playwright/test';
 
 /**
  * Dismiss splash screen and onboarding overlay through UI interaction.
@@ -7,7 +7,7 @@ const { expect } = require('@playwright/test');
  *   1) mount + 600 ms delay → adds "show" class (opacity transition starts)
  *   2) transitionend → sets cardsLength from config → v-for renders actual cards
  */
-async function dismissOverlays(page) {
+export async function dismissOverlays(page) {
   // Wait for splash screen to disappear
   await page.locator('.custom-splash-screen').waitFor({ state: 'hidden', timeout: 5000 }).catch(() => {});
 
@@ -40,7 +40,7 @@ async function dismissOverlays(page) {
 /**
  * Login via the UI and dismiss any overlays that appear afterwards.
  */
-async function uiLogin(page, email, password) {
+export async function uiLogin(page, email, password) {
   await page.goto('/login');
   await page.fill('#txt_user', email);
   await page.fill('#txt_password', password);
@@ -48,5 +48,3 @@ async function uiLogin(page, email, password) {
   await expect(page).not.toHaveURL(/\/login/, { timeout: 15000 });
   await dismissOverlays(page);
 }
-
-module.exports = { dismissOverlays, uiLogin };

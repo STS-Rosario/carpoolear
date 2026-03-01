@@ -70,7 +70,7 @@ export default {
         }),
 
         onAcceptRequest() {
-            let baseUrl = process.env.API_URL;
+            let baseUrl = import.meta.env.VITE_API_URL;
             let url = baseUrl + '/transbank?tp_id=' + this.request.id;
             if (window.location.protocol.indexOf('http') >= 0) {
                 window.location.href = url;

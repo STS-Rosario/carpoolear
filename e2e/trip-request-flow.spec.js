@@ -1,5 +1,5 @@
-const { test, expect } = require('@playwright/test');
-const { dismissOverlays, uiLogin } = require('./helpers');
+import { test, expect } from '@playwright/test';
+import { dismissOverlays, uiLogin } from './helpers.js';
 
 /**
  * Thorough e2e test for the trip request flow:

@@ -4,7 +4,7 @@ import TaggedList from '../classes/TaggedList';
 import axios from 'axios';
 import { Capacitor } from '@capacitor/core';
 
-const API_URL = process.env.API_URL;
+const API_URL = import.meta.env.VITE_API_URL;
 
 class MyPromise {
     constructor(resolve, reject, promise = null) {

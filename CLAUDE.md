@@ -1,6 +1,6 @@
 # Carpoolear Frontend
 
-Carpooling platform frontend built with **Vue.js 2** and **Webpack 4**.
+Carpooling platform frontend built with **Vue.js 3** (compat mode) and **Vite**.
 
 ## Architecture
 
@@ -14,14 +14,17 @@ src/
 ├── services/
 │   ├── api/             # API service classes (Auth, Trips, PassengerApi, ConversationApi, etc.)
 │   └── network.js       # Axios HTTP client with JWT auth header injection
-├── router/              # Vue Router routes
-├── styles/              # Bootstrap + custom Less/CSS
+├── router/              # Vue Router routes (lazy-loaded via dynamic import())
+├── styles/              # Bootstrap + custom CSS
 ├── language/            # i18n translations (Spanish/English)
 ├── classes/             # Core JS classes (TaggedApi, Threads, TaggedList)
+├── env.js               # Firebase config helper (reconstructs from VITE_ env vars)
 config/
-├── dev.env.js           # Dev environment (API_URL, MAPS_API, etc.)
-├── prod.env.js          # Production environment
 ├── conf.json            # Default app configuration
+├── capacitor.js         # Capacitor plugin configuration
+.env                     # Shared defaults (VITE_TARGET_APP)
+.env.development         # Dev environment (VITE_API_URL, VITE_MAPS_API, etc.)
+.env.production          # Production environment (VITE_FIREBASE_*, etc.)
 e2e/                     # Playwright end-to-end tests
 projects/                # Multi-project branding support (carpoolear, apalancar, etc.)
 ```
@@ -30,8 +33,10 @@ projects/                # Multi-project branding support (carpoolear, apalancar
 
 ```bash
 # Development
-npm run dev                    # Start dev server with hot reload (port 8080)
-npm run build                  # Production build
+npm run dev                    # Start Vite dev server with HMR (port 8080)
+npm run build                  # Production build → dist/
+npm run build:web              # Production build for web (PLATFORM=DESKTOP)
+npm run preview                # Preview production build locally
 npm run lint:fix               # Auto-fix ESLint issues
 
 # E2E Testing
@@ -40,15 +45,24 @@ npm run test:e2e:ui            # Run Playwright tests with UI mode
 npx playwright install         # Install browser binaries
 
 # Mobile
-npm run build:android          # Build Android via Capacitor
-npm run build:ios              # Build iOS via Capacitor
+npm run build:android          # Build for Android → www/ + cap sync
+npm run build:ios              # Build for iOS → www/ + cap sync
 ```
 
 ## Docker Setup
 
-- **Dev**: Node 12 container, port 8080, bind mount for hot reload
+- **Dev**: Node 18 container, port 8080, bind mount for hot reload
 - **Prod**: Multi-stage build → nginx serving static files on port 80
-- Frontend connects to backend API at `http://localhost:8000` (configurable in `config/dev.env.js`)
+- Frontend connects to backend API at `http://localhost:8000` (configurable in `.env.development`)
+
+## Environment Variables
+
+All env vars use `VITE_` prefix and are accessed via `import.meta.env.VITE_*`:
+- `VITE_API_URL` — Backend API URL
+- `VITE_ROUTE_BASE` — Base path for router (`/app/` in prod, `/` in dev)
+- `VITE_TARGET_APP` — App variant (`carpoolear` or `apalancar`)
+- `VITE_FIREBASE_*` — Firebase config (reconstructed in `src/env.js`)
+- `import.meta.env.DEV` / `import.meta.env.PROD` — Mode checks
 
 ## Authentication
 
@@ -84,9 +98,9 @@ npm run build:ios              # Build iOS via Capacitor
 
 ## API Configuration
 
-Backend API URL configured in `config/dev.env.js`:
-```js
-API_URL: '"http://localhost:8000"'
+Backend API URL configured in `.env.development`:
+```
+VITE_API_URL=http://localhost:8000
 ```
 
 ## Test Users (from backend TestingSeeder)
@@ -99,8 +113,8 @@ API_URL: '"http://localhost:8000"'
 
 Build for different branded versions:
 ```bash
-TARGET_APP=carpoolear npm run build
-TARGET_APP=apalancar npm run build
+VITE_TARGET_APP=carpoolear npm run build
+VITE_TARGET_APP=apalancar npm run build
 ```
 
-Project configs in `projects/` and `config/dev.{project}.env.js`.
+Multi-project CSS variants resolved via `multiProjectResolver` Vite plugin in `vite.config.js`.

@@ -1,4 +1,4 @@
-const { test, expect } = require('@playwright/test');
+import { test, expect } from '@playwright/test';
 
 test.describe('Authenticated navigation', () => {
   test.beforeEach(async ({ page }) => {

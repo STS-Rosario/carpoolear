@@ -303,7 +303,7 @@ export default {
             iosLoading: false,
             error: '',
             carpoolear_logo:
-                process.env.ROUTE_BASE + 'static/img/carpoolear_logo.png',
+                import.meta.env.VITE_ROUTE_BASE + 'static/img/carpoolear_logo.png',
             hasScroll: false,
             isUnderstood: true,
             dontShowAgain: false,
@@ -313,9 +313,9 @@ export default {
             modalType: 'facebook',
             showUserBannedInfo: false,
             app_logo:
-                process.env.ROUTE_BASE +
+                import.meta.env.VITE_ROUTE_BASE +
                 'static/img/' +
-                process.env.TARGET_APP +
+                import.meta.env.VITE_TARGET_APP +
                 '_logo_full.png'
         };
     },

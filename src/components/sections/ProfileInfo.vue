@@ -278,7 +278,7 @@ export default {
             if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
                 return imagePath;
             }
-            const base = process.env.ROUTE_BASE + 'static/img';
+            const base = import.meta.env.VITE_ROUTE_BASE + 'static/img';
             return base + (base && !imagePath.startsWith('/') ? '/' : '') + imagePath;
         }
     },

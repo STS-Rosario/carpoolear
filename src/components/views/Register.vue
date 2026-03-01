@@ -397,7 +397,7 @@ class Error {
         this.message = '';
     }
 }
-console.log('RECAPTCHA_SECRET_KEY', process.env.RECAPTCHA_SITE_KEY);
+console.log('RECAPTCHA_SECRET_KEY', import.meta.env.VITE_RECAPTCHA_SITE_KEY);
 export default {
     name: 'register',
     data() {
@@ -415,11 +415,11 @@ export default {
             account_bank: '',
             termsAndConditions: false,
             carpoolear_logo:
-                process.env.ROUTE_BASE +
+                import.meta.env.VITE_ROUTE_BASE +
                 'static/img/' +
-                process.env.TARGET_APP +
+                import.meta.env.VITE_TARGET_APP +
                 '_logo.png',
-            RECAPTCHA_SITE_KEY: process.env.RECAPTCHA_SITE_KEY,
+            RECAPTCHA_SITE_KEY: import.meta.env.VITE_RECAPTCHA_SITE_KEY,
             progress: false,
             success: false,
             emailError: new Error(),
@@ -629,7 +629,7 @@ export default {
             const that = this;
             grecaptcha.ready(function () {
                 grecaptcha
-                    .execute(process.env.RECAPTCHA_SITE_KEY, {
+                    .execute(import.meta.env.VITE_RECAPTCHA_SITE_KEY, {
                         action: 'submit'
                     })
                     .then(function (token) {
@@ -764,7 +764,7 @@ export default {
         let recaptchaScript = document.createElement('script');
         recaptchaScript.setAttribute(
             'src',
-            `https://www.google.com/recaptcha/api.js?render=${process.env.RECAPTCHA_SITE_KEY}`
+            `https://www.google.com/recaptcha/api.js?render=${import.meta.env.VITE_RECAPTCHA_SITE_KEY}`
         );
         document.head.appendChild(recaptchaScript);
     },

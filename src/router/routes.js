@@ -9,7 +9,7 @@ export default [
         path: '/login',
         name: 'login',
         beforeEnter: guest,
-        component: require('../components/views/Login').default,
+        component: () => import('../components/views/Login.vue'),
         meta: {
             actionbar: {
                 header: {
@@ -28,7 +28,7 @@ export default [
         path: '/register',
         name: 'register',
         beforeEnter: guest,
-        component: require('../components/views/Register').default,
+        component: () => import('../components/views/Register.vue'),
         meta: {
             actionbar: {
                 header: {
@@ -51,14 +51,14 @@ export default [
         path: '/activate/:token',
         name: 'activate',
         beforeEnter: guest,
-        component: require('../components/views/Activate').default,
+        component: () => import('../components/views/Activate.vue'),
         props: true
     },
     {
         path: '/reset-password',
         name: 'reset-password',
         beforeEnter: guest,
-        component: require('../components/views/ResetPassword').default,
+        component: () => import('../components/views/ResetPassword.vue'),
         props: true,
         meta: {
             actionbar: {
@@ -82,7 +82,7 @@ export default [
         path: '/reset-password/:token',
         name: 'reset-password-confirm',
         beforeEnter: guest,
-        component: require('../components/views/ResetPassword').default,
+        component: () => import('../components/views/ResetPassword.vue'),
         props: true,
         meta: {
             actionbar: {
@@ -101,7 +101,7 @@ export default [
     {
         path: '/profile/:id',
         name: 'profile',
-        component: require('../components/views/Profile.vue').default,
+        component: () => import('../components/views/Profile.vue'),
         props: true,
         beforeEnter: auth,
         meta: {
@@ -120,7 +120,7 @@ export default [
     {
         path: '/my-trips',
         name: 'my-trips',
-        component: require('../components/views/MyTrips').default,
+        component: () => import('../components/views/MyTrips.vue'),
         beforeEnter: (to, from, next) => {
             if (!store.getters['auth/checkLogin']) {
                 auth(to, from, next);
@@ -144,7 +144,7 @@ export default [
     {
         path: '/trips',
         name: 'trips',
-        component: require('../components/views/Trips').default,
+        component: () => import('../components/views/Trips.vue'),
         props: true,
         meta: {
             actionbar: {
@@ -161,7 +161,7 @@ export default [
     {
         path: '/trips/create',
         name: 'new-trip',
-        component: require('../components/views/NewTrip').default,
+        component: () => import('../components/views/NewTrip.vue'),
         beforeEnter: (to, from, next) => {
             if (!store.getters['auth/checkLogin']) {
                 auth(to, from, next);
@@ -183,7 +183,7 @@ export default [
     {
         path: '/trips/update/:id',
         name: 'update-trip',
-        component: require('../components/views/NewTrip').default,
+        component: () => import('../components/views/NewTrip.vue'),
         beforeEnter: auth,
         props: true,
         meta: {
@@ -198,7 +198,7 @@ export default [
     {
         path: '/trips/:id',
         name: 'detail_trip',
-        component: require('../components/views/Trip').default,
+        component: () => import('../components/views/Trip.vue'),
         beforeEnter: (to, from, next) => {
             if (!store.getters['auth/checkLogin']) {
                 auth(to, from, next);
@@ -223,7 +223,7 @@ export default [
     {
         path: '/trips/:id/:location',
         name: 'detail_trip_location',
-        component: require('../components/views/Trip'),
+        component: () => import('../components/views/Trip.vue'),
         beforeEnter: (to, from, next) => {
             if (!store.getters['auth/checkLogin']) {
                 auth(to, from, next);
@@ -248,7 +248,7 @@ export default [
     {
         path: '/notifications',
         name: 'notifications',
-        component: require('../components/views/Notifications.vue').default,
+        component: () => import('../components/views/Notifications.vue'),
         beforeEnter: auth,
         props: true,
         meta: {
@@ -265,14 +265,13 @@ export default [
     },
     {
         path: '/setting',
-        component: require('../components/views/Settings.vue').default,
+        component: () => import('../components/views/Settings.vue'),
         beforeEnter: auth,
         children: [
             {
                 path: 'profile',
                 name: 'profile_update',
-                component: require('../components/sections/UpdateProfile.vue')
-                    .default,
+                component: () => import('../components/sections/UpdateProfile.vue'),
                 meta: {
                     tab: 'profile',
                     actionbar: {
@@ -290,8 +289,7 @@ export default [
             {
                 path: 'friends',
                 name: 'friends_setting',
-                component: require('../components/sections/FriendsSetting.vue')
-                    .default,
+                component: () => import('../components/sections/FriendsSetting.vue'),
                 meta: {
                     tab: 'friends',
                     actionbar: {
@@ -309,8 +307,7 @@ export default [
             {
                 path: 'friends/search',
                 name: 'friends_search',
-                component: require('../components/sections/FriendsRequest.vue')
-                    .default,
+                component: () => import('../components/sections/FriendsRequest.vue'),
                 meta: {
                     tab: 'friends',
                     actionbar: {
@@ -324,9 +321,7 @@ export default [
             {
                 path: 'identity-validation',
                 name: 'identity_validation',
-                component:
-                    require('../components/sections/IdentityValidation.vue')
-                        .default,
+                component: () => import('../components/sections/IdentityValidation.vue'),
                 meta: {
                     tab: 'identity_validation',
                     actionbar: {
@@ -344,9 +339,7 @@ export default [
             {
                 path: 'identity-validation/manual',
                 name: 'identity_validation_manual',
-                component:
-                    require('../components/sections/ManualIdentityValidation.vue')
-                        .default,
+                component: () => import('../components/sections/ManualIdentityValidation.vue'),
                 meta: {
                     tab: 'identity_validation',
                     actionbar: {
@@ -366,7 +359,7 @@ export default [
     {
         path: '/conversations',
         name: 'conversations-list',
-        component: require('../components/views/ConversationList').default,
+        component: () => import('../components/views/ConversationList.vue'),
         beforeEnter: (to, from, next) => {
             if (!store.getters['auth/checkLogin']) {
                 auth(to, from, next);
@@ -392,8 +385,7 @@ export default [
             {
                 path: ':id',
                 name: 'conversation-chat',
-                component: require('../components/views/ConversationChat')
-                    .default,
+                component: () => import('../components/views/ConversationChat.vue'),
                 props: true,
                 meta: {
                     hide: true,
@@ -416,7 +408,7 @@ export default [
     {
         path: '/about',
         name: 'acerca_de',
-        component: require('../components/views/About').default,
+        component: () => import('../components/views/About.vue'),
         meta: {
             actionbar: {
                 header: {
@@ -429,7 +421,7 @@ export default [
     {
         path: '/transactions',
         name: 'transacciones',
-        component: require('../components/views/transactions').default,
+        component: () => import('../components/views/transactions.vue'),
         meta: {
             actionbar: {
                 header: {
@@ -442,7 +434,7 @@ export default [
     {
         path: '/terminos',
         name: 'terms',
-        component: require('../components/views/TermsAndConditions').default,
+        component: () => import('../components/views/TermsAndConditions.vue'),
         meta: {
             actionbar: {
                 header: {
@@ -455,7 +447,7 @@ export default [
     {
         path: '/admin',
         name: 'admin-page',
-        component: require('../components/views/AdminPage').default,
+        component: () => import('../components/views/AdminPage.vue'),
         beforeEnter: authAdmin,
         meta: {
             actionbar: {
@@ -473,7 +465,7 @@ export default [
     {
         path: '/admin/users',
         name: 'admin-users',
-        component: require('../components/views/UsersCrud').default,
+        component: () => import('../components/views/UsersCrud.vue'),
         beforeEnter: authAdmin,
         meta: {
             actionbar: {
@@ -491,7 +483,7 @@ export default [
     {
         path: '/admin/trips',
         name: 'admin-trips',
-        component: require('../components/views/AdminTrips.vue').default,
+        component: () => import('../components/views/AdminTrips.vue'),
         beforeEnter: authAdmin,
         meta: {
             actionbar: {
@@ -509,7 +501,7 @@ export default [
     {
         path: '/admin/users-delete-list',
         name: 'admin-users-delete-list',
-        component: require('../components/views/UsersDeleteList.vue').default,
+        component: () => import('../components/views/UsersDeleteList.vue'),
         beforeEnter: authAdmin,
         meta: {
             actionbar: {
@@ -527,7 +519,7 @@ export default [
     {
         path: '/admin/banned-users',
         name: 'admin-banned-users',
-        component: require('../components/views/BannedUsersList.vue').default,
+        component: () => import('../components/views/BannedUsersList.vue'),
         beforeEnter: authAdmin,
         meta: {
             actionbar: {
@@ -545,9 +537,7 @@ export default [
     {
         path: '/admin/manual-identity-validations',
         name: 'admin-manual-identity-validations',
-        component:
-            require('../components/views/AdminManualIdentityValidations.vue')
-                .default,
+        component: () => import('../components/views/AdminManualIdentityValidations.vue'),
         beforeEnter: authAdmin,
         meta: {
             actionbar: {
@@ -565,9 +555,7 @@ export default [
     {
         path: '/admin/manual-identity-validations/:id',
         name: 'admin-manual-identity-validation-review',
-        component:
-            require('../components/views/AdminManualIdentityValidationReview.vue')
-                .default,
+        component: () => import('../components/views/AdminManualIdentityValidationReview.vue'),
         props: true,
         beforeEnter: authAdmin,
         meta: {
@@ -586,8 +574,7 @@ export default [
     {
         path: '/admin/mercado-pago-rejected-validations',
         name: 'admin-mp-rejected-validations',
-        component: require('../components/views/AdminMpRejectedValidations.vue')
-            .default,
+        component: () => import('../components/views/AdminMpRejectedValidations.vue'),
         beforeEnter: authAdmin,
         meta: {
             actionbar: {
@@ -605,9 +592,7 @@ export default [
     {
         path: '/admin/mercado-pago-rejected-validations/:id',
         name: 'admin-mp-rejected-validation-detail',
-        component:
-            require('../components/views/AdminMpRejectedValidationDetail.vue')
-                .default,
+        component: () => import('../components/views/AdminMpRejectedValidationDetail.vue'),
         props: true,
         beforeEnter: authAdmin,
         meta: {

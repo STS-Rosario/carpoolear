@@ -1,4 +1,4 @@
-const { test, expect } = require('@playwright/test');
+import { test, expect } from '@playwright/test';
 
 test.describe('Trips page', () => {
   test('loads and shows the trips container', async ({ page }) => {

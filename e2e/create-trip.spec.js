@@ -1,5 +1,5 @@
-const { test, expect } = require('@playwright/test');
-const { dismissOverlays } = require('./helpers');
+import { test, expect } from '@playwright/test';
+import { dismissOverlays } from './helpers.js';
 
 test.describe('Create trip flow', () => {
   test.setTimeout(90000);

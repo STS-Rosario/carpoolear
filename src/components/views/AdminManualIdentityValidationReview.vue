@@ -197,7 +197,7 @@ export default {
         loadImages() {
             if (!this.item || !this.item.has_images) return;
             const authHeader = store.getters['auth/authHeader'];
-            const baseUrl = (process.env.API_URL || '').replace(/\/$/, '');
+            const baseUrl = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
             if (!baseUrl) return;
             // Always request images from the backend (API_URL), not from the URL in the response (which may use APP_URL = frontend)
             ['front', 'back', 'selfie'].forEach((type) => {
