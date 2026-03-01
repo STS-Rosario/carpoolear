@@ -14,7 +14,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install && npm install -g @lhci/cli@0.15.x
+        run: npm ci --ignore-scripts && npm install -g @lhci/cli@0.15.x
 
       - name: Build
         run: npm run build
