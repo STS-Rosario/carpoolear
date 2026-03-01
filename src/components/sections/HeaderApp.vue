@@ -303,7 +303,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { dropdown } from 'vue-strap';
+import dropdown from '../Dropdown';
 import router from '../../router';
 import bus from '../../services/bus-event.js';
 import modal from '../Modal';
