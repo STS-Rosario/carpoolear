@@ -37,7 +37,7 @@
     </div>
 </template>
 <script>
-import moment from 'moment';
+import dayjs from '../dayjs';
 import UserNameWithBadge from './elements/UserNameWithBadge.vue';
 import { markdownToHtml } from '../services/markdown';
 
@@ -63,12 +63,12 @@ export default {
             today.setHours(0);
             today.setMinutes(0);
             today.setSeconds(0);
-            if (moment(this.message.created_at)._d < today) {
-                return moment(this.message.created_at).format(
+            if (dayjs(this.message.created_at).toDate() < today) {
+                return dayjs(this.message.created_at).format(
                     'DD/MM/YYYY HH:mm'
                 );
             }
-            return moment(this.message.created_at).format('LT');
+            return dayjs(this.message.created_at).format('LT');
         },
         grupalChat() {
             return false;

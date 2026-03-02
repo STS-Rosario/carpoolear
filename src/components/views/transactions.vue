@@ -16,7 +16,7 @@
                 >
                     <td>
                         <span class="th visible-xs">{{ $t('fecha') }}</span>
-                        {{ transaction.created_at | moment('DD/MM/YYYY') }}
+                        {{ dayjs(transaction.created_at).format('DD/MM/YYYY') }}
                     </td>
                     <td>
                         <span class="th visible-xs">{{
@@ -41,6 +41,7 @@
 <script>
 import bus from '../../services/bus-event.js';
 import { mapActions, mapGetters } from 'vuex';
+import dayjs from '../../dayjs';
 
 export default {
     name: 'transacciones',
@@ -66,6 +67,7 @@ export default {
     },
 
     methods: {
+        dayjs,
         ...mapActions({
             history: 'passenger/transactions'
         }),

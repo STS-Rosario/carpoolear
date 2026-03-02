@@ -3,7 +3,7 @@ import * as types from '../mutation-types';
 import * as pagination from '../pagination';
 import globalStore from '../index';
 import Vue from 'vue';
-import moment from 'moment';
+import dayjs from '../../dayjs';
 import { checkError, redirectToIdentityValidationIfRequired } from '../../../utils/helpers';
 import dialogs from '../../services/dialogs.js';
 import router from '../../router';
@@ -470,8 +470,8 @@ const mutations = {
                 });
                 const arrayClone = state.list.slice(0);
                 arrayClone.sort((a, b) => {
-                    const dateA = moment(a.updated_at || a.update_at).toDate();
-                    const dateB = moment(b.updated_at || b.update_at).toDate();
+                    const dateA = dayjs(a.updated_at || a.update_at).toDate();
+                    const dateB = dayjs(b.updated_at || b.update_at).toDate();
                     return dateB - dateA;
                 });
                 state.list = arrayClone;
@@ -499,8 +499,8 @@ const mutations = {
         conv.last_message = msg;
 
         state.list.sort((a, b) => {
-            const dateA = moment(a.updated_at || a.update_at).toDate();
-            const dateB = moment(b.updated_at || b.update_at).toDate();
+            const dateA = dayjs(a.updated_at || a.update_at).toDate();
+            const dateB = dayjs(b.updated_at || b.update_at).toDate();
             return dateB - dateA;
         });
 

@@ -1,7 +1,7 @@
 import { TripApi } from '../../services/api';
 import * as types from '../mutation-types';
 import globalStore from '../index';
-import moment from 'moment';
+import dayjs from '../../dayjs';
 
 import * as pagination from '../pagination';
 
@@ -125,7 +125,7 @@ const actions = {
         const lastPoint = trip.points[trip.points.length - 1];
         const data = {
             is_passenger: !trip.is_passenger,
-            date: moment(trip.trip_date).format('YYYY-MM-DD'),
+            date: dayjs(trip.trip_date).format('YYYY-MM-DD'),
             origin_lat: firstPoint.lat,
             origin_lng: firstPoint.lng,
             origin_radio: 25000, // Por ahora hardcoreado
@@ -147,8 +147,8 @@ const actions = {
                         continue;
                     }
                     if (
-                        moment(trip.trip_date).format('YYYY-MM-DD') ===
-                        moment(t.trip_date).format('YYYY-MM-DD')
+                        dayjs(trip.trip_date).format('YYYY-MM-DD') ===
+                        dayjs(t.trip_date).format('YYYY-MM-DD')
                     ) {
                         const i = users.findIndex(
                             (item) => t.user && item.id === t.user.id

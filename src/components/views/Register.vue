@@ -387,7 +387,7 @@ import bus from '../../services/bus-event';
 import router from '../../router';
 import DatePicker from '../DatePicker';
 import modal from '../Modal';
-import moment from 'moment';
+import dayjs from '../../dayjs';
 import Spinner from '../Spinner.vue';
 let emailRegex =
     /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
@@ -431,8 +431,8 @@ export default {
             accountNumberError: new Error(),
             accountTypeError: new Error(),
             accountBankError: new Error(),
-            maxDate: moment().toDate(),
-            minDate: moment('1900-01-01').toDate(),
+            maxDate: dayjs().toDate(),
+            minDate: dayjs('1900-01-01').toDate(),
             showBeDriver: false,
             driverFiles: null,
             banks: [],

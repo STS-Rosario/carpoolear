@@ -43,7 +43,7 @@
                                 v-show="!n.readed"
                             ></i>
                             <strong>{{ n.text }}</strong>
-                            <em>{{ n.created_at | moment('calendar') }}</em>
+                            <em>{{ dayjs(n.created_at).calendar() }}</em>
                         </div>
                         <span class="col-xs-2 text-right">
                             <i
@@ -80,6 +80,7 @@ import { mapActions, mapGetters } from 'vuex';
 import router from '../../router';
 import dialogs from '../../services/dialogs.js';
 import push from '../../cordova/push-capacitor.js';
+import dayjs from '../../dayjs';
 
 
 export default {
@@ -98,6 +99,7 @@ export default {
     },
 
     methods: {
+        dayjs,
         ...mapActions({
             search: 'notifications/index'
         }),

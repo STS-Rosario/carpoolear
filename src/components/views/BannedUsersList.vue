@@ -56,7 +56,7 @@ import adminNav from '../sections/adminNav';
 import Loading from '../Loading.vue';
 import { AdminApi } from '../../services/api';
 import dialogs from '../../services/dialogs.js';
-import moment from 'moment';
+import dayjs from '../../dayjs';
 
 export default {
     name: 'admin-banned-users-list',
@@ -70,7 +70,7 @@ export default {
     methods: {
         formatDate(dateString) {
             if (!dateString) return '-';
-            return moment(dateString).format('DD/MM/YYYY HH:mm');
+            return dayjs(dateString).format('DD/MM/YYYY HH:mm');
         },
         getBannedByLabel(bannedBy) {
             if (bannedBy === 0) return this.$t('sistema');
