@@ -846,38 +846,31 @@ export default {
 
         save() {
             if (!this.validate()) {
-                // DNI: send raw value without dots (backend expects digits only)
-                const nroDocRaw = this.newInfo.nro_doc
-                    ? cleanId(this.newInfo.nro_doc, this.settings.profile_id_format)
-                    : this.newInfo.nro_doc;
-
-                // Patente: trim whitespace before sending
-                const patenteValue = (this.newInfo.patente && this.newInfo.patente.trim) ? this.newInfo.patente.trim() : (this.newInfo.patente || '');
-
-                // Only send properties from the admin form (backend allows these for admin)
-                const payload = {
-                    user: { id: this.currentUser.id },
-                    name: this.newInfo.name,
-                    email: this.newInfo.email,
-                    description: this.newInfo.description,
-                    private_note: this.newInfo.private_note,
-                    nro_doc: nroDocRaw,
-                    mobile_phone: this.newInfo.mobile_phone,
-                    patente: patenteValue,
-                    driver_is_verified: this.newInfo.driver_is_verified ? 1 : 0,
-                    account_number: this.newInfo.account_number,
-                    account_type: this.newInfo.account_type,
-                    account_bank: this.newInfo.account_bank,
-                    banned: this.newInfo.banned ? 1 : 0,
-                    active: this.newInfo.active ? 1 : 0
-                };
-
+                this.newInfo.user = this.currentUser;
                 if (this.newInfo.pass && this.newInfo.pass.password) {
-                    payload.password = this.newInfo.pass.password;
-                    payload.password_confirmation = this.newInfo.pass.password_confirmation;
+                    this.newInfo.password = this.newInfo.pass.password;
+                    this.newInfo.password_confirmation =
+                        this.newInfo.pass.password_confirmation;
                 }
-
-                this.update(payload)
+                
+                // Ensure nro_doc is raw value (no dots) before sending
+                if (this.newInfo.nro_doc) {
+                    this.newInfo.nro_doc = cleanId(this.newInfo.nro_doc, this.settings.profile_id_format);
+                }
+                
+                // Handle patente data - if user has cars, update first car's patente
+                // If no cars but patente is provided, backend will create a new car
+                if (this.newInfo.patente && this.newInfo.patente.length > 0) {
+                    if (this.newInfo.cars && this.newInfo.cars.length > 0) {
+                        // Update existing car's patente
+                        this.newInfo.cars[0].patente = this.newInfo.patente;
+                    } else {
+                        // Create new car with patente - backend will handle this
+                        this.newInfo.cars = [{ patente: this.newInfo.patente }];
+                    }
+                }
+                
+                this.update(this.newInfo)
                     .then(() => {
                         dialogs.message(this.$t('perfilActualizadoCorrectamente'));
                     })
