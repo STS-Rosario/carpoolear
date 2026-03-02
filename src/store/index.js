@@ -22,7 +22,14 @@ export default createStore({
     actions,
     getters,
     state: {
-        appVersion: 3
+        appVersion: 3,
+        /** { version, versionSource: 'real'|'fallback', platform: 'android'|'ios'|'web' } from Capacitor/AppUpdate or fallback */
+        appVersionInfo: null
+    },
+    mutations: {
+        SET_APP_VERSION_INFO(state, payload) {
+            state.appVersionInfo = payload;
+        }
     },
     modules: {
         auth,

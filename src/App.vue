@@ -48,11 +48,7 @@ export default {
             const minAndroid = config.min_version_android;
             const minIos = config.min_version_ios;
 
-            if (platform === 'android' && (minAndroid === null || minAndroid === undefined)) return;
-            if (platform === 'ios' && (minIos === null || minIos === undefined || minIos === '')) return;
-
             try {
-                let outdated = false;
                 let currentVersionCode = null;
                 let currentVersionName = null;
 
@@ -60,21 +56,25 @@ export default {
                     const result = await AppUpdate.getAppUpdateInfo();
                     currentVersionCode = result.currentVersionCode;
                     currentVersionName = result.currentVersionName;
+                    const version = platform === 'android' ? String(currentVersionCode) : (currentVersionName || String(currentVersionCode));
+                    this.$store.commit('SET_APP_VERSION_INFO', { version, versionSource: 'real', platform });
                 } catch (pluginError) {
                     console.warn('AppUpdate.getAppUpdateInfo failed, using window.appVersion fallback:', pluginError);
                     const fallback = window.appVersion || '0';
                     currentVersionCode = fallback;
                     currentVersionName = fallback;
+                    this.$store.commit('SET_APP_VERSION_INFO', { version: fallback, versionSource: 'fallback', platform });
                 }
 
-                if (platform === 'android' && currentVersionCode != null) {
-                    outdated = compareAndroidVersion(currentVersionCode, minAndroid) < 0;
-                } else if (platform === 'ios' && currentVersionName != null) {
-                    outdated = compareSemver(currentVersionName, minIos) < 0;
-                }
-
-                if (outdated) {
-                    this.showForceUpgrade = true;
+                // Min-version / force-upgrade check (only when backend sends min for this platform)
+                if (platform === 'android' && (minAndroid !== null && minAndroid !== undefined)) {
+                    if (currentVersionCode != null && compareAndroidVersion(currentVersionCode, minAndroid) < 0) {
+                        this.showForceUpgrade = true;
+                    }
+                } else if (platform === 'ios' && minIos != null && minIos !== '') {
+                    if (currentVersionName != null && compareSemver(currentVersionName, minIos) < 0) {
+                        this.showForceUpgrade = true;
+                    }
                 }
             } catch (error) {
                 console.warn('Version check failed:', error);
