@@ -52,10 +52,14 @@ export default {
         const authHeader = store.getters['auth/authHeader'];
         Object.assign(headers, authHeader);
 
-        // Add Capacitor platform header when running on native platform
-        if (Capacitor.isNativePlatform()) {
-            headers['X-App-Platform'] = 'capacitor';
-        }
+        // App version and platform for min-version / force-upgrade checks (backend)
+        const platform = Capacitor.getPlatform(); // 'android' | 'ios' | 'web'
+        const appVersionInfo = store.state.appVersionInfo;
+        const version = appVersionInfo ? appVersionInfo.version : (typeof window !== 'undefined' && window.appVersion ? window.appVersion : '0');
+        const versionSource = appVersionInfo ? appVersionInfo.versionSource : 'fallback';
+        headers['X-App-Platform'] = platform;
+        headers['X-App-Version'] = String(version);
+        headers['X-App-Version-Source'] = versionSource;
 
         // Add ngrok bypass header for ngrok domains
         if (API_URL && API_URL.includes('ngrok')) {

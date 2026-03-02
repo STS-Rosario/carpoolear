@@ -36,6 +36,7 @@
     "@capacitor/splash-screen": "^7.0.2",
     "@capacitor/status-bar": "^7.0.2",
     "@capacitor/toast": "^7.0.2",
+    "@capawesome/capacitor-app-update": "^7.2.0",
     "@movilizame/vue-jumper": "^2.0.2",
     "@toast-ui/vue-editor": "^3.2.3",
     "@vue/compat": "^3.2",
