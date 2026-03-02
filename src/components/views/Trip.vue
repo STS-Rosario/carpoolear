@@ -383,13 +383,11 @@ import TripPassengers from '../elements/TripPassengers';
 import TripButtons from '../elements/TripButtons';
 
 import Vue from 'vue';
-import VueRouter from 'vue-router';
 import VueHead from 'vue-head';
 import { LMap, LTileLayer } from 'vue2-leaflet';
 import { appLocaleToRoutingLanguage } from '../../main';
 import 'leaflet-routing-machine';
 Vue.use(VueHead);
-Vue.use(VueRouter);
 
 export default {
     name: 'trip',
@@ -401,7 +399,7 @@ export default {
                 sendMessageAction: false
             },
             carpoolear_logo:
-                process.env.ROUTE_BASE + 'static/img/carpoolear_logo.png',
+                import.meta.env.VITE_ROUTE_BASE + 'static/img/carpoolear_logo.png',
             points: [
                 {
                     name: '',
@@ -825,7 +823,7 @@ export default {
             container.innerHTML = '';
 
             // Create a fresh MP instance and render the payment button
-            var mp = new MercadoPago(process.env.MERCADO_PAGO_PUBLIC_KEY);
+            var mp = new MercadoPago(import.meta.env.VITE_MERCADO_PAGO_PUBLIC_KEY);
             var preferenceId = this.trip.payment_id;
             mp.bricks().create("wallet", "walletBrick_container", {
                 initialization: { preferenceId: preferenceId }
@@ -835,7 +833,7 @@ export default {
                     var c = document.getElementById('walletBrick_container');
                     if (c && c.children.length > 0) return;
                     if (c) c.innerHTML = '';
-                    var mp2 = new MercadoPago(process.env.MERCADO_PAGO_PUBLIC_KEY);
+                    var mp2 = new MercadoPago(import.meta.env.VITE_MERCADO_PAGO_PUBLIC_KEY);
                     mp2.bricks().create("wallet", "walletBrick_container", {
                         initialization: { preferenceId: preferenceId }
                     }).catch(function (err2) {

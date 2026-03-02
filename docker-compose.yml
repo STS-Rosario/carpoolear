@@ -5,12 +5,11 @@ services:
       target: dev
     tty: true
     container_name: ${CONTAINER_PREFIX:-carpoolear}_frontend
-    command: npm run dev
+    command: npx vite --host 0.0.0.0
     environment:
-      HOST: '0.0.0.0'
-      API_URL: ${API_URL:-http://localhost:8000}
-      WEB_URL: ${WEB_URL:-https://carpoolear.com.ar/app}
-      MERCADO_PAGO_PUBLIC_KEY: ${MERCADO_PAGO_PUBLIC_KEY:-}
+      VITE_API_URL: ${API_URL:-http://localhost:8000}
+      VITE_WEB_URL: ${WEB_URL:-https://carpoolear.com.ar/app}
+      VITE_MERCADO_PAGO_PUBLIC_KEY: ${MERCADO_PAGO_PUBLIC_KEY:-}
     ports:
       - ${FRONTEND_PORT:-8080}:8080
     networks:

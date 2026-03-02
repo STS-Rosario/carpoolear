@@ -316,29 +316,29 @@ export default {
     data() {
         return {
             background_desktop_mini:
-                process.env.ROUTE_BASE +
+                import.meta.env.VITE_ROUTE_BASE +
                 'static/img/' +
-                process.env.TARGET_APP +
+                import.meta.env.VITE_TARGET_APP +
                 '_background_desktop_mini.png',
             background_desktop:
-                process.env.ROUTE_BASE +
+                import.meta.env.VITE_ROUTE_BASE +
                 'static/img/' +
-                process.env.TARGET_APP +
+                import.meta.env.VITE_TARGET_APP +
                 '_background_desktop.png',
             app_logo:
-                process.env.ROUTE_BASE +
+                import.meta.env.VITE_ROUTE_BASE +
                 'static/img/' +
-                process.env.TARGET_APP +
+                import.meta.env.VITE_TARGET_APP +
                 '_logo.png',
             showModal: false,
-            shareUrl: encodeURIComponent(new URL(process.env.WEB_URL).origin)
+            shareUrl: encodeURIComponent(new URL(import.meta.env.VITE_WEB_URL).origin)
         };
     },
 
     mounted() {
         bus.on('header-title-change', this.onHeaderChange);
         console.log('app_logo', this.app_logo);
-        console.log('ROUTE_BASE', process.env.ROUTE_BASE);
+        console.log('ROUTE_BASE', import.meta.env.VITE_ROUTE_BASE);
     },
 
     computed: {

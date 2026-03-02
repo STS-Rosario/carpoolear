@@ -1,9 +1,7 @@
 /* jshint esversion: 6 */
 
-import 'babel-polyfill';
-
 import Vue, { createApp } from 'vue';
-import App from './App';
+import App from './App.vue';
 
 import VueResource from 'vue-resource';
 import VueAnalytics from 'vue-analytics';
@@ -18,8 +16,8 @@ import directives from './directives';
 
 import bootstrapCss from './styles/bootstrap/css/bootstrap.min.css';
 
-import cssHelpers from './styles/helpers';
-import css from './styles/main';
+import './styles/helpers.css';
+import './styles/main.css';
 
 import i18n, { appLocaleToBCP47, appLocaleToRoutingLanguage, applyPriceFormat } from './i18n';
 
@@ -33,12 +31,13 @@ import { App as CapacitorApp } from '@capacitor/app';
 
 import Vue2Leaflet from 'vue2-leaflet';
 
-import * as VueGoogleMaps from 'vue2-google-maps';
+// import * as VueGoogleMaps from 'vue2-google-maps';
 
-// Re-export locale maps so existing imports from '../../main' still work
+// Re-export so existing imports from '../../main' still work
 export { appLocaleToBCP47, appLocaleToRoutingLanguage };
+export { default as i18n } from './i18n';
 
-const ROUTE_BASE = process.env.ROUTE_BASE;
+const ROUTE_BASE = import.meta.env.VITE_ROUTE_BASE;
 
 const debugApi = new DebugApi();
 const cordovaTag = document.createElement('script');
@@ -47,10 +46,10 @@ console.log('ROUTE_BASE', ROUTE_BASE, cordovaPath);
 cordovaTag.setAttribute('src', ROUTE_BASE + cordovaPath);
 document.head.appendChild(cordovaTag);
 
-const moment = require('moment-timezone');
+import moment from 'moment-timezone';
+import 'moment/locale/es';
+import 'font-awesome/css/font-awesome.min.css';
 moment.tz.setDefault('America/Argentina');
-require('moment/locale/es');
-require('font-awesome-webpack-4');
 
 Vue.use(VueResource);
 
@@ -79,8 +78,8 @@ Vue.use(VueAnalytics, {
 });
 
 Vue.use(VueMoment);
-require('./filters.js');
-require('./prototypes.js');
+import './filters.js';
+import './prototypes.js';
 
 /* import * as VueGoogleMaps from 'vue2-google-maps';
 
@@ -165,28 +164,19 @@ const initializePushNotifications = async () => {
 initializeCapacitorPlugins();
 
 window.store = store;
-if (process.env.SERVE) {
+if (import.meta.env.DEV) {
     console.log('Not running in cordova.');
     store.dispatch('init');
 } else {
-    if (process.env.NODE_ENV === 'development') {
-        setTimeout(function () {
-            if (!window.cordova) {
-                console.log('Not running in cordova.');
-                store.dispatch('init');
-            }
-        }, 2000);
-    } else {
-        console.log('no process at all', process.env.NODE_ENV);
-        setTimeout(function () {
-            if (!window.cordova) {
-                console.log('Not running in cordova.');
-                store.dispatch('init');
-            }
-        }, 2000);
-    }
+    console.log('no process at all', import.meta.env.MODE);
+    setTimeout(function () {
+        if (!window.cordova) {
+            console.log('Not running in cordova.');
+            store.dispatch('init');
+        }
+    }, 2000);
 }
-console.log('APP NAME: ' + process.env.TARGET_APP);
+console.log('APP NAME: ' + import.meta.env.VITE_TARGET_APP);
 
 bus.on('system-ready', () => {
     const app = createApp(App);

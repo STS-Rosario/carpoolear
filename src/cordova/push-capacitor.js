@@ -4,6 +4,7 @@ import * as types from '../store/mutation-types';
 import { onMessage, getMessaging, getToken } from 'firebase/messaging';
 import { initializeApp } from 'firebase/app';
 import { Capacitor } from '@capacitor/core';
+import { FIREBASE_PARAMS, FIREBASE_VAPID_KEY } from '../env.js';
 
 class Notification {
     constructor(e) {
@@ -72,19 +73,19 @@ export default {
 
     async initWebPush() {
         if (
-            process.env.FIREBASE_PARAMS !== undefined &&
+            FIREBASE_PARAMS !== undefined &&
             window.Notification &&
             window.Notification.requestPermission
         ) {
             try {
                 const firebaseParamsString = new URLSearchParams(
-                    process.env.FIREBASE_PARAMS
+                    FIREBASE_PARAMS
                 ).toString();
 
                 // Get service worker path based on environment
                 let serviceWorkerPath =
-                    process.env.NODE_ENV === 'production'
-                        ? process.env.ROUTE_BASE + 'firebase-messaging-sw.js'
+                    import.meta.env.PROD
+                        ? import.meta.env.VITE_ROUTE_BASE + 'firebase-messaging-sw.js'
                         : '/static/firebase-messaging-sw.js';
 
                 // Append firebase params as query since service workers can't access process.env
@@ -101,12 +102,12 @@ export default {
 
                 const reg = await serviceWorker;
 
-                const firebaseApp = initializeApp(process.env.FIREBASE_PARAMS);
+                const firebaseApp = initializeApp(FIREBASE_PARAMS);
                 const messaging = getMessaging(firebaseApp);
 
                 // Get FCM token
                 const currentToken = await getToken(messaging, {
-                    vapidKey: process.env.FIRABASE_VAPID_KEY,
+                    vapidKey: FIREBASE_VAPID_KEY,
                     serviceWorkerRegistration: reg
                 });
 

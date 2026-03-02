@@ -1,5 +1,5 @@
-const { test, expect } = require('@playwright/test');
-const { uiLogin } = require('./helpers');
+import { test, expect } from '@playwright/test';
+import { uiLogin } from './helpers.js';
 
 /**
  * Mock the MercadoPago SDK by injecting it before any page scripts run.

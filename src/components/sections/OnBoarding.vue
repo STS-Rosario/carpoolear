@@ -98,8 +98,8 @@ export default {
         }),
         srcCard(number) {
             let src =
-                process.env.ROUTE_BASE +
-                `static/img/onBoarding/${process.env.TARGET_APP}_placa${number}.jpg`;
+                import.meta.env.VITE_ROUTE_BASE +
+                `static/img/onBoarding/${import.meta.env.VITE_TARGET_APP}_placa${number}.jpg`;
             console.log('src', src);
             return src;
         },

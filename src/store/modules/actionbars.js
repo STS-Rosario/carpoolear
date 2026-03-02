@@ -1,7 +1,7 @@
 import router from '../../router';
 import globalStore from '../index';
 import * as types from '../mutation-types';
-let appName = process.env.TARGET_APP || 'Carpoolear';
+let appName = import.meta.env.VITE_TARGET_APP || 'Carpoolear';
 if (appName && appName.length) {
     appName = appName.charAt(0).toUpperCase() + appName.slice(1);
 }
@@ -93,7 +93,7 @@ const actions = {
     setTitle(store, title = '') {
         const getters = globalStore.getters;
         const config = getters['auth/appConfig'];
-        let appName = config ? config.name_app : process.env.TARGET_APP;
+        let appName = config ? config.name_app : import.meta.env.VITE_TARGET_APP;
         if (appName && appName.length) {
             appName = appName.charAt(0).toUpperCase() + appName.slice(1);
         }

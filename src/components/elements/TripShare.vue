@@ -43,7 +43,7 @@ export default {
     data() {
         return {
             currentUrl: encodeURIComponent(
-                process.env.WEB_URL + this.$route.fullPath
+                import.meta.env.VITE_WEB_URL + this.$route.fullPath
             )
         };
     },

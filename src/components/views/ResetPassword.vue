@@ -83,7 +83,7 @@ export default {
             password_confirmation: '',
             password: '',
             carpoolear_logo:
-                process.env.ROUTE_BASE + 'static/img/carpoolear_logo.png'
+                import.meta.env.VITE_ROUTE_BASE + 'static/img/carpoolear_logo.png'
         };
     },
     computed: {
