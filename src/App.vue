@@ -8,7 +8,7 @@
             <!-- Custom Splash Screen -->
             <div v-if="showCustomSplash" class="custom-splash-screen">
                 <img src="https://carpoolear.com.ar/app/static/img/splash-android-1280x1920.png" alt="Carpoolear" class="splash-image" />
-                <div class="splash-version">Version 96</div>
+                <div class="splash-version">{{ splashVersionText }}</div>
             </div>
 
             <onBoarding key="1" v-if="onBoardingVisibility"></onBoarding>
@@ -117,6 +117,13 @@ export default {
         }, 3000);
     },
     computed: {
+        // Same version we send in X-App-Version header for all requests (network.js getHeader)
+        splashVersionText() {
+            const appVersionInfo = this.$store.state.appVersionInfo;
+            const version = (appVersionInfo && appVersionInfo.version) || (typeof window !== 'undefined' && window.appVersion) || '0';
+            const base = 'Version ' + version;
+            return Capacitor.isNativePlatform() ? base : base + ' - build 97';
+        },
         ...mapGetters({
             deviceReady: 'cordova/deviceReady',
             backgroundStyle: 'background/backgroundStyle',
