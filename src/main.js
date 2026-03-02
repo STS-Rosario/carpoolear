@@ -21,7 +21,11 @@ import bootstrapCss from './styles/bootstrap/css/bootstrap.min.css';
 import cssHelpers from './styles/helpers';
 import css from './styles/main';
 
-import i18n, { appLocaleToBCP47, appLocaleToRoutingLanguage, applyPriceFormat } from './i18n';
+import i18n, {
+    appLocaleToBCP47,
+    appLocaleToRoutingLanguage,
+    applyPriceFormat
+} from './i18n';
 
 import bus from './services/bus-event';
 import { DebugApi } from './services/api';
@@ -59,15 +63,24 @@ const numberFormatLocaleMap = appLocaleToBCP47;
 const original$n = Vue.prototype.$n;
 Vue.prototype.$n = function (value, ...args) {
     if (args[0] === 'currency') {
-        const intlLocale = numberFormatLocaleMap[this.$i18n.locale] || this.$i18n.locale;
-        if (args.length === 1) return this.$i18n.n(value, 'currency', intlLocale);
-        if (args.length === 2 && typeof args[1] === 'object') return this.$i18n.n(value, { key: 'currency', locale: intlLocale, ...args[1] });
+        const intlLocale =
+            numberFormatLocaleMap[this.$i18n.locale] || this.$i18n.locale;
+        if (args.length === 1) { return this.$i18n.n(value, 'currency', intlLocale); }
+        if (args.length === 2 && typeof args[1] === 'object') {
+            return this.$i18n.n(value, {
+                key: 'currency',
+                locale: intlLocale,
+                ...args[1]
+            });
+        }
     }
     return original$n.call(this, value, ...args);
 };
 
 store.subscribe((mutation) => {
-    const isConfig = mutation.type === 'auth/AUTH_APP_CONFIG' || mutation.type === 'AUTH_APP_CONFIG';
+    const isConfig =
+        mutation.type === 'auth/AUTH_APP_CONFIG' ||
+        mutation.type === 'AUTH_APP_CONFIG';
     if (isConfig && mutation.payload) {
         const showCents = mutation.payload.price_show_cents !== false;
         applyPriceFormat(showCents);
@@ -119,7 +132,10 @@ const initializeCapacitorPlugins = async () => {
 
         console.log('Capacitor plugins initialized');
     } catch (error) {
-        console.log('Capacitor plugins not available (running in browser):', error);
+        console.log(
+            'Capacitor plugins not available (running in browser):',
+            error
+        );
     }
 };
 
@@ -129,7 +145,9 @@ const initializePushNotifications = async () => {
         const { Capacitor } = await import('@capacitor/core');
 
         if (Capacitor.isNativePlatform()) {
-            const { PushNotifications } = await import('@capacitor/push-notifications');
+            const { PushNotifications } = await import(
+                '@capacitor/push-notifications'
+            );
 
             const result = await PushNotifications.requestPermissions();
 
@@ -142,16 +160,22 @@ const initializePushNotifications = async () => {
                 });
 
                 // Listen for registration errors
-                PushNotifications.addListener('registrationError', (error) => {
-                });
+                PushNotifications.addListener(
+                    'registrationError',
+                    (error) => {}
+                );
 
                 // Listen for incoming push notifications
-                PushNotifications.addListener('pushNotificationReceived', (notification) => {
-                });
+                PushNotifications.addListener(
+                    'pushNotificationReceived',
+                    (notification) => {}
+                );
 
                 // Listen for notification tap
-                PushNotifications.addListener('pushNotificationActionPerformed', (notification) => {
-                });
+                PushNotifications.addListener(
+                    'pushNotificationActionPerformed',
+                    (notification) => {}
+                );
             } else {
             }
         } else {
