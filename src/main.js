@@ -65,14 +65,14 @@ Vue.prototype.$n = function (value, ...args) {
     if (args[0] === 'currency') {
         const intlLocale =
             numberFormatLocaleMap[this.$i18n.locale] || this.$i18n.locale;
-        if (args.length === 1)
-            return this.$i18n.n(value, 'currency', intlLocale);
-        if (args.length === 2 && typeof args[1] === 'object')
+        if (args.length === 1) { return this.$i18n.n(value, 'currency', intlLocale); }
+        if (args.length === 2 && typeof args[1] === 'object') {
             return this.$i18n.n(value, {
                 key: 'currency',
                 locale: intlLocale,
                 ...args[1]
             });
+        }
     }
     return original$n.call(this, value, ...args);
 };
