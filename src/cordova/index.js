@@ -14,7 +14,7 @@ import config from '../../config/conf.json';
 console.log('CORDOVA INDEX.JS IS LOADING!');
 
 window.facebook = facebook;
-window.appVersion = '3.1.2';
+window.appVersion = '3.1.3';
 
 const onDeviceReady = () => {
     console.log('Device ready');
