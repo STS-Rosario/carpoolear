@@ -82,7 +82,7 @@ import SeatsChart from '../elements/SeatsChart';
 import MonthlyUsersChart from '../elements/MonthlyUsersChart';
 import TotalUsersChart from '../elements/TotalUsersChart';
 import datePicker from '../DatePicker';
-import moment from 'moment';
+import dayjs from '../../dayjs';
 import adminNav from '../sections/adminNav';
 
 export default {
@@ -90,10 +90,10 @@ export default {
     data() {
         return {
             dateLimits: {
-                start: moment(new Date(new Date().getFullYear(), 0, 1)).format(
+                start: dayjs(new Date(new Date().getFullYear(), 0, 1)).format(
                     'YYYY-MM'
                 ),
-                end: moment().format('YYYY-MM'),
+                end: dayjs().format('YYYY-MM'),
                 dateError: new Error()
             }
         };

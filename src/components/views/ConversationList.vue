@@ -117,8 +117,7 @@
                                                     v-if="false"
                                                 >
                                                     {{
-                                                        conversation.updated_at
-                                                            | moment('h:mm a')
+                                                        dayjs(conversation.updated_at).format('h:mm a')
                                                     }}
                                                 </span>
                                             </div>
@@ -127,7 +126,7 @@
                                                 v-if="conversation.last_message"
                                             >
                                                 {{
-                                                    $moment(
+                                                    dayjs(
                                                         conversation
                                                             .last_message
                                                             .created_at
@@ -216,6 +215,7 @@ import Loading from '../Loading.vue';
 import UserNameWithBadge from '../elements/UserNameWithBadge.vue';
 import router from '../../router';
 import CoordinateTrip from '../elements/CoordinateTrip';
+import dayjs from '../../dayjs';
 
 export default {
     name: 'conversation-list',
@@ -241,6 +241,7 @@ export default {
     },
 
     methods: {
+        dayjs,
         ...mapActions({
             conversationsSearch: 'conversations/listSearch',
             searchUser: 'conversations/getUserList',

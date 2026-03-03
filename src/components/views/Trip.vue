@@ -284,16 +284,11 @@
                                                 <small>
                                                     {{ $t('viajaEl') }}
                                                     {{
-                                                        p.tripMatch.trip_date
-                                                            | moment('DD/MM')
+                                                        dayjs(p.tripMatch.trip_date).format('DD/MM')
                                                     }}
                                                     <strong>
                                                         {{
-                                                            p.tripMatch
-                                                                .trip_date
-                                                                | moment(
-                                                                    'HH:mm'
-                                                                )
+                                                            dayjs(p.tripMatch.trip_date).format('HH:mm')
                                                         }}
                                                     </strong>
                                                 </small>
@@ -368,7 +363,7 @@ import router from '../../router';
 import bus from '../../services/bus-event';
 import svgItem from '../SvgItem';
 import modal from '../Modal';
-import moment from 'moment';
+import dayjs from '../../dayjs';
 import dialogs from '../../services/dialogs.js';
 import TripLocation from '../elements/TripLocation';
 import TripDriver from '../elements/TripDriver';
@@ -449,7 +444,7 @@ export default {
                             this.trip.points[this.trip.points.length - 1]
                                 .json_address.ciudad +
                             ' | ' +
-                            moment(this.trip.trip_date).format(
+                            dayjs(this.trip.trip_date).format(
                                 'dddd DD/MM hh:mm'
                             )
                     },
@@ -462,6 +457,7 @@ export default {
     },
 
     methods: {
+        dayjs,
         ...mapActions({
             getTrip: 'getTrip',
             lookConversation: 'conversations/createConversation',

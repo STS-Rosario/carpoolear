@@ -76,12 +76,12 @@
                             <div class="trip_date_date">
                                 <span class="trip_date_date_day">
                                     <span style="text-transform: uppercase">
-                                        {{ [trip.trip_date] | moment('ddd') }}
+                                        {{ dayjs(trip.trip_date).format('ddd') }}
                                     </span>
                                 </span>
                                 <br />
                                 <span class="trip_date_date_month">
-                                    {{ [trip.trip_date] | moment('MMM') }}
+                                    {{ dayjs(trip.trip_date).format('MMM') }}
                                 </span>
                             </div>
                         </time>
@@ -184,7 +184,7 @@
                                     v-if="tripCardTheme === 'light'"
                                 >
                                     <span class="trip_from_time">
-                                        {{ trip.trip_date | moment('HH:mm') }}
+                                        {{ dayjs(trip.trip_date).format('HH:mm') }}
                                     </span>
                                 </div>
                                 <div
@@ -240,7 +240,7 @@
                                     v-if="tripCardTheme === 'light'"
                                 >
                                     <span class="trip_to_time">
-                                        {{ tripArrivingTime | moment('HH:mm') }}
+                                        {{ dayjs(tripArrivingTime).format('HH:mm') }}
                                     </span>
                                 </div>
                                 <div
@@ -345,21 +345,21 @@
                                     <span class="trip_datetime_date_day">
                                         <span style="text-transform: uppercase">
                                             {{
-                                                [trip.trip_date] | moment('ddd')
+                                                dayjs(trip.trip_date).format('ddd')
                                             }}
                                         </span>
                                         {{
-                                            [trip.trip_date] | moment('DD MMMM')
+                                            dayjs(trip.trip_date).format('DD MMMM')
                                         }}
                                     </span>
                                     <br />
                                     <span class="trip_datetime_date_year">
-                                        {{ [trip.trip_date] | moment('YYYY') }}
+                                        {{ dayjs(trip.trip_date).format('YYYY') }}
                                     </span>
                                 </div>
                                 <div class="col-xs-10">
                                     <span class="trip_datetime_time">
-                                        {{ [trip.trip_date] | moment('HH:mm') }}
+                                        {{ dayjs(trip.trip_date).format('HH:mm') }}
                                         {{ $t('horas') }}
                                     </span>
                                 </div>
@@ -562,7 +562,7 @@ import bus from '../../services/bus-event.js';
 import tripDisplay from './TripDisplay';
 import WeeklySchedule from '../elements/WeeklySchedule';
 import UserNameWithBadge from '../elements/UserNameWithBadge.vue';
-import moment from 'moment';
+import dayjs from '../../dayjs';
 import SvgItem from '../SvgItem';
 
 export default {
@@ -594,6 +594,7 @@ export default {
     },
 
     methods: {
+        dayjs,
         ...mapActions({
             changeSeats: 'trips/changeSeats',
             remove: 'trips/remove'
@@ -792,7 +793,7 @@ export default {
                 let minutes = 0;
                 minutes = parseInt(this.trip.estimated_time.split(':')[0]) * 60;
                 minutes += parseInt(this.trip.estimated_time.split(':')[1]);
-                return moment(this.trip.trip_date).add(minutes, 'minutes');
+                return dayjs(this.trip.trip_date).add(minutes, 'minutes');
             }
             return '';
         },

@@ -7,11 +7,11 @@
                 v-if="tripCardTheme !== 'light'"
             >
                 <span class="trip_datetime_date">
-                    {{ [trip.trip_date] | moment('DD MMMM YYYY') }}
+                    {{ dayjs(trip.trip_date).format('DD MMMM YYYY') }}
                 </span>
                 -
                 <span class="trip_datetime_time">{{
-                    [trip.trip_date] | moment('HH:mm')
+                    dayjs(trip.trip_date).format('HH:mm')
                 }}</span>
             </time>
         </div>
@@ -29,14 +29,14 @@
             <time class="trip_date_right" :datetime="trip.trip_date">
                 <div class="trip_date_date">
                     <span class="trip_date_date_day">
-                        <span>{{ [trip.trip_date] | moment('DD') }}</span>
+                        <span>{{ dayjs(trip.trip_date).format('DD') }}</span>
                     </span>
                     <br v-if="isMobile" />
                     <span v-if="isMobile" class="trip_date_date_month">
-                        {{ [trip.trip_date] | moment('MMM') }}
+                        {{ dayjs(trip.trip_date).format('MMM') }}
                     </span>
                     <span v-else class="trip_date_date_month">
-                        {{ [trip.trip_date] | moment('MMMM') }}
+                        {{ dayjs(trip.trip_date).format('MMMM') }}
                     </span>
                 </div>
             </time>
@@ -57,8 +57,12 @@
 import { mapGetters } from 'vuex';
 import WeeklySchedule from './WeeklySchedule';
 import SvgItem from '../SvgItem';
+import dayjs from '../../dayjs';
 export default {
     name: 'TripDate',
+    methods: {
+        dayjs
+    },
     computed: {
         ...mapGetters({
             trip: 'trips/currentTrip',

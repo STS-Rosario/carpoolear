@@ -20,7 +20,7 @@
 
 <script>
 import datePicker from 'vue-datepicker';
-import moment from 'moment';
+import dayjs from '../dayjs';
 
 export default {
     name: 'calendar',
@@ -30,9 +30,9 @@ export default {
             if (this.value.indexOf('/') >= 0) {
                 format = 'DD/MM/YYYY';
             }
-            let time = moment(this.value, format).format('DD/MM/YYYY');
+            let time = dayjs(this.value, format).format('DD/MM/YYYY');
             this.$refs.calendar.showDay(time);
-            this.date.time = moment(this.value, format).format('DD/MM/YYYY');
+            this.date.time = dayjs(this.value, format).format('DD/MM/YYYY');
         }
     },
     data() {
@@ -93,7 +93,7 @@ export default {
     mounted() {},
     computed: {
         dateSys: function () {
-            return moment(this.date.time, this.format).format('YYYY-MM-DD');
+            return dayjs(this.date.time, this.format).format('YYYY-MM-DD');
         }
     },
     methods: {

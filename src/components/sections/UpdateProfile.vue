@@ -113,7 +113,7 @@
                     </div>
                     <!--<div class="form-group">
                     <label for="">Fecha de nacimiento <span class="required-field-flag" title="Campo requerido">(*)</span></label>
-                    <DatePicker :value="birthday | moment('YYYY-MM-DD') " ref="ipt_calendar" name="ipt_calendar" :maxDate="maxDate" :minDate="minDate" :class="{'has-error': birthdayError.state}" ></DatePicker>
+                    <DatePicker :value="dayjs(birthday).format('YYYY-MM-DD') " ref="ipt_calendar" name="ipt_calendar" :maxDate="maxDate" :minDate="minDate" :class="{'has-error': birthdayError.state}" ></DatePicker>
                     <span class="error" v-if="birthdayError.state"> {{birthdayError.message}} </span>
                 </div>-->
                     <div class="form-group">
@@ -639,7 +639,7 @@ import Uploadfile from '../Uploadfile';
 import DatePicker from '../DatePicker';
 import SvgItem from '../SvgItem';
 import dialogs from '../../services/dialogs.js';
-import moment from 'moment';
+import dayjs from '../../dayjs';
 import bus from '../../services/bus-event';
 import Spinner from '../Spinner.vue';
 import modal from '../Modal';
@@ -678,8 +678,8 @@ export default {
             accountNumberError: new Error(),
             accountTypeError: new Error(),
             accountBankError: new Error(),
-            maxDate: moment().toDate(),
-            minDate: moment('1900-01-01').toDate(),
+            maxDate: dayjs().toDate(),
+            minDate: dayjs('1900-01-01').toDate(),
             birthday: '',
             birthdayAnswer: '',
             showChangePassword: false,
@@ -749,6 +749,7 @@ export default {
         }
     },
     methods: {
+        dayjs,
         ...mapActions({
             update: 'auth/update',
             updatePhoto: 'auth/updatePhoto',
@@ -971,8 +972,8 @@ export default {
                 this.birthdayError.message = this.$t('olvidasteFechaNacimiento');
                 globalError = true;
             } else {
-                let birthday = moment(this.birthdayAnswer);
-                if (moment().diff(birthday, 'years') < 18) {
+                let birthday = dayjs(this.birthdayAnswer);
+                if (dayjs().diff(birthday, 'years') < 18) {
                     this.birthdayError.state = true;
                     this.birthdayError.message = this.$t('debesSerMayorDeEdad');
                     globalError = true;
@@ -1193,8 +1194,8 @@ export default {
             }
         }
         try {
-            if (moment(this.user.birthday, 'YYYY-MM-DD').isValid()) {
-                this.birthday = moment(this.user.birthday, 'YYYY-MM-DD');
+            if (dayjs(this.user.birthday, 'YYYY-MM-DD').isValid()) {
+                this.birthday = dayjs(this.user.birthday, 'YYYY-MM-DD');
             } else {
                 this.birthday = '';
             }

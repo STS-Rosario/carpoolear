@@ -27,7 +27,7 @@
                     }}</strong>
                     {{ $t('ratePendingElDia') }}
                     <strong>{{
-                        trip.trip_date | moment('dddd DD [de] MMMM')
+                        dayjs(trip.trip_date).format('dddd DD [de] MMMM')
                     }}</strong>
                     ?
                 </div>
@@ -71,6 +71,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import dialogs from '../services/dialogs.js';
+import dayjs from '../dayjs';
 
 export default {
     name: 'rate-pending',
@@ -89,6 +90,7 @@ export default {
     },
 
     methods: {
+        dayjs,
         ...mapActions({
             emit: 'rates/vote'
         }),

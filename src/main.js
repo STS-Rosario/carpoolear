@@ -7,7 +7,7 @@ import App from './App';
 
 import VueResource from 'vue-resource';
 import VueAnalytics from 'vue-analytics';
-import VueMoment from 'vue-moment';
+import dayjs from './dayjs';
 
 import router from './router';
 import store from './store';
@@ -51,9 +51,6 @@ console.log('ROUTE_BASE', ROUTE_BASE, cordovaPath);
 cordovaTag.setAttribute('src', ROUTE_BASE + cordovaPath);
 document.head.appendChild(cordovaTag);
 
-const moment = require('moment-timezone');
-moment.tz.setDefault('America/Argentina');
-require('moment/locale/es');
 require('font-awesome-webpack-4');
 
 Vue.use(VueResource);
@@ -91,7 +88,6 @@ Vue.use(VueAnalytics, {
     id: 'UA-40995702-4'
 });
 
-Vue.use(VueMoment);
 require('./filters.js');
 require('./prototypes.js');
 
@@ -219,17 +215,17 @@ bus.on('system-ready', () => {
     app.use(i18n);
     const vm = app.mount('#app');
 
-    // Set moment locale based on i18n language
-    const momentLocaleMap = {
+    // Set dayjs locale based on i18n language
+    const dayjsLocaleMap = {
         arg: 'es',
         chl: 'es',
         en: 'en'
     };
     const currentLocale = i18n.global.locale || 'arg';
-    moment.locale(momentLocaleMap[currentLocale] || 'es');
+    dayjs.locale(dayjsLocaleMap[currentLocale] || 'es');
 
-    // Watch for language changes and update moment locale
+    // Watch for language changes and update dayjs locale
     vm.$watch('$i18n.locale', (newLocale) => {
-        moment.locale(momentLocaleMap[newLocale] || 'es');
+        dayjs.locale(dayjsLocaleMap[newLocale] || 'es');
     });
 });

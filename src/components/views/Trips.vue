@@ -280,7 +280,7 @@ import SearchBox from '../sections/SearchTrip.vue';
 import Loading from '../Loading.vue';
 import bus from '../../services/bus-event.js';
 import { mapGetters, mapActions } from 'vuex';
-import moment from 'moment';
+import dayjs from '../../dayjs';
 import router from '../../router';
 import dialogs from '../../services/dialogs.js';
 import modal from '../Modal';
@@ -362,7 +362,7 @@ export default {
         isDonationTime() {
             if (this.appConfig) {
                 return (
-                    moment().date() <
+                    dayjs().date() <
                     parseFloat(this.appConfig.donation.month_days)
                 );
             } else {
@@ -410,8 +410,8 @@ export default {
         isComplementary(trip, searchParams, index) {
             let isComplementary = false;
             if (searchParams.data && searchParams.data.date) {
-                var searchDate = moment(searchParams.data.date).toDate();
-                var tripDate = moment(trip.trip_date).toDate();
+                var searchDate = dayjs(searchParams.data.date).toDate();
+                var tripDate = dayjs(trip.trip_date).toDate();
                 tripDate.setHours(0);
                 tripDate.setMinutes(0);
                 tripDate.setSeconds(0);

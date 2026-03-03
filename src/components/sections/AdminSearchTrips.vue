@@ -218,7 +218,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import DatePicker from '../DatePicker';
-import moment from 'moment';
+import dayjs from '../../dayjs';
 import dialogs from '../../services/dialogs.js';
 import loading from '../Loading';
 import Autocomplete from '../Autocomplete';
@@ -227,7 +227,7 @@ export default {
     name: 'search-trip',
     data() {
         return {
-            minDate: moment().toDate(),
+            minDate: dayjs().toDate(),
             isPassenger: false,
             isAdmin: true,
             from_town: {

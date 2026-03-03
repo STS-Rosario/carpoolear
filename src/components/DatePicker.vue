@@ -38,8 +38,8 @@
                 @change="changeMobileValue"
                 type="date"
                 id="datepicker-mobile"
-                :min="min | moment('YYYY-MM-DD')"
-                :max="max | moment('YYYY-MM-DD')"
+                :min="dayjs(min).format('YYYY-MM-DD')"
+                :max="dayjs(max).format('YYYY-MM-DD')"
                 autocomplete="off"
             />
         </div>
@@ -49,7 +49,7 @@
 <script>
 import DatepickerSystem from 'vuejs-datepicker';
 import { mapGetters } from 'vuex';
-import moment from 'moment';
+import dayjs from '../dayjs';
 import bus from '../services/bus-event';
 /*
 
@@ -63,25 +63,26 @@ export default {
             date: '',
             update: true,
             focus: false,
-            nextYear: moment().add(2, 'years').format('YYYY-MM-DD'),
-            lastCentury: moment().subtract(100, 'years').format('YYYY-MM-DD'),
+            nextYear: dayjs().add(2, 'years').format('YYYY-MM-DD'),
+            lastCentury: dayjs().subtract(100, 'years').format('YYYY-MM-DD'),
             niceDate: ''
         };
     },
     mounted() {
         if (this.value !== '') {
-            this.dateBrowser = moment(this.value).toDate();
+            this.dateBrowser = dayjs(this.value).toDate();
             this.dateMobile = this.value;
-            this.niceDate = moment(this.value).format('DD/MM/YYYY');
+            this.niceDate = dayjs(this.value).format('DD/MM/YYYY');
         }
     },
 
     updated() {
         if (this.value !== '') {
-            this.niceDate = moment(this.value).format('DD/MM/YYYY');
+            this.niceDate = dayjs(this.value).format('DD/MM/YYYY');
         }
     },
     methods: {
+        dayjs,
         clear() {
             this.dateBrowser = '';
             this.dateMobile = '';
@@ -94,7 +95,7 @@ export default {
             this.dateMobile = el.target.value;
             // Update the nice formatted date for consistency
             if (el.target.value) {
-                this.niceDate = moment(el.target.value).format('DD/MM/YYYY');
+                this.niceDate = dayjs(el.target.value).format('DD/MM/YYYY');
             } else {
                 this.niceDate = '';
             }
@@ -110,7 +111,7 @@ export default {
     watch: {
         dateBrowser: function (value) {
             value =
-                value && value !== '' ? moment(value).format('YYYY-MM-DD') : '';
+                value && value !== '' ? dayjs(value).format('YYYY-MM-DD') : '';
 
             bus.emit('date-change', value);
 
@@ -124,9 +125,9 @@ export default {
             this.$emit('date_changed', value);
         },
         value: function (value) {
-            this.dateBrowser = moment(this.value).toDate();
+            this.dateBrowser = dayjs(this.value).toDate();
             this.dateMobile = this.value;
-            this.niceDate = moment(this.value).format('DD/MM/YYYY');
+            this.niceDate = dayjs(this.value).format('DD/MM/YYYY');
         }
     },
     props: {
@@ -190,9 +191,9 @@ export default {
                 answer = this.nextYear;
             }
             if (this.browser) {
-                return moment(answer).toDate();
+                return dayjs(answer).toDate();
             } else {
-                return moment(answer).format('YYYY-MM-DD');
+                return dayjs(answer).format('YYYY-MM-DD');
             }
         },
         min() {
@@ -203,13 +204,13 @@ export default {
                 answer = this.lastCentury;
             }
             if (this.browser) {
-                let date = moment(answer).toDate();
+                let date = dayjs(answer).toDate();
                 date.setHours(0);
                 date.setMinutes(0);
                 date.setSeconds(0);
                 return date;
             } else {
-                return moment(answer).format('YYYY-MM-DD');
+                return dayjs(answer).format('YYYY-MM-DD');
             }
         }
     },

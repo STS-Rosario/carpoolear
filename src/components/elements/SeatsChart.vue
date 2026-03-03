@@ -12,16 +12,16 @@
 <script>
 import LineChart from './LineChart';
 import { mapActions } from 'vuex';
-import moment from 'moment';
+import dayjs from '../../dayjs';
 
 export default {
     name: 'seats-chart',
     props: {
         minDate: {
-            default: moment(Date(new Date().getFullYear(), 0, 1), 'YYYY-MM')
+            default: dayjs(new Date(new Date().getFullYear(), 0, 1)).format('YYYY-MM')
         },
         maxDate: {
-            default: moment(Date(), 'YYYY-MM')
+            default: dayjs(new Date()).format('YYYY-MM')
         }
     },
     data() {

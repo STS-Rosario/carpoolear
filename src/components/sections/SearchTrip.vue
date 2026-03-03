@@ -149,14 +149,14 @@ import { mapGetters } from 'vuex';
 import DatePicker from '../DatePicker';
 import autocomplete from '../Autocomplete.vue';
 import bus from '../../services/bus-event.js';
-import moment from 'moment';
+import dayjs from '../../dayjs';
 import dialogs from '../../services/dialogs.js';
 
 export default {
     name: 'search-trip',
     data() {
         return {
-            minDate: moment().toDate(),
+            minDate: dayjs().toDate(),
             isPassenger: false,
             from_town: {
                 name: '',

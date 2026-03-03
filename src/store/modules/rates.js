@@ -1,7 +1,7 @@
 import { RateApi } from '../../services/api';
 import * as types from '../mutation-types';
 import globalStore from '../index';
-import moment from 'moment';
+import dayjs from '../../dayjs';
 
 const rateApi = new RateApi();
 
@@ -46,7 +46,7 @@ const actions = {
         return rateApi
             .reply(data.trip_id, data.user_id, obj)
             .then((response) => {
-                data.reply_comment_created_at = moment(new Date()).format();
+                data.reply_comment_created_at = dayjs(new Date()).format();
                 globalStore.commit('profile/' + types.PROFILE_SET_REPLY, data);
                 return Promise.resolve();
             })

@@ -23,7 +23,7 @@
                 <p class="chat_last_connection">
                     <strong>{{ $t('ultimaConexion') }}</strong>
                     <span class="">{{
-                        lastConnection | moment('calendar')
+                        dayjs(lastConnection).calendar()
                     }}</span>
                 </p>
             </div>
@@ -89,7 +89,7 @@ import { mapGetters, mapActions } from 'vuex';
 import { Editor } from '@toast-ui/vue-editor';
 import MessageView from '../MessageView';
 import router from '../../router';
-import moment from 'moment';
+import dayjs from '../../dayjs';
 import bus from '../../services/bus-event.js';
 import dialogs from '../../services/dialogs.js';
 import CoordinateTrip from '../elements/CoordinateTrip';
@@ -143,6 +143,7 @@ export default {
         }
     },
     methods: {
+        dayjs,
         ...mapActions({
             select: 'conversations/select',
             send: 'conversations/sendMessage',
@@ -236,7 +237,7 @@ export default {
                     });
                     this.setSubTitle(
                         this.$t('ultimaConexion') +
-                            moment(this.lastConnection).calendar()
+                            dayjs(this.lastConnection).calendar()
                     );
                     this.setImgTitle(this.conversation.image);
                 }
@@ -268,7 +269,7 @@ export default {
                 }
             });
             this.setSubTitle(
-                this.$t('ultimaConexion') + moment(this.lastConnection).calendar()
+                this.$t('ultimaConexion') + dayjs(this.lastConnection).calendar()
             );
             this.setImgTitle(this.conversation.image);
 

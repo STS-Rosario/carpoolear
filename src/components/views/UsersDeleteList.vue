@@ -142,7 +142,7 @@ import modal from '../Modal';
 import Spinner from '../Spinner.vue';
 import { AdminApi } from '../../services/api';
 import dialogs from '../../services/dialogs.js';
-import moment from 'moment';
+import dayjs from '../../dayjs';
 
 export default {
     name: 'admin-users-delete-list',
@@ -162,7 +162,7 @@ export default {
     methods: {
         formatDate(dateString) {
             if (!dateString) return '-';
-            return moment(dateString).format('DD/MM/YYYY HH:mm');
+            return dayjs(dateString).format('DD/MM/YYYY HH:mm');
         },
         getActionTakenLabel(actionTaken) {
             if (actionTaken === 0) return this.$t('solicitado');

@@ -144,7 +144,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex';
-import moment from 'moment';
+import dayjs from '../../dayjs';
 import spinner from '../Spinner.vue';
 import Transactions from '../views/transactions.vue';
 
@@ -175,7 +175,7 @@ export default {
                 : false;
         },
         expired() {
-            return moment(this.trip.trip_date).format() < moment().format();
+            return dayjs(this.trip.trip_date).format() < dayjs().format();
         },
         owner() {
             return this.trip && this.user && this.user.id === this.trip.user.id;
