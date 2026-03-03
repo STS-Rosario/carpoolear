@@ -46,11 +46,13 @@ export default {
 
             const platform = Capacitor.getPlatform();
             const minAndroid = config.min_version_android;
+            const minAndroidSemver = config.min_version_android_semver;
             const minIos = config.min_version_ios;
 
             try {
                 let currentVersionCode = null;
                 let currentVersionName = null;
+                let isFallback = false;
 
                 try {
                     const result = await AppUpdate.getAppUpdateInfo();
@@ -63,13 +65,20 @@ export default {
                     const fallback = window.appVersion || '0';
                     currentVersionCode = fallback;
                     currentVersionName = fallback;
+                    isFallback = true;
                     this.$store.commit('SET_APP_VERSION_INFO', { version: fallback, versionSource: 'fallback', platform });
                 }
 
                 // Min-version / force-upgrade check (only when backend sends min for this platform)
-                if (platform === 'android' && (minAndroid !== null && minAndroid !== undefined)) {
-                    if (currentVersionCode != null && compareAndroidVersion(currentVersionCode, minAndroid) < 0) {
-                        this.showForceUpgrade = true;
+                if (platform === 'android') {
+                    if (!isFallback && currentVersionCode != null && minAndroid != null && minAndroid !== undefined) {
+                        if (compareAndroidVersion(currentVersionCode, minAndroid) < 0) {
+                            this.showForceUpgrade = true;
+                        }
+                    } else if (isFallback && currentVersionName != null && minAndroidSemver) {
+                        if (compareSemver(currentVersionName, minAndroidSemver) < 0) {
+                            this.showForceUpgrade = true;
+                        }
                     }
                 } else if (platform === 'ios' && minIos != null && minIos !== '') {
                     if (currentVersionName != null && compareSemver(currentVersionName, minIos) < 0) {
