@@ -1,7 +1,6 @@
 const { defineConfig } = require('@playwright/test');
 
 module.exports = defineConfig({
-  testDir: './e2e',
   timeout: 30000,
   retries: 0,
   expect: {
@@ -18,7 +17,13 @@ module.exports = defineConfig({
   },
   projects: [
     {
-      name: 'chromium',
+      name: 'e2e',
+      testDir: './e2e',
+      use: { browserName: 'chromium' },
+    },
+    {
+      name: 'frontend',
+      testDir: './e2e-frontend',
       use: { browserName: 'chromium' },
     },
   ],

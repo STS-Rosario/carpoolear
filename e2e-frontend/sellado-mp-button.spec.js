@@ -1,5 +1,10 @@
 const { test, expect } = require('@playwright/test');
-const { uiLogin } = require('./helpers');
+const {
+  setupCatchAllMock,
+  setupCommonMocks,
+  setupAuthState,
+  waitForPageReady,
+} = require('./shared/mocks');
 
 /**
  * Mock the MercadoPago SDK by injecting it before any page scripts run.
@@ -115,6 +120,12 @@ async function mockConfigWithSellado(page) {
 test.describe('Sellado - MercadoPago wallet button', () => {
   const TRIP_ID = 99999;
 
+  test.beforeEach(async ({ page }) => {
+    await setupCatchAllMock(page);
+    await setupCommonMocks(page);
+    await setupAuthState(page);
+  });
+
   test('renders the sellado banner and MP wallet button on a trip awaiting payment', async ({ page }) => {
     test.setTimeout(60000);
 
@@ -135,9 +146,9 @@ test.describe('Sellado - MercadoPago wallet button', () => {
       }
     });
 
-    // 2. Login and navigate to the trip detail page
-    await uiLogin(page, 'user0@g.com', '123456');
+    // 2. Navigate to the trip detail page
     await page.goto(`/trips/${TRIP_ID}`);
+    await waitForPageReady(page);
 
     // 3. Verify the sellado banner is visible with correct text
     const banner = page.locator('.alert-sellado-viaje');
@@ -189,8 +200,8 @@ test.describe('Sellado - MercadoPago wallet button', () => {
       }
     });
 
-    await uiLogin(page, 'user0@g.com', '123456');
     await page.goto(`/trips/${TRIP_ID}`);
+    await waitForPageReady(page);
 
     // Wait for trip to load
     await expect(page.getByText('Test trip for sellado MP button')).toBeVisible({ timeout: 15000 });

@@ -22,9 +22,12 @@
     "lint": "eslint --ext .js -f ./node_modules/eslint-friendly-formatter src",
     "lint:fix": "eslint --ext .js -f ./node_modules/eslint-friendly-formatter --fix src",
     "test:e2e": "npx playwright test",
+    "test:e2e:only": "npx playwright test --project=e2e",
     "test:e2e:ui": "npx playwright test --ui",
-    "test:e2e:screenshots": "npx playwright test e2e/screenshots.spec.js",
-    "test:e2e:screenshots:update": "npx playwright test e2e/screenshots.spec.js --update-snapshots"
+    "test:e2e:screenshots": "npx playwright test --project=frontend e2e-frontend/screenshots.spec.js",
+    "test:e2e:screenshots:update": "npx playwright test --project=frontend e2e-frontend/screenshots.spec.js --update-snapshots",
+    "test:frontend": "npx playwright test --project=frontend",
+    "test:frontend:ui": "npx playwright test --project=frontend --ui"
   },
   "dependencies": {
     "@capacitor/android": "^7.4.3",
