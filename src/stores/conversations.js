@@ -3,13 +3,13 @@ import { ConversationApi } from '../services/api';
 import dayjs from '../dayjs';
 import { checkError } from '../../utils/helpers';
 import dialogs from '../services/dialogs.js';
+import i18n from '../i18n';
 // Lazy-load router to avoid circular dependency (stores → router → routes → components → stores)
 let _router;
 function getRouter() {
     if (!_router) _router = require('../router').default;
     return _router;
 }
-import i18n from '../i18n';
 
 const conversationApi = new ConversationApi();
 const pageSize = 20;

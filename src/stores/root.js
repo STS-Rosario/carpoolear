@@ -131,7 +131,7 @@ export const useRootStore = defineStore('root', {
                 }
             }
 
-            let driverTrips = myTripsStore.driver_trip;
+            const driverTrips = myTripsStore.driver_trip;
             if (driverTrips) {
                 for (let i = 0; i < driverTrips.length; i++) {
                     if (driverTrips[i].id === id) {
@@ -141,7 +141,7 @@ export const useRootStore = defineStore('root', {
                 }
             }
 
-            let passengerTrips = myTripsStore.passenger_trip;
+            const passengerTrips = myTripsStore.passenger_trip;
             if (passengerTrips) {
                 for (let i = 0; i < passengerTrips.length; i++) {
                     if (passengerTrips[i].id === id) {

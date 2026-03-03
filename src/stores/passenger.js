@@ -3,13 +3,13 @@ import { PassengerApi } from '../services/api';
 import { checkError } from '../../utils/helpers';
 import dialogs from '../services/dialogs.js';
 import i18n from '../i18n';
+import network from '../services/network';
 // Lazy-load router to avoid circular dependency (stores → router → routes → components → stores)
 let _router;
 function getRouter() {
     if (!_router) _router = require('../router').default;
     return _router;
 }
-import network from '../services/network';
 
 /* eslint-disable no-undef */
 
@@ -36,13 +36,13 @@ export const usePassengerStore = defineStore('passenger', {
             this.pendingPaymentRequests = list;
         },
 
-        removePending({ user_id, trip_id }) {
+        removePending({ user_id: userId, trip_id: tripId }) {
             let index = 0;
             if (this.pendingRequest && this.pendingRequest.length) {
                 this.pendingRequest.forEach((item, i) => {
                     if (
-                        (item.user.id === user_id) &
-                        (item.trip_id === trip_id)
+                        (item.user.id === userId) &
+                        (item.trip_id === tripId)
                     ) {
                         index = i;
                     }
@@ -51,14 +51,14 @@ export const usePassengerStore = defineStore('passenger', {
             }
         },
 
-        removePendingPayment({ trip_id }) {
+        removePendingPayment({ trip_id: tripId }) {
             let index = 0;
             if (
                 this.pendingPaymentRequests &&
                 this.pendingPaymentRequests.length
             ) {
                 this.pendingPaymentRequests.forEach((item, i) => {
-                    if (item.trip_id === trip_id) {
+                    if (item.trip_id === tripId) {
                         index = i;
                     }
                 });

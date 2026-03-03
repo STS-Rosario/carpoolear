@@ -97,7 +97,7 @@ export function makePaginationActions(name, requestGeneration, callback) {
                 return Promise.reject(error);
             });
         if (callback) {
-            callback(this, promises);
+            callback(this, promises); // eslint-disable-line node/no-callback-literal
         }
         return promises;
     };

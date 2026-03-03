@@ -230,5 +230,4 @@ bus.on('system-ready', () => {
     vm.$watch('$i18n.locale', (newLocale) => {
         dayjs.locale(dayjsLocaleMap[newLocale] || 'es');
     });
-
 });

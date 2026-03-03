@@ -27,7 +27,7 @@ export function checkError (error, message) {
     if (error.status === 422) {
         if (error.data && error.data.errors && error.data.errors.error && error.data.errors.error.length) {
             for (let i = 0; i < error.data.errors.error.length; i++) {
-                let errorMessage = error.data.errors.error[i];
+                const errorMessage = error.data.errors.error[i];
                 if (errorMessage === message) {
                     return true;
                 }
@@ -52,7 +52,7 @@ export function scrollToElement (element, offset) {
     if (!offset) {
         offset = 30;
     }
-    let elementPosition = element.offsetTop - offset;
+    const elementPosition = element.offsetTop - offset;
 
     const onScroll = () => {
         if (Math.round(window.pageYOffset) === elementPosition) {
