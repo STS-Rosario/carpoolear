@@ -137,7 +137,10 @@
     </footer>
 </template>
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapState, mapActions } from 'pinia';
+import { useActionbarsStore } from '../../stores/actionbars';
+import { useNotificationsStore } from '../../stores/notifications';
+import { useAuthStore } from '../../stores/auth';
 import svgItem from '../SvgItem';
 
 export default {
@@ -146,16 +149,20 @@ export default {
         return {};
     },
     computed: {
-        ...mapGetters({
-            footerButtons: 'actionbars/footerButtons',
-            footerShow: 'actionbars/footerShow',
-            notificationsCount: 'notifications/count',
-            config: 'auth/appConfig'
+        ...mapState(useActionbarsStore, {
+            footerButtons: 'footerButtons',
+            footerShow: 'footerShow'
+        }),
+        ...mapState(useNotificationsStore, {
+            notificationsCount: 'count'
+        }),
+        ...mapState(useAuthStore, {
+            config: 'appConfig'
         })
     },
     methods: {
-        ...mapActions({
-            onClick: 'actionbars/footerButtonClick'
+        ...mapActions(useActionbarsStore, {
+            onClick: 'footerButtonClick'
         })
     },
     components: {

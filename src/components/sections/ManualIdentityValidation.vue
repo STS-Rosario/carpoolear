@@ -118,7 +118,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapState } from 'pinia';
+import { useAuthStore } from '../../stores/auth';
 import { UserApi } from '../../services/api';
 import QRCode from 'qrcode';
 
@@ -148,8 +149,8 @@ export default {
         };
     },
     computed: {
-        ...mapGetters({
-            config: 'auth/appConfig'
+        ...mapState(useAuthStore, {
+            config: 'appConfig'
         }),
         identityValidationManualEnabled() {
             return this.config && this.config.identity_validation_manual_enabled === true;

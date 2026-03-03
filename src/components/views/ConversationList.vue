@@ -209,7 +209,10 @@
     </div>
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapState, mapActions } from 'pinia';
+import { useConversationsStore } from '../../stores/conversations';
+import { useDeviceStore } from '../../stores/device';
+import { useAuthStore } from '../../stores/auth';
 import { Thread } from '../../classes/Threads.js';
 import Loading from '../Loading.vue';
 import UserNameWithBadge from '../elements/UserNameWithBadge.vue';
@@ -226,13 +229,17 @@ export default {
     },
 
     computed: {
-        ...mapGetters({
-            conversations: 'conversations/list',
-            moreConversations: 'conversations/listMorePage',
-            users: 'conversations/users',
-            selectedId: 'conversations/selectedId',
-            isMobile: 'device/isMobile',
-            config: 'auth/appConfig'
+        ...mapState(useConversationsStore, {
+            conversations: 'list',
+            moreConversations: 'listMorePage',
+            users: 'users',
+            selectedId: 'selectedId'
+        }),
+        ...mapState(useDeviceStore, {
+            isMobile: 'isMobile'
+        }),
+        ...mapState(useAuthStore, {
+            config: 'appConfig'
         }),
 
         hide() {
@@ -242,13 +249,13 @@ export default {
 
     methods: {
         dayjs,
-        ...mapActions({
-            conversationsSearch: 'conversations/listSearch',
-            searchUser: 'conversations/getUserList',
-            create: 'conversations/createConversation',
-            unreadMessage: 'conversations/getUnreaded',
-            select: 'conversations/select',
-            clear: 'conversations/clearUserList'
+        ...mapActions(useConversationsStore, {
+            conversationsSearch: 'listSearch',
+            searchUser: 'getUserList',
+            create: 'createConversation',
+            unreadMessage: 'getUnreaded',
+            select: 'select',
+            clear: 'clearUserList'
         }),
 
         nextPage() {

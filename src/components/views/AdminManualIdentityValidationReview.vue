@@ -137,7 +137,7 @@
 import axios from 'axios';
 import adminNav from '../sections/adminNav';
 import { AdminApi } from '../../services/api';
-import store from '../../store';
+import { useAuthStore } from '../../stores/auth';
 import dialogs from '../../services/dialogs.js';
 
 export default {
@@ -196,7 +196,7 @@ export default {
         },
         loadImages() {
             if (!this.item || !this.item.has_images) return;
-            const authHeader = store.getters['auth/authHeader'];
+            const authHeader = useAuthStore().authHeader;
             const baseUrl = (process.env.API_URL || '').replace(/\/$/, '');
             if (!baseUrl) return;
             // Always request images from the backend (API_URL), not from the URL in the response (which may use APP_URL = frontend)

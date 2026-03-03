@@ -110,7 +110,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapState } from 'pinia';
+import { useAuthStore } from '../../stores/auth';
 import { UserApi } from '../../services/api';
 
 export default {
@@ -131,9 +132,9 @@ export default {
         };
     },
     computed: {
-        ...mapGetters({
-            user: 'auth/user',
-            config: 'auth/appConfig'
+        ...mapState(useAuthStore, {
+            user: 'user',
+            config: 'appConfig'
         }),
         identityValidationMpEnabled() {
             return this.config && this.config.identity_validation_mercado_pago_enabled === true;

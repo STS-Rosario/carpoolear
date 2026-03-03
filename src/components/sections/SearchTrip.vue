@@ -145,7 +145,9 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapState } from 'pinia';
+import { useDeviceStore } from '../../stores/device';
+import { useAuthStore } from '../../stores/auth';
 import DatePicker from '../DatePicker';
 import autocomplete from '../Autocomplete.vue';
 import bus from '../../services/bus-event.js';
@@ -194,9 +196,11 @@ export default {
         };
     },
     computed: {
-        ...mapGetters({
-            isMobile: 'device/isMobile',
-            config: 'auth/appConfig'
+        ...mapState(useDeviceStore, {
+            isMobile: 'isMobile'
+        }),
+        ...mapState(useAuthStore, {
+            config: 'appConfig'
         }),
         autoSearch() {
             return this.config.trips_auto_search && !this.isMobile;

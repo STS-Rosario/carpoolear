@@ -1,9 +1,13 @@
 /* jshint esversion: 6 */
-import store from '../store';
 import router from '../router';
 
+function getAuthStore () {
+    const { useAuthStore } = require('../stores/auth');
+    return useAuthStore();
+}
+
 export function auth(to, from, next) {
-    if (store.getters['auth/checkLogin']) {
+    if (getAuthStore().checkLogin) {
         next();
     } else {
         next(false);
@@ -15,9 +19,10 @@ export function auth(to, from, next) {
     }
 }
 export function authAdmin(to, from, next) {
+    const authStore = getAuthStore();
     if (
-        store.getters['auth/checkLogin'] &&
-        store.getters['auth/user'].is_admin
+        authStore.checkLogin &&
+        authStore.user.is_admin
     ) {
         next();
     } else {
@@ -31,7 +36,7 @@ export function authAdmin(to, from, next) {
 }
 
 export function guest(to, from, next) {
-    if (!store.getters['auth/checkLogin']) {
+    if (!getAuthStore().checkLogin) {
         next();
     } else {
         next(false);
@@ -45,8 +50,9 @@ export function guest(to, from, next) {
  * Call after auth (only runs when logged in).
  */
 export function requireIdentityValidation(to, from, next) {
-    const config = store.getters['auth/appConfig'];
-    const user = store.getters['auth/user'];
+    const authStore = getAuthStore();
+    const config = authStore.appConfig;
+    const user = authStore.user;
     if (
         config &&
         user &&
@@ -62,7 +68,7 @@ export function requireIdentityValidation(to, from, next) {
 }
 
 export function profileComplete(to, from, next) {
-    const user = store.getters['auth/user'];
+    const user = getAuthStore().user;
     if (
         !user.image ||
         user.image.length === 0 ||

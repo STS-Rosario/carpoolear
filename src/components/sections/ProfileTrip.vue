@@ -115,7 +115,9 @@
 <script>
 import Trip from '../sections/Trip.vue';
 import Loading from '../Loading.vue';
-import { mapGetters, mapActions } from 'vuex';
+import { mapState, mapActions } from 'pinia';
+import { useAuthStore } from '../../stores/auth';
+import { useTripsStore } from '../../stores/trips';
 
 import Tab from '../elements/Tab';
 
@@ -135,8 +137,8 @@ export default {
         }
     },
     computed: {
-        ...mapGetters({
-            user: 'auth/user'
+        ...mapState(useAuthStore, {
+            user: 'user'
         })
     },
     mounted() {
@@ -144,11 +146,11 @@ export default {
     },
 
     methods: {
-        ...mapActions({
-            tripAsDriver: 'trips/tripsAsDriver',
-            tripAsPassenger: 'trips/tripsAsPassenger',
-            oldTripsAsDriver: 'trips/oldTripsAsDriver',
-            oldTripsAsPassenger: 'trips/oldTripsAsPassenger'
+        ...mapActions(useTripsStore, {
+            tripAsDriver: 'tripsAsDriver',
+            tripAsPassenger: 'tripsAsPassenger',
+            oldTripsAsDriver: 'oldTripsAsDriver',
+            oldTripsAsPassenger: 'oldTripsAsPassenger'
         }),
 
         async loadTrips() {

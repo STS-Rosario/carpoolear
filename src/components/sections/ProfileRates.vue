@@ -128,7 +128,10 @@
     </div>
 </template>
 <script>
-import { mapGetters } from 'vuex';
+import { mapState } from 'pinia';
+import { useAuthStore } from '../../stores/auth';
+import { useProfileStore } from '../../stores/profile';
+import { useDeviceStore } from '../../stores/device';
 import Loading from '../Loading.vue';
 import RateItem from '../RateItem';
 
@@ -170,14 +173,18 @@ export default {
         }
     },
     computed: {
-        ...mapGetters({
-            user: 'auth/user',
-            rates: 'profile/rates',
-            isMobile: 'device/isMobile',
-            isTablet: 'device/isTablet',
-            isDesktop: 'device/isDesktop',
-            config: 'auth/appConfig',
-            references: 'profile/references'
+        ...mapState(useAuthStore, {
+            user: 'user',
+            config: 'appConfig'
+        }),
+        ...mapState(useProfileStore, {
+            rates: 'rates',
+            references: 'references'
+        }),
+        ...mapState(useDeviceStore, {
+            isMobile: 'isMobile',
+            isTablet: 'isTablet',
+            isDesktop: 'isDesktop'
         })
     },
     watch: {

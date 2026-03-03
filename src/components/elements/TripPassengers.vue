@@ -89,7 +89,11 @@
     </div>
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapState, mapActions } from 'pinia';
+import { useTripsStore } from '../../stores/trips';
+import { useAuthStore } from '../../stores/auth';
+import { useConversationsStore } from '../../stores/conversations';
+import { usePassengerStore } from '../../stores/passenger';
 import router from '../../router';
 import dialogs from '../../services/dialogs.js';
 import bus from '../../services/bus-event';
@@ -99,10 +103,12 @@ export default {
         return {};
     },
     computed: {
-        ...mapGetters({
-            trip: 'trips/currentTrip',
-            tripCardTheme: 'auth/tripCardTheme',
-            user: 'auth/user'
+        ...mapState(useTripsStore, {
+            trip: 'currentTrip'
+        }),
+        ...mapState(useAuthStore, {
+            tripCardTheme: 'tripCardTheme',
+            user: 'user'
         }),
         owner() {
             return this.trip && this.user && this.user.id === this.trip.user.id;
@@ -129,9 +135,11 @@ export default {
         this.calculateHeight();
     },
     methods: {
-        ...mapActions({
-            lookConversation: 'conversations/createConversation',
-            cancel: 'passenger/cancel'
+        ...mapActions(useConversationsStore, {
+            lookConversation: 'createConversation'
+        }),
+        ...mapActions(usePassengerStore, {
+            cancel: 'cancel'
         }),
         calculateHeight() {
             this.$nextTick(() => {

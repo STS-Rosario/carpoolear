@@ -131,7 +131,10 @@
     </div>
 </template>
 <script>
-import { mapGetters } from 'vuex';
+import { mapState } from 'pinia';
+import { useDeviceStore } from '../../stores/device';
+import { useTripsStore } from '../../stores/trips';
+import { useAuthStore } from '../../stores/auth';
 import svgItem from '../SvgItem';
 import dayjs from '../../dayjs';
 import TripSeats from './TripSeats';
@@ -142,10 +145,14 @@ export default {
         return {};
     },
     computed: {
-        ...mapGetters({
-            isMobile: 'device/isMobile',
-            trip: 'trips/currentTrip',
-            tripCardTheme: 'auth/tripCardTheme'
+        ...mapState(useDeviceStore, {
+            isMobile: 'isMobile'
+        }),
+        ...mapState(useTripsStore, {
+            trip: 'currentTrip'
+        }),
+        ...mapState(useAuthStore, {
+            tripCardTheme: 'tripCardTheme'
         }),
         widthLocationClass() {
             return this.tripCardTheme === 'light' ? 'col-xs-14' : 'col-xs-18';

@@ -189,7 +189,10 @@
     </div>
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapState, mapActions } from 'pinia';
+import { useAuthStore } from '../../stores/auth';
+import { useProfileStore } from '../../stores/profile';
+import { useConversationsStore } from '../../stores/conversations';
 import router from '../../router';
 import Spinner from '../Spinner.vue';
 import UserNameWithBadge from '../elements/UserNameWithBadge.vue';
@@ -205,11 +208,13 @@ export default {
         };
     },
     computed: {
-        ...mapGetters({
-            user: 'auth/user',
-            profile: 'profile/user',
-            badges: 'profile/badges',
-            config: 'auth/appConfig'
+        ...mapState(useAuthStore, {
+            user: 'user',
+            config: 'appConfig'
+        }),
+        ...mapState(useProfileStore, {
+            profile: 'user',
+            badges: 'badges'
         }),
         userReferenceWritten() {
             return (
@@ -229,9 +234,11 @@ export default {
         }
     },
     methods: {
-        ...mapActions({
-            lookConversation: 'conversations/createConversation',
-            makeReference: 'profile/makeReference'
+        ...mapActions(useConversationsStore, {
+            lookConversation: 'createConversation'
+        }),
+        ...mapActions(useProfileStore, {
+            makeReference: 'makeReference'
         }),
         messageUser() {
             console.log('messageUser profileInfo', this.profile);

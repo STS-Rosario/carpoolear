@@ -381,7 +381,11 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapState, mapActions } from 'pinia';
+import { useAuthStore } from '../../stores/auth';
+import { useDeviceStore } from '../../stores/device';
+import { useProfileStore } from '../../stores/profile';
+import { useCordovaStore } from '../../stores/cordova';
 import dialogs from '../../services/dialogs.js';
 import bus from '../../services/bus-event';
 import router from '../../router';
@@ -444,11 +448,15 @@ export default {
         };
     },
     computed: {
-        ...mapGetters({
-            checkLogin: 'auth/checkLogin',
-            isMobile: 'device/isMobile',
-            settings: 'auth/appConfig',
-            registerData: 'profile/registerData'
+        ...mapState(useAuthStore, {
+            checkLogin: 'checkLogin',
+            settings: 'appConfig'
+        }),
+        ...mapState(useDeviceStore, {
+            isMobile: 'isMobile'
+        }),
+        ...mapState(useProfileStore, {
+            registerData: 'registerData'
         }),
         tripCardTheme() {
             return this.settings ? this.settings.trip_card_design : '';
@@ -483,12 +491,16 @@ export default {
         Spinner
     },
     methods: {
-        ...mapActions({
-            doRegister: 'auth/register',
-            getBankData: 'profile/getBankData',
-            saveRegisterData: 'profile/saveRegisterData',
-            cleanRegisterData: 'profile/cleanRegisterData',
-            fbLogin: 'cordova/facebookLogin'
+        ...mapActions(useAuthStore, {
+            doRegister: 'register'
+        }),
+        ...mapActions(useProfileStore, {
+            getBankData: 'getBankData',
+            saveRegisterData: 'saveRegisterData',
+            cleanRegisterData: 'cleanRegisterData'
+        }),
+        ...mapActions(useCordovaStore, {
+            fbLogin: 'facebookLogin'
         }),
         onShowRegister() {
             this.showRegister = true;

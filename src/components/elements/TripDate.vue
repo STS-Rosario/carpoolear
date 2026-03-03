@@ -54,7 +54,10 @@
     </div>
 </template>
 <script>
-import { mapGetters } from 'vuex';
+import { mapState } from 'pinia';
+import { useTripsStore } from '../../stores/trips';
+import { useAuthStore } from '../../stores/auth';
+import { useDeviceStore } from '../../stores/device';
 import WeeklySchedule from './WeeklySchedule';
 import SvgItem from '../SvgItem';
 import dayjs from '../../dayjs';
@@ -64,10 +67,14 @@ export default {
         dayjs
     },
     computed: {
-        ...mapGetters({
-            trip: 'trips/currentTrip',
-            tripCardTheme: 'auth/tripCardTheme',
-            isMobile: 'device/isMobile'
+        ...mapState(useTripsStore, {
+            trip: 'currentTrip'
+        }),
+        ...mapState(useAuthStore, {
+            tripCardTheme: 'tripCardTheme'
+        }),
+        ...mapState(useDeviceStore, {
+            isMobile: 'isMobile'
         })
     },
     components: {

@@ -11,7 +11,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapState } from 'pinia';
+import { useAuthStore } from '../stores/auth';
 
 export default {
     name: 'IdentityValidationCountdownBanner',
@@ -22,9 +23,9 @@ export default {
         };
     },
     computed: {
-        ...mapGetters({
-            user: 'auth/user',
-            appConfig: 'auth/appConfig'
+        ...mapState(useAuthStore, {
+            user: 'user',
+            appConfig: 'appConfig'
         }),
         visible() {
             if (!this.user) return false;

@@ -383,7 +383,13 @@ import Loading from '../Loading.vue';
 import PendingRequest from '../PendingRequest';
 import PendingPaymentRequest from '../PendingPaymentRequest';
 import RatePending from '../RatePending';
-import { mapGetters, mapActions } from 'vuex';
+import { mapState, mapActions } from 'pinia';
+import { useMyTripsStore } from '../../stores/myTrips';
+import { useRatesStore } from '../../stores/rates';
+import { usePassengerStore } from '../../stores/passenger';
+import { useAuthStore } from '../../stores/auth';
+import { useSubscriptionsStore } from '../../stores/subscriptions';
+import { useProfileStore } from '../../stores/profile';
 
 import Tab from '../elements/Tab';
 import modal from '../Modal';
@@ -427,32 +433,48 @@ export default {
         bus.off('request-status-changed');
     },
     computed: {
-        ...mapGetters({
-            trips: 'myTrips/myTrips',
-            passengerTrips: 'myTrips/passengerTrips',
-            pendingRates: 'rates/pendingRates',
-            pendingRequest: 'passenger/pendingRequest',
-            pendingPaymentRequests: 'passenger/pendingPaymentRequests',
-            user: 'auth/user',
-            oldTrips: 'myTrips/myOldTrips',
-            oldPassengerTrips: 'myTrips/passengerOldTrips',
-            subscriptions: 'subscriptions/subscriptions',
-            config: 'auth/appConfig'
+        ...mapState(useMyTripsStore, {
+            trips: 'myTrips',
+            passengerTrips: 'passengerTrips',
+            oldTrips: 'myOldTrips',
+            oldPassengerTrips: 'passengerOldTrips'
+        }),
+        ...mapState(useRatesStore, {
+            pendingRates: 'pendingRates'
+        }),
+        ...mapState(usePassengerStore, {
+            pendingRequest: 'pendingRequest',
+            pendingPaymentRequests: 'pendingPaymentRequests'
+        }),
+        ...mapState(useAuthStore, {
+            user: 'user',
+            config: 'appConfig'
+        }),
+        ...mapState(useSubscriptionsStore, {
+            subscriptions: 'subscriptions'
         })
     },
 
     methods: {
-        ...mapActions({
-            tripAsDriver: 'myTrips/tripAsDriver',
-            tripAsPassenger: 'myTrips/tripAsPassenger',
-            pendingRate: 'rates/pendingRates',
-            getPendingRequest: 'passenger/getPendingRequest',
-            getPendingPaymentRequests: 'passenger/getPendingPaymentRequests',
-            oldTripsAsDriver: 'myTrips/oldTripsAsDriver',
-            oldTripsAsPassenger: 'myTrips/oldTripsAsPassenger',
-            findSubscriptions: 'subscriptions/index',
-            registerDonation: 'profile/registerDonation',
-            changeProperty: 'profile/changeProperty'
+        ...mapActions(useMyTripsStore, {
+            tripAsDriver: 'tripAsDriver',
+            tripAsPassenger: 'tripAsPassenger',
+            oldTripsAsDriver: 'oldTripsAsDriver',
+            oldTripsAsPassenger: 'oldTripsAsPassenger'
+        }),
+        ...mapActions(useRatesStore, {
+            pendingRate: 'pendingRatesAction'
+        }),
+        ...mapActions(usePassengerStore, {
+            getPendingRequest: 'getPendingRequest',
+            getPendingPaymentRequests: 'getPendingPaymentRequests'
+        }),
+        ...mapActions(useSubscriptionsStore, {
+            findSubscriptions: 'index'
+        }),
+        ...mapActions(useProfileStore, {
+            registerDonation: 'registerDonation',
+            changeProperty: 'changeProperty'
         }),
         findTrip(id) {
             if (this.trips) {

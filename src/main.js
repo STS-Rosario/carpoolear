@@ -10,7 +10,7 @@ import VueAnalytics from 'vue-analytics';
 import dayjs from './dayjs';
 
 import router from './router';
-import store from './store';
+import pinia from './pinia';
 
 /* eslint-disable no-unused-vars */
 import cordova from './cordova';
@@ -73,16 +73,6 @@ Vue.prototype.$n = function (value, ...args) {
     }
     return original$n.call(this, value, ...args);
 };
-
-store.subscribe((mutation) => {
-    const isConfig =
-        mutation.type === 'auth/AUTH_APP_CONFIG' ||
-        mutation.type === 'AUTH_APP_CONFIG';
-    if (isConfig && mutation.payload) {
-        const showCents = mutation.payload.price_show_cents !== false;
-        applyPriceFormat(showCents);
-    }
-});
 
 Vue.use(VueAnalytics, {
     id: 'UA-40995702-4'
@@ -184,16 +174,17 @@ const initializePushNotifications = async () => {
 // Initialize plugins when app is ready
 initializeCapacitorPlugins();
 
-window.store = store;
 if (process.env.SERVE) {
     console.log('Not running in cordova.');
-    store.dispatch('init');
+    const { useRootStore } = require('./stores/root');
+    useRootStore().init();
 } else {
     if (process.env.NODE_ENV === 'development') {
         setTimeout(function () {
             if (!window.cordova) {
                 console.log('Not running in cordova.');
-                store.dispatch('init');
+                const { useRootStore } = require('./stores/root');
+                useRootStore().init();
             }
         }, 2000);
     } else {
@@ -201,7 +192,8 @@ if (process.env.SERVE) {
         setTimeout(function () {
             if (!window.cordova) {
                 console.log('Not running in cordova.');
-                store.dispatch('init');
+                const { useRootStore } = require('./stores/root');
+                useRootStore().init();
             }
         }, 2000);
     }
@@ -211,9 +203,19 @@ console.log('APP NAME: ' + process.env.TARGET_APP);
 bus.on('system-ready', () => {
     const app = createApp(App);
     app.use(router);
-    app.use(store);
+    app.use(pinia);
     app.use(i18n);
     const vm = app.mount('#app');
+
+    // Subscribe to auth store config changes for price formatting
+    const { useAuthStore } = require('./stores/auth');
+    const authStore = useAuthStore();
+    authStore.$subscribe((mutation, state) => {
+        if (state.appConfig) {
+            const showCents = state.appConfig.price_show_cents !== false;
+            applyPriceFormat(showCents);
+        }
+    });
 
     // Set dayjs locale based on i18n language
     const dayjsLocaleMap = {
@@ -228,4 +230,5 @@ bus.on('system-ready', () => {
     vm.$watch('$i18n.locale', (newLocale) => {
         dayjs.locale(dayjsLocaleMap[newLocale] || 'es');
     });
+
 });

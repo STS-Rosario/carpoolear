@@ -112,7 +112,10 @@
     </div>
 </template>
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapState, mapActions } from 'pinia';
+import { useAuthStore } from '../stores/auth';
+import { useProfileStore } from '../stores/profile';
+import { useRatesStore } from '../stores/rates';
 import dayjs from '../dayjs';
 export default {
     data() {
@@ -123,8 +126,8 @@ export default {
     },
     methods: {
         dayjs,
-        ...mapActions({
-            reply: 'rates/reply'
+        ...mapActions(useRatesStore, {
+            reply: 'reply'
         }),
         onReply() {
             let data = {
@@ -147,10 +150,12 @@ export default {
         }
     },
     computed: {
-        ...mapGetters({
-            config: 'auth/appConfig',
-            me: 'auth/user',
-            profile: 'profile/user'
+        ...mapState(useAuthStore, {
+            config: 'appConfig',
+            me: 'user'
+        }),
+        ...mapState(useProfileStore, {
+            profile: 'user'
         }),
         canReply() {
             return (

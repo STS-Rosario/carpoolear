@@ -162,7 +162,10 @@
     </div>
 </template>
 <script>
-import { mapGetters } from 'vuex';
+import { mapState } from 'pinia';
+import { useAuthStore } from '../../stores/auth';
+import { useTripsStore } from '../../stores/trips';
+import { useDeviceStore } from '../../stores/device';
 import TripDate from './TripDate';
 import TripDescription from './TripDescription';
 import SvgItem from '../SvgItem';
@@ -170,12 +173,16 @@ import SvgItem from '../SvgItem';
 export default {
     name: 'TripDriver',
     computed: {
-        ...mapGetters({
-            user: 'auth/user',
-            trip: 'trips/currentTrip',
-            tripCardTheme: 'auth/tripCardTheme',
-            config: 'auth/appConfig',
-            isMobile: 'device/isMobile'
+        ...mapState(useAuthStore, {
+            user: 'user',
+            tripCardTheme: 'tripCardTheme',
+            config: 'appConfig'
+        }),
+        ...mapState(useTripsStore, {
+            trip: 'currentTrip'
+        }),
+        ...mapState(useDeviceStore, {
+            isMobile: 'isMobile'
         }),
         getUserProfile() {
             return this.trip.user.id === this.user.id
