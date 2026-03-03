@@ -191,9 +191,9 @@ const MOCK_CONVERSATIONS = [
 ];
 
 const MOCK_MESSAGES = [
-  { id: 1, conversation_id: 1, text: 'Hola! Tenés lugar?', created_at: '2025-06-10T10:00:00.000Z', user: { id: 2, name: 'María García' } },
-  { id: 2, conversation_id: 1, text: 'Sí, hay 2 lugares disponibles', created_at: '2025-06-10T10:15:00.000Z', user: { id: 1, name: 'Juan Pérez' } },
-  { id: 3, conversation_id: 1, text: 'Hola, ¿a qué hora salís?', created_at: '2025-06-10T10:30:00.000Z', user: { id: 2, name: 'María García' } },
+  { id: 1, conversation_id: 1, user_id: 2, text: 'Hola! Tenés lugar?', created_at: '2025-06-10T10:00:00.000Z', user: { id: 2, name: 'María García' } },
+  { id: 2, conversation_id: 1, user_id: 1, text: 'Sí, hay 2 lugares disponibles', created_at: '2025-06-10T10:15:00.000Z', user: { id: 1, name: 'Juan Pérez' } },
+  { id: 3, conversation_id: 1, user_id: 2, text: 'Hola, ¿a qué hora salís?', created_at: '2025-06-10T10:30:00.000Z', user: { id: 2, name: 'María García' } },
 ];
 
 const MOCK_NOTIFICATIONS = [
@@ -381,6 +381,110 @@ const MOCK_PROFILE_USER = {
   description: 'Usuario activo en la plataforma',
   created_at: '2023-06-01T00:00:00.000Z',
 };
+
+const MOCK_RATINGS = [
+  {
+    id: 1,
+    from: { id: 201, name: 'María García', image: null },
+    comment: 'Excelente conductor, muy puntual',
+    rating: 1,
+    user_to_type: 1,
+    trip: { id: 10, to_town: 'Buenos Aires' },
+    rate_at: '2025-05-01T10:00:00.000Z',
+    created_at: '2025-05-01T10:00:00.000Z',
+    reply_comment: null,
+    reply_comment_created_at: null,
+  },
+  {
+    id: 2,
+    from: { id: 202, name: 'Carlos López', image: null },
+    comment: 'Buen viaje, recomendado',
+    rating: 1,
+    user_to_type: 0,
+    trip: { id: 11, to_town: 'Córdoba' },
+    rate_at: '2025-04-20T14:00:00.000Z',
+    created_at: '2025-04-20T14:00:00.000Z',
+    reply_comment: 'Gracias Carlos!',
+    reply_comment_created_at: '2025-04-21T09:00:00.000Z',
+  },
+];
+
+const MOCK_PENDING_RATINGS = [
+  {
+    id: 1,
+    user: { id: 201, name: 'Laura Martínez', image: null },
+    trip: makeMockTrip(10, { from_town: 'Rosario', to_town: 'Buenos Aires' }),
+    created_at: '2025-06-10T10:00:00.000Z',
+  },
+];
+
+// ============================================================
+// Factory functions
+// ============================================================
+
+function makeMockConversation(id, overrides = {}) {
+  return {
+    id,
+    title: `User ${id}`,
+    image: null,
+    other_user_identity_validated_at: null,
+    updated_at: '2025-06-10T10:30:00.000Z',
+    last_message: { id: id * 10, text: `Message from conv ${id}`, created_at: '2025-06-10T10:30:00.000Z' },
+    unread: false,
+    users: [
+      { id: 1, name: 'Juan Pérez' },
+      { id: id + 100, name: `User ${id}` },
+    ],
+    ...overrides,
+  };
+}
+
+function makeMockMessage(id, overrides = {}) {
+  return {
+    id,
+    conversation_id: 1,
+    user_id: 2,
+    text: `Test message ${id}`,
+    created_at: '2025-06-10T10:00:00.000Z',
+    user: { id: 2, name: 'María García' },
+    ...overrides,
+  };
+}
+
+function makeMockNotification(id, overrides = {}) {
+  return {
+    id,
+    text: `Notification ${id}`,
+    created_at: '2025-06-10T10:00:00.000Z',
+    readed: false,
+    extras: { type: 'passenger_request', trip_id: 1 },
+    ...overrides,
+  };
+}
+
+function makeMockRating(id, overrides = {}) {
+  return {
+    id,
+    from: { id: id + 200, name: `Reviewer ${id}`, image: null },
+    comment: `Rating comment ${id}`,
+    rating: 1,
+    user_to_type: 1,
+    trip: { id: id + 100, to_town: 'Buenos Aires' },
+    rate_at: '2025-05-01T10:00:00.000Z',
+    created_at: '2025-05-01T10:00:00.000Z',
+    reply_comment: null,
+    reply_comment_created_at: null,
+    ...overrides,
+  };
+}
+
+/**
+ * Generate N items using a factory function.
+ * factory is called with (index + 1) as the id.
+ */
+function generateItems(factory, count) {
+  return Array.from({ length: count }, (_, i) => factory(i + 1));
+}
 
 // ============================================================
 // Paginated response wrapper
@@ -613,6 +717,15 @@ module.exports = {
   MOCK_CHART_SEATS,
   MOCK_CHART_USERS,
   MOCK_PROFILE_USER,
+  MOCK_RATINGS,
+  MOCK_PENDING_RATINGS,
+
+  // Factory functions
+  makeMockConversation,
+  makeMockMessage,
+  makeMockNotification,
+  makeMockRating,
+  generateItems,
 
   // Utilities
   paginated,
