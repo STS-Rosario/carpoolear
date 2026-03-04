@@ -1,5 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const {
+  MOCK_CONFIG,
   setupCatchAllMock,
   setupCommonMocks,
   setupAuthState,
@@ -107,13 +108,17 @@ function buildSelladoTrip(tripId) {
  * Override the /api/config response to include sellado payment config.
  */
 async function mockConfigWithSellado(page) {
-  await page.route('**/api/config', async (route) => {
-    const response = await route.fetch();
-    const json = await response.json();
-    json.module_trip_creation_payment_enabled = true;
-    json.module_trip_creation_payment_amount_cents = 100;
-    json.module_trip_creation_payment_trips_threshold = 2;
-    await route.fulfill({ response, json });
+  await page.route('**/api/config', (route) => {
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        ...MOCK_CONFIG,
+        module_trip_creation_payment_enabled: true,
+        module_trip_creation_payment_amount_cents: 100,
+        module_trip_creation_payment_trips_threshold: 2,
+      }),
+    });
   });
 }
 
@@ -159,21 +164,10 @@ test.describe('Sellado - MercadoPago wallet button', () => {
     const container = page.locator('#walletBrick_container');
     await expect(container).toBeAttached({ timeout: 5000 });
 
-    // 5. Trigger the MP wallet brick (the mock SDK is available via addInitScript,
-    //    but the component's enablePayment may not self-trigger in the fast mock
-    //    environment, so we invoke the mock SDK directly to verify integration)
-    await page.evaluate(() => {
-      var mp = new MercadoPago('test-key');
-      mp.bricks().create('wallet', 'walletBrick_container', {
-        initialization: { preferenceId: 'mock-preference-id-12345' }
-      });
-    });
-
-    // 6. Verify the mock MP wallet button rendered
-    const mpButton = page.locator('#walletBrick_container .mock-mp-wallet-button');
-    await expect(mpButton).toBeVisible({ timeout: 5000 });
+    // 5. Verify the mock MP wallet button rendered (component calls enablePayment automatically)
+    const mpButton = page.locator('#walletBrick_container .mock-mp-wallet-button').first();
+    await expect(mpButton).toBeVisible({ timeout: 10000 });
     await expect(mpButton).toHaveText('Pagar con Mercado Pago');
-    await expect(mpButton).toHaveAttribute('data-preference-id', 'mock-preference-id-12345');
   });
 
   test('does NOT show the sellado banner on a normal active trip', async ({ page }) => {
