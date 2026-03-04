@@ -74,7 +74,7 @@
                 </div>
             </div>
 
-            <div class="col-xs-24 col-md-8 gmap-autocomplete origin">
+            <div class="col-xs-24 col-md-8 location-autocomplete origin">
                 <Autocomplete
                     :placeholder="$t('origen')"
                     name="from_town"
@@ -84,7 +84,6 @@
                     :classes="'form-control form-control-with-icon form-control-map-autocomplete'"
                     :country="allowForeignPoints ? null : 'AR'"
                 ></Autocomplete>
-                <!-- <GmapAutocomplete name="from_town" ref="from_town" :selectFirstOnEnter="true" :types="['(cities)']"  :componentRestrictions="allowForeignPoints ? null : {country: 'AR'}"  placeholder="Origen"  :value="from_town.name" v-on:place_changed="(data) => getPlace(0, data)" class="form-control form-control-with-icon form-control-map-autocomplete"> </GmapAutocomplete>-->
                 <div class="date-picker--cross">
                     <i
                         v-on:click="resetInput('from_town')"
@@ -108,7 +107,7 @@
                     />
                 </div>
             </div>
-            <div class="col-xs-24 col-md-8 gmap-autocomplete destiny">
+            <div class="col-xs-24 col-md-8 location-autocomplete destiny">
                 <Autocomplete
                     :placeholder="$t('destino')"
                     name="to_town"
@@ -118,7 +117,6 @@
                     :classes="'form-control form-control-with-icon form-control-map-autocomplete'"
                     :country="allowForeignPoints ? null : 'AR'"
                 ></Autocomplete>
-                <!-- <GmapAutocomplete name="to_town" ref="to_town" :selectFirstOnEnter="true" :types="['(cities)']"  :componentRestrictions="allowForeignPoints ? null : {country: 'AR'}"  placeholder="Destino"  :value="to_town.name" v-on:place_changed="(data) => getPlace(1, data)" class="form-control form-control-with-icon form-control-map-autocomplete"> </GmapAutocomplete> -->
                 <div class="date-picker--cross">
                     <i
                         v-on:click="resetInput('to_town')"
@@ -148,7 +146,7 @@
                 <div class="optional-warning text-center">({{ $t('opcional') }})</div>
             </div>
 
-            <div class="col-xs-24 col-md-8 gmap-autocomplete origin">
+            <div class="col-xs-24 col-md-8 location-autocomplete origin">
                 <div class="search-users">
                     <input
                         v-model="userSearch"

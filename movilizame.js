@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const argv = require('minimist')(process.argv.slice(2));
 const shell = require('shelljs');
-const fs = require('fs-extra');
+const fs = require('fs');
 const xmlParser = require('xml2js').parseString;
 
 console.log('Movilizame builder -- Starting building');
@@ -29,9 +29,9 @@ function preBuildAndCheckPlatform (callback) {
     let cordovaFiles = `projects/${TARGET}/cordova`;
     if (fs.existsSync(folderCordovaResFiles)) {
         console.log('Deleting old files.')
-        fs.removeSync(folderCordovaResFiles);
+        fs.rmSync(folderCordovaResFiles, { recursive: true, force: true });
     }
-    fs.copy(cordovaFiles, folder, function (err) {
+    fs.cp(cordovaFiles, folder, { recursive: true }, function (err) {
         if (err) {
             console.error(err);
         } else {

@@ -38,8 +38,6 @@ import { App as CapacitorApp } from '@capacitor/app';
 
 import Vue2Leaflet from 'vue2-leaflet';
 
-import * as VueGoogleMaps from 'vue2-google-maps';
-
 // Re-export locale maps so existing imports from '../../main' still work
 export { appLocaleToBCP47, appLocaleToRoutingLanguage };
 
@@ -85,16 +83,6 @@ Vue.use(VueAnalytics, {
 
 require('./filters.js');
 require('./prototypes.js');
-
-/* import * as VueGoogleMaps from 'vue2-google-maps';
-
-Vue.use(VueGoogleMaps, {
-    load: {
-        key: process.env.MAPS_API,
-        libraries: 'places',
-        installComponents: true
-    }
-}); */
 
 Vue.config.errorHandler = function (err, vm, info) {
     // handle error
