@@ -136,7 +136,10 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapState, mapActions } from 'pinia';
+import { useConversationsStore } from '../../stores/conversations';
+import { useAuthStore } from '../../stores/auth';
+import { usePassengerStore } from '../../stores/passenger';
 import dialogs from '../../services/dialogs.js';
 import spinner from '../Spinner.vue';
 import dayjs from '../../dayjs';
@@ -152,10 +155,12 @@ export default {
         };
     },
     computed: {
-        ...mapGetters({
-            conversation: 'conversations/selectedConversation',
-            config: 'auth/appConfig',
-            user: 'auth/user'
+        ...mapState(useConversationsStore, {
+            conversation: 'selectedConversation'
+        }),
+        ...mapState(useAuthStore, {
+            config: 'appConfig',
+            user: 'user'
         }),
         owner() {
             return (
@@ -199,9 +204,9 @@ export default {
     },
     methods: {
         dayjs,
-        ...mapActions({
-            make: 'passenger/makeRequest',
-            cancel: 'passenger/cancel'
+        ...mapActions(usePassengerStore, {
+            make: 'makeRequest',
+            cancel: 'cancel'
         }),
 
         doRequest(isReturnTrip = false) {

@@ -633,7 +633,11 @@
     </div>
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapState, mapActions } from 'pinia';
+import { useAuthStore } from '../../stores/auth';
+import { useCarsStore } from '../../stores/car';
+import { useDeviceStore } from '../../stores/device';
+import { useProfileStore } from '../../stores/profile';
 import { inputIsNumber, formatId, cleanId } from '../../services/utility';
 import Uploadfile from '../Uploadfile';
 import DatePicker from '../DatePicker';
@@ -697,13 +701,17 @@ export default {
         };
     },
     computed: {
-        ...mapGetters({
-            userData: 'auth/user',
-            firstTime: 'auth/firstTime',
-            cars: 'cars/cars',
-            isMobile: 'device/isMobile',
-            settings: 'auth/appConfig',
-            config: 'auth/appConfig'
+        ...mapState(useAuthStore, {
+            userData: 'user',
+            firstTime: 'firstTime',
+            settings: 'appConfig',
+            config: 'appConfig'
+        }),
+        ...mapState(useCarsStore, {
+            cars: 'cars'
+        }),
+        ...mapState(useDeviceStore, {
+            isMobile: 'isMobile'
         }),
         iptUser() {
             if (this.user) {
@@ -750,13 +758,17 @@ export default {
     },
     methods: {
         dayjs,
-        ...mapActions({
-            update: 'auth/update',
-            updatePhoto: 'auth/updatePhoto',
-            carCreate: 'cars/create',
-            carUpdate: 'cars/update',
-            carIndex: 'cars/index',
-            getBankData: 'profile/getBankData'
+        ...mapActions(useAuthStore, {
+            update: 'update',
+            updatePhoto: 'updatePhoto'
+        }),
+        ...mapActions(useCarsStore, {
+            carCreate: 'create',
+            carUpdate: 'update',
+            carIndex: 'index'
+        }),
+        ...mapActions(useProfileStore, {
+            getBankData: 'getBankData'
         }),
         jumpToError() {
             let hasError = document.getElementsByClassName('has-error');

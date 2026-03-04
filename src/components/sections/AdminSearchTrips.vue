@@ -216,7 +216,11 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapState, mapActions } from 'pinia';
+import { useDeviceStore } from '../../stores/device';
+import { useAuthStore } from '../../stores/auth';
+import { useTripsStore } from '../../stores/trips';
+import { useAdminStore } from '../../stores/admin';
 import DatePicker from '../DatePicker';
 import dayjs from '../../dayjs';
 import dialogs from '../../services/dialogs.js';
@@ -271,15 +275,19 @@ export default {
         };
     },
     computed: {
-        ...mapGetters({
-            isMobile: 'device/isMobile',
-            config: 'auth/appConfig'
+        ...mapState(useDeviceStore, {
+            isMobile: 'isMobile'
+        }),
+        ...mapState(useAuthStore, {
+            config: 'appConfig'
         })
     },
     methods: {
-        ...mapActions({
-            search: 'trips/tripsSearch',
-            searchUsers: 'admin/searchUsers'
+        ...mapActions(useTripsStore, {
+            search: 'tripsSearch'
+        }),
+        ...mapActions(useAdminStore, {
+            searchUsers: 'searchUsers'
         }),
         onSearchUsers() {
             this.showAutocomplete = true;

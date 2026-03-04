@@ -556,7 +556,9 @@
     </div>
 </template>
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapState, mapActions } from 'pinia';
+import { useAuthStore } from '../../stores/auth';
+import { useTripsStore } from '../../stores/trips';
 import dialogs from '../../services/dialogs.js';
 import bus from '../../services/bus-event.js';
 import tripDisplay from './TripDisplay';
@@ -595,9 +597,9 @@ export default {
 
     methods: {
         dayjs,
-        ...mapActions({
-            changeSeats: 'trips/changeSeats',
-            remove: 'trips/remove'
+        ...mapActions(useTripsStore, {
+            changeSeats: 'changeSeats',
+            remove: 'remove'
         }),
         goToDetail: function (goToEdit, passengerView) {
             if (goToEdit) {
@@ -743,8 +745,8 @@ export default {
         };
     },
     computed: {
-        ...mapGetters({
-            config: 'auth/appConfig'
+        ...mapState(useAuthStore, {
+            config: 'appConfig'
         }),
         tripCardCountClass() {
             if (this.config) {

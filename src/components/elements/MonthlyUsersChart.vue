@@ -11,7 +11,8 @@
 
 <script>
 import LineChart from './LineChart';
-import { mapActions } from 'vuex';
+import { mapActions } from 'pinia';
+import { useAdminStore } from '../../stores/admin';
 import dayjs from '../../dayjs';
 
 export default {
@@ -84,8 +85,8 @@ export default {
         }
     },
     methods: {
-        ...mapActions({
-            getUsers: 'admin/getUserStats'
+        ...mapActions(useAdminStore, {
+            getUsers: 'getUserStats'
         }),
         processUsers(usuarios, minDate, maxDate) {
             let labels = [];

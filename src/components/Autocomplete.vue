@@ -40,7 +40,8 @@
 </template>
 <script>
 import TripApi from '../services/api/Trips';
-import { mapGetters } from 'vuex';
+import { mapState } from 'pinia';
+import { useAuthStore } from '../stores/auth';
 
 export default {
     name: 'autocomplete',
@@ -70,8 +71,8 @@ export default {
         this.input = this.value ? this.value : '';
     },
     computed: {
-        ...mapGetters({
-            config: 'auth/appConfig'
+        ...mapState(useAuthStore, {
+            config: 'appConfig'
         })
     },
     methods: {

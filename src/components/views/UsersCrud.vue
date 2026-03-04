@@ -497,7 +497,12 @@
     </div>
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapState, mapActions } from 'pinia';
+import { useDeviceStore } from '../../stores/device';
+import { useAuthStore } from '../../stores/auth';
+import { useAdminStore } from '../../stores/admin';
+import { useConversationsStore } from '../../stores/conversations';
+import { useProfileStore } from '../../stores/profile';
 import { Thread } from '../../classes/Threads.js';
 import Loading from '../Loading.vue';
 import { inputIsNumber, formatId, cleanId } from '../../services/utility';
@@ -560,9 +565,11 @@ export default {
     },
 
     computed: {
-        ...mapGetters({
-            isMobile: 'device/isMobile',
-            settings: 'auth/appConfig'
+        ...mapState(useDeviceStore, {
+            isMobile: 'isMobile'
+        }),
+        ...mapState(useAuthStore, {
+            settings: 'appConfig'
         }),
         confirmModalTitle() {
             if (this.pendingAction === 'delete') return this.$t('confirmarEliminarUsuario');
@@ -579,11 +586,15 @@ export default {
     },
 
     methods: {
-        ...mapActions({
-            update: 'admin/adminUpdate',
-            search: 'admin/searchUsers',
-            lookConversation: 'conversations/createConversation',
-            getBankData: 'profile/getBankData'
+        ...mapActions(useAdminStore, {
+            update: 'adminUpdate',
+            search: 'searchUsers'
+        }),
+        ...mapActions(useConversationsStore, {
+            lookConversation: 'createConversation'
+        }),
+        ...mapActions(useProfileStore, {
+            getBankData: 'getBankData'
         }),
 
         onSearchUsers() {

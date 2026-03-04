@@ -1687,7 +1687,12 @@
     </div>
 </template>
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapState, mapActions } from 'pinia';
+import { useAuthStore } from '../../stores/auth';
+import { useCarsStore } from '../../stores/car';
+import { useDeviceStore } from '../../stores/device';
+import { useTripsStore } from '../../stores/trips';
+import { useRootStore } from '../../stores/root';
 import { appLocaleToRoutingLanguage } from '../../main';
 // import { parseOsmStreet } from '../../services/maps.js';
 import DatePicker from '../DatePicker';
@@ -1879,12 +1884,16 @@ export default {
     beforeDestroy() {},
 
     computed: {
-        ...mapGetters({
-            user: 'auth/user',
-            cars: 'cars/cars',
-            isMobile: 'device/isMobile',
-            config: 'auth/appConfig',
-            tripCardTheme: 'auth/tripCardTheme'
+        ...mapState(useAuthStore, {
+            user: 'user',
+            config: 'appConfig',
+            tripCardTheme: 'tripCardTheme'
+        }),
+        ...mapState(useCarsStore, {
+            cars: 'cars'
+        }),
+        ...mapState(useDeviceStore, {
+            isMobile: 'isMobile'
         }),
         columnClass() {
             return !this.isMobile && this.tripCardTheme === 'light'
@@ -2027,11 +2036,13 @@ export default {
         // }
     },
     methods: {
-        ...mapActions({
-            createTrip: 'trips/create',
-            updateTrip: 'trips/update',
-            getTrip: 'getTrip',
-            getPrice: 'trips/price'
+        ...mapActions(useTripsStore, {
+            createTrip: 'create',
+            updateTrip: 'update',
+            getPrice: 'price'
+        }),
+        ...mapActions(useRootStore, {
+            getTrip: 'getTrip'
         }),
         setIsPassenger(value) {
             this.$set(this.trip, 'is_passenger', value);

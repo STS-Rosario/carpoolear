@@ -111,7 +111,8 @@
     </div>
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapState, mapActions } from 'pinia';
+import { useFriendsStore } from '../../stores/friends';
 import Loading from '../Loading.vue';
 import FriendCard from './FriendCard';
 import bus from '../../services/bus-event.js';
@@ -127,14 +128,14 @@ export default {
         };
     },
     computed: {
-        ...mapGetters({
-            users: 'friends/users'
+        ...mapState(useFriendsStore, {
+            users: 'users'
         })
     },
     methods: {
-        ...mapActions({
-            search: 'friends/searchUsers',
-            request: 'friends/request'
+        ...mapActions(useFriendsStore, {
+            search: 'searchUsers',
+            request: 'request'
         }),
         onTextChange() {
             this.search(this.text);

@@ -82,7 +82,8 @@
 <script>
 import adminNav from '../sections/adminNav';
 import adminSearchTrip from '../sections/AdminSearchTrips';
-import { mapActions } from 'vuex';
+import { mapActions } from 'pinia';
+import { useTripsStore } from '../../stores/trips';
 import tripDisplay from '../sections/TripDisplay';
 
 export default {
@@ -96,10 +97,10 @@ export default {
         };
     },
     methods: {
-        ...mapActions({
-            search: 'trips/tripsSearch',
-            show: 'trips/show',
-            changeVisibility: 'trips/changeVisibility'
+        ...mapActions(useTripsStore, {
+            search: 'tripsSearch',
+            show: 'show',
+            changeVisibility: 'changeVisibility'
         }),
         research(params) {
             console.log('research', params);

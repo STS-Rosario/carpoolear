@@ -284,7 +284,10 @@
     </div>
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapState, mapActions } from 'pinia';
+import { useAuthStore } from '../../stores/auth';
+import { useDeviceStore } from '../../stores/device';
+import { useCordovaStore } from '../../stores/cordova';
 import modal from '../Modal';
 import dialogs from '../../services/dialogs.js';
 import router from '../../router';
@@ -320,11 +323,15 @@ export default {
         };
     },
     computed: {
-        ...mapGetters({
-            checkLogin: 'auth/checkLogin',
-            isMobile: 'device/isMobile',
-            config: 'auth/appConfig',
-            deviceData: 'cordova/device'
+        ...mapState(useAuthStore, {
+            checkLogin: 'checkLogin',
+            config: 'appConfig'
+        }),
+        ...mapState(useDeviceStore, {
+            isMobile: 'isMobile'
+        }),
+        ...mapState(useCordovaStore, {
+            deviceData: 'device'
         }),
         isDesktop() {
             return !this.isMobile;
@@ -353,10 +360,12 @@ export default {
         }
     },
     methods: {
-        ...mapActions({
-            doLogin: 'auth/login', // map this.add() to this.$store.dispatch('increment')
-            fbLogin: 'cordova/facebookLogin',
-            appleLogin: 'cordova/appleLogin'
+        ...mapActions(useAuthStore, {
+            doLogin: 'login'
+        }),
+        ...mapActions(useCordovaStore, {
+            fbLogin: 'facebookLogin',
+            appleLogin: 'appleLogin'
         }),
         fbWarningGetIt() {
             this.isUnderstood = true;

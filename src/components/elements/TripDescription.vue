@@ -9,13 +9,17 @@
     </div>
 </template>
 <script>
-import { mapGetters } from 'vuex';
+import { mapState } from 'pinia';
+import { useTripsStore } from '../../stores/trips';
+import { useAuthStore } from '../../stores/auth';
 export default {
     name: 'TripDescription',
     computed: {
-        ...mapGetters({
-            trip: 'trips/currentTrip',
-            tripCardTheme: 'auth/tripCardTheme'
+        ...mapState(useTripsStore, {
+            trip: 'currentTrip'
+        }),
+        ...mapState(useAuthStore, {
+            tripCardTheme: 'tripCardTheme'
         }),
         descriptionLength() {
             return this.trip.description.length > 215 ? 'long-description' : '';

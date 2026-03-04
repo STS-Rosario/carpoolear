@@ -85,7 +85,11 @@
 </template>
 <script>
 import '@toast-ui/editor/dist/toastui-editor.css';
-import { mapGetters, mapActions } from 'vuex';
+import { mapState, mapActions } from 'pinia';
+import { useConversationsStore } from '../../stores/conversations';
+import { useAuthStore } from '../../stores/auth';
+import { useDeviceStore } from '../../stores/device';
+import { useActionbarsStore } from '../../stores/actionbars';
 import { Editor } from '@toast-ui/vue-editor';
 import MessageView from '../MessageView';
 import router from '../../router';
@@ -122,14 +126,20 @@ export default {
                 placeholder: this.$t('escribirMensaje')
             };
         },
-        ...mapGetters({
-            conversation: 'conversations/selectedConversation',
-            user: 'auth/user',
-            messages: 'conversations/messagesList',
-            lastPageConversation: 'conversations/lastPageConversation',
-            title: 'actionbars/title',
-            isMobile: 'device/isMobile',
-            config: 'auth/appConfig'
+        ...mapState(useConversationsStore, {
+            conversation: 'selectedConversation',
+            messages: 'messagesList',
+            lastPageConversation: 'lastPageConversation'
+        }),
+        ...mapState(useAuthStore, {
+            user: 'user',
+            config: 'appConfig'
+        }),
+        ...mapState(useActionbarsStore, {
+            title: 'title'
+        }),
+        ...mapState(useDeviceStore, {
+            isMobile: 'isMobile'
         }),
         lastConnection() {
             let users = this.conversation.users.filter(
@@ -144,15 +154,17 @@ export default {
     },
     methods: {
         dayjs,
-        ...mapActions({
-            select: 'conversations/select',
-            send: 'conversations/sendMessage',
-            findMessage: 'conversations/findMessage',
-            unreadMessage: 'conversations/getUnreadMessages',
-            setTitle: 'actionbars/setTitle',
-            setTitleLink: 'actionbars/setTitleLink',
-            setSubTitle: 'actionbars/setSubTitle',
-            setImgTitle: 'actionbars/setImgTitle'
+        ...mapActions(useConversationsStore, {
+            select: 'select',
+            send: 'sendMessage',
+            findMessage: 'findMessage',
+            unreadMessage: 'getUnreadMessages'
+        }),
+        ...mapActions(useActionbarsStore, {
+            setTitle: 'setTitle',
+            setTitleLink: 'setTitleLink',
+            setSubTitle: 'setSubTitle',
+            setImgTitle: 'setImgTitle'
         }),
 
         userProfile() {
