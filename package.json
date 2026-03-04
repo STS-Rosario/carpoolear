@@ -137,14 +137,8 @@
     "webpack-merge": "^4.2.1",
     "xml2js": "^0.4.19"
   },
-  "browserslist": {
-    "production": [
-      "last 2 version",
-      "ie 9"
-    ],
-    "development": [
-      "last 2 version",
-      "ie 9"
-    ]
-  }
+  "browserslist": [
+    "defaults and fully supports es6-module",
+    ">0.5% in AR and not dead"
+  ]
 }
