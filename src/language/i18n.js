@@ -193,7 +193,8 @@ const messages = {
         olvidasteDni: 'Olvidaste completar el documento.',
         olvidasteTel: 'Olvidaste completar el télefono.',
         olvidasteFechaNacimiento: 'Olvidaste ingresar su fecha de nacimiento.',
-        debesSerMayorDeEdad: 'Lo sentimos, debes ser mayor de edad para usar el servicio. Para más información te recomendamos leer los términos y condiciones.',
+        debesSerMayorDeEdad:
+            'Lo sentimos, debes ser mayor de edad para usar el servicio. Para más información te recomendamos leer los términos y condiciones.',
         descripcionCorta:
             'Ups! Tu descripción es muy acotada. No seas tímido, contanos un poco más.',
         dniNoValido: 'El DNI que ingresaste no es válido.',
@@ -470,9 +471,12 @@ const messages = {
         errorAlGuardar: 'Error al guardar',
         errorAlGuardarContactarMesaAyuda:
             'Hubo un error al guardar la información, por favor contactar a mesa de ayuda',
-        usuarioEliminadoExitosamente: 'El usuario ha sido eliminado exitosamente',
-        usuarioAnonimizadoExitosamente: 'El usuario ha sido anonimizado exitosamente',
-        eliminacionCuentaNegativas: 'Debido a que tenés calificaciones negativas necesitamos que te pongas en contacto con la mesa de ayuda para proceder con el borrado de tu cuenta.',
+        usuarioEliminadoExitosamente:
+            'El usuario ha sido eliminado exitosamente',
+        usuarioAnonimizadoExitosamente:
+            'El usuario ha sido anonimizado exitosamente',
+        eliminacionCuentaNegativas:
+            'Debido a que tenés calificaciones negativas necesitamos que te pongas en contacto con la mesa de ayuda para proceder con el borrado de tu cuenta.',
         solicitarEliminacionCuenta: 'Solicitar eliminación de cuenta',
         pedidoEliminacionEnviado:
             'El pedido de eliminación de cuenta ha sido enviado exitosamente',
@@ -776,11 +780,15 @@ const messages = {
         anonimizarUsuario: 'Anonimizar usuario',
         anonimizarYBloquearUsuario: 'Anonimizar y bloquear DNI',
         confirmarEliminarUsuario: 'Confirmar eliminar usuario',
-        confirmarEliminarUsuarioMensaje: '¿Está seguro que desea eliminar este usuario? Solo es posible si no tiene viajes, calificaciones ni referencias.',
+        confirmarEliminarUsuarioMensaje:
+            '¿Está seguro que desea eliminar este usuario? Solo es posible si no tiene viajes, calificaciones ni referencias.',
         confirmarAnonimizarUsuario: 'Confirmar anonimizar usuario',
-        confirmarAnonimizarUsuarioMensaje: '¿Está seguro que desea anonimizar este usuario? Sus datos personales serán eliminados y la cuenta desactivada.',
-        confirmarAnonimizarYBloquearUsuario: 'Confirmar anonimizar y bloquear DNI',
-        confirmarAnonimizarYBloquearUsuarioMensaje: '¿Está seguro? Se agregará el DNI a la lista de bloqueados y se anonimizará el usuario. Use esta opción para usuarios con calificaciones negativas.',
+        confirmarAnonimizarUsuarioMensaje:
+            '¿Está seguro que desea anonimizar este usuario? Sus datos personales serán eliminados y la cuenta desactivada.',
+        confirmarAnonimizarYBloquearUsuario:
+            'Confirmar anonimizar y bloquear DNI',
+        confirmarAnonimizarYBloquearUsuarioMensaje:
+            '¿Está seguro? Se agregará el DNI a la lista de bloqueados y se anonimizará el usuario. Use esta opción para usuarios con calificaciones negativas.',
         confirmar: 'Confirmar',
         accionCompletadaExitosamente: 'Acción completada exitosamente',
         pedidoEliminacionActualizadoExitosamente:
@@ -961,11 +969,14 @@ const messages = {
         faltaFechaOProgramaSemanal:
             'Debe seleccionar una fecha o un programa semanal',
         crearViajeTitulo: 'Crear viaje',
-        precioAsientoTooltip: 'El precio que pagará cada pasajero. Incluye el proporcional de peajes{sellado}',
+        precioAsientoTooltip:
+            'El precio que pagará cada pasajero. Incluye el proporcional de peajes{sellado}',
         contribucionRecomendadaLabel: 'Contribución recomendada',
-        calculadoEnBaseNaftaTooltip: 'Calculado en base a nafta premium, consumo promedio alto, peajes y Sellado de Viaje incluídos (si aplica)',
+        calculadoEnBaseNaftaTooltip:
+            'Calculado en base a nafta premium, consumo promedio alto, peajes y Sellado de Viaje incluídos (si aplica)',
         comentario: 'Comentario',
-        kilogramosDioxidoDeCarbonoEquivalente: 'Kilogramos dióxido de carbono equivalente'
+        kilogramosDioxidoDeCarbonoEquivalente:
+            'Kilogramos dióxido de carbono equivalente'
     },
     chl: {
         loginUsuarioPlaceholder: 'Usuario',
@@ -1501,9 +1512,12 @@ const messages = {
         errorAlGuardar: 'Error al guardar',
         errorAlGuardarContactarMesaAyuda:
             'Hubo un error al guardar la información, por favor contactar a mesa de ayuda',
-        usuarioEliminadoExitosamente: 'El usuario ha sido eliminado exitosamente',
-        usuarioAnonimizadoExitosamente: 'El usuario ha sido anonimizado exitosamente',
-        eliminacionCuentaNegativas: 'Debido a que tenés calificaciones negativas necesitamos que te pongas en contacto con la mesa de ayuda para proceder con el borrado de tu cuenta.',
+        usuarioEliminadoExitosamente:
+            'El usuario ha sido eliminado exitosamente',
+        usuarioAnonimizadoExitosamente:
+            'El usuario ha sido anonimizado exitosamente',
+        eliminacionCuentaNegativas:
+            'Debido a que tenés calificaciones negativas necesitamos que te pongas en contacto con la mesa de ayuda para proceder con el borrado de tu cuenta.',
         solicitarEliminacionCuenta: 'Solicitar eliminación de cuenta',
         pedidoEliminacionEnviado:
             'El pedido de eliminación de cuenta ha sido enviado exitosamente',
@@ -1553,11 +1567,15 @@ const messages = {
         anonimizarUsuario: 'Anonimizar usuario',
         anonimizarYBloquearUsuario: 'Anonimizar y bloquear DNI',
         confirmarEliminarUsuario: 'Confirmar eliminar usuario',
-        confirmarEliminarUsuarioMensaje: '¿Está seguro que desea eliminar este usuario? Solo es posible si no tiene viajes, calificaciones ni referencias.',
+        confirmarEliminarUsuarioMensaje:
+            '¿Está seguro que desea eliminar este usuario? Solo es posible si no tiene viajes, calificaciones ni referencias.',
         confirmarAnonimizarUsuario: 'Confirmar anonimizar usuario',
-        confirmarAnonimizarUsuarioMensaje: '¿Está seguro que desea anonimizar este usuario? Sus datos personales serán eliminados y la cuenta desactivada.',
-        confirmarAnonimizarYBloquearUsuario: 'Confirmar anonimizar y bloquear DNI',
-        confirmarAnonimizarYBloquearUsuarioMensaje: '¿Está seguro? Se agregará el DNI a la lista de bloqueados y se anonimizará el usuario. Use esta opción para usuarios con calificaciones negativas.',
+        confirmarAnonimizarUsuarioMensaje:
+            '¿Está seguro que desea anonimizar este usuario? Sus datos personales serán eliminados y la cuenta desactivada.',
+        confirmarAnonimizarYBloquearUsuario:
+            'Confirmar anonimizar y bloquear DNI',
+        confirmarAnonimizarYBloquearUsuarioMensaje:
+            '¿Está seguro? Se agregará el DNI a la lista de bloqueados y se anonimizará el usuario. Use esta opción para usuarios con calificaciones negativas.',
         confirmar: 'Confirmar',
         cancelar: 'Cancelar',
         accionCompletadaExitosamente: 'Acción completada exitosamente',
@@ -1878,10 +1896,10 @@ const messages = {
         mailEnUso: 'The email account entered is already in use.',
         emailYaTomado: 'The email has already been taken.',
         emailYaTomadoDescripcion:
-            'A user with this email already exists. If it\'s yours and you want to recover your account, contact us at the help desk',
+            "A user with this email already exists. If it's yours and you want to recover your account, contact us at the help desk",
         datosEnUso: 'Data in use',
         datosEnUsoDescripcion:
-            'A user with this document number or phone number already exists. If it\'s yours and you want to recover your account, contact us at the help desk',
+            "A user with this document number or phone number already exists. If it's yours and you want to recover your account, contact us at the help desk",
         errorRegistro:
             'An error occurred while processing the registration, please try again.',
         valorDonacion: 'You must select a donation amount.',
@@ -1918,7 +1936,8 @@ const messages = {
         olvidasteDni: 'You forgot to complete the document.',
         olvidasteTel: 'You forgot to complete the phone number.',
         olvidasteFechaNacimiento: 'You forgot to enter your date of birth.',
-        debesSerMayorDeEdad: 'Sorry, you must be of legal age to use the service. For more information, we recommend reading the terms and conditions.',
+        debesSerMayorDeEdad:
+            'Sorry, you must be of legal age to use the service. For more information, we recommend reading the terms and conditions.',
         descripcionCorta:
             "Oops! Your description is too short. Don't be shy, tell us a little more.",
         dniNoValido: 'The ID you entered is not valid.',
@@ -2139,7 +2158,7 @@ const messages = {
         debeActivarCuenta:
             'To log in you must activate your account, we have sent an activation link to your email so you can activate your account.',
         instalar: 'Install',
-        donar: 'Donnate',
+        donar: 'Donate',
         ingresar: 'Log in',
         recordarme: 'Remember me',
         olvideContra: 'Recover my account password',
@@ -2196,8 +2215,10 @@ const messages = {
         errorAlGuardarContactarMesaAyuda:
             'There was an error saving the information, please contact the help desk',
         usuarioEliminadoExitosamente: 'The user has been deleted successfully',
-        usuarioAnonimizadoExitosamente: 'The user has been anonymized successfully',
-        eliminacionCuentaNegativas: 'Due to negative ratings, you need to contact the help desk to proceed with account deletion.',
+        usuarioAnonimizadoExitosamente:
+            'The user has been anonymized successfully',
+        eliminacionCuentaNegativas:
+            'Due to negative ratings, you need to contact the help desk to proceed with account deletion.',
         solicitarEliminacionCuenta: 'Request account deletion',
         pedidoEliminacionEnviado:
             'The account deletion request has been sent successfully',
@@ -2494,11 +2515,14 @@ const messages = {
         anonimizarUsuario: 'Anonymize user',
         anonimizarYBloquearUsuario: 'Anonymize and block DNI',
         confirmarEliminarUsuario: 'Confirm delete user',
-        confirmarEliminarUsuarioMensaje: 'Are you sure you want to delete this user? Only possible if they have no trips, ratings, or references.',
+        confirmarEliminarUsuarioMensaje:
+            'Are you sure you want to delete this user? Only possible if they have no trips, ratings, or references.',
         confirmarAnonimizarUsuario: 'Confirm anonymize user',
-        confirmarAnonimizarUsuarioMensaje: 'Are you sure you want to anonymize this user? Their personal data will be removed and the account deactivated.',
+        confirmarAnonimizarUsuarioMensaje:
+            'Are you sure you want to anonymize this user? Their personal data will be removed and the account deactivated.',
         confirmarAnonimizarYBloquearUsuario: 'Confirm anonymize and block DNI',
-        confirmarAnonimizarYBloquearUsuarioMensaje: 'Are you sure? The DNI will be added to the blocklist and the user will be anonymized. Use this option for users with negative ratings.',
+        confirmarAnonimizarYBloquearUsuarioMensaje:
+            'Are you sure? The DNI will be added to the blocklist and the user will be anonymized. Use this option for users with negative ratings.',
         confirmar: 'Confirm',
         accionCompletadaExitosamente: 'Action completed successfully',
         pedidoEliminacionActualizadoExitosamente:
@@ -2674,11 +2698,14 @@ const messages = {
         faltaFechaOProgramaSemanal:
             'You must select a date or a weekly schedule',
         crearViajeTitulo: 'Create trip',
-        precioAsientoTooltip: 'The price each passenger will pay. Includes proportional of tolls{sellado}',
+        precioAsientoTooltip:
+            'The price each passenger will pay. Includes proportional of tolls{sellado}',
         contribucionRecomendadaLabel: 'Recommended contribution',
-        calculadoEnBaseNaftaTooltip: 'Calculated based on premium gasoline, high average consumption, tolls and Trip Seal included (if applicable)',
+        calculadoEnBaseNaftaTooltip:
+            'Calculated based on premium gasoline, high average consumption, tolls and Trip Seal included (if applicable)',
         comentario: 'Comment',
-        kilogramosDioxidoDeCarbonoEquivalente: 'Kilograms of carbon dioxide equivalent'
+        kilogramosDioxidoDeCarbonoEquivalente:
+            'Kilograms of carbon dioxide equivalent'
     }
 };
 export default messages;
