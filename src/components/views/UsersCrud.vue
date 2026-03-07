@@ -477,10 +477,10 @@
                         </div>
                         <hr />
                         <!-- User References  -->
-                        <h3>Referencias</h3>
+                        <h3>{{ $t('referencias') }}</h3>
 
                         <div v-if="references && references.length === 0">
-                            Este usuario no tiene referencias
+                            {{ $t('noReferences') }}
                         </div>
 
                         <div
