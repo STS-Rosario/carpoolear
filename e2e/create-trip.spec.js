@@ -1,12 +1,11 @@
 const { test, expect } = require('@playwright/test');
-
-const API_URL = process.env.API_URL || 'http://localhost:8000';
+const { dismissOverlays } = require('./helpers');
 
 test.describe('Create trip flow', () => {
   test.setTimeout(90000);
 
   test('login, create a trip, verify in my-trips and search', async ({ page }) => {
-    // Mock the autocomplete API (nodes_geo table may be empty)
+    // Mock APIs that depend on backend geographic data (nodes_geo table may be empty)
     await page.route('**/api/trips/autocomplete**', (route) => {
       const url = new URL(route.request().url());
       const name = (url.searchParams.get('name') || '').toLowerCase();
@@ -21,8 +20,6 @@ test.describe('Create trip flow', () => {
         body: JSON.stringify({ nodes_geos: match ? results[match] : [] }),
       });
     });
-
-    // Mock the trip-info API (provides distance/duration/co2)
     await page.route('**/api/trips/trip-info', (route) => {
       route.fulfill({
         status: 200,
@@ -46,24 +43,10 @@ test.describe('Create trip flow', () => {
     await page.fill('#txt_user', 'user0@g.com');
     await page.fill('#txt_password', '123456');
     await page.click('#btn_login');
-    await expect(page).not.toHaveURL(/\/login/);
+    await expect(page).not.toHaveURL(/\/login/, { timeout: 15000 });
 
-    // 1b. Dismiss onboarding overlay if it appears
-    // (Requires users.on_boarding_view = 1 in DB; see TestingSeeder or run:
-    //  docker compose exec app php artisan tinker --execute="...")
-    const onboarding = page.locator('.on-boarding--overlay');
-    if (await onboarding.isVisible({ timeout: 2000 }).catch(() => false)) {
-      // Click through all cards until "Comenzar" button appears
-      while (await page.locator('.on-boarding--overlay button.btn-primary').isVisible().catch(() => false)) {
-        await page.locator('.on-boarding--overlay button.btn-primary').click();
-        await page.waitForTimeout(800);
-      }
-      const comenzar = page.locator('.on-boarding--overlay button.btn-success');
-      if (await comenzar.isVisible().catch(() => false)) {
-        await comenzar.click();
-      }
-      await page.waitForTimeout(1000);
-    }
+    // 1b. Dismiss splash screen and onboarding through UI
+    await dismissOverlays(page);
 
     // 2. Navigate to create trip
     await page.getByRole('link', { name: /crear viaje/i }).click();
@@ -73,7 +56,6 @@ test.describe('Create trip flow', () => {
     await page.click('label[for="type-driver"]');
 
     // 4. Fill origin: type "Rosario", wait for autocomplete, select first result
-    // Use pressSequentially to trigger keyup events (needed for OSM autocomplete)
     const originInput = page.locator('.trip_point').first().locator('.osm-autocomplete input');
     await originInput.click();
     await originInput.pressSequentially('Rosario', { delay: 50 });
@@ -89,9 +71,8 @@ test.describe('Create trip flow', () => {
     await destResult.waitFor({ state: 'visible', timeout: 15000 });
     await destResult.click();
 
-    // 6. Select date: open calendar, pick a day that is definitely in the future
+    // 6. Select date: open calendar, pick a future day
     await page.locator('.vdp-datepicker__calendar-button').click();
-    // Skip today (which may fail if the chosen time has already passed) — pick the last enabled day
     const futureDays = page.locator('.vdp-datepicker__calendar .cell.day:not(.disabled):not(.selected)');
     await futureDays.first().waitFor({ state: 'visible' });
     await futureDays.last().click();
@@ -114,6 +95,7 @@ test.describe('Create trip flow', () => {
     // 12. Wait for redirect to trip detail page and capture trip ID
     await expect(page).toHaveURL(/\/trips\/\d+/, { timeout: 15000 });
     const tripId = page.url().match(/\/trips\/(\d+)/)[1];
+    console.log('Created trip ID:', tripId);
 
     // 13. Verify trip detail shows the cities
     await expect(page.getByText('Rosario, Santa Fe').first()).toBeVisible({ timeout: 5000 });
@@ -135,10 +117,17 @@ test.describe('Create trip flow', () => {
     await expect(page.getByText('Rosario, Santa Fe').first()).toBeVisible({ timeout: 15000 });
     await expect(page.getByText('Mendoza, Mendoza').first()).toBeVisible({ timeout: 15000 });
 
-    // 18. Cleanup: delete the created trip to avoid hitting rate limits on reruns
-    const token = await page.evaluate(() => localStorage.getItem('TOKEN'));
-    await page.request.delete(`${API_URL}/api/trips/${tripId}`, {
-      headers: { Authorization: `Bearer ${token}` },
+    // 18. Cleanup: delete the created trip via UI
+    await page.goto(`/trips/${tripId}`);
+    await page.waitForTimeout(2000);
+
+    page.on('dialog', async (dialog) => {
+      await dialog.accept();
     });
+
+    const cancelTripBtn = page.locator('.buttons-container a.btn').filter({ hasText: /Cancelar Viaje/i });
+    await cancelTripBtn.waitFor({ state: 'visible', timeout: 10000 });
+    await cancelTripBtn.click();
+    await page.waitForTimeout(2000);
   });
 });

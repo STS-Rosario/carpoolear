@@ -2,12 +2,12 @@
     <div class="new-trip-component container">
         <div class="alert alert-info alert-sellado-viaje" v-if="this.config.module_trip_creation_payment_enabled">
             <p>{{ $t('mensajeContandoSobreSelladoViaje') }}</p>
-            <p>{{ $t('podesHacerViajesGratis', { free_trips_amount: this.free_trips_amount }) }}</p>
-            <div v-if="this.trips_created_by_user_amount >= this.free_trips_amount">
-                <p>{{ $t('yaCreasteViajes', { trips_created_by_user_amount: this.trips_created_by_user_amount }) }} {{ $t('luegoTendrasQuePagarSelladoViaje') }}</p>
+            <p>{{ $t('podesHacerViajesGratis', { freeTrips: free_trips_amount }) }}</p>
+            <div v-if="trips_created_by_user_amount >= free_trips_amount">
+                <p>{{ $t('yaCreasteViajes', { tripsCreated: trips_created_by_user_amount }) }}</p>
             </div>
-            <div v-if="this.trips_created_by_user_amount < this.free_trips_amount">
-                <p>{{ $t('teQuedaViajesGratis', { remainingFreeTrips: remainingFreeTrips }) }} viaje{{ (remainingFreeTrips) === 1 ? '' : 's' }} gratis, {{ $t('luegoTendrasQuePagarSelladoViaje') }}</p>
+            <div v-if="trips_created_by_user_amount < free_trips_amount">
+                <p>{{ $t('teQuedaViajesGratis', { remaining: remainingFreeTrips }) }}</p>
             </div>
         </div>
 
@@ -1693,7 +1693,7 @@ import { appLocaleToRoutingLanguage } from '../../main';
 import DatePicker from '../DatePicker';
 import dialogs from '../../services/dialogs.js';
 import spinner from '../Spinner.vue';
-import moment from 'moment';
+import dayjs from '../../dayjs';
 import { last } from 'lodash';
 import TripApi from '../../services/api/Trips';
 import UserApi from '../../services/api/User';
@@ -1729,7 +1729,7 @@ export default {
     },
     data() {
         return {
-            minDate: moment().toDate(),
+            minDate: dayjs().toDate(),
             lucrarError: new Error(),
             dateError: new Error(),
             timeError: new Error(),
@@ -1802,7 +1802,7 @@ export default {
                 '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
             showReturnTrip: false,
             otherTrip: {
-                minDate: moment().toDate(),
+                minDate: dayjs().toDate(),
                 dateError: new Error(),
                 timeError: new Error(),
                 commentError: new Error(),
@@ -1858,10 +1858,10 @@ export default {
     },
     mounted() {
         let self = this;
-        this.time = moment().add(1, 'hours').format('HH:00');
-        this.otherTrip.time = moment().add(2, 'hours').format('HH:00');
-        this.weeklyScheduleTime = moment().add(1, 'hours').format('HH:00');
-        this.weeklyScheduleReturnTime = moment().add(2, 'hours').format('HH:00');
+        this.time = dayjs().add(1, 'hours').format('HH:00');
+        this.otherTrip.time = dayjs().add(2, 'hours').format('HH:00');
+        this.weeklyScheduleTime = dayjs().add(1, 'hours').format('HH:00');
+        this.weeklyScheduleReturnTime = dayjs().add(2, 'hours').format('HH:00');
         bus.off('clear-click', this.onBackButton);
         bus.on('clear-click', this.onBackButton);
 
@@ -1968,7 +1968,7 @@ export default {
         },
         dateAnswer: function (value) {
             if (!this.showReturnTrip || !this.otherTrip.dateAnswer) {
-                // const v = moment(value);
+                // const v = dayjs(value);
                 // let date = '';
                 /* if (v.isValid()) {
                     date = value;
@@ -2088,15 +2088,15 @@ export default {
 
             // Restore weekly schedule time
             if (trip.weekly_schedule_time) {
-                this.weeklyScheduleTime = moment(trip.weekly_schedule_time).format('HH:mm');
+                this.weeklyScheduleTime = dayjs(trip.weekly_schedule_time).format('HH:mm');
             }
         } else {
             this.useWeeklySchedule = false;
 
             // Only restore date/time if NOT using weekly schedule
             if (trip.trip_date) {
-                this.date = moment(trip.trip_date.split(' ')[0]).format('YYYY-MM-DD');
-                this.dateAnswer = moment(trip.trip_date.split(' ')[0]).format('YYYY-MM-DD');
+                this.date = dayjs(trip.trip_date.split(' ')[0]).format('YYYY-MM-DD');
+                this.dateAnswer = dayjs(trip.trip_date.split(' ')[0]).format('YYYY-MM-DD');
                 this.time = trip.trip_date.split(' ')[1];
             }
         }
@@ -2197,7 +2197,7 @@ export default {
                 }
             }
 
-            if (!this.time || !moment(this.time, 'HH mm').isValid()) {
+            if (!this.time || !dayjs(this.time, 'HH mm').isValid()) {
                 this.timeError.state = true;
                 this.timeError.message = this.$t('noHorarioValido');
                 globalError = true;
@@ -2233,14 +2233,14 @@ export default {
                 }
                 
                 // Validate weekly schedule time
-                if (!this.weeklyScheduleTime || !moment(this.weeklyScheduleTime, 'HH:mm').isValid()) {
+                if (!this.weeklyScheduleTime || !dayjs(this.weeklyScheduleTime, 'HH:mm').isValid()) {
                     this.timeError.state = true;
                     this.timeError.message = this.$t('noHorarioValido');
                     globalError = true;
                 }
             } else if (
                 !(this.dateAnswer && this.dateAnswer.length) ||
-                !moment(this.dateAnswer).isValid()
+                !dayjs(this.dateAnswer).isValid()
             ) {
                 globalError = true;
                 this.dateError.state = true;
@@ -2286,13 +2286,13 @@ export default {
             }
             if (validDate && validTime) {
                 if (
-                    moment(this.dateAnswer).format('YYYY-MM-DD') ===
-                    moment().format('YYYY-MM-DD')
+                    dayjs(this.dateAnswer).format('YYYY-MM-DD') ===
+                    dayjs().format('YYYY-MM-DD')
                 ) {
                     // la fecha es de hoy, la hora no debería poder ser anterior
                     if (
-                        moment(this.time, 'HH mm').format('HH mm') <
-                        moment().format('HH mm')
+                        dayjs(this.time, 'HH mm').format('HH mm') <
+                        dayjs().format('HH mm')
                     ) {
                         this.timeError.state = true;
                         this.timeError.message = this.$t('viajesPasado');
@@ -2324,7 +2324,7 @@ export default {
                     }
                     
                     // Validate weekly schedule time
-                    if (!this.weeklyScheduleReturnTime || !moment(this.weeklyScheduleReturnTime, 'HH:mm').isValid()) {
+                    if (!this.weeklyScheduleReturnTime || !dayjs(this.weeklyScheduleReturnTime, 'HH:mm').isValid()) {
                         this.otherTrip.timeError.state = true;
                         this.otherTrip.timeError.message = this.$t('noHorarioValido');
                         globalError = true;
@@ -2334,7 +2334,7 @@ export default {
                 } else {
                     if (
                         !this.otherTrip.time ||
-                        !moment(this.otherTrip.time, 'HH mm').isValid()
+                        !dayjs(this.otherTrip.time, 'HH mm').isValid()
                     ) {
                         this.otherTrip.timeError.state = true;
                         this.otherTrip.timeError.message =
@@ -2368,7 +2368,7 @@ export default {
                         this.otherTrip.dateAnswer &&
                         this.otherTrip.dateAnswer.length
                     ) ||
-                    !moment(this.otherTrip.dateAnswer).isValid()
+                    !dayjs(this.otherTrip.dateAnswer).isValid()
                 ) {
                     globalError = true;
                     this.otherTrip.dateError.state = true;
@@ -2379,15 +2379,15 @@ export default {
 
                 if (validOtherTripTime && validOtherTripDate && !this.useWeeklySchedule) {
                     if (
-                        moment(this.otherTrip.dateAnswer).format(
+                        dayjs(this.otherTrip.dateAnswer).format(
                             'YYYY-MM-DD'
-                        ) === moment().format('YYYY-MM-DD')
+                        ) === dayjs().format('YYYY-MM-DD')
                     ) {
                         // la fecha es de hoy, la hora no debería poder ser anterior
                         if (
-                            moment(this.otherTrip.time, 'HH mm').format(
+                            dayjs(this.otherTrip.time, 'HH mm').format(
                                 'HH mm'
-                            ) < moment().format('HH mm')
+                            ) < dayjs().format('HH mm')
                         ) {
                             this.otherTrip.timeError.state = true;
                             this.otherTrip.timeError.message =
@@ -2396,23 +2396,17 @@ export default {
                         }
                     }
 
-                    const tripDate = moment(this.dateAnswer);
-                    const otherTripDate = moment(this.otherTrip.dateAnswer);
-                    let time = moment(this.time, 'HH:mm');
+                    let time = dayjs(this.time, 'HH:mm');
+                    const tripDate = dayjs(this.dateAnswer)
+                        .hour(time.hour())
+                        .minute(time.minute())
+                        .second(time.second());
 
-                    tripDate.set({
-                        hour: time.get('hour'),
-                        minute: time.get('minute'),
-                        second: time.get('second')
-                    });
-
-                    time = moment(this.otherTrip.time, 'HH:mm');
-
-                    otherTripDate.set({
-                        hour: time.get('hour'),
-                        minute: time.get('minute'),
-                        second: time.get('second')
-                    });
+                    time = dayjs(this.otherTrip.time, 'HH:mm');
+                    const otherTripDate = dayjs(this.otherTrip.dateAnswer)
+                        .hour(time.hour())
+                        .minute(time.minute())
+                        .second(time.second());
 
                     if (
                         otherTripDate.isBefore(tripDate) ||

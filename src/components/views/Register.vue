@@ -338,14 +338,14 @@
                 v-if="showEmailTakenModal"
                 @close="toggleEmailTakenModal"
             >
-                <h3 slot="header">
+                <template #header><h3>
                     <span>{{ $t('emailYaTomado') }}</span>
                     <i
                         v-on:click="toggleEmailTakenModal"
                         class="fa fa-times float-right-close"
                     ></i>
-                </h3>
-                <div slot="body">
+                </h3></template>
+                <template #body><div>
                     <div class="text-left color-black login-modal">
                         <p>
                             {{ $t('emailYaTomadoDescripcion') }}
@@ -364,7 +364,7 @@
                             >.
                         </p>
                     </div>
-                </div>
+                </div></template>
             </modal>
         </div>
         <div class="form row register-success" v-else>
@@ -387,7 +387,7 @@ import bus from '../../services/bus-event';
 import router from '../../router';
 import DatePicker from '../DatePicker';
 import modal from '../Modal';
-import moment from 'moment';
+import dayjs from '../../dayjs';
 import Spinner from '../Spinner.vue';
 let emailRegex =
     /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
@@ -431,8 +431,8 @@ export default {
             accountNumberError: new Error(),
             accountTypeError: new Error(),
             accountBankError: new Error(),
-            maxDate: moment().toDate(),
-            minDate: moment('1900-01-01').toDate(),
+            maxDate: dayjs().toDate(),
+            minDate: dayjs('1900-01-01').toDate(),
             showBeDriver: false,
             driverFiles: null,
             banks: [],

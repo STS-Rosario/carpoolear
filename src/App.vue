@@ -3,20 +3,23 @@
         class="app-container"
         :class="[backgroundStyle, viewName, deviceClass]"
     >
-        <!-- Custom Splash Screen -->
-        <div v-if="showCustomSplash" class="custom-splash-screen">
-            <img src="https://carpoolear.com.ar/app/static/img/splash-android-1280x1920.png" alt="Carpoolear" class="splash-image" />
-            <div class="splash-version">Version 92</div>
-        </div>
-        
-        <onBoarding key="1" v-if="onBoardingVisibility"></onBoarding>
-        <headerApp></headerApp>
-        <main id="main">
-            <div class="view-container clearfix">
-                <router-view></router-view>
+        <ForceUpgradeModal v-if="showForceUpgrade" />
+        <template v-if="!showForceUpgrade">
+            <!-- Custom Splash Screen -->
+            <div v-if="showCustomSplash" class="custom-splash-screen">
+                <img src="https://carpoolear.com.ar/app/static/img/splash-android-1280x1920.png" alt="Carpoolear" class="splash-image" />
+                <div class="splash-version">{{ splashVersionText }}</div>
             </div>
-        </main>
-        <footerApp></footerApp>
+
+            <onBoarding key="1" v-if="onBoardingVisibility"></onBoarding>
+            <headerApp></headerApp>
+            <main id="main">
+                <div class="view-container clearfix">
+                    <router-view></router-view>
+                </div>
+            </main>
+            <footerApp></footerApp>
+        </template>
         <!--
     <pre>
             {{this.$store.state}}
@@ -26,13 +29,68 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import { Capacitor } from '@capacitor/core';
+import { AppUpdate } from '@capawesome/capacitor-app-update';
+import { compareAndroidVersion, compareSemver } from './utils/versionCompare';
 import footerApp from './components/sections/FooterApp.vue';
 import headerApp from './components/sections/HeaderApp.vue';
 import onBoarding from './components/sections/OnBoarding.vue';
+import ForceUpgradeModal from './components/ForceUpgradeModal.vue';
 
 export default {
     name: 'app',
     methods: {
+        async runVersionCheck(config) {
+            if (!Capacitor.isNativePlatform() || this.versionCheckDone) return;
+            if (!config || config.__isLocal) return;
+
+            const platform = Capacitor.getPlatform();
+            const minAndroid = config.min_version_android;
+            const minAndroidSemver = config.min_version_android_semver;
+            const minIos = config.min_version_ios;
+
+            try {
+                let currentVersionCode = null;
+                let currentVersionName = null;
+                let isFallback = false;
+
+                try {
+                    const result = await AppUpdate.getAppUpdateInfo();
+                    currentVersionCode = result.currentVersionCode;
+                    currentVersionName = result.currentVersionName;
+                    const version = platform === 'android' ? String(currentVersionCode) : (currentVersionName || String(currentVersionCode));
+                    this.$store.commit('SET_APP_VERSION_INFO', { version, versionSource: 'real', platform });
+                } catch (pluginError) {
+                    console.warn('AppUpdate.getAppUpdateInfo failed, using window.appVersion fallback:', pluginError);
+                    const fallback = window.appVersion || '0';
+                    currentVersionCode = fallback;
+                    currentVersionName = fallback;
+                    isFallback = true;
+                    this.$store.commit('SET_APP_VERSION_INFO', { version: fallback, versionSource: 'fallback', platform });
+                }
+
+                // Min-version / force-upgrade check (only when backend sends min for this platform)
+                if (platform === 'android') {
+                    if (!isFallback && currentVersionCode != null && minAndroid != null && minAndroid !== undefined) {
+                        if (compareAndroidVersion(currentVersionCode, minAndroid) < 0) {
+                            this.showForceUpgrade = true;
+                        }
+                    } else if (isFallback && currentVersionName != null && minAndroidSemver) {
+                        if (compareSemver(currentVersionName, minAndroidSemver) < 0) {
+                            this.showForceUpgrade = true;
+                        }
+                    }
+                } else if (platform === 'ios' && minIos != null && minIos !== '') {
+                    if (currentVersionName != null && compareSemver(currentVersionName, minIos) < 0) {
+                        this.showForceUpgrade = true;
+                    }
+                }
+            } catch (error) {
+                console.warn('Version check failed:', error);
+            } finally {
+                this.versionCheckDone = true;
+            }
+        },
         setRouteClass: function (route) {
             this.actualRouteName = 'route--' + route.name;
         },
@@ -68,6 +126,13 @@ export default {
         }, 3000);
     },
     computed: {
+        // Same version we send in X-App-Version header for all requests (network.js getHeader)
+        splashVersionText() {
+            const appVersionInfo = this.$store.state.appVersionInfo;
+            const version = (appVersionInfo && appVersionInfo.version) || (typeof window !== 'undefined' && window.appVersion) || '0';
+            const base = 'Version ' + version;
+            return Capacitor.isNativePlatform() ? base : base + ' - build 97';
+        },
         ...mapGetters({
             deviceReady: 'cordova/deviceReady',
             backgroundStyle: 'background/backgroundStyle',
@@ -106,30 +171,32 @@ export default {
             if (value && value.locale && !localStorage.getItem('app_locale')) {
                 this.$root.$i18n.locale = value.locale;
             }
+            if (value && !value.__isLocal) {
+                this.runVersionCheck(value);
+            }
         }
     },
     data() {
         return {
             actualRouteName: '',
-            showCustomSplash: true
+            showCustomSplash: true,
+            showForceUpgrade: false,
+            versionCheckDone: false
         };
     },
     components: {
         headerApp,
         footerApp,
-        onBoarding
+        onBoarding,
+        ForceUpgradeModal
     }
 };
 </script>
 
 <style>
 #app {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-    margin-top: 60px;
 }
 
 .custom-splash-screen {

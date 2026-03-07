@@ -25,14 +25,14 @@
                 :title="$t('pendingRequestCarpoodatos')"
                 :body="'Body'"
             >
-                <h3 slot="header">
+                <template #header><h3>
                     <span>{{ $t('pendingRequestCarpoodatos') }}</span>
                     <i
                         v-on:click="onModalClose"
                         class="fa fa-times float-right-close"
                     ></i>
-                </h3>
-                <div slot="body">
+                </h3></template>
+                <template #body><div>
                     <div class="text-left carpoodatos">
                         <p>
                             {{ $t('pendingRequestAntesDeAceptarSolicitud') }}
@@ -84,7 +84,7 @@
                             {{ $t('pendingRequestEnviarMensaje') }}
                         </button>
                     </div>
-                </div>
+                </div></template>
             </modal>
             <div class="rate-pending-message">
                 <div class="rate-pending-message--content">
@@ -93,8 +93,8 @@
                     <strong>{{
                         trip.points[trip.points.length - 1].json_address.ciudad
                     }}</strong>
-                    {{ $t('pendingRequestDelDia') }} {{ trip.trip_date | moment('DD/MM/YYYY') }} {{ $t('pendingRequestALas') }}
-                    {{ trip.trip_date | moment('HH:mm') }}.
+                    {{ $t('pendingRequestDelDia') }} {{ dayjs(trip.trip_date).format('DD/MM/YYYY') }} {{ $t('pendingRequestALas') }}
+                    {{ dayjs(trip.trip_date).format('HH:mm') }}.
                     <div class="pending-buttons">
                         <button
                             class="btn btn-accept-request"
@@ -136,6 +136,7 @@ import modal from './Modal';
 import dialogs from '../services/dialogs.js';
 import spinner from './Spinner.vue';
 import bus from '../services/bus-event.js';
+import dayjs from '../dayjs';
 
 export default {
     data() {
@@ -153,6 +154,7 @@ export default {
         })
     },
     methods: {
+        dayjs,
         ...mapActions({
             passengerAccept: 'passenger/accept',
             passengerReject: 'passenger/reject',

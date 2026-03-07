@@ -70,12 +70,12 @@
                         <div class="rate-item-detail">
                             {{ $t('rateItemViajoAComo') }} {{ rate.trip.to_town }} {{ $t('rateItemComo') }}
                             {{ rateType }} -
-                            {{ rate.rate_at | moment('DD/MM/YYYY') }}
+                            {{ dayjs(rate.rate_at).format('DD/MM/YYYY') }}
                         </div>
                     </template>
                     <template v-else>
                         <div class="rate-item-detail">
-                            {{ rate.created_at | moment('DD/MM/YYYY') }}
+                            {{ dayjs(rate.created_at).format('DD/MM/YYYY') }}
                         </div>
                     </template>
                 </div>
@@ -106,14 +106,14 @@
                 {{ rate.reply_comment }}
             </div>
             <div class="reply_comment_date">
-                {{ rate.reply_comment_created_at | moment('calendar') }}
+                {{ dayjs(rate.reply_comment_created_at).calendar() }}
             </div>
         </div>
     </div>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import moment from 'moment';
+import dayjs from '../dayjs';
 export default {
     data() {
         return {
@@ -122,6 +122,7 @@ export default {
         };
     },
     methods: {
+        dayjs,
         ...mapActions({
             reply: 'rates/reply'
         }),
@@ -134,7 +135,7 @@ export default {
             this.reply(data).then(() => {
                 this.showReply = false;
                 this.rate.reply_comment = this.comment;
-                this.rate.reply_comment_created_at = moment(
+                this.rate.reply_comment_created_at = dayjs(
                     new Date()
                 ).format();
                 this.comment = '';

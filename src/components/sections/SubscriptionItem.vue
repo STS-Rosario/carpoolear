@@ -30,7 +30,7 @@
                     <div class="suscription-item-detail--content">
                         <span>{{ $t('fechaAproximada') }}:</span>
                         <strong>{{
-                            subscription.trip_date | moment('DD/MM/YYYY')
+                            dayjs(subscription.trip_date).format('DD/MM/YYYY')
                         }}</strong>
                     </div>
                 </div>
@@ -75,7 +75,7 @@
 </template>
 <script>
 import { mapActions } from 'vuex';
-import moment from 'moment';
+import dayjs from '../../dayjs';
 export default {
     name: 'subscriptions-item',
     props: {
@@ -104,6 +104,7 @@ export default {
         this.search(false);
     },
     methods: {
+        dayjs,
         ...mapActions({
             removeStore: 'subscriptions/remove',
             searchTrip: 'trips/tripsSearch'
@@ -121,7 +122,7 @@ export default {
         search(redirect) {
             let params = {};
             if (this.subscription.trip_date) {
-                params.date = moment(this.subscription.trip_date).format(
+                params.date = dayjs(this.subscription.trip_date).format(
                     'YYYY-MM-DD'
                 );
             }

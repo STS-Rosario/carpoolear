@@ -33,19 +33,19 @@
                             </tr>
                         </tbody>
                     </table>
-                    <div slot="no-data" class="text-center" style="margin-top: 20px;">
+                    <template #no-data><div class="text-center" style="margin-top: 20px;">
                         <div class="alert alert-info">
                             {{ $t('noHayUsuariosBloqueados') }}
                         </div>
-                    </div>
-                    <div slot="loading" class="text-center" style="margin-top: 20px;">
+                    </div></template>
+                    <template #loading><div class="text-center" style="margin-top: 20px;">
                         <img
                             src="https://carpoolear.com.ar/static/img/loader.gif"
                             alt=""
                             class="ajax-loader"
                         />
                         <p>{{ $t('cargandoPedidos') }}</p>
-                    </div>
+                    </div></template>
                 </Loading>
             </div>
         </div>
@@ -56,7 +56,7 @@ import adminNav from '../sections/adminNav';
 import Loading from '../Loading.vue';
 import { AdminApi } from '../../services/api';
 import dialogs from '../../services/dialogs.js';
-import moment from 'moment';
+import dayjs from '../../dayjs';
 
 export default {
     name: 'admin-banned-users-list',
@@ -70,7 +70,7 @@ export default {
     methods: {
         formatDate(dateString) {
             if (!dateString) return '-';
-            return moment(dateString).format('DD/MM/YYYY HH:mm');
+            return dayjs(dateString).format('DD/MM/YYYY HH:mm');
         },
         getBannedByLabel(bannedBy) {
             if (bannedBy === 0) return this.$t('sistema');

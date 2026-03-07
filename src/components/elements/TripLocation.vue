@@ -5,7 +5,7 @@
             <div class="row trip_location_from">
                 <div class="col-xs-4" v-if="tripCardTheme === 'light'">
                     <span class="trip_from_time">{{
-                        trip.trip_date | moment('HH:mm')
+                        dayjs(trip.trip_date).format('HH:mm')
                     }}</span>
                 </div>
                 <div
@@ -73,7 +73,7 @@
             >
                 <div class="col-xs-4" v-if="tripCardTheme === 'light'">
                     <span class="trip_to_time">{{
-                        tripArrivingTime | moment('HH:mm')
+                        dayjs(tripArrivingTime).format('HH:mm')
                     }}</span>
                 </div>
                 <div
@@ -133,7 +133,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import svgItem from '../SvgItem';
-import moment from 'moment';
+import dayjs from '../../dayjs';
 import TripSeats from './TripSeats';
 
 export default {
@@ -155,12 +155,13 @@ export default {
                 let minutes = 0;
                 minutes = parseInt(this.trip.estimated_time.split(':')[0]) * 60;
                 minutes += parseInt(this.trip.estimated_time.split(':')[1]);
-                return moment(this.trip.trip_date).add(minutes, 'minutes');
+                return dayjs(this.trip.trip_date).add(minutes, 'minutes');
             }
             return '';
         }
     },
     methods: {
+        dayjs,
         goToProfile: function (event) {
             event.stopPropagation();
             this.$router.push({

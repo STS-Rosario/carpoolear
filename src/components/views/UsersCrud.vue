@@ -99,17 +99,22 @@
                                                 </div>
                                             </div>
                                         </li>
-                                        <li
-                                            slot="no-data"
+                                        <template #no-data><li
                                             class="list-group-item alert alert-warning"
                                             role="alert"
                                         >
+<<<<<<< HEAD
                                             {{
                                                 $t('noSeEncontroNingunUsuario')
                                             }}
                                         </li>
                                         <li
                                             slot="loading"
+=======
+                                            {{ $t('noSeEncontroNingunUsuario') }}
+                                        </li></template>
+                                        <template #loading><li
+>>>>>>> 562313360da7efa140521dacfd43fb0ffb1b0bd0
                                             class="list-group-item alert alert-info"
                                             role="alert"
                                         >
@@ -119,7 +124,7 @@
                                                 class="ajax-loader"
                                             />
                                             {{ $t('cargandoUsuarios') }}
-                                        </li>
+                                        </li></template>
                                     </Loading>
                                 </template>
                             </ul>
@@ -533,7 +538,6 @@
                     </div>
                     <div v-else class="col-xs-24 col-sm-16 col-md-16">
                         <p
-                            slot="no-data"
                             class="alert alert-warning"
                             role="alert"
                         >
@@ -549,14 +553,20 @@
             :name="'modal-confirm-admin-action'"
             @close="closeConfirmModal"
         >
-            <h3 slot="header">
+            <template #header><h3>
                 <span>{{ confirmModalTitle }}</span>
+<<<<<<< HEAD
                 <i
                     v-on:click="closeConfirmModal"
                     class="fa fa-times float-right-close"
                 ></i>
             </h3>
             <div slot="body">
+=======
+                <i v-on:click="closeConfirmModal" class="fa fa-times float-right-close"></i>
+            </h3></template>
+            <template #body><div>
+>>>>>>> 562313360da7efa140521dacfd43fb0ffb1b0bd0
                 <div class="text-left color-black">
                     <p>{{ confirmModalMessage }}</p>
                     <div
@@ -593,7 +603,7 @@
                         </button>
                     </div>
                 </div>
-            </div>
+            </div></template>
         </modal>
     </div>
 </template>
@@ -1014,13 +1024,38 @@ export default {
 
         save() {
             if (!this.validate()) {
-                this.newInfo.user = this.currentUser;
+                // DNI: send raw value without dots (backend expects digits only)
+                const nroDocRaw = this.newInfo.nro_doc
+                    ? cleanId(this.newInfo.nro_doc, this.settings.profile_id_format)
+                    : this.newInfo.nro_doc;
+
+                // Patente: trim whitespace before sending
+                const patenteValue = (this.newInfo.patente && this.newInfo.patente.trim) ? this.newInfo.patente.trim() : (this.newInfo.patente || '');
+
+                // Only send properties from the admin form (backend allows these for admin)
+                const payload = {
+                    user: { id: this.currentUser.id },
+                    name: this.newInfo.name,
+                    email: this.newInfo.email,
+                    description: this.newInfo.description,
+                    private_note: this.newInfo.private_note,
+                    nro_doc: nroDocRaw,
+                    mobile_phone: this.newInfo.mobile_phone,
+                    patente: patenteValue,
+                    driver_is_verified: this.newInfo.driver_is_verified ? 1 : 0,
+                    account_number: this.newInfo.account_number,
+                    account_type: this.newInfo.account_type,
+                    account_bank: this.newInfo.account_bank,
+                    banned: this.newInfo.banned ? 1 : 0,
+                    active: this.newInfo.active ? 1 : 0
+                };
+
                 if (this.newInfo.pass && this.newInfo.pass.password) {
-                    this.newInfo.password = this.newInfo.pass.password;
-                    this.newInfo.password_confirmation =
-                        this.newInfo.pass.password_confirmation;
+                    payload.password = this.newInfo.pass.password;
+                    payload.password_confirmation = this.newInfo.pass.password_confirmation;
                 }
 
+<<<<<<< HEAD
                 // Ensure nro_doc is raw value (no dots) before sending
                 if (this.newInfo.nro_doc) {
                     this.newInfo.nro_doc = cleanId(
@@ -1042,6 +1077,9 @@ export default {
                 }
 
                 this.update(this.newInfo)
+=======
+                this.update(payload)
+>>>>>>> 562313360da7efa140521dacfd43fb0ffb1b0bd0
                     .then(() => {
                         dialogs.message(
                             this.$t('perfilActualizadoCorrectamente')

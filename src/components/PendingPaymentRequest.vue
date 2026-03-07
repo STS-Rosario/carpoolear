@@ -12,8 +12,8 @@
                                       .json_address.name
                                 : trip.points[trip.points.length - 1].address
                         }}
-                        {{ $t('pendingRequestDelDia') }} {{ trip.trip_date | moment('DD/MM/YYYY') }} {{ $t('pendingRequestALas') }}
-                        {{ trip.trip_date | moment('HH:mm') }}
+                        {{ $t('pendingRequestDelDia') }} {{ dayjs(trip.trip_date).format('DD/MM/YYYY') }} {{ $t('pendingRequestALas') }}
+                        {{ dayjs(trip.trip_date).format('HH:mm') }}
                     </strong>
                     {{ $t('pendingPaymentAhoraDebesRealizarElPagoDe') }}
                     <strong>{{ $n(trip.seat_price_cents / 100, 'currency') }}</strong>
@@ -42,6 +42,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import dialogs from '../services/dialogs.js';
+import dayjs from '../dayjs';
 export default {
     data() {
         return {
@@ -63,6 +64,7 @@ export default {
         });
     },
     methods: {
+        dayjs,
         ...mapActions({
             getTrip: 'getTrip',
             passengerAccept: 'passenger/accept',

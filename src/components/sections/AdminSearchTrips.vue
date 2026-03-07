@@ -176,15 +176,13 @@
                                     </div>
                                 </div>
                             </li>
-                            <li
-                                slot="no-data"
+                            <template #no-data><li
                                 class="list-group-item alert alert-warning"
                                 role="alert"
                             >
                                 {{ $t('noSeEncontroNingunUsuario') }}
-                            </li>
-                            <li
-                                slot="loading"
+                            </li></template>
+                            <template #loading><li
                                 class="list-group-item alert alert-info"
                                 role="alert"
                             >
@@ -194,7 +192,7 @@
                                     class="ajax-loader"
                                 />
                                 {{ $t('cargandoUsuarios') }}
-                            </li>
+                            </li></template>
                         </loading>
                     </div>
                 </div>
@@ -220,7 +218,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import DatePicker from '../DatePicker';
-import moment from 'moment';
+import dayjs from '../../dayjs';
 import dialogs from '../../services/dialogs.js';
 import loading from '../Loading';
 import Autocomplete from '../Autocomplete';
@@ -229,7 +227,7 @@ export default {
     name: 'search-trip',
     data() {
         return {
-            minDate: moment().toDate(),
+            minDate: dayjs().toDate(),
             isPassenger: false,
             isAdmin: true,
             from_town: {

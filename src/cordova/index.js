@@ -14,7 +14,7 @@ import config from '../../config/conf.json';
 console.log('CORDOVA INDEX.JS IS LOADING!');
 
 window.facebook = facebook;
-window.appVersion = '2.2.2';
+window.appVersion = '3.1.3';
 
 const onDeviceReady = () => {
     console.log('Device ready');
@@ -90,12 +90,18 @@ const initDeviceInfo = async () => {
             window.device = compatibleDevice;
 
             // Update the store
-            store.commit('cordova/' + types.CORDOVA_SET_DEVICE, compatibleDevice);
+            store.commit(
+                'cordova/' + types.CORDOVA_SET_DEVICE,
+                compatibleDevice
+            );
         } catch (error) {
             console.error('Error getting device info:', error);
             // Fallback to existing window.device if available
             if (window.device) {
-                store.commit('cordova/' + types.CORDOVA_SET_DEVICE, window.device);
+                store.commit(
+                    'cordova/' + types.CORDOVA_SET_DEVICE,
+                    window.device
+                );
             }
         }
     } else {
@@ -189,7 +195,9 @@ console.log('Checking platform:', Capacitor.getPlatform());
 console.log('Is native platform:', Capacitor.isNativePlatform());
 
 if (Capacitor.isNativePlatform()) {
-    console.log('Capacitor native platform detected - initializing immediately');
+    console.log(
+        'Capacitor native platform detected - initializing immediately'
+    );
 
     // Wait a bit for Capacitor to be fully ready
     setTimeout(() => {

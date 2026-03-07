@@ -113,7 +113,7 @@
                     </div>
                     <!--<div class="form-group">
                     <label for="">Fecha de nacimiento <span class="required-field-flag" title="Campo requerido">(*)</span></label>
-                    <DatePicker :value="birthday | moment('YYYY-MM-DD') " ref="ipt_calendar" name="ipt_calendar" :maxDate="maxDate" :minDate="minDate" :class="{'has-error': birthdayError.state}" ></DatePicker>
+                    <DatePicker :value="dayjs(birthday).format('YYYY-MM-DD') " ref="ipt_calendar" name="ipt_calendar" :maxDate="maxDate" :minDate="minDate" :class="{'has-error': birthdayError.state}" ></DatePicker>
                     <span class="error" v-if="birthdayError.state"> {{birthdayError.message}} </span>
                 </div>-->
                     <div class="form-group">
@@ -488,14 +488,14 @@
             @close="toggleModalDeleteAccount"
             :body="'Body'"
         >
-            <h3 slot="header">
+            <template #header><h3>
                 <span>{{ $t('seguroEliminarCuenta') }}</span>
                 <i
                     v-on:click="toggleModalDeleteAccount"
                     class="fa fa-times float-right-close"
                 ></i>
-            </h3>
-            <div slot="body">
+            </h3></template>
+            <template #body><div>
                 <div class="text-left color-black" v-if="!showNegativeRatingsInModal">
                     <p>{{ $t('eliminacionCuentaRecuperarCuenta') }}</p>
                     <div class="text-center" style="margin-top: 1em;">
@@ -535,7 +535,7 @@
                         </button>
                     </div>
                 </div>
-            </div>
+            </div></template>
         </modal>
 
         <modal
@@ -543,14 +543,14 @@
             v-if="showMesaAyudaModal"
             @close="showMesaAyudaModal = false"
         >
-            <h3 slot="header">
+            <template #header><h3>
                 <span>{{ $t('mesaAyuda') }}</span>
                 <i
                     v-on:click="showMesaAyudaModal = false"
                     class="fa fa-times float-right-close"
                 ></i>
-            </h3>
-            <div slot="body">
+            </h3></template>
+            <template #body><div>
                 <div class="text-left color-black login-modal">
                     <p>
                         {{ $t('mesaAyudaFuncionaDesde') }}
@@ -562,7 +562,7 @@
                         <a href="https://facebook.com/carpoolear">Facebook</a>.
                     </p>
                 </div>
-            </div>
+            </div></template>
         </modal>
 
         <modal
@@ -570,14 +570,14 @@
             v-if="showBannedDniModal"
             @close="toggleBannedDniModal"
         >
-            <h3 slot="header">
+            <template #header><h3>
                 <span>{{ $t('errorAlGuardar') }}</span>
                 <i
                     v-on:click="toggleBannedDniModal"
                     class="fa fa-times float-right-close"
                 ></i>
-            </h3>
-            <div slot="body">
+            </h3></template>
+            <template #body><div>
                 <div class="text-left color-black login-modal">
                     <p>
                         {{ $t('errorAlGuardarContactarMesaAyuda') }}
@@ -595,7 +595,7 @@
                         <a href="https://facebook.com/carpoolear">Facebook</a>.
                     </p>
                 </div>
-            </div>
+            </div></template>
         </modal>
 
         <modal
@@ -603,14 +603,14 @@
             v-if="showDatosEnUsoModal"
             @close="toggleDatosEnUsoModal"
         >
-            <h3 slot="header">
+            <template #header><h3>
                 <span>{{ $t('datosEnUso') }}</span>
                 <i
                     v-on:click="toggleDatosEnUsoModal"
                     class="fa fa-times float-right-close"
                 ></i>
-            </h3>
-            <div slot="body">
+            </h3></template>
+            <template #body><div>
                 <div class="text-left color-black login-modal">
                     <p>
                         {{ $t('datosEnUsoDescripcion') }}
@@ -628,7 +628,7 @@
                         <a href="https://facebook.com/carpoolear">Facebook</a>.
                     </p>
                 </div>
-            </div>
+            </div></template>
         </modal>
     </div>
 </template>
@@ -639,7 +639,7 @@ import Uploadfile from '../Uploadfile';
 import DatePicker from '../DatePicker';
 import SvgItem from '../SvgItem';
 import dialogs from '../../services/dialogs.js';
-import moment from 'moment';
+import dayjs from '../../dayjs';
 import bus from '../../services/bus-event';
 import Spinner from '../Spinner.vue';
 import modal from '../Modal';
@@ -678,8 +678,8 @@ export default {
             accountNumberError: new Error(),
             accountTypeError: new Error(),
             accountBankError: new Error(),
-            maxDate: moment().toDate(),
-            minDate: moment('1900-01-01').toDate(),
+            maxDate: dayjs().toDate(),
+            minDate: dayjs('1900-01-01').toDate(),
             birthday: '',
             birthdayAnswer: '',
             showChangePassword: false,
@@ -749,6 +749,7 @@ export default {
         }
     },
     methods: {
+        dayjs,
         ...mapActions({
             update: 'auth/update',
             updatePhoto: 'auth/updatePhoto',
@@ -818,9 +819,21 @@ export default {
             if (this.user && this.user.nro_doc) {
                 this.user.nro_doc = cleanId(this.user.nro_doc, this.config.profile_id_format);
             }
-            console.log('this.user', this.user);
-            var data = Object.assign({}, this.user);
-            console.log('data.user', data);
+            // Only send properties the backend allows for profile edit (name/email are read-only)
+            const allowedProfileUpdateKeys = [
+                'birthday', 'gender', 'description', 'mobile_phone', 'emails_notifications',
+                'nro_doc', 'data_visibility',
+                'do_not_alert_request_seat', 'do_not_alert_accept_passenger',
+                'do_not_alert_pending_rates', 'do_not_alert_pricing',
+                'autoaccept_requests', 'unaswered_messages_limit',
+                'account_number', 'account_type', 'account_bank'
+            ];
+            const data = {};
+            allowedProfileUpdateKeys.forEach((key) => {
+                if (this.user.hasOwnProperty(key) && this.user[key] !== undefined) {
+                    data[key] = this.user[key];
+                }
+            });
             if (this.pass.password) {
                 if (this.pass.password !== this.pass.password_confirmation) {
                     this.error = this.$t('passwordNoCoincide');
@@ -829,12 +842,6 @@ export default {
                 data.password = this.pass.password;
                 data.password_confirmation = this.pass.password_confirmation;
             }
-            /* if (moment(this.birthdayAnswer, 'YYYY-MM-DD').isValid()) {
-                console.log('valid date');
-                data.birthday = this.birthdayAnswer;
-                console.log(this.user.birthday);
-            } */
-            // nro_doc is already raw value (no dots) from user object
             /* global FormData */
             let bodyFormData = new FormData();
             for (const key in data) {
@@ -845,10 +852,8 @@ export default {
                             bodyFormData.append(key + '[]', element);
                         }
                     } else {
-                        if (data[key] !== null) {
+                        if (data[key] !== null && data[key] !== undefined) {
                             bodyFormData.append(key, data[key]);
-                        } else {
-                            // bodyFormData.append(key, '');
                         }
                     }
                 }
@@ -967,8 +972,8 @@ export default {
                 this.birthdayError.message = this.$t('olvidasteFechaNacimiento');
                 globalError = true;
             } else {
-                let birthday = moment(this.birthdayAnswer);
-                if (moment().diff(birthday, 'years') < 18) {
+                let birthday = dayjs(this.birthdayAnswer);
+                if (dayjs().diff(birthday, 'years') < 18) {
                     this.birthdayError.state = true;
                     this.birthdayError.message = this.$t('debesSerMayorDeEdad');
                     globalError = true;
@@ -1189,8 +1194,8 @@ export default {
             }
         }
         try {
-            if (moment(this.user.birthday, 'YYYY-MM-DD').isValid()) {
-                this.birthday = moment(this.user.birthday, 'YYYY-MM-DD');
+            if (dayjs(this.user.birthday, 'YYYY-MM-DD').isValid()) {
+                this.birthday = dayjs(this.user.birthday, 'YYYY-MM-DD');
             } else {
                 this.birthday = '';
             }

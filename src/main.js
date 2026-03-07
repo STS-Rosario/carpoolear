@@ -2,12 +2,12 @@
 
 import 'babel-polyfill';
 
-import Vue from 'vue';
+import Vue, { createApp } from 'vue';
 import App from './App';
 
 import VueResource from 'vue-resource';
 import VueAnalytics from 'vue-analytics';
-import VueMoment from 'vue-moment';
+import dayjs from './dayjs';
 
 import router from './router';
 import store from './store';
@@ -21,8 +21,11 @@ import bootstrapCss from './styles/bootstrap/css/bootstrap.min.css';
 import cssHelpers from './styles/helpers';
 import css from './styles/main';
 
-import VueI18n from 'vue-i18n';
-import messages from './language/i18n';
+import i18n, {
+    appLocaleToBCP47,
+    appLocaleToRoutingLanguage,
+    applyPriceFormat
+} from './i18n';
 
 import bus from './services/bus-event';
 import { DebugApi } from './services/api';
@@ -36,6 +39,9 @@ import Vue2Leaflet from 'vue2-leaflet';
 
 import * as VueGoogleMaps from 'vue2-google-maps';
 
+// Re-export locale maps so existing imports from '../../main' still work
+export { appLocaleToBCP47, appLocaleToRoutingLanguage };
+
 const ROUTE_BASE = process.env.ROUTE_BASE;
 
 const debugApi = new DebugApi();
@@ -45,115 +51,43 @@ console.log('ROUTE_BASE', ROUTE_BASE, cordovaPath);
 cordovaTag.setAttribute('src', ROUTE_BASE + cordovaPath);
 document.head.appendChild(cordovaTag);
 
-const moment = require('moment-timezone');
-moment.tz.setDefault('America/Argentina');
-require('moment/locale/es');
 require('font-awesome-webpack-4');
 
 Vue.use(VueResource);
 
-Vue.use(VueI18n);
-
-// Price format: controlled by config.price_show_cents (default: show cents).
-// Set price_show_cents: false in config to hide cents in currency display.
-const defaultCurrencyOptions = (fractionDigits = 2) => ({
-    style: 'currency',
-    currencyDisplay: 'symbol',
-    minimumFractionDigits: fractionDigits,
-    maximumFractionDigits: fractionDigits
-});
-
-// App locale -> BCP 47 locale (for Intl number/currency formatting).
-export const appLocaleToBCP47 = {
-    arg: 'es-AR',
-    chl: 'es-CL'
-};
-// App locale -> leaflet-routing-machine language (base codes only; e.g. 'es' not 'es-AR').
-export const appLocaleToRoutingLanguage = {
-    arg: 'es',
-    chl: 'es'
-};
-const numberFormatLocaleMap = appLocaleToBCP47;
-
-const i18n = new VueI18n({
-    locale: 'arg',
-    fallbackLocale: 'arg',
-    messages,
-    silentFallbackWarn: true,
-    numberFormats: {
-        arg: {
-            currency: {
-                style: 'currency',
-                currency: 'ARS',
-                ...defaultCurrencyOptions(2)
-            }
-        },
-        chl: {
-            currency: {
-                style: 'currency',
-                currency: 'CHL',
-                ...defaultCurrencyOptions(2)
-            }
-        },
-        'es-AR': {
-            currency: {
-                style: 'currency',
-                currency: 'ARS',
-                ...defaultCurrencyOptions(2)
-            }
-        },
-        'es-CL': {
-            currency: {
-                style: 'currency',
-                currency: 'CLP',
-                ...defaultCurrencyOptions(2)
-            }
-        }
-    }
-});
-
 // Use correct Intl locale for currency so es-AR gets comma decimal, period thousands.
+const numberFormatLocaleMap = appLocaleToBCP47;
 const original$n = Vue.prototype.$n;
 Vue.prototype.$n = function (value, ...args) {
     if (args[0] === 'currency') {
-        const intlLocale = numberFormatLocaleMap[this.$i18n.locale] || this.$i18n.locale;
-        if (args.length === 1) return this.$i18n.n(value, 'currency', intlLocale);
-        if (args.length === 2 && typeof args[1] === 'object') return this.$i18n.n(value, { key: 'currency', locale: intlLocale, ...args[1] });
+        const intlLocale =
+            numberFormatLocaleMap[this.$i18n.locale] || this.$i18n.locale;
+        if (args.length === 1) { return this.$i18n.n(value, 'currency', intlLocale); }
+        if (args.length === 2 && typeof args[1] === 'object') {
+            return this.$i18n.n(value, {
+                key: 'currency',
+                locale: intlLocale,
+                ...args[1]
+            });
+        }
     }
     return original$n.call(this, value, ...args);
 };
 
-function applyPriceFormat(showCents) {
-    const fractionDigits = showCents !== false ? 2 : 0;
-    const options = defaultCurrencyOptions(fractionDigits);
-    const formats = [
-        ['arg', 'ARS'],
-        ['chl', 'CHL'],
-        ['es-AR', 'ARS'],
-        ['es-CL', 'CLP']
-    ];
-    formats.forEach(([locale, currency]) => {
-        i18n.mergeNumberFormat(locale, {
-            currency: { style: 'currency', currency, ...options }
-        });
-    });
-}
-
 store.subscribe((mutation) => {
-    const isConfig = mutation.type === 'auth/AUTH_APP_CONFIG' || mutation.type === 'AUTH_APP_CONFIG';
+    const isConfig =
+        mutation.type === 'auth/AUTH_APP_CONFIG' ||
+        mutation.type === 'AUTH_APP_CONFIG';
     if (isConfig && mutation.payload) {
         const showCents = mutation.payload.price_show_cents !== false;
         applyPriceFormat(showCents);
     }
 });
 
-export { i18n };
-
 Vue.use(VueAnalytics, {
     id: 'UA-40995702-4'
 });
 
-Vue.use(VueMoment);
 require('./filters.js');
 require('./prototypes.js');
 
@@ -194,7 +128,10 @@ const initializeCapacitorPlugins = async () => {
 
         console.log('Capacitor plugins initialized');
     } catch (error) {
-        console.log('Capacitor plugins not available (running in browser):', error);
+        console.log(
+            'Capacitor plugins not available (running in browser):',
+            error
+        );
     }
 };
 
@@ -204,7 +141,9 @@ const initializePushNotifications = async () => {
         const { Capacitor } = await import('@capacitor/core');
 
         if (Capacitor.isNativePlatform()) {
-            const { PushNotifications } = await import('@capacitor/push-notifications');
+            const { PushNotifications } = await import(
+                '@capacitor/push-notifications'
+            );
 
             const result = await PushNotifications.requestPermissions();
 
@@ -217,16 +156,22 @@ const initializePushNotifications = async () => {
                 });
 
                 // Listen for registration errors
-                PushNotifications.addListener('registrationError', (error) => {
-                });
+                PushNotifications.addListener(
+                    'registrationError',
+                    (error) => {}
+                );
 
                 // Listen for incoming push notifications
-                PushNotifications.addListener('pushNotificationReceived', (notification) => {
-                });
+                PushNotifications.addListener(
+                    'pushNotificationReceived',
+                    (notification) => {}
+                );
 
                 // Listen for notification tap
-                PushNotifications.addListener('pushNotificationActionPerformed', (notification) => {
-                });
+                PushNotifications.addListener(
+                    'pushNotificationActionPerformed',
+                    (notification) => {}
+                );
             } else {
             }
         } else {
@@ -264,26 +209,23 @@ if (process.env.SERVE) {
 console.log('APP NAME: ' + process.env.TARGET_APP);
 
 bus.on('system-ready', () => {
-    const app = new Vue({
-        el: '#app',
-        router,
-        store,
-        template: '<App/>',
-        components: { App },
-        i18n
-    });
+    const app = createApp(App);
+    app.use(router);
+    app.use(store);
+    app.use(i18n);
+    const vm = app.mount('#app');
 
-    // Set moment locale based on i18n language
-    const momentLocaleMap = {
+    // Set dayjs locale based on i18n language
+    const dayjsLocaleMap = {
         arg: 'es',
         chl: 'es',
         en: 'en'
     };
-    const currentLocale = i18n.locale || 'arg';
-    moment.locale(momentLocaleMap[currentLocale] || 'es');
+    const currentLocale = i18n.global.locale || 'arg';
+    dayjs.locale(dayjsLocaleMap[currentLocale] || 'es');
 
-    // Watch for language changes and update moment locale
-    app.$watch('$i18n.locale', (newLocale) => {
-        moment.locale(momentLocaleMap[newLocale] || 'es');
+    // Watch for language changes and update dayjs locale
+    vm.$watch('$i18n.locale', (newLocale) => {
+        dayjs.locale(dayjsLocaleMap[newLocale] || 'es');
     });
 });

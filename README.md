@@ -18,12 +18,12 @@ It is and ad-hoc customization for Argentina with carpooling philosophy, with co
 # Clone repo
 gh repo clone STS-Rosario/carpoolear
 
-# Set v12 as Node version
+# Set 22 as Node version
 cd carpoolear
-nvm install 12 - you will need to install nvm first
-nvm use 12
+nvm install 22 - you will need to install nvm first
+nvm use 22
 
-# install dependencies (this will take a long time)
+# install dependencies
 npm install
 
 # change the backend URL if needed
@@ -77,6 +77,32 @@ This branch is multi project. You can handle multiple apps in only one source co
 3. Finally in ./config folder clone the files dev.env.js and prod.env.js and save as dev.YOUR-PROJECT-NAME.env.js and prod.YOUR-PROJECT-NAME.env.js. Personalize the files with your values. Your new project is ready.
 
 Happy coding!
+
+## Testing
+
+Playwright is used for end-to-end screenshot tests that cover every view in the application. All backend requests are mocked so no running backend is needed.
+
+``` bash
+# install Playwright browsers (first time only)
+npx playwright install --with-deps chromium
+
+# start the dev server (requires Node 22 or Docker)
+npm run dev
+
+# run all e2e tests headless
+npm run test:e2e
+
+# run screenshot tests only
+npm run test:e2e:screenshots
+
+# run with the Playwright UI for debugging
+npm run test:e2e:ui
+
+# update golden screenshots after intentional UI changes
+npm run test:e2e:screenshots:update
+```
+
+Screenshot tests also run automatically on every push and PR to `master` via the `Screenshot Tests` GitHub Action.
 
 ## Config
 

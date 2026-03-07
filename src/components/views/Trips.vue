@@ -27,7 +27,7 @@
                     :title="'Test'"
                     :body="'Body'"
                 >
-                    <h3 slot="header">
+                    <template #header><h3>
                         <span>{{ $t('donaA') }}</span>
                         <br class="hidden-sm hidden-md hidden-lg" />
                         <small>{{ $t('proyectoDe') }}</small>
@@ -36,8 +36,8 @@
                             alt="STS Rosario"
                             src="https://carpoolear.com.ar/img/logo_sts_nuevo_color.png"
                         />
-                    </h3>
-                    <div slot="body" class="donation">
+                    </h3></template>
+                    <template #body><div class="donation">
                         <div class="radio">
                             <label class="radio-inline">
                                 <input
@@ -98,7 +98,7 @@
                                 ( {{ $t('cancelaCuando') }})
                             </button>
                         </div>
-                    </div>
+                    </div></template>
                 </modal>
                 <modal
                     :name="'modal'"
@@ -107,10 +107,10 @@
                     :title="'Test'"
                     :body="'Body'"
                 >
-                    <h3 slot="header">
+                    <template #header><h3>
                         <span>{{ getInstallModalContent() && getInstallModalContent().title || $t('instalarApp') }}</span>
-                    </h3>
-                    <div slot="body" class="">
+                    </h3></template>
+                    <template #body><div class="">
                         <p style="white-space: pre-line;" v-html="getInstallModalContent() && getInstallModalContent().message || $t('instalarWebAppPWA')">
                         </p>
                         <div style="margin-bottom: 10px">
@@ -137,7 +137,7 @@
                                 {{ $t('noMostrarDeNuevo') }}
                             </button>
                         </div>
-                    </div>
+                    </div></template>
                 </modal>
                 <template v-for="(trip, index) in trips">
                     <template
@@ -222,8 +222,7 @@
                 />
                 {{ $t('cargandoMasResultados') }}
             </div>
-            <p
-                slot="no-data"
+            <template #no-data><p
                 class="alert alert-warning"
                 role="alert"
                 :class="isMobile ? 'mobile-alert' : ''"
@@ -248,15 +247,15 @@
                         $t('noHayViajesCargadosAun')
                     }}</span>
                 </template>
-            </p>
-            <p slot="loading" class="alert alert-info" role="alert">
+            </p></template>
+            <template #loading><p class="alert alert-info" role="alert">
                 <img
                     src="https://carpoolear.com.ar/static/img/loader.gif"
                     alt=""
                     class="ajax-loader"
                 />
                 {{ $t('cargandoViajes') }}
-            </p>
+            </p></template>
         </Loading>
     </div>
 </template>
@@ -281,7 +280,7 @@ import SearchBox from '../sections/SearchTrip.vue';
 import Loading from '../Loading.vue';
 import bus from '../../services/bus-event.js';
 import { mapGetters, mapActions } from 'vuex';
-import moment from 'moment';
+import dayjs from '../../dayjs';
 import router from '../../router';
 import dialogs from '../../services/dialogs.js';
 import modal from '../Modal';
@@ -305,8 +304,8 @@ export default {
             showModalInstallApp: false,
             installAppEvent: null,
             donateValue: 0,
-            hasNotificationPermission: false, // New state variable
-            showNotificationWarning: true // New state variable
+            hasNotificationPermission: false,
+            showNotificationWarning: true
         };
     },
     props: ['clearSearch', 'keepSearch'],
@@ -363,7 +362,7 @@ export default {
         isDonationTime() {
             if (this.appConfig) {
                 return (
-                    moment().date() <
+                    dayjs().date() <
                     parseFloat(this.appConfig.donation.month_days)
                 );
             } else {
@@ -411,8 +410,8 @@ export default {
         isComplementary(trip, searchParams, index) {
             let isComplementary = false;
             if (searchParams.data && searchParams.data.date) {
-                var searchDate = moment(searchParams.data.date).toDate();
-                var tripDate = moment(trip.trip_date).toDate();
+                var searchDate = dayjs(searchParams.data.date).toDate();
+                var tripDate = dayjs(trip.trip_date).toDate();
                 tripDate.setHours(0);
                 tripDate.setMinutes(0);
                 tripDate.setSeconds(0);

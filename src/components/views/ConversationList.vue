@@ -117,8 +117,7 @@
                                                     v-if="false"
                                                 >
                                                     {{
-                                                        conversation.updated_at
-                                                            | moment('h:mm a')
+                                                        dayjs(conversation.updated_at).format('h:mm a')
                                                     }}
                                                 </span>
                                             </div>
@@ -127,7 +126,7 @@
                                                 v-if="conversation.last_message"
                                             >
                                                 {{
-                                                    $moment(
+                                                    dayjs(
                                                         conversation
                                                             .last_message
                                                             .created_at
@@ -147,15 +146,13 @@
                                             {{ $t('masResultados') }}
                                         </button>
                                     </li>
-                                    <li
-                                        slot="no-data"
+                                    <template #no-data><li
                                         class="list-group-item alert alert-warning"
                                         role="alert"
                                     >
                                         {{ $t('noTienesConversaciones') }}
-                                    </li>
-                                    <li
-                                        slot="loading"
+                                    </li></template>
+                                    <template #loading><li
                                         class="list-group-item alert alert-info"
                                         role="alert"
                                     >
@@ -165,7 +162,7 @@
                                             class="ajax-loader"
                                         />
                                         {{ $t('cargandoConversaciones') }}
-                                    </li>
+                                    </li></template>
                                 </Loading>
                             </template>
                             <template v-else>
@@ -185,20 +182,18 @@
                                         ></div>
                                         <UserNameWithBadge :user="user" />
                                     </li>
-                                    <li
-                                        slot="no-data"
+                                    <template #no-data><li
                                         class="list-group-item alert alert-warning"
                                         role="alert"
                                     >
                                         {{ $t('noHayConcidiencias') }}
-                                    </li>
-                                    <li
-                                        slot="loading"
+                                    </li></template>
+                                    <template #loading><li
                                         class="list-group-item alert alert-info"
                                         role="alert"
                                     >
                                         {{ $t('tipeaUnNombreYBusca') }}
-                                    </li>
+                                    </li></template>
                                 </Loading>
                             </template>
                         </ul>
@@ -220,6 +215,7 @@ import Loading from '../Loading.vue';
 import UserNameWithBadge from '../elements/UserNameWithBadge.vue';
 import router from '../../router';
 import CoordinateTrip from '../elements/CoordinateTrip';
+import dayjs from '../../dayjs';
 
 export default {
     name: 'conversation-list',
@@ -245,6 +241,7 @@ export default {
     },
 
     methods: {
+        dayjs,
         ...mapActions({
             conversationsSearch: 'conversations/listSearch',
             searchUser: 'conversations/getUserList',

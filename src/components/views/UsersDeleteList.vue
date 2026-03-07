@@ -46,19 +46,19 @@
                             </tr>
                         </tbody>
                     </table>
-                    <div slot="no-data" class="text-center" style="margin-top: 20px;">
+                    <template #no-data><div class="text-center" style="margin-top: 20px;">
                         <div class="alert alert-info">
                             {{ $t('noHayPedidosEliminacion') }}
                         </div>
-                    </div>
-                    <div slot="loading" class="text-center" style="margin-top: 20px;">
+                    </div></template>
+                    <template #loading><div class="text-center" style="margin-top: 20px;">
                         <img
                             src="https://carpoolear.com.ar/static/img/loader.gif"
                             alt=""
                             class="ajax-loader"
                         />
                         <p>{{ $t('cargandoPedidos') }}</p>
-                    </div>
+                    </div></template>
                 </Loading>
 
                 <modal
@@ -67,14 +67,14 @@
                     @close="closeModal"
                     :body="'Body'"
                 >
-                    <h3 slot="header">
+                    <template #header><h3>
                         <span>{{ $t('editarPedidoEliminacion') }}</span>
                         <i
                             v-on:click="closeModal"
                             class="fa fa-times float-right-close"
                         ></i>
-                    </h3>
-                    <div slot="body">
+                    </h3></template>
+                    <template #body><div>
                         <div class="text-left color-black">
                             <div class="form-group" v-if="currentRequest">
                                 <label><strong>{{ $t('idLabel') }}:</strong> {{ currentRequest.id }}</label>
@@ -129,7 +129,7 @@
                                 </button>
                             </div>
                         </div>
-                    </div>
+                    </div></template>
                 </modal>
             </div>
         </div>
@@ -142,7 +142,7 @@ import modal from '../Modal';
 import Spinner from '../Spinner.vue';
 import { AdminApi } from '../../services/api';
 import dialogs from '../../services/dialogs.js';
-import moment from 'moment';
+import dayjs from '../../dayjs';
 
 export default {
     name: 'admin-users-delete-list',
@@ -162,7 +162,7 @@ export default {
     methods: {
         formatDate(dateString) {
             if (!dateString) return '-';
-            return moment(dateString).format('DD/MM/YYYY HH:mm');
+            return dayjs(dateString).format('DD/MM/YYYY HH:mm');
         },
         getActionTakenLabel(actionTaken) {
             if (actionTaken === 0) return this.$t('solicitado');

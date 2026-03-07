@@ -43,7 +43,7 @@
                                 v-show="!n.readed"
                             ></i>
                             <strong>{{ n.text }}</strong>
-                            <em>{{ n.created_at | moment('calendar') }}</em>
+                            <em>{{ dayjs(n.created_at).calendar() }}</em>
                         </div>
                         <span class="col-xs-2 text-right">
                             <i
@@ -59,17 +59,17 @@
                     {{ $t('siguiente') }}
                 </button>
             </div>
-            <p slot="no-data" class="alert alert-warning" role="alert">
+            <template #no-data><p class="alert alert-warning" role="alert">
                 {{ $t('noHayNotificaciones') }}
-            </p>
-            <p slot="loading" class="alert alert-info" role="alert">
+            </p></template>
+            <template #loading><p class="alert alert-info" role="alert">
                 <img
                     src="https://carpoolear.com.ar/static/img/loader.gif"
                     alt=""
                     class="ajax-loader"
                 />
                 {{ $t('cargandoNotificaciones') }}
-            </p>
+            </p></template>
         </Loading>
     </div>
 </template>
@@ -80,6 +80,7 @@ import { mapActions, mapGetters } from 'vuex';
 import router from '../../router';
 import dialogs from '../../services/dialogs.js';
 import push from '../../cordova/push-capacitor.js';
+import dayjs from '../../dayjs';
 
 
 export default {
@@ -98,6 +99,7 @@ export default {
     },
 
     methods: {
+        dayjs,
         ...mapActions({
             search: 'notifications/index'
         }),

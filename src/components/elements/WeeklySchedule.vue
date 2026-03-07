@@ -34,7 +34,7 @@
         <!-- Time display/input -->
         <div class="weekly-schedule-time-container">
             <span v-if="readonly" class="weekly-schedule-time">
-                {{ weeklyScheduleTime | moment('HH:mm') }} {{ $t('horas') }}
+                {{ dayjs(weeklyScheduleTime).format('HH:mm') }} {{ $t('horas') }}
             </span>
             <input
                 v-else
@@ -50,6 +50,8 @@
 </template>
 
 <script>
+import dayjs from '../../dayjs';
+
 const WEEKLY_DAYS = [
     { key: 'domingo', bit: 64 },
     { key: 'lunes', bit: 1 },
@@ -91,6 +93,7 @@ export default {
     },
 
     methods: {
+        dayjs,
         isDaySelected(bitValue) {
             return (this.weeklySchedule & bitValue) !== 0;
         },

@@ -9,25 +9,23 @@
             <span v-if="owner">
                 {{ $t('coordinateTripDelDia') }}
                 <strong>{{
-                    conversation.trip.trip_date | moment('DD/MM/YYYY')
+                    dayjs(conversation.trip.trip_date).format('DD/MM/YYYY')
                 }}</strong>
                 {{ $t('coordinateTripALas') }}
                 <strong
                     >{{
-                        conversation.trip.trip_date | moment('HH:mm')
+                        dayjs(conversation.trip.trip_date).format('HH:mm')
                     }})</strong
                 >
                 <template v-if="conversation.trip.return_trip">
                     {{ $t('coordinateTripYVueltaElDia') }}
                     <strong>{{
-                        conversation.return_trip.trip_date
-                            | moment('DD/MM/YYYY')
+                        dayjs(conversation.return_trip.trip_date).format('DD/MM/YYYY')
                     }}</strong>
                     {{ $t('coordinateTripALas2') }}
                     <strong
                         >{{
-                            conversation.return_trip.trip_date
-                                | moment('HH:mm')
+                            dayjs(conversation.return_trip.trip_date).format('HH:mm')
                         }})</strong
                     >
                 </template>
@@ -80,13 +78,13 @@
                 <template v-if="!sending.trip">
                     <strong
                         >({{
-                            conversation.trip.trip_date | moment('DD/MM/YYYY')
+                            dayjs(conversation.trip.trip_date).format('DD/MM/YYYY')
                         }}</strong
                     >
                     -
                     <strong
                         >{{
-                            conversation.trip.trip_date | moment('HH:mm')
+                            dayjs(conversation.trip.trip_date).format('HH:mm')
                         }})</strong
                     >
                 </template>
@@ -122,15 +120,13 @@
                 <template v-if="!sending.returnTrip">
                     <strong>
                         ({{
-                            conversation.return_trip.trip_date
-                                | moment('DD/MM/YYYY')
+                            dayjs(conversation.return_trip.trip_date).format('DD/MM/YYYY')
                         }}
                     </strong>
                     -
                     <strong
                         >{{
-                            conversation.return_trip.trip_date
-                                | moment('HH:mm')
+                            dayjs(conversation.return_trip.trip_date).format('HH:mm')
                         }})</strong
                     >
                 </template>
@@ -143,7 +139,7 @@
 import { mapGetters, mapActions } from 'vuex';
 import dialogs from '../../services/dialogs.js';
 import spinner from '../Spinner.vue';
-import moment from 'moment';
+import dayjs from '../../dayjs';
 
 export default {
     name: 'conversation-chat',
@@ -190,18 +186,19 @@ export default {
         },
         expiredTrip() {
             return (
-                moment(this.conversation.trip.trip_date).format() <
-                moment().format()
+                dayjs(this.conversation.trip.trip_date).format() <
+                dayjs().format()
             );
         },
         expiredReturnTrip() {
             return (
-                moment(this.conversation.return_trip.trip_date).format() <
-                moment().format()
+                dayjs(this.conversation.return_trip.trip_date).format() <
+                dayjs().format()
             );
         }
     },
     methods: {
+        dayjs,
         ...mapActions({
             make: 'passenger/makeRequest',
             cancel: 'passenger/cancel'

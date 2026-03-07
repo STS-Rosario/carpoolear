@@ -1,18 +1,15 @@
 /* jshint esversion: 6 */
-import Vue from 'vue';
-import VueRouter from 'vue-router';
-import { i18n } from '../main';
+import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router';
+import i18n from '../i18n';
 
 import store from '../store';
 import routes from './routes.js';
 
-Vue.use(VueRouter);
-
-const router = new VueRouter({
+const router = createRouter({
     routes: routes,
-    // esto hay que atarlo a si estoy en cordova o no
-    mode: process.env.HISTORY_MODE,
-    base: process.env.ROUTE_BASE
+    history: process.env.HISTORY_MODE === 'history'
+        ? createWebHistory(process.env.ROUTE_BASE)
+        : createWebHashHistory(process.env.ROUTE_BASE)
 });
 
 router.rememberRoute = null;
@@ -53,7 +50,7 @@ router.beforeEach((to, from, next) => {
         store.dispatch('actionbars/setImgTitle', '');
         if (actionbar.header.titleKey) {
             console.log('actionbar.header.titleKey', actionbar.header.titleKey);
-            const title = i18n.t(actionbar.header.titleKey);
+            const title = i18n.global.t(actionbar.header.titleKey);
             store.dispatch('actionbars/setTitle', title);
         } else {
             console.log('actionbar appName', appName);
