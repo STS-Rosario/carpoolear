@@ -44,7 +44,9 @@ class AdminApi extends TaggedApi {
     }
 
     banAndAnonymizeUser(userId, note = '') {
-        return this.post(`/api/admin/users/${userId}/ban-and-anonymize`, { note });
+        return this.post(`/api/admin/users/${userId}/ban-and-anonymize`, {
+            note
+        });
     }
 
     clearIdentityValidation(userId) {
@@ -101,6 +103,16 @@ class AdminApi extends TaggedApi {
         return this.post(
             '/api/admin/mercado-pago-rejected-validations/' + id + '/approve',
             {}
+        );
+    }
+
+    getUserReferences(userId) {
+        return this.get(`/api/admin/users/${userId}/references`);
+    }
+
+    deleteUserReference(referenceId, userId) {
+        return this.delete(
+            `/api/admin/users/${userId}/references/${referenceId}`
         );
     }
 }

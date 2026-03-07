@@ -32,12 +32,21 @@ function getSeats(store) {
 function getUserStats(store) {
     return adminApi.getUserStats();
 }
+function getUserReferences(store, userId) {
+    return adminApi.getUserReferences(userId);
+}
+
+function deleteUserReference(store, { userId, referenceId }) {
+    return adminApi.deleteUserReference(userId, referenceId);
+}
 const actions = {
     searchUsers,
     adminUpdate,
     getTrips,
     getSeats,
-    getUserStats
+    getUserStats,
+    getUserReferences,
+    deleteUserReference
 };
 
 // const state = {
