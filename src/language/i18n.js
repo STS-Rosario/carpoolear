@@ -888,7 +888,7 @@ const messages = {
             'Si aceptás una solicitud de asiento, se genera el compromiso de viajar. Habilitándose la posibilidad de calificación 24hs después de comenzado el viaje. Tendrán 14 días para calificarse',
         pendingRequestPodranCalificarseAunque:
             'Podrán calificarse aunque canceles el viaje o te bajen o te bajes del viaje.',
-        pendingRequestNoPidasAsiento:
+        pendingRequestNoPidasAsiento: 
             'No pidas asiento si no tenés seguridad de que vas a viajar, muchas personas también están buscando el mismo viaje que vos. Si ocurriera algo que te impida viajar, avisale lo más rápido que puedas a la personas que iban a viajar.',
         pendingRequestCualquierDudaEscribinos: 'Cualquier duda escribinos a',
         pendingRequestCarpoolearStsrosarioOrgAr: 'carpoolear@stsrosario.org.ar',

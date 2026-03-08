@@ -489,7 +489,7 @@ export default {
                 !this.user.description ||
                 this.user.description.length === 0
             ) {
-                router.replace({ name: 'profile_update' });
+                router.replace({ name: 'profile_update', query: { incompleteProfile: 'true' } });
             } else {
                 return true;
             }

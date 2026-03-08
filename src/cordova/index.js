@@ -8,13 +8,12 @@ import cache from '../services/cache';
 import { Capacitor } from '@capacitor/core';
 import { Network } from '@capacitor/network';
 import { Device } from '@capacitor/device';
-import { SplashScreen } from '@capacitor/splash-screen';
 import config from '../../config/conf.json';
 
 console.log('CORDOVA INDEX.JS IS LOADING!');
 
 window.facebook = facebook;
-window.appVersion = '3.1.3';
+window.appVersion = '3.1.6';
 
 const onDeviceReady = () => {
     console.log('Device ready');
