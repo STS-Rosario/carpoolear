@@ -99,32 +99,31 @@
                                                 </div>
                                             </div>
                                         </li>
-                                        <template #no-data><li
-                                            class="list-group-item alert alert-warning"
-                                            role="alert"
+                                        <template #no-data
+                                            ><li
+                                                class="list-group-item alert alert-warning"
+                                                role="alert"
+                                            >
+                                                {{
+                                                    $t(
+                                                        'noSeEncontroNingunUsuario'
+                                                    )
+                                                }}
+                                            </li></template
                                         >
-<<<<<<< HEAD
-                                            {{
-                                                $t('noSeEncontroNingunUsuario')
-                                            }}
-                                        </li>
-                                        <li
-                                            slot="loading"
-=======
-                                            {{ $t('noSeEncontroNingunUsuario') }}
-                                        </li></template>
-                                        <template #loading><li
->>>>>>> 562313360da7efa140521dacfd43fb0ffb1b0bd0
-                                            class="list-group-item alert alert-info"
-                                            role="alert"
+                                        <template #loading
+                                            ><li
+                                                class="list-group-item alert alert-info"
+                                                role="alert"
+                                            >
+                                                <img
+                                                    src="https://carpoolear.com.ar/static/img/loader.gif"
+                                                    alt=""
+                                                    class="ajax-loader"
+                                                />
+                                                {{ $t('cargandoUsuarios') }}
+                                            </li></template
                                         >
-                                            <img
-                                                src="https://carpoolear.com.ar/static/img/loader.gif"
-                                                alt=""
-                                                class="ajax-loader"
-                                            />
-                                            {{ $t('cargandoUsuarios') }}
-                                        </li></template>
                                     </Loading>
                                 </template>
                             </ul>
@@ -537,10 +536,7 @@
                         </div>
                     </div>
                     <div v-else class="col-xs-24 col-sm-16 col-md-16">
-                        <p
-                            class="alert alert-warning"
-                            role="alert"
-                        >
+                        <p class="alert alert-warning" role="alert">
                             {{ $t('seleccioneAlgunaPersona') }}
                         </p>
                     </div>
@@ -553,57 +549,56 @@
             :name="'modal-confirm-admin-action'"
             @close="closeConfirmModal"
         >
-            <template #header><h3>
-                <span>{{ confirmModalTitle }}</span>
-<<<<<<< HEAD
-                <i
-                    v-on:click="closeConfirmModal"
-                    class="fa fa-times float-right-close"
-                ></i>
-            </h3>
-            <div slot="body">
-=======
-                <i v-on:click="closeConfirmModal" class="fa fa-times float-right-close"></i>
-            </h3></template>
-            <template #body><div>
->>>>>>> 562313360da7efa140521dacfd43fb0ffb1b0bd0
-                <div class="text-left color-black">
-                    <p>{{ confirmModalMessage }}</p>
-                    <div
-                        v-if="pendingAction === 'banAndAnonymize'"
-                        class="form-group"
-                    >
-                        <label>{{ $t('nota') }} ({{ $t('opcional') }})</label>
-                        <input
-                            v-model="banNote"
-                            type="text"
-                            class="form-control"
-                        />
-                    </div>
-                    <div class="text-center" style="margin-top: 1.5em">
-                        <button
-                            class="btn btn-danger"
-                            @click="executePendingAction"
-                            :disabled="loadingAction"
+            <template #header
+                ><h3>
+                    <span>{{ confirmModalTitle }}</span>
+                    <i
+                        v-on:click="closeConfirmModal"
+                        class="fa fa-times float-right-close"
+                    ></i></h3
+            ></template>
+            <template #body
+                ><div>
+                    <div class="text-left color-black">
+                        <p>{{ confirmModalMessage }}</p>
+                        <div
+                            v-if="pendingAction === 'banAndAnonymize'"
+                            class="form-group"
                         >
-                            <span v-if="!loadingAction">{{
-                                $t('confirmar')
-                            }}</span>
-                            <spinner
-                                v-if="loadingAction"
-                                class="blue"
-                            ></spinner>
-                        </button>
-                        <button
-                            class="btn btn-default"
-                            @click="closeConfirmModal"
-                            style="margin-left: 8px"
-                        >
-                            {{ $t('cancelar') }}
-                        </button>
+                            <label
+                                >{{ $t('nota') }} ({{ $t('opcional') }})</label
+                            >
+                            <input
+                                v-model="banNote"
+                                type="text"
+                                class="form-control"
+                            />
+                        </div>
+                        <div class="text-center" style="margin-top: 1.5em">
+                            <button
+                                class="btn btn-danger"
+                                @click="executePendingAction"
+                                :disabled="loadingAction"
+                            >
+                                <span v-if="!loadingAction">{{
+                                    $t('confirmar')
+                                }}</span>
+                                <spinner
+                                    v-if="loadingAction"
+                                    class="blue"
+                                ></spinner>
+                            </button>
+                            <button
+                                class="btn btn-default"
+                                @click="closeConfirmModal"
+                                style="margin-left: 8px"
+                            >
+                                {{ $t('cancelar') }}
+                            </button>
+                        </div>
                     </div>
-                </div>
-            </div></template>
+                </div></template
+            >
         </modal>
     </div>
 </template>
@@ -1026,11 +1021,17 @@ export default {
             if (!this.validate()) {
                 // DNI: send raw value without dots (backend expects digits only)
                 const nroDocRaw = this.newInfo.nro_doc
-                    ? cleanId(this.newInfo.nro_doc, this.settings.profile_id_format)
+                    ? cleanId(
+                          this.newInfo.nro_doc,
+                          this.settings.profile_id_format
+                      )
                     : this.newInfo.nro_doc;
 
                 // Patente: trim whitespace before sending
-                const patenteValue = (this.newInfo.patente && this.newInfo.patente.trim) ? this.newInfo.patente.trim() : (this.newInfo.patente || '');
+                const patenteValue =
+                    this.newInfo.patente && this.newInfo.patente.trim
+                        ? this.newInfo.patente.trim()
+                        : this.newInfo.patente || '';
 
                 // Only send properties from the admin form (backend allows these for admin)
                 const payload = {
@@ -1052,34 +1053,11 @@ export default {
 
                 if (this.newInfo.pass && this.newInfo.pass.password) {
                     payload.password = this.newInfo.pass.password;
-                    payload.password_confirmation = this.newInfo.pass.password_confirmation;
+                    payload.password_confirmation =
+                        this.newInfo.pass.password_confirmation;
                 }
 
-<<<<<<< HEAD
-                // Ensure nro_doc is raw value (no dots) before sending
-                if (this.newInfo.nro_doc) {
-                    this.newInfo.nro_doc = cleanId(
-                        this.newInfo.nro_doc,
-                        this.settings.profile_id_format
-                    );
-                }
-
-                // Handle patente data - if user has cars, update first car's patente
-                // If no cars but patente is provided, backend will create a new car
-                if (this.newInfo.patente && this.newInfo.patente.length > 0) {
-                    if (this.newInfo.cars && this.newInfo.cars.length > 0) {
-                        // Update existing car's patente
-                        this.newInfo.cars[0].patente = this.newInfo.patente;
-                    } else {
-                        // Create new car with patente - backend will handle this
-                        this.newInfo.cars = [{ patente: this.newInfo.patente }];
-                    }
-                }
-
-                this.update(this.newInfo)
-=======
                 this.update(payload)
->>>>>>> 562313360da7efa140521dacfd43fb0ffb1b0bd0
                     .then(() => {
                         dialogs.message(
                             this.$t('perfilActualizadoCorrectamente')
