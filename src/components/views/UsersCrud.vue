@@ -6,12 +6,18 @@
         <div class="conversation-component container">
             <div class="row">
                 <router-link
-                        :to="{ name: 'admin-users-delete-list' }"
-                        class="btn btn-link"
-                        style="display: block; text-align: center; margin-top: -10px;margin-bottom: 10px;font-size: 16px;"
-                    >
-                        {{ $t('pedidosDeEliminacionDeCuenta') }}
-                    </router-link>
+                    :to="{ name: 'admin-users-delete-list' }"
+                    class="btn btn-link"
+                    style="
+                        display: block;
+                        text-align: center;
+                        margin-top: -10px;
+                        margin-bottom: 10px;
+                        font-size: 16px;
+                    "
+                >
+                    {{ $t('pedidosDeEliminacionDeCuenta') }}
+                </router-link>
                 <div class="col-md-20 col-md-offset-2">
                     <div class="col-sm-8 col-md-8">
                         <div class="conversation_list">
@@ -23,7 +29,11 @@
                                             v-on:keyup="onSearchUsers"
                                             type="text"
                                             class="form-control"
-                                            :placeholder="$t('escribeUnNombreYPresionaBuscar')"
+                                            :placeholder="
+                                                $t(
+                                                    'escribeUnNombreYPresionaBuscar'
+                                                )
+                                            "
                                         />
                                     </div>
                                 </li>
@@ -89,23 +99,31 @@
                                                 </div>
                                             </div>
                                         </li>
-                                        <template #no-data><li
-                                            class="list-group-item alert alert-warning"
-                                            role="alert"
+                                        <template #no-data
+                                            ><li
+                                                class="list-group-item alert alert-warning"
+                                                role="alert"
+                                            >
+                                                {{
+                                                    $t(
+                                                        'noSeEncontroNingunUsuario'
+                                                    )
+                                                }}
+                                            </li></template
                                         >
-                                            {{ $t('noSeEncontroNingunUsuario') }}
-                                        </li></template>
-                                        <template #loading><li
-                                            class="list-group-item alert alert-info"
-                                            role="alert"
+                                        <template #loading
+                                            ><li
+                                                class="list-group-item alert alert-info"
+                                                role="alert"
+                                            >
+                                                <img
+                                                    src="https://carpoolear.com.ar/static/img/loader.gif"
+                                                    alt=""
+                                                    class="ajax-loader"
+                                                />
+                                                {{ $t('cargandoUsuarios') }}
+                                            </li></template
                                         >
-                                            <img
-                                                src="https://carpoolear.com.ar/static/img/loader.gif"
-                                                alt=""
-                                                class="ajax-loader"
-                                            />
-                                            {{ $t('cargandoUsuarios') }}
-                                        </li></template>
                                     </Loading>
                                 </template>
                             </ul>
@@ -117,9 +135,9 @@
                     >
                         <div class="settings-container">
                             <div class="form-group">
-                                <label for="input-name"
-                                    >{{ $t('nombreYApellido') }}</label
-                                >
+                                <label for="input-name">{{
+                                    $t('nombreYApellido')
+                                }}</label>
                                 <input
                                     maxlength="25"
                                     v-model="newInfo.name"
@@ -134,7 +152,9 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="input-email">{{ $t('eMail') }}</label>
+                                <label for="input-email">{{
+                                    $t('eMail')
+                                }}</label>
                                 <input
                                     maxlength="40"
                                     v-model="newInfo.email"
@@ -146,9 +166,9 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="input-description"
-                                    >{{ $t('acercaDeMi') }}</label
-                                >
+                                <label for="input-description">{{
+                                    $t('acercaDeMi')
+                                }}</label>
                                 <textarea
                                     maxlength="1000"
                                     v-model="newInfo.description"
@@ -163,20 +183,22 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="input-private-note"
-                                    >{{ $t('notaPrivada') }}</label
-                                >
+                                <label for="input-private-note">{{
+                                    $t('notaPrivada')
+                                }}</label>
                                 <textarea
                                     maxlength="1000"
                                     v-model="newInfo.private_note"
-                                    :placeholder="$t('notaSoloVisiblePorAdmins')"
+                                    :placeholder="
+                                        $t('notaSoloVisiblePorAdmins')
+                                    "
                                 ></textarea>
                             </div>
 
                             <div class="form-group">
-                                <label for="input-dni"
-                                    >{{ $t('numeroDeDocumento') }}</label
-                                >
+                                <label for="input-dni">{{
+                                    $t('numeroDeDocumento')
+                                }}</label>
                                 <input
                                     type="tel"
                                     v-model="newInfo.nro_doc"
@@ -184,7 +206,9 @@
                                     class="form-control"
                                     id="input-dni"
                                     :placeholder="$t('doc')"
-                                    :maxlength="(settings.profile_id_format).length"
+                                    :maxlength="
+                                        settings.profile_id_format.length
+                                    "
                                 />
                                 <span class="error" v-if="dniError.state">
                                     {{ dniError.message }}
@@ -192,9 +216,9 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="input-telefono"
-                                    >{{ $t('numeroDeTelefono') }}</label
-                                >
+                                <label for="input-telefono">{{
+                                    $t('numeroDeTelefono')
+                                }}</label>
                                 <input
                                     maxlength="20"
                                     @keydown="isNumber"
@@ -203,7 +227,9 @@
                                     type="tel"
                                     class="form-control"
                                     id="input-phone"
-                                    :placeholder="$t('numeroDeTelefonoAlMenos7Numeros')"
+                                    :placeholder="
+                                        $t('numeroDeTelefonoAlMenos7Numeros')
+                                    "
                                 />
                                 <span class="error" v-if="phoneError.state">
                                     {{ phoneError.message }}
@@ -211,9 +237,9 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="input-patente"
-                                    >{{ $t('patente') }}</label
-                                >
+                                <label for="input-patente">{{
+                                    $t('patente')
+                                }}</label>
                                 <input
                                     maxlength="20"
                                     v-model="newInfo.patente"
@@ -247,9 +273,9 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="input-pass"
-                                    >{{ $t('ingreseSuNuevaContrasena') }}</label
-                                >
+                                <label for="input-pass">{{
+                                    $t('ingreseSuNuevaContrasena')
+                                }}</label>
                                 <input
                                     maxlength="40"
                                     v-model="newInfo.pass.password"
@@ -408,9 +434,9 @@
                                 <div class="checkbox col-md-19">
                                     <label>
                                         <input
-                                                type="checkbox"
-                                                v-model="newInfo.banned"
-                                            />
+                                            type="checkbox"
+                                            v-model="newInfo.banned"
+                                        />
                                         {{ $t('usuarioSuspendido') }}
                                     </label>
                                 </div>
@@ -424,37 +450,93 @@
                                 </div>
                             </div>
                             <hr />
-                            <div class="row" style="margin-top: 1em;">
+                            <div class="row" style="margin-top: 1em">
                                 <div class="col-md-24">
                                     <button
                                         class="btn btn-danger btn-sm"
                                         v-on:click="openConfirmModal('delete')"
-                                        style="margin-right: 8px;"
+                                        style="margin-right: 8px"
                                     >
                                         {{ $t('eliminarUsuario') }}
                                     </button>
                                     <button
                                         class="btn btn-warning btn-sm"
-                                        v-on:click="openConfirmModal('anonymize')"
-                                        style="margin-right: 8px;"
+                                        v-on:click="
+                                            openConfirmModal('anonymize')
+                                        "
+                                        style="margin-right: 8px"
                                     >
                                         {{ $t('anonimizarUsuario') }}
                                     </button>
                                     <button
                                         class="btn btn-warning btn-sm"
-                                        v-on:click="openConfirmModal('banAndAnonymize')"
+                                        v-on:click="
+                                            openConfirmModal('banAndAnonymize')
+                                        "
                                     >
                                         {{ $t('anonimizarYBloquearUsuario') }}
                                     </button>
                                 </div>
                             </div>
                         </div>
+                        <hr />
+                        <!-- User References  -->
+                        <h3>{{ $t('referencias') }}</h3>
+
+                        <div v-if="references && references.length === 0">
+                            {{ $t('noReferences') }}
+                        </div>
+
+                        <div
+                            v-for="reference in references"
+                            :key="reference.id"
+                            class="panel panel-default"
+                        >
+                            <div class="panel-body">
+                                <div class="media">
+                                    <div class="media-right pull-right"></div>
+                                    <div class="media-left">
+                                        <div
+                                            class="conversation_image circle-box"
+                                            v-imgSrc:profile="
+                                                reference.from.image
+                                            "
+                                        ></div>
+                                    </div>
+                                    <div class="media-body">
+                                        <h4 class="media-heading">
+                                            <span class="conversation-title">
+                                                {{ reference.from.name }}
+                                            </span>
+                                        </h4>
+                                        <span>
+                                            {{ reference.from.email }}
+                                        </span>
+                                        <br />
+                                        <span>
+                                            {{
+                                                reference.created_at.split(
+                                                    'T'
+                                                )[0]
+                                            }}
+                                        </span>
+                                        <p>
+                                            {{ reference.comment }}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <button
+                                    class="btn btn-danger btn-xs"
+                                    @click="deleteReference(reference.id)"
+                                >
+                                    Eliminar referencia
+                                </button>
+                            </div>
+                        </div>
                     </div>
                     <div v-else class="col-xs-24 col-sm-16 col-md-16">
-                        <p
-                            class="alert alert-warning"
-                            role="alert"
-                        >
+                        <p class="alert alert-warning" role="alert">
                             {{ $t('seleccioneAlgunaPersona') }}
                         </p>
                     </div>
@@ -467,32 +549,56 @@
             :name="'modal-confirm-admin-action'"
             @close="closeConfirmModal"
         >
-            <template #header><h3>
-                <span>{{ confirmModalTitle }}</span>
-                <i v-on:click="closeConfirmModal" class="fa fa-times float-right-close"></i>
-            </h3></template>
-            <template #body><div>
-                <div class="text-left color-black">
-                    <p>{{ confirmModalMessage }}</p>
-                    <div v-if="pendingAction === 'banAndAnonymize'" class="form-group">
-                        <label>{{ $t('nota') }} ({{ $t('opcional') }})</label>
-                        <input v-model="banNote" type="text" class="form-control" />
-                    </div>
-                    <div class="text-center" style="margin-top: 1.5em;">
-                        <button
-                            class="btn btn-danger"
-                            @click="executePendingAction"
-                            :disabled="loadingAction"
+            <template #header
+                ><h3>
+                    <span>{{ confirmModalTitle }}</span>
+                    <i
+                        v-on:click="closeConfirmModal"
+                        class="fa fa-times float-right-close"
+                    ></i></h3
+            ></template>
+            <template #body
+                ><div>
+                    <div class="text-left color-black">
+                        <p>{{ confirmModalMessage }}</p>
+                        <div
+                            v-if="pendingAction === 'banAndAnonymize'"
+                            class="form-group"
                         >
-                            <span v-if="!loadingAction">{{ $t('confirmar') }}</span>
-                            <spinner v-if="loadingAction" class="blue"></spinner>
-                        </button>
-                        <button class="btn btn-default" @click="closeConfirmModal" style="margin-left: 8px;">
-                            {{ $t('cancelar') }}
-                        </button>
+                            <label
+                                >{{ $t('nota') }} ({{ $t('opcional') }})</label
+                            >
+                            <input
+                                v-model="banNote"
+                                type="text"
+                                class="form-control"
+                            />
+                        </div>
+                        <div class="text-center" style="margin-top: 1.5em">
+                            <button
+                                class="btn btn-danger"
+                                @click="executePendingAction"
+                                :disabled="loadingAction"
+                            >
+                                <span v-if="!loadingAction">{{
+                                    $t('confirmar')
+                                }}</span>
+                                <spinner
+                                    v-if="loadingAction"
+                                    class="blue"
+                                ></spinner>
+                            </button>
+                            <button
+                                class="btn btn-default"
+                                @click="closeConfirmModal"
+                                style="margin-left: 8px"
+                            >
+                                {{ $t('cancelar') }}
+                            </button>
+                        </div>
                     </div>
-                </div>
-            </div></template>
+                </div></template
+            >
         </modal>
     </div>
 </template>
@@ -555,7 +661,8 @@ export default {
             loadingAction: false,
             adminApi: null,
             banNote: '',
-            clearingIdentity: false
+            clearingIdentity: false,
+            references: []
         };
     },
 
@@ -565,15 +672,21 @@ export default {
             settings: 'auth/appConfig'
         }),
         confirmModalTitle() {
-            if (this.pendingAction === 'delete') return this.$t('confirmarEliminarUsuario');
-            if (this.pendingAction === 'anonymize') return this.$t('confirmarAnonimizarUsuario');
-            if (this.pendingAction === 'banAndAnonymize') return this.$t('confirmarAnonimizarYBloquearUsuario');
+            if (this.pendingAction === 'delete')
+                return this.$t('confirmarEliminarUsuario');
+            if (this.pendingAction === 'anonymize')
+                return this.$t('confirmarAnonimizarUsuario');
+            if (this.pendingAction === 'banAndAnonymize')
+                return this.$t('confirmarAnonimizarYBloquearUsuario');
             return '';
         },
         confirmModalMessage() {
-            if (this.pendingAction === 'delete') return this.$t('confirmarEliminarUsuarioMensaje');
-            if (this.pendingAction === 'anonymize') return this.$t('confirmarAnonimizarUsuarioMensaje');
-            if (this.pendingAction === 'banAndAnonymize') return this.$t('confirmarAnonimizarYBloquearUsuarioMensaje');
+            if (this.pendingAction === 'delete')
+                return this.$t('confirmarEliminarUsuarioMensaje');
+            if (this.pendingAction === 'anonymize')
+                return this.$t('confirmarAnonimizarUsuarioMensaje');
+            if (this.pendingAction === 'banAndAnonymize')
+                return this.$t('confirmarAnonimizarYBloquearUsuarioMensaje');
             return '';
         }
     },
@@ -600,7 +713,8 @@ export default {
         },
         confirmClearIdentityValidation() {
             if (!this.currentUser || !this.currentUser.id) return;
-            if (!confirm(this.$t('confirmarRemoverValidacionIdentidad'))) return;
+            if (!confirm(this.$t('confirmarRemoverValidacionIdentidad')))
+                return;
             this.doClearIdentityValidation();
         },
         doClearIdentityValidation() {
@@ -616,7 +730,9 @@ export default {
                     dialogs.message(this.$t('validacionIdentidadRemovida'));
                 })
                 .catch(() => {
-                    dialogs.message(this.$t('resultError'), { estado: 'error' });
+                    dialogs.message(this.$t('resultError'), {
+                        estado: 'error'
+                    });
                 })
                 .finally(() => {
                     this.clearingIdentity = false;
@@ -627,7 +743,10 @@ export default {
             console.log('selectUser', user);
             // Ensure nro_doc is stored as raw value (no dots) when loaded from backend
             const nroDocRaw = this.currentUser.nro_doc
-                ? cleanId(this.currentUser.nro_doc, this.settings.profile_id_format)
+                ? cleanId(
+                      this.currentUser.nro_doc,
+                      this.settings.profile_id_format
+                  )
                 : '';
             this.newInfo = {
                 name: this.currentUser.name,
@@ -646,14 +765,46 @@ export default {
                 banned: this.currentUser.banned > 0,
                 active: this.currentUser.active > 0,
                 cars: this.currentUser.cars || [],
-                patente: this.currentUser.cars && this.currentUser.cars.length > 0 ? this.currentUser.cars[0].patente : '',
+                patente:
+                    this.currentUser.cars && this.currentUser.cars.length > 0
+                        ? this.currentUser.cars[0].patente
+                        : '',
                 identity_validated: this.currentUser.identity_validated,
                 identity_validated_at: this.currentUser.identity_validated_at
             };
             // Format nro_doc for display after loading
             if (this.newInfo.nro_doc) {
-                this.newInfo.nro_doc = formatId(this.newInfo.nro_doc, this.settings.profile_id_format);
+                this.newInfo.nro_doc = formatId(
+                    this.newInfo.nro_doc,
+                    this.settings.profile_id_format
+                );
             }
+            this.loadReferences(user.id);
+        },
+        loadReferences(userId) {
+            this.adminApi
+                .getUserReferences(userId)
+                .then((response) => {
+                    console.log('references:', response);
+                    this.references = response.references;
+                })
+                .catch((err) => console.error(err));
+        },
+        deleteReference(referenceId) {
+            if (!confirm('¿Eliminar referencia?')) {
+                return;
+            }
+
+            this.adminApi
+                .deleteUserReference(referenceId, this.currentUser.id)
+                .then(() => {
+                    this.references = this.references.filter(
+                        (r) => r.id !== referenceId
+                    );
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
         },
         toUserMessages(user) {
             console.log('toUserMessages');
@@ -674,7 +825,10 @@ export default {
 
         // Handle DNI input - format using pattern
         handleDniInput(event) {
-            const formatted = formatId(event.target.value, this.settings.profile_id_format);
+            const formatted = formatId(
+                event.target.value,
+                this.settings.profile_id_format
+            );
             event.target.value = formatted;
             // Update the Vue data model with the formatted value
             this.newInfo.nro_doc = formatted;
@@ -704,16 +858,21 @@ export default {
         loadUserFromQuery() {
             const userId = this.$route.query.userId;
             if (!userId) return;
-            this.userApi.show(userId).then((response) => {
-                const user = response.data;
-                if (user) {
-                    this.selectUser(user);
-                    this.textSearch = user.name || '';
-                    this.userList = [user];
-                }
-            }).catch(() => {
-                dialogs.message(this.$t('noSeEncontroNingunUsuario'), { estado: 'error' });
-            });
+            this.userApi
+                .show(userId)
+                .then((response) => {
+                    const user = response.data;
+                    if (user) {
+                        this.selectUser(user);
+                        this.textSearch = user.name || '';
+                        this.userList = [user];
+                    }
+                })
+                .catch(() => {
+                    dialogs.message(this.$t('noSeEncontroNingunUsuario'), {
+                        estado: 'error'
+                    });
+                });
         },
         conversationsSearch() {
             // Placeholder method - may be implemented later
@@ -748,7 +907,10 @@ export default {
             } else if (this.pendingAction === 'anonymize') {
                 promise = api.anonymizeUser(this.currentUser.id);
             } else if (this.pendingAction === 'banAndAnonymize') {
-                promise = api.banAndAnonymizeUser(this.currentUser.id, this.banNote);
+                promise = api.banAndAnonymizeUser(
+                    this.currentUser.id,
+                    this.banNote
+                );
             } else {
                 this.loadingAction = false;
                 return;
@@ -759,7 +921,9 @@ export default {
                     this.loadingAction = false;
                     this.closeConfirmModal();
                     this.clear();
-                    this.userList = this.userList.filter((u) => u.id !== userId);
+                    this.userList = this.userList.filter(
+                        (u) => u.id !== userId
+                    );
                     dialogs.message(this.$t('accionCompletadaExitosamente'), {
                         duration: 5,
                         estado: 'success'
@@ -767,12 +931,21 @@ export default {
                 })
                 .catch((err) => {
                     this.loadingAction = false;
-                    const msg = (err.response && err.response.data && err.response.data.message) || err.message || this.$t('errorAlActualizar');
+                    const msg =
+                        (err.response &&
+                            err.response.data &&
+                            err.response.data.message) ||
+                        err.message ||
+                        this.$t('errorAlActualizar');
                     dialogs.message(msg, {
                         duration: 5,
                         estado: 'error'
                     });
-                    if (err.response && err.response.data && err.response.data.error === 'requires_ban') {
+                    if (
+                        err.response &&
+                        err.response.data &&
+                        err.response.data.error === 'requires_ban'
+                    ) {
                         this.closeConfirmModal();
                     }
                 });
@@ -848,11 +1021,17 @@ export default {
             if (!this.validate()) {
                 // DNI: send raw value without dots (backend expects digits only)
                 const nroDocRaw = this.newInfo.nro_doc
-                    ? cleanId(this.newInfo.nro_doc, this.settings.profile_id_format)
+                    ? cleanId(
+                          this.newInfo.nro_doc,
+                          this.settings.profile_id_format
+                      )
                     : this.newInfo.nro_doc;
 
                 // Patente: trim whitespace before sending
-                const patenteValue = (this.newInfo.patente && this.newInfo.patente.trim) ? this.newInfo.patente.trim() : (this.newInfo.patente || '');
+                const patenteValue =
+                    this.newInfo.patente && this.newInfo.patente.trim
+                        ? this.newInfo.patente.trim()
+                        : this.newInfo.patente || '';
 
                 // Only send properties from the admin form (backend allows these for admin)
                 const payload = {
@@ -874,12 +1053,15 @@ export default {
 
                 if (this.newInfo.pass && this.newInfo.pass.password) {
                     payload.password = this.newInfo.pass.password;
-                    payload.password_confirmation = this.newInfo.pass.password_confirmation;
+                    payload.password_confirmation =
+                        this.newInfo.pass.password_confirmation;
                 }
 
                 this.update(payload)
                     .then(() => {
-                        dialogs.message(this.$t('perfilActualizadoCorrectamente'));
+                        dialogs.message(
+                            this.$t('perfilActualizadoCorrectamente')
+                        );
                     })
                     .catch((err) => {
                         console.log(err);
@@ -896,7 +1078,9 @@ export default {
                     });
                 this.onSearchUsers();
             } else {
-                dialogs.message(this.$t('verifiqueLosCampos'), { estado: 'error' });
+                dialogs.message(this.$t('verifiqueLosCampos'), {
+                    estado: 'error'
+                });
             }
         }
     },
