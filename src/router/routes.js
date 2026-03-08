@@ -126,7 +126,9 @@ export default [
                 auth(to, from, next);
                 return;
             }
-            requireIdentityValidation(to, from, next);
+            requireIdentityValidation(to, from, () => {
+                profileComplete(to, from, next);
+            });
         },
         meta: {
             actionbar: {
@@ -204,7 +206,9 @@ export default [
                 auth(to, from, next);
                 return;
             }
-            requireIdentityValidation(to, from, next);
+            requireIdentityValidation(to, from, () => {
+                profileComplete(to, from, next);
+            });
         },
         props: true,
         meta: {
@@ -229,7 +233,9 @@ export default [
                 auth(to, from, next);
                 return;
             }
-            requireIdentityValidation(to, from, next);
+            requireIdentityValidation(to, from, () => {
+                profileComplete(to, from, next);
+            });
         },
         props: true,
         meta: {
@@ -372,7 +378,9 @@ export default [
                 auth(to, from, next);
                 return;
             }
-            requireIdentityValidation(to, from, next);
+            requireIdentityValidation(to, from, () => {
+                profileComplete(to, from, next);
+            });
         },
         meta: {
             actionbar: {

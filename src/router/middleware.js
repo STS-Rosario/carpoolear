@@ -75,7 +75,7 @@ export function profileComplete(to, from, next) {
         };
         console.log('problem');
         next(false);
-        router.replace({ name: 'profile_update' });
+        router.replace({ name: 'profile_update', query: { incompleteProfile: 'true' } });
     } else {
         next();
     }
