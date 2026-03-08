@@ -19,7 +19,7 @@ src/
 ├── language/            # i18n translations (Spanish/English)
 ├── classes/             # Core JS classes (TaggedApi, Threads, TaggedList)
 config/
-├── dev.env.js           # Dev environment (API_URL, MAPS_API, etc.)
+├── dev.env.js           # Dev environment (API_URL, FACEBOOK_API, etc.)
 ├── prod.env.js          # Production environment
 ├── conf.json            # Default app configuration
 e2e/                     # Playwright end-to-end tests

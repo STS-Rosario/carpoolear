@@ -118,7 +118,7 @@
                     >
                         <div
                             v-for="(m, index) in points"
-                            class="trip_point gmap-autocomplete"
+                            class="trip_point location-autocomplete"
                             :class="{ 'trip-error': m.error.state }"
                             :key="m.id"
                         >
@@ -143,7 +143,6 @@
                                 :country="allowForeignPoints ? null : 'AR'"
                                 :class="{ 'has-error': m.error.state }"
                             ></autocomplete>
-                            <!-- <GmapAutocomplete  :selectFirstOnEnter="true" :types="['(cities)']" :componentRestrictions="allowForeignPoints ? null : {country: 'AR'}" :placeholder="getPlaceholder(index)"  :value="m.name" :name="'input-' + index" :ref="'input-' + index" v-on:place_changed="(data) => getPlace(index, data)" class="form-control form-control-with-icon form-control-map-autocomplete" :class="{'has-error': m.error.state}"> </GmapAutocomplete> -->
                             <div
                                 @click="resetPoints(m, index)"
                                 class="date-picker--cross"
@@ -229,7 +228,7 @@
                             >
                                 <div
                                     v-for="(m, index) in points"
-                                    class="trip_point gmap-autocomplete"
+                                    class="trip_point location-autocomplete"
                                     :class="{ 'trip-error': m.error.state }"
                                     :key="m.id"
                                 >
@@ -256,7 +255,6 @@
                                         "
                                         :class="{ 'has-error': m.error.state }"
                                     ></autocomplete>
-                                    <!-- <GmapAutocomplete  :selectFirstOnEnter="true" :types="['(cities)']" :componentRestrictions="allowForeignPoints ? null : {country: 'AR'}" :placeholder="getPlaceholder(index)"  :value="m.name" :name="'input-' + index" :ref="'input-' + index" v-on:place_changed="(data) => getPlace(index, data)" class="form-control form-control-with-icon form-control-map-autocomplete" :class="{'has-error': m.error.state}"> </GmapAutocomplete> -->
                                     <div
                                         @click="resetPoints(m, index)"
                                         class="date-picker--cross"
@@ -917,7 +915,7 @@
                     >
                         <div
                             v-for="(m, index) in otherTrip.points"
-                            class="trip_point gmap-autocomplete"
+                            class="trip_point location-autocomplete"
                             :class="{ 'trip-error': m.error.state }"
                             :key="m.id"
                         >
@@ -973,7 +971,7 @@
                             >
                                 <div
                                     v-for="(m, index) in otherTrip.points"
-                                    class="trip_point gmap-autocomplete"
+                                    class="trip_point location-autocomplete"
                                     :class="{ 'trip-error': m.error.state }"
                                     :key="m.id"
                                 >
