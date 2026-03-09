@@ -130,7 +130,11 @@
     </div>
 </template>
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapState, mapActions } from 'pinia';
+import { useAuthStore } from '../stores/auth';
+import { usePassengerStore } from '../stores/passenger';
+import { useConversationsStore } from '../stores/conversations';
+import { useProfileStore } from '../stores/profile';
 import router from '../router';
 import modal from './Modal';
 import dialogs from '../services/dialogs.js';
@@ -148,18 +152,22 @@ export default {
         };
     },
     computed: {
-        ...mapGetters({
-            currentUser: 'auth/user',
-            config: 'auth/appConfig'
+        ...mapState(useAuthStore, {
+            currentUser: 'user',
+            config: 'appConfig'
         })
     },
     methods: {
         dayjs,
-        ...mapActions({
-            passengerAccept: 'passenger/accept',
-            passengerReject: 'passenger/reject',
-            lookConversation: 'conversations/createConversation',
-            changeProperty: 'profile/changeProperty'
+        ...mapActions(usePassengerStore, {
+            passengerAccept: 'accept',
+            passengerReject: 'reject'
+        }),
+        ...mapActions(useConversationsStore, {
+            lookConversation: 'createConversation'
+        }),
+        ...mapActions(useProfileStore, {
+            changeProperty: 'changeProperty'
         }),
 
         onAcceptRequest() {

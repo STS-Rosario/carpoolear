@@ -302,7 +302,12 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapState } from 'pinia';
+import { useAuthStore } from '../../stores/auth';
+import { useNotificationsStore } from '../../stores/notifications';
+import { useActionbarsStore } from '../../stores/actionbars';
+import { useDeviceStore } from '../../stores/device';
+import { useTripsStore } from '../../stores/trips';
 import dropdown from '../Dropdown';
 import router from '../../router';
 import bus from '../../services/bus-event.js';
@@ -342,22 +347,28 @@ export default {
     },
 
     computed: {
-        ...mapGetters({
-            logged: 'auth/checkLogin',
-            user: 'auth/user',
-            notificationsCount: 'notifications/count',
-            title: 'actionbars/title',
-            titleLink: 'actionbars/titleLink',
-            subTitle: 'actionbars/subTitle',
-            imgTitle: 'actionbars/imgTitle',
-            showMenu: 'actionbars/showMenu',
-            leftHeaderButton: 'actionbars/leftHeaderButton',
-            rightHeaderButton: 'actionbars/rightHeaderButton',
-            logoHeaderVisibility: 'actionbars/headerLogoVisibility',
-            isNotLargeDesktop: 'device/isNotLargeDesktop',
-            isFacebokApp: 'device/isFacebokApp',
-            isMobile: 'device/isMobile',
-            config: 'auth/appConfig'
+        ...mapState(useAuthStore, {
+            logged: 'checkLogin',
+            user: 'user',
+            config: 'appConfig'
+        }),
+        ...mapState(useNotificationsStore, {
+            notificationsCount: 'count'
+        }),
+        ...mapState(useActionbarsStore, {
+            title: 'title',
+            titleLink: 'titleLink',
+            subTitle: 'subTitle',
+            imgTitle: 'imgTitle',
+            showMenu: 'showMenu',
+            leftHeaderButton: 'leftHeaderButton',
+            rightHeaderButton: 'rightHeaderButton',
+            logoHeaderVisibility: 'headerLogoVisibility'
+        }),
+        ...mapState(useDeviceStore, {
+            isNotLargeDesktop: 'isNotLargeDesktop',
+            isFacebokApp: 'isFacebokApp',
+            isMobile: 'isMobile'
         }),
 
         showLogo() {
@@ -397,7 +408,7 @@ export default {
         },
 
         logout() {
-            this.$store.dispatch('auth/logout');
+            useAuthStore().logout();
         },
 
         toNotifications() {
@@ -409,8 +420,8 @@ export default {
         },
 
         tripsClick() {
-            this.$store.dispatch('trips/refreshList', true);
-            this.$store.dispatch('trips/tripsSearch', { is_passenger: false });
+            useTripsStore().refreshListAction(true);
+            useTripsStore().tripsSearch({ is_passenger: false });
         },
 
         onHeaderChange() {

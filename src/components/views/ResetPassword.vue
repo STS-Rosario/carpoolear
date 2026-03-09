@@ -58,7 +58,9 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapState, mapActions } from 'pinia';
+import { useDeviceStore } from '../../stores/device';
+import { useAuthStore } from '../../stores/auth';
 import bus from '../../services/bus-event';
 import router from '../../router';
 import Spinner from '../Spinner.vue';
@@ -87,9 +89,11 @@ export default {
         };
     },
     computed: {
-        ...mapGetters({
-            isMobile: 'device/isMobile',
-            settings: 'auth/appConfig'
+        ...mapState(useDeviceStore, {
+            isMobile: 'isMobile'
+        }),
+        ...mapState(useAuthStore, {
+            settings: 'appConfig'
         }),
         tripCardTheme() {
             return this.settings ? this.settings.trip_card_design : '';
@@ -97,9 +101,9 @@ export default {
     },
 
     methods: {
-        ...mapActions({
-            resetPassword: 'auth/resetPassword',
-            changePassword: 'auth/changePassword'
+        ...mapActions(useAuthStore, {
+            resetPassword: 'resetPassword',
+            changePassword: 'changePassword'
         }),
 
         reset() {

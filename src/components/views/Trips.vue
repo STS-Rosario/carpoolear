@@ -279,7 +279,12 @@ import Trip from '../sections/Trip.vue';
 import SearchBox from '../sections/SearchTrip.vue';
 import Loading from '../Loading.vue';
 import bus from '../../services/bus-event.js';
-import { mapGetters, mapActions } from 'vuex';
+import { mapState, mapActions } from 'pinia';
+import { useTripsStore } from '../../stores/trips';
+import { useAuthStore } from '../../stores/auth';
+import { useDeviceStore } from '../../stores/device';
+import { useSubscriptionsStore } from '../../stores/subscriptions';
+import { useProfileStore } from '../../stores/profile';
 import dayjs from '../../dayjs';
 import router from '../../router';
 import dialogs from '../../services/dialogs.js';
@@ -310,16 +315,20 @@ export default {
     },
     props: ['clearSearch', 'keepSearch'],
     methods: {
-        ...mapActions({
-            search: 'trips/tripsSearch',
-            refreshTrips: 'trips/refreshList',
-            subscribeToSearch: 'subscriptions/create',
-            findSubscriptions: 'subscriptions/index',
-            registerDonation: 'profile/registerDonation',
-            setScrollOffset: 'trips/setScrollOffset'
-            // morePagesActions: 'trips/tripMorePage',
-            // setActionButton: 'actionbars/setHeaderButtons'
+        ...mapActions(useTripsStore, {
+            search: 'tripsSearch',
+            refreshTrips: 'refreshListAction',
+            setScrollOffset: 'setScrollOffset'
+            // morePagesActions: 'tripMorePage',
         }),
+        ...mapActions(useSubscriptionsStore, {
+            subscribeToSearch: 'create',
+            findSubscriptions: 'index'
+        }),
+        ...mapActions(useProfileStore, {
+            registerDonation: 'registerDonation'
+        }),
+        // setActionButton: 'actionbars/setHeaderButtons'
         isIOS() {
             return /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
         },
@@ -717,17 +726,23 @@ export default {
         }
     },
     computed: {
-        ...mapGetters({
-            trips: 'trips/trips',
-            morePages: 'trips/tripsMorePage',
-            user: 'auth/user',
-            searchParams: 'trips/tripsSearchParam',
-            isMobile: 'device/isMobile',
-            isBrowser: 'device/isBrowser',
-            refreshList: 'trips/refreshList',
-            subscriptions: 'subscriptions/subscriptions',
-            appConfig: 'auth/appConfig',
-            scrollPosition: 'trips/scrollOffset'
+        ...mapState(useTripsStore, {
+            trips: 'trips',
+            morePages: 'tripsMorePage',
+            searchParams: 'tripsSearchParam',
+            refreshList: 'refreshList',
+            scrollPosition: 'scrollOffset'
+        }),
+        ...mapState(useAuthStore, {
+            user: 'user',
+            appConfig: 'appConfig'
+        }),
+        ...mapState(useDeviceStore, {
+            isMobile: 'isMobile',
+            isBrowser: 'isBrowser'
+        }),
+        ...mapState(useSubscriptionsStore, {
+            subscriptions: 'subscriptions'
         }),
 
         showingTrips() {

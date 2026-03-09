@@ -48,7 +48,9 @@
 
 <script>
 import DatepickerSystem from 'vuejs-datepicker';
-import { mapGetters } from 'vuex';
+import { mapState } from 'pinia';
+import { useDeviceStore } from '../stores/device';
+import { useCordovaStore } from '../stores/cordova';
 import dayjs from '../dayjs';
 import bus from '../services/bus-event';
 /*
@@ -155,9 +157,11 @@ export default {
         }
     },
     computed: {
-        ...mapGetters({
-            isMobile: 'device/isMobile',
-            device: 'cordova/device'
+        ...mapState(useDeviceStore, {
+            isMobile: 'isMobile'
+        }),
+        ...mapState(useCordovaStore, {
+            device: 'device'
         }),
         datePickerLanguage() {
             const locale = this.$i18n.locale || 'arg';

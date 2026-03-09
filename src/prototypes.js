@@ -12,5 +12,5 @@ Vue.prototype.$scrollToElement = scrollToElement;
 Vue.prototype.$checkError = checkError;
 Vue.prototype.$getErrors = getErrors;
 Vue.prototype.$redirectToIdentityValidationIfRequired = function () {
-    return redirectToIdentityValidationIfRequired(this.$store, this.$router);
+    return redirectToIdentityValidationIfRequired(this.$router);
 };

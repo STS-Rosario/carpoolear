@@ -76,7 +76,9 @@
 
 <script>
 import Loading from '../Loading';
-import { mapActions, mapGetters } from 'vuex';
+import { mapState, mapActions } from 'pinia';
+import { useNotificationsStore } from '../../stores/notifications';
+import { useAuthStore } from '../../stores/auth';
 import router from '../../router';
 import dialogs from '../../services/dialogs.js';
 import push from '../../cordova/push-capacitor.js';
@@ -100,8 +102,8 @@ export default {
 
     methods: {
         dayjs,
-        ...mapActions({
-            search: 'notifications/index'
+        ...mapActions(useNotificationsStore, {
+            search: 'indexAction'
         }),
         isPWA() {
             return !window.Capacitor || window.Capacitor.getPlatform() === 'web';
@@ -195,9 +197,11 @@ export default {
     },
 
     computed: {
-        ...mapGetters({
-            notifications: 'notifications/index',
-            appConfig: 'auth/appConfig'
+        ...mapState(useNotificationsStore, {
+            notifications: 'index'
+        }),
+        ...mapState(useAuthStore, {
+            appConfig: 'appConfig'
         })
     },
 

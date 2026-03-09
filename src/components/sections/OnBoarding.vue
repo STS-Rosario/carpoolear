@@ -62,7 +62,9 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapState, mapActions } from 'pinia';
+import { useAuthStore } from '../../stores/auth';
+import { useDeviceStore } from '../../stores/device';
 
 export default {
     name: 'onBoarding',
@@ -88,13 +90,13 @@ export default {
         document.body.scroll = 'no';
     },
     computed: {
-        ...mapGetters({
-            appConfig: 'auth/appConfig'
+        ...mapState(useAuthStore, {
+            appConfig: 'appConfig'
         })
     },
     methods: {
-        ...mapActions({
-            setFirstTimeAppOpenInDevice: 'device/setFirstTimeAppOpenInDevice'
+        ...mapActions(useDeviceStore, {
+            setFirstTimeAppOpenInDevice: 'setFirstTimeAppOpenInDevice'
         }),
         srcCard(number) {
             let src =

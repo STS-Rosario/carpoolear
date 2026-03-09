@@ -11,7 +11,8 @@
 
 <script>
 import LineChart from './LineChart';
-import { mapActions } from 'vuex';
+import { mapActions } from 'pinia';
+import { useAdminStore } from '../../stores/admin';
 import dayjs from '../../dayjs';
 
 export default {
@@ -88,9 +89,9 @@ export default {
         }
     },
     methods: {
-        ...mapActions({
-            getTrips: 'admin/getTrips',
-            getSeats: 'admin/getSeats'
+        ...mapActions(useAdminStore, {
+            getTrips: 'getTrips',
+            getSeats: 'getSeats'
         }),
         processTrips(viajes, asientos, minDate, maxDate) {
             let etiquetas = [];

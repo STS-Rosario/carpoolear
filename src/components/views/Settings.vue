@@ -32,16 +32,20 @@
     </div>
 </template>
 <script>
-import { mapGetters } from 'vuex';
+import { mapState } from 'pinia';
+import { useDeviceStore } from '../../stores/device';
+import { useAuthStore } from '../../stores/auth';
 export default {
     name: 'settings',
     data() {
         return {};
     },
     computed: {
-        ...mapGetters({
-            isMobile: 'device/isMobile',
-            config: 'auth/appConfig'
+        ...mapState(useDeviceStore, {
+            isMobile: 'isMobile'
+        }),
+        ...mapState(useAuthStore, {
+            config: 'appConfig'
         }),
         tabActive() {
             return this.$route.meta.tab;

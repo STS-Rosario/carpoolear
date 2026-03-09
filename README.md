@@ -80,7 +80,10 @@ Happy coding!
 
 ## Testing
 
-Playwright is used for end-to-end screenshot tests that cover every view in the application. All backend requests are mocked so no running backend is needed.
+Playwright tests are split into two projects:
+
+- **`e2e/`** — Full end-to-end tests that require a running backend
+- **`e2e-frontend/`** — Frontend-only tests (all API calls mocked, no backend needed)
 
 ``` bash
 # install Playwright browsers (first time only)
@@ -89,20 +92,27 @@ npx playwright install --with-deps chromium
 # start the dev server (requires Node 22 or Docker)
 npm run dev
 
-# run all e2e tests headless
+# run all tests (both projects)
 npm run test:e2e
+
+# run only frontend tests (no backend needed)
+npm run test:frontend
+
+# run only full e2e tests (backend required)
+npm run test:e2e:only
 
 # run screenshot tests only
 npm run test:e2e:screenshots
 
 # run with the Playwright UI for debugging
+npm run test:frontend:ui
 npm run test:e2e:ui
 
 # update golden screenshots after intentional UI changes
 npm run test:e2e:screenshots:update
 ```
 
-Screenshot tests also run automatically on every push and PR to `master` via the `Screenshot Tests` GitHub Action.
+Frontend tests run automatically on every push and PR to `master` via the `Frontend Tests` GitHub Action.
 
 ## Config
 

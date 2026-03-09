@@ -14,7 +14,10 @@
 <script>
 import Tab from '../elements/Tab';
 import Tabset from '../elements/Tabset';
-import { mapActions, mapGetters } from 'vuex';
+import { mapState, mapActions } from 'pinia';
+import { useAuthStore } from '../../stores/auth';
+import { useProfileStore } from '../../stores/profile';
+import { useActionbarsStore } from '../../stores/actionbars';
 import ProfileInfo from '../sections/ProfileInfo';
 import ProfileRates from '../sections/ProfileRates';
 import MyTrips from './MyTrips';
@@ -52,9 +55,11 @@ export default {
     },
 
     computed: {
-        ...mapGetters({
-            user: 'auth/user',
-            profile: 'profile/user'
+        ...mapState(useAuthStore, {
+            user: 'user'
+        }),
+        ...mapState(useProfileStore, {
+            profile: 'user'
         }),
         viajesHeaderTitle() {
             return this.id === 'me' || this.id === this.user.id
@@ -67,11 +72,13 @@ export default {
     },
 
     methods: {
-        ...mapActions({
-            setTitle: 'actionbars/setTitle',
-            setProfile: 'profile/setUser',
-            setProfileByID: 'profile/setUserByID',
-            fetchBadges: 'profile/fetchBadges'
+        ...mapActions(useActionbarsStore, {
+            setTitle: 'setTitle'
+        }),
+        ...mapActions(useProfileStore, {
+            setProfile: 'setUser',
+            setProfileByID: 'setUserByID',
+            fetchBadges: 'fetchBadges'
         }),
         updateProfile() {
             if (this.id === 'me' || this.id === this.user.id) {

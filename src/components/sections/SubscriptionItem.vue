@@ -74,7 +74,9 @@
     </div>
 </template>
 <script>
-import { mapActions } from 'vuex';
+import { mapActions } from 'pinia';
+import { useSubscriptionsStore } from '../../stores/subscriptions';
+import { useTripsStore } from '../../stores/trips';
 import dayjs from '../../dayjs';
 export default {
     name: 'subscriptions-item',
@@ -105,9 +107,11 @@ export default {
     },
     methods: {
         dayjs,
-        ...mapActions({
-            removeStore: 'subscriptions/remove',
-            searchTrip: 'trips/tripsSearch'
+        ...mapActions(useSubscriptionsStore, {
+            removeStore: 'remove'
+        }),
+        ...mapActions(useTripsStore, {
+            searchTrip: 'tripsSearch'
         }),
         remove() {
             this.inProgress = true;

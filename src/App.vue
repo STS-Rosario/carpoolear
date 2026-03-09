@@ -28,7 +28,12 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapState, mapActions } from 'pinia';
+import { useAuthStore } from './stores/auth';
+import { useCordovaStore } from './stores/cordova';
+import { useDeviceStore } from './stores/device';
+import { useBackgroundStore } from './stores/background';
+import { useRootStore } from './stores/root';
 import { Capacitor } from '@capacitor/core';
 import { AppUpdate } from '@capawesome/capacitor-app-update';
 import { compareAndroidVersion, compareSemver } from './utils/versionCompare';
@@ -59,14 +64,14 @@ export default {
                     currentVersionCode = result.currentVersionCode;
                     currentVersionName = result.currentVersionName;
                     const version = platform === 'android' ? String(currentVersionCode) : (currentVersionName || String(currentVersionCode));
-                    this.$store.commit('SET_APP_VERSION_INFO', { version, versionSource: 'real', platform });
+                    useRootStore().setAppVersionInfo({ version, versionSource: 'real', platform });
                 } catch (pluginError) {
                     console.warn('AppUpdate.getAppUpdateInfo failed, using window.appVersion fallback:', pluginError);
                     const fallback = window.appVersion || '0';
                     currentVersionCode = fallback;
                     currentVersionName = fallback;
                     isFallback = true;
-                    this.$store.commit('SET_APP_VERSION_INFO', { version: fallback, versionSource: 'fallback', platform });
+                    useRootStore().setAppVersionInfo({ version: fallback, versionSource: 'fallback', platform });
                 }
 
                 // Min-version / force-upgrade check (only when backend sends min for this platform)
@@ -94,9 +99,11 @@ export default {
         setRouteClass: function (route) {
             this.actualRouteName = 'route--' + route.name;
         },
-        ...mapActions({
-            fbLogin: 'cordova/facebookLogin',
-            getConfig: 'auth/getConfig'
+        ...mapActions(useCordovaStore, {
+            fbLogin: 'facebookLogin'
+        }),
+        ...mapActions(useAuthStore, {
+            getConfig: 'getConfig'
         })
     },
     created() {
@@ -128,21 +135,27 @@ export default {
     computed: {
         // Same version we send in X-App-Version header for all requests (network.js getHeader)
         splashVersionText() {
-            const appVersionInfo = this.$store.state.appVersionInfo;
+            const appVersionInfo = useRootStore().appVersionInfo;
             const version = (appVersionInfo && appVersionInfo.version) || (typeof window !== 'undefined' && window.appVersion) || '0';
             const base = 'Version ' + version;
             return Capacitor.isNativePlatform() ? base : base + ' - build 97';
         },
-        ...mapGetters({
-            deviceReady: 'cordova/deviceReady',
-            backgroundStyle: 'background/backgroundStyle',
-            logged: 'auth/checkLogin',
-            isFacebokApp: 'device/isFacebokApp',
-            appConfig: 'auth/appConfig',
-            isRemoteConfig: 'auth/isRemoteConfig',
-            firsTimeMobileAppOpen: 'device/firsTimeMobileAppOpen',
-            user: 'auth/user',
-            isBrowser: 'device/isBrowser'
+        ...mapState(useCordovaStore, {
+            deviceReady: 'deviceReady'
+        }),
+        ...mapState(useBackgroundStore, {
+            backgroundStyle: 'backgroundStyle'
+        }),
+        ...mapState(useAuthStore, {
+            logged: 'checkLogin',
+            appConfig: 'appConfig',
+            isRemoteConfig: 'isRemoteConfig',
+            user: 'user'
+        }),
+        ...mapState(useDeviceStore, {
+            isFacebokApp: 'isFacebokApp',
+            firsTimeMobileAppOpen: 'firsTimeMobileAppOpen',
+            isBrowser: 'isBrowser'
         }),
         onBoardingVisibility() {
             let moduleEnabled =
