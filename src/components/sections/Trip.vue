@@ -1,6 +1,6 @@
 <template>
     <div
-        :class="tripCardCountClass"
+        :class="[tripCardCountClass, { 'trip-needs-sellado': trip.needs_sellado }]"
         v-on:click="clickModal ? openModal() : goToDetail(false)"
     >
         <tripDisplay
@@ -176,6 +176,12 @@
                             </div>
                         </div>
                     </template>
+                    <div
+                        v-if="trip.needs_sellado"
+                        class="trip-legend-sellado"
+                    >
+                        {{ $t('faltaPagarSellado') }}
+                    </div>
                     <div class="trip_location">
                         <template v-if="trip.points.length >= 2">
                             <div class="row trip_location_from">
@@ -556,7 +562,9 @@
     </div>
 </template>
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapState, mapActions } from 'pinia';
+import { useAuthStore } from '../../stores/auth';
+import { useTripsStore } from '../../stores/trips';
 import dialogs from '../../services/dialogs.js';
 import bus from '../../services/bus-event.js';
 import tripDisplay from './TripDisplay';
@@ -595,9 +603,9 @@ export default {
 
     methods: {
         dayjs,
-        ...mapActions({
-            changeSeats: 'trips/changeSeats',
-            remove: 'trips/remove'
+        ...mapActions(useTripsStore, {
+            changeSeats: 'changeSeats',
+            remove: 'remove'
         }),
         goToDetail: function (goToEdit, passengerView) {
             if (goToEdit) {
@@ -743,8 +751,8 @@ export default {
         };
     },
     computed: {
-        ...mapGetters({
-            config: 'auth/appConfig'
+        ...mapState(useAuthStore, {
+            config: 'appConfig'
         }),
         tripCardCountClass() {
             if (this.config) {
@@ -897,5 +905,19 @@ export default {
     .trip-with-control .card-trip {
         height: 500px;
     }
+}
+.trip-needs-sellado {
+    opacity: 0.6;
+}
+.trip-legend-sellado {
+    display: block;
+    width: fit-content;
+    margin: 0 auto 0.5em;
+    text-align: center;
+    background: #c76b1a;
+    color: #fff;
+    padding: 0.35em 0.75em;
+    border-radius: 0.5em;
+    font-size: 0.9em;
 }
 </style>

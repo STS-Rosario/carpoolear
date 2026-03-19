@@ -40,7 +40,10 @@
     </div>
 </template>
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapState, mapActions } from 'pinia';
+import { useAuthStore } from '../stores/auth';
+import { useRootStore } from '../stores/root';
+import { usePassengerStore } from '../stores/passenger';
 import dialogs from '../services/dialogs.js';
 import dayjs from '../dayjs';
 export default {
@@ -53,8 +56,8 @@ export default {
         };
     },
     computed: {
-        ...mapGetters({
-            currentUser: 'auth/user'
+        ...mapState(useAuthStore, {
+            currentUser: 'user'
         })
     },
     mounted() {
@@ -65,10 +68,12 @@ export default {
     },
     methods: {
         dayjs,
-        ...mapActions({
-            getTrip: 'getTrip',
-            passengerAccept: 'passenger/accept',
-            cancel: 'passenger/cancel'
+        ...mapActions(useRootStore, {
+            getTrip: 'getTrip'
+        }),
+        ...mapActions(usePassengerStore, {
+            passengerAccept: 'accept',
+            cancel: 'cancel'
         }),
 
         onAcceptRequest() {

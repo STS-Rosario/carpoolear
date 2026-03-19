@@ -56,14 +56,18 @@
     </div>
 </template>
 <script>
-import { mapGetters } from 'vuex';
+import { mapState } from 'pinia';
+import { useTripsStore } from '../../stores/trips';
+import { useAuthStore } from '../../stores/auth';
 import SvgItem from '../SvgItem';
 export default {
     name: 'TripData',
     computed: {
-        ...mapGetters({
-            trip: 'trips/currentTrip',
-            tripCardTheme: 'auth/tripCardTheme'
+        ...mapState(useTripsStore, {
+            trip: 'currentTrip'
+        }),
+        ...mapState(useAuthStore, {
+            tripCardTheme: 'tripCardTheme'
         }),
         isPassengersView() {
             return this.trip.is_passenger;

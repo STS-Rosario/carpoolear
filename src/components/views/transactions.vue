@@ -40,7 +40,9 @@
 
 <script>
 import bus from '../../services/bus-event.js';
-import { mapActions, mapGetters } from 'vuex';
+import { mapState, mapActions } from 'pinia';
+import { useAuthStore } from '../../stores/auth';
+import { usePassengerStore } from '../../stores/passenger';
 import dayjs from '../../dayjs';
 
 export default {
@@ -51,8 +53,8 @@ export default {
         };
     },
     computed: {
-        ...mapGetters({
-            user: 'auth/user'
+        ...mapState(useAuthStore, {
+            user: 'user'
         })
     },
     mounted() {
@@ -68,8 +70,8 @@ export default {
 
     methods: {
         dayjs,
-        ...mapActions({
-            history: 'passenger/transactions'
+        ...mapActions(usePassengerStore, {
+            history: 'transactions'
         }),
         onBackClick() {
             this.$router.back();

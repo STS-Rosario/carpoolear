@@ -1,8 +1,10 @@
 /* jshint esversion: 6 */
 import { auth, guest, profileComplete, authAdmin, requireIdentityValidation } from './middleware.js';
-import store from '../store/index';
 
-const getters = store.getters;
+function getAuthStore () {
+    const { useAuthStore } = require('../stores/auth');
+    return useAuthStore();
+}
 
 export default [
     {
@@ -33,11 +35,10 @@ export default [
             actionbar: {
                 header: {
                     logo: {
-                        show:
-                            getters &&
-                            getters['auth/appConfig'] &&
-                            getters['auth/appConfig'].trip_card_design ===
-                                'light'
+                        get show () {
+                            const config = getAuthStore().appConfig;
+                            return config && config.trip_card_design === 'light';
+                        }
                     },
                     buttons: ['back']
                 }
@@ -64,11 +65,10 @@ export default [
             actionbar: {
                 header: {
                     logo: {
-                        show:
-                            getters &&
-                            getters['auth/appConfig'] &&
-                            getters['auth/appConfig'].trip_card_design ===
-                                'light'
+                        get show () {
+                            const config = getAuthStore().appConfig;
+                            return config && config.trip_card_design === 'light';
+                        }
                     },
                     buttons: ['back']
                 }
@@ -122,7 +122,7 @@ export default [
         name: 'my-trips',
         component: require('../components/views/MyTrips').default,
         beforeEnter: (to, from, next) => {
-            if (!store.getters['auth/checkLogin']) {
+            if (!getAuthStore().checkLogin) {
                 auth(to, from, next);
                 return;
             }
@@ -165,7 +165,7 @@ export default [
         name: 'new-trip',
         component: require('../components/views/NewTrip').default,
         beforeEnter: (to, from, next) => {
-            if (!store.getters['auth/checkLogin']) {
+            if (!getAuthStore().checkLogin) {
                 auth(to, from, next);
                 return;
             }
@@ -202,7 +202,7 @@ export default [
         name: 'detail_trip',
         component: require('../components/views/Trip').default,
         beforeEnter: (to, from, next) => {
-            if (!store.getters['auth/checkLogin']) {
+            if (!getAuthStore().checkLogin) {
                 auth(to, from, next);
                 return;
             }
@@ -229,7 +229,7 @@ export default [
         name: 'detail_trip_location',
         component: require('../components/views/Trip'),
         beforeEnter: (to, from, next) => {
-            if (!store.getters['auth/checkLogin']) {
+            if (!getAuthStore().checkLogin) {
                 auth(to, from, next);
                 return;
             }
@@ -374,7 +374,7 @@ export default [
         name: 'conversations-list',
         component: require('../components/views/ConversationList').default,
         beforeEnter: (to, from, next) => {
-            if (!store.getters['auth/checkLogin']) {
+            if (!getAuthStore().checkLogin) {
                 auth(to, from, next);
                 return;
             }

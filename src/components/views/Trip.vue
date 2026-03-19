@@ -358,7 +358,15 @@
     </div>
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapState, mapActions } from 'pinia';
+import { useAuthStore } from '../../stores/auth';
+import { useTripsStore } from '../../stores/trips';
+import { useDeviceStore } from '../../stores/device';
+import { useConversationsStore } from '../../stores/conversations';
+import { usePassengerStore } from '../../stores/passenger';
+import { useProfileStore } from '../../stores/profile';
+import { useMyTripsStore } from '../../stores/myTrips';
+import { useRootStore } from '../../stores/root';
 import router from '../../router';
 import bus from '../../services/bus-event';
 import svgItem from '../SvgItem';
@@ -458,18 +466,28 @@ export default {
 
     methods: {
         dayjs,
-        ...mapActions({
-            getTrip: 'getTrip',
-            lookConversation: 'conversations/createConversation',
-            selectConversation: 'conversations/select',
-            make: 'passenger/makeRequest',
-            cancel: 'passenger/cancel',
-            remove: 'trips/remove',
-            searchMatchers: 'trips/searchMatchers',
-            sendToAll: 'conversations/sendToAll',
-            changeProperty: 'profile/changeProperty',
-            removeTrip: 'myTrips/removeTrip',
-            searchAgain: 'trips/searchAgain'
+        ...mapActions(useRootStore, {
+            getTrip: 'getTrip'
+        }),
+        ...mapActions(useConversationsStore, {
+            lookConversation: 'createConversation',
+            selectConversation: 'select',
+            sendToAll: 'sendToAll'
+        }),
+        ...mapActions(usePassengerStore, {
+            make: 'makeRequest',
+            cancel: 'cancel'
+        }),
+        ...mapActions(useTripsStore, {
+            remove: 'remove',
+            searchMatchers: 'searchMatchers',
+            searchAgain: 'searchAgain'
+        }),
+        ...mapActions(useProfileStore, {
+            changeProperty: 'changeProperty'
+        }),
+        ...mapActions(useMyTripsStore, {
+            removeTrip: 'removeTrip'
         }),
         calculateHeight() {
             this.$nextTick(() => {
@@ -884,13 +902,17 @@ export default {
     },
 
     computed: {
-        ...mapGetters({
-            user: 'auth/user',
-            trip: 'trips/currentTrip',
-            config: 'auth/appConfig',
-            tripCardTheme: 'auth/tripCardTheme',
-            isMobile: 'device/isMobile',
-            resolution: 'device/resolution'
+        ...mapState(useAuthStore, {
+            user: 'user',
+            config: 'appConfig',
+            tripCardTheme: 'tripCardTheme'
+        }),
+        ...mapState(useTripsStore, {
+            trip: 'currentTrip'
+        }),
+        ...mapState(useDeviceStore, {
+            isMobile: 'isMobile',
+            resolution: 'resolution'
         }),
         resolutionWidth() {
             return this.resolution.width;

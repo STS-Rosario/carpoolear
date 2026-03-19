@@ -69,7 +69,9 @@
     </div>
 </template>
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapState, mapActions } from 'pinia';
+import { useAuthStore } from '../stores/auth';
+import { useRatesStore } from '../stores/rates';
 import dialogs from '../services/dialogs.js';
 import dayjs from '../dayjs';
 
@@ -91,8 +93,8 @@ export default {
 
     methods: {
         dayjs,
-        ...mapActions({
-            emit: 'rates/vote'
+        ...mapActions(useRatesStore, {
+            emit: 'vote'
         }),
 
         setRate(value) {
@@ -147,8 +149,8 @@ export default {
     },
 
     computed: {
-        ...mapGetters({
-            user: 'auth/user'
+        ...mapState(useAuthStore, {
+            user: 'user'
         }),
 
         to() {

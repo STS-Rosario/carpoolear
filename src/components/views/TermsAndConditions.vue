@@ -7,7 +7,8 @@
 <script>
 import router from '../../router';
 import bus from '../../services/bus-event.js';
-import { mapActions } from 'vuex';
+import { mapActions } from 'pinia';
+import { useProfileStore } from '../../stores/profile';
 export default {
     name: 'about',
     data() {
@@ -28,8 +29,8 @@ export default {
             });
     },
     methods: {
-        ...mapActions({
-            getTermsText: 'profile/getTermsText'
+        ...mapActions(useProfileStore, {
+            getTermsText: 'getTermsText'
         }),
         onBackClick() {
             router.back();

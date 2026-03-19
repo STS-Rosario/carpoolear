@@ -48,7 +48,8 @@
 </template>
 <script>
 import OsmApi from '../services/api/Osm';
-import { mapGetters } from 'vuex';
+import { mapState } from 'pinia';
+import { useAuthStore } from '../stores/auth';
 
 let osmApi = new OsmApi();
 export default {
@@ -78,8 +79,8 @@ export default {
         this.input = this.value ? this.value : '';
     },
     computed: {
-        ...mapGetters({
-            config: 'auth/appConfig'
+        ...mapState(useAuthStore, {
+            config: 'appConfig'
         })
     },
     methods: {

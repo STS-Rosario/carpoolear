@@ -41,16 +41,20 @@
     </div>
 </template>
 <script>
-import { mapGetters } from 'vuex';
+import { mapState } from 'pinia';
+import { useTripsStore } from '../../stores/trips';
+import { useAuthStore } from '../../stores/auth';
 import SvgItem from '../SvgItem';
 export default {
     name: 'TripSeats',
     computed: {
-        ...mapGetters({
-            trip: 'trips/currentTrip',
-            tripCardTheme: 'auth/tripCardTheme',
-            user: 'auth/user',
-            config: 'auth/appConfig',
+        ...mapState(useTripsStore, {
+            trip: 'currentTrip'
+        }),
+        ...mapState(useAuthStore, {
+            tripCardTheme: 'tripCardTheme',
+            user: 'user',
+            config: 'appConfig'
         }),
         owner() {
             console.log('this.trip', this.trip);

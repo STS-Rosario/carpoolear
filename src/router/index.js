@@ -2,7 +2,6 @@
 import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router';
 import i18n from '../i18n';
 
-import store from '../store';
 import routes from './routes.js';
 
 const router = createRouter({
@@ -15,26 +14,29 @@ const router = createRouter({
 router.rememberRoute = null;
 
 router.beforeEach((to, from, next) => {
+    const { useAuthStore } = require('../stores/auth');
+    const { useActionbarsStore } = require('../stores/actionbars');
+    const { useBackgroundStore } = require('../stores/background');
+    const authStore = useAuthStore();
+    const actionbarsStore = useActionbarsStore();
+    const backgroundStore = useBackgroundStore();
+
     const actionbar = to.meta.actionbar || {};
     const background = to.meta.background || {};
-    const user = store.getters['auth/checkLogin'];
+    const user = authStore.checkLogin;
     if (user && actionbar.footer) {
         if (actionbar.footer.show) {
-            store.dispatch('actionbars/showFooter', true);
+            actionbarsStore.showFooter(true);
         } else {
-            store.dispatch('actionbars/showFooter', false);
+            actionbarsStore.showFooter(false);
         }
         if (actionbar.footer.active_id) {
-            store.dispatch(
-                'actionbars/setActiveFooter',
-                actionbar.footer.active_id
-            );
+            actionbarsStore.setActiveFooter(actionbar.footer.active_id);
         }
     } else {
-        store.dispatch('actionbars/showFooter', false);
+        actionbarsStore.showFooter(false);
     }
-    const getters = store.getters;
-    const config = getters['auth/appConfig'];
+    const config = authStore.appConfig;
     console.log('config app name', config);
     let appName = process.env.TARGET_APP || 'Carpoolear';
     if (config) {
@@ -45,42 +47,36 @@ router.beforeEach((to, from, next) => {
     }
     console.log('app name', appName);
     if (actionbar.header) {
-        store.dispatch('actionbars/setSubTitle', '');
-        store.dispatch('actionbars/setTitleLink', {});
-        store.dispatch('actionbars/setImgTitle', '');
+        actionbarsStore.setSubTitle('');
+        actionbarsStore.setTitleLink({});
+        actionbarsStore.setImgTitle('');
         if (actionbar.header.titleKey) {
             console.log('actionbar.header.titleKey', actionbar.header.titleKey);
             const title = i18n.global.t(actionbar.header.titleKey);
-            store.dispatch('actionbars/setTitle', title);
+            actionbarsStore.setTitle(title);
         } else {
             console.log('actionbar appName', appName);
-            store.dispatch('actionbars/setTitle', appName);
+            actionbarsStore.setTitle(appName);
         }
         if (actionbar.header.buttons) {
-            store.dispatch(
-                'actionbars/setHeaderButtons',
-                actionbar.header.buttons
-            );
+            actionbarsStore.setHeaderButtons(actionbar.header.buttons);
         } else {
-            store.dispatch('actionbars/setHeaderButtons', []);
+            actionbarsStore.setHeaderButtons([]);
         }
         if (actionbar.header.logo) {
-            store.dispatch(
-                'actionbars/showHeaderLogo',
-                actionbar.header.logo.show
-            );
+            actionbarsStore.showHeaderLogo(actionbar.header.logo.show);
         } else {
-            store.dispatch('actionbars/showHeaderLogo', true);
+            actionbarsStore.showHeaderLogo(true);
         }
     } else {
-        store.dispatch('actionbars/setTitle', appName);
-        store.dispatch('actionbars/setHeaderButtons', []);
-        store.dispatch('actionbars/showHeaderLogo', true);
+        actionbarsStore.setTitle(appName);
+        actionbarsStore.setHeaderButtons([]);
+        actionbarsStore.showHeaderLogo(true);
     }
     if (background.style) {
-        store.dispatch('background/setBackgroundStyle', background.style);
+        backgroundStore.setBackgroundStyle(background.style);
     } else {
-        store.dispatch('background/setBackgroundStyle', 'gray');
+        backgroundStore.setBackgroundStyle('gray');
     }
     window.scrollTo(0, 0);
     next();

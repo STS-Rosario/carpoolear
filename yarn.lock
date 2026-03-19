@@ -1051,7 +1051,7 @@
     "@vue/compiler-dom" "3.5.28"
     "@vue/shared" "3.5.28"
 
-"@vue/devtools-api@^6.0.0-beta.11", "@vue/devtools-api@^6.5.0", "@vue/devtools-api@^6.5.1":
+"@vue/devtools-api@^6.5.0", "@vue/devtools-api@^6.5.1", "@vue/devtools-api@^6.6.3":
   version "6.6.4"
   resolved "https://registry.npmjs.org/@vue/devtools-api/-/devtools-api-6.6.4.tgz"
   integrity sha512-sGhTPMuXqZ1rVOk32RylztWkfXTRhuS7vgAKv0zjqk8gbsHkJ7xfFf+jbySxt7tWObEJwyKaHMikV/WGDiQm8g==
@@ -8843,6 +8843,14 @@ pikaday@^1.6.1:
   resolved "https://registry.npmjs.org/pikaday/-/pikaday-1.8.2.tgz"
   integrity sha512-TNtsE+34BIax3WtkB/qqu5uepV1McKYEgvL3kWzU7aqPCpMEN6rBF3AOwu4WCwAealWlBGobXny/9kJb49C1ew==
 
+pinia@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.npmjs.org/pinia/-/pinia-2.3.1.tgz"
+  integrity sha512-khUlZSwt9xXCaTbbxFYBKDc/bWAGWJjOgvxETwkTN7KRm66EeT1ZdZj6i2ceh9sP2Pzqsbc704r2yngBrxBVug==
+  dependencies:
+    "@vue/devtools-api" "^6.6.3"
+    vue-demi "^0.14.10"
+
 pinkie-promise@^2.0.0:
   version "2.0.1"
   resolved "https://registry.npmjs.org/pinkie-promise/-/pinkie-promise-2.0.1.tgz"
@@ -12266,6 +12274,11 @@ vue-datepicker@^1.3.0:
   dependencies:
     moment "^2.11.1"
 
+vue-demi@^0.14.10:
+  version "0.14.10"
+  resolved "https://registry.npmjs.org/vue-demi/-/vue-demi-0.14.10.tgz"
+  integrity sha512-nMZBOwuzabUO0nLgIcc6rycZEebF6eeUfaiQx9+WSk8e29IbLvPU9feI6tqW4kTo3hvoYAJkMh8n8D0fuISphg==
+
 vue-eslint-parser@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/vue-eslint-parser/-/vue-eslint-parser-1.0.0.tgz"
@@ -12351,13 +12364,6 @@ vuejs-datepicker@^0.9.7:
   version "0.9.29"
   resolved "https://registry.npmjs.org/vuejs-datepicker/-/vuejs-datepicker-0.9.29.tgz"
   integrity sha512-9zHkUrDudf1Ej+Mkd/BtjE23R+SXU665REK30iOWmreDPXMJk8vqdhVRRHNyPYfCFaEUaDGOgZl0G83xTdwhFw==
-
-vuex@^4:
-  version "4.1.0"
-  resolved "https://registry.npmjs.org/vuex/-/vuex-4.1.0.tgz"
-  integrity sha512-hmV6UerDrPcgbSy9ORAtNXDr9M4wlNP4pEFKye4ujJF8oqgFFuxDCdOLS3eNoRTtq5O3hoBDh9Doj1bQMYHRbQ==
-  dependencies:
-    "@vue/devtools-api" "^6.0.0-beta.11"
 
 w3c-keyname@^2.2.0:
   version "2.2.8"

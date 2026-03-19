@@ -110,7 +110,8 @@
     </div>
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapState, mapActions } from 'pinia';
+import { useFriendsStore } from '../../stores/friends';
 import Loading from '../Loading.vue';
 import FriendCard from './FriendCard';
 import FriendRequestCard from './FriendRequestCard';
@@ -124,9 +125,9 @@ export default {
         };
     },
     computed: {
-        ...mapGetters({
-            friends: 'friends/friends',
-            pendings: 'friends/pendings'
+        ...mapState(useFriendsStore, {
+            friends: 'friends',
+            pendings: 'pendings'
         }),
 
         noResult() {
@@ -138,12 +139,12 @@ export default {
         }
     },
     methods: {
-        ...mapActions({
-            search: 'friends/friendsSearch',
-            lookPeginds: 'friends/pending',
-            accept: 'friends/accept',
-            reject: 'friends/reject',
-            delete: 'friends/delete'
+        ...mapActions(useFriendsStore, {
+            search: 'friendsSearch',
+            lookPeginds: 'pending',
+            accept: 'accept',
+            reject: 'reject',
+            delete: 'delete'
         }),
 
         onTextChange() {

@@ -22,7 +22,8 @@ config/
 ├── dev.env.js           # Dev environment (API_URL, MAPS_API, etc.)
 ├── prod.env.js          # Production environment
 ├── conf.json            # Default app configuration
-e2e/                     # Playwright end-to-end tests
+e2e/                     # Playwright end-to-end tests (require backend)
+e2e-frontend/            # Playwright frontend-only tests (mocked API, no backend)
 projects/                # Multi-project branding support (carpoolear, apalancar, etc.)
 ```
 
@@ -34,9 +35,12 @@ npm run dev                    # Start dev server with hot reload (port 8080)
 npm run build                  # Production build
 npm run lint:fix               # Auto-fix ESLint issues
 
-# E2E Testing
-npm run test:e2e               # Run Playwright tests (headless)
-npm run test:e2e:ui            # Run Playwright tests with UI mode
+# Testing
+npm run test:e2e               # Run all Playwright tests (both projects)
+npm run test:frontend          # Run frontend-only tests (no backend needed)
+npm run test:e2e:only          # Run full E2E tests (backend required)
+npm run test:e2e:screenshots   # Run screenshot tests only
+npm run test:frontend:ui       # Frontend tests with Playwright UI
 npx playwright install         # Install browser binaries
 
 # Mobile

@@ -1,6 +1,4 @@
 /* jshint esversion: 6 */
-import store from '../store';
-import * as types from '../store/mutation-types';
 import { onMessage, getMessaging, getToken } from 'firebase/messaging';
 import { initializeApp } from 'firebase/app';
 import { Capacitor } from '@capacitor/core';
@@ -111,11 +109,10 @@ export default {
                 });
 
                 if (currentToken) {
-                    store.commit(
-                        'cordova/' + types.CORDOVA_DEVICE_REGISTER,
-                        currentToken
-                    );
-                    store.dispatch('device/register').catch((error) => {
+                    const { useCordovaStore } = require('../stores/cordova');
+                    const { useDeviceStore } = require('../stores/device');
+                    useCordovaStore().setDeviceId(currentToken);
+                    useDeviceStore().register().catch((error) => {
                         console.error('❌ Device registration failed:', error);
                     });
 
@@ -136,9 +133,10 @@ export default {
                         data: payload.data
                     });
 
-                    store.dispatch('cordova/notificationArrive', notification);
-                    // store.dispatch('conversations/getUnreaded');
-                    // store.dispatch('notifications/count');
+                    const { useCordovaStore } = require('../stores/cordova');
+                    useCordovaStore().notificationArrive(notification);
+                    // conversations/getUnreaded
+                    // notifications/count
 
                     // Background messages already open a notification
                     if (isBackgroundMessage) {
@@ -193,15 +191,14 @@ export default {
 
             // IMPORTANTE: Configurar listeners ANTES de registrar
             PushNotifications.addListener('registration', (token) => {
-                store.commit(
-                    'cordova/' + types.CORDOVA_DEVICE_REGISTER,
-                    token.value
-                );
+                const { useCordovaStore } = require('../stores/cordova');
+                const { useDeviceStore } = require('../stores/device');
+                useCordovaStore().setDeviceId(token.value);
 
-                // Add a small delay to ensure Vuex state is updated before registering with backend
+                // Add a small delay to ensure state is updated before registering with backend
                 setTimeout(() => {
-                    store
-                        .dispatch('device/register')
+                    useDeviceStore()
+                        .register()
                         .then(() => {})
                         .catch((error) => {
                             console.error(
@@ -232,7 +229,8 @@ export default {
                             data: notification.data || {}
                         });
                         n.foreground = true;
-                        store.dispatch('cordova/notificationArrive', n);
+                        const { useCordovaStore } = require('../stores/cordova');
+                        useCordovaStore().notificationArrive(n);
 
                         // Try to show a system notification as well
                         if (Capacitor.isNativePlatform()) {
@@ -275,7 +273,8 @@ export default {
                         n.foreground = false;
                         n.coldstart = true;
 
-                        store.dispatch('cordova/notificationArrive', n);
+                        const { useCordovaStore } = require('../stores/cordova');
+                        useCordovaStore().notificationArrive(n);
                     } catch (error) {
                         console.error('💥 === ERROR HANDLING PUSH TAP ===');
                         console.error('❌ Tap error details:', error);

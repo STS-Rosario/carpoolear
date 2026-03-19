@@ -143,7 +143,10 @@
     </div>
 </template>
 <script>
-import { mapGetters } from 'vuex';
+import { mapState } from 'pinia';
+import { useTripsStore } from '../../stores/trips';
+import { useAuthStore } from '../../stores/auth';
+import { useDeviceStore } from '../../stores/device';
 import dayjs from '../../dayjs';
 import spinner from '../Spinner.vue';
 import Transactions from '../views/transactions.vue';
@@ -155,12 +158,16 @@ export default {
     },
     props: ['sending'],
     computed: {
-        ...mapGetters({
-            trip: 'trips/currentTrip',
-            tripCardTheme: 'auth/tripCardTheme',
-            user: 'auth/user',
-            isMobile: 'device/isMobile',
-            config: 'auth/appConfig'
+        ...mapState(useTripsStore, {
+            trip: 'currentTrip'
+        }),
+        ...mapState(useAuthStore, {
+            tripCardTheme: 'tripCardTheme',
+            user: 'user',
+            config: 'appConfig'
+        }),
+        ...mapState(useDeviceStore, {
+            isMobile: 'isMobile'
         }),
         sendingStatus() {
             Object.keys(this.sending).some((k) => this.sending[k] === true);

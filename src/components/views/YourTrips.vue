@@ -108,7 +108,12 @@ import Trip from '../sections/Trip.vue';
 import Loading from '../Loading.vue';
 import PendingRequest from '../PendingRequest';
 import RatePending from '../RatePending';
-import { mapGetters, mapActions } from 'vuex';
+import { mapState, mapActions } from 'pinia';
+import { useAuthStore } from '../../stores/auth';
+import { useMyTripsStore } from '../../stores/myTrips';
+import { useSubscriptionsStore } from '../../stores/subscriptions';
+import { useTripsStore } from '../../stores/trips';
+import { useProfileStore } from '../../stores/profile';
 
 import Tab from '../elements/Tab';
 import modal from '../Modal';
@@ -148,24 +153,32 @@ export default {
         this.findSubscriptions();
     },
     computed: {
-        ...mapGetters({
-            user: 'auth/user',
-            oldTrips: 'myTrips/myOldTrips',
-            oldPassengerTrips: 'myTrips/passengerOldTrips',
-            subscriptions: 'subscriptions/subscriptions',
-            appConfig: 'auth/appConfig'
+        ...mapState(useAuthStore, {
+            user: 'user',
+            appConfig: 'appConfig'
+        }),
+        ...mapState(useMyTripsStore, {
+            oldTrips: 'myOldTrips',
+            oldPassengerTrips: 'passengerOldTrips'
+        }),
+        ...mapState(useSubscriptionsStore, {
+            subscriptions: 'subscriptions'
         })
     },
 
     methods: {
-        ...mapActions({
-            tripAsDriver: 'trips/tripAsDriver',
-            tripAsPassenger: 'trips/tripAsPassenger',
-            oldTripsAsDriver: 'trips/oldTripsAsDriver',
-            oldTripsAsPassenger: 'trips/oldTripsAsPassenger',
-            findSubscriptions: 'subscriptions/index',
-            registerDonation: 'profile/registerDonation',
-            changeProperty: 'profile/changeProperty'
+        ...mapActions(useTripsStore, {
+            tripAsDriver: 'tripAsDriver',
+            tripAsPassenger: 'tripAsPassenger',
+            oldTripsAsDriver: 'oldTripsAsDriver',
+            oldTripsAsPassenger: 'oldTripsAsPassenger'
+        }),
+        ...mapActions(useSubscriptionsStore, {
+            findSubscriptions: 'index'
+        }),
+        ...mapActions(useProfileStore, {
+            registerDonation: 'registerDonation',
+            changeProperty: 'changeProperty'
         }),
         findTrip(id) {
             if (this.trips) {

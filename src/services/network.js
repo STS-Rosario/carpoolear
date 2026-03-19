@@ -1,5 +1,4 @@
 /* jshint esversion: 6 */
-import store from '../store';
 import TaggedList from '../classes/TaggedList';
 import axios from 'axios';
 import { Capacitor } from '@capacitor/core';
@@ -49,12 +48,17 @@ export default {
     },
 
     getHeader(headers) {
-        const authHeader = store.getters['auth/authHeader'];
+        const { useAuthStore } = require('../stores/auth');
+        const { useRootStore } = require('../stores/root');
+        const authStore = useAuthStore();
+        const rootStore = useRootStore();
+
+        const authHeader = authStore.authHeader;
         Object.assign(headers, authHeader);
 
         // App version and platform for min-version / force-upgrade checks (backend)
         const platform = Capacitor.getPlatform(); // 'android' | 'ios' | 'web'
-        const appVersionInfo = store.state.appVersionInfo;
+        const appVersionInfo = rootStore.appVersionInfo;
         const version = appVersionInfo ? appVersionInfo.version : (typeof window !== 'undefined' && window.appVersion ? window.appVersion : '0');
         const versionSource = appVersionInfo ? appVersionInfo.versionSource : 'fallback';
         headers['X-App-Platform'] = platform;
