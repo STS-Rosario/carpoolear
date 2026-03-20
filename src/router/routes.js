@@ -366,6 +366,24 @@ export default [
                         }
                     }
                 }
+            },
+            {
+                path: 'debug',
+                name: 'debug_setting',
+                component: require('../components/sections/Debug.vue').default,
+                meta: {
+                    tab: 'debug',
+                    actionbar: {
+                        footer: {
+                            show: true,
+                            active_id: 'profile'
+                        },
+                        header: {
+                            titleKey: 'debug',
+                            buttons: ['menu']
+                        }
+                    }
+                }
             }
         ]
     },

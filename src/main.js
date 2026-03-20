@@ -29,6 +29,7 @@ import i18n, {
 
 import bus from './services/bus-event';
 import { DebugApi } from './services/api';
+import { init as initDebugLogger } from './services/debug';
 
 // Capacitor plugins
 import { StatusBar, Style } from '@capacitor/status-bar';
@@ -45,6 +46,10 @@ export { appLocaleToBCP47, appLocaleToRoutingLanguage };
 const ROUTE_BASE = process.env.ROUTE_BASE;
 
 const debugApi = new DebugApi();
+
+// Initialize debug logger: clear logs on app init, patch console if debug mode enabled
+initDebugLogger();
+
 const cordovaTag = document.createElement('script');
 const cordovaPath = 'cordova.js';
 console.log('ROUTE_BASE', ROUTE_BASE, cordovaPath);
