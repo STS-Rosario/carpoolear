@@ -13,6 +13,19 @@ const router = createRouter({
 
 router.rememberRoute = null;
 
+router.afterEach((to) => {
+    try {
+        const { getInstance } = require('../services/debug');
+        const instance = getInstance();
+        if (instance && instance.isEnabled()) {
+            const url = (to.fullPath || to.path || window.location.href);
+            console.log('[DEBUG] Navigation:', url);
+        }
+    } catch (e) {
+        // Debug service not ready
+    }
+});
+
 router.beforeEach((to, from, next) => {
     const { useAuthStore } = require('../stores/auth');
     const { useActionbarsStore } = require('../stores/actionbars');

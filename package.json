@@ -27,7 +27,8 @@
     "test:e2e:screenshots": "npx playwright test --project=frontend e2e-frontend/screenshots.spec.js",
     "test:e2e:screenshots:update": "npx playwright test --project=frontend e2e-frontend/screenshots.spec.js --update-snapshots",
     "test:frontend": "npx playwright test --project=frontend",
-    "test:frontend:ui": "npx playwright test --project=frontend --ui"
+    "test:frontend:ui": "npx playwright test --project=frontend --ui",
+    "test:unit": "vitest"
   },
   "dependencies": {
     "@capacitor/android": "^7.4.3",
@@ -138,6 +139,7 @@
     "webpack-cli": "^3.3.6",
     "webpack-dev-server": "^3.7.2",
     "webpack-merge": "^4.2.1",
+    "vitest": "^2.1.0",
     "xml2js": "^0.4.19"
   },
   "browserslist": [

@@ -18,6 +18,11 @@
                             >{{ $t('validarIdentidad') }}</router-link
                         >
                     </li>
+                    <li :class="{ active: tabActive === 'debug' }">
+                        <router-link :to="{ name: 'debug_setting' }"
+                            >{{ $t('debug') }}</router-link
+                        >
+                    </li>
                     <!--
                     <li>
                         <a href="#">Dispositivos</a>
