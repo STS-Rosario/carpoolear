@@ -22,14 +22,14 @@ function createDebugLogger(options = {}) {
         getItem: () => Promise.resolve(null),
         setItem: () => Promise.resolve()
     };
-    const getDeviceInfo = options.getDeviceInfo || (function () {
+    const getDeviceInfo = options.getDeviceInfo || function () {
         return {
             appVersion: (typeof window !== 'undefined' && window.appVersion) || 'unknown',
             device: (typeof window !== 'undefined' && window.device) || { platform: 'unknown', model: 'unknown', osVersion: 'unknown' },
             notificationPermission: typeof window !== 'undefined' && window.Notification ? window.Notification.permission : 'unknown',
             networkOnline: (typeof navigator !== 'undefined' && navigator.onLine !== undefined) ? navigator.onLine : true
         };
-    });
+    };
 
     let logBuffer = [];
     let enabled = false;
