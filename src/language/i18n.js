@@ -265,7 +265,7 @@ const messages = {
         inicio: 'Inicio',
         mensajes: 'Mensajes',
         perfil: 'Perfil',
-        validarIdentidad: 'Verificar cuenta',
+        validarIdentidad: 'Verificación de cuenta',
         debug: 'Debug',
         debugMode: 'Modo debug',
         debugModeOn: 'Activado',
@@ -313,6 +313,18 @@ const messages = {
             'A partir de hoy tenés {days} días para verificar tu cuenta, luego será obligatoria para poder publicar viajes o enviar mensajes.',
         identidadModalValidar: 'Verificar cuenta',
         identidadModalMasTarde: 'Más tarde',
+        identityValidationPageIntro:
+            'Para mantener la seguridad de la comunidad, necesitamos confirmar tu identidad.',
+        identityValidationPageBullet1: 'Evitar perfiles falsos.',
+        identityValidationPageBullet2: 'Asegurar que cada persona tenga una sola cuenta.',
+        identityValidationPageBullet3: 'Mejorar la confianza entre quienes comparten viajes.',
+        identityValidationAutoCardDesc:
+            'Validá con tu cuenta de Mercado Pago. El sistema contrasta los datos con RENAPER.',
+        identityValidationManualCardDesc:
+            'Si no tenés Mercado Pago o preferís no usarlo, podés enviar documentación para que nuestro equipo la revise.',
+        identityValidationCostLine: 'Costo: {cost}',
+        identityValidationTimeLine: 'Tiempo de validación: hasta 48 hs hábiles',
+        solicitarVerificacionManual: 'Solicitar verificación manual',
         validadoEl: 'Verificado el',
         validarConMercadoPago: 'Verificar con Mercado Pago',
         validarConMercadoPagoDesc:
@@ -1250,7 +1262,7 @@ const messages = {
             'Escribe una referencia sobre el usuario',
         comentar: 'Comment',
         miPerfil: 'Mi perfil',
-        validarIdentidad: 'Verificar cuenta',
+        validarIdentidad: 'Verificación de cuenta',
         debug: 'Debug',
         debugMode: 'Modo debug',
         debugModeOn: 'Activado',
@@ -1299,6 +1311,18 @@ const messages = {
             'A partir de hoy tenés {days} días para verificar tu cuenta, luego será obligatoria para poder publicar viajes o enviar mensajes.',
         identidadModalValidar: 'Verificar cuenta',
         identidadModalMasTarde: 'Más tarde',
+        identityValidationPageIntro:
+            'Para mantener la seguridad de la comunidad, necesitamos confirmar tu identidad.',
+        identityValidationPageBullet1: 'Evitar perfiles falsos.',
+        identityValidationPageBullet2: 'Asegurar que cada persona tenga una sola cuenta.',
+        identityValidationPageBullet3: 'Mejorar la confianza entre quienes comparten viajes.',
+        identityValidationAutoCardDesc:
+            'Validá con tu cuenta de Mercado Pago. El sistema contrasta los datos con RENAPER.',
+        identityValidationManualCardDesc:
+            'Si no tenés Mercado Pago o preferís no usarlo, podés enviar documentación para que nuestro equipo la revise.',
+        identityValidationCostLine: 'Costo: {cost}',
+        identityValidationTimeLine: 'Tiempo de validación: hasta 48 hs hábiles',
+        solicitarVerificacionManual: 'Solicitar verificación manual',
         validadoEl: 'Verificado el',
         validarConMercadoPago: 'Verificar con Mercado Pago',
         validarConMercadoPagoDesc:
@@ -2074,7 +2098,7 @@ const messages = {
         inicio: 'Home',
         mensajes: 'Messages',
         perfil: 'Profile',
-        validarIdentidad: 'Verify account',
+        validarIdentidad: 'Account verification',
         debug: 'Debug',
         debugMode: 'Debug mode',
         debugModeOn: 'On',
@@ -2089,6 +2113,18 @@ const messages = {
         validarConMercadoPago: 'Verify with Mercado Pago',
         validarConMercadoPagoDesc:
             'Verify your account with Mercado Pago (RENAPER).',
+        identityValidationPageIntro:
+            'To keep the community safe, we need to confirm your identity.',
+        identityValidationPageBullet1: 'Reduce fake profiles.',
+        identityValidationPageBullet2: 'Ensure each person has only one account.',
+        identityValidationPageBullet3: 'Build trust among people sharing trips.',
+        identityValidationAutoCardDesc:
+            'Verify with your Mercado Pago account. The system checks your data against RENAPER.',
+        identityValidationManualCardDesc:
+            "If you don't have Mercado Pago or prefer not to use it, you can send documents for our team to review.",
+        identityValidationCostLine: 'Cost: {cost}',
+        identityValidationTimeLine: 'Validation time: up to 48 business hours',
+        solicitarVerificacionManual: 'Request manual verification',
         validacionManual: 'Manual verification',
         validacionManualDescCorta:
             "If you don't want or can't use Mercado Pago, you can request manual verification (at a cost).",

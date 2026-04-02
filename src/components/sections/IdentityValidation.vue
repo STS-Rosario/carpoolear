@@ -79,31 +79,63 @@
                 </div>
             </div>
 
-            <div v-else class="list-group">
-                <div v-if="identityValidationMpEnabled" class="list-group-item">
-                    <h4>{{ $t('validarConMercadoPago') }}</h4>
-                    <p class="text-muted">{{ $t('validarConMercadoPagoDesc') }}</p>
-                    <button
-                        class="btn btn-primary"
-                        :disabled="!user || !user.nro_doc || loadingOAuth"
-                        @click="startMercadoPagoOAuth"
+            <div v-else class="identity-validation-main">
+                <header class="identity-validation-intro">
+                    <h1 class="identity-validation-title visible-xs-block">{{ $t('validarIdentidad') }}</h1>
+                    <p class="identity-validation-lead">{{ $t('identityValidationPageIntro') }}</p>
+                    <ul class="identity-validation-bullets">
+                        <li>{{ $t('identityValidationPageBullet1') }}</li>
+                        <li>{{ $t('identityValidationPageBullet2') }}</li>
+                        <li>{{ $t('identityValidationPageBullet3') }}</li>
+                    </ul>
+                    <p class="identity-validation-once">{{ $t('identidadModalUnaVez') }}</p>
+                </header>
+
+                <div class="identity-validation-cards">
+                    <div
+                        v-if="identityValidationMpEnabled"
+                        class="identity-validation-card"
                     >
-                        <span v-if="loadingOAuth">{{ $t('guardando') }}</span>
-                        <span v-else>{{ $t('validarConMercadoPago') }}</span>
-                    </button>
-                    <p v-if="user && !user.nro_doc" class="text-warning small mt-2">
-                        {{ $t('debesCargarDni') }}
-                    </p>
+                        <h2 class="identity-validation-card-title">{{ $t('identidadModalAutoTitulo') }}</h2>
+                        <p class="identity-validation-card-desc">{{ $t('identityValidationAutoCardDesc') }}</p>
+                        <ul class="identity-validation-card-bullets">
+                            <li>{{ $t('identidadModalAutoGratis') }}</li>
+                            <li>{{ $t('identidadModalAutoInmediata') }}</li>
+                        </ul>
+                        <button
+                            type="button"
+                            class="btn btn-danger btn-lg btn-block identity-validation-btn-cta"
+                            :disabled="!user || !user.nro_doc || loadingOAuth"
+                            @click="startMercadoPagoOAuth"
+                        >
+                            <span v-if="loadingOAuth">{{ $t('guardando') }}</span>
+                            <span v-else>{{ $t('validarConMercadoPago') }}</span>
+                        </button>
+                        <p v-if="user && !user.nro_doc" class="small identity-validation-hint">
+                            {{ $t('debesCargarDni') }}
+                        </p>
+                    </div>
+
+                    <div
+                        v-if="identityValidationManualEnabled"
+                        class="identity-validation-card"
+                    >
+                        <h2 class="identity-validation-card-title">{{ $t('identidadModalManualTitulo') }}</h2>
+                        <p class="identity-validation-card-desc">{{ $t('identityValidationManualCardDesc') }}</p>
+                        <ul class="identity-validation-card-bullets">
+                            <li>
+                                {{ $t('identityValidationCostLine', { cost: formattedManualCost }) }}
+                            </li>
+                            <li>{{ $t('identityValidationTimeLine') }}</li>
+                        </ul>
+                        <router-link
+                            :to="{ name: 'identity_validation_manual' }"
+                            class="btn btn-lg btn-block identity-validation-btn-outline"
+                        >
+                            {{ $t('solicitarVerificacionManual') }}
+                        </router-link>
+                    </div>
                 </div>
-                <router-link
-                    v-if="identityValidationManualEnabled"
-                    :to="{ name: 'identity_validation_manual' }"
-                    class="list-group-item list-group-item-action"
-                >
-                    <h4>{{ $t('validacionManual') }}</h4>
-                    <p class="text-muted">{{ $t('validacionManualDescCorta') }}</p>
-                    <span class="btn btn-default btn-sm">{{ $t('validacionManual') }}</span>
-                </router-link>
             </div>
         </div>
     </div>
@@ -147,6 +179,20 @@ export default {
         },
         resultMessage() {
             return this.$route.query.result || null;
+        },
+        formattedManualCost() {
+            const cents =
+                this.config && this.config.manual_identity_validation_cost_cents;
+            if (cents == null || Number(cents) <= 0) {
+                return '—';
+            }
+            const loc = this.$i18n.locale === 'en' ? 'en-US' : 'es-AR';
+            return new Intl.NumberFormat(loc, {
+                style: 'currency',
+                currency: 'ARS',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(Number(cents) / 100);
         },
         /** Why "Validar con Mercado Pago" is disabled (for debugging) */
         mercadopagoButtonDisabledReason() {
@@ -238,13 +284,185 @@ export default {
 
 <style scoped>
 .identity-validation-component {
+    margin-top: 4rem;
     padding: 0 0 1em 0;
+    color: #333;
 }
+
+.identity-validation-component .btn-primary,
+.identity-validation-component .btn-danger {
+    color: #fff;
+}
+
+.identity-validation-component .btn-primary[disabled],
+.identity-validation-component .btn-danger[disabled] {
+    color: #fff;
+    opacity: 0.65;
+}
+
+.identity-validation-component .identity-validation-btn-outline {
+    color: #337ab7;
+}
+
+.identity-validation-component .identity-validation-btn-outline:hover,
+.identity-validation-component .identity-validation-btn-outline:focus {
+    color: #286090;
+}
+
+.identity-validation-component .alert {
+    color: #333;
+}
+
 .manual-status-panel {
     margin-bottom: 1.5em;
 }
+
 .review-note {
     font-style: italic;
-    color: #666;
+    color: #333;
+}
+
+.identity-validation-main {
+    padding: 0 0 0.5rem;
+}
+
+@media (min-width: 768px) {
+    .identity-validation-main {
+        background: #fff;
+        border-radius: 6px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+        padding: 1.75rem 2rem 2rem;
+    }
+}
+
+.identity-validation-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 0.75rem;
+    line-height: 1.3;
+    color: #333;
+}
+
+.identity-validation-lead {
+    margin: 0 0 1rem;
+    line-height: 1.5;
+    color: #333;
+}
+
+/* Bullets only on this screen — scoped to root, not global `ul` */
+.identity-validation-component .identity-validation-bullets,
+.identity-validation-component .identity-validation-card-bullets {
+    list-style-type: disc;
+    list-style-position: outside;
+    padding-left: 1.5rem;
+    margin-left: 0;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #333;
+}
+
+.identity-validation-component .identity-validation-bullets {
+    margin: 0 0 1rem;
+}
+
+.identity-validation-component .identity-validation-bullets li,
+.identity-validation-component .identity-validation-card-bullets li {
+    display: list-item;
+}
+
+.identity-validation-component .identity-validation-bullets li {
+    margin-bottom: 0.35rem;
+}
+
+.identity-validation-once {
+    margin: 0 0 1.75rem;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+.identity-validation-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+@media (min-width: 768px) {
+    .identity-validation-cards {
+        flex-direction: row;
+        align-items: stretch;
+        gap: 1.5rem;
+    }
+
+    .identity-validation-cards .identity-validation-card {
+        flex: 1 1 0;
+        min-width: 0;
+    }
+}
+
+.identity-validation-card {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 1.25rem 1.25rem 1.5rem;
+    background: #fff;
+}
+
+@media (min-width: 768px) {
+    .identity-validation-main .identity-validation-card {
+        background: #fafafa;
+    }
+}
+
+.identity-validation-card-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0 0 0.75rem;
+    line-height: 1.3;
+    color: #333;
+}
+
+.identity-validation-card-desc {
+    margin: 0 0 1rem;
+    line-height: 1.5;
+    color: #333;
+    font-size: 0.95rem;
+}
+
+.identity-validation-component .identity-validation-card-bullets {
+    margin: 0 0 1.25rem;
+}
+
+.identity-validation-component .identity-validation-card-bullets li {
+    margin-bottom: 0.25rem;
+}
+
+.identity-validation-btn-cta {
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    border-radius: 4px;
+}
+
+.identity-validation-btn-outline {
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    border-radius: 4px;
+    background: #fff;
+    border: 2px solid #337ab7;
+    color: #337ab7;
+}
+
+.identity-validation-btn-outline:hover,
+.identity-validation-btn-outline:focus {
+    background: #f5f9fc;
+    border-color: #286090;
+    color: #286090;
+    text-decoration: none;
+}
+
+.identity-validation-hint {
+    margin-top: 0.75rem;
+    margin-bottom: 0;
+    color: #333;
 }
 </style>
