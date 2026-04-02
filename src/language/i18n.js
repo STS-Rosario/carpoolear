@@ -284,19 +284,41 @@ const messages = {
             '¿Remover la validación de identidad de este usuario? Se borrarán todos los datos de validación.',
         validacionIdentidadRemovida: 'Validación de identidad removida.',
         debesValidarIdentidadParaAccion:
-            'Debes validar tu identidad para realizar esta acción.',
+            'Debes verificar tu cuenta para realizar esta acción.',
         validacionProntoBanner:
-            'Validá tu identidad o no podrás publicar viajes ni enviar mensajes. Tiempo restante: {countdown}',
+            'Verificá tu cuenta o no podrás publicar viajes ni enviar mensajes. Tiempo restante: {countdown}',
         validacionProntoBannerTiempoCumplido:
-            'Tenés que validar tu identidad para publicar viajes o enviar mensajes.',
+            'Tenés que verificar tu cuenta para publicar viajes o enviar mensajes.',
         validacionProntoBannerDias: 'días',
         validacionProntoBannerHs: 'hs',
         validacionProntoBannerMin: 'min',
         validacionProntoBannerS: 's',
+        identidadModalTitle: 'Verificá tu cuenta',
+        identidadModalIntro:
+            'Para seguir mejorando la seguridad de la comunidad, ahora todas las cuentas de Carpoolear deberán estar verificadas.',
+        identidadModalEnfasis:
+            'La verificación confirma que cada perfil corresponde a una persona real y que cada miembro tenga una única cuenta.',
+        identidadModalOpcionesTitulo:
+            'Podés verificar tu cuenta de dos maneras:',
+        identidadModalUnaOpcion:
+            'Podés verificar tu cuenta de la siguiente manera:',
+        identidadModalAutoTitulo: 'Verificación automática',
+        identidadModalAutoMp: 'Con tu cuenta de Mercado Pago',
+        identidadModalAutoGratis: 'Sin costo',
+        identidadModalAutoInmediata: 'Validación inmediata',
+        identidadModalManualTitulo: 'Verificación manual',
+        identidadModalManualEquipo: 'Revisada por el equipo Carpoolear',
+        identidadModalManualCosto: 'Tiene un costo de {cost}',
+        identidadModalManualPlazo: 'Se aprueba dentro de 48 hs hábiles',
+        identidadModalUnaVez: 'La verificación sólo se realiza una vez.',
+        identidadModalPlazoInfo:
+            'A partir de hoy tenés {days} días para verificar tu cuenta, luego será obligatoria para poder publicar viajes o enviar mensajes.',
+        identidadModalValidar: 'Verificar cuenta',
+        identidadModalMasTarde: 'Más tarde',
         validadoEl: 'Validado el',
         validarConMercadoPago: 'Validar con Mercado Pago',
         validarConMercadoPagoDesc:
-            'Validá tu identidad usando tu cuenta de Mercado Pago (RENAPER).',
+            'Verificá tu cuenta con Mercado Pago (RENAPER).',
         validacionManual: 'Validación manual',
         validacionManualDescCorta:
             'Si no podés o no querés usar Mercado Pago, podés solicitar una validación manual (con costo).',
@@ -331,7 +353,7 @@ const messages = {
         debesCargarDni:
             'Debés cargar tu DNI en tu perfil para validar con Mercado Pago.',
         validacionManualDescripcion:
-            'Si no querés o no podés usar Mercado Pago (RENAPER) para validar tu identidad, podés solicitar una validación manual. Un equipo revisará tu documentación. Tiene un costo que se abona con Mercado Pago.',
+            'Si no querés o no podés usar Mercado Pago (RENAPER) para verificar tu cuenta, podés solicitar una validación manual. Un equipo revisará tu documentación. Tiene un costo que se abona con Mercado Pago.',
         costoValidacionManual: 'Costo de la validación manual',
         pagarYContinuar: 'Pagar y continuar',
         pagarConQR: 'Pagar con QR',
@@ -1248,19 +1270,41 @@ const messages = {
             '¿Remover la validación de identidad de este usuario? Se borrarán todos los datos de validación.',
         validacionIdentidadRemovida: 'Validación de identidad removida.',
         debesValidarIdentidadParaAccion:
-            'Debes validar tu identidad para realizar esta acción.',
+            'Debes verificar tu cuenta para realizar esta acción.',
         validacionProntoBanner:
-            'Validá tu identidad o no podrás publicar viajes ni enviar mensajes. Tiempo restante: {countdown}',
+            'Verificá tu cuenta o no podrás publicar viajes ni enviar mensajes. Tiempo restante: {countdown}',
         validacionProntoBannerTiempoCumplido:
-            'Tenés que validar tu identidad para publicar viajes o enviar mensajes.',
+            'Tenés que verificar tu cuenta para publicar viajes o enviar mensajes.',
         validacionProntoBannerDias: 'días',
         validacionProntoBannerHs: 'hs',
         validacionProntoBannerMin: 'min',
         validacionProntoBannerS: 's',
+        identidadModalTitle: 'Verificá tu cuenta',
+        identidadModalIntro:
+            'Para seguir mejorando la seguridad de la comunidad, ahora todas las cuentas de Carpoolear deberán estar verificadas.',
+        identidadModalEnfasis:
+            'La verificación confirma que cada perfil corresponde a una persona real y que cada miembro tenga una única cuenta.',
+        identidadModalOpcionesTitulo:
+            'Podés verificar tu cuenta de dos maneras:',
+        identidadModalUnaOpcion:
+            'Podés verificar tu cuenta de la siguiente manera:',
+        identidadModalAutoTitulo: 'Verificación automática',
+        identidadModalAutoMp: 'Con tu cuenta de Mercado Pago',
+        identidadModalAutoGratis: 'Sin costo',
+        identidadModalAutoInmediata: 'Validación inmediata',
+        identidadModalManualTitulo: 'Verificación manual',
+        identidadModalManualEquipo: 'Revisada por el equipo Carpoolear',
+        identidadModalManualCosto: 'Tiene un costo de {cost}',
+        identidadModalManualPlazo: 'Se aprueba dentro de 48 hs hábiles',
+        identidadModalUnaVez: 'La verificación sólo se realiza una vez.',
+        identidadModalPlazoInfo:
+            'A partir de hoy tenés {days} días para verificar tu cuenta, luego será obligatoria para poder publicar viajes o enviar mensajes.',
+        identidadModalValidar: 'Verificar cuenta',
+        identidadModalMasTarde: 'Más tarde',
         validadoEl: 'Validado el',
         validarConMercadoPago: 'Validar con Mercado Pago',
         validarConMercadoPagoDesc:
-            'Validá tu identidad usando tu cuenta de Mercado Pago (RENAPER).',
+            'Verificá tu cuenta con Mercado Pago (RENAPER).',
         validacionManual: 'Validación manual',
         validacionManualDescCorta:
             'Si no podés o no querés usar Mercado Pago, podés solicitar una validación manual (con costo).',
@@ -1295,7 +1339,7 @@ const messages = {
         debesCargarDni:
             'Debés cargar tu DNI en tu perfil para validar con Mercado Pago.',
         validacionManualDescripcion:
-            'Si no querés o no podés usar Mercado Pago (RENAPER) para validar tu identidad, podés solicitar una validación manual. Un equipo revisará tu documentación. Tiene un costo que se abona con Mercado Pago.',
+            'Si no querés o no podés usar Mercado Pago (RENAPER) para verificar tu cuenta, podés solicitar una validación manual. Un equipo revisará tu documentación. Tiene un costo que se abona con Mercado Pago.',
         costoValidacionManual: 'Costo de la validación manual',
         pagarYContinuar: 'Pagar y continuar',
         pagarConQR: 'Pagar con QR',
@@ -2048,7 +2092,7 @@ const messages = {
         validadoEl: 'Validated on',
         validarConMercadoPago: 'Validate with Mercado Pago',
         validarConMercadoPagoDesc:
-            'Validate your identity using your Mercado Pago account (RENAPER).',
+            'Verify your account with Mercado Pago (RENAPER).',
         validacionManual: 'Manual validation',
         validacionManualDescCorta:
             "If you don't want or can't use Mercado Pago, you can request manual validation (at a cost).",
@@ -2084,7 +2128,7 @@ const messages = {
         debesCargarDni:
             'You must add your DNI to your profile to validate with Mercado Pago.',
         validacionManualDescripcion:
-            "If you don't want or can't use Mercado Pago (RENAPER) to validate your identity, you can request manual validation. A team will review your documentation. There is a cost payable via Mercado Pago.",
+            "If you don't want or can't use Mercado Pago (RENAPER) to verify your account, you can request manual validation. A team will review your documentation. There is a cost payable via Mercado Pago.",
         costoValidacionManual: 'Manual validation cost',
         pagarYContinuar: 'Pay and continue',
         pagarConQR: 'Pay with QR',
@@ -2133,15 +2177,35 @@ const messages = {
             'Remove identity validation for this user? All validation data will be cleared.',
         validacionIdentidadRemovida: 'Identity validation removed.',
         debesValidarIdentidadParaAccion:
-            'You must validate your identity to perform this action.',
+            'You must verify your account to perform this action.',
         validacionProntoBanner:
-            "Validate your identity or you won't be able to post trips or send messages. Time remaining: {countdown}",
+            "Verify your account or you won't be able to post trips or send messages. Time remaining: {countdown}",
         validacionProntoBannerTiempoCumplido:
-            'You need to validate your identity to post trips or send messages.',
+            'You need to verify your account to post trips or send messages.',
         validacionProntoBannerDias: 'days',
         validacionProntoBannerHs: 'h',
         validacionProntoBannerMin: 'min',
         validacionProntoBannerS: 's',
+        identidadModalTitle: 'Verify your account',
+        identidadModalIntro:
+            'To keep improving community safety, all Carpoolear accounts must now be verified.',
+        identidadModalEnfasis:
+            'Verification confirms that each profile belongs to a real person and that each member has only one account.',
+        identidadModalOpcionesTitulo: 'You can verify your account in two ways:',
+        identidadModalUnaOpcion: 'You can verify your account as follows:',
+        identidadModalAutoTitulo: 'Automatic verification',
+        identidadModalAutoMp: 'With your Mercado Pago account',
+        identidadModalAutoGratis: 'No cost',
+        identidadModalAutoInmediata: 'Instant validation',
+        identidadModalManualTitulo: 'Manual verification',
+        identidadModalManualEquipo: 'Reviewed by the Carpoolear team',
+        identidadModalManualCosto: 'There is a cost of {cost}',
+        identidadModalManualPlazo: 'Approved within 48 business hours',
+        identidadModalUnaVez: 'You only verify once.',
+        identidadModalPlazoInfo:
+            'From today you have {days} days to verify your account; after that it will be required to post trips or send messages.',
+        identidadModalValidar: 'Verify account',
+        identidadModalMasTarde: 'Remind me later',
         identidadNoValidada: 'Not validated',
         validarUsuario: 'Validate user',
         validadoPor: 'Validated by',
