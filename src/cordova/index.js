@@ -11,7 +11,7 @@ import config from '../../config/conf.json';
 console.log('CORDOVA INDEX.JS IS LOADING!');
 
 window.facebook = facebook;
-window.appVersion = '3.1.6';
+window.appVersion = '3.1.8';
 
 function getCordovaStore () {
     const { useCordovaStore } = require('../stores/cordova');
