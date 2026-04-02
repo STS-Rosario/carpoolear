@@ -32,10 +32,10 @@
             </div>
             <div class="col-xs-24 col-sm-19">
                 <h1
-                    v-if="$route.name === 'identity_validation'"
+                    v-if="settingsIdentityPageTitleKey"
                     class="settings-identity-page-title hidden-xs"
                 >
-                    {{ $t('validarIdentidad') }}
+                    {{ $t(settingsIdentityPageTitleKey) }}
                 </h1>
                 <router-view></router-view>
             </div>
@@ -64,6 +64,12 @@ export default {
         identityValidationAvailable() {
             const c = this.config;
             return c && (c.identity_validation_mercado_pago_enabled === true || c.identity_validation_manual_enabled === true);
+        },
+        settingsIdentityPageTitleKey() {
+            const n = this.$route.name;
+            if (n === 'identity_validation') return 'validarIdentidad';
+            if (n === 'identity_validation_manual') return 'validacionManual';
+            return null;
         }
     },
     methods: {},
@@ -81,7 +87,7 @@ export default {
     font-weight: 700;
     margin: 0 0 1rem;
     line-height: 1.3;
-    color: #222;
+    color: #333;
 }
 
 @media only screen and (min-width: 768px) {

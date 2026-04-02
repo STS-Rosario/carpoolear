@@ -440,6 +440,7 @@ export default {
     font-weight: 600;
     letter-spacing: 0.02em;
     border-radius: 4px;
+    font-size: 1.125rem;
 }
 
 .identity-validation-btn-outline {
@@ -447,6 +448,7 @@ export default {
     font-weight: 600;
     letter-spacing: 0.02em;
     border-radius: 4px;
+    font-size: 1.125rem;
     background: #fff;
     border: 2px solid #337ab7;
     color: #337ab7;
