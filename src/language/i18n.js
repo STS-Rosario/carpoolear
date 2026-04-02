@@ -369,6 +369,16 @@ const messages = {
         costoValidacionManual: 'Costo de la verificación manual',
         pagarYContinuar: 'Pagar y continuar',
         pagarConQR: 'Pagar con QR',
+        manualValidationPayIntro1:
+            'Primero deberás realizar el pago de la verificación manual, que tiene un costo de {cost}.',
+        manualValidationPayIntro2:
+            'Una vez confirmado, te pediremos que cargues la documentación.',
+        manualValidationPayListLead: 'Tené a mano:',
+        manualValidationPayBulletDni: 'Tu DNI',
+        manualValidationPayBulletSelfie: 'Una foto tuya con el DNI',
+        manualValidationPayClosing:
+            'Esto nos permitirá verificar tu identidad correctamente.',
+        manualValidationPagarMercadoPago: 'Pagar con Mercado Pago',
         escaneáConAppMercadoPago: 'Escaneá con la app de Mercado Pago',
         qrExpiraEn: 'El QR expira en 15 minutos.',
         validacionManualNoDisponible:
@@ -1367,6 +1377,16 @@ const messages = {
         costoValidacionManual: 'Costo de la verificación manual',
         pagarYContinuar: 'Pagar y continuar',
         pagarConQR: 'Pagar con QR',
+        manualValidationPayIntro1:
+            'Primero deberás realizar el pago de la verificación manual, que tiene un costo de {cost}.',
+        manualValidationPayIntro2:
+            'Una vez confirmado, te pediremos que cargues la documentación.',
+        manualValidationPayListLead: 'Tené a mano:',
+        manualValidationPayBulletDni: 'Tu DNI',
+        manualValidationPayBulletSelfie: 'Una foto tuya con el DNI',
+        manualValidationPayClosing:
+            'Esto nos permitirá verificar tu identidad correctamente.',
+        manualValidationPagarMercadoPago: 'Pagar con Mercado Pago',
         escaneáConAppMercadoPago: 'Escaneá con la app de Mercado Pago',
         qrExpiraEn: 'El QR expira en 15 minutos.',
         validacionManualNoDisponible:
@@ -2168,6 +2188,16 @@ const messages = {
         costoValidacionManual: 'Manual verification cost',
         pagarYContinuar: 'Pay and continue',
         pagarConQR: 'Pay with QR',
+        manualValidationPayIntro1:
+            'First you need to pay for manual verification, which costs {cost}.',
+        manualValidationPayIntro2:
+            'Once confirmed, we will ask you to upload your documents.',
+        manualValidationPayListLead: 'Have ready:',
+        manualValidationPayBulletDni: 'Your national ID (DNI)',
+        manualValidationPayBulletSelfie: 'A photo of yourself with your ID',
+        manualValidationPayClosing:
+            'This allows us to verify your identity correctly.',
+        manualValidationPagarMercadoPago: 'Pay with Mercado Pago',
         escaneáConAppMercadoPago: 'Scan with the Mercado Pago app',
         qrExpiraEn: 'The QR code expires in 15 minutes.',
         validacionManualNoDisponible:
