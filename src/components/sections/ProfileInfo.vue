@@ -130,6 +130,13 @@
                         {{ $t('verAmigos') }}
                     </router-link>
                     <router-link
+                        class="btn btn-primary"
+                        tag="button"
+                        :to="{ name: 'debug_setting' }"
+                    >
+                        {{ $t('debug') }}
+                    </router-link>
+                    <router-link
                         v-if="config && config.module_trip_seats_payment"
                         class="btn btn-primary"
                         tag="button"
