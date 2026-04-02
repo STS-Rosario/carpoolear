@@ -356,7 +356,7 @@ export default {
     list-style-position: outside;
     padding-left: 1.5rem;
     margin-left: 0;
-    font-size: 1rem;
+    font-size: 0.9rem;
     line-height: 1.5;
     color: #333;
 }
