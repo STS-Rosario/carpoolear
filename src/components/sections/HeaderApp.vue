@@ -23,7 +23,10 @@
             </div>
             <div
                 class="actionbar_section actionbar_title"
-                :class="subTitle !== '' ? 'header--with-subtitle' : ''"
+                :class="[
+                    subTitle !== '' ? 'header--with-subtitle' : '',
+                    actionbarTitleWidthClass
+                ]"
             >
                 <div
                     class="header--image circle-box"
@@ -389,6 +392,12 @@ export default {
         currentLocaleShortLabel() {
             const short = { arg: 'ES', en: 'EN' };
             return short[this.$i18n.locale] || 'ES';
+        },
+        actionbarTitleWidthClass() {
+            const n = this.$route && this.$route.name;
+            return n === 'identity_validation' || n === 'identity_validation_manual'
+                ? 'actionbar_title--settings-wide'
+                : '';
         }
     },
 

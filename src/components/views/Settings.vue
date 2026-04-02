@@ -31,6 +31,12 @@
                 </ul>
             </div>
             <div class="col-xs-24 col-sm-19">
+                <h1
+                    v-if="$route.name === 'identity_validation'"
+                    class="settings-identity-page-title hidden-xs"
+                >
+                    {{ $t('validarIdentidad') }}
+                </h1>
                 <router-view></router-view>
             </div>
         </div>
@@ -70,6 +76,14 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.settings-identity-page-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 1rem;
+    line-height: 1.3;
+    color: #222;
+}
+
 @media only screen and (min-width: 768px) {
     .settings-component {
         margin: 2em;

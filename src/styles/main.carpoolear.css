@@ -1999,6 +1999,13 @@ textarea {
     margin-left: .5em;
 }
 
+/* Long titles on cuenta / identity settings (base.css caps title at 50% width) */
+.actionbar_title.actionbar_title--settings-wide {
+    max-width: 72%;
+    font-size: 18px;
+    font-weight: 600;
+}
+
 .footer-component {
     color: white;
     background-color: #33363A;
