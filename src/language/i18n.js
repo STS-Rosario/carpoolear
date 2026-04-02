@@ -284,9 +284,9 @@ const messages = {
         debesValidarIdentidadParaAccion:
             'Debes validar tu identidad para realizar esta acción.',
         validacionProntoBanner:
-            'Pronto tendrás que validar tu perfil para usar la app. Click acá para hacerlo. Tiempo restante: {countdown}',
+            'Validá tu identidad o no podrás publicar viajes ni enviar mensajes. Tiempo restante: {countdown}',
         validacionProntoBannerTiempoCumplido:
-            'Pronto tendrás que validar tu perfil para usar la app. Click acá para hacerlo. Tiempo cumplido.',
+            'Tenés que validar tu identidad para publicar viajes o enviar mensajes.',
         validacionProntoBannerDias: 'días',
         validacionProntoBannerHs: 'hs',
         validacionProntoBannerMin: 'min',
@@ -1248,9 +1248,9 @@ const messages = {
         debesValidarIdentidadParaAccion:
             'Debes validar tu identidad para realizar esta acción.',
         validacionProntoBanner:
-            'Pronto tendrás que validar tu perfil para usar la app. Click acá para hacerlo. Tiempo restante: {countdown}',
+            'Validá tu identidad o no podrás publicar viajes ni enviar mensajes. Tiempo restante: {countdown}',
         validacionProntoBannerTiempoCumplido:
-            'Pronto tendrás que validar tu perfil para usar la app. Click acá para hacerlo. Tiempo cumplido.',
+            'Tenés que validar tu identidad para publicar viajes o enviar mensajes.',
         validacionProntoBannerDias: 'días',
         validacionProntoBannerHs: 'hs',
         validacionProntoBannerMin: 'min',
@@ -2131,9 +2131,9 @@ const messages = {
         debesValidarIdentidadParaAccion:
             'You must validate your identity to perform this action.',
         validacionProntoBanner:
-            'You will soon need to validate your profile to use the app. Click here to do it. Time remaining: {countdown}',
+            "Validate your identity or you won't be able to post trips or send messages. Time remaining: {countdown}",
         validacionProntoBannerTiempoCumplido:
-            'You will soon need to validate your profile to use the app. Click here to do it. Time is up.',
+            'You need to validate your identity to post trips or send messages.',
         validacionProntoBannerDias: 'days',
         validacionProntoBannerHs: 'h',
         validacionProntoBannerMin: 'min',
