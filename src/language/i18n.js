@@ -279,10 +279,10 @@ const messages = {
         debugInfoCopied: 'Copiado al portapapeles',
         debugInfoUnavailable: 'No hay información de debug disponible.',
         identidadValidadaTooltip: 'Identidad validada',
-        removerValidacionIdentidad: 'Remover validación de identidad',
+        removerValidacionIdentidad: 'Remover verificación de cuenta',
         confirmarRemoverValidacionIdentidad:
-            '¿Remover la validación de identidad de este usuario? Se borrarán todos los datos de validación.',
-        validacionIdentidadRemovida: 'Validación de identidad removida.',
+            '¿Remover la verificación de cuenta de este usuario? Se borrarán todos los datos de validación.',
+        validacionIdentidadRemovida: 'Verificación de cuenta removida.',
         debesValidarIdentidadParaAccion:
             'Debes verificar tu cuenta para realizar esta acción.',
         validacionProntoBanner:
@@ -362,7 +362,7 @@ const messages = {
         validacionManualNoDisponible:
             'La validación manual no está disponible en este momento.',
         validacionIdentidadNoDisponible:
-            'La validación de identidad no está disponible en este momento.',
+            'La verificación de cuenta no está disponible en este momento.',
         advertenciaCalidadFotos:
             'Las fotos deben ser de buena calidad. Si la verificación manual no puede realizarse (por ejemplo, por mala calidad), el dinero no se devolverá y tendrás que pagar nuevamente para otro intento.',
         subirFrenteDocumento: 'Frente del documento (DNI o pasaporte)',
@@ -1265,10 +1265,10 @@ const messages = {
         debugInfoUnavailable: 'No hay información de debug disponible.',
         identidadValidada: 'Identidad validada',
         identidadValidadaTooltip: 'Identidad validada',
-        removerValidacionIdentidad: 'Remover validación de identidad',
+        removerValidacionIdentidad: 'Remover verificación de cuenta',
         confirmarRemoverValidacionIdentidad:
-            '¿Remover la validación de identidad de este usuario? Se borrarán todos los datos de validación.',
-        validacionIdentidadRemovida: 'Validación de identidad removida.',
+            '¿Remover la verificación de cuenta de este usuario? Se borrarán todos los datos de validación.',
+        validacionIdentidadRemovida: 'Verificación de cuenta removida.',
         debesValidarIdentidadParaAccion:
             'Debes verificar tu cuenta para realizar esta acción.',
         validacionProntoBanner:
@@ -1348,7 +1348,7 @@ const messages = {
         validacionManualNoDisponible:
             'La validación manual no está disponible en este momento.',
         validacionIdentidadNoDisponible:
-            'La validación de identidad no está disponible en este momento.',
+            'La verificación de cuenta no está disponible en este momento.',
         advertenciaCalidadFotos:
             'Las fotos deben ser de buena calidad. Si la verificación manual no puede realizarse (por ejemplo, por mala calidad), el dinero no se devolverá y tendrás que pagar nuevamente para otro intento.',
         subirFrenteDocumento: 'Frente del documento (DNI o pasaporte)',
@@ -2137,7 +2137,7 @@ const messages = {
         validacionManualNoDisponible:
             'Manual validation is not available at this time.',
         validacionIdentidadNoDisponible:
-            'Identity validation is not available at this time.',
+            'Account verification is not available at this time.',
         advertenciaCalidadFotos:
             'Photos must be of good quality. If manual verification cannot be completed (e.g. due to poor quality), the money will not be refunded and you will have to pay again for another try.',
         subirFrenteDocumento: 'Front of ID (DNI or passport)',
@@ -2172,10 +2172,10 @@ const messages = {
         estadoIdentidad: 'Identity status',
         identidadValidada: 'Validated',
         identidadValidadaTooltip: 'Identity validated',
-        removerValidacionIdentidad: 'Remove identity validation',
+        removerValidacionIdentidad: 'Remove account verification',
         confirmarRemoverValidacionIdentidad:
-            'Remove identity validation for this user? All validation data will be cleared.',
-        validacionIdentidadRemovida: 'Identity validation removed.',
+            'Remove account verification for this user? All verification data will be cleared.',
+        validacionIdentidadRemovida: 'Account verification removed.',
         debesValidarIdentidadParaAccion:
             'You must verify your account to perform this action.',
         validacionProntoBanner:
