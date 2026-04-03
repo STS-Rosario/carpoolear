@@ -381,6 +381,11 @@ const messages = {
             'Estamos revisando tu documentación.',
         identityVerificationPendingReviewNoticeEmphasis:
             'Te notificaremos cuando la verificación esté completa.',
+        identityValidationRejectionNoticeTitle: 'Verificación rechazada',
+        identityValidationRejectionNoticeBody:
+            'No pudimos verificar tu identidad con la información enviada.',
+        identityValidationRejectionNoticeEmphasis:
+            'Podés intentar nuevamente o contactar al equipo de soporte.',
         verEstadoValidacion: 'Ver estado de verificación',
         debesCargarDni:
             'Debés cargar tu DNI en tu perfil para verificar con Mercado Pago.',
@@ -1430,6 +1435,11 @@ const messages = {
             'Estamos revisando tu documentación.',
         identityVerificationPendingReviewNoticeEmphasis:
             'Te notificaremos cuando la verificación esté completa.',
+        identityValidationRejectionNoticeTitle: 'Verificación rechazada',
+        identityValidationRejectionNoticeBody:
+            'No pudimos verificar tu identidad con la información enviada.',
+        identityValidationRejectionNoticeEmphasis:
+            'Podés intentar nuevamente o contactar al equipo de soporte.',
         verEstadoValidacion: 'Ver estado de verificación',
         debesCargarDni:
             'Debés cargar tu DNI en tu perfil para verificar con Mercado Pago.',
@@ -2282,6 +2292,11 @@ const messages = {
             'We are reviewing your documentation.',
         identityVerificationPendingReviewNoticeEmphasis:
             'We will notify you when verification is complete.',
+        identityValidationRejectionNoticeTitle: 'Verification rejected',
+        identityValidationRejectionNoticeBody:
+            "We couldn't verify your identity with the information you sent.",
+        identityValidationRejectionNoticeEmphasis:
+            'You can try again or contact the support team.',
         verEstadoValidacion: 'View verification status',
         debesCargarDni:
             'You must add your DNI to your profile to verify with Mercado Pago.',
