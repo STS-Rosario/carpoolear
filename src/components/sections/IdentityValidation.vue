@@ -38,9 +38,6 @@
         <div class="alert alert-warning" v-if="resultMessage === 'name_mismatch'">
             {{ $t('resultNameMismatch') }}
         </div>
-        <div class="alert alert-success" v-if="resultMessage === 'manual_submitted'">
-            {{ $t('documentacionEnviada') }}
-        </div>
 
             <div v-if="!identityValidationAvailable" class="alert alert-info">
                 {{ $t('validacionIdentidadNoDisponible') }}
@@ -61,40 +58,111 @@
                 </div>
             </div>
 
-            <!-- Manual validation: paid, waiting for review or for upload -->
-            <div v-else-if="identityValidationManualEnabled && manualStatus.has_submission && manualStatus.paid" class="panel panel-default manual-status-panel">
-                <div class="panel-heading">{{ manualStatus.submitted_at ? $t('tienesDocumentoEnRevision') : $t('pagoRealizadoSubeDocumentos') }}</div>
-                <div class="panel-body">
-                    <p v-if="manualStatus.submitted_at">
+            <!-- Manual validation: paid, docs sent — awaiting review (blue notice only) -->
+            <div
+                v-else-if="
+                    identityValidationManualEnabled &&
+                        manualStatus.has_submission &&
+                        manualStatus.paid &&
+                        showManualValidationSubmittedNotice
+                "
+                class="identity-validation-manual-submitted-notice identity-validation-manual-submitted-notice--standalone"
+            >
+                <h2 class="identity-validation-manual-submitted-notice__title">
+                    {{ $t('identityValidationManualSubmittedNoticeTitle') }}
+                </h2>
+                <p class="identity-validation-manual-submitted-notice__text">
+                    {{ $t('identityValidationManualSubmittedNoticeBody') }}
+                </p>
+                <p class="identity-validation-manual-submitted-notice__emphasis">
+                    {{ $t('identityValidationManualSubmittedNoticeEmphasis') }}
+                </p>
+                <div class="identity-validation-manual-submitted-notice__meta">
+                    <p class="identity-validation-manual-submitted-notice__meta-line">
                         <strong>{{ $t('estado') }}:</strong>
-                        <span v-if="manualStatus.review_status === 'pending'">{{ $t('pagadoEsperandoRevision') }}</span>
-                        <span v-else-if="manualStatus.review_status === 'approved'">{{ $t('estadoAprobado') }}</span>
-                        <span v-else-if="manualStatus.review_status === 'rejected'">{{ $t('estadoRechazado') }}</span>
+                        {{ $t('pagadoEsperandoRevision') }}
                     </p>
-                    <p v-if="manualStatus.paid_at">
+                    <p
+                        v-if="manualStatus.paid_at"
+                        class="identity-validation-manual-submitted-notice__meta-line"
+                    >
                         {{ $t('pagadoEl') }} {{ formatDate(manualStatus.paid_at) }}
                     </p>
-                    <p v-if="manualStatus.submitted_at">
+                    <p
+                        v-if="manualStatus.submitted_at"
+                        class="identity-validation-manual-submitted-notice__meta-line"
+                    >
                         {{ $t('enviadoEl') }} {{ formatDate(manualStatus.submitted_at) }}
                     </p>
-                    <p v-if="manualStatus.review_note && manualStatus.review_status === 'rejected'" class="review-note">
-                        {{ manualStatus.review_note }}
-                    </p>
-                    <router-link
-                        v-if="manualStatus.review_status === 'rejected'"
-                        :to="{ name: 'identity_validation_manual' }"
-                        class="btn btn-primary"
-                    >
-                        {{ $t('puedesIntentarDeNuevo') }}
-                    </router-link>
-                    <router-link
-                        v-else-if="!manualStatus.submitted_at && manualStatus.request_id"
-                        :to="{ name: 'identity_validation_manual', query: { request_id: manualStatus.request_id, payment_success: '1' } }"
-                        class="btn btn-primary"
-                    >
-                        {{ $t('subirDocumentacion') }}
-                    </router-link>
                 </div>
+            </div>
+
+            <!-- Manual validation: paid, upload docs -->
+            <div
+                v-else-if="
+                    identityValidationManualEnabled &&
+                        manualStatus.has_submission &&
+                        manualStatus.paid &&
+                        !manualStatus.submitted_at
+                "
+                class="manual-status-upload-block"
+            >
+                <p class="manual-status-upload-block__lead">
+                    {{ $t('pagoRealizadoSubeDocumentos') }}
+                </p>
+                <router-link
+                    v-if="manualStatus.request_id"
+                    :to="{
+                        name: 'identity_validation_manual',
+                        query: { request_id: manualStatus.request_id, payment_success: '1' }
+                    }"
+                    class="btn btn-primary"
+                >
+                    {{ $t('subirDocumentacion') }}
+                </router-link>
+            </div>
+
+            <!-- Manual validation: paid, submitted — approved or rejected -->
+            <div
+                v-else-if="
+                    identityValidationManualEnabled &&
+                        manualStatus.has_submission &&
+                        manualStatus.paid &&
+                        manualStatus.submitted_at &&
+                        !showManualValidationSubmittedNotice
+                "
+                class="manual-status-terminal-block"
+            >
+                <p class="manual-status-terminal-block__estado">
+                    <strong>{{ $t('estado') }}:</strong>
+                    <span v-if="manualStatus.review_status === 'approved'">{{ $t('estadoAprobado') }}</span>
+                    <span v-else-if="manualStatus.review_status === 'rejected'">{{ $t('estadoRechazado') }}</span>
+                </p>
+                <p
+                    v-if="manualStatus.paid_at"
+                    class="manual-status-terminal-block__date"
+                >
+                    {{ $t('pagadoEl') }} {{ formatDate(manualStatus.paid_at) }}
+                </p>
+                <p
+                    v-if="manualStatus.submitted_at"
+                    class="manual-status-terminal-block__date"
+                >
+                    {{ $t('enviadoEl') }} {{ formatDate(manualStatus.submitted_at) }}
+                </p>
+                <p
+                    v-if="manualStatus.review_note && manualStatus.review_status === 'rejected'"
+                    class="review-note"
+                >
+                    {{ manualStatus.review_note }}
+                </p>
+                <router-link
+                    v-if="manualStatus.review_status === 'rejected'"
+                    :to="{ name: 'identity_validation_manual' }"
+                    class="btn btn-primary"
+                >
+                    {{ $t('puedesIntentarDeNuevo') }}
+                </router-link>
             </div>
 
             <div v-else class="identity-validation-main">
@@ -198,7 +266,31 @@ export default {
         resultMessage() {
             return this.$route.query.result || null;
         },
+        /**
+         * Paid + docs sent + not yet approved/rejected — still in admin queue.
+         * Must not be hidden behind the green "already verified" banner (user may still
+         * carry identity_validated from MP or stale cache while manual review runs).
+         */
+        manualDocsPendingAdminReview() {
+            if (!this.identityValidationManualEnabled) return false;
+            const m = this.manualStatus;
+            if (!m || !m.has_submission || !m.paid || !m.submitted_at) return false;
+            if (m.review_status === 'approved' || m.review_status === 'rejected') {
+                return false;
+            }
+            return true;
+        },
+        /** Blue “Validación enviada” notice (same idea as ?result=manual_submitted), above estado in the panel. */
+        showManualValidationSubmittedNotice() {
+            const m = this.manualStatus;
+            if (!m || !m.submitted_at) return false;
+            const rs = m.review_status;
+            return rs !== 'approved' && rs !== 'rejected';
+        },
         showVerificationSuccessBanner() {
+            if (this.manualDocsPendingAdminReview) {
+                return false;
+            }
             if (this.resultMessage === 'success') {
                 return true;
             }
@@ -259,13 +351,34 @@ export default {
             return d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         },
         fetchManualStatus() {
+            const defaults = {
+                has_submission: false,
+                request_id: null,
+                paid: null,
+                paid_at: null,
+                review_status: null,
+                submitted_at: null,
+                review_note: null
+            };
             const userApi = new UserApi();
             return userApi.getManualIdentityValidationStatus()
                 .then((res) => {
-                    this.manualStatus = res.data || res;
+                    let body = res && typeof res === 'object' ? res : null;
+                    if (
+                        body &&
+                        !Object.prototype.hasOwnProperty.call(body, 'has_submission') &&
+                        body.data &&
+                        typeof body.data === 'object'
+                    ) {
+                        body = body.data;
+                    }
+                    if (!body || typeof body !== 'object') {
+                        body = {};
+                    }
+                    this.manualStatus = { ...defaults, ...body };
                 })
                 .catch(() => {
-                    this.manualStatus = { has_submission: false };
+                    this.manualStatus = { ...defaults };
                 });
         },
         payManualValidation() {
@@ -405,6 +518,81 @@ export default {
 
 .identity-validation-component .alert {
     color: #333;
+}
+
+.identity-validation-manual-submitted-notice {
+    background: #cbe6f7;
+    border: 1px solid #2b6fad;
+    border-radius: 4px;
+    padding: 1rem 1.25rem;
+    color: #0d3a66;
+}
+
+.identity-validation-manual-submitted-notice--standalone {
+    margin-bottom: 1rem;
+}
+
+.identity-validation-manual-submitted-notice__title {
+    margin: 0 0 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.3;
+    color: #0d3a66;
+}
+
+.identity-validation-manual-submitted-notice__text {
+    margin: 0 0 0.4rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #0d3a66;
+}
+
+.identity-validation-manual-submitted-notice__emphasis {
+    margin: 0 0 0.65rem;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.45;
+    color: #0d3a66;
+}
+
+.identity-validation-manual-submitted-notice__meta {
+    margin: 0;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(43, 111, 173, 0.35);
+}
+
+.identity-validation-manual-submitted-notice__meta-line {
+    margin: 0.15rem 0;
+    font-size: 0.95rem;
+    line-height: 1.35;
+    color: #0d3a66;
+}
+
+.manual-status-upload-block {
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+.manual-status-upload-block__lead {
+    margin: 0 0 0.75rem;
+    font-size: 1rem;
+    line-height: 1.45;
+}
+
+.manual-status-terminal-block {
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+.manual-status-terminal-block__estado {
+    margin: 0 0 0.35rem;
+    font-size: 1rem;
+}
+
+.manual-status-terminal-block__date {
+    margin: 0.15rem 0;
+    font-size: 0.95rem;
+    line-height: 1.35;
 }
 
 .manual-status-panel {
