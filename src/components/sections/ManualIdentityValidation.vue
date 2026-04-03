@@ -5,7 +5,10 @@
             <router-link :to="{ name: 'identity_validation' }" class="btn btn-default btn-sm">{{ $t('volver') }}</router-link>
         </div>
         <template v-else>
-            <div v-if="statusPaidAt || statusSubmittedAt" class="panel panel-default status-dates-panel">
+            <div
+                v-if="(statusPaidAt || statusSubmittedAt) && !(canUpload && !alreadySubmitted)"
+                class="panel panel-default status-dates-panel"
+            >
                 <div class="panel-body">
                     <p v-if="statusPaidAt"><strong>{{ $t('pagadoEl') }}:</strong> {{ formatDate(statusPaidAt) }}</p>
                     <p v-if="statusSubmittedAt"><strong>{{ $t('enviadoEl') }}:</strong> {{ formatDate(statusSubmittedAt) }}</p>
@@ -87,16 +90,66 @@
 
             <div v-else class="upload-section manual-validation-upload">
                 <div class="manual-validation-main">
-                    <div class="alert alert-warning">
-                        <strong>{{ $t('advertenciaCalidadFotos') }}</strong>
+                    <router-link
+                        :to="{ name: 'identity_validation' }"
+                        class="manual-validation-back-desktop hidden-xs"
+                    >
+                        ← {{ $t('manualValidationVolverOpcionesDesktop') }}
+                    </router-link>
+                    <h1 class="manual-validation-title visible-xs-block">{{ $t('validacionManual') }}</h1>
+
+                    <div
+                        v-if="statusPaidAt || paymentSuccess"
+                        class="manual-validation-pay-success"
+                    >
+                        <img
+                            :src="checkCircleIconSrc"
+                            alt=""
+                            class="manual-validation-success-icon"
+                        />
+                        <span class="manual-validation-success-copy">
+                            <span class="manual-validation-success-title">{{
+                                $t('manualValidationPagoProcesado')
+                            }}</span>
+                            <span v-if="statusPaidAt" class="manual-validation-success-date">{{
+                                formatDate(statusPaidAt)
+                            }}</span>
+                        </span>
                     </div>
 
-                    <form @submit.prevent="submitImages">
+                    <p class="manual-validation-text">{{ $t('manualValidationUploadIntro') }}</p>
+                    <ul class="manual-validation-bullets manual-validation-upload-photo-list">
+                        <li>{{ $t('manualValidationUploadBulletFrente') }}</li>
+                        <li>{{ $t('manualValidationUploadBulletDorso') }}</li>
+                        <li>{{ $t('manualValidationUploadBulletFotoConDni') }}</li>
+                    </ul>
+
+                    <p class="manual-validation-subheading">{{ $t('manualValidationUploadRequisitos') }}</p>
+                    <ul class="manual-validation-bullets manual-validation-upload-req-list">
+                        <li>{{ $t('manualValidationUploadReqClaras') }}</li>
+                        <li>{{ $t('manualValidationUploadReqFormatos') }}</li>
+                        <li>
+                            {{
+                                $t('manualValidationUploadReqTamano', {
+                                    maxMb: manualValidationMaxFileMb
+                                })
+                            }}
+                        </li>
+                    </ul>
+
+                    <p class="manual-validation-disclaimer">
+                        {{ $t('manualValidationUploadDisclaimer') }}
+                    </p>
+
+                    <form class="manual-validation-upload-form" @submit.prevent="submitImages">
                         <div class="form-group">
-                            <label>{{ $t('subirFrenteDocumento') }} <span class="required">*</span></label>
+                            <label class="manual-validation-field-label">
+                                {{ $t('manualValidationUploadLabelFront') }}
+                                <span class="required">*</span>
+                            </label>
                             <input
                                 type="file"
-                                accept="image/*"
+                                accept="image/jpeg,image/png"
                                 ref="frontInput"
                                 @change="onFileChange($event, 'front')"
                                 required
@@ -104,10 +157,13 @@
                             />
                         </div>
                         <div class="form-group">
-                            <label>{{ $t('subirDorsoDocumento') }} <span class="required">*</span></label>
+                            <label class="manual-validation-field-label">
+                                {{ $t('manualValidationUploadLabelBack') }}
+                                <span class="required">*</span>
+                            </label>
                             <input
                                 type="file"
-                                accept="image/*"
+                                accept="image/jpeg,image/png"
                                 ref="backInput"
                                 @change="onFileChange($event, 'back')"
                                 required
@@ -115,10 +171,13 @@
                             />
                         </div>
                         <div class="form-group">
-                            <label>{{ $t('subirSelfieDocumento') }} <span class="required">*</span></label>
+                            <label class="manual-validation-field-label">
+                                {{ $t('manualValidationUploadLabelSelfie') }}
+                                <span class="required">*</span>
+                            </label>
                             <input
                                 type="file"
-                                accept="image/*"
+                                accept="image/jpeg,image/png"
                                 ref="selfieInput"
                                 @change="onFileChange($event, 'selfie')"
                                 required
@@ -127,7 +186,7 @@
                         </div>
                         <button
                             type="submit"
-                            class="btn btn-primary btn-lg"
+                            class="btn btn-danger btn-lg manual-validation-upload-submit"
                             :disabled="submitting || !requestId"
                         >
                             <span v-if="submitting">{{ $t('guardando') }}</span>
@@ -197,6 +256,18 @@ export default {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
             }).format(this.costCents / 100);
+        },
+        manualValidationMaxFileMb() {
+            const c = this.config;
+            const n = c && c.manual_identity_validation_max_upload_mb;
+            if (n != null && Number(n) > 0) {
+                return Number(n);
+            }
+            return 10;
+        },
+        checkCircleIconSrc() {
+            const base = process.env.ROUTE_BASE || '/';
+            return `${base}static/img/check-circle.png`;
         }
     },
     methods: {
@@ -402,12 +473,94 @@ export default {
     }
 }
 
+.manual-validation-back-desktop {
+    display: inline-block;
+    margin-bottom: 1rem;
+    color: #337ab7;
+}
+
+.manual-validation-back-desktop:hover,
+.manual-validation-back-desktop:focus {
+    color: #286090;
+}
+
 .manual-validation-title {
     font-size: 1.5rem;
     font-weight: 700;
     margin: 0 0 1rem;
     line-height: 1.3;
     color: #333;
+}
+
+.manual-validation-pay-success {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    margin: 0 0 1.25rem;
+}
+
+.manual-validation-success-icon {
+    width: 1.85rem;
+    height: 1.85rem;
+    object-fit: contain;
+    flex-shrink: 0;
+    display: block;
+}
+
+.manual-validation-success-copy {
+    line-height: 1.4;
+    color: #333;
+}
+
+.manual-validation-success-title {
+    font-weight: 600;
+    margin-right: 0.35rem;
+    font-size: 1.125rem;
+}
+
+.manual-validation-success-date {
+    font-weight: 400;
+    font-size: 1rem;
+}
+
+.manual-validation-subheading {
+    font-weight: 700;
+    margin: 1rem 0 0.4rem;
+    color: #333;
+    font-size: 1rem;
+}
+
+.manual-validation-upload-photo-list {
+    margin-bottom: 1rem;
+}
+
+.manual-validation-upload-req-list {
+    margin-bottom: 1rem;
+}
+
+.manual-validation-disclaimer {
+    margin: 0 0 1.25rem;
+    line-height: 1.5;
+    color: #333;
+    font-size: 0.9rem;
+}
+
+.manual-validation-field-label {
+    color: #337ab7;
+    font-weight: 600;
+}
+
+.manual-validation-upload-form .form-group {
+    margin-bottom: 1.1rem;
+}
+
+.manual-validation-upload-submit {
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    border-radius: 4px;
+    font-size: 1.0625rem;
+    margin-top: 0.25rem;
 }
 
 .manual-validation-unpaid-alert {
