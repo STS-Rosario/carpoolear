@@ -161,21 +161,20 @@
                 </router-link>
             </div>
 
-            <!-- Manual validation: paid, submitted — approved or rejected -->
+            <!-- Manual validation: approved (read-only summary) -->
             <div
                 v-else-if="
                     identityValidationManualEnabled &&
                         manualStatus.has_submission &&
                         manualStatus.paid &&
                         manualStatus.submitted_at &&
-                        !showManualValidationSubmittedNotice
+                        manualStatus.review_status === 'approved'
                 "
                 class="manual-status-terminal-block"
             >
                 <p class="manual-status-terminal-block__estado">
                     <strong>{{ $t('estado') }}:</strong>
-                    <span v-if="manualStatus.review_status === 'approved'">{{ $t('estadoAprobado') }}</span>
-                    <span v-else-if="manualStatus.review_status === 'rejected'">{{ $t('estadoRechazado') }}</span>
+                    {{ $t('estadoAprobado') }}
                 </p>
                 <p
                     v-if="manualStatus.paid_at"
@@ -189,19 +188,75 @@
                 >
                     {{ $t('enviadoEl') }} {{ formatDate(manualStatus.submitted_at) }}
                 </p>
-                <p
-                    v-if="manualStatus.review_note && manualStatus.review_status === 'rejected'"
-                    class="review-note"
-                >
-                    {{ manualStatus.review_note }}
-                </p>
-                <router-link
-                    v-if="manualStatus.review_status === 'rejected'"
-                    :to="{ name: 'identity_validation_manual' }"
-                    class="btn btn-primary"
-                >
-                    {{ $t('puedesIntentarDeNuevo') }}
-                </router-link>
+            </div>
+
+            <!-- Manual validation: rejected — red notice + same two options as main screen -->
+            <div
+                v-else-if="showManualRejectedWithChoiceCards"
+                class="identity-validation-rejected-flow"
+            >
+                <div class="identity-validation-rejection-notice">
+                    <h2 class="identity-validation-rejection-notice__title">
+                        {{ $t('identityValidationRejectionNoticeTitle') }}
+                    </h2>
+                    <p class="identity-validation-rejection-notice__text">
+                        {{ $t('identityValidationRejectionNoticeBody') }}
+                    </p>
+                    <p class="identity-validation-rejection-notice__emphasis">
+                        {{ $t('identityValidationRejectionNoticeEmphasis') }}
+                    </p>
+                    <p
+                        v-if="manualStatus.review_note"
+                        class="identity-validation-rejection-notice__note"
+                    >
+                        {{ manualStatus.review_note }}
+                    </p>
+                </div>
+                <div class="identity-validation-cards">
+                    <div
+                        v-if="identityValidationMpEnabled"
+                        class="identity-validation-card"
+                    >
+                        <h2 class="identity-validation-card-title">{{ $t('identidadModalAutoTitulo') }}</h2>
+                        <p class="identity-validation-card-desc">{{ $t('identityValidationAutoCardDesc') }}</p>
+                        <ul class="identity-validation-card-bullets">
+                            <li>{{ $t('identidadModalAutoGratis') }}</li>
+                            <li>{{ $t('identidadModalAutoInmediata') }}</li>
+                        </ul>
+                        <button
+                            type="button"
+                            class="btn btn-danger btn-lg btn-block identity-validation-btn-cta"
+                            :disabled="!user || !user.nro_doc || loadingOAuth"
+                            @click="startMercadoPagoOAuth"
+                        >
+                            <span v-if="loadingOAuth">{{ $t('guardando') }}</span>
+                            <span v-else>{{ $t('validarConMercadoPago') }}</span>
+                        </button>
+                        <p v-if="user && !user.nro_doc" class="small identity-validation-hint">
+                            {{ $t('debesCargarDni') }}
+                        </p>
+                    </div>
+
+                    <div
+                        v-if="identityValidationManualEnabled"
+                        class="identity-validation-card"
+                    >
+                        <h2 class="identity-validation-card-title">{{ $t('identidadModalManualTitulo') }}</h2>
+                        <p class="identity-validation-card-desc">{{ $t('identityValidationManualCardDesc') }}</p>
+                        <ul class="identity-validation-card-bullets">
+                            <li>
+                                {{ $t('identityValidationCostLine', { cost: formattedManualCost }) }}
+                            </li>
+                            <li>{{ $t('identityValidationTimeLine') }}</li>
+                        </ul>
+                        <router-link
+                            :to="{ name: 'identity_validation_manual' }"
+                            class="btn btn-lg btn-block identity-validation-btn-outline"
+                        >
+                            {{ $t('solicitarVerificacionManual') }}
+                        </router-link>
+                    </div>
+                </div>
             </div>
 
             <div v-else class="identity-validation-main">
@@ -338,6 +393,18 @@ export default {
             return (
                 this.showManualValidationSubmittedNotice &&
                 this.resultMessage !== 'manual_submitted'
+            );
+        },
+        /** Manual docs rejected: show red banner + MP / manual choice cards. */
+        showManualRejectedWithChoiceCards() {
+            if (!this.identityValidationManualEnabled) return false;
+            const m = this.manualStatus;
+            return !!(
+                m &&
+                m.has_submission &&
+                m.paid &&
+                m.submitted_at &&
+                m.review_status === 'rejected'
             );
         },
         showVerificationSuccessBanner() {
@@ -666,6 +733,51 @@ export default {
     color: #7a5f2a;
 }
 
+.identity-validation-rejected-flow {
+    margin-bottom: 1rem;
+}
+
+.identity-validation-rejection-notice {
+    background: #fdecea;
+    border: 1px solid #e8b4b8;
+    border-radius: 4px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.25rem;
+    color: #7f1d1d;
+}
+
+.identity-validation-rejection-notice__title {
+    margin: 0 0 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.3;
+    color: #991b1b;
+}
+
+.identity-validation-rejection-notice__text {
+    margin: 0 0 0.4rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #7f1d1d;
+}
+
+.identity-validation-rejection-notice__emphasis {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.45;
+    color: #991b1b;
+}
+
+.identity-validation-rejection-notice__note {
+    margin: 0.75rem 0 0;
+    padding-top: 0.65rem;
+    border-top: 1px solid rgba(153, 27, 27, 0.2);
+    font-size: 0.95rem;
+    line-height: 1.4;
+    color: #7f1d1d;
+}
+
 .manual-status-upload-block {
     margin-bottom: 1.5rem;
     color: #333;
@@ -794,6 +906,17 @@ export default {
 
 @media (min-width: 768px) {
     .identity-validation-main .identity-validation-card {
+        background: #fafafa;
+    }
+
+    .identity-validation-rejected-flow .identity-validation-cards {
+        background: #fff;
+        border-radius: 6px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+        padding: 1.75rem 2rem 2rem;
+    }
+
+    .identity-validation-rejected-flow .identity-validation-card {
         background: #fafafa;
     }
 }
