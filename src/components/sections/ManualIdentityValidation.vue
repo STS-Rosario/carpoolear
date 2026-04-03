@@ -414,6 +414,13 @@ export default {
     margin-bottom: 1rem;
 }
 
+.manual-validation-unpaid-alert strong {
+    font-size: 1.25rem;
+    line-height: 1.35;
+    display: block;
+    margin-bottom: 0.35rem;
+}
+
 .manual-validation-text {
     margin: 0 0 0.75rem;
     line-height: 1.5;

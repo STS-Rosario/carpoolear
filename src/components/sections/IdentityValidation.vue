@@ -317,6 +317,12 @@ export default {
     margin-bottom: 1.5em;
 }
 
+.identity-validation-component .manual-status-panel.panel-warning .panel-heading {
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
 .review-note {
     font-style: italic;
     color: #333;
