@@ -1,8 +1,34 @@
 <template>
     <div class="identity-validation-component">
-        <div class="alert alert-success" v-if="resultMessage === 'success'">
-            {{ $t('resultSuccess') }}
+        <div
+            v-if="showVerificationSuccessBanner"
+            class="identity-verification-success-banner"
+        >
+            <img
+                :src="checkCircleIconSrc"
+                alt=""
+                class="identity-verification-success-banner__icon"
+            />
+            <div class="identity-verification-success-banner__content">
+                <h2 class="identity-verification-success-banner__title">
+                    {{ $t('identityVerificationSuccessTitle') }}
+                </h2>
+                <p class="identity-verification-success-banner__text">
+                    {{ $t('identityVerificationSuccessBody') }}
+                </p>
+                <p class="identity-verification-success-banner__emphasis">
+                    {{ $t('identityVerificationSuccessEmphasis') }}
+                </p>
+                <router-link
+                    :to="{ name: 'trips', params: { clearSearch: true } }"
+                    class="identity-verification-success-banner__link"
+                >
+                    {{ $t('identityVerificationSuccessHomeLink') }}
+                </router-link>
+            </div>
         </div>
+
+        <div v-else>
         <div class="alert alert-danger" v-if="resultMessage === 'error'">
             {{ $t('resultError') }}
         </div>
@@ -16,14 +42,6 @@
             {{ $t('documentacionEnviada') }}
         </div>
 
-        <!-- Only show Validado when we have both flag and date (avoids showing for new users or bad data) -->
-        <div v-if="user && user.identity_validated && user.identity_validated_at" class="alert alert-info">
-            <strong>{{ $t('identidadValidada') }}</strong>
-            {{ $t('validadoEl') }} {{ formatDate(user.identity_validated_at) }}
-            <span v-if="user.identity_validation_type"> ({{ user.identity_validation_type }})</span>
-        </div>
-
-        <div v-else>
             <div v-if="!identityValidationAvailable" class="alert alert-info">
                 {{ $t('validacionIdentidadNoDisponible') }}
             </div>
@@ -180,6 +198,23 @@ export default {
         resultMessage() {
             return this.$route.query.result || null;
         },
+        showVerificationSuccessBanner() {
+            if (this.resultMessage === 'success') {
+                return true;
+            }
+            if (
+                this.user &&
+                this.user.identity_validated &&
+                this.user.identity_validated_at
+            ) {
+                return true;
+            }
+            return false;
+        },
+        checkCircleIconSrc() {
+            const base = process.env.ROUTE_BASE || '/';
+            return `${base}static/img/check-circle.png`;
+        },
         formattedManualCost() {
             const cents =
                 this.config && this.config.manual_identity_validation_cost_cents;
@@ -287,6 +322,65 @@ export default {
     margin-top: 4rem;
     padding: 0 0 1em 0;
     color: #333;
+}
+
+.identity-verification-success-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    background: #e8f5e9;
+    border: 1px solid #a5d6a7;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+}
+
+.identity-verification-success-banner__icon {
+    width: 1.85rem;
+    height: 1.85rem;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.identity-verification-success-banner__content {
+    flex: 1;
+    min-width: 0;
+}
+
+.identity-verification-success-banner__title {
+    margin: 0 0 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1b5e20;
+    line-height: 1.3;
+}
+
+.identity-verification-success-banner__text {
+    margin: 0 0 0.4rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #2e7d32;
+}
+
+.identity-verification-success-banner__emphasis {
+    margin: 0 0 0.75rem;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.45;
+    color: #2e7d32;
+}
+
+.identity-verification-success-banner__link {
+    display: inline-block;
+    font-size: 0.95rem;
+    color: #337ab7;
+    font-weight: 600;
+}
+
+.identity-verification-success-banner__link:hover,
+.identity-verification-success-banner__link:focus {
+    color: #286090;
+    text-decoration: none;
 }
 
 .identity-validation-component .btn-primary,
