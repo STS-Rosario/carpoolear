@@ -318,14 +318,17 @@ const messages = {
         identityValidationPageIntro:
             'Para mantener la seguridad de la comunidad, necesitamos confirmar tu identidad.',
         identityValidationPageBullet1: 'Evitar perfiles falsos.',
-        identityValidationPageBullet2: 'Asegurar que cada persona tenga una sola cuenta.',
-        identityValidationPageBullet3: 'Mejorar la confianza entre quienes comparten viajes.',
+        identityValidationPageBullet2:
+            'Asegurar que cada persona tenga una sola cuenta.',
+        identityValidationPageBullet3:
+            'Mejorar la confianza entre quienes comparten viajes.',
         identityValidationAutoCardDesc:
             'Validá con tu cuenta de Mercado Pago. El sistema contrasta los datos con RENAPER.',
         identityValidationManualCardDesc:
             'Si no tenés Mercado Pago o preferís no usarlo, podés enviar documentación para que nuestro equipo la revise.',
         identityValidationCostLine: 'Costo: {cost}',
-        identityValidationTimeLine: 'Tiempo de verificación: hasta 48 hs hábiles',
+        identityValidationTimeLine:
+            'Tiempo de verificación: hasta 48 hs hábiles',
         solicitarVerificacionManual: 'Solicitar verificación manual',
         validadoEl: 'Verificado el',
         validarConMercadoPago: 'Verificar con Mercado Pago',
@@ -334,7 +337,8 @@ const messages = {
         validacionManual: 'Verificación manual',
         validacionManualDescCorta:
             'Si no podés o no querés usar Mercado Pago, podés solicitar una verificación manual (con costo).',
-        esperandoPagoValidacionManual: 'Esperando pago de la verificación manual',
+        esperandoPagoValidacionManual:
+            'Esperando pago de la verificación manual',
         debesPagarParaContinuar:
             'Iniciaste una verificación manual pero no completaste el pago. Pagá para continuar.',
         pagadoEsperandoRevision: 'Pagado, esperando revisión',
@@ -355,7 +359,8 @@ const messages = {
         puedesIntentarDeNuevo: 'Intentar de nuevo',
         resultSuccess: '¡Cuenta verificada correctamente!',
         identityVerificationSuccessTitle: 'Verificación exitosa',
-        identityVerificationSuccessBody: 'Tu cuenta fue verificada correctamente.',
+        identityVerificationSuccessBody:
+            'Tu cuenta fue verificada correctamente.',
         identityVerificationSuccessEmphasis:
             'Ya podés publicar viajes y enviar mensajes dentro de la comunidad.',
         identityVerificationSuccessHomeLink: 'Ir a Inicio',
@@ -366,6 +371,11 @@ const messages = {
             'El nombre no coincide con el de Mercado Pago. Verificá que tu nombre en el perfil incluya nombre y apellido tal como figuran en Mercado Pago.',
         documentacionEnviada:
             'Documentación enviada. Será revisada por el equipo.',
+        identityValidationManualSubmittedNoticeTitle: 'Validación Enviada',
+        identityValidationManualSubmittedNoticeBody:
+            'Recibimos tu solicitud de validación.',
+        identityValidationManualSubmittedNoticeEmphasis:
+            'Nuestro equipo la revisará dentro de las próximas 48 hs hábiles.',
         verEstadoValidacion: 'Ver estado de verificación',
         debesCargarDni:
             'Debés cargar tu DNI en tu perfil para verificar con Mercado Pago.',
@@ -384,7 +394,8 @@ const messages = {
         manualValidationPayClosing:
             'Esto nos permitirá verificar tu identidad correctamente.',
         manualValidationPagarMercadoPago: 'Pagar con Mercado Pago',
-        manualValidationVolverOpcionesDesktop: 'Volver a opciones de verificación',
+        manualValidationVolverOpcionesDesktop:
+            'Volver a opciones de verificación',
         manualValidationPagoProcesado: 'Pago procesado correctamente',
         manualValidationUploadIntro:
             'Ahora cargá las siguientes fotos para completar la verificación manual.',
@@ -395,11 +406,14 @@ const messages = {
         manualValidationUploadReqClaras:
             'Las fotos deben ser claras, completas y legibles.',
         manualValidationUploadReqFormatos: 'Archivos permitidos: JPG o PNG.',
-        manualValidationUploadReqTamano: 'Tamaño máximo por archivo: {maxMb} MB.',
+        manualValidationUploadReqTamano:
+            'Tamaño máximo por archivo: {maxMb} MB.',
         manualValidationUploadDisclaimer:
             'Si la calidad de las imágenes no es suficiente, no podremos procesar la solicitud, no se reembolsará el pago y deberás abonar nuevamente para intentarlo de nuevo.',
-        manualValidationUploadLabelFront: 'Frente del documento (DNI o pasaporte)',
-        manualValidationUploadLabelBack: 'Dorso del documento (DNI o pasaporte)',
+        manualValidationUploadLabelFront:
+            'Frente del documento (DNI o pasaporte)',
+        manualValidationUploadLabelBack:
+            'Dorso del documento (DNI o pasaporte)',
         manualValidationUploadLabelSelfie: 'Foto tuya sosteniendo tu DNI',
         escaneáConAppMercadoPago: 'Escaneá con la app de Mercado Pago',
         qrExpiraEn: 'El QR expira en 15 minutos.',
@@ -1348,14 +1362,17 @@ const messages = {
         identityValidationPageIntro:
             'Para mantener la seguridad de la comunidad, necesitamos confirmar tu identidad.',
         identityValidationPageBullet1: 'Evitar perfiles falsos.',
-        identityValidationPageBullet2: 'Asegurar que cada persona tenga una sola cuenta.',
-        identityValidationPageBullet3: 'Mejorar la confianza entre quienes comparten viajes.',
+        identityValidationPageBullet2:
+            'Asegurar que cada persona tenga una sola cuenta.',
+        identityValidationPageBullet3:
+            'Mejorar la confianza entre quienes comparten viajes.',
         identityValidationAutoCardDesc:
             'Validá con tu cuenta de Mercado Pago. El sistema contrasta los datos con RENAPER.',
         identityValidationManualCardDesc:
             'Si no tenés Mercado Pago o preferís no usarlo, podés enviar documentación para que nuestro equipo la revise.',
         identityValidationCostLine: 'Costo: {cost}',
-        identityValidationTimeLine: 'Tiempo de verificación: hasta 48 hs hábiles',
+        identityValidationTimeLine:
+            'Tiempo de verificación: hasta 48 hs hábiles',
         solicitarVerificacionManual: 'Solicitar verificación manual',
         validadoEl: 'Verificado el',
         validarConMercadoPago: 'Verificar con Mercado Pago',
@@ -1364,7 +1381,8 @@ const messages = {
         validacionManual: 'Verificación manual',
         validacionManualDescCorta:
             'Si no podés o no querés usar Mercado Pago, podés solicitar una verificación manual (con costo).',
-        esperandoPagoValidacionManual: 'Esperando pago de la verificación manual',
+        esperandoPagoValidacionManual:
+            'Esperando pago de la verificación manual',
         debesPagarParaContinuar:
             'Iniciaste una verificación manual pero no completaste el pago. Pagá para continuar.',
         pagadoEsperandoRevision: 'Pagado, esperando revisión',
@@ -1385,7 +1403,8 @@ const messages = {
         puedesIntentarDeNuevo: 'Intentar de nuevo',
         resultSuccess: '¡Cuenta verificada correctamente!',
         identityVerificationSuccessTitle: 'Verificación exitosa',
-        identityVerificationSuccessBody: 'Tu cuenta fue verificada correctamente.',
+        identityVerificationSuccessBody:
+            'Tu cuenta fue verificada correctamente.',
         identityVerificationSuccessEmphasis:
             'Ya podés publicar viajes y enviar mensajes dentro de la comunidad.',
         identityVerificationSuccessHomeLink: 'Ir a Inicio',
@@ -1396,6 +1415,11 @@ const messages = {
             'El nombre no coincide con el de Mercado Pago. Verificá que tu nombre en el perfil incluya nombre y apellido tal como figuran en Mercado Pago.',
         documentacionEnviada:
             'Documentación enviada. Será revisada por el equipo.',
+        identityValidationManualSubmittedNoticeTitle: 'Validación Enviada',
+        identityValidationManualSubmittedNoticeBody:
+            'Recibimos tu solicitud de validación.',
+        identityValidationManualSubmittedNoticeEmphasis:
+            'Nuestro equipo la revisará dentro de las próximas 48 hs hábiles.',
         verEstadoValidacion: 'Ver estado de verificación',
         debesCargarDni:
             'Debés cargar tu DNI en tu perfil para verificar con Mercado Pago.',
@@ -1414,7 +1438,8 @@ const messages = {
         manualValidationPayClosing:
             'Esto nos permitirá verificar tu identidad correctamente.',
         manualValidationPagarMercadoPago: 'Pagar con Mercado Pago',
-        manualValidationVolverOpcionesDesktop: 'Volver a opciones de verificación',
+        manualValidationVolverOpcionesDesktop:
+            'Volver a opciones de verificación',
         manualValidationPagoProcesado: 'Pago procesado correctamente',
         manualValidationUploadIntro:
             'Ahora cargá las siguientes fotos para completar la verificación manual.',
@@ -1425,11 +1450,14 @@ const messages = {
         manualValidationUploadReqClaras:
             'Las fotos deben ser claras, completas y legibles.',
         manualValidationUploadReqFormatos: 'Archivos permitidos: JPG o PNG.',
-        manualValidationUploadReqTamano: 'Tamaño máximo por archivo: {maxMb} MB.',
+        manualValidationUploadReqTamano:
+            'Tamaño máximo por archivo: {maxMb} MB.',
         manualValidationUploadDisclaimer:
             'Si la calidad de las imágenes no es suficiente, no podremos procesar la solicitud, no se reembolsará el pago y deberás abonar nuevamente para intentarlo de nuevo.',
-        manualValidationUploadLabelFront: 'Frente del documento (DNI o pasaporte)',
-        manualValidationUploadLabelBack: 'Dorso del documento (DNI o pasaporte)',
+        manualValidationUploadLabelFront:
+            'Frente del documento (DNI o pasaporte)',
+        manualValidationUploadLabelBack:
+            'Dorso del documento (DNI o pasaporte)',
         manualValidationUploadLabelSelfie: 'Foto tuya sosteniendo tu DNI',
         escaneáConAppMercadoPago: 'Escaneá con la app de Mercado Pago',
         qrExpiraEn: 'El QR expira en 15 minutos.',
@@ -2184,19 +2212,23 @@ const messages = {
         identityValidationPageIntro:
             'To keep the community safe, we need to confirm your identity.',
         identityValidationPageBullet1: 'Reduce fake profiles.',
-        identityValidationPageBullet2: 'Ensure each person has only one account.',
-        identityValidationPageBullet3: 'Build trust among people sharing trips.',
+        identityValidationPageBullet2:
+            'Ensure each person has only one account.',
+        identityValidationPageBullet3:
+            'Build trust among people sharing trips.',
         identityValidationAutoCardDesc:
             'Verify with your Mercado Pago account. The system checks your data against RENAPER.',
         identityValidationManualCardDesc:
             "If you don't have Mercado Pago or prefer not to use it, you can send documents for our team to review.",
         identityValidationCostLine: 'Cost: {cost}',
-        identityValidationTimeLine: 'Verification time: up to 48 business hours',
+        identityValidationTimeLine:
+            'Verification time: up to 48 business hours',
         solicitarVerificacionManual: 'Request manual verification',
         validacionManual: 'Manual verification',
         validacionManualDescCorta:
             "If you don't want or can't use Mercado Pago, you can request manual verification (at a cost).",
-        esperandoPagoValidacionManual: 'Waiting for manual verification payment',
+        esperandoPagoValidacionManual:
+            'Waiting for manual verification payment',
         debesPagarParaContinuar:
             "You started a manual verification but didn't complete the payment. Pay to continue.",
         pagadoEsperandoRevision: 'Paid, waiting for review',
@@ -2218,7 +2250,8 @@ const messages = {
         puedesIntentarDeNuevo: 'Try again',
         resultSuccess: 'Account verified successfully!',
         identityVerificationSuccessTitle: 'Verification successful',
-        identityVerificationSuccessBody: 'Your account was verified successfully.',
+        identityVerificationSuccessBody:
+            'Your account was verified successfully.',
         identityVerificationSuccessEmphasis:
             'You can now post trips and send messages in the community.',
         identityVerificationSuccessHomeLink: 'Go to Home',
@@ -2229,6 +2262,11 @@ const messages = {
             "The name doesn't match Mercado Pago. Make sure your profile name includes first and last name as in Mercado Pago.",
         documentacionEnviada:
             'Documentation submitted. It will be reviewed by the team.',
+        identityValidationManualSubmittedNoticeTitle: 'Verification submitted',
+        identityValidationManualSubmittedNoticeBody:
+            'We received your verification request.',
+        identityValidationManualSubmittedNoticeEmphasis:
+            'Our team will review it within the next 48 business hours.',
         verEstadoValidacion: 'View verification status',
         debesCargarDni:
             'You must add your DNI to your profile to verify with Mercado Pago.',
@@ -2253,7 +2291,8 @@ const messages = {
             'Now upload the following photos to complete manual verification.',
         manualValidationUploadBulletFrente: 'Photo of the front of your ID',
         manualValidationUploadBulletDorso: 'Photo of the back of your ID',
-        manualValidationUploadBulletFotoConDni: 'Photo of yourself holding your ID',
+        manualValidationUploadBulletFotoConDni:
+            'Photo of yourself holding your ID',
         manualValidationUploadRequisitos: 'Requirements',
         manualValidationUploadReqClaras:
             'Photos must be clear, complete, and readable.',
@@ -2323,7 +2362,8 @@ const messages = {
             'To keep improving community safety, all Carpoolear accounts must now be verified.',
         identidadModalEnfasis:
             'Verification confirms that each profile belongs to a real person and that each member has only one account.',
-        identidadModalOpcionesTitulo: 'You can verify your account in two ways:',
+        identidadModalOpcionesTitulo:
+            'You can verify your account in two ways:',
         identidadModalUnaOpcion: 'You can verify your account as follows:',
         identidadModalAutoTitulo: 'Automatic verification',
         identidadModalAutoMp: 'With your Mercado Pago account',
