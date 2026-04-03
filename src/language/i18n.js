@@ -371,11 +371,16 @@ const messages = {
             'El nombre no coincide con el de Mercado Pago. Verificá que tu nombre en el perfil incluya nombre y apellido tal como figuran en Mercado Pago.',
         documentacionEnviada:
             'Documentación enviada. Será revisada por el equipo.',
-        identityValidationManualSubmittedNoticeTitle: 'Validación Enviada',
+        identityValidationManualSubmittedNoticeTitle: 'Verificación enviada',
         identityValidationManualSubmittedNoticeBody:
-            'Recibimos tu solicitud de validación.',
+            'Recibimos tu solicitud de verificación.',
         identityValidationManualSubmittedNoticeEmphasis:
             'Nuestro equipo la revisará dentro de las próximas 48 hs hábiles.',
+        identityVerificationPendingReviewNoticeTitle: 'Verificación en proceso',
+        identityVerificationPendingReviewNoticeBody:
+            'Estamos revisando tu documentación.',
+        identityVerificationPendingReviewNoticeEmphasis:
+            'Te notificaremos cuando la verificación esté completa.',
         verEstadoValidacion: 'Ver estado de verificación',
         debesCargarDni:
             'Debés cargar tu DNI en tu perfil para verificar con Mercado Pago.',
@@ -1415,11 +1420,16 @@ const messages = {
             'El nombre no coincide con el de Mercado Pago. Verificá que tu nombre en el perfil incluya nombre y apellido tal como figuran en Mercado Pago.',
         documentacionEnviada:
             'Documentación enviada. Será revisada por el equipo.',
-        identityValidationManualSubmittedNoticeTitle: 'Validación Enviada',
+        identityValidationManualSubmittedNoticeTitle: 'Verificación enviada',
         identityValidationManualSubmittedNoticeBody:
-            'Recibimos tu solicitud de validación.',
+            'Recibimos tu solicitud de verificación.',
         identityValidationManualSubmittedNoticeEmphasis:
             'Nuestro equipo la revisará dentro de las próximas 48 hs hábiles.',
+        identityVerificationPendingReviewNoticeTitle: 'Verificación en proceso',
+        identityVerificationPendingReviewNoticeBody:
+            'Estamos revisando tu documentación.',
+        identityVerificationPendingReviewNoticeEmphasis:
+            'Te notificaremos cuando la verificación esté completa.',
         verEstadoValidacion: 'Ver estado de verificación',
         debesCargarDni:
             'Debés cargar tu DNI en tu perfil para verificar con Mercado Pago.',
@@ -2267,6 +2277,11 @@ const messages = {
             'We received your verification request.',
         identityValidationManualSubmittedNoticeEmphasis:
             'Our team will review it within the next 48 business hours.',
+        identityVerificationPendingReviewNoticeTitle: 'Verification in progress',
+        identityVerificationPendingReviewNoticeBody:
+            'We are reviewing your documentation.',
+        identityVerificationPendingReviewNoticeEmphasis:
+            'We will notify you when verification is complete.',
         verEstadoValidacion: 'View verification status',
         debesCargarDni:
             'You must add your DNI to your profile to verify with Mercado Pago.',

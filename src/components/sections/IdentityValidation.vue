@@ -58,13 +58,13 @@
                 </div>
             </div>
 
-            <!-- Manual validation: paid, docs sent — awaiting review (blue notice only) -->
+            <!-- Manual: pending review — blue (?result=manual_submitted) -->
             <div
                 v-else-if="
                     identityValidationManualEnabled &&
                         manualStatus.has_submission &&
                         manualStatus.paid &&
-                        showManualValidationSubmittedNotice
+                        showManualPendingReviewBlue
                 "
                 class="identity-validation-manual-submitted-notice identity-validation-manual-submitted-notice--standalone"
             >
@@ -91,6 +91,45 @@
                     <p
                         v-if="manualStatus.submitted_at"
                         class="identity-validation-manual-submitted-notice__meta-line"
+                    >
+                        {{ $t('enviadoEl') }} {{ formatDate(manualStatus.submitted_at) }}
+                    </p>
+                </div>
+            </div>
+
+            <!-- Manual: pending review — yellow (API state, no query param) -->
+            <div
+                v-else-if="
+                    identityValidationManualEnabled &&
+                        manualStatus.has_submission &&
+                        manualStatus.paid &&
+                        showManualPendingReviewYellow
+                "
+                class="identity-verification-pending-review-notice"
+            >
+                <h2 class="identity-verification-pending-review-notice__title">
+                    {{ $t('identityVerificationPendingReviewNoticeTitle') }}
+                </h2>
+                <p class="identity-verification-pending-review-notice__text">
+                    {{ $t('identityVerificationPendingReviewNoticeBody') }}
+                </p>
+                <p class="identity-verification-pending-review-notice__emphasis">
+                    {{ $t('identityVerificationPendingReviewNoticeEmphasis') }}
+                </p>
+                <div class="identity-verification-pending-review-notice__meta">
+                    <p class="identity-verification-pending-review-notice__meta-line">
+                        <strong>{{ $t('estado') }}:</strong>
+                        {{ $t('pagadoEsperandoRevision') }}
+                    </p>
+                    <p
+                        v-if="manualStatus.paid_at"
+                        class="identity-verification-pending-review-notice__meta-line"
+                    >
+                        {{ $t('pagadoEl') }} {{ formatDate(manualStatus.paid_at) }}
+                    </p>
+                    <p
+                        v-if="manualStatus.submitted_at"
+                        class="identity-verification-pending-review-notice__meta-line"
                     >
                         {{ $t('enviadoEl') }} {{ formatDate(manualStatus.submitted_at) }}
                     </p>
@@ -280,12 +319,26 @@ export default {
             }
             return true;
         },
-        /** Blue “Validación enviada” notice (same idea as ?result=manual_submitted), above estado in the panel. */
+        /** Docs submitted, awaiting admin (not approved/rejected). */
         showManualValidationSubmittedNotice() {
             const m = this.manualStatus;
             if (!m || !m.submitted_at) return false;
             const rs = m.review_status;
             return rs !== 'approved' && rs !== 'rejected';
+        },
+        /** Blue card: right after upload redirect (?result=manual_submitted). */
+        showManualPendingReviewBlue() {
+            return (
+                this.showManualValidationSubmittedNotice &&
+                this.resultMessage === 'manual_submitted'
+            );
+        },
+        /** Yellow card: same API state when user opens the page without that query. */
+        showManualPendingReviewYellow() {
+            return (
+                this.showManualValidationSubmittedNotice &&
+                this.resultMessage !== 'manual_submitted'
+            );
         },
         showVerificationSuccessBanner() {
             if (this.manualDocsPendingAdminReview) {
@@ -566,6 +619,51 @@ export default {
     font-size: 0.95rem;
     line-height: 1.35;
     color: #0d3a66;
+}
+
+.identity-verification-pending-review-notice {
+    background: #fcf8e3;
+    border: 1px solid #d6c896;
+    border-radius: 4px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+    color: #7a5f2a;
+}
+
+.identity-verification-pending-review-notice__title {
+    margin: 0 0 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.3;
+    color: #6b5424;
+}
+
+.identity-verification-pending-review-notice__text {
+    margin: 0 0 0.4rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #7a5f2a;
+}
+
+.identity-verification-pending-review-notice__emphasis {
+    margin: 0 0 0.65rem;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.45;
+    color: #6b5424;
+}
+
+.identity-verification-pending-review-notice__meta {
+    margin: 0;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(122, 95, 42, 0.28);
+}
+
+.identity-verification-pending-review-notice__meta-line {
+    margin: 0.15rem 0;
+    font-size: 0.95rem;
+    line-height: 1.35;
+    color: #7a5f2a;
 }
 
 .manual-status-upload-block {
