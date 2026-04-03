@@ -425,7 +425,7 @@ const messages = {
         manualValidationUploadLabelBack:
             'Dorso del documento (DNI o pasaporte)',
         manualValidationUploadLabelSelfie: 'Foto tuya sosteniendo tu DNI',
-        escaneáConAppMercadoPago: 'Escaneá con la app de Mercado Pago',
+        escaneáConAppMercadoPago: 'Escanéa con una billetera virtual',
         qrExpiraEn: 'El QR expira en 15 minutos.',
         validacionManualNoDisponible:
             'La verificación manual no está disponible en este momento.',
@@ -1479,7 +1479,7 @@ const messages = {
         manualValidationUploadLabelBack:
             'Dorso del documento (DNI o pasaporte)',
         manualValidationUploadLabelSelfie: 'Foto tuya sosteniendo tu DNI',
-        escaneáConAppMercadoPago: 'Escaneá con la app de Mercado Pago',
+        escaneáConAppMercadoPago: 'Escanéa con una billetera virtual',
         qrExpiraEn: 'El QR expira en 15 minutos.',
         validacionManualNoDisponible:
             'La verificación manual no está disponible en este momento.',
@@ -2333,7 +2333,7 @@ const messages = {
         manualValidationUploadLabelFront: 'Front of ID (DNI or passport)',
         manualValidationUploadLabelBack: 'Back of ID (DNI or passport)',
         manualValidationUploadLabelSelfie: 'Photo of yourself holding your ID',
-        escaneáConAppMercadoPago: 'Scan with the Mercado Pago app',
+        escaneáConAppMercadoPago: 'Scan with a digital wallet',
         qrExpiraEn: 'The QR code expires in 15 minutes.',
         validacionManualNoDisponible:
             'Manual verification is not available at this time.',
