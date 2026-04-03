@@ -354,6 +354,11 @@ const messages = {
         pagadoEl: 'Pagado el',
         puedesIntentarDeNuevo: 'Intentar de nuevo',
         resultSuccess: '¡Cuenta verificada correctamente!',
+        identityVerificationSuccessTitle: 'Verificación exitosa',
+        identityVerificationSuccessBody: 'Tu cuenta fue verificada correctamente.',
+        identityVerificationSuccessEmphasis:
+            'Ya podés publicar viajes y enviar mensajes dentro de la comunidad.',
+        identityVerificationSuccessHomeLink: 'Ir a Inicio',
         resultError: 'Ocurrió un error. Intentá de nuevo.',
         resultDniMismatch:
             'El DNI no coincide con el de tu perfil. Verificá que tu DNI esté cargado correctamente.',
@@ -1379,6 +1384,11 @@ const messages = {
         pagadoEl: 'Pagado el',
         puedesIntentarDeNuevo: 'Intentar de nuevo',
         resultSuccess: '¡Cuenta verificada correctamente!',
+        identityVerificationSuccessTitle: 'Verificación exitosa',
+        identityVerificationSuccessBody: 'Tu cuenta fue verificada correctamente.',
+        identityVerificationSuccessEmphasis:
+            'Ya podés publicar viajes y enviar mensajes dentro de la comunidad.',
+        identityVerificationSuccessHomeLink: 'Ir a Inicio',
         resultError: 'Ocurrió un error. Intentá de nuevo.',
         resultDniMismatch:
             'El DNI no coincide con el de tu perfil. Verificá que tu DNI esté cargado correctamente.',
@@ -2207,6 +2217,11 @@ const messages = {
         pagadoEl: 'Paid on',
         puedesIntentarDeNuevo: 'Try again',
         resultSuccess: 'Account verified successfully!',
+        identityVerificationSuccessTitle: 'Verification successful',
+        identityVerificationSuccessBody: 'Your account was verified successfully.',
+        identityVerificationSuccessEmphasis:
+            'You can now post trips and send messages in the community.',
+        identityVerificationSuccessHomeLink: 'Go to Home',
         resultError: 'An error occurred. Please try again.',
         resultDniMismatch:
             "The DNI doesn't match the one on your profile. Please make sure your DNI is correct.",
