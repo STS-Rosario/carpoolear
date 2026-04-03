@@ -323,7 +323,7 @@ const messages = {
         identityValidationManualCardDesc:
             'Si no tenés Mercado Pago o preferís no usarlo, podés enviar documentación para que nuestro equipo la revise.',
         identityValidationCostLine: 'Costo: {cost}',
-        identityValidationTimeLine: 'Tiempo de validación: hasta 48 hs hábiles',
+        identityValidationTimeLine: 'Tiempo de verificación: hasta 48 hs hábiles',
         solicitarVerificacionManual: 'Solicitar verificación manual',
         validadoEl: 'Verificado el',
         validarConMercadoPago: 'Verificar con Mercado Pago',
@@ -373,10 +373,27 @@ const messages = {
             'Una vez confirmado, te pediremos que cargues la documentación.',
         manualValidationPayListLead: 'Tené a mano:',
         manualValidationPayBulletDni: 'Tu DNI',
-        manualValidationPayBulletSelfie: 'Una foto tuya con el DNI',
+        manualValidationPayBulletSelfie: 'Foto tuya sosteniendo tu DNI',
         manualValidationPayClosing:
             'Esto nos permitirá verificar tu identidad correctamente.',
         manualValidationPagarMercadoPago: 'Pagar con Mercado Pago',
+        manualValidationVolverOpcionesDesktop: 'Volver a opciones de verificación',
+        manualValidationPagoProcesado: 'Pago procesado correctamente',
+        manualValidationUploadIntro:
+            'Ahora cargá las siguientes fotos para completar la verificación manual.',
+        manualValidationUploadBulletFrente: 'Foto del frente de tu DNI',
+        manualValidationUploadBulletDorso: 'Foto del dorso de tu DNI',
+        manualValidationUploadBulletFotoConDni: 'Foto tuya sosteniendo tu DNI',
+        manualValidationUploadRequisitos: 'Requisitos',
+        manualValidationUploadReqClaras:
+            'Las fotos deben ser claras, completas y legibles.',
+        manualValidationUploadReqFormatos: 'Archivos permitidos: JPG o PNG.',
+        manualValidationUploadReqTamano: 'Tamaño máximo por archivo: {maxMb} MB.',
+        manualValidationUploadDisclaimer:
+            'Si la calidad de las imágenes no es suficiente, no podremos procesar la solicitud, no se reembolsará el pago y deberás abonar nuevamente para intentarlo de nuevo.',
+        manualValidationUploadLabelFront: 'Frente del documento (DNI o pasaporte)',
+        manualValidationUploadLabelBack: 'Dorso del documento (DNI o pasaporte)',
+        manualValidationUploadLabelSelfie: 'Foto tuya sosteniendo tu DNI',
         escaneáConAppMercadoPago: 'Escaneá con la app de Mercado Pago',
         qrExpiraEn: 'El QR expira en 15 minutos.',
         validacionManualNoDisponible:
@@ -386,8 +403,8 @@ const messages = {
         advertenciaCalidadFotos:
             'Las fotos deben ser de buena calidad. Si la verificación manual no puede realizarse (por ejemplo, por mala calidad), el dinero no se devolverá y tendrás que pagar nuevamente para otro intento.',
         subirFrenteDocumento: 'Frente del documento (DNI o pasaporte)',
-        subirDorsoDocumento: 'Dorso del documento',
-        subirSelfieDocumento: 'Selfie sosteniendo el documento',
+        subirDorsoDocumento: 'Dorso del documento (DNI o pasaporte)',
+        subirSelfieDocumento: 'Foto tuya sosteniendo tu DNI',
         enviarDocumentacion: 'Enviar documentación',
         todosLosArchivosRequeridos: 'Debés subir las tres imágenes.',
         validacionesManuales: 'Verificaciones manuales',
@@ -1331,7 +1348,7 @@ const messages = {
         identityValidationManualCardDesc:
             'Si no tenés Mercado Pago o preferís no usarlo, podés enviar documentación para que nuestro equipo la revise.',
         identityValidationCostLine: 'Costo: {cost}',
-        identityValidationTimeLine: 'Tiempo de validación: hasta 48 hs hábiles',
+        identityValidationTimeLine: 'Tiempo de verificación: hasta 48 hs hábiles',
         solicitarVerificacionManual: 'Solicitar verificación manual',
         validadoEl: 'Verificado el',
         validarConMercadoPago: 'Verificar con Mercado Pago',
@@ -1381,10 +1398,27 @@ const messages = {
             'Una vez confirmado, te pediremos que cargues la documentación.',
         manualValidationPayListLead: 'Tené a mano:',
         manualValidationPayBulletDni: 'Tu DNI',
-        manualValidationPayBulletSelfie: 'Una foto tuya con el DNI',
+        manualValidationPayBulletSelfie: 'Foto tuya sosteniendo tu DNI',
         manualValidationPayClosing:
             'Esto nos permitirá verificar tu identidad correctamente.',
         manualValidationPagarMercadoPago: 'Pagar con Mercado Pago',
+        manualValidationVolverOpcionesDesktop: 'Volver a opciones de verificación',
+        manualValidationPagoProcesado: 'Pago procesado correctamente',
+        manualValidationUploadIntro:
+            'Ahora cargá las siguientes fotos para completar la verificación manual.',
+        manualValidationUploadBulletFrente: 'Foto del frente de tu DNI',
+        manualValidationUploadBulletDorso: 'Foto del dorso de tu DNI',
+        manualValidationUploadBulletFotoConDni: 'Foto tuya sosteniendo tu DNI',
+        manualValidationUploadRequisitos: 'Requisitos',
+        manualValidationUploadReqClaras:
+            'Las fotos deben ser claras, completas y legibles.',
+        manualValidationUploadReqFormatos: 'Archivos permitidos: JPG o PNG.',
+        manualValidationUploadReqTamano: 'Tamaño máximo por archivo: {maxMb} MB.',
+        manualValidationUploadDisclaimer:
+            'Si la calidad de las imágenes no es suficiente, no podremos procesar la solicitud, no se reembolsará el pago y deberás abonar nuevamente para intentarlo de nuevo.',
+        manualValidationUploadLabelFront: 'Frente del documento (DNI o pasaporte)',
+        manualValidationUploadLabelBack: 'Dorso del documento (DNI o pasaporte)',
+        manualValidationUploadLabelSelfie: 'Foto tuya sosteniendo tu DNI',
         escaneáConAppMercadoPago: 'Escaneá con la app de Mercado Pago',
         qrExpiraEn: 'El QR expira en 15 minutos.',
         validacionManualNoDisponible:
@@ -1394,8 +1428,8 @@ const messages = {
         advertenciaCalidadFotos:
             'Las fotos deben ser de buena calidad. Si la verificación manual no puede realizarse (por ejemplo, por mala calidad), el dinero no se devolverá y tendrás que pagar nuevamente para otro intento.',
         subirFrenteDocumento: 'Frente del documento (DNI o pasaporte)',
-        subirDorsoDocumento: 'Dorso del documento',
-        subirSelfieDocumento: 'Selfie sosteniendo el documento',
+        subirDorsoDocumento: 'Dorso del documento (DNI o pasaporte)',
+        subirSelfieDocumento: 'Foto tuya sosteniendo tu DNI',
         enviarDocumentacion: 'Enviar documentación',
         todosLosArchivosRequeridos: 'Debés subir las tres imágenes.',
         validacionesManuales: 'Verificaciones manuales',
@@ -2143,7 +2177,7 @@ const messages = {
         identityValidationManualCardDesc:
             "If you don't have Mercado Pago or prefer not to use it, you can send documents for our team to review.",
         identityValidationCostLine: 'Cost: {cost}',
-        identityValidationTimeLine: 'Validation time: up to 48 business hours',
+        identityValidationTimeLine: 'Verification time: up to 48 business hours',
         solicitarVerificacionManual: 'Request manual verification',
         validacionManual: 'Manual verification',
         validacionManualDescCorta:
@@ -2190,10 +2224,27 @@ const messages = {
             'Once confirmed, we will ask you to upload your documents.',
         manualValidationPayListLead: 'Have ready:',
         manualValidationPayBulletDni: 'Your national ID (DNI)',
-        manualValidationPayBulletSelfie: 'A photo of yourself with your ID',
+        manualValidationPayBulletSelfie: 'Photo of yourself holding your DNI',
         manualValidationPayClosing:
             'This allows us to verify your identity correctly.',
         manualValidationPagarMercadoPago: 'Pay with Mercado Pago',
+        manualValidationVolverOpcionesDesktop: 'Back to verification options',
+        manualValidationPagoProcesado: 'Payment processed successfully',
+        manualValidationUploadIntro:
+            'Now upload the following photos to complete manual verification.',
+        manualValidationUploadBulletFrente: 'Photo of the front of your ID',
+        manualValidationUploadBulletDorso: 'Photo of the back of your ID',
+        manualValidationUploadBulletFotoConDni: 'Photo of yourself holding your ID',
+        manualValidationUploadRequisitos: 'Requirements',
+        manualValidationUploadReqClaras:
+            'Photos must be clear, complete, and readable.',
+        manualValidationUploadReqFormatos: 'Allowed files: JPG or PNG.',
+        manualValidationUploadReqTamano: 'Maximum size per file: {maxMb} MB.',
+        manualValidationUploadDisclaimer:
+            'If image quality is not sufficient, we cannot process the request, the payment will not be refunded, and you will need to pay again to try again.',
+        manualValidationUploadLabelFront: 'Front of ID (DNI or passport)',
+        manualValidationUploadLabelBack: 'Back of ID (DNI or passport)',
+        manualValidationUploadLabelSelfie: 'Photo of yourself holding your ID',
         escaneáConAppMercadoPago: 'Scan with the Mercado Pago app',
         qrExpiraEn: 'The QR code expires in 15 minutes.',
         validacionManualNoDisponible:
@@ -2203,8 +2254,8 @@ const messages = {
         advertenciaCalidadFotos:
             'Photos must be of good quality. If manual verification cannot be completed (e.g. due to poor quality), the money will not be refunded and you will have to pay again for another try.',
         subirFrenteDocumento: 'Front of ID (DNI or passport)',
-        subirDorsoDocumento: 'Back of ID',
-        subirSelfieDocumento: 'Selfie holding the ID',
+        subirDorsoDocumento: 'Back of ID (DNI or passport)',
+        subirSelfieDocumento: 'Photo of yourself holding your DNI',
         enviarDocumentacion: 'Submit documentation',
         todosLosArchivosRequeridos: 'You must upload all three images.',
         validacionesManuales: 'Manual verifications',
