@@ -4,6 +4,10 @@
         :class="[backgroundStyle, viewName, deviceClass]"
     >
         <ForceUpgradeModal v-if="showForceUpgrade" />
+        <IdentityValidationPromptModal
+            v-if="!showForceUpgrade"
+            :suppress="identityPromptSuppress"
+        />
         <template v-if="!showForceUpgrade">
             <!-- Custom Splash Screen -->
             <div v-if="showCustomSplash" class="custom-splash-screen">
@@ -41,6 +45,7 @@ import footerApp from './components/sections/FooterApp.vue';
 import headerApp from './components/sections/HeaderApp.vue';
 import onBoarding from './components/sections/OnBoarding.vue';
 import ForceUpgradeModal from './components/ForceUpgradeModal.vue';
+import IdentityValidationPromptModal from './components/IdentityValidationPromptModal.vue';
 
 export default {
     name: 'app',
@@ -167,6 +172,9 @@ export default {
             let mustShowGeneral = this.user && this.user.on_boarding_view !== 1;
             return moduleEnabled && (mustShowMobile || mustShowGeneral);
         },
+        identityPromptSuppress() {
+            return this.showCustomSplash || this.onBoardingVisibility;
+        },
         viewName() {
             return this.$route.name;
         },
@@ -201,7 +209,8 @@ export default {
         headerApp,
         footerApp,
         onBoarding,
-        ForceUpgradeModal
+        ForceUpgradeModal,
+        IdentityValidationPromptModal
     }
 };
 </script>
