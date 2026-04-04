@@ -2554,6 +2554,10 @@ export default {
                             dialogs.message(this.$t('tienesQueSerConductor'), {
                                 estado: 'error'
                             });
+                        } else if (this.$checkError(err, 'routing_service_unavailable')) {
+                            dialogs.message(this.$t('routingServiceTemporaryError'), {
+                                estado: 'error'
+                            });
                         } else {
                             dialogs.message(
                                 this.$t('problemaAlCargarElViaje'),
@@ -2580,8 +2584,17 @@ export default {
                             params: { id: this.trip.id }
                         });
                     })
-                    .catch(() => {
+                    .catch((err) => {
                         this.saving = false;
+                        if (this.$checkError(err, 'routing_service_unavailable')) {
+                            dialogs.message(this.$t('routingServiceTemporaryError'), {
+                                estado: 'error'
+                            });
+                        } else {
+                            dialogs.message(this.$t('problemaAlCargarElViaje'), {
+                                estado: 'error'
+                            });
+                        }
                     });
             }
         },
@@ -2727,6 +2740,10 @@ export default {
                         this.recommended_return_trip_price_cents = result.data.recommended_trip_price_cents;
                         this.recalculateRecommendedReturnPrice();
                     }
+                } else if (result.error_code === 'routing_service_unavailable') {
+                    dialogs.message(this.$t('routingServiceTemporaryError'), {
+                        estado: 'error'
+                    });
                 }
             });
 
