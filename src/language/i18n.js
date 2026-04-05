@@ -103,9 +103,10 @@ const messages = {
         cargandoViajes: 'Cargando viajes ...',
         comoConductor: 'Como conductor',
         comoPasajero: 'Como pasajero',
-        meComprometo: 'Me comprometo a no lucrar con el viaje.',
+        meComprometo: 'Me comprometo a no lucrar con el viaje',
+        viajeColaborativoLead: 'Este es un viaje colaborativo.',
         contribucionMaxima:
-            'La contribución máxima es igual a gastos de combustible + peaje dividido la cantidad de personas viajando en el auto. Durante la coordinación previa al viaje, cualquier persona puede pedir hacer la división con tickets de combustible y peaje en mano.',
+            'La contribución se calcula únicamente para cubrir combustible y peajes, divididos entre quienes viajan. Si alguien lo desea, pueden revisarse y dividirse los gastos con los comprobantes en mano antes de realizar el viaje.',
         contribucionMaximaPista:
             'Al pedir una contribución por encima de la máxima, es posible que el viaje sea considerado con fin de lucro y por lo tanto un transporte ilegal de pasajeros, pudiendo ser invalidado el seguro particular automotor y la cobertura contra terceros asociada. Tengamos un buen viaje cuidándonos entre todos :-D',
         origenOdestino: 'Origen o destino fuera de',
@@ -134,6 +135,9 @@ const messages = {
         aceptaMascotas: 'Acepta mascotas',
         noninos: 'No niños',
         aceptaNinos: 'Acepta niños',
+        preferenciaPermitidoFumar: 'Permitido fumar',
+        preferenciaPermitidoAnimales: 'Permitido animales',
+        preferenciaPermitidoNinos: 'Permitido niños',
         cargarViajeRegreso: 'Cargar viaje de regreso',
         crear: 'CREAR',
         actualizar: 'Actualizar',
@@ -1072,7 +1076,15 @@ const messages = {
         crearViajeTitulo: 'Crear viaje',
         precioAsientoTooltip:
             'El precio que pagará cada pasajero. Incluye el proporcional de peajes{sellado}',
+        contribucionPorPersonaTooltipSinSellado:
+            'Calculado en base a nafta premium, consumo promedio alto y peajes',
+        contribucionPorPersonaTooltipConSellado:
+            'Calculado en base a nafta premium, consumo promedio alto, sellado de viaje y peajes',
         contribucionRecomendadaLabel: 'Contribución recomendada',
+        contribucionRecomendadaCardDescripcionSinSellado:
+            'Calculado en base a nafta premium (con consumo promedio alto) y peajes.',
+        contribucionRecomendadaCardDescripcionConSellado:
+            'Calculado en base a nafta premium (con consumo promedio alto), sellado de viaje y peajes.',
         calculadoEnBaseNaftaTooltip:
             'Calculado en base a nafta premium, consumo promedio alto, peajes y Sellado de Viaje incluídos (si aplica)',
         comentario: 'Comentario',
@@ -1180,9 +1192,10 @@ const messages = {
         cargandoViajes: 'Cargando viajes ...',
         comoConductor: 'Como conductor',
         comoPasajero: 'Como pasajero',
-        meComprometo: 'Me comprometo a no lucrar con el viaje.',
+        meComprometo: 'Me comprometo a no lucrar con el viaje',
+        viajeColaborativoLead: 'Este es un viaje colaborativo.',
         contribucionMaxima:
-            'La contribución máxima es igual a gastos de combustible + peaje dividido la cantidad de personas viajando en el auto. Durante la coordinación previa al viaje, cualquier persona puede pedir hacer la división con tickets de combustible y peaje en mano.',
+            'La contribución se calcula únicamente para cubrir combustible y peajes, divididos entre quienes viajan. Si alguien lo desea, pueden revisarse y dividirse los gastos con los comprobantes en mano antes de realizar el viaje.',
         contribucionMaximaPista:
             'Al pedir una contribución por encima de la máxima, es posible que el viaje sea considerado con fin de lucro y por lo tanto un transporte ilegal de pasajeros, pudiendo ser invalidado el seguro particular automotor y la cobertura contra terceros asociada. Tengamos un buen viaje cuidándonos entre todos :-D',
         origenOdestino: 'Origen o destino fuera de',
@@ -1211,6 +1224,9 @@ const messages = {
         aceptaMascotas: 'Acepta mascotas',
         noninos: 'No niños',
         aceptaNinos: 'Acepta niños',
+        preferenciaPermitidoFumar: 'Permitido fumar',
+        preferenciaPermitidoAnimales: 'Permitido animales',
+        preferenciaPermitidoNinos: 'Permitido niños',
         cargarViajeRegreso: 'Cargar viaje de regreso',
         crear: 'CREAR',
         actualizar: 'Actualizar',
@@ -2049,9 +2065,10 @@ const messages = {
         cargandoViajes: 'Loading...',
         comoConductor: 'As a driver',
         comoPasajero: 'As a passenger',
-        meComprometo: 'I commit to not profiting from the trip.',
+        meComprometo: 'I commit to not profiting from the trip',
+        viajeColaborativoLead: 'This is a collaborative trip.',
         contribucionMaxima:
-            'The maximum contribution equals fuel costs + tolls divided by the number of people traveling in the car. During pre-trip coordination, anyone can request to do the division with fuel and toll receipts in hand.',
+            'The contribution is calculated solely to cover fuel and tolls, split among those traveling. If anyone wishes, expenses can be reviewed and split using receipts in hand before the trip.',
         contribucionMaximaPista:
             "By requesting a contribution above the maximum, the trip may be considered for-profit and therefore illegal passenger transport, potentially invalidating private car insurance and associated third-party coverage. Let's have a good trip by taking care of each other :-D",
         origenOdestino: 'Departure or destination outside of',
@@ -2080,6 +2097,9 @@ const messages = {
         aceptaMascotas: 'Pets allowed',
         noninos: 'No children',
         aceptaNinos: 'Children allowed',
+        preferenciaPermitidoFumar: 'Smoking allowed',
+        preferenciaPermitidoAnimales: 'Pets allowed',
+        preferenciaPermitidoNinos: 'Children allowed',
         cargarViajeRegreso: 'Add return trip',
         crear: 'CREATE',
         actualizar: 'Update',
@@ -2999,7 +3019,15 @@ const messages = {
         crearViajeTitulo: 'Create trip',
         precioAsientoTooltip:
             'The price each passenger will pay. Includes proportional of tolls{sellado}',
+        contribucionPorPersonaTooltipSinSellado:
+            'Calculated based on premium gasoline, high average consumption and tolls',
+        contribucionPorPersonaTooltipConSellado:
+            'Calculated based on premium gasoline, high average consumption, Trip Seal and tolls',
         contribucionRecomendadaLabel: 'Recommended contribution',
+        contribucionRecomendadaCardDescripcionSinSellado:
+            'Calculated based on premium gasoline (with high average consumption) and tolls.',
+        contribucionRecomendadaCardDescripcionConSellado:
+            'Calculated based on premium gasoline (with high average consumption), Trip Seal and tolls.',
         calculadoEnBaseNaftaTooltip:
             'Calculated based on premium gasoline, high average consumption, tolls and Trip Seal included (if applicable)',
         comentario: 'Comment',

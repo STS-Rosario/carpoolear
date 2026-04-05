@@ -191,7 +191,7 @@ export default {
         },
         infoIconSrc() {
             const base = process.env.ROUTE_BASE || '/';
-            return `${base}static/img/info-circle.png`;
+            return `${base}static/img/icon-info.svg`;
         },
         formattedManualCost() {
             const cents =
