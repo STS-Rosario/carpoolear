@@ -1751,6 +1751,7 @@ import { useDeviceStore } from '../../stores/device';
 import { useTripsStore } from '../../stores/trips';
 import { useRootStore } from '../../stores/root';
 import { appLocaleToRoutingLanguage } from '../../main';
+import { leafletOsrmServiceUrl } from '../../utils/osrmRouting';
 // import { parseOsmStreet } from '../../services/maps.js';
 import DatePicker from '../DatePicker';
 import dialogs from '../../services/dialogs.js';
@@ -2812,12 +2813,36 @@ export default {
 
             if (this.$refs.map && this.$refs.map.mapObject) {
                 let map = this.$refs.map.mapObject;
+                const waypointsMeta = points.map((point) => ({
+                    lat: point.location.lat,
+                    lng: point.location.lng
+                }));
+                const routingLang = appLocaleToRoutingLanguage[this.$i18n.locale] || 'es';
+                const osrmServiceUrl = leafletOsrmServiceUrl();
+                console.debug('[Carpoolear][L.Routing] NewTrip calcRoute: Routing.control via backend OSRM proxy', {
+                    type: type || 'trip',
+                    waypointCount: points.length,
+                    waypoints: waypointsMeta,
+                    language: routingLang,
+                    serviceUrl: osrmServiceUrl
+                });
 
                 /* eslint-disable no-undef */
                 L.Routing.control({
+                    router: L.Routing.osrmv1({
+                        serviceUrl: osrmServiceUrl,
+                        language: routingLang,
+                        suppressDemoServerWarning: true
+                    }),
                     waypoints: points.map(point => L.latLng(point.location.lat, point.location.lng)),
-                    language: appLocaleToRoutingLanguage[this.$i18n.locale] || 'es'
+                    language: routingLang
                 }).addTo(map);
+            } else {
+                console.debug('[Carpoolear][L.Routing] NewTrip calcRoute: skip Routing.control (no map ref yet)', {
+                    type: type || 'trip',
+                    waypointCount: points.length,
+                    hasMapRef: !!(this.$refs.map && this.$refs.map.mapObject)
+                });
             }
         },
         validatePrice() {
