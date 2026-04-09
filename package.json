@@ -54,7 +54,7 @@
     "babel-preset-stage-2": "^6.24.1",
     "chart.js": "^3.9.1",
     "dayjs": "^1.11.19",
-    "dompurify": "^3.3.1",
+    "dompurify": "^3.3.2",
     "firebase": "^9.19.1",
     "font-awesome": "^4.7.0",
     "font-awesome-webpack-4": "^1.0.0",
