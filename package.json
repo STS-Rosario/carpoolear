@@ -130,7 +130,7 @@
     "webpack-cli": "^3.3.6",
     "webpack-dev-server": "^3.7.2",
     "webpack-merge": "^4.2.1",
-    "vitest": "^2.1.0",
+    "vitest": "^4.1.4",
     "xml2js": "^0.4.19"
   },
   "browserslist": [
