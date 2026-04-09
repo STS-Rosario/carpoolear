@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 const argv = require('minimist')(process.argv.slice(2));
+const cp = require('child_process');
+const path = require('path');
 const shell = require('shelljs');
 const fs = require('fs');
 const xmlParser = require('xml2js').parseString;
@@ -104,12 +106,22 @@ if (argv._.length > 0) {
             process.env.CORDOVA = false;
             process.env.NODE_ENV = NODE_ENV;
             process.env.TARGET_APP = TARGET;
-            shell.exec('webpack-dev-server --inline --progress --config build/webpack.dev.conf.js',
-                {
-                    env: process.env,
-                    async: true
-                }
-            );
+            // Use spawn + node binary path: shelljs async exec let the parent exit immediately;
+            // sync shelljs exec buffers output and is a poor fit for a long-running server.
+            const wds = path.join(__dirname, 'node_modules', 'webpack-dev-server', 'bin', 'webpack-dev-server.js');
+            const child = cp.spawn(process.execPath, [
+                wds,
+                '--inline',
+                '--progress',
+                '--config',
+                'build/webpack.dev.conf.js'
+            ], {
+                env: process.env,
+                stdio: 'inherit'
+            });
+            child.on('exit', (code, signal) => {
+                process.exit(signal ? 1 : (code === null ? 1 : code));
+            });
             break;
         case 'build':
             preBuildAndCheckPlatform(() => {

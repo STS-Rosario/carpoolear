@@ -54,7 +54,7 @@ console.log('ROUTE_BASE', ROUTE_BASE, cordovaPath);
 cordovaTag.setAttribute('src', ROUTE_BASE + cordovaPath);
 document.head.appendChild(cordovaTag);
 
-require('font-awesome-webpack-4');
+import 'font-awesome/css/font-awesome.min.css';
 
 Vue.use(VueResource);
 

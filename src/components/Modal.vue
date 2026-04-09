@@ -32,7 +32,6 @@
 </template>
 
 <script>
-import { setTimeout } from 'timers';
 export default {
     name: 'modal',
     data() {

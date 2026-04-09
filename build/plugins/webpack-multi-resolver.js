@@ -1,5 +1,6 @@
-let fs = require('fs');
-let path = require('path');
+const fs = require('fs');
+const path = require('path');
+const webpack = require('webpack');
 
 class WebpackMultiResolver {
 
@@ -12,25 +13,28 @@ class WebpackMultiResolver {
     }
 
     apply (compiler) {
-        compiler.plugin('compilation', (compilation) => {
-            compilation.plugin('normal-module-loader', (loaderContext, module) => {
-                if (this.pattern.test(module.rawRequest)) {
-                    let newPath = module.resource.replace(this.targetDefault, this.targetProject);
-                    if (fs.existsSync(newPath)) {
-                        module.resource = newPath;
+        const { NormalModule } = webpack;
+
+        compiler.hooks.compilation.tap('WebpackMultiResolver', (compilation) => {
+            NormalModule.getCompilationHooks(compilation).beforeLoaders.tap(
+                'WebpackMultiResolver',
+                (loaders, module) => {
+                    if (this.pattern.test(module.rawRequest)) {
+                        const newPath = module.resource.replace(this.targetDefault, this.targetProject);
+                        if (fs.existsSync(newPath)) {
+                            module.resource = newPath;
+                        }
                     }
                 }
-            });
+            );
         });
-        compiler.plugin('context-module-factory', (cmf) => {
-            cmf.plugin('before-resolve', (result, callback) => {
-                if (this.targetProject && this.pattern.test(result.request)) {
-                    result.request = result.request.replace(this.targetDefault, this.targetProject);
+
+        compiler.hooks.contextModuleFactory.tap('WebpackMultiResolver', (cmf) => {
+            cmf.hooks.beforeResolve.tapAsync('WebpackMultiResolver', (data, callback) => {
+                if (this.targetProject && data.request && this.pattern.test(data.request)) {
+                    data.request = data.request.replace(this.targetDefault, this.targetProject);
                 }
-                callback(null, result);
-            });
-            cmf.plugin('after-resolve', (result, callback) => {
-                return callback(null, result);
+                callback(null, data);
             });
         });
     }
