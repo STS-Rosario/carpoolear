@@ -1,6 +1,8 @@
 .DS_Store
 .env
 node_modules/
+# npm only — do not commit Yarn lockfiles
+yarn.lock
 dist/
 npm-debug.log
 
