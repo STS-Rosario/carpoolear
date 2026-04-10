@@ -6,9 +6,9 @@ import routes from './routes.js';
 
 const router = createRouter({
     routes: routes,
-    history: process.env.HISTORY_MODE === 'history'
-        ? createWebHistory(process.env.ROUTE_BASE)
-        : createWebHashHistory(process.env.ROUTE_BASE)
+    history: import.meta.env.VITE_HISTORY_MODE === 'history'
+        ? createWebHistory(import.meta.env.VITE_ROUTE_BASE)
+        : createWebHashHistory(import.meta.env.VITE_ROUTE_BASE)
 });
 
 router.rememberRoute = null;
@@ -51,7 +51,7 @@ router.beforeEach((to, from, next) => {
     }
     const config = authStore.appConfig;
     console.log('config app name', config);
-    let appName = process.env.TARGET_APP || 'Carpoolear';
+    let appName = import.meta.env.VITE_TARGET_APP || 'Carpoolear';
     if (config) {
         appName = config.app_name ? config.app_name : config.name_app;
     }

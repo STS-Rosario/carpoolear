@@ -13,14 +13,14 @@ import router from './router';
 import pinia from './pinia';
 
 /* eslint-disable no-unused-vars */
-import cordova from './cordova';
-import directives from './directives';
+import './cordova';
+import './directives';
 
-import bootstrapCss from './styles/bootstrap/css/bootstrap.min.css';
+import './styles/bootstrap/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
 
-import cssHelpers from './styles/helpers';
-import css from './styles/main';
+import './styles/helpers.css';
+import './styles/main.css';
 
 import i18n, {
     appLocaleToBCP47,
@@ -42,7 +42,7 @@ import Vue2Leaflet from 'vue2-leaflet';
 // Re-export locale maps so existing imports from '../../main' still work
 export { appLocaleToBCP47, appLocaleToRoutingLanguage };
 
-const ROUTE_BASE = process.env.ROUTE_BASE;
+const ROUTE_BASE = import.meta.env.VITE_ROUTE_BASE || '';
 
 const debugApi = new DebugApi();
 
@@ -170,12 +170,12 @@ const initializePushNotifications = async () => {
 // Initialize plugins when app is ready
 initializeCapacitorPlugins();
 
-if (process.env.SERVE) {
+if (import.meta.env.VITE_SERVE) {
     console.log('Not running in cordova.');
     const { useRootStore } = require('./stores/root');
     useRootStore().init();
 } else {
-    if (process.env.NODE_ENV === 'development') {
+    if (import.meta.env.DEV) {
         setTimeout(function () {
             if (!window.cordova) {
                 console.log('Not running in cordova.');
@@ -184,7 +184,7 @@ if (process.env.SERVE) {
             }
         }, 2000);
     } else {
-        console.log('no process at all', process.env.NODE_ENV);
+        console.log('no process at all', import.meta.env.PROD);
         setTimeout(function () {
             if (!window.cordova) {
                 console.log('Not running in cordova.');
@@ -194,7 +194,7 @@ if (process.env.SERVE) {
         }, 2000);
     }
 }
-console.log('APP NAME: ' + process.env.TARGET_APP);
+console.log('APP NAME: ' + import.meta.env.VITE_TARGET_APP);
 
 bus.on('system-ready', () => {
     const app = createApp(App);

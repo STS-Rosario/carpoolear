@@ -137,15 +137,14 @@ if (argv._.length > 0) {
             process.env.CORDOVA = false;
             process.env.NODE_ENV = NODE_ENV;
             process.env.TARGET_APP = TARGET;
-            // Use spawn + node binary path: shelljs async exec let the parent exit immediately;
-            // sync shelljs exec buffers output and is a poor fit for a long-running server.
-            const wds = path.join(__dirname, 'node_modules', 'webpack-dev-server', 'bin', 'webpack-dev-server.js');
+            const viteBin = path.join(__dirname, 'node_modules', 'vite', 'bin', 'vite.js');
             const child = cp.spawn(process.execPath, [
-                wds,
-                '--inline',
-                '--progress',
+                viteBin,
+                '--host',
+                '--port',
+                process.env.PORT || '8080',
                 '--config',
-                'build/webpack.dev.conf.js'
+                'vite.config.js'
             ], {
                 env: process.env,
                 stdio: 'inherit'
@@ -156,11 +155,21 @@ if (argv._.length > 0) {
             break;
         case 'build':
             preBuildAndCheckPlatform(() => {
-                shell.exec(`${shellQuote(resolveCordovaBin())} build ${PLATFORM}`, {
-                    env: cordovaEnv(),
-                    cwd: projectPath,
+                const viteBin = path.join(__dirname, 'node_modules', 'vite', 'bin', 'vite.js');
+                shell.exec(`cross-env PLATFORM=${PLATFORM} node ${viteBin} build`, {
+                    env: process.env,
+                    cwd: __dirname,
                     silent: true
-                }, showError);
+                }, (code, stderr, stdout) => {
+                    if (code !== 0) {
+                        console.log('Vite build failed:', stderr, stdout);
+                    }
+                    shell.exec(`${shellQuote(resolveCordovaBin())} build ${PLATFORM}`, {
+                        env: cordovaEnv(),
+                        cwd: projectPath,
+                        silent: true
+                    }, showError);
+                });
             });
             break;
         case 'prepare':
@@ -173,15 +182,15 @@ if (argv._.length > 0) {
             });
             break;
         case 'build-web':
-            let buildEnv = PROD ? 'build.js' : 'build-dev.js';
             process.env.CORDOVA = false;
             process.env.NODE_ENV = 'production';
             process.env.TARGET_APP = TARGET;
-            let options = {
-                env: process.env
-            };
-            console.log(`cross-env PLATFORM=DESKTOP node build/${buildEnv}`);
-            shell.exec(`cross-env PLATFORM=DESKTOP node build/${buildEnv}`, options);
+            const viteBuildBin = path.join(__dirname, 'node_modules', 'vite', 'bin', 'vite.js');
+            shell.exec(`node ${viteBuildBin} build`, {
+                env: process.env,
+                cwd: __dirname,
+                silent: false
+            });
             break;
         default:
             console.log(shell);

@@ -386,13 +386,11 @@ import TripPassengers from '../elements/TripPassengers';
 import TripButtons from '../elements/TripButtons';
 
 import Vue from 'vue';
-import VueRouter from 'vue-router';
 import VueHead from 'vue-head';
 import { LMap, LTileLayer } from 'vue2-leaflet';
 import { appLocaleToRoutingLanguage } from '../../main';
 import 'leaflet-routing-machine';
 Vue.use(VueHead);
-Vue.use(VueRouter);
 
 export default {
     name: 'trip',

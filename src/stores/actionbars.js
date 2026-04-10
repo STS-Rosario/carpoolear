@@ -7,7 +7,7 @@ function getRouter() {
     return _router;
 }
 
-let appName = process.env.TARGET_APP || 'Carpoolear';
+let appName = import.meta.env.VITE_TARGET_APP || 'Carpoolear';
 if (appName && appName.length) {
     appName = appName.charAt(0).toUpperCase() + appName.slice(1);
 }
@@ -97,7 +97,7 @@ export const useActionbarsStore = defineStore('actionbars', {
             const { useAuthStore } = require('./auth');
             const authStore = useAuthStore();
             const config = authStore.appConfig;
-            let currentAppName = config ? config.name_app : process.env.TARGET_APP;
+            let currentAppName = config ? config.name_app : import.meta.env.VITE_TARGET_APP;
             if (currentAppName && currentAppName.length) {
                 currentAppName = currentAppName.charAt(0).toUpperCase() + currentAppName.slice(1);
             }

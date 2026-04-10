@@ -70,22 +70,22 @@ export default {
 
     async initWebPush() {
         if (
-            process.env.FIREBASE_PARAMS !== undefined &&
+            import.meta.env.VITE_FIREBASE_PARAMS !== undefined &&
             window.Notification &&
             window.Notification.requestPermission
         ) {
             try {
                 const firebaseParamsString = new URLSearchParams(
-                    process.env.FIREBASE_PARAMS
+                    import.meta.env.VITE_FIREBASE_PARAMS
                 ).toString();
 
                 // Get service worker path based on environment
                 let serviceWorkerPath =
-                    process.env.NODE_ENV === 'production'
-                        ? process.env.ROUTE_BASE + 'firebase-messaging-sw.js'
+                    import.meta.env.PROD
+                        ? import.meta.env.VITE_ROUTE_BASE + 'firebase-messaging-sw.js'
                         : '/static/firebase-messaging-sw.js';
 
-                // Append firebase params as query since service workers can't access process.env
+                // Append firebase params as query since service workers can't access import.meta.env
                 serviceWorkerPath += '?' + firebaseParamsString;
 
                 const serviceWorker = navigator.serviceWorker
@@ -99,12 +99,12 @@ export default {
 
                 const reg = await serviceWorker;
 
-                const firebaseApp = initializeApp(process.env.FIREBASE_PARAMS);
+                const firebaseApp = initializeApp(import.meta.env.VITE_FIREBASE_PARAMS);
                 const messaging = getMessaging(firebaseApp);
 
                 // Get FCM token
                 const currentToken = await getToken(messaging, {
-                    vapidKey: process.env.FIRABASE_VAPID_KEY,
+                    vapidKey: import.meta.env.VITE_FIRABASE_VAPID_KEY,
                     serviceWorkerRegistration: reg
                 });
 
@@ -148,7 +148,7 @@ export default {
                     const notificationOptions = {
                         body: payload.notification.body,
                         data: payload.data,
-                        icon: payload.notification.icon // process.env.ROUTE_BASE + 'static/img/icon-192.png'
+                        icon: payload.notification.icon // import.meta.env.VITE_ROUTE_BASE + 'static/img/icon-192.png'
                     };
 
                     if (payload.data.url !== window.location.pathname) {
