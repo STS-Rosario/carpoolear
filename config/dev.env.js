@@ -7,7 +7,9 @@ module.exports = merge(prodEnv, {
     API_URL: JSON.stringify(process.env.API_URL || 'http://localhost:8000'),
     WEB_URL: JSON.stringify(process.env.WEB_URL || 'https://carpoolear.com.ar/app'),
     FACEBOOK_API: '"147151221990591"',
-    RECAPTCHA_SITE_KEY: '"6LeVu34pAAAAAMpDut-0e0Wahe2vy1amM5MpANQz"',
+    RECAPTCHA_SITE_KEY: '"6LdoUqQpAAAAAJXZvlOk47gLqTapZ0gErj4KoFj_"',
     TARGET_APP: '"carpoolear"',
-    MERCADO_PAGO_PUBLIC_KEY: JSON.stringify(process.env.MERCADO_PAGO_PUBLIC_KEY || '')
+    MERCADO_PAGO_PUBLIC_KEY: JSON.stringify(
+        process.env.MERCADO_PAGO_PUBLIC_KEY || ''
+    )
 });

@@ -2337,7 +2337,7 @@
           border-left-width: 0;
       }
       .new-trip-component .form-trip {
-          padding-bottom: 3rem;
+          padding-bottom: calc(52px + 10rem + env(safe-area-inset-bottom, 0px));
           box-shadow: none;
           margin-bottom: 0;
       }

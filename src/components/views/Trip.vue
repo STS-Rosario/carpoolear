@@ -390,6 +390,7 @@ import VueRouter from 'vue-router';
 import VueHead from 'vue-head';
 import { LMap, LTileLayer } from 'vue2-leaflet';
 import { appLocaleToRoutingLanguage } from '../../main';
+import { leafletOsrmServiceUrl } from '../../utils/osrmRouting';
 import 'leaflet-routing-machine';
 Vue.use(VueHead);
 Vue.use(VueRouter);
@@ -734,11 +735,33 @@ export default {
                 let points = this.trip.points.map((point) =>
                     L.latLng(point.lat, point.lng)
                 );
+                const waypointsMeta = (this.trip.points || []).map((p) => ({
+                    lat: p.lat,
+                    lng: p.lng
+                }));
+                const routingLang = appLocaleToRoutingLanguage[this.$i18n.locale] || 'es';
+                const osrmServiceUrl = leafletOsrmServiceUrl();
+                console.debug('[Carpoolear][L.Routing] Trip.vue renderMap: Routing.control via backend OSRM proxy', {
+                    tripId: this.trip && this.trip.id,
+                    waypointCount: waypointsMeta.length,
+                    waypoints: waypointsMeta,
+                    language: routingLang,
+                    serviceUrl: osrmServiceUrl
+                });
                 let control = L.Routing.control({
+                    router: L.Routing.osrmv1({
+                        serviceUrl: osrmServiceUrl,
+                        language: routingLang,
+                        suppressDemoServerWarning: true
+                    }),
                     waypoints: points,
-                    language: appLocaleToRoutingLanguage[this.$i18n.locale] || 'es'
+                    language: routingLang
                 });
                 control.addTo(map);
+            } else {
+                console.debug('[Carpoolear][L.Routing] Trip.vue renderMap: skip (no map ref)', {
+                    tripId: this.trip && this.trip.id
+                });
             }
         },
 
