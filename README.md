@@ -31,9 +31,8 @@ change API_URL in config/dev.env.js
 
 # serve with hot reload at localhost:8080
 npm run dev
-npm run prod (NOT WORKING)
 
-# serve with hot realod and with prod.env
+# serve with hot reload and with prod.env
 npm run prod
 
 ```
@@ -53,7 +52,6 @@ $env:TARGET_APP = "myProject"
 
 ## Mobile apps
 
-
 ``` bash
 
 # in root folder
@@ -61,6 +59,10 @@ npm run build:android
 npm run build:ios
 npm run build-dev:android
 npm run build-dev:ios
+
+# Web build (no Cordova)
+npm run build:web
+npm run build-dev:web
 
 # the apk will be created in the dist folder
 
