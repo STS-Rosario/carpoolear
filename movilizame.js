@@ -77,9 +77,9 @@ function buildAndCheckPlatform (callback) {
     let options = {
         env: process.env
     };
-    let buildEnv = PROD ? 'build.js' : 'build-dev.js';
-    console.log(`cross-env PLATFORM=${PLATFORM} node build/${buildEnv}`);
-    shell.exec(`cross-env PLATFORM=${PLATFORM} node build/${buildEnv}`, options)
+    const viteBin = path.join(__dirname, 'node_modules', 'vite', 'bin', 'vite.js');
+    console.log(`cross-env PLATFORM=${PLATFORM} node ${viteBin} build`);
+    shell.exec(`cross-env PLATFORM=${PLATFORM} node ${viteBin} build`, options)
     ;
     if (!fs.existsSync(`./dist/${TARGET}/${NODE_ENV}/platforms/${PLATFORM}`)) {
         console.log('Adding platform: ' + PLATFORM + ' - path: ' + projectPath);
@@ -183,7 +183,8 @@ if (argv._.length > 0) {
             break;
         case 'build-web':
             process.env.CORDOVA = false;
-            process.env.NODE_ENV = 'production';
+            const buildNodeEnv = PROD ? 'production' : 'development';
+            process.env.NODE_ENV = buildNodeEnv;
             process.env.TARGET_APP = TARGET;
             const viteBuildBin = path.join(__dirname, 'node_modules', 'vite', 'bin', 'vite.js');
             shell.exec(`node ${viteBuildBin} build`, {
