@@ -19,8 +19,9 @@ export function pointDistance(lat1, lon1, lat2, lon2) {
 
 export function parseStreet(result) {
     const address = {};
-    for (const i in result.address_components) {
-        const obj = result.address_components[i];
+    const components = result.address_components;
+    for (let ai = 0; ai < components.length; ai += 1) {
+        const obj = components[ai];
         const nombreLong = obj.long_name;
         const nombreShort = obj.short_name;
         switch (obj.types[0]) {

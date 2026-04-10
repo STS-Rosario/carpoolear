@@ -9,8 +9,8 @@ var FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const portfinder = require('portfinder')
 
 const devWebpackConfig = merge(baseWebpackConfig, {
-  // cheap-module-eval-source-map is faster for development
-  devtool: '#cheap-module-eval-source-map',
+  // Webpack 5: keyword order is strict (was #cheap-module-eval-source-map in v4)
+  devtool: 'eval-cheap-module-source-map',
 
   // these devServer options should be customized in /config/index.js
   devServer: {
@@ -33,12 +33,12 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     }
   },
   optimization: {
-    namedModules: true, // NamedModulesPlugin()
-    splitChunks: { // CommonsChunkPlugin()
+    moduleIds: 'named',
+    splitChunks: {
         chunks: 'all'
     },
-    noEmitOnErrors: true, // NoEmitOnErrorsPlugin
-    concatenateModules: true //ModuleConcatenationPlugin
+    emitOnErrors: false,
+    concatenateModules: true
   },
   plugins: [
     new WebpackMultiResolver({

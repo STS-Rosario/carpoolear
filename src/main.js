@@ -17,6 +17,7 @@ import cordova from './cordova';
 import directives from './directives';
 
 import bootstrapCss from './styles/bootstrap/css/bootstrap.min.css';
+import 'font-awesome/css/font-awesome.min.css';
 
 import cssHelpers from './styles/helpers';
 import css from './styles/main';
@@ -53,8 +54,6 @@ const cordovaPath = 'cordova.js';
 console.log('ROUTE_BASE', ROUTE_BASE, cordovaPath);
 cordovaTag.setAttribute('src', ROUTE_BASE + cordovaPath);
 document.head.appendChild(cordovaTag);
-
-require('font-awesome-webpack-4');
 
 Vue.use(VueResource);
 
@@ -141,23 +140,27 @@ const initializePushNotifications = async () => {
                 // Listen for registration errors
                 PushNotifications.addListener(
                     'registrationError',
-                    (error) => {}
+                    () => {
+                        return undefined;
+                    }
                 );
 
                 // Listen for incoming push notifications
                 PushNotifications.addListener(
                     'pushNotificationReceived',
-                    (notification) => {}
+                    () => {
+                        return undefined;
+                    }
                 );
 
                 // Listen for notification tap
                 PushNotifications.addListener(
                     'pushNotificationActionPerformed',
-                    (notification) => {}
+                    () => {
+                        return undefined;
+                    }
                 );
-            } else {
             }
-        } else {
         }
     } catch (error) {
         console.error('Push notification initialization error:', error);

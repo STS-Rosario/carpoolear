@@ -44,9 +44,12 @@ class TaggedList {
 
     keys() {
         const temp = [];
-        for (const i in this.map) {
-            if (this.map[i] && this.map[i].length > 0) {
-                temp.push(i);
+        const map = this.map;
+        const keys = Object.keys(map);
+        for (let ki = 0; ki < keys.length; ki += 1) {
+            const tag = keys[ki];
+            if (map[tag] && map[tag].length > 0) {
+                temp.push(tag);
             }
         }
         return temp;

@@ -14,8 +14,9 @@ processEnv.SERVE = serveMode;
 
 console.log('TARGET = ' + TARGET);
 console.log('config = ' + JSON.stringify(config));
+
 if (TARGET === 'default') {
-    extensions = ['.js', '.vue', '.json', '.css', 'jpg', 'png'];
+    extensions = ['.js', '.vue', '.json', '.css', '.jpg', '.png'];
 } else {
     extensions = [
         '.' + TARGET + '.js', '.js',
@@ -60,7 +61,9 @@ module.exports = {
   },*/
   module: {
     rules: [
-      ...(config.dev.useEslint? [{
+      // eslint-loader runs ESLint on raw .vue sources; without vue-eslint-parser that floods
+      // production builds with false "Parsing error" reports. Keep lint for dev / dev-server only.
+      ...(config.dev.useEslint && devMode ? [{
         test: /\.(js|vue)$/,
         loader: 'eslint-loader',
         enforce: 'pre',
@@ -118,8 +121,12 @@ module.exports = {
           name: utils.assetsPath('media/[name].[hash:7].[ext]')
         }
       },
-      { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=10000&minetype=application/font-woff" },
-      { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader" }
+      {
+        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: 'url-loader',
+        options: { limit: 10000, mimetype: 'application/font-woff' }
+      },
+      { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'file-loader' }
     ]
   },
   plugins: [

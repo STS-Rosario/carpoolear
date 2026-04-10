@@ -138,10 +138,7 @@ export const useAuthStore = defineStore('auth', {
                 .then((response) => {
                     this.onLoggin(response.token);
                 })
-                .catch((err) => {
-                    if (err) {
-                    }
-                });
+                .catch(() => undefined);
         },
 
         register(data) {

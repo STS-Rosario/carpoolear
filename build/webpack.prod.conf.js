@@ -14,20 +14,20 @@ const TARGET = process.env.TARGET_APP || 'default';
 const PLATFORM = process.env.PLATFORM || 'android';
 
 const webpackConfig = merge(baseWebpackConfig, {
-  devtool: config.build.productionSourceMap ? '#source-map' : false,
+  devtool: config.build.productionSourceMap ? 'source-map' : false,
   output: {
     path: config.build.assetsRoot,
-    filename: utils.assetsPath('js/[name].[chunkhash].js'),
-    chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
+    filename: utils.assetsPath('js/[name].[contenthash].js'),
+    chunkFilename: utils.assetsPath('js/[id].[contenthash].js')
   },
   optimization: {
-    namedModules: false, // NamedModulesPlugin()
-    splitChunks: { // CommonsChunkPlugin()
+    moduleIds: 'deterministic',
+    splitChunks: {
         name: 'vendor',
         chunks: 'all'
     },
-    noEmitOnErrors: true, // NoEmitOnErrorsPlugin
-    concatenateModules: true //ModuleConcatenationPlugin
+    emitOnErrors: false,
+    concatenateModules: true
   },
   plugins: [
     new WebpackMultiResolver({
@@ -57,18 +57,16 @@ const webpackConfig = merge(baseWebpackConfig, {
         removeAttributeQuotes: true
         // more options:
         // https://github.com/kangax/html-minifier#options-quick-reference
-      },
-      // necessary to consistently work with multiple chunks via CommonsChunkPlugin
-      chunksSortMode: 'dependency'
-    }),
-    // keep module.id stable when vender modules does not change
-    new webpack.HashedModuleIdsPlugin(),
-    new CopyWebpackPlugin([
-      {
-        from: path.resolve(__dirname, '../static'),
-        to: config.build.assetsSubDirectory
       }
-    ])
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, '../static'),
+          to: config.build.assetsSubDirectory
+        }
+      ]
+    })
   ]
 })
 
