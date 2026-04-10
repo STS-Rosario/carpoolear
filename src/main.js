@@ -1,6 +1,6 @@
 /* jshint esversion: 6 */
 
-import 'babel-polyfill';
+import 'core-js/stable';
 
 import Vue, { createApp } from 'vue';
 import App from './App';
