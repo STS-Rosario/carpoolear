@@ -18,6 +18,36 @@ const NODE_ENV = PROD ? 'production' : 'development';
 const projectPath = `./dist/${TARGET}/${NODE_ENV}/`;
 console.log('Enviroment: ' + NODE_ENV);
 
+function resolveCordovaBin () {
+    const base = path.join(__dirname, 'node_modules', '.bin');
+    const unix = path.join(base, 'cordova');
+    const win = path.join(base, 'cordova.cmd');
+    if (fs.existsSync(unix)) {
+        return unix;
+    }
+    if (fs.existsSync(win)) {
+        return win;
+    }
+    return 'cordova';
+}
+
+function shellQuote (binPath) {
+    return /\s/.test(binPath) ? `"${binPath}"` : binPath;
+}
+
+/** Cordova's JDK check runs `java`/`javac`; ensure JAVA_HOME/bin is on PATH for npm GUI/IDE runs. */
+function cordovaEnv () {
+    const env = { ...process.env };
+    if (env.JAVA_HOME) {
+        const javaBin = path.join(env.JAVA_HOME, 'bin');
+        if (fs.existsSync(javaBin)) {
+            const sep = path.delimiter;
+            env.PATH = `${javaBin}${sep}${env.PATH || ''}`;
+        }
+    }
+    return env;
+}
+
 function showError (code, stderr, stdout) {
     console.log('ERROR IN CORDOVA:');
     console.log('CODE:', code);
@@ -53,9 +83,10 @@ function buildAndCheckPlatform (callback) {
     ;
     if (!fs.existsSync(`./dist/${TARGET}/${NODE_ENV}/platforms/${PLATFORM}`)) {
         console.log('Adding platform: ' + PLATFORM + ' - path: ' + projectPath);
-        shell.exec(`cross-env cordova platform add ${PLATFORM}`, {
+        shell.exec(`${shellQuote(resolveCordovaBin())} platform add ${PLATFORM}`, {
             cwd: projectPath,
-            silent: true
+            silent: true,
+            env: cordovaEnv()
         }, function (code, stderr, stdout) {
             console.log('STDOUT: ', stdout);
             if (stdout.search('already added')) {
@@ -125,8 +156,8 @@ if (argv._.length > 0) {
             break;
         case 'build':
             preBuildAndCheckPlatform(() => {
-                shell.exec(`cordova build ${PLATFORM}`, {
-                    env: process.env,
+                shell.exec(`${shellQuote(resolveCordovaBin())} build ${PLATFORM}`, {
+                    env: cordovaEnv(),
                     cwd: projectPath,
                     silent: true
                 }, showError);
@@ -134,10 +165,10 @@ if (argv._.length > 0) {
             break;
         case 'prepare':
             preBuildAndCheckPlatform(() => {
-                shell.exec(`cordova prepare ${PLATFORM}`, {
+                shell.exec(`${shellQuote(resolveCordovaBin())} prepare ${PLATFORM}`, {
                     cwd: projectPath,
                     silent: true,
-                    env: process.env
+                    env: cordovaEnv()
                 }, showError);
             });
             break;

@@ -61,7 +61,9 @@ module.exports = {
   },*/
   module: {
     rules: [
-      ...(config.dev.useEslint? [{
+      // eslint-loader runs ESLint on raw .vue sources; without vue-eslint-parser that floods
+      // production builds with false "Parsing error" reports. Keep lint for dev / dev-server only.
+      ...(config.dev.useEslint && devMode ? [{
         test: /\.(js|vue)$/,
         loader: 'eslint-loader',
         enforce: 'pre',
