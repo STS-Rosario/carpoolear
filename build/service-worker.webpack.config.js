@@ -24,7 +24,7 @@ module.exports = {
   },
   module: {
     rules: [
-      ...(config.dev.useEslint? [{
+      ...(config.dev.useEslint && devMode ? [{
         test: /\.(js|vue)$/,
         loader: 'eslint-loader',
         enforce: 'pre',

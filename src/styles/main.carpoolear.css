@@ -1596,11 +1596,11 @@ textarea {
     padding: .3rem;
 }
 
-.gmap-autocomplete {
+.location-autocomplete {
     position: relative;
 }
 
-.gmap-autocomplete .date-picker--cross {
+.location-autocomplete .date-picker--cross {
     color: #666;
     right: 22px;
     position: absolute;
@@ -1608,16 +1608,16 @@ textarea {
     top: 14px;
 }
 
-.new-trip-component .gmap-autocomplete .date-picker--cross {
+.new-trip-component .location-autocomplete .date-picker--cross {
     right: 12px;
 }
 
-.gmap-autocomplete input {
+.location-autocomplete input {
     padding-right: 30px;
     margin-right: 0;
 }
 
-.gmap-autocomplete .date-picker--cross i {
+.location-autocomplete .date-picker--cross i {
     cursor: pointer;
     margin-left: 2px;
 }
@@ -2975,21 +2975,21 @@ ul {
         padding: .8em 1.2em;
     }
 
-    .gmap-autocomplete .date-picker--cross {
+    .location-autocomplete .date-picker--cross {
         right: 20px;
         top: 15px;
     }
 
-    .new-trip-component .gmap-autocomplete .date-picker--cross {
+    .new-trip-component .location-autocomplete .date-picker--cross {
         right: 12px;
         top: 14px;
     }
 
-    .search-section .gmap-autocomplete .date-picker--cross {
+    .search-section .location-autocomplete .date-picker--cross {
         top: 23px;
     }
 
-    .origin.gmap-autocomplete .date-picker--cross {
+    .origin.location-autocomplete .date-picker--cross {
         right: 36px;
     }
 

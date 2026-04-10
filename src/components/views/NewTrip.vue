@@ -119,7 +119,7 @@
                     >
                         <div
                             v-for="(m, index) in points"
-                            class="trip_point gmap-autocomplete"
+                            class="trip_point location-autocomplete"
                             :class="{ 'trip-error': m.error.state }"
                             :key="m.id"
                         >
@@ -144,7 +144,6 @@
                                 :country="allowForeignPoints ? null : 'AR'"
                                 :class="{ 'has-error': m.error.state }"
                             ></autocomplete>
-                            <!-- <GmapAutocomplete  :selectFirstOnEnter="true" :types="['(cities)']" :componentRestrictions="allowForeignPoints ? null : {country: 'AR'}" :placeholder="getPlaceholder(index)"  :value="m.name" :name="'input-' + index" :ref="'input-' + index" v-on:place_changed="(data) => getPlace(index, data)" class="form-control form-control-with-icon form-control-map-autocomplete" :class="{'has-error': m.error.state}"> </GmapAutocomplete> -->
                             <div
                                 @click="resetPoints(m, index)"
                                 class="date-picker--cross"
@@ -235,7 +234,7 @@
                             >
                                 <div
                                     v-for="(m, index) in points"
-                                    class="trip_point gmap-autocomplete"
+                                    class="trip_point location-autocomplete"
                                     :class="{ 'trip-error': m.error.state }"
                                     :key="m.id"
                                 >
@@ -262,7 +261,6 @@
                                         "
                                         :class="{ 'has-error': m.error.state }"
                                     ></autocomplete>
-                                    <!-- <GmapAutocomplete  :selectFirstOnEnter="true" :types="['(cities)']" :componentRestrictions="allowForeignPoints ? null : {country: 'AR'}" :placeholder="getPlaceholder(index)"  :value="m.name" :name="'input-' + index" :ref="'input-' + index" v-on:place_changed="(data) => getPlace(index, data)" class="form-control form-control-with-icon form-control-map-autocomplete" :class="{'has-error': m.error.state}"> </GmapAutocomplete> -->
                                     <div
                                         @click="resetPoints(m, index)"
                                         class="date-picker--cross"
@@ -930,7 +928,7 @@
                     >
                         <div
                             v-for="(m, index) in otherTrip.points"
-                            class="trip_point gmap-autocomplete"
+                            class="trip_point location-autocomplete"
                             :class="{ 'trip-error': m.error.state }"
                             :key="m.id"
                         >
@@ -986,7 +984,7 @@
                             >
                                 <div
                                     v-for="(m, index) in otherTrip.points"
-                                    class="trip_point gmap-autocomplete"
+                                    class="trip_point location-autocomplete"
                                     :class="{ 'trip-error': m.error.state }"
                                     :key="m.id"
                                 >
@@ -2622,6 +2620,10 @@ export default {
                             dialogs.message(this.$t('tienesQueSerConductor'), {
                                 estado: 'error'
                             });
+                        } else if (this.$checkError(err, 'routing_service_unavailable')) {
+                            dialogs.message(this.$t('routingServiceTemporaryError'), {
+                                estado: 'error'
+                            });
                         } else {
                             dialogs.message(
                                 this.$t('problemaAlCargarElViaje'),
@@ -2646,8 +2648,17 @@ export default {
                             params: { id: this.trip.id }
                         });
                     })
-                    .catch(() => {
+                    .catch((err) => {
                         this.saving = false;
+                        if (this.$checkError(err, 'routing_service_unavailable')) {
+                            dialogs.message(this.$t('routingServiceTemporaryError'), {
+                                estado: 'error'
+                            });
+                        } else {
+                            dialogs.message(this.$t('problemaAlCargarElViaje'), {
+                                estado: 'error'
+                            });
+                        }
                     });
             }
         },
@@ -2793,6 +2804,10 @@ export default {
                         this.recommended_return_trip_price_cents = result.data.recommended_trip_price_cents;
                         this.recalculateRecommendedReturnPrice();
                     }
+                } else if (result.error_code === 'routing_service_unavailable') {
+                    dialogs.message(this.$t('routingServiceTemporaryError'), {
+                        estado: 'error'
+                    });
                 }
             });
 

@@ -241,7 +241,7 @@
     padding-left: 0;
 }
 @media only screen and (min-width: 992px) {
-    .search-section .gmap-autocomplete .date-picker--cross {
+    .search-section .location-autocomplete .date-picker--cross {
         top: 13px;
     }
     .search-section .form-control-map-autocomplete {

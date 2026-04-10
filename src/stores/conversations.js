@@ -306,8 +306,9 @@ export const useConversationsStore = defineStore('conversations', {
                 .unread(data)
                 .then(async (response) => {
                     const messages = response.data.reverse();
-                    for (const msg of messages) {
-                        const convId = normalizeId(msg.conversation_id);
+                    for (let mi = 0; mi < messages.length; mi += 1) {
+                        const message = messages[mi];
+                        const convId = normalizeId(message.conversation_id);
                         if (!this.messages[convId]) {
                             try {
                                 const res = await conversationApi.show(convId);
@@ -319,7 +320,7 @@ export const useConversationsStore = defineStore('conversations', {
                             }
                         }
                         this.insertMessage({
-                            messages: [msg]
+                            messages: [message]
                         });
                     }
                     if (messages.length > 0) {

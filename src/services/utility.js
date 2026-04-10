@@ -180,6 +180,6 @@ export function cleanId(value, pattern) {
     if (!value) return '';
     // Remove any characters that are separators in the pattern
     const separators = pattern.replace(/[#A]/g, '');
-    const separatorRegex = new RegExp('[' + separators.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + ']', 'g');
+    const separatorRegex = new RegExp('[' + separators.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&') + ']', 'g');
     return String(value).replace(separatorRegex, '');
 }

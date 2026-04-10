@@ -17,6 +17,7 @@ import cordova from './cordova';
 import directives from './directives';
 
 import bootstrapCss from './styles/bootstrap/css/bootstrap.min.css';
+import 'font-awesome/css/font-awesome.min.css';
 
 import cssHelpers from './styles/helpers';
 import css from './styles/main';
@@ -38,8 +39,6 @@ import { App as CapacitorApp } from '@capacitor/app';
 
 import Vue2Leaflet from 'vue2-leaflet';
 
-import * as VueGoogleMaps from 'vue2-google-maps';
-
 // Re-export locale maps so existing imports from '../../main' still work
 export { appLocaleToBCP47, appLocaleToRoutingLanguage };
 
@@ -55,8 +54,6 @@ const cordovaPath = 'cordova.js';
 console.log('ROUTE_BASE', ROUTE_BASE, cordovaPath);
 cordovaTag.setAttribute('src', ROUTE_BASE + cordovaPath);
 document.head.appendChild(cordovaTag);
-
-require('font-awesome-webpack-4');
 
 Vue.use(VueResource);
 
@@ -85,16 +82,6 @@ Vue.use(VueAnalytics, {
 
 require('./filters.js');
 require('./prototypes.js');
-
-/* import * as VueGoogleMaps from 'vue2-google-maps';
-
-Vue.use(VueGoogleMaps, {
-    load: {
-        key: process.env.MAPS_API,
-        libraries: 'places',
-        installComponents: true
-    }
-}); */
 
 Vue.config.errorHandler = function (err, vm, info) {
     // handle error
@@ -153,23 +140,27 @@ const initializePushNotifications = async () => {
                 // Listen for registration errors
                 PushNotifications.addListener(
                     'registrationError',
-                    (error) => {}
+                    () => {
+                        return undefined;
+                    }
                 );
 
                 // Listen for incoming push notifications
                 PushNotifications.addListener(
                     'pushNotificationReceived',
-                    (notification) => {}
+                    () => {
+                        return undefined;
+                    }
                 );
 
                 // Listen for notification tap
                 PushNotifications.addListener(
                     'pushNotificationActionPerformed',
-                    (notification) => {}
+                    () => {
+                        return undefined;
+                    }
                 );
-            } else {
             }
-        } else {
         }
     } catch (error) {
         console.error('Push notification initialization error:', error);
