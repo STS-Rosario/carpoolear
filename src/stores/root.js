@@ -1,10 +1,7 @@
 import { defineStore } from 'pinia';
 import cache, { keys } from '../services/cache';
 import bus from '../services/bus-event';
-import { TripApi } from '../services/api';
 import { Thread, stopThreads } from '../classes/Threads';
-
-const tripsApi = new TripApi();
 
 export const useRootStore = defineStore('root', {
     state: () => ({
@@ -18,11 +15,11 @@ export const useRootStore = defineStore('root', {
             this.appVersionInfo = payload;
         },
 
-        init() {
+        async init() {
             console.log('Starting app.');
 
-            const { useAuthStore } = require('./auth');
-            const { useDeviceStore } = require('./device');
+            const { useAuthStore } = await import('./auth');
+            const { useDeviceStore } = await import('./device');
             const authStore = useAuthStore();
             const deviceStore = useDeviceStore();
 
@@ -71,13 +68,13 @@ export const useRootStore = defineStore('root', {
             });
         },
 
-        startApp() {
-            const { useAuthStore } = require('./auth');
-            const { useTripsStore } = require('./trips');
-            const { useMyTripsStore } = require('./myTrips');
-            const { usePassengerStore } = require('./passenger');
-            const { useDeviceStore } = require('./device');
-            const { useCordovaStore } = require('./cordova');
+        async startApp() {
+            const { useAuthStore } = await import('./auth');
+            const { useTripsStore } = await import('./trips');
+            const { useMyTripsStore } = await import('./myTrips');
+            const { usePassengerStore } = await import('./passenger');
+            const { useDeviceStore } = await import('./device');
+            const { useCordovaStore } = await import('./cordova');
 
             const authStore = useAuthStore();
             const tripsStore = useTripsStore();
@@ -89,11 +86,11 @@ export const useRootStore = defineStore('root', {
             // Lazy require to avoid circular dependency
             let ratesStore, carsStore;
             try {
-                const { useRatesStore } = require('./rates');
+                const { useRatesStore } = await import('./rates');
                 ratesStore = useRatesStore();
             } catch (e) { /* optional */ }
             try {
-                const { useCarsStore } = require('./car');
+                const { useCarsStore } = await import('./car');
                 carsStore = useCarsStore();
             } catch (e) { /* optional */ }
 
@@ -115,9 +112,12 @@ export const useRootStore = defineStore('root', {
             bus.emit('system-ready');
         },
 
-        getTrip(id) {
-            const { useTripsStore } = require('./trips');
-            const { useMyTripsStore } = require('./myTrips');
+        async getTrip(id) {
+            const { useTripsStore } = await import('./trips');
+            const { useMyTripsStore } = await import('./myTrips');
+            const { TripApi } = await import('../services/api');
+            
+            const tripsApi = new TripApi();
             const tripsStore = useTripsStore();
             const myTripsStore = useMyTripsStore();
 
@@ -157,9 +157,9 @@ export const useRootStore = defineStore('root', {
             });
         },
 
-        startThread() {
-            const { useAuthStore } = require('./auth');
-            const { useNotificationsStore } = require('./notifications');
+        async startThread() {
+            const { useAuthStore } = await import('./auth');
+            const { useNotificationsStore } = await import('./notifications');
             const authStore = useAuthStore();
             const notificationsStore = useNotificationsStore();
 
