@@ -5,7 +5,6 @@ import 'core-js/stable';
 import Vue, { createApp } from 'vue';
 import App from './App';
 
-import VueResource from 'vue-resource';
 import VueAnalytics from 'vue-analytics';
 import dayjs from './dayjs';
 
@@ -58,8 +57,6 @@ const cordovaPath = 'cordova.js';
 console.log('ROUTE_BASE', ROUTE_BASE, cordovaPath);
 cordovaTag.setAttribute('src', ROUTE_BASE + cordovaPath);
 document.head.appendChild(cordovaTag);
-
-Vue.use(VueResource);
 
 // Initialize Capacitor plugins
 const initializeCapacitorPlugins = async () => {
