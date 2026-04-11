@@ -1,23 +1,20 @@
-import Vue from 'vue';
+import mitt from 'mitt';
 
 class EventBuffer {
     constructor() {
-        this.buffer = new Vue();
+        this.emitter = mitt();
     }
 
     emit(name, params) {
-        const events = this.buffer._events || {};
-        const b = events[name] && events[name].length;
-        this.buffer.$emit(name, params);
-        return b;
+        this.emitter.emit(name, params);
     }
 
     on(name, callback) {
-        this.buffer.$on(name, callback);
+        this.emitter.on(name, callback);
     }
 
     off(name, callback) {
-        this.buffer.$off(name, callback);
+        this.emitter.off(name, callback);
     }
 }
 
