@@ -8,11 +8,11 @@ function wrapElement(el) {
 }
 
 export default {
-    inserted: function (el, binding, node) {
+    mounted: function (el, binding, node) {
         wrapElement(el);
     },
-    update: function (el, binding, node) {
+    updated: function (el, binding, node) {
         // wrapElement(el);
     },
-    unbind: function (el, binding, node) {}
+    unmounted: function (el, binding, node) {}
 };

@@ -71,7 +71,7 @@ const keyDownHandler = function (event) {
 };
 
 export default {
-    bind: function (el, binding, node) {
+    beforeMount: function (el, binding, node) {
         numberFormatter[el.id] = {};
         numberFormatter[el.id].name = el.id;
         numberFormatter[el.id].value = el.value;
@@ -85,7 +85,7 @@ export default {
         el.addEventListener('keydown', keyDownHandler, false);
         el.addEventListener('input', inputHandler, false);
     },
-    unbind: function (el, binding, node) {
+    unmounted: function (el, binding, node) {
         el.removeEventListener('keydown', keyDownHandler, false);
         el.removeEventListener('input', inputHandler, false);
         numberFormatter[el.id] = undefined;
