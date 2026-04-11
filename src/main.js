@@ -34,6 +34,7 @@ import i18n, {
 import bus from './services/bus-event';
 import { DebugApi } from './services/api';
 import { init as initDebugLogger } from './services/debug';
+import { installPrototypes } from './prototypes';
 
 // Capacitor plugins
 import { StatusBar, Style } from '@capacitor/status-bar';
@@ -43,7 +44,6 @@ import { App as CapacitorApp } from '@capacitor/app';
 import Vue2Leaflet from 'vue2-leaflet';
 
 import './filters.js';
-import './prototypes.js';
 
 // Re-export locale maps so existing imports from '../../main' still work
 export { appLocaleToBCP47, appLocaleToRoutingLanguage };
@@ -62,38 +62,6 @@ cordovaTag.setAttribute('src', ROUTE_BASE + cordovaPath);
 document.head.appendChild(cordovaTag);
 
 Vue.use(VueResource);
-
-// Use correct Intl locale for currency so es-AR gets comma decimal, period thousands.
-const numberFormatLocaleMap = appLocaleToBCP47;
-const original$n = Vue.prototype.$n;
-Vue.prototype.$n = function (value, ...args) {
-    if (args[0] === 'currency') {
-        const intlLocale =
-            numberFormatLocaleMap[this.$i18n.locale] || this.$i18n.locale;
-        if (args.length === 1) { return this.$i18n.n(value, 'currency', intlLocale); }
-        if (args.length === 2 && typeof args[1] === 'object') {
-            return this.$i18n.n(value, {
-                key: 'currency',
-                locale: intlLocale,
-                ...args[1]
-            });
-        }
-    }
-    return original$n.call(this, value, ...args);
-};
-
-Vue.use(VueAnalytics, {
-    id: 'UA-40995702-4'
-});
-
-Vue.config.errorHandler = function (err, vm, info) {
-    // handle error
-    // `info` is a Vue-specific error info, e.g. which lifecycle hook
-    // the error was found in. Only available in 2.2.0+
-    const data = {};
-    data.log = err.stack;
-    debugApi.log(data);
-};
 
 // Initialize Capacitor plugins
 const initializeCapacitorPlugins = async () => {
@@ -201,6 +169,35 @@ bus.on('system-ready', () => {
     app.use(router);
     app.use(pinia);
     app.use(i18n);
+
+    // Install prototypes as globalProperties
+    installPrototypes(app);
+
+    // Use correct Intl locale for currency so es-AR gets comma decimal, period thousands.
+    const numberFormatLocaleMap = appLocaleToBCP47;
+    const original$n = app.config.globalProperties.$n;
+    app.config.globalProperties.$n = function (value, ...args) {
+        if (args[0] === 'currency') {
+            const intlLocale =
+                numberFormatLocaleMap[this.$i18n.locale] || this.$i18n.locale;
+            if (args.length === 1) { return this.$i18n.n(value, 'currency', intlLocale); }
+            if (args.length === 2 && typeof args[1] === 'object') {
+                return this.$i18n.n(value, {
+                    key: 'currency',
+                    locale: intlLocale,
+                    ...args[1]
+                });
+            }
+        }
+        return original$n.call(this, value, ...args);
+    };
+
+    app.config.errorHandler = function (err, vm, info) {
+        const data = {};
+        data.log = err.stack;
+        debugApi.log(data);
+    };
+
     const vm = app.mount('#app');
 
     // Subscribe to auth store config changes for price formatting
