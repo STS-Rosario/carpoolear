@@ -17,7 +17,7 @@ import { useAuthStore } from './stores/auth';
 
 /* eslint-disable no-unused-vars */
 import './cordova';
-import './directives';
+import { registerDirectives } from './directives';
 
 import './styles/bootstrap/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
@@ -172,6 +172,9 @@ bus.on('system-ready', () => {
 
     // Install prototypes as globalProperties
     installPrototypes(app);
+
+    // Register global directives
+    registerDirectives(app);
 
     // Use correct Intl locale for currency so es-AR gets comma decimal, period thousands.
     const numberFormatLocaleMap = appLocaleToBCP47;
