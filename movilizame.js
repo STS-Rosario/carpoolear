@@ -51,30 +51,30 @@ function cordovaEnv () {
 function showError (code, stderr, stdout) {
     console.log('ERROR IN CORDOVA:');
     console.log('CODE:', code);
-    console.log('STDERR', stderr)
+    console.log('STDERR', stderr);
     console.log('STDOUT', stdout);
 }
 
 function preBuildAndCheckPlatform (callback) {
-    let folder = `dist/${TARGET}/${NODE_ENV}`;
-    let folderCordovaResFiles = `dist/${TARGET}/${NODE_ENV}/res`;
-    let cordovaFiles = `projects/${TARGET}/cordova`;
+    const folder = `dist/${TARGET}/${NODE_ENV}`;
+    const folderCordovaResFiles = `dist/${TARGET}/${NODE_ENV}/res`;
+    const cordovaFiles = `projects/${TARGET}/cordova`;
     if (fs.existsSync(folderCordovaResFiles)) {
-        console.log('Deleting old files.')
+        console.log('Deleting old files.');
         fs.rmSync(folderCordovaResFiles, { recursive: true, force: true });
     }
     fs.cp(cordovaFiles, folder, { recursive: true }, function (err) {
         if (err) {
             console.error(err);
         } else {
-            console.log('Copyng cordova assets.')
+            console.log('Copyng cordova assets.');
             buildAndCheckPlatform(callback);
         }
     });
 }
 
 function buildAndCheckPlatform (callback) {
-    let options = {
+    const options = {
         env: process.env
     };
     const viteBin = path.join(__dirname, 'node_modules', 'vite', 'bin', 'vite.js');
@@ -103,15 +103,15 @@ function buildAndCheckPlatform (callback) {
 }
 
 function loadAppVersion () {
-    let path = `./projects/${TARGET}/cordova/config.xml`;
-    let xml = fs.readFileSync(path);
+    const path = `./projects/${TARGET}/cordova/config.xml`;
+    const xml = fs.readFileSync(path);
     xmlParser(xml, function (err, result) {
         if (err) {
             console.error(error);
         } else {
-            process.env.APP_VERSION  = result.widget.$.version;
+            process.env.APP_VERSION = result.widget.$.version;
             let i = 0;
-            for (i;  i < result.widget.plugin.length; i++) {
+            for (i; i < result.widget.plugin.length; i++) {
                 if (result.widget.plugin[i].$.name === 'cordova-plugin-facebook4') {
                     let j = 0;
                     for (j; j < result.widget.plugin[i].variable.length; j++) {
@@ -128,72 +128,72 @@ function loadAppVersion () {
 }
 
 if (argv._.length > 0) {
-    let action = argv._[0];
+    const action = argv._[0];
     process.env.ACTION = action;
     loadAppVersion();
     switch (action) {
-        case 'serve':
-            process.env.SERVE = true;
-            process.env.CORDOVA = false;
-            process.env.NODE_ENV = NODE_ENV;
-            process.env.TARGET_APP = TARGET;
+    case 'serve':
+        process.env.SERVE = true;
+        process.env.CORDOVA = false;
+        process.env.NODE_ENV = NODE_ENV;
+        process.env.TARGET_APP = TARGET;
+        const viteBin = path.join(__dirname, 'node_modules', 'vite', 'bin', 'vite.js');
+        const child = cp.spawn(process.execPath, [
+            viteBin,
+            '--host',
+            '--port',
+            process.env.PORT || '8080',
+            '--config',
+            'vite.config.js'
+        ], {
+            env: process.env,
+            stdio: 'inherit'
+        });
+        child.on('exit', (code, signal) => {
+            process.exit(signal ? 1 : (code === null ? 1 : code));
+        });
+        break;
+    case 'build':
+        preBuildAndCheckPlatform(() => {
             const viteBin = path.join(__dirname, 'node_modules', 'vite', 'bin', 'vite.js');
-            const child = cp.spawn(process.execPath, [
-                viteBin,
-                '--host',
-                '--port',
-                process.env.PORT || '8080',
-                '--config',
-                'vite.config.js'
-            ], {
-                env: process.env,
-                stdio: 'inherit'
-            });
-            child.on('exit', (code, signal) => {
-                process.exit(signal ? 1 : (code === null ? 1 : code));
-            });
-            break;
-        case 'build':
-            preBuildAndCheckPlatform(() => {
-                const viteBin = path.join(__dirname, 'node_modules', 'vite', 'bin', 'vite.js');
-                shell.exec(`cross-env PLATFORM=${PLATFORM} node ${viteBin} build`, {
-                    env: process.env,
-                    cwd: __dirname,
-                    silent: true
-                }, (code, stderr, stdout) => {
-                    if (code !== 0) {
-                        console.log('Vite build failed:', stderr, stdout);
-                    }
-                    shell.exec(`${shellQuote(resolveCordovaBin())} build ${PLATFORM}`, {
-                        env: cordovaEnv(),
-                        cwd: projectPath,
-                        silent: true
-                    }, showError);
-                });
-            });
-            break;
-        case 'prepare':
-            preBuildAndCheckPlatform(() => {
-                shell.exec(`${shellQuote(resolveCordovaBin())} prepare ${PLATFORM}`, {
-                    cwd: projectPath,
-                    silent: true,
-                    env: cordovaEnv()
-                }, showError);
-            });
-            break;
-        case 'build-web':
-            process.env.CORDOVA = false;
-            const buildNodeEnv = PROD ? 'production' : 'development';
-            process.env.NODE_ENV = buildNodeEnv;
-            process.env.TARGET_APP = TARGET;
-            const viteBuildBin = path.join(__dirname, 'node_modules', 'vite', 'bin', 'vite.js');
-            shell.exec(`node ${viteBuildBin} build`, {
+            shell.exec(`cross-env PLATFORM=${PLATFORM} node ${viteBin} build`, {
                 env: process.env,
                 cwd: __dirname,
-                silent: false
+                silent: true
+            }, (code, stderr, stdout) => {
+                if (code !== 0) {
+                    console.log('Vite build failed:', stderr, stdout);
+                }
+                shell.exec(`${shellQuote(resolveCordovaBin())} build ${PLATFORM}`, {
+                    env: cordovaEnv(),
+                    cwd: projectPath,
+                    silent: true
+                }, showError);
             });
-            break;
-        default:
-            console.log(shell);
+        });
+        break;
+    case 'prepare':
+        preBuildAndCheckPlatform(() => {
+            shell.exec(`${shellQuote(resolveCordovaBin())} prepare ${PLATFORM}`, {
+                cwd: projectPath,
+                silent: true,
+                env: cordovaEnv()
+            }, showError);
+        });
+        break;
+    case 'build-web':
+        process.env.CORDOVA = false;
+        const buildNodeEnv = PROD ? 'production' : 'development';
+        process.env.NODE_ENV = buildNodeEnv;
+        process.env.TARGET_APP = TARGET;
+        const viteBuildBin = path.join(__dirname, 'node_modules', 'vite', 'bin', 'vite.js');
+        shell.exec(`node ${viteBuildBin} build`, {
+            env: process.env,
+            cwd: __dirname,
+            silent: false
+        });
+        break;
+    default:
+        console.log(shell);
     }
 }
