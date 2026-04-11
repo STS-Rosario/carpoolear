@@ -15,13 +15,13 @@ function changePhoto(el, binding, node) {
 }
 
 export default {
-    inserted: function (el, binding, node) {
+    mounted: function (el, binding, node) {
         changePhoto(el, binding, node);
     },
-    update: function (el, binding, node) {
+    updated: function (el, binding, node) {
         changePhoto(el, binding, node);
     },
-    unbind: function (el, binding, node) {
+    unmounted: function (el, binding, node) {
         el.style.backgroundImage = null;
     }
 };

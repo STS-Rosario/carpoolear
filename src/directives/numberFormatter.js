@@ -171,7 +171,7 @@ const beforeInputHandler = function (event) {
 };
 
 export default {
-    bind: function (el, binding, node) {
+    beforeMount: function (el, binding, node) {
         // Ensure element has an ID (required for the directive to work)
         if (!el.id) {
             console.warn('numberMask directive requires element to have an id attribute');
@@ -203,7 +203,7 @@ export default {
             el.addEventListener('beforeinput', beforeInputHandler, false);
         }
     },
-    update: function (el, binding, node) {
+    updated: function (el, binding, node) {
         // Update context and expression if they changed
         if (numberFormatter[el.id]) {
             numberFormatter[el.id].context = node.context;
@@ -216,7 +216,7 @@ export default {
             formatNumber(el.id);
         }
     },
-    unbind: function (el, binding, node) {
+    unmounted: function (el, binding, node) {
         if (!el.id || !numberFormatter[el.id]) {
             return;
         }

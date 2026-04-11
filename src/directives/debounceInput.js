@@ -6,11 +6,11 @@ const inputHandler = debounce(function () {
 }, 800);
 
 export default {
-    bind: function (el, binding, node) {
+    beforeMount: function (el, binding, node) {
         debounceFunction = binding.value;
         el.addEventListener('input', inputHandler, false);
     },
-    unbind: function (el, binding, node) {
+    unmounted: function (el, binding, node) {
         el.removeEventListener('input', inputHandler, false);
     }
 };
