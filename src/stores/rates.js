@@ -48,10 +48,9 @@ export const useRatesStore = defineStore('rates', {
             };
             return rateApi
                 .reply(data.trip_id, data.user_id, obj)
-                .then((response) => {
+                .then(async (response) => {
                     data.reply_comment_created_at = dayjs(new Date()).format();
-                    // Cross-module: call profile store's setReply
-                    const { useProfileStore } = require('./profile');
+                    const { useProfileStore } = await import('./profile');
                     useProfileStore().setReply(data);
                     return Promise.resolve();
                 })

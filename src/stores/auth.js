@@ -5,8 +5,11 @@ import localConfig from '../../config/conf';
 
 // Lazy-load router to avoid circular dependency (stores → router → routes → components → stores)
 let _router;
-function getRouter() {
-    if (!_router) _router = require('../router').default;
+async function getRouter() {
+    if (!_router) {
+        const routerModule = await import('../router');
+        _router = routerModule.default;
+    }
     return _router;
 }
 
@@ -116,10 +119,11 @@ export const useAuthStore = defineStore('auth', {
             if (carsStore) carsStore.index();
             passengerStore.getPendingRequest();
             rootStore.startThread();
+            const router = await getRouter();
             if (this.firstTime) {
-                getRouter().replace({ name: 'profile_update' });
+                router.replace({ name: 'profile_update' });
             } else {
-                getRouter().rememberBack();
+                router.rememberBack();
             }
         },
 
@@ -188,11 +192,11 @@ export const useAuthStore = defineStore('auth', {
                         });
                         resolve();
                     })
-                    .catch(({ data, status }) => {
-                        // check for internet problems -> not resolve until retoken finish
+                    .catch(async ({ data, status }) => {
                         console.log(data, status);
                         this.doLogout();
-                        getRouter().push({ name: 'login' });
+                        const router = await getRouter();
+                        router.push({ name: 'login' });
                         resolve();
                     });
             });
@@ -216,7 +220,8 @@ export const useAuthStore = defineStore('auth', {
             this.doLogout();
             deviceStore.devices = [];
             rootStore.stopThread();
-            getRouter().replace({ name: 'trips' });
+            const router = await getRouter();
+            router.replace({ name: 'trips' });
         },
 
         resetPassword(email) {
@@ -233,8 +238,9 @@ export const useAuthStore = defineStore('auth', {
         changePassword({ token, data }) {
             return authApi
                 .changePassword(token, data)
-                .then(() => {
-                    getRouter().push({ name: 'login' });
+                .then(async () => {
+                    const router = await getRouter();
+                    router.push({ name: 'login' });
                     return Promise.resolve();
                 })
                 .catch((err) => {

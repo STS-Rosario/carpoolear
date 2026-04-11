@@ -13,10 +13,10 @@ export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, process.cwd(), '');
     const nodeEnv = env.NODE_ENV || 'development';
 
-    const PLATFORM = process.env.PLATFORM || 'android';
+    const PLATFORM = process.env.PLATFORM || 'browser';
     const isWebBuild = PLATFORM === 'browser';
     const routeBase = isWebBuild ? '/app/' : '';
-    const historyMode = isWebBuild ? 'history' : 'hash';
+    const historyMode = env.HISTORY_MODE || (isWebBuild ? 'history' : 'hash');
 
     return {
         root: '.',

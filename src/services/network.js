@@ -111,12 +111,50 @@ export default {
         return promise;
     },
 
-    get(url, params, headers = {}) {
+async get(url, params, headers = {}) {
         const source = this.newCancelToken();
+        const resolvedHeaders = await this.getHeader(headers);
         return this.processResponse(
             axios.get(API_URL + url, {
                 params: params,
-                headers: this.getHeader(headers),
+                headers: resolvedHeaders,
+                cancelToken: source.token
+            }),
+            source
+        );
+    },
+
+    async post(url, body, headers = {}) {
+        const source = this.newCancelToken();
+        const resolvedHeaders = await this.getHeader(headers);
+        return this.processResponse(
+            axios.post(API_URL + url, body, {
+                headers: resolvedHeaders,
+                cancelToken: source.token
+            }),
+            source
+        );
+    },
+
+    async delete(url, params, headers = {}) {
+        const source = this.newCancelToken();
+        const resolvedHeaders = await this.getHeader(headers);
+        return this.processResponse(
+            axios.delete(API_URL + url, {
+                params: params,
+                headers: resolvedHeaders,
+                cancelToken: source.token
+            }),
+            source
+        );
+    },
+
+    async put(url, body, headers = {}) {
+        const source = this.newCancelToken();
+        const resolvedHeaders = await this.getHeader(headers);
+        return this.processResponse(
+            axios.put(API_URL + url, body, {
+                headers: resolvedHeaders,
                 cancelToken: source.token
             }),
             source
