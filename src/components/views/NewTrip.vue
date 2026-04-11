@@ -378,8 +378,8 @@
                             </div>
                             <div class="trip-weekly-schedule" v-if="useWeeklySchedule && config.weekly_schedule">
                                 <WeeklySchedule
-                                    :weeklySchedule.sync="weeklySchedule"
-                                    :weeklyScheduleTime.sync="weeklyScheduleTime"
+                                    v-model:weeklySchedule="weeklySchedule"
+                                    v-model:weeklyScheduleTime="weeklyScheduleTime"
                                     :readonly="false"
                                     :theme="tripCardTheme"
                                     :hasError="timeError.state"
@@ -1143,8 +1143,8 @@
                             </div>
                             <div class="trip-weekly-schedule" v-if="useWeeklySchedule && config.weekly_schedule">
                                 <WeeklySchedule
-                                    :weeklySchedule.sync="weeklySchedule"
-                                    :weeklyScheduleTime.sync="weeklyScheduleReturnTime"
+                                    v-model:weeklySchedule="weeklySchedule"
+                                    v-model:weeklyScheduleTime="weeklyScheduleReturnTime"
                                     :readonly="false"
                                     :theme="tripCardTheme"
                                     :hasError="otherTrip.timeError.state"
