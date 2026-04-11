@@ -4,7 +4,7 @@ import imgSrc from './imageSrc';
 import numberFormatter from './numberFormatter';
 import dateFormatter from './dateFormatter';
 import debounceInput from './debounceInput';
-import { VueMaskDirective } from 'v-mask';
+import { vMaska } from 'maska/vue';
 import clickOutside from './clickOutside';
 import fancyCheckbox from './fancyCheckbox';
 
@@ -12,7 +12,7 @@ export function registerDirectives(app) {
     app.directive('focus', autofocus);
     app.directive('jump', Jump);
     app.directive('imgSrc', imgSrc);
-    app.directive('mask', VueMaskDirective);
+    app.directive('mask', vMaska);
     app.directive('numberMask', numberFormatter);
     app.directive('dateFormatter', dateFormatter);
     app.directive('debounceInput', debounceInput);
