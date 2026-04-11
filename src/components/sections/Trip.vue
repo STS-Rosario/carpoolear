@@ -234,8 +234,7 @@
                                         class="trip_location_from_state-country"
                                     >
                                         {{
-                                            getStateName(trip.points[0])
-                                                | googleInfoClean
+                                            googleInfoClean(getStateName(trip.points[0]))
                                         }}
                                     </span>
                                 </div>
@@ -290,11 +289,11 @@
                                         class="trip_location_to_state-country"
                                     >
                                         {{
-                                            getStateName(
+                                            googleInfoClean(getStateName(
                                                 trip.points[
                                                     trip.points.length - 1
                                                 ]
-                                            ) | googleInfoClean
+                                            ))
                                         }}
                                     </span>
                                 </div>
@@ -572,6 +571,7 @@ import WeeklySchedule from '../elements/WeeklySchedule';
 import UserNameWithBadge from '../elements/UserNameWithBadge.vue';
 import dayjs from '../../dayjs';
 import SvgItem from '../SvgItem';
+import { googleInfoClean } from '../../filters';
 
 export default {
     name: 'trip',
