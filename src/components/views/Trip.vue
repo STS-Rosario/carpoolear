@@ -512,7 +512,7 @@ export default {
         },
         deleteTrip() {
             if (window.confirm(this.$t('seguroCancelar'))) {
-                this.$set(this.sending, 'deleteAction', true);
+                this.sending.deleteAction = true;
                 this.remove(this.trip.id)
                     .then(() => {
                         dialogs.message(this.$t('viajeCancelado'), {
@@ -525,7 +525,7 @@ export default {
                         dialogs.message(this.$t('errorAlCancelar'), {
                             estado: 'error'
                         });
-                        this.$set(this.sending, 'deleteAction', false);
+                        this.sending.deleteAction = false;
                     });
             }
         },
@@ -620,7 +620,7 @@ export default {
         },
 
         toUserMessages(user) {
-            this.$set(this.sending, 'sendMessageAction', true);
+            this.sending.sendMessageAction = true;
             let data = {
                 user: user,
                 tripId: this.trip.is_passenger ? undefined : this.trip.id
@@ -634,7 +634,7 @@ export default {
                 })
                 .catch((error) => {
                     console.error(error);
-                    this.$set(this.sending, 'sendMessageAction', false);
+                    this.sending.sendMessageAction = false;
                 });
         },
 
@@ -678,7 +678,7 @@ export default {
                     this.toMessages();
                     return;
                 }
-                this.$set(this.sending, 'requestAction', true);
+                this.sending.requestAction = true;
                 this.showModalRequestSeat = false;
                 this.make(this.trip.id)
                     .then((response) => {
@@ -693,14 +693,14 @@ export default {
                         }
                     })
                     .finally(() => {
-                        this.$set(this.sending, 'requestAction', false);
+                        this.sending.requestAction = false;
                     });
             }
         },
 
         cancelRequest() {
             if (window.confirm(this.$t('seguroBajarteViaje'))) {
-                this.$set(this.sending, 'requestAction', true);
+                this.sending.requestAction = true;
                 this.cancel({ user: this.user, trip: this.trip })
                     .then(() => {
                         dialogs.message(this.$t('teHasBajadoViaje'));
@@ -716,7 +716,7 @@ export default {
                         );
                     })
                     .finally(() => {
-                        this.$set(this.sending, 'requestAction', false);
+                        this.sending.requestAction = false;
                     });
             }
         },

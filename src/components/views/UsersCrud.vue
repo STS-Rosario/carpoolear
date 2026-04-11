@@ -820,8 +820,8 @@ export default {
             if (this.newInfo.nro_doc && this.newInfo.nro_doc.length > 0 && this.newInfo.nro_doc.length < 7) {
                 // this.dniError.state = true;
                 // this.dniError.message = 'El DNI que ingresaste no es válido.';
-                this.$set(this.dniError, 'state', true);
-                this.$set(this.dniError, 'message', 'asdasdasdasd');
+                this.dniError.state = true;
+                this.dniError.message = 'asdasdasdasd';
 
                 globalError = true;
             }

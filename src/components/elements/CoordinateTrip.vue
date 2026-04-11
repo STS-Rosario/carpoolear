@@ -212,17 +212,13 @@ export default {
         doRequest(isReturnTrip = false) {
             if (this.$redirectToIdentityValidationIfRequired()) return;
             if (this.config.module_coordinate_by_message) {
-                this.$set(
-                    this.sending,
-                    isReturnTrip ? 'returnTrip' : 'trip',
-                    true
-                );
+                this.sending[isReturnTrip ? 'returnTrip' : 'trip'] = true;
                 let trip = isReturnTrip
                     ? this.conversation.return_trip
                     : this.conversation.trip;
                 this.make(trip.id)
                     .then((response) => {
-                        this.$set(trip, 'request', 'send');
+                        trip.request = 'send';
                     })
                     .catch((error) => {
                         if (this.$checkError(error, 'identity_validation_required')) {
@@ -233,11 +229,7 @@ export default {
                         }
                     })
                     .finally(() => {
-                        this.$set(
-                            this.sending,
-                            isReturnTrip ? 'returnTrip' : 'trip',
-                            false
-                        );
+                        this.sending[isReturnTrip ? 'returnTrip' : 'trip'] = false;
                     });
             }
         },
@@ -249,11 +241,7 @@ export default {
                         this.$t('seguroBajarteViaje')
                     )
                 ) {
-                    this.$set(
-                        this.sending,
-                        isReturnTrip ? 'trip' : 'returnTrip',
-                        true
-                    );
+                    this.sending[isReturnTrip ? 'trip' : 'returnTrip'] = true;
                     let trip = isReturnTrip
                         ? this.conversation.return_trip
                         : this.conversation.trip;
@@ -288,11 +276,7 @@ export default {
                             );
                         })
                         .finally(() => {
-                            this.$set(
-                                this.sending,
-                                isReturnTrip ? 'trip' : 'returnTrip',
-                                false
-                            );
+                            this.sending[isReturnTrip ? 'trip' : 'returnTrip'] = false;
                         });
                 }
             }
