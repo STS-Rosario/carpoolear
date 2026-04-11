@@ -287,7 +287,7 @@ export default {
         }
     },
 
-    beforeDestroy() {
+    beforeUnmount() {
         this.thread.stop();
         this.select(null);
     },

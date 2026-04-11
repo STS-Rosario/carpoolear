@@ -72,7 +72,7 @@ export default {
             this.now = Date.now();
         }, 1000);
     },
-    beforeDestroy() {
+    beforeUnmount() {
         if (this.ticker) clearInterval(this.ticker);
     },
     methods: {

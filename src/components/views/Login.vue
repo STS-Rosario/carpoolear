@@ -500,7 +500,7 @@ export default {
         });
     },
 
-    beforeDestroy() {
+    beforeUnmount() {
         bus.off('clear-click', this.onClearClick);
     },
 

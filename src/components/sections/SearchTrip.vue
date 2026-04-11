@@ -235,7 +235,7 @@ export default {
         this.$refs['to_town'].$el.addEventListener('input', this.checkInput);
     },
     updated() {},
-    beforeDestroy() {
+    beforeUnmount() {
         this.$refs['from_town'].$el.removeEventListener(
             'input',
             this.checkInput

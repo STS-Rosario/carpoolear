@@ -156,7 +156,7 @@ export default {
         bus.on('back-click', this.onBackClick);
     },
 
-    beforeDestroy() {
+    beforeUnmount() {
         bus.off('back-click', this.onBackClick);
     },
 

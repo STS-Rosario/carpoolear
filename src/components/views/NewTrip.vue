@@ -1879,7 +1879,7 @@ export default {
             this.trips_created_by_user_amount = result.data.trips_created_by_user_amount;
         });
     },
-    beforeDestroy() {},
+    beforeUnmount() {},
 
     computed: {
         ...mapState(useAuthStore, {

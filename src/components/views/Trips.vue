@@ -709,7 +709,7 @@ export default {
     updated(a) {
         // {{ $t('pendienteNoSeLimpiaBuscador') }}
     },
-    beforeDestroy() {
+    beforeUnmount() {
         bus.off('search-click', this.onSearchButton);
         bus.off('clear-click', this.onClearButton);
         bus.off('scroll-bottom', this.onScrollBottom);

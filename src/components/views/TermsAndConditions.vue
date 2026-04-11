@@ -36,7 +36,7 @@ export default {
             router.back();
         }
     },
-    beforeDestroy() {
+    beforeUnmount() {
         bus.off('back-click', this.onBackClick);
     }
 };

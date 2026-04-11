@@ -429,7 +429,7 @@ export default {
             });
         });
     },
-    beforeDestroy() {
+    beforeUnmount() {
         bus.off('request-status-changed');
     },
     computed: {

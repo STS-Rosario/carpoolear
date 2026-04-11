@@ -319,7 +319,7 @@ export default {
         this.fetchCost();
         this.fetchStatus();
     },
-    beforeDestroy() {
+    beforeUnmount() {
         this.stopPollingStatus();
     }
 };

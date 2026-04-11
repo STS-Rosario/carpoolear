@@ -256,7 +256,7 @@ export default {
             });
         }
     },
-    beforeDestroy() {
+    beforeUnmount() {
         bus.off('back-click', this.onBackClick);
     },
     mounted() {
