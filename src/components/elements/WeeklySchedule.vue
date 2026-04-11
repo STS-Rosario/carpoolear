@@ -41,7 +41,7 @@
                 type="time"
                 :value="weeklyScheduleTime"
                 @input="$emit('update:weeklyScheduleTime', $event.target.value)"
-                v-mask="'##:##'"
+                v-maska="'##:##'"
                 class="form-control form-control-with-icon form-control-time"
                 :class="{ 'has-error': hasError }"
             />

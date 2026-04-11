@@ -361,7 +361,7 @@
                                     }}</label>
                                     <input
                                         type="time"
-                                        v-mask="'##:##'"
+                                        v-maska="'##:##'"
                                         v-model="time"
                                         class="form-control form-control-with-icon form-control-time"
                                         id="time"
@@ -1122,7 +1122,7 @@
                                     </label>
                                     <input
                                         type="time"
-                                        v-mask="'##:##'"
+                                        v-maska="'##:##'"
                                         v-model="otherTrip.time"
                                         class="form-control form-control-with-icon form-control-time"
                                         id="otherTrip-time"
