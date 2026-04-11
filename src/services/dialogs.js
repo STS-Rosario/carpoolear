@@ -1,7 +1,7 @@
 /* jshint esversion: 6 */
-import alertifyjs from '../../node_modules/alertifyjs/build/alertify.min.js';
+import * as alertifyjs from '../../node_modules/alertifyjs/build/alertify.min.js';
 import cordovaToast from '../cordova/toast.js';
-require('../../node_modules/alertifyjs/build/css/alertify.min.css');
+import '../../node_modules/alertifyjs/build/css/alertify.min.css';
 
 export default {
     message(text, options = {}, successCallback = null) {

@@ -1,8 +1,8 @@
 /* jshint esversion: 6 */
 import router from '../router';
+import { useAuthStore } from '../stores/auth';
 
 function getAuthStore () {
-    const { useAuthStore } = require('../stores/auth');
     return useAuthStore();
 }
 

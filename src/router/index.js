@@ -1,21 +1,24 @@
 /* jshint esversion: 6 */
 import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router';
 import i18n from '../i18n';
+import { getInstance } from '../services/debug';
+import { useAuthStore } from '../stores/auth';
+import { useActionbarsStore } from '../stores/actionbars';
+import { useBackgroundStore } from '../stores/background';
 
 import routes from './routes.js';
 
 const router = createRouter({
     routes: routes,
-    history: process.env.HISTORY_MODE === 'history'
-        ? createWebHistory(process.env.ROUTE_BASE)
-        : createWebHashHistory(process.env.ROUTE_BASE)
+    history: import.meta.env.VITE_HISTORY_MODE === 'history'
+        ? createWebHistory(import.meta.env.VITE_ROUTE_BASE)
+        : createWebHashHistory(import.meta.env.VITE_ROUTE_BASE)
 });
 
 router.rememberRoute = null;
 
 router.afterEach((to) => {
     try {
-        const { getInstance } = require('../services/debug');
         const instance = getInstance();
         if (instance && instance.isEnabled()) {
             const url = (to.fullPath || to.path || window.location.href);
@@ -27,9 +30,6 @@ router.afterEach((to) => {
 });
 
 router.beforeEach((to, from, next) => {
-    const { useAuthStore } = require('../stores/auth');
-    const { useActionbarsStore } = require('../stores/actionbars');
-    const { useBackgroundStore } = require('../stores/background');
     const authStore = useAuthStore();
     const actionbarsStore = useActionbarsStore();
     const backgroundStore = useBackgroundStore();
@@ -51,7 +51,7 @@ router.beforeEach((to, from, next) => {
     }
     const config = authStore.appConfig;
     console.log('config app name', config);
-    let appName = process.env.TARGET_APP || 'Carpoolear';
+    let appName = import.meta.env.VITE_TARGET_APP || 'Carpoolear';
     if (config) {
         appName = config.app_name ? config.app_name : config.name_app;
     }

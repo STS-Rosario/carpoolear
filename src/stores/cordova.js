@@ -7,8 +7,11 @@ import toast from '../cordova/toast.js';
 
 // Lazy-load router to avoid circular dependency (stores → router → routes → components → stores)
 let _router;
-function getRouter() {
-    if (!_router) _router = require('../router').default;
+async function getRouter() {
+    if (!_router) {
+        const routerModule = await import('../router');
+        _router = routerModule.default;
+    }
     return _router;
 }
 
@@ -60,7 +63,7 @@ export const useCordovaStore = defineStore('cordova', {
         },
 
         // Business logic actions
-        notificationArrive(notification) {
+        async notificationArrive(notification) {
             // [TODO] Determinar logica
             console.log('Notification arrive', notification);
             if (notification.foreground) {
@@ -71,7 +74,7 @@ export const useCordovaStore = defineStore('cordova', {
                         notification.data.type === 'conversation' &&
                         notification.data.conversation_id
                     ) {
-                        const { useConversationsStore } = require('./conversations');
+                        const { useConversationsStore } = await import('./conversations');
                         const conversationsStore = useConversationsStore();
                         conversationsStore.findConversation({
                             id: notification.data.conversation_id
@@ -90,19 +93,19 @@ export const useCordovaStore = defineStore('cordova', {
                     }
                 );
             }
-            const { useNotificationsStore } = require('./notifications');
+            const { useNotificationsStore } = await import('./notifications');
             const notificationsStore = useNotificationsStore();
             notificationsStore.add();
         },
 
-        facebookLogin() {
+        async facebookLogin() {
             return facebook.login().then((response) => {
                 const accessToken = response.authResponse.accessToken;
                 authApi
                     .loginWithProvider('facebook', { access_token: accessToken })
-                    .then((response) => {
+                    .then(async (response) => {
                         const token = response.token;
-                        const { useAuthStore } = require('./auth');
+                        const { useAuthStore } = await import('./auth');
                         const authStore = useAuthStore();
                         authStore.onLoggin(token);
                         authApi.matchFriendsWithProvider('facebook', {
@@ -112,16 +115,16 @@ export const useCordovaStore = defineStore('cordova', {
             });
         },
 
-        appleLogin() {
+        async appleLogin() {
             return apple.login().then((response) => {
                 let data = {
                     access_token: response.identityToken
                 };
                 data = Object.assign(data, response);
 
-                authApi.loginWithProvider('apple', data).then((response) => {
+                authApi.loginWithProvider('apple', data).then(async (response) => {
                     const token = response.token;
-                    const { useAuthStore } = require('./auth');
+                    const { useAuthStore } = await import('./auth');
                     const authStore = useAuthStore();
                     authStore.onLoggin(token);
                 });

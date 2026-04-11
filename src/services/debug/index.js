@@ -5,11 +5,11 @@ import { createDebugLogger } from './debugLogger.js';
 
 let defaultInstance = null;
 
-function getDeviceInfo() {
+async function getDeviceInfo() {
     let device = (window && window.device) || { platform: 'unknown', model: 'unknown', osVersion: 'unknown' };
     let networkOnline = (typeof navigator !== 'undefined' && navigator.onLine !== undefined) ? navigator.onLine : true;
     try {
-        const { useCordovaStore } = require('../../stores/cordova');
+        const { useCordovaStore } = await import('../../stores/cordova');
         const store = useCordovaStore();
         if (store && store.device) {
             device = store.device;

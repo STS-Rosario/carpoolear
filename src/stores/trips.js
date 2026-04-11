@@ -29,8 +29,8 @@ export const useTripsStore = defineStore('trips', {
             this.tripsSearch(this.tripsSearchParam.data);
         },
 
-        create(data) {
-            const { useMyTripsStore } = require('./myTrips');
+        async create(data) {
+            const { useMyTripsStore } = await import('./myTrips');
             const myTripsStore = useMyTripsStore();
             return tripsApi.create(data).then((response) => {
                 myTripsStore.addTrip(response.data);
@@ -39,8 +39,8 @@ export const useTripsStore = defineStore('trips', {
             });
         },
 
-        update(data) {
-            const { useMyTripsStore } = require('./myTrips');
+        async update(data) {
+            const { useMyTripsStore } = await import('./myTrips');
             const myTripsStore = useMyTripsStore();
             return tripsApi.update(data).then((response) => {
                 myTripsStore.updateTrip(response.data);
@@ -49,8 +49,8 @@ export const useTripsStore = defineStore('trips', {
             });
         },
 
-        changeSeats(data) {
-            const { useMyTripsStore } = require('./myTrips');
+        async changeSeats(data) {
+            const { useMyTripsStore } = await import('./myTrips');
             const myTripsStore = useMyTripsStore();
             return tripsApi.changeSeats(data).then((response) => {
                 myTripsStore.updateTrip(response.data);
@@ -58,8 +58,8 @@ export const useTripsStore = defineStore('trips', {
             });
         },
 
-        remove(id) {
-            const { useMyTripsStore } = require('./myTrips');
+        async remove(id) {
+            const { useMyTripsStore } = await import('./myTrips');
             const myTripsStore = useMyTripsStore();
             return tripsApi.remove(id).then((response) => {
                 myTripsStore.deleteTrip(id);

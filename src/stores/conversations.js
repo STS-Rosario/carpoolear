@@ -6,8 +6,11 @@ import dialogs from '../services/dialogs.js';
 import i18n from '../i18n';
 // Lazy-load router to avoid circular dependency (stores → router → routes → components → stores)
 let _router;
-function getRouter() {
-    if (!_router) _router = require('../router').default;
+async function getRouter() {
+    if (!_router) {
+        const routerModule = await import('../router');
+        _router = routerModule.default;
+    }
     return _router;
 }
 
@@ -192,9 +195,9 @@ export const useConversationsStore = defineStore('conversations', {
             }
         },
 
-        createConversation(param) {
+        async createConversation(param) {
             // Inline identity validation check (replaces redirectToIdentityValidationIfRequired)
-            const { useAuthStore } = require('./auth');
+            const { useAuthStore } = await import('./auth');
             const authStore = useAuthStore();
             const config = authStore.appConfig;
             const currentUser = authStore.user;

@@ -2,12 +2,15 @@ import { defineStore } from 'pinia';
 
 // Lazy-load router to avoid circular dependency (stores → router → routes → components → stores)
 let _router;
-function getRouter() {
-    if (!_router) _router = require('../router').default;
+async function getRouter() {
+    if (!_router) {
+        const routerModule = await import('../router');
+        _router = routerModule.default;
+    }
     return _router;
 }
 
-let appName = process.env.TARGET_APP || 'Carpoolear';
+let appName = import.meta.env.VITE_TARGET_APP || 'Carpoolear';
 if (appName && appName.length) {
     appName = appName.charAt(0).toUpperCase() + appName.slice(1);
 }
@@ -93,11 +96,11 @@ export const useActionbarsStore = defineStore('actionbars', {
     },
 
     actions: {
-        setTitle(title = '') {
-            const { useAuthStore } = require('./auth');
+        async setTitle(title = '') {
+            const { useAuthStore } = await import('./auth');
             const authStore = useAuthStore();
             const config = authStore.appConfig;
-            let currentAppName = config ? config.name_app : process.env.TARGET_APP;
+            let currentAppName = config ? config.name_app : import.meta.env.VITE_TARGET_APP;
             if (currentAppName && currentAppName.length) {
                 currentAppName = currentAppName.charAt(0).toUpperCase() + currentAppName.slice(1);
             }
@@ -157,14 +160,14 @@ export const useActionbarsStore = defineStore('actionbars', {
             });
         },
 
-        footerButtonClick(item) {
+        async footerButtonClick(item) {
             const params = {};
             if (item.url === 'profile') {
                 params.id = 'me';
             }
             if (item.url === 'trips') {
                 params.clearSearch = true;
-                const { useTripsStore } = require('./trips');
+                const { useTripsStore } = await import('./trips');
                 const tripsStore = useTripsStore();
                 tripsStore.tripsSearch({ is_passenger: false });
                 tripsStore.setRefreshList(true);

@@ -17,9 +17,9 @@ export const useAdminStore = defineStore('admin', {
                 });
         },
 
-        searchUsers(name) {
+        async searchUsers(name) {
             // Cross-module: check auth user for admin
-            const { useAuthStore } = require('./auth');
+            const { useAuthStore } = await import('./auth');
             const authStore = useAuthStore();
             if (authStore.user && authStore.user.is_admin) {
                 return adminApi.searchUsers({ name: name });

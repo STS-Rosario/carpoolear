@@ -5,8 +5,11 @@ import localConfig from '../../config/conf';
 
 // Lazy-load router to avoid circular dependency (stores → router → routes → components → stores)
 let _router;
-function getRouter() {
-    if (!_router) _router = require('../router').default;
+async function getRouter() {
+    if (!_router) {
+        const routerModule = await import('../router');
+        _router = routerModule.default;
+    }
     return _router;
 }
 
@@ -69,16 +72,25 @@ export const useAuthStore = defineStore('auth', {
         },
 
         // Business logic actions
-        onLoggin(token) {
+        async onLoggin(token) {
             this.setToken(token);
             this.fetchUser();
 
-            const { useCordovaStore } = require('./cordova');
-            const { useDeviceStore } = require('./device');
-            const { useTripsStore } = require('./trips');
-            const { useMyTripsStore } = require('./myTrips');
-            const { usePassengerStore } = require('./passenger');
-            const { useRootStore } = require('./root');
+            const [
+                { useCordovaStore },
+                { useDeviceStore },
+                { useTripsStore },
+                { useMyTripsStore },
+                { usePassengerStore },
+                { useRootStore }
+            ] = await Promise.all([
+                import('./cordova'),
+                import('./device'),
+                import('./trips'),
+                import('./myTrips'),
+                import('./passenger'),
+                import('./root')
+            ]);
             const cordovaStore = useCordovaStore();
             const deviceStore = useDeviceStore();
             const tripsStore = useTripsStore();
@@ -88,11 +100,11 @@ export const useAuthStore = defineStore('auth', {
 
             let ratesStore, carsStore;
             try {
-                const { useRatesStore } = require('./rates');
+                const { useRatesStore } = await import('./rates');
                 ratesStore = useRatesStore();
             } catch (e) { /* optional */ }
             try {
-                const { useCarsStore } = require('./car');
+                const { useCarsStore } = await import('./car');
                 carsStore = useCarsStore();
             } catch (e) { /* optional */ }
 
@@ -107,10 +119,11 @@ export const useAuthStore = defineStore('auth', {
             if (carsStore) carsStore.index();
             passengerStore.getPendingRequest();
             rootStore.startThread();
+            const router = await getRouter();
             if (this.firstTime) {
-                getRouter().replace({ name: 'profile_update' });
+                router.replace({ name: 'profile_update' });
             } else {
-                getRouter().rememberBack();
+                router.rememberBack();
             }
         },
 
@@ -179,24 +192,24 @@ export const useAuthStore = defineStore('auth', {
                         });
                         resolve();
                     })
-                    .catch(({ data, status }) => {
-                        // check for internet problems -> not resolve until retoken finish
+                    .catch(async ({ data, status }) => {
                         console.log(data, status);
                         this.doLogout();
-                        getRouter().push({ name: 'login' });
+                        const router = await getRouter();
+                        router.push({ name: 'login' });
                         resolve();
                     });
             });
         },
 
-        logout() {
+        async logout() {
             // Call the logout API endpoint
             authApi.logout().catch((error) => {
                 console.error('Logout API call failed:', error);
             });
 
-            const { useDeviceStore } = require('./device');
-            const { useRootStore } = require('./root');
+            const { useDeviceStore } = await import('./device');
+            const { useRootStore } = await import('./root');
             const deviceStore = useDeviceStore();
             const rootStore = useRootStore();
 
@@ -207,7 +220,8 @@ export const useAuthStore = defineStore('auth', {
             this.doLogout();
             deviceStore.devices = [];
             rootStore.stopThread();
-            getRouter().replace({ name: 'trips' });
+            const router = await getRouter();
+            router.replace({ name: 'trips' });
         },
 
         resetPassword(email) {
@@ -224,8 +238,9 @@ export const useAuthStore = defineStore('auth', {
         changePassword({ token, data }) {
             return authApi
                 .changePassword(token, data)
-                .then(() => {
-                    getRouter().push({ name: 'login' });
+                .then(async () => {
+                    const router = await getRouter();
+                    router.push({ name: 'login' });
                     return Promise.resolve();
                 })
                 .catch((err) => {
