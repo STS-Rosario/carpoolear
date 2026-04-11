@@ -195,7 +195,7 @@ bus.on('system-ready', () => {
         return original$n.call(this, value, ...args);
     };
 
-    app.config.errorHandler = function (err, vm, info) {
+    app.config.errorHandler = function (err, instance, info) {
         const data = {};
         data.log = err.stack;
         debugApi.log(data);
