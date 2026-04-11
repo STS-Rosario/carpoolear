@@ -1,4 +1,3 @@
-import Vue from 'vue';
 import {
     cssvar,
     scrollToElement,
@@ -7,10 +6,12 @@ import {
     redirectToIdentityValidationIfRequired
 } from './../utils/helpers';
 
-Vue.prototype.$cssvar = cssvar;
-Vue.prototype.$scrollToElement = scrollToElement;
-Vue.prototype.$checkError = checkError;
-Vue.prototype.$getErrors = getErrors;
-Vue.prototype.$redirectToIdentityValidationIfRequired = function () {
-    return redirectToIdentityValidationIfRequired(this.$router);
-};
+export function installPrototypes(app) {
+    app.config.globalProperties.$cssvar = cssvar;
+    app.config.globalProperties.$scrollToElement = scrollToElement;
+    app.config.globalProperties.$checkError = checkError;
+    app.config.globalProperties.$getErrors = getErrors;
+    app.config.globalProperties.$redirectToIdentityValidationIfRequired = function () {
+        return redirectToIdentityValidationIfRequired(this.$router);
+    };
+}
