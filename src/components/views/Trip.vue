@@ -385,12 +385,10 @@ import TripShare from '../elements/TripShare';
 import TripPassengers from '../elements/TripPassengers';
 import TripButtons from '../elements/TripButtons';
 
-import Vue from 'vue';
-import VueHead from 'vue-head';
+import { useHead } from '@unhead/vue';
 import { LMap, LTileLayer } from 'vue2-leaflet';
 import { appLocaleToRoutingLanguage } from '../../main';
 import 'leaflet-routing-machine';
-Vue.use(VueHead);
 
 export default {
     name: 'trip',
@@ -430,36 +428,6 @@ export default {
             acceptPricing: 0,
             calculatedHeight: {}
         };
-    },
-
-    head: {
-        /* title: function () {
-            return {
-                inner: this.$t('viaje')
-            };
-        }, */
-        meta: function () {
-            if (this.trip) {
-                return [
-                    { p: 'og:description', c: this.trip.description },
-                    {
-                        p: 'og:title',
-                        c:
-                            this.trip.points[0].json_address.ciudad +
-                            ' -> ' +
-                            this.trip.points[this.trip.points.length - 1]
-                                .json_address.ciudad +
-                            ' | ' +
-                            dayjs(this.trip.trip_date).format(
-                                'dddd DD/MM hh:mm'
-                            )
-                    },
-                    { p: 'og:image', c: this.carpoolear_logo }
-                ];
-            } else {
-                return [];
-            }
-        }
     },
 
     methods: {
@@ -895,6 +863,33 @@ export default {
             handler: function () {
                 var self = this;
                 this.$nextTick(function () { self.enablePayment(); });
+                if (this.trip) {
+                    useHead({
+                        meta: [
+                            {
+                                name: 'og:description',
+                                content: this.trip.description
+                            },
+                            {
+                                name: 'og:title',
+                                content:
+                                    this.trip.points[0].json_address.ciudad +
+                                    ' -> ' +
+                                    this.trip.points[
+                                        this.trip.points.length - 1
+                                    ].json_address.ciudad +
+                                    ' | ' +
+                                    dayjs(this.trip.trip_date).format(
+                                        'dddd DD/MM hh:mm'
+                                    )
+                            },
+                            {
+                                name: 'og:image',
+                                content: this.carpoolear_logo
+                            }
+                        ]
+                    });
+                }
             }
         }
     },

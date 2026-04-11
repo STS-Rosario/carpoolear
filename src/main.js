@@ -30,6 +30,8 @@ import i18n, {
     applyPriceFormat
 } from './i18n';
 
+import { createHead } from '@unhead/vue/client';
+
 import bus from './services/bus-event';
 import { DebugApi } from './services/api';
 import { init as initDebugLogger } from './services/debug';
@@ -164,6 +166,7 @@ bus.on('system-ready', () => {
     app.use(router);
     app.use(pinia);
     app.use(i18n);
+    app.use(createHead());
 
     // Install prototypes as globalProperties
     installPrototypes(app);
