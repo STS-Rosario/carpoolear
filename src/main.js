@@ -43,8 +43,6 @@ import { App as CapacitorApp } from '@capacitor/app';
 
 import Vue2Leaflet from 'vue2-leaflet';
 
-import './filters.js';
-
 // Re-export locale maps so existing imports from '../../main' still work
 export { appLocaleToBCP47, appLocaleToRoutingLanguage };
 

@@ -139,7 +139,7 @@
                         </div>
                     </div></template>
                 </modal>
-                <template v-for="(trip, index) in trips">
+                <template v-for="(trip, index) in trips" :key="trip.id != null ? trip.id : index">
                     <template
                         v-if="
                             isDonationTime() &&
@@ -314,6 +314,14 @@ export default {
         };
     },
     props: ['clearSearch', 'keepSearch'],
+    beforeMount() {
+        // SearchTrip mounts after this hook and runs loadParams(searchParams). If the store still
+        // holds a previous narrow search, trips_auto_search watchers emit() and overwrite the
+        // default trip list with a 0-result search. Reset the store before the child reads it.
+        if (!this.clearSearch && !this.keepSearch) {
+            this.search({ is_passenger: false });
+        }
+    },
     methods: {
         ...mapActions(useTripsStore, {
             search: 'tripsSearch',
@@ -648,14 +656,15 @@ export default {
         // Clear search
         if (this.clearSearch) {
             this.onClearButton();
-        } else {
-            // Tendria que recargar desde la búsqueda anterior
+        } else if (this.keepSearch) {
             if (this.$refs.searchBox) {
                 this.$refs.searchBox.loadParams(this.searchParams.data);
             }
-        }
-        if (!this.keepSearch) {
-            this.$refs.searchBox.clear();
+            this.search(this.searchParams.data);
+        } else {
+            if (this.$refs.searchBox) {
+                this.$refs.searchBox.clear();
+            }
         }
 
         if (this.scrollPosition) {
@@ -716,7 +725,7 @@ export default {
         bus.off('backbutton', this.onBackBottom);
     },
     watch: {
-        trips: function (oldValue, newValue) {
+        trips() {
             if (this.refreshList) {
                 this.refreshTrips(false);
                 this.lookSearch = false;

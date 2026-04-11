@@ -21,9 +21,6 @@ import spinner from './Spinner.vue';
 
 export default {
     name: 'loading',
-    mounted() {
-        // this.search();
-    },
     props: {
         data: {
             required: true

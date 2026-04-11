@@ -24,7 +24,7 @@
                         {{ getLocationName(trip.points[0]) }}
                     </span>
                     <span class="trip_location_from_state-country">
-                        {{ getStateName(trip.points[0]) | googleInfoClean }}
+                        {{ googleInfoClean(getStateName(trip.points[0])) }}
                     </span>
                 </div>
             </div>
@@ -56,7 +56,7 @@
                             getLocationName(p)
                         }}</span>
                         <span class="trip_location_inner_state-country">
-                            {{ getStateName(p) | googleInfoClean }}
+                            {{ googleInfoClean(getStateName(p)) }}
                         </span>
                     </div>
                 </div>
@@ -90,8 +90,7 @@
                     </span>
                     <span class="trip_location_from_state-country">
                         {{
-                            getStateName(trip.points[trip.points.length - 1])
-                                | googleInfoClean
+                            googleInfoClean(getStateName(trip.points[trip.points.length - 1]))
                         }}
                     </span>
                 </div>
@@ -138,6 +137,7 @@ import { useAuthStore } from '../../stores/auth';
 import svgItem from '../SvgItem';
 import dayjs from '../../dayjs';
 import TripSeats from './TripSeats';
+import { googleInfoClean } from '../../filters';
 
 export default {
     name: 'tripLocation',
@@ -168,6 +168,7 @@ export default {
         }
     },
     methods: {
+        googleInfoClean,
         dayjs,
         goToProfile: function (event) {
             event.stopPropagation();

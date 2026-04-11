@@ -4,6 +4,16 @@ import { TripApi, RateApi } from '../services/api';
 const tripsApi = new TripApi();
 const rateApi = new RateApi();
 
+function tripsListFromResponse(response) {
+    if (Array.isArray(response)) {
+        return response;
+    }
+    if (response && Array.isArray(response.data)) {
+        return response.data;
+    }
+    return [];
+}
+
 export const useMyTripsStore = defineStore('myTrips', {
     state: () => ({
         driver_trip: null,
@@ -24,15 +34,29 @@ export const useMyTripsStore = defineStore('myTrips', {
     actions: {
         // Data-fetching actions
         tripAsDriver() {
-            return tripsApi.myTrips(true).then((response) => {
-                this.driver_trip = response.data;
-            });
+            return tripsApi
+                .myTrips(true)
+                .then((response) => {
+                    const list = tripsListFromResponse(response);
+                    this.driver_trip = list;
+                })
+                .catch((err) => {
+                    console.error('[myTrips] tripAsDriver failed:', err);
+                    this.driver_trip = [];
+                });
         },
 
         tripAsPassenger() {
-            return tripsApi.myTrips(false).then((response) => {
-                this.passenger_trip = response.data;
-            });
+            return tripsApi
+                .myTrips(false)
+                .then((response) => {
+                    const list = tripsListFromResponse(response);
+                    this.passenger_trip = list;
+                })
+                .catch((err) => {
+                    console.error('[myTrips] tripAsPassenger failed:', err);
+                    this.passenger_trip = [];
+                });
         },
 
         pendingRatesAction() {
@@ -43,13 +67,13 @@ export const useMyTripsStore = defineStore('myTrips', {
 
         oldTripsAsDriver() {
             return tripsApi.myOldTrips(true).then((response) => {
-                this.driver_old_trips = response.data;
+                this.driver_old_trips = tripsListFromResponse(response);
             });
         },
 
         oldTripsAsPassenger() {
             return tripsApi.myOldTrips(false).then((response) => {
-                this.passenger_old_trips = response.data;
+                this.passenger_old_trips = tripsListFromResponse(response);
             });
         },
 
