@@ -192,7 +192,7 @@ export default {
             if (!editor) return;
             const text = (editor.invoke('getMarkdown') || '').trim();
             if (text.length) {
-                this.$set(this.sending, 'message', true);
+                this.sending.message = true;
                 this.send(text)
                     .catch((err) => {
                         if (this.$checkError(err, 'identity_validation_required')) {
@@ -203,7 +203,7 @@ export default {
                         }
                     })
                     .finally(() => {
-                        this.$set(this.sending, 'message', false);
+                        this.sending.message = false;
                         this.$forceUpdate();
                     });
                 editor.invoke('setMarkdown', '');

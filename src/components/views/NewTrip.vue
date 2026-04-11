@@ -2043,14 +2043,14 @@ export default {
             getTrip: 'getTrip'
         }),
         setIsPassenger(value) {
-            this.$set(this.trip, 'is_passenger', value);
+            this.trip.is_passenger = value;
         },
         changeOtherTripDate(date) {
-            this.$set(this.otherTrip.dateError, 'state', false);
+            this.otherTrip.dateError.state = false;
             this.otherTrip.dateAnswer = date;
         },
         changeDate(date) {
-            this.$set(this.dateError, 'state', false);
+            this.dateError.state = false;
             this.dateAnswer = date;
         },
         jumpToError() {

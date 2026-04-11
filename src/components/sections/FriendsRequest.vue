@@ -142,13 +142,13 @@ export default {
         },
 
         onAddClick(user) {
-            this.$set(this.idRequesting, user.id, true);
+            this.idRequesting[user.id] = true;
             this.request(user.id).then(
                 () => {
-                    this.$set(this.idRequesting, user.id, false);
+                    this.idRequesting[user.id] = false;
                 },
                 () => {
-                    this.$set(this.idRequesting, user.id, false);
+                    this.idRequesting[user.id] = false;
                 }
             );
         },

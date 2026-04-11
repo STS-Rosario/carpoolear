@@ -150,18 +150,14 @@ export default {
             this.endActions();
         },
         endActions() {
-            this.$set(document.documentElement.style, 'overflow', 'auto');
-            this.$set(document.body, 'scroll', 'yes');
+            document.documentElement.style.overflow = 'auto';
+            document.body.style.scroll = 'yes';
             this.setFirstTimeAppOpenInDevice();
         }
     },
     watch: {
         cardNumber(value) {
-            this.$set(
-                this.styleContainerObject,
-                'transform',
-                `translate(${(value - 1) * -100}vw)`
-            );
+            this.styleContainerObject.transform = `translate(${(value - 1) * -100}vw)`;
         }
     }
 };
