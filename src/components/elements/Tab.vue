@@ -48,7 +48,7 @@ export default {
     mounted: function () {
         this.$parent.registerTab(this);
     },
-    beforeDestroy: function () {
+    beforeUnmount: function () {
         this.$parent.removeTab(this);
     },
     ready: function () {

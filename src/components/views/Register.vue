@@ -781,7 +781,7 @@ export default {
         document.head.appendChild(recaptchaScript);
     },
 
-    beforeDestroy() {
+    beforeUnmount() {
         console.log(this.$route.name);
         if (this.$route.name === 'terms') {
             this.saveRegisterData(this.$data);

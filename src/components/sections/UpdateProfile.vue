@@ -1215,7 +1215,7 @@ export default {
             console.log('exception', ex);
         }
     },
-    beforeDestroy() {
+    beforeUnmount() {
         bus.off('date-change', this.dateChange);
     },
     components: {
