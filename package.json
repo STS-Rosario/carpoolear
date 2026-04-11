@@ -62,6 +62,7 @@
     "lodash": "^4.18.1",
     "marked": "^4.0.19",
     "minimist": "^1.2.0",
+    "mitt": "^3.0.1",
     "node-notifier": "^5.4.1",
     "pinia": "^2.3.1",
     "qrcode": "^1.5.3",
