@@ -9,16 +9,42 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const target = process.env.TARGET_APP || 'default';
 
+/** Vue Router + Vite asset base; '' or missing env → default /app/ for web (production). */
+function resolveRouteBase(raw, isWebBuild) {
+    const trimmed =
+        raw !== undefined && raw !== null ? String(raw).trim() : '';
+    if (trimmed !== '') {
+        if (trimmed === '/') {
+            return '/';
+        }
+        let b = trimmed.startsWith('/') ? trimmed : `/${trimmed}`;
+        if (!b.endsWith('/')) {
+            b += '/';
+        }
+        return b;
+    }
+    return isWebBuild ? '/app/' : '';
+}
+
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, process.cwd(), '');
     const nodeEnv = env.NODE_ENV || 'development';
 
     const PLATFORM = process.env.PLATFORM || 'browser';
     const isWebBuild = PLATFORM === 'browser';
-    const routeBase = isWebBuild ? '/app/' : '';
-    const historyMode = env.HISTORY_MODE || (isWebBuild ? 'history' : 'hash');
+    const routeBase = resolveRouteBase(env.VITE_ROUTE_BASE, isWebBuild);
+    const historyMode =
+        env.VITE_HISTORY_MODE ||
+        env.HISTORY_MODE ||
+        (isWebBuild ? 'history' : 'hash');
+    // Must read VITE_API_URL — .env files use that name; env.API_URL was always undefined.
+    const apiUrl =
+        env.VITE_API_URL !== undefined && env.VITE_API_URL !== null
+            ? String(env.VITE_API_URL)
+            : env.API_URL || 'http://carpoolear_backend.test';
 
     return {
+        base: routeBase === '/' ? '/' : routeBase,
         root: '.',
         publicDir: 'static',
         plugins: [
@@ -57,7 +83,7 @@ export default defineConfig(({ mode }) => {
                 TARGET_APP: env.TARGET_APP || target,
                 WEB_URL: env.WEB_URL || 'https://carpoolear.com.ar/app'
             }),
-            VITE_API_URL: JSON.stringify(env.API_URL || 'http://carpoolear_backend.test'),
+            VITE_API_URL: JSON.stringify(apiUrl),
             VITE_TARGET_APP: JSON.stringify(env.TARGET_APP || target),
             VITE_ROUTE_BASE: JSON.stringify(routeBase),
             VITE_HISTORY_MODE: JSON.stringify(historyMode),

@@ -2474,7 +2474,8 @@ export default {
         },
 
         save() {
-            if (this.validate()) {
+            const validationResult = this.validate();
+            if (validationResult) {
                 // Jump To Error
                 this.$nextTick(() => {
                     this.jumpToError();
@@ -2483,14 +2484,13 @@ export default {
             }
             /* eslint-disable no-unreachable */
             this.saving = true;
-
-            this.trip = this.getSaveInfo(this, this.estimatedTimeString);
             if (!this.updatingTrip) {
                 if (this.$redirectToIdentityValidationIfRequired()) {
                     this.saving = false;
                     return;
                 }
-                let trip = JSON.parse(JSON.stringify(this.trip));
+                let trip = this.getSaveInfo(this, this.estimatedTimeString);
+                trip.is_passenger = trip.is_passenger ? 1 : 0;
                 trip.allow_kids = !(trip.allow_kids > 0);
                 trip.allow_animals = !(trip.allow_animals > 0);
                 trip.allow_smoking = !(trip.allow_smoking > 0);

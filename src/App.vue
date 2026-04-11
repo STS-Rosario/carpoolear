@@ -126,8 +126,7 @@ export default {
         if (window.SplashScreen && window.SplashScreen.hide) {
             window.SplashScreen.hide();
         }
-        
-        // Show custom splash for 3 seconds
+
         setTimeout(() => {
             this.showCustomSplash = false;
         }, 3000);
@@ -164,7 +163,13 @@ export default {
                 this.appConfig.module_on_boarding_new_user &&
                 this.appConfig.module_on_boarding_new_user.enabled;
             let mustShowMobile = !this.isBrowser && !this.firsTimeMobileAppOpen;
-            let mustShowGeneral = this.user && this.user.on_boarding_view !== 1;
+            // Full-screen onboarding (z-index 9999) sat on top of /trips in the browser while
+            // trips loaded underneath (debug: Trip mounted x4, customSplash 0, cardTrip DOM count 0 under #main snapshot).
+            // Keep the blocking overlay for native / in-app only; web uses the app without it.
+            let mustShowGeneral =
+                this.user &&
+                this.user.on_boarding_view !== 1 &&
+                !this.isBrowser;
             return moduleEnabled && (mustShowMobile || mustShowGeneral);
         },
         viewName() {

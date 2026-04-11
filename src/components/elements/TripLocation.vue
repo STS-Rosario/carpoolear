@@ -168,6 +168,7 @@ export default {
         }
     },
     methods: {
+        googleInfoClean,
         dayjs,
         goToProfile: function (event) {
             event.stopPropagation();

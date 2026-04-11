@@ -95,7 +95,7 @@
                                 />
                             </div>
                         </template>
-                        <template v-if="user">
+                        <template v-if="user && trip.user">
                             <div
                                 class="trip_driver_img_container"
                                 v-on:click="goToProfile"
@@ -183,7 +183,7 @@
                         {{ $t('faltaPagarSellado') }}
                     </div>
                     <div class="trip_location">
-                        <template v-if="trip.points.length >= 2">
+                        <template v-if="trip.points && trip.points.length >= 2">
                             <div class="row trip_location_from">
                                 <div
                                     class="col-xs-4"
@@ -314,11 +314,14 @@
                                 </div>
                                 <div class="col-xs-20">
                                     {{
-                                        trip.from_town.slice(0, 23) +
-                                        '' +
-                                        (trip.from_town.length > 34
-                                            ? '...'
-                                            : '')
+                                        String(trip.from_town || '').slice(
+                                            0,
+                                            23
+                                        ) +
+                                            (String(trip.from_town || '')
+                                                .length > 34
+                                                ? '...'
+                                                : '')
                                     }}
                                 </div>
                             </div>
@@ -331,9 +334,11 @@
                                 </div>
                                 <div class="col-xs-20">
                                     {{
-                                        trip.to_town.slice(0, 23) +
-                                        '' +
-                                        (trip.to_town.length > 34 ? '...' : '')
+                                        String(trip.to_town || '').slice(0, 23) +
+                                            (String(trip.to_town || '').length >
+                                            34
+                                                ? '...'
+                                                : '')
                                     }}
                                 </div>
                             </div>
@@ -515,7 +520,10 @@
                                                 goToDetail(false, true)
                                             "
                                             v-if="!trip.is_passenger"
-                                            :disabled="!trip.passenger.length"
+                                            :disabled="
+                                                !trip.passenger ||
+                                                !trip.passenger.length
+                                            "
                                             class="btn btn-default"
                                             :aria-label="
                                                 $t('verPasajerosSubidos')
@@ -602,6 +610,7 @@ export default {
     },
 
     methods: {
+        googleInfoClean,
         dayjs,
         ...mapActions(useTripsStore, {
             changeSeats: 'changeSeats',
@@ -633,6 +642,9 @@ export default {
         },
         goToProfile: function (event) {
             event.stopPropagation();
+            if (!this.trip.user) {
+                return;
+            }
             this.$router.push({
                 name: 'profile',
                 params: {
@@ -792,6 +804,12 @@ export default {
             }
         },
         getUserImage() {
+            if (!this.trip || !this.trip.user) {
+                return '';
+            }
+            if (!this.user || this.user.id == null) {
+                return this.trip.user.image || '';
+            }
             return this.user.id === this.trip.user.id
                 ? this.user.image
                 : this.trip.user.image;
@@ -856,8 +874,7 @@ export default {
     },
     mounted() {
         this.seats_available = this.trip.seats_available;
-    },
-    updated() {}
+    }
 };
 </script>
 <style scoped>

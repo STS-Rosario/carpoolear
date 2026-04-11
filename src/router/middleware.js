@@ -53,13 +53,23 @@ export function requireIdentityValidation(to, from, next) {
     const authStore = getAuthStore();
     const config = authStore.appConfig;
     const user = authStore.user;
-    if (
-        config &&
-        user &&
-        config.identity_validation_required_new_users &&
-        user.identity_validation_required_for_user &&
-        !user.identity_validated
-    ) {
+    
+    // Check if user needs validation (either new user flag or past deadline for current users)
+    let needsValidation = false;
+    if (config && user && config.identity_validation_required_new_users) {
+        if (user.identity_validation_required_for_user && !user.identity_validated) {
+            needsValidation = true;
+        } else if (user.validate_by_date && !user.identity_validated) {
+            // Check if deadline has passed for current users
+            const [y, m, d] = user.validate_by_date.split('-').map(Number);
+            const deadlineEndOfDay = new Date(y, m - 1, d, 23, 59, 59, 999).getTime();
+            if (Date.now() >= deadlineEndOfDay) {
+                needsValidation = true;
+            }
+        }
+    }
+    
+    if (needsValidation) {
         next(false);
         router.replace({ name: 'identity_validation' });
         return;

@@ -6,16 +6,41 @@
  * @returns {boolean} true if redirect was performed (caller should abort); false otherwise
  */
 export function redirectToIdentityValidationIfRequired (router) {
-    const { useAuthStore } = require('../src/stores/auth');
-    const authStore = useAuthStore();
-    const config = authStore.appConfig;
-    const user = authStore.user;
-    if (!config || !user) return false;
-    if (!config.identity_validation_required_new_users) return false;
-    if (!user.identity_validation_required_for_user) return false;
-    if (user.identity_validated) return false;
-    router.push({ name: 'identity_validation' });
-    return true;
+    try {
+        const { useAuthStore } = require('../src/stores/auth');
+        const authStore = useAuthStore();
+        const config = authStore.appConfig;
+        const user = authStore.user;
+        
+        if (!config || !user) {
+            return false;
+        }
+        
+        if (!config.identity_validation_required_new_users) {
+            return false;
+        }
+        
+        // Check new users (identity_validation_required_for_user flag)
+        if (user.identity_validation_required_for_user && !user.identity_validated) {
+            router.push({ name: 'identity_validation' });
+            return true;
+        }
+        
+        // Check current users with deadline (validate_by_date)
+        if (user.validate_by_date && !user.identity_validated) {
+            const [y, m, d] = user.validate_by_date.split('-').map(Number);
+            const deadlineEndOfDay = new Date(y, m - 1, d, 23, 59, 59, 999).getTime();
+            if (Date.now() >= deadlineEndOfDay) {
+                router.push({ name: 'identity_validation' });
+                return true;
+            }
+        }
+        
+        return false;
+    } catch (e) {
+        console.log('[identity check] ERROR:', e.message);
+        return false;
+    }
 }
 
 export function cssvar (name) {
