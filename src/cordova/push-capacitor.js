@@ -2,6 +2,8 @@
 import { onMessage, getMessaging, getToken } from 'firebase/messaging';
 import { initializeApp } from 'firebase/app';
 import { Capacitor } from '@capacitor/core';
+import { useCordovaStore } from '../stores/cordova';
+import { useDeviceStore } from '../stores/device';
 
 class Notification {
     constructor(e) {
@@ -109,8 +111,6 @@ export default {
                 });
 
                 if (currentToken) {
-                    const { useCordovaStore } = require('../stores/cordova');
-                    const { useDeviceStore } = require('../stores/device');
                     useCordovaStore().setDeviceId(currentToken);
                     useDeviceStore().register().catch((error) => {
                         console.error('❌ Device registration failed:', error);
@@ -133,7 +133,6 @@ export default {
                         data: payload.data
                     });
 
-                    const { useCordovaStore } = require('../stores/cordova');
                     useCordovaStore().notificationArrive(notification);
                     // conversations/getUnreaded
                     // notifications/count
@@ -191,8 +190,6 @@ export default {
 
             // IMPORTANTE: Configurar listeners ANTES de registrar
             PushNotifications.addListener('registration', (token) => {
-                const { useCordovaStore } = require('../stores/cordova');
-                const { useDeviceStore } = require('../stores/device');
                 useCordovaStore().setDeviceId(token.value);
 
                 // Add a small delay to ensure state is updated before registering with backend
@@ -229,7 +226,6 @@ export default {
                             data: notification.data || {}
                         });
                         n.foreground = true;
-                        const { useCordovaStore } = require('../stores/cordova');
                         useCordovaStore().notificationArrive(n);
 
                         // Try to show a system notification as well
@@ -273,7 +269,6 @@ export default {
                         n.foreground = false;
                         n.coldstart = true;
 
-                        const { useCordovaStore } = require('../stores/cordova');
                         useCordovaStore().notificationArrive(n);
                     } catch (error) {
                         console.error('💥 === ERROR HANDLING PUSH TAP ===');

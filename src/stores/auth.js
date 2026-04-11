@@ -69,16 +69,25 @@ export const useAuthStore = defineStore('auth', {
         },
 
         // Business logic actions
-        onLoggin(token) {
+        async onLoggin(token) {
             this.setToken(token);
             this.fetchUser();
 
-            const { useCordovaStore } = require('./cordova');
-            const { useDeviceStore } = require('./device');
-            const { useTripsStore } = require('./trips');
-            const { useMyTripsStore } = require('./myTrips');
-            const { usePassengerStore } = require('./passenger');
-            const { useRootStore } = require('./root');
+            const [
+                { useCordovaStore },
+                { useDeviceStore },
+                { useTripsStore },
+                { useMyTripsStore },
+                { usePassengerStore },
+                { useRootStore }
+            ] = await Promise.all([
+                import('./cordova'),
+                import('./device'),
+                import('./trips'),
+                import('./myTrips'),
+                import('./passenger'),
+                import('./root')
+            ]);
             const cordovaStore = useCordovaStore();
             const deviceStore = useDeviceStore();
             const tripsStore = useTripsStore();
@@ -88,11 +97,11 @@ export const useAuthStore = defineStore('auth', {
 
             let ratesStore, carsStore;
             try {
-                const { useRatesStore } = require('./rates');
+                const { useRatesStore } = await import('./rates');
                 ratesStore = useRatesStore();
             } catch (e) { /* optional */ }
             try {
-                const { useCarsStore } = require('./car');
+                const { useCarsStore } = await import('./car');
                 carsStore = useCarsStore();
             } catch (e) { /* optional */ }
 
@@ -189,14 +198,14 @@ export const useAuthStore = defineStore('auth', {
             });
         },
 
-        logout() {
+        async logout() {
             // Call the logout API endpoint
             authApi.logout().catch((error) => {
                 console.error('Logout API call failed:', error);
             });
 
-            const { useDeviceStore } = require('./device');
-            const { useRootStore } = require('./root');
+            const { useDeviceStore } = await import('./device');
+            const { useRootStore } = await import('./root');
             const deviceStore = useDeviceStore();
             const rootStore = useRootStore();
 

@@ -38,9 +38,9 @@ export const useDeviceStore = defineStore('device', {
     },
 
     actions: {
-        register() {
-            const { useCordovaStore } = require('./cordova');
-            const { useRootStore } = require('./root');
+        async register() {
+            const { useCordovaStore } = await import('./cordova');
+            const { useRootStore } = await import('./root');
             const cordovaStore = useCordovaStore();
             const rootStore = useRootStore();
 
@@ -63,10 +63,10 @@ export const useDeviceStore = defineStore('device', {
                 });
         },
 
-        update(data = {}) {
+        async update(data = {}) {
             if (this.current) {
-                const { useCordovaStore } = require('./cordova');
-                const { useRootStore } = require('./root');
+                const { useCordovaStore } = await import('./cordova');
+                const { useRootStore } = await import('./root');
                 const cordovaStore = useCordovaStore();
                 const rootStore = useRootStore();
 
@@ -170,13 +170,13 @@ export const useDeviceStore = defineStore('device', {
             }
         },
 
-        setFirstTimeAppOpenInDevice() {
+        async setFirstTimeAppOpenInDevice() {
             if (!this.isBrowser) {
                 this.setFirstTimeAppOpen(true);
                 cache.setItem(keys.FIRST_TIME_APP_KEY, true);
             }
-            const { useAuthStore } = require('./auth');
-            const { useProfileStore } = require('./profile');
+            const { useAuthStore } = await import('./auth');
+            const { useProfileStore } = await import('./profile');
             const authStore = useAuthStore();
             const profileStore = useProfileStore();
             const user = authStore.user;

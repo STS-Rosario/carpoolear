@@ -79,9 +79,9 @@ export const usePassengerStore = defineStore('passenger', {
             });
         },
 
-        makeRequest(tripId) {
-            const { useTripsStore } = require('./trips');
-            const { useAuthStore } = require('./auth');
+        async makeRequest(tripId) {
+            const { useTripsStore } = await import('./trips');
+            const { useAuthStore } = await import('./auth');
             const tripsStore = useTripsStore();
             const authStore = useAuthStore();
 
@@ -162,9 +162,9 @@ export const usePassengerStore = defineStore('passenger', {
             return passengerApi.transactions();
         },
 
-        accept({ user, trip }) {
-            const { useTripsStore } = require('./trips');
-            const { useMyTripsStore } = require('./myTrips');
+        async accept({ user, trip }) {
+            const { useTripsStore } = await import('./trips');
+            const { useMyTripsStore } = await import('./myTrips');
             const tripsStore = useTripsStore();
             const myTripsStore = useMyTripsStore();
 
@@ -217,10 +217,10 @@ export const usePassengerStore = defineStore('passenger', {
                 });
         },
 
-        cancel({ user, trip, cancelTripForPayment }) {
-            const { useTripsStore } = require('./trips');
-            const { useMyTripsStore } = require('./myTrips');
-            const { useAuthStore } = require('./auth');
+        async cancel({ user, trip, cancelTripForPayment }) {
+            const { useTripsStore } = await import('./trips');
+            const { useMyTripsStore } = await import('./myTrips');
+            const { useAuthStore } = await import('./auth');
             const tripsStore = useTripsStore();
             const myTripsStore = useMyTripsStore();
             const authStore = useAuthStore();

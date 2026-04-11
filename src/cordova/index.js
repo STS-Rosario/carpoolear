@@ -7,6 +7,8 @@ import { Capacitor } from '@capacitor/core';
 import { Network } from '@capacitor/network';
 import { Device } from '@capacitor/device';
 import config from '../../config/conf.json';
+import { useCordovaStore } from '../stores/cordova';
+import { useRootStore } from '../stores/root';
 
 console.log('CORDOVA INDEX.JS IS LOADING!');
 
@@ -14,12 +16,10 @@ window.facebook = facebook;
 window.appVersion = '3.1.8';
 
 function getCordovaStore () {
-    const { useCordovaStore } = require('../stores/cordova');
     return useCordovaStore();
 }
 
 function getRootStore () {
-    const { useRootStore } = require('../stores/root');
     return useRootStore();
 }
 

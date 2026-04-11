@@ -48,26 +48,36 @@ export default {
     },
 
     getHeader(headers) {
-        const { useAuthStore } = require('../stores/auth');
-        const { useRootStore } = require('../stores/root');
-        const authStore = useAuthStore();
-        const rootStore = useRootStore();
+        // Use dynamic import to avoid circular dependency at module load time
+        // The stores will be available after pinia is initialized
+        return this._getHeaderAsync(headers);
+    },
 
-        const authHeader = authStore.authHeader;
-        Object.assign(headers, authHeader);
+    async _getHeaderAsync(headers) {
+        try {
+            const { useAuthStore } = await import('../stores/auth');
+            const { useRootStore } = await import('../stores/root');
+            const authStore = useAuthStore();
+            const rootStore = useRootStore();
 
-        // App version and platform for min-version / force-upgrade checks (backend)
-        const platform = Capacitor.getPlatform(); // 'android' | 'ios' | 'web'
-        const appVersionInfo = rootStore.appVersionInfo;
-        const version = appVersionInfo ? appVersionInfo.version : (typeof window !== 'undefined' && window.appVersion ? window.appVersion : '0');
-        const versionSource = appVersionInfo ? appVersionInfo.versionSource : 'fallback';
-        headers['X-App-Platform'] = platform;
-        headers['X-App-Version'] = String(version);
-        headers['X-App-Version-Source'] = versionSource;
+            const authHeader = authStore.authHeader;
+            Object.assign(headers, authHeader);
 
-        // Add ngrok bypass header for ngrok domains
-        if (API_URL && API_URL.includes('ngrok')) {
-            headers['ngrok-skip-browser-warning'] = 'any';
+            // App version and platform for min-version / force-upgrade checks (backend)
+            const platform = Capacitor.getPlatform(); // 'android' | 'ios' | 'web'
+            const appVersionInfo = rootStore.appVersionInfo;
+            const version = appVersionInfo ? appVersionInfo.version : (typeof window !== 'undefined' && window.appVersion ? window.appVersion : '0');
+            const versionSource = appVersionInfo ? appVersionInfo.versionSource : 'fallback';
+            headers['X-App-Platform'] = platform;
+            headers['X-App-Version'] = String(version);
+            headers['X-App-Version-Source'] = versionSource;
+
+            // Add ngrok bypass header for ngrok domains
+            if (API_URL && API_URL.includes('ngrok')) {
+                headers['ngrok-skip-browser-warning'] = 'any';
+            }
+        } catch (e) {
+            console.warn('Stores not ready for getHeader:', e.message);
         }
 
         return headers;

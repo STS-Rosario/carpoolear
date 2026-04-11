@@ -192,9 +192,9 @@ export const useConversationsStore = defineStore('conversations', {
             }
         },
 
-        createConversation(param) {
+        async createConversation(param) {
             // Inline identity validation check (replaces redirectToIdentityValidationIfRequired)
-            const { useAuthStore } = require('./auth');
+            const { useAuthStore } = await import('./auth');
             const authStore = useAuthStore();
             const config = authStore.appConfig;
             const currentUser = authStore.user;

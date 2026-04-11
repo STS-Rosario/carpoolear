@@ -12,6 +12,9 @@ import dayjs from './dayjs';
 import router from './router';
 import pinia from './pinia';
 
+import { useRootStore } from './stores/root';
+import { useAuthStore } from './stores/auth';
+
 /* eslint-disable no-unused-vars */
 import './cordova';
 import './directives';
@@ -38,6 +41,9 @@ import { SplashScreen } from '@capacitor/splash-screen';
 import { App as CapacitorApp } from '@capacitor/app';
 
 import Vue2Leaflet from 'vue2-leaflet';
+
+import './filters.js';
+import './prototypes.js';
 
 // Re-export locale maps so existing imports from '../../main' still work
 export { appLocaleToBCP47, appLocaleToRoutingLanguage };
@@ -79,9 +85,6 @@ Vue.prototype.$n = function (value, ...args) {
 Vue.use(VueAnalytics, {
     id: 'UA-40995702-4'
 });
-
-require('./filters.js');
-require('./prototypes.js');
 
 Vue.config.errorHandler = function (err, vm, info) {
     // handle error
@@ -172,14 +175,12 @@ initializeCapacitorPlugins();
 
 if (import.meta.env.VITE_SERVE) {
     console.log('Not running in cordova.');
-    const { useRootStore } = require('./stores/root');
     useRootStore().init();
 } else {
     if (import.meta.env.DEV) {
         setTimeout(function () {
             if (!window.cordova) {
                 console.log('Not running in cordova.');
-                const { useRootStore } = require('./stores/root');
                 useRootStore().init();
             }
         }, 2000);
@@ -188,7 +189,6 @@ if (import.meta.env.VITE_SERVE) {
         setTimeout(function () {
             if (!window.cordova) {
                 console.log('Not running in cordova.');
-                const { useRootStore } = require('./stores/root');
                 useRootStore().init();
             }
         }, 2000);
@@ -204,7 +204,6 @@ bus.on('system-ready', () => {
     const vm = app.mount('#app');
 
     // Subscribe to auth store config changes for price formatting
-    const { useAuthStore } = require('./stores/auth');
     const authStore = useAuthStore();
     authStore.$subscribe((mutation, state) => {
         if (state.appConfig) {

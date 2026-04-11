@@ -1,6 +1,10 @@
 /* jshint esversion: 6 */
 import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router';
 import i18n from '../i18n';
+import { getInstance } from '../services/debug';
+import { useAuthStore } from '../stores/auth';
+import { useActionbarsStore } from '../stores/actionbars';
+import { useBackgroundStore } from '../stores/background';
 
 import routes from './routes.js';
 
@@ -15,7 +19,6 @@ router.rememberRoute = null;
 
 router.afterEach((to) => {
     try {
-        const { getInstance } = require('../services/debug');
         const instance = getInstance();
         if (instance && instance.isEnabled()) {
             const url = (to.fullPath || to.path || window.location.href);
@@ -27,9 +30,6 @@ router.afterEach((to) => {
 });
 
 router.beforeEach((to, from, next) => {
-    const { useAuthStore } = require('../stores/auth');
-    const { useActionbarsStore } = require('../stores/actionbars');
-    const { useBackgroundStore } = require('../stores/background');
     const authStore = useAuthStore();
     const actionbarsStore = useActionbarsStore();
     const backgroundStore = useBackgroundStore();

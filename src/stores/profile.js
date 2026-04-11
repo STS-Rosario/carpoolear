@@ -74,8 +74,8 @@ export const useProfileStore = defineStore('profile', {
                 });
         },
 
-        registerDonation(data) {
-            const { useAuthStore } = require('./auth');
+        async registerDonation(data) {
+            const { useAuthStore } = await import('./auth');
             const authStore = useAuthStore();
             return userApi
                 .registerDonation(data)
@@ -112,8 +112,8 @@ export const useProfileStore = defineStore('profile', {
                 });
         },
 
-        changeProperty(data) {
-            const { useAuthStore } = require('./auth');
+        async changeProperty(data) {
+            const { useAuthStore } = await import('./auth');
             const authStore = useAuthStore();
             return userApi
                 .changeProperty(data)

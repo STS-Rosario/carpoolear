@@ -93,8 +93,8 @@ export const useActionbarsStore = defineStore('actionbars', {
     },
 
     actions: {
-        setTitle(title = '') {
-            const { useAuthStore } = require('./auth');
+        async setTitle(title = '') {
+            const { useAuthStore } = await import('./auth');
             const authStore = useAuthStore();
             const config = authStore.appConfig;
             let currentAppName = config ? config.name_app : import.meta.env.VITE_TARGET_APP;
@@ -157,14 +157,14 @@ export const useActionbarsStore = defineStore('actionbars', {
             });
         },
 
-        footerButtonClick(item) {
+        async footerButtonClick(item) {
             const params = {};
             if (item.url === 'profile') {
                 params.id = 'me';
             }
             if (item.url === 'trips') {
                 params.clearSearch = true;
-                const { useTripsStore } = require('./trips');
+                const { useTripsStore } = await import('./trips');
                 const tripsStore = useTripsStore();
                 tripsStore.tripsSearch({ is_passenger: false });
                 tripsStore.setRefreshList(true);
