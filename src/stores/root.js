@@ -116,7 +116,7 @@ export const useRootStore = defineStore('root', {
             const { useTripsStore } = await import('./trips');
             const { useMyTripsStore } = await import('./myTrips');
             const { TripApi } = await import('../services/api');
-            
+
             const tripsApi = new TripApi();
             const tripsStore = useTripsStore();
             const myTripsStore = useMyTripsStore();
