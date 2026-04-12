@@ -9,7 +9,7 @@
                     {{ $t('volver') }}
                 </router-link>
                 <div v-if="loading" class="text-center">
-                    <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
+                    <img :src="$publicImg('loader.gif')" alt="" class="ajax-loader" />
                     <p>{{ $t('cargando') }}</p>
                 </div>
                 <div v-else-if="item" class="panel panel-default">

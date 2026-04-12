@@ -180,7 +180,16 @@ export default [
         path: '/trips',
         name: 'trips',
         component: Trips,
-        props: true,
+        props: (route) => ({
+            clearSearch:
+                route.query.clearSearch === true ||
+                route.query.clearSearch === 'true' ||
+                route.query.clearSearch === '1',
+            keepSearch:
+                route.query.keepSearch === true ||
+                route.query.keepSearch === 'true' ||
+                route.query.keepSearch === '1'
+        }),
         meta: {
             actionbar: {
                 footer: {

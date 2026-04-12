@@ -34,7 +34,12 @@ export default {
     },
     computed: {
         logoUrl() {
-            return process.env.ROUTE_BASE + 'static/img/carpoolear_logo.png';
+            return (
+                process.env.ROUTE_BASE +
+                'img/' +
+                process.env.TARGET_APP +
+                '_logo.png'
+            );
         }
     },
     methods: {

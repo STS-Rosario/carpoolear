@@ -20,7 +20,7 @@
                 </p></template>
                 <template #loading><p class="alert alert-info" role="alert">
                     <img
-                        src="https://carpoolear.com.ar/static/img/loader.gif"
+                        :src="$publicImg('loader.gif')"
                         alt=""
                         class="ajax-loader"
                     />
@@ -49,7 +49,7 @@
                     </p></template>
                     <template #loading><p class="alert alert-info" role="alert">
                         <img
-                            src="https://carpoolear.com.ar/static/img/loader.gif"
+                            :src="$publicImg('loader.gif')"
                             alt=""
                             class="ajax-loader"
                         />
@@ -74,7 +74,7 @@
                     </p></template>
                     <template #loading><p class="alert alert-info" role="alert">
                         <img
-                            src="https://carpoolear.com.ar/static/img/loader.gif"
+                            :src="$publicImg('loader.gif')"
                             alt=""
                             class="ajax-loader"
                         />
@@ -100,7 +100,7 @@
                     </p></template>
                     <template #loading><p class="alert alert-info" role="alert">
                         <img
-                            src="https://carpoolear.com.ar/static/img/loader.gif"
+                            :src="$publicImg('loader.gif')"
                             alt=""
                             class="ajax-loader"
                         />

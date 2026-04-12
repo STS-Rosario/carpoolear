@@ -85,7 +85,10 @@ export default {
             password_confirmation: '',
             password: '',
             carpoolear_logo:
-                process.env.ROUTE_BASE + 'static/img/carpoolear_logo.png'
+                process.env.ROUTE_BASE +
+                'img/' +
+                process.env.TARGET_APP +
+                '_logo.png'
         };
     },
     computed: {

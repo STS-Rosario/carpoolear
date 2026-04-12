@@ -5,7 +5,7 @@
             <div class="actionbar_section actionbar_icon">
                 <span v-if="showLogo">
                     <router-link
-                        :to="{ name: 'trips', params: { clearSearch: true } }"
+                        :to="{ name: 'trips', query: { clearSearch: 'true' } }"
                         v-on:click.native="tripsClick"
                     >
                         <img :src="app_logo" />
@@ -111,7 +111,7 @@
         </div>
         <div class="header_content hidden-xs">
             <router-link
-                :to="{ name: 'trips', params: { clearSearch: true } }"
+                :to="{ name: 'trips', query: { clearSearch: 'true' } }"
                 v-on:click.native="tripsClick"
             >
                 <div class="header_panel-left" v-if="logoHeaderVisibility">
@@ -181,7 +181,7 @@
                 <router-link
                     v-if="config.trip_card_design !== 'light'"
                     class="btn btn-link trips-link"
-                    :to="{ name: 'trips', params: { clearSearch: true } }"
+                    :to="{ name: 'trips', query: { clearSearch: 'true' } }"
                 >
                     {{ $t('viajes') }}
                 </router-link>
@@ -322,17 +322,17 @@ export default {
         return {
             background_desktop_mini:
                 process.env.ROUTE_BASE +
-                'static/img/' +
+                'img/' +
                 process.env.TARGET_APP +
                 '_background_desktop_mini.png',
             background_desktop:
                 process.env.ROUTE_BASE +
-                'static/img/' +
+                'img/' +
                 process.env.TARGET_APP +
                 '_background_desktop.png',
             app_logo:
                 process.env.ROUTE_BASE +
-                'static/img/' +
+                'img/' +
                 process.env.TARGET_APP +
                 '_logo.png',
             showModal: false,

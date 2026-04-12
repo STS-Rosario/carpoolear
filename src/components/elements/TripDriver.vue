@@ -116,14 +116,14 @@
                     <div class="user_pin">
                         <span v-if="trip.user.has_pin == 1">
                             <img
-                                src="https://carpoolear.com.ar/static/img/pin.png"
+                                :src="$publicImg('pin.png')"
                                 alt=""
                                 :title="$t('aportanteMediaNaranja')"
                             />
                         </span>
                         <span v-if="trip.user.is_member == 1">
                             <img
-                                src="https://carpoolear.com.ar/static/img/pin_member.png"
+                                :src="$publicImg('pin_member.png')"
                                 alt=""
                                 :title="$t('miembroEquipo')"
                             />

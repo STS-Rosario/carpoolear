@@ -12,7 +12,7 @@ export function registerDirectives(app) {
     app.directive('focus', autofocus);
     app.directive('jump', Jump);
     app.directive('imgSrc', imgSrc);
-    app.directive('mask', vMaska);
+    app.directive('maska', vMaska);
     app.directive('numberMask', numberFormatter);
     app.directive('dateFormatter', dateFormatter);
     app.directive('debounceInput', debounceInput);

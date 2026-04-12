@@ -157,7 +157,7 @@
                                         role="alert"
                                     >
                                         <img
-                                            src="https://carpoolear.com.ar/static/img/loader.gif"
+                                            :src="$publicImg('loader.gif')"
                                             alt=""
                                             class="ajax-loader"
                                         />

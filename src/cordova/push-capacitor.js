@@ -82,10 +82,8 @@ export default {
                 ).toString();
 
                 // Get service worker path based on environment
-                let serviceWorkerPath =
-                    import.meta.env.PROD
-                        ? import.meta.env.VITE_ROUTE_BASE + 'firebase-messaging-sw.js'
-                        : '/static/firebase-messaging-sw.js';
+                const swBase = import.meta.env.VITE_ROUTE_BASE || '/';
+                let serviceWorkerPath = swBase + 'firebase-messaging-sw.js';
 
                 // Append firebase params as query since service workers can't access import.meta.env
                 serviceWorkerPath += '?' + firebaseParamsString;
@@ -147,7 +145,7 @@ export default {
                     const notificationOptions = {
                         body: payload.notification.body,
                         data: payload.data,
-                        icon: payload.notification.icon // import.meta.env.VITE_ROUTE_BASE + 'static/img/icon-192.png'
+                        icon: payload.notification.icon // import.meta.env.VITE_ROUTE_BASE + 'img/icon-192.png'
                     };
 
                     if (payload.data.url !== window.location.pathname) {

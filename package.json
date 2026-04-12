@@ -48,7 +48,6 @@
     "@movilizame/vue-jumper": "^2.0.2",
     "@toast-ui/vue-editor": "^3.2.3",
     "@unhead/vue": "^3.0.2",
-    "@vue/compat": "^3.2",
     "@vuepic/vue-datepicker": "^12.1.0",
     "alertifyjs": "^1.10.0",
     "axios": "^1.15.0",

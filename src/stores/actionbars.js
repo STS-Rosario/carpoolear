@@ -162,17 +162,22 @@ export const useActionbarsStore = defineStore('actionbars', {
 
         async footerButtonClick(item) {
             const params = {};
+            const query = {};
             if (item.url === 'profile') {
                 params.id = 'me';
             }
             if (item.url === 'trips') {
-                params.clearSearch = true;
+                query.clearSearch = 'true';
                 const { useTripsStore } = await import('./trips');
                 const tripsStore = useTripsStore();
                 tripsStore.tripsSearch({ is_passenger: false });
                 tripsStore.setRefreshList(true);
             }
-            getRouter().push({ name: item.url, params });
+            getRouter().push({
+                name: item.url,
+                ...(Object.keys(params).length ? { params } : {}),
+                ...(Object.keys(query).length ? { query } : {})
+            });
         }
     }
 });

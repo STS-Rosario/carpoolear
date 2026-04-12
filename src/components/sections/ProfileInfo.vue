@@ -292,7 +292,7 @@ export default {
             if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
                 return imagePath;
             }
-            const base = process.env.ROUTE_BASE + 'static/img';
+            const base = process.env.ROUTE_BASE + 'img';
             return base + (base && !imagePath.startsWith('/') ? '/' : '') + imagePath;
         }
     },

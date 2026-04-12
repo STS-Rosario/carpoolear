@@ -185,7 +185,7 @@
                                 role="alert"
                             >
                                 <img
-                                    src="https://carpoolear.com.ar/static/img/loader.gif"
+                                    :src="$publicImg('loader.gif')"
                                     alt=""
                                     class="ajax-loader"
                                 />
@@ -257,17 +257,17 @@ export default {
             userList: [],
             chofer_logo_blanco:
                 process.env.ROUTE_BASE +
-                'static/img/icono-conductor-blanco.png',
+                'img/icono-conductor-blanco.png',
             pasajero_logo_blanco:
-                process.env.ROUTE_BASE + 'static/img/icono-pasajero-blanco.png',
+                process.env.ROUTE_BASE + 'img/icono-pasajero-blanco.png',
             chofer_logo_gris:
-                process.env.ROUTE_BASE + 'static/img/icono-conductor-gris.png',
+                process.env.ROUTE_BASE + 'img/icono-conductor-gris.png',
             pasajero_logo_gris:
-                process.env.ROUTE_BASE + 'static/img/icono-pasajero-gris.png',
+                process.env.ROUTE_BASE + 'img/icono-pasajero-gris.png',
             swap_horizontal:
-                process.env.ROUTE_BASE + 'static/img/flechas_horizontales.png',
+                process.env.ROUTE_BASE + 'img/flechas_horizontales.png',
             swap_vertical:
-                process.env.ROUTE_BASE + 'static/img/flechas_verticales.png',
+                process.env.ROUTE_BASE + 'img/flechas_verticales.png',
             allowForeignPoints: false,
             options: []
         };

@@ -7,7 +7,11 @@
         <template v-if="!showForceUpgrade">
             <!-- Custom Splash Screen -->
             <div v-if="showCustomSplash" class="custom-splash-screen">
-                <img src="https://carpoolear.com.ar/app/static/img/splash-android-1280x1920.png" alt="Carpoolear" class="splash-image" />
+                <img
+                    :src="$publicImg('splash-android-1280x1920.png')"
+                    alt="Carpoolear"
+                    class="splash-image"
+                />
                 <div class="splash-version">{{ splashVersionText }}</div>
             </div>
 
@@ -137,7 +141,7 @@ export default {
             const appVersionInfo = useRootStore().appVersionInfo;
             const version = (appVersionInfo && appVersionInfo.version) || (typeof window !== 'undefined' && window.appVersion) || '0';
             const base = 'Version ' + version;
-            return Capacitor.isNativePlatform() ? base : base + ' - build 100';
+            return Capacitor.isNativePlatform() ? base : base + ' - build 101';
         },
         ...mapState(useCordovaStore, {
             deviceReady: 'deviceReady'

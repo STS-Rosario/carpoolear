@@ -152,7 +152,7 @@
 
         <img
             class="img-ES"
-            src="/static/img/espacio_santafesino.jpg"
+            :src="$publicImg('espacio_santafesino.jpg')"
             alt="Realizado con el apoyo de Espacio Santafesino, Ministerio de Innovación y Cultura de Santa Fe. Convocatoria 2016."
         />
     </div>

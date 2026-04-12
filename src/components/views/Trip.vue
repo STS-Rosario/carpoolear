@@ -399,7 +399,10 @@ export default {
                 sendMessageAction: false
             },
             carpoolear_logo:
-                process.env.ROUTE_BASE + 'static/img/carpoolear_logo.png',
+                process.env.ROUTE_BASE +
+                'img/' +
+                process.env.TARGET_APP +
+                '_logo.png',
             points: [
                 {
                     name: '',
