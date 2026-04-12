@@ -55,7 +55,7 @@ let osmApi = new OsmApi();
 export default {
     name: 'osmautocomplete',
     watch: {
-        value(n, o) {
+        modelValue(n) {
             if (!n) {
                 this.input = '';
             } else {
@@ -76,7 +76,7 @@ export default {
         };
     },
     mounted() {
-        this.input = this.value ? this.value : '';
+        this.input = this.modelValue ? this.modelValue : '';
     },
     computed: {
         ...mapState(useAuthStore, {
@@ -584,7 +584,7 @@ export default {
         vJumpDisabled: {
             required: false
         },
-        value: {
+        modelValue: {
             required: false
         },
         classes: {

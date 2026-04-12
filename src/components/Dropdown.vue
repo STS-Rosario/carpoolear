@@ -40,20 +40,20 @@ export default {
         size: { type: String, default: null },
         text: { type: String, default: null },
         type: { type: String, default: 'default' },
-        value: { type: Boolean, default: false }
+        modelValue: { type: Boolean, default: false }
     },
 
     data() {
         return {
-            show: this.value
+            show: this.modelValue
         };
     },
 
     watch: {
         show(val) {
-            this.$emit('input', val);
+            this.$emit('update:modelValue', val);
         },
-        value(val) {
+        modelValue(val) {
             this.show = val;
         }
     },

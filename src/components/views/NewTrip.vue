@@ -135,7 +135,7 @@
                                 :placeholder="getPlaceholder(index)"
                                 name="'input-' + index"
                                 ref="'input-' + index"
-                                :value="m.name"
+                                :model-value="m.name"
                                 v-on:place_changed="
                                     (data) => getPlace(index, data)
                                 "
@@ -245,7 +245,7 @@
                                         :placeholder="getPlaceholder(index)"
                                         name="'input-' + index"
                                         ref="'input-' + index"
-                                        :value="m.name"
+                                        :model-value="m.name"
                                         v-on:place_changed="
                                             (data) => getPlace(index, data)
                                         "
@@ -344,7 +344,7 @@
                                         $t('dia')
                                     }}</label>
                                     <DatePicker
-                                        :value="date"
+                                        :model-value="date"
                                         :minDate="minDate"
                                         :class="{
                                             'has-error': dateError.state
@@ -932,7 +932,7 @@
                                 :placeholder="getPlaceholder(index)"
                                 name="'input-return-trip' + index"
                                 ref="'input-return-trip' + index"
-                                :value="m.name"
+                                :model-value="m.name"
                                 v-on:place_changed="
                                     (data) =>
                                         getPlace(
@@ -988,7 +988,7 @@
                                         :placeholder="getPlaceholder(index)"
                                         name="'input-return-trip' + index"
                                         ref="'input-return-trip' + index"
-                                        :value="m.name"
+                                        :model-value="m.name"
                                         v-on:place_changed="
                                             (data) =>
                                                 getPlace(
@@ -1101,7 +1101,7 @@
                                         $t('dia')
                                     }}</label>
                                     <DatePicker
-                                        :value="otherTrip.date"
+                                        :model-value="otherTrip.date"
                                         :minDate="otherTrip.minDate"
                                         :class="{
                                             'has-error':
