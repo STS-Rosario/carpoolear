@@ -5,26 +5,33 @@
             class="form-control picker"
             :class="focus ? 'input-border' : ''"
         >
-            <DatepickerSystem
+            <VueDatePicker
                 ref="datepickerSystem"
-                :clear-button="true"
-                :clear-button-icon="'fa fa-times'"
-                :calendar-button="true"
-                :calendar-button-icon="'fa fa-calendar'"
-                :value="dateBrowser"
-                :language="datePickerLanguage"
-                v-on:opened="focus = true"
-                v-on:closed="focus = false"
-                v-on:selected="changeValue"
-                :placeholder="this.$t('fecha')"
-                :format="'dd/MM/yyyy'"
-                :disabled="{
-                    to: min,
-                    from: max
-                }"
-                :disabled-picker="disabledPicker"
-                autocomplete="off"
-            ></DatepickerSystem>
+                :model-value="dateBrowser"
+                class="carpoolear-vue-dp"
+                model-type="yyyy-MM-dd"
+                :locale="dpLocale"
+                :formats="dpFormats"
+                :min-date="min"
+                :max-date="max"
+                :disabled="disabledPicker"
+                :placeholder="$t('fecha')"
+                :time-picker="false"
+                :time-config="dpTimeConfig"
+                :hide-navigation="['time']"
+                :auto-apply="true"
+                :input-attrs="dpInputAttrs"
+                teleport="body"
+                @open="focus = true"
+                @closed="focus = false"
+                @update:model-value="onDpModelValue"
+            />
+            <div
+                class="date-picker--cross"
+                @click.stop="clearBrowserCross"
+            >
+                <i class="fa fa-times" aria-hidden="true"></i>
+            </div>
         </div>
         <div
             v-if="!browser"
@@ -47,55 +54,81 @@
 </template>
 
 <script>
-import DatepickerSystem from 'vuejs-datepicker';
+import { VueDatePicker } from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
+import { enUS, es } from 'date-fns/locale';
 import { mapState } from 'pinia';
 import { useDeviceStore } from '../stores/device';
 import { useCordovaStore } from '../stores/cordova';
 import dayjs from '../dayjs';
 import bus from '../services/bus-event';
-/*
 
-*/
 export default {
     name: 'datePicker',
+    components: {
+        VueDatePicker
+    },
     data() {
         return {
-            dateBrowser: '',
+            dateBrowser: null,
+            dpTimeConfig: {
+                enableTimePicker: false,
+                enableMinutes: false,
+                enableSeconds: false,
+                timePickerInline: false
+            },
             dateMobile: '',
-            date: '',
-            update: true,
             focus: false,
             nextYear: dayjs().add(2, 'years').format('YYYY-MM-DD'),
             lastCentury: dayjs().subtract(100, 'years').format('YYYY-MM-DD'),
-            niceDate: ''
+            niceDate: '',
+            dpFormats: { input: 'dd/MM/yyyy' },
+            dpInputAttrs: {
+                autocomplete: 'off',
+                clearable: false,
+                hideInputIcon: true
+            }
         };
     },
     mounted() {
-        if (this.value !== '') {
-            this.dateBrowser = dayjs(this.value).toDate();
-            this.dateMobile = this.value;
-            this.niceDate = dayjs(this.value).format('DD/MM/YYYY');
-        }
-    },
-
-    updated() {
-        if (this.value !== '') {
-            this.niceDate = dayjs(this.value).format('DD/MM/YYYY');
-        }
+        this.syncFromValue(this.value);
     },
     methods: {
         dayjs,
+        syncFromValue(val) {
+            if (val && dayjs(val).isValid()) {
+                const ymd = dayjs(val).format('YYYY-MM-DD');
+                this.dateBrowser = ymd;
+                this.dateMobile = ymd;
+                this.niceDate = dayjs(val).format('DD/MM/YYYY');
+            } else {
+                this.dateBrowser = null;
+                this.dateMobile = '';
+                this.niceDate = '';
+            }
+        },
+        onDpModelValue(val) {
+            this.dateBrowser = val;
+            this.$nextTick(() => {
+                const dp = this.$refs.datepickerSystem;
+                if (dp && typeof dp.formatInputValue === 'function') {
+                    dp.formatInputValue();
+                }
+            });
+        },
+        clearBrowserCross() {
+            if (this.disabledPicker) {
+                return;
+            }
+            this.clear();
+        },
         clear() {
-            this.dateBrowser = '';
+            this.dateBrowser = null;
             this.dateMobile = '';
             this.niceDate = '';
         },
-        changeValue(value) {
-            this.dateBrowser = value;
-        },
         changeMobileValue(el) {
             this.dateMobile = el.target.value;
-            // Update the nice formatted date for consistency
             if (el.target.value) {
                 this.niceDate = dayjs(el.target.value).format('DD/MM/YYYY');
             } else {
@@ -104,32 +137,31 @@ export default {
         },
         setFocus() {
             if (this.browser) {
-                this.$refs.datepickerSystem.showCalendar();
+                const dp = this.$refs.datepickerSystem;
+                if (dp && typeof dp.openMenu === 'function') {
+                    dp.openMenu();
+                }
             } else {
                 this.$refs.mobileInput.focus();
             }
         }
     },
     watch: {
-        dateBrowser: function (value) {
-            value =
-                value && value !== '' ? dayjs(value).format('YYYY-MM-DD') : '';
-
-            bus.emit('date-change', value);
-
-            this.$emit('date_changed', value);
+        dateBrowser(value) {
+            const str =
+                value && dayjs(value).isValid()
+                    ? dayjs(value).format('YYYY-MM-DD')
+                    : '';
+            bus.emit('date-change', str);
+            this.$emit('date_changed', str);
         },
-        dateMobile: function (value) {
-            value = value && value !== '' ? value : '';
-
-            bus.emit('date-change', value);
-
-            this.$emit('date_changed', value);
+        dateMobile(value) {
+            const str = value && value !== '' ? value : '';
+            bus.emit('date-change', str);
+            this.$emit('date_changed', str);
         },
-        value: function (value) {
-            this.dateBrowser = dayjs(this.value).toDate();
-            this.dateMobile = this.value;
-            this.niceDate = dayjs(this.value).format('DD/MM/YYYY');
+        value(val) {
+            this.syncFromValue(val);
         }
     },
     props: {
@@ -174,7 +206,10 @@ export default {
                     return 'es';
                 default:
                     return 'es';
-            } 
+            }
+        },
+        dpLocale() {
+            return this.datePickerLanguage === 'en' ? enUS : es;
         },
         browser() {
             if (this.device) {
@@ -208,7 +243,7 @@ export default {
                 answer = this.lastCentury;
             }
             if (this.browser) {
-                let date = dayjs(answer).toDate();
+                const date = dayjs(answer).toDate();
                 date.setHours(0);
                 date.setMinutes(0);
                 date.setSeconds(0);
@@ -217,46 +252,68 @@ export default {
                 return dayjs(answer).format('YYYY-MM-DD');
             }
         }
-    },
-    components: {
-        DatepickerSystem
     }
 };
 </script>
 
 <style>
-.vdp-datepicker i {
-    font-size: 16px;
-    padding-left: 4px;
-}
-.vdp-datepicker i.fa-times {
-    font-size: 14.4px;
+/* Icon is CSS background on .dp__input (see base.css); library calendar SVG hidden */
+.carpoolear-vue-dp {
+    --dp-font-size: 14px;
+    --dp-input-icon-padding: 0;
+    /* room for Font Awesome clear (same as .location-autocomplete input padding-right) */
+    --dp-input-padding: 6px 30px 6px 12px;
+    width: 100%;
 }
 
-.vdp-datepicker__calendar-button {
-    width: 18px;
+.carpoolear-vue-dp .dp__input_wrap {
+    width: 100%;
+    display: block;
 }
-.vdp-datepicker input,
-.user-form .vdp-datepicker input[type='text'] {
+
+.carpoolear-vue-dp .dp__input,
+.user-form .carpoolear-vue-dp .dp__input {
     border: 0;
-    width: calc(100% - 44px);
-    padding-left: 0.4em;
-    line-height: 40px;
-    font-size: 13px;
+    width: 100%;
+    max-width: 100%;
+    font-size: 14px;
+    line-height: 22px;
+    box-sizing: border-box;
 }
 
-.user-form .vdp-datepicker input[type='text'] {
-    display: inline-block;
-    padding: 0;
+.user-form .carpoolear-vue-dp .dp__input {
+    display: block;
     margin-bottom: 0;
-    padding-left: 0.4em;
 }
 
+@media only screen and (min-width: 992px) {
+    .search-section .carpoolear-vue-dp .dp__input {
+        line-height: 42px;
+        min-height: 42px;
+    }
+}
+
+.date-picker .picker.form-control .date-picker--cross {
+    color: #666;
+    z-index: 2;
+}
 .date-picker--cross {
     position: absolute;
 }
 .date-picker--cross i {
     cursor: pointer;
+    margin-left: 2px;
+}
+/* Match destiny field: .location-autocomplete .date-picker--cross */
+.search-section .date-picker .date-picker--cross {
+    right: 22px;
+    top: 14px;
+}
+@media only screen and (min-width: 992px) {
+    .search-section .date-picker .date-picker--cross {
+        top: 23px;
+        right: 20px;
+    }
 }
 .date-picker {
     width: 100%;
@@ -273,7 +330,7 @@ export default {
 }
 @media only screen and (min-width: 992px) {
     .search-section .picker.form-control {
-        padding: 0.8em 0.6em;
+        padding: 0.4em 0.6em;
     }
 }
 .input-border.form-control {
@@ -283,18 +340,23 @@ export default {
         0 0 8px rgba(102, 175, 233, 0.6);
 }
 @media only screen and (max-width: 991px) {
-    .vdp-datepicker .vdp-datepicker__calendar {
+    .carpoolear-vue-dp .dp__menu {
         font-size: 1.6em;
         box-shadow: 2px 2px 11px;
-        z-index: 100;
+        z-index: 10050;
         padding: 2.5em 1em;
         position: fixed;
-        /* height: 40%; */
         width: 90%;
         top: 0px;
         left: 0px;
         margin: 5%;
         margin-top: 40%;
     }
+}
+
+/* Date-only: no time row in popover (backup if props are ignored) */
+.carpoolear-vue-dp .dp__time_input,
+.carpoolear-vue-dp .dp--tp-wrap {
+    display: none !important;
 }
 </style>

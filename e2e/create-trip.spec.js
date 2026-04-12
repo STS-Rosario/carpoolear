@@ -71,9 +71,11 @@ test.describe('Create trip flow', () => {
     await destResult.waitFor({ state: 'visible', timeout: 15000 });
     await destResult.click();
 
-    // 6. Select date: open calendar, pick a future day
-    await page.locator('.vdp-datepicker__calendar-button').click();
-    const futureDays = page.locator('.vdp-datepicker__calendar .cell.day:not(.disabled):not(.selected)');
+    // 6. Select date: open calendar, pick a future day (@vuepic/vue-datepicker; icon is input background)
+    await page.locator('.carpoolear-vue-dp .dp__input').click();
+    const futureDays = page.locator(
+      '.dp__calendar .dp__calendar_item:not(.dp__cell_disabled) .dp__cell_inner'
+    );
     await futureDays.first().waitFor({ state: 'visible' });
     await futureDays.last().click();
 

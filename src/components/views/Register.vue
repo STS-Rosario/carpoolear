@@ -389,7 +389,6 @@ import { useCordovaStore } from '../../stores/cordova';
 import dialogs from '../../services/dialogs.js';
 import bus from '../../services/bus-event';
 import router from '../../router';
-import DatePicker from '../DatePicker';
 import modal from '../Modal';
 import dayjs from '../../dayjs';
 import Spinner from '../Spinner.vue';
@@ -486,7 +485,6 @@ export default {
         }
     },
     components: {
-        DatePicker,
         modal,
         Spinner
     },

@@ -147,9 +147,11 @@ test.describe('Trip request flow with 6 users', () => {
     await destResult.waitFor({ state: 'visible', timeout: 15000 });
     await destResult.click();
 
-    // Select date - pick a future date
-    await driverPage.locator('.vdp-datepicker__calendar-button').click();
-    const futureDays = driverPage.locator('.vdp-datepicker__calendar .cell.day:not(.disabled):not(.selected)');
+    // Select date - pick a future date (@vuepic/vue-datepicker; icon is input background)
+    await driverPage.locator('.carpoolear-vue-dp .dp__input').click();
+    const futureDays = driverPage.locator(
+      '.dp__calendar .dp__calendar_item:not(.dp__cell_disabled) .dp__cell_inner'
+    );
     await futureDays.first().waitFor({ state: 'visible' });
     await futureDays.last().click();
 
