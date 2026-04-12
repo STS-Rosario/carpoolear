@@ -79,7 +79,7 @@
                     :placeholder="$t('origen')"
                     name="from_town"
                     ref="from_town"
-                    :value="from_town.name"
+                    :model-value="from_town.name"
                     v-on:place_changed="(data) => getPlace(0, data)"
                     :classes="'form-control form-control-with-icon form-control-map-autocomplete'"
                     :country="allowForeignPoints ? null : 'AR'"
@@ -112,7 +112,7 @@
                     :placeholder="$t('destino')"
                     name="to_town"
                     ref="to_town"
-                    :value="to_town.name"
+                    :model-value="to_town.name"
                     v-on:place_changed="(data) => getPlace(1, data)"
                     :classes="'form-control form-control-with-icon form-control-map-autocomplete'"
                     :country="allowForeignPoints ? null : 'AR'"
@@ -130,7 +130,7 @@
             <div class="col-xs-24 col-md-4 no-padding">
                 <DatePicker
                     ref="datepicker"
-                    :value="from_date"
+                    :model-value="from_date"
                     :class="{ 'has-error': dateError.state }"
                     v-on:date_changed="(date) => (this.from_date = date)"
                 ></DatePicker>
@@ -139,7 +139,7 @@
             <div class="col-xs-24 col-md-4 no-padding">
                 <DatePicker
                     ref="datepicker"
-                    :value="to_date"
+                    :model-value="to_date"
                     :class="{ 'has-error': dateError.state }"
                     v-on:date_changed="(date) => (this.to_date = date)"
                 ></DatePicker>

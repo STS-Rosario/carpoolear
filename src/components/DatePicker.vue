@@ -91,7 +91,7 @@ export default {
         };
     },
     mounted() {
-        this.syncFromValue(this.value);
+        this.syncFromValue(this.modelValue);
     },
     methods: {
         dayjs,
@@ -154,13 +154,15 @@ export default {
                     : '';
             bus.emit('date-change', str);
             this.$emit('date_changed', str);
+            this.$emit('update:modelValue', str);
         },
         dateMobile(value) {
             const str = value && value !== '' ? value : '';
             bus.emit('date-change', str);
             this.$emit('date_changed', str);
+            this.$emit('update:modelValue', str);
         },
-        value(val) {
+        modelValue(val) {
             this.syncFromValue(val);
         }
     },
@@ -170,7 +172,7 @@ export default {
             required: false,
             default: 'DD/MM/YYYY'
         },
-        value: {
+        modelValue: {
             type: String,
             required: false
         },

@@ -46,7 +46,7 @@ import { useAuthStore } from '../stores/auth';
 export default {
     name: 'autocomplete',
     watch: {
-        value(n, o) {
+        modelValue(n) {
             if (!n) {
                 this.input = '';
             } else {
@@ -67,8 +67,7 @@ export default {
         };
     },
     mounted() {
-        console.log('mounted', this.value);
-        this.input = this.value ? this.value : '';
+        this.input = this.modelValue ? this.modelValue : '';
     },
     computed: {
         ...mapState(useAuthStore, {
@@ -218,7 +217,7 @@ export default {
         vJumpDisabled: {
             required: false
         },
-        value: {
+        modelValue: {
             required: false
         },
         classes: {

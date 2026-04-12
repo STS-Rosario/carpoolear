@@ -113,7 +113,7 @@
                     </div>
                     <!--<div class="form-group">
                     <label for="">Fecha de nacimiento <span class="required-field-flag" title="Campo requerido">(*)</span></label>
-                    <DatePicker :value="dayjs(birthday).format('YYYY-MM-DD') " ref="ipt_calendar" name="ipt_calendar" :maxDate="maxDate" :minDate="minDate" :class="{'has-error': birthdayError.state}" ></DatePicker>
+                    <DatePicker :model-value="dayjs(birthday).format('YYYY-MM-DD') " ref="ipt_calendar" name="ipt_calendar" :maxDate="maxDate" :minDate="minDate" :class="{'has-error': birthdayError.state}" ></DatePicker>
                     <span class="error" v-if="birthdayError.state"> {{birthdayError.message}} </span>
                 </div>-->
                     <div class="form-group">

@@ -10,7 +10,7 @@
                         <div class="col-md-9 col-md-offset-1">
                             <datePicker
                                 class="picker"
-                                :value="dateLimits.start"
+                                :model-value="dateLimits.start"
                                 :class="{
                                     'has-error': dateLimits.dateError.state
                                 }"
@@ -25,7 +25,7 @@
                         <div class="col-md-9 col-md-offset-4">
                             <datePicker
                                 class="picker"
-                                :value="dateLimits.end"
+                                :model-value="dateLimits.end"
                                 :class="{
                                     'has-error': dateLimits.dateError.state
                                 }"
