@@ -59,6 +59,7 @@
     "dompurify": "^3.3.2",
     "firebase": "^9.19.1",
     "font-awesome": "^4.7.0",
+    "leaflet": "^1.9.4",
     "leaflet-routing-machine": "^3.2.12",
     "lodash": "^4.18.1",
     "marked": "^4.0.19",
@@ -75,7 +76,6 @@
     "vue-eslint-parser": "^1.0.0",
     "vue-i18n": "^9",
     "vue-router": "4.3.3",
-    "vue2-leaflet": "^1.0.2",
     "vuejs-datepicker": "^0.9.7"
   },
   "devDependencies": {

@@ -331,9 +331,9 @@
                                 </div>
                             </div>
                         </div>
-                        <l-map
-                            :zoom="zoom"
-                            :center="center"
+                        <div
+                            ref="tripMapEl"
+                            class="trip-route-map"
                             style="
                                 width: calc(100% + 20px);
                                 height: 461px;
@@ -341,13 +341,7 @@
                                 margin-left: -10px;
                                 z-index: 0;
                             "
-                            ref="map"
-                        >
-                            <l-tile-layer
-                                :url="url"
-                                :attribution="attribution"
-                            ></l-tile-layer>
-                        </l-map>
+                        ></div>
                     </div>
                 </div>
             </div>
@@ -386,12 +380,17 @@ import TripPassengers from '../elements/TripPassengers';
 import TripButtons from '../elements/TripButtons';
 
 import { useHead } from '@unhead/vue';
-import { LMap, LTileLayer } from 'vue2-leaflet';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 import { appLocaleToRoutingLanguage } from '../../main';
 import 'leaflet-routing-machine';
 
 export default {
     name: 'trip',
+    beforeCreate() {
+        this._tripLeafletMap = null;
+        this._tripRoutingControl = null;
+    },
     data() {
         return {
             sending: {
@@ -505,9 +504,11 @@ export default {
                     var self = this;
                     this.calculateHeight();
                     this.$nextTick(function () { self.enablePayment(); });
-                    setTimeout(() => {
-                        self.renderMap();
-                    }, 500);
+                    self.$nextTick(() => {
+                        self.$nextTick(() => {
+                            self.syncTripRouteMap();
+                        });
+                    });
                     if (this.owner) {
                         this.searchMatchers({ trip: this.trip }).then(
                             (users) => {
@@ -693,19 +694,48 @@ export default {
             router.back();
         },
 
-        renderMap() {
-            if (this.$refs.map) {
-                let map = this.$refs.map.mapObject;
-                /* eslint-disable no-undef */
-                let points = this.trip.points.map((point) =>
-                    L.latLng(point.lat, point.lng)
-                );
-                let control = L.Routing.control({
-                    waypoints: points,
-                    language: appLocaleToRoutingLanguage[this.$i18n.locale] || 'es'
-                });
-                control.addTo(map);
+        destroyTripRouteMap() {
+            if (this._tripRoutingControl && this._tripLeafletMap) {
+                try {
+                    this._tripLeafletMap.removeControl(this._tripRoutingControl);
+                } catch (_) {
+                    /* noop */
+                }
+                this._tripRoutingControl = null;
             }
+            if (this._tripLeafletMap) {
+                try {
+                    this._tripLeafletMap.remove();
+                } catch (_) {
+                    /* noop */
+                }
+                this._tripLeafletMap = null;
+            }
+        },
+
+        syncTripRouteMap() {
+            const el = this.$refs.tripMapEl;
+            if (this.isPassengersView) {
+                this.destroyTripRouteMap();
+                return;
+            }
+            if (!el || !this.trip || !this.trip.points || !this.trip.points.length) {
+                return;
+            }
+            this.destroyTripRouteMap();
+            const c = this.center;
+            const map = L.map(el).setView([c.lat, c.lng], this.zoom);
+            L.tileLayer(this.url, { attribution: this.attribution }).addTo(map);
+            this._tripLeafletMap = map;
+            const points = this.trip.points.map((point) =>
+                L.latLng(point.lat, point.lng)
+            );
+            this._tripRoutingControl = L.Routing.control({
+                waypoints: points,
+                language: appLocaleToRoutingLanguage[this.$i18n.locale] || 'es'
+            });
+            this._tripRoutingControl.addTo(map);
+            map.invalidateSize();
         },
 
         restoreData(trip) {
@@ -847,6 +877,7 @@ export default {
     },
 
     beforeUnmount() {
+        this.destroyTripRouteMap();
         bus.off('back-click', this.onBackClick);
         bus.off('calculate-height', this.calculateHeight);
     },
@@ -971,8 +1002,6 @@ export default {
 
     components: {
         svgItem,
-        LMap,
-        LTileLayer,
         modal,
         TripLocation,
         TripDriver,
@@ -999,6 +1028,10 @@ export default {
     min-height: 418px;
     /* overflow: hidden; */
     top: 0;
+}
+.trip-route-map :deep(.leaflet-container) {
+    height: 100%;
+    width: 100%;
 }
 .trip-detail-component .driver-container {
     margin-top: 0;
