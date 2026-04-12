@@ -5,7 +5,6 @@ import 'core-js/stable';
 import Vue, { createApp } from 'vue';
 import App from './App';
 
-import VueAnalytics from 'vue-analytics';
 import dayjs from './dayjs';
 
 import router from './router';
