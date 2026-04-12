@@ -71,7 +71,6 @@ export default defineConfig(({ mode }) => {
                 src: path.resolve(__dirname, './src'),
                 components: path.resolve(__dirname, './src/components'),
                 assets: path.resolve(__dirname, './src/assets'),
-                vue: '@vue/compat',
                 marked: path.resolve(__dirname, './node_modules/marked/lib/marked.cjs'),
                 styles: path.resolve(__dirname, './src/styles')
             }
@@ -94,7 +93,7 @@ export default defineConfig(({ mode }) => {
             VITE_FIRABASE_VAPID_KEY: JSON.stringify(env.FIRABASE_VAPID_KEY || '')
         },
         optimizeDeps: {
-            include: ['vue', 'vue-router', 'vue-i18n', '@vue/compat']
+            include: ['vue', 'vue-router', 'vue-i18n']
         },
         server: {
             port: 8080,

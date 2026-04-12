@@ -725,12 +725,15 @@ export default {
         bus.off('backbutton', this.onBackBottom);
     },
     watch: {
-        trips() {
-            if (this.refreshList) {
-                this.refreshTrips(false);
-                this.lookSearch = false;
-                this.resultaOfSearch = false;
-                this.$refs.searchBox.clear();
+        trips: {
+            deep: true,
+            handler() {
+                if (this.refreshList) {
+                    this.refreshTrips(false);
+                    this.lookSearch = false;
+                    this.resultaOfSearch = false;
+                    this.$refs.searchBox.clear();
+                }
             }
         }
     },

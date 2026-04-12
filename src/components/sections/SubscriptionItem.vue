@@ -153,7 +153,7 @@ export default {
             if (redirect) {
                 this.$router.replace({
                     name: 'trips',
-                    params: { keepSearch: true }
+                    query: { keepSearch: 'true' }
                 });
             }
         }

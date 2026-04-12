@@ -5,7 +5,7 @@
             <div class="actionbar_section actionbar_icon">
                 <span v-if="showLogo">
                     <router-link
-                        :to="{ name: 'trips', params: { clearSearch: true } }"
+                        :to="{ name: 'trips', query: { clearSearch: 'true' } }"
                         v-on:click.native="tripsClick"
                     >
                         <img :src="app_logo" />
@@ -111,7 +111,7 @@
         </div>
         <div class="header_content hidden-xs">
             <router-link
-                :to="{ name: 'trips', params: { clearSearch: true } }"
+                :to="{ name: 'trips', query: { clearSearch: 'true' } }"
                 v-on:click.native="tripsClick"
             >
                 <div class="header_panel-left" v-if="logoHeaderVisibility">
@@ -181,7 +181,7 @@
                 <router-link
                     v-if="config.trip_card_design !== 'light'"
                     class="btn btn-link trips-link"
-                    :to="{ name: 'trips', params: { clearSearch: true } }"
+                    :to="{ name: 'trips', query: { clearSearch: 'true' } }"
                 >
                     {{ $t('viajes') }}
                 </router-link>

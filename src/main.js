@@ -2,7 +2,7 @@
 
 import 'core-js/stable';
 
-import Vue, { createApp } from 'vue';
+import { createApp } from 'vue';
 import App from './App';
 
 import dayjs from './dayjs';
