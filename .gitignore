@@ -23,3 +23,6 @@ www/*
 test-results/
 playwright-report/
 playwright/.cache/
+
+# Cursor (local debug session NDJSON logs)
+.cursor/debug-*.log
