@@ -53,7 +53,7 @@ export function requireIdentityValidation(to, from, next) {
     const authStore = getAuthStore();
     const config = authStore.appConfig;
     const user = authStore.user;
-    
+
     // Check if user needs validation (either new user flag or past deadline for current users)
     let needsValidation = false;
     if (config && user && config.identity_validation_required_new_users) {
@@ -68,7 +68,7 @@ export function requireIdentityValidation(to, from, next) {
             }
         }
     }
-    
+
     if (needsValidation) {
         next(false);
         router.replace({ name: 'identity_validation' });
