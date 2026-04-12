@@ -20,7 +20,7 @@ export function getRoute(value, subRoute = '') {
     if (value && value.length) {
         return import.meta.env.VITE_API_URL + subRoute + value;
     } else {
-        return import.meta.env.VITE_ROUTE_BASE + 'static/img/default-profile.png';
+        return import.meta.env.BASE_URL + 'img/default-profile.png';
     }
 }
 

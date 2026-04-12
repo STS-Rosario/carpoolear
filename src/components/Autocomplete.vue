@@ -28,7 +28,7 @@
             </button>
             <small class="copy" v-if="results.length || this.waiting">
                 <img
-                    src="https://carpoolear.com.ar/static/img/loader.gif"
+                    :src="$publicImg('loader.gif')"
                     alt=""
                     class="ajax-loader"
                     v-if="this.input !== '' && this.waiting"

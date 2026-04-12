@@ -322,17 +322,17 @@ export default {
         return {
             background_desktop_mini:
                 process.env.ROUTE_BASE +
-                'static/img/' +
+                'img/' +
                 process.env.TARGET_APP +
                 '_background_desktop_mini.png',
             background_desktop:
                 process.env.ROUTE_BASE +
-                'static/img/' +
+                'img/' +
                 process.env.TARGET_APP +
                 '_background_desktop.png',
             app_logo:
                 process.env.ROUTE_BASE +
-                'static/img/' +
+                'img/' +
                 process.env.TARGET_APP +
                 '_logo.png',
             showModal: false,

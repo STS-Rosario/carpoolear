@@ -171,6 +171,11 @@ bus.on('system-ready', () => {
     // Register global directives
     registerDirectives(app);
 
+    // Public assets live in publicDir (static/) → served as {base}img/... (see vite.config publicDir)
+    const assetBase = import.meta.env.BASE_URL;
+    app.config.globalProperties.$publicImg = (filename) =>
+        `${assetBase}img/${String(filename).replace(/^\/+/, '')}`;
+
     // Use correct Intl locale for currency so es-AR gets comma decimal, period thousands.
     const numberFormatLocaleMap = appLocaleToBCP47;
     const original$n = app.config.globalProperties.$n;

@@ -53,7 +53,7 @@
                     </div></template>
                     <template #loading><div class="text-center" style="margin-top: 20px;">
                         <img
-                            src="https://carpoolear.com.ar/static/img/loader.gif"
+                            :src="$publicImg('loader.gif')"
                             alt=""
                             class="ajax-loader"
                         />

@@ -101,8 +101,7 @@ export default {
         srcCard(number) {
             let src =
                 process.env.ROUTE_BASE +
-                `static/img/onBoarding/${process.env.TARGET_APP}_placa${number}.jpg`;
-            console.log('src', src);
+                `img/onBoarding/${process.env.TARGET_APP}_placa${number}.jpg`;
             return src;
         },
         firstTransitionEnd() {

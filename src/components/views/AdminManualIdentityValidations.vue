@@ -63,7 +63,7 @@
                         <div class="alert alert-info">{{ $t('noHayValidacionesManuales') }}</div>
                     </div></template>
                     <template #loading><div class="text-center" style="margin-top: 20px;">
-                        <img src="https://carpoolear.com.ar/static/img/loader.gif" alt="" class="ajax-loader" />
+                        <img :src="$publicImg('loader.gif')" alt="" class="ajax-loader" />
                         <p>{{ $t('cargando') }}</p>
                     </div></template>
                 </Loading>

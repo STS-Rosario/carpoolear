@@ -34,7 +34,7 @@
                         <img
                             width="90"
                             alt="STS Rosario"
-                            src="https://carpoolear.com.ar/img/logo_sts_nuevo_color.png"
+                            :src="$publicImg('logo_sts_nuevo_color.png')"
                         />
                     </h3></template>
                     <template #body><div class="donation">
@@ -216,7 +216,7 @@
             </div>
             <div v-if="runningSearch" class="more-trips-loading">
                 <img
-                    src="https://carpoolear.com.ar/static/img/loader.gif"
+                    :src="$publicImg('loader.gif')"
                     alt=""
                     class="ajax-loader"
                 />
@@ -250,7 +250,7 @@
             </p></template>
             <template #loading><p class="alert alert-info" role="alert">
                 <img
-                    src="https://carpoolear.com.ar/static/img/loader.gif"
+                    :src="$publicImg('loader.gif')"
                     alt=""
                     class="ajax-loader"
                 />

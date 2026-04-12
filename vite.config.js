@@ -9,6 +9,19 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const target = process.env.TARGET_APP || 'default';
 
+/**
+ * Branding / static/img filenames (e.g. carpoolear_logo.png).
+ * Movilizame `serve` sets TARGET_APP to "default" when unset; .env uses VITE_TARGET_APP for the real app.
+ * Prefer an explicit non-default shell TARGET_APP (e.g. apalancar build) over VITE_TARGET_APP.
+ */
+function resolveBrandingTarget(env) {
+    const shell = process.env.TARGET_APP;
+    if (shell && shell !== 'default') {
+        return shell;
+    }
+    return env.VITE_TARGET_APP || env.TARGET_APP || 'default';
+}
+
 /** Vue Router + Vite asset base; '' or missing env → default /app/ for web (production). */
 function resolveRouteBase(raw, isWebBuild) {
     const trimmed =
@@ -33,6 +46,7 @@ export default defineConfig(({ mode }) => {
     const PLATFORM = process.env.PLATFORM || 'browser';
     const isWebBuild = PLATFORM === 'browser';
     const routeBase = resolveRouteBase(env.VITE_ROUTE_BASE, isWebBuild);
+    const brandingTarget = resolveBrandingTarget(env);
     const historyMode =
         env.VITE_HISTORY_MODE ||
         env.HISTORY_MODE ||
@@ -79,11 +93,11 @@ export default defineConfig(({ mode }) => {
             'process.env': JSON.stringify({
                 NODE_ENV: nodeEnv,
                 ROUTE_BASE: routeBase,
-                TARGET_APP: env.TARGET_APP || target,
+                TARGET_APP: brandingTarget,
                 WEB_URL: env.WEB_URL || 'https://carpoolear.com.ar/app'
             }),
             VITE_API_URL: JSON.stringify(apiUrl),
-            VITE_TARGET_APP: JSON.stringify(env.TARGET_APP || target),
+            VITE_TARGET_APP: JSON.stringify(brandingTarget),
             VITE_ROUTE_BASE: JSON.stringify(routeBase),
             VITE_HISTORY_MODE: JSON.stringify(historyMode),
             VITE_FACEBOOK_API: JSON.stringify(env.FACEBOOK_API || ''),

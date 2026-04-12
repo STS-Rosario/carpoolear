@@ -306,7 +306,10 @@ export default {
             iosLoading: false,
             error: '',
             carpoolear_logo:
-                process.env.ROUTE_BASE + 'static/img/carpoolear_logo.png',
+                process.env.ROUTE_BASE +
+                'img/' +
+                process.env.TARGET_APP +
+                '_logo.png',
             hasScroll: false,
             isUnderstood: true,
             dontShowAgain: false,
@@ -317,7 +320,7 @@ export default {
             showUserBannedInfo: false,
             app_logo:
                 process.env.ROUTE_BASE +
-                'static/img/' +
+                'img/' +
                 process.env.TARGET_APP +
                 '_logo_full.png'
         };
