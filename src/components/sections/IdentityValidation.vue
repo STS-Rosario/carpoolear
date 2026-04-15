@@ -207,10 +207,11 @@
                         v-html="$t('identityValidationRejectionNoticeEmphasis')"
                     ></p>
                     <p
-                        v-if="manualStatus.review_note"
+                        v-if="manualStatus.review_note && manualStatus.review_note.trim()"
                         class="identity-validation-rejection-notice__note"
                     >
-                        {{ manualStatus.review_note }}
+                        <strong>{{ $t('identityValidationRejectionReasonLabel') }}:</strong>
+                        {{ manualStatus.review_note.trim() }}
                     </p>
                 </div>
                 <div class="identity-validation-cards">

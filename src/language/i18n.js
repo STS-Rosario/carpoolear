@@ -389,7 +389,8 @@ const messages = {
         identityValidationRejectionNoticeBody:
             'No pudimos verificar tu cuenta con la información enviada.',
         identityValidationRejectionNoticeEmphasis:
-            'Podes intentar nuevamente o contactar a la mesa de ayuda (mail <a href="mailto:carpoolear@stsrosario.org.ar">carpoolear@stsrosario.org.ar</a> o sino por mensaje privado al <a href="https://www.instagram.com/carpoolear/?hl=en" target="_blank" rel="noopener noreferrer">IG</a> o <a href="https://www.facebook.com/Carpoolear" target="_blank" rel="noopener noreferrer">FB</a> de Carpoolear).',
+            'Podes intentar nuevamente o contactar a la mesa de ayuda (mail <a href="mailto:carpoolear@@stsrosario.org.ar">carpoolear@@stsrosario.org.ar</a> o sino por mensaje privado al <a href="https://www.instagram.com/carpoolear/?hl=en" target="_blank" rel="noopener noreferrer">IG</a> o <a href="https://www.facebook.com/Carpoolear" target="_blank" rel="noopener noreferrer">FB</a> de Carpoolear).',
+        identityValidationRejectionReasonLabel: 'Razón de rechazo',
         verEstadoValidacion: 'Ver estado de verificación',
         debesCargarDni:
             'Debés cargar tu DNI en tu perfil para verificar con Mercado Pago.',
@@ -509,7 +510,7 @@ const messages = {
         carpoolear: 'Carpoolear',
         recuperarDeFacebook:
             'Si carpooleabas antes del 5/8/17, tenés que entrar al sistema mediante el botón "ingresar con Facebook" para seguir usando el mismo usuario y recuperar tus calificaciones. Si no podés entrar, escribinos a',
-        carpoolearMail: 'carpoolear@stsrosario.org.ar',
+        carpoolearMail: 'carpoolear@@stsrosario.org.ar',
         recuperarDeFacebook2: 'o a nuestro Facebook así te ayudamos :)',
         noMostrar: 'No volver a mostrar',
         entendido: 'ENTENDIDO!',
@@ -531,9 +532,9 @@ const messages = {
         alIngresarApple: 'Al ingresar con Apple estas aceptando nuestros',
         alIngresarFace: 'Al ingresar con Facebook estas aceptando nuestros',
         usuarioBanneado:
-            'Tu cuenta se encuentra desactivada por el equipo de Carpoolear. Ponte en contacto con nosotros a contacto@carpoolear.com para solucionar el inconveniente.',
+            'Tu cuenta se encuentra desactivada por el equipo de Carpoolear. Ponte en contacto con nosotros a contacto@@carpoolear.com para solucionar el inconveniente.',
         paraIngresarCuenta:
-            'Esta cuenta no se encuentra confirmada. Debes activarla desde tu correo, busca en tu bandeja de entrada/spam por un correo nuestro. Sino encuentras el correo ponte en contacto con nosotros a contacto@carpoolear.com',
+            'Esta cuenta no se encuentra confirmada. Debes activarla desde tu correo, busca en tu bandeja de entrada/spam por un correo nuestro. Sino encuentras el correo ponte en contacto con nosotros a contacto@@carpoolear.com',
         emailOContra: 'Email o password incorrecto.',
         solicitudEnviada:
             'Su solicitud ya fue enviada, aguarde un momento por favor.',
@@ -997,7 +998,7 @@ const messages = {
         pendingRequestNoPidasAsiento:
             'No pidas asiento si no tenés seguridad de que vas a viajar, muchas personas también están buscando el mismo viaje que vos. Si ocurriera algo que te impida viajar, avisale lo más rápido que puedas a la personas que iban a viajar.',
         pendingRequestCualquierDudaEscribinos: 'Cualquier duda escribinos a',
-        pendingRequestCarpoolearStsrosarioOrgAr: 'carpoolear@stsrosario.org.ar',
+        pendingRequestCarpoolearStsrosarioOrgAr: 'carpoolear@@stsrosario.org.ar',
         pendingRequestONuestrasRedesSociales: 'o nuestras redes sociales.',
         pendingRequestQuiereSubirseAlViaje: 'quiere subirse al viaje hacia',
         pendingRequestDelDia: 'del día',
@@ -1454,7 +1455,8 @@ const messages = {
         identityValidationRejectionNoticeBody:
             'No pudimos verificar tu cuenta con la información enviada.',
         identityValidationRejectionNoticeEmphasis:
-            'Podes intentar nuevamente o contactar a la mesa de ayuda (mail <a href="mailto:carpoolear@stsrosario.org.ar">carpoolear@stsrosario.org.ar</a> o sino por mensaje privado al <a href="https://www.instagram.com/carpoolear/?hl=en" target="_blank" rel="noopener noreferrer">IG</a> o <a href="https://www.facebook.com/Carpoolear" target="_blank" rel="noopener noreferrer">FB</a> de Carpoolear).',
+            'Podes intentar nuevamente o contactar a la mesa de ayuda (mail <a href="mailto:carpoolear@@stsrosario.org.ar">carpoolear@@stsrosario.org.ar</a> o sino por mensaje privado al <a href="https://www.instagram.com/carpoolear/?hl=en" target="_blank" rel="noopener noreferrer">IG</a> o <a href="https://www.facebook.com/Carpoolear" target="_blank" rel="noopener noreferrer">FB</a> de Carpoolear).',
+        identityValidationRejectionReasonLabel: 'Razón de rechazo',
         verEstadoValidacion: 'Ver estado de verificación',
         debesCargarDni:
             'Debés cargar tu DNI en tu perfil para verificar con Mercado Pago.',
@@ -1901,7 +1903,7 @@ const messages = {
         pendingRequestNoPidasAsiento:
             'No pidas asiento si no tenés seguridad de que vas a viajar, muchas personas también están buscando el mismo viaje que vos. Si ocurriera algo que te impida viajar, avisale lo más rápido que puedas a la personas que iban a viajar.',
         pendingRequestCualquierDudaEscribinos: 'Cualquier duda escribinos a',
-        pendingRequestCarpoolearStsrosarioOrgAr: 'carpoolear@stsrosario.org.ar',
+        pendingRequestCarpoolearStsrosarioOrgAr: 'carpoolear@@stsrosario.org.ar',
         pendingRequestONuestrasRedesSociales: 'o nuestras redes sociales.',
         pendingRequestQuiereSubirseAlViaje: 'quiere subirse al viaje hacia',
         pendingRequestDelDia: 'del día',
@@ -2314,7 +2316,8 @@ const messages = {
         identityValidationRejectionNoticeBody:
             "We couldn't verify your account with the information you sent.",
         identityValidationRejectionNoticeEmphasis:
-            'You can try again or contact the help desk (email <a href="mailto:carpoolear@stsrosario.org.ar">carpoolear@stsrosario.org.ar</a> or via private message on <a href="https://www.instagram.com/carpoolear/?hl=en" target="_blank" rel="noopener noreferrer">Instagram</a> or <a href="https://www.facebook.com/Carpoolear" target="_blank" rel="noopener noreferrer">Facebook</a> for Carpoolear).',
+            'You can try again or contact the help desk (email <a href="mailto:carpoolear@@stsrosario.org.ar">carpoolear@@stsrosario.org.ar</a> or via private message on <a href="https://www.instagram.com/carpoolear/?hl=en" target="_blank" rel="noopener noreferrer">Instagram</a> or <a href="https://www.facebook.com/Carpoolear" target="_blank" rel="noopener noreferrer">Facebook</a> for Carpoolear).',
+        identityValidationRejectionReasonLabel: 'Reason for rejection',
         verEstadoValidacion: 'View verification status',
         debesCargarDni:
             'You must add your DNI to your profile to verify with Mercado Pago.',
@@ -2467,7 +2470,7 @@ const messages = {
         carpoolear: 'Carpoolear',
         recuperarDeFacebook:
             'If you were carpooling before 8/5/17, you need to enter the system using the "log in with Facebook" button to continue using the same user and recover your ratings. If you cannot log in, write to us at',
-        carpoolearMail: 'carpoolear@stsrosario.org.ar',
+        carpoolearMail: 'carpoolear@@stsrosario.org.ar',
         recuperarDeFacebook2: 'or to our Facebook so we can help you :)',
         noMostrar: 'Do not show again',
         entendido: 'GOT IT!',
@@ -2488,9 +2491,9 @@ const messages = {
         alIngresarApple: 'By logging in with Apple you are accepting our',
         alIngresarFace: 'By logging in with Facebook you are accepting our',
         usuarioBanneado:
-            'Your account has been deactivated by the Carpoolear team. Contact us at contacto@carpoolear.com to resolve the issue.',
+            'Your account has been deactivated by the Carpoolear team. Contact us at contacto@@carpoolear.com to resolve the issue.',
         paraIngresarCuenta:
-            'This account is not confirmed. You must activate it from your email, check your inbox/spam for an email from us. If you cannot find the email, contact us at contacto@carpoolear.com',
+            'This account is not confirmed. You must activate it from your email, check your inbox/spam for an email from us. If you cannot find the email, contact us at contacto@@carpoolear.com',
         emailOContra: 'Incorrect email or password.',
         solicitudEnviada:
             'Your request has already been sent, please wait a moment.',
@@ -2944,7 +2947,7 @@ const messages = {
         pendingRequestNoPidasAsiento:
             "Don't request a seat if you're not sure you're going to travel, many other people are also looking for the same trip as you. If something happens that prevents you from traveling, let the people who were going to travel know as soon as possible.",
         pendingRequestCualquierDudaEscribinos: 'Any questions, write to us at',
-        pendingRequestCarpoolearStsrosarioOrgAr: 'carpoolear@stsrosario.org.ar',
+        pendingRequestCarpoolearStsrosarioOrgAr: 'carpoolear@@stsrosario.org.ar',
         pendingRequestONuestrasRedesSociales: 'or our social networks.',
         pendingRequestQuiereSubirseAlViaje: 'wants to join the trip to',
         pendingRequestDelDia: 'on',
