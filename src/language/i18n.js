@@ -312,7 +312,7 @@ const messages = {
         identidadModalAutoInmediata: 'Verificación inmediata',
         identidadModalManualTitulo: 'Verificación manual',
         identidadModalManualEquipo: 'Revisada por el equipo Carpoolear',
-        identidadModalManualCosto: 'Tiene costo de {cost}',
+        identidadModalManualCosto: 'Tiene costo',
         identidadModalManualPlazo: 'Se aprueba dentro de 48 hs hábiles',
         identidadModalUnaVez: 'La verificación sólo se realiza una vez.',
         identidadModalPlazoInfo:
@@ -1378,7 +1378,7 @@ const messages = {
         identidadModalAutoInmediata: 'Verificación inmediata',
         identidadModalManualTitulo: 'Verificación manual',
         identidadModalManualEquipo: 'Revisada por el equipo Carpoolear',
-        identidadModalManualCosto: 'Tiene costo de {cost}',
+        identidadModalManualCosto: 'Tiene costo',
         identidadModalManualPlazo: 'Se aprueba dentro de 48 hs hábiles',
         identidadModalUnaVez: 'La verificación sólo se realiza una vez.',
         identidadModalPlazoInfo:
@@ -2421,7 +2421,7 @@ const messages = {
         identidadModalAutoInmediata: 'Instant verification',
         identidadModalManualTitulo: 'Manual verification',
         identidadModalManualEquipo: 'Reviewed by the Carpoolear team',
-        identidadModalManualCosto: 'There is a cost of {cost}',
+        identidadModalManualCosto: 'There is a cost',
         identidadModalManualPlazo: 'Approved within 48 business hours',
         identidadModalUnaVez: 'You only verify once.',
         identidadModalPlazoInfo:

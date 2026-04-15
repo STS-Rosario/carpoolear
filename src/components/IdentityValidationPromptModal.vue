@@ -70,11 +70,7 @@
                                 <strong>{{ $t('identidadModalManualEquipo') }}</strong>
                             </li>
                             <li>
-                                {{
-                                    $t('identidadModalManualCosto', {
-                                        cost: formattedManualCost
-                                    })
-                                }}
+                                {{ $t('identidadModalManualCosto') }}
                             </li>
                             <li>{{ $t('identidadModalManualPlazo') }}</li>
                         </ul>
@@ -192,21 +188,6 @@ export default {
         infoIconSrc() {
             const base = process.env.ROUTE_BASE || '/';
             return `${base}img/icon-info.svg`;
-        },
-        formattedManualCost() {
-            const cents =
-                this.appConfig &&
-                this.appConfig.manual_identity_validation_cost_cents;
-            if (cents == null || Number(cents) <= 0) {
-                return '—';
-            }
-            const loc = this.$i18n.locale === 'en' ? 'en-US' : 'es-AR';
-            return new Intl.NumberFormat(loc, {
-                style: 'currency',
-                currency: 'ARS',
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 0
-            }).format(Number(cents) / 100);
         },
         optionsTitleKey() {
             return this.showMpOption && this.showManualOption
