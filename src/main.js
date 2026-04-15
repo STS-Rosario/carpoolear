@@ -4,6 +4,7 @@ import 'core-js/stable';
 
 import { createApp } from 'vue';
 import App from './App';
+import { Capacitor } from '@capacitor/core';
 
 import dayjs from './dayjs';
 
@@ -44,42 +45,29 @@ import { App as CapacitorApp } from '@capacitor/app';
 // Re-export locale maps so existing imports from '../../main' still work
 export { appLocaleToBCP47, appLocaleToRoutingLanguage };
 
-const ROUTE_BASE = import.meta.env.VITE_ROUTE_BASE || '';
-
 const debugApi = new DebugApi();
 
 // Initialize debug logger: clear logs on app init, patch console if debug mode enabled
 initDebugLogger();
 
-const cordovaTag = document.createElement('script');
-const cordovaPath = 'cordova.js';
-console.log('ROUTE_BASE', ROUTE_BASE, cordovaPath);
-cordovaTag.setAttribute('src', ROUTE_BASE + cordovaPath);
-document.head.appendChild(cordovaTag);
-
 // Initialize Capacitor plugins
 const initializeCapacitorPlugins = async () => {
-    try {
-        // Configure StatusBar to fix overlay issues
-        await StatusBar.setStyle({ style: Style.Light });
-        await StatusBar.setBackgroundColor({ color: '#ffffff' });
-        await StatusBar.setOverlaysWebView({ overlay: false });
-
-        // Hide splash screen after app loads
-        setTimeout(async () => {
-            await SplashScreen.hide();
-        }, 1000);
-
-        // Initialize push notifications directly here
-        await initializePushNotifications();
-
-        console.log('Capacitor plugins initialized');
-    } catch (error) {
-        console.log(
-            'Capacitor plugins not available (running in browser):',
-            error
-        );
+    if (!Capacitor.isNativePlatform()) {
+        return;
     }
+
+    // Configure StatusBar to fix overlay issues
+    await StatusBar.setStyle({ style: Style.Light });
+    await StatusBar.setBackgroundColor({ color: '#ffffff' });
+    await StatusBar.setOverlaysWebView({ overlay: false });
+
+    // Hide splash screen after app loads
+    setTimeout(async () => {
+        await SplashScreen.hide();
+    }, 1000);
+
+    // Initialize push notifications directly here
+    await initializePushNotifications();
 };
 
 // Direct push notification initialization
@@ -98,9 +86,7 @@ const initializePushNotifications = async () => {
                 await PushNotifications.register();
 
                 // Listen for registration success
-                PushNotifications.addListener('registration', (token) => {
-                    console.log('Push registration token:', token.value);
-                });
+                PushNotifications.addListener('registration', () => {});
 
                 // Listen for registration errors
                 PushNotifications.addListener(
@@ -127,36 +113,29 @@ const initializePushNotifications = async () => {
                 );
             }
         }
-    } catch (error) {
-        console.error('Push notification initialization error:', error);
-    }
+    } catch (error) {}
 };
 
 // Initialize plugins when app is ready
 initializeCapacitorPlugins();
 
 if (import.meta.env.VITE_SERVE) {
-    console.log('Not running in cordova.');
     useRootStore().init();
 } else {
     if (import.meta.env.DEV) {
         setTimeout(function () {
             if (!window.cordova) {
-                console.log('Not running in cordova.');
                 useRootStore().init();
             }
         }, 2000);
     } else {
-        console.log('no process at all', import.meta.env.PROD);
         setTimeout(function () {
             if (!window.cordova) {
-                console.log('Not running in cordova.');
                 useRootStore().init();
             }
         }, 2000);
     }
 }
-console.log('APP NAME: ' + import.meta.env.VITE_TARGET_APP);
 
 bus.on('system-ready', () => {
     const app = createApp(App);

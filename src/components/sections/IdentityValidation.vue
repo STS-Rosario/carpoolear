@@ -441,28 +441,6 @@ export default {
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 0
             }).format(Number(cents) / 100);
-        },
-        /** Why "Validar con Mercado Pago" is disabled (for debugging) */
-        mercadopagoButtonDisabledReason() {
-            if (!this.user) return 'no_user';
-            if (!this.user.nro_doc || String(this.user.nro_doc).trim() === '') return 'no_nro_doc';
-            if (this.loadingOAuth) return 'loading_oauth';
-            return null;
-        }
-    },
-    watch: {
-        user: {
-            handler(newUser) {
-                const reason = this.mercadopagoButtonDisabledReason;
-                console.log('[IdentityValidation] Mercado Pago button state', {
-                    hasUser: !!newUser,
-                    nro_doc: newUser ? (newUser.nro_doc != null ? newUser.nro_doc : '(undefined)') : 'N/A',
-                    loadingOAuth: this.loadingOAuth,
-                    disabledReason: reason,
-                    buttonDisabled: !!reason
-                });
-            },
-            immediate: true
         }
     },
     methods: {
@@ -539,14 +517,6 @@ export default {
     },
     mounted() {
         this.fetchManualStatus();
-        this.$nextTick(() => {
-            console.log('[IdentityValidation] mounted – Mercado Pago button', {
-                hasUser: !!this.user,
-                nro_doc: this.user ? (this.user.nro_doc != null ? this.user.nro_doc : '(undefined)') : 'N/A',
-                loadingOAuth: this.loadingOAuth,
-                disabledReason: this.mercadopagoButtonDisabledReason
-            });
-        });
     }
 };
 </script>

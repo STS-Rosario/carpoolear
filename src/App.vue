@@ -195,7 +195,6 @@ export default {
     },
     watch: {
         deviceReady: () => {
-            console.log('Device ready from components');
         },
         appConfig(value) {
             if (value && value.locale && !localStorage.getItem('app_locale')) {
