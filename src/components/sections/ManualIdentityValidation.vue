@@ -266,7 +266,7 @@ export default {
         },
         checkCircleIconSrc() {
             const base = process.env.ROUTE_BASE || '/';
-            return `${base}static/img/check-circle.png`;
+            return `${base}img/check-circle.png`;
         }
     },
     methods: {

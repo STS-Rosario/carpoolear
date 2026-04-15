@@ -10,7 +10,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const target = process.env.TARGET_APP || 'default';
 
 /**
- * Branding / static/img filenames (e.g. carpoolear_logo.png).
+ * Branding assets: repo folder is static/img/; Vite publicDir copies contents to out root → URLs are {base}img/...
  * Movilizame `serve` sets TARGET_APP to "default" when unset; .env uses VITE_TARGET_APP for the real app.
  * Prefer an explicit non-default shell TARGET_APP (e.g. apalancar build) over VITE_TARGET_APP.
  */

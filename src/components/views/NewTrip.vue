@@ -2109,7 +2109,7 @@ export default {
         tripStaticImg(filename) {
             const base = process.env.ROUTE_BASE || '/';
             const normalized = base.endsWith('/') ? base : `${base}/`;
-            return `${normalized}static/img/${filename}`;
+            return `${normalized}img/${filename}`;
         },
         normalizeAllowFlagsForApi(trip) {
             trip.allow_kids = trip.allow_kids ? 1 : 0;
