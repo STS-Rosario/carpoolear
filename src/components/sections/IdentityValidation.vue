@@ -202,10 +202,9 @@
                     <p class="identity-validation-rejection-notice__text">
                         {{ $t('identityValidationRejectionNoticeBody') }}
                     </p>
-                    <p
-                        class="identity-validation-rejection-notice__emphasis"
-                        v-html="$t('identityValidationRejectionNoticeEmphasis')"
-                    ></p>
+                    <p class="identity-validation-rejection-notice__emphasis">
+                        <strong class="identity-validation-rejection-notice__emphasis-strong">{{ $t('identityValidationRejectionNoticeEmphasisBeforeParen') }}</strong><span class="identity-validation-rejection-notice__emphasis-paren">{{ $t('identityValidationRejectionNoticeEmphasisLead') }}<a href="mailto:carpoolear@stsrosario.org.ar">carpoolear@stsrosario.org.ar</a>{{ $t('identityValidationRejectionNoticeEmphasisMid') }}<a href="https://www.instagram.com/carpoolear/?hl=en" target="_blank" rel="noopener noreferrer">{{ $t('identityValidationRejectionNoticeEmphasisIgLabel') }}</a>{{ $t('identityValidationRejectionNoticeEmphasisBetweenSocial') }}<a href="https://www.facebook.com/Carpoolear" target="_blank" rel="noopener noreferrer">{{ $t('identityValidationRejectionNoticeEmphasisFbLabel') }}</a>{{ $t('identityValidationRejectionNoticeEmphasisTail') }}</span>
+                    </p>
                     <p
                         v-if="manualStatus.review_note && manualStatus.review_note.trim()"
                         class="identity-validation-rejection-notice__note"
@@ -766,19 +765,27 @@ export default {
 .identity-validation-rejection-notice__emphasis {
     margin: 0;
     font-size: 1rem;
-    font-weight: 700;
+    font-weight: 400;
     line-height: 1.45;
     color: #991b1b;
 }
 
-.identity-validation-rejection-notice__emphasis a {
-    color: #7f1d1d;
-    text-decoration: underline;
+.identity-validation-rejection-notice__emphasis-strong {
     font-weight: 700;
 }
 
-.identity-validation-rejection-notice__emphasis a:hover,
-.identity-validation-rejection-notice__emphasis a:focus {
+.identity-validation-rejection-notice__emphasis-paren {
+    font-weight: 400;
+}
+
+.identity-validation-rejection-notice__emphasis-paren a {
+    color: #7f1d1d;
+    text-decoration: underline;
+    font-weight: 400;
+}
+
+.identity-validation-rejection-notice__emphasis-paren a:hover,
+.identity-validation-rejection-notice__emphasis-paren a:focus {
     color: #450a0a;
 }
 

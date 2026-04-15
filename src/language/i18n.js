@@ -388,8 +388,16 @@ const messages = {
         identityValidationRejectionNoticeTitle: 'Verificación rechazada',
         identityValidationRejectionNoticeBody:
             'No pudimos verificar tu cuenta con la información enviada.',
-        identityValidationRejectionNoticeEmphasis:
-            'Podes intentar nuevamente o contactar a la mesa de ayuda (mail <a href="mailto:carpoolear@@stsrosario.org.ar">carpoolear@@stsrosario.org.ar</a> o sino por mensaje privado al <a href="https://www.instagram.com/carpoolear/?hl=en" target="_blank" rel="noopener noreferrer">IG</a> o <a href="https://www.facebook.com/Carpoolear" target="_blank" rel="noopener noreferrer">FB</a> de Carpoolear).',
+        identityValidationRejectionNoticeEmphasisBeforeParen:
+            'Podes intentar nuevamente o contactar a la mesa de ayuda',
+        identityValidationRejectionNoticeEmphasisLead:
+            ' (mail ',
+        identityValidationRejectionNoticeEmphasisMid:
+            ' o sino por mensaje privado al ',
+        identityValidationRejectionNoticeEmphasisBetweenSocial: ' o ',
+        identityValidationRejectionNoticeEmphasisTail: ' de Carpoolear).',
+        identityValidationRejectionNoticeEmphasisIgLabel: 'IG',
+        identityValidationRejectionNoticeEmphasisFbLabel: 'FB',
         identityValidationRejectionReasonLabel: 'Razón de rechazo',
         verEstadoValidacion: 'Ver estado de verificación',
         debesCargarDni:
@@ -1454,8 +1462,16 @@ const messages = {
         identityValidationRejectionNoticeTitle: 'Verificación rechazada',
         identityValidationRejectionNoticeBody:
             'No pudimos verificar tu cuenta con la información enviada.',
-        identityValidationRejectionNoticeEmphasis:
-            'Podes intentar nuevamente o contactar a la mesa de ayuda (mail <a href="mailto:carpoolear@@stsrosario.org.ar">carpoolear@@stsrosario.org.ar</a> o sino por mensaje privado al <a href="https://www.instagram.com/carpoolear/?hl=en" target="_blank" rel="noopener noreferrer">IG</a> o <a href="https://www.facebook.com/Carpoolear" target="_blank" rel="noopener noreferrer">FB</a> de Carpoolear).',
+        identityValidationRejectionNoticeEmphasisBeforeParen:
+            'Podes intentar nuevamente o contactar a la mesa de ayuda',
+        identityValidationRejectionNoticeEmphasisLead:
+            ' (mail ',
+        identityValidationRejectionNoticeEmphasisMid:
+            ' o sino por mensaje privado al ',
+        identityValidationRejectionNoticeEmphasisBetweenSocial: ' o ',
+        identityValidationRejectionNoticeEmphasisTail: ' de Carpoolear).',
+        identityValidationRejectionNoticeEmphasisIgLabel: 'IG',
+        identityValidationRejectionNoticeEmphasisFbLabel: 'FB',
         identityValidationRejectionReasonLabel: 'Razón de rechazo',
         verEstadoValidacion: 'Ver estado de verificación',
         debesCargarDni:
@@ -2315,8 +2331,16 @@ const messages = {
         identityValidationRejectionNoticeTitle: 'Verification rejected',
         identityValidationRejectionNoticeBody:
             "We couldn't verify your account with the information you sent.",
-        identityValidationRejectionNoticeEmphasis:
-            'You can try again or contact the help desk (email <a href="mailto:carpoolear@@stsrosario.org.ar">carpoolear@@stsrosario.org.ar</a> or via private message on <a href="https://www.instagram.com/carpoolear/?hl=en" target="_blank" rel="noopener noreferrer">Instagram</a> or <a href="https://www.facebook.com/Carpoolear" target="_blank" rel="noopener noreferrer">Facebook</a> for Carpoolear).',
+        identityValidationRejectionNoticeEmphasisBeforeParen:
+            'You can try again or contact the help desk',
+        identityValidationRejectionNoticeEmphasisLead:
+            ' (email ',
+        identityValidationRejectionNoticeEmphasisMid:
+            ' or via private message on ',
+        identityValidationRejectionNoticeEmphasisBetweenSocial: ' or ',
+        identityValidationRejectionNoticeEmphasisTail: ' for Carpoolear).',
+        identityValidationRejectionNoticeEmphasisIgLabel: 'Instagram',
+        identityValidationRejectionNoticeEmphasisFbLabel: 'Facebook',
         identityValidationRejectionReasonLabel: 'Reason for rejection',
         verEstadoValidacion: 'View verification status',
         debesCargarDni:
