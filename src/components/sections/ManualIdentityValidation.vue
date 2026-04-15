@@ -40,7 +40,6 @@
                     </p>
                     <ul class="manual-validation-bullets">
                         <li>{{ $t('manualValidationPayBulletDni') }}</li>
-                        <li>{{ $t('manualValidationPayBulletSelfie') }}</li>
                     </ul>
                     <p class="manual-validation-text manual-validation-closing">
                         {{ $t('manualValidationPayClosing') }}

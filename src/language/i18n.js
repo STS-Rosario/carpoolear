@@ -301,7 +301,7 @@ const messages = {
         identidadModalIntro:
             'Para seguir mejorando la seguridad de la comunidad, ahora todas las cuentas de Carpoolear deberán estar verificadas.',
         identidadModalEnfasis:
-            'La verificación confirma que cada perfil corresponde a una persona real y que cada miembro tenga una única cuenta.',
+            'La verificación confirma que cada perfil corresponde a una persona real y que cada persona tenga una única cuenta.',
         identidadModalOpcionesTitulo:
             'Podés verificar tu cuenta de dos maneras:',
         identidadModalUnaOpcion:
@@ -312,7 +312,7 @@ const messages = {
         identidadModalAutoInmediata: 'Verificación inmediata',
         identidadModalManualTitulo: 'Verificación manual',
         identidadModalManualEquipo: 'Revisada por el equipo Carpoolear',
-        identidadModalManualCosto: 'Tiene un costo de {cost}',
+        identidadModalManualCosto: 'Tiene costo de {cost}',
         identidadModalManualPlazo: 'Se aprueba dentro de 48 hs hábiles',
         identidadModalUnaVez: 'La verificación sólo se realiza una vez.',
         identidadModalPlazoInfo:
@@ -320,7 +320,7 @@ const messages = {
         identidadModalValidar: 'Verificar cuenta',
         identidadModalMasTarde: 'Más tarde',
         identityValidationPageIntro:
-            'Para mantener la seguridad de la comunidad, necesitamos confirmar tu identidad.',
+            'Para mantener la seguridad de la comunidad, necesitamos confirmar tu cuenta.',
         identityValidationPageBullet1: 'Evitar perfiles falsos.',
         identityValidationPageBullet2:
             'Asegurar que cada persona tenga una sola cuenta.',
@@ -387,9 +387,9 @@ const messages = {
             'Te notificaremos cuando la verificación esté completa.',
         identityValidationRejectionNoticeTitle: 'Verificación rechazada',
         identityValidationRejectionNoticeBody:
-            'No pudimos verificar tu identidad con la información enviada.',
+            'No pudimos verificar tu cuenta con la información enviada.',
         identityValidationRejectionNoticeEmphasis:
-            'Podés intentar nuevamente o contactar al equipo de soporte.',
+            'Podes intentar nuevamente o contactar a la mesa de ayuda (mail <a href="mailto:carpoolear@stsrosario.org.ar">carpoolear@stsrosario.org.ar</a> o sino por mensaje privado al <a href="https://www.instagram.com/carpoolear/?hl=en" target="_blank" rel="noopener noreferrer">IG</a> o <a href="https://www.facebook.com/Carpoolear" target="_blank" rel="noopener noreferrer">FB</a> de Carpoolear).',
         verEstadoValidacion: 'Ver estado de verificación',
         debesCargarDni:
             'Debés cargar tu DNI en tu perfil para verificar con Mercado Pago.',
@@ -404,9 +404,8 @@ const messages = {
             'Una vez confirmado, te pediremos que cargues la documentación.',
         manualValidationPayListLead: 'Tené a mano:',
         manualValidationPayBulletDni: 'Tu DNI',
-        manualValidationPayBulletSelfie: 'Foto tuya sosteniendo tu DNI',
         manualValidationPayClosing:
-            'Esto nos permitirá verificar tu identidad correctamente.',
+            'Esto nos permitirá verificar tu cuenta correctamente.',
         manualValidationPagarMercadoPago: 'Pagar con Mercado Pago',
         manualValidationVolverOpcionesDesktop:
             'Volver a opciones de verificación',
@@ -1079,9 +1078,9 @@ const messages = {
         precioAsientoTooltip:
             'El precio que pagará cada pasajero. Incluye el proporcional de peajes{sellado}',
         contribucionPorPersonaTooltipSinSellado:
-            'Calculado en base a nafta premium, consumo promedio alto y peajes',
+            'Ajustar en función de rendimiento del auto L cada 100km, combustible cargado y peajes del tramo. Cualquier duda siempre llenar el tanque al salir y nuevamente al llenarlo al llegar, la diferencia será el combustible gastado en viaje.',
         contribucionPorPersonaTooltipConSellado:
-            'Calculado en base a nafta premium, consumo promedio alto, sellado de viaje y peajes',
+            'Ajustar en función de rendimiento del auto L cada 100km, combustible cargado y peajes del tramo. Cualquier duda siempre llenar el tanque al salir y nuevamente al llenarlo al llegar, la diferencia será el combustible gastado en viaje.',
         contribucionRecomendadaLabel: 'Contribución recomendada',
         contribucionRecomendadaCardDescripcionSinSellado:
             'Calculado en base a nafta premium (con consumo promedio alto) y peajes.',
@@ -1367,7 +1366,7 @@ const messages = {
         identidadModalIntro:
             'Para seguir mejorando la seguridad de la comunidad, ahora todas las cuentas de Carpoolear deberán estar verificadas.',
         identidadModalEnfasis:
-            'La verificación confirma que cada perfil corresponde a una persona real y que cada miembro tenga una única cuenta.',
+            'La verificación confirma que cada perfil corresponde a una persona real y que cada persona tenga una única cuenta.',
         identidadModalOpcionesTitulo:
             'Podés verificar tu cuenta de dos maneras:',
         identidadModalUnaOpcion:
@@ -1378,7 +1377,7 @@ const messages = {
         identidadModalAutoInmediata: 'Verificación inmediata',
         identidadModalManualTitulo: 'Verificación manual',
         identidadModalManualEquipo: 'Revisada por el equipo Carpoolear',
-        identidadModalManualCosto: 'Tiene un costo de {cost}',
+        identidadModalManualCosto: 'Tiene costo de {cost}',
         identidadModalManualPlazo: 'Se aprueba dentro de 48 hs hábiles',
         identidadModalUnaVez: 'La verificación sólo se realiza una vez.',
         identidadModalPlazoInfo:
@@ -1386,7 +1385,7 @@ const messages = {
         identidadModalValidar: 'Verificar cuenta',
         identidadModalMasTarde: 'Más tarde',
         identityValidationPageIntro:
-            'Para mantener la seguridad de la comunidad, necesitamos confirmar tu identidad.',
+            'Para mantener la seguridad de la comunidad, necesitamos confirmar tu cuenta.',
         identityValidationPageBullet1: 'Evitar perfiles falsos.',
         identityValidationPageBullet2:
             'Asegurar que cada persona tenga una sola cuenta.',
@@ -1453,9 +1452,9 @@ const messages = {
             'Te notificaremos cuando la verificación esté completa.',
         identityValidationRejectionNoticeTitle: 'Verificación rechazada',
         identityValidationRejectionNoticeBody:
-            'No pudimos verificar tu identidad con la información enviada.',
+            'No pudimos verificar tu cuenta con la información enviada.',
         identityValidationRejectionNoticeEmphasis:
-            'Podés intentar nuevamente o contactar al equipo de soporte.',
+            'Podes intentar nuevamente o contactar a la mesa de ayuda (mail <a href="mailto:carpoolear@stsrosario.org.ar">carpoolear@stsrosario.org.ar</a> o sino por mensaje privado al <a href="https://www.instagram.com/carpoolear/?hl=en" target="_blank" rel="noopener noreferrer">IG</a> o <a href="https://www.facebook.com/Carpoolear" target="_blank" rel="noopener noreferrer">FB</a> de Carpoolear).',
         verEstadoValidacion: 'Ver estado de verificación',
         debesCargarDni:
             'Debés cargar tu DNI en tu perfil para verificar con Mercado Pago.',
@@ -1470,9 +1469,8 @@ const messages = {
             'Una vez confirmado, te pediremos que cargues la documentación.',
         manualValidationPayListLead: 'Tené a mano:',
         manualValidationPayBulletDni: 'Tu DNI',
-        manualValidationPayBulletSelfie: 'Foto tuya sosteniendo tu DNI',
         manualValidationPayClosing:
-            'Esto nos permitirá verificar tu identidad correctamente.',
+            'Esto nos permitirá verificar tu cuenta correctamente.',
         manualValidationPagarMercadoPago: 'Pagar con Mercado Pago',
         manualValidationVolverOpcionesDesktop:
             'Volver a opciones de verificación',
@@ -2250,7 +2248,7 @@ const messages = {
         validarConMercadoPagoDesc:
             'Verify your account with Mercado Pago (RENAPER).',
         identityValidationPageIntro:
-            'To keep the community safe, we need to confirm your identity.',
+            'To keep the community safe, we need to confirm your account.',
         identityValidationPageBullet1: 'Reduce fake profiles.',
         identityValidationPageBullet2:
             'Ensure each person has only one account.',
@@ -2314,9 +2312,9 @@ const messages = {
             'We will notify you when verification is complete.',
         identityValidationRejectionNoticeTitle: 'Verification rejected',
         identityValidationRejectionNoticeBody:
-            "We couldn't verify your identity with the information you sent.",
+            "We couldn't verify your account with the information you sent.",
         identityValidationRejectionNoticeEmphasis:
-            'You can try again or contact the support team.',
+            'You can try again or contact the help desk (email <a href="mailto:carpoolear@stsrosario.org.ar">carpoolear@stsrosario.org.ar</a> or via private message on <a href="https://www.instagram.com/carpoolear/?hl=en" target="_blank" rel="noopener noreferrer">Instagram</a> or <a href="https://www.facebook.com/Carpoolear" target="_blank" rel="noopener noreferrer">Facebook</a> for Carpoolear).',
         verEstadoValidacion: 'View verification status',
         debesCargarDni:
             'You must add your DNI to your profile to verify with Mercado Pago.',
@@ -2331,9 +2329,8 @@ const messages = {
             'Once confirmed, we will ask you to upload your documents.',
         manualValidationPayListLead: 'Have ready:',
         manualValidationPayBulletDni: 'Your national ID (DNI)',
-        manualValidationPayBulletSelfie: 'Photo of yourself holding your DNI',
         manualValidationPayClosing:
-            'This allows us to verify your identity correctly.',
+            'This allows us to verify your account correctly.',
         manualValidationPagarMercadoPago: 'Pay with Mercado Pago',
         manualValidationVolverOpcionesDesktop: 'Back to verification options',
         manualValidationPagoProcesado: 'Payment processed successfully',
@@ -2411,7 +2408,7 @@ const messages = {
         identidadModalIntro:
             'To keep improving community safety, all Carpoolear accounts must now be verified.',
         identidadModalEnfasis:
-            'Verification confirms that each profile belongs to a real person and that each member has only one account.',
+            'Verification confirms that each profile belongs to a real person and that each person has only one account.',
         identidadModalOpcionesTitulo:
             'You can verify your account in two ways:',
         identidadModalUnaOpcion: 'You can verify your account as follows:',
@@ -3024,9 +3021,9 @@ const messages = {
         precioAsientoTooltip:
             'The price each passenger will pay. Includes proportional of tolls{sellado}',
         contribucionPorPersonaTooltipSinSellado:
-            'Calculated based on premium gasoline, high average consumption and tolls',
+            "Adjust based on the car's fuel consumption (L per 100 km), fuel purchased and tolls for the route. If in doubt, always fill the tank when you leave and again when you fill up on arrival; the difference is the fuel used on the trip.",
         contribucionPorPersonaTooltipConSellado:
-            'Calculated based on premium gasoline, high average consumption, Trip Seal and tolls',
+            "Adjust based on the car's fuel consumption (L per 100 km), fuel purchased and tolls for the route. If in doubt, always fill the tank when you leave and again when you fill up on arrival; the difference is the fuel used on the trip.",
         contribucionRecomendadaLabel: 'Recommended contribution',
         contribucionRecomendadaCardDescripcionSinSellado:
             'Calculated based on premium gasoline (with high average consumption) and tolls.',

@@ -202,9 +202,10 @@
                     <p class="identity-validation-rejection-notice__text">
                         {{ $t('identityValidationRejectionNoticeBody') }}
                     </p>
-                    <p class="identity-validation-rejection-notice__emphasis">
-                        {{ $t('identityValidationRejectionNoticeEmphasis') }}
-                    </p>
+                    <p
+                        class="identity-validation-rejection-notice__emphasis"
+                        v-html="$t('identityValidationRejectionNoticeEmphasis')"
+                    ></p>
                     <p
                         v-if="manualStatus.review_note"
                         class="identity-validation-rejection-notice__note"
@@ -767,6 +768,17 @@ export default {
     font-weight: 700;
     line-height: 1.45;
     color: #991b1b;
+}
+
+.identity-validation-rejection-notice__emphasis a {
+    color: #7f1d1d;
+    text-decoration: underline;
+    font-weight: 700;
+}
+
+.identity-validation-rejection-notice__emphasis a:hover,
+.identity-validation-rejection-notice__emphasis a:focus {
+    color: #450a0a;
 }
 
 .identity-validation-rejection-notice__note {
