@@ -2986,16 +2986,19 @@ hr {
 
 .trip_terms--lucrar-card__title-row {
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
+    flex-wrap: nowrap;
+    align-items: flex-start;
     gap: 0.35rem;
 }
 
 .trip_terms--lucrar-card__tooltip {
     flex-shrink: 0;
+    margin-top: 0.15em;
 }
 
 .trip_terms--lucrar-card__title {
+    flex: 1 1 0;
+    min-width: 0;
     font-weight: 700;
     font-size: 1.125rem;
     line-height: 1.35;
