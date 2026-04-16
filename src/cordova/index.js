@@ -10,8 +10,6 @@ import config from '../../config/conf.json';
 import { useCordovaStore } from '../stores/cordova';
 import { useRootStore } from '../stores/root';
 
-console.log('CORDOVA INDEX.JS IS LOADING!');
-
 window.facebook = facebook;
 window.appVersion = '3.1.8';
 
@@ -24,7 +22,6 @@ function getRootStore () {
 }
 
 const onDeviceReady = () => {
-    console.log('Device ready');
     const hasToDoInit = true;
     cache.setItem('appVersion', window.appVersion);
     if (hasToDoInit) {
@@ -33,14 +30,12 @@ const onDeviceReady = () => {
 };
 
 const doInit = async () => {
-    console.log('do Init');
     getCordovaStore().setDeviceReady();
 
     // Initialize device info with Capacitor
     await initDeviceInfo();
 
     // Initialize push notifications with Capacitor
-    console.log('Initializing push notifications...');
     push.init();
 
     // Initialize network monitoring with Capacitor
@@ -55,11 +50,8 @@ const initDeviceInfo = async () => {
     const cordovaStore = getCordovaStore();
 
     if (Capacitor.isNativePlatform()) {
-        console.log('Initializing Capacitor device info...');
-
         try {
             const deviceInfo = await Device.getInfo();
-            console.log('Device info:', deviceInfo);
 
             // Create a device object compatible with the old Cordova format
             const compatibleDevice = {
@@ -77,14 +69,12 @@ const initDeviceInfo = async () => {
             // Update the store
             cordovaStore.setDevice(compatibleDevice);
         } catch (error) {
-            console.error('Error getting device info:', error);
             // Fallback to existing window.device if available
             if (window.device) {
                 cordovaStore.setDevice(window.device);
             }
         }
     } else {
-        console.log('Web platform - using browser device detection');
         // For web platform, create a basic device object
         const webDevice = {
             platform: 'browser',
@@ -104,12 +94,9 @@ const initNetworkMonitoring = async () => {
     const cordovaStore = getCordovaStore();
 
     if (Capacitor.isNativePlatform()) {
-        console.log('Initializing Capacitor network monitoring...');
-
         try {
             // Get initial network status
             const status = await Network.getStatus();
-            console.log('Initial network status:', status);
 
             if (status.connected) {
                 cordovaStore.deviceOnline();
@@ -119,7 +106,6 @@ const initNetworkMonitoring = async () => {
 
             // Listen for network changes
             Network.addListener('networkStatusChange', (status) => {
-                console.log('Network status changed:', status);
                 if (status.connected) {
                     cordovaStore.deviceOnline();
                 } else {
@@ -127,12 +113,10 @@ const initNetworkMonitoring = async () => {
                 }
             });
         } catch (error) {
-            console.error('Error initializing network monitoring:', error);
             // Fallback to browser events
             initBrowserNetworkEvents();
         }
     } else {
-        console.log('Web platform - using browser network events');
         initBrowserNetworkEvents();
     }
 };
@@ -143,18 +127,15 @@ const initBrowserNetworkEvents = () => {
 };
 
 const onOnline = () => {
-    console.log('Device online (browser event)');
     getCordovaStore().deviceOnline();
 };
 
 const onOffline = () => {
-    console.log('Device offline (browser event)');
     getCordovaStore().deviceOffline();
 };
 
 //  cordova.fireDocumentEvent('backbutton'); for testing in console
 const onBackbutton = () => {
-    console.log('Backbutton');
     getCordovaStore().onBackButton();
 };
 
@@ -176,10 +157,6 @@ console.log('Checking platform:', Capacitor.getPlatform());
 console.log('Is native platform:', Capacitor.isNativePlatform());
 
 if (Capacitor.isNativePlatform()) {
-    console.log(
-        'Capacitor native platform detected - initializing immediately'
-    );
-
     // Wait a bit for Capacitor to be fully ready
     setTimeout(() => {
         onDeviceReady();

@@ -19,6 +19,7 @@
     "build-dev:ios": "node movilizame build --platform=ios",
     "build-dev:android": "node movilizame build --platform=android",
     "build-capacitor-android-local": "npm run build:android && cp -r dist/default/production/www/* www/ && npx cap run android --target d59fb3c7",
+    "cap:sync:android": "npx cap sync android && node scripts/fix-capacitor-cordova-gradle.js",
     "lint": "eslint --ext .js src",
     "lint:fix": "eslint --ext .js --fix src",
     "test:e2e": "npx playwright test",
@@ -28,7 +29,8 @@
     "test:e2e:screenshots:update": "npx playwright test --project=frontend e2e-frontend/screenshots.spec.js --update-snapshots",
     "test:frontend": "npx playwright test --project=frontend",
     "test:frontend:ui": "npx playwright test --project=frontend --ui",
-    "test:unit": "vitest"
+    "test:unit": "vitest",
+    "fix:capacitor:cordova-gradle": "node scripts/fix-capacitor-cordova-gradle.js"
   },
   "dependencies": {
     "@capacitor/android": "^7.4.3",

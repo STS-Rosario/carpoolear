@@ -3,7 +3,8 @@
   "appName": "Carpoolear",
   "webDir": "www",
   "server": {
-    "androidScheme": "https"
+    "androidScheme": "https",
+    "hostname": "carpoolear.com.ar"
   },
   "ios": {
     "minVersion": "14.0"

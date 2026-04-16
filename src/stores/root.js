@@ -59,7 +59,6 @@ export const useRootStore = defineStore('root', {
             });
 
             return Promise.all(promises).then(() => {
-                console.log('State loaded from cache.');
                 if (authStore.token) {
                     authStore.retoken().then(() => this.startApp());
                 } else {

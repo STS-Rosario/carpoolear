@@ -4,6 +4,10 @@
         :class="[backgroundStyle, viewName, deviceClass]"
     >
         <ForceUpgradeModal v-if="showForceUpgrade" />
+        <IdentityValidationPromptModal
+            v-if="!showForceUpgrade"
+            :suppress="identityPromptSuppress"
+        />
         <template v-if="!showForceUpgrade">
             <!-- Custom Splash Screen -->
             <div v-if="showCustomSplash" class="custom-splash-screen">
@@ -45,6 +49,7 @@ import footerApp from './components/sections/FooterApp.vue';
 import headerApp from './components/sections/HeaderApp.vue';
 import onBoarding from './components/sections/OnBoarding.vue';
 import ForceUpgradeModal from './components/ForceUpgradeModal.vue';
+import IdentityValidationPromptModal from './components/IdentityValidationPromptModal.vue';
 
 export default {
     name: 'app',
@@ -141,7 +146,7 @@ export default {
             const appVersionInfo = useRootStore().appVersionInfo;
             const version = (appVersionInfo && appVersionInfo.version) || (typeof window !== 'undefined' && window.appVersion) || '0';
             const base = 'Version ' + version;
-            return Capacitor.isNativePlatform() ? base : base + ' - build 101';
+            return Capacitor.isNativePlatform() ? base : base + ' - build 103';
         },
         ...mapState(useCordovaStore, {
             deviceReady: 'deviceReady'
@@ -176,6 +181,9 @@ export default {
                 !this.isBrowser;
             return moduleEnabled && (mustShowMobile || mustShowGeneral);
         },
+        identityPromptSuppress() {
+            return this.showCustomSplash || this.onBoardingVisibility;
+        },
         viewName() {
             return this.$route.name;
         },
@@ -187,7 +195,6 @@ export default {
     },
     watch: {
         deviceReady: () => {
-            console.log('Device ready from components');
         },
         appConfig(value) {
             if (value && value.locale && !localStorage.getItem('app_locale')) {
@@ -210,7 +217,8 @@ export default {
         headerApp,
         footerApp,
         onBoarding,
-        ForceUpgradeModal
+        ForceUpgradeModal,
+        IdentityValidationPromptModal
     }
 };
 </script>

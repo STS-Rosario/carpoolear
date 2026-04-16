@@ -13,6 +13,7 @@
 <script>
 import { mapState } from 'pinia';
 import { useAuthStore } from '../stores/auth';
+import { isIdentityValidationCountdownScenario } from '../utils/identityValidationPrompt';
 
 export default {
     name: 'IdentityValidationCountdownBanner',
@@ -28,12 +29,7 @@ export default {
             appConfig: 'appConfig'
         }),
         visible() {
-            if (!this.user) return false;
-            const daysEnabled = this.appConfig && Number(this.appConfig.identity_validation_days_for_current_users) > 0;
-            if (!daysEnabled) return false;
-            if (this.user.identity_validated) return false;
-            if (!this.user.validate_by_date) return false;
-            return true;
+            return isIdentityValidationCountdownScenario(this.user, this.appConfig);
         },
         deadlineEndOfDay() {
             if (!this.user || !this.user.validate_by_date) return null;

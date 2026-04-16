@@ -1,7 +1,12 @@
 /* jshint esversion: 6 */
-import * as alertifyjs from '../../node_modules/alertifyjs/build/alertify.min.js';
+import alertifyModule from 'alertifyjs/build/alertify.min.js';
 import cordovaToast from '../cordova/toast.js';
-import '../../node_modules/alertifyjs/build/css/alertify.min.css';
+import 'alertifyjs/build/css/alertify.min.css';
+
+const alertifyjs = (
+    alertifyModule &&
+    (alertifyModule.notify ? alertifyModule : alertifyModule.default)
+) || (typeof window !== 'undefined' ? window.alertify : null);
 
 export default {
     message(text, options = {}, successCallback = null) {
@@ -30,12 +35,17 @@ export default {
             }
             cordovaToast.toast(text, successCallback, options);
         } else {
-            alertifyjs.notify(
-                text,
-                options.estado,
-                options.duration,
-                successCallback
-            );
+            if (alertifyjs && typeof alertifyjs.notify === 'function') {
+                alertifyjs.notify(
+                    text,
+                    options.estado,
+                    options.duration,
+                    successCallback
+                );
+            } else {
+                console.warn('Alertify notify is not available');
+                successCallback();
+            }
         }
     }
 };

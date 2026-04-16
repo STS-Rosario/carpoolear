@@ -227,9 +227,10 @@ export default {
                     setTimeout(() => {
                         this.$router.push({ name: 'admin-manual-identity-validations' });
                     }, 2000);
-                })
-                .catch((err) => {
-                    this.reviewError = (err.response && err.response.data && err.response.data.error) || this.$t('resultError');
+                }, (err) => {
+                    const apiError = (err && err.data && (err.data.error || err.data.message)) ||
+                        (err && err.response && err.response.data && (err.response.data.error || err.response.data.message));
+                    this.reviewError = apiError || this.$t('resultError');
                 })
                 .finally(() => {
                     this.submitting = false;

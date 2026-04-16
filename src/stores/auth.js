@@ -111,7 +111,6 @@ export const useAuthStore = defineStore('auth', {
             if (cordovaStore.device) {
                 deviceStore.register();
             }
-            console.log('dispatch trips/tripsSearch on Loggin');
             tripsStore.tripsSearch({ is_passenger: false });
             myTripsStore.tripAsDriver();
             myTripsStore.tripAsPassenger();
@@ -144,7 +143,6 @@ export const useAuthStore = defineStore('auth', {
         },
 
         activate(activationToken) {
-            console.log('activate action');
             this.setFirstTime(true);
             return authApi
                 .activate(activationToken, {})
@@ -169,12 +167,9 @@ export const useAuthStore = defineStore('auth', {
             return userApi
                 .show()
                 .then((response) => {
-                    console.log('fetch user', response.data);
                     this.setUser(response.data);
                 })
-                .catch(({ data, status }) => {
-                    console.log(data, status);
-                });
+                .catch(() => {});
         },
 
         retoken() {
@@ -184,7 +179,6 @@ export const useAuthStore = defineStore('auth', {
                 authApi
                     .retoken(data)
                     .then((response) => {
-                        console.log('retoken response', response);
                         this.setToken(response.token);
                         this.setAppConfig({
                             ...localConfig,
@@ -192,8 +186,7 @@ export const useAuthStore = defineStore('auth', {
                         });
                         resolve();
                     })
-                    .catch(async ({ data, status }) => {
-                        console.log(data, status);
+                    .catch(async () => {
                         this.doLogout();
                         const router = await getRouter();
                         router.push({ name: 'login' });
@@ -204,9 +197,7 @@ export const useAuthStore = defineStore('auth', {
 
         async logout() {
             // Call the logout API endpoint
-            authApi.logout().catch((error) => {
-                console.error('Logout API call failed:', error);
-            });
+            authApi.logout().catch(() => {});
 
             const { useDeviceStore } = await import('./device');
             const { useRootStore } = await import('./root');
@@ -259,7 +250,6 @@ export const useAuthStore = defineStore('auth', {
                     return Promise.resolve(response.data);
                 })
                 .catch(({ data, status }) => {
-                    console.log(data, status);
                     return Promise.reject(data);
                 });
         },
@@ -268,12 +258,10 @@ export const useAuthStore = defineStore('auth', {
             return userApi
                 .updatePhoto(data)
                 .then((response) => {
-                    console.log(response);
                     this.setUser(response.data);
                     return Promise.resolve(response.data);
                 })
                 .catch(({ data, status }) => {
-                    console.log(data, status);
                     return Promise.reject(data);
                 });
         },
@@ -291,7 +279,6 @@ export const useAuthStore = defineStore('auth', {
                     return Promise.resolve(response.data);
                 })
                 .catch(({ data, status }) => {
-                    console.log(data, status);
                     return Promise.reject(data);
                 });
         },

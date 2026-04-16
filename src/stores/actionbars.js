@@ -173,7 +173,8 @@ export const useActionbarsStore = defineStore('actionbars', {
                 tripsStore.tripsSearch({ is_passenger: false });
                 tripsStore.setRefreshList(true);
             }
-            getRouter().push({
+            const router = await getRouter();
+            router.push({
                 name: item.url,
                 ...(Object.keys(params).length ? { params } : {}),
                 ...(Object.keys(query).length ? { query } : {})

@@ -1,7 +1,6 @@
 /* jshint esversion: 6 */
 import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router';
 import i18n from '../i18n';
-import { getInstance } from '../services/debug';
 import { useAuthStore } from '../stores/auth';
 import { useActionbarsStore } from '../stores/actionbars';
 import { useBackgroundStore } from '../stores/background';
@@ -16,18 +15,6 @@ const router = createRouter({
 });
 
 router.rememberRoute = null;
-
-router.afterEach((to) => {
-    try {
-        const instance = getInstance();
-        if (instance && instance.isEnabled()) {
-            const url = (to.fullPath || to.path || window.location.href);
-            console.log('[DEBUG] Navigation:', url);
-        }
-    } catch (e) {
-        // Debug service not ready
-    }
-});
 
 router.beforeEach((to, from, next) => {
     const authStore = useAuthStore();
@@ -50,7 +37,6 @@ router.beforeEach((to, from, next) => {
         actionbarsStore.showFooter(false);
     }
     const config = authStore.appConfig;
-    console.log('config app name', config);
     let appName = import.meta.env.VITE_TARGET_APP || 'Carpoolear';
     if (config) {
         appName = config.app_name ? config.app_name : config.name_app;
@@ -58,17 +44,14 @@ router.beforeEach((to, from, next) => {
     if (appName && appName.length) {
         appName = appName.charAt(0).toUpperCase() + appName.slice(1);
     }
-    console.log('app name', appName);
     if (actionbar.header) {
         actionbarsStore.setSubTitle('');
         actionbarsStore.setTitleLink({});
         actionbarsStore.setImgTitle('');
         if (actionbar.header.titleKey) {
-            console.log('actionbar.header.titleKey', actionbar.header.titleKey);
             const title = i18n.global.t(actionbar.header.titleKey);
             actionbarsStore.setTitle(title);
         } else {
-            console.log('actionbar appName', appName);
             actionbarsStore.setTitle(appName);
         }
         if (actionbar.header.buttons) {

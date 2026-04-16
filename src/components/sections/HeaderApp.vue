@@ -23,7 +23,10 @@
             </div>
             <div
                 class="actionbar_section actionbar_title"
-                :class="subTitle !== '' ? 'header--with-subtitle' : ''"
+                :class="[
+                    subTitle !== '' ? 'header--with-subtitle' : '',
+                    actionbarTitleWidthClass
+                ]"
             >
                 <div
                     class="header--image circle-box"
@@ -342,8 +345,6 @@ export default {
 
     mounted() {
         bus.on('header-title-change', this.onHeaderChange);
-        console.log('app_logo', this.app_logo);
-        console.log('ROUTE_BASE', process.env.ROUTE_BASE);
     },
 
     computed: {
@@ -389,6 +390,12 @@ export default {
         currentLocaleShortLabel() {
             const short = { arg: 'ES', en: 'EN' };
             return short[this.$i18n.locale] || 'ES';
+        },
+        actionbarTitleWidthClass() {
+            const n = this.$route && this.$route.name;
+            return n === 'identity_validation' || n === 'identity_validation_manual'
+                ? 'actionbar_title--settings-wide'
+                : '';
         }
     },
 
@@ -435,7 +442,6 @@ export default {
     },
     watch: {
         title(_old, _new) {
-            console.log('titlee change', this.title);
         }
     },
     components: {

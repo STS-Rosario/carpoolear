@@ -383,6 +383,8 @@ import { useHead } from '@unhead/vue';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { appLocaleToRoutingLanguage } from '../../main';
+import { leafletOsrmServiceUrl } from '../../utils/osrmRouting';
+import { ensureLeafletDefaultIconImages, tripWaypointIcon } from '../../utils/leafletIcons';
 import 'leaflet-routing-machine';
 
 export default {
@@ -733,9 +735,35 @@ export default {
             const points = this.trip.points.map((point) =>
                 L.latLng(point.lat, point.lng)
             );
+            const routingLang = appLocaleToRoutingLanguage[this.$i18n.locale] || 'es';
+            const osrmServiceUrl = leafletOsrmServiceUrl();
+            console.debug(
+                '[Carpoolear][L.Routing] Trip.vue syncTripRouteMap: Routing.control via backend OSRM proxy',
+                {
+                    tripId: this.trip && this.trip.id,
+                    waypointCount: points.length,
+                    language: routingLang,
+                    serviceUrl: osrmServiceUrl
+                }
+            );
+            ensureLeafletDefaultIconImages();
+            const waypointCount = points.length;
             this._tripRoutingControl = L.Routing.control({
+                router: L.Routing.osrmv1({
+                    serviceUrl: osrmServiceUrl,
+                    language: routingLang,
+                    suppressDemoServerWarning: true
+                }),
                 waypoints: points,
-                language: appLocaleToRoutingLanguage[this.$i18n.locale] || 'es'
+                language: routingLang,
+                draggableWaypoints: false,
+                addWaypoints: false,
+                createMarker(i, wp) {
+                    return L.marker(wp.latLng, {
+                        draggable: false,
+                        icon: tripWaypointIcon(i, waypointCount)
+                    });
+                }
             });
             this._tripRoutingControl.addTo(map);
             map.invalidateSize();

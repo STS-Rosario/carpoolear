@@ -1,5 +1,5 @@
 <template>
-    <div class="new-trip-component container">
+    <div class="new-trip-component container new-trip-tooltips--left">
         <div class="alert alert-info alert-sellado-viaje" v-if="this.config.module_trip_creation_payment_enabled">
             <p>{{ $t('mensajeContandoSobreSelladoViaje') }}</p>
             <p>{{ $t('podesHacerViajesGratis', { freeTrips: free_trips_amount }) }}</p>
@@ -105,10 +105,11 @@
                                 class="tooltip-bottom"
                                 :data-tooltip="$t('habilitaOrigen')"
                             >
-                                <i
-                                    class="fa fa-info-circle"
-                                    aria-hidden="true"
-                                ></i>
+                                <img
+                                    :src="tripStaticImg('icon-info.svg')"
+                                    alt=""
+                                    class="trip-form-info-icon"
+                                />
                             </span>
                         </span>
                     </div>
@@ -154,33 +155,37 @@
                             </span>
                         </div>
                     </div>
-                    <div class="trip_terms" v-if="trip.is_passenger == 0">
+                    <div
+                        class="trip_terms trip_terms--lucrar-card"
+                        v-if="trip.is_passenger == 0"
+                    >
                         <input
                             type="checkbox"
                             id="no-lucrar"
                             v-model="no_lucrar"
-                            class="checkbox-button"
+                            class="checkbox-button trip_terms--lucrar-card__input"
                         />
                         <label
                             for="no-lucrar"
-                            class="trip_terms_label checkbox-click-target"
+                            class="trip_terms_label checkbox-click-target trip_terms--lucrar-card__label"
                             :class="{ 'has-error': lucrarError.state }"
                         >
-                            <span class="checkbox-box"></span>
-                            <span>
-                                {{ $t('meComprometo') }}
-                                <span
-                                    class="tooltip-bottom"
-                                    :data-tooltip="$t('contribucionMaximaPista')"
-                                >
-                                    <i
-                                        class="fa fa-info-circle"
-                                        aria-hidden="true"
-                                    ></i>
-                                </span>
-                                <br />
-                                <small>{{ $t('contribucionMaxima') }}</small>
-                            </span>
+                            <span
+                                class="checkbox-box trip_terms--lucrar-card__box"
+                            ></span>
+                            <div class="trip_terms--lucrar-card__copy">
+                                <div class="trip_terms--lucrar-card__title-row">
+                                    <strong class="trip_terms--lucrar-card__title">{{
+                                        $t('meComprometo')
+                                    }}</strong>
+                                </div>
+                                <p class="trip_terms--lucrar-card__lead">
+                                    {{ $t('viajeColaborativoLead') }}
+                                </p>
+                                <p class="trip_terms--lucrar-card__text">
+                                    {{ $t('contribucionMaxima') }}
+                                </p>
+                            </div>
                         </label>
                     </div>
                     <!-- <pre style="background: #f5f5f5; padding: 10px; margin: 10px; border-radius: 4px; font-size: 12px;">
@@ -215,10 +220,11 @@
                                         class="tooltip-bottom"
                                         :data-tooltip="$t('habilitaOrigen')"
                                     >
-                                        <i
-                                            class="fa fa-info-circle"
-                                            aria-hidden="true"
-                                        ></i>
+                                        <img
+                                            :src="tripStaticImg('icon-info.svg')"
+                                            alt=""
+                                            class="trip-form-info-icon"
+                                        />
                                     </span>
                                 </span>
                             </div>
@@ -493,12 +499,13 @@
                                     {{ $t('precioAsiento') }}
                                 <span
                                     class="tooltip-bottom tooltip-seat-price"
-                                    :data-tooltip="$t('precioAsientoTooltip', { sellado: this.config.module_trip_creation_payment_enabled ? ' y Sellado de Viaje.' : '' })"
+                                    :data-tooltip="contribucionPorPersonaTooltipText"
                                 >
-                                    <i
-                                        class="fa fa-info-circle"
-                                        aria-hidden="true"
-                                    ></i>
+                                    <img
+                                        :src="tripStaticImg('icon-info.svg')"
+                                        alt=""
+                                        class="trip-form-info-icon"
+                                    />
                                 </span>
                                 </legend>
 
@@ -510,7 +517,15 @@
                                     :class="{ 'has-error': priceError.state }"
                                     :placeholder="price"
                                 />
-                                <span class="error" v-if="priceError.state">
+                                <span
+                                    class="error trip-form-error-with-icon"
+                                    v-if="priceError.state"
+                                >
+                                    <img
+                                        :src="tripStaticImg('icon-warning.svg')"
+                                        alt=""
+                                        class="trip-form-warning-icon"
+                                    />
                                     {{ priceError.message }}
                                 </span>
                             </div>
@@ -540,12 +555,13 @@
                                     {{ $t('precioAsiento') }}
                                     <span
                                         class="tooltip-bottom tooltip-seat-price"
-                                        :data-tooltip="$t('precioAsientoTooltip', { sellado: this.config.module_trip_creation_payment_enabled ? ' y Sellado de Viaje.' : '' })"
+                                        :data-tooltip="contribucionPorPersonaTooltipText"
                                     >
-                                        <i
-                                            class="fa fa-info-circle"
-                                            aria-hidden="true"
-                                        ></i>
+                                        <img
+                                            :src="tripStaticImg('icon-info.svg')"
+                                            alt=""
+                                            class="trip-form-info-icon"
+                                        />
                                     </span>
                                 </legend>
 
@@ -559,47 +575,43 @@
                                     :max="maximum_seat_price_cents / 100"
                                     @input="validatePrice"
                                 />
-                                <span class="error" v-if="priceError.state">
+                                <span
+                                    class="error trip-form-error-with-icon"
+                                    v-if="priceError.state"
+                                >
+                                    <img
+                                        :src="tripStaticImg('icon-warning.svg')"
+                                        alt=""
+                                        class="trip-form-warning-icon"
+                                    />
                                     {{ priceError.message }}
                                 </span>
                             </div>
 
-                            <div v-if="trip.is_passenger == 0 && this.trip.distance > 0 && config.module_seat_price_enabled">
-                                <div
-                                class="label-soft"
-                                v-if="tripCardTheme !== 'light'"
-                                style="
-                                    color: var(--trip-mostly-free-color);
-                                    font-weight: bold;
-                                    margin-bottom: 10px;
-                                    font-size: 1.1rem;
+                            <div
+                                v-if="
+                                    trip.is_passenger == 0 &&
+                                    trip.distance > 0 &&
+                                    config.module_seat_price_enabled
                                 "
-                                >
-                                    {{ $t('contribucionRecomendadaLabel') }}
-
-                                    <span
-                                        style="
-                                            color: var(
-                                                --trip-almost-fill-color
-                                            );
-                                        "
+                                class="trip-contribucion-recomendada-card"
+                            >
+                                <div class="trip-contribucion-recomendada-card__main">
+                                    <strong
+                                        >{{ $t('contribucionRecomendadaLabel') }}:
+                                        {{
+                                            $n(
+                                                recommended_seat_price_cents / 100,
+                                                'currency'
+                                            )
+                                        }}</strong
                                     >
-                                        $ {{ recommendedSeatPrice }}
-
-                                    <span>
-
-                                        <span
-                                            class="tooltip-seat-price"
-                                            :data-tooltip="$t('calculadoEnBaseNaftaTooltip')"
-                                        >
-                                            <i
-                                                class="fa fa-info-circle"
-                                                aria-hidden="true"
-                                            ></i>
-                                        </span>
-                                    </span>
-                                    </span>
                                 </div>
+                                <p class="trip-contribucion-recomendada-card__hint">
+                                    {{
+                                        contribucionRecomendadaCardDescripcionText
+                                    }}
+                                </p>
                             </div>
 
                             <div class="trip-comment">
@@ -681,143 +693,144 @@
                                 {{ $t('preferenciasViaje') }}
                             </legend>
                             <br />
-                            <div
-                                class="preferences row"
-                                v-if="tripCardTheme !== 'light' || isMobile"
-                            >
-                                <div class="col-xs-8">
-                                    <div class="col-xs-12">
+                            <div class="preferences row trip-pref-cards">
+                                <div class="col-xs-8 trip-pref-cards__cell">
+                                    <div class="trip-pref-card">
                                         <input
                                             type="checkbox"
-                                            id="smoking"
+                                            id="newtrip-pref-smoking"
                                             v-model="trip.allow_smoking"
+                                            class="trip-pref-card__input sr-only"
                                         />
-                                    </div>
-                                    <div class="col-xs-12">
-                                        <SvgItem
-                                            icon="no-smoking"
-                                            :size="24"
-                                        ></SvgItem>
-                                    </div>
-                                    <div class="col-xs-24">
                                         <label
-                                            for="allow-smoking"
-                                            class="label-soft preferences-text"
+                                            for="newtrip-pref-smoking"
+                                            class="trip-pref-card__label"
                                         >
-                                            {{ $t('nofumar') }}
+                                            <span class="trip-pref-card__surface">
+                                                <span
+                                                    class="trip-pref-card__badge"
+                                                    aria-hidden="true"
+                                                >
+                                                    <i
+                                                        class="fa fa-check"
+                                                        aria-hidden="true"
+                                                    ></i>
+                                                </span>
+                                                <img
+                                                    :src="
+                                                        tripStaticImg(
+                                                            'icon-smoke.svg'
+                                                        )
+                                                    "
+                                                    alt=""
+                                                    class="trip-pref-card__icon"
+                                                />
+                                            </span>
+                                            <span
+                                                class="trip-pref-card__caption label-soft"
+                                            >
+                                                {{
+                                                    $t(
+                                                        'preferenciaPermitidoFumar'
+                                                    )
+                                                }}
+                                            </span>
                                         </label>
                                     </div>
                                 </div>
-                                <div class="col-xs-8">
-                                    <div class="col-xs-12">
+                                <div class="col-xs-8 trip-pref-cards__cell">
+                                    <div class="trip-pref-card">
                                         <input
                                             type="checkbox"
-                                            id="animals"
+                                            id="newtrip-pref-animals"
                                             v-model="trip.allow_animals"
+                                            class="trip-pref-card__input sr-only"
                                         />
-                                    </div>
-                                    <div class="col-xs-12">
-                                        <SvgItem
-                                            icon="no-animals"
-                                            :size="24"
-                                        ></SvgItem>
-                                    </div>
-                                    <div class="col-xs-24 no-padding">
                                         <label
-                                            for="allow-animals"
-                                            class="label-soft preferences-text"
+                                            for="newtrip-pref-animals"
+                                            class="trip-pref-card__label"
                                         >
-                                            {{ $t('noanimales') }}
+                                            <span class="trip-pref-card__surface">
+                                                <span
+                                                    class="trip-pref-card__badge"
+                                                    aria-hidden="true"
+                                                >
+                                                    <i
+                                                        class="fa fa-check"
+                                                        aria-hidden="true"
+                                                    ></i>
+                                                </span>
+                                                <img
+                                                    :src="
+                                                        tripStaticImg(
+                                                            'icon-pet.svg'
+                                                        )
+                                                    "
+                                                    alt=""
+                                                    class="trip-pref-card__icon"
+                                                />
+                                            </span>
+                                            <span
+                                                class="trip-pref-card__caption label-soft"
+                                            >
+                                                {{
+                                                    $t(
+                                                        'preferenciaPermitidoAnimales'
+                                                    )
+                                                }}
+                                            </span>
                                         </label>
                                     </div>
                                 </div>
-                                <div class="col-xs-8">
-                                    <div class="col-xs-12">
+                                <div class="col-xs-8 trip-pref-cards__cell">
+                                    <div class="trip-pref-card">
                                         <input
                                             type="checkbox"
-                                            id="kids"
+                                            id="newtrip-pref-kids"
                                             v-model="trip.allow_kids"
+                                            class="trip-pref-card__input sr-only"
                                         />
-                                    </div>
-                                    <div class="col-xs-12">
-                                        <SvgItem
-                                            icon="no-kids"
-                                            :size="24"
-                                        ></SvgItem>
-                                    </div>
-                                    <div class="col-xs-24 no-padding">
                                         <label
-                                            for="allow-kids"
-                                            class="label-soft preferences-text"
+                                            for="newtrip-pref-kids"
+                                            class="trip-pref-card__label"
                                         >
-                                            {{ $t('noninos') }}
+                                            <span class="trip-pref-card__surface">
+                                                <span
+                                                    class="trip-pref-card__badge"
+                                                    aria-hidden="true"
+                                                >
+                                                    <i
+                                                        class="fa fa-check"
+                                                        aria-hidden="true"
+                                                    ></i>
+                                                </span>
+                                                <img
+                                                    :src="
+                                                        tripStaticImg(
+                                                            'icon-baby.svg'
+                                                        )
+                                                    "
+                                                    alt=""
+                                                    class="trip-pref-card__icon"
+                                                />
+                                            </span>
+                                            <span
+                                                class="trip-pref-card__caption label-soft"
+                                            >
+                                                {{
+                                                    $t(
+                                                        'preferenciaPermitidoNinos'
+                                                    )
+                                                }}
+                                            </span>
                                         </label>
                                     </div>
                                 </div>
                             </div>
-                            <ul
-                                class="no-bullet preferences row"
-                                v-if="tripCardTheme === 'light' && !isMobile"
+                            <div
+                                v-if="!updatingTrip && !isMobile"
+                                class="row row-showReturnTrip"
                             >
-                                <li>
-                                    <input
-                                        type="checkbox"
-                                        id="smoking"
-                                        v-model="trip.allow_smoking"
-                                        class="checkbox-button"
-                                    />
-                                    <label
-                                        for="smoking"
-                                        class="label-soft preferences-text checkbox-click-target"
-                                    >
-                                        <span class="checkbox-box"></span>
-                                        <SvgItem
-                                            icon="no-smoking"
-                                            :size="24"
-                                        ></SvgItem>
-                                        {{ $t('nofumar') }}
-                                    </label>
-                                </li>
-                                <li>
-                                    <input
-                                        type="checkbox"
-                                        id="animals"
-                                        v-model="trip.allow_animals"
-                                        class="checkbox-button"
-                                    />
-                                    <label
-                                        for="animals"
-                                        class="label-soft preferences-text checkbox-click-target"
-                                    >
-                                        <span class="checkbox-box"></span>
-                                        <SvgItem
-                                            icon="no-animals"
-                                            :size="24"
-                                        ></SvgItem>
-                                        {{ $t('noanimales') }}
-                                    </label>
-                                </li>
-                                <li>
-                                    <input
-                                        type="checkbox"
-                                        id="kids"
-                                        v-model="trip.allow_kids"
-                                        class="checkbox-button"
-                                    />
-                                    <label
-                                        for="allow-kids"
-                                        class="label-soft preferences-text checkbox-click-target"
-                                    >
-                                        <span class="checkbox-box"></span>
-                                        <SvgItem
-                                            icon="kids"
-                                            :size="24"
-                                        ></SvgItem>
-                                        {{ $t('noninos') }}
-                                    </label>
-                                </li>
-                            </ul>
-                            <div v-if="!updatingTrip" class="row row-showReturnTrip">
                                 <hr class="col-md-20" />
                                 <div class="checkbox-trip-return col-md-24">
                                     <span>
@@ -833,7 +846,7 @@
                                 </div>
                             </div>
                             <button
-                                v-if="!showReturnTrip"
+                                v-if="!showReturnTrip && !isMobile"
                                 class="trip-create btn btn-primary btn-lg"
                                 :class="{ 'trip-create--update': updatingTrip && !showReturnTrip }"
                                 @click="save"
@@ -1164,12 +1177,13 @@
                                     {{ $t('precioAsiento') }}
                                 <span
                                     class="tooltip-bottom tooltip-seat-price"
-                                    :data-tooltip="$t('precioAsientoTooltip', { sellado: this.config.module_trip_creation_payment_enabled ? ' y Sellado de Viaje.' : '' })"
+                                    :data-tooltip="contribucionPorPersonaTooltipText"
                                 >
-                                    <i
-                                        class="fa fa-info-circle"
-                                        aria-hidden="true"
-                                    ></i>
+                                    <img
+                                        :src="tripStaticImg('icon-info.svg')"
+                                        alt=""
+                                        class="trip-form-info-icon"
+                                    />
                                 </span>
                                 </legend>
 
@@ -1181,7 +1195,15 @@
                                     :class="{ 'has-error': returnPriceError.state }"
                                     :placeholder="returnPrice"
                                 />
-                                <span class="error" v-if="returnPriceError.state">
+                                <span
+                                    class="error trip-form-error-with-icon"
+                                    v-if="returnPriceError.state"
+                                >
+                                    <img
+                                        :src="tripStaticImg('icon-warning.svg')"
+                                        alt=""
+                                        class="trip-form-warning-icon"
+                                    />
                                     {{ returnPriceError.message }}
                                 </span>
                             </div>
@@ -1193,12 +1215,13 @@
                                     {{ $t('precioAsiento') }}
                                     <span
                                         class="tooltip-bottom tooltip-seat-price"
-                                        :data-tooltip="$t('precioAsientoTooltip', { sellado: this.config.module_trip_creation_payment_enabled ? ' y Sellado de Viaje.' : '' })"
+                                        :data-tooltip="contribucionPorPersonaTooltipText"
                                     >
-                                        <i
-                                            class="fa fa-info-circle"
-                                            aria-hidden="true"
-                                        ></i>
+                                        <img
+                                            :src="tripStaticImg('icon-info.svg')"
+                                            alt=""
+                                            class="trip-form-info-icon"
+                                        />
                                     </span>
                                 </legend>
                                 <input
@@ -1214,49 +1237,42 @@
                                     @input="validatePrice"
                                 />
                                 <span
-                                    class="error"
+                                    class="error trip-form-error-with-icon"
                                     v-if="returnPriceError.state"
                                 >
+                                    <img
+                                        :src="tripStaticImg('icon-warning.svg')"
+                                        alt=""
+                                        class="trip-form-warning-icon"
+                                    />
                                     {{ returnPriceError.message }}
                                 </span>
                             </div>
 
-                            <div v-if="trip.is_passenger == 0 && this.trip.distance > 0 && config.module_seat_price_enabled">
-                                <div
-                                class="label-soft"
-                                v-if="tripCardTheme !== 'light'"
-                                style="
-                                    color: var(--trip-mostly-free-color);
-                                    font-weight: bold;
-                                    margin-bottom: 10px;
-                                    font-size: 1.1rem;
+                            <div
+                                v-if="
+                                    trip.is_passenger == 0 &&
+                                    otherTrip.trip.distance > 0 &&
+                                    config.module_seat_price_enabled
                                 "
-                                >
-                                    {{ $t('contribucionRecomendadaLabel') }}
-
-                                    <span
-                                        style="
-                                            color: var(
-                                                --trip-almost-fill-color
-                                            );
-                                        "
+                                class="trip-contribucion-recomendada-card"
+                            >
+                                <div class="trip-contribucion-recomendada-card__main">
+                                    <strong
+                                        >{{ $t('contribucionRecomendadaLabel') }}:
+                                        {{
+                                            $n(
+                                                recommended_return_seat_price_cents / 100,
+                                                'currency'
+                                            )
+                                        }}</strong
                                     >
-                                        $ {{ recommendedReturnSeatPrice }}
-
-                                    <span>
-
-                                        <span
-                                            class="tooltip-seat-price"
-                                            :data-tooltip="$t('calculadoEnBaseNaftaTooltip')"
-                                        >
-                                            <i
-                                                class="fa fa-info-circle"
-                                                aria-hidden="true"
-                                            ></i>
-                                        </span>
-                                    </span>
-                                    </span>
                                 </div>
+                                <p class="trip-contribucion-recomendada-card__hint">
+                                    {{
+                                        contribucionRecomendadaCardDescripcionText
+                                    }}
+                                </p>
                             </div>
 
                             <div class="trip_seats-available">
@@ -1469,142 +1485,146 @@
                                 {{ $t('preferenciasViaje') }}
                             </legend>
                             <br />
-                            <div
-                                class="preferences row"
-                                v-if="tripCardTheme !== 'light' || isMobile"
-                            >
-                                <div class="col-xs-8">
-                                    <div class="col-xs-12">
+                            <div class="preferences row trip-pref-cards">
+                                <div class="col-xs-8 trip-pref-cards__cell">
+                                    <div class="trip-pref-card">
                                         <input
                                             type="checkbox"
-                                            id="smoking"
+                                            id="newtrip-return-pref-smoking"
                                             v-model="
                                                 otherTrip.trip.allow_smoking
                                             "
+                                            class="trip-pref-card__input sr-only"
                                         />
-                                    </div>
-                                    <div class="col-xs-12">
-                                        <SvgItem
-                                            icon="no-smoking"
-                                            :size="24"
-                                        ></SvgItem>
-                                    </div>
-                                    <div class="col-xs-24">
                                         <label
-                                            for="allow-smoking"
-                                            class="label-soft preferences-text"
+                                            for="newtrip-return-pref-smoking"
+                                            class="trip-pref-card__label"
                                         >
-                                            {{ $t('nofumar') }}
+                                            <span class="trip-pref-card__surface">
+                                                <span
+                                                    class="trip-pref-card__badge"
+                                                    aria-hidden="true"
+                                                >
+                                                    <i
+                                                        class="fa fa-check"
+                                                        aria-hidden="true"
+                                                    ></i>
+                                                </span>
+                                                <img
+                                                    :src="
+                                                        tripStaticImg(
+                                                            'icon-smoke.svg'
+                                                        )
+                                                    "
+                                                    alt=""
+                                                    class="trip-pref-card__icon"
+                                                />
+                                            </span>
+                                            <span
+                                                class="trip-pref-card__caption label-soft"
+                                            >
+                                                {{
+                                                    $t(
+                                                        'preferenciaPermitidoFumar'
+                                                    )
+                                                }}
+                                            </span>
                                         </label>
                                     </div>
                                 </div>
-                                <div class="col-xs-8">
-                                    <div class="col-xs-12">
+                                <div class="col-xs-8 trip-pref-cards__cell">
+                                    <div class="trip-pref-card">
                                         <input
                                             type="checkbox"
-                                            id="animals"
+                                            id="newtrip-return-pref-animals"
                                             v-model="
                                                 otherTrip.trip.allow_animals
                                             "
+                                            class="trip-pref-card__input sr-only"
                                         />
-                                    </div>
-                                    <div class="col-xs-12">
-                                        <SvgItem
-                                            icon="no-animals"
-                                            :size="24"
-                                        ></SvgItem>
-                                    </div>
-                                    <div class="col-xs-24 no-padding">
                                         <label
-                                            for="allow-animals"
-                                            class="label-soft preferences-text"
+                                            for="newtrip-return-pref-animals"
+                                            class="trip-pref-card__label"
                                         >
-                                            {{ $t('noanimales') }}
+                                            <span class="trip-pref-card__surface">
+                                                <span
+                                                    class="trip-pref-card__badge"
+                                                    aria-hidden="true"
+                                                >
+                                                    <i
+                                                        class="fa fa-check"
+                                                        aria-hidden="true"
+                                                    ></i>
+                                                </span>
+                                                <img
+                                                    :src="
+                                                        tripStaticImg(
+                                                            'icon-pet.svg'
+                                                        )
+                                                    "
+                                                    alt=""
+                                                    class="trip-pref-card__icon"
+                                                />
+                                            </span>
+                                            <span
+                                                class="trip-pref-card__caption label-soft"
+                                            >
+                                                {{
+                                                    $t(
+                                                        'preferenciaPermitidoAnimales'
+                                                    )
+                                                }}
+                                            </span>
                                         </label>
                                     </div>
                                 </div>
-                                <div class="col-xs-8">
-                                    <div class="col-xs-12">
+                                <div class="col-xs-8 trip-pref-cards__cell">
+                                    <div class="trip-pref-card">
                                         <input
                                             type="checkbox"
-                                            id="kids"
+                                            id="newtrip-return-pref-kids"
                                             v-model="otherTrip.trip.allow_kids"
+                                            class="trip-pref-card__input sr-only"
                                         />
-                                    </div>
-                                    <div class="col-xs-12">
-                                        <SvgItem
-                                            icon="no-kids"
-                                            :size="24"
-                                        ></SvgItem>
-                                    </div>
-                                    <div class="col-xs-24 no-padding">
                                         <label
-                                            for="allow-kids"
-                                            class="label-soft preferences-text"
+                                            for="newtrip-return-pref-kids"
+                                            class="trip-pref-card__label"
                                         >
-                                            {{ $t('noninos') }}
+                                            <span class="trip-pref-card__surface">
+                                                <span
+                                                    class="trip-pref-card__badge"
+                                                    aria-hidden="true"
+                                                >
+                                                    <i
+                                                        class="fa fa-check"
+                                                        aria-hidden="true"
+                                                    ></i>
+                                                </span>
+                                                <img
+                                                    :src="
+                                                        tripStaticImg(
+                                                            'icon-baby.svg'
+                                                        )
+                                                    "
+                                                    alt=""
+                                                    class="trip-pref-card__icon"
+                                                />
+                                            </span>
+                                            <span
+                                                class="trip-pref-card__caption label-soft"
+                                            >
+                                                {{
+                                                    $t(
+                                                        'preferenciaPermitidoNinos'
+                                                    )
+                                                }}
+                                            </span>
                                         </label>
                                     </div>
                                 </div>
                             </div>
-                            <ul
-                                class="no-bullet preferences row"
-                                v-if="tripCardTheme === 'light' && !isMobile"
-                            >
-                                <li>
-                                    <input
-                                        type="checkbox"
-                                        id="smoking"
-                                        v-model="otherTrip.trip.allow_smoking"
-                                    />
-                                    <SvgItem
-                                        icon="no-smoking"
-                                        :size="24"
-                                    ></SvgItem>
-                                    <label
-                                        for="allow-smoking"
-                                        class="label-soft preferences-text"
-                                    >
-                                        {{ $t('nofumar') }}
-                                    </label>
-                                </li>
-                                <li>
-                                    <input
-                                        type="checkbox"
-                                        id="animals"
-                                        v-model="otherTrip.trip.allow_animals"
-                                    />
-                                    <SvgItem
-                                        icon="no-animals"
-                                        :size="24"
-                                    ></SvgItem>
-                                    <label
-                                        for="allow-animals"
-                                        class="label-soft preferences-text"
-                                    >
-                                        {{ $t('noanimales') }}
-                                    </label>
-                                </li>
-                                <li>
-                                    <input
-                                        type="checkbox"
-                                        id="kids"
-                                        v-model="otherTrip.trip.allow_kids"
-                                    />
-                                    <SvgItem
-                                        icon="no-kids"
-                                        :size="24"
-                                    ></SvgItem>
-                                    <label
-                                        for="allow-kids"
-                                        class="label-soft preferences-text"
-                                    >
-                                        {{ $t('noninos') }}
-                                    </label>
-                                </li>
-                            </ul>
                             <button
-                                v-if="showReturnTrip"
+                                v-if="showReturnTrip && !isMobile"
                                 class="trip-create btn btn-primary btn-lg"
                                 @click="save"
                                 :disabled="saving"
@@ -1682,6 +1702,45 @@
                 <div class="col-xs-24 map"></div>
             </div>
         </div>
+        <div
+            v-if="isMobile"
+            class="trip-form-mobile-footer"
+        >
+            <div
+                v-if="!updatingTrip"
+                class="trip-form-mobile-footer__return checkbox-trip-return"
+            >
+                <input
+                    type="checkbox"
+                    v-model="showReturnTrip"
+                    id="cbxShowReturnTripMobile"
+                />
+                <label for="cbxShowReturnTripMobile">
+                    {{ $t('cargarViajeRegreso') }}
+                </label>
+            </div>
+            <button
+                class="trip-create btn btn-primary btn-lg trip-form-mobile-footer__submit"
+                :class="{ 'trip-create--update': updatingTrip && !showReturnTrip }"
+                @click="save"
+                :disabled="saving"
+            >
+                <span v-if="!updatingTrip">
+                    <spinner
+                        class="blue"
+                        v-if="saving"
+                    ></spinner>
+                    <span v-else>{{ $t('crear') }}</span>
+                </span>
+                <span v-else>
+                    <spinner
+                        class="blue"
+                        v-if="saving"
+                    ></spinner>
+                    <span v-else>{{ $t('actualizar') }}</span>
+                </span>
+            </button>
+        </div>
     </div>
 </template>
 <script>
@@ -1692,6 +1751,7 @@ import { useDeviceStore } from '../../stores/device';
 import { useTripsStore } from '../../stores/trips';
 import { useRootStore } from '../../stores/root';
 import { appLocaleToRoutingLanguage } from '../../main';
+import { leafletOsrmServiceUrl } from '../../utils/osrmRouting';
 // import { parseOsmStreet } from '../../services/maps.js';
 import DatePicker from '../DatePicker';
 import dialogs from '../../services/dialogs.js';
@@ -1790,9 +1850,9 @@ export default {
                 distance: 0.0,
                 co2: 0.0,
                 description: '',
-                allow_kids: true,
-                allow_smoking: true,
-                allow_animals: true,
+                allow_kids: false,
+                allow_smoking: false,
+                allow_animals: false,
                 car_id: null,
                 enc_path: '123',
                 points: [] /* address json_address lat lng */
@@ -1846,9 +1906,9 @@ export default {
                     description: '',
                     car_id: null,
                     enc_path: '123',
-                    allow_kids: true,
-                    allow_smoking: true,
-                    allow_animals: true,
+                    allow_kids: false,
+                    allow_smoking: false,
+                    allow_animals: false,
                     seat_price_cents: 0,
                     points: [] /* address json_address lat lng */
                 }
@@ -1901,14 +1961,6 @@ export default {
         distanceString() {
             return Math.floor(this.trip.distance / 1000) + ' Km';
         },
-        recommendedSeatPrice() {
-            return Math.floor((this.recommended_seat_price_cents / 100)) ;
-        },
-
-        recommendedReturnSeatPrice() {
-            return Math.floor((this.recommended_return_seat_price_cents / 100)) ;
-        },
-
         estimatedTimeString() {
             const totalMinutes = Math.floor(this.duration / 60);
             const minutes = Math.floor(totalMinutes % 60);
@@ -1955,6 +2007,18 @@ export default {
         },
         zoom() {
             return this.config.map_zoom;
+        },
+        contribucionPorPersonaTooltipText() {
+            if (this.config && this.config.module_trip_creation_payment_enabled) {
+                return this.$t('contribucionPorPersonaTooltipConSellado');
+            }
+            return this.$t('contribucionPorPersonaTooltipSinSellado');
+        },
+        contribucionRecomendadaCardDescripcionText() {
+            if (this.config && this.config.module_trip_creation_payment_enabled) {
+                return this.$t('contribucionRecomendadaCardDescripcionConSellado');
+            }
+            return this.$t('contribucionRecomendadaCardDescripcionSinSellado');
         }
     },
     watch: {
@@ -2042,6 +2106,16 @@ export default {
         ...mapActions(useRootStore, {
             getTrip: 'getTrip'
         }),
+        tripStaticImg(filename) {
+            const base = process.env.ROUTE_BASE || '/';
+            const normalized = base.endsWith('/') ? base : `${base}/`;
+            return `${normalized}img/${filename}`;
+        },
+        normalizeAllowFlagsForApi(trip) {
+            trip.allow_kids = trip.allow_kids ? 1 : 0;
+            trip.allow_animals = trip.allow_animals ? 1 : 0;
+            trip.allow_smoking = trip.allow_smoking ? 1 : 0;
+        },
         setIsPassenger(value) {
             this.trip.is_passenger = value;
         },
@@ -2117,9 +2191,9 @@ export default {
         this.trip.distance = trip.distance;
         this.trip.description = trip.description;
         
-        this.trip.allow_kids = !(trip.allow_kids > 0);
-        this.trip.allow_animals = !(trip.allow_animals > 0);
-        this.trip.allow_smoking = !(trip.allow_smoking > 0);
+        this.trip.allow_kids = Number(trip.allow_kids) > 0;
+        this.trip.allow_animals = Number(trip.allow_animals) > 0;
+        this.trip.allow_smoking = Number(trip.allow_smoking) > 0;
         
         if (trip.seat_price_cents != null) {
             this.price = trip.seat_price_cents / 100;
@@ -2491,9 +2565,7 @@ export default {
                 }
                 let trip = this.getSaveInfo(this, this.estimatedTimeString);
                 trip.is_passenger = trip.is_passenger ? 1 : 0;
-                trip.allow_kids = !(trip.allow_kids > 0);
-                trip.allow_animals = !(trip.allow_animals > 0);
-                trip.allow_smoking = !(trip.allow_smoking > 0);
+                this.normalizeAllowFlagsForApi(trip);
 
                 trip.seat_price_cents = this.price * 100;
                 
@@ -2516,11 +2588,7 @@ export default {
                                 otherTrip = JSON.parse(
                                     JSON.stringify(otherTrip)
                                 );
-                                otherTrip.allow_kids = !otherTrip.allow_kids;
-                                otherTrip.allow_animals =
-                                    !otherTrip.allow_animals;
-                                otherTrip.allow_smoking =
-                                    !otherTrip.allow_smoking;
+                                this.normalizeAllowFlagsForApi(otherTrip);
                                 otherTrip.seat_price_cents = this.returnPrice * 100;
                                 this.createTrip(otherTrip).then((ot) => {
                                     return resolve(ot);
@@ -2570,9 +2638,7 @@ export default {
             } else {
                 this.trip.id = this.updatingTrip.id;
                 let trip = JSON.parse(JSON.stringify(this.trip));
-                trip.allow_kids = !(trip.allow_kids > 0);
-                trip.allow_animals = !(trip.allow_animals > 0);
-                trip.allow_smoking = !(trip.allow_smoking > 0);
+                this.normalizeAllowFlagsForApi(trip);
                 trip.seat_price_cents = Math.round(this.price * 100);
                 this.updateTrip(trip)
                     .then(() => {
@@ -2747,12 +2813,36 @@ export default {
 
             if (this.$refs.map && this.$refs.map.mapObject) {
                 let map = this.$refs.map.mapObject;
+                const waypointsMeta = points.map((point) => ({
+                    lat: point.location.lat,
+                    lng: point.location.lng
+                }));
+                const routingLang = appLocaleToRoutingLanguage[this.$i18n.locale] || 'es';
+                const osrmServiceUrl = leafletOsrmServiceUrl();
+                console.debug('[Carpoolear][L.Routing] NewTrip calcRoute: Routing.control via backend OSRM proxy', {
+                    type: type || 'trip',
+                    waypointCount: points.length,
+                    waypoints: waypointsMeta,
+                    language: routingLang,
+                    serviceUrl: osrmServiceUrl
+                });
 
                 /* eslint-disable no-undef */
                 L.Routing.control({
+                    router: L.Routing.osrmv1({
+                        serviceUrl: osrmServiceUrl,
+                        language: routingLang,
+                        suppressDemoServerWarning: true
+                    }),
                     waypoints: points.map(point => L.latLng(point.location.lat, point.location.lng)),
-                    language: appLocaleToRoutingLanguage[this.$i18n.locale] || 'es'
+                    language: routingLang
                 }).addTo(map);
+            } else {
+                console.debug('[Carpoolear][L.Routing] NewTrip calcRoute: skip Routing.control (no map ref yet)', {
+                    type: type || 'trip',
+                    waypointCount: points.length,
+                    hasMapRef: !!(this.$refs.map && this.$refs.map.mapObject)
+                });
             }
         },
         validatePrice() {
@@ -2824,6 +2914,98 @@ hr {
 .preferences {
     margin-right: 0px;
 }
+
+.trip_terms--lucrar-card {
+    margin-top: 1rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    max-width: 100%;
+    background: var(--form-background, #fff);
+    border: 1px solid #dcdfe6;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.trip_terms--lucrar-card__label.trip_terms_label,
+.trip_terms--lucrar-card__label.checkbox-click-target {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+    margin: 0;
+    padding: 14px 16px;
+    box-sizing: border-box;
+    color: #111;
+    line-height: 1.4;
+    vertical-align: unset;
+}
+
+.trip_terms--lucrar-card__label.trip_terms_label.has-error {
+    color: #111;
+}
+
+.trip_terms--lucrar-card__box.checkbox-box {
+    position: relative;
+    top: 2px;
+    left: 0;
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-width: 2px;
+    border-radius: 5px;
+    border-color: #aeb6bd;
+}
+
+.trip_terms--lucrar-card__box.checkbox-box:after {
+    width: 11px;
+    height: 7px;
+    left: 3px;
+    top: 5px;
+    border: 2px solid #444;
+    border-top: none;
+    border-right: none;
+}
+
+.trip_terms--lucrar-card__copy {
+    flex: 1;
+    min-width: 0;
+}
+
+.trip_terms--lucrar-card__title-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.trip_terms--lucrar-card__title {
+    font-weight: 700;
+    font-size: 1.125rem;
+    line-height: 1.35;
+    color: #111;
+}
+
+.trip_terms--lucrar-card__lead {
+    margin: 0.65rem 0 0 0;
+    font-weight: 700;
+    font-size: 0.9375rem;
+    color: #111;
+    line-height: 1.35;
+}
+
+.trip_terms--lucrar-card__text {
+    margin: 0.4rem 0 0 0;
+    font-weight: 400;
+    font-size: 0.8125rem;
+    color: #111;
+    line-height: 1.45;
+}
+
+.trip_terms--lucrar-card__label.has-error .trip_terms--lucrar-card__title {
+    color: var(--main-error, #d72521);
+}
+
 .container {
     padding-top: 0;
 }
@@ -2884,8 +3066,48 @@ textarea.form-control {
     width: 100%;
 }
 
-.tooltip-seat-price::before {
-    width: 30em;
+.new-trip-tooltips--left .tooltip-seat-price.tooltip-bottom::before {
+    width: auto;
+    min-width: 20vw;
+    max-width: 40vw;
+}
+
+/* Bottom tooltips: anchor to the trigger’s right edge and expand leftward */
+.new-trip-tooltips--left :deep([data-tooltip].tooltip-bottom:before) {
+    left: auto;
+    right: 0;
+    margin-left: 0;
+    transform: translate(0, 20px);
+    text-align: left;
+    width: auto;
+    min-width: 20vw;
+    max-width: 40vw;
+}
+
+.new-trip-tooltips--left :deep([data-tooltip].tooltip-bottom:after) {
+    left: auto;
+    right: 10px;
+    margin-left: 0;
+    transform: translate(0, 20px);
+}
+
+.new-trip-tooltips--left :deep([data-tooltip].tooltip-bottom:hover:before),
+.new-trip-tooltips--left :deep([data-tooltip].tooltip-bottom:hover:after),
+.new-trip-tooltips--left :deep([data-tooltip].tooltip-bottom:focus:before),
+.new-trip-tooltips--left :deep([data-tooltip].tooltip-bottom:focus:after) {
+    transform: translate(0, 20px);
+}
+
+@media only screen and (max-width: 768px) {
+    .new-trip-tooltips--left .tooltip-seat-price.tooltip-bottom::before {
+        min-width: 40vw;
+        max-width: 60vw;
+    }
+
+    .new-trip-tooltips--left :deep([data-tooltip].tooltip-bottom:before) {
+        min-width: 40vw;
+        max-width: 60vw;
+    }
 }
 
 .trip_schedule-toggle {
@@ -2925,5 +3147,180 @@ textarea.form-control {
 
 .trip-create--update {
     margin-top: 2em;
+}
+
+.trip-form-info-icon {
+    width: 1.1em;
+    height: 1.1em;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.trip-pref-cards__cell {
+    text-align: center;
+    margin-bottom: 0.35rem;
+}
+
+.trip-pref-card {
+    display: inline-block;
+    max-width: 100%;
+}
+
+.trip-pref-card__label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    margin: 0;
+    font-weight: normal;
+}
+
+.trip-pref-card__surface {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.15rem;
+    height: 3.15rem;
+    box-sizing: border-box;
+    border: 1px solid #cfd4d8;
+    border-radius: 4px;
+    background: #fffef8;
+    transition:
+        border-color 0.15s ease,
+        background-color 0.15s ease;
+}
+
+.trip-pref-card__input:checked + .trip-pref-card__label .trip-pref-card__surface {
+    border-color: var(--primary-color, #0070b8);
+    background: #fffef8;
+}
+
+.trip-pref-card__badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 1.125rem;
+    height: 1.125rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 2px;
+    box-sizing: border-box;
+    border: 1px solid #aeb6bd;
+    background: #fff;
+    color: #fff;
+    font-size: 0.65rem;
+    line-height: 1;
+    pointer-events: none;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.06);
+    transition:
+        border-color 0.15s ease,
+        background-color 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.trip-pref-card__badge .fa-check {
+    opacity: 0;
+    transform: scale(0.75);
+    transition:
+        opacity 0.12s ease,
+        transform 0.12s ease;
+}
+
+.trip-pref-card__input:checked + .trip-pref-card__label .trip-pref-card__badge {
+    border-color: var(--primary-color, #0070b8);
+    background: var(--primary-color, #0070b8);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.trip-pref-card__input:checked + .trip-pref-card__label .trip-pref-card__badge .fa-check {
+    opacity: 1;
+    transform: scale(1.12);
+}
+
+.trip-pref-card__icon {
+    display: block;
+    object-fit: contain;
+    width: 1.4rem;
+    height: 1.4rem;
+}
+
+.trip-pref-card__caption {
+    display: block;
+    margin-top: 0.35rem;
+    font-size: 0.8rem;
+    text-align: center;
+    color: var(--main-font-color, #555);
+    max-width: 7.5rem;
+    line-height: 1.25;
+}
+
+.trip-pref-card__input:focus-visible + .trip-pref-card__label .trip-pref-card__surface {
+    outline: 2px solid var(--primary-color, #0070b8);
+    outline-offset: 2px;
+}
+
+.trip-form-error-with-icon {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.35em;
+}
+
+.trip-form-warning-icon {
+    width: 1em;
+    height: 1em;
+    flex-shrink: 0;
+    margin-top: 0.15em;
+    object-fit: contain;
+}
+
+.trip-form-mobile-footer {
+    position: fixed;
+    left: 0;
+    right: 0;
+    z-index: 11;
+    bottom: calc(52px + env(safe-area-inset-bottom, 0px));
+    padding: 0.75rem 1rem;
+    background: var(--main-background, #fff);
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.trip-form-mobile-footer__return {
+    margin-bottom: 0.5rem;
+}
+
+.trip-form-mobile-footer__submit {
+    margin: 0 !important;
+    width: 100%;
+    min-width: 100%;
+}
+
+.trip-contribucion-recomendada-card {
+    background: #f0f9eb;
+    border: 1px solid var(--trip-mostly-free-color, #91b64c);
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    margin: 0.75rem 0 1rem;
+}
+
+.trip-contribucion-recomendada-card__main {
+    font-size: 1rem;
+    line-height: 1.35;
+    margin-bottom: 0.35rem;
+    color: #2d5016;
+}
+
+.trip-contribucion-recomendada-card__main strong {
+    font-weight: 700;
+}
+
+.trip-contribucion-recomendada-card__hint {
+    margin: 0;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: #5c6d3a;
+    opacity: 0.95;
 }
 </style>

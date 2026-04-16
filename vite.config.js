@@ -10,7 +10,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const target = process.env.TARGET_APP || 'default';
 
 /**
- * Branding / static/img filenames (e.g. carpoolear_logo.png).
+ * Branding assets: repo folder is static/img/; Vite publicDir copies contents to out root → URLs are {base}img/...
  * Movilizame `serve` sets TARGET_APP to "default" when unset; .env uses VITE_TARGET_APP for the real app.
  * Prefer an explicit non-default shell TARGET_APP (e.g. apalancar build) over VITE_TARGET_APP.
  */
@@ -22,8 +22,17 @@ function resolveBrandingTarget(env) {
     return env.VITE_TARGET_APP || env.TARGET_APP || 'default';
 }
 
-/** Vue Router + Vite asset base; '' or missing env → default /app/ for web (production). */
-function resolveRouteBase(raw, isWebBuild) {
+/**
+ * Vue Router + Vite asset base.
+ *
+ * Web production is hosted under /app/ (see .env.production).
+ * Capacitor (android/ios) serves assets from the web root → MUST use '' base,
+ * otherwise the app requests /app/* and everything 404s (white screen).
+ *
+ * If you ever need a non-empty base on mobile, set VITE_MOBILE_ROUTE_BASE explicitly.
+ */
+function resolveRouteBase(rawWeb, rawMobile, isWebBuild) {
+    const raw = isWebBuild ? rawWeb : rawMobile;
     const trimmed =
         raw !== undefined && raw !== null ? String(raw).trim() : '';
     if (trimmed !== '') {
@@ -45,12 +54,17 @@ export default defineConfig(({ mode }) => {
 
     const PLATFORM = process.env.PLATFORM || 'browser';
     const isWebBuild = PLATFORM === 'browser';
-    const routeBase = resolveRouteBase(env.VITE_ROUTE_BASE, isWebBuild);
+    const routeBase = resolveRouteBase(
+        env.VITE_ROUTE_BASE,
+        env.VITE_MOBILE_ROUTE_BASE,
+        isWebBuild,
+    );
     const brandingTarget = resolveBrandingTarget(env);
-    const historyMode =
-        env.VITE_HISTORY_MODE ||
-        env.HISTORY_MODE ||
-        (isWebBuild ? 'history' : 'hash');
+    // Web can use history mode; native should default to hash to avoid breaking relative assets
+    // when the URL path changes (e.g. /trips → img/... resolves to /trips/img/... and 404s).
+    const historyMode = isWebBuild
+        ? (env.VITE_HISTORY_MODE || env.HISTORY_MODE || 'history')
+        : (env.VITE_MOBILE_HISTORY_MODE || 'hash');
     // Must read VITE_API_URL — .env files use that name; env.API_URL was always undefined.
     const apiUrl =
         env.VITE_API_URL !== undefined && env.VITE_API_URL !== null
@@ -90,6 +104,16 @@ export default defineConfig(({ mode }) => {
             }
         },
         define: {
+            // IMPORTANT:
+            // App code uses `import.meta.env.*` (Vite env injection), not only `process.env`.
+            // In production `.env.production` sets VITE_ROUTE_BASE=/app/ and VITE_HISTORY_MODE=history
+            // for the hosted web build. For native builds we must override those at compile time,
+            // otherwise the app navigates under /app/* and all assets 404.
+            'import.meta.env.VITE_ROUTE_BASE': JSON.stringify(routeBase),
+            'import.meta.env.VITE_HISTORY_MODE': JSON.stringify(historyMode),
+            'import.meta.env.VITE_API_URL': JSON.stringify(apiUrl),
+            'import.meta.env.VITE_TARGET_APP': JSON.stringify(brandingTarget),
+
             'process.env': JSON.stringify({
                 NODE_ENV: nodeEnv,
                 ROUTE_BASE: routeBase,

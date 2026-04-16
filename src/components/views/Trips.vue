@@ -1,7 +1,12 @@
 <template>
     <div class="trips container" :class="!user ? 'not-logged' : ''"> 
         <template v-if="appConfig && appConfig.banner && appConfig.banner.url">
-            <a :href="appConfig.banner.url" target="_blank" class="banner">
+            <a
+                :href="bannerHref"
+                :target="bannerTarget"
+                class="banner"
+                @click.prevent="onBannerClick"
+            >
                 <img alt="" :src="appConfig.banner.image" />
             </a>
         </template>
@@ -337,6 +342,23 @@ export default {
             registerDonation: 'registerDonation'
         }),
         // setActionButton: 'actionbars/setHeaderButtons'
+        isInternalBannerUrl(url) {
+            return typeof url === 'string' && url.trim().startsWith('/');
+        },
+        onBannerClick() {
+            const url =
+                this.appConfig &&
+                this.appConfig.banner &&
+                this.appConfig.banner.url;
+            if (!url || typeof url !== 'string') return;
+            const normalized = url.trim();
+            if (!normalized) return;
+            if (this.isInternalBannerUrl(normalized)) {
+                this.$router.push(normalized);
+                return;
+            }
+            window.open(normalized, '_blank');
+        },
         isIOS() {
             return /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
         },
@@ -762,6 +784,16 @@ export default {
         },
         isIOSCapacitor() {
             return Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'ios';
+        },
+        bannerHref() {
+            const url =
+                this.appConfig &&
+                this.appConfig.banner &&
+                this.appConfig.banner.url;
+            return typeof url === 'string' ? url : '#';
+        },
+        bannerTarget() {
+            return this.isInternalBannerUrl(this.bannerHref) ? null : '_blank';
         }
     },
     components: {

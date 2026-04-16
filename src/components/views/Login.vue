@@ -54,6 +54,12 @@
                         ref="txt_user"
                         type="email"
                         id="txt_user"
+                        name="email"
+                        autocomplete="username"
+                        autocapitalize="none"
+                        autocorrect="off"
+                        spellcheck="false"
+                        inputmode="email"
                         v-model="email"
                         v-jump
                     />
@@ -65,6 +71,8 @@
                         ref="txt_password"
                         type="password"
                         id="txt_password"
+                        name="password"
+                        autocomplete="current-password"
                         v-jump
                         v-model="password"
                     />
