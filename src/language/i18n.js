@@ -125,7 +125,7 @@ const messages = {
         cuposNecesarios: 'Cuantos cupos necesitas',
         comentarioPasajeros: 'Detalles extra del viaje',
         placeholderComentarioPasajeros:
-            'Ejemplo:\nPunto/Zona/Barrio de referencia de partida y llegada del viaje\nTamaño de mochila/bolso\nContribución de combustible y peaje\nParadas Intermedias\nHorario Flexible',
+            'Ejemplo:\nPunto/Zona/Barrio de referencia de partida y llegada del viaje\nTamaño de mochila/bolso\nParadas Intermedias\nHorario Flexible',
         privacidadViaje: 'Privacidad del viaje',
         publico: 'Público',
         amigosamigos: 'Amigos de Amigos',
@@ -790,9 +790,9 @@ const messages = {
         compartirPlataforma:
             'Carpoolear: plataforma para compartir viajes en autos',
         estoyEnMovil: 'Estoy en móvil',
-        contribucionPorPersona: 'Contribución por persona',
+        contribucionPorPersona: 'Contribución combustible y peaje por persona',
         porPersona: 'por persona',
-        contribucionRecomendada: 'Contribución <br/> recomendada',
+        contribucionRecomendada: 'Contribución promedio para este tramo',
         calculadoEnBaseNafta:
             'Calculado en base a nafta premium, consumo promedio alto, peajes y Sellado de Viaje incluídos (si aplica)',
         viajesDeConductoresPlataforma: 'Viajes de conductores en la plataforma',
@@ -1095,9 +1095,9 @@ const messages = {
             'Ajustar en función de rendimiento del auto L cada 100km, combustible cargado y peajes del tramo. Cualquier duda siempre llenar el tanque al salir y nuevamente al llenarlo al llegar, la diferencia será el combustible gastado en viaje.',
         contribucionRecomendadaLabel: 'Contribución recomendada',
         contribucionRecomendadaCardDescripcionSinSellado:
-            'Calculado en base a nafta premium (con consumo promedio alto) y peajes.',
+            'La contribución por persona considerando rendimiento de un auto promedio del parque automotor argentino (8L cada 100km en ruta), combustible premium y peajes',
         contribucionRecomendadaCardDescripcionConSellado:
-            'Calculado en base a nafta premium (con consumo promedio alto), sellado de viaje y peajes.',
+            'La contribución por persona considerando rendimiento de un auto promedio del parque automotor argentino (8L cada 100km en ruta), combustible premium, sellado de viaje y peajes',
         calculadoEnBaseNaftaTooltip:
             'Calculado en base a nafta premium, consumo promedio alto, peajes y Sellado de Viaje incluídos (si aplica)',
         comentario: 'Comentario',
@@ -1227,7 +1227,7 @@ const messages = {
         cuposNecesarios: 'Cuantos cupos necesitas',
         comentarioPasajeros: 'Detalles extra del viaje',
         placeholderComentarioPasajeros:
-            'Ejemplo:\nPunto/Zona/Barrio de referencia de partida y llegada del viaje\nTamaño de mochila/bolso\nContribución de combustible y peaje\nParadas Intermedias\nHorario Flexible',
+            'Ejemplo:\nPunto/Zona/Barrio de referencia de partida y llegada del viaje\nTamaño de mochila/bolso\nParadas Intermedias\nHorario Flexible',
         privacidadViaje: 'Privacidad del viaje',
         publico: 'Público',
         amigosamigos: 'Amigos de Amigos',
@@ -1692,9 +1692,9 @@ const messages = {
         compartirPlataforma:
             'Apalan-car: plataforma para compartir viajes en autos',
         estoyEnMovil: 'Estoy en móvil',
-        contribucionPorPersona: 'Contribución por persona',
+        contribucionPorPersona: 'Contribución combustible y peaje por persona',
         porPersona: 'por persona',
-        contribucionRecomendada: 'Contribución <br/> recomendada',
+        contribucionRecomendada: 'Contribución promedio para este tramo',
         calculadoEnBaseNafta:
             'Calculado en base a nafta premium, consumo promedio alto, peajes y Sellado de Viaje incluídos (si aplica)',
         viajesDeConductoresPlataforma: 'Viajes de conductores en la plataforma',
@@ -2111,7 +2111,7 @@ const messages = {
         cuposNecesarios: 'How many seats do you need',
         comentarioPasajeros: 'Extra trip details',
         placeholderComentarioPasajeros:
-            'Example:\nReference point/zone/neighborhood for departure and arrival\nBackpack/bag size\nFuel and toll contribution\nIntermediate stops\nFlexible schedule',
+            'Example:\nReference point/zone/neighborhood for departure and arrival\nBackpack/bag size\nIntermediate stops\nFlexible schedule',
         privacidadViaje: 'Trip privacy',
         publico: 'Public',
         amigosamigos: 'Friends of Friends',
@@ -2764,9 +2764,9 @@ const messages = {
         publicarUnViajeCompartir: 'Post a trip to share on Carpoolear',
         compartirPlataforma: 'Carpoolear: platform to share car rides',
         estoyEnMovil: "I'm on mobile",
-        contribucionPorPersona: 'Contribution per person',
+        contribucionPorPersona: 'Fuel and toll contribution per person',
         porPersona: 'per person',
-        contribucionRecomendada: 'Recommended <br/> contribution',
+        contribucionRecomendada: 'Average contribution for this route segment',
         calculadoEnBaseNafta:
             'Calculated based on premium gasoline, high average consumption, tolls and Trip Seal included (if applicable)',
         viajesDeConductoresPlataforma: 'Driver trips on the platform',
@@ -3062,9 +3062,9 @@ const messages = {
             "Adjust based on the car's fuel consumption (L per 100 km), fuel purchased and tolls for the route. If in doubt, always fill the tank when you leave and again when you fill up on arrival; the difference is the fuel used on the trip.",
         contribucionRecomendadaLabel: 'Recommended contribution',
         contribucionRecomendadaCardDescripcionSinSellado:
-            'Calculated based on premium gasoline (with high average consumption) and tolls.',
+            'Per-person contribution based on fuel efficiency of a typical vehicle in the Argentine fleet (8 L per 100 km on highways), premium fuel, and tolls.',
         contribucionRecomendadaCardDescripcionConSellado:
-            'Calculated based on premium gasoline (with high average consumption), Trip Seal and tolls.',
+            'Per-person contribution based on fuel efficiency of a typical vehicle in the Argentine fleet (8 L per 100 km on highways), premium fuel, Trip Seal, and tolls.',
         calculadoEnBaseNaftaTooltip:
             'Calculated based on premium gasoline, high average consumption, tolls and Trip Seal included (if applicable)',
         comentario: 'Comment',
