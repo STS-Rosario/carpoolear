@@ -384,6 +384,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { appLocaleToRoutingLanguage } from '../../main';
 import { leafletOsrmServiceUrl } from '../../utils/osrmRouting';
+import { ensureLeafletDefaultIconImages, tripWaypointIcon } from '../../utils/leafletIcons';
 import 'leaflet-routing-machine';
 
 export default {
@@ -745,6 +746,8 @@ export default {
                     serviceUrl: osrmServiceUrl
                 }
             );
+            ensureLeafletDefaultIconImages();
+            const waypointCount = points.length;
             this._tripRoutingControl = L.Routing.control({
                 router: L.Routing.osrmv1({
                     serviceUrl: osrmServiceUrl,
@@ -752,7 +755,15 @@ export default {
                     suppressDemoServerWarning: true
                 }),
                 waypoints: points,
-                language: routingLang
+                language: routingLang,
+                draggableWaypoints: false,
+                addWaypoints: false,
+                createMarker(i, wp) {
+                    return L.marker(wp.latLng, {
+                        draggable: false,
+                        icon: tripWaypointIcon(i, waypointCount)
+                    });
+                }
             });
             this._tripRoutingControl.addTo(map);
             map.invalidateSize();
