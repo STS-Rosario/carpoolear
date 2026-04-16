@@ -120,8 +120,13 @@
                     ref="txt_email"
                     name="txt_email"
                     maxlength="40"
-                    type="text"
+                    type="email"
                     id="txt_email"
+                    autocomplete="email"
+                    autocapitalize="none"
+                    autocorrect="off"
+                    spellcheck="false"
+                    inputmode="email"
                     v-model="email"
                     :class="{ 'has-error': emailError.state }"
                 />
@@ -173,6 +178,7 @@
                     maxlength="40"
                     type="password"
                     id="txt_password"
+                    autocomplete="new-password"
                     v-model="password"
                     :class="{ 'has-error': passwordError.state }"
                 />
@@ -195,6 +201,7 @@
                     maxlength="40"
                     type="password"
                     id="txt_password_confirmation"
+                    autocomplete="new-password"
                     v-model="passwordConfirmation"
                     :class="{ 'has-error': passwordError.state }"
                 />

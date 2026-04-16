@@ -16,7 +16,18 @@
                 {{ $t('recuperarContraseña') }}
             </h1>
             <label for="txt_email">{{ $t('email') }}</label>
-            <input v-jump type="text" id="txt_email" v-model="email" />
+            <input
+                v-jump
+                type="email"
+                id="txt_email"
+                name="email"
+                autocomplete="username"
+                autocapitalize="none"
+                autocorrect="off"
+                spellcheck="false"
+                inputmode="email"
+                v-model="email"
+            />
             <span class="error" v-if="error">{{ error }}</span>
             <button
                 v-jump
@@ -34,13 +45,19 @@
                 v-jump
                 type="password"
                 id="txt_password"
+                name="password"
+                autocomplete="new-password"
                 v-model="password"
             />
-            <label for="txt_password">{{ $t('repetirContrasena') }}</label>
+            <label for="txt_password_confirmation">{{
+                $t('repetirContrasena')
+            }}</label>
             <input
                 v-jump
                 type="password"
-                id="txt_password"
+                id="txt_password_confirmation"
+                name="password_confirmation"
+                autocomplete="new-password"
                 v-model="password_confirmation"
             />
             <span class="error" v-if="error">{{ error }}</span>
