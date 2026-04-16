@@ -104,9 +104,11 @@ const messages = {
         comoConductor: 'Como conductor',
         comoPasajero: 'Como pasajero',
         meComprometo: 'Me comprometo a no lucrar con el viaje',
+        meComprometoLucroTooltip:
+            'Al pedir una contribución por encima de la máxima, es posible que el viaje sea considerado con fin de lucro y por lo tanto un transporte ilegal de pasajeros, pudiendo ser invalidado el seguro particular automotor y la cobertura contra  terceros asociada. Tengamos un buen viaje cuidándonos entre todos :D',
         viajeColaborativoLead: 'Este es un viaje colaborativo.',
         contribucionMaxima:
-            'La contribución se calcula únicamente para cubrir combustible y peajes, divididos entre quienes viajan. Si alguien lo desea, pueden revisarse y dividirse los gastos con los comprobantes en mano antes de realizar el viaje.',
+            'La contribución máxima es gastos de combustible + peaje dividido por la cantidad de asientos del auto. Durante la coordinación previa al viaje, cualquier persona puede indicar que se haga la división con tickets de combustible y peaje en mano.',
         contribucionMaximaPista:
             'Al pedir una contribución por encima de la máxima, es posible que el viaje sea considerado con fin de lucro y por lo tanto un transporte ilegal de pasajeros, pudiendo ser invalidado el seguro particular automotor y la cobertura contra terceros asociada. Tengamos un buen viaje cuidándonos entre todos :-D',
         origenOdestino: 'Origen o destino fuera de',
@@ -320,7 +322,8 @@ const messages = {
         identidadModalValidar: 'Verificar cuenta',
         identidadModalMasTarde: 'Más tarde',
         identityValidationPageIntro:
-            'Para mantener la seguridad de la comunidad, necesitamos confirmar tu cuenta.',
+            'Para mantener la seguridad de la comunidad, necesitamos verificar tu cuenta.',
+        identityValidationPageIntroEstoPermite: 'Esto permite',
         identityValidationPageBullet1: 'Evitar perfiles falsos.',
         identityValidationPageBullet2:
             'Asegurar que cada persona tenga una sola cuenta.',
@@ -1078,7 +1081,7 @@ const messages = {
         ocupados: 'Ocupados',
         activar: 'Activar',
         ocultar: 'Ocultar',
-        precioMaximoExcedido: 'El precio máximo ha sido excedido',
+        precioMaximoExcedido: 'La contribución máxima ha sido excedida',
         unaVez: 'Una vez',
         programaSemanal: 'Semanal',
         faltaFechaOProgramaSemanal:
@@ -1203,9 +1206,11 @@ const messages = {
         comoConductor: 'Como conductor',
         comoPasajero: 'Como pasajero',
         meComprometo: 'Me comprometo a no lucrar con el viaje',
+        meComprometoLucroTooltip:
+            'Al pedir una contribución por encima de la máxima, es posible que el viaje sea considerado con fin de lucro y por lo tanto un transporte ilegal de pasajeros, pudiendo ser invalidado el seguro particular automotor y la cobertura contra  terceros asociada. Tengamos un buen viaje cuidándonos entre todos :D',
         viajeColaborativoLead: 'Este es un viaje colaborativo.',
         contribucionMaxima:
-            'La contribución se calcula únicamente para cubrir combustible y peajes, divididos entre quienes viajan. Si alguien lo desea, pueden revisarse y dividirse los gastos con los comprobantes en mano antes de realizar el viaje.',
+            'La contribución máxima es gastos de combustible + peaje dividido por la cantidad de asientos del auto. Durante la coordinación previa al viaje, cualquier persona puede indicar que se haga la división con tickets de combustible y peaje en mano.',
         contribucionMaximaPista:
             'Al pedir una contribución por encima de la máxima, es posible que el viaje sea considerado con fin de lucro y por lo tanto un transporte ilegal de pasajeros, pudiendo ser invalidado el seguro particular automotor y la cobertura contra terceros asociada. Tengamos un buen viaje cuidándonos entre todos :-D',
         origenOdestino: 'Origen o destino fuera de',
@@ -1394,7 +1399,8 @@ const messages = {
         identidadModalValidar: 'Verificar cuenta',
         identidadModalMasTarde: 'Más tarde',
         identityValidationPageIntro:
-            'Para mantener la seguridad de la comunidad, necesitamos confirmar tu cuenta.',
+            'Para mantener la seguridad de la comunidad, necesitamos verificar tu cuenta.',
+        identityValidationPageIntroEstoPermite: 'Esto permite',
         identityValidationPageBullet1: 'Evitar perfiles falsos.',
         identityValidationPageBullet2:
             'Asegurar que cada persona tenga una sola cuenta.',
@@ -2084,9 +2090,11 @@ const messages = {
         comoConductor: 'As a driver',
         comoPasajero: 'As a passenger',
         meComprometo: 'I commit to not profiting from the trip',
+        meComprometoLucroTooltip:
+            'By requesting a contribution above the maximum, the trip may be considered for-profit and therefore illegal passenger transport, potentially invalidating private car insurance and associated third-party coverage. Let’s have a good trip by taking care of each other :D',
         viajeColaborativoLead: 'This is a collaborative trip.',
         contribucionMaxima:
-            'The contribution is calculated solely to cover fuel and tolls, split among those traveling. If anyone wishes, expenses can be reviewed and split using receipts in hand before the trip.',
+            'The maximum contribution is fuel costs plus tolls divided by the number of seats in the car. During coordination before the trip, anyone may ask that the split be done with fuel and toll receipts in hand.',
         contribucionMaximaPista:
             "By requesting a contribution above the maximum, the trip may be considered for-profit and therefore illegal passenger transport, potentially invalidating private car insurance and associated third-party coverage. Let's have a good trip by taking care of each other :-D",
         origenOdestino: 'Departure or destination outside of',
@@ -2267,6 +2275,7 @@ const messages = {
             'Verify your account with Mercado Pago (RENAPER).',
         identityValidationPageIntro:
             'To keep the community safe, we need to confirm your account.',
+        identityValidationPageIntroEstoPermite: 'This allows',
         identityValidationPageBullet1: 'Reduce fake profiles.',
         identityValidationPageBullet2:
             'Ensure each person has only one account.',
@@ -3039,7 +3048,7 @@ const messages = {
         ocupados: 'Occupied',
         activar: 'Activate',
         ocultar: 'Hide',
-        precioMaximoExcedido: 'Maximum price exceeded',
+        precioMaximoExcedido: 'Maximum contribution exceeded',
         unaVez: 'Once',
         programaSemanal: 'Weekly',
         faltaFechaOProgramaSemanal:
