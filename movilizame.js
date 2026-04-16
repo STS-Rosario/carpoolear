@@ -55,6 +55,63 @@ function showError (code, stderr, stdout) {
     console.log('STDOUT', stdout);
 }
 
+/**
+ * Cordova config.xml lists res/icon/* and res/screen/* paths, but those folders are often
+ * not committed under projects/<target>/cordova. `cordova prepare` fails if any src is missing
+ * (e.g. iOS: "Source path does not exist: res/icon/ios/icon-1024.png").
+ * Fill missing files from static/img so prepare can complete; replace with proper artwork later.
+ */
+function ensureCordovaPlaceholderResources (distCordovaRoot) {
+    const configPath = path.join(distCordovaRoot, 'config.xml');
+    if (!fs.existsSync(configPath)) {
+        return;
+    }
+    const xml = fs.readFileSync(configPath, 'utf8');
+    const re = /src="(res\/(?:icon|screen)\/[^"]+)"/g;
+    const relPaths = new Set();
+    let m;
+    while ((m = re.exec(xml)) !== null) {
+        relPaths.add(m[1]);
+    }
+    if (relPaths.size === 0) {
+        return;
+    }
+    const iconMaster = path.join(__dirname, 'static', 'img', 'icon-1024.png');
+    const splashCandidates = [
+        path.join(__dirname, 'static', 'img', 'splash-ios-640x1136.png'),
+        path.join(__dirname, 'static', 'img', 'splash-android-1280x1920.png'),
+        path.join(__dirname, 'static', 'img', 'splash-android-720x1280.png')
+    ];
+    let splashMaster = null;
+    for (let i = 0; i < splashCandidates.length; i += 1) {
+        if (fs.existsSync(splashCandidates[i])) {
+            splashMaster = splashCandidates[i];
+            break;
+        }
+    }
+    let created = 0;
+    relPaths.forEach((rel) => {
+        const dest = path.join(distCordovaRoot, rel);
+        if (fs.existsSync(dest)) {
+            return;
+        }
+        let src = null;
+        if (rel.indexOf('/icon/') !== -1 && fs.existsSync(iconMaster)) {
+            src = iconMaster;
+        } else if (rel.indexOf('/screen/') !== -1 && splashMaster) {
+            src = splashMaster;
+        }
+        if (src) {
+            fs.mkdirSync(path.dirname(dest), { recursive: true });
+            fs.copyFileSync(src, dest);
+            created += 1;
+        }
+    });
+    if (created > 0) {
+        console.log(`Cordova placeholder resources: created ${created} missing file(s) under res/.`);
+    }
+}
+
 function preBuildAndCheckPlatform (callback) {
     const folder = `dist/${TARGET}/${NODE_ENV}`;
     const folderCordovaResFiles = `dist/${TARGET}/${NODE_ENV}/res`;
@@ -68,6 +125,7 @@ function preBuildAndCheckPlatform (callback) {
             console.error(err);
         } else {
             console.log('Copyng cordova assets.');
+            ensureCordovaPlaceholderResources(path.join(__dirname, folder));
             buildAndCheckPlatform(callback);
         }
     });
