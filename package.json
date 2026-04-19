@@ -60,7 +60,7 @@
     "chart.js": "^3.9.1",
     "core-js": "^3.49.0",
     "dayjs": "^1.11.19",
-    "dompurify": "^3.3.2",
+    "dompurify": "^3.4.0",
     "firebase": "^9.19.1",
     "font-awesome": "^4.7.0",
     "leaflet": "^1.9.4",
