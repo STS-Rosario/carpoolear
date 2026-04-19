@@ -23,6 +23,8 @@ www/*
 test-results/
 playwright-report/
 playwright/.cache/
+# Local macOS screenshot baselines (CI commits Linux snapshots)
+**/*-snapshots/**/*-darwin.png
 
 # Cursor (local debug session NDJSON logs)
 .cursor/debug-*.log

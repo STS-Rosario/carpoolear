@@ -519,8 +519,14 @@ async function freezeClock(page) {
  * Registered FIRST so specific mocks (registered later) take priority.
  * Also blocks external requests (map tiles, fonts) to prevent non-determinism.
  */
+function isBackendApiUrl(url) {
+  const pathname = url instanceof URL ? url.pathname : new URL(url).pathname;
+  // Must start with /api/ so we do not match Vite modules under e.g. /src/services/api/*.js
+  return pathname.startsWith('/api/');
+}
+
 async function setupCatchAllMock(page) {
-  await page.route(/\/api\//, (route) => {
+  await page.route(isBackendApiUrl, (route) => {
     route.fulfill({
       status: 200,
       contentType: 'application/json',
@@ -528,10 +534,21 @@ async function setupCatchAllMock(page) {
     });
   });
 
-  // Block map tile and external requests to prevent non-deterministic rendering
-  await page.route(/tile\.openstreetmap|unpkg\.com\/leaflet|\.tile\./, (route) => {
+  // Block OSM raster tiles only (do not abort Leaflet CSS/JS from unpkg or node_modules).
+  await page.route(shouldAbortOsmTileRequest, (route) => {
     route.abort();
   });
+}
+
+function shouldAbortOsmTileRequest(url) {
+  const u = url instanceof URL ? url : new URL(url);
+  const h = u.hostname.toLowerCase();
+  const isOsmTileHost =
+    h === 'tile.openstreetmap.org' || /\.tile\.openstreetmap\.org$/.test(h);
+  if (!isOsmTileHost) {
+    return false;
+  }
+  return /\/\d+\/\d+\/\d+/.test(u.pathname);
 }
 
 /**
@@ -612,6 +629,20 @@ async function setupAuthState(page, user = MOCK_USER) {
       status: 200,
       contentType: 'application/json',
       body: JSON.stringify({ data: user }),
+    });
+  });
+
+  await page.route('**/api/users/sellado-viaje', (route) => {
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        data: {
+          user_over_free_limit: false,
+          free_trips_amount: 99,
+          trips_created_by_user_amount: 0,
+        },
+      }),
     });
   });
 

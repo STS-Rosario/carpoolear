@@ -28,6 +28,8 @@
     "test:e2e:screenshots": "npx playwright test --project=frontend e2e-frontend/screenshots.spec.js",
     "test:e2e:screenshots:update": "npx playwright test --project=frontend e2e-frontend/screenshots.spec.js --update-snapshots",
     "test:frontend": "npx playwright test --project=frontend",
+    "test:frontend:update-snapshots": "npx playwright test --project=frontend e2e-frontend/screenshots.spec.js --update-snapshots",
+    "test:frontend:screenshots:debug": "npx playwright test --project=frontend e2e-frontend/screenshots.spec.js --workers=1 --headed --max-failures=1",
     "test:frontend:ui": "npx playwright test --project=frontend --ui",
     "test:unit": "vitest",
     "fix:capacitor:cordova-gradle": "node scripts/fix-capacitor-cordova-gradle.js"

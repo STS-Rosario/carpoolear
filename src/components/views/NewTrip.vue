@@ -178,6 +178,18 @@
                                     <strong class="trip_terms--lucrar-card__title">{{
                                         $t('meComprometo')
                                     }}</strong>
+                                    <span
+                                        class="tooltip-bottom trip_terms--lucrar-card__tooltip"
+                                        role="button"
+                                        tabindex="0"
+                                        :data-tooltip="$t('meComprometoLucroTooltip')"
+                                    >
+                                        <img
+                                            :src="tripStaticImg('icon-info.svg')"
+                                            alt=""
+                                            class="trip-form-info-icon"
+                                        />
+                                    </span>
                                 </div>
                                 <p class="trip_terms--lucrar-card__lead">
                                     {{ $t('viajeColaborativoLead') }}
@@ -2974,12 +2986,19 @@ hr {
 
 .trip_terms--lucrar-card__title-row {
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
+    flex-wrap: nowrap;
+    align-items: flex-start;
     gap: 0.35rem;
 }
 
+.trip_terms--lucrar-card__tooltip {
+    flex-shrink: 0;
+    margin-top: 0.15em;
+}
+
 .trip_terms--lucrar-card__title {
+    flex: 1 1 0;
+    min-width: 0;
     font-weight: 700;
     font-size: 1.125rem;
     line-height: 1.35;
@@ -3089,6 +3108,13 @@ textarea.form-control {
     right: 10px;
     margin-left: 0;
     transform: translate(0, 20px);
+}
+
+/* Long legal copy next to “Me comprometo…” */
+.new-trip-tooltips--left
+    :deep(.trip_terms--lucrar-card__tooltip[data-tooltip].tooltip-bottom:before) {
+    min-width: min(28rem, 92vw);
+    max-width: min(36rem, 92vw);
 }
 
 .new-trip-tooltips--left :deep([data-tooltip].tooltip-bottom:hover:before),
