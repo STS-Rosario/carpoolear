@@ -1082,6 +1082,8 @@ const messages = {
         activar: 'Activar',
         ocultar: 'Ocultar',
         precioMaximoExcedido: 'La contribución máxima ha sido excedida',
+        contribucionPorPersonaRequerida:
+            'Tenés que completar la contribución por persona.',
         unaVez: 'Una vez',
         programaSemanal: 'Semanal',
         faltaFechaOProgramaSemanal:
@@ -3049,6 +3051,8 @@ const messages = {
         activar: 'Activate',
         ocultar: 'Hide',
         precioMaximoExcedido: 'Maximum contribution exceeded',
+        contribucionPorPersonaRequerida:
+            'You must enter the per-person contribution.',
         unaVez: 'Once',
         programaSemanal: 'Weekly',
         faltaFechaOProgramaSemanal:

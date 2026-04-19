@@ -528,6 +528,7 @@
                                     id="price"
                                     :class="{ 'has-error': priceError.state }"
                                     :placeholder="price"
+                                    @input="onOutboundPriceFieldInput"
                                 />
                                 <span
                                     class="error trip-form-error-with-icon"
@@ -585,7 +586,7 @@
                                     :class="{ 'has-error': priceError.state }"
                                     :placeholder="price"
                                     :max="maximum_seat_price_cents / 100"
-                                    @input="validatePrice"
+                                    @input="onOutboundPriceFieldInput"
                                 />
                                 <span
                                     class="error trip-form-error-with-icon"
@@ -1206,6 +1207,7 @@
                                     id="return-price"
                                     :class="{ 'has-error': returnPriceError.state }"
                                     :placeholder="returnPrice"
+                                    @input="onReturnPriceFieldInput"
                                 />
                                 <span
                                     class="error trip-form-error-with-icon"
@@ -1246,7 +1248,7 @@
                                     }"
                                     :placeholder="price"
                                     :max="maximum_seat_price_cents / 100"
-                                    @input="validatePrice"
+                                    @input="onReturnPriceFieldInput"
                                 />
                                 <span
                                     class="error trip-form-error-with-icon"
@@ -1835,7 +1837,7 @@ export default {
             date: '',
             dateAnswer: this.date,
             time: '12:00',
-            price: 0,
+            price: '',
             needs_to_pay_for_next_trip: false,
             maximum_trip_price_cents: 0,
             recommended_trip_price_cents: 0,
@@ -1848,7 +1850,7 @@ export default {
             free_trips_amount: 0,
             trips_created_by_user_amount: 0,
             route_needs_payment: false,
-            returnPrice: 0,
+            returnPrice: '',
             duration: 0,
             passengers: 0,
             trip: {
@@ -2237,6 +2239,49 @@ export default {
                 });
         },
 
+        parseSeatPriceInput(value) {
+            if (value === '' || value === null || value === undefined) {
+                return null;
+            }
+            if (typeof value === 'string' && value.trim() === '') {
+                return null;
+            }
+            const n = Number(value);
+            return Number.isFinite(n) ? n : null;
+        },
+
+        seatPriceCentsForApi(raw) {
+            const p = this.parseSeatPriceInput(raw);
+            if (p === null) {
+                return 0;
+            }
+            return Math.round(p * 100);
+        },
+
+        onOutboundPriceFieldInput() {
+            this.validatePrice();
+            const p = this.parseSeatPriceInput(this.price);
+            if (
+                p !== null &&
+                this.priceError.message ===
+                    this.$t('contribucionPorPersonaRequerida')
+            ) {
+                this.priceError.state = false;
+            }
+        },
+
+        onReturnPriceFieldInput() {
+            this.validateReturnPrice();
+            const p = this.parseSeatPriceInput(this.returnPrice);
+            if (
+                p !== null &&
+                this.returnPriceError.message ===
+                    this.$t('contribucionPorPersonaRequerida')
+            ) {
+                this.returnPriceError.state = false;
+            }
+        },
+
         validate() {
             let globalError = false;
             let foreignPoints = 0;
@@ -2396,15 +2441,26 @@ export default {
                 }
             }
 
-            if (this.config.module_max_price_enabled
-                && this.trip.is_passenger == 0) {
-                if (this.price > this.maximum_seat_price_cents / 100) {
+            if (this.trip.is_passenger == 0 && this.config.module_seat_price_enabled) {
+                const seatP = this.parseSeatPriceInput(this.price);
+                if (seatP === null) {
+                    globalError = true;
+                    this.priceError.state = true;
+                    this.priceError.message = this.$t(
+                        'contribucionPorPersonaRequerida'
+                    );
+                } else if (
+                    this.config.module_max_price_enabled &&
+                    seatP > this.maximum_seat_price_cents / 100
+                ) {
                     globalError = true;
                     this.priceError.state = true;
                     this.priceError.message = this.$t('precioMaximoExcedido');
                 } else {
                     this.priceError.state = false;
                 }
+            } else {
+                this.priceError.state = false;
             }
 
             if (this.showReturnTrip) {
@@ -2521,6 +2577,43 @@ export default {
                         estado: 'error'
                     });
                 }
+
+                if (
+                    this.trip.is_passenger == 0 &&
+                    this.config.module_seat_price_enabled &&
+                    (!this.config.module_max_price_enabled ||
+                        this.config.module_trip_creation_payment_enabled)
+                ) {
+                    const returnSeatP = this.parseSeatPriceInput(
+                        this.returnPrice
+                    );
+                    if (returnSeatP === null) {
+                        globalError = true;
+                        this.returnPriceError.state = true;
+                        this.returnPriceError.message = this.$t(
+                            'contribucionPorPersonaRequerida'
+                        );
+                    } else if (
+                        this.config.module_trip_creation_payment_enabled &&
+                        this.config.module_max_price_enabled &&
+                        returnSeatP >
+                            this.maximum_return_seat_price_cents / 100
+                    ) {
+                        globalError = true;
+                        this.returnPriceError.state = true;
+                        this.returnPriceError.message = this.$t(
+                            'precioMaximoExcedido'
+                        );
+                    } else {
+                        this.returnPriceError.state = false;
+                    }
+                } else {
+                    this.returnPriceError.state = false;
+                }
+            }
+
+            if (!this.showReturnTrip) {
+                this.returnPriceError.state = false;
             }
 
             return globalError;
@@ -2579,7 +2672,7 @@ export default {
                 trip.is_passenger = trip.is_passenger ? 1 : 0;
                 this.normalizeAllowFlagsForApi(trip);
 
-                trip.seat_price_cents = this.price * 100;
+                trip.seat_price_cents = this.seatPriceCentsForApi(this.price);
                 
                 if (trip.is_passenger === 1) {
                     trip.no_lucrar = 1;
@@ -2601,7 +2694,8 @@ export default {
                                     JSON.stringify(otherTrip)
                                 );
                                 this.normalizeAllowFlagsForApi(otherTrip);
-                                otherTrip.seat_price_cents = this.returnPrice * 100;
+                                otherTrip.seat_price_cents =
+                                    this.seatPriceCentsForApi(this.returnPrice);
                                 this.createTrip(otherTrip).then((ot) => {
                                     return resolve(ot);
                                 });
@@ -2651,7 +2745,7 @@ export default {
                 this.trip.id = this.updatingTrip.id;
                 let trip = JSON.parse(JSON.stringify(this.trip));
                 this.normalizeAllowFlagsForApi(trip);
-                trip.seat_price_cents = Math.round(this.price * 100);
+                trip.seat_price_cents = this.seatPriceCentsForApi(this.price);
                 this.updateTrip(trip)
                     .then(() => {
                         this.saving = false;
@@ -2858,17 +2952,24 @@ export default {
             }
         },
         validatePrice() {
-            if (this.price > this.maximum_seat_price_cents / 100) {
+            const p = this.parseSeatPriceInput(this.price);
+            if (
+                p !== null &&
+                this.config.module_max_price_enabled &&
+                p > this.maximum_seat_price_cents / 100
+            ) {
                 this.priceError.state = true;
                 this.priceError.message = this.$t('precioMaximoExcedido');
-            } else {
+            } else if (
+                this.priceError.message === this.$t('precioMaximoExcedido')
+            ) {
                 this.priceError.state = false;
             }
-
-            if (this.returnPrice > this.maximum_seat_price_cents / 100) {
-                this.priceError.state = true;
-                this.priceError.message = this.$t('precioMaximoExcedido');
-            } else {
+            if (
+                p !== null &&
+                this.priceError.message ===
+                    this.$t('contribucionPorPersonaRequerida')
+            ) {
                 this.priceError.state = false;
             }
         },
@@ -2884,10 +2985,24 @@ export default {
             this.validateReturnPrice();
         },
         validateReturnPrice() {
-            if (this.returnPrice > this.maximum_return_seat_price_cents / 100) {
+            const p = this.parseSeatPriceInput(this.returnPrice);
+            if (
+                p !== null &&
+                p > this.maximum_return_seat_price_cents / 100
+            ) {
                 this.returnPriceError.state = true;
                 this.returnPriceError.message = this.$t('precioMaximoExcedido');
-            } else {
+            } else if (
+                this.returnPriceError.message ===
+                this.$t('precioMaximoExcedido')
+            ) {
+                this.returnPriceError.state = false;
+            }
+            if (
+                p !== null &&
+                this.returnPriceError.message ===
+                    this.$t('contribucionPorPersonaRequerida')
+            ) {
                 this.returnPriceError.state = false;
             }
         },
