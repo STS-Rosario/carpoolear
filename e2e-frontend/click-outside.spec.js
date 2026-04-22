@@ -1,4 +1,9 @@
 const { test, expect } = require('@playwright/test');
+const {
+  setupCatchAllMock,
+  setupCommonMocks,
+  waitForPageReady,
+} = require('./shared/mocks');
 
 /**
  * Test to reproduce the clickOutside directive error in Vue 3 compat mode.
@@ -12,40 +17,8 @@ const { test, expect } = require('@playwright/test');
  */
 test.describe('clickOutside directive', () => {
   test.beforeEach(async ({ page }) => {
-    // Mock the API calls so we don't need a backend
-    await page.route('**/api/app/config', route =>
-      route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({
-          module_trip_creation_payment_enabled: false,
-          onboarding: [],
-        }),
-      })
-    );
-
-    await page.route('**/api/trips/search*', route =>
-      route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({
-          data: [],
-          total: 0,
-          per_page: 20,
-          current_page: 1,
-          last_page: 1,
-        }),
-      })
-    );
-
-    // Catch-all for other API calls
-    await page.route('**/api/**', route =>
-      route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({}),
-      })
-    );
+    await setupCatchAllMock(page);
+    await setupCommonMocks(page);
   });
 
   test('clicking outside autocomplete should not throw TypeError', async ({ page }) => {
@@ -56,7 +29,7 @@ test.describe('clickOutside directive', () => {
 
     // Go to trips page which has the search Autocomplete component
     await page.goto('/trips');
-    await page.waitForLoadState('networkidle');
+    await waitForPageReady(page);
 
     // Remove webpack dev server overlay that intercepts pointer events
     await page.evaluate(() => {
