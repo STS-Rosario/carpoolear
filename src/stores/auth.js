@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { AuthApi, UserApi } from '../services/api';
 import cache, { keys } from '../services/cache';
 import localConfig from '../../config/conf';
+import { completeSessionIfRegistrationReturnsToken } from '../utils/registrationAutoLogin';
 
 // Lazy-load router to avoid circular dependency (stores → router → routes → components → stores)
 let _router;
@@ -155,8 +156,11 @@ export const useAuthStore = defineStore('auth', {
         register(data) {
             return userApi
                 .register(data)
-                .then((data) => {
-                    return Promise.resolve(data);
+                .then(async (res) => {
+                    await completeSessionIfRegistrationReturnsToken(res, (token) =>
+                        this.onLoggin(token)
+                    );
+                    return Promise.resolve(res);
                 })
                 .catch((err) => {
                     return Promise.reject(err);
