@@ -20,6 +20,7 @@
     "disable_user_hints": false,
     "login_custom_header": false,
     "module_trip_seats_payment": false,
+    "module_conversation_average_delay": false,
     "module_validated_drivers": false,
     "trip_stars": false,
     "api_price": false,
