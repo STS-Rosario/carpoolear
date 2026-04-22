@@ -7,6 +7,10 @@ const {
 
 test.describe('Register', () => {
   test.beforeEach(async ({ page }) => {
+    // Keep init-script mock: Register.vue injects Google's script which would replace it.
+    await page.route('https://www.google.com/recaptcha/**', route => route.abort());
+    await page.route('https://www.gstatic.com/recaptcha/**', route => route.abort());
+
     await setupCatchAllMock(page);
     await setupCommonMocks(page);
 

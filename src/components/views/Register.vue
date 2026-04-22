@@ -407,7 +407,6 @@ class Error {
         this.message = '';
     }
 }
-console.log('RECAPTCHA_SECRET_KEY', process.env.RECAPTCHA_SITE_KEY);
 export default {
     name: 'register',
     data() {
@@ -429,7 +428,7 @@ export default {
                 'img/' +
                 process.env.TARGET_APP +
                 '_logo.png',
-            RECAPTCHA_SITE_KEY: process.env.RECAPTCHA_SITE_KEY,
+            RECAPTCHA_SITE_KEY: import.meta.env.VITE_RECAPTCHA_SITE_KEY || '',
             progress: false,
             success: false,
             emailError: new Error(),
@@ -644,9 +643,10 @@ export default {
         },
         register(event) {
             const that = this;
+            const siteKey = that.RECAPTCHA_SITE_KEY;
             grecaptcha.ready(function () {
                 grecaptcha
-                    .execute(process.env.RECAPTCHA_SITE_KEY, {
+                    .execute(siteKey, {
                         action: 'submit'
                     })
                     .then(function (token) {
@@ -759,6 +759,13 @@ export default {
                                 }
                                 that.progress = false;
                             });
+                    })
+                    .catch(function () {
+                        that.progress = false;
+                        dialogs.message(that.$t('errorRegistro'), {
+                            duration: 10,
+                            estado: 'error'
+                        });
                     });
             });
         },
@@ -778,12 +785,15 @@ export default {
             this.accountTypes = data.cc;
         });
 
-        let recaptchaScript = document.createElement('script');
-        recaptchaScript.setAttribute(
-            'src',
-            `https://www.google.com/recaptcha/api.js?render=${process.env.RECAPTCHA_SITE_KEY}`
-        );
-        document.head.appendChild(recaptchaScript);
+        const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+        if (siteKey) {
+            const recaptchaScript = document.createElement('script');
+            recaptchaScript.setAttribute(
+                'src',
+                `https://www.google.com/recaptcha/api.js?render=${siteKey}`
+            );
+            document.head.appendChild(recaptchaScript);
+        }
     },
 
     beforeUnmount() {
