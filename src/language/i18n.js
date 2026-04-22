@@ -1095,7 +1095,7 @@ const messages = {
             'Ajustar en función de rendimiento del auto L cada 100km, combustible cargado y peajes del tramo. Cualquier duda siempre llenar el tanque al salir y nuevamente al llenarlo al llegar, la diferencia será el combustible gastado en viaje.',
         contribucionPorPersonaTooltipConSellado:
             'Ajustar en función de rendimiento del auto L cada 100km, combustible cargado y peajes del tramo. Cualquier duda siempre llenar el tanque al salir y nuevamente al llenarlo al llegar, la diferencia será el combustible gastado en viaje.',
-        contribucionRecomendadaLabel: 'Contribución recomendada',
+        contribucionRecomendadaLabel: 'Contribución promedio',
         contribucionRecomendadaCardDescripcionSinSellado:
             'La contribución por persona considerando rendimiento de un auto promedio del parque automotor argentino (8L cada 100km en ruta), combustible premium y peajes',
         contribucionRecomendadaCardDescripcionConSellado:
@@ -3064,7 +3064,7 @@ const messages = {
             "Adjust based on the car's fuel consumption (L per 100 km), fuel purchased and tolls for the route. If in doubt, always fill the tank when you leave and again when you fill up on arrival; the difference is the fuel used on the trip.",
         contribucionPorPersonaTooltipConSellado:
             "Adjust based on the car's fuel consumption (L per 100 km), fuel purchased and tolls for the route. If in doubt, always fill the tank when you leave and again when you fill up on arrival; the difference is the fuel used on the trip.",
-        contribucionRecomendadaLabel: 'Recommended contribution',
+        contribucionRecomendadaLabel: 'Average contribution',
         contribucionRecomendadaCardDescripcionSinSellado:
             'Per-person contribution based on fuel efficiency of a typical vehicle in the Argentine fleet (8 L per 100 km on highways), premium fuel, and tolls.',
         contribucionRecomendadaCardDescripcionConSellado:

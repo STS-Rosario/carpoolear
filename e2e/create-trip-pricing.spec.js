@@ -109,7 +109,7 @@ async function setupRouteMocks(page, mockedTripInfo) {
 test.describe('Trip creation recommended contribution', () => {
   test.setTimeout(120000);
 
-  test('recalculates Contribución recomendada with seats + driver divisor', async ({ page }) => {
+  test('recalculates Contribución promedio with seats + driver divisor', async ({ page }) => {
     const mockedTripInfo = {
       distance: 291088.8,
       duration: 11805.6,
