@@ -6,11 +6,9 @@
  * @returns {Promise<void>}
  */
 export async function completeSessionIfRegistrationReturnsToken(apiResponse, onLoginWithToken) {
-    if (
-        apiResponse &&
-        typeof apiResponse.token === 'string' &&
-        apiResponse.token.length > 0
-    ) {
-        await onLoginWithToken(apiResponse.token);
+    const token = apiResponse?.token;
+    if (typeof token !== 'string' || token.length === 0) {
+        return;
     }
+    await onLoginWithToken(token);
 }
