@@ -1066,6 +1066,13 @@ const messages = {
         coordinateTripALas: 'a las',
         coordinateTripYVueltaElDia: 'y vuelta el día',
         coordinateTripALas2: 'a las',
+        coordinateTripContributionWarningDriver:
+            'Recuerde no superar la contribución del viaje ({maxContribution}) ya que el seguro automotor no lo cubrirá en caso de accidentes y está contra las reglas de uso de Carpoolear, por lo que podrá ser suspendido',
+        coordinateTripContributionWarningPassengerPrefix:
+            'Recuerde que el conductor deberá pedir la contribución establecida, ya que si se pide más el seguro automotor no los cubrirá en caso de accidentes, y está contra las reglas de uso de Carpoolear. Si lo hace, ',
+        coordinateTripContributionWarningPassengerReportLink: 'denúncielo',
+        coordinateTripContributionWarningPassengerSuffix:
+            ' para mantener una comunidad más segura.',
         solicitudFueEnviada: 'La solicitud fue enviada.',
         teHasSubidoAlViaje: 'Te has subido al viaje.',
         yaSubidoMismoViaje:
@@ -3038,6 +3045,13 @@ const messages = {
         coordinateTripALas: 'at',
         coordinateTripYVueltaElDia: 'and return on',
         coordinateTripALas2: 'at',
+        coordinateTripContributionWarningDriver:
+            'Remember not to exceed the trip contribution ({maxContribution}), since auto insurance will not cover it in case of accidents and it is against Carpoolear usage rules, so you may be suspended',
+        coordinateTripContributionWarningPassengerPrefix:
+            'Remember that the driver must request the established contribution, because if more is requested auto insurance will not cover you in case of accidents, and it is against Carpoolear usage rules. If it happens, ',
+        coordinateTripContributionWarningPassengerReportLink: 'report it',
+        coordinateTripContributionWarningPassengerSuffix:
+            ' to keep a safer community.',
         solicitudFueEnviada: 'The request was sent.',
         teHasSubidoAlViaje: 'You have joined the trip.',
         yaSubidoMismoViaje:

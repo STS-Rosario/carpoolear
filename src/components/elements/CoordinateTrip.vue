@@ -31,6 +31,25 @@
                 </template>
             </span>
         </div>
+        <p v-if="contributionWarningData" class="trip_actions-contribution-warning">
+            <template v-if="contributionWarningData.role === 'driver'">
+                {{
+                    $t('coordinateTripContributionWarningDriver', {
+                        maxContribution: $n(
+                            contributionWarningData.maxContributionCents / 100,
+                            'currency'
+                        )
+                    })
+                }}
+            </template>
+            <template v-else>
+                {{ $t('coordinateTripContributionWarningPassengerPrefix') }}
+                <a :href="contributionWarningData.reportPath">{{
+                    $t('coordinateTripContributionWarningPassengerReportLink')
+                }}</a>
+                {{ $t('coordinateTripContributionWarningPassengerSuffix') }}
+            </template>
+        </p>
         <template v-if="!owner">
             <button
                 :disabled="sending.trip || expiredTrip"
@@ -143,6 +162,7 @@ import { usePassengerStore } from '../../stores/passenger';
 import dialogs from '../../services/dialogs.js';
 import spinner from '../Spinner.vue';
 import dayjs from '../../dayjs';
+import { getConversationContributionWarningData } from '../../utils/conversationContributionWarning.js';
 
 export default {
     name: 'conversation-chat',
@@ -200,6 +220,12 @@ export default {
                 dayjs(this.conversation.return_trip.trip_date).format() <
                 dayjs().format()
             );
+        },
+        contributionWarningData() {
+            return getConversationContributionWarningData({
+                conversation: this.conversation,
+                user: this.user
+            });
         }
     },
     methods: {
@@ -292,6 +318,19 @@ export default {
 .trip_actions .btn-primary {
     font-size: 12px;
     width: 100%;
+}
+
+.trip_actions-contribution-warning {
+    margin: 0.6em 0 0.8em;
+    font-size: 12px;
+    line-height: 1.35;
+    color: #8a1f11;
+}
+
+.trip_actions-contribution-warning a {
+    color: inherit;
+    text-decoration: underline;
+    font-weight: bold;
 }
 @media only screen and (max-width: 768px) {
     .trip_actions {
