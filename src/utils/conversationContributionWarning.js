@@ -1,13 +1,16 @@
 export function getConversationContributionWarningData({ conversation, user }) {
-    if (!conversation || !conversation.trip || !conversation.trip.user || !user) {
+    const trip = conversation && conversation.trip;
+    if (!trip || !trip.user || !user) {
         return null;
     }
 
-    const isDriver = user.id === conversation.trip.user.id;
+    const isDriver = user.id === trip.user.id;
+    const tripId = trip.id;
+    const maxContributionCents = trip.seat_price_cents || 0;
 
     return {
         role: isDriver ? 'driver' : 'passenger',
-        maxContributionCents: conversation.trip.seat_price_cents || 0,
-        reportPath: isDriver ? null : `/denunciar?tripId=${conversation.trip.id}`
+        maxContributionCents,
+        reportPath: isDriver ? null : `/denunciar?tripId=${tripId}`
     };
 }
