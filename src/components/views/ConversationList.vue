@@ -473,20 +473,26 @@ export default {
      * Trip strip (consulta + warning + actions) stays at the top; composer at the bottom;
      * only #messagesWrapper scrolls (flex middle).
      */
+    /*
+     * Explicit height above fixed .actionbar-bottom (52px + safe area).
+     * Do not subtract 5.6rem here: that matches desktop .view-container padding
+     * (min-width: 768px in base.css). Mobile view-container uses ~51px/77px + safe
+     * top padding already, so 5.6rem would double-count and shrink the chat column.
+     */
     .conversation-list-page--mobile-chat {
         display: flex;
         flex-direction: column;
         min-height: 0;
-        height: calc(100dvh - 5.6rem);
-        height: calc(100dvh - 5.6rem - constant(safe-area-inset-top, 0px));
-        height: calc(100dvh - 5.6rem - env(safe-area-inset-top, 0px));
-        max-height: calc(100dvh - 5.6rem - env(safe-area-inset-top, 0px));
+        box-sizing: border-box;
+        height: calc(100dvh - 52px - constant(safe-area-inset-top, 0px) - constant(safe-area-inset-bottom, 0px));
+        height: calc(100dvh - 52px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+        max-height: calc(100dvh - 52px - constant(safe-area-inset-top, 0px) - constant(safe-area-inset-bottom, 0px));
+        max-height: calc(100dvh - 52px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
         overflow: hidden;
+        background-color: #fff;
     }
     .conversation-list-page--mobile-chat > .trip_actions {
         flex: 0 0 auto;
-        position: sticky;
-        top: 0;
         z-index: 8;
         align-self: stretch;
     }
@@ -497,6 +503,7 @@ export default {
         flex-direction: column;
         overflow: hidden;
         margin-bottom: 0;
+        padding-bottom: 0;
     }
     .conversation-list-page--mobile-chat .conversation-component > .row {
         flex: 1 1 auto;
@@ -544,12 +551,9 @@ export default {
     }
     .conversation-list-page--mobile-chat .message-composer {
         flex: 0 0 auto;
-        position: sticky;
-        bottom: 0;
         z-index: 9;
         background: #fff;
         box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
-        padding-bottom: env(safe-area-inset-bottom, 0px);
     }
 }
 .media-right {
