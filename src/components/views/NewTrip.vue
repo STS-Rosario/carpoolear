@@ -1778,6 +1778,7 @@ import autocomplete from '../Autocomplete';
 import SvgItem from '../SvgItem';
 import WeeklySchedule from '../elements/WeeklySchedule';
 import bus from '../../services/bus-event.js';
+import { getMaxContributionExceededMessage } from '../../utils/maxContributionExceededMessage.js';
 
 let tripApi = new TripApi();
 let userApi = new UserApi();
@@ -2455,7 +2456,11 @@ export default {
                 ) {
                     globalError = true;
                     this.priceError.state = true;
-                    this.priceError.message = this.$t('precioMaximoExcedido');
+                    this.priceError.message = getMaxContributionExceededMessage({
+                        t: this.$t,
+                        n: this.$n,
+                        maxContributionCents: this.maximum_seat_price_cents
+                    });
                 } else {
                     this.priceError.state = false;
                 }
@@ -2601,9 +2606,11 @@ export default {
                     ) {
                         globalError = true;
                         this.returnPriceError.state = true;
-                        this.returnPriceError.message = this.$t(
-                            'precioMaximoExcedido'
-                        );
+                        this.returnPriceError.message = getMaxContributionExceededMessage({
+                            t: this.$t,
+                            n: this.$n,
+                            maxContributionCents: this.maximum_return_seat_price_cents
+                        });
                     } else {
                         this.returnPriceError.state = false;
                     }
@@ -2959,9 +2966,18 @@ export default {
                 p > this.maximum_seat_price_cents / 100
             ) {
                 this.priceError.state = true;
-                this.priceError.message = this.$t('precioMaximoExcedido');
+                this.priceError.message = getMaxContributionExceededMessage({
+                    t: this.$t,
+                    n: this.$n,
+                    maxContributionCents: this.maximum_seat_price_cents
+                });
             } else if (
-                this.priceError.message === this.$t('precioMaximoExcedido')
+                this.priceError.message ===
+                getMaxContributionExceededMessage({
+                    t: this.$t,
+                    n: this.$n,
+                    maxContributionCents: this.maximum_seat_price_cents
+                })
             ) {
                 this.priceError.state = false;
             }
@@ -2991,10 +3007,18 @@ export default {
                 p > this.maximum_return_seat_price_cents / 100
             ) {
                 this.returnPriceError.state = true;
-                this.returnPriceError.message = this.$t('precioMaximoExcedido');
+                this.returnPriceError.message = getMaxContributionExceededMessage({
+                    t: this.$t,
+                    n: this.$n,
+                    maxContributionCents: this.maximum_return_seat_price_cents
+                });
             } else if (
                 this.returnPriceError.message ===
-                this.$t('precioMaximoExcedido')
+                getMaxContributionExceededMessage({
+                    t: this.$t,
+                    n: this.$n,
+                    maxContributionCents: this.maximum_return_seat_price_cents
+                })
             ) {
                 this.returnPriceError.state = false;
             }

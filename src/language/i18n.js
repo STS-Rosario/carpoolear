@@ -1081,7 +1081,8 @@ const messages = {
         ocupados: 'Ocupados',
         activar: 'Activar',
         ocultar: 'Ocultar',
-        precioMaximoExcedido: 'La contribución máxima ha sido excedida',
+        precioMaximoExcedido:
+            'La contribución máxima ({maxContribution}) ha sido excedida',
         contribucionPorPersonaRequerida:
             'Tenés que completar la contribución por persona.',
         unaVez: 'Una vez',
@@ -3050,7 +3051,8 @@ const messages = {
         ocupados: 'Occupied',
         activar: 'Activate',
         ocultar: 'Hide',
-        precioMaximoExcedido: 'Maximum contribution exceeded',
+        precioMaximoExcedido:
+            'Maximum contribution ({maxContribution}) exceeded',
         contribucionPorPersonaRequerida:
             'You must enter the per-person contribution.',
         unaVez: 'Once',
