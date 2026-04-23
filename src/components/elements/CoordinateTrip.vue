@@ -2,11 +2,7 @@
     <div class="trip_actions" v-if="conversation && conversation.trip">
         <div class="trip_actions-detail">
             <span v-if="owner">{{ $t('coordinateTripTeEnviaUnaConsultaPorTuViajeDesde') }}</span>
-            <span v-else>{{ $t('coordinateTripViajeDesde') }}</span>
-            <strong>{{ conversation.trip.from_town }}</strong>
-            {{ $t('coordinateTripHacia') }}
-            <strong>{{ conversation.trip.to_town }}</strong>
-            <span v-if="owner">
+            <span v-else>{{ $t('coordinateTripViajeDesde') }}</span>{{ ' ' }}<strong>{{ conversation.trip.from_town }}</strong>{{ ' ' }}{{ $t('coordinateTripHacia') }}{{ ' ' }}<strong>{{ conversation.trip.to_town }}</strong>{{ ' ' }}<span v-if="owner">
                 {{ $t('coordinateTripDelDia') }}
                 <strong>{{
                     dayjs(conversation.trip.trip_date).format('DD/MM/YYYY')
