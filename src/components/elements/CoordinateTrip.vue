@@ -322,13 +322,18 @@ export default {
 
 .trip_actions-contribution-warning {
     margin: 0.6em 0 0.8em;
+    padding: 0.65em 0.75em;
     font-size: 12px;
     line-height: 1.35;
     color: #8a1f11;
+    background-color: #fff5f4;
+    border: 1px solid #e8b8b4;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
 }
 
 .trip_actions-contribution-warning a {
-    color: inherit;
+    color: #6b150d;
     text-decoration: underline;
     font-weight: bold;
 }
