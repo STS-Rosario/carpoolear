@@ -541,6 +541,16 @@
                                     />
                                     {{ priceError.message }}
                                 </span>
+                                <span
+                                    class="error"
+                                    v-if="hasShownMaxContributionExceededWarning"
+                                >
+                                    {{
+                                        $t(
+                                            'recuerdeReglaContribucionMaximaExcedida'
+                                        )
+                                    }}
+                                </span>
                             </div>
 
                             <div
@@ -598,6 +608,16 @@
                                         class="trip-form-warning-icon"
                                     />
                                     {{ priceError.message }}
+                                </span>
+                                <span
+                                    class="error"
+                                    v-if="hasShownMaxContributionExceededWarning"
+                                >
+                                    {{
+                                        $t(
+                                            'recuerdeReglaContribucionMaximaExcedida'
+                                        )
+                                    }}
                                 </span>
                             </div>
 
@@ -1220,6 +1240,16 @@
                                     />
                                     {{ returnPriceError.message }}
                                 </span>
+                                <span
+                                    class="error"
+                                    v-if="hasShownReturnMaxContributionExceededWarning"
+                                >
+                                    {{
+                                        $t(
+                                            'recuerdeReglaContribucionMaximaExcedida'
+                                        )
+                                    }}
+                                </span>
                             </div>
                             <div
                                 class="trip_price"
@@ -1260,6 +1290,16 @@
                                         class="trip-form-warning-icon"
                                     />
                                     {{ returnPriceError.message }}
+                                </span>
+                                <span
+                                    class="error"
+                                    v-if="hasShownReturnMaxContributionExceededWarning"
+                                >
+                                    {{
+                                        $t(
+                                            'recuerdeReglaContribucionMaximaExcedida'
+                                        )
+                                    }}
                                 </span>
                             </div>
 
@@ -1779,6 +1819,7 @@ import SvgItem from '../SvgItem';
 import WeeklySchedule from '../elements/WeeklySchedule';
 import bus from '../../services/bus-event.js';
 import { getMaxContributionExceededMessage } from '../../utils/maxContributionExceededMessage.js';
+import { rememberMaxContributionWarning } from '../../utils/maxContributionWarningState.js';
 
 let tripApi = new TripApi();
 let userApi = new UserApi();
@@ -1812,7 +1853,9 @@ export default {
             dateError: new Error(),
             timeError: new Error(),
             priceError: new Error(),
+            hasShownMaxContributionExceededWarning: false,
             returnPriceError: new Error(),
+            hasShownReturnMaxContributionExceededWarning: false,
             commentError: new Error(),
             seatsError: new Error(),
             no_lucrar: false,
@@ -2466,6 +2509,12 @@ export default {
                     this.priceError.message = this.getMaxContributionExceededMessage(
                         this.maximum_seat_price_cents
                     );
+                    this.hasShownMaxContributionExceededWarning = rememberMaxContributionWarning(
+                        {
+                            hasBeenShown: this.hasShownMaxContributionExceededWarning,
+                            hasExceededMaxContribution: true
+                        }
+                    );
                 } else {
                     this.priceError.state = false;
                 }
@@ -2613,6 +2662,12 @@ export default {
                         this.returnPriceError.state = true;
                         this.returnPriceError.message = this.getMaxContributionExceededMessage(
                             this.maximum_return_seat_price_cents
+                        );
+                        this.hasShownReturnMaxContributionExceededWarning = rememberMaxContributionWarning(
+                            {
+                                hasBeenShown: this.hasShownReturnMaxContributionExceededWarning,
+                                hasExceededMaxContribution: true
+                            }
                         );
                     } else {
                         this.returnPriceError.state = false;
@@ -2972,6 +3027,12 @@ export default {
                 this.priceError.message = this.getMaxContributionExceededMessage(
                     this.maximum_seat_price_cents
                 );
+                this.hasShownMaxContributionExceededWarning = rememberMaxContributionWarning(
+                    {
+                        hasBeenShown: this.hasShownMaxContributionExceededWarning,
+                        hasExceededMaxContribution: true
+                    }
+                );
             } else if (
                 this.priceError.message ===
                 this.getMaxContributionExceededMessage(
@@ -3008,6 +3069,12 @@ export default {
                 this.returnPriceError.state = true;
                 this.returnPriceError.message = this.getMaxContributionExceededMessage(
                     this.maximum_return_seat_price_cents
+                );
+                this.hasShownReturnMaxContributionExceededWarning = rememberMaxContributionWarning(
+                    {
+                        hasBeenShown: this.hasShownReturnMaxContributionExceededWarning,
+                        hasExceededMaxContribution: true
+                    }
                 );
             } else if (
                 this.returnPriceError.message ===
