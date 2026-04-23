@@ -384,22 +384,10 @@ export default {
     padding-bottom: 0;
     margin-bottom: 0;
 }
-.module--coordinate-by-message
-    .conversation_chat
-    .list-group-item:nth-child(2) {
-    height: calc(100% - 245px);
-}
 @media only screen and (min-width: 768px) {
     .module--coordinate-by-message .conversation_chat p,
     .module--coordinate-by-message .message_text {
         font-size: 12px;
-    }
-    @media only screen and (min-width: 1000px) {
-        .module--coordinate-by-message
-            .conversation_chat
-            .list-group-item:nth-child(2) {
-            height: calc(100% - 205px);
-        }
     }
 }
 </style>

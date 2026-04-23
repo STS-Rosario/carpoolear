@@ -414,11 +414,37 @@ export default {
         height: 100%;
     }
     .conversation_list {
-        height: 85%;
+        height: 100%;
     }
-    .conversation_chat .list-group-item:nth-child(2) {
-        height: calc(100% - 99px);
+    .conversation-container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        min-height: 0;
+    }
+    .conversation-container .conversation_chat {
+        flex: 1 1 auto;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+    .conversation_chat > .list-group {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        min-height: 0;
+    }
+    .conversation_chat .conversation_user_header {
+        flex: 0 0 auto;
+    }
+    .conversation_chat .conversation-messages {
+        flex: 1 1 auto;
+        min-height: 0;
         overflow-y: auto;
+    }
+    .conversation_chat .message-composer {
+        flex: 0 0 auto;
     }
     .conversation-component.container {
         padding-left: 10px;
@@ -427,7 +453,7 @@ export default {
         height: calc(100vh - 150px);
     }
     .without-footer.conversation-component.container {
-        height: calc(100vh - 15px);
+        height: calc(100vh - 5.6rem);
     }
     .conversation-component > .row {
         padding-left: 20px;

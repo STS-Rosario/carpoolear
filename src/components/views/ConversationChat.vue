@@ -31,7 +31,7 @@
             <div
                 id="messagesWrapper"
                 ref="messagesWrapper"
-                class="list-group-item clearfix"
+                class="list-group-item clearfix conversation-messages"
             >
                 <div>
                     <button
@@ -85,13 +85,12 @@
     </div>
 </template>
 <script>
-import '@toast-ui/editor/dist/toastui-editor.css';
 import { mapState, mapActions } from 'pinia';
 import { useConversationsStore } from '../../stores/conversations';
 import { useAuthStore } from '../../stores/auth';
 import { useDeviceStore } from '../../stores/device';
 import { useActionbarsStore } from '../../stores/actionbars';
-import { Editor } from '@toast-ui/vue-editor';
+import ToastUiEditor from '../elements/ToastUiEditor.vue';
 import MessageView from '../MessageView';
 import router from '../../router';
 import dayjs from '../../dayjs';
@@ -191,9 +190,7 @@ export default {
                 id = 1;
             }
             return {
-                id: this.conversation.users[id].id,
-                userProfile: this.conversation.users[id],
-                activeTab: 1
+                id: this.conversation.users[id].id
             };
         },
 
@@ -255,16 +252,16 @@ export default {
                 if (this.conversation) {
                     this.setTitle(this.conversation.title);
                     const otherUser = this.conversation.users.find(
-                        (user) => user.id !== this.user.id
+                        (u) => u.id !== this.user.id
                     );
-                    this.setTitleLink({
-                        name: 'profile',
-                        params: {
-                            id: otherUser.id,
-                            userProfile: otherUser,
-                            activeTab: 1
-                        }
-                    });
+                    if (otherUser) {
+                        this.setTitleLink({
+                            name: 'profile',
+                            params: { id: otherUser.id }
+                        });
+                    } else {
+                        this.setTitleLink({});
+                    }
                     this.setSubTitle(
                         this.lastConnectionFormatted
                             ? `${this.$t('ultimaConexion')} ${this.lastConnectionFormatted}`
@@ -289,16 +286,16 @@ export default {
         if (this.conversation) {
             this.setTitle(this.conversation.title);
             const otherUser = this.conversation.users.find(
-                (user) => user.id !== this.user.id
+                (u) => u.id !== this.user.id
             );
-            this.setTitleLink({
-                name: 'profile',
-                params: {
-                    id: otherUser.id,
-                    userProfile: otherUser,
-                    activeTab: 1
-                }
-            });
+            if (otherUser) {
+                this.setTitleLink({
+                    name: 'profile',
+                    params: { id: otherUser.id }
+                });
+            } else {
+                this.setTitleLink({});
+            }
             this.setSubTitle(
                 this.lastConnectionFormatted
                     ? `${this.$t('ultimaConexion')} ${this.lastConnectionFormatted}`
@@ -324,7 +321,7 @@ export default {
     },
     props: ['id'],
     components: {
-        Editor,
+        editor: ToastUiEditor,
         MessageView,
         CoordinateTrip
     }
