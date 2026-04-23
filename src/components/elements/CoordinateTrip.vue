@@ -44,9 +44,7 @@
             </template>
             <template v-else>
                 {{ $t('coordinateTripContributionWarningPassengerPrefix') }}
-                <a :href="contributionWarningData.reportPath">{{
-                    $t('coordinateTripContributionWarningPassengerReportLink')
-                }}</a>
+                {{ $t('coordinateTripContributionWarningPassengerReportLink') }}
                 {{ $t('coordinateTripContributionWarningPassengerSuffix') }}
             </template>
         </p>

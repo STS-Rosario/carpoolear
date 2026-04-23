@@ -16,12 +16,11 @@ describe('getConversationContributionWarningData', () => {
 
         expect(data).toEqual({
             role: 'driver',
-            maxContributionCents: 12345,
-            reportPath: null
+            maxContributionCents: 12345
         });
     });
 
-    it('returns passenger warning data including report link with trip id', () => {
+    it('returns passenger warning data including max contribution amount', () => {
         const data = getConversationContributionWarningData({
             conversation: {
                 trip: {
@@ -35,8 +34,7 @@ describe('getConversationContributionWarningData', () => {
 
         expect(data).toEqual({
             role: 'passenger',
-            maxContributionCents: 5000,
-            reportPath: '/denunciar?tripId=99'
+            maxContributionCents: 5000
         });
     });
 });
