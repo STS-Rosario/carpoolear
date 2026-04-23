@@ -20,11 +20,12 @@
                 </router-link>
                 <h2 v-else>{{ conversation.title }}</h2>
                 <CoordinateTrip></CoordinateTrip>
-                <p class="chat_last_connection">
+                <p
+                    v-if="lastConnectionFormatted"
+                    class="chat_last_connection"
+                >
                     <strong>{{ $t('ultimaConexion') }}</strong>
-                    <span class="">{{
-                        dayjs(lastConnection).calendar()
-                    }}</span>
+                    <span> {{ lastConnectionFormatted }}</span>
                 </p>
             </div>
             <div
@@ -141,15 +142,32 @@ export default {
         ...mapState(useDeviceStore, {
             isMobile: 'isMobile'
         }),
-        lastConnection() {
-            let users = this.conversation.users.filter(
+        /**
+         * Last-connection timestamp for the other participant in a 1:1 chat.
+         * In group-style conversations (more than one other user) there is no single value; returns null.
+         */
+        lastConnectionRaw() {
+            if (!this.conversation || !this.conversation.users) {
+                return null;
+            }
+            const others = this.conversation.users.filter(
                 (item) => item.id !== this.user.id
             );
-            if (users.length > 1) {
-                return '';
-            } else {
-                return users[0].last_connection;
+            if (others.length !== 1) {
+                return null;
             }
+            return others[0].last_connection;
+        },
+        lastConnectionFormatted() {
+            const raw = this.lastConnectionRaw;
+            if (raw == null || raw === '') {
+                return '';
+            }
+            const d = dayjs(raw);
+            if (!d.isValid()) {
+                return '';
+            }
+            return d.calendar();
         }
     },
     methods: {
@@ -248,8 +266,9 @@ export default {
                         }
                     });
                     this.setSubTitle(
-                        this.$t('ultimaConexion') +
-                            dayjs(this.lastConnection).calendar()
+                        this.lastConnectionFormatted
+                            ? `${this.$t('ultimaConexion')} ${this.lastConnectionFormatted}`
+                            : ''
                     );
                     this.setImgTitle(this.conversation.image);
                 }
@@ -281,7 +300,9 @@ export default {
                 }
             });
             this.setSubTitle(
-                this.$t('ultimaConexion') + dayjs(this.lastConnection).calendar()
+                this.lastConnectionFormatted
+                    ? `${this.$t('ultimaConexion')} ${this.lastConnectionFormatted}`
+                    : ''
             );
             this.setImgTitle(this.conversation.image);
 
