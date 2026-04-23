@@ -2163,6 +2163,22 @@ export default {
                 maxContributionCents
             });
         },
+        markMaxContributionExceededWarningAsShown() {
+            this.hasShownMaxContributionExceededWarning = rememberMaxContributionWarning(
+                {
+                    hasBeenShown: this.hasShownMaxContributionExceededWarning,
+                    hasExceededMaxContribution: true
+                }
+            );
+        },
+        markReturnMaxContributionExceededWarningAsShown() {
+            this.hasShownReturnMaxContributionExceededWarning = rememberMaxContributionWarning(
+                {
+                    hasBeenShown: this.hasShownReturnMaxContributionExceededWarning,
+                    hasExceededMaxContribution: true
+                }
+            );
+        },
         ...mapActions(useTripsStore, {
             createTrip: 'create',
             updateTrip: 'update',
@@ -2509,12 +2525,7 @@ export default {
                     this.priceError.message = this.getMaxContributionExceededMessage(
                         this.maximum_seat_price_cents
                     );
-                    this.hasShownMaxContributionExceededWarning = rememberMaxContributionWarning(
-                        {
-                            hasBeenShown: this.hasShownMaxContributionExceededWarning,
-                            hasExceededMaxContribution: true
-                        }
-                    );
+                    this.markMaxContributionExceededWarningAsShown();
                 } else {
                     this.priceError.state = false;
                 }
@@ -2663,12 +2674,7 @@ export default {
                         this.returnPriceError.message = this.getMaxContributionExceededMessage(
                             this.maximum_return_seat_price_cents
                         );
-                        this.hasShownReturnMaxContributionExceededWarning = rememberMaxContributionWarning(
-                            {
-                                hasBeenShown: this.hasShownReturnMaxContributionExceededWarning,
-                                hasExceededMaxContribution: true
-                            }
-                        );
+                        this.markReturnMaxContributionExceededWarningAsShown();
                     } else {
                         this.returnPriceError.state = false;
                     }
@@ -3027,12 +3033,7 @@ export default {
                 this.priceError.message = this.getMaxContributionExceededMessage(
                     this.maximum_seat_price_cents
                 );
-                this.hasShownMaxContributionExceededWarning = rememberMaxContributionWarning(
-                    {
-                        hasBeenShown: this.hasShownMaxContributionExceededWarning,
-                        hasExceededMaxContribution: true
-                    }
-                );
+                this.markMaxContributionExceededWarningAsShown();
             } else if (
                 this.priceError.message ===
                 this.getMaxContributionExceededMessage(
@@ -3070,12 +3071,7 @@ export default {
                 this.returnPriceError.message = this.getMaxContributionExceededMessage(
                     this.maximum_return_seat_price_cents
                 );
-                this.hasShownReturnMaxContributionExceededWarning = rememberMaxContributionWarning(
-                    {
-                        hasBeenShown: this.hasShownReturnMaxContributionExceededWarning,
-                        hasExceededMaxContribution: true
-                    }
-                );
+                this.markReturnMaxContributionExceededWarningAsShown();
             } else if (
                 this.returnPriceError.message ===
                 this.getMaxContributionExceededMessage(
