@@ -2113,6 +2113,13 @@ export default {
         // }
     },
     methods: {
+        getMaxContributionExceededMessage(maxContributionCents) {
+            return getMaxContributionExceededMessage({
+                t: this.$t,
+                n: this.$n,
+                maxContributionCents
+            });
+        },
         ...mapActions(useTripsStore, {
             createTrip: 'create',
             updateTrip: 'update',
@@ -2456,11 +2463,9 @@ export default {
                 ) {
                     globalError = true;
                     this.priceError.state = true;
-                    this.priceError.message = getMaxContributionExceededMessage({
-                        t: this.$t,
-                        n: this.$n,
-                        maxContributionCents: this.maximum_seat_price_cents
-                    });
+                    this.priceError.message = this.getMaxContributionExceededMessage(
+                        this.maximum_seat_price_cents
+                    );
                 } else {
                     this.priceError.state = false;
                 }
@@ -2606,11 +2611,9 @@ export default {
                     ) {
                         globalError = true;
                         this.returnPriceError.state = true;
-                        this.returnPriceError.message = getMaxContributionExceededMessage({
-                            t: this.$t,
-                            n: this.$n,
-                            maxContributionCents: this.maximum_return_seat_price_cents
-                        });
+                        this.returnPriceError.message = this.getMaxContributionExceededMessage(
+                            this.maximum_return_seat_price_cents
+                        );
                     } else {
                         this.returnPriceError.state = false;
                     }
@@ -2966,18 +2969,14 @@ export default {
                 p > this.maximum_seat_price_cents / 100
             ) {
                 this.priceError.state = true;
-                this.priceError.message = getMaxContributionExceededMessage({
-                    t: this.$t,
-                    n: this.$n,
-                    maxContributionCents: this.maximum_seat_price_cents
-                });
+                this.priceError.message = this.getMaxContributionExceededMessage(
+                    this.maximum_seat_price_cents
+                );
             } else if (
                 this.priceError.message ===
-                getMaxContributionExceededMessage({
-                    t: this.$t,
-                    n: this.$n,
-                    maxContributionCents: this.maximum_seat_price_cents
-                })
+                this.getMaxContributionExceededMessage(
+                    this.maximum_seat_price_cents
+                )
             ) {
                 this.priceError.state = false;
             }
@@ -3007,18 +3006,14 @@ export default {
                 p > this.maximum_return_seat_price_cents / 100
             ) {
                 this.returnPriceError.state = true;
-                this.returnPriceError.message = getMaxContributionExceededMessage({
-                    t: this.$t,
-                    n: this.$n,
-                    maxContributionCents: this.maximum_return_seat_price_cents
-                });
+                this.returnPriceError.message = this.getMaxContributionExceededMessage(
+                    this.maximum_return_seat_price_cents
+                );
             } else if (
                 this.returnPriceError.message ===
-                getMaxContributionExceededMessage({
-                    t: this.$t,
-                    n: this.$n,
-                    maxContributionCents: this.maximum_return_seat_price_cents
-                })
+                this.getMaxContributionExceededMessage(
+                    this.maximum_return_seat_price_cents
+                )
             ) {
                 this.returnPriceError.state = false;
             }
