@@ -1,10 +1,12 @@
 <template>
     <div
-        :class="
+        class="conversation-list-page"
+        :class="[
             config.module_coordinate_by_message
                 ? 'module--coordinate-by-message'
-                : ''
-        "
+                : '',
+            { 'conversation-list-page--mobile-chat': hide && isMobile }
+        ]"
     >
         <CoordinateTrip v-show="isMobile"></CoordinateTrip>
         <div
@@ -463,6 +465,91 @@ export default {
         height: calc(100% - 66px);
         overflow-y: auto;
         border-bottom: 1px solid #ddd;
+    }
+}
+@media only screen and (max-width: 768px) {
+    /*
+     * Open conversation on mobile: fixed column height under the app header.
+     * Trip strip (consulta + warning + actions) stays at the top; composer at the bottom;
+     * only #messagesWrapper scrolls (flex middle).
+     */
+    .conversation-list-page--mobile-chat {
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        height: calc(100dvh - 5.6rem);
+        height: calc(100dvh - 5.6rem - constant(safe-area-inset-top, 0px));
+        height: calc(100dvh - 5.6rem - env(safe-area-inset-top, 0px));
+        max-height: calc(100dvh - 5.6rem - env(safe-area-inset-top, 0px));
+        overflow: hidden;
+    }
+    .conversation-list-page--mobile-chat > .trip_actions {
+        flex: 0 0 auto;
+        position: sticky;
+        top: 0;
+        z-index: 8;
+        align-self: stretch;
+    }
+    .conversation-list-page--mobile-chat .conversation-component.container {
+        flex: 1 1 auto;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        margin-bottom: 0;
+    }
+    .conversation-list-page--mobile-chat .conversation-component > .row {
+        flex: 1 1 auto;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        margin-left: 0;
+        margin-right: 0;
+    }
+    .conversation-list-page--mobile-chat .conversation-component > .row > [class*='col-'] {
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        max-width: 100%;
+        flex: 1 1 auto;
+    }
+    .conversation-list-page--mobile-chat .conversation-container {
+        flex: 1 1 auto;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+    .conversation-list-page--mobile-chat .conversation-container .conversation_chat {
+        flex: 1 1 auto;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+    .conversation-list-page--mobile-chat .conversation-container .conversation_chat > .list-group {
+        flex: 1 1 auto;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+    .conversation-list-page--mobile-chat .conversation-messages {
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    .conversation-list-page--mobile-chat .message-composer {
+        flex: 0 0 auto;
+        position: sticky;
+        bottom: 0;
+        z-index: 9;
+        background: #fff;
+        box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+        padding-bottom: env(safe-area-inset-bottom, 0px);
     }
 }
 .media-right {

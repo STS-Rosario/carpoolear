@@ -342,9 +342,10 @@ export default {
         border-radius: 0;
         box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
         font-size: 0.9em;
-        position: fixed;
-        z-index: 10;
+        position: static;
+        z-index: auto;
         background-color: #f6f6f6;
+        flex-shrink: 0;
     }
     .trip_actions .btn-primary {
         display: block;

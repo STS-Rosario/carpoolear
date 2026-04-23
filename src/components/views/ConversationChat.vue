@@ -232,14 +232,16 @@ export default {
         },
 
         jumpEndOfConversation() {
-            if (this.isMobile) {
-                window.scrollTo(0, document.body.scrollHeight);
-            } else {
-                let div = this.$refs.messagesWrapper;
+            const run = () => {
+                const div = this.$refs.messagesWrapper;
                 if (div) {
                     div.scrollTop = div.scrollHeight;
                 }
-            }
+            };
+            this.$nextTick(() => {
+                run();
+                requestAnimationFrame(run);
+            });
         },
 
         searchMore() {
@@ -269,6 +271,7 @@ export default {
                     );
                     this.setImgTitle(this.conversation.image);
                 }
+                this.jumpEndOfConversation();
             });
         }
     },
@@ -360,12 +363,9 @@ export default {
     .list-group-item {
         border: 0;
     }
-    .list-group-item:last-child {
+    .message-composer {
+        position: static;
         border-top: 1px solid #ddd;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        position: fixed;
     }
     .message-composer-editor-wrap {
         align-items: stretch;
@@ -382,7 +382,6 @@ export default {
     }
     #messagesWrapper {
         padding-top: 0;
-        padding-bottom: 65px;
     }
 }
 </style>
