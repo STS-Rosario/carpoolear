@@ -542,7 +542,7 @@
                                     {{ priceError.message }}
                                 </span>
                                 <span
-                                    class="error"
+                                    class="error max-contribution-reminder"
                                     v-if="hasShownMaxContributionExceededWarning"
                                 >
                                     {{
@@ -610,7 +610,7 @@
                                     {{ priceError.message }}
                                 </span>
                                 <span
-                                    class="error"
+                                    class="error max-contribution-reminder"
                                     v-if="hasShownMaxContributionExceededWarning"
                                 >
                                     {{
@@ -1241,7 +1241,7 @@
                                     {{ returnPriceError.message }}
                                 </span>
                                 <span
-                                    class="error"
+                                    class="error max-contribution-reminder"
                                     v-if="hasShownReturnMaxContributionExceededWarning"
                                 >
                                     {{
@@ -1292,7 +1292,7 @@
                                     {{ returnPriceError.message }}
                                 </span>
                                 <span
-                                    class="error"
+                                    class="error max-contribution-reminder"
                                     v-if="hasShownReturnMaxContributionExceededWarning"
                                 >
                                     {{
@@ -3238,6 +3238,10 @@ span.error {
 }
 span.error.textarea {
     margin-top: 0.8em;
+}
+
+span.error.max-contribution-reminder {
+    margin-top: 0.5em;
 }
 .trip_points--left {
     margin-left: 0.5rem;
