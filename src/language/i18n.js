@@ -792,6 +792,7 @@ const messages = {
         estoyEnMovil: 'Estoy en móvil',
         contribucionPorPersona: 'Contribución combustible y peaje por persona',
         porPersona: 'por persona',
+        loQueSePuedaAportar: 'Lo que se pueda aportar',
         verContribucionReferenciaTramo:
             'Ver contribución de referencia para este tramo',
         contribucionRecomendada: 'Contribución promedio para este tramo',
@@ -1708,6 +1709,7 @@ const messages = {
         estoyEnMovil: 'Estoy en móvil',
         contribucionPorPersona: 'Contribución combustible y peaje por persona',
         porPersona: 'por persona',
+        loQueSePuedaAportar: 'Lo que se pueda aportar',
         verContribucionReferenciaTramo:
             'Ver contribución de referencia para este tramo',
         contribucionRecomendada: 'Contribución promedio para este tramo',
@@ -2784,6 +2786,7 @@ const messages = {
         estoyEnMovil: "I'm on mobile",
         contribucionPorPersona: 'Fuel and toll contribution per person',
         porPersona: 'per person',
+        loQueSePuedaAportar: 'Whatever you can contribute',
         verContribucionReferenciaTramo:
             'View reference contribution for this route segment',
         contribucionRecomendada: 'Average contribution for this route segment',

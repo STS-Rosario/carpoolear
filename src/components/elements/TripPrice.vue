@@ -6,7 +6,14 @@
     >
         <div v-if="tripCardTheme !== 'light'" class="price-container">
             <div class="price-item">
-                <span class="trip_seat-price_value trip_seat-price_value-main">{{ $n(trip.seat_price_cents / 100, 'currency') }}</span>
+                <span class="trip_seat-price_value trip_seat-price_value-main">
+                    <template v-if="isZeroTripContribution">{{
+                        $t('loQueSePuedaAportar')
+                    }}</template>
+                    <template v-else>{{
+                        $n(trip.seat_price_cents / 100, 'currency')
+                    }}</template>
+                </span>
                 <span class="trip_seats-available_label">
                     {{ $t('contribucionPorPersona') }}
                     <br />
@@ -46,7 +53,13 @@
         <template v-else>
             <div class="trip_seats-available" v-if="!trip.is_passenger">
                 <template v-for="n in trip.total_seats">
-                    {{ $t('contribucionPorPersona') }}: <span>{{ $n(trip.seat_price_cents / 100, 'currency') }}</span>
+                    {{ $t('contribucionPorPersona') }}:
+                    <span v-if="isZeroTripContribution">{{
+                        $t('loQueSePuedaAportar')
+                    }}</span>
+                    <span v-else>{{
+                        $n(trip.seat_price_cents / 100, 'currency')
+                    }}</span>
                 </template>
             </div>
         </template>
@@ -79,6 +92,9 @@ export default {
             console.log('this.trip.user.id', this.trip.user.id);
             console.log('this.user.id', this.user.id);
             return this.trip && this.user && this.user.id === this.trip.user.id;
+        },
+        isZeroTripContribution() {
+            return this.trip && this.trip.seat_price_cents === 0;
         },
         calculadoEnBaseNaftaDescription() {
             const base = this.$t('calculadoEnBaseNaftaBase');
