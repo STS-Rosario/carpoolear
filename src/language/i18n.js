@@ -319,6 +319,8 @@ const messages = {
         identidadModalUnaVez: 'La verificación sólo se realiza una vez.',
         identidadModalPlazoInfo:
             'A partir de hoy tenés {days} días para verificar tu cuenta, luego será obligatoria para poder publicar viajes o enviar mensajes.',
+        identidadModalOptionalInfo:
+            'Por ahora podés seguir usando la app con normalidad; te recomendamos verificar tu cuenta cuando puedas.',
         identidadModalValidar: 'Verificar cuenta',
         identidadModalMasTarde: 'Más tarde',
         identityValidationPageIntro:
@@ -1411,6 +1413,8 @@ const messages = {
         identidadModalUnaVez: 'La verificación sólo se realiza una vez.',
         identidadModalPlazoInfo:
             'A partir de hoy tenés {days} días para verificar tu cuenta, luego será obligatoria para poder publicar viajes o enviar mensajes.',
+        identidadModalOptionalInfo:
+            'Por ahora podés seguir usando la app con normalidad; te recomendamos verificar tu cuenta cuando puedas.',
         identidadModalValidar: 'Verificar cuenta',
         identidadModalMasTarde: 'Más tarde',
         identityValidationPageIntro:
@@ -2479,6 +2483,8 @@ const messages = {
         identidadModalUnaVez: 'You only verify once.',
         identidadModalPlazoInfo:
             'From today you have {days} days to verify your account; after that it will be required to post trips or send messages.',
+        identidadModalOptionalInfo:
+            'For now you can keep using the app as usual; we recommend verifying your account when you can.',
         identidadModalValidar: 'Verify account',
         identidadModalMasTarde: 'Remind me later',
         identidadNoValidada: 'Not verified',
