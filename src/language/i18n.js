@@ -792,9 +792,13 @@ const messages = {
         estoyEnMovil: 'Estoy en móvil',
         contribucionPorPersona: 'Contribución combustible y peaje por persona',
         porPersona: 'por persona',
+        verContribucionReferenciaTramo:
+            'Ver contribución de referencia para este tramo',
         contribucionRecomendada: 'Contribución promedio para este tramo',
-        calculadoEnBaseNafta:
-            'Calculado en base a nafta premium, consumo promedio alto, peajes y Sellado de Viaje incluídos (si aplica)',
+        calculadoEnBaseNaftaBase:
+            'Calculado en base a nafta premium, consumo promedio alto (8km/L) y peajes incluídos',
+        calculadoEnBaseNaftaSelladoSuffix:
+            ' y Sellado de Viaje incluídos (si aplica)',
         viajesDeConductoresPlataforma: 'Viajes de conductores en la plataforma',
         mes: 'Mes',
         cantidad: 'Cantidad',
@@ -1066,6 +1070,13 @@ const messages = {
         coordinateTripALas: 'a las',
         coordinateTripYVueltaElDia: 'y vuelta el día',
         coordinateTripALas2: 'a las',
+        coordinateTripContributionWarningDriver:
+            'Recuerde no superar la contribución del viaje ({maxContribution}) ya que el seguro automotor no lo cubrirá en caso de accidentes y está contra las reglas de uso de Carpoolear, por lo que podrá ser suspendido',
+        coordinateTripContributionWarningPassengerPrefix:
+            'Recuerde que el conductor deberá pedir la contribución establecida, ya que si se pide más el seguro automotor no los cubrirá en caso de accidentes, y está contra las reglas de uso de Carpoolear. Si lo hace, ',
+        coordinateTripContributionWarningPassengerReportLink: 'denúncielo',
+        coordinateTripContributionWarningPassengerSuffix:
+            ' para mantener una comunidad más segura.',
         solicitudFueEnviada: 'La solicitud fue enviada.',
         teHasSubidoAlViaje: 'Te has subido al viaje.',
         yaSubidoMismoViaje:
@@ -1081,7 +1092,10 @@ const messages = {
         ocupados: 'Ocupados',
         activar: 'Activar',
         ocultar: 'Ocultar',
-        precioMaximoExcedido: 'La contribución máxima ha sido excedida',
+        precioMaximoExcedido:
+            'La contribución máxima ({maxContribution}) ha sido excedida',
+        recuerdeReglaContribucionMaximaExcedida:
+            'Recuerde que exceder la contribución máxima está fuera de las reglas de Carpoolear, el seguro automotor no lo cubrirá en caso de accidente, y será suspendido de la plataforma',
         contribucionPorPersonaRequerida:
             'Tenés que completar la contribución por persona.',
         unaVez: 'Una vez',
@@ -1100,8 +1114,6 @@ const messages = {
             'La contribución por persona considerando rendimiento de un auto promedio del parque automotor argentino (8L cada 100km en ruta), combustible premium y peajes',
         contribucionRecomendadaCardDescripcionConSellado:
             'La contribución por persona considerando rendimiento de un auto promedio del parque automotor argentino (8L cada 100km en ruta), combustible premium, sellado de viaje y peajes',
-        calculadoEnBaseNaftaTooltip:
-            'Calculado en base a nafta premium, consumo promedio alto, peajes y Sellado de Viaje incluídos (si aplica)',
         comentario: 'Comentario',
         kilogramosDioxidoDeCarbonoEquivalente:
             'Kilogramos dióxido de carbono equivalente'
@@ -1696,9 +1708,13 @@ const messages = {
         estoyEnMovil: 'Estoy en móvil',
         contribucionPorPersona: 'Contribución combustible y peaje por persona',
         porPersona: 'por persona',
+        verContribucionReferenciaTramo:
+            'Ver contribución de referencia para este tramo',
         contribucionRecomendada: 'Contribución promedio para este tramo',
-        calculadoEnBaseNafta:
-            'Calculado en base a nafta premium, consumo promedio alto, peajes y Sellado de Viaje incluídos (si aplica)',
+        calculadoEnBaseNaftaBase:
+            'Calculado en base a nafta premium, consumo promedio alto (8km/L) y peajes incluídos',
+        calculadoEnBaseNaftaSelladoSuffix:
+            ' y Sellado de Viaje incluídos (si aplica)',
         viajesDeConductoresPlataforma: 'Viajes de conductores en la plataforma',
         mes: 'Mes',
         cantidad: 'Cantidad',
@@ -2768,9 +2784,13 @@ const messages = {
         estoyEnMovil: "I'm on mobile",
         contribucionPorPersona: 'Fuel and toll contribution per person',
         porPersona: 'per person',
+        verContribucionReferenciaTramo:
+            'View reference contribution for this route segment',
         contribucionRecomendada: 'Average contribution for this route segment',
-        calculadoEnBaseNafta:
-            'Calculated based on premium gasoline, high average consumption, tolls and Trip Seal included (if applicable)',
+        calculadoEnBaseNaftaBase:
+            'Calculated based on premium gasoline, high average consumption (8 km/L) and tolls included',
+        calculadoEnBaseNaftaSelladoSuffix:
+            ' and Trip Seal included (if applicable)',
         viajesDeConductoresPlataforma: 'Driver trips on the platform',
         mes: 'Month',
         cantidad: 'Quantity',
@@ -3035,6 +3055,13 @@ const messages = {
         coordinateTripALas: 'at',
         coordinateTripYVueltaElDia: 'and return on',
         coordinateTripALas2: 'at',
+        coordinateTripContributionWarningDriver:
+            'Remember not to exceed the trip contribution ({maxContribution}), since auto insurance will not cover it in case of accidents and it is against Carpoolear usage rules, so you may be suspended',
+        coordinateTripContributionWarningPassengerPrefix:
+            'Remember that the driver must request the established contribution, because if more is requested auto insurance will not cover you in case of accidents, and it is against Carpoolear usage rules. If it happens, ',
+        coordinateTripContributionWarningPassengerReportLink: 'report it',
+        coordinateTripContributionWarningPassengerSuffix:
+            ' to keep a safer community.',
         solicitudFueEnviada: 'The request was sent.',
         teHasSubidoAlViaje: 'You have joined the trip.',
         yaSubidoMismoViaje:
@@ -3050,7 +3077,10 @@ const messages = {
         ocupados: 'Occupied',
         activar: 'Activate',
         ocultar: 'Hide',
-        precioMaximoExcedido: 'Maximum contribution exceeded',
+        precioMaximoExcedido:
+            'Maximum contribution ({maxContribution}) exceeded',
+        recuerdeReglaContribucionMaximaExcedida:
+            'Remember that exceeding the maximum contribution is against Carpoolear rules, auto insurance will not cover it in case of an accident, and you will be suspended from the platform',
         contribucionPorPersonaRequerida:
             'You must enter the per-person contribution.',
         unaVez: 'Once',
@@ -3069,8 +3099,6 @@ const messages = {
             'Per-person contribution based on fuel efficiency of a typical vehicle in the Argentine fleet (8 L per 100 km on highways), premium fuel, and tolls.',
         contribucionRecomendadaCardDescripcionConSellado:
             'Per-person contribution based on fuel efficiency of a typical vehicle in the Argentine fleet (8 L per 100 km on highways), premium fuel, Trip Seal, and tolls.',
-        calculadoEnBaseNaftaTooltip:
-            'Calculated based on premium gasoline, high average consumption, tolls and Trip Seal included (if applicable)',
         comentario: 'Comment',
         kilogramosDioxidoDeCarbonoEquivalente:
             'Kilograms of carbon dioxide equivalent'

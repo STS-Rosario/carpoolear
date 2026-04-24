@@ -541,6 +541,16 @@
                                     />
                                     {{ priceError.message }}
                                 </span>
+                                <span
+                                    class="error max-contribution-reminder"
+                                    v-if="hasShownMaxContributionExceededWarning"
+                                >
+                                    {{
+                                        $t(
+                                            'recuerdeReglaContribucionMaximaExcedida'
+                                        )
+                                    }}
+                                </span>
                             </div>
 
                             <div
@@ -598,6 +608,16 @@
                                         class="trip-form-warning-icon"
                                     />
                                     {{ priceError.message }}
+                                </span>
+                                <span
+                                    class="error max-contribution-reminder"
+                                    v-if="hasShownMaxContributionExceededWarning"
+                                >
+                                    {{
+                                        $t(
+                                            'recuerdeReglaContribucionMaximaExcedida'
+                                        )
+                                    }}
                                 </span>
                             </div>
 
@@ -1220,6 +1240,16 @@
                                     />
                                     {{ returnPriceError.message }}
                                 </span>
+                                <span
+                                    class="error max-contribution-reminder"
+                                    v-if="hasShownReturnMaxContributionExceededWarning"
+                                >
+                                    {{
+                                        $t(
+                                            'recuerdeReglaContribucionMaximaExcedida'
+                                        )
+                                    }}
+                                </span>
                             </div>
                             <div
                                 class="trip_price"
@@ -1260,6 +1290,16 @@
                                         class="trip-form-warning-icon"
                                     />
                                     {{ returnPriceError.message }}
+                                </span>
+                                <span
+                                    class="error max-contribution-reminder"
+                                    v-if="hasShownReturnMaxContributionExceededWarning"
+                                >
+                                    {{
+                                        $t(
+                                            'recuerdeReglaContribucionMaximaExcedida'
+                                        )
+                                    }}
                                 </span>
                             </div>
 
@@ -1778,6 +1818,8 @@ import autocomplete from '../Autocomplete';
 import SvgItem from '../SvgItem';
 import WeeklySchedule from '../elements/WeeklySchedule';
 import bus from '../../services/bus-event.js';
+import { getMaxContributionExceededMessage } from '../../utils/maxContributionExceededMessage.js';
+import { rememberMaxContributionWarning } from '../../utils/maxContributionWarningState.js';
 
 let tripApi = new TripApi();
 let userApi = new UserApi();
@@ -1811,7 +1853,9 @@ export default {
             dateError: new Error(),
             timeError: new Error(),
             priceError: new Error(),
+            hasShownMaxContributionExceededWarning: false,
             returnPriceError: new Error(),
+            hasShownReturnMaxContributionExceededWarning: false,
             commentError: new Error(),
             seatsError: new Error(),
             no_lucrar: false,
@@ -2112,6 +2156,29 @@ export default {
         // }
     },
     methods: {
+        getMaxContributionExceededMessage(maxContributionCents) {
+            return getMaxContributionExceededMessage({
+                t: this.$t,
+                n: this.$n,
+                maxContributionCents
+            });
+        },
+        markMaxContributionExceededWarningAsShown() {
+            this.hasShownMaxContributionExceededWarning = rememberMaxContributionWarning(
+                {
+                    hasBeenShown: this.hasShownMaxContributionExceededWarning,
+                    hasExceededMaxContribution: true
+                }
+            );
+        },
+        markReturnMaxContributionExceededWarningAsShown() {
+            this.hasShownReturnMaxContributionExceededWarning = rememberMaxContributionWarning(
+                {
+                    hasBeenShown: this.hasShownReturnMaxContributionExceededWarning,
+                    hasExceededMaxContribution: true
+                }
+            );
+        },
         ...mapActions(useTripsStore, {
             createTrip: 'create',
             updateTrip: 'update',
@@ -2455,7 +2522,10 @@ export default {
                 ) {
                     globalError = true;
                     this.priceError.state = true;
-                    this.priceError.message = this.$t('precioMaximoExcedido');
+                    this.priceError.message = this.getMaxContributionExceededMessage(
+                        this.maximum_seat_price_cents
+                    );
+                    this.markMaxContributionExceededWarningAsShown();
                 } else {
                     this.priceError.state = false;
                 }
@@ -2601,9 +2671,10 @@ export default {
                     ) {
                         globalError = true;
                         this.returnPriceError.state = true;
-                        this.returnPriceError.message = this.$t(
-                            'precioMaximoExcedido'
+                        this.returnPriceError.message = this.getMaxContributionExceededMessage(
+                            this.maximum_return_seat_price_cents
                         );
+                        this.markReturnMaxContributionExceededWarningAsShown();
                     } else {
                         this.returnPriceError.state = false;
                     }
@@ -2959,9 +3030,15 @@ export default {
                 p > this.maximum_seat_price_cents / 100
             ) {
                 this.priceError.state = true;
-                this.priceError.message = this.$t('precioMaximoExcedido');
+                this.priceError.message = this.getMaxContributionExceededMessage(
+                    this.maximum_seat_price_cents
+                );
+                this.markMaxContributionExceededWarningAsShown();
             } else if (
-                this.priceError.message === this.$t('precioMaximoExcedido')
+                this.priceError.message ===
+                this.getMaxContributionExceededMessage(
+                    this.maximum_seat_price_cents
+                )
             ) {
                 this.priceError.state = false;
             }
@@ -2991,10 +3068,15 @@ export default {
                 p > this.maximum_return_seat_price_cents / 100
             ) {
                 this.returnPriceError.state = true;
-                this.returnPriceError.message = this.$t('precioMaximoExcedido');
+                this.returnPriceError.message = this.getMaxContributionExceededMessage(
+                    this.maximum_return_seat_price_cents
+                );
+                this.markReturnMaxContributionExceededWarningAsShown();
             } else if (
                 this.returnPriceError.message ===
-                this.$t('precioMaximoExcedido')
+                this.getMaxContributionExceededMessage(
+                    this.maximum_return_seat_price_cents
+                )
             ) {
                 this.returnPriceError.state = false;
             }
@@ -3156,6 +3238,10 @@ span.error {
 }
 span.error.textarea {
     margin-top: 0.8em;
+}
+
+span.error.max-contribution-reminder {
+    margin-top: 0.5em;
 }
 .trip_points--left {
     margin-left: 0.5rem;
