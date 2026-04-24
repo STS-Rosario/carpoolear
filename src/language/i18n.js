@@ -792,9 +792,13 @@ const messages = {
         estoyEnMovil: 'Estoy en móvil',
         contribucionPorPersona: 'Contribución combustible y peaje por persona',
         porPersona: 'por persona',
+        verContribucionReferenciaTramo:
+            'Ver contribución de referencia para este tramo',
         contribucionRecomendada: 'Contribución promedio para este tramo',
-        calculadoEnBaseNafta:
-            'Calculado en base a nafta premium, consumo promedio alto, peajes y Sellado de Viaje incluídos (si aplica)',
+        calculadoEnBaseNaftaBase:
+            'Calculado en base a nafta premium, consumo promedio alto (8km/L) y peajes incluídos',
+        calculadoEnBaseNaftaSelladoSuffix:
+            ' y Sellado de Viaje incluídos (si aplica)',
         viajesDeConductoresPlataforma: 'Viajes de conductores en la plataforma',
         mes: 'Mes',
         cantidad: 'Cantidad',
@@ -1110,8 +1114,6 @@ const messages = {
             'La contribución por persona considerando rendimiento de un auto promedio del parque automotor argentino (8L cada 100km en ruta), combustible premium y peajes',
         contribucionRecomendadaCardDescripcionConSellado:
             'La contribución por persona considerando rendimiento de un auto promedio del parque automotor argentino (8L cada 100km en ruta), combustible premium, sellado de viaje y peajes',
-        calculadoEnBaseNaftaTooltip:
-            'Calculado en base a nafta premium, consumo promedio alto, peajes y Sellado de Viaje incluídos (si aplica)',
         comentario: 'Comentario',
         kilogramosDioxidoDeCarbonoEquivalente:
             'Kilogramos dióxido de carbono equivalente'
@@ -1706,9 +1708,13 @@ const messages = {
         estoyEnMovil: 'Estoy en móvil',
         contribucionPorPersona: 'Contribución combustible y peaje por persona',
         porPersona: 'por persona',
+        verContribucionReferenciaTramo:
+            'Ver contribución de referencia para este tramo',
         contribucionRecomendada: 'Contribución promedio para este tramo',
-        calculadoEnBaseNafta:
-            'Calculado en base a nafta premium, consumo promedio alto, peajes y Sellado de Viaje incluídos (si aplica)',
+        calculadoEnBaseNaftaBase:
+            'Calculado en base a nafta premium, consumo promedio alto (8km/L) y peajes incluídos',
+        calculadoEnBaseNaftaSelladoSuffix:
+            ' y Sellado de Viaje incluídos (si aplica)',
         viajesDeConductoresPlataforma: 'Viajes de conductores en la plataforma',
         mes: 'Mes',
         cantidad: 'Cantidad',
@@ -2778,9 +2784,13 @@ const messages = {
         estoyEnMovil: "I'm on mobile",
         contribucionPorPersona: 'Fuel and toll contribution per person',
         porPersona: 'per person',
+        verContribucionReferenciaTramo:
+            'View reference contribution for this route segment',
         contribucionRecomendada: 'Average contribution for this route segment',
-        calculadoEnBaseNafta:
-            'Calculated based on premium gasoline, high average consumption, tolls and Trip Seal included (if applicable)',
+        calculadoEnBaseNaftaBase:
+            'Calculated based on premium gasoline, high average consumption (8 km/L) and tolls included',
+        calculadoEnBaseNaftaSelladoSuffix:
+            ' and Trip Seal included (if applicable)',
         viajesDeConductoresPlataforma: 'Driver trips on the platform',
         mes: 'Month',
         cantidad: 'Quantity',
@@ -3089,8 +3099,6 @@ const messages = {
             'Per-person contribution based on fuel efficiency of a typical vehicle in the Argentine fleet (8 L per 100 km on highways), premium fuel, and tolls.',
         contribucionRecomendadaCardDescripcionConSellado:
             'Per-person contribution based on fuel efficiency of a typical vehicle in the Argentine fleet (8 L per 100 km on highways), premium fuel, Trip Seal, and tolls.',
-        calculadoEnBaseNaftaTooltip:
-            'Calculated based on premium gasoline, high average consumption, tolls and Trip Seal included (if applicable)',
         comentario: 'Comment',
         kilogramosDioxidoDeCarbonoEquivalente:
             'Kilograms of carbon dioxide equivalent'
