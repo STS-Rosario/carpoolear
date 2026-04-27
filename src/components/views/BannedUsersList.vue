@@ -1,8 +1,5 @@
 <template>
-    <div class="col-md-24">
-        <div class="row">
-            <adminNav></adminNav>
-        </div>
+    <AdminLayout>
         <div class="row">
             <div class="col-md-22 col-md-offset-1">
                 <h2>{{ $t('usuariosBloqueados') }}</h2>
@@ -49,10 +46,10 @@
                 </Loading>
             </div>
         </div>
-    </div>
+    </AdminLayout>
 </template>
 <script>
-import adminNav from '../sections/adminNav';
+import AdminLayout from '../layouts/AdminLayout.vue';
 import Loading from '../Loading.vue';
 import { AdminApi } from '../../services/api';
 import dialogs from '../../services/dialogs.js';
@@ -95,7 +92,7 @@ export default {
         }
     },
     components: {
-        adminNav,
+        AdminLayout,
         Loading
     },
     mounted() {

@@ -12,6 +12,7 @@ import DebugApi from './Debug';
 import SubscriptionApi from './SubscriptionsApi';
 import AdminApi from './Admin';
 import ReferencesApi from './References';
+import TicketsApi from './TicketsApi';
 
 export {
     AuthApi,
@@ -27,5 +28,6 @@ export {
     NotificationApi,
     SubscriptionApi,
     AdminApi,
-    ReferencesApi
+    ReferencesApi,
+    TicketsApi
 };

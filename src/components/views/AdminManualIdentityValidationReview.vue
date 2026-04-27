@@ -1,8 +1,5 @@
 <template>
-    <div class="col-md-24">
-        <div class="row">
-            <adminNav></adminNav>
-        </div>
+    <AdminLayout>
         <div class="row">
             <div class="col-md-22 col-md-offset-1">
                 <router-link :to="{ name: 'admin-manual-identity-validations' }" class="btn btn-default btn-sm mb-2">
@@ -130,12 +127,12 @@
                 </div>
             </div>
         </div>
-    </div>
+    </AdminLayout>
 </template>
 
 <script>
 import axios from 'axios';
-import adminNav from '../sections/adminNav';
+import AdminLayout from '../layouts/AdminLayout.vue';
 import { AdminApi } from '../../services/api';
 import { useAuthStore } from '../../stores/auth';
 import dialogs from '../../services/dialogs.js';
@@ -270,7 +267,7 @@ export default {
         });
     },
     components: {
-        adminNav
+        AdminLayout
     }
 };
 </script>

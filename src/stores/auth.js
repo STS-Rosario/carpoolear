@@ -3,16 +3,7 @@ import { AuthApi, UserApi } from '../services/api';
 import cache, { keys } from '../services/cache';
 import localConfig from '../../config/conf';
 import { completeSessionIfRegistrationReturnsToken } from '../utils/registrationAutoLogin';
-
-// Lazy-load router to avoid circular dependency (stores → router → routes → components → stores)
-let _router;
-async function getRouter() {
-    if (!_router) {
-        const routerModule = await import('../router');
-        _router = routerModule.default;
-    }
-    return _router;
-}
+import { getLazyRouter } from '../utils/routerLazy.js';
 
 const authApi = new AuthApi();
 const userApi = new UserApi();
@@ -119,7 +110,7 @@ export const useAuthStore = defineStore('auth', {
             if (carsStore) carsStore.index();
             passengerStore.getPendingRequest();
             rootStore.startThread();
-            const router = await getRouter();
+            const router = await getLazyRouter();
             if (this.firstTime) {
                 router.replace({ name: 'profile_update' });
             } else {
@@ -192,7 +183,7 @@ export const useAuthStore = defineStore('auth', {
                     })
                     .catch(async () => {
                         this.doLogout();
-                        const router = await getRouter();
+                        const router = await getLazyRouter();
                         router.push({ name: 'login' });
                         resolve();
                     });
@@ -215,7 +206,7 @@ export const useAuthStore = defineStore('auth', {
             this.doLogout();
             deviceStore.devices = [];
             rootStore.stopThread();
-            const router = await getRouter();
+            const router = await getLazyRouter();
             router.replace({ name: 'trips' });
         },
 
@@ -234,7 +225,7 @@ export const useAuthStore = defineStore('auth', {
             return authApi
                 .changePassword(token, data)
                 .then(async () => {
-                    const router = await getRouter();
+                    const router = await getLazyRouter();
                     router.push({ name: 'login' });
                     return Promise.resolve();
                 })

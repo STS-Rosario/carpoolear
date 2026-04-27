@@ -1,8 +1,5 @@
 <template>
-    <div class="col-md-24">
-        <div class="row">
-            <adminNav></adminNav>
-        </div>
+    <AdminLayout>
         <div class="row">
             <div class="col-md-22 col-md-offset-1">
                 <h2>{{ $t('validacionesManuales') }}</h2>
@@ -69,11 +66,11 @@
                 </Loading>
             </div>
         </div>
-    </div>
+    </AdminLayout>
 </template>
 
 <script>
-import adminNav from '../sections/adminNav';
+import AdminLayout from '../layouts/AdminLayout.vue';
 import Loading from '../Loading';
 import { AdminApi } from '../../services/api';
 
@@ -141,7 +138,7 @@ export default {
         this.fetchList();
     },
     components: {
-        adminNav,
+        AdminLayout,
         Loading
     }
 };

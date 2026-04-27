@@ -1,8 +1,5 @@
 <template>
-    <div class="col-md-24">
-        <div class="row">
-            <adminNav></adminNav>
-        </div>
+    <AdminLayout>
         <div class="row">
             <div class="col-md-22 col-md-offset-1">
                 <h2>{{ $t('pedidosDeEliminacionDeCuenta') }}</h2>
@@ -90,7 +87,7 @@
                                         {{ $t('verPerfilPublico') }}
                                     </router-link>
                                     <router-link
-                                        :to="{ name: 'admin-users', query: { userId: currentRequest.user.id } }"
+                                        :to="{ name: 'admin-users-edit', params: { userId: String(currentRequest.user.id) } }"
                                         class="btn btn-link btn-sm"
                                     >
                                         {{ $t('editarEnAdmin') }}
@@ -133,10 +130,10 @@
                 </modal>
             </div>
         </div>
-    </div>
+    </AdminLayout>
 </template>
 <script>
-import adminNav from '../sections/adminNav';
+import AdminLayout from '../layouts/AdminLayout.vue';
 import Loading from '../Loading.vue';
 import modal from '../Modal';
 import Spinner from '../Spinner.vue';
@@ -234,7 +231,7 @@ export default {
         }
     },
     components: {
-        adminNav,
+        AdminLayout,
         Loading,
         modal,
         Spinner

@@ -11,6 +11,11 @@ class AdminApi extends TaggedApi {
         return this.get('/api/users/search', data);
     }
 
+    /** Paginated admin user list (newest first). Params: page, per_page, name (optional) */
+    getUsersList(params = {}) {
+        return this.get('/api/admin/users', params);
+    }
+
     getTrips() {
         return this.get('/api/data/trips');
     }

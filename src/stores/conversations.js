@@ -4,15 +4,7 @@ import dayjs from '../dayjs';
 import { checkError } from '../../utils/helpers';
 import dialogs from '../services/dialogs.js';
 import i18n from '../i18n';
-// Lazy-load router to avoid circular dependency (stores → router → routes → components → stores)
-let _router;
-async function getRouter() {
-    if (!_router) {
-        const routerModule = await import('../router');
-        _router = routerModule.default;
-    }
-    return _router;
-}
+import { fireLazyRouterPush, lazyRouterPush } from '../utils/routerLazy.js';
 
 const conversationApi = new ConversationApi();
 const pageSize = 20;
@@ -206,7 +198,7 @@ export const useConversationsStore = defineStore('conversations', {
                 config.identity_validation_enabled === true &&
                 config.identity_validation_optional !== true;
             if (identityEnforced && currentUser && currentUser.identity_validation_required_for_user && !currentUser.identity_validated) {
-                getRouter().push({ name: 'identity_validation' });
+                await lazyRouterPush({ name: 'identity_validation' });
                 return Promise.resolve();
             }
 
@@ -227,7 +219,7 @@ export const useConversationsStore = defineStore('conversations', {
                 .catch((error) => {
                     console.log(error);
                     if (checkError(error, 'identity_validation_required')) {
-                        getRouter().push({ name: 'identity_validation' });
+                        fireLazyRouterPush({ name: 'identity_validation' });
                         dialogs.message(i18n.global.t('debesValidarIdentidadParaAccion'), {
                             estado: 'error'
                         });
@@ -242,6 +234,7 @@ export const useConversationsStore = defineStore('conversations', {
                             { estado: 'error' }
                         );
                     }
+                    return Promise.reject(error);
                 });
         },
 
@@ -408,7 +401,7 @@ export const useConversationsStore = defineStore('conversations', {
                 })
                 .catch((error) => {
                     if (checkError(error, 'identity_validation_required')) {
-                        getRouter().push({ name: 'identity_validation' });
+                        fireLazyRouterPush({ name: 'identity_validation' });
                         dialogs.message(i18n.global.t('debesValidarIdentidadParaAccion'), {
                             estado: 'error'
                         });

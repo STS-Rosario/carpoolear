@@ -1082,7 +1082,8 @@ textarea.has-error {
         display: none;
     }
     .reset-password .user-form .btn-primary {
-        max-width: 300px;
+        width: fit-content;
+        max-width: 100%;
     }
     .header .header_panel-right {
         height: 86px;

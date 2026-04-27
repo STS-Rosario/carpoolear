@@ -2083,6 +2083,7 @@ textarea {
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#019be1', endColorstr='#016587', GradientType=1);
 }
 .app-container.blue.reset-password .user-form .btn-primary {
+    width: fit-content;
     max-width: 100%;
 }
 @media (max-width: 768px) {
@@ -2213,7 +2214,13 @@ textarea.has-error {
     height: 56px;
     margin-top: 1em;
     padding: 1em;
+    width: fit-content;
+    max-width: 100%;
+}
+
+.user-form .btn-primary.btn-facebook {
     width: 100%;
+    max-width: 100%;
 }
 
 .user-form a {
@@ -2773,7 +2780,8 @@ ul {
     }
 
     .user-form .btn-primary {
-        max-width: 130px;
+        width: fit-content;
+        max-width: 100%;
         padding: 1em 2em;
     }
 

@@ -24,6 +24,8 @@ const Transactions = () => import('../components/views/transactions.vue');
 const TermsAndConditions = () => import('../components/views/TermsAndConditions.vue');
 const AdminPage = () => import('../components/views/AdminPage.vue');
 const UsersCrud = () => import('../components/views/UsersCrud.vue');
+const AdminUsersList = () => import('../components/views/AdminUsersList.vue');
+const AdminUserDetail = () => import('../components/views/AdminUserDetail.vue');
 const AdminTrips = () => import('../components/views/AdminTrips.vue');
 const UsersDeleteList = () => import('../components/views/UsersDeleteList.vue');
 const BannedUsersList = () => import('../components/views/BannedUsersList.vue');
@@ -31,6 +33,10 @@ const AdminManualIdentityValidations = () => import('../components/views/AdminMa
 const AdminManualIdentityValidationReview = () => import('../components/views/AdminManualIdentityValidationReview.vue');
 const AdminMpRejectedValidations = () => import('../components/views/AdminMpRejectedValidations.vue');
 const AdminMpRejectedValidationDetail = () => import('../components/views/AdminMpRejectedValidationDetail.vue');
+const Tickets = () => import('../components/views/Tickets.vue');
+const TicketDetail = () => import('../components/views/TicketDetail.vue');
+const AdminSupportTickets = () => import('../components/views/AdminSupportTickets.vue');
+const AdminSupportTicketDetail = () => import('../components/views/AdminSupportTicketDetail.vue');
 
 const UpdateProfile = () => import('../components/sections/UpdateProfile.vue');
 const FriendsSetting = () => import('../components/sections/FriendsSetting.vue');
@@ -312,6 +318,38 @@ export default [
         }
     },
     {
+        path: '/tickets',
+        name: 'tickets',
+        component: Tickets,
+        beforeEnter: auth,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'notifications'
+                },
+                header: {
+                    titleKey: 'soporte'
+                }
+            }
+        }
+    },
+    {
+        path: '/tickets/:id',
+        name: 'ticket-detail',
+        component: TicketDetail,
+        props: true,
+        beforeEnter: auth,
+        meta: {
+            actionbar: {
+                header: {
+                    titleKey: 'detalleTicket',
+                    buttons: ['back']
+                }
+            }
+        }
+    },
+    {
         path: '/setting',
         component: Settings,
         beforeEnter: auth,
@@ -531,9 +569,45 @@ export default [
         }
     },
     {
+        path: '/admin/users/:userId([0-9]+)/edit',
+        name: 'admin-users-edit',
+        component: UsersCrud,
+        beforeEnter: authAdmin,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'admin'
+                },
+                header: {
+                    titleKey: 'adminUsers',
+                    buttons: []
+                }
+            }
+        }
+    },
+    {
+        path: '/admin/users/:userId([0-9]+)',
+        name: 'admin-users-user',
+        component: AdminUserDetail,
+        beforeEnter: authAdmin,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'admin'
+                },
+                header: {
+                    titleKey: 'adminUsers',
+                    buttons: []
+                }
+            }
+        }
+    },
+    {
         path: '/admin/users',
         name: 'admin-users',
-        component: UsersCrud,
+        component: AdminUsersList,
         beforeEnter: authAdmin,
         meta: {
             actionbar: {
@@ -634,6 +708,43 @@ export default [
                 },
                 header: {
                     titleKey: 'revisarSolicitud',
+                    buttons: ['back']
+                }
+            }
+        }
+    },
+    {
+        path: '/admin/support-tickets',
+        name: 'admin-support-tickets',
+        component: AdminSupportTickets,
+        beforeEnter: authAdmin,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'admin'
+                },
+                header: {
+                    titleKey: 'soporte',
+                    buttons: []
+                }
+            }
+        }
+    },
+    {
+        path: '/admin/support-tickets/:id',
+        name: 'admin-support-ticket-detail',
+        component: AdminSupportTicketDetail,
+        props: true,
+        beforeEnter: authAdmin,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'admin'
+                },
+                header: {
+                    titleKey: 'detalleTicket',
                     buttons: ['back']
                 }
             }
