@@ -2773,7 +2773,7 @@ ul {
     }
 
     .user-form .btn-primary {
-        max-width: 130px;
+        max-width: 100%;
         padding: 1em 2em;
     }
 
