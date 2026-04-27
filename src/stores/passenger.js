@@ -4,15 +4,7 @@ import { checkError } from '../../utils/helpers';
 import dialogs from '../services/dialogs.js';
 import i18n from '../i18n';
 import network from '../services/network';
-// Lazy-load router to avoid circular dependency (stores → router → routes → components → stores)
-let _router;
-async function getRouter() {
-    if (!_router) {
-        const routerModule = await import('../router');
-        _router = routerModule.default;
-    }
-    return _router;
-}
+import { fireLazyRouterPush } from '../utils/routerLazy.js';
 
 /* eslint-disable no-undef */
 
@@ -138,7 +130,7 @@ export const usePassengerStore = defineStore('passenger', {
                 .catch((error) => {
                     console.error(error);
                     if (checkError(error, 'identity_validation_required')) {
-                        getRouter().push({ name: 'identity_validation' });
+                        fireLazyRouterPush({ name: 'identity_validation' });
                         dialogs.message(i18n.global.t('debesValidarIdentidadParaAccion'), {
                             estado: 'error'
                         });
@@ -190,7 +182,7 @@ export const usePassengerStore = defineStore('passenger', {
                 })
                 .catch((error) => {
                     if (checkError(error, 'identity_validation_required')) {
-                        getRouter().push({ name: 'identity_validation' });
+                        fireLazyRouterPush({ name: 'identity_validation' });
                         dialogs.message(i18n.global.t('debesValidarIdentidadParaAccion'), {
                             estado: 'error'
                         });
@@ -211,7 +203,7 @@ export const usePassengerStore = defineStore('passenger', {
                 })
                 .catch((error) => {
                     if (checkError(error, 'identity_validation_required')) {
-                        getRouter().push({ name: 'identity_validation' });
+                        fireLazyRouterPush({ name: 'identity_validation' });
                         dialogs.message(i18n.global.t('debesValidarIdentidadParaAccion'), {
                             estado: 'error'
                         });

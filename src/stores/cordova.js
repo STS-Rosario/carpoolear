@@ -4,16 +4,7 @@ import apple from '../cordova/apple.js';
 import { AuthApi } from '../services/api';
 import bus from '../services/bus-event.js';
 import toast from '../cordova/toast.js';
-
-// Lazy-load router to avoid circular dependency (stores → router → routes → components → stores)
-let _router;
-async function getRouter() {
-    if (!_router) {
-        const routerModule = await import('../router');
-        _router = routerModule.default;
-    }
-    return _router;
-}
+import { fireLazyRouterPush, getLazyRouter } from '../utils/routerLazy.js';
 
 const authApi = new AuthApi();
 
@@ -83,15 +74,7 @@ export const useCordovaStore = defineStore('cordova', {
                 }
             } else {
                 // Sino estoy entrando desde la notificacion debería abrirme la URL
-                getRouter().push(
-                    { path: notification.url },
-                    function (a, b) {
-                        console.log('router succes');
-                    },
-                    function (x, y) {
-                        console.log('router abort');
-                    }
-                );
+                fireLazyRouterPush({ path: notification.url });
             }
             const { useNotificationsStore } = await import('./notifications');
             const notificationsStore = useNotificationsStore();
@@ -147,18 +130,16 @@ export const useCordovaStore = defineStore('cordova', {
             // do staff
         },
 
-        onBackButton() {
+        async onBackButton() {
             const result = bus.emit('backbutton');
             if (!result) {
-                if (getRouter().stack.length > 0) {
-                    getRouter().go(-1);
-                } else {
-                    // In Capacitor, use App.exitApp() instead of navigator.Backbutton.goHome()
-                    if (window.Capacitor && window.Capacitor.isNativePlatform()) {
-                        import('@capacitor/app').then(({ App }) => {
-                            App.exitApp();
-                        });
-                    }
+                const router = await getLazyRouter();
+                if (window.history.length > 1) {
+                    router.back();
+                } else if (window.Capacitor && window.Capacitor.isNativePlatform()) {
+                    import('@capacitor/app').then(({ App }) => {
+                        App.exitApp();
+                    });
                 }
             }
         }

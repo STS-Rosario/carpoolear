@@ -1,14 +1,5 @@
 import { defineStore } from 'pinia';
-
-// Lazy-load router to avoid circular dependency (stores → router → routes → components → stores)
-let _router;
-async function getRouter() {
-    if (!_router) {
-        const routerModule = await import('../router');
-        _router = routerModule.default;
-    }
-    return _router;
-}
+import { getLazyRouter } from '../utils/routerLazy.js';
 
 let appName = import.meta.env.VITE_TARGET_APP || 'Carpoolear';
 if (appName && appName.length) {
@@ -173,7 +164,7 @@ export const useActionbarsStore = defineStore('actionbars', {
                 tripsStore.tripsSearch({ is_passenger: false });
                 tripsStore.setRefreshList(true);
             }
-            const router = await getRouter();
+            const router = await getLazyRouter();
             router.push({
                 name: item.url,
                 ...(Object.keys(params).length ? { params } : {}),
