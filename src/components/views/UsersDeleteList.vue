@@ -87,7 +87,7 @@
                                         {{ $t('verPerfilPublico') }}
                                     </router-link>
                                     <router-link
-                                        :to="{ name: 'admin-users', query: { userId: currentRequest.user.id } }"
+                                        :to="{ name: 'admin-users-edit', params: { userId: String(currentRequest.user.id) } }"
                                         class="btn btn-link btn-sm"
                                     >
                                         {{ $t('editarEnAdmin') }}

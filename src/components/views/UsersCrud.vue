@@ -1,111 +1,42 @@
 <template>
     <AdminLayout>
-        <div class="conversation-component container">
+        <div class="container admin-user-edit">
             <div class="row">
                 <div class="col-md-20 col-md-offset-2">
-                    <div class="col-sm-8 col-md-8">
-                        <div class="conversation_list">
-                            <ul class="list-group">
-                                <li class="list-group-item">
-                                    <div class="up">
-                                        <input
-                                            v-model="textSearch"
-                                            v-on:keyup="onSearchUsers"
-                                            type="text"
-                                            class="form-control"
-                                            :placeholder="$t('escribeUnNombreYPresionaBuscar')"
-                                        />
-                                    </div>
-                                </li>
-                                <template v-if="textSearch.length != 0">
-                                    <Loading
-                                        class="conversation_chat--chats"
-                                        :data="userList"
-                                    >
-                                        <li
-                                            v-for="user in userList"
-                                            class="list-group-item conversation_header"
-                                            @click="selectUser(user)"
-                                            v-bind:key="user.id"
-                                        >
-                                            <div class="media">
-                                                <div
-                                                    class="media-right pull-right"
-                                                >
-                                                    <button
-                                                        class="btn btn-success btn-circle"
-                                                        v-on:click.stop="
-                                                            toUserMessages(user)
-                                                        "
-                                                    >
-                                                        <i
-                                                            class="fa fa-comments medium-icon"
-                                                            aria-hidden="true"
-                                                        ></i>
-                                                    </button>
-                                                </div>
-                                                <div class="media-left">
-                                                    <div
-                                                        class="conversation_image circle-box"
-                                                        v-imgSrc:profile="
-                                                            user.image
-                                                        "
-                                                    ></div>
-                                                </div>
-                                                <div class="media-body">
-                                                    <h4 class="media-heading">
-                                                        <span
-                                                            class="conversation-title"
-                                                        >
-                                                            {{ user.name }}
-                                                        </span>
-                                                    </h4>
-                                                    <span>
-                                                        {{ user.email }}
-                                                    </span>
-                                                    <span
-                                                        style="display: block"
-                                                    >
-                                                        {{ user.nro_doc }} -
-                                                        {{ user.mobile_phone }}
-                                                    </span>
-                                                    <span
-                                                        style="display: block"
-                                                    >
-                                                        {{
-                                                            user.last_connection
-                                                        }}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <template #no-data><li
-                                            class="list-group-item alert alert-warning"
-                                            role="alert"
-                                        >
-                                            {{ $t('noSeEncontroNingunUsuario') }}
-                                        </li></template>
-                                        <template #loading><li
-                                            class="list-group-item alert alert-info"
-                                            role="alert"
-                                        >
-                                            <img
-                                                :src="$publicImg('loader.gif')"
-                                                alt=""
-                                                class="ajax-loader"
-                                            />
-                                            {{ $t('cargandoUsuarios') }}
-                                        </li></template>
-                                    </Loading>
-                                </template>
-                            </ul>
-                        </div>
+                    <div
+                        v-if="userLoading"
+                        class="alert alert-info"
+                    >
+                        <img
+                            :src="$publicImg('loader.gif')"
+                            alt=""
+                            class="ajax-loader"
+                        />
+                        {{ $t('cargandoUsuarios') }}
                     </div>
                     <div
-                        v-if="currentUser"
-                        class="user-settings col-xs-24 col-sm-16 col-md-16"
+                        v-else-if="currentUser"
+                        class="user-settings col-xs-24"
                     >
                         <div class="settings-container">
+                            <p class="user-admin-edit-nav">
+                                <router-link
+                                    :to="{
+                                        name: 'admin-users-user',
+                                        params: { userId: String(currentUser.id) }
+                                    }"
+                                    class="btn btn-default btn-sm"
+                                >
+                                    {{ $t('adminUsuariosVolverResumen') }}
+                                </router-link>
+                                <button
+                                    type="button"
+                                    class="btn btn-link btn-sm"
+                                    @click="goToListOnly"
+                                >
+                                    {{ $t('adminUsuariosVolverAlListado') }}
+                                </button>
+                            </p>
                             <div class="form-group">
                                 <label for="input-name"
                                     >{{ $t('nombreYApellido') }}</label
@@ -440,14 +371,6 @@
                             </div>
                         </div>
                     </div>
-                    <div v-else class="col-xs-24 col-sm-16 col-md-16">
-                        <p
-                            class="alert alert-warning"
-                            role="alert"
-                        >
-                            {{ $t('seleccioneAlgunaPersona') }}
-                        </p>
-                    </div>
                 </div>
             </div>
         </div>
@@ -491,13 +414,10 @@ import { mapState, mapActions } from 'pinia';
 import { useDeviceStore } from '../../stores/device';
 import { useAuthStore } from '../../stores/auth';
 import { useAdminStore } from '../../stores/admin';
-import { useConversationsStore } from '../../stores/conversations';
 import { useProfileStore } from '../../stores/profile';
 import { Thread } from '../../classes/Threads.js';
-import Loading from '../Loading.vue';
 import { inputIsNumber, formatId, cleanId } from '../../services/utility';
 import dialogs from '../../services/dialogs.js';
-import router from '../../router';
 import AdminLayout from '../layouts/AdminLayout.vue';
 import modal from '../Modal';
 import Spinner from '../Spinner.vue';
@@ -506,11 +426,10 @@ import { AdminApi, UserApi } from '../../services/api';
 export default {
     // TODO fix css names
     // TODO search by facebook
-    name: 'admin-users',
+    name: 'admin-user-edit',
     data() {
         return {
-            textSearch: '',
-            userList: [],
+            userLoading: true,
             currentUser: '',
             newInfo: {
                 name: '',
@@ -542,7 +461,6 @@ export default {
             accountTypeError: new Error(),
             accountBankError: new Error(),
             patenteError: new Error(),
-            keyUpTimerId: 0,
             banks: [],
             accountTypes: [],
             showConfirmModal: false,
@@ -577,27 +495,41 @@ export default {
 
     methods: {
         ...mapActions(useAdminStore, {
-            update: 'adminUpdate',
-            search: 'searchUsers'
-        }),
-        ...mapActions(useConversationsStore, {
-            lookConversation: 'createConversation'
+            update: 'adminUpdate'
         }),
         ...mapActions(useProfileStore, {
             getBankData: 'getBankData'
         }),
 
-        onSearchUsers() {
-            if (this.keyUpTimerId) {
-                clearTimeout(this.keyUpTimerId);
+        goToListOnly() {
+            this.resetUserState();
+            this.$router.push({ name: 'admin-users' });
+        },
+        async loadUserForEdit() {
+            const userId = this.$route.params.userId;
+            if (!userId) {
+                this.userLoading = false;
+                this.resetUserState();
+                this.$router.replace({ name: 'admin-users' });
+                return;
             }
-            this.keyUpTimerId = setTimeout(() => {
-                this.search(this.textSearch).then((data) => {
-                    this.userList = data.data;
-                    // console.log('pas');
-                    // FIXME seleccionar usuario a veces congela la lista
-                });
-            }, 750);
+            this.userLoading = true;
+            try {
+                const body = await this.userApi.show(userId);
+                const user = body.data;
+                if (user) {
+                    this.selectUser(user);
+                } else {
+                    dialogs.message(this.$t('noSeEncontroNingunUsuario'), { estado: 'error' });
+                    this.$router.replace({ name: 'admin-users' });
+                }
+            } catch (e) {
+                console.error(e);
+                dialogs.message(this.$t('noSeEncontroNingunUsuario'), { estado: 'error' });
+                this.$router.replace({ name: 'admin-users' });
+            } finally {
+                this.userLoading = false;
+            }
         },
         confirmClearIdentityValidation() {
             if (!this.currentUser || !this.currentUser.id) return;
@@ -656,19 +588,6 @@ export default {
                 this.newInfo.nro_doc = formatId(this.newInfo.nro_doc, this.settings.profile_id_format);
             }
         },
-        toUserMessages(user) {
-            console.log('toUserMessages');
-            this.lookConversation({ user: user, tripId: null }).then(
-                (conversation) => {
-                    console.log('toUserMessages then', conversation);
-                    router.push({
-                        name: 'conversation-chat',
-                        params: { id: conversation.id }
-                    });
-                }
-            );
-        },
-
         isNumber(value) {
             inputIsNumber(value);
         },
@@ -681,7 +600,7 @@ export default {
             this.newInfo.nro_doc = formatted;
         },
 
-        clear() {
+        resetUserState() {
             this.currentUser = '';
             this.newInfo = {
                 name: '',
@@ -702,19 +621,11 @@ export default {
                 patente: ''
             };
         },
-        loadUserFromQuery() {
-            const userId = this.$route.query.userId;
-            if (!userId) return;
-            this.userApi.show(userId).then((response) => {
-                const user = response.data;
-                if (user) {
-                    this.selectUser(user);
-                    this.textSearch = user.name || '';
-                    this.userList = [user];
-                }
-            }).catch(() => {
-                dialogs.message(this.$t('noSeEncontroNingunUsuario'), { estado: 'error' });
-            });
+        clear() {
+            this.resetUserState();
+            if (this.$route.params.userId) {
+                this.$router.replace({ name: 'admin-users' });
+            }
         },
         conversationsSearch() {
             // Placeholder method - may be implemented later
@@ -759,8 +670,8 @@ export default {
                 .then(() => {
                     this.loadingAction = false;
                     this.closeConfirmModal();
-                    this.clear();
-                    this.userList = this.userList.filter((u) => u.id !== userId);
+                    this.resetUserState();
+                    this.$router.replace({ name: 'admin-users' });
                     dialogs.message(this.$t('accionCompletadaExitosamente'), {
                         duration: 5,
                         estado: 'success'
@@ -881,6 +792,7 @@ export default {
                 this.update(payload)
                     .then(() => {
                         dialogs.message(this.$t('perfilActualizadoCorrectamente'));
+                        this.loadUserForEdit();
                     })
                     .catch((err) => {
                         console.log(err);
@@ -895,7 +807,6 @@ export default {
                             estado: 'error'
                         });
                     });
-                this.onSearchUsers();
             } else {
                 dialogs.message(this.$t('verifiqueLosCampos'), { estado: 'error' });
             }
@@ -913,17 +824,19 @@ export default {
                 // router.push({ name: 'conversation-chat' });
             }
         },
-        textSearch: function (newValue, oldValue) {
-            if (oldValue.length === 0 && newValue.length > 0) {
-                this.clear();
-            }
-        },
         'newInfo.patente': function () {
             this.patenteError.state = false;
         }
     },
 
-    mounted() {
+    beforeRouteUpdate(to, from, next) {
+        next();
+        if (to.name === 'admin-users-edit') {
+            this.loadUserForEdit();
+        }
+    },
+
+    async mounted() {
         this.adminApi = new AdminApi();
         this.userApi = new UserApi();
         this.getBankData().then((data) => {
@@ -936,16 +849,18 @@ export default {
             this.unreadMessage();
         });
         this.thread.run(20000);
-        this.loadUserFromQuery();
-    },
-    watch: {
-        '$route.query.userId'(userId) {
-            this.loadUserFromQuery();
+        if (this.$route.query.userId) {
+            const id = String(this.$route.query.userId);
+            await this.$router.replace({
+                name: 'admin-users-edit',
+                params: { userId: id },
+                query: {}
+            });
         }
+        await this.loadUserForEdit();
     },
     updated() {},
     components: {
-        Loading,
         AdminLayout,
         modal,
         Spinner
@@ -1069,5 +984,38 @@ export default {
         padding-left: 20px;
         padding-right: 20px;
     }
+}
+
+.list-group-item.conversation_header.active,
+.list-group-item.conversation_header.active:hover {
+    background-color: #e7f0ff;
+    border-color: #b8d4f0;
+}
+
+.user-admin-pager-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.user-admin-pager-label {
+    flex: 1;
+    text-align: center;
+    font-size: 12px;
+}
+
+.user-admin-view h4 {
+    margin-top: 0;
+}
+
+.user-admin-view-actions .btn {
+    margin-right: 8px;
+    margin-bottom: 8px;
+}
+
+.user-admin-edit-nav {
+    margin-bottom: 12px;
 }
 </style>
