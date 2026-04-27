@@ -137,50 +137,26 @@
                 </div>
             </router-link>
             <div class="header_panel-right">
-                <modal
-                    :name="'modal'"
-                    v-if="showModal"
-                    @close="showModal = false"
-                    :title="'Test'"
-                    :body="'Body'"
-                >
-                    <template #header><h3>{{ $t('invitarAmigos') }}</h3></template>
-                    <template #body><div class="social-share">
-                        <a
-                            :href="'https://www.facebook.com/sharer/sharer.php?u=' + shareUrl"
-                            target="_blank"
-                            aria-label="Compartir en Facebook"
-                            class="lnk lnk-social-network lnk-facebook"
-                        >
-                            <i class="fa fa-facebook" aria-hidden="true"></i>
-                        </a>
-                        <a
-                            :href="'https://twitter.com/intent/tweet/?text=' + encodeURIComponent(this.$t('compartirPlataforma')) + '&url=' + shareUrl + '&via=' + config.name_app.toLowerCase() + '&hashtags=carpooling'"
-                            target="_blank"
-                            aria-label="Compartir en Twitter"
-                            class="lnk lnk-social-network lnk-twitter"
-                        >
-                            <i class="fa fa-twitter" aria-hidden="true"></i>
-                        </a>
-                        <a
-                            :href="'whatsapp://send?text=' + encodeURIComponent(this.$t('compartirPlataforma')) + '%20' + shareUrl"
-                            target="_blank"
-                            aria-label="Compartir en Whats App"
-                            class="lnk lnk-social-network lnk-whatsapp"
-                            v-if="isMobile"
-                        >
-                            <i class="fa fa-whatsapp" aria-hidden="true"></i>
-                        </a>
-                    </div></template>
-                </modal>
-                <button
-                    v-if="config.trip_card_design !== 'light'"
-                    @click="share"
-                    type="button"
-                    class="btn btn-link"
-                >
-                    {{ $t('invitarAmigos') }}
-                </button>
+                <div class="header-social-links">
+                    <a
+                        href="https://www.instagram.com/carpoolear/?hl=en"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="header-social-link"
+                        aria-label="Instagram Carpoolear"
+                    >
+                        <img :src="instagram_logo" alt="" />
+                    </a>
+                    <a
+                        href="https://www.facebook.com/Carpoolear"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="header-social-link"
+                        aria-label="Facebook Carpoolear"
+                    >
+                        <img :src="facebook_logo" alt="" />
+                    </a>
+                </div>
                 <router-link
                     v-if="config.trip_card_design !== 'light'"
                     class="btn btn-link trips-link"
@@ -314,7 +290,6 @@ import { useTripsStore } from '../../stores/trips';
 import dropdown from '../Dropdown';
 import router from '../../router';
 import bus from '../../services/bus-event.js';
-import modal from '../Modal';
 import IdentityValidationCountdownBanner from '../IdentityValidationCountdownBanner.vue';
 import { shouldHideDonationOnIOSCapacitor } from '../../services/capacitor.js';
 
@@ -338,8 +313,8 @@ export default {
                 'img/' +
                 process.env.TARGET_APP +
                 '_logo.png',
-            showModal: false,
-            shareUrl: encodeURIComponent(new URL(process.env.WEB_URL).origin)
+            facebook_logo: process.env.ROUTE_BASE + 'img/fb_logo.png',
+            instagram_logo: process.env.ROUTE_BASE + 'img/instagram-logo.png'
         };
     },
 
@@ -403,17 +378,6 @@ export default {
         shouldHideDonationOnIOSCapacitor(user) {
             return shouldHideDonationOnIOSCapacitor(user);
         },
-        share() {
-            // dialogs.message('Message example');
-            /* if (window && window.plugins && window.plugins.socialsharing && window.plugins.socialsharing.shareWithOptions) {
-                socialShare.share();
-            } else {
-                this.showModal = true;
-            } */
-            // Primero necesito ver cuando estoy en App y cuando en Web
-            this.showModal = true;
-        },
-
         logout() {
             useAuthStore().logout();
         },
@@ -446,7 +410,6 @@ export default {
     },
     components: {
         dropdown,
-        modal,
         IdentityValidationCountdownBanner
     }
 };
@@ -455,6 +418,24 @@ export default {
 <style scoped>
 .trips-link {
     font-weight: bold;
+}
+.header-social-links {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-right: 3rem;
+    vertical-align: middle;
+}
+.header-social-link img {
+    width: 22px;
+    height: 22px;
+    display: block;
+    object-fit: contain;
+    vertical-align: middle;
+    margin-right: 1rem;
+}
+.header-social-link:hover img {
+    opacity: 0.85;
 }
 .actionbar_icon img {
     margin-bottom: 2px;
