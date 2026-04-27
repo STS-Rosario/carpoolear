@@ -181,6 +181,12 @@ export default {
                             params: { id: n.extras.conversation_id }
                         });
                         break;
+                    case 'ticket':
+                        router.push({
+                            name: 'ticket-detail',
+                            params: { id: n.extras.ticket_id || n.extras.id }
+                        });
+                        break;
                     case 'announcement':
                         // open external url
                         if (n.extras.external_url) {

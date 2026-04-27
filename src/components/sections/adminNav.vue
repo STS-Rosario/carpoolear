@@ -21,6 +21,9 @@
             <li>
                 <router-link :to="{ name: 'admin-mp-rejected-validations' }">{{ $t('rechazosMercadoPago') }}</router-link>
             </li>
+            <li>
+                <router-link :to="{ name: 'admin-support-tickets' }">{{ $t('soporte') }}</router-link>
+            </li>
         </div>
     </div>
 </template>
