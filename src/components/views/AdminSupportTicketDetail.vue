@@ -1,12 +1,7 @@
 <template>
-    <div class="col-md-24" v-if="ticket">
-        <div class="row">
-            <adminNav></adminNav>
-        </div>
-        <div class="row">
-            <div class="col-md-20 col-md-offset-2">
-                <h3>#{{ ticket.id }} - {{ ticket.subject }}</h3>
-                <p>{{ ticket.status }} · {{ ticket.priority }}</p>
+    <AdminLayout v-if="ticket">
+        <h3>#{{ ticket.id }} - {{ ticket.subject }}</h3>
+        <p>{{ ticket.status }} · {{ ticket.priority }}</p>
 
                 <label>{{ $t('notaInterna') }}</label>
                 <textarea class="form-control" v-model="internalNote"></textarea>
@@ -26,15 +21,13 @@
                 <button class="btn btn-default mtop-10 mleft-10" @click="resolveTicket">{{ $t('marcarResuelto') }}</button>
                 <button class="btn btn-default mtop-10 mleft-10" @click="closeTicket">{{ $t('cerrarTicket') }}</button>
                 <button class="btn btn-default mtop-10 mleft-10" @click="reopenTicket">{{ $t('reabrirTicket') }}</button>
-            </div>
-        </div>
-    </div>
+    </AdminLayout>
 </template>
 
 <script>
 import { mapActions } from 'pinia';
 import ToastUiEditor from '../elements/ToastUiEditor.vue';
-import adminNav from '../sections/adminNav';
+import AdminLayout from '../layouts/AdminLayout.vue';
 import { markdownToHtml } from '../../services/markdown';
 import { useTicketsStore } from '../../stores/tickets';
 
@@ -102,7 +95,7 @@ export default {
     },
     components: {
         editor: ToastUiEditor,
-        adminNav
+        AdminLayout
     }
 };
 </script>

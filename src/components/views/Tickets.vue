@@ -5,6 +5,7 @@
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-6">
+                        <label class="control-label">{{ $t('categoriaTicket') }}</label>
                         <select v-model="form.type" class="form-control">
                             <option value="bug_report">{{ $t('ticketTypeBug') }}</option>
                             <option value="contact">{{ $t('ticketTypeContact') }}</option>
@@ -12,15 +13,10 @@
                             <option value="report">{{ $t('ticketTypeReport') }}</option>
                         </select>
                     </div>
-                    <div class="col-md-6">
-                        <select v-model="form.priority" class="form-control">
-                            <option value="low">{{ $t('prioridadBaja') }}</option>
-                            <option value="normal">{{ $t('prioridadNormal') }}</option>
-                            <option value="high">{{ $t('prioridadAlta') }}</option>
-                        </select>
-                    </div>
                 </div>
-                <input v-model="form.subject" class="form-control mtop-10" :placeholder="$t('asuntoTicket')" />
+                <label class="control-label mtop-10">{{ $t('asuntoTicket') }}</label>
+                <input v-model="form.subject" class="form-control" :placeholder="$t('asuntoTicketPlaceholder')" />
+                <label class="control-label mtop-10">{{ $t('mensajeTicket') }}</label>
                 <editor
                     ref="createEditor"
                     :initial-value="''"
@@ -29,6 +25,7 @@
                     height="180px"
                     class="mtop-10"
                 />
+                <label class="control-label mtop-10">{{ $t('adjuntosTicket') }}</label>
                 <input class="mtop-10" type="file" accept="image/*" multiple @change="onCreateAttachments" />
                 <p class="help-block">{{ $t('maximo3Imagenes') }}</p>
                 <button class="btn btn-primary" @click="createTicket">{{ $t('crearTicket') }}</button>
@@ -61,7 +58,6 @@ export default {
         return {
             form: {
                 type: 'bug_report',
-                priority: 'normal',
                 subject: ''
             },
             attachments: [],
@@ -89,7 +85,6 @@ export default {
             const markdown = this.$refs.createEditor.invoke('getMarkdown');
             return this.createTicketAction({
                 type: this.form.type,
-                priority: this.form.priority,
                 subject: this.form.subject,
                 message_markdown: markdown,
                 attachments: this.attachments
@@ -99,10 +94,23 @@ export default {
                 this.$refs.createEditor.invoke('setMarkdown', '');
                 return this.fetchList();
             }).catch(() => dialogs.message(this.$t('errorDatos'), { estado: 'error' }));
+        },
+        setTypeFromUrl() {
+            const allowed = ['bug_report', 'contact', 'feedback', 'report'];
+            const category = this.$route.query.category;
+            if (allowed.includes(category)) {
+                this.form.type = category;
+            }
         }
     },
     mounted() {
+        this.setTypeFromUrl();
         this.fetchList();
+    },
+    watch: {
+        '$route.query.category': function () {
+            this.setTypeFromUrl();
+        }
     },
     components: {
         editor: ToastUiEditor

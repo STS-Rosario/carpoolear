@@ -38,6 +38,9 @@ export const useTicketsStore = defineStore('tickets', {
             return ticketsApi.adminList().then((response) => {
                 this.adminList = response.data || [];
                 return this.adminList;
+            }).catch((error) => {
+                this.adminList = [];
+                return Promise.reject(error);
             });
         },
         fetchAdminOne(id) {

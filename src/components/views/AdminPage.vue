@@ -1,8 +1,5 @@
 <template>
-    <div class="col-md-24">
-        <div class="row">
-            <adminNav></adminNav>
-        </div>
+    <AdminLayout>
         <div class="row">
             <div class="col-md-20 col-md-offset-2">
                 <div class="card chart-card">
@@ -72,7 +69,7 @@
                 </TotalUsersChart>
             </div>
         </div>
-    </div>
+    </AdminLayout>
 </template>
 
 <script>
@@ -83,7 +80,7 @@ import MonthlyUsersChart from '../elements/MonthlyUsersChart';
 import TotalUsersChart from '../elements/TotalUsersChart';
 import datePicker from '../DatePicker';
 import dayjs from '../../dayjs';
-import adminNav from '../sections/adminNav';
+import AdminLayout from '../layouts/AdminLayout.vue';
 
 export default {
     name: 'admin-page',
@@ -112,7 +109,7 @@ export default {
         MonthlyUsersChart,
         TotalUsersChart,
         datePicker,
-        adminNav
+        AdminLayout
     },
     mounted() {}
 };

@@ -1,8 +1,5 @@
 <template>
-    <div class="col-md-24">
-        <div class="row">
-            <adminNav></adminNav>
-        </div>
+    <AdminLayout>
         <div class="row">
             <div class="col-md-22 col-md-offset-1">
                 <adminSearchTrip
@@ -76,11 +73,11 @@
                 ></tripDisplay>
             </div>
         </div>
-    </div>
+    </AdminLayout>
 </template>
 
 <script>
-import adminNav from '../sections/adminNav';
+import AdminLayout from '../layouts/AdminLayout.vue';
 import adminSearchTrip from '../sections/AdminSearchTrips';
 import { mapActions } from 'pinia';
 import { useTripsStore } from '../../stores/trips';
@@ -141,7 +138,7 @@ export default {
         }
     },
     components: {
-        adminNav,
+        AdminLayout,
         adminSearchTrip,
         tripDisplay
     },

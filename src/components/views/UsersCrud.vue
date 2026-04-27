@@ -1,17 +1,7 @@
 <template>
-    <div class="col-md-24">
-        <div class="row">
-            <adminNav></adminNav>
-        </div>
+    <AdminLayout>
         <div class="conversation-component container">
             <div class="row">
-                <router-link
-                        :to="{ name: 'admin-users-delete-list' }"
-                        class="btn btn-link"
-                        style="display: block; text-align: center; margin-top: -10px;margin-bottom: 10px;font-size: 16px;"
-                    >
-                        {{ $t('pedidosDeEliminacionDeCuenta') }}
-                    </router-link>
                 <div class="col-md-20 col-md-offset-2">
                     <div class="col-sm-8 col-md-8">
                         <div class="conversation_list">
@@ -494,7 +484,7 @@
                 </div>
             </div></template>
         </modal>
-    </div>
+    </AdminLayout>
 </template>
 <script>
 import { mapState, mapActions } from 'pinia';
@@ -508,7 +498,7 @@ import Loading from '../Loading.vue';
 import { inputIsNumber, formatId, cleanId } from '../../services/utility';
 import dialogs from '../../services/dialogs.js';
 import router from '../../router';
-import adminNav from '../sections/adminNav';
+import AdminLayout from '../layouts/AdminLayout.vue';
 import modal from '../Modal';
 import Spinner from '../Spinner.vue';
 import { AdminApi, UserApi } from '../../services/api';
@@ -956,7 +946,7 @@ export default {
     updated() {},
     components: {
         Loading,
-        adminNav,
+        AdminLayout,
         modal,
         Spinner
     }
