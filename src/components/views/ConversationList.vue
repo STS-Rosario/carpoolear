@@ -1,10 +1,12 @@
 <template>
     <div
-        :class="
+        class="conversation-list-page"
+        :class="[
             config.module_coordinate_by_message
                 ? 'module--coordinate-by-message'
-                : ''
-        "
+                : '',
+            { 'conversation-list-page--mobile-chat': hide && isMobile }
+        ]"
     >
         <CoordinateTrip v-show="isMobile"></CoordinateTrip>
         <div
@@ -414,11 +416,37 @@ export default {
         height: 100%;
     }
     .conversation_list {
-        height: 85%;
+        height: 100%;
     }
-    .conversation_chat .list-group-item:nth-child(2) {
-        height: calc(100% - 99px);
+    .conversation-container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        min-height: 0;
+    }
+    .conversation-container .conversation_chat {
+        flex: 1 1 auto;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+    .conversation_chat > .list-group {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        min-height: 0;
+    }
+    .conversation_chat .conversation_user_header {
+        flex: 0 0 auto;
+    }
+    .conversation_chat .conversation-messages {
+        flex: 1 1 auto;
+        min-height: 0;
         overflow-y: auto;
+    }
+    .conversation_chat .message-composer {
+        flex: 0 0 auto;
     }
     .conversation-component.container {
         padding-left: 10px;
@@ -427,7 +455,7 @@ export default {
         height: calc(100vh - 150px);
     }
     .without-footer.conversation-component.container {
-        height: calc(100vh - 15px);
+        height: calc(100vh - 5.6rem);
     }
     .conversation-component > .row {
         padding-left: 20px;
@@ -437,6 +465,95 @@ export default {
         height: calc(100% - 66px);
         overflow-y: auto;
         border-bottom: 1px solid #ddd;
+    }
+}
+@media only screen and (max-width: 768px) {
+    /*
+     * Open conversation on mobile: fixed column height under the app header.
+     * Trip strip (consulta + warning + actions) stays at the top; composer at the bottom;
+     * only #messagesWrapper scrolls (flex middle).
+     */
+    /*
+     * Explicit height above fixed .actionbar-bottom (52px + safe area).
+     * Do not subtract 5.6rem here: that matches desktop .view-container padding
+     * (min-width: 768px in base.css). Mobile view-container uses ~51px/77px + safe
+     * top padding already, so 5.6rem would double-count and shrink the chat column.
+     */
+    .conversation-list-page--mobile-chat {
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        box-sizing: border-box;
+        height: calc(100dvh - 52px - constant(safe-area-inset-top, 0px) - constant(safe-area-inset-bottom, 0px));
+        height: calc(100dvh - 52px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+        max-height: calc(100dvh - 52px - constant(safe-area-inset-top, 0px) - constant(safe-area-inset-bottom, 0px));
+        max-height: calc(100dvh - 52px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+        overflow: hidden;
+        background-color: #fff;
+    }
+    .conversation-list-page--mobile-chat > .trip_actions {
+        flex: 0 0 auto;
+        z-index: 8;
+        align-self: stretch;
+    }
+    .conversation-list-page--mobile-chat .conversation-component.container {
+        flex: 1 1 auto;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+    .conversation-list-page--mobile-chat .conversation-component > .row {
+        flex: 1 1 auto;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        margin-left: 0;
+        margin-right: 0;
+    }
+    .conversation-list-page--mobile-chat .conversation-component > .row > [class*='col-'] {
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        max-width: 100%;
+        flex: 1 1 auto;
+    }
+    .conversation-list-page--mobile-chat .conversation-container {
+        flex: 1 1 auto;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+    .conversation-list-page--mobile-chat .conversation-container .conversation_chat {
+        flex: 1 1 auto;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+    .conversation-list-page--mobile-chat .conversation-container .conversation_chat > .list-group {
+        flex: 1 1 auto;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+    .conversation-list-page--mobile-chat .conversation-messages {
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    .conversation-list-page--mobile-chat .message-composer {
+        flex: 0 0 auto;
+        z-index: 9;
+        background: #fff;
+        box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
     }
 }
 .media-right {

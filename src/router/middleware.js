@@ -45,8 +45,8 @@ export function guest(to, from, next) {
 }
 
 /**
- * When identity_validation_required_new_users is true and the user is a new user
- * who must validate and is not yet validated, redirect to identity validation page.
+ * When identity validation is enforced (enabled and not optional) and the user
+ * must validate, redirect to identity validation page.
  * Call after auth (only runs when logged in).
  */
 export function requireIdentityValidation(to, from, next) {
@@ -54,9 +54,14 @@ export function requireIdentityValidation(to, from, next) {
     const config = authStore.appConfig;
     const user = authStore.user;
 
+    const enforced =
+        config &&
+        config.identity_validation_enabled === true &&
+        config.identity_validation_optional !== true;
+
     // Check if user needs validation (either new user flag or past deadline for current users)
     let needsValidation = false;
-    if (config && user && config.identity_validation_required_new_users) {
+    if (enforced && user) {
         if (user.identity_validation_required_for_user && !user.identity_validated) {
             needsValidation = true;
         } else if (user.validate_by_date && !user.identity_validated) {

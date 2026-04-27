@@ -40,5 +40,7 @@
     "profile_id_format": "##.###.###",
     "weekly_schedule": false,
     "web_push_notification": false,
-    "price_show_cents": false
+    "price_show_cents": false,
+    "identity_validation_enabled": false,
+    "identity_validation_optional": false
 }

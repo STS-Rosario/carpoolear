@@ -20,17 +20,18 @@
                 </router-link>
                 <h2 v-else>{{ conversation.title }}</h2>
                 <CoordinateTrip></CoordinateTrip>
-                <p class="chat_last_connection">
+                <p
+                    v-if="lastConnectionFormatted"
+                    class="chat_last_connection"
+                >
                     <strong>{{ $t('ultimaConexion') }}</strong>
-                    <span class="">{{
-                        dayjs(lastConnection).calendar()
-                    }}</span>
+                    <span> {{ lastConnectionFormatted }}</span>
                 </p>
             </div>
             <div
                 id="messagesWrapper"
                 ref="messagesWrapper"
-                class="list-group-item clearfix"
+                class="list-group-item clearfix conversation-messages"
             >
                 <div>
                     <button
@@ -84,13 +85,12 @@
     </div>
 </template>
 <script>
-import '@toast-ui/editor/dist/toastui-editor.css';
 import { mapState, mapActions } from 'pinia';
 import { useConversationsStore } from '../../stores/conversations';
 import { useAuthStore } from '../../stores/auth';
 import { useDeviceStore } from '../../stores/device';
 import { useActionbarsStore } from '../../stores/actionbars';
-import { Editor } from '@toast-ui/vue-editor';
+import ToastUiEditor from '../elements/ToastUiEditor.vue';
 import MessageView from '../MessageView';
 import router from '../../router';
 import dayjs from '../../dayjs';
@@ -141,15 +141,32 @@ export default {
         ...mapState(useDeviceStore, {
             isMobile: 'isMobile'
         }),
-        lastConnection() {
-            let users = this.conversation.users.filter(
+        /**
+         * Last-connection timestamp for the other participant in a 1:1 chat.
+         * In group-style conversations (more than one other user) there is no single value; returns null.
+         */
+        lastConnectionRaw() {
+            if (!this.conversation || !this.conversation.users) {
+                return null;
+            }
+            const others = this.conversation.users.filter(
                 (item) => item.id !== this.user.id
             );
-            if (users.length > 1) {
-                return '';
-            } else {
-                return users[0].last_connection;
+            if (others.length !== 1) {
+                return null;
             }
+            return others[0].last_connection;
+        },
+        lastConnectionFormatted() {
+            const raw = this.lastConnectionRaw;
+            if (raw == null || raw === '') {
+                return '';
+            }
+            const d = dayjs(raw);
+            if (!d.isValid()) {
+                return '';
+            }
+            return d.calendar();
         }
     },
     methods: {
@@ -173,9 +190,7 @@ export default {
                 id = 1;
             }
             return {
-                id: this.conversation.users[id].id,
-                userProfile: this.conversation.users[id],
-                activeTab: 1
+                id: this.conversation.users[id].id
             };
         },
 
@@ -217,14 +232,16 @@ export default {
         },
 
         jumpEndOfConversation() {
-            if (this.isMobile) {
-                window.scrollTo(0, document.body.scrollHeight);
-            } else {
-                let div = this.$refs.messagesWrapper;
+            const run = () => {
+                const div = this.$refs.messagesWrapper;
                 if (div) {
                     div.scrollTop = div.scrollHeight;
                 }
-            }
+            };
+            this.$nextTick(() => {
+                run();
+                requestAnimationFrame(run);
+            });
         },
 
         searchMore() {
@@ -237,22 +254,24 @@ export default {
                 if (this.conversation) {
                     this.setTitle(this.conversation.title);
                     const otherUser = this.conversation.users.find(
-                        (user) => user.id !== this.user.id
+                        (u) => u.id !== this.user.id
                     );
-                    this.setTitleLink({
-                        name: 'profile',
-                        params: {
-                            id: otherUser.id,
-                            userProfile: otherUser,
-                            activeTab: 1
-                        }
-                    });
+                    if (otherUser) {
+                        this.setTitleLink({
+                            name: 'profile',
+                            params: { id: otherUser.id }
+                        });
+                    } else {
+                        this.setTitleLink({});
+                    }
                     this.setSubTitle(
-                        this.$t('ultimaConexion') +
-                            dayjs(this.lastConnection).calendar()
+                        this.lastConnectionFormatted
+                            ? `${this.$t('ultimaConexion')} ${this.lastConnectionFormatted}`
+                            : ''
                     );
                     this.setImgTitle(this.conversation.image);
                 }
+                this.jumpEndOfConversation();
             });
         }
     },
@@ -270,18 +289,20 @@ export default {
         if (this.conversation) {
             this.setTitle(this.conversation.title);
             const otherUser = this.conversation.users.find(
-                (user) => user.id !== this.user.id
+                (u) => u.id !== this.user.id
             );
-            this.setTitleLink({
-                name: 'profile',
-                params: {
-                    id: otherUser.id,
-                    userProfile: otherUser,
-                    activeTab: 1
-                }
-            });
+            if (otherUser) {
+                this.setTitleLink({
+                    name: 'profile',
+                    params: { id: otherUser.id }
+                });
+            } else {
+                this.setTitleLink({});
+            }
             this.setSubTitle(
-                this.$t('ultimaConexion') + dayjs(this.lastConnection).calendar()
+                this.lastConnectionFormatted
+                    ? `${this.$t('ultimaConexion')} ${this.lastConnectionFormatted}`
+                    : ''
             );
             this.setImgTitle(this.conversation.image);
 
@@ -303,7 +324,7 @@ export default {
     },
     props: ['id'],
     components: {
-        Editor,
+        editor: ToastUiEditor,
         MessageView,
         CoordinateTrip
     }
@@ -342,12 +363,9 @@ export default {
     .list-group-item {
         border: 0;
     }
-    .list-group-item:last-child {
+    .message-composer {
+        position: static;
         border-top: 1px solid #ddd;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        position: fixed;
     }
     .message-composer-editor-wrap {
         align-items: stretch;
@@ -364,7 +382,6 @@ export default {
     }
     #messagesWrapper {
         padding-top: 0;
-        padding-bottom: 65px;
     }
 }
 </style>

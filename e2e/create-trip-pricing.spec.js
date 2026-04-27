@@ -74,6 +74,8 @@ async function setupRouteMocks(page, mockedTripInfo) {
     if (json.config) {
       json.config.module_seat_price_enabled = true;
       json.config.module_max_price_enabled = true;
+      json.config.identity_validation_enabled = false;
+      json.config.identity_validation_optional = false;
       json.config.identity_validation_required_new_users = false;
       json.config.identity_validation_days_for_current_users = 0;
     }
@@ -94,11 +96,15 @@ async function setupRouteMocks(page, mockedTripInfo) {
     if (json.config) {
       json.config.module_seat_price_enabled = true;
       json.config.module_max_price_enabled = true;
+      json.config.identity_validation_enabled = false;
+      json.config.identity_validation_optional = false;
       json.config.identity_validation_required_new_users = false;
       json.config.identity_validation_days_for_current_users = 0;
     } else {
       json.module_seat_price_enabled = true;
       json.module_max_price_enabled = true;
+      json.identity_validation_enabled = false;
+      json.identity_validation_optional = false;
       json.identity_validation_required_new_users = false;
       json.identity_validation_days_for_current_users = 0;
     }

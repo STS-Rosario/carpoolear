@@ -48,11 +48,21 @@ function cordovaEnv () {
     return env;
 }
 
-function showError (code, stderr, stdout) {
-    console.log('ERROR IN CORDOVA:');
-    console.log('CODE:', code);
-    console.log('STDERR', stderr);
-    console.log('STDOUT', stdout);
+/** shelljs `exec` invokes callbacks as `(code, stdout, stderr)` — keep that order. */
+function logCordovaExec (code, stdout, stderr) {
+    if (code !== 0) {
+        console.log('ERROR IN CORDOVA:');
+        console.log('CODE:', code);
+        console.log('STDOUT', stdout);
+        console.log('STDERR', stderr);
+    } else if ((stdout && stdout.trim()) || (stderr && stderr.trim())) {
+        if (stdout && stdout.trim()) {
+            console.log(stdout.trim());
+        }
+        if (stderr && stderr.trim()) {
+            console.log(stderr.trim());
+        }
+    }
 }
 
 /**
@@ -145,12 +155,12 @@ function buildAndCheckPlatform (callback) {
             cwd: projectPath,
             silent: true,
             env: cordovaEnv()
-        }, function (code, stderr, stdout) {
+        }, function (code, stdout, stderr) {
             console.log('STDOUT: ', stdout);
             if (stdout.search('already added')) {
                 console.log('Platform allready installed.');
             } else {
-                showError(code, stderr, stdout);
+                logCordovaExec(code, stdout, stderr);
             }
             callback();
         });
@@ -226,7 +236,7 @@ if (argv._.length > 0) {
                     env: cordovaEnv(),
                     cwd: projectPath,
                     silent: true
-                }, showError);
+                }, logCordovaExec);
             });
         });
         break;
@@ -236,7 +246,7 @@ if (argv._.length > 0) {
                 cwd: projectPath,
                 silent: true,
                 env: cordovaEnv()
-            }, showError);
+            }, logCordovaExec);
         });
         break;
     case 'build-web':

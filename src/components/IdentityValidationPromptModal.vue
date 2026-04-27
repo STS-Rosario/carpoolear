@@ -81,7 +81,11 @@
                     {{ $t('identidadModalUnaVez') }}
                 </p>
 
-                <div class="identity-validation-prompt-info" role="status">
+                <div
+                    v-if="!isOptionalMode"
+                    class="identity-validation-prompt-info"
+                    role="status"
+                >
                     <img
                         :src="infoIconSrc"
                         alt=""
@@ -93,6 +97,20 @@
                                 days: plazoModalDays
                             })
                         }}
+                    </p>
+                </div>
+                <div
+                    v-else
+                    class="identity-validation-prompt-info identity-validation-prompt-info--optional"
+                    role="status"
+                >
+                    <img
+                        :src="infoIconSrc"
+                        alt=""
+                        class="identity-validation-prompt-info-icon"
+                    />
+                    <p>
+                        {{ $t('identidadModalOptionalInfo') }}
                     </p>
                 </div>
             </div>
@@ -121,12 +139,10 @@
 import { mapState } from 'pinia';
 import { useAuthStore } from '../stores/auth';
 import {
-    isIdentityValidationCountdownScenario,
+    isIdentityValidationPromptScenario,
     isIdentityPromptDismissed,
     dismissIdentityPromptPermanently
 } from '../utils/identityValidationPrompt';
-
-const PLAZO_MODAL_DAYS = 30;
 
 export default {
     name: 'IdentityValidationPromptModal',
@@ -166,12 +182,15 @@ export default {
                 this.appConfig.identity_validation_manual_enabled === true
             );
         },
+        isOptionalMode() {
+            return this.appConfig && this.appConfig.identity_validation_optional === true;
+        },
         baseEligible() {
             return (
                 this.logged &&
                 !this.suppress &&
                 !this.hideForRoute &&
-                isIdentityValidationCountdownScenario(this.user, this.appConfig)
+                isIdentityValidationPromptScenario(this.user, this.appConfig)
             );
         },
         dismissed() {
@@ -195,7 +214,10 @@ export default {
                 : 'identidadModalUnaOpcion';
         },
         plazoModalDays() {
-            return PLAZO_MODAL_DAYS;
+            const d = this.appConfig
+                ? Number(this.appConfig.identity_validation_days_for_current_users)
+                : 0;
+            return d > 0 ? d : 30;
         }
     },
     methods: {

@@ -6,35 +6,60 @@
     >
         <div v-if="tripCardTheme !== 'light'" class="price-container">
             <div class="price-item">
-                <span class="trip_seat-price_value">{{ $n(trip.seat_price_cents / 100, 'currency') }}</span>
+                <span class="trip_seat-price_value trip_seat-price_value-main">
+                    <template v-if="isZeroTripContribution">{{
+                        $t('loQueSePuedaAportar')
+                    }}</template>
+                    <template v-else>{{
+                        $n(trip.seat_price_cents / 100, 'currency')
+                    }}</template>
+                </span>
                 <span class="trip_seats-available_label">
                     {{ $t('contribucionPorPersona') }}
                     <br />
                 </span>
-            </div>
-            <div class="price-item" v-if="this.config.module_max_price_enabled">
-                <span class="trip_seat-price_value trip_seat-price_recommended_value">{{ $n(recommendedPricePerSeat, 'currency') }}</span>
-                <span class="trip_seats-available_label">
-                    <span v-html="$t('contribucionRecomendada')"></span>
-                    <span>
-                        <span
-                            class="tooltip-seat-price tooltip-seat-price-passenger"
-                            :data-tooltip="$t('calculadoEnBaseNafta')"
-                        >
-                            <i
-                                class="fa fa-info-circle"
-                                aria-hidden="true"
-                            ></i>
-                        </span>
+                <button
+                    v-if="this.config.module_max_price_enabled"
+                    class="trip-reference-toggle"
+                    type="button"
+                    @click="showReferenceContribution = !showReferenceContribution"
+                >
+                    <span class="trip-reference-toggle__text">
+                        {{ $t('verContribucionReferenciaTramo') }}
                     </span>
-                </span>
+                    <i
+                        class="fa fa-chevron-down trip-reference-toggle__arrow"
+                        :class="{ 'trip-reference-toggle__arrow--open': showReferenceContribution }"
+                        aria-hidden="true"
+                    ></i>
+                </button>
+                <div
+                    v-if="this.config.module_max_price_enabled && showReferenceContribution"
+                    class="trip-reference-collapse"
+                >
+                    <div class="trip-reference-collapse__title">
+                        {{ $t('contribucionRecomendada') }}
+                    </div>
+                    <div class="trip-reference-collapse__description">
+                        {{ calculadoEnBaseNaftaDescription }}
+                    </div>
+                    <div class="trip_seat-price_value trip_seat-price_recommended_value trip-reference-collapse__amount">
+                        {{ $n(recommendedPricePerSeat, 'currency') }}
+                    </div>
+                </div>
             </div>
         </div>
         <div v-if="tripCardTheme !== 'light'" style="height: 3.5em"></div>
         <template v-else>
             <div class="trip_seats-available" v-if="!trip.is_passenger">
                 <template v-for="n in trip.total_seats">
-                    {{ $t('contribucionPorPersona') }}: <span>{{ $n(trip.seat_price_cents / 100, 'currency') }}</span>
+                    {{ $t('contribucionPorPersona') }}:
+                    <span v-if="isZeroTripContribution">{{
+                        $t('loQueSePuedaAportar')
+                    }}</span>
+                    <span v-else>{{
+                        $n(trip.seat_price_cents / 100, 'currency')
+                    }}</span>
                 </template>
             </div>
         </template>
@@ -47,6 +72,11 @@ import { useAuthStore } from '../../stores/auth';
 import SvgItem from '../SvgItem';
 export default {
     name: 'TripSeats',
+    data() {
+        return {
+            showReferenceContribution: false
+        };
+    },
     computed: {
         ...mapState(useTripsStore, {
             trip: 'currentTrip'
@@ -62,6 +92,16 @@ export default {
             console.log('this.trip.user.id', this.trip.user.id);
             console.log('this.user.id', this.user.id);
             return this.trip && this.user && this.user.id === this.trip.user.id;
+        },
+        isZeroTripContribution() {
+            return this.trip && this.trip.seat_price_cents === 0;
+        },
+        calculadoEnBaseNaftaDescription() {
+            const base = this.$t('calculadoEnBaseNaftaBase');
+            if (this.config && this.config.module_trip_creation_payment_enabled) {
+                return base + this.$t('calculadoEnBaseNaftaSelladoSuffix');
+            }
+            return base;
         },
         recommendedPricePerSeat() {
             // Same unit as trip.seat_price_cents / 100 (main currency) so $n(..., 'currency') formats like trip detail
@@ -108,6 +148,49 @@ export default {
     align-items: center;
     justify-content: center;
     width: 100%;
+}
+.trip_seat-price_value-main {
+    font-size: 2em;
+}
+.trip-reference-toggle {
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: #2f4f4f;
+    font-size: 0.95em;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    margin-top: 0.65em;
+}
+.trip-reference-toggle__text {
+    text-decoration: underline;
+}
+.trip-reference-toggle__arrow {
+    text-decoration: none;
+    transition: transform 0.2s ease;
+}
+.trip-reference-toggle__arrow--open {
+    transform: rotate(180deg);
+}
+.trip-reference-collapse {
+    width: 100%;
+    text-align: center;
+    margin-top: 0.5em;
+}
+.trip-reference-collapse__title {
+    font-weight: 600;
+}
+.trip-reference-collapse__description {
+    font-size: 0.9em;
+    color: #666;
+    margin-top: 0.25em;
+}
+.trip-reference-collapse__amount {
+    font-size: 1.5em;
+    color: #808080;
+    margin-top: 0.2em;
 }
 .trip_seats-available_label > span {
     display: inline;

@@ -2,11 +2,7 @@
     <div class="trip_actions" v-if="conversation && conversation.trip">
         <div class="trip_actions-detail">
             <span v-if="owner">{{ $t('coordinateTripTeEnviaUnaConsultaPorTuViajeDesde') }}</span>
-            <span v-else>{{ $t('coordinateTripViajeDesde') }}</span>
-            <strong>{{ conversation.trip.from_town }}</strong>
-            {{ $t('coordinateTripHacia') }}
-            <strong>{{ conversation.trip.to_town }}</strong>
-            <span v-if="owner">
+            <span v-else>{{ $t('coordinateTripViajeDesde') }}</span>{{ ' ' }}<strong>{{ conversation.trip.from_town }}</strong>{{ ' ' }}{{ $t('coordinateTripHacia') }}{{ ' ' }}<strong>{{ conversation.trip.to_town }}</strong>{{ ' ' }}<span v-if="owner">
                 {{ $t('coordinateTripDelDia') }}
                 <strong>{{
                     dayjs(conversation.trip.trip_date).format('DD/MM/YYYY')
@@ -31,6 +27,23 @@
                 </template>
             </span>
         </div>
+        <p v-if="contributionWarningData" class="trip_actions-contribution-warning">
+            <template v-if="contributionWarningData.role === 'driver'">
+                {{
+                    $t('coordinateTripContributionWarningDriver', {
+                        maxContribution: $n(
+                            contributionWarningData.maxContributionCents / 100,
+                            'currency'
+                        )
+                    })
+                }}
+            </template>
+            <template v-else>
+                {{ $t('coordinateTripContributionWarningPassengerPrefix') }}
+                {{ $t('coordinateTripContributionWarningPassengerReportLink') }}
+                {{ $t('coordinateTripContributionWarningPassengerSuffix') }}
+            </template>
+        </p>
         <template v-if="!owner">
             <button
                 :disabled="sending.trip || expiredTrip"
@@ -143,6 +156,7 @@ import { usePassengerStore } from '../../stores/passenger';
 import dialogs from '../../services/dialogs.js';
 import spinner from '../Spinner.vue';
 import dayjs from '../../dayjs';
+import { getConversationContributionWarningData } from '../../utils/conversationContributionWarning.js';
 
 export default {
     name: 'conversation-chat',
@@ -200,6 +214,12 @@ export default {
                 dayjs(this.conversation.return_trip.trip_date).format() <
                 dayjs().format()
             );
+        },
+        contributionWarningData() {
+            return getConversationContributionWarningData({
+                conversation: this.conversation,
+                user: this.user
+            });
         }
     },
     methods: {
@@ -293,6 +313,24 @@ export default {
     font-size: 12px;
     width: 100%;
 }
+
+.trip_actions-contribution-warning {
+    margin: 0.6em 0 0.8em;
+    padding: 0.65em 0.75em;
+    font-size: 12px;
+    line-height: 1.35;
+    color: #8a1f11;
+    background-color: #fff5f4;
+    border: 1px solid #e8b8b4;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.trip_actions-contribution-warning a {
+    color: #6b150d;
+    text-decoration: underline;
+    font-weight: bold;
+}
 @media only screen and (max-width: 768px) {
     .trip_actions {
         padding: 0.4em 0.8em;
@@ -300,9 +338,10 @@ export default {
         border-radius: 0;
         box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
         font-size: 0.9em;
-        position: fixed;
-        z-index: 10;
+        position: static;
+        z-index: auto;
         background-color: #f6f6f6;
+        flex-shrink: 0;
     }
     .trip_actions .btn-primary {
         display: block;
@@ -340,22 +379,10 @@ export default {
     padding-bottom: 0;
     margin-bottom: 0;
 }
-.module--coordinate-by-message
-    .conversation_chat
-    .list-group-item:nth-child(2) {
-    height: calc(100% - 245px);
-}
 @media only screen and (min-width: 768px) {
     .module--coordinate-by-message .conversation_chat p,
     .module--coordinate-by-message .message_text {
         font-size: 12px;
-    }
-    @media only screen and (min-width: 1000px) {
-        .module--coordinate-by-message
-            .conversation_chat
-            .list-group-item:nth-child(2) {
-            height: calc(100% - 205px);
-        }
     }
 }
 </style>

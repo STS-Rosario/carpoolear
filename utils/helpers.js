@@ -16,16 +16,19 @@ export function redirectToIdentityValidationIfRequired (router) {
             return false;
         }
         
-        if (!config.identity_validation_required_new_users) {
+        const enforced =
+            config.identity_validation_enabled === true &&
+            config.identity_validation_optional !== true;
+        if (!enforced) {
             return false;
         }
-        
+
         // Check new users (identity_validation_required_for_user flag)
         if (user.identity_validation_required_for_user && !user.identity_validated) {
             router.push({ name: 'identity_validation' });
             return true;
         }
-        
+
         // Check current users with deadline (validate_by_date)
         if (user.validate_by_date && !user.identity_validated) {
             const [y, m, d] = user.validate_by_date.split('-').map(Number);

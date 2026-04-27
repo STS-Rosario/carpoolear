@@ -201,7 +201,11 @@ export const useConversationsStore = defineStore('conversations', {
             const authStore = useAuthStore();
             const config = authStore.appConfig;
             const currentUser = authStore.user;
-            if (config && config.identity_validation_required_new_users && currentUser && currentUser.identity_validation_required_for_user && !currentUser.identity_validated) {
+            const identityEnforced =
+                config &&
+                config.identity_validation_enabled === true &&
+                config.identity_validation_optional !== true;
+            if (identityEnforced && currentUser && currentUser.identity_validation_required_for_user && !currentUser.identity_validated) {
                 getRouter().push({ name: 'identity_validation' });
                 return Promise.resolve();
             }

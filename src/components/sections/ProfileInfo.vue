@@ -234,7 +234,12 @@ export default {
         },
         identityValidationAvailable() {
             const c = this.config;
-            return c && (c.identity_validation_mercado_pago_enabled === true || c.identity_validation_manual_enabled === true);
+            return (
+                c &&
+                c.identity_validation_enabled === true &&
+                (c.identity_validation_mercado_pago_enabled === true ||
+                    c.identity_validation_manual_enabled === true)
+            );
         },
         formattedNroDoc() {
             return formatId(this.profile.nro_doc, this.config.profile_id_format);

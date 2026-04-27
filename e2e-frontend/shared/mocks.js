@@ -47,6 +47,8 @@ const MOCK_CONFIG = {
   web_push_notification: false,
   price_show_cents: false,
   enable_facebook: false,
+  identity_validation_enabled: false,
+  identity_validation_optional: false,
   module_identity_validation: true,
   module_manual_identity_validation: true,
   module_coordinate_by_message: true,

@@ -356,8 +356,14 @@ export default {
         identityValidationManualEnabled() {
             return this.config && this.config.identity_validation_manual_enabled === true;
         },
+        identityValidationEnabled() {
+            return this.config && this.config.identity_validation_enabled === true;
+        },
         identityValidationAvailable() {
-            return this.identityValidationMpEnabled || this.identityValidationManualEnabled;
+            return (
+                this.identityValidationEnabled &&
+                (this.identityValidationMpEnabled || this.identityValidationManualEnabled)
+            );
         },
         resultMessage() {
             return this.$route.query.result || null;
