@@ -182,9 +182,12 @@ export const useAuthStore = defineStore('auth', {
                         resolve();
                     })
                     .catch(async () => {
+                        // Stale or invalid token: clear session and open the app as a guest (same as logout).
+                        // Do not send to login — /trips and other routes work without auth; pushing login traps
+                        // users when history is empty (clear / back does nothing).
                         this.doLogout();
                         const router = await getLazyRouter();
-                        router.push({ name: 'login' });
+                        router.replace({ name: 'trips' });
                         resolve();
                     });
             });
@@ -282,6 +285,16 @@ export const useAuthStore = defineStore('auth', {
             localConfig.__isLocal = true;
             this.setAppConfig(localConfig);
             return authApi.config().then((response) => {
+                const isConfigObject =
+                    response &&
+                    typeof response === 'object' &&
+                    !Array.isArray(response);
+                if (!isConfigObject) {
+                    console.error(
+                        'getConfig: expected JSON object from /api/config; keeping local config only.'
+                    );
+                    return localConfig;
+                }
                 response.__isLocal = false;
                 console.log('Loading config from server: ', response);
                 const config = { ...localConfig, ...response };

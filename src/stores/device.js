@@ -55,6 +55,10 @@ export const useDeviceStore = defineStore('device', {
             return deviceApi
                 .create(data)
                 .then((response) => {
+                    if (!response || !response.data) {
+                        console.warn('Device register: missing response data');
+                        return;
+                    }
                     response.data.notifications = true;
                     this.setCurrentDevice(response.data);
                 })

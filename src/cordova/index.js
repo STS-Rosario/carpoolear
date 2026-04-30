@@ -11,7 +11,7 @@ import { useCordovaStore } from '../stores/cordova';
 import { useRootStore } from '../stores/root';
 
 window.facebook = facebook;
-window.appVersion = '3.1.8';
+window.appVersion = '3.1.10';
 
 function getCordovaStore () {
     return useCordovaStore();
