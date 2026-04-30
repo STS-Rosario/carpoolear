@@ -18,7 +18,7 @@ class NativeStorage {
         return (async () => {
             const result = await Preferences.get({ key });
             if (result.value === null) {
-                throw new Error('Item not found');
+                return null;
             }
 
             try {

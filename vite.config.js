@@ -66,10 +66,23 @@ export default defineConfig(({ mode }) => {
         ? (env.VITE_HISTORY_MODE || env.HISTORY_MODE || 'history')
         : (env.VITE_MOBILE_HISTORY_MODE || 'hash');
     // Must read VITE_API_URL — .env files use that name; env.API_URL was always undefined.
-    const apiUrl =
+    let apiUrl =
         env.VITE_API_URL !== undefined && env.VITE_API_URL !== null
             ? String(env.VITE_API_URL)
             : env.API_URL || 'http://carpoolear_backend.test';
+
+    // Capacitor + server.hostname: the WebView is served as https://<hostname>. Requests to the
+    // same host hit the local asset server (HTML for unknown paths). Use VITE_API_URL_NATIVE for
+    // iOS/Android so axios targets a different host (e.g. www) while LastPass still matches apex.
+    if (!isWebBuild) {
+        const nativeApi =
+            env.VITE_API_URL_NATIVE !== undefined && env.VITE_API_URL_NATIVE !== null
+                ? String(env.VITE_API_URL_NATIVE).trim()
+                : '';
+        if (nativeApi !== '') {
+            apiUrl = nativeApi;
+        }
+    }
 
     return {
         base: routeBase === '/' ? '/' : routeBase,

@@ -483,7 +483,8 @@ export default {
             }
         },
         onClearClick() {
-            router.back();
+            // After failed retoken, login can be the first route — history.back() does nothing.
+            router.replace({ name: 'trips' });
         }
     },
 
