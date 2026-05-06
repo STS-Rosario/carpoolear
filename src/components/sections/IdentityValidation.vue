@@ -58,9 +58,9 @@
                     <template v-if="showPendingManualSwitchLink">
                         <hr class="manual-status-switch-separator" />
                         <p class="manual-status-switch-link">
-                            <router-link :to="{ name: 'identity_validation' }">
+                            <a href="#" @click.prevent="onPendingManualSwitchClick">
                                 {{ $t('manualValidationSwitchToMercadoPago') }}
-                            </router-link>
+                            </a>
                         </p>
                     </template>
                 </div>
@@ -360,6 +360,7 @@ import {
 } from '../../utils/identityValidationDniRequirements';
 import { getIdentityValidationButtonSizingStyle } from '../../utils/identityValidationButtonSizing';
 import { shouldShowPendingManualSwitchLink } from '../../utils/identityValidationPendingManualSwitch';
+import { getIdentityValidationPendingSwitchBehavior } from '../../utils/identityValidationPendingSwitchBehavior';
 
 export default {
     name: 'IdentityValidation',
@@ -568,6 +569,11 @@ export default {
         },
         goToManualValidation() {
             this.$router.push(getManualIdentityValidationRoute(this.user));
+        },
+        onPendingManualSwitchClick() {
+            if (getIdentityValidationPendingSwitchBehavior() === 'mercadopago_oauth') {
+                this.startMercadoPagoOAuth();
+            }
         }
     },
     mounted() {
