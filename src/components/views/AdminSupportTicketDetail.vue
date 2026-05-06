@@ -17,13 +17,15 @@
                     <strong>
                         <span v-if="reply.is_admin">{{ $t('admin') }}</span>
                         <span v-else>
-                            <router-link :to="{ name: 'profile', params: { id: ticket.user.id } }">
+                            <router-link v-if="canLinkUserProfile()" :to="userAppProfileRoute()">
                                 {{ replyAuthorLabel(reply) }}
                             </router-link>
+                            <span v-else>{{ replyAuthorLabel(reply) }}</span>
                             (
-                            <router-link :to="{ name: 'admin-users-user', params: { userId: ticket.user.id } }">
+                            <router-link v-if="canLinkUserProfile()" :to="userAdminProfileRoute()">
                                 {{ $t('verPerfilEnAdmin') }}
                             </router-link>
+                            <span v-else>{{ $t('verPerfilEnAdmin') }}</span>
                             )
                         </span>
                     </strong>
@@ -125,6 +127,15 @@ export default {
         replyAuthorLabel(reply) {
             if (reply.is_admin) return this.$t('admin');
             return (this.ticket && this.ticket.user && this.ticket.user.name) || this.$t('usuario');
+        },
+        canLinkUserProfile() {
+            return Boolean(this.ticket && this.ticket.user && this.ticket.user.id);
+        },
+        userAppProfileRoute() {
+            return { name: 'profile', params: { id: this.ticket.user.id } };
+        },
+        userAdminProfileRoute() {
+            return { name: 'admin-users-user', params: { userId: this.ticket.user.id } };
         },
         relativeDate(value) {
             if (!value) return '-';
