@@ -360,7 +360,10 @@ import {
 } from '../../utils/identityValidationDniRequirements';
 import { getIdentityValidationButtonSizingStyle } from '../../utils/identityValidationButtonSizing';
 import { shouldShowPendingManualSwitchLink } from '../../utils/identityValidationPendingManualSwitch';
-import { getIdentityValidationPendingSwitchBehavior } from '../../utils/identityValidationPendingSwitchBehavior';
+import {
+    getIdentityValidationPendingSwitchBehavior,
+    IDENTITY_VALIDATION_PENDING_SWITCH_BEHAVIOR_OAUTH
+} from '../../utils/identityValidationPendingSwitchBehavior';
 
 export default {
     name: 'IdentityValidation',
@@ -571,7 +574,7 @@ export default {
             this.$router.push(getManualIdentityValidationRoute(this.user));
         },
         onPendingManualSwitchClick() {
-            if (getIdentityValidationPendingSwitchBehavior() === 'mercadopago_oauth') {
+            if (getIdentityValidationPendingSwitchBehavior() === IDENTITY_VALIDATION_PENDING_SWITCH_BEHAVIOR_OAUTH) {
                 this.startMercadoPagoOAuth();
             }
         }
