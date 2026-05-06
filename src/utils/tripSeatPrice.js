@@ -33,13 +33,13 @@ export function priceInputNumberFromStoredSeatPriceCents(seatPriceCents) {
     return seatPriceCents / 100;
 }
 
-export function shouldShowTripSeatPriceSection(seatPriceCents) {
-    return (
-        seatPriceCents === VOLUNTARY_CONTRIBUTION_SEAT_PRICE_CENTS ||
-        (typeof seatPriceCents === 'number' && seatPriceCents > 0)
-    );
-}
-
 export function isVoluntaryContributionSeatPrice(seatPriceCents) {
     return seatPriceCents === VOLUNTARY_CONTRIBUTION_SEAT_PRICE_CENTS;
+}
+
+export function shouldShowTripSeatPriceSection(seatPriceCents) {
+    return (
+        isVoluntaryContributionSeatPrice(seatPriceCents) ||
+        (typeof seatPriceCents === 'number' && seatPriceCents > 0)
+    );
 }
