@@ -367,6 +367,8 @@ const messages = {
             'Para proceder con la verificación, por favor primero ingrese su DNI en ',
         identityValidationDniWarningProfileLink: 'su perfil',
         identityValidationDniWarningSuffix: '.',
+        identityValidationMercadoPagoOwnershipWarning:
+            'Antes de realizar la verificación, asegurate que el titular de la cuenta logueada en Mercado Pago coincida con el de Carpoolear',
         identityValidationAutoCardDesc:
             'Validá con tu cuenta de Mercado Pago. El sistema contrasta los datos con RENAPER.',
         identityValidationManualCardDesc:
@@ -505,6 +507,7 @@ const messages = {
         no: 'No',
         acciones: 'Acciones',
         verPerfil: 'Ver perfil',
+        perfilEnAdmin: 'Perfil en admin',
         noHayValidacionesManuales: 'No hay solicitudes de verificación manual.',
         rechazosMercadoPago: 'Rechazos verificación Mercado Pago',
         detalleRechazoMp: 'Detalle rechazo MP',
@@ -1502,6 +1505,8 @@ const messages = {
             'Para proceder con la verificación, por favor primero ingrese su DNI en ',
         identityValidationDniWarningProfileLink: 'su perfil',
         identityValidationDniWarningSuffix: '.',
+        identityValidationMercadoPagoOwnershipWarning:
+            'Antes de realizar la verificación, asegurate que el titular de la cuenta logueada en Mercado Pago coincida con el de Carpoolear',
         identityValidationAutoCardDesc:
             'Validá con tu cuenta de Mercado Pago. El sistema contrasta los datos con RENAPER.',
         identityValidationManualCardDesc:
@@ -1640,6 +1645,7 @@ const messages = {
         no: 'No',
         acciones: 'Acciones',
         verPerfil: 'Ver perfil',
+        perfilEnAdmin: 'Perfil en admin',
         noHayValidacionesManuales: 'No hay solicitudes de verificación manual.',
         rechazosMercadoPago: 'Rechazos verificación Mercado Pago',
         detalleRechazoMp: 'Detalle rechazo MP',
@@ -2549,6 +2555,7 @@ const messages = {
         no: 'No',
         acciones: 'Actions',
         verPerfil: 'View profile',
+        perfilEnAdmin: 'Admin profile',
         noHayValidacionesManuales: 'No manual verification requests.',
         rechazosMercadoPago: 'Rejected Mercado Pago verifications',
         detalleRechazoMp: 'Rejection detail (MP)',
@@ -2605,6 +2612,8 @@ const messages = {
             'To proceed with verification, please first enter your ID document number in ',
         identityValidationDniWarningProfileLink: 'your profile',
         identityValidationDniWarningSuffix: '.',
+        identityValidationMercadoPagoOwnershipWarning:
+            'Before verifying, make sure the account holder logged into Mercado Pago matches the Carpoolear account holder.',
         identidadNoValidada: 'Not verified',
         validarUsuario: 'Verify user',
         validadoPor: 'Verified by',

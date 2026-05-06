@@ -36,6 +36,9 @@
                             <router-link v-if="item.user_id" :to="{ name: 'profile', params: { id: item.user_id } }" target="_blank">
                                 {{ item.user_name }}
                             </router-link>
+                            <router-link v-if="item.user_id" :to="getAdminUserProfileRoute(item.user_id)" target="_blank">
+                                ({{ $t('perfilEnAdmin') }})
+                            </router-link>
                             <span v-else>{{ item.user_name || $t('na') }}</span>
                         </p>
                         <p><strong>{{ $t('doc') }}:</strong> {{ item.user_nro_doc || '-' }}</p>
@@ -88,6 +91,7 @@
 import AdminLayout from '../layouts/AdminLayout.vue';
 import { AdminApi } from '../../services/api';
 import dialogs from '../../services/dialogs.js';
+import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
 
 export default {
     name: 'AdminMpRejectedValidationDetail',
@@ -141,6 +145,7 @@ export default {
             if (status === 'rejected' || status === 'reject') return 'label label-danger';
             return 'label label-warning';
         },
+        getAdminUserProfileRoute,
         fetchItem() {
             const api = new AdminApi();
             return api.getMercadoPagoRejectedValidation(this.id).then((res) => {
