@@ -6,6 +6,11 @@ const viewPath = path.resolve(__dirname, 'TicketDetail.vue');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 
 describe('TicketDetail user view', () => {
+    it('shows link to return to support tickets list', () => {
+        expect(viewSource).toContain("{{ $t('volverListaTicketsSoporte') }}");
+        expect(viewSource).toContain("name: 'tickets'");
+    });
+
     it('shows translated, color-coded priority and status labels', () => {
         expect(viewSource).toContain('priorityClass(');
         expect(viewSource).toContain('statusClass(');
