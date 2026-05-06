@@ -41,6 +41,10 @@
                     <ul class="manual-validation-bullets">
                         <li>{{ $t('manualValidationPayBulletDni') }}</li>
                     </ul>
+                    <p class="manual-validation-upload-warning">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        {{ $t(manualValidationUploadWarningKey) }}
+                    </p>
                     <p class="manual-validation-text manual-validation-closing">
                         {{ $t('manualValidationPayClosing') }}
                     </p>
@@ -217,6 +221,7 @@ import {
     shouldShowSwitchToMercadoPago,
     SWITCH_TO_MERCADO_PAGO_ROUTE
 } from '../../utils/identityValidationModeSwitch';
+import { getManualValidationUploadWarningKey } from '../../utils/manualValidationUploadWarning';
 
 export default {
     name: 'ManualIdentityValidation',
@@ -255,6 +260,9 @@ export default {
         },
         showSwitchToMercadoPagoLink() {
             return shouldShowSwitchToMercadoPago(this.config);
+        },
+        manualValidationUploadWarningKey() {
+            return getManualValidationUploadWarningKey();
         },
         switchToMercadoPagoRoute() {
             return SWITCH_TO_MERCADO_PAGO_ROUTE;
@@ -613,6 +621,20 @@ export default {
 
 .manual-validation-closing {
     margin-bottom: 1.25rem;
+}
+
+.manual-validation-upload-warning {
+    margin: 0 0 1rem;
+    padding: 0.75rem 0.9rem;
+    border: 1px solid #faebcc;
+    border-radius: 4px;
+    background: #fcf8e3;
+    color: #8a6d3b;
+    line-height: 1.4;
+}
+
+.manual-validation-upload-warning .fa {
+    margin-right: 0.5rem;
 }
 
 .manual-identity-validation-component .manual-validation-bullets {

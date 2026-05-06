@@ -462,6 +462,8 @@ const messages = {
             'Una vez confirmado, te pediremos que cargues la documentación.',
         manualValidationPayListLead: 'Tené a mano:',
         manualValidationPayBulletDni: 'Tu DNI',
+        manualValidationUploadDeletionWarning:
+            'Las fotos subidas al sistema serán eliminadas luego de que un miembro del equipo de Carpoolear las revise.',
         manualValidationPayClosing:
             'Esto nos permitirá verificar tu cuenta correctamente.',
         manualValidationPagarMercadoPago: 'Pagar con Mercado Pago',
@@ -1607,6 +1609,8 @@ const messages = {
             'Una vez confirmado, te pediremos que cargues la documentación.',
         manualValidationPayListLead: 'Tené a mano:',
         manualValidationPayBulletDni: 'Tu DNI',
+        manualValidationUploadDeletionWarning:
+            'Las fotos subidas al sistema serán eliminadas luego de que un miembro del equipo de Carpoolear las revise.',
         manualValidationPayClosing:
             'Esto nos permitirá verificar tu cuenta correctamente.',
         manualValidationPagarMercadoPago: 'Pagar con Mercado Pago',
@@ -2527,6 +2531,8 @@ const messages = {
             'Once confirmed, we will ask you to upload your documents.',
         manualValidationPayListLead: 'Have ready:',
         manualValidationPayBulletDni: 'Your national ID (DNI)',
+        manualValidationUploadDeletionWarning:
+            'Photos uploaded to the system will be deleted after a Carpoolear team member reviews them.',
         manualValidationPayClosing:
             'This allows us to verify your account correctly.',
         manualValidationPagarMercadoPago: 'Pay with Mercado Pago',
