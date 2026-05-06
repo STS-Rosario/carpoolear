@@ -1,5 +1,10 @@
 <template>
     <div class="container" v-if="ticket">
+        <p>
+            <router-link :to="{ name: 'tickets' }">
+                {{ $t('volverListaTicketsSoporte') }}
+            </router-link>
+        </p>
         <div class="panel panel-default">
             <div class="panel-heading">
                 <strong>#{{ ticket.id }} - {{ ticket.subject }}</strong>
