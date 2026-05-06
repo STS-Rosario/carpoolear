@@ -9,7 +9,7 @@
                 v-if="showSwitchToMercadoPagoLink"
                 class="manual-validation-switch-mode-link"
             >
-                <router-link :to="{ name: 'identity_validation' }">
+                <router-link :to="switchToMercadoPagoRoute">
                     {{ $t('manualValidationSwitchToMercadoPago') }}
                 </router-link>
             </p>
@@ -213,7 +213,10 @@ import { mapState } from 'pinia';
 import { useAuthStore } from '../../stores/auth';
 import { UserApi } from '../../services/api';
 import QRCode from 'qrcode';
-import { shouldShowSwitchToMercadoPago } from '../../utils/identityValidationModeSwitch';
+import {
+    shouldShowSwitchToMercadoPago,
+    SWITCH_TO_MERCADO_PAGO_ROUTE
+} from '../../utils/identityValidationModeSwitch';
 
 export default {
     name: 'ManualIdentityValidation',
@@ -252,6 +255,9 @@ export default {
         },
         showSwitchToMercadoPagoLink() {
             return shouldShowSwitchToMercadoPago(this.config);
+        },
+        switchToMercadoPagoRoute() {
+            return SWITCH_TO_MERCADO_PAGO_ROUTE;
         },
         canUpload() {
             return this.requestId && this.paymentSuccess;

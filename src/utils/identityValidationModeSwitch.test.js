@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { shouldShowSwitchToMercadoPago } from './identityValidationModeSwitch.js';
+import {
+    shouldShowSwitchToMercadoPago,
+    SWITCH_TO_MERCADO_PAGO_ROUTE
+} from './identityValidationModeSwitch.js';
 
 describe('shouldShowSwitchToMercadoPago', () => {
     it('returns true when mercado pago validation is enabled', () => {
@@ -20,5 +23,11 @@ describe('shouldShowSwitchToMercadoPago', () => {
 
     it('returns false when config is missing', () => {
         expect(shouldShowSwitchToMercadoPago(null)).toBe(false);
+    });
+
+    it('exposes identity validation route for the switch link', () => {
+        expect(SWITCH_TO_MERCADO_PAGO_ROUTE).toEqual({
+            name: 'identity_validation'
+        });
     });
 });
