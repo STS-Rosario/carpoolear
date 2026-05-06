@@ -34,6 +34,7 @@ const AdminManualIdentityValidationReview = () => import('../components/views/Ad
 const AdminMpRejectedValidations = () => import('../components/views/AdminMpRejectedValidations.vue');
 const AdminMpRejectedValidationDetail = () => import('../components/views/AdminMpRejectedValidationDetail.vue');
 const Tickets = () => import('../components/views/Tickets.vue');
+const TicketNew = () => import('../components/views/TicketNew.vue');
 const TicketDetail = () => import('../components/views/TicketDetail.vue');
 const AdminSupportTickets = () => import('../components/views/AdminSupportTickets.vue');
 const AdminSupportTicketNew = () => import('../components/views/AdminSupportTicketNew.vue');
@@ -331,6 +332,20 @@ export default [
                 },
                 header: {
                     titleKey: 'soporte'
+                }
+            }
+        }
+    },
+    {
+        path: '/soporte/nuevo',
+        name: 'ticket-new',
+        component: TicketNew,
+        beforeEnter: auth,
+        meta: {
+            actionbar: {
+                header: {
+                    titleKey: 'crearTicket',
+                    buttons: ['back']
                 }
             }
         }
