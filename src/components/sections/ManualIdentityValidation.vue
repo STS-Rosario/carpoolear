@@ -221,7 +221,10 @@ import {
     shouldShowSwitchToMercadoPago,
     SWITCH_TO_MERCADO_PAGO_ROUTE
 } from '../../utils/identityValidationModeSwitch';
-import { getManualValidationUploadWarningKey } from '../../utils/manualValidationUploadWarning';
+import {
+    getManualValidationUploadWarningKey,
+    MANUAL_VALIDATION_UPLOAD_WARNING_STYLE
+} from '../../utils/manualValidationUploadWarning';
 
 export default {
     name: 'ManualIdentityValidation',
@@ -263,6 +266,9 @@ export default {
         },
         manualValidationUploadWarningKey() {
             return getManualValidationUploadWarningKey();
+        },
+        manualValidationUploadWarningStyle() {
+            return MANUAL_VALIDATION_UPLOAD_WARNING_STYLE;
         },
         switchToMercadoPagoRoute() {
             return SWITCH_TO_MERCADO_PAGO_ROUTE;
@@ -626,10 +632,10 @@ export default {
 .manual-validation-upload-warning {
     margin: 0 0 1rem;
     padding: 0.75rem 0.9rem;
-    border: 1px solid #faebcc;
+    border: v-bind('manualValidationUploadWarningStyle.border');
     border-radius: 4px;
-    background: #fcf8e3;
-    color: #8a6d3b;
+    background: v-bind('manualValidationUploadWarningStyle.background');
+    color: v-bind('manualValidationUploadWarningStyle.color');
     line-height: 1.4;
 }
 
