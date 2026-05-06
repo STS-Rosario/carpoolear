@@ -43,6 +43,23 @@
                         <p><strong>{{ $t('email') }}:</strong> {{ item.user_email || '-' }}</p>
                         <p><strong>{{ $t('motivoRechazo') }}:</strong> {{ getRejectReasonLabel(item.reject_reason) }}</p>
                         <p><strong>{{ $t('fecha') }}:</strong> {{ formatDate(item.created_at) }}</p>
+                        <div class="form-group private-admin-note-group">
+                            <label>{{ $t('notaPrivadaSoloAdmins') }}</label>
+                            <textarea
+                                v-model="privateAdminNote"
+                                class="form-control"
+                                rows="3"
+                                :placeholder="$t('notaPrivadaSoloAdmins')"
+                            ></textarea>
+                            <button
+                                class="btn btn-default btn-sm private-admin-note-save-btn"
+                                :disabled="savingPrivateNote"
+                                @click="savePrivateAdminNote"
+                            >
+                                <span v-if="savingPrivateNote">{{ $t('guardando') }}</span>
+                                <span v-else>{{ $t('guardar') }}</span>
+                            </button>
+                        </div>
 
                         <div v-if="!item.review_status" class="review-actions mt-3">
                             <h4>{{ $t('accion') }}</h4>
@@ -104,7 +121,9 @@ export default {
             item: null,
             loading: true,
             reviewNote: '',
+            privateAdminNote: '',
             submitting: false,
+            savingPrivateNote: false,
             reviewError: null
         };
     },
@@ -149,11 +168,32 @@ export default {
             return api.getMercadoPagoRejectedValidation(this.id).then((res) => {
                 const data = res.data || res;
                 this.item = data.data || data;
+                this.privateAdminNote = this.item.private_admin_note || '';
             }).catch(() => {
                 this.item = null;
             }).finally(() => {
                 this.loading = false;
             });
+        },
+        savePrivateAdminNote() {
+            if (!this.item) return;
+            this.savingPrivateNote = true;
+            const api = new AdminApi();
+            api.updateMercadoPagoRejectedValidationPrivateNote(
+                this.item.id,
+                this.privateAdminNote
+            )
+                .then((res) => {
+                    const data = res.data || res;
+                    this.item = data.data || data;
+                    this.privateAdminNote = this.item.private_admin_note || '';
+                    dialogs.message(this.$t('guardar'), { duration: 2, estado: 'success' });
+                }, () => {
+                    dialogs.message(this.$t('resultError'), { duration: 3, estado: 'error' });
+                })
+                .finally(() => {
+                    this.savingPrivateNote = false;
+                });
         },
         review(action) {
             if (action !== 'approve' && !this.hasComment) return;
@@ -211,5 +251,11 @@ export default {
 .mt-4 { margin-top: 1.5em; }
 .review-note-display {
     word-break: break-word;
+}
+.private-admin-note-group {
+    margin-top: 1rem;
+}
+.private-admin-note-save-btn {
+    margin-top: 0.5rem;
 }
 </style>

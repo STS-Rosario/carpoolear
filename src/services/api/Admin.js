@@ -102,6 +102,13 @@ class AdminApi extends TaggedApi {
         );
     }
 
+    updateMercadoPagoRejectedValidationPrivateNote(id, privateAdminNote) {
+        return this.post(
+            '/api/admin/mercado-pago-rejected-validations/' + id + '/private-note',
+            { private_admin_note: privateAdminNote }
+        );
+    }
+
     approveMercadoPagoRejectedValidation(id) {
         return this.post(
             '/api/admin/mercado-pago-rejected-validations/' + id + '/approve',
