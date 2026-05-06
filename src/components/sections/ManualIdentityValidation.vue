@@ -5,6 +5,15 @@
             <router-link :to="{ name: 'identity_validation' }" class="btn btn-default btn-sm">{{ $t('volver') }}</router-link>
         </div>
         <template v-else>
+            <p
+                v-if="showSwitchToMercadoPagoLink"
+                class="manual-validation-switch-mode-link"
+            >
+                <router-link :to="{ name: 'identity_validation' }">
+                    {{ $t('manualValidationSwitchToMercadoPago') }}
+                </router-link>
+            </p>
+
             <div
                 v-if="(statusPaidAt || statusSubmittedAt) && !(canUpload && !alreadySubmitted)"
                 class="panel panel-default status-dates-panel"
@@ -204,6 +213,7 @@ import { mapState } from 'pinia';
 import { useAuthStore } from '../../stores/auth';
 import { UserApi } from '../../services/api';
 import QRCode from 'qrcode';
+import { shouldShowSwitchToMercadoPago } from '../../utils/identityValidationModeSwitch';
 
 export default {
     name: 'ManualIdentityValidation',
@@ -239,6 +249,9 @@ export default {
         },
         identityValidationManualQrEnabled() {
             return this.config && this.config.identity_validation_manual_qr_enabled === true;
+        },
+        showSwitchToMercadoPagoLink() {
+            return shouldShowSwitchToMercadoPago(this.config);
         },
         canUpload() {
             return this.requestId && this.paymentSuccess;
@@ -453,6 +466,10 @@ export default {
 
 .status-dates-panel {
     margin-top: 1em;
+}
+
+.manual-validation-switch-mode-link {
+    margin: 0 0 1rem;
 }
 
 .manual-validation-upload {

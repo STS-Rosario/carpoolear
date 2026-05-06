@@ -353,6 +353,8 @@ const messages = {
             'Por ahora podés seguir usando la app con normalidad; te recomendamos verificar tu cuenta cuando puedas.',
         identidadModalValidar: 'Verificar cuenta',
         identidadModalMasTarde: 'Más tarde',
+        manualValidationSwitchToMercadoPago:
+            'Cambiar modo de verificación de cuenta a Mercado Pago (gratis)',
         identityValidationPageIntro:
             'Para mantener la seguridad de la comunidad, necesitamos verificar tu cuenta.',
         identityValidationPageIntroEstoPermite: 'Esto permite',
@@ -1482,6 +1484,8 @@ const messages = {
             'Por ahora podés seguir usando la app con normalidad; te recomendamos verificar tu cuenta cuando puedas.',
         identidadModalValidar: 'Verificar cuenta',
         identidadModalMasTarde: 'Más tarde',
+        manualValidationSwitchToMercadoPago:
+            'Cambiar modo de verificación de cuenta a Mercado Pago (gratis)',
         identityValidationPageIntro:
             'Para mantener la seguridad de la comunidad, necesitamos verificar tu cuenta.',
         identityValidationPageIntroEstoPermite: 'Esto permite',
@@ -2587,6 +2591,8 @@ const messages = {
             'For now you can keep using the app as usual; we recommend verifying your account when you can.',
         identidadModalValidar: 'Verify account',
         identidadModalMasTarde: 'Remind me later',
+        manualValidationSwitchToMercadoPago:
+            'Switch account verification mode to Mercado Pago (free)',
         identidadNoValidada: 'Not verified',
         validarUsuario: 'Verify user',
         validadoPor: 'Verified by',
