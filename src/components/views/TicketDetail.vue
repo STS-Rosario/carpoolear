@@ -57,6 +57,33 @@ import { markdownToHtml } from '../../services/markdown';
 import dialogs from '../../services/dialogs';
 import dayjs from '../../dayjs';
 
+const PRIORITY_LABEL_KEYS = {
+    low: 'prioridadBaja',
+    normal: 'prioridadNormal',
+    high: 'prioridadAlta'
+};
+
+const PRIORITY_CLASS_MAP = {
+    high: 'label label-danger',
+    normal: 'label label-info',
+    low: 'label label-default'
+};
+
+const STATUS_LABEL_KEYS = {
+    Open: 'estadoPendiente',
+    'Esperando respuesta': 'esperaUsuarioResponda',
+    'En revision': 'estadoPendienteRevision',
+    Resuelto: 'estadoAprobado',
+    Cerrado: 'estadoCerrado'
+};
+
+const STATUS_CLASS_MAP = {
+    Cerrado: 'label label-default',
+    Resuelto: 'label label-success',
+    'Esperando respuesta': 'label label-warning',
+    'En revision': 'label label-info'
+};
+
 export default {
     name: 'ticket-detail',
     props: ['id'],
@@ -85,31 +112,19 @@ export default {
         },
         priorityLabel(priority) {
             const key = (priority || '').toLowerCase();
-            if (key === 'low') return this.$t('prioridadBaja');
-            if (key === 'normal') return this.$t('prioridadNormal');
-            if (key === 'high') return this.$t('prioridadAlta');
+            if (PRIORITY_LABEL_KEYS[key]) return this.$t(PRIORITY_LABEL_KEYS[key]);
             return this.capitalizeFirst(priority || '');
         },
         priorityClass(priority) {
             const key = (priority || '').toLowerCase();
-            if (key === 'high') return 'label label-danger';
-            if (key === 'normal') return 'label label-info';
-            return 'label label-default';
+            return PRIORITY_CLASS_MAP[key] || 'label label-default';
         },
         statusLabel(status) {
-            if (status === 'Open') return this.$t('estadoPendiente');
-            if (status === 'Esperando respuesta') return this.$t('esperaUsuarioResponda');
-            if (status === 'En revision') return this.$t('estadoPendienteRevision');
-            if (status === 'Resuelto') return this.$t('estadoAprobado');
-            if (status === 'Cerrado') return this.$t('estadoCerrado');
+            if (STATUS_LABEL_KEYS[status]) return this.$t(STATUS_LABEL_KEYS[status]);
             return this.capitalizeFirst(status || '');
         },
         statusClass(status) {
-            if (status === 'Cerrado') return 'label label-default';
-            if (status === 'Resuelto') return 'label label-success';
-            if (status === 'Esperando respuesta') return 'label label-warning';
-            if (status === 'En revision') return 'label label-info';
-            return 'label label-primary';
+            return STATUS_CLASS_MAP[status] || 'label label-primary';
         },
         replyAuthorLabel(reply) {
             if (reply.is_admin) return this.$t('admin');
