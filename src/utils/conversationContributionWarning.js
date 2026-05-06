@@ -5,7 +5,9 @@ export function getConversationContributionWarningData({ conversation, user }) {
     }
 
     const isDriver = user.id === trip.user.id;
-    const maxContributionCents = trip.seat_price_cents || 0;
+    const cents = trip.seat_price_cents;
+    const maxContributionCents =
+        typeof cents === 'number' && cents > 0 ? cents : 0;
 
     return {
         role: isDriver ? 'driver' : 'passenger',
