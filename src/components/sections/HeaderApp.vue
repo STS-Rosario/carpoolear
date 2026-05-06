@@ -80,6 +80,7 @@
                                 {{ $t('perfil') }}
                             </router-link>
                         </li>
+                        <!-- /soporte (mesa de ayuda), mobile -->
                         <li v-if="user">
                             <router-link :to="{ name: 'tickets' }">{{
                                 $t('soporte')
@@ -244,6 +245,7 @@
                                 {{ $t('perfil') }}
                             </router-link>
                         </li>
+                        <!-- /soporte (mesa de ayuda), desktop -->
                         <li>
                             <router-link :to="{ name: 'tickets' }">{{
                                 $t('soporte')
