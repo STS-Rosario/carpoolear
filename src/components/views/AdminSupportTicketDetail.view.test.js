@@ -39,7 +39,7 @@ describe('AdminSupportTicketDetail view', () => {
         expect(viewSource).toContain('admin-reply-box');
         expect(viewSource).toContain('reply-actions');
         expect(viewSource).toContain('reply-action-btn');
-        expect(viewSource).toContain("respuestaEnviada");
+        expect(viewSource).toContain('respuestaEnviada');
         expect(viewSource).toContain('.then(() => this.refresh())');
     });
 });

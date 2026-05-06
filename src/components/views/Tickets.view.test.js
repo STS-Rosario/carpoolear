@@ -43,8 +43,8 @@ describe('Tickets list view', () => {
     });
 
     it('does not render ticket creation form fields in list view', () => {
-        expect(viewSource).not.toContain("v-model=\"form.subject\"");
-        expect(viewSource).not.toContain("v-model=\"form.type\"");
+        expect(viewSource).not.toContain('v-model="form.subject"');
+        expect(viewSource).not.toContain('v-model="form.type"');
         expect(viewSource).not.toContain('ref="createEditor"');
     });
 });
