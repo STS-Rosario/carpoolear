@@ -7,11 +7,13 @@
                     <div class="col-md-6">
                         <label class="control-label">{{ $t('categoriaTicket') }}</label>
                         <select v-model="form.type" class="form-control">
-                            <option value="bug_report">{{ $t('ticketTypeBug') }}</option>
-                            <option value="contact">{{ $t('ticketTypeContact') }}</option>
-                            <option value="feedback">{{ $t('ticketTypeSuggestion') }}</option>
-                            <option value="report">{{ $t('ticketTypeReport') }}</option>
-                            <option value="account_verification">{{ $t('ticketTypeAccountVerification') }}</option>
+                            <option
+                                v-for="option in ticketTypeOptions"
+                                :key="option.value"
+                                :value="option.value"
+                            >
+                                {{ $t(option.labelKey) }}
+                            </option>
                         </select>
                     </div>
                 </div>
@@ -50,6 +52,13 @@ export default {
                 subject: ''
             },
             attachments: [],
+            ticketTypeOptions: [
+                { value: 'bug_report', labelKey: 'ticketTypeBug' },
+                { value: 'contact', labelKey: 'ticketTypeContact' },
+                { value: 'feedback', labelKey: 'ticketTypeSuggestion' },
+                { value: 'report', labelKey: 'ticketTypeReport' },
+                { value: 'account_verification', labelKey: 'ticketTypeAccountVerification' }
+            ],
             editorOptions: {
                 usageStatistics: false,
                 hideModeSwitch: true,
