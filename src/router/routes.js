@@ -36,6 +36,7 @@ const AdminMpRejectedValidationDetail = () => import('../components/views/AdminM
 const Tickets = () => import('../components/views/Tickets.vue');
 const TicketDetail = () => import('../components/views/TicketDetail.vue');
 const AdminSupportTickets = () => import('../components/views/AdminSupportTickets.vue');
+const AdminSupportTicketNew = () => import('../components/views/AdminSupportTicketNew.vue');
 const AdminSupportTicketDetail = () => import('../components/views/AdminSupportTicketDetail.vue');
 
 const UpdateProfile = () => import('../components/sections/UpdateProfile.vue');
@@ -727,6 +728,24 @@ export default [
                 header: {
                     titleKey: 'soporte',
                     buttons: []
+                }
+            }
+        }
+    },
+    {
+        path: '/admin/support-tickets/new',
+        name: 'admin-support-ticket-new',
+        component: AdminSupportTicketNew,
+        beforeEnter: authAdmin,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'admin'
+                },
+                header: {
+                    titleKey: 'crearTicket',
+                    buttons: ['back']
                 }
             }
         }

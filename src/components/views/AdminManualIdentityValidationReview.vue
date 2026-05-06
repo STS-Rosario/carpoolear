@@ -29,7 +29,7 @@
                             v-if="item.user_id"
                             class="btn btn-default btn-sm"
                             :to="{
-                                name: 'admin-support-tickets',
+                                name: 'admin-support-ticket-new',
                                 query: {
                                     userId: item.user_id,
                                     userName: item.user_name,
