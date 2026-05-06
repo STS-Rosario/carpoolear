@@ -1,5 +1,6 @@
 <template>
     <div class="container" v-if="ticket">
+        <h3>{{ $t('ticketDeSoporte') }}</h3>
         <p>
             <router-link :to="backToTicketsRoute">
                 {{ $t('volverListaTicketsSoporte') }}
@@ -8,23 +9,16 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <strong>#{{ ticket.id }} - {{ ticket.subject }}</strong>
-            </div>
-            <div class="panel-body">
-                <p>
-                    {{ $t('prioridad') }}:
-                    <span :class="priorityClass(ticket.priority)">{{ priorityLabel(ticket.priority) }}</span>
-                </p>
-                <p>
-                    {{ $t('estado') }}:
-                    <span :class="statusClass(ticket.status)">{{ statusLabel(ticket.status) }}</span>
-                </p>
+                <span class="mleft-10" :class="statusClass(ticket.status)">{{ statusLabel(ticket.status) }}</span>
             </div>
         </div>
 
         <div class="list-group">
             <div class="list-group-item" v-for="reply in ticket.replies || []" :key="reply.id">
-                <p><strong>{{ replyAuthorLabel(reply) }}</strong></p>
-                <p><small :title="fullDate(reply.created_at)">{{ relativeDate(reply.created_at) }}</small></p>
+                <p class="reply-meta-row">
+                    <strong>{{ replyAuthorLabel(reply) }}</strong>
+                    <small class="reply-meta-date" :title="fullDate(reply.created_at)">{{ relativeDate(reply.created_at) }}</small>
+                </p>
                 <div v-html="markdownToHtml(reply.message_markdown)"></div>
             </div>
         </div>
@@ -61,18 +55,6 @@ import { useTicketsStore } from '../../stores/tickets';
 import { markdownToHtml } from '../../services/markdown';
 import dialogs from '../../services/dialogs';
 import dayjs from '../../dayjs';
-
-const PRIORITY_LABEL_KEYS = {
-    low: 'prioridadBaja',
-    normal: 'prioridadNormal',
-    high: 'prioridadAlta'
-};
-
-const PRIORITY_CLASS_MAP = {
-    high: 'label label-danger',
-    normal: 'label label-info',
-    low: 'label label-default'
-};
 
 const STATUS_LABEL_KEYS = {
     Open: 'estadoPendiente',
@@ -119,15 +101,6 @@ export default {
         capitalizeFirst(value) {
             if (!value) return '';
             return value.charAt(0).toUpperCase() + value.slice(1);
-        },
-        priorityLabel(priority) {
-            const key = (priority || '').toLowerCase();
-            if (PRIORITY_LABEL_KEYS[key]) return this.$t(PRIORITY_LABEL_KEYS[key]);
-            return this.capitalizeFirst(priority || '');
-        },
-        priorityClass(priority) {
-            const key = (priority || '').toLowerCase();
-            return PRIORITY_CLASS_MAP[key] || 'label label-default';
         },
         statusLabel(status) {
             if (STATUS_LABEL_KEYS[status]) return this.$t(STATUS_LABEL_KEYS[status]);
@@ -180,3 +153,15 @@ export default {
     }
 };
 </script>
+
+<style scoped>
+.reply-meta-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.reply-meta-date {
+    color: #777;
+}
+</style>
