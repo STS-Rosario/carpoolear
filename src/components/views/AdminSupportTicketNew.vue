@@ -69,8 +69,6 @@ import { useTicketsStore } from '../../stores/tickets';
 import { AdminApi } from '../../services/api';
 import dialogs from '../../services/dialogs';
 
-let searchTimer = null;
-
 export default {
     name: 'admin-support-ticket-new',
     data() {
@@ -81,6 +79,7 @@ export default {
             userOptions: [],
             userSearch: '',
             selectedUser: null,
+            userSearchTimer: null,
             createForm: {
                 user_id: null,
                 type: 'account_verification',
@@ -125,7 +124,7 @@ export default {
             }
         },
         onSearchUsers() {
-            if (searchTimer) clearTimeout(searchTimer);
+            if (this.userSearchTimer) clearTimeout(this.userSearchTimer);
             const term = this.userSearch;
             if (!term) {
                 this.userOptions = [];
@@ -134,7 +133,7 @@ export default {
                 this.createForm.user_id = null;
                 return;
             }
-            searchTimer = setTimeout(() => {
+            this.userSearchTimer = setTimeout(() => {
                 this.searchLoading = true;
                 this.showAutocomplete = true;
                 const adminApi = new AdminApi();
@@ -171,6 +170,11 @@ export default {
     },
     mounted() {
         this.applyPrefill();
+    },
+    beforeUnmount() {
+        if (this.userSearchTimer) {
+            clearTimeout(this.userSearchTimer);
+        }
     },
     components: {
         AdminLayout
