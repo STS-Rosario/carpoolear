@@ -32,7 +32,7 @@
 
                 <div class="form-group">
                     <label>{{ $t('usuario') }}</label>
-                    <p class="form-control-static" v-if="selectedUserLabel">{{ selectedUserLabel }}</p>
+                    <p class="form-control-static selected-user-value" v-if="selectedUserLabel">{{ selectedUserLabel }}</p>
                     <p class="text-danger" v-else>{{ $t('errorDatos') }}</p>
                 </div>
 
@@ -188,5 +188,19 @@ export default {
     max-height: 240px;
     overflow: auto;
     cursor: pointer;
+    background: #fff;
+}
+
+.autocomplete-users .list-group-item {
+    color: #333;
+    background: #fff;
+}
+
+.autocomplete-users .list-group-item:hover {
+    background: #f5f5f5;
+}
+
+.selected-user-value {
+    margin-top: 0;
 }
 </style>
