@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { getIdentityValidationMismatchDetails } from './identityValidationMismatchDetails.js';
+import {
+    getIdentityValidationMismatchDetails,
+    MISMATCH_RESULT_BOTH
+} from './identityValidationMismatchDetails.js';
 
 describe('getIdentityValidationMismatchDetails', () => {
     it('returns both name and dni comparison details for both_mismatch', () => {
@@ -18,5 +21,9 @@ describe('getIdentityValidationMismatchDetails', () => {
         expect(details.mpName).toBe('Other Person');
         expect(details.userDni).toBe('30123456');
         expect(details.mpDni).toBe('30999999');
+    });
+
+    it('exports both mismatch result constant', () => {
+        expect(MISMATCH_RESULT_BOTH).toBe('both_mismatch');
     });
 });

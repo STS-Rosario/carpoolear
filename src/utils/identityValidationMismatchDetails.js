@@ -1,19 +1,23 @@
+export const MISMATCH_RESULT_DNI = 'dni_mismatch';
+export const MISMATCH_RESULT_NAME = 'name_mismatch';
+export const MISMATCH_RESULT_BOTH = 'both_mismatch';
+
 export function getIdentityValidationMismatchDetails(query) {
     const result = query && query.result;
     if (
-        result !== 'dni_mismatch' &&
-        result !== 'name_mismatch' &&
-        result !== 'both_mismatch'
+        result !== MISMATCH_RESULT_DNI &&
+        result !== MISMATCH_RESULT_NAME &&
+        result !== MISMATCH_RESULT_BOTH
     ) {
         return null;
     }
 
-    const showName = result === 'name_mismatch' || result === 'both_mismatch';
-    const showDni = result === 'dni_mismatch' || result === 'both_mismatch';
+    const showName = result === MISMATCH_RESULT_NAME || result === MISMATCH_RESULT_BOTH;
+    const showDni = result === MISMATCH_RESULT_DNI || result === MISMATCH_RESULT_BOTH;
     const reasonKey =
-        result === 'both_mismatch'
+        result === MISMATCH_RESULT_BOTH
             ? 'resultBothMismatch'
-            : result === 'name_mismatch'
+            : result === MISMATCH_RESULT_NAME
                 ? 'resultNameMismatch'
                 : 'resultDniMismatch';
 
