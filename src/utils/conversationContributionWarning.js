@@ -1,3 +1,5 @@
+import { maxContributionCapFromSeatPriceCents } from './tripSeatPrice.js';
+
 export function getConversationContributionWarningData({ conversation, user }) {
     const trip = conversation && conversation.trip;
     if (!trip || !trip.user || !user) {
@@ -5,7 +7,9 @@ export function getConversationContributionWarningData({ conversation, user }) {
     }
 
     const isDriver = user.id === trip.user.id;
-    const maxContributionCents = trip.seat_price_cents || 0;
+    const maxContributionCents = maxContributionCapFromSeatPriceCents(
+        trip.seat_price_cents
+    );
 
     return {
         role: isDriver ? 'driver' : 'passenger',

@@ -2,12 +2,16 @@
     
     <div
         class="trip-seats"
-        v-if="this.config.module_seat_price_enabled && (tripCardTheme === 'light' || !trip.is_passenger)"
+        v-if="
+            this.config.module_seat_price_enabled &&
+            (tripCardTheme === 'light' || !trip.is_passenger) &&
+            showSeatPriceSection
+        "
     >
         <div v-if="tripCardTheme !== 'light'" class="price-container">
             <div class="price-item">
                 <span class="trip_seat-price_value trip_seat-price_value-main">
-                    <template v-if="isZeroTripContribution">{{
+                    <template v-if="isVoluntaryContribution">{{
                         $t('loQueSePuedaAportar')
                     }}</template>
                     <template v-else>{{
@@ -54,7 +58,7 @@
             <div class="trip_seats-available" v-if="!trip.is_passenger">
                 <template v-for="n in trip.total_seats">
                     {{ $t('contribucionPorPersona') }}:
-                    <span v-if="isZeroTripContribution">{{
+                    <span v-if="isVoluntaryContribution">{{
                         $t('loQueSePuedaAportar')
                     }}</span>
                     <span v-else>{{
@@ -69,6 +73,10 @@
 import { mapState } from 'pinia';
 import { useTripsStore } from '../../stores/trips';
 import { useAuthStore } from '../../stores/auth';
+import {
+    isVoluntaryContributionSeatPrice,
+    shouldShowTripSeatPriceSection
+} from '../../utils/tripSeatPrice.js';
 import SvgItem from '../SvgItem';
 export default {
     name: 'TripSeats',
@@ -87,14 +95,19 @@ export default {
             config: 'appConfig'
         }),
         owner() {
-            console.log('this.trip', this.trip);
-            console.log('this.user', this.user);
-            console.log('this.trip.user.id', this.trip.user.id);
-            console.log('this.user.id', this.user.id);
             return this.trip && this.user && this.user.id === this.trip.user.id;
         },
-        isZeroTripContribution() {
-            return this.trip && this.trip.seat_price_cents === 0;
+        showSeatPriceSection() {
+            return (
+                this.trip &&
+                shouldShowTripSeatPriceSection(this.trip.seat_price_cents)
+            );
+        },
+        isVoluntaryContribution() {
+            return (
+                this.trip &&
+                isVoluntaryContributionSeatPrice(this.trip.seat_price_cents)
+            );
         },
         calculadoEnBaseNaftaDescription() {
             const base = this.$t('calculadoEnBaseNaftaBase');

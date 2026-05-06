@@ -1820,6 +1820,11 @@ import WeeklySchedule from '../elements/WeeklySchedule';
 import bus from '../../services/bus-event.js';
 import { getMaxContributionExceededMessage } from '../../utils/maxContributionExceededMessage.js';
 import { rememberMaxContributionWarning } from '../../utils/maxContributionWarningState.js';
+import {
+    parseSeatPriceInput,
+    priceInputNumberFromStoredSeatPriceCents,
+    seatPriceCentsForApi
+} from '../../utils/tripSeatPrice.js';
 
 let tripApi = new TripApi();
 let userApi = new UserApi();
@@ -1913,6 +1918,7 @@ export default {
                 allow_animals: false,
                 car_id: null,
                 enc_path: '123',
+                seat_price_cents: null,
                 points: [] /* address json_address lat lng */
             },
             updatingTrip: null,
@@ -1967,7 +1973,7 @@ export default {
                     allow_kids: false,
                     allow_smoking: false,
                     allow_animals: false,
-                    seat_price_cents: 0,
+                    seat_price_cents: null,
                     points: [] /* address json_address lat lng */
                 }
             },
@@ -2276,9 +2282,11 @@ export default {
         this.trip.allow_animals = Number(trip.allow_animals) > 0;
         this.trip.allow_smoking = Number(trip.allow_smoking) > 0;
         
-        if (trip.seat_price_cents != null) {
-            this.price = trip.seat_price_cents / 100;
-            this.trip.seat_price_cents = trip.seat_price_cents;
+        this.trip.seat_price_cents = trip.seat_price_cents;
+        const restoredPrice =
+            priceInputNumberFromStoredSeatPriceCents(trip.seat_price_cents);
+        if (restoredPrice !== null) {
+            this.price = restoredPrice;
         }
         
         this.calcRoute();
@@ -2306,28 +2314,9 @@ export default {
                 });
         },
 
-        parseSeatPriceInput(value) {
-            if (value === '' || value === null || value === undefined) {
-                return null;
-            }
-            if (typeof value === 'string' && value.trim() === '') {
-                return null;
-            }
-            const n = Number(value);
-            return Number.isFinite(n) ? n : null;
-        },
-
-        seatPriceCentsForApi(raw) {
-            const p = this.parseSeatPriceInput(raw);
-            if (p === null) {
-                return 0;
-            }
-            return Math.round(p * 100);
-        },
-
         onOutboundPriceFieldInput() {
             this.validatePrice();
-            const p = this.parseSeatPriceInput(this.price);
+            const p = parseSeatPriceInput(this.price);
             if (
                 p !== null &&
                 this.priceError.message ===
@@ -2339,7 +2328,7 @@ export default {
 
         onReturnPriceFieldInput() {
             this.validateReturnPrice();
-            const p = this.parseSeatPriceInput(this.returnPrice);
+            const p = parseSeatPriceInput(this.returnPrice);
             if (
                 p !== null &&
                 this.returnPriceError.message ===
@@ -2509,7 +2498,7 @@ export default {
             }
 
             if (this.trip.is_passenger == 0 && this.config.module_seat_price_enabled) {
-                const seatP = this.parseSeatPriceInput(this.price);
+                const seatP = parseSeatPriceInput(this.price);
                 if (seatP === null) {
                     globalError = true;
                     this.priceError.state = true;
@@ -2654,7 +2643,7 @@ export default {
                     (!this.config.module_max_price_enabled ||
                         this.config.module_trip_creation_payment_enabled)
                 ) {
-                    const returnSeatP = this.parseSeatPriceInput(
+                    const returnSeatP = parseSeatPriceInput(
                         this.returnPrice
                     );
                     if (returnSeatP === null) {
@@ -2743,7 +2732,7 @@ export default {
                 trip.is_passenger = trip.is_passenger ? 1 : 0;
                 this.normalizeAllowFlagsForApi(trip);
 
-                trip.seat_price_cents = this.seatPriceCentsForApi(this.price);
+                trip.seat_price_cents = seatPriceCentsForApi(this.price);
                 
                 if (trip.is_passenger === 1) {
                     trip.no_lucrar = 1;
@@ -2766,7 +2755,7 @@ export default {
                                 );
                                 this.normalizeAllowFlagsForApi(otherTrip);
                                 otherTrip.seat_price_cents =
-                                    this.seatPriceCentsForApi(this.returnPrice);
+                                    seatPriceCentsForApi(this.returnPrice);
                                 this.createTrip(otherTrip).then((ot) => {
                                     return resolve(ot);
                                 });
@@ -2816,7 +2805,7 @@ export default {
                 this.trip.id = this.updatingTrip.id;
                 let trip = JSON.parse(JSON.stringify(this.trip));
                 this.normalizeAllowFlagsForApi(trip);
-                trip.seat_price_cents = this.seatPriceCentsForApi(this.price);
+                trip.seat_price_cents = seatPriceCentsForApi(this.price);
                 this.updateTrip(trip)
                     .then(() => {
                         this.saving = false;
@@ -3023,7 +3012,7 @@ export default {
             }
         },
         validatePrice() {
-            const p = this.parseSeatPriceInput(this.price);
+            const p = parseSeatPriceInput(this.price);
             if (
                 p !== null &&
                 this.config.module_max_price_enabled &&
@@ -3062,7 +3051,7 @@ export default {
             this.validateReturnPrice();
         },
         validateReturnPrice() {
-            const p = this.parseSeatPriceInput(this.returnPrice);
+            const p = parseSeatPriceInput(this.returnPrice);
             if (
                 p !== null &&
                 p > this.maximum_return_seat_price_cents / 100

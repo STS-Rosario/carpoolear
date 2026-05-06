@@ -37,4 +37,22 @@ describe('getConversationContributionWarningData', () => {
             maxContributionCents: 5000
         });
     });
+
+    it('treats voluntary contribution sentinel (-1 cents) as zero max amount', () => {
+        const data = getConversationContributionWarningData({
+            conversation: {
+                trip: {
+                    id: 7,
+                    seat_price_cents: -1,
+                    user: { id: 2 }
+                }
+            },
+            user: { id: 2 }
+        });
+
+        expect(data).toEqual({
+            role: 'driver',
+            maxContributionCents: 0
+        });
+    });
 });
