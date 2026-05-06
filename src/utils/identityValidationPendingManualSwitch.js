@@ -1,7 +1,8 @@
+import { shouldShowSwitchToMercadoPago } from './identityValidationModeSwitch.js';
+
 export function shouldShowPendingManualSwitchLink(config, manualStatus) {
     return !!(
-        config &&
-        config.identity_validation_mercado_pago_enabled === true &&
+        shouldShowSwitchToMercadoPago(config) &&
         manualStatus &&
         manualStatus.has_submission &&
         manualStatus.paid === false
