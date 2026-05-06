@@ -27,7 +27,7 @@
                     <label>{{ $t('mensajeTicket') }}</label>
                     <textarea v-model="createForm.message_markdown" class="form-control" rows="4"></textarea>
                 </div>
-                <button class="btn btn-primary" :disabled="creating" @click="createTicket">
+                <button class="btn btn-primary" :disabled="createDisabled" @click="createTicket">
                     {{ creating ? $t('guardando') : $t('crearTicket') }}
                 </button>
             </div>
@@ -80,6 +80,12 @@ export default {
         prefilledUserName() {
             const userName = this.$route.query.userName;
             return userName ? String(userName) : '';
+        },
+        createDisabled() {
+            return this.creating ||
+                !this.createForm.user_id ||
+                !this.createForm.subject ||
+                !this.createForm.message_markdown;
         }
     },
     methods: {
