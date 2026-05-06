@@ -64,7 +64,14 @@
                                         config.module_trip_seats_payment
                                     "
                                 >
-                                    {{ $t('reservar') }} {{ $n(trip.seat_price_cents / 100, 'currency') }}
+                                    {{ $t('reservar') }}
+                                    <template
+                                        v-if="isVoluntaryContributionSeatPrice(trip.seat_price_cents)"
+                                        >{{ $t('loQueSePuedaAportar') }}</template
+                                    >
+                                    <template v-else>{{
+                                        $n(trip.seat_price_cents / 100, 'currency')
+                                    }}</template>
                                 </template>
                                 <template v-else>{{ $t('reservar') }}</template>
                             </template>
@@ -150,6 +157,7 @@ import { useDeviceStore } from '../../stores/device';
 import dayjs from '../../dayjs';
 import spinner from '../Spinner.vue';
 import Transactions from '../views/transactions.vue';
+import { isVoluntaryContributionSeatPrice } from '../../utils/tripSeatPrice.js';
 
 export default {
     name: 'TripButtons',
@@ -199,6 +207,7 @@ export default {
         Transactions
     },
     methods: {
+        isVoluntaryContributionSeatPrice,
         onShareLinkClick(event) {
             if (
                 window.device &&

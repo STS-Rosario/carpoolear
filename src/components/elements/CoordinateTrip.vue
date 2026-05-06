@@ -76,7 +76,14 @@
                 <span v-else-if="expiredTrip">{{ $t('viajeCarpooleado') }}</span>
                 <span v-else>
                     <template v-if="config && config.module_trip_seats_payment">
-                        {{ $t('reservar') }} {{ $n(conversation.trip.seat_price_cents / 100, 'currency') }}
+                        {{ $t('reservar') }}
+                        <template
+                            v-if="isVoluntaryContributionSeatPrice(conversation.trip.seat_price_cents)"
+                            >{{ $t('loQueSePuedaAportar') }}</template
+                        >
+                        <template v-else>{{
+                            $n(conversation.trip.seat_price_cents / 100, 'currency')
+                        }}</template>
                         <template v-if="conversation.return_trip"
                             >{{ $t('deIda') }}</template
                         >
@@ -126,7 +133,15 @@
                 <span v-else-if="expiredReturnTrip">{{ $t('viajeCarpooleado') }}</span>
                 <span v-else>
                     <template v-if="config && config.module_trip_seats_payment">
-                        {{ $t('reservar') }} {{ $n(conversation.return_trip.seat_price_cents / 100, 'currency') }} {{ $t('deVuelta') }}
+                        {{ $t('reservar') }}
+                        <template
+                            v-if="isVoluntaryContributionSeatPrice(conversation.return_trip.seat_price_cents)"
+                            >{{ $t('loQueSePuedaAportar') }}</template
+                        >
+                        <template v-else>{{
+                            $n(conversation.return_trip.seat_price_cents / 100, 'currency')
+                        }}</template>
+                        {{ $t('deVuelta') }}
                     </template>
                     <template v-else>{{ $t('solicitarAsientoDeVuelta') }}</template>
                 </span>
@@ -157,6 +172,7 @@ import dialogs from '../../services/dialogs.js';
 import spinner from '../Spinner.vue';
 import dayjs from '../../dayjs';
 import { getConversationContributionWarningData } from '../../utils/conversationContributionWarning.js';
+import { isVoluntaryContributionSeatPrice } from '../../utils/tripSeatPrice.js';
 
 export default {
     name: 'conversation-chat',
@@ -223,6 +239,7 @@ export default {
         }
     },
     methods: {
+        isVoluntaryContributionSeatPrice,
         dayjs,
         ...mapActions(usePassengerStore, {
             make: 'makeRequest',
