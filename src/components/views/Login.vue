@@ -49,58 +49,60 @@
                     $t('email')
                 }}</label>
                 <div class="visual-trick">
-                    <input
-                        :placeholder="$t('loginUsuarioPlaceholder')"
-                        ref="txt_user"
-                        type="email"
-                        id="txt_user"
-                        name="email"
-                        autocomplete="username"
-                        autocapitalize="none"
-                        autocorrect="off"
-                        spellcheck="false"
-                        inputmode="email"
-                        v-model="email"
-                        v-jump
-                    />
-                    <label for="txt_password" v-show="isDesktop">{{
-                        $t('password')
-                    }}</label>
-                    <input
-                        :placeholder="$t('loginPasswordPlaceholder')"
-                        ref="txt_password"
-                        type="password"
-                        id="txt_password"
-                        name="password"
-                        autocomplete="current-password"
-                        v-jump
-                        v-model="password"
-                    />
-                    <div
-                        class="alert alert-info"
-                        role="alert"
-                        v-if="showUserNotActiveInfo"
-                    >
-                        {{ $t('debeActivarCuenta') }}
-                    </div>
-                    <div
-                        class="alert alert-info"
-                        role="alert"
-                        v-if="showUserBannedInfo"
-                    >
-                        {{ $t('usuarioBanneado') }}
-                    </div>
-                    <button
-                        v-jump
-                        ref="btn_login"
-                        id="btn_login"
-                        class="btn btn-primary btn-shadowed-black"
-                        @click="login"
-                        :disabled="loading"
-                    >
-                        <span v-if="!loading">{{ $t('ingresar') }}</span>
-                        <spinner class="blue" v-if="loading"></spinner>
-                    </button>
+                    <form @submit.prevent="submitLogin">
+                        <input
+                            :placeholder="$t('loginUsuarioPlaceholder')"
+                            ref="txt_user"
+                            type="email"
+                            id="txt_user"
+                            name="email"
+                            autocomplete="username"
+                            autocapitalize="none"
+                            autocorrect="off"
+                            spellcheck="false"
+                            inputmode="email"
+                            v-model="email"
+                            v-jump
+                        />
+                        <label for="txt_password" v-show="isDesktop">{{
+                            $t('password')
+                        }}</label>
+                        <input
+                            :placeholder="$t('loginPasswordPlaceholder')"
+                            ref="txt_password"
+                            type="password"
+                            id="txt_password"
+                            name="password"
+                            autocomplete="current-password"
+                            v-jump
+                            v-model="password"
+                        />
+                        <div
+                            class="alert alert-info"
+                            role="alert"
+                            v-if="showUserNotActiveInfo"
+                        >
+                            {{ $t('debeActivarCuenta') }}
+                        </div>
+                        <div
+                            class="alert alert-info"
+                            role="alert"
+                            v-if="showUserBannedInfo"
+                        >
+                            {{ $t('usuarioBanneado') }}
+                        </div>
+                        <button
+                            v-jump
+                            ref="btn_login"
+                            id="btn_login"
+                            type="submit"
+                            class="btn btn-primary btn-shadowed-black"
+                            :disabled="loading"
+                        >
+                            <span v-if="!loading">{{ $t('ingresar') }}</span>
+                            <spinner class="blue" v-if="loading"></spinner>
+                        </button>
+                    </form>
                 </div>
                 <div class="pass-options" v-if="isDesktop">
                     <input id="checkbox_remember" type="checkbox" />
@@ -393,6 +395,12 @@ export default {
                 this.modalType = type;
             }
             this.showModalLogin = !this.showModalLogin;
+        },
+        submitLogin() {
+            if (this.loading) {
+                return;
+            }
+            this.login();
         },
         login() {
             if (!this.fbLoading) {

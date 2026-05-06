@@ -35,8 +35,22 @@ describe('TicketDetail user view', () => {
         expect(viewSource).toContain('replyAuthorLabel(reply)');
     });
 
+    it('registers Toast UI editor so the reply composer mounts', () => {
+        expect(viewSource).toContain('components:');
+        expect(viewSource).toContain('editor: ToastUiEditor');
+    });
+
+    it('labels admin replies as Carpoolear team', () => {
+        expect(viewSource).toContain("this.$t('equipoCarpoolear')");
+    });
+
     it('shows translated image attachment title', () => {
         expect(viewSource).toContain("{{ $t('adjuntarImagenes') }}");
+    });
+
+    it('shows title above the reply composer', () => {
+        expect(viewSource).toContain("{{ $t('responderAlTicketDeSoporte') }}");
+        expect(viewSource).toContain('reply-to-ticket-title');
     });
 
     it('shows relative message date with tooltip containing full timestamp', () => {

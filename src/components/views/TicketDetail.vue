@@ -25,6 +25,7 @@
 
         <div class="panel panel-default">
             <div class="panel-body">
+                <h4 class="reply-to-ticket-title">{{ $t('responderAlTicketDeSoporte') }}</h4>
                 <editor
                     ref="replyEditor"
                     :initial-value="''"
@@ -33,7 +34,7 @@
                     height="140px"
                 />
                 <label class="control-label mtop-10">{{ $t('adjuntarImagenes') }}</label>
-                <input class="mtop-10" type="file" accept="image/*" multiple @change="onAttachments" />
+                <input ref="attachmentInput" class="mtop-10" type="file" accept="image/*" multiple @change="onAttachments" />
                 <p class="help-block">{{ $t('maximo3Imagenes') }}</p>
                 <button class="btn btn-primary" @click="sendReply">{{ $t('responder') }}</button>
                 <button
@@ -58,7 +59,7 @@ import dayjs from '../../dayjs';
 
 const STATUS_LABEL_KEYS = {
     Open: 'estadoPendiente',
-    'Esperando respuesta': 'esperaUsuarioResponda',
+    'Esperando respuesta': 'ticketEstadoEsperandoTuRespuesta',
     'En revision': 'estadoPendienteRevision',
     Resuelto: 'estadoAprobado',
     Cerrado: 'estadoCerrado'
@@ -109,7 +110,7 @@ export default {
             return STATUS_CLASS_MAP[status] || 'label label-primary';
         },
         replyAuthorLabel(reply) {
-            if (reply.is_admin) return this.$t('admin');
+            if (reply.is_admin) return this.$t('equipoCarpoolear');
             return (this.ticket && this.ticket.user && this.ticket.user.name) || this.$t('usuario');
         },
         relativeDate(value) {
@@ -133,11 +134,27 @@ export default {
             return this.replyTicket(this.id, {
                 message_markdown: markdown,
                 attachments: this.attachments
-            }).then(() => {
-                this.attachments = [];
-                this.$refs.replyEditor.invoke('setMarkdown', '');
-                return this.refresh();
-            }).catch(() => dialogs.message(this.$t('errorDatos'), { estado: 'error' }));
+            })
+                .then(() => this.refresh())
+                .then(() => {
+                    dialogs.message(this.$t('respuestaEnviada'), { estado: 'success', duration: 2 });
+                })
+                .catch(() => {
+                    dialogs.message(this.$t('errorDatos'), { estado: 'error', duration: 3 });
+                })
+                .finally(() => {
+                    try {
+                        const editor = this.$refs.replyEditor;
+                        if (editor && typeof editor.invoke === 'function') {
+                            editor.invoke('setMarkdown', '');
+                        }
+                        this.attachments = [];
+                        const input = this.$refs.attachmentInput;
+                        if (input) input.value = '';
+                    } catch (e) {
+                        console.warn('TicketDetail: could not reset reply form', e);
+                    }
+                });
         },
         closeTicket() {
             const message = window.prompt(this.$t('mensajeOpcionalCierre')) || '';
@@ -146,6 +163,9 @@ export default {
             }
             this.closeTicketAction(this.id, { message_markdown: message }).then(() => this.refresh());
         }
+    },
+    components: {
+        editor: ToastUiEditor
     },
     mounted() {
         this.refresh();
@@ -167,5 +187,10 @@ export default {
 .ticket-status-label {
     display: inline-block;
     margin-left: 12px;
+}
+
+.reply-to-ticket-title {
+    margin-top: 0;
+    margin-bottom: 12px;
 }
 </style>

@@ -20,7 +20,7 @@
             <div class="list-group-item" v-for="reply in ticket.replies || []" :key="reply.id">
                 <p class="reply-meta-row">
                     <strong>
-                        <span v-if="reply.is_admin">{{ $t('admin') }}</span>
+                        <span v-if="reply.is_admin">{{ $t('equipoCarpoolear') }}</span>
                         <span v-else>
                             <router-link v-if="canLinkUserProfile()" :to="userAppProfileRoute()">
                                 {{ replyAuthorLabel(reply) }}
@@ -43,7 +43,7 @@
         <div class="admin-reply-box">
             <label class="control-label">{{ $t('respuestaCarpoolear') }}</label>
             <editor ref="replyEditor" :initial-value="''" :options="editorOptions" initial-edit-type="wysiwyg" height="140px" />
-            <input class="mtop-10" type="file" accept="image/*" multiple @change="onAttachments" />
+            <input ref="attachmentInput" class="mtop-10" type="file" accept="image/*" multiple @change="onAttachments" />
             <div class="reply-actions">
                 <button class="btn btn-primary reply-action-btn" @click="sendReply">{{ $t('responder') }}</button>
                 <button class="btn btn-default reply-action-btn" @click="resolveTicket">{{ $t('marcarResuelto') }}</button>
@@ -60,6 +60,7 @@ import ToastUiEditor from '../elements/ToastUiEditor.vue';
 import AdminLayout from '../layouts/AdminLayout.vue';
 import { markdownToHtml } from '../../services/markdown';
 import { useTicketsStore } from '../../stores/tickets';
+import dialogs from '../../services/dialogs.js';
 import dayjs from '../../dayjs';
 
 const STATUS_LABEL_KEYS = {
@@ -135,7 +136,7 @@ export default {
             return PRIORITY_CLASS_MAP[key] || 'label label-default';
         },
         replyAuthorLabel(reply) {
-            if (reply.is_admin) return this.$t('admin');
+            if (reply.is_admin) return this.$t('equipoCarpoolear');
             return (this.ticket && this.ticket.user && this.ticket.user.name) || this.$t('usuario');
         },
         canLinkUserProfile() {
@@ -169,11 +170,27 @@ export default {
         },
         sendReply() {
             const markdown = this.$refs.replyEditor.invoke('getMarkdown');
-            return this.adminReply(this.id, { message_markdown: markdown, attachments: this.attachments }).then(() => {
-                this.$refs.replyEditor.invoke('setMarkdown', '');
-                this.attachments = [];
-                return this.refresh();
-            });
+            return this.adminReply(this.id, { message_markdown: markdown, attachments: this.attachments })
+                .then(() => this.refresh())
+                .then(() => {
+                    dialogs.message(this.$t('respuestaEnviada'), { estado: 'success', duration: 2 });
+                })
+                .catch(() => {
+                    dialogs.message(this.$t('errorDatos'), { estado: 'error', duration: 3 });
+                })
+                .finally(() => {
+                    try {
+                        const editor = this.$refs.replyEditor;
+                        if (editor && typeof editor.invoke === 'function') {
+                            editor.invoke('setMarkdown', '');
+                        }
+                        this.attachments = [];
+                        const input = this.$refs.attachmentInput;
+                        if (input) input.value = '';
+                    } catch (e) {
+                        console.warn('AdminSupportTicketDetail: could not reset reply form', e);
+                    }
+                });
         },
         resolveTicket() {
             if (!window.confirm(this.$t('confirmarMarcarResuelto'))) return;

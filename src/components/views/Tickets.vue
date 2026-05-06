@@ -45,7 +45,7 @@ import dayjs from '../../dayjs';
 
 const STATUS_LABEL_KEYS = {
     Open: 'estadoPendiente',
-    'Esperando respuesta': 'esperaUsuarioResponda',
+    'Esperando respuesta': 'ticketEstadoEsperandoTuRespuesta',
     'En revision': 'estadoPendienteRevision',
     Resuelto: 'estadoAprobado',
     Cerrado: 'estadoCerrado'
