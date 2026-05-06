@@ -1,9 +1,14 @@
 <template>
     <AdminLayout v-if="ticket">
-        <h3>#{{ ticket.id }} - {{ ticket.subject }}</h3>
         <p>
-            <span :class="statusClass(ticket.status)">{{ statusLabel(ticket.status) }}</span>
-            <span class="mleft-10" :class="priorityClass(ticket.priority)">{{ priorityLabel(ticket.priority) }}</span>
+            <router-link :to="{ name: 'admin-support-tickets' }">
+                {{ $t('volverListaTickets') }}
+            </router-link>
+        </p>
+        <h3>#{{ ticket.id }} - {{ ticket.subject }}</h3>
+        <p class="ticket-meta-row">
+            <span class="ticket-status-label" :class="statusClass(ticket.status)">{{ statusLabel(ticket.status) }}</span>
+            <span class="ticket-priority-label" :class="priorityClass(ticket.priority)">{{ priorityLabel(ticket.priority) }}</span>
         </p>
 
         <label>{{ $t('notaInterna') }}</label>
@@ -35,12 +40,17 @@
             </div>
         </div>
 
-        <editor ref="replyEditor" :initial-value="''" :options="editorOptions" initial-edit-type="wysiwyg" height="140px" />
-        <input class="mtop-10" type="file" accept="image/*" multiple @change="onAttachments" />
-        <button class="btn btn-primary mtop-10" @click="sendReply">{{ $t('responder') }}</button>
-        <button class="btn btn-default mtop-10 mleft-10" @click="resolveTicket">{{ $t('marcarResuelto') }}</button>
-        <button class="btn btn-default mtop-10 mleft-10" @click="closeTicket">{{ $t('cerrarTicket') }}</button>
-        <button class="btn btn-default mtop-10 mleft-10" @click="reopenTicket">{{ $t('reabrirTicket') }}</button>
+        <div class="admin-reply-box">
+            <label class="control-label">{{ $t('respuestaCarpoolear') }}</label>
+            <editor ref="replyEditor" :initial-value="''" :options="editorOptions" initial-edit-type="wysiwyg" height="140px" />
+            <input class="mtop-10" type="file" accept="image/*" multiple @change="onAttachments" />
+            <div class="reply-actions">
+                <button class="btn btn-primary reply-action-btn" @click="sendReply">{{ $t('responder') }}</button>
+                <button class="btn btn-default reply-action-btn" @click="resolveTicket">{{ $t('marcarResuelto') }}</button>
+                <button class="btn btn-default reply-action-btn" @click="closeTicket">{{ $t('cerrarTicket') }}</button>
+                <button class="btn btn-default reply-action-btn" @click="reopenTicket">{{ $t('reabrirTicket') }}</button>
+            </div>
+        </div>
     </AdminLayout>
 </template>
 
@@ -198,5 +208,28 @@ export default {
 
 .reply-meta-date {
     color: #777;
+}
+
+.ticket-meta-row {
+    display: flex;
+    align-items: center;
+}
+
+.ticket-priority-label {
+    margin-left: 10px;
+}
+
+.admin-reply-box {
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+.reply-actions {
+    margin-top: 12px;
+}
+
+.reply-action-btn {
+    margin-right: 8px;
+    margin-bottom: 8px;
 }
 </style>
