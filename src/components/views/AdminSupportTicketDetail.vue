@@ -1,7 +1,7 @@
 <template>
     <AdminLayout v-if="ticket">
         <p>
-            <router-link :to="{ name: 'admin-support-tickets' }">
+            <router-link :to="backToTicketsRoute()">
                 {{ $t('volverListaTickets') }}
             </router-link>
         </p>
@@ -146,6 +146,9 @@ export default {
         },
         userAdminProfileRoute() {
             return { name: 'admin-users-user', params: { userId: this.ticket.user.id } };
+        },
+        backToTicketsRoute() {
+            return { name: 'admin-support-tickets' };
         },
         relativeDate(value) {
             if (!value) return '-';
