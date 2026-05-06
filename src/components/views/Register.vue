@@ -355,20 +355,8 @@
                 <template #body><div>
                     <div class="text-left color-black login-modal">
                         <p>
-                            {{ $t('emailYaTomadoDescripcion') }}
-                        </p>
-                        <p>
-                            {{ $t('mesaAyudaFuncionaDesde') }}
-                            <a :href="'mailto:' + settings.admin_email">
-                                {{ settings.admin_email }}</a>,
-                            {{ $t('mensajePrivadoDe') }}
-                            <a href="https://instagram.com/carpoolear"
-                                >Instagram</a
-                            >
-                            {{ $t('y') }}
-                            <a href="https://facebook.com/carpoolear"
-                                >Facebook</a
-                            >.
+                            <span>{{ $t('emailYaTomadoDescripcion') }}</span>
+                            <router-link :to="{ name: 'tickets' }">{{ $t('mesaAyuda') }}</router-link>{{ $t('mesaAyudaContactoTail') }}
                         </p>
                     </div>
                 </div></template>

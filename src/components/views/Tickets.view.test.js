@@ -11,11 +11,11 @@ describe('Tickets list view', () => {
     });
 
     it('shows empty-state message when user has no support tickets', () => {
-        expect(viewSource).toContain('No tenés tickets de soporte');
+        expect(viewSource).toContain("$t('noHayTicketsUsuarioMesaAyuda')");
     });
 
     it('includes create support ticket button linking to new ticket page', () => {
-        expect(viewSource).toContain('Crear nuevo ticket de soporte');
+        expect(viewSource).toContain("$t('crearNuevoTicketMesaAyuda')");
         expect(viewSource).toContain("name: 'ticket-new'");
     });
 

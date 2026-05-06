@@ -4,14 +4,14 @@ const messages = {
         loginPasswordPlaceholder: 'Contraseña',
         documento: 'Número de documento',
         doc: 'DNI',
-        soporte: 'Soporte',
+        soporte: 'Mesa de ayuda',
         navegacionAdministracion: 'Navegacion de administracion',
         detalleTicket: 'Detalle del ticket',
-        ticketDeSoporte: 'Ticket de soporte',
+        ticketDeSoporte: 'Ticket de mesa de ayuda',
         volverListaTickets: 'Volver a la lista de tickets',
         respuestaCarpoolear: 'Respuesta de Carpoolear',
         verPerfilEnAdmin: 'Ver perfil en admin',
-        volverListaTicketsSoporte: 'Volver a la lista de tickets de soporte',
+        volverListaTicketsSoporte: 'Volver a la lista de mesa de ayuda',
         crearTicket: 'Crear ticket',
         categoriaTicket: 'Categoria',
         asuntoTicket: 'Asunto del ticket',
@@ -33,8 +33,8 @@ const messages = {
         estadoCerrado: 'Cerrado',
         sinLeer: 'Sin leer',
         notaInterna: 'Nota interna',
-        noHayTickets: 'No hay tickets de soporte',
-        errorCargandoTickets: 'Error cargando tickets de soporte',
+        noHayTickets: 'No hay tickets de mesa de ayuda',
+        errorCargandoTickets: 'Error cargando tickets de mesa de ayuda',
         maximo3Imagenes: 'Máximo 3 imágenes por ticket o respuesta',
         adjuntarImagenes: 'Adjuntar imágenes',
         ticketTypeBug: 'Reporte de error',
@@ -42,7 +42,13 @@ const messages = {
         ticketTypeSuggestion: 'Sugerencia',
         ticketTypeReport: 'Denuncia',
         ticketTypeAccountVerification: 'Verificación de cuenta',
-        crearTicketSoporte: 'Crear ticket de soporte',
+        crearTicketSoporte: 'Crear ticket de mesa de ayuda',
+        crearNuevoTicketMesaAyuda: 'Crear nuevo ticket de mesa de ayuda',
+        noHayTicketsUsuarioMesaAyuda: 'No tenés tickets de mesa de ayuda',
+        mesaAyudaContactoLead: 'Podés contactarnos desde la ',
+        mesaAyudaContactoTail: '.',
+        escribinosMesaAyudaMigracionLead:
+            'Para recuperar tu cuenta y migrarla a una cuenta vinculada a correo, escribinos desde la ',
         unaswered_messages_limit: 'Límites de consultas por un viaje',
         unaswered_messages_limitDescription:
             'Establece un máximo de consultas (solicitudes o mensajes) que podés recibir por un viaje.',
@@ -197,10 +203,10 @@ const messages = {
         mailEnUso: 'La cuenta de email ingresada se encuentra en uso.',
         emailYaTomado: 'El email ya ha sido tomado.',
         emailYaTomadoDescripcion:
-            'Ya existe un usuario con este email, si es tuyo y querés recuperar tu cuenta, contactanos a la mesa de ayuda',
+            'Ya existe un usuario con este email. Si es tuyo y querés recuperar tu cuenta, escribinos desde la ',
         datosEnUso: 'Datos en uso',
         datosEnUsoDescripcion:
-            'Ya existe un usuario con este número de documento o número de teléfono, si es tuyo y querés recuperar tu cuenta, contactanos a la mesa de ayuda',
+            'Ya existe un usuario con este número de documento o número de teléfono. Si es tuyo y querés recuperar tu cuenta, escribinos desde la ',
         errorRegistro:
             'Ocurrió un error al procesar el registro, por favor vuelva a intentar.',
         valorDonacion: 'Tienes que seleccionar un valor de donación.',
@@ -446,16 +452,9 @@ const messages = {
         identityValidationRejectionNoticeTitle: 'Verificación rechazada',
         identityValidationRejectionNoticeBody:
             'No pudimos verificar tu cuenta con la información enviada.',
-        identityValidationRejectionNoticeEmphasisBeforeParen:
-            'Podes intentar nuevamente o contactar a la mesa de ayuda',
-        identityValidationRejectionNoticeEmphasisLead:
-            ' (mail ',
-        identityValidationRejectionNoticeEmphasisMid:
-            ' o sino por mensaje privado al ',
-        identityValidationRejectionNoticeEmphasisBetweenSocial: ' o ',
-        identityValidationRejectionNoticeEmphasisTail: ' de Carpoolear).',
-        identityValidationRejectionNoticeEmphasisIgLabel: 'IG',
-        identityValidationRejectionNoticeEmphasisFbLabel: 'FB',
+        identityValidationRejectionNoticeContactLead:
+            'Podés intentar nuevamente o escribinos desde la ',
+        identityValidationRejectionNoticeContactTail: '.',
         identityValidationRejectionReasonLabel: 'Razón de rechazo',
         verEstadoValidacion: 'Ver estado de verificación',
         debesCargarDni:
@@ -646,13 +645,15 @@ const messages = {
             'El pedido de eliminación de cuenta será procesado en un plazo de 7 hábiles y serás notificado por correo electrónico cuando se haya procesado.',
         errorAlGuardar: 'Error al guardar',
         errorAlGuardarContactarMesaAyuda:
-            'Hubo un error al guardar la información, por favor contactar a mesa de ayuda',
+            'Hubo un error al guardar la información. Por favor escribinos desde la ',
         usuarioEliminadoExitosamente:
             'El usuario ha sido eliminado exitosamente',
         usuarioAnonimizadoExitosamente:
             'El usuario ha sido anonimizado exitosamente',
-        eliminacionCuentaNegativas:
-            'Debido a que tenés calificaciones negativas necesitamos que te pongas en contacto con la mesa de ayuda para proceder con el borrado de tu cuenta.',
+        eliminacionCuentaNegativasLead:
+            'Debido a que tenés calificaciones negativas necesitamos que escribas desde la ',
+        eliminacionCuentaNegativasTail:
+            ' para proceder con el borrado de tu cuenta.',
         solicitarEliminacionCuenta: 'Solicitar eliminación de cuenta',
         pedidoEliminacionEnviado:
             'El pedido de eliminación de cuenta ha sido enviado exitosamente',
@@ -923,7 +924,7 @@ const messages = {
         campoRequerido: 'Campo requerido',
         tituloCampoRequerido: 'Campo requerido',
         dniValidadoContacteSoporte:
-            'Su cuenta ya fue verificada, para editar el DNI contacte a soporte.',
+            'Su cuenta ya fue verificada; para editar el DNI contacte a la mesa de ayuda.',
         ultimaConexion: 'Última conexión:',
         verMasMensajes: 'Ver más mensajes',
         escribirMensaje: 'Escribir mensaje...',
@@ -993,10 +994,6 @@ const messages = {
         teniasCuentaVinculada:
             '¿Tenías cuenta de Carpoolear vinculada a tu cuenta de',
         ingresoRegistroYaNoFunciona: 'El ingreso/registro via',
-        escribinosMesaAyuda:
-            'Escribinos a la mesa de ayuda de Carpoolear para poder recuperar tu cuenta y migrarla a una vinculada a mail.',
-        mesaAyudaFuncionaDesde: 'La mesa de ayuda de Carpoolear funciona desde',
-        mensajePrivadoDe: 'mensaje privado de',
         y: 'y',
         buenasRutas: '¡Buenas rutas!',
         apple: 'Apple',
@@ -1188,14 +1185,14 @@ const messages = {
         loginUsuarioPlaceholder: 'Usuario',
         documento: 'Número de RUT',
         doc: 'RUT',
-        soporte: 'Soporte',
+        soporte: 'Mesa de ayuda',
         navegacionAdministracion: 'Navegacion de administracion',
         detalleTicket: 'Detalle del ticket',
-        ticketDeSoporte: 'Ticket de soporte',
+        ticketDeSoporte: 'Ticket de mesa de ayuda',
         volverListaTickets: 'Volver a la lista de tickets',
         respuestaCarpoolear: 'Respuesta de Carpoolear',
         verPerfilEnAdmin: 'Ver perfil en admin',
-        volverListaTicketsSoporte: 'Volver a la lista de tickets de soporte',
+        volverListaTicketsSoporte: 'Volver a la lista de mesa de ayuda',
         crearTicket: 'Crear ticket',
         categoriaTicket: 'Categoria',
         asuntoTicket: 'Asunto del ticket',
@@ -1217,8 +1214,8 @@ const messages = {
         estadoCerrado: 'Cerrado',
         sinLeer: 'Sin leer',
         notaInterna: 'Nota interna',
-        noHayTickets: 'No hay tickets de soporte',
-        errorCargandoTickets: 'Error cargando tickets de soporte',
+        noHayTickets: 'No hay tickets de mesa de ayuda',
+        errorCargandoTickets: 'Error cargando tickets de mesa de ayuda',
         maximo3Imagenes: 'Máximo 3 imágenes por ticket o respuesta',
         adjuntarImagenes: 'Adjuntar imágenes',
         ticketTypeBug: 'Reporte de error',
@@ -1226,7 +1223,13 @@ const messages = {
         ticketTypeSuggestion: 'Sugerencia',
         ticketTypeReport: 'Denuncia',
         ticketTypeAccountVerification: 'Verificación de cuenta',
-        crearTicketSoporte: 'Crear ticket de soporte',
+        crearTicketSoporte: 'Crear ticket de mesa de ayuda',
+        crearNuevoTicketMesaAyuda: 'Crear nuevo ticket de mesa de ayuda',
+        noHayTicketsUsuarioMesaAyuda: 'No tenés tickets de mesa de ayuda',
+        mesaAyudaContactoLead: 'Podés contactarnos desde la ',
+        mesaAyudaContactoTail: '.',
+        escribinosMesaAyudaMigracionLead:
+            'Para recuperar tu cuenta y migrarla a una cuenta vinculada a correo, escribinos desde la ',
         requisitosRegister:
             'Se requiere que cargue: licencia de conductor, seguro del vehículo ...',
         RegistrarNuevoUsuario: 'Registrate',
@@ -1378,10 +1381,10 @@ const messages = {
         mailEnUso: 'La cuenta de email ingresada se encuentra en uso.',
         emailYaTomado: 'El email ya ha sido tomado.',
         emailYaTomadoDescripcion:
-            'Ya existe un usuario con este email, si es tuyo y querés recuperar tu cuenta, contactanos a la mesa de ayuda',
+            'Ya existe un usuario con este email. Si es tuyo y querés recuperar tu cuenta, escribinos desde la ',
         datosEnUso: 'Datos en uso',
         datosEnUsoDescripcion:
-            'Ya existe un usuario con este número de documento o número de teléfono, si es tuyo y querés recuperar tu cuenta, contactanos a la mesa de ayuda',
+            'Ya existe un usuario con este número de documento o número de teléfono. Si es tuyo y querés recuperar tu cuenta, escribinos desde la ',
         errorRegistro:
             'Ocurrió un error al procesar el registro, por favor vuelva a intentar.',
         buscoConductor: 'Conductor',
@@ -1603,16 +1606,9 @@ const messages = {
         identityValidationRejectionNoticeTitle: 'Verificación rechazada',
         identityValidationRejectionNoticeBody:
             'No pudimos verificar tu cuenta con la información enviada.',
-        identityValidationRejectionNoticeEmphasisBeforeParen:
-            'Podes intentar nuevamente o contactar a la mesa de ayuda',
-        identityValidationRejectionNoticeEmphasisLead:
-            ' (mail ',
-        identityValidationRejectionNoticeEmphasisMid:
-            ' o sino por mensaje privado al ',
-        identityValidationRejectionNoticeEmphasisBetweenSocial: ' o ',
-        identityValidationRejectionNoticeEmphasisTail: ' de Carpoolear).',
-        identityValidationRejectionNoticeEmphasisIgLabel: 'IG',
-        identityValidationRejectionNoticeEmphasisFbLabel: 'FB',
+        identityValidationRejectionNoticeContactLead:
+            'Podés intentar nuevamente o escribinos desde la ',
+        identityValidationRejectionNoticeContactTail: '.',
         identityValidationRejectionReasonLabel: 'Razón de rechazo',
         verEstadoValidacion: 'Ver estado de verificación',
         debesCargarDni:
@@ -1897,13 +1893,15 @@ const messages = {
             'El pedido de eliminación de cuenta será procesado en un plazo de 7 hábiles y serás notificado por correo electrónico cuando se haya procesado.',
         errorAlGuardar: 'Error al guardar',
         errorAlGuardarContactarMesaAyuda:
-            'Hubo un error al guardar la información, por favor contactar a mesa de ayuda',
+            'Hubo un error al guardar la información. Por favor escribinos desde la ',
         usuarioEliminadoExitosamente:
             'El usuario ha sido eliminado exitosamente',
         usuarioAnonimizadoExitosamente:
             'El usuario ha sido anonimizado exitosamente',
-        eliminacionCuentaNegativas:
-            'Debido a que tenés calificaciones negativas necesitamos que te pongas en contacto con la mesa de ayuda para proceder con el borrado de tu cuenta.',
+        eliminacionCuentaNegativasLead:
+            'Debido a que tenés calificaciones negativas necesitamos que escribas desde la ',
+        eliminacionCuentaNegativasTail:
+            ' para proceder con el borrado de tu cuenta.',
         solicitarEliminacionCuenta: 'Solicitar eliminación de cuenta',
         pedidoEliminacionEnviado:
             'El pedido de eliminación de cuenta ha sido enviado exitosamente',
@@ -1914,7 +1912,7 @@ const messages = {
         campoRequerido: 'Required field',
         tituloCampoRequerido: 'Required field',
         dniValidadoContacteSoporte:
-            'Su cuenta ya fue verificada, para editar el DNI contacte a soporte.',
+            'Su cuenta ya fue verificada; para editar el DNI contacte a la mesa de ayuda.',
         ultimaConexion: 'Última conexión:',
         verMasMensajes: 'Ver más mensajes',
         escribirMensaje: 'Escribir mensaje...',
@@ -1990,10 +1988,6 @@ const messages = {
         teniasCuentaVinculada:
             '¿Tenías cuenta de Carpoolear vinculada a tu cuenta de',
         ingresoRegistroYaNoFunciona: 'El ingreso/registro via',
-        escribinosMesaAyuda:
-            'Escribinos a la mesa de ayuda de Carpoolear para poder recuperar tu cuenta y migrarla a una vinculada a mail.',
-        mesaAyudaFuncionaDesde: 'La mesa de ayuda de Carpoolear funciona desde',
-        mensajePrivadoDe: 'mensaje privado de',
         y: 'y',
         buenasRutas: '¡Buenas rutas!',
         apple: 'Apple',
@@ -2143,14 +2137,14 @@ const messages = {
         loginPasswordPlaceholder: 'Password',
         documento: 'ID number',
         doc: 'ID',
-        soporte: 'Support',
+        soporte: 'Help desk',
         navegacionAdministracion: 'Administration navigation',
         detalleTicket: 'Ticket detail',
-        ticketDeSoporte: 'Support ticket',
+        ticketDeSoporte: 'Help desk ticket',
         volverListaTickets: 'Back to tickets list',
         respuestaCarpoolear: 'Carpoolear reply',
         verPerfilEnAdmin: 'View profile in admin',
-        volverListaTicketsSoporte: 'Back to support tickets list',
+        volverListaTicketsSoporte: 'Back to help desk ticket list',
         crearTicket: 'Create ticket',
         categoriaTicket: 'Category',
         asuntoTicket: 'Ticket subject',
@@ -2172,8 +2166,8 @@ const messages = {
         estadoCerrado: 'Closed',
         sinLeer: 'Unread',
         notaInterna: 'Internal note',
-        noHayTickets: 'No support tickets found',
-        errorCargandoTickets: 'Error loading support tickets',
+        noHayTickets: 'No help desk tickets',
+        errorCargandoTickets: 'Error loading help desk tickets',
         maximo3Imagenes: 'Up to 3 images per ticket or reply',
         adjuntarImagenes: 'Attach images',
         ticketTypeBug: 'Bug report',
@@ -2181,7 +2175,13 @@ const messages = {
         ticketTypeSuggestion: 'Suggestion',
         ticketTypeReport: 'Report',
         ticketTypeAccountVerification: 'Account verification',
-        crearTicketSoporte: 'Create support ticket',
+        crearTicketSoporte: 'Create help desk ticket',
+        crearNuevoTicketMesaAyuda: 'Create new help desk ticket',
+        noHayTicketsUsuarioMesaAyuda: "You don't have any help desk tickets",
+        mesaAyudaContactoLead: 'You can contact us through the ',
+        mesaAyudaContactoTail: '.',
+        escribinosMesaAyudaMigracionLead:
+            'To recover your account and link it to an email login, reach us through the ',
         unaswered_messages_limit: 'Query limits per trip',
         unaswered_messages_limitDescription:
             'Set a maximum number of queries (requests or messages) you can receive per trip.',
@@ -2333,10 +2333,10 @@ const messages = {
         mailEnUso: 'The email account entered is already in use.',
         emailYaTomado: 'The email has already been taken.',
         emailYaTomadoDescripcion:
-            "A user with this email already exists. If it's yours and you want to recover your account, contact us at the help desk",
+            "A user with this email already exists. If it's yours and you want to recover your account, reach out through the ",
         datosEnUso: 'Data in use',
         datosEnUsoDescripcion:
-            "A user with this document number or phone number already exists. If it's yours and you want to recover your account, contact us at the help desk",
+            "A user with this document number or phone number already exists. If it's yours and you want to recover your account, reach out through the ",
         errorRegistro:
             'An error occurred while processing the registration, please try again.',
         valorDonacion: 'You must select a donation amount.',
@@ -2535,16 +2535,9 @@ const messages = {
         identityValidationRejectionNoticeTitle: 'Verification rejected',
         identityValidationRejectionNoticeBody:
             "We couldn't verify your account with the information you sent.",
-        identityValidationRejectionNoticeEmphasisBeforeParen:
-            'You can try again or contact the help desk',
-        identityValidationRejectionNoticeEmphasisLead:
-            ' (email ',
-        identityValidationRejectionNoticeEmphasisMid:
-            ' or via private message on ',
-        identityValidationRejectionNoticeEmphasisBetweenSocial: ' or ',
-        identityValidationRejectionNoticeEmphasisTail: ' for Carpoolear).',
-        identityValidationRejectionNoticeEmphasisIgLabel: 'Instagram',
-        identityValidationRejectionNoticeEmphasisFbLabel: 'Facebook',
+        identityValidationRejectionNoticeContactLead:
+            'You can try again or reach out through the ',
+        identityValidationRejectionNoticeContactTail: '.',
         identityValidationRejectionReasonLabel: 'Reason for rejection',
         verEstadoValidacion: 'View verification status',
         debesCargarDni:
@@ -2777,12 +2770,14 @@ const messages = {
             'The account deletion request will be processed within 7 business days and you will be notified by email when it has been processed.',
         errorAlGuardar: 'Error saving',
         errorAlGuardarContactarMesaAyuda:
-            'There was an error saving the information, please contact the help desk',
+            'There was an error saving the information. Please reach out through the ',
         usuarioEliminadoExitosamente: 'The user has been deleted successfully',
         usuarioAnonimizadoExitosamente:
             'The user has been anonymized successfully',
-        eliminacionCuentaNegativas:
-            'Due to negative ratings, you need to contact the help desk to proceed with account deletion.',
+        eliminacionCuentaNegativasLead:
+            'Due to negative ratings, we need you to reach out through the ',
+        eliminacionCuentaNegativasTail:
+            ' to proceed with account deletion.',
         solicitarEliminacionCuenta: 'Request account deletion',
         pedidoEliminacionEnviado:
             'The account deletion request has been sent successfully',
@@ -3046,7 +3041,7 @@ const messages = {
         campoRequerido: 'Required field',
         tituloCampoRequerido: 'Required field',
         dniValidadoContacteSoporte:
-            'Your account has been verified; to edit your document number contact support.',
+            'Your account has been verified; to edit your document number contact the help desk.',
         ultimaConexion: 'Last connection:',
         verMasMensajes: 'View more messages',
         escribirMensaje: 'Write message...',
@@ -3115,10 +3110,6 @@ const messages = {
         teniasCuentaVinculada:
             'Did you have a Carpoolear account linked to your',
         ingresoRegistroYaNoFunciona: 'Login/registration via',
-        escribinosMesaAyuda:
-            'Write to the Carpoolear help desk to recover your account and migrate it to one linked to email.',
-        mesaAyudaFuncionaDesde: 'The Carpoolear help desk operates from',
-        mensajePrivadoDe: 'private message from',
         y: 'and',
         buenasRutas: 'Safe travels!',
         apple: 'Apple',

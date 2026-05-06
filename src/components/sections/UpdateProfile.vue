@@ -521,7 +521,10 @@
                     </div>
                 </div>
                 <div class="text-left color-black" v-else>
-                    <p>{{ $t('eliminacionCuentaNegativas') }}</p>
+                    <p>
+                        <span>{{ $t('eliminacionCuentaNegativasLead') }}</span>
+                        <router-link :to="{ name: 'tickets' }">{{ $t('mesaAyuda') }}</router-link>{{ $t('eliminacionCuentaNegativasTail') }}
+                    </p>
                     <p>{{ $t('eliminacionCuentaIrreversible') }}</p>
                     <p>{{ $t('eliminacionCuentaPlazo') }}</p>
                     <div class="text-center" style="margin-top: 1.5em;">
@@ -553,13 +556,8 @@
             <template #body><div>
                 <div class="text-left color-black login-modal">
                     <p>
-                        {{ $t('mesaAyudaFuncionaDesde') }}
-                        <a :href="'mailto:' + config.admin_email">
-                            {{ config.admin_email }}</a>,
-                        {{ $t('mensajePrivadoDe') }}
-                        <a href="https://instagram.com/carpoolear">Instagram</a>
-                        {{ $t('y') }}
-                        <a href="https://facebook.com/carpoolear">Facebook</a>.
+                        <span>{{ $t('mesaAyudaContactoLead') }}</span>
+                        <router-link :to="{ name: 'tickets' }">{{ $t('mesaAyuda') }}</router-link>{{ $t('mesaAyudaContactoTail') }}
                     </p>
                 </div>
             </div></template>
@@ -580,19 +578,8 @@
             <template #body><div>
                 <div class="text-left color-black login-modal">
                     <p>
-                        {{ $t('errorAlGuardarContactarMesaAyuda') }}
-                    </p>
-                    <p>
-                        {{ $t('escribinosMesaAyuda') }}
-                    </p>
-                    <p>
-                        {{ $t('mesaAyudaFuncionaDesde') }}
-                        <a :href="'mailto:' + config.admin_email">
-                            {{ config.admin_email }}</a>,
-                        {{ $t('mensajePrivadoDe') }}
-                        <a href="https://instagram.com/carpoolear">Instagram</a>
-                        {{ $t('y') }}
-                        <a href="https://facebook.com/carpoolear">Facebook</a>.
+                        <span>{{ $t('errorAlGuardarContactarMesaAyuda') }}</span>
+                        <router-link :to="{ name: 'tickets' }">{{ $t('mesaAyuda') }}</router-link>{{ $t('mesaAyudaContactoTail') }}
                     </p>
                 </div>
             </div></template>
@@ -613,19 +600,8 @@
             <template #body><div>
                 <div class="text-left color-black login-modal">
                     <p>
-                        {{ $t('datosEnUsoDescripcion') }}
-                    </p>
-                    <p>
-                        {{ $t('escribinosMesaAyuda') }}
-                    </p>
-                    <p>
-                        {{ $t('mesaAyudaFuncionaDesde') }}
-                        <a :href="'mailto:' + config.admin_email">
-                            {{ config.admin_email }}</a>,
-                        {{ $t('mensajePrivadoDe') }}
-                        <a href="https://instagram.com/carpoolear">Instagram</a>
-                        {{ $t('y') }}
-                        <a href="https://facebook.com/carpoolear">Facebook</a>.
+                        <span>{{ $t('datosEnUsoDescripcion') }}</span>
+                        <router-link :to="{ name: 'tickets' }">{{ $t('mesaAyuda') }}</router-link>{{ $t('mesaAyudaContactoTail') }}
                     </p>
                 </div>
             </div></template>

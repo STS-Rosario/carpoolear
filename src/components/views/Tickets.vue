@@ -3,11 +3,11 @@
         <h3>{{ $t('soporte') }}</h3>
         <div class="mbot-10 create-ticket-cta">
             <router-link class="btn btn-primary" :to="{ name: 'ticket-new' }">
-                Crear nuevo ticket de soporte
+                {{ $t('crearNuevoTicketMesaAyuda') }}
             </router-link>
         </div>
 
-        <p v-if="!safeTickets.length" class="alert alert-warning">No tenés tickets de soporte</p>
+        <p v-if="!safeTickets.length" class="alert alert-warning">{{ $t('noHayTicketsUsuarioMesaAyuda') }}</p>
 
         <div v-else class="table-responsive">
             <table class="table table-hover support-tickets-table">

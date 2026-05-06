@@ -275,14 +275,8 @@
                             {{ $t('ingresoRegistroYaNoFunciona') }} {{ modalType === 'facebook' ? $t('facebook') : $t('apple') }}.
                         </p>
                         <p>
-                            {{ $t('escribinosMesaAyuda') }}
-                        </p>
-                        <p>
-                            {{ $t('mesaAyudaFuncionaDesde') }}
-                            <a :href="'mailto:' + config.admin_email">
-                                {{ config.admin_email }}</a>,
-                                {{ $t('mensajePrivadoDe') }} <a href="https://instagram.com/carpoolear">Instagram</a> {{ $t('y') }}
-                            <a href="https://facebook.com/carpoolear">Facebook</a>.
+                            <span>{{ $t('escribinosMesaAyudaMigracionLead') }}</span>
+                            <router-link :to="{ name: 'tickets' }">{{ $t('mesaAyuda') }}</router-link>{{ $t('mesaAyudaContactoTail') }}
                         </p>
                         <p>{{ $t('buenasRutas') }}</p>
                     </div>

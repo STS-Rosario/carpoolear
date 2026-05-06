@@ -220,7 +220,7 @@
                         {{ $t('identityValidationRejectionNoticeBody') }}
                     </p>
                     <p class="identity-validation-rejection-notice__emphasis">
-                        <strong class="identity-validation-rejection-notice__emphasis-strong">{{ $t('identityValidationRejectionNoticeEmphasisBeforeParen') }}</strong><span class="identity-validation-rejection-notice__emphasis-paren">{{ $t('identityValidationRejectionNoticeEmphasisLead') }}<a href="mailto:carpoolear@stsrosario.org.ar">carpoolear@stsrosario.org.ar</a>{{ $t('identityValidationRejectionNoticeEmphasisMid') }}<a href="https://www.instagram.com/carpoolear/?hl=en" target="_blank" rel="noopener noreferrer">{{ $t('identityValidationRejectionNoticeEmphasisIgLabel') }}</a>{{ $t('identityValidationRejectionNoticeEmphasisBetweenSocial') }}<a href="https://www.facebook.com/Carpoolear" target="_blank" rel="noopener noreferrer">{{ $t('identityValidationRejectionNoticeEmphasisFbLabel') }}</a>{{ $t('identityValidationRejectionNoticeEmphasisTail') }}</span>
+                        <strong class="identity-validation-rejection-notice__emphasis-strong">{{ $t('identityValidationRejectionNoticeContactLead') }}</strong><router-link class="identity-validation-rejection-notice__mesa-link" :to="{ name: 'tickets' }">{{ $t('mesaAyuda') }}</router-link>{{ $t('identityValidationRejectionNoticeContactTail') }}
                     </p>
                     <p
                         v-if="manualStatus.review_note && manualStatus.review_note.trim()"
