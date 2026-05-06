@@ -202,7 +202,7 @@ export default {
         },
         illustrationSrc() {
             const base = process.env.ROUTE_BASE || '/';
-            return `${base}static/img/icon-verificacion.png`;
+            return `${base}img/icon-verificacion.png`;
         },
         infoIconSrc() {
             const base = process.env.ROUTE_BASE || '/';
