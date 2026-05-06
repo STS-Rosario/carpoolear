@@ -9,7 +9,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <strong>#{{ ticket.id }} - {{ ticket.subject }}</strong>
-                <span class="mleft-10" :class="statusClass(ticket.status)">{{ statusLabel(ticket.status) }}</span>
+                <span class="ticket-status-label" :class="statusClass(ticket.status)">{{ statusLabel(ticket.status) }}</span>
             </div>
         </div>
 
@@ -162,5 +162,10 @@ export default {
 
 .reply-meta-date {
     color: #777;
+}
+
+.ticket-status-label {
+    display: inline-block;
+    margin-left: 12px;
 }
 </style>

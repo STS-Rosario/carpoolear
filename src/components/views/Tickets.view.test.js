@@ -19,7 +19,10 @@ describe('Tickets list view', () => {
         expect(viewSource).toContain("name: 'ticket-new'");
     });
 
-    it('renders ticket rows with title, created date, updated date and status', () => {
+    it('renders tickets in table rows with title, created date, updated date and status', () => {
+        expect(viewSource).toContain('<table');
+        expect(viewSource).toContain('<tbody');
+        expect(viewSource).toContain('<tr v-for="ticket in safeTickets"');
         expect(viewSource).toContain('ticket.subject');
         expect(viewSource).toContain('ticket.created_at');
         expect(viewSource).toContain('ticket.updated_at');
@@ -29,6 +32,14 @@ describe('Tickets list view', () => {
     it('color-codes ticket status values', () => {
         expect(viewSource).toContain(':class="statusClass(ticket.status)"');
         expect(viewSource).toContain('statusClass(status)');
+        expect(viewSource).toContain('statusLabel(status)');
+    });
+
+    it('shows relative created/updated dates with full timestamp tooltip', () => {
+        expect(viewSource).toContain('relativeDate(ticket.created_at)');
+        expect(viewSource).toContain('relativeDate(ticket.updated_at)');
+        expect(viewSource).toContain(':title="fullDate(ticket.created_at)"');
+        expect(viewSource).toContain(':title="fullDate(ticket.updated_at)"');
     });
 
     it('does not render ticket creation form fields in list view', () => {
