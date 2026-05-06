@@ -92,7 +92,6 @@ export default {
     },
     methods: {
         markdownToHtml,
-        dayjs,
         ...mapActions(useTicketsStore, {
             fetchOne: 'fetchOne',
             replyTicket: 'replyTicket',
