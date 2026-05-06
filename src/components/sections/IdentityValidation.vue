@@ -213,6 +213,14 @@
                         {{ manualStatus.review_note.trim() }}
                     </p>
                 </div>
+                <div
+                    v-if="isIdentityValidationBlockedByMissingDni"
+                    class="identity-validation-dni-warning"
+                >
+                    {{ $t('identityValidationDniWarningPrefix') }}
+                    <a href="#" @click.prevent="goToProfileEdit">{{ $t('identityValidationDniWarningProfileLink') }}</a>
+                    {{ $t('identityValidationDniWarningSuffix') }}
+                </div>
                 <div class="identity-validation-cards">
                     <div
                         v-if="identityValidationMpEnabled"
@@ -227,15 +235,12 @@
                         <button
                             type="button"
                             class="btn btn-danger btn-lg btn-block identity-validation-btn-cta"
-                            :disabled="!user || !user.nro_doc || loadingOAuth"
+                            :disabled="isIdentityValidationBlockedByMissingDni || loadingOAuth"
                             @click="startMercadoPagoOAuth"
                         >
                             <span v-if="loadingOAuth">{{ $t('guardando') }}</span>
                             <span v-else>{{ $t('validarConMercadoPago') }}</span>
                         </button>
-                        <p v-if="user && !user.nro_doc" class="small identity-validation-hint">
-                            {{ $t('debesCargarDni') }}
-                        </p>
                     </div>
 
                     <div
@@ -250,12 +255,14 @@
                             </li>
                             <li>{{ $t('identityValidationTimeLine') }}</li>
                         </ul>
-                        <router-link
-                            :to="{ name: 'identity_validation_manual' }"
+                        <button
+                            type="button"
                             class="btn btn-lg btn-block identity-validation-btn-outline"
+                            :disabled="isIdentityValidationBlockedByMissingDni"
+                            @click="goToManualValidation"
                         >
                             {{ $t('solicitarVerificacionManual') }}
-                        </router-link>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -272,6 +279,14 @@
                     </ul>
                     <p class="identity-validation-once">{{ $t('identidadModalUnaVez') }}</p>
                 </header>
+                <div
+                    v-if="isIdentityValidationBlockedByMissingDni"
+                    class="identity-validation-dni-warning"
+                >
+                    {{ $t('identityValidationDniWarningPrefix') }}
+                    <a href="#" @click.prevent="goToProfileEdit">{{ $t('identityValidationDniWarningProfileLink') }}</a>
+                    {{ $t('identityValidationDniWarningSuffix') }}
+                </div>
 
                 <div class="identity-validation-cards">
                     <div
@@ -287,15 +302,12 @@
                         <button
                             type="button"
                             class="btn btn-danger btn-lg btn-block identity-validation-btn-cta"
-                            :disabled="!user || !user.nro_doc || loadingOAuth"
+                            :disabled="isIdentityValidationBlockedByMissingDni || loadingOAuth"
                             @click="startMercadoPagoOAuth"
                         >
                             <span v-if="loadingOAuth">{{ $t('guardando') }}</span>
                             <span v-else>{{ $t('validarConMercadoPago') }}</span>
                         </button>
-                        <p v-if="user && !user.nro_doc" class="small identity-validation-hint">
-                            {{ $t('debesCargarDni') }}
-                        </p>
                     </div>
 
                     <div
@@ -310,12 +322,14 @@
                             </li>
                             <li>{{ $t('identityValidationTimeLine') }}</li>
                         </ul>
-                        <router-link
-                            :to="{ name: 'identity_validation_manual' }"
+                        <button
+                            type="button"
                             class="btn btn-lg btn-block identity-validation-btn-outline"
+                            :disabled="isIdentityValidationBlockedByMissingDni"
+                            @click="goToManualValidation"
                         >
                             {{ $t('solicitarVerificacionManual') }}
-                        </router-link>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -327,6 +341,10 @@
 import { mapState } from 'pinia';
 import { useAuthStore } from '../../stores/auth';
 import { UserApi } from '../../services/api';
+import {
+    isIdentityValidationActionBlockedByMissingDni,
+    PROFILE_EDIT_ROUTE
+} from '../../utils/identityValidationDniRequirements';
 
 export default {
     name: 'IdentityValidation',
@@ -448,6 +466,9 @@ export default {
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 0
             }).format(Number(cents) / 100);
+        },
+        isIdentityValidationBlockedByMissingDni() {
+            return isIdentityValidationActionBlockedByMissingDni(this.user);
         }
     },
     methods: {
@@ -520,6 +541,16 @@ export default {
                 .catch(() => {
                     this.loadingOAuth = false;
                 });
+        },
+        goToProfileEdit() {
+            this.$router.push(PROFILE_EDIT_ROUTE);
+        },
+        goToManualValidation() {
+            if (this.isIdentityValidationBlockedByMissingDni) {
+                this.goToProfileEdit();
+                return;
+            }
+            this.$router.push({ name: 'identity_validation_manual' });
         }
     },
     mounted() {
@@ -819,6 +850,27 @@ export default {
 
 .identity-validation-main {
     padding: 0 0 0.5rem;
+}
+
+.identity-validation-dni-warning {
+    margin: 0 0 1.25rem;
+    padding: 0.9rem 1rem;
+    border-radius: 4px;
+    border: 1px solid #ebccd1;
+    background: #f2dede;
+    color: #a94442;
+    line-height: 1.45;
+}
+
+.identity-validation-dni-warning a {
+    color: #843534;
+    font-weight: 700;
+    text-decoration: underline;
+}
+
+.identity-validation-dni-warning a:hover,
+.identity-validation-dni-warning a:focus {
+    color: #5f2525;
 }
 
 @media (min-width: 768px) {

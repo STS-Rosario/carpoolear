@@ -363,6 +363,10 @@ const messages = {
             'Asegurar que cada persona tenga una sola cuenta.',
         identityValidationPageBullet3:
             'Mejorar la confianza entre quienes comparten viajes.',
+        identityValidationDniWarningPrefix:
+            'Para proceder con la verificación, por favor primero ingrese su DNI en ',
+        identityValidationDniWarningProfileLink: 'su perfil',
+        identityValidationDniWarningSuffix: '.',
         identityValidationAutoCardDesc:
             'Validá con tu cuenta de Mercado Pago. El sistema contrasta los datos con RENAPER.',
         identityValidationManualCardDesc:
@@ -1494,6 +1498,10 @@ const messages = {
             'Asegurar que cada persona tenga una sola cuenta.',
         identityValidationPageBullet3:
             'Mejorar la confianza entre quienes comparten viajes.',
+        identityValidationDniWarningPrefix:
+            'Para proceder con la verificación, por favor primero ingrese su DNI en ',
+        identityValidationDniWarningProfileLink: 'su perfil',
+        identityValidationDniWarningSuffix: '.',
         identityValidationAutoCardDesc:
             'Validá con tu cuenta de Mercado Pago. El sistema contrasta los datos con RENAPER.',
         identityValidationManualCardDesc:
@@ -2593,6 +2601,10 @@ const messages = {
         identidadModalMasTarde: 'Remind me later',
         manualValidationSwitchToMercadoPago:
             'Switch account verification mode to Mercado Pago (free)',
+        identityValidationDniWarningPrefix:
+            'To proceed with verification, please first enter your ID document number in ',
+        identityValidationDniWarningProfileLink: 'your profile',
+        identityValidationDniWarningSuffix: '.',
         identidadNoValidada: 'Not verified',
         validarUsuario: 'Verify user',
         validadoPor: 'Verified by',
