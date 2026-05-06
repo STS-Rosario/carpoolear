@@ -14,7 +14,8 @@ const apiMock = {
     adminClose: vi.fn(),
     adminReopen: vi.fn(),
     adminSetPriority: vi.fn(),
-    adminSetInternalNote: vi.fn()
+    adminSetInternalNote: vi.fn(),
+    adminCreate: vi.fn()
 };
 
 vi.mock('../services/api', () => ({
@@ -49,5 +50,21 @@ describe('tickets store', () => {
         const store = useTicketsStore();
         await expect(store.fetchAdminList()).rejects.toThrow('network error');
         expect(store.adminList).toEqual([]);
+    });
+
+    it('creates support ticket from admin and returns payload data', async () => {
+        const { useTicketsStore } = await import('./tickets');
+        apiMock.adminCreate.mockResolvedValue({ data: { id: 88, user_id: 45, type: 'account_verification' } });
+
+        const store = useTicketsStore();
+        const created = await store.adminCreateTicket({
+            user_id: 45,
+            type: 'account_verification',
+            subject: 'Verificacion',
+            message_markdown: 'Mensaje'
+        });
+
+        expect(created).toEqual({ id: 88, user_id: 45, type: 'account_verification' });
+        expect(apiMock.adminCreate).toHaveBeenCalledTimes(1);
     });
 });
