@@ -343,7 +343,8 @@ import { useAuthStore } from '../../stores/auth';
 import { UserApi } from '../../services/api';
 import {
     isIdentityValidationActionBlockedByMissingDni,
-    PROFILE_EDIT_ROUTE
+    PROFILE_EDIT_ROUTE,
+    getManualIdentityValidationRoute
 } from '../../utils/identityValidationDniRequirements';
 
 export default {
@@ -526,7 +527,7 @@ export default {
                 });
         },
         startMercadoPagoOAuth() {
-            if (!this.user || this.loadingOAuth) return;
+            if (!this.user || this.loadingOAuth || this.isIdentityValidationBlockedByMissingDni) return;
             this.loadingOAuth = true;
             const userApi = new UserApi();
             userApi.getMercadoPagoOAuthUrl()
@@ -546,11 +547,7 @@ export default {
             this.$router.push(PROFILE_EDIT_ROUTE);
         },
         goToManualValidation() {
-            if (this.isIdentityValidationBlockedByMissingDni) {
-                this.goToProfileEdit();
-                return;
-            }
-            this.$router.push({ name: 'identity_validation_manual' });
+            this.$router.push(getManualIdentityValidationRoute(this.user));
         }
     },
     mounted() {
