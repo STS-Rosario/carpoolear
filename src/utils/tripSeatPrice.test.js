@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
     VOLUNTARY_CONTRIBUTION_SEAT_PRICE_CENTS,
     isVoluntaryContributionSeatPrice,
+    maxContributionCapFromSeatPriceCents,
     parseSeatPriceInput,
     priceInputNumberFromStoredSeatPriceCents,
     seatPriceCentsForApi,
@@ -81,6 +82,15 @@ describe('tripSeatPrice', () => {
             expect(isVoluntaryContributionSeatPrice(0)).toBe(false);
             expect(isVoluntaryContributionSeatPrice(null)).toBe(false);
             expect(isVoluntaryContributionSeatPrice(100)).toBe(false);
+        });
+    });
+
+    describe('maxContributionCapFromSeatPriceCents', () => {
+        it('returns positive cents only', () => {
+            expect(maxContributionCapFromSeatPriceCents(500)).toBe(500);
+            expect(maxContributionCapFromSeatPriceCents(-1)).toBe(0);
+            expect(maxContributionCapFromSeatPriceCents(0)).toBe(0);
+            expect(maxContributionCapFromSeatPriceCents(null)).toBe(0);
         });
     });
 });

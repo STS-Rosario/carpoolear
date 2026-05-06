@@ -37,6 +37,13 @@ export function isVoluntaryContributionSeatPrice(seatPriceCents) {
     return seatPriceCents === VOLUNTARY_CONTRIBUTION_SEAT_PRICE_CENTS;
 }
 
+/** Caps used in warnings; voluntary (-1) and unset/non-positive amounts yield 0. */
+export function maxContributionCapFromSeatPriceCents(seatPriceCents) {
+    return typeof seatPriceCents === 'number' && seatPriceCents > 0
+        ? seatPriceCents
+        : 0;
+}
+
 export function shouldShowTripSeatPriceSection(seatPriceCents) {
     return (
         isVoluntaryContributionSeatPrice(seatPriceCents) ||
