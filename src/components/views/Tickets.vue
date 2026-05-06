@@ -35,6 +35,15 @@ import { useTicketsStore } from '../../stores/tickets';
 
 export default {
     name: 'tickets',
+    data() {
+        return {
+            statusClassMap: {
+                Cerrado: 'label label-default',
+                Resuelto: 'label label-success',
+                'Esperando respuesta': 'label label-warning'
+            }
+        };
+    },
     computed: {
         ...mapState(useTicketsStore, {
             tickets: 'list'
@@ -48,10 +57,7 @@ export default {
             fetchList: 'fetchList'
         }),
         statusClass(status) {
-            if (status === 'Cerrado') return 'label label-default';
-            if (status === 'Resuelto') return 'label label-success';
-            if (status === 'Esperando respuesta') return 'label label-warning';
-            return 'label label-info';
+            return this.statusClassMap[status] || 'label label-info';
         }
     },
     mounted() {
