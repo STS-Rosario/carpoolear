@@ -36,9 +36,7 @@
                             <router-link v-if="item.user_id" :to="{ name: 'profile', params: { id: item.user_id } }" target="_blank">
                                 {{ item.user_name }}
                             </router-link>
-                            <router-link v-if="item.user_id" :to="getAdminUserProfileRoute(item.user_id)" target="_blank">
-                                ({{ $t('perfilEnAdmin') }})
-                            </router-link>
+                            <template v-if="item.user_id">&nbsp;(<router-link :to="getAdminUserProfileRoute(item.user_id)" target="_blank">{{ $t('perfilEnAdmin') }}</router-link>)</template>
                             <span v-else>{{ item.user_name || $t('na') }}</span>
                         </p>
                         <p><strong>{{ $t('doc') }}:</strong> {{ item.user_nro_doc || '-' }}</p>

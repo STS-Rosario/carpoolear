@@ -5,15 +5,6 @@
             <router-link :to="{ name: 'identity_validation' }" class="btn btn-default btn-sm">{{ $t('volver') }}</router-link>
         </div>
         <template v-else>
-            <p
-                v-if="showSwitchToMercadoPagoLink"
-                class="manual-validation-switch-mode-link"
-            >
-                <router-link :to="switchToMercadoPagoRoute">
-                    {{ $t('manualValidationSwitchToMercadoPago') }}
-                </router-link>
-            </p>
-
             <div
                 v-if="(statusPaidAt || statusSubmittedAt) && !(canUpload && !alreadySubmitted)"
                 class="panel panel-default status-dates-panel"
@@ -75,6 +66,15 @@
                             <span v-else>{{ $t('pagarConQR') }}</span>
                         </button>
                     </div>
+
+                    <template v-if="showSwitchToMercadoPagoLink">
+                        <hr class="manual-validation-switch-mode-separator" />
+                        <p class="manual-validation-switch-mode-link">
+                            <router-link :to="switchToMercadoPagoRoute">
+                                {{ $t('manualValidationSwitchToMercadoPago') }}
+                            </router-link>
+                        </p>
+                    </template>
 
                     <p v-if="costCents <= 0" class="manual-validation-text small manual-validation-cost-unavailable">
                         {{ $t('validacionManualNoDisponible') }}
@@ -476,6 +476,11 @@ export default {
 
 .manual-validation-switch-mode-link {
     margin: 0 0 1rem;
+    text-align: center;
+}
+
+.manual-validation-switch-mode-separator {
+    margin: 1rem 0;
 }
 
 .manual-validation-upload {
