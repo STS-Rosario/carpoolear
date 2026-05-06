@@ -55,6 +55,14 @@
                         <span v-if="loadingPreference">{{ $t('guardando') }}</span>
                         <span v-else>{{ $t('pagarAhora') }}</span>
                     </button>
+                    <template v-if="showPendingManualSwitchLink">
+                        <hr class="manual-status-switch-separator" />
+                        <p class="manual-status-switch-link">
+                            <router-link :to="{ name: 'identity_validation' }">
+                                {{ $t('manualValidationSwitchToMercadoPago') }}
+                            </router-link>
+                        </p>
+                    </template>
                 </div>
             </div>
 
@@ -351,6 +359,7 @@ import {
     getManualIdentityValidationRoute
 } from '../../utils/identityValidationDniRequirements';
 import { getIdentityValidationButtonSizingStyle } from '../../utils/identityValidationButtonSizing';
+import { shouldShowPendingManualSwitchLink } from '../../utils/identityValidationPendingManualSwitch';
 
 export default {
     name: 'IdentityValidation',
@@ -478,6 +487,9 @@ export default {
         },
         identityValidationButtonSizingStyle() {
             return getIdentityValidationButtonSizingStyle();
+        },
+        showPendingManualSwitchLink() {
+            return shouldShowPendingManualSwitchLink(this.config, this.manualStatus);
         }
     },
     methods: {
@@ -566,7 +578,6 @@ export default {
 
 <style scoped>
 .identity-validation-component {
-    margin-top: 4rem;
     padding: 0 0 1em 0;
     color: #333;
 }
@@ -840,6 +851,14 @@ export default {
 
 .manual-status-panel {
     margin-bottom: 1.5em;
+}
+
+.manual-status-switch-separator {
+    margin: 1rem 0;
+}
+
+.manual-status-switch-link {
+    margin: 1rem 0 0;
 }
 
 .identity-validation-component .manual-status-panel.panel-warning .panel-heading {
