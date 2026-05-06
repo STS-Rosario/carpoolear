@@ -235,6 +235,7 @@
                         <button
                             type="button"
                             class="btn btn-danger btn-lg btn-block identity-validation-btn-cta"
+                            :style="identityValidationButtonSizingStyle"
                             :disabled="isIdentityValidationBlockedByMissingDni || loadingOAuth"
                             @click="startMercadoPagoOAuth"
                         >
@@ -258,6 +259,7 @@
                         <button
                             type="button"
                             class="btn btn-lg btn-block identity-validation-btn-outline"
+                            :style="identityValidationButtonSizingStyle"
                             :disabled="isIdentityValidationBlockedByMissingDni"
                             @click="goToManualValidation"
                         >
@@ -302,6 +304,7 @@
                         <button
                             type="button"
                             class="btn btn-danger btn-lg btn-block identity-validation-btn-cta"
+                            :style="identityValidationButtonSizingStyle"
                             :disabled="isIdentityValidationBlockedByMissingDni || loadingOAuth"
                             @click="startMercadoPagoOAuth"
                         >
@@ -325,6 +328,7 @@
                         <button
                             type="button"
                             class="btn btn-lg btn-block identity-validation-btn-outline"
+                            :style="identityValidationButtonSizingStyle"
                             :disabled="isIdentityValidationBlockedByMissingDni"
                             @click="goToManualValidation"
                         >
@@ -346,6 +350,7 @@ import {
     PROFILE_EDIT_ROUTE,
     getManualIdentityValidationRoute
 } from '../../utils/identityValidationDniRequirements';
+import { getIdentityValidationButtonSizingStyle } from '../../utils/identityValidationButtonSizing';
 
 export default {
     name: 'IdentityValidation',
@@ -470,6 +475,9 @@ export default {
         },
         isIdentityValidationBlockedByMissingDni() {
             return isIdentityValidationActionBlockedByMissingDni(this.user);
+        },
+        identityValidationButtonSizingStyle() {
+            return getIdentityValidationButtonSizingStyle();
         }
     },
     methods: {
