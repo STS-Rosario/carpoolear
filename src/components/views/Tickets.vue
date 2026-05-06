@@ -1,20 +1,29 @@
 <template>
     <div class="container">
+        <h3>{{ $t('soporte') }}</h3>
         <div class="mbot-10">
             <router-link class="btn btn-primary" :to="{ name: 'ticket-new' }">
                 Crear nuevo ticket de soporte
             </router-link>
         </div>
 
-        <div class="list-group">
+        <p v-if="!safeTickets.length" class="alert alert-warning">No tenés tickets de soporte</p>
+
+        <div v-else class="list-group">
             <router-link
-                v-for="ticket in tickets"
+                v-for="ticket in safeTickets"
                 :key="ticket.id"
                 class="list-group-item"
                 :to="{ name: 'ticket-detail', params: { id: ticket.id } }"
             >
                 <strong>#{{ ticket.id }} - {{ ticket.subject }}</strong>
-                <p>{{ ticket.status }} · {{ ticket.priority }}</p>
+                <p>{{ ticket.subject }}</p>
+                <p>Creado: {{ ticket.created_at || '-' }}</p>
+                <p>Actualizado: {{ ticket.updated_at || '-' }}</p>
+                <p>
+                    Estado:
+                    <span :class="statusClass(ticket.status)">{{ ticket.status }}</span>
+                </p>
             </router-link>
         </div>
     </div>
@@ -29,12 +38,21 @@ export default {
     computed: {
         ...mapState(useTicketsStore, {
             tickets: 'list'
-        })
+        }),
+        safeTickets() {
+            return Array.isArray(this.tickets) ? this.tickets : [];
+        }
     },
     methods: {
         ...mapActions(useTicketsStore, {
             fetchList: 'fetchList'
-        })
+        }),
+        statusClass(status) {
+            if (status === 'Cerrado') return 'label label-default';
+            if (status === 'Resuelto') return 'label label-success';
+            if (status === 'Esperando respuesta') return 'label label-warning';
+            return 'label label-info';
+        }
     },
     mounted() {
         this.fetchList();
