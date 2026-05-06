@@ -32,11 +32,16 @@
         <div class="alert alert-danger" v-if="resultMessage === 'error'">
             {{ $t('resultError') }}
         </div>
-        <div class="alert alert-warning" v-if="resultMessage === 'dni_mismatch'">
-            {{ $t('resultDniMismatch') }}
-        </div>
-        <div class="alert alert-warning" v-if="resultMessage === 'name_mismatch'">
-            {{ $t('resultNameMismatch') }}
+        <div class="alert alert-warning" v-if="mismatchDetails">
+            <p>{{ $t(mismatchDetails.reasonKey) }}</p>
+            <p v-if="mismatchDetails.showDni">
+                <strong>{{ $t('dniEnCarpoolear') }}:</strong> {{ mismatchDetails.userDni }}<br />
+                <strong>{{ $t('dniEnMercadoPago') }}:</strong> {{ mismatchDetails.mpDni }}
+            </p>
+            <p v-if="mismatchDetails.showName">
+                <strong>{{ $t('nombreEnCarpoolear') }}:</strong> {{ mismatchDetails.userName }}<br />
+                <strong>{{ $t('nombreEnMercadoPago') }}:</strong> {{ mismatchDetails.mpName }}
+            </p>
         </div>
 
             <div v-if="!identityValidationAvailable" class="alert alert-info">
@@ -61,6 +66,10 @@
                             <a href="#" @click.prevent="onPendingManualSwitchClick">
                                 {{ $t('manualValidationSwitchToMercadoPago') }}
                             </a>
+                        </p>
+                        <p class="identity-validation-mp-warning">
+                            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                            {{ $t('identityValidationMercadoPagoOwnershipWarning') }}
                         </p>
                     </template>
                 </div>
@@ -250,6 +259,10 @@
                             <span v-if="loadingOAuth">{{ $t('guardando') }}</span>
                             <span v-else>{{ $t('validarConMercadoPago') }}</span>
                         </button>
+                        <p class="identity-validation-mp-warning">
+                            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                            {{ $t('identityValidationMercadoPagoOwnershipWarning') }}
+                        </p>
                     </div>
 
                     <div
@@ -319,6 +332,10 @@
                             <span v-if="loadingOAuth">{{ $t('guardando') }}</span>
                             <span v-else>{{ $t('validarConMercadoPago') }}</span>
                         </button>
+                        <p class="identity-validation-mp-warning">
+                            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                            {{ $t('identityValidationMercadoPagoOwnershipWarning') }}
+                        </p>
                     </div>
 
                     <div
@@ -364,6 +381,7 @@ import {
     getIdentityValidationPendingSwitchBehavior,
     IDENTITY_VALIDATION_PENDING_SWITCH_BEHAVIOR_OAUTH
 } from '../../utils/identityValidationPendingSwitchBehavior';
+import { getIdentityValidationMismatchDetails } from '../../utils/identityValidationMismatchDetails';
 
 export default {
     name: 'IdentityValidation',
@@ -404,6 +422,9 @@ export default {
         },
         resultMessage() {
             return this.$route.query.result || null;
+        },
+        mismatchDetails() {
+            return getIdentityValidationMismatchDetails(this.$route.query || {});
         },
         /**
          * Paid + docs sent + not yet approved/rejected — still in admin queue.
@@ -868,6 +889,21 @@ export default {
 
 .manual-status-switch-link {
     margin: 1rem 0 0;
+}
+
+.identity-validation-mp-warning {
+    margin: 0.75rem 0 0;
+    padding: 0.75rem 0.9rem;
+    border-radius: 4px;
+    border: 1px solid #faebcc;
+    background: #fcf8e3;
+    color: #8a6d3b;
+    line-height: 1.4;
+    font-size: 0.92rem;
+}
+
+.identity-validation-mp-warning .fa {
+    margin-right: 0.5rem;
 }
 
 .identity-validation-component .manual-status-panel.panel-warning .panel-heading {

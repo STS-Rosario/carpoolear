@@ -416,6 +416,12 @@ const messages = {
             'El DNI no coincide con el de tu perfil. Verificá que tu DNI esté cargado correctamente.',
         resultNameMismatch:
             'El nombre no coincide con el de Mercado Pago. Verificá que tu nombre en el perfil incluya nombre y apellido tal como figuran en Mercado Pago.',
+        resultBothMismatch:
+            'Ni el nombre ni el DNI coinciden con Mercado Pago.',
+        dniEnCarpoolear: 'DNI en Carpoolear',
+        dniEnMercadoPago: 'DNI en Mercado Pago',
+        nombreEnCarpoolear: 'Nombre en Carpoolear',
+        nombreEnMercadoPago: 'Nombre en Mercado Pago',
         documentacionEnviada:
             'Documentación enviada. Será revisada por el equipo.',
         identityValidationManualSubmittedNoticeTitle: 'Verificación enviada',
@@ -1554,6 +1560,12 @@ const messages = {
             'El DNI no coincide con el de tu perfil. Verificá que tu DNI esté cargado correctamente.',
         resultNameMismatch:
             'El nombre no coincide con el de Mercado Pago. Verificá que tu nombre en el perfil incluya nombre y apellido tal como figuran en Mercado Pago.',
+        resultBothMismatch:
+            'Ni el nombre ni el DNI coinciden con Mercado Pago.',
+        dniEnCarpoolear: 'DNI en Carpoolear',
+        dniEnMercadoPago: 'DNI en Mercado Pago',
+        nombreEnCarpoolear: 'Nombre en Carpoolear',
+        nombreEnMercadoPago: 'Nombre en Mercado Pago',
         documentacionEnviada:
             'Documentación enviada. Será revisada por el equipo.',
         identityValidationManualSubmittedNoticeTitle: 'Verificación enviada',
@@ -2467,6 +2479,12 @@ const messages = {
             "The DNI doesn't match the one on your profile. Please make sure your DNI is correct.",
         resultNameMismatch:
             "The name doesn't match Mercado Pago. Make sure your profile name includes first and last name as in Mercado Pago.",
+        resultBothMismatch:
+            'Neither the name nor the DNI matches Mercado Pago.',
+        dniEnCarpoolear: 'DNI in Carpoolear',
+        dniEnMercadoPago: 'DNI in Mercado Pago',
+        nombreEnCarpoolear: 'Name in Carpoolear',
+        nombreEnMercadoPago: 'Name in Mercado Pago',
         documentacionEnviada:
             'Documentation submitted. It will be reviewed by the team.',
         identityValidationManualSubmittedNoticeTitle: 'Verification submitted',
