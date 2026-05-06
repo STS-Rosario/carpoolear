@@ -1,7 +1,7 @@
 <template>
     <div class="container" v-if="ticket">
         <p>
-            <router-link :to="{ name: 'tickets' }">
+            <router-link :to="backToTicketsRoute">
                 {{ $t('volverListaTicketsSoporte') }}
             </router-link>
         </p>
@@ -102,6 +102,11 @@ export default {
                 toolbarItems: [['bold', 'italic', 'strike'], ['ul', 'ol']]
             }
         };
+    },
+    computed: {
+        backToTicketsRoute() {
+            return { name: 'tickets' };
+        }
     },
     methods: {
         markdownToHtml,
