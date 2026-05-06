@@ -34,6 +34,8 @@ const messages = {
         ticketTypeContact: 'Contacto',
         ticketTypeSuggestion: 'Sugerencia',
         ticketTypeReport: 'Denuncia',
+        ticketTypeAccountVerification: 'Verificación de cuenta',
+        crearTicketSoporte: 'Crear ticket de soporte',
         unaswered_messages_limit: 'Límites de consultas por un viaje',
         unaswered_messages_limitDescription:
             'Establece un máximo de consultas (solicitudes o mensajes) que podés recibir por un viaje.',
@@ -1208,6 +1210,8 @@ const messages = {
         ticketTypeContact: 'Contacto',
         ticketTypeSuggestion: 'Sugerencia',
         ticketTypeReport: 'Denuncia',
+        ticketTypeAccountVerification: 'Verificación de cuenta',
+        crearTicketSoporte: 'Crear ticket de soporte',
         requisitosRegister:
             'Se requiere que cargue: licencia de conductor, seguro del vehículo ...',
         RegistrarNuevoUsuario: 'Registrate',
@@ -2153,6 +2157,8 @@ const messages = {
         ticketTypeContact: 'Contact',
         ticketTypeSuggestion: 'Suggestion',
         ticketTypeReport: 'Report',
+        ticketTypeAccountVerification: 'Account verification',
+        crearTicketSoporte: 'Create support ticket',
         unaswered_messages_limit: 'Query limits per trip',
         unaswered_messages_limitDescription:
             'Set a maximum number of queries (requests or messages) you can receive per trip.',

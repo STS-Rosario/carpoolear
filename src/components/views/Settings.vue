@@ -23,6 +23,11 @@
                             >{{ $t('debug') }}</router-link
                         >
                     </li>
+                    <li>
+                        <router-link :to="{ name: 'tickets' }"
+                            >{{ $t('soporte') }}</router-link
+                        >
+                    </li>
                     <!--
                     <li>
                         <a href="#">Dispositivos</a>

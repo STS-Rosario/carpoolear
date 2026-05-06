@@ -41,6 +41,21 @@
                         </p>
                         <p><strong>{{ $t('doc') }}:</strong> {{ item.user_nro_doc || '-' }}</p>
                         <p><strong>{{ $t('email') }}:</strong> {{ item.user_email || '-' }}</p>
+                        <router-link
+                            v-if="item.user_id"
+                            class="btn btn-default btn-sm"
+                            :to="{
+                                name: 'admin-support-tickets',
+                                query: {
+                                    userId: item.user_id,
+                                    userName: item.user_name,
+                                    type: 'account_verification',
+                                    subject: $t('ticketTypeAccountVerification')
+                                }
+                            }"
+                        >
+                            {{ $t('crearTicketSoporte') }}
+                        </router-link>
                         <p><strong>{{ $t('motivoRechazo') }}:</strong> {{ getRejectReasonLabel(item.reject_reason) }}</p>
                         <p><strong>{{ $t('fecha') }}:</strong> {{ formatDate(item.created_at) }}</p>
                         <div class="form-group private-admin-note-group">

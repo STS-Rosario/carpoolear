@@ -11,6 +11,7 @@
                             <option value="contact">{{ $t('ticketTypeContact') }}</option>
                             <option value="feedback">{{ $t('ticketTypeSuggestion') }}</option>
                             <option value="report">{{ $t('ticketTypeReport') }}</option>
+                            <option value="account_verification">{{ $t('ticketTypeAccountVerification') }}</option>
                         </select>
                     </div>
                 </div>
@@ -96,7 +97,7 @@ export default {
             }).catch(() => dialogs.message(this.$t('errorDatos'), { estado: 'error' }));
         },
         setTypeFromUrl() {
-            const allowed = ['bug_report', 'contact', 'feedback', 'report'];
+            const allowed = ['bug_report', 'contact', 'feedback', 'report', 'account_verification'];
             const category = this.$route.query.category;
             if (allowed.includes(category)) {
                 this.form.type = category;

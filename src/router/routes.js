@@ -318,7 +318,7 @@ export default [
         }
     },
     {
-        path: '/tickets',
+        path: '/soporte',
         name: 'tickets',
         component: Tickets,
         beforeEnter: auth,
@@ -335,7 +335,7 @@ export default [
         }
     },
     {
-        path: '/tickets/:id',
+        path: '/soporte/:id',
         name: 'ticket-detail',
         component: TicketDetail,
         props: true,
