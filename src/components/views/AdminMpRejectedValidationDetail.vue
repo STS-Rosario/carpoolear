@@ -166,14 +166,17 @@ export default {
         fetchItem() {
             const api = new AdminApi();
             return api.getMercadoPagoRejectedValidation(this.id).then((res) => {
-                const data = res.data || res;
-                this.item = data.data || data;
-                this.privateAdminNote = this.item.private_admin_note || '';
+                this.applyResponseItem(res);
             }).catch(() => {
                 this.item = null;
             }).finally(() => {
                 this.loading = false;
             });
+        },
+        applyResponseItem(res) {
+            const data = res.data || res;
+            this.item = data.data || data;
+            this.privateAdminNote = this.item.private_admin_note || '';
         },
         savePrivateAdminNote() {
             if (!this.item) return;
@@ -184,9 +187,7 @@ export default {
                 this.privateAdminNote
             )
                 .then((res) => {
-                    const data = res.data || res;
-                    this.item = data.data || data;
-                    this.privateAdminNote = this.item.private_admin_note || '';
+                    this.applyResponseItem(res);
                     dialogs.message(this.$t('guardar'), { duration: 2, estado: 'success' });
                 }, () => {
                     dialogs.message(this.$t('resultError'), { duration: 3, estado: 'error' });
