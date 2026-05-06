@@ -34,8 +34,10 @@ const AdminManualIdentityValidationReview = () => import('../components/views/Ad
 const AdminMpRejectedValidations = () => import('../components/views/AdminMpRejectedValidations.vue');
 const AdminMpRejectedValidationDetail = () => import('../components/views/AdminMpRejectedValidationDetail.vue');
 const Tickets = () => import('../components/views/Tickets.vue');
+const TicketNew = () => import('../components/views/TicketNew.vue');
 const TicketDetail = () => import('../components/views/TicketDetail.vue');
 const AdminSupportTickets = () => import('../components/views/AdminSupportTickets.vue');
+const AdminSupportTicketNew = () => import('../components/views/AdminSupportTicketNew.vue');
 const AdminSupportTicketDetail = () => import('../components/views/AdminSupportTicketDetail.vue');
 
 const UpdateProfile = () => import('../components/sections/UpdateProfile.vue');
@@ -318,7 +320,7 @@ export default [
         }
     },
     {
-        path: '/tickets',
+        path: '/soporte',
         name: 'tickets',
         component: Tickets,
         beforeEnter: auth,
@@ -335,7 +337,21 @@ export default [
         }
     },
     {
-        path: '/tickets/:id',
+        path: '/soporte/nuevo',
+        name: 'ticket-new',
+        component: TicketNew,
+        beforeEnter: auth,
+        meta: {
+            actionbar: {
+                header: {
+                    titleKey: 'crearTicket',
+                    buttons: ['back']
+                }
+            }
+        }
+    },
+    {
+        path: '/soporte/:id',
         name: 'ticket-detail',
         component: TicketDetail,
         props: true,
@@ -727,6 +743,24 @@ export default [
                 header: {
                     titleKey: 'soporte',
                     buttons: []
+                }
+            }
+        }
+    },
+    {
+        path: '/admin/support-tickets/new',
+        name: 'admin-support-ticket-new',
+        component: AdminSupportTicketNew,
+        beforeEnter: authAdmin,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'admin'
+                },
+                header: {
+                    titleKey: 'crearTicket',
+                    buttons: ['back']
                 }
             }
         }

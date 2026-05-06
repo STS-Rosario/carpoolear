@@ -73,6 +73,19 @@
                         <li>
                             <a @click="setLocale('en')">English</a>
                         </li>
+                        <li v-if="user">
+                            <router-link
+                                :to="{ name: 'profile', params: { id: 'me' } }"
+                            >
+                                {{ $t('perfil') }}
+                            </router-link>
+                        </li>
+                        <!-- /soporte (mesa de ayuda), mobile -->
+                        <li v-if="user">
+                            <router-link :to="{ name: 'tickets' }">{{
+                                $t('soporte')
+                            }}</router-link>
+                        </li>
                         <li
                             v-if="user"
                             role="separator"
@@ -231,6 +244,12 @@
                             >
                                 {{ $t('perfil') }}
                             </router-link>
+                        </li>
+                        <!-- /soporte (mesa de ayuda), desktop -->
+                        <li>
+                            <router-link :to="{ name: 'tickets' }">{{
+                                $t('soporte')
+                            }}</router-link>
                         </li>
                         <li v-if="user.is_admin">
                             <router-link :to="{ name: 'admin-page' }">

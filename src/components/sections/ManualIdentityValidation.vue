@@ -41,6 +41,10 @@
                     <ul class="manual-validation-bullets">
                         <li>{{ $t('manualValidationPayBulletDni') }}</li>
                     </ul>
+                    <p class="manual-validation-upload-warning">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        {{ $t(manualValidationUploadWarningKey) }}
+                    </p>
                     <p class="manual-validation-text manual-validation-closing">
                         {{ $t('manualValidationPayClosing') }}
                     </p>
@@ -66,6 +70,15 @@
                             <span v-else>{{ $t('pagarConQR') }}</span>
                         </button>
                     </div>
+
+                    <template v-if="showSwitchToMercadoPagoLink">
+                        <hr class="manual-validation-switch-mode-separator" />
+                        <p class="manual-validation-switch-mode-link">
+                            <router-link :to="switchToMercadoPagoRoute">
+                                {{ $t('manualValidationSwitchToMercadoPago') }}
+                            </router-link>
+                        </p>
+                    </template>
 
                     <p v-if="costCents <= 0" class="manual-validation-text small manual-validation-cost-unavailable">
                         {{ $t('validacionManualNoDisponible') }}
@@ -204,6 +217,14 @@ import { mapState } from 'pinia';
 import { useAuthStore } from '../../stores/auth';
 import { UserApi } from '../../services/api';
 import QRCode from 'qrcode';
+import {
+    shouldShowSwitchToMercadoPago,
+    SWITCH_TO_MERCADO_PAGO_ROUTE
+} from '../../utils/identityValidationModeSwitch';
+import {
+    getManualValidationUploadWarningKey,
+    MANUAL_VALIDATION_UPLOAD_WARNING_STYLE
+} from '../../utils/manualValidationUploadWarning';
 
 export default {
     name: 'ManualIdentityValidation',
@@ -239,6 +260,18 @@ export default {
         },
         identityValidationManualQrEnabled() {
             return this.config && this.config.identity_validation_manual_qr_enabled === true;
+        },
+        showSwitchToMercadoPagoLink() {
+            return shouldShowSwitchToMercadoPago(this.config);
+        },
+        manualValidationUploadWarningKey() {
+            return getManualValidationUploadWarningKey();
+        },
+        manualValidationUploadWarningStyle() {
+            return MANUAL_VALIDATION_UPLOAD_WARNING_STYLE;
+        },
+        switchToMercadoPagoRoute() {
+            return SWITCH_TO_MERCADO_PAGO_ROUTE;
         },
         canUpload() {
             return this.requestId && this.paymentSuccess;
@@ -455,6 +488,15 @@ export default {
     margin-top: 1em;
 }
 
+.manual-validation-switch-mode-link {
+    margin: 0 0 1rem;
+    text-align: center;
+}
+
+.manual-validation-switch-mode-separator {
+    margin: 1rem 0;
+}
+
 .manual-validation-upload {
     margin-top: 1em;
 }
@@ -585,6 +627,20 @@ export default {
 
 .manual-validation-closing {
     margin-bottom: 1.25rem;
+}
+
+.manual-validation-upload-warning {
+    margin: 0 0 1rem;
+    padding: 0.75rem 0.9rem;
+    border: v-bind('manualValidationUploadWarningStyle.border');
+    border-radius: 4px;
+    background: v-bind('manualValidationUploadWarningStyle.background');
+    color: v-bind('manualValidationUploadWarningStyle.color');
+    line-height: 1.4;
+}
+
+.manual-validation-upload-warning .fa {
+    margin-right: 0.5rem;
 }
 
 .manual-identity-validation-component .manual-validation-bullets {

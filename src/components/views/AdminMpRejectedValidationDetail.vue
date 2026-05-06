@@ -36,12 +36,45 @@
                             <router-link v-if="item.user_id" :to="{ name: 'profile', params: { id: item.user_id } }" target="_blank">
                                 {{ item.user_name }}
                             </router-link>
+                            <template v-if="item.user_id">&nbsp;(<router-link :to="getAdminUserProfileRoute(item.user_id)" target="_blank">{{ $t('perfilEnAdmin') }}</router-link>)</template>
                             <span v-else>{{ item.user_name || $t('na') }}</span>
                         </p>
                         <p><strong>{{ $t('doc') }}:</strong> {{ item.user_nro_doc || '-' }}</p>
                         <p><strong>{{ $t('email') }}:</strong> {{ item.user_email || '-' }}</p>
+                        <router-link
+                            v-if="item.user_id"
+                            class="btn btn-default btn-sm"
+                            :to="{
+                                name: 'admin-support-ticket-new',
+                                query: {
+                                    userId: item.user_id,
+                                    userName: item.user_name,
+                                    type: 'account_verification',
+                                    subject: $t('ticketTypeAccountVerification')
+                                }
+                            }"
+                        >
+                            {{ $t('crearTicketSoporte') }}
+                        </router-link>
                         <p><strong>{{ $t('motivoRechazo') }}:</strong> {{ getRejectReasonLabel(item.reject_reason) }}</p>
                         <p><strong>{{ $t('fecha') }}:</strong> {{ formatDate(item.created_at) }}</p>
+                        <div class="form-group private-admin-note-group">
+                            <label>{{ $t('notaPrivadaSoloAdmins') }}</label>
+                            <textarea
+                                v-model="privateAdminNote"
+                                class="form-control"
+                                rows="3"
+                                :placeholder="$t('notaPrivadaSoloAdmins')"
+                            ></textarea>
+                            <button
+                                class="btn btn-default btn-sm private-admin-note-save-btn"
+                                :disabled="savingPrivateNote"
+                                @click="savePrivateAdminNote"
+                            >
+                                <span v-if="savingPrivateNote">{{ $t('guardando') }}</span>
+                                <span v-else>{{ $t('guardar') }}</span>
+                            </button>
+                        </div>
 
                         <div v-if="!item.review_status" class="review-actions mt-3">
                             <h4>{{ $t('accion') }}</h4>
@@ -88,6 +121,7 @@
 import AdminLayout from '../layouts/AdminLayout.vue';
 import { AdminApi } from '../../services/api';
 import dialogs from '../../services/dialogs.js';
+import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
 
 export default {
     name: 'AdminMpRejectedValidationDetail',
@@ -102,7 +136,9 @@ export default {
             item: null,
             loading: true,
             reviewNote: '',
+            privateAdminNote: '',
             submitting: false,
+            savingPrivateNote: false,
             reviewError: null
         };
     },
@@ -127,6 +163,7 @@ export default {
         getRejectReasonLabel(reason) {
             if (reason === 'dni_mismatch') return this.$t('rechazoDniMismatch');
             if (reason === 'name_mismatch') return this.$t('rechazoNameMismatch');
+            if (reason === 'both_mismatch') return this.$t('both_mismatch');
             return reason || '-';
         },
         getStatusLabel(status) {
@@ -141,16 +178,39 @@ export default {
             if (status === 'rejected' || status === 'reject') return 'label label-danger';
             return 'label label-warning';
         },
+        getAdminUserProfileRoute,
         fetchItem() {
             const api = new AdminApi();
             return api.getMercadoPagoRejectedValidation(this.id).then((res) => {
-                const data = res.data || res;
-                this.item = data.data || data;
+                this.applyResponseItem(res);
             }).catch(() => {
                 this.item = null;
             }).finally(() => {
                 this.loading = false;
             });
+        },
+        applyResponseItem(res) {
+            const data = res.data || res;
+            this.item = data.data || data;
+            this.privateAdminNote = this.item.private_admin_note || '';
+        },
+        savePrivateAdminNote() {
+            if (!this.item) return;
+            this.savingPrivateNote = true;
+            const api = new AdminApi();
+            api.updateMercadoPagoRejectedValidationPrivateNote(
+                this.item.id,
+                this.privateAdminNote
+            )
+                .then((res) => {
+                    this.applyResponseItem(res);
+                    dialogs.message(this.$t('guardar'), { duration: 2, estado: 'success' });
+                }, () => {
+                    dialogs.message(this.$t('resultError'), { duration: 3, estado: 'error' });
+                })
+                .finally(() => {
+                    this.savingPrivateNote = false;
+                });
         },
         review(action) {
             if (action !== 'approve' && !this.hasComment) return;
@@ -208,5 +268,11 @@ export default {
 .mt-4 { margin-top: 1.5em; }
 .review-note-display {
     word-break: break-word;
+}
+.private-admin-note-group {
+    margin-top: 1rem;
+}
+.private-admin-note-save-btn {
+    margin-top: 0.5rem;
 }
 </style>

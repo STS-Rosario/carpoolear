@@ -82,6 +82,7 @@ export default {
         getRejectReasonLabel(reason) {
             if (reason === 'dni_mismatch') return this.$t('rechazoDniMismatch');
             if (reason === 'name_mismatch') return this.$t('rechazoNameMismatch');
+            if (reason === 'both_mismatch') return this.$t('both_mismatch');
             return reason || '-';
         },
         fetchList() {

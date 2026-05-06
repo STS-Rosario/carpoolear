@@ -25,6 +25,21 @@
                         <p><strong>{{ $t('fechaEnvio') }}:</strong> {{ item.submitted_at ? formatDate(item.submitted_at) : '-' }}</p>
                         <p><strong>{{ $t('pagado') }}:</strong> {{ item.paid ? $t('si') : $t('no') }}</p>
                         <p><strong>{{ $t('estado') }}:</strong> {{ getStatusLabel(item.review_status) }}</p>
+                        <router-link
+                            v-if="item.user_id"
+                            class="btn btn-default btn-sm"
+                            :to="{
+                                name: 'admin-support-ticket-new',
+                                query: {
+                                    userId: item.user_id,
+                                    userName: item.user_name,
+                                    type: 'account_verification',
+                                    subject: $t('ticketTypeAccountVerification')
+                                }
+                            }"
+                        >
+                            {{ $t('crearTicketSoporte') }}
+                        </router-link>
                         <p v-if="item.reviewed_at">
                             <strong>{{ getActionDateLabel(item.review_status) }}:</strong> {{ formatDate(item.reviewed_at) }}
                         </p>

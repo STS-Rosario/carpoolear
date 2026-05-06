@@ -46,6 +46,9 @@ export const useTicketsStore = defineStore('tickets', {
         fetchAdminOne(id) {
             return ticketsApi.adminShow(id).then((response) => response.data);
         },
+        adminCreateTicket(payload) {
+            return ticketsApi.adminCreate(payload).then((response) => response.data);
+        },
         adminReply(id, payload) {
             return ticketsApi.adminReply(id, payload).then((response) => response.data);
         },

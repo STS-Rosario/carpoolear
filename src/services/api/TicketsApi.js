@@ -31,6 +31,10 @@ class TicketsApi extends TaggedApi {
         return this.get('/api/admin/support/tickets/' + id);
     }
 
+    adminCreate(data) {
+        return this.post('/api/admin/support/tickets', data);
+    }
+
     adminReply(id, data) {
         const body = this.toFormData(data);
         return this.post('/api/admin/support/tickets/' + id + '/replies', body);

@@ -32,11 +32,16 @@
         <div class="alert alert-danger" v-if="resultMessage === 'error'">
             {{ $t('resultError') }}
         </div>
-        <div class="alert alert-warning" v-if="resultMessage === 'dni_mismatch'">
-            {{ $t('resultDniMismatch') }}
-        </div>
-        <div class="alert alert-warning" v-if="resultMessage === 'name_mismatch'">
-            {{ $t('resultNameMismatch') }}
+        <div class="alert alert-warning" v-if="mismatchDetails">
+            <p>{{ $t(mismatchDetails.reasonKey) }}</p>
+            <p v-if="mismatchDetails.showDni">
+                <strong>{{ $t('dniEnCarpoolear') }}:</strong> {{ mismatchDetails.userDni }}<br />
+                <strong>{{ $t('dniEnMercadoPago') }}:</strong> {{ mismatchDetails.mpDni }}
+            </p>
+            <p v-if="mismatchDetails.showName">
+                <strong>{{ $t('nombreEnCarpoolear') }}:</strong> {{ mismatchDetails.userName }}<br />
+                <strong>{{ $t('nombreEnMercadoPago') }}:</strong> {{ mismatchDetails.mpName }}
+            </p>
         </div>
 
             <div v-if="!identityValidationAvailable" class="alert alert-info">
@@ -55,6 +60,18 @@
                         <span v-if="loadingPreference">{{ $t('guardando') }}</span>
                         <span v-else>{{ $t('pagarAhora') }}</span>
                     </button>
+                    <template v-if="showPendingManualSwitchLink">
+                        <hr class="manual-status-switch-separator" />
+                        <p class="manual-status-switch-link">
+                            <a href="#" @click.prevent="onPendingManualSwitchClick">
+                                {{ $t('manualValidationSwitchToMercadoPago') }}
+                            </a>
+                        </p>
+                        <p class="identity-validation-mp-warning">
+                            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                            {{ $t('identityValidationMercadoPagoOwnershipWarning') }}
+                        </p>
+                    </template>
                 </div>
             </div>
 
@@ -203,7 +220,7 @@
                         {{ $t('identityValidationRejectionNoticeBody') }}
                     </p>
                     <p class="identity-validation-rejection-notice__emphasis">
-                        <strong class="identity-validation-rejection-notice__emphasis-strong">{{ $t('identityValidationRejectionNoticeEmphasisBeforeParen') }}</strong><span class="identity-validation-rejection-notice__emphasis-paren">{{ $t('identityValidationRejectionNoticeEmphasisLead') }}<a href="mailto:carpoolear@stsrosario.org.ar">carpoolear@stsrosario.org.ar</a>{{ $t('identityValidationRejectionNoticeEmphasisMid') }}<a href="https://www.instagram.com/carpoolear/?hl=en" target="_blank" rel="noopener noreferrer">{{ $t('identityValidationRejectionNoticeEmphasisIgLabel') }}</a>{{ $t('identityValidationRejectionNoticeEmphasisBetweenSocial') }}<a href="https://www.facebook.com/Carpoolear" target="_blank" rel="noopener noreferrer">{{ $t('identityValidationRejectionNoticeEmphasisFbLabel') }}</a>{{ $t('identityValidationRejectionNoticeEmphasisTail') }}</span>
+                        <strong class="identity-validation-rejection-notice__emphasis-strong">{{ $t('identityValidationRejectionNoticeContactLead') }}</strong><router-link class="identity-validation-rejection-notice__mesa-link" :to="{ name: 'tickets' }">{{ $t('mesaAyuda') }}</router-link>{{ $t('identityValidationRejectionNoticeContactTail') }}
                     </p>
                     <p
                         v-if="manualStatus.review_note && manualStatus.review_note.trim()"
@@ -212,6 +229,14 @@
                         <strong>{{ $t('identityValidationRejectionReasonLabel') }}:</strong>
                         {{ manualStatus.review_note.trim() }}
                     </p>
+                </div>
+                <div
+                    v-if="isIdentityValidationBlockedByMissingDni"
+                    class="identity-validation-dni-warning"
+                >
+                    {{ $t('identityValidationDniWarningPrefix') }}
+                    <a href="#" @click.prevent="goToProfileEdit">{{ $t('identityValidationDniWarningProfileLink') }}</a>
+                    {{ $t('identityValidationDniWarningSuffix') }}
                 </div>
                 <div class="identity-validation-cards">
                     <div
@@ -227,14 +252,16 @@
                         <button
                             type="button"
                             class="btn btn-danger btn-lg btn-block identity-validation-btn-cta"
-                            :disabled="!user || !user.nro_doc || loadingOAuth"
+                            :style="identityValidationButtonSizingStyle"
+                            :disabled="isIdentityValidationBlockedByMissingDni || loadingOAuth"
                             @click="startMercadoPagoOAuth"
                         >
                             <span v-if="loadingOAuth">{{ $t('guardando') }}</span>
                             <span v-else>{{ $t('validarConMercadoPago') }}</span>
                         </button>
-                        <p v-if="user && !user.nro_doc" class="small identity-validation-hint">
-                            {{ $t('debesCargarDni') }}
+                        <p class="identity-validation-mp-warning">
+                            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                            {{ $t('identityValidationMercadoPagoOwnershipWarning') }}
                         </p>
                     </div>
 
@@ -250,12 +277,15 @@
                             </li>
                             <li>{{ $t('identityValidationTimeLine') }}</li>
                         </ul>
-                        <router-link
-                            :to="{ name: 'identity_validation_manual' }"
+                        <button
+                            type="button"
                             class="btn btn-lg btn-block identity-validation-btn-outline"
+                            :style="identityValidationButtonSizingStyle"
+                            :disabled="isIdentityValidationBlockedByMissingDni"
+                            @click="goToManualValidation"
                         >
                             {{ $t('solicitarVerificacionManual') }}
-                        </router-link>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -272,6 +302,14 @@
                     </ul>
                     <p class="identity-validation-once">{{ $t('identidadModalUnaVez') }}</p>
                 </header>
+                <div
+                    v-if="isIdentityValidationBlockedByMissingDni"
+                    class="identity-validation-dni-warning"
+                >
+                    {{ $t('identityValidationDniWarningPrefix') }}
+                    <a href="#" @click.prevent="goToProfileEdit">{{ $t('identityValidationDniWarningProfileLink') }}</a>
+                    {{ $t('identityValidationDniWarningSuffix') }}
+                </div>
 
                 <div class="identity-validation-cards">
                     <div
@@ -287,14 +325,16 @@
                         <button
                             type="button"
                             class="btn btn-danger btn-lg btn-block identity-validation-btn-cta"
-                            :disabled="!user || !user.nro_doc || loadingOAuth"
+                            :style="identityValidationButtonSizingStyle"
+                            :disabled="isIdentityValidationBlockedByMissingDni || loadingOAuth"
                             @click="startMercadoPagoOAuth"
                         >
                             <span v-if="loadingOAuth">{{ $t('guardando') }}</span>
                             <span v-else>{{ $t('validarConMercadoPago') }}</span>
                         </button>
-                        <p v-if="user && !user.nro_doc" class="small identity-validation-hint">
-                            {{ $t('debesCargarDni') }}
+                        <p class="identity-validation-mp-warning">
+                            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                            {{ $t('identityValidationMercadoPagoOwnershipWarning') }}
                         </p>
                     </div>
 
@@ -310,12 +350,15 @@
                             </li>
                             <li>{{ $t('identityValidationTimeLine') }}</li>
                         </ul>
-                        <router-link
-                            :to="{ name: 'identity_validation_manual' }"
+                        <button
+                            type="button"
                             class="btn btn-lg btn-block identity-validation-btn-outline"
+                            :style="identityValidationButtonSizingStyle"
+                            :disabled="isIdentityValidationBlockedByMissingDni"
+                            @click="goToManualValidation"
                         >
                             {{ $t('solicitarVerificacionManual') }}
-                        </router-link>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -327,6 +370,18 @@
 import { mapState } from 'pinia';
 import { useAuthStore } from '../../stores/auth';
 import { UserApi } from '../../services/api';
+import {
+    isIdentityValidationActionBlockedByMissingDni,
+    PROFILE_EDIT_ROUTE,
+    getManualIdentityValidationRoute
+} from '../../utils/identityValidationDniRequirements';
+import { getIdentityValidationButtonSizingStyle } from '../../utils/identityValidationButtonSizing';
+import { shouldShowPendingManualSwitchLink } from '../../utils/identityValidationPendingManualSwitch';
+import {
+    getIdentityValidationPendingSwitchBehavior,
+    IDENTITY_VALIDATION_PENDING_SWITCH_BEHAVIOR_OAUTH
+} from '../../utils/identityValidationPendingSwitchBehavior';
+import { getIdentityValidationMismatchDetails } from '../../utils/identityValidationMismatchDetails';
 
 export default {
     name: 'IdentityValidation',
@@ -367,6 +422,9 @@ export default {
         },
         resultMessage() {
             return this.$route.query.result || null;
+        },
+        mismatchDetails() {
+            return getIdentityValidationMismatchDetails(this.$route.query || {});
         },
         /**
          * Paid + docs sent + not yet approved/rejected — still in admin queue.
@@ -433,7 +491,7 @@ export default {
         },
         checkCircleIconSrc() {
             const base = process.env.ROUTE_BASE || '/';
-            return `${base}static/img/check-circle.png`;
+            return `${base}img/check-circle.png`;
         },
         formattedManualCost() {
             const cents =
@@ -448,6 +506,15 @@ export default {
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 0
             }).format(Number(cents) / 100);
+        },
+        isIdentityValidationBlockedByMissingDni() {
+            return isIdentityValidationActionBlockedByMissingDni(this.user);
+        },
+        identityValidationButtonSizingStyle() {
+            return getIdentityValidationButtonSizingStyle();
+        },
+        showPendingManualSwitchLink() {
+            return shouldShowPendingManualSwitchLink(this.config, this.manualStatus);
         }
     },
     methods: {
@@ -505,7 +572,7 @@ export default {
                 });
         },
         startMercadoPagoOAuth() {
-            if (!this.user || this.loadingOAuth) return;
+            if (!this.user || this.loadingOAuth || this.isIdentityValidationBlockedByMissingDni) return;
             this.loadingOAuth = true;
             const userApi = new UserApi();
             userApi.getMercadoPagoOAuthUrl()
@@ -520,6 +587,17 @@ export default {
                 .catch(() => {
                     this.loadingOAuth = false;
                 });
+        },
+        goToProfileEdit() {
+            this.$router.push(PROFILE_EDIT_ROUTE);
+        },
+        goToManualValidation() {
+            this.$router.push(getManualIdentityValidationRoute(this.user));
+        },
+        onPendingManualSwitchClick() {
+            if (getIdentityValidationPendingSwitchBehavior() === IDENTITY_VALIDATION_PENDING_SWITCH_BEHAVIOR_OAUTH) {
+                this.startMercadoPagoOAuth();
+            }
         }
     },
     mounted() {
@@ -530,7 +608,6 @@ export default {
 
 <style scoped>
 .identity-validation-component {
-    margin-top: 4rem;
     padding: 0 0 1em 0;
     color: #333;
 }
@@ -806,6 +883,29 @@ export default {
     margin-bottom: 1.5em;
 }
 
+.manual-status-switch-separator {
+    margin: 1rem 0;
+}
+
+.manual-status-switch-link {
+    margin: 1rem 0 0;
+}
+
+.identity-validation-mp-warning {
+    margin: 0.75rem 0 0;
+    padding: 0.75rem 0.9rem;
+    border-radius: 4px;
+    border: 1px solid #faebcc;
+    background: #fcf8e3;
+    color: #8a6d3b;
+    line-height: 1.4;
+    font-size: 0.92rem;
+}
+
+.identity-validation-mp-warning .fa {
+    margin-right: 0.5rem;
+}
+
 .identity-validation-component .manual-status-panel.panel-warning .panel-heading {
     font-size: 1.25rem;
     font-weight: 700;
@@ -819,6 +919,27 @@ export default {
 
 .identity-validation-main {
     padding: 0 0 0.5rem;
+}
+
+.identity-validation-dni-warning {
+    margin: 0 0 1.25rem;
+    padding: 0.9rem 1rem;
+    border-radius: 4px;
+    border: 1px solid #ebccd1;
+    background: #f2dede;
+    color: #a94442;
+    line-height: 1.45;
+}
+
+.identity-validation-dni-warning a {
+    color: #843534;
+    font-weight: 700;
+    text-decoration: underline;
+}
+
+.identity-validation-dni-warning a:hover,
+.identity-validation-dni-warning a:focus {
+    color: #5f2525;
 }
 
 @media (min-width: 768px) {
