@@ -75,8 +75,8 @@ describe('AdminSupportTicketDetail view', () => {
     });
 
     it('shows reopen only for closed tickets and hides close when already closed', () => {
-        expect(viewSource).toContain("v-if=\"showReopenTicketButton\"");
-        expect(viewSource).toContain("v-if=\"showCloseTicketButton\"");
+        expect(viewSource).toContain('v-if="showReopenTicketButton"');
+        expect(viewSource).toContain('v-if="showCloseTicketButton"');
         expect(viewSource).toContain('isTicketClosed()');
         expect(viewSource).toContain("return this.ticket && this.ticket.status === 'Cerrado'");
         expect(viewSource).toContain('return this.ticket && !this.isTicketClosed');
