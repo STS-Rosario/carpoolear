@@ -27,6 +27,12 @@ describe('AdminSupportTicketDetail view', () => {
         expect(viewSource).toContain("{{ $t('verPerfilEnAdmin') }}");
     });
 
+    it('shows Carpoolear team plus admin name and id for staff replies', () => {
+        expect(viewSource).toContain('adminReplyAuthorLabel(reply)');
+        expect(viewSource).toContain("{{ adminReplyAuthorLabel(reply) }}");
+        expect(viewSource).toContain("$t('equipoCarpoolearAutorAdmin'");
+    });
+
     it('shows reply metadata row with relative date and full date tooltip', () => {
         expect(viewSource).toContain('reply-meta-row');
         expect(viewSource).toContain('reply-meta-date');
