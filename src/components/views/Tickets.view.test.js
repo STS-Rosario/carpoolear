@@ -19,6 +19,30 @@ describe('Tickets list view', () => {
         expect(viewSource).toContain("name: 'ticket-new'");
     });
 
+    it('orders thead columns category then priority then subject before dates and status', () => {
+        const cat = viewSource.indexOf("$t('categoriaTicket')");
+        const pri = viewSource.indexOf("$t('prioridad')");
+        const sub = viewSource.indexOf("$t('asuntoTicket')");
+        const cre = viewSource.indexOf("$t('creado')");
+        const upd = viewSource.indexOf("$t('actualizado')");
+        const est = viewSource.indexOf("$t('estado')");
+        expect(cat).toBeGreaterThan(-1);
+        expect(cat).toBeLessThan(pri);
+        expect(pri).toBeLessThan(sub);
+        expect(sub).toBeLessThan(cre);
+        expect(cre).toBeLessThan(upd);
+        expect(upd).toBeLessThan(est);
+    });
+
+    it('shows category and priority cells before id and subject link', () => {
+        const catCell = viewSource.indexOf('ticketCategoryLabel(ticket.type)');
+        const priCell = viewSource.indexOf('priorityLabel(ticket.priority)');
+        const subjectCell = viewSource.indexOf('#{{ ticket.id }}');
+        expect(catCell).toBeGreaterThan(-1);
+        expect(catCell).toBeLessThan(priCell);
+        expect(priCell).toBeLessThan(subjectCell);
+    });
+
     it('renders tickets in table rows with title, created date, updated date and status', () => {
         expect(viewSource).toContain('<table');
         expect(viewSource).toContain('<tbody');
