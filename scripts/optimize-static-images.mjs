@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /**
  * Lossy-optimize raster assets under static/img (JPG/PNG).
+ * Carpoolear onboarding plates: resized to 1000×1000 (cover, centre) then JPEG.
  * Run before production builds when full-resolution sources exist locally.
  */
 import fs from 'fs';
@@ -11,6 +12,19 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..', 'static', 'img');
 
 const EXT = new Set(['.jpg', '.jpeg', '.png']);
+
+const ONBOARDING_PLACA_SIZE = 1000;
+
+function isCarpoolearOnboardingPlaca(filePath) {
+    const rel = path.relative(ROOT, filePath);
+    const parts = rel.split(path.sep);
+    const folder = parts.length >= 2 ? parts[0].toLowerCase() : '';
+    const base = path.basename(filePath).toLowerCase();
+    return (
+        folder === 'onboarding'
+        && /^carpoolear_placa\d+\.jpe?g$/.test(base)
+    );
+}
 
 async function main() {
     let sharp;
@@ -50,6 +64,20 @@ async function main() {
         const buf = fs.readFileSync(filePath);
         const ext = path.extname(filePath).toLowerCase();
         let out;
+
+        if (isCarpoolearOnboardingPlaca(filePath)) {
+            out = await sharp(buf)
+                .resize(ONBOARDING_PLACA_SIZE, ONBOARDING_PLACA_SIZE, {
+                    fit: 'cover',
+                    position: 'centre'
+                })
+                .jpeg({ quality: 82, mozjpeg: true })
+                .toBuffer();
+            fs.writeFileSync(filePath, out);
+            saved += buf.length - out.length;
+            continue;
+        }
+
         if (ext === '.jpg' || ext === '.jpeg') {
             out = await sharp(buf)
                 .jpeg({ quality: 82, mozjpeg: true })
