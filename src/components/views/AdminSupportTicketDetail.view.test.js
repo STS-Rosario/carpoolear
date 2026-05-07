@@ -36,8 +36,12 @@ describe('AdminSupportTicketDetail view', () => {
 
     it('shows admin reply title and spacing classes around editor and actions', () => {
         expect(viewSource).toContain("{{ $t('respuestaCarpoolear') }}");
+        expect(viewSource).toContain('admin-reply-header');
+        expect(viewSource).toContain("{{ $t('responderConPlantilla') }}");
         expect(viewSource).toContain('admin-reply-box');
         expect(viewSource).toContain('reply-actions');
+        expect(viewSource).toContain('reply-actions-left');
+        expect(viewSource).toContain('reply-actions-right');
         expect(viewSource).toContain('reply-action-btn');
         expect(viewSource).toContain('respuestaEnviada');
         expect(viewSource).toContain('.then(() => this.refresh())');
@@ -58,7 +62,6 @@ describe('AdminSupportTicketDetail view', () => {
     });
 
     it('offers reply template modal with search and pick handler', () => {
-        expect(viewSource).toContain("{{ $t('responderConPlantilla') }}");
         expect(viewSource).toContain("{{ $t('plantillasModalTitulo') }}");
         expect(viewSource).toContain(":placeholder=\"$t('buscarPlantillasPlaceholder')\"");
         expect(viewSource).toContain('filteredReplyTemplates');
@@ -69,5 +72,12 @@ describe('AdminSupportTicketDetail view', () => {
     it('lets admins click template name to append body', () => {
         expect(viewSource).toContain('reply-template-modal-pick');
         expect(viewSource).toContain('@click="pickReplyTemplate(t)"');
+    });
+
+    it('shows reopen only for closed tickets and hides close when already closed', () => {
+        expect(viewSource).toContain("v-if=\"showReopenTicketButton\"");
+        expect(viewSource).toContain("v-if=\"showCloseTicketButton\"");
+        expect(viewSource).toContain("return this.ticket && this.ticket.status === 'Cerrado'");
+        expect(viewSource).toContain("return this.ticket && this.ticket.status !== 'Cerrado'");
     });
 });
