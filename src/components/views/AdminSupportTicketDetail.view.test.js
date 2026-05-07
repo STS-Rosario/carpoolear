@@ -42,4 +42,15 @@ describe('AdminSupportTicketDetail view', () => {
         expect(viewSource).toContain('respuestaEnviada');
         expect(viewSource).toContain('.then(() => this.refresh())');
     });
+
+    it('interpolates ticket user variables before sending admin reply', () => {
+        expect(viewSource).toContain('interpolateSupportTemplateVariables');
+        expect(viewSource).toContain('adminReply(this.id');
+    });
+
+    it('can append interpolated template markdown into the reply editor', () => {
+        expect(viewSource).toContain('appendInterpolatedTemplateToReply');
+        expect(viewSource).toContain("invoke('getMarkdown')");
+        expect(viewSource).toContain("invoke('setMarkdown'");
+    });
 });
