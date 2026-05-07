@@ -46,21 +46,62 @@
             <input ref="attachmentInput" class="mtop-10" type="file" accept="image/*" multiple @change="onAttachments" />
             <div class="reply-actions">
                 <button class="btn btn-primary reply-action-btn" @click="sendReply">{{ $t('responder') }}</button>
+                <button type="button" class="btn btn-default reply-action-btn" @click="openReplyTemplateModal">
+                    {{ $t('responderConPlantilla') }}
+                </button>
                 <button class="btn btn-default reply-action-btn" @click="resolveTicket">{{ $t('marcarResuelto') }}</button>
                 <button class="btn btn-default reply-action-btn" @click="closeTicket">{{ $t('cerrarTicket') }}</button>
                 <button class="btn btn-default reply-action-btn" @click="reopenTicket">{{ $t('reabrirTicket') }}</button>
+            </div>
+        </div>
+
+        <div
+            v-if="replyTemplateModalOpen"
+            class="reply-template-modal-backdrop"
+            @click.self="closeReplyTemplateModal"
+        >
+            <div class="reply-template-modal-dialog" @click.stop>
+                <div class="reply-template-modal-header">
+                    <strong>{{ $t('plantillasModalTitulo') }}</strong>
+                    <button type="button" class="close reply-template-modal-close" @click="closeReplyTemplateModal">
+                        &times;
+                    </button>
+                </div>
+                <input
+                    v-model="replyTemplateSearch"
+                    class="form-control mtop-10"
+                    type="search"
+                    :placeholder="$t('buscarPlantillasPlaceholder')"
+                />
+                <p v-if="replyTemplatesLoading" class="mtop-10">{{ $t('cargandoNotificaciones') }}</p>
+                <p v-else-if="replyTemplatesLoadError" class="alert alert-danger mtop-10">{{ replyTemplatesLoadError }}</p>
+                <ul v-else class="list-group reply-template-modal-list mtop-10">
+                    <li
+                        v-for="t in filteredReplyTemplates"
+                        :key="t.id"
+                        class="list-group-item reply-template-modal-item"
+                        @click="pickReplyTemplate(t)"
+                    >
+                        <div class="reply-template-modal-name">{{ t.name }}</div>
+                        <div v-if="t.short_description" class="small text-muted">{{ t.short_description }}</div>
+                    </li>
+                </ul>
+                <button type="button" class="btn btn-default mtop-10" @click="closeReplyTemplateModal">
+                    {{ $t('cerrarModal') }}
+                </button>
             </div>
         </div>
     </AdminLayout>
 </template>
 
 <script>
-import { mapActions } from 'pinia';
+import { mapActions, mapState } from 'pinia';
 import ToastUiEditor from '../elements/ToastUiEditor.vue';
 import AdminLayout from '../layouts/AdminLayout.vue';
 import { markdownToHtml } from '../../services/markdown';
 import { interpolateSupportTemplateVariables } from '../../utils/supportTemplateInterpolation';
 import { useTicketsStore } from '../../stores/tickets';
+import { useReplyTemplatesStore } from '../../stores/replyTemplates';
 import dialogs from '../../services/dialogs.js';
 import dayjs from '../../dayjs';
 
@@ -103,12 +144,32 @@ export default {
                 usageStatistics: false,
                 hideModeSwitch: true,
                 toolbarItems: [['bold', 'italic', 'strike'], ['ul', 'ol']]
-            }
+            },
+            replyTemplateModalOpen: false,
+            replyTemplateSearch: '',
+            replyTemplatesLoading: false,
+            replyTemplatesLoadError: ''
         };
     },
     computed: {
         ticketUserForTemplates() {
             return this.ticket && this.ticket.user ? this.ticket.user : null;
+        },
+        ...mapState(useReplyTemplatesStore, {
+            replyTemplatesAdminList: 'adminList'
+        }),
+        filteredReplyTemplates() {
+            const list = Array.isArray(this.replyTemplatesAdminList) ? this.replyTemplatesAdminList : [];
+            const q = (this.replyTemplateSearch || '').trim().toLowerCase();
+            if (!q) {
+                return list;
+            }
+            return list.filter((t) => {
+                const blob = [t.name, t.short_description, t.body_markdown]
+                    .map((x) => String(x || '').toLowerCase())
+                    .join('\n');
+                return blob.includes(q);
+            });
         }
     },
     methods: {
@@ -120,6 +181,9 @@ export default {
             adminClose: 'adminClose',
             adminReopen: 'adminReopen',
             adminSetInternalNote: 'adminSetInternalNote'
+        }),
+        ...mapActions(useReplyTemplatesStore, {
+            fetchReplyTemplatesAdminList: 'fetchAdminList'
         }),
         capitalizeFirst(value) {
             if (!value) return '';
@@ -173,6 +237,26 @@ export default {
                 this.ticket = data;
                 this.internalNote = data.internal_note_markdown || '';
             });
+        },
+        openReplyTemplateModal() {
+            this.replyTemplateModalOpen = true;
+            this.replyTemplateSearch = '';
+            this.replyTemplatesLoadError = '';
+            this.replyTemplatesLoading = true;
+            this.fetchReplyTemplatesAdminList()
+                .catch(() => {
+                    this.replyTemplatesLoadError = this.$t('errorCargandoPlantillasRespuestas');
+                })
+                .finally(() => {
+                    this.replyTemplatesLoading = false;
+                });
+        },
+        closeReplyTemplateModal() {
+            this.replyTemplateModalOpen = false;
+        },
+        pickReplyTemplate(row) {
+            this.appendInterpolatedTemplateToReply(row.body_markdown);
+            this.closeReplyTemplateModal();
         },
         appendInterpolatedTemplateToReply(templateMarkdown) {
             if (templateMarkdown == null || String(templateMarkdown).trim() === '') return;
@@ -267,5 +351,57 @@ export default {
 .reply-action-btn {
     margin-right: 8px;
     margin-bottom: 8px;
+}
+
+.reply-template-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1050;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 40px 16px;
+    overflow-y: auto;
+}
+
+.reply-template-modal-dialog {
+    background: #fff;
+    border-radius: 4px;
+    max-width: 520px;
+    width: 100%;
+    padding: 16px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+}
+
+.reply-template-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.reply-template-modal-close {
+    background: transparent;
+    border: none;
+    font-size: 22px;
+    line-height: 1;
+    padding: 0 6px;
+}
+
+.reply-template-modal-list {
+    max-height: 320px;
+    overflow-y: auto;
+}
+
+.reply-template-modal-item {
+    cursor: pointer;
+}
+
+.reply-template-modal-item:hover {
+    background-color: #f5f5f5;
+}
+
+.reply-template-modal-name {
+    font-weight: 600;
 }
 </style>
