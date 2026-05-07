@@ -243,11 +243,14 @@ export default {
             return (this.ticket && this.ticket.user && this.ticket.user.name) || this.$t('usuario');
         },
         adminReplyAuthorLabel(reply) {
-            const u = reply.user;
-            if (!u || u.name == null || String(u.name).trim() === '') {
+            const name = reply.user?.name != null ? String(reply.user.name).trim() : '';
+            if (!name) {
                 return this.$t('equipoCarpoolear');
             }
-            return this.$t('equipoCarpoolearAutorAdmin', { name: u.name, id: u.id });
+            return this.$t('equipoCarpoolearAutorAdmin', {
+                name,
+                id: reply.user?.id ?? ''
+            });
         },
         canLinkUserProfile() {
             return Boolean(this.ticket && this.ticket.user && this.ticket.user.id);
