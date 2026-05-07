@@ -64,7 +64,7 @@
                             </template>
                             <button
                                 type="button"
-                                class="btn btn-primary"
+                                class="btn btn-primary admin-user-migration-new__submit"
                                 :disabled="migrateDisabled || migrating"
                                 @click="onMigrateClick"
                             >
@@ -200,5 +200,9 @@ export default {
 
 .admin-user-migration-new__preview {
     margin-top: 16px;
+}
+
+.admin-user-migration-new__submit {
+    margin-top: 24px;
 }
 </style>
