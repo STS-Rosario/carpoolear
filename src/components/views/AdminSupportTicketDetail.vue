@@ -59,6 +59,7 @@ import { mapActions } from 'pinia';
 import ToastUiEditor from '../elements/ToastUiEditor.vue';
 import AdminLayout from '../layouts/AdminLayout.vue';
 import { markdownToHtml } from '../../services/markdown';
+import { interpolateSupportTemplateVariables } from '../../utils/supportTemplateInterpolation';
 import { useTicketsStore } from '../../stores/tickets';
 import dialogs from '../../services/dialogs.js';
 import dayjs from '../../dayjs';
@@ -104,6 +105,11 @@ export default {
                 toolbarItems: [['bold', 'italic', 'strike'], ['ul', 'ol']]
             }
         };
+    },
+    computed: {
+        ticketUserForTemplates() {
+            return this.ticket && this.ticket.user ? this.ticket.user : null;
+        }
     },
     methods: {
         markdownToHtml,
@@ -168,9 +174,18 @@ export default {
                 this.internalNote = data.internal_note_markdown || '';
             });
         },
+        appendInterpolatedTemplateToReply(templateMarkdown) {
+            const editor = this.$refs.replyEditor;
+            if (!editor || typeof editor.invoke !== 'function') return;
+            const chunk = interpolateSupportTemplateVariables(templateMarkdown, this.ticketUserForTemplates);
+            const current = editor.invoke('getMarkdown') || '';
+            const sep = current.trim() ? '\n\n' : '';
+            editor.invoke('setMarkdown', current + sep + chunk);
+        },
         sendReply() {
             const markdown = this.$refs.replyEditor.invoke('getMarkdown');
-            return this.adminReply(this.id, { message_markdown: markdown, attachments: this.attachments })
+            const messageMarkdown = interpolateSupportTemplateVariables(markdown, this.ticketUserForTemplates);
+            return this.adminReply(this.id, { message_markdown: messageMarkdown, attachments: this.attachments })
                 .then(() => this.refresh())
                 .then(() => {
                     dialogs.message(this.$t('respuestaEnviada'), { estado: 'success', duration: 2 });
