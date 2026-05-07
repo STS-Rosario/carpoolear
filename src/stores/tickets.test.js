@@ -67,4 +67,19 @@ describe('tickets store', () => {
         expect(created).toEqual({ id: 88, user_id: 45, type: 'account_verification' });
         expect(apiMock.adminCreate).toHaveBeenCalledTimes(1);
     });
+
+    it('createTicket unwraps Laravel data envelope so router receives ticket id', async () => {
+        const { useTicketsStore } = await import('./tickets');
+        apiMock.create.mockResolvedValue({ data: { id: 42, subject: 'Same subject', type: 'contact' } });
+
+        const store = useTicketsStore();
+        const ticket = await store.createTicket({
+            type: 'contact',
+            subject: 'Same subject',
+            message_markdown: 'Same body'
+        });
+
+        expect(ticket.id).toBe(42);
+        expect(apiMock.create).toHaveBeenCalledTimes(1);
+    });
 });
