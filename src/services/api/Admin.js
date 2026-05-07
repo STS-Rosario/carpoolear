@@ -115,6 +115,14 @@ class AdminApi extends TaggedApi {
             {}
         );
     }
+
+    getUserMigrations(params = {}) {
+        return this.get('/api/admin/user-migrations', params);
+    }
+
+    createUserMigration(data) {
+        return this.post('/api/admin/user-migrations', data);
+    }
 }
 
 export { AdminApi as default };
