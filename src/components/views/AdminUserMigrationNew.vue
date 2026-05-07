@@ -52,6 +52,14 @@
                                         <p><strong>ID:</strong> {{ card.user.id }}</p>
                                         <p><strong>{{ $t('nombre') }}:</strong> {{ card.user.name || '—' }}</p>
                                         <p>
+                                            <strong>{{ $t('email') }}:</strong>
+                                            {{ card.user.email || '—' }}
+                                        </p>
+                                        <p>
+                                            <strong>{{ $t('usuarioDesde') }}:</strong>
+                                            {{ formatJoinDate(card.user.created_at) }}
+                                        </p>
+                                        <p>
                                             <strong>{{ $t('calificacionesPositivas') }}:</strong>
                                             {{ Number(card.user.positive_ratings || 0) }}
                                         </p>
@@ -83,6 +91,7 @@ import AdminLayout from '../layouts/AdminLayout.vue';
 import UserSearchAutocomplete from '../UserSearchAutocomplete.vue';
 import { AdminApi } from '../../services/api';
 import dialogs from '../../services/dialogs.js';
+import dayjs from '../../dayjs';
 
 export default {
     name: 'admin-user-migration-new',
@@ -128,6 +137,11 @@ export default {
             const img = (user.image || '').toString().trim();
             if (!img) return false;
             return img !== 'default.png';
+        },
+        formatJoinDate(iso) {
+            if (!iso) return '—';
+            const d = dayjs(iso);
+            return d.isValid() ? d.format('LL') : '—';
         },
         onMigrateClick() {
             if (!this.previewReady) return;

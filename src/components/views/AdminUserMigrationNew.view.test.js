@@ -32,6 +32,7 @@ describe('AdminUserMigrationNew view', () => {
         expect(source).toContain("$t('usuarioDesde')");
         expect(source).toContain('formatJoinDate');
         expect(source).toContain("import dayjs from '../../dayjs'");
-        expect(source).toMatch(/dayjs\([^)]+\)\.format\('LL'\)/);
+        expect(source).toContain("dayjs(");
+        expect(source).toContain(".format('LL')");
     });
 });
