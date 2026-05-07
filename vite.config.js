@@ -2,17 +2,49 @@ import { defineConfig, loadEnv } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import eslint from 'vite-plugin-eslint';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
+import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+/** Remove design-source files from the emitted bundle (publicDir has no exclude hook). */
+function stripPsdFromOutDir(outDirAbs) {
+    return {
+        name: 'strip-psd-from-outdir',
+        apply: 'build',
+        closeBundle() {
+            function walk(dir) {
+                let entries = [];
+                try {
+                    entries = fs.readdirSync(dir, { withFileTypes: true });
+                } catch {
+                    return;
+                }
+                entries.forEach((dirent) => {
+                    const full = path.join(dir, dirent.name);
+                    if (dirent.isDirectory()) {
+                        walk(full);
+                    } else if (dirent.name.toLowerCase().endsWith('.psd')) {
+                        try {
+                            fs.unlinkSync(full);
+                        } catch {
+                            /* ignore */
+                        }
+                    }
+                });
+            }
+            walk(outDirAbs);
+        }
+    };
+}
 
 const target = process.env.TARGET_APP || 'default';
 
 /**
  * Branding assets: repo folder is static/img/; Vite publicDir copies contents to out root → URLs are {base}img/...
  * Movilizame `serve` sets TARGET_APP to "default" when unset; .env uses VITE_TARGET_APP for the real app.
- * Prefer an explicit non-default shell TARGET_APP (e.g. apalancar build) over VITE_TARGET_APP.
+ * Prefer an explicit non-default shell TARGET_APP over VITE_TARGET_APP when set.
  */
 function resolveBrandingTarget(env) {
     const shell = process.env.TARGET_APP;
@@ -84,6 +116,8 @@ export default defineConfig(({ mode }) => {
         }
     }
 
+    const outDirAbs = path.resolve(__dirname, `dist/${target}/${nodeEnv}/www`);
+
     return {
         base: routeBase === '/' ? '/' : routeBase,
         root: '.',
@@ -103,7 +137,8 @@ export default defineConfig(({ mode }) => {
                         dest: 'static'
                     }
                 ]
-            })
+            }),
+            stripPsdFromOutDir(outDirAbs)
         ],
         resolve: {
             extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue', '.css'],
@@ -165,7 +200,8 @@ export default defineConfig(({ mode }) => {
         build: {
             outDir: `dist/${target}/${nodeEnv}/www`,
             assetsDir: 'static',
-            sourcemap: true,
+            // Production: omit .js.map (large); dev/other modes keep maps for debugging.
+            sourcemap: mode !== 'production',
             minify: 'terser',
             rollupOptions: {
                 input: {

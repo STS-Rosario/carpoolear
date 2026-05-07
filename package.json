@@ -32,7 +32,8 @@
     "test:frontend:screenshots:debug": "npx playwright test --project=frontend e2e-frontend/screenshots.spec.js --workers=1 --headed --max-failures=1",
     "test:frontend:ui": "npx playwright test --project=frontend --ui",
     "test:unit": "vitest",
-    "fix:capacitor:cordova-gradle": "node scripts/fix-capacitor-cordova-gradle.js"
+    "fix:capacitor:cordova-gradle": "node scripts/fix-capacitor-cordova-gradle.js",
+    "optimize:static-images": "node scripts/optimize-static-images.mjs"
   },
   "dependencies": {
     "@capacitor/android": "^7.4.3",
@@ -113,6 +114,7 @@
     "postcss-loader": "^2.1.6",
     "postcss-preset-env": "^6.7.0",
     "semver": "^5.3.0",
+    "sharp": "^0.34.5",
     "shelljs": "^0.10.0",
     "terser": "^5.46.1",
     "vite": "^8.0.8",
