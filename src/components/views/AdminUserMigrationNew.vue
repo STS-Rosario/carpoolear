@@ -38,9 +38,15 @@
                             <p class="lead">{{ $t('vasAMigrarLosDatosDeEsteUsuario') }}</p>
                             <div class="media user-migration-card">
                                 <div
+                                    v-if="hasUserImage(userToRemove)"
                                     class="media-left user-migration-card__avatar"
                                     v-imgSrc:profile="userToRemove.image"
                                 ></div>
+                                <div
+                                    v-else
+                                    class="media-left user-migration-card__avatar user-migration-card__avatar--placeholder"
+                                    :aria-label="$t('sinFoto')"
+                                >?</div>
                                 <div class="media-body">
                                     <p><strong>ID:</strong> {{ userToRemove.id }}</p>
                                     <p><strong>{{ $t('nombre') }}:</strong> {{ userToRemove.name || '—' }}</p>
@@ -57,9 +63,15 @@
                             <p class="lead">{{ $t('yLosVasAJuntarConLosDeEsteUsuario') }}</p>
                             <div class="media user-migration-card">
                                 <div
+                                    v-if="hasUserImage(userToKeep)"
                                     class="media-left user-migration-card__avatar"
                                     v-imgSrc:profile="userToKeep.image"
                                 ></div>
+                                <div
+                                    v-else
+                                    class="media-left user-migration-card__avatar user-migration-card__avatar--placeholder"
+                                    :aria-label="$t('sinFoto')"
+                                >?</div>
                                 <div class="media-body">
                                     <p><strong>ID:</strong> {{ userToKeep.id }}</p>
                                     <p><strong>{{ $t('nombre') }}:</strong> {{ userToKeep.name || '—' }}</p>
@@ -120,6 +132,12 @@ export default {
         }
     },
     methods: {
+        hasUserImage(user) {
+            if (!user) return false;
+            const img = (user.image || '').toString().trim();
+            if (!img) return false;
+            return img !== 'default.png';
+        },
         onMigrateClick() {
             if (!this.previewReady) return;
             if (!window.confirm(this.$t('confirmacionMigracionUsuarios'))) {
@@ -166,11 +184,27 @@ export default {
 }
 
 .user-migration-card__avatar {
-    width: 56px;
-    height: 56px;
+    width: 100px;
+    height: 100px;
+    max-width: 100px;
+    max-height: 100px;
     border-radius: 50%;
     overflow: hidden;
     background: #eee;
+    background-size: cover;
+    background-position: center;
+}
+
+.user-migration-card__avatar--placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1;
+    background: #f2f2f2;
+    border: 1px solid #ddd;
 }
 
 .admin-user-migration-new__preview {
