@@ -175,6 +175,7 @@ export default {
             });
         },
         appendInterpolatedTemplateToReply(templateMarkdown) {
+            if (templateMarkdown == null || String(templateMarkdown).trim() === '') return;
             const editor = this.$refs.replyEditor;
             if (!editor || typeof editor.invoke !== 'function') return;
             const chunk = interpolateSupportTemplateVariables(templateMarkdown, this.ticketUserForTemplates);
