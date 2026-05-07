@@ -13,6 +13,8 @@
             <table class="table table-hover support-tickets-table">
                 <thead>
                     <tr>
+                        <th>{{ capitalizeFirst($t('categoriaTicket')) }}</th>
+                        <th>{{ capitalizeFirst($t('prioridad')) }}</th>
                         <th>{{ capitalizeFirst($t('asuntoTicket')) }}</th>
                         <th>{{ capitalizeFirst($t('creado')) }}</th>
                         <th>{{ capitalizeFirst($t('actualizado')) }}</th>
@@ -21,6 +23,8 @@
                 </thead>
                 <tbody>
                     <tr v-for="ticket in safeTickets" :key="ticket.id">
+                        <td>{{ ticketCategoryLabel(ticket.type) }}</td>
+                        <td><span :class="priorityClass(ticket.priority)">{{ priorityLabel(ticket.priority) }}</span></td>
                         <td>
                             <router-link :to="{ name: 'ticket-detail', params: { id: ticket.id } }">
                                 #{{ ticket.id }} - {{ ticket.subject }}
@@ -42,6 +46,7 @@
 import { mapActions, mapState } from 'pinia';
 import { useTicketsStore } from '../../stores/tickets';
 import dayjs from '../../dayjs';
+import { TICKET_TYPE_LABEL_KEYS } from '../../utils/supportTicketLabels';
 
 const STATUS_LABEL_KEYS = {
     Open: 'estadoPendiente',
@@ -49,6 +54,12 @@ const STATUS_LABEL_KEYS = {
     'En revision': 'estadoPendienteRevision',
     Resuelto: 'estadoAprobado',
     Cerrado: 'estadoCerrado'
+};
+
+const PRIORITY_LABEL_KEYS = {
+    low: 'prioridadBaja',
+    normal: 'prioridadNormal',
+    high: 'prioridadAlta'
 };
 
 export default {
@@ -89,6 +100,24 @@ export default {
         capitalizeFirst(value) {
             if (!value) return '';
             return value.charAt(0).toUpperCase() + value.slice(1);
+        },
+        ticketCategoryLabel(type) {
+            const key = TICKET_TYPE_LABEL_KEYS[type];
+            if (key) return this.$t(key);
+            return this.capitalizeFirst(type || '');
+        },
+        priorityLabel(priority) {
+            const key = (priority || '').toLowerCase();
+            if (PRIORITY_LABEL_KEYS[key]) return this.$t(PRIORITY_LABEL_KEYS[key]);
+            return this.capitalizeFirst(priority || '');
+        },
+        priorityClass(priority) {
+            const key = (priority || '').toLowerCase();
+            return {
+                high: 'label label-danger',
+                normal: 'label label-info',
+                low: 'label label-default'
+            }[key] || 'label label-default';
         },
         statusClass(status) {
             return this.statusClassMap[status] || 'label label-info';
