@@ -21,6 +21,9 @@
                     <router-link :to="{ name: 'admin-users' }">{{ $t('adminNavUsuarios') }}</router-link>
                 </li>
                 <li>
+                    <router-link :to="{ name: 'admin-user-migrations' }">{{ $t('migrarUsuarios') }}</router-link>
+                </li>
+                <li>
                     <router-link :to="{ name: 'admin-users-delete-list' }">{{ $t('pedidosDeEliminacionDeCuenta') }}</router-link>
                 </li>
                 <li>
