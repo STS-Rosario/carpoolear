@@ -16,4 +16,13 @@ describe('admin support routes', () => {
         expect(routesSource).toContain("name: 'admin-support-tickets'");
         expect(routesSource).toContain("path: '/admin/support-tickets/new'");
     });
+
+    it('defines reply template admin routes under support tickets', () => {
+        expect(routesSource).toContain("path: '/admin/support-tickets/response-templates'");
+        expect(routesSource).toContain("name: 'admin-support-reply-templates'");
+        expect(routesSource).toContain("path: '/admin/support-tickets/response-templates/new'");
+        expect(routesSource).toContain("name: 'admin-support-reply-template-new'");
+        expect(routesSource).toContain("name: 'admin-support-reply-template-view'");
+        expect(routesSource).toContain("name: 'admin-support-reply-template-edit'");
+    });
 });
