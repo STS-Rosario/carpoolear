@@ -76,15 +76,20 @@
                 <p v-if="replyTemplatesLoading" class="mtop-10">{{ $t('cargandoNotificaciones') }}</p>
                 <p v-else-if="replyTemplatesLoadError" class="alert alert-danger mtop-10">{{ replyTemplatesLoadError }}</p>
                 <ul v-else class="list-group reply-template-modal-list mtop-10">
-                    <li
-                        v-for="t in filteredReplyTemplates"
-                        :key="t.id"
-                        class="list-group-item reply-template-modal-item"
-                        @click="pickReplyTemplate(t)"
-                    >
-                        <div class="reply-template-modal-name">{{ t.name }}</div>
-                        <div v-if="t.short_description" class="small text-muted">{{ t.short_description }}</div>
-                    </li>
+                    <template v-if="!filteredReplyTemplates.length">
+                        <li class="list-group-item">{{ $t('sinPlantillasRespuestas') }}</li>
+                    </template>
+                    <template v-else>
+                        <li
+                            v-for="t in filteredReplyTemplates"
+                            :key="t.id"
+                            class="list-group-item reply-template-modal-item"
+                            @click="pickReplyTemplate(t)"
+                        >
+                            <div class="reply-template-modal-name">{{ t.name }}</div>
+                            <div v-if="t.short_description" class="small text-muted">{{ t.short_description }}</div>
+                        </li>
+                    </template>
                 </ul>
                 <button type="button" class="btn btn-default mtop-10" @click="closeReplyTemplateModal">
                     {{ $t('cerrarModal') }}
