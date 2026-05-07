@@ -15,4 +15,15 @@ describe('AdminUserMigrationNew view', () => {
         expect(source).toContain("$t('yLosVasAJuntarConLosDeEsteUsuario')");
         expect(source).toContain("name: 'admin-users-user'");
     });
+
+    it('falls back to a question-mark placeholder when user has no image', () => {
+        expect(source).toContain('hasUserImage');
+        expect(source).toContain('user-migration-card__avatar--placeholder');
+        expect(source).toContain('?');
+    });
+
+    it('caps avatar size to 100x100px', () => {
+        expect(source).toMatch(/\.user-migration-card__avatar\s*\{[^}]*width:\s*100px/);
+        expect(source).toMatch(/\.user-migration-card__avatar\s*\{[^}]*height:\s*100px/);
+    });
 });
