@@ -10,31 +10,31 @@
         <p v-if="!safeTickets.length" class="alert alert-warning">{{ $t('noHayTicketsUsuarioMesaAyuda') }}</p>
 
         <div v-else class="table-responsive">
-            <table class="table table-hover support-tickets-table">
+            <table class="table table-hover support-tickets-table support-tickets-table--compact">
                 <thead>
                     <tr>
-                        <th>{{ capitalizeFirst($t('categoriaTicket')) }}</th>
-                        <th>{{ capitalizeFirst($t('prioridad')) }}</th>
-                        <th>{{ capitalizeFirst($t('asuntoTicket')) }}</th>
-                        <th>{{ capitalizeFirst($t('creado')) }}</th>
-                        <th>{{ capitalizeFirst($t('actualizado')) }}</th>
-                        <th>{{ capitalizeFirst($t('estado')) }}</th>
+                        <th class="support-tickets-table__subject">{{ capitalizeFirst($t('asuntoTicket')) }}</th>
+                        <th class="support-tickets-table__narrow">{{ capitalizeFirst($t('prioridad')) }}</th>
+                        <th class="support-tickets-table__narrow">{{ capitalizeFirst($t('creado')) }}</th>
+                        <th class="support-tickets-table__narrow">{{ capitalizeFirst($t('actualizado')) }}</th>
+                        <th class="support-tickets-table__narrow">{{ capitalizeFirst($t('estado')) }}</th>
+                        <th class="support-tickets-table__narrow">{{ capitalizeFirst($t('categoriaTicket')) }}</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="ticket in safeTickets" :key="ticket.id">
-                        <td>{{ ticketCategoryLabel(ticket.type) }}</td>
-                        <td><span :class="priorityClass(ticket.priority)">{{ priorityLabel(ticket.priority) }}</span></td>
-                        <td>
+                        <td class="support-tickets-table__subject">
                             <router-link :to="{ name: 'ticket-detail', params: { id: ticket.id } }">
                                 #{{ ticket.id }} - {{ ticket.subject }}
                             </router-link>
                         </td>
-                        <td :title="fullDate(ticket.created_at)">{{ relativeDate(ticket.created_at) }}</td>
-                        <td :title="fullDate(ticket.updated_at)">{{ relativeDate(ticket.updated_at) }}</td>
-                        <td>
+                        <td class="support-tickets-table__narrow"><span :class="priorityClass(ticket.priority)">{{ priorityLabel(ticket.priority) }}</span></td>
+                        <td class="support-tickets-table__narrow" :title="fullDate(ticket.created_at)">{{ relativeDate(ticket.created_at) }}</td>
+                        <td class="support-tickets-table__narrow" :title="fullDate(ticket.updated_at)">{{ relativeDate(ticket.updated_at) }}</td>
+                        <td class="support-tickets-table__narrow">
                             <span :class="statusClass(ticket.status)">{{ statusLabel(ticket.status) }}</span>
                         </td>
+                        <td class="support-tickets-table__narrow">{{ ticketCategoryLabel(ticket.type) }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -143,5 +143,25 @@ export default {
 
 .support-tickets-table tbody tr:nth-child(odd) {
     background-color: #fafafa;
+}
+
+.support-tickets-table--compact {
+    table-layout: fixed;
+    width: 100%;
+}
+
+.support-tickets-table__narrow {
+    white-space: nowrap;
+    width: 1%;
+    padding-left: 6px;
+    padding-right: 6px;
+    vertical-align: middle;
+}
+
+.support-tickets-table__subject {
+    width: 40%;
+    min-width: 120px;
+    word-break: break-word;
+    vertical-align: middle;
 }
 </style>
