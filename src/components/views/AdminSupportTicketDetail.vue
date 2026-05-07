@@ -196,11 +196,14 @@ export default {
                 return blob.includes(q);
             });
         },
-        showReopenTicketButton() {
+        isTicketClosed() {
             return this.ticket && this.ticket.status === 'Cerrado';
         },
+        showReopenTicketButton() {
+            return this.isTicketClosed;
+        },
         showCloseTicketButton() {
-            return this.ticket && this.ticket.status !== 'Cerrado';
+            return this.ticket && !this.isTicketClosed;
         }
     },
     methods: {
