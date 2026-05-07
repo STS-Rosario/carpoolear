@@ -62,7 +62,7 @@
         >
             <div class="reply-template-modal-dialog" @click.stop>
                 <div class="reply-template-modal-header">
-                    <strong>{{ $t('plantillasModalTitulo') }}</strong>
+                    <strong class="reply-template-modal-title">{{ $t('plantillasModalTitulo') }}</strong>
                     <button type="button" class="close reply-template-modal-close" @click="closeReplyTemplateModal">
                         &times;
                     </button>
@@ -86,7 +86,13 @@
                             class="list-group-item reply-template-modal-item"
                             @click="pickReplyTemplate(t)"
                         >
-                            <div class="reply-template-modal-name">{{ t.name }}</div>
+                            <button
+                                type="button"
+                                class="reply-template-modal-pick"
+                                @click="pickReplyTemplate(t)"
+                            >
+                                <span class="reply-template-modal-name">{{ t.name }}</span>
+                            </button>
                             <div v-if="t.short_description" class="small text-muted">{{ t.short_description }}</div>
                         </li>
                     </template>
@@ -383,6 +389,13 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding-bottom: 10px;
+}
+
+.reply-template-modal-title {
+    font-size: 20px;
+    line-height: 1.2;
+    color: #222;
 }
 
 .reply-template-modal-close {
@@ -408,5 +421,15 @@ export default {
 
 .reply-template-modal-name {
     font-weight: 600;
+    color: #222;
+}
+
+.reply-template-modal-pick {
+    display: block;
+    width: 100%;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    text-align: left;
 }
 </style>
