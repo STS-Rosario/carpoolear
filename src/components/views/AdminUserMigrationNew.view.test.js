@@ -1,0 +1,18 @@
+import { describe, it, expect } from 'vitest';
+import fs from 'node:fs';
+import path from 'node:path';
+
+const viewPath = path.resolve(__dirname, 'AdminUserMigrationNew.vue');
+const source = fs.readFileSync(viewPath, 'utf8');
+
+describe('AdminUserMigrationNew view', () => {
+    it('uses two UserSearchAutocomplete and confirm before createUserMigration', () => {
+        expect(source).toContain('UserSearchAutocomplete');
+        expect(source).toContain('createUserMigration');
+        expect(source).toContain('window.confirm');
+        expect(source).toContain("$t('confirmacionMigracionUsuarios')");
+        expect(source).toContain("$t('vasAMigrarLosDatosDeEsteUsuario')");
+        expect(source).toContain("$t('yLosVasAJuntarConLosDeEsteUsuario')");
+        expect(source).toContain("name: 'admin-users-user'");
+    });
+});

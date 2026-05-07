@@ -33,6 +33,8 @@ const AdminManualIdentityValidations = () => import('../components/views/AdminMa
 const AdminManualIdentityValidationReview = () => import('../components/views/AdminManualIdentityValidationReview.vue');
 const AdminMpRejectedValidations = () => import('../components/views/AdminMpRejectedValidations.vue');
 const AdminMpRejectedValidationDetail = () => import('../components/views/AdminMpRejectedValidationDetail.vue');
+const AdminUserMigrationsList = () => import('../components/views/AdminUserMigrationsList.vue');
+const AdminUserMigrationNew = () => import('../components/views/AdminUserMigrationNew.vue');
 const Tickets = () => import('../components/views/Tickets.vue');
 const TicketNew = () => import('../components/views/TicketNew.vue');
 const TicketDetail = () => import('../components/views/TicketDetail.vue');
@@ -619,6 +621,42 @@ export default [
                 header: {
                     titleKey: 'adminUsers',
                     buttons: []
+                }
+            }
+        }
+    },
+    {
+        path: '/admin/user-migrations',
+        name: 'admin-user-migrations',
+        component: AdminUserMigrationsList,
+        beforeEnter: authAdmin,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'admin'
+                },
+                header: {
+                    titleKey: 'migrarUsuarios',
+                    buttons: []
+                }
+            }
+        }
+    },
+    {
+        path: '/admin/user-migrations/new',
+        name: 'admin-user-migration-new',
+        component: AdminUserMigrationNew,
+        beforeEnter: authAdmin,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'admin'
+                },
+                header: {
+                    titleKey: 'migrarUsuarios',
+                    buttons: ['back']
                 }
             }
         }
