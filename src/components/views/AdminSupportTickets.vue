@@ -16,15 +16,18 @@
             <table class="table table-hover support-tickets-table">
                 <thead>
                     <tr>
+                        <th>{{ capitalizeFirst($t('categoriaTicket')) }}</th>
+                        <th>{{ capitalizeFirst($t('prioridad')) }}</th>
                         <th>{{ capitalizeFirst($t('asuntoTicket')) }}</th>
                         <th>{{ capitalizeFirst($t('creado')) }}</th>
                         <th>{{ capitalizeFirst($t('actualizado')) }}</th>
                         <th>{{ capitalizeFirst($t('estado')) }}</th>
-                        <th>{{ capitalizeFirst($t('prioridad')) }}</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="ticket in safeTickets" :key="ticket.id">
+                        <td>{{ ticketCategoryLabel(ticket.type) }}</td>
+                        <td><span :class="priorityClass(ticket.priority)">{{ priorityLabel(ticket.priority) }}</span></td>
                         <td>
                             <router-link :to="{ name: 'admin-support-ticket-detail', params: { id: ticket.id } }">
                                 #{{ ticket.id }} - {{ ticket.subject }}
@@ -40,7 +43,6 @@
                         <td :title="fullDate(ticket.created_at)">{{ relativeDate(ticket.created_at) }}</td>
                         <td :title="fullDate(ticket.updated_at)">{{ relativeDate(ticket.updated_at) }}</td>
                         <td><span :class="statusClass(ticket.status)">{{ statusLabel(ticket.status) }}</span></td>
-                        <td><span :class="priorityClass(ticket.priority)">{{ priorityLabel(ticket.priority) }}</span></td>
                     </tr>
                 </tbody>
             </table>
@@ -53,6 +55,14 @@ import { mapActions, mapState } from 'pinia';
 import AdminLayout from '../layouts/AdminLayout.vue';
 import { useTicketsStore } from '../../stores/tickets';
 import dayjs from '../../dayjs';
+
+const TICKET_TYPE_LABEL_KEYS = {
+    bug_report: 'ticketTypeBug',
+    contact: 'ticketTypeContact',
+    feedback: 'ticketTypeSuggestion',
+    report: 'ticketTypeReport',
+    account_verification: 'ticketTypeAccountVerification'
+};
 
 const STATUS_LABEL_KEYS = {
     Open: 'estadoPendiente',
@@ -91,6 +101,11 @@ export default {
         capitalizeFirst(value) {
             if (!value) return '';
             return value.charAt(0).toUpperCase() + value.slice(1);
+        },
+        ticketCategoryLabel(type) {
+            const key = TICKET_TYPE_LABEL_KEYS[type];
+            if (key) return this.$t(key);
+            return this.capitalizeFirst(type || '');
         },
         fullDate(value) {
             if (!value) return '-';
