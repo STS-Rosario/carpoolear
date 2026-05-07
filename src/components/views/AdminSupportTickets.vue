@@ -55,14 +55,7 @@ import { mapActions, mapState } from 'pinia';
 import AdminLayout from '../layouts/AdminLayout.vue';
 import { useTicketsStore } from '../../stores/tickets';
 import dayjs from '../../dayjs';
-
-const TICKET_TYPE_LABEL_KEYS = {
-    bug_report: 'ticketTypeBug',
-    contact: 'ticketTypeContact',
-    feedback: 'ticketTypeSuggestion',
-    report: 'ticketTypeReport',
-    account_verification: 'ticketTypeAccountVerification'
-};
+import { TICKET_TYPE_LABEL_KEYS } from '../../utils/supportTicketLabels';
 
 const STATUS_LABEL_KEYS = {
     Open: 'estadoPendiente',
