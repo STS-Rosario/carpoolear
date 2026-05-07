@@ -1081,9 +1081,9 @@ const messages = {
         usuarioAMantener: 'Usuario a mantener',
         usuarioABorrar: 'Usuario a borrar',
         vasAMigrarLosDatosDeEsteUsuario:
-            'Vas a migrar los datos de este usuario:',
+            'Vas a pasar los datos de este usuario:',
         yLosVasAJuntarConLosDeEsteUsuario:
-            'Y los vas a juntar con los de este usuario:',
+            'A este otro usuario:',
         migrar: 'Migrar',
         confirmacionMigracionUsuarios:
             'Esta acción NO se puede deshacer, ¿revisaste que los usuarios estén en el orden correcto?',
@@ -2128,9 +2128,9 @@ const messages = {
         usuarioAMantener: 'Usuario a mantener',
         usuarioABorrar: 'Usuario a borrar',
         vasAMigrarLosDatosDeEsteUsuario:
-            'Vas a migrar los datos de este usuario:',
+            'Vas a pasar los datos de este usuario:',
         yLosVasAJuntarConLosDeEsteUsuario:
-            'Y los vas a juntar con los de este usuario:',
+            'A este otro usuario:',
         migrar: 'Migrar',
         confirmacionMigracionUsuarios:
             'Esta acción NO se puede deshacer, ¿revisaste que los usuarios estén en el orden correcto?',
@@ -3304,9 +3304,9 @@ const messages = {
         usuarioAMantener: 'User to keep',
         usuarioABorrar: 'User to remove',
         vasAMigrarLosDatosDeEsteUsuario:
-            'You are about to migrate this user’s data:',
+            'You are about to move this user’s data:',
         yLosVasAJuntarConLosDeEsteUsuario:
-            'And merge them with this user:',
+            'To this other user:',
         migrar: 'Migrate',
         confirmacionMigracionUsuarios:
             'This action CANNOT be undone. Did you verify the users are in the correct order?',
