@@ -55,7 +55,7 @@ import { mapActions, mapState } from 'pinia';
 import AdminLayout from '../layouts/AdminLayout.vue';
 import { useTicketsStore } from '../../stores/tickets';
 import dayjs from '../../dayjs';
-import { TICKET_TYPE_LABEL_KEYS } from '../../utils/supportTicketLabels';
+import { TICKET_TYPE_LABEL_KEYS, TICKET_PRIORITY_LABEL_KEYS } from '../../utils/supportTicketLabels';
 
 const STATUS_LABEL_KEYS = {
     Open: 'estadoPendiente',
@@ -63,12 +63,6 @@ const STATUS_LABEL_KEYS = {
     'En revision': 'estadoPendienteRevision',
     Resuelto: 'estadoAprobado',
     Cerrado: 'estadoCerrado'
-};
-
-const PRIORITY_LABEL_KEYS = {
-    low: 'prioridadBaja',
-    normal: 'prioridadNormal',
-    high: 'prioridadAlta'
 };
 
 export default {
@@ -122,7 +116,7 @@ export default {
         },
         priorityLabel(priority) {
             const key = (priority || '').toLowerCase();
-            if (PRIORITY_LABEL_KEYS[key]) return this.$t(PRIORITY_LABEL_KEYS[key]);
+            if (TICKET_PRIORITY_LABEL_KEYS[key]) return this.$t(TICKET_PRIORITY_LABEL_KEYS[key]);
             return this.capitalizeFirst(priority || '');
         },
         priorityClass(priority) {
