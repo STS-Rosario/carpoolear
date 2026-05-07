@@ -62,4 +62,9 @@ describe('AdminSupportTicketDetail view', () => {
         expect(viewSource).toContain('pickReplyTemplate');
         expect(viewSource).toContain('openReplyTemplateModal');
     });
+
+    it('lets admins click template name to append body', () => {
+        expect(viewSource).toContain('reply-template-modal-pick');
+        expect(viewSource).toContain('@click="pickReplyTemplate(t)"');
+    });
 });
