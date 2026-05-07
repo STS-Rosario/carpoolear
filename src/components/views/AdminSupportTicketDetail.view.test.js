@@ -30,7 +30,7 @@ describe('AdminSupportTicketDetail view', () => {
     it('shows Carpoolear team plus admin name and id for staff replies', () => {
         expect(viewSource).toContain('adminReplyAuthorLabel(reply)');
         expect(viewSource).toContain("{{ adminReplyAuthorLabel(reply) }}");
-        expect(viewSource).toContain("$t('equipoCarpoolearAutorAdmin'");
+        expect(viewSource).toContain("equipoCarpoolearAutorAdmin");
     });
 
     it('shows reply metadata row with relative date and full date tooltip', () => {
