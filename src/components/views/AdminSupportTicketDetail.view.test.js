@@ -36,10 +36,49 @@ describe('AdminSupportTicketDetail view', () => {
 
     it('shows admin reply title and spacing classes around editor and actions', () => {
         expect(viewSource).toContain("{{ $t('respuestaCarpoolear') }}");
+        expect(viewSource).toContain('admin-reply-header');
+        expect(viewSource).toContain("{{ $t('responderConPlantilla') }}");
         expect(viewSource).toContain('admin-reply-box');
         expect(viewSource).toContain('reply-actions');
+        expect(viewSource).toContain('reply-actions-left');
+        expect(viewSource).toContain('reply-actions-right');
         expect(viewSource).toContain('reply-action-btn');
         expect(viewSource).toContain('respuestaEnviada');
         expect(viewSource).toContain('.then(() => this.refresh())');
+    });
+
+    it('interpolates ticket user variables before sending admin reply', () => {
+        expect(viewSource).toContain('interpolateSupportTemplateVariables');
+        expect(viewSource).toContain('adminReply(this.id');
+    });
+
+    it('can append interpolated template markdown into the reply editor', () => {
+        expect(viewSource).toContain('appendInterpolatedTemplateToReply');
+        expect(viewSource).toContain("invoke('getMarkdown')");
+        expect(viewSource).toContain('replyEditorInitialValue = current + sep + chunk');
+        expect(viewSource).toContain('replyEditorKey += 1');
+        expect(viewSource).toContain(':key="replyEditorKey"');
+        expect(viewSource).toContain(':initial-value="replyEditorInitialValue"');
+    });
+
+    it('offers reply template modal with search and pick handler', () => {
+        expect(viewSource).toContain("{{ $t('plantillasModalTitulo') }}");
+        expect(viewSource).toContain(":placeholder=\"$t('buscarPlantillasPlaceholder')\"");
+        expect(viewSource).toContain('filteredReplyTemplates');
+        expect(viewSource).toContain('pickReplyTemplate');
+        expect(viewSource).toContain('openReplyTemplateModal');
+    });
+
+    it('lets admins click template name to append body', () => {
+        expect(viewSource).toContain('reply-template-modal-pick');
+        expect(viewSource).toContain('@click="pickReplyTemplate(t)"');
+    });
+
+    it('shows reopen only for closed tickets and hides close when already closed', () => {
+        expect(viewSource).toContain('v-if="showReopenTicketButton"');
+        expect(viewSource).toContain('v-if="showCloseTicketButton"');
+        expect(viewSource).toContain('isTicketClosed()');
+        expect(viewSource).toContain("return this.ticket && this.ticket.status === 'Cerrado'");
+        expect(viewSource).toContain('return this.ticket && !this.isTicketClosed');
     });
 });

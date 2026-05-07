@@ -30,4 +30,9 @@ describe('AdminSupportTickets view', () => {
         expect(viewSource).toContain('hasUserLastReply(ticket)');
         expect(viewSource).toContain('glyphicon glyphicon-comment');
     });
+
+    it('links to reply templates editor next to create ticket', () => {
+        expect(viewSource).toContain("{{ $t('editarPlantillasRespuestas') }}");
+        expect(viewSource).toContain("name: 'admin-support-reply-templates'");
+    });
 });

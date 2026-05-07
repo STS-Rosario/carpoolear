@@ -1,5 +1,18 @@
 import { describe, it, expect } from 'vitest';
+import fs from 'node:fs';
+import path from 'path';
+import { fileURLToPath } from 'node:url';
 import TicketsApi from './TicketsApi';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const apiSource = fs.readFileSync(path.resolve(__dirname, 'TicketsApi.js'), 'utf8');
+
+describe('TicketsApi admin reply templates', () => {
+    it('targets reply-templates endpoints', () => {
+        expect(apiSource).toContain('/api/admin/support/reply-templates');
+        expect(apiSource).toContain('/duplicate');
+    });
+});
 
 describe('TicketsApi.toFormData', () => {
     it('limits attachments to three files', () => {

@@ -1,9 +1,12 @@
 <template>
     <AdminLayout>
         <h3>{{ $t('soporte') }}</h3>
-        <p class="mb-2">
+        <p class="mb-2 support-tickets-admin-actions">
             <router-link class="btn btn-primary" :to="{ name: 'admin-support-ticket-new' }">
                 {{ $t('crearTicket') }}
+            </router-link>
+            <router-link class="btn btn-default mleft-6" :to="{ name: 'admin-support-reply-templates' }">
+                {{ $t('editarPlantillasRespuestas') }}
             </router-link>
         </p>
         <p v-if="loading" class="alert alert-info">{{ $t('cargandoNotificaciones') }}</p>
@@ -163,5 +166,9 @@ export default {
 
 .last-reply-icon {
     margin-left: 8px;
+}
+
+.support-tickets-admin-actions .mleft-6 {
+    margin-left: 6px;
 }
 </style>

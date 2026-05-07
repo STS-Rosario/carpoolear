@@ -62,6 +62,30 @@ class TicketsApi extends TaggedApi {
         });
     }
 
+    adminReplyTemplateList() {
+        return this.get('/api/admin/support/reply-templates');
+    }
+
+    adminReplyTemplateShow(id) {
+        return this.get('/api/admin/support/reply-templates/' + id);
+    }
+
+    adminReplyTemplateCreate(data) {
+        return this.post('/api/admin/support/reply-templates', data);
+    }
+
+    adminReplyTemplateUpdate(id, data) {
+        return this.put('/api/admin/support/reply-templates/' + id, data);
+    }
+
+    adminReplyTemplateDelete(id) {
+        return this.delete('/api/admin/support/reply-templates/' + id);
+    }
+
+    adminReplyTemplateDuplicate(id) {
+        return this.post('/api/admin/support/reply-templates/' + id + '/duplicate', {});
+    }
+
     toFormData(data) {
         const form = new FormData();
         Object.keys(data || {}).forEach((key) => {

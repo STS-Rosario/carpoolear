@@ -39,6 +39,9 @@ const TicketDetail = () => import('../components/views/TicketDetail.vue');
 const AdminSupportTickets = () => import('../components/views/AdminSupportTickets.vue');
 const AdminSupportTicketNew = () => import('../components/views/AdminSupportTicketNew.vue');
 const AdminSupportTicketDetail = () => import('../components/views/AdminSupportTicketDetail.vue');
+const AdminSupportReplyTemplates = () => import('../components/views/AdminSupportReplyTemplates.vue');
+const AdminSupportReplyTemplateView = () => import('../components/views/AdminSupportReplyTemplateView.vue');
+const AdminSupportReplyTemplateForm = () => import('../components/views/AdminSupportReplyTemplateForm.vue');
 
 const UpdateProfile = () => import('../components/sections/UpdateProfile.vue');
 const FriendsSetting = () => import('../components/sections/FriendsSetting.vue');
@@ -760,6 +763,80 @@ export default [
                 },
                 header: {
                     titleKey: 'crearTicket',
+                    buttons: ['back']
+                }
+            }
+        }
+    },
+    {
+        path: '/admin/support-tickets/response-templates',
+        name: 'admin-support-reply-templates',
+        component: AdminSupportReplyTemplates,
+        beforeEnter: authAdmin,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'admin'
+                },
+                header: {
+                    titleKey: 'plantillasRespuestas',
+                    buttons: ['back']
+                }
+            }
+        }
+    },
+    {
+        path: '/admin/support-tickets/response-templates/new',
+        name: 'admin-support-reply-template-new',
+        component: AdminSupportReplyTemplateForm,
+        beforeEnter: authAdmin,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'admin'
+                },
+                header: {
+                    titleKey: 'nuevaPlantillaRespuesta',
+                    buttons: ['back']
+                }
+            }
+        }
+    },
+    {
+        path: '/admin/support-tickets/response-templates/:templateId/edit',
+        name: 'admin-support-reply-template-edit',
+        component: AdminSupportReplyTemplateForm,
+        props: true,
+        beforeEnter: authAdmin,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'admin'
+                },
+                header: {
+                    titleKey: 'editarPlantillaRespuesta',
+                    buttons: ['back']
+                }
+            }
+        }
+    },
+    {
+        path: '/admin/support-tickets/response-templates/:templateId',
+        name: 'admin-support-reply-template-view',
+        component: AdminSupportReplyTemplateView,
+        props: true,
+        beforeEnter: authAdmin,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'admin'
+                },
+                header: {
+                    titleKey: 'detallePlantillaRespuesta',
                     buttons: ['back']
                 }
             }
