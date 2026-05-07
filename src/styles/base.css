@@ -351,7 +351,7 @@
       border: none;
       width: 100%;
   }
-  .btn-with-icon:hover .btn-with-icon--icon {
+  .btn-with-icon:not(.btn-apple):hover .btn-with-icon--icon {
       background-color: #2c406d;
   }
   .btn-with-icon:hover {
@@ -386,6 +386,7 @@
   .open > .dropdown-toggle.btn-with-icon.focus {
       background-color: #DDD;
   }
+  .btn-apple.btn-with-icon:hover .btn-with-icon--icon,
   .btn-apple.btn-with-icon:focus .btn-with-icon--icon,
   .btn-apple.btn-with-icon:active .btn-with-icon--icon,
   .btn-apple.btn-with-icon.active:hover .btn-with-icon--icon,
@@ -393,7 +394,8 @@
   .btn-apple.btn-with-icon.active:focus .btn-with-icon--icon,
   .btn-apple.btn-with-icon.focus:active .btn-with-icon--icon,
   .btn-apple.btn-with-icon.active.focus .btn-with-icon--icon {
-      background-color: #2c406d;
+      background-color: #e8e8e8;
+      color: #000;
   }
 
   .btn-with-icon--icon {
@@ -418,12 +420,8 @@
         border: 1px solid #000;
     }
     .btn-apple .btn-with-icon--icon {
-      background-color: transparent;
+      background-color: #e8e8e8;
       color: #000;
-    }
-    .btn-apple .btn-with-icon--label {
-        margin-left: 0;
-        display: inline-block;
     }
 
       .btn-facebook:disabled span:first-child {
@@ -2120,6 +2118,10 @@
       width: 100%;
       max-width: 100%;
   }
+  .user-form .btn-primary.btn-apple {
+      width: 100%;
+      max-width: 100%;
+  }
   .user-form a {
       color: #ddd;
       font-weight: bold;
@@ -2327,6 +2329,11 @@
           line-height: 24px;
       }
       .user-form .btn-primary.btn-facebook {
+          width: 100%;
+          padding-left: 0;
+          padding: 0;
+      }
+      .user-form .btn-primary.btn-apple {
           width: 100%;
           padding-left: 0;
           padding: 0;

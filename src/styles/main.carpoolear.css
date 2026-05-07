@@ -378,7 +378,7 @@ fieldset[disabled] .btn-facebook.focus {
     width: 100%;
 }
 
-.btn-with-icon:hover .btn-with-icon--icon {
+.btn-with-icon:not(.btn-apple):hover .btn-with-icon--icon {
     background-color: #2c406d;
 }
 
@@ -386,12 +386,12 @@ fieldset[disabled] .btn-facebook.focus {
     background-color: rgb(48, 75, 130);
 }
 .btn-apple.btn-with-icon:hover .btn-with-icon--icon {
-    background-color: black;
-    color: white;
+    background-color: #e8e8e8;
+    color: #000;
 }
 .btn-apple.btn-with-icon:hover {
-    background-color: black;
-    color: white;
+    background-color: #e5e5e5;
+    color: #000;
 }
 
 .btn-with-icon:focus,
@@ -408,18 +408,65 @@ fieldset[disabled] .btn-facebook.focus {
     background-color: rgb(48, 75, 130);
 }
 
-.btn-with-icon:focus .btn-with-icon--icon,
-.btn-with-icon:active .btn-with-icon--icon,
+.btn-with-icon:not(.btn-apple):focus .btn-with-icon--icon,
+.btn-with-icon:not(.btn-apple):active .btn-with-icon--icon,
 .btn-sarch:active:hover .btn-with-icon--icon,
-.btn-with-icon.active:hover .btn-with-icon--icon,
-.open>.dropdown-toggle.btn-with-icon:hover .btn-with-icon--icon,
-.btn-with-icon:active:focus .btn-with-icon--icon,
-.btn-with-icon.active:focus .btn-with-icon--icon,
-.open>.dropdown-toggle.btn-with-icon:focus .btn-with-icon--icon,
-.btn-with-icon.focus:active .btn-with-icon--icon,
-.btn-with-icon.active.focus .btn-with-icon--icon,
-.open>.dropdown-toggle.btn-with-icon.focus .btn-with-icon--icon {
+.btn-with-icon:not(.btn-apple).active:hover .btn-with-icon--icon,
+.open>.dropdown-toggle.btn-with-icon:not(.btn-apple):hover .btn-with-icon--icon,
+.btn-with-icon:not(.btn-apple):active:focus .btn-with-icon--icon,
+.btn-with-icon:not(.btn-apple).active:focus .btn-with-icon--icon,
+.open>.dropdown-toggle.btn-with-icon:not(.btn-apple):focus .btn-with-icon--icon,
+.btn-with-icon:not(.btn-apple).focus:active .btn-with-icon--icon,
+.btn-with-icon:not(.btn-apple).active.focus .btn-with-icon--icon,
+.open>.dropdown-toggle.btn-with-icon:not(.btn-apple).focus .btn-with-icon--icon {
     background-color: #2c406d;
+}
+
+.btn-apple.btn-with-icon:focus,
+.btn-apple.btn-with-icon:active,
+.btn-apple.btn-with-icon.active:hover,
+.open>.dropdown-toggle.btn-apple.btn-with-icon:hover,
+.btn-apple.btn-with-icon:active:focus,
+.btn-apple.btn-with-icon.active:focus,
+.open>.dropdown-toggle.btn-apple.btn-with-icon:focus,
+.btn-apple.btn-with-icon.focus:active,
+.btn-apple.btn-with-icon.active.focus,
+.open>.dropdown-toggle.btn-apple.btn-with-icon.focus {
+    background-color: #e5e5e5;
+    color: #000;
+}
+
+.btn-apple.btn-with-icon:focus .btn-with-icon--icon,
+.btn-apple.btn-with-icon:active .btn-with-icon--icon,
+.btn-apple.btn-with-icon.active:hover .btn-with-icon--icon,
+.open>.dropdown-toggle.btn-apple.btn-with-icon:hover .btn-with-icon--icon,
+.btn-apple.btn-with-icon:active:focus .btn-with-icon--icon,
+.btn-apple.btn-with-icon.active:focus .btn-with-icon--icon,
+.open>.dropdown-toggle.btn-apple.btn-with-icon:focus .btn-with-icon--icon,
+.btn-apple.btn-with-icon.focus:active .btn-with-icon--icon,
+.btn-apple.btn-with-icon.active.focus .btn-with-icon--icon,
+.open>.dropdown-toggle.btn-apple.btn-with-icon.focus .btn-with-icon--icon {
+    background-color: #e8e8e8;
+    color: #000;
+}
+
+.btn-primary.btn-apple.btn-with-icon:hover,
+.btn-primary.btn-apple.btn-with-icon:focus,
+.btn-primary.btn-apple.btn-with-icon:active,
+.btn-primary.btn-apple.btn-with-icon:active:focus,
+.btn-primary.btn-apple.btn-with-icon:active:hover {
+    color: #000;
+    background-color: #e5e5e5;
+    border-color: #000;
+}
+
+.btn-primary.btn-apple.btn-with-icon:hover .btn-with-icon--icon,
+.btn-primary.btn-apple.btn-with-icon:focus .btn-with-icon--icon,
+.btn-primary.btn-apple.btn-with-icon:active .btn-with-icon--icon,
+.btn-primary.btn-apple.btn-with-icon:active:focus .btn-with-icon--icon,
+.btn-primary.btn-apple.btn-with-icon:active:hover .btn-with-icon--icon {
+    background-color: #e8e8e8;
+    color: #000;
 }
 
 .btn-with-icon--icon {
@@ -2223,6 +2270,11 @@ textarea.has-error {
     max-width: 100%;
 }
 
+.user-form .btn-primary.btn-apple {
+    width: 100%;
+    max-width: 100%;
+}
+
 .user-form a {
     color: #ddd;
     font-weight: bold;
@@ -2444,6 +2496,12 @@ ul {
     }
 
     .user-form .btn-primary.btn-facebook {
+        width: 100%;
+        padding-left: 0;
+        padding: 0;
+    }
+
+    .user-form .btn-primary.btn-apple {
         width: 100%;
         padding-left: 0;
         padding: 0;

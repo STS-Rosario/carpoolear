@@ -650,11 +650,6 @@ label {
         width: 100%;
         max-width: 280px;
         margin: 0.5em 0 0.6em 0;
-        text-transform: none;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-            Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-        font-size: 20px;
-        padding: 0.7em 2em;
         border-color: black;
     }
     .register::before {
