@@ -148,51 +148,12 @@
 
             <div class="col-xs-24 col-md-8 location-autocomplete origin">
                 <div class="search-users">
-                    <input
-                        v-model="userSearch"
-                        v-on:keyup="onSearchUsers"
-                        type="text"
-                        class="form-control form-control-with-icon search-users-input"
+                    <UserSearchAutocomplete
+                        v-model="user"
                         :placeholder="$t('escribeUnNombre')"
+                        :max-results="3"
+                        input-class="form-control form-control-with-icon search-users-input"
                     />
-                    <div v-if="userSearch.length != 0 && showAutocomplete">
-                        <loading class="autocomplete-users" :data="userList">
-                            <li
-                                v-for="user in userList"
-                                class="list-group-item conversation_header"
-                                @click="selectUser(user)"
-                                v-bind:key="user.id"
-                            >
-                                <div class="media">
-                                    <div class="media-body">
-                                        <h4 class="media-heading">
-                                            <span class="conversation-title">{{
-                                                user.name
-                                            }}</span>
-                                        </h4>
-                                        <span>{{ user.email }}</span>
-                                    </div>
-                                </div>
-                            </li>
-                            <template #no-data><li
-                                class="list-group-item alert alert-warning"
-                                role="alert"
-                            >
-                                {{ $t('noSeEncontroNingunUsuario') }}
-                            </li></template>
-                            <template #loading><li
-                                class="list-group-item alert alert-info"
-                                role="alert"
-                            >
-                                <img
-                                    :src="$publicImg('loader.gif')"
-                                    alt=""
-                                    class="ajax-loader"
-                                />
-                                {{ $t('cargandoUsuarios') }}
-                            </li></template>
-                        </loading>
-                    </div>
                 </div>
                 <div class="date-picker--cross">
                     <i
@@ -218,12 +179,12 @@ import { mapState, mapActions } from 'pinia';
 import { useDeviceStore } from '../../stores/device';
 import { useAuthStore } from '../../stores/auth';
 import { useTripsStore } from '../../stores/trips';
-import { useAdminStore } from '../../stores/admin';
 import DatePicker from '../DatePicker';
 import dayjs from '../../dayjs';
 import dialogs from '../../services/dialogs.js';
 import loading from '../Loading';
 import Autocomplete from '../Autocomplete';
+import UserSearchAutocomplete from '../UserSearchAutocomplete.vue';
 
 export default {
     name: 'search-trip',
@@ -251,10 +212,7 @@ export default {
                 message: '',
                 state: ''
             },
-            user: '',
-            showAutocomplete: false,
-            userSearch: '',
-            userList: [],
+            user: null,
             chofer_logo_blanco:
                 process.env.ROUTE_BASE +
                 'img/icono-conductor-blanco.png',
@@ -284,26 +242,6 @@ export default {
         ...mapActions(useTripsStore, {
             search: 'tripsSearch'
         }),
-        ...mapActions(useAdminStore, {
-            searchUsers: 'searchUsers'
-        }),
-        onSearchUsers() {
-            this.showAutocomplete = true;
-            this.searchUsers(this.userSearch)
-                .then((data) => {
-                    this.userList = data.data.slice(0, 3);
-                })
-                .catch((err) => {
-                    console.log(err);
-                    this.userList = [];
-                });
-        },
-        selectUser(user) {
-            this.showAutocomplete = false;
-            this.userList = null;
-            this.userSearch = user.name;
-            this.user = user;
-        },
         getPlace(i, data) {
             console.log('getPlace', data);
             let obj = {};
@@ -372,7 +310,7 @@ export default {
             if (!this.from_date && !this.to_date) {
                 params.history = true;
             }
-            if (this.user.id) {
+            if (this.user && this.user.id) {
                 params.user_id = this.user.id;
             }
             params.is_passenger = this.isPassenger;
@@ -401,8 +339,7 @@ export default {
             };
         },
         resetUser() {
-            this.user = {};
-            this.userSearch = '';
+            this.user = null;
         },
         swapCities() {
             let temp;
@@ -426,7 +363,8 @@ export default {
     components: {
         DatePicker,
         Autocomplete,
-        loading
+        loading,
+        UserSearchAutocomplete
     }
 };
 </script>

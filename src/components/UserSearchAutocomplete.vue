@@ -58,7 +58,6 @@ export default {
     name: 'user-search-autocomplete',
     props: {
         modelValue: {
-            type: Object,
             default: null
         },
         placeholder: {
@@ -101,9 +100,8 @@ export default {
             handler(user) {
                 this.syncingFromModel = true;
                 if (user && user.id) {
-                    const label = `${user.id} - ${user.name || ''}`.trim();
-                    this.inputText = label;
-                } else if (!this.inputText) {
+                    this.inputText = `${user.id} - ${user.name || ''}`.trim();
+                } else {
                     this.inputText = '';
                 }
                 this.$nextTick(() => {
