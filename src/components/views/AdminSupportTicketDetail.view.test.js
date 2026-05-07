@@ -53,4 +53,13 @@ describe('AdminSupportTicketDetail view', () => {
         expect(viewSource).toContain("invoke('getMarkdown')");
         expect(viewSource).toContain("invoke('setMarkdown'");
     });
+
+    it('offers reply template modal with search and pick handler', () => {
+        expect(viewSource).toContain("{{ $t('responderConPlantilla') }}");
+        expect(viewSource).toContain("{{ $t('plantillasModalTitulo') }}");
+        expect(viewSource).toContain("{{ $t('buscarPlantillasPlaceholder') }}");
+        expect(viewSource).toContain('filteredReplyTemplates');
+        expect(viewSource).toContain('pickReplyTemplate');
+        expect(viewSource).toContain('openReplyTemplateModal');
+    });
 });

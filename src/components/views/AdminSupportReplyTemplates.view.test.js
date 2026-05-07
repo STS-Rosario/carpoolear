@@ -10,7 +10,7 @@ describe('AdminSupportReplyTemplates view', () => {
     it('lists templates with expected columns and actions', () => {
         const viewSource = fs.readFileSync(viewPath, 'utf8');
         expect(viewSource).toContain("{{ $t('plantillasRespuestas') }}");
-        expect(viewSource).toContain("{{ $t('descripcionCortaPlantilla') }}");
+        expect(viewSource).toContain("capitalizeFirst($t('descripcionCortaPlantilla'))");
         expect(viewSource).toContain("{{ $t('accionVer') }}");
         expect(viewSource).toContain("{{ $t('accionEditar') }}");
         expect(viewSource).toContain("{{ $t('accionDuplicar') }}");
