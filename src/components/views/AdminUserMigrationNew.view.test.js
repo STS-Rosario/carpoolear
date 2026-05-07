@@ -26,4 +26,12 @@ describe('AdminUserMigrationNew view', () => {
         expect(source).toMatch(/\.user-migration-card__avatar\s*\{[^}]*width:\s*100px/);
         expect(source).toMatch(/\.user-migration-card__avatar\s*\{[^}]*height:\s*100px/);
     });
+
+    it('renders the user email and a friendly join date on each preview card', () => {
+        expect(source).toContain("$t('email')");
+        expect(source).toContain("$t('usuarioDesde')");
+        expect(source).toContain('formatJoinDate');
+        expect(source).toContain("import dayjs from '../../dayjs'");
+        expect(source).toMatch(/dayjs\([^)]+\)\.format\('LL'\)/);
+    });
 });
