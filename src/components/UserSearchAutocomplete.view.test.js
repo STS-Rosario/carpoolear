@@ -8,7 +8,7 @@ const source = fs.readFileSync(componentPath, 'utf8');
 describe('UserSearchAutocomplete', () => {
     it('uses AdminApi searchUsers with debounced scheduling', () => {
         expect(source).toContain('AdminApi');
-        expect(source).toContain("searchUsers({ name: term })");
+        expect(source).toContain('searchUsers({ name: term })');
         expect(source).toContain('250');
     });
 
