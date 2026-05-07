@@ -123,6 +123,7 @@ export default {
 };
 </script>
 
+<style scoped src="../../styles/supportTicketsTableCompact.css"></style>
 <style scoped>
 .create-ticket-cta {
     margin-bottom: 16px;
@@ -143,25 +144,5 @@ export default {
 
 .support-tickets-table tbody tr:nth-child(odd) {
     background-color: #fafafa;
-}
-
-.support-tickets-table--compact {
-    table-layout: fixed;
-    width: 100%;
-}
-
-.support-tickets-table__narrow {
-    white-space: nowrap;
-    width: 1%;
-    padding-left: 6px;
-    padding-right: 6px;
-    vertical-align: middle;
-}
-
-.support-tickets-table__subject {
-    width: 40%;
-    min-width: 120px;
-    word-break: break-word;
-    vertical-align: middle;
 }
 </style>
