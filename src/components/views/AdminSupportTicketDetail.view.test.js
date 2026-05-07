@@ -51,7 +51,10 @@ describe('AdminSupportTicketDetail view', () => {
     it('can append interpolated template markdown into the reply editor', () => {
         expect(viewSource).toContain('appendInterpolatedTemplateToReply');
         expect(viewSource).toContain("invoke('getMarkdown')");
-        expect(viewSource).toContain("invoke('setMarkdown'");
+        expect(viewSource).toContain('replyEditorInitialValue = current + sep + chunk');
+        expect(viewSource).toContain('replyEditorKey += 1');
+        expect(viewSource).toContain(':key="replyEditorKey"');
+        expect(viewSource).toContain(':initial-value="replyEditorInitialValue"');
     });
 
     it('offers reply template modal with search and pick handler', () => {

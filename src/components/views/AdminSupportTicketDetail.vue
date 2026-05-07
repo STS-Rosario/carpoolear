@@ -42,7 +42,14 @@
 
         <div class="admin-reply-box">
             <label class="control-label">{{ $t('respuestaCarpoolear') }}</label>
-            <editor ref="replyEditor" :initial-value="''" :options="editorOptions" initial-edit-type="wysiwyg" height="140px" />
+            <editor
+                :key="replyEditorKey"
+                ref="replyEditor"
+                :initial-value="replyEditorInitialValue"
+                :options="editorOptions"
+                initial-edit-type="wysiwyg"
+                height="140px"
+            />
             <input ref="attachmentInput" class="mtop-10" type="file" accept="image/*" multiple @change="onAttachments" />
             <div class="reply-actions">
                 <button class="btn btn-primary reply-action-btn" @click="sendReply">{{ $t('responder') }}</button>
@@ -158,7 +165,9 @@ export default {
             replyTemplateModalOpen: false,
             replyTemplateSearch: '',
             replyTemplatesLoading: false,
-            replyTemplatesLoadError: ''
+            replyTemplatesLoadError: '',
+            replyEditorInitialValue: '',
+            replyEditorKey: 0
         };
     },
     computed: {
@@ -265,8 +274,10 @@ export default {
             this.replyTemplateModalOpen = false;
         },
         pickReplyTemplate(row) {
-            this.appendInterpolatedTemplateToReply(row.body_markdown);
             this.closeReplyTemplateModal();
+            this.$nextTick(() => {
+                this.appendInterpolatedTemplateToReply(row.body_markdown);
+            });
         },
         appendInterpolatedTemplateToReply(templateMarkdown) {
             if (templateMarkdown == null || String(templateMarkdown).trim() === '') return;
@@ -275,7 +286,8 @@ export default {
             const chunk = interpolateSupportTemplateVariables(templateMarkdown, this.ticketUserForTemplates);
             const current = editor.invoke('getMarkdown') || '';
             const sep = current.trim() ? '\n\n' : '';
-            editor.invoke('setMarkdown', current + sep + chunk);
+            this.replyEditorInitialValue = current + sep + chunk;
+            this.replyEditorKey += 1;
         },
         sendReply() {
             const markdown = this.$refs.replyEditor.invoke('getMarkdown');
@@ -294,6 +306,8 @@ export default {
                         if (editor && typeof editor.invoke === 'function') {
                             editor.invoke('setMarkdown', '');
                         }
+                        this.replyEditorInitialValue = '';
+                        this.replyEditorKey += 1;
                         this.attachments = [];
                         const input = this.$refs.attachmentInput;
                         if (input) input.value = '';
