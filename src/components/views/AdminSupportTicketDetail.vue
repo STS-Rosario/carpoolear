@@ -41,7 +41,12 @@
         </div>
 
         <div class="admin-reply-box">
-            <label class="control-label">{{ $t('respuestaCarpoolear') }}</label>
+            <div class="admin-reply-header">
+                <label class="control-label">{{ $t('respuestaCarpoolear') }}</label>
+                <button type="button" class="btn btn-default btn-sm" @click="openReplyTemplateModal">
+                    {{ $t('responderConPlantilla') }}
+                </button>
+            </div>
             <editor
                 :key="replyEditorKey"
                 ref="replyEditor"
@@ -52,13 +57,14 @@
             />
             <input ref="attachmentInput" class="mtop-10" type="file" accept="image/*" multiple @change="onAttachments" />
             <div class="reply-actions">
-                <button class="btn btn-primary reply-action-btn" @click="sendReply">{{ $t('responder') }}</button>
-                <button type="button" class="btn btn-default reply-action-btn" @click="openReplyTemplateModal">
-                    {{ $t('responderConPlantilla') }}
-                </button>
-                <button class="btn btn-default reply-action-btn" @click="resolveTicket">{{ $t('marcarResuelto') }}</button>
-                <button class="btn btn-default reply-action-btn" @click="closeTicket">{{ $t('cerrarTicket') }}</button>
-                <button class="btn btn-default reply-action-btn" @click="reopenTicket">{{ $t('reabrirTicket') }}</button>
+                <div class="reply-actions-left">
+                    <button class="btn btn-primary reply-action-btn" @click="sendReply">{{ $t('responder') }}</button>
+                </div>
+                <div class="reply-actions-right">
+                    <button class="btn btn-default reply-action-btn" @click="resolveTicket">{{ $t('marcarResuelto') }}</button>
+                    <button v-if="showCloseTicketButton" class="btn btn-default reply-action-btn" @click="closeTicket">{{ $t('cerrarTicket') }}</button>
+                    <button v-if="showReopenTicketButton" class="btn btn-default reply-action-btn" @click="reopenTicket">{{ $t('reabrirTicket') }}</button>
+                </div>
             </div>
         </div>
 
@@ -189,6 +195,12 @@ export default {
                     .join('\n');
                 return blob.includes(q);
             });
+        },
+        showReopenTicketButton() {
+            return this.ticket && this.ticket.status === 'Cerrado';
+        },
+        showCloseTicketButton() {
+            return this.ticket && this.ticket.status !== 'Cerrado';
         }
     },
     methods: {
@@ -368,8 +380,25 @@ export default {
     margin-bottom: 16px;
 }
 
+.admin-reply-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
 .reply-actions {
     margin-top: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.reply-actions-left,
+.reply-actions-right {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 .reply-action-btn {
