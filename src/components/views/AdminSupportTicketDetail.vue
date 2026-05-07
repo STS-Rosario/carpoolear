@@ -84,7 +84,6 @@
                             v-for="t in filteredReplyTemplates"
                             :key="t.id"
                             class="list-group-item reply-template-modal-item"
-                            @click="pickReplyTemplate(t)"
                         >
                             <button
                                 type="button"
