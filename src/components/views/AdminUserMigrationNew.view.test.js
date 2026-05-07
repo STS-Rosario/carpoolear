@@ -11,8 +11,8 @@ describe('AdminUserMigrationNew view', () => {
         expect(source).toContain('createUserMigration');
         expect(source).toContain('window.confirm');
         expect(source).toContain("$t('confirmacionMigracionUsuarios')");
-        expect(source).toContain("$t('vasAMigrarLosDatosDeEsteUsuario')");
-        expect(source).toContain("$t('yLosVasAJuntarConLosDeEsteUsuario')");
+        expect(source).toContain('vasAMigrarLosDatosDeEsteUsuario');
+        expect(source).toContain('yLosVasAJuntarConLosDeEsteUsuario');
         expect(source).toContain("name: 'admin-users-user'");
     });
 

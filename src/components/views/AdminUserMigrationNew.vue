@@ -35,56 +35,33 @@
                         class="panel panel-default admin-user-migration-new__preview"
                     >
                         <div class="panel-body">
-                            <p class="lead">{{ $t('vasAMigrarLosDatosDeEsteUsuario') }}</p>
-                            <div class="media user-migration-card">
-                                <div
-                                    v-if="hasUserImage(userToRemove)"
-                                    class="media-left user-migration-card__avatar"
-                                    v-imgSrc:profile="userToRemove.image"
-                                ></div>
-                                <div
-                                    v-else
-                                    class="media-left user-migration-card__avatar user-migration-card__avatar--placeholder"
-                                    :aria-label="$t('sinFoto')"
-                                >?</div>
-                                <div class="media-body">
-                                    <p><strong>ID:</strong> {{ userToRemove.id }}</p>
-                                    <p><strong>{{ $t('nombre') }}:</strong> {{ userToRemove.name || '—' }}</p>
-                                    <p>
-                                        <strong>{{ $t('calificacionesPositivas') }}:</strong>
-                                        {{ Number(userToRemove.positive_ratings || 0) }}
-                                    </p>
-                                    <p>
-                                        <strong>{{ $t('calificacionesNegativas') }}:</strong>
-                                        {{ Number(userToRemove.negative_ratings || 0) }}
-                                    </p>
+                            <template v-for="card in previewCards" :key="card.role">
+                                <p class="lead">{{ $t(card.headingKey) }}</p>
+                                <div class="media user-migration-card">
+                                    <div
+                                        v-if="hasUserImage(card.user)"
+                                        class="media-left user-migration-card__avatar"
+                                        v-imgSrc:profile="card.user.image"
+                                    ></div>
+                                    <div
+                                        v-else
+                                        class="media-left user-migration-card__avatar user-migration-card__avatar--placeholder"
+                                        :aria-label="$t('sinFoto')"
+                                    >?</div>
+                                    <div class="media-body">
+                                        <p><strong>ID:</strong> {{ card.user.id }}</p>
+                                        <p><strong>{{ $t('nombre') }}:</strong> {{ card.user.name || '—' }}</p>
+                                        <p>
+                                            <strong>{{ $t('calificacionesPositivas') }}:</strong>
+                                            {{ Number(card.user.positive_ratings || 0) }}
+                                        </p>
+                                        <p>
+                                            <strong>{{ $t('calificacionesNegativas') }}:</strong>
+                                            {{ Number(card.user.negative_ratings || 0) }}
+                                        </p>
+                                    </div>
                                 </div>
-                            </div>
-                            <p class="lead">{{ $t('yLosVasAJuntarConLosDeEsteUsuario') }}</p>
-                            <div class="media user-migration-card">
-                                <div
-                                    v-if="hasUserImage(userToKeep)"
-                                    class="media-left user-migration-card__avatar"
-                                    v-imgSrc:profile="userToKeep.image"
-                                ></div>
-                                <div
-                                    v-else
-                                    class="media-left user-migration-card__avatar user-migration-card__avatar--placeholder"
-                                    :aria-label="$t('sinFoto')"
-                                >?</div>
-                                <div class="media-body">
-                                    <p><strong>ID:</strong> {{ userToKeep.id }}</p>
-                                    <p><strong>{{ $t('nombre') }}:</strong> {{ userToKeep.name || '—' }}</p>
-                                    <p>
-                                        <strong>{{ $t('calificacionesPositivas') }}:</strong>
-                                        {{ Number(userToKeep.positive_ratings || 0) }}
-                                    </p>
-                                    <p>
-                                        <strong>{{ $t('calificacionesNegativas') }}:</strong>
-                                        {{ Number(userToKeep.negative_ratings || 0) }}
-                                    </p>
-                                </div>
-                            </div>
+                            </template>
                             <button
                                 type="button"
                                 class="btn btn-primary"
@@ -129,6 +106,20 @@ export default {
         },
         migrateDisabled() {
             return !this.previewReady;
+        },
+        previewCards() {
+            return [
+                {
+                    role: 'remove',
+                    headingKey: 'vasAMigrarLosDatosDeEsteUsuario',
+                    user: this.userToRemove
+                },
+                {
+                    role: 'keep',
+                    headingKey: 'yLosVasAJuntarConLosDeEsteUsuario',
+                    user: this.userToKeep
+                }
+            ];
         }
     },
     methods: {
