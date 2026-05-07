@@ -1,20 +1,21 @@
-/* Shared compact layout for user + admin support ticket tables */
+/* Shared compact layout for user + admin support ticket tables.
+ * Auto layout: nowrap columns take only the width their content needs;
+ * subject column uses width 100% so it absorbs the remaining space in the row. */
 .support-tickets-table--compact {
-    table-layout: fixed;
+    table-layout: auto;
     width: 100%;
 }
 
 .support-tickets-table__narrow {
     white-space: nowrap;
-    width: 1%;
+    vertical-align: middle;
     padding-left: 6px;
     padding-right: 6px;
-    vertical-align: middle;
 }
 
 .support-tickets-table__subject {
-    width: 40%;
-    min-width: 120px;
+    width: 100%;
+    min-width: 12em;
     word-break: break-word;
     vertical-align: middle;
 }
