@@ -9,7 +9,8 @@ describe('CoordinateTrip.vue contribution warning', () => {
     it('links passenger report action to soporte', () => {
         expect(viewSource).toContain("$t('coordinateTripContributionWarningPassengerPrefix')");
         expect(viewSource).toContain("$t('coordinateTripContributionWarningPassengerSuffix')");
-        expect(viewSource).toContain("$t('coordinateTripContributionWarningPassengerReportLink')");
-        expect(viewSource).toContain("<router-link :to=\"{ path: '/soporte' }\">");
+        expect(viewSource).toMatch(
+            /<router-link\s+:to="\{\s*path:\s*'\/soporte'\s*\}">\s*\{\{\s*\$t\('coordinateTripContributionWarningPassengerReportLink'\)\s*\}\}\s*<\/router-link>/
+        );
     });
 });
