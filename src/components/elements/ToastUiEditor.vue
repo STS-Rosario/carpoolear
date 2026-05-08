@@ -28,6 +28,11 @@ const DEFAULT_OPTIONS = {
 
 export default {
     name: 'ToastUiEditor',
+    beforeCreate() {
+        // #region agent log
+        log343bb5('H7', 'ToastUiEditor.vue:beforeCreate', 'editor-component-construct-start', {});
+        // #endregion
+    },
     props: {
         initialValue: {
             type: String,

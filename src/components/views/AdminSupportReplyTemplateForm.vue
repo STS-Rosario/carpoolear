@@ -95,11 +95,29 @@ export default {
             if (!this.isEdit) {
                 this.form = { name: '', short_description: '', body_markdown: '' };
                 this.loading = false;
+                this.loadError = '';
                 log343bb5('H-B', 'AdminSupportReplyTemplateForm:load:new-branch', 'load-new-done-skip-bump', {
                     loading: this.loading,
                     loadError: this.loadError,
                     routeKey: `${this.$route.name}-${this.templateId ?? 'new'}`
                 });
+                // #region agent log
+                this.$nextTick(() => {
+                    const main = typeof document !== 'undefined' ? document.getElementById('main') : null;
+                    const inMain =
+                        main && main.querySelectorAll ? main.querySelectorAll('.toast-ui-editor-mount').length : -1;
+                    const inSelf =
+                        this.$el && typeof this.$el.querySelectorAll === 'function'
+                            ? this.$el.querySelectorAll('.toast-ui-editor-mount').length
+                            : -1;
+                    log343bb5('H1,H2,H6', 'AdminSupportReplyTemplateForm:load:new-branch+tick', 'post-new-load-dom', {
+                        inMainToastMountCount: inMain,
+                        inSelfToastMountCount: inSelf,
+                        routeName: this.$route.name,
+                        fullPath: this.$route.fullPath
+                    });
+                });
+                // #endregion
                 return;
             }
             this.loading = true;

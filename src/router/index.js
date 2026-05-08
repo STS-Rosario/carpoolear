@@ -91,9 +91,12 @@ router.afterEach((to) => {
             const main = document.getElementById('main');
             log343bb5('H-A,H-C,H-E', 'router/index.js:afterEach:raf', 'dom-snapshot-after-nav', {
                 name: to.name,
+                fullPath: to.fullPath,
                 mainInnerLen: main ? main.innerHTML.length : -1,
                 hasAdminNav: !!document.querySelector('.admin-nav-sidebar'),
-                adminNavVisible: !!(main && main.querySelector('.admin-nav-sidebar'))
+                adminNavVisible: !!(main && main.querySelector('.admin-nav-sidebar')),
+                toastMountCount: main ? main.querySelectorAll('.toast-ui-editor-mount').length : -1,
+                formGroupCount: main ? main.querySelectorAll('.form-group').length : -1
             });
         })
     );
