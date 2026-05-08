@@ -19,6 +19,7 @@
             <div class="form-group">
                 <label>{{ $t('cuerpoPlantillaMensaje') }} *</label>
                 <editor
+                    :key="bodyEditorKey"
                     ref="bodyEditor"
                     :initial-value="form.body_markdown"
                     :options="editorOptions"
@@ -58,6 +59,8 @@ export default {
                 short_description: '',
                 body_markdown: ''
             },
+            /** Remount Toast UI editor so content comes from initial-value only (avoids setMarkdown vs ProseMirror race). */
+            bodyEditorKey: 0,
             editorOptions: {
                 usageStatistics: false,
                 hideModeSwitch: true,
@@ -76,11 +79,14 @@ export default {
             adminCreateTemplate: 'adminCreateTemplate',
             adminUpdateTemplate: 'adminUpdateTemplate'
         }),
+        bumpBodyEditor() {
+            this.bodyEditorKey += 1;
+        },
         async load() {
             if (!this.isEdit) {
                 this.form = { name: '', short_description: '', body_markdown: '' };
                 this.loading = false;
-                this.$nextTick(() => this.syncEditor());
+                this.$nextTick(() => this.bumpBodyEditor());
                 return;
             }
             this.loading = true;
@@ -97,13 +103,7 @@ export default {
                 this.loadError = this.$t('errorCargandoPlantillasRespuestas');
             } finally {
                 this.loading = false;
-                this.$nextTick(() => this.syncEditor());
-            }
-        },
-        syncEditor() {
-            const ed = this.$refs.bodyEditor;
-            if (ed && typeof ed.invoke === 'function') {
-                ed.invoke('setMarkdown', this.form.body_markdown || '');
+                this.$nextTick(() => this.bumpBodyEditor());
             }
         },
         save() {
