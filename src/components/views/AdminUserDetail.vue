@@ -53,6 +53,20 @@
                             >
                                 {{ $t('adminUsuariosEditar') }}
                             </router-link>
+                            <router-link
+                                :to="{
+                                    name: 'admin-support-ticket-new',
+                                    query: {
+                                        userId: user.id,
+                                        userName: user.name,
+                                        type: 'account_verification',
+                                        subject: $t('ticketTypeAccountVerification')
+                                    }
+                                }"
+                                class="btn btn-default"
+                            >
+                                {{ $t('crearTicketSoporte') }}
+                            </router-link>
                             <button
                                 type="button"
                                 class="btn btn-success btn-circle"
