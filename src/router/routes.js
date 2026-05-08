@@ -23,6 +23,7 @@ const About = () => import('../components/views/About.vue');
 const Transactions = () => import('../components/views/transactions.vue');
 const TermsAndConditions = () => import('../components/views/TermsAndConditions.vue');
 const AdminPage = () => import('../components/views/AdminPage.vue');
+const AdminMaintenance = () => import('../components/views/AdminMaintenance.vue');
 const UsersCrud = () => import('../components/views/UsersCrud.vue');
 const AdminUsersList = () => import('../components/views/AdminUsersList.vue');
 const AdminUserDetail = () => import('../components/views/AdminUserDetail.vue');
@@ -584,6 +585,24 @@ export default [
                 },
                 header: {
                     titleKey: 'adminPage',
+                    buttons: []
+                }
+            }
+        }
+    },
+    {
+        path: '/admin/maintenance',
+        name: 'admin-maintenance',
+        component: AdminMaintenance,
+        beforeEnter: authAdmin,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'admin'
+                },
+                header: {
+                    titleKey: 'adminMaintenanceTitle',
                     buttons: []
                 }
             }

@@ -49,6 +49,13 @@ class TaggedApi {
         return xhr;
     }
 
+    patch(url, body, headers) {
+        const xhr = network.patch(url, body, headers);
+        this._addTags(xhr);
+
+        return xhr;
+    }
+
     delete(url, params, headers) {
         const xhr = network.delete(url, params, headers);
         this._addTags(xhr);
