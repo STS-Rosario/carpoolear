@@ -310,6 +310,7 @@ export default {
             runningSearch: false,
             alreadySubscribe: false,
             resultaOfSearch: false,
+            pendingScrollRestore: null,
             showModal: false,
             showModalInstallApp: false,
             installAppEvent: null,
@@ -323,7 +324,7 @@ export default {
         // SearchTrip mounts after this hook and runs loadParams(searchParams). If the store still
         // holds a previous narrow search, trips_auto_search watchers emit() and overwrite the
         // default trip list with a 0-result search. Reset the store before the child reads it.
-        if (!this.clearSearch && !this.keepSearch) {
+        if (!this.clearSearch && !this.keepSearch && !this.hasRouteSearchParams()) {
             this.search({ is_passenger: false });
         }
     },
@@ -437,6 +438,7 @@ export default {
             this.alreadySubscribe = false;
             this.search(params);
             this.findSubscriptions();
+            this.updateTripsQuery(params);
             // this.setActionButton(['clear']);
         },
         nextPage() {
@@ -445,6 +447,81 @@ export default {
         onTripClick() {
             let scrolloffset = window.scrollY;
             this.setScrollOffset(scrolloffset);
+            this.updateTripsQuery(this.searchParams.data, scrolloffset);
+        },
+        hasRouteSearchParams() {
+            const query = this.getRouteQuery();
+            return Object.keys(query).some((key) => key !== 'scroll' && key !== 'clearSearch' && key !== 'keepSearch');
+        },
+        getRouteQuery() {
+            return this.$route && this.$route.query ? this.$route.query : {};
+        },
+        getSearchParamsFromQuery() {
+            const query = this.getRouteQuery();
+            const params = {};
+            const textFields = ['origin_name', 'destination_name', 'date'];
+            textFields.forEach((field) => {
+                if (typeof query[field] === 'string' && query[field].trim()) {
+                    params[field] = query[field];
+                }
+            });
+            const numericFields = [
+                'origin_lat',
+                'origin_lng',
+                'origin_radio',
+                'origin_id',
+                'destination_lat',
+                'destination_lng',
+                'destination_radio',
+                'destination_id'
+            ];
+            numericFields.forEach((field) => {
+                const parsed = this.parseNumericQueryValue(query[field]);
+                if (parsed !== null) {
+                    params[field] = parsed;
+                }
+            });
+            if (this.parseBooleanQueryValue(query.is_passenger)) {
+                params.is_passenger = true;
+            }
+            return params;
+        },
+        parseNumericQueryValue(value) {
+            if (value === undefined || value === null || value === '') {
+                return null;
+            }
+            const parsed = Number.parseFloat(value);
+            return Number.isNaN(parsed) ? null : parsed;
+        },
+        parseBooleanQueryValue(value) {
+            return value === 'true' || value === '1' || value === true;
+        },
+        updateTripsQuery(params = {}, scroll) {
+            const nextQuery = {};
+            const source = params || {};
+            Object.keys(source).forEach((key) => {
+                if (source[key] !== undefined && source[key] !== null && source[key] !== '') {
+                    nextQuery[key] = source[key];
+                }
+            });
+            if (scroll !== undefined && scroll !== null) {
+                nextQuery.scroll = Math.max(0, Math.floor(scroll));
+            }
+            this.$router.replace({
+                name: 'trips',
+                query: nextQuery
+            });
+        },
+        maybeRestoreScroll() {
+            if (this.pendingScrollRestore === null || this.pendingScrollRestore === undefined) {
+                return;
+            }
+            this.$nextTick(() => {
+                this.$nextTick(() => {
+                    window.scrollTo(0, this.pendingScrollRestore);
+                    this.pendingScrollRestore = null;
+                });
+            });
         },
         isComplementary(trip, searchParams, index) {
             let isComplementary = false;
@@ -689,12 +766,18 @@ export default {
             }
         }
 
-        if (this.scrollPosition) {
-            this.$nextTick(() => {
-                setTimeout(() => {
-                    window.scrollTo(0, this.scrollPosition);
-                }, 2);
-            });
+        const queryParams = this.getSearchParamsFromQuery();
+        if (Object.keys(queryParams).length) {
+            this.resultaOfSearch = true;
+            this.filtered = true;
+            if (this.$refs.searchBox) {
+                this.$refs.searchBox.loadParams(queryParams);
+            }
+            this.search(queryParams);
+        }
+        this.pendingScrollRestore = Number.parseInt(this.getRouteQuery().scroll, 10);
+        if (Number.isNaN(this.pendingScrollRestore)) {
+            this.pendingScrollRestore = null;
         }
 
         window.addEventListener('beforeinstallprompt', (e) => {
@@ -750,6 +833,7 @@ export default {
         trips: {
             deep: true,
             handler() {
+                this.maybeRestoreScroll();
                 if (this.refreshList) {
                     this.refreshTrips(false);
                     this.lookSearch = false;
