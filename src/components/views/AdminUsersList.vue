@@ -165,6 +165,9 @@ export default {
         displayOrDash(value) {
             return value === null || value === undefined || value === '' ? '—' : value;
         },
+        normalizedSearchQuery() {
+            return (this.textSearch && this.textSearch.trim()) || '';
+        },
         toggleSort(column) {
             if (this.sortKey === column) {
                 this.sortDir = this.sortDir === 'asc' ? 'desc' : 'asc';
@@ -188,7 +191,7 @@ export default {
                 sort: this.sortKey,
                 direction: this.sortDir
             };
-            const q = (this.textSearch && this.textSearch.trim()) || '';
+            const q = this.normalizedSearchQuery();
             if (q) {
                 query.name = q;
             }
@@ -219,7 +222,7 @@ export default {
                 sort: this.sortKey,
                 direction: this.sortDir
             };
-            const q = (this.textSearch && this.textSearch.trim()) || '';
+            const q = this.normalizedSearchQuery();
             if (q) {
                 params.name = q;
             }
