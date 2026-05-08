@@ -6,6 +6,11 @@ const viewPath = path.resolve(__dirname, 'Trips.vue');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 
 describe('Trips.vue persisted search state', () => {
+    it('does not run default search when URL already has search params', () => {
+        expect(viewSource).toContain('hasRouteSearchParams()');
+        expect(viewSource).toContain('if (!this.clearSearch && !this.keepSearch && !this.hasRouteSearchParams()) {');
+    });
+
     it('stores search filters in the route query when searching', () => {
         expect(viewSource).toContain('updateTripsQuery(params = {}, scroll)');
         expect(viewSource).toContain('this.$router.replace({');
