@@ -14,6 +14,9 @@ import LineChart from './LineChart';
 import { mapActions } from 'pinia';
 import { useAdminStore } from '../../stores/admin';
 import dayjs from '../../dayjs';
+import i18n from '../../i18n';
+
+const t = (key) => i18n.global.t(key);
 
 export default {
     name: 'seats-chart',
@@ -35,7 +38,7 @@ export default {
                 maintainAspectRatio: false,
                 title: {
                     display: true,
-                    text: this.$t('chartAsientos')
+                    text: t('chartAsientos')
                 },
                 tooltips: {
                     mode: 'index',
@@ -51,7 +54,7 @@ export default {
                             display: true,
                             scaleLabel: {
                                 display: true,
-                                labelString: this.$t('chartMes')
+                                labelString: t('chartMes')
                             },
                             stacked: true
                         }
@@ -61,7 +64,7 @@ export default {
                             display: true,
                             scaleLabel: {
                                 display: true,
-                                labelString: this.$t('chartCantidad')
+                                labelString: t('chartCantidad')
                             },
                             stacked: true
                         }
@@ -134,14 +137,14 @@ export default {
                     labels: etiquetas,
                     datasets: [
                         {
-                            label: this.$t('chartOcupados'),
+                            label: t('chartOcupados'),
                             borderColor: 'blue',
                             data: ocupados,
                             backgroundColor: 'rgb(0, 0, 255, 0.5)',
                             fill: true
                         },
                         {
-                            label: this.$t('chartNoOcupados'),
+                            label: t('chartNoOcupados'),
                             backgroundColor: 'rgb(255, 0, 0, 0.5)',
                             borderColor: '#F00',
                             data: desocupados,

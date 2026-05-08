@@ -13,6 +13,9 @@ import LineChart from './LineChart';
 import { mapActions } from 'pinia';
 import { useAdminStore } from '../../stores/admin';
 import dayjs from '../../dayjs';
+import i18n from '../../i18n';
+
+const t = (key) => i18n.global.t(key);
 
 export default {
     name: 'trips-chart',
@@ -33,7 +36,7 @@ export default {
                 maintainAspectRatio: false,
                 title: {
                     display: true,
-                    text: this.$t('chartViajesDeConductoresEnLaPlataforma')
+                    text: t('chartViajesDeConductoresEnLaPlataforma')
                 },
                 tooltips: {
                     mode: 'index',
@@ -49,7 +52,7 @@ export default {
                             display: true,
                             scaleLabel: {
                                 display: true,
-                                labelString: this.$t('chartMes')
+                                labelString: t('chartMes')
                             }
                         }
                     ],
@@ -58,7 +61,7 @@ export default {
                             display: true,
                             scaleLabel: {
                                 display: true,
-                                labelString: this.$t('chartCantidad')
+                                labelString: t('chartCantidad')
                             }
                         }
                     ]
@@ -110,7 +113,7 @@ export default {
                     labels: etiquetas,
                     datasets: [
                         {
-                            label: this.$t('chartCantidadDeViajes'),
+                            label: t('chartCantidadDeViajes'),
                             backgroundColor: '#F00',
                             borderColor: '#F00',
                             data: datos,

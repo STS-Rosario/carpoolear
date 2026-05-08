@@ -48,25 +48,19 @@
                     class="chart-card"
                     :minDate="dateLimits.start"
                     :maxDate="dateLimits.end"
-                >
-                    >
-                </MonthlyUsersChart>
+                />
             </div>
             <div class="col-md-9 col-md-offset-2">
                 <SeatsChart
                     class="chart-card"
                     :minDate="dateLimits.start"
                     :maxDate="dateLimits.end"
-                >
-                    >
-                </SeatsChart>
+                />
                 <TotalUsersChart
                     class="chart-card"
                     :minDate="dateLimits.start"
                     :maxDate="dateLimits.end"
-                >
-                    >
-                </TotalUsersChart>
+                />
             </div>
         </div>
     </AdminLayout>
