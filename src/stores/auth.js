@@ -54,6 +54,28 @@ export const useAuthStore = defineStore('auth', {
             this.appConfig = appConfig;
         },
 
+        /**
+         * Merge maintenance flags from a 503 maintenance JSON body (API middleware).
+         */
+        applyMaintenanceBlock(payload) {
+            if (!this.appConfig) {
+                return;
+            }
+            const prev = this.appConfig.maintenance || {};
+            this.appConfig = {
+                ...this.appConfig,
+                maintenance: {
+                    ...prev,
+                    enabled: true,
+                    mode: payload.mode ?? prev.mode,
+                    message: payload.message ?? prev.message,
+                    ends_at: payload.ends_at ?? prev.ends_at,
+                    admin_path:
+                        prev.admin_path || '/#/admin/maintenance'
+                }
+            };
+        },
+
         pushDonation(donation) {
             if (this.user) {
                 if (!this.user.donations) {

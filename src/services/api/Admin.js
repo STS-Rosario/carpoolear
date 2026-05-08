@@ -123,6 +123,34 @@ class AdminApi extends TaggedApi {
     createUserMigration(data) {
         return this.post('/api/admin/user-migrations', data);
     }
+
+    getMaintenanceSchedules() {
+        return this.get('/api/admin/maintenance/schedules');
+    }
+
+    createMaintenanceSchedule(body) {
+        return this.post('/api/admin/maintenance/schedules', body);
+    }
+
+    patchMaintenanceSchedule(id, body) {
+        return this.patch('/api/admin/maintenance/schedules/' + id, body);
+    }
+
+    cancelMaintenanceSchedule(id) {
+        return this.delete('/api/admin/maintenance/schedules/' + id);
+    }
+
+    getMaintenanceState() {
+        return this.get('/api/admin/maintenance/state');
+    }
+
+    putMaintenanceState(body) {
+        return this.put('/api/admin/maintenance/state', body);
+    }
+
+    getMaintenanceAuditLogs() {
+        return this.get('/api/admin/maintenance/audit-logs');
+    }
 }
 
 export { AdminApi as default };

@@ -18,6 +18,9 @@
                     <router-link :to="{ name: 'admin-page' }">{{ $t('adminNavGraficos') }}</router-link>
                 </li>
                 <li>
+                    <router-link :to="{ name: 'admin-maintenance' }">{{ $t('adminNavMaintenance') }}</router-link>
+                </li>
+                <li>
                     <router-link :to="{ name: 'admin-users' }">{{ $t('adminNavUsuarios') }}</router-link>
                 </li>
                 <li>

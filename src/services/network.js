@@ -99,6 +99,26 @@ export default {
                     if (resp.response) {
                         const data = resp.response.data;
                         const status = resp.response.status;
+                        if (
+                            status === 503 &&
+                            data &&
+                            data.maintenance === true
+                        ) {
+                            import('../stores/auth').then(
+                                ({ useAuthStore }) => {
+                                    try {
+                                        useAuthStore().applyMaintenanceBlock(
+                                            data
+                                        );
+                                    } catch (e) {
+                                        console.warn(
+                                            'applyMaintenanceBlock:',
+                                            e
+                                        );
+                                    }
+                                }
+                            );
+                        }
                         reject({ data, status });
                     } else {
                         reject(resp);
@@ -154,6 +174,18 @@ export default {
         const resolvedHeaders = await this.getHeader(headers);
         return this.processResponse(
             axios.put(API_URL + url, body, {
+                headers: resolvedHeaders,
+                cancelToken: source.token
+            }),
+            source
+        );
+    },
+
+    async patch(url, body, headers = {}) {
+        const source = this.newCancelToken();
+        const resolvedHeaders = await this.getHeader(headers);
+        return this.processResponse(
+            axios.patch(API_URL + url, body, {
                 headers: resolvedHeaders,
                 cancelToken: source.token
             }),

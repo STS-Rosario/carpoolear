@@ -4,11 +4,11 @@
         :class="[backgroundStyle, viewName, deviceClass]"
     >
         <ForceUpgradeModal v-if="showForceUpgrade" />
-        <IdentityValidationPromptModal
-            v-if="!showForceUpgrade"
-            :suppress="identityPromptSuppress"
-        />
-        <template v-if="!showForceUpgrade">
+        <MaintenanceFullscreen v-else-if="passengerMaintenanceWall" />
+        <template v-else>
+            <IdentityValidationPromptModal
+                :suppress="identityPromptSuppress"
+            />
             <!-- Custom Splash Screen -->
             <div v-if="showCustomSplash" class="custom-splash-screen">
                 <img
@@ -20,6 +20,7 @@
             </div>
 
             <onBoarding key="1" v-if="onBoardingVisibility"></onBoarding>
+            <MaintenanceAdminBanner v-if="maintenanceAdminStickyVisible" />
             <headerApp></headerApp>
             <main id="main">
                 <div class="view-container clearfix">
@@ -50,6 +51,8 @@ import headerApp from './components/sections/HeaderApp.vue';
 import onBoarding from './components/sections/OnBoarding.vue';
 import ForceUpgradeModal from './components/ForceUpgradeModal.vue';
 import IdentityValidationPromptModal from './components/IdentityValidationPromptModal.vue';
+import MaintenanceFullscreen from './components/MaintenanceFullscreen.vue';
+import MaintenanceAdminBanner from './components/MaintenanceAdminBanner.vue';
 
 export default {
     name: 'app',
@@ -184,6 +187,34 @@ export default {
         identityPromptSuppress() {
             return this.showCustomSplash || this.onBoardingVisibility;
         },
+        passengerMaintenanceWall() {
+            const cfg = this.appConfig && this.appConfig.maintenance;
+            if (!cfg || !cfg.enabled) {
+                return false;
+            }
+            if (this.user && this.user.is_admin) {
+                return false;
+            }
+            const allowed = new Set([
+                'login',
+                'register',
+                'activate',
+                'reset-password',
+                'reset-password-confirm'
+            ]);
+            return !allowed.has(this.$route.name);
+        },
+        maintenanceAdminStickyVisible() {
+            const cfg = this.appConfig && this.appConfig.maintenance;
+            if (!cfg || !cfg.enabled || cfg.mode !== 'flexible') {
+                return false;
+            }
+            if (!this.user || !this.user.is_admin) {
+                return false;
+            }
+            const hideOn = new Set(['login', 'register']);
+            return !hideOn.has(this.$route.name);
+        },
         viewName() {
             return this.$route.name;
         },
@@ -218,7 +249,9 @@ export default {
         footerApp,
         onBoarding,
         ForceUpgradeModal,
-        IdentityValidationPromptModal
+        IdentityValidationPromptModal,
+        MaintenanceFullscreen,
+        MaintenanceAdminBanner
     }
 };
 </script>
