@@ -53,6 +53,9 @@ const messages = {
         descripcionCortaPlantilla: 'Descripción breve',
         nombrePlantilla: 'Nombre',
         cuerpoPlantillaMensaje: 'Mensaje',
+        plantillaVariablesAyudaIntro: 'Variables:',
+        plantillaVariablesAyudaConector: '(primer nombre del usuario del ticket) y',
+        plantillaVariablesAyudaSuffix: '(nombre completo).',
         plantillaVariablesAyuda:
             'Variables: {{nombre}} (primer nombre del usuario del ticket) y {{nombreCompleto}} (nombre completo).',
         accionVer: 'Ver',
@@ -1289,6 +1292,9 @@ const messages = {
         descripcionCortaPlantilla: 'Descripción breve',
         nombrePlantilla: 'Nombre',
         cuerpoPlantillaMensaje: 'Mensaje',
+        plantillaVariablesAyudaIntro: 'Variables:',
+        plantillaVariablesAyudaConector: '(primer nombre del usuario del ticket) y',
+        plantillaVariablesAyudaSuffix: '(nombre completo).',
         plantillaVariablesAyuda:
             'Variables: {{nombre}} (primer nombre del usuario del ticket) y {{nombreCompleto}} (nombre completo).',
         accionVer: 'Ver',
@@ -2296,6 +2302,9 @@ const messages = {
         descripcionCortaPlantilla: 'Short description',
         nombrePlantilla: 'Name',
         cuerpoPlantillaMensaje: 'Message',
+        plantillaVariablesAyudaIntro: 'Variables:',
+        plantillaVariablesAyudaConector: '(ticket user first name) and',
+        plantillaVariablesAyudaSuffix: '(full name).',
         plantillaVariablesAyuda:
             'Variables: {{nombre}} (ticket user first name) and {{nombreCompleto}} (full name).',
         accionVer: 'View',

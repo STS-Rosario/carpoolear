@@ -14,9 +14,12 @@ import LineChart from './LineChart';
 import { mapActions } from 'pinia';
 import { useAdminStore } from '../../stores/admin';
 import dayjs from '../../dayjs';
+import i18n from '../../i18n';
+
+const t = (key) => i18n.global.t(key);
 
 export default {
-    name: 'monthly-users-chart',
+    name: 'total-users-chart',
     props: {
         minDate: {
             default: dayjs(new Date(new Date().getFullYear(), 0, 1)).format('YYYY-MM')
@@ -34,7 +37,7 @@ export default {
                 maintainAspectRatio: false,
                 title: {
                     display: true,
-                    text: this.$t('chartUsuariosRegistradosPorMes')
+                    text: t('chartUsuariosRegistradosPorMes')
                 },
                 tooltips: {
                     mode: 'index',
@@ -50,7 +53,7 @@ export default {
                             display: true,
                             scaleLabel: {
                                 display: true,
-                                labelString: this.$t('chartMes')
+                                labelString: t('chartMes')
                             },
                             stacked: true
                         }
@@ -60,7 +63,7 @@ export default {
                             display: true,
                             scaleLabel: {
                                 display: true,
-                                labelString: this.$t('chartCantidad')
+                                labelString: t('chartCantidad')
                             }
                         }
                     ]
@@ -103,7 +106,7 @@ export default {
                 labels: labels,
                 datasets: [
                     {
-                        label: this.$t('chartUsuarios'),
+                        label: t('chartUsuarios'),
                         backgroundColor: '#0F0',
                         borderColor: '#0F0',
                         data: datasetTotales,

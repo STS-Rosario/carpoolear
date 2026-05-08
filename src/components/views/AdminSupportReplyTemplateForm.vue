@@ -4,7 +4,13 @@
             <router-link :to="{ name: 'admin-support-reply-templates' }">{{ $t('volverPlantillasRespuestas') }}</router-link>
         </p>
         <h3>{{ isEdit ? $t('editarPlantillaRespuesta') : $t('nuevaPlantillaRespuesta') }}</h3>
-        <p class="help-block">{{ $t('plantillaVariablesAyuda') }}</p>
+        <p class="help-block">
+            {{ $t('plantillaVariablesAyudaIntro') }}
+            <code v-pre>{{nombre}}</code>
+            {{ $t('plantillaVariablesAyudaConector') }}
+            <code v-pre>{{nombreCompleto}}</code>
+            {{ $t('plantillaVariablesAyudaSuffix') }}
+        </p>
         <div v-if="loadError" class="alert alert-danger">{{ loadError }}</div>
         <div v-else-if="loading" class="alert alert-info">{{ $t('cargandoNotificaciones') }}</div>
         <div v-else>
@@ -19,6 +25,7 @@
             <div class="form-group">
                 <label>{{ $t('cuerpoPlantillaMensaje') }} *</label>
                 <editor
+                    :key="`${$route.name}-${templateId ?? 'new'}-${bodyEditorKey}`"
                     ref="bodyEditor"
                     :initial-value="form.body_markdown"
                     :options="editorOptions"
@@ -58,6 +65,8 @@ export default {
                 short_description: '',
                 body_markdown: ''
             },
+            /** Remount Toast UI editor so content comes from initial-value only (avoids setMarkdown vs ProseMirror race). */
+            bodyEditorKey: 0,
             editorOptions: {
                 usageStatistics: false,
                 hideModeSwitch: true,
@@ -76,11 +85,14 @@ export default {
             adminCreateTemplate: 'adminCreateTemplate',
             adminUpdateTemplate: 'adminUpdateTemplate'
         }),
+        bumpBodyEditor() {
+            this.bodyEditorKey += 1;
+        },
         async load() {
             if (!this.isEdit) {
                 this.form = { name: '', short_description: '', body_markdown: '' };
                 this.loading = false;
-                this.$nextTick(() => this.syncEditor());
+                this.loadError = '';
                 return;
             }
             this.loading = true;
@@ -97,13 +109,7 @@ export default {
                 this.loadError = this.$t('errorCargandoPlantillasRespuestas');
             } finally {
                 this.loading = false;
-                this.$nextTick(() => this.syncEditor());
-            }
-        },
-        syncEditor() {
-            const ed = this.$refs.bodyEditor;
-            if (ed && typeof ed.invoke === 'function') {
-                ed.invoke('setMarkdown', this.form.body_markdown || '');
+                this.$nextTick(() => this.bumpBodyEditor());
             }
         },
         save() {
