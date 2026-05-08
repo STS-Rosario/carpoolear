@@ -155,6 +155,9 @@ const PRIORITY_CLASS_MAP = {
     low: 'label label-default'
 };
 
+const INTERNAL_NOTE_SAVE_SUCCESS_TOAST_OPTIONS = { estado: 'success', duration: 2 };
+const INTERNAL_NOTE_SAVE_ERROR_TOAST_OPTIONS = { estado: 'error', duration: 3 };
+
 export default {
     name: 'admin-support-ticket-detail',
     props: ['id'],
@@ -357,10 +360,10 @@ export default {
             this.adminSetInternalNote(this.id, this.internalNote)
                 .then(() => this.refresh())
                 .then(() => {
-                    dialogs.message(this.$t('notaInternaGuardada'), { estado: 'success', duration: 2 });
+                    dialogs.message(this.$t('notaInternaGuardada'), INTERNAL_NOTE_SAVE_SUCCESS_TOAST_OPTIONS);
                 })
                 .catch(() => {
-                    dialogs.message(this.$t('errorGuardandoNotaInterna'), { estado: 'error', duration: 3 });
+                    dialogs.message(this.$t('errorGuardandoNotaInterna'), INTERNAL_NOTE_SAVE_ERROR_TOAST_OPTIONS);
                 });
         }
     },
