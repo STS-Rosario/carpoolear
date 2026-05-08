@@ -20,7 +20,7 @@
             <div class="list-group-item" v-for="reply in ticket.replies || []" :key="reply.id">
                 <p class="reply-meta-row">
                     <strong>
-                        <span v-if="reply.is_admin">{{ $t('equipoCarpoolear') }}</span>
+                        <span v-if="reply.is_admin">{{ adminReplyAuthorLabel(reply) }}</span>
                         <span v-else>
                             <router-link v-if="canLinkUserProfile()" :to="userAppProfileRoute()">
                                 {{ replyAuthorLabel(reply) }}
@@ -240,8 +240,17 @@ export default {
             return PRIORITY_CLASS_MAP[key] || 'label label-default';
         },
         replyAuthorLabel(reply) {
-            if (reply.is_admin) return this.$t('equipoCarpoolear');
             return (this.ticket && this.ticket.user && this.ticket.user.name) || this.$t('usuario');
+        },
+        adminReplyAuthorLabel(reply) {
+            const name = reply.user?.name != null ? String(reply.user.name).trim() : '';
+            if (!name) {
+                return this.$t('equipoCarpoolear');
+            }
+            return this.$t('equipoCarpoolearAutorAdmin', {
+                name,
+                id: reply.user?.id ?? ''
+            });
         },
         canLinkUserProfile() {
             return Boolean(this.ticket && this.ticket.user && this.ticket.user.id);

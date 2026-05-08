@@ -10,27 +10,31 @@
         <p v-if="!safeTickets.length" class="alert alert-warning">{{ $t('noHayTicketsUsuarioMesaAyuda') }}</p>
 
         <div v-else class="table-responsive">
-            <table class="table table-hover support-tickets-table">
+            <table class="table table-hover support-tickets-table support-tickets-table--compact">
                 <thead>
                     <tr>
-                        <th>{{ capitalizeFirst($t('asuntoTicket')) }}</th>
-                        <th>{{ capitalizeFirst($t('creado')) }}</th>
-                        <th>{{ capitalizeFirst($t('actualizado')) }}</th>
-                        <th>{{ capitalizeFirst($t('estado')) }}</th>
+                        <th class="support-tickets-table__subject">{{ capitalizeFirst($t('asuntoTicket')) }}</th>
+                        <th class="support-tickets-table__narrow">{{ capitalizeFirst($t('prioridad')) }}</th>
+                        <th class="support-tickets-table__narrow">{{ capitalizeFirst($t('creado')) }}</th>
+                        <th class="support-tickets-table__narrow">{{ capitalizeFirst($t('actualizado')) }}</th>
+                        <th class="support-tickets-table__narrow">{{ capitalizeFirst($t('estado')) }}</th>
+                        <th class="support-tickets-table__narrow">{{ capitalizeFirst($t('categoriaTicket')) }}</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="ticket in safeTickets" :key="ticket.id">
-                        <td>
+                        <td class="support-tickets-table__subject">
                             <router-link :to="{ name: 'ticket-detail', params: { id: ticket.id } }">
                                 #{{ ticket.id }} - {{ ticket.subject }}
                             </router-link>
                         </td>
-                        <td :title="fullDate(ticket.created_at)">{{ relativeDate(ticket.created_at) }}</td>
-                        <td :title="fullDate(ticket.updated_at)">{{ relativeDate(ticket.updated_at) }}</td>
-                        <td>
+                        <td class="support-tickets-table__narrow"><span :class="priorityClass(ticket.priority)">{{ priorityLabel(ticket.priority) }}</span></td>
+                        <td class="support-tickets-table__narrow" :title="fullDate(ticket.created_at)">{{ relativeDate(ticket.created_at) }}</td>
+                        <td class="support-tickets-table__narrow" :title="fullDate(ticket.updated_at)">{{ relativeDate(ticket.updated_at) }}</td>
+                        <td class="support-tickets-table__narrow">
                             <span :class="statusClass(ticket.status)">{{ statusLabel(ticket.status) }}</span>
                         </td>
+                        <td class="support-tickets-table__narrow">{{ ticketCategoryLabel(ticket.type) }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -42,6 +46,7 @@
 import { mapActions, mapState } from 'pinia';
 import { useTicketsStore } from '../../stores/tickets';
 import dayjs from '../../dayjs';
+import { TICKET_TYPE_LABEL_KEYS, TICKET_PRIORITY_LABEL_KEYS } from '../../utils/supportTicketLabels';
 
 const STATUS_LABEL_KEYS = {
     Open: 'estadoPendiente',
@@ -90,6 +95,24 @@ export default {
             if (!value) return '';
             return value.charAt(0).toUpperCase() + value.slice(1);
         },
+        ticketCategoryLabel(type) {
+            const key = TICKET_TYPE_LABEL_KEYS[type];
+            if (key) return this.$t(key);
+            return this.capitalizeFirst(type || '');
+        },
+        priorityLabel(priority) {
+            const key = (priority || '').toLowerCase();
+            if (TICKET_PRIORITY_LABEL_KEYS[key]) return this.$t(TICKET_PRIORITY_LABEL_KEYS[key]);
+            return this.capitalizeFirst(priority || '');
+        },
+        priorityClass(priority) {
+            const key = (priority || '').toLowerCase();
+            return {
+                high: 'label label-danger',
+                normal: 'label label-info',
+                low: 'label label-default'
+            }[key] || 'label label-default';
+        },
         statusClass(status) {
             return this.statusClassMap[status] || 'label label-info';
         }
@@ -100,6 +123,7 @@ export default {
 };
 </script>
 
+<style scoped src="../../styles/supportTicketsTableCompact.css"></style>
 <style scoped>
 .create-ticket-cta {
     margin-bottom: 16px;

@@ -44,6 +44,11 @@ describe('TicketDetail user view', () => {
         expect(viewSource).toContain("this.$t('equipoCarpoolear')");
     });
 
+    it('does not expose which admin replied on the user-facing ticket detail', () => {
+        expect(viewSource).not.toContain('equipoCarpoolearAutorAdmin');
+        expect(viewSource).not.toContain('adminReplyAuthorLabel');
+    });
+
     it('shows translated image attachment title', () => {
         expect(viewSource).toContain("{{ $t('adjuntarImagenes') }}");
     });

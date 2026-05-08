@@ -13,19 +13,20 @@
         <p v-else-if="error" class="alert alert-danger">{{ error }}</p>
         <p v-else-if="!safeTickets.length" class="alert alert-warning">{{ $t('noHayTickets') }}</p>
         <div v-else class="table-responsive">
-            <table class="table table-hover support-tickets-table">
+            <table class="table table-hover support-tickets-table support-tickets-table--compact">
                 <thead>
                     <tr>
-                        <th>{{ capitalizeFirst($t('asuntoTicket')) }}</th>
-                        <th>{{ capitalizeFirst($t('creado')) }}</th>
-                        <th>{{ capitalizeFirst($t('actualizado')) }}</th>
-                        <th>{{ capitalizeFirst($t('estado')) }}</th>
-                        <th>{{ capitalizeFirst($t('prioridad')) }}</th>
+                        <th class="support-tickets-table__subject">{{ capitalizeFirst($t('asuntoTicket')) }}</th>
+                        <th class="support-tickets-table__narrow">{{ capitalizeFirst($t('prioridad')) }}</th>
+                        <th class="support-tickets-table__narrow">{{ capitalizeFirst($t('creado')) }}</th>
+                        <th class="support-tickets-table__narrow">{{ capitalizeFirst($t('actualizado')) }}</th>
+                        <th class="support-tickets-table__narrow">{{ capitalizeFirst($t('estado')) }}</th>
+                        <th class="support-tickets-table__narrow">{{ capitalizeFirst($t('categoriaTicket')) }}</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="ticket in safeTickets" :key="ticket.id">
-                        <td>
+                        <td class="support-tickets-table__subject">
                             <router-link :to="{ name: 'admin-support-ticket-detail', params: { id: ticket.id } }">
                                 #{{ ticket.id }} - {{ ticket.subject }}
                             </router-link>
@@ -37,10 +38,11 @@
                                 <i class="glyphicon glyphicon-comment"></i>
                             </span>
                         </td>
-                        <td :title="fullDate(ticket.created_at)">{{ relativeDate(ticket.created_at) }}</td>
-                        <td :title="fullDate(ticket.updated_at)">{{ relativeDate(ticket.updated_at) }}</td>
-                        <td><span :class="statusClass(ticket.status)">{{ statusLabel(ticket.status) }}</span></td>
-                        <td><span :class="priorityClass(ticket.priority)">{{ priorityLabel(ticket.priority) }}</span></td>
+                        <td class="support-tickets-table__narrow"><span :class="priorityClass(ticket.priority)">{{ priorityLabel(ticket.priority) }}</span></td>
+                        <td class="support-tickets-table__narrow" :title="fullDate(ticket.created_at)">{{ relativeDate(ticket.created_at) }}</td>
+                        <td class="support-tickets-table__narrow" :title="fullDate(ticket.updated_at)">{{ relativeDate(ticket.updated_at) }}</td>
+                        <td class="support-tickets-table__narrow"><span :class="statusClass(ticket.status)">{{ statusLabel(ticket.status) }}</span></td>
+                        <td class="support-tickets-table__narrow">{{ ticketCategoryLabel(ticket.type) }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -53,6 +55,7 @@ import { mapActions, mapState } from 'pinia';
 import AdminLayout from '../layouts/AdminLayout.vue';
 import { useTicketsStore } from '../../stores/tickets';
 import dayjs from '../../dayjs';
+import { TICKET_TYPE_LABEL_KEYS, TICKET_PRIORITY_LABEL_KEYS } from '../../utils/supportTicketLabels';
 
 const STATUS_LABEL_KEYS = {
     Open: 'estadoPendiente',
@@ -60,12 +63,6 @@ const STATUS_LABEL_KEYS = {
     'En revision': 'estadoPendienteRevision',
     Resuelto: 'estadoAprobado',
     Cerrado: 'estadoCerrado'
-};
-
-const PRIORITY_LABEL_KEYS = {
-    low: 'prioridadBaja',
-    normal: 'prioridadNormal',
-    high: 'prioridadAlta'
 };
 
 export default {
@@ -92,6 +89,11 @@ export default {
             if (!value) return '';
             return value.charAt(0).toUpperCase() + value.slice(1);
         },
+        ticketCategoryLabel(type) {
+            const key = TICKET_TYPE_LABEL_KEYS[type];
+            if (key) return this.$t(key);
+            return this.capitalizeFirst(type || '');
+        },
         fullDate(value) {
             if (!value) return '-';
             return dayjs(value).format('YYYY-MM-DD HH:mm:ss');
@@ -114,7 +116,7 @@ export default {
         },
         priorityLabel(priority) {
             const key = (priority || '').toLowerCase();
-            if (PRIORITY_LABEL_KEYS[key]) return this.$t(PRIORITY_LABEL_KEYS[key]);
+            if (TICKET_PRIORITY_LABEL_KEYS[key]) return this.$t(TICKET_PRIORITY_LABEL_KEYS[key]);
             return this.capitalizeFirst(priority || '');
         },
         priorityClass(priority) {
@@ -146,6 +148,7 @@ export default {
 };
 </script>
 
+<style scoped src="../../styles/supportTicketsTableCompact.css"></style>
 <style scoped>
 .support-tickets-table {
     border: 1px solid #dcdcdc;

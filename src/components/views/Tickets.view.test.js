@@ -19,6 +19,36 @@ describe('Tickets list view', () => {
         expect(viewSource).toContain("name: 'ticket-new'");
     });
 
+    it('orders thead subject first then priority then dates and status with category last', () => {
+        const sub = viewSource.indexOf("$t('asuntoTicket')");
+        const pri = viewSource.indexOf("$t('prioridad')");
+        const cre = viewSource.indexOf("$t('creado')");
+        const upd = viewSource.indexOf("$t('actualizado')");
+        const est = viewSource.indexOf("$t('estado')");
+        const cat = viewSource.indexOf("$t('categoriaTicket')");
+        expect(sub).toBeGreaterThan(-1);
+        expect(sub).toBeLessThan(pri);
+        expect(pri).toBeLessThan(cre);
+        expect(cre).toBeLessThan(upd);
+        expect(upd).toBeLessThan(est);
+        expect(est).toBeLessThan(cat);
+    });
+
+    it('shows subject link before priority and category cell last in row', () => {
+        const subjectCell = viewSource.indexOf('#{{ ticket.id }}');
+        const priCell = viewSource.indexOf('priorityLabel(ticket.priority)');
+        const catCell = viewSource.indexOf('ticketCategoryLabel(ticket.type)');
+        expect(subjectCell).toBeGreaterThan(-1);
+        expect(subjectCell).toBeLessThan(priCell);
+        expect(priCell).toBeLessThan(catCell);
+    });
+
+    it('uses compact narrow columns and a wide subject column class', () => {
+        expect(viewSource).toContain('support-tickets-table--compact');
+        expect(viewSource).toContain('support-tickets-table__subject');
+        expect(viewSource).toContain('support-tickets-table__narrow');
+    });
+
     it('renders tickets in table rows with title, created date, updated date and status', () => {
         expect(viewSource).toContain('<table');
         expect(viewSource).toContain('<tbody');
