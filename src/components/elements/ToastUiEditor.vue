@@ -5,6 +5,7 @@
 <script>
 import Editor from '@toast-ui/editor';
 import '@toast-ui/editor/dist/toastui-editor.css';
+import { log343bb5 } from '../../debug/session343bb5Log';
 
 const EDITOR_EVENTS = [
     'load',
@@ -92,10 +93,23 @@ export default {
         }
     },
     mounted() {
-        this.editor = new Editor({
-            el: this.$refs.mount,
-            ...this.editorConstructorOptions
+        log343bb5('H-B,H-C', 'ToastUiEditor:mounted', 'creating-editor', {
+            initialEditType: this.initialEditType,
+            height: this.height
         });
+        try {
+            this.editor = new Editor({
+                el: this.$refs.mount,
+                ...this.editorConstructorOptions
+            });
+            log343bb5('H-B', 'ToastUiEditor:mounted', 'editor-created-ok', {});
+        } catch (e) {
+            log343bb5('H-B', 'ToastUiEditor:mounted', 'editor-created-throw', {
+                errName: e && e.name,
+                errMessage: e && e.message ? String(e.message).slice(0, 160) : 'unknown'
+            });
+            throw e;
+        }
     },
     beforeUnmount() {
         if (!this.editor) {

@@ -40,6 +40,7 @@ import ToastUiEditor from '../elements/ToastUiEditor.vue';
 import AdminLayout from '../layouts/AdminLayout.vue';
 import { useReplyTemplatesStore } from '../../stores/replyTemplates';
 import dialogs from '../../services/dialogs';
+import { log343bb5 } from '../../debug/session343bb5Log';
 
 export default {
     name: 'admin-support-reply-template-form',
@@ -81,12 +82,24 @@ export default {
         }),
         bumpBodyEditor() {
             this.bodyEditorKey += 1;
+            log343bb5('H-B,H-D', 'AdminSupportReplyTemplateForm:bumpBodyEditor', 'editor-key-increment', {
+                bodyEditorKey: this.bodyEditorKey
+            });
         },
         async load() {
+            log343bb5('H-D,H-B', 'AdminSupportReplyTemplateForm:load:entry', 'load-started', {
+                isEdit: this.isEdit,
+                routeName: this.$route.name,
+                templateId: this.templateId
+            });
             if (!this.isEdit) {
                 this.form = { name: '', short_description: '', body_markdown: '' };
                 this.loading = false;
                 this.$nextTick(() => this.bumpBodyEditor());
+                log343bb5('H-D', 'AdminSupportReplyTemplateForm:load:new-branch', 'load-new-done', {
+                    loading: this.loading,
+                    loadError: this.loadError
+                });
                 return;
             }
             this.loading = true;
@@ -103,6 +116,10 @@ export default {
                 this.loadError = this.$t('errorCargandoPlantillasRespuestas');
             } finally {
                 this.loading = false;
+                log343bb5('H-D', 'AdminSupportReplyTemplateForm:load:finally', 'load-edit-finally', {
+                    loadError: this.loadError,
+                    bodyLen: (this.form.body_markdown || '').length
+                });
                 this.$nextTick(() => this.bumpBodyEditor());
             }
         },
@@ -149,7 +166,20 @@ export default {
         }
     },
     mounted() {
+        log343bb5('H-B,H-D', 'AdminSupportReplyTemplateForm:mounted', 'form-mounted', {
+            routeName: this.$route.name,
+            isEdit: this.isEdit,
+            loading: this.loading,
+            loadError: this.loadError,
+            bodyEditorKey: this.bodyEditorKey
+        });
         this.load();
+        this.$nextTick(() =>
+            log343bb5('H-D', 'AdminSupportReplyTemplateForm:mounted+tick', 'after-first-tick', {
+                loading: this.loading,
+                loadError: this.loadError
+            })
+        );
     },
     components: {
         editor: ToastUiEditor,

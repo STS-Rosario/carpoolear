@@ -13,11 +13,15 @@
 
 <script>
 import adminNav from '../sections/adminNav';
+import { log343bb5 } from '../../debug/session343bb5Log';
 
 export default {
     name: 'admin-layout',
     components: {
         adminNav
+    },
+    mounted() {
+        log343bb5('H-C,H-E', 'AdminLayout.vue:mounted', 'admin-layout-mounted', {});
     }
 };
 </script>

@@ -1,9 +1,11 @@
 /* jshint esversion: 6 */
 import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router';
+import { nextTick } from 'vue';
 import i18n from '../i18n';
 import { useAuthStore } from '../stores/auth';
 import { useActionbarsStore } from '../stores/actionbars';
 import { useBackgroundStore } from '../stores/background';
+import { log343bb5 } from '../debug/session343bb5Log';
 
 import routes from './routes.js';
 
@@ -76,6 +78,25 @@ router.beforeEach((to, from, next) => {
     }
     window.scrollTo(0, 0);
     next();
+});
+
+router.afterEach((to) => {
+    log343bb5('H-A', 'router/index.js:afterEach', 'entered-route', {
+        name: to.name,
+        fullPath: to.fullPath,
+        matchedCount: to.matched ? to.matched.length : 0
+    });
+    nextTick(() =>
+        requestAnimationFrame(() => {
+            const main = document.getElementById('main');
+            log343bb5('H-A,H-C,H-E', 'router/index.js:afterEach:raf', 'dom-snapshot-after-nav', {
+                name: to.name,
+                mainInnerLen: main ? main.innerHTML.length : -1,
+                hasAdminNav: !!document.querySelector('.admin-nav-sidebar'),
+                adminNavVisible: !!(main && main.querySelector('.admin-nav-sidebar'))
+            });
+        })
+    );
 });
 
 router.stack = [];
