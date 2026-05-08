@@ -354,7 +354,14 @@ export default {
             this.adminReopen(this.id).then(() => this.refresh());
         },
         saveInternalNote() {
-            this.adminSetInternalNote(this.id, this.internalNote).then(() => this.refresh());
+            this.adminSetInternalNote(this.id, this.internalNote)
+                .then(() => this.refresh())
+                .then(() => {
+                    dialogs.message(this.$t('notaInternaGuardada'), { estado: 'success', duration: 2 });
+                })
+                .catch(() => {
+                    dialogs.message(this.$t('errorDatos'), { estado: 'error', duration: 3 });
+                });
         }
     },
     mounted() {

@@ -53,6 +53,13 @@ describe('AdminSupportTicketDetail view', () => {
         expect(viewSource).toContain('.then(() => this.refresh())');
     });
 
+    it('shows toast feedback when saving internal notes', () => {
+        expect(viewSource).toContain('saveInternalNote()');
+        expect(viewSource).toContain("notaInternaGuardada");
+        expect(viewSource).toContain("dialogs.message(this.$t('notaInternaGuardada')");
+        expect(viewSource).toContain("dialogs.message(this.$t('errorDatos')");
+    });
+
     it('interpolates ticket user variables before sending admin reply', () => {
         expect(viewSource).toContain('interpolateSupportTemplateVariables');
         expect(viewSource).toContain('adminReply(this.id');
