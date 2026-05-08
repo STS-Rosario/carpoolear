@@ -360,7 +360,7 @@ export default {
                     dialogs.message(this.$t('notaInternaGuardada'), { estado: 'success', duration: 2 });
                 })
                 .catch(() => {
-                    dialogs.message(this.$t('errorDatos'), { estado: 'error', duration: 3 });
+                    dialogs.message(this.$t('errorGuardandoNotaInterna'), { estado: 'error', duration: 3 });
                 });
         }
     },
