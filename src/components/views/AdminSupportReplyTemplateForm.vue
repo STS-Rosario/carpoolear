@@ -7,7 +7,7 @@
         <p class="help-block">{{ $t('plantillaVariablesAyuda') }}</p>
         <div v-if="loadError" class="alert alert-danger">{{ loadError }}</div>
         <div v-else-if="loading" class="alert alert-info">{{ $t('cargandoNotificaciones') }}</div>
-        <div v-else>
+        <div v-else class="reply-template-form-content">
             <div class="form-group">
                 <label>{{ $t('nombrePlantilla') }} *</label>
                 <input v-model="form.name" class="form-control" type="text" />
@@ -140,6 +140,9 @@ export default {
                         mainPickSameAsIdMain: !!(mainById && mainInApp && mainById === mainInApp),
                         idMainToastCount: mainById?.querySelectorAll?.('.toast-ui-editor-mount').length ?? -1,
                         appMainToastCount: mainInApp?.querySelectorAll?.('.toast-ui-editor-mount').length ?? -1,
+                        appFormContentCount: appRoot?.querySelectorAll?.('.reply-template-form-content').length ?? -1,
+                        appInfoCount: appRoot?.querySelectorAll?.('.alert-info').length ?? -1,
+                        appDangerCount: appRoot?.querySelectorAll?.('.alert-danger').length ?? -1,
                         appInnerLen: appRoot ? appRoot.innerHTML.length : -1,
                         hasNavInApp: !!(appRoot && appRoot.querySelector('.admin-nav-sidebar')),
                         rootElNodeType: rootElType,
@@ -211,6 +214,21 @@ export default {
         }
     },
     watch: {
+        loading(value) {
+            // #region agent log
+            log343bb5('H10', 'AdminSupportReplyTemplateForm:watch:loading', 'loading-changed', {
+                value
+            });
+            // #endregion
+        },
+        loadError(value) {
+            // #region agent log
+            log343bb5('H10', 'AdminSupportReplyTemplateForm:watch:loadError', 'loadError-changed', {
+                hasError: !!value,
+                len: value ? String(value).length : 0
+            });
+            // #endregion
+        },
         '$route.name'() {
             this.load();
         },
@@ -233,6 +251,13 @@ export default {
                 loadError: this.loadError
             })
         );
+    },
+    beforeUnmount() {
+        // #region agent log
+        log343bb5('H11', 'AdminSupportReplyTemplateForm:beforeUnmount', 'form-before-unmount', {
+            routeName: this.$route.name
+        });
+        // #endregion
     },
     components: {
         editor: ToastUiEditor,

@@ -107,7 +107,10 @@ router.afterEach((to) => {
                 formGroupCount: main ? main.querySelectorAll('.form-group').length : -1,
                 viewContainerInnerLen: main && main.querySelector('.view-container')
                     ? main.querySelector('.view-container').innerHTML.length
-                    : -1
+                    : -1,
+                appFormContentCount: appRoot ? appRoot.querySelectorAll('.reply-template-form-content').length : -1,
+                appInfoCount: appRoot ? appRoot.querySelectorAll('.alert-info').length : -1,
+                appDangerCount: appRoot ? appRoot.querySelectorAll('.alert-danger').length : -1
             });
         })
     );
