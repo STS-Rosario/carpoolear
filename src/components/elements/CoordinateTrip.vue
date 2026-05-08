@@ -40,7 +40,9 @@
             </template>
             <template v-else>
                 {{ $t('coordinateTripContributionWarningPassengerPrefix') }}
-                {{ $t('coordinateTripContributionWarningPassengerReportLink') }}
+                <router-link :to="{ path: '/soporte' }">
+                    {{ $t('coordinateTripContributionWarningPassengerReportLink') }}
+                </router-link>
                 {{ $t('coordinateTripContributionWarningPassengerSuffix') }}
             </template>
         </p>
