@@ -324,7 +324,7 @@ export default {
         // SearchTrip mounts after this hook and runs loadParams(searchParams). If the store still
         // holds a previous narrow search, trips_auto_search watchers emit() and overwrite the
         // default trip list with a 0-result search. Reset the store before the child reads it.
-        if (!this.clearSearch && !this.keepSearch) {
+        if (!this.clearSearch && !this.keepSearch && !this.hasRouteSearchParams()) {
             this.search({ is_passenger: false });
         }
     },
@@ -448,6 +448,10 @@ export default {
             let scrolloffset = window.scrollY;
             this.setScrollOffset(scrolloffset);
             this.updateTripsQuery(this.searchParams.data, scrolloffset);
+        },
+        hasRouteSearchParams() {
+            const query = this.$route && this.$route.query ? this.$route.query : {};
+            return Object.keys(query).some((key) => key !== 'scroll' && key !== 'clearSearch' && key !== 'keepSearch');
         },
         getSearchParamsFromQuery() {
             const query = this.$route && this.$route.query ? this.$route.query : {};
