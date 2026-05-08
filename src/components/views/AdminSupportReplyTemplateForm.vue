@@ -19,7 +19,7 @@
             <div class="form-group">
                 <label>{{ $t('cuerpoPlantillaMensaje') }} *</label>
                 <editor
-                    :key="bodyEditorKey"
+                    :key="`${$route.name}-${templateId ?? 'new'}-${bodyEditorKey}`"
                     ref="bodyEditor"
                     :initial-value="form.body_markdown"
                     :options="editorOptions"
@@ -95,10 +95,10 @@ export default {
             if (!this.isEdit) {
                 this.form = { name: '', short_description: '', body_markdown: '' };
                 this.loading = false;
-                this.$nextTick(() => this.bumpBodyEditor());
-                log343bb5('H-D', 'AdminSupportReplyTemplateForm:load:new-branch', 'load-new-done', {
+                log343bb5('H-B', 'AdminSupportReplyTemplateForm:load:new-branch', 'load-new-done-skip-bump', {
                     loading: this.loading,
-                    loadError: this.loadError
+                    loadError: this.loadError,
+                    routeKey: `${this.$route.name}-${this.templateId ?? 'new'}`
                 });
                 return;
             }
