@@ -182,6 +182,34 @@ export default {
                 this.fetchList(1);
             }, 500);
         },
+        syncRouteQuery() {
+            const query = {
+                page: String(this.listPage || 1),
+                sort: this.sortKey,
+                direction: this.sortDir
+            };
+            const q = (this.textSearch && this.textSearch.trim()) || '';
+            if (q) {
+                query.name = q;
+            }
+            this.$router.replace({ query });
+        },
+        initFromRouteQuery() {
+            const query = this.$route.query || {};
+            const page = parseInt(query.page, 10);
+            if (!Number.isNaN(page) && page > 0) {
+                this.listPage = page;
+            }
+            if (query.sort) {
+                this.sortKey = String(query.sort);
+            }
+            if (query.direction) {
+                this.sortDir = String(query.direction) === 'asc' ? 'asc' : 'desc';
+            }
+            if (query.name) {
+                this.textSearch = String(query.name);
+            }
+        },
         async fetchList(page) {
             this.listLoading = true;
             this.listPage = page || 1;
@@ -195,6 +223,7 @@ export default {
             if (q) {
                 params.name = q;
             }
+            this.syncRouteQuery();
             try {
                 const body = await this.adminApi.getUsersList(params);
                 this.userList = body.data || [];
@@ -230,7 +259,8 @@ export default {
     },
     mounted() {
         this.adminApi = new AdminApi();
-        this.fetchList(1);
+        this.initFromRouteQuery();
+        this.fetchList(this.listPage || 1);
     },
     components: {
         AdminLayout
