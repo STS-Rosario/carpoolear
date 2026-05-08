@@ -62,6 +62,12 @@
                                             v-if="sortKey === 'email'"
                                         >{{ sortDir === 'asc' ? '▲' : '▼' }}</span>
                                     </th>
+                                    <th scope="col">
+                                        {{ $t('numeroDeDocumento') }}
+                                    </th>
+                                    <th scope="col">
+                                        {{ $t('numeroDeTelefono') }}
+                                    </th>
                                     <th
                                         scope="col"
                                         class="admin-users-th-sort"
@@ -80,12 +86,17 @@
                                     v-for="u in userList"
                                     :key="u.id"
                                     class="admin-users-row"
-                                    @click="goToUser(u.id)"
                                 >
                                     <th scope="row">{{ u.id }}</th>
-                                    <td>{{ u.name || '—' }}</td>
-                                    <td>{{ u.email || '—' }}</td>
-                                    <td>{{ u.last_connection || '—' }}</td>
+                                    <td>
+                                        <router-link :to="{ name: 'admin-users-user', params: { userId: String(u.id) } }">
+                                            {{ displayOrDash(u.name) }}
+                                        </router-link>
+                                    </td>
+                                    <td>{{ displayOrDash(u.email) }}</td>
+                                    <td>{{ displayOrDash(u.nro_doc) }}</td>
+                                    <td>{{ displayOrDash(u.mobile_phone) }}</td>
+                                    <td>{{ displayOrDash(u.last_connection) }}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -154,6 +165,12 @@ export default {
         };
     },
     methods: {
+        displayOrDash(value) {
+            return value === null || value === undefined || value === '' ? '—' : value;
+        },
+        normalizedSearchQuery() {
+            return (this.textSearch && this.textSearch.trim()) || '';
+        },
         toggleSort(column) {
             if (this.sortKey === column) {
                 this.sortDir = this.sortDir === 'asc' ? 'desc' : 'asc';
@@ -171,6 +188,34 @@ export default {
                 this.fetchList(1);
             }, 500);
         },
+        syncRouteQuery() {
+            const query = {
+                page: String(this.listPage || 1),
+                sort: this.sortKey,
+                direction: this.sortDir
+            };
+            const q = this.normalizedSearchQuery();
+            if (q) {
+                query.name = q;
+            }
+            this.$router.replace({ query });
+        },
+        initFromRouteQuery() {
+            const query = this.$route.query || {};
+            const page = parseInt(query.page, 10);
+            if (!Number.isNaN(page) && page > 0) {
+                this.listPage = page;
+            }
+            if (query.sort) {
+                this.sortKey = String(query.sort);
+            }
+            if (query.direction) {
+                this.sortDir = String(query.direction) === 'asc' ? 'asc' : 'desc';
+            }
+            if (query.name) {
+                this.textSearch = String(query.name);
+            }
+        },
         async fetchList(page) {
             this.listLoading = true;
             this.listPage = page || 1;
@@ -180,10 +225,11 @@ export default {
                 sort: this.sortKey,
                 direction: this.sortDir
             };
-            const q = (this.textSearch && this.textSearch.trim()) || '';
+            const q = this.normalizedSearchQuery();
             if (q) {
                 params.name = q;
             }
+            this.syncRouteQuery();
             try {
                 const body = await this.adminApi.getUsersList(params);
                 this.userList = body.data || [];
@@ -210,16 +256,11 @@ export default {
             if (!p || p.current_page >= p.total_pages) return;
             this.fetchList(p.current_page + 1);
         },
-        goToUser(id) {
-            this.$router.push({
-                name: 'admin-users-user',
-                params: { userId: String(id) }
-            });
-        }
     },
     mounted() {
         this.adminApi = new AdminApi();
-        this.fetchList(1);
+        this.initFromRouteQuery();
+        this.fetchList(this.listPage || 1);
     },
     components: {
         AdminLayout
@@ -247,10 +288,6 @@ export default {
     margin-left: 4px;
     font-size: 12px;
     color: #666;
-}
-
-.admin-users-row {
-    cursor: pointer;
 }
 
 .admin-users-pager-bar {

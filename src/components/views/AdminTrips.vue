@@ -3,6 +3,7 @@
         <div class="row">
             <div class="col-md-22 col-md-offset-1">
                 <adminSearchTrip
+                    :params="routeSearchParams"
                     v-on:admin-trip-search="research"
                 ></adminSearchTrip>
             </div>
@@ -93,6 +94,11 @@ export default {
             showTrip: false
         };
     },
+    computed: {
+        routeSearchParams() {
+            return this.$route.query || {};
+        }
+    },
     methods: {
         ...mapActions(useTripsStore, {
             search: 'tripsSearch',
@@ -102,12 +108,23 @@ export default {
         research(params) {
             console.log('research', params);
             this.query = params;
+            this.syncRouteQuery(params);
             this.search(params).then((data) => {
                 this.viajes = data.data;
             });
         },
+        syncRouteQuery(params) {
+            const query = {};
+            Object.keys(params || {}).forEach((key) => {
+                const value = params[key];
+                if (value === null || value === undefined || value === '') return;
+                query[key] = String(value);
+            });
+            this.$router.replace({ query });
+        },
         nextPage() {
             this.query.next = true;
+            this.syncRouteQuery(this.query);
             this.search(this.query).then((data) => {
                 this.viajes = data.data;
             });

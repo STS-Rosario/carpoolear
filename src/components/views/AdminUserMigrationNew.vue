@@ -132,6 +132,35 @@ export default {
         }
     },
     methods: {
+        applyPrefillFromQuery() {
+            const query = this.$route.query || {};
+            const removeUserId = parseInt(query.removeUserId, 10);
+            const keepUserId = parseInt(query.keepUserId, 10);
+            if (!Number.isNaN(removeUserId) && removeUserId > 0) {
+                this.userToRemove = {
+                    id: removeUserId,
+                    name: query.removeUserName ? String(query.removeUserName) : ''
+                };
+            }
+            if (!Number.isNaN(keepUserId) && keepUserId > 0) {
+                this.userToKeep = {
+                    id: keepUserId,
+                    name: query.keepUserName ? String(query.keepUserName) : ''
+                };
+            }
+        },
+        syncRouteQuery() {
+            const query = {};
+            if (this.userToRemove && this.userToRemove.id) {
+                query.removeUserId = String(this.userToRemove.id);
+                query.removeUserName = String(this.userToRemove.name || '');
+            }
+            if (this.userToKeep && this.userToKeep.id) {
+                query.keepUserId = String(this.userToKeep.id);
+                query.keepUserName = String(this.userToKeep.name || '');
+            }
+            this.$router.replace({ query });
+        },
         hasUserImage(user) {
             if (!user) return false;
             const img = (user.image || '').toString().trim();
@@ -175,6 +204,15 @@ export default {
     },
     mounted() {
         this.adminApi = new AdminApi();
+        this.applyPrefillFromQuery();
+    },
+    watch: {
+        userToRemove() {
+            this.syncRouteQuery();
+        },
+        userToKeep() {
+            this.syncRouteQuery();
+        }
     },
     components: {
         AdminLayout,

@@ -357,6 +357,29 @@ export default {
         onSearch(search, loading) {
             loading(true);
             this.search(loading, search, this);
+        },
+        applyParams() {
+            const params = this.params || {};
+            if (params.user_id) {
+                const userId = parseInt(params.user_id, 10);
+                if (!Number.isNaN(userId) && userId > 0) {
+                    this.user = {
+                        id: userId,
+                        name: params.user_name ? String(params.user_name) : ''
+                    };
+                }
+            }
+            if (params.is_passenger != null) {
+                const raw = String(params.is_passenger).toLowerCase();
+                this.isPassenger = raw === '1' || raw === 'true';
+            }
+            if (params.from_date) this.from_date = String(params.from_date);
+            if (params.to_date) this.to_date = String(params.to_date);
+
+            const hasAnyParam = Object.keys(params).length > 0;
+            if (hasAnyParam) {
+                this.emit();
+            }
         }
     },
     props: ['params'],
@@ -365,6 +388,9 @@ export default {
         Autocomplete,
         loading,
         UserSearchAutocomplete
+    },
+    mounted() {
+        this.applyParams();
     }
 };
 </script>

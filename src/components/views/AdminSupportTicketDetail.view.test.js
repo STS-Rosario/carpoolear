@@ -29,8 +29,8 @@ describe('AdminSupportTicketDetail view', () => {
 
     it('shows Carpoolear team plus admin name and id for staff replies', () => {
         expect(viewSource).toContain('adminReplyAuthorLabel(reply)');
-        expect(viewSource).toContain("{{ adminReplyAuthorLabel(reply) }}");
-        expect(viewSource).toContain("equipoCarpoolearAutorAdmin");
+        expect(viewSource).toContain('{{ adminReplyAuthorLabel(reply) }}');
+        expect(viewSource).toContain('equipoCarpoolearAutorAdmin');
     });
 
     it('shows reply metadata row with relative date and full date tooltip', () => {
@@ -51,6 +51,13 @@ describe('AdminSupportTicketDetail view', () => {
         expect(viewSource).toContain('reply-action-btn');
         expect(viewSource).toContain('respuestaEnviada');
         expect(viewSource).toContain('.then(() => this.refresh())');
+    });
+
+    it('shows toast feedback when saving internal notes', () => {
+        expect(viewSource).toContain('saveInternalNote()');
+        expect(viewSource).toContain('notaInternaGuardada');
+        expect(viewSource).toContain("dialogs.message(this.$t('notaInternaGuardada')");
+        expect(viewSource).toContain("dialogs.message(this.$t('errorGuardandoNotaInterna')");
     });
 
     it('interpolates ticket user variables before sending admin reply', () => {

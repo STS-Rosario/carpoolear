@@ -11,4 +11,14 @@ describe('AdminSupportTicketNew view', () => {
         expect(source).toContain('v-model="selectedUser"');
         expect(source).not.toContain('class="list-group autocomplete-users"');
     });
+
+    it('persists selected user and form fields in route query', () => {
+        expect(source).toContain('syncRouteQuery');
+        expect(source).toContain('this.$router.replace');
+        expect(source).toContain('query.userId');
+        expect(source).toContain('query.userName');
+        expect(source).toContain('query.type');
+        expect(source).toContain('query.subject');
+        expect(source).toContain('query.message');
+    });
 });

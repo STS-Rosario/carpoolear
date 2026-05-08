@@ -81,6 +81,16 @@ export default {
     watch: {
         selectedUser(user) {
             this.createForm.user_id = user && user.id ? user.id : null;
+            this.syncRouteQuery();
+        },
+        'createForm.type'() {
+            this.syncRouteQuery();
+        },
+        'createForm.subject'() {
+            this.syncRouteQuery();
+        },
+        'createForm.message_markdown'() {
+            this.syncRouteQuery();
         }
     },
     methods: {
@@ -104,6 +114,23 @@ export default {
             if (query.message) {
                 this.createForm.message_markdown = String(query.message);
             }
+        },
+        syncRouteQuery() {
+            const query = {};
+            if (this.selectedUser && this.selectedUser.id) {
+                query.userId = String(this.selectedUser.id);
+                query.userName = String(this.selectedUser.name || '');
+            }
+            if (this.createForm.type) {
+                query.type = this.createForm.type;
+            }
+            if (this.createForm.subject) {
+                query.subject = this.createForm.subject;
+            }
+            if (this.createForm.message_markdown) {
+                query.message = this.createForm.message_markdown;
+            }
+            this.$router.replace({ query });
         },
         createTicket() {
             this.creating = true;

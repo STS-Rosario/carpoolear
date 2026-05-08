@@ -35,4 +35,12 @@ describe('AdminUserMigrationNew view', () => {
         expect(source).toContain('dayjs(');
         expect(source).toContain(".format('LL')");
     });
+
+    it('persists selected users in route query to restore state after navigation', () => {
+        expect(source).toContain('syncRouteQuery');
+        expect(source).toContain('this.$router.replace');
+        expect(source).toContain('this.$route.query');
+        expect(source).toContain('query.removeUserId');
+        expect(source).toContain('query.keepUserId');
+    });
 });
