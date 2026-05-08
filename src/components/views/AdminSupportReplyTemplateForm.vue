@@ -118,6 +118,23 @@ export default {
                         this.$el && typeof this.$el.querySelectorAll === 'function'
                             ? this.$el.querySelectorAll('.toast-ui-editor-mount').length
                             : -1;
+                    const subTree = this.$ && this.$.subTree ? this.$.subTree : null;
+                    const fragmentAnchor =
+                        subTree && Object.prototype.hasOwnProperty.call(subTree, 'anchor')
+                            ? subTree.anchor
+                            : null;
+                    const fragmentAnchorType =
+                        fragmentAnchor && typeof fragmentAnchor.nodeType === 'number'
+                            ? fragmentAnchor.nodeType
+                            : -1;
+                    const fragmentParentType =
+                        this.$el && this.$el.parentNode && typeof this.$el.parentNode.nodeType === 'number'
+                            ? this.$el.parentNode.nodeType
+                            : -1;
+                    const fragmentParentChildCount =
+                        this.$el && this.$el.parentNode && this.$el.parentNode.childNodes
+                            ? this.$el.parentNode.childNodes.length
+                            : -1;
                     log343bb5('H8,H9', 'AdminSupportReplyTemplateForm:load:new-branch+tick', 'post-new-load-dom', {
                         inMainToastMountCountScoped: inMain,
                         mainPickSameAsIdMain: !!(mainById && mainInApp && mainById === mainInApp),
@@ -126,6 +143,9 @@ export default {
                         appInnerLen: appRoot ? appRoot.innerHTML.length : -1,
                         hasNavInApp: !!(appRoot && appRoot.querySelector('.admin-nav-sidebar')),
                         rootElNodeType: rootElType,
+                        fragmentAnchorNodeType: fragmentAnchorType,
+                        fragmentParentNodeType: fragmentParentType,
+                        fragmentParentChildCount,
                         inSelfToastMountCount: inSelf,
                         refsBodyEditor: !!this.$refs.bodyEditor,
                         routeName: this.$route.name,

@@ -104,7 +104,10 @@ router.afterEach((to) => {
                 hasAdminNavInApp: !!(appRoot && appRoot.querySelector('.admin-nav-sidebar')),
                 adminNavVisible: !!(main && main.querySelector('.admin-nav-sidebar')),
                 toastMountCount: main ? main.querySelectorAll('.toast-ui-editor-mount').length : -1,
-                formGroupCount: main ? main.querySelectorAll('.form-group').length : -1
+                formGroupCount: main ? main.querySelectorAll('.form-group').length : -1,
+                viewContainerInnerLen: main && main.querySelector('.view-container')
+                    ? main.querySelector('.view-container').innerHTML.length
+                    : -1
             });
         })
     );
