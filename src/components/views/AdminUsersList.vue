@@ -62,6 +62,12 @@
                                             v-if="sortKey === 'email'"
                                         >{{ sortDir === 'asc' ? '▲' : '▼' }}</span>
                                     </th>
+                                    <th scope="col">
+                                        {{ $t('numeroDeDocumento') }}
+                                    </th>
+                                    <th scope="col">
+                                        {{ $t('numeroDeTelefono') }}
+                                    </th>
                                     <th
                                         scope="col"
                                         class="admin-users-th-sort"
@@ -85,6 +91,8 @@
                                     <th scope="row">{{ u.id }}</th>
                                     <td>{{ u.name || '—' }}</td>
                                     <td>{{ u.email || '—' }}</td>
+                                    <td>{{ u.nro_doc || '—' }}</td>
+                                    <td>{{ u.mobile_phone || '—' }}</td>
                                     <td>{{ u.last_connection || '—' }}</td>
                                 </tr>
                             </tbody>
