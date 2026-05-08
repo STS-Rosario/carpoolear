@@ -43,4 +43,14 @@ describe('AdminUserMigrationNew view', () => {
         expect(source).toContain('query.removeUserId');
         expect(source).toContain('query.keepUserId');
     });
+
+    it('renders the irreversible-delete warning above the Migrar button', () => {
+        expect(source).toContain("$t('advertenciaMigracionUsuarios')");
+        expect(source).toContain('admin-user-migration-new__warning');
+        const warningIndex = source.indexOf("$t('advertenciaMigracionUsuarios')");
+        const submitButtonIndex = source.indexOf('admin-user-migration-new__submit');
+        expect(warningIndex).toBeGreaterThan(-1);
+        expect(submitButtonIndex).toBeGreaterThan(-1);
+        expect(warningIndex).toBeLessThan(submitButtonIndex);
+    });
 });

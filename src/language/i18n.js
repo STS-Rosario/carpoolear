@@ -1093,6 +1093,8 @@ const messages = {
         migrar: 'Migrar',
         confirmacionMigracionUsuarios:
             'Esta acción NO se puede deshacer, ¿revisaste que los usuarios estén en el orden correcto?',
+        advertenciaMigracionUsuarios:
+            'Advertencia: el usuario a borrar será eliminado (o anonimizado en caso de no ser posible), revise bien qué usuario eligió a mantener ya que no será reversible.',
         usuariosMigrados: 'Usuarios migrados',
         migracionId: 'ID migración',
         usuarioMantenido: 'Usuario mantenido',
@@ -2146,6 +2148,8 @@ const messages = {
         migrar: 'Migrar',
         confirmacionMigracionUsuarios:
             'Esta acción NO se puede deshacer, ¿revisaste que los usuarios estén en el orden correcto?',
+        advertenciaMigracionUsuarios:
+            'Advertencia: el usuario a borrar será eliminado (o anonimizado en caso de no ser posible), revise bien qué usuario eligió a mantener ya que no será reversible.',
         usuariosMigrados: 'Usuarios migrados',
         migracionId: 'ID migración',
         usuarioMantenido: 'Usuario mantenido',
@@ -3328,6 +3332,8 @@ const messages = {
         migrar: 'Migrate',
         confirmacionMigracionUsuarios:
             'This action CANNOT be undone. Did you verify the users are in the correct order?',
+        advertenciaMigracionUsuarios:
+            'Warning: the user to remove will be deleted (or anonymized if deletion fails); double-check the user you chose to keep — this is not reversible.',
         usuariosMigrados: 'Users migrated',
         migracionId: 'Migration ID',
         usuarioMantenido: 'Kept user',

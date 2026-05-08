@@ -70,6 +70,12 @@
                                     </div>
                                 </div>
                             </template>
+                            <p
+                                class="alert alert-warning admin-user-migration-new__warning"
+                                role="alert"
+                            >
+                                {{ $t('advertenciaMigracionUsuarios') }}
+                            </p>
                             <button
                                 type="button"
                                 class="btn btn-primary admin-user-migration-new__submit"
