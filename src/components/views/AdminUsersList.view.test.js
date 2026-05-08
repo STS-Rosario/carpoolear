@@ -26,4 +26,9 @@ describe('AdminUsersList view', () => {
         expect(viewSource).toContain('query.direction');
         expect(viewSource).toContain('query.name');
     });
+
+    it('navigates to user profile from name link only, not row click', () => {
+        expect(viewSource).toContain("<router-link :to=\"{ name: 'admin-users-user', params: { userId: String(u.id) } }\">");
+        expect(viewSource).not.toContain('@click="goToUser(u.id)"');
+    });
 });

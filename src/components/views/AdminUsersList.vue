@@ -86,10 +86,13 @@
                                     v-for="u in userList"
                                     :key="u.id"
                                     class="admin-users-row"
-                                    @click="goToUser(u.id)"
                                 >
                                     <th scope="row">{{ u.id }}</th>
-                                    <td>{{ displayOrDash(u.name) }}</td>
+                                    <td>
+                                        <router-link :to="{ name: 'admin-users-user', params: { userId: String(u.id) } }">
+                                            {{ displayOrDash(u.name) }}
+                                        </router-link>
+                                    </td>
                                     <td>{{ displayOrDash(u.email) }}</td>
                                     <td>{{ displayOrDash(u.nro_doc) }}</td>
                                     <td>{{ displayOrDash(u.mobile_phone) }}</td>
@@ -253,12 +256,6 @@ export default {
             if (!p || p.current_page >= p.total_pages) return;
             this.fetchList(p.current_page + 1);
         },
-        goToUser(id) {
-            this.$router.push({
-                name: 'admin-users-user',
-                params: { userId: String(id) }
-            });
-        }
     },
     mounted() {
         this.adminApi = new AdminApi();
@@ -291,10 +288,6 @@ export default {
     margin-left: 4px;
     font-size: 12px;
     color: #666;
-}
-
-.admin-users-row {
-    cursor: pointer;
 }
 
 .admin-users-pager-bar {
