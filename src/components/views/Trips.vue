@@ -450,11 +450,14 @@ export default {
             this.updateTripsQuery(this.searchParams.data, scrolloffset);
         },
         hasRouteSearchParams() {
-            const query = this.$route && this.$route.query ? this.$route.query : {};
+            const query = this.getRouteQuery();
             return Object.keys(query).some((key) => key !== 'scroll' && key !== 'clearSearch' && key !== 'keepSearch');
         },
+        getRouteQuery() {
+            return this.$route && this.$route.query ? this.$route.query : {};
+        },
         getSearchParamsFromQuery() {
-            const query = this.$route && this.$route.query ? this.$route.query : {};
+            const query = this.getRouteQuery();
             const params = {};
             const textFields = ['origin_name', 'destination_name', 'date'];
             textFields.forEach((field) => {
@@ -772,7 +775,7 @@ export default {
             }
             this.search(queryParams);
         }
-        this.pendingScrollRestore = Number.parseInt(this.$route.query.scroll, 10);
+        this.pendingScrollRestore = Number.parseInt(this.getRouteQuery().scroll, 10);
         if (Number.isNaN(this.pendingScrollRestore)) {
             this.pendingScrollRestore = null;
         }

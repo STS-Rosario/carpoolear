@@ -28,7 +28,7 @@ describe('Trips.vue persisted search state', () => {
     it('restores scroll from query only after trips have loaded', () => {
         expect(viewSource).toContain('pendingScrollRestore: null');
         expect(viewSource).toContain('maybeRestoreScroll()');
-        expect(viewSource).toContain('this.pendingScrollRestore = Number.parseInt(this.$route.query.scroll, 10);');
+        expect(viewSource).toContain('this.pendingScrollRestore = Number.parseInt(this.getRouteQuery().scroll, 10);');
         expect(viewSource).toContain('window.scrollTo(0, this.pendingScrollRestore);');
         expect(viewSource).toContain('this.pendingScrollRestore = null;');
     });
