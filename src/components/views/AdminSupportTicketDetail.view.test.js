@@ -57,7 +57,7 @@ describe('AdminSupportTicketDetail view', () => {
         expect(viewSource).toContain('saveInternalNote()');
         expect(viewSource).toContain("notaInternaGuardada");
         expect(viewSource).toContain("dialogs.message(this.$t('notaInternaGuardada')");
-        expect(viewSource).toContain("dialogs.message(this.$t('errorDatos')");
+        expect(viewSource).toContain("dialogs.message(this.$t('errorGuardandoNotaInterna')");
     });
 
     it('interpolates ticket user variables before sending admin reply', () => {
