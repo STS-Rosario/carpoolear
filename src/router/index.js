@@ -88,12 +88,20 @@ router.afterEach((to) => {
     });
     nextTick(() =>
         requestAnimationFrame(() => {
-            const main = document.getElementById('main');
+            const mainById = document.getElementById('main');
+            const mainInApp =
+                typeof document !== 'undefined' ? document.querySelector('#app main') : null;
+            const main = mainInApp || mainById;
+            const appRoot = typeof document !== 'undefined' ? document.getElementById('app') : null;
             log343bb5('H-A,H-C,H-E', 'router/index.js:afterEach:raf', 'dom-snapshot-after-nav', {
                 name: to.name,
                 fullPath: to.fullPath,
+                mainPick: mainInApp && mainById && mainInApp !== mainById ? 'app-scoped-vs-id-conflict' : 'single-or-app',
                 mainInnerLen: main ? main.innerHTML.length : -1,
+                idMainInnerLen: mainById ? mainById.innerHTML.length : -1,
+                appInnerLen: appRoot ? appRoot.innerHTML.length : -1,
                 hasAdminNav: !!document.querySelector('.admin-nav-sidebar'),
+                hasAdminNavInApp: !!(appRoot && appRoot.querySelector('.admin-nav-sidebar')),
                 adminNavVisible: !!(main && main.querySelector('.admin-nav-sidebar')),
                 toastMountCount: main ? main.querySelectorAll('.toast-ui-editor-mount').length : -1,
                 formGroupCount: main ? main.querySelectorAll('.form-group').length : -1

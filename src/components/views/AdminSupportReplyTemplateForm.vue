@@ -103,16 +103,31 @@ export default {
                 });
                 // #region agent log
                 this.$nextTick(() => {
-                    const main = typeof document !== 'undefined' ? document.getElementById('main') : null;
+                    const doc = typeof document !== 'undefined' ? document : null;
+                    const mainById = doc ? doc.getElementById('main') : null;
+                    const mainInApp = doc ? doc.querySelector('#app main') : null;
+                    const mainPick = mainInApp || mainById;
+                    const appRoot = doc ? doc.getElementById('app') : null;
                     const inMain =
-                        main && main.querySelectorAll ? main.querySelectorAll('.toast-ui-editor-mount').length : -1;
+                        mainPick && mainPick.querySelectorAll
+                            ? mainPick.querySelectorAll('.toast-ui-editor-mount').length
+                            : -1;
+                    const rootElType =
+                        this.$el && typeof this.$el.nodeType === 'number' ? this.$el.nodeType : -1;
                     const inSelf =
                         this.$el && typeof this.$el.querySelectorAll === 'function'
                             ? this.$el.querySelectorAll('.toast-ui-editor-mount').length
                             : -1;
-                    log343bb5('H1,H2,H6', 'AdminSupportReplyTemplateForm:load:new-branch+tick', 'post-new-load-dom', {
-                        inMainToastMountCount: inMain,
+                    log343bb5('H8,H9', 'AdminSupportReplyTemplateForm:load:new-branch+tick', 'post-new-load-dom', {
+                        inMainToastMountCountScoped: inMain,
+                        mainPickSameAsIdMain: !!(mainById && mainInApp && mainById === mainInApp),
+                        idMainToastCount: mainById?.querySelectorAll?.('.toast-ui-editor-mount').length ?? -1,
+                        appMainToastCount: mainInApp?.querySelectorAll?.('.toast-ui-editor-mount').length ?? -1,
+                        appInnerLen: appRoot ? appRoot.innerHTML.length : -1,
+                        hasNavInApp: !!(appRoot && appRoot.querySelector('.admin-nav-sidebar')),
+                        rootElNodeType: rootElType,
                         inSelfToastMountCount: inSelf,
+                        refsBodyEditor: !!this.$refs.bodyEditor,
                         routeName: this.$route.name,
                         fullPath: this.$route.fullPath
                     });
