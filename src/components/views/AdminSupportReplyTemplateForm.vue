@@ -4,7 +4,13 @@
             <router-link :to="{ name: 'admin-support-reply-templates' }">{{ $t('volverPlantillasRespuestas') }}</router-link>
         </p>
         <h3>{{ isEdit ? $t('editarPlantillaRespuesta') : $t('nuevaPlantillaRespuesta') }}</h3>
-        <p class="help-block">{{ $t('plantillaVariablesAyuda') }}</p>
+        <p class="help-block">
+            {{ $t('plantillaVariablesAyudaIntro') }}
+            <code v-pre>{{nombre}}</code>
+            {{ $t('plantillaVariablesAyudaConector') }}
+            <code v-pre>{{nombreCompleto}}</code>
+            {{ $t('plantillaVariablesAyudaSuffix') }}
+        </p>
         <div v-if="loadError" class="alert alert-danger">{{ loadError }}</div>
         <div v-else-if="loading" class="alert alert-info">{{ $t('cargandoNotificaciones') }}</div>
         <div v-else class="reply-template-form-content">
