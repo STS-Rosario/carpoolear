@@ -10,4 +10,11 @@ describe('AdminSearchTrips user search', () => {
         expect(source).toContain('UserSearchAutocomplete');
         expect(source).toContain(':max-results="3"');
     });
+
+    it('hydrates filters from route-style params and emits initial persisted search', () => {
+        expect(source).toContain("props: ['params']");
+        expect(source).toContain('applyParams');
+        expect(source).toContain('this.emit()');
+        expect(source).toContain('params.user_id');
+    });
 });

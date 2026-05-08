@@ -16,4 +16,14 @@ describe('AdminUsersList view', () => {
         expect(viewSource).toContain('{{ displayOrDash(u.mobile_phone) }}');
         expect(viewSource).toContain('displayOrDash(value)');
     });
+
+    it('syncs search, page and sorting in route query for back navigation persistence', () => {
+        expect(viewSource).toContain('syncRouteQuery');
+        expect(viewSource).toContain('this.$router.replace');
+        expect(viewSource).toContain('this.$route.query');
+        expect(viewSource).toContain('query.page');
+        expect(viewSource).toContain('query.sort');
+        expect(viewSource).toContain('query.direction');
+        expect(viewSource).toContain('query.name');
+    });
 });
