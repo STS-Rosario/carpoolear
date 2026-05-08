@@ -54,12 +54,27 @@
                 >
                     Guardar estado
                 </button>
-                <p v-if="serverState" class="admin-maint-server-state text-muted">
-                    Servidor: activo={{ serverState.is_active }} · modo={{
-                        serverState.mode || '—'
-                    }}
-                    · origen={{ serverState.source || '—' }}
-                </p>
+                <div
+                    v-if="serverState"
+                    class="admin-maint-live-status well well-sm"
+                >
+                    <p class="admin-maint-live-status__title">
+                        <strong>{{ $t('adminMaintenanceLiveStatusTitle') }}</strong>
+                    </p>
+                    <p class="admin-maint-live-status__help text-muted">
+                        {{ $t('adminMaintenanceLiveStatusHelp') }}
+                    </p>
+                    <dl class="admin-maint-live-status__dl">
+                        <dt>{{ $t('adminMaintenanceFieldActiveLabel') }}</dt>
+                        <dd>{{ liveActiveDescription }}</dd>
+                        <template v-if="serverState.is_active">
+                            <dt>{{ $t('adminMaintenanceFieldModeLabel') }}</dt>
+                            <dd>{{ liveModeDescription }}</dd>
+                            <dt>{{ $t('adminMaintenanceFieldSourceLabel') }}</dt>
+                            <dd>{{ liveSourceDescription }}</dd>
+                        </template>
+                    </dl>
+                </div>
             </div>
         </div>
 
@@ -231,6 +246,42 @@ export default {
     mounted() {
         this.refreshAll();
     },
+    computed: {
+        liveActiveDescription() {
+            if (!this.serverState) {
+                return '';
+            }
+            return this.serverState.is_active
+                ? this.$t('adminMaintenanceActiveYes')
+                : this.$t('adminMaintenanceActiveNo');
+        },
+        liveModeDescription() {
+            if (!this.serverState || !this.serverState.is_active) {
+                return '';
+            }
+            const m = this.serverState.mode;
+            if (m === 'strict') {
+                return this.$t('adminMaintenanceModeStrictFull');
+            }
+            if (m === 'flexible') {
+                return this.$t('adminMaintenanceModeFlexibleFull');
+            }
+            return this.$t('adminMaintenanceModeUnknownFull');
+        },
+        liveSourceDescription() {
+            if (!this.serverState || !this.serverState.is_active) {
+                return '';
+            }
+            const s = this.serverState.source;
+            if (s === 'manual') {
+                return this.$t('adminMaintenanceSourceManualFull');
+            }
+            if (s === 'schedule') {
+                return this.$t('adminMaintenanceSourceScheduleFull');
+            }
+            return this.$t('adminMaintenanceSourceUnknownFull');
+        }
+    },
     methods: {
         formatMeta(meta) {
             if (!meta) {
@@ -400,7 +451,32 @@ export default {
     max-width: 280px;
 }
 
-.admin-maint-server-state {
-    margin-top: 12px;
+.admin-maint-live-status {
+    margin-top: 16px;
+    margin-bottom: 0;
+}
+
+.admin-maint-live-status__title {
+    margin-bottom: 6px;
+}
+
+.admin-maint-live-status__help {
+    margin-bottom: 12px;
+    font-size: 13px;
+}
+
+.admin-maint-live-status__dl {
+    margin-bottom: 0;
+}
+
+.admin-maint-live-status__dl dt {
+    margin-top: 10px;
+    font-weight: 600;
+    color: #555;
+}
+
+.admin-maint-live-status__dl dd {
+    margin-left: 0;
+    margin-bottom: 4px;
 }
 </style>

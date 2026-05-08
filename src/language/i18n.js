@@ -1081,6 +1081,27 @@ const messages = {
         adminNavGraficos: 'Graficos',
         adminNavMaintenance: 'Mantenimiento',
         adminMaintenanceTitle: 'Mantenimiento',
+        adminMaintenanceLiveStatusTitle: 'Estado actual en el servidor',
+        adminMaintenanceLiveStatusHelp:
+            'Esto es lo que el backend está aplicando ahora. Si acabas de guardar o actualizó el cron, debería coincidir con lo esperado.',
+        adminMaintenanceFieldActiveLabel: '¿Mantenimiento encendido?',
+        adminMaintenanceActiveYes:
+            'Sí. Los usuarios no pueden usar la app (salvo rutas permitidas: iniciar sesión, configuración, recuperación de contraseña, etc.).',
+        adminMaintenanceActiveNo:
+            'No. La app está disponible con normalidad para todos.',
+        adminMaintenanceFieldModeLabel: 'Modo',
+        adminMaintenanceModeStrictFull:
+            'Estricto — nadie puede usar la API principal de uso cotidiano; los administradores tampoco entran a la app normal y solo pueden operar vía panel admin / rutas admin.',
+        adminMaintenanceModeFlexibleFull:
+            'Flexible — solo cuentas administrador pueden seguir usando la app; el resto ve la pantalla de mantenimiento.',
+        adminMaintenanceModeUnknownFull:
+            'Desconocido — revisá el registro de acciones abajo o guardá el estado de nuevo.',
+        adminMaintenanceFieldSourceLabel: 'Origen',
+        adminMaintenanceSourceManualFull:
+            'Manual — lo prendiste o apagaste desde este panel (estado manual, sin depender solo del cron).',
+        adminMaintenanceSourceScheduleFull:
+            'Programado — lo aplicó el trabajo programado del servidor (`maintenance:tick`, cada minuto) según una ventana que configuraste.',
+        adminMaintenanceSourceUnknownFull: 'Desconocido.',
         adminNavUsuarios: 'Usuarios',
         adminNavViajes: 'Viajes',
         migrarUsuarios: 'Migrar usuarios',
@@ -2138,6 +2159,27 @@ const messages = {
         adminNavGraficos: 'Graficos',
         adminNavMaintenance: 'Mantenimiento',
         adminMaintenanceTitle: 'Mantenimiento',
+        adminMaintenanceLiveStatusTitle: 'Estado actual en el servidor',
+        adminMaintenanceLiveStatusHelp:
+            'Esto es lo que el backend está aplicando ahora. Si acabas de guardar o actualizó el cron, debería coincidir con lo esperado.',
+        adminMaintenanceFieldActiveLabel: '¿Mantenimiento encendido?',
+        adminMaintenanceActiveYes:
+            'Sí. Los usuarios no pueden usar la app (salvo rutas permitidas: iniciar sesión, configuración, recuperación de contraseña, etc.).',
+        adminMaintenanceActiveNo:
+            'No. La app está disponible con normalidad para todos.',
+        adminMaintenanceFieldModeLabel: 'Modo',
+        adminMaintenanceModeStrictFull:
+            'Estricto — nadie puede usar la API principal de uso cotidiano; los administradores tampoco entran a la app normal y solo pueden operar vía panel admin / rutas admin.',
+        adminMaintenanceModeFlexibleFull:
+            'Flexible — solo cuentas administrador pueden seguir usando la app; el resto ve la pantalla de mantenimiento.',
+        adminMaintenanceModeUnknownFull:
+            'Desconocido — revisá el registro de acciones abajo o guardá el estado de nuevo.',
+        adminMaintenanceFieldSourceLabel: 'Origen',
+        adminMaintenanceSourceManualFull:
+            'Manual — lo prendiste o apagaste desde este panel (estado manual, sin depender solo del cron).',
+        adminMaintenanceSourceScheduleFull:
+            'Programado — lo aplicó el trabajo programado del servidor (`maintenance:tick`, cada minuto) según una ventana que configuraste.',
+        adminMaintenanceSourceUnknownFull: 'Desconocido.',
         adminNavUsuarios: 'Usuarios',
         adminNavViajes: 'Viajes',
         migrarUsuarios: 'Migrar usuarios',
@@ -3324,6 +3366,26 @@ const messages = {
         adminNavGraficos: 'Charts',
         adminNavMaintenance: 'Maintenance',
         adminMaintenanceTitle: 'Maintenance',
+        adminMaintenanceLiveStatusTitle: 'Current server state',
+        adminMaintenanceLiveStatusHelp:
+            'This is what the backend is enforcing right now. After you save—or after the scheduler runs—it should match what you expect.',
+        adminMaintenanceFieldActiveLabel: 'Maintenance on?',
+        adminMaintenanceActiveYes:
+            'Yes. Users cannot use the app (except allowed routes such as login, config, and password recovery).',
+        adminMaintenanceActiveNo: 'No. The app is available to everyone as usual.',
+        adminMaintenanceFieldModeLabel: 'Mode',
+        adminMaintenanceModeStrictFull:
+            'Strict — nobody can use the main day‑to‑day API; admins cannot use the regular app either and must rely on admin routes/panel.',
+        adminMaintenanceModeFlexibleFull:
+            'Flexible — only admin accounts can keep using the app; everyone else sees the maintenance screen.',
+        adminMaintenanceModeUnknownFull:
+            'Unknown — check the audit log below or save the state again.',
+        adminMaintenanceFieldSourceLabel: 'Source',
+        adminMaintenanceSourceManualFull:
+            'Manual — you turned maintenance on/off from this screen (manual state, not only the scheduler).',
+        adminMaintenanceSourceScheduleFull:
+            'Scheduled — the server scheduler (`maintenance:tick`, every minute) applied a window you configured.',
+        adminMaintenanceSourceUnknownFull: 'Unknown.',
         adminNavUsuarios: 'Users',
         adminNavViajes: 'Trips',
         migrarUsuarios: 'Migrate users',
