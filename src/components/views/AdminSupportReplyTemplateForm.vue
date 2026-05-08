@@ -242,7 +242,9 @@ export default {
             isEdit: this.isEdit,
             loading: this.loading,
             loadError: this.loadError,
-            bodyEditorKey: this.bodyEditorKey
+            bodyEditorKey: this.bodyEditorKey,
+            hasRenderFn: typeof this.$options.render === 'function',
+            hasTranslateFn: typeof this.$t === 'function'
         });
         this.load();
         this.$nextTick(() =>
@@ -251,6 +253,16 @@ export default {
                 loadError: this.loadError
             })
         );
+    },
+    errorCaptured(err, _instance, info) {
+        // #region agent log
+        log343bb5('H12', 'AdminSupportReplyTemplateForm:errorCaptured', 'form-error-captured', {
+            info: info || 'unknown',
+            errName: err && err.name ? err.name : 'unknown',
+            errMessage: err && err.message ? String(err.message).slice(0, 220) : 'unknown'
+        });
+        // #endregion
+        return false;
     },
     beforeUnmount() {
         // #region agent log
