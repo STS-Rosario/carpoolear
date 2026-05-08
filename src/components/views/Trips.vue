@@ -469,18 +469,25 @@ export default {
                 'destination_id'
             ];
             numericFields.forEach((field) => {
-                if (query[field] === undefined || query[field] === null || query[field] === '') {
-                    return;
-                }
-                const parsed = Number.parseFloat(query[field]);
-                if (!Number.isNaN(parsed)) {
+                const parsed = this.parseNumericQueryValue(query[field]);
+                if (parsed !== null) {
                     params[field] = parsed;
                 }
             });
-            if (query.is_passenger === 'true' || query.is_passenger === '1' || query.is_passenger === true) {
+            if (this.parseBooleanQueryValue(query.is_passenger)) {
                 params.is_passenger = true;
             }
             return params;
+        },
+        parseNumericQueryValue(value) {
+            if (value === undefined || value === null || value === '') {
+                return null;
+            }
+            const parsed = Number.parseFloat(value);
+            return Number.isNaN(parsed) ? null : parsed;
+        },
+        parseBooleanQueryValue(value) {
+            return value === 'true' || value === '1' || value === true;
         },
         updateTripsQuery(params = {}, scroll) {
             const nextQuery = {};
