@@ -12,7 +12,8 @@ describe('AdminUsersList view', () => {
     });
 
     it('renders DNI and phone values for each user row', () => {
-        expect(viewSource).toContain("{{ u.nro_doc || '—' }}");
-        expect(viewSource).toContain("{{ u.mobile_phone || '—' }}");
+        expect(viewSource).toContain('{{ displayOrDash(u.nro_doc) }}');
+        expect(viewSource).toContain('{{ displayOrDash(u.mobile_phone) }}');
+        expect(viewSource).toContain('displayOrDash(value)');
     });
 });

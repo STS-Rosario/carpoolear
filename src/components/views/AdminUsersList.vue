@@ -89,11 +89,11 @@
                                     @click="goToUser(u.id)"
                                 >
                                     <th scope="row">{{ u.id }}</th>
-                                    <td>{{ u.name || '—' }}</td>
-                                    <td>{{ u.email || '—' }}</td>
-                                    <td>{{ u.nro_doc || '—' }}</td>
-                                    <td>{{ u.mobile_phone || '—' }}</td>
-                                    <td>{{ u.last_connection || '—' }}</td>
+                                    <td>{{ displayOrDash(u.name) }}</td>
+                                    <td>{{ displayOrDash(u.email) }}</td>
+                                    <td>{{ displayOrDash(u.nro_doc) }}</td>
+                                    <td>{{ displayOrDash(u.mobile_phone) }}</td>
+                                    <td>{{ displayOrDash(u.last_connection) }}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -162,6 +162,9 @@ export default {
         };
     },
     methods: {
+        displayOrDash(value) {
+            return value === null || value === undefined || value === '' ? '—' : value;
+        },
         toggleSort(column) {
             if (this.sortKey === column) {
                 this.sortDir = this.sortDir === 'asc' ? 'desc' : 'asc';
