@@ -13,7 +13,7 @@
         </p>
         <div v-if="loadError" class="alert alert-danger">{{ loadError }}</div>
         <div v-else-if="loading" class="alert alert-info">{{ $t('cargandoNotificaciones') }}</div>
-        <div v-else class="reply-template-form-content">
+        <div v-else>
             <div class="form-group">
                 <label>{{ $t('nombrePlantilla') }} *</label>
                 <input v-model="form.name" class="form-control" type="text" />
@@ -46,7 +46,6 @@ import ToastUiEditor from '../elements/ToastUiEditor.vue';
 import AdminLayout from '../layouts/AdminLayout.vue';
 import { useReplyTemplatesStore } from '../../stores/replyTemplates';
 import dialogs from '../../services/dialogs';
-import { log343bb5 } from '../../debug/session343bb5Log';
 
 export default {
     name: 'admin-support-reply-template-form',
@@ -88,80 +87,12 @@ export default {
         }),
         bumpBodyEditor() {
             this.bodyEditorKey += 1;
-            log343bb5('H-B,H-D', 'AdminSupportReplyTemplateForm:bumpBodyEditor', 'editor-key-increment', {
-                bodyEditorKey: this.bodyEditorKey
-            });
         },
         async load() {
-            log343bb5('H-D,H-B', 'AdminSupportReplyTemplateForm:load:entry', 'load-started', {
-                isEdit: this.isEdit,
-                routeName: this.$route.name,
-                templateId: this.templateId
-            });
             if (!this.isEdit) {
                 this.form = { name: '', short_description: '', body_markdown: '' };
                 this.loading = false;
                 this.loadError = '';
-                log343bb5('H-B', 'AdminSupportReplyTemplateForm:load:new-branch', 'load-new-done-skip-bump', {
-                    loading: this.loading,
-                    loadError: this.loadError,
-                    routeKey: `${this.$route.name}-${this.templateId ?? 'new'}`
-                });
-                // #region agent log
-                this.$nextTick(() => {
-                    const doc = typeof document !== 'undefined' ? document : null;
-                    const mainById = doc ? doc.getElementById('main') : null;
-                    const mainInApp = doc ? doc.querySelector('#app main') : null;
-                    const mainPick = mainInApp || mainById;
-                    const appRoot = doc ? doc.getElementById('app') : null;
-                    const inMain =
-                        mainPick && mainPick.querySelectorAll
-                            ? mainPick.querySelectorAll('.toast-ui-editor-mount').length
-                            : -1;
-                    const rootElType =
-                        this.$el && typeof this.$el.nodeType === 'number' ? this.$el.nodeType : -1;
-                    const inSelf =
-                        this.$el && typeof this.$el.querySelectorAll === 'function'
-                            ? this.$el.querySelectorAll('.toast-ui-editor-mount').length
-                            : -1;
-                    const subTree = this.$ && this.$.subTree ? this.$.subTree : null;
-                    const fragmentAnchor =
-                        subTree && Object.prototype.hasOwnProperty.call(subTree, 'anchor')
-                            ? subTree.anchor
-                            : null;
-                    const fragmentAnchorType =
-                        fragmentAnchor && typeof fragmentAnchor.nodeType === 'number'
-                            ? fragmentAnchor.nodeType
-                            : -1;
-                    const fragmentParentType =
-                        this.$el && this.$el.parentNode && typeof this.$el.parentNode.nodeType === 'number'
-                            ? this.$el.parentNode.nodeType
-                            : -1;
-                    const fragmentParentChildCount =
-                        this.$el && this.$el.parentNode && this.$el.parentNode.childNodes
-                            ? this.$el.parentNode.childNodes.length
-                            : -1;
-                    log343bb5('H8,H9', 'AdminSupportReplyTemplateForm:load:new-branch+tick', 'post-new-load-dom', {
-                        inMainToastMountCountScoped: inMain,
-                        mainPickSameAsIdMain: !!(mainById && mainInApp && mainById === mainInApp),
-                        idMainToastCount: mainById?.querySelectorAll?.('.toast-ui-editor-mount').length ?? -1,
-                        appMainToastCount: mainInApp?.querySelectorAll?.('.toast-ui-editor-mount').length ?? -1,
-                        appFormContentCount: appRoot?.querySelectorAll?.('.reply-template-form-content').length ?? -1,
-                        appInfoCount: appRoot?.querySelectorAll?.('.alert-info').length ?? -1,
-                        appDangerCount: appRoot?.querySelectorAll?.('.alert-danger').length ?? -1,
-                        appInnerLen: appRoot ? appRoot.innerHTML.length : -1,
-                        hasNavInApp: !!(appRoot && appRoot.querySelector('.admin-nav-sidebar')),
-                        rootElNodeType: rootElType,
-                        fragmentAnchorNodeType: fragmentAnchorType,
-                        fragmentParentNodeType: fragmentParentType,
-                        fragmentParentChildCount,
-                        inSelfToastMountCount: inSelf,
-                        refsBodyEditor: !!this.$refs.bodyEditor,
-                        routeName: this.$route.name,
-                        fullPath: this.$route.fullPath
-                    });
-                });
-                // #endregion
                 return;
             }
             this.loading = true;
@@ -178,10 +109,6 @@ export default {
                 this.loadError = this.$t('errorCargandoPlantillasRespuestas');
             } finally {
                 this.loading = false;
-                log343bb5('H-D', 'AdminSupportReplyTemplateForm:load:finally', 'load-edit-finally', {
-                    loadError: this.loadError,
-                    bodyLen: (this.form.body_markdown || '').length
-                });
                 this.$nextTick(() => this.bumpBodyEditor());
             }
         },
@@ -220,21 +147,6 @@ export default {
         }
     },
     watch: {
-        loading(value) {
-            // #region agent log
-            log343bb5('H10', 'AdminSupportReplyTemplateForm:watch:loading', 'loading-changed', {
-                value
-            });
-            // #endregion
-        },
-        loadError(value) {
-            // #region agent log
-            log343bb5('H10', 'AdminSupportReplyTemplateForm:watch:loadError', 'loadError-changed', {
-                hasError: !!value,
-                len: value ? String(value).length : 0
-            });
-            // #endregion
-        },
         '$route.name'() {
             this.load();
         },
@@ -243,39 +155,7 @@ export default {
         }
     },
     mounted() {
-        log343bb5('H-B,H-D', 'AdminSupportReplyTemplateForm:mounted', 'form-mounted', {
-            routeName: this.$route.name,
-            isEdit: this.isEdit,
-            loading: this.loading,
-            loadError: this.loadError,
-            bodyEditorKey: this.bodyEditorKey,
-            hasRenderFn: typeof this.$options.render === 'function',
-            hasTranslateFn: typeof this.$t === 'function'
-        });
         this.load();
-        this.$nextTick(() =>
-            log343bb5('H-D', 'AdminSupportReplyTemplateForm:mounted+tick', 'after-first-tick', {
-                loading: this.loading,
-                loadError: this.loadError
-            })
-        );
-    },
-    errorCaptured(err, _instance, info) {
-        // #region agent log
-        log343bb5('H12', 'AdminSupportReplyTemplateForm:errorCaptured', 'form-error-captured', {
-            info: info || 'unknown',
-            errName: err && err.name ? err.name : 'unknown',
-            errMessage: err && err.message ? String(err.message).slice(0, 220) : 'unknown'
-        });
-        // #endregion
-        return false;
-    },
-    beforeUnmount() {
-        // #region agent log
-        log343bb5('H11', 'AdminSupportReplyTemplateForm:beforeUnmount', 'form-before-unmount', {
-            routeName: this.$route.name
-        });
-        // #endregion
     },
     components: {
         editor: ToastUiEditor,

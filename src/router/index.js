@@ -1,11 +1,9 @@
 /* jshint esversion: 6 */
 import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router';
-import { nextTick } from 'vue';
 import i18n from '../i18n';
 import { useAuthStore } from '../stores/auth';
 import { useActionbarsStore } from '../stores/actionbars';
 import { useBackgroundStore } from '../stores/background';
-import { log343bb5 } from '../debug/session343bb5Log';
 
 import routes from './routes.js';
 
@@ -78,42 +76,6 @@ router.beforeEach((to, from, next) => {
     }
     window.scrollTo(0, 0);
     next();
-});
-
-router.afterEach((to) => {
-    log343bb5('H-A', 'router/index.js:afterEach', 'entered-route', {
-        name: to.name,
-        fullPath: to.fullPath,
-        matchedCount: to.matched ? to.matched.length : 0
-    });
-    nextTick(() =>
-        requestAnimationFrame(() => {
-            const mainById = document.getElementById('main');
-            const mainInApp =
-                typeof document !== 'undefined' ? document.querySelector('#app main') : null;
-            const main = mainInApp || mainById;
-            const appRoot = typeof document !== 'undefined' ? document.getElementById('app') : null;
-            log343bb5('H-A,H-C,H-E', 'router/index.js:afterEach:raf', 'dom-snapshot-after-nav', {
-                name: to.name,
-                fullPath: to.fullPath,
-                mainPick: mainInApp && mainById && mainInApp !== mainById ? 'app-scoped-vs-id-conflict' : 'single-or-app',
-                mainInnerLen: main ? main.innerHTML.length : -1,
-                idMainInnerLen: mainById ? mainById.innerHTML.length : -1,
-                appInnerLen: appRoot ? appRoot.innerHTML.length : -1,
-                hasAdminNav: !!document.querySelector('.admin-nav-sidebar'),
-                hasAdminNavInApp: !!(appRoot && appRoot.querySelector('.admin-nav-sidebar')),
-                adminNavVisible: !!(main && main.querySelector('.admin-nav-sidebar')),
-                toastMountCount: main ? main.querySelectorAll('.toast-ui-editor-mount').length : -1,
-                formGroupCount: main ? main.querySelectorAll('.form-group').length : -1,
-                viewContainerInnerLen: main && main.querySelector('.view-container')
-                    ? main.querySelector('.view-container').innerHTML.length
-                    : -1,
-                appFormContentCount: appRoot ? appRoot.querySelectorAll('.reply-template-form-content').length : -1,
-                appInfoCount: appRoot ? appRoot.querySelectorAll('.alert-info').length : -1,
-                appDangerCount: appRoot ? appRoot.querySelectorAll('.alert-danger').length : -1
-            });
-        })
-    );
 });
 
 router.stack = [];
