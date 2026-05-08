@@ -8,11 +8,13 @@ const source = fs.readFileSync(viewPath, 'utf8');
 describe('AdminUserDetail view', () => {
     it('includes a support ticket button prefilled with user detail context', () => {
         expect(source).toContain("name: 'admin-support-ticket-new'");
+        expect(source).toContain(':to="supportTicketRoute(user)"');
+        expect(source).toContain('supportTicketRoute(user)');
         expect(source).toContain('query: {');
         expect(source).toContain('userId: user.id');
         expect(source).toContain('userName: user.name');
         expect(source).toContain("type: 'account_verification'");
-        expect(source).toContain("subject: $t('ticketTypeAccountVerification')");
+        expect(source).toContain("subject: this.$t('ticketTypeAccountVerification')");
         expect(source).toContain("$t('crearTicketSoporte')");
     });
 });

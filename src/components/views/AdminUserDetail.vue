@@ -54,15 +54,7 @@
                                 {{ $t('adminUsuariosEditar') }}
                             </router-link>
                             <router-link
-                                :to="{
-                                    name: 'admin-support-ticket-new',
-                                    query: {
-                                        userId: user.id,
-                                        userName: user.name,
-                                        type: 'account_verification',
-                                        subject: $t('ticketTypeAccountVerification')
-                                    }
-                                }"
+                                :to="supportTicketRoute(user)"
                                 class="btn btn-default"
                             >
                                 {{ $t('crearTicketSoporte') }}
@@ -144,6 +136,17 @@ export default {
                     });
                 }
             );
+        },
+        supportTicketRoute(user) {
+            return {
+                name: 'admin-support-ticket-new',
+                query: {
+                    userId: user.id,
+                    userName: user.name,
+                    type: 'account_verification',
+                    subject: this.$t('ticketTypeAccountVerification')
+                }
+            };
         }
     },
     watch: {
