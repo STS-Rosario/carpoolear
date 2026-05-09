@@ -33,7 +33,10 @@
                             <span
                                 v-if="ticketOwnerDisplayName(ticket)"
                                 class="support-tickets-table__owner text-muted"
-                            ><span class="support-tickets-table__owner-sep" aria-hidden="true"> · </span>{{ ticketOwnerDisplayName(ticket) }}</span>
+                            ><span class="support-tickets-table__owner-sep" aria-hidden="true"> · </span><router-link
+                                v-if="canLinkTicketOwnerProfile(ticket)"
+                                :to="ticketOwnerAppProfileRoute(ticket)"
+                            >{{ ticketOwnerDisplayName(ticket) }}</router-link><span v-else>{{ ticketOwnerDisplayName(ticket) }}</span></span>
                             <span
                                 v-if="hasUserLastReply(ticket)"
                                 class="last-reply-icon text-warning"
@@ -133,6 +136,12 @@ export default {
         },
         hasUserLastReply(ticket) {
             return Number(ticket && ticket.unread_for_admin) > 0;
+        },
+        canLinkTicketOwnerProfile(ticket) {
+            return Boolean(ticket && ticket.user && ticket.user.id);
+        },
+        ticketOwnerAppProfileRoute(ticket) {
+            return { name: 'profile', params: { id: ticket.user.id } };
         },
         ticketOwnerDisplayName(ticket) {
             const u = ticket && ticket.user;
