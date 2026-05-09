@@ -19,3 +19,7 @@
     word-break: break-word;
     vertical-align: middle;
 }
+
+.support-tickets-table__owner {
+    margin-left: 4px;
+}

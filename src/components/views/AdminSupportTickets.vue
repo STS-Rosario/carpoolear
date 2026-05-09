@@ -33,7 +33,7 @@
                             <span
                                 v-if="ticketOwnerDisplayName(ticket)"
                                 class="support-tickets-table__owner text-muted"
-                            >{{ ticketOwnerDisplayName(ticket) }}</span>
+                            ><span class="support-tickets-table__owner-sep" aria-hidden="true"> · </span>{{ ticketOwnerDisplayName(ticket) }}</span>
                             <span
                                 v-if="hasUserLastReply(ticket)"
                                 class="last-reply-icon text-warning"
@@ -138,9 +138,9 @@ export default {
             const u = ticket && ticket.user;
             if (!u) return '';
             const name = u.name != null && String(u.name).trim();
-            if (name) return ` · ${name}`;
+            if (name) return name;
             const username = u.username != null && String(u.username).trim();
-            if (username) return ` · ${username}`;
+            if (username) return username;
             return '';
         }
     },
@@ -178,10 +178,6 @@ export default {
 
 .support-tickets-table tbody tr:nth-child(odd) {
     background-color: #fafafa;
-}
-
-.support-tickets-table__owner {
-    margin-left: 4px;
 }
 
 .last-reply-icon {
