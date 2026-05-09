@@ -17,4 +17,10 @@ describe('AdminUserDetail view', () => {
         expect(source).toContain("subject: this.$t('ticketTypeAccountVerification')");
         expect(source).toContain("$t('crearTicketSoporte')");
     });
+
+    it('links to the user public profile with verPerfilPublico translation', () => {
+        expect(source).toContain("$t('verPerfilPublico')");
+        expect(source).toContain("name: 'profile'");
+        expect(source).toContain('params: { id: user.id }');
+    });
 });
