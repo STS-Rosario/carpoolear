@@ -67,4 +67,25 @@ describe('TicketDetail user view', () => {
         expect(viewSource).toContain('reply-meta-row');
         expect(viewSource).toContain('reply-meta-date');
     });
+
+    it('disables reply submit while sending and shows Enviando label', () => {
+        expect(viewSource).toContain('replySubmitting');
+        expect(viewSource).toContain(':disabled="replySubmitting"');
+        expect(viewSource).toContain("$t('enviando')");
+        expect(viewSource).toContain("$t('responder')");
+    });
+
+    it('blocks duplicate reply bodies against existing thread messages', () => {
+        expect(viewSource).toContain('supportTicketReplyDuplicate');
+        expect(viewSource).toContain('ticketRespuestaDuplicada');
+        expect(viewSource).toContain('isDuplicateReplyApiError');
+    });
+
+    it('re-creates editor and clears attachments after sending a reply via key increment', () => {
+        expect(viewSource).toContain(':key="replyEditorKey"');
+        expect(viewSource).toContain('replyEditorKey: 0');
+        expect(viewSource).toContain('this.replyEditorKey += 1');
+        expect(viewSource).toContain('this.attachments = []');
+        expect(viewSource).toContain('attachmentInput');
+    });
 });

@@ -60,6 +60,19 @@ describe('AdminSupportTicketDetail view', () => {
         expect(viewSource).toContain("dialogs.message(this.$t('errorGuardandoNotaInterna')");
     });
 
+    it('disables reply submit while sending and shows Enviando label', () => {
+        expect(viewSource).toContain('replySubmitting');
+        expect(viewSource).toContain(':disabled="replySubmitting"');
+        expect(viewSource).toContain("$t('enviando')");
+        expect(viewSource).toContain("$t('responder')");
+    });
+
+    it('blocks duplicate reply bodies against existing thread messages', () => {
+        expect(viewSource).toContain('supportTicketReplyDuplicate');
+        expect(viewSource).toContain('ticketRespuestaDuplicada');
+        expect(viewSource).toContain('isDuplicateReplyApiError');
+    });
+
     it('interpolates ticket user variables before sending admin reply', () => {
         expect(viewSource).toContain('interpolateSupportTemplateVariables');
         expect(viewSource).toContain('adminReply(this.id');
@@ -93,5 +106,12 @@ describe('AdminSupportTicketDetail view', () => {
         expect(viewSource).toContain('isTicketClosed()');
         expect(viewSource).toContain("return this.ticket && this.ticket.status === 'Cerrado'");
         expect(viewSource).toContain('return this.ticket && !this.isTicketClosed');
+    });
+
+    it('resets markdown editor, initialValue, key, and attachments after sending an admin reply', () => {
+        expect(viewSource).toContain('this.replyEditorInitialValue =');
+        expect(viewSource).toContain('replyEditorKey');
+        expect(viewSource).toContain('this.attachments = []');
+        expect(viewSource).toContain('attachmentInput');
     });
 });

@@ -58,7 +58,14 @@
             <input ref="attachmentInput" class="mtop-10" type="file" accept="image/*" multiple @change="onAttachments" />
             <div class="reply-actions">
                 <div class="reply-actions-left">
-                    <button class="btn btn-primary reply-action-btn" @click="sendReply">{{ $t('responder') }}</button>
+                    <button
+                        type="button"
+                        class="btn btn-primary reply-action-btn"
+                        :disabled="replySubmitting"
+                        @click="sendReply"
+                    >
+                        {{ replySubmitting ? $t('enviando') : $t('responder') }}
+                    </button>
                 </div>
                 <div class="reply-actions-right">
                     <button class="btn btn-default reply-action-btn" @click="resolveTicket">{{ $t('marcarResuelto') }}</button>
@@ -123,6 +130,7 @@ import ToastUiEditor from '../elements/ToastUiEditor.vue';
 import AdminLayout from '../layouts/AdminLayout.vue';
 import { markdownToHtml } from '../../services/markdown';
 import { interpolateSupportTemplateVariables } from '../../utils/supportTemplateInterpolation';
+import { ticketReplyBodyAlreadyUsed, isDuplicateReplyApiError } from '../../utils/supportTicketReplyDuplicate';
 import { useTicketsStore } from '../../stores/tickets';
 import { useReplyTemplatesStore } from '../../stores/replyTemplates';
 import dialogs from '../../services/dialogs.js';
@@ -176,7 +184,8 @@ export default {
             replyTemplatesLoading: false,
             replyTemplatesLoadError: '',
             replyEditorInitialValue: '',
-            replyEditorKey: 0
+            replyEditorKey: 0,
+            replySubmitting: false
         };
     },
     computed: {
@@ -317,22 +326,31 @@ export default {
             this.replyEditorKey += 1;
         },
         sendReply() {
+            if (this.replySubmitting) {
+                return undefined;
+            }
             const markdown = this.$refs.replyEditor.invoke('getMarkdown');
             const messageMarkdown = interpolateSupportTemplateVariables(markdown, this.ticketUserForTemplates);
+            if (ticketReplyBodyAlreadyUsed(this.ticket?.replies, messageMarkdown)) {
+                dialogs.message(this.$t('ticketRespuestaDuplicada'), { estado: 'error', duration: 3 });
+                return undefined;
+            }
+            this.replySubmitting = true;
             return this.adminReply(this.id, { message_markdown: messageMarkdown, attachments: this.attachments })
                 .then(() => this.refresh())
                 .then(() => {
                     dialogs.message(this.$t('respuestaEnviada'), { estado: 'success', duration: 2 });
                 })
-                .catch(() => {
-                    dialogs.message(this.$t('errorDatos'), { estado: 'error', duration: 3 });
+                .catch((err) => {
+                    if (isDuplicateReplyApiError(err)) {
+                        dialogs.message(this.$t('ticketRespuestaDuplicada'), { estado: 'error', duration: 3 });
+                    } else {
+                        dialogs.message(this.$t('errorDatos'), { estado: 'error', duration: 3 });
+                    }
                 })
                 .finally(() => {
+                    this.replySubmitting = false;
                     try {
-                        const editor = this.$refs.replyEditor;
-                        if (editor && typeof editor.invoke === 'function') {
-                            editor.invoke('setMarkdown', '');
-                        }
                         this.replyEditorInitialValue = '';
                         this.replyEditorKey += 1;
                         this.attachments = [];
