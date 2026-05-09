@@ -31,6 +31,10 @@
                                 #{{ ticket.id }} - {{ ticket.subject }}
                             </router-link>
                             <span
+                                v-if="ticketOwnerDisplayName(ticket)"
+                                class="support-tickets-table__owner text-muted"
+                            >{{ ticketOwnerDisplayName(ticket) }}</span>
+                            <span
                                 v-if="hasUserLastReply(ticket)"
                                 class="last-reply-icon text-warning"
                                 title="Ultima respuesta del usuario"
@@ -129,6 +133,15 @@ export default {
         },
         hasUserLastReply(ticket) {
             return Number(ticket && ticket.unread_for_admin) > 0;
+        },
+        ticketOwnerDisplayName(ticket) {
+            const u = ticket && ticket.user;
+            if (!u) return '';
+            const name = u.name != null && String(u.name).trim();
+            if (name) return ` · ${name}`;
+            const username = u.username != null && String(u.username).trim();
+            if (username) return ` · ${username}`;
+            return '';
         }
     },
     mounted() {
@@ -165,6 +178,10 @@ export default {
 
 .support-tickets-table tbody tr:nth-child(odd) {
     background-color: #fafafa;
+}
+
+.support-tickets-table__owner {
+    margin-left: 4px;
 }
 
 .last-reply-icon {
