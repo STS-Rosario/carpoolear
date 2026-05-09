@@ -28,6 +28,16 @@
                             <small class="text-muted">#{{ user.id }}</small>
                         </h3>
                         <p>
+                            <router-link
+                                :to="{
+                                    name: 'profile',
+                                    params: { id: user.id }
+                                }"
+                            >
+                                {{ $t('verPerfilPublico') }}
+                            </router-link>
+                        </p>
+                        <p>
                             <strong>{{ $t('eMail') }}:</strong>
                             {{ user.email || '—' }}
                         </p>
