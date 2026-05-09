@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { ticketReplyBodyAlreadyUsed } from './supportTicketReplyDuplicate';
+import { ticketReplyBodyAlreadyUsed, isDuplicateReplyApiError } from './supportTicketReplyDuplicate';
 
 describe('ticketReplyBodyAlreadyUsed', () => {
     it('returns true when trimmed body matches an existing reply message', () => {
@@ -16,5 +16,16 @@ describe('ticketReplyBodyAlreadyUsed', () => {
     it('returns false for empty composer message', () => {
         expect(ticketReplyBodyAlreadyUsed([{ message_markdown: 'x' }], '')).toBe(false);
         expect(ticketReplyBodyAlreadyUsed([{ message_markdown: 'x' }], '   ')).toBe(false);
+    });
+});
+
+describe('isDuplicateReplyApiError', () => {
+    it('returns true for Duplicate reply server payload', () => {
+        expect(isDuplicateReplyApiError({ response: { data: { error: 'Duplicate reply' } } })).toBe(true);
+    });
+
+    it('returns false for other errors', () => {
+        expect(isDuplicateReplyApiError({ response: { data: { error: 'Other' } } })).toBe(false);
+        expect(isDuplicateReplyApiError(null)).toBe(false);
     });
 });
