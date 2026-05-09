@@ -107,4 +107,12 @@ describe('AdminSupportTicketDetail view', () => {
         expect(viewSource).toContain("return this.ticket && this.ticket.status === 'Cerrado'");
         expect(viewSource).toContain('return this.ticket && !this.isTicketClosed');
     });
+
+    it('resets markdown editor, initialValue, key, and attachments after sending an admin reply', () => {
+        expect(viewSource).toContain("editor.invoke('setMarkdown', '')");
+        expect(viewSource).toContain('this.replyEditorInitialValue =');
+        expect(viewSource).toContain('replyEditorKey');
+        expect(viewSource).toContain('this.attachments = []');
+        expect(viewSource).toContain('attachmentInput');
+    });
 });

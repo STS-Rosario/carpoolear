@@ -160,17 +160,6 @@ export default {
                 })
                 .finally(() => {
                     this.replySubmitting = false;
-                    try {
-                        const editor = this.$refs.replyEditor;
-                        if (editor && typeof editor.invoke === 'function') {
-                            editor.invoke('setMarkdown', '');
-                        }
-                        this.attachments = [];
-                        const input = this.$refs.attachmentInput;
-                        if (input) input.value = '';
-                    } catch (e) {
-                        console.warn('TicketDetail: could not reset reply form', e);
-                    }
                 });
         },
         closeTicket() {

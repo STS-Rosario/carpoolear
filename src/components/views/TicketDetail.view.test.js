@@ -80,4 +80,10 @@ describe('TicketDetail user view', () => {
         expect(viewSource).toContain('ticketRespuestaDuplicada');
         expect(viewSource).toContain('isDuplicateReplyApiError');
     });
+
+    it('resets markdown editor and attachments after sending a reply', () => {
+        expect(viewSource).toContain("editor.invoke('setMarkdown', '')");
+        expect(viewSource).toContain('this.attachments = []');
+        expect(viewSource).toContain('attachmentInput');
+    });
 });
