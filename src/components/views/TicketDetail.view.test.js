@@ -78,5 +78,6 @@ describe('TicketDetail user view', () => {
     it('blocks duplicate reply bodies against existing thread messages', () => {
         expect(viewSource).toContain('supportTicketReplyDuplicate');
         expect(viewSource).toContain('ticketRespuestaDuplicada');
+        expect(viewSource).toContain('isDuplicateReplyApiError');
     });
 });
