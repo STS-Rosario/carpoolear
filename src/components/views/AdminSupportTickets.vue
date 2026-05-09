@@ -33,10 +33,14 @@
                             <span
                                 v-if="ticketOwnerDisplayName(ticket)"
                                 class="support-tickets-table__owner text-muted"
-                            ><span class="support-tickets-table__owner-sep" aria-hidden="true"> · </span><router-link
-                                v-if="canLinkTicketOwnerProfile(ticket)"
-                                :to="ticketOwnerAppProfileRoute(ticket)"
-                            >{{ ticketOwnerDisplayName(ticket) }}</router-link><span v-else>{{ ticketOwnerDisplayName(ticket) }}</span></span>
+                            >
+                                <span class="support-tickets-table__owner-sep" aria-hidden="true"> · </span>
+                                <router-link
+                                    v-if="canLinkTicketOwnerProfile(ticket)"
+                                    :to="ticketOwnerAppProfileRoute(ticket)"
+                                >{{ ticketOwnerDisplayName(ticket) }}</router-link>
+                                <span v-else>{{ ticketOwnerDisplayName(ticket) }}</span>
+                            </span>
                             <span
                                 v-if="hasUserLastReply(ticket)"
                                 class="last-reply-icon text-warning"
@@ -71,6 +75,10 @@ const STATUS_LABEL_KEYS = {
     Resuelto: 'estadoAprobado',
     Cerrado: 'estadoCerrado'
 };
+
+function userAppProfileLocation(userId) {
+    return { name: 'profile', params: { id: userId } };
+}
 
 export default {
     name: 'admin-support-tickets',
@@ -141,7 +149,7 @@ export default {
             return Boolean(ticket && ticket.user && ticket.user.id);
         },
         ticketOwnerAppProfileRoute(ticket) {
-            return { name: 'profile', params: { id: ticket.user.id } };
+            return userAppProfileLocation(ticket.user.id);
         },
         ticketOwnerDisplayName(ticket) {
             const u = ticket && ticket.user;
