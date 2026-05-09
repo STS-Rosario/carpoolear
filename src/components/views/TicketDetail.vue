@@ -36,7 +36,9 @@
                 <label class="control-label mtop-10">{{ $t('adjuntarImagenes') }}</label>
                 <input ref="attachmentInput" class="mtop-10" type="file" accept="image/*" multiple @change="onAttachments" />
                 <p class="help-block">{{ $t('maximo3Imagenes') }}</p>
-                <button class="btn btn-primary" @click="sendReply">{{ $t('responder') }}</button>
+                <button type="button" class="btn btn-primary" :disabled="replySubmitting" @click="sendReply">
+                    {{ replySubmitting ? $t('enviando') : $t('responder') }}
+                </button>
                 <button
                     v-if="['Resuelto', 'En revision'].includes(ticket.status)"
                     class="btn btn-default mleft-10"
@@ -53,6 +55,7 @@
 import { mapActions } from 'pinia';
 import ToastUiEditor from '../elements/ToastUiEditor.vue';
 import { useTicketsStore } from '../../stores/tickets';
+import { ticketReplyBodyAlreadyUsed } from '../../utils/supportTicketReplyDuplicate';
 import { markdownToHtml } from '../../services/markdown';
 import dialogs from '../../services/dialogs';
 import dayjs from '../../dayjs';
@@ -83,7 +86,8 @@ export default {
                 usageStatistics: false,
                 hideModeSwitch: true,
                 toolbarItems: [['bold', 'italic', 'strike'], ['ul', 'ol']]
-            }
+            },
+            replySubmitting: false
         };
     },
     computed: {
@@ -130,7 +134,15 @@ export default {
             });
         },
         sendReply() {
+            if (this.replySubmitting) {
+                return undefined;
+            }
             const markdown = this.$refs.replyEditor.invoke('getMarkdown');
+            if (ticketReplyBodyAlreadyUsed(this.ticket?.replies, markdown)) {
+                dialogs.message(this.$t('ticketRespuestaDuplicada'), { estado: 'error', duration: 3 });
+                return undefined;
+            }
+            this.replySubmitting = true;
             return this.replyTicket(this.id, {
                 message_markdown: markdown,
                 attachments: this.attachments
@@ -139,10 +151,16 @@ export default {
                 .then(() => {
                     dialogs.message(this.$t('respuestaEnviada'), { estado: 'success', duration: 2 });
                 })
-                .catch(() => {
-                    dialogs.message(this.$t('errorDatos'), { estado: 'error', duration: 3 });
+                .catch((err) => {
+                    const code = err?.response?.data?.error;
+                    if (code === 'Duplicate reply') {
+                        dialogs.message(this.$t('ticketRespuestaDuplicada'), { estado: 'error', duration: 3 });
+                    } else {
+                        dialogs.message(this.$t('errorDatos'), { estado: 'error', duration: 3 });
+                    }
                 })
                 .finally(() => {
+                    this.replySubmitting = false;
                     try {
                         const editor = this.$refs.replyEditor;
                         if (editor && typeof editor.invoke === 'function') {

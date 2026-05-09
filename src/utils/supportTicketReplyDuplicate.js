@@ -8,5 +8,5 @@ export function ticketReplyBodyAlreadyUsed(replies, messageMarkdown) {
         return false;
     }
     const list = Array.isArray(replies) ? replies : [];
-    return list.some((r) => String(r?.message_markdown ?? '').trim() === needle);
+    return list.some((r) => String(r?.['message_markdown'] ?? '').trim() === needle);
 }
