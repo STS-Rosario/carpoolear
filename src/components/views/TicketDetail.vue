@@ -27,6 +27,7 @@
             <div class="panel-body">
                 <h4 class="reply-to-ticket-title">{{ $t('responderAlTicketDeSoporte') }}</h4>
                 <editor
+                    :key="replyEditorKey"
                     ref="replyEditor"
                     :initial-value="''"
                     :options="editorOptions"
@@ -87,6 +88,7 @@ export default {
                 hideModeSwitch: true,
                 toolbarItems: [['bold', 'italic', 'strike'], ['ul', 'ol']]
             },
+            replyEditorKey: 0,
             replySubmitting: false
         };
     },
@@ -161,10 +163,7 @@ export default {
                 .finally(() => {
                     this.replySubmitting = false;
                     try {
-                        const editor = this.$refs.replyEditor;
-                        if (editor) {
-                            editor.invoke('setMarkdown', '');
-                        }
+                        this.replyEditorKey += 1;
                         this.attachments = [];
                         const input = this.$refs.attachmentInput;
                         if (input) input.value = '';

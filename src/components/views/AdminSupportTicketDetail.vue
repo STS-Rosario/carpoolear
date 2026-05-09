@@ -351,10 +351,6 @@ export default {
                 .finally(() => {
                     this.replySubmitting = false;
                     try {
-                        const editor = this.$refs.replyEditor;
-                        if (editor) {
-                            editor.invoke('setMarkdown', '');
-                        }
                         this.replyEditorInitialValue = '';
                         this.replyEditorKey += 1;
                         this.attachments = [];

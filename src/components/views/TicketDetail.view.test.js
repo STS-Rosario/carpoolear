@@ -81,8 +81,10 @@ describe('TicketDetail user view', () => {
         expect(viewSource).toContain('isDuplicateReplyApiError');
     });
 
-    it('resets markdown editor and attachments after sending a reply', () => {
-        expect(viewSource).toContain("editor.invoke('setMarkdown', '')");
+    it('re-creates editor and clears attachments after sending a reply via key increment', () => {
+        expect(viewSource).toContain(':key="replyEditorKey"');
+        expect(viewSource).toContain('replyEditorKey: 0');
+        expect(viewSource).toContain('this.replyEditorKey += 1');
         expect(viewSource).toContain('this.attachments = []');
         expect(viewSource).toContain('attachmentInput');
     });
