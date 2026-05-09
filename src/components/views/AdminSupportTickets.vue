@@ -31,6 +31,17 @@
                                 #{{ ticket.id }} - {{ ticket.subject }}
                             </router-link>
                             <span
+                                v-if="ticketOwnerDisplayName(ticket)"
+                                class="support-tickets-table__owner text-muted"
+                            >
+                                <span class="support-tickets-table__owner-sep" aria-hidden="true"> · </span>
+                                <router-link
+                                    v-if="canLinkTicketOwnerProfile(ticket)"
+                                    :to="ticketOwnerAppProfileRoute(ticket)"
+                                >{{ ticketOwnerDisplayName(ticket) }}</router-link>
+                                <span v-else>{{ ticketOwnerDisplayName(ticket) }}</span>
+                            </span>
+                            <span
                                 v-if="hasUserLastReply(ticket)"
                                 class="last-reply-icon text-warning"
                                 title="Ultima respuesta del usuario"
@@ -64,6 +75,10 @@ const STATUS_LABEL_KEYS = {
     Resuelto: 'estadoAprobado',
     Cerrado: 'estadoCerrado'
 };
+
+function userAppProfileLocation(userId) {
+    return { name: 'profile', params: { id: userId } };
+}
 
 export default {
     name: 'admin-support-tickets',
@@ -129,6 +144,21 @@ export default {
         },
         hasUserLastReply(ticket) {
             return Number(ticket && ticket.unread_for_admin) > 0;
+        },
+        canLinkTicketOwnerProfile(ticket) {
+            return Boolean(ticket && ticket.user && ticket.user.id);
+        },
+        ticketOwnerAppProfileRoute(ticket) {
+            return userAppProfileLocation(ticket.user.id);
+        },
+        ticketOwnerDisplayName(ticket) {
+            const u = ticket && ticket.user;
+            if (!u) return '';
+            const name = u.name != null && String(u.name).trim();
+            if (name) return name;
+            const username = u.username != null && String(u.username).trim();
+            if (username) return username;
+            return '';
         }
     },
     mounted() {
