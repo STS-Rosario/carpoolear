@@ -130,7 +130,7 @@ import ToastUiEditor from '../elements/ToastUiEditor.vue';
 import AdminLayout from '../layouts/AdminLayout.vue';
 import { markdownToHtml } from '../../services/markdown';
 import { interpolateSupportTemplateVariables } from '../../utils/supportTemplateInterpolation';
-import { ticketReplyBodyAlreadyUsed } from '../../utils/supportTicketReplyDuplicate';
+import { ticketReplyBodyAlreadyUsed, isDuplicateReplyApiError } from '../../utils/supportTicketReplyDuplicate';
 import { useTicketsStore } from '../../stores/tickets';
 import { useReplyTemplatesStore } from '../../stores/replyTemplates';
 import dialogs from '../../services/dialogs.js';
@@ -342,8 +342,7 @@ export default {
                     dialogs.message(this.$t('respuestaEnviada'), { estado: 'success', duration: 2 });
                 })
                 .catch((err) => {
-                    const code = err?.response?.data?.error;
-                    if (code === 'Duplicate reply') {
+                    if (isDuplicateReplyApiError(err)) {
                         dialogs.message(this.$t('ticketRespuestaDuplicada'), { estado: 'error', duration: 3 });
                     } else {
                         dialogs.message(this.$t('errorDatos'), { estado: 'error', duration: 3 });

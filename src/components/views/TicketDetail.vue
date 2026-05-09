@@ -55,7 +55,7 @@
 import { mapActions } from 'pinia';
 import ToastUiEditor from '../elements/ToastUiEditor.vue';
 import { useTicketsStore } from '../../stores/tickets';
-import { ticketReplyBodyAlreadyUsed } from '../../utils/supportTicketReplyDuplicate';
+import { ticketReplyBodyAlreadyUsed, isDuplicateReplyApiError } from '../../utils/supportTicketReplyDuplicate';
 import { markdownToHtml } from '../../services/markdown';
 import dialogs from '../../services/dialogs';
 import dayjs from '../../dayjs';
@@ -152,8 +152,7 @@ export default {
                     dialogs.message(this.$t('respuestaEnviada'), { estado: 'success', duration: 2 });
                 })
                 .catch((err) => {
-                    const code = err?.response?.data?.error;
-                    if (code === 'Duplicate reply') {
+                    if (isDuplicateReplyApiError(err)) {
                         dialogs.message(this.$t('ticketRespuestaDuplicada'), { estado: 'error', duration: 3 });
                     } else {
                         dialogs.message(this.$t('errorDatos'), { estado: 'error', duration: 3 });
