@@ -60,6 +60,18 @@ describe('AdminSupportTicketDetail view', () => {
         expect(viewSource).toContain("dialogs.message(this.$t('errorGuardandoNotaInterna')");
     });
 
+    it('disables reply submit while sending and shows Enviando label', () => {
+        expect(viewSource).toContain('replySubmitting');
+        expect(viewSource).toContain(':disabled="replySubmitting"');
+        expect(viewSource).toContain("$t('enviando')");
+        expect(viewSource).toContain("$t('responder')");
+    });
+
+    it('blocks duplicate reply bodies against existing thread messages', () => {
+        expect(viewSource).toContain('supportTicketReplyDuplicate');
+        expect(viewSource).toContain('ticketRespuestaDuplicada');
+    });
+
     it('interpolates ticket user variables before sending admin reply', () => {
         expect(viewSource).toContain('interpolateSupportTemplateVariables');
         expect(viewSource).toContain('adminReply(this.id');
