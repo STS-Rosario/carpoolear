@@ -38,6 +38,11 @@ describe('AdminSupportTickets view', () => {
         expect(priCell).toBeLessThan(catCell);
     });
 
+    it('shows ticket owner display name next to the subject for admin context', () => {
+        expect(viewSource).toContain('ticketOwnerDisplayName(ticket)');
+        expect(viewSource).toContain('support-tickets-table__owner');
+    });
+
     it('uses compact narrow columns and a wide subject column class', () => {
         expect(viewSource).toContain('support-tickets-table--compact');
         expect(viewSource).toContain('support-tickets-table__subject');
