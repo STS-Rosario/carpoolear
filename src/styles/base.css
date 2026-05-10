@@ -2472,6 +2472,10 @@
       .trip-detail-component .driver-container {
           z-index: 0;
       }
+      .conversation-component {
+          padding-left: 0;
+          padding-right: 0;
+      }
       .conversation-component .list-group-item:first-child {
           border: 1px solid #DDDDDD;
       }

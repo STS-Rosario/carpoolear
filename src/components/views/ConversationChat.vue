@@ -366,9 +366,23 @@ export default {
     .message-composer {
         position: static;
         border-top: 1px solid #ddd;
+        padding-left: 4px;
+        padding-right: 4px;
     }
     .message-composer-editor-wrap {
         align-items: stretch;
+        gap: 4px;
+    }
+    .message-composer-editor {
+        overflow: hidden;
+    }
+    .message-composer-editor :deep(.toastui-editor-defaultUI-toolbar) {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding: 0 8px;
+    }
+    .message-composer-editor :deep(.toastui-editor-defaultUI) {
+        border-radius: 0;
     }
     .message-composer-send {
         height: 44px;
