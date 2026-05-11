@@ -114,4 +114,25 @@ describe('AdminSupportTicketDetail view', () => {
         expect(viewSource).toContain('this.attachments = []');
         expect(viewSource).toContain('attachmentInput');
     });
+
+    it('shows success and error snackbars when resolving a ticket', () => {
+        expect(viewSource).toContain('ticketMarcadoResuelto');
+        expect(viewSource).toContain('errorMarcandoResuelto');
+        expect(viewSource).toContain("dialogs.message(this.$t('ticketMarcadoResuelto')");
+        expect(viewSource).toContain("dialogs.message(this.$t('errorMarcandoResuelto')");
+    });
+
+    it('shows success and error snackbars when closing a ticket', () => {
+        expect(viewSource).toContain('ticketCerrado');
+        expect(viewSource).toContain('errorCerrandoTicket');
+        expect(viewSource).toContain("dialogs.message(this.$t('ticketCerrado')");
+        expect(viewSource).toContain("dialogs.message(this.$t('errorCerrandoTicket')");
+    });
+
+    it('shows success and error snackbars when reopening a ticket', () => {
+        expect(viewSource).toContain('ticketReabierto');
+        expect(viewSource).toContain('errorReabriendoTicket');
+        expect(viewSource).toContain("dialogs.message(this.$t('ticketReabierto')");
+        expect(viewSource).toContain("dialogs.message(this.$t('errorReabriendoTicket')");
+    });
 });
