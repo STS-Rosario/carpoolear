@@ -31,15 +31,16 @@
             <template v-if="contributionWarningData.role === 'driver'">
                 {{
                     $t('coordinateTripContributionWarningDriver', {
-                        maxContribution: $n(
-                            contributionWarningData.maxContributionCents / 100,
-                            'currency'
-                        )
+                        amountPart: contributionWarningAmountPart
                     })
                 }}
             </template>
             <template v-else>
-                {{ $t('coordinateTripContributionWarningPassengerPrefix') }}
+                {{
+                    $t('coordinateTripContributionWarningPassengerPrefix', {
+                        amountPart: contributionWarningAmountPart
+                    })
+                }}
                 <router-link :to="{ path: '/soporte' }">
                     {{ $t('coordinateTripContributionWarningPassengerReportLink') }}
                 </router-link>
@@ -174,6 +175,7 @@ import dialogs from '../../services/dialogs.js';
 import spinner from '../Spinner.vue';
 import dayjs from '../../dayjs';
 import { getConversationContributionWarningData } from '../../utils/conversationContributionWarning.js';
+import { getContributionWarningAmountPart } from '../../utils/contributionWarningAmountPart.js';
 import { isVoluntaryContributionSeatPrice } from '../../utils/tripSeatPrice.js';
 
 export default {
@@ -238,6 +240,16 @@ export default {
                 conversation: this.conversation,
                 user: this.user
             });
+        },
+        contributionWarningAmountPart() {
+            const data = this.contributionWarningData;
+            if (!data || typeof this.$n !== 'function') {
+                return '';
+            }
+            return getContributionWarningAmountPart(
+                this.$n.bind(this),
+                data.maxContributionCents
+            );
         }
     },
     methods: {
