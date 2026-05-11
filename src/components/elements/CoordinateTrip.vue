@@ -243,7 +243,7 @@ export default {
         },
         contributionWarningAmountPart() {
             const data = this.contributionWarningData;
-            if (!data || typeof this.$n !== 'function') {
+            if (!data) {
                 return '';
             }
             return getContributionWarningAmountPart(
