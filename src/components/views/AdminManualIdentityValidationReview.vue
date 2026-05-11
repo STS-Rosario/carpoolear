@@ -209,9 +209,17 @@ export default {
         loadImages() {
             if (!this.item || !this.item.has_images) return;
             const authHeader = useAuthStore().authHeader;
-            const baseUrl = (process.env.API_URL || '').replace(/\/$/, '');
+            const legacyBase = (typeof process !== 'undefined' && process.env && process.env.API_URL
+                ? String(process.env.API_URL)
+                : ''
+            ).replace(/\/$/, '');
+            const viteBase = (import.meta.env && import.meta.env.VITE_API_URL
+                ? String(import.meta.env.VITE_API_URL)
+                : ''
+            ).replace(/\/$/, '');
+            const baseUrl = legacyBase || viteBase;
             if (!baseUrl) return;
-            // Always request images from the backend (API_URL), not from the URL in the response (which may use APP_URL = frontend)
+            // Always request images from the backend (same host as API), not from URLs in JSON (may be APP_URL / frontend).
             ['front', 'back', 'selfie'].forEach((type) => {
                 const path = '/api/admin/manual-identity-validations/' + this.id + '/image/' + type;
                 const fullUrl = baseUrl + path;
