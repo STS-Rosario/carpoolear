@@ -13,3 +13,13 @@ describe('AdminApi user migrations', () => {
         expect(apiSource).toContain('createUserMigration');
     });
 });
+
+describe('AdminApi manual identity validations private note', () => {
+    it('posts private admin note to manual identity validation endpoint', () => {
+        expect(apiSource).toContain('updateManualIdentityValidationPrivateNote');
+        expect(apiSource).toContain(
+            "/api/admin/manual-identity-validations/' + id + '/private-note"
+        );
+        expect(apiSource).toContain('private_admin_note');
+    });
+});

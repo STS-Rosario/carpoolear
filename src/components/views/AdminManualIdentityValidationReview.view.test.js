@@ -1,0 +1,15 @@
+import { describe, it, expect } from 'vitest';
+import fs from 'node:fs';
+import path from 'path';
+
+const viewPath = path.resolve(__dirname, 'AdminManualIdentityValidationReview.vue');
+const viewSource = fs.readFileSync(viewPath, 'utf8');
+
+describe('AdminManualIdentityValidationReview view', () => {
+    it('shows private admin note field and save wired to AdminApi', () => {
+        expect(viewSource).toContain('notaPrivadaSoloAdmins');
+        expect(viewSource).toContain('privateAdminNote');
+        expect(viewSource).toContain('savePrivateAdminNote');
+        expect(viewSource).toContain('updateManualIdentityValidationPrivateNote');
+    });
+});
