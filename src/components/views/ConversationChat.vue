@@ -54,6 +54,7 @@
             <div class="list-group-item message-composer">
                 <div class="message-composer-editor-wrap">
                     <editor
+                        :key="editorKey"
                         ref="messageEditor"
                         :initial-value="editorInitialValue"
                         initial-edit-type="wysiwyg"
@@ -103,6 +104,7 @@ export default {
     data() {
         return {
             editorInitialValue: '',
+            editorKey: 0,
             editorHasContent: false,
             mustJump: false,
             sending: {
@@ -219,10 +221,10 @@ export default {
                     })
                     .finally(() => {
                         this.sending.message = false;
+                        this.editorKey += 1;
+                        this.editorHasContent = false;
                         this.$forceUpdate();
                     });
-                editor.invoke('setMarkdown', '');
-                this.editorHasContent = false;
             }
         },
 
