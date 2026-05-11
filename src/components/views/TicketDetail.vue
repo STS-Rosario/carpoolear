@@ -76,6 +76,9 @@ const STATUS_CLASS_MAP = {
     'En revision': 'label label-info'
 };
 
+const SUCCESS_TOAST_OPTIONS = { estado: 'success', duration: 2 };
+const ERROR_TOAST_OPTIONS = { estado: 'error', duration: 3 };
+
 export default {
     name: 'ticket-detail',
     props: ['id'],
@@ -151,13 +154,13 @@ export default {
             })
                 .then(() => this.refresh())
                 .then(() => {
-                    dialogs.message(this.$t('respuestaEnviada'), { estado: 'success', duration: 2 });
+                    dialogs.message(this.$t('respuestaEnviada'), SUCCESS_TOAST_OPTIONS);
                 })
                 .catch((err) => {
                     if (isDuplicateReplyApiError(err)) {
-                        dialogs.message(this.$t('ticketRespuestaDuplicada'), { estado: 'error', duration: 3 });
+                        dialogs.message(this.$t('ticketRespuestaDuplicada'), ERROR_TOAST_OPTIONS);
                     } else {
-                        dialogs.message(this.$t('errorDatos'), { estado: 'error', duration: 3 });
+                        dialogs.message(this.$t('errorDatos'), ERROR_TOAST_OPTIONS);
                     }
                 })
                 .finally(() => {
@@ -180,10 +183,10 @@ export default {
             this.closeTicketAction(this.id, { message_markdown: message })
                 .then(() => this.refresh())
                 .then(() => {
-                    dialogs.message(this.$t('ticketCerrado'), { estado: 'success', duration: 2 });
+                    dialogs.message(this.$t('ticketCerrado'), SUCCESS_TOAST_OPTIONS);
                 })
                 .catch(() => {
-                    dialogs.message(this.$t('errorCerrandoTicket'), { estado: 'error', duration: 3 });
+                    dialogs.message(this.$t('errorCerrandoTicket'), ERROR_TOAST_OPTIONS);
                 });
         }
     },

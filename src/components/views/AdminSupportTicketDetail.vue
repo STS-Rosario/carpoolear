@@ -163,8 +163,8 @@ const PRIORITY_CLASS_MAP = {
     low: 'label label-default'
 };
 
-const INTERNAL_NOTE_SAVE_SUCCESS_TOAST_OPTIONS = { estado: 'success', duration: 2 };
-const INTERNAL_NOTE_SAVE_ERROR_TOAST_OPTIONS = { estado: 'error', duration: 3 };
+const SUCCESS_TOAST_OPTIONS = { estado: 'success', duration: 2 };
+const ERROR_TOAST_OPTIONS = { estado: 'error', duration: 3 };
 
 export default {
     name: 'admin-support-ticket-detail',
@@ -339,13 +339,13 @@ export default {
             return this.adminReply(this.id, { message_markdown: messageMarkdown, attachments: this.attachments })
                 .then(() => this.refresh())
                 .then(() => {
-                    dialogs.message(this.$t('respuestaEnviada'), { estado: 'success', duration: 2 });
+                    dialogs.message(this.$t('respuestaEnviada'), SUCCESS_TOAST_OPTIONS);
                 })
                 .catch((err) => {
                     if (isDuplicateReplyApiError(err)) {
-                        dialogs.message(this.$t('ticketRespuestaDuplicada'), { estado: 'error', duration: 3 });
+                        dialogs.message(this.$t('ticketRespuestaDuplicada'), ERROR_TOAST_OPTIONS);
                     } else {
-                        dialogs.message(this.$t('errorDatos'), { estado: 'error', duration: 3 });
+                        dialogs.message(this.$t('errorDatos'), ERROR_TOAST_OPTIONS);
                     }
                 })
                 .finally(() => {
@@ -367,10 +367,10 @@ export default {
             this.adminResolve(this.id, { message_markdown: message })
                 .then(() => this.refresh())
                 .then(() => {
-                    dialogs.message(this.$t('ticketMarcadoResuelto'), { estado: 'success', duration: 2 });
+                    dialogs.message(this.$t('ticketMarcadoResuelto'), SUCCESS_TOAST_OPTIONS);
                 })
                 .catch(() => {
-                    dialogs.message(this.$t('errorMarcandoResuelto'), { estado: 'error', duration: 3 });
+                    dialogs.message(this.$t('errorMarcandoResuelto'), ERROR_TOAST_OPTIONS);
                 });
         },
         closeTicket() {
@@ -379,30 +379,30 @@ export default {
             this.adminClose(this.id, { message_markdown: message })
                 .then(() => this.refresh())
                 .then(() => {
-                    dialogs.message(this.$t('ticketCerrado'), { estado: 'success', duration: 2 });
+                    dialogs.message(this.$t('ticketCerrado'), SUCCESS_TOAST_OPTIONS);
                 })
                 .catch(() => {
-                    dialogs.message(this.$t('errorCerrandoTicket'), { estado: 'error', duration: 3 });
+                    dialogs.message(this.$t('errorCerrandoTicket'), ERROR_TOAST_OPTIONS);
                 });
         },
         reopenTicket() {
             this.adminReopen(this.id)
                 .then(() => this.refresh())
                 .then(() => {
-                    dialogs.message(this.$t('ticketReabierto'), { estado: 'success', duration: 2 });
+                    dialogs.message(this.$t('ticketReabierto'), SUCCESS_TOAST_OPTIONS);
                 })
                 .catch(() => {
-                    dialogs.message(this.$t('errorReabriendoTicket'), { estado: 'error', duration: 3 });
+                    dialogs.message(this.$t('errorReabriendoTicket'), ERROR_TOAST_OPTIONS);
                 });
         },
         saveInternalNote() {
             this.adminSetInternalNote(this.id, this.internalNote)
                 .then(() => this.refresh())
                 .then(() => {
-                    dialogs.message(this.$t('notaInternaGuardada'), INTERNAL_NOTE_SAVE_SUCCESS_TOAST_OPTIONS);
+                    dialogs.message(this.$t('notaInternaGuardada'), SUCCESS_TOAST_OPTIONS);
                 })
                 .catch(() => {
-                    dialogs.message(this.$t('errorGuardandoNotaInterna'), INTERNAL_NOTE_SAVE_ERROR_TOAST_OPTIONS);
+                    dialogs.message(this.$t('errorGuardandoNotaInterna'), ERROR_TOAST_OPTIONS);
                 });
         }
     },
