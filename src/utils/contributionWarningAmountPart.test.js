@@ -12,6 +12,7 @@ describe('getContributionWarningAmountPart', () => {
         const n = vi.fn();
         expect(getContributionWarningAmountPart(n, -1)).toBe('');
         expect(getContributionWarningAmountPart(n, null)).toBe('');
+        expect(getContributionWarningAmountPart(n, undefined)).toBe('');
         expect(n).not.toHaveBeenCalled();
     });
 
