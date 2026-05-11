@@ -364,15 +364,36 @@ export default {
         resolveTicket() {
             if (!window.confirm(this.$t('confirmarMarcarResuelto'))) return;
             const message = window.prompt(this.$t('mensajeOpcionalResolucion')) || '';
-            this.adminResolve(this.id, { message_markdown: message }).then(() => this.refresh());
+            this.adminResolve(this.id, { message_markdown: message })
+                .then(() => this.refresh())
+                .then(() => {
+                    dialogs.message(this.$t('ticketMarcadoResuelto'), { estado: 'success', duration: 2 });
+                })
+                .catch(() => {
+                    dialogs.message(this.$t('errorMarcandoResuelto'), { estado: 'error', duration: 3 });
+                });
         },
         closeTicket() {
             if (!window.confirm(this.$t('confirmarCierreTicket'))) return;
             const message = window.prompt(this.$t('mensajeOpcionalCierre')) || '';
-            this.adminClose(this.id, { message_markdown: message }).then(() => this.refresh());
+            this.adminClose(this.id, { message_markdown: message })
+                .then(() => this.refresh())
+                .then(() => {
+                    dialogs.message(this.$t('ticketCerrado'), { estado: 'success', duration: 2 });
+                })
+                .catch(() => {
+                    dialogs.message(this.$t('errorCerrandoTicket'), { estado: 'error', duration: 3 });
+                });
         },
         reopenTicket() {
-            this.adminReopen(this.id).then(() => this.refresh());
+            this.adminReopen(this.id)
+                .then(() => this.refresh())
+                .then(() => {
+                    dialogs.message(this.$t('ticketReabierto'), { estado: 'success', duration: 2 });
+                })
+                .catch(() => {
+                    dialogs.message(this.$t('errorReabriendoTicket'), { estado: 'error', duration: 3 });
+                });
         },
         saveInternalNote() {
             this.adminSetInternalNote(this.id, this.internalNote)

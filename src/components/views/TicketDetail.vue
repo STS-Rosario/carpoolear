@@ -177,7 +177,14 @@ export default {
             if (!window.confirm(this.$t('confirmarCierreTicket'))) {
                 return;
             }
-            this.closeTicketAction(this.id, { message_markdown: message }).then(() => this.refresh());
+            this.closeTicketAction(this.id, { message_markdown: message })
+                .then(() => this.refresh())
+                .then(() => {
+                    dialogs.message(this.$t('ticketCerrado'), { estado: 'success', duration: 2 });
+                })
+                .catch(() => {
+                    dialogs.message(this.$t('errorCerrandoTicket'), { estado: 'error', duration: 3 });
+                });
         }
     },
     components: {
