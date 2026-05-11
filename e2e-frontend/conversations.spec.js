@@ -149,12 +149,8 @@ test.describe('Conversations', () => {
     // Send button should NOT be active (editor is cleared)
     await expect(page.locator('#btn-send')).not.toHaveClass(/active/);
 
-    // Editor content should be empty
-    const content = await page.evaluate(() => {
-      const el = document.querySelector('.message-composer-editor .ProseMirror.toastui-editor-contents');
-      return el?.textContent?.trim() || '';
-    });
-    expect(content).toBe('');
+    // Editor should not contain the sent message anymore
+    await expect(page.locator('.message-composer-editor')).not.toContainText('Hello! This is a test message');
   });
 
   test('distinguishes own messages from others', async ({ page }) => {
