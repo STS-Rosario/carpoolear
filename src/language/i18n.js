@@ -1250,7 +1250,7 @@ const messages = {
         activar: 'Activar',
         ocultar: 'Ocultar',
         precioMaximoExcedido:
-            'La contribución máxima ({maxContribution}) ha sido excedida',
+            'La contribución máxima{maxContributionPart} ha sido excedida',
         recuerdeReglaContribucionMaximaExcedida:
             'Recuerde que exceder la contribución máxima está fuera de las reglas de Carpoolear, el seguro automotor no lo cubrirá en caso de accidente, y será suspendido de la plataforma',
         contribucionPorPersonaRequerida:
@@ -3548,7 +3548,7 @@ const messages = {
         activar: 'Activate',
         ocultar: 'Hide',
         precioMaximoExcedido:
-            'Maximum contribution ({maxContribution}) exceeded',
+            'Maximum contribution{maxContributionPart} exceeded',
         recuerdeReglaContribucionMaximaExcedida:
             'Remember that exceeding the maximum contribution is against Carpoolear rules, auto insurance will not cover it in case of an accident, and you will be suspended from the platform',
         contribucionPorPersonaRequerida:
