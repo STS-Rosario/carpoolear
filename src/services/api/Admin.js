@@ -84,6 +84,13 @@ class AdminApi extends TaggedApi {
         );
     }
 
+    updateManualIdentityValidationPrivateNote(id, privateAdminNote) {
+        return this.post(
+            '/api/admin/manual-identity-validations/' + id + '/private-note',
+            { private_admin_note: privateAdminNote }
+        );
+    }
+
     getMercadoPagoRejectedValidations() {
         return this.get('/api/admin/mercado-pago-rejected-validations', {});
     }

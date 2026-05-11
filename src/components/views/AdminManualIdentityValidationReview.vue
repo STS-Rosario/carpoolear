@@ -50,6 +50,24 @@
                             <strong>{{ $t('comentarioRevision') }}:</strong> {{ item.review_note }}
                         </p>
 
+                        <div class="form-group private-admin-note-group">
+                            <label>{{ $t('notaPrivadaSoloAdmins') }}</label>
+                            <textarea
+                                v-model="privateAdminNote"
+                                class="form-control"
+                                rows="3"
+                                :placeholder="$t('notaPrivadaSoloAdmins')"
+                            ></textarea>
+                            <button
+                                class="btn btn-default btn-sm private-admin-note-save-btn"
+                                :disabled="savingPrivateNote"
+                                @click="savePrivateAdminNote"
+                            >
+                                <span v-if="savingPrivateNote">{{ $t('guardando') }}</span>
+                                <span v-else>{{ $t('guardar') }}</span>
+                            </button>
+                        </div>
+
                         <div v-if="item.has_images" class="images-section">
                             <h4>{{ $t('fotos') }}</h4>
                             <div class="row">
@@ -167,6 +185,8 @@ export default {
             blobUrls: { front: null, back: null, selfie: null },
             fullSizeImage: null,
             reviewNote: '',
+            privateAdminNote: '',
+            savingPrivateNote: false,
             submitting: false,
             reviewError: null,
             purging: false
@@ -194,12 +214,16 @@ export default {
             if (reviewStatus === 'pending') return this.$t('fechaMarcadoPendiente');
             return this.$t('fechaAccionAdmin');
         },
+        applyResponseItem(res) {
+            const data = res.data || res;
+            this.item = data.data || data;
+            this.privateAdminNote = (this.item && this.item.private_admin_note) || '';
+            this.loadImages();
+        },
         fetchItem() {
             const api = new AdminApi();
             return api.getManualIdentityValidation(this.id).then((res) => {
-                const data = res.data || res;
-                this.item = data.data || data;
-                this.loadImages();
+                this.applyResponseItem(res);
             }).catch(() => {
                 this.item = null;
             }).finally(() => {
@@ -232,6 +256,21 @@ export default {
         },
         showFullSize(type) {
             this.fullSizeImage = this.blobUrls[type] || null;
+        },
+        savePrivateAdminNote() {
+            if (!this.item) return;
+            this.savingPrivateNote = true;
+            const api = new AdminApi();
+            api.updateManualIdentityValidationPrivateNote(this.item.id, this.privateAdminNote)
+                .then((res) => {
+                    this.applyResponseItem(res);
+                    dialogs.message(this.$t('guardar'), { duration: 2, estado: 'success' });
+                }, () => {
+                    dialogs.message(this.$t('resultError'), { duration: 3, estado: 'error' });
+                })
+                .finally(() => {
+                    this.savingPrivateNote = false;
+                });
         },
         review(action) {
             if (action !== 'approve' && !this.hasComment) return;
@@ -322,5 +361,11 @@ export default {
 }
 .review-note-display {
     word-break: break-word;
+}
+.private-admin-note-group {
+    margin-top: 1rem;
+}
+.private-admin-note-save-btn {
+    margin-top: 0.5rem;
 }
 </style>
