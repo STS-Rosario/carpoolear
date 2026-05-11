@@ -149,7 +149,7 @@ export default {
             const appVersionInfo = useRootStore().appVersionInfo;
             const version = (appVersionInfo && appVersionInfo.version) || (typeof window !== 'undefined' && window.appVersion) || '0';
             const base = 'Version ' + version;
-            return Capacitor.isNativePlatform() ? base : base + ' - build 109';
+            return Capacitor.isNativePlatform() ? base : base + ' - build 110';
         },
         ...mapState(useCordovaStore, {
             deviceReady: 'deviceReady'
