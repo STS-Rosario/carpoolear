@@ -214,13 +214,16 @@ export default {
             if (reviewStatus === 'pending') return this.$t('fechaMarcadoPendiente');
             return this.$t('fechaAccionAdmin');
         },
+        applyResponseItem(res) {
+            const data = res.data || res;
+            this.item = data.data || data;
+            this.privateAdminNote = (this.item && this.item.private_admin_note) || '';
+            this.loadImages();
+        },
         fetchItem() {
             const api = new AdminApi();
             return api.getManualIdentityValidation(this.id).then((res) => {
-                const data = res.data || res;
-                this.item = data.data || data;
-                this.privateAdminNote = (this.item && this.item.private_admin_note) || '';
-                this.loadImages();
+                this.applyResponseItem(res);
             }).catch(() => {
                 this.item = null;
             }).finally(() => {
@@ -260,9 +263,7 @@ export default {
             const api = new AdminApi();
             api.updateManualIdentityValidationPrivateNote(this.item.id, this.privateAdminNote)
                 .then((res) => {
-                    const data = res.data || res;
-                    this.item = data.data || data;
-                    this.privateAdminNote = (this.item && this.item.private_admin_note) || '';
+                    this.applyResponseItem(res);
                     dialogs.message(this.$t('guardar'), { duration: 2, estado: 'success' });
                 }, () => {
                     dialogs.message(this.$t('resultError'), { duration: 3, estado: 'error' });

@@ -11,5 +11,6 @@ describe('AdminManualIdentityValidationReview view', () => {
         expect(viewSource).toContain('privateAdminNote');
         expect(viewSource).toContain('savePrivateAdminNote');
         expect(viewSource).toContain('updateManualIdentityValidationPrivateNote');
+        expect(viewSource).toContain('applyResponseItem');
     });
 });
