@@ -88,4 +88,11 @@ describe('TicketDetail user view', () => {
         expect(viewSource).toContain('this.attachments = []');
         expect(viewSource).toContain('attachmentInput');
     });
+
+    it('shows success and error snackbars when the user closes a ticket', () => {
+        expect(viewSource).toContain('ticketCerrado');
+        expect(viewSource).toContain('errorCerrandoTicket');
+        expect(viewSource).toContain("dialogs.message(this.$t('ticketCerrado')");
+        expect(viewSource).toContain("dialogs.message(this.$t('errorCerrandoTicket')");
+    });
 });
