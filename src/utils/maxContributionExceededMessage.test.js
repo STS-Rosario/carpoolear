@@ -14,7 +14,24 @@ describe('getMaxContributionExceededMessage', () => {
 
         expect(n).toHaveBeenCalledWith(1500, 'currency');
         expect(t).toHaveBeenCalledWith('precioMaximoExcedido', {
-            maxContribution: '$ 1500'
+            maxContributionPart: ' ($ 1500)'
+        });
+        expect(message).toBe('message');
+    });
+
+    it('omits formatted currency when max contribution is zero', () => {
+        const t = vi.fn().mockReturnValue('message');
+        const n = vi.fn();
+
+        const message = getMaxContributionExceededMessage({
+            t,
+            n,
+            maxContributionCents: 0
+        });
+
+        expect(n).not.toHaveBeenCalled();
+        expect(t).toHaveBeenCalledWith('precioMaximoExcedido', {
+            maxContributionPart: ''
         });
         expect(message).toBe('message');
     });
