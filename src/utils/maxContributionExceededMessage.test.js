@@ -35,4 +35,20 @@ describe('getMaxContributionExceededMessage', () => {
         });
         expect(message).toBe('message');
     });
+
+    it('omits formatted currency for non-positive cap amounts', () => {
+        const t = vi.fn().mockReturnValue('message');
+        const n = vi.fn();
+
+        getMaxContributionExceededMessage({
+            t,
+            n,
+            maxContributionCents: -1
+        });
+
+        expect(n).not.toHaveBeenCalled();
+        expect(t).toHaveBeenCalledWith('precioMaximoExcedido', {
+            maxContributionPart: ''
+        });
+    });
 });
