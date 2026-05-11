@@ -110,6 +110,49 @@ test.describe('Conversations', () => {
     await expect(page.getByText('Sí, hay 2 lugares disponibles')).toBeVisible();
   });
 
+  test('sends a message and clears the editor', async ({ page }) => {
+    // Mock the send message endpoint
+    await page.route(/\/api\/conversations\/1\/send/, (route) => {
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          data: { id: 100, conversation_id: 1, text: 'Test message', created_at: '2025-07-15T12:01:00.000Z', user: { id: 1, name: 'Juan Pérez' } },
+        }),
+      });
+    });
+
+    await page.goto('/conversations/1');
+    await waitForPageReady(page);
+
+    // Wait for messages to render
+    await expect(page.locator('.message-wrapper').first()).toBeVisible({ timeout: 10000 });
+
+    // Focus the editor and type a message
+    const editor = page.locator('.message-composer-editor .ProseMirror.toastui-editor-contents');
+    await editor.waitFor({ state: 'visible', timeout: 10000 });
+    await editor.click();
+    await page.keyboard.type('Hello! This is a test message');
+
+    // Send button should be active
+    await expect(page.locator('#btn-send')).toHaveClass(/active/);
+
+    // Click the send button
+    await page.locator('#btn-send').click();
+
+    // Wait for the send API response
+    await page.waitForResponse(/\/api\/conversations\/1\/send/);
+
+    // Wait for Vue to update
+    await page.waitForTimeout(500);
+
+    // Send button should NOT be active (editor is cleared)
+    await expect(page.locator('#btn-send')).not.toHaveClass(/active/);
+
+    // Editor should not contain the sent message anymore
+    await expect(page.locator('.message-composer-editor')).not.toContainText('Hello! This is a test message');
+  });
+
   test('distinguishes own messages from others', async ({ page }) => {
     await page.goto('/conversations/1');
     await waitForPageReady(page);
