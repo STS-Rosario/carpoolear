@@ -107,9 +107,7 @@
                             <span>
                                 <h5>{{ $t('aceptadas') }}:</h5>
                                 <router-link
-                                    v-for="pas in trip.allPassengerRequest.filter(
-                                        (p) => p.request_state == 1
-                                    )"
+                                    v-for="pas in passengerRequestsByState(1)"
                                     :key="'acc-' + pas.user.id"
                                     class="trip-display-profile-link trip-display-profile-link--block"
                                     :to="{ name: 'profile', params: { id: pas.user.id } }"
@@ -122,9 +120,7 @@
                             <span>
                                 <h5>{{ $t('rechazadas') }}:</h5>
                                 <router-link
-                                    v-for="pas in trip.allPassengerRequest.filter(
-                                        (p) => p.request_state == 2
-                                    )"
+                                    v-for="pas in passengerRequestsByState(2)"
                                     :key="'rej-' + pas.user.id"
                                     class="trip-display-profile-link trip-display-profile-link--block"
                                     :to="{ name: 'profile', params: { id: pas.user.id } }"
@@ -137,9 +133,7 @@
                             <span>
                                 <h5>{{ $t('canceladas') }}:</h5>
                                 <router-link
-                                    v-for="pas in trip.allPassengerRequest.filter(
-                                        (p) => p.request_state == 3
-                                    )"
+                                    v-for="pas in passengerRequestsByState(3)"
                                     :key="'can-' + pas.user.id"
                                     class="trip-display-profile-link trip-display-profile-link--block"
                                     :to="{ name: 'profile', params: { id: pas.user.id } }"
@@ -152,9 +146,7 @@
                             <span>
                                 <h5>{{ $t('pendientes') }}:</h5>
                                 <router-link
-                                    v-for="pas in trip.allPassengerRequest.filter(
-                                        (p) => p.request_state == 0
-                                    )"
+                                    v-for="pas in passengerRequestsByState(0)"
                                     :key="'pen-' + pas.user.id"
                                     class="trip-display-profile-link trip-display-profile-link--block"
                                     :to="{ name: 'profile', params: { id: pas.user.id } }"
@@ -251,6 +243,13 @@ export default {
         }
     },
     methods: {
+        passengerRequestsByState(state) {
+            const list = this.trip.allPassengerRequest;
+            if (!Array.isArray(list)) {
+                return [];
+            }
+            return list.filter((p) => p.request_state == state);
+        },
         visibilityParser(id) {
             switch (id) {
                 case 0:

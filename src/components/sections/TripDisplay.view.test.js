@@ -19,4 +19,8 @@ describe('TripDisplay profile navigation', () => {
         );
         expect(source).toMatch(/text-decoration:\s*underline/);
     });
+
+    it('groups passenger request links via a helper', () => {
+        expect(source).toContain('passengerRequestsByState');
+    });
 });
