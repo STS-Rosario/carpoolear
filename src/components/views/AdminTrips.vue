@@ -135,9 +135,11 @@ export default {
             }
             return [];
         },
-        listQueryString(query) {
+        normalizedRouteQuerySnapshot(query, { includeTripId = false } = {}) {
             const qo = { ...(query || {}) };
-            delete qo[TRIP_ID_QUERY_KEY];
+            if (!includeTripId) {
+                delete qo[TRIP_ID_QUERY_KEY];
+            }
             if (qo.page === '1' || qo.page === 1) {
                 delete qo.page;
             }
@@ -148,17 +150,15 @@ export default {
             });
             return JSON.stringify(normalized);
         },
-        fullQueryString(query) {
-            const qo = { ...(query || {}) };
-            if (qo.page === '1' || qo.page === 1) {
-                delete qo.page;
-            }
-            const sorted = Object.keys(qo).sort();
-            const normalized = {};
-            sorted.forEach((k) => {
-                normalized[k] = String(qo[k]);
+        listQueryString(query) {
+            return this.normalizedRouteQuerySnapshot(query, {
+                includeTripId: false
             });
-            return JSON.stringify(normalized);
+        },
+        fullQueryString(query) {
+            return this.normalizedRouteQuerySnapshot(query, {
+                includeTripId: true
+            });
         },
         buildListRouteQuery() {
             const store = useTripsStore();

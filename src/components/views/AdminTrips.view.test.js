@@ -25,4 +25,8 @@ describe('AdminTrips URL state', () => {
         expect(source).toContain('routeQueryToSearchParams');
         expect(source).toMatch(/\$route\.query/);
     });
+
+    it('deduplicates route query serialization for list vs full URL', () => {
+        expect(source).toContain('normalizedRouteQuerySnapshot');
+    });
 });
