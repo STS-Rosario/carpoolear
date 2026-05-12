@@ -8,8 +8,8 @@ const source = fs.readFileSync(viewPath, 'utf8');
 describe('TripDisplay profile navigation', () => {
     it('uses router-link with a shared visible-link class instead of plain click handlers', () => {
         expect(source).toContain('trip-display-profile-link');
-        expect(source).toContain("<router-link");
-        expect(source).toContain(":to=\"{ name: 'profile', params: { id:");
+        expect(source).toContain('<router-link');
+        expect(source).toContain(':to="{ name: \'profile\', params: { id:');
         expect(source).not.toMatch(/v-on:click="openProfile/);
     });
 
