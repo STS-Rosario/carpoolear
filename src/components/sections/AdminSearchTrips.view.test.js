@@ -14,7 +14,14 @@ describe('AdminSearchTrips user search', () => {
     it('hydrates filters from route-style params and emits initial persisted search', () => {
         expect(source).toContain("props: ['params']");
         expect(source).toContain('applyParams');
-        expect(source).toContain('this.emit()');
+        expect(source).toContain('this.emit(true)');
         expect(source).toContain('params.user_id');
+    });
+
+    it('watches params so browser back updates filters and re-emits search', () => {
+        expect(source).toContain('paramsSignature');
+        expect(source).toMatch(/watch:\s*\{[\s\S]*paramsSignature/);
+        expect(source).toContain('immediate: true');
+        expect(source).toContain('applyParams');
     });
 });

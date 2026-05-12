@@ -85,7 +85,12 @@ export function makePaginationActions(name, requestGeneration, callback) {
             params.page_size = this[name + 'SearchParam'].pageSize;
         } else {
             // RESTORE_PAGE
-            this[name + 'SearchParam'].page = 1;
+            const requestedPage =
+                data.page != null ? parseInt(String(data.page), 10) : NaN;
+            this[name + 'SearchParam'].page =
+                Number.isFinite(requestedPage) && requestedPage >= 1
+                    ? requestedPage
+                    : 1;
             this[name + 'SearchParam'].lastPage = false;
             // SET_FILTER
             this[name + 'SearchParam'].data = data;

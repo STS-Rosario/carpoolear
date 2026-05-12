@@ -1,13 +1,21 @@
 <template>
     <transition name="modal">
-        <div class="modal-mask">
+        <div class="modal-mask" @click.self="requestModalClose">
             <div class="modal-wrapper">
                 <div
                     class="modal-container"
-                    v-clickoutside="clickOutsideHandler"
+                    v-clickoutside="onModalClickOutside"
                     :id="name"
                 >
-                    <div class="modal-header">
+                    <div class="modal-header modal-header-with-close">
+                        <button
+                            type="button"
+                            class="modal-header-close btn btn-link"
+                            :aria-label="$t('cerrar')"
+                            @click="requestModalClose"
+                        >
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </button>
                         <slot name="header"></slot>
                     </div>
 
@@ -36,15 +44,38 @@ export default {
     name: 'modal',
     data() {
         return {
-            clickOutsideHandler: () => {}
+            // Avoid treating the same click that opened the modal (e.g. table row) as an outside click.
+            outsideDismissReady: false
         };
     },
     mounted() {
+        window.addEventListener('keydown', this.onModalDocumentEscape);
         setTimeout(() => {
-            this.clickOutsideHandler = this.clickOutside;
+            this.outsideDismissReady = true;
         }, 0);
     },
-    methods: {},
+    beforeUnmount() {
+        window.removeEventListener('keydown', this.onModalDocumentEscape);
+    },
+    methods: {
+        requestModalClose() {
+            if (typeof this.clickOutside === 'function') {
+                this.clickOutside();
+            }
+            this.$emit('close');
+        },
+        onModalClickOutside() {
+            if (!this.outsideDismissReady) {
+                return;
+            }
+            this.requestModalClose();
+        },
+        onModalDocumentEscape(event) {
+            if (event.key === 'Escape') {
+                this.requestModalClose();
+            }
+        }
+    },
 
     props: {
         hideFooter: {
@@ -69,25 +100,58 @@ export default {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    display: table;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    box-sizing: border-box;
     transition: opacity 0.3s ease;
 }
 
 .modal-wrapper {
-    display: table-cell;
-    vertical-align: middle;
+    display: flex;
+    width: 100%;
+    max-width: 600px;
+    justify-content: center;
+    flex: 0 1 auto;
+    min-height: 0;
 }
 
 .modal-container {
     max-width: 600px;
-    width: 90%;
-    margin: 0px auto;
+    width: 100%;
+    max-height: calc(100vh - 2rem);
+    margin: 0;
     padding: 20px 30px;
     background-color: #fff;
     border-radius: 2px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
     transition: all 0.3s ease;
     color: #333333;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
+}
+
+.modal-header {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.modal-header-with-close {
+    padding-right: 2.5rem;
+}
+
+.modal-header-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0 0.25rem;
+    line-height: 1;
+    font-size: 1.25rem;
+    color: #333 !important;
+    text-decoration: none !important;
 }
 
 .modal-header h3 {
@@ -95,7 +159,15 @@ export default {
 }
 
 .modal-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     margin: 20px 0;
+}
+
+.modal-footer {
+    flex-shrink: 0;
 }
 
 .modal-default-button {

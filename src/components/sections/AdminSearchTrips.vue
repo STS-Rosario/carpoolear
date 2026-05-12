@@ -166,7 +166,7 @@
             </div>
 
             <div class="col-xs-24 col-md-8 col-lg-8">
-                <button class="btn btn-primary btn-search" @click="emit">
+                <button class="btn btn-primary btn-search" @click="submitSearch">
                     {{ $t('buscar') }}
                 </button>
             </div>
@@ -236,7 +236,17 @@ export default {
         }),
         ...mapState(useAuthStore, {
             config: 'appConfig'
-        })
+        }),
+        paramsSignature() {
+            const p = this.params || {};
+            const keys = Object.keys(p).sort();
+            return JSON.stringify(
+                keys.reduce((acc, k) => {
+                    acc[k] = p[k];
+                    return acc;
+                }, {})
+            );
+        }
     },
     methods: {
         ...mapActions(useTripsStore, {
@@ -262,7 +272,10 @@ export default {
                 this.to_town = obj;
             }
         },
-        emit() {
+        submitSearch() {
+            this.emit(false);
+        },
+        emit(includeRoutePage = false) {
             let params = {};
             let foreignCountry = 0;
             if (this.from_town.location) {
@@ -315,6 +328,16 @@ export default {
             }
             params.is_passenger = this.isPassenger;
             params.is_admin = this.isAdmin;
+            if (
+                includeRoutePage &&
+                this.params &&
+                this.params.page != null
+            ) {
+                const p = parseInt(String(this.params.page), 10);
+                if (Number.isFinite(p) && p >= 1) {
+                    params.page = p;
+                }
+            }
             if (foreignCountry < 2) {
                 this.$emit('admin-trip-search', params);
             } else {
@@ -378,7 +401,7 @@ export default {
 
             const hasAnyParam = Object.keys(params).length > 0;
             if (hasAnyParam) {
-                this.emit();
+                this.emit(true);
             }
         }
     },
@@ -389,8 +412,13 @@ export default {
         loading,
         UserSearchAutocomplete
     },
-    mounted() {
-        this.applyParams();
+    watch: {
+        paramsSignature: {
+            immediate: true,
+            handler() {
+                this.applyParams();
+            }
+        }
     }
 };
 </script>

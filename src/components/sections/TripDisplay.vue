@@ -17,13 +17,15 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div
-                            class="col-md-6"
-                            v-on:click="openProfile(trip.user.id)"
-                        >
+                        <div class="col-md-6">
                             <span>
                                 <h4>{{ $t('nombre') }}:</h4>
-                                <UserNameWithBadge :user="trip.user" />
+                                <router-link
+                                    class="trip-display-profile-link"
+                                    :to="{ name: 'profile', params: { id: trip.user.id } }"
+                                >
+                                    <UserNameWithBadge :user="trip.user" />
+                                </router-link>
                             </span>
                         </div>
                         <div class="col-md-6">
@@ -104,45 +106,53 @@
                         <div class="col-md-6">
                             <span>
                                 <h5>{{ $t('aceptadas') }}:</h5>
-                                <div
-                                    v-for="pas in trip.allPassengerRequest"
-                                    v-on:click="openProfile(pas.user.id)"
+                                <router-link
+                                    v-for="pas in passengerRequestsByState(1)"
+                                    :key="'acc-' + pas.user.id"
+                                    class="trip-display-profile-link trip-display-profile-link--block"
+                                    :to="{ name: 'profile', params: { id: pas.user.id } }"
                                 >
-                                    <UserNameWithBadge v-if="pas.request_state == 1" :user="pas.user" />
-                                </div>
+                                    <UserNameWithBadge :user="pas.user" />
+                                </router-link>
                             </span>
                         </div>
                         <div class="col-md-6">
                             <span>
                                 <h5>{{ $t('rechazadas') }}:</h5>
-                                <div
-                                    v-for="pas in trip.allPassengerRequest"
-                                    v-on:click="openProfile(pas.user.id)"
+                                <router-link
+                                    v-for="pas in passengerRequestsByState(2)"
+                                    :key="'rej-' + pas.user.id"
+                                    class="trip-display-profile-link trip-display-profile-link--block"
+                                    :to="{ name: 'profile', params: { id: pas.user.id } }"
                                 >
-                                    <UserNameWithBadge v-if="pas.request_state == 2" :user="pas.user" />
-                                </div>
+                                    <UserNameWithBadge :user="pas.user" />
+                                </router-link>
                             </span>
                         </div>
                         <div class="col-md-6">
                             <span>
                                 <h5>{{ $t('canceladas') }}:</h5>
-                                <div
-                                    v-for="pas in trip.allPassengerRequest"
-                                    v-on:click="openProfile(pas.user.id)"
+                                <router-link
+                                    v-for="pas in passengerRequestsByState(3)"
+                                    :key="'can-' + pas.user.id"
+                                    class="trip-display-profile-link trip-display-profile-link--block"
+                                    :to="{ name: 'profile', params: { id: pas.user.id } }"
                                 >
-                                    <UserNameWithBadge v-if="pas.request_state == 3" :user="pas.user" />
-                                </div>
+                                    <UserNameWithBadge :user="pas.user" />
+                                </router-link>
                             </span>
                         </div>
                         <div class="col-md-6">
                             <span>
                                 <h5>{{ $t('pendientes') }}:</h5>
-                                <div
-                                    v-for="pas in trip.allPassengerRequest"
-                                    v-on:click="openProfile(pas.user.id)"
+                                <router-link
+                                    v-for="pas in passengerRequestsByState(0)"
+                                    :key="'pen-' + pas.user.id"
+                                    class="trip-display-profile-link trip-display-profile-link--block"
+                                    :to="{ name: 'profile', params: { id: pas.user.id } }"
                                 >
-                                    <UserNameWithBadge v-if="pas.request_state == 0" :user="pas.user" />
-                                </div>
+                                    <UserNameWithBadge :user="pas.user" />
+                                </router-link>
                             </span>
                         </div>
                     </div>
@@ -151,14 +161,39 @@
                             <span v-if="Array.isArray(trip.ratings)">
                                 <h4>{{ $t('calificacion') }}:</h4>
                                 <div
-                                    v-for="rating in trip.ratings.filter(
+                                    v-for="(rating, ratingIndex) in trip.ratings.filter(
                                         (r) => r.voted > 0
                                     )"
+                                    :key="'rate-' + ratingIndex"
                                 >
                                     <span>
-                                        <strong><UserNameWithBadge :user="rating.from" /></strong>
+                                        <strong>
+                                            <router-link
+                                                v-if="rating.from && rating.from.id"
+                                                class="trip-display-profile-link"
+                                                :to="{ name: 'profile', params: { id: rating.from.id } }"
+                                            >
+                                                <UserNameWithBadge :user="rating.from" />
+                                            </router-link>
+                                            <UserNameWithBadge
+                                                v-else
+                                                :user="rating.from"
+                                            />
+                                        </strong>
                                         {{ $t('calificadoA') }}
-                                        <strong><UserNameWithBadge :user="rating.to" /></strong>
+                                        <strong>
+                                            <router-link
+                                                v-if="rating.to && rating.to.id"
+                                                class="trip-display-profile-link"
+                                                :to="{ name: 'profile', params: { id: rating.to.id } }"
+                                            >
+                                                <UserNameWithBadge :user="rating.to" />
+                                            </router-link>
+                                            <UserNameWithBadge
+                                                v-else
+                                                :user="rating.to"
+                                            />
+                                        </strong>
                                         {{ $t('como') }}
                                         {{
                                             rating.rating
@@ -193,7 +228,6 @@
 <script>
 import Modal from '../Modal';
 import UserNameWithBadge from '../elements/UserNameWithBadge.vue';
-import router from '../../router';
 
 // FIXME: Rate_at undefined
 
@@ -209,8 +243,12 @@ export default {
         }
     },
     methods: {
-        openProfile(id) {
-            router.push({ name: 'profile', params: { id: id } });
+        passengerRequestsByState(state) {
+            const list = this.trip.allPassengerRequest;
+            if (!Array.isArray(list)) {
+                return [];
+            }
+            return list.filter((p) => p.request_state == state);
         },
         visibilityParser(id) {
             switch (id) {
@@ -232,8 +270,23 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .trip-display-title {
     font-size: 2em;
+}
+
+.trip-display-profile-link {
+    cursor: pointer;
+    color: #337ab7;
+    text-decoration: underline;
+}
+
+.trip-display-profile-link:hover,
+.trip-display-profile-link:focus {
+    color: #23527c;
+}
+
+.trip-display-profile-link--block {
+    display: block;
 }
 </style>
