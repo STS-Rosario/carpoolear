@@ -14,3 +14,15 @@ describe('AdminTrips table', () => {
         expect(source).toMatch(/:key="viaje\.id"/);
     });
 });
+
+describe('AdminTrips URL state', () => {
+    it('pushes list and trip detail query so back navigation can restore state', () => {
+        expect(source).toContain('trip_id');
+        expect(source).toContain('$router.push');
+        expect(source).toContain('buildListRouteQuery');
+        expect(source).toContain('pushListQueryToRouter');
+        expect(source).toContain('syncTripDetailFromRoute');
+        expect(source).toContain('routeQueryToSearchParams');
+        expect(source).toMatch(/\$route\.query/);
+    });
+});

@@ -17,4 +17,9 @@ describe('AdminSearchTrips user search', () => {
         expect(source).toContain('this.emit()');
         expect(source).toContain('params.user_id');
     });
+
+    it('watches params so browser back updates filters and re-emits search', () => {
+        expect(source).toMatch(/watch:\s*\{[\s\S]*\bparams\b/);
+        expect(source).toContain('applyParams');
+    });
 });
