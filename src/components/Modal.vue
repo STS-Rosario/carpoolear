@@ -42,8 +42,17 @@
 <script>
 export default {
     name: 'modal',
+    data() {
+        return {
+            // Avoid treating the same click that opened the modal (e.g. table row) as an outside click.
+            outsideDismissReady: false
+        };
+    },
     mounted() {
         window.addEventListener('keydown', this.onModalDocumentEscape);
+        setTimeout(() => {
+            this.outsideDismissReady = true;
+        }, 0);
     },
     beforeUnmount() {
         window.removeEventListener('keydown', this.onModalDocumentEscape);
@@ -56,6 +65,9 @@ export default {
             this.$emit('close');
         },
         onModalClickOutside() {
+            if (!this.outsideDismissReady) {
+                return;
+            }
             this.requestModalClose();
         },
         onModalDocumentEscape(event) {

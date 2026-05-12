@@ -16,6 +16,13 @@ describe('Modal close behavior', () => {
         expect(source).not.toMatch(/setTimeout\(\s*\(\)\s*=>\s*\{\s*this\.clickOutsideHandler/);
     });
 
+    it('defers outside-dismiss until after the opening click stack (outsideDismissReady)', () => {
+        expect(source).toContain('outsideDismissReady');
+        expect(source).toMatch(
+            /onModalClickOutside\(\)\s*\{[\s\S]*?if\s*\(\s*!this\.outsideDismissReady\s*\)/
+        );
+    });
+
     it('registers Escape to dismiss the modal', () => {
         expect(source).toContain("'Escape'");
         expect(source).toMatch(/addEventListener\s*\(\s*['"]keydown['"]/);

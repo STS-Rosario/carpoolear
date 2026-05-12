@@ -13,6 +13,7 @@
                 <table class="table table-dark">
                     <thead>
                         <tr>
+                            <th scope="col">{{ $t('id') }}</th>
                             <th scope="col">{{ $t('usuario') }}</th>
                             <th scope="col">{{ $t('origen') }}</th>
                             <th scope="col">{{ $t('destino') }}</th>
@@ -27,8 +28,11 @@
                     <tbody>
                         <tr
                             v-for="viaje in viajes"
+                            :key="viaje.id"
+                            class="admin-trips-row-clickable"
                             v-on:click="openTrip(viaje)"
                         >
+                            <td>{{ viaje.id }}</td>
                             <th scope="row">{{ viaje.user.name }}</th>
                             <td>{{ viaje.from_town }}</td>
                             <td>{{ viaje.to_town }}</td>
@@ -173,5 +177,9 @@ export default {
 }
 .picker {
     margin-top: 1em;
+}
+
+.admin-trips-row-clickable {
+    cursor: pointer;
 }
 </style>
