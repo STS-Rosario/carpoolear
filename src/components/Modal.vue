@@ -1,13 +1,21 @@
 <template>
     <transition name="modal">
-        <div class="modal-mask">
+        <div class="modal-mask" @click.self="requestModalClose">
             <div class="modal-wrapper">
                 <div
                     class="modal-container"
-                    v-clickoutside="clickOutsideHandler"
+                    v-clickoutside="onModalClickOutside"
                     :id="name"
                 >
-                    <div class="modal-header">
+                    <div class="modal-header modal-header-with-close">
+                        <button
+                            type="button"
+                            class="modal-header-close btn btn-link"
+                            :aria-label="$t('cerrar')"
+                            @click="requestModalClose"
+                        >
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </button>
                         <slot name="header"></slot>
                     </div>
 
@@ -34,17 +42,28 @@
 <script>
 export default {
     name: 'modal',
-    data() {
-        return {
-            clickOutsideHandler: () => {}
-        };
-    },
     mounted() {
-        setTimeout(() => {
-            this.clickOutsideHandler = this.clickOutside;
-        }, 0);
+        this._onModalDocumentEscape = (event) => {
+            if (event.key === 'Escape') {
+                this.requestModalClose();
+            }
+        };
+        window.addEventListener('keydown', this._onModalDocumentEscape);
     },
-    methods: {},
+    beforeUnmount() {
+        window.removeEventListener('keydown', this._onModalDocumentEscape);
+    },
+    methods: {
+        requestModalClose() {
+            if (typeof this.clickOutside === 'function') {
+                this.clickOutside();
+            }
+            this.$emit('close');
+        },
+        onModalClickOutside() {
+            this.requestModalClose();
+        }
+    },
 
     props: {
         hideFooter: {
@@ -88,6 +107,25 @@ export default {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
     transition: all 0.3s ease;
     color: #333333;
+}
+
+.modal-header {
+    position: relative;
+}
+
+.modal-header-with-close {
+    padding-right: 2.5rem;
+}
+
+.modal-header-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0 0.25rem;
+    line-height: 1;
+    font-size: 1.25rem;
+    color: #333 !important;
+    text-decoration: none !important;
 }
 
 .modal-header h3 {
