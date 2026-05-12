@@ -162,11 +162,15 @@ export default defineConfig(({ mode }) => {
             'import.meta.env.VITE_API_URL': JSON.stringify(apiUrl),
             'import.meta.env.VITE_TARGET_APP': JSON.stringify(brandingTarget),
 
+            // Keep in sync with `process.env.*` usage under src/ (static replace at build time).
             'process.env': JSON.stringify({
                 NODE_ENV: nodeEnv,
                 ROUTE_BASE: routeBase,
                 TARGET_APP: brandingTarget,
-                WEB_URL: env.WEB_URL || 'https://carpoolear.com.ar/app'
+                WEB_URL: env.WEB_URL || 'https://carpoolear.com.ar/app',
+                API_URL: apiUrl,
+                MERCADO_PAGO_PUBLIC_KEY:
+                    env.VITE_MERCADO_PAGO_PUBLIC_KEY || env.MERCADO_PAGO_PUBLIC_KEY || ''
             }),
             VITE_API_URL: JSON.stringify(apiUrl),
             VITE_TARGET_APP: JSON.stringify(brandingTarget),
