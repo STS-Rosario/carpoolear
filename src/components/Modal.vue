@@ -43,15 +43,10 @@
 export default {
     name: 'modal',
     mounted() {
-        this._onModalDocumentEscape = (event) => {
-            if (event.key === 'Escape') {
-                this.requestModalClose();
-            }
-        };
-        window.addEventListener('keydown', this._onModalDocumentEscape);
+        window.addEventListener('keydown', this.onModalDocumentEscape);
     },
     beforeUnmount() {
-        window.removeEventListener('keydown', this._onModalDocumentEscape);
+        window.removeEventListener('keydown', this.onModalDocumentEscape);
     },
     methods: {
         requestModalClose() {
@@ -62,6 +57,11 @@ export default {
         },
         onModalClickOutside() {
             this.requestModalClose();
+        },
+        onModalDocumentEscape(event) {
+            if (event.key === 'Escape') {
+                this.requestModalClose();
+            }
         }
     },
 
