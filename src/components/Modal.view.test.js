@@ -35,4 +35,11 @@ describe('Modal close behavior', () => {
         expect(source).toMatch(/:aria-label="\$t\('cerrar'\)"/);
         expect(source).toMatch(/type="button"/);
     });
+
+    it('keeps long content scrollable within the viewport', () => {
+        expect(source).toMatch(/\.modal-container\s*\{[\s\S]*max-height:\s*calc\(100vh/);
+        expect(source).toMatch(
+            /\.modal-body\s*\{[\s\S]*?overflow-y:\s*auto/s
+        );
+    });
 });

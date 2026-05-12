@@ -100,29 +100,43 @@ export default {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    display: table;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    box-sizing: border-box;
     transition: opacity 0.3s ease;
 }
 
 .modal-wrapper {
-    display: table-cell;
-    vertical-align: middle;
+    display: flex;
+    width: 100%;
+    max-width: 600px;
+    justify-content: center;
+    flex: 0 1 auto;
+    min-height: 0;
 }
 
 .modal-container {
     max-width: 600px;
-    width: 90%;
-    margin: 0px auto;
+    width: 100%;
+    max-height: calc(100vh - 2rem);
+    margin: 0;
     padding: 20px 30px;
     background-color: #fff;
     border-radius: 2px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
     transition: all 0.3s ease;
     color: #333333;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
 }
 
 .modal-header {
     position: relative;
+    flex-shrink: 0;
 }
 
 .modal-header-with-close {
@@ -145,7 +159,15 @@ export default {
 }
 
 .modal-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     margin: 20px 0;
+}
+
+.modal-footer {
+    flex-shrink: 0;
 }
 
 .modal-default-button {
