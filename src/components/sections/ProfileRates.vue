@@ -378,4 +378,8 @@ export default {
 .profile-rates-component {
     padding-bottom: 6em;
 }
+
+.edit-action-reference {
+    margin-bottom: 1rem;
+}
 </style>
