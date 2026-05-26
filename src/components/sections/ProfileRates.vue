@@ -64,6 +64,84 @@
         <template v-if="config && config.module_references">
             <div class="clearfix">
                 <h2>{{ $t('referencias') }}</h2>
+                <div
+                    class="edit-action edit-action-reference"
+                    v-if="canWriteReference"
+                >
+                    <button
+                        v-if="!sendReferenceFormVisibility"
+                        class="btn btn-primary"
+                        @click="showReferenceConfirmation"
+                    >
+                        {{ $t('enviarReferencia') }}
+                    </button>
+                    <modal
+                        v-if="referenceConfirmationVisibility"
+                        name="reference-confirmation-modal"
+                        @close="hideReferenceConfirmation"
+                    >
+                        <template #header>
+                            <h3>{{ $t('confirmarReferenciaUsuarioTitulo') }}</h3>
+                        </template>
+                        <template #body>
+                            <p>
+                                {{
+                                    $t('confirmarReferenciaUsuarioMensajeReferencia', {
+                                        userName: referenceRecipientName
+                                    })
+                                }}
+                            </p>
+                            <p>
+                                {{
+                                    $t('confirmarReferenciaUsuarioMensajeCalificacion')
+                                }}
+                            </p>
+                        </template>
+                        <template #footer>
+                            <button
+                                class="btn btn-secondary"
+                                @click="hideReferenceConfirmation"
+                            >
+                                {{ $t('cancelar') }}
+                            </button>
+                            <button
+                                class="btn btn-primary"
+                                @click="confirmReferenceWriting"
+                            >
+                                {{ $t('continuar') }}
+                            </button>
+                        </template>
+                    </modal>
+                    <div v-else-if="sendReferenceFormVisibility" class="reply-box">
+                        <label for="reference" class="label label-reply">
+                            {{ $t('escribeUnaReferenciaSobreElUsuario') }}
+                        </label>
+                        <textarea
+                            ref="reference"
+                            maxlength="260"
+                            v-model="referenceComment"
+                            id="reference"
+                        ></textarea>
+                        <div class="reply-btns">
+                            <button
+                                class="btn btn-primary"
+                                @click="sendReference"
+                                :disabled="sending"
+                            >
+                                <template v-if="sending">
+                                    <spinner class="blue"></spinner>
+                                </template>
+                                <template v-else>{{ $t('comentar') }}</template>
+                            </button>
+                            <button
+                                class="btn btn-primary"
+                                @click="sendReferenceFormVisibility = false"
+                            >
+                                {{ $t('cancelar') }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
                 <Loading :data="references">
                     <div class="list-group">
                         <div class="column-rating">
@@ -128,12 +206,15 @@
     </div>
 </template>
 <script>
-import { mapState } from 'pinia';
+import { mapState, mapActions } from 'pinia';
 import { useAuthStore } from '../../stores/auth';
 import { useProfileStore } from '../../stores/profile';
 import { useDeviceStore } from '../../stores/device';
 import Loading from '../Loading.vue';
 import RateItem from '../RateItem';
+import Spinner from '../Spinner.vue';
+import modal from '../Modal';
+import dialogs from '../../services/dialogs.js';
 
 let emptyCols = {
     col1: [],
@@ -145,10 +226,17 @@ export default {
     data() {
         return {
             rating: {},
-            referencesCol: {}
+            referencesCol: {},
+            sendReferenceFormVisibility: false,
+            referenceConfirmationVisibility: false,
+            referenceComment: '',
+            sending: false
         };
     },
     methods: {
+        ...mapActions(useProfileStore, {
+            makeReference: 'makeReference'
+        }),
         cleanCols(array) {
             this[array] = JSON.parse(JSON.stringify(emptyCols));
         },
@@ -170,6 +258,47 @@ export default {
                     }
                 }
             }
+        },
+        showReferenceConfirmation() {
+            this.referenceConfirmationVisibility = true;
+        },
+        hideReferenceConfirmation() {
+            this.referenceConfirmationVisibility = false;
+        },
+        confirmReferenceWriting() {
+            this.referenceConfirmationVisibility = false;
+            this.showReferenceForm();
+        },
+        showReferenceForm() {
+            this.sendReferenceFormVisibility = true;
+            this.$nextTick(() => {
+                this.$refs.reference.focus();
+            });
+        },
+        sendReference() {
+            this.sending = true;
+            this.makeReference({
+                user_id_to: this.profile.id,
+                comment: this.referenceComment
+            })
+                .then(() => {
+                    dialogs.message(this.$t('referenciaExitosa'));
+                    this.sendReferenceFormVisibility = false;
+                })
+                .catch((error) => {
+                    let errorMessage = this.$t('referenciaError');
+                    if (this.$checkError(error, 'reference_exist')) {
+                        errorMessage = this.$t('referenciaExist');
+                    } else if (this.$checkError(error, 'reference_same_user')) {
+                        errorMessage = this.$t('referenciaSameUser');
+                    } else if (this.$checkError(error, 'user_doesnt_exist')) {
+                        errorMessage = this.$t('userDoesntExist');
+                    }
+                    dialogs.message(errorMessage, { estado: 'error' });
+                })
+                .finally(() => {
+                    this.sending = false;
+                });
         }
     },
     computed: {
@@ -178,6 +307,7 @@ export default {
             config: 'appConfig'
         }),
         ...mapState(useProfileStore, {
+            profile: 'user',
             rates: 'rates',
             references: 'references'
         }),
@@ -185,7 +315,29 @@ export default {
             isMobile: 'isMobile',
             isTablet: 'isTablet',
             isDesktop: 'isDesktop'
-        })
+        }),
+        canWriteReference() {
+            return (
+                this.config &&
+                this.config.module_references &&
+                this.profile &&
+                this.user &&
+                this.profile.id !== this.user.id &&
+                !this.userReferenceWritten
+            );
+        },
+        referenceRecipientName() {
+            return this.profile ? this.profile.name : '';
+        },
+        userReferenceWritten() {
+            return (
+                this.profile.references_data &&
+                    this.profile.references_data.length &&
+                    this.profile.references_data.findIndex(
+                        (item) => item.user_id_from === this.user.id
+                    ) >= 0
+            );
+        }
     },
     watch: {
         rates: {
@@ -220,7 +372,9 @@ export default {
     },
     components: {
         Loading,
-        RateItem
+        RateItem,
+        Spinner,
+        modal
     },
     props: ['id']
 };
@@ -228,5 +382,14 @@ export default {
 <style scoped>
 .profile-rates-component {
     padding-bottom: 6em;
+}
+
+.edit-action-reference {
+    margin-bottom: 1rem;
+}
+
+.label-reply {
+    color: #333;
+    font-size: 1rem;
 }
 </style>

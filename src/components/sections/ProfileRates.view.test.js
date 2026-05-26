@@ -1,0 +1,69 @@
+import { describe, it, expect } from 'vitest';
+import fs from 'node:fs';
+import path from 'node:path';
+
+const profileRatesPath = path.resolve(__dirname, 'ProfileRates.vue');
+const profileInfoPath = path.resolve(__dirname, 'ProfileInfo.vue');
+const i18nPath = path.resolve(__dirname, '../../language/i18n.js');
+
+const profileRatesSource = fs.readFileSync(profileRatesPath, 'utf8');
+const profileInfoSource = fs.readFileSync(profileInfoPath, 'utf8');
+const i18nSource = fs.readFileSync(i18nPath, 'utf8');
+const referenceActionSpacingRule =
+    /\.edit-action-reference\s*\{[\s\S]*margin-bottom:\s*1rem/;
+const referenceLabelColorRule = /\.label-reply\s*\{[\s\S]*color:\s*#333/;
+const referenceLabelSizeRule = /\.label-reply\s*\{[\s\S]*font-size:\s*1rem/;
+const referenceMessageFirstKey = 'confirmarReferenciaUsuarioMensajeReferencia';
+const referenceMessageSecondKey = 'confirmarReferenciaUsuarioMensajeCalificacion';
+const referencePersonCopy =
+    'Las referencias son de la persona, y no de un viaje.';
+const referenceTripRatingCopy =
+    'Si tuviste un viaje dentro de Carpoolear y querés dejar una calificación, tenés que esperar a que pasen 24 horas luego de la finalización del viaje, vas a recibir una notificación cuando puedas hacerlo.';
+const referenceModalParagraphsRule =
+    /<template #body>[\s\S]*<p>[\s\S]*\$t\('confirmarReferenciaUsuarioMensajeReferencia'[\s\S]*<\/p>[\s\S]*<p>[\s\S]*\$t\('confirmarReferenciaUsuarioMensajeCalificacion'\)[\s\S]*<\/p>[\s\S]*<\/template>/;
+
+describe('ProfileRates reference action', () => {
+    it('shows the write-reference action in the references section before the list', () => {
+        const referencesHeadingIndex = profileRatesSource.indexOf("$t('referencias')");
+        const actionIndex = profileRatesSource.indexOf("$t('enviarReferencia')");
+        const referencesListIndex = profileRatesSource.indexOf('<Loading :data="references">');
+
+        expect(actionIndex).toBeGreaterThan(referencesHeadingIndex);
+        expect(actionIndex).toBeLessThan(referencesListIndex);
+        expect(profileInfoSource).not.toContain("$t('enviarReferencia')");
+    });
+
+    it('asks for confirmation in a modal before showing the reference form', () => {
+        expect(profileRatesSource).toContain('<modal');
+        expect(profileRatesSource).toContain("$t('confirmarReferenciaUsuarioTitulo')");
+        expect(profileRatesSource).toContain(`$t('${referenceMessageFirstKey}'`);
+        expect(profileRatesSource).toContain(`$t('${referenceMessageSecondKey}')`);
+        expect(profileRatesSource).toContain("$t('continuar')");
+        expect(profileRatesSource).toContain("$t('cancelar')");
+        expect(profileRatesSource).toMatch(/@click="showReferenceConfirmation"/);
+        expect(profileRatesSource).toMatch(/@click="confirmReferenceWriting"/);
+    });
+
+    it('renders the reference explanation as two translated paragraphs', () => {
+        expect(profileRatesSource).toMatch(referenceModalParagraphsRule);
+    });
+
+    it('keeps all new confirmation copy in i18n', () => {
+        expect(i18nSource).toContain('confirmarReferenciaUsuarioTitulo');
+        expect(i18nSource).toContain(referenceMessageFirstKey);
+        expect(i18nSource).toContain(referenceMessageSecondKey);
+        expect(i18nSource).toContain(referencePersonCopy);
+        expect(i18nSource).toContain(referenceTripRatingCopy);
+        expect(i18nSource).toContain('Continuar');
+        expect(i18nSource).toContain('Cancel');
+    });
+
+    it('adds bottom spacing to the reference action before the list', () => {
+        expect(profileRatesSource).toMatch(referenceActionSpacingRule);
+    });
+
+    it('styles the reference form label as black and larger text', () => {
+        expect(profileRatesSource).toMatch(referenceLabelColorRule);
+        expect(profileRatesSource).toMatch(referenceLabelSizeRule);
+    });
+});
