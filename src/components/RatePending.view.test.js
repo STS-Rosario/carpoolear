@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import fs from 'node:fs';
 import path from 'node:path';
+import nodeVm from 'node:vm';
 import { parse } from '@vue/compiler-sfc';
 
 const componentPath = path.resolve(__dirname, 'RatePending.vue');
@@ -11,27 +12,18 @@ function loadComponent(dialogs) {
     const script = descriptor.script.content
         .replace(/^import .*;\n/gm, '')
         .replace('export default', 'component =');
-
-    return new Function(
-        'mapState',
-        'mapActions',
-        'useRatesStore',
-        'useAuthStore',
-        'dialogs',
-        'dayjs',
-        `
-            let component;
-            ${script}
-            return component;
-        `
-    )(
-        () => ({}),
-        () => ({}),
-        () => ({}),
-        () => ({}),
+    const context = {
+        component: null,
+        mapState: () => ({}),
+        mapActions: () => ({}),
+        useRatesStore: () => ({}),
+        useAuthStore: () => ({}),
         dialogs,
-        () => {}
-    );
+        dayjs: () => {}
+    };
+
+    nodeVm.runInNewContext(script, context);
+    return context.component;
 }
 
 function makeRate() {
@@ -56,13 +48,13 @@ function makeRate() {
 
 describe('RatePending blank comments', () => {
     it('shows an error instead of submitting a positive rating without a comment', () => {
+        const emitted = [];
+        const submitted = [];
         const dialogs = {
             message: vi.fn()
         };
         const component = loadComponent(dialogs);
-        const emitted = [];
-        const submitted = [];
-        const vm = {
+        const componentVm = {
             ...component.data(),
             rate: makeRate(),
             trip: makeRate().trip,
@@ -77,7 +69,7 @@ describe('RatePending blank comments', () => {
             }
         };
 
-        component.methods.makeVote.call(vm);
+        component.methods.makeVote.call(componentVm);
 
         expect(dialogs.message).toHaveBeenCalledWith(
             'ratePendingComentarioNoPuedeEstarVacio',
@@ -85,6 +77,6 @@ describe('RatePending blank comments', () => {
         );
         expect(emitted).toEqual([]);
         expect(submitted).toEqual([]);
-        expect(vm.sending).toBe(false);
+        expect(componentVm.sending).toBe(false);
     });
 });
