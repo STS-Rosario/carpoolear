@@ -502,7 +502,7 @@
                                     </span>
                                 </div>
                                 <div class="trip-inline-controls row">
-                                    <span class="col-xs-6">
+                                    <span class="col-xs-8">
                                         <button
                                             v-on:click.stop="goToDetail(false)"
                                             class="btn btn-default"
@@ -514,28 +514,7 @@
                                             ></i>
                                         </button>
                                     </span>
-                                    <span class="col-xs-6">
-                                        <button
-                                            v-on:click.stop="
-                                                goToDetail(false, true)
-                                            "
-                                            v-if="!trip.is_passenger"
-                                            :disabled="
-                                                !trip.passenger ||
-                                                !trip.passenger.length
-                                            "
-                                            class="btn btn-default"
-                                            :aria-label="
-                                                $t('verPasajerosSubidos')
-                                            "
-                                        >
-                                            <i
-                                                class="fa fa-users"
-                                                aria-hidden="true"
-                                            ></i>
-                                        </button>
-                                    </span>
-                                    <span class="col-xs-6">
+                                    <span class="col-xs-8">
                                         <button
                                             v-on:click.stop="goToDetail(true)"
                                             class="btn btn-default"
@@ -547,7 +526,7 @@
                                             ></i>
                                         </button>
                                     </span>
-                                    <span class="col-xs-6">
+                                    <span class="col-xs-8">
                                         <button
                                             v-on:click.stop="deleteTrip"
                                             class="btn btn-default"
@@ -616,28 +595,18 @@ export default {
             changeSeats: 'changeSeats',
             remove: 'remove'
         }),
-        goToDetail: function (goToEdit, passengerView) {
+        goToDetail: function (goToEdit) {
             if (goToEdit) {
                 this.$router.push({
                     name: 'update-trip',
                     params: { id: this.trip.id }
                 });
             } else {
-                if (!passengerView) {
-                    bus.emit('trip-click');
-                    this.$router.push({
-                        name: 'detail_trip',
-                        params: { id: this.trip.id }
-                    });
-                } else {
-                    this.$router.push({
-                        name: 'detail_trip_location',
-                        params: {
-                            id: this.trip.id,
-                            location: 'passenger'
-                        }
-                    });
-                }
+                bus.emit('trip-click');
+                this.$router.push({
+                    name: 'detail_trip',
+                    params: { id: this.trip.id }
+                });
             }
         },
         goToProfile: function (event) {
