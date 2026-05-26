@@ -9,6 +9,8 @@ const i18nPath = path.resolve(__dirname, '../../language/i18n.js');
 const profileRatesSource = fs.readFileSync(profileRatesPath, 'utf8');
 const profileInfoSource = fs.readFileSync(profileInfoPath, 'utf8');
 const i18nSource = fs.readFileSync(i18nPath, 'utf8');
+const referenceActionSpacingRule =
+    /\.edit-action-reference\s*\{[\s\S]*margin-bottom:\s*1rem/;
 
 describe('ProfileRates reference action', () => {
     it('shows the write-reference action in the references section before the list', () => {
@@ -39,8 +41,6 @@ describe('ProfileRates reference action', () => {
     });
 
     it('adds bottom spacing to the reference action before the list', () => {
-        expect(profileRatesSource).toMatch(
-            /\.edit-action-reference\s*\{[\s\S]*margin-bottom:\s*1rem/
-        );
+        expect(profileRatesSource).toMatch(referenceActionSpacingRule);
     });
 });
