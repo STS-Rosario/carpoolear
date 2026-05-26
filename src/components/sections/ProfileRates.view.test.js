@@ -16,7 +16,9 @@ const referenceLabelSizeRule = /\.label-reply\s*\{[\s\S]*font-size:\s*1rem/;
 const referencePersonCopy =
     'Las referencias son de la persona, y no de un viaje.';
 const referenceTripRatingCopy =
-    'Si tuviste un viaje dentro de Carpoolear y querés dejar una calificación';
+    'Si tuviste un viaje dentro de Carpoolear y querés dejar una calificación, tenés que esperar a que pasen 24 horas luego de la finalización del viaje, vas a recibir una notificación cuando puedas hacerlo.';
+const referenceModalParagraphsRule =
+    /<template #body>[\s\S]*<p>[\s\S]*\$t\('confirmarReferenciaUsuarioMensajeReferencia'[\s\S]*<\/p>[\s\S]*<p>[\s\S]*\$t\('confirmarReferenciaUsuarioMensajeCalificacion'\)[\s\S]*<\/p>[\s\S]*<\/template>/;
 
 describe('ProfileRates reference action', () => {
     it('shows the write-reference action in the references section before the list', () => {
@@ -32,16 +34,22 @@ describe('ProfileRates reference action', () => {
     it('asks for confirmation in a modal before showing the reference form', () => {
         expect(profileRatesSource).toContain('<modal');
         expect(profileRatesSource).toContain("$t('confirmarReferenciaUsuarioTitulo')");
-        expect(profileRatesSource).toContain("$t('confirmarReferenciaUsuarioMensaje'");
+        expect(profileRatesSource).toContain("$t('confirmarReferenciaUsuarioMensajeReferencia'");
+        expect(profileRatesSource).toContain("$t('confirmarReferenciaUsuarioMensajeCalificacion')");
         expect(profileRatesSource).toContain("$t('continuar')");
         expect(profileRatesSource).toContain("$t('cancelar')");
         expect(profileRatesSource).toMatch(/@click="showReferenceConfirmation"/);
         expect(profileRatesSource).toMatch(/@click="confirmReferenceWriting"/);
     });
 
+    it('renders the reference explanation as two translated paragraphs', () => {
+        expect(profileRatesSource).toMatch(referenceModalParagraphsRule);
+    });
+
     it('keeps all new confirmation copy in i18n', () => {
         expect(i18nSource).toContain('confirmarReferenciaUsuarioTitulo');
-        expect(i18nSource).toContain('confirmarReferenciaUsuarioMensaje');
+        expect(i18nSource).toContain('confirmarReferenciaUsuarioMensajeReferencia');
+        expect(i18nSource).toContain('confirmarReferenciaUsuarioMensajeCalificacion');
         expect(i18nSource).toContain(referencePersonCopy);
         expect(i18nSource).toContain(referenceTripRatingCopy);
         expect(i18nSource).toContain('Continuar');
