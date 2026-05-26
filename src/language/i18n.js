@@ -1153,7 +1153,7 @@ const messages = {
         ratePendingIncluyaUnComentario: 'Incluya un comentario...',
         ratePendingCalificar: 'Calificar',
         ratePendingComentarioNoPuedeEstarVacio:
-            'El comentario no puede estar vacío para los votos negativos.',
+            'El comentario no puede estar vacío.',
         rateItemPositiva: 'Positiva',
         rateItemNegativa: 'Negativa',
         rateItemViajoAComo: 'Viajó a',
@@ -2241,7 +2241,7 @@ const messages = {
         ratePendingIncluyaUnComentario: 'Incluya un comentario...',
         ratePendingCalificar: 'Calificar',
         ratePendingComentarioNoPuedeEstarVacio:
-            'El comentario no puede estar vacío para los votos negativos.',
+            'El comentario no puede estar vacío.',
         rateItemPositiva: 'Positiva',
         rateItemNegativa: 'Negativa',
         rateItemViajoAComo: 'Viajó a',
@@ -3463,7 +3463,7 @@ const messages = {
         ratePendingIncluyaUnComentario: 'Include a comment...',
         ratePendingCalificar: 'Rate',
         ratePendingComentarioNoPuedeEstarVacio:
-            'Comment cannot be empty for negative votes.',
+            'Comment cannot be empty.',
         rateItemPositiva: 'Positive',
         rateItemNegativa: 'Negative',
         rateItemViajoAComo: 'Traveled to',

@@ -109,25 +109,21 @@ export default {
 
         makeVote() {
             this.sending = true;
+            const comment = this.comment.trim();
             let data = {
                 id: this.rate.id,
                 trip_id: this.trip.id,
                 user_id: this.to.id,
                 trip: this.rate.trip,
-                comment: this.comment,
+                comment,
                 rating: this.vote
             };
             let ok = false;
-            if (!this.vote) {
-                if (!this.comment) {
-                    // Voto negativo y comentario vacio
-                    dialogs.message(
-                        this.$t('ratePendingComentarioNoPuedeEstarVacio'),
-                        { duration: 10, estado: 'error' }
-                    );
-                } else {
-                    ok = true;
-                }
+            if (!comment) {
+                dialogs.message(
+                    this.$t('ratePendingComentarioNoPuedeEstarVacio'),
+                    { duration: 10, estado: 'error' }
+                );
             } else {
                 ok = true;
             }
