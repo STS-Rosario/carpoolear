@@ -11,6 +11,8 @@ const profileInfoSource = fs.readFileSync(profileInfoPath, 'utf8');
 const i18nSource = fs.readFileSync(i18nPath, 'utf8');
 const referenceActionSpacingRule =
     /\.edit-action-reference\s*\{[\s\S]*margin-bottom:\s*1rem/;
+const referenceLabelColorRule = /\.label-reply\s*\{[\s\S]*color:\s*#333/;
+const referenceLabelSizeRule = /\.label-reply\s*\{[\s\S]*font-size:\s*1rem/;
 const referencePersonCopy =
     'Las referencias son de la persona, y no de un viaje.';
 const referenceTripRatingCopy =
@@ -51,11 +53,7 @@ describe('ProfileRates reference action', () => {
     });
 
     it('styles the reference form label as black and larger text', () => {
-        expect(profileRatesSource).toMatch(
-            /\.label-reply\s*\{[\s\S]*color:\s*#333/
-        );
-        expect(profileRatesSource).toMatch(
-            /\.label-reply\s*\{[\s\S]*font-size:\s*1rem/
-        );
+        expect(profileRatesSource).toMatch(referenceLabelColorRule);
+        expect(profileRatesSource).toMatch(referenceLabelSizeRule);
     });
 });
