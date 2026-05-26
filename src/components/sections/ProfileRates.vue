@@ -71,7 +71,6 @@
                     <button
                         v-if="!sendReferenceFormVisibility"
                         class="btn btn-primary"
-                        tag="button"
                         @click="showReferenceConfirmation"
                     >
                         {{ $t('enviarReferencia') }}
@@ -88,7 +87,7 @@
                             <p>
                                 {{
                                     $t('confirmarReferenciaUsuarioMensaje', {
-                                        userName: profile.name
+                                        userName: referenceRecipientName
                                     })
                                 }}
                             </p>
@@ -321,6 +320,9 @@ export default {
                 this.profile.id !== this.user.id &&
                 !this.userReferenceWritten
             );
+        },
+        referenceRecipientName() {
+            return this.profile ? this.profile.name : '';
         },
         userReferenceWritten() {
             return (

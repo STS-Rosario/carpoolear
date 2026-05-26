@@ -159,9 +159,6 @@ import UserNameWithBadge from '../elements/UserNameWithBadge.vue';
 import { formatId } from '../../services/utility';
 
 export default {
-    data() {
-        return {};
-    },
     computed: {
         ...mapState(useAuthStore, {
             user: 'user',
