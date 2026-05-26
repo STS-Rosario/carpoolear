@@ -387,6 +387,7 @@ import router from '../../router';
 import modal from '../Modal';
 import dayjs from '../../dayjs';
 import Spinner from '../Spinner.vue';
+import { isOfflineApiError } from '../../utils/apiErrors.js';
 let emailRegex =
     /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 class Error {
@@ -697,6 +698,10 @@ export default {
                             })
                             .catch((err) => {
                                 console.log('catch', err);
+                                if (isOfflineApiError(err)) {
+                                    that.progress = false;
+                                    return;
+                                }
                                 if (err) {
                                     console.log('err register', err);
                                     if (err.status === 422) {
@@ -748,8 +753,11 @@ export default {
                                 that.progress = false;
                             });
                     })
-                    .catch(function () {
+                    .catch(function (err) {
                         that.progress = false;
+                        if (isOfflineApiError(err)) {
+                            return;
+                        }
                         dialogs.message(that.$t('errorRegistro'), {
                             duration: 10,
                             estado: 'error'

@@ -11,6 +11,7 @@ const authApi = new AuthApi();
 export const useCordovaStore = defineStore('cordova', {
     state: () => ({
         deviceReady: false,
+        networkReady: false,
         _deviceOnline: false,
         device: null,
         deviceId: null
@@ -37,12 +38,17 @@ export const useCordovaStore = defineStore('cordova', {
             this.deviceReady = true;
         },
 
+        setNetworkState(connected) {
+            this.networkReady = true;
+            this._deviceOnline = Boolean(connected);
+        },
+
         setOnline() {
-            this._deviceOnline = true;
+            this.setNetworkState(true);
         },
 
         setOffline() {
-            this._deviceOnline = false;
+            this.setNetworkState(false);
         },
 
         setDevice(device) {
@@ -115,11 +121,11 @@ export const useCordovaStore = defineStore('cordova', {
         },
 
         deviceOnline() {
-            this._deviceOnline = true;
+            this.setNetworkState(true);
         },
 
         deviceOffline() {
-            this._deviceOnline = false;
+            this.setNetworkState(false);
         },
 
         onPausa() {

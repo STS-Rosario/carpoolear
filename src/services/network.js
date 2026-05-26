@@ -4,6 +4,11 @@ import axios from 'axios';
 import { Capacitor } from '@capacitor/core';
 
 const API_URL = import.meta.env.VITE_API_URL;
+const OFFLINE_ERROR = {
+    data: { message: 'network_offline' },
+    status: 0,
+    offline: true
+};
 
 class MyPromise {
     constructor(resolve, reject, promise = null) {
@@ -88,13 +93,30 @@ export default {
         return CancelToken.source();
     },
 
+    createOfflineError() {
+        return {
+            data: { ...OFFLINE_ERROR.data },
+            status: OFFLINE_ERROR.status,
+            offline: OFFLINE_ERROR.offline
+        };
+    },
+
+    async markOffline() {
+        try {
+            const { useCordovaStore } = await import('../stores/cordova');
+            useCordovaStore().setNetworkState(false);
+        } catch (e) {
+            console.warn('markOffline:', e);
+        }
+    },
+
     processResponse(response, source) {
         const promise = new MyPromise((resolve, reject) => {
             response
                 .then((response) => {
                     resolve(response.data);
                 })
-                .catch((resp) => {
+                .catch(async (resp) => {
                     // Revisar el tipo de error!
                     if (resp.response) {
                         const data = resp.response.data;
@@ -120,8 +142,11 @@ export default {
                             );
                         }
                         reject({ data, status });
-                    } else {
+                    } else if (axios.isCancel && axios.isCancel(resp)) {
                         reject(resp);
+                    } else {
+                        await this.markOffline();
+                        reject(this.createOfflineError());
                     }
                 });
         });

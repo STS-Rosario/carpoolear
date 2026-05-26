@@ -13,6 +13,10 @@ import { useRootStore } from '../stores/root';
 window.facebook = facebook;
 window.appVersion = '3.2.2';
 
+const NETWORK_POLL_INTERVAL_MS = 5000;
+let networkMonitoringStarted = false;
+let networkPollInterval = null;
+
 function getCordovaStore() {
     return useCordovaStore();
 }
@@ -91,26 +95,20 @@ const initDeviceInfo = async () => {
 };
 
 const initNetworkMonitoring = async () => {
-    const cordovaStore = getCordovaStore();
+    if (networkMonitoringStarted) {
+        return;
+    }
+    networkMonitoringStarted = true;
 
     if (Capacitor.isNativePlatform()) {
         try {
             // Get initial network status
             const status = await Network.getStatus();
-
-            if (status.connected) {
-                cordovaStore.deviceOnline();
-            } else {
-                cordovaStore.deviceOffline();
-            }
+            handleNetworkStatus(status.connected);
 
             // Listen for network changes
             Network.addListener('networkStatusChange', (status) => {
-                if (status.connected) {
-                    cordovaStore.deviceOnline();
-                } else {
-                    cordovaStore.deviceOffline();
-                }
+                handleNetworkStatus(status.connected);
             });
         } catch (error) {
             // Fallback to browser events
@@ -122,16 +120,59 @@ const initNetworkMonitoring = async () => {
 };
 
 const initBrowserNetworkEvents = () => {
-    document.addEventListener('online', onOnline, false);
-    document.addEventListener('offline', onOffline, false);
+    handleNetworkStatus(navigator.onLine !== false);
+    window.addEventListener('online', onOnline, false);
+    window.addEventListener('offline', onOffline, false);
 };
 
 const onOnline = () => {
-    getCordovaStore().deviceOnline();
+    handleNetworkStatus(true);
 };
 
 const onOffline = () => {
-    getCordovaStore().deviceOffline();
+    handleNetworkStatus(false);
+};
+
+const handleNetworkStatus = (connected) => {
+    getCordovaStore().setNetworkState(connected);
+    if (connected) {
+        stopOfflinePolling();
+    } else {
+        startOfflinePolling();
+    }
+};
+
+const getCurrentNetworkStatus = async () => {
+    if (Capacitor.isNativePlatform()) {
+        try {
+            const status = await Network.getStatus();
+            return status.connected;
+        } catch (error) {
+            return navigator.onLine !== false;
+        }
+    }
+
+    return navigator.onLine !== false;
+};
+
+const startOfflinePolling = () => {
+    if (networkPollInterval) {
+        return;
+    }
+
+    networkPollInterval = setInterval(async () => {
+        const connected = await getCurrentNetworkStatus();
+        handleNetworkStatus(connected);
+    }, NETWORK_POLL_INTERVAL_MS);
+};
+
+const stopOfflinePolling = () => {
+    if (!networkPollInterval) {
+        return;
+    }
+
+    clearInterval(networkPollInterval);
+    networkPollInterval = null;
 };
 
 //  cordova.fireDocumentEvent('backbutton'); for testing in console
@@ -162,6 +203,7 @@ if (Capacitor.isNativePlatform()) {
         onDeviceReady();
     }, 1000);
 } else {
+    initNetworkMonitoring();
     if (
         config.web_push_notification &&
         window.Notification.permission === 'granted'

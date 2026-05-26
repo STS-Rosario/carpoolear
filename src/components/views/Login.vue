@@ -298,6 +298,7 @@ import router from '../../router';
 import bus from '../../services/bus-event';
 import Spinner from '../Spinner.vue';
 import cache from '../../services/cache';
+import { isOfflineApiError } from '../../utils/apiErrors.js';
 
 export default {
     name: 'login',
@@ -416,6 +417,10 @@ export default {
                         // router.rememberBack();
                     },
                     (error) => {
+                        if (isOfflineApiError(error)) {
+                            this.loading = false;
+                            return;
+                        }
                         const userNotActive =
                             error && error.message === 'user_not_active';
                         const userBanned =
