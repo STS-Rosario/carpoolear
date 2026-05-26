@@ -145,52 +145,6 @@
                         {{ $t('transacciones') }}
                     </router-link>
                 </div>
-                <div
-                    class="edit-action edit-action-reference"
-                    v-else-if="
-                        config &&
-                        config.module_references &&
-                        !userReferenceWritten
-                    "
-                >
-                    <button
-                        v-if="!sendReferenceFormVisibility"
-                        class="btn btn-primary"
-                        tag="button"
-                        @click="showReferenceForm"
-                    >
-                        {{ $t('enviarReferencia') }}
-                    </button>
-                    <div v-else class="reply-box">
-                        <label for="reply" class="label label-reply">
-                            {{ $t('escribeUnaReferenciaSobreElUsuario') }}
-                        </label>
-                        <textarea
-                            ref="reference"
-                            maxlength="260"
-                            v-model="referenceComment"
-                            id="reference"
-                        ></textarea>
-                        <div class="reply-btns">
-                            <button
-                                class="btn btn-primary"
-                                @click="sendReference"
-                                :disabled="sending"
-                            >
-                                <template v-if="sending">
-                                    <spinner class="blue"></spinner>
-                                </template>
-                                <template v-else>{{ $t('comentar') }}</template>
-                            </button>
-                            <button
-                                class="btn btn-primary"
-                                @click="sendReferenceFormVisibility = false"
-                            >
-                                {{ $t('cancelar') }}
-                            </button>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -201,18 +155,12 @@ import { useAuthStore } from '../../stores/auth';
 import { useProfileStore } from '../../stores/profile';
 import { useConversationsStore } from '../../stores/conversations';
 import router from '../../router';
-import Spinner from '../Spinner.vue';
 import UserNameWithBadge from '../elements/UserNameWithBadge.vue';
-import dialogs from '../../services/dialogs.js';
 import { formatId } from '../../services/utility';
 
 export default {
     data() {
-        return {
-            sendReferenceFormVisibility: false,
-            referenceComment: '',
-            sending: false
-        };
+        return {};
     },
     computed: {
         ...mapState(useAuthStore, {
@@ -223,15 +171,6 @@ export default {
             profile: 'user',
             badges: 'badges'
         }),
-        userReferenceWritten() {
-            return (
-                this.profile.references_data &&
-                    this.profile.references_data.length &&
-                    this.profile.references_data.findIndex(
-                        (item) => item.user_id_from === this.user.id
-                    ) >= 0
-            );
-        },
         identityValidationAvailable() {
             const c = this.config;
             return (
@@ -249,9 +188,6 @@ export default {
         ...mapActions(useConversationsStore, {
             lookConversation: 'createConversation'
         }),
-        ...mapActions(useProfileStore, {
-            makeReference: 'makeReference'
-        }),
         messageUser() {
             console.log('messageUser profileInfo', this.profile);
             this.lookConversation(this.profile).then((conversation) => {
@@ -259,37 +195,6 @@ export default {
                     name: 'conversation-chat',
                     params: { id: conversation.id }
                 });
-            });
-        },
-        sendReference() {
-            this.sending = true;
-            this.makeReference({
-                user_id_to: this.profile.id,
-                comment: this.referenceComment
-            })
-                .then(() => {
-                    dialogs.message(this.$t('referenciaExitosa'));
-                    this.sendReferenceFormVisibility = false;
-                })
-                .catch((error) => {
-                    let errorMessage = this.$t('referenciaError');
-                    if (this.$checkError(error, 'reference_exist')) {
-                        errorMessage = this.$t('referenciaExist');
-                    } else if (this.$checkError(error, 'reference_same_user')) {
-                        errorMessage = this.$t('referenciaSameUser');
-                    } else if (this.$checkError(error, 'user_doesnt_exist')) {
-                        errorMessage = this.$t('userDoesntExist');
-                    }
-                    dialogs.message(errorMessage, { estado: 'error' });
-                })
-                .finally(() => {
-                    this.sending = false;
-                });
-        },
-        showReferenceForm() {
-            this.sendReferenceFormVisibility = true;
-            this.$nextTick(() => {
-                this.$refs.reference.focus();
             });
         },
         badgeImageUrl(imagePath) {
@@ -302,7 +207,6 @@ export default {
         }
     },
     components: {
-        Spinner,
         UserNameWithBadge
     }
 };

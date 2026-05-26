@@ -331,6 +331,10 @@ const messages = {
         enviarMensaje: 'Enviar mensaje',
         editarPerfil: 'Editar perfil',
         enviarReferencia: 'Escribir una referencia del usuario',
+        confirmarReferenciaUsuarioTitulo: 'Escribir referencia',
+        confirmarReferenciaUsuarioMensaje:
+            'Estás por escribir una referencia para el usuario {userName}. Si tuviste un viaje y querés dejar una calificación, tenés que esperar a que pasen 24 horas luego de la finalización del viaje, vas a recibir una notificación cuando puedas hacerlo',
+        continuar: 'Continuar',
         referenciaExitosa: 'El comentario fue enviado exitosamente',
         referenciaError: 'Ocurrió un problema al enviar el comentario.',
         referenciaExist:
@@ -2650,6 +2654,10 @@ const messages = {
         enviarMensaje: 'Send message',
         editarPerfil: 'Edit profile',
         enviarReferencia: 'Write a review for the user',
+        confirmarReferenciaUsuarioTitulo: 'Write a reference',
+        confirmarReferenciaUsuarioMensaje:
+            'You are about to write a reference for {userName}. If you took a trip and want to leave a rating, you need to wait 24 hours after the trip ends. You will receive a notification when you can do it.',
+        continuar: 'Continue',
         referenciaExitosa: 'The comment was sent successfully',
         referenciaError: 'A problem occurred while sending the comment.',
         referenciaExist:
