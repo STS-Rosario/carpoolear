@@ -49,4 +49,13 @@ describe('ProfileRates reference action', () => {
     it('adds bottom spacing to the reference action before the list', () => {
         expect(profileRatesSource).toMatch(referenceActionSpacingRule);
     });
+
+    it('styles the reference form label as black and larger text', () => {
+        expect(profileRatesSource).toMatch(
+            /\.label-reply\s*\{[\s\S]*color:\s*#333/
+        );
+        expect(profileRatesSource).toMatch(
+            /\.label-reply\s*\{[\s\S]*font-size:\s*1rem/
+        );
+    });
 });
