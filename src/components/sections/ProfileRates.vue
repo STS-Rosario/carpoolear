@@ -382,4 +382,9 @@ export default {
 .edit-action-reference {
     margin-bottom: 1rem;
 }
+
+.label-reply {
+    color: #333;
+    font-size: 1rem;
+}
 </style>
