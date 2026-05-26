@@ -86,9 +86,14 @@
                         <template #body>
                             <p>
                                 {{
-                                    $t('confirmarReferenciaUsuarioMensaje', {
+                                    $t('confirmarReferenciaUsuarioMensajeReferencia', {
                                         userName: referenceRecipientName
                                     })
+                                }}
+                            </p>
+                            <p>
+                                {{
+                                    $t('confirmarReferenciaUsuarioMensajeCalificacion')
                                 }}
                             </p>
                         </template>

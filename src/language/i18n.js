@@ -332,8 +332,10 @@ const messages = {
         editarPerfil: 'Editar perfil',
         enviarReferencia: 'Escribir una referencia del usuario',
         confirmarReferenciaUsuarioTitulo: 'Escribir referencia',
-        confirmarReferenciaUsuarioMensaje:
-            'Estás por escribir una referencia para el usuario {userName}. Las referencias son de la persona, y no de un viaje.\n\nSi tuviste un viaje dentro de Carpoolear y querés dejar una calificación, tenés que esperar a que pasen 24 horas luego de la finalización del viaje, vas a recibir una notificación cuando puedas hacerlo',
+        confirmarReferenciaUsuarioMensajeReferencia:
+            'Estás por escribir una referencia para el usuario {userName}. Las referencias son de la persona, y no de un viaje.',
+        confirmarReferenciaUsuarioMensajeCalificacion:
+            'Si tuviste un viaje dentro de Carpoolear y querés dejar una calificación, tenés que esperar a que pasen 24 horas luego de la finalización del viaje, vas a recibir una notificación cuando puedas hacerlo.',
         continuar: 'Continuar',
         referenciaExitosa: 'El comentario fue enviado exitosamente',
         referenciaError: 'Ocurrió un problema al enviar el comentario.',
@@ -2655,8 +2657,10 @@ const messages = {
         editarPerfil: 'Edit profile',
         enviarReferencia: 'Write a review for the user',
         confirmarReferenciaUsuarioTitulo: 'Write a reference',
-        confirmarReferenciaUsuarioMensaje:
-            'You are about to write a reference for {userName}. References are about the person, not a trip.\n\nIf you took a trip within Carpoolear and want to leave a rating, you need to wait 24 hours after the trip ends. You will receive a notification when you can do it.',
+        confirmarReferenciaUsuarioMensajeReferencia:
+            'You are about to write a reference for {userName}. References are about the person, not a trip.',
+        confirmarReferenciaUsuarioMensajeCalificacion:
+            'If you took a trip within Carpoolear and want to leave a rating, you need to wait 24 hours after the trip ends. You will receive a notification when you can do it.',
         continuar: 'Continue',
         referenciaExitosa: 'The comment was sent successfully',
         referenciaError: 'A problem occurred while sending the comment.',
