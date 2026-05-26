@@ -118,29 +118,24 @@ export default {
                 comment,
                 rating: this.vote
             };
-            let ok = false;
             if (!comment) {
                 dialogs.message(
                     this.$t('ratePendingComentarioNoPuedeEstarVacio'),
                     { duration: 10, estado: 'error' }
                 );
-            } else {
-                ok = true;
-            }
-            if (ok) {
-                console.log('emit rated');
-                this.$emit('rated', data);
-                this.emit(data)
-                    .then(() => {
-                        this.comment = '';
-                        this.sending = false;
-                    })
-                    .catch(() => {
-                        this.sending = false;
-                    });
-            } else {
                 this.sending = false;
+                return;
             }
+            console.log('emit rated');
+            this.$emit('rated', data);
+            this.emit(data)
+                .then(() => {
+                    this.comment = '';
+                    this.sending = false;
+                })
+                .catch(() => {
+                    this.sending = false;
+                });
         }
     },
 
