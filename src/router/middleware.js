@@ -1,6 +1,7 @@
 /* jshint esversion: 6 */
 import router from '../router';
 import { useAuthStore } from '../stores/auth';
+import { hasRequiredProfileFields } from '../utils/profileRequirements';
 
 function getAuthStore () {
     return useAuthStore();
@@ -84,12 +85,7 @@ export function requireIdentityValidation(to, from, next) {
 
 export function profileComplete(to, from, next) {
     const user = getAuthStore().user;
-    if (
-        !user.image ||
-        user.image.length === 0 ||
-        !user.description ||
-        user.description.length === 0
-    ) {
+    if (!hasRequiredProfileFields(user)) {
         router.rememberRoute = {
             name: to.name,
             params: to.params

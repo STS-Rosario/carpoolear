@@ -1825,6 +1825,11 @@ import {
     priceInputNumberFromStoredSeatPriceCents,
     seatPriceCentsForApi
 } from '../../utils/tripSeatPrice.js';
+import {
+    firstCarWithPlate,
+    hasDriverPlate,
+    requiresDriverPlate
+} from '../../utils/profileRequirements';
 
 let tripApi = new TripApi();
 let userApi = new UserApi();
@@ -2189,6 +2194,9 @@ export default {
             createTrip: 'create',
             updateTrip: 'update',
             getPrice: 'price'
+        }),
+        ...mapActions(useCarsStore, {
+            carIndex: 'index'
         }),
         ...mapActions(useRootStore, {
             getTrip: 'getTrip'
@@ -2689,13 +2697,14 @@ export default {
                     node_id: p.place.id
                 };
             });
+            const car = firstCarWithPlate(this.cars);
 
             const tripInfo = {
                 points,
                 from_town: points[0].address,
                 to_town: last(points).address,
                 estimated_time: estimatedTime,
-                car_id: this.cars.length > 0 ? this.cars[0].id : undefined
+                car_id: car ? car.id : undefined
             };
 
             if (!useWeeklySchedule) {
@@ -2712,7 +2721,26 @@ export default {
             return result;
         },
 
-        save() {
+        async save() {
+            if (
+                requiresDriverPlate(this.trip) &&
+                !Array.isArray(this.cars)
+            ) {
+                await this.carIndex();
+            }
+            if (
+                requiresDriverPlate(this.trip) &&
+                !hasDriverPlate(this.cars)
+            ) {
+                dialogs.message(this.$t('olvidastePatente'), {
+                    estado: 'error'
+                });
+                this.$router.replace({
+                    name: 'profile_update',
+                    query: { incompleteProfile: 'true', missing: 'patente' }
+                });
+                return;
+            }
             const validationResult = this.validate();
             if (validationResult) {
                 // Jump To Error
