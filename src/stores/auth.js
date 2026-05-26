@@ -4,6 +4,7 @@ import cache, { keys } from '../services/cache';
 import localConfig from '../../config/conf';
 import { completeSessionIfRegistrationReturnsToken } from '../utils/registrationAutoLogin';
 import { getLazyRouter } from '../utils/routerLazy.js';
+import { hasRequiredProfileFields } from '../utils/profileRequirements';
 
 const authApi = new AuthApi();
 const userApi = new UserApi();
@@ -88,7 +89,7 @@ export const useAuthStore = defineStore('auth', {
         // Business logic actions
         async onLoggin(token) {
             this.setToken(token);
-            this.fetchUser();
+            await this.fetchUser();
 
             const [
                 { useCordovaStore },
@@ -133,7 +134,7 @@ export const useAuthStore = defineStore('auth', {
             passengerStore.getPendingRequest();
             rootStore.startThread();
             const router = await getLazyRouter();
-            if (this.firstTime) {
+            if (this.firstTime || !hasRequiredProfileFields(this.user)) {
                 router.replace({ name: 'profile_update' });
             } else {
                 router.rememberBack();

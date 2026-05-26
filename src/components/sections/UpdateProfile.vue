@@ -200,8 +200,13 @@
                         </span>
                     </div>
 
-                    <div class="form-group">
-                        <label for="input-telefono">
+                    <div
+                        class="form-group"
+                        :class="{
+                            'missing-field-highlight': shouldHighlightPatente
+                        }"
+                    >
+                        <label for="input-patente">
                             {{ $t('patente') }}
                             <span class="description">
                                 ({{ $t('soloConductores') }}).
@@ -213,7 +218,8 @@
                             v-model="patente"
                             type="text"
                             class="form-control"
-                            id="input-phone"
+                            id="input-patente"
+                            ref="patenteInput"
                             :class="{ 'has-error': patentError.state }"
                         />
                         <span class="error" v-if="patentError.state">
@@ -730,6 +736,13 @@ export default {
             if (this.user) {
                 return this.user.mobile_phone;
             }
+        },
+        shouldHighlightPatente() {
+            return !!(
+                this.$route &&
+                this.$route.query &&
+                this.$route.query.missing === 'patente'
+            );
         }
     },
     methods: {
@@ -752,6 +765,20 @@ export default {
                 let element = hasError[0];
                 this.$scrollToElement(element, -270);
             }
+        },
+        scrollToMissingRouteField() {
+            if (
+                !this.$route ||
+                !this.$route.query ||
+                this.$route.query.missing !== 'patente'
+            ) {
+                return;
+            }
+            this.$nextTick(() => {
+                if (this.$refs.patenteInput) {
+                    this.$scrollToElement(this.$refs.patenteInput, -270);
+                }
+            });
         },
         changeShowPassword() {
             this.showChangePassword = !this.showChangePassword;
@@ -1190,6 +1217,7 @@ export default {
         } catch (ex) {
             console.log('exception', ex);
         }
+        this.scrollToMissingRouteField();
     },
     beforeUnmount() {
         bus.off('date-change', this.dateChange);
@@ -1247,6 +1275,11 @@ span.error.textarea {
     vertical-align: -2px;
     margin-right: 5px;
     color: var(--trip-mostly-free-color);
+}
+.missing-field-highlight {
+    background: #fff4cc;
+    border-radius: 4px;
+    padding: 0.75em;
 }
 
 hr {
