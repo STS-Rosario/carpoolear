@@ -36,6 +36,12 @@ describe('ProfileRates reference action', () => {
     it('keeps all new confirmation copy in i18n', () => {
         expect(i18nSource).toContain('confirmarReferenciaUsuarioTitulo');
         expect(i18nSource).toContain('confirmarReferenciaUsuarioMensaje');
+        expect(i18nSource).toContain(
+            'Las referencias son de la persona, y no de un viaje.'
+        );
+        expect(i18nSource).toContain(
+            'Si tuviste un viaje dentro de Carpoolear y querés dejar una calificación'
+        );
         expect(i18nSource).toContain('Continuar');
         expect(i18nSource).toContain('Cancel');
     });
