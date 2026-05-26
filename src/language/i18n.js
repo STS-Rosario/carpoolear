@@ -254,6 +254,8 @@ const messages = {
             'Ya existe un usuario con este número de documento o número de teléfono. Si es tuyo y querés recuperar tu cuenta, escribinos desde la ',
         errorRegistro:
             'Ocurrió un error al procesar el registro, por favor vuelva a intentar.',
+        offlineStatusBarMessage:
+            'Sin conexión a internet. Revisá tu conexión.',
         valorDonacion: 'Tienes que seleccionar un valor de donación.',
         correctamenteSubscripto:
             'Te subscribiste correctamente. Te avisaremos cuando hayan viajes similares',
@@ -1525,6 +1527,8 @@ const messages = {
             'Ya existe un usuario con este número de documento o número de teléfono. Si es tuyo y querés recuperar tu cuenta, escribinos desde la ',
         errorRegistro:
             'Ocurrió un error al procesar el registro, por favor vuelva a intentar.',
+        offlineStatusBarMessage:
+            'Sin conexión a internet. Revisá tu conexión.',
         buscoConductor: 'Conductor',
         buscoPasajero: 'Pasajero',
         iniciarSesion: 'Comparte auto para llegar al lugar donde quierés ir',
@@ -2570,6 +2574,8 @@ const messages = {
             "A user with this document number or phone number already exists. If it's yours and you want to recover your account, reach out through the ",
         errorRegistro:
             'An error occurred while processing the registration, please try again.',
+        offlineStatusBarMessage:
+            'No internet connection. Check your connection.',
         valorDonacion: 'You must select a donation amount.',
         correctamenteSubscripto:
             'You subscribed successfully. We will notify you when there are similar trips.',

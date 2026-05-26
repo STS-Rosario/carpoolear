@@ -150,8 +150,11 @@ export const useAuthStore = defineStore('auth', {
                     this.onLoggin(response.token);
                     return Promise.resolve();
                 },
-                ({ data, status }) => {
-                    return Promise.reject(data);
+                (error) => {
+                    if (error && error.offline) {
+                        return Promise.reject(error);
+                    }
+                    return Promise.reject(error ? error.data : error);
                 }
             );
         },

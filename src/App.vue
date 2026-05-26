@@ -3,6 +3,7 @@
         class="app-container"
         :class="[backgroundStyle, viewName, deviceClass]"
     >
+        <OfflineStatusBar />
         <ForceUpgradeModal v-if="showForceUpgrade" />
         <MaintenanceFullscreen v-else-if="passengerMaintenanceWall" />
         <template v-else>
@@ -53,6 +54,7 @@ import ForceUpgradeModal from './components/ForceUpgradeModal.vue';
 import IdentityValidationPromptModal from './components/IdentityValidationPromptModal.vue';
 import MaintenanceFullscreen from './components/MaintenanceFullscreen.vue';
 import MaintenanceAdminBanner from './components/MaintenanceAdminBanner.vue';
+import OfflineStatusBar from './components/OfflineStatusBar.vue';
 
 export default {
     name: 'app',
@@ -251,7 +253,8 @@ export default {
         ForceUpgradeModal,
         IdentityValidationPromptModal,
         MaintenanceFullscreen,
-        MaintenanceAdminBanner
+        MaintenanceAdminBanner,
+        OfflineStatusBar
     }
 };
 </script>
