@@ -6,6 +6,20 @@ const viewPath = path.resolve(__dirname, 'CoordinateTrip.vue');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 
 describe('CoordinateTrip.vue contribution warning', () => {
+    it('renders a collapsed trip description toggle after the trip summary', () => {
+        expect(viewSource).toContain("$t('coordinateTripMostrarDescripcionViaje')");
+        expect(viewSource).toContain('showTripDescription');
+        expect(viewSource).toMatch(
+            /<div class="trip_actions-detail">[\s\S]*?<\/div>\s*<div[\s\S]*?class="trip_actions-description"/s
+        );
+        expect(viewSource).toMatch(
+            /v-if="conversation\.trip\.description"/
+        );
+        expect(viewSource).toMatch(
+            /v-show="showTripDescription"[\s\S]*conversation\.trip\.description/s
+        );
+    });
+
     it('uses optional amountPart so zero-price trips omit currency in driver and passenger copy', () => {
         expect(viewSource).toContain('getContributionWarningAmountPart');
         expect(viewSource).toMatch(
