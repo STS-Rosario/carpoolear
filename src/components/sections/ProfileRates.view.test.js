@@ -37,4 +37,10 @@ describe('ProfileRates reference action', () => {
         expect(i18nSource).toContain('Continuar');
         expect(i18nSource).toContain('Cancel');
     });
+
+    it('adds bottom spacing to the reference action before the list', () => {
+        expect(profileRatesSource).toMatch(
+            /\.edit-action-reference\s*\{[\s\S]*margin-bottom:\s*1rem/
+        );
+    });
 });
