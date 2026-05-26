@@ -13,6 +13,8 @@ const referenceActionSpacingRule =
     /\.edit-action-reference\s*\{[\s\S]*margin-bottom:\s*1rem/;
 const referenceLabelColorRule = /\.label-reply\s*\{[\s\S]*color:\s*#333/;
 const referenceLabelSizeRule = /\.label-reply\s*\{[\s\S]*font-size:\s*1rem/;
+const referenceMessageFirstKey = 'confirmarReferenciaUsuarioMensajeReferencia';
+const referenceMessageSecondKey = 'confirmarReferenciaUsuarioMensajeCalificacion';
 const referencePersonCopy =
     'Las referencias son de la persona, y no de un viaje.';
 const referenceTripRatingCopy =
@@ -34,8 +36,8 @@ describe('ProfileRates reference action', () => {
     it('asks for confirmation in a modal before showing the reference form', () => {
         expect(profileRatesSource).toContain('<modal');
         expect(profileRatesSource).toContain("$t('confirmarReferenciaUsuarioTitulo')");
-        expect(profileRatesSource).toContain("$t('confirmarReferenciaUsuarioMensajeReferencia'");
-        expect(profileRatesSource).toContain("$t('confirmarReferenciaUsuarioMensajeCalificacion')");
+        expect(profileRatesSource).toContain(`$t('${referenceMessageFirstKey}'`);
+        expect(profileRatesSource).toContain(`$t('${referenceMessageSecondKey}')`);
         expect(profileRatesSource).toContain("$t('continuar')");
         expect(profileRatesSource).toContain("$t('cancelar')");
         expect(profileRatesSource).toMatch(/@click="showReferenceConfirmation"/);
@@ -48,8 +50,8 @@ describe('ProfileRates reference action', () => {
 
     it('keeps all new confirmation copy in i18n', () => {
         expect(i18nSource).toContain('confirmarReferenciaUsuarioTitulo');
-        expect(i18nSource).toContain('confirmarReferenciaUsuarioMensajeReferencia');
-        expect(i18nSource).toContain('confirmarReferenciaUsuarioMensajeCalificacion');
+        expect(i18nSource).toContain(referenceMessageFirstKey);
+        expect(i18nSource).toContain(referenceMessageSecondKey);
         expect(i18nSource).toContain(referencePersonCopy);
         expect(i18nSource).toContain(referenceTripRatingCopy);
         expect(i18nSource).toContain('Continuar');
