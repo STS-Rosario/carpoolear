@@ -187,115 +187,172 @@
                     >
                     <div class="trip_location">
                         <template v-if="trip.points && trip.points.length >= 2">
-                            <div class="row trip_location_from">
-                                <div
-                                    class="col-xs-4"
-                                    v-if="tripCardTheme === 'light'"
-                                >
-                                    <span class="trip_from_time">
-                                        {{ dayjs(trip.trip_date).format('HH:mm') }}
-                                    </span>
-                                </div>
-                                <div
-                                    class="text-right"
-                                    :class="
-                                        tripCardTheme === 'light'
-                                            ? 'col-xs-2'
-                                            : 'col-xs-3'
-                                    "
-                                >
-                                    <i
-                                        class="fa fa-map-marker"
-                                        aria-hidden="true"
-                                        v-if="tripCardTheme !== 'light'"
-                                    ></i>
-                                    <i
-                                        class="fa fa-circle"
-                                        aria-hidden="true"
-                                        v-else
-                                    ></i>
-                                </div>
-                                <div
-                                    :class="
-                                        config &&
-                                        config.trip_card_design === 'light'
-                                            ? 'col-xs-14'
-                                            : 'col-xs-20'
-                                    "
-                                >
-                                    <span
-                                        class="trip_location_from_city"
-                                    >
-                                        {{ getLocationName(trip.points[0]) }}
-                                    </span>
-                                    <span
-                                        class="trip_location_from_state-country"
-                                    >
-                                        {{
-                                            googleInfoClean(getStateName(trip.points[0]))
-                                        }}
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="row trip_location_to">
-                                <div
-                                    class="col-xs-4"
-                                    v-if="tripCardTheme === 'light'"
-                                >
-                                    <span class="trip_to_time">
-                                        {{ dayjs(tripArrivingTime).format('HH:mm') }}
-                                    </span>
-                                </div>
-                                <div
-                                    class="text-right"
-                                    :class="
-                                        tripCardTheme === 'light'
-                                            ? 'col-xs-2'
-                                            : 'col-xs-3'
-                                    "
-                                >
-                                    <i
-                                        class="fa fa-map-marker"
-                                        aria-hidden="true"
-                                    ></i>
-                                </div>
-                                <div
-                                    :class="
-                                        config &&
-                                        config.trip_card_design === 'light'
-                                            ? 'col-xs-14'
-                                            : 'col-xs-20'
-                                    "
-                                >
-                                    <span
-                                        class="trip_location_to_city"
-                                    >
-                                        {{
-                                            getLocationName(
-                                                trip.points[
-                                                    trip.points.length - 1
-                                                ]
-                                            )
-                                        }}
-                                    </span>
-                                    <span
-                                        class="trip_location_to_state-country"
-                                    >
-                                        {{
-                                            googleInfoClean(getStateName(
-                                                trip.points[
-                                                    trip.points.length - 1
-                                                ]
-                                            ))
-                                        }}
-                                    </span>
-                                </div>
-                            </div>
                             <div
-                                class="col-xs-3 trip_location-dot-line trip_location-dot-line-small"
+                                v-if="tripCardTheme !== 'light'"
+                                class="trip_location-routed"
                             >
-                                <div></div>
+                                <div class="trip_location-routed__row">
+                                    <div
+                                        class="trip_location-routed__pin-col text-right"
+                                    >
+                                        <i
+                                            class="fa fa-map-marker trip_location-routed__pin trip_location-routed__pin--from"
+                                            aria-hidden="true"
+                                        ></i>
+                                    </div>
+                                    <div
+                                        class="trip_location-routed__text-col trip_location_from"
+                                    >
+                                        <span class="trip_location_from_city">
+                                            {{
+                                                getLocationName(trip.points[0])
+                                            }}
+                                        </span>
+                                        <span
+                                            class="trip_location_from_state-country"
+                                        >
+                                            {{
+                                                googleInfoClean(
+                                                    getStateName(trip.points[0])
+                                                )
+                                            }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div
+                                    class="trip_location-routed__row trip_location-routed__row--connector"
+                                >
+                                    <div class="trip_location-routed__pin-col">
+                                        <span
+                                            class="trip_location-routed__connector"
+                                            aria-hidden="true"
+                                        ></span>
+                                    </div>
+                                    <div
+                                        class="trip_location-routed__text-col"
+                                        aria-hidden="true"
+                                    ></div>
+                                </div>
+                                <div class="trip_location-routed__row">
+                                    <div
+                                        class="trip_location-routed__pin-col text-right"
+                                    >
+                                        <i
+                                            class="fa fa-map-marker trip_location-routed__pin trip_location-routed__pin--to"
+                                            aria-hidden="true"
+                                        ></i>
+                                    </div>
+                                    <div
+                                        class="trip_location-routed__text-col trip_location_to"
+                                    >
+                                        <span class="trip_location_to_city">
+                                            {{
+                                                getLocationName(
+                                                    trip.points[
+                                                        trip.points.length - 1
+                                                    ]
+                                                )
+                                            }}
+                                        </span>
+                                        <span
+                                            class="trip_location_to_state-country"
+                                        >
+                                            {{
+                                                googleInfoClean(
+                                                    getStateName(
+                                                        trip.points[
+                                                            trip.points.length -
+                                                                1
+                                                        ]
+                                                    )
+                                                )
+                                            }}
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
+                            <template v-else>
+                                <div class="row trip_location_from">
+                                    <div class="col-xs-4">
+                                        <span class="trip_from_time">
+                                            {{
+                                                dayjs(trip.trip_date).format(
+                                                    'HH:mm'
+                                                )
+                                            }}
+                                        </span>
+                                    </div>
+                                    <div class="text-right col-xs-2">
+                                        <i
+                                            class="fa fa-circle"
+                                            aria-hidden="true"
+                                        ></i>
+                                    </div>
+                                    <div class="col-xs-14">
+                                        <span class="trip_location_from_city">
+                                            {{
+                                                getLocationName(trip.points[0])
+                                            }}
+                                        </span>
+                                        <span
+                                            class="trip_location_from_state-country"
+                                        >
+                                            {{
+                                                googleInfoClean(
+                                                    getStateName(trip.points[0])
+                                                )
+                                            }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row trip_location_to">
+                                    <div class="col-xs-4">
+                                        <span class="trip_to_time">
+                                            {{
+                                                dayjs(tripArrivingTime).format(
+                                                    'HH:mm'
+                                                )
+                                            }}
+                                        </span>
+                                    </div>
+                                    <div class="text-right col-xs-2">
+                                        <i
+                                            class="fa fa-map-marker"
+                                            aria-hidden="true"
+                                        ></i>
+                                    </div>
+                                    <div class="col-xs-14">
+                                        <span class="trip_location_to_city">
+                                            {{
+                                                getLocationName(
+                                                    trip.points[
+                                                        trip.points.length - 1
+                                                    ]
+                                                )
+                                            }}
+                                        </span>
+                                        <span
+                                            class="trip_location_to_state-country"
+                                        >
+                                            {{
+                                                googleInfoClean(
+                                                    getStateName(
+                                                        trip.points[
+                                                            trip.points
+                                                                .length - 1
+                                                        ]
+                                                    )
+                                                )
+                                            }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div
+                                    class="col-xs-2 trip_location-dot-line trip_location-dot-line-small"
+                                >
+                                    <div></div>
+                                </div>
+                            </template>
                         </template>
                         <template v-else>
                             <div class="row trip_location_from">
