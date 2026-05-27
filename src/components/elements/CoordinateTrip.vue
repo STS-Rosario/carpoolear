@@ -27,6 +27,23 @@
                 </template>
             </span>
         </div>
+        <div class="trip_actions-description" v-if="conversation.trip.description">
+            <button
+                type="button"
+                class="trip_actions-description-toggle"
+                :aria-expanded="showTripDescription ? 'true' : 'false'"
+                @click="showTripDescription = !showTripDescription"
+            >
+                {{ $t('coordinateTripMostrarDescripcionViaje') }}
+                <span aria-hidden="true">{{ showTripDescription ? '-' : '+' }}</span>
+            </button>
+            <div
+                v-show="showTripDescription"
+                class="trip_actions-description-content"
+            >
+                {{ conversation.trip.description }}
+            </div>
+        </div>
         <p v-if="contributionWarningData" class="trip_actions-contribution-warning">
             <template v-if="contributionWarningData.role === 'driver'">
                 {{
@@ -185,7 +202,8 @@ export default {
             sending: {
                 trip: false,
                 returnTrip: false
-            }
+            },
+            showTripDescription: false
         };
     },
     computed: {
