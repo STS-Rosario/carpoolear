@@ -1068,6 +1068,14 @@ export default {
 </script>
 
 <style scoped>
+.trip-seat-requests-warning {
+    margin: 1rem 0;
+}
+.trip-seat-requests-warning a {
+    color: inherit;
+    font-weight: 500;
+    text-decoration: underline;
+}
 .trip-detail-component .structure-div {
     margin-top: 1rem;
     z-index: 0;
