@@ -182,6 +182,9 @@
                     >
                         {{ $t('faltaPagarSellado') }}
                     </div>
+                    <div
+                        class="trip-card-section trip-card-section--route"
+                    >
                     <div class="trip_location">
                         <template v-if="trip.points && trip.points.length >= 2">
                             <div class="row trip_location_from">
@@ -198,7 +201,7 @@
                                     :class="
                                         tripCardTheme === 'light'
                                             ? 'col-xs-2'
-                                            : 'col-xs-4'
+                                            : 'col-xs-3'
                                     "
                                 >
                                     <i
@@ -217,16 +220,11 @@
                                         config &&
                                         config.trip_card_design === 'light'
                                             ? 'col-xs-14'
-                                            : 'col-xs-18'
+                                            : 'col-xs-20'
                                     "
                                 >
                                     <span
                                         class="trip_location_from_city"
-                                        :style="
-                                            originLongName
-                                                ? LONG_NAME_STYLE
-                                                : {}
-                                        "
                                     >
                                         {{ getLocationName(trip.points[0]) }}
                                     </span>
@@ -253,7 +251,7 @@
                                     :class="
                                         tripCardTheme === 'light'
                                             ? 'col-xs-2'
-                                            : 'col-xs-4'
+                                            : 'col-xs-3'
                                     "
                                 >
                                     <i
@@ -266,16 +264,11 @@
                                         config &&
                                         config.trip_card_design === 'light'
                                             ? 'col-xs-14'
-                                            : 'col-xs-18'
+                                            : 'col-xs-20'
                                     "
                                 >
                                     <span
                                         class="trip_location_to_city"
-                                        :style="
-                                            destinyLongName
-                                                ? LONG_NAME_STYLE
-                                                : {}
-                                        "
                                     >
                                         {{
                                             getLocationName(
@@ -299,7 +292,7 @@
                                 </div>
                             </div>
                             <div
-                                class="col-xs-4 trip_location-dot-line trip_location-dot-line-small"
+                                class="col-xs-3 trip_location-dot-line trip_location-dot-line-small"
                             >
                                 <div></div>
                             </div>
@@ -344,6 +337,11 @@
                             </div>
                         </template>
                     </div>
+                    </div>
+                    <div
+                        v-if="tripCardTheme !== 'light'"
+                        class="trip-card-section trip-card-section--schedule"
+                    >
                     <div class="row">
                         <time
                             class="trip_datetime col-xs-24"
@@ -384,7 +382,11 @@
                             />
                         </div>
                     </div>
-                    <template v-if="tripCardTheme !== 'light'">
+                    </div>
+                    <div
+                        v-if="tripCardTheme !== 'light'"
+                        class="trip-card-section trip-card-section--footer"
+                    >
                         <template v-if="!enableChangeSeats">
                             <div v-if="trip.seats_available !== 0" class="row">
                                 <div
@@ -541,7 +543,7 @@
                                 </div>
                             </div>
                         </template>
-                    </template>
+                    </div>
                 </div>
             </div>
         </div>
@@ -724,10 +726,6 @@ export default {
         return {
             sending: false,
             seats_available: 0,
-            CITY_NAME_LONG_LENGTH: 16,
-            LONG_NAME_STYLE: {
-                'font-size': '17px'
-            },
             showTrip: false
         };
     },
@@ -753,24 +751,6 @@ export default {
         },
         tripCardTheme() {
             return this.config ? this.config.trip_card_design : '';
-        },
-        originLongName() {
-            if (this.trip.points) {
-                let name = this.getLocationName(this.trip.points[0]);
-                return name.length > this.CITY_NAME_LONG_LENGTH;
-            } else {
-                return false;
-            }
-        },
-        destinyLongName() {
-            if (this.trip.points) {
-                let name = this.getLocationName(
-                    this.trip.points[this.trip.points.length - 1]
-                );
-                return name.length > this.CITY_NAME_LONG_LENGTH;
-            } else {
-                return false;
-            }
         },
         getUserImage() {
             if (!this.trip || !this.trip.user) {
@@ -892,6 +872,7 @@ export default {
         height: 500px;
     }
 }
+
 .trip-needs-sellado {
     opacity: 0.6;
 }

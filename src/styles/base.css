@@ -1026,7 +1026,7 @@
       float: right;
       width: 1px;
       margin-right: 13px;
-      height: 50px;
+      min-height: 50px;
       content: '\A0';
       border: 0;
       border-left: solid 1px #777;
