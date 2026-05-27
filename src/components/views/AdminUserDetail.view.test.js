@@ -23,4 +23,13 @@ describe('AdminUserDetail view', () => {
         expect(source).toContain("name: 'profile'");
         expect(source).toContain('params: { id: user.id }');
     });
+
+    it('links to admin user trips ratings and recommendations pages', () => {
+        expect(source).toContain("name: 'admin-users-trips'");
+        expect(source).toContain("name: 'admin-users-ratings'");
+        expect(source).toContain("name: 'admin-users-recommendations'");
+        expect(source).toContain("$t('adminUsuariosVerViajes')");
+        expect(source).toContain("$t('adminUsuariosVerCalificaciones')");
+        expect(source).toContain("$t('adminUsuariosVerRecomendaciones')");
+    });
 });
