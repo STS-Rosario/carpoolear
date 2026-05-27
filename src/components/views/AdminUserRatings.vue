@@ -15,100 +15,52 @@
                     alt=""
                     class="ajax-loader"
                 />
-                {{ $t('cargandoNotificaciones') }}
+                {{ $t('cargandoCalificaciones') }}
             </div>
             <div v-else-if="profileUser">
                 <h2>
                     {{ profileUser.name }}
                     <small class="text-muted">#{{ profileUser.id }}</small>
                 </h2>
-                <h3>{{ $t('calificaciones') }}</h3>
-                <p v-if="!rates.length" class="alert alert-warning">
-                    {{ $t('noCalificaciones') }}
-                </p>
-                <div
-                    v-for="rate in rates"
-                    :key="rate.id"
-                    class="panel panel-default admin-user-ratings__item"
+
+                <h3>{{ $t('adminUsuariosCalificacionesRecibidas') }}</h3>
+                <p
+                    v-if="!receivedRatings.length"
+                    class="alert alert-warning"
                 >
-                    <div class="panel-body">
-                        <p>
-                            <strong>{{ rate.from?.name || '—' }}</strong>
-                            <span v-if="rate.trip">
-                                — {{ rate.trip.from_town }} →
-                                {{ rate.trip.to_town }}
-                            </span>
-                        </p>
-                        <template v-if="editingId === rate.id">
-                            <div class="form-group">
-                                <label>{{ $t('adminUsuariosCalificacion') }}</label>
-                                <select
-                                    v-model.number="editForm.rating"
-                                    class="form-control"
-                                >
-                                    <option :value="1">
-                                        {{ $t('rateItemPositiva') }}
-                                    </option>
-                                    <option :value="0">
-                                        {{ $t('rateItemNegativa') }}
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>{{ $t('adminUsuariosComentario') }}</label>
-                                <textarea
-                                    v-model="editForm.comment"
-                                    class="form-control"
-                                    rows="3"
-                                ></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label>{{ $t('adminUsuariosRespuesta') }}</label>
-                                <textarea
-                                    v-model="editForm.reply_comment"
-                                    class="form-control"
-                                    rows="2"
-                                ></textarea>
-                            </div>
-                            <button
-                                type="button"
-                                class="btn btn-primary"
-                                :disabled="saving"
-                                @click="saveRating(rate)"
-                            >
-                                {{ $t('adminUsuariosGuardar') }}
-                            </button>
-                            <button
-                                type="button"
-                                class="btn btn-default"
-                                :disabled="saving"
-                                @click="cancelEdit"
-                            >
-                                {{ $t('adminUsuariosCancelar') }}
-                            </button>
-                        </template>
-                        <template v-else>
-                            <p>
-                                <span v-if="rate.rating == 1">
-                                    {{ $t('rateItemPositiva') }}
-                                </span>
-                                <span v-else>{{ $t('rateItemNegativa') }}</span>
-                            </p>
-                            <p v-if="rate.comment">{{ rate.comment }}</p>
-                            <p v-if="rate.reply_comment">
-                                <em>{{ $t('adminUsuariosRespuesta') }}:</em>
-                                {{ rate.reply_comment }}
-                            </p>
-                            <button
-                                type="button"
-                                class="btn btn-default btn-sm"
-                                @click="startEdit(rate)"
-                            >
-                                {{ $t('adminUsuariosEditarFila') }}
-                            </button>
-                        </template>
-                    </div>
-                </div>
+                    {{ $t('adminUsuariosNoCalificacionesRecibidas') }}
+                </p>
+                <AdminRatingCard
+                    v-for="rate in receivedRatings"
+                    :key="'received-' + rate.id"
+                    :rate="rate"
+                    :counterparty="rate.from"
+                    :editing="editingId === rate.id"
+                    :edit-form="editForm"
+                    :saving="saving"
+                    @edit="startEdit(rate)"
+                    @save="saveRating(rate, 'received')"
+                    @cancel="cancelEdit"
+                    @update:edit-form="editForm = $event"
+                />
+
+                <h3>{{ $t('adminUsuariosCalificacionesOtorgadas') }}</h3>
+                <p v-if="!givenRatings.length" class="alert alert-warning">
+                    {{ $t('adminUsuariosNoCalificacionesOtorgadas') }}
+                </p>
+                <AdminRatingCard
+                    v-for="rate in givenRatings"
+                    :key="'given-' + rate.id"
+                    :rate="rate"
+                    :counterparty="rate.to"
+                    :editing="editingId === rate.id"
+                    :edit-form="editForm"
+                    :saving="saving"
+                    @edit="startEdit(rate)"
+                    @save="saveRating(rate, 'given')"
+                    @cancel="cancelEdit"
+                    @update:edit-form="editForm = $event"
+                />
             </div>
         </div>
     </AdminLayout>
@@ -116,20 +68,23 @@
 
 <script>
 import AdminLayout from '../layouts/AdminLayout.vue';
-import { UserApi, RateApi, AdminApi } from '../../services/api';
+import AdminRatingCard from '../elements/AdminRatingCard.vue';
+import { UserApi, AdminApi } from '../../services/api';
 import dialogs from '../../services/dialogs.js';
 
 export default {
     name: 'admin-user-ratings',
     components: {
-        AdminLayout
+        AdminLayout,
+        AdminRatingCard
     },
     data() {
         return {
             loading: true,
             saving: false,
             profileUser: null,
-            rates: [],
+            receivedRatings: [],
+            givenRatings: [],
             editingId: null,
             editForm: {
                 rating: 1,
@@ -137,7 +92,6 @@ export default {
                 reply_comment: ''
             },
             userApi: null,
-            rateApi: null,
             adminApi: null
         };
     },
@@ -164,12 +118,12 @@ export default {
                     if (!this.profileUser) {
                         throw new Error('not found');
                     }
-                    return this.rateApi.index(this.profileUser.id, {
-                        page_size: 200
-                    });
+                    return this.adminApi.getUserRatings(this.profileUser.id);
                 })
                 .then((response) => {
-                    this.rates = response.data || [];
+                    const payload = response.data || {};
+                    this.receivedRatings = payload.received || [];
+                    this.givenRatings = payload.given || [];
                 })
                 .catch(() => {
                     dialogs.message(this.$t('noSeEncontroNingunUsuario'), {
@@ -192,7 +146,13 @@ export default {
         cancelEdit() {
             this.editingId = null;
         },
-        saveRating(rate) {
+        replaceRating(list, rate, updated) {
+            const idx = list.findIndex((r) => r.id === rate.id);
+            if (idx !== -1 && updated) {
+                list.splice(idx, 1, { ...list[idx], ...updated });
+            }
+        },
+        saveRating(rate, section) {
             this.saving = true;
             this.adminApi
                 .updateRating(rate.id, {
@@ -202,12 +162,14 @@ export default {
                 })
                 .then((response) => {
                     const updated = response.data;
-                    const idx = this.rates.findIndex((r) => r.id === rate.id);
-                    if (idx !== -1 && updated) {
-                        this.rates.splice(idx, 1, {
-                            ...this.rates[idx],
-                            ...updated
-                        });
+                    if (section === 'received') {
+                        this.replaceRating(
+                            this.receivedRatings,
+                            rate,
+                            updated
+                        );
+                    } else {
+                        this.replaceRating(this.givenRatings, rate, updated);
                     }
                     this.editingId = null;
                     dialogs.message(this.$t('adminUsuariosEdicionGuardada'), {
@@ -231,7 +193,6 @@ export default {
     },
     mounted() {
         this.userApi = new UserApi();
-        this.rateApi = new RateApi();
         this.adminApi = new AdminApi();
         this.load();
     }
@@ -243,7 +204,8 @@ export default {
     margin-bottom: 12px;
 }
 
-.admin-user-ratings__item {
+.admin-user-ratings h3 {
+    margin-top: 24px;
     margin-bottom: 12px;
 }
 </style>
