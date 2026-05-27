@@ -51,6 +51,10 @@
                     <svgItem icon="no-kids" size="18"></svgItem>
                     {{ $t('noninos') }}
                 </em>
+
+                <em v-if="Number(trip.rear_max_two_passengers) > 0">
+                    {{ $t('atrasViajanSolo2Personas') }}
+                </em>
             </template>
         </div>
     </div>
