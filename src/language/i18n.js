@@ -753,6 +753,7 @@ const messages = {
         calificacionesPendientes: 'Calificaciones pendientes',
         noHayCalificacionesPendientes: 'No hay calificaciones pendientes',
         cargandoCalificaciones: 'Cargando calificaciones',
+        // My-trips page: upcoming/past × driver/passenger section headings
         misProximosViajes: 'Mis próximos viajes como conductor',
         noTenesViajesCreados: 'No tenés viajes creados',
         viajesEstoySubido: 'Mis próximos viajes como pasajero',
