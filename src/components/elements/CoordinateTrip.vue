@@ -380,6 +380,33 @@ export default {
     text-decoration: underline;
     font-weight: bold;
 }
+
+.trip_actions-description {
+    margin: 0.4em 0 0.6em;
+}
+
+.trip_actions-description-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.35em 0.5em;
+    font-size: 12px;
+    color: #337ab7;
+    background: transparent;
+    border: 1px solid #d6e6f3;
+    border-radius: 4px;
+}
+
+.trip_actions-description-content {
+    margin-top: 0.35em;
+    padding: 0.55em 0.65em;
+    font-size: 12px;
+    line-height: 1.35;
+    background-color: #fff;
+    border: 1px solid #ececec;
+    border-radius: 4px;
+}
 @media only screen and (max-width: 768px) {
     .trip_actions {
         padding: 0.4em 0.8em;

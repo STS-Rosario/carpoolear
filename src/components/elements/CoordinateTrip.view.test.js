@@ -5,7 +5,7 @@ import path from 'node:path';
 const viewPath = path.resolve(__dirname, 'CoordinateTrip.vue');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 
-describe('CoordinateTrip.vue contribution warning', () => {
+describe('CoordinateTrip.vue', () => {
     it('renders a collapsed trip description toggle after the trip summary', () => {
         expect(viewSource).toContain("$t('coordinateTripMostrarDescripcionViaje')");
         expect(viewSource).toContain('showTripDescription');
