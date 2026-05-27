@@ -125,7 +125,7 @@ describe('AdminSupportTicketDetail view', () => {
     it('hides reply composer when ticket is resolved or closed', () => {
         expect(viewSource).toContain('v-if="showReplyForm"');
         expect(viewSource).toContain('isTicketResolved');
-        expect(viewSource).toContain("return this.ticket && !this.isTicketClosed && !this.isTicketResolved");
+        expect(viewSource).toContain('return this.ticket && !this.isTicketClosed && !this.isTicketResolved');
     });
 
     it('toggles resolve and unresolve actions', () => {
