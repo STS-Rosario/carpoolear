@@ -122,6 +122,21 @@ describe('AdminSupportTicketDetail view', () => {
         expect(viewSource).toContain("dialogs.message(this.$t('errorMarcandoResuelto')");
     });
 
+    it('hides reply composer when ticket is resolved or closed', () => {
+        expect(viewSource).toContain('v-if="showReplyForm"');
+        expect(viewSource).toContain('isTicketResolved');
+        expect(viewSource).toContain("return this.ticket && !this.isTicketClosed && !this.isTicketResolved");
+    });
+
+    it('toggles resolve and unresolve actions', () => {
+        expect(viewSource).toContain('showResolveTicketButton');
+        expect(viewSource).toContain('showUnresolveTicketButton');
+        expect(viewSource).toContain('unresolveTicket');
+        expect(viewSource).toContain('adminUnresolve');
+        expect(viewSource).toContain("{{ $t('marcarComoNoResuelto') }}");
+        expect(viewSource).toContain('ticketMarcadoNoResuelto');
+    });
+
     it('shows success and error snackbars when closing a ticket', () => {
         expect(viewSource).toContain('ticketCerrado');
         expect(viewSource).toContain('errorCerrandoTicket');

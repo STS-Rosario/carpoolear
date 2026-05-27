@@ -64,6 +64,18 @@ describe('TicketDetail user view', () => {
         expect(viewSource).toContain('reply-to-ticket-title');
     });
 
+    it('hides reply composer when ticket is resolved or closed', () => {
+        expect(viewSource).toContain('v-if="showReplyForm"');
+        expect(viewSource).toContain("!['Resuelto', 'Cerrado'].includes(this.ticket.status)");
+    });
+
+    it('shows close ticket only while under review, not when resolved or closed', () => {
+        expect(viewSource).toContain('showUserCloseButton');
+        expect(viewSource).toContain("this.ticket.status === 'En revision'");
+        expect(viewSource).not.toContain("['Resuelto', 'En revision']");
+        expect(viewSource).not.toContain('v-else-if="showUserCloseButton"');
+    });
+
     it('shows relative message date with tooltip containing full timestamp', () => {
         expect(viewSource).toContain('relativeDate(reply.created_at)');
         expect(viewSource).toContain(':title="fullDate(reply.created_at)"');

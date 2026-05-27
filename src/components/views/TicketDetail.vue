@@ -20,10 +20,20 @@
                     <small class="reply-meta-date" :title="fullDate(reply.created_at)">{{ relativeDate(reply.created_at) }}</small>
                 </p>
                 <div v-html="markdownToHtml(reply.message_markdown)"></div>
+                <div v-if="reply.attachments && reply.attachments.length" class="reply-attachments">
+                    <img
+                        v-for="attachment in reply.attachments"
+                        v-show="attachmentBlobUrls[attachment.id]"
+                        :key="attachment.id"
+                        :src="attachmentBlobUrls[attachment.id]"
+                        class="img-thumbnail ticket-attachment-thumb"
+                        :alt="attachment.original_name"
+                    />
+                </div>
             </div>
         </div>
 
-        <div class="panel panel-default">
+        <div v-if="showReplyForm" class="panel panel-default">
             <div class="panel-body">
                 <h4 class="reply-to-ticket-title">{{ $t('responderAlTicketDeSoporte') }}</h4>
                 <editor
@@ -41,7 +51,7 @@
                     {{ replySubmitting ? $t('enviando') : $t('responder') }}
                 </button>
                 <button
-                    v-if="['Resuelto', 'En revision'].includes(ticket.status)"
+                    v-if="showUserCloseButton"
                     class="btn btn-default mleft-10"
                     @click="closeTicket"
                 >
@@ -58,6 +68,7 @@ import ToastUiEditor from '../elements/ToastUiEditor.vue';
 import { useTicketsStore } from '../../stores/tickets';
 import { ticketReplyBodyAlreadyUsed, isDuplicateReplyApiError } from '../../utils/supportTicketReplyDuplicate';
 import { markdownToHtml } from '../../services/markdown';
+import { fetchSupportTicketAttachmentBlob } from '../../utils/supportTicketAttachmentImage';
 import dialogs from '../../services/dialogs';
 import dayjs from '../../dayjs';
 import {
@@ -74,6 +85,7 @@ export default {
     data() {
         return {
             ticket: null,
+            attachmentBlobUrls: {},
             attachments: [],
             editorOptions: {
                 usageStatistics: false,
@@ -87,6 +99,13 @@ export default {
     computed: {
         backToTicketsRoute() {
             return { name: 'tickets' };
+        },
+        showReplyForm() {
+            return this.ticket
+                && !['Resuelto', 'Cerrado'].includes(this.ticket.status);
+        },
+        showUserCloseButton() {
+            return this.ticket && this.ticket.status === 'En revision';
         }
     },
     methods: {
@@ -125,6 +144,27 @@ export default {
         refresh() {
             return this.fetchOne(this.id).then((data) => {
                 this.ticket = data;
+                this.loadReplyAttachmentUrls();
+            });
+        },
+        revokeAttachmentBlobUrls() {
+            Object.values(this.attachmentBlobUrls).forEach((url) => {
+                if (url) URL.revokeObjectURL(url);
+            });
+            this.attachmentBlobUrls = {};
+        },
+        loadReplyAttachmentUrls() {
+            if (!this.ticket || !this.ticket.id) return;
+            this.revokeAttachmentBlobUrls();
+            const ticketId = this.ticket.id;
+            (this.ticket.replies || []).forEach((reply) => {
+                (reply.attachments || []).forEach((attachment) => {
+                    fetchSupportTicketAttachmentBlob(ticketId, attachment.id, { admin: false })
+                        .then((blob) => {
+                            this.attachmentBlobUrls[attachment.id] = URL.createObjectURL(blob);
+                        })
+                        .catch(() => {});
+                });
             });
         },
         sendReply() {
@@ -184,6 +224,9 @@ export default {
     },
     mounted() {
         this.refresh();
+    },
+    beforeUnmount() {
+        this.revokeAttachmentBlobUrls();
     }
 };
 </script>
@@ -207,5 +250,17 @@ export default {
 .reply-to-ticket-title {
     margin-top: 0;
     margin-bottom: 12px;
+}
+
+.reply-attachments {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.ticket-attachment-thumb {
+    max-width: 160px;
+    max-height: 160px;
 }
 </style>

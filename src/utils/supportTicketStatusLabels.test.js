@@ -11,4 +11,9 @@ describe('supportTicketStatusLabels', () => {
         expect(USER_TICKET_STATUS_LABEL_KEYS['Necesita revisión']).toBe('estadoNecesitaRevision');
         expect(TICKET_STATUS_CLASS_MAP['Necesita revisión']).toBe('label label-danger');
     });
+
+    it('maps resolved status to estadoResuelto not identity approval copy', () => {
+        expect(TICKET_STATUS_LABEL_KEYS.Resuelto).toBe('estadoResuelto');
+        expect(USER_TICKET_STATUS_LABEL_KEYS.Resuelto).toBe('estadoResuelto');
+    });
 });

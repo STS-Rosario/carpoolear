@@ -4,7 +4,7 @@ export const TICKET_STATUS_LABEL_KEYS = {
     'Esperando respuesta': 'esperaUsuarioResponda',
     'En revision': 'estadoPendienteRevision',
     'Necesita revisión': 'estadoNecesitaRevision',
-    Resuelto: 'estadoAprobado',
+    Resuelto: 'estadoResuelto',
     Cerrado: 'estadoCerrado'
 };
 
