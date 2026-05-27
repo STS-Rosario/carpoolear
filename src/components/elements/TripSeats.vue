@@ -5,41 +5,62 @@
     >
         <div class="row" v-if="tripCardTheme !== 'light'">
             <div
-                class="trip_seats-available col-xs-offset-4 col-sm-offset-4 col-xs-12"
+                class="trip_seats-available col-xs-offset-2 col-sm-offset-4 col-xs-24"
             >
-                <span class="trip_seats-available_value pull-left">{{
-                    trip.seats_available
-                }}</span>
-                <span v-if="trip.seats_available == 1" 
-                    class="trip_seats-available_label"
-                >
-                    {{ $t('Lugar') }}
-                    <br />
-                    {{ $t('libre') }}
-                </span>
-                <span v-if="trip.seats_available > 1" 
-                    class="trip_seats-available_label"
-                >
-                    {{ $t('Lugares') }}
-                    <br />
-                    {{ $t('libres') }}
-                </span>            
+                <div class="trip-seats__availability">
+                    <span class="trip_seats-available_value">{{
+                        trip.seats_available
+                    }}</span>
+                    <span
+                        v-if="trip.seats_available == 1"
+                        class="trip_seats-available_label"
+                    >
+                        {{ $t('Lugar') }}
+                        <br />
+                        {{ $t('libre') }}
+                    </span>
+                    <span
+                        v-if="trip.seats_available > 1"
+                        class="trip_seats-available_label"
+                    >
+                        {{ $t('Lugares') }}
+                        <br />
+                        {{ $t('libres') }}
+                    </span>
+                    <span
+                        v-if="Number(trip.rear_max_two_passengers) > 0"
+                        class="trip-seats__rear-comfort-note label-soft"
+                    >
+                        {{ $t('atrasViajanSolo2Personas') }}
+                    </span>
+                </div>
             </div>
         </div>
         <div v-if="tripCardTheme !== 'light'" style="height: 2em"></div>
         <template v-else>
-            <div class="trip_seats-available" v-if="!trip.is_passenger">
-                <template v-for="n in trip.total_seats">
+            <div
+                class="trip_seats-available"
+                v-if="!trip.is_passenger"
+            >
+                <div class="trip-seats__availability">
+                    <template v-for="n in trip.total_seats">
+                        <span
+                            :class="
+                                n < trip.total_seats - trip.seats_available
+                                    ? 'seat-taken'
+                                    : 'seat-free'
+                            "
+                        >
+                            <svg-item :icon="'seat'" :size="18"></svg-item>
+                        </span>
+                    </template>
                     <span
-                        :class="
-                            n < trip.total_seats - trip.seats_available
-                                ? 'seat-taken'
-                                : 'seat-free'
-                        "
+                        v-if="Number(trip.rear_max_two_passengers) > 0"
+                        class="trip-seats__rear-comfort-note label-soft"
                     >
-                        <svg-item :icon="'seat'" :size="18"></svg-item>
+                        {{ $t('atrasViajanSolo2Personas') }}
                     </span>
-                </template>
+                </div>
             </div>
         </template>
     </div>
@@ -64,3 +85,28 @@ export default {
     }
 };
 </script>
+<style scoped>
+.trip-seats__availability {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.trip-seats__availability .trip_seats-available_value {
+    float: none;
+    flex-shrink: 0;
+}
+
+.trip-seats__availability .trip_seats-available_label {
+    flex-shrink: 0;
+}
+
+.trip-seats__rear-comfort-note {
+    font-size: 0.9em;
+    line-height: 1.2;
+    text-transform: none;
+    min-width: 0;
+    margin-left: 1rem;
+}
+</style>
