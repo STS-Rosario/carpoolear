@@ -65,6 +65,7 @@ const STATUS_LABEL_KEYS = {
     Open: 'estadoPendiente',
     'Esperando respuesta': 'ticketEstadoEsperandoTuRespuesta',
     'En revision': 'estadoPendienteRevision',
+    'Necesita revisión': 'estadoNecesitaRevision',
     Resuelto: 'estadoAprobado',
     Cerrado: 'estadoCerrado'
 };
@@ -73,7 +74,8 @@ const STATUS_CLASS_MAP = {
     Cerrado: 'label label-default',
     Resuelto: 'label label-success',
     'Esperando respuesta': 'label label-warning',
-    'En revision': 'label label-info'
+    'En revision': 'label label-info',
+    'Necesita revisión': 'label label-danger'
 };
 
 const SUCCESS_TOAST_OPTIONS = { estado: 'success', duration: 2 };

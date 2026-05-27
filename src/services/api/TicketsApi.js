@@ -52,6 +52,10 @@ class TicketsApi extends TaggedApi {
         return this.post('/api/admin/support/tickets/' + id + '/reopen', {});
     }
 
+    adminMarkNeedsReview(id, data = {}) {
+        return this.post('/api/admin/support/tickets/' + id + '/needs-review', data);
+    }
+
     adminSetPriority(id, priority) {
         return this.put('/api/admin/support/tickets/' + id + '/priority', { priority });
     }

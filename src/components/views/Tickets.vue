@@ -52,6 +52,7 @@ const STATUS_LABEL_KEYS = {
     Open: 'estadoPendiente',
     'Esperando respuesta': 'ticketEstadoEsperandoTuRespuesta',
     'En revision': 'estadoPendienteRevision',
+    'Necesita revisión': 'estadoNecesitaRevision',
     Resuelto: 'estadoAprobado',
     Cerrado: 'estadoCerrado'
 };

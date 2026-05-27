@@ -72,6 +72,7 @@ const STATUS_LABEL_KEYS = {
     Open: 'estadoPendiente',
     'Esperando respuesta': 'esperaUsuarioResponda',
     'En revision': 'estadoPendienteRevision',
+    'Necesita revisión': 'estadoNecesitaRevision',
     Resuelto: 'estadoAprobado',
     Cerrado: 'estadoCerrado'
 };
@@ -126,7 +127,8 @@ export default {
                 Cerrado: 'label label-default',
                 Resuelto: 'label label-success',
                 'Esperando respuesta': 'label label-warning',
-                'En revision': 'label label-info'
+                'En revision': 'label label-info',
+                'Necesita revisión': 'label label-danger'
             }[status] || 'label label-primary';
         },
         priorityLabel(priority) {

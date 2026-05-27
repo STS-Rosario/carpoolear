@@ -68,6 +68,13 @@
                     </button>
                 </div>
                 <div class="reply-actions-right">
+                    <button
+                        v-if="showMarkNeedsReviewButton"
+                        class="btn btn-default reply-action-btn"
+                        @click="markNeedsReviewTicket"
+                    >
+                        {{ $t('marcarNecesitaRevision') }}
+                    </button>
                     <button class="btn btn-default reply-action-btn" @click="resolveTicket">{{ $t('marcarResuelto') }}</button>
                     <button v-if="showCloseTicketButton" class="btn btn-default reply-action-btn" @click="closeTicket">{{ $t('cerrarTicket') }}</button>
                     <button v-if="showReopenTicketButton" class="btn btn-default reply-action-btn" @click="reopenTicket">{{ $t('reabrirTicket') }}</button>
@@ -140,6 +147,7 @@ const STATUS_LABEL_KEYS = {
     Open: 'estadoPendiente',
     'Esperando respuesta': 'esperaUsuarioResponda',
     'En revision': 'estadoPendienteRevision',
+    'Necesita revisión': 'estadoNecesitaRevision',
     Resuelto: 'estadoAprobado',
     Cerrado: 'estadoCerrado'
 };
@@ -148,7 +156,8 @@ const STATUS_CLASS_MAP = {
     Cerrado: 'label label-default',
     Resuelto: 'label label-success',
     'Esperando respuesta': 'label label-warning',
-    'En revision': 'label label-info'
+    'En revision': 'label label-info',
+    'Necesita revisión': 'label label-danger'
 };
 
 const PRIORITY_LABEL_KEYS = {
@@ -216,6 +225,11 @@ export default {
         },
         showCloseTicketButton() {
             return this.ticket && !this.isTicketClosed;
+        },
+        showMarkNeedsReviewButton() {
+            return this.ticket
+                && !this.isTicketClosed
+                && this.ticket.status !== 'Necesita revisión';
         }
     },
     methods: {
@@ -226,6 +240,7 @@ export default {
             adminResolve: 'adminResolve',
             adminClose: 'adminClose',
             adminReopen: 'adminReopen',
+            adminMarkNeedsReview: 'adminMarkNeedsReview',
             adminSetInternalNote: 'adminSetInternalNote'
         }),
         ...mapActions(useReplyTemplatesStore, {
@@ -393,6 +408,24 @@ export default {
                 })
                 .catch(() => {
                     dialogs.message(this.$t('errorReabriendoTicket'), ERROR_TOAST_OPTIONS);
+                });
+        },
+        markNeedsReviewTicket() {
+            if (!window.confirm(this.$t('confirmarMarcarNecesitaRevision'))) {
+                return;
+            }
+            const markdown = this.$refs.replyEditor.invoke('getMarkdown');
+            const messageMarkdown = interpolateSupportTemplateVariables(markdown, this.ticketUserForTemplates);
+            const payload = messageMarkdown.trim()
+                ? { message_markdown: messageMarkdown }
+                : {};
+            this.adminMarkNeedsReview(this.id, payload)
+                .then(() => this.refresh())
+                .then(() => {
+                    dialogs.message(this.$t('ticketMarcadoNecesitaRevision'), SUCCESS_TOAST_OPTIONS);
+                })
+                .catch(() => {
+                    dialogs.message(this.$t('errorMarcandoNecesitaRevision'), ERROR_TOAST_OPTIONS);
                 });
         },
         saveInternalNote() {
