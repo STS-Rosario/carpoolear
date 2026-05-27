@@ -30,4 +30,16 @@ describe('NewTrip.vue rear seat comfort preference', () => {
             /rear_max_two_passengers:\s*false/
         );
     });
+
+    it('normalizes rear seat preference for API and supports return trips', () => {
+        expect(viewSource).toMatch(
+            /normalizeAllowFlagsForApi\(trip\)[\s\S]*?trip\.rear_max_two_passengers = trip\.rear_max_two_passengers \? 1 : 0/s
+        );
+        expect(viewSource).toMatch(
+            /otherTrip\.trip\.rear_max_two_passengers/
+        );
+        expect(viewSource).toMatch(
+            /class="trip_seats-available"[\s\S]*?class="trip-comfort-preference"[\s\S]*?otherTrip-comfort-rear-max-two/s
+        );
+    });
 });
