@@ -14,6 +14,20 @@ describe('AdminApi user migrations', () => {
     });
 });
 
+describe('AdminApi user ratings and references', () => {
+    it('patches admin rating and reference endpoints', () => {
+        expect(apiSource).toContain('updateRating');
+        expect(apiSource).toContain("'/api/admin/ratings/' + ratingId");
+        expect(apiSource).toContain('updateReference');
+        expect(apiSource).toContain("'/api/admin/references/' + referenceId");
+    });
+
+    it('fetches received and given ratings for a user', () => {
+        expect(apiSource).toContain('getUserRatings');
+        expect(apiSource).toContain("'/api/admin/users/' + userId + '/ratings'");
+    });
+});
+
 describe('AdminApi manual identity validations private note', () => {
     it('posts private admin note to manual identity validation endpoint', () => {
         expect(apiSource).toContain('updateManualIdentityValidationPrivateNote');

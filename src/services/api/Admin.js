@@ -158,6 +158,18 @@ class AdminApi extends TaggedApi {
     getMaintenanceAuditLogs() {
         return this.get('/api/admin/maintenance/audit-logs');
     }
+
+    getUserRatings(userId) {
+        return this.get('/api/admin/users/' + userId + '/ratings');
+    }
+
+    updateRating(ratingId, data) {
+        return this.patch('/api/admin/ratings/' + ratingId, data);
+    }
+
+    updateReference(referenceId, data) {
+        return this.patch('/api/admin/references/' + referenceId, data);
+    }
 }
 
 export { AdminApi as default };

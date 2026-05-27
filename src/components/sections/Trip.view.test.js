@@ -12,3 +12,22 @@ describe('Trip card quick actions', () => {
         expect(source).not.toContain('detail_trip_location');
     });
 });
+
+describe('Trip clickModal', () => {
+    it('opens modal from the trip card only, not the modal wrapper', () => {
+        const wrapperOpen = source.match(
+            /:class="\[tripCardCountClass, \{ 'trip-needs-sellado': trip\.needs_sellado \}\]"\s*\n\s*v-on:click="clickModal/
+        );
+        expect(wrapperOpen).toBeNull();
+
+        expect(source).toMatch(
+            /class="trip"[\s\S]*?v-on:click="clickModal \? openModal\(\) : goToDetail\(false\)"/
+        );
+    });
+
+    it('stops click propagation on trip display so dismiss does not reopen', () => {
+        expect(source).toMatch(
+            /<tripDisplay[\s\S]*@click\.stop/
+        );
+    });
+});

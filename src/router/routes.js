@@ -27,6 +27,10 @@ const AdminMaintenance = () => import('../components/views/AdminMaintenance.vue'
 const UsersCrud = () => import('../components/views/UsersCrud.vue');
 const AdminUsersList = () => import('../components/views/AdminUsersList.vue');
 const AdminUserDetail = () => import('../components/views/AdminUserDetail.vue');
+const AdminUserTrips = () => import('../components/views/AdminUserTrips.vue');
+const AdminUserRatings = () => import('../components/views/AdminUserRatings.vue');
+const AdminUserRecommendations = () =>
+    import('../components/views/AdminUserRecommendations.vue');
 const AdminTrips = () => import('../components/views/AdminTrips.vue');
 const UsersDeleteList = () => import('../components/views/UsersDeleteList.vue');
 const BannedUsersList = () => import('../components/views/BannedUsersList.vue');
@@ -604,6 +608,60 @@ export default [
                 header: {
                     titleKey: 'adminMaintenanceTitle',
                     buttons: []
+                }
+            }
+        }
+    },
+    {
+        path: '/admin/users/:userId([0-9]+)/trips',
+        name: 'admin-users-trips',
+        component: AdminUserTrips,
+        beforeEnter: authAdmin,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'admin'
+                },
+                header: {
+                    titleKey: 'adminUsuariosVerViajes',
+                    buttons: ['back']
+                }
+            }
+        }
+    },
+    {
+        path: '/admin/users/:userId([0-9]+)/ratings',
+        name: 'admin-users-ratings',
+        component: AdminUserRatings,
+        beforeEnter: authAdmin,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'admin'
+                },
+                header: {
+                    titleKey: 'adminUsuariosVerCalificaciones',
+                    buttons: ['back']
+                }
+            }
+        }
+    },
+    {
+        path: '/admin/users/:userId([0-9]+)/recommendations',
+        name: 'admin-users-recommendations',
+        component: AdminUserRecommendations,
+        beforeEnter: authAdmin,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'admin'
+                },
+                header: {
+                    titleKey: 'adminUsuariosVerReferencias',
+                    buttons: ['back']
                 }
             }
         }
