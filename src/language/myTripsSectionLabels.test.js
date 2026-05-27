@@ -4,22 +4,22 @@ import messages from './i18n';
 /** My-trips / profile-trip section headings (upcoming vs past, driver vs passenger). */
 const SECTION_LABELS_BY_LOCALE = {
     arg: {
-        misProximosViajes: 'Mis próximos viajes como conductor',
-        viajesEstoySubido: 'Mis próximos viajes como pasajero',
-        misViajesPasados: 'Mis viajes pasados como conductor',
-        viajesMeSubi: 'Mis viajes pasados como pasajero'
+        misProximosViajes: 'Próximos viajes como conductor',
+        viajesEstoySubido: 'Próximos viajes como pasajero',
+        misViajesPasados: 'Viajes pasados como conductor',
+        viajesMeSubi: 'Viajes pasados como pasajero'
     },
     chl: {
-        misProximosViajes: 'Mis próximos viajes como conductor',
-        viajesEstoySubido: 'Mis próximos viajes como pasajero',
-        misViajesPasados: 'Mis viajes pasados como conductor',
-        viajesMeSubi: 'Mis viajes pasados como pasajero'
+        misProximosViajes: 'Próximos viajes como conductor',
+        viajesEstoySubido: 'Próximos viajes como pasajero',
+        misViajesPasados: 'Viajes pasados como conductor',
+        viajesMeSubi: 'Viajes pasados como pasajero'
     },
     en: {
-        misProximosViajes: 'My upcoming trips as driver',
-        viajesEstoySubido: 'My upcoming trips as passenger',
-        misViajesPasados: 'My past trips as driver',
-        viajesMeSubi: 'My past trips as passenger'
+        misProximosViajes: 'Upcoming trips as driver',
+        viajesEstoySubido: 'Upcoming trips as passenger',
+        misViajesPasados: 'Past trips as driver',
+        viajesMeSubi: 'Past trips as passenger'
     }
 };
 
