@@ -48,11 +48,12 @@ export default {
     data() {
         return {
             form: {
-                type: 'bug_report',
+                type: 'account_recovery',
                 subject: ''
             },
             attachments: [],
             ticketTypeOptions: [
+                { value: 'account_recovery', labelKey: 'ticketTypeAccountRecovery' },
                 { value: 'bug_report', labelKey: 'ticketTypeBug' },
                 { value: 'contact', labelKey: 'ticketTypeContact' },
                 { value: 'feedback', labelKey: 'ticketTypeSuggestion' },
@@ -85,7 +86,7 @@ export default {
             }).catch(() => dialogs.message(this.$t('errorDatos'), { estado: 'error' }));
         },
         setTypeFromUrl() {
-            const allowed = ['bug_report', 'contact', 'feedback', 'report', 'account_verification'];
+            const allowed = ['account_recovery', 'bug_report', 'contact', 'feedback', 'report', 'account_verification'];
             const category = this.$route.query.category;
             if (allowed.includes(category)) {
                 this.form.type = category;

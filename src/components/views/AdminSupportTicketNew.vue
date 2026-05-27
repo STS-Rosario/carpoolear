@@ -26,6 +26,7 @@
                 <div class="form-group">
                     <label>{{ $t('categoriaTicket') }}</label>
                     <select v-model="createForm.type" class="form-control">
+                        <option value="account_recovery">{{ $t('ticketTypeAccountRecovery') }}</option>
                         <option value="account_verification">{{ $t('ticketTypeAccountVerification') }}</option>
                         <option value="bug_report">{{ $t('ticketTypeBug') }}</option>
                         <option value="contact">{{ $t('ticketTypeContact') }}</option>

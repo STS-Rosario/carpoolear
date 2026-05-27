@@ -7,8 +7,7 @@ const source = fs.readFileSync(viewPath, 'utf8');
 
 describe('TicketNew view', () => {
     it('defaults ticket type to account recovery', () => {
-        expect(source).toContain("type: 'account_recovery'");
-        expect(source).not.toMatch(/type:\s*'bug_report'/);
+        expect(source).toMatch(/form:\s*\{[\s\S]*?type:\s*'account_recovery'/);
     });
 
     it('includes account recovery in category options and URL prefill', () => {
