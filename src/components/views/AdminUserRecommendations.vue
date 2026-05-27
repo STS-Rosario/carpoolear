@@ -26,55 +26,19 @@
                 <p v-if="!references.length" class="alert alert-warning">
                     {{ $t('noReferences') }}
                 </p>
-                <div
+                <AdminReferenceCard
                     v-for="reference in references"
                     :key="reference.id"
-                    class="panel panel-default admin-user-recommendations__item"
-                >
-                    <div class="panel-body">
-                        <p>
-                            <strong>{{
-                                reference.from?.name || reference.user_id_from
-                            }}</strong>
-                        </p>
-                        <template v-if="editingId === reference.id">
-                            <div class="form-group">
-                                <label>{{ $t('adminUsuariosComentario') }}</label>
-                                <textarea
-                                    v-model="editComment"
-                                    class="form-control"
-                                    rows="4"
-                                ></textarea>
-                            </div>
-                            <button
-                                type="button"
-                                class="btn btn-primary"
-                                :disabled="saving"
-                                @click="saveReference(reference)"
-                            >
-                                {{ $t('adminUsuariosGuardar') }}
-                            </button>
-                            <button
-                                type="button"
-                                class="btn btn-default"
-                                :disabled="saving"
-                                @click="cancelEdit"
-                            >
-                                {{ $t('adminUsuariosCancelar') }}
-                            </button>
-                        </template>
-                        <template v-else>
-                            <p>{{ reference.comment }}</p>
-                            <button
-                                type="button"
-                                class="btn btn-default btn-sm"
-                                @click="startEdit(reference)"
-                            >
-                                {{ $t('adminUsuariosEditarFila') }}
-                            </button>
-                        </template>
-                    </div>
-                </div>
+                    :reference="reference"
+                    :author="referenceAuthor(reference)"
+                    :editing="editingId === reference.id"
+                    :edit-comment="editComment"
+                    :saving="saving"
+                    @edit="startEdit(reference)"
+                    @save="saveReference(reference)"
+                    @cancel="cancelEdit"
+                    @update:edit-comment="editComment = $event"
+                />
             </div>
         </div>
     </AdminLayout>
@@ -82,13 +46,15 @@
 
 <script>
 import AdminLayout from '../layouts/AdminLayout.vue';
+import AdminReferenceCard from '../elements/AdminReferenceCard.vue';
 import { UserApi, AdminApi } from '../../services/api';
 import dialogs from '../../services/dialogs.js';
 
 export default {
     name: 'admin-user-recommendations',
     components: {
-        AdminLayout
+        AdminLayout,
+        AdminReferenceCard
     },
     data() {
         return {
@@ -113,6 +79,16 @@ export default {
         }
     },
     methods: {
+        referenceAuthor(reference) {
+            const from = reference.from;
+            if (from && from.id) {
+                return from;
+            }
+            if (reference.user_id_from) {
+                return { id: reference.user_id_from, name: '#' + reference.user_id_from };
+            }
+            return null;
+        },
         load() {
             const userId = this.$route.params.userId;
             if (!userId) {
@@ -195,6 +171,6 @@ export default {
 }
 
 .admin-user-recommendations__item {
-    margin-bottom: 12px;
+    margin-bottom: 6px;
 }
 </style>
