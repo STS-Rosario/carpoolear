@@ -110,6 +110,56 @@ test.describe('Trip detail page', () => {
     await expect(page.getByText('Carpooleado')).toBeVisible({ timeout: 15000 });
   });
 
+  test('shows seat requests warning link for driver with pending requests', async ({
+    page,
+  }) => {
+    await freezeClock(page);
+    await setupCatchAllMock(page);
+    await setupCommonMocks(page);
+    await setupAuthState(page);
+
+    const ownTripWithRequests = makeMockTrip(TRIP_ID, {
+      user: { ...MOCK_USER, positive_ratings: 5, negative_ratings: 0 },
+      passengerPending_count: 2,
+      seats_available: 3,
+    });
+    await setupTripRoute(page, ownTripWithRequests);
+
+    await page.goto(`/trips/${TRIP_ID}`);
+    await waitForPageReady(page);
+
+    const warningLink = page.getByRole('link', {
+      name: 'Tenés pedidos de asiento de pasajeros para este viaje, revisalos en Tus Viajes',
+    });
+    await expect(warningLink).toBeVisible({ timeout: 15000 });
+    await expect(warningLink).toHaveAttribute('href', '/my-trips');
+  });
+
+  test('does not show seat requests warning when driver has no pending requests', async ({
+    page,
+  }) => {
+    await freezeClock(page);
+    await setupCatchAllMock(page);
+    await setupCommonMocks(page);
+    await setupAuthState(page);
+
+    const ownTripWithoutRequests = makeMockTrip(TRIP_ID, {
+      user: { ...MOCK_USER, positive_ratings: 5, negative_ratings: 0 },
+      passengerPending_count: 0,
+      seats_available: 3,
+    });
+    await setupTripRoute(page, ownTripWithoutRequests);
+
+    await page.goto(`/trips/${TRIP_ID}`);
+    await waitForPageReady(page);
+
+    await expect(
+      page.getByRole('link', {
+        name: 'Tenés pedidos de asiento de pasajeros para este viaje, revisalos en Tus Viajes',
+      })
+    ).toHaveCount(0);
+  });
+
   test('renders passenger list with multiple passengers', async ({ page }) => {
     await freezeClock(page);
     await setupCatchAllMock(page);
