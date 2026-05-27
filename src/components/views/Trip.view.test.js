@@ -13,6 +13,8 @@ describe('Trip.vue driver seat requests warning', () => {
             /class="alert alert-warning trip-seat-requests-warning"[\s\S]*?name: 'my-trips'/s
         );
         expect(viewSource).toContain('passengerPending_count');
+        expect(viewSource).toContain('fa-exclamation-triangle');
+        expect(viewSource).toContain('trip-seat-requests-warning__icon');
         expect(viewSource).toContain('.trip-seat-requests-warning a');
     });
 });

@@ -22,6 +22,10 @@
                     role="alert"
                     v-if="showSeatRequestsWarning"
                 >
+                    <i
+                        class="fa fa-exclamation-triangle trip-seat-requests-warning__icon"
+                        aria-hidden="true"
+                    ></i>
                     <router-link :to="{ name: 'my-trips' }">
                         {{ $t('tripSeatRequestsDriverWarning') }}
                     </router-link>
@@ -1069,7 +1073,15 @@ export default {
 
 <style scoped>
 .trip-seat-requests-warning {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
     margin: 1rem 0;
+}
+.trip-seat-requests-warning__icon {
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+    font-size: 1.15em;
 }
 .trip-seat-requests-warning a {
     color: inherit;
