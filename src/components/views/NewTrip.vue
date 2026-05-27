@@ -504,6 +504,25 @@
                                 </span>
                             </div>
                             <div
+                                class="trip-comfort-preference"
+                                v-if="trip.is_passenger == 0"
+                            >
+                                <legend class="label-for-group">
+                                    {{ $t('priorizarComodidad') }}
+                                </legend>
+                                <label
+                                    for="newtrip-comfort-rear-max-two"
+                                    class="label-soft trip-comfort-preference__label"
+                                >
+                                    <input
+                                        type="checkbox"
+                                        id="newtrip-comfort-rear-max-two"
+                                        v-model="trip.rear_max_two_passengers"
+                                    />
+                                    {{ $t('atrasViajanSolo2Personas') }}
+                                </label>
+                            </div>
+                            <div
                                 class="trip_price"
                                 v-if="trip.is_passenger == 0 && !config.module_max_price_enabled && config.module_seat_price_enabled"
                             >
@@ -1455,6 +1474,27 @@
                                     {{ otherTrip.seatsError.message }}
                                 </span>
                             </div>
+                            <div
+                                class="trip-comfort-preference"
+                                v-if="otherTrip.trip.is_passenger == 0"
+                            >
+                                <legend class="label-for-group">
+                                    {{ $t('priorizarComodidad') }}
+                                </legend>
+                                <label
+                                    for="otherTrip-comfort-rear-max-two"
+                                    class="label-soft trip-comfort-preference__label"
+                                >
+                                    <input
+                                        type="checkbox"
+                                        id="otherTrip-comfort-rear-max-two"
+                                        v-model="
+                                            otherTrip.trip.rear_max_two_passengers
+                                        "
+                                    />
+                                    {{ $t('atrasViajanSolo2Personas') }}
+                                </label>
+                            </div>
                             <div class="trip-comment">
                                 <label
                                     for="otherTrip-trip_comment"
@@ -1921,6 +1961,7 @@ export default {
                 allow_kids: false,
                 allow_smoking: false,
                 allow_animals: false,
+                rear_max_two_passengers: false,
                 car_id: null,
                 enc_path: '123',
                 seat_price_cents: null,
@@ -1978,6 +2019,7 @@ export default {
                     allow_kids: false,
                     allow_smoking: false,
                     allow_animals: false,
+                    rear_max_two_passengers: false,
                     seat_price_cents: null,
                     points: [] /* address json_address lat lng */
                 }
@@ -2210,6 +2252,7 @@ export default {
             trip.allow_kids = trip.allow_kids ? 1 : 0;
             trip.allow_animals = trip.allow_animals ? 1 : 0;
             trip.allow_smoking = trip.allow_smoking ? 1 : 0;
+            trip.rear_max_two_passengers = trip.rear_max_two_passengers ? 1 : 0;
         },
         setIsPassenger(value) {
             this.trip.is_passenger = value;
@@ -2289,6 +2332,7 @@ export default {
         this.trip.allow_kids = Number(trip.allow_kids) > 0;
         this.trip.allow_animals = Number(trip.allow_animals) > 0;
         this.trip.allow_smoking = Number(trip.allow_smoking) > 0;
+        this.trip.rear_max_two_passengers = Number(trip.rear_max_two_passengers) > 0;
         
         this.trip.seat_price_cents = trip.seat_price_cents;
         const restoredPrice =
@@ -3134,6 +3178,19 @@ hr {
 .show-return-trip {
     margin-top: 1em;
 }
+
+.trip-comfort-preference {
+    margin: 0.5rem 0;
+}
+
+.trip-comfort-preference__label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    margin: 0;
+    font-weight: normal;
+}
+
 .preferences-text {
     font-size: 0.8em;
 }

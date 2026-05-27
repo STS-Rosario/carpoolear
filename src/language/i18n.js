@@ -212,6 +212,8 @@ const messages = {
         dia: 'Día',
         hora: 'Hora',
         lugaresDisponibles: 'Lugares disponibles',
+        priorizarComodidad: 'Priorizá la comodidad',
+        atrasViajanSolo2Personas: 'Atrás viajan sólo 2 personas',
         cuposNecesarios: 'Cuantos cupos necesitas',
         comentarioPasajeros: 'Detalles extra del viaje',
         placeholderComentarioPasajeros:
@@ -1493,6 +1495,8 @@ const messages = {
         dia: 'Día',
         hora: 'Hora',
         lugaresDisponibles: 'Lugares disponibles',
+        priorizarComodidad: 'Priorizá la comodidad',
+        atrasViajanSolo2Personas: 'Atrás viajan sólo 2 personas',
         cuposNecesarios: 'Cuantos cupos necesitas',
         comentarioPasajeros: 'Detalles extra del viaje',
         placeholderComentarioPasajeros:
@@ -2540,6 +2544,8 @@ const messages = {
         dia: 'Day',
         hora: 'Time',
         lugaresDisponibles: 'Available seats',
+        priorizarComodidad: 'Prioritize comfort',
+        atrasViajanSolo2Personas: 'Only 2 people ride in the back',
         cuposNecesarios: 'How many seats do you need',
         comentarioPasajeros: 'Extra trip details',
         placeholderComentarioPasajeros:
