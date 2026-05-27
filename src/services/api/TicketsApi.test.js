@@ -12,6 +12,13 @@ describe('TicketsApi admin ticket actions', () => {
         expect(apiSource).toContain('/needs-review');
         expect(apiSource).toContain('adminMarkNeedsReview');
     });
+
+    it('targets attachment image stream and purge endpoints', () => {
+        expect(apiSource).toContain('/attachments/');
+        expect(apiSource).toContain('/image');
+        expect(apiSource).toContain('adminPurgeAttachments');
+        expect(apiSource).toContain('/purge-attachments');
+    });
 });
 
 describe('TicketsApi admin reply templates', () => {

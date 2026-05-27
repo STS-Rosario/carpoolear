@@ -136,6 +136,14 @@ describe('AdminSupportTicketDetail view', () => {
         expect(viewSource).toContain("dialogs.message(this.$t('errorReabriendoTicket')");
     });
 
+    it('renders reply attachments and purge-all-images action for admins', () => {
+        expect(viewSource).toContain('reply-attachments');
+        expect(viewSource).toContain('loadReplyAttachmentUrls');
+        expect(viewSource).toContain('purgeAllAttachments');
+        expect(viewSource).toContain("{{ $t('eliminarTodasLasImagenes') }}");
+        expect(viewSource).toContain('fetchSupportTicketAttachmentBlob');
+    });
+
     it('shows mark needs review action for open tickets', () => {
         expect(viewSource).toContain('markNeedsReviewTicket');
         expect(viewSource).toContain('adminMarkNeedsReview');

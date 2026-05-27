@@ -53,6 +53,12 @@ describe('TicketDetail user view', () => {
         expect(viewSource).toContain("{{ $t('adjuntarImagenes') }}");
     });
 
+    it('renders reply attachments loaded from authenticated image API', () => {
+        expect(viewSource).toContain('reply-attachments');
+        expect(viewSource).toContain('loadReplyAttachmentUrls');
+        expect(viewSource).toContain('fetchSupportTicketAttachmentBlob');
+    });
+
     it('shows title above the reply composer', () => {
         expect(viewSource).toContain("{{ $t('responderAlTicketDeSoporte') }}");
         expect(viewSource).toContain('reply-to-ticket-title');
