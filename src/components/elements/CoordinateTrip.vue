@@ -27,6 +27,23 @@
                 </template>
             </span>
         </div>
+        <div class="trip_actions-description" v-if="conversation.trip.description">
+            <button
+                type="button"
+                class="trip_actions-description-toggle"
+                :aria-expanded="showTripDescription ? 'true' : 'false'"
+                @click="showTripDescription = !showTripDescription"
+            >
+                {{ $t('coordinateTripMostrarDescripcionViaje') }}
+                <span aria-hidden="true">{{ showTripDescription ? '-' : '+' }}</span>
+            </button>
+            <div
+                v-show="showTripDescription"
+                class="trip_actions-description-content"
+            >
+                {{ conversation.trip.description }}
+            </div>
+        </div>
         <p v-if="contributionWarningData" class="trip_actions-contribution-warning">
             <template v-if="contributionWarningData.role === 'driver'">
                 {{
@@ -185,7 +202,8 @@ export default {
             sending: {
                 trip: false,
                 returnTrip: false
-            }
+            },
+            showTripDescription: false
         };
     },
     computed: {
@@ -361,6 +379,33 @@ export default {
     color: #6b150d;
     text-decoration: underline;
     font-weight: bold;
+}
+
+.trip_actions-description {
+    margin: 0.4em 0 0.6em;
+}
+
+.trip_actions-description-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.35em 0.5em;
+    font-size: 12px;
+    color: #337ab7;
+    background: transparent;
+    border: 1px solid #d6e6f3;
+    border-radius: 4px;
+}
+
+.trip_actions-description-content {
+    margin-top: 0.35em;
+    padding: 0.55em 0.65em;
+    font-size: 12px;
+    line-height: 1.35;
+    background-color: #fff;
+    border: 1px solid #ececec;
+    border-radius: 4px;
 }
 @media only screen and (max-width: 768px) {
     .trip_actions {
