@@ -886,6 +886,8 @@ const messages = {
         bajarmeViaje: 'Bajarme del viaje',
         finalizado: 'Finalizado',
         viajeCarpooleado: 'Viaje Carpooleado',
+        tripSeatRequestsDriverWarning:
+            'Tenés pedidos de asiento de pasajeros para este viaje, revisalos en Tus Viajes',
         atencionViajeSolicitado:
             'Atención! Este viaje está siendo muy solicitado: {count} personas lo están solicitando',
         bajarPasajeroViaje: 'Bajar pasajero del viaje',
@@ -1958,6 +1960,8 @@ const messages = {
         bajarmeViaje: 'Bajarme del viaje',
         finalizado: 'Finalizado',
         viajeCarpooleado: 'Viaje Carpooleado',
+        tripSeatRequestsDriverWarning:
+            'Tenés pedidos de asiento de pasajeros para este viaje, revisalos en Tus Viajes',
         atencionViajeSolicitado:
             'Atención! Este viaje está siendo muy solicitado: {count} personas lo están solicitando',
         bajarPasajeroViaje: 'Bajar pasajero del viaje',
@@ -3208,6 +3212,8 @@ const messages = {
         bajarmeViaje: 'Leave the trip',
         finalizado: 'Completed',
         viajeCarpooleado: 'Carpooled Trip',
+        tripSeatRequestsDriverWarning:
+            'You have passenger seat requests for this trip, review them in My Trips',
         atencionViajeSolicitado:
             'Attention! This trip is in high demand: {count} people are requesting it',
         bajarPasajeroViaje: 'Remove passenger from trip',

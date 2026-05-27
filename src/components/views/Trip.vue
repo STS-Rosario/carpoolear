@@ -17,6 +17,15 @@
                     <p>{{ $t('pagarSelladoViaje', { amount: $n(this.config.module_trip_creation_payment_amount_cents / 100, 'currency') }) }}</p>
                     <div id="walletBrick_container"></div>
                 </div>
+                <div
+                    class="alert alert-warning trip-seat-requests-warning"
+                    role="alert"
+                    v-if="showSeatRequestsWarning"
+                >
+                    <router-link :to="{ name: 'my-trips' }">
+                        {{ $t('tripSeatRequestsDriverWarning') }}
+                    </router-link>
+                </div>
                 <div class="row form">
                     <div
                         ref="rightPanel"
@@ -367,6 +376,7 @@ import svgItem from '../SvgItem';
 import modal from '../Modal';
 import dayjs from '../../dayjs';
 import dialogs from '../../services/dialogs.js';
+import { shouldShowTripSeatRequestsWarning } from '../../utils/tripSeatRequestsWarning.js';
 import TripLocation from '../elements/TripLocation';
 import TripDriver from '../elements/TripDriver';
 import TripDate from '../elements/TripDate';
@@ -1013,6 +1023,12 @@ export default {
         },
         owner() {
             return this.trip && this.user && this.user.id === this.trip.user.id;
+        },
+        showSeatRequestsWarning() {
+            return shouldShowTripSeatRequestsWarning(
+                this.owner,
+                this.trip?.passengerPending_count
+            );
         },
         isPassengersView() {
             if (this.location) {
