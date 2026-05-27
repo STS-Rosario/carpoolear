@@ -1,15 +1,16 @@
 <template>
     <div
         :class="[tripCardCountClass, { 'trip-needs-sellado': trip.needs_sellado }]"
-        v-on:click="clickModal ? openModal() : goToDetail(false)"
     >
         <tripDisplay
             v-if="showTrip && clickModal"
             :trip="trip"
             :clickOutside="closeModal.bind(this)"
+            @click.stop
         ></tripDisplay>
         <div
             class="trip"
+            v-on:click="clickModal ? openModal() : goToDetail(false)"
             :class="{
                 'trip-fill': seats_available === 0,
                 'trip-almost-fill': seats_available === 1,
