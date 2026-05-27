@@ -1051,6 +1051,7 @@ const messages = {
         teniasCuentaVinculada:
             '¿Tenías cuenta de Carpoolear vinculada a tu cuenta de',
         ingresoRegistroYaNoFunciona: 'El ingreso/registro via',
+        ingresoRegistroYaNoFuncionaMas: 'ya no funciona más.',
         y: 'y',
         buenasRutas: '¡Buenas rutas!',
         apple: 'Apple',
@@ -2162,9 +2163,11 @@ const messages = {
         teniasCuentaVinculada:
             '¿Tenías cuenta de Carpoolear vinculada a tu cuenta de',
         ingresoRegistroYaNoFunciona: 'El ingreso/registro via',
+        ingresoRegistroYaNoFuncionaMas: 'ya no funciona más.',
         y: 'y',
         buenasRutas: '¡Buenas rutas!',
         apple: 'Apple',
+        facebook: 'Facebook',
         notificacionesNoHabilitadas: 'No tenés habilitadas las notificaciones',
         notificacionesNoAceptastePermisos:
             'Parece que no aceptaste los permisos para que te podamos enviar notificaciones (en nuevos mensajes, etc.), presioná el botón para hacerlo:',
@@ -3407,6 +3410,7 @@ const messages = {
         teniasCuentaVinculada:
             'Did you have a Carpoolear account linked to your',
         ingresoRegistroYaNoFunciona: 'Login/registration via',
+        ingresoRegistroYaNoFuncionaMas: 'no longer works.',
         y: 'and',
         buenasRutas: 'Safe travels!',
         apple: 'Apple',

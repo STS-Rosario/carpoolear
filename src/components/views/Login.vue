@@ -274,7 +274,7 @@
                 <template #body><div>
                     <div class="text-left color-black login-modal">
                         <p>
-                            {{ $t('ingresoRegistroYaNoFunciona') }} {{ modalType === 'facebook' ? $t('facebook') : $t('apple') }}.
+                            {{ $t('ingresoRegistroYaNoFunciona') }} {{ modalType === 'facebook' ? $t('facebook') : $t('apple') }} {{ $t('ingresoRegistroYaNoFuncionaMas') }}
                         </p>
                         <p>
                             <span>{{ $t('escribinosMesaAyudaMigracionLead') }}</span>
