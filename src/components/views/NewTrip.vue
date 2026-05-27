@@ -510,7 +510,10 @@
                                 <legend class="label-for-group">
                                     {{ $t('priorizarComodidad') }}
                                 </legend>
-                                <label for="newtrip-comfort-rear-max-two">
+                                <label
+                                    for="newtrip-comfort-rear-max-two"
+                                    class="label-soft trip-comfort-preference__label"
+                                >
                                     <input
                                         type="checkbox"
                                         id="newtrip-comfort-rear-max-two"
@@ -1478,7 +1481,10 @@
                                 <legend class="label-for-group">
                                     {{ $t('priorizarComodidad') }}
                                 </legend>
-                                <label for="otherTrip-comfort-rear-max-two">
+                                <label
+                                    for="otherTrip-comfort-rear-max-two"
+                                    class="label-soft trip-comfort-preference__label"
+                                >
                                     <input
                                         type="checkbox"
                                         id="otherTrip-comfort-rear-max-two"
@@ -3172,6 +3178,19 @@ hr {
 .show-return-trip {
     margin-top: 1em;
 }
+
+.trip-comfort-preference {
+    margin: 0.5rem 0;
+}
+
+.trip-comfort-preference__label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    margin: 0;
+    font-weight: normal;
+}
+
 .preferences-text {
     font-size: 0.8em;
 }
