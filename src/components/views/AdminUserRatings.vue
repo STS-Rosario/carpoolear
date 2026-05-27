@@ -208,4 +208,12 @@ export default {
     margin-top: 24px;
     margin-bottom: 12px;
 }
+
+.admin-user-ratings__item {
+    margin-bottom: 6px;
+}
+
+.admin-user-ratings__item :deep(.panel-body--compact) {
+    padding: 8px 12px;
+}
 </style>

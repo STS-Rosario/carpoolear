@@ -1,45 +1,58 @@
 <template>
     <div class="panel panel-default admin-user-ratings__item admin-rating-card">
-        <div class="panel-body">
-            <p class="admin-rating-card__meta">
+        <div class="panel-body" :class="{ 'panel-body--compact': !editing }">
+            <div v-if="!editing" class="admin-rating-card__row">
                 <span class="text-muted admin-rating-card__id">
                     #{{ rate.id }}
                 </span>
-                <span
-                    class="admin-rating-pill"
-                    :class="pillClass"
-                >
+                <span class="admin-rating-card__sep" aria-hidden="true">·</span>
+                <span class="admin-rating-pill" :class="pillClass">
                     {{ pillLabel }}
                 </span>
-            </p>
-            <p v-if="rate.trip" class="admin-rating-card__trip">
-                <router-link
-                    :to="{
-                        name: 'detail_trip',
-                        params: { id: rate.trip.id }
-                    }"
+                <template v-if="rate.trip">
+                    <span class="admin-rating-card__sep" aria-hidden="true">·</span>
+                    <router-link
+                        class="admin-rating-card__trip"
+                        :to="{
+                            name: 'detail_trip',
+                            params: { id: rate.trip.id }
+                        }"
+                    >
+                        {{ rate.trip.from_town }} → {{ rate.trip.to_town }}
+                    </router-link>
+                </template>
+                <template v-if="counterparty">
+                    <span class="admin-rating-card__sep" aria-hidden="true">·</span>
+                    <router-link
+                        class="admin-rating-card__user"
+                        :to="{
+                            name: 'profile',
+                            params: { id: counterparty.id }
+                        }"
+                    >
+                        {{ counterparty.name }}
+                    </router-link>
+                </template>
+                <template v-if="rate.comment">
+                    <span class="admin-rating-card__sep" aria-hidden="true">·</span>
+                    <span class="admin-rating-card__comment">{{ rate.comment }}</span>
+                </template>
+                <template v-if="rate.reply_comment">
+                    <span class="admin-rating-card__sep" aria-hidden="true">·</span>
+                    <span class="admin-rating-card__reply">
+                        <em>{{ $t('adminUsuariosRespuesta') }}:</em>
+                        {{ rate.reply_comment }}
+                    </span>
+                </template>
+                <button
+                    type="button"
+                    class="btn btn-default btn-sm admin-rating-card__edit"
+                    @click="$emit('edit')"
                 >
-                    {{ rate.trip.from_town }} → {{ rate.trip.to_town }}
-                </router-link>
-            </p>
-            <p v-if="counterparty" class="admin-rating-card__user">
-                <router-link
-                    :to="{
-                        name: 'profile',
-                        params: { id: counterparty.id }
-                    }"
-                >
-                    {{ counterparty.name }}
-                </router-link>
-            </p>
-            <p v-if="rate.comment" class="admin-rating-card__comment">
-                {{ rate.comment }}
-            </p>
-            <p v-if="rate.reply_comment" class="admin-rating-card__reply">
-                <em>{{ $t('adminUsuariosRespuesta') }}:</em>
-                {{ rate.reply_comment }}
-            </p>
-            <template v-if="editing">
+                    {{ $t('adminUsuariosEditarFila') }}
+                </button>
+            </div>
+            <template v-else-if="editing">
                 <div class="form-group">
                     <label>{{ $t('adminUsuariosCalificacion') }}</label>
                     <select
@@ -101,14 +114,6 @@
                     {{ $t('adminUsuariosCancelar') }}
                 </button>
             </template>
-            <button
-                v-else
-                type="button"
-                class="btn btn-default btn-sm"
-                @click="$emit('edit')"
-            >
-                {{ $t('adminUsuariosEditarFila') }}
-            </button>
         </div>
     </div>
 </template>
@@ -159,11 +164,51 @@ export default {
 </script>
 
 <style scoped>
-.admin-rating-card__meta {
+.panel-body--compact {
+    padding: 8px 12px;
+}
+
+.admin-rating-card__row {
     display: flex;
     align-items: center;
-    gap: 8px;
     flex-wrap: wrap;
+    gap: 4px 6px;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.admin-rating-card__sep {
+    color: #bbb;
+    user-select: none;
+}
+
+.admin-rating-card__id {
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.admin-rating-card__trip,
+.admin-rating-card__user {
+    white-space: nowrap;
+}
+
+.admin-rating-card__comment,
+.admin-rating-card__reply {
+    flex: 1 1 120px;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.admin-rating-card__reply em {
+    font-style: normal;
+    color: #777;
+}
+
+.admin-rating-card__edit {
+    flex-shrink: 0;
+    margin-left: auto;
 }
 
 .admin-rating-pill {
@@ -182,10 +227,5 @@ export default {
 .admin-rating-pill--negative {
     background-color: #d9534f;
     color: #fff;
-}
-
-.admin-rating-card__comment {
-    margin-top: 8px;
-    white-space: pre-wrap;
 }
 </style>
