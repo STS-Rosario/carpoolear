@@ -504,6 +504,22 @@
                                 </span>
                             </div>
                             <div
+                                class="trip-comfort-preference"
+                                v-if="trip.is_passenger == 0"
+                            >
+                                <legend class="label-for-group">
+                                    {{ $t('priorizarComodidad') }}
+                                </legend>
+                                <label for="newtrip-comfort-rear-max-two">
+                                    <input
+                                        type="checkbox"
+                                        id="newtrip-comfort-rear-max-two"
+                                        v-model="trip.rear_max_two_passengers"
+                                    />
+                                    {{ $t('atrasViajanSolo2Personas') }}
+                                </label>
+                            </div>
+                            <div
                                 class="trip_price"
                                 v-if="trip.is_passenger == 0 && !config.module_max_price_enabled && config.module_seat_price_enabled"
                             >
@@ -1921,6 +1937,7 @@ export default {
                 allow_kids: false,
                 allow_smoking: false,
                 allow_animals: false,
+                rear_max_two_passengers: false,
                 car_id: null,
                 enc_path: '123',
                 seat_price_cents: null,
