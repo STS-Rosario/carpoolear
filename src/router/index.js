@@ -4,6 +4,8 @@ import i18n from '../i18n';
 import { useAuthStore } from '../stores/auth';
 import { useActionbarsStore } from '../stores/actionbars';
 import { useBackgroundStore } from '../stores/background';
+import { useNotificationsStore } from '../stores/notifications';
+import { refreshNotificationsCountOnRouteChange } from './refreshNotificationsCountOnRouteChange.js';
 
 import routes from './routes.js';
 
@@ -20,6 +22,9 @@ router.beforeEach((to, from, next) => {
     const authStore = useAuthStore();
     const actionbarsStore = useActionbarsStore();
     const backgroundStore = useBackgroundStore();
+    const notificationsStore = useNotificationsStore();
+
+    refreshNotificationsCountOnRouteChange(authStore, notificationsStore);
 
     const actionbar = to.meta.actionbar || {};
     const background = to.meta.background || {};
