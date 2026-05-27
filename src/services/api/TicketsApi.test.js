@@ -7,6 +7,13 @@ import TicketsApi from './TicketsApi';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const apiSource = fs.readFileSync(path.resolve(__dirname, 'TicketsApi.js'), 'utf8');
 
+describe('TicketsApi admin ticket actions', () => {
+    it('targets needs-review endpoint', () => {
+        expect(apiSource).toContain('/needs-review');
+        expect(apiSource).toContain('adminMarkNeedsReview');
+    });
+});
+
 describe('TicketsApi admin reply templates', () => {
     it('targets reply-templates endpoints', () => {
         expect(apiSource).toContain('/api/admin/support/reply-templates');

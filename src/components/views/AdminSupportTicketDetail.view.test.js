@@ -135,4 +135,12 @@ describe('AdminSupportTicketDetail view', () => {
         expect(viewSource).toContain("dialogs.message(this.$t('ticketReabierto')");
         expect(viewSource).toContain("dialogs.message(this.$t('errorReabriendoTicket')");
     });
+
+    it('shows mark needs review action for open tickets', () => {
+        expect(viewSource).toContain('markNeedsReviewTicket');
+        expect(viewSource).toContain('adminMarkNeedsReview');
+        expect(viewSource).toContain("{{ $t('marcarNecesitaRevision') }}");
+        expect(viewSource).toContain('showMarkNeedsReviewButton');
+        expect(viewSource).toContain("'Necesita revisión'");
+    });
 });
