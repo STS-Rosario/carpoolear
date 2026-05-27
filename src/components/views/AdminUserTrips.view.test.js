@@ -13,4 +13,9 @@ describe('AdminUserTrips view', () => {
         expect(source).toContain('oldTripsAsPassenger');
         expect(source).toContain(':clickModal="true"');
     });
+
+    it('uses Trip clickModal for admin trip inspection', () => {
+        expect(source).toContain("import Trip from '../sections/Trip.vue'");
+        expect(source).toMatch(/<Trip[\s\S]*:clickModal="true"/);
+    });
 });
