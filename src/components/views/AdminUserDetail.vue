@@ -53,6 +53,35 @@
                             <strong>{{ $t('ultimaConexion') }}</strong>
                             {{ user.last_connection || '—' }}
                         </p>
+                        <p class="user-admin-view-nav">
+                            <router-link
+                                :to="{
+                                    name: 'admin-users-trips',
+                                    params: { userId: String(user.id) }
+                                }"
+                                class="btn btn-default"
+                            >
+                                {{ $t('adminUsuariosVerViajes') }}
+                            </router-link>
+                            <router-link
+                                :to="{
+                                    name: 'admin-users-ratings',
+                                    params: { userId: String(user.id) }
+                                }"
+                                class="btn btn-default"
+                            >
+                                {{ $t('adminUsuariosVerCalificaciones') }}
+                            </router-link>
+                            <router-link
+                                :to="{
+                                    name: 'admin-users-recommendations',
+                                    params: { userId: String(user.id) }
+                                }"
+                                class="btn btn-default"
+                            >
+                                {{ $t('adminUsuariosVerRecomendaciones') }}
+                            </router-link>
+                        </p>
                         <p class="user-admin-view-actions">
                             <router-link
                                 :to="{
@@ -185,6 +214,7 @@ export default {
     margin-top: 0;
 }
 
+.user-admin-view-nav .btn,
 .user-admin-view-actions .btn {
     margin-right: 8px;
     margin-bottom: 8px;
