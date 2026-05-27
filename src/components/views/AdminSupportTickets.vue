@@ -67,15 +67,10 @@ import AdminLayout from '../layouts/AdminLayout.vue';
 import { useTicketsStore } from '../../stores/tickets';
 import dayjs from '../../dayjs';
 import { TICKET_TYPE_LABEL_KEYS, TICKET_PRIORITY_LABEL_KEYS } from '../../utils/supportTicketLabels';
-
-const STATUS_LABEL_KEYS = {
-    Open: 'estadoPendiente',
-    'Esperando respuesta': 'esperaUsuarioResponda',
-    'En revision': 'estadoPendienteRevision',
-    'Necesita revisión': 'estadoNecesitaRevision',
-    Resuelto: 'estadoAprobado',
-    Cerrado: 'estadoCerrado'
-};
+import {
+    TICKET_STATUS_CLASS_MAP,
+    TICKET_STATUS_LABEL_KEYS as STATUS_LABEL_KEYS
+} from '../../utils/supportTicketStatusLabels';
 
 function userAppProfileLocation(userId) {
     return { name: 'profile', params: { id: userId } };
@@ -123,13 +118,7 @@ export default {
             return status || '-';
         },
         statusClass(status) {
-            return {
-                Cerrado: 'label label-default',
-                Resuelto: 'label label-success',
-                'Esperando respuesta': 'label label-warning',
-                'En revision': 'label label-info',
-                'Necesita revisión': 'label label-danger'
-            }[status] || 'label label-primary';
+            return TICKET_STATUS_CLASS_MAP[status] || 'label label-primary';
         },
         priorityLabel(priority) {
             const key = (priority || '').toLowerCase();

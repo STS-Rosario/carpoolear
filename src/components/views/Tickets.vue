@@ -47,15 +47,7 @@ import { mapActions, mapState } from 'pinia';
 import { useTicketsStore } from '../../stores/tickets';
 import dayjs from '../../dayjs';
 import { TICKET_TYPE_LABEL_KEYS, TICKET_PRIORITY_LABEL_KEYS } from '../../utils/supportTicketLabels';
-
-const STATUS_LABEL_KEYS = {
-    Open: 'estadoPendiente',
-    'Esperando respuesta': 'ticketEstadoEsperandoTuRespuesta',
-    'En revision': 'estadoPendienteRevision',
-    'Necesita revisión': 'estadoNecesitaRevision',
-    Resuelto: 'estadoAprobado',
-    Cerrado: 'estadoCerrado'
-};
+import { USER_TICKET_STATUS_LABEL_KEYS as STATUS_LABEL_KEYS } from '../../utils/supportTicketStatusLabels';
 
 export default {
     name: 'tickets',

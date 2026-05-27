@@ -142,23 +142,10 @@ import { useTicketsStore } from '../../stores/tickets';
 import { useReplyTemplatesStore } from '../../stores/replyTemplates';
 import dialogs from '../../services/dialogs.js';
 import dayjs from '../../dayjs';
-
-const STATUS_LABEL_KEYS = {
-    Open: 'estadoPendiente',
-    'Esperando respuesta': 'esperaUsuarioResponda',
-    'En revision': 'estadoPendienteRevision',
-    'Necesita revisión': 'estadoNecesitaRevision',
-    Resuelto: 'estadoAprobado',
-    Cerrado: 'estadoCerrado'
-};
-
-const STATUS_CLASS_MAP = {
-    Cerrado: 'label label-default',
-    Resuelto: 'label label-success',
-    'Esperando respuesta': 'label label-warning',
-    'En revision': 'label label-info',
-    'Necesita revisión': 'label label-danger'
-};
+import {
+    TICKET_STATUS_CLASS_MAP as STATUS_CLASS_MAP,
+    TICKET_STATUS_LABEL_KEYS as STATUS_LABEL_KEYS
+} from '../../utils/supportTicketStatusLabels';
 
 const PRIORITY_LABEL_KEYS = {
     low: 'prioridadBaja',
