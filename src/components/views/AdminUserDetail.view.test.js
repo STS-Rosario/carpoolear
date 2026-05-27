@@ -30,6 +30,6 @@ describe('AdminUserDetail view', () => {
         expect(source).toContain("name: 'admin-users-recommendations'");
         expect(source).toContain("$t('adminUsuariosVerViajes')");
         expect(source).toContain("$t('adminUsuariosVerCalificaciones')");
-        expect(source).toContain("$t('adminUsuariosVerRecomendaciones')");
+        expect(source).toContain("$t('adminUsuariosVerReferencias')");
     });
 });

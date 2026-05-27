@@ -21,6 +21,11 @@ describe('AdminApi user ratings and references', () => {
         expect(apiSource).toContain('updateReference');
         expect(apiSource).toContain("'/api/admin/references/' + referenceId");
     });
+
+    it('fetches received and given ratings for a user', () => {
+        expect(apiSource).toContain('getUserRatings');
+        expect(apiSource).toContain("'/api/admin/users/' + userId + '/ratings'");
+    });
 });
 
 describe('AdminApi manual identity validations private note', () => {

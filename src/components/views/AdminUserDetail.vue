@@ -79,7 +79,7 @@
                                 }"
                                 class="btn btn-default"
                             >
-                                {{ $t('adminUsuariosVerRecomendaciones') }}
+                                {{ $t('adminUsuariosVerReferencias') }}
                             </router-link>
                         </p>
                         <p class="user-admin-view-actions">

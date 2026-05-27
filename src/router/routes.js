@@ -660,7 +660,7 @@ export default [
                     active_id: 'admin'
                 },
                 header: {
-                    titleKey: 'adminUsuariosVerRecomendaciones',
+                    titleKey: 'adminUsuariosVerReferencias',
                     buttons: ['back']
                 }
             }
