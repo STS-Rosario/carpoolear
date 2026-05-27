@@ -87,6 +87,7 @@ function buildSelladoTrip(tripId) {
       allow_kids: 0,
       allow_animals: 0,
       allow_smoking: 0,
+      rear_max_two_passengers: 0,
       payment_id: 'mock-preference-id-12345',
       needs_sellado: 1,
       request: '',
