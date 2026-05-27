@@ -1,20 +1,17 @@
 import { describe, expect, it } from 'vitest';
 import messages from './i18n';
 
+const SECTION_LABELS_ES = {
+    misProximosViajes: 'Próximos viajes como conductor',
+    viajesEstoySubido: 'Próximos viajes como pasajero',
+    misViajesPasados: 'Viajes pasados como conductor',
+    viajesMeSubi: 'Viajes pasados como pasajero'
+};
+
 /** My-trips / profile-trip section headings (upcoming vs past, driver vs passenger). */
 const SECTION_LABELS_BY_LOCALE = {
-    arg: {
-        misProximosViajes: 'Próximos viajes como conductor',
-        viajesEstoySubido: 'Próximos viajes como pasajero',
-        misViajesPasados: 'Viajes pasados como conductor',
-        viajesMeSubi: 'Viajes pasados como pasajero'
-    },
-    chl: {
-        misProximosViajes: 'Próximos viajes como conductor',
-        viajesEstoySubido: 'Próximos viajes como pasajero',
-        misViajesPasados: 'Viajes pasados como conductor',
-        viajesMeSubi: 'Viajes pasados como pasajero'
-    },
+    arg: SECTION_LABELS_ES,
+    chl: SECTION_LABELS_ES,
     en: {
         misProximosViajes: 'Upcoming trips as driver',
         viajesEstoySubido: 'Upcoming trips as passenger',
