@@ -14,3 +14,17 @@ describe('ProfileInfo cars display', () => {
         expect(viewSource).not.toContain('profile.cars[0].patente');
     });
 });
+
+describe('ProfileInfo report action', () => {
+    it('links to a denuncia ticket for another user profile', () => {
+        expect(viewSource).toContain("from '../../utils/reportTicketRoute'");
+        expect(viewSource).toContain('buildReportTicketRoute');
+        expect(viewSource).toContain('reportTicketSubjectForUser');
+        expect(viewSource).toContain("$t('denunciar')");
+        expect(viewSource).toContain('fa-flag');
+        expect(viewSource).toContain('canReportProfile');
+        expect(viewSource).toMatch(
+            /v-if="canReportProfile"[\s\S]*?:to="reportProfileRoute"/s
+        );
+    });
+});
