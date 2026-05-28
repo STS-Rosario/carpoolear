@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
     DONATION_TIERS,
+    appendDonationTrackingUserId,
     getDonationMonthlyUrl,
     getDonationOnceUrl
 } from './donationOptions.js';
@@ -32,6 +33,26 @@ describe('donationOptions', () => {
 
         it('returns default link for unknown amounts', () => {
             expect(getDonationOnceUrl(50)).toBe('https://mpago.la/jgap');
+        });
+    });
+
+    describe('appendDonationTrackingUserId', () => {
+        it('appends user id query param when provided', () => {
+            expect(
+                appendDonationTrackingUserId('https://mpago.la/abc', 42)
+            ).toBe('https://mpago.la/abc?u=42');
+            expect(
+                appendDonationTrackingUserId(
+                    'https://example.com?foo=1',
+                    99
+                )
+            ).toBe('https://example.com?foo=1&u=99');
+        });
+
+        it('returns url unchanged when user id is missing', () => {
+            expect(appendDonationTrackingUserId('https://mpago.la/abc')).toBe(
+                'https://mpago.la/abc'
+            );
         });
     });
 
