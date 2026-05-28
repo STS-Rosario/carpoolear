@@ -7,9 +7,9 @@ const viewSource = fs.readFileSync(viewPath, 'utf8');
 
 describe('UpdateProfile missing field routing', () => {
     it('exposes the patente input as a scroll target', () => {
-        expect(viewSource).toContain('for="input-patente"');
-        expect(viewSource).toContain('id="input-patente"');
-        expect(viewSource).toContain('ref="patenteInput"');
+        expect(viewSource).toContain("for=\"'input-patente-' + index\"");
+        expect(viewSource).toContain("id=\"'input-patente-' + index\"");
+        expect(viewSource).toContain("'patenteInput'");
     });
 
     it('scrolls to patente when route query requests the missing patente field', () => {
@@ -24,6 +24,16 @@ describe('UpdateProfile missing field routing', () => {
         expect(viewSource).toContain('missing-field-highlight');
         expect(viewSource).toContain('shouldHighlightPatente');
         expect(viewSource).toContain("this.$route.query.missing === 'patente'");
+    });
+});
+
+describe('UpdateProfile multiple patentes', () => {
+    it('supports adding another car from the profile form', () => {
+        expect(viewSource).toContain('agregarOtroAuto');
+        expect(viewSource).toContain('addUserCar');
+        expect(viewSource).toContain('removeUserCar');
+        expect(viewSource).toContain('v-for="(entry, index) in userCars"');
+        expect(viewSource).toContain('saveUserCars');
     });
 });
 
