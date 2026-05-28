@@ -344,19 +344,34 @@ export default {
 .user_pin img {
     width: 40px;
 }
+.trip-driver-actions {
+    text-align: center;
+}
 .trip-driver-actions__buttons {
     display: flex;
     gap: 0.5rem;
     align-items: stretch;
+    justify-content: center;
+    width: 100%;
 }
 .trip-driver-actions__buttons > a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     flex: 1 1 0;
     min-width: 0;
+    max-width: 100%;
     width: auto;
     margin: 0;
-    padding: 1.2em 0.75em;
+    padding: 0.85em 0.75em;
+    line-height: 1.2;
+    text-align: center;
     white-space: nowrap;
     box-sizing: border-box;
+}
+.trip-driver-actions__buttons > a .fa {
+    line-height: 1;
+    margin-right: 0.45rem;
 }
 .trip-driver-report {
     margin-top: 0.75rem;
