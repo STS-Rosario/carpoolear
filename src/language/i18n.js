@@ -527,6 +527,7 @@ const messages = {
             'Parece que no coincide tu DNI, asegurate que sea el correcto e intentá nuevamente. Si es el correcto y está asociado a otra cuenta, creá un ticket de Mesa de Ayuda así te ayudamos a resolverlo.',
         identityValidationRejectionSupportWarningBothMismatch:
             'Parece que no coinciden tu nombre y tu DNI. Asegurate que sean correctos e intentá nuevamente. Si persiste, creá un ticket de Mesa de Ayuda así te ayudamos a resolverlo.',
+        identityValidationMismatchSupportTicketCta: 'creá un ticket de Mesa de Ayuda',
         identityValidationRejectionReasonLabel: 'Razón de rechazo',
         verEstadoValidacion: 'Ver estado de verificación',
         debesCargarDni:
@@ -1822,6 +1823,7 @@ const messages = {
             'Parece que no coincide tu DNI, asegurate que sea el correcto e intentá nuevamente. Si es el correcto y está asociado a otra cuenta, creá un ticket de Mesa de Ayuda así te ayudamos a resolverlo.',
         identityValidationRejectionSupportWarningBothMismatch:
             'Parece que no coinciden tu nombre y tu DNI. Asegurate que sean correctos e intentá nuevamente. Si persiste, creá un ticket de Mesa de Ayuda así te ayudamos a resolverlo.',
+        identityValidationMismatchSupportTicketCta: 'creá un ticket de Mesa de Ayuda',
         identityValidationRejectionReasonLabel: 'Razón de rechazo',
         verEstadoValidacion: 'Ver estado de verificación',
         debesCargarDni:
@@ -2898,6 +2900,7 @@ const messages = {
             "It looks like your DNI doesn't match. Make sure it is correct and try again. If it is correct and linked to another account, create a Help Desk ticket so we can help resolve it.",
         identityValidationRejectionSupportWarningBothMismatch:
             "It looks like both your name and DNI don't match. Make sure they are correct and try again. If the issue persists, create a Help Desk ticket so we can help resolve it.",
+        identityValidationMismatchSupportTicketCta: 'create a Help Desk ticket',
         identityValidationRejectionReasonLabel: 'Reason for rejection',
         verEstadoValidacion: 'View verification status',
         debesCargarDni:

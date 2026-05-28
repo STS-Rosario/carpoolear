@@ -34,13 +34,6 @@
         </div>
         <div class="alert alert-warning" v-if="mismatchDetails">
             <p>{{ $t(mismatchDetails.reasonKey) }}</p>
-            <p
-                v-if="mismatchSupportWarningKey"
-                class="identity-validation-mismatch-support-warning"
-            >
-                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                {{ $t(mismatchSupportWarningKey) }}
-            </p>
             <p v-if="mismatchDetails.showDni">
                 <strong>{{ $t('dniEnCarpoolear') }}:</strong> {{ mismatchDetails.userDni }}<br />
                 <strong>{{ $t('dniEnMercadoPago') }}:</strong> {{ mismatchDetails.mpDni }}
@@ -48,6 +41,16 @@
             <p v-if="mismatchDetails.showName">
                 <strong>{{ $t('nombreEnCarpoolear') }}:</strong> {{ mismatchDetails.userName }}<br />
                 <strong>{{ $t('nombreEnMercadoPago') }}:</strong> {{ mismatchDetails.mpName }}
+            </p>
+            <p
+                v-if="mismatchSupportWarningKey"
+                class="identity-validation-mismatch-support-warning"
+            >
+                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                {{ $t(mismatchSupportWarningKey) }}
+                <router-link :to="{ name: 'ticket-new' }">
+                    {{ $t('identityValidationMismatchSupportTicketCta') }}
+                </router-link>
             </p>
         </div>
 
@@ -944,10 +947,22 @@ export default {
 
 .identity-validation-mismatch-support-warning {
     margin-top: 0.5rem;
+    padding: 0.75rem 0.9rem;
+    border-radius: 4px;
+    border: 1px solid #f0c36d;
+    background: #fff7e6;
+    color: #8a6d3b;
 }
 
 .identity-validation-mismatch-support-warning .fa {
     margin-right: 0.5rem;
+}
+
+.identity-validation-mismatch-support-warning a {
+    margin-left: 0.2rem;
+    color: #7f4f00;
+    text-decoration: underline;
+    font-weight: 600;
 }
 
 .identity-validation-component .manual-status-panel.panel-warning .panel-heading {
