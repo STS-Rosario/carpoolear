@@ -9,7 +9,7 @@ describe('IdentityValidation rejection warnings', () => {
     it('shows mismatch support warning with warning icon in MP mismatch alert', () => {
         expect(viewSource).toContain('<div class="alert alert-warning" v-if="mismatchDetails">');
         expect(viewSource).toContain('identity-validation-mismatch-support-warning');
-        expect(viewSource).toContain('$t(mismatchSupportWarningKey)');
+        expect(viewSource).toContain('$t(mismatchSupportWarningParts.leadKey)');
         expect(viewSource).toContain('fa fa-exclamation-triangle');
     });
 

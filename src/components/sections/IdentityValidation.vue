@@ -47,10 +47,13 @@
                 class="identity-validation-mismatch-support-warning"
             >
                 <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                {{ $t(mismatchSupportWarningKey) }}
+                {{ $t(mismatchSupportWarningParts.leadKey) }}
                 <router-link :to="{ name: 'ticket-new' }">
                     {{ $t('identityValidationMismatchSupportTicketCta') }}
                 </router-link>
+                <span v-if="mismatchSupportWarningParts.tailKey">
+                    {{ $t(mismatchSupportWarningParts.tailKey) }}
+                </span>
             </p>
         </div>
 
@@ -449,6 +452,13 @@ export default {
         },
         mismatchSupportWarningKey() {
             return getMismatchSupportWarningKey(this.resultMessage);
+        },
+        mismatchSupportWarningParts() {
+            if (!this.mismatchSupportWarningKey) return { leadKey: null, tailKey: null };
+            return {
+                leadKey: `${this.mismatchSupportWarningKey}Lead`,
+                tailKey: `${this.mismatchSupportWarningKey}Tail`
+            };
         },
         /**
          * Paid + docs sent + not yet approved/rejected — still in admin queue.
