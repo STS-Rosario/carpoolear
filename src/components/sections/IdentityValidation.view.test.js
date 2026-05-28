@@ -29,6 +29,12 @@ describe('IdentityValidation rejection warnings', () => {
         expect(viewSource).toContain('identityValidationMismatchSupportTicketCta');
     });
 
+    it('interpolates mismatch support warning text around ticket CTA link', () => {
+        expect(viewSource).toContain('mismatchSupportWarningParts');
+        expect(viewSource).toContain('$t(mismatchSupportWarningParts.leadKey)');
+        expect(viewSource).toContain('$t(mismatchSupportWarningParts.tailKey)');
+    });
+
     it('shows warning icon and translated mismatch warning placeholder in rejected flow', () => {
         expect(viewSource).toContain('identity-validation-rejection-notice__support-warning');
         expect(viewSource).toContain('fa fa-exclamation-triangle');
