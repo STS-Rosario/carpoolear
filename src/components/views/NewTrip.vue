@@ -81,35 +81,6 @@
                         </div>
                     </fieldset>
                     <div
-                        class="form-group trip-car-selection"
-                        v-if="
-                            trip.is_passenger == 0 &&
-                            driverCarsWithPlate.length > 1
-                        "
-                    >
-                        <label for="trip-car-select">{{ $t('seleccionarAuto') }}</label>
-                        <select
-                            id="trip-car-select"
-                            class="form-control"
-                            v-model="selectedCarId"
-                            :class="{ 'has-error': carSelectionError.state }"
-                        >
-                            <option disabled value="">
-                                {{ $t('elegiPatente') }}
-                            </option>
-                            <option
-                                v-for="car in driverCarsWithPlate"
-                                :key="car.id"
-                                :value="car.id"
-                            >
-                                {{ car.patente }}
-                            </option>
-                        </select>
-                        <span class="error" v-if="carSelectionError.state">
-                            {{ carSelectionError.message }}
-                        </span>
-                    </div>
-                    <div
                         class="trip_allow-foreign"
                         v-if="!isMobile && tripCardTheme === 'light'"
                     >
@@ -433,6 +404,46 @@
                                 />
                                 <span class="error" v-if="timeError.state">
                                     {{ timeError.message }}
+                                </span>
+                            </div>
+                            <div
+                                class="form-group trip-car-selection"
+                                v-if="showTripCarSelection"
+                            >
+                                <label
+                                    for="trip-car-select"
+                                    class="trip-car-selection__label"
+                                >
+                                    {{ $t('seleccionarAuto') }}
+                                    <router-link
+                                        :to="profilePatenteLink"
+                                        class="trip-car-selection__profile-link"
+                                    >
+                                        {{ $t('agregarNuevoAutoEnPerfil') }}
+                                    </router-link>
+                                </label>
+                                <select
+                                    id="trip-car-select"
+                                    class="form-control"
+                                    v-model="selectedCarId"
+                                    :disabled="!needsDriverCarSelection"
+                                    :class="{
+                                        'has-error': carSelectionError.state
+                                    }"
+                                >
+                                    <option disabled value="">
+                                        {{ $t('elegiPatente') }}
+                                    </option>
+                                    <option
+                                        v-for="car in driverCarsWithPlate"
+                                        :key="car.id"
+                                        :value="car.id"
+                                    >
+                                        {{ car.patente }}
+                                    </option>
+                                </select>
+                                <span class="error" v-if="carSelectionError.state">
+                                    {{ carSelectionError.message }}
                                 </span>
                             </div>
                             <div class="trip_seats-available">
@@ -2077,6 +2088,7 @@ export default {
             self.loadTrip();
         }
 
+        this.hydrateDriverCarsFromProfile();
         this.carIndex().then(() => {
             this.preselectDriverCar();
         });
@@ -2101,6 +2113,21 @@ export default {
         }),
         driverCarsWithPlate() {
             return activeCarsWithPlate(this.cars);
+        },
+        showTripCarSelection() {
+            return (
+                requiresDriverPlate(this.trip) &&
+                this.driverCarsWithPlate.length > 0
+            );
+        },
+        needsDriverCarSelection() {
+            return needsCarSelection(this.cars);
+        },
+        profilePatenteLink() {
+            return {
+                name: 'profile_update',
+                query: { missing: 'patente' }
+            };
         },
         ...mapState(useDeviceStore, {
             isMobile: 'isMobile'
@@ -2226,6 +2253,9 @@ export default {
             this.otherTrip.trip.friendship_type_id =
                 this.trip.friendship_type_id;
         },
+        'trip.is_passenger': function () {
+            this.preselectDriverCar();
+        },
         // 'trip.distance': function () {
         //     // TODO: FIX THIS
         //     if (this.config.module_trip_creation_payment_enabled) {
@@ -2260,7 +2290,19 @@ export default {
                 maxContributionCents
             });
         },
+        hydrateDriverCarsFromProfile() {
+            if (Array.isArray(this.cars) && this.cars.length > 0) {
+                return;
+            }
+            const profileCars = this.user && this.user.cars;
+            if (Array.isArray(profileCars) && profileCars.length > 0) {
+                useCarsStore().$patch({ cars: profileCars });
+            }
+        },
         preselectDriverCar() {
+            if (!requiresDriverPlate(this.trip)) {
+                return;
+            }
             if (this.selectedCarId != null && this.selectedCarId !== '') {
                 return;
             }
@@ -3422,6 +3464,15 @@ textarea.form-control {
 }
 .alert-sellado-viaje {
     margin-top: -1em;
+}
+
+.trip-car-selection__label {
+    font-weight: normal;
+}
+
+.trip-car-selection__profile-link {
+    margin-left: 0.35em;
+    font-weight: normal;
 }
 
 .label-tooltip {

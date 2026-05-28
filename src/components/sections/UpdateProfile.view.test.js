@@ -9,14 +9,17 @@ describe('UpdateProfile missing field routing', () => {
     it('exposes the patente input as a scroll target', () => {
         expect(viewSource).toContain('for="input-patente-0"');
         expect(viewSource).toContain(":id=\"'input-patente-' + index\"");
-        expect(viewSource).toContain("'patenteInput'");
+        expect(viewSource).toContain('ref="patenteBlock"');
+        expect(viewSource).toContain("getElementById('input-patente-0')");
     });
 
     it('scrolls to patente when route query requests the missing patente field', () => {
         expect(viewSource).toContain("this.$route.query.missing !== 'patente'");
-        expect(viewSource).toContain('this.$refs.patenteInput');
+        expect(viewSource).toContain('getPatenteScrollTarget');
+        expect(viewSource).toContain('scrollToMissingRouteField');
+        expect(viewSource).toContain("'$route.query.missing'");
         expect(viewSource).toContain(
-            'this.$scrollToElement(this.$refs.patenteInput, -270)'
+            'this.$scrollToElement(target, -270)'
         );
     });
 

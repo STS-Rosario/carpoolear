@@ -221,6 +221,7 @@
                     </div>
 
                     <div
+                        ref="patenteBlock"
                         class="form-group user-cars-block"
                         :class="{
                             'missing-field-highlight': shouldHighlightPatente
@@ -249,9 +250,6 @@
                                     type="text"
                                     class="form-control"
                                     :id="'input-patente-' + index"
-                                    :ref="
-                                        index === 0 ? 'patenteInput' : null
-                                    "
                                     :class="{
                                         'has-error': patentError.state
                                     }"
@@ -887,6 +885,17 @@ export default {
                 }
             }
         },
+        getPatenteScrollTarget() {
+            const input = document.getElementById('input-patente-0');
+            if (input) {
+                return input;
+            }
+            const block = this.$refs.patenteBlock;
+            if (block) {
+                return Array.isArray(block) ? block[0] : block;
+            }
+            return null;
+        },
         scrollToMissingRouteField() {
             if (
                 !this.$route ||
@@ -895,10 +904,21 @@ export default {
             ) {
                 return;
             }
-            this.$nextTick(() => {
-                if (this.$refs.patenteInput) {
-                    this.$scrollToElement(this.$refs.patenteInput, -270);
+            const scroll = () => {
+                const target = this.getPatenteScrollTarget();
+                if (!target) {
+                    return false;
                 }
+                this.$scrollToElement(target, -270);
+                return true;
+            };
+            this.$nextTick(() => {
+                if (scroll()) {
+                    return;
+                }
+                requestAnimationFrame(() => {
+                    this.$nextTick(scroll);
+                });
             });
         },
         changeShowPassword() {
@@ -1293,6 +1313,9 @@ export default {
             handler() {
                 this.patentError.state = false;
             }
+        },
+        '$route.query.missing'() {
+            this.scrollToMissingRouteField();
         }
     },
 
@@ -1309,9 +1332,11 @@ export default {
         this.carIndex()
             .then(() => {
                 this.syncUserCarsFromStore();
+                this.scrollToMissingRouteField();
             })
             .catch((error) => {
                 console.error('Failed to load cars:', error);
+                this.scrollToMissingRouteField();
             });
         bus.on('date-change', this.dateChange);
         this.user = this.userData;
