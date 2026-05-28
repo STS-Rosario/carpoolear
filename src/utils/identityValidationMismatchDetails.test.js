@@ -41,7 +41,7 @@ describe('getIdentityValidationMismatchDetails', () => {
 
     it('maps both mismatch reject reason to warning translation key', () => {
         expect(getManualRejectionSupportWarningKey('both_mismatch'))
-            .toBe('identityValidationRejectionSupportWarningBothMismatch');
+            .toBe('identityValidationRejectionSupportWarningNameMismatch');
     });
 
     it('returns null when reject reason does not match known mismatch reasons', () => {
