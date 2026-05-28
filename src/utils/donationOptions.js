@@ -43,3 +43,11 @@ export function getDonationOnceUrl(amount) {
 export function getDonationMonthlyUrl(amount) {
     return tierForAmount(amount)?.monthlyUrl ?? DEFAULT_MONTHLY_URL;
 }
+
+export function appendDonationTrackingUserId(url, userId) {
+    if (!userId) {
+        return url;
+    }
+    const separator = url.includes('?') ? '&' : '?';
+    return `${url}${separator}u=${userId}`;
+}
