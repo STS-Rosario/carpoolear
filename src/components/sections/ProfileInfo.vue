@@ -282,7 +282,7 @@ export default {
 .btn-primary {
     display: inline-block;
 }
-.btn-report {
+.edit-action .btn-report {
     margin-top: 0.5rem;
 }
 .label-reply {
