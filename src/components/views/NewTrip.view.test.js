@@ -13,6 +13,16 @@ describe('NewTrip.vue seat price API mapping', () => {
     });
 });
 
+describe('NewTrip.vue trip car selection', () => {
+    it('restores and saves car_id when editing a driver trip', () => {
+        expect(viewSource).toContain('restoreSelectedCarIdFromTrip');
+        expect(viewSource).toContain('resolveTripCarId(this.cars, this.selectedCarId)');
+        expect(viewSource).toMatch(
+            /else\s*\{[\s\S]*?let trip = this\.getSaveInfo\(this, this\.estimatedTimeString\)/s
+        );
+    });
+});
+
 describe('NewTrip.vue rear seat comfort preference', () => {
     it('shows comfort section after seats with unchecked checkbox for drivers', () => {
         expect(viewSource).toContain("$t('priorizarComodidad')");

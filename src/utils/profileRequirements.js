@@ -38,3 +38,10 @@ export function requiresDriverPlate(trip) {
         trip.is_passenger === true
     );
 }
+
+export {
+    activeCarsWithPlate,
+    needsCarSelection,
+    resolveTripCarId,
+    restoreSelectedCarIdFromTrip
+} from './userCars';

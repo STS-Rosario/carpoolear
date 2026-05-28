@@ -18,7 +18,7 @@ class CarApi extends TaggedApi {
     }
 
     delete(data = {}) {
-        return this.delete('/api/cars/' + data.id, data);
+        return super.delete('/api/cars/' + data.id, data);
     }
 }
 

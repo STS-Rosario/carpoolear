@@ -406,6 +406,45 @@
                                     {{ timeError.message }}
                                 </span>
                             </div>
+                            <div
+                                class="form-group trip-car-selection"
+                                v-if="showTripCarSelection"
+                            >
+                                <label
+                                    for="trip-car-select"
+                                    class="trip-car-selection__label"
+                                >
+                                    {{ $t('seleccionarAuto') }}
+                                    <router-link
+                                        :to="profilePatenteLink"
+                                        class="trip-car-selection__profile-link"
+                                    >
+                                        {{ $t('agregarNuevoAutoEnPerfil') }}
+                                    </router-link>
+                                </label>
+                                <select
+                                    id="trip-car-select"
+                                    class="form-control"
+                                    v-model="selectedCarId"
+                                    :class="{
+                                        'has-error': carSelectionError.state
+                                    }"
+                                >
+                                    <option disabled value="">
+                                        {{ $t('elegiPatente') }}
+                                    </option>
+                                    <option
+                                        v-for="car in driverCarsWithPlate"
+                                        :key="car.id"
+                                        :value="car.id"
+                                    >
+                                        {{ car.patente }}
+                                    </option>
+                                </select>
+                                <span class="error" v-if="carSelectionError.state">
+                                    {{ carSelectionError.message }}
+                                </span>
+                            </div>
                             <div class="trip_seats-available">
                                 <fieldset>
                                     <span class="label-for-group">
@@ -1866,9 +1905,12 @@ import {
     seatPriceCentsForApi
 } from '../../utils/tripSeatPrice.js';
 import {
-    firstCarWithPlate,
+    activeCarsWithPlate,
     hasDriverPlate,
-    requiresDriverPlate
+    needsCarSelection,
+    requiresDriverPlate,
+    resolveTripCarId,
+    restoreSelectedCarIdFromTrip
 } from '../../utils/profileRequirements';
 
 let tripApi = new TripApi();
@@ -1968,6 +2010,8 @@ export default {
                 points: [] /* address json_address lat lng */
             },
             updatingTrip: null,
+            selectedCarId: null,
+            carSelectionError: new Error(),
             saving: false,
             allowForeignPoints: false,
             url: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
@@ -2043,6 +2087,11 @@ export default {
             self.loadTrip();
         }
 
+        this.hydrateDriverCarsFromProfile();
+        this.carIndex().then(() => {
+            this.preselectDriverCar();
+        });
+
         userApi.selladoViaje().then((result) => {
             // if user is over the free trips limit, show a message telling them they need to pay for the next trip
             this.needs_to_pay_for_next_trip = this.config.module_trip_creation_payment_enabled && result.data.user_over_free_limit;
@@ -2061,6 +2110,21 @@ export default {
         ...mapState(useCarsStore, {
             cars: 'cars'
         }),
+        driverCarsWithPlate() {
+            return activeCarsWithPlate(this.cars);
+        },
+        showTripCarSelection() {
+            return (
+                requiresDriverPlate(this.trip) &&
+                this.driverCarsWithPlate.length > 0
+            );
+        },
+        profilePatenteLink() {
+            return {
+                name: 'profile_update',
+                query: { missing: 'patente' }
+            };
+        },
         ...mapState(useDeviceStore, {
             isMobile: 'isMobile'
         }),
@@ -2133,6 +2197,9 @@ export default {
         }
     },
     watch: {
+        cars() {
+            this.preselectDriverCar();
+        },
         no_lucrar: function () {
             this.lucrarError.state = false;
         },
@@ -2182,6 +2249,9 @@ export default {
             this.otherTrip.trip.friendship_type_id =
                 this.trip.friendship_type_id;
         },
+        'trip.is_passenger': function () {
+            this.preselectDriverCar();
+        },
         // 'trip.distance': function () {
         //     // TODO: FIX THIS
         //     if (this.config.module_trip_creation_payment_enabled) {
@@ -2215,6 +2285,34 @@ export default {
                 n: this.$n,
                 maxContributionCents
             });
+        },
+        hydrateDriverCarsFromProfile() {
+            if (Array.isArray(this.cars) && this.cars.length > 0) {
+                return;
+            }
+            const profileCars = this.user && this.user.cars;
+            if (Array.isArray(profileCars) && profileCars.length > 0) {
+                useCarsStore().$patch({ cars: profileCars });
+            }
+        },
+        preselectDriverCar() {
+            if (!requiresDriverPlate(this.trip)) {
+                return;
+            }
+            const withPlate = this.driverCarsWithPlate;
+            if (this.selectedCarId != null && this.selectedCarId !== '') {
+                const stillActive = withPlate.find(
+                    (car) => String(car.id) === String(this.selectedCarId)
+                );
+                if (stillActive) {
+                    return;
+                }
+                this.selectedCarId = null;
+                this.trip.car_id = null;
+            }
+            if (withPlate.length === 1) {
+                this.selectedCarId = withPlate[0].id;
+            }
         },
         markMaxContributionExceededWarningAsShown() {
             this.hasShownMaxContributionExceededWarning = rememberMaxContributionWarning(
@@ -2333,6 +2431,15 @@ export default {
         this.trip.allow_animals = Number(trip.allow_animals) > 0;
         this.trip.allow_smoking = Number(trip.allow_smoking) > 0;
         this.trip.rear_max_two_passengers = Number(trip.rear_max_two_passengers) > 0;
+
+        const restoredCarId = restoreSelectedCarIdFromTrip(trip, this.cars);
+        if (restoredCarId != null) {
+            this.selectedCarId = restoredCarId;
+            this.trip.car_id = restoredCarId;
+        } else {
+            this.selectedCarId = null;
+            this.trip.car_id = null;
+        }
         
         this.trip.seat_price_cents = trip.seat_price_cents;
         const restoredPrice =
@@ -2349,7 +2456,16 @@ export default {
                 .then((trip) => {
                     if (this.user.id === trip.user.id) {
                         this.updatingTrip = trip;
-                        this.restoreData(trip);
+                        this.hydrateDriverCarsFromProfile();
+                        this.carIndex()
+                            .then(() => {
+                                this.restoreData(trip);
+                                this.preselectDriverCar();
+                            })
+                            .catch(() => {
+                                this.restoreData(trip);
+                                this.preselectDriverCar();
+                            });
                     } else {
                         this.$router.replace({
                             name: 'trips'
@@ -2741,15 +2857,19 @@ export default {
                     node_id: p.place.id
                 };
             });
-            const car = firstCarWithPlate(this.cars);
-
+            const resolvedCarId = requiresDriverPlate(tripObj.trip)
+                ? resolveTripCarId(this.cars, this.selectedCarId)
+                : undefined;
             const tripInfo = {
                 points,
                 from_town: points[0].address,
                 to_town: last(points).address,
-                estimated_time: estimatedTime,
-                car_id: car ? car.id : undefined
+                estimated_time: estimatedTime
             };
+
+            if (resolvedCarId != null && resolvedCarId !== '') {
+                tripInfo.car_id = resolvedCarId;
+            }
 
             if (!useWeeklySchedule) {
                 // Only include trip_date when in specific date view (not using weekly schedule)
@@ -2761,7 +2881,17 @@ export default {
             }
 
             const result = Object.assign({}, tripObj.trip, tripInfo);
-            
+
+            if (requiresDriverPlate(tripObj.trip)) {
+                if (resolvedCarId != null && resolvedCarId !== '') {
+                    result.car_id = resolvedCarId;
+                } else {
+                    delete result.car_id;
+                }
+            } else {
+                delete result.car_id;
+            }
+
             return result;
         },
 
@@ -2785,6 +2915,16 @@ export default {
                 });
                 return;
             }
+            if (
+                requiresDriverPlate(this.trip) &&
+                needsCarSelection(this.cars) &&
+                !resolveTripCarId(this.cars, this.selectedCarId)
+            ) {
+                this.carSelectionError.state = true;
+                this.carSelectionError.message = this.$t('seleccionaAuto');
+                return;
+            }
+            this.carSelectionError.state = false;
             const validationResult = this.validate();
             if (validationResult) {
                 // Jump To Error
@@ -2874,8 +3014,9 @@ export default {
                         this.saving = false;
                     });
             } else {
-                this.trip.id = this.updatingTrip.id;
-                let trip = JSON.parse(JSON.stringify(this.trip));
+                let trip = this.getSaveInfo(this, this.estimatedTimeString);
+                trip.id = this.updatingTrip.id;
+                trip.is_passenger = trip.is_passenger ? 1 : 0;
                 this.normalizeAllowFlagsForApi(trip);
                 trip.seat_price_cents = seatPriceCentsForApi(this.price);
                 this.updateTrip(trip)
@@ -3354,6 +3495,15 @@ textarea.form-control {
 }
 .alert-sellado-viaje {
     margin-top: -1em;
+}
+
+.trip-car-selection__label {
+    font-weight: normal;
+}
+
+.trip-car-selection__profile-link {
+    margin-left: 0.35em;
+    font-weight: normal;
 }
 
 .label-tooltip {

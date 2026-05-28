@@ -3,7 +3,9 @@ import {
     hasRequiredProfileFields,
     hasDriverPlate,
     firstCarWithPlate,
-    requiresDriverPlate
+    needsCarSelection,
+    requiresDriverPlate,
+    resolveTripCarId
 } from './profileRequirements';
 
 describe('profile required fields', () => {
@@ -43,5 +45,16 @@ describe('profile required fields', () => {
 
         expect(firstCarWithPlate([first, second])).toBe(second);
         expect(firstCarWithPlate([first])).toBe(null);
+    });
+
+    it('requires choosing a car when the driver has multiple plates', () => {
+        const cars = [
+            { id: 1, patente: 'AAA111' },
+            { id: 2, patente: 'BBB222' }
+        ];
+
+        expect(needsCarSelection(cars)).toBe(true);
+        expect(resolveTripCarId(cars, 2)).toBe(2);
+        expect(resolveTripCarId(cars, null)).toBeUndefined();
     });
 });

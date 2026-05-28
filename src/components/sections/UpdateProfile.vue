@@ -221,30 +221,59 @@
                     </div>
 
                     <div
-                        class="form-group"
+                        ref="patenteBlock"
+                        class="form-group user-cars-block"
                         :class="{
                             'missing-field-highlight': shouldHighlightPatente
                         }"
                     >
-                        <label for="input-patente">
+                        <label for="input-patente-0">
                             {{ $t('patente') }}
                             <span class="description">
                                 ({{ $t('soloConductores') }}).
                                 {{ $t('incentivoPatente') }}
                             </span>
                         </label>
-                        <input
-                            maxlength="20"
-                            v-model="patente"
-                            type="text"
-                            class="form-control"
-                            id="input-patente"
-                            ref="patenteInput"
-                            :class="{ 'has-error': patentError.state }"
-                        />
+                        <div
+                            v-for="(entry, index) in userCars"
+                            :key="
+                                entry.id
+                                    ? 'car-' + entry.id
+                                    : 'car-new-' + index
+                            "
+                            class="user-car-row"
+                        >
+                            <div class="user-car-row__fields">
+                                <input
+                                    maxlength="20"
+                                    v-model="entry.patente"
+                                    type="text"
+                                    class="form-control"
+                                    :id="'input-patente-' + index"
+                                    :class="{
+                                        'has-error': patentError.state
+                                    }"
+                                />
+                                <button
+                                    v-if="userCars.length > 1"
+                                    type="button"
+                                    class="btn btn-default user-car-row__remove"
+                                    @click.prevent="removeUserCar(index)"
+                                >
+                                    {{ $t('eliminarAuto') }}
+                                </button>
+                            </div>
+                        </div>
                         <span class="error" v-if="patentError.state">
                             {{ patentError.message }}
                         </span>
+                        <button
+                            type="button"
+                            class="btn btn-default user-cars-block__add"
+                            @click.prevent="addUserCar"
+                        >
+                            {{ $t('agregarOtroAuto') }}
+                        </button>
                     </div>
                     <div class="checkbox">
                         <label>
@@ -662,6 +691,7 @@ import modal from '../Modal';
 import { UserApi } from '../../services/api';
 import { getApiErrorMessage } from '../../utils/apiErrors.js';
 import { normalizeFacebookProfileUrl } from '../../utils/facebookProfileUrl.js';
+import { buildPatenteRowsFromCars } from '../../utils/userCars.js';
 
 class Error {
     constructor(state = false, message = '') {
@@ -675,8 +705,7 @@ export default {
     data() {
         return {
             user: null,
-            car: null,
-            patente: '',
+            userCars: [{ id: null, patente: '' }],
             pass: {
                 password: '',
                 password_confirmation: ''
@@ -786,6 +815,7 @@ export default {
         ...mapActions(useCarsStore, {
             carCreate: 'create',
             carUpdate: 'update',
+            carDelete: 'delete',
             carIndex: 'index'
         }),
         ...mapActions(useProfileStore, {
@@ -804,6 +834,68 @@ export default {
                 this.$scrollToElement(element, -270);
             }
         },
+        syncUserCarsFromStore() {
+            this.userCars = buildPatenteRowsFromCars(this.cars);
+        },
+        addUserCar() {
+            this.userCars.push({ id: null, patente: '' });
+        },
+        removeUserCar(index) {
+            const entry = this.userCars[index];
+            if (!entry) {
+                return;
+            }
+            const removeRow = () => {
+                this.userCars.splice(index, 1);
+                if (this.userCars.length === 0) {
+                    this.userCars.push({ id: null, patente: '' });
+                }
+            };
+            if (entry.id) {
+                this.carDelete({ id: entry.id })
+                    .then(removeRow)
+                    .catch((err) => {
+                        console.error(err);
+                        dialogs.message(getApiErrorMessage(err), {
+                            duration: 10,
+                            estado: 'error'
+                        });
+                    });
+                return;
+            }
+            removeRow();
+        },
+        async saveUserCars() {
+            for (const entry of this.userCars) {
+                const patente = (entry.patente || '').trim();
+                if (!patente) {
+                    continue;
+                }
+                const payload = {
+                    patente,
+                    description: 'NOT USED YET'
+                };
+                if (entry.id) {
+                    await this.carUpdate({ ...payload, id: entry.id });
+                } else {
+                    const created = await this.carCreate(payload);
+                    if (created && created.id) {
+                        entry.id = created.id;
+                    }
+                }
+            }
+        },
+        getPatenteScrollTarget() {
+            const input = document.getElementById('input-patente-0');
+            if (input) {
+                return input;
+            }
+            const block = this.$refs.patenteBlock;
+            if (block) {
+                return Array.isArray(block) ? block[0] : block;
+            }
+            return null;
+        },
         scrollToMissingRouteField() {
             if (
                 !this.$route ||
@@ -812,10 +904,21 @@ export default {
             ) {
                 return;
             }
-            this.$nextTick(() => {
-                if (this.$refs.patenteInput) {
-                    this.$scrollToElement(this.$refs.patenteInput, -270);
+            const scroll = () => {
+                const target = this.getPatenteScrollTarget();
+                if (!target) {
+                    return false;
                 }
+                this.$scrollToElement(target, -270);
+                return true;
+            };
+            this.$nextTick(() => {
+                if (scroll()) {
+                    return;
+                }
+                requestAnimationFrame(() => {
+                    this.$nextTick(scroll);
+                });
             });
         },
         changeShowPassword() {
@@ -933,18 +1036,13 @@ export default {
                     this.pass.password_confirmation = '';
                     this.loading = false;
                     dialogs.message(this.$t('perfilActualizadoCorrectamente'));
-                    if (this.patente.length) {
-                        if (this.car) {
-                            this.car.patente = this.patente;
-                            this.carUpdate(this.car);
-                        } else {
-                            let car = {
-                                description: 'NOT USED YET',
-                                patente: this.patente
-                            };
-                            this.carCreate(car);
-                        }
-                    }
+                    this.saveUserCars().catch((carErr) => {
+                        console.error(carErr);
+                        dialogs.message(getApiErrorMessage(carErr), {
+                            duration: 10,
+                            estado: 'error'
+                        });
+                    });
                     // this.user.birthday = this.birthdayAnswer;
                     if (
                         this.user.image &&
@@ -1182,11 +1280,7 @@ export default {
     },
     watch: {
         cars: function () {
-            console.log('cars', this.cars);
-            if (this.cars.length > 0) {
-                this.car = this.cars[0];
-                this.patente = this.car.patente;
-            }
+            this.syncUserCarsFromStore();
         },
         userData: function () {
             console.log('userData', this.userData);
@@ -1214,8 +1308,14 @@ export default {
         iptPhone() {
             this.phoneError.state = false;
         },
-        patente() {
-            this.patentError.state = false;
+        userCars: {
+            deep: true,
+            handler() {
+                this.patentError.state = false;
+            }
+        },
+        '$route.query.missing'() {
+            this.scrollToMissingRouteField();
         }
     },
 
@@ -1229,17 +1329,15 @@ export default {
         });
         
         // Load user's cars to populate patente field
-        this.carIndex().then(() => {
-            console.log('Cars loaded for profile update');
-            // Ensure patente is set if cars are loaded
-            if (this.cars && this.cars.length > 0) {
-                this.car = this.cars[0];
-                this.patente = this.car.patente;
-                console.log('Patente set from loaded car:', this.patente);
-            }
-        }).catch((error) => {
-            console.error('Failed to load cars:', error);
-        });
+        this.carIndex()
+            .then(() => {
+                this.syncUserCarsFromStore();
+                this.scrollToMissingRouteField();
+            })
+            .catch((error) => {
+                console.error('Failed to load cars:', error);
+                this.scrollToMissingRouteField();
+            });
         bus.on('date-change', this.dateChange);
         this.user = this.userData;
         // Format nro_doc with pattern when page loads
@@ -1254,10 +1352,7 @@ export default {
             this.showBeDriver = true;
         }
         if (this.cars) {
-            if (this.cars.length > 0) {
-                this.car = this.cars[0];
-                this.patente = this.car.patente;
-            }
+            this.syncUserCarsFromStore();
         }
         try {
             if (dayjs(this.user.birthday, 'YYYY-MM-DD').isValid()) {
@@ -1285,6 +1380,28 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.user-cars-block .user-car-row + .user-car-row {
+    margin-top: 0.35rem;
+}
+
+.user-car-row__fields {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.user-car-row__fields .form-control {
+    flex: 1;
+}
+
+.user-car-row__remove {
+    flex-shrink: 0;
+}
+
+.user-cars-block__add {
+    margin-top: 0.5rem;
+}
+
 .delete-account-container {
     display: flex;
     justify-content: flex-end;

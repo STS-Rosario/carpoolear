@@ -69,8 +69,9 @@ export const useCarsStore = defineStore('cars', {
                 .delete(data)
                 .then((response) => {
                     // CARS_DELETE - bug fixed: original used === instead of !==
-                    this.cars = this.cars.filter(
-                        (item) => item.id !== data.id
+                    const cars = this.cars || [];
+                    this.cars = cars.filter(
+                        (item) => String(item.id) !== String(data.id)
                     );
                     return Promise.resolve();
                 })
