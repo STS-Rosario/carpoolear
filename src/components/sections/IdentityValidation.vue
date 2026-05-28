@@ -34,6 +34,13 @@
         </div>
         <div class="alert alert-warning" v-if="mismatchDetails">
             <p>{{ $t(mismatchDetails.reasonKey) }}</p>
+            <p
+                v-if="mismatchSupportWarningKey"
+                class="identity-validation-mismatch-support-warning"
+            >
+                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                {{ $t(mismatchSupportWarningKey) }}
+            </p>
             <p v-if="mismatchDetails.showDni">
                 <strong>{{ $t('dniEnCarpoolear') }}:</strong> {{ mismatchDetails.userDni }}<br />
                 <strong>{{ $t('dniEnMercadoPago') }}:</strong> {{ mismatchDetails.mpDni }}
@@ -435,6 +442,9 @@ export default {
         },
         mismatchDetails() {
             return getIdentityValidationMismatchDetails(this.$route.query || {});
+        },
+        mismatchSupportWarningKey() {
+            return getManualRejectionSupportWarningKey(this.resultMessage);
         },
         /**
          * Paid + docs sent + not yet approved/rejected — still in admin queue.
@@ -928,6 +938,14 @@ export default {
 }
 
 .identity-validation-mp-warning .fa {
+    margin-right: 0.5rem;
+}
+
+.identity-validation-mismatch-support-warning {
+    margin-top: 0.5rem;
+}
+
+.identity-validation-mismatch-support-warning .fa {
     margin-right: 0.5rem;
 }
 
