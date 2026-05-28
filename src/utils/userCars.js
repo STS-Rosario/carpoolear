@@ -25,7 +25,7 @@ export function needsCarSelection(cars) {
     return activeCarsWithPlate(cars).length > 1;
 }
 
-export function restoreSelectedCarIdFromTrip(trip) {
+export function tripCarIdFromPayload(trip) {
     if (!trip) {
         return null;
     }
@@ -41,15 +41,34 @@ export function restoreSelectedCarIdFromTrip(trip) {
     return null;
 }
 
+export function isActiveCarId(cars, carId) {
+    if (carId == null || carId === '') {
+        return false;
+    }
+
+    return activeCarsWithPlate(cars).some(
+        (car) => String(car.id) === String(carId)
+    );
+}
+
+export function restoreSelectedCarIdFromTrip(trip, cars = null) {
+    const carId = tripCarIdFromPayload(trip);
+    if (carId == null) {
+        return null;
+    }
+
+    if (cars == null) {
+        return carId;
+    }
+
+    return isActiveCarId(cars, carId) ? carId : null;
+}
+
 export function resolveTripCarId(cars, selectedCarId) {
     const withPlate = activeCarsWithPlate(cars);
 
     if (withPlate.length === 0) {
         return undefined;
-    }
-
-    if (withPlate.length === 1) {
-        return withPlate[0].id;
     }
 
     if (selectedCarId != null && selectedCarId !== '') {
@@ -59,6 +78,10 @@ export function resolveTripCarId(cars, selectedCarId) {
         if (match) {
             return match.id;
         }
+    }
+
+    if (withPlate.length === 1) {
+        return withPlate[0].id;
     }
 
     return undefined;

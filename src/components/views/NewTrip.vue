@@ -426,7 +426,6 @@
                                     id="trip-car-select"
                                     class="form-control"
                                     v-model="selectedCarId"
-                                    :disabled="!needsDriverCarSelection"
                                     :class="{
                                         'has-error': carSelectionError.state
                                     }"
@@ -2120,9 +2119,6 @@ export default {
                 this.driverCarsWithPlate.length > 0
             );
         },
-        needsDriverCarSelection() {
-            return needsCarSelection(this.cars);
-        },
         profilePatenteLink() {
             return {
                 name: 'profile_update',
@@ -2303,10 +2299,17 @@ export default {
             if (!requiresDriverPlate(this.trip)) {
                 return;
             }
-            if (this.selectedCarId != null && this.selectedCarId !== '') {
-                return;
-            }
             const withPlate = this.driverCarsWithPlate;
+            if (this.selectedCarId != null && this.selectedCarId !== '') {
+                const stillActive = withPlate.find(
+                    (car) => String(car.id) === String(this.selectedCarId)
+                );
+                if (stillActive) {
+                    return;
+                }
+                this.selectedCarId = null;
+                this.trip.car_id = null;
+            }
             if (withPlate.length === 1) {
                 this.selectedCarId = withPlate[0].id;
             }
@@ -2429,10 +2432,13 @@ export default {
         this.trip.allow_smoking = Number(trip.allow_smoking) > 0;
         this.trip.rear_max_two_passengers = Number(trip.rear_max_two_passengers) > 0;
 
-        const restoredCarId = restoreSelectedCarIdFromTrip(trip);
+        const restoredCarId = restoreSelectedCarIdFromTrip(trip, this.cars);
         if (restoredCarId != null) {
             this.selectedCarId = restoredCarId;
             this.trip.car_id = restoredCarId;
+        } else {
+            this.selectedCarId = null;
+            this.trip.car_id = null;
         }
         
         this.trip.seat_price_cents = trip.seat_price_cents;
@@ -2450,7 +2456,16 @@ export default {
                 .then((trip) => {
                     if (this.user.id === trip.user.id) {
                         this.updatingTrip = trip;
-                        this.restoreData(trip);
+                        this.hydrateDriverCarsFromProfile();
+                        this.carIndex()
+                            .then(() => {
+                                this.restoreData(trip);
+                                this.preselectDriverCar();
+                            })
+                            .catch(() => {
+                                this.restoreData(trip);
+                                this.preselectDriverCar();
+                            });
                     } else {
                         this.$router.replace({
                             name: 'trips'
@@ -2842,13 +2857,19 @@ export default {
                     node_id: p.place.id
                 };
             });
+            const resolvedCarId = requiresDriverPlate(tripObj.trip)
+                ? resolveTripCarId(this.cars, this.selectedCarId)
+                : undefined;
             const tripInfo = {
                 points,
                 from_town: points[0].address,
                 to_town: last(points).address,
-                estimated_time: estimatedTime,
-                car_id: resolveTripCarId(this.cars, this.selectedCarId)
+                estimated_time: estimatedTime
             };
+
+            if (resolvedCarId != null && resolvedCarId !== '') {
+                tripInfo.car_id = resolvedCarId;
+            }
 
             if (!useWeeklySchedule) {
                 // Only include trip_date when in specific date view (not using weekly schedule)
@@ -2860,7 +2881,17 @@ export default {
             }
 
             const result = Object.assign({}, tripObj.trip, tripInfo);
-            
+
+            if (requiresDriverPlate(tripObj.trip)) {
+                if (resolvedCarId != null && resolvedCarId !== '') {
+                    result.car_id = resolvedCarId;
+                } else {
+                    delete result.car_id;
+                }
+            } else {
+                delete result.car_id;
+            }
+
             return result;
         },
 

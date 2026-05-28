@@ -6,9 +6,7 @@ const viewPath = path.resolve(__dirname, 'TripData.vue');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 
 describe('TripData trip car display', () => {
-    it('shows patente on driver trips when car is present', () => {
-        expect(viewSource).toContain('trip.car.patente');
-        expect(viewSource).toContain('!trip.is_passenger');
-        expect(viewSource).toContain('autoEliminado');
+    it('does not duplicate patente (shown in TripDescription instead)', () => {
+        expect(viewSource).not.toContain('trip.car.patente');
     });
 });

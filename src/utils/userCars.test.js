@@ -2,9 +2,11 @@ import { describe, expect, it } from 'vitest';
 import {
     activeCarsWithPlate,
     buildPatenteRowsFromCars,
+    isActiveCarId,
     needsCarSelection,
     resolveTripCarId,
-    restoreSelectedCarIdFromTrip
+    restoreSelectedCarIdFromTrip,
+    tripCarIdFromPayload
 } from './userCars';
 
 describe('userCars', () => {
@@ -34,19 +36,32 @@ describe('userCars', () => {
         expect(needsCarSelection(cars)).toBe(true);
         expect(resolveTripCarId(cars, null)).toBeUndefined();
         expect(resolveTripCarId(cars, 2)).toBe(2);
+        expect(resolveTripCarId(cars, 99)).toBeUndefined();
     });
 
-    it('auto-resolves the only active car', () => {
+    it('auto-resolves the only active car when selection is missing or stale', () => {
         const cars = [{ id: 5, patente: 'ONLY1' }];
 
         expect(needsCarSelection(cars)).toBe(false);
         expect(resolveTripCarId(cars, null)).toBe(5);
+        expect(resolveTripCarId(cars, 99)).toBe(5);
     });
 
     it('restores selected car id from trip payload when editing', () => {
+        expect(tripCarIdFromPayload({ car_id: 9 })).toBe(9);
+        expect(tripCarIdFromPayload({ car: { id: 4, patente: 'XY' } })).toBe(4);
+        expect(tripCarIdFromPayload({})).toBeNull();
         expect(restoreSelectedCarIdFromTrip({ car_id: 9 })).toBe(9);
         expect(restoreSelectedCarIdFromTrip({ car: { id: 4, patente: 'XY' } })).toBe(4);
         expect(restoreSelectedCarIdFromTrip({})).toBeNull();
+    });
+
+    it('ignores soft-deleted trip cars when restoring edit selection', () => {
+        const activeCars = [{ id: 2, patente: 'NEW002' }];
+
+        expect(isActiveCarId(activeCars, 1)).toBe(false);
+        expect(restoreSelectedCarIdFromTrip({ car_id: 1 }, activeCars)).toBeNull();
+        expect(restoreSelectedCarIdFromTrip({ car_id: 2 }, activeCars)).toBe(2);
     });
 
     it('ignores cars without a plate when resolving trip car', () => {
