@@ -219,6 +219,13 @@
                     <p class="identity-validation-rejection-notice__text">
                         {{ $t('identityValidationRejectionNoticeBody') }}
                     </p>
+                    <p
+                        v-if="manualRejectionSupportWarningKey"
+                        class="identity-validation-rejection-notice__support-warning"
+                    >
+                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                        {{ $t(manualRejectionSupportWarningKey) }}
+                    </p>
                     <p class="identity-validation-rejection-notice__emphasis">
                         <strong class="identity-validation-rejection-notice__emphasis-strong">{{ $t('identityValidationRejectionNoticeContactLead') }}</strong><router-link class="identity-validation-rejection-notice__mesa-link" :to="{ name: 'tickets' }">{{ $t('mesaAyuda') }}</router-link>{{ $t('identityValidationRejectionNoticeContactTail') }}
                     </p>
@@ -472,6 +479,19 @@ export default {
                 m.submitted_at &&
                 m.review_status === 'rejected'
             );
+        },
+        manualRejectionSupportWarningKey() {
+            if (!this.showManualRejectedWithChoiceCards) return null;
+            if (this.manualStatus.reject_reason === 'name_mismatch') {
+                return 'identityValidationRejectionSupportWarningNameMismatch';
+            }
+            if (this.manualStatus.reject_reason === 'dni_mismatch') {
+                return 'identityValidationRejectionSupportWarningDniMismatch';
+            }
+            if (this.manualStatus.reject_reason === 'both_mismatch') {
+                return 'identityValidationRejectionSupportWarningBothMismatch';
+            }
+            return null;
         },
         showVerificationSuccessBanner() {
             if (this.manualDocsPendingAdminReview) {
@@ -850,6 +870,17 @@ export default {
     font-size: 0.95rem;
     line-height: 1.4;
     color: #7f1d1d;
+}
+
+.identity-validation-rejection-notice__support-warning {
+    margin: 0.65rem 0 0.5rem;
+    font-size: 0.95rem;
+    line-height: 1.45;
+    color: #7f1d1d;
+}
+
+.identity-validation-rejection-notice__support-warning .fa {
+    margin-right: 0.35rem;
 }
 
 .manual-status-upload-block {

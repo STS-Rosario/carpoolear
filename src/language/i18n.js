@@ -521,6 +521,12 @@ const messages = {
         identityValidationRejectionNoticeContactLead:
             'Podés intentar nuevamente o escribinos desde la ',
         identityValidationRejectionNoticeContactTail: '.',
+        identityValidationRejectionSupportWarningNameMismatch:
+            'Parece que no coincide tu nombre, creá un ticket de Mesa de Ayuda así te ayudamos a cambiarlo y podés intentar nuevamente.',
+        identityValidationRejectionSupportWarningDniMismatch:
+            'Parece que no coincide tu DNI, asegurate que sea el correcto e intentá nuevamente. Si es el correcto y está asociado a otra cuenta, creá un ticket de Mesa de Ayuda así te ayudamos a resolverlo.',
+        identityValidationRejectionSupportWarningBothMismatch:
+            'Parece que no coinciden tu nombre y tu DNI. Asegurate que sean correctos e intentá nuevamente. Si persiste, creá un ticket de Mesa de Ayuda así te ayudamos a resolverlo.',
         identityValidationRejectionReasonLabel: 'Razón de rechazo',
         verEstadoValidacion: 'Ver estado de verificación',
         debesCargarDni:
@@ -1810,6 +1816,12 @@ const messages = {
         identityValidationRejectionNoticeContactLead:
             'Podés intentar nuevamente o escribinos desde la ',
         identityValidationRejectionNoticeContactTail: '.',
+        identityValidationRejectionSupportWarningNameMismatch:
+            'Parece que no coincide tu nombre, creá un ticket de Mesa de Ayuda así te ayudamos a cambiarlo y podés intentar nuevamente.',
+        identityValidationRejectionSupportWarningDniMismatch:
+            'Parece que no coincide tu DNI, asegurate que sea el correcto e intentá nuevamente. Si es el correcto y está asociado a otra cuenta, creá un ticket de Mesa de Ayuda así te ayudamos a resolverlo.',
+        identityValidationRejectionSupportWarningBothMismatch:
+            'Parece que no coinciden tu nombre y tu DNI. Asegurate que sean correctos e intentá nuevamente. Si persiste, creá un ticket de Mesa de Ayuda así te ayudamos a resolverlo.',
         identityValidationRejectionReasonLabel: 'Razón de rechazo',
         verEstadoValidacion: 'Ver estado de verificación',
         debesCargarDni:
@@ -2880,6 +2892,12 @@ const messages = {
         identityValidationRejectionNoticeContactLead:
             'You can try again or reach out through the ',
         identityValidationRejectionNoticeContactTail: '.',
+        identityValidationRejectionSupportWarningNameMismatch:
+            "It looks like your name doesn't match. Create a Help Desk ticket so we can help you update it and try again.",
+        identityValidationRejectionSupportWarningDniMismatch:
+            "It looks like your DNI doesn't match. Make sure it is correct and try again. If it is correct and linked to another account, create a Help Desk ticket so we can help resolve it.",
+        identityValidationRejectionSupportWarningBothMismatch:
+            "It looks like both your name and DNI don't match. Make sure they are correct and try again. If the issue persists, create a Help Desk ticket so we can help resolve it.",
         identityValidationRejectionReasonLabel: 'Reason for rejection',
         verEstadoValidacion: 'View verification status',
         debesCargarDni:
