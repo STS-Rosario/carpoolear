@@ -965,6 +965,11 @@ export default {
     font-weight: 600;
 }
 
+.identity-validation-mismatch-support-warning a:hover,
+.identity-validation-mismatch-support-warning a:focus {
+    color: #5f3a00;
+}
+
 .identity-validation-component .manual-status-panel.panel-warning .panel-heading {
     font-size: 1.25rem;
     font-weight: 700;
