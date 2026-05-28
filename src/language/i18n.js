@@ -534,11 +534,11 @@ const messages = {
         identityValidationRejectionSupportWarningDniMismatchTail:
             ' así te ayudamos a resolverlo.',
         identityValidationRejectionSupportWarningBothMismatch:
-            'Parece que no coinciden tu nombre y tu DNI. Asegurate que sean correctos e intentá nuevamente. Si persiste, creá un ticket de Mesa de Ayuda así te ayudamos a resolverlo.',
+            'Parece que no coincide tu nombre ni DNI, revisá que usaste una cuenta de Mercado Pago del mismo titular. Si necesitás cambiar tu nombre en Carpoolear, creá un ticket de Mesa de Ayuda así te ayudamos a cambiarlo y podés intentar nuevamente.',
         identityValidationRejectionSupportWarningBothMismatchLead:
-            'Parece que no coinciden tu nombre y tu DNI. Asegurate que sean correctos e intentá nuevamente. Si persiste, ',
+            'Parece que no coincide tu nombre ni DNI, revisá que usaste una cuenta de Mercado Pago del mismo titular. Si necesitás cambiar tu nombre en Carpoolear, ',
         identityValidationRejectionSupportWarningBothMismatchTail:
-            ' así te ayudamos a resolverlo.',
+            ' así te ayudamos a cambiarlo y podés intentar nuevamente.',
         identityValidationMismatchSupportTicketCta: 'creá un ticket de Mesa de Ayuda',
         identityValidationRejectionReasonLabel: 'Razón de rechazo',
         verEstadoValidacion: 'Ver estado de verificación',
@@ -1842,11 +1842,11 @@ const messages = {
         identityValidationRejectionSupportWarningDniMismatchTail:
             ' así te ayudamos a resolverlo.',
         identityValidationRejectionSupportWarningBothMismatch:
-            'Parece que no coinciden tu nombre y tu DNI. Asegurate que sean correctos e intentá nuevamente. Si persiste, creá un ticket de Mesa de Ayuda así te ayudamos a resolverlo.',
+            'Parece que no coincide tu nombre ni DNI, revisá que usaste una cuenta de Mercado Pago del mismo titular. Si necesitás cambiar tu nombre en Carpoolear, creá un ticket de Mesa de Ayuda así te ayudamos a cambiarlo y podés intentar nuevamente.',
         identityValidationRejectionSupportWarningBothMismatchLead:
-            'Parece que no coinciden tu nombre y tu DNI. Asegurate que sean correctos e intentá nuevamente. Si persiste, ',
+            'Parece que no coincide tu nombre ni DNI, revisá que usaste una cuenta de Mercado Pago del mismo titular. Si necesitás cambiar tu nombre en Carpoolear, ',
         identityValidationRejectionSupportWarningBothMismatchTail:
-            ' así te ayudamos a resolverlo.',
+            ' así te ayudamos a cambiarlo y podés intentar nuevamente.',
         identityValidationMismatchSupportTicketCta: 'creá un ticket de Mesa de Ayuda',
         identityValidationRejectionReasonLabel: 'Razón de rechazo',
         verEstadoValidacion: 'Ver estado de verificación',
@@ -2931,11 +2931,11 @@ const messages = {
         identityValidationRejectionSupportWarningDniMismatchTail:
             ' so we can help resolve it.',
         identityValidationRejectionSupportWarningBothMismatch:
-            "It looks like both your name and DNI don't match. Make sure they are correct and try again. If the issue persists, create a Help Desk ticket so we can help resolve it.",
+            'It looks like neither your name nor DNI matches. Make sure you used a Mercado Pago account belonging to the same holder. If you need to change your name in Carpoolear, create a Help Desk ticket so we can help you update it and try again.',
         identityValidationRejectionSupportWarningBothMismatchLead:
-            "It looks like both your name and DNI don't match. Make sure they are correct and try again. If the issue persists, ",
+            'It looks like neither your name nor DNI matches. Make sure you used a Mercado Pago account belonging to the same holder. If you need to change your name in Carpoolear, ',
         identityValidationRejectionSupportWarningBothMismatchTail:
-            ' so we can help resolve it.',
+            ' so we can help you update it and try again.',
         identityValidationMismatchSupportTicketCta: 'create a Help Desk ticket',
         identityValidationRejectionReasonLabel: 'Reason for rejection',
         verEstadoValidacion: 'View verification status',

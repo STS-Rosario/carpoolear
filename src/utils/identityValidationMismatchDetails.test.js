@@ -41,7 +41,7 @@ describe('getIdentityValidationMismatchDetails', () => {
 
     it('maps both mismatch reject reason to warning translation key', () => {
         expect(getManualRejectionSupportWarningKey('both_mismatch'))
-            .toBe('identityValidationRejectionSupportWarningNameMismatch');
+            .toBe('identityValidationRejectionSupportWarningBothMismatch');
     });
 
     it('returns null when reject reason does not match known mismatch reasons', () => {
@@ -54,7 +54,7 @@ describe('getIdentityValidationMismatchDetails', () => {
         expect(getMismatchSupportWarningKey('dni_mismatch'))
             .toBe('identityValidationRejectionSupportWarningDniMismatch');
         expect(getMismatchSupportWarningKey('both_mismatch'))
-            .toBe('identityValidationRejectionSupportWarningNameMismatch');
+            .toBe('identityValidationRejectionSupportWarningBothMismatch');
         expect(getMismatchSupportWarningKey('other')).toBe(null);
     });
 });

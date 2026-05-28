@@ -40,8 +40,7 @@ export function getMismatchSupportWarningKey(mismatchReason) {
         return 'identityValidationRejectionSupportWarningDniMismatch';
     }
     if (mismatchReason === MISMATCH_RESULT_BOTH) {
-        // Product decision: "both mismatch" reuses the same copy as name mismatch.
-        return 'identityValidationRejectionSupportWarningNameMismatch';
+        return 'identityValidationRejectionSupportWarningBothMismatch';
     }
     return null;
 }
