@@ -407,6 +407,8 @@ import {
     getMismatchSupportWarningKey
 } from '../../utils/identityValidationMismatchDetails';
 
+const EMPTY_WARNING_PARTS = { leadKey: null, tailKey: null };
+
 export default {
     name: 'IdentityValidation',
     data() {
@@ -454,7 +456,7 @@ export default {
             return getMismatchSupportWarningKey(this.resultMessage);
         },
         mismatchSupportWarningParts() {
-            if (!this.mismatchSupportWarningKey) return { leadKey: null, tailKey: null };
+            if (!this.mismatchSupportWarningKey) return EMPTY_WARNING_PARTS;
             return {
                 leadKey: `${this.mismatchSupportWarningKey}Lead`,
                 tailKey: `${this.mismatchSupportWarningKey}Tail`
