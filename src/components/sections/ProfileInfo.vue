@@ -282,6 +282,9 @@ export default {
 .btn-primary {
     display: inline-block;
 }
+.btn-report {
+    margin-top: 0.5rem;
+}
 .label-reply {
     display: block;
     padding: 0;

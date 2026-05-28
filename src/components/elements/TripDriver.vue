@@ -347,6 +347,12 @@ export default {
 .user_pin img {
     width: 40px;
 }
+.trip-driver-report {
+    margin-top: 0.75rem;
+}
+.trip-driver-report .btn-report {
+    width: 100%;
+}
 .driver-profile div.row:last-child {
     height: auto;
 }
