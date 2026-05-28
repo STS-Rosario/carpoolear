@@ -105,12 +105,18 @@
                     </div>
 
                     <div
-                        class="list-group-item"
-                        v-if="profile.cars && profile.cars.length"
+                        class="list-group-item profile-cars"
+                        v-if="visibleCars.length"
                     >
                         <i class="fa fa-car" aria-hidden="true"></i>
                         <div class="list-group-item--content">
-                            {{ profile.cars[0].patente }}
+                            <div
+                                v-for="car in visibleCars"
+                                :key="car.id"
+                                class="profile-car-patente"
+                            >
+                                {{ car.patente }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -176,6 +182,7 @@ import { useConversationsStore } from '../../stores/conversations';
 import router from '../../router';
 import UserNameWithBadge from '../elements/UserNameWithBadge.vue';
 import { formatId } from '../../services/utility';
+import { activeCarsWithPlate } from '../../utils/userCars.js';
 
 export default {
     computed: {
@@ -198,6 +205,9 @@ export default {
         },
         formattedNroDoc() {
             return formatId(this.profile.nro_doc, this.config.profile_id_format);
+        },
+        visibleCars() {
+            return activeCarsWithPlate(this.profile?.cars);
         }
     },
     methods: {
