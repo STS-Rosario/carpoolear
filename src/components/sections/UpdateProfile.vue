@@ -221,48 +221,57 @@
                     </div>
 
                     <div
-                        v-for="(entry, index) in userCars"
-                        :key="entry.id ? 'car-' + entry.id : 'car-new-' + index"
-                        class="form-group user-car-row"
+                        class="form-group user-cars-block"
                         :class="{
-                            'missing-field-highlight':
-                                shouldHighlightPatente && index === 0
+                            'missing-field-highlight': shouldHighlightPatente
                         }"
                     >
-                        <label :for="'input-patente-' + index">
+                        <label for="input-patente-0">
                             {{ $t('patente') }}
-                            <span v-if="index === 0" class="description">
+                            <span class="description">
                                 ({{ $t('soloConductores') }}).
                                 {{ $t('incentivoPatente') }}
                             </span>
                         </label>
-                        <div class="user-car-row__fields">
-                            <input
-                                maxlength="20"
-                                v-model="entry.patente"
-                                type="text"
-                                class="form-control"
-                                :id="'input-patente-' + index"
-                                :ref="index === 0 ? 'patenteInput' : null"
-                                :class="{ 'has-error': patentError.state }"
-                            />
-                            <button
-                                v-if="userCars.length > 1"
-                                type="button"
-                                class="btn btn-default user-car-row__remove"
-                                @click.prevent="removeUserCar(index)"
-                            >
-                                {{ $t('eliminarAuto') }}
-                            </button>
+                        <div
+                            v-for="(entry, index) in userCars"
+                            :key="
+                                entry.id
+                                    ? 'car-' + entry.id
+                                    : 'car-new-' + index
+                            "
+                            class="user-car-row"
+                        >
+                            <div class="user-car-row__fields">
+                                <input
+                                    maxlength="20"
+                                    v-model="entry.patente"
+                                    type="text"
+                                    class="form-control"
+                                    :id="'input-patente-' + index"
+                                    :ref="
+                                        index === 0 ? 'patenteInput' : null
+                                    "
+                                    :class="{
+                                        'has-error': patentError.state
+                                    }"
+                                />
+                                <button
+                                    v-if="userCars.length > 1"
+                                    type="button"
+                                    class="btn btn-default user-car-row__remove"
+                                    @click.prevent="removeUserCar(index)"
+                                >
+                                    {{ $t('eliminarAuto') }}
+                                </button>
+                            </div>
                         </div>
-                        <span class="error" v-if="patentError.state && index === 0">
+                        <span class="error" v-if="patentError.state">
                             {{ patentError.message }}
                         </span>
-                    </div>
-                    <div class="form-group">
                         <button
                             type="button"
-                            class="btn btn-default"
+                            class="btn btn-default user-cars-block__add"
                             @click.prevent="addUserCar"
                         >
                             {{ $t('agregarOtroAuto') }}
@@ -1346,10 +1355,14 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.user-cars-block .user-car-row + .user-car-row {
+    margin-top: 0.35rem;
+}
+
 .user-car-row__fields {
     display: flex;
     gap: 0.5rem;
-    align-items: flex-start;
+    align-items: center;
 }
 
 .user-car-row__fields .form-control {
@@ -1358,6 +1371,10 @@ export default {
 
 .user-car-row__remove {
     flex-shrink: 0;
+}
+
+.user-cars-block__add {
+    margin-top: 0.5rem;
 }
 
 .delete-account-container {

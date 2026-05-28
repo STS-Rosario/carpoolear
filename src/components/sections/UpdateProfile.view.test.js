@@ -7,8 +7,8 @@ const viewSource = fs.readFileSync(viewPath, 'utf8');
 
 describe('UpdateProfile missing field routing', () => {
     it('exposes the patente input as a scroll target', () => {
-        expect(viewSource).toContain("for=\"'input-patente-' + index\"");
-        expect(viewSource).toContain("id=\"'input-patente-' + index\"");
+        expect(viewSource).toContain('for="input-patente-0"');
+        expect(viewSource).toContain(":id=\"'input-patente-' + index\"");
         expect(viewSource).toContain("'patenteInput'");
     });
 
@@ -32,6 +32,7 @@ describe('UpdateProfile multiple patentes', () => {
         expect(viewSource).toContain('agregarOtroAuto');
         expect(viewSource).toContain('addUserCar');
         expect(viewSource).toContain('removeUserCar');
+        expect(viewSource).toContain('class="form-group user-cars-block"');
         expect(viewSource).toContain('v-for="(entry, index) in userCars"');
         expect(viewSource).toContain('saveUserCars');
     });
