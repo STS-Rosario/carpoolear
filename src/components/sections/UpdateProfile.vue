@@ -199,6 +199,25 @@
                             {{ phoneError.message }}
                         </span>
                     </div>
+                    <div
+                        class="form-group"
+                        v-if="settings.module_facebook_profile_url_enabled"
+                    >
+                        <label for="input-facebook-profile-url">
+                            Perfil de Facebook (opcional)
+                        </label>
+                        <input
+                            v-model="user.facebook_profile_url"
+                            type="url"
+                            class="form-control"
+                            id="input-facebook-profile-url"
+                            placeholder="https://facebook.com/tuperfil"
+                        />
+                        <p class="help-block">
+                            Opcional. Para generar confianza podés poner tu link a
+                            tu perfil de Facebook
+                        </p>
+                    </div>
 
                     <div
                         class="form-group"
@@ -841,7 +860,8 @@ export default {
                 'do_not_alert_request_seat', 'do_not_alert_accept_passenger',
                 'do_not_alert_pending_rates', 'do_not_alert_pricing',
                 'autoaccept_requests', 'unaswered_messages_limit',
-                'account_number', 'account_type', 'account_bank'
+                'account_number', 'account_type', 'account_bank',
+                'facebook_profile_url'
             ];
             const data = {};
             allowedProfileUpdateKeys.forEach((key) => {

@@ -29,15 +29,17 @@ describe('Facebook profile URL coverage in profile surfaces', () => {
         expect(registerSource).toContain('Perfil de Facebook (opcional)');
         expect(registerSource).toContain('https://facebook.com/tuperfil');
         expect(registerSource).toContain(
-            'Opcional. Para generar confianza podés poner tu link a tu perfil de Facebook'
+            'Opcional. Para generar confianza podés poner tu link a'
         );
+        expect(registerSource).toContain('tu perfil de Facebook');
 
         expect(updateProfileSource).toContain('module_facebook_profile_url_enabled');
         expect(updateProfileSource).toContain('Perfil de Facebook (opcional)');
         expect(updateProfileSource).toContain('https://facebook.com/tuperfil');
         expect(updateProfileSource).toContain(
-            'Opcional. Para generar confianza podés poner tu link a tu perfil de Facebook'
+            'Opcional. Para generar confianza podés poner tu link a'
         );
+        expect(updateProfileSource).toContain('tu perfil de Facebook');
     });
 
     it('shows the facebook profile url in profile detail and admin user detail', () => {

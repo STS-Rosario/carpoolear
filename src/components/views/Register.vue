@@ -156,6 +156,25 @@
                 <span class="error" v-if="emailVerificationError.state">
                     {{ emailVerificationError.message }}
                 </span>
+                <div
+                    class="form-group"
+                    v-if="settings.module_facebook_profile_url_enabled"
+                >
+                    <label for="input-facebook-profile-url">
+                        Perfil de Facebook (opcional)
+                    </label>
+                    <input
+                        id="input-facebook-profile-url"
+                        v-model="facebookProfileUrl"
+                        type="url"
+                        class="form-control"
+                        placeholder="https://facebook.com/tuperfil"
+                    />
+                    <p class="help-block">
+                        Opcional. Para generar confianza podés poner tu link a
+                        tu perfil de Facebook
+                    </p>
+                </div>
 
                 <!--<label for="">Fecha de nacimiento <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
         <DatePicker :model-value="birthday" ref="ipt_calendar" name="ipt_calendar" :maxDate="maxDate" :minDate="minDate" :class="{'has-error': birthdayError.state}" ></DatePicker>-->
@@ -411,6 +430,7 @@ export default {
             account_number: '',
             account_type: '',
             account_bank: '',
+            facebookProfileUrl: '',
             termsAndConditions: false,
             carpoolear_logo:
                 process.env.ROUTE_BASE +
@@ -662,6 +682,7 @@ export default {
                             account_number: that.account_number,
                             account_type: that.account_type,
                             account_bank: that.account_bank,
+                            facebook_profile_url: that.facebookProfileUrl,
                             token
                         };
                         /* global FormData */
