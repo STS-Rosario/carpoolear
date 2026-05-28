@@ -295,13 +295,10 @@ export default {
                 bus.on('back-click', this.onBackClick);
                 if (this.conversation) {
                     this.setTitle(this.conversation.title);
-                    const otherUser = this.conversation.users.find(
-                        (u) => u.id !== this.user.id
-                    );
-                    if (otherUser) {
+                    if (this.otherConversationUser) {
                         this.setTitleLink({
                             name: 'profile',
-                            params: { id: otherUser.id }
+                            params: { id: this.otherConversationUser.id }
                         });
                     } else {
                         this.setTitleLink({});
@@ -330,13 +327,10 @@ export default {
         }
         if (this.conversation) {
             this.setTitle(this.conversation.title);
-            const otherUser = this.conversation.users.find(
-                (u) => u.id !== this.user.id
-            );
-            if (otherUser) {
+            if (this.otherConversationUser) {
                 this.setTitleLink({
                     name: 'profile',
-                    params: { id: otherUser.id }
+                    params: { id: this.otherConversationUser.id }
                 });
             } else {
                 this.setTitleLink({});
