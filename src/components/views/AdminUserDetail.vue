@@ -49,6 +49,19 @@
                             <strong>{{ $t('doc') }}:</strong>
                             {{ user.nro_doc || '—' }}
                         </p>
+                        <p v-if="config && config.module_facebook_profile_url_enabled">
+                            <strong>Perfil de Facebook:</strong>
+                            <span v-if="user.facebook_profile_url">
+                                <a
+                                    :href="user.facebook_profile_url"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    {{ user.facebook_profile_url }}
+                                </a>
+                            </span>
+                            <span v-else>—</span>
+                        </p>
                         <p>
                             <strong>{{ $t('ultimaConexion') }}</strong>
                             {{ user.last_connection || '—' }}
@@ -117,8 +130,9 @@
 </template>
 
 <script>
-import { mapActions } from 'pinia';
+import { mapActions, mapState } from 'pinia';
 import { useConversationsStore } from '../../stores/conversations';
+import { useAuthStore } from '../../stores/auth';
 import AdminLayout from '../layouts/AdminLayout.vue';
 import router from '../../router';
 import { UserApi } from '../../services/api';
@@ -132,6 +146,11 @@ export default {
             user: null,
             userApi: null
         };
+    },
+    computed: {
+        ...mapState(useAuthStore, {
+            config: 'appConfig'
+        })
     },
     methods: {
         ...mapActions(useConversationsStore, {

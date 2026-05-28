@@ -93,6 +93,26 @@
                                     :placeholder="$t('notaSoloVisiblePorAdmins')"
                                 ></textarea>
                             </div>
+                            <div
+                                class="form-group"
+                                v-if="settings.module_facebook_profile_url_enabled"
+                            >
+                                <label for="input-facebook-profile-url">
+                                    Perfil de Facebook (opcional)
+                                    <span class="description">
+                                        Opcional. Para generar confianza podés poner tu
+                                        link a tu perfil de Facebook
+                                    </span>
+                                </label>
+                                <input
+                                    v-model="newInfo.facebook_profile_url"
+                                    type="url"
+                                    class="form-control"
+                                    id="input-facebook-profile-url"
+                                    placeholder="https://facebook.com/tuperfil"
+                                    @blur="onFacebookProfileUrlBlur"
+                                />
+                            </div>
 
                             <div class="form-group">
                                 <label for="input-dni"
@@ -417,6 +437,7 @@ import { useAdminStore } from '../../stores/admin';
 import { useProfileStore } from '../../stores/profile';
 import { Thread } from '../../classes/Threads.js';
 import { inputIsNumber, formatId, cleanId } from '../../services/utility';
+import { normalizeFacebookProfileUrl } from '../../utils/facebookProfileUrl.js';
 import dialogs from '../../services/dialogs.js';
 import AdminLayout from '../layouts/AdminLayout.vue';
 import modal from '../Modal';
@@ -447,7 +468,8 @@ export default {
                 account_type: '',
                 account_bank: '',
                 cars: [],
-                patente: ''
+                patente: '',
+                facebook_profile_url: ''
             },
             error: null,
             globalError: false,
@@ -500,6 +522,12 @@ export default {
         ...mapActions(useProfileStore, {
             getBankData: 'getBankData'
         }),
+        onFacebookProfileUrlBlur() {
+            const normalized = normalizeFacebookProfileUrl(this.newInfo.facebook_profile_url);
+            if (normalized) {
+                this.newInfo.facebook_profile_url = normalized;
+            }
+        },
 
         goToListOnly() {
             this.resetUserState();
@@ -576,6 +604,7 @@ export default {
                 account_number: this.currentUser.account_number,
                 account_type: this.currentUser.account_type,
                 account_bank: this.currentUser.account_bank,
+                facebook_profile_url: this.currentUser.facebook_profile_url,
                 banned: this.currentUser.banned > 0,
                 active: this.currentUser.active > 0,
                 cars: this.currentUser.cars || [],
@@ -618,7 +647,8 @@ export default {
                 account_type: '',
                 account_bank: '',
                 cars: [],
-                patente: ''
+                patente: '',
+                facebook_profile_url: ''
             };
         },
         clear() {
@@ -780,6 +810,9 @@ export default {
                     account_number: this.newInfo.account_number,
                     account_type: this.newInfo.account_type,
                     account_bank: this.newInfo.account_bank,
+                    facebook_profile_url:
+                        normalizeFacebookProfileUrl(this.newInfo.facebook_profile_url) ??
+                        this.newInfo.facebook_profile_url,
                     banned: this.newInfo.banned ? 1 : 0,
                     active: this.newInfo.active ? 1 : 0
                 };

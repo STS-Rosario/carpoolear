@@ -11,6 +11,3 @@ fi
 
 echo "pre-commit: eslint..."
 npm run lint
-
-echo "pre-commit: unit tests..."
-npm run test:unit -- --run

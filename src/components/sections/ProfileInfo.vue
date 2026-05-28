@@ -77,6 +77,25 @@
                             {{ formattedNroDoc }}
                         </div>
                     </div>
+                    <div
+                        class="list-group-item"
+                        v-if="
+                            config &&
+                            config.module_facebook_profile_url_enabled &&
+                            profile.facebook_profile_url
+                        "
+                    >
+                        <i class="fa fa-facebook" aria-hidden="true"></i>
+                        <div class="list-group-item--content">
+                            <a
+                                :href="profile.facebook_profile_url"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                {{ profile.facebook_profile_url }}
+                            </a>
+                        </div>
+                    </div>
 
                     <div class="list-group-item" v-if="profile.mobile_phone">
                         <i class="fa fa-mobile bigger" aria-hidden="true"></i>

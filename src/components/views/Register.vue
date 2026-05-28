@@ -156,6 +156,26 @@
                 <span class="error" v-if="emailVerificationError.state">
                     {{ emailVerificationError.message }}
                 </span>
+                <div
+                    class="form-group"
+                    v-if="facebookProfileUrlModuleEnabled"
+                >
+                    <label for="input-facebook-profile-url">
+                        Perfil de Facebook (opcional)
+                        <span class="description">
+                            Opcional. Para generar confianza podés poner tu link a
+                            tu perfil de Facebook
+                        </span>
+                    </label>
+                    <input
+                        id="input-facebook-profile-url"
+                        v-model="facebookProfileUrl"
+                        type="url"
+                        class="form-control"
+                        placeholder="https://facebook.com/tuperfil"
+                        @blur="onFacebookProfileUrlBlur"
+                    />
+                </div>
 
                 <!--<label for="">Fecha de nacimiento <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
         <DatePicker :model-value="birthday" ref="ipt_calendar" name="ipt_calendar" :maxDate="maxDate" :minDate="minDate" :class="{'has-error': birthdayError.state}" ></DatePicker>-->
@@ -388,6 +408,7 @@ import modal from '../Modal';
 import dayjs from '../../dayjs';
 import Spinner from '../Spinner.vue';
 import { isOfflineApiError } from '../../utils/apiErrors.js';
+import { normalizeFacebookProfileUrl } from '../../utils/facebookProfileUrl.js';
 let emailRegex =
     /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 class Error {
@@ -411,6 +432,7 @@ export default {
             account_number: '',
             account_type: '',
             account_bank: '',
+            facebookProfileUrl: '',
             termsAndConditions: false,
             carpoolear_logo:
                 process.env.ROUTE_BASE +
@@ -457,6 +479,11 @@ export default {
         },
         showRegisterForm() {
             return !this.settings.enable_facebook || this.showRegister;
+        },
+        facebookProfileUrlModuleEnabled() {
+            return !!(
+                this.settings && this.settings.module_facebook_profile_url_enabled
+            );
         }
     },
     watch: {
@@ -497,6 +524,12 @@ export default {
         }),
         onShowRegister() {
             this.showRegister = true;
+        },
+        onFacebookProfileUrlBlur() {
+            const normalized = normalizeFacebookProfileUrl(this.facebookProfileUrl);
+            if (normalized) {
+                this.facebookProfileUrl = normalized;
+            }
         },
         toggleEmailTakenModal() {
             this.showEmailTakenModal = !this.showEmailTakenModal;
@@ -662,6 +695,8 @@ export default {
                             account_number: that.account_number,
                             account_type: that.account_type,
                             account_bank: that.account_bank,
+                            facebook_profile_url:
+                                normalizeFacebookProfileUrl(that.facebookProfileUrl) ?? '',
                             token
                         };
                         /* global FormData */
