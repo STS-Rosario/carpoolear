@@ -9,9 +9,8 @@ describe('DonationAmountPicker.vue', () => {
     it('renders 2026 preset amounts with tier labels and icons', () => {
         const source = componentSource();
         expect(source).toContain('DONATION_TIERS');
-        expect(source).toContain('fa-coffee');
-        expect(source).toContain('fa-beer');
-        expect(source).toContain('fa-cutlery');
+        expect(source).toContain('tier.icon');
+        expect(source).toContain('tier.labelKey');
         expect(source).toContain(':value="String(tier.amount)"');
         expect(source).toContain('donationTierCafe');
         expect(source).toContain('donationUsageNote');

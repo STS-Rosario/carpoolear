@@ -141,48 +141,7 @@
                         </p>
                         {{ $t('ayudanosPlataforma') }}
                     </div>
-                    <div class="radio">
-                        <label class="radio-inline">
-                            <input
-                                type="radio"
-                                name="donationValor"
-                                id="donation50"
-                                value="2000"
-                                v-model="donateValue"
-                            />
-                            <span>$ 2000</span>
-                        </label>
-                        <label class="radio-inline">
-                            <input
-                                type="radio"
-                                name="donationValor"
-                                id="donation100"
-                                value="5000"
-                                v-model="donateValue"
-                            />
-                            <span>$ 5000</span>
-                        </label>
-                        <label class="radio-inline">
-                            <input
-                                type="radio"
-                                name="donationValor"
-                                id="donation200"
-                                value="10000"
-                                v-model="donateValue"
-                            />
-                            <span>$ 10000</span>
-                        </label>
-                        <label class="radio-inline">
-                            <input
-                                type="radio"
-                                name="donationValor"
-                                id="donation500"
-                                value="10000"
-                                v-model="donateValue"
-                            />
-                            <span>{{ $t('elegiPropiaAventura') }}</span>
-                        </label>
-                    </div>
+                    <DonationAmountPicker v-model="donateValue" />
                     <div>
                         <button
                             class="btn btn-success btn-unica-vez"
@@ -393,6 +352,11 @@ import { useProfileStore } from '../../stores/profile';
 
 import Tab from '../elements/Tab';
 import modal from '../Modal';
+import DonationAmountPicker from '../elements/DonationAmountPicker.vue';
+import {
+    getDonationMonthlyUrl,
+    getDonationOnceUrl
+} from '../../utils/donationOptions.js';
 import dialogs from '../../services/dialogs.js';
 import bus from '../../services/bus-event.js';
 import { App } from '@capacitor/app';
@@ -515,23 +479,7 @@ export default {
         },
         async onDonateOnceTime() {
             if (this.donateValue > 0) {
-                var url = 'http://mpago.la/jgap'; // 50
-                switch (this.donateValue) {
-                    case '2000':
-                        url =
-                            'https://mpago.la/1WhaoLf';
-                        break;
-                    case '5000':
-                        url =
-                            'https://mpago.la/1SB6on8';
-                        break;
-                    case '10000':
-                        url =
-                            'https://mpago.la/2USgEBv';
-                        break;
-                    default:
-                        break;
-                }
+                let url = getDonationOnceUrl(this.donateValue);
                 // Add userId parameter for tracking
                 if (this.user && this.user.id) {
                     const separator = url.includes('?') ? '&' : '?';
@@ -559,20 +507,7 @@ export default {
         },
         async onDonateMonthly() {
             if (this.donateValue > 0) {
-                var url = 'http://mpago.la/2XdoxpF'; // 50
-                switch (this.donateValue) {
-                    case '2000':
-                        url = 'https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=2c9380848a2fd5c9018a33702cc50181';
-                        break;
-                    case '5000':
-                        url = 'https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=2c9380848cee0ea5018d0e9ea71016d7';
-                        break;
-                    case '10000':
-                        url = 'https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=2c93808497030fc7019705478b370068';
-                        break;
-                    default:
-                        break;
-                }
+                let url = getDonationMonthlyUrl(this.donateValue);
                 // Add userId parameter for tracking
                 if (this.user && this.user.id) {
                     const separator = url.includes('?') ? '&' : '?';
@@ -727,7 +662,8 @@ export default {
         RatePending,
         Tab,
         subscriptionItem,
-        modal
+        modal,
+        DonationAmountPicker
     }
 };
 </script>
