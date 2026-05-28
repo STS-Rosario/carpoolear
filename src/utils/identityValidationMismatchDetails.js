@@ -31,3 +31,16 @@ export function getIdentityValidationMismatchDetails(query) {
         mpDni: showDni ? (query.mp_dni || '-') : null
     };
 }
+
+export function getManualRejectionSupportWarningKey(rejectReason) {
+    if (rejectReason === MISMATCH_RESULT_NAME) {
+        return 'identityValidationRejectionSupportWarningNameMismatch';
+    }
+    if (rejectReason === MISMATCH_RESULT_DNI) {
+        return 'identityValidationRejectionSupportWarningDniMismatch';
+    }
+    if (rejectReason === MISMATCH_RESULT_BOTH) {
+        return 'identityValidationRejectionSupportWarningBothMismatch';
+    }
+    return null;
+}

@@ -388,7 +388,10 @@ import {
     getIdentityValidationPendingSwitchBehavior,
     IDENTITY_VALIDATION_PENDING_SWITCH_BEHAVIOR_OAUTH
 } from '../../utils/identityValidationPendingSwitchBehavior';
-import { getIdentityValidationMismatchDetails } from '../../utils/identityValidationMismatchDetails';
+import {
+    getIdentityValidationMismatchDetails,
+    getManualRejectionSupportWarningKey
+} from '../../utils/identityValidationMismatchDetails';
 
 export default {
     name: 'IdentityValidation',
@@ -482,16 +485,7 @@ export default {
         },
         manualRejectionSupportWarningKey() {
             if (!this.showManualRejectedWithChoiceCards) return null;
-            if (this.manualStatus.reject_reason === 'name_mismatch') {
-                return 'identityValidationRejectionSupportWarningNameMismatch';
-            }
-            if (this.manualStatus.reject_reason === 'dni_mismatch') {
-                return 'identityValidationRejectionSupportWarningDniMismatch';
-            }
-            if (this.manualStatus.reject_reason === 'both_mismatch') {
-                return 'identityValidationRejectionSupportWarningBothMismatch';
-            }
-            return null;
+            return getManualRejectionSupportWarningKey(this.manualStatus.reject_reason);
         },
         showVerificationSuccessBanner() {
             if (this.manualDocsPendingAdminReview) {

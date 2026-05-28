@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
     getIdentityValidationMismatchDetails,
+    getManualRejectionSupportWarningKey,
     MISMATCH_RESULT_BOTH
 } from './identityValidationMismatchDetails.js';
 
@@ -25,5 +26,24 @@ describe('getIdentityValidationMismatchDetails', () => {
 
     it('exports both mismatch result constant', () => {
         expect(MISMATCH_RESULT_BOTH).toBe('both_mismatch');
+    });
+
+    it('maps name mismatch reject reason to warning translation key', () => {
+        expect(getManualRejectionSupportWarningKey('name_mismatch'))
+            .toBe('identityValidationRejectionSupportWarningNameMismatch');
+    });
+
+    it('maps dni mismatch reject reason to warning translation key', () => {
+        expect(getManualRejectionSupportWarningKey('dni_mismatch'))
+            .toBe('identityValidationRejectionSupportWarningDniMismatch');
+    });
+
+    it('maps both mismatch reject reason to warning translation key', () => {
+        expect(getManualRejectionSupportWarningKey('both_mismatch'))
+            .toBe('identityValidationRejectionSupportWarningBothMismatch');
+    });
+
+    it('returns null when reject reason does not match known mismatch reasons', () => {
+        expect(getManualRejectionSupportWarningKey('other')).toBe(null);
     });
 });
