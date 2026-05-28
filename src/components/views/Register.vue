@@ -158,7 +158,7 @@
                 </span>
                 <div
                     class="form-group"
-                    v-if="settings.module_facebook_profile_url_enabled"
+                    v-if="facebookProfileUrlModuleEnabled"
                 >
                     <label for="input-facebook-profile-url">
                         Perfil de Facebook (opcional)
@@ -477,6 +477,11 @@ export default {
         },
         showRegisterForm() {
             return !this.settings.enable_facebook || this.showRegister;
+        },
+        facebookProfileUrlModuleEnabled() {
+            return !!(
+                this.settings && this.settings.module_facebook_profile_url_enabled
+            );
         }
     },
     watch: {
