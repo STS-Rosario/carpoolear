@@ -25,6 +25,22 @@ export function needsCarSelection(cars) {
     return activeCarsWithPlate(cars).length > 1;
 }
 
+export function restoreSelectedCarIdFromTrip(trip) {
+    if (!trip) {
+        return null;
+    }
+
+    if (trip.car_id != null && trip.car_id !== '') {
+        return trip.car_id;
+    }
+
+    if (trip.car && trip.car.id != null) {
+        return trip.car.id;
+    }
+
+    return null;
+}
+
 export function resolveTripCarId(cars, selectedCarId) {
     const withPlate = activeCarsWithPlate(cars);
 

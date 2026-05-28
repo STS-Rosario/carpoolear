@@ -1899,7 +1899,8 @@ import {
     hasDriverPlate,
     needsCarSelection,
     requiresDriverPlate,
-    resolveTripCarId
+    resolveTripCarId,
+    restoreSelectedCarIdFromTrip
 } from '../../utils/profileRequirements';
 
 let tripApi = new TripApi();
@@ -2260,6 +2261,9 @@ export default {
             });
         },
         preselectDriverCar() {
+            if (this.selectedCarId != null && this.selectedCarId !== '') {
+                return;
+            }
             const withPlate = this.driverCarsWithPlate;
             if (withPlate.length === 1) {
                 this.selectedCarId = withPlate[0].id;
@@ -2382,6 +2386,12 @@ export default {
         this.trip.allow_animals = Number(trip.allow_animals) > 0;
         this.trip.allow_smoking = Number(trip.allow_smoking) > 0;
         this.trip.rear_max_two_passengers = Number(trip.rear_max_two_passengers) > 0;
+
+        const restoredCarId = restoreSelectedCarIdFromTrip(trip);
+        if (restoredCarId != null) {
+            this.selectedCarId = restoredCarId;
+            this.trip.car_id = restoredCarId;
+        }
         
         this.trip.seat_price_cents = trip.seat_price_cents;
         const restoredPrice =
@@ -2931,8 +2941,9 @@ export default {
                         this.saving = false;
                     });
             } else {
-                this.trip.id = this.updatingTrip.id;
-                let trip = JSON.parse(JSON.stringify(this.trip));
+                let trip = this.getSaveInfo(this, this.estimatedTimeString);
+                trip.id = this.updatingTrip.id;
+                trip.is_passenger = trip.is_passenger ? 1 : 0;
                 this.normalizeAllowFlagsForApi(trip);
                 trip.seat_price_cents = seatPriceCentsForApi(this.price);
                 this.updateTrip(trip)

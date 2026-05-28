@@ -5,6 +5,23 @@
                 >{{ $t('pasajeroQueBuscaViaje') }}</strong
             >
         </div>
+        <div
+            class="row trip-data"
+            v-if="!trip.is_passenger && trip.car && trip.car.patente"
+        >
+            <span class="trip-data--subtitle" v-if="tripCardTheme === 'light'">
+                {{ $t('auto') }}
+            </span>
+            <em>
+                {{ trip.car.patente }}
+                <span
+                    v-if="trip.car.deleted"
+                    class="trip-car-deleted-label"
+                >
+                    ({{ $t('autoEliminado') }})
+                </span>
+            </em>
+        </div>
         <div class="row trip-data">
             <span class="trip-data--subtitle" v-if="tripCardTheme === 'light'">
                 {{ $t('privacidadViaje') }}
