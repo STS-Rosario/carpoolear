@@ -6,6 +6,18 @@ const viewPath = path.resolve(__dirname, 'IdentityValidation.vue');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 
 describe('IdentityValidation rejection warnings', () => {
+    it('shows mismatch support warning with warning icon in MP mismatch alert', () => {
+        expect(viewSource).toContain('<div class="alert alert-warning" v-if="mismatchDetails">');
+        expect(viewSource).toContain('identity-validation-mismatch-support-warning');
+        expect(viewSource).toContain('$t(mismatchSupportWarningKey)');
+        expect(viewSource).toContain('fa fa-exclamation-triangle');
+    });
+
+    it('maps MP mismatch result to support warning key', () => {
+        expect(viewSource).toContain('mismatchSupportWarningKey');
+        expect(viewSource).toContain('this.resultMessage');
+    });
+
     it('shows warning icon and translated mismatch warning placeholder in rejected flow', () => {
         expect(viewSource).toContain('identity-validation-rejection-notice__support-warning');
         expect(viewSource).toContain('fa fa-exclamation-triangle');
