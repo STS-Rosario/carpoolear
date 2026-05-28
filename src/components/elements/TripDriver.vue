@@ -71,6 +71,17 @@
                 <strong>{{ $t('porcentajeDeRespuestas') }}</strong>
                 {{ percentageResponse }}
             </div>
+            <div class="row trip-driver-report" v-if="canReportDriver">
+                <div class="col-md-24">
+                    <router-link
+                        class="btn btn-default btn-report"
+                        :to="reportTripRoute"
+                    >
+                        <i class="fa fa-flag" aria-hidden="true"></i>
+                        {{ $t('denunciar') }}
+                    </router-link>
+                </div>
+            </div>
         </div>
         <div class="driver-profile" v-else>
             <div class="row">
@@ -141,10 +152,10 @@
                 <strong>{{ $t('porcentajeDeRespuestas') }}</strong>
                 {{ percentageResponse }}
             </div>
-            <div class="row">
-                <div class="col-md-24">
+            <div class="row trip-driver-actions">
+                <div class="col-md-24 trip-driver-actions__buttons">
                     <router-link
-                        class="btn-primary btn-search btn-shadowed-black"
+                        class="btn-primary btn-search btn-shadowed-black trip-driver-actions__profile"
                         :to="{
                             name: 'profile',
                             params: {
@@ -154,6 +165,14 @@
                         }"
                     >
                         {{ $t('verPerfil') }}
+                    </router-link>
+                    <router-link
+                        v-if="canReportDriver"
+                        class="btn btn-default btn-report trip-driver-actions__report"
+                        :to="reportTripRoute"
+                    >
+                        <i class="fa fa-flag" aria-hidden="true"></i>
+                        {{ $t('denunciar') }}
                     </router-link>
                 </div>
             </div>
@@ -169,6 +188,10 @@ import { useDeviceStore } from '../../stores/device';
 import TripDate from './TripDate';
 import TripDescription from './TripDescription';
 import SvgItem from '../SvgItem';
+import {
+    buildReportTicketRoute,
+    reportTicketSubjectForTrip
+} from '../../utils/reportTicketRoute';
 
 export default {
     name: 'TripDriver',
@@ -193,6 +216,22 @@ export default {
             return this.user.id === this.trip.user.id
                 ? this.user.image
                 : this.trip.user.image;
+        },
+        canReportDriver() {
+            return (
+                this.trip &&
+                this.trip.user &&
+                this.user &&
+                this.trip.user.id !== this.user.id
+            );
+        },
+        reportTripRoute() {
+            if (!this.trip) {
+                return buildReportTicketRoute();
+            }
+            return buildReportTicketRoute({
+                subject: reportTicketSubjectForTrip(this.trip)
+            });
         },
         tripStars() {
             if (this.trip && this.trip.user) {
@@ -304,6 +343,42 @@ export default {
 }
 .user_pin img {
     width: 40px;
+}
+.trip-driver-actions {
+    text-align: center;
+}
+.trip-driver-actions__buttons {
+    display: flex;
+    gap: 0.5rem;
+    align-items: stretch;
+    justify-content: center;
+    width: 100%;
+}
+.trip-driver-actions__buttons > a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: 100%;
+    width: auto;
+    margin: 0;
+    padding: 0.85em 0.75em;
+    line-height: 1.2;
+    text-align: center;
+    white-space: nowrap;
+    box-sizing: border-box;
+}
+.trip-driver-actions__buttons > a .fa {
+    line-height: 1;
+    margin-right: 0.45rem;
+}
+.trip-driver-report {
+    margin-top: 0.75rem;
+}
+.trip-driver-report .btn-report {
+    width: 100%;
+    white-space: nowrap;
 }
 .driver-profile div.row:last-child {
     height: auto;

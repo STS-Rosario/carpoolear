@@ -12,4 +12,13 @@ describe('TicketNew view', () => {
         expect(source).toContain('USER_TICKET_TYPE_OPTIONS');
         expect(source).toContain('USER_TICKET_TYPE_VALUES');
     });
+
+    it('prefills subject from route query when opening a report ticket', () => {
+        expect(source).toContain('setSubjectFromUrl');
+        expect(source).toMatch(
+            /const subject = this\.\$route\.query\.subject/
+        );
+        expect(source).toContain('this.form.subject = subject');
+        expect(source).toContain("'$route.query.subject'");
+    });
 });

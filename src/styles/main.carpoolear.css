@@ -1997,6 +1997,27 @@ textarea {
     margin-right: .8em;
 }
 
+.btn-report {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45em;
+}
+
+.profile-info-component .btn-report .fa,
+.trip-detail-component .btn-report .fa {
+    float: none;
+    width: auto;
+    position: static;
+    line-height: 1;
+    margin: 0;
+    font-size: 1em;
+}
+
+.profile-info-component .btn-report .fa {
+    color: inherit;
+}
+
 .profile-info-component .list-group-item--no-border {
     border-top: 0;
 }

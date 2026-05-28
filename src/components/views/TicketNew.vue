@@ -83,20 +83,33 @@ export default {
                 this.$router.push({ name: 'ticket-detail', params: { id: ticket.id } });
             }).catch(() => dialogs.message(this.$t('errorDatos'), { estado: 'error' }));
         },
+        setFormFromUrl() {
+            this.setTypeFromUrl();
+            this.setSubjectFromUrl();
+        },
         setTypeFromUrl() {
             const allowed = USER_TICKET_TYPE_VALUES;
             const category = this.$route.query.category;
             if (allowed.includes(category)) {
                 this.form.type = category;
             }
+        },
+        setSubjectFromUrl() {
+            const subject = this.$route.query.subject;
+            if (typeof subject === 'string' && subject.trim()) {
+                this.form.subject = subject;
+            }
         }
     },
     mounted() {
-        this.setTypeFromUrl();
+        this.setFormFromUrl();
     },
     watch: {
         '$route.query.category': function () {
             this.setTypeFromUrl();
+        },
+        '$route.query.subject': function () {
+            this.setSubjectFromUrl();
         }
     },
     components: {
