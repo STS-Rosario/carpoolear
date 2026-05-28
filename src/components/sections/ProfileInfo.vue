@@ -120,6 +120,16 @@
                         </div>
                     </div>
                 </div>
+                <div class="edit-action" v-if="canReportProfile">
+                    <router-link
+                        class="btn btn-default btn-report"
+                        tag="button"
+                        :to="reportProfileRoute"
+                    >
+                        <i class="fa fa-flag" aria-hidden="true"></i>
+                        {{ $t('denunciar') }}
+                    </router-link>
+                </div>
                 <div
                     class="edit-action"
                     v-if="user.is_admin && profile.id !== user.id"
@@ -183,6 +193,10 @@ import router from '../../router';
 import UserNameWithBadge from '../elements/UserNameWithBadge.vue';
 import { formatId } from '../../services/utility';
 import { activeCarsWithPlate } from '../../utils/userCars.js';
+import {
+    buildReportTicketRoute,
+    reportTicketSubjectForUser
+} from '../../utils/reportTicketRoute';
 
 export default {
     computed: {
@@ -208,6 +222,18 @@ export default {
         },
         visibleCars() {
             return activeCarsWithPlate(this.profile?.cars);
+        },
+        canReportProfile() {
+            return (
+                this.profile &&
+                this.user &&
+                this.profile.id !== this.user.id
+            );
+        },
+        reportProfileRoute() {
+            return buildReportTicketRoute({
+                subject: reportTicketSubjectForUser(this.profile)
+            });
         }
     },
     methods: {

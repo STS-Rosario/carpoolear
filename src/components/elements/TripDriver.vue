@@ -71,6 +71,17 @@
                 <strong>{{ $t('porcentajeDeRespuestas') }}</strong>
                 {{ percentageResponse }}
             </div>
+            <div class="row trip-driver-report" v-if="canReportDriver">
+                <div class="col-md-24">
+                    <router-link
+                        class="btn btn-default btn-report"
+                        :to="reportTripRoute"
+                    >
+                        <i class="fa fa-flag" aria-hidden="true"></i>
+                        {{ $t('denunciar') }}
+                    </router-link>
+                </div>
+            </div>
         </div>
         <div class="driver-profile" v-else>
             <div class="row">
@@ -157,6 +168,17 @@
                     </router-link>
                 </div>
             </div>
+            <div class="row trip-driver-report" v-if="canReportDriver">
+                <div class="col-md-24">
+                    <router-link
+                        class="btn btn-default btn-report"
+                        :to="reportTripRoute"
+                    >
+                        <i class="fa fa-flag" aria-hidden="true"></i>
+                        {{ $t('denunciar') }}
+                    </router-link>
+                </div>
+            </div>
             <TripDescription />
         </div>
     </div>
@@ -169,6 +191,10 @@ import { useDeviceStore } from '../../stores/device';
 import TripDate from './TripDate';
 import TripDescription from './TripDescription';
 import SvgItem from '../SvgItem';
+import {
+    buildReportTicketRoute,
+    reportTicketSubjectForTrip
+} from '../../utils/reportTicketRoute';
 
 export default {
     name: 'TripDriver',
@@ -193,6 +219,22 @@ export default {
             return this.user.id === this.trip.user.id
                 ? this.user.image
                 : this.trip.user.image;
+        },
+        canReportDriver() {
+            return (
+                this.trip &&
+                this.trip.user &&
+                this.user &&
+                this.trip.user.id !== this.user.id
+            );
+        },
+        reportTripRoute() {
+            if (!this.trip) {
+                return buildReportTicketRoute();
+            }
+            return buildReportTicketRoute({
+                subject: reportTicketSubjectForTrip(this.trip)
+            });
         },
         tripStars() {
             if (this.trip && this.trip.user) {
