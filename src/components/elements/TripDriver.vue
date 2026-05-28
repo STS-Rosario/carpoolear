@@ -152,10 +152,10 @@
                 <strong>{{ $t('porcentajeDeRespuestas') }}</strong>
                 {{ percentageResponse }}
             </div>
-            <div class="row">
-                <div class="col-md-24">
+            <div class="row trip-driver-actions">
+                <div class="col-md-24 trip-driver-actions__buttons">
                     <router-link
-                        class="btn-primary btn-search btn-shadowed-black"
+                        class="btn-primary btn-search btn-shadowed-black trip-driver-actions__profile"
                         :to="{
                             name: 'profile',
                             params: {
@@ -166,12 +166,9 @@
                     >
                         {{ $t('verPerfil') }}
                     </router-link>
-                </div>
-            </div>
-            <div class="row trip-driver-report" v-if="canReportDriver">
-                <div class="col-md-24">
                     <router-link
-                        class="btn btn-default btn-report"
+                        v-if="canReportDriver"
+                        class="btn btn-default btn-report trip-driver-actions__report"
                         :to="reportTripRoute"
                     >
                         <i class="fa fa-flag" aria-hidden="true"></i>
@@ -347,11 +344,26 @@ export default {
 .user_pin img {
     width: 40px;
 }
+.trip-driver-actions__buttons {
+    display: flex;
+    gap: 0.5rem;
+    align-items: stretch;
+}
+.trip-driver-actions__buttons > a {
+    flex: 1 1 0;
+    min-width: 0;
+    width: auto;
+    margin: 0;
+    padding: 1.2em 0.75em;
+    white-space: nowrap;
+    box-sizing: border-box;
+}
 .trip-driver-report {
     margin-top: 0.75rem;
 }
 .trip-driver-report .btn-report {
     width: 100%;
+    white-space: nowrap;
 }
 .driver-profile div.row:last-child {
     height: auto;

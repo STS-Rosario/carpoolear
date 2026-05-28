@@ -17,4 +17,13 @@ describe('TripDriver report action', () => {
             /v-if="canReportDriver"[\s\S]*?:to="reportTripRoute"/s
         );
     });
+
+    it('places Denunciar beside Ver perfil in the driver profile actions row', () => {
+        expect(viewSource).toContain('trip-driver-actions__buttons');
+        expect(viewSource).toContain('trip-driver-actions__profile');
+        expect(viewSource).toContain('trip-driver-actions__report');
+        expect(viewSource).toMatch(
+            /trip-driver-actions__profile[\s\S]*\$t\('verPerfil'\)[\s\S]*trip-driver-actions__report/s
+        );
+    });
 });
