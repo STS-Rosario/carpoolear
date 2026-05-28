@@ -3,7 +3,8 @@ import {
     activeCarsWithPlate,
     buildPatenteRowsFromCars,
     needsCarSelection,
-    resolveTripCarId
+    resolveTripCarId,
+    restoreSelectedCarIdFromTrip
 } from './userCars';
 
 describe('userCars', () => {
@@ -40,6 +41,12 @@ describe('userCars', () => {
 
         expect(needsCarSelection(cars)).toBe(false);
         expect(resolveTripCarId(cars, null)).toBe(5);
+    });
+
+    it('restores selected car id from trip payload when editing', () => {
+        expect(restoreSelectedCarIdFromTrip({ car_id: 9 })).toBe(9);
+        expect(restoreSelectedCarIdFromTrip({ car: { id: 4, patente: 'XY' } })).toBe(4);
+        expect(restoreSelectedCarIdFromTrip({})).toBeNull();
     });
 
     it('ignores cars without a plate when resolving trip car', () => {
