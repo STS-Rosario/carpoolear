@@ -29,9 +29,11 @@ export const DONATION_TIERS = [
 const DEFAULT_ONCE_URL = 'https://mpago.la/jgap';
 const DEFAULT_MONTHLY_URL = 'http://mpago.la/2XdoxpF';
 
+const TIER_BY_AMOUNT = new Map(DONATION_TIERS.map((tier) => [tier.amount, tier]));
+
 function tierForAmount(amount) {
     const numeric = typeof amount === 'string' ? parseInt(amount, 10) : amount;
-    return DONATION_TIERS.find((tier) => tier.amount === numeric);
+    return TIER_BY_AMOUNT.get(numeric);
 }
 
 export function getDonationOnceUrl(amount) {
