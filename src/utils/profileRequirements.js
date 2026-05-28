@@ -23,6 +23,8 @@ export function firstCarWithPlate(cars) {
     return cars.find((car) => car && hasValue(car.patente)) || null;
 }
 
+export { activeCarsWithPlate, needsCarSelection, resolveTripCarId } from './userCars';
+
 export function hasDriverPlate(cars) {
     return !!firstCarWithPlate(cars);
 }
