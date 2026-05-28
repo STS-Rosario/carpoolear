@@ -94,6 +94,12 @@
                             <span>
                                 <h4>{{ $t('auto') }}:</h4>
                                 {{ trip.car.patente }}
+                                <span
+                                    v-if="trip.car.deleted"
+                                    class="label label-warning trip-car-deleted"
+                                >
+                                    {{ $t('autoEliminado') }}
+                                </span>
                             </span>
                         </div>
                     </div>

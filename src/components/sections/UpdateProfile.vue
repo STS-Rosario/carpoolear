@@ -221,30 +221,52 @@
                     </div>
 
                     <div
-                        class="form-group"
+                        v-for="(entry, index) in userCars"
+                        :key="entry.id ? 'car-' + entry.id : 'car-new-' + index"
+                        class="form-group user-car-row"
                         :class="{
-                            'missing-field-highlight': shouldHighlightPatente
+                            'missing-field-highlight':
+                                shouldHighlightPatente && index === 0
                         }"
                     >
-                        <label for="input-patente">
+                        <label :for="'input-patente-' + index">
                             {{ $t('patente') }}
-                            <span class="description">
+                            <span v-if="index === 0" class="description">
                                 ({{ $t('soloConductores') }}).
                                 {{ $t('incentivoPatente') }}
                             </span>
                         </label>
-                        <input
-                            maxlength="20"
-                            v-model="patente"
-                            type="text"
-                            class="form-control"
-                            id="input-patente"
-                            ref="patenteInput"
-                            :class="{ 'has-error': patentError.state }"
-                        />
-                        <span class="error" v-if="patentError.state">
+                        <div class="user-car-row__fields">
+                            <input
+                                maxlength="20"
+                                v-model="entry.patente"
+                                type="text"
+                                class="form-control"
+                                :id="'input-patente-' + index"
+                                :ref="index === 0 ? 'patenteInput' : null"
+                                :class="{ 'has-error': patentError.state }"
+                            />
+                            <button
+                                v-if="userCars.length > 1"
+                                type="button"
+                                class="btn btn-default user-car-row__remove"
+                                @click.prevent="removeUserCar(index)"
+                            >
+                                {{ $t('eliminarAuto') }}
+                            </button>
+                        </div>
+                        <span class="error" v-if="patentError.state && index === 0">
                             {{ patentError.message }}
                         </span>
+                    </div>
+                    <div class="form-group">
+                        <button
+                            type="button"
+                            class="btn btn-default"
+                            @click.prevent="addUserCar"
+                        >
+                            {{ $t('agregarOtroAuto') }}
+                        </button>
                     </div>
                     <div class="checkbox">
                         <label>
@@ -662,6 +684,7 @@ import modal from '../Modal';
 import { UserApi } from '../../services/api';
 import { getApiErrorMessage } from '../../utils/apiErrors.js';
 import { normalizeFacebookProfileUrl } from '../../utils/facebookProfileUrl.js';
+import { buildPatenteRowsFromCars } from '../../utils/userCars.js';
 
 class Error {
     constructor(state = false, message = '') {
@@ -675,8 +698,7 @@ export default {
     data() {
         return {
             user: null,
-            car: null,
-            patente: '',
+            userCars: [{ id: null, patente: '' }],
             pass: {
                 password: '',
                 password_confirmation: ''
@@ -786,6 +808,7 @@ export default {
         ...mapActions(useCarsStore, {
             carCreate: 'create',
             carUpdate: 'update',
+            carDelete: 'delete',
             carIndex: 'index'
         }),
         ...mapActions(useProfileStore, {
@@ -802,6 +825,57 @@ export default {
             if (hasError.length) {
                 let element = hasError[0];
                 this.$scrollToElement(element, -270);
+            }
+        },
+        syncUserCarsFromStore() {
+            this.userCars = buildPatenteRowsFromCars(this.cars);
+        },
+        addUserCar() {
+            this.userCars.push({ id: null, patente: '' });
+        },
+        removeUserCar(index) {
+            const entry = this.userCars[index];
+            if (!entry) {
+                return;
+            }
+            const removeRow = () => {
+                this.userCars.splice(index, 1);
+                if (this.userCars.length === 0) {
+                    this.userCars.push({ id: null, patente: '' });
+                }
+            };
+            if (entry.id) {
+                this.carDelete({ id: entry.id })
+                    .then(removeRow)
+                    .catch((err) => {
+                        console.error(err);
+                        dialogs.message(getApiErrorMessage(err), {
+                            duration: 10,
+                            estado: 'error'
+                        });
+                    });
+                return;
+            }
+            removeRow();
+        },
+        async saveUserCars() {
+            for (const entry of this.userCars) {
+                const patente = (entry.patente || '').trim();
+                if (!patente) {
+                    continue;
+                }
+                const payload = {
+                    patente,
+                    description: 'NOT USED YET'
+                };
+                if (entry.id) {
+                    await this.carUpdate({ ...payload, id: entry.id });
+                } else {
+                    const created = await this.carCreate(payload);
+                    if (created && created.id) {
+                        entry.id = created.id;
+                    }
+                }
             }
         },
         scrollToMissingRouteField() {
@@ -933,18 +1007,13 @@ export default {
                     this.pass.password_confirmation = '';
                     this.loading = false;
                     dialogs.message(this.$t('perfilActualizadoCorrectamente'));
-                    if (this.patente.length) {
-                        if (this.car) {
-                            this.car.patente = this.patente;
-                            this.carUpdate(this.car);
-                        } else {
-                            let car = {
-                                description: 'NOT USED YET',
-                                patente: this.patente
-                            };
-                            this.carCreate(car);
-                        }
-                    }
+                    this.saveUserCars().catch((carErr) => {
+                        console.error(carErr);
+                        dialogs.message(getApiErrorMessage(carErr), {
+                            duration: 10,
+                            estado: 'error'
+                        });
+                    });
                     // this.user.birthday = this.birthdayAnswer;
                     if (
                         this.user.image &&
@@ -1182,11 +1251,7 @@ export default {
     },
     watch: {
         cars: function () {
-            console.log('cars', this.cars);
-            if (this.cars.length > 0) {
-                this.car = this.cars[0];
-                this.patente = this.car.patente;
-            }
+            this.syncUserCarsFromStore();
         },
         userData: function () {
             console.log('userData', this.userData);
@@ -1214,8 +1279,11 @@ export default {
         iptPhone() {
             this.phoneError.state = false;
         },
-        patente() {
-            this.patentError.state = false;
+        userCars: {
+            deep: true,
+            handler() {
+                this.patentError.state = false;
+            }
         }
     },
 
@@ -1229,17 +1297,13 @@ export default {
         });
         
         // Load user's cars to populate patente field
-        this.carIndex().then(() => {
-            console.log('Cars loaded for profile update');
-            // Ensure patente is set if cars are loaded
-            if (this.cars && this.cars.length > 0) {
-                this.car = this.cars[0];
-                this.patente = this.car.patente;
-                console.log('Patente set from loaded car:', this.patente);
-            }
-        }).catch((error) => {
-            console.error('Failed to load cars:', error);
-        });
+        this.carIndex()
+            .then(() => {
+                this.syncUserCarsFromStore();
+            })
+            .catch((error) => {
+                console.error('Failed to load cars:', error);
+            });
         bus.on('date-change', this.dateChange);
         this.user = this.userData;
         // Format nro_doc with pattern when page loads
@@ -1254,10 +1318,7 @@ export default {
             this.showBeDriver = true;
         }
         if (this.cars) {
-            if (this.cars.length > 0) {
-                this.car = this.cars[0];
-                this.patente = this.car.patente;
-            }
+            this.syncUserCarsFromStore();
         }
         try {
             if (dayjs(this.user.birthday, 'YYYY-MM-DD').isValid()) {
@@ -1285,6 +1346,20 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.user-car-row__fields {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-start;
+}
+
+.user-car-row__fields .form-control {
+    flex: 1;
+}
+
+.user-car-row__remove {
+    flex-shrink: 0;
+}
+
 .delete-account-container {
     display: flex;
     justify-content: flex-end;
