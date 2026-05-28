@@ -14,6 +14,14 @@
         <label>{{ $t('notaInterna') }}</label>
         <textarea class="form-control" v-model="internalNote"></textarea>
         <button class="btn btn-default mtop-10" @click="saveInternalNote">{{ $t('guardarCambio') }}</button>
+        <button
+            v-if="ticketHasAttachments"
+            type="button"
+            class="btn btn-danger mtop-10 mleft-10"
+            @click="purgeAllAttachments"
+        >
+            {{ $t('eliminarTodasLasImagenes') }}
+        </button>
 
         <hr />
         <div class="list-group">
@@ -37,10 +45,20 @@
                     <small class="reply-meta-date" :title="fullDate(reply.created_at)">{{ relativeDate(reply.created_at) }}</small>
                 </p>
                 <div v-html="markdownToHtml(reply.message_markdown)"></div>
+                <div v-if="reply.attachments && reply.attachments.length" class="reply-attachments">
+                    <img
+                        v-for="attachment in reply.attachments"
+                        v-show="attachmentBlobUrls[attachment.id]"
+                        :key="attachment.id"
+                        :src="attachmentBlobUrls[attachment.id]"
+                        class="img-thumbnail ticket-attachment-thumb"
+                        :alt="attachment.original_name"
+                    />
+                </div>
             </div>
         </div>
 
-        <div class="admin-reply-box">
+        <div v-if="showReplyForm" class="admin-reply-box">
             <div class="admin-reply-header">
                 <label class="control-label">{{ $t('respuestaCarpoolear') }}</label>
                 <button type="button" class="btn btn-default btn-sm" @click="openReplyTemplateModal">
@@ -67,11 +85,34 @@
                         {{ replySubmitting ? $t('enviando') : $t('responder') }}
                     </button>
                 </div>
-                <div class="reply-actions-right">
-                    <button class="btn btn-default reply-action-btn" @click="resolveTicket">{{ $t('marcarResuelto') }}</button>
-                    <button v-if="showCloseTicketButton" class="btn btn-default reply-action-btn" @click="closeTicket">{{ $t('cerrarTicket') }}</button>
-                    <button v-if="showReopenTicketButton" class="btn btn-default reply-action-btn" @click="reopenTicket">{{ $t('reabrirTicket') }}</button>
-                </div>
+            </div>
+        </div>
+
+        <div class="admin-ticket-actions reply-actions mtop-10">
+            <div class="reply-actions-right">
+                <button
+                    v-if="showMarkNeedsReviewButton"
+                    class="btn btn-default reply-action-btn"
+                    @click="markNeedsReviewTicket"
+                >
+                    {{ $t('marcarNecesitaRevision') }}
+                </button>
+                <button
+                    v-if="showResolveTicketButton"
+                    class="btn btn-default reply-action-btn"
+                    @click="resolveTicket"
+                >
+                    {{ $t('marcarResuelto') }}
+                </button>
+                <button
+                    v-if="showUnresolveTicketButton"
+                    class="btn btn-default reply-action-btn"
+                    @click="unresolveTicket"
+                >
+                    {{ $t('marcarComoNoResuelto') }}
+                </button>
+                <button v-if="showCloseTicketButton" class="btn btn-default reply-action-btn" @click="closeTicket">{{ $t('cerrarTicket') }}</button>
+                <button v-if="showReopenTicketButton" class="btn btn-default reply-action-btn" @click="reopenTicket">{{ $t('reabrirTicket') }}</button>
             </div>
         </div>
 
@@ -131,25 +172,15 @@ import AdminLayout from '../layouts/AdminLayout.vue';
 import { markdownToHtml } from '../../services/markdown';
 import { interpolateSupportTemplateVariables } from '../../utils/supportTemplateInterpolation';
 import { ticketReplyBodyAlreadyUsed, isDuplicateReplyApiError } from '../../utils/supportTicketReplyDuplicate';
+import { fetchSupportTicketAttachmentBlob } from '../../utils/supportTicketAttachmentImage';
 import { useTicketsStore } from '../../stores/tickets';
 import { useReplyTemplatesStore } from '../../stores/replyTemplates';
 import dialogs from '../../services/dialogs.js';
 import dayjs from '../../dayjs';
-
-const STATUS_LABEL_KEYS = {
-    Open: 'estadoPendiente',
-    'Esperando respuesta': 'esperaUsuarioResponda',
-    'En revision': 'estadoPendienteRevision',
-    Resuelto: 'estadoAprobado',
-    Cerrado: 'estadoCerrado'
-};
-
-const STATUS_CLASS_MAP = {
-    Cerrado: 'label label-default',
-    Resuelto: 'label label-success',
-    'Esperando respuesta': 'label label-warning',
-    'En revision': 'label label-info'
-};
+import {
+    TICKET_STATUS_CLASS_MAP as STATUS_CLASS_MAP,
+    TICKET_STATUS_LABEL_KEYS as STATUS_LABEL_KEYS
+} from '../../utils/supportTicketStatusLabels';
 
 const PRIORITY_LABEL_KEYS = {
     low: 'prioridadBaja',
@@ -172,6 +203,7 @@ export default {
     data() {
         return {
             ticket: null,
+            attachmentBlobUrls: {},
             attachments: [],
             internalNote: '',
             editorOptions: {
@@ -211,11 +243,34 @@ export default {
         isTicketClosed() {
             return this.ticket && this.ticket.status === 'Cerrado';
         },
+        isTicketResolved() {
+            return this.ticket && this.ticket.status === 'Resuelto';
+        },
+        showReplyForm() {
+            return this.ticket && !this.isTicketClosed && !this.isTicketResolved;
+        },
         showReopenTicketButton() {
             return this.isTicketClosed;
         },
         showCloseTicketButton() {
             return this.ticket && !this.isTicketClosed;
+        },
+        showResolveTicketButton() {
+            return this.ticket && !this.isTicketClosed && !this.isTicketResolved;
+        },
+        showUnresolveTicketButton() {
+            return this.isTicketResolved;
+        },
+        showMarkNeedsReviewButton() {
+            return this.ticket
+                && !this.isTicketClosed
+                && !this.isTicketResolved
+                && this.ticket.status !== 'Necesita revisión';
+        },
+        ticketHasAttachments() {
+            return (this.ticket?.replies || []).some(
+                (reply) => Array.isArray(reply.attachments) && reply.attachments.length > 0
+            );
         }
     },
     methods: {
@@ -224,8 +279,11 @@ export default {
             fetchAdminOne: 'fetchAdminOne',
             adminReply: 'adminReply',
             adminResolve: 'adminResolve',
+            adminUnresolve: 'adminUnresolve',
             adminClose: 'adminClose',
             adminReopen: 'adminReopen',
+            adminMarkNeedsReview: 'adminMarkNeedsReview',
+            adminPurgeAttachments: 'adminPurgeAttachments',
             adminSetInternalNote: 'adminSetInternalNote'
         }),
         ...mapActions(useReplyTemplatesStore, {
@@ -291,6 +349,27 @@ export default {
             return this.fetchAdminOne(this.id).then((data) => {
                 this.ticket = data;
                 this.internalNote = data.internal_note_markdown || '';
+                this.loadReplyAttachmentUrls();
+            });
+        },
+        revokeAttachmentBlobUrls() {
+            Object.values(this.attachmentBlobUrls).forEach((url) => {
+                if (url) URL.revokeObjectURL(url);
+            });
+            this.attachmentBlobUrls = {};
+        },
+        loadReplyAttachmentUrls() {
+            if (!this.ticket || !this.ticket.id) return;
+            this.revokeAttachmentBlobUrls();
+            const ticketId = this.ticket.id;
+            (this.ticket.replies || []).forEach((reply) => {
+                (reply.attachments || []).forEach((attachment) => {
+                    fetchSupportTicketAttachmentBlob(ticketId, attachment.id, { admin: true })
+                        .then((blob) => {
+                            this.attachmentBlobUrls[attachment.id] = URL.createObjectURL(blob);
+                        })
+                        .catch(() => {});
+                });
             });
         },
         openReplyTemplateModal() {
@@ -373,6 +452,19 @@ export default {
                     dialogs.message(this.$t('errorMarcandoResuelto'), ERROR_TOAST_OPTIONS);
                 });
         },
+        unresolveTicket() {
+            if (!window.confirm(this.$t('confirmarMarcarNoResuelto'))) {
+                return;
+            }
+            this.adminUnresolve(this.id)
+                .then(() => this.refresh())
+                .then(() => {
+                    dialogs.message(this.$t('ticketMarcadoNoResuelto'), SUCCESS_TOAST_OPTIONS);
+                })
+                .catch(() => {
+                    dialogs.message(this.$t('errorMarcandoNoResuelto'), ERROR_TOAST_OPTIONS);
+                });
+        },
         closeTicket() {
             if (!window.confirm(this.$t('confirmarCierreTicket'))) return;
             const message = window.prompt(this.$t('mensajeOpcionalCierre')) || '';
@@ -395,6 +487,37 @@ export default {
                     dialogs.message(this.$t('errorReabriendoTicket'), ERROR_TOAST_OPTIONS);
                 });
         },
+        markNeedsReviewTicket() {
+            if (!window.confirm(this.$t('confirmarMarcarNecesitaRevision'))) {
+                return;
+            }
+            const markdown = this.$refs.replyEditor.invoke('getMarkdown');
+            const messageMarkdown = interpolateSupportTemplateVariables(markdown, this.ticketUserForTemplates);
+            const payload = messageMarkdown.trim()
+                ? { message_markdown: messageMarkdown }
+                : {};
+            this.adminMarkNeedsReview(this.id, payload)
+                .then(() => this.refresh())
+                .then(() => {
+                    dialogs.message(this.$t('ticketMarcadoNecesitaRevision'), SUCCESS_TOAST_OPTIONS);
+                })
+                .catch(() => {
+                    dialogs.message(this.$t('errorMarcandoNecesitaRevision'), ERROR_TOAST_OPTIONS);
+                });
+        },
+        purgeAllAttachments() {
+            if (!window.confirm(this.$t('confirmarEliminarTodasLasImagenes'))) {
+                return;
+            }
+            this.adminPurgeAttachments(this.id)
+                .then(() => this.refresh())
+                .then(() => {
+                    dialogs.message(this.$t('imagenesTicketEliminadas'), SUCCESS_TOAST_OPTIONS);
+                })
+                .catch(() => {
+                    dialogs.message(this.$t('errorEliminandoImagenesTicket'), ERROR_TOAST_OPTIONS);
+                });
+        },
         saveInternalNote() {
             this.adminSetInternalNote(this.id, this.internalNote)
                 .then(() => this.refresh())
@@ -408,6 +531,9 @@ export default {
     },
     mounted() {
         this.refresh();
+    },
+    beforeUnmount() {
+        this.revokeAttachmentBlobUrls();
     },
     components: {
         editor: ToastUiEditor,
@@ -425,6 +551,18 @@ export default {
 
 .reply-meta-date {
     color: #777;
+}
+
+.reply-attachments {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.ticket-attachment-thumb {
+    max-width: 160px;
+    max-height: 160px;
 }
 
 .ticket-meta-row {

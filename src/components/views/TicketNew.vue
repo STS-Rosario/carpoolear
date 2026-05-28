@@ -42,23 +42,22 @@ import { mapActions } from 'pinia';
 import ToastUiEditor from '../elements/ToastUiEditor.vue';
 import { useTicketsStore } from '../../stores/tickets';
 import dialogs from '../../services/dialogs';
+import {
+    DEFAULT_USER_TICKET_TYPE,
+    USER_TICKET_TYPE_OPTIONS,
+    USER_TICKET_TYPE_VALUES
+} from '../../utils/supportTicketTypeOptions';
 
 export default {
     name: 'ticket-new',
     data() {
         return {
             form: {
-                type: 'bug_report',
+                type: DEFAULT_USER_TICKET_TYPE,
                 subject: ''
             },
             attachments: [],
-            ticketTypeOptions: [
-                { value: 'bug_report', labelKey: 'ticketTypeBug' },
-                { value: 'contact', labelKey: 'ticketTypeContact' },
-                { value: 'feedback', labelKey: 'ticketTypeSuggestion' },
-                { value: 'report', labelKey: 'ticketTypeReport' },
-                { value: 'account_verification', labelKey: 'ticketTypeAccountVerification' }
-            ],
+            ticketTypeOptions: USER_TICKET_TYPE_OPTIONS,
             editorOptions: {
                 usageStatistics: false,
                 hideModeSwitch: true,
@@ -85,7 +84,7 @@ export default {
             }).catch(() => dialogs.message(this.$t('errorDatos'), { estado: 'error' }));
         },
         setTypeFromUrl() {
-            const allowed = ['bug_report', 'contact', 'feedback', 'report', 'account_verification'];
+            const allowed = USER_TICKET_TYPE_VALUES;
             const category = this.$route.query.category;
             if (allowed.includes(category)) {
                 this.form.type = category;

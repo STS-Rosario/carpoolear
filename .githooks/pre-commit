@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(git rev-parse --show-toplevel)"
+cd "$ROOT"
+
+if [[ ! -d node_modules ]]; then
+  echo "pre-commit: node_modules not found — run npm ci" >&2
+  exit 1
+fi
+
+echo "pre-commit: eslint..."
+npm run lint
+
+echo "pre-commit: unit tests..."
+npm run test:unit -- --run

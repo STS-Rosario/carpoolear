@@ -61,6 +61,15 @@ export const useTicketsStore = defineStore('tickets', {
         adminReopen(id) {
             return ticketsApi.adminReopen(id).then((response) => response.data);
         },
+        adminUnresolve(id) {
+            return ticketsApi.adminUnresolve(id).then((response) => response.data);
+        },
+        adminMarkNeedsReview(id, payload) {
+            return ticketsApi.adminMarkNeedsReview(id, payload).then((response) => response.data);
+        },
+        adminPurgeAttachments(id) {
+            return ticketsApi.adminPurgeAttachments(id).then((response) => response.data);
+        },
         adminSetPriority(id, priority) {
             return ticketsApi.adminSetPriority(id, priority).then((response) => response.data);
         },
