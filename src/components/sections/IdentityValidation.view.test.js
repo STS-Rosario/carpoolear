@@ -18,6 +18,17 @@ describe('IdentityValidation rejection warnings', () => {
         expect(viewSource).toContain('this.resultMessage');
     });
 
+    it('renders mismatch support warning after mismatch details rows', () => {
+        const warningIndex = viewSource.indexOf('identity-validation-mismatch-support-warning');
+        const detailsIndex = viewSource.indexOf("{{ $t('nombreEnMercadoPago') }}:");
+        expect(warningIndex).toBeGreaterThan(detailsIndex);
+    });
+
+    it('links mismatch support warning to ticket creation route', () => {
+        expect(viewSource).toContain(":to=\"{ name: 'ticket-new' }\"");
+        expect(viewSource).toContain('identityValidationMismatchSupportTicketCta');
+    });
+
     it('shows warning icon and translated mismatch warning placeholder in rejected flow', () => {
         expect(viewSource).toContain('identity-validation-rejection-notice__support-warning');
         expect(viewSource).toContain('fa fa-exclamation-triangle');
