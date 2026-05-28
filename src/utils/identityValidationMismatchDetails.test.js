@@ -54,7 +54,7 @@ describe('getIdentityValidationMismatchDetails', () => {
         expect(getMismatchSupportWarningKey('dni_mismatch'))
             .toBe('identityValidationRejectionSupportWarningDniMismatch');
         expect(getMismatchSupportWarningKey('both_mismatch'))
-            .toBe('identityValidationRejectionSupportWarningBothMismatch');
+            .toBe('identityValidationRejectionSupportWarningNameMismatch');
         expect(getMismatchSupportWarningKey('other')).toBe(null);
     });
 });
