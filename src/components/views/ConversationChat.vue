@@ -12,13 +12,26 @@
                         v-imgSrc="conversation.image"
                     ></div>
                 </router-link>
-                <router-link
-                    v-if="conversation.users.length === 2"
-                    :to="{ name: 'profile', params: userProfile() }"
-                >
-                    <h2>{{ conversation.title }}</h2>
-                </router-link>
-                <h2 v-else>{{ conversation.title }}</h2>
+                <div class="conversation_user_header_top">
+                    <router-link
+                        v-if="conversation.users.length === 2"
+                        :to="{ name: 'profile', params: userProfile() }"
+                        class="conversation_user_header_name"
+                    >
+                        <h2>{{ conversation.title }}</h2>
+                    </router-link>
+                    <h2 v-else class="conversation_user_header_name">
+                        {{ conversation.title }}
+                    </h2>
+                    <router-link
+                        v-if="canReportConversationUser"
+                        class="btn btn-default btn-report conversation_user_header_report"
+                        :to="reportConversationUserRoute"
+                    >
+                        <i class="fa fa-flag" aria-hidden="true"></i>
+                        {{ $t('denunciar') }}
+                    </router-link>
+                </div>
                 <CoordinateTrip></CoordinateTrip>
                 <p
                     v-if="lastConnectionFormatted"
@@ -98,6 +111,10 @@ import dayjs from '../../dayjs';
 import bus from '../../services/bus-event.js';
 import dialogs from '../../services/dialogs.js';
 import CoordinateTrip from '../elements/CoordinateTrip';
+import {
+    buildReportTicketRoute,
+    reportTicketSubjectForUser
+} from '../../utils/reportTicketRoute';
 
 export default {
     name: 'conversation-chat',
@@ -147,7 +164,7 @@ export default {
          * Last-connection timestamp for the other participant in a 1:1 chat.
          * In group-style conversations (more than one other user) there is no single value; returns null.
          */
-        lastConnectionRaw() {
+        otherConversationUser() {
             if (!this.conversation || !this.conversation.users) {
                 return null;
             }
@@ -157,7 +174,30 @@ export default {
             if (others.length !== 1) {
                 return null;
             }
-            return others[0].last_connection;
+            return others[0];
+        },
+        canReportConversationUser() {
+            return (
+                this.otherConversationUser &&
+                this.user &&
+                this.otherConversationUser.id !== this.user.id
+            );
+        },
+        reportConversationUserRoute() {
+            const other = this.otherConversationUser;
+            if (!other) {
+                return buildReportTicketRoute();
+            }
+            return buildReportTicketRoute({
+                subject: reportTicketSubjectForUser(other)
+            });
+        },
+        lastConnectionRaw() {
+            const other = this.otherConversationUser;
+            if (!other) {
+                return null;
+            }
+            return other.last_connection;
         },
         lastConnectionFormatted() {
             const raw = this.lastConnectionRaw;
@@ -334,6 +374,24 @@ export default {
 </script>
 
 <style scoped>
+.conversation_user_header_top {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+.conversation_user_header_name {
+    flex: 1 1 auto;
+    min-width: 0;
+    margin: 0;
+}
+.conversation_user_header_top h2 {
+    margin: 0;
+}
+.conversation_user_header_report {
+    flex: 0 0 auto;
+    white-space: nowrap;
+}
 #btn-more {
     padding: 1em 0;
     margin-top: 1.5rem;
