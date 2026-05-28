@@ -32,15 +32,19 @@ export function getIdentityValidationMismatchDetails(query) {
     };
 }
 
-export function getManualRejectionSupportWarningKey(rejectReason) {
-    if (rejectReason === MISMATCH_RESULT_NAME) {
+export function getMismatchSupportWarningKey(mismatchReason) {
+    if (mismatchReason === MISMATCH_RESULT_NAME) {
         return 'identityValidationRejectionSupportWarningNameMismatch';
     }
-    if (rejectReason === MISMATCH_RESULT_DNI) {
+    if (mismatchReason === MISMATCH_RESULT_DNI) {
         return 'identityValidationRejectionSupportWarningDniMismatch';
     }
-    if (rejectReason === MISMATCH_RESULT_BOTH) {
+    if (mismatchReason === MISMATCH_RESULT_BOTH) {
         return 'identityValidationRejectionSupportWarningBothMismatch';
     }
     return null;
+}
+
+export function getManualRejectionSupportWarningKey(rejectReason) {
+    return getMismatchSupportWarningKey(rejectReason);
 }

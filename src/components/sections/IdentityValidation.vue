@@ -397,7 +397,8 @@ import {
 } from '../../utils/identityValidationPendingSwitchBehavior';
 import {
     getIdentityValidationMismatchDetails,
-    getManualRejectionSupportWarningKey
+    getManualRejectionSupportWarningKey,
+    getMismatchSupportWarningKey
 } from '../../utils/identityValidationMismatchDetails';
 
 export default {
@@ -444,7 +445,7 @@ export default {
             return getIdentityValidationMismatchDetails(this.$route.query || {});
         },
         mismatchSupportWarningKey() {
-            return getManualRejectionSupportWarningKey(this.resultMessage);
+            return getMismatchSupportWarningKey(this.resultMessage);
         },
         /**
          * Paid + docs sent + not yet approved/rejected — still in admin queue.

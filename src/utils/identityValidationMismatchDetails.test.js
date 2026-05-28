@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
     getIdentityValidationMismatchDetails,
+    getMismatchSupportWarningKey,
     getManualRejectionSupportWarningKey,
     MISMATCH_RESULT_BOTH
 } from './identityValidationMismatchDetails.js';
@@ -45,5 +46,15 @@ describe('getIdentityValidationMismatchDetails', () => {
 
     it('returns null when reject reason does not match known mismatch reasons', () => {
         expect(getManualRejectionSupportWarningKey('other')).toBe(null);
+    });
+
+    it('maps mismatch result to support warning key using shared helper', () => {
+        expect(getMismatchSupportWarningKey('name_mismatch'))
+            .toBe('identityValidationRejectionSupportWarningNameMismatch');
+        expect(getMismatchSupportWarningKey('dni_mismatch'))
+            .toBe('identityValidationRejectionSupportWarningDniMismatch');
+        expect(getMismatchSupportWarningKey('both_mismatch'))
+            .toBe('identityValidationRejectionSupportWarningBothMismatch');
+        expect(getMismatchSupportWarningKey('other')).toBe(null);
     });
 });
