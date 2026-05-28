@@ -498,7 +498,17 @@
                         </button>
                     </div>
                     
-                    <span v-if="error">{{ error }}</span>
+                    <div
+                        v-if="error"
+                        class="alert alert-danger profile-save-error"
+                        role="alert"
+                    >
+                        <i
+                            class="fa fa-exclamation-triangle"
+                            aria-hidden="true"
+                        ></i>
+                        <span>{{ error }}</span>
+                    </div>
                     <Uploadfile
                         :name="'profile'"
                         @change="onPhotoChange"
@@ -650,6 +660,7 @@ import bus from '../../services/bus-event';
 import Spinner from '../Spinner.vue';
 import modal from '../Modal';
 import { UserApi } from '../../services/api';
+import { getApiErrorMessage } from '../../utils/apiErrors.js';
 import { normalizeFacebookProfileUrl } from '../../utils/facebookProfileUrl.js';
 
 class Error {
@@ -917,6 +928,7 @@ export default {
             }
             this.update(bodyFormData)
                 .then(() => {
+                    this.error = null;
                     this.pass.password = '';
                     this.pass.password_confirmation = '';
                     this.loading = false;
@@ -955,7 +967,12 @@ export default {
                 .catch((err) => {
                     console.error(err);
                     this.loading = false;
-                    this.error = this.$t('errorDatos');
+                    const message = getApiErrorMessage(err, this.$t('errorDatos'));
+                    this.error = message;
+                    dialogs.message(message, {
+                        duration: 10,
+                        estado: 'error'
+                    });
                     this.jumpToError();
                     const isDocTaken =
                         err &&
@@ -1310,6 +1327,18 @@ span.error.textarea {
     margin-right: 5px;
     color: var(--trip-mostly-free-color);
 }
+.profile-save-error {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5em;
+    margin-top: 1em;
+}
+
+.profile-save-error .fa {
+    flex-shrink: 0;
+    margin-top: 0.15em;
+}
+
 .missing-field-highlight {
     background: #fff4cc;
     border-radius: 4px;

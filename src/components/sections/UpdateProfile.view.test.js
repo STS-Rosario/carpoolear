@@ -26,3 +26,12 @@ describe('UpdateProfile missing field routing', () => {
         expect(viewSource).toContain("this.$route.query.missing === 'patente'");
     });
 });
+
+describe('UpdateProfile save error feedback', () => {
+    it('shows backend validation errors in an alert and snackbar', () => {
+        expect(viewSource).toContain('getApiErrorMessage');
+        expect(viewSource).toContain('profile-save-error');
+        expect(viewSource).toContain('fa-exclamation-triangle');
+        expect(viewSource).toContain("dialogs.message(message, {\n                        duration: 10,\n                        estado: 'error'\n                    })");
+    });
+});
