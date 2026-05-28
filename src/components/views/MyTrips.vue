@@ -354,6 +354,7 @@ import Tab from '../elements/Tab';
 import modal from '../Modal';
 import DonationAmountPicker from '../elements/DonationAmountPicker.vue';
 import {
+    appendDonationTrackingUserId,
     getDonationMonthlyUrl,
     getDonationOnceUrl
 } from '../../utils/donationOptions.js';
@@ -480,11 +481,10 @@ export default {
         async onDonateOnceTime() {
             if (this.donateValue > 0) {
                 let url = getDonationOnceUrl(this.donateValue);
-                // Add userId parameter for tracking
-                if (this.user && this.user.id) {
-                    const separator = url.includes('?') ? '&' : '?';
-                    url = `${url}${separator}u=${this.user.id}`;
-                }
+                url = appendDonationTrackingUserId(
+                    url,
+                    this.user && this.user.id
+                );
                 // Open in external browser (required for iOS donations)
                 await this.openExternalBrowser(url);
                 this.showModalRequestDonation = false;
@@ -508,11 +508,10 @@ export default {
         async onDonateMonthly() {
             if (this.donateValue > 0) {
                 let url = getDonationMonthlyUrl(this.donateValue);
-                // Add userId parameter for tracking
-                if (this.user && this.user.id) {
-                    const separator = url.includes('?') ? '&' : '?';
-                    url = `${url}${separator}u=${this.user.id}`;
-                }
+                url = appendDonationTrackingUserId(
+                    url,
+                    this.user && this.user.id
+                );
                 // Open in external browser (required for iOS donations)
                 await this.openExternalBrowser(url);
                 this.showModalRequestDonation = false;
