@@ -117,6 +117,10 @@ import { useProfileStore } from '../../stores/profile';
 
 import Tab from '../elements/Tab';
 import modal from '../Modal';
+import {
+    getDonationMonthlyUrl,
+    getDonationOnceUrl
+} from '../../utils/donationOptions.js';
 import dialogs from '../../services/dialogs.js';
 import { shouldHideDonationOnIOSCapacitor } from '../../services/capacitor.js';
 
@@ -195,20 +199,7 @@ export default {
         },
         onDonateOnceTime() {
             if (this.donateValue > 0) {
-                var url = 'http://mpago.la/jgap'; // 50
-                switch (this.donateValue) {
-                    case '100':
-                        url = 'http://mpago.la/CaSZ';
-                        break;
-                    case '200':
-                        url = 'http://mpago.la/xntw';
-                        break;
-                    case '500':
-                        url = 'http://mpago.la/QEiN';
-                        break;
-                    default:
-                        break;
-                }
+                const url = getDonationOnceUrl(this.donateValue);
                 window.open(url, '_blank');
                 this.showModalRequestDonation = false;
                 let data = {
@@ -230,20 +221,7 @@ export default {
         },
         onDonateMonthly() {
             if (this.donateValue > 0) {
-                var url = 'http://mpago.la/1w3aci'; // 50
-                switch (this.donateValue) {
-                    case '100':
-                        url = 'http://mpago.la/BfZ';
-                        break;
-                    case '200':
-                        url = 'http://mpago.la/P02H';
-                        break;
-                    case '500':
-                        url = 'http://mpago.la/k8Xp';
-                        break;
-                    default:
-                        break;
-                }
+                const url = getDonationMonthlyUrl(this.donateValue);
                 window.open(url, '_blank');
                 this.showModalRequestDonation = false;
                 let data = {
