@@ -99,6 +99,10 @@
                             >
                                 <label for="input-facebook-profile-url">
                                     Perfil de Facebook (opcional)
+                                    <span class="description">
+                                        Opcional. Para generar confianza podés poner tu
+                                        link a tu perfil de Facebook
+                                    </span>
                                 </label>
                                 <input
                                     v-model="newInfo.facebook_profile_url"
@@ -106,11 +110,8 @@
                                     class="form-control"
                                     id="input-facebook-profile-url"
                                     placeholder="https://facebook.com/tuperfil"
+                                    @blur="onFacebookProfileUrlBlur"
                                 />
-                                <p class="help-block">
-                                    Opcional. Para generar confianza podés poner tu
-                                    link a tu perfil de Facebook
-                                </p>
                             </div>
 
                             <div class="form-group">
@@ -436,6 +437,7 @@ import { useAdminStore } from '../../stores/admin';
 import { useProfileStore } from '../../stores/profile';
 import { Thread } from '../../classes/Threads.js';
 import { inputIsNumber, formatId, cleanId } from '../../services/utility';
+import { normalizeFacebookProfileUrl } from '../../utils/facebookProfileUrl.js';
 import dialogs from '../../services/dialogs.js';
 import AdminLayout from '../layouts/AdminLayout.vue';
 import modal from '../Modal';
@@ -520,6 +522,12 @@ export default {
         ...mapActions(useProfileStore, {
             getBankData: 'getBankData'
         }),
+        onFacebookProfileUrlBlur() {
+            const normalized = normalizeFacebookProfileUrl(this.newInfo.facebook_profile_url);
+            if (normalized) {
+                this.newInfo.facebook_profile_url = normalized;
+            }
+        },
 
         goToListOnly() {
             this.resetUserState();
@@ -802,7 +810,9 @@ export default {
                     account_number: this.newInfo.account_number,
                     account_type: this.newInfo.account_type,
                     account_bank: this.newInfo.account_bank,
-                    facebook_profile_url: this.newInfo.facebook_profile_url,
+                    facebook_profile_url:
+                        normalizeFacebookProfileUrl(this.newInfo.facebook_profile_url) ??
+                        this.newInfo.facebook_profile_url,
                     banned: this.newInfo.banned ? 1 : 0,
                     active: this.newInfo.active ? 1 : 0
                 };

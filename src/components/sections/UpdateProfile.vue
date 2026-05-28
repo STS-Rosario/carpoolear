@@ -205,6 +205,10 @@
                     >
                         <label for="input-facebook-profile-url">
                             Perfil de Facebook (opcional)
+                            <span class="description">
+                                Opcional. Para generar confianza podés poner tu link a
+                                tu perfil de Facebook
+                            </span>
                         </label>
                         <input
                             v-model="user.facebook_profile_url"
@@ -212,11 +216,8 @@
                             class="form-control"
                             id="input-facebook-profile-url"
                             placeholder="https://facebook.com/tuperfil"
+                            @blur="onFacebookProfileUrlBlur"
                         />
-                        <p class="help-block">
-                            Opcional. Para generar confianza podés poner tu link a
-                            tu perfil de Facebook
-                        </p>
                     </div>
 
                     <div
@@ -649,6 +650,7 @@ import bus from '../../services/bus-event';
 import Spinner from '../Spinner.vue';
 import modal from '../Modal';
 import { UserApi } from '../../services/api';
+import { normalizeFacebookProfileUrl } from '../../utils/facebookProfileUrl.js';
 
 class Error {
     constructor(state = false, message = '') {
@@ -778,6 +780,12 @@ export default {
         ...mapActions(useProfileStore, {
             getBankData: 'getBankData'
         }),
+        onFacebookProfileUrlBlur() {
+            const normalized = normalizeFacebookProfileUrl(this.user.facebook_profile_url);
+            if (normalized) {
+                this.user.facebook_profile_url = normalized;
+            }
+        },
         jumpToError() {
             let hasError = document.getElementsByClassName('has-error');
             if (hasError.length) {
@@ -869,6 +877,12 @@ export default {
                     data[key] = this.user[key];
                 }
             });
+            if (data.facebook_profile_url) {
+                const normalized = normalizeFacebookProfileUrl(data.facebook_profile_url);
+                if (normalized) {
+                    data.facebook_profile_url = normalized;
+                }
+            }
             if (this.pass.password) {
                 if (this.pass.password !== this.pass.password_confirmation) {
                     this.error = this.$t('passwordNoCoincide');

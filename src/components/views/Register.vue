@@ -162,6 +162,10 @@
                 >
                     <label for="input-facebook-profile-url">
                         Perfil de Facebook (opcional)
+                        <span class="description">
+                            Opcional. Para generar confianza podés poner tu link a
+                            tu perfil de Facebook
+                        </span>
                     </label>
                     <input
                         id="input-facebook-profile-url"
@@ -169,11 +173,8 @@
                         type="url"
                         class="form-control"
                         placeholder="https://facebook.com/tuperfil"
+                        @blur="onFacebookProfileUrlBlur"
                     />
-                    <p class="help-block">
-                        Opcional. Para generar confianza podés poner tu link a
-                        tu perfil de Facebook
-                    </p>
                 </div>
 
                 <!--<label for="">Fecha de nacimiento <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
@@ -407,6 +408,7 @@ import modal from '../Modal';
 import dayjs from '../../dayjs';
 import Spinner from '../Spinner.vue';
 import { isOfflineApiError } from '../../utils/apiErrors.js';
+import { normalizeFacebookProfileUrl } from '../../utils/facebookProfileUrl.js';
 let emailRegex =
     /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 class Error {
@@ -522,6 +524,12 @@ export default {
         }),
         onShowRegister() {
             this.showRegister = true;
+        },
+        onFacebookProfileUrlBlur() {
+            const normalized = normalizeFacebookProfileUrl(this.facebookProfileUrl);
+            if (normalized) {
+                this.facebookProfileUrl = normalized;
+            }
         },
         toggleEmailTakenModal() {
             this.showEmailTakenModal = !this.showEmailTakenModal;
@@ -687,7 +695,8 @@ export default {
                             account_number: that.account_number,
                             account_type: that.account_type,
                             account_bank: that.account_bank,
-                            facebook_profile_url: that.facebookProfileUrl,
+                            facebook_profile_url:
+                                normalizeFacebookProfileUrl(that.facebookProfileUrl) ?? '',
                             token
                         };
                         /* global FormData */
