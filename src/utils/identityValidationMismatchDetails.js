@@ -31,3 +31,20 @@ export function getIdentityValidationMismatchDetails(query) {
         mpDni: showDni ? (query.mp_dni || '-') : null
     };
 }
+
+export function getMismatchSupportWarningKey(mismatchReason) {
+    if (mismatchReason === MISMATCH_RESULT_NAME) {
+        return 'identityValidationRejectionSupportWarningNameMismatch';
+    }
+    if (mismatchReason === MISMATCH_RESULT_DNI) {
+        return 'identityValidationRejectionSupportWarningDniMismatch';
+    }
+    if (mismatchReason === MISMATCH_RESULT_BOTH) {
+        return 'identityValidationRejectionSupportWarningBothMismatch';
+    }
+    return null;
+}
+
+export function getManualRejectionSupportWarningKey(rejectReason) {
+    return getMismatchSupportWarningKey(rejectReason);
+}

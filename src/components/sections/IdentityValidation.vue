@@ -42,6 +42,19 @@
                 <strong>{{ $t('nombreEnCarpoolear') }}:</strong> {{ mismatchDetails.userName }}<br />
                 <strong>{{ $t('nombreEnMercadoPago') }}:</strong> {{ mismatchDetails.mpName }}
             </p>
+            <p
+                v-if="mismatchSupportWarningKey"
+                class="identity-validation-mismatch-support-warning"
+            >
+                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                {{ $t(mismatchSupportWarningParts.leadKey) }}
+                <router-link :to="{ name: 'ticket-new' }">
+                    {{ $t('identityValidationMismatchSupportTicketCta') }}
+                </router-link>
+                <span v-if="mismatchSupportWarningParts.tailKey">
+                    {{ $t(mismatchSupportWarningParts.tailKey) }}
+                </span>
+            </p>
         </div>
 
             <div v-if="!identityValidationAvailable" class="alert alert-info">
@@ -219,6 +232,13 @@
                     <p class="identity-validation-rejection-notice__text">
                         {{ $t('identityValidationRejectionNoticeBody') }}
                     </p>
+                    <p
+                        v-if="manualRejectionSupportWarningKey"
+                        class="identity-validation-rejection-notice__support-warning"
+                    >
+                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                        {{ $t(manualRejectionSupportWarningKey) }}
+                    </p>
                     <p class="identity-validation-rejection-notice__emphasis">
                         <strong class="identity-validation-rejection-notice__emphasis-strong">{{ $t('identityValidationRejectionNoticeContactLead') }}</strong><router-link class="identity-validation-rejection-notice__mesa-link" :to="{ name: 'tickets' }">{{ $t('mesaAyuda') }}</router-link>{{ $t('identityValidationRejectionNoticeContactTail') }}
                     </p>
@@ -381,7 +401,13 @@ import {
     getIdentityValidationPendingSwitchBehavior,
     IDENTITY_VALIDATION_PENDING_SWITCH_BEHAVIOR_OAUTH
 } from '../../utils/identityValidationPendingSwitchBehavior';
-import { getIdentityValidationMismatchDetails } from '../../utils/identityValidationMismatchDetails';
+import {
+    getIdentityValidationMismatchDetails,
+    getManualRejectionSupportWarningKey,
+    getMismatchSupportWarningKey
+} from '../../utils/identityValidationMismatchDetails';
+
+const EMPTY_WARNING_PARTS = { leadKey: null, tailKey: null };
 
 export default {
     name: 'IdentityValidation',
@@ -425,6 +451,16 @@ export default {
         },
         mismatchDetails() {
             return getIdentityValidationMismatchDetails(this.$route.query || {});
+        },
+        mismatchSupportWarningKey() {
+            return getMismatchSupportWarningKey(this.resultMessage);
+        },
+        mismatchSupportWarningParts() {
+            if (!this.mismatchSupportWarningKey) return EMPTY_WARNING_PARTS;
+            return {
+                leadKey: `${this.mismatchSupportWarningKey}Lead`,
+                tailKey: `${this.mismatchSupportWarningKey}Tail`
+            };
         },
         /**
          * Paid + docs sent + not yet approved/rejected — still in admin queue.
@@ -472,6 +508,10 @@ export default {
                 m.submitted_at &&
                 m.review_status === 'rejected'
             );
+        },
+        manualRejectionSupportWarningKey() {
+            if (!this.showManualRejectedWithChoiceCards) return null;
+            return getManualRejectionSupportWarningKey(this.manualStatus.reject_reason);
         },
         showVerificationSuccessBanner() {
             if (this.manualDocsPendingAdminReview) {
@@ -852,6 +892,17 @@ export default {
     color: #7f1d1d;
 }
 
+.identity-validation-rejection-notice__support-warning {
+    margin: 0.65rem 0 0.5rem;
+    font-size: 0.95rem;
+    line-height: 1.45;
+    color: #7f1d1d;
+}
+
+.identity-validation-rejection-notice__support-warning .fa {
+    margin-right: 0.35rem;
+}
+
 .manual-status-upload-block {
     margin-bottom: 1.5rem;
     color: #333;
@@ -904,6 +955,31 @@ export default {
 
 .identity-validation-mp-warning .fa {
     margin-right: 0.5rem;
+}
+
+.identity-validation-mismatch-support-warning {
+    margin-top: 0.5rem;
+    padding: 0.75rem 0.9rem;
+    border-radius: 4px;
+    border: 1px solid #f0c36d;
+    background: #fff7e6;
+    color: #8a6d3b;
+}
+
+.identity-validation-mismatch-support-warning .fa {
+    margin-right: 0.5rem;
+}
+
+.identity-validation-mismatch-support-warning a {
+    margin-left: 0.2rem;
+    color: #7f4f00;
+    text-decoration: underline;
+    font-weight: 600;
+}
+
+.identity-validation-mismatch-support-warning a:hover,
+.identity-validation-mismatch-support-warning a:focus {
+    color: #5f3a00;
 }
 
 .identity-validation-component .manual-status-panel.panel-warning .panel-heading {
