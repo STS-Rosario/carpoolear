@@ -25,8 +25,9 @@ export function getApiErrorMessage(apiError, fallback) {
 
     const errors = apiError.errors;
     if (errors && typeof errors === 'object') {
-        for (const key of Object.keys(errors)) {
-            const value = errors[key];
+        const errorValues = Object.values(errors);
+        for (let i = 0; i < errorValues.length; i += 1) {
+            const value = errorValues[i];
             if (Array.isArray(value) && value.length > 0 && value[0]) {
                 return String(value[0]);
             }
