@@ -18,7 +18,7 @@ describe('TicketNew view', () => {
         expect(source).toMatch(
             /const subject = this\.\$route\.query\.subject/
         );
-        expect(source).toContain("this.form.subject = subject");
+        expect(source).toContain('this.form.subject = subject');
         expect(source).toContain("'$route.query.subject'");
     });
 });
