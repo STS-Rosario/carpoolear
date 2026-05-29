@@ -67,16 +67,31 @@
                         <label for="txt_password" v-show="isDesktop">{{
                             $t('password')
                         }}</label>
-                        <input
-                            :placeholder="$t('loginPasswordPlaceholder')"
-                            ref="txt_password"
-                            type="password"
-                            id="txt_password"
-                            name="password"
-                            autocomplete="current-password"
-                            v-jump
-                            v-model="password"
-                        />
+                        <div class="password-field">
+                            <input
+                                :placeholder="$t('loginPasswordPlaceholder')"
+                                ref="txt_password"
+                                :type="showPassword ? 'text' : 'password'"
+                                id="txt_password"
+                                name="password"
+                                autocomplete="current-password"
+                                v-jump
+                                v-model="password"
+                            />
+                            <button
+                                type="button"
+                                id="btn_toggle_password"
+                                class="password-field__toggle"
+                                :aria-label="showPassword ? $t('ocultarContrasena') : $t('mostrarContrasena')"
+                                @click="togglePasswordVisibility"
+                            >
+                                <i
+                                    class="fa"
+                                    :class="showPassword ? 'fa-eye-slash' : 'fa-eye'"
+                                    aria-hidden="true"
+                                ></i>
+                            </button>
+                        </div>
                         <div
                             class="alert alert-info"
                             role="alert"
@@ -306,6 +321,7 @@ export default {
         return {
             email: '',
             password: '',
+            showPassword: false,
             loading: false,
             fbLoading: false,
             iosLoading: false,
@@ -396,6 +412,9 @@ export default {
                 this.modalType = type;
             }
             this.showModalLogin = !this.showModalLogin;
+        },
+        togglePasswordVisibility() {
+            this.showPassword = !this.showPassword;
         },
         submitLogin() {
             if (this.loading) {
