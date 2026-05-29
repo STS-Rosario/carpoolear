@@ -23,3 +23,13 @@
 .support-tickets-table__owner {
     margin-left: 4px;
 }
+
+.support-tickets-table__updated--warning {
+    font-weight: bold;
+    color: #8a6d3b;
+}
+
+.support-tickets-table__updated--critical {
+    font-weight: bold;
+    color: #a94442;
+}
