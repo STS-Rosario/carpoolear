@@ -68,6 +68,10 @@ class TicketsApi extends TaggedApi {
         return this.put('/api/admin/support/tickets/' + id + '/priority', { priority });
     }
 
+    adminSetType(id, type) {
+        return this.put('/api/admin/support/tickets/' + id + '/type', { type });
+    }
+
     adminSetInternalNote(id, internalNoteMarkdown) {
         return this.put('/api/admin/support/tickets/' + id + '/internal-note', {
             internal_note_markdown: internalNoteMarkdown
