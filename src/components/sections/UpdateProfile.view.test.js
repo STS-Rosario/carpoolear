@@ -49,3 +49,22 @@ describe('UpdateProfile save error feedback', () => {
         expect(viewSource).toContain("dialogs.message(message, {\n                        duration: 10,\n                        estado: 'error'\n                    })");
     });
 });
+
+describe('UpdateProfile name editing', () => {
+    it('locks the name field when identity is validated', () => {
+        expect(viewSource).toContain('isNameLockedByValidation');
+        expect(viewSource).toContain(':disabled="isNameLockedByValidation"');
+        expect(viewSource).toContain('identity_validated');
+        expect(viewSource).toContain('identity_validated_at');
+    });
+
+    it('includes name in the profile save payload when identity is not validated', () => {
+        expect(viewSource).toContain('isNameLockedByValidation');
+        expect(viewSource).toContain("data['name'] = this.user.name");
+    });
+
+    it('shows support contact hint when name is locked', () => {
+        expect(viewSource).toContain('nameInputTitle');
+        expect(viewSource).toContain('nombreValidadoContacteSoporte');
+    });
+});

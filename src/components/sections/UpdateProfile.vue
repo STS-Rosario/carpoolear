@@ -86,7 +86,8 @@
                             id="input-name"
                             :placeholder="$t('placeholderNombre')"
                             :class="{ 'has-error': nombreError.state }"
-                            :disabled="!firstTime"
+                            :disabled="isNameLockedByValidation"
+                            :title="nameInputTitle"
                         />
                         <span class="error" v-if="nombreError.state">
                             {{ nombreError.message }}
@@ -781,16 +782,27 @@ export default {
                 return this.user.nro_doc;
             }
         },
-        isDniLockedByValidation() {
+        isIdentityValidated() {
             return !!(
                 this.user &&
                 this.user.identity_validated &&
                 this.user.identity_validated_at
             );
         },
+        isDniLockedByValidation() {
+            return this.isIdentityValidated;
+        },
+        isNameLockedByValidation() {
+            return this.isIdentityValidated;
+        },
         dniInputTitle() {
             return this.isDniLockedByValidation
                 ? this.$t('dniValidadoContacteSoporte')
+                : '';
+        },
+        nameInputTitle() {
+            return this.isNameLockedByValidation
+                ? this.$t('nombreValidadoContacteSoporte')
                 : '';
         },
         iptPhone() {
@@ -975,7 +987,7 @@ export default {
             if (this.user && this.user.nro_doc) {
                 this.user.nro_doc = cleanId(this.user.nro_doc, this.config.profile_id_format);
             }
-            // Only send properties the backend allows for profile edit (name/email are read-only)
+            // Only send properties the backend allows for profile edit (email is read-only)
             const allowedProfileUpdateKeys = [
                 'birthday', 'gender', 'description', 'mobile_phone', 'emails_notifications',
                 'nro_doc', 'data_visibility',
@@ -991,6 +1003,9 @@ export default {
                     data[key] = this.user[key];
                 }
             });
+            if (!this.isNameLockedByValidation && this.user.name !== undefined) {
+                data['name'] = this.user.name;
+            }
             if (data.facebook_profile_url) {
                 const normalized = normalizeFacebookProfileUrl(data.facebook_profile_url);
                 if (normalized) {
