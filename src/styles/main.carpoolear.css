@@ -2389,6 +2389,38 @@ h2 {
     line-height: 28px;
 }
 
+.user-form .password-field {
+    position: relative;
+    margin-bottom: 0.5em;
+}
+
+.user-form .password-field input {
+    margin-bottom: 0;
+    padding-right: 2.5em;
+}
+
+.user-form .password-field__toggle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 2.5em;
+    margin-top: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: #666;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-form .password-field__toggle:focus {
+    outline: 2px solid var(--secondary-background, #2793ff);
+    outline-offset: -2px;
+}
+
 .user-form input.has-error,
 input.has-error,
 textarea.has-error {
