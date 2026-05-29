@@ -274,11 +274,8 @@ export default {
         margin-right: 1em;
     }
     .buttons-container {
-        left: 42px;
-        bottom: -25px;
-        position: absolute;
-        padding-bottom: 0;
-        z-index: 1;
+        margin-top: 1.5em;
+        padding-bottom: 1rem;
     }
 }
 .alert-warning {
