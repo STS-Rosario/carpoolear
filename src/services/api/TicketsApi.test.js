@@ -22,6 +22,11 @@ describe('TicketsApi admin ticket actions', () => {
         expect(apiSource).toContain('adminUnresolve');
         expect(apiSource).toContain('/unresolve');
     });
+
+    it('targets type endpoint for admin category updates', () => {
+        expect(apiSource).toContain('adminSetType');
+        expect(apiSource).toContain('/type');
+    });
 });
 
 describe('TicketsApi admin reply templates', () => {
