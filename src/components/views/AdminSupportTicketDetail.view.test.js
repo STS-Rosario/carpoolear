@@ -166,4 +166,14 @@ describe('AdminSupportTicketDetail view', () => {
         expect(viewSource).toContain('showMarkNeedsReviewButton');
         expect(viewSource).toContain("'Necesita revisión'");
     });
+
+    it('lets admins change ticket category and save it', () => {
+        expect(viewSource).toContain("{{ $t('categoriaTicket') }}");
+        expect(viewSource).toContain('ticketTypeOptions');
+        expect(viewSource).toContain('v-model="ticketType"');
+        expect(viewSource).toContain('saveTicketCategory');
+        expect(viewSource).toContain('adminSetType');
+        expect(viewSource).toContain('categoriaTicketGuardada');
+        expect(viewSource).toContain('errorGuardandoCategoriaTicket');
+    });
 });
