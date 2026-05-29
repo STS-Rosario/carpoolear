@@ -20,7 +20,7 @@
                         {{ $t('libre') }}
                     </span>
                     <span
-                        v-if="trip.seats_available > 1"
+                        v-else
                         class="trip_seats-available_label"
                     >
                         {{ $t('Lugares') }}
@@ -36,7 +36,6 @@
                 </div>
             </div>
         </div>
-        <div v-if="tripCardTheme !== 'light'" style="height: 2em"></div>
         <template v-else>
             <div
                 class="trip_seats-available"
@@ -86,6 +85,10 @@ export default {
 };
 </script>
 <style scoped>
+.trip-seats {
+    margin-bottom: 2em;
+}
+
 .trip-seats__availability {
     display: flex;
     flex-wrap: nowrap;
