@@ -1,5 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import { ticketNeedsAdminAttention } from './supportTicketUpdatedAgeAttention.js';
+import dayjs from '../dayjs';
+import {
+    ticketNeedsAdminAttention,
+    getUpdatedAgeAttentionLevel
+} from './supportTicketUpdatedAgeAttention.js';
 
 describe('ticketNeedsAdminAttention', () => {
     it('returns true when the user replied and admin has unread messages', () => {
@@ -21,5 +25,27 @@ describe('ticketNeedsAdminAttention', () => {
     it('returns false for resolved or closed tickets', () => {
         expect(ticketNeedsAdminAttention({ status: 'Resuelto', unread_for_admin: 0 })).toBe(false);
         expect(ticketNeedsAdminAttention({ status: 'Cerrado', unread_for_admin: 0 })).toBe(false);
+    });
+});
+
+describe('getUpdatedAgeAttentionLevel', () => {
+    const now = dayjs('2026-05-29T12:00:00');
+
+    it('returns null when updated less than 2 days ago', () => {
+        expect(getUpdatedAgeAttentionLevel('2026-05-28T12:00:00', now)).toBeNull();
+    });
+
+    it('returns warning when updated at least 2 days but less than 4 days ago', () => {
+        expect(getUpdatedAgeAttentionLevel('2026-05-27T12:00:00', now)).toBe('warning');
+        expect(getUpdatedAgeAttentionLevel('2026-05-26T12:01:00', now)).toBe('warning');
+    });
+
+    it('returns critical when updated 4 days ago or older', () => {
+        expect(getUpdatedAgeAttentionLevel('2026-05-25T12:00:00', now)).toBe('critical');
+        expect(getUpdatedAgeAttentionLevel('2026-05-20T08:00:00', now)).toBe('critical');
+    });
+
+    it('returns null when updated_at is missing', () => {
+        expect(getUpdatedAgeAttentionLevel(null, now)).toBeNull();
     });
 });
