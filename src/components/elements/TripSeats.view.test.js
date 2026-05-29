@@ -14,3 +14,11 @@ describe('TripSeats.vue rear seat comfort preference', () => {
         expect(viewSource).toContain('trip-seats__rear-comfort-note');
     });
 });
+
+describe('TripSeats.vue zero available seats label', () => {
+    it('shows "lugares libres" label when no seats are available', () => {
+        expect(viewSource).toMatch(
+            /v-if="trip\.seats_available === 0"[\s\S]*?\$t\('Lugares'\)[\s\S]*?\$t\('libres'\)/
+        );
+    });
+});
