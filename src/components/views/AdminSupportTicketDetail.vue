@@ -11,6 +11,18 @@
             <span class="ticket-priority-label" :class="priorityClass(ticket.priority)">{{ priorityLabel(ticket.priority) }}</span>
         </p>
 
+        <label>{{ $t('categoriaTicket') }}</label>
+        <select v-model="ticketType" class="form-control ticket-category-select">
+            <option
+                v-for="option in ticketTypeOptions"
+                :key="option.value"
+                :value="option.value"
+            >
+                {{ $t(option.labelKey) }}
+            </option>
+        </select>
+        <button class="btn btn-default mtop-10" @click="saveTicketCategory">{{ $t('guardarCambio') }}</button>
+
         <label>{{ $t('notaInterna') }}</label>
         <textarea class="form-control" v-model="internalNote"></textarea>
         <button class="btn btn-default mtop-10" @click="saveInternalNote">{{ $t('guardarCambio') }}</button>
@@ -181,6 +193,7 @@ import {
     TICKET_STATUS_CLASS_MAP as STATUS_CLASS_MAP,
     TICKET_STATUS_LABEL_KEYS as STATUS_LABEL_KEYS
 } from '../../utils/supportTicketStatusLabels';
+import { USER_TICKET_TYPE_OPTIONS } from '../../utils/supportTicketTypeOptions';
 
 const PRIORITY_LABEL_KEYS = {
     low: 'prioridadBaja',
@@ -196,6 +209,7 @@ const PRIORITY_CLASS_MAP = {
 
 const SUCCESS_TOAST_OPTIONS = { estado: 'success', duration: 2 };
 const ERROR_TOAST_OPTIONS = { estado: 'error', duration: 3 };
+const ticketTypeOptions = USER_TICKET_TYPE_OPTIONS;
 
 export default {
     name: 'admin-support-ticket-detail',
@@ -206,6 +220,8 @@ export default {
             attachmentBlobUrls: {},
             attachments: [],
             internalNote: '',
+            ticketType: '',
+            ticketTypeOptions,
             editorOptions: {
                 usageStatistics: false,
                 hideModeSwitch: true,
@@ -284,7 +300,8 @@ export default {
             adminReopen: 'adminReopen',
             adminMarkNeedsReview: 'adminMarkNeedsReview',
             adminPurgeAttachments: 'adminPurgeAttachments',
-            adminSetInternalNote: 'adminSetInternalNote'
+            adminSetInternalNote: 'adminSetInternalNote',
+            adminSetType: 'adminSetType'
         }),
         ...mapActions(useReplyTemplatesStore, {
             fetchReplyTemplatesAdminList: 'fetchAdminList'
@@ -349,6 +366,7 @@ export default {
             return this.fetchAdminOne(this.id).then((data) => {
                 this.ticket = data;
                 this.internalNote = data.internal_note_markdown || '';
+                this.ticketType = data.type || '';
                 this.loadReplyAttachmentUrls();
             });
         },
@@ -526,6 +544,16 @@ export default {
                 })
                 .catch(() => {
                     dialogs.message(this.$t('errorGuardandoNotaInterna'), ERROR_TOAST_OPTIONS);
+                });
+        },
+        saveTicketCategory() {
+            this.adminSetType(this.id, this.ticketType)
+                .then(() => this.refresh())
+                .then(() => {
+                    dialogs.message(this.$t('categoriaTicketGuardada'), SUCCESS_TOAST_OPTIONS);
+                })
+                .catch(() => {
+                    dialogs.message(this.$t('errorGuardandoCategoriaTicket'), ERROR_TOAST_OPTIONS);
                 });
         }
     },
