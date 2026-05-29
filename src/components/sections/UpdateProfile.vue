@@ -782,15 +782,18 @@ export default {
                 return this.user.nro_doc;
             }
         },
-        isDniLockedByValidation() {
+        isIdentityValidated() {
             return !!(
                 this.user &&
                 this.user.identity_validated &&
                 this.user.identity_validated_at
             );
         },
+        isDniLockedByValidation() {
+            return this.isIdentityValidated;
+        },
         isNameLockedByValidation() {
-            return this.isDniLockedByValidation;
+            return this.isIdentityValidated;
         },
         dniInputTitle() {
             return this.isDniLockedByValidation
