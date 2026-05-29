@@ -23,6 +23,7 @@
         </select>
         <button class="btn btn-default mtop-10" @click="saveTicketCategory">{{ $t('guardarCambio') }}</button>
 
+        <hr />
         <label>{{ $t('notaInterna') }}</label>
         <textarea class="form-control" v-model="internalNote"></textarea>
         <button class="btn btn-default mtop-10" @click="saveInternalNote">{{ $t('guardarCambio') }}</button>
