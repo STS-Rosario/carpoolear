@@ -2,7 +2,8 @@ import { describe, it, expect } from 'vitest';
 import dayjs from '../dayjs';
 import {
     ticketNeedsAdminAttention,
-    getUpdatedAgeAttentionLevel
+    getUpdatedAgeAttentionLevel,
+    getUpdatedAgeAttentionClass
 } from './supportTicketUpdatedAgeAttention.js';
 
 describe('ticketNeedsAdminAttention', () => {
@@ -47,5 +48,41 @@ describe('getUpdatedAgeAttentionLevel', () => {
 
     it('returns null when updated_at is missing', () => {
         expect(getUpdatedAgeAttentionLevel(null, now)).toBeNull();
+    });
+});
+
+describe('getUpdatedAgeAttentionClass', () => {
+    const now = dayjs('2026-05-29T12:00:00');
+
+    it('returns empty string when ticket does not need admin attention', () => {
+        expect(getUpdatedAgeAttentionClass({
+            status: 'Esperando respuesta',
+            unread_for_admin: 0,
+            updated_at: '2026-05-20T08:00:00'
+        }, now)).toBe('');
+    });
+
+    it('returns warning class when attention is needed and updated 2+ days ago', () => {
+        expect(getUpdatedAgeAttentionClass({
+            status: 'En revision',
+            unread_for_admin: 0,
+            updated_at: '2026-05-27T12:00:00'
+        }, now)).toBe('support-tickets-table__updated--warning');
+    });
+
+    it('returns critical class when attention is needed and updated 4+ days ago', () => {
+        expect(getUpdatedAgeAttentionClass({
+            status: 'En revision',
+            unread_for_admin: 0,
+            updated_at: '2026-05-25T12:00:00'
+        }, now)).toBe('support-tickets-table__updated--critical');
+    });
+
+    it('returns empty string when attention is needed but updated recently', () => {
+        expect(getUpdatedAgeAttentionClass({
+            status: 'En revision',
+            unread_for_admin: 0,
+            updated_at: '2026-05-28T12:00:00'
+        }, now)).toBe('');
     });
 });
