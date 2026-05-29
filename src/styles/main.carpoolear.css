@@ -1355,7 +1355,7 @@ textarea {
     border-color: var(--trip-mostly-free-color);
 }
 
-.trip-fill .card_heading {
+.trip-fill .card-trip .card_heading {
     box-shadow: none;
     background: transparent;
     border: none;
