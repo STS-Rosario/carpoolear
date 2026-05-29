@@ -14,6 +14,7 @@ const apiMock = {
     adminClose: vi.fn(),
     adminReopen: vi.fn(),
     adminSetPriority: vi.fn(),
+    adminSetType: vi.fn(),
     adminSetInternalNote: vi.fn(),
     adminCreate: vi.fn()
 };
@@ -81,5 +82,16 @@ describe('tickets store', () => {
 
         expect(ticket.id).toBe(42);
         expect(apiMock.create).toHaveBeenCalledTimes(1);
+    });
+
+    it('adminSetType delegates to API and returns ticket data', async () => {
+        const { useTicketsStore } = await import('./tickets');
+        apiMock.adminSetType.mockResolvedValue({ data: { id: 5, type: 'bug_report' } });
+
+        const store = useTicketsStore();
+        const updated = await store.adminSetType(5, 'bug_report');
+
+        expect(updated).toEqual({ id: 5, type: 'bug_report' });
+        expect(apiMock.adminSetType).toHaveBeenCalledWith(5, 'bug_report');
     });
 });
