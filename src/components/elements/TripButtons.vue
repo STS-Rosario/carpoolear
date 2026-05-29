@@ -275,7 +275,6 @@ export default {
     }
     .buttons-container {
         margin-top: 1.5em;
-        padding-bottom: 1rem;
     }
 }
 .alert-warning {

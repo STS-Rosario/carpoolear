@@ -15,5 +15,6 @@ describe('TripButtons.vue trip detail layout', () => {
 
         const desktopButtonsStyles = desktopButtonsRule[1];
         expect(desktopButtonsStyles).not.toMatch(/position:\s*absolute/);
+        expect(desktopButtonsStyles).toMatch(/margin-top:\s*1\.5em/);
     });
 });
