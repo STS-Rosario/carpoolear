@@ -21,6 +21,20 @@ test.describe('Login', () => {
     await expect(page.locator('#btn_login')).toContainText('Ingresar');
   });
 
+  test('toggles password visibility when clicking the show/hide button', async ({ page }) => {
+    await page.goto('/login');
+    await waitForPageReady(page);
+
+    const passwordInput = page.locator('#txt_password');
+    await expect(passwordInput).toHaveAttribute('type', 'password');
+
+    await page.locator('#btn_toggle_password').click();
+    await expect(passwordInput).toHaveAttribute('type', 'text');
+
+    await page.locator('#btn_toggle_password').click();
+    await expect(passwordInput).toHaveAttribute('type', 'password');
+  });
+
   test('shows error toast on invalid credentials (401)', async ({ page }) => {
     // Register login mock AFTER setup (last route wins in Playwright)
     await page.route('**/api/login', (route) => {
