@@ -2,6 +2,8 @@ const messages = {
     arg: {
         loginUsuarioPlaceholder: 'El email con el que te registraste',
         loginPasswordPlaceholder: 'Contraseña',
+        mostrarContrasena: 'Mostrar contraseña',
+        ocultarContrasena: 'Ocultar contraseña',
         documento: 'Número de documento',
         doc: 'DNI',
         soporte: 'Mesa de ayuda',
@@ -2465,6 +2467,8 @@ const messages = {
     en: {
         loginUsuarioPlaceholder: 'The email you registered with',
         loginPasswordPlaceholder: 'Password',
+        mostrarContrasena: 'Show password',
+        ocultarContrasena: 'Hide password',
         documento: 'ID number',
         doc: 'ID',
         soporte: 'Help desk',

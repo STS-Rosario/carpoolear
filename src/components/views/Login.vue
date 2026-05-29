@@ -67,16 +67,31 @@
                         <label for="txt_password" v-show="isDesktop">{{
                             $t('password')
                         }}</label>
-                        <input
-                            :placeholder="$t('loginPasswordPlaceholder')"
-                            ref="txt_password"
-                            type="password"
-                            id="txt_password"
-                            name="password"
-                            autocomplete="current-password"
-                            v-jump
-                            v-model="password"
-                        />
+                        <div class="password-field">
+                            <input
+                                :placeholder="$t('loginPasswordPlaceholder')"
+                                ref="txt_password"
+                                :type="showPassword ? 'text' : 'password'"
+                                id="txt_password"
+                                name="password"
+                                autocomplete="current-password"
+                                v-jump
+                                v-model="password"
+                            />
+                            <button
+                                type="button"
+                                id="btn_toggle_password"
+                                class="password-field__toggle"
+                                :aria-label="showPassword ? $t('ocultarContrasena') : $t('mostrarContrasena')"
+                                @click="togglePasswordVisibility"
+                            >
+                                <i
+                                    class="fa"
+                                    :class="showPassword ? 'fa-eye-slash' : 'fa-eye'"
+                                    aria-hidden="true"
+                                ></i>
+                            </button>
+                        </div>
                         <div
                             class="alert alert-info"
                             role="alert"
@@ -306,6 +321,7 @@ export default {
         return {
             email: '',
             password: '',
+            showPassword: false,
             loading: false,
             fbLoading: false,
             iosLoading: false,
@@ -396,6 +412,9 @@ export default {
                 this.modalType = type;
             }
             this.showModalLogin = !this.showModalLogin;
+        },
+        togglePasswordVisibility() {
+            this.showPassword = !this.showPassword;
         },
         submitLogin() {
             if (this.loading) {
@@ -565,6 +584,62 @@ label {
     font-weight: bold;
     padding-left: 12px;
     color: var(--secondary-background);
+}
+
+.password-field {
+    position: relative;
+    display: block;
+    width: 100%;
+    margin-bottom: 0.5em;
+}
+
+.password-field input {
+    margin-bottom: 0;
+    padding-right: 2.25rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.password-field__toggle {
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    bottom: 1px;
+    width: 2.25rem;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    appearance: none;
+    -webkit-appearance: none;
+    color: #666;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.password-field__toggle:hover,
+.password-field__toggle:focus,
+.password-field__toggle:active {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    box-shadow: none;
+    outline: none;
+}
+
+.password-field__toggle:focus-visible {
+    color: var(--secondary-background, #2793ff);
+}
+
+.password-field__toggle .fa {
+    font-size: 1rem;
+    pointer-events: none;
 }
 
 /* .user-form .btn-primary.btn-facebook {
