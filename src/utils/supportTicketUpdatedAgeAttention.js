@@ -11,9 +11,13 @@ export const UPDATED_AGE_ATTENTION_CLASS_BY_LEVEL = {
     critical: 'support-tickets-table__updated--critical'
 };
 
+export function hasUnreadAdminMessages(ticket) {
+    return Number(ticket && ticket.unread_for_admin) > 0;
+}
+
 export function ticketNeedsAdminAttention(ticket) {
     if (!ticket) return false;
-    if (Number(ticket.unread_for_admin) > 0) return true;
+    if (hasUnreadAdminMessages(ticket)) return true;
     return ADMIN_ATTENTION_STATUSES.has(ticket.status);
 }
 
