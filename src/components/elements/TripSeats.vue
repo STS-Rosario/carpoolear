@@ -20,15 +20,7 @@
                         {{ $t('libre') }}
                     </span>
                     <span
-                        v-if="trip.seats_available > 1"
-                        class="trip_seats-available_label"
-                    >
-                        {{ $t('Lugares') }}
-                        <br />
-                        {{ $t('libres') }}
-                    </span>
-                    <span
-                        v-if="trip.seats_available === 0"
+                        v-else
                         class="trip_seats-available_label"
                     >
                         {{ $t('Lugares') }}
