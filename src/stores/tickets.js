@@ -73,6 +73,9 @@ export const useTicketsStore = defineStore('tickets', {
         adminSetPriority(id, priority) {
             return ticketsApi.adminSetPriority(id, priority).then((response) => response.data);
         },
+        adminSetType(id, type) {
+            return ticketsApi.adminSetType(id, type).then((response) => response.data);
+        },
         adminSetInternalNote(id, note) {
             return ticketsApi.adminSetInternalNote(id, note).then((response) => response.data);
         }
