@@ -2396,29 +2396,49 @@ h2 {
 
 .user-form .password-field input {
     margin-bottom: 0;
-    padding-right: 2.5em;
+    padding-right: 2.25rem;
 }
 
 .user-form .password-field__toggle {
     position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: 2.5em;
-    margin-top: 0;
+    top: 1px;
+    right: 1px;
+    bottom: 1px;
+    width: 2.25rem;
+    margin: 0;
     padding: 0;
-    border: none;
-    background: transparent;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    appearance: none;
+    -webkit-appearance: none;
     color: #666;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
+    line-height: 1;
 }
 
-.user-form .password-field__toggle:focus {
-    outline: 2px solid var(--secondary-background, #2793ff);
-    outline-offset: -2px;
+.user-form .password-field__toggle:hover,
+.user-form .password-field__toggle:focus,
+.user-form .password-field__toggle:active {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    box-shadow: none;
+    outline: none;
+}
+
+.user-form .password-field__toggle:focus-visible {
+    color: var(--secondary-background, #2793ff);
+}
+
+.user-form .password-field__toggle .fa {
+    font-size: 1rem;
+    pointer-events: none;
 }
 
 .user-form input.has-error,

@@ -10,6 +10,7 @@ describe('Login password visibility toggle', () => {
         expect(loginSource).toContain('class="password-field"');
         expect(loginSource).toContain('id="btn_toggle_password"');
         expect(loginSource).toContain('@click="togglePasswordVisibility"');
+        expect(loginSource).toContain('.password-field__toggle');
     });
 
     it('defaults the password input to hidden and toggles its type', () => {

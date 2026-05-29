@@ -586,6 +586,62 @@ label {
     color: var(--secondary-background);
 }
 
+.password-field {
+    position: relative;
+    display: block;
+    width: 100%;
+    margin-bottom: 0.5em;
+}
+
+.password-field input {
+    margin-bottom: 0;
+    padding-right: 2.25rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.password-field__toggle {
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    bottom: 1px;
+    width: 2.25rem;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    appearance: none;
+    -webkit-appearance: none;
+    color: #666;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.password-field__toggle:hover,
+.password-field__toggle:focus,
+.password-field__toggle:active {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    box-shadow: none;
+    outline: none;
+}
+
+.password-field__toggle:focus-visible {
+    color: var(--secondary-background, #2793ff);
+}
+
+.password-field__toggle .fa {
+    font-size: 1rem;
+    pointer-events: none;
+}
+
 /* .user-form .btn-primary.btn-facebook {
   width: 90%;
   margin: 1em auto;
