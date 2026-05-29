@@ -28,6 +28,14 @@
                         {{ $t('libres') }}
                     </span>
                     <span
+                        v-if="trip.seats_available === 0"
+                        class="trip_seats-available_label"
+                    >
+                        {{ $t('Lugares') }}
+                        <br />
+                        {{ $t('libres') }}
+                    </span>
+                    <span
                         v-if="Number(trip.rear_max_two_passengers) > 0"
                         class="trip-seats__rear-comfort-note label-soft"
                     >
