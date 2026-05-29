@@ -1028,6 +1028,8 @@ const messages = {
         tituloCampoRequerido: 'Campo requerido',
         dniValidadoContacteSoporte:
             'Su cuenta ya fue verificada; para editar el DNI contacte a la mesa de ayuda.',
+        nombreValidadoContacteSoporte:
+            'Su cuenta ya fue verificada; para editar el nombre contacte a la mesa de ayuda.',
         ultimaConexion: 'Última conexión:',
         verMasMensajes: 'Ver más mensajes',
         escribirMensaje: 'Escribir mensaje...',
@@ -2177,6 +2179,8 @@ const messages = {
         tituloCampoRequerido: 'Required field',
         dniValidadoContacteSoporte:
             'Su cuenta ya fue verificada; para editar el DNI contacte a la mesa de ayuda.',
+        nombreValidadoContacteSoporte:
+            'Su cuenta ya fue verificada; para editar el nombre contacte a la mesa de ayuda.',
         ultimaConexion: 'Última conexión:',
         verMasMensajes: 'Ver más mensajes',
         escribirMensaje: 'Escribir mensaje...',
@@ -3474,6 +3478,8 @@ const messages = {
         tituloCampoRequerido: 'Required field',
         dniValidadoContacteSoporte:
             'Your account has been verified; to edit your document number contact the help desk.',
+        nombreValidadoContacteSoporte:
+            'Your account has been verified; to edit your name contact the help desk.',
         ultimaConexion: 'Last connection:',
         verMasMensajes: 'View more messages',
         escribirMensaje: 'Write message...',
