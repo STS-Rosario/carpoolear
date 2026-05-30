@@ -82,7 +82,8 @@
                         </p>
                         <p class="identity-validation-mp-warning">
                             <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                            {{ $t('identityValidationMercadoPagoOwnershipWarning') }}
+                            {{ $t('identityValidationMercadoPagoOwnershipWarningPrefix') }}
+                            <a href="#" @click.prevent="goToProfileEdit">{{ $t('identityValidationMercadoPagoOwnershipWarningProfileLink') }}</a>{{ $t('identityValidationMercadoPagoOwnershipWarningSuffix') }}
                         </p>
                     </template>
                 </div>
@@ -281,7 +282,8 @@
                         </button>
                         <p class="identity-validation-mp-warning">
                             <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                            {{ $t('identityValidationMercadoPagoOwnershipWarning') }}
+                            {{ $t('identityValidationMercadoPagoOwnershipWarningPrefix') }}
+                            <a href="#" @click.prevent="goToProfileEdit">{{ $t('identityValidationMercadoPagoOwnershipWarningProfileLink') }}</a>{{ $t('identityValidationMercadoPagoOwnershipWarningSuffix') }}
                         </p>
                     </div>
 
@@ -354,7 +356,8 @@
                         </button>
                         <p class="identity-validation-mp-warning">
                             <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                            {{ $t('identityValidationMercadoPagoOwnershipWarning') }}
+                            {{ $t('identityValidationMercadoPagoOwnershipWarningPrefix') }}
+                            <a href="#" @click.prevent="goToProfileEdit">{{ $t('identityValidationMercadoPagoOwnershipWarningProfileLink') }}</a>{{ $t('identityValidationMercadoPagoOwnershipWarningSuffix') }}
                         </p>
                     </div>
 
