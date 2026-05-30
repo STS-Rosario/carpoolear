@@ -23,4 +23,12 @@ describe('supportTicketsTableCompact.css', () => {
         expect(css).not.toMatch(/width:\s*40%/);
         expect(css).toMatch(/\.support-tickets-table__subject[\s\S]*?width:\s*100%/);
     });
+
+    it('styles stale updated cells with warning and critical emphasis', () => {
+        const css = readCompactCss();
+        expect(css).toMatch(/\.support-tickets-table__updated--warning[\s\S]*?font-weight:\s*bold/);
+        expect(css).toMatch(/\.support-tickets-table__updated--warning[\s\S]*?color:\s*#8a6d3b/);
+        expect(css).toMatch(/\.support-tickets-table__updated--critical[\s\S]*?font-weight:\s*bold/);
+        expect(css).toMatch(/\.support-tickets-table__updated--critical[\s\S]*?color:\s*#a94442/);
+    });
 });

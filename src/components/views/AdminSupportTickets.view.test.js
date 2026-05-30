@@ -76,4 +76,9 @@ describe('AdminSupportTickets view', () => {
         expect(viewSource).toContain("{{ $t('editarPlantillasRespuestas') }}");
         expect(viewSource).toContain("name: 'admin-support-reply-templates'");
     });
+
+    it('highlights stale updated timestamps that need admin attention', () => {
+        expect(viewSource).toContain(':class="updatedAgeAttentionClass(ticket)"');
+        expect(viewSource).toContain('getUpdatedAgeAttentionClass');
+    });
 });

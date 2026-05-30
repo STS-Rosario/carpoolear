@@ -51,7 +51,11 @@
                         </td>
                         <td class="support-tickets-table__narrow"><span :class="priorityClass(ticket.priority)">{{ priorityLabel(ticket.priority) }}</span></td>
                         <td class="support-tickets-table__narrow" :title="fullDate(ticket.created_at)">{{ relativeDate(ticket.created_at) }}</td>
-                        <td class="support-tickets-table__narrow" :title="fullDate(ticket.updated_at)">{{ relativeDate(ticket.updated_at) }}</td>
+                        <td
+                            class="support-tickets-table__narrow"
+                            :class="updatedAgeAttentionClass(ticket)"
+                            :title="fullDate(ticket.updated_at)"
+                        >{{ relativeDate(ticket.updated_at) }}</td>
                         <td class="support-tickets-table__narrow"><span :class="statusClass(ticket.status)">{{ statusLabel(ticket.status) }}</span></td>
                         <td class="support-tickets-table__narrow">{{ ticketCategoryLabel(ticket.type) }}</td>
                     </tr>
@@ -71,6 +75,7 @@ import {
     TICKET_STATUS_CLASS_MAP,
     TICKET_STATUS_LABEL_KEYS as STATUS_LABEL_KEYS
 } from '../../utils/supportTicketStatusLabels';
+import { getUpdatedAgeAttentionClass, hasUnreadAdminMessages } from '../../utils/supportTicketUpdatedAgeAttention';
 
 function userAppProfileLocation(userId) {
     return { name: 'profile', params: { id: userId } };
@@ -113,6 +118,9 @@ export default {
             if (!value) return '-';
             return dayjs(value).fromNow();
         },
+        updatedAgeAttentionClass(ticket) {
+            return getUpdatedAgeAttentionClass(ticket);
+        },
         statusLabel(status) {
             if (STATUS_LABEL_KEYS[status]) return this.$t(STATUS_LABEL_KEYS[status]);
             return status || '-';
@@ -134,7 +142,7 @@ export default {
             }[key] || 'label label-default';
         },
         hasUserLastReply(ticket) {
-            return Number(ticket && ticket.unread_for_admin) > 0;
+            return hasUnreadAdminMessages(ticket);
         },
         canLinkTicketOwnerProfile(ticket) {
             return Boolean(ticket && ticket.user && ticket.user.id);
