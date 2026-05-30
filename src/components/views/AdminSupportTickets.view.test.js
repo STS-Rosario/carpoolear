@@ -15,12 +15,15 @@ describe('AdminSupportTickets view', () => {
     });
 
     it('orders thead subject first then priority then dates and status with category last', () => {
-        const sub = viewSource.indexOf("$t('asuntoTicket')");
-        const pri = viewSource.indexOf("$t('prioridad')");
-        const cre = viewSource.indexOf("$t('creado')");
-        const upd = viewSource.indexOf("$t('actualizado')");
-        const est = viewSource.indexOf("$t('estado')");
-        const cat = viewSource.indexOf("$t('categoriaTicket')");
+        const theadStart = viewSource.indexOf('<thead>');
+        const theadEnd = viewSource.indexOf('</thead>');
+        const thead = viewSource.slice(theadStart, theadEnd);
+        const sub = thead.indexOf("$t('asuntoTicket')");
+        const pri = thead.indexOf("$t('prioridad')");
+        const cre = thead.indexOf("$t('creado')");
+        const upd = thead.indexOf("$t('actualizado')");
+        const est = thead.indexOf("$t('estado')");
+        const cat = thead.indexOf("$t('categoriaTicket')");
         expect(sub).toBeGreaterThan(-1);
         expect(sub).toBeLessThan(pri);
         expect(pri).toBeLessThan(cre);
@@ -80,5 +83,20 @@ describe('AdminSupportTickets view', () => {
     it('highlights stale updated timestamps that need admin attention', () => {
         expect(viewSource).toContain(':class="updatedAgeAttentionClass(ticket)"');
         expect(viewSource).toContain('getUpdatedAgeAttentionClass');
+    });
+
+    it('renders category, priority and needs-reply filters', () => {
+        expect(viewSource).toContain('support-tickets-admin-filters');
+        expect(viewSource).toContain('v-model="filterType"');
+        expect(viewSource).toContain('v-model="filterPriority"');
+        expect(viewSource).toContain('v-model="filterNeedsReply"');
+        expect(viewSource).toContain("{{ $t('filtroTicketsTodasCategorias') }}");
+        expect(viewSource).toContain("{{ $t('filtroTicketsRequiereRespuesta') }}");
+    });
+
+    it('loads admin list using route query filters', () => {
+        expect(viewSource).toContain('parseAdminSupportTicketListFiltersFromRoute');
+        expect(viewSource).toContain('fetchAdminList(this.listFilters)');
+        expect(viewSource).toContain('syncFiltersToRoute');
     });
 });
