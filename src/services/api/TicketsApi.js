@@ -23,8 +23,8 @@ class TicketsApi extends TaggedApi {
         return this.post('/api/support/tickets/' + id + '/close', data);
     }
 
-    adminList() {
-        return this.get('/api/admin/support/tickets');
+    adminList(params = {}) {
+        return this.get('/api/admin/support/tickets', params);
     }
 
     adminShow(id) {
