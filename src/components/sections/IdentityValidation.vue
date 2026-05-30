@@ -960,6 +960,17 @@ export default {
     margin-right: 0.5rem;
 }
 
+.identity-validation-mp-warning a {
+    color: #7f4f00;
+    font-weight: 700;
+    text-decoration: underline;
+}
+
+.identity-validation-mp-warning a:hover,
+.identity-validation-mp-warning a:focus {
+    color: #5f3a00;
+}
+
 .identity-validation-mismatch-support-warning {
     margin-top: 0.5rem;
     padding: 0.75rem 0.9rem;
