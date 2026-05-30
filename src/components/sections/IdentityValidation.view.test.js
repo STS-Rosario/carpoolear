@@ -73,4 +73,8 @@ describe('IdentityValidation Mercado Pago ownership warning', () => {
         ).length;
         expect(prefixOccurrences).toBe(3);
     });
+
+    it('styles profile edit link inside Mercado Pago ownership warning', () => {
+        expect(viewSource).toContain('.identity-validation-mp-warning a {');
+    });
 });
