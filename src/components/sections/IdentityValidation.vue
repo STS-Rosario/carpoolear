@@ -82,7 +82,8 @@
                         </p>
                         <p class="identity-validation-mp-warning">
                             <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                            {{ $t('identityValidationMercadoPagoOwnershipWarning') }}
+                            {{ $t('identityValidationMercadoPagoOwnershipWarningPrefix') }}
+                            <a href="#" @click.prevent="goToProfileEdit">{{ $t('identityValidationMercadoPagoOwnershipWarningProfileLink') }}</a>{{ $t('identityValidationMercadoPagoOwnershipWarningSuffix') }}
                         </p>
                     </template>
                 </div>
@@ -281,7 +282,8 @@
                         </button>
                         <p class="identity-validation-mp-warning">
                             <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                            {{ $t('identityValidationMercadoPagoOwnershipWarning') }}
+                            {{ $t('identityValidationMercadoPagoOwnershipWarningPrefix') }}
+                            <a href="#" @click.prevent="goToProfileEdit">{{ $t('identityValidationMercadoPagoOwnershipWarningProfileLink') }}</a>{{ $t('identityValidationMercadoPagoOwnershipWarningSuffix') }}
                         </p>
                     </div>
 
@@ -354,7 +356,8 @@
                         </button>
                         <p class="identity-validation-mp-warning">
                             <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                            {{ $t('identityValidationMercadoPagoOwnershipWarning') }}
+                            {{ $t('identityValidationMercadoPagoOwnershipWarningPrefix') }}
+                            <a href="#" @click.prevent="goToProfileEdit">{{ $t('identityValidationMercadoPagoOwnershipWarningProfileLink') }}</a>{{ $t('identityValidationMercadoPagoOwnershipWarningSuffix') }}
                         </p>
                     </div>
 
@@ -955,6 +958,17 @@ export default {
 
 .identity-validation-mp-warning .fa {
     margin-right: 0.5rem;
+}
+
+.identity-validation-mp-warning a {
+    color: #7f4f00;
+    font-weight: 700;
+    text-decoration: underline;
+}
+
+.identity-validation-mp-warning a:hover,
+.identity-validation-mp-warning a:focus {
+    color: #5f3a00;
 }
 
 .identity-validation-mismatch-support-warning {

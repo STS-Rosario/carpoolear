@@ -460,8 +460,11 @@ const messages = {
             'Para proceder con la verificación, por favor primero ingrese su DNI en ',
         identityValidationDniWarningProfileLink: 'su perfil',
         identityValidationDniWarningSuffix: '.',
-        identityValidationMercadoPagoOwnershipWarning:
-            'Antes de realizar la verificación, asegurate que el titular de la cuenta logueada en Mercado Pago coincida con el de Carpoolear',
+        identityValidationMercadoPagoOwnershipWarningPrefix:
+            'Antes de realizar la verificación, asegurate que el titular de la cuenta logueada en Mercado Pago coincida con el de Carpoolear. El nombre completo debe coincidir en Carpoolear y MP, ',
+        identityValidationMercadoPagoOwnershipWarningProfileLink:
+            'podés editarlo acá',
+        identityValidationMercadoPagoOwnershipWarningSuffix: '.',
         identityValidationAutoCardDesc:
             'Validá con tu cuenta de Mercado Pago. El sistema contrasta los datos con RENAPER.',
         identityValidationManualCardDesc:
@@ -1780,8 +1783,11 @@ const messages = {
             'Para proceder con la verificación, por favor primero ingrese su DNI en ',
         identityValidationDniWarningProfileLink: 'su perfil',
         identityValidationDniWarningSuffix: '.',
-        identityValidationMercadoPagoOwnershipWarning:
-            'Antes de realizar la verificación, asegurate que el titular de la cuenta logueada en Mercado Pago coincida con el de Carpoolear',
+        identityValidationMercadoPagoOwnershipWarningPrefix:
+            'Antes de realizar la verificación, asegurate que el titular de la cuenta logueada en Mercado Pago coincida con el de Carpoolear. El nombre completo debe coincidir en Carpoolear y MP, ',
+        identityValidationMercadoPagoOwnershipWarningProfileLink:
+            'podés editarlo acá',
+        identityValidationMercadoPagoOwnershipWarningSuffix: '.',
         identityValidationAutoCardDesc:
             'Validá con tu cuenta de Mercado Pago. El sistema contrasta los datos con RENAPER.',
         identityValidationManualCardDesc:
@@ -3096,8 +3102,10 @@ const messages = {
             'To proceed with verification, please first enter your ID document number in ',
         identityValidationDniWarningProfileLink: 'your profile',
         identityValidationDniWarningSuffix: '.',
-        identityValidationMercadoPagoOwnershipWarning:
-            'Before verifying, make sure the account holder logged into Mercado Pago matches the Carpoolear account holder.',
+        identityValidationMercadoPagoOwnershipWarningPrefix:
+            'Before verifying, make sure the account holder logged into Mercado Pago matches the Carpoolear account holder. Your full name must match in Carpoolear and MP, you can ',
+        identityValidationMercadoPagoOwnershipWarningProfileLink: 'edit it here',
+        identityValidationMercadoPagoOwnershipWarningSuffix: '.',
         identidadNoValidada: 'Not verified',
         validarUsuario: 'Verify user',
         validadoPor: 'Verified by',

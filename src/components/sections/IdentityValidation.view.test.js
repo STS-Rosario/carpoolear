@@ -49,3 +49,32 @@ describe('IdentityValidation rejection warnings', () => {
         expect(viewSource).toContain('manualStatus.reject_reason');
     });
 });
+
+describe('IdentityValidation Mercado Pago ownership warning', () => {
+    it('shows ownership warning with profile edit link on MP verification card', () => {
+        expect(viewSource).toContain('identity-validation-mp-warning');
+        expect(viewSource).toContain(
+            "$t('identityValidationMercadoPagoOwnershipWarningPrefix')"
+        );
+        expect(viewSource).toContain(
+            "$t('identityValidationMercadoPagoOwnershipWarningProfileLink')"
+        );
+        expect(viewSource).toContain(
+            "$t('identityValidationMercadoPagoOwnershipWarningSuffix')"
+        );
+        expect(viewSource).toContain('@click.prevent="goToProfileEdit"');
+    });
+
+    it('renders ownership warning with profile edit link in all MP warning blocks', () => {
+        const prefixOccurrences = (
+            viewSource.match(
+                /identityValidationMercadoPagoOwnershipWarningPrefix/g
+            ) || []
+        ).length;
+        expect(prefixOccurrences).toBe(3);
+    });
+
+    it('styles profile edit link inside Mercado Pago ownership warning', () => {
+        expect(viewSource).toContain('.identity-validation-mp-warning a {');
+    });
+});
