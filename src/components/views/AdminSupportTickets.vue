@@ -9,6 +9,35 @@
                 {{ $t('editarPlantillasRespuestas') }}
             </router-link>
         </p>
+        <form class="form-inline support-tickets-admin-filters mb-3" @submit.prevent="applyFilters">
+            <div class="form-group">
+                <label class="sr-only" for="support-filter-type">{{ capitalizeFirst($t('categoriaTicket')) }}</label>
+                <select id="support-filter-type" v-model="filterType" class="form-control">
+                    <option value="">{{ $t('filtroTicketsTodasCategorias') }}</option>
+                    <option
+                        v-for="option in ticketTypeOptions"
+                        :key="option.value"
+                        :value="option.value"
+                    >{{ $t(option.labelKey) }}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="sr-only" for="support-filter-priority">{{ capitalizeFirst($t('prioridad')) }}</label>
+                <select id="support-filter-priority" v-model="filterPriority" class="form-control">
+                    <option value="">{{ $t('filtroTicketsTodasPrioridades') }}</option>
+                    <option value="high">{{ $t('prioridadAlta') }}</option>
+                    <option value="normal">{{ $t('prioridadNormal') }}</option>
+                    <option value="low">{{ $t('prioridadBaja') }}</option>
+                </select>
+            </div>
+            <div class="checkbox form-group">
+                <label>
+                    <input v-model="filterNeedsReply" type="checkbox" />
+                    {{ $t('filtroTicketsRequiereRespuesta') }}
+                </label>
+            </div>
+            <button type="submit" class="btn btn-default">{{ $t('buscar') }}</button>
+        </form>
         <p v-if="loading" class="alert alert-info">{{ $t('cargandoNotificaciones') }}</p>
         <p v-else-if="error" class="alert alert-danger">{{ error }}</p>
         <p v-else-if="!safeTickets.length" class="alert alert-warning">{{ $t('noHayTickets') }}</p>
@@ -75,18 +104,28 @@ import {
     TICKET_STATUS_CLASS_MAP,
     TICKET_STATUS_LABEL_KEYS as STATUS_LABEL_KEYS
 } from '../../utils/supportTicketStatusLabels';
+import { USER_TICKET_TYPE_OPTIONS } from '../../utils/supportTicketTypeOptions';
+import {
+    parseAdminSupportTicketListFiltersFromRoute
+} from '../../utils/adminSupportTicketListFilters';
 import { getUpdatedAgeAttentionClass, hasUnreadAdminMessages } from '../../utils/supportTicketUpdatedAgeAttention';
 
 function userAppProfileLocation(userId) {
     return { name: 'profile', params: { id: userId } };
 }
 
+const ticketTypeOptions = USER_TICKET_TYPE_OPTIONS;
+
 export default {
     name: 'admin-support-tickets',
     data() {
         return {
             loading: false,
-            error: ''
+            error: '',
+            filterType: '',
+            filterPriority: '',
+            filterNeedsReply: false,
+            ticketTypeOptions
         };
     },
     computed: {
@@ -95,12 +134,62 @@ export default {
         }),
         safeTickets() {
             return Array.isArray(this.tickets) ? this.tickets : [];
+        },
+        listFilters() {
+            return {
+                type: this.filterType,
+                priority: this.filterPriority,
+                needsReply: this.filterNeedsReply
+            };
+        }
+    },
+    watch: {
+        '$route.query': {
+            deep: true,
+            immediate: true,
+            handler() {
+                this.initFiltersFromRoute();
+                this.loadTickets();
+            }
         }
     },
     methods: {
         ...mapActions(useTicketsStore, {
             fetchAdminList: 'fetchAdminList'
         }),
+        initFiltersFromRoute() {
+            const parsed = parseAdminSupportTicketListFiltersFromRoute(this.$route.query || {});
+            this.filterType = parsed.type;
+            this.filterPriority = parsed.priority;
+            this.filterNeedsReply = parsed.needsReply;
+        },
+        syncFiltersToRoute() {
+            const query = {};
+            if (this.filterType) {
+                query.type = this.filterType;
+            }
+            if (this.filterPriority) {
+                query.priority = this.filterPriority;
+            }
+            if (this.filterNeedsReply) {
+                query.needs_reply = '1';
+            }
+            this.$router.replace({ query });
+        },
+        applyFilters() {
+            this.syncFiltersToRoute();
+        },
+        loadTickets() {
+            this.loading = true;
+            this.error = '';
+            return this.fetchAdminList(this.listFilters)
+                .catch(() => {
+                    this.error = this.$t('errorCargandoTickets');
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+        },
         capitalizeFirst(value) {
             if (!value) return '';
             return value.charAt(0).toUpperCase() + value.slice(1);
@@ -160,17 +249,6 @@ export default {
             return '';
         }
     },
-    mounted() {
-        this.loading = true;
-        this.error = '';
-        this.fetchAdminList()
-            .catch(() => {
-                this.error = this.$t('errorCargandoTickets');
-            })
-            .finally(() => {
-                this.loading = false;
-            });
-    },
     components: {
         AdminLayout
     }
@@ -202,5 +280,15 @@ export default {
 
 .support-tickets-admin-actions .mleft-6 {
     margin-left: 6px;
+}
+
+.support-tickets-admin-filters .form-group {
+    margin-right: 12px;
+    margin-bottom: 8px;
+}
+
+.support-tickets-admin-filters .checkbox {
+    margin-top: 0;
+    margin-bottom: 8px;
 }
 </style>

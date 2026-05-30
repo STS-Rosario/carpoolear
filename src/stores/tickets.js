@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { TicketsApi } from '../services/api';
+import { buildAdminSupportTicketListParams } from '../utils/adminSupportTicketListFilters';
 
 const ticketsApi = new TicketsApi();
 
@@ -33,9 +34,10 @@ export const useTicketsStore = defineStore('tickets', {
         closeTicket(id, payload) {
             return ticketsApi.close(id, payload).then((response) => response.data);
         },
-        fetchAdminList() {
+        fetchAdminList(filters) {
             this.adminList = null;
-            return ticketsApi.adminList().then((response) => {
+            const params = buildAdminSupportTicketListParams(filters);
+            return ticketsApi.adminList(params).then((response) => {
                 this.adminList = response.data || [];
                 return this.adminList;
             }).catch((error) => {
