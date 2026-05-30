@@ -44,6 +44,24 @@ describe('tickets store', () => {
         expect(store.adminList).toEqual([{ id: 10 }]);
     });
 
+    it('fetchAdminList passes filter params to adminList API', async () => {
+        const { useTicketsStore } = await import('./tickets');
+        apiMock.adminList.mockResolvedValue({ data: [{ id: 3 }] });
+
+        const store = useTicketsStore();
+        await store.fetchAdminList({
+            type: 'contact',
+            priority: 'high',
+            needsReply: true
+        });
+
+        expect(apiMock.adminList).toHaveBeenCalledWith({
+            type: 'contact',
+            priority: 'high',
+            needs_reply: '1'
+        });
+    });
+
     it('sets adminList to empty array on admin list error', async () => {
         const { useTicketsStore } = await import('./tickets');
         apiMock.adminList.mockRejectedValue(new Error('network error'));
