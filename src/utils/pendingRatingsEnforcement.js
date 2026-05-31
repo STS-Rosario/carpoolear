@@ -13,3 +13,11 @@ export function shouldRedirectForPendingRatings(pendingRates, routeName) {
     }
     return true;
 }
+
+export function performPendingRatingsRedirectIfRequired(pendingRates, router) {
+    if (!hasPendingRatings(pendingRates)) {
+        return false;
+    }
+    router.push(PENDING_RATINGS_REDIRECT_ROUTE);
+    return true;
+}

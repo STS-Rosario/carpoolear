@@ -1,7 +1,8 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import {
     hasPendingRatings,
     shouldRedirectForPendingRatings,
+    performPendingRatingsRedirectIfRequired,
     PENDING_RATINGS_REDIRECT_ROUTE
 } from './pendingRatingsEnforcement.js';
 
@@ -36,5 +37,19 @@ describe('pendingRatingsEnforcement', () => {
 
     it('uses my-trips as redirect destination', () => {
         expect(PENDING_RATINGS_REDIRECT_ROUTE).toEqual({ name: 'my-trips' });
+    });
+
+    it('does not redirect actions when there are no pending rates', () => {
+        const router = { push: vi.fn() };
+        expect(performPendingRatingsRedirectIfRequired([], router)).toBe(false);
+        expect(router.push).not.toHaveBeenCalled();
+    });
+
+    it('redirects actions to my-trips when pending rates exist', () => {
+        const router = { push: vi.fn() };
+        expect(
+            performPendingRatingsRedirectIfRequired([{ id: 1 }], router)
+        ).toBe(true);
+        expect(router.push).toHaveBeenCalledWith({ name: 'my-trips' });
     });
 });
