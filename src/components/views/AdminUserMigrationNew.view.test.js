@@ -53,4 +53,31 @@ describe('AdminUserMigrationNew view', () => {
         expect(submitButtonIndex).toBeGreaterThan(-1);
         expect(warningIndex).toBeLessThan(submitButtonIndex);
     });
+
+    it('renders a field comparison table with per-field source pickers', () => {
+        expect(source).toContain('admin-user-migration-new__field-table');
+        expect(source).toContain('fieldSources');
+        expect(source).toContain('migrationFields');
+        expect(source).toContain('selectFieldSource');
+        expect(source).toContain('field_sources');
+        expect(source).toContain("$t('migracionCampoEmail')");
+        expect(source).toContain("$t('migracionCampoContrasena')");
+        expect(source).toContain("$t('migracionCampoDni')");
+        expect(source).toContain("$t('migracionCampoTelefono')");
+        expect(source).toContain("$t('migracionCampoFechaCreacion')");
+    });
+
+    it('defaults field sources to old account for email dni and created_at and new account for password and phone', () => {
+        expect(source).toContain('DEFAULT_FIELD_SOURCES');
+        expect(source).toMatch(/email:\s*'removed'/);
+        expect(source).toMatch(/password:\s*'kept'/);
+        expect(source).toMatch(/nro_doc:\s*'removed'/);
+        expect(source).toMatch(/mobile_phone:\s*'kept'/);
+        expect(source).toMatch(/created_at:\s*'removed'/);
+    });
+
+    it('highlights the selected field source cell in the comparison table', () => {
+        expect(source).toContain('admin-user-migration-new__field-cell--selected');
+        expect(source).toContain('isFieldSourceSelected');
+    });
 });
