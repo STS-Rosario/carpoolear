@@ -14,6 +14,12 @@ describe('Trip card quick actions', () => {
 });
 
 describe('Trip clickModal', () => {
+    it('declares clickModal as a boolean prop defaulting to false', () => {
+        expect(source).toMatch(
+            /clickModal:\s*\{[\s\S]*?type:\s*Boolean,[\s\S]*?default:\s*false/
+        );
+    });
+
     it('opens modal from the trip card only, not the modal wrapper', () => {
         const wrapperOpen = source.match(
             /:class="\[tripCardCountClass, \{ 'trip-needs-sellado': trip\.needs_sellado \}\]"\s*\n\s*v-on:click="clickModal/
