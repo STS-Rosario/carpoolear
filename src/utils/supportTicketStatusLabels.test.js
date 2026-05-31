@@ -16,4 +16,9 @@ describe('supportTicketStatusLabels', () => {
         expect(TICKET_STATUS_LABEL_KEYS.Resuelto).toBe('estadoResuelto');
         expect(USER_TICKET_STATUS_LABEL_KEYS.Resuelto).toBe('estadoResuelto');
     });
+
+    it('uses neutral status styling for resolved and closed tickets in admin', () => {
+        expect(TICKET_STATUS_CLASS_MAP.Resuelto).toBe('label label-default');
+        expect(TICKET_STATUS_CLASS_MAP.Cerrado).toBe('label label-default');
+    });
 });
