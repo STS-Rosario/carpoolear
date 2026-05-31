@@ -104,6 +104,14 @@ export function requirePendingRatingsSubmission(to, from, next) {
     next();
 }
 
+export function requireIdentityPendingRatingsAndProfile(to, from, next) {
+    requireIdentityValidation(to, from, () => {
+        requirePendingRatingsSubmission(to, from, () => {
+            profileComplete(to, from, next);
+        });
+    });
+}
+
 export function profileComplete(to, from, next) {
     const user = getAuthStore().user;
     if (!hasRequiredProfileFields(user)) {

@@ -6,13 +6,13 @@ const routesPath = path.resolve(__dirname, 'routes.js');
 const routesSource = fs.readFileSync(routesPath, 'utf8');
 
 describe('routes pending ratings enforcement', () => {
-    it('imports requirePendingRatingsSubmission middleware', () => {
-        expect(routesSource).toContain('requirePendingRatingsSubmission');
+    it('imports requireIdentityPendingRatingsAndProfile middleware', () => {
+        expect(routesSource).toContain('requireIdentityPendingRatingsAndProfile');
     });
 
-    it('chains pending ratings check after identity validation on restricted routes', () => {
+    it('uses combined identity and pending ratings guard on restricted routes', () => {
         expect(routesSource).toContain(
-            'requireIdentityValidation(to, from, () => {\n                requirePendingRatingsSubmission(to, from, () => {'
+            'requireIdentityPendingRatingsAndProfile(to, from, next)'
         );
     });
 });
