@@ -108,7 +108,7 @@ import { USER_TICKET_TYPE_OPTIONS } from '../../utils/supportTicketTypeOptions';
 import {
     parseAdminSupportTicketListFiltersFromRoute
 } from '../../utils/adminSupportTicketListFilters';
-import { getUpdatedAgeAttentionClass, hasUnreadAdminMessages } from '../../utils/supportTicketUpdatedAgeAttention';
+import { getUpdatedAgeAttentionClass, hasUnreadUserReplyIndicator } from '../../utils/supportTicketUpdatedAgeAttention';
 
 function userAppProfileLocation(userId) {
     return { name: 'profile', params: { id: userId } };
@@ -231,7 +231,7 @@ export default {
             }[key] || 'label label-default';
         },
         hasUserLastReply(ticket) {
-            return hasUnreadAdminMessages(ticket);
+            return hasUnreadUserReplyIndicator(ticket);
         },
         canLinkTicketOwnerProfile(ticket) {
             return Boolean(ticket && ticket.user && ticket.user.id);

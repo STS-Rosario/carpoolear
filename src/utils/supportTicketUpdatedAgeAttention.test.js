@@ -3,7 +3,8 @@ import dayjs from '../dayjs';
 import {
     ticketNeedsAdminAttention,
     getUpdatedAgeAttentionLevel,
-    getUpdatedAgeAttentionClass
+    getUpdatedAgeAttentionClass,
+    hasUnreadUserReplyIndicator
 } from './supportTicketUpdatedAgeAttention.js';
 
 describe('ticketNeedsAdminAttention', () => {
@@ -26,6 +27,22 @@ describe('ticketNeedsAdminAttention', () => {
     it('returns false for resolved or closed tickets', () => {
         expect(ticketNeedsAdminAttention({ status: 'Resuelto', unread_for_admin: 0 })).toBe(false);
         expect(ticketNeedsAdminAttention({ status: 'Cerrado', unread_for_admin: 0 })).toBe(false);
+    });
+
+    it('returns false for resolved or closed tickets even with unread admin messages', () => {
+        expect(ticketNeedsAdminAttention({ status: 'Resuelto', unread_for_admin: 1 })).toBe(false);
+        expect(ticketNeedsAdminAttention({ status: 'Cerrado', unread_for_admin: 1 })).toBe(false);
+    });
+});
+
+describe('hasUnreadUserReplyIndicator', () => {
+    it('returns true when the user replied on an open ticket', () => {
+        expect(hasUnreadUserReplyIndicator({ status: 'Esperando respuesta', unread_for_admin: 1 })).toBe(true);
+    });
+
+    it('returns false for resolved or closed tickets even with unread admin messages', () => {
+        expect(hasUnreadUserReplyIndicator({ status: 'Resuelto', unread_for_admin: 1 })).toBe(false);
+        expect(hasUnreadUserReplyIndicator({ status: 'Cerrado', unread_for_admin: 1 })).toBe(false);
     });
 });
 
@@ -84,5 +101,20 @@ describe('getUpdatedAgeAttentionClass', () => {
             unread_for_admin: 0,
             updated_at: '2026-05-28T12:00:00'
         }, now)).toBe('');
+    });
+
+    it('returns empty string for resolved or closed tickets even when stale and unread', () => {
+        const staleResolved = {
+            status: 'Resuelto',
+            unread_for_admin: 1,
+            updated_at: '2026-05-20T08:00:00'
+        };
+        const staleClosed = {
+            status: 'Cerrado',
+            unread_for_admin: 1,
+            updated_at: '2026-05-20T08:00:00'
+        };
+        expect(getUpdatedAgeAttentionClass(staleResolved, now)).toBe('');
+        expect(getUpdatedAgeAttentionClass(staleClosed, now)).toBe('');
     });
 });

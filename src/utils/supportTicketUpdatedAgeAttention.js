@@ -1,7 +1,10 @@
 import dayjs from '../dayjs';
+import { SOLVED_TICKET_STATUSES } from './supportTicketStatusLabels';
 
 /** Statuses where admins are expected to take action (excluding user-wait states). */
 export const ADMIN_ATTENTION_STATUSES = new Set(['En revision', 'Necesita revisión']);
+
+export { SOLVED_TICKET_STATUSES };
 
 export const SUPPORT_TICKET_UPDATED_WARNING_DAYS = 2;
 export const SUPPORT_TICKET_UPDATED_CRITICAL_DAYS = 4;
@@ -15,8 +18,16 @@ export function hasUnreadAdminMessages(ticket) {
     return Number(ticket && ticket.unread_for_admin) > 0;
 }
 
+export function isSolvedSupportTicket(ticket) {
+    return SOLVED_TICKET_STATUSES.has(ticket && ticket.status);
+}
+
+export function hasUnreadUserReplyIndicator(ticket) {
+    return !isSolvedSupportTicket(ticket) && hasUnreadAdminMessages(ticket);
+}
+
 export function ticketNeedsAdminAttention(ticket) {
-    if (!ticket) return false;
+    if (!ticket || isSolvedSupportTicket(ticket)) return false;
     if (hasUnreadAdminMessages(ticket)) return true;
     return ADMIN_ATTENTION_STATUSES.has(ticket.status);
 }
