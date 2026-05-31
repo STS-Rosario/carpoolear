@@ -1,8 +1,10 @@
 const { test, expect } = require('@playwright/test');
 const {
+  MOCK_USER,
   MOCK_PROFILE_USER,
   MOCK_RATINGS,
   makeMockRating,
+  makeMockTrip,
   generateItems,
   paginated,
   freezeClock,
@@ -160,5 +162,67 @@ test.describe('Profile page', () => {
     await waitForPageReady(page);
 
     await expect(page.locator('.profile-info--name.desktop').getByText('Perfil de Prueba')).toBeVisible({ timeout: 15000 });
+  });
+
+  test('admin viewing another user past passenger trip navigates to detail, not modal', async ({
+    page,
+  }) => {
+    const TRIP_ID = 55;
+    const adminUser = { ...MOCK_USER, is_admin: true };
+
+    await freezeClock(page);
+    await setupCatchAllMock(page);
+    await setupCommonMocks(page);
+    await setupAuthState(page, adminUser);
+    await setupProfileMocks(page, MOCK_PROFILE_USER);
+
+    const oldPassengerTrip = makeMockTrip(TRIP_ID, {
+      user: { id: 999, name: 'Other Driver', image: null },
+      from_town: 'Rosario, Santa Fe',
+      to_town: 'Buenos Aires',
+    });
+
+    await page.route('**/api/users/get-old-trips**', (route) => {
+      const url = route.request().url();
+      const isPassenger = url.includes('as_driver=0') || url.includes('as_driver=false');
+
+      if (isPassenger) {
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({ data: [oldPassengerTrip] }),
+        });
+      } else {
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({ data: [] }),
+        });
+      }
+    });
+
+    await page.route(`**/api/trips/${TRIP_ID}`, (route) => {
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ data: oldPassengerTrip }),
+      });
+    });
+
+    await page.goto(`/profile/${MOCK_PROFILE_USER.id}`);
+    await waitForPageReady(page);
+
+    await page.getByRole('tab', { name: 'Viajes' }).click();
+
+    await expect(page.getByText('Viajes pasados como pasajero')).toBeVisible({
+      timeout: 10000,
+    });
+    await expect(page.getByText('Buenos Aires').first()).toBeVisible();
+
+    await page.locator('.profile-trip-component .trip').first().click();
+    await page.waitForURL(`**/trips/${TRIP_ID}`, { timeout: 10000 });
+
+    await expect(page.getByRole('heading', { name: 'Detalles del viaje' })).not.toBeVisible();
+    await expect(page.getByText('Enviar mensaje')).toBeVisible({ timeout: 10000 });
   });
 });
