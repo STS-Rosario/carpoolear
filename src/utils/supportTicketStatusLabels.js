@@ -16,7 +16,7 @@ export const USER_TICKET_STATUS_LABEL_KEYS = {
 
 export const TICKET_STATUS_CLASS_MAP = {
     Cerrado: 'label label-default',
-    Resuelto: 'label label-success',
+    Resuelto: 'label label-default',
     'Esperando respuesta': 'label label-warning',
     'En revision': 'label label-info',
     'Necesita revisión': 'label label-danger'

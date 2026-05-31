@@ -72,6 +72,7 @@ describe('AdminSupportTickets view', () => {
 
     it('shows icon marker when user was last to reply', () => {
         expect(viewSource).toContain('hasUserLastReply(ticket)');
+        expect(viewSource).toContain('hasUnreadUserReplyIndicator');
         expect(viewSource).toContain('glyphicon glyphicon-comment');
     });
 

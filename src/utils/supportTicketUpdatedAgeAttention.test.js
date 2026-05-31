@@ -3,7 +3,8 @@ import dayjs from '../dayjs';
 import {
     ticketNeedsAdminAttention,
     getUpdatedAgeAttentionLevel,
-    getUpdatedAgeAttentionClass
+    getUpdatedAgeAttentionClass,
+    hasUnreadUserReplyIndicator
 } from './supportTicketUpdatedAgeAttention.js';
 
 describe('ticketNeedsAdminAttention', () => {
@@ -31,6 +32,17 @@ describe('ticketNeedsAdminAttention', () => {
     it('returns false for resolved or closed tickets even with unread admin messages', () => {
         expect(ticketNeedsAdminAttention({ status: 'Resuelto', unread_for_admin: 1 })).toBe(false);
         expect(ticketNeedsAdminAttention({ status: 'Cerrado', unread_for_admin: 1 })).toBe(false);
+    });
+});
+
+describe('hasUnreadUserReplyIndicator', () => {
+    it('returns true when the user replied on an open ticket', () => {
+        expect(hasUnreadUserReplyIndicator({ status: 'Esperando respuesta', unread_for_admin: 1 })).toBe(true);
+    });
+
+    it('returns false for resolved or closed tickets even with unread admin messages', () => {
+        expect(hasUnreadUserReplyIndicator({ status: 'Resuelto', unread_for_admin: 1 })).toBe(false);
+        expect(hasUnreadUserReplyIndicator({ status: 'Cerrado', unread_for_admin: 1 })).toBe(false);
     });
 });
 
