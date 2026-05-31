@@ -162,10 +162,6 @@ export default {
                     this.userId
                 );
             }
-            console.log(this.passengerTrips);
-            console.log(this.oldPassengerTrips);
-            console.log(this.driverTrips);
-            console.log(this.oldDriverTrips);
         }
     },
 

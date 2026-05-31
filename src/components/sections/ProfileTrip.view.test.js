@@ -29,5 +29,6 @@ describe('ProfileTrip trip card navigation', () => {
         expect(source).toContain('if (this.user.is_admin)');
         expect(source).toContain('oldTripsAsPassenger');
         expect(source).toContain('$t(\'viajesMeSubi\')');
+        expect(source).not.toContain('console.log(this.oldPassengerTrips)');
     });
 });
