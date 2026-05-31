@@ -217,6 +217,7 @@ export default {
 
         sendMessage() {
             if (this.$redirectToIdentityValidationIfRequired()) return;
+            if (this.$redirectToMyTripsIfPendingRatingsRequired()) return;
             const editor = this.$refs.messageEditor;
             if (!editor) return;
             const text = (editor.invoke('getMarkdown') || '').trim();

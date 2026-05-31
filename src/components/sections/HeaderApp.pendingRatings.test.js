@@ -4,7 +4,7 @@ import path from 'node:path';
 
 const bannerPath = path.resolve(
     __dirname,
-    '../components/PendingRatingsBanner.vue'
+    '../PendingRatingsBanner.vue'
 );
 const headerPath = path.resolve(__dirname, 'HeaderApp.vue');
 const headerSource = fs.readFileSync(headerPath, 'utf8');

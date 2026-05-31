@@ -3113,6 +3113,10 @@ export default {
                     this.saving = false;
                     return;
                 }
+                if (this.$redirectToMyTripsIfPendingRatingsRequired()) {
+                    this.saving = false;
+                    return;
+                }
                 let trip = this.getSaveInfo(this, this.estimatedTimeString);
                 trip.is_passenger = trip.is_passenger ? 1 : 0;
                 this.normalizeAllowFlagsForApi(trip);

@@ -1,5 +1,5 @@
 /* jshint esversion: 6 */
-import { auth, guest, profileComplete, authAdmin, requireIdentityValidation } from './middleware.js';
+import { auth, guest, profileComplete, authAdmin, requireIdentityValidation, requirePendingRatingsSubmission } from './middleware.js';
 import { useAuthStore } from '../stores/auth';
 
 function getAuthStore () {
@@ -184,7 +184,9 @@ export default [
                 return;
             }
             requireIdentityValidation(to, from, () => {
-                profileComplete(to, from, next);
+                requirePendingRatingsSubmission(to, from, () => {
+                    profileComplete(to, from, next);
+                });
             });
         },
         meta: {
@@ -236,7 +238,9 @@ export default [
                 return;
             }
             requireIdentityValidation(to, from, () => {
-                profileComplete(to, from, next);
+                requirePendingRatingsSubmission(to, from, () => {
+                    profileComplete(to, from, next);
+                });
             });
         },
         meta: {
@@ -327,7 +331,9 @@ export default [
                 return;
             }
             requireIdentityValidation(to, from, () => {
-                profileComplete(to, from, next);
+                requirePendingRatingsSubmission(to, from, () => {
+                    profileComplete(to, from, next);
+                });
             });
         },
         props: true,
@@ -354,7 +360,9 @@ export default [
                 return;
             }
             requireIdentityValidation(to, from, () => {
-                profileComplete(to, from, next);
+                requirePendingRatingsSubmission(to, from, () => {
+                    profileComplete(to, from, next);
+                });
             });
         },
         props: true,
@@ -556,7 +564,9 @@ export default [
                 return;
             }
             requireIdentityValidation(to, from, () => {
-                profileComplete(to, from, next);
+                requirePendingRatingsSubmission(to, from, () => {
+                    profileComplete(to, from, next);
+                });
             });
         },
         meta: {
