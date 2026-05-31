@@ -1,10 +1,10 @@
 import dayjs from '../dayjs';
+import { SOLVED_TICKET_STATUSES } from './supportTicketStatusLabels';
 
 /** Statuses where admins are expected to take action (excluding user-wait states). */
 export const ADMIN_ATTENTION_STATUSES = new Set(['En revision', 'Necesita revisión']);
 
-/** Tickets that are done and should not show admin attention styling. */
-export const SOLVED_TICKET_STATUSES = new Set(['Resuelto', 'Cerrado']);
+export { SOLVED_TICKET_STATUSES };
 
 export const SUPPORT_TICKET_UPDATED_WARNING_DAYS = 2;
 export const SUPPORT_TICKET_UPDATED_CRITICAL_DAYS = 4;
