@@ -27,9 +27,8 @@ describe('AdminUserMigrationNew view', () => {
         expect(source).toMatch(/\.user-migration-card__avatar\s*\{[^}]*height:\s*100px/);
     });
 
-    it('renders the user email and a friendly join date on each preview card', () => {
-        expect(source).toContain("$t('email')");
-        expect(source).toContain("$t('usuarioDesde')");
+    it('renders the user email and a friendly join date in the field comparison table', () => {
+        expect(source).toContain('field.labelKey');
         expect(source).toContain('formatJoinDate');
         expect(source).toContain("import dayjs from '../../dayjs'");
         expect(source).toContain('dayjs(');
@@ -52,5 +51,24 @@ describe('AdminUserMigrationNew view', () => {
         expect(warningIndex).toBeGreaterThan(-1);
         expect(submitButtonIndex).toBeGreaterThan(-1);
         expect(warningIndex).toBeLessThan(submitButtonIndex);
+    });
+
+    it('renders a field comparison table with per-field source pickers', () => {
+        expect(source).toContain('admin-user-migration-new__field-table');
+        expect(source).toContain('fieldSources');
+        expect(source).toContain('migrationFields');
+        expect(source).toContain('selectFieldSource');
+        expect(source).toContain('field_sources');
+        expect(source).toContain("from '../../utils/userMigrationFields.js'");
+    });
+
+    it('defaults field sources to old account for email dni and created_at and new account for password and phone', () => {
+        expect(source).toContain("from '../../utils/userMigrationFields.js'");
+        expect(source).toContain('createDefaultFieldSources');
+    });
+
+    it('highlights the selected field source cell in the comparison table', () => {
+        expect(source).toContain('admin-user-migration-new__field-cell--selected');
+        expect(source).toContain('isFieldSourceSelected');
     });
 });
