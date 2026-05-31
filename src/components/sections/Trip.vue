@@ -643,6 +643,7 @@ export default {
             default: false
         },
         clickModal: {
+            type: Boolean,
             required: false,
             default: false
         }

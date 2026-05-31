@@ -233,4 +233,109 @@ test.describe('My Trips page', () => {
     await expect(page.getByText('No tenés viajes creados')).toBeVisible({ timeout: 10000 });
     await expect(page.getByText('Calificaciones pendientes')).not.toBeVisible();
   });
+
+  test('clicking a driver trip navigates to trip detail instead of opening modal', async ({
+    page,
+  }) => {
+    const TRIP_ID = 10;
+
+    await freezeClock(page);
+    await setupCatchAllMock(page);
+    await setupCommonMocks(page);
+    await setupAuthState(page);
+
+    const driverTrip = makeMockTrip(TRIP_ID, {
+      user: MOCK_USER,
+      from_town: 'Rosario, Santa Fe',
+      to_town: 'Buenos Aires',
+    });
+
+    await page.route('**/api/users/get-trips**', (route) => {
+      const url = route.request().url();
+      if (url.includes('as_driver=1') || url.includes('as_driver=true')) {
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({ data: [driverTrip] }),
+        });
+      } else {
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({ data: [] }),
+        });
+      }
+    });
+
+    await page.route(`**/api/trips/${TRIP_ID}`, (route) => {
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ data: driverTrip }),
+      });
+    });
+
+    await page.goto('/my-trips');
+    await waitForPageReady(page);
+
+    await expect(page.getByText('Buenos Aires').first()).toBeVisible({ timeout: 10000 });
+
+    await page.locator('.trip').first().click();
+    await page.waitForURL(`**/trips/${TRIP_ID}`, { timeout: 10000 });
+
+    await expect(page.getByRole('heading', { name: 'Detalles del viaje' })).not.toBeVisible();
+    await expect(page.getByText('Editar')).toBeVisible({ timeout: 10000 });
+  });
+
+  test('admin user clicking a trip on my-trips still navigates to detail', async ({
+    page,
+  }) => {
+    const TRIP_ID = 10;
+    const adminUser = { ...MOCK_USER, is_admin: true };
+
+    await freezeClock(page);
+    await setupCatchAllMock(page);
+    await setupCommonMocks(page);
+    await setupAuthState(page, adminUser);
+
+    const driverTrip = makeMockTrip(TRIP_ID, {
+      user: adminUser,
+      from_town: 'Rosario, Santa Fe',
+      to_town: 'Buenos Aires',
+    });
+
+    await page.route('**/api/users/get-trips**', (route) => {
+      const url = route.request().url();
+      if (url.includes('as_driver=1') || url.includes('as_driver=true')) {
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({ data: [driverTrip] }),
+        });
+      } else {
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({ data: [] }),
+        });
+      }
+    });
+
+    await page.route(`**/api/trips/${TRIP_ID}`, (route) => {
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ data: driverTrip }),
+      });
+    });
+
+    await page.goto('/my-trips');
+    await waitForPageReady(page);
+
+    await page.locator('.trip').first().click();
+    await page.waitForURL(`**/trips/${TRIP_ID}`, { timeout: 10000 });
+
+    await expect(page.getByRole('heading', { name: 'Detalles del viaje' })).not.toBeVisible();
+    await expect(page.getByText('Editar')).toBeVisible({ timeout: 10000 });
+  });
 });

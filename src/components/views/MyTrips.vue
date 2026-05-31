@@ -249,6 +249,7 @@
                         v-bind:key="trip.id"
                         :trip="trip"
                         :user="user"
+                        :clickModal="false"
                         :enableChangeSeats="true"
                     ></Trip>
                 </div>
@@ -275,6 +276,7 @@
                         v-bind:key="trip.id"
                         :trip="trip"
                         :user="user"
+                        :clickModal="false"
                     ></Trip>
                 </div>
                 <template #no-data><p class="alert alert-warning" role="alert">
@@ -333,6 +335,7 @@
                         v-bind:key="trip.id"
                         :trip="trip"
                         :user="user"
+                        :clickModal="false"
                     ></Trip>
                 </div>
                 <template #no-data><p class="alert alert-warning" role="alert">
@@ -358,6 +361,7 @@
                         v-bind:key="trip.id"
                         :trip="trip"
                         :user="user"
+                        :clickModal="false"
                     ></Trip>
                 </div>
                 <template #no-data><p class="alert alert-warning" role="alert">
