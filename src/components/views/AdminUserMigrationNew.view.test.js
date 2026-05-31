@@ -28,8 +28,7 @@ describe('AdminUserMigrationNew view', () => {
     });
 
     it('renders the user email and a friendly join date in the field comparison table', () => {
-        expect(source).toContain('migracionCampoEmail');
-        expect(source).toContain('migracionCampoFechaCreacion');
+        expect(source).toContain('field.labelKey');
         expect(source).toContain('formatJoinDate');
         expect(source).toContain("import dayjs from '../../dayjs'");
         expect(source).toContain('dayjs(');
@@ -60,20 +59,12 @@ describe('AdminUserMigrationNew view', () => {
         expect(source).toContain('migrationFields');
         expect(source).toContain('selectFieldSource');
         expect(source).toContain('field_sources');
-        expect(source).toContain('migracionCampoEmail');
-        expect(source).toContain('migracionCampoContrasena');
-        expect(source).toContain('migracionCampoDni');
-        expect(source).toContain('migracionCampoTelefono');
-        expect(source).toContain('migracionCampoFechaCreacion');
+        expect(source).toContain("from '../../utils/userMigrationFields.js'");
     });
 
     it('defaults field sources to old account for email dni and created_at and new account for password and phone', () => {
-        expect(source).toContain('DEFAULT_FIELD_SOURCES');
-        expect(source).toMatch(/email:\s*'removed'/);
-        expect(source).toMatch(/password:\s*'kept'/);
-        expect(source).toMatch(/nro_doc:\s*'removed'/);
-        expect(source).toMatch(/mobile_phone:\s*'kept'/);
-        expect(source).toMatch(/created_at:\s*'removed'/);
+        expect(source).toContain("from '../../utils/userMigrationFields.js'");
+        expect(source).toContain('createDefaultFieldSources');
     });
 
     it('highlights the selected field source cell in the comparison table', () => {

@@ -143,22 +143,11 @@ import UserSearchAutocomplete from '../UserSearchAutocomplete.vue';
 import { AdminApi } from '../../services/api';
 import dialogs from '../../services/dialogs.js';
 import dayjs from '../../dayjs';
-
-const DEFAULT_FIELD_SOURCES = {
-    email: 'removed',
-    password: 'kept',
-    nro_doc: 'removed',
-    mobile_phone: 'kept',
-    created_at: 'removed'
-};
-
-const migrationFields = [
-    { key: 'email', labelKey: 'migracionCampoEmail' },
-    { key: 'password', labelKey: 'migracionCampoContrasena' },
-    { key: 'nro_doc', labelKey: 'migracionCampoDni' },
-    { key: 'mobile_phone', labelKey: 'migracionCampoTelefono' },
-    { key: 'created_at', labelKey: 'migracionCampoFechaCreacion' }
-];
+import {
+    DEFAULT_FIELD_SOURCES,
+    createDefaultFieldSources,
+    migrationFields
+} from '../../utils/userMigrationFields.js';
 
 export default {
     name: 'admin-user-migration-new',
@@ -166,10 +155,9 @@ export default {
         return {
             userToRemove: null,
             userToKeep: null,
-            fieldSources: { ...DEFAULT_FIELD_SOURCES },
+            fieldSources: createDefaultFieldSources(),
             migrating: false,
             adminApi: null,
-            DEFAULT_FIELD_SOURCES,
             migrationFields
         };
     },
@@ -232,7 +220,7 @@ export default {
             this.$router.replace({ query });
         },
         resetFieldSources() {
-            this.fieldSources = { ...DEFAULT_FIELD_SOURCES };
+            this.fieldSources = createDefaultFieldSources();
         },
         selectFieldSource(fieldKey, source) {
             this.fieldSources = {
