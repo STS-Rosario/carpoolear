@@ -10,7 +10,7 @@
                     <Trip
                         v-for="trip in driverTrips"
                         v-bind:key="trip.id"
-                        :clickModal="user.is_admin"
+                        :clickModal="false"
                         :trip="trip"
                         :user="user"
                     ></Trip>
@@ -40,7 +40,7 @@
                             v-for="trip in passengerTrips"
                             v-bind:key="trip.id"
                             :trip="trip"
-                            :clickModal="user.is_admin"
+                            :clickModal="false"
                             :user="user"
                         ></Trip>
                     </div>
@@ -64,7 +64,7 @@
                         <Trip
                             v-for="trip in oldDriverTrips"
                             v-bind:key="trip.id"
-                            :clickModal="user.is_admin"
+                            :clickModal="false"
                             :trip="trip"
                             :user="user"
                         ></Trip>
@@ -90,7 +90,7 @@
                         <Trip
                             v-for="trip in oldPassengerTrips"
                             v-bind:key="trip.id"
-                            :clickModal="user.is_admin"
+                            :clickModal="false"
                             :trip="trip"
                             :user="user"
                         ></Trip>
@@ -162,10 +162,6 @@ export default {
                     this.userId
                 );
             }
-            console.log(this.passengerTrips);
-            console.log(this.oldPassengerTrips);
-            console.log(this.driverTrips);
-            console.log(this.oldDriverTrips);
         }
     },
 
