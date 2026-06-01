@@ -2,10 +2,6 @@ import { describe, it, expect } from 'vitest';
 import fs from 'node:fs';
 import path from 'node:path';
 
-const registerSource = fs.readFileSync(
-    path.resolve(__dirname, 'Register.vue'),
-    'utf8'
-);
 const updateProfileSource = fs.readFileSync(
     path.resolve(__dirname, '../sections/UpdateProfile.vue'),
     'utf8'
@@ -23,11 +19,18 @@ const adminEditSource = fs.readFileSync(
     'utf8'
 );
 
-describe('Facebook profile URL coverage in profile surfaces', () => {
-    it('does not show a facebook profile url field on registration', () => {
-        expect(registerSource).not.toContain('input-facebook-profile-url');
-        expect(registerSource).not.toContain('Perfil de Facebook (opcional)');
-        expect(registerSource).not.toContain('facebookProfileUrl');
+describe('Facebook profile URL module coverage', () => {
+    describe('registration', () => {
+        it('does not collect a facebook profile url', () => {
+            const registerSource = fs.readFileSync(
+                path.resolve(__dirname, 'Register.vue'),
+                'utf8'
+            );
+
+            expect(registerSource).not.toContain('input-facebook-profile-url');
+            expect(registerSource).not.toContain('Perfil de Facebook (opcional)');
+            expect(registerSource).not.toContain('facebookProfileUrl');
+        });
     });
 
     it('shows a facebook profile url field on profile edit behind module flag', () => {
