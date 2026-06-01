@@ -24,15 +24,13 @@ const adminEditSource = fs.readFileSync(
 );
 
 describe('Facebook profile URL coverage in profile surfaces', () => {
-    it('shows a facebook profile url field in profile create and edit screens behind module flag', () => {
-        expect(registerSource).toContain('module_facebook_profile_url_enabled');
-        expect(registerSource).toContain('Perfil de Facebook (opcional)');
-        expect(registerSource).toContain('https://facebook.com/tuperfil');
-        expect(registerSource).toContain(
-            'Opcional. Para generar confianza podés poner tu link a'
-        );
-        expect(registerSource).toContain('tu perfil de Facebook');
+    it('does not show a facebook profile url field on registration', () => {
+        expect(registerSource).not.toContain('input-facebook-profile-url');
+        expect(registerSource).not.toContain('Perfil de Facebook (opcional)');
+        expect(registerSource).not.toContain('facebookProfileUrl');
+    });
 
+    it('shows a facebook profile url field on profile edit behind module flag', () => {
         expect(updateProfileSource).toContain('module_facebook_profile_url_enabled');
         expect(updateProfileSource).toContain('Perfil de Facebook (opcional)');
         expect(updateProfileSource).toContain('https://facebook.com/tuperfil');
