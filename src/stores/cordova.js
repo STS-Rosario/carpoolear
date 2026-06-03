@@ -39,8 +39,21 @@ export const useCordovaStore = defineStore('cordova', {
         },
 
         setNetworkState(connected) {
+            const wasOnline = this._deviceOnline;
             this.networkReady = true;
             this._deviceOnline = Boolean(connected);
+            if (connected && !wasOnline) {
+                import('./serverStatus')
+                    .then(({ useServerStatusStore }) => {
+                        const serverStatusStore = useServerStatusStore();
+                        if (serverStatusStore.serverUnavailable) {
+                            serverStatusStore.tryRecover();
+                        }
+                    })
+                    .catch((e) => {
+                        console.warn('setNetworkState tryRecover:', e);
+                    });
+            }
         },
 
         setOnline() {

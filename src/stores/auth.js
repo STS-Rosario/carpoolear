@@ -307,9 +307,7 @@ export const useAuthStore = defineStore('auth', {
                 });
         },
 
-        getConfig() {
-            localConfig.__isLocal = true;
-            this.setAppConfig(localConfig);
+        reloadConfigFromServer() {
             return authApi.config().then((response) => {
                 const isConfigObject =
                     response &&
@@ -317,15 +315,27 @@ export const useAuthStore = defineStore('auth', {
                     !Array.isArray(response);
                 if (!isConfigObject) {
                     console.error(
-                        'getConfig: expected JSON object from /api/config; keeping local config only.'
+                        'reloadConfigFromServer: expected JSON object from /api/config.'
                     );
-                    return localConfig;
+                    return Promise.reject(response);
                 }
                 response.__isLocal = false;
                 console.log('Loading config from server: ', response);
                 const config = { ...localConfig, ...response };
                 this.setAppConfig(config);
-                return response;
+                return import('./serverStatus').then(({ useServerStatusStore }) => {
+                    useServerStatusStore().clearServerUnavailable();
+                    return response;
+                });
+            });
+        },
+
+        getConfig() {
+            localConfig.__isLocal = true;
+            this.setAppConfig(localConfig);
+            return this.reloadConfigFromServer().catch((error) => {
+                console.warn('getConfig: remote config unavailable.', error);
+                return localConfig;
             });
         },
 
