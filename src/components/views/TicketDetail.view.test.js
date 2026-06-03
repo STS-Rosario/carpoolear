@@ -113,4 +113,12 @@ describe('TicketDetail user view', () => {
         expect(viewSource).toContain("dialogs.message(this.$t('ticketCerrado')");
         expect(viewSource).toContain("dialogs.message(this.$t('errorCerrandoTicket')");
     });
+
+    it('uses a taller, vertically resizable reply editor', () => {
+        expect(viewSource).toContain('supportTicketReplyEditor');
+        expect(viewSource).toContain(':height="supportTicketReplyEditorHeight"');
+        expect(viewSource).toContain('resizable');
+        expect(viewSource).toContain(':class="supportTicketReplyEditorClass"');
+        expect(viewSource).not.toContain('height="140px"');
+    });
 });
