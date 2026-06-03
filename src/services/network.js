@@ -2,6 +2,11 @@
 import TaggedList from '../classes/TaggedList';
 import axios from 'axios';
 import { Capacitor } from '@capacitor/core';
+import {
+    createServerUnavailableError,
+    isMaintenanceResponse,
+    isServerUnavailableHttpStatus
+} from '../utils/serverErrors';
 
 const API_URL = import.meta.env.VITE_API_URL;
 const OFFLINE_ERROR = {
@@ -110,22 +115,68 @@ export default {
         }
     },
 
+    async isDeviceOnline() {
+        try {
+            const { useCordovaStore } = await import('../stores/cordova');
+            const cordovaStore = useCordovaStore();
+            if (cordovaStore.networkReady) {
+                return cordovaStore.networkState;
+            }
+        } catch (e) {
+            console.warn('isDeviceOnline:', e);
+        }
+
+        return typeof navigator === 'undefined' || navigator.onLine !== false;
+    },
+
+    async markServerUnavailable() {
+        try {
+            const { useServerStatusStore } = await import(
+                '../stores/serverStatus'
+            );
+            useServerStatusStore().markServerUnavailable();
+        } catch (e) {
+            console.warn('markServerUnavailable:', e);
+        }
+    },
+
+    async clearServerUnavailable() {
+        try {
+            const { useServerStatusStore } = await import(
+                '../stores/serverStatus'
+            );
+            useServerStatusStore().clearServerUnavailable();
+        } catch (e) {
+            console.warn('clearServerUnavailable:', e);
+        }
+    },
+
+    async handleTransportFailure() {
+        if (await this.isDeviceOnline()) {
+            await this.markServerUnavailable();
+            return createServerUnavailableError();
+        }
+
+        await this.markOffline();
+        return this.createOfflineError();
+    },
+
     processResponse(response, source) {
         const promise = new MyPromise((resolve, reject) => {
             response
                 .then((response) => {
-                    resolve(response.data);
+                    return Promise.resolve(this.clearServerUnavailable()).then(
+                        () => {
+                            resolve(response.data);
+                        }
+                    );
                 })
                 .catch(async (resp) => {
                     // Revisar el tipo de error!
                     if (resp.response) {
                         const data = resp.response.data;
                         const status = resp.response.status;
-                        if (
-                            status === 503 &&
-                            data &&
-                            data.maintenance === true
-                        ) {
+                        if (isMaintenanceResponse(status, data)) {
                             import('../stores/auth').then(
                                 ({ useAuthStore }) => {
                                     try {
@@ -140,13 +191,17 @@ export default {
                                     }
                                 }
                             );
+                        } else if (
+                            isServerUnavailableHttpStatus(status) &&
+                            (await this.isDeviceOnline())
+                        ) {
+                            await this.markServerUnavailable();
                         }
                         reject({ data, status });
                     } else if (axios.isCancel && axios.isCancel(resp)) {
                         reject(resp);
                     } else {
-                        await this.markOffline();
-                        reject(this.createOfflineError());
+                        reject(await this.handleTransportFailure());
                     }
                 });
         });

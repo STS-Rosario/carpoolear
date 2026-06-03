@@ -276,6 +276,11 @@ const messages = {
             'Ocurrió un error al procesar el registro, por favor vuelva a intentar.',
         offlineStatusBarMessage:
             'Sin conexión a internet. Revisá tu conexión.',
+        serverDownTitle: 'Carpoolear no está disponible',
+        serverDownLead:
+            'Estamos teniendo problemas para conectar con el servidor. Por favor esperá un momento e intentá de nuevo.',
+        serverDownRetrying: 'Reintentando conexión…',
+        serverDownRetryButton: 'Reintentar ahora',
         valorDonacion: 'Tienes que seleccionar un valor de donación.',
         correctamenteSubscripto:
             'Te subscribiste correctamente. Te avisaremos cuando hayan viajes similares',
@@ -1651,6 +1656,11 @@ const messages = {
             'Ocurrió un error al procesar el registro, por favor vuelva a intentar.',
         offlineStatusBarMessage:
             'Sin conexión a internet. Revisá tu conexión.',
+        serverDownTitle: 'Carpoolear no está disponible',
+        serverDownLead:
+            'Estamos teniendo problemas para conectar con el servidor. Por favor esperá un momento e intentá de nuevo.',
+        serverDownRetrying: 'Reintentando conexión…',
+        serverDownRetryButton: 'Reintentar ahora',
         buscoConductor: 'Conductor',
         buscoPasajero: 'Pasajero',
         iniciarSesion: 'Comparte auto para llegar al lugar donde quierés ir',
@@ -2780,6 +2790,11 @@ const messages = {
             'An error occurred while processing the registration, please try again.',
         offlineStatusBarMessage:
             'No internet connection. Check your connection.',
+        serverDownTitle: 'Carpoolear is unavailable',
+        serverDownLead:
+            'We are having trouble connecting to the server. Please wait a moment and try again.',
+        serverDownRetrying: 'Retrying connection…',
+        serverDownRetryButton: 'Retry now',
         valorDonacion: 'You must select a donation amount.',
         correctamenteSubscripto:
             'You subscribed successfully. We will notify you when there are similar trips.',

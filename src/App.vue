@@ -6,6 +6,7 @@
         <OfflineStatusBar />
         <ForceUpgradeModal v-if="showForceUpgrade" />
         <MaintenanceFullscreen v-else-if="passengerMaintenanceWall" />
+        <ServerDownFullscreen v-else-if="serverDownWallVisible" />
         <template v-else>
             <IdentityValidationPromptModal
                 :suppress="identityPromptSuppress"
@@ -55,6 +56,8 @@ import IdentityValidationPromptModal from './components/IdentityValidationPrompt
 import MaintenanceFullscreen from './components/MaintenanceFullscreen.vue';
 import MaintenanceAdminBanner from './components/MaintenanceAdminBanner.vue';
 import OfflineStatusBar from './components/OfflineStatusBar.vue';
+import ServerDownFullscreen from './components/ServerDownFullscreen.vue';
+import { useServerStatusStore } from './stores/serverStatus';
 
 export default {
     name: 'app',
@@ -154,7 +157,9 @@ export default {
             return Capacitor.isNativePlatform() ? base : base + ' - build 111';
         },
         ...mapState(useCordovaStore, {
-            deviceReady: 'deviceReady'
+            deviceReady: 'deviceReady',
+            networkReady: 'networkReady',
+            networkState: 'networkState'
         }),
         ...mapState(useBackgroundStore, {
             backgroundStyle: 'backgroundStyle'
@@ -169,6 +174,9 @@ export default {
             isFacebokApp: 'isFacebokApp',
             firsTimeMobileAppOpen: 'firsTimeMobileAppOpen',
             isBrowser: 'isBrowser'
+        }),
+        ...mapState(useServerStatusStore, {
+            serverUnavailable: 'serverUnavailable'
         }),
         onBoardingVisibility() {
             let moduleEnabled =
@@ -205,6 +213,15 @@ export default {
                 'reset-password-confirm'
             ]);
             return !allowed.has(this.$route.name);
+        },
+        serverDownWallVisible() {
+            if (!this.serverUnavailable) {
+                return false;
+            }
+            if (this.networkReady && !this.networkState) {
+                return false;
+            }
+            return true;
         },
         maintenanceAdminStickyVisible() {
             const cfg = this.appConfig && this.appConfig.maintenance;
@@ -254,7 +271,8 @@ export default {
         IdentityValidationPromptModal,
         MaintenanceFullscreen,
         MaintenanceAdminBanner,
-        OfflineStatusBar
+        OfflineStatusBar,
+        ServerDownFullscreen
     }
 };
 </script>
