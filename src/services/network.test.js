@@ -108,12 +108,14 @@ describe('network transport errors', () => {
 
         const source = { cancel: vi.fn() };
         const request = network.default.processResponse(
-            Promise.reject({
-                response: {
-                    status: 502,
-                    data: { message: 'Bad Gateway' }
-                }
-            }),
+            Promise.reject(
+                Object.assign(new Error('Bad Gateway'), {
+                    response: {
+                        status: 502,
+                        data: { message: 'Bad Gateway' }
+                    }
+                })
+            ),
             source
         );
 
@@ -134,17 +136,19 @@ describe('network transport errors', () => {
 
         const source = { cancel: vi.fn() };
         const request = network.default.processResponse(
-            Promise.reject({
-                response: {
-                    status: 503,
-                    data: {
-                        maintenance: true,
-                        enabled: true,
-                        mode: 'strict',
-                        message: 'Planned work'
+            Promise.reject(
+                Object.assign(new Error('Service Unavailable'), {
+                    response: {
+                        status: 503,
+                        data: {
+                            maintenance: true,
+                            enabled: true,
+                            mode: 'strict',
+                            message: 'Planned work'
+                        }
                     }
-                }
-            }),
+                })
+            ),
             source
         );
 
