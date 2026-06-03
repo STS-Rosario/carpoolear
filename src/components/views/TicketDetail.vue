@@ -42,7 +42,9 @@
                     :initial-value="''"
                     :options="editorOptions"
                     initial-edit-type="wysiwyg"
-                    height="140px"
+                    :height="supportTicketReplyEditorHeight"
+                    resizable
+                    :class="supportTicketReplyEditorClass"
                 />
                 <label class="control-label mtop-10">{{ $t('adjuntarImagenes') }}</label>
                 <input ref="attachmentInput" class="mtop-10" type="file" accept="image/*" multiple @change="onAttachments" />
@@ -75,6 +77,10 @@ import {
     TICKET_STATUS_CLASS_MAP as STATUS_CLASS_MAP,
     USER_TICKET_STATUS_LABEL_KEYS as STATUS_LABEL_KEYS
 } from '../../utils/supportTicketStatusLabels';
+import {
+    SUPPORT_TICKET_REPLY_EDITOR_HEIGHT,
+    SUPPORT_TICKET_REPLY_EDITOR_CLASS
+} from '../../utils/supportTicketReplyEditor';
 
 const SUCCESS_TOAST_OPTIONS = { estado: 'success', duration: 2 };
 const ERROR_TOAST_OPTIONS = { estado: 'error', duration: 3 };
@@ -92,6 +98,8 @@ export default {
                 hideModeSwitch: true,
                 toolbarItems: [['bold', 'italic', 'strike'], ['ul', 'ol']]
             },
+            supportTicketReplyEditorHeight: SUPPORT_TICKET_REPLY_EDITOR_HEIGHT,
+            supportTicketReplyEditorClass: SUPPORT_TICKET_REPLY_EDITOR_CLASS,
             replyEditorKey: 0,
             replySubmitting: false
         };

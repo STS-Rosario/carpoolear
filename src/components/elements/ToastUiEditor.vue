@@ -1,5 +1,9 @@
 <template>
-    <div ref="mount" class="toast-ui-editor-mount" />
+    <div
+        ref="mount"
+        class="toast-ui-editor-mount"
+        :class="{ 'toast-ui-editor-mount--resizable': resizable }"
+    />
 </template>
 
 <script>
@@ -47,6 +51,10 @@ export default {
         options: {
             type: Object,
             default: () => ({})
+        },
+        resizable: {
+            type: Boolean,
+            default: false
         }
     },
     data() {
@@ -121,5 +129,11 @@ export default {
 <style scoped>
 .toast-ui-editor-mount {
     width: 100%;
+}
+
+.toast-ui-editor-mount--resizable {
+    resize: vertical;
+    overflow: auto;
+    min-height: 140px;
 }
 </style>
