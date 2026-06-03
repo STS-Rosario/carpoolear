@@ -26,9 +26,10 @@ function normalizeConversation(conv) {
 }
 
 /** Deduplicate list by normalized id (keep first occurrence) and normalise each item. */
+/** Preserve null (loading); empty array means fetch completed with no rows. */
 function deduplicateList(list) {
     if (list == null) return null;
-    if (!list.length) return list;
+    if (list.length === 0) return list;
     const seen = new Set();
     return list
         .filter((item) => {
