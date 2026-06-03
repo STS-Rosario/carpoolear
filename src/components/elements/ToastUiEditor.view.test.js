@@ -20,4 +20,14 @@ describe('ToastUiEditor resizable', () => {
         expect(componentSource).toContain('resize: vertical');
         expect(componentSource).toMatch(/toast-ui-editor-mount--resizable[\s\S]*overflow:\s*auto/);
     });
+
+    it('sets minHeight to the height prop when resizable so the editor cannot shrink below default', () => {
+        expect(componentSource).toMatch(/if\s*\(\s*this\.resizable\s*\)[\s\S]*merged\.minHeight\s*=\s*this\.height/);
+    });
+
+    it('allows markdown textarea resize inside a resizable mount', () => {
+        expect(componentSource).toMatch(
+            /\.toast-ui-editor-mount--resizable\s*:deep\(textarea\)[\s\S]*resize:\s*vertical/
+        );
+    });
 });

@@ -84,6 +84,9 @@ export default {
                 previewStyle: this.previewStyle,
                 events: wrappedEvents
             };
+            if (this.resizable) {
+                merged.minHeight = this.height;
+            }
             return merged;
         }
     },
@@ -134,6 +137,9 @@ export default {
 .toast-ui-editor-mount--resizable {
     resize: vertical;
     overflow: auto;
-    min-height: 140px;
+}
+
+.toast-ui-editor-mount--resizable :deep(textarea) {
+    resize: vertical;
 }
 </style>
