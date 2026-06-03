@@ -84,7 +84,9 @@
                 :initial-value="replyEditorInitialValue"
                 :options="editorOptions"
                 initial-edit-type="wysiwyg"
-                height="140px"
+                :height="supportTicketReplyEditorHeight"
+                resizable
+                :class="supportTicketReplyEditorClass"
             />
             <input ref="attachmentInput" class="mtop-10" type="file" accept="image/*" multiple @change="onAttachments" />
             <div class="reply-actions">
@@ -195,6 +197,10 @@ import {
     TICKET_STATUS_LABEL_KEYS as STATUS_LABEL_KEYS
 } from '../../utils/supportTicketStatusLabels';
 import { USER_TICKET_TYPE_OPTIONS } from '../../utils/supportTicketTypeOptions';
+import {
+    SUPPORT_TICKET_REPLY_EDITOR_HEIGHT,
+    SUPPORT_TICKET_REPLY_EDITOR_CLASS
+} from '../../utils/supportTicketReplyEditor';
 
 const PRIORITY_LABEL_KEYS = {
     low: 'prioridadBaja',
@@ -228,6 +234,8 @@ export default {
                 hideModeSwitch: true,
                 toolbarItems: [['bold', 'italic', 'strike'], ['ul', 'ol']]
             },
+            supportTicketReplyEditorHeight: SUPPORT_TICKET_REPLY_EDITOR_HEIGHT,
+            supportTicketReplyEditorClass: SUPPORT_TICKET_REPLY_EDITOR_CLASS,
             replyTemplateModalOpen: false,
             replyTemplateSearch: '',
             replyTemplatesLoading: false,

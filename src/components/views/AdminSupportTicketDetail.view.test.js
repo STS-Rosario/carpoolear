@@ -176,4 +176,12 @@ describe('AdminSupportTicketDetail view', () => {
         expect(viewSource).toContain('categoriaTicketGuardada');
         expect(viewSource).toContain('errorGuardandoCategoriaTicket');
     });
+
+    it('uses a taller, vertically resizable admin reply editor', () => {
+        expect(viewSource).toContain('supportTicketReplyEditor');
+        expect(viewSource).toContain(':height="supportTicketReplyEditorHeight"');
+        expect(viewSource).toContain('resizable');
+        expect(viewSource).toContain(':class="supportTicketReplyEditorClass"');
+        expect(viewSource).not.toContain('height="140px"');
+    });
 });
