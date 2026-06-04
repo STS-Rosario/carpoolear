@@ -14,10 +14,11 @@
                         <h3>{{ $t('revisarSolicitud') }} #{{ item.id }}</h3>
                     </div>
                     <div class="panel-body">
-                        <p><strong>{{ $t('usuario') }}:</strong>
-                            <router-link v-if="item.user_id" :to="{ name: 'profile', params: { id: item.user_id } }" target="_blank">
+                        <p><strong>{{ $t('usuario') }}:</strong>&nbsp;
+                            <router-link v-if="item.user_id" :to="getAdminUserProfileRoute(item.user_id)">
                                 {{ item.user_name }}
                             </router-link>
+                            <template v-if="item.user_id">&nbsp;(<router-link :to="{ name: 'profile', params: { id: item.user_id } }" target="_blank">{{ $t('verPerfilPublico') }}</router-link>)</template>
                             <span v-else>{{ item.user_name || $t('na') }}</span>
                         </p>
                         <p><strong>{{ $t('doc') }} (DNI):</strong> {{ item.user_nro_doc || '-' }}</p>
@@ -184,6 +185,7 @@ import AdminUserSupportTicketsWarning from '../AdminUserSupportTicketsWarning.vu
 import { AdminApi } from '../../services/api';
 import { useAuthStore } from '../../stores/auth';
 import dialogs from '../../services/dialogs.js';
+import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
 
 export default {
     name: 'AdminManualIdentityValidationReview',
@@ -213,6 +215,7 @@ export default {
         }
     },
     methods: {
+        getAdminUserProfileRoute,
         formatDate(value) {
             if (!value) return '-';
             return new Date(value).toLocaleString();
