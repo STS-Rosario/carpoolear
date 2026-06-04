@@ -142,7 +142,7 @@ import { useConversationsStore } from '../../stores/conversations';
 import { useAuthStore } from '../../stores/auth';
 import AdminLayout from '../layouts/AdminLayout.vue';
 import { adminUserSupportTicketsRoute } from '../../utils/adminUserSupportTicketsLink';
-import { formatAdminUserNavLabel } from '../../utils/adminUserNavLabel';
+import { formatAdminUserNavLabelFromKey } from '../../utils/adminUserNavLabel';
 import router from '../../router';
 import { UserApi } from '../../services/api';
 import dialogs from '../../services/dialogs.js';
@@ -217,7 +217,7 @@ export default {
         },
         adminUserSupportTicketsRoute,
         adminUserNavLabel(labelKey, count) {
-            return formatAdminUserNavLabel(this.$t(labelKey), count);
+            return formatAdminUserNavLabelFromKey(this.$t.bind(this), labelKey, count);
         }
     },
     watch: {
