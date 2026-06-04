@@ -18,4 +18,19 @@ describe('AdminMpRejectedValidationDetail view', () => {
         expect(viewSource).toContain(':user-id="item.user_id"');
         expect(viewSource).toContain(':user-name="item.user_name"');
     });
+
+    it('shows spaced labels for estado and admin review status', () => {
+        expect(viewSource).toContain("{{ $t('estado') }}:</strong>&nbsp;");
+        expect(viewSource).toContain("{{ $t('revisionAdmin') }}:</strong>&nbsp;");
+    });
+});
+
+const i18nPath = path.resolve(__dirname, '../../language/i18n.js');
+const i18nSource = fs.readFileSync(i18nPath, 'utf8');
+
+describe('AdminMpRejectedValidationDetail i18n', () => {
+    it('defines revisionAdmin in all locales', () => {
+        expect(i18nSource).toContain("revisionAdmin: 'Revisión admin'");
+        expect(i18nSource).toContain("revisionAdmin: 'Admin review'");
+    });
 });
