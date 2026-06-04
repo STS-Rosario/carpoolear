@@ -9,8 +9,8 @@ describe('AdminUserSupportTicketsWarning component', () => {
     it('shows warning with ticket count and link to filtered admin tickets list', () => {
         expect(source).toContain('shouldShowAdminUserSupportTicketsWarning');
         expect(source).toContain('adminUserSupportTicketsRoute');
-        expect(source).toContain("adminUsuarioTieneTicketsSoporte");
-        expect(source).toContain("adminUsuarioVerTicketsSoporte");
+        expect(source).toContain('adminUsuarioTieneTicketsSoporte');
+        expect(source).toContain('adminUsuarioVerTicketsSoporte');
         expect(source).toContain('alert alert-warning');
         expect(source).toContain(':to="supportTicketsRoute"');
     });
