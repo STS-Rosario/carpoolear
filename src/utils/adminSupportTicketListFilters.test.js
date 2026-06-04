@@ -11,12 +11,14 @@ describe('adminSupportTicketListFilters', () => {
             buildAdminSupportTicketListParams({
                 type: 'bug_report',
                 priority: 'high',
-                needsReply: true
+                needsReply: true,
+                userId: 42
             })
         ).toEqual({
             type: 'bug_report',
             priority: 'high',
-            needs_reply: '1'
+            needs_reply: '1',
+            user_id: '42'
         });
     });
 
@@ -30,13 +32,19 @@ describe('adminSupportTicketListFilters', () => {
             parseAdminSupportTicketListFiltersFromRoute({
                 type: 'contact',
                 priority: 'low',
-                needs_reply: '1'
+                needs_reply: '1',
+                user_id: '99'
             })
         ).toEqual({
             type: 'contact',
             priority: 'low',
-            needsReply: true
+            needsReply: true,
+            userId: 99
         });
+    });
+
+    it('filtersAreActive is true when userId filter is set', () => {
+        expect(filtersAreActive({ type: '', priority: '', needsReply: false, userId: 5 })).toBe(true);
     });
 
     it('filtersAreActive is true when any filter is set', () => {

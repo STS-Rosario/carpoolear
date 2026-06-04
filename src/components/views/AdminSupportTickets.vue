@@ -125,6 +125,7 @@ export default {
             filterType: '',
             filterPriority: '',
             filterNeedsReply: false,
+            filterUserId: null,
             ticketTypeOptions
         };
     },
@@ -139,7 +140,8 @@ export default {
             return {
                 type: this.filterType,
                 priority: this.filterPriority,
-                needsReply: this.filterNeedsReply
+                needsReply: this.filterNeedsReply,
+                userId: this.filterUserId
             };
         }
     },
@@ -162,6 +164,7 @@ export default {
             this.filterType = parsed.type;
             this.filterPriority = parsed.priority;
             this.filterNeedsReply = parsed.needsReply;
+            this.filterUserId = parsed.userId;
         },
         syncFiltersToRoute() {
             const query = {};
@@ -173,6 +176,9 @@ export default {
             }
             if (this.filterNeedsReply) {
                 query.needs_reply = '1';
+            }
+            if (this.filterUserId) {
+                query.user_id = String(this.filterUserId);
             }
             this.$router.replace({ query });
         },

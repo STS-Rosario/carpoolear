@@ -18,6 +18,12 @@ describe('AdminUserDetail view', () => {
         expect(source).toContain("$t('crearTicketSoporte')");
     });
 
+    it('links to user support tickets list with count from profile API', () => {
+        expect(source).toContain('adminUserSupportTicketsRoute');
+        expect(source).toContain('user.support_tickets_count');
+        expect(source).toContain('adminUsuarioVerTicketsSoporte');
+    });
+
     it('links to the user public profile with verPerfilPublico translation', () => {
         expect(source).toContain("$t('verPerfilPublico')");
         expect(source).toContain("name: 'profile'");
@@ -28,8 +34,16 @@ describe('AdminUserDetail view', () => {
         expect(source).toContain("name: 'admin-users-trips'");
         expect(source).toContain("name: 'admin-users-ratings'");
         expect(source).toContain("name: 'admin-users-recommendations'");
-        expect(source).toContain("$t('adminUsuariosVerViajes')");
-        expect(source).toContain("$t('adminUsuariosVerCalificaciones')");
-        expect(source).toContain("$t('adminUsuariosVerReferencias')");
+        expect(source).toContain("adminUserNavLabel('adminUsuariosVerViajes'");
+        expect(source).toContain("adminUserNavLabel('adminUsuariosVerCalificaciones'");
+        expect(source).toContain("adminUserNavLabel('adminUsuariosVerReferencias'");
+    });
+
+    it('shows trip rating and reference counts in admin profile nav buttons', () => {
+        expect(source).toContain('formatAdminUserNavLabelFromKey');
+        expect(source).toContain('user.admin_trips_count');
+        expect(source).toContain('user.admin_ratings_count');
+        expect(source).toContain('user.references');
+        expect(source).toContain('adminUserNavLabel(');
     });
 });

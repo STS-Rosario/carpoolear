@@ -100,4 +100,9 @@ describe('AdminSupportTickets view', () => {
         expect(viewSource).toContain('fetchAdminList(this.listFilters)');
         expect(viewSource).toContain('syncFiltersToRoute');
     });
+
+    it('passes userId filter from route query to admin ticket list fetch', () => {
+        expect(viewSource).toContain('filterUserId');
+        expect(viewSource).toContain('userId: this.filterUserId');
+    });
 });

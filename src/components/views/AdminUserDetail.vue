@@ -74,7 +74,7 @@
                                 }"
                                 class="btn btn-default"
                             >
-                                {{ $t('adminUsuariosVerViajes') }}
+                                {{ adminUserNavLabel('adminUsuariosVerViajes', user.admin_trips_count) }}
                             </router-link>
                             <router-link
                                 :to="{
@@ -83,7 +83,7 @@
                                 }"
                                 class="btn btn-default"
                             >
-                                {{ $t('adminUsuariosVerCalificaciones') }}
+                                {{ adminUserNavLabel('adminUsuariosVerCalificaciones', user.admin_ratings_count) }}
                             </router-link>
                             <router-link
                                 :to="{
@@ -92,7 +92,7 @@
                                 }"
                                 class="btn btn-default"
                             >
-                                {{ $t('adminUsuariosVerReferencias') }}
+                                {{ adminUserNavLabel('adminUsuariosVerReferencias', user.references) }}
                             </router-link>
                         </p>
                         <p class="user-admin-view-actions">
@@ -110,6 +110,13 @@
                                 class="btn btn-default"
                             >
                                 {{ $t('crearTicketSoporte') }}
+                            </router-link>
+                            <router-link
+                                v-if="user.support_tickets_count"
+                                :to="adminUserSupportTicketsRoute(user.id)"
+                                class="btn btn-default"
+                            >
+                                {{ $t('adminUsuarioVerTicketsSoporte', { count: user.support_tickets_count }) }}
                             </router-link>
                             <button
                                 type="button"
@@ -134,6 +141,8 @@ import { mapActions, mapState } from 'pinia';
 import { useConversationsStore } from '../../stores/conversations';
 import { useAuthStore } from '../../stores/auth';
 import AdminLayout from '../layouts/AdminLayout.vue';
+import { adminUserSupportTicketsRoute } from '../../utils/adminUserSupportTicketsLink';
+import { formatAdminUserNavLabelFromKey } from '../../utils/adminUserNavLabel';
 import router from '../../router';
 import { UserApi } from '../../services/api';
 import dialogs from '../../services/dialogs.js';
@@ -205,6 +214,10 @@ export default {
                     subject: this.$t('ticketTypeAccountVerification')
                 }
             };
+        },
+        adminUserSupportTicketsRoute,
+        adminUserNavLabel(labelKey, count) {
+            return formatAdminUserNavLabelFromKey(this.$t.bind(this), labelKey, count);
         }
     },
     watch: {

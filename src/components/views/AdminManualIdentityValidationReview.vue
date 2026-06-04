@@ -14,17 +14,21 @@
                         <h3>{{ $t('revisarSolicitud') }} #{{ item.id }}</h3>
                     </div>
                     <div class="panel-body">
-                        <p><strong>{{ $t('usuario') }}:</strong>
-                            <router-link v-if="item.user_id" :to="{ name: 'profile', params: { id: item.user_id } }" target="_blank">
-                                {{ item.user_name }}
-                            </router-link>
-                            <span v-else>{{ item.user_name || $t('na') }}</span>
-                        </p>
+                        <AdminReviewSubjectUserLine
+                            label-key="usuario"
+                            :user-id="item.user_id"
+                            :user-name="item.user_name"
+                        />
                         <p><strong>{{ $t('doc') }} (DNI):</strong> {{ item.user_nro_doc || '-' }}</p>
                         <p><strong>{{ $t('fechaPago') }}:</strong> {{ item.paid_at ? formatDate(item.paid_at) : '-' }}</p>
                         <p><strong>{{ $t('fechaEnvio') }}:</strong> {{ item.submitted_at ? formatDate(item.submitted_at) : '-' }}</p>
                         <p><strong>{{ $t('pagado') }}:</strong> {{ item.paid ? $t('si') : $t('no') }}</p>
                         <p><strong>{{ $t('estado') }}:</strong> {{ getStatusLabel(item.review_status) }}</p>
+                        <AdminUserSupportTicketsWarning
+                            v-if="item.user_id"
+                            :user-id="item.user_id"
+                            :support-tickets-count="item.support_tickets_count || 0"
+                        />
                         <router-link
                             v-if="item.user_id"
                             class="btn btn-default btn-sm"
@@ -175,6 +179,8 @@
 <script>
 import axios from 'axios';
 import AdminLayout from '../layouts/AdminLayout.vue';
+import AdminReviewSubjectUserLine from '../AdminReviewSubjectUserLine.vue';
+import AdminUserSupportTicketsWarning from '../AdminUserSupportTicketsWarning.vue';
 import { AdminApi } from '../../services/api';
 import { useAuthStore } from '../../stores/auth';
 import dialogs from '../../services/dialogs.js';
@@ -338,7 +344,9 @@ export default {
         });
     },
     components: {
-        AdminLayout
+        AdminLayout,
+        AdminReviewSubjectUserLine,
+        AdminUserSupportTicketsWarning
     }
 };
 </script>

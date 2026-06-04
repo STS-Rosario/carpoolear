@@ -16,13 +16,13 @@
                     <div class="panel-body">
                         <h4>{{ $t('datosUsuario') }}</h4>
                         <p>
-                            <strong>{{ $t('estado') }}:</strong>
+                            <strong>{{ $t('estado') }}:</strong>&nbsp;
                             <span :class="item.user_identity_validated ? 'label label-success' : 'label label-default'">
                                 {{ item.user_identity_validated ? $t('identidadValidada') : $t('identidadNoValidada') }}
                             </span>
                         </p>
                         <p v-if="item.review_status" class="review-status-display">
-                            <strong>{{ $t('revisionAdmin') }}:</strong>
+                            <strong>{{ $t('revisionAdmin') }}:</strong>&nbsp;
                             <span :class="getStatusBadgeClass(item)">{{ getStatusLabel(item.review_status) }}</span>
                         </p>
                         <p v-if="item.review_note && item.review_note.trim()" class="review-note-display">
@@ -32,15 +32,18 @@
                             <strong>{{ $t('revisadoPor') }}:</strong> {{ item.reviewed_by_name || $t('na') }} {{ $t('el') }} {{ formatDate(item.reviewed_at) }}
                         </p>
                         <p><strong>{{ $t('usuario') }} ID:</strong> {{ item.user_id }}</p>
-                        <p><strong>{{ $t('nombre') }}:</strong>
-                            <router-link v-if="item.user_id" :to="{ name: 'profile', params: { id: item.user_id } }" target="_blank">
-                                {{ item.user_name }}
-                            </router-link>
-                            <template v-if="item.user_id">&nbsp;(<router-link :to="getAdminUserProfileRoute(item.user_id)" target="_blank">{{ $t('perfilEnAdmin') }}</router-link>)</template>
-                            <span v-else>{{ item.user_name || $t('na') }}</span>
-                        </p>
+                        <AdminReviewSubjectUserLine
+                            label-key="nombre"
+                            :user-id="item.user_id"
+                            :user-name="item.user_name"
+                        />
                         <p><strong>{{ $t('doc') }}:</strong> {{ item.user_nro_doc || '-' }}</p>
                         <p><strong>{{ $t('email') }}:</strong> {{ item.user_email || '-' }}</p>
+                        <AdminUserSupportTicketsWarning
+                            v-if="item.user_id"
+                            :user-id="item.user_id"
+                            :support-tickets-count="item.support_tickets_count || 0"
+                        />
                         <router-link
                             v-if="item.user_id"
                             class="btn btn-default btn-sm"
@@ -119,9 +122,10 @@
 
 <script>
 import AdminLayout from '../layouts/AdminLayout.vue';
+import AdminReviewSubjectUserLine from '../AdminReviewSubjectUserLine.vue';
+import AdminUserSupportTicketsWarning from '../AdminUserSupportTicketsWarning.vue';
 import { AdminApi } from '../../services/api';
 import dialogs from '../../services/dialogs.js';
-import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
 
 export default {
     name: 'AdminMpRejectedValidationDetail',
@@ -178,7 +182,6 @@ export default {
             if (status === 'rejected' || status === 'reject') return 'label label-danger';
             return 'label label-warning';
         },
-        getAdminUserProfileRoute,
         fetchItem() {
             const api = new AdminApi();
             return api.getMercadoPagoRejectedValidation(this.id).then((res) => {
@@ -251,7 +254,9 @@ export default {
         }
     },
     components: {
-        AdminLayout
+        AdminLayout,
+        AdminReviewSubjectUserLine,
+        AdminUserSupportTicketsWarning
     }
 };
 </script>
