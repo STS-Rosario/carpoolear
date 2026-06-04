@@ -12,8 +12,7 @@ describe('AdminUserSupportTicketsWarning component', () => {
         expect(source).toContain("adminUsuarioTieneTicketsSoporte");
         expect(source).toContain("adminUsuarioVerTicketsSoporte");
         expect(source).toContain('alert alert-warning');
-        expect(source).toContain("name: 'admin-support-tickets'");
-        expect(source).toContain('user_id');
+        expect(source).toContain(':to="supportTicketsRoute"');
     });
 
     it('requires userId and supportTicketsCount props', () => {
