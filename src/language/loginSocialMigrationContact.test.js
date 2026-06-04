@@ -2,6 +2,10 @@ import { describe, expect, it } from 'vitest';
 import fs from 'node:fs';
 import path from 'node:path';
 import messages from './i18n';
+import {
+    CARPOOLEAR_FACEBOOK_URL,
+    CARPOOLEAR_INSTAGRAM_URL
+} from '../utils/carpoolearSocialUrls';
 
 const MIGRATION_CONTACT_ES = {
     escribinosMesaAyudaMigracionLead:
@@ -20,10 +24,6 @@ const MIGRATION_CONTACT_BY_LOCALE = {
         escribinosMesaAyudaMigracionOr: ' or '
     }
 };
-
-const CARPOOLEAR_FACEBOOK_URL = 'https://www.facebook.com/Carpoolear';
-const CARPOOLEAR_INSTAGRAM_URL =
-    'https://www.instagram.com/carpoolear/?hl=en';
 
 const loginViewPath = path.resolve(
     __dirname,
@@ -62,8 +62,15 @@ describe('Login.vue social migration contact links', () => {
         expect(loginViewSource).toContain(
             ":href=\"'mailto:' + config.admin_email\""
         );
-        expect(loginViewSource).toContain(CARPOOLEAR_FACEBOOK_URL);
-        expect(loginViewSource).toContain(CARPOOLEAR_INSTAGRAM_URL);
+        expect(loginViewSource).toContain('carpoolearFacebookUrl');
+        expect(loginViewSource).toContain('carpoolearInstagramUrl');
+        expect(loginViewSource).toContain('carpoolearSocialUrls');
+        expect(CARPOOLEAR_FACEBOOK_URL).toBe(
+            'https://www.facebook.com/Carpoolear'
+        );
+        expect(CARPOOLEAR_INSTAGRAM_URL).toBe(
+            'https://www.instagram.com/carpoolear/?hl=en'
+        );
         expect(loginViewSource).toContain("$t('footerInstagram')");
         expect(loginViewSource).toContain("$t('footerFacebook')");
     });

@@ -298,13 +298,13 @@
                             }}</a>
                             <span>{{ $t('escribinosMesaAyudaMigracionMid') }}</span>
                             <a
-                                href="https://www.instagram.com/carpoolear/?hl=en"
+                                :href="carpoolearInstagramUrl"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >{{ $t('footerInstagram') }}</a>
                             <span>{{ $t('escribinosMesaAyudaMigracionOr') }}</span>
                             <a
-                                href="https://www.facebook.com/Carpoolear"
+                                :href="carpoolearFacebookUrl"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >{{ $t('footerFacebook') }}</a>
@@ -328,6 +328,10 @@ import bus from '../../services/bus-event';
 import Spinner from '../Spinner.vue';
 import cache from '../../services/cache';
 import { isOfflineApiError } from '../../utils/apiErrors.js';
+import {
+    CARPOOLEAR_FACEBOOK_URL,
+    CARPOOLEAR_INSTAGRAM_URL
+} from '../../utils/carpoolearSocialUrls.js';
 
 export default {
     name: 'login',
@@ -352,6 +356,8 @@ export default {
             showUserNotActiveInfo: false,
             showModalLogin: false,
             modalType: 'facebook',
+            carpoolearFacebookUrl: CARPOOLEAR_FACEBOOK_URL,
+            carpoolearInstagramUrl: CARPOOLEAR_INSTAGRAM_URL,
             showUserBannedInfo: false,
             app_logo:
                 process.env.ROUTE_BASE +
