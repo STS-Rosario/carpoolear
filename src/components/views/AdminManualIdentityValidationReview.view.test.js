@@ -20,4 +20,10 @@ describe('AdminManualIdentityValidationReview view', () => {
         expect(viewSource).toContain('alert alert-info');
         expect(viewSource).toContain('fa-info-circle');
     });
+
+    it('shows support tickets warning when user has associated tickets', () => {
+        expect(viewSource).toContain('AdminUserSupportTicketsWarning');
+        expect(viewSource).toContain(':user-id="item.user_id"');
+        expect(viewSource).toContain(':support-tickets-count="item.support_tickets_count"');
+    });
 });

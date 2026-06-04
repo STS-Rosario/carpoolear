@@ -18,6 +18,12 @@ describe('AdminUserDetail view', () => {
         expect(source).toContain("$t('crearTicketSoporte')");
     });
 
+    it('links to user support tickets list with count from profile API', () => {
+        expect(source).toContain('adminUserSupportTicketsRoute');
+        expect(source).toContain('user.support_tickets_count');
+        expect(source).toContain("adminUsuarioVerTicketsSoporte");
+    });
+
     it('links to the user public profile with verPerfilPublico translation', () => {
         expect(source).toContain("$t('verPerfilPublico')");
         expect(source).toContain("name: 'profile'");
