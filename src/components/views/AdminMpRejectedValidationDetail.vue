@@ -16,13 +16,13 @@
                     <div class="panel-body">
                         <h4>{{ $t('datosUsuario') }}</h4>
                         <p>
-                            <strong>{{ $t('estado') }}:</strong>
+                            <strong>{{ $t('estado') }}:</strong>&nbsp;
                             <span :class="item.user_identity_validated ? 'label label-success' : 'label label-default'">
                                 {{ item.user_identity_validated ? $t('identidadValidada') : $t('identidadNoValidada') }}
                             </span>
                         </p>
                         <p v-if="item.review_status" class="review-status-display">
-                            <strong>{{ $t('revisionAdmin') }}:</strong>
+                            <strong>{{ $t('revisionAdmin') }}:</strong>&nbsp;
                             <span :class="getStatusBadgeClass(item)">{{ getStatusLabel(item.review_status) }}</span>
                         </p>
                         <p v-if="item.review_note && item.review_note.trim()" class="review-note-display">

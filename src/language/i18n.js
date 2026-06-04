@@ -668,6 +668,7 @@ const messages = {
         comentarioRequeridoParaAccion:
             'Debe escribir un comentario si quiere tomar esta acción',
         comentarioRevision: 'Comentario de revisión',
+        revisionAdmin: 'Revisión admin',
         fechaAccionAdmin: 'Fecha de acción del admin',
         fechaAprobacion: 'Fecha de aprobación',
         fechaRechazo: 'Fecha de rechazo',
@@ -2011,6 +2012,7 @@ const messages = {
         comentarioRequeridoParaAccion:
             'Debe escribir un comentario si quiere tomar esta acción',
         comentarioRevision: 'Comentario de revisión',
+        revisionAdmin: 'Revisión admin',
         fechaAccionAdmin: 'Fecha de acción del admin',
         fechaAprobacion: 'Fecha de aprobación',
         fechaRechazo: 'Fecha de rechazo',
@@ -3187,6 +3189,7 @@ const messages = {
         comentarioRevisar: 'Comment (required to reject or mark as pending)',
         comentarioVisibleParaUsuario: 'The user will see this message',
         comentarioRevision: 'Review comment',
+        revisionAdmin: 'Admin review',
         fechaAccionAdmin: 'Admin action date',
         fechaAprobacion: 'Approval date',
         fechaRechazo: 'Rejection date',
