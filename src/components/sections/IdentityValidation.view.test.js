@@ -78,3 +78,19 @@ describe('IdentityValidation Mercado Pago ownership warning', () => {
         expect(viewSource).toContain('.identity-validation-mp-warning a {');
     });
 });
+
+describe('IdentityValidation manual admin review note', () => {
+    it('shows admin review note in success banner and main flow when present', () => {
+        expect(viewSource).toContain('identity-validation-admin-review-note');
+        expect(viewSource).toContain('displayableManualReviewNote');
+        expect(viewSource).toContain('manualAdminReviewNoteLabelKey');
+        expect(viewSource).toContain('manualIdentityValidationReviewNote');
+    });
+
+    it('does not duplicate rejection-only review note block', () => {
+        const rejectionNoteBlocks = viewSource.match(
+            /identity-validation-rejection-notice__note/g
+        );
+        expect(rejectionNoteBlocks).toBeNull();
+    });
+});
