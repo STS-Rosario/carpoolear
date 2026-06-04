@@ -38,4 +38,12 @@ describe('AdminUserDetail view', () => {
         expect(source).toContain("$t('adminUsuariosVerCalificaciones')");
         expect(source).toContain("$t('adminUsuariosVerReferencias')");
     });
+
+    it('shows trip rating and reference counts in admin profile nav buttons', () => {
+        expect(source).toContain('formatAdminUserNavLabel');
+        expect(source).toContain('user.admin_trips_count');
+        expect(source).toContain('user.admin_ratings_count');
+        expect(source).toContain('user.references');
+        expect(source).toContain('adminUserNavLabel(');
+    });
 });
