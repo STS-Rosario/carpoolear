@@ -24,6 +24,6 @@ describe('AdminManualIdentityValidationReview view', () => {
     it('shows support tickets warning when user has associated tickets', () => {
         expect(viewSource).toContain('AdminUserSupportTicketsWarning');
         expect(viewSource).toContain(':user-id="item.user_id"');
-        expect(viewSource).toContain(':support-tickets-count="item.support_tickets_count"');
+        expect(viewSource).toContain(':support-tickets-count="item.support_tickets_count || 0"');
     });
 });

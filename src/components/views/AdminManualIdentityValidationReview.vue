@@ -25,6 +25,11 @@
                         <p><strong>{{ $t('fechaEnvio') }}:</strong> {{ item.submitted_at ? formatDate(item.submitted_at) : '-' }}</p>
                         <p><strong>{{ $t('pagado') }}:</strong> {{ item.paid ? $t('si') : $t('no') }}</p>
                         <p><strong>{{ $t('estado') }}:</strong> {{ getStatusLabel(item.review_status) }}</p>
+                        <AdminUserSupportTicketsWarning
+                            v-if="item.user_id"
+                            :user-id="item.user_id"
+                            :support-tickets-count="item.support_tickets_count || 0"
+                        />
                         <router-link
                             v-if="item.user_id"
                             class="btn btn-default btn-sm"
@@ -175,6 +180,7 @@
 <script>
 import axios from 'axios';
 import AdminLayout from '../layouts/AdminLayout.vue';
+import AdminUserSupportTicketsWarning from '../AdminUserSupportTicketsWarning.vue';
 import { AdminApi } from '../../services/api';
 import { useAuthStore } from '../../stores/auth';
 import dialogs from '../../services/dialogs.js';
@@ -338,7 +344,8 @@ export default {
         });
     },
     components: {
-        AdminLayout
+        AdminLayout,
+        AdminUserSupportTicketsWarning
     }
 };
 </script>

@@ -41,6 +41,11 @@
                         </p>
                         <p><strong>{{ $t('doc') }}:</strong> {{ item.user_nro_doc || '-' }}</p>
                         <p><strong>{{ $t('email') }}:</strong> {{ item.user_email || '-' }}</p>
+                        <AdminUserSupportTicketsWarning
+                            v-if="item.user_id"
+                            :user-id="item.user_id"
+                            :support-tickets-count="item.support_tickets_count || 0"
+                        />
                         <router-link
                             v-if="item.user_id"
                             class="btn btn-default btn-sm"
@@ -119,6 +124,7 @@
 
 <script>
 import AdminLayout from '../layouts/AdminLayout.vue';
+import AdminUserSupportTicketsWarning from '../AdminUserSupportTicketsWarning.vue';
 import { AdminApi } from '../../services/api';
 import dialogs from '../../services/dialogs.js';
 import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
@@ -251,7 +257,8 @@ export default {
         }
     },
     components: {
-        AdminLayout
+        AdminLayout,
+        AdminUserSupportTicketsWarning
     }
 };
 </script>

@@ -111,6 +111,13 @@
                             >
                                 {{ $t('crearTicketSoporte') }}
                             </router-link>
+                            <router-link
+                                v-if="user.support_tickets_count"
+                                :to="adminUserSupportTicketsRoute(user.id)"
+                                class="btn btn-default"
+                            >
+                                {{ $t('adminUsuarioVerTicketsSoporte', { count: user.support_tickets_count }) }}
+                            </router-link>
                             <button
                                 type="button"
                                 class="btn btn-success btn-circle"
@@ -134,6 +141,7 @@ import { mapActions, mapState } from 'pinia';
 import { useConversationsStore } from '../../stores/conversations';
 import { useAuthStore } from '../../stores/auth';
 import AdminLayout from '../layouts/AdminLayout.vue';
+import { adminUserSupportTicketsRoute } from '../../utils/adminUserSupportTicketsLink';
 import router from '../../router';
 import { UserApi } from '../../services/api';
 import dialogs from '../../services/dialogs.js';
@@ -205,7 +213,8 @@ export default {
                     subject: this.$t('ticketTypeAccountVerification')
                 }
             };
-        }
+        },
+        adminUserSupportTicketsRoute
     },
     watch: {
         '$route.params.userId'() {
