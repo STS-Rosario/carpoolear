@@ -281,10 +281,6 @@
                     <span>
                         {{ $t('teniasCuentaVinculada') }} {{ modalType === 'facebook' ? $t('facebook') : $t('apple') }}?
                     </span>
-                    <i
-                        v-on:click="toggleModalLogin"
-                        class="fa fa-times float-right-close"
-                    ></i>
                 </h3></template>
                 <template #body><div>
                     <div class="text-left color-black login-modal">
@@ -293,7 +289,21 @@
                         </p>
                         <p>
                             <span>{{ $t('escribinosMesaAyudaMigracionLead') }}</span>
-                            <router-link :to="{ name: 'tickets' }">{{ $t('mesaAyuda') }}</router-link>{{ $t('mesaAyudaContactoTail') }}
+                            <a :href="'mailto:' + config.admin_email">{{
+                                config.admin_email
+                            }}</a>
+                            <span>{{ $t('escribinosMesaAyudaMigracionMid') }}</span>
+                            <a
+                                :href="carpoolearInstagramUrl"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >{{ $t('footerInstagram') }}</a>
+                            <span>{{ $t('escribinosMesaAyudaMigracionOr') }}</span>
+                            <a
+                                :href="carpoolearFacebookUrl"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >{{ $t('footerFacebook') }}</a>
                         </p>
                         <p>{{ $t('buenasRutas') }}</p>
                     </div>
@@ -314,6 +324,10 @@ import bus from '../../services/bus-event';
 import Spinner from '../Spinner.vue';
 import cache from '../../services/cache';
 import { isOfflineApiError } from '../../utils/apiErrors.js';
+import {
+    CARPOOLEAR_FACEBOOK_URL,
+    CARPOOLEAR_INSTAGRAM_URL
+} from '../../utils/carpoolearSocialUrls.js';
 
 export default {
     name: 'login',
@@ -338,6 +352,8 @@ export default {
             showUserNotActiveInfo: false,
             showModalLogin: false,
             modalType: 'facebook',
+            carpoolearFacebookUrl: CARPOOLEAR_FACEBOOK_URL,
+            carpoolearInstagramUrl: CARPOOLEAR_INSTAGRAM_URL,
             showUserBannedInfo: false,
             app_logo:
                 process.env.ROUTE_BASE +
