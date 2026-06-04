@@ -112,32 +112,41 @@
                             <h4>{{ $t('accion') }}</h4>
                             <div class="form-group">
                                 <label>{{ $t('comentarioRevisar') }}</label>
+                                <div
+                                    class="alert alert-info identity-validation-review-comment-user-visible"
+                                    role="status"
+                                >
+                                    <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                    {{ $t('comentarioVisibleParaUsuario') }}
+                                </div>
                                 <textarea v-model="reviewNote" class="form-control" rows="3" :placeholder="$t('comentarioRevisar')"></textarea>
                             </div>
-                            <button
-                                class="btn btn-success"
-                                :disabled="submitting"
-                                @click="review('approve')"
-                            >
-                                {{ $t('aprobar') }}
-                            </button>
-                            <button
-                                class="btn btn-warning"
-                                :disabled="!hasComment || submitting"
-                                :title="!hasComment ? $t('comentarioRequeridoParaAccion') : ''"
-                                @click="review('pending')"
-                            >
-                                {{ $t('marcarPendiente') }}
-                            </button>
-                            <button
-                                class="btn btn-danger"
-                                :disabled="!hasComment || submitting"
-                                :title="!hasComment ? $t('comentarioRequeridoParaAccion') : ''"
-                                @click="review('reject')"
-                            >
-                                {{ $t('rechazar') }}
-                            </button>
-                            <p v-if="reviewError" class="text-danger">{{ reviewError }}</p>
+                            <div class="review-actions-buttons">
+                                <button
+                                    class="btn btn-success"
+                                    :disabled="submitting"
+                                    @click="review('approve')"
+                                >
+                                    {{ $t('aprobar') }}
+                                </button>
+                                <button
+                                    class="btn btn-warning"
+                                    :disabled="!hasComment || submitting"
+                                    :title="!hasComment ? $t('comentarioRequeridoParaAccion') : ''"
+                                    @click="review('pending')"
+                                >
+                                    {{ $t('marcarPendiente') }}
+                                </button>
+                                <button
+                                    class="btn btn-danger"
+                                    :disabled="!hasComment || submitting"
+                                    :title="!hasComment ? $t('comentarioRequeridoParaAccion') : ''"
+                                    @click="review('reject')"
+                                >
+                                    {{ $t('rechazar') }}
+                                </button>
+                            </div>
+                            <p v-if="reviewError" class="text-danger review-actions-error">{{ reviewError }}</p>
                         </div>
                         <div v-else class="alert alert-warning">{{ $t('noPagadoNoRevisar') }}</div>
 
@@ -359,6 +368,16 @@ export default {
 .purge-section .purge-warning {
     margin-bottom: 0.5em;
 }
+.review-actions-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.75rem;
+    margin-top: 0.25rem;
+}
+.review-actions-error {
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+}
 .review-note-display {
     word-break: break-word;
 }
@@ -367,5 +386,15 @@ export default {
 }
 .private-admin-note-save-btn {
     margin-top: 0.5rem;
+}
+.identity-validation-review-comment-user-visible {
+    display: block;
+    width: fit-content;
+    max-width: 100%;
+    margin-top: 0.35rem;
+    margin-bottom: 0.75rem;
+}
+.identity-validation-review-comment-user-visible .fa {
+    margin-right: 0.5rem;
 }
 </style>

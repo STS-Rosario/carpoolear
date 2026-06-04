@@ -19,6 +19,10 @@
                 <p class="identity-verification-success-banner__emphasis">
                     {{ $t('identityVerificationSuccessEmphasis') }}
                 </p>
+                <IdentityValidationAdminReviewNote
+                    :note="displayableManualReviewNote"
+                    :label-key="manualAdminReviewNoteLabelKey"
+                />
                 <router-link
                     :to="{ name: 'trips', params: { clearSearch: true } }"
                     class="identity-verification-success-banner__link"
@@ -29,6 +33,11 @@
         </div>
 
         <div v-else>
+        <IdentityValidationAdminReviewNote
+            :note="displayableManualReviewNote"
+            :label-key="manualAdminReviewNoteLabelKey"
+            in-flow
+        />
         <div class="alert alert-danger" v-if="resultMessage === 'error'">
             {{ $t('resultError') }}
         </div>
@@ -243,13 +252,6 @@
                     <p class="identity-validation-rejection-notice__emphasis">
                         <strong class="identity-validation-rejection-notice__emphasis-strong">{{ $t('identityValidationRejectionNoticeContactLead') }}</strong><router-link class="identity-validation-rejection-notice__mesa-link" :to="{ name: 'tickets' }">{{ $t('mesaAyuda') }}</router-link>{{ $t('identityValidationRejectionNoticeContactTail') }}
                     </p>
-                    <p
-                        v-if="manualStatus.review_note && manualStatus.review_note.trim()"
-                        class="identity-validation-rejection-notice__note"
-                    >
-                        <strong>{{ $t('identityValidationRejectionReasonLabel') }}:</strong>
-                        {{ manualStatus.review_note.trim() }}
-                    </p>
                 </div>
                 <div
                     v-if="isIdentityValidationBlockedByMissingDni"
@@ -409,11 +411,19 @@ import {
     getManualRejectionSupportWarningKey,
     getMismatchSupportWarningKey
 } from '../../utils/identityValidationMismatchDetails';
+import {
+    getDisplayableManualReviewNote,
+    getManualReviewNoteLabelKey
+} from '../../utils/manualIdentityValidationReviewNote';
+import IdentityValidationAdminReviewNote from '../IdentityValidationAdminReviewNote.vue';
 
 const EMPTY_WARNING_PARTS = { leadKey: null, tailKey: null };
 
 export default {
     name: 'IdentityValidation',
+    components: {
+        IdentityValidationAdminReviewNote
+    },
     data() {
         return {
             manualStatus: {
@@ -515,6 +525,12 @@ export default {
         manualRejectionSupportWarningKey() {
             if (!this.showManualRejectedWithChoiceCards) return null;
             return getManualRejectionSupportWarningKey(this.manualStatus.reject_reason);
+        },
+        displayableManualReviewNote() {
+            return getDisplayableManualReviewNote(this.manualStatus);
+        },
+        manualAdminReviewNoteLabelKey() {
+            return getManualReviewNoteLabelKey(this.manualStatus?.review_status);
         },
         showVerificationSuccessBanner() {
             if (this.manualDocsPendingAdminReview) {
@@ -884,15 +900,6 @@ export default {
 .identity-validation-rejection-notice__emphasis-paren a:hover,
 .identity-validation-rejection-notice__emphasis-paren a:focus {
     color: #450a0a;
-}
-
-.identity-validation-rejection-notice__note {
-    margin: 0.75rem 0 0;
-    padding-top: 0.65rem;
-    border-top: 1px solid rgba(153, 27, 27, 0.2);
-    font-size: 0.95rem;
-    line-height: 1.4;
-    color: #7f1d1d;
 }
 
 .identity-validation-rejection-notice__support-warning {

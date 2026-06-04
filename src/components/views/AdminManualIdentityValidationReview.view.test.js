@@ -13,4 +13,11 @@ describe('AdminManualIdentityValidationReview view', () => {
         expect(viewSource).toContain('updateManualIdentityValidationPrivateNote');
         expect(viewSource).toContain('applyResponseItem');
     });
+
+    it('warns admins that the review comment is visible to the user', () => {
+        expect(viewSource).toContain('comentarioVisibleParaUsuario');
+        expect(viewSource).toContain('identity-validation-review-comment-user-visible');
+        expect(viewSource).toContain('alert alert-info');
+        expect(viewSource).toContain('fa-info-circle');
+    });
 });
