@@ -293,7 +293,21 @@
                         </p>
                         <p>
                             <span>{{ $t('escribinosMesaAyudaMigracionLead') }}</span>
-                            <router-link :to="{ name: 'tickets' }">{{ $t('mesaAyuda') }}</router-link>{{ $t('mesaAyudaContactoTail') }}
+                            <a :href="'mailto:' + config.admin_email">{{
+                                config.admin_email
+                            }}</a>
+                            <span>{{ $t('escribinosMesaAyudaMigracionMid') }}</span>
+                            <a
+                                href="https://www.instagram.com/carpoolear/?hl=en"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >{{ $t('footerInstagram') }}</a>
+                            <span>{{ $t('escribinosMesaAyudaMigracionOr') }}</span>
+                            <a
+                                href="https://www.facebook.com/Carpoolear"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >{{ $t('footerFacebook') }}</a>
                         </p>
                         <p>{{ $t('buenasRutas') }}</p>
                     </div>

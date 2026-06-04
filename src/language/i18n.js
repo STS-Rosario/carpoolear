@@ -111,7 +111,9 @@ const messages = {
         mesaAyudaContactoLead: 'Podés contactarnos desde la ',
         mesaAyudaContactoTail: '.',
         escribinosMesaAyudaMigracionLead:
-            'Para recuperar tu cuenta y migrarla a una cuenta vinculada a correo, escribinos desde la ',
+            'Para recuperar tu cuenta y migrarla a una cuenta vinculada a correo, escribinos a ',
+        escribinosMesaAyudaMigracionMid: ' o por mensaje a ',
+        escribinosMesaAyudaMigracionOr: ' o ',
         unaswered_messages_limit: 'Límites de consultas por un viaje',
         unaswered_messages_limitDescription:
             'Establece un máximo de consultas (solicitudes o mensajes) que podés recibir por un viaje.',
@@ -1489,7 +1491,9 @@ const messages = {
         mesaAyudaContactoLead: 'Podés contactarnos desde la ',
         mesaAyudaContactoTail: '.',
         escribinosMesaAyudaMigracionLead:
-            'Para recuperar tu cuenta y migrarla a una cuenta vinculada a correo, escribinos desde la ',
+            'Para recuperar tu cuenta y migrarla a una cuenta vinculada a correo, escribinos a ',
+        escribinosMesaAyudaMigracionMid: ' o por mensaje a ',
+        escribinosMesaAyudaMigracionOr: ' o ',
         requisitosRegister:
             'Se requiere que cargue: licencia de conductor, seguro del vehículo ...',
         RegistrarNuevoUsuario: 'Registrate',
@@ -2634,7 +2638,9 @@ const messages = {
         mesaAyudaContactoLead: 'You can contact us through the ',
         mesaAyudaContactoTail: '.',
         escribinosMesaAyudaMigracionLead:
-            'To recover your account and link it to an email login, reach us through the ',
+            'To recover your account and migrate it to an email-linked account, write us at ',
+        escribinosMesaAyudaMigracionMid: ' or message us on ',
+        escribinosMesaAyudaMigracionOr: ' or ',
         unaswered_messages_limit: 'Query limits per trip',
         unaswered_messages_limitDescription:
             'Set a maximum number of queries (requests or messages) you can receive per trip.',
