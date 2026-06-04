@@ -80,4 +80,10 @@ describe('Login.vue social migration contact links', () => {
             /escribinosMesaAyudaMigracionLead[\s\S]{0,300}router-link[^>]*name:\s*'tickets'/
         );
     });
+
+    it('relies on Modal header close only (no duplicate green float-right-close)', () => {
+        expect(loginViewSource).not.toMatch(
+            /showModalLogin[\s\S]{0,600}float-right-close/
+        );
+    });
 });
