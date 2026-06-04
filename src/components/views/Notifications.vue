@@ -187,6 +187,9 @@ export default {
                             params: { id: n.extras.ticket_id || n.extras.id }
                         });
                         break;
+                    case 'identity_validation':
+                        router.push({ name: 'identity_validation' });
+                        break;
                     case 'announcement':
                         // open external url
                         if (n.extras.external_url) {

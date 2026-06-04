@@ -564,6 +564,8 @@ const messages = {
             ' así te ayudamos a cambiarlo y podés intentar nuevamente.',
         identityValidationMismatchSupportTicketCta: 'creá un ticket de Mesa de Ayuda',
         identityValidationRejectionReasonLabel: 'Razón de rechazo',
+        identityValidationAdminReviewNoteLabelApproved: 'Mensaje del equipo',
+        identityValidationAdminReviewNoteLabelPending: 'Mensaje del equipo',
         verEstadoValidacion: 'Ver estado de verificación',
         debesCargarDni:
             'Debés cargar tu DNI en tu perfil para verificar con Mercado Pago.',
@@ -658,6 +660,7 @@ const messages = {
         comentarioObligatorio: 'Comentario (obligatorio)',
         comentarioRevisar:
             'Comentario (obligatorio para rechazar o marcar pendiente)',
+        comentarioVisibleParaUsuario: 'Este mensaje lo verá el usuario',
         comentarioRequeridoParaAccion:
             'Debe escribir un comentario si quiere tomar esta acción',
         comentarioRevision: 'Comentario de revisión',
@@ -1906,6 +1909,8 @@ const messages = {
             ' así te ayudamos a cambiarlo y podés intentar nuevamente.',
         identityValidationMismatchSupportTicketCta: 'creá un ticket de Mesa de Ayuda',
         identityValidationRejectionReasonLabel: 'Razón de rechazo',
+        identityValidationAdminReviewNoteLabelApproved: 'Mensaje del equipo',
+        identityValidationAdminReviewNoteLabelPending: 'Mensaje del equipo',
         verEstadoValidacion: 'Ver estado de verificación',
         debesCargarDni:
             'Debés cargar tu DNI en tu perfil para verificar con Mercado Pago.',
@@ -1994,6 +1999,7 @@ const messages = {
         comentarioObligatorio: 'Comentario (obligatorio)',
         comentarioRevisar:
             'Comentario (obligatorio para rechazar o marcar pendiente)',
+        comentarioVisibleParaUsuario: 'Este mensaje lo verá el usuario',
         comentarioRequeridoParaAccion:
             'Debe escribir un comentario si quiere tomar esta acción',
         comentarioRevision: 'Comentario de revisión',
@@ -3026,6 +3032,8 @@ const messages = {
             ' so we can help you update it and try again.',
         identityValidationMismatchSupportTicketCta: 'create a Help Desk ticket',
         identityValidationRejectionReasonLabel: 'Reason for rejection',
+        identityValidationAdminReviewNoteLabelApproved: 'Message from the team',
+        identityValidationAdminReviewNoteLabelPending: 'Message from the team',
         verEstadoValidacion: 'View verification status',
         debesCargarDni:
             'You must add your DNI to your profile to verify with Mercado Pago.',
@@ -3165,6 +3173,7 @@ const messages = {
         fotosPurgadas: 'Photos purged',
         comentarioObligatorio: 'Comment (required)',
         comentarioRevisar: 'Comment (required to reject or mark as pending)',
+        comentarioVisibleParaUsuario: 'The user will see this message',
         comentarioRevision: 'Review comment',
         fechaAccionAdmin: 'Admin action date',
         fechaAprobacion: 'Approval date',

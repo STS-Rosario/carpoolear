@@ -112,6 +112,9 @@
                             <h4>{{ $t('accion') }}</h4>
                             <div class="form-group">
                                 <label>{{ $t('comentarioRevisar') }}</label>
+                                <p class="help-block identity-validation-review-comment-user-visible">
+                                    {{ $t('comentarioVisibleParaUsuario') }}
+                                </p>
                                 <textarea v-model="reviewNote" class="form-control" rows="3" :placeholder="$t('comentarioRevisar')"></textarea>
                             </div>
                             <button

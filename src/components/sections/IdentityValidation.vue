@@ -19,6 +19,13 @@
                 <p class="identity-verification-success-banner__emphasis">
                     {{ $t('identityVerificationSuccessEmphasis') }}
                 </p>
+                <p
+                    v-if="displayableManualReviewNote"
+                    class="identity-validation-admin-review-note"
+                >
+                    <strong>{{ $t(manualAdminReviewNoteLabelKey) }}:</strong>
+                    {{ displayableManualReviewNote }}
+                </p>
                 <router-link
                     :to="{ name: 'trips', params: { clearSearch: true } }"
                     class="identity-verification-success-banner__link"
@@ -29,6 +36,13 @@
         </div>
 
         <div v-else>
+        <p
+            v-if="displayableManualReviewNote"
+            class="identity-validation-admin-review-note identity-validation-admin-review-note--flow"
+        >
+            <strong>{{ $t(manualAdminReviewNoteLabelKey) }}:</strong>
+            {{ displayableManualReviewNote }}
+        </p>
         <div class="alert alert-danger" v-if="resultMessage === 'error'">
             {{ $t('resultError') }}
         </div>
@@ -243,13 +257,6 @@
                     <p class="identity-validation-rejection-notice__emphasis">
                         <strong class="identity-validation-rejection-notice__emphasis-strong">{{ $t('identityValidationRejectionNoticeContactLead') }}</strong><router-link class="identity-validation-rejection-notice__mesa-link" :to="{ name: 'tickets' }">{{ $t('mesaAyuda') }}</router-link>{{ $t('identityValidationRejectionNoticeContactTail') }}
                     </p>
-                    <p
-                        v-if="manualStatus.review_note && manualStatus.review_note.trim()"
-                        class="identity-validation-rejection-notice__note"
-                    >
-                        <strong>{{ $t('identityValidationRejectionReasonLabel') }}:</strong>
-                        {{ manualStatus.review_note.trim() }}
-                    </p>
                 </div>
                 <div
                     v-if="isIdentityValidationBlockedByMissingDni"
@@ -409,6 +416,10 @@ import {
     getManualRejectionSupportWarningKey,
     getMismatchSupportWarningKey
 } from '../../utils/identityValidationMismatchDetails';
+import {
+    getDisplayableManualReviewNote,
+    getManualReviewNoteLabelKey
+} from '../../utils/manualIdentityValidationReviewNote';
 
 const EMPTY_WARNING_PARTS = { leadKey: null, tailKey: null };
 
@@ -515,6 +526,12 @@ export default {
         manualRejectionSupportWarningKey() {
             if (!this.showManualRejectedWithChoiceCards) return null;
             return getManualRejectionSupportWarningKey(this.manualStatus.reject_reason);
+        },
+        displayableManualReviewNote() {
+            return getDisplayableManualReviewNote(this.manualStatus);
+        },
+        manualAdminReviewNoteLabelKey() {
+            return getManualReviewNoteLabelKey(this.manualStatus?.review_status);
         },
         showVerificationSuccessBanner() {
             if (this.manualDocsPendingAdminReview) {

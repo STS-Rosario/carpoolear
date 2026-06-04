@@ -87,10 +87,9 @@ describe('IdentityValidation manual admin review note', () => {
         expect(viewSource).toContain('manualIdentityValidationReviewNote');
     });
 
-    it('does not duplicate rejection-only review note block', () => {
-        const rejectionNoteBlocks = viewSource.match(
-            /identity-validation-rejection-notice__note/g
+    it('does not render review note only inside rejection notice markup', () => {
+        expect(viewSource).not.toContain(
+            'identity-validation-rejection-notice__note"'
         );
-        expect(rejectionNoteBlocks).toBeNull();
     });
 });
