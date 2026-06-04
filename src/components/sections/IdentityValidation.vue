@@ -19,13 +19,10 @@
                 <p class="identity-verification-success-banner__emphasis">
                     {{ $t('identityVerificationSuccessEmphasis') }}
                 </p>
-                <p
-                    v-if="displayableManualReviewNote"
-                    class="identity-validation-admin-review-note"
-                >
-                    <strong>{{ $t(manualAdminReviewNoteLabelKey) }}:</strong>
-                    {{ displayableManualReviewNote }}
-                </p>
+                <IdentityValidationAdminReviewNote
+                    :note="displayableManualReviewNote"
+                    :label-key="manualAdminReviewNoteLabelKey"
+                />
                 <router-link
                     :to="{ name: 'trips', params: { clearSearch: true } }"
                     class="identity-verification-success-banner__link"
@@ -36,13 +33,11 @@
         </div>
 
         <div v-else>
-        <p
-            v-if="displayableManualReviewNote"
-            class="identity-validation-admin-review-note identity-validation-admin-review-note--flow"
-        >
-            <strong>{{ $t(manualAdminReviewNoteLabelKey) }}:</strong>
-            {{ displayableManualReviewNote }}
-        </p>
+        <IdentityValidationAdminReviewNote
+            :note="displayableManualReviewNote"
+            :label-key="manualAdminReviewNoteLabelKey"
+            in-flow
+        />
         <div class="alert alert-danger" v-if="resultMessage === 'error'">
             {{ $t('resultError') }}
         </div>
@@ -420,11 +415,15 @@ import {
     getDisplayableManualReviewNote,
     getManualReviewNoteLabelKey
 } from '../../utils/manualIdentityValidationReviewNote';
+import IdentityValidationAdminReviewNote from '../IdentityValidationAdminReviewNote.vue';
 
 const EMPTY_WARNING_PARTS = { leadKey: null, tailKey: null };
 
 export default {
     name: 'IdentityValidation',
+    components: {
+        IdentityValidationAdminReviewNote
+    },
     data() {
         return {
             manualStatus: {
@@ -901,15 +900,6 @@ export default {
 .identity-validation-rejection-notice__emphasis-paren a:hover,
 .identity-validation-rejection-notice__emphasis-paren a:focus {
     color: #450a0a;
-}
-
-.identity-validation-rejection-notice__note {
-    margin: 0.75rem 0 0;
-    padding-top: 0.65rem;
-    border-top: 1px solid rgba(153, 27, 27, 0.2);
-    font-size: 0.95rem;
-    line-height: 1.4;
-    color: #7f1d1d;
 }
 
 .identity-validation-rejection-notice__support-warning {

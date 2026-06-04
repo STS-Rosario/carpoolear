@@ -81,7 +81,7 @@ describe('IdentityValidation Mercado Pago ownership warning', () => {
 
 describe('IdentityValidation manual admin review note', () => {
     it('shows admin review note in success banner and main flow when present', () => {
-        expect(viewSource).toContain('identity-validation-admin-review-note');
+        expect(viewSource).toContain('IdentityValidationAdminReviewNote');
         expect(viewSource).toContain('displayableManualReviewNote');
         expect(viewSource).toContain('manualAdminReviewNoteLabelKey');
         expect(viewSource).toContain('manualIdentityValidationReviewNote');
