@@ -281,10 +281,6 @@
                     <span>
                         {{ $t('teniasCuentaVinculada') }} {{ modalType === 'facebook' ? $t('facebook') : $t('apple') }}?
                     </span>
-                    <i
-                        v-on:click="toggleModalLogin"
-                        class="fa fa-times float-right-close"
-                    ></i>
                 </h3></template>
                 <template #body><div>
                     <div class="text-left color-black login-modal">
