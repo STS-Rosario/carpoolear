@@ -34,9 +34,9 @@ describe('AdminUserDetail view', () => {
         expect(source).toContain("name: 'admin-users-trips'");
         expect(source).toContain("name: 'admin-users-ratings'");
         expect(source).toContain("name: 'admin-users-recommendations'");
-        expect(source).toContain("$t('adminUsuariosVerViajes')");
-        expect(source).toContain("$t('adminUsuariosVerCalificaciones')");
-        expect(source).toContain("$t('adminUsuariosVerReferencias')");
+        expect(source).toContain("adminUserNavLabel('adminUsuariosVerViajes'");
+        expect(source).toContain("adminUserNavLabel('adminUsuariosVerCalificaciones'");
+        expect(source).toContain("adminUserNavLabel('adminUsuariosVerReferencias'");
     });
 
     it('shows trip rating and reference counts in admin profile nav buttons', () => {

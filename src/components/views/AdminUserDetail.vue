@@ -74,7 +74,7 @@
                                 }"
                                 class="btn btn-default"
                             >
-                                {{ $t('adminUsuariosVerViajes') }}
+                                {{ adminUserNavLabel('adminUsuariosVerViajes', user.admin_trips_count) }}
                             </router-link>
                             <router-link
                                 :to="{
@@ -83,7 +83,7 @@
                                 }"
                                 class="btn btn-default"
                             >
-                                {{ $t('adminUsuariosVerCalificaciones') }}
+                                {{ adminUserNavLabel('adminUsuariosVerCalificaciones', user.admin_ratings_count) }}
                             </router-link>
                             <router-link
                                 :to="{
@@ -92,7 +92,7 @@
                                 }"
                                 class="btn btn-default"
                             >
-                                {{ $t('adminUsuariosVerReferencias') }}
+                                {{ adminUserNavLabel('adminUsuariosVerReferencias', user.references) }}
                             </router-link>
                         </p>
                         <p class="user-admin-view-actions">
@@ -142,6 +142,7 @@ import { useConversationsStore } from '../../stores/conversations';
 import { useAuthStore } from '../../stores/auth';
 import AdminLayout from '../layouts/AdminLayout.vue';
 import { adminUserSupportTicketsRoute } from '../../utils/adminUserSupportTicketsLink';
+import { formatAdminUserNavLabel } from '../../utils/adminUserNavLabel';
 import router from '../../router';
 import { UserApi } from '../../services/api';
 import dialogs from '../../services/dialogs.js';
@@ -214,7 +215,10 @@ export default {
                 }
             };
         },
-        adminUserSupportTicketsRoute
+        adminUserSupportTicketsRoute,
+        adminUserNavLabel(labelKey, count) {
+            return formatAdminUserNavLabel(this.$t(labelKey), count);
+        }
     },
     watch: {
         '$route.params.userId'() {
