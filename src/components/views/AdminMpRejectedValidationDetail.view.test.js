@@ -13,11 +13,9 @@ describe('AdminMpRejectedValidationDetail view', () => {
     });
 
     it('shows user name linked to admin profile with public profile link in parentheses', () => {
-        expect(viewSource).toContain("{{ $t('nombre') }}:</strong>&nbsp;");
-        expect(viewSource).toContain('getAdminUserProfileRoute(item.user_id)');
-        expect(viewSource).toContain("name: 'profile'");
-        expect(viewSource).toContain("params: { id: item.user_id }");
-        expect(viewSource).toContain("{{ $t('verPerfilPublico') }}");
-        expect(viewSource).not.toContain("perfilEnAdmin");
+        expect(viewSource).toContain('AdminReviewSubjectUserLine');
+        expect(viewSource).toContain('label-key="nombre"');
+        expect(viewSource).toContain(':user-id="item.user_id"');
+        expect(viewSource).toContain(':user-name="item.user_name"');
     });
 });

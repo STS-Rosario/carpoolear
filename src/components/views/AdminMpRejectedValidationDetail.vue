@@ -32,13 +32,11 @@
                             <strong>{{ $t('revisadoPor') }}:</strong> {{ item.reviewed_by_name || $t('na') }} {{ $t('el') }} {{ formatDate(item.reviewed_at) }}
                         </p>
                         <p><strong>{{ $t('usuario') }} ID:</strong> {{ item.user_id }}</p>
-                        <p><strong>{{ $t('nombre') }}:</strong>&nbsp;
-                            <router-link v-if="item.user_id" :to="getAdminUserProfileRoute(item.user_id)">
-                                {{ item.user_name }}
-                            </router-link>
-                            <template v-if="item.user_id">&nbsp;(<router-link :to="{ name: 'profile', params: { id: item.user_id } }" target="_blank">{{ $t('verPerfilPublico') }}</router-link>)</template>
-                            <span v-else>{{ item.user_name || $t('na') }}</span>
-                        </p>
+                        <AdminReviewSubjectUserLine
+                            label-key="nombre"
+                            :user-id="item.user_id"
+                            :user-name="item.user_name"
+                        />
                         <p><strong>{{ $t('doc') }}:</strong> {{ item.user_nro_doc || '-' }}</p>
                         <p><strong>{{ $t('email') }}:</strong> {{ item.user_email || '-' }}</p>
                         <AdminUserSupportTicketsWarning
@@ -124,10 +122,10 @@
 
 <script>
 import AdminLayout from '../layouts/AdminLayout.vue';
+import AdminReviewSubjectUserLine from '../AdminReviewSubjectUserLine.vue';
 import AdminUserSupportTicketsWarning from '../AdminUserSupportTicketsWarning.vue';
 import { AdminApi } from '../../services/api';
 import dialogs from '../../services/dialogs.js';
-import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
 
 export default {
     name: 'AdminMpRejectedValidationDetail',
@@ -184,7 +182,6 @@ export default {
             if (status === 'rejected' || status === 'reject') return 'label label-danger';
             return 'label label-warning';
         },
-        getAdminUserProfileRoute,
         fetchItem() {
             const api = new AdminApi();
             return api.getMercadoPagoRejectedValidation(this.id).then((res) => {
@@ -258,6 +255,7 @@ export default {
     },
     components: {
         AdminLayout,
+        AdminReviewSubjectUserLine,
         AdminUserSupportTicketsWarning
     }
 };

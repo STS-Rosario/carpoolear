@@ -14,13 +14,11 @@
                         <h3>{{ $t('revisarSolicitud') }} #{{ item.id }}</h3>
                     </div>
                     <div class="panel-body">
-                        <p><strong>{{ $t('usuario') }}:</strong>&nbsp;
-                            <router-link v-if="item.user_id" :to="getAdminUserProfileRoute(item.user_id)">
-                                {{ item.user_name }}
-                            </router-link>
-                            <template v-if="item.user_id">&nbsp;(<router-link :to="{ name: 'profile', params: { id: item.user_id } }" target="_blank">{{ $t('verPerfilPublico') }}</router-link>)</template>
-                            <span v-else>{{ item.user_name || $t('na') }}</span>
-                        </p>
+                        <AdminReviewSubjectUserLine
+                            label-key="usuario"
+                            :user-id="item.user_id"
+                            :user-name="item.user_name"
+                        />
                         <p><strong>{{ $t('doc') }} (DNI):</strong> {{ item.user_nro_doc || '-' }}</p>
                         <p><strong>{{ $t('fechaPago') }}:</strong> {{ item.paid_at ? formatDate(item.paid_at) : '-' }}</p>
                         <p><strong>{{ $t('fechaEnvio') }}:</strong> {{ item.submitted_at ? formatDate(item.submitted_at) : '-' }}</p>
@@ -181,11 +179,11 @@
 <script>
 import axios from 'axios';
 import AdminLayout from '../layouts/AdminLayout.vue';
+import AdminReviewSubjectUserLine from '../AdminReviewSubjectUserLine.vue';
 import AdminUserSupportTicketsWarning from '../AdminUserSupportTicketsWarning.vue';
 import { AdminApi } from '../../services/api';
 import { useAuthStore } from '../../stores/auth';
 import dialogs from '../../services/dialogs.js';
-import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
 
 export default {
     name: 'AdminManualIdentityValidationReview',
@@ -215,7 +213,6 @@ export default {
         }
     },
     methods: {
-        getAdminUserProfileRoute,
         formatDate(value) {
             if (!value) return '-';
             return new Date(value).toLocaleString();
@@ -348,6 +345,7 @@ export default {
     },
     components: {
         AdminLayout,
+        AdminReviewSubjectUserLine,
         AdminUserSupportTicketsWarning
     }
 };
