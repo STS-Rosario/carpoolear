@@ -38,7 +38,7 @@ export default {
 
 <style scoped>
 .identity-validation-admin-review-note {
-    margin: 0.75rem 0 0;
+    margin: 1.25rem 0 1.25rem;
     padding: 0.65rem 0.75rem;
     border-radius: 4px;
     background: rgba(255, 255, 255, 0.85);
@@ -48,6 +48,7 @@ export default {
 }
 
 .identity-validation-admin-review-note--flow {
-    margin-bottom: 1rem;
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
 }
 </style>
