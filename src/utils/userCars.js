@@ -1,7 +1,3 @@
-function hasValue(value) {
-    return value !== null && value !== undefined && String(value).trim().length > 0;
-}
-
 export function buildPatenteRowsFromCars(cars) {
     if (!Array.isArray(cars) || cars.length === 0) {
         return [{ id: null, patente: '' }];
@@ -85,4 +81,16 @@ export function resolveTripCarId(cars, selectedCarId) {
     }
 
     return undefined;
+}
+
+export function canRemoveSavedCar(entry) {
+    return Boolean(entry && entry.id != null && entry.id !== '');
+}
+
+export function canShowRemoveCarRow(entry, totalRows) {
+    return canRemoveSavedCar(entry) || totalRows > 1;
+}
+
+function hasValue(value) {
+    return value !== null && value !== undefined && String(value).trim().length > 0;
 }
