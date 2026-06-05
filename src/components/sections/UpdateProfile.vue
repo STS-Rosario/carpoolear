@@ -257,8 +257,10 @@
                                 />
                                 <button
                                     v-if="
-                                        canRemoveSavedCar(entry) ||
-                                        userCars.length > 1
+                                        canShowRemoveCarRow(
+                                            entry,
+                                            userCars.length
+                                        )
                                     "
                                     type="button"
                                     class="btn btn-default user-car-row__remove"
@@ -700,7 +702,11 @@ import modal from '../Modal';
 import { UserApi } from '../../services/api';
 import { getApiErrorMessage } from '../../utils/apiErrors.js';
 import { normalizeFacebookProfileUrl } from '../../utils/facebookProfileUrl.js';
-import { buildPatenteRowsFromCars, canRemoveSavedCar } from '../../utils/userCars.js';
+import {
+    buildPatenteRowsFromCars,
+    canRemoveSavedCar,
+    canShowRemoveCarRow
+} from '../../utils/userCars.js';
 
 class Error {
     constructor(state = false, message = '') {
@@ -829,6 +835,7 @@ export default {
     methods: {
         dayjs,
         canRemoveSavedCar,
+        canShowRemoveCarRow,
         ...mapActions(useAuthStore, {
             update: 'update',
             updatePhoto: 'updatePhoto'
@@ -1423,6 +1430,9 @@ export default {
 
 .user-car-row__remove {
     flex-shrink: 0;
+    min-width: 2.25rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
 }
 
 .user-cars-block__add {
