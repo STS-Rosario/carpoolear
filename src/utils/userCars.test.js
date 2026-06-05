@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
     activeCarsWithPlate,
     buildPatenteRowsFromCars,
+    canRemoveSavedCar,
     isActiveCarId,
     needsCarSelection,
     resolveTripCarId,
@@ -72,5 +73,14 @@ describe('userCars', () => {
 
         expect(activeCarsWithPlate(cars)).toEqual([{ id: 2, patente: 'OK123' }]);
         expect(resolveTripCarId(cars, null)).toBe(2);
+    });
+
+    it('allows removing a saved car even when it is the only row', () => {
+        expect(canRemoveSavedCar({ id: 12, patente: 'ABC123' })).toBe(true);
+    });
+
+    it('does not allow removing an unsaved empty row', () => {
+        expect(canRemoveSavedCar({ id: null, patente: '' })).toBe(false);
+        expect(canRemoveSavedCar({ id: null, patente: 'NEW123' })).toBe(false);
     });
 });

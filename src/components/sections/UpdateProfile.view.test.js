@@ -41,6 +41,21 @@ describe('UpdateProfile multiple patentes', () => {
     });
 });
 
+describe('UpdateProfile remove saved car', () => {
+    it('shows remove icon for any saved car row including a single patente', () => {
+        expect(viewSource).toContain('canRemoveSavedCar(entry)');
+        expect(viewSource).toContain('fa fa-times');
+        expect(viewSource).not.toContain('v-if="userCars.length > 1"');
+    });
+
+    it('asks for confirmation before deleting a saved car', () => {
+        expect(viewSource).toContain('confirmarEliminarAuto');
+        expect(viewSource).toContain(
+            "window.confirm(this.$t('confirmarEliminarAuto'))"
+        );
+    });
+});
+
 describe('UpdateProfile save error feedback', () => {
     it('shows backend validation errors in an alert and snackbar', () => {
         expect(viewSource).toContain('getApiErrorMessage');
