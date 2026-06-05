@@ -256,12 +256,20 @@
                                     }"
                                 />
                                 <button
-                                    v-if="userCars.length > 1"
+                                    v-if="
+                                        canRemoveSavedCar(entry) ||
+                                        userCars.length > 1
+                                    "
                                     type="button"
                                     class="btn btn-default user-car-row__remove"
+                                    :title="$t('eliminarAuto')"
+                                    :aria-label="$t('eliminarAuto')"
                                     @click.prevent="removeUserCar(index)"
                                 >
-                                    {{ $t('eliminarAuto') }}
+                                    <i
+                                        aria-hidden="true"
+                                        class="fa fa-times"
+                                    ></i>
                                 </button>
                             </div>
                         </div>
@@ -692,7 +700,7 @@ import modal from '../Modal';
 import { UserApi } from '../../services/api';
 import { getApiErrorMessage } from '../../utils/apiErrors.js';
 import { normalizeFacebookProfileUrl } from '../../utils/facebookProfileUrl.js';
-import { buildPatenteRowsFromCars } from '../../utils/userCars.js';
+import { buildPatenteRowsFromCars, canRemoveSavedCar } from '../../utils/userCars.js';
 
 class Error {
     constructor(state = false, message = '') {
@@ -820,6 +828,7 @@ export default {
     },
     methods: {
         dayjs,
+        canRemoveSavedCar,
         ...mapActions(useAuthStore, {
             update: 'update',
             updatePhoto: 'updatePhoto'
@@ -864,6 +873,9 @@ export default {
                 }
             };
             if (entry.id) {
+                if (!window.confirm(this.$t('confirmarEliminarAuto'))) {
+                    return;
+                }
                 this.carDelete({ id: entry.id })
                     .then(removeRow)
                     .catch((err) => {
