@@ -43,9 +43,7 @@ describe('UpdateProfile multiple patentes', () => {
 
 describe('UpdateProfile remove saved car', () => {
     it('shows remove icon for any saved car row including a single patente', () => {
-        expect(viewSource).toContain('canRemoveSavedCar(entry)');
-        expect(viewSource).toContain('fa fa-times');
-        expect(viewSource).not.toContain('v-if="userCars.length > 1"');
+        expect(viewSource).toContain('canShowRemoveCarRow(entry, userCars.length)');
     });
 
     it('asks for confirmation before deleting a saved car', () => {

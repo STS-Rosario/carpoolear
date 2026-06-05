@@ -3,6 +3,7 @@ import {
     activeCarsWithPlate,
     buildPatenteRowsFromCars,
     canRemoveSavedCar,
+    canShowRemoveCarRow,
     isActiveCarId,
     needsCarSelection,
     resolveTripCarId,
@@ -82,5 +83,11 @@ describe('userCars', () => {
     it('does not allow removing an unsaved empty row', () => {
         expect(canRemoveSavedCar({ id: null, patente: '' })).toBe(false);
         expect(canRemoveSavedCar({ id: null, patente: 'NEW123' })).toBe(false);
+    });
+
+    it('shows remove control for unsaved extra rows or any saved row', () => {
+        expect(canShowRemoveCarRow({ id: 1, patente: 'X' }, 1)).toBe(true);
+        expect(canShowRemoveCarRow({ id: null, patente: '' }, 2)).toBe(true);
+        expect(canShowRemoveCarRow({ id: null, patente: '' }, 1)).toBe(false);
     });
 });
