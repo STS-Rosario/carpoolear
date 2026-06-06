@@ -53,72 +53,6 @@
         <div class="col-xs-24">
             <modal
                 :name="'modal'"
-                v-if="showModalPendingRates"
-                @close="toPendingRates"
-                :title="$t('carpoodatos')"
-                :body="'Body'"
-                :hide-footer="true"
-            >
-                <template #header><h3>
-                    <span>{{ $t('carpoodatos') }}</span>
-                    <i
-                        v-on:click="toPendingRates"
-                        class="fa fa-times float-right-close"
-                    ></i>
-                </h3></template>
-                <template #body><div>
-                    <div class="text-left carpoodatos">
-                        <p>
-                            <b>{{ $t('carpoodatosImportanteCalificar').split('.')[0] }}</b>
-                            {{ $t('carpoodatosImportanteCalificar').split('.')[1] }}
-                        </p>
-                        <p>
-                            <b
-                                >{{ $t('carpoodatosTiempoCalificar').split('.')[0] }}</b
-                            >
-                            {{ $t('carpoodatosTiempoCalificar').split('.')[1] }}
-                        </p>
-                        <p>
-                            <b
-                                >{{ $t('carpoodatosNoBorrar').split('.')[0] }}</b
-                            >
-                            {{ $t('carpoodatosNoBorrar').split('.')[1] }}
-                        </p>
-                        <p>
-                            <b>{{ $t('carpoodatosDeciLoQuePensas').split('.')[0] }}</b>
-                            {{ $t('carpoodatosDeciLoQuePensas').split('.')[1] }}
-                        </p>
-                        <p>
-                            {{ $t('carpoodatosContacto') }}
-                            <a :href="'mailto:' + config.admin_email">
-                                {{ config.admin_email }}
-                            </a>
-                            {{ $t('oNuestrasRedesSociales') }}
-                        </p>
-                    </div>
-                    <div class="check" style="margin-bottom: 10px">
-                        <label class="check-inline">
-                            <input
-                                type="checkbox"
-                                name="pendingRatesValor"
-                                value="0"
-                                v-model="pendingRatesValue"
-                            />
-                            <span>{{ $t('carpoodatosNoVolverAMostrar') }}</span>
-                        </label>
-                    </div>
-                    <div class="text-center">
-                        <button
-                            class="btn btn-accept-request"
-                            @click="toPendingRates"
-                        >
-                            {{ $t('carpoodatosEntiendo') }}
-                        </button>
-                    </div>
-                </div></template>
-            </modal>
-            <modal
-                :name="'modal'"
                 v-if="showModalRequestDonation"
                 @close="onModalClose"
                 :title="'Test'"
@@ -409,10 +343,7 @@ export default {
         return {
             showModalRequestDonation: false,
             donateValue: 0,
-            modalTripId: 0,
-            showModalPendingRates: false,
-            pendingRatesValue: 0,
-            alreadyAlerted: false
+            modalTripId: 0
         };
     },
     mounted() {
@@ -477,8 +408,7 @@ export default {
             findSubscriptions: 'index'
         }),
         ...mapActions(useProfileStore, {
-            registerDonation: 'registerDonation',
-            changeProperty: 'changeProperty'
+            registerDonation: 'registerDonation'
         }),
         findTrip(id) {
             if (this.trips) {
@@ -603,18 +533,6 @@ export default {
             }
         },
 
-        toPendingRates() {
-            if (this.pendingRatesValue) {
-                let data = {
-                    property: 'do_not_alert_pending_rates',
-                    value: 1
-                };
-                this.changeProperty(data).then(() => {
-                    console.log('do not alert success');
-                });
-            }
-            this.showModalPendingRates = false;
-        },
         onMessageModalClose() {
             this.showModalRequestDonation = false;
             let data = {
@@ -694,18 +612,8 @@ export default {
         passengerTrips: function () {
             this.updateScroll();
         },
-        pendingRates: function (newValue, oldValue) {
+        pendingRates: function () {
             this.updateScroll();
-            if (
-                !this.user.do_not_alert_pending_rates &&
-                !this.config.disable_user_hints
-            ) {
-                console.log('pendingRates', newValue, oldValue);
-                if (newValue && newValue.length > 0 && !this.alreadyAlerted) {
-                    this.alreadyAlerted = true;
-                    this.showModalPendingRates = true;
-                }
-            }
         },
         pendingRequest: function () {
             this.updateScroll();
