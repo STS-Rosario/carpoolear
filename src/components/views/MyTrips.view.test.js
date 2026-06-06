@@ -25,3 +25,13 @@ describe('MyTrips trip card navigation', () => {
         expect(source).not.toContain(':clickModal="user.is_admin"');
     });
 });
+
+describe('MyTrips pending rates carpoodatos modal', () => {
+    it('does not show the carpoodatos hint modal for pending ratings', () => {
+        expect(source).not.toContain('showModalPendingRates');
+        expect(source).not.toContain('carpoodatosImportanteCalificar');
+        expect(source).not.toContain('carpoodatosTiempoCalificar');
+        expect(source).not.toContain('carpoodatosNoBorrar');
+        expect(source).not.toContain('carpoodatosDeciLoQuePensas');
+    });
+});
