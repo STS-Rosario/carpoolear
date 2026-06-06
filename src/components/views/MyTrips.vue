@@ -533,16 +533,6 @@ export default {
             }
         },
 
-        onMessageModalClose() {
-            this.showModalRequestDonation = false;
-            let data = {
-                has_donated: 0,
-                has_denied: 1,
-                ammount: 0,
-                trip_id: this.modalTripId
-            };
-            this.registerDonation(data);
-        },
         onModalClose() {
             this.showModalRequestDonation = false;
             let data = {

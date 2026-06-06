@@ -804,15 +804,6 @@ const messages = {
         pendientesDeContestar: 'Pendientes de contestar',
         noHayPendientesDeContestar: 'No hay pendientes de contestar',
         carpoodatos: 'Carpoodatos',
-        carpoodatosImportanteCalificar:
-            'Importante: Calificá a tus compañeros de viaje.',
-        carpoodatosTiempoCalificar:
-            'Tenés 30 días para calificar desde que finalizó el viaje.',
-        carpoodatosNoBorrar: 'No borres el viaje de tu historial.',
-        carpoodatosDeciLoQuePensas: 'Decí lo que pensás.',
-        carpoodatosContacto: 'Si tenés algún problema, contactanos a',
-        carpoodatosNoVolverAMostrar: 'No volver a mostrar',
-        carpoodatosEntiendo: 'Entiendo',
         buenisimoCompartirViaje: '¡Buenísimo compartir viaje!',
         ayudanosPlataforma: 'Ayudanos a mantener la plataforma',
         elegiPropiaAventura: 'Elegí tu propia aventura',
@@ -1694,15 +1685,6 @@ const messages = {
         pendientesDeContestar: 'Pendientes de contestar',
         noHayPendientesDeContestar: 'No hay pendientes de contestar',
         carpoodatos: 'Carpoodatos',
-        carpoodatosImportanteCalificar:
-            'Importante: Calificá a tus compañeros de viaje.',
-        carpoodatosTiempoCalificar:
-            'Tenés 30 días para calificar desde que finalizó el viaje.',
-        carpoodatosNoBorrar: 'No borres el viaje de tu historial.',
-        carpoodatosDeciLoQuePensas: 'Decí lo que pensás.',
-        carpoodatosContacto: 'Si tenés algún problema, contactanos a',
-        carpoodatosNoVolverAMostrar: 'No volver a mostrar',
-        carpoodatosEntiendo: 'Entiendo',
         buenisimoCompartirViaje: '¡Buenísimo compartir viaje!',
         ayudanosPlataforma: 'Ayudanos a mantener la plataforma',
         elegiPropiaAventura: 'Elegí tu propia aventura',
@@ -3326,15 +3308,6 @@ const messages = {
         pendientesDeContestar: 'Pending response',
         noHayPendientesDeContestar: 'No pending responses',
         carpoodatos: 'Carpoodata',
-        carpoodatosImportanteCalificar:
-            'Important: Rate your travel companions.',
-        carpoodatosTiempoCalificar:
-            'You have 30 days to rate from when the trip ended.',
-        carpoodatosNoBorrar: 'Do not delete the trip from your history.',
-        carpoodatosDeciLoQuePensas: 'Say what you think.',
-        carpoodatosContacto: 'If you have any problems, contact us at',
-        carpoodatosNoVolverAMostrar: 'Do not show again',
-        carpoodatosEntiendo: 'I understand',
         buenisimoCompartirViaje: 'Sharing a ride is awesome!',
         ayudanosPlataforma: 'Help us maintain the platform',
         elegiPropiaAventura: 'Choose your own adventure',
