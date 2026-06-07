@@ -52,4 +52,21 @@ describe('NewTrip.vue rear seat comfort preference', () => {
             /class="trip_seats-available"[\s\S]*?class="trip-comfort-preference"[\s\S]*?otherTrip-comfort-rear-max-two/s
         );
     });
+
+    it('recalculates recommended price from comfort preference, not seat count', () => {
+        expect(viewSource).toMatch(/from '\.\.\/\.\.\/utils\/tripPriceOccupants\.js'/);
+        expect(viewSource).toContain('seatPriceCentsFromTripPriceCents');
+        expect(viewSource).toMatch(
+            /recalculateRecommendedPrice\(\)[\s\S]*?seatPriceCentsFromTripPriceCents\([\s\S]*?this\.trip\.rear_max_two_passengers/s
+        );
+        expect(viewSource).toMatch(
+            /recalculateRecommendedReturnPrice\(\)[\s\S]*?seatPriceCentsFromTripPriceCents\([\s\S]*?this\.otherTrip\.trip\.rear_max_two_passengers/s
+        );
+        expect(viewSource).toMatch(
+            /'trip\.rear_max_two_passengers':\s*function[\s\S]*?recalculateRecommendedPrice\(\)/s
+        );
+        expect(viewSource).not.toMatch(
+            /recalculateRecommendedPrice\(\)[\s\S]*?this\.trip\.total_seats \+ 1/s
+        );
+    });
 });
