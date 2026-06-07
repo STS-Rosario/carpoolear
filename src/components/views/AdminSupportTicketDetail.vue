@@ -43,16 +43,10 @@
                     <strong>
                         <span v-if="reply.is_admin">{{ adminReplyAuthorLabel(reply) }}</span>
                         <span v-else>
-                            <router-link v-if="canLinkUserProfile()" :to="userAppProfileRoute()">
+                            <router-link v-if="canLinkUserProfile()" :to="userAdminProfileRoute()">
                                 {{ replyAuthorLabel(reply) }}
                             </router-link>
                             <span v-else>{{ replyAuthorLabel(reply) }}</span>
-                            (
-                            <router-link v-if="canLinkUserProfile()" :to="userAdminProfileRoute()">
-                                {{ $t('verPerfilEnAdmin') }}
-                            </router-link>
-                            <span v-else>{{ $t('verPerfilEnAdmin') }}</span>
-                            )
                         </span>
                     </strong>
                     <small class="reply-meta-date" :title="fullDate(reply.created_at)">{{ relativeDate(reply.created_at) }}</small>
@@ -197,6 +191,7 @@ import {
     TICKET_STATUS_LABEL_KEYS as STATUS_LABEL_KEYS
 } from '../../utils/supportTicketStatusLabels';
 import { USER_TICKET_TYPE_OPTIONS } from '../../utils/supportTicketTypeOptions';
+import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
 import {
     SUPPORT_TICKET_REPLY_EDITOR_HEIGHT,
     SUPPORT_TICKET_REPLY_EDITOR_CLASS
@@ -351,11 +346,8 @@ export default {
         canLinkUserProfile() {
             return Boolean(this.ticket && this.ticket.user && this.ticket.user.id);
         },
-        userAppProfileRoute() {
-            return { name: 'profile', params: { id: this.ticket.user.id } };
-        },
         userAdminProfileRoute() {
-            return { name: 'admin-users-user', params: { userId: this.ticket.user.id } };
+            return getAdminUserProfileRoute(this.ticket.user.id);
         },
         backToTicketsRoute() {
             return { name: 'admin-support-tickets' };

@@ -66,7 +66,7 @@
                                 <span class="support-tickets-table__owner-sep" aria-hidden="true"> · </span>
                                 <router-link
                                     v-if="canLinkTicketOwnerProfile(ticket)"
-                                    :to="ticketOwnerAppProfileRoute(ticket)"
+                                    :to="ticketOwnerAdminProfileRoute(ticket)"
                                 >{{ ticketOwnerDisplayName(ticket) }}</router-link>
                                 <span v-else>{{ ticketOwnerDisplayName(ticket) }}</span>
                             </span>
@@ -109,10 +109,7 @@ import {
     parseAdminSupportTicketListFiltersFromRoute
 } from '../../utils/adminSupportTicketListFilters';
 import { getUpdatedAgeAttentionClass, hasUnreadUserReplyIndicator } from '../../utils/supportTicketUpdatedAgeAttention';
-
-function userAppProfileLocation(userId) {
-    return { name: 'profile', params: { id: userId } };
-}
+import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
 
 const ticketTypeOptions = USER_TICKET_TYPE_OPTIONS;
 
@@ -242,8 +239,8 @@ export default {
         canLinkTicketOwnerProfile(ticket) {
             return Boolean(ticket && ticket.user && ticket.user.id);
         },
-        ticketOwnerAppProfileRoute(ticket) {
-            return userAppProfileLocation(ticket.user.id);
+        ticketOwnerAdminProfileRoute(ticket) {
+            return getAdminUserProfileRoute(ticket.user.id);
         },
         ticketOwnerDisplayName(ticket) {
             const u = ticket && ticket.user;

@@ -46,10 +46,11 @@ describe('AdminSupportTickets view', () => {
         expect(viewSource).toContain('support-tickets-table__owner');
     });
 
-    it('links ticket owner display name to the public profile route when linkable', () => {
+    it('links ticket owner display name to the admin user profile route when linkable', () => {
         expect(viewSource).toContain('canLinkTicketOwnerProfile(ticket)');
-        expect(viewSource).toContain('ticketOwnerAppProfileRoute(ticket)');
-        expect(viewSource).toContain("name: 'profile'");
+        expect(viewSource).toContain('ticketOwnerAdminProfileRoute(ticket)');
+        expect(viewSource).toContain('getAdminUserProfileRoute');
+        expect(viewSource).not.toContain("name: 'profile'");
     });
 
     it('uses compact narrow columns and a wide subject column class', () => {

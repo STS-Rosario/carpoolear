@@ -17,10 +17,11 @@ describe('AdminUserRecommendations view', () => {
 });
 
 describe('AdminReferenceCard', () => {
-    it('shows reference id, author link, comment, and edit on one row', () => {
+    it('shows reference id, author admin profile link, comment, and edit on one row', () => {
         expect(cardSource).toContain('admin-reference-card__row');
         expect(cardSource).toContain('admin-reference-card__id');
-        expect(cardSource).toContain("name: 'profile'");
+        expect(cardSource).toContain('getAdminUserProfileRoute');
+        expect(cardSource).not.toContain("name: 'profile'");
         expect(cardSource).toContain('reference.comment');
         expect(cardSource).toContain('adminUsuariosEditarFila');
     });

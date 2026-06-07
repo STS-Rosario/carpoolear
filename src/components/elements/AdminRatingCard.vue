@@ -25,10 +25,7 @@
                     <span class="admin-rating-card__sep" aria-hidden="true">·</span>
                     <router-link
                         class="admin-rating-card__user"
-                        :to="{
-                            name: 'profile',
-                            params: { id: counterparty.id }
-                        }"
+                        :to="getAdminUserProfileRoute(counterparty.id)"
                     >
                         {{ counterparty.name }}
                     </router-link>
@@ -119,6 +116,8 @@
 </template>
 
 <script>
+import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
+
 export default {
     name: 'admin-rating-card',
     props: {
@@ -148,6 +147,9 @@ export default {
         }
     },
     emits: ['edit', 'save', 'cancel', 'update:editForm'],
+    methods: {
+        getAdminUserProfileRoute
+    },
     computed: {
         pillClass() {
             return Number(this.rate.rating) === 1

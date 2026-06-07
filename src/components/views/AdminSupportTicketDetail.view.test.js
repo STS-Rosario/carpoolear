@@ -20,11 +20,12 @@ describe('AdminSupportTicketDetail view', () => {
         expect(viewSource).toContain('ticket-priority-label');
     });
 
-    it('shows user name with app profile link and admin profile link label', () => {
+    it('links non-admin reply authors to the admin user profile', () => {
         expect(viewSource).toContain('replyAuthorLabel(reply)');
-        expect(viewSource).toContain("name: 'profile'");
-        expect(viewSource).toContain("name: 'admin-users-user'");
-        expect(viewSource).toContain("{{ $t('verPerfilEnAdmin') }}");
+        expect(viewSource).toContain('userAdminProfileRoute()');
+        expect(viewSource).toContain('getAdminUserProfileRoute');
+        expect(viewSource).not.toContain("name: 'profile'");
+        expect(viewSource).not.toContain("{{ $t('verPerfilEnAdmin') }}");
     });
 
     it('shows Carpoolear team plus admin name and id for staff replies', () => {

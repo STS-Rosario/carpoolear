@@ -21,11 +21,12 @@ describe('AdminUserRatings view', () => {
 });
 
 describe('AdminRatingCard', () => {
-    it('shows rating id, trip link, profile link, pill, and comment', () => {
+    it('shows rating id, trip link, admin profile link, pill, and comment', () => {
         expect(cardSource).toContain('admin-rating-card__row');
         expect(cardSource).toContain('admin-rating-card__id');
         expect(cardSource).toContain("name: 'detail_trip'");
-        expect(cardSource).toContain("name: 'profile'");
+        expect(cardSource).toContain('getAdminUserProfileRoute');
+        expect(cardSource).not.toContain("name: 'profile'");
         expect(cardSource).toContain('admin-rating-pill--positive');
         expect(cardSource).toContain('admin-rating-pill--negative');
         expect(cardSource).toContain('rate.comment');
