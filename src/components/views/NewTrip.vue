@@ -1904,6 +1904,7 @@ import {
     priceInputNumberFromStoredSeatPriceCents,
     seatPriceCentsForApi
 } from '../../utils/tripSeatPrice.js';
+import { seatPriceCentsFromTripPriceCents } from '../../utils/tripPriceOccupants.js';
 import {
     activeCarsWithPlate,
     hasDriverPlate,
@@ -2203,14 +2204,12 @@ export default {
         no_lucrar: function () {
             this.lucrarError.state = false;
         },
-        'trip.total_seats': function(newValue) {
+        'trip.rear_max_two_passengers': function() {
             if (this.trip.distance > 0) {
-                // The maximum_trip_price_cents is constant based on distance
-                // We just need to recalculate the per-seat prices
                 this.recalculateRecommendedPrice();
             }
         },
-        'otherTrip.trip.total_seats': function(newValue) {
+        'otherTrip.trip.rear_max_two_passengers': function() {
             if (this.otherTrip.trip.distance > 0) {
                 this.recalculateRecommendedReturnPrice();
             }
@@ -3253,14 +3252,25 @@ export default {
             }
         },
         recalculateRecommendedPrice() {
-            // The maximum_trip_price_cents is the total price for the entire trip (including driver)
-            this.maximum_seat_price_cents = Math.round(this.maximum_trip_price_cents / (this.trip.total_seats + 1));
-            this.recommended_seat_price_cents = Math.round(this.recommended_trip_price_cents / (this.trip.total_seats + 1));
+            this.maximum_seat_price_cents = seatPriceCentsFromTripPriceCents(
+                this.maximum_trip_price_cents,
+                this.trip.rear_max_two_passengers
+            );
+            this.recommended_seat_price_cents = seatPriceCentsFromTripPriceCents(
+                this.recommended_trip_price_cents,
+                this.trip.rear_max_two_passengers
+            );
             this.validatePrice();
         },
         recalculateRecommendedReturnPrice() {
-            this.maximum_return_seat_price_cents = Math.round(this.maximum_return_trip_price_cents / (this.otherTrip.trip.total_seats + 1));
-            this.recommended_return_seat_price_cents = Math.round(this.recommended_return_trip_price_cents / (this.otherTrip.trip.total_seats + 1));
+            this.maximum_return_seat_price_cents = seatPriceCentsFromTripPriceCents(
+                this.maximum_return_trip_price_cents,
+                this.otherTrip.trip.rear_max_two_passengers
+            );
+            this.recommended_return_seat_price_cents = seatPriceCentsFromTripPriceCents(
+                this.recommended_return_trip_price_cents,
+                this.otherTrip.trip.rear_max_two_passengers
+            );
             this.validateReturnPrice();
         },
         validateReturnPrice() {

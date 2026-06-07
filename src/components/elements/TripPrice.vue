@@ -77,6 +77,7 @@ import {
     isVoluntaryContributionSeatPrice,
     shouldShowTripSeatPriceSection
 } from '../../utils/tripSeatPrice.js';
+import { seatPriceCentsFromTripPriceCents } from '../../utils/tripPriceOccupants.js';
 import SvgItem from '../SvgItem';
 export default {
     name: 'TripSeats',
@@ -117,14 +118,13 @@ export default {
             return base;
         },
         recommendedPricePerSeat() {
-            // Same unit as trip.seat_price_cents / 100 (main currency) so $n(..., 'currency') formats like trip detail
             const toDisplayAmount = (value) => Math.round(value * 100) / 100;
 
-            if (this.trip.recommended_seat_price_cents != null) {
-                return this.trip.recommended_seat_price_cents / 100;
-            }
             if (this.trip.recommended_trip_price_cents) {
-                const perSeat = this.trip.recommended_trip_price_cents / 100 / (this.trip.total_seats + 1);
+                const perSeat = seatPriceCentsFromTripPriceCents(
+                    this.trip.recommended_trip_price_cents,
+                    this.trip.rear_max_two_passengers
+                ) / 100;
                 return toDisplayAmount(perSeat);
             }
             // Calculate from scratch
@@ -138,7 +138,10 @@ export default {
             const basePriceCents = Math.round(distanceInKm * pricePerKilometer * 100);
             const tollsVarianceCents = Math.round(basePriceCents * (tollsVariancePercent / 100));
             const recommendedTripPriceCents = basePriceCents + tollsVarianceCents + (selladoViajePrice * 100);
-            const recommendedPricePerSeat = recommendedTripPriceCents / 100 / (this.trip.total_seats + 1);
+            const recommendedPricePerSeat = seatPriceCentsFromTripPriceCents(
+                recommendedTripPriceCents,
+                this.trip.rear_max_two_passengers
+            ) / 100;
             return toDisplayAmount(recommendedPricePerSeat);
         }
     },
