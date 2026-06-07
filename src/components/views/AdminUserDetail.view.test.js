@@ -46,4 +46,19 @@ describe('AdminUserDetail view', () => {
         expect(source).toContain('user.references');
         expect(source).toContain('adminUserNavLabel(');
     });
+
+    it('highlights banned status at the top with colored banner', () => {
+        expect(source).toContain('getAdminUserBannedBanner');
+        expect(source).toContain('admin-user-detail__status');
+        expect(source).toContain('bannedBanner.modifier');
+        expect(source).toContain("'alert-' + bannedBanner.modifier");
+    });
+
+    it('renders all user properties from the admin profile payload', () => {
+        expect(source).toContain('buildAdminUserPropertyRows');
+        expect(source).toContain('admin-user-detail__properties');
+        expect(source).toContain('propertyRows');
+        expect(source).toContain('row.label');
+        expect(source).toContain('row.value');
+    });
 });
