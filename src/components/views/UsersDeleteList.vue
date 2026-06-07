@@ -80,11 +80,10 @@
                                 <label>{{ $t('usuarioLabel') }} {{ currentRequest.user.name }}</label>
                                 <div style="margin-top: 8px;">
                                     <router-link
-                                        :to="{ name: 'profile', params: { id: currentRequest.user.id } }"
-                                        target="_blank"
+                                        :to="getAdminUserProfileRoute(currentRequest.user.id)"
                                         class="btn btn-link btn-sm"
                                     >
-                                        {{ $t('verPerfilPublico') }}
+                                        {{ $t('verPerfilEnAdmin') }}
                                     </router-link>
                                     <router-link
                                         :to="{ name: 'admin-users-edit', params: { userId: String(currentRequest.user.id) } }"
@@ -140,6 +139,7 @@ import Spinner from '../Spinner.vue';
 import { AdminApi } from '../../services/api';
 import dialogs from '../../services/dialogs.js';
 import dayjs from '../../dayjs';
+import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
 
 export default {
     name: 'admin-users-delete-list',
@@ -157,6 +157,7 @@ export default {
         };
     },
     methods: {
+        getAdminUserProfileRoute,
         formatDate(dateString) {
             if (!dateString) return '-';
             return dayjs(dateString).format('DD/MM/YYYY HH:mm');

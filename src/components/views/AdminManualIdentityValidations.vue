@@ -40,8 +40,7 @@
                                 <td>
                                     <router-link
                                         v-if="item.user_id"
-                                        :to="{ name: 'profile', params: { id: item.user_id } }"
-                                        target="_blank"
+                                        :to="getAdminUserProfileRoute(item.user_id)"
                                         class="btn btn-link btn-sm"
                                     >
                                         {{ $t('verPerfil') }}
@@ -73,6 +72,7 @@
 import AdminLayout from '../layouts/AdminLayout.vue';
 import Loading from '../Loading';
 import { AdminApi } from '../../services/api';
+import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
 
 export default {
     name: 'AdminManualIdentityValidations',
@@ -82,6 +82,7 @@ export default {
         };
     },
     methods: {
+        getAdminUserProfileRoute,
         formatDate(value) {
             if (!value) return '-';
             return new Date(value).toLocaleString();
