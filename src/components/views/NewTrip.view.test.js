@@ -69,4 +69,20 @@ describe('NewTrip.vue rear seat comfort preference', () => {
             /recalculateRecommendedPrice\(\)[\s\S]*?this\.trip\.total_seats \+ 1/s
         );
     });
+
+    it('blocks rear max two with 4 seats and shows validation message', () => {
+        expect(viewSource).toMatch(/from '\.\.\/\.\.\/utils\/tripRearComfortSeats\.js'/);
+        expect(viewSource).toContain('isRearMaxTwoCompatibleWithSeats');
+        expect(viewSource).toContain('onOutboundRearMaxTwoChange');
+        expect(viewSource).toContain('onReturnRearMaxTwoChange');
+        expect(viewSource).toContain('onOutboundTotalSeatsChange');
+        expect(viewSource).toContain('onReturnTotalSeatsChange');
+        expect(viewSource).toContain("$t('rearMaxTwoRequiresThreeOrFewerSeats')");
+        expect(viewSource).toMatch(
+            /id="newtrip-comfort-rear-max-two"[\s\S]*?@change="onOutboundRearMaxTwoChange"/s
+        );
+        expect(viewSource).toMatch(
+            /id="otherTrip-comfort-rear-max-two"[\s\S]*?@change="onReturnRearMaxTwoChange"/s
+        );
+    });
 });
