@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest';
 import {
     MAX_AVAILABLE_SEATS_WITH_REAR_MAX_TWO,
     isRearMaxTwoCompatibleWithSeats,
-    rearMaxTwoRequiresThreeOrFewerSeats
+    rearMaxTwoRequiresThreeOrFewerSeats,
+    shouldBlockSeatSelection
 } from './tripRearComfortSeats.js';
 
 describe('tripRearComfortSeats', () => {
@@ -36,6 +37,16 @@ describe('tripRearComfortSeats', () => {
         it('is false for compatible combinations', () => {
             expect(rearMaxTwoRequiresThreeOrFewerSeats(3, true)).toBe(false);
             expect(rearMaxTwoRequiresThreeOrFewerSeats(4, false)).toBe(false);
+        });
+    });
+
+    describe('shouldBlockSeatSelection', () => {
+        it('blocks selecting 4 seats when rear max two is enabled', () => {
+            expect(shouldBlockSeatSelection(4, true)).toBe(true);
+        });
+
+        it('allows selecting up to 3 seats when rear max two is enabled', () => {
+            expect(shouldBlockSeatSelection(3, true)).toBe(false);
         });
     });
 });

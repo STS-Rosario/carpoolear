@@ -459,42 +459,90 @@
                                                 : $t('cuposNecesarios')
                                         }}
                                     </span>
-                                    <span v-if="tripCardTheme !== 'light'">
+                                    <span
+                                        v-if="tripCardTheme !== 'light'"
+                                        :key="
+                                            'outbound-seats-' +
+                                            trip.total_seats +
+                                            '-' +
+                                            outboundSeatsRadioRevision
+                                        "
+                                    >
                                         <span class="radio-inline">
                                             <input
                                                 type="radio"
                                                 id="seats-one"
+                                                name="newtrip-outbound-total-seats"
                                                 :value="1"
                                                 v-model.number="trip.total_seats"
+                                                @mousedown="
+                                                    onOutboundSeatRadioAttempt(1, $event)
+                                                "
                                             />
-                                            <label for="seats-one">1</label>
+                                            <label
+                                                for="seats-one"
+                                                @mousedown="
+                                                    onOutboundSeatRadioAttempt(1, $event)
+                                                "
+                                                >1</label
+                                            >
                                         </span>
                                         <span class="radio-inline">
                                             <input
                                                 type="radio"
                                                 id="seats-two"
+                                                name="newtrip-outbound-total-seats"
                                                 :value="2"
                                                 v-model.number="trip.total_seats"
+                                                @mousedown="
+                                                    onOutboundSeatRadioAttempt(2, $event)
+                                                "
                                             />
-                                            <label for="seats-two">2</label>
+                                            <label
+                                                for="seats-two"
+                                                @mousedown="
+                                                    onOutboundSeatRadioAttempt(2, $event)
+                                                "
+                                                >2</label
+                                            >
                                         </span>
                                         <span class="radio-inline">
                                             <input
                                                 type="radio"
                                                 id="seats-three"
+                                                name="newtrip-outbound-total-seats"
                                                 :value="3"
                                                 v-model.number="trip.total_seats"
+                                                @mousedown="
+                                                    onOutboundSeatRadioAttempt(3, $event)
+                                                "
                                             />
-                                            <label for="seats-three">3</label>
+                                            <label
+                                                for="seats-three"
+                                                @mousedown="
+                                                    onOutboundSeatRadioAttempt(3, $event)
+                                                "
+                                                >3</label
+                                            >
                                         </span>
                                         <span class="radio-inline">
                                             <input
                                                 type="radio"
                                                 id="seats-four"
+                                                name="newtrip-outbound-total-seats"
                                                 :value="4"
                                                 v-model.number="trip.total_seats"
+                                                @mousedown="
+                                                    onOutboundSeatRadioAttempt(4, $event)
+                                                "
                                             />
-                                            <label for="seats-four">4</label>
+                                            <label
+                                                for="seats-four"
+                                                @mousedown="
+                                                    onOutboundSeatRadioAttempt(4, $event)
+                                                "
+                                                >4</label
+                                            >
                                         </span>
                                     </span>
                                     <span
@@ -1402,17 +1450,33 @@
                                                 : $t('lugaresDisponibles')
                                         }}
                                     </span>
-                                    <span v-if="tripCardTheme !== 'light'">
+                                    <span
+                                        v-if="tripCardTheme !== 'light'"
+                                        :key="
+                                            'return-seats-' +
+                                            otherTrip.trip.total_seats +
+                                            '-' +
+                                            returnSeatsRadioRevision
+                                        "
+                                    >
                                         <span class="radio-inline">
                                             <input
                                                 type="radio"
                                                 id="otherTrip-seats-one"
+                                                name="newtrip-return-total-seats"
                                                 :value="1"
                                                 v-model.number="
                                                     otherTrip.trip.total_seats
                                                 "
+                                                @mousedown="
+                                                    onReturnSeatRadioAttempt(1, $event)
+                                                "
                                             />
-                                            <label for="otherTrip-seats-one"
+                                            <label
+                                                for="otherTrip-seats-one"
+                                                @mousedown="
+                                                    onReturnSeatRadioAttempt(1, $event)
+                                                "
                                                 >1</label
                                             >
                                         </span>
@@ -1420,12 +1484,20 @@
                                             <input
                                                 type="radio"
                                                 id="otherTrip-seats-two"
+                                                name="newtrip-return-total-seats"
                                                 :value="2"
                                                 v-model.number="
                                                     otherTrip.trip.total_seats
                                                 "
+                                                @mousedown="
+                                                    onReturnSeatRadioAttempt(2, $event)
+                                                "
                                             />
-                                            <label for="otherTrip-seats-two"
+                                            <label
+                                                for="otherTrip-seats-two"
+                                                @mousedown="
+                                                    onReturnSeatRadioAttempt(2, $event)
+                                                "
                                                 >2</label
                                             >
                                         </span>
@@ -1433,12 +1505,20 @@
                                             <input
                                                 type="radio"
                                                 id="otherTrip-seats-three"
+                                                name="newtrip-return-total-seats"
                                                 :value="3"
                                                 v-model.number="
                                                     otherTrip.trip.total_seats
                                                 "
+                                                @mousedown="
+                                                    onReturnSeatRadioAttempt(3, $event)
+                                                "
                                             />
-                                            <label for="otherTrip-seats-three"
+                                            <label
+                                                for="otherTrip-seats-three"
+                                                @mousedown="
+                                                    onReturnSeatRadioAttempt(3, $event)
+                                                "
                                                 >3</label
                                             >
                                         </span>
@@ -1446,12 +1526,20 @@
                                             <input
                                                 type="radio"
                                                 id="otherTrip-seats-four"
+                                                name="newtrip-return-total-seats"
                                                 :value="4"
                                                 v-model.number="
                                                     otherTrip.trip.total_seats
                                                 "
+                                                @mousedown="
+                                                    onReturnSeatRadioAttempt(4, $event)
+                                                "
                                             />
-                                            <label for="otherTrip-seats-four"
+                                            <label
+                                                for="otherTrip-seats-four"
+                                                @mousedown="
+                                                    onReturnSeatRadioAttempt(4, $event)
+                                                "
                                                 >4</label
                                             >
                                         </span>
@@ -1921,7 +2009,7 @@ import {
     seatPriceCentsForApi
 } from '../../utils/tripSeatPrice.js';
 import { seatPriceCentsFromTripPriceCents } from '../../utils/tripPriceOccupants.js';
-import { isRearMaxTwoCompatibleWithSeats } from '../../utils/tripRearComfortSeats.js';
+import { isRearMaxTwoCompatibleWithSeats, shouldBlockSeatSelection } from '../../utils/tripRearComfortSeats.js';
 import {
     activeCarsWithPlate,
     hasDriverPlate,
@@ -2038,6 +2126,8 @@ export default {
                 '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
             showReturnTrip: false,
             showRearMaxTwoSeatsConflictModal: false,
+            outboundSeatsRadioRevision: 0,
+            returnSeatsRadioRevision: 0,
             otherTrip: {
                 minDate: dayjs().toDate(),
                 dateError: new Error(),
@@ -3312,7 +3402,38 @@ export default {
                 return;
             }
             tripRef.total_seats = oldValue;
+            if (tripRef === this.trip) {
+                this.outboundSeatsRadioRevision += 1;
+            } else {
+                this.returnSeatsRadioRevision += 1;
+            }
             this.showRearMaxTwoSeatsConflictMessage();
+        },
+        onOutboundSeatRadioAttempt(seats, event) {
+            if (
+                shouldBlockSeatSelection(
+                    seats,
+                    this.trip.rear_max_two_passengers
+                )
+            ) {
+                event.preventDefault();
+                event.stopPropagation();
+                this.outboundSeatsRadioRevision += 1;
+                this.showRearMaxTwoSeatsConflictMessage();
+            }
+        },
+        onReturnSeatRadioAttempt(seats, event) {
+            if (
+                shouldBlockSeatSelection(
+                    seats,
+                    this.otherTrip.trip.rear_max_two_passengers
+                )
+            ) {
+                event.preventDefault();
+                event.stopPropagation();
+                this.returnSeatsRadioRevision += 1;
+                this.showRearMaxTwoSeatsConflictMessage();
+            }
         },
         onOutboundRearMaxTwoChange(event) {
             const wantsChecked = event.target.checked;

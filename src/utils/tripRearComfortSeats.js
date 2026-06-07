@@ -16,3 +16,7 @@ export function rearMaxTwoRequiresThreeOrFewerSeats(
 ) {
     return !isRearMaxTwoCompatibleWithSeats(totalSeats, rearMaxTwoPassengers);
 }
+
+export function shouldBlockSeatSelection(totalSeats, rearMaxTwoPassengers) {
+    return rearMaxTwoRequiresThreeOrFewerSeats(totalSeats, rearMaxTwoPassengers);
+}
