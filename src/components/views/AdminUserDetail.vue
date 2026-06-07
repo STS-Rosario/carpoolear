@@ -169,15 +169,12 @@ export default {
             return getAdminUserBannedBanner(this.user, this.$t.bind(this));
         },
         propertyRows() {
-            const rows = buildAdminUserPropertyRows(this.user, {
-                translate: this.$t.bind(this)
+            return buildAdminUserPropertyRows(this.user, {
+                translate: this.$t.bind(this),
+                showFacebookProfileUrl: !!(
+                    this.config && this.config.module_facebook_profile_url_enabled
+                )
             });
-
-            if (this.config && this.config.module_facebook_profile_url_enabled) {
-                return rows;
-            }
-
-            return rows.filter((row) => row.key !== 'facebook_profile_url');
         }
     },
     methods: {

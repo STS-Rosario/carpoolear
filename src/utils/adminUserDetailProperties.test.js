@@ -100,4 +100,13 @@ describe('buildAdminUserPropertyRows', () => {
         expect(bannedIndex).toBeGreaterThanOrEqual(0);
         expect(bannedIndex).toBeLessThan(emailIndex);
     });
+
+    it('hides facebook profile url when module flag is disabled', () => {
+        const rows = buildAdminUserPropertyRows(
+            { ...sampleUser, facebook_profile_url: 'https://facebook.com/jane' },
+            { translate, showFacebookProfileUrl: false }
+        );
+
+        expect(rows.find((row) => row.key === 'facebook_profile_url')).toBeUndefined();
+    });
 });

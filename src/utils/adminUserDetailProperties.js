@@ -129,12 +129,15 @@ export function getAdminUserBannedBanner(user, translate) {
     };
 }
 
-export function buildAdminUserPropertyRows(user, { translate }) {
+export function buildAdminUserPropertyRows(
+    user,
+    { translate, showFacebookProfileUrl = true }
+) {
     if (!user) {
         return [];
     }
 
-    return ADMIN_USER_PROPERTY_DEFINITIONS.map((definition) => ({
+    const rows = ADMIN_USER_PROPERTY_DEFINITIONS.map((definition) => ({
         key: definition.key,
         label: resolvePropertyLabel(definition, translate),
         value: formatAdminUserPropertyValue(
@@ -142,4 +145,10 @@ export function buildAdminUserPropertyRows(user, { translate }) {
             definition.type || 'text'
         )
     }));
+
+    if (showFacebookProfileUrl) {
+        return rows;
+    }
+
+    return rows.filter((row) => row.key !== 'facebook_profile_url');
 }
