@@ -98,4 +98,22 @@ describe('NewTrip.vue rear seat comfort preference', () => {
             /id="otherTrip-comfort-rear-max-two"[\s\S]*?@change="onReturnRearMaxTwoChange"/s
         );
     });
+
+    it('keeps one seat radio selected when rejecting 4 seats with rear max two', () => {
+        expect(viewSource).toMatch(
+            /id="seats-four"[\s\S]*?v-model\.number="trip\.total_seats"/s
+        );
+        expect(viewSource).toMatch(
+            /id="otherTrip-seats-four"[\s\S]*?v-model\.number="\s*otherTrip\.trip\.total_seats\s*"/s
+        );
+        expect(viewSource).toMatch(
+            /'trip\.total_seats':\s*function\s*\(newValue,\s*oldValue\)[\s\S]*?isRearMaxTwoCompatibleWithSeats\([\s\S]*?this\.trip\.total_seats = oldValue/s
+        );
+        expect(viewSource).toMatch(
+            /'otherTrip\.trip\.total_seats':\s*function\s*\(newValue,\s*oldValue\)[\s\S]*?isRearMaxTwoCompatibleWithSeats\([\s\S]*?this\.otherTrip\.trip\.total_seats = oldValue/s
+        );
+        expect(viewSource).not.toMatch(
+            /id="seats-four"[\s\S]*?:checked="trip\.total_seats === 4"/s
+        );
+    });
 });
