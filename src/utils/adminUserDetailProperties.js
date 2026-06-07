@@ -79,6 +79,10 @@ function isTruthyFlag(value) {
     return Number(value) > 0;
 }
 
+function isUserBanned(user) {
+    return isTruthyFlag(user?.banned);
+}
+
 export function formatAdminUserPropertyValue(value, type = 'text') {
     if (type === 'boolean') {
         if (value === null || value === undefined || value === '') {
@@ -112,9 +116,7 @@ function resolvePropertyLabel(definition, translate) {
 }
 
 export function getAdminUserBannedBanner(user, translate) {
-    const isBanned = Number(user?.banned) > 0;
-
-    if (isBanned) {
+    if (isUserBanned(user)) {
         return {
             label: translate('usuarioSuspendido'),
             modifier: 'danger'
