@@ -62,7 +62,7 @@ describe('buildAdminUserPropertyRows', () => {
         });
         expect(rows.find((row) => row.key === 'banned')).toEqual({
             key: 'banned',
-            label: 'usuarioSuspendido',
+            label: 'Usuario suspendido',
             value: 'No'
         });
         expect(rows.find((row) => row.key === 'has_pin')).toEqual({
