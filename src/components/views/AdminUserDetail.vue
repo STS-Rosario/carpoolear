@@ -23,6 +23,13 @@
                         v-else-if="user"
                         class="user-settings settings-container user-admin-view"
                     >
+                        <div
+                            class="admin-user-detail__status alert"
+                            :class="'alert-' + bannedBanner.modifier"
+                            role="status"
+                        >
+                            <strong>{{ bannedBanner.label }}</strong>
+                        </div>
                         <h3>
                             {{ user.name }}
                             <small class="text-muted">#{{ user.id }}</small>
@@ -37,35 +44,29 @@
                                 {{ $t('verPerfilPublico') }}
                             </router-link>
                         </p>
-                        <p>
-                            <strong>{{ $t('eMail') }}:</strong>
-                            {{ user.email || '—' }}
-                        </p>
-                        <p>
-                            <strong>{{ $t('numeroDeTelefono') }}:</strong>
-                            {{ user.mobile_phone || '—' }}
-                        </p>
-                        <p>
-                            <strong>{{ $t('doc') }}:</strong>
-                            {{ user.nro_doc || '—' }}
-                        </p>
-                        <p v-if="config && config.module_facebook_profile_url_enabled">
-                            <strong>Perfil de Facebook:</strong>
-                            <span v-if="user.facebook_profile_url">
-                                <a
-                                    :href="user.facebook_profile_url"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    {{ user.facebook_profile_url }}
-                                </a>
-                            </span>
-                            <span v-else>—</span>
-                        </p>
-                        <p>
-                            <strong>{{ $t('ultimaConexion') }}</strong>
-                            {{ user.last_connection || '—' }}
-                        </p>
+                        <dl class="admin-user-detail__properties">
+                            <div
+                                v-for="row in propertyRows"
+                                :key="row.key"
+                                class="admin-user-detail__property"
+                            >
+                                <dt>{{ row.label }}</dt>
+                                <dd>
+                                    <a
+                                        v-if="
+                                            row.key === 'facebook_profile_url' &&
+                                            row.value !== '—'
+                                        "
+                                        :href="row.value"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        {{ row.value }}
+                                    </a>
+                                    <span v-else>{{ row.value }}</span>
+                                </dd>
+                            </div>
+                        </dl>
                         <p class="user-admin-view-nav">
                             <router-link
                                 :to="{
@@ -143,6 +144,10 @@ import { useAuthStore } from '../../stores/auth';
 import AdminLayout from '../layouts/AdminLayout.vue';
 import { adminUserSupportTicketsRoute } from '../../utils/adminUserSupportTicketsLink';
 import { formatAdminUserNavLabelFromKey } from '../../utils/adminUserNavLabel';
+import {
+    buildAdminUserPropertyRows,
+    getAdminUserBannedBanner
+} from '../../utils/adminUserDetailProperties';
 import router from '../../router';
 import { UserApi } from '../../services/api';
 import dialogs from '../../services/dialogs.js';
@@ -159,7 +164,21 @@ export default {
     computed: {
         ...mapState(useAuthStore, {
             config: 'appConfig'
-        })
+        }),
+        bannedBanner() {
+            return getAdminUserBannedBanner(this.user, this.$t.bind(this));
+        },
+        propertyRows() {
+            const rows = buildAdminUserPropertyRows(this.user, {
+                translate: this.$t.bind(this)
+            });
+
+            if (this.config && this.config.module_facebook_profile_url_enabled) {
+                return rows;
+            }
+
+            return rows.filter((row) => row.key !== 'facebook_profile_url');
+        }
     },
     methods: {
         ...mapActions(useConversationsStore, {
@@ -258,5 +277,35 @@ export default {
 
 .admin-user-detail__back {
     margin-bottom: 12px;
+}
+
+.admin-user-detail__status {
+    margin-bottom: 16px;
+}
+
+.admin-user-detail__properties {
+    margin: 0 0 16px;
+}
+
+.admin-user-detail__property {
+    display: grid;
+    grid-template-columns: minmax(140px, 32%) 1fr;
+    gap: 8px 16px;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.admin-user-detail__property:last-child {
+    border-bottom: none;
+}
+
+.admin-user-detail__property dt {
+    margin: 0;
+    font-weight: 600;
+}
+
+.admin-user-detail__property dd {
+    margin: 0;
+    word-break: break-word;
 }
 </style>
