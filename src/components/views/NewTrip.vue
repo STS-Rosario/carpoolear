@@ -1858,6 +1858,19 @@
                 </span>
             </button>
         </div>
+
+        <modal
+            name="newtrip-rear-comfort-seats-conflict"
+            v-if="showRearMaxTwoSeatsConflictModal"
+            @close="closeRearMaxTwoSeatsConflictModal"
+        >
+            <template #header><h3>
+                <span>{{ $t('priorizarComodidad') }}</span>
+            </h3></template>
+            <template #body><div class="text-left color-black">
+                <p>{{ $t('rearMaxTwoRequiresThreeOrFewerSeats') }}</p>
+            </div></template>
+        </modal>
     </div>
 </template>
 <script>
@@ -1871,6 +1884,7 @@ import { appLocaleToRoutingLanguage } from '../../main';
 import { leafletOsrmServiceUrl } from '../../utils/osrmRouting';
 // import { parseOsmStreet } from '../../services/maps.js';
 import DatePicker from '../DatePicker';
+import modal from '../Modal';
 import dialogs from '../../services/dialogs.js';
 import spinner from '../Spinner.vue';
 import dayjs from '../../dayjs';
@@ -1922,7 +1936,8 @@ export default {
         WeeklySchedule,
         SvgItem,
         autocomplete,
-        spinner
+        spinner,
+        modal
     },
     data() {
         return {
@@ -2004,6 +2019,7 @@ export default {
             attribution:
                 '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
             showReturnTrip: false,
+            showRearMaxTwoSeatsConflictModal: false,
             otherTrip: {
                 minDate: dayjs().toDate(),
                 dateError: new Error(),
@@ -3248,10 +3264,10 @@ export default {
             this.validatePrice();
         },
         showRearMaxTwoSeatsConflictMessage() {
-            dialogs.alert(
-                this.$t('rearMaxTwoRequiresThreeOrFewerSeats'),
-                { okLabel: this.$t('entendido') }
-            );
+            this.showRearMaxTwoSeatsConflictModal = true;
+        },
+        closeRearMaxTwoSeatsConflictModal() {
+            this.showRearMaxTwoSeatsConflictModal = false;
         },
         onOutboundTotalSeatsChange(totalSeats) {
             const seats = Number(totalSeats);
