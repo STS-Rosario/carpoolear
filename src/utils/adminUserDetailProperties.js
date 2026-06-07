@@ -5,7 +5,6 @@ const ADMIN_USER_PROPERTY_DEFINITIONS = [
     { key: 'banned', labelKey: 'usuarioSuspendido', type: 'boolean' },
     { key: 'active', labelKey: 'usuarioActivo', type: 'boolean' },
     { key: 'name', labelKey: 'nombreYApellido' },
-    { key: 'username', labelKey: 'username' },
     { key: 'email', labelKey: 'eMail' },
     { key: 'mobile_phone', labelKey: 'numeroDeTelefono' },
     { key: 'phone_verified', labelKey: 'phone_verified', type: 'boolean' },
