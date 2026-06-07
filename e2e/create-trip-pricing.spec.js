@@ -1,8 +1,9 @@
 const { test, expect } = require('@playwright/test');
 const { uiLogin } = require('./helpers');
 
-function expectedSeatPriceCents(totalTripPriceCents, availableSeats) {
-  return Math.round(totalTripPriceCents / (availableSeats + 1));
+function expectedSeatPriceCents(totalTripPriceCents, rearMaxTwoPassengers) {
+  const occupants = rearMaxTwoPassengers ? 4 : 5;
+  return Math.round(totalTripPriceCents / occupants);
 }
 
 function parseCurrencyTextToUnits(text) {
@@ -115,7 +116,7 @@ async function setupRouteMocks(page, mockedTripInfo) {
 test.describe('Trip creation recommended contribution', () => {
   test.setTimeout(120000);
 
-  test('recalculates Contribución promedio with seats + driver divisor', async ({ page }) => {
+  test('recalculates Contribución promedio with comfort preference divisor', async ({ page }) => {
     const mockedTripInfo = {
       distance: 291088.8,
       duration: 11805.6,
@@ -149,18 +150,26 @@ test.describe('Trip creation recommended contribution', () => {
 
     await expect(page.locator('.trip-contribucion-recomendada-card__main strong').first()).toBeVisible({ timeout: 15000 });
 
-    // Seats = 2 => divide by (2 + 1)
-    await page.click('label[for="seats-two"]');
-    const seatsTwoExpectedUnits = Math.round(expectedSeatPriceCents(mockedTripInfo.recommended_trip_price_cents, 2) / 100);
-    const seatsTwoText = await page.locator('.trip-contribucion-recomendada-card__main strong').first().innerText();
-    expect(parseCurrencyTextToUnits(seatsTwoText)).toBe(seatsTwoExpectedUnits);
+    const comfortCheckbox = page.locator('#newtrip-comfort-rear-max-two');
 
-    // Seats = 4 => divide by (4 + 1)
-    await page.click('label[for="seats-four"]');
-    const seatsFourExpectedUnits = Math.round(expectedSeatPriceCents(mockedTripInfo.recommended_trip_price_cents, 4) / 100);
+    // Default unchecked => divide by 5 occupants
+    const defaultExpectedUnits = Math.round(expectedSeatPriceCents(mockedTripInfo.recommended_trip_price_cents, false) / 100);
+    const defaultText = await page.locator('.trip-contribucion-recomendada-card__main strong').first().innerText();
+    expect(parseCurrencyTextToUnits(defaultText)).toBe(defaultExpectedUnits);
+
+    // Checked => divide by 4 occupants
+    await comfortCheckbox.check();
+    const comfortExpectedUnits = Math.round(expectedSeatPriceCents(mockedTripInfo.recommended_trip_price_cents, true) / 100);
     await expect.poll(async () => {
       const text = await page.locator('.trip-contribucion-recomendada-card__main strong').first().innerText();
       return parseCurrencyTextToUnits(text);
-    }).toBe(seatsFourExpectedUnits);
+    }).toBe(comfortExpectedUnits);
+
+    // Changing seat count must not alter recommended contribution
+    await page.click('label[for="seats-four"]');
+    await expect.poll(async () => {
+      const text = await page.locator('.trip-contribucion-recomendada-card__main strong').first().innerText();
+      return parseCurrencyTextToUnits(text);
+    }).toBe(comfortExpectedUnits);
   });
 });

@@ -973,7 +973,7 @@ const messages = {
             'Ver contribución de referencia para este tramo',
         contribucionRecomendada: 'Contribución promedio para este tramo',
         calculadoEnBaseNaftaBase:
-            'Calculado en base a nafta premium, consumo promedio alto (8km/L) y peajes incluídos',
+            'Calculado en base a nafta premium, auto promedio de consumo 8L/100km y peajes incluídos',
         calculadoEnBaseNaftaSelladoSuffix:
             ' y Sellado de Viaje incluídos (si aplica)',
         viajesDeConductoresPlataforma: 'Viajes de conductores en la plataforma',
@@ -2137,7 +2137,7 @@ const messages = {
             'Ver contribución de referencia para este tramo',
         contribucionRecomendada: 'Contribución promedio para este tramo',
         calculadoEnBaseNaftaBase:
-            'Calculado en base a nafta premium, consumo promedio alto (8km/L) y peajes incluídos',
+            'Calculado en base a nafta premium, auto promedio de consumo 8L/100km y peajes incluídos',
         calculadoEnBaseNaftaSelladoSuffix:
             ' y Sellado de Viaje incluídos (si aplica)',
         viajesDeConductoresPlataforma: 'Viajes de conductores en la plataforma',
@@ -3470,7 +3470,7 @@ const messages = {
             'View reference contribution for this route segment',
         contribucionRecomendada: 'Average contribution for this route segment',
         calculadoEnBaseNaftaBase:
-            'Calculated based on premium gasoline, high average consumption (8 km/L) and tolls included',
+            'Calculated based on premium gasoline, average car consumption 8L/100km and tolls included',
         calculadoEnBaseNaftaSelladoSuffix:
             ' and Trip Seal included (if applicable)',
         viajesDeConductoresPlataforma: 'Driver trips on the platform',
