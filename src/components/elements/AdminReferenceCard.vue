@@ -9,10 +9,7 @@
                 <router-link
                     v-if="author"
                     class="admin-reference-card__user"
-                    :to="{
-                        name: 'profile',
-                        params: { id: author.id }
-                    }"
+                    :to="getAdminUserProfileRoute(author.id)"
                 >
                     {{ author.name }}
                 </router-link>
@@ -71,6 +68,8 @@
 </template>
 
 <script>
+import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
+
 export default {
     name: 'admin-reference-card',
     props: {
@@ -95,7 +94,10 @@ export default {
             default: false
         }
     },
-    emits: ['edit', 'save', 'cancel', 'update:editComment']
+    emits: ['edit', 'save', 'cancel', 'update:editComment'],
+    methods: {
+        getAdminUserProfileRoute
+    }
 };
 </script>
 
