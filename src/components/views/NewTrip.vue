@@ -459,42 +459,90 @@
                                                 : $t('cuposNecesarios')
                                         }}
                                     </span>
-                                    <span v-if="tripCardTheme !== 'light'">
+                                    <span
+                                        v-if="tripCardTheme !== 'light'"
+                                        :key="
+                                            'outbound-seats-' +
+                                            trip.total_seats +
+                                            '-' +
+                                            outboundSeatsRadioRevision
+                                        "
+                                    >
                                         <span class="radio-inline">
                                             <input
                                                 type="radio"
                                                 id="seats-one"
+                                                name="newtrip-outbound-total-seats"
                                                 :value="1"
                                                 v-model.number="trip.total_seats"
+                                                @mousedown="
+                                                    onOutboundSeatRadioAttempt(1, $event)
+                                                "
                                             />
-                                            <label for="seats-one">1</label>
+                                            <label
+                                                for="seats-one"
+                                                @mousedown="
+                                                    onOutboundSeatRadioAttempt(1, $event)
+                                                "
+                                                >1</label
+                                            >
                                         </span>
                                         <span class="radio-inline">
                                             <input
                                                 type="radio"
                                                 id="seats-two"
+                                                name="newtrip-outbound-total-seats"
                                                 :value="2"
                                                 v-model.number="trip.total_seats"
+                                                @mousedown="
+                                                    onOutboundSeatRadioAttempt(2, $event)
+                                                "
                                             />
-                                            <label for="seats-two">2</label>
+                                            <label
+                                                for="seats-two"
+                                                @mousedown="
+                                                    onOutboundSeatRadioAttempt(2, $event)
+                                                "
+                                                >2</label
+                                            >
                                         </span>
                                         <span class="radio-inline">
                                             <input
                                                 type="radio"
                                                 id="seats-three"
+                                                name="newtrip-outbound-total-seats"
                                                 :value="3"
                                                 v-model.number="trip.total_seats"
+                                                @mousedown="
+                                                    onOutboundSeatRadioAttempt(3, $event)
+                                                "
                                             />
-                                            <label for="seats-three">3</label>
+                                            <label
+                                                for="seats-three"
+                                                @mousedown="
+                                                    onOutboundSeatRadioAttempt(3, $event)
+                                                "
+                                                >3</label
+                                            >
                                         </span>
                                         <span class="radio-inline">
                                             <input
                                                 type="radio"
                                                 id="seats-four"
+                                                name="newtrip-outbound-total-seats"
                                                 :value="4"
                                                 v-model.number="trip.total_seats"
+                                                @mousedown="
+                                                    onOutboundSeatRadioAttempt(4, $event)
+                                                "
                                             />
-                                            <label for="seats-four">4</label>
+                                            <label
+                                                for="seats-four"
+                                                @mousedown="
+                                                    onOutboundSeatRadioAttempt(4, $event)
+                                                "
+                                                >4</label
+                                            >
                                         </span>
                                     </span>
                                     <span
@@ -556,7 +604,8 @@
                                     <input
                                         type="checkbox"
                                         id="newtrip-comfort-rear-max-two"
-                                        v-model="trip.rear_max_two_passengers"
+                                        :checked="trip.rear_max_two_passengers"
+                                        @change="onOutboundRearMaxTwoChange"
                                     />
                                     {{ $t('atrasViajanSolo2Personas') }}
                                 </label>
@@ -1401,17 +1450,33 @@
                                                 : $t('lugaresDisponibles')
                                         }}
                                     </span>
-                                    <span v-if="tripCardTheme !== 'light'">
+                                    <span
+                                        v-if="tripCardTheme !== 'light'"
+                                        :key="
+                                            'return-seats-' +
+                                            otherTrip.trip.total_seats +
+                                            '-' +
+                                            returnSeatsRadioRevision
+                                        "
+                                    >
                                         <span class="radio-inline">
                                             <input
                                                 type="radio"
                                                 id="otherTrip-seats-one"
+                                                name="newtrip-return-total-seats"
                                                 :value="1"
                                                 v-model.number="
                                                     otherTrip.trip.total_seats
                                                 "
+                                                @mousedown="
+                                                    onReturnSeatRadioAttempt(1, $event)
+                                                "
                                             />
-                                            <label for="otherTrip-seats-one"
+                                            <label
+                                                for="otherTrip-seats-one"
+                                                @mousedown="
+                                                    onReturnSeatRadioAttempt(1, $event)
+                                                "
                                                 >1</label
                                             >
                                         </span>
@@ -1419,12 +1484,20 @@
                                             <input
                                                 type="radio"
                                                 id="otherTrip-seats-two"
+                                                name="newtrip-return-total-seats"
                                                 :value="2"
                                                 v-model.number="
                                                     otherTrip.trip.total_seats
                                                 "
+                                                @mousedown="
+                                                    onReturnSeatRadioAttempt(2, $event)
+                                                "
                                             />
-                                            <label for="otherTrip-seats-two"
+                                            <label
+                                                for="otherTrip-seats-two"
+                                                @mousedown="
+                                                    onReturnSeatRadioAttempt(2, $event)
+                                                "
                                                 >2</label
                                             >
                                         </span>
@@ -1432,12 +1505,20 @@
                                             <input
                                                 type="radio"
                                                 id="otherTrip-seats-three"
+                                                name="newtrip-return-total-seats"
                                                 :value="3"
                                                 v-model.number="
                                                     otherTrip.trip.total_seats
                                                 "
+                                                @mousedown="
+                                                    onReturnSeatRadioAttempt(3, $event)
+                                                "
                                             />
-                                            <label for="otherTrip-seats-three"
+                                            <label
+                                                for="otherTrip-seats-three"
+                                                @mousedown="
+                                                    onReturnSeatRadioAttempt(3, $event)
+                                                "
                                                 >3</label
                                             >
                                         </span>
@@ -1445,12 +1526,20 @@
                                             <input
                                                 type="radio"
                                                 id="otherTrip-seats-four"
+                                                name="newtrip-return-total-seats"
                                                 :value="4"
                                                 v-model.number="
                                                     otherTrip.trip.total_seats
                                                 "
+                                                @mousedown="
+                                                    onReturnSeatRadioAttempt(4, $event)
+                                                "
                                             />
-                                            <label for="otherTrip-seats-four"
+                                            <label
+                                                for="otherTrip-seats-four"
+                                                @mousedown="
+                                                    onReturnSeatRadioAttempt(4, $event)
+                                                "
                                                 >4</label
                                             >
                                         </span>
@@ -1527,9 +1616,10 @@
                                     <input
                                         type="checkbox"
                                         id="otherTrip-comfort-rear-max-two"
-                                        v-model="
+                                        :checked="
                                             otherTrip.trip.rear_max_two_passengers
                                         "
+                                        @change="onReturnRearMaxTwoChange"
                                     />
                                     {{ $t('atrasViajanSolo2Personas') }}
                                 </label>
@@ -1874,6 +1964,19 @@
                 </span>
             </button>
         </div>
+
+        <modal
+            name="newtrip-rear-comfort-seats-conflict"
+            v-if="showRearMaxTwoSeatsConflictModal"
+            @close="closeRearMaxTwoSeatsConflictModal"
+        >
+            <template #header><h3>
+                <span>{{ $t('priorizarComodidad') }}</span>
+            </h3></template>
+            <template #body><div class="text-left color-black">
+                <p>{{ $t('rearMaxTwoRequiresThreeOrFewerSeats') }}</p>
+            </div></template>
+        </modal>
     </div>
 </template>
 <script>
@@ -1887,6 +1990,7 @@ import { appLocaleToRoutingLanguage } from '../../main';
 import { leafletOsrmServiceUrl } from '../../utils/osrmRouting';
 // import { parseOsmStreet } from '../../services/maps.js';
 import DatePicker from '../DatePicker';
+import modal from '../Modal';
 import dialogs from '../../services/dialogs.js';
 import spinner from '../Spinner.vue';
 import dayjs from '../../dayjs';
@@ -1904,6 +2008,8 @@ import {
     priceInputNumberFromStoredSeatPriceCents,
     seatPriceCentsForApi
 } from '../../utils/tripSeatPrice.js';
+import { seatPriceCentsFromTripPriceCents } from '../../utils/tripPriceOccupants.js';
+import { isRearMaxTwoCompatibleWithSeats, shouldBlockSeatSelection } from '../../utils/tripRearComfortSeats.js';
 import {
     activeCarsWithPlate,
     hasDriverPlate,
@@ -1936,7 +2042,8 @@ export default {
         WeeklySchedule,
         SvgItem,
         autocomplete,
-        spinner
+        spinner,
+        modal
     },
     data() {
         return {
@@ -2018,6 +2125,9 @@ export default {
             attribution:
                 '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
             showReturnTrip: false,
+            showRearMaxTwoSeatsConflictModal: false,
+            outboundSeatsRadioRevision: 0,
+            returnSeatsRadioRevision: 0,
             otherTrip: {
                 minDate: dayjs().toDate(),
                 dateError: new Error(),
@@ -2203,17 +2313,29 @@ export default {
         no_lucrar: function () {
             this.lucrarError.state = false;
         },
-        'trip.total_seats': function(newValue) {
+        'trip.rear_max_two_passengers': function() {
             if (this.trip.distance > 0) {
-                // The maximum_trip_price_cents is constant based on distance
-                // We just need to recalculate the per-seat prices
                 this.recalculateRecommendedPrice();
             }
         },
-        'otherTrip.trip.total_seats': function(newValue) {
+        'trip.total_seats': function(newValue, oldValue) {
+            this.guardTotalSeatsAgainstRearComfortConflict(
+                this.trip,
+                newValue,
+                oldValue
+            );
+        },
+        'otherTrip.trip.rear_max_two_passengers': function() {
             if (this.otherTrip.trip.distance > 0) {
                 this.recalculateRecommendedReturnPrice();
             }
+        },
+        'otherTrip.trip.total_seats': function(newValue, oldValue) {
+            this.guardTotalSeatsAgainstRearComfortConflict(
+                this.otherTrip.trip,
+                newValue,
+                oldValue
+            );
         },
         dateAnswer: function (value) {
             if (!this.showReturnTrip || !this.otherTrip.dateAnswer) {
@@ -3253,14 +3375,102 @@ export default {
             }
         },
         recalculateRecommendedPrice() {
-            // The maximum_trip_price_cents is the total price for the entire trip (including driver)
-            this.maximum_seat_price_cents = Math.round(this.maximum_trip_price_cents / (this.trip.total_seats + 1));
-            this.recommended_seat_price_cents = Math.round(this.recommended_trip_price_cents / (this.trip.total_seats + 1));
+            this.maximum_seat_price_cents = seatPriceCentsFromTripPriceCents(
+                this.maximum_trip_price_cents,
+                this.trip.rear_max_two_passengers
+            );
+            this.recommended_seat_price_cents = seatPriceCentsFromTripPriceCents(
+                this.recommended_trip_price_cents,
+                this.trip.rear_max_two_passengers
+            );
             this.validatePrice();
         },
+        showRearMaxTwoSeatsConflictMessage() {
+            this.showRearMaxTwoSeatsConflictModal = true;
+        },
+        closeRearMaxTwoSeatsConflictModal() {
+            this.showRearMaxTwoSeatsConflictModal = false;
+        },
+        guardTotalSeatsAgainstRearComfortConflict(tripRef, newValue, oldValue) {
+            if (
+                newValue === oldValue ||
+                isRearMaxTwoCompatibleWithSeats(
+                    newValue,
+                    tripRef.rear_max_two_passengers
+                )
+            ) {
+                return;
+            }
+            tripRef.total_seats = oldValue;
+            if (tripRef === this.trip) {
+                this.outboundSeatsRadioRevision += 1;
+            } else {
+                this.returnSeatsRadioRevision += 1;
+            }
+            this.showRearMaxTwoSeatsConflictMessage();
+        },
+        onOutboundSeatRadioAttempt(seats, event) {
+            if (
+                shouldBlockSeatSelection(
+                    seats,
+                    this.trip.rear_max_two_passengers
+                )
+            ) {
+                event.preventDefault();
+                event.stopPropagation();
+                this.outboundSeatsRadioRevision += 1;
+                this.showRearMaxTwoSeatsConflictMessage();
+            }
+        },
+        onReturnSeatRadioAttempt(seats, event) {
+            if (
+                shouldBlockSeatSelection(
+                    seats,
+                    this.otherTrip.trip.rear_max_two_passengers
+                )
+            ) {
+                event.preventDefault();
+                event.stopPropagation();
+                this.returnSeatsRadioRevision += 1;
+                this.showRearMaxTwoSeatsConflictMessage();
+            }
+        },
+        onOutboundRearMaxTwoChange(event) {
+            const wantsChecked = event.target.checked;
+            if (
+                wantsChecked &&
+                !isRearMaxTwoCompatibleWithSeats(this.trip.total_seats, true)
+            ) {
+                event.target.checked = false;
+                this.showRearMaxTwoSeatsConflictMessage();
+                return;
+            }
+            this.trip.rear_max_two_passengers = wantsChecked;
+        },
+        onReturnRearMaxTwoChange(event) {
+            const wantsChecked = event.target.checked;
+            if (
+                wantsChecked &&
+                !isRearMaxTwoCompatibleWithSeats(
+                    this.otherTrip.trip.total_seats,
+                    true
+                )
+            ) {
+                event.target.checked = false;
+                this.showRearMaxTwoSeatsConflictMessage();
+                return;
+            }
+            this.otherTrip.trip.rear_max_two_passengers = wantsChecked;
+        },
         recalculateRecommendedReturnPrice() {
-            this.maximum_return_seat_price_cents = Math.round(this.maximum_return_trip_price_cents / (this.otherTrip.trip.total_seats + 1));
-            this.recommended_return_seat_price_cents = Math.round(this.recommended_return_trip_price_cents / (this.otherTrip.trip.total_seats + 1));
+            this.maximum_return_seat_price_cents = seatPriceCentsFromTripPriceCents(
+                this.maximum_return_trip_price_cents,
+                this.otherTrip.trip.rear_max_two_passengers
+            );
+            this.recommended_return_seat_price_cents = seatPriceCentsFromTripPriceCents(
+                this.recommended_return_trip_price_cents,
+                this.otherTrip.trip.rear_max_two_passengers
+            );
             this.validateReturnPrice();
         },
         validateReturnPrice() {

@@ -34,7 +34,7 @@ describe('NewTrip.vue rear seat comfort preference', () => {
             /v-if="trip\.is_passenger\s*==\s*0"[\s\S]*?class="trip-comfort-preference"/s
         );
         expect(viewSource).toMatch(
-            /id="newtrip-comfort-rear-max-two"[\s\S]*?v-model="trip\.rear_max_two_passengers"/s
+            /id="newtrip-comfort-rear-max-two"[\s\S]*?:checked="trip\.rear_max_two_passengers"[\s\S]*?@change="onOutboundRearMaxTwoChange"/s
         );
         expect(viewSource).toMatch(
             /rear_max_two_passengers:\s*false/
@@ -50,6 +50,80 @@ describe('NewTrip.vue rear seat comfort preference', () => {
         );
         expect(viewSource).toMatch(
             /class="trip_seats-available"[\s\S]*?class="trip-comfort-preference"[\s\S]*?otherTrip-comfort-rear-max-two/s
+        );
+    });
+
+    it('recalculates recommended price from comfort preference, not seat count', () => {
+        expect(viewSource).toMatch(/from '\.\.\/\.\.\/utils\/tripPriceOccupants\.js'/);
+        expect(viewSource).toContain('seatPriceCentsFromTripPriceCents');
+        expect(viewSource).toMatch(
+            /recalculateRecommendedPrice\(\)[\s\S]*?seatPriceCentsFromTripPriceCents\([\s\S]*?this\.trip\.rear_max_two_passengers/s
+        );
+        expect(viewSource).toMatch(
+            /recalculateRecommendedReturnPrice\(\)[\s\S]*?seatPriceCentsFromTripPriceCents\([\s\S]*?this\.otherTrip\.trip\.rear_max_two_passengers/s
+        );
+        expect(viewSource).toMatch(
+            /'trip\.rear_max_two_passengers':\s*function[\s\S]*?recalculateRecommendedPrice\(\)/s
+        );
+        const recalculateRecommendedPriceBody = viewSource.match(
+            /recalculateRecommendedPrice\(\)\s*\{[\s\S]*?validatePrice\(\);\s*\}/
+        );
+        expect(recalculateRecommendedPriceBody).toBeTruthy();
+        expect(recalculateRecommendedPriceBody[0]).not.toContain(
+            'this.trip.total_seats + 1'
+        );
+    });
+
+    it('blocks rear max two with 4 seats and shows validation message', () => {
+        expect(viewSource).toMatch(/from '\.\.\/\.\.\/utils\/tripRearComfortSeats\.js'/);
+        expect(viewSource).toContain('isRearMaxTwoCompatibleWithSeats');
+        expect(viewSource).toContain('onOutboundRearMaxTwoChange');
+        expect(viewSource).toContain('onReturnRearMaxTwoChange');
+        expect(viewSource).toContain('onOutboundSeatRadioAttempt');
+        expect(viewSource).toContain('onReturnSeatRadioAttempt');
+        expect(viewSource).toContain('guardTotalSeatsAgainstRearComfortConflict');
+        expect(viewSource).toContain("$t('rearMaxTwoRequiresThreeOrFewerSeats')");
+        expect(viewSource).toMatch(/from '\.\.\/Modal'/);
+        expect(viewSource).toContain('showRearMaxTwoSeatsConflictModal');
+        expect(viewSource).toMatch(
+            /showRearMaxTwoSeatsConflictMessage\(\)\s*\{[\s\S]*?this\.showRearMaxTwoSeatsConflictModal = true/s
+        );
+        expect(viewSource).toMatch(
+            /name="newtrip-rear-comfort-seats-conflict"[\s\S]*?@close="closeRearMaxTwoSeatsConflictModal"/s
+        );
+        expect(viewSource).not.toContain('dialogs.alert');
+        expect(viewSource).toMatch(
+            /id="newtrip-comfort-rear-max-two"[\s\S]*?@change="onOutboundRearMaxTwoChange"/s
+        );
+        expect(viewSource).toMatch(
+            /id="otherTrip-comfort-rear-max-two"[\s\S]*?@change="onReturnRearMaxTwoChange"/s
+        );
+    });
+
+    it('keeps one seat radio selected when rejecting 4 seats with rear max two', () => {
+        expect(viewSource).toMatch(
+            /id="seats-four"[\s\S]*?onOutboundSeatRadioAttempt\(4,\s*\$event\)/s
+        );
+        expect(viewSource).toMatch(
+            /for="seats-four"[\s\S]*?onOutboundSeatRadioAttempt\(4,\s*\$event\)/s
+        );
+        expect(viewSource).toMatch(
+            /id="otherTrip-seats-four"[\s\S]*?onReturnSeatRadioAttempt\(4,\s*\$event\)/s
+        );
+        expect(viewSource).toMatch(
+            /for="otherTrip-seats-four"[\s\S]*?onReturnSeatRadioAttempt\(4,\s*\$event\)/s
+        );
+        expect(viewSource).toMatch(
+            /onOutboundSeatRadioAttempt\([\s\S]*?shouldBlockSeatSelection\([\s\S]*?event\.preventDefault\(\)[\s\S]*?this\.outboundSeatsRadioRevision \+= 1/s
+        );
+        expect(viewSource).toMatch(
+            /'trip\.total_seats':\s*function\s*\(newValue,\s*oldValue\)[\s\S]*?guardTotalSeatsAgainstRearComfortConflict\([\s\S]*?this\.trip,\s*newValue,\s*oldValue/s
+        );
+        expect(viewSource).toContain('outboundSeatsRadioRevision');
+        expect(viewSource).toContain('returnSeatsRadioRevision');
+        expect(viewSource).toContain('name="newtrip-outbound-total-seats"');
+        expect(viewSource).not.toMatch(
+            /id="seats-four"[\s\S]*?:checked="trip\.total_seats === 4"/s
         );
     });
 });
