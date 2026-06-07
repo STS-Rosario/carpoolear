@@ -13,9 +13,8 @@ describe('AdminReviewSubjectUserLine component', () => {
         expect(source).toContain('userName');
     });
 
-    it('includes public profile link in parentheses when userId is present', () => {
-        expect(source).toContain("name: 'profile'");
-        expect(source).toContain('params: { id: userId }');
-        expect(source).toContain("{{ $t('verPerfilPublico') }}");
+    it('does not link to the public profile route', () => {
+        expect(source).not.toContain("name: 'profile'");
+        expect(source).not.toContain("{{ $t('verPerfilPublico') }}");
     });
 });
