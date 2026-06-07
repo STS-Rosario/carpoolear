@@ -47,5 +47,26 @@ export default {
                 successCallback();
             }
         }
+    },
+    alert(text, options = {}, callback = null) {
+        if (typeof callback !== 'function') {
+            callback = function () {};
+        }
+        if (alertifyjs && typeof alertifyjs.alert === 'function') {
+            const dialog = alertifyjs.alert(text, callback);
+            if (dialog && typeof dialog.set === 'function') {
+                dialog
+                    .set('closable', true)
+                    .set('closableByDimmer', false);
+                if (options.okLabel) {
+                    dialog.set('label', options.okLabel);
+                }
+            }
+            return;
+        }
+        if (typeof window !== 'undefined' && typeof window.alert === 'function') {
+            window.alert(text);
+        }
+        callback();
     }
 };

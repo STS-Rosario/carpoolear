@@ -21,15 +21,14 @@ vi.mock('../cordova/toast.js', () => ({
     default: { toast: vi.fn() }
 }));
 
-import dialogs from './dialogs.js';
-
 describe('dialogs.alert', () => {
     beforeEach(() => {
         alertFn.mockClear();
         alertDialog.set.mockClear();
     });
 
-    it('opens a closable alert dialog instead of a timed snackbar', () => {
+    it('opens a closable alert dialog instead of a timed snackbar', async () => {
+        const dialogs = (await import('./dialogs.js')).default;
         const onClose = vi.fn();
 
         dialogs.alert('Conflict message', { okLabel: 'Entendido' }, onClose);

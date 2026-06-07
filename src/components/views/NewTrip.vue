@@ -3248,9 +3248,10 @@ export default {
             this.validatePrice();
         },
         showRearMaxTwoSeatsConflictMessage() {
-            dialogs.message(this.$t('rearMaxTwoRequiresThreeOrFewerSeats'), {
-                estado: 'error'
-            });
+            dialogs.alert(
+                this.$t('rearMaxTwoRequiresThreeOrFewerSeats'),
+                { okLabel: this.$t('entendido') }
+            );
         },
         onOutboundTotalSeatsChange(totalSeats) {
             const seats = Number(totalSeats);

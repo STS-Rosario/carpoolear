@@ -83,6 +83,10 @@ describe('NewTrip.vue rear seat comfort preference', () => {
         expect(viewSource).toContain('onReturnTotalSeatsChange');
         expect(viewSource).toContain("$t('rearMaxTwoRequiresThreeOrFewerSeats')");
         expect(viewSource).toMatch(
+            /showRearMaxTwoSeatsConflictMessage\(\)\s*\{[\s\S]*?dialogs\.alert\([\s\S]*?\$t\('rearMaxTwoRequiresThreeOrFewerSeats'\)/s
+        );
+        expect(viewSource).toContain("$t('entendido')");
+        expect(viewSource).toMatch(
             /id="newtrip-comfort-rear-max-two"[\s\S]*?@change="onOutboundRearMaxTwoChange"/s
         );
         expect(viewSource).toMatch(
