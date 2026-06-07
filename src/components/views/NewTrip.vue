@@ -2009,6 +2009,7 @@ import {
     seatPriceCentsForApi
 } from '../../utils/tripSeatPrice.js';
 import { seatPriceCentsFromTripPriceCents } from '../../utils/tripPriceOccupants.js';
+import { exceedsMaximumSeatPrice } from '../../utils/tripMaxPriceValidation.js';
 import { isRearMaxTwoCompatibleWithSeats, shouldBlockSeatSelection } from '../../utils/tripRearComfortSeats.js';
 import {
     activeCarsWithPlate,
@@ -2797,7 +2798,11 @@ export default {
                     );
                 } else if (
                     this.config.module_max_price_enabled &&
-                    seatP > this.maximum_seat_price_cents / 100
+                    exceedsMaximumSeatPrice({
+                        seatPriceUnits: seatP,
+                        maximumSeatPriceCents: this.maximum_seat_price_cents,
+                        maximumTripPriceCents: this.maximum_trip_price_cents
+                    })
                 ) {
                     globalError = true;
                     this.priceError.state = true;
@@ -2945,8 +2950,13 @@ export default {
                     } else if (
                         this.config.module_trip_creation_payment_enabled &&
                         this.config.module_max_price_enabled &&
-                        returnSeatP >
-                            this.maximum_return_seat_price_cents / 100
+                        exceedsMaximumSeatPrice({
+                            seatPriceUnits: returnSeatP,
+                            maximumSeatPriceCents:
+                                this.maximum_return_seat_price_cents,
+                            maximumTripPriceCents:
+                                this.maximum_return_trip_price_cents
+                        })
                     ) {
                         globalError = true;
                         this.returnPriceError.state = true;
@@ -3203,7 +3213,6 @@ export default {
             }
 
             this.calcRoute(type);
-            this.recalculateRecommendedPrice();
         },
 
         getPlaceholder(index) {
@@ -3349,9 +3358,12 @@ export default {
         validatePrice() {
             const p = parseSeatPriceInput(this.price);
             if (
-                p !== null &&
                 this.config.module_max_price_enabled &&
-                p > this.maximum_seat_price_cents / 100
+                exceedsMaximumSeatPrice({
+                    seatPriceUnits: p,
+                    maximumSeatPriceCents: this.maximum_seat_price_cents,
+                    maximumTripPriceCents: this.maximum_trip_price_cents
+                })
             ) {
                 this.priceError.state = true;
                 this.priceError.message = this.getMaxContributionExceededMessage(
@@ -3476,8 +3488,13 @@ export default {
         validateReturnPrice() {
             const p = parseSeatPriceInput(this.returnPrice);
             if (
-                p !== null &&
-                p > this.maximum_return_seat_price_cents / 100
+                exceedsMaximumSeatPrice({
+                    seatPriceUnits: p,
+                    maximumSeatPriceCents:
+                        this.maximum_return_seat_price_cents,
+                    maximumTripPriceCents:
+                        this.maximum_return_trip_price_cents
+                })
             ) {
                 this.returnPriceError.state = true;
                 this.returnPriceError.message = this.getMaxContributionExceededMessage(

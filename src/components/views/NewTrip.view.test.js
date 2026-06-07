@@ -5,6 +5,22 @@ import path from 'node:path';
 const viewPath = path.resolve(__dirname, 'NewTrip.vue');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 
+describe('NewTrip.vue max contribution validation timing', () => {
+    it('defers max contribution checks until trip-info cap is available', () => {
+        expect(viewSource).toContain("from '../../utils/tripMaxPriceValidation.js'");
+        expect(viewSource).toContain('exceedsMaximumSeatPrice');
+        expect(viewSource).toMatch(
+            /validatePrice\(\)[\s\S]*?maximumTripPriceCents:\s*this\.maximum_trip_price_cents/s
+        );
+        expect(viewSource).toMatch(
+            /validateReturnPrice\(\)[\s\S]*?maximumTripPriceCents:\s*this\.maximum_return_trip_price_cents/s
+        );
+        expect(viewSource).not.toMatch(
+            /this\.calcRoute\(type\);\s*\n\s*this\.recalculateRecommendedPrice\(\);/
+        );
+    });
+});
+
 describe('NewTrip.vue seat price API mapping', () => {
     it('imports seat price helpers for voluntary -1 sentinel', () => {
         expect(viewSource).toMatch(/from '\.\.\/\.\.\/utils\/tripSeatPrice\.js'/);
