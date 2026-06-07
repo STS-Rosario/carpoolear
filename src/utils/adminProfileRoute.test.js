@@ -8,7 +8,14 @@ describe('getAdminUserProfileRoute', () => {
     it('builds admin user detail route from user id', () => {
         expect(getAdminUserProfileRoute(42)).toEqual({
             name: ADMIN_USER_PROFILE_ROUTE_NAME,
-            params: { userId: 42 }
+            params: { userId: '42' }
+        });
+    });
+
+    it('stringifies string user ids for route params', () => {
+        expect(getAdminUserProfileRoute('99')).toEqual({
+            name: ADMIN_USER_PROFILE_ROUTE_NAME,
+            params: { userId: '99' }
         });
     });
 });
