@@ -236,6 +236,8 @@ const messages = {
         lugaresDisponibles: 'Lugares disponibles',
         priorizarComodidad: 'Priorizá la comodidad',
         atrasViajanSolo2Personas: 'Atrás viajan sólo 2 personas',
+        rearMaxTwoRequiresThreeOrFewerSeats:
+            'Si van 2 personas atrás, los asientos disponibles tienen que ser 3 o menos',
         cuposNecesarios: 'Cuantos cupos necesitas',
         comentarioPasajeros: 'Detalles extra del viaje',
         placeholderComentarioPasajeros:
@@ -1618,6 +1620,8 @@ const messages = {
         lugaresDisponibles: 'Lugares disponibles',
         priorizarComodidad: 'Priorizá la comodidad',
         atrasViajanSolo2Personas: 'Atrás viajan sólo 2 personas',
+        rearMaxTwoRequiresThreeOrFewerSeats:
+            'Si van 2 personas atrás, los asientos disponibles tienen que ser 3 o menos',
         cuposNecesarios: 'Cuantos cupos necesitas',
         comentarioPasajeros: 'Detalles extra del viaje',
         placeholderComentarioPasajeros:
@@ -2750,6 +2754,8 @@ const messages = {
         lugaresDisponibles: 'Available seats',
         priorizarComodidad: 'Prioritize comfort',
         atrasViajanSolo2Personas: 'Only 2 people ride in the back',
+        rearMaxTwoRequiresThreeOrFewerSeats:
+            'If only 2 people ride in the back, available seats must be 3 or fewer',
         cuposNecesarios: 'How many seats do you need',
         comentarioPasajeros: 'Extra trip details',
         placeholderComentarioPasajeros:

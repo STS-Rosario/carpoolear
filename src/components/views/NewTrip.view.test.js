@@ -34,7 +34,7 @@ describe('NewTrip.vue rear seat comfort preference', () => {
             /v-if="trip\.is_passenger\s*==\s*0"[\s\S]*?class="trip-comfort-preference"/s
         );
         expect(viewSource).toMatch(
-            /id="newtrip-comfort-rear-max-two"[\s\S]*?v-model="trip\.rear_max_two_passengers"/s
+            /id="newtrip-comfort-rear-max-two"[\s\S]*?:checked="trip\.rear_max_two_passengers"[\s\S]*?@change="onOutboundRearMaxTwoChange"/s
         );
         expect(viewSource).toMatch(
             /rear_max_two_passengers:\s*false/
@@ -65,8 +65,12 @@ describe('NewTrip.vue rear seat comfort preference', () => {
         expect(viewSource).toMatch(
             /'trip\.rear_max_two_passengers':\s*function[\s\S]*?recalculateRecommendedPrice\(\)/s
         );
-        expect(viewSource).not.toMatch(
-            /recalculateRecommendedPrice\(\)[\s\S]*?this\.trip\.total_seats \+ 1/s
+        const recalculateRecommendedPriceBody = viewSource.match(
+            /recalculateRecommendedPrice\(\)\s*\{[\s\S]*?validatePrice\(\);\s*\}/
+        );
+        expect(recalculateRecommendedPriceBody).toBeTruthy();
+        expect(recalculateRecommendedPriceBody[0]).not.toContain(
+            'this.trip.total_seats + 1'
         );
     });
 
