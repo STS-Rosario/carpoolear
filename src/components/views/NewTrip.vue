@@ -465,8 +465,7 @@
                                                 type="radio"
                                                 id="seats-one"
                                                 :value="1"
-                                                :checked="trip.total_seats === 1"
-                                                @change="onOutboundTotalSeatsChange(1)"
+                                                v-model.number="trip.total_seats"
                                             />
                                             <label for="seats-one">1</label>
                                         </span>
@@ -475,8 +474,7 @@
                                                 type="radio"
                                                 id="seats-two"
                                                 :value="2"
-                                                :checked="trip.total_seats === 2"
-                                                @change="onOutboundTotalSeatsChange(2)"
+                                                v-model.number="trip.total_seats"
                                             />
                                             <label for="seats-two">2</label>
                                         </span>
@@ -485,8 +483,7 @@
                                                 type="radio"
                                                 id="seats-three"
                                                 :value="3"
-                                                :checked="trip.total_seats === 3"
-                                                @change="onOutboundTotalSeatsChange(3)"
+                                                v-model.number="trip.total_seats"
                                             />
                                             <label for="seats-three">3</label>
                                         </span>
@@ -495,8 +492,7 @@
                                                 type="radio"
                                                 id="seats-four"
                                                 :value="4"
-                                                :checked="trip.total_seats === 4"
-                                                @change="onOutboundTotalSeatsChange(4)"
+                                                v-model.number="trip.total_seats"
                                             />
                                             <label for="seats-four">4</label>
                                         </span>
@@ -507,7 +503,12 @@
                                     >
                                         <button
                                             type="button"
-                                            @click="incrementOutboundTotalSeats"
+                                            @click="
+                                                () =>
+                                                    trip.total_seats < 4
+                                                        ? trip.total_seats++
+                                                        : trip.total_seats
+                                            "
                                             class="btn btn-link"
                                             :disabled="trip.total_seats === 4"
                                         >
@@ -521,7 +522,12 @@
                                         }}</span>
                                         <button
                                             type="button"
-                                            @click="decrementOutboundTotalSeats"
+                                            @click="
+                                                () =>
+                                                    trip.total_seats > 1
+                                                        ? trip.total_seats--
+                                                        : trip.total_seats
+                                            "
                                             class="btn btn-link"
                                             :disabled="trip.total_seats === 1"
                                         >
@@ -1402,10 +1408,9 @@
                                                 type="radio"
                                                 id="otherTrip-seats-one"
                                                 :value="1"
-                                                :checked="
-                                                    otherTrip.trip.total_seats === 1
+                                                v-model.number="
+                                                    otherTrip.trip.total_seats
                                                 "
-                                                @change="onReturnTotalSeatsChange(1)"
                                             />
                                             <label for="otherTrip-seats-one"
                                                 >1</label
@@ -1416,10 +1421,9 @@
                                                 type="radio"
                                                 id="otherTrip-seats-two"
                                                 :value="2"
-                                                :checked="
-                                                    otherTrip.trip.total_seats === 2
+                                                v-model.number="
+                                                    otherTrip.trip.total_seats
                                                 "
-                                                @change="onReturnTotalSeatsChange(2)"
                                             />
                                             <label for="otherTrip-seats-two"
                                                 >2</label
@@ -1430,10 +1434,9 @@
                                                 type="radio"
                                                 id="otherTrip-seats-three"
                                                 :value="3"
-                                                :checked="
-                                                    otherTrip.trip.total_seats === 3
+                                                v-model.number="
+                                                    otherTrip.trip.total_seats
                                                 "
-                                                @change="onReturnTotalSeatsChange(3)"
                                             />
                                             <label for="otherTrip-seats-three"
                                                 >3</label
@@ -1444,10 +1447,9 @@
                                                 type="radio"
                                                 id="otherTrip-seats-four"
                                                 :value="4"
-                                                :checked="
-                                                    otherTrip.trip.total_seats === 4
+                                                v-model.number="
+                                                    otherTrip.trip.total_seats
                                                 "
-                                                @change="onReturnTotalSeatsChange(4)"
                                             />
                                             <label for="otherTrip-seats-four"
                                                 >4</label
@@ -1460,7 +1462,15 @@
                                     >
                                         <button
                                             type="button"
-                                            @click="incrementReturnTotalSeats"
+                                            @click="
+                                                () =>
+                                                    otherTrip.trip.total_seats <
+                                                    4
+                                                        ? otherTrip.trip
+                                                              .total_seats++
+                                                        : otherTrip.trip
+                                                              .total_seats
+                                            "
                                             class="btn btn-link"
                                             :disabled="
                                                 otherTrip.trip.total_seats === 4
@@ -1476,7 +1486,15 @@
                                         </span>
                                         <button
                                             type="button"
-                                            @click="decrementReturnTotalSeats"
+                                            @click="
+                                                () =>
+                                                    otherTrip.trip.total_seats >
+                                                    1
+                                                        ? otherTrip.trip
+                                                              .total_seats--
+                                                        : otherTrip.trip
+                                                              .total_seats
+                                            "
                                             class="btn btn-link"
                                             :disabled="
                                                 otherTrip.trip.total_seats === 1
@@ -2210,10 +2228,24 @@ export default {
                 this.recalculateRecommendedPrice();
             }
         },
+        'trip.total_seats': function(newValue, oldValue) {
+            this.guardTotalSeatsAgainstRearComfortConflict(
+                this.trip,
+                newValue,
+                oldValue
+            );
+        },
         'otherTrip.trip.rear_max_two_passengers': function() {
             if (this.otherTrip.trip.distance > 0) {
                 this.recalculateRecommendedReturnPrice();
             }
+        },
+        'otherTrip.trip.total_seats': function(newValue, oldValue) {
+            this.guardTotalSeatsAgainstRearComfortConflict(
+                this.otherTrip.trip,
+                newValue,
+                oldValue
+            );
         },
         dateAnswer: function (value) {
             if (!this.showReturnTrip || !this.otherTrip.dateAnswer) {
@@ -3269,27 +3301,18 @@ export default {
         closeRearMaxTwoSeatsConflictModal() {
             this.showRearMaxTwoSeatsConflictModal = false;
         },
-        onOutboundTotalSeatsChange(totalSeats) {
-            const seats = Number(totalSeats);
-            if (seats < 1 || seats > 4) {
-                return;
-            }
+        guardTotalSeatsAgainstRearComfortConflict(tripRef, newValue, oldValue) {
             if (
-                !isRearMaxTwoCompatibleWithSeats(
-                    seats,
-                    this.trip.rear_max_two_passengers
+                newValue === oldValue ||
+                isRearMaxTwoCompatibleWithSeats(
+                    newValue,
+                    tripRef.rear_max_two_passengers
                 )
             ) {
-                this.showRearMaxTwoSeatsConflictMessage();
                 return;
             }
-            this.trip.total_seats = seats;
-        },
-        incrementOutboundTotalSeats() {
-            this.onOutboundTotalSeatsChange(this.trip.total_seats + 1);
-        },
-        decrementOutboundTotalSeats() {
-            this.onOutboundTotalSeatsChange(this.trip.total_seats - 1);
+            tripRef.total_seats = oldValue;
+            this.showRearMaxTwoSeatsConflictMessage();
         },
         onOutboundRearMaxTwoChange(event) {
             const wantsChecked = event.target.checked;
@@ -3302,28 +3325,6 @@ export default {
                 return;
             }
             this.trip.rear_max_two_passengers = wantsChecked;
-        },
-        onReturnTotalSeatsChange(totalSeats) {
-            const seats = Number(totalSeats);
-            if (seats < 1 || seats > 4) {
-                return;
-            }
-            if (
-                !isRearMaxTwoCompatibleWithSeats(
-                    seats,
-                    this.otherTrip.trip.rear_max_two_passengers
-                )
-            ) {
-                this.showRearMaxTwoSeatsConflictMessage();
-                return;
-            }
-            this.otherTrip.trip.total_seats = seats;
-        },
-        incrementReturnTotalSeats() {
-            this.onReturnTotalSeatsChange(this.otherTrip.trip.total_seats + 1);
-        },
-        decrementReturnTotalSeats() {
-            this.onReturnTotalSeatsChange(this.otherTrip.trip.total_seats - 1);
         },
         onReturnRearMaxTwoChange(event) {
             const wantsChecked = event.target.checked;

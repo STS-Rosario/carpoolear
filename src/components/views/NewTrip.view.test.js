@@ -79,8 +79,7 @@ describe('NewTrip.vue rear seat comfort preference', () => {
         expect(viewSource).toContain('isRearMaxTwoCompatibleWithSeats');
         expect(viewSource).toContain('onOutboundRearMaxTwoChange');
         expect(viewSource).toContain('onReturnRearMaxTwoChange');
-        expect(viewSource).toContain('onOutboundTotalSeatsChange');
-        expect(viewSource).toContain('onReturnTotalSeatsChange');
+        expect(viewSource).toContain('guardTotalSeatsAgainstRearComfortConflict');
         expect(viewSource).toContain("$t('rearMaxTwoRequiresThreeOrFewerSeats')");
         expect(viewSource).toMatch(/from '\.\.\/Modal'/);
         expect(viewSource).toContain('showRearMaxTwoSeatsConflictModal');
@@ -107,10 +106,10 @@ describe('NewTrip.vue rear seat comfort preference', () => {
             /id="otherTrip-seats-four"[\s\S]*?v-model\.number="\s*otherTrip\.trip\.total_seats\s*"/s
         );
         expect(viewSource).toMatch(
-            /'trip\.total_seats':\s*function\s*\(newValue,\s*oldValue\)[\s\S]*?isRearMaxTwoCompatibleWithSeats\([\s\S]*?this\.trip\.total_seats = oldValue/s
+            /'trip\.total_seats':\s*function\s*\(newValue,\s*oldValue\)[\s\S]*?guardTotalSeatsAgainstRearComfortConflict\([\s\S]*?this\.trip,\s*newValue,\s*oldValue/s
         );
         expect(viewSource).toMatch(
-            /'otherTrip\.trip\.total_seats':\s*function\s*\(newValue,\s*oldValue\)[\s\S]*?isRearMaxTwoCompatibleWithSeats\([\s\S]*?this\.otherTrip\.trip\.total_seats = oldValue/s
+            /'otherTrip\.trip\.total_seats':\s*function\s*\(newValue,\s*oldValue\)[\s\S]*?guardTotalSeatsAgainstRearComfortConflict\([\s\S]*?this\.otherTrip\.trip,\s*newValue,\s*oldValue/s
         );
         expect(viewSource).not.toMatch(
             /id="seats-four"[\s\S]*?:checked="trip\.total_seats === 4"/s
