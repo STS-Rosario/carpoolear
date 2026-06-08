@@ -42,10 +42,10 @@
 
             <div class="ongoing-trip-card__actions">
                 <router-link
-                    v-show="showShareLocationLink"
+                    v-if="showShareLocationLink"
                     :to="{
-                        name: 'detail_trip_location',
-                        params: { id: trip.id, location: 'passenger' }
+                        name: 'trip_live_share',
+                        params: { id: trip.id }
                     }"
                     class="ongoing-trip-card__share"
                 >
@@ -66,8 +66,9 @@
 
 <script>
 import dayjs from '../../dayjs';
-import { getTripLocationLabels } from '../../utils/ongoingTrip.js';
+import { getTripLocationLabels, canStartSharing } from '../../utils/ongoingTrip.js';
 import { normalizeTripsCount } from '../../utils/profileMemberStats.js';
+import { useAuthStore } from '../../stores/auth.js';
 import UserNameWithBadge from './UserNameWithBadge.vue';
 import UserRatingsCounts from './UserRatingsCounts.vue';
 
@@ -78,11 +79,6 @@ export default {
             type: Object,
             default: null
         }
-    },
-    data() {
-        return {
-            showShareLocationLink: false
-        };
     },
     computed: {
         locations() {
@@ -117,6 +113,24 @@ export default {
                 return '';
             }
             return dayjs(this.trip.trip_date).format('HH:mm');
+        },
+        showShareLocationLink() {
+            if (!this.trip || !this.trip.trip_date) {
+                return false;
+            }
+            const authStore = useAuthStore();
+            const user = authStore.auth_user;
+            if (!user) {
+                return false;
+            }
+            const isDriver = Number(this.trip.user_id) === Number(user.id);
+            const isAcceptedPassenger = Array.isArray(this.trip.passenger)
+                ? this.trip.passenger.some((p) => Number(p.id) === Number(user.id))
+                : false;
+            if (!isDriver && !isAcceptedPassenger) {
+                return false;
+            }
+            return canStartSharing(dayjs(), dayjs(this.trip.trip_date));
         }
     },
     components: {

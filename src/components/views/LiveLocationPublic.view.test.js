@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import fs from 'node:fs';
 import path from 'node:path';
 
-const viewPath = path.resolve(__dirname, '../components/views/LiveLocationPublic.vue');
+const viewPath = path.resolve(__dirname, 'LiveLocationPublic.vue');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 
 describe('LiveLocationPublic.vue', () => {

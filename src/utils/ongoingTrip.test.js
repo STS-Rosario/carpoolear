@@ -3,7 +3,8 @@ import dayjs from '../dayjs';
 import {
     estimatedTimeToMinutes,
     getTripLocationLabels,
-    isWithinOngoingTripWindow
+    isWithinOngoingTripWindow,
+    canStartSharing
 } from './ongoingTrip.js';
 
 describe('ongoingTrip estimatedTimeToMinutes', () => {
@@ -44,6 +45,18 @@ describe('ongoingTrip isWithinOngoingTripWindow', () => {
     it('is false more than thirty minutes after estimated arrival', () => {
         const now = start.add(81, 'minute');
         expect(isWithinOngoingTripWindow(now, start, '00:50')).toBe(false);
+    });
+});
+
+describe('ongoingTrip canStartSharing', () => {
+    const start = dayjs('2026-06-02 16:00:00');
+
+    it('is true from one hour before departure', () => {
+        expect(canStartSharing(start.subtract(60, 'minute'), start)).toBe(true);
+    });
+
+    it('is false more than one hour before departure', () => {
+        expect(canStartSharing(start.subtract(61, 'minute'), start)).toBe(false);
     });
 });
 

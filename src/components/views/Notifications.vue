@@ -187,6 +187,16 @@ export default {
                             params: { id: n.extras.ticket_id || n.extras.id }
                         });
                         break;
+                    case 'live_location':
+                        if (n.url) {
+                            router.push({ path: n.url.replace(/^\/app/, '') });
+                        } else if (n.extras.trip_id) {
+                            router.push({
+                                name: 'trip_live_view',
+                                params: { id: n.extras.trip_id }
+                            });
+                        }
+                        break;
                     case 'identity_validation':
                         router.push({ name: 'identity_validation' });
                         break;

@@ -15,6 +15,9 @@ const MyTrips = () => import('../components/views/MyTrips.vue');
 const Trips = () => import('../components/views/Trips.vue');
 const NewTrip = () => import('../components/views/NewTrip.vue');
 const Trip = () => import('../components/views/Trip.vue');
+const LiveLocationShare = () => import('../components/views/LiveLocationShare.vue');
+const LiveLocationPublic = () => import('../components/views/LiveLocationPublic.vue');
+const LiveLocationTrip = () => import('../components/views/LiveLocationTrip.vue');
 const Notifications = () => import('../components/views/Notifications.vue');
 const Settings = () => import('../components/views/Settings.vue');
 const ConversationList = () => import('../components/views/ConversationList.vue');
@@ -254,6 +257,60 @@ export default [
                     titleKey: 'editarViaje',
                     buttons: ['clear']
                 }
+            }
+        }
+    },
+    {
+        path: '/live/:token',
+        name: 'live_location_public',
+        component: LiveLocationPublic,
+        props: true,
+        meta: {
+            actionbar: {
+                footer: { show: true, active_id: 'home' },
+                header: { titleKey: 'liveLocationTitle', buttons: ['back'] }
+            }
+        }
+    },
+    {
+        path: '/trips/:id/live',
+        name: 'trip_live_share',
+        component: LiveLocationShare,
+        beforeEnter: (to, from, next) => {
+            if (!getAuthStore().checkLogin) {
+                auth(to, from, next);
+                return;
+            }
+            requireIdentityValidation(to, from, () => {
+                profileComplete(to, from, next);
+            });
+        },
+        props: true,
+        meta: {
+            actionbar: {
+                footer: { show: true, active_id: 'home' },
+                header: { titleKey: 'liveLocationTitle', buttons: ['back'] }
+            }
+        }
+    },
+    {
+        path: '/trips/:id/ubicacion',
+        name: 'trip_live_view',
+        component: LiveLocationTrip,
+        beforeEnter: (to, from, next) => {
+            if (!getAuthStore().checkLogin) {
+                auth(to, from, next);
+                return;
+            }
+            requireIdentityValidation(to, from, () => {
+                profileComplete(to, from, next);
+            });
+        },
+        props: true,
+        meta: {
+            actionbar: {
+                footer: { show: true, active_id: 'home' },
+                header: { titleKey: 'liveLocationTitle', buttons: ['back'] }
             }
         }
     },

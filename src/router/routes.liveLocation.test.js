@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import fs from 'node:fs';
 import path from 'node:path';
 
-const routesPath = path.resolve(__dirname, '../../router/routes.js');
+const routesPath = path.resolve(__dirname, 'routes.js');
 const routesSource = fs.readFileSync(routesPath, 'utf8');
 
 describe('live location routes', () => {

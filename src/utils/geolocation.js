@@ -28,12 +28,13 @@ function getWebAdapter() {
             }
             return navigator.geolocation.watchPosition(
                 (position) => {
-                    callback({
+                    const coords = {
                         lat: position.coords.latitude,
                         lng: position.coords.longitude
-                    });
+                    };
+                    callback(coords);
                 },
-                () => {},
+                (_error) => undefined,
                 { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
             );
         },
@@ -70,10 +71,11 @@ async function getCapacitorAdapter() {
                     if (err || !position) {
                         return;
                     }
-                    callback({
+                    const coords = {
                         lat: position.coords.latitude,
                         lng: position.coords.longitude
-                    });
+                    };
+                    callback(coords);
                 }
             );
         },
