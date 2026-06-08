@@ -52,6 +52,9 @@ const AdminSupportTicketDetail = () => import('../components/views/AdminSupportT
 const AdminSupportReplyTemplates = () => import('../components/views/AdminSupportReplyTemplates.vue');
 const AdminSupportReplyTemplateView = () => import('../components/views/AdminSupportReplyTemplateView.vue');
 const AdminSupportReplyTemplateForm = () => import('../components/views/AdminSupportReplyTemplateForm.vue');
+const AdminChangelogs = () => import('../components/views/AdminChangelogs.vue');
+const AdminChangelogView = () => import('../components/views/AdminChangelogView.vue');
+const AdminChangelogForm = () => import('../components/views/AdminChangelogForm.vue');
 
 const UpdateProfile = () => import('../components/sections/UpdateProfile.vue');
 const FriendsSetting = () => import('../components/sections/FriendsSetting.vue');
@@ -1009,6 +1012,80 @@ export default [
                 },
                 header: {
                     titleKey: 'detallePlantillaRespuesta',
+                    buttons: ['back']
+                }
+            }
+        }
+    },
+    {
+        path: '/admin/changelogs',
+        name: 'admin-changelogs',
+        component: AdminChangelogs,
+        beforeEnter: authAdmin,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'admin'
+                },
+                header: {
+                    titleKey: 'adminNavChangelog',
+                    buttons: ['back']
+                }
+            }
+        }
+    },
+    {
+        path: '/admin/changelogs/new',
+        name: 'admin-changelog-new',
+        component: AdminChangelogForm,
+        beforeEnter: authAdmin,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'admin'
+                },
+                header: {
+                    titleKey: 'nuevoChangelog',
+                    buttons: ['back']
+                }
+            }
+        }
+    },
+    {
+        path: '/admin/changelogs/:changelogId/edit',
+        name: 'admin-changelog-edit',
+        component: AdminChangelogForm,
+        props: true,
+        beforeEnter: authAdmin,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'admin'
+                },
+                header: {
+                    titleKey: 'editarChangelog',
+                    buttons: ['back']
+                }
+            }
+        }
+    },
+    {
+        path: '/admin/changelogs/:changelogId',
+        name: 'admin-changelog-view',
+        component: AdminChangelogView,
+        props: true,
+        beforeEnter: authAdmin,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'admin'
+                },
+                header: {
+                    titleKey: 'detalleChangelog',
                     buttons: ['back']
                 }
             }

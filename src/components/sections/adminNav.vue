@@ -44,6 +44,9 @@
                 <li>
                     <router-link :to="{ name: 'admin-support-tickets' }">{{ $t('soporte') }}</router-link>
                 </li>
+                <li>
+                    <router-link :to="{ name: 'admin-changelogs' }">{{ $t('adminNavChangelog') }}</router-link>
+                </li>
             </ul>
         </div>
     </div>
