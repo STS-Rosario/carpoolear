@@ -14,6 +14,7 @@ describe('MarkdownPreview view', () => {
         expect(viewSource).toContain('markdown-preview');
         expect(viewSource).toContain('color: #333');
         expect(viewSource).toMatch(/:deep\(h1\)/);
+        expect(viewSource).toMatch(/:deep\(h6\)/);
         expect(viewSource).toMatch(/:deep\(p\)/);
     });
 

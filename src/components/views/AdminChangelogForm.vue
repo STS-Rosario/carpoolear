@@ -58,7 +58,7 @@ export default {
             editorOptions: {
                 usageStatistics: false,
                 hideModeSwitch: true,
-                toolbarItems: [['bold', 'italic', 'strike'], ['ul', 'ol']]
+                toolbarItems: [['heading'], ['bold', 'italic', 'strike'], ['ul', 'ol']]
             }
         };
     },

@@ -4,7 +4,7 @@ import DOMPurify from 'dompurify';
 const SANITIZE_OPTIONS = {
     ALLOWED_TAGS: [
         'p', 'br', 'strong', 'b', 'em', 'i', 'u', 'del', 's',
-        'code', 'pre', 'a', 'ul', 'ol', 'li', 'blockquote', 'h1', 'h2', 'h3'
+        'code', 'pre', 'a', 'ul', 'ol', 'li', 'blockquote', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'
     ],
     ALLOWED_ATTR: ['href', 'target', 'rel']
 };

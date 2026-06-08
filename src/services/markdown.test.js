@@ -35,4 +35,24 @@ describe('renderMarkdownPreview', () => {
         expect(html).not.toContain('# Cambios');
         expect(html).toContain('<li>Prueba dsada</li>');
     });
+
+    it('keeps all heading levels through h6 in markdown and html previews', async () => {
+        const { renderMarkdownPreview } = await import('./markdown.js');
+        const markdownHtml = renderMarkdownPreview(
+            '# H1\n## H2\n### H3\n#### H4\n##### H5\n###### H6'
+        );
+        expect(markdownHtml).toContain('<h1');
+        expect(markdownHtml).toContain('<h2');
+        expect(markdownHtml).toContain('<h3');
+        expect(markdownHtml).toContain('<h4');
+        expect(markdownHtml).toContain('<h5');
+        expect(markdownHtml).toContain('<h6');
+
+        const wysiwygHtml = renderMarkdownPreview(
+            '<h1>H1</h1><h2>H2</h2><h3>H3</h3><h4>H4</h4><h5>H5</h5><h6>H6</h6>'
+        );
+        expect(wysiwygHtml).toContain('<h4>H4</h4>');
+        expect(wysiwygHtml).toContain('<h5>H5</h5>');
+        expect(wysiwygHtml).toContain('<h6>H6</h6>');
+    });
 });

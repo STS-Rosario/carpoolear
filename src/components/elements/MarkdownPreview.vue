@@ -30,6 +30,9 @@ export default {
 .markdown-preview :deep(h1),
 .markdown-preview :deep(h2),
 .markdown-preview :deep(h3),
+.markdown-preview :deep(h4),
+.markdown-preview :deep(h5),
+.markdown-preview :deep(h6),
 .markdown-preview :deep(p),
 .markdown-preview :deep(li),
 .markdown-preview :deep(ul),
@@ -44,7 +47,10 @@ export default {
 
 .markdown-preview :deep(h1),
 .markdown-preview :deep(h2),
-.markdown-preview :deep(h3) {
+.markdown-preview :deep(h3),
+.markdown-preview :deep(h4),
+.markdown-preview :deep(h5),
+.markdown-preview :deep(h6) {
     margin: 0 0 0.5em;
     font-weight: 600;
 }
