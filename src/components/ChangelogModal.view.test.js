@@ -47,4 +47,11 @@ describe('ChangelogModal view', () => {
         expect(viewSource).toContain('openFromNavigation');
         expect(viewSource).toContain('forcedOpen');
     });
+
+    it('keeps long changelog content in a scrollable region with a fixed footer', () => {
+        expect(viewSource).toContain('changelog-modal-scroll');
+        expect(viewSource).toMatch(/changelog-modal-scroll[\s\S]*overflow-y:\s*auto/);
+        expect(viewSource).toMatch(/changelog-modal-footer[\s\S]*flex-shrink:\s*0/);
+        expect(viewSource).toMatch(/changelog-modal-dialog[\s\S]*min-height:\s*0/);
+    });
 });
