@@ -201,7 +201,8 @@ export default {
     display: flex;
     flex-wrap: nowrap;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.75rem;
+    margin: 0.75rem 0;
 }
 
 .trip-seats__availability .trip_seats-available_value {
@@ -214,8 +215,9 @@ export default {
 }
 
 .trip-seats__rear-comfort-note {
-    font-size: 0.9em;
-    line-height: 1.2;
+    font-size: 1.15em;
+    font-weight: 500;
+    line-height: 1.3;
     text-transform: none;
     min-width: 0;
     margin-left: 1rem;
@@ -226,7 +228,9 @@ export default {
 }
 
 .trip-seats__co-passengers {
-    font-size: 0.95em;
+    margin-top: 0.75rem;
+    font-size: 1.15em;
+    font-weight: 500;
     line-height: 1.3;
     text-transform: none;
 }
