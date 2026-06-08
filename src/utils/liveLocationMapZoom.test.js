@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import {
     LIVE_LOCATION_MAP_DEFAULT_ZOOM,
     LIVE_LOCATION_MAP_ZOOM_KEY,
+    bindLiveLocationMapZoomPersistence,
     getLiveLocationMapZoom,
     saveLiveLocationMapZoom
 } from './liveLocationMapZoom.js';
@@ -37,5 +38,24 @@ describe('liveLocationMapZoom', () => {
             LIVE_LOCATION_MAP_ZOOM_KEY,
             '17'
         );
+    });
+
+    it('bindLiveLocationMapZoomPersistence saves zoom on zoomend', () => {
+        const storage = {
+            getItem: vi.fn(),
+            setItem: vi.fn()
+        };
+        const handlers = {};
+        const map = {
+            on: vi.fn((event, handler) => {
+                handlers[event] = handler;
+            }),
+            getZoom: vi.fn(() => 16)
+        };
+
+        bindLiveLocationMapZoomPersistence(map, storage);
+        handlers.zoomend();
+
+        expect(storage.setItem).toHaveBeenCalledWith(LIVE_LOCATION_MAP_ZOOM_KEY, '16');
     });
 });
