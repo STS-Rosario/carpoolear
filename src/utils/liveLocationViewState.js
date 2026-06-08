@@ -9,3 +9,16 @@ export function isWaitingForLiveLocation(view) {
             (view.lat == null || view.lng == null)
     );
 }
+
+export function getTripLiveLocationViewMode(tripView, loaded) {
+    if (!loaded) {
+        return 'loading';
+    }
+    if (isLiveShareStopped(tripView)) {
+        return 'stopped';
+    }
+    if (tripView) {
+        return 'active';
+    }
+    return 'waiting';
+}
