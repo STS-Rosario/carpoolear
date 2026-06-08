@@ -12,4 +12,13 @@ describe('SeatRequestTrip card', () => {
         expect(source).toContain('getSeatRequestStatusClass');
         expect(source).toContain('getSeatRequestStatusLabelKey');
     });
+
+    it('wraps trip and status in a shared card shell with grid column sizing', () => {
+        expect(source).toContain('seat-request-trip__card');
+        expect(source).toContain(':class="tripCardCountClass"');
+        expect(source).toContain(':embeddedInSeatRequest="true"');
+        expect(source).toMatch(
+            /\.seat-request-trip__card :deep\(\.card-trip\) \{[\s\S]*?border-radius: 0;[\s\S]*?box-shadow: none;/
+        );
+    });
 });
