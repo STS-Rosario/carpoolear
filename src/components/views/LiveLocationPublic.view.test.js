@@ -22,5 +22,7 @@ describe('LiveLocationPublic.vue', () => {
         expect(viewSource).toContain("viewMode === 'active'");
         expect(viewSource).toContain("viewMode === 'stopped'");
         expect(viewSource).not.toContain('isLiveShareStopped(');
+        expect(viewSource).toContain('liveLocationPassengerPublicIntro');
+        expect(viewSource).toContain('getPassengerPublicLiveLocationIntroParams');
     });
 });
