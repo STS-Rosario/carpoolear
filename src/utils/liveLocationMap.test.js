@@ -8,10 +8,20 @@ const mapSource = fs.readFileSync(
     path.resolve(__dirname, 'liveLocationMap.js'),
     'utf8'
 );
+const mapStyleSource = fs.readFileSync(
+    path.resolve(__dirname, 'liveLocationMap.css'),
+    'utf8'
+);
 
 describe('liveLocationMap', () => {
     it('imports Leaflet styles for map rendering', () => {
         expect(mapSource).toContain("import 'leaflet/dist/leaflet.css'");
+        expect(mapSource).toContain('./liveLocationMap.css');
+    });
+
+    it('keeps live location map below header dropdown stacking', () => {
+        expect(mapStyleSource).toContain('isolation: isolate');
+        expect(mapStyleSource).toContain('z-index: 0');
     });
 
     it('createLiveLocationMarkerUpdater updates marker position', () => {

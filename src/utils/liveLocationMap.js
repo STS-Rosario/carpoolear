@@ -1,5 +1,6 @@
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import './liveLocationMap.css';
 import { ensureLeafletDefaultIconImages } from './leafletIcons.js';
 import { createLiveLocationMarkerUpdater } from './liveLocationMapHelpers.js';
 import {
