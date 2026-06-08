@@ -24,6 +24,11 @@ export function isWithinOngoingTripWindow(now, tripStart, estimatedTime) {
     );
 }
 
+export function canStartSharing(now, tripStart) {
+    const windowStart = tripStart.subtract(ONGOING_TRIP_LEAD_MINUTES, 'minute');
+    return !now.isBefore(windowStart);
+}
+
 function getLocationName(point) {
     if (!point) {
         return '';

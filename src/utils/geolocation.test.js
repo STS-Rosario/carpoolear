@@ -38,15 +38,15 @@ describe('geolocation', () => {
         expect(position.lng).toBe(-58.38);
     });
 
-    it('startLocationWatch invokes callback and returns watch id', () => {
+    it('startLocationWatch invokes callback and returns watch id', async () => {
         const callback = vi.fn();
-        const watchId = startLocationWatch(callback);
+        const watchId = await startLocationWatch(callback);
         expect(watchId).toBe(42);
         expect(callback).toHaveBeenCalledWith({ lat: -34.6, lng: -58.38 });
     });
 
-    it('clearLocationWatch clears active web watch', () => {
-        startLocationWatch(() => {});
+    it('clearLocationWatch clears active web watch', async () => {
+        await startLocationWatch(() => {});
         clearLocationWatch();
         expect(navigator.geolocation.clearWatch).toHaveBeenCalledWith(42);
     });

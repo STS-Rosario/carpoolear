@@ -45,6 +45,7 @@
     "@capacitor/cli": "^8.3.0",
     "@capacitor/core": "^7.4.3",
     "@capacitor/device": "^7.0.2",
+    "@capacitor/geolocation": "^7.1.8",
     "@capacitor/ios": "^7.4.3",
     "@capacitor/network": "^7.0.2",
     "@capacitor/preferences": "^7.0.2",

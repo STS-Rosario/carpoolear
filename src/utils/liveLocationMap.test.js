@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { createLiveLocationMarkerUpdater } from './liveLocationMap.js';
+import { createLiveLocationMarkerUpdater } from './liveLocationMapHelpers.js';
 
 describe('liveLocationMap', () => {
     it('createLiveLocationMarkerUpdater updates marker position', () => {
