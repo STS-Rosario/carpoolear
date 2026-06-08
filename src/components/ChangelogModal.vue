@@ -19,7 +19,17 @@
 
             <h2 class="changelog-modal-title">{{ $t('ultimosCambios') }}</h2>
 
+            <p class="changelog-modal-intro">{{ $t('changelogModalIntro') }}</p>
+
+            <h3 class="changelog-modal-version">{{ versionHeading }}</h3>
+
             <MarkdownPreview class="changelog-modal-body" :source="entryBody" />
+
+            <div class="changelog-modal-footer">
+                <button type="button" class="btn btn-primary changelog-modal-ok" @click="close">
+                    {{ $t('changelogModalOk') }}
+                </button>
+            </div>
         </div>
     </div>
 </template>
@@ -62,6 +72,9 @@ export default {
                     ? window.appVersion
                     : '';
             return getChangelogAppVersion(useRootStore().appVersionInfo, fallback);
+        },
+        versionHeading() {
+            return this.appVersion ? `v${this.appVersion}` : '';
         },
         eligible() {
             return (
@@ -145,7 +158,7 @@ export default {
 
 .changelog-modal-dialog {
     position: absolute;
-    right: 16px;
+    left: 16px;
     bottom: 16px;
     width: min(420px, calc(100vw - 32px));
     max-height: min(70vh, 520px);
@@ -173,15 +186,40 @@ export default {
 
 .changelog-modal-title {
     margin: 0 2rem 12px 0;
-    font-size: 1.25rem;
-    font-weight: 600;
+    font-size: 1.75rem;
+    font-weight: 700;
     color: #333;
 }
 
+.changelog-modal-intro {
+    margin: 0 0 12px;
+    color: #333;
+    font-size: 0.95rem;
+    line-height: 1.45;
+}
+
+.changelog-modal-version {
+    margin: 0 0 12px;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #036686;
+}
+
 .changelog-modal-body {
+    flex: 1 1 auto;
+    min-height: 0;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    margin: 0;
+    margin: 0 0 12px;
     color: #333;
+}
+
+.changelog-modal-footer {
+    flex-shrink: 0;
+    text-align: right;
+}
+
+.changelog-modal-ok {
+    min-width: 88px;
 }
 </style>

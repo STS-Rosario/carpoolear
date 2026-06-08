@@ -81,6 +81,9 @@ const messages = {
         crearNuevoTicketMesaAyuda: 'Crear nuevo ticket de mesa de ayuda',
         plantillasRespuestas: 'Plantillas de respuestas',
         ultimosCambios: 'Últimos cambios',
+        changelogModalIntro:
+            'Estuvimos haciendo mejoras, te dejamos lo que cambiamos para que estés al tanto :)',
+        changelogModalOk: 'OK',
         adminNavChangelog: 'Changelog',
         changelogVersion: 'Versión',
         changelogContenido: 'Contenido',
@@ -1502,6 +1505,9 @@ const messages = {
         crearNuevoTicketMesaAyuda: 'Crear nuevo ticket de mesa de ayuda',
         plantillasRespuestas: 'Plantillas de respuestas',
         ultimosCambios: 'Últimos cambios',
+        changelogModalIntro:
+            'Estuvimos haciendo mejoras, te dejamos lo que cambiamos para que estés al tanto :)',
+        changelogModalOk: 'OK',
         adminNavChangelog: 'Changelog',
         changelogVersion: 'Versión',
         changelogContenido: 'Contenido',
@@ -2690,6 +2696,9 @@ const messages = {
         crearNuevoTicketMesaAyuda: 'Create new help desk ticket',
         plantillasRespuestas: 'Reply templates',
         ultimosCambios: 'Latest changes',
+        changelogModalIntro:
+            'We have been making improvements. Here is what changed so you are up to date :)',
+        changelogModalOk: 'OK',
         adminNavChangelog: 'Changelog',
         changelogVersion: 'Version',
         changelogContenido: 'Content',
