@@ -22,3 +22,28 @@ describe('TripSeats.vue zero available seats label', () => {
         );
     });
 });
+
+describe('TripSeats.vue accepted passenger co-travelers', () => {
+    it('shows co-passenger first names below available seats for accepted passengers', () => {
+        expect(viewSource).toContain('isAcceptedPassengerOnTrip');
+        expect(viewSource).toContain('getAcceptedCoPassengerFirstNames');
+        expect(viewSource).toContain('formatSpanishNameList');
+        expect(viewSource).toContain("$t('viajasCon'");
+        expect(viewSource).toContain('trip-seats__co-passengers');
+    });
+
+    it('places rear comfort note above seats for accepted passengers', () => {
+        expect(viewSource).toMatch(
+            /trip-seats__rear-comfort-note--above[\s\S]*?trip-seats__availability/s
+        );
+    });
+
+    it('does not add profile links or images for co-passengers', () => {
+        const coPassengerBlock = viewSource.match(
+            /trip-seats__co-passengers[\s\S]*?<\/span>/
+        )?.[0];
+
+        expect(coPassengerBlock).toBeTruthy();
+        expect(coPassengerBlock).not.toMatch(/router-link|toUserProfile|v-imgSrc/);
+    });
+});
