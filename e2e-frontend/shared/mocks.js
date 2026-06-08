@@ -173,8 +173,14 @@ const MOCK_CONVERSATIONS = [
     last_message: { id: 10, text: 'Hola, ¿a qué hora salís?', created_at: '2025-06-10T10:30:00.000Z' },
     unread: true,
     users: [
-      { id: 1, name: 'Juan Pérez' },
-      { id: 2, name: 'María García' },
+      { id: 1, name: 'Juan Pérez', positive_ratings: 10, negative_ratings: 1 },
+      {
+        id: 2,
+        name: 'María García',
+        positive_ratings: 8,
+        negative_ratings: 2,
+        last_connection: '2025-06-10T09:00:00.000Z',
+      },
     ],
   },
   {
@@ -434,8 +440,13 @@ function makeMockConversation(id, overrides = {}) {
     last_message: { id: id * 10, text: `Message from conv ${id}`, created_at: '2025-06-10T10:30:00.000Z' },
     unread: false,
     users: [
-      { id: 1, name: 'Juan Pérez' },
-      { id: id + 100, name: `User ${id}` },
+      { id: 1, name: 'Juan Pérez', positive_ratings: 10, negative_ratings: 1 },
+      {
+        id: id + 100,
+        name: `User ${id}`,
+        positive_ratings: 5,
+        negative_ratings: 0,
+      },
     ],
     ...overrides,
   };
