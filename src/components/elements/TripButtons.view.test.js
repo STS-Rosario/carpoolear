@@ -17,4 +17,10 @@ describe('TripButtons.vue trip detail layout', () => {
         expect(desktopButtonsStyles).not.toMatch(/position:\s*absolute/);
         expect(desktopButtonsStyles).toMatch(/margin-top:\s*1\.5em/);
     });
+
+    it('shows live location share button when trip is shareable', () => {
+        expect(viewSource).toContain('compartirUbicacionTiempoReal');
+        expect(viewSource).toContain("name: 'trip_live_share'");
+        expect(viewSource).toContain('showLiveLocationShare');
+    });
 });
