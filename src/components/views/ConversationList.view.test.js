@@ -5,20 +5,24 @@ import path from 'node:path';
 const viewPath = path.resolve(__dirname, 'ConversationList.vue');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 
-function getMobileChatConversationComponentBlock() {
+function getMobileStylesBlock() {
     const match = viewSource.match(
-        /\.conversation-list-page--mobile-chat \.conversation-component\.container\s*\{[^}]+\}/s
+        /@media only screen and \(max-width: 768px\)\s*\{([\s\S]*?)\n\}/m
     );
-    return match ? match[0] : '';
+    return match ? match[1] : '';
 }
 
 describe('ConversationList.vue mobile chat layout', () => {
     it('removes horizontal container padding on mobile chat so conversation uses full width', () => {
-        const block = getMobileChatConversationComponentBlock();
+        const mobileStyles = getMobileStylesBlock();
+        const block = mobileStyles.match(
+            /\.conversation-list-page--mobile-chat \.conversation-component\.container\s*\{[^}]+\}/s
+        );
 
-        expect(block).toMatch(/padding-left:\s*0/);
-        expect(block).toMatch(/padding-right:\s*0/);
-        expect(block).toMatch(/width:\s*100%/);
-        expect(block).toMatch(/max-width:\s*100%/);
+        expect(block).not.toBeNull();
+        expect(block[0]).toMatch(/padding-left:\s*0/);
+        expect(block[0]).toMatch(/padding-right:\s*0/);
+        expect(block[0]).toMatch(/width:\s*100%/);
+        expect(block[0]).toMatch(/max-width:\s*100%/);
     });
 });
