@@ -1,10 +1,26 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
     changelogSeenStorageKey,
     isChangelogSeenForVersion,
     markChangelogSeenForVersion,
     shouldShowChangelogModal
 } from './changelogPrompt.js';
+
+function createLocalStorageMock() {
+    const store = new Map();
+    return {
+        getItem: vi.fn((key) => (store.has(key) ? store.get(key) : null)),
+        setItem: vi.fn((key, value) => {
+            store.set(key, String(value));
+        }),
+        removeItem: vi.fn((key) => {
+            store.delete(key);
+        }),
+        clear: vi.fn(() => {
+            store.clear();
+        })
+    };
+}
 
 describe('changelogSeenStorageKey', () => {
     it('scopes dismissal to the semver version', () => {
@@ -13,8 +29,12 @@ describe('changelogSeenStorageKey', () => {
 });
 
 describe('changelog once-per-version', () => {
+    beforeEach(() => {
+        vi.stubGlobal('localStorage', createLocalStorageMock());
+    });
+
     afterEach(() => {
-        localStorage.clear();
+        vi.unstubAllGlobals();
     });
 
     it('shows modal when version has not been dismissed', () => {
