@@ -52,6 +52,15 @@ export function getAcceptedCoPassengerFirstNames(
         .filter(Boolean);
 }
 
+export function buildCoPassengerNamesText(
+    allPassengerRequest,
+    currentUserId
+) {
+    return formatSpanishNameList(
+        getAcceptedCoPassengerFirstNames(allPassengerRequest, currentUserId)
+    );
+}
+
 export function isAcceptedPassengerOnTrip(allPassengerRequest, currentUserId) {
     if (!Array.isArray(allPassengerRequest) || currentUserId == null) {
         return false;

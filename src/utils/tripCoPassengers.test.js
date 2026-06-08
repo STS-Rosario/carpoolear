@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+    buildCoPassengerNamesText,
     extractFirstName,
     formatSpanishNameList,
     getAcceptedCoPassengerFirstNames,
@@ -53,6 +54,28 @@ describe('tripCoPassengers', () => {
             );
 
             expect(names).toEqual(['María']);
+        });
+    });
+
+    describe('buildCoPassengerNamesText', () => {
+        it('formats accepted co-passenger first names for display', () => {
+            expect(
+                buildCoPassengerNamesText(
+                    [
+                        {
+                            user_id: 10,
+                            request_state: 1,
+                            name: 'Ana Pérez'
+                        },
+                        {
+                            user_id: 11,
+                            request_state: 1,
+                            name: 'Pedro Gómez'
+                        }
+                    ],
+                    10
+                )
+            ).toBe('Pedro');
         });
     });
 

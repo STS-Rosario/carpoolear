@@ -141,8 +141,7 @@ import { useTripsStore } from '../../stores/trips';
 import { useAuthStore } from '../../stores/auth';
 import SvgItem from '../SvgItem';
 import {
-    formatSpanishNameList,
-    getAcceptedCoPassengerFirstNames,
+    buildCoPassengerNamesText,
     isAcceptedPassengerOnTrip
 } from '../../utils/tripCoPassengers.js';
 
@@ -176,12 +175,10 @@ export default {
                 return '';
             }
 
-            const firstNames = getAcceptedCoPassengerFirstNames(
+            return buildCoPassengerNamesText(
                 this.trip?.allPassengerRequest,
                 this.user?.id
             );
-
-            return formatSpanishNameList(firstNames);
         }
     },
     components: {

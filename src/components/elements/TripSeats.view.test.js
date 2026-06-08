@@ -26,8 +26,7 @@ describe('TripSeats.vue zero available seats label', () => {
 describe('TripSeats.vue accepted passenger co-travelers', () => {
     it('shows co-passenger first names below available seats for accepted passengers', () => {
         expect(viewSource).toContain('isAcceptedPassengerOnTrip');
-        expect(viewSource).toContain('getAcceptedCoPassengerFirstNames');
-        expect(viewSource).toContain('formatSpanishNameList');
+        expect(viewSource).toContain('buildCoPassengerNamesText');
         expect(viewSource).toContain("$t('viajasCon'");
         expect(viewSource).toContain('trip-seats__co-passengers');
     });
