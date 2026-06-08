@@ -504,6 +504,10 @@ export default {
         overflow: hidden;
         margin-bottom: 0;
         padding-bottom: 0;
+        padding-left: 0;
+        padding-right: 0;
+        width: 100%;
+        max-width: 100%;
     }
     .conversation-list-page--mobile-chat .conversation-component > .row {
         flex: 1 1 auto;
