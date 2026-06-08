@@ -496,6 +496,7 @@ export default {
         z-index: 8;
         align-self: stretch;
     }
+    /* Bootstrap .container adds 10px side padding; override for edge-to-edge chat */
     .conversation-list-page--mobile-chat .conversation-component.container {
         flex: 1 1 auto;
         min-height: 0;
@@ -504,6 +505,10 @@ export default {
         overflow: hidden;
         margin-bottom: 0;
         padding-bottom: 0;
+        padding-left: 0;
+        padding-right: 0;
+        width: 100%;
+        max-width: 100%;
     }
     .conversation-list-page--mobile-chat .conversation-component > .row {
         flex: 1 1 auto;
