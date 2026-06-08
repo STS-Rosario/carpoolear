@@ -128,10 +128,10 @@ export const useAuthStore = defineStore('auth', {
             }
             tripsStore.tripsSearch({ is_passenger: false });
             myTripsStore.tripAsDriver();
-            myTripsStore.tripAsPassenger();
             if (ratesStore) ratesStore.pendingRatesAction();
             if (carsStore) carsStore.index();
             passengerStore.getPendingRequest();
+            passengerStore.getSeatRequests();
             rootStore.startThread();
             const router = await getLazyRouter();
             if (this.firstTime || !hasRequiredProfileFields(this.user)) {

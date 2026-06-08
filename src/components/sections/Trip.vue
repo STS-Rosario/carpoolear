@@ -646,6 +646,11 @@ export default {
             type: Boolean,
             required: false,
             default: false
+        },
+        embeddedInSeatRequest: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
 
@@ -793,6 +798,9 @@ export default {
             config: 'appConfig'
         }),
         tripCardCountClass() {
+            if (this.embeddedInSeatRequest) {
+                return '';
+            }
             if (this.config) {
                 if (this.config.max_cards_per_row === 3) {
                     return 'col-lg-8 col-md-12 col-sm-12';

@@ -140,11 +140,13 @@ export const useRootStore = defineStore('root', {
                 }
             }
 
-            const passengerTrips = myTripsStore.passenger_trip;
-            if (passengerTrips) {
-                for (let i = 0; i < passengerTrips.length; i++) {
-                    if (passengerTrips[i].id === id) {
-                        tripsStore.setCurrentTrip(passengerTrips[i]);
+            const { usePassengerStore } = await import('./passenger');
+            const passengerStore = usePassengerStore();
+            if (passengerStore.seatRequests) {
+                for (let i = 0; i < passengerStore.seatRequests.length; i++) {
+                    const request = passengerStore.seatRequests[i];
+                    if (request.trip && request.trip.id === id) {
+                        tripsStore.setCurrentTrip(request.trip);
                         break;
                     }
                 }

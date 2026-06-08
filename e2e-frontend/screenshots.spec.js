@@ -7,6 +7,7 @@ const {
     MOCK_TRIP_DETAIL,
     MOCK_DRIVER_TRIPS,
     MOCK_PASSENGER_TRIPS,
+    MOCK_SEAT_REQUESTS,
     MOCK_CONVERSATIONS,
     MOCK_MESSAGES,
     MOCK_NOTIFICATIONS,
@@ -199,14 +200,18 @@ test.describe('Screenshot tests', () => {
             await page.route('**/api/users/get-trips**', (route) => {
                 const url = new URL(route.request().url());
                 const asDriver = url.searchParams.get('as_driver');
-                const data =
-                    asDriver === 'true'
-                        ? MOCK_DRIVER_TRIPS
-                        : MOCK_PASSENGER_TRIPS;
+                const data = asDriver === 'true' ? MOCK_DRIVER_TRIPS : [];
                 route.fulfill({
                     status: 200,
                     contentType: 'application/json',
                     body: JSON.stringify({ data })
+                });
+            });
+            await page.route('**/api/users/seat-requests', (route) => {
+                route.fulfill({
+                    status: 200,
+                    contentType: 'application/json',
+                    body: JSON.stringify({ data: MOCK_SEAT_REQUESTS })
                 });
             });
             await page.route('**/api/users/requests', (route) => {

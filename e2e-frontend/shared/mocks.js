@@ -163,6 +163,16 @@ const MOCK_PASSENGER_TRIPS = [
   }),
 ];
 
+const MOCK_SEAT_REQUESTS = [
+  {
+    id: 1,
+    trip_id: 20,
+    request_state: 1,
+    created_at: '2025-06-10T10:00:00.000Z',
+    trip: MOCK_PASSENGER_TRIPS[0],
+  },
+];
+
 const MOCK_CONVERSATIONS = [
   {
     id: 1,
@@ -699,6 +709,14 @@ async function setupAuthState(page, user = MOCK_USER) {
     });
   });
 
+  await page.route('**/api/users/seat-requests', (route) => {
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ data: [] }),
+    });
+  });
+
   await page.route('**/api/cars', (route) => {
     route.fulfill({
       status: 200,
@@ -746,6 +764,7 @@ module.exports = {
   MOCK_TRIP_DETAIL,
   MOCK_DRIVER_TRIPS,
   MOCK_PASSENGER_TRIPS,
+  MOCK_SEAT_REQUESTS,
   MOCK_CONVERSATIONS,
   MOCK_MESSAGES,
   MOCK_NOTIFICATIONS,
