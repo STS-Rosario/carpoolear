@@ -13,6 +13,15 @@ describe('Trips.vue app banner', () => {
     });
 });
 
+describe('Trips.vue ongoing trip card', () => {
+    it('loads and shows the ongoing trip card for logged-in users', () => {
+        expect(viewSource).toContain('OngoingTripCard');
+        expect(viewSource).toContain('ongoingTrip');
+        expect(viewSource).toContain('fetchOngoingTrip');
+        expect(viewSource).toContain('v-if="ongoingTrip"');
+    });
+});
+
 describe('Trips.vue persisted search state', () => {
     it('does not run default search when URL already has search params', () => {
         expect(viewSource).toContain('hasRouteSearchParams()');
