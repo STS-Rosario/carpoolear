@@ -16,6 +16,15 @@
                         <i class="fa fa-thumbs-down" aria-hidden="true"></i>
                         <span>{{ profile.negative_ratings }}</span>
                     </div>
+                    <div
+                        v-if="memberSinceLabel || participatedTripsLabel"
+                        class="profile-info--member-stats"
+                    >
+                        <div v-if="memberSinceLabel">{{ memberSinceLabel }}</div>
+                        <div v-if="participatedTripsLabel">
+                            {{ participatedTripsLabel }}
+                        </div>
+                    </div>
                 </div>
                 <div v-if="badges.length" class="profile-badges">
                     <img
@@ -183,6 +192,10 @@ import router from '../../router';
 import UserNameWithBadge from '../elements/UserNameWithBadge.vue';
 import { formatId } from '../../services/utility';
 import { activeCarsWithPlate } from '../../utils/userCars.js';
+import {
+    formatMemberSinceMonthYear,
+    normalizeTripsCount
+} from '../../utils/profileMemberStats.js';
 
 export default {
     computed: {
@@ -208,6 +221,19 @@ export default {
         },
         visibleCars() {
             return activeCarsWithPlate(this.profile?.cars);
+        },
+        memberSinceLabel() {
+            const date = formatMemberSinceMonthYear(this.profile?.created_at);
+            return date ? this.$t('miembroDesde', { date }) : '';
+        },
+        participatedTripsLabel() {
+            if (!this.profile || this.profile.trips_count == null) {
+                return '';
+            }
+
+            return this.$t('perfilViajesParticipados', {
+                count: normalizeTripsCount(this.profile.trips_count)
+            });
         }
     },
     methods: {
