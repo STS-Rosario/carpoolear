@@ -136,6 +136,7 @@ export const usePassengerStore = defineStore('passenger', {
                     } else {
                         dialogs.message(i18n.global.t('solicitudFueEnviada'));
                     }
+                    this.getSeatRequests();
                     return Promise.resolve(response);
                 })
                 .catch((error) => {
@@ -271,6 +272,7 @@ export const usePassengerStore = defineStore('passenger', {
                             value: ''
                         });
                     }
+                    this.getSeatRequests();
                     return Promise.resolve(response);
                 })
                 .catch((error) => {
