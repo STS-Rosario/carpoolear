@@ -35,7 +35,9 @@
                 </button>
             </div>
             <div v-else class="live-location-share__inactive">
-                <p>{{ $t('liveLocationSharingInactive') }}</p>
+                <p v-if="shareIntroKey" class="live-location-share__intro">
+                    {{ $t(shareIntroKey) }}
+                </p>
                 <button type="button" class="btn btn-primary" @click="startSharing">
                     <i class="fa fa-wifi live-location-share__share-icon" aria-hidden="true"></i>
                     {{ $t('compartirUbicacionTiempoReal') }}
@@ -50,6 +52,8 @@
 import { mapActions, mapState } from 'pinia';
 import Loading from '../Loading.vue';
 import LiveLocationLastUpdated from '../elements/LiveLocationLastUpdated.vue';
+import { useAuthStore } from '../../stores/auth.js';
+import { useRootStore } from '../../stores/root.js';
 import { useTripLiveShareStore } from '../../stores/tripLiveShare.js';
 import socialShare from '../../services/socialShare.js';
 import toast from '../../cordova/toast.js';
@@ -58,6 +62,7 @@ import {
     createLiveLocationMarkerUpdater,
     destroyLiveLocationMap
 } from '../../utils/liveLocationMap.js';
+import { getLiveLocationShareIntroKey } from '../../utils/liveLocationShareIntro.js';
 
 export default {
     name: 'LiveLocationShare',
@@ -72,7 +77,8 @@ export default {
             loaded: false,
             errorMessage: '',
             mapInstance: null,
-            marker: null
+            marker: null,
+            trip: null
         };
     },
     computed: {
@@ -80,6 +86,12 @@ export default {
             share: 'share',
             shareUrl: 'shareUrl'
         }),
+        ...mapState(useAuthStore, {
+            user: 'user'
+        }),
+        shareIntroKey() {
+            return getLiveLocationShareIntroKey(this.trip, this.user?.id);
+        },
         hasCoordinates() {
             return (
                 this.share &&
@@ -113,7 +125,14 @@ export default {
         async loadStatus() {
             this.loaded = false;
             try {
-                await this.fetchStatus(this.id);
+                await Promise.all([
+                    this.fetchStatus(this.id),
+                    useRootStore()
+                        .getTrip(this.id)
+                        .then((trip) => {
+                            this.trip = trip;
+                        })
+                ]);
                 this.resumeActiveSharing(this.id);
             } finally {
                 this.loaded = true;
@@ -202,6 +221,11 @@ export default {
     max-width: 520px;
     margin: 0 auto;
     padding: 1rem;
+}
+
+.live-location-share__intro {
+    margin-bottom: 1rem;
+    line-height: 1.5;
 }
 
 .live-location-map {

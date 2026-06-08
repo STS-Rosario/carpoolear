@@ -190,6 +190,10 @@ const messages = {
         liveLocationTitle: 'Ubicación en tiempo real',
         liveLocationSharingActive: 'Estás compartiendo tu ubicación en tiempo real.',
         liveLocationSharingInactive: 'Compartí tu ubicación en tiempo real con quien quieras.',
+        liveLocationShareIntroDriver:
+            'Podés compartir tu ubicación en tiempo real para que tus pasajeros sepan cuando estás cerca y pierdas menos tiempo esperando. Podés detenerla cuando quieras. Avisaremos a los pasajeros cuando comiences a compartirla.',
+        liveLocationShareIntroPassenger:
+            'Podés compartir tu ubicación en tiempo real con familiares, amigos, etc. No necesitan tener una cuenta de Carpoolear para verla. Podés detenerla cuando quieras.',
         liveLocationShareUrlLabel: 'Enlace para compartir',
         liveLocationCopyUrl: 'Copiar',
         liveLocationCopySuccess: 'Enlace copiado',
@@ -1599,6 +1603,10 @@ const messages = {
         liveLocationTitle: 'Ubicación en tiempo real',
         liveLocationSharingActive: 'Estás compartiendo tu ubicación en tiempo real.',
         liveLocationSharingInactive: 'Compartí tu ubicación en tiempo real con quien quieras.',
+        liveLocationShareIntroDriver:
+            'Podés compartir tu ubicación en tiempo real para que tus pasajeros sepan cuando estás cerca y pierdas menos tiempo esperando. Podés detenerla cuando quieras. Avisaremos a los pasajeros cuando comiences a compartirla.',
+        liveLocationShareIntroPassenger:
+            'Podés compartir tu ubicación en tiempo real con familiares, amigos, etc. No necesitan tener una cuenta de Carpoolear para verla. Podés detenerla cuando quieras.',
         liveLocationShareUrlLabel: 'Enlace para compartir',
         liveLocationCopyUrl: 'Copiar',
         liveLocationCopySuccess: 'Enlace copiado',
@@ -2755,6 +2763,10 @@ const messages = {
         liveLocationTitle: 'Live location',
         liveLocationSharingActive: 'You are sharing your live location.',
         liveLocationSharingInactive: 'Share your live location with anyone you choose.',
+        liveLocationShareIntroDriver:
+            'You can share your live location so your passengers know when you are nearby and spend less time waiting. You can stop sharing at any time. We will notify passengers when you start sharing.',
+        liveLocationShareIntroPassenger:
+            'You can share your live location with family, friends, and others. They do not need a Carpoolear account to view it. You can stop sharing at any time.',
         liveLocationShareUrlLabel: 'Share link',
         liveLocationCopyUrl: 'Copy',
         liveLocationCopySuccess: 'Link copied',

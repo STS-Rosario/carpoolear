@@ -24,5 +24,6 @@ describe('LiveLocationShare.vue', () => {
         expect(viewSource).toContain('getLiveLocationShareIntroKey');
         expect(viewSource).toContain('shareIntroKey');
         expect(viewSource).toContain('$t(shareIntroKey)');
+        expect(viewSource).toContain('getTrip');
     });
 });
