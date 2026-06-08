@@ -3,7 +3,8 @@ import {
     MAX_AVAILABLE_SEATS_WITH_REAR_MAX_TWO,
     isRearMaxTwoCompatibleWithSeats,
     rearMaxTwoRequiresThreeOrFewerSeats,
-    shouldBlockSeatSelection
+    shouldBlockSeatSelection,
+    shouldShowRearComfortNote
 } from './tripRearComfortSeats.js';
 
 describe('tripRearComfortSeats', () => {
@@ -47,6 +48,28 @@ describe('tripRearComfortSeats', () => {
 
         it('allows selecting up to 3 seats when rear max two is enabled', () => {
             expect(shouldBlockSeatSelection(3, true)).toBe(false);
+        });
+    });
+
+    describe('shouldShowRearComfortNote', () => {
+        it('is true when rear max two passengers is enabled on the trip', () => {
+            expect(shouldShowRearComfortNote({ rear_max_two_passengers: 1 })).toBe(
+                true
+            );
+            expect(shouldShowRearComfortNote({ rear_max_two_passengers: true })).toBe(
+                true
+            );
+        });
+
+        it('is false when rear max two passengers is disabled or missing', () => {
+            expect(shouldShowRearComfortNote({ rear_max_two_passengers: 0 })).toBe(
+                false
+            );
+            expect(shouldShowRearComfortNote({ rear_max_two_passengers: false })).toBe(
+                false
+            );
+            expect(shouldShowRearComfortNote({})).toBe(false);
+            expect(shouldShowRearComfortNote(null)).toBe(false);
         });
     });
 });

@@ -6,12 +6,15 @@ const viewPath = path.resolve(__dirname, 'TripSeats.vue');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 
 describe('TripSeats.vue rear seat comfort preference', () => {
-    it('shows rear seat comfort copy alongside available seats when enabled', () => {
+    it('shows rear seat comfort copy for every viewer when the trip enables it', () => {
         expect(viewSource).toContain("$t('atrasViajanSolo2Personas')");
+        expect(viewSource).toContain('shouldShowRearComfortNote');
         expect(viewSource).toMatch(
-            /class="trip-seats__availability"[\s\S]*?trip_seats-available_label[\s\S]*?trip-seats__rear-comfort-note/s
+            /v-if="showRearComfortNote"[\s\S]*?trip-seats__rear-comfort-note--above[\s\S]*?trip-seats__availability/s
         );
-        expect(viewSource).toContain('trip-seats__rear-comfort-note');
+        expect(viewSource).not.toMatch(
+            /v-else class="trip-seats__availability"[\s\S]*?trip_seats-available_label[\s\S]*?trip-seats__rear-comfort-note(?!--above)/s
+        );
     });
 
     it('uses a larger font size for rear comfort copy in trip detail', () => {
@@ -41,12 +44,6 @@ describe('TripSeats.vue accepted passenger co-travelers', () => {
         expect(viewSource).toContain('buildCoPassengerNamesText');
         expect(viewSource).toContain("$t('viajasCon'");
         expect(viewSource).toContain('trip-seats__co-passengers');
-    });
-
-    it('places rear comfort note above seats for accepted passengers', () => {
-        expect(viewSource).toMatch(
-            /trip-seats__rear-comfort-note--above[\s\S]*?trip-seats__availability/s
-        );
     });
 
     it('styles co-passenger copy with top margin and a larger font', () => {
