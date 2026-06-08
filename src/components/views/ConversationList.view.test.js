@@ -12,6 +12,18 @@ function getMobileStylesBlock() {
     return match ? match[1] : '';
 }
 
+describe('ConversationList.vue mobile chat ratings header', () => {
+    it('uses a taller mobile chat column when the header shows participant ratings', () => {
+        expect(viewSource).toContain(
+            'conversation-list-page--mobile-chat--tall-header'
+        );
+        expect(viewSource).toContain('headerRatings');
+        expect(viewSource).toMatch(
+            /conversation-list-page--mobile-chat--tall-header[\s\S]*64px/s
+        );
+    });
+});
+
 describe('ConversationList.vue mobile chat layout', () => {
     it('removes horizontal container padding on mobile chat so conversation uses full width', () => {
         const mobileStyles = getMobileStylesBlock();

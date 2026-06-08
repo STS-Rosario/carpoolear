@@ -93,6 +93,17 @@ test.describe('Conversations', () => {
     await expect(page).toHaveURL(/\/conversations\/1/);
   });
 
+  test('displays other participant ratings in conversation chat header on desktop', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto('/conversations/1');
+    await waitForPageReady(page);
+
+    const ratings = page.locator('.conversation_user_header_title_row .user-ratings-counts');
+    await expect(ratings).toBeVisible({ timeout: 10000 });
+    await expect(ratings).toContainText('8');
+    await expect(ratings).toContainText('2');
+  });
+
   test('displays messages in conversation chat', async ({ page }) => {
     await page.goto('/conversations/1');
     await waitForPageReady(page);

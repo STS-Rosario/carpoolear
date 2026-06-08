@@ -1,7 +1,10 @@
 <template>
     <header class="header header-component">
         <IdentityValidationCountdownBanner />
-        <div class="actionbar actionbar-top visible-xs">
+        <div
+            class="actionbar actionbar-top visible-xs"
+            :class="{ 'actionbar-top--with-ratings': headerRatings }"
+        >
             <div class="actionbar_section actionbar_icon">
                 <span v-if="showLogo">
                     <router-link
@@ -25,6 +28,7 @@
                 class="actionbar_section actionbar_title"
                 :class="[
                     subTitle !== '' ? 'header--with-subtitle' : '',
+                    headerRatings ? 'header--with-ratings' : '',
                     actionbarTitleWidthClass
                 ]"
             >
@@ -44,6 +48,11 @@
                     <span>{{ title }}</span>
                 </router-link>
                 <span class="header--subtitle">{{ subTitle }}</span>
+                <UserRatingsCounts
+                    v-if="headerRatings"
+                    :ratings="headerRatings"
+                    class="header--ratings"
+                />
             </div>
             <div class="actionbar_section actionbar_icon pull-right">
                 <template v-for="item in rightHeaderButton" :key="item.id">
@@ -310,6 +319,7 @@ import dropdown from '../Dropdown';
 import router from '../../router';
 import bus from '../../services/bus-event.js';
 import IdentityValidationCountdownBanner from '../IdentityValidationCountdownBanner.vue';
+import UserRatingsCounts from '../elements/UserRatingsCounts.vue';
 import { shouldHideDonationOnIOSCapacitor } from '../../services/capacitor.js';
 
 export default {
@@ -354,6 +364,7 @@ export default {
             title: 'title',
             titleLink: 'titleLink',
             subTitle: 'subTitle',
+            headerRatings: 'headerRatings',
             imgTitle: 'imgTitle',
             showMenu: 'showMenu',
             leftHeaderButton: 'leftHeaderButton',
@@ -429,7 +440,8 @@ export default {
     },
     components: {
         dropdown,
-        IdentityValidationCountdownBanner
+        IdentityValidationCountdownBanner,
+        UserRatingsCounts
     }
 };
 </script>
