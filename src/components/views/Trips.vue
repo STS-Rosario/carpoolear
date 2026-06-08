@@ -1,6 +1,6 @@
 <template>
     <div class="trips container" :class="!user ? 'not-logged' : ''"> 
-        <template v-if="appConfig && appConfig.banner && appConfig.banner.url">
+        <template v-if="showAppBanner">
             <a
                 :href="bannerHref"
                 :target="bannerTarget"
@@ -300,6 +300,7 @@ import {
     isIOSCapacitor,
     shouldHideDonationOnIOSCapacitor
 } from '../../services/capacitor.js';
+import { shouldShowAppBanner } from '../../utils/appBanner.js';
 
 export default {
     name: 'trips',
@@ -868,6 +869,10 @@ export default {
         },
         isIOSCapacitor() {
             return Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'ios';
+        },
+        showAppBanner() {
+            const banner = this.appConfig && this.appConfig.banner;
+            return shouldShowAppBanner(banner, this.user);
         },
         bannerHref() {
             const url =
