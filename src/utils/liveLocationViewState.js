@@ -22,3 +22,16 @@ export function getTripLiveLocationViewMode(tripView, loaded) {
     }
     return 'waiting';
 }
+
+export function getPublicLiveLocationViewMode(publicView, loaded) {
+    if (!loaded) {
+        return 'loading';
+    }
+    if (!publicView) {
+        return 'notFound';
+    }
+    if (isLiveShareStopped(publicView)) {
+        return 'stopped';
+    }
+    return 'active';
+}

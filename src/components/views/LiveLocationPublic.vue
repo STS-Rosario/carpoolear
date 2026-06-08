@@ -1,7 +1,7 @@
 <template>
     <div class="live-location-public">
         <Loading :data="loadingData">
-            <div v-if="publicView && !isLiveShareStopped(publicView)">
+            <div v-if="viewMode === 'active'">
                 <div class="live-location-public__driver" v-if="publicView.driver">
                     <router-link
                         :to="{
@@ -24,7 +24,7 @@
                     {{ $t('liveLocationWaitingForPosition') }}
                 </p>
             </div>
-            <p v-else-if="publicView && isLiveShareStopped(publicView)" class="alert alert-warning">
+            <p v-else-if="viewMode === 'stopped'" class="alert alert-warning">
                 {{ $t('liveLocationSharingStopped') }}
             </p>
             <template #no-data>
@@ -47,7 +47,7 @@ import {
     destroyLiveLocationMap
 } from '../../utils/liveLocationMap.js';
 import {
-    isLiveShareStopped,
+    getPublicLiveLocationViewMode,
     isWaitingForLiveLocation
 } from '../../utils/liveLocationViewState.js';
 
@@ -70,6 +70,9 @@ export default {
         ...mapState(useTripLiveShareStore, {
             publicView: 'publicView'
         }),
+        viewMode() {
+            return getPublicLiveLocationViewMode(this.publicView, this.loaded);
+        },
         hasCoordinates() {
             return (
                 this.publicView &&
@@ -82,9 +85,7 @@ export default {
                 return null;
             }
             return this.publicView ? ['ready'] : [];
-        },
-        isLiveShareStopped,
-        isWaitingForLiveLocation
+        }
     },
     methods: {
         ...mapActions(useTripLiveShareStore, {
@@ -92,6 +93,7 @@ export default {
             beginViewerPolling: 'beginViewerPolling',
             resetStore: 'reset'
         }),
+        isWaitingForLiveLocation,
         async loadView() {
             this.loaded = false;
             try {
