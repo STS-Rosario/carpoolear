@@ -24,7 +24,6 @@ allprojects {
     }
     
     afterEvaluate { project ->
-        // Force Java 17 for all Android projects
         if (project.hasProperty("android")) {
             project.android {
                 compileOptions {
@@ -33,11 +32,16 @@ allprojects {
                 }
             }
         }
-        
-        // Force Java 17 for all Java projects
+
         if (project.plugins.hasPlugin('java')) {
             project.sourceCompatibility = JavaVersion.VERSION_17
             project.targetCompatibility = JavaVersion.VERSION_17
+        }
+
+        if (project.plugins.hasPlugin('kotlin-android')) {
+            project.kotlin {
+                jvmToolchain(17)
+            }
         }
     }
 }
