@@ -1,3 +1,5 @@
+import dayjs from '../dayjs';
+
 export const ONGOING_TRIP_LEAD_MINUTES = 60;
 export const ONGOING_TRIP_GRACE_MINUTES = 30;
 
@@ -27,6 +29,35 @@ export function isWithinOngoingTripWindow(now, tripStart, estimatedTime) {
 export function canStartSharing(now, tripStart) {
     const windowStart = tripStart.subtract(ONGOING_TRIP_LEAD_MINUTES, 'minute');
     return !now.isBefore(windowStart);
+}
+
+export function isLiveLocationParticipant(trip, userId) {
+    if (!trip || userId == null) {
+        return false;
+    }
+    const uid = Number(userId);
+    if (trip.user && Number(trip.user.id) === uid) {
+        return true;
+    }
+    if (Array.isArray(trip.passenger)) {
+        return trip.passenger.some((passenger) => Number(passenger.id) === uid);
+    }
+    if (Array.isArray(trip.allPassengerRequest)) {
+        return trip.allPassengerRequest.some(
+            (request) =>
+                Number(request.user_id) === uid &&
+                (request.request_state === 1 || request.request_state === 4)
+        );
+    }
+    return false;
+}
+
+export function shouldShowLiveLocationShare(trip, userId, now) {
+    if (!trip || !trip.trip_date || !isLiveLocationParticipant(trip, userId)) {
+        return false;
+    }
+    const current = now || dayjs();
+    return canStartSharing(current, dayjs(trip.trip_date));
 }
 
 function getLocationName(point) {
