@@ -1,0 +1,89 @@
+export const ONGOING_TRIP_LEAD_MINUTES = 60;
+export const ONGOING_TRIP_GRACE_MINUTES = 30;
+
+export function estimatedTimeToMinutes(estimatedTime) {
+    if (estimatedTime == null || estimatedTime === '') {
+        return 0;
+    }
+    const parts = String(estimatedTime).split(':');
+    const hours = Number.parseInt(parts[0], 10) || 0;
+    const minutes = Number.parseInt(parts[1], 10) || 0;
+    return hours * 60 + minutes;
+}
+
+export function isWithinOngoingTripWindow(now, tripStart, estimatedTime) {
+    const durationMinutes = estimatedTimeToMinutes(estimatedTime);
+    const windowStart = tripStart.subtract(ONGOING_TRIP_LEAD_MINUTES, 'minute');
+    const windowEnd = tripStart
+        .add(durationMinutes, 'minute')
+        .add(ONGOING_TRIP_GRACE_MINUTES, 'minute');
+
+    return (
+        !now.isBefore(windowStart) &&
+        !now.isAfter(windowEnd)
+    );
+}
+
+function getLocationName(point) {
+    if (!point) {
+        return '';
+    }
+    if (point.json_address) {
+        if (point.json_address.ciudad) {
+            return point.json_address.ciudad;
+        }
+        if (point.json_address.name) {
+            return point.json_address.name;
+        }
+    }
+    return point.address || '';
+}
+
+function getStateName(point) {
+    if (!point || !point.json_address) {
+        return '';
+    }
+    if (point.json_address.provincia) {
+        return point.json_address.provincia;
+    }
+    if (point.json_address.state) {
+        return point.json_address.state;
+    }
+    return '';
+}
+
+function parseTownLabel(town) {
+    if (!town) {
+        return { city: '', region: '' };
+    }
+    const parts = String(town)
+        .split(',')
+        .map((part) => part.trim())
+        .filter(Boolean);
+    return {
+        city: parts[0] || '',
+        region: parts[1] || ''
+    };
+}
+
+export function getTripLocationLabels(trip) {
+    if (trip && trip.points && trip.points.length >= 2) {
+        const fromPoint = trip.points[0];
+        const toPoint = trip.points[trip.points.length - 1];
+        return {
+            fromCity: getLocationName(fromPoint),
+            fromRegion: getStateName(fromPoint),
+            toCity: getLocationName(toPoint),
+            toRegion: getStateName(toPoint)
+        };
+    }
+
+    const from = parseTownLabel(trip && trip.from_town);
+    const to = parseTownLabel(trip && trip.to_town);
+    return {
+        fromCity: from.city,
+        fromRegion: from.region,
+        toCity: to.city,
+        toRegion: to.region
+    };
+}
