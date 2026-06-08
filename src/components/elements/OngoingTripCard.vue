@@ -116,7 +116,7 @@ export default {
             if (!this.trip || !this.trip.trip_date) {
                 return '';
             }
-            return `${dayjs(this.trip.trip_date).format('HH')}hs`;
+            return dayjs(this.trip.trip_date).format('HH:mm');
         }
     },
     components: {
