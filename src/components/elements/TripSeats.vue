@@ -7,7 +7,46 @@
             <div
                 class="trip_seats-available col-xs-offset-2 col-sm-offset-4 col-xs-24"
             >
-                <div class="trip-seats__availability">
+                <div
+                    v-if="isAcceptedPassengerView"
+                    class="trip-seats__passenger-detail"
+                >
+                    <span
+                        v-if="showRearComfortNote"
+                        class="trip-seats__rear-comfort-note trip-seats__rear-comfort-note--above label-soft"
+                    >
+                        {{ $t('atrasViajanSolo2Personas') }}
+                    </span>
+                    <div class="trip-seats__availability">
+                        <span class="trip_seats-available_value">{{
+                            trip.seats_available
+                        }}</span>
+                        <span
+                            v-if="trip.seats_available == 1"
+                            class="trip_seats-available_label"
+                        >
+                            {{ $t('Lugar') }}
+                            <br />
+                            {{ $t('libre') }}
+                        </span>
+                        <span v-else class="trip_seats-available_label">
+                            {{ $t('Lugares') }}
+                            <br />
+                            {{ $t('libres') }}
+                        </span>
+                    </div>
+                    <span
+                        v-if="coPassengerNamesText"
+                        class="trip-seats__co-passengers label-soft"
+                    >
+                        {{
+                            $t('viajasCon', {
+                                names: coPassengerNamesText
+                            })
+                        }}
+                    </span>
+                </div>
+                <div v-else class="trip-seats__availability">
                     <span class="trip_seats-available_value">{{
                         trip.seats_available
                     }}</span>
@@ -19,16 +58,13 @@
                         <br />
                         {{ $t('libre') }}
                     </span>
-                    <span
-                        v-else
-                        class="trip_seats-available_label"
-                    >
+                    <span v-else class="trip_seats-available_label">
                         {{ $t('Lugares') }}
                         <br />
                         {{ $t('libres') }}
                     </span>
                     <span
-                        v-if="Number(trip.rear_max_two_passengers) > 0"
+                        v-if="showRearComfortNote"
                         class="trip-seats__rear-comfort-note label-soft"
                     >
                         {{ $t('atrasViajanSolo2Personas') }}
@@ -37,11 +73,46 @@
             </div>
         </div>
         <template v-else>
-            <div
-                class="trip_seats-available"
-                v-if="!trip.is_passenger"
-            >
-                <div class="trip-seats__availability">
+            <div class="trip_seats-available" v-if="!trip.is_passenger">
+                <div
+                    v-if="isAcceptedPassengerView"
+                    class="trip-seats__passenger-detail"
+                >
+                    <span
+                        v-if="showRearComfortNote"
+                        class="trip-seats__rear-comfort-note trip-seats__rear-comfort-note--above label-soft"
+                    >
+                        {{ $t('atrasViajanSolo2Personas') }}
+                    </span>
+                    <div class="trip-seats__availability">
+                        <template v-for="n in trip.total_seats">
+                            <span
+                                :class="
+                                    n <
+                                    trip.total_seats - trip.seats_available
+                                        ? 'seat-taken'
+                                        : 'seat-free'
+                                "
+                            >
+                                <svg-item
+                                    :icon="'seat'"
+                                    :size="18"
+                                ></svg-item>
+                            </span>
+                        </template>
+                    </div>
+                    <span
+                        v-if="coPassengerNamesText"
+                        class="trip-seats__co-passengers label-soft"
+                    >
+                        {{
+                            $t('viajasCon', {
+                                names: coPassengerNamesText
+                            })
+                        }}
+                    </span>
+                </div>
+                <div v-else class="trip-seats__availability">
                     <template v-for="n in trip.total_seats">
                         <span
                             :class="
@@ -54,7 +125,7 @@
                         </span>
                     </template>
                     <span
-                        v-if="Number(trip.rear_max_two_passengers) > 0"
+                        v-if="showRearComfortNote"
                         class="trip-seats__rear-comfort-note label-soft"
                     >
                         {{ $t('atrasViajanSolo2Personas') }}
@@ -69,6 +140,12 @@ import { mapState } from 'pinia';
 import { useTripsStore } from '../../stores/trips';
 import { useAuthStore } from '../../stores/auth';
 import SvgItem from '../SvgItem';
+import {
+    formatSpanishNameList,
+    getAcceptedCoPassengerFirstNames,
+    isAcceptedPassengerOnTrip
+} from '../../utils/tripCoPassengers.js';
+
 export default {
     name: 'TripSeats',
     computed: {
@@ -76,8 +153,36 @@ export default {
             trip: 'currentTrip'
         }),
         ...mapState(useAuthStore, {
-            tripCardTheme: 'tripCardTheme'
-        })
+            tripCardTheme: 'tripCardTheme',
+            user: 'user'
+        }),
+        owner() {
+            return this.trip && this.user && this.user.id === this.trip.user.id;
+        },
+        isAcceptedPassengerView() {
+            return (
+                !this.owner &&
+                isAcceptedPassengerOnTrip(
+                    this.trip?.allPassengerRequest,
+                    this.user?.id
+                )
+            );
+        },
+        showRearComfortNote() {
+            return Number(this.trip?.rear_max_two_passengers) > 0;
+        },
+        coPassengerNamesText() {
+            if (!this.isAcceptedPassengerView) {
+                return '';
+            }
+
+            const firstNames = getAcceptedCoPassengerFirstNames(
+                this.trip?.allPassengerRequest,
+                this.user?.id
+            );
+
+            return formatSpanishNameList(firstNames);
+        }
     },
     components: {
         SvgItem
@@ -87,6 +192,12 @@ export default {
 <style scoped>
 .trip-seats {
     margin-bottom: 2em;
+}
+
+.trip-seats__passenger-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
 .trip-seats__availability {
@@ -111,5 +222,15 @@ export default {
     text-transform: none;
     min-width: 0;
     margin-left: 1rem;
+}
+
+.trip-seats__rear-comfort-note--above {
+    margin-left: 0;
+}
+
+.trip-seats__co-passengers {
+    font-size: 0.95em;
+    line-height: 1.3;
+    text-transform: none;
 }
 </style>
