@@ -66,7 +66,10 @@
 
 <script>
 import dayjs from '../../dayjs';
-import { getTripLocationLabels, canStartSharing } from '../../utils/ongoingTrip.js';
+import {
+    getTripLocationLabels,
+    shouldShowLiveLocationShare
+} from '../../utils/ongoingTrip.js';
 import { normalizeTripsCount } from '../../utils/profileMemberStats.js';
 import { useAuthStore } from '../../stores/auth.js';
 import UserNameWithBadge from './UserNameWithBadge.vue';
@@ -115,22 +118,12 @@ export default {
             return dayjs(this.trip.trip_date).format('HH:mm');
         },
         showShareLocationLink() {
-            if (!this.trip || !this.trip.trip_date) {
-                return false;
-            }
             const authStore = useAuthStore();
-            const user = authStore.auth_user;
+            const user = authStore.user;
             if (!user) {
                 return false;
             }
-            const isDriver = Number(this.trip.user_id) === Number(user.id);
-            const isAcceptedPassenger = Array.isArray(this.trip.passenger)
-                ? this.trip.passenger.some((p) => Number(p.id) === Number(user.id))
-                : false;
-            if (!isDriver && !isAcceptedPassenger) {
-                return false;
-            }
-            return canStartSharing(dayjs(), dayjs(this.trip.trip_date));
+            return shouldShowLiveLocationShare(this.trip, user.id, dayjs());
         }
     },
     components: {

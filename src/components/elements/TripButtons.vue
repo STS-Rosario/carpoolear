@@ -115,6 +115,14 @@
             <template v-if="expired">
                 <button class="btn btn-primary" disabled>{{ $t('finalizado') }}</button>
             </template>
+            <router-link
+                v-if="showLiveLocationShare"
+                class="btn btn-primary live-location-share-btn"
+                :to="{ name: 'trip_live_share', params: { id: trip.id } }"
+            >
+                <i class="fa fa-wifi live-location-share-btn__icon" aria-hidden="true"></i>
+                {{ $t('compartirUbicacionTiempoReal') }}
+            </router-link>
             <template v-if="trip.seats_available === 0 && !trip.is_passenger">
                 <div class="carpooled-trip">{{ $t('viajeCarpooleado') }}</div>
             </template>
@@ -158,6 +166,7 @@ import dayjs from '../../dayjs';
 import spinner from '../Spinner.vue';
 import Transactions from '../views/transactions.vue';
 import { isVoluntaryContributionSeatPrice } from '../../utils/tripSeatPrice.js';
+import { shouldShowLiveLocationShare } from '../../utils/ongoingTrip.js';
 
 export default {
     name: 'TripButtons',
@@ -197,6 +206,12 @@ export default {
         },
         canRequest() {
             return !this.owner && !this.trip.request;
+        },
+        showLiveLocationShare() {
+            if (!this.trip || !this.user) {
+                return false;
+            }
+            return shouldShowLiveLocationShare(this.trip, this.user.id, dayjs());
         },
         isPassengersView() {
             return this.trip.is_passenger;
@@ -269,6 +284,11 @@ export default {
     margin-top: 1em;
     padding-bottom: 2rem;
 }
+.live-location-share-btn__icon {
+    transform: rotate(90deg);
+    margin-right: 0.35rem;
+}
+
 @media only screen and (min-width: 768px) {
     .buttons-container button:first-child {
         margin-right: 1em;
