@@ -42,6 +42,7 @@
 
             <div class="ongoing-trip-card__actions">
                 <router-link
+                    v-show="showShareLocationLink"
                     :to="{
                         name: 'detail_trip_location',
                         params: { id: trip.id, location: 'passenger' }
@@ -77,6 +78,11 @@ export default {
             type: Object,
             default: null
         }
+    },
+    data() {
+        return {
+            showShareLocationLink: false
+        };
     },
     computed: {
         locations() {
