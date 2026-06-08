@@ -44,7 +44,7 @@ import {
     shouldShowChangelogModal,
     markChangelogSeenForVersion
 } from '../utils/changelogPrompt';
-import { getChangelogAppVersion } from '../utils/changelogAppVersion';
+import { formatChangelogVersionHeading, getChangelogAppVersion } from '../utils/changelogAppVersion';
 
 export default {
     name: 'ChangelogModal',
@@ -74,7 +74,7 @@ export default {
             return getChangelogAppVersion(useRootStore().appVersionInfo, fallback);
         },
         versionHeading() {
-            return this.appVersion ? `v${this.appVersion}` : '';
+            return formatChangelogVersionHeading(this.appVersion);
         },
         eligible() {
             return (

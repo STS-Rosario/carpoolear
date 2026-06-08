@@ -12,3 +12,8 @@ export function getChangelogAppVersion(appVersionInfo, fallbackVersion) {
     }
     return '';
 }
+
+export function formatChangelogVersionHeading(version) {
+    if (!version) return '';
+    return `v${version}`;
+}
