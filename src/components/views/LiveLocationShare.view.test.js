@@ -21,5 +21,8 @@ describe('LiveLocationShare.vue', () => {
         expect(viewSource).toContain('resumeActiveSharing');
         expect(viewSource).toContain('LiveLocationLastUpdated');
         expect(viewSource).toContain('share.recorded_at');
+        expect(viewSource).toContain('getLiveLocationShareIntroKey');
+        expect(viewSource).toContain('shareIntroKey');
+        expect(viewSource).toContain('$t(shareIntroKey)');
     });
 });
