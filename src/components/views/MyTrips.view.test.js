@@ -9,11 +9,20 @@ function getTripComponentTags() {
     return source.match(/<Trip[\s\S]*?(?:\/>|<\/Trip>)/g) || [];
 }
 
+describe('MyTrips seat requests section', () => {
+    it('shows solicitudes de asiento instead of proximos viajes como pasajero', () => {
+        expect(source).toContain("$t('solicitudesDeAsiento')");
+        expect(source).toContain('SeatRequestTrip');
+        expect(source).not.toContain("$t('viajesEstoySubido')");
+        expect(source).not.toContain('passengerTrips');
+    });
+});
+
 describe('MyTrips trip card navigation', () => {
     it('disables trip info modal on every trip card so clicks go to detail page', () => {
         const tripTags = getTripComponentTags();
 
-        expect(tripTags.length).toBe(4);
+        expect(tripTags.length).toBe(3);
 
         tripTags.forEach((tag) => {
             expect(tag).toContain(':clickModal="false"');

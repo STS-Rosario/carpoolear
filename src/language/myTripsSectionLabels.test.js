@@ -3,7 +3,10 @@ import messages from './i18n';
 
 const SECTION_LABELS_ES = {
     misProximosViajes: 'Próximos viajes como conductor',
-    viajesEstoySubido: 'Próximos viajes como pasajero',
+    solicitudesDeAsiento: 'Solicitudes de asiento',
+    solicitudPendiente: 'Solicitud pendiente',
+    solicitudRechazada: 'Solicitud rechazada',
+    solicitudAceptada: 'Solicitud aceptada',
     misViajesPasados: 'Viajes pasados como conductor',
     viajesMeSubi: 'Viajes pasados como pasajero'
 };
@@ -14,7 +17,10 @@ const SECTION_LABELS_BY_LOCALE = {
     chl: SECTION_LABELS_ES,
     en: {
         misProximosViajes: 'Upcoming trips as driver',
-        viajesEstoySubido: 'Upcoming trips as passenger',
+        solicitudesDeAsiento: 'Seat requests',
+        solicitudPendiente: 'Request pending',
+        solicitudRechazada: 'Request rejected',
+        solicitudAceptada: 'Request accepted',
         misViajesPasados: 'Past trips as driver',
         viajesMeSubi: 'Past trips as passenger'
     }
