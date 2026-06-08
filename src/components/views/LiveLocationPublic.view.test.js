@@ -24,5 +24,6 @@ describe('LiveLocationPublic.vue', () => {
         expect(viewSource).not.toContain('isLiveShareStopped(');
         expect(viewSource).toContain('liveLocationPassengerPublicIntro');
         expect(viewSource).toContain('getPassengerPublicLiveLocationIntroParams');
+        expect(viewSource).toContain('passengerPublicIntroParams');
     });
 });

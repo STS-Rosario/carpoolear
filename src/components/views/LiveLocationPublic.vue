@@ -2,7 +2,16 @@
     <div class="live-location-public">
         <Loading :data="loadingData">
             <div v-if="viewMode === 'active'">
-                <div class="live-location-public__driver" v-if="publicView.driver">
+                <p
+                    v-if="passengerPublicIntroParams"
+                    class="live-location-public__intro"
+                >
+                    {{ $t('liveLocationPassengerPublicIntro', passengerPublicIntroParams) }}
+                </p>
+                <div
+                    v-else-if="publicView.driver"
+                    class="live-location-public__driver"
+                >
                     <router-link
                         :to="{
                             name: 'profile',
@@ -24,9 +33,17 @@
                     {{ $t('liveLocationWaitingForPosition') }}
                 </p>
             </div>
-            <p v-else-if="viewMode === 'stopped'" class="alert alert-warning">
-                {{ $t('liveLocationSharingStopped') }}
-            </p>
+            <div v-else-if="viewMode === 'stopped'">
+                <p
+                    v-if="passengerPublicIntroParams"
+                    class="live-location-public__intro"
+                >
+                    {{ $t('liveLocationPassengerPublicIntro', passengerPublicIntroParams) }}
+                </p>
+                <p class="alert alert-warning">
+                    {{ $t('liveLocationSharingStopped') }}
+                </p>
+            </div>
             <template #no-data>
                 <p class="alert alert-warning">{{ $t('liveLocationNotFound') }}</p>
             </template>
@@ -50,6 +67,7 @@ import {
     getPublicLiveLocationViewMode,
     isWaitingForLiveLocation
 } from '../../utils/liveLocationViewState.js';
+import { getPassengerPublicLiveLocationIntroParams } from '../../utils/liveLocationPublicIntro.js';
 
 export default {
     name: 'LiveLocationPublic',
@@ -72,6 +90,9 @@ export default {
         }),
         viewMode() {
             return getPublicLiveLocationViewMode(this.publicView, this.loaded);
+        },
+        passengerPublicIntroParams() {
+            return getPassengerPublicLiveLocationIntroParams(this.publicView);
         },
         hasCoordinates() {
             return (
@@ -147,6 +168,11 @@ export default {
 <style scoped>
 .live-location-public {
     padding: 1rem;
+}
+
+.live-location-public__intro {
+    margin-bottom: 0.75rem;
+    line-height: 1.5;
 }
 
 .live-location-public__driver {

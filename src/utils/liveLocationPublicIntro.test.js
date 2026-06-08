@@ -1,12 +1,13 @@
 import { describe, expect, it } from 'vitest';
+import { formatLiveLocationTripDateTime } from './liveLocationFormat.js';
 import {
-    formatLiveLocationTripDateTime,
     getPassengerPublicLiveLocationIntroParams,
     isPassengerPublicLiveShare
 } from './liveLocationPublicIntro.js';
 
 describe('liveLocationPublicIntro', () => {
     const passengerPublicView = {
+        is_passenger_share: true,
         sharer: { id: 2, name: 'Ana Pasajera' },
         driver: { id: 1, name: 'Juan Conductor' },
         destination: 'Rosario',
@@ -17,6 +18,7 @@ describe('liveLocationPublicIntro', () => {
         expect(isPassengerPublicLiveShare(passengerPublicView)).toBe(true);
         expect(
             isPassengerPublicLiveShare({
+                is_passenger_share: false,
                 sharer: { id: 1, name: 'Juan Conductor' },
                 driver: { id: 1, name: 'Juan Conductor' }
             })
@@ -30,9 +32,5 @@ describe('liveLocationPublicIntro', () => {
             destination: 'Rosario',
             tripDateTime: formatLiveLocationTripDateTime('2026-06-08T16:00:00-03:00')
         });
-    });
-
-    it('formats trip date and time for public intro copy', () => {
-        expect(formatLiveLocationTripDateTime('2026-06-08T16:00:00-03:00')).toContain('16:00');
     });
 });
