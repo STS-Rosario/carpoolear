@@ -14,5 +14,7 @@ describe('LiveLocationShare.vue', () => {
         expect(viewSource).toContain('startSharing');
         expect(viewSource).toContain('stopSharing');
         expect(viewSource).toContain('useTripLiveShareStore');
+        expect(viewSource).toContain('loadingData');
+        expect(viewSource).not.toMatch(/:data="loaded"/);
     });
 });

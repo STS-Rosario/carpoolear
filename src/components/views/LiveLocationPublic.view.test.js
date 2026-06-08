@@ -11,5 +11,7 @@ describe('LiveLocationPublic.vue', () => {
         expect(viewSource).toContain('UserRatingsCounts');
         expect(viewSource).toContain('fetchPublicView');
         expect(viewSource).toContain('beginViewerPolling');
+        expect(viewSource).toContain('loadingData');
+        expect(viewSource).not.toMatch(/:data="loaded"/);
     });
 });
