@@ -5,6 +5,14 @@ import path from 'node:path';
 const viewPath = path.resolve(__dirname, 'Trips.vue');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 
+describe('Trips.vue app banner', () => {
+    it('uses shouldShowAppBanner for verification-aware banner visibility', () => {
+        expect(viewSource).toContain('shouldShowAppBanner');
+        expect(viewSource).toContain('showAppBanner');
+        expect(viewSource).toContain('v-if="showAppBanner"');
+    });
+});
+
 describe('Trips.vue persisted search state', () => {
     it('does not run default search when URL already has search params', () => {
         expect(viewSource).toContain('hasRouteSearchParams()');
