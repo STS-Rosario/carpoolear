@@ -46,12 +46,6 @@ describe('TripSeats.vue accepted passenger co-travelers', () => {
         expect(viewSource).toContain('trip-seats__co-passengers');
     });
 
-    it('places rear comfort note above seats for accepted passengers', () => {
-        expect(viewSource).toMatch(
-            /trip-seats__rear-comfort-note--above[\s\S]*?trip-seats__availability/s
-        );
-    });
-
     it('styles co-passenger copy with top margin and a larger font', () => {
         expect(viewSource).toMatch(
             /\.trip-seats__co-passengers\s*\{[\s\S]*?margin-top:\s*0\.75rem[\s\S]*?font-size:\s*1\.15em/

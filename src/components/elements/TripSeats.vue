@@ -172,7 +172,6 @@ export default {
     line-height: 1.3;
     text-transform: none;
     min-width: 0;
-    margin-left: 1rem;
 }
 
 .trip-seats__rear-comfort-note--above {
