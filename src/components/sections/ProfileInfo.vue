@@ -264,6 +264,12 @@ export default {
 };
 </script>
 <style scoped>
+.profile-info--member-stats {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
 .profile-badges {
     display: flex;
     justify-content: center;
