@@ -22,5 +22,11 @@ export function shouldBlockSeatSelection(totalSeats, rearMaxTwoPassengers) {
 }
 
 export function shouldShowRearComfortNote(trip) {
-    return Number(trip?.rear_max_two_passengers) > 0;
+    if (!trip) {
+        return false;
+    }
+
+    const { rear_max_two_passengers: rearMaxTwoPassengers } = trip;
+
+    return Number(rearMaxTwoPassengers) > 0;
 }
