@@ -18,7 +18,9 @@ describe('LiveLocationPublic.vue', () => {
         expect(viewSource).toContain('LiveLocationLastUpdated');
         expect(viewSource).toContain('publicView.recorded_at');
         expect(viewSource).toContain('liveLocationSharingStopped');
-        expect(viewSource).toContain('isWaitingForLiveLocation');
-        expect(viewSource).toContain('isLiveShareStopped');
+        expect(viewSource).toContain('getPublicLiveLocationViewMode');
+        expect(viewSource).toContain("viewMode === 'active'");
+        expect(viewSource).toContain("viewMode === 'stopped'");
+        expect(viewSource).not.toContain('isLiveShareStopped(');
     });
 });

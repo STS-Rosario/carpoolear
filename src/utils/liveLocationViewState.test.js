@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+    getPublicLiveLocationViewMode,
     getTripLiveLocationViewMode,
     isLiveShareStopped,
     isWaitingForLiveLocation
@@ -39,5 +40,22 @@ describe('liveLocationViewState', () => {
 
         expect(getTripLiveLocationViewMode(stoppedView, true)).toBe('stopped');
         expect(isWaitingForLiveLocation(stoppedView)).toBe(false);
+    });
+
+    it('returns public live view modes without calling helpers from template', () => {
+        expect(getPublicLiveLocationViewMode(null, false)).toBe('loading');
+        expect(getPublicLiveLocationViewMode(null, true)).toBe('notFound');
+        expect(
+            getPublicLiveLocationViewMode(
+                { is_active: true, lat: -34.6, lng: -58.38 },
+                true
+            )
+        ).toBe('active');
+        expect(
+            getPublicLiveLocationViewMode(
+                { is_active: false, lat: null, lng: null },
+                true
+            )
+        ).toBe('stopped');
     });
 });
