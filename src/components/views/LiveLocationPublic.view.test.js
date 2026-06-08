@@ -17,5 +17,8 @@ describe('LiveLocationPublic.vue', () => {
         expect(viewSource).toContain('syncMapAfterRender');
         expect(viewSource).toContain('LiveLocationLastUpdated');
         expect(viewSource).toContain('publicView.recorded_at');
+        expect(viewSource).toContain('liveLocationSharingStopped');
+        expect(viewSource).toContain('isWaitingForLiveLocation');
+        expect(viewSource).toContain('isLiveShareStopped');
     });
 });
