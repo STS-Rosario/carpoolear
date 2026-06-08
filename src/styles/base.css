@@ -666,6 +666,23 @@
       /* position: absolute;
       bottom: 8px; */
   }
+  .actionbar-top--with-ratings {
+      height: auto;
+      min-height: 64px;
+  }
+  .header--with-ratings .header--ratings {
+      display: block;
+      font-size: 10px;
+      line-height: 1.4em;
+  }
+  .view-container--tall-header {
+      padding-top: calc(63px + constant(safe-area-inset-top));
+      padding-top: calc(63px + env(safe-area-inset-top));
+  }
+  .ios .view-container--tall-header {
+      padding-top: calc(89px + constant(safe-area-inset-top));
+      padding-top: calc(89px + env(safe-area-inset-top));
+  }
   .header--image {
       width: 32px;
       height: 32px;

@@ -11,6 +11,7 @@ export const useActionbarsStore = defineStore('actionbars', {
         title: appName,
         titleLink: {},
         subTitle: '',
+        headerRatings: null,
         imgTitle: '',
         showMenu: false,
         header_buttons: [
@@ -111,6 +112,10 @@ export const useActionbarsStore = defineStore('actionbars', {
 
         setSubTitle(newSubTitle = '') {
             this.subTitle = newSubTitle;
+        },
+
+        setHeaderRatings(ratings = null) {
+            this.headerRatings = ratings;
         },
 
         setImgTitle(newImgTitle = '') {

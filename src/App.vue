@@ -25,7 +25,10 @@
             <MaintenanceAdminBanner v-if="maintenanceAdminStickyVisible" />
             <headerApp></headerApp>
             <main id="main">
-                <div class="view-container clearfix">
+                <div
+                    class="view-container clearfix"
+                    :class="{ 'view-container--tall-header': headerRatings }"
+                >
                     <router-view></router-view>
                 </div>
             </main>
@@ -41,6 +44,7 @@
 <script>
 import { mapState, mapActions } from 'pinia';
 import { useAuthStore } from './stores/auth';
+import { useActionbarsStore } from './stores/actionbars';
 import { useCordovaStore } from './stores/cordova';
 import { useDeviceStore } from './stores/device';
 import { useBackgroundStore } from './stores/background';
@@ -163,6 +167,9 @@ export default {
         }),
         ...mapState(useBackgroundStore, {
             backgroundStyle: 'backgroundStyle'
+        }),
+        ...mapState(useActionbarsStore, {
+            headerRatings: 'headerRatings'
         }),
         ...mapState(useAuthStore, {
             logged: 'checkLogin',

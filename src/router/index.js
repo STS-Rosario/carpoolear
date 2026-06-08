@@ -51,6 +51,7 @@ router.beforeEach((to, from, next) => {
     }
     if (actionbar.header) {
         actionbarsStore.setSubTitle('');
+        actionbarsStore.setHeaderRatings(null);
         actionbarsStore.setTitleLink({});
         actionbarsStore.setImgTitle('');
         if (actionbar.header.titleKey) {

@@ -12,12 +12,17 @@
                         v-imgSrc="conversation.image"
                     ></div>
                 </router-link>
-                <router-link
+                <div
                     v-if="conversation.users.length === 2"
-                    :to="{ name: 'profile', params: userProfile() }"
+                    class="conversation_user_header_title_row"
                 >
-                    <h2>{{ conversation.title }}</h2>
-                </router-link>
+                    <router-link
+                        :to="{ name: 'profile', params: userProfile() }"
+                    >
+                        <h2>{{ conversation.title }}</h2>
+                    </router-link>
+                    <UserRatingsCounts :ratings="otherUserRatings" />
+                </div>
                 <h2 v-else>{{ conversation.title }}</h2>
                 <CoordinateTrip></CoordinateTrip>
                 <p
@@ -98,6 +103,11 @@ import dayjs from '../../dayjs';
 import bus from '../../services/bus-event.js';
 import dialogs from '../../services/dialogs.js';
 import CoordinateTrip from '../elements/CoordinateTrip';
+import UserRatingsCounts from '../elements/UserRatingsCounts.vue';
+import {
+    getOtherParticipant,
+    getOtherParticipantRatings
+} from '../../utils/conversationOtherUserRatings.js';
 
 export default {
     name: 'conversation-chat',
@@ -148,16 +158,17 @@ export default {
          * In group-style conversations (more than one other user) there is no single value; returns null.
          */
         lastConnectionRaw() {
-            if (!this.conversation || !this.conversation.users) {
-                return null;
-            }
-            const others = this.conversation.users.filter(
-                (item) => item.id !== this.user.id
+            const other = getOtherParticipant(
+                this.conversation?.users,
+                this.user?.id
             );
-            if (others.length !== 1) {
-                return null;
-            }
-            return others[0].last_connection;
+            return other?.last_connection ?? null;
+        },
+        otherUserRatings() {
+            return getOtherParticipantRatings(
+                this.conversation?.users,
+                this.user?.id
+            );
         },
         lastConnectionFormatted() {
             const raw = this.lastConnectionRaw;
@@ -183,6 +194,7 @@ export default {
             setTitle: 'setTitle',
             setTitleLink: 'setTitleLink',
             setSubTitle: 'setSubTitle',
+            setHeaderRatings: 'setHeaderRatings',
             setImgTitle: 'setImgTitle'
         }),
 
@@ -250,29 +262,36 @@ export default {
             this.findMessage({ more: true });
         },
 
+        syncChatHeader() {
+            if (!this.conversation) {
+                return;
+            }
+            this.setTitle(this.conversation.title);
+            const otherUser = getOtherParticipant(
+                this.conversation.users,
+                this.user.id
+            );
+            if (otherUser) {
+                this.setTitleLink({
+                    name: 'profile',
+                    params: { id: otherUser.id }
+                });
+            } else {
+                this.setTitleLink({});
+            }
+            this.setSubTitle(
+                this.lastConnectionFormatted
+                    ? `${this.$t('ultimaConexion')} ${this.lastConnectionFormatted}`
+                    : ''
+            );
+            this.setHeaderRatings(this.otherUserRatings);
+            this.setImgTitle(this.conversation.image);
+        },
+
         refresh() {
             this.select(this.id).then(() => {
                 bus.on('back-click', this.onBackClick);
-                if (this.conversation) {
-                    this.setTitle(this.conversation.title);
-                    const otherUser = this.conversation.users.find(
-                        (u) => u.id !== this.user.id
-                    );
-                    if (otherUser) {
-                        this.setTitleLink({
-                            name: 'profile',
-                            params: { id: otherUser.id }
-                        });
-                    } else {
-                        this.setTitleLink({});
-                    }
-                    this.setSubTitle(
-                        this.lastConnectionFormatted
-                            ? `${this.$t('ultimaConexion')} ${this.lastConnectionFormatted}`
-                            : ''
-                    );
-                    this.setImgTitle(this.conversation.image);
-                }
+                this.syncChatHeader();
                 this.jumpEndOfConversation();
             });
         }
@@ -289,25 +308,7 @@ export default {
             this.mustJump = false;
         }
         if (this.conversation) {
-            this.setTitle(this.conversation.title);
-            const otherUser = this.conversation.users.find(
-                (u) => u.id !== this.user.id
-            );
-            if (otherUser) {
-                this.setTitleLink({
-                    name: 'profile',
-                    params: { id: otherUser.id }
-                });
-            } else {
-                this.setTitleLink({});
-            }
-            this.setSubTitle(
-                this.lastConnectionFormatted
-                    ? `${this.$t('ultimaConexion')} ${this.lastConnectionFormatted}`
-                    : ''
-            );
-            this.setImgTitle(this.conversation.image);
-
+            this.syncChatHeader();
             bus.emit('header-title-change');
         }
     },
@@ -328,12 +329,22 @@ export default {
     components: {
         editor: ToastUiEditor,
         MessageView,
-        CoordinateTrip
+        CoordinateTrip,
+        UserRatingsCounts
     }
 };
 </script>
 
 <style scoped>
+.conversation_user_header_title_row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+.conversation_user_header_title_row h2 {
+    margin: 0;
+}
 #btn-more {
     padding: 1em 0;
     margin-top: 1.5rem;

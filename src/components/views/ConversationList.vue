@@ -5,7 +5,11 @@
             config.module_coordinate_by_message
                 ? 'module--coordinate-by-message'
                 : '',
-            { 'conversation-list-page--mobile-chat': hide && isMobile }
+            {
+                'conversation-list-page--mobile-chat': hide && isMobile,
+                'conversation-list-page--mobile-chat--tall-header':
+                    hide && isMobile && headerRatings
+            }
         ]"
     >
         <CoordinateTrip v-show="isMobile"></CoordinateTrip>
@@ -215,6 +219,7 @@ import { mapState, mapActions } from 'pinia';
 import { useConversationsStore } from '../../stores/conversations';
 import { useDeviceStore } from '../../stores/device';
 import { useAuthStore } from '../../stores/auth';
+import { useActionbarsStore } from '../../stores/actionbars';
 import { Thread } from '../../classes/Threads.js';
 import Loading from '../Loading.vue';
 import UserNameWithBadge from '../elements/UserNameWithBadge.vue';
@@ -242,6 +247,9 @@ export default {
         }),
         ...mapState(useAuthStore, {
             config: 'appConfig'
+        }),
+        ...mapState(useActionbarsStore, {
+            headerRatings: 'headerRatings'
         }),
 
         hide() {
@@ -559,6 +567,12 @@ export default {
         z-index: 9;
         background: #fff;
         box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+    }
+    .conversation-list-page--mobile-chat--tall-header {
+        height: calc(100dvh - 64px - constant(safe-area-inset-top, 0px) - constant(safe-area-inset-bottom, 0px));
+        height: calc(100dvh - 64px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+        max-height: calc(100dvh - 64px - constant(safe-area-inset-top, 0px) - constant(safe-area-inset-bottom, 0px));
+        max-height: calc(100dvh - 64px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
     }
 }
 .media-right {
