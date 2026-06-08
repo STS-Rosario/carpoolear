@@ -13,7 +13,8 @@ const passengerApi = new PassengerApi();
 export const usePassengerStore = defineStore('passenger', {
     state: () => ({
         pendingRequest: null,
-        pendingPaymentRequests: null
+        pendingPaymentRequests: null,
+        seatRequests: null
     }),
 
     getters: {
@@ -29,6 +30,10 @@ export const usePassengerStore = defineStore('passenger', {
 
         setPendingPayment(list) {
             this.pendingPaymentRequests = list;
+        },
+
+        setSeatRequests(list) {
+            this.seatRequests = list;
         },
 
         removePending({ user_id: userId, trip_id: tripId }) {
@@ -71,6 +76,12 @@ export const usePassengerStore = defineStore('passenger', {
         getPendingPaymentRequests() {
             return passengerApi.pendingPaymentRequests().then((response) => {
                 this.setPendingPayment(response.data);
+            });
+        },
+
+        getSeatRequests() {
+            return passengerApi.seatRequests().then((response) => {
+                this.setSeatRequests(response.data);
             });
         },
 

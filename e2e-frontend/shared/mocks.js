@@ -699,6 +699,14 @@ async function setupAuthState(page, user = MOCK_USER) {
     });
   });
 
+  await page.route('**/api/users/seat-requests', (route) => {
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ data: [] }),
+    });
+  });
+
   await page.route('**/api/cars', (route) => {
     route.fulfill({
       status: 200,

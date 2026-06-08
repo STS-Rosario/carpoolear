@@ -15,19 +15,23 @@ vi.mock('../i18n', () => ({
     }
 }));
 
+const seatRequestsMock = vi.fn().mockResolvedValue({
+    data: [
+        {
+            id: 1,
+            trip_id: 10,
+            request_state: 0,
+            trip: { id: 10, from_town: 'Rosario', to_town: 'Buenos Aires' }
+        }
+    ]
+});
+
 vi.mock('../services/api', () => ({
-    PassengerApi: vi.fn().mockImplementation(() => ({
-        seatRequests: vi.fn().mockResolvedValue({
-            data: [
-                {
-                    id: 1,
-                    trip_id: 10,
-                    request_state: 0,
-                    trip: { id: 10, from_town: 'Rosario', to_town: 'Buenos Aires' }
-                }
-            ]
-        })
-    }))
+    PassengerApi: class PassengerApiMock {
+        seatRequests() {
+            return seatRequestsMock();
+        }
+    }
 }));
 
 describe('passenger store seat requests', () => {

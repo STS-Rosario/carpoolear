@@ -202,19 +202,19 @@
         </div>
 
         <div class="col-xs-24">
-            <Loading :data="passengerTrips" :hideOnEmpty="true">
-                <template #title><h2 v-html="$t('viajesEstoySubido')"></h2></template>
+            <Loading :data="seatRequests" :hideOnEmpty="true">
+                <template #title><h2>{{ $t('solicitudesDeAsiento') }}</h2></template>
                 <div class="trips-list">
-                    <Trip
-                        v-for="trip in passengerTrips"
-                        v-bind:key="trip.id"
-                        :trip="trip"
+                    <SeatRequestTrip
+                        v-for="request in seatRequests"
+                        v-bind:key="request.id"
+                        :trip="request.trip"
+                        :requestState="request.request_state"
                         :user="user"
-                        :clickModal="false"
-                    ></Trip>
+                    ></SeatRequestTrip>
                 </div>
                 <template #no-data><p class="alert alert-warning" role="alert">
-                    {{ $t('noEstasSubidoViaje') }}
+                    {{ $t('noHaySolicitudesDeAsiento') }}
                 </p></template>
                 <template #loading><p class="alert alert-info" role="alert">
                     <img
@@ -321,6 +321,7 @@ import Loading from '../Loading.vue';
 import PendingRequest from '../PendingRequest';
 import PendingPaymentRequest from '../PendingPaymentRequest';
 import RatePending from '../RatePending';
+import SeatRequestTrip from '../SeatRequestTrip.vue';
 import { mapState, mapActions } from 'pinia';
 import { useMyTripsStore } from '../../stores/myTrips';
 import { useRatesStore } from '../../stores/rates';
@@ -348,13 +349,13 @@ export default {
     },
     mounted() {
         this.tripAsDriver();
-        this.tripAsPassenger();
         this.pendingRate();
         this.getPendingRequest().then(() => {
             this.oldTripsAsDriver();
             this.oldTripsAsPassenger();
         });
         this.getPendingPaymentRequests();
+        this.getSeatRequests();
         this.findSubscriptions();
 
         bus.on('request-status-changed', () => {
@@ -362,6 +363,7 @@ export default {
                 this.oldTripsAsDriver();
                 this.oldTripsAsPassenger();
             });
+            this.getSeatRequests();
         });
     },
     beforeUnmount() {
@@ -370,7 +372,6 @@ export default {
     computed: {
         ...mapState(useMyTripsStore, {
             trips: 'myTrips',
-            passengerTrips: 'passengerTrips',
             oldTrips: 'myOldTrips',
             oldPassengerTrips: 'passengerOldTrips'
         }),
@@ -379,7 +380,8 @@ export default {
         }),
         ...mapState(usePassengerStore, {
             pendingRequest: 'pendingRequest',
-            pendingPaymentRequests: 'pendingPaymentRequests'
+            pendingPaymentRequests: 'pendingPaymentRequests',
+            seatRequests: 'seatRequests'
         }),
         ...mapState(useAuthStore, {
             user: 'user',
@@ -393,7 +395,6 @@ export default {
     methods: {
         ...mapActions(useMyTripsStore, {
             tripAsDriver: 'tripAsDriver',
-            tripAsPassenger: 'tripAsPassenger',
             oldTripsAsDriver: 'oldTripsAsDriver',
             oldTripsAsPassenger: 'oldTripsAsPassenger'
         }),
@@ -402,7 +403,8 @@ export default {
         }),
         ...mapActions(usePassengerStore, {
             getPendingRequest: 'getPendingRequest',
-            getPendingPaymentRequests: 'getPendingPaymentRequests'
+            getPendingPaymentRequests: 'getPendingPaymentRequests',
+            getSeatRequests: 'getSeatRequests'
         }),
         ...mapActions(useSubscriptionsStore, {
             findSubscriptions: 'index'
@@ -599,7 +601,7 @@ export default {
         trips: function () {
             this.updateScroll();
         },
-        passengerTrips: function () {
+        seatRequests: function () {
             this.updateScroll();
         },
         pendingRates: function () {
@@ -627,6 +629,7 @@ export default {
         PendingRequest,
         PendingPaymentRequest,
         RatePending,
+        SeatRequestTrip,
         Tab,
         subscriptionItem,
         modal

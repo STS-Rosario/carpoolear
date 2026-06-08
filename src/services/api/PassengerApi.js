@@ -9,6 +9,10 @@ class PassengerApi extends TaggedApi {
         return this.get('/api/users/requests', {});
     }
 
+    seatRequests() {
+        return this.get('/api/users/seat-requests', {});
+    }
+
     tripRequest(id) {
         return this.get('/api/trips/' + id + '/requests', {});
     }
