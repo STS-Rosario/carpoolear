@@ -10,7 +10,7 @@
             <span v-if="row.creator"> · {{ row.creator.name }}</span>
         </p>
         <hr />
-        <div class="changelog-body-html message_text message_text--markdown" v-html="markdownToHtml(row.body_markdown || '')"></div>
+        <MarkdownPreview class="changelog-body-html" :source="row.body_markdown || ''" />
         <p class="mtop-10">
             <router-link class="btn btn-default" :to="{ name: 'admin-changelog-edit', params: { changelogId: row.id } }">
                 {{ $t('accionEditar') }}
@@ -29,7 +29,7 @@
 <script>
 import { mapActions } from 'pinia';
 import AdminLayout from '../layouts/AdminLayout.vue';
-import { markdownToHtml } from '../../services/markdown';
+import MarkdownPreview from '../elements/MarkdownPreview.vue';
 import { useChangelogStore } from '../../stores/changelog';
 import dayjs from '../../dayjs';
 
@@ -48,7 +48,6 @@ export default {
         };
     },
     methods: {
-        markdownToHtml,
         ...mapActions(useChangelogStore, {
             fetchAdminOne: 'fetchAdminOne'
         }),
@@ -82,7 +81,8 @@ export default {
         this.load();
     },
     components: {
-        AdminLayout
+        AdminLayout,
+        MarkdownPreview
     }
 };
 </script>

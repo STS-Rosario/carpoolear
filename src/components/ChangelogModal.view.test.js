@@ -10,9 +10,10 @@ describe('ChangelogModal view', () => {
         expect(viewSource).toContain('ultimosCambios');
     });
 
-    it('renders markdown body with the shared renderer', () => {
-        expect(viewSource).toContain('markdownToHtml');
-        expect(viewSource).toContain('message_text--markdown');
+    it('renders markdown body with MarkdownPreview instead of raw markdown', () => {
+        expect(viewSource).toContain('MarkdownPreview');
+        expect(viewSource).toContain(':source="entryBody"');
+        expect(viewSource).not.toContain('message_text--markdown');
     });
 
     it('is positioned in the lower right with a backdrop', () => {

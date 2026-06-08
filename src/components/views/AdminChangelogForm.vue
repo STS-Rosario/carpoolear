@@ -101,7 +101,10 @@ export default {
         },
         save() {
             const ed = this.$refs.bodyEditor;
-            const body = ed && typeof ed.invoke === 'function' ? ed.invoke('getMarkdown') : this.form.body_markdown;
+            const body =
+                ed && typeof ed.invoke === 'function'
+                    ? ed.invoke('getHTML') || ed.invoke('getMarkdown')
+                    : this.form.body_markdown;
             const version = (this.form.version || '').trim();
             if (!version) {
                 dialogs.message(this.$t('errorDatos'), { estado: 'error', duration: 2 });

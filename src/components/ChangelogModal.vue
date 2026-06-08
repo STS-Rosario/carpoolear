@@ -19,10 +19,7 @@
 
             <h2 class="changelog-modal-title">{{ $t('ultimosCambios') }}</h2>
 
-            <div
-                class="changelog-modal-body message_text message_text--markdown"
-                v-html="bodyHtml"
-            />
+            <MarkdownPreview class="changelog-modal-body" :source="entryBody" />
         </div>
     </div>
 </template>
@@ -32,7 +29,7 @@ import { mapState } from 'pinia';
 import { useAuthStore } from '../stores/auth';
 import { useRootStore } from '../stores/root';
 import { useChangelogStore } from '../stores/changelog';
-import { markdownToHtml } from '../services/markdown';
+import MarkdownPreview from './elements/MarkdownPreview.vue';
 import {
     shouldShowChangelogModal,
     markChangelogSeenForVersion
@@ -78,8 +75,8 @@ export default {
         open() {
             return this.eligible && !!this.entry;
         },
-        bodyHtml() {
-            return markdownToHtml((this.entry && this.entry.body_markdown) || '');
+        entryBody() {
+            return (this.entry && this.entry.body_markdown) || '';
         }
     },
     watch: {
@@ -124,6 +121,9 @@ export default {
             this.dismissed = true;
             this.entry = null;
         }
+    },
+    components: {
+        MarkdownPreview
     }
 };
 </script>
