@@ -19,6 +19,7 @@
                     />
                 </div>
                 <div ref="mapEl" class="live-location-map" aria-label="Live location map"></div>
+                <LiveLocationLastUpdated :recorded-at="publicView.recorded_at" />
                 <p v-if="!hasCoordinates" class="alert alert-info">
                     {{ $t('liveLocationWaitingForPosition') }}
                 </p>
@@ -35,6 +36,7 @@ import { mapActions, mapState } from 'pinia';
 import Loading from '../Loading.vue';
 import UserNameWithBadge from '../elements/UserNameWithBadge.vue';
 import UserRatingsCounts from '../elements/UserRatingsCounts.vue';
+import LiveLocationLastUpdated from '../elements/LiveLocationLastUpdated.vue';
 import { useTripLiveShareStore } from '../../stores/tripLiveShare.js';
 import {
     createLiveLocationMap,
@@ -85,11 +87,17 @@ export default {
             this.loaded = false;
             try {
                 await this.fetchPublicView(this.token);
-                this.syncMap();
-                this.beginViewerPolling(() => this.fetchPublicView(this.token).then(() => this.syncMap()));
+                this.beginViewerPolling(() =>
+                    this.fetchPublicView(this.token).then(() => this.syncMapAfterRender())
+                );
             } finally {
                 this.loaded = true;
+                await this.syncMapAfterRender();
             }
+        },
+        async syncMapAfterRender() {
+            await this.$nextTick();
+            this.syncMap();
         },
         syncMap() {
             if (!this.hasCoordinates || !this.$refs.mapEl) {
@@ -119,7 +127,8 @@ export default {
     components: {
         Loading,
         UserNameWithBadge,
-        UserRatingsCounts
+        UserRatingsCounts,
+        LiveLocationLastUpdated
     }
 };
 </script>

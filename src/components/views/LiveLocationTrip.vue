@@ -3,6 +3,7 @@
         <Loading :data="loadingData">
             <div v-if="tripView">
                 <div ref="mapEl" class="live-location-map" aria-label="Trip live location map"></div>
+                <LiveLocationLastUpdated :recorded-at="tripView.recorded_at" />
                 <p v-if="tripView.sharer" class="live-location-trip__sharer">
                     {{ $t('liveLocationSharerLabel', { name: tripView.sharer.name }) }}
                 </p>
@@ -17,6 +18,7 @@
 <script>
 import { mapActions, mapState } from 'pinia';
 import Loading from '../Loading.vue';
+import LiveLocationLastUpdated from '../elements/LiveLocationLastUpdated.vue';
 import { useTripLiveShareStore } from '../../stores/tripLiveShare.js';
 import {
     createLiveLocationMap,
@@ -67,13 +69,17 @@ export default {
             this.loaded = false;
             try {
                 await this.fetchTripView(this.id);
-                this.syncMap();
                 this.beginViewerPolling(() =>
-                    this.fetchTripView(this.id).then(() => this.syncMap())
+                    this.fetchTripView(this.id).then(() => this.syncMapAfterRender())
                 );
             } finally {
                 this.loaded = true;
+                await this.syncMapAfterRender();
             }
+        },
+        async syncMapAfterRender() {
+            await this.$nextTick();
+            this.syncMap();
         },
         syncMap() {
             if (!this.hasCoordinates || !this.$refs.mapEl) {
@@ -101,7 +107,8 @@ export default {
         this.resetStore();
     },
     components: {
-        Loading
+        Loading,
+        LiveLocationLastUpdated
     }
 };
 </script>

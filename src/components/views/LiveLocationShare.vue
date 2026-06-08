@@ -3,6 +3,11 @@
         <Loading :data="loadingData">
             <div v-if="share && share.is_active" class="live-location-share__active">
                 <p>{{ $t('liveLocationSharingActive') }}</p>
+                <div ref="mapEl" class="live-location-map" aria-label="Live location map"></div>
+                <LiveLocationLastUpdated :recorded-at="share.recorded_at" />
+                <p v-if="!hasCoordinates" class="alert alert-info">
+                    {{ $t('liveLocationWaitingForPosition') }}
+                </p>
                 <label class="live-location-share__label" for="live-share-url">{{
                     $t('liveLocationShareUrlLabel')
                 }}</label>
@@ -44,9 +49,15 @@
 <script>
 import { mapActions, mapState } from 'pinia';
 import Loading from '../Loading.vue';
+import LiveLocationLastUpdated from '../elements/LiveLocationLastUpdated.vue';
 import { useTripLiveShareStore } from '../../stores/tripLiveShare.js';
 import socialShare from '../../services/socialShare.js';
 import toast from '../../cordova/toast.js';
+import {
+    createLiveLocationMap,
+    createLiveLocationMarkerUpdater,
+    destroyLiveLocationMap
+} from '../../utils/liveLocationMap.js';
 
 export default {
     name: 'LiveLocationShare',
@@ -59,7 +70,9 @@ export default {
     data() {
         return {
             loaded: false,
-            errorMessage: ''
+            errorMessage: '',
+            mapInstance: null,
+            marker: null
         };
     },
     computed: {
@@ -67,6 +80,13 @@ export default {
             share: 'share',
             shareUrl: 'shareUrl'
         }),
+        hasCoordinates() {
+            return (
+                this.share &&
+                this.share.lat != null &&
+                this.share.lng != null
+            );
+        },
         loadingData() {
             if (!this.loaded) {
                 return null;
@@ -74,9 +94,18 @@ export default {
             return ['ready'];
         }
     },
+    watch: {
+        share: {
+            handler() {
+                this.$nextTick(() => this.syncMap());
+            },
+            deep: true
+        }
+    },
     methods: {
         ...mapActions(useTripLiveShareStore, {
             fetchStatus: 'fetchStatus',
+            resumeActiveSharing: 'resumeActiveSharing',
             startSharingAction: 'startSharing',
             stopSharingAction: 'stopSharing',
             resetStore: 'reset'
@@ -85,20 +114,45 @@ export default {
             this.loaded = false;
             try {
                 await this.fetchStatus(this.id);
+                this.resumeActiveSharing(this.id);
             } finally {
                 this.loaded = true;
+                await this.$nextTick();
+                this.syncMap();
+            }
+        },
+        syncMap() {
+            if (!this.hasCoordinates || !this.$refs.mapEl) {
+                return;
+            }
+            const { lat, lng } = this.share;
+            if (!this.mapInstance) {
+                const created = createLiveLocationMap(this.$refs.mapEl, lat, lng);
+                this.mapInstance = created.map;
+                this.marker = created.marker;
+            } else {
+                const updater = createLiveLocationMarkerUpdater(
+                    this.mapInstance,
+                    () => this.marker
+                );
+                updater(lat, lng);
             }
         },
         async startSharing() {
             this.errorMessage = '';
             try {
                 await this.startSharingAction(this.id);
+                await this.$nextTick();
+                this.syncMap();
             } catch (err) {
                 this.errorMessage = this.$t('liveLocationPermissionDenied');
                 console.error('[LiveLocationShare] startSharing failed:', err);
             }
         },
         async stopSharing() {
+            destroyLiveLocationMap(this.mapInstance);
+            this.mapInstance = null;
+            this.marker = null;
             await this.stopSharingAction(this.id);
         },
         async copyShareUrl() {
@@ -133,10 +187,12 @@ export default {
         this.loadStatus();
     },
     beforeUnmount() {
+        destroyLiveLocationMap(this.mapInstance);
         this.resetStore();
     },
     components: {
-        Loading
+        Loading,
+        LiveLocationLastUpdated
     }
 };
 </script>
@@ -146,6 +202,13 @@ export default {
     max-width: 520px;
     margin: 0 auto;
     padding: 1rem;
+}
+
+.live-location-map {
+    width: 100%;
+    height: 360px;
+    border-radius: 8px;
+    margin-bottom: 0.75rem;
 }
 
 .live-location-share__url-row {
