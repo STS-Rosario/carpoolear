@@ -37,6 +37,7 @@ import {
     shouldShowChangelogModal,
     markChangelogSeenForVersion
 } from '../utils/changelogPrompt';
+import { getChangelogAppVersion } from '../utils/changelogAppVersion';
 
 export default {
     name: 'ChangelogModal',
@@ -59,13 +60,11 @@ export default {
             logged: 'checkLogin'
         }),
         appVersion() {
-            const info = useRootStore().appVersionInfo;
-            const fromStore = info && info.version;
-            if (fromStore) return String(fromStore);
-            if (typeof window !== 'undefined' && window.appVersion) {
-                return String(window.appVersion);
-            }
-            return '';
+            const fallback =
+                typeof window !== 'undefined' && window.appVersion
+                    ? window.appVersion
+                    : '';
+            return getChangelogAppVersion(useRootStore().appVersionInfo, fallback);
         },
         eligible() {
             return (

@@ -87,7 +87,12 @@ export default {
                     currentVersionCode = result.currentVersionCode;
                     currentVersionName = result.currentVersionName;
                     const version = platform === 'android' ? String(currentVersionCode) : (currentVersionName || String(currentVersionCode));
-                    useRootStore().setAppVersionInfo({ version, versionSource: 'real', platform });
+                    useRootStore().setAppVersionInfo({
+                        version,
+                        versionName: currentVersionName ? String(currentVersionName) : null,
+                        versionSource: 'real',
+                        platform
+                    });
                 } catch (pluginError) {
                     console.warn('AppUpdate.getAppUpdateInfo failed, using window.appVersion fallback:', pluginError);
                     const fallback = window.appVersion || '0';
