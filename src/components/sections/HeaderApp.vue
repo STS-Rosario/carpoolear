@@ -384,10 +384,10 @@ export default {
             isMobile: 'isMobile'
         }),
         ...mapState(useChangelogStore, {
-            hasCurrentVersionChangelog: 'hasCurrentVersionChangelog'
+            hasAnyChangelog: 'hasAnyChangelog'
         }),
         showChangelogNav() {
-            return this.logged && this.hasCurrentVersionChangelog;
+            return this.logged && this.hasAnyChangelog;
         },
 
         showLogo() {

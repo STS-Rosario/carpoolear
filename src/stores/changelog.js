@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { ChangelogApi } from '../services/api';
+import { sortChangelogsBySemverDesc } from '../utils/changelogSort';
 
 const changelogApi = new ChangelogApi();
 
@@ -7,11 +8,16 @@ export const useChangelogStore = defineStore('changelog', {
     state: () => ({
         currentEntry: null,
         probedVersion: null,
+        publicList: null,
+        publicListProbed: false,
         adminList: null
     }),
     getters: {
         hasCurrentVersionChangelog(state) {
             return !!state.currentEntry;
+        },
+        hasAnyChangelog(state) {
+            return Array.isArray(state.publicList) && state.publicList.length > 0;
         }
     },
     actions: {
@@ -35,6 +41,27 @@ export const useChangelogStore = defineStore('changelog', {
                 return Promise.resolve(this.currentEntry);
             }
             return this.fetchForVersion(version).catch(() => null);
+        },
+        fetchAll() {
+            return changelogApi
+                .fetchAll()
+                .then((response) => {
+                    const rows = sortChangelogsBySemverDesc(response.data || []);
+                    this.publicList = rows;
+                    this.publicListProbed = true;
+                    return rows;
+                })
+                .catch((error) => {
+                    this.publicList = [];
+                    this.publicListProbed = true;
+                    return Promise.reject(error);
+                });
+        },
+        probePublicList() {
+            if (this.publicListProbed) {
+                return Promise.resolve(this.publicList || []);
+            }
+            return this.fetchAll().catch(() => []);
         },
         fetchAdminList() {
             this.adminList = null;

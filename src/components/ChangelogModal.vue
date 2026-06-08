@@ -22,9 +22,26 @@
 
                 <p class="changelog-modal-intro">{{ $t('changelogModalIntro') }}</p>
 
-                <h3 class="changelog-modal-version">{{ versionHeading }}</h3>
+                <template v-if="navigationMode">
+                    <section
+                        v-for="entry in navigationEntries"
+                        :key="entry.id"
+                        class="changelog-modal-entry"
+                    >
+                        <h3 class="changelog-modal-version">
+                            {{ formatEntryVersionHeading(entry.version) }}
+                        </h3>
+                        <MarkdownPreview
+                            class="changelog-modal-body"
+                            :source="entry.body_markdown"
+                        />
+                    </section>
+                </template>
+                <template v-else>
+                    <h3 class="changelog-modal-version">{{ versionHeading }}</h3>
 
-                <MarkdownPreview class="changelog-modal-body" :source="entryBody" />
+                    <MarkdownPreview class="changelog-modal-body" :source="entryBody" />
+                </template>
             </div>
 
             <div class="changelog-modal-footer">
@@ -48,6 +65,7 @@ import {
     markChangelogSeenForVersion
 } from '../utils/changelogPrompt';
 import { formatChangelogVersionHeading, getChangelogAppVersion } from '../utils/changelogAppVersion';
+import { sortChangelogsBySemverDesc } from '../utils/changelogSort';
 
 const CHANGELOG_OPEN_EVENT = 'changelog:open';
 
@@ -62,6 +80,8 @@ export default {
     data() {
         return {
             forcedOpen: false,
+            navigationMode: false,
+            navigationEntries: [],
             dismissed: false
         };
     },
@@ -92,11 +112,14 @@ export default {
             );
         },
         open() {
-            if (this.suppress || !this.entry) {
+            if (this.suppress) {
                 return false;
             }
-            if (this.forcedOpen) {
-                return this.logged && !!this.appVersion;
+            if (this.navigationMode && this.forcedOpen) {
+                return this.logged && this.navigationEntries.length > 0;
+            }
+            if (!this.entry) {
+                return false;
             }
             return this.autoEligible;
         },
@@ -135,39 +158,55 @@ export default {
     methods: {
         resetForVersionChange() {
             this.forcedOpen = false;
+            this.navigationMode = false;
+            this.navigationEntries = [];
             this.dismissed = false;
             const store = useChangelogStore();
             store.currentEntry = null;
             store.probedVersion = null;
         },
         probeAvailability() {
-            if (!this.logged || !this.appVersion) return;
-            useChangelogStore().probeForVersion(this.appVersion);
+            if (!this.logged) return;
+            const store = useChangelogStore();
+            store.probePublicList();
+            if (this.appVersion) {
+                store.probeForVersion(this.appVersion);
+            }
         },
         loadChangelog() {
             if (!this.appVersion) return;
             return useChangelogStore().fetchForVersion(this.appVersion);
         },
         openFromNavigation() {
-            if (!this.logged || !this.appVersion) return;
+            if (!this.logged) return;
+            this.navigationMode = true;
             this.forcedOpen = true;
             this.dismissed = false;
             useChangelogStore()
-                .fetchForVersion(this.appVersion)
-                .then((entry) => {
-                    if (!entry) {
+                .fetchAll()
+                .then((entries) => {
+                    this.navigationEntries = sortChangelogsBySemverDesc(entries);
+                    if (!this.navigationEntries.length) {
                         this.forcedOpen = false;
+                        this.navigationMode = false;
                     }
                 })
                 .catch(() => {
                     this.forcedOpen = false;
+                    this.navigationMode = false;
+                    this.navigationEntries = [];
                 });
+        },
+        formatEntryVersionHeading(version) {
+            return formatChangelogVersionHeading(version);
         },
         close() {
             if (this.appVersion) {
                 markChangelogSeenForVersion(this.appVersion);
             }
             this.forcedOpen = false;
+            this.navigationMode = false;
+            this.navigationEntries = [];
             this.dismissed = true;
         }
     },
@@ -241,6 +280,12 @@ export default {
     color: #333;
     font-size: 0.95rem;
     line-height: 1.45;
+}
+
+.changelog-modal-entry + .changelog-modal-entry {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid #e8e8e8;
 }
 
 .changelog-modal-version {

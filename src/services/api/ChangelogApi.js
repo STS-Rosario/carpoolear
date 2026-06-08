@@ -5,6 +5,10 @@ class ChangelogApi extends TaggedApi {
         return this.get('/api/changelog', { version });
     }
 
+    fetchAll() {
+        return this.get('/api/changelogs');
+    }
+
     adminList() {
         return this.get('/api/admin/changelogs');
     }
