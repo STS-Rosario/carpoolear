@@ -39,6 +39,7 @@
     "optimize:static-images": "node scripts/optimize-static-images.mjs"
   },
   "dependencies": {
+    "@capacitor-community/background-geolocation": "^1.2.26",
     "@capacitor/android": "^7.4.3",
     "@capacitor/app": "^7.0.2",
     "@capacitor/camera": "^7.0.2",

@@ -1,10 +1,14 @@
 import { defineStore } from 'pinia';
 import TripLiveShareApi from '../services/api/TripLiveShare.js';
 import {
+    clearLiveLocationAppLifecycle,
     clearLocationWatch,
+    isNativePlatform,
+    registerLiveLocationAppLifecycle,
     requestLocationPermission,
     startLocationWatch
 } from '../utils/geolocation.js';
+import { getLiveLocationGeolocationMessages } from '../utils/liveLocationGeolocationMessages.js';
 import { buildLiveShareUrl, getUpdateIntervalMs } from '../utils/tripLiveShareUtils.js';
 
 const api = new TripLiveShareApi();
@@ -42,7 +46,10 @@ export const useTripLiveShareStore = defineStore('tripLiveShare', {
 
         async startSharing(tripId) {
             this.error = null;
-            await requestLocationPermission();
+            const watchOptions = {
+                messages: getLiveLocationGeolocationMessages()
+            };
+            await requestLocationPermission(watchOptions);
             const response = await api.start(tripId);
             this.share = response?.data ?? null;
             this.beginLocationUpdates(tripId);
@@ -59,6 +66,9 @@ export const useTripLiveShareStore = defineStore('tripLiveShare', {
 
         beginLocationUpdates(tripId) {
             this.clearTimers();
+            const watchOptions = {
+                messages: getLiveLocationGeolocationMessages()
+            };
             const pushLocation = async (coords) => {
                 try {
                     const response = await api.updateLocation(
@@ -74,17 +84,27 @@ export const useTripLiveShareStore = defineStore('tripLiveShare', {
 
             startLocationWatch((coords) => {
                 pushLocation(coords);
-            }).catch((err) => {
+            }, watchOptions).catch((err) => {
                 console.error('[tripLiveShare] watch failed:', err);
             });
 
-            this.updateTimer = setInterval(() => {
-                requestLocationPermission()
+            registerLiveLocationAppLifecycle(() => {
+                requestLocationPermission(watchOptions)
                     .then(pushLocation)
                     .catch((err) => {
-                        console.error('[tripLiveShare] periodic location failed:', err);
+                        console.error('[tripLiveShare] resume location failed:', err);
                     });
-            }, getUpdateIntervalMs('sharer'));
+            });
+
+            if (!isNativePlatform()) {
+                this.updateTimer = setInterval(() => {
+                    requestLocationPermission(watchOptions)
+                        .then(pushLocation)
+                        .catch((err) => {
+                            console.error('[tripLiveShare] periodic location failed:', err);
+                        });
+                }, getUpdateIntervalMs('sharer'));
+            }
         },
 
         async fetchPublicView(token) {
@@ -126,6 +146,7 @@ export const useTripLiveShareStore = defineStore('tripLiveShare', {
         reset() {
             this.clearTimers();
             clearLocationWatch();
+            clearLiveLocationAppLifecycle();
             this.share = null;
             this.publicView = null;
             this.tripView = null;
