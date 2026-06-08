@@ -17,13 +17,15 @@
                 <i class="fa fa-times" aria-hidden="true"></i>
             </button>
 
-            <h2 class="changelog-modal-title">{{ $t('ultimosCambios') }}</h2>
+            <div class="changelog-modal-scroll">
+                <h2 class="changelog-modal-title">{{ $t('ultimosCambios') }}</h2>
 
-            <p class="changelog-modal-intro">{{ $t('changelogModalIntro') }}</p>
+                <p class="changelog-modal-intro">{{ $t('changelogModalIntro') }}</p>
 
-            <h3 class="changelog-modal-version">{{ versionHeading }}</h3>
+                <h3 class="changelog-modal-version">{{ versionHeading }}</h3>
 
-            <MarkdownPreview class="changelog-modal-body" :source="entryBody" />
+                <MarkdownPreview class="changelog-modal-body" :source="entryBody" />
+            </div>
 
             <div class="changelog-modal-footer">
                 <button type="button" class="btn btn-primary changelog-modal-ok" @click="close">
@@ -196,6 +198,7 @@ export default {
     bottom: 16px;
     width: min(420px, calc(100vw - 32px));
     max-height: min(70vh, 520px);
+    min-height: 0;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -204,6 +207,14 @@ export default {
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
     padding: 20px 20px 16px;
     pointer-events: auto;
+}
+
+.changelog-modal-scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-right: 4px;
 }
 
 .changelog-modal-close {
@@ -240,11 +251,7 @@ export default {
 }
 
 .changelog-modal-body {
-    flex: 1 1 auto;
-    min-height: 0;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    margin: 0 0 12px;
+    margin: 0 0 4px;
     color: #333;
 }
 
