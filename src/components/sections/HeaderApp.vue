@@ -95,6 +95,9 @@
                                 $t('soporte')
                             }}</router-link>
                         </li>
+                        <li v-if="showChangelogNav">
+                            <a @click="openChangelog">{{ $t('ultimosCambios') }}</a>
+                        </li>
                         <li
                             v-if="user"
                             role="separator"
@@ -260,6 +263,9 @@
                                 $t('soporte')
                             }}</router-link>
                         </li>
+                        <li v-if="showChangelogNav">
+                            <a @click="openChangelog">{{ $t('ultimosCambios') }}</a>
+                        </li>
                         <li v-if="user.is_admin">
                             <router-link :to="{ name: 'admin-page' }">
                                 {{ $t('administracion') }}
@@ -315,6 +321,7 @@ import { useNotificationsStore } from '../../stores/notifications';
 import { useActionbarsStore } from '../../stores/actionbars';
 import { useDeviceStore } from '../../stores/device';
 import { useTripsStore } from '../../stores/trips';
+import { useChangelogStore } from '../../stores/changelog';
 import dropdown from '../Dropdown';
 import router from '../../router';
 import bus from '../../services/bus-event.js';
@@ -376,6 +383,12 @@ export default {
             isFacebokApp: 'isFacebokApp',
             isMobile: 'isMobile'
         }),
+        ...mapState(useChangelogStore, {
+            hasAnyChangelog: 'hasAnyChangelog'
+        }),
+        showChangelogNav() {
+            return this.logged && this.hasAnyChangelog;
+        },
 
         showLogo() {
             for (let i = 0; i < this.leftHeaderButton.length; i++) {
@@ -405,6 +418,9 @@ export default {
     },
 
     methods: {
+        openChangelog() {
+            bus.emit('changelog:open');
+        },
         shouldHideDonationOnIOSCapacitor(user) {
             return shouldHideDonationOnIOSCapacitor(user);
         },

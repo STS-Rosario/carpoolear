@@ -31,3 +31,13 @@ describe('ToastUiEditor resizable', () => {
         );
     });
 });
+
+describe('ToastUiEditor heading dropdown', () => {
+    it('forces readable text in the heading picker popup', () => {
+        expect(componentSource).toContain('toastui-editor-popup-add-heading');
+        expect(componentSource).toMatch(/:deep\(\.toastui-editor-popup-add-heading h1\)/);
+        expect(componentSource).toMatch(/:deep\(\.toastui-editor-popup-add-heading h6\)/);
+        expect(componentSource).toMatch(/:deep\(\.toastui-editor-popup-add-heading li div\)/);
+        expect(componentSource).toMatch(/color:\s*#333/);
+    });
+});

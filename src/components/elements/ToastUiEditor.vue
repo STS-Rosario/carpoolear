@@ -142,4 +142,17 @@ export default {
 .toast-ui-editor-mount--resizable :deep(textarea) {
     resize: vertical;
 }
+
+/* Global h1 { color: #fff } would make heading options invisible on the light popup. */
+.toast-ui-editor-mount :deep(.toastui-editor-popup-add-heading h1),
+.toast-ui-editor-mount :deep(.toastui-editor-popup-add-heading h2),
+.toast-ui-editor-mount :deep(.toastui-editor-popup-add-heading h3),
+.toast-ui-editor-mount :deep(.toastui-editor-popup-add-heading h4),
+.toast-ui-editor-mount :deep(.toastui-editor-popup-add-heading h5),
+.toast-ui-editor-mount :deep(.toastui-editor-popup-add-heading h6),
+.toast-ui-editor-mount :deep(.toastui-editor-popup-add-heading p),
+.toast-ui-editor-mount :deep(.toastui-editor-popup-add-heading li),
+.toast-ui-editor-mount :deep(.toastui-editor-popup-add-heading li div) {
+    color: #333;
+}
 </style>

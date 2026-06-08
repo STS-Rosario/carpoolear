@@ -11,6 +11,7 @@
             <IdentityValidationPromptModal
                 :suppress="identityPromptSuppress"
             />
+            <ChangelogModal :suppress="changelogModalSuppress" />
             <!-- Custom Splash Screen -->
             <div v-if="showCustomSplash" class="custom-splash-screen">
                 <img
@@ -57,6 +58,7 @@ import headerApp from './components/sections/HeaderApp.vue';
 import onBoarding from './components/sections/OnBoarding.vue';
 import ForceUpgradeModal from './components/ForceUpgradeModal.vue';
 import IdentityValidationPromptModal from './components/IdentityValidationPromptModal.vue';
+import ChangelogModal from './components/ChangelogModal.vue';
 import MaintenanceFullscreen from './components/MaintenanceFullscreen.vue';
 import MaintenanceAdminBanner from './components/MaintenanceAdminBanner.vue';
 import OfflineStatusBar from './components/OfflineStatusBar.vue';
@@ -85,7 +87,12 @@ export default {
                     currentVersionCode = result.currentVersionCode;
                     currentVersionName = result.currentVersionName;
                     const version = platform === 'android' ? String(currentVersionCode) : (currentVersionName || String(currentVersionCode));
-                    useRootStore().setAppVersionInfo({ version, versionSource: 'real', platform });
+                    useRootStore().setAppVersionInfo({
+                        version,
+                        versionName: currentVersionName ? String(currentVersionName) : null,
+                        versionSource: 'real',
+                        platform
+                    });
                 } catch (pluginError) {
                     console.warn('AppUpdate.getAppUpdateInfo failed, using window.appVersion fallback:', pluginError);
                     const fallback = window.appVersion || '0';
@@ -204,6 +211,9 @@ export default {
         identityPromptSuppress() {
             return this.showCustomSplash || this.onBoardingVisibility;
         },
+        changelogModalSuppress() {
+            return this.showCustomSplash || this.onBoardingVisibility;
+        },
         passengerMaintenanceWall() {
             const cfg = this.appConfig && this.appConfig.maintenance;
             if (!cfg || !cfg.enabled) {
@@ -276,6 +286,7 @@ export default {
         onBoarding,
         ForceUpgradeModal,
         IdentityValidationPromptModal,
+        ChangelogModal,
         MaintenanceFullscreen,
         MaintenanceAdminBanner,
         OfflineStatusBar,
