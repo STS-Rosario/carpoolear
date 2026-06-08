@@ -366,6 +366,8 @@ const messages = {
         aportanteMediaNaranja:
             'Aportante en la campaña mi media naranja carpoolera',
         miembroEquipo: 'Miembro del equipo de Carpoolear',
+        miembroDesde: 'Miembro desde: {date}',
+        perfilViajesParticipados: '{count} viajes',
         cambioFacebook:
             'Facebook cambió sus políticas y no podemos llevarte al perfil de esta persona, pero te ayudamos a buscarlo.',
         enviarMensaje: 'Enviar mensaje',
@@ -2125,6 +2127,8 @@ const messages = {
         aportanteMediaNaranja:
             'Aportante en la campaña mi media naranja carpoolera',
         miembroEquipo: 'Miembro del equipo de Carpoolear',
+        miembroDesde: 'Miembro desde: {date}',
+        perfilViajesParticipados: '{count} viajes',
         compartirEnFacebook: 'Compartir en Facebook',
         compartirEnTwitter: 'Compartir en Twitter',
         compartirEnGooglePlus: 'Compartir en Google+',
@@ -2880,6 +2884,8 @@ const messages = {
         aportanteMediaNaranja:
             'Contributor to the "my carpooling soulmate" campaign',
         miembroEquipo: 'Carpoolear team member',
+        miembroDesde: 'Member since: {date}',
+        perfilViajesParticipados: '{count} trips',
         cambioFacebook:
             "Facebook changed its policies and we cannot take you to this person's profile, but we can help you search for them.",
         enviarMensaje: 'Send message',
