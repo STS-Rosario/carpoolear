@@ -1,6 +1,6 @@
 <template>
     <div class="live-location-share">
-        <Loading :data="loaded">
+        <Loading :data="loadingData">
             <div v-if="share && share.is_active" class="live-location-share__active">
                 <p>{{ $t('liveLocationSharingActive') }}</p>
                 <label class="live-location-share__label" for="live-share-url">{{
@@ -66,7 +66,13 @@ export default {
         ...mapState(useTripLiveShareStore, {
             share: 'share',
             shareUrl: 'shareUrl'
-        })
+        }),
+        loadingData() {
+            if (!this.loaded) {
+                return null;
+            }
+            return ['ready'];
+        }
     },
     methods: {
         ...mapActions(useTripLiveShareStore, {

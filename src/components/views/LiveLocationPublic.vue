@@ -1,6 +1,6 @@
 <template>
     <div class="live-location-public">
-        <Loading :data="loaded">
+        <Loading :data="loadingData">
             <div v-if="publicView">
                 <div class="live-location-public__driver" v-if="publicView.driver">
                     <router-link
@@ -67,6 +67,12 @@ export default {
                 this.publicView.lat != null &&
                 this.publicView.lng != null
             );
+        },
+        loadingData() {
+            if (!this.loaded) {
+                return null;
+            }
+            return this.publicView ? ['ready'] : [];
         }
     },
     methods: {

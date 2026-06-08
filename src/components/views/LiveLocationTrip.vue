@@ -1,6 +1,6 @@
 <template>
     <div class="live-location-trip">
-        <Loading :data="loaded">
+        <Loading :data="loadingData">
             <div v-if="tripView">
                 <div ref="mapEl" class="live-location-map" aria-label="Trip live location map"></div>
                 <p v-if="tripView.sharer" class="live-location-trip__sharer">
@@ -49,6 +49,12 @@ export default {
                 this.tripView.lat != null &&
                 this.tripView.lng != null
             );
+        },
+        loadingData() {
+            if (!this.loaded) {
+                return null;
+            }
+            return ['ready'];
         }
     },
     methods: {
