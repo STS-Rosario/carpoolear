@@ -264,10 +264,25 @@ export default {
 };
 </script>
 <style scoped>
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
 .profile-info--member-stats {
     margin-top: 0.5rem;
     font-size: 0.9rem;
     line-height: 1.4;
+    text-align: center;
+    max-width: 230px;
+}
+
+@media only screen and (min-width: 768px) {
+    .profile-info--member-stats {
+        white-space: nowrap;
+    }
 }
 
 .profile-badges {

@@ -19,6 +19,10 @@ describe('ProfileInfo member stats', () => {
         expect(viewSource).toContain('formatMemberSinceMonthYear');
         expect(viewSource).toContain('normalizeTripsCount');
         expect(viewSource).toContain('profile-info--member-stats');
+        expect(viewSource).toMatch(/\.profile-info\s*\{[\s\S]*align-items:\s*center/);
+        expect(viewSource).toMatch(
+            /\.profile-info--member-stats\s*\{[\s\S]*text-align:\s*center/
+        );
     });
 
     it('keeps member stats copy in i18n', () => {
