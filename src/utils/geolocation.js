@@ -1,3 +1,4 @@
+import { registerPlugin } from '@capacitor/core';
 import { getLiveLocationGeolocationMessages } from './liveLocationGeolocationMessages.js';
 
 let activeWatchId = null;
@@ -52,16 +53,15 @@ function getWebAdapter() {
     };
 }
 
-async function loadBackgroundGeolocation() {
+function loadBackgroundGeolocation() {
     if (!backgroundGeolocationPlugin) {
-        const { registerPlugin } = await import('@capacitor/core');
         backgroundGeolocationPlugin = registerPlugin('BackgroundGeolocation');
     }
     return backgroundGeolocationPlugin;
 }
 
 async function getBackgroundAdapter(watchOptions = {}) {
-    const BackgroundGeolocation = await loadBackgroundGeolocation();
+    const BackgroundGeolocation = loadBackgroundGeolocation();
     const messages =
         watchOptions.messages ?? getLiveLocationGeolocationMessages();
 
