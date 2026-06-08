@@ -12,5 +12,9 @@ describe('LiveLocationTrip.vue', () => {
         expect(viewSource).toContain('beginViewerPolling');
         expect(viewSource).toContain('loadingData');
         expect(viewSource).not.toMatch(/:data="loaded"/);
+        expect(viewSource).toContain('$nextTick');
+        expect(viewSource).toContain('syncMapAfterRender');
+        expect(viewSource).toContain('LiveLocationLastUpdated');
+        expect(viewSource).toContain('tripView.recorded_at');
     });
 });
