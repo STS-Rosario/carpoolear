@@ -122,7 +122,8 @@ export default {
 
 <style scoped>
 .ongoing-trip {
-    margin-bottom: 1.25rem;
+    margin: 0 auto 1.25rem;
+    max-width: 500px;
 }
 
 .ongoing-trip__heading {
