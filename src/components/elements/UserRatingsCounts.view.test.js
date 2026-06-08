@@ -16,6 +16,6 @@ describe('UserRatingsCounts.vue', () => {
 
     it('does not render when ratings prop is null', () => {
         expect(viewSource).toMatch(/v-if="visible"/);
-        expect(viewSource).toContain('ratings == null');
+        expect(viewSource).toMatch(/ratings\s*!=\s*null/);
     });
 });
