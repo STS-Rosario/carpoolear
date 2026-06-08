@@ -19,5 +19,7 @@ describe('LiveLocationTrip.vue', () => {
         expect(viewSource).toContain('liveLocationSharingStopped');
         expect(viewSource).toContain('isWaitingForLiveLocation');
         expect(viewSource).toContain('isLiveShareStopped');
+        expect(viewSource).toContain('getTripLiveLocationViewMode');
+        expect(viewSource).toContain("viewMode === 'stopped'");
     });
 });
