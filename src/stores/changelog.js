@@ -6,8 +6,14 @@ const changelogApi = new ChangelogApi();
 export const useChangelogStore = defineStore('changelog', {
     state: () => ({
         currentEntry: null,
+        probedVersion: null,
         adminList: null
     }),
+    getters: {
+        hasCurrentVersionChangelog(state) {
+            return !!state.currentEntry;
+        }
+    },
     actions: {
         fetchForVersion(version) {
             return changelogApi
@@ -15,12 +21,20 @@ export const useChangelogStore = defineStore('changelog', {
                 .then((response) => {
                     const entry = response.data || null;
                     this.currentEntry = entry;
+                    this.probedVersion = version;
                     return entry;
                 })
                 .catch((error) => {
                     this.currentEntry = null;
+                    this.probedVersion = version;
                     return Promise.reject(error);
                 });
+        },
+        probeForVersion(version) {
+            if (this.probedVersion === version) {
+                return Promise.resolve(this.currentEntry);
+            }
+            return this.fetchForVersion(version).catch(() => null);
         },
         fetchAdminList() {
             this.adminList = null;

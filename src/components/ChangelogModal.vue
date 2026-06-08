@@ -40,11 +40,14 @@ import { useAuthStore } from '../stores/auth';
 import { useRootStore } from '../stores/root';
 import { useChangelogStore } from '../stores/changelog';
 import MarkdownPreview from './elements/MarkdownPreview.vue';
+import bus from '../services/bus-event';
 import {
     shouldShowChangelogModal,
     markChangelogSeenForVersion
 } from '../utils/changelogPrompt';
 import { formatChangelogVersionHeading, getChangelogAppVersion } from '../utils/changelogAppVersion';
+
+const CHANGELOG_OPEN_EVENT = 'changelog:open';
 
 export default {
     name: 'ChangelogModal',
@@ -56,15 +59,16 @@ export default {
     },
     data() {
         return {
-            entry: null,
-            loading: false,
-            dismissed: false,
-            fetchAttempted: false
+            forcedOpen: false,
+            dismissed: false
         };
     },
     computed: {
         ...mapState(useAuthStore, {
             logged: 'checkLogin'
+        }),
+        ...mapState(useChangelogStore, {
+            entry: 'currentEntry'
         }),
         appVersion() {
             const fallback =
@@ -76,7 +80,7 @@ export default {
         versionHeading() {
             return formatChangelogVersionHeading(this.appVersion);
         },
-        eligible() {
+        autoEligible() {
             return (
                 this.logged &&
                 !this.suppress &&
@@ -86,53 +90,83 @@ export default {
             );
         },
         open() {
-            return this.eligible && !!this.entry;
+            if (this.suppress || !this.entry) {
+                return false;
+            }
+            if (this.forcedOpen) {
+                return this.logged && !!this.appVersion;
+            }
+            return this.autoEligible;
         },
         entryBody() {
             return (this.entry && this.entry.body_markdown) || '';
+        },
+        availabilityProbeKey() {
+            return `${this.logged}-${this.appVersion}`;
         }
     },
     watch: {
-        eligible: {
+        autoEligible: {
             immediate: true,
             handler(shouldLoad) {
-                if (shouldLoad && !this.fetchAttempted) {
+                if (shouldLoad) {
                     this.loadChangelog();
                 }
+            }
+        },
+        availabilityProbeKey: {
+            immediate: true,
+            handler() {
+                this.probeAvailability();
             }
         },
         appVersion() {
             this.resetForVersionChange();
         }
     },
+    mounted() {
+        bus.on(CHANGELOG_OPEN_EVENT, this.openFromNavigation);
+    },
+    beforeUnmount() {
+        bus.off(CHANGELOG_OPEN_EVENT, this.openFromNavigation);
+    },
     methods: {
         resetForVersionChange() {
-            this.entry = null;
-            this.fetchAttempted = false;
+            this.forcedOpen = false;
             this.dismissed = false;
+            const store = useChangelogStore();
+            store.currentEntry = null;
+            store.probedVersion = null;
+        },
+        probeAvailability() {
+            if (!this.logged || !this.appVersion) return;
+            useChangelogStore().probeForVersion(this.appVersion);
         },
         loadChangelog() {
-            if (!this.appVersion || this.fetchAttempted) return;
-            this.fetchAttempted = true;
-            this.loading = true;
+            if (!this.appVersion) return;
+            return useChangelogStore().fetchForVersion(this.appVersion);
+        },
+        openFromNavigation() {
+            if (!this.logged || !this.appVersion) return;
+            this.forcedOpen = true;
+            this.dismissed = false;
             useChangelogStore()
                 .fetchForVersion(this.appVersion)
-                .then((data) => {
-                    this.entry = data;
+                .then((entry) => {
+                    if (!entry) {
+                        this.forcedOpen = false;
+                    }
                 })
                 .catch(() => {
-                    this.entry = null;
-                })
-                .finally(() => {
-                    this.loading = false;
+                    this.forcedOpen = false;
                 });
         },
         close() {
             if (this.appVersion) {
                 markChangelogSeenForVersion(this.appVersion);
             }
+            this.forcedOpen = false;
             this.dismissed = true;
-            this.entry = null;
         }
     },
     components: {

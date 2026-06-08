@@ -37,6 +37,20 @@ describe('changelog store', () => {
         expect(store.currentEntry).toEqual(entry);
     });
 
+    it('probes the current version only once', async () => {
+        const { useChangelogStore } = await import('./changelog');
+        apiMock.fetchForVersion.mockResolvedValue({
+            data: { id: 1, version: '3.2.3', body_markdown: '## Cambios' }
+        });
+
+        const store = useChangelogStore();
+        await store.probeForVersion('3.2.3');
+        await store.probeForVersion('3.2.3');
+
+        expect(apiMock.fetchForVersion).toHaveBeenCalledTimes(1);
+        expect(store.probedVersion).toBe('3.2.3');
+    });
+
     it('loads admin changelog list into state', async () => {
         const { useChangelogStore } = await import('./changelog');
         apiMock.adminList.mockResolvedValue({ data: [{ id: 2, version: '1.0.0' }] });
