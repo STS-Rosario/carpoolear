@@ -14,7 +14,7 @@ describe('LiveLocationPublic.vue', () => {
         expect(viewSource).toContain('loadingData');
         expect(viewSource).not.toMatch(/:data="loaded"/);
         expect(viewSource).toContain('$nextTick');
-        expect(viewSource).toContain('syncMap');
+        expect(viewSource).toContain('syncMapAfterRender');
         expect(viewSource).toContain('LiveLocationLastUpdated');
         expect(viewSource).toContain('publicView.recorded_at');
     });

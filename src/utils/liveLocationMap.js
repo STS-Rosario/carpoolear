@@ -1,4 +1,5 @@
 import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 import { ensureLeafletDefaultIconImages } from './leafletIcons.js';
 import { createLiveLocationMarkerUpdater } from './liveLocationMapHelpers.js';
 
@@ -17,6 +18,7 @@ export function createLiveLocationMap(container, lat, lng) {
     }).addTo(map);
 
     const marker = L.marker([lat, lng]).addTo(map);
+    map.invalidateSize();
 
     return { map, marker };
 }

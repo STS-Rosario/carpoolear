@@ -34,6 +34,12 @@ export const useTripLiveShareStore = defineStore('tripLiveShare', {
             return this.share;
         },
 
+        resumeActiveSharing(tripId) {
+            if (this.isSharing) {
+                this.beginLocationUpdates(tripId);
+            }
+        },
+
         async startSharing(tripId) {
             this.error = null;
             await requestLocationPermission();

@@ -1,7 +1,18 @@
 import { describe, expect, it, vi } from 'vitest';
+import fs from 'node:fs';
+import path from 'node:path';
 import { createLiveLocationMarkerUpdater } from './liveLocationMapHelpers.js';
 
+const mapSource = fs.readFileSync(
+    path.resolve(__dirname, 'liveLocationMap.js'),
+    'utf8'
+);
+
 describe('liveLocationMap', () => {
+    it('imports Leaflet styles for map rendering', () => {
+        expect(mapSource).toContain("import 'leaflet/dist/leaflet.css'");
+    });
+
     it('createLiveLocationMarkerUpdater updates marker position', () => {
         const setLatLng = vi.fn();
         const panTo = vi.fn();
