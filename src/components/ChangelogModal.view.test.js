@@ -41,4 +41,10 @@ describe('ChangelogModal view', () => {
     it('marks the version as seen when closed', () => {
         expect(viewSource).toContain('markChangelogSeenForVersion');
     });
+
+    it('opens from navigation even after the version was dismissed', () => {
+        expect(viewSource).toContain('changelog:open');
+        expect(viewSource).toContain('openFromNavigation');
+        expect(viewSource).toContain('forcedOpen');
+    });
 });
