@@ -10,6 +10,7 @@ describe('HeaderApp changelog navigation', () => {
         expect(viewSource).toContain('ultimosCambios');
         expect(viewSource).toContain('openChangelog');
         expect(viewSource).toContain('showChangelogNav');
+        expect(viewSource).toContain('hasAnyChangelog');
         expect(viewSource).toMatch(
             /\$t\('soporte'\)[\s\S]*showChangelogNav[\s\S]*\$t\('ultimosCambios'\)/
         );

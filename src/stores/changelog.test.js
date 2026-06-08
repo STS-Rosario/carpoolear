@@ -3,6 +3,7 @@ import { createPinia, setActivePinia } from 'pinia';
 
 const apiMock = {
     fetchForVersion: vi.fn(),
+    fetchAll: vi.fn(),
     adminList: vi.fn(),
     adminShow: vi.fn(),
     adminCreate: vi.fn(),
@@ -49,6 +50,37 @@ describe('changelog store', () => {
 
         expect(apiMock.fetchForVersion).toHaveBeenCalledTimes(1);
         expect(store.probedVersion).toBe('3.2.3');
+    });
+
+    it('loads all public changelogs sorted by semver newest first', async () => {
+        const { useChangelogStore } = await import('./changelog');
+        apiMock.fetchAll.mockResolvedValue({
+            data: [
+                { id: 1, version: '1.0.0', body_markdown: 'a' },
+                { id: 2, version: '2.10.0', body_markdown: 'b' },
+                { id: 3, version: '2.2.0', body_markdown: 'c' }
+            ]
+        });
+
+        const store = useChangelogStore();
+        const list = await store.fetchAll();
+
+        expect(list.map((row) => row.version)).toEqual(['2.10.0', '2.2.0', '1.0.0']);
+        expect(store.publicList.map((row) => row.version)).toEqual(['2.10.0', '2.2.0', '1.0.0']);
+        expect(store.hasAnyChangelog).toBe(true);
+    });
+
+    it('probes the public changelog list only once', async () => {
+        const { useChangelogStore } = await import('./changelog');
+        apiMock.fetchAll.mockResolvedValue({
+            data: [{ id: 1, version: '1.0.0', body_markdown: 'a' }]
+        });
+
+        const store = useChangelogStore();
+        await store.probePublicList();
+        await store.probePublicList();
+
+        expect(apiMock.fetchAll).toHaveBeenCalledTimes(1);
     });
 
     it('loads admin changelog list into state', async () => {

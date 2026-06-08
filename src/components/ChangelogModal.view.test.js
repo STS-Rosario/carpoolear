@@ -48,6 +48,14 @@ describe('ChangelogModal view', () => {
         expect(viewSource).toContain('forcedOpen');
     });
 
+    it('loads every changelog from navigation sorted by semver newest first', () => {
+        expect(viewSource).toContain('fetchAll');
+        expect(viewSource).toContain('navigationMode');
+        expect(viewSource).toContain('navigationEntries');
+        expect(viewSource).toContain('sortChangelogsBySemverDesc');
+        expect(viewSource).toMatch(/v-for="entry in navigationEntries"/);
+    });
+
     it('keeps long changelog content in a scrollable region with a fixed footer', () => {
         expect(viewSource).toContain('changelog-modal-scroll');
         expect(viewSource).toMatch(/changelog-modal-scroll[\s\S]*overflow-y:\s*auto/);
