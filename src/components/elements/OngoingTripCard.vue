@@ -42,10 +42,10 @@
 
             <div class="ongoing-trip-card__actions">
                 <router-link
-                    v-show="showShareLocationLink"
+                    v-if="showShareLocationLink"
                     :to="{
-                        name: 'detail_trip_location',
-                        params: { id: trip.id, location: 'passenger' }
+                        name: 'trip_live_share',
+                        params: { id: trip.id }
                     }"
                     class="ongoing-trip-card__share"
                 >
@@ -66,8 +66,12 @@
 
 <script>
 import dayjs from '../../dayjs';
-import { getTripLocationLabels } from '../../utils/ongoingTrip.js';
+import {
+    getTripLocationLabels,
+    shouldShowLiveLocationShare
+} from '../../utils/ongoingTrip.js';
 import { normalizeTripsCount } from '../../utils/profileMemberStats.js';
+import { useAuthStore } from '../../stores/auth.js';
 import UserNameWithBadge from './UserNameWithBadge.vue';
 import UserRatingsCounts from './UserRatingsCounts.vue';
 
@@ -78,11 +82,6 @@ export default {
             type: Object,
             default: null
         }
-    },
-    data() {
-        return {
-            showShareLocationLink: false
-        };
     },
     computed: {
         locations() {
@@ -117,6 +116,14 @@ export default {
                 return '';
             }
             return dayjs(this.trip.trip_date).format('HH:mm');
+        },
+        showShareLocationLink() {
+            const authStore = useAuthStore();
+            const user = authStore.user;
+            if (!user) {
+                return false;
+            }
+            return shouldShowLiveLocationShare(this.trip, user.id, dayjs());
         }
     },
     components: {

@@ -3,7 +3,10 @@ import dayjs from '../dayjs';
 import {
     estimatedTimeToMinutes,
     getTripLocationLabels,
-    isWithinOngoingTripWindow
+    isWithinOngoingTripWindow,
+    canStartSharing,
+    isLiveLocationParticipant,
+    shouldShowLiveLocationShare
 } from './ongoingTrip.js';
 
 describe('ongoingTrip estimatedTimeToMinutes', () => {
@@ -44,6 +47,70 @@ describe('ongoingTrip isWithinOngoingTripWindow', () => {
     it('is false more than thirty minutes after estimated arrival', () => {
         const now = start.add(81, 'minute');
         expect(isWithinOngoingTripWindow(now, start, '00:50')).toBe(false);
+    });
+});
+
+describe('ongoingTrip canStartSharing', () => {
+    const start = dayjs('2026-06-02 16:00:00');
+
+    it('is true from one hour before departure', () => {
+        expect(canStartSharing(start.subtract(60, 'minute'), start)).toBe(true);
+    });
+
+    it('is false more than one hour before departure', () => {
+        expect(canStartSharing(start.subtract(61, 'minute'), start)).toBe(false);
+    });
+});
+
+describe('isLiveLocationParticipant', () => {
+    const userId = 42;
+
+    it('returns true for trip driver using trip.user.id', () => {
+        const trip = { user: { id: userId }, passenger: [] };
+        expect(isLiveLocationParticipant(trip, userId)).toBe(true);
+    });
+
+    it('returns true for accepted passenger in passenger list', () => {
+        const trip = {
+            user: { id: 1 },
+            passenger: [{ id: userId }]
+        };
+        expect(isLiveLocationParticipant(trip, userId)).toBe(true);
+    });
+
+    it('returns false when user is not driver or accepted passenger', () => {
+        const trip = {
+            user: { id: 1 },
+            passenger: [{ id: 99 }]
+        };
+        expect(isLiveLocationParticipant(trip, userId)).toBe(false);
+    });
+});
+
+describe('shouldShowLiveLocationShare', () => {
+    const start = dayjs('2026-06-02 16:00:00');
+    const driverTrip = {
+        trip_date: start.format('YYYY-MM-DD HH:mm:ss'),
+        user: { id: 7 },
+        passenger: []
+    };
+
+    it('returns true for driver within sharing window', () => {
+        expect(
+            shouldShowLiveLocationShare(driverTrip, 7, start.subtract(30, 'minute'))
+        ).toBe(true);
+    });
+
+    it('returns false for driver before sharing window', () => {
+        expect(
+            shouldShowLiveLocationShare(driverTrip, 7, start.subtract(90, 'minute'))
+        ).toBe(false);
+    });
+
+    it('returns false for non-participant even within window', () => {
+        expect(
+            shouldShowLiveLocationShare(driverTrip, 99, start.subtract(30, 'minute'))
+        ).toBe(false);
     });
 });
 

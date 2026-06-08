@@ -13,11 +13,13 @@ import SubscriptionApi from './SubscriptionsApi';
 import AdminApi from './Admin';
 import ReferencesApi from './References';
 import TicketsApi from './TicketsApi';
+import TripLiveShareApi from './TripLiveShare';
 
 export {
     AuthApi,
     DebugApi,
     TripApi,
+    TripLiveShareApi,
     UserApi,
     DeviceApi,
     RateApi,

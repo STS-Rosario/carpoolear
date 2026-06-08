@@ -4,4 +4,5 @@
     <string name="title_activity_main">Carpoolear</string>
     <string name="package_name">com.sts.carpoolear</string>
     <string name="custom_url_scheme">com.sts.carpoolear</string>
+    <string name="capacitor_background_geolocation_notification_channel_name">Ubicación en tiempo real</string>
 </resources>

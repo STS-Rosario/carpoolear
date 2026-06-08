@@ -28,9 +28,14 @@
 	<string>Carpoolear necesita acceso a la cámara para poder cambiar la foto de perfil</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Carpoolear necesita acceso a la cámara para poder cambiar la foto de perfil</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Carpoolear necesita tu ubicación para compartir tu viaje en tiempo real.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Carpoolear necesita tu ubicación para compartir tu viaje en tiempo real, incluso cuando la app está en segundo plano.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>
+		<string>location</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

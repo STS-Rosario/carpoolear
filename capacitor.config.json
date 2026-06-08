@@ -9,7 +9,17 @@
   "ios": {
     "minVersion": "14.0"
   },
+  "android": {
+    "useLegacyBridge": true
+  },
   "plugins": {
+    "CapacitorHttp": {
+      "enabled": true
+    },
+    "Geolocation": {
+      "locationAlwaysAndWhenInUsePermission": "Carpoolear necesita tu ubicación para compartir tu viaje en tiempo real.",
+      "locationWhenInUsePermission": "Carpoolear necesita tu ubicación para compartir tu viaje en tiempo real."
+    },
     "StatusBar": {
       "style": "LIGHT",
       "backgroundColor": "#ffffff",

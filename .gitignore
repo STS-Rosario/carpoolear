@@ -28,3 +28,7 @@ playwright/.cache/
 
 # Cursor (local debug session NDJSON logs)
 .cursor/debug-*.log
+.cursor/
+
+# Vitest / Istanbul coverage output
+coverage/
