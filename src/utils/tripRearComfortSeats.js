@@ -20,3 +20,7 @@ export function rearMaxTwoRequiresThreeOrFewerSeats(
 export function shouldBlockSeatSelection(totalSeats, rearMaxTwoPassengers) {
     return rearMaxTwoRequiresThreeOrFewerSeats(totalSeats, rearMaxTwoPassengers);
 }
+
+export function shouldShowRearComfortNote(trip) {
+    return Number(trip?.rear_max_two_passengers) > 0;
+}

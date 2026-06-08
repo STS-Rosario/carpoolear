@@ -7,10 +7,7 @@
             <div
                 class="trip_seats-available col-xs-offset-2 col-sm-offset-4 col-xs-24"
             >
-                <div
-                    v-if="isAcceptedPassengerView"
-                    class="trip-seats__passenger-detail"
-                >
+                <div class="trip-seats__passenger-detail">
                     <span
                         v-if="showRearComfortNote"
                         class="trip-seats__rear-comfort-note trip-seats__rear-comfort-note--above label-soft"
@@ -46,38 +43,11 @@
                         }}
                     </span>
                 </div>
-                <div v-else class="trip-seats__availability">
-                    <span class="trip_seats-available_value">{{
-                        trip.seats_available
-                    }}</span>
-                    <span
-                        v-if="trip.seats_available == 1"
-                        class="trip_seats-available_label"
-                    >
-                        {{ $t('Lugar') }}
-                        <br />
-                        {{ $t('libre') }}
-                    </span>
-                    <span v-else class="trip_seats-available_label">
-                        {{ $t('Lugares') }}
-                        <br />
-                        {{ $t('libres') }}
-                    </span>
-                    <span
-                        v-if="showRearComfortNote"
-                        class="trip-seats__rear-comfort-note label-soft"
-                    >
-                        {{ $t('atrasViajanSolo2Personas') }}
-                    </span>
-                </div>
             </div>
         </div>
         <template v-else>
             <div class="trip_seats-available" v-if="!trip.is_passenger">
-                <div
-                    v-if="isAcceptedPassengerView"
-                    class="trip-seats__passenger-detail"
-                >
+                <div class="trip-seats__passenger-detail">
                     <span
                         v-if="showRearComfortNote"
                         class="trip-seats__rear-comfort-note trip-seats__rear-comfort-note--above label-soft"
@@ -112,25 +82,6 @@
                         }}
                     </span>
                 </div>
-                <div v-else class="trip-seats__availability">
-                    <template v-for="n in trip.total_seats">
-                        <span
-                            :class="
-                                n < trip.total_seats - trip.seats_available
-                                    ? 'seat-taken'
-                                    : 'seat-free'
-                            "
-                        >
-                            <svg-item :icon="'seat'" :size="18"></svg-item>
-                        </span>
-                    </template>
-                    <span
-                        v-if="showRearComfortNote"
-                        class="trip-seats__rear-comfort-note label-soft"
-                    >
-                        {{ $t('atrasViajanSolo2Personas') }}
-                    </span>
-                </div>
             </div>
         </template>
     </div>
@@ -144,6 +95,7 @@ import {
     buildCoPassengerNamesText,
     isAcceptedPassengerOnTrip
 } from '../../utils/tripCoPassengers.js';
+import { shouldShowRearComfortNote } from '../../utils/tripRearComfortSeats.js';
 
 export default {
     name: 'TripSeats',
@@ -168,7 +120,7 @@ export default {
             );
         },
         showRearComfortNote() {
-            return Number(this.trip?.rear_max_two_passengers) > 0;
+            return shouldShowRearComfortNote(this.trip);
         },
         coPassengerNamesText() {
             if (!this.isAcceptedPassengerView) {
