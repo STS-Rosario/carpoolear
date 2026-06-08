@@ -1,7 +1,7 @@
 <template>
     <div class="live-location-public">
         <Loading :data="loadingData">
-            <div v-if="publicView">
+            <div v-if="publicView && !isLiveShareStopped(publicView)">
                 <div class="live-location-public__driver" v-if="publicView.driver">
                     <router-link
                         :to="{
@@ -20,10 +20,13 @@
                 </div>
                 <div ref="mapEl" class="live-location-map" aria-label="Live location map"></div>
                 <LiveLocationLastUpdated :recorded-at="publicView.recorded_at" />
-                <p v-if="!hasCoordinates" class="alert alert-info">
+                <p v-if="isWaitingForLiveLocation(publicView)" class="alert alert-info">
                     {{ $t('liveLocationWaitingForPosition') }}
                 </p>
             </div>
+            <p v-else-if="publicView && isLiveShareStopped(publicView)" class="alert alert-warning">
+                {{ $t('liveLocationSharingStopped') }}
+            </p>
             <template #no-data>
                 <p class="alert alert-warning">{{ $t('liveLocationNotFound') }}</p>
             </template>
@@ -43,6 +46,10 @@ import {
     createLiveLocationMarkerUpdater,
     destroyLiveLocationMap
 } from '../../utils/liveLocationMap.js';
+import {
+    isLiveShareStopped,
+    isWaitingForLiveLocation
+} from '../../utils/liveLocationViewState.js';
 
 export default {
     name: 'LiveLocationPublic',
@@ -75,7 +82,9 @@ export default {
                 return null;
             }
             return this.publicView ? ['ready'] : [];
-        }
+        },
+        isLiveShareStopped,
+        isWaitingForLiveLocation
     },
     methods: {
         ...mapActions(useTripLiveShareStore, {

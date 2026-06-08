@@ -1,13 +1,19 @@
 <template>
     <div class="live-location-trip">
         <Loading :data="loadingData">
-            <div v-if="tripView">
+            <div v-if="tripView && !isLiveShareStopped(tripView)">
                 <div ref="mapEl" class="live-location-map" aria-label="Trip live location map"></div>
                 <LiveLocationLastUpdated :recorded-at="tripView.recorded_at" />
                 <p v-if="tripView.sharer" class="live-location-trip__sharer">
                     {{ $t('liveLocationSharerLabel', { name: tripView.sharer.name }) }}
                 </p>
+                <p v-if="isWaitingForLiveLocation(tripView)" class="alert alert-info">
+                    {{ $t('liveLocationWaitingForPosition') }}
+                </p>
             </div>
+            <p v-else-if="tripView && isLiveShareStopped(tripView)" class="alert alert-warning">
+                {{ $t('liveLocationSharingStopped') }}
+            </p>
             <p v-else-if="loaded" class="alert alert-info">
                 {{ $t('liveLocationWaitingForPosition') }}
             </p>
@@ -25,6 +31,10 @@ import {
     createLiveLocationMarkerUpdater,
     destroyLiveLocationMap
 } from '../../utils/liveLocationMap.js';
+import {
+    isLiveShareStopped,
+    isWaitingForLiveLocation
+} from '../../utils/liveLocationViewState.js';
 
 export default {
     name: 'LiveLocationTrip',
@@ -57,7 +67,9 @@ export default {
                 return null;
             }
             return ['ready'];
-        }
+        },
+        isLiveShareStopped,
+        isWaitingForLiveLocation
     },
     methods: {
         ...mapActions(useTripLiveShareStore, {
