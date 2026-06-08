@@ -20,7 +20,8 @@ export const useMyTripsStore = defineStore('myTrips', {
         passenger_trip: null,
         driver_old_trips: null,
         passenger_old_trips: null,
-        pending_rates: null
+        pending_rates: null,
+        ongoing_trip: null
     }),
 
     getters: {
@@ -28,11 +29,25 @@ export const useMyTripsStore = defineStore('myTrips', {
         passengerTrips: (state) => state.passenger_trip,
         pendingRates: (state) => state.pending_rates,
         myOldTrips: (state) => state.driver_old_trips,
-        passengerOldTrips: (state) => state.passenger_old_trips
+        passengerOldTrips: (state) => state.passenger_old_trips,
+        ongoingTrip: (state) => state.ongoing_trip
     },
 
     actions: {
         // Data-fetching actions
+        fetchOngoingTrip() {
+            return tripsApi
+                .ongoingTrip()
+                .then((response) => {
+                    this.ongoing_trip =
+                        response && response.data ? response.data : null;
+                })
+                .catch((err) => {
+                    console.error('[myTrips] fetchOngoingTrip failed:', err);
+                    this.ongoing_trip = null;
+                });
+        },
+
         tripAsDriver() {
             return tripsApi
                 .myTrips(true)

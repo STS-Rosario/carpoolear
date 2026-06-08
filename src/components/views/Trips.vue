@@ -17,6 +17,7 @@
                 {{ $t('paraComenzar') }}
             </router-link>
         </div>
+        <OngoingTripCard v-if="ongoingTrip" :trip="ongoingTrip" />
         <SearchBox
             :params="searchParams"
             v-on:trip-search="research"
@@ -281,11 +282,13 @@
 </style>
 <script>
 import Trip from '../sections/Trip.vue';
+import OngoingTripCard from '../elements/OngoingTripCard.vue';
 import SearchBox from '../sections/SearchTrip.vue';
 import Loading from '../Loading.vue';
 import bus from '../../services/bus-event.js';
 import { mapState, mapActions } from 'pinia';
 import { useTripsStore } from '../../stores/trips';
+import { useMyTripsStore } from '../../stores/myTrips';
 import { useAuthStore } from '../../stores/auth';
 import { useDeviceStore } from '../../stores/device';
 import { useSubscriptionsStore } from '../../stores/subscriptions';
@@ -342,6 +345,9 @@ export default {
         }),
         ...mapActions(useProfileStore, {
             registerDonation: 'registerDonation'
+        }),
+        ...mapActions(useMyTripsStore, {
+            fetchOngoingTrip: 'fetchOngoingTrip'
         }),
         // setActionButton: 'actionbars/setHeaderButtons'
         isInternalBannerUrl(url) {
@@ -820,6 +826,10 @@ export default {
         bus.on('trip-click', this.onTripClick);
 
         router.stack = [];
+
+        if (this.user) {
+            this.fetchOngoingTrip();
+        }
     },
     updated(a) {
         // {{ $t('pendienteNoSeLimpiaBuscador') }}
@@ -831,6 +841,11 @@ export default {
         bus.off('backbutton', this.onBackBottom);
     },
     watch: {
+        user(value) {
+            if (value) {
+                this.fetchOngoingTrip();
+            }
+        },
         trips: {
             deep: true,
             handler() {
@@ -863,6 +878,9 @@ export default {
         ...mapState(useSubscriptionsStore, {
             subscriptions: 'subscriptions'
         }),
+        ...mapState(useMyTripsStore, {
+            ongoingTrip: 'ongoingTrip'
+        }),
 
         showingTrips() {
             return !this.isMobile || !this.lookSearch;
@@ -887,6 +905,7 @@ export default {
     },
     components: {
         Trip,
+        OngoingTripCard,
         Loading,
         SearchBox,
         modal
