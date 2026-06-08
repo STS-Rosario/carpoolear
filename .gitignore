@@ -27,5 +27,8 @@ playwright/.cache/
 **/*-snapshots/**/*-darwin.png
 
 # Cursor (local debug session NDJSON logs)
-.cursor/debug-*.logcoverage/
+.cursor/debug-*.log
 .cursor/
+
+# Vitest / Istanbul coverage output
+coverage/
