@@ -76,6 +76,12 @@ export const useFriendsStore = defineStore('friends', {
             });
         },
 
+        toggleTripAlerts(userId) {
+            return friendsApi.toggleTripAlerts(userId).then((response) => {
+                return Promise.resolve(response.data);
+            });
+        },
+
         searchUsers(value) {
             if (value.length > 0) {
                 this.users = null;

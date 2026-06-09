@@ -165,6 +165,18 @@
                             {{ $t('rechazar') }}
                         </button>
                     </template>
+                    <button
+                        v-else-if="profile.friendship_state === 'friend'"
+                        class="btn btn-primary"
+                        :disabled="friendActionLoading"
+                        v-on:click="onToggleTripAlerts()"
+                    >
+                        {{
+                            profile.friend_trip_alerts_enabled
+                                ? $t('detenerAlertasViajeAmigo')
+                                : $t('recibirAlertasViajeAmigo')
+                        }}
+                    </button>
                 </div>
                 <div
                     class="edit-action"
@@ -283,7 +295,9 @@ export default {
                 return false;
             }
             const state = this.profile.friendship_state || 'none';
-            return ['none', 'pending_sent', 'pending_received'].includes(state);
+            return ['none', 'pending_sent', 'pending_received', 'friend'].includes(
+                state
+            );
         }
     },
     methods: {
@@ -293,7 +307,8 @@ export default {
         ...mapActions(useFriendsStore, {
             requestFriend: 'request',
             acceptFriend: 'accept',
-            rejectFriend: 'reject'
+            rejectFriend: 'reject',
+            toggleTripAlerts: 'toggleTripAlerts'
         }),
         ...mapActions(useProfileStore, {
             setProfileUser: 'setUser'
@@ -320,6 +335,20 @@ export default {
         },
         onRejectFriend() {
             this.runFriendAction(this.rejectFriend, 'none');
+        },
+        onToggleTripAlerts() {
+            this.friendActionLoading = true;
+            this.toggleTripAlerts(this.profile.id)
+                .then((data) => {
+                    this.setProfileUser({
+                        ...this.profile,
+                        friend_trip_alerts_enabled:
+                            data && data.friend_trip_alerts_enabled
+                    });
+                })
+                .finally(() => {
+                    this.friendActionLoading = false;
+                });
         },
         messageUser() {
             console.log('messageUser profileInfo', this.profile);

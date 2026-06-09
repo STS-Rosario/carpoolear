@@ -28,6 +28,10 @@ class FriendApi extends TaggedApi {
     request(userId) {
         return this.make('request', userId);
     }
+
+    toggleTripAlerts(userId) {
+        return this.post('/api/friends/trip-alerts/' + userId, {});
+    }
 }
 
 export { FriendApi as default };
