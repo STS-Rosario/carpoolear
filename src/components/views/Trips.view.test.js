@@ -109,4 +109,13 @@ describe('Trips.vue persisted search state', () => {
         expect(viewSource).toContain('parseBooleanQueryValue(query.hide_carpooleado)');
         expect(viewSource).toContain('params.hide_carpooleado = true');
     });
+
+    it('persists allow preference filters in route query when searching', () => {
+        expect(viewSource).toContain('allow_animals');
+        expect(viewSource).toContain('allow_smoking');
+        expect(viewSource).toContain('allow_kids');
+        expect(viewSource).toContain('parseBooleanQueryValue(query.allow_animals)');
+        expect(viewSource).toContain('params.allow_animals = true');
+        expect(viewSource).toContain('params.allow_smoking = false');
+    });
 });
