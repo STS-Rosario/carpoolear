@@ -74,3 +74,17 @@ describe('ProfileInfo friend actions', () => {
         expect(viewSource).toContain('rejectFriend');
     });
 });
+
+describe('ProfileInfo friend trip alerts toggle', () => {
+    it('shows receive alerts button when friend alerts are disabled', () => {
+        expect(viewSource).toContain("friendship_state === 'friend'");
+        expect(viewSource).toContain('friend_trip_alerts_enabled');
+        expect(viewSource).toContain("$t('recibirAlertasViajeAmigo')");
+        expect(viewSource).toContain('onToggleTripAlerts');
+    });
+
+    it('shows stop alerts button when friend alerts are enabled', () => {
+        expect(viewSource).toContain("$t('detenerAlertasViajeAmigo')");
+        expect(viewSource).toContain('toggleTripAlerts');
+    });
+});
