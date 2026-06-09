@@ -67,6 +67,21 @@ describe('NewTrip.vue trip car selection', () => {
     });
 });
 
+describe('NewTrip.vue punto partida and punto llegada', () => {
+    it('shows required point detail inputs after origin and destination are selected', () => {
+        expect(viewSource).toContain("from '../../utils/tripPointDetailValidation.js'");
+        expect(viewSource).toContain('TripPointDetailFields');
+        expect(viewSource).toContain("$t('puntoDePartida')");
+        expect(viewSource).toContain("$t('puntoDeLlegada')");
+        expect(viewSource).toContain("$t('lugarExactoOBarrio')");
+        expect(viewSource).toMatch(
+            /validate\(\)[\s\S]*?validateTripPointDetails\(/s
+        );
+        expect(viewSource).toContain('punto_partida');
+        expect(viewSource).toContain('punto_llegada');
+    });
+});
+
 describe('NewTrip.vue rear seat comfort preference', () => {
     it('shows comfort section after seats with unchecked checkbox for drivers', () => {
         expect(viewSource).toContain("$t('priorizarComodidad')");
