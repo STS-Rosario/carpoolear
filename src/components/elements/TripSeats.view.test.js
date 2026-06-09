@@ -61,3 +61,13 @@ describe('TripSeats.vue accepted passenger co-travelers', () => {
         expect(coPassengerBlock).not.toMatch(/router-link|toUserProfile|v-imgSrc/);
     });
 });
+
+describe('TripSeats.vue invite friends placement', () => {
+    it('renders invite friends trigger below the available seats block', () => {
+        expect(viewSource).toContain('trip-invite-friends-trigger');
+        expect(viewSource).toContain("$t('invitarAmigosAlViaje')");
+        expect(viewSource).toMatch(
+            /trip-seats__availability[\s\S]*?trip-invite-friends-trigger/
+        );
+    });
+});

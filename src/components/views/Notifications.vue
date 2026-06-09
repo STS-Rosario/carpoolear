@@ -83,6 +83,7 @@ import router from '../../router';
 import dialogs from '../../services/dialogs.js';
 import push from '../../cordova/push-capacitor.js';
 import dayjs from '../../dayjs';
+import { resolveTripDetailRoute } from '../../utils/notificationNavigation.js';
 
 
 export default {
@@ -154,15 +155,14 @@ export default {
         },
         onNotificationClick(n) {
             console.log('onNotificationClick', n);
+            const tripRoute = resolveTripDetailRoute(n);
+            if (tripRoute) {
+                router.push(tripRoute);
+                return;
+            }
             if (n.extras) {
                 console.log(n.extras);
                 switch (n.extras.type) {
-                    case 'trip':
-                        router.push({
-                            name: 'detail_trip',
-                            params: { id: n.extras.trip_id }
-                        });
-                        break;
                     case 'friends':
                         router.push({ name: 'friends_setting' });
                         break;

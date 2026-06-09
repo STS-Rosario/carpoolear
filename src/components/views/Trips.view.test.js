@@ -38,6 +38,42 @@ describe('Trips.vue friend-first trip sections', () => {
         expect(viewSource).toContain('friendTripsList');
         expect(viewSource).toContain('otherTripsList');
     });
+
+    it('renders section headings as block elements above trip rows', () => {
+        expect(viewSource).toContain('class="trips-section"');
+        expect(viewSource).toContain('class="trips-section-heading"');
+        expect(viewSource).toContain('class="trips-section__list row"');
+        expect(viewSource).toMatch(
+            /<section[\s\S]*?trips-section-heading[\s\S]*?trips-section__list row/s
+        );
+    });
+
+    it('shows the donation banner before friend and other sections', () => {
+        expect(viewSource).toContain('shouldShowSplitDonationPanel');
+        expect(viewSource).toContain('trips-donation-banner');
+        expect(viewSource).toMatch(
+            /showSplitDonationPanel[\s\S]*?showFriendTripSections[\s\S]*?viajesDeMisAmigos/s
+        );
+        expect(viewSource).not.toMatch(
+            /friendTripsList[\s\S]*?panel-donar[\s\S]*?otrosViajes/s
+        );
+    });
+
+    it('hides section headings when there are no friend trips', () => {
+        expect(viewSource).toContain('showFriendTripSections');
+        expect(viewSource).toMatch(
+            /v-if="showFriendTripSections"[\s\S]*?viajesDeMisAmigos[\s\S]*?otrosViajes/s
+        );
+
+        const flatTripsListBlock = viewSource.match(
+            /v-else-if="otherTripsList\.length"[\s\S]*?class="trips-section__list row"[\s\S]*?<\/div>\s*<\/template>/
+        )?.[0];
+
+        expect(flatTripsListBlock).toBeTruthy();
+        expect(flatTripsListBlock).not.toContain('trips-section-heading');
+        expect(flatTripsListBlock).not.toContain("$t('viajesDeMisAmigos')");
+        expect(flatTripsListBlock).not.toContain("$t('otrosViajes')");
+    });
 });
 
 describe('Trips.vue persisted search state', () => {

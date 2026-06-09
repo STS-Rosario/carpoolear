@@ -780,6 +780,21 @@
                                     {{ commentError.message }}
                                 </span>
                             </div>
+                            <div
+                                v-if="trip.is_passenger == 0"
+                                class="checkbox-trip-autoaccept-friends"
+                            >
+                                <span>
+                                    <input
+                                        type="checkbox"
+                                        v-model="trip.autoaccept_friends_requests"
+                                        id="cbxAutoacceptFriendsRequests"
+                                    />
+                                    <label for="cbxAutoacceptFriendsRequests">
+                                        {{ $t('aceptarPedidosAmigosAutomaticamente') }}
+                                    </label>
+                                </span>
+                            </div>
                         </div>
                         <div class="col-sm-11 col-md-9 preferences-container">
                             <!-- <fieldset class="trip-privacity">
@@ -968,21 +983,6 @@
                                         </label>
                                     </div>
                                 </div>
-                            </div>
-                            <div
-                                v-if="trip.is_passenger == 0"
-                                class="checkbox-trip-autoaccept-friends"
-                            >
-                                <span>
-                                    <input
-                                        type="checkbox"
-                                        v-model="trip.autoaccept_friends_requests"
-                                        id="cbxAutoacceptFriendsRequests"
-                                    />
-                                    <label for="cbxAutoacceptFriendsRequests">
-                                        {{ $t('aceptarPedidosAmigosAutomaticamente') }}
-                                    </label>
-                                </span>
                             </div>
                             <div
                                 v-if="!updatingTrip && !isMobile"

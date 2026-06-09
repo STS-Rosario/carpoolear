@@ -102,4 +102,50 @@ test.describe('Notifications page', () => {
     const bellIcon = unreadItem.locator('.fa-bell-o');
     await expect(bellIcon).toBeAttached();
   });
+
+  test('clicking a friend trip alert notification opens trip detail', async ({ page }) => {
+    await freezeClock(page);
+    await setupCatchAllMock(page);
+    await setupCommonMocks(page);
+    await setupAuthState(page);
+
+    const tripId = 42;
+    const notification = makeMockNotification(1, {
+      text: 'Lilliana Treutel publicó un viaje a Buenos Aires el 12/06/2026 a las 20:00',
+      readed: false,
+      extras: {
+        type: 'friend_trip',
+        trip_id: tripId,
+        user_id: 9,
+      },
+    });
+    await overrideNotifications(page, [notification]);
+
+    await page.route(`**/api/trips/${tripId}`, (route) => {
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          data: {
+            id: tripId,
+            from_town: 'Rosario, Santa Fe',
+            to_town: 'Buenos Aires',
+            trip_date: '2026-06-12T20:00:00.000Z',
+            seats_available: 2,
+            user: { id: 9, name: 'Lilliana Treutel' },
+          },
+        }),
+      });
+    });
+
+    await page.goto('/notifications');
+    await waitForPageReady(page);
+
+    await page
+      .getByText('Lilliana Treutel publicó un viaje a Buenos Aires el 12/06/2026 a las 20:00')
+      .click();
+
+    await page.waitForURL(`**/trips/${tripId}`, { timeout: 10000 });
+    await expect(page).toHaveURL(new RegExp(`/trips/${tripId}$`));
+  });
 });

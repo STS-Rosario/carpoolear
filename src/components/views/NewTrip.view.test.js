@@ -72,6 +72,9 @@ describe('NewTrip.vue autoaccept friends requests', () => {
         expect(viewSource).toContain("$t('aceptarPedidosAmigosAutomaticamente')");
         expect(viewSource).toContain('v-model="trip.autoaccept_friends_requests"');
         expect(viewSource).toMatch(/autoaccept_friends_requests:\s*false/);
+        expect(viewSource).toMatch(
+            /class="trip-comment"[\s\S]*?v-model="trip\.description"[\s\S]*?checkbox-trip-autoaccept-friends/s
+        );
     });
 
     it('includes autoaccept_friends_requests in create payload normalization', () => {

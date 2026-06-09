@@ -10,4 +10,12 @@ describe('Notifications view', () => {
         expect(viewSource).toContain("case 'identity_validation':");
         expect(viewSource).toContain("name: 'identity_validation'");
     });
+
+    it('routes friend trip alert notifications through trip detail resolver', () => {
+        expect(viewSource).toContain(
+            "import { resolveTripDetailRoute } from '../../utils/notificationNavigation.js'"
+        );
+        expect(viewSource).toContain('const tripRoute = resolveTripDetailRoute(n)');
+        expect(viewSource).toContain("router.push(tripRoute)");
+    });
 });

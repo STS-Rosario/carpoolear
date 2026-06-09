@@ -4,6 +4,7 @@ import path from 'node:path';
 
 const componentPath = path.resolve(__dirname, 'TripInviteFriends.vue');
 const tripViewPath = path.resolve(__dirname, '../views/Trip.vue');
+const tripSeatsPath = path.resolve(__dirname, '../elements/TripSeats.vue');
 const newTripViewPath = path.resolve(__dirname, '../views/NewTrip.vue');
 const tripsApiPath = path.resolve(__dirname, '../../services/api/Trips.js');
 const isUpcomingTripPath = path.resolve(
@@ -13,6 +14,7 @@ const isUpcomingTripPath = path.resolve(
 
 const componentSource = fs.readFileSync(componentPath, 'utf8');
 const tripViewSource = fs.readFileSync(tripViewPath, 'utf8');
+const tripSeatsSource = fs.readFileSync(tripSeatsPath, 'utf8');
 const newTripViewSource = fs.readFileSync(newTripViewPath, 'utf8');
 const tripsApiSource = fs.readFileSync(tripsApiPath, 'utf8');
 const isUpcomingTripSource = fs.readFileSync(isUpcomingTripPath, 'utf8');
@@ -54,19 +56,28 @@ describe('TripInviteFriends.vue', () => {
 });
 
 describe('Trip.vue TripInviteFriends integration', () => {
-    it('shows invite button and modal only for upcoming owner trips', () => {
-        expect(tripViewSource).toContain('canInviteFriendsToTrip');
-        expect(tripViewSource).toContain('isUpcomingTrip');
-        expect(tripViewSource).toContain('showInviteFriendsModal');
-        expect(tripViewSource).toContain("$t('invitarAmigosAlViaje')");
-        expect(tripViewSource).toContain('maybeOpenInviteFriendsFromQuery');
-        expect(tripViewSource).not.toContain('showTripInviteFriends');
-        expect(tripViewSource).not.toContain('dismiss_trip_invite_');
+    it('does not render invite friends UI directly in Trip.vue', () => {
+        expect(tripViewSource).not.toContain('canInviteFriendsToTrip');
+        expect(tripViewSource).not.toContain('showInviteFriendsModal');
+        expect(tripViewSource).not.toContain("$t('invitarAmigosAlViaje')");
+    });
+});
+
+describe('TripSeats.vue TripInviteFriends integration', () => {
+    it('shows invite button and modal below available seats for upcoming owner trips', () => {
+        expect(tripSeatsSource).toContain('canInviteFriendsToTrip');
+        expect(tripSeatsSource).toContain('isUpcomingTrip');
+        expect(tripSeatsSource).toContain('showInviteFriendsModal');
+        expect(tripSeatsSource).toContain("$t('invitarAmigosAlViaje')");
+        expect(tripSeatsSource).toContain('maybeOpenInviteFriendsFromQuery');
+        expect(tripSeatsSource).toMatch(
+            /trip-seats__availability[\s\S]*?trip-invite-friends-trigger/
+        );
     });
 
     it('auto-opens invite modal only from inviteFriends query param', () => {
-        expect(tripViewSource).toContain("query.inviteFriends !== '1'");
-        expect(tripViewSource).toContain('delete nextQuery.inviteFriends');
+        expect(tripSeatsSource).toContain("query.inviteFriends !== '1'");
+        expect(tripSeatsSource).toContain('delete nextQuery.inviteFriends');
     });
 });
 

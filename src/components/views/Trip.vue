@@ -230,34 +230,6 @@
                             :sending="sending"
                             :isPassengersView="isPassengersView"
                         />
-                        <div
-                            v-if="canInviteFriendsToTrip"
-                            class="trip-invite-friends-trigger"
-                        >
-                            <button
-                                type="button"
-                                class="btn btn-primary"
-                                @click="showInviteFriendsModal = true"
-                            >
-                                {{ $t('invitarAmigosAlViaje') }}
-                            </button>
-                        </div>
-                        <modal
-                            :name="'invite-friends-modal'"
-                            v-if="showInviteFriendsModal"
-                            @close="onInviteFriendsModalClose"
-                            :hideFooter="true"
-                        >
-                            <template #header>
-                                <h3>{{ $t('invitarAmigosAlViaje') }}</h3>
-                            </template>
-                            <template #body>
-                                <TripInviteFriends
-                                    :trip-id="trip.id"
-                                    @close="onInviteFriendsModalClose"
-                                />
-                            </template>
-                        </modal>
                         <TripStats
                             v-if="!isMobile && tripCardTheme === 'light'"
                         />
@@ -409,7 +381,6 @@ import modal from '../Modal';
 import dayjs from '../../dayjs';
 import dialogs from '../../services/dialogs.js';
 import { shouldShowTripSeatRequestsWarning } from '../../utils/tripSeatRequestsWarning.js';
-import { isUpcomingTrip } from '../../utils/isUpcomingTrip.js';
 import TripLocation from '../elements/TripLocation';
 import TripDriver from '../elements/TripDriver';
 import TripDate from '../elements/TripDate';
@@ -421,7 +392,6 @@ import TripDescription from '../elements/TripDescription';
 import TripShare from '../elements/TripShare';
 import TripPassengers from '../elements/TripPassengers';
 import TripButtons from '../elements/TripButtons';
-import TripInviteFriends from '../sections/TripInviteFriends.vue';
 
 import { useHead } from '@unhead/vue';
 import L from 'leaflet';
@@ -474,8 +444,7 @@ export default {
             paymentBrickRendering: false,
             acceptPassengerValue: 0,
             acceptPricing: 0,
-            calculatedHeight: {},
-            showInviteFriendsModal: false
+            calculatedHeight: {}
         };
     },
 
@@ -546,22 +515,6 @@ export default {
                     });
             }
         },
-        onInviteFriendsModalClose() {
-            this.showInviteFriendsModal = false;
-        },
-        maybeOpenInviteFriendsFromQuery() {
-            if (!this.canInviteFriendsToTrip) {
-                return;
-            }
-            const query = this.$route && this.$route.query;
-            if (!query || query.inviteFriends !== '1') {
-                return;
-            }
-            this.showInviteFriendsModal = true;
-            const nextQuery = { ...query };
-            delete nextQuery.inviteFriends;
-            this.$router.replace({ query: nextQuery });
-        },
         loadTrip() {
             this.getTrip(this.id)
                 .then((trip) => {
@@ -588,7 +541,6 @@ export default {
                             }
                         );
                     }
-                    this.maybeOpenInviteFriendsFromQuery();
                 })
                 .catch((error) => {
                     console.log('Error loading trip:', error);
@@ -1082,11 +1034,6 @@ export default {
                 this.trip?.passengerPending_count
             );
         },
-        canInviteFriendsToTrip() {
-            return (
-                this.owner && this.trip && isUpcomingTrip(this.trip, dayjs)
-            );
-        },
         isPassengersView() {
             if (this.location) {
                 return this.location === 'passenger';
@@ -1117,8 +1064,7 @@ export default {
         TripShare,
         TripPassengers,
         TripButtons,
-        TripPrice,
-        TripInviteFriends
+        TripPrice
     },
 
     props: ['id', 'location']
@@ -1126,10 +1072,6 @@ export default {
 </script>
 
 <style scoped>
-.trip-invite-friends-trigger {
-    margin-top: 1rem;
-}
-
 .trip-seat-requests-warning {
     display: flex;
     align-items: flex-start;

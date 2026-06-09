@@ -42,6 +42,12 @@ export const useProfileStore = defineStore('profile', {
             }
         },
 
+        setFriendTripAlertsEnabled(enabled) {
+            if (this.user) {
+                this.user.friend_trip_alerts_enabled = enabled;
+            }
+        },
+
         setUserByID({ id, userProfile }) {
             if (userProfile) {
                 this.user = userProfile;

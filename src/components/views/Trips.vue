@@ -26,7 +26,7 @@
             ref="searchBox"
         ></SearchBox>
         <Loading :data="trips" v-if="showingTrips">
-            <div class="trips-list row">                
+            <div class="trips-list">
                 <modal
                     :name="'modal'"
                     v-if="showModal"
@@ -147,141 +147,119 @@
                     </div></template>
                 </modal>
                 <template v-if="user">
-                    <h2
-                        v-if="friendTripsList.length"
-                        class="trips-section-heading"
+                    <div
+                        v-if="showSplitDonationPanel"
+                        class="panel panel-default panel-donar trips-donation-banner"
                     >
-                        {{ $t('viajesDeMisAmigos') }}
-                    </h2>
-                    <template
-                        v-for="(trip, index) in friendTripsList"
-                        :key="'friend-' + (trip.id != null ? trip.id : index)"
-                    >
-                        <template
-                            v-if="
-                                isDonationTime() &&
-                                (!user || !user.monthly_donate) &&
-                                !shouldHideDonationOnIOSCapacitor(user)
-                            "
-                        >
-                            <div
-                                class="panel panel-default panel-donar"
-                                v-if="
-                                    (index +
-                                        parseFloat(
-                                            appConfig.donation.trips_offset
-                                        )) %
-                                        parseFloat(
-                                            appConfig.donation.trips_count
-                                        ) ===
-                                    0
+                        <div class="panel-body">
+                            <button
+                                class="btn btn-success pull-right btn-donar"
+                                @click="onDonate"
+                            >
+                                {{ $t('donar') }}
+                            </button>
+                            <h2>{{ $t('ayudanos') }}</h2>
+
+                            <a
+                                href="/donar"
+                                target="_blank"
+                                v-on:click.prevent="
+                                    onOpenLink(
+                                        'https://carpoolear.com.ar/donar?u=' +
+                                            user.id
+                                    )
                                 "
                             >
-                                <div class="panel-body">
-                                    <button
-                                        class="btn btn-success pull-right btn-donar"
-                                        @click="onDonate"
-                                    >
-                                        {{ $t('donar') }}
-                                    </button>
-                                    <h2>{{ $t('ayudanos') }}</h2>
-
-                                    <a
-                                        href="/donar"
-                                        target="_blank"
-                                        v-on:click.prevent="
-                                            onOpenLink(
-                                                'https://carpoolear.com.ar/donar?u=' +
-                                                    user.id
+                                {{ $t('porQueDonar') }}
+                            </a>
+                        </div>
+                    </div>
+                    <template v-if="showFriendTripSections">
+                        <section
+                            v-if="friendTripsList.length"
+                            class="trips-section"
+                        >
+                            <h2 class="trips-section-heading">
+                                {{ $t('viajesDeMisAmigos') }}
+                            </h2>
+                            <div class="trips-section__list row">
+                                <template
+                                    v-for="(trip, index) in friendTripsList"
+                                    :key="'friend-' + (trip.id != null ? trip.id : index)"
+                                >
+                                    <div
+                                        v-if="
+                                            isComplementary(
+                                                trip,
+                                                searchParams,
+                                                index
                                             )
                                         "
+                                        class="col-xs-24"
                                     >
-                                        {{ $t('porQueDonar') }}
-                                    </a>
-                                </div>
+                                        <div class="trip-complementary">
+                                            <h2>{{ $t('resultadosCercanos') }}</h2>
+                                        </div>
+                                    </div>
+                                    <Trip :trip="trip" :user="user"></Trip>
+                                </template>
                             </div>
-                        </template>
-                        <template
-                            v-if="isComplementary(trip, searchParams, index)"
+                        </section>
+                        <section
+                            v-if="otherTripsList.length"
+                            class="trips-section"
                         >
-                            <div class="trip-complementary">
-                                <h2>{{ $t('resultadosCercanos') }}</h2>
+                            <h2 class="trips-section-heading">
+                                {{ $t('otrosViajes') }}
+                            </h2>
+                            <div class="trips-section__list row">
+                                <template
+                                    v-for="(trip, index) in otherTripsList"
+                                    :key="'other-' + (trip.id != null ? trip.id : index)"
+                                >
+                                    <div
+                                        v-if="
+                                            isComplementary(
+                                                trip,
+                                                searchParams,
+                                                friendTripsList.length + index
+                                            )
+                                        "
+                                        class="col-xs-24"
+                                    >
+                                        <div class="trip-complementary">
+                                            <h2>{{ $t('resultadosCercanos') }}</h2>
+                                        </div>
+                                    </div>
+                                    <Trip :trip="trip" :user="user"></Trip>
+                                </template>
                             </div>
-                        </template>
-                        <Trip :trip="trip" :user="user"></Trip>
+                        </section>
                     </template>
-                    <h2
-                        v-if="otherTripsList.length"
-                        class="trips-section-heading"
-                    >
-                        {{ $t('otrosViajes') }}
-                    </h2>
-                    <template
-                        v-for="(trip, index) in otherTripsList"
-                        :key="'other-' + (trip.id != null ? trip.id : index)"
+                    <div
+                        v-else-if="otherTripsList.length"
+                        class="trips-section__list row"
                     >
                         <template
-                            v-if="
-                                isDonationTime() &&
-                                (!user || !user.monthly_donate) &&
-                                !shouldHideDonationOnIOSCapacitor(user)
-                            "
+                            v-for="(trip, index) in otherTripsList"
+                            :key="'flat-' + (trip.id != null ? trip.id : index)"
                         >
                             <div
-                                class="panel panel-default panel-donar"
                                 v-if="
-                                    (friendTripsList.length +
-                                        index +
-                                        parseFloat(
-                                            appConfig.donation.trips_offset
-                                        )) %
-                                        parseFloat(
-                                            appConfig.donation.trips_count
-                                        ) ===
-                                    0
+                                    isComplementary(trip, searchParams, index)
                                 "
+                                class="col-xs-24"
                             >
-                                <div class="panel-body">
-                                    <button
-                                        class="btn btn-success pull-right btn-donar"
-                                        @click="onDonate"
-                                    >
-                                        {{ $t('donar') }}
-                                    </button>
-                                    <h2>{{ $t('ayudanos') }}</h2>
-
-                                    <a
-                                        href="/donar"
-                                        target="_blank"
-                                        v-on:click.prevent="
-                                            onOpenLink(
-                                                'https://carpoolear.com.ar/donar?u=' +
-                                                    user.id
-                                            )
-                                        "
-                                    >
-                                        {{ $t('porQueDonar') }}
-                                    </a>
+                                <div class="trip-complementary">
+                                    <h2>{{ $t('resultadosCercanos') }}</h2>
                                 </div>
                             </div>
+                            <Trip :trip="trip" :user="user"></Trip>
                         </template>
-                        <template
-                            v-if="
-                                isComplementary(
-                                    trip,
-                                    searchParams,
-                                    friendTripsList.length + index
-                                )
-                            "
-                        >
-                            <div class="trip-complementary">
-                                <h2>{{ $t('resultadosCercanos') }}</h2>
-                            </div>
-                        </template>
-                        <Trip :trip="trip" :user="user"></Trip>
-                    </template>
+                    </div>
                 </template>
                 <template v-else>
+                    <div class="trips-section__list row">
                     <template
                         v-for="(trip, index) in trips"
                         :key="trip.id != null ? trip.id : index"
@@ -333,12 +311,15 @@
                         <template
                             v-if="isComplementary(trip, searchParams, index)"
                         >
-                            <div class="trip-complementary">
-                                <h2>{{ $t('resultadosCercanos') }}</h2>
+                            <div class="col-xs-24">
+                                <div class="trip-complementary">
+                                    <h2>{{ $t('resultadosCercanos') }}</h2>
+                                </div>
                             </div>
                         </template>
                         <Trip :trip="trip" :user="user"></Trip>
                     </template>
+                    </div>
                 </template>
             </div>
             <div class="row">
@@ -449,6 +430,7 @@ import {
 } from '../../services/capacitor.js';
 import { shouldShowAppBanner } from '../../utils/appBanner.js';
 import { splitFriendTrips } from '../../utils/splitFriendTrips.js';
+import { shouldShowSplitDonationPanel } from '../../utils/tripsSplitDonationBanner.js';
 
 export default {
     name: 'trips',
@@ -1063,6 +1045,20 @@ export default {
                 return [];
             }
             return splitFriendTrips(this.trips).otherTrips;
+        },
+        showFriendTripSections() {
+            return this.friendTripsList.length > 0;
+        },
+        showSplitDonationPanel() {
+            return shouldShowSplitDonationPanel({
+                isDonationTime: this.isDonationTime(),
+                user: this.user,
+                hideOnIos: this.shouldHideDonationOnIOSCapacitor(this.user),
+                friendTripsCount: this.friendTripsList.length,
+                otherTripsCount: this.otherTripsList.length,
+                tripsOffset: this.appConfig.donation.trips_offset,
+                tripsCount: this.appConfig.donation.trips_count
+            });
         }
     },
     components: {
@@ -1141,5 +1137,27 @@ export default {
         width: 100%;
         max-width: 200px;
     }
+}
+
+.trips-section {
+    display: block;
+    width: 100%;
+    clear: both;
+}
+
+.trips-section-heading {
+    display: block;
+    width: 100%;
+    margin: 0 0 1rem;
+}
+
+.trips-section__list {
+    width: 100%;
+    margin: 0 0 1.5rem;
+}
+
+.trips-donation-banner {
+    width: 100%;
+    margin-bottom: 1.5rem;
 }
 </style>

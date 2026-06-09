@@ -3,8 +3,13 @@ import messages from './i18n';
 
 const FRIENDS_OVERHAUL_LABELS_ES = {
     invitarAmigos: 'Invitar a amigos',
-    recibirAlertasViajeAmigo: 'Recibir alertas de viaje de este amigo',
-    detenerAlertasViajeAmigo: 'Dejar de recibir alertas de viaje de este amigo',
+    recibirAlertasViajeAmigo: 'Recibir alertas de viaje de {name}',
+    detenerAlertasViajeAmigo: 'No recibir más alertas de viaje de {name}',
+    alertasViajeAmigoActivadas: 'Ahora recibirás alertas de viaje de {name}',
+    alertasViajeAmigoDesactivadas:
+        'Ya no recibirás alertas de viaje de {name}',
+    errorAlertasViajeAmigo:
+        'No pudimos actualizar las alertas de viaje. Intentá de nuevo.',
     aceptarPedidosAmigosAutomaticamente:
         'Aceptar pedidos de asiento de amigos automáticamente',
     queresInvitarTusAmigos: '¿Querés invitar a tus amigos a este viaje?',
@@ -28,8 +33,14 @@ const FRIENDS_OVERHAUL_LABELS_BY_LOCALE = {
     chl: FRIENDS_OVERHAUL_LABELS_ES,
     en: {
         invitarAmigos: 'Invite friends',
-        recibirAlertasViajeAmigo: 'Receive trip alerts from this friend',
-        detenerAlertasViajeAmigo: 'Stop receiving trip alerts from this friend',
+        recibirAlertasViajeAmigo: 'Receive trip alerts from {name}',
+        detenerAlertasViajeAmigo: 'Stop receiving trip alerts from {name}',
+        alertasViajeAmigoActivadas:
+            'You will now receive trip alerts from {name}',
+        alertasViajeAmigoDesactivadas:
+            'You will no longer receive trip alerts from {name}',
+        errorAlertasViajeAmigo:
+            'Could not update trip alerts. Please try again.',
         aceptarPedidosAmigosAutomaticamente:
             'Automatically accept seat requests from friends',
         queresInvitarTusAmigos: 'Do you want to invite your friends to this trip?',
