@@ -463,6 +463,9 @@ const messages = {
         otrosViajes: 'Otros viajes',
         tenesInvitacionesAmigosClickParaVerlas:
             'Tenés invitaciones a amigos, click acá para verlas',
+        tenesInvitacionesAmigosAntesClick: 'Tenés invitaciones de amigos,',
+        clickAca: 'click acá',
+        paraVerlasInvitacionesAmigos: 'para verlas',
         noVolverAMostrarInvitarAmigos: 'No volver a mostrar invitar amigos',
         solicitudAmistadEnviada: 'Enviada',
         inicio: 'Inicio',
@@ -2165,6 +2168,9 @@ const messages = {
         otrosViajes: 'Otros viajes',
         tenesInvitacionesAmigosClickParaVerlas:
             'Tenés invitaciones a amigos, click acá para verlas',
+        tenesInvitacionesAmigosAntesClick: 'Tenés invitaciones de amigos,',
+        clickAca: 'click acá',
+        paraVerlasInvitacionesAmigos: 'para verlas',
         noVolverAMostrarInvitarAmigos: 'No volver a mostrar invitar amigos',
         solicitudAmistadEnviada: 'Enviada',
         filtrarPorNombre: 'Filtrar por nombre:',
@@ -3109,6 +3115,9 @@ const messages = {
         otrosViajes: 'Other trips',
         tenesInvitacionesAmigosClickParaVerlas:
             'You have friend invitations, click here to see them',
+        tenesInvitacionesAmigosAntesClick: 'You have friend invitations,',
+        clickAca: 'click here',
+        paraVerlasInvitacionesAmigos: 'to see them',
         noVolverAMostrarInvitarAmigos: 'Do not show invite friends again',
         solicitudAmistadEnviada: 'Sent',
         inicio: 'Home',

@@ -14,6 +14,9 @@ const FRIENDS_OVERHAUL_LABELS_ES = {
     otrosViajes: 'Otros viajes',
     tenesInvitacionesAmigosClickParaVerlas:
         'Tenés invitaciones a amigos, click acá para verlas',
+    tenesInvitacionesAmigosAntesClick: 'Tenés invitaciones de amigos,',
+    clickAca: 'click acá',
+    paraVerlasInvitacionesAmigos: 'para verlas',
     noVolverAMostrarInvitarAmigos: 'No volver a mostrar invitar amigos',
     solicitudAmistadEnviada: 'Enviada',
     solicitudesDeAmigoPendientes: 'Solicitudes de amigo pendientes',
@@ -36,6 +39,9 @@ const FRIENDS_OVERHAUL_LABELS_BY_LOCALE = {
         otrosViajes: 'Other trips',
         tenesInvitacionesAmigosClickParaVerlas:
             'You have friend invitations, click here to see them',
+        tenesInvitacionesAmigosAntesClick: 'You have friend invitations,',
+        clickAca: 'click here',
+        paraVerlasInvitacionesAmigos: 'to see them',
         noVolverAMostrarInvitarAmigos: 'Do not show invite friends again',
         solicitudAmistadEnviada: 'Sent',
         solicitudesDeAmigoPendientes: 'Pending friend requests sent',

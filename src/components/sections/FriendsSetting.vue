@@ -8,39 +8,15 @@
                         $t('solicitudesDeAmistad')
                     }}</h2></template
                 >
-                <div id="friends-list">
-                    <FriendCard
+                <div id="incoming-friend-requests-list" class="incoming-friend-requests-list">
+                    <IncomingFriendRequestCard
                         v-for="user in pendings"
-                        v-bind:key="user.id"
+                        :key="user.id"
                         :user="user"
-                    >
-                        <template slot>
-                            <span>{{ $t('deseaSerTuAmigo') }}</span>
-                            <div class="pending-buttons">
-                                <button
-                                    @click="onAcceptClick(user)"
-                                    class="btn btn-accept-request"
-                                >
-                                    <i
-                                        class="fa fa-check"
-                                        aria-hidden="true"
-                                    ></i>
-                                </button>
-                                <button
-                                    @click="onRejectClick(user)"
-                                    class="btn btn-primary"
-                                >
-                                    <i
-                                        class="fa fa-times"
-                                        aria-hidden="true"
-                                    ></i>
-                                </button>
-                                <span v-if="idRequesting == user.id"
-                                    >{{ $t('enProceso') }}</span
-                                >
-                            </div>
-                        </template>
-                    </FriendCard>
+                        :id-requesting="idRequesting"
+                        @accept="onAcceptClick"
+                        @reject="onRejectClick"
+                    />
                 </div>
                 <template #no-data><p class="alert alert-warning" role="alert">
                     {{ $t('noHaySolicitudesNuevas') }}
@@ -173,7 +149,7 @@
 import { mapState, mapActions } from 'pinia';
 import { useFriendsStore } from '../../stores/friends';
 import Loading from '../Loading.vue';
-import FriendCard from './FriendCard';
+import IncomingFriendRequestCard from './IncomingFriendRequestCard.vue';
 import FriendRequestCard from './FriendRequestCard';
 
 export default {
@@ -270,7 +246,7 @@ export default {
     },
     components: {
         Loading,
-        FriendCard,
+        IncomingFriendRequestCard,
         FriendRequestCard
     }
 };
@@ -315,6 +291,14 @@ h2 {
     font-weight: 400;
     font-size: 1.375rem;
     line-height: 1.25;
+}
+.incoming-friend-requests-list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
 }
 .friends-toolbar {
     display: flex;

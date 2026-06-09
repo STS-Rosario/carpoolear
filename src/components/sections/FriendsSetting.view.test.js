@@ -7,6 +7,24 @@ const friendApiPath = path.resolve(__dirname, '../../services/api/FriendApi.js')
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 const friendApiSource = fs.readFileSync(friendApiPath, 'utf8');
 
+describe('FriendsSetting.vue incoming friend requests', () => {
+    it('renders incoming friend request cards with labeled accept and reject actions', () => {
+        expect(viewSource).toContain('IncomingFriendRequestCard');
+        expect(viewSource).toContain('incoming-friend-requests-list');
+        expect(viewSource).toContain('align-items: flex-start');
+        expect(viewSource).toMatch(
+            /\.incoming-friend-requests-list[\s\S]*?width: 100%/
+        );
+        expect(viewSource).toContain('onAcceptClick');
+        expect(viewSource).toContain('onRejectClick');
+        const incomingSection = viewSource.match(
+            /id="incoming-friend-requests-list"[\s\S]*?<\/div>\s*<template #no-data/
+        )?.[0];
+        expect(incomingSection).toBeTruthy();
+        expect(incomingSection).not.toContain('FriendCard');
+    });
+});
+
 describe('FriendsSetting.vue outgoing pending requests', () => {
     it('shows sent pending requests as inline-flex name chips with remove action', () => {
         expect(viewSource).toContain("$t('solicitudesDeAmigoPendientes')");
