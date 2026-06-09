@@ -633,6 +633,7 @@
                                     v-model="price"
                                     class="form-control form-control-with-icon form-control-price"
                                     id="price"
+                                    min="0"
                                     :class="{ 'has-error': priceError.state }"
                                     :placeholder="price"
                                     @input="onOutboundPriceFieldInput"
@@ -700,6 +701,7 @@
                                     v-model="price"
                                     class="form-control form-control-with-icon form-control-price"
                                     id="price"
+                                    min="0"
                                     :class="{ 'has-error': priceError.state }"
                                     :placeholder="price"
                                     :max="maximum_seat_price_cents / 100"
@@ -1332,6 +1334,7 @@
                                     v-model="returnPrice"
                                     class="form-control form-control-with-icon form-control-price"
                                     id="return-price"
+                                    min="0"
                                     :class="{ 'has-error': returnPriceError.state }"
                                     :placeholder="returnPrice"
                                     @input="onReturnPriceFieldInput"
@@ -1380,6 +1383,7 @@
                                     v-model="returnPrice"
                                     class="form-control form-control-with-icon form-control-price"
                                     id="return-price"
+                                    min="0"
                                     :class="{
                                         'has-error': returnPriceError.state
                                     }"
@@ -2004,6 +2008,7 @@ import bus from '../../services/bus-event.js';
 import { getMaxContributionExceededMessage } from '../../utils/maxContributionExceededMessage.js';
 import { rememberMaxContributionWarning } from '../../utils/maxContributionWarningState.js';
 import {
+    isNegativeSeatPriceInput,
     parseSeatPriceInput,
     priceInputNumberFromStoredSeatPriceCents,
     seatPriceCentsForApi
@@ -2610,8 +2615,11 @@ export default {
             const p = parseSeatPriceInput(this.price);
             if (
                 p !== null &&
-                this.priceError.message ===
-                    this.$t('contribucionPorPersonaRequerida')
+                !isNegativeSeatPriceInput(this.price) &&
+                (this.priceError.message ===
+                    this.$t('contribucionPorPersonaRequerida') ||
+                    this.priceError.message ===
+                        this.$t('contribucionPorPersonaNegativa'))
             ) {
                 this.priceError.state = false;
             }
@@ -2622,8 +2630,11 @@ export default {
             const p = parseSeatPriceInput(this.returnPrice);
             if (
                 p !== null &&
-                this.returnPriceError.message ===
-                    this.$t('contribucionPorPersonaRequerida')
+                !isNegativeSeatPriceInput(this.returnPrice) &&
+                (this.returnPriceError.message ===
+                    this.$t('contribucionPorPersonaRequerida') ||
+                    this.returnPriceError.message ===
+                        this.$t('contribucionPorPersonaNegativa'))
             ) {
                 this.returnPriceError.state = false;
             }
@@ -2796,6 +2807,12 @@ export default {
                     this.priceError.message = this.$t(
                         'contribucionPorPersonaRequerida'
                     );
+                } else if (isNegativeSeatPriceInput(this.price)) {
+                    globalError = true;
+                    this.priceError.state = true;
+                    this.priceError.message = this.$t(
+                        'contribucionPorPersonaNegativa'
+                    );
                 } else if (
                     this.config.module_max_price_enabled &&
                     exceedsMaximumSeatPrice({
@@ -2946,6 +2963,12 @@ export default {
                         this.returnPriceError.state = true;
                         this.returnPriceError.message = this.$t(
                             'contribucionPorPersonaRequerida'
+                        );
+                    } else if (isNegativeSeatPriceInput(this.returnPrice)) {
+                        globalError = true;
+                        this.returnPriceError.state = true;
+                        this.returnPriceError.message = this.$t(
+                            'contribucionPorPersonaNegativa'
                         );
                     } else if (
                         this.config.module_trip_creation_payment_enabled &&
@@ -3357,6 +3380,13 @@ export default {
         },
         validatePrice() {
             const p = parseSeatPriceInput(this.price);
+            if (isNegativeSeatPriceInput(this.price)) {
+                this.priceError.state = true;
+                this.priceError.message = this.$t(
+                    'contribucionPorPersonaNegativa'
+                );
+                return;
+            }
             if (
                 this.config.module_max_price_enabled &&
                 exceedsMaximumSeatPrice({
@@ -3487,6 +3517,13 @@ export default {
         },
         validateReturnPrice() {
             const p = parseSeatPriceInput(this.returnPrice);
+            if (isNegativeSeatPriceInput(this.returnPrice)) {
+                this.returnPriceError.state = true;
+                this.returnPriceError.message = this.$t(
+                    'contribucionPorPersonaNegativa'
+                );
+                return;
+            }
             if (
                 exceedsMaximumSeatPrice({
                     seatPriceUnits: p,
