@@ -14,7 +14,10 @@ const FRIENDS_OVERHAUL_LABELS_ES = {
     otrosViajes: 'Otros viajes',
     tenesInvitacionesAmigosClickParaVerlas:
         'Tenés invitaciones a amigos, click acá para verlas',
-    noVolverAMostrarInvitarAmigos: 'No volver a mostrar invitar amigos'
+    noVolverAMostrarInvitarAmigos: 'No volver a mostrar invitar amigos',
+    solicitudAmistadEnviada: 'Enviada',
+    solicitudesDeAmigoPendientes: 'Solicitudes de amigo pendientes',
+    quitarSolicitudAmigo: 'Quitar'
 };
 
 const FRIENDS_OVERHAUL_LABELS_BY_LOCALE = {
@@ -33,7 +36,10 @@ const FRIENDS_OVERHAUL_LABELS_BY_LOCALE = {
         otrosViajes: 'Other trips',
         tenesInvitacionesAmigosClickParaVerlas:
             'You have friend invitations, click here to see them',
-        noVolverAMostrarInvitarAmigos: 'Do not show invite friends again'
+        noVolverAMostrarInvitarAmigos: 'Do not show invite friends again',
+        solicitudAmistadEnviada: 'Sent',
+        solicitudesDeAmigoPendientes: 'Pending friend requests sent',
+        quitarSolicitudAmigo: 'Remove'
     }
 };
 
