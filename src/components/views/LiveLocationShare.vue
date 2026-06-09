@@ -30,7 +30,11 @@
                         {{ $t('compartirUbicacionTiempoReal') }}
                     </button>
                 </div>
-                <button type="button" class="btn btn-danger" @click="stopSharing">
+                <button
+                    type="button"
+                    class="btn btn-danger live-location-share__stop"
+                    @click="stopSharing"
+                >
                     {{ $t('liveLocationStopSharing') }}
                 </button>
             </div>
@@ -55,8 +59,8 @@ import LiveLocationLastUpdated from '../elements/LiveLocationLastUpdated.vue';
 import { useAuthStore } from '../../stores/auth.js';
 import { useRootStore } from '../../stores/root.js';
 import { useTripLiveShareStore } from '../../stores/tripLiveShare.js';
-import socialShare from '../../services/socialShare.js';
 import toast from '../../cordova/toast.js';
+import { shareContent } from '../../utils/shareContent.js';
 import {
     createLiveLocationMap,
     createLiveLocationMarkerUpdater,
@@ -185,21 +189,19 @@ export default {
                 console.error('[LiveLocationShare] copy failed:', err);
             }
         },
-        shareLiveUrl() {
+        async shareLiveUrl() {
             if (!this.shareUrl) {
                 return;
             }
-            if (navigator.share) {
-                navigator.share({
-                    title: this.$t('compartirUbicacionTiempoReal'),
-                    url: this.shareUrl
-                }).catch(() => {});
-                return;
-            }
-            socialShare.share({
-                message: this.$t('compartirUbicacionTiempoReal'),
+            const title = this.$t('compartirUbicacionTiempoReal');
+            const result = await shareContent({
+                title,
+                text: title,
                 url: this.shareUrl
             });
+            if (!result.ok && !result.cancelled) {
+                await this.copyShareUrl();
+            }
         }
     },
     mounted() {
@@ -221,6 +223,11 @@ export default {
     max-width: 520px;
     margin: 0 auto;
     padding: 1rem;
+}
+
+.live-location-share__stop {
+    margin-bottom: calc(52px + constant(safe-area-inset-bottom, 0px));
+    margin-bottom: calc(52px + env(safe-area-inset-bottom, 0px));
 }
 
 .live-location-share__intro {

@@ -47,10 +47,17 @@
                         name: 'trip_live_share',
                         params: { id: trip.id }
                     }"
-                    class="ongoing-trip-card__share"
+                    :class="[
+                        'ongoing-trip-card__share',
+                        { 'ongoing-trip-card__share--active': isSharingLiveLocation }
+                    ]"
                 >
                     <i class="fa fa-wifi ongoing-trip-card__share-icon" aria-hidden="true"></i>
-                    <span>{{ $t('compartirUbicacionTiempoReal') }}</span>
+                    <span>{{
+                        isSharingLiveLocation
+                            ? $t('compartiendoUbicacionTiempoReal')
+                            : $t('compartirUbicacionTiempoReal')
+                    }}</span>
                 </router-link>
                 <router-link
                     :to="{ name: 'detail_trip', params: { id: trip.id } }"
@@ -72,8 +79,11 @@ import {
 } from '../../utils/ongoingTrip.js';
 import { normalizeTripsCount } from '../../utils/profileMemberStats.js';
 import { useAuthStore } from '../../stores/auth.js';
+import TripLiveShareApi from '../../services/api/TripLiveShare.js';
 import UserNameWithBadge from './UserNameWithBadge.vue';
 import UserRatingsCounts from './UserRatingsCounts.vue';
+
+const tripLiveShareApi = new TripLiveShareApi();
 
 export default {
     name: 'OngoingTripCard',
@@ -81,6 +91,19 @@ export default {
         trip: {
             type: Object,
             default: null
+        }
+    },
+    data() {
+        return {
+            isSharingLiveLocation: false
+        };
+    },
+    watch: {
+        'trip.id': {
+            immediate: true,
+            handler() {
+                this.loadLiveShareStatus();
+            }
         }
     },
     computed: {
@@ -124,6 +147,20 @@ export default {
                 return false;
             }
             return shouldShowLiveLocationShare(this.trip, user.id, dayjs());
+        }
+    },
+    methods: {
+        async loadLiveShareStatus() {
+            if (!this.trip || !this.trip.id) {
+                this.isSharingLiveLocation = false;
+                return;
+            }
+            try {
+                const response = await tripLiveShareApi.status(this.trip.id);
+                this.isSharingLiveLocation = Boolean(response?.data?.is_active);
+            } catch (err) {
+                this.isSharingLiveLocation = false;
+            }
         }
     },
     components: {
@@ -234,6 +271,10 @@ export default {
     gap: 0.4rem;
     color: inherit;
     text-decoration: none;
+}
+
+.ongoing-trip-card__share--active {
+    color: #e53935;
 }
 
 .ongoing-trip-card__share-icon {

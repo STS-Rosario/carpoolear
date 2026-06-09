@@ -11,6 +11,12 @@ describe('LiveLocationShare.vue', () => {
         expect(viewSource).toContain('shareUrl');
         expect(viewSource).toContain('copyShareUrl');
         expect(viewSource).toContain('shareLiveUrl');
+        expect(viewSource).toContain('shareContent');
+        expect(viewSource).not.toContain('navigator.share');
+        expect(viewSource).toContain('live-location-share__stop');
+        expect(viewSource).toMatch(
+            /live-location-share__stop[\s\S]*safe-area-inset-bottom/
+        );
         expect(viewSource).toContain('startSharing');
         expect(viewSource).toContain('stopSharing');
         expect(viewSource).toContain('useTripLiveShareStore');
