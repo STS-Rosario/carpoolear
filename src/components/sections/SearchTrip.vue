@@ -1,7 +1,7 @@
 <template>
     <div>
         <div
-            class="row text-center foreignCountry-select foreignCountry-select-desktop"
+            class="row text-center search-filters-desktop foreignCountry-select foreignCountry-select-desktop"
             v-show="!isMobile"
         >
             <div class="foreignCountry-select_wrapper">
@@ -20,6 +20,17 @@
                     :data-tooltip="$t('marcandoEstaOpcionPodrasSeleccionar')"
                 ></span>
                 <i class="fa fa-info-circle" aria-hidden="true"></i>
+            </div>
+            <div class="hide-carpooleado-select_wrapper hide-carpooleado-select-desktop">
+                <input
+                    type="checkbox"
+                    v-model="hideCarpooleado"
+                    id="cbxHideCarpooleado"
+                    class="cbx"
+                />
+                <label for="cbxHideCarpooleado" class="cbx_label">
+                    {{ $t('esconderViajesCarpooleados') }}
+                </label>
             </div>
         </div>
         <div class="row search-section">
@@ -133,6 +144,22 @@
                 ></DatePicker>
                 <div class="optional-warning text-center">({{ $t('opcional') }})</div>
             </div>
+            <div
+                class="col-xs-24 hide-carpooleado-select-mobile"
+                v-show="isMobile && !autoSearch"
+            >
+                <div class="hide-carpooleado-select_wrapper">
+                    <input
+                        type="checkbox"
+                        v-model="hideCarpooleado"
+                        id="cbxHideCarpooleadoMobile"
+                        class="cbx"
+                    />
+                    <label for="cbxHideCarpooleadoMobile" class="cbx_label">
+                        {{ $t('esconderViajesCarpooleados') }}
+                    </label>
+                </div>
+            </div>
             <div v-if="!autoSearch" class="col-xs-24 col-md-3 col-lg-4">
                 <button class="btn btn-primary btn-search" @click="emit">
                     {{ $t('buscar') }} 
@@ -190,6 +217,7 @@ export default {
             swap_vertical:
                 process.env.ROUTE_BASE + 'img/flechas_verticales.png',
             allowForeignPoints: false,
+            hideCarpooleado: false,
             options: []
         };
     },
@@ -323,6 +351,9 @@ export default {
                 params.date = this.dateAnswer;
             }
             params.is_passenger = this.isPassenger;
+            if (this.hideCarpooleado) {
+                params.hide_carpooleado = this.hideCarpooleado;
+            }
             if (foreignCountry < 2) {
                 // console.log('trip-search', params);
                 this.$emit('trip-search', params);
@@ -401,6 +432,11 @@ export default {
                 } else {
                     this.date = '';
                 }
+                if (parameters.hide_carpooleado) {
+                    this.hideCarpooleado = true;
+                } else {
+                    this.hideCarpooleado = false;
+                }
             }
         },
         onSearch(search, loading) {
@@ -453,8 +489,20 @@ export default {
 .foreignCountry-select-mobile {
     width: 100%;
 }
+.search-filters-desktop {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
 .foreignCountry-select-desktop .foreignCountry-select_wrapper {
     margin-left: -10%;
+}
+.hide-carpooleado-select-desktop {
+    margin-left: 2em;
+}
+.hide-carpooleado-select-mobile {
+    margin-bottom: 1em;
 }
 .cbx,
 .cbx_label {

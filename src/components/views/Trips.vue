@@ -621,6 +621,9 @@ export default {
             if (this.parseBooleanQueryValue(query.is_passenger)) {
                 params.is_passenger = true;
             }
+            if (this.parseBooleanQueryValue(query.hide_carpooleado)) {
+                params.hide_carpooleado = true;
+            }
             return params;
         },
         parseNumericQueryValue(value) {

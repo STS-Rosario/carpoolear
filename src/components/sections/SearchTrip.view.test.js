@@ -26,7 +26,7 @@ describe('SearchTrip hide carpooleado filter', () => {
             source.indexOf('btn-search')
         );
         expect(mobileBlock).toContain('hide-carpooleado-select-mobile');
-        expect(mobileBlock).toContain('v-show="isMobile"');
+        expect(mobileBlock).toContain('v-show="isMobile && !autoSearch"');
     });
 
     it('emits hide_carpooleado when the checkbox is checked', () => {
