@@ -3151,6 +3151,9 @@ export default {
                                 name: 'detail_trip',
                                 params: {
                                     id: t.id
+                                },
+                                query: {
+                                    inviteFriends: '1'
                                 }
                             });
                         });

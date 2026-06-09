@@ -30,6 +30,11 @@
                         {{ $t('tripSeatRequestsDriverWarning') }}
                     </router-link>
                 </div>
+                <TripInviteFriends
+                    v-if="showTripInviteFriends"
+                    :trip-id="trip.id"
+                    :show="showTripInviteFriends"
+                />
                 <div class="row form">
                     <div
                         ref="rightPanel"
@@ -392,6 +397,7 @@ import TripDescription from '../elements/TripDescription';
 import TripShare from '../elements/TripShare';
 import TripPassengers from '../elements/TripPassengers';
 import TripButtons from '../elements/TripButtons';
+import TripInviteFriends from '../sections/TripInviteFriends.vue';
 
 import { useHead } from '@unhead/vue';
 import L from 'leaflet';
@@ -1034,6 +1040,19 @@ export default {
                 this.trip?.passengerPending_count
             );
         },
+        showTripInviteFriends() {
+            if (!this.owner || !this.trip) {
+                return false;
+            }
+            const dismissed = localStorage.getItem(
+                'dismiss_trip_invite_' + this.trip.id
+            );
+            const query = this.$route && this.$route.query;
+            if (query && query.inviteFriends === '1') {
+                return true;
+            }
+            return !dismissed;
+        },
         isPassengersView() {
             if (this.location) {
                 return this.location === 'passenger';
@@ -1064,7 +1083,8 @@ export default {
         TripShare,
         TripPassengers,
         TripButtons,
-        TripPrice
+        TripPrice,
+        TripInviteFriends
     },
 
     props: ['id', 'location']
