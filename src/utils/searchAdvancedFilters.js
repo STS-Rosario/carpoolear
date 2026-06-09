@@ -44,3 +44,41 @@ export function hasAdvancedSearchFilters(parameters = {}) {
             parameters.allow_kids !== undefined
     );
 }
+
+const ALLOW_PREFERENCE_QUERY_FIELDS = [
+    'allow_animals',
+    'allow_smoking',
+    'allow_kids'
+];
+
+export function readAllowPreferenceParamsFromQuery(query = {}, parseBoolean) {
+    const params = {};
+
+    ALLOW_PREFERENCE_QUERY_FIELDS.forEach((field) => {
+        if (parseBoolean(query[field])) {
+            params[field] = true;
+        } else if (query[field] === 'false' || query[field] === '0') {
+            params[field] = false;
+        }
+    });
+
+    return params;
+}
+
+export const ALLOW_PREFERENCE_FILTER_FIELDS = [
+    {
+        modelKey: 'allowAnimalsFilter',
+        labelKey: 'preferenciaPermitidoAnimales',
+        idPrefix: 'allowAnimalsFilter'
+    },
+    {
+        modelKey: 'allowSmokingFilter',
+        labelKey: 'preferenciaPermitidoFumar',
+        idPrefix: 'allowSmokingFilter'
+    },
+    {
+        modelKey: 'allowKidsFilter',
+        labelKey: 'preferenciaPermitidoNinos',
+        idPrefix: 'allowKidsFilter'
+    }
+];

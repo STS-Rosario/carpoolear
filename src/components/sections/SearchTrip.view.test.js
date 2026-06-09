@@ -27,12 +27,10 @@ describe('SearchTrip advanced filters', () => {
         expect(source).toContain('search-advanced-filters');
         expect(source).toMatch(/v-show="showAdvancedFilters/);
         expect(source).toContain("$t('esconderViajesCarpooleados')");
-        expect(source).toContain("$t('preferenciaPermitidoAnimales')");
-        expect(source).toContain("$t('preferenciaPermitidoFumar')");
-        expect(source).toContain("$t('preferenciaPermitidoNinos')");
-        expect(source).toContain('v-model="allowAnimalsFilter"');
-        expect(source).toContain('v-model="allowSmokingFilter"');
-        expect(source).toContain('v-model="allowKidsFilter"');
+        expect(source).toContain('$t(field.labelKey)');
+        expect(source).toContain('allowPreferenceFilterFields');
+        expect(source).toContain('v-model="$data[field.modelKey]"');
+        expect(source).toContain('ALLOW_PREFERENCE_FILTER_FIELDS');
         expect(source).toContain("$t('filtroCualquiera')");
     });
 

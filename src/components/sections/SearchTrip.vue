@@ -49,25 +49,17 @@
                         {{ $t('esconderViajesCarpooleados') }}
                     </label>
                 </div>
-                <div class="allow-preference-filter">
-                    <label for="allowAnimalsFilterDesktop">{{ $t('preferenciaPermitidoAnimales') }}</label>
-                    <select id="allowAnimalsFilterDesktop" v-model="allowAnimalsFilter" class="form-control">
-                        <option :value="anyAllowFilter">{{ $t('filtroCualquiera') }}</option>
-                        <option value="yes">{{ $t('filtroPermitido') }}</option>
-                        <option value="no">{{ $t('filtroNoPermitido') }}</option>
-                    </select>
-                </div>
-                <div class="allow-preference-filter">
-                    <label for="allowSmokingFilterDesktop">{{ $t('preferenciaPermitidoFumar') }}</label>
-                    <select id="allowSmokingFilterDesktop" v-model="allowSmokingFilter" class="form-control">
-                        <option :value="anyAllowFilter">{{ $t('filtroCualquiera') }}</option>
-                        <option value="yes">{{ $t('filtroPermitido') }}</option>
-                        <option value="no">{{ $t('filtroNoPermitido') }}</option>
-                    </select>
-                </div>
-                <div class="allow-preference-filter">
-                    <label for="allowKidsFilterDesktop">{{ $t('preferenciaPermitidoNinos') }}</label>
-                    <select id="allowKidsFilterDesktop" v-model="allowKidsFilter" class="form-control">
+                <div
+                    v-for="field in allowPreferenceFilterFields"
+                    :key="'desktop-' + field.idPrefix"
+                    class="allow-preference-filter"
+                >
+                    <label :for="field.idPrefix + 'Desktop'">{{ $t(field.labelKey) }}</label>
+                    <select
+                        :id="field.idPrefix + 'Desktop'"
+                        v-model="$data[field.modelKey]"
+                        class="form-control"
+                    >
                         <option :value="anyAllowFilter">{{ $t('filtroCualquiera') }}</option>
                         <option value="yes">{{ $t('filtroPermitido') }}</option>
                         <option value="no">{{ $t('filtroNoPermitido') }}</option>
@@ -218,25 +210,17 @@
                             {{ $t('esconderViajesCarpooleados') }}
                         </label>
                     </div>
-                    <div class="allow-preference-filter">
-                        <label for="allowAnimalsFilterMobile">{{ $t('preferenciaPermitidoAnimales') }}</label>
-                        <select id="allowAnimalsFilterMobile" v-model="allowAnimalsFilter" class="form-control">
-                            <option :value="anyAllowFilter">{{ $t('filtroCualquiera') }}</option>
-                            <option value="yes">{{ $t('filtroPermitido') }}</option>
-                            <option value="no">{{ $t('filtroNoPermitido') }}</option>
-                        </select>
-                    </div>
-                    <div class="allow-preference-filter">
-                        <label for="allowSmokingFilterMobile">{{ $t('preferenciaPermitidoFumar') }}</label>
-                        <select id="allowSmokingFilterMobile" v-model="allowSmokingFilter" class="form-control">
-                            <option :value="anyAllowFilter">{{ $t('filtroCualquiera') }}</option>
-                            <option value="yes">{{ $t('filtroPermitido') }}</option>
-                            <option value="no">{{ $t('filtroNoPermitido') }}</option>
-                        </select>
-                    </div>
-                    <div class="allow-preference-filter">
-                        <label for="allowKidsFilterMobile">{{ $t('preferenciaPermitidoNinos') }}</label>
-                        <select id="allowKidsFilterMobile" v-model="allowKidsFilter" class="form-control">
+                    <div
+                        v-for="field in allowPreferenceFilterFields"
+                        :key="'mobile-' + field.idPrefix"
+                        class="allow-preference-filter"
+                    >
+                        <label :for="field.idPrefix + 'Mobile'">{{ $t(field.labelKey) }}</label>
+                        <select
+                            :id="field.idPrefix + 'Mobile'"
+                            v-model="$data[field.modelKey]"
+                            class="form-control"
+                        >
                             <option :value="anyAllowFilter">{{ $t('filtroCualquiera') }}</option>
                             <option value="yes">{{ $t('filtroPermitido') }}</option>
                             <option value="no">{{ $t('filtroNoPermitido') }}</option>
@@ -264,6 +248,7 @@ import dayjs from '../../dayjs';
 import dialogs from '../../services/dialogs.js';
 import {
     ANY_ALLOW_FILTER,
+    ALLOW_PREFERENCE_FILTER_FIELDS,
     appendAllowPreferenceParams,
     hydrateAllowPreferenceFilters,
     hasAdvancedSearchFilters
@@ -325,6 +310,9 @@ export default {
         }),
         autoSearch() {
             return this.config.trips_auto_search && !this.isMobile;
+        },
+        allowPreferenceFilterFields() {
+            return ALLOW_PREFERENCE_FILTER_FIELDS;
         }
     },
     watch: {
