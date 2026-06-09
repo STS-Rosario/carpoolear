@@ -146,58 +146,199 @@
                         </div>
                     </div></template>
                 </modal>
-                <template v-for="(trip, index) in trips" :key="trip.id != null ? trip.id : index">
-                    <template
-                        v-if="
-                            isDonationTime() &&
-                            (!user || !user.monthly_donate) &&
-                            !shouldHideDonationOnIOSCapacitor(user)
-                        "
+                <template v-if="user">
+                    <h2
+                        v-if="friendTripsList.length"
+                        class="trips-section-heading"
                     >
-                        <!-- solo si el usuario no es donador mensual -->
-                        <div
-                            class="panel panel-default panel-donar"
+                        {{ $t('viajesDeMisAmigos') }}
+                    </h2>
+                    <template
+                        v-for="(trip, index) in friendTripsList"
+                        :key="'friend-' + (trip.id != null ? trip.id : index)"
+                    >
+                        <template
                             v-if="
-                                (index +
-                                    parseFloat(
-                                        appConfig.donation.trips_offset
-                                    )) %
-                                    parseFloat(
-                                        appConfig.donation.trips_count
-                                    ) ===
-                                0
+                                isDonationTime() &&
+                                (!user || !user.monthly_donate) &&
+                                !shouldHideDonationOnIOSCapacitor(user)
                             "
                         >
-                            <div class="panel-body">
-                                <button
-                                    class="btn btn-success pull-right btn-donar"
-                                    @click="onDonate"
-                                >
-                                    {{ $t('donar') }}
-                                </button>
-                                <h2>{{ $t('ayudanos') }}</h2>
+                            <div
+                                class="panel panel-default panel-donar"
+                                v-if="
+                                    (index +
+                                        parseFloat(
+                                            appConfig.donation.trips_offset
+                                        )) %
+                                        parseFloat(
+                                            appConfig.donation.trips_count
+                                        ) ===
+                                    0
+                                "
+                            >
+                                <div class="panel-body">
+                                    <button
+                                        class="btn btn-success pull-right btn-donar"
+                                        @click="onDonate"
+                                    >
+                                        {{ $t('donar') }}
+                                    </button>
+                                    <h2>{{ $t('ayudanos') }}</h2>
 
-                                <a
-                                    href="/donar"
-                                    target="_blank"
-                                    v-on:click.prevent="
-                                        onOpenLink(
-                                            'https://carpoolear.com.ar/donar?u=' +
-                                                user.id
-                                        )
-                                    "
-                                >
-                                    {{ $t('porQueDonar') }}
-                                </a>
+                                    <a
+                                        href="/donar"
+                                        target="_blank"
+                                        v-on:click.prevent="
+                                            onOpenLink(
+                                                'https://carpoolear.com.ar/donar?u=' +
+                                                    user.id
+                                            )
+                                        "
+                                    >
+                                        {{ $t('porQueDonar') }}
+                                    </a>
+                                </div>
                             </div>
-                        </div>
+                        </template>
+                        <template
+                            v-if="isComplementary(trip, searchParams, index)"
+                        >
+                            <div class="trip-complementary">
+                                <h2>{{ $t('resultadosCercanos') }}</h2>
+                            </div>
+                        </template>
+                        <Trip :trip="trip" :user="user"></Trip>
                     </template>
-                    <template v-if="isComplementary(trip, searchParams, index)">
-                        <div class="trip-complementary">
-                            <h2>{{ $t('resultadosCercanos') }}</h2>
-                        </div>
+                    <h2
+                        v-if="otherTripsList.length"
+                        class="trips-section-heading"
+                    >
+                        {{ $t('otrosViajes') }}
+                    </h2>
+                    <template
+                        v-for="(trip, index) in otherTripsList"
+                        :key="'other-' + (trip.id != null ? trip.id : index)"
+                    >
+                        <template
+                            v-if="
+                                isDonationTime() &&
+                                (!user || !user.monthly_donate) &&
+                                !shouldHideDonationOnIOSCapacitor(user)
+                            "
+                        >
+                            <div
+                                class="panel panel-default panel-donar"
+                                v-if="
+                                    (friendTripsList.length +
+                                        index +
+                                        parseFloat(
+                                            appConfig.donation.trips_offset
+                                        )) %
+                                        parseFloat(
+                                            appConfig.donation.trips_count
+                                        ) ===
+                                    0
+                                "
+                            >
+                                <div class="panel-body">
+                                    <button
+                                        class="btn btn-success pull-right btn-donar"
+                                        @click="onDonate"
+                                    >
+                                        {{ $t('donar') }}
+                                    </button>
+                                    <h2>{{ $t('ayudanos') }}</h2>
+
+                                    <a
+                                        href="/donar"
+                                        target="_blank"
+                                        v-on:click.prevent="
+                                            onOpenLink(
+                                                'https://carpoolear.com.ar/donar?u=' +
+                                                    user.id
+                                            )
+                                        "
+                                    >
+                                        {{ $t('porQueDonar') }}
+                                    </a>
+                                </div>
+                            </div>
+                        </template>
+                        <template
+                            v-if="
+                                isComplementary(
+                                    trip,
+                                    searchParams,
+                                    friendTripsList.length + index
+                                )
+                            "
+                        >
+                            <div class="trip-complementary">
+                                <h2>{{ $t('resultadosCercanos') }}</h2>
+                            </div>
+                        </template>
+                        <Trip :trip="trip" :user="user"></Trip>
                     </template>
-                    <Trip :trip="trip" :user="user"></Trip>
+                </template>
+                <template v-else>
+                    <template
+                        v-for="(trip, index) in trips"
+                        :key="trip.id != null ? trip.id : index"
+                    >
+                        <template
+                            v-if="
+                                isDonationTime() &&
+                                (!user || !user.monthly_donate) &&
+                                !shouldHideDonationOnIOSCapacitor(user)
+                            "
+                        >
+                            <div
+                                class="panel panel-default panel-donar"
+                                v-if="
+                                    (index +
+                                        parseFloat(
+                                            appConfig.donation.trips_offset
+                                        )) %
+                                        parseFloat(
+                                            appConfig.donation.trips_count
+                                        ) ===
+                                    0
+                                "
+                            >
+                                <div class="panel-body">
+                                    <button
+                                        class="btn btn-success pull-right btn-donar"
+                                        @click="onDonate"
+                                    >
+                                        {{ $t('donar') }}
+                                    </button>
+                                    <h2>{{ $t('ayudanos') }}</h2>
+
+                                    <a
+                                        href="/donar"
+                                        target="_blank"
+                                        v-on:click.prevent="
+                                            onOpenLink(
+                                                'https://carpoolear.com.ar/donar?u=' +
+                                                    user.id
+                                            )
+                                        "
+                                    >
+                                        {{ $t('porQueDonar') }}
+                                    </a>
+                                </div>
+                            </div>
+                        </template>
+                        <template
+                            v-if="isComplementary(trip, searchParams, index)"
+                        >
+                            <div class="trip-complementary">
+                                <h2>{{ $t('resultadosCercanos') }}</h2>
+                            </div>
+                        </template>
+                        <Trip :trip="trip" :user="user"></Trip>
+                    </template>
                 </template>
             </div>
             <div class="row">
@@ -307,6 +448,7 @@ import {
     shouldHideDonationOnIOSCapacitor
 } from '../../services/capacitor.js';
 import { shouldShowAppBanner } from '../../utils/appBanner.js';
+import { splitFriendTrips } from '../../utils/splitFriendTrips.js';
 
 export default {
     name: 'trips',
@@ -909,6 +1051,18 @@ export default {
         },
         bannerTarget() {
             return this.isInternalBannerUrl(this.bannerHref) ? null : '_blank';
+        },
+        friendTripsList() {
+            if (!this.user) {
+                return [];
+            }
+            return splitFriendTrips(this.trips).friendTrips;
+        },
+        otherTripsList() {
+            if (!this.user) {
+                return [];
+            }
+            return splitFriendTrips(this.trips).otherTrips;
         }
     },
     components: {
