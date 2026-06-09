@@ -30,6 +30,16 @@ describe('Trips.vue pending friend invitations card', () => {
     });
 });
 
+describe('Trips.vue friend-first trip sections', () => {
+    it('splits logged-in trip list into friend and other sections', () => {
+        expect(viewSource).toContain('splitFriendTrips');
+        expect(viewSource).toContain("$t('viajesDeMisAmigos')");
+        expect(viewSource).toContain("$t('otrosViajes')");
+        expect(viewSource).toContain('friendTripsList');
+        expect(viewSource).toContain('otherTripsList');
+    });
+});
+
 describe('Trips.vue persisted search state', () => {
     it('does not run default search when URL already has search params', () => {
         expect(viewSource).toContain('hasRouteSearchParams()');
