@@ -87,6 +87,145 @@ test.describe('Friends overhaul', () => {
         });
     });
 
+    test('friend search displays users returned by the list endpoint', async ({
+        page
+    }) => {
+        await freezeClock(page);
+        await setupCatchAllMock(page);
+        await setupCommonMocks(page);
+        await setupAuthState(page);
+
+        await page.route('**/api/users/list**', (route) => {
+            route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify({
+                    data: [
+                        {
+                            id: 5,
+                            name: 'Lilliana Treutel',
+                            image: null,
+                            state: 'none'
+                        }
+                    ]
+                })
+            });
+        });
+
+        await page.goto('/setting/friends/search');
+        await waitForPageReady(page);
+
+        await page.locator('#input-name').fill('Lil');
+        await page.locator('.input-group-btn button').click();
+
+        await expect(page.getByText('Lilliana Treutel')).toBeVisible({
+            timeout: 15000
+        });
+        await expect(
+            page.getByRole('button', { name: /agregar/i })
+        ).toBeVisible();
+    });
+
+    test('friend search shows short orange sent label after requesting friendship', async ({
+        page
+    }) => {
+        await freezeClock(page);
+        await setupCatchAllMock(page);
+        await setupCommonMocks(page);
+        await setupAuthState(page);
+
+        await page.route('**/api/users/list**', (route) => {
+            route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify({
+                    data: [
+                        {
+                            id: 5,
+                            name: 'Lilliana Treutel',
+                            image: null,
+                            state: 'none'
+                        }
+                    ]
+                })
+            });
+        });
+
+        await page.route('**/api/friends/request/5', (route) => {
+            route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify({ data: 'ok' })
+            });
+        });
+
+        await page.goto('/setting/friends/search');
+        await waitForPageReady(page);
+
+        await page.locator('#input-name').fill('Lil');
+        await page.locator('.input-group-btn button').click();
+        await page.getByRole('button', { name: /agregar/i }).click();
+
+        const sentButton = page.getByRole('button', { name: /^enviada$/i });
+        await expect(sentButton).toBeVisible({ timeout: 15000 });
+        await expect(sentButton).toBeDisabled();
+        await expect(sentButton).toHaveCSS(
+            'background-color',
+            'rgb(230, 126, 34)'
+        );
+    });
+
+    test('friends settings lists and removes outgoing pending requests', async ({
+        page
+    }) => {
+        await freezeClock(page);
+        await setupCatchAllMock(page);
+        await setupCommonMocks(page);
+        await setupAuthState(page);
+
+        await page.route('**/api/friends/sent-pendings**', (route) => {
+            route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify({
+                    data: [
+                        {
+                            id: 5,
+                            name: 'Lilliana Treutel',
+                            image: null
+                        }
+                    ]
+                })
+            });
+        });
+
+        await page.route('**/api/friends/cancel-request/5', (route) => {
+            route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify('OK')
+            });
+        });
+
+        await page.goto('/setting/friends');
+        await waitForPageReady(page);
+
+        await expect(
+            page.getByRole('heading', { name: /solicitudes de amigo pendientes/i })
+        ).toBeVisible({ timeout: 15000 });
+        await expect(page.getByText('Lilliana Treutel')).toBeVisible();
+
+        const removeButton = page
+            .locator('#sent-pending-list')
+            .getByRole('button', { name: /^quitar$/i });
+        await expect(removeButton).toBeVisible();
+        await removeButton.click();
+
+        await expect(page.getByText('Lilliana Treutel')).not.toBeVisible({
+            timeout: 15000
+        });
+    });
+
     test('trip search shows friend trips section when logged in', async ({ page }) => {
         await freezeClock(page);
         await setupCatchAllMock(page);

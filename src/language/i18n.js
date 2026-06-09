@@ -464,6 +464,7 @@ const messages = {
         tenesInvitacionesAmigosClickParaVerlas:
             'Tenés invitaciones a amigos, click acá para verlas',
         noVolverAMostrarInvitarAmigos: 'No volver a mostrar invitar amigos',
+        solicitudAmistadEnviada: 'Enviada',
         inicio: 'Inicio',
         mensajes: 'Mensajes',
         perfil: 'Perfil',
@@ -937,6 +938,8 @@ const messages = {
         mensajeVistoPorElUsuario: 'Mensaje visto por el usuario',
         tipeaUnNombreYBusca: 'Tipeá un nombre y buscá',
         solicitudesDeAmistad: 'Solicitudes de amistad',
+        solicitudesDeAmigoPendientes: 'Solicitudes de amigo pendientes',
+        quitarSolicitudAmigo: 'Quitar',
         filtrarPorNombre: 'Filtrar por nombre:',
         ingresarNombre: 'Ingrese nombre...',
         noHayResultados: 'No hay resultados',
@@ -2147,6 +2150,8 @@ const messages = {
         mensajeVistoPorElUsuario: 'Mensaje visto por el usuario',
         tipeaUnNombreYBusca: 'Tipeá un nombre y buscá',
         solicitudesDeAmistad: 'Solicitudes de amistad',
+        solicitudesDeAmigoPendientes: 'Solicitudes de amigo pendientes',
+        quitarSolicitudAmigo: 'Quitar',
         invitarAmigos: 'Invitar a amigos',
         recibirAlertasViajeAmigo: 'Recibir alertas de viaje de este amigo',
         detenerAlertasViajeAmigo:
@@ -2161,6 +2166,7 @@ const messages = {
         tenesInvitacionesAmigosClickParaVerlas:
             'Tenés invitaciones a amigos, click acá para verlas',
         noVolverAMostrarInvitarAmigos: 'No volver a mostrar invitar amigos',
+        solicitudAmistadEnviada: 'Enviada',
         filtrarPorNombre: 'Filtrar por nombre:',
         ingresarNombre: 'Ingrese nombre...',
         noHayResultados: 'No hay resultados',
@@ -3104,6 +3110,7 @@ const messages = {
         tenesInvitacionesAmigosClickParaVerlas:
             'You have friend invitations, click here to see them',
         noVolverAMostrarInvitarAmigos: 'Do not show invite friends again',
+        solicitudAmistadEnviada: 'Sent',
         inicio: 'Home',
         mensajes: 'Messages',
         perfil: 'Profile',
@@ -3567,6 +3574,8 @@ const messages = {
         mensajeVistoPorElUsuario: 'Message seen by user',
         tipeaUnNombreYBusca: 'Type a name and search',
         solicitudesDeAmistad: 'Friend requests',
+        solicitudesDeAmigoPendientes: 'Pending friend requests sent',
+        quitarSolicitudAmigo: 'Remove',
         filtrarPorNombre: 'Filter by name:',
         ingresarNombre: 'Enter name...',
         noHayResultados: 'No results',

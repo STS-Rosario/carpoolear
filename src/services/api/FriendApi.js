@@ -9,6 +9,10 @@ class FriendApi extends TaggedApi {
         return this.get('/api/friends/pedings', data);
     }
 
+    sentPending(data = {}) {
+        return this.get('/api/friends/sent-pendings', data);
+    }
+
     make(verb, userId) {
         return this.post('/api/friends/' + verb + '/' + userId, {});
     }
@@ -27,6 +31,10 @@ class FriendApi extends TaggedApi {
 
     request(userId) {
         return this.make('request', userId);
+    }
+
+    cancelRequest(userId) {
+        return this.make('cancel-request', userId);
     }
 
     toggleTripAlerts(userId) {

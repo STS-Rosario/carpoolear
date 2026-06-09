@@ -51,6 +51,44 @@
             </Loading>
         </div>
 
+        <div class="clearfix">
+            <Loading :data="sentPendings" :hideOnEmpty="true">
+                <template #title
+                    ><h2>{{ $t('solicitudesDeAmigoPendientes') }}</h2></template
+                >
+                <div id="sent-pending-list">
+                    <FriendCard
+                        v-for="user in sentPendings"
+                        v-bind:key="user.id"
+                        :user="user"
+                    >
+                        <div class="pending-buttons">
+                            <button
+                                @click="onCancelRequestClick(user)"
+                                class="btn btn-primary"
+                                :disabled="idRequesting == user.id"
+                            >
+                                <span v-if="idRequesting != user.id">{{
+                                    $t('quitarSolicitudAmigo')
+                                }}</span>
+                                <span v-else>{{ $t('enProceso') }}</span>
+                            </button>
+                        </div>
+                    </FriendCard>
+                </div>
+                <template #loading
+                    ><p class="alert alert-info" role="alert">
+                        <img
+                            :src="$publicImg('loader.gif')"
+                            alt=""
+                            class="ajax-loader"
+                        />
+                        {{ $t('cargandoSolicitudes') }}
+                    </p></template
+                >
+            </Loading>
+        </div>
+
         <h2>{{ $t('amigos') }}</h2>
         <router-link
             :to="{ name: 'friends_search' }"
@@ -127,7 +165,8 @@ export default {
     computed: {
         ...mapState(useFriendsStore, {
             friends: 'friends',
-            pendings: 'pendings'
+            pendings: 'pendings',
+            sentPendings: 'sentPendings'
         }),
 
         noResult() {
@@ -142,8 +181,10 @@ export default {
         ...mapActions(useFriendsStore, {
             search: 'friendsSearch',
             lookPeginds: 'pending',
+            loadSentPendings: 'sentPending',
             accept: 'accept',
             reject: 'reject',
+            cancelRequest: 'cancelRequest',
             delete: 'delete'
         }),
 
@@ -175,6 +216,18 @@ export default {
             );
         },
 
+        onCancelRequestClick(user) {
+            this.idRequesting = user.id;
+            this.cancelRequest(user.id).then(
+                () => {
+                    this.idRequesting = 0;
+                },
+                () => {
+                    this.idRequesting = 0;
+                }
+            );
+        },
+
         onDeleteClick(user) {
             this.idRequesting = user.id;
             this.delete(user.id).then(
@@ -191,6 +244,7 @@ export default {
     mounted() {
         this.search({});
         this.lookPeginds();
+        this.loadSentPendings();
     },
     components: {
         Loading,

@@ -21,7 +21,7 @@ describe('FriendsSetting.vue outgoing pending requests', () => {
 describe('FriendApi outgoing pending requests', () => {
     it('targets sent-pendings and cancel-request endpoints', () => {
         expect(friendApiSource).toContain('/api/friends/sent-pendings');
-        expect(friendApiSource).toContain('/api/friends/cancel-request/');
+        expect(friendApiSource).toContain("'cancel-request'");
         expect(friendApiSource).toContain('sentPending');
         expect(friendApiSource).toContain('cancelRequest');
     });
