@@ -97,7 +97,7 @@ describe('ProfileInfo friend trip alerts toggle', () => {
 
     it('patches trip alerts through profile store without reloading the profile', () => {
         const onToggleTripAlerts = viewSource.match(
-            /onToggleTripAlerts\(\)\s*\{[\s\S]*?\n        \},/
+            /onToggleTripAlerts\(\)\s*\{[\s\S]*?\n {8}\},/
         );
 
         expect(onToggleTripAlerts).not.toBeNull();

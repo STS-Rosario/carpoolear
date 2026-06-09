@@ -16,6 +16,6 @@ describe('Notifications view', () => {
             "import { resolveTripDetailRoute } from '../../utils/notificationNavigation.js'"
         );
         expect(viewSource).toContain('const tripRoute = resolveTripDetailRoute(n)');
-        expect(viewSource).toContain("router.push(tripRoute)");
+        expect(viewSource).toContain('router.push(tripRoute)');
     });
 });
