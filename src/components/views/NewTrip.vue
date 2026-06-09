@@ -154,6 +154,16 @@
                                 {{ m.error.message }}
                             </span>
                         </div>
+                        <TripPointDetailFields
+                            :points="points"
+                            :punto-partida="trip.punto_partida"
+                            :punto-llegada="trip.punto_llegada"
+                            :punto-partida-error="puntoPartidaError"
+                            :punto-llegada-error="puntoLlegadaError"
+                            id-prefix="newtrip-outbound"
+                            @update:puntoPartida="trip.punto_partida = $event"
+                            @update:puntoLlegada="trip.punto_llegada = $event"
+                        />
                     </div>
                     <div
                         class="trip_terms trip_terms--lucrar-card"
@@ -286,6 +296,16 @@
                                         {{ m.error.message }}
                                     </span>
                                 </div>
+                                <TripPointDetailFields
+                                    :points="points"
+                                    :punto-partida="trip.punto_partida"
+                                    :punto-llegada="trip.punto_llegada"
+                                    :punto-partida-error="puntoPartidaError"
+                                    :punto-llegada-error="puntoLlegadaError"
+                                    id-prefix="newtrip-outbound-mobile"
+                                    @update:puntoPartida="trip.punto_partida = $event"
+                                    @update:puntoLlegada="trip.punto_llegada = $event"
+                                />
                             </div>
                             <div
                                 v-if="tripCardTheme !== 'light' || isMobile"
@@ -1131,6 +1151,16 @@
                                 {{ m.error.message }}
                             </span>
                         </div>
+                        <TripPointDetailFields
+                            :points="otherTrip.points"
+                            :punto-partida="otherTrip.trip.punto_partida"
+                            :punto-llegada="otherTrip.trip.punto_llegada"
+                            :punto-partida-error="otherTrip.puntoPartidaError"
+                            :punto-llegada-error="otherTrip.puntoLlegadaError"
+                            id-prefix="newtrip-return"
+                            @update:puntoPartida="otherTrip.trip.punto_partida = $event"
+                            @update:puntoLlegada="otherTrip.trip.punto_llegada = $event"
+                        />
                     </div>
                 </div>
                 <div v-if="showReturnTrip" :class="columnClass[1]">
@@ -1187,6 +1217,16 @@
                                         {{ m.error.message }}
                                     </span>
                                 </div>
+                                <TripPointDetailFields
+                                    :points="otherTrip.points"
+                                    :punto-partida="otherTrip.trip.punto_partida"
+                                    :punto-llegada="otherTrip.trip.punto_llegada"
+                                    :punto-partida-error="otherTrip.puntoPartidaError"
+                                    :punto-llegada-error="otherTrip.puntoLlegadaError"
+                                    id-prefix="newtrip-return-mobile"
+                                    @update:puntoPartida="otherTrip.trip.punto_partida = $event"
+                                    @update:puntoLlegada="otherTrip.trip.punto_llegada = $event"
+                                />
                             </div>
                             <div
                                 v-if="tripCardTheme !== 'light' || isMobile"
@@ -2033,6 +2073,7 @@ import SvgItem from '../SvgItem';
 import WeeklySchedule from '../elements/WeeklySchedule';
 import CompleteCarModal from '../elements/CompleteCarModal.vue';
 import TripCarsModal from '../elements/TripCarsModal.vue';
+import TripPointDetailFields from '../elements/TripPointDetailFields';
 import bus from '../../services/bus-event.js';
 import { tripDetailRouteAfterCreate } from '../../utils/tripCreateRedirect.js';
 import { getMaxContributionExceededMessage } from '../../utils/maxContributionExceededMessage.js';
@@ -2046,6 +2087,10 @@ import {
 import { seatPriceCentsFromTripPriceCents } from '../../utils/tripPriceOccupants.js';
 import { exceedsMaximumSeatPrice } from '../../utils/tripMaxPriceValidation.js';
 import { isRearMaxTwoCompatibleWithSeats, shouldBlockSeatSelection } from '../../utils/tripRearComfortSeats.js';
+import {
+    shouldShowTripPointDetailInputs,
+    validateTripPointDetails
+} from '../../utils/tripPointDetailValidation.js';
 import {
     activeCarsWithPlate,
     hasDriverPlate,
@@ -2078,6 +2123,7 @@ export default {
         DatePicker,
         WeeklySchedule,
         SvgItem,
+        TripPointDetailFields,
         autocomplete,
         spinner,
         modal,
@@ -2139,6 +2185,8 @@ export default {
                 is_passenger: 0,
                 from_town: '',
                 to_town: '',
+                punto_partida: '',
+                punto_llegada: '',
                 trip_date: '',
                 total_seats: 2,
                 friendship_type_id: 2,
@@ -2162,6 +2210,8 @@ export default {
             showCompleteCarModal: false,
             showTripCarsModal: false,
             carToComplete: null,
+            puntoPartidaError: new Error(),
+            puntoLlegadaError: new Error(),
             saving: false,
             allowForeignPoints: false,
             url: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
@@ -2177,6 +2227,8 @@ export default {
                 timeError: new Error(),
                 commentError: new Error(),
                 seatsError: new Error(),
+                puntoPartidaError: new Error(),
+                puntoLlegadaError: new Error(),
                 no_lucrar: false,
                 sameCity: false,
                 points: [
@@ -2204,6 +2256,8 @@ export default {
                     is_passenger: 0,
                     from_town: '',
                     to_town: '',
+                    punto_partida: '',
+                    punto_llegada: '',
                     trip_date: '',
                     total_seats: 2,
                     friendship_type_id: 2,
@@ -2613,6 +2667,8 @@ export default {
         this.trip.friendship_type_id = trip.friendship_type_id;
         this.trip.distance = trip.distance;
         this.trip.description = trip.description;
+        this.trip.punto_partida = trip.punto_partida || '';
+        this.trip.punto_llegada = trip.punto_llegada || '';
         
         this.trip.allow_kids = Number(trip.allow_kids) > 0;
         this.trip.allow_animals = Number(trip.allow_animals) > 0;
@@ -2757,6 +2813,33 @@ export default {
                         'origenDestinoArgentina'
                     );
                 }
+            }
+
+            if (shouldShowTripPointDetailInputs(this.points)) {
+                const pointDetailErrors = validateTripPointDetails({
+                    puntoPartida: this.trip.punto_partida,
+                    puntoLlegada: this.trip.punto_llegada,
+                    t: (key) => this.$t(key)
+                });
+                if (pointDetailErrors.puntoPartida) {
+                    this.puntoPartidaError.state = true;
+                    this.puntoPartidaError.message =
+                        pointDetailErrors.puntoPartida;
+                    globalError = true;
+                } else {
+                    this.puntoPartidaError.state = false;
+                }
+                if (pointDetailErrors.puntoLlegada) {
+                    this.puntoLlegadaError.state = true;
+                    this.puntoLlegadaError.message =
+                        pointDetailErrors.puntoLlegada;
+                    globalError = true;
+                } else {
+                    this.puntoLlegadaError.state = false;
+                }
+            } else {
+                this.puntoPartidaError.state = false;
+                this.puntoLlegadaError.state = false;
             }
 
             if (!this.time || !dayjs(this.time, 'HH mm').isValid()) {
@@ -2944,6 +3027,33 @@ export default {
                     );
                     this.otherTrip.sameCity = true;
                     globalError = true;
+                }
+
+                if (shouldShowTripPointDetailInputs(this.otherTrip.points)) {
+                    const returnPointDetailErrors = validateTripPointDetails({
+                        puntoPartida: this.otherTrip.trip.punto_partida,
+                        puntoLlegada: this.otherTrip.trip.punto_llegada,
+                        t: (key) => this.$t(key)
+                    });
+                    if (returnPointDetailErrors.puntoPartida) {
+                        this.otherTrip.puntoPartidaError.state = true;
+                        this.otherTrip.puntoPartidaError.message =
+                            returnPointDetailErrors.puntoPartida;
+                        globalError = true;
+                    } else {
+                        this.otherTrip.puntoPartidaError.state = false;
+                    }
+                    if (returnPointDetailErrors.puntoLlegada) {
+                        this.otherTrip.puntoLlegadaError.state = true;
+                        this.otherTrip.puntoLlegadaError.message =
+                            returnPointDetailErrors.puntoLlegada;
+                        globalError = true;
+                    } else {
+                        this.otherTrip.puntoLlegadaError.state = false;
+                    }
+                } else {
+                    this.otherTrip.puntoPartidaError.state = false;
+                    this.otherTrip.puntoLlegadaError.state = false;
                 }
 
                 if (
