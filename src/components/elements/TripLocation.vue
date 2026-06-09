@@ -28,7 +28,7 @@
                     </span>
                     <span
                         v-if="trip.punto_partida"
-                        class="trip-location-point-detail"
+                        class="trip-location-point-detail trip-location-point-detail--partida"
                     >
                         <span class="trip-location-point-detail__label">{{
                             $t('puntoDePartida')
@@ -104,7 +104,7 @@
                     </span>
                     <span
                         v-if="trip.punto_llegada"
-                        class="trip-location-point-detail"
+                        class="trip-location-point-detail trip-location-point-detail--llegada"
                     >
                         <span class="trip-location-point-detail__label">{{
                             $t('puntoDeLlegada')
@@ -136,7 +136,7 @@
                     {{ trip.from_town }}
                     <div
                         v-if="trip.punto_partida"
-                        class="trip-location-point-detail"
+                        class="trip-location-point-detail trip-location-point-detail--partida"
                     >
                         <span class="trip-location-point-detail__label">{{
                             $t('puntoDePartida')
@@ -153,7 +153,7 @@
                     {{ trip.to_town }}
                     <div
                         v-if="trip.punto_llegada"
-                        class="trip-location-point-detail"
+                        class="trip-location-point-detail trip-location-point-detail--llegada"
                     >
                         <span class="trip-location-point-detail__label">{{
                             $t('puntoDeLlegada')

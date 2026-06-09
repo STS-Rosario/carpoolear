@@ -1398,6 +1398,22 @@
       color: #666;
       margin-bottom: 0.15rem;
   }
+  .trip-detail-component .trip-location-point-detail--partida,
+  .trip-detail-component .trip-location-point-detail--llegada {
+      margin-bottom: 0.5rem;
+  }
+  @media only screen and (max-width: 767px) {
+      .trip-detail-component .trip-location-point-detail--partida,
+      .trip-detail-component .trip-location-point-detail--llegada {
+          margin-bottom: 1.25rem;
+      }
+      .trip-detail-component .trip_location_from:has(.trip-location-point-detail--partida) {
+          margin-bottom: 0.5rem;
+      }
+      .trip-detail-component .trip_location_to:has(.trip-location-point-detail--llegada) {
+          margin-bottom: 0.5rem;
+      }
+  }
   .trip-detail-component .trip_location_inner_city {
       font-weight: 400;
       color: #392;
