@@ -15,6 +15,8 @@ describe('FriendsSetting.vue incoming friend requests', () => {
         expect(viewSource).toMatch(
             /\.incoming-friend-requests-list[\s\S]*?width: 100%/
         );
+        expect(viewSource).toContain('refreshFriendsData');
+        expect(viewSource).toContain('activated()');
         expect(viewSource).toContain('onAcceptClick');
         expect(viewSource).toContain('onRejectClick');
         const incomingSection = viewSource.match(
@@ -22,6 +24,20 @@ describe('FriendsSetting.vue incoming friend requests', () => {
         )?.[0];
         expect(incomingSection).toBeTruthy();
         expect(incomingSection).not.toContain('FriendCard');
+    });
+});
+
+describe('FriendsSetting.vue friends list', () => {
+    it('renders friend list cards with delete action and left-aligned layout', () => {
+        expect(viewSource).toContain('FriendRequestCard');
+        expect(viewSource).toContain('friends-list');
+        expect(viewSource).toContain('onDeleteClick');
+        expect(viewSource).toMatch(/\.friends-list[\s\S]*?align-items: flex-start/);
+        const friendsListSection = viewSource.match(
+            /id="friends-list"[\s\S]*?<\/div>\s*<template #no-data/
+        )?.[0];
+        expect(friendsListSection).toBeTruthy();
+        expect(friendsListSection).not.toContain('<template slot>');
     });
 });
 

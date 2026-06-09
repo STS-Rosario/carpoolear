@@ -11,6 +11,11 @@ import {
 const friendsApi = new FriendsApi();
 const userApi = new UserApi();
 
+const friendsPaginationActions = makePaginationActions('friends', ({ data }) =>
+    friendsApi.index(data)
+);
+const friendsSearchBase = friendsPaginationActions.friendsSearch;
+
 export const useFriendsStore = defineStore('friends', {
     state: () => ({
         ...makePaginationState('friends'),
@@ -27,9 +32,29 @@ export const useFriendsStore = defineStore('friends', {
     },
 
     actions: {
-        ...makePaginationActions('friends', ({ data }) => {
-            return friendsApi.index(data);
-        }),
+        ...friendsPaginationActions,
+
+        friendsSearch(data = {}) {
+            const isNextPage = Boolean(data.next);
+            return friendsSearchBase.call(this, data).then((response) => {
+                const items = extractPaginatedList(response);
+                if (!isNextPage) {
+                    this.friends = items;
+                }
+                this.pruneSentPendingsForAcceptedFriends();
+                return items;
+            });
+        },
+
+        pruneSentPendingsForAcceptedFriends() {
+            if (!Array.isArray(this.sentPendings) || !Array.isArray(this.friends)) {
+                return;
+            }
+            const friendIds = new Set(this.friends.map((friend) => friend.id));
+            this.sentPendings = this.sentPendings.filter(
+                (item) => !friendIds.has(item.id)
+            );
+        },
 
         pending() {
             this.pendings = null;
@@ -43,6 +68,7 @@ export const useFriendsStore = defineStore('friends', {
             this.sentPendings = null;
             return friendsApi.sentPending().then((response) => {
                 this.sentPendings = extractPaginatedList(response);
+                this.pruneSentPendingsForAcceptedFriends();
                 return Promise.resolve(this.sentPendings);
             });
         },
@@ -82,11 +108,15 @@ export const useFriendsStore = defineStore('friends', {
         },
 
         accept(userId) {
-            return friendsApi.accept(userId).then((response) => {
-                // FRIENDS_REMOVE_PENDING
-                this.pendings = this.pendings.filter(
-                    (item) => item.id !== userId
-                );
+            return friendsApi.accept(userId).then(() => {
+                if (Array.isArray(this.pendings)) {
+                    this.pendings = this.pendings.filter(
+                        (item) => item.id !== userId
+                    );
+                }
+                return this.friendsSearch({
+                    ...this.friendsSearchParam.data
+                });
             });
         },
 
@@ -100,11 +130,16 @@ export const useFriendsStore = defineStore('friends', {
         },
 
         delete(userId) {
-            return friendsApi.delete(userId).then((response) => {
-                // FRIENDS_REMOVE
-                this.friends = this.friends.filter(
-                    (item) => item.id !== userId
-                );
+            const normalizedUserId = userId.toString();
+            return friendsApi.delete(userId).then(() => {
+                if (Array.isArray(this.friends)) {
+                    this.friends = this.friends.filter(
+                        (item) => item.id.toString() !== normalizedUserId
+                    );
+                }
+                return this.friendsSearch({
+                    ...this.friendsSearchParam.data
+                });
             });
         },
 

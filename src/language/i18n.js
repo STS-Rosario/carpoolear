@@ -943,6 +943,7 @@ const messages = {
         solicitudesDeAmistad: 'Solicitudes de amistad',
         solicitudesDeAmigoPendientes: 'Solicitudes de amigo pendientes',
         quitarSolicitudAmigo: 'Quitar',
+        quitarAmigo: 'Quitar amigo',
         filtrarPorNombre: 'Filtrar por nombre:',
         ingresarNombre: 'Ingrese nombre...',
         noHayResultados: 'No hay resultados',
@@ -2155,6 +2156,7 @@ const messages = {
         solicitudesDeAmistad: 'Solicitudes de amistad',
         solicitudesDeAmigoPendientes: 'Solicitudes de amigo pendientes',
         quitarSolicitudAmigo: 'Quitar',
+        quitarAmigo: 'Quitar amigo',
         invitarAmigos: 'Invitar a amigos',
         recibirAlertasViajeAmigo: 'Recibir alertas de viaje de este amigo',
         detenerAlertasViajeAmigo:
@@ -3585,6 +3587,7 @@ const messages = {
         solicitudesDeAmistad: 'Friend requests',
         solicitudesDeAmigoPendientes: 'Pending friend requests sent',
         quitarSolicitudAmigo: 'Remove',
+        quitarAmigo: 'Remove friend',
         filtrarPorNombre: 'Filter by name:',
         ingresarNombre: 'Enter name...',
         noHayResultados: 'No results',

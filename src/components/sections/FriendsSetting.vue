@@ -110,26 +110,14 @@
             </router-link>
         </div>
         <Loading :data="friends">
-            <div id="friends-list">
+            <div id="friends-list" class="friends-list">
                 <FriendRequestCard
                     v-for="user in friends"
-                    v-bind:key="user.id"
+                    :key="user.id"
                     :user="user"
-                >
-                    <template slot>
-                        <div>
-                            <div
-                                @click="onDeleteClick(user)"
-                                class="delete-friend"
-                            >
-                                <i class="fa fa-times" aria-hidden="true"></i>
-                            </div>
-                            <span v-if="idRequesting == user.id"
-                                >{{ $t('enProceso') }}</span
-                            >
-                        </div>
-                    </template>
-                </FriendRequestCard>
+                    :id-requesting="idRequesting"
+                    @delete="onDeleteClick"
+                />
             </div>
             <template #no-data><p class="alert alert-warning" role="alert">
                 {{ noResult }}
@@ -190,6 +178,11 @@ export default {
             this.search({ value: this.text });
         },
 
+        refreshFriendsData() {
+            this.lookPeginds();
+            return this.search({}).then(() => this.loadSentPendings());
+        },
+
         onAcceptClick(user) {
             this.idRequesting = user.id;
             this.accept(user.id).then(
@@ -240,9 +233,11 @@ export default {
     },
 
     mounted() {
-        this.search({});
-        this.lookPeginds();
-        this.loadSentPendings();
+        this.refreshFriendsData();
+    },
+
+    activated() {
+        this.refreshFriendsData();
     },
     components: {
         Loading,
@@ -292,7 +287,8 @@ h2 {
     font-size: 1.375rem;
     line-height: 1.25;
 }
-.incoming-friend-requests-list {
+.incoming-friend-requests-list,
+.friends-list {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
