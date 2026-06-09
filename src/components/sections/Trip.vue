@@ -57,7 +57,7 @@
                                 >
                                     <span
                                         class="tooltip-bottom"
-                                        :title="$t('visibilidadAmigosDeAmigos')"
+                                        :title="$t('visibilidadPublico')"
                                         :data-tooltip="$t('publicoTooltip')"
                                     >
                                         <i

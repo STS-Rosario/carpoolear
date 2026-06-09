@@ -29,7 +29,7 @@
 </template>
 <script>
 export default {
-    name: 'friend_card',
+    name: 'friend_request_card',
     props: ['user'],
     data() {
         return {};
