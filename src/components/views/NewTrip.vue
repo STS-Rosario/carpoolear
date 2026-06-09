@@ -2089,7 +2089,7 @@ import { exceedsMaximumSeatPrice } from '../../utils/tripMaxPriceValidation.js';
 import { isRearMaxTwoCompatibleWithSeats, shouldBlockSeatSelection } from '../../utils/tripRearComfortSeats.js';
 import {
     shouldShowTripPointDetailInputs,
-    validateTripPointDetails
+    applyTripPointDetailValidation
 } from '../../utils/tripPointDetailValidation.js';
 import {
     activeCarsWithPlate,
@@ -2816,27 +2816,14 @@ export default {
             }
 
             if (shouldShowTripPointDetailInputs(this.points)) {
-                const pointDetailErrors = validateTripPointDetails({
-                    puntoPartida: this.trip.punto_partida,
-                    puntoLlegada: this.trip.punto_llegada,
-                    t: (key) => this.$t(key)
-                });
-                if (pointDetailErrors.puntoPartida) {
-                    this.puntoPartidaError.state = true;
-                    this.puntoPartidaError.message =
-                        pointDetailErrors.puntoPartida;
-                    globalError = true;
-                } else {
-                    this.puntoPartidaError.state = false;
-                }
-                if (pointDetailErrors.puntoLlegada) {
-                    this.puntoLlegadaError.state = true;
-                    this.puntoLlegadaError.message =
-                        pointDetailErrors.puntoLlegada;
-                    globalError = true;
-                } else {
-                    this.puntoLlegadaError.state = false;
-                }
+                globalError =
+                    applyTripPointDetailValidation({
+                        puntoPartida: this.trip.punto_partida,
+                        puntoLlegada: this.trip.punto_llegada,
+                        t: (key) => this.$t(key),
+                        puntoPartidaError: this.puntoPartidaError,
+                        puntoLlegadaError: this.puntoLlegadaError
+                    }) || globalError;
             } else {
                 this.puntoPartidaError.state = false;
                 this.puntoLlegadaError.state = false;
@@ -3030,27 +3017,14 @@ export default {
                 }
 
                 if (shouldShowTripPointDetailInputs(this.otherTrip.points)) {
-                    const returnPointDetailErrors = validateTripPointDetails({
-                        puntoPartida: this.otherTrip.trip.punto_partida,
-                        puntoLlegada: this.otherTrip.trip.punto_llegada,
-                        t: (key) => this.$t(key)
-                    });
-                    if (returnPointDetailErrors.puntoPartida) {
-                        this.otherTrip.puntoPartidaError.state = true;
-                        this.otherTrip.puntoPartidaError.message =
-                            returnPointDetailErrors.puntoPartida;
-                        globalError = true;
-                    } else {
-                        this.otherTrip.puntoPartidaError.state = false;
-                    }
-                    if (returnPointDetailErrors.puntoLlegada) {
-                        this.otherTrip.puntoLlegadaError.state = true;
-                        this.otherTrip.puntoLlegadaError.message =
-                            returnPointDetailErrors.puntoLlegada;
-                        globalError = true;
-                    } else {
-                        this.otherTrip.puntoLlegadaError.state = false;
-                    }
+                    globalError =
+                        applyTripPointDetailValidation({
+                            puntoPartida: this.otherTrip.trip.punto_partida,
+                            puntoLlegada: this.otherTrip.trip.punto_llegada,
+                            t: (key) => this.$t(key),
+                            puntoPartidaError: this.otherTrip.puntoPartidaError,
+                            puntoLlegadaError: this.otherTrip.puntoLlegadaError
+                        }) || globalError;
                 } else {
                     this.otherTrip.puntoPartidaError.state = false;
                     this.otherTrip.puntoLlegadaError.state = false;

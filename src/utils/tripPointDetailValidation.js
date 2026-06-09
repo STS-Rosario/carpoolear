@@ -26,3 +26,32 @@ export function validateTripPointDetails({ puntoPartida, puntoLlegada, t }) {
 
     return errors;
 }
+
+export function applyTripPointDetailValidation({
+    puntoPartida,
+    puntoLlegada,
+    t,
+    puntoPartidaError,
+    puntoLlegadaError
+}) {
+    const errors = validateTripPointDetails({ puntoPartida, puntoLlegada, t });
+    let hasError = false;
+
+    if (errors.puntoPartida) {
+        puntoPartidaError.state = true;
+        puntoPartidaError.message = errors.puntoPartida;
+        hasError = true;
+    } else {
+        puntoPartidaError.state = false;
+    }
+
+    if (errors.puntoLlegada) {
+        puntoLlegadaError.state = true;
+        puntoLlegadaError.message = errors.puntoLlegada;
+        hasError = true;
+    } else {
+        puntoLlegadaError.state = false;
+    }
+
+    return hasError;
+}
