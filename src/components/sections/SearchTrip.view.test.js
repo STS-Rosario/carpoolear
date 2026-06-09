@@ -39,4 +39,8 @@ describe('SearchTrip hide carpooleado filter', () => {
         expect(source).toContain('parameters.hide_carpooleado');
         expect(source).toContain('this.hideCarpooleado = true');
     });
+
+    it('resets hide carpooleado when clearing the search form', () => {
+        expect(source).toContain('this.hideCarpooleado = false');
+    });
 });

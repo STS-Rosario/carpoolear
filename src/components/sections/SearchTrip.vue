@@ -396,6 +396,7 @@ export default {
             this.resetInput('to_town');
             this.$refs['to_town'].input = '';
             this.$refs.datepicker.clear();
+            this.hideCarpooleado = false;
         },
         loadParams(parameters) {
             if (parameters) {
