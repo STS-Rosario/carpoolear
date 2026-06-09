@@ -2,7 +2,9 @@ import { describe, expect, it } from 'vitest';
 import dayjs from '../dayjs';
 import {
     estimatedTimeToMinutes,
+    getRatingAvailableAt,
     getTripLocationLabels,
+    isRatingAvailable,
     isWithinOngoingTripWindow,
     canStartSharing,
     isLiveLocationParticipant,
@@ -47,6 +49,27 @@ describe('ongoingTrip isWithinOngoingTripWindow', () => {
     it('is false more than thirty minutes after estimated arrival', () => {
         const now = start.add(81, 'minute');
         expect(isWithinOngoingTripWindow(now, start, '00:50')).toBe(false);
+    });
+});
+
+describe('ongoingTrip rating availability', () => {
+    const tripStart = dayjs('2026-06-01 10:00:00');
+
+    it('computes available time as trip start plus eighty percent of estimated duration', () => {
+        expect(getRatingAvailableAt(tripStart, '02:00').format('YYYY-MM-DD HH:mm:ss')).toBe(
+            '2026-06-01 11:36:00'
+        );
+    });
+
+    it('returns trip start when estimated time is missing', () => {
+        expect(getRatingAvailableAt(tripStart, null).format('YYYY-MM-DD HH:mm:ss')).toBe(
+            '2026-06-01 10:00:00'
+        );
+    });
+
+    it('is available once eighty percent of estimated duration has passed', () => {
+        expect(isRatingAvailable(dayjs('2026-06-01 11:36:00'), tripStart, '02:00')).toBe(true);
+        expect(isRatingAvailable(dayjs('2026-06-01 11:35:00'), tripStart, '02:00')).toBe(false);
     });
 });
 
