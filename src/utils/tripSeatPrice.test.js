@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
     VOLUNTARY_CONTRIBUTION_SEAT_PRICE_CENTS,
+    isNegativeSeatPriceInput,
     isVoluntaryContributionSeatPrice,
     maxContributionCapFromSeatPriceCents,
     parseSeatPriceInput,
@@ -31,6 +32,21 @@ describe('tripSeatPrice', () => {
         });
     });
 
+    describe('isNegativeSeatPriceInput', () => {
+        it('is true for negative form values', () => {
+            expect(isNegativeSeatPriceInput(-1)).toBe(true);
+            expect(isNegativeSeatPriceInput('-5')).toBe(true);
+        });
+
+        it('is false for zero, positive, and empty values', () => {
+            expect(isNegativeSeatPriceInput(0)).toBe(false);
+            expect(isNegativeSeatPriceInput('0')).toBe(false);
+            expect(isNegativeSeatPriceInput(10)).toBe(false);
+            expect(isNegativeSeatPriceInput('')).toBe(false);
+            expect(isNegativeSeatPriceInput(null)).toBe(false);
+        });
+    });
+
     describe('seatPriceCentsForApi', () => {
         it('maps explicit zero to voluntary sentinel -1', () => {
             expect(seatPriceCentsForApi(0)).toBe(-1);
@@ -45,6 +61,11 @@ describe('tripSeatPrice', () => {
         it('returns null when unset (empty input)', () => {
             expect(seatPriceCentsForApi('')).toBeNull();
             expect(seatPriceCentsForApi(null)).toBeNull();
+        });
+
+        it('returns null for negative form values', () => {
+            expect(seatPriceCentsForApi(-5)).toBeNull();
+            expect(seatPriceCentsForApi('-1')).toBeNull();
         });
     });
 

@@ -5,6 +5,34 @@ import path from 'node:path';
 const viewPath = path.resolve(__dirname, 'NewTrip.vue');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 
+describe('NewTrip.vue negative contribution validation', () => {
+    it('imports negative seat price helper and blocks negative values on save', () => {
+        expect(viewSource).toMatch(/from '\.\.\/\.\.\/utils\/tripSeatPrice\.js'/);
+        expect(viewSource).toContain('isNegativeSeatPriceInput');
+        expect(viewSource).toContain("$t('contribucionPorPersonaNegativa')");
+        expect(viewSource).toMatch(
+            /if \(this\.trip\.is_passenger == 0 && this\.config\.module_seat_price_enabled\)[\s\S]*?isNegativeSeatPriceInput\(this\.price\)/s
+        );
+        expect(viewSource).toMatch(
+            /isNegativeSeatPriceInput\([\s\S]*?this\.returnPrice[\s\S]*?contribucionPorPersonaNegativa/s
+        );
+    });
+
+    it('validates negative contribution while typing for outbound and return trips', () => {
+        expect(viewSource).toMatch(
+            /validatePrice\(\)[\s\S]*?isNegativeSeatPriceInput\(this\.price\)/s
+        );
+        expect(viewSource).toMatch(
+            /validateReturnPrice\(\)[\s\S]*?isNegativeSeatPriceInput\(this\.returnPrice\)/s
+        );
+    });
+
+    it('sets min zero on contribution inputs', () => {
+        expect(viewSource).toMatch(/id="price"[\s\S]*?min="0"/s);
+        expect(viewSource).toMatch(/id="return-price"[\s\S]*?min="0"/s);
+    });
+});
+
 describe('NewTrip.vue max contribution validation timing', () => {
     it('defers max contribution checks until trip-info cap is available', () => {
         expect(viewSource).toContain("from '../../utils/tripMaxPriceValidation.js'");

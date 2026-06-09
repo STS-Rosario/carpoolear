@@ -1407,6 +1407,8 @@ const messages = {
             'Recuerde que exceder la contribución máxima está fuera de las reglas de Carpoolear, el seguro automotor no lo cubrirá en caso de accidente, y será suspendido de la plataforma',
         contribucionPorPersonaRequerida:
             'Tenés que completar la contribución por persona.',
+        contribucionPorPersonaNegativa:
+            'La contribución por persona no puede ser negativa.',
         unaVez: 'Una vez',
         programaSemanal: 'Semanal',
         faltaFechaOProgramaSemanal:
@@ -3994,6 +3996,8 @@ const messages = {
             'Remember that exceeding the maximum contribution is against Carpoolear rules, auto insurance will not cover it in case of an accident, and you will be suspended from the platform',
         contribucionPorPersonaRequerida:
             'You must enter the per-person contribution.',
+        contribucionPorPersonaNegativa:
+            'The per-person contribution cannot be negative.',
         unaVez: 'Once',
         programaSemanal: 'Weekly',
         faltaFechaOProgramaSemanal:
