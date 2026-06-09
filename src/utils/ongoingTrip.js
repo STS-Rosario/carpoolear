@@ -26,10 +26,14 @@ export function isWithinOngoingTripWindow(now, tripStart, estimatedTime) {
     );
 }
 
+export function getSharingWindowEnd(tripStart, estimatedTime) {
+    const durationMinutes = estimatedTimeToMinutes(estimatedTime);
+    return tripStart.add(durationMinutes * 2, 'minute');
+}
+
 export function canStartSharing(now, tripStart, estimatedTime) {
     const windowStart = tripStart.subtract(ONGOING_TRIP_LEAD_MINUTES, 'minute');
-    const durationMinutes = estimatedTimeToMinutes(estimatedTime);
-    const windowEnd = tripStart.add(durationMinutes * 2, 'minute');
+    const windowEnd = getSharingWindowEnd(tripStart, estimatedTime);
 
     return !now.isBefore(windowStart) && !now.isAfter(windowEnd);
 }
