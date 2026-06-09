@@ -451,8 +451,19 @@ const messages = {
         cerrarSesion: 'Cerrar sesión',
         pedidosDeEliminacionDeCuenta: 'Pedidos de eliminación de cuenta',
         invitarAmigos: 'Invitar a amigos',
+        recibirAlertasViajeAmigo: 'Recibir alertas de viaje de este amigo',
+        detenerAlertasViajeAmigo:
+            'Dejar de recibir alertas de viaje de este amigo',
+        aceptarPedidosAmigosAutomaticamente:
+            'Aceptar pedidos de asiento de amigos automáticamente',
+        queresInvitarTusAmigos: '¿Querés invitar a tus amigos a este viaje?',
+        invitarATodosMisAmigos: 'Invitar a todos mis amigos',
+        invitarAmigosAlViaje: 'Invitar amigos al viaje',
+        viajesDeMisAmigos: 'Viajes de mis amigos',
+        otrosViajes: 'Otros viajes',
         tenesInvitacionesAmigosClickParaVerlas:
             'Tenés invitaciones a amigos, click acá para verlas',
+        noVolverAMostrarInvitarAmigos: 'No volver a mostrar invitar amigos',
         inicio: 'Inicio',
         mensajes: 'Mensajes',
         perfil: 'Perfil',
@@ -2138,8 +2149,20 @@ const messages = {
         mensajeVistoPorElUsuario: 'Mensaje visto por el usuario',
         tipeaUnNombreYBusca: 'Tipeá un nombre y buscá',
         solicitudesDeAmistad: 'Solicitudes de amistad',
+        invitarAmigos: 'Invitar a amigos',
+        recibirAlertasViajeAmigo: 'Recibir alertas de viaje de este amigo',
+        detenerAlertasViajeAmigo:
+            'Dejar de recibir alertas de viaje de este amigo',
+        aceptarPedidosAmigosAutomaticamente:
+            'Aceptar pedidos de asiento de amigos automáticamente',
+        queresInvitarTusAmigos: '¿Querés invitar a tus amigos a este viaje?',
+        invitarATodosMisAmigos: 'Invitar a todos mis amigos',
+        invitarAmigosAlViaje: 'Invitar amigos al viaje',
+        viajesDeMisAmigos: 'Viajes de mis amigos',
+        otrosViajes: 'Otros viajes',
         tenesInvitacionesAmigosClickParaVerlas:
             'Tenés invitaciones a amigos, click acá para verlas',
+        noVolverAMostrarInvitarAmigos: 'No volver a mostrar invitar amigos',
         filtrarPorNombre: 'Filtrar por nombre:',
         ingresarNombre: 'Ingrese nombre...',
         noHayResultados: 'No hay resultados',
@@ -3069,8 +3092,20 @@ const messages = {
         cerrarSesion: 'Log out',
         pedidosDeEliminacionDeCuenta: 'Account deletion requests',
         invitarAmigos: 'Invite friends',
+        recibirAlertasViajeAmigo: 'Receive trip alerts from this friend',
+        detenerAlertasViajeAmigo:
+            'Stop receiving trip alerts from this friend',
+        aceptarPedidosAmigosAutomaticamente:
+            'Automatically accept seat requests from friends',
+        queresInvitarTusAmigos:
+            'Do you want to invite your friends to this trip?',
+        invitarATodosMisAmigos: 'Invite all my friends',
+        invitarAmigosAlViaje: 'Invite friends to the trip',
+        viajesDeMisAmigos: 'My friends trips',
+        otrosViajes: 'Other trips',
         tenesInvitacionesAmigosClickParaVerlas:
             'You have friend invitations, click here to see them',
+        noVolverAMostrarInvitarAmigos: 'Do not show invite friends again',
         inicio: 'Home',
         mensajes: 'Messages',
         perfil: 'Profile',
