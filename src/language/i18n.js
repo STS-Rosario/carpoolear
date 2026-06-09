@@ -451,6 +451,8 @@ const messages = {
         cerrarSesion: 'Cerrar sesión',
         pedidosDeEliminacionDeCuenta: 'Pedidos de eliminación de cuenta',
         invitarAmigos: 'Invitar a amigos',
+        tenesInvitacionesAmigosClickParaVerlas:
+            'Tenés invitaciones a amigos, click acá para verlas',
         inicio: 'Inicio',
         mensajes: 'Mensajes',
         perfil: 'Perfil',
@@ -924,6 +926,8 @@ const messages = {
         mensajeVistoPorElUsuario: 'Mensaje visto por el usuario',
         tipeaUnNombreYBusca: 'Tipeá un nombre y buscá',
         solicitudesDeAmistad: 'Solicitudes de amistad',
+        tenesInvitacionesAmigosClickParaVerlas:
+            'Tenés invitaciones a amigos, click acá para verlas',
         filtrarPorNombre: 'Filtrar por nombre:',
         ingresarNombre: 'Ingrese nombre...',
         noHayResultados: 'No hay resultados',
@@ -2134,6 +2138,8 @@ const messages = {
         mensajeVistoPorElUsuario: 'Mensaje visto por el usuario',
         tipeaUnNombreYBusca: 'Tipeá un nombre y buscá',
         solicitudesDeAmistad: 'Solicitudes de amistad',
+        tenesInvitacionesAmigosClickParaVerlas:
+            'Tenés invitaciones a amigos, click acá para verlas',
         filtrarPorNombre: 'Filtrar por nombre:',
         ingresarNombre: 'Ingrese nombre...',
         noHayResultados: 'No hay resultados',
@@ -3063,6 +3069,8 @@ const messages = {
         cerrarSesion: 'Log out',
         pedidosDeEliminacionDeCuenta: 'Account deletion requests',
         invitarAmigos: 'Invite friends',
+        tenesInvitacionesAmigosClickParaVerlas:
+            'You have friend invitations, click here to see them',
         inicio: 'Home',
         mensajes: 'Messages',
         perfil: 'Profile',

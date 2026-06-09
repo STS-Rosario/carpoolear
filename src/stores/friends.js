@@ -18,8 +18,9 @@ export const useFriendsStore = defineStore('friends', {
     }),
 
     getters: {
-        ...makePaginationGetters('friends')
-        // pendings, users, searching are accessed via mapState directly from state.
+        ...makePaginationGetters('friends'),
+        hasPendingFriendRequests: (state) =>
+            Array.isArray(state.pendings) && state.pendings.length > 0
     },
 
     actions: {

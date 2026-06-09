@@ -18,6 +18,7 @@
             </router-link>
         </div>
         <OngoingTripCard v-if="ongoingTrip" :trip="ongoingTrip" />
+        <PendingFriendRequestsCard v-if="user" />
         <SearchBox
             :params="searchParams"
             v-on:trip-search="research"
@@ -283,6 +284,7 @@
 <script>
 import Trip from '../sections/Trip.vue';
 import OngoingTripCard from '../elements/OngoingTripCard.vue';
+import PendingFriendRequestsCard from '../elements/PendingFriendRequestsCard.vue';
 import SearchBox from '../sections/SearchTrip.vue';
 import Loading from '../Loading.vue';
 import bus from '../../services/bus-event.js';
@@ -293,6 +295,7 @@ import { useAuthStore } from '../../stores/auth';
 import { useDeviceStore } from '../../stores/device';
 import { useSubscriptionsStore } from '../../stores/subscriptions';
 import { useProfileStore } from '../../stores/profile';
+import { useFriendsStore } from '../../stores/friends';
 import dayjs from '../../dayjs';
 import router from '../../router';
 import dialogs from '../../services/dialogs.js';
@@ -348,6 +351,9 @@ export default {
         }),
         ...mapActions(useMyTripsStore, {
             fetchOngoingTrip: 'fetchOngoingTrip'
+        }),
+        ...mapActions(useFriendsStore, {
+            fetchPendingFriends: 'pending'
         }),
         // setActionButton: 'actionbars/setHeaderButtons'
         isInternalBannerUrl(url) {
@@ -829,6 +835,7 @@ export default {
 
         if (this.user) {
             this.fetchOngoingTrip();
+            this.fetchPendingFriends();
         }
     },
     updated(a) {
@@ -844,6 +851,7 @@ export default {
         user(value) {
             if (value) {
                 this.fetchOngoingTrip();
+                this.fetchPendingFriends();
             }
         },
         trips: {
@@ -906,6 +914,7 @@ export default {
     components: {
         Trip,
         OngoingTripCard,
+        PendingFriendRequestsCard,
         Loading,
         SearchBox,
         modal

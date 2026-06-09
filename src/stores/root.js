@@ -83,10 +83,14 @@ export const useRootStore = defineStore('root', {
             const cordovaStore = useCordovaStore();
 
             // Lazy require to avoid circular dependency
-            let ratesStore, carsStore;
+            let ratesStore, carsStore, friendsStore;
             try {
                 const { useRatesStore } = await import('./rates');
                 ratesStore = useRatesStore();
+            } catch (e) { /* optional */ }
+            try {
+                const { useFriendsStore } = await import('./friends');
+                friendsStore = useFriendsStore();
             } catch (e) { /* optional */ }
             try {
                 const { useCarsStore } = await import('./car');
@@ -99,6 +103,7 @@ export const useRootStore = defineStore('root', {
                 myTripsStore.tripAsDriver();
                 myTripsStore.tripAsPassenger();
                 if (ratesStore) ratesStore.pendingRatesAction();
+                if (friendsStore) friendsStore.pending();
                 passengerStore.getPendingRequest();
                 if (carsStore) carsStore.index();
                 this.startThread();
