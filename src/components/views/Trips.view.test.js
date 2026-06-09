@@ -22,6 +22,15 @@ describe('Trips.vue ongoing trip card', () => {
     });
 });
 
+describe('Trips.vue pending friend invitations card', () => {
+    it('shows pending friend requests card linking to friends settings', () => {
+        expect(viewSource).toContain('PendingFriendRequestsCard');
+        expect(viewSource).toContain('tenesInvitacionesAmigosClickParaVerlas');
+        expect(viewSource).toContain('friends_setting');
+        expect(viewSource).toContain('fetchPendingFriends');
+    });
+});
+
 describe('Trips.vue persisted search state', () => {
     it('does not run default search when URL already has search params', () => {
         expect(viewSource).toContain('hasRouteSearchParams()');
