@@ -12,7 +12,7 @@ describe('SearchTrip advanced filters', () => {
         expect(source).toContain('advanced-filters-toggle_link');
         expect(source).toContain('fa-cog');
         expect(source).toContain('toggleAdvancedFilters');
-        expect(source).toContain("@click.prevent=\"toggleAdvancedFilters\"");
+        expect(source).toContain('@click.prevent="toggleAdvancedFilters"');
         expect(source).toContain("$t('filtrosAvanzados')");
         expect(source).toContain('cursor: pointer');
         expect(source).toContain('margin-left');
