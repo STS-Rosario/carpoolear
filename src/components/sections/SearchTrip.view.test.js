@@ -6,12 +6,17 @@ const viewPath = path.resolve(__dirname, 'SearchTrip.vue');
 const source = fs.readFileSync(viewPath, 'utf8');
 
 describe('SearchTrip advanced filters', () => {
-    it('renders filtros avanzados toggle beside foreign country filter on desktop', () => {
+    it('renders filtros avanzados as cog link beside foreign country filter on desktop', () => {
         expect(source).toContain('search-filters-desktop');
         expect(source).toContain('advanced-filters-toggle-desktop');
-        expect(source).toContain('v-model="showAdvancedFilters"');
+        expect(source).toContain('advanced-filters-toggle_link');
+        expect(source).toContain('fa-cog');
+        expect(source).toContain('toggleAdvancedFilters');
+        expect(source).toContain("@click.prevent=\"toggleAdvancedFilters\"");
         expect(source).toContain("$t('filtrosAvanzados')");
+        expect(source).toContain('cursor: pointer');
         expect(source).toContain('margin-left');
+        expect(source).not.toContain('id="cbxAdvancedFilters"');
     });
 
     it('renders filtros avanzados toggle above search button on mobile', () => {
@@ -20,7 +25,10 @@ describe('SearchTrip advanced filters', () => {
             source.indexOf('btn-search')
         );
         expect(mobileBlock).toContain('advanced-filters-toggle-mobile');
+        expect(mobileBlock).toContain('advanced-filters-toggle_link');
+        expect(mobileBlock).toContain('fa-cog');
         expect(mobileBlock).toContain('v-show="isMobile && !autoSearch"');
+        expect(mobileBlock).not.toContain('id="cbxAdvancedFiltersMobile"');
     });
 
     it('toggles advanced filters section with hide carpooleado and allow preferences', () => {
