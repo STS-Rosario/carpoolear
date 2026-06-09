@@ -2610,6 +2610,11 @@ export default {
                 });
         },
 
+        markNegativeContributionError(errorTarget) {
+            errorTarget.state = true;
+            errorTarget.message = this.$t('contribucionPorPersonaNegativa');
+        },
+
         onOutboundPriceFieldInput() {
             this.validatePrice();
             const p = parseSeatPriceInput(this.price);
@@ -2809,10 +2814,7 @@ export default {
                     );
                 } else if (isNegativeSeatPriceInput(this.price)) {
                     globalError = true;
-                    this.priceError.state = true;
-                    this.priceError.message = this.$t(
-                        'contribucionPorPersonaNegativa'
-                    );
+                    this.markNegativeContributionError(this.priceError);
                 } else if (
                     this.config.module_max_price_enabled &&
                     exceedsMaximumSeatPrice({
@@ -2966,10 +2968,7 @@ export default {
                         );
                     } else if (isNegativeSeatPriceInput(this.returnPrice)) {
                         globalError = true;
-                        this.returnPriceError.state = true;
-                        this.returnPriceError.message = this.$t(
-                            'contribucionPorPersonaNegativa'
-                        );
+                        this.markNegativeContributionError(this.returnPriceError);
                     } else if (
                         this.config.module_trip_creation_payment_enabled &&
                         this.config.module_max_price_enabled &&
@@ -3381,10 +3380,7 @@ export default {
         validatePrice() {
             const p = parseSeatPriceInput(this.price);
             if (isNegativeSeatPriceInput(this.price)) {
-                this.priceError.state = true;
-                this.priceError.message = this.$t(
-                    'contribucionPorPersonaNegativa'
-                );
+                this.markNegativeContributionError(this.priceError);
                 return;
             }
             if (
@@ -3518,10 +3514,7 @@ export default {
         validateReturnPrice() {
             const p = parseSeatPriceInput(this.returnPrice);
             if (isNegativeSeatPriceInput(this.returnPrice)) {
-                this.returnPriceError.state = true;
-                this.returnPriceError.message = this.$t(
-                    'contribucionPorPersonaNegativa'
-                );
+                this.markNegativeContributionError(this.returnPriceError);
                 return;
             }
             if (
