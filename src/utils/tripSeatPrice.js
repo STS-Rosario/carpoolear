@@ -12,17 +12,17 @@ export function parseSeatPriceInput(value) {
     return Number.isFinite(n) ? n : null;
 }
 
-export function isNegativeSeatPriceInput(value) {
-    const parsed = parseSeatPriceInput(value);
+export function isNegativeSeatPriceUnits(parsed) {
     return parsed !== null && parsed < 0;
+}
+
+export function isNegativeSeatPriceInput(value) {
+    return isNegativeSeatPriceUnits(parseSeatPriceInput(value));
 }
 
 export function seatPriceCentsForApi(raw) {
     const p = parseSeatPriceInput(raw);
-    if (p === null) {
-        return null;
-    }
-    if (p < 0) {
+    if (p === null || isNegativeSeatPriceUnits(p)) {
         return null;
     }
     if (p === 0) {
