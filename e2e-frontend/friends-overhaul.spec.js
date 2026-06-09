@@ -216,8 +216,8 @@ test.describe('Friends overhaul', () => {
         await expect(page.getByText('Lilliana Treutel')).toBeVisible();
 
         const removeButton = page
-            .locator('#sent-pending-list')
-            .getByRole('button', { name: /^quitar$/i });
+            .locator('#sent-pending-list .sent-pending-chip__remove')
+            .first();
         await expect(removeButton).toBeVisible();
         await removeButton.click();
 

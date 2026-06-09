@@ -6,11 +6,16 @@ const componentPath = path.resolve(__dirname, 'TripInviteFriends.vue');
 const tripViewPath = path.resolve(__dirname, '../views/Trip.vue');
 const newTripViewPath = path.resolve(__dirname, '../views/NewTrip.vue');
 const tripsApiPath = path.resolve(__dirname, '../../services/api/Trips.js');
+const isUpcomingTripPath = path.resolve(
+    __dirname,
+    '../../utils/isUpcomingTrip.js'
+);
 
 const componentSource = fs.readFileSync(componentPath, 'utf8');
 const tripViewSource = fs.readFileSync(tripViewPath, 'utf8');
 const newTripViewSource = fs.readFileSync(newTripViewPath, 'utf8');
 const tripsApiSource = fs.readFileSync(tripsApiPath, 'utf8');
+const isUpcomingTripSource = fs.readFileSync(isUpcomingTripPath, 'utf8');
 
 describe('TripApi invite friends', () => {
     it('targets invite-friends endpoint with friend_ids payload', () => {
@@ -20,11 +25,16 @@ describe('TripApi invite friends', () => {
     });
 });
 
+describe('isUpcomingTrip', () => {
+    it('mirrors backend expired rules for weekly schedule and trip_date', () => {
+        expect(isUpcomingTripSource).toContain('weekly_schedule');
+        expect(isUpcomingTripSource).toContain('trip_date');
+    });
+});
+
 describe('TripInviteFriends.vue', () => {
     it('lists friends with checkboxes and master invite-all toggle', () => {
-        expect(componentSource).toContain("$t('invitarAmigosAlViaje')");
         expect(componentSource).toContain("$t('invitarATodosMisAmigos')");
-        expect(componentSource).toContain("$t('noVolverAMostrarInvitarAmigos')");
         expect(componentSource).toContain('v-for="friend in friends"');
         expect(componentSource).toContain('selectedFriendIds');
         expect(componentSource).toContain('inviteAllFriends');
@@ -35,18 +45,28 @@ describe('TripInviteFriends.vue', () => {
         expect(componentSource).toContain('onSubmit');
     });
 
-    it('persists dismiss preference in localStorage per trip', () => {
-        expect(componentSource).toContain('dismiss_trip_invite_');
-        expect(componentSource).toContain('dontShowAgain');
+    it('emits close instead of persisting dismiss preference', () => {
+        expect(componentSource).toContain("emits: ['close']");
+        expect(componentSource).toContain("$emit('close')");
+        expect(componentSource).not.toContain('dismiss_trip_invite_');
+        expect(componentSource).not.toContain('noVolverAMostrarInvitarAmigos');
     });
 });
 
 describe('Trip.vue TripInviteFriends integration', () => {
-    it('shows invite friends panel for trip owner when query or first visit', () => {
-        expect(tripViewSource).toContain('TripInviteFriends');
-        expect(tripViewSource).toContain('showTripInviteFriends');
-        expect(tripViewSource).toContain('inviteFriends');
-        expect(tripViewSource).toContain('dismiss_trip_invite_');
+    it('shows invite button and modal only for upcoming owner trips', () => {
+        expect(tripViewSource).toContain('canInviteFriendsToTrip');
+        expect(tripViewSource).toContain('isUpcomingTrip');
+        expect(tripViewSource).toContain('showInviteFriendsModal');
+        expect(tripViewSource).toContain("$t('invitarAmigosAlViaje')");
+        expect(tripViewSource).toContain('maybeOpenInviteFriendsFromQuery');
+        expect(tripViewSource).not.toContain('showTripInviteFriends');
+        expect(tripViewSource).not.toContain('dismiss_trip_invite_');
+    });
+
+    it('auto-opens invite modal only from inviteFriends query param', () => {
+        expect(tripViewSource).toContain("query.inviteFriends !== '1'");
+        expect(tripViewSource).toContain('delete nextQuery.inviteFriends');
     });
 });
 

@@ -1,16 +1,21 @@
 import { debounce } from '../services/utility';
 
-let debounceFunction = null;
-const inputHandler = debounce(function () {
-    debounceFunction();
-}, 800);
-
 export default {
-    beforeMount: function (el, binding, node) {
-        debounceFunction = binding.value;
-        el.addEventListener('input', inputHandler, false);
+    beforeMount(el, binding) {
+        const handler = binding.value;
+        const instance = binding.instance;
+        const debouncedHandler = debounce(() => {
+            if (typeof handler === 'function') {
+                handler.call(instance);
+            }
+        }, 800);
+        el.__debounceInputHandler = debouncedHandler;
+        el.addEventListener('input', debouncedHandler, false);
     },
-    unmounted: function (el, binding, node) {
-        el.removeEventListener('input', inputHandler, false);
+    unmounted(el) {
+        if (el.__debounceInputHandler) {
+            el.removeEventListener('input', el.__debounceInputHandler, false);
+            delete el.__debounceInputHandler;
+        }
     }
 };
