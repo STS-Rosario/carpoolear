@@ -7,8 +7,8 @@ const source = fs.readFileSync(viewPath, 'utf8');
 
 describe('SearchTrip hide carpooleado filter', () => {
     it('renders a hide carpooleado checkbox with i18n label on desktop and mobile', () => {
-        expect(source).toContain("v-model=\"hideCarpooleado\"");
-        expect(source).toContain("id=\"cbxHideCarpooleado\"");
+        expect(source).toContain('v-model="hideCarpooleado"');
+        expect(source).toContain('id="cbxHideCarpooleado"');
         expect(source).toContain("$t('esconderViajesCarpooleados')");
         expect(source).toContain('hide-carpooleado-select-desktop');
         expect(source).toContain('hide-carpooleado-select-mobile');
