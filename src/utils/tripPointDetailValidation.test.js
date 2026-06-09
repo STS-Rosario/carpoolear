@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
     shouldShowTripPointDetailInputs,
-    validateTripPointDetails
+    validateTripPointDetails,
+    applyTripPointDetailValidation
 } from './tripPointDetailValidation.js';
 
 describe('tripPointDetailValidation', () => {
@@ -49,6 +50,33 @@ describe('tripPointDetailValidation', () => {
                     t
                 })
             ).toEqual({});
+        });
+    });
+
+    describe('applyTripPointDetailValidation', () => {
+        const t = (key) => key;
+
+        it('sets error state on detail error objects and reports validation failure', () => {
+            const puntoPartidaError = { state: false, message: '' };
+            const puntoLlegadaError = { state: false, message: '' };
+
+            const hasError = applyTripPointDetailValidation({
+                puntoPartida: '',
+                puntoLlegada: 'Centro',
+                t,
+                puntoPartidaError,
+                puntoLlegadaError
+            });
+
+            expect(hasError).toBe(true);
+            expect(puntoPartidaError).toEqual({
+                state: true,
+                message: 'puntoPartidaRequerido'
+            });
+            expect(puntoLlegadaError).toEqual({
+                state: false,
+                message: ''
+            });
         });
     });
 });
