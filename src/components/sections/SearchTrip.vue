@@ -22,15 +22,15 @@
                 <i class="fa fa-info-circle" aria-hidden="true"></i>
             </div>
             <div class="advanced-filters-toggle_wrapper advanced-filters-toggle-desktop">
-                <input
-                    type="checkbox"
-                    v-model="showAdvancedFilters"
-                    id="cbxAdvancedFilters"
-                    class="cbx"
-                />
-                <label for="cbxAdvancedFilters" class="cbx_label">
+                <a
+                    href="#"
+                    class="advanced-filters-toggle_link"
+                    :aria-expanded="showAdvancedFilters"
+                    @click.prevent="toggleAdvancedFilters"
+                >
+                    <i class="fa fa-cog" aria-hidden="true"></i>
                     {{ $t('filtrosAvanzados') }}
-                </label>
+                </a>
             </div>
         </div>
         <div
@@ -183,15 +183,15 @@
                 v-show="isMobile && !autoSearch"
             >
                 <div class="advanced-filters-toggle_wrapper">
-                    <input
-                        type="checkbox"
-                        v-model="showAdvancedFilters"
-                        id="cbxAdvancedFiltersMobile"
-                        class="cbx"
-                    />
-                    <label for="cbxAdvancedFiltersMobile" class="cbx_label">
+                    <a
+                        href="#"
+                        class="advanced-filters-toggle_link"
+                        :aria-expanded="showAdvancedFilters"
+                        @click.prevent="toggleAdvancedFilters"
+                    >
+                        <i class="fa fa-cog" aria-hidden="true"></i>
                         {{ $t('filtrosAvanzados') }}
-                    </label>
+                    </a>
                 </div>
             </div>
             <div
@@ -486,6 +486,9 @@ export default {
             this.$refs.datepicker.clear();
             this.resetAdvancedFilters();
         },
+        toggleAdvancedFilters() {
+            this.showAdvancedFilters = !this.showAdvancedFilters;
+        },
         resetAdvancedFilters() {
             this.showAdvancedFilters = false;
             this.hideCarpooleado = false;
@@ -597,6 +600,22 @@ export default {
 }
 .advanced-filters-toggle-desktop {
     margin-left: 2em;
+}
+.advanced-filters-toggle_link {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    text-decoration: none;
+    color: inherit;
+}
+.advanced-filters-toggle_link:hover,
+.advanced-filters-toggle_link:focus {
+    text-decoration: underline;
+    color: inherit;
+}
+.advanced-filters-toggle_link .fa {
+    cursor: pointer;
 }
 .advanced-filters-toggle-mobile,
 .search-advanced-filters-mobile {
