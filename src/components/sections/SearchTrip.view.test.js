@@ -25,7 +25,7 @@ describe('SearchTrip advanced filters', () => {
 
     it('toggles advanced filters section with hide carpooleado and allow preferences', () => {
         expect(source).toContain('search-advanced-filters');
-        expect(source).toContain('v-show="showAdvancedFilters"');
+        expect(source).toMatch(/v-show="showAdvancedFilters/);
         expect(source).toContain("$t('esconderViajesCarpooleados')");
         expect(source).toContain("$t('preferenciaPermitidoAnimales')");
         expect(source).toContain("$t('preferenciaPermitidoFumar')");

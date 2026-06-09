@@ -624,6 +624,21 @@ export default {
             if (this.parseBooleanQueryValue(query.hide_carpooleado)) {
                 params.hide_carpooleado = true;
             }
+            if (this.parseBooleanQueryValue(query.allow_animals)) {
+                params.allow_animals = true;
+            } else if (query.allow_animals === 'false' || query.allow_animals === '0') {
+                params.allow_animals = false;
+            }
+            if (this.parseBooleanQueryValue(query.allow_smoking)) {
+                params.allow_smoking = true;
+            } else if (query.allow_smoking === 'false' || query.allow_smoking === '0') {
+                params.allow_smoking = false;
+            }
+            if (this.parseBooleanQueryValue(query.allow_kids)) {
+                params.allow_kids = true;
+            } else if (query.allow_kids === 'false' || query.allow_kids === '0') {
+                params.allow_kids = false;
+            }
             return params;
         },
         parseNumericQueryValue(value) {

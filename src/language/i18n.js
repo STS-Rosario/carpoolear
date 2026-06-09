@@ -1087,6 +1087,10 @@ const messages = {
         km: 'km',
         origenODestinoFueraDe: 'Origen o destino fuera de',
         esconderViajesCarpooleados: 'Esconder viajes Carpooleados',
+        filtrosAvanzados: 'Filtros avanzados',
+        filtroCualquiera: 'Cualquiera',
+        filtroPermitido: 'Permitido',
+        filtroNoPermitido: 'No permitido',
         marcandoEstaOpcionPodrasSeleccionar:
             'Marcando esta opción vas a poder seleccionar origen o destino fuera de Argentina. Recordá averiguar con la aseguradora del auto, si tenés cobertura contra terceros fuera de la Argentina. Si no es así, averiguá con ella para obtener la extensión fuera de Argentina, de forma de tener cobertura durante el viaje',
         origenYDestinoNoPuedenSerAmbosDelExterior:
@@ -2304,6 +2308,10 @@ const messages = {
         co2eq: 'CO2eq',
         origenODestinoFueraDe: 'Origen o destino outside',
         esconderViajesCarpooleados: 'Ocultar viajes Carpooleados',
+        filtrosAvanzados: 'Filtros avanzados',
+        filtroCualquiera: 'Cualquiera',
+        filtroPermitido: 'Permitido',
+        filtroNoPermitido: 'No permitido',
         marcandoEstaOpcionPodrasSeleccionar:
             'Marcando esta opción vas a poder seleccionar origen o destino fuera de Argentina. Recordá averiguar con la aseguradora del auto, si tenés cobertura contra terceros fuera de la Argentina. Si no es así, averiguá con ella para obtener la extensión fuera de Argentina, de forma de tener cobertura durante el viaje',
         origenYDestinoNoPuedenSerAmbosDelExterior:
@@ -3741,6 +3749,10 @@ const messages = {
         km: 'km',
         origenODestinoFueraDe: 'Departure or destination outside of',
         esconderViajesCarpooleados: 'Hide Carpooled trips',
+        filtrosAvanzados: 'Advanced filters',
+        filtroCualquiera: 'Any',
+        filtroPermitido: 'Allowed',
+        filtroNoPermitido: 'Not allowed',
         marcandoEstaOpcionPodrasSeleccionar:
             'By checking this option you will be able to select departure or destination outside of Argentina. Remember to check with the car insurance company if you have third-party coverage outside of Argentina. If not, check with them to get an extension outside of Argentina, in order to have coverage during the trip',
         origenYDestinoNoPuedenSerAmbosDelExterior:
