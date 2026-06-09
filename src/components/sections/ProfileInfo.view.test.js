@@ -44,3 +44,33 @@ describe('ProfileInfo cars display', () => {
         expect(viewSource).not.toContain('profile.cars[0].patente');
     });
 });
+
+describe('ProfileInfo friend actions', () => {
+    it('shows invite button with person icon for other users without friendship', () => {
+        expect(viewSource).toContain('profile-friend-actions');
+        expect(viewSource).toContain("$t('invitarAmigos')");
+        expect(viewSource).toContain('fa-user');
+        expect(viewSource).toContain('onInviteFriend');
+        expect(viewSource).toContain("friendship_state === 'none'");
+    });
+
+    it('shows sent-request state when friendship is pending_sent', () => {
+        expect(viewSource).toContain("friendship_state === 'pending_sent'");
+        expect(viewSource).toContain("$t('solicitudEnviada')");
+    });
+
+    it('shows accept and reject for incoming friend requests', () => {
+        expect(viewSource).toContain("friendship_state === 'pending_received'");
+        expect(viewSource).toContain('onAcceptFriend');
+        expect(viewSource).toContain('onRejectFriend');
+        expect(viewSource).toContain("$t('aceptar')");
+        expect(viewSource).toContain("$t('rechazar')");
+    });
+
+    it('wires friend actions through friends store', () => {
+        expect(viewSource).toContain('useFriendsStore');
+        expect(viewSource).toContain('requestFriend');
+        expect(viewSource).toContain('acceptFriend');
+        expect(viewSource).toContain('rejectFriend');
+    });
+});
