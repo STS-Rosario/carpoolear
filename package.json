@@ -51,6 +51,7 @@
     "@capacitor/network": "^7.0.2",
     "@capacitor/preferences": "^7.0.2",
     "@capacitor/push-notifications": "^7.0.2",
+    "@capacitor/share": "^7.0.4",
     "@capacitor/splash-screen": "^7.0.2",
     "@capacitor/status-bar": "^7.0.2",
     "@capacitor/toast": "^7.0.2",
