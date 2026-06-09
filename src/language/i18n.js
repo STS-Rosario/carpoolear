@@ -937,8 +937,6 @@ const messages = {
         mensajeVistoPorElUsuario: 'Mensaje visto por el usuario',
         tipeaUnNombreYBusca: 'Tipeá un nombre y buscá',
         solicitudesDeAmistad: 'Solicitudes de amistad',
-        tenesInvitacionesAmigosClickParaVerlas:
-            'Tenés invitaciones a amigos, click acá para verlas',
         filtrarPorNombre: 'Filtrar por nombre:',
         ingresarNombre: 'Ingrese nombre...',
         noHayResultados: 'No hay resultados',
