@@ -1382,6 +1382,22 @@
       color: #777;
       font-size: .95rem;
   }
+  .trip-detail-component .trip-location-point-detail {
+      display: block;
+      margin-top: 0.35rem;
+      font-size: 1.05rem;
+      line-height: 1.35;
+      color: #333;
+  }
+  .trip-detail-component .trip-location-point-detail__label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      color: #666;
+      margin-bottom: 0.15rem;
+  }
   .trip-detail-component .trip_location_inner_city {
       font-weight: 400;
       color: #392;
