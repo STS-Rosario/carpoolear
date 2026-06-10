@@ -26,4 +26,12 @@ describe('TripCreationStepper.vue', () => {
         expect(componentSource).toContain('trip-creation-stepper__segment--incomplete');
         expect(componentSource).toContain('incompleteSteps');
     });
+
+    it('shows a short label under each step segment', () => {
+        expect(componentSource).toContain('getTripCreationStepLabelKey');
+        expect(componentSource).toContain('trip-creation-stepper__label');
+        expect(componentSource).toMatch(
+            /\$t\(getTripCreationStepLabelKey\(step\)\)/
+        );
+    });
 });
