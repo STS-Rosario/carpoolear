@@ -32,7 +32,7 @@
                         @click="openEditCar(car)"
                     >
                         <i class="fa fa-pencil" aria-hidden="true"></i>
-                        {{ $t('editarAuto') }}
+                        {{ $t('editar') }}
                     </button>
                     <button
                         type="button"
@@ -40,7 +40,7 @@
                         @click="deleteCar(car)"
                     >
                         <i class="fa fa-trash-o" aria-hidden="true"></i>
-                        {{ $t('eliminarAuto') }}
+                        {{ $t('accionEliminar') }}
                     </button>
                 </div>
             </li>
@@ -314,23 +314,23 @@ export default {
 }
 
 .cars-editor-panel__item {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.75rem 0.5rem;
     align-items: center;
-    justify-content: space-between;
-    gap: 0.5rem;
     padding: 0.75rem 0;
     border-bottom: 1px solid #e5e5e5;
 }
 
 .cars-editor-panel__summary {
-    flex: 1 1 12rem;
+    min-width: 0;
     color: var(--main-font-color, #555);
 }
 
 .cars-editor-panel__label {
     color: #333;
     font-weight: 500;
+    overflow-wrap: anywhere;
 }
 
 .cars-editor-panel__badge {
@@ -339,7 +339,20 @@ export default {
 
 .cars-editor-panel__actions {
     display: flex;
+    flex-wrap: nowrap;
     gap: 0.5rem;
+    justify-self: end;
+    min-width: max-content;
+}
+
+.cars-editor-panel__action-btn {
+    display: inline-flex;
+    align-items: center;
+    flex: 0 0 auto;
+    width: auto;
+    min-width: max-content;
+    white-space: nowrap;
+    overflow: visible;
 }
 
 .cars-editor-panel__action-btn .fa {

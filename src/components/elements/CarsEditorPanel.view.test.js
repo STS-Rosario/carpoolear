@@ -19,9 +19,17 @@ describe('CarsEditorPanel', () => {
         expect(source).toMatch(/watch:\s*\{[\s\S]*active/s);
     });
 
+    it('keeps row action buttons wide enough for icon and label', () => {
+        expect(source).toContain('grid-template-columns: minmax(0, 1fr) auto');
+        expect(source).toContain('min-width: max-content');
+        expect(source).toContain('display: inline-flex');
+    });
+
     it('lists cars with add, edit and delete actions', () => {
         expect(source).toContain("$t('agregarAuto')");
-        expect(source).toContain("$t('editarAuto')");
+        expect(source).toContain("$t('editar')");
+        expect(source).toContain("$t('accionEliminar')");
+        expect(source).not.toContain("$t('eliminarAuto')");
         expect(source).toContain('carDisplayLabel');
         expect(source).toContain('btn-danger');
         expect(source).toContain('fa-pencil');
