@@ -7,7 +7,8 @@
             :placeholder="placeholder"
             :disabled="disabled"
             @input="onInput"
-            @focus="open = true"
+            @focus="onInputFocus"
+            @blur="onInputBlur"
             @keydown.down.prevent="moveHighlight(1)"
             @keydown.up.prevent="moveHighlight(-1)"
             @keydown.enter.prevent="selectHighlighted"
@@ -29,6 +30,7 @@
 
 <script>
 import { CATALOG_OTHER_VALUE } from '../../utils/carFields.js';
+import { createCatalogComboboxOutsideDismiss } from '../../utils/catalogComboboxDismiss.js';
 
 export default {
     name: 'catalog-combobox',
@@ -110,7 +112,35 @@ export default {
             this.query = '';
         }
     },
+    mounted() {
+        this.removeOutsideDismiss = createCatalogComboboxOutsideDismiss(
+            this.$el,
+            () => this.closeList()
+        );
+    },
+    beforeUnmount() {
+        if (this.removeOutsideDismiss) {
+            this.removeOutsideDismiss();
+        }
+        this.clearBlurCloseTimer();
+    },
     methods: {
+        onInputFocus() {
+            this.clearBlurCloseTimer();
+            this.open = true;
+        },
+        onInputBlur() {
+            this.clearBlurCloseTimer();
+            this.blurCloseTimer = window.setTimeout(() => {
+                this.closeList();
+            }, 0);
+        },
+        clearBlurCloseTimer() {
+            if (this.blurCloseTimer) {
+                clearTimeout(this.blurCloseTimer);
+                this.blurCloseTimer = null;
+            }
+        },
         onInput(event) {
             this.query = event.target.value;
             this.open = true;
@@ -148,6 +178,7 @@ export default {
         closeList() {
             this.open = false;
             this.highlightedIndex = 0;
+            this.query = '';
         }
     }
 };

@@ -14,6 +14,19 @@ import {
 } from './carFields.js';
 
 describe('carFields', () => {
+    it('detects complete car with catalog brand and custom model', () => {
+        expect(
+            isCarComplete({
+                patente: 'AE322FE',
+                car_brand_id: 21,
+                brand_name: 'FORD',
+                model_other: 'MiModelo',
+                car_color_id: 3,
+                year: 2011
+            })
+        ).toBe(true);
+    });
+
     it('detects complete catalog car', () => {
         expect(
             isCarComplete({
@@ -97,6 +110,23 @@ describe('carFields', () => {
         expect(carsNeedingCompletion(cars)).toEqual([cars[1]]);
     });
 
+    it('does not flag catalog brand with custom model as needing completion', () => {
+        const cars = [
+            {
+                id: 1,
+                patente: 'AE322FE',
+                car_brand_id: 21,
+                brand_name: 'FORD',
+                model_other: 'MiModelo',
+                car_color_id: 3,
+                year: 2011
+            },
+            { id: 2, patente: 'B' }
+        ];
+
+        expect(carsNeedingCompletion(cars)).toEqual([cars[1]]);
+    });
+
     it('builds detail rows for trip car display', () => {
         expect(
             carDetailRows({
@@ -123,6 +153,26 @@ describe('carFields', () => {
                 year: 2020
             })
         ).toBe('Toyota · Corolla · 2020 · Blanco · AB123CD');
+    });
+
+    it('builds payload for catalog brand with other model', () => {
+        expect(
+            carPayloadFromForm({
+                patente: 'AE322FE',
+                car_color_id: 3,
+                year: 2011,
+                brandSelection: 21,
+                car_brand_id: 21,
+                modelSelection: CATALOG_OTHER_VALUE,
+                model_other: 'MiModelo'
+            })
+        ).toEqual({
+            patente: 'AE322FE',
+            car_color_id: 3,
+            year: 2011,
+            car_brand_id: 21,
+            model_other: 'MiModelo'
+        });
     });
 
     it('builds payload for other brand and model', () => {

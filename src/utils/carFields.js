@@ -29,6 +29,10 @@ export function hasCarBrandAndModel(carOrForm) {
         );
     }
 
+    if (carOrForm.car_brand_id && hasValue(carOrForm.model_other)) {
+        return true;
+    }
+
     const brandId = carOrForm.car_brand_id || carOrForm.brandSelection;
     const modelSelection =
         carOrForm.car_model_id || carOrForm.modelSelection;

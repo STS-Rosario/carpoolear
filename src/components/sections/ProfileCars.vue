@@ -1,6 +1,6 @@
 <template>
     <div class="profile-cars">
-        <h1 class="profile-cars__heading">{{ $t('autos') }}</h1>
+        <h1 class="profile-cars__heading visible-xs-block">{{ $t('autos') }}</h1>
 
         <p
             v-if="incompleteCars.length"
@@ -17,7 +17,9 @@
                 class="profile-cars__item"
             >
                 <div class="profile-cars__summary">
-                    <span>{{ carDisplayLabel(car) || car.patente }}</span>
+                    <span class="profile-cars__label">{{
+                        carDisplayLabel(car) || car.patente
+                    }}</span>
                     <span
                         v-if="!isCarComplete(car)"
                         class="label label-warning profile-cars__badge"
@@ -28,16 +30,18 @@
                 <div class="profile-cars__actions">
                     <button
                         type="button"
-                        class="btn btn-default btn-sm"
+                        class="btn btn-default btn-sm profile-cars__action-btn"
                         @click="openEditCar(car)"
                     >
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
                         {{ $t('editarAuto') }}
                     </button>
                     <button
                         type="button"
-                        class="btn btn-default btn-sm"
+                        class="btn btn-danger btn-sm profile-cars__action-btn"
                         @click="deleteCar(car)"
                     >
+                        <i class="fa fa-trash-o" aria-hidden="true"></i>
                         {{ $t('eliminarAuto') }}
                     </button>
                 </div>
@@ -48,9 +52,10 @@
 
         <button
             type="button"
-            class="btn btn-primary profile-cars__add"
+            class="btn btn-primary profile-cars__add profile-cars__action-btn"
             @click="openAddCar"
         >
+            <i class="fa fa-plus" aria-hidden="true"></i>
             {{ $t('agregarAuto') }}
         </button>
 
@@ -257,16 +262,22 @@ export default {
 </script>
 
 <style scoped>
+.profile-cars {
+    color: var(--main-font-color, #555);
+}
+
 .profile-cars__heading {
     font-size: 1.5rem;
     font-weight: 700;
     margin: 0 0 1rem;
+    color: #036686;
 }
 
 .profile-cars__list {
     list-style: none;
     margin: 0 0 1rem;
     padding: 0;
+    color: var(--main-font-color, #555);
 }
 
 .profile-cars__item {
@@ -281,6 +292,12 @@ export default {
 
 .profile-cars__summary {
     flex: 1 1 12rem;
+    color: var(--main-font-color, #555);
+}
+
+.profile-cars__label {
+    color: #333;
+    font-weight: 500;
 }
 
 .profile-cars__badge {
@@ -290,6 +307,10 @@ export default {
 .profile-cars__actions {
     display: flex;
     gap: 0.5rem;
+}
+
+.profile-cars__action-btn .fa {
+    margin-right: 0.35em;
 }
 
 .profile-cars__add {

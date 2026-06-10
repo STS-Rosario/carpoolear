@@ -21,6 +21,10 @@ describe('ProfileCars CRUD section', () => {
         expect(viewSource).toContain('openEditCar');
         expect(viewSource).toContain('deleteCar');
         expect(viewSource).toContain('openAddCar');
+        expect(viewSource).toContain('btn-danger');
+        expect(viewSource).toContain('fa-pencil');
+        expect(viewSource).toContain('fa-trash-o');
+        expect(viewSource).toContain('fa-plus');
     });
 
     it('requires complete marca, modelo, año and color before saving', () => {
@@ -36,6 +40,15 @@ describe('ProfileCars CRUD section', () => {
 
         expect(viewSource).toContain('carsNeedingCompletion');
         expect(viewSource).toContain('autosCompletarPendientes');
+    });
+
+    it('uses readable text colors and mobile-only page heading', () => {
+        const viewSource = fs.readFileSync(viewPath, 'utf8');
+
+        expect(viewSource).toContain('visible-xs-block');
+        expect(viewSource).toContain('color: #036686');
+        expect(viewSource).toContain('var(--main-font-color');
+        expect(viewSource).toContain('profile-cars__label');
     });
 });
 

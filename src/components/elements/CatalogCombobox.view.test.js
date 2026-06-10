@@ -20,4 +20,10 @@ describe('CatalogCombobox dropdown contrast', () => {
         expect(source).toMatch(/\.catalog-combobox__input\s*\{[\s\S]*?color:\s*#333/s);
         expect(source).toContain('.catalog-combobox__input::placeholder');
     });
+
+    it('closes the dropdown when clicking or blurring outside', () => {
+        expect(source).toContain('createCatalogComboboxOutsideDismiss');
+        expect(source).toContain('@blur="onInputBlur"');
+        expect(source).not.toContain('v-clickoutside');
+    });
 });
