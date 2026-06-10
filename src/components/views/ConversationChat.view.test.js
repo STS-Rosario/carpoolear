@@ -19,4 +19,10 @@ describe('ConversationChat.vue user ratings', () => {
         expect(viewSource).toContain('getOtherParticipantRatings');
         expect(viewSource).toContain('setHeaderRatings');
     });
+
+    it('supports trip group chat header with participants and mute toggle', () => {
+        expect(viewSource).toContain('ConversationParticipants');
+        expect(viewSource).toContain('groupChatMuteNotifications');
+        expect(viewSource).toContain(':isGroupChat="isGroupChat"');
+    });
 });
