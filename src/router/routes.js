@@ -1,5 +1,5 @@
 /* jshint esversion: 6 */
-import { auth, guest, profileComplete, authAdmin, requireIdentityPendingRatingsAndProfile } from './middleware.js';
+import { auth, guest, profileComplete, authAdmin, requireIdentityValidation, requireIdentityPendingRatingsAndProfile } from './middleware.js';
 import { useAuthStore } from '../stores/auth';
 
 function getAuthStore () {
