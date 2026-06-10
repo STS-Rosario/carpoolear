@@ -41,4 +41,3 @@ describe('CarsEditorPanel', () => {
         expect(source).toContain('autosCompletarPendientes');
     });
 });
-
