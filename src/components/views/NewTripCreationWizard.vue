@@ -60,6 +60,16 @@
                     <span class="error" v-if="form.points[0].error.state">{{ form.points[0].error.message }}</span>
                     <span class="error" v-if="stepErrors.origin">{{ $t(stepErrors.origin) }}</span>
                 </div>
+                <TripCreationRoutePanel
+                    :points="form.points"
+                    :distance-string="form.distanceString"
+                    :estimated-time-string="form.estimatedTimeString"
+                    :co2-string="form.CO2String"
+                    :center="form.center"
+                    :zoom="form.zoom"
+                    :url="form.url"
+                    :attribution="form.attribution"
+                />
             </template>
 
             <!-- Step 2: Destination -->
@@ -82,30 +92,16 @@
                     <span class="error" v-if="lastPoint.error.state">{{ lastPoint.error.message }}</span>
                     <span class="error" v-if="stepErrors.destination">{{ $t(stepErrors.destination) }}</span>
                 </div>
-                <button
-                    type="button"
-                    class="new-trip-wizard__collapse-toggle"
-                    @click="showRouteDetails = !showRouteDetails"
-                >
-                    {{ $t('tripCreationRouteDetails') }}
-                    <i :class="showRouteDetails ? 'fa fa-chevron-up' : 'fa fa-chevron-down'" aria-hidden="true"></i>
-                </button>
-                <div v-show="showRouteDetails" class="trip_information trip_information--light">
-                    <ul class="no-bullet">
-                        <li class="list_item">
-                            <div class="label-soft">{{ $t('distanciaARecorrer') }}</div>
-                            <div>{{ form.distanceString }}</div>
-                        </li>
-                        <li class="list_item">
-                            <div class="label-soft">{{ $t('tiempoEstimado') }}</div>
-                            <div>{{ form.estimatedTimeString }}</div>
-                        </li>
-                        <li class="list_item">
-                            <div class="label-soft">{{ $t('huellaCarbono') }}</div>
-                            <div>{{ form.CO2String }}</div>
-                        </li>
-                    </ul>
-                </div>
+                <TripCreationRoutePanel
+                    :points="form.points"
+                    :distance-string="form.distanceString"
+                    :estimated-time-string="form.estimatedTimeString"
+                    :co2-string="form.CO2String"
+                    :center="form.center"
+                    :zoom="form.zoom"
+                    :url="form.url"
+                    :attribution="form.attribution"
+                />
             </template>
 
             <!-- Step 3: Schedule -->
@@ -384,6 +380,7 @@
 <script>
 import { last } from 'lodash';
 import TripCreationStepper from '../elements/TripCreationStepper.vue';
+import TripCreationRoutePanel from '../elements/TripCreationRoutePanel.vue';
 import TripCarStepPanel from '../elements/TripCarStepPanel.vue';
 import DatePicker from '../DatePicker';
 import autocomplete from '../Autocomplete';
@@ -406,6 +403,7 @@ export default {
 
     components: {
         TripCreationStepper,
+        TripCreationRoutePanel,
         TripCarStepPanel,
         DatePicker,
         autocomplete,
@@ -423,7 +421,6 @@ export default {
             maxVisitedStep: STEP.ORIGIN,
             incompleteSteps: [],
             stepErrors: {},
-            showRouteDetails: false,
             draftTimer: null
         };
     },
@@ -677,18 +674,6 @@ export default {
     font-size: 1.1rem;
     font-weight: 700;
     margin-bottom: 1rem;
-}
-
-.new-trip-wizard__collapse-toggle {
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
-    margin: 1rem 0;
-    background: none;
-    border: none;
-    color: inherit;
-    font-weight: 600;
-    cursor: pointer;
 }
 
 .new-trip-wizard__nav {
