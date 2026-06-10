@@ -129,7 +129,7 @@
                 </div>
                 <div v-if="!form.useWeeklySchedule" class="trip_datetime">
                     <DatePicker
-                        :model-value="form.date"
+                        :model-value="form.dateAnswer"
                         :minDate="form.minDate"
                         :class="{ 'has-error': form.dateError.state }"
                         v-on:date_changed="form.changeDate"
@@ -540,8 +540,9 @@ export default {
                     error: { state: false, message: '' }
                 }));
             }
-            this.form.date = draft.date || this.form.date;
-            this.form.dateAnswer = draft.dateAnswer || this.form.dateAnswer;
+            this.form.dateAnswer =
+                draft.dateAnswer || draft.date || this.form.dateAnswer;
+            this.form.date = draft.date || this.form.dateAnswer || this.form.date;
             this.form.time = draft.time || this.form.time;
             this.form.price = draft.price || this.form.price;
             this.form.no_lucrar = draft.no_lucrar || false;

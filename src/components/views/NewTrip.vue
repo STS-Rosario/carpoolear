@@ -595,6 +595,7 @@ export default {
         },
         changeDate(date) {
             this.dateError.state = false;
+            this.date = date;
             this.dateAnswer = date;
         },
         jumpToError() {
