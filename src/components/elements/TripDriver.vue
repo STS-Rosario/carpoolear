@@ -10,22 +10,22 @@
                 >
                 <TripDate v-if="isMobile" />
                 <template v-if="trip && trip.user">
-                    <div
-                        class="trip_driver_img_container"
-                        @click="goToProfile()"
+                    <router-link
+                        class="trip-driver-profile-link trip_driver_img_container"
+                        :to="driverProfileRoute"
                     >
                         <div
                             class="trip_driver_img circle-box"
                             v-imgSrc:profile="getUserImage"
                         ></div>
-                    </div>
+                    </router-link>
                     <div class="trip_driver_details">
-                        <a
-                            class="btn-link trip_driver_name"
-                            @click="goToProfile()"
+                        <router-link
+                            class="trip-driver-profile-link trip_driver_name"
+                            :to="driverProfileRoute"
                         >
                             {{ trip.user.name }}
-                        </a>
+                        </router-link>
                         <div
                             class="trip_driver_ratings"
                             v-if="
@@ -75,13 +75,23 @@
         <div class="driver-profile" v-else>
             <div class="row">
                 <div class="col-xs-9 col-md-8 col-lg-8">
-                    <div
-                        class="trip_driver_img circle-box"
-                        v-imgSrc:profile="getUserImage"
-                    ></div>
+                    <router-link
+                        class="trip-driver-profile-link"
+                        :to="driverProfileRoute"
+                    >
+                        <div
+                            class="trip_driver_img circle-box"
+                            v-imgSrc:profile="getUserImage"
+                        ></div>
+                    </router-link>
                 </div>
                 <div class="col-xs-15 driver-data">
-                    <div>{{ trip.user.name }}</div>
+                    <router-link
+                        class="trip-driver-profile-link"
+                        :to="driverProfileRoute"
+                    >
+                        {{ trip.user.name }}
+                    </router-link>
                     <div
                         class="trip_driver_ratings"
                         v-if="
@@ -145,13 +155,7 @@
                 <div class="col-md-24">
                     <router-link
                         class="btn-primary btn-search btn-shadowed-black"
-                        :to="{
-                            name: 'profile',
-                            params: {
-                                id: getUserProfile,
-                                userProfile: trip.user
-                            }
-                        }"
+                        :to="driverProfileRoute"
                     >
                         {{ $t('verPerfil') }}
                     </router-link>
@@ -188,6 +192,15 @@ export default {
             return this.trip.user.id === this.user.id
                 ? 'me'
                 : this.trip.user.id;
+        },
+        driverProfileRoute() {
+            return {
+                name: 'profile',
+                params: {
+                    id: this.getUserProfile,
+                    userProfile: this.trip.user
+                }
+            };
         },
         getUserImage() {
             return this.user.id === this.trip.user.id
@@ -299,6 +312,15 @@ export default {
 };
 </script>
 <style scoped>
+.trip-driver-profile-link {
+    cursor: pointer;
+    color: inherit;
+    text-decoration: none;
+}
+.trip-driver-profile-link.trip_driver_name:hover,
+.trip-driver-profile-link.trip_driver_name:focus {
+    text-decoration: underline;
+}
 .user_pin {
     margin-top: 1em;
 }
