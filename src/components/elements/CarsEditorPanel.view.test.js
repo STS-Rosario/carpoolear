@@ -18,4 +18,27 @@ describe('CarsEditorPanel', () => {
         expect(source).toContain('active');
         expect(source).toMatch(/watch:\s*\{[\s\S]*active/s);
     });
+
+    it('lists cars with add, edit and delete actions', () => {
+        expect(source).toContain("$t('agregarAuto')");
+        expect(source).toContain("$t('editarAuto')");
+        expect(source).toContain('carDisplayLabel');
+        expect(source).toContain('btn-danger');
+        expect(source).toContain('fa-pencil');
+        expect(source).toContain('fa-trash-o');
+        expect(source).toContain('fa-plus');
+    });
+
+    it('requires complete marca, modelo, año and color before saving', () => {
+        expect(source).toContain('isCarFormComplete');
+        expect(source).toContain('carFormMissingFieldKeys');
+        expect(source).toContain('autosDatosIncompletos');
+    });
+
+    it('prompts user to complete each incomplete saved car when enabled', () => {
+        expect(source).toContain('promptIncompleteOnLoad');
+        expect(source).toContain('carsNeedingCompletion');
+        expect(source).toContain('autosCompletarPendientes');
+    });
 });
+
