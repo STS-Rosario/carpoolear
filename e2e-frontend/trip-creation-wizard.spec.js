@@ -17,7 +17,8 @@ test.describe('trip creation wizard', () => {
         await waitForPageReady(page);
         await expect(page.getByTestId('trip-creation-step-1')).toBeVisible();
         await expect(page.getByTestId('trip-creation-next')).toBeVisible();
-        await expect(page.getByText('Crear viaje como conductor')).toBeVisible();
+        await expect(page.getByText('Crear viaje')).toBeVisible();
+        await expect(page.getByTestId('trip-creation-role-driver')).toBeVisible();
     });
 
     test('update trip route shows wizard', async ({ page }) => {

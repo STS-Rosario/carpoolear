@@ -17,6 +17,7 @@ export function buildOutboundTripCreationSnapshot(form) {
         no_lucrar: form.no_lucrar,
         selectedCarId: form.selectedCarId,
         allowForeignPoints: form.allowForeignPoints,
+        wantsIntermediateStops: form.wantsIntermediateStops,
         weeklyScheduleTime: form.weeklyScheduleTime
     };
 }
@@ -57,6 +58,7 @@ export function buildReturnTripCreationDraftFromSnapshot(snapshot, parentTripId)
         no_lucrar: snapshot.no_lucrar ?? false,
         selectedCarId: snapshot.selectedCarId,
         allowForeignPoints: snapshot.allowForeignPoints || false,
+        wantsIntermediateStops: false,
         useWeeklySchedule: false,
         weeklySchedule: 0,
         weeklyScheduleTime: snapshot.weeklyScheduleTime || '12:00',
