@@ -2,6 +2,7 @@ import dayjs from '../dayjs';
 
 export const ONGOING_TRIP_LEAD_MINUTES = 60;
 export const ONGOING_TRIP_GRACE_MINUTES = 30;
+export const RATING_AVAILABLE_DURATION_FACTOR = 0.8;
 
 export function estimatedTimeToMinutes(estimatedTime) {
     if (estimatedTime == null || estimatedTime === '') {
@@ -11,6 +12,17 @@ export function estimatedTimeToMinutes(estimatedTime) {
     const hours = Number.parseInt(parts[0], 10) || 0;
     const minutes = Number.parseInt(parts[1], 10) || 0;
     return hours * 60 + minutes;
+}
+
+export function getRatingAvailableAt(tripStart, estimatedTime) {
+    const durationMinutes = estimatedTimeToMinutes(estimatedTime);
+    const availableAfterMinutes = Math.round(durationMinutes * RATING_AVAILABLE_DURATION_FACTOR);
+
+    return tripStart.add(availableAfterMinutes, 'minute');
+}
+
+export function isRatingAvailable(now, tripStart, estimatedTime) {
+    return !now.isBefore(getRatingAvailableAt(tripStart, estimatedTime));
 }
 
 export function isWithinOngoingTripWindow(now, tripStart, estimatedTime) {

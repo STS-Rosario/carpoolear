@@ -418,7 +418,7 @@ const messages = {
         confirmarReferenciaUsuarioMensajeReferencia:
             'Estás por escribir una referencia para el usuario {userName}. Las referencias son de la persona, y no de un viaje.',
         confirmarReferenciaUsuarioMensajeCalificacion:
-            'Si tuviste un viaje dentro de Carpoolear y querés dejar una calificación, tenés que esperar a que pasen 24 horas luego de la finalización del viaje, vas a recibir una notificación cuando puedas hacerlo.',
+            'Si tuviste un viaje dentro de Carpoolear y querés dejar una calificación, podés hacerlo cuando haya transcurrido el 80% del tiempo estimado del viaje desde Mis Viajes. Vas a recibir una notificación 24 horas después del inicio del viaje.',
         continuar: 'Continuar',
         referenciaExitosa: 'El comentario fue enviado exitosamente',
         referenciaError: 'Ocurrió un problema al enviar el comentario.',
@@ -987,7 +987,7 @@ const messages = {
         carpoodatosAntesSolicitud:
             'Antes de mandar solicitud de asiento, mandale mensaje a la otra persona para coordinar todo lo vinculado al viaje: punto de encuentro, punto de llegada,tamaño de bolsos, contribución para combustible y peajes, etc.',
         carpoodatosCompromisoViaje:
-            'Si mandaste solicitud de asiento y te aceptan el pedido, se genera el compromiso de viaje. Habilitándose la posibilidad de calificación 24hs después de comenzado el viaje. Tendrán 14 días para calificarse',
+            'Si mandaste solicitud de asiento y te aceptan el pedido, se genera el compromiso de viaje. Habilitándose la posibilidad de calificación cuando transcurra el 80% del tiempo estimado del viaje. Recibirás una notificación 24 horas después del inicio. Tendrán 14 días para calificarse',
         carpoodatosCalificarCancelar:
             'Podrán calificarse aunque el viaje se cancele, te bajen o te bajes del viaje.',
         carpoodatosNoPidasAsiento:
@@ -1324,7 +1324,7 @@ const messages = {
         pendingRequestAntesDeAceptarSolicitud:
             'Antes de aceptar solicitud de asiento, mandale mensaje a la otra persona para coordinar todo lo vinculado al viaje: punto de encuentro, punto de llegada, tamaño de bolsos, contribución para combustible y peajes, etc.',
         pendingRequestSiAceptasUnaSolicitud:
-            'Si aceptás una solicitud de asiento, se genera el compromiso de viajar. Habilitándose la posibilidad de calificación 24hs después de comenzado el viaje. Tendrán 14 días para calificarse',
+            'Si aceptás una solicitud de asiento, se genera el compromiso de viajar. Habilitándose la posibilidad de calificación cuando transcurra el 80% del tiempo estimado del viaje. Recibirás una notificación 24 horas después del inicio. Tendrán 14 días para calificarse',
         pendingRequestPodranCalificarseAunque:
             'Podrán calificarse aunque canceles el viaje o te bajen o te bajes del viaje.',
         pendingRequestNoPidasAsiento:
@@ -2229,7 +2229,7 @@ const messages = {
         carpoodatosAntesSolicitud:
             'Antes de mandar solicitud de asiento, mandale mensaje a la otra persona para coordinar todo lo vinculado al viaje: punto de encuentro, punto de llegada,tamaño de bolsos, contribución para combustible y peajes, etc.',
         carpoodatosCompromisoViaje:
-            'Si mandaste solicitud de asiento y te aceptan el pedido, se genera el compromiso de viaje. Habilitándose la posibilidad de calificación 24hs después de comenzado el viaje. Tendrán 14 días para calificarse',
+            'Si mandaste solicitud de asiento y te aceptan el pedido, se genera el compromiso de viaje. Habilitándose la posibilidad de calificación cuando transcurra el 80% del tiempo estimado del viaje. Recibirás una notificación 24 horas después del inicio. Tendrán 14 días para calificarse',
         carpoodatosCalificarCancelar:
             'Podrán calificarse aunque el viaje se cancele, te bajen o te bajes del viaje.',
         carpoodatosNoPidasAsiento:
@@ -2589,7 +2589,7 @@ const messages = {
         pendingRequestAntesDeAceptarSolicitud:
             'Antes de aceptar solicitud de asiento, mandale mensaje a la otra persona para coordinar todo lo vinculado al viaje: punto de encuentro, punto de llegada, tamaño de bolsos, contribución para combustible y peajes, etc.',
         pendingRequestSiAceptasUnaSolicitud:
-            'Si aceptás una solicitud de asiento, se genera el compromiso de viajar. Habilitándose la posibilidad de calificación 24hs después de comenzado el viaje. Tendrán 14 días para calificarse',
+            'Si aceptás una solicitud de asiento, se genera el compromiso de viajar. Habilitándose la posibilidad de calificación cuando transcurra el 80% del tiempo estimado del viaje. Recibirás una notificación 24 horas después del inicio. Tendrán 14 días para calificarse',
         pendingRequestPodranCalificarseAunque:
             'Podrán calificarse aunque canceles el viaje o te bajen o te bajes del viaje.',
         pendingRequestNoPidasAsiento:
@@ -3093,7 +3093,7 @@ const messages = {
         confirmarReferenciaUsuarioMensajeReferencia:
             'You are about to write a reference for {userName}. References are about the person, not a trip.',
         confirmarReferenciaUsuarioMensajeCalificacion:
-            'If you took a trip within Carpoolear and want to leave a rating, you need to wait 24 hours after the trip ends. You will receive a notification when you can do it.',
+            'If you took a trip within Carpoolear and want to leave a rating, you can do it once 80% of the estimated trip time has passed from My Trips. You will receive a notification 24 hours after the trip starts.',
         continuar: 'Continue',
         referenciaExitosa: 'The comment was sent successfully',
         referenciaError: 'A problem occurred while sending the comment.',
@@ -3652,7 +3652,7 @@ const messages = {
         carpoodatosAntesSolicitud:
             'Before sending a seat request, send a message to the other person to coordinate everything related to the trip: meeting point, arrival point, bag size, contribution for fuel and tolls, etc.',
         carpoodatosCompromisoViaje:
-            'If you sent a seat request and your request is accepted, a trip commitment is generated. Rating will be enabled 24 hours after the trip starts. You will have 14 days to rate each other.',
+            'If you sent a seat request and your request is accepted, a trip commitment is generated. Rating will be enabled once 80% of the estimated trip time has passed. You will receive a notification 24 hours after the trip starts. You will have 14 days to rate each other.',
         carpoodatosCalificarCancelar:
             'You can rate each other even if the trip is canceled, you are removed, or you leave the trip.',
         carpoodatosNoPidasAsiento:
@@ -3982,7 +3982,7 @@ const messages = {
         pendingRequestAntesDeAceptarSolicitud:
             'Before accepting a seat request, send a message to the other person to coordinate everything related to the trip: meeting point, arrival point, bag size, contribution for fuel and tolls, etc.',
         pendingRequestSiAceptasUnaSolicitud:
-            'If you accept a seat request, a commitment to travel is generated. Rating will be enabled 24 hours after the trip starts. You will have 14 days to rate each other.',
+            'If you accept a seat request, a commitment to travel is generated. Rating will be enabled once 80% of the estimated trip time has passed. You will receive a notification 24 hours after the trip starts. You will have 14 days to rate each other.',
         pendingRequestPodranCalificarseAunque:
             'You can rate each other even if you cancel the trip or get removed or leave the trip.',
         pendingRequestNoPidasAsiento:
