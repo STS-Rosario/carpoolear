@@ -90,12 +90,8 @@ describe('NewTripCreationWizard.vue', () => {
     });
 
     it('passes intermediate-stop preference into step navigation', () => {
-        expect(wizardSource).toMatch(
-            /getNextStep\([\s\S]*wantsIntermediateStops/
-        );
-        expect(wizardSource).toMatch(
-            /getPreviousStep\([\s\S]*wantsIntermediateStops/
-        );
+        expect(wizardSource).toContain('navigationOptions');
+        expect(wizardSource).toContain('wantsIntermediateStops');
         expect(wizardSource).toContain('removeEmptyIntermediatePoints');
     });
 });

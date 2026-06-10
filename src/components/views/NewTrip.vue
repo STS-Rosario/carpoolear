@@ -90,6 +90,10 @@ import {
     buildOutboundTripCreationSnapshot,
     buildReturnTripCreationDraftFromSnapshot
 } from '../../utils/tripCreationReturnDraft.js';
+import {
+    filterTripPointsForSave,
+    removeEmptyIntermediatePoints
+} from '../../utils/tripCreationPoints.js';
 import NewTripCreationWizard from './NewTripCreationWizard.vue';
 import TripCreationSuccess from './TripCreationSuccess.vue';
 
@@ -208,6 +212,7 @@ export default {
             carToComplete: null,
             saving: false,
             allowForeignPoints: false,
+            wantsIntermediateStops: false,
             url: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
             attribution:
                 '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
@@ -1130,8 +1135,13 @@ export default {
             return globalError;
         },
 
+        removeEmptyIntermediatePoints() {
+            this.points = removeEmptyIntermediatePoints(this.points);
+            this.calcRoute();
+        },
         getSaveInfo(tripObj, estimatedTime, useWeeklySchedule = this.useWeeklySchedule, weeklyScheduleTime = this.weeklyScheduleTime) {
-            const points = tripObj.points.map((p) => {
+            const resolvedPoints = filterTripPointsForSave(tripObj.points);
+            const points = resolvedPoints.map((p) => {
                 return {
                     address: p.name,
                     json_address: p.json,

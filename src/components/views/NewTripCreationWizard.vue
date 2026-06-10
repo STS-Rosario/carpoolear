@@ -2,28 +2,6 @@
     <div class="new-trip-wizard">
         <h2 class="new-trip-wizard__title">{{ wizardTitle }}</h2>
 
-        <fieldset
-            class="trip-type-selection--light new-trip-wizard__type"
-            v-if="!form.updatingTrip"
-        >
-            <button
-                type="button"
-                class="btn btn-option"
-                :class="{ active: !isPassenger }"
-                @click="setPassengerMode(0)"
-            >
-                {{ $t('buscoConductor') }}
-            </button>
-            <button
-                type="button"
-                class="btn btn-option"
-                :class="{ active: isPassenger }"
-                @click="setPassengerMode(1)"
-            >
-                {{ $t('buscoPasajero') }}
-            </button>
-        </fieldset>
-
         <TripCreationStepper
             :current-step="currentStep"
             :max-visited-step="maxVisitedStep"
@@ -33,7 +11,56 @@
         />
 
         <div class="new-trip-wizard__step">
-            <!-- Step 1: Origin -->
+            <!-- Step 1: Role -->
+            <template v-if="currentStep === STEP.ROLE && !form.updatingTrip">
+                <h3 class="new-trip-wizard__question">
+                    {{ $t('tripCreationStepRoleQuestion') }}
+                </h3>
+                <p class="new-trip-wizard__subtitle">
+                    {{ $t('tripCreationStepRoleSubtitle') }}
+                </p>
+                <div class="new-trip-wizard__role-cards">
+                    <button
+                        type="button"
+                        class="new-trip-wizard__role-card"
+                        :class="{ 'new-trip-wizard__role-card--active': !isPassenger }"
+                        data-testid="trip-creation-role-driver"
+                        @click="setPassengerMode(0)"
+                    >
+                        <span
+                            class="fa fa-car new-trip-wizard__role-card-icon"
+                            aria-hidden="true"
+                        ></span>
+                        <span class="new-trip-wizard__role-card-title">
+                            {{ $t('tripCreationRoleDriverTitle') }}
+                        </span>
+                        <span class="new-trip-wizard__role-card-text">
+                            {{ $t('tripCreationRoleDriverDescription') }}
+                        </span>
+                    </button>
+                    <button
+                        type="button"
+                        class="new-trip-wizard__role-card"
+                        :class="{ 'new-trip-wizard__role-card--active': isPassenger }"
+                        data-testid="trip-creation-role-passenger"
+                        @click="setPassengerMode(1)"
+                    >
+                        <img
+                            class="new-trip-wizard__role-card-image"
+                            alt=""
+                            :src="isPassenger ? pasajeroLogoBlanco : pasajeroLogoGris"
+                        />
+                        <span class="new-trip-wizard__role-card-title">
+                            {{ $t('tripCreationRolePassengerTitle') }}
+                        </span>
+                        <span class="new-trip-wizard__role-card-text">
+                            {{ $t('tripCreationRolePassengerDescription') }}
+                        </span>
+                    </button>
+                </div>
+            </template>
+
+            <!-- Step 2: Origin -->
             <template v-if="currentStep === STEP.ORIGIN">
                 <h3 class="new-trip-wizard__question">
                     {{ $t('tripCreationStepOriginQuestion') }}
@@ -92,6 +119,16 @@
                     <span class="error" v-if="lastPoint.error.state">{{ lastPoint.error.message }}</span>
                     <span class="error" v-if="stepErrors.destination">{{ $t(stepErrors.destination) }}</span>
                 </div>
+                <div class="new-trip-wizard__wants-stops">
+                    <input
+                        type="checkbox"
+                        id="wizard-wants-intermediate-stops"
+                        v-model="form.wantsIntermediateStops"
+                    />
+                    <label for="wizard-wants-intermediate-stops">
+                        {{ $t('tripCreationWantsIntermediateStops') }}
+                    </label>
+                </div>
                 <TripCreationRoutePanel
                     :points="form.points"
                     :distance-string="form.distanceString"
@@ -104,7 +141,57 @@
                 />
             </template>
 
-            <!-- Step 3: Schedule -->
+            <!-- Step 4: Intermediate stops -->
+            <template v-if="currentStep === STEP.STOPS">
+                <h3 class="new-trip-wizard__question">
+                    {{ $t('tripCreationStepStopsQuestion') }}
+                </h3>
+                <div
+                    v-for="(point, index) in intermediatePoints"
+                    :key="point.id || index"
+                    class="trip_point location-autocomplete new-trip-wizard__stop"
+                    :class="{ 'trip-error': point.error.state }"
+                >
+                    <autocomplete
+                        :placeholder="form.$t('ingresePuntoIntermedio')"
+                        :name="`wizard-stop-${index}`"
+                        :model-value="point.name"
+                        v-on:place_changed="(data) => form.getPlace(intermediateIndex(index), data)"
+                        :classes="'form-control form-control-with-icon form-control-map-autocomplete'"
+                        :country="form.allowForeignPoints ? null : 'AR'"
+                    ></autocomplete>
+                    <button
+                        type="button"
+                        class="btn btn-link new-trip-wizard__remove-stop"
+                        @click="form.resetPoints(point, intermediateIndex(index))"
+                    >
+                        {{ $t('eliminar') }}
+                    </button>
+                    <span class="error" v-if="point.error.state">{{ point.error.message }}</span>
+                </div>
+                <button
+                    type="button"
+                    class="btn btn-link new-trip-wizard__add-stop"
+                    data-testid="trip-creation-add-stop"
+                    @click="form.addPoint(true)"
+                >
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                    {{ $t('tripCreationAddStop') }}
+                </button>
+                <span class="error" v-if="stepErrors.stops">{{ $t(stepErrors.stops) }}</span>
+                <TripCreationRoutePanel
+                    :points="form.points"
+                    :distance-string="form.distanceString"
+                    :estimated-time-string="form.estimatedTimeString"
+                    :co2-string="form.CO2String"
+                    :center="form.center"
+                    :zoom="form.zoom"
+                    :url="form.url"
+                    :attribution="form.attribution"
+                />
+            </template>
+
+            <!-- Step 5: Schedule -->
             <template v-if="currentStep === STEP.SCHEDULE">
                 <h3 class="new-trip-wizard__question">
                     {{ $t('tripCreationStepScheduleQuestion') }}
@@ -507,6 +594,10 @@ import {
     validateStep
 } from '../../utils/tripCreationSteps.js';
 import {
+    getIntermediatePoints,
+    removeEmptyIntermediatePoints
+} from '../../utils/tripCreationPoints.js';
+import {
     loadTripCreationDraft,
     saveTripCreationDraft
 } from '../../utils/tripCreationDraft.js';
@@ -528,13 +619,18 @@ export default {
     inject: ['newTripForm'],
 
     data() {
+        const routeBase = process.env.ROUTE_BASE || '/';
+        const normalizedBase = routeBase.endsWith('/') ? routeBase : `${routeBase}/`;
+
         return {
             STEP,
-            currentStep: STEP.ORIGIN,
-            maxVisitedStep: STEP.ORIGIN,
+            currentStep: STEP.ROLE,
+            maxVisitedStep: STEP.ROLE,
             incompleteSteps: [],
             stepErrors: {},
-            draftTimer: null
+            draftTimer: null,
+            pasajeroLogoBlanco: `${normalizedBase}img/icono-pasajero-blanco.png`,
+            pasajeroLogoGris: `${normalizedBase}img/icono-pasajero-gris.png`
         };
     },
 
@@ -549,11 +645,26 @@ export default {
             return last(this.form.points) || { name: '', error: { state: false, message: '' } };
         },
         previousStep() {
-            return getPreviousStep(this.currentStep, this.isPassenger);
+            return getPreviousStep(
+                this.currentStep,
+                this.isPassenger,
+                this.navigationOptions
+            );
+        },
+        navigationOptions() {
+            return {
+                wantsIntermediateStops: this.form.wantsIntermediateStops
+            };
+        },
+        intermediatePoints() {
+            return getIntermediatePoints(this.form.points);
         },
         wizardTitle() {
             if (this.form.updatingTrip) {
                 return this.$t('editarViaje');
+            }
+            if (this.currentStep === STEP.ROLE) {
+                return this.$t('crearViajeTitulo');
             }
             return this.isPassenger
                 ? this.$t('tripCreationTitlePassenger')
@@ -587,6 +698,7 @@ export default {
 
     mounted() {
         if (this.form.updatingTrip) {
+            this.currentStep = STEP.ORIGIN;
             this.maxVisitedStep = STEP.LAST_DETAILS;
             return;
         }
@@ -632,6 +744,7 @@ export default {
                 no_lucrar: this.form.no_lucrar,
                 selectedCarId: this.form.selectedCarId,
                 allowForeignPoints: this.form.allowForeignPoints,
+                wantsIntermediateStops: this.form.wantsIntermediateStops,
                 parentTripId: this.form.parentTripId,
                 useWeeklySchedule: this.form.useWeeklySchedule,
                 weeklySchedule: this.form.weeklySchedule,
@@ -662,11 +775,12 @@ export default {
             this.form.no_lucrar = draft.no_lucrar || false;
             this.form.selectedCarId = draft.selectedCarId;
             this.form.allowForeignPoints = draft.allowForeignPoints || false;
+            this.form.wantsIntermediateStops = draft.wantsIntermediateStops || false;
             this.form.parentTripId = draft.parentTripId || null;
             this.form.useWeeklySchedule = draft.useWeeklySchedule || false;
             this.form.weeklySchedule = draft.weeklySchedule || 0;
             this.form.weeklyScheduleTime = draft.weeklyScheduleTime || this.form.weeklyScheduleTime;
-            this.currentStep = draft.currentStep || STEP.ORIGIN;
+            this.currentStep = draft.currentStep || STEP.ROLE;
             this.maxVisitedStep = draft.maxVisitedStep || this.currentStep;
             if (
                 this.form.points[0]?.json &&
@@ -709,7 +823,7 @@ export default {
         },
         revalidateVisitedSteps() {
             const steps = [];
-            for (let s = STEP.ORIGIN; s <= this.maxVisitedStep; s++) {
+            for (let s = STEP.ROLE; s <= this.maxVisitedStep; s++) {
                 if (this.isPassenger && s === STEP.CAR) {
                     continue;
                 }
@@ -720,21 +834,66 @@ export default {
             }
             this.incompleteSteps = steps;
         },
+        intermediateIndex(localIndex) {
+            return localIndex + 1;
+        },
+        syncIntermediatePoints() {
+            this.form.points = removeEmptyIntermediatePoints(this.form.points);
+            if (
+                this.form.points[0]?.json &&
+                last(this.form.points)?.json
+            ) {
+                this.form.calcRoute();
+            }
+        },
         onStepSelect(step) {
+            if (
+                this.currentStep === STEP.STOPS &&
+                step !== STEP.STOPS
+            ) {
+                this.syncIntermediatePoints();
+            }
             this.currentStep = step;
+            this.maxVisitedStep = Math.max(this.maxVisitedStep, step);
         },
         goNext() {
             if (!this.validateCurrentStep()) {
                 return;
             }
-            const next = getNextStep(this.currentStep, this.isPassenger);
+            if (
+                this.currentStep === STEP.DESTINATION &&
+                !this.form.wantsIntermediateStops
+            ) {
+                this.syncIntermediatePoints();
+            }
+            const next = getNextStep(
+                this.currentStep,
+                this.isPassenger,
+                this.navigationOptions
+            );
             if (next) {
+                if (
+                    next === STEP.STOPS &&
+                    this.intermediatePoints.length === 0
+                ) {
+                    this.form.addPoint(true);
+                }
+                if (next !== STEP.STOPS && this.currentStep === STEP.STOPS) {
+                    this.syncIntermediatePoints();
+                }
                 this.currentStep = next;
                 this.maxVisitedStep = Math.max(this.maxVisitedStep, next);
             }
         },
         goBack() {
-            const prev = getPreviousStep(this.currentStep, this.isPassenger);
+            if (this.currentStep === STEP.STOPS) {
+                this.syncIntermediatePoints();
+            }
+            const prev = getPreviousStep(
+                this.currentStep,
+                this.isPassenger,
+                this.navigationOptions
+            );
             if (prev) {
                 this.currentStep = prev;
             }
@@ -779,16 +938,72 @@ export default {
     margin-bottom: 1rem;
 }
 
-.new-trip-wizard__type {
-    display: flex;
-    gap: 0.5rem;
+.new-trip-wizard__subtitle {
+    margin-bottom: 1.25rem;
+    color: #555;
+}
+
+.new-trip-wizard__role-cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
     margin-bottom: 1rem;
-    border: none;
+}
+
+.new-trip-wizard__role-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 0.75rem;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
+    text-align: center;
+    cursor: pointer;
+}
+
+.new-trip-wizard__role-card--active {
+    border-color: var(--primary-color, #d72521);
+    background: rgba(215, 37, 33, 0.06);
+}
+
+.new-trip-wizard__role-card-icon {
+    font-size: 2rem;
+    color: var(--primary-color, #d72521);
+}
+
+.new-trip-wizard__role-card-image {
+    width: 2rem;
+    height: 2rem;
+}
+
+.new-trip-wizard__role-card-title {
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.new-trip-wizard__role-card-text {
+    font-size: 0.8125rem;
+    color: #666;
+    line-height: 1.35;
+}
+
+.new-trip-wizard__wants-stops {
+    margin: 1rem 0;
+}
+
+.new-trip-wizard__stop {
+    margin-bottom: 0.75rem;
+}
+
+.new-trip-wizard__remove-stop {
+    margin-top: 0.25rem;
     padding: 0;
 }
 
-.new-trip-wizard__type .btn-option {
-    flex: 1;
+.new-trip-wizard__add-stop {
+    margin-bottom: 1rem;
 }
 
 .new-trip-wizard__question {
