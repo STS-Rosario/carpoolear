@@ -4,12 +4,39 @@ import {
     canNavigateToStep,
     getNextStep,
     getPreviousStep,
+    getTripCreationStepLabelKey,
     getVisibleSteps,
     isCarStep,
     isStepDisabledForPassenger,
     STEP,
     validateStep
 } from './tripCreationSteps.js';
+
+describe('tripCreationSteps step labels', () => {
+    it('maps each wizard step to a short i18n label key', () => {
+        expect(getTripCreationStepLabelKey(STEP.ORIGIN)).toBe(
+            'tripCreationStepLabelOrigin'
+        );
+        expect(getTripCreationStepLabelKey(STEP.DESTINATION)).toBe(
+            'tripCreationStepLabelDestination'
+        );
+        expect(getTripCreationStepLabelKey(STEP.SCHEDULE)).toBe(
+            'tripCreationStepLabelSchedule'
+        );
+        expect(getTripCreationStepLabelKey(STEP.CAR)).toBe(
+            'tripCreationStepLabelCar'
+        );
+        expect(getTripCreationStepLabelKey(STEP.SEATS)).toBe(
+            'tripCreationStepLabelSeats'
+        );
+        expect(getTripCreationStepLabelKey(STEP.DESCRIPTION)).toBe(
+            'tripCreationStepLabelDescription'
+        );
+        expect(getTripCreationStepLabelKey(STEP.LAST_DETAILS)).toBe(
+            'tripCreationStepLabelLastDetails'
+        );
+    });
+});
 
 describe('tripCreationSteps navigation', () => {
     it('lists all steps for drivers and skips car step for passengers', () => {
