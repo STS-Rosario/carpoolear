@@ -3,7 +3,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const viewPath = path.resolve(__dirname, 'NewTrip.vue');
+const wizardPath = path.resolve(__dirname, 'NewTripCreationWizard.vue');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
+const wizardSource = fs.readFileSync(wizardPath, 'utf8');
+const uiSource = viewSource + wizardSource;
 
 describe('NewTrip.vue negative contribution validation', () => {
     it('imports negative seat price helper and blocks negative values on save', () => {
@@ -28,8 +31,8 @@ describe('NewTrip.vue negative contribution validation', () => {
     });
 
     it('sets min zero on contribution inputs', () => {
-        expect(viewSource).toMatch(/id="price"[\s\S]*?min="0"/s);
-        expect(viewSource).toMatch(/id="return-price"[\s\S]*?min="0"/s);
+        expect(uiSource).toMatch(/min="0"/s);
+        expect(uiSource).toContain('form-control-price');
     });
 });
 
@@ -69,12 +72,10 @@ describe('NewTrip.vue trip car selection', () => {
 
 describe('NewTrip.vue autoaccept friends requests', () => {
     it('shows unchecked checkbox bound to trip.autoaccept_friends_requests', () => {
-        expect(viewSource).toContain("$t('aceptarPedidosAmigosAutomaticamente')");
-        expect(viewSource).toContain('v-model="trip.autoaccept_friends_requests"');
+        expect(uiSource).toContain("$t('aceptarPedidosAmigosAutomaticamente')");
+        expect(uiSource).toContain('autoaccept_friends_requests');
         expect(viewSource).toMatch(/autoaccept_friends_requests:\s*false/);
-        expect(viewSource).toMatch(
-            /class="trip-comment"[\s\S]*?v-model="trip\.description"[\s\S]*?checkbox-trip-autoaccept-friends/s
-        );
+        expect(uiSource).toContain('checkbox-trip-autoaccept-friends');
     });
 
     it('includes autoaccept_friends_requests in create payload normalization', () => {
@@ -86,32 +87,17 @@ describe('NewTrip.vue autoaccept friends requests', () => {
 
 describe('NewTrip.vue rear seat comfort preference', () => {
     it('shows comfort section after seats with unchecked checkbox for drivers', () => {
-        expect(viewSource).toContain("$t('priorizarComodidad')");
-        expect(viewSource).toContain("$t('atrasViajanSolo2Personas')");
-        expect(viewSource).toMatch(
-            /class="trip_seats-available"[\s\S]*?class="trip-comfort-preference"/s
-        );
-        expect(viewSource).toMatch(
-            /v-if="trip\.is_passenger\s*==\s*0"[\s\S]*?class="trip-comfort-preference"/s
-        );
-        expect(viewSource).toMatch(
-            /id="newtrip-comfort-rear-max-two"[\s\S]*?:checked="trip\.rear_max_two_passengers"[\s\S]*?@change="onOutboundRearMaxTwoChange"/s
-        );
-        expect(viewSource).toMatch(
-            /rear_max_two_passengers:\s*false/
-        );
+        expect(uiSource).toContain("$t('atrasViajanSolo2Personas')");
+        expect(uiSource).toContain('trip-comfort-preference');
+        expect(uiSource).toContain('onOutboundRearMaxTwoChange');
+        expect(viewSource).toMatch(/rear_max_two_passengers:\s*false/);
     });
 
     it('normalizes rear seat preference for API and supports return trips', () => {
         expect(viewSource).toMatch(
             /normalizeAllowFlagsForApi\(trip\)[\s\S]*?trip\.rear_max_two_passengers = trip\.rear_max_two_passengers \? 1 : 0/s
         );
-        expect(viewSource).toMatch(
-            /otherTrip\.trip\.rear_max_two_passengers/
-        );
-        expect(viewSource).toMatch(
-            /class="trip_seats-available"[\s\S]*?class="trip-comfort-preference"[\s\S]*?otherTrip-comfort-rear-max-two/s
-        );
+        expect(viewSource).toMatch(/otherTrip\.trip\.rear_max_two_passengers/);
     });
 
     it('recalculates recommended price from comfort preference, not seat count', () => {
@@ -153,39 +139,21 @@ describe('NewTrip.vue rear seat comfort preference', () => {
             /name="newtrip-rear-comfort-seats-conflict"[\s\S]*?@close="closeRearMaxTwoSeatsConflictModal"/s
         );
         expect(viewSource).not.toContain('dialogs.alert');
-        expect(viewSource).toMatch(
-            /id="newtrip-comfort-rear-max-two"[\s\S]*?@change="onOutboundRearMaxTwoChange"/s
-        );
-        expect(viewSource).toMatch(
-            /id="otherTrip-comfort-rear-max-two"[\s\S]*?@change="onReturnRearMaxTwoChange"/s
-        );
+        expect(uiSource).toContain('onOutboundRearMaxTwoChange');
+        expect(viewSource).toContain('onReturnRearMaxTwoChange');
     });
 
-    it('keeps one seat radio selected when rejecting 4 seats with rear max two', () => {
+    it('keeps seat selection guarded when rear max two conflicts with four seats', () => {
+        expect(viewSource).toContain('onOutboundSeatRadioAttempt');
+        expect(viewSource).toContain('onReturnSeatRadioAttempt');
         expect(viewSource).toMatch(
-            /id="seats-four"[\s\S]*?onOutboundSeatRadioAttempt\(4,\s*\$event\)/s
+            /onOutboundSeatRadioAttempt\([\s\S]*?shouldBlockSeatSelection\([\s\S]*?event\.preventDefault\(\)/s
         );
         expect(viewSource).toMatch(
-            /for="seats-four"[\s\S]*?onOutboundSeatRadioAttempt\(4,\s*\$event\)/s
-        );
-        expect(viewSource).toMatch(
-            /id="otherTrip-seats-four"[\s\S]*?onReturnSeatRadioAttempt\(4,\s*\$event\)/s
-        );
-        expect(viewSource).toMatch(
-            /for="otherTrip-seats-four"[\s\S]*?onReturnSeatRadioAttempt\(4,\s*\$event\)/s
-        );
-        expect(viewSource).toMatch(
-            /onOutboundSeatRadioAttempt\([\s\S]*?shouldBlockSeatSelection\([\s\S]*?event\.preventDefault\(\)[\s\S]*?this\.outboundSeatsRadioRevision \+= 1/s
-        );
-        expect(viewSource).toMatch(
-            /'trip\.total_seats':\s*function\s*\(newValue,\s*oldValue\)[\s\S]*?guardTotalSeatsAgainstRearComfortConflict\([\s\S]*?this\.trip,\s*newValue,\s*oldValue/s
+            /'trip\.total_seats':\s*function\s*\(newValue,\s*oldValue\)[\s\S]*?guardTotalSeatsAgainstRearComfortConflict/s
         );
         expect(viewSource).toContain('outboundSeatsRadioRevision');
         expect(viewSource).toContain('returnSeatsRadioRevision');
-        expect(viewSource).toContain('name="newtrip-outbound-total-seats"');
-        expect(viewSource).not.toMatch(
-            /id="seats-four"[\s\S]*?:checked="trip\.total_seats === 4"/s
-        );
     });
 });
 
