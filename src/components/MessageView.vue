@@ -1,28 +1,24 @@
 <template>
     <div
         class="message-wrapper"
-        v-bind:class="[author.id == user.id ? 'message-wrapper-me' : '']"
+        :class="wrapperClasses"
     >
         <div class="message media">
-            <div class="media-left" v-if="grupalChat">
+            <div class="media-left" v-if="showAuthorMeta">
                 <div
                     class="conversation_image circle-box media-object"
-                    v-imgSrc:profile="user.image"
-                    v-if="author.id != user.id"
+                    v-imgSrc:profile="author.image"
                 ></div>
             </div>
             <div class="media-body">
-                <div
-                    class="message_author"
-                    v-if="author.id != user.id && grupalChat"
-                >
+                <div class="message_author" v-if="showAuthorMeta">
                     <strong><UserNameWithBadge :user="author" /></strong>
                 </div>
                 <div
                     class="message_text message_text--markdown"
                     v-html="messageTextHtml"
                 ></div>
-                <div class="message_meta">
+                <div class="message_meta" v-if="!isSystemMessage">
                     <span class="message_time">{{ date }}</span>
                     <span
                         class="message_seen"
@@ -70,11 +66,46 @@ export default {
             }
             return dayjs(this.message.created_at).format('LT');
         },
-        grupalChat() {
-            return false;
+        isSystemMessage() {
+            return !!this.message.is_system;
+        },
+        showAuthorMeta() {
+            return (
+                this.isGroupChat &&
+                !this.isSystemMessage &&
+                this.author.id &&
+                this.author.id !== this.user.id
+            );
+        },
+        wrapperClasses() {
+            const classes = [];
+            if (this.author.id == this.user.id) {
+                classes.push('message-wrapper-me');
+            }
+            if (this.isSystemMessage) {
+                classes.push('message-wrapper--system');
+            }
+            return classes;
         }
     },
-    props: ['users', 'message', 'user']
+    props: {
+        users: {
+            type: Array,
+            default: () => []
+        },
+        message: {
+            type: Object,
+            required: true
+        },
+        user: {
+            type: Object,
+            required: true
+        },
+        isGroupChat: {
+            type: Boolean,
+            default: false
+        }
+    }
 };
 </script>
 <style scoped>
@@ -108,5 +139,17 @@ export default {
 .message_text--markdown >>> ol {
     margin: 0.25em 0;
     padding-left: 1.25em;
+}
+.message-wrapper--system {
+    text-align: center;
+    margin: 0.75em 0;
+}
+.message-wrapper--system .message_text {
+    display: inline-block;
+    padding: 0.35em 0.75em;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.06);
+    color: #666;
+    font-size: 0.9em;
 }
 </style>

@@ -417,6 +417,49 @@ export const useConversationsStore = defineStore('conversations', {
             return conversationApi.sendToAll({ message, users });
         },
 
+        openTripGroupChat(tripId) {
+            return conversationApi
+                .showByTrip(tripId)
+                .then((response) => {
+                    const conv = normalizeConversation(response.data);
+                    this.pushConversation(conv);
+                    return this.select(conv.id).then(() => conv);
+                })
+                .catch((error) => {
+                    dialogs.message(
+                        i18n.global.t('problemaAlCargarElViaje'),
+                        { estado: 'error' }
+                    );
+                    return Promise.reject(error);
+                });
+        },
+
+        setConversationNotifications({ id, enabled }) {
+            const nid = normalizeId(id);
+            return conversationApi
+                .updateNotifications(nid, enabled)
+                .then((response) => {
+                    const conv = normalizeConversation(response.data);
+                    if (
+                        this.conversationSelected &&
+                        normalizeId(this.conversationSelected.id) === nid
+                    ) {
+                        this.conversationSelected = {
+                            ...this.conversationSelected,
+                            ...conv
+                        };
+                    }
+                    const list = this._list || [];
+                    const existing = list.find(
+                        (item) => normalizeId(item.id) === nid
+                    );
+                    if (existing) {
+                        existing.notifications_enabled = conv.notifications_enabled;
+                    }
+                    return conv;
+                });
+        },
+
         // State mutation methods (replacing Vuex mutations)
         createMessages(id) {
             const nid = normalizeId(id);

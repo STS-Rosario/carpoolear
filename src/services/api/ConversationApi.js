@@ -38,6 +38,16 @@ class ConversationApi extends TaggedApi {
     unread(data = {}) {
         return this.get('/api/conversations/unread', data);
     }
+
+    showByTrip(tripId) {
+        return this.get('/api/conversations/trip/' + tripId);
+    }
+
+    updateNotifications(id, enabled) {
+        return this.post('/api/conversations/' + id + '/notifications', {
+            enabled
+        });
+    }
 }
 
 export { ConversationApi as default };

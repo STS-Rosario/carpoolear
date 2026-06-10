@@ -82,8 +82,8 @@
                                                         class="conversation-title"
                                                     >
                                                         <UserNameWithBadge
-                                                            :name="conversation.title"
-                                                            :showBadge="!!conversation.other_user_identity_validated_at"
+                                                            :name="conversationTitle(conversation)"
+                                                            :showBadge="!!conversation.other_user_identity_validated_at && !isTripGroupConversation(conversation)"
                                                         />
                                                     </span>
                                                 </h4>
@@ -226,6 +226,10 @@ import UserNameWithBadge from '../elements/UserNameWithBadge.vue';
 import router from '../../router';
 import CoordinateTrip from '../elements/CoordinateTrip';
 import dayjs from '../../dayjs';
+import {
+    formatTripGroupChatTitle,
+    isTripGroupConversation
+} from '../../utils/tripGroupChatTitle';
 
 export default {
     name: 'conversation-list',
@@ -259,6 +263,17 @@ export default {
 
     methods: {
         dayjs,
+        isTripGroupConversation,
+        conversationTitle(conversation) {
+            if (isTripGroupConversation(conversation)) {
+                return formatTripGroupChatTitle(
+                    this.$t.bind(this),
+                    conversation.trip_date
+                );
+            }
+
+            return conversation.title;
+        },
         ...mapActions(useConversationsStore, {
             conversationsSearch: 'listSearch',
             searchUser: 'getUserList',

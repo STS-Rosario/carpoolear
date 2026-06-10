@@ -225,6 +225,7 @@
                         <TripButtons
                             @deleteTrip="deleteTrip()"
                             @toMessages="toMessages()"
+                            @toGroupChat="toGroupChat()"
                             @onMakeRequest="onMakeRequest()"
                             @cancelRequest="cancelRequest()"
                             :sending="sending"
@@ -412,7 +413,8 @@ export default {
             sending: {
                 deleteAction: false,
                 requestAction: false,
-                sendMessageAction: false
+                sendMessageAction: false,
+                groupChatAction: false
             },
             carpoolear_logo:
                 process.env.ROUTE_BASE +
@@ -456,7 +458,8 @@ export default {
         ...mapActions(useConversationsStore, {
             lookConversation: 'createConversation',
             selectConversation: 'select',
-            sendToAll: 'sendToAll'
+            sendToAll: 'sendToAll',
+            openTripGroupChat: 'openTripGroupChat'
         }),
         ...mapActions(usePassengerStore, {
             make: 'makeRequest',
@@ -623,6 +626,26 @@ export default {
                 .catch((error) => {
                     console.error(error);
                     this.sending.sendMessageAction = false;
+                });
+        },
+
+        toGroupChat() {
+            if (!this.profileComplete()) {
+                return;
+            }
+            this.sending.groupChatAction = true;
+            this.openTripGroupChat(this.trip.id)
+                .then((conversation) => {
+                    router.push({
+                        name: 'conversation-chat',
+                        params: { id: conversation.id }
+                    });
+                })
+                .catch((error) => {
+                    console.error(error);
+                })
+                .finally(() => {
+                    this.sending.groupChatAction = false;
                 });
         },
 

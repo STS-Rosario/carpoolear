@@ -19,4 +19,19 @@ describe('ConversationChat.vue user ratings', () => {
         expect(viewSource).toContain('getOtherParticipantRatings');
         expect(viewSource).toContain('setHeaderRatings');
     });
+
+    it('supports trip group chat header with participants and mute toggle', () => {
+        expect(viewSource).toContain('ConversationParticipants');
+        expect(viewSource).toContain('groupChatMuteNotifications');
+        expect(viewSource).toContain(':isGroupChat="isGroupChat"');
+    });
+
+    it('renders group chat participants from conversation users instead of private driver header', () => {
+        expect(viewSource).toMatch(
+            /isGroupChat[\s\S]*ConversationParticipants[\s\S]*conversation\.users/s
+        );
+        expect(viewSource).toMatch(
+            /v-if="isGroupChat"[\s\S]*groupChatTitle/s
+        );
+    });
 });

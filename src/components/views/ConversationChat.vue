@@ -2,6 +2,22 @@
     <div class="conversation_chat" v-if="conversation">
         <div class="list-group">
             <div class="list-group-item conversation_user_header hidden-xs">
+                <template v-if="isGroupChat">
+                    <h2>{{ groupChatTitle }}</h2>
+                    <ConversationParticipants :users="conversation.users" />
+                    <button
+                        type="button"
+                        class="btn btn-link conversation-notifications-toggle"
+                        @click="toggleNotifications"
+                    >
+                        {{
+                            conversation.notifications_enabled
+                                ? $t('groupChatMuteNotifications')
+                                : $t('groupChatUnmuteNotifications')
+                        }}
+                    </button>
+                </template>
+                <template v-else>
                 <router-link
                     v-if="conversation.users.length === 2"
                     :to="{ name: 'profile', params: userProfile() }"
@@ -32,6 +48,7 @@
                     <strong>{{ $t('ultimaConexion') }}</strong>
                     <span> {{ lastConnectionFormatted }}</span>
                 </p>
+                </template>
             </div>
             <div
                 id="messagesWrapper"
@@ -54,6 +71,7 @@
                     :message="m"
                     :user="user"
                     :users="conversation.users"
+                    :isGroupChat="isGroupChat"
                 ></MessageView>
             </div>
             <div class="list-group-item message-composer">
@@ -104,6 +122,11 @@ import bus from '../../services/bus-event.js';
 import dialogs from '../../services/dialogs.js';
 import CoordinateTrip from '../elements/CoordinateTrip';
 import UserRatingsCounts from '../elements/UserRatingsCounts.vue';
+import ConversationParticipants from '../elements/ConversationParticipants.vue';
+import {
+    formatTripGroupChatTitle,
+    isTripGroupConversation
+} from '../../utils/tripGroupChatTitle.js';
 import {
     getOtherParticipant,
     getOtherParticipantRatings
@@ -180,6 +203,15 @@ export default {
                 return '';
             }
             return d.calendar();
+        },
+        isGroupChat() {
+            return isTripGroupConversation(this.conversation);
+        },
+        groupChatTitle() {
+            return formatTripGroupChatTitle(
+                this.$t.bind(this),
+                this.conversation?.trip_date
+            );
         }
     },
     methods: {
@@ -188,7 +220,8 @@ export default {
             select: 'select',
             send: 'sendMessage',
             findMessage: 'findMessage',
-            unreadMessage: 'getUnreadMessages'
+            unreadMessage: 'getUnreadMessages',
+            setConversationNotifications: 'setConversationNotifications'
         }),
         ...mapActions(useActionbarsStore, {
             setTitle: 'setTitle',
@@ -262,11 +295,38 @@ export default {
             this.findMessage({ more: true });
         },
 
+        toggleNotifications() {
+            if (!this.conversation) {
+                return;
+            }
+            const enabled = !this.conversation.notifications_enabled;
+            this.setConversationNotifications({
+                id: this.conversation.id,
+                enabled
+            }).then(() => {
+                dialogs.message(
+                    enabled
+                        ? this.$t('groupChatNotificationsOn')
+                        : this.$t('groupChatNotificationsOff')
+                );
+            });
+        },
+
         syncChatHeader() {
             if (!this.conversation) {
                 return;
             }
-            this.setTitle(this.conversation.title);
+            const title = this.isGroupChat
+                ? this.groupChatTitle
+                : this.conversation.title;
+            this.setTitle(title);
+            if (this.isGroupChat) {
+                this.setTitleLink({});
+                this.setSubTitle('');
+                this.setHeaderRatings(null);
+                this.setImgTitle('');
+                return;
+            }
             const otherUser = getOtherParticipant(
                 this.conversation.users,
                 this.user.id
@@ -330,7 +390,8 @@ export default {
         editor: ToastUiEditor,
         MessageView,
         CoordinateTrip,
-        UserRatingsCounts
+        UserRatingsCounts,
+        ConversationParticipants
     }
 };
 </script>

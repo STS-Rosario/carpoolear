@@ -1,10 +1,43 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { createPinia, setActivePinia } from 'pinia';
 
+const showByTripMock = vi.fn(() =>
+    Promise.resolve({
+        data: {
+            id: 9,
+            type: 1,
+            trip_date: '2026-06-10 14:30:00',
+            users: [
+                { id: 1, name: 'Driver' },
+                { id: 2, name: 'Passenger' }
+            ]
+        }
+    })
+);
+
 vi.mock('../services/api', () => ({
     ConversationApi: class ConversationApiMock {
-        constructor() {
-            return {};
+        showByTrip = showByTripMock;
+
+        updateNotifications() {
+            return Promise.resolve({ data: { id: 9, notifications_enabled: false } });
+        }
+
+        show() {
+            return Promise.resolve({
+                data: {
+                    id: 9,
+                    type: 1,
+                    users: [
+                        { id: 1, name: 'Driver' },
+                        { id: 2, name: 'Passenger' }
+                    ]
+                }
+            });
+        }
+
+        getMessages() {
+            return Promise.resolve({ data: [] });
         }
     }
 }));
@@ -31,6 +64,7 @@ vi.mock('../utils/routerLazy.js', () => ({
 describe('conversations store list getter', () => {
     beforeEach(() => {
         setActivePinia(createPinia());
+        showByTripMock.mockClear();
     });
 
     it('returns null while conversations are loading so UI can show loading state', async () => {
@@ -49,5 +83,48 @@ describe('conversations store list getter', () => {
         store._list = [];
 
         expect(store.list).toEqual([]);
+    });
+
+    it('opens trip group chat by trip id and selects conversation', async () => {
+        const { useConversationsStore } = await import('./conversations');
+        const store = useConversationsStore();
+
+        const conversation = await store.openTripGroupChat(42);
+
+        expect(showByTripMock).toHaveBeenCalledWith(42);
+        expect(conversation.id).toBe(9);
+        expect(conversation.type).toBe(1);
+        expect(store.selectedID).toBe(9);
+    });
+
+    it('stores group chat participants returned by showByTrip for trip group chat UI', async () => {
+        const { useConversationsStore } = await import('./conversations');
+        const store = useConversationsStore();
+
+        const conversation = await store.openTripGroupChat(42);
+
+        expect(conversation.users).toEqual([
+            { id: 1, name: 'Driver' },
+            { id: 2, name: 'Passenger' }
+        ]);
+        expect(store.conversationSelected.type).toBe(1);
+        expect(store.conversationSelected.users).toEqual([
+            { id: 1, name: 'Driver' },
+            { id: 2, name: 'Passenger' }
+        ]);
+    });
+
+    it('updates conversation notification preference in selected conversation', async () => {
+        const { useConversationsStore } = await import('./conversations');
+        const store = useConversationsStore();
+        store.conversationSelected = { id: 9, notifications_enabled: true };
+
+        const updated = await store.setConversationNotifications({
+            id: 9,
+            enabled: false
+        });
+
+        expect(updated.notifications_enabled).toBe(false);
+        expect(store.conversationSelected.notifications_enabled).toBe(false);
     });
 });
