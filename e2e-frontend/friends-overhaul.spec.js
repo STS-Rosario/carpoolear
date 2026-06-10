@@ -39,8 +39,9 @@ test.describe('Friends overhaul', () => {
         await page.goto('/trips');
         await waitForPageReady(page);
 
-        const card = page.getByText(/invitaciones a amigos/i);
+        const card = page.locator('.pending-friend-requests-card');
         await expect(card).toBeVisible({ timeout: 15000 });
+        await expect(card).toContainText(/invitaciones de amigos/i);
         await card.click();
         await expect(page).toHaveURL(/\/setting\/friends/);
     });
