@@ -4,9 +4,14 @@ import path from 'node:path';
 
 const viewPath = path.resolve(__dirname, 'NewTrip.vue');
 const wizardPath = path.resolve(__dirname, 'NewTripCreationWizard.vue');
+const carStepPanelPath = path.resolve(
+    __dirname,
+    '../elements/TripCarStepPanel.vue'
+);
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 const wizardSource = fs.readFileSync(wizardPath, 'utf8');
-const uiSource = viewSource + wizardSource;
+const carStepPanelSource = fs.readFileSync(carStepPanelPath, 'utf8');
+const uiSource = viewSource + wizardSource + carStepPanelSource;
 
 describe('NewTrip.vue negative contribution validation', () => {
     it('imports negative seat price helper and blocks negative values on save', () => {
@@ -159,12 +164,12 @@ describe('NewTrip.vue rear seat comfort preference', () => {
 
 describe('NewTrip.vue trip cars editor modal', () => {
     it('opens in-page cars editor instead of navigating to profile settings', () => {
-        expect(viewSource).toContain("$t('editarAutosEnViaje')");
-        expect(viewSource).not.toContain("$t('agregarNuevoAutoEnPerfil')");
+        expect(carStepPanelSource).toContain("$t('agregarOtroAuto')");
+        expect(uiSource).not.toContain("$t('agregarNuevoAutoEnPerfil')");
         expect(viewSource).toContain('TripCarsModal');
         expect(viewSource).toContain('showTripCarsModal');
-        expect(viewSource).toContain('openTripCarsModal');
-        expect(viewSource).not.toMatch(
+        expect(wizardSource).toContain('TripCarStepPanel');
+        expect(uiSource).not.toMatch(
             /trip-car-selection[\s\S]*router-link[\s\S]*profile_cars/s
         );
     });
