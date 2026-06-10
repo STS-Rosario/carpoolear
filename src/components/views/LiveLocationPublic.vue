@@ -23,6 +23,7 @@
                     <UserRatingsCounts
                         :ratings="{
                             positive: publicView.driver.positive_ratings,
+                            neutral: publicView.driver.neutral_ratings,
                             negative: publicView.driver.negative_ratings
                         }"
                     />

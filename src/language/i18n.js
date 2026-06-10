@@ -1288,6 +1288,8 @@ const messages = {
         adminQueLoHizo: 'Admin',
         fechaDeMigracion: 'Fecha',
         calificacionesPositivas: 'Calificaciones positivas',
+        calificacionesNeutrales: 'Calificaciones neutrales',
+        neutral_ratings: 'Calificaciones neutrales',
         calificacionesNegativas: 'Calificaciones negativas',
         errorMigrandoUsuarios: 'Error al migrar usuarios',
         migracionElegirDatos: 'Elegí qué datos conservar',
@@ -1312,7 +1314,10 @@ const messages = {
         ratePendingCalificar: 'Calificar',
         ratePendingComentarioNoPuedeEstarVacio:
             'El comentario no puede estar vacío para los votos negativos.',
+        ratePendingComentarioNoPuedeEstarVacioNeutral:
+            'El comentario no puede estar vacío para los votos neutrales.',
         rateItemPositiva: 'Positiva',
+        rateItemNeutral: 'Neutral',
         rateItemNegativa: 'Negativa',
         rateItemViajoAComo: 'Viajó a',
         rateItemComo: 'como',
@@ -2553,6 +2558,8 @@ const messages = {
         adminQueLoHizo: 'Admin',
         fechaDeMigracion: 'Fecha',
         calificacionesPositivas: 'Calificaciones positivas',
+        calificacionesNeutrales: 'Calificaciones neutrales',
+        neutral_ratings: 'Calificaciones neutrales',
         calificacionesNegativas: 'Calificaciones negativas',
         errorMigrandoUsuarios: 'Error al migrar usuarios',
         migracionElegirDatos: 'Elegí qué datos conservar',
@@ -2577,7 +2584,10 @@ const messages = {
         ratePendingCalificar: 'Calificar',
         ratePendingComentarioNoPuedeEstarVacio:
             'El comentario no puede estar vacío para los votos negativos.',
+        ratePendingComentarioNoPuedeEstarVacioNeutral:
+            'El comentario no puede estar vacío para los votos neutrales.',
         rateItemPositiva: 'Positiva',
+        rateItemNeutral: 'Neutral',
         rateItemNegativa: 'Negativa',
         rateItemViajoAComo: 'Viajó a',
         rateItemComo: 'como',
@@ -3946,6 +3956,8 @@ const messages = {
         adminQueLoHizo: 'Admin',
         fechaDeMigracion: 'Date',
         calificacionesPositivas: 'Positive ratings',
+        calificacionesNeutrales: 'Neutral ratings',
+        neutral_ratings: 'Neutral ratings',
         calificacionesNegativas: 'Negative ratings',
         errorMigrandoUsuarios: 'Error migrating users',
         migracionElegirDatos: 'Choose which data to keep',
@@ -3970,7 +3982,10 @@ const messages = {
         ratePendingCalificar: 'Rate',
         ratePendingComentarioNoPuedeEstarVacio:
             'Comment cannot be empty for negative votes.',
+        ratePendingComentarioNoPuedeEstarVacioNeutral:
+            'Comment cannot be empty for neutral votes.',
         rateItemPositiva: 'Positive',
+        rateItemNeutral: 'Neutral',
         rateItemNegativa: 'Negative',
         rateItemViajoAComo: 'Traveled to',
         rateItemComo: 'as',

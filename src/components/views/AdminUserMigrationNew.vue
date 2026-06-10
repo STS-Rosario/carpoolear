@@ -56,6 +56,10 @@
                                             {{ Number(card.user.positive_ratings || 0) }}
                                         </p>
                                         <p>
+                                            <strong>{{ $t('calificacionesNeutrales') }}:</strong>
+                                            {{ Number(card.user.neutral_ratings || 0) }}
+                                        </p>
+                                        <p>
                                             <strong>{{ $t('calificacionesNegativas') }}:</strong>
                                             {{ Number(card.user.negative_ratings || 0) }}
                                         </p>

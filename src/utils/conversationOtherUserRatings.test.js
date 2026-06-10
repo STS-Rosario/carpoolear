@@ -12,7 +12,8 @@ describe('conversationOtherUserRatings', () => {
             id: 2,
             name: 'Other',
             positive_ratings: 5,
-            negative_ratings: 2
+            negative_ratings: 2,
+            neutral_ratings: 3
         }
     ];
 
@@ -35,9 +36,10 @@ describe('conversationOtherUserRatings', () => {
         expect(getOtherParticipant(null, currentUserId)).toBeNull();
     });
 
-    it('returns positive and negative rating counts for the other participant', () => {
+    it('returns positive, neutral, and negative rating counts for the other participant', () => {
         expect(getOtherParticipantRatings(users, currentUserId)).toEqual({
             positive: 5,
+            neutral: 3,
             negative: 2
         });
     });
@@ -50,6 +52,7 @@ describe('conversationOtherUserRatings', () => {
             )
         ).toEqual({
             positive: 0,
+            neutral: 0,
             negative: 0
         });
     });

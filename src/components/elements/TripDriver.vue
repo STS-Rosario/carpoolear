@@ -52,10 +52,7 @@
                             </div>
                         </div>
                         <div class="trip_driver_ratings" v-else>
-                            {{
-                                trip.user.positive_ratings +
-                                trip.user.negative_ratings
-                            }}
+                            {{ sumUserRatings(trip.user) }}
                             {{ $t('calificaciones') }}
                         </div>
                     </div>
@@ -110,6 +107,12 @@
                     <div class="profile-info--ratings" v-else>
                         <svgItem icon="thumbUp" size="18"></svgItem>
                         <span>{{ trip.user.positive_ratings }}</span>
+                        <i
+                            class="fa fa-thumbs-up rate-neutral-icon"
+                            aria-hidden="true"
+                            :style="neutralIconStyle"
+                        ></i>
+                        <span>{{ trip.user.neutral_ratings || 0 }}</span>
                         <svgItem icon="thumbDown" size="18"></svgItem>
                         <span>{{ trip.user.negative_ratings }}</span>
                     </div>
@@ -169,9 +172,21 @@ import { useDeviceStore } from '../../stores/device';
 import TripDate from './TripDate';
 import TripDescription from './TripDescription';
 import SvgItem from '../SvgItem';
+import {
+    NEUTRAL_RATING_ICON_STYLE,
+    sumUserRatings
+} from '../../utils/tripRating';
 
 export default {
     name: 'TripDriver',
+    data() {
+        return {
+            neutralIconStyle: NEUTRAL_RATING_ICON_STYLE
+        };
+    },
+    methods: {
+        sumUserRatings
+    },
     computed: {
         ...mapState(useAuthStore, {
             user: 'user',
@@ -196,11 +211,8 @@ export default {
         },
         tripStars() {
             if (this.trip && this.trip.user) {
-                let value =
-                    (this.trip.user.positive_ratings /
-                        (this.trip.user.positive_ratings +
-                            this.trip.user.negative_ratings)) *
-                    5;
+                const total = sumUserRatings(this.trip.user);
+                let value = total ? (this.trip.user.positive_ratings / total) * 5 : 0;
                 let integerPart = Math.floor(value);
                 let decimalPart = value - integerPart;
                 let stars = [];

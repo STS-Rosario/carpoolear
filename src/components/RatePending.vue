@@ -42,6 +42,17 @@
                         <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
                     </button>
                     <button
+                        class="btn rate-neutral"
+                        @click="setRate(2)"
+                        :class="{ active: vote === 2 }"
+                    >
+                        <i
+                            class="fa fa-thumbs-o-up rate-neutral-icon"
+                            aria-hidden="true"
+                            :style="neutralIconStyle"
+                        ></i>
+                    </button>
+                    <button
                         class="btn rate-negative"
                         @click="setRate(0)"
                         :class="{ active: vote === 0 }"
@@ -74,6 +85,11 @@ import { useAuthStore } from '../stores/auth';
 import { useRatesStore } from '../stores/rates';
 import dialogs from '../services/dialogs.js';
 import dayjs from '../dayjs';
+import {
+    NEUTRAL_RATING_ICON_STYLE,
+    canSubmitRatingVote,
+    getRequiredCommentMessageKey
+} from '../utils/tripRating';
 
 export default {
     name: 'rate-pending',
@@ -87,7 +103,8 @@ export default {
             vote: null,
             expanded: false,
             comment: '',
-            sending: false
+            sending: false,
+            neutralIconStyle: NEUTRAL_RATING_ICON_STYLE
         };
     },
 
@@ -117,34 +134,25 @@ export default {
                 comment: this.comment,
                 rating: this.vote
             };
-            let ok = false;
-            if (!this.vote) {
-                if (!this.comment) {
-                    // Voto negativo y comentario vacio
-                    dialogs.message(
-                        this.$t('ratePendingComentarioNoPuedeEstarVacio'),
-                        { duration: 10, estado: 'error' }
-                    );
-                } else {
-                    ok = true;
-                }
-            } else {
-                ok = true;
-            }
-            if (ok) {
-                console.log('emit rated');
-                this.$emit('rated', data);
-                this.emit(data)
-                    .then(() => {
-                        this.comment = '';
-                        this.sending = false;
-                    })
-                    .catch(() => {
-                        this.sending = false;
-                    });
-            } else {
+            if (!canSubmitRatingVote(this.vote, this.comment)) {
+                dialogs.message(
+                    this.$t(getRequiredCommentMessageKey(this.vote)),
+                    { duration: 10, estado: 'error' }
+                );
                 this.sending = false;
+                return;
             }
+
+            console.log('emit rated');
+            this.$emit('rated', data);
+            this.emit(data)
+                .then(() => {
+                    this.comment = '';
+                    this.sending = false;
+                })
+                .catch(() => {
+                    this.sending = false;
+                });
         }
     },
 

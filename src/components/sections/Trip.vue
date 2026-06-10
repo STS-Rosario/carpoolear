@@ -141,10 +141,7 @@
                                     </div>
                                 </div>
                                 <div class="trip_driver_ratings" v-else>
-                                    {{
-                                        trip.user.positive_ratings +
-                                        trip.user.negative_ratings
-                                    }}
+                                    {{ sumUserRatings(trip.user) }}
                                     {{ $t('calificaciones') }}
                                 </div>
                             </div>
@@ -619,6 +616,7 @@ import UserNameWithBadge from '../elements/UserNameWithBadge.vue';
 import dayjs from '../../dayjs';
 import SvgItem from '../SvgItem';
 import { googleInfoClean } from '../../filters';
+import { sumUserRatings } from '../../utils/tripRating';
 
 export default {
     name: 'trip',
@@ -657,6 +655,7 @@ export default {
     methods: {
         googleInfoClean,
         dayjs,
+        sumUserRatings,
         ...mapActions(useTripsStore, {
             changeSeats: 'changeSeats',
             remove: 'remove'
@@ -841,11 +840,8 @@ export default {
         },
         tripStars() {
             if (this.trip && this.trip.user) {
-                let value =
-                    (this.trip.user.positive_ratings /
-                        (this.trip.user.positive_ratings +
-                            this.trip.user.negative_ratings)) *
-                    5;
+                const total = sumUserRatings(this.trip.user);
+                let value = total ? (this.trip.user.positive_ratings / total) * 5 : 0;
                 let integerPart = Math.floor(value);
                 let decimalPart = value - integerPart;
                 let stars = [];
