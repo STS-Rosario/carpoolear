@@ -32,3 +32,7 @@ playwright/.cache/
 
 # Vitest / Istanbul coverage output
 coverage/
+
+# Git worktrees (local isolated checkouts)
+.worktrees/
+worktrees/
