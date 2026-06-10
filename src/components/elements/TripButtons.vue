@@ -123,6 +123,27 @@
                 <i class="fa fa-wifi live-location-share-btn__icon" aria-hidden="true"></i>
                 {{ $t('compartirUbicacionTiempoReal') }}
             </router-link>
+            <button
+                v-if="showGroupChatButton"
+                class="btn btn-primary group-chat-btn"
+                @click="$emit('toGroupChat')"
+                :disabled="sendingStatus"
+            >
+                <spinner
+                    class="blue"
+                    v-if="sending && sending.groupChatAction"
+                ></spinner>
+                <template v-else>
+                    <i class="fa fa-comments" aria-hidden="true"></i>
+                    {{ $t('groupChatButton') }}
+                    <span
+                        v-if="groupChatUnreadCount > 0"
+                        class="group-chat-btn__badge"
+                    >
+                        {{ groupChatUnreadCount }}
+                    </span>
+                </template>
+            </button>
             <template v-if="trip.seats_available === 0 && !trip.is_passenger">
                 <div class="carpooled-trip">{{ $t('viajeCarpooleado') }}</div>
             </template>
@@ -213,6 +234,12 @@ export default {
             }
             return shouldShowLiveLocationShare(this.trip, this.user.id, dayjs());
         },
+        showGroupChatButton() {
+            return this.owner || this.isPassenger;
+        },
+        groupChatUnreadCount() {
+            return Number(this.trip?.group_chat_unread_count || 0);
+        },
         isPassengersView() {
             return this.trip.is_passenger;
         }
@@ -287,6 +314,17 @@ export default {
 .live-location-share-btn__icon {
     transform: rotate(90deg);
     margin-right: 0.35rem;
+}
+.group-chat-btn__badge {
+    display: inline-block;
+    min-width: 1.5em;
+    margin-left: 0.35rem;
+    padding: 0 0.35em;
+    border-radius: 999px;
+    background: #d9534f;
+    color: #fff;
+    font-size: 0.85em;
+    line-height: 1.5;
 }
 
 @media only screen and (min-width: 768px) {
