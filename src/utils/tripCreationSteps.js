@@ -11,7 +11,7 @@ export const STEP = {
     LAST_DETAILS: 7
 };
 
-const DRIVER_STEPS = [
+export const ALL_WIZARD_STEPS = [
     STEP.ORIGIN,
     STEP.DESTINATION,
     STEP.SCHEDULE,
@@ -20,6 +20,8 @@ const DRIVER_STEPS = [
     STEP.DESCRIPTION,
     STEP.LAST_DETAILS
 ];
+
+const DRIVER_STEPS = ALL_WIZARD_STEPS;
 
 const PASSENGER_STEPS = [
     STEP.ORIGIN,
