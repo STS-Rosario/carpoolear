@@ -29,12 +29,11 @@
 
 <script>
 import {
+    ALL_WIZARD_STEPS,
     canNavigateToStep,
     getTripCreationStepLabelKey,
     isStepDisabledForPassenger
 } from '../../utils/tripCreationSteps.js';
-
-const STEPS = [1, 2, 3, 4, 5, 6, 7];
 
 export default {
     name: 'trip-creation-stepper',
@@ -62,7 +61,7 @@ export default {
 
     computed: {
         steps() {
-            return STEPS;
+            return ALL_WIZARD_STEPS;
         }
     },
 

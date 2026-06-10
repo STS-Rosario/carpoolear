@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import dayjs from '../dayjs';
 import {
+    ALL_WIZARD_STEPS,
     canNavigateToStep,
     getNextStep,
     getPreviousStep,
@@ -40,6 +41,7 @@ describe('tripCreationSteps step labels', () => {
 
 describe('tripCreationSteps navigation', () => {
     it('lists all steps for drivers and skips car step for passengers', () => {
+        expect(ALL_WIZARD_STEPS).toEqual([1, 2, 3, 4, 5, 6, 7]);
         expect(getVisibleSteps(false)).toEqual([1, 2, 3, 4, 5, 6, 7]);
         expect(getVisibleSteps(true)).toEqual([1, 2, 3, 5, 6, 7]);
     });
