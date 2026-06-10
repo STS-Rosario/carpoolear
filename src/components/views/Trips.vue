@@ -431,6 +431,7 @@ import {
 import { shouldShowAppBanner } from '../../utils/appBanner.js';
 import { splitFriendTrips } from '../../utils/splitFriendTrips.js';
 import { shouldShowSplitDonationPanel } from '../../utils/tripsSplitDonationBanner.js';
+import { readAllowPreferenceParamsFromQuery } from '../../utils/searchAdvancedFilters.js';
 
 export default {
     name: 'trips',
@@ -621,6 +622,15 @@ export default {
             if (this.parseBooleanQueryValue(query.is_passenger)) {
                 params.is_passenger = true;
             }
+            if (this.parseBooleanQueryValue(query.hide_carpooleado)) {
+                params.hide_carpooleado = true;
+            }
+            Object.assign(
+                params,
+                readAllowPreferenceParamsFromQuery(query, (value) =>
+                    this.parseBooleanQueryValue(value)
+                )
+            );
             return params;
         },
         parseNumericQueryValue(value) {

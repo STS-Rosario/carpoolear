@@ -103,4 +103,15 @@ describe('Trips.vue persisted search state', () => {
         expect(viewSource).toContain('window.scrollTo(0, this.pendingScrollRestore);');
         expect(viewSource).toContain('this.pendingScrollRestore = null;');
     });
+
+    it('persists hide_carpooleado in route query when searching', () => {
+        expect(viewSource).toContain('hide_carpooleado');
+        expect(viewSource).toContain('parseBooleanQueryValue(query.hide_carpooleado)');
+        expect(viewSource).toContain('params.hide_carpooleado = true');
+    });
+
+    it('persists allow preference filters in route query when searching', () => {
+        expect(viewSource).toContain('readAllowPreferenceParamsFromQuery');
+        expect(viewSource).toContain("from '../../utils/searchAdvancedFilters.js'");
+    });
 });
