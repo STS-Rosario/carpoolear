@@ -160,6 +160,12 @@ describe('AdminSupportTicketDetail view', () => {
         expect(viewSource).toContain('fetchSupportTicketAttachmentBlob');
     });
 
+    it('opens reply attachment thumbnails in a new tab when clicked', () => {
+        expect(viewSource).toContain('openBlobImageInNewTab');
+        expect(viewSource).toContain('@click="openBlobImageInNewTab(attachmentBlobUrls[attachment.id])"');
+        expect(viewSource).toContain('ticket-attachment-thumb clickable-img');
+    });
+
     it('shows mark needs review action for open tickets', () => {
         expect(viewSource).toContain('markNeedsReviewTicket');
         expect(viewSource).toContain('adminMarkNeedsReview');
