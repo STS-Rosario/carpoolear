@@ -58,8 +58,9 @@
                         v-show="attachmentBlobUrls[attachment.id]"
                         :key="attachment.id"
                         :src="attachmentBlobUrls[attachment.id]"
-                        class="img-thumbnail ticket-attachment-thumb"
+                        class="img-thumbnail ticket-attachment-thumb clickable-img"
                         :alt="attachment.original_name"
+                        @click="openBlobImageInNewTab(attachmentBlobUrls[attachment.id])"
                     />
                 </div>
             </div>
@@ -181,7 +182,10 @@ import AdminLayout from '../layouts/AdminLayout.vue';
 import { markdownToHtml } from '../../services/markdown';
 import { interpolateSupportTemplateVariables } from '../../utils/supportTemplateInterpolation';
 import { ticketReplyBodyAlreadyUsed, isDuplicateReplyApiError } from '../../utils/supportTicketReplyDuplicate';
-import { fetchSupportTicketAttachmentBlob } from '../../utils/supportTicketAttachmentImage';
+import {
+    fetchSupportTicketAttachmentBlob,
+    openBlobImageInNewTab
+} from '../../utils/supportTicketAttachmentImage';
 import { useTicketsStore } from '../../stores/tickets';
 import { useReplyTemplatesStore } from '../../stores/replyTemplates';
 import dialogs from '../../services/dialogs.js';
@@ -294,6 +298,7 @@ export default {
         }
     },
     methods: {
+        openBlobImageInNewTab,
         markdownToHtml,
         ...mapActions(useTicketsStore, {
             fetchAdminOne: 'fetchAdminOne',
@@ -592,6 +597,10 @@ export default {
 .ticket-attachment-thumb {
     max-width: 160px;
     max-height: 160px;
+}
+
+.clickable-img {
+    cursor: pointer;
 }
 
 .ticket-meta-row {
