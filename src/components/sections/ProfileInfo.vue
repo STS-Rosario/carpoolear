@@ -11,16 +11,7 @@
                         <UserNameWithBadge :user="profile" />
                     </div>
                     <div class="profile-info--ratings">
-                        <i class="fa fa-thumbs-up" aria-hidden="true"></i>
-                        <span>{{ profile.positive_ratings }}</span>
-                        <i
-                            class="fa fa-thumbs-up profile-info__neutral-icon rate-neutral-icon"
-                            aria-hidden="true"
-                            :style="neutralIconStyle"
-                        ></i>
-                        <span>{{ profile.neutral_ratings || 0 }}</span>
-                        <i class="fa fa-thumbs-down" aria-hidden="true"></i>
-                        <span>{{ profile.negative_ratings }}</span>
+                        <UserRatingsCounts :ratings="profileRatings" />
                     </div>
                     <div
                         v-if="memberSinceLabel || participatedTripsLabel"
@@ -243,19 +234,23 @@ import { useFriendsStore } from '../../stores/friends';
 import router from '../../router';
 import dialogs from '../../services/dialogs.js';
 import UserNameWithBadge from '../elements/UserNameWithBadge.vue';
+import UserRatingsCounts from '../elements/UserRatingsCounts.vue';
 import { formatId } from '../../services/utility';
 import { activeCarsWithPlate } from '../../utils/userCars.js';
 import {
     formatMemberSinceMonthYear,
     normalizeTripsCount
 } from '../../utils/profileMemberStats.js';
-import { NEUTRAL_RATING_ICON_STYLE } from '../../utils/tripRating';
+import { userRatingsFromProfile } from '../../utils/tripRating';
 
 export default {
+    components: {
+        UserNameWithBadge,
+        UserRatingsCounts
+    },
     data() {
         return {
-            friendActionLoading: false,
-            neutralIconStyle: NEUTRAL_RATING_ICON_STYLE
+            friendActionLoading: false
         };
     },
     computed: {
@@ -294,6 +289,9 @@ export default {
             return this.$t('perfilViajesParticipados', {
                 count: normalizeTripsCount(this.profile.trips_count)
             });
+        },
+        profileRatings() {
+            return userRatingsFromProfile(this.profile);
         },
         showFriendActions() {
             if (!this.profile || !this.user) {
@@ -396,9 +394,6 @@ export default {
             const base = process.env.ROUTE_BASE + 'img';
             return base + (base && !imagePath.startsWith('/') ? '/' : '') + imagePath;
         }
-    },
-    components: {
-        UserNameWithBadge
     }
 };
 </script>
@@ -416,6 +411,14 @@ export default {
     line-height: 1.4;
     text-align: center;
     max-width: 230px;
+}
+
+.profile-info--ratings {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    max-width: 230px;
+    overflow: visible;
 }
 
 @media only screen and (min-width: 768px) {

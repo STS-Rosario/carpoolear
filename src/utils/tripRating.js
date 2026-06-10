@@ -31,6 +31,14 @@ export function isNeutralRating(rating) {
     return Number(rating) === RATING_NEUTRAL;
 }
 
+export function getRequiredCommentMessageKey(rating) {
+    if (isNeutralRating(rating)) {
+        return 'ratePendingComentarioNoPuedeEstarVacioNeutral';
+    }
+
+    return 'ratePendingComentarioNoPuedeEstarVacio';
+}
+
 export function sumUserRatings(profile) {
     const source = profile || {};
     return (

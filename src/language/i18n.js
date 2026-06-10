@@ -1314,6 +1314,8 @@ const messages = {
         ratePendingCalificar: 'Calificar',
         ratePendingComentarioNoPuedeEstarVacio:
             'El comentario no puede estar vacío para los votos negativos.',
+        ratePendingComentarioNoPuedeEstarVacioNeutral:
+            'El comentario no puede estar vacío para los votos neutrales.',
         rateItemPositiva: 'Positiva',
         rateItemNeutral: 'Neutral',
         rateItemNegativa: 'Negativa',
@@ -2582,6 +2584,8 @@ const messages = {
         ratePendingCalificar: 'Calificar',
         ratePendingComentarioNoPuedeEstarVacio:
             'El comentario no puede estar vacío para los votos negativos.',
+        ratePendingComentarioNoPuedeEstarVacioNeutral:
+            'El comentario no puede estar vacío para los votos neutrales.',
         rateItemPositiva: 'Positiva',
         rateItemNeutral: 'Neutral',
         rateItemNegativa: 'Negativa',
@@ -3978,6 +3982,8 @@ const messages = {
         ratePendingCalificar: 'Rate',
         ratePendingComentarioNoPuedeEstarVacio:
             'Comment cannot be empty for negative votes.',
+        ratePendingComentarioNoPuedeEstarVacioNeutral:
+            'Comment cannot be empty for neutral votes.',
         rateItemPositiva: 'Positive',
         rateItemNeutral: 'Neutral',
         rateItemNegativa: 'Negative',

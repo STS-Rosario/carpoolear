@@ -4,6 +4,7 @@ import {
     RATING_NEUTRAL,
     RATING_POSITIVE,
     canSubmitRatingVote,
+    getRequiredCommentMessageKey,
     isNeutralRating,
     isNegativeRating,
     isPositiveRating,
@@ -56,6 +57,20 @@ describe('rating type helpers', () => {
         expect(isNegativeRating(0)).toBe(true);
         expect(isNeutralRating(2)).toBe(true);
         expect(isNeutralRating('2')).toBe(true);
+    });
+});
+
+describe('getRequiredCommentMessageKey', () => {
+    it('returns neutral-specific copy key for neutral votes', () => {
+        expect(getRequiredCommentMessageKey(RATING_NEUTRAL)).toBe(
+            'ratePendingComentarioNoPuedeEstarVacioNeutral'
+        );
+    });
+
+    it('returns negative-specific copy key for negative votes', () => {
+        expect(getRequiredCommentMessageKey(RATING_NEGATIVE)).toBe(
+            'ratePendingComentarioNoPuedeEstarVacio'
+        );
     });
 });
 

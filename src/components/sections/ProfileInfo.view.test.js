@@ -7,6 +7,16 @@ const i18nPath = path.resolve(__dirname, '../../language/i18n.js');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 const i18nSource = fs.readFileSync(i18nPath, 'utf8');
 
+describe('ProfileInfo ratings display', () => {
+    it('uses UserRatingsCounts for evenly spaced rating pairs', () => {
+        expect(viewSource).toContain('UserRatingsCounts');
+        expect(viewSource).toContain(':ratings="profileRatings"');
+        expect(viewSource).toContain('userRatingsFromProfile');
+        expect(viewSource).not.toContain('profile.neutral_ratings || 0');
+        expect(viewSource).toMatch(/\.profile-info--ratings\s*\{[\s\S]*justify-content:\s*center/);
+    });
+});
+
 describe('ProfileInfo member stats', () => {
     it('shows member since and participated trips below rating counters', () => {
         const ratingsIndex = viewSource.indexOf('profile-info--ratings');

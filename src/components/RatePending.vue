@@ -87,7 +87,8 @@ import dialogs from '../services/dialogs.js';
 import dayjs from '../dayjs';
 import {
     NEUTRAL_RATING_ICON_STYLE,
-    canSubmitRatingVote
+    canSubmitRatingVote,
+    getRequiredCommentMessageKey
 } from '../utils/tripRating';
 
 export default {
@@ -135,7 +136,7 @@ export default {
             };
             if (!canSubmitRatingVote(this.vote, this.comment)) {
                 dialogs.message(
-                    this.$t('ratePendingComentarioNoPuedeEstarVacio'),
+                    this.$t(getRequiredCommentMessageKey(this.vote)),
                     { duration: 10, estado: 'error' }
                 );
                 this.sending = false;
