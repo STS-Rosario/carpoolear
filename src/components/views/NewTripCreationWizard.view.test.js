@@ -29,6 +29,36 @@ describe('NewTripCreationWizard.vue', () => {
     it('binds schedule DatePicker to dateAnswer so revisiting the step shows the chosen date', () => {
         expect(wizardSource).toContain(':model-value="form.dateAnswer"');
     });
+
+    it('opens TripCarsModal from the car step editar autos action', () => {
+        expect(wizardSource).toContain('@edit-cars="form.openTripCarsModal"');
+    });
+
+    it('uses icon padding on seat contribution input and spaced rear-comfort label', () => {
+        expect(wizardSource).toContain(
+            'form-control form-control-with-icon form-control-price'
+        );
+        expect(wizardSource).toContain('trip-comfort-preference__label');
+    });
+
+    it('uses a taller resizable description textarea', () => {
+        expect(wizardSource).toContain('new-trip-wizard__description');
+        expect(wizardSource).toContain('resize: vertical');
+    });
+
+    it('restores last-details lucrar card and preference card styling', () => {
+        expect(wizardSource).toContain('trip_terms--lucrar-card__copy');
+        expect(wizardSource).toContain('viajeColaborativoLead');
+        expect(wizardSource).toContain('trip-pref-card__badge');
+        expect(wizardSource).toContain('col-xs-8 trip-pref-cards__cell');
+        expect(wizardSource).toContain('new-trip-wizard__last-section--preferences');
+        expect(wizardSource).not.toContain('new-trip-wizard__last-section--return');
+        expect(wizardSource).not.toContain('cargarViajeRegreso');
+    });
+
+    it('adds bottom margin below foreign-country option on origin step', () => {
+        expect(wizardSource).toContain('new-trip-wizard__allow-foreign');
+    });
 });
 
 describe('NewTrip.vue wizard integration', () => {
@@ -42,5 +72,13 @@ describe('NewTrip.vue wizard integration', () => {
         expect(newTripSource).toContain('TripCreationSuccess');
         expect(newTripSource).toContain('showWizardSuccess');
         expect(newTripSource).not.toContain('inviteFriends: \'1\'');
+    });
+
+    it('starts return trip creation from success with inverted draft', () => {
+        expect(newTripSource).toContain(
+            '@start-return-trip="startReturnTripCreation"'
+        );
+        expect(newTripSource).toContain('buildReturnTripCreationDraftFromSnapshot');
+        expect(newTripSource).toContain('parentTripId');
     });
 });
