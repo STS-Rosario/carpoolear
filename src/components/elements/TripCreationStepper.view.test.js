@@ -6,7 +6,7 @@ const componentPath = path.resolve(__dirname, 'TripCreationStepper.vue');
 const componentSource = fs.readFileSync(componentPath, 'utf8');
 
 describe('TripCreationStepper.vue', () => {
-    it('renders seven step segments with data-testid hooks', () => {
+    it('renders nine step segments with data-testid hooks', () => {
         expect(componentSource).toContain('trip-creation-stepper');
         expect(componentSource).toMatch(/trip-creation-step-\$\{step\}/);
         expect(componentSource).toContain('data-testid');
