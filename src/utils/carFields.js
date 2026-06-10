@@ -19,6 +19,109 @@ export function isValidCarYear(year) {
     );
 }
 
+export function hasCarBrandAndModel(carOrForm) {
+    if (
+        carOrForm.brandSelection === CATALOG_OTHER_VALUE ||
+        (hasValue(carOrForm.brand_other) && !carOrForm.car_brand_id)
+    ) {
+        return (
+            hasValue(carOrForm.brand_other) && hasValue(carOrForm.model_other)
+        );
+    }
+
+    const brandId = carOrForm.car_brand_id || carOrForm.brandSelection;
+    const modelSelection =
+        carOrForm.car_model_id || carOrForm.modelSelection;
+
+    if (modelSelection === CATALOG_OTHER_VALUE) {
+        return Boolean(brandId) && hasValue(carOrForm.model_other);
+    }
+
+    if (carOrForm.car_brand_id && carOrForm.car_model_id) {
+        return true;
+    }
+
+    return Boolean(brandId && modelSelection);
+}
+
+export function hasCarColor(carOrForm) {
+    return (
+        carOrForm.car_color_id !== null &&
+        carOrForm.car_color_id !== undefined &&
+        carOrForm.car_color_id !== ''
+    );
+}
+
+export function isCarFormComplete(entry) {
+    if (!entry) {
+        return false;
+    }
+
+    return (
+        hasCarBrandAndModel(entry) &&
+        isValidCarYear(entry.year) &&
+        hasCarColor(entry)
+    );
+}
+
+export function carFormMissingFieldKeys(entry) {
+    if (!entry) {
+        return ['marca', 'modelo', 'anio', 'color'];
+    }
+
+    const missing = [];
+
+    if (!hasCarBrandAndModel(entry)) {
+        if (
+            !entry.brandSelection &&
+            !entry.car_brand_id &&
+            !hasValue(entry.brand_other)
+        ) {
+            missing.push('marca');
+        }
+        if (
+            !entry.modelSelection &&
+            !entry.car_model_id &&
+            !hasValue(entry.model_other)
+        ) {
+            missing.push('modelo');
+        }
+        if (!missing.includes('marca') && !missing.includes('modelo')) {
+            missing.push('marca', 'modelo');
+        }
+    } else {
+        const brandId = entry.car_brand_id || entry.brandSelection;
+        const modelId = entry.car_model_id || entry.modelSelection;
+        if (entry.brandSelection === CATALOG_OTHER_VALUE) {
+            if (!hasValue(entry.brand_other)) {
+                missing.push('marca');
+            }
+            if (!hasValue(entry.model_other)) {
+                missing.push('modelo');
+            }
+        } else {
+            if (!brandId) {
+                missing.push('marca');
+            }
+            if (!modelId || modelId === CATALOG_OTHER_VALUE) {
+                if (!hasValue(entry.model_other)) {
+                    missing.push('modelo');
+                }
+            }
+        }
+    }
+
+    if (!isValidCarYear(entry.year)) {
+        missing.push('anio');
+    }
+
+    if (!hasCarColor(entry)) {
+        missing.push('color');
+    }
+
+    return missing;
+}
+
 export function isCarComplete(car) {
     if (!car || !hasValue(car.patente)) {
         return false;
@@ -28,11 +131,11 @@ export function isCarComplete(car) {
         return false;
     }
 
-    const hasCatalogIds = car.car_brand_id && car.car_model_id;
-    const hasOther =
-        hasValue(car.brand_other) && hasValue(car.model_other);
+    if (!hasCarColor(car)) {
+        return false;
+    }
 
-    return Boolean(hasCatalogIds || hasOther);
+    return hasCarBrandAndModel(car);
 }
 
 export function carsNeedingCompletion(cars) {
