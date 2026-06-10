@@ -71,44 +71,12 @@ export function carFormMissingFieldKeys(entry) {
 
     const missing = [];
 
-    if (!hasCarBrandAndModel(entry)) {
-        if (
-            !entry.brandSelection &&
-            !entry.car_brand_id &&
-            !hasValue(entry.brand_other)
-        ) {
-            missing.push('marca');
-        }
-        if (
-            !entry.modelSelection &&
-            !entry.car_model_id &&
-            !hasValue(entry.model_other)
-        ) {
-            missing.push('modelo');
-        }
-        if (!missing.includes('marca') && !missing.includes('modelo')) {
-            missing.push('marca', 'modelo');
-        }
-    } else {
-        const brandId = entry.car_brand_id || entry.brandSelection;
-        const modelId = entry.car_model_id || entry.modelSelection;
-        if (entry.brandSelection === CATALOG_OTHER_VALUE) {
-            if (!hasValue(entry.brand_other)) {
-                missing.push('marca');
-            }
-            if (!hasValue(entry.model_other)) {
-                missing.push('modelo');
-            }
-        } else {
-            if (!brandId) {
-                missing.push('marca');
-            }
-            if (!modelId || modelId === CATALOG_OTHER_VALUE) {
-                if (!hasValue(entry.model_other)) {
-                    missing.push('modelo');
-                }
-            }
-        }
+    if (!hasCarBrand(entry)) {
+        missing.push('marca');
+    }
+
+    if (!hasCarModel(entry)) {
+        missing.push('modelo');
     }
 
     if (!isValidCarYear(entry.year)) {
@@ -120,6 +88,26 @@ export function carFormMissingFieldKeys(entry) {
     }
 
     return missing;
+}
+
+function hasCarBrand(entry) {
+    if (entry.brandSelection === CATALOG_OTHER_VALUE) {
+        return hasValue(entry.brand_other);
+    }
+
+    return Boolean(entry.car_brand_id || entry.brandSelection);
+}
+
+function hasCarModel(entry) {
+    if (entry.brandSelection === CATALOG_OTHER_VALUE) {
+        return hasValue(entry.model_other);
+    }
+
+    if (entry.modelSelection === CATALOG_OTHER_VALUE) {
+        return hasValue(entry.model_other);
+    }
+
+    return Boolean(entry.car_model_id || entry.modelSelection);
 }
 
 export function isCarComplete(car) {
