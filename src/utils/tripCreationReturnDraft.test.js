@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { STEP } from './tripCreationSteps.js';
 import {
+    buildOutboundTripCreationSnapshot,
     buildReturnTripCreationDraftFromSnapshot,
     invertTripPointsForReturn
 } from './tripCreationReturnDraft.js';
@@ -42,6 +43,18 @@ describe('tripCreationReturnDraft', () => {
         allowForeignPoints: false,
         weeklyScheduleTime: '12:00'
     };
+
+    it('builds an outbound snapshot from live form fields', () => {
+        const snapshot = buildOutboundTripCreationSnapshot(outboundSnapshot);
+
+        expect(snapshot.trip.description).toBe('Viaje de prueba');
+        expect(snapshot.points).toHaveLength(2);
+        expect(snapshot.points[0].name).toBe('Rosario');
+        expect(snapshot.dateAnswer).toBe('2026-06-15');
+        expect(snapshot.time).toBe('14:00');
+        expect(snapshot.price).toBe('5000');
+        expect(snapshot.selectedCarId).toBe(9);
+    });
 
     it('inverts origin and destination points for a return trip', () => {
         expect(invertTripPointsForReturn(outboundSnapshot.points)).toEqual([
