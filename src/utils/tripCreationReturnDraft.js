@@ -1,34 +1,23 @@
 import { STEP } from './tripCreationSteps.js';
 
-export function buildOutboundTripCreationSnapshot({
-    trip,
-    points,
-    date,
-    dateAnswer,
-    time,
-    price,
-    no_lucrar,
-    selectedCarId,
-    allowForeignPoints,
-    weeklyScheduleTime
-}) {
+export function buildOutboundTripCreationSnapshot(form) {
     return {
-        trip: { ...trip },
-        points: (points || []).map((point) => ({
+        trip: { ...form.trip },
+        points: (form.points || []).map((point) => ({
             name: point.name,
             place: point.place,
             json: point.json,
             location: point.location,
             id: point.id
         })),
-        date,
-        dateAnswer,
-        time,
-        price,
-        no_lucrar,
-        selectedCarId,
-        allowForeignPoints,
-        weeklyScheduleTime
+        date: form.date,
+        dateAnswer: form.dateAnswer,
+        time: form.time,
+        price: form.price,
+        no_lucrar: form.no_lucrar,
+        selectedCarId: form.selectedCarId,
+        allowForeignPoints: form.allowForeignPoints,
+        weeklyScheduleTime: form.weeklyScheduleTime
     };
 }
 
