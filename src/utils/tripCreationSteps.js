@@ -77,22 +77,22 @@ function lastPoint(points) {
 
 export function validateStep(step, context = {}) {
     switch (step) {
-        case STEP.ORIGIN:
-            return validateOrigin(context);
-        case STEP.DESTINATION:
-            return validateDestination(context);
-        case STEP.SCHEDULE:
-            return validateSchedule(context);
-        case STEP.CAR:
-            return validateCar(context);
-        case STEP.SEATS:
-            return validateSeats(context);
-        case STEP.DESCRIPTION:
-            return validateDescription(context);
-        case STEP.LAST_DETAILS:
-            return validateLastDetails(context);
-        default:
-            return { valid: true, errors: {} };
+    case STEP.ORIGIN:
+        return validateOrigin(context);
+    case STEP.DESTINATION:
+        return validateDestination(context);
+    case STEP.SCHEDULE:
+        return validateSchedule(context);
+    case STEP.CAR:
+        return validateCar(context);
+    case STEP.SEATS:
+        return validateSeats(context);
+    case STEP.DESCRIPTION:
+        return validateDescription(context);
+    case STEP.LAST_DETAILS:
+        return validateLastDetails(context);
+    default:
+        return { valid: true, errors: {} };
     }
 }
 
@@ -135,8 +135,8 @@ function validateSchedule({
             errors: valid
                 ? {}
                 : {
-                      schedule: hasDays ? 'noHorarioValido' : 'faltaFechaOProgramaSemanal'
-                  }
+                    schedule: hasDays ? 'noHorarioValido' : 'faltaFechaOProgramaSemanal'
+                }
         };
     }
 
