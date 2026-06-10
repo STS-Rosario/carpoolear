@@ -60,6 +60,7 @@ const AdminCarModels = () => import('../components/views/AdminCarModels.vue');
 const AdminCarColors = () => import('../components/views/AdminCarColors.vue');
 
 const UpdateProfile = () => import('../components/sections/UpdateProfile.vue');
+const ProfileCars = () => import('../components/sections/ProfileCars.vue');
 const FriendsSetting = () => import('../components/sections/FriendsSetting.vue');
 const FriendsRequest = () => import('../components/sections/FriendsRequest.vue');
 const IdentityValidation = () => import('../components/sections/IdentityValidation.vue');
@@ -456,6 +457,24 @@ export default [
                         },
                         header: {
                             titleKey: 'editarPerfil',
+                            buttons: ['menu']
+                        }
+                    }
+                }
+            },
+            {
+                path: 'cars',
+                name: 'profile_cars',
+                component: ProfileCars,
+                meta: {
+                    tab: 'cars',
+                    actionbar: {
+                        footer: {
+                            show: true,
+                            active_id: 'profile'
+                        },
+                        header: {
+                            titleKey: 'autos',
                             buttons: ['menu']
                         }
                     }

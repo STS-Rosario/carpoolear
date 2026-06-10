@@ -8,6 +8,11 @@
                             >{{ $t('perfil') }}</router-link
                         >
                     </li>
+                    <li :class="{ active: tabActive === 'cars' }">
+                        <router-link :to="{ name: 'profile_cars' }"
+                            >{{ $t('autos') }}</router-link
+                        >
+                    </li>
                     <li :class="{ active: tabActive === 'friends' }">
                         <router-link :to="{ name: 'friends_setting' }"
                             >{{ $t('amigos') }}</router-link
@@ -79,6 +84,7 @@ export default {
             const n = this.$route.name;
             if (n === 'identity_validation') return 'validarIdentidad';
             if (n === 'identity_validation_manual') return 'validacionManual';
+            if (n === 'profile_cars') return 'autos';
             return null;
         }
     },
