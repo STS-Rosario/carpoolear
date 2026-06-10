@@ -58,6 +58,16 @@ describe('NewTripCreationWizard.vue', () => {
 
     it('adds bottom margin below foreign-country option on origin step', () => {
         expect(wizardSource).toContain('new-trip-wizard__allow-foreign');
+        expect(wizardSource).toContain('.new-trip-wizard__allow-foreign');
+        expect(wizardSource).toMatch(
+            /\.new-trip-wizard__allow-foreign\s*\{[^}]*margin-bottom:\s*1rem/
+        );
+    });
+
+    it('restores cleared schedule fields from return-trip draft without keeping outbound values', () => {
+        expect(wizardSource).toContain("'dateAnswer' in draft");
+        expect(wizardSource).toContain("'date' in draft");
+        expect(wizardSource).toContain("'time' in draft");
     });
 });
 
