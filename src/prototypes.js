@@ -3,8 +3,7 @@ import {
     scrollToElement,
     checkError,
     getErrors,
-    redirectToIdentityValidationIfRequired,
-    redirectToMyTripsIfPendingRatingsRequired
+    redirectToIdentityValidationIfRequired
 } from './../utils/helpers';
 
 export function installPrototypes(app) {
@@ -14,8 +13,5 @@ export function installPrototypes(app) {
     app.config.globalProperties.$getErrors = getErrors;
     app.config.globalProperties.$redirectToIdentityValidationIfRequired = function () {
         return redirectToIdentityValidationIfRequired(this.$router);
-    };
-    app.config.globalProperties.$redirectToMyTripsIfPendingRatingsRequired = function () {
-        return redirectToMyTripsIfPendingRatingsRequired(this.$router);
     };
 }

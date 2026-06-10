@@ -204,13 +204,6 @@ export const useConversationsStore = defineStore('conversations', {
                 return Promise.resolve();
             }
 
-            const { useRatesStore } = await import('./rates');
-            const { hasPendingRatings } = await import('../utils/pendingRatingsEnforcement');
-            if (hasPendingRatings(useRatesStore().pendingRates)) {
-                await lazyRouterPush({ name: 'my-trips' });
-                return Promise.resolve();
-            }
-
             let user = param;
             if (param.user) {
                 user = param.user;
