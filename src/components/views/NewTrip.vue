@@ -86,7 +86,10 @@ import {
     restoreSelectedCarIdFromTrip
 } from '../../utils/profileRequirements';
 import { clearTripCreationDraft, saveTripCreationDraft } from '../../utils/tripCreationDraft.js';
-import { buildReturnTripCreationDraftFromSnapshot } from '../../utils/tripCreationReturnDraft.js';
+import {
+    buildOutboundTripCreationSnapshot,
+    buildReturnTripCreationDraftFromSnapshot
+} from '../../utils/tripCreationReturnDraft.js';
 import NewTripCreationWizard from './NewTripCreationWizard.vue';
 import TripCreationSuccess from './TripCreationSuccess.vue';
 
@@ -546,24 +549,7 @@ export default {
                 return;
             }
 
-            const snapshot = {
-                trip: { ...this.trip },
-                points: this.points.map((point) => ({
-                    name: point.name,
-                    place: point.place,
-                    json: point.json,
-                    location: point.location,
-                    id: point.id
-                })),
-                date: this.date,
-                dateAnswer: this.dateAnswer,
-                time: this.time,
-                price: this.price,
-                no_lucrar: this.no_lucrar,
-                selectedCarId: this.selectedCarId,
-                allowForeignPoints: this.allowForeignPoints,
-                weeklyScheduleTime: this.weeklyScheduleTime
-            };
+            const snapshot = buildOutboundTripCreationSnapshot(this);
             const draft = buildReturnTripCreationDraftFromSnapshot(
                 snapshot,
                 this.createdTrip.id

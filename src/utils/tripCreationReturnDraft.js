@@ -1,5 +1,37 @@
 import { STEP } from './tripCreationSteps.js';
 
+export function buildOutboundTripCreationSnapshot({
+    trip,
+    points,
+    date,
+    dateAnswer,
+    time,
+    price,
+    no_lucrar,
+    selectedCarId,
+    allowForeignPoints,
+    weeklyScheduleTime
+}) {
+    return {
+        trip: { ...trip },
+        points: (points || []).map((point) => ({
+            name: point.name,
+            place: point.place,
+            json: point.json,
+            location: point.location,
+            id: point.id
+        })),
+        date,
+        dateAnswer,
+        time,
+        price,
+        no_lucrar,
+        selectedCarId,
+        allowForeignPoints,
+        weeklyScheduleTime
+    };
+}
+
 export function invertTripPointsForReturn(points) {
     if (!Array.isArray(points) || points.length < 2) {
         return points;

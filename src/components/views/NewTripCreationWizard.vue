@@ -653,10 +653,11 @@ export default {
                     error: { state: false, message: '' }
                 }));
             }
-            this.form.dateAnswer =
-                draft.dateAnswer || draft.date || this.form.dateAnswer;
-            this.form.date = draft.date || this.form.dateAnswer || this.form.date;
-            this.form.time = draft.time || this.form.time;
+            this.form.dateAnswer = 'dateAnswer' in draft
+                ? draft.dateAnswer
+                : this.form.dateAnswer;
+            this.form.date = 'date' in draft ? draft.date : this.form.date;
+            this.form.time = 'time' in draft ? draft.time : this.form.time;
             this.form.price = draft.price || this.form.price;
             this.form.no_lucrar = draft.no_lucrar || false;
             this.form.selectedCarId = draft.selectedCarId;
