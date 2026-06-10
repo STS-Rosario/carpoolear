@@ -14,7 +14,7 @@
                 :key="car.id"
                 :value="car.id"
             >
-                {{ car.patente }}
+                {{ formatCarSelectLabel(car) }}
             </option>
         </select>
         <span class="error" v-if="carSelectionError.state">
@@ -76,6 +76,7 @@
 <script>
 import { mapActions, mapState } from 'pinia';
 import { useCarsStore } from '../../stores/car';
+import { formatCarSelectLabel } from '../../utils/carFields.js';
 import {
     buildPatenteRowsFromCars,
     canShowRemoveCarRow,
@@ -147,6 +148,7 @@ export default {
             carIndex: 'index'
         }),
         canShowRemoveCarRow,
+        formatCarSelectLabel,
         syncEditorFromStore() {
             this.editorRows = buildPatenteRowsFromCars(this.cars);
         },

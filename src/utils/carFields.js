@@ -166,13 +166,51 @@ export function carDetailRows(car) {
     ];
 }
 
+export function carMakeName(car) {
+    if (!car) {
+        return '';
+    }
+
+    return car.brand_name || car.brand_other || '';
+}
+
+export function carModelName(car) {
+    if (!car) {
+        return '';
+    }
+
+    return car.model_name || car.model_other || '';
+}
+
+export function formatCarSelectLabel(car) {
+    if (!car) {
+        return '';
+    }
+
+    const patente = String(car.patente || '').trim();
+    const makeModel = [carMakeName(car), carModelName(car)]
+        .map((part) => String(part || '').trim())
+        .filter(hasValue)
+        .join(' ');
+
+    if (patente && makeModel) {
+        return `${patente} (${makeModel})`;
+    }
+
+    if (patente) {
+        return patente;
+    }
+
+    return makeModel;
+}
+
 export function carDisplayLabel(car) {
     if (!car) {
         return '';
     }
 
-    const brand = car.brand_name || car.brand_other || '';
-    const model = car.model_name || car.model_other || '';
+    const brand = carMakeName(car);
+    const model = carModelName(car);
     const color = car.color_name || '';
     const year = isValidCarYear(car.year) ? String(car.year) : '';
     const parts = [brand, model, year, color, car.patente].filter(hasValue);
