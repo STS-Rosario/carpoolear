@@ -1189,6 +1189,7 @@ export default {
         },
 
         async save() {
+            this.removeEmptyIntermediatePoints();
             if (
                 requiresDriverPlate(this.trip) &&
                 !Array.isArray(this.cars)
