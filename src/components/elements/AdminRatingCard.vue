@@ -63,6 +63,7 @@
                         "
                     >
                         <option :value="1">{{ $t('rateItemPositiva') }}</option>
+                        <option :value="2">{{ $t('rateItemNeutral') }}</option>
                         <option :value="0">{{ $t('rateItemNegativa') }}</option>
                     </select>
                 </div>
@@ -117,6 +118,11 @@
 
 <script>
 import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
+import {
+    isNegativeRating,
+    isNeutralRating,
+    isPositiveRating
+} from '../../utils/tripRating';
 
 export default {
     name: 'admin-rating-card',
@@ -152,14 +158,22 @@ export default {
     },
     computed: {
         pillClass() {
-            return Number(this.rate.rating) === 1
-                ? 'admin-rating-pill--positive'
-                : 'admin-rating-pill--negative';
+            if (isPositiveRating(this.rate.rating)) {
+                return 'admin-rating-pill--positive';
+            }
+            if (isNeutralRating(this.rate.rating)) {
+                return 'admin-rating-pill--neutral';
+            }
+            return 'admin-rating-pill--negative';
         },
         pillLabel() {
-            return Number(this.rate.rating) === 1
-                ? this.$t('rateItemPositiva')
-                : this.$t('rateItemNegativa');
+            if (isPositiveRating(this.rate.rating)) {
+                return this.$t('rateItemPositiva');
+            }
+            if (isNeutralRating(this.rate.rating)) {
+                return this.$t('rateItemNeutral');
+            }
+            return this.$t('rateItemNegativa');
         }
     }
 };
@@ -223,6 +237,11 @@ export default {
 
 .admin-rating-pill--positive {
     background-color: #5cb85c;
+    color: #fff;
+}
+
+.admin-rating-pill--neutral {
+    background-color: #999;
     color: #fff;
 }
 

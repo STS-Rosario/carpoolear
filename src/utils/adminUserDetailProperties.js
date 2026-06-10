@@ -62,6 +62,7 @@ const ADMIN_USER_PROPERTY_DEFINITIONS = [
     { key: 'account_type', labelKey: 'account_type' },
     { key: 'account_bank', labelKey: 'account_bank' },
     { key: 'positive_ratings', labelKey: 'positive_ratings' },
+    { key: 'neutral_ratings', labelKey: 'neutral_ratings' },
     { key: 'negative_ratings', labelKey: 'negative_ratings' },
     { key: 'references', labelKey: 'references' },
     { key: 'support_tickets_count', labelKey: 'support_tickets_count' },

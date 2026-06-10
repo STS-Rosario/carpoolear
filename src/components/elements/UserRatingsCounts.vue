@@ -9,6 +9,14 @@
         </span>
         <span class="user-ratings-counts__pair">
             <i
+                class="fa fa-thumbs-up user-ratings-counts__icon--neutral rate-neutral-icon"
+                aria-hidden="true"
+                :style="neutralIconStyle"
+            ></i>
+            <span>{{ ratings.neutral }}</span>
+        </span>
+        <span class="user-ratings-counts__pair">
+            <i
                 class="fa fa-thumbs-down user-ratings-counts__icon--negative"
                 aria-hidden="true"
             ></i>
@@ -18,8 +26,15 @@
 </template>
 
 <script>
+import { NEUTRAL_RATING_ICON_STYLE } from '../../utils/tripRating';
+
 export default {
     name: 'UserRatingsCounts',
+    data() {
+        return {
+            neutralIconStyle: NEUTRAL_RATING_ICON_STYLE
+        };
+    },
     props: {
         ratings: {
             type: Object,
@@ -49,6 +64,10 @@ export default {
 }
 .user-ratings-counts__icon--positive {
     color: #59b200;
+    font-size: 0.95em;
+}
+.user-ratings-counts__icon--neutral {
+    color: #888;
     font-size: 0.95em;
 }
 .user-ratings-counts__icon--negative {

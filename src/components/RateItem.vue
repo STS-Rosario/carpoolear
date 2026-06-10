@@ -6,11 +6,19 @@
             </div>
 
             <div v-if="!notReply" class="rate-item-value">
-                <span v-if="rate.rating == 1">
+                <span v-if="isPositiveRating(rate.rating)">
                         {{ $t('rateItemPositiva') }}
                         <i class="fa fa-thumbs-up" aria-hidden="true"></i>
                     </span>
-                    <span v-if="rate.rating == 0">
+                    <span v-else-if="isNeutralRating(rate.rating)">
+                        {{ $t('rateItemNeutral') }}
+                        <i
+                            class="fa fa-thumbs-up rate-neutral-icon"
+                            aria-hidden="true"
+                            :style="neutralIconStyle"
+                        ></i>
+                    </span>
+                    <span v-else-if="isNegativeRating(rate.rating)">
                         {{ $t('rateItemNegativa') }}
                         <i class="fa fa-thumbs-down" aria-hidden="true"></i>
                     </span>
@@ -49,12 +57,18 @@
                                 <i
                                     class="fa fa-thumbs-up"
                                     aria-hidden="true"
-                                    v-if="rate.rating == 1"
+                                    v-if="isPositiveRating(rate.rating)"
+                                ></i>
+                                <i
+                                    class="fa fa-thumbs-up rate-neutral-icon"
+                                    aria-hidden="true"
+                                    v-else-if="isNeutralRating(rate.rating)"
+                                    :style="neutralIconStyle"
                                 ></i>
                                 <i
                                     class="fa fa-thumbs-down"
                                     aria-hidden="true"
-                                    v-if="rate.rating == 0"
+                                    v-else-if="isNegativeRating(rate.rating)"
                                 ></i>
                             </span>
                             <span
@@ -117,15 +131,25 @@ import { useAuthStore } from '../stores/auth';
 import { useProfileStore } from '../stores/profile';
 import { useRatesStore } from '../stores/rates';
 import dayjs from '../dayjs';
+import {
+    NEUTRAL_RATING_ICON_STYLE,
+    isNegativeRating,
+    isNeutralRating,
+    isPositiveRating
+} from '../utils/tripRating';
 export default {
     data() {
         return {
             showReply: false,
-            comment: ''
+            comment: '',
+            neutralIconStyle: NEUTRAL_RATING_ICON_STYLE
         };
     },
     methods: {
         dayjs,
+        isPositiveRating,
+        isNeutralRating,
+        isNegativeRating,
         ...mapActions(useRatesStore, {
             reply: 'reply'
         }),

@@ -16,6 +16,7 @@ export function getOtherParticipantRatings(users, currentUserId) {
     }
     return {
         positive: Number(other.positive_ratings) || 0,
+        neutral: Number(other.neutral_ratings) || 0,
         negative: Number(other.negative_ratings) || 0
     };
 }

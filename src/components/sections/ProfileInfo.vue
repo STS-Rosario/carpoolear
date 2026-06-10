@@ -13,6 +13,12 @@
                     <div class="profile-info--ratings">
                         <i class="fa fa-thumbs-up" aria-hidden="true"></i>
                         <span>{{ profile.positive_ratings }}</span>
+                        <i
+                            class="fa fa-thumbs-up profile-info__neutral-icon rate-neutral-icon"
+                            aria-hidden="true"
+                            :style="neutralIconStyle"
+                        ></i>
+                        <span>{{ profile.neutral_ratings || 0 }}</span>
                         <i class="fa fa-thumbs-down" aria-hidden="true"></i>
                         <span>{{ profile.negative_ratings }}</span>
                     </div>
@@ -243,11 +249,13 @@ import {
     formatMemberSinceMonthYear,
     normalizeTripsCount
 } from '../../utils/profileMemberStats.js';
+import { NEUTRAL_RATING_ICON_STYLE } from '../../utils/tripRating';
 
 export default {
     data() {
         return {
-            friendActionLoading: false
+            friendActionLoading: false,
+            neutralIconStyle: NEUTRAL_RATING_ICON_STYLE
         };
     },
     computed: {
