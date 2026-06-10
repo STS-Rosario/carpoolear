@@ -1,19 +1,24 @@
 import dayjs from '../dayjs';
 import { activeCarsWithPlate, resolveTripCarId } from './userCars.js';
+import { getIntermediatePoints } from './tripCreationPoints.js';
 
 export const STEP = {
-    ORIGIN: 1,
-    DESTINATION: 2,
-    SCHEDULE: 3,
-    CAR: 4,
-    SEATS: 5,
-    DESCRIPTION: 6,
-    LAST_DETAILS: 7
+    ROLE: 1,
+    ORIGIN: 2,
+    DESTINATION: 3,
+    STOPS: 4,
+    SCHEDULE: 5,
+    CAR: 6,
+    SEATS: 7,
+    DESCRIPTION: 8,
+    LAST_DETAILS: 9
 };
 
 export const ALL_WIZARD_STEPS = [
+    STEP.ROLE,
     STEP.ORIGIN,
     STEP.DESTINATION,
+    STEP.STOPS,
     STEP.SCHEDULE,
     STEP.CAR,
     STEP.SEATS,
@@ -24,8 +29,10 @@ export const ALL_WIZARD_STEPS = [
 const DRIVER_STEPS = ALL_WIZARD_STEPS;
 
 const PASSENGER_STEPS = [
+    STEP.ROLE,
     STEP.ORIGIN,
     STEP.DESTINATION,
+    STEP.STOPS,
     STEP.SCHEDULE,
     STEP.SEATS,
     STEP.DESCRIPTION,
@@ -33,8 +40,10 @@ const PASSENGER_STEPS = [
 ];
 
 const STEP_LABEL_KEYS = {
+    [STEP.ROLE]: 'tripCreationStepLabelRole',
     [STEP.ORIGIN]: 'tripCreationStepLabelOrigin',
     [STEP.DESTINATION]: 'tripCreationStepLabelDestination',
+    [STEP.STOPS]: 'tripCreationStepLabelStops',
     [STEP.SCHEDULE]: 'tripCreationStepLabelSchedule',
     [STEP.CAR]: 'tripCreationStepLabelCar',
     [STEP.SEATS]: 'tripCreationStepLabelSeats',
@@ -58,8 +67,25 @@ export function isStepDisabledForPassenger(step, isPassenger) {
     return isPassenger && step === STEP.CAR;
 }
 
-export function getNextStep(currentStep, isPassenger) {
+function getNavigationOptions(options = {}) {
+    return {
+        wantsIntermediateStops: Boolean(options.wantsIntermediateStops)
+    };
+}
+
+function getLinearSteps(isPassenger, options = {}) {
+    const { wantsIntermediateStops } = getNavigationOptions(options);
     const steps = getVisibleSteps(isPassenger);
+
+    if (!wantsIntermediateStops) {
+        return steps.filter((step) => step !== STEP.STOPS);
+    }
+
+    return steps;
+}
+
+export function getNextStep(currentStep, isPassenger, options = {}) {
+    const steps = getLinearSteps(isPassenger, options);
     const index = steps.indexOf(currentStep);
     if (index === -1 || index >= steps.length - 1) {
         return null;
@@ -67,8 +93,8 @@ export function getNextStep(currentStep, isPassenger) {
     return steps[index + 1];
 }
 
-export function getPreviousStep(currentStep, isPassenger) {
-    const steps = getVisibleSteps(isPassenger);
+export function getPreviousStep(currentStep, isPassenger, options = {}) {
+    const steps = getLinearSteps(isPassenger, options);
     const index = steps.indexOf(currentStep);
     if (index <= 0) {
         return null;
@@ -79,6 +105,13 @@ export function getPreviousStep(currentStep, isPassenger) {
 export function canNavigateToStep(targetStep, maxVisitedStep, isPassenger) {
     if (isStepDisabledForPassenger(targetStep, isPassenger)) {
         return false;
+    }
+
+    if (
+        targetStep === STEP.STOPS &&
+        maxVisitedStep >= STEP.DESTINATION
+    ) {
+        return true;
     }
 
     return targetStep <= maxVisitedStep;
@@ -93,10 +126,14 @@ function lastPoint(points) {
 
 export function validateStep(step, context = {}) {
     switch (step) {
+    case STEP.ROLE:
+        return { valid: true, errors: {} };
     case STEP.ORIGIN:
         return validateOrigin(context);
     case STEP.DESTINATION:
         return validateDestination(context);
+    case STEP.STOPS:
+        return validateStops(context);
     case STEP.SCHEDULE:
         return validateSchedule(context);
     case STEP.CAR:
@@ -133,6 +170,18 @@ function validateDestination({ points = [] }) {
     }
 
     return { valid: true, errors: {} };
+}
+
+function validateStops({ points = [] }) {
+    const intermediates = getIntermediatePoints(points);
+    const invalid = intermediates.find(
+        (point) => point.name && !point.json
+    );
+
+    return {
+        valid: !invalid,
+        errors: invalid ? { stops: 'localidadValida' } : {}
+    };
 }
 
 function validateSchedule({
