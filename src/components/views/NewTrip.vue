@@ -970,6 +970,21 @@
                                 </div>
                             </div>
                             <div
+                                v-if="trip.is_passenger == 0"
+                                class="checkbox-trip-autoaccept-friends"
+                            >
+                                <span>
+                                    <input
+                                        type="checkbox"
+                                        v-model="trip.autoaccept_friends_requests"
+                                        id="cbxAutoacceptFriendsRequests"
+                                    />
+                                    <label for="cbxAutoacceptFriendsRequests">
+                                        {{ $t('aceptarPedidosAmigosAutomaticamente') }}
+                                    </label>
+                                </span>
+                            </div>
+                            <div
                                 v-if="!updatingTrip && !isMobile"
                                 class="row row-showReturnTrip"
                             >
@@ -2117,6 +2132,7 @@ export default {
                 allow_smoking: false,
                 allow_animals: false,
                 rear_max_two_passengers: false,
+                autoaccept_friends_requests: false,
                 car_id: null,
                 enc_path: '123',
                 seat_price_cents: null,
@@ -2479,6 +2495,9 @@ export default {
             trip.allow_animals = trip.allow_animals ? 1 : 0;
             trip.allow_smoking = trip.allow_smoking ? 1 : 0;
             trip.rear_max_two_passengers = trip.rear_max_two_passengers ? 1 : 0;
+            trip.autoaccept_friends_requests = trip.autoaccept_friends_requests
+                ? 1
+                : 0;
         },
         setIsPassenger(value) {
             this.trip.is_passenger = value;
@@ -3132,6 +3151,9 @@ export default {
                                 name: 'detail_trip',
                                 params: {
                                     id: t.id
+                                },
+                                query: {
+                                    inviteFriends: '1'
                                 }
                             });
                         });

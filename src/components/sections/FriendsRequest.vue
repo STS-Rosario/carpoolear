@@ -13,16 +13,21 @@
                         :placeholder="$t('buscarPersonas')"
                     />
                     <span class="input-group-btn">
-                        <button class="btn btn-default" type="button">
+                        <button
+                            class="btn btn-default"
+                            type="button"
+                            @click="onTextChange"
+                        >
                             <i class="fa fa-search" aria-hidden="true"></i>
                         </button>
                     </span>
                 </div>
             </li>
-            <template>
+            <template v-if="text.length > 0">
                 <Loading class="conversation_chat--chats" :data="users">
                     <li
                         v-for="user in users"
+                        :key="user.id"
                         class="list-group-item conversation_header"
                     >
                         <div class="media">
@@ -56,7 +61,7 @@
                                     :class="
                                         user.state === 'none'
                                             ? 'btn-primary'
-                                            : ''
+                                            : 'btn-friend-request-sent'
                                     "
                                     class="btn"
                                     :disabled="user.state != 'none'"
@@ -81,9 +86,9 @@
                                     >
                                         <spinner class="blue"></spinner>
                                     </span>
-                                    <span v-if="user.state != 'none'"
-                                        >{{ $t('solicitudEnviada') }}</span
-                                    >
+                                    <span v-if="user.state != 'none'">{{
+                                        $t('solicitudAmistadEnviada')
+                                    }}</span>
                                 </button>
                             </div>
                         </div>
@@ -135,7 +140,8 @@ export default {
     methods: {
         ...mapActions(useFriendsStore, {
             search: 'searchUsers',
-            request: 'request'
+            request: 'request',
+            clearUserSearch: 'clearUserSearch'
         }),
         onTextChange() {
             this.search(this.text);
@@ -158,6 +164,7 @@ export default {
     },
 
     mounted() {
+        this.clearUserSearch();
         bus.on('back-click', this.onBackClick);
     },
 
@@ -201,6 +208,20 @@ h2 {
     border-radius: 3px;
     font-size: 12px;
     padding: 0.8em 1.8em;
+}
+.btn-friend-request-sent {
+    border-radius: 3px;
+    font-size: 12px;
+    padding: 0.8em 1.8em;
+    background-color: #e67e22;
+    border-color: #e67e22;
+    color: #fff;
+}
+.btn-friend-request-sent:disabled {
+    background-color: #e67e22;
+    border-color: #e67e22;
+    color: #fff;
+    opacity: 1;
 }
 i {
     padding-left: 0.4em;

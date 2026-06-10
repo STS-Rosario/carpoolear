@@ -67,6 +67,20 @@ describe('NewTrip.vue trip car selection', () => {
     });
 });
 
+describe('NewTrip.vue autoaccept friends requests', () => {
+    it('shows unchecked checkbox bound to trip.autoaccept_friends_requests', () => {
+        expect(viewSource).toContain("$t('aceptarPedidosAmigosAutomaticamente')");
+        expect(viewSource).toContain('v-model="trip.autoaccept_friends_requests"');
+        expect(viewSource).toMatch(/autoaccept_friends_requests:\s*false/);
+    });
+
+    it('includes autoaccept_friends_requests in create payload normalization', () => {
+        expect(viewSource).toMatch(
+            /normalizeAllowFlagsForApi\(trip\)[\s\S]*?autoaccept_friends_requests/s
+        );
+    });
+});
+
 describe('NewTrip.vue rear seat comfort preference', () => {
     it('shows comfort section after seats with unchecked checkbox for drivers', () => {
         expect(viewSource).toContain("$t('priorizarComodidad')");

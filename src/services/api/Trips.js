@@ -76,6 +76,12 @@ class TripApi extends TaggedApi {
     changeVisibility(data) {
         return this.post('/api/trips/' + data.id + '/change-visibility', data);
     }
+
+    inviteFriends(tripId, friendIds) {
+        return this.post('/api/trips/' + tripId + '/invite-friends', {
+            friend_ids: friendIds
+        });
+    }
 }
 
 export { TripApi as default };

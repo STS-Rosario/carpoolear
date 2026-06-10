@@ -60,6 +60,14 @@ describe('ongoingTrip canStartSharing', () => {
     it('is false more than one hour before departure', () => {
         expect(canStartSharing(start.subtract(61, 'minute'), start)).toBe(false);
     });
+
+    it('is true up to twice the estimated trip duration after departure', () => {
+        expect(canStartSharing(start.add(120, 'minute'), start, '01:00')).toBe(true);
+    });
+
+    it('is false after twice the estimated trip duration from departure', () => {
+        expect(canStartSharing(start.add(121, 'minute'), start, '01:00')).toBe(false);
+    });
 });
 
 describe('isLiveLocationParticipant', () => {
@@ -91,6 +99,7 @@ describe('shouldShowLiveLocationShare', () => {
     const start = dayjs('2026-06-02 16:00:00');
     const driverTrip = {
         trip_date: start.format('YYYY-MM-DD HH:mm:ss'),
+        estimated_time: '01:00',
         user: { id: 7 },
         passenger: []
     };
@@ -110,6 +119,12 @@ describe('shouldShowLiveLocationShare', () => {
     it('returns false for non-participant even within window', () => {
         expect(
             shouldShowLiveLocationShare(driverTrip, 99, start.subtract(30, 'minute'))
+        ).toBe(false);
+    });
+
+    it('returns false for driver after twice the estimated trip duration', () => {
+        expect(
+            shouldShowLiveLocationShare(driverTrip, 7, start.add(121, 'minute'))
         ).toBe(false);
     });
 });

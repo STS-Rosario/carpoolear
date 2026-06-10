@@ -130,6 +130,55 @@
                     </div>
                 </div>
                 <div
+                    class="edit-action profile-friend-actions"
+                    v-if="user && profile.id !== user.id && showFriendActions"
+                >
+                    <button
+                        v-if="profile.friendship_state === 'none'"
+                        class="btn btn-primary"
+                        :disabled="friendActionLoading"
+                        v-on:click="onInviteFriend()"
+                    >
+                        <i class="fa fa-user" aria-hidden="true"></i>
+                        {{ $t('invitarAmigos') }}
+                    </button>
+                    <button
+                        v-else-if="profile.friendship_state === 'pending_sent'"
+                        class="btn btn-primary"
+                        disabled
+                    >
+                        {{ $t('solicitudEnviada') }}
+                    </button>
+                    <template v-else-if="profile.friendship_state === 'pending_received'">
+                        <button
+                            class="btn btn-primary"
+                            :disabled="friendActionLoading"
+                            v-on:click="onAcceptFriend()"
+                        >
+                            {{ $t('aceptar') }}
+                        </button>
+                        <button
+                            class="btn btn-default"
+                            :disabled="friendActionLoading"
+                            v-on:click="onRejectFriend()"
+                        >
+                            {{ $t('rechazar') }}
+                        </button>
+                    </template>
+                    <button
+                        v-else-if="profile.friendship_state === 'friend'"
+                        class="btn btn-primary"
+                        :disabled="friendActionLoading"
+                        v-on:click="onToggleTripAlerts()"
+                    >
+                        {{
+                            profile.friend_trip_alerts_enabled
+                                ? $t('detenerAlertasViajeAmigo')
+                                : $t('recibirAlertasViajeAmigo')
+                        }}
+                    </button>
+                </div>
+                <div
                     class="edit-action"
                     v-if="user.is_admin && profile.id !== user.id"
                 >
@@ -188,6 +237,7 @@ import { mapState, mapActions } from 'pinia';
 import { useAuthStore } from '../../stores/auth';
 import { useProfileStore } from '../../stores/profile';
 import { useConversationsStore } from '../../stores/conversations';
+import { useFriendsStore } from '../../stores/friends';
 import router from '../../router';
 import UserNameWithBadge from '../elements/UserNameWithBadge.vue';
 import { formatId } from '../../services/utility';
@@ -198,6 +248,11 @@ import {
 } from '../../utils/profileMemberStats.js';
 
 export default {
+    data() {
+        return {
+            friendActionLoading: false
+        };
+    },
     computed: {
         ...mapState(useAuthStore, {
             user: 'user',
@@ -234,12 +289,67 @@ export default {
             return this.$t('perfilViajesParticipados', {
                 count: normalizeTripsCount(this.profile.trips_count)
             });
+        },
+        showFriendActions() {
+            if (!this.profile || !this.user) {
+                return false;
+            }
+            const state = this.profile.friendship_state || 'none';
+            return ['none', 'pending_sent', 'pending_received', 'friend'].includes(
+                state
+            );
         }
     },
     methods: {
         ...mapActions(useConversationsStore, {
             lookConversation: 'createConversation'
         }),
+        ...mapActions(useFriendsStore, {
+            requestFriend: 'request',
+            acceptFriend: 'accept',
+            rejectFriend: 'reject',
+            toggleTripAlerts: 'toggleTripAlerts'
+        }),
+        ...mapActions(useProfileStore, {
+            setProfileUser: 'setUser'
+        }),
+        updateFriendshipState(friendshipState) {
+            this.setProfileUser({
+                ...this.profile,
+                friendship_state: friendshipState
+            });
+        },
+        runFriendAction(action, friendshipState) {
+            this.friendActionLoading = true;
+            return action(this.profile.id)
+                .then(() => this.updateFriendshipState(friendshipState))
+                .finally(() => {
+                    this.friendActionLoading = false;
+                });
+        },
+        onInviteFriend() {
+            this.runFriendAction(this.requestFriend, 'pending_sent');
+        },
+        onAcceptFriend() {
+            this.runFriendAction(this.acceptFriend, 'friend');
+        },
+        onRejectFriend() {
+            this.runFriendAction(this.rejectFriend, 'none');
+        },
+        onToggleTripAlerts() {
+            this.friendActionLoading = true;
+            this.toggleTripAlerts(this.profile.id)
+                .then((data) => {
+                    this.setProfileUser({
+                        ...this.profile,
+                        friend_trip_alerts_enabled:
+                            data && data.friend_trip_alerts_enabled
+                    });
+                })
+                .finally(() => {
+                    this.friendActionLoading = false;
+                });
+        },
         messageUser() {
             console.log('messageUser profileInfo', this.profile);
             this.lookConversation(this.profile).then((conversation) => {

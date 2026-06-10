@@ -26,9 +26,16 @@ export function isWithinOngoingTripWindow(now, tripStart, estimatedTime) {
     );
 }
 
-export function canStartSharing(now, tripStart) {
+export function getSharingWindowEnd(tripStart, estimatedTime) {
+    const durationMinutes = estimatedTimeToMinutes(estimatedTime);
+    return tripStart.add(durationMinutes * 2, 'minute');
+}
+
+export function canStartSharing(now, tripStart, estimatedTime) {
     const windowStart = tripStart.subtract(ONGOING_TRIP_LEAD_MINUTES, 'minute');
-    return !now.isBefore(windowStart);
+    const windowEnd = getSharingWindowEnd(tripStart, estimatedTime);
+
+    return !now.isBefore(windowStart) && !now.isAfter(windowEnd);
 }
 
 export function isLiveLocationParticipant(trip, userId) {
@@ -57,7 +64,7 @@ export function shouldShowLiveLocationShare(trip, userId, now) {
         return false;
     }
     const current = now || dayjs();
-    return canStartSharing(current, dayjs(trip.trip_date));
+    return canStartSharing(current, dayjs(trip.trip_date), trip.estimated_time);
 }
 
 function getLocationName(point) {

@@ -1,120 +1,139 @@
 <template>
-    <div class="col-lg-6 col-md-8 col-sm-12">
-        <div class="friend-card clearfix">
-            <template v-if="user">
-                <div class="rate-pending_photo">
-                    <router-link
-                        :to="{
-                            name: 'profile',
-                            params: {
-                                id: user.id,
-                                userProfile: user,
-                                activeTab: 1
-                            }
-                        }"
-                    >
-                        <div
-                            class="trip_driver_img circle-box"
-                            v-imgSrc:profile="user.image"
-                        ></div>
-                    </router-link>
-                </div>
-                <div class="rate-pending-message">
-                    <strong>{{ user.name }}</strong>
-                </div>
-                <slot></slot>
-            </template>
+    <div class="friend-list-card" v-if="user">
+        <router-link class="friend-list-card__avatar" :to="profileRoute">
+            <div
+                class="friend-list-card__photo circle-box"
+                v-imgSrc:profile="user.image"
+            ></div>
+        </router-link>
+        <div class="friend-list-card__body">
+            <router-link class="friend-list-card__name" :to="profileRoute">
+                {{ user.name }}
+            </router-link>
         </div>
+        <button
+            type="button"
+            class="friend-list-card__remove"
+            :aria-label="$t('quitarAmigo')"
+            :disabled="isRemoving"
+            @click="$emit('delete', user)"
+        >
+            <i
+                v-if="!isRemoving"
+                class="fa fa-times"
+                aria-hidden="true"
+            ></i>
+            <span v-else>{{ $t('enProceso') }}</span>
+        </button>
     </div>
 </template>
+
 <script>
 export default {
-    name: 'friend_card',
-    props: ['user'],
-    data() {
-        return {};
+    name: 'friend_list_card',
+
+    props: {
+        user: {
+            type: Object,
+            required: true
+        },
+        idRequesting: {
+            type: Number,
+            default: 0
+        }
     },
-    mounted() {}
+
+    emits: ['delete'],
+
+    computed: {
+        isRemoving() {
+            return this.idRequesting === this.user.id;
+        },
+        profileRoute() {
+            return {
+                name: 'profile',
+                params: {
+                    id: this.user.id,
+                    userProfile: this.user,
+                    activeTab: 1
+                }
+            };
+        }
+    }
 };
 </script>
 
 <style scoped>
-.form-group {
-    width: 100%;
-}
-.friend-card {
-    padding: 0.6em;
-    vertical-align: middle;
-    line-height: 5em;
-}
-.friend-card .trip_driver_img {
-    width: 5em;
-    height: 5em;
-}
-.rate-pending_photo {
-    margin-top: 0.2em;
-    width: 6em;
-    float: left;
-    height: 5.5em;
-}
-.delete-friend {
-    width: 1.6em;
-    float: left;
-}
-.delete-friend i {
-    font-size: 20px;
-    cursor: pointer;
-}
-.rate-pending-message {
-    margin-top: 0;
-    float: left;
-    width: calc(100% - 7.6em);
-    padding-left: 0.4em;
-    white-space: nowrap;
-    word-break: normal;
-}
-.pending-buttons button {
-    width: calc(50% - 0.3em);
-    border-radius: 0.3em;
-    min-width: auto;
-    padding: 0.8em;
-}
-.pending-buttons button:first-child {
-    margin-right: 0.3em;
-}
-#friends-list > div {
-    padding: 0;
-}
-@media only screen and (min-width: 782px) {
-    .friends-list .col-sm-12 {
-        padding: 0;
-    }
+.friend-list-card {
+    display: flex;
+    align-items: center;
+    align-self: flex-start;
+    gap: 1rem;
+    width: fit-content;
+    max-width: 100%;
+    margin: 0;
+    padding: 1rem 1.1rem;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 0 4px 1px #ccc;
 }
 
-@media only screen and (min-width: 992px) {
-    .btn-primary {
-        font-size: 11px;
-        min-width: 3rem;
-        border-radius: 0.2em;
-        padding: 0.8em 0.8em;
-    }
+.friend-list-card__avatar {
+    flex-shrink: 0;
+    text-decoration: none;
 }
-@media only screen and (max-width: 400px) {
-    .pending-buttons .btn-accept-request {
-        padding: 0.92em;
-    }
+
+.friend-list-card__photo {
+    width: 50px;
+    height: 50px;
+    max-width: 50px;
+    max-height: 50px;
 }
-@media only screen and (max-width: 350px) {
-    .rate-pending_photo {
-        display: block;
-    }
+
+.friend-list-card__body {
+    flex: 0 1 auto;
+    min-width: 0;
 }
-@media only screen and (max-width: 300px) {
-    .rate-pending_photo {
-        display: none;
-    }
-    .rate-pending-message {
-        width: calc(100% - 1.6em);
-    }
+
+.friend-list-card__name {
+    display: inline-block;
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.25;
+    color: inherit;
+    text-decoration: none;
+}
+
+.friend-list-card__name:hover,
+.friend-list-card__name:focus {
+    text-decoration: underline;
+}
+
+.friend-list-card__remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: #6b7280;
+    font-size: 0.85rem;
+    line-height: 1;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.friend-list-card__remove:hover:not(:disabled),
+.friend-list-card__remove:focus:not(:disabled) {
+    background-color: #e8ecf0;
+    color: #374151;
+}
+
+.friend-list-card__remove:disabled {
+    cursor: default;
+    opacity: 0.7;
 }
 </style>

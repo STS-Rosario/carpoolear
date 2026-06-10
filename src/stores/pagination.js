@@ -28,7 +28,7 @@ function readPagination(response) {
     };
 }
 
-function extractPaginatedList(response) {
+export function extractPaginatedList(response) {
     if (!response || typeof response !== 'object') {
         return [];
     }

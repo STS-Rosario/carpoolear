@@ -13,6 +13,17 @@ describe('Trip card quick actions', () => {
     });
 });
 
+describe('Trip public visibility tooltip', () => {
+    it('uses visibilidadPublico title for friendship_type_id 2', () => {
+        expect(source).toMatch(
+            /friendship_type_id === 2[\s\S]*?:title="\$t\('visibilidadPublico'\)"/s
+        );
+        expect(source).not.toMatch(
+            /friendship_type_id === 2[\s\S]*?:title="\$t\('visibilidadAmigosDeAmigos'\)"/s
+        );
+    });
+});
+
 describe('Trip clickModal', () => {
     it('declares clickModal as a boolean prop defaulting to false', () => {
         expect(source).toMatch(
