@@ -503,6 +503,8 @@ const messages = {
         validacionProntoBannerHs: 'hs',
         validacionProntoBannerMin: 'min',
         validacionProntoBannerS: 's',
+        pendingRatingsBanner:
+            'Tenés viajes para calificar, hacelo para poder continuar usando Carpoolear. Click acá para hacerlo.',
         identidadModalTitle: 'Verificá tu cuenta',
         identidadModalIntro:
             'Para seguir mejorando la seguridad de la comunidad, ahora todas las cuentas de Carpoolear deberán estar verificadas.',
@@ -1899,6 +1901,8 @@ const messages = {
         validacionProntoBannerHs: 'hs',
         validacionProntoBannerMin: 'min',
         validacionProntoBannerS: 's',
+        pendingRatingsBanner:
+            'Tenés viajes para calificar, hacelo para poder continuar usando Carpoolear. Click acá para hacerlo.',
         identidadModalTitle: 'Verificá tu cuenta',
         identidadModalIntro:
             'Para seguir mejorando la seguridad de la comunidad, ahora todas las cuentas de Carpoolear deberán estar verificadas.',
@@ -3358,6 +3362,8 @@ const messages = {
         validacionProntoBannerHs: 'h',
         validacionProntoBannerMin: 'min',
         validacionProntoBannerS: 's',
+        pendingRatingsBanner:
+            'You have trips to rate. Rate them to keep using Carpoolear. Click here to do it.',
         identidadModalTitle: 'Verify your account',
         identidadModalIntro:
             'To keep improving community safety, all Carpoolear accounts must now be verified.',
