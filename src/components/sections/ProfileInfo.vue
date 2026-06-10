@@ -171,11 +171,7 @@
                         :disabled="friendActionLoading"
                         v-on:click="onToggleTripAlerts()"
                     >
-                        {{
-                            profile.friend_trip_alerts_enabled
-                                ? $t('detenerAlertasViajeAmigo')
-                                : $t('recibirAlertasViajeAmigo')
-                        }}
+                        {{ tripAlertsButtonLabel }}
                     </button>
                 </div>
                 <div
@@ -239,6 +235,7 @@ import { useProfileStore } from '../../stores/profile';
 import { useConversationsStore } from '../../stores/conversations';
 import { useFriendsStore } from '../../stores/friends';
 import router from '../../router';
+import dialogs from '../../services/dialogs.js';
 import UserNameWithBadge from '../elements/UserNameWithBadge.vue';
 import { formatId } from '../../services/utility';
 import { activeCarsWithPlate } from '../../utils/userCars.js';
@@ -298,6 +295,15 @@ export default {
             return ['none', 'pending_sent', 'pending_received', 'friend'].includes(
                 state
             );
+        },
+        tripAlertsButtonLabel() {
+            if (!this.profile || !this.profile.name) {
+                return '';
+            }
+            const params = { name: this.profile.name };
+            return this.profile.friend_trip_alerts_enabled
+                ? this.$t('detenerAlertasViajeAmigo', params)
+                : this.$t('recibirAlertasViajeAmigo', params);
         }
     },
     methods: {
@@ -311,7 +317,8 @@ export default {
             toggleTripAlerts: 'toggleTripAlerts'
         }),
         ...mapActions(useProfileStore, {
-            setProfileUser: 'setUser'
+            setProfileUser: 'setUser',
+            setFriendTripAlertsEnabled: 'setFriendTripAlertsEnabled'
         }),
         updateFriendshipState(friendshipState) {
             this.setProfileUser({
@@ -338,12 +345,26 @@ export default {
         },
         onToggleTripAlerts() {
             this.friendActionLoading = true;
+            const friendName = this.profile.name;
             this.toggleTripAlerts(this.profile.id)
                 .then((data) => {
-                    this.setProfileUser({
-                        ...this.profile,
-                        friend_trip_alerts_enabled:
-                            data && data.friend_trip_alerts_enabled
+                    const enabled = Boolean(
+                        data && data.friend_trip_alerts_enabled
+                    );
+                    this.setFriendTripAlertsEnabled(enabled);
+                    dialogs.message(
+                        this.$t(
+                            enabled
+                                ? 'alertasViajeAmigoActivadas'
+                                : 'alertasViajeAmigoDesactivadas',
+                            { name: friendName }
+                        ),
+                        { estado: 'success' }
+                    );
+                })
+                .catch(() => {
+                    dialogs.message(this.$t('errorAlertasViajeAmigo'), {
+                        estado: 'error'
                     });
                 })
                 .finally(() => {

@@ -144,9 +144,7 @@ export const useFriendsStore = defineStore('friends', {
         },
 
         toggleTripAlerts(userId) {
-            return friendsApi.toggleTripAlerts(userId).then((response) => {
-                return Promise.resolve(response.data);
-            });
+            return friendsApi.toggleTripAlerts(userId);
         },
 
         clearUserSearch() {

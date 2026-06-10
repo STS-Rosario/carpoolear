@@ -451,9 +451,15 @@ const messages = {
         cerrarSesion: 'Cerrar sesión',
         pedidosDeEliminacionDeCuenta: 'Pedidos de eliminación de cuenta',
         invitarAmigos: 'Invitar a amigos',
-        recibirAlertasViajeAmigo: 'Recibir alertas de viaje de este amigo',
+        recibirAlertasViajeAmigo: 'Recibir alertas de viaje de {name}',
         detenerAlertasViajeAmigo:
-            'Dejar de recibir alertas de viaje de este amigo',
+            'No recibir más alertas de viaje de {name}',
+        alertasViajeAmigoActivadas:
+            'Ahora recibirás alertas de viaje de {name}',
+        alertasViajeAmigoDesactivadas:
+            'Ya no recibirás alertas de viaje de {name}',
+        errorAlertasViajeAmigo:
+            'No pudimos actualizar las alertas de viaje. Intentá de nuevo.',
         aceptarPedidosAmigosAutomaticamente:
             'Aceptar pedidos de asiento de amigos automáticamente',
         queresInvitarTusAmigos: '¿Querés invitar a tus amigos a este viaje?',
@@ -2158,9 +2164,15 @@ const messages = {
         quitarSolicitudAmigo: 'Quitar',
         quitarAmigo: 'Quitar amigo',
         invitarAmigos: 'Invitar a amigos',
-        recibirAlertasViajeAmigo: 'Recibir alertas de viaje de este amigo',
+        recibirAlertasViajeAmigo: 'Recibir alertas de viaje de {name}',
         detenerAlertasViajeAmigo:
-            'Dejar de recibir alertas de viaje de este amigo',
+            'No recibir más alertas de viaje de {name}',
+        alertasViajeAmigoActivadas:
+            'Ahora recibirás alertas de viaje de {name}',
+        alertasViajeAmigoDesactivadas:
+            'Ya no recibirás alertas de viaje de {name}',
+        errorAlertasViajeAmigo:
+            'No pudimos actualizar las alertas de viaje. Intentá de nuevo.',
         aceptarPedidosAmigosAutomaticamente:
             'Aceptar pedidos de asiento de amigos automáticamente',
         queresInvitarTusAmigos: '¿Querés invitar a tus amigos a este viaje?',
@@ -3104,9 +3116,14 @@ const messages = {
         cerrarSesion: 'Log out',
         pedidosDeEliminacionDeCuenta: 'Account deletion requests',
         invitarAmigos: 'Invite friends',
-        recibirAlertasViajeAmigo: 'Receive trip alerts from this friend',
-        detenerAlertasViajeAmigo:
-            'Stop receiving trip alerts from this friend',
+        recibirAlertasViajeAmigo: 'Receive trip alerts from {name}',
+        detenerAlertasViajeAmigo: 'Stop receiving trip alerts from {name}',
+        alertasViajeAmigoActivadas:
+            'You will now receive trip alerts from {name}',
+        alertasViajeAmigoDesactivadas:
+            'You will no longer receive trip alerts from {name}',
+        errorAlertasViajeAmigo:
+            'Could not update trip alerts. Please try again.',
         aceptarPedidosAmigosAutomaticamente:
             'Automatically accept seat requests from friends',
         queresInvitarTusAmigos:

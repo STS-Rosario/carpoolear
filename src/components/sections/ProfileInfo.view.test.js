@@ -76,15 +76,32 @@ describe('ProfileInfo friend actions', () => {
 });
 
 describe('ProfileInfo friend trip alerts toggle', () => {
-    it('shows receive alerts button when friend alerts are disabled', () => {
+    it('shows receive alerts button label with friend name when alerts are disabled', () => {
         expect(viewSource).toContain("friendship_state === 'friend'");
         expect(viewSource).toContain('friend_trip_alerts_enabled');
-        expect(viewSource).toContain("$t('recibirAlertasViajeAmigo')");
+        expect(viewSource).toContain('tripAlertsButtonLabel');
+        expect(viewSource).toContain("$t('recibirAlertasViajeAmigo', params)");
+        expect(viewSource).toContain("$t('detenerAlertasViajeAmigo', params)");
         expect(viewSource).toContain('onToggleTripAlerts');
     });
 
-    it('shows stop alerts button when friend alerts are enabled', () => {
-        expect(viewSource).toContain("$t('detenerAlertasViajeAmigo')");
+    it('shows snackbar feedback when toggling friend trip alerts', () => {
+        expect(viewSource).toContain("import dialogs from '../../services/dialogs.js'");
+        expect(viewSource).toContain("'alertasViajeAmigoActivadas'");
+        expect(viewSource).toContain("'alertasViajeAmigoDesactivadas'");
+        expect(viewSource).toContain("this.$t('errorAlertasViajeAmigo')");
+        expect(viewSource).toContain("estado: 'success'");
+        expect(viewSource).toContain("estado: 'error'");
         expect(viewSource).toContain('toggleTripAlerts');
+    });
+
+    it('patches trip alerts through profile store without reloading the profile', () => {
+        const onToggleTripAlerts = viewSource.match(
+            /onToggleTripAlerts\(\)\s*\{[\s\S]*?\n {8}\},/
+        );
+
+        expect(onToggleTripAlerts).not.toBeNull();
+        expect(onToggleTripAlerts[0]).toContain('setFriendTripAlertsEnabled');
+        expect(onToggleTripAlerts[0]).not.toContain('setProfileUser');
     });
 });

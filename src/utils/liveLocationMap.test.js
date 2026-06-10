@@ -2,7 +2,6 @@ import { describe, expect, it, vi } from 'vitest';
 import fs from 'node:fs';
 import path from 'node:path';
 import { createLiveLocationMarkerUpdater } from './liveLocationMapHelpers.js';
-import { bindLiveLocationMapZoomPersistence } from './liveLocationMapZoom.js';
 
 const mapSource = fs.readFileSync(
     path.resolve(__dirname, 'liveLocationMap.js'),
