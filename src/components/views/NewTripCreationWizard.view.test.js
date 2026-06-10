@@ -25,6 +25,10 @@ describe('NewTripCreationWizard.vue', () => {
         expect(wizardSource).toContain('saveTripCreationDraft');
         expect(wizardSource).toContain('loadTripCreationDraft');
     });
+
+    it('binds schedule DatePicker to dateAnswer so revisiting the step shows the chosen date', () => {
+        expect(wizardSource).toContain(':model-value="form.dateAnswer"');
+    });
 });
 
 describe('NewTrip.vue wizard integration', () => {
