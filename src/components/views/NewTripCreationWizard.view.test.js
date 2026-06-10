@@ -69,6 +69,35 @@ describe('NewTripCreationWizard.vue', () => {
         expect(wizardSource).toContain("'date' in draft");
         expect(wizardSource).toContain("'time' in draft");
     });
+
+    it('shows role selection only on step 1 without persistent top toggle', () => {
+        expect(wizardSource).toContain('currentStep === STEP.ROLE');
+        expect(wizardSource).toContain('tripCreationStepRoleQuestion');
+        expect(wizardSource).toContain('tripCreationRoleDriverTitle');
+        expect(wizardSource).toContain('tripCreationRolePassengerTitle');
+        expect(wizardSource).not.toMatch(
+            /new-trip-wizard__type[\s\S]*v-if="!form\.updatingTrip"/
+        );
+    });
+
+    it('offers intermediate stops checkbox on destination and a dedicated stops step', () => {
+        expect(wizardSource).toContain('wantsIntermediateStops');
+        expect(wizardSource).toContain('tripCreationWantsIntermediateStops');
+        expect(wizardSource).toContain('currentStep === STEP.STOPS');
+        expect(wizardSource).toContain('tripCreationStepStopsQuestion');
+        expect(wizardSource).toContain('form.addPoint');
+        expect(wizardSource).toContain('wantsIntermediateStops');
+    });
+
+    it('passes intermediate-stop preference into step navigation', () => {
+        expect(wizardSource).toMatch(
+            /getNextStep\([\s\S]*wantsIntermediateStops/
+        );
+        expect(wizardSource).toMatch(
+            /getPreviousStep\([\s\S]*wantsIntermediateStops/
+        );
+        expect(wizardSource).toContain('removeEmptyIntermediatePoints');
+    });
 });
 
 describe('NewTrip.vue wizard integration', () => {
@@ -90,5 +119,11 @@ describe('NewTrip.vue wizard integration', () => {
         );
         expect(newTripSource).toContain('buildReturnTripCreationDraftFromSnapshot');
         expect(newTripSource).toContain('parentTripId');
+    });
+
+    it('filters empty intermediate points before saving trip data', () => {
+        expect(newTripSource).toContain('filterTripPointsForSave');
+        expect(newTripSource).toContain('removeEmptyIntermediatePoints');
+        expect(newTripSource).toContain('wantsIntermediateStops');
     });
 });
