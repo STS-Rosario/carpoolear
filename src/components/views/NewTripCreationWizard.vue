@@ -38,7 +38,7 @@
                 <h3 class="new-trip-wizard__question">
                     {{ $t('tripCreationStepOriginQuestion') }}
                 </h3>
-                <div class="trip_allow-foreign">
+                <div class="trip_allow-foreign new-trip-wizard__allow-foreign">
                     <input
                         type="checkbox"
                         v-model="form.allowForeignPoints"
@@ -165,6 +165,7 @@
                     :car-selection-error="form.carSelectionError"
                     @update:selected-car-id="form.selectedCarId = $event"
                     @cars-updated="form.preselectDriverCar"
+                    @edit-cars="form.openTripCarsModal"
                 />
                 <span class="error" v-if="stepErrors.car">{{ $t(stepErrors.car) }}</span>
             </template>
@@ -224,14 +225,17 @@
                         </div>
                     </div>
                     <div v-if="!isPassenger" class="trip-comfort-preference">
-                        <label for="wizard-comfort-rear" class="label-soft">
+                        <label
+                            for="wizard-comfort-rear"
+                            class="label-soft trip-comfort-preference__label"
+                        >
                             <input
                                 type="checkbox"
                                 id="wizard-comfort-rear"
                                 :checked="form.trip.rear_max_two_passengers"
                                 @change="form.onOutboundRearMaxTwoChange($event)"
                             />
-                            {{ $t('atrasViajanSolo2Personas') }}
+                            <span>{{ $t('atrasViajanSolo2Personas') }}</span>
                         </label>
                     </div>
                     <div
@@ -242,7 +246,7 @@
                         <input
                             type="number"
                             v-model="form.price"
-                            class="form-control form-control-price"
+                            class="form-control form-control-with-icon form-control-price"
                             min="0"
                             :class="{ 'has-error': form.priceError.state }"
                             @input="form.onOutboundPriceFieldInput"
@@ -261,7 +265,7 @@
                 <textarea
                     maxlength="2000"
                     v-model="form.trip.description"
-                    class="form-control"
+                    class="form-control new-trip-wizard__description"
                     :placeholder="$t('placeholderComentarioPasajeros')"
                 ></textarea>
                 <div v-if="!isPassenger" class="checkbox-trip-autoaccept-friends">
@@ -283,61 +287,170 @@
                 <h3 class="new-trip-wizard__question">
                     {{ $t('tripCreationStepLastDetailsTitle') }}
                 </h3>
-                <div v-if="!isPassenger" class="trip_terms trip_terms--lucrar-card">
-                    <input
-                        type="checkbox"
-                        id="wizard-no-lucrar"
-                        v-model="form.no_lucrar"
-                        class="checkbox-button"
-                    />
-                    <label for="wizard-no-lucrar" class="checkbox-click-target">
-                        <span class="checkbox-box"></span>
-                        <strong>{{ $t('meComprometo') }}</strong>
-                    </label>
-                    <span class="error" v-if="form.lucrarError.state">{{ form.lucrarError.message }}</span>
-                </div>
-                <legend class="label-for-group">{{ $t('preferenciasViaje') }}</legend>
-                <div class="preferences row trip-pref-cards">
-                    <div class="col-xs-4 trip-pref-cards__cell">
-                        <div class="trip-pref-card">
-                            <input type="checkbox" id="wizard-pref-smoking" v-model="form.trip.allow_smoking" class="trip-pref-card__input sr-only" />
-                            <label for="wizard-pref-smoking" class="trip-pref-card__label">
-                                <span class="trip-pref-card__surface">
-                                    <img :src="form.tripStaticImg('icon-smoke.svg')" alt="" class="trip-pref-card__icon" />
-                                </span>
-                                <span class="trip-pref-card__caption">{{ $t('preferenciaPermitidoFumar') }}</span>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-xs-4 trip-pref-cards__cell">
-                        <div class="trip-pref-card">
-                            <input type="checkbox" id="wizard-pref-animals" v-model="form.trip.allow_animals" class="trip-pref-card__input sr-only" />
-                            <label for="wizard-pref-animals" class="trip-pref-card__label">
-                                <span class="trip-pref-card__surface">
-                                    <img :src="form.tripStaticImg('icon-pet.svg')" alt="" class="trip-pref-card__icon" />
-                                </span>
-                                <span class="trip-pref-card__caption">{{ $t('preferenciaPermitidoAnimales') }}</span>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-xs-4 trip-pref-cards__cell">
-                        <div class="trip-pref-card">
-                            <input type="checkbox" id="wizard-pref-kids" v-model="form.trip.allow_kids" class="trip-pref-card__input sr-only" />
-                            <label for="wizard-pref-kids" class="trip-pref-card__label">
-                                <span class="trip-pref-card__surface">
-                                    <img :src="form.tripStaticImg('icon-baby.svg')" alt="" class="trip-pref-card__icon" />
-                                </span>
-                                <span class="trip-pref-card__caption">{{ $t('preferenciaPermitidoNinos') }}</span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
                 <div
-                    v-if="!form.updatingTrip && !isPassenger"
-                    class="checkbox-trip-return"
+                    v-if="!isPassenger"
+                    class="new-trip-wizard__last-section new-trip-wizard__last-section--lucrar"
                 >
-                    <input type="checkbox" v-model="form.showReturnTrip" id="wizard-return" />
-                    <label for="wizard-return">{{ $t('cargarViajeRegreso') }}</label>
+                    <div class="trip_terms trip_terms--lucrar-card">
+                        <input
+                            type="checkbox"
+                            id="wizard-no-lucrar"
+                            v-model="form.no_lucrar"
+                            class="checkbox-button trip_terms--lucrar-card__input"
+                        />
+                        <label
+                            for="wizard-no-lucrar"
+                            class="trip_terms_label checkbox-click-target trip_terms--lucrar-card__label"
+                            :class="{ 'has-error': form.lucrarError.state }"
+                        >
+                            <span
+                                class="checkbox-box trip_terms--lucrar-card__box"
+                            ></span>
+                            <div class="trip_terms--lucrar-card__copy">
+                                <div class="trip_terms--lucrar-card__title-row">
+                                    <strong class="trip_terms--lucrar-card__title">{{
+                                        $t('meComprometo')
+                                    }}</strong>
+                                    <span
+                                        class="tooltip-bottom trip_terms--lucrar-card__tooltip"
+                                        role="button"
+                                        tabindex="0"
+                                        :data-tooltip="$t('meComprometoLucroTooltip')"
+                                    >
+                                        <img
+                                            :src="form.tripStaticImg('icon-info.svg')"
+                                            alt=""
+                                            class="trip-form-info-icon"
+                                        />
+                                    </span>
+                                </div>
+                                <p class="trip_terms--lucrar-card__lead">
+                                    {{ $t('viajeColaborativoLead') }}
+                                </p>
+                                <p class="trip_terms--lucrar-card__text">
+                                    {{ $t('contribucionMaxima') }}
+                                </p>
+                            </div>
+                        </label>
+                    </div>
+                    <span class="error" v-if="form.lucrarError.state">
+                        {{ form.lucrarError.message }}
+                    </span>
+                </div>
+                <div class="new-trip-wizard__last-section new-trip-wizard__last-section--preferences">
+                    <legend class="label-for-group">
+                        {{ $t('preferenciasViaje') }}
+                    </legend>
+                    <div class="preferences row trip-pref-cards">
+                        <div class="col-xs-8 trip-pref-cards__cell">
+                            <div class="trip-pref-card">
+                                <input
+                                    type="checkbox"
+                                    id="wizard-pref-smoking"
+                                    v-model="form.trip.allow_smoking"
+                                    class="trip-pref-card__input sr-only"
+                                />
+                                <label
+                                    for="wizard-pref-smoking"
+                                    class="trip-pref-card__label"
+                                >
+                                    <span class="trip-pref-card__surface">
+                                        <span
+                                            class="trip-pref-card__badge"
+                                            aria-hidden="true"
+                                        >
+                                            <i
+                                                class="fa fa-check"
+                                                aria-hidden="true"
+                                            ></i>
+                                        </span>
+                                        <img
+                                            :src="form.tripStaticImg('icon-smoke.svg')"
+                                            alt=""
+                                            class="trip-pref-card__icon"
+                                        />
+                                    </span>
+                                    <span
+                                        class="trip-pref-card__caption label-soft"
+                                    >
+                                        {{ $t('preferenciaPermitidoFumar') }}
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-xs-8 trip-pref-cards__cell">
+                            <div class="trip-pref-card">
+                                <input
+                                    type="checkbox"
+                                    id="wizard-pref-animals"
+                                    v-model="form.trip.allow_animals"
+                                    class="trip-pref-card__input sr-only"
+                                />
+                                <label
+                                    for="wizard-pref-animals"
+                                    class="trip-pref-card__label"
+                                >
+                                    <span class="trip-pref-card__surface">
+                                        <span
+                                            class="trip-pref-card__badge"
+                                            aria-hidden="true"
+                                        >
+                                            <i
+                                                class="fa fa-check"
+                                                aria-hidden="true"
+                                            ></i>
+                                        </span>
+                                        <img
+                                            :src="form.tripStaticImg('icon-pet.svg')"
+                                            alt=""
+                                            class="trip-pref-card__icon"
+                                        />
+                                    </span>
+                                    <span
+                                        class="trip-pref-card__caption label-soft"
+                                    >
+                                        {{ $t('preferenciaPermitidoAnimales') }}
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-xs-8 trip-pref-cards__cell">
+                            <div class="trip-pref-card">
+                                <input
+                                    type="checkbox"
+                                    id="wizard-pref-kids"
+                                    v-model="form.trip.allow_kids"
+                                    class="trip-pref-card__input sr-only"
+                                />
+                                <label
+                                    for="wizard-pref-kids"
+                                    class="trip-pref-card__label"
+                                >
+                                    <span class="trip-pref-card__surface">
+                                        <span
+                                            class="trip-pref-card__badge"
+                                            aria-hidden="true"
+                                        >
+                                            <i
+                                                class="fa fa-check"
+                                                aria-hidden="true"
+                                            ></i>
+                                        </span>
+                                        <img
+                                            :src="form.tripStaticImg('icon-baby.svg')"
+                                            alt=""
+                                            class="trip-pref-card__icon"
+                                        />
+                                    </span>
+                                    <span
+                                        class="trip-pref-card__caption label-soft"
+                                    >
+                                        {{ $t('preferenciaPermitidoNinos') }}
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <span class="error" v-if="stepErrors.lastDetails">{{ $t(stepErrors.lastDetails) }}</span>
             </template>
@@ -519,7 +632,7 @@ export default {
                 no_lucrar: this.form.no_lucrar,
                 selectedCarId: this.form.selectedCarId,
                 allowForeignPoints: this.form.allowForeignPoints,
-                showReturnTrip: this.form.showReturnTrip,
+                parentTripId: this.form.parentTripId,
                 useWeeklySchedule: this.form.useWeeklySchedule,
                 weeklySchedule: this.form.weeklySchedule,
                 weeklyScheduleTime: this.form.weeklyScheduleTime,
@@ -548,12 +661,18 @@ export default {
             this.form.no_lucrar = draft.no_lucrar || false;
             this.form.selectedCarId = draft.selectedCarId;
             this.form.allowForeignPoints = draft.allowForeignPoints || false;
-            this.form.showReturnTrip = draft.showReturnTrip || false;
+            this.form.parentTripId = draft.parentTripId || null;
             this.form.useWeeklySchedule = draft.useWeeklySchedule || false;
             this.form.weeklySchedule = draft.weeklySchedule || 0;
             this.form.weeklyScheduleTime = draft.weeklyScheduleTime || this.form.weeklyScheduleTime;
             this.currentStep = draft.currentStep || STEP.ORIGIN;
             this.maxVisitedStep = draft.maxVisitedStep || this.currentStep;
+            if (
+                this.form.points[0]?.json &&
+                last(this.form.points)?.json
+            ) {
+                this.form.calcRoute();
+            }
         },
         buildValidationContext() {
             return {
@@ -677,6 +796,10 @@ export default {
     margin-bottom: 1rem;
 }
 
+.new-trip-wizard__allow-foreign {
+    margin-bottom: 1rem;
+}
+
 .new-trip-wizard__nav {
     margin-top: 2rem;
     display: flex;
@@ -707,4 +830,267 @@ export default {
 .trip_seats-total-people {
     margin-top: 1rem;
 }
+
+.trip-comfort-preference {
+    margin: 0.5rem 0;
+}
+
+.trip-comfort-preference__label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65em;
+    margin: 0;
+    font-weight: normal;
+}
+
+.trip-comfort-preference__label input[type='checkbox'] {
+    margin: 0;
+    flex-shrink: 0;
+}
+
+.new-trip-wizard__description {
+    min-height: 10rem;
+    height: auto;
+    resize: vertical;
+}
+
+.new-trip-wizard__last-section--preferences {
+    margin-top: 1.75rem;
+}
+</style>
+
+<style>
+/* Last-details blocks mirror NewTrip.vue (scoped there); wizard needs global rules. */
+.new-trip-wizard__last-section--lucrar .trip_terms--lucrar-card {
+    margin-top: 0;
+    margin-left: 0;
+    margin-right: 0;
+    max-width: 100%;
+    background: var(--form-background, #fff);
+    border: 1px solid #dcdfe6;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.new-trip-wizard__last-section--lucrar
+    .trip_terms--lucrar-card__label.trip_terms_label,
+.new-trip-wizard__last-section--lucrar
+    .trip_terms--lucrar-card__label.checkbox-click-target {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+    margin: 0;
+    padding: 14px 16px;
+    box-sizing: border-box;
+    color: #111;
+    line-height: 1.4;
+    vertical-align: unset;
+}
+
+.new-trip-wizard__last-section--lucrar
+    .trip_terms--lucrar-card__label.trip_terms_label.has-error {
+    color: #111;
+}
+
+.new-trip-wizard__last-section--lucrar
+    .trip_terms--lucrar-card__box.checkbox-box {
+    position: relative;
+    top: 2px;
+    left: 0;
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-width: 2px;
+    border-radius: 5px;
+    border-color: #aeb6bd;
+}
+
+.new-trip-wizard__last-section--lucrar
+    .trip_terms--lucrar-card__box.checkbox-box:after {
+    width: 11px;
+    height: 7px;
+    left: 3px;
+    top: 5px;
+    border: 2px solid #444;
+    border-top: none;
+    border-right: none;
+}
+
+.new-trip-wizard__last-section--lucrar .trip_terms--lucrar-card__copy {
+    flex: 1;
+    min-width: 0;
+}
+
+.new-trip-wizard__last-section--lucrar .trip_terms--lucrar-card__title-row {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    gap: 0.35rem;
+}
+
+.new-trip-wizard__last-section--lucrar .trip_terms--lucrar-card__tooltip {
+    flex-shrink: 0;
+    margin-top: 0.15em;
+}
+
+.new-trip-wizard__last-section--lucrar .trip_terms--lucrar-card__title {
+    flex: 1 1 0;
+    min-width: 0;
+    font-weight: 700;
+    font-size: 1.125rem;
+    line-height: 1.35;
+    color: #111;
+}
+
+.new-trip-wizard__last-section--lucrar .trip_terms--lucrar-card__lead {
+    margin: 0.65rem 0 0 0;
+    font-weight: 700;
+    font-size: 0.9375rem;
+    color: #111;
+    line-height: 1.35;
+}
+
+.new-trip-wizard__last-section--lucrar .trip_terms--lucrar-card__text {
+    margin: 0.4rem 0 0 0;
+    font-weight: 400;
+    font-size: 0.8125rem;
+    color: #111;
+    line-height: 1.45;
+}
+
+.new-trip-wizard__last-section--lucrar
+    .trip_terms--lucrar-card__label.has-error
+    .trip_terms--lucrar-card__title {
+    color: var(--main-error, #d72521);
+}
+
+.new-trip-wizard__last-section .trip-form-info-icon {
+    width: 1.1em;
+    height: 1.1em;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.new-trip-wizard__last-section--preferences .trip-pref-cards__cell {
+    text-align: center;
+    margin-bottom: 0.35rem;
+}
+
+.new-trip-wizard__last-section--preferences .trip-pref-card {
+    display: inline-block;
+    max-width: 100%;
+}
+
+.new-trip-wizard__last-section--preferences .trip-pref-card__label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    margin: 0;
+    font-weight: normal;
+}
+
+.new-trip-wizard__last-section--preferences .trip-pref-card__surface {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.15rem;
+    height: 3.15rem;
+    box-sizing: border-box;
+    border: 1px solid #cfd4d8;
+    border-radius: 4px;
+    background: #fffef8;
+    transition:
+        border-color 0.15s ease,
+        background-color 0.15s ease;
+}
+
+.new-trip-wizard__last-section--preferences
+    .trip-pref-card__input:checked
+    + .trip-pref-card__label
+    .trip-pref-card__surface {
+    border-color: var(--primary-color, #0070b8);
+    background: #fffef8;
+}
+
+.new-trip-wizard__last-section--preferences .trip-pref-card__badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 1.125rem;
+    height: 1.125rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 2px;
+    box-sizing: border-box;
+    border: 1px solid #aeb6bd;
+    background: #fff;
+    color: #fff;
+    font-size: 0.65rem;
+    line-height: 1;
+    pointer-events: none;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.06);
+    transition:
+        border-color 0.15s ease,
+        background-color 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.new-trip-wizard__last-section--preferences
+    .trip-pref-card__badge
+    .fa-check {
+    opacity: 0;
+    transform: scale(0.75);
+    transition:
+        opacity 0.12s ease,
+        transform 0.12s ease;
+}
+
+.new-trip-wizard__last-section--preferences
+    .trip-pref-card__input:checked
+    + .trip-pref-card__label
+    .trip-pref-card__badge {
+    border-color: var(--primary-color, #0070b8);
+    background: var(--primary-color, #0070b8);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.new-trip-wizard__last-section--preferences
+    .trip-pref-card__input:checked
+    + .trip-pref-card__label
+    .trip-pref-card__badge
+    .fa-check {
+    opacity: 1;
+    transform: scale(1.12);
+}
+
+.new-trip-wizard__last-section--preferences .trip-pref-card__icon {
+    display: block;
+    object-fit: contain;
+    width: 1.4rem;
+    height: 1.4rem;
+}
+
+.new-trip-wizard__last-section--preferences .trip-pref-card__caption {
+    display: block;
+    margin-top: 0.35rem;
+    font-size: 0.8rem;
+    text-align: center;
+    color: var(--main-font-color, #555);
+    max-width: 7.5rem;
+    line-height: 1.25;
+}
+
+.new-trip-wizard__last-section--preferences
+    .trip-pref-card__input:focus-visible
+    + .trip-pref-card__label
+    .trip-pref-card__surface {
+    outline: 2px solid var(--primary-color, #0070b8);
+    outline-offset: 2px;
+}
+
 </style>

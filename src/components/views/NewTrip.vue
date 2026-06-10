@@ -14,6 +14,7 @@
         <TripCreationSuccess
             v-if="showWizardSuccess && createdTrip"
             :trip="createdTrip"
+            @start-return-trip="startReturnTripCreation"
         />
         <NewTripCreationWizard v-else />
 
@@ -84,7 +85,8 @@ import {
     resolveTripCarId,
     restoreSelectedCarIdFromTrip
 } from '../../utils/profileRequirements';
-import { clearTripCreationDraft } from '../../utils/tripCreationDraft.js';
+import { clearTripCreationDraft, saveTripCreationDraft } from '../../utils/tripCreationDraft.js';
+import { buildReturnTripCreationDraftFromSnapshot } from '../../utils/tripCreationReturnDraft.js';
 import NewTripCreationWizard from './NewTripCreationWizard.vue';
 import TripCreationSuccess from './TripCreationSuccess.vue';
 
@@ -189,7 +191,7 @@ export default {
                 allow_smoking: false,
                 allow_animals: false,
                 rear_max_two_passengers: false,
-                autoaccept_friends_requests: false,
+                autoaccept_friends_requests: true,
                 car_id: null,
                 enc_path: '123',
                 seat_price_cents: null,
@@ -265,7 +267,8 @@ export default {
             weeklyScheduleTime: '12:00',
             weeklyScheduleReturnTime: '12:00',
             showWizardSuccess: false,
-            createdTrip: null
+            createdTrip: null,
+            parentTripId: null
         };
     },
     mounted() {
@@ -538,6 +541,37 @@ export default {
         openTripCarsModal() {
             this.showTripCarsModal = true;
         },
+        startReturnTripCreation() {
+            if (!this.createdTrip || !this.user?.id) {
+                return;
+            }
+
+            const snapshot = {
+                trip: { ...this.trip },
+                points: this.points.map((point) => ({
+                    name: point.name,
+                    place: point.place,
+                    json: point.json,
+                    location: point.location,
+                    id: point.id
+                })),
+                date: this.date,
+                dateAnswer: this.dateAnswer,
+                time: this.time,
+                price: this.price,
+                no_lucrar: this.no_lucrar,
+                selectedCarId: this.selectedCarId,
+                allowForeignPoints: this.allowForeignPoints,
+                weeklyScheduleTime: this.weeklyScheduleTime
+            };
+            const draft = buildReturnTripCreationDraftFromSnapshot(
+                snapshot,
+                this.createdTrip.id
+            );
+            saveTripCreationDraft(this.user.id, draft);
+            this.showWizardSuccess = false;
+            this.createdTrip = null;
+        },
         onTripCarsModalClose() {
             this.showTripCarsModal = false;
         },
@@ -666,6 +700,8 @@ export default {
         this.trip.allow_animals = Number(trip.allow_animals) > 0;
         this.trip.allow_smoking = Number(trip.allow_smoking) > 0;
         this.trip.rear_max_two_passengers = Number(trip.rear_max_two_passengers) > 0;
+        this.trip.autoaccept_friends_requests =
+            Number(trip.autoaccept_friends_requests) > 0;
 
         const restoredCarId = restoreSelectedCarIdFromTrip(trip, this.cars);
         if (restoredCarId != null) {
@@ -1209,46 +1245,27 @@ export default {
                 this.normalizeAllowFlagsForApi(trip);
 
                 trip.seat_price_cents = seatPriceCentsForApi(this.price);
-                
+
                 if (trip.is_passenger === 1) {
                     trip.no_lucrar = 1;
                 }
+                if (this.parentTripId) {
+                    trip.parent_trip_id = this.parentTripId;
+                }
                 this.createTrip(trip)
                     .then((t) => {
-                        return new Promise((resolve, reject) => {
-                            if (!this.showReturnTrip) {
-                                return resolve();
-                            } else {
-                                let otherTrip = this.getSaveInfo(
-                                    this.otherTrip,
-                                    this.otherTripEstimatedTimeString,
-                                    this.useWeeklySchedule,
-                                    this.weeklyScheduleReturnTime
-                                );
-                                otherTrip.parent_trip_id = t.id;
-                                otherTrip = JSON.parse(
-                                    JSON.stringify(otherTrip)
-                                );
-                                this.normalizeAllowFlagsForApi(otherTrip);
-                                otherTrip.seat_price_cents =
-                                    seatPriceCentsForApi(this.returnPrice);
-                                this.createTrip(otherTrip).then((ot) => {
-                                    return resolve(ot);
-                                });
-                            }
-                        }).then(() => {
-                            this.saving = false;
-                            if (t.existing) {
-                                dialogs.message(this.$t('viajeYaPublicado'), {
-                                    estado: 'info'
-                                });
-                            }
-                            if (this.user && this.user.id != null) {
-                                clearTripCreationDraft(this.user.id);
-                            }
-                            this.createdTrip = t;
-                            this.showWizardSuccess = true;
-                        });
+                        this.saving = false;
+                        if (t.existing) {
+                            dialogs.message(this.$t('viajeYaPublicado'), {
+                                estado: 'info'
+                            });
+                        }
+                        if (this.user && this.user.id != null) {
+                            clearTripCreationDraft(this.user.id);
+                        }
+                        this.parentTripId = null;
+                        this.createdTrip = t;
+                        this.showWizardSuccess = true;
                     })
                     .catch((err) => {
                         console.log('error_creating', err);

@@ -9,7 +9,7 @@ describe('TripCreationSuccess.vue', () => {
     it('offers a return-trip button for driver trips', () => {
         expect(componentSource).toContain('data-testid="trip-creation-return-trip"');
         expect(componentSource).toContain("$t('cargarViajeRegreso')");
-        expect(componentSource).toContain("@start-return-trip");
+        expect(componentSource).toContain("$emit('start-return-trip')");
         expect(componentSource).toContain('!trip.is_passenger');
     });
 });
