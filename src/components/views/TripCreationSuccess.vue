@@ -22,6 +22,15 @@
             >
                 {{ $t('tripCreationViewTrip') }}
             </router-link>
+            <button
+                v-if="!trip.is_passenger && !trip.parent_trip_id"
+                type="button"
+                class="btn btn-default trip-creation-success__return"
+                data-testid="trip-creation-return-trip"
+                @click="$emit('start-return-trip')"
+            >
+                {{ $t('cargarViajeRegreso') }}
+            </button>
         </div>
 
         <div class="trip-creation-success__invite">
@@ -50,6 +59,8 @@ export default {
             required: true
         }
     },
+
+    emits: ['start-return-trip'],
 
     methods: {
         tripUrl() {

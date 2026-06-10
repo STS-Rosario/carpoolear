@@ -76,10 +76,10 @@ describe('NewTrip.vue trip car selection', () => {
 });
 
 describe('NewTrip.vue autoaccept friends requests', () => {
-    it('shows unchecked checkbox bound to trip.autoaccept_friends_requests', () => {
+    it('defaults autoaccept friends requests to checked on new trips', () => {
         expect(uiSource).toContain("$t('aceptarPedidosAmigosAutomaticamente')");
         expect(uiSource).toContain('autoaccept_friends_requests');
-        expect(viewSource).toMatch(/autoaccept_friends_requests:\s*false/);
+        expect(viewSource).toMatch(/autoaccept_friends_requests:\s*true/);
         expect(uiSource).toContain('checkbox-trip-autoaccept-friends');
     });
 
@@ -164,10 +164,13 @@ describe('NewTrip.vue rear seat comfort preference', () => {
 
 describe('NewTrip.vue trip cars editor modal', () => {
     it('opens in-page cars editor instead of navigating to profile settings', () => {
-        expect(carStepPanelSource).toContain("$t('agregarOtroAuto')");
+        expect(carStepPanelSource).toContain("$t('editarAutosEnViaje')");
+        expect(carStepPanelSource).toContain("$emit('edit-cars')");
+        expect(wizardSource).toContain('@edit-cars="form.openTripCarsModal"');
         expect(uiSource).not.toContain("$t('agregarNuevoAutoEnPerfil')");
         expect(viewSource).toContain('TripCarsModal');
         expect(viewSource).toContain('showTripCarsModal');
+        expect(viewSource).toContain('openTripCarsModal');
         expect(wizardSource).toContain('TripCarStepPanel');
         expect(uiSource).not.toMatch(
             /trip-car-selection[\s\S]*router-link[\s\S]*profile_cars/s
