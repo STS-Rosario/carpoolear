@@ -18,6 +18,7 @@
             </router-link>
         </div>
         <OngoingTripCard v-if="ongoingTrip" :trip="ongoingTrip" />
+        <TripCreationDraftCard v-if="user" />
         <PendingFriendRequestsCard v-if="user" />
         <div
             v-if="user && notificationsEnabledForPlatform && !hasNotificationPermission && showNotificationWarning"
@@ -402,6 +403,7 @@
 <script>
 import Trip from '../sections/Trip.vue';
 import OngoingTripCard from '../elements/OngoingTripCard.vue';
+import TripCreationDraftCard from '../elements/TripCreationDraftCard.vue';
 import PendingFriendRequestsCard from '../elements/PendingFriendRequestsCard.vue';
 import SearchBox from '../sections/SearchTrip.vue';
 import Loading from '../Loading.vue';
@@ -1108,6 +1110,7 @@ export default {
     components: {
         Trip,
         OngoingTripCard,
+        TripCreationDraftCard,
         PendingFriendRequestsCard,
         Loading,
         SearchBox,

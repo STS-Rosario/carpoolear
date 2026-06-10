@@ -11,2029 +11,11 @@
             </div>
         </div>
 
-        <div class="form form-trip">
-            <div class="row">
-                <div :class="columnClass[0]">
-                    <h2
-                        class="title--desktop"
-                        v-if="tripCardTheme === 'light' && !isMobile"
-                    >
-                        {{ $t('crearViaje') }}
-                    </h2>
-                    <fieldset
-                        class="trip-type-selection"
-                        v-if="tripCardTheme !== 'light'"
-                    >
-                        <div class="radio-option">
-                            <input
-                                type="radio"
-                                id="type-driver"
-                                value="0"
-                                v-model="trip.is_passenger"
-                                :disabled="updatingTrip"
-                            />
-                            <label for="type-driver" class="control-label">
-                                {{ $t('comoConductor') }}
-                            </label>
-                        </div>
-                        <div class="radio-option">
-                            <input
-                                type="radio"
-                                id="type-passenger"
-                                value="1"
-                                v-model="trip.is_passenger"
-                                :disabled="updatingTrip"
-                            />
-                            <label for="type-passenger" class="control-label">
-                                {{ $t('comoPasajero') }}
-                            </label>
-                        </div>
-                    </fieldset>
-                    <fieldset
-                        class="trip-type-selection--light"
-                        v-if="tripCardTheme === 'light'"
-                    >
-                        <div class="row">
-                            <div class="col-xs-12 col-md-12 col-lg-12">
-                                <button
-                                    class="btn btn-option"
-                                    @click="setIsPassenger(0)"
-                                    :disabled="updatingTrip"
-                                    :class="
-                                        trip.is_passenger == 0 ? 'active' : ''
-                                    "
-                                    v-html="$t('buscoConductor')"
-                                >
-                                </button>
-                            </div>
-                            <div class="col-xs-12 col-md-12 col-lg-12">
-                                <button
-                                    class="btn btn-option"
-                                    @click="setIsPassenger(1)"
-                                    :disabled="updatingTrip"
-                                    :class="
-                                        trip.is_passenger == 1 ? 'active' : ''
-                                    "
-                                >
-                                    {{ $t('buscoPasajero') }}
-                                </button>
-                            </div>
-                        </div>
-                    </fieldset>
-                    <div
-                        class="trip_allow-foreign"
-                        v-if="!isMobile && tripCardTheme === 'light'"
-                    >
-                        <span>
-                            <input
-                                type="checkbox"
-                                v-model="allowForeignPoints"
-                                id="cbxAllowForeignPoints"
-                                class="checkbox-button"
-                            />
-                            <label
-                                for="cbxAllowForeignPoints"
-                                class="checkbox-click-target"
-                            >
-                                <span class="checkbox-box"></span>
-                                <span
-                                    >{{ $t('origenOdestino') }}
-                                    {{ config.country_name }}</span
-                                >
-                            </label>
-                            <span
-                                class="tooltip-bottom"
-                                :data-tooltip="$t('habilitaOrigen')"
-                            >
-                                <img
-                                    :src="tripStaticImg('icon-info.svg')"
-                                    alt=""
-                                    class="trip-form-info-icon"
-                                />
-                            </span>
-                        </span>
-                    </div>
-                    <div
-                        class="new-left trip_points trip_points--left"
-                        v-if="!isMobile && tripCardTheme === 'light'"
-                    >
-                        <div
-                            v-for="(m, index) in points"
-                            class="trip_point location-autocomplete"
-                            :class="{ 'trip-error': m.error.state }"
-                            :key="m.id"
-                        >
-                            <span v-if="index == 0" class="sr-only">{{
-                                $t('origen')
-                            }}</span>
-                            <span
-                                v-if="index == points.length - 1"
-                                class="sr-only"
-                            >
-                                {{ $t('destino') }}
-                            </span>
-                            <autocomplete
-                                :placeholder="getPlaceholder(index)"
-                                name="'input-' + index"
-                                ref="'input-' + index"
-                                :model-value="m.name"
-                                v-on:place_changed="
-                                    (data) => getPlace(index, data)
-                                "
-                                :classes="'form-control form-control-with-icon form-control-map-autocomplete'"
-                                :country="allowForeignPoints ? null : 'AR'"
-                                :class="{ 'has-error': m.error.state }"
-                            ></autocomplete>
-                            <div
-                                @click="resetPoints(m, index)"
-                                class="date-picker--cross"
-                            >
-                                <i aria-hidden="true" class="fa fa-times"></i>
-                            </div>
-                            <span class="error" v-if="m.error.state">
-                                {{ m.error.message }}
-                            </span>
-                        </div>
-                        <TripPointDetailFields
-                            :points="points"
-                            :punto-partida="trip.punto_partida"
-                            :punto-llegada="trip.punto_llegada"
-                            :punto-partida-error="puntoPartidaError"
-                            :punto-llegada-error="puntoLlegadaError"
-                            id-prefix="newtrip-outbound"
-                            @update:puntoPartida="trip.punto_partida = $event"
-                            @update:puntoLlegada="trip.punto_llegada = $event"
-                        />
-                    </div>
-                    <div
-                        class="trip_terms trip_terms--lucrar-card"
-                        v-if="trip.is_passenger == 0"
-                    >
-                        <input
-                            type="checkbox"
-                            id="no-lucrar"
-                            v-model="no_lucrar"
-                            class="checkbox-button trip_terms--lucrar-card__input"
-                        />
-                        <label
-                            for="no-lucrar"
-                            class="trip_terms_label checkbox-click-target trip_terms--lucrar-card__label"
-                            :class="{ 'has-error': lucrarError.state }"
-                        >
-                            <span
-                                class="checkbox-box trip_terms--lucrar-card__box"
-                            ></span>
-                            <div class="trip_terms--lucrar-card__copy">
-                                <div class="trip_terms--lucrar-card__title-row">
-                                    <strong class="trip_terms--lucrar-card__title">{{
-                                        $t('meComprometo')
-                                    }}</strong>
-                                    <span
-                                        class="tooltip-bottom trip_terms--lucrar-card__tooltip"
-                                        role="button"
-                                        tabindex="0"
-                                        :data-tooltip="$t('meComprometoLucroTooltip')"
-                                    >
-                                        <img
-                                            :src="tripStaticImg('icon-info.svg')"
-                                            alt=""
-                                            class="trip-form-info-icon"
-                                        />
-                                    </span>
-                                </div>
-                                <p class="trip_terms--lucrar-card__lead">
-                                    {{ $t('viajeColaborativoLead') }}
-                                </p>
-                                <p class="trip_terms--lucrar-card__text">
-                                    {{ $t('contribucionMaxima') }}
-                                </p>
-                            </div>
-                        </label>
-                    </div>
-                    <!-- <pre style="background: #f5f5f5; padding: 10px; margin: 10px; border-radius: 4px; font-size: 12px;">
-{{ JSON.stringify({
-    ...this
-}, null, 2) }}</pre> -->
-                </div>
-                <div :class="columnClass[1]">
-                    <div class="row">
-                        <div class="panel-trip-data">
-                            <div
-                                class="col-md-24"
-                                v-show="isMobile && !tripCardTheme === 'light'"
-                            >
-                                <hr />
-                            </div>
-                            <div
-                                class="trip_allow-foreign col-md-24"
-                                v-if="isMobile || tripCardTheme !== 'light'"
-                            >
-                                <span>
-                                    <input
-                                        type="checkbox"
-                                        v-model="allowForeignPoints"
-                                        id="cbxAllowForeignPoints"
-                                    />
-                                    <label for="cbxAllowForeignPoints">
-                                        {{ $t('origenOdestino') }}
-                                        {{ config.country_name }}
-                                    </label>
-                                    <span
-                                        class="tooltip-bottom"
-                                        :data-tooltip="$t('habilitaOrigen')"
-                                    >
-                                        <img
-                                            :src="tripStaticImg('icon-info.svg')"
-                                            alt=""
-                                            class="trip-form-info-icon"
-                                        />
-                                    </span>
-                                </span>
-                            </div>
-                            <div
-                                class="new-left trip_points col-sm-13 col-md-15"
-                                v-if="isMobile || tripCardTheme !== 'light'"
-                            >
-                                <div
-                                    v-for="(m, index) in points"
-                                    class="trip_point location-autocomplete"
-                                    :class="{ 'trip-error': m.error.state }"
-                                    :key="m.id"
-                                >
-                                    <span v-if="index == 0" class="sr-only">
-                                        {{ $t('origen') }}
-                                    </span>
-                                    <span
-                                        v-if="index == points.length - 1"
-                                        class="sr-only"
-                                    >
-                                        {{ $t('destino') }}
-                                    </span>
-                                    <autocomplete
-                                        :placeholder="getPlaceholder(index)"
-                                        name="'input-' + index"
-                                        ref="'input-' + index"
-                                        :model-value="m.name"
-                                        v-on:place_changed="
-                                            (data) => getPlace(index, data)
-                                        "
-                                        :classes="'form-control form-control-with-icon form-control-map-autocomplete'"
-                                        :country="
-                                            allowForeignPoints ? null : 'AR'
-                                        "
-                                        :class="{ 'has-error': m.error.state }"
-                                    ></autocomplete>
-                                    <div
-                                        @click="resetPoints(m, index)"
-                                        class="date-picker--cross"
-                                    >
-                                        <i
-                                            aria-hidden="true"
-                                            class="fa fa-times"
-                                        ></i>
-                                    </div>
-                                    <span class="error" v-if="m.error.state">
-                                        {{ m.error.message }}
-                                    </span>
-                                </div>
-                                <TripPointDetailFields
-                                    :points="points"
-                                    :punto-partida="trip.punto_partida"
-                                    :punto-llegada="trip.punto_llegada"
-                                    :punto-partida-error="puntoPartidaError"
-                                    :punto-llegada-error="puntoLlegadaError"
-                                    id-prefix="newtrip-outbound-mobile"
-                                    @update:puntoPartida="trip.punto_partida = $event"
-                                    @update:puntoLlegada="trip.punto_llegada = $event"
-                                />
-                            </div>
-                            <div
-                                v-if="tripCardTheme !== 'light' || isMobile"
-                                class="col-sm-11 col-md-9"
-                            >
-                                <div class="trip_information">
-                                    <ul class="no-bullet">
-                                        <li class="list_item">
-                                            <i
-                                                class="fa fa-link"
-                                                aria-hidden="true"
-                                                v-if="tripCardTheme === 'light'"
-                                            ></i>
-                                            <div
-                                                class="label-soft"
-                                                v-if="tripCardTheme !== 'light'"
-                                            >
-                                                {{ $t('distanciaARecorrer') }}
-                                            </div>
-                                            <div>{{ distanceString }}</div>
-                                        </li>
-                                        <li class="list_item">
-                                            <i
-                                                class="fa fa-clock-o"
-                                                aria-hidden="true"
-                                                v-if="tripCardTheme === 'light'"
-                                            ></i>
-                                            <div
-                                                class="label-soft"
-                                                v-if="tripCardTheme !== 'light'"
-                                            >
-                                                {{ $t('tiempoEstimado') }}
-                                            </div>
-                                            <div>{{ estimatedTimeString }}</div>
-                                        </li>
-                                        <li class="list_item">
-                                            <i
-                                                class="fa fa-leaf"
-                                                aria-hidden="true"
-                                                v-if="tripCardTheme === 'light'"
-                                            ></i>
-                                            <div
-                                                class="label-soft"
-                                                v-if="tripCardTheme !== 'light'"
-                                            >
-                                                {{ $t('huellaCarbono') }} (
-                                                <abbr :title="$t('kilogramosDioxidoCarbono')">
-                                                    kg CO<sub>2</sub> eq.
-                                                </abbr>
-                                                )
-                                            </div>
-                                            <div>{{ CO2String }}</div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="new-left col-sm-13 col-md-15">
-                            <div class="trip_schedule-toggle" v-if="config.weekly_schedule">
-                                <div class="schedule-toggle-buttons">
-                                    <button type="button" class="btn btn-option schedule-tab" @click="useWeeklySchedule = false" :class="!useWeeklySchedule ? 'active' : ''">
-                                        {{ $t('unaVez') }}
-                                    </button>
-                                    <button type="button" class="btn btn-option schedule-tab" @click="useWeeklySchedule = true" :class="useWeeklySchedule ? 'active' : ''">
-                                        {{ $t('programaSemanal') }}
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="trip_datetime" v-if="!useWeeklySchedule">
-                                <div class="trip_date">
-                                    <label for="date" class="sr-only">{{
-                                        $t('dia')
-                                    }}</label>
-                                    <DatePicker
-                                        :model-value="date"
-                                        :minDate="minDate"
-                                        :class="{
-                                            'has-error': dateError.state
-                                        }"
-                                        v-on:date_changed="changeDate"
-                                    ></DatePicker>
-                                    <span class="error" v-if="dateError.state">
-                                        {{ dateError.message }}
-                                    </span>
-                                </div>
-                                <div class="trip_time">
-                                    <label for="time" class="sr-only">{{
-                                        $t('hora')
-                                    }}</label>
-                                    <input
-                                        type="time"
-                                        v-maska="'##:##'"
-                                        v-model="time"
-                                        class="form-control form-control-with-icon form-control-time"
-                                        id="time"
-                                        :class="{
-                                            'has-error': timeError.state
-                                        }"
-                                        placeholder="Hora (12:00)"
-                                    />
-                                    <span class="error" v-if="timeError.state">
-                                        {{ timeError.message }}
-                                    </span>
-                                    <!--<input type="text" v-model="time" />-->
-                                </div>
-                            </div>
-                            <div class="trip-weekly-schedule" v-if="useWeeklySchedule && config.weekly_schedule">
-                                <WeeklySchedule
-                                    v-model:weeklySchedule="weeklySchedule"
-                                    v-model:weeklyScheduleTime="weeklyScheduleTime"
-                                    :readonly="false"
-                                    :theme="tripCardTheme"
-                                    :hasError="timeError.state"
-                                />
-                                <span class="error" v-if="timeError.state">
-                                    {{ timeError.message }}
-                                </span>
-                            </div>
-                            <div
-                                class="form-group trip-car-selection"
-                                v-if="showTripCarSelection"
-                            >
-                                <label
-                                    for="trip-car-select"
-                                    class="trip-car-selection__label"
-                                >
-                                    {{ $t('seleccionarAuto') }}
-                                    <button
-                                        type="button"
-                                        class="trip-car-selection__profile-link btn btn-link"
-                                        @click="openTripCarsModal"
-                                    >
-                                        {{ $t('editarAutosEnViaje') }}
-                                    </button>
-                                </label>
-                                <select
-                                    id="trip-car-select"
-                                    class="form-control"
-                                    v-model="selectedCarId"
-                                    :class="{
-                                        'has-error': carSelectionError.state
-                                    }"
-                                >
-                                    <option disabled value="">
-                                        {{ $t('elegiPatente') }}
-                                    </option>
-                                    <option
-                                        v-for="car in driverCarsWithPlate"
-                                        :key="car.id"
-                                        :value="car.id"
-                                    >
-                                        {{ car.patente }}
-                                    </option>
-                                </select>
-                                <span class="error" v-if="carSelectionError.state">
-                                    {{ carSelectionError.message }}
-                                </span>
-                            </div>
-                            <div class="trip_seats-available">
-                                <fieldset>
-                                    <span class="label-for-group">
-                                        <svg-item
-                                            v-if="tripCardTheme === 'light'"
-                                            :size="28"
-                                            :icon="'icono-sentado'"
-                                        ></svg-item>
-                                        {{
-                                            trip.is_passenger == 0
-                                                ? $t('lugaresDisponibles')
-                                                : $t('cuposNecesarios')
-                                        }}
-                                    </span>
-                                    <span
-                                        v-if="tripCardTheme !== 'light'"
-                                        :key="
-                                            'outbound-seats-' +
-                                            trip.total_seats +
-                                            '-' +
-                                            outboundSeatsRadioRevision
-                                        "
-                                    >
-                                        <span class="radio-inline">
-                                            <input
-                                                type="radio"
-                                                id="seats-one"
-                                                name="newtrip-outbound-total-seats"
-                                                :value="1"
-                                                v-model.number="trip.total_seats"
-                                                @mousedown="
-                                                    onOutboundSeatRadioAttempt(1, $event)
-                                                "
-                                            />
-                                            <label
-                                                for="seats-one"
-                                                @mousedown="
-                                                    onOutboundSeatRadioAttempt(1, $event)
-                                                "
-                                                >1</label
-                                            >
-                                        </span>
-                                        <span class="radio-inline">
-                                            <input
-                                                type="radio"
-                                                id="seats-two"
-                                                name="newtrip-outbound-total-seats"
-                                                :value="2"
-                                                v-model.number="trip.total_seats"
-                                                @mousedown="
-                                                    onOutboundSeatRadioAttempt(2, $event)
-                                                "
-                                            />
-                                            <label
-                                                for="seats-two"
-                                                @mousedown="
-                                                    onOutboundSeatRadioAttempt(2, $event)
-                                                "
-                                                >2</label
-                                            >
-                                        </span>
-                                        <span class="radio-inline">
-                                            <input
-                                                type="radio"
-                                                id="seats-three"
-                                                name="newtrip-outbound-total-seats"
-                                                :value="3"
-                                                v-model.number="trip.total_seats"
-                                                @mousedown="
-                                                    onOutboundSeatRadioAttempt(3, $event)
-                                                "
-                                            />
-                                            <label
-                                                for="seats-three"
-                                                @mousedown="
-                                                    onOutboundSeatRadioAttempt(3, $event)
-                                                "
-                                                >3</label
-                                            >
-                                        </span>
-                                        <span class="radio-inline">
-                                            <input
-                                                type="radio"
-                                                id="seats-four"
-                                                name="newtrip-outbound-total-seats"
-                                                :value="4"
-                                                v-model.number="trip.total_seats"
-                                                @mousedown="
-                                                    onOutboundSeatRadioAttempt(4, $event)
-                                                "
-                                            />
-                                            <label
-                                                for="seats-four"
-                                                @mousedown="
-                                                    onOutboundSeatRadioAttempt(4, $event)
-                                                "
-                                                >4</label
-                                            >
-                                        </span>
-                                    </span>
-                                    <span
-                                        class="seats-widget"
-                                        v-if="tripCardTheme === 'light'"
-                                    >
-                                        <button
-                                            type="button"
-                                            @click="
-                                                () =>
-                                                    trip.total_seats < 4
-                                                        ? trip.total_seats++
-                                                        : trip.total_seats
-                                            "
-                                            class="btn btn-link"
-                                            :disabled="trip.total_seats === 4"
-                                        >
-                                            <svg-item
-                                                :size="28"
-                                                :icon="'add'"
-                                            ></svg-item>
-                                        </button>
-                                        <span class="total_seats">{{
-                                            trip.total_seats
-                                        }}</span>
-                                        <button
-                                            type="button"
-                                            @click="
-                                                () =>
-                                                    trip.total_seats > 1
-                                                        ? trip.total_seats--
-                                                        : trip.total_seats
-                                            "
-                                            class="btn btn-link"
-                                            :disabled="trip.total_seats === 1"
-                                        >
-                                            <svg-item
-                                                :size="28"
-                                                :icon="'remove'"
-                                            ></svg-item>
-                                        </button>
-                                    </span>
-                                </fieldset>
-                                <span class="error" v-if="seatsError.state">
-                                    {{ seatsError.message }}
-                                </span>
-                            </div>
-                            <div
-                                class="trip-comfort-preference"
-                                v-if="trip.is_passenger == 0"
-                            >
-                                <legend class="label-for-group">
-                                    {{ $t('priorizarComodidad') }}
-                                </legend>
-                                <label
-                                    for="newtrip-comfort-rear-max-two"
-                                    class="label-soft trip-comfort-preference__label"
-                                >
-                                    <input
-                                        type="checkbox"
-                                        id="newtrip-comfort-rear-max-two"
-                                        :checked="trip.rear_max_two_passengers"
-                                        @change="onOutboundRearMaxTwoChange"
-                                    />
-                                    {{ $t('atrasViajanSolo2Personas') }}
-                                </label>
-                            </div>
-                            <div
-                                class="trip_price"
-                                v-if="trip.is_passenger == 0 && !config.module_max_price_enabled && config.module_seat_price_enabled"
-                            >
-                                <legend class="label-for-group label-tooltip">
-                                    {{ $t('precioAsiento') }}
-                                <span
-                                    class="tooltip-bottom tooltip-seat-price"
-                                    :data-tooltip="contribucionPorPersonaTooltipText"
-                                >
-                                    <img
-                                        :src="tripStaticImg('icon-info.svg')"
-                                        alt=""
-                                        class="trip-form-info-icon"
-                                    />
-                                </span>
-                                </legend>
-
-                                <input
-                                    type="number"
-                                    v-model="price"
-                                    class="form-control form-control-with-icon form-control-price"
-                                    id="price"
-                                    min="0"
-                                    :class="{ 'has-error': priceError.state }"
-                                    :placeholder="price"
-                                    @input="onOutboundPriceFieldInput"
-                                />
-                                <span
-                                    class="error trip-form-error-with-icon"
-                                    v-if="priceError.state"
-                                >
-                                    <img
-                                        :src="tripStaticImg('icon-warning.svg')"
-                                        alt=""
-                                        class="trip-form-warning-icon"
-                                    />
-                                    {{ priceError.message }}
-                                </span>
-                                <span
-                                    class="error max-contribution-reminder"
-                                    v-if="hasShownMaxContributionExceededWarning"
-                                >
-                                    {{
-                                        $t(
-                                            'recuerdeReglaContribucionMaximaExcedida'
-                                        )
-                                    }}
-                                </span>
-                            </div>
-
-                            <div
-                                class="list_item"
-                                v-if="
-                                    trip.is_passenger == 0 &&
-                                    config.module_max_price_enabled
-                                "
-                            >
-                                <i
-                                    class="fa fa-link"
-                                    aria-hidden="true"
-                                    v-if="tripCardTheme === 'light'"
-                                ></i>
-                            </div>
-                            <div
-                                class="trip_price"
-                                v-if="
-                                    trip.is_passenger == 0 &&
-                                    config.module_max_price_enabled &&
-                                    config.module_seat_price_enabled
-                                "
-                            >
-                                <legend class="label-for-group label-tooltip">
-                                    {{ $t('precioAsiento') }}
-                                    <span
-                                        class="tooltip-bottom tooltip-seat-price"
-                                        :data-tooltip="contribucionPorPersonaTooltipText"
-                                    >
-                                        <img
-                                            :src="tripStaticImg('icon-info.svg')"
-                                            alt=""
-                                            class="trip-form-info-icon"
-                                        />
-                                    </span>
-                                </legend>
-
-                                <input
-                                    type="number"
-                                    v-model="price"
-                                    class="form-control form-control-with-icon form-control-price"
-                                    id="price"
-                                    min="0"
-                                    :class="{ 'has-error': priceError.state }"
-                                    :placeholder="price"
-                                    :max="maximum_seat_price_cents / 100"
-                                    @input="onOutboundPriceFieldInput"
-                                />
-                                <span
-                                    class="error trip-form-error-with-icon"
-                                    v-if="priceError.state"
-                                >
-                                    <img
-                                        :src="tripStaticImg('icon-warning.svg')"
-                                        alt=""
-                                        class="trip-form-warning-icon"
-                                    />
-                                    {{ priceError.message }}
-                                </span>
-                                <span
-                                    class="error max-contribution-reminder"
-                                    v-if="hasShownMaxContributionExceededWarning"
-                                >
-                                    {{
-                                        $t(
-                                            'recuerdeReglaContribucionMaximaExcedida'
-                                        )
-                                    }}
-                                </span>
-                            </div>
-
-                            <div
-                                v-if="
-                                    trip.is_passenger == 0 &&
-                                    trip.distance > 0 &&
-                                    config.module_seat_price_enabled
-                                "
-                                class="trip-contribucion-recomendada-card"
-                            >
-                                <div class="trip-contribucion-recomendada-card__main">
-                                    <strong
-                                        >{{ $t('contribucionRecomendadaLabel') }}:
-                                        {{
-                                            $n(
-                                                recommended_seat_price_cents / 100,
-                                                'currency'
-                                            )
-                                        }}</strong
-                                    >
-                                </div>
-                                <p class="trip-contribucion-recomendada-card__hint">
-                                    {{
-                                        contribucionRecomendadaCardDescripcionText
-                                    }}
-                                </p>
-                            </div>
-
-                            <div class="trip-comment">
-                                <label
-                                    for="trip_comment"
-                                    class="label-for-group"
-                                >
-                                    {{
-                                        trip.is_passenger == 0
-                                            ? $t('comentarioPasajeros')
-                                            : $t('comentario')
-                                    }}
-                                </label>
-                                <textarea
-                                    maxlength="2000"
-                                    v-model="trip.description"
-                                    id="trp_comment"
-                                    class="form-control"
-                                    :placeholder="
-                                        $t('placeholderComentarioPasajeros')
-                                    "
-                                ></textarea>
-                                <span class="error" v-if="commentError.state">
-                                    {{ commentError.message }}
-                                </span>
-                            </div>
-                            <div
-                                v-if="trip.is_passenger == 0"
-                                class="checkbox-trip-autoaccept-friends"
-                            >
-                                <span>
-                                    <input
-                                        type="checkbox"
-                                        v-model="trip.autoaccept_friends_requests"
-                                        id="cbxAutoacceptFriendsRequests"
-                                    />
-                                    <label for="cbxAutoacceptFriendsRequests">
-                                        {{ $t('aceptarPedidosAmigosAutomaticamente') }}
-                                    </label>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-sm-11 col-md-9 preferences-container">
-                            <!-- <fieldset class="trip-privacity">
-                                <legend class="label-for-group">
-                                    {{ $t('privacidadViaje') }}
-                                </legend>
-                                <ul class="no-bullet">
-                                    <li>
-                                        <input
-                                            type="radio"
-                                            id="privacity-public"
-                                            value="2"
-                                            v-model="trip.friendship_type_id"
-                                        />
-                                        <label
-                                            for="privacity-public"
-                                            class="label-soft"
-                                        >
-                                            {{ $t('publico') }}
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <input
-                                            type="radio"
-                                            id="privacity-friendofriend"
-                                            value="1"
-                                            v-model="trip.friendship_type_id"
-                                        />
-                                        <label
-                                            for="privacity-friendofriend"
-                                            class="label-soft"
-                                        >
-                                            {{ $t('amigosamigos') }}
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <input
-                                            type="radio"
-                                            id="privacity-friend"
-                                            value="0"
-                                            v-model="trip.friendship_type_id"
-                                        />
-                                        <label
-                                            for="privacity-friend"
-                                            class="label-soft"
-                                        >
-                                            {{ $t('soloAmigos') }}
-                                        </label>
-                                    </li>
-                                </ul>
-                            </fieldset> -->
-                            <legend class="label-for-group">
-                                {{ $t('preferenciasViaje') }}
-                            </legend>
-                            <br />
-                            <div class="preferences row trip-pref-cards">
-                                <div class="col-xs-8 trip-pref-cards__cell">
-                                    <div class="trip-pref-card">
-                                        <input
-                                            type="checkbox"
-                                            id="newtrip-pref-smoking"
-                                            v-model="trip.allow_smoking"
-                                            class="trip-pref-card__input sr-only"
-                                        />
-                                        <label
-                                            for="newtrip-pref-smoking"
-                                            class="trip-pref-card__label"
-                                        >
-                                            <span class="trip-pref-card__surface">
-                                                <span
-                                                    class="trip-pref-card__badge"
-                                                    aria-hidden="true"
-                                                >
-                                                    <i
-                                                        class="fa fa-check"
-                                                        aria-hidden="true"
-                                                    ></i>
-                                                </span>
-                                                <img
-                                                    :src="
-                                                        tripStaticImg(
-                                                            'icon-smoke.svg'
-                                                        )
-                                                    "
-                                                    alt=""
-                                                    class="trip-pref-card__icon"
-                                                />
-                                            </span>
-                                            <span
-                                                class="trip-pref-card__caption label-soft"
-                                            >
-                                                {{
-                                                    $t(
-                                                        'preferenciaPermitidoFumar'
-                                                    )
-                                                }}
-                                            </span>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-xs-8 trip-pref-cards__cell">
-                                    <div class="trip-pref-card">
-                                        <input
-                                            type="checkbox"
-                                            id="newtrip-pref-animals"
-                                            v-model="trip.allow_animals"
-                                            class="trip-pref-card__input sr-only"
-                                        />
-                                        <label
-                                            for="newtrip-pref-animals"
-                                            class="trip-pref-card__label"
-                                        >
-                                            <span class="trip-pref-card__surface">
-                                                <span
-                                                    class="trip-pref-card__badge"
-                                                    aria-hidden="true"
-                                                >
-                                                    <i
-                                                        class="fa fa-check"
-                                                        aria-hidden="true"
-                                                    ></i>
-                                                </span>
-                                                <img
-                                                    :src="
-                                                        tripStaticImg(
-                                                            'icon-pet.svg'
-                                                        )
-                                                    "
-                                                    alt=""
-                                                    class="trip-pref-card__icon"
-                                                />
-                                            </span>
-                                            <span
-                                                class="trip-pref-card__caption label-soft"
-                                            >
-                                                {{
-                                                    $t(
-                                                        'preferenciaPermitidoAnimales'
-                                                    )
-                                                }}
-                                            </span>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-xs-8 trip-pref-cards__cell">
-                                    <div class="trip-pref-card">
-                                        <input
-                                            type="checkbox"
-                                            id="newtrip-pref-kids"
-                                            v-model="trip.allow_kids"
-                                            class="trip-pref-card__input sr-only"
-                                        />
-                                        <label
-                                            for="newtrip-pref-kids"
-                                            class="trip-pref-card__label"
-                                        >
-                                            <span class="trip-pref-card__surface">
-                                                <span
-                                                    class="trip-pref-card__badge"
-                                                    aria-hidden="true"
-                                                >
-                                                    <i
-                                                        class="fa fa-check"
-                                                        aria-hidden="true"
-                                                    ></i>
-                                                </span>
-                                                <img
-                                                    :src="
-                                                        tripStaticImg(
-                                                            'icon-baby.svg'
-                                                        )
-                                                    "
-                                                    alt=""
-                                                    class="trip-pref-card__icon"
-                                                />
-                                            </span>
-                                            <span
-                                                class="trip-pref-card__caption label-soft"
-                                            >
-                                                {{
-                                                    $t(
-                                                        'preferenciaPermitidoNinos'
-                                                    )
-                                                }}
-                                            </span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div
-                                v-if="!updatingTrip && !isMobile"
-                                class="row row-showReturnTrip"
-                            >
-                                <hr class="col-md-20" />
-                                <div class="checkbox-trip-return col-md-24">
-                                    <span>
-                                        <input
-                                            type="checkbox"
-                                            v-model="showReturnTrip"
-                                            id="cbxShowReturnTrip"
-                                        />
-                                        <label for="cbxShowReturnTrip">
-                                            {{ $t('cargarViajeRegreso') }}
-                                        </label>
-                                    </span>
-                                </div>
-                            </div>
-                            <TripFormValidationSummary
-                                v-bind="tripFormValidationSummaryBindings"
-                            />
-                            <button
-                                v-if="!showReturnTrip && !isMobile"
-                                class="trip-create btn btn-primary btn-lg"
-                                :class="{ 'trip-create--update': updatingTrip && !showReturnTrip }"
-                                @click="save"
-                                :disabled="saving"
-                            >
-                                <span v-if="!updatingTrip">
-                                    <spinner
-                                        class="blue"
-                                        v-if="saving"
-                                    ></spinner>
-                                    <span v-else>{{ $t('crear') }}</span>
-                                </span>
-                                <span v-else>
-                                    <spinner
-                                        class="blue"
-                                        v-if="saving"
-                                    ></spinner>
-                                    <span v-else>{{ $t('actualizar') }}</span>
-                                </span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div
-                v-if="tripCardTheme === 'light' && !isMobile"
-                class="trip_information trip_information--light"
-            >
-                <ul class="no-bullet">
-                    <li class="list_item">
-                        <i
-                            class="fa fa-link"
-                            aria-hidden="true"
-                            v-if="tripCardTheme === 'light'"
-                        ></i>
-                        <div class="label-soft">
-                            {{ $t('distanciaARecorrer') }}
-                        </div>
-                        <div>{{ distanceString }}</div>
-                    </li>
-                    <li class="list_item">
-                        <i
-                            class="fa fa-clock-o"
-                            aria-hidden="true"
-                            v-if="tripCardTheme === 'light'"
-                        ></i>
-                        <div class="label-soft">{{ $t('tiempoEstimado') }}</div>
-                        <div>{{ estimatedTimeString }}</div>
-                    </li>
-                    <li class="list_item">
-                        <i
-                            class="fa fa-leaf"
-                            aria-hidden="true"
-                            v-if="tripCardTheme === 'light'"
-                        ></i>
-                        <div class="label-soft">
-                            {{ $t('huellaCarbono') }} (
-                            <abbr
-                                :title="$t('kilogramosDioxidoDeCarbonoEquivalente')"
-                            >
-                                kg CO
-                                <sub>2eq</sub>
-                            </abbr>
-                            )
-                        </div>
-                        <div>{{ CO2String }}</div>
-                    </li>
-                </ul>
-            </div>
-            <div
-                v-if="showReturnTrip"
-                class="row show-return-trip"
-            >
-                <hr class="col-xs-24 hidden-sm hidden-md hidden-lg" />
-                <div v-if="showReturnTrip" :class="columnClass[0]">
-                    <div
-                        class="new-left trip_points trip_points--left"
-                        v-if="!isMobile && tripCardTheme === 'light'"
-                    >
-                        <div
-                            v-for="(m, index) in otherTrip.points"
-                            class="trip_point location-autocomplete"
-                            :class="{ 'trip-error': m.error.state }"
-                            :key="m.id"
-                        >
-                            <span v-if="index == 0" class="sr-only">{{
-                                $t('origen')
-                            }}</span>
-                            <span
-                                v-if="index == otherTrip.points.length - 1"
-                                class="sr-only"
-                            >
-                                {{ $t('destino') }}
-                            </span>
-                            <autocomplete
-                                :placeholder="getPlaceholder(index)"
-                                name="'input-return-trip' + index"
-                                ref="'input-return-trip' + index"
-                                :model-value="m.name"
-                                v-on:place_changed="
-                                    (data) =>
-                                        getPlace(
-                                            index,
-                                            data,
-                                            'returnTrip'
-                                        )
-                                "
-                                :classes="'form-control form-control-with-icon form-control-map-autocomplete'"
-                                :country="
-                                    allowForeignPoints ? null : 'AR'
-                                "
-                                :class="{ 'has-error': m.error.state }"
-                            ></autocomplete>
-                            <div
-                                @click="resetReturnPoints(m, index)"
-                                class="date-picker--cross"
-                            >
-                                <i
-                                    aria-hidden="true"
-                                    class="fa fa-times"
-                                ></i>
-                            </div>
-                            <span class="error" v-if="m.error.state">
-                                {{ m.error.message }}
-                            </span>
-                        </div>
-                        <TripPointDetailFields
-                            :points="otherTrip.points"
-                            :punto-partida="otherTrip.trip.punto_partida"
-                            :punto-llegada="otherTrip.trip.punto_llegada"
-                            :punto-partida-error="otherTrip.puntoPartidaError"
-                            :punto-llegada-error="otherTrip.puntoLlegadaError"
-                            id-prefix="newtrip-return"
-                            @update:puntoPartida="otherTrip.trip.punto_partida = $event"
-                            @update:puntoLlegada="otherTrip.trip.punto_llegada = $event"
-                        />
-                    </div>
-                </div>
-                <div v-if="showReturnTrip" :class="columnClass[1]">
-                    <div class="row">
-                        <div class="panel-other-trip-data">
-                            <div
-                                class="new-left trip_points col-sm-13 col-md-15"
-                                v-if="isMobile || tripCardTheme !== 'light'"
-                            >
-                                <div
-                                    v-for="(m, index) in otherTrip.points"
-                                    class="trip_point location-autocomplete"
-                                    :class="{ 'trip-error': m.error.state }"
-                                    :key="m.id"
-                                >
-                                    <span v-if="index == 0" class="sr-only">
-                                        {{ $t('origen') }}
-                                    </span>
-                                    <span
-                                        v-if="index == otherTrip.points.length - 1"
-                                        class="sr-only"
-                                    >
-                                        {{ $t('destino') }}
-                                    </span>
-                                    <autocomplete
-                                        :placeholder="getPlaceholder(index)"
-                                        name="'input-return-trip' + index"
-                                        ref="'input-return-trip' + index"
-                                        :model-value="m.name"
-                                        v-on:place_changed="
-                                            (data) =>
-                                                getPlace(
-                                                    index,
-                                                    data,
-                                                    'returnTrip'
-                                                )
-                                        "
-                                        :classes="'form-control form-control-with-icon form-control-map-autocomplete'"
-                                        :country="
-                                            allowForeignPoints ? null : 'AR'
-                                        "
-                                        :class="{ 'has-error': m.error.state }"
-                                    ></autocomplete>
-                                    <div
-                                        @click="resetReturnPoints(m, index)"
-                                        class="date-picker--cross"
-                                    >
-                                        <i
-                                            aria-hidden="true"
-                                            class="fa fa-times"
-                                        ></i>
-                                    </div>
-                                    <span class="error" v-if="m.error.state">
-                                        {{ m.error.message }}
-                                    </span>
-                                </div>
-                                <TripPointDetailFields
-                                    :points="otherTrip.points"
-                                    :punto-partida="otherTrip.trip.punto_partida"
-                                    :punto-llegada="otherTrip.trip.punto_llegada"
-                                    :punto-partida-error="otherTrip.puntoPartidaError"
-                                    :punto-llegada-error="otherTrip.puntoLlegadaError"
-                                    id-prefix="newtrip-return-mobile"
-                                    @update:puntoPartida="otherTrip.trip.punto_partida = $event"
-                                    @update:puntoLlegada="otherTrip.trip.punto_llegada = $event"
-                                />
-                            </div>
-                            <div
-                                v-if="tripCardTheme !== 'light' || isMobile"
-                                class="col-sm-11 col-md-9"
-                            >
-                                <div class="trip_information">
-                                    <ul class="no-bullet">
-                                        <li class="list_item">
-                                            <i
-                                                class="fa fa-link"
-                                                aria-hidden="true"
-                                                v-if="tripCardTheme === 'light'"
-                                            ></i>
-                                            <div
-                                                class="label-soft"
-                                                v-if="tripCardTheme !== 'light'"
-                                            >
-                                                {{ $t('distanciaARecorrer') }}
-                                            </div>
-                                            <div>
-                                                {{ otherTripDistanceString }}
-                                            </div>
-                                        </li>
-                                        <li class="list_item">
-                                            <i
-                                                class="fa fa-clock-o"
-                                                aria-hidden="true"
-                                                v-if="tripCardTheme === 'light'"
-                                            ></i>
-                                            <div
-                                                class="label-soft"
-                                                v-if="tripCardTheme !== 'light'"
-                                            >
-                                                {{ $t('tiempoEstimado') }}
-                                            </div>
-                                            <div>
-                                                {{
-                                                    otherTripEstimatedTimeString
-                                                }}
-                                            </div>
-                                        </li>
-                                        <li class="list_item">
-                                            <i
-                                                class="fa fa-leaf"
-                                                aria-hidden="true"
-                                                v-if="tripCardTheme === 'light'"
-                                            ></i>
-                                            <div
-                                                class="label-soft"
-                                                v-if="tripCardTheme !== 'light'"
-                                            >
-                                                {{ $t('huellaCarbono') }} (
-                                                    <abbr
-                                                        :title="$t('kilogramosDioxidoDeCarbonoEquivalente')"
-                                                    >
-                                                    kg CO
-                                                    <sub>2eq</sub>
-                                                </abbr>
-                                                )
-                                            </div>
-                                            <div>{{ otherTripCO2String }}</div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="new-left col-sm-13 col-md-15">
-                            <div class="trip_schedule-toggle" v-if="config.weekly_schedule">
-                                <div class="schedule-toggle-buttons">
-                                    <button type="button" class="btn btn-option schedule-tab" @click="useWeeklySchedule = false" :class="!useWeeklySchedule ? 'active' : ''">
-                                        {{ $t('unaVez') }}
-                                    </button>
-                                    <button type="button" class="btn btn-option schedule-tab" @click="useWeeklySchedule = true" :class="useWeeklySchedule ? 'active' : ''">
-                                        {{ $t('programaSemanal') }}
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="trip_datetime" v-if="!useWeeklySchedule">
-                                <div class="trip_date">
-                                    <label for="date" class="sr-only">{{
-                                        $t('dia')
-                                    }}</label>
-                                    <DatePicker
-                                        :model-value="otherTrip.date"
-                                        :minDate="otherTrip.minDate"
-                                        :class="{
-                                            'has-error':
-                                                otherTrip.dateError.state
-                                        }"
-                                        v-on:date_changed="changeOtherTripDate"
-                                    ></DatePicker>
-                                    <span
-                                        class="error"
-                                        v-if="otherTrip.dateError.state"
-                                    >
-                                        {{ otherTrip.dateError.message }}
-                                    </span>
-                                </div>
-                                <div class="trip_time">
-                                    <label for="otherTrip-time" class="sr-only">
-                                        {{ $t('hora') }}
-                                    </label>
-                                    <input
-                                        type="time"
-                                        v-maska="'##:##'"
-                                        v-model="otherTrip.time"
-                                        class="form-control form-control-with-icon form-control-time"
-                                        id="otherTrip-time"
-                                        :class="{
-                                            'has-error':
-                                                otherTrip.timeError.state
-                                        }"
-                                        placeholder="Hora (12:00)"
-                                    />
-                                    <span
-                                        class="error"
-                                        v-if="otherTrip.timeError.state"
-                                    >
-                                        {{ otherTrip.timeError.message }}
-                                    </span>
-                                    <!--<input type="text" v-model="time" />-->
-                                </div>
-                            </div>
-                            <div class="trip-weekly-schedule" v-if="useWeeklySchedule && config.weekly_schedule">
-                                <WeeklySchedule
-                                    v-model:weeklySchedule="weeklySchedule"
-                                    v-model:weeklyScheduleTime="weeklyScheduleReturnTime"
-                                    :readonly="false"
-                                    :theme="tripCardTheme"
-                                    :hasError="otherTrip.timeError.state"
-                                    :idPrefix="'return-ws'"
-                                />
-                                <span class="error" v-if="otherTrip.timeError.state">
-                                    {{ otherTrip.timeError.message }}
-                                </span>
-                            </div>
-                            <div
-                                class="trip_price"
-                                v-if="trip.is_passenger == 0 && 
-                                !config.module_max_price_enabled && 
-                                config.module_seat_price_enabled"
-                            >
-                                <legend class="label-for-group label-tooltip">
-                                    {{ $t('precioAsiento') }}
-                                <span
-                                    class="tooltip-bottom tooltip-seat-price"
-                                    :data-tooltip="contribucionPorPersonaTooltipText"
-                                >
-                                    <img
-                                        :src="tripStaticImg('icon-info.svg')"
-                                        alt=""
-                                        class="trip-form-info-icon"
-                                    />
-                                </span>
-                                </legend>
-
-                                <input
-                                    type="number"
-                                    v-model="returnPrice"
-                                    class="form-control form-control-with-icon form-control-price"
-                                    id="return-price"
-                                    min="0"
-                                    :class="{ 'has-error': returnPriceError.state }"
-                                    :placeholder="returnPrice"
-                                    @input="onReturnPriceFieldInput"
-                                />
-                                <span
-                                    class="error trip-form-error-with-icon"
-                                    v-if="returnPriceError.state"
-                                >
-                                    <img
-                                        :src="tripStaticImg('icon-warning.svg')"
-                                        alt=""
-                                        class="trip-form-warning-icon"
-                                    />
-                                    {{ returnPriceError.message }}
-                                </span>
-                                <span
-                                    class="error max-contribution-reminder"
-                                    v-if="hasShownReturnMaxContributionExceededWarning"
-                                >
-                                    {{
-                                        $t(
-                                            'recuerdeReglaContribucionMaximaExcedida'
-                                        )
-                                    }}
-                                </span>
-                            </div>
-                            <div
-                                class="trip_price"
-                                v-if="this.config.module_trip_creation_payment_enabled && config.module_seat_price_enabled"
-                            >
-                                <legend class="label-for-group label-tooltip">
-                                    {{ $t('precioAsiento') }}
-                                    <span
-                                        class="tooltip-bottom tooltip-seat-price"
-                                        :data-tooltip="contribucionPorPersonaTooltipText"
-                                    >
-                                        <img
-                                            :src="tripStaticImg('icon-info.svg')"
-                                            alt=""
-                                            class="trip-form-info-icon"
-                                        />
-                                    </span>
-                                </legend>
-                                <input
-                                    type="number"
-                                    v-model="returnPrice"
-                                    class="form-control form-control-with-icon form-control-price"
-                                    id="return-price"
-                                    min="0"
-                                    :class="{
-                                        'has-error': returnPriceError.state
-                                    }"
-                                    :placeholder="price"
-                                    :max="maximum_seat_price_cents / 100"
-                                    @input="onReturnPriceFieldInput"
-                                />
-                                <span
-                                    class="error trip-form-error-with-icon"
-                                    v-if="returnPriceError.state"
-                                >
-                                    <img
-                                        :src="tripStaticImg('icon-warning.svg')"
-                                        alt=""
-                                        class="trip-form-warning-icon"
-                                    />
-                                    {{ returnPriceError.message }}
-                                </span>
-                                <span
-                                    class="error max-contribution-reminder"
-                                    v-if="hasShownReturnMaxContributionExceededWarning"
-                                >
-                                    {{
-                                        $t(
-                                            'recuerdeReglaContribucionMaximaExcedida'
-                                        )
-                                    }}
-                                </span>
-                            </div>
-
-                            <div
-                                v-if="
-                                    trip.is_passenger == 0 &&
-                                    otherTrip.trip.distance > 0 &&
-                                    config.module_seat_price_enabled
-                                "
-                                class="trip-contribucion-recomendada-card"
-                            >
-                                <div class="trip-contribucion-recomendada-card__main">
-                                    <strong
-                                        >{{ $t('contribucionRecomendadaLabel') }}:
-                                        {{
-                                            $n(
-                                                recommended_return_seat_price_cents / 100,
-                                                'currency'
-                                            )
-                                        }}</strong
-                                    >
-                                </div>
-                                <p class="trip-contribucion-recomendada-card__hint">
-                                    {{
-                                        contribucionRecomendadaCardDescripcionText
-                                    }}
-                                </p>
-                            </div>
-
-                            <div class="trip_seats-available">
-                                <fieldset>
-                                    <span class="label-for-group">
-                                        <svg-item
-                                            v-if="tripCardTheme === 'light'"
-                                            :size="28"
-                                            :icon="'icono-sentado'"
-                                        ></svg-item>
-                                        {{
-                                            trip.is_passenger
-                                                ? $t('cuposNecesarios')
-                                                : $t('lugaresDisponibles')
-                                        }}
-                                    </span>
-                                    <span
-                                        v-if="tripCardTheme !== 'light'"
-                                        :key="
-                                            'return-seats-' +
-                                            otherTrip.trip.total_seats +
-                                            '-' +
-                                            returnSeatsRadioRevision
-                                        "
-                                    >
-                                        <span class="radio-inline">
-                                            <input
-                                                type="radio"
-                                                id="otherTrip-seats-one"
-                                                name="newtrip-return-total-seats"
-                                                :value="1"
-                                                v-model.number="
-                                                    otherTrip.trip.total_seats
-                                                "
-                                                @mousedown="
-                                                    onReturnSeatRadioAttempt(1, $event)
-                                                "
-                                            />
-                                            <label
-                                                for="otherTrip-seats-one"
-                                                @mousedown="
-                                                    onReturnSeatRadioAttempt(1, $event)
-                                                "
-                                                >1</label
-                                            >
-                                        </span>
-                                        <span class="radio-inline">
-                                            <input
-                                                type="radio"
-                                                id="otherTrip-seats-two"
-                                                name="newtrip-return-total-seats"
-                                                :value="2"
-                                                v-model.number="
-                                                    otherTrip.trip.total_seats
-                                                "
-                                                @mousedown="
-                                                    onReturnSeatRadioAttempt(2, $event)
-                                                "
-                                            />
-                                            <label
-                                                for="otherTrip-seats-two"
-                                                @mousedown="
-                                                    onReturnSeatRadioAttempt(2, $event)
-                                                "
-                                                >2</label
-                                            >
-                                        </span>
-                                        <span class="radio-inline">
-                                            <input
-                                                type="radio"
-                                                id="otherTrip-seats-three"
-                                                name="newtrip-return-total-seats"
-                                                :value="3"
-                                                v-model.number="
-                                                    otherTrip.trip.total_seats
-                                                "
-                                                @mousedown="
-                                                    onReturnSeatRadioAttempt(3, $event)
-                                                "
-                                            />
-                                            <label
-                                                for="otherTrip-seats-three"
-                                                @mousedown="
-                                                    onReturnSeatRadioAttempt(3, $event)
-                                                "
-                                                >3</label
-                                            >
-                                        </span>
-                                        <span class="radio-inline">
-                                            <input
-                                                type="radio"
-                                                id="otherTrip-seats-four"
-                                                name="newtrip-return-total-seats"
-                                                :value="4"
-                                                v-model.number="
-                                                    otherTrip.trip.total_seats
-                                                "
-                                                @mousedown="
-                                                    onReturnSeatRadioAttempt(4, $event)
-                                                "
-                                            />
-                                            <label
-                                                for="otherTrip-seats-four"
-                                                @mousedown="
-                                                    onReturnSeatRadioAttempt(4, $event)
-                                                "
-                                                >4</label
-                                            >
-                                        </span>
-                                    </span>
-                                    <span
-                                        class="seats-widget"
-                                        v-if="tripCardTheme === 'light'"
-                                    >
-                                        <button
-                                            type="button"
-                                            @click="
-                                                () =>
-                                                    otherTrip.trip.total_seats <
-                                                    4
-                                                        ? otherTrip.trip
-                                                              .total_seats++
-                                                        : otherTrip.trip
-                                                              .total_seats
-                                            "
-                                            class="btn btn-link"
-                                            :disabled="
-                                                otherTrip.trip.total_seats === 4
-                                            "
-                                        >
-                                            <svg-item
-                                                :size="28"
-                                                :icon="'add'"
-                                            ></svg-item>
-                                        </button>
-                                        <span class="total_seats">
-                                            {{ otherTrip.trip.total_seats }}
-                                        </span>
-                                        <button
-                                            type="button"
-                                            @click="
-                                                () =>
-                                                    otherTrip.trip.total_seats >
-                                                    1
-                                                        ? otherTrip.trip
-                                                              .total_seats--
-                                                        : otherTrip.trip
-                                                              .total_seats
-                                            "
-                                            class="btn btn-link"
-                                            :disabled="
-                                                otherTrip.trip.total_seats === 1
-                                            "
-                                        >
-                                            <svg-item
-                                                :size="28"
-                                                :icon="'remove'"
-                                            ></svg-item>
-                                        </button>
-                                    </span>
-                                </fieldset>
-                                <span
-                                    class="error"
-                                    v-if="otherTrip.seatsError.state"
-                                >
-                                    {{ otherTrip.seatsError.message }}
-                                </span>
-                            </div>
-                            <div
-                                class="trip-comfort-preference"
-                                v-if="otherTrip.trip.is_passenger == 0"
-                            >
-                                <legend class="label-for-group">
-                                    {{ $t('priorizarComodidad') }}
-                                </legend>
-                                <label
-                                    for="otherTrip-comfort-rear-max-two"
-                                    class="label-soft trip-comfort-preference__label"
-                                >
-                                    <input
-                                        type="checkbox"
-                                        id="otherTrip-comfort-rear-max-two"
-                                        :checked="
-                                            otherTrip.trip.rear_max_two_passengers
-                                        "
-                                        @change="onReturnRearMaxTwoChange"
-                                    />
-                                    {{ $t('atrasViajanSolo2Personas') }}
-                                </label>
-                            </div>
-                            <div class="trip-comment">
-                                <label
-                                    for="otherTrip-trip_comment"
-                                    class="label-for-group"
-                                >
-                                    {{ $t('comentarioPasajeros') }}
-                                </label>
-                                <textarea
-                                    maxlength="2000"
-                                    v-model="otherTrip.trip.description"
-                                    id="other_trp_comment"
-                                    class="form-control"
-                                    :placeholder="
-                                        $t('placeholderComentarioPasajeros')
-                                    "
-                                ></textarea>
-                                <span class="error" v-if="otherTrip.commentError.state">
-                                    {{ otherTrip.commentError.message }}
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-sm-11 col-md-9 preferences-container">
-                            <fieldset class="trip-privacity">
-                                <legend class="label-for-group">
-                                    {{ $t('privacidadViaje') }}
-                                </legend>
-                                <ul class="no-bullet">
-                                    <li>
-                                        <input
-                                            type="radio"
-                                            id="otherTrip-privacity-public"
-                                            value="2"
-                                            v-model="
-                                                otherTrip.trip
-                                                    .friendship_type_id
-                                            "
-                                        />
-                                        <label
-                                            for="otherTrip-privacity-public"
-                                            class="label-soft"
-                                        >
-                                            {{ $t('publico') }}
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <input
-                                            type="radio"
-                                            id="otherTrip-privacity-friendofriend"
-                                            value="1"
-                                            v-model="
-                                                otherTrip.trip
-                                                    .friendship_type_id
-                                            "
-                                        />
-                                        <label
-                                            for="otherTrip-privacity-friendofriend"
-                                            class="label-soft"
-                                        >
-                                            {{ $t('amigosamigos') }}
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <input
-                                            type="radio"
-                                            id="otherTrip-privacity-friend"
-                                            value="0"
-                                            v-model="
-                                                otherTrip.trip
-                                                    .friendship_type_id
-                                            "
-                                        />
-                                        <label
-                                            for="otherTrip-privacity-friend"
-                                            class="label-soft"
-                                        >
-                                            {{ $t('soloAmigos') }}
-                                        </label>
-                                    </li>
-                                </ul>
-                            </fieldset>
-                            <legend class="label-for-group">
-                                {{ $t('preferenciasViaje') }}
-                            </legend>
-                            <br />
-                            <div class="preferences row trip-pref-cards">
-                                <div class="col-xs-8 trip-pref-cards__cell">
-                                    <div class="trip-pref-card">
-                                        <input
-                                            type="checkbox"
-                                            id="newtrip-return-pref-smoking"
-                                            v-model="
-                                                otherTrip.trip.allow_smoking
-                                            "
-                                            class="trip-pref-card__input sr-only"
-                                        />
-                                        <label
-                                            for="newtrip-return-pref-smoking"
-                                            class="trip-pref-card__label"
-                                        >
-                                            <span class="trip-pref-card__surface">
-                                                <span
-                                                    class="trip-pref-card__badge"
-                                                    aria-hidden="true"
-                                                >
-                                                    <i
-                                                        class="fa fa-check"
-                                                        aria-hidden="true"
-                                                    ></i>
-                                                </span>
-                                                <img
-                                                    :src="
-                                                        tripStaticImg(
-                                                            'icon-smoke.svg'
-                                                        )
-                                                    "
-                                                    alt=""
-                                                    class="trip-pref-card__icon"
-                                                />
-                                            </span>
-                                            <span
-                                                class="trip-pref-card__caption label-soft"
-                                            >
-                                                {{
-                                                    $t(
-                                                        'preferenciaPermitidoFumar'
-                                                    )
-                                                }}
-                                            </span>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-xs-8 trip-pref-cards__cell">
-                                    <div class="trip-pref-card">
-                                        <input
-                                            type="checkbox"
-                                            id="newtrip-return-pref-animals"
-                                            v-model="
-                                                otherTrip.trip.allow_animals
-                                            "
-                                            class="trip-pref-card__input sr-only"
-                                        />
-                                        <label
-                                            for="newtrip-return-pref-animals"
-                                            class="trip-pref-card__label"
-                                        >
-                                            <span class="trip-pref-card__surface">
-                                                <span
-                                                    class="trip-pref-card__badge"
-                                                    aria-hidden="true"
-                                                >
-                                                    <i
-                                                        class="fa fa-check"
-                                                        aria-hidden="true"
-                                                    ></i>
-                                                </span>
-                                                <img
-                                                    :src="
-                                                        tripStaticImg(
-                                                            'icon-pet.svg'
-                                                        )
-                                                    "
-                                                    alt=""
-                                                    class="trip-pref-card__icon"
-                                                />
-                                            </span>
-                                            <span
-                                                class="trip-pref-card__caption label-soft"
-                                            >
-                                                {{
-                                                    $t(
-                                                        'preferenciaPermitidoAnimales'
-                                                    )
-                                                }}
-                                            </span>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-xs-8 trip-pref-cards__cell">
-                                    <div class="trip-pref-card">
-                                        <input
-                                            type="checkbox"
-                                            id="newtrip-return-pref-kids"
-                                            v-model="otherTrip.trip.allow_kids"
-                                            class="trip-pref-card__input sr-only"
-                                        />
-                                        <label
-                                            for="newtrip-return-pref-kids"
-                                            class="trip-pref-card__label"
-                                        >
-                                            <span class="trip-pref-card__surface">
-                                                <span
-                                                    class="trip-pref-card__badge"
-                                                    aria-hidden="true"
-                                                >
-                                                    <i
-                                                        class="fa fa-check"
-                                                        aria-hidden="true"
-                                                    ></i>
-                                                </span>
-                                                <img
-                                                    :src="
-                                                        tripStaticImg(
-                                                            'icon-baby.svg'
-                                                        )
-                                                    "
-                                                    alt=""
-                                                    class="trip-pref-card__icon"
-                                                />
-                                            </span>
-                                            <span
-                                                class="trip-pref-card__caption label-soft"
-                                            >
-                                                {{
-                                                    $t(
-                                                        'preferenciaPermitidoNinos'
-                                                    )
-                                                }}
-                                            </span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <TripFormValidationSummary
-                                v-bind="tripFormValidationSummaryBindings"
-                            />
-                            <button
-                                v-if="showReturnTrip && !isMobile"
-                                class="trip-create btn btn-primary btn-lg"
-                                @click="save"
-                                :disabled="saving"
-                            >
-                                <span v-if="!updatingTrip">
-                                    <spinner
-                                        class="blue"
-                                        v-if="saving"
-                                    ></spinner>
-                                    <span v-else>{{ $t('crear') }}</span>
-                                </span>
-                                <span v-else>
-                                    <spinner
-                                        class="blue"
-                                        v-if="saving"
-                                    ></spinner>
-                                    <span v-else>{{ $t('actualizar') }}</span>
-                                </span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div
-                v-if="
-                    !updatingTrip &&
-                    showReturnTrip &&
-                    tripCardTheme === 'light' &&
-                    !isMobile
-                "
-                class="trip_information trip_information--light"
-            >
-                <ul class="no-bullet">
-                    <li class="list_item">
-                        <i
-                            class="fa fa-link"
-                            aria-hidden="true"
-                            v-if="tripCardTheme === 'light'"
-                        ></i>
-                        <div class="label-soft">
-                            {{ $t('distanciaARecorrer') }}
-                        </div>
-                        <div>{{ distanceString }}</div>
-                    </li>
-                    <li class="list_item">
-                        <i
-                            class="fa fa-clock-o"
-                            aria-hidden="true"
-                            v-if="tripCardTheme === 'light'"
-                        ></i>
-                        <div class="label-soft">{{ $t('tiempoEstimado') }}</div>
-                        <div>{{ estimatedTimeString }}</div>
-                    </li>
-                    <li class="list_item">
-                        <i
-                            class="fa fa-leaf"
-                            aria-hidden="true"
-                            v-if="tripCardTheme === 'light'"
-                        ></i>
-                        <div class="label-soft">
-                            {{ $t('huellaCarbono') }} (
-                            <abbr
-                                :title="$t('kilogramosDioxidoDeCarbonoEquivalente')"
-                            >
-                                kg CO
-                                <sub>2eq</sub>
-                            </abbr>
-                            )
-                        </div>
-                        <div>{{ CO2String }}</div>
-                    </li>
-                </ul>
-            </div>
-            <div class="row">
-                <div class="col-xs-24 map"></div>
-            </div>
-        </div>
-        <div
-            v-if="isMobile"
-            class="trip-form-mobile-footer"
-        >
-            <div
-                v-if="!updatingTrip"
-                class="trip-form-mobile-footer__return checkbox-trip-return"
-            >
-                <input
-                    type="checkbox"
-                    v-model="showReturnTrip"
-                    id="cbxShowReturnTripMobile"
-                />
-                <label for="cbxShowReturnTripMobile">
-                    {{ $t('cargarViajeRegreso') }}
-                </label>
-            </div>
-            <TripFormValidationSummary
-                v-if="isMobile"
-                v-bind="tripFormValidationSummaryBindings"
-            />
-            <button
-                class="trip-create btn btn-primary btn-lg trip-form-mobile-footer__submit"
-                :class="{ 'trip-create--update': updatingTrip && !showReturnTrip }"
-                @click="save"
-                :disabled="saving"
-            >
-                <span v-if="!updatingTrip">
-                    <spinner
-                        class="blue"
-                        v-if="saving"
-                    ></spinner>
-                    <span v-else>{{ $t('crear') }}</span>
-                </span>
-                <span v-else>
-                    <spinner
-                        class="blue"
-                        v-if="saving"
-                    ></spinner>
-                    <span v-else>{{ $t('actualizar') }}</span>
-                </span>
-            </button>
-        </div>
+        <TripCreationSuccess
+            v-if="showWizardSuccess && createdTrip"
+            :trip="createdTrip"
+        />
+        <NewTripCreationWizard v-else />
 
         <modal
             name="newtrip-rear-comfort-seats-conflict"
@@ -2067,8 +49,6 @@ import { useCarsStore } from '../../stores/car';
 import { useDeviceStore } from '../../stores/device';
 import { useTripsStore } from '../../stores/trips';
 import { useRootStore } from '../../stores/root';
-import { appLocaleToRoutingLanguage } from '../../main';
-import { leafletOsrmServiceUrl } from '../../utils/osrmRouting';
 // import { parseOsmStreet } from '../../services/maps.js';
 import DatePicker from '../DatePicker';
 import modal from '../Modal';
@@ -2083,19 +63,7 @@ import SvgItem from '../SvgItem';
 import WeeklySchedule from '../elements/WeeklySchedule';
 import CompleteCarModal from '../elements/CompleteCarModal.vue';
 import TripCarsModal from '../elements/TripCarsModal.vue';
-import TripFormValidationSummary from '../elements/TripFormValidationSummary.vue';
-import TripPointDetailFields from '../elements/TripPointDetailFields';
 import bus from '../../services/bus-event.js';
-import { tripDetailRouteAfterCreate } from '../../utils/tripCreateRedirect.js';
-import {
-    isProfileRequiredTripError,
-    redirectToIncompleteProfileForTripCreate
-} from '../../utils/tripCreateErrors.js';
-import {
-    collectActiveValidationMessages,
-    findFirstTripFormErrorElement,
-    formatTripValidationDialogMessage
-} from '../../utils/tripFormValidationFeedback.js';
 import { getMaxContributionExceededMessage } from '../../utils/maxContributionExceededMessage.js';
 import { rememberMaxContributionWarning } from '../../utils/maxContributionWarningState.js';
 import {
@@ -2108,15 +76,6 @@ import { seatPriceCentsFromTripPriceCents } from '../../utils/tripPriceOccupants
 import { exceedsMaximumSeatPrice } from '../../utils/tripMaxPriceValidation.js';
 import { isRearMaxTwoCompatibleWithSeats, shouldBlockSeatSelection } from '../../utils/tripRearComfortSeats.js';
 import {
-    shouldShowTripPointDetailInputs,
-    applyTripPointDetailValidation
-} from '../../utils/tripPointDetailValidation.js';
-import { hasTooManyForeignTripEndpoints } from '../../utils/tripForeignEndpointsValidation.js';
-import {
-    restoreTripPointDetailsFromTrip,
-    syncReturnTripPointDetailsFromOutbound
-} from '../../utils/tripPointDetailPrefill.js';
-import {
     activeCarsWithPlate,
     hasDriverPlate,
     isCarComplete,
@@ -2125,6 +84,9 @@ import {
     resolveTripCarId,
     restoreSelectedCarIdFromTrip
 } from '../../utils/profileRequirements';
+import { clearTripCreationDraft } from '../../utils/tripCreationDraft.js';
+import NewTripCreationWizard from './NewTripCreationWizard.vue';
+import TripCreationSuccess from './TripCreationSuccess.vue';
 
 let tripApi = new TripApi();
 let userApi = new UserApi();
@@ -2148,13 +110,18 @@ export default {
         DatePicker,
         WeeklySchedule,
         SvgItem,
-        TripPointDetailFields,
         autocomplete,
         spinner,
         modal,
         CompleteCarModal,
         TripCarsModal,
-        TripFormValidationSummary
+        NewTripCreationWizard,
+        TripCreationSuccess
+    },
+    provide() {
+        return {
+            newTripForm: this
+        };
     },
     data() {
         return {
@@ -2211,8 +178,6 @@ export default {
                 is_passenger: 0,
                 from_town: '',
                 to_town: '',
-                punto_partida: '',
-                punto_llegada: '',
                 trip_date: '',
                 total_seats: 2,
                 friendship_type_id: 2,
@@ -2236,10 +201,7 @@ export default {
             showCompleteCarModal: false,
             showTripCarsModal: false,
             carToComplete: null,
-            puntoPartidaError: new Error(),
-            puntoLlegadaError: new Error(),
             saving: false,
-            formValidationAttempted: false,
             allowForeignPoints: false,
             url: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
             attribution:
@@ -2254,8 +216,6 @@ export default {
                 timeError: new Error(),
                 commentError: new Error(),
                 seatsError: new Error(),
-                puntoPartidaError: new Error(),
-                puntoLlegadaError: new Error(),
                 no_lucrar: false,
                 sameCity: false,
                 points: [
@@ -2283,8 +243,6 @@ export default {
                     is_passenger: 0,
                     from_town: '',
                     to_town: '',
-                    punto_partida: '',
-                    punto_llegada: '',
                     trip_date: '',
                     total_seats: 2,
                     friendship_type_id: 2,
@@ -2306,6 +264,8 @@ export default {
             weeklySchedule: 0,
             weeklyScheduleTime: '12:00',
             weeklyScheduleReturnTime: '12:00',
+            showWizardSuccess: false,
+            createdTrip: null
         };
     },
     mounted() {
@@ -2353,21 +313,15 @@ export default {
                 this.driverCarsWithPlate.length > 0
             );
         },
+        profilePatenteLink() {
+            return {
+                name: 'profile_update',
+                query: { missing: 'patente' }
+            };
+        },
         ...mapState(useDeviceStore, {
             isMobile: 'isMobile'
         }),
-        activeFormValidationMessages() {
-            return collectActiveValidationMessages(
-                this.getTripValidationErrorFields()
-            );
-        },
-        tripFormValidationSummaryBindings() {
-            return {
-                attempted: this.formValidationAttempted,
-                messages: this.activeFormValidationMessages,
-                title: this.$t('algunosDatosNoValidos')
-            };
-        },
         columnClass() {
             return !this.isMobile && this.tripCardTheme === 'light'
                 ? ['col-sm-10', 'col-sm-14']
@@ -2497,39 +451,9 @@ export default {
         'otherTrip.trip.description': function () {
             this.otherTrip.commentError.state = false;
         },
-        'trip.description': function () {
-            this.commentError.state = false;
-        },
-        no_lucrar() {
-            this.lucrarError.state = false;
-        },
         'trip.friendship_type_id': function () {
             this.otherTrip.trip.friendship_type_id =
                 this.trip.friendship_type_id;
-        },
-        showReturnTrip(value) {
-            if (value) {
-                syncReturnTripPointDetailsFromOutbound(
-                    this.trip,
-                    this.otherTrip.trip
-                );
-            }
-        },
-        'trip.punto_partida'() {
-            if (this.showReturnTrip) {
-                syncReturnTripPointDetailsFromOutbound(
-                    this.trip,
-                    this.otherTrip.trip
-                );
-            }
-        },
-        'trip.punto_llegada'() {
-            if (this.showReturnTrip) {
-                syncReturnTripPointDetailsFromOutbound(
-                    this.trip,
-                    this.otherTrip.trip
-                );
-            }
         },
         'trip.is_passenger': function () {
             this.preselectDriverCar();
@@ -2577,6 +501,25 @@ export default {
                 useCarsStore().$patch({ cars: profileCars });
             }
         },
+        preselectDriverCar() {
+            if (!requiresDriverPlate(this.trip)) {
+                return;
+            }
+            const withPlate = this.driverCarsWithPlate;
+            if (this.selectedCarId != null && this.selectedCarId !== '') {
+                const stillActive = withPlate.find(
+                    (car) => String(car.id) === String(this.selectedCarId)
+                );
+                if (stillActive) {
+                    return;
+                }
+                this.selectedCarId = null;
+                this.trip.car_id = null;
+            }
+            if (withPlate.length === 1) {
+                this.selectedCarId = withPlate[0].id;
+            }
+        },
         resolveDriverCarForTrip() {
             const carId = resolveTripCarId(this.cars, this.selectedCarId);
             if (carId == null) {
@@ -2601,25 +544,6 @@ export default {
         async onTripCarsUpdated() {
             await this.carIndex();
             this.preselectDriverCar();
-        },
-        preselectDriverCar() {
-            if (!requiresDriverPlate(this.trip)) {
-                return;
-            }
-            const withPlate = this.driverCarsWithPlate;
-            if (this.selectedCarId != null && this.selectedCarId !== '') {
-                const stillActive = withPlate.find(
-                    (car) => String(car.id) === String(this.selectedCarId)
-                );
-                if (stillActive) {
-                    return;
-                }
-                this.selectedCarId = null;
-                this.trip.car_id = null;
-            }
-            if (withPlate.length === 1) {
-                this.selectedCarId = withPlate[0].id;
-            }
         },
         markMaxContributionExceededWarningAsShown() {
             this.hasShownMaxContributionExceededWarning = rememberMaxContributionWarning(
@@ -2674,59 +598,11 @@ export default {
             this.dateAnswer = date;
         },
         jumpToError() {
-            const element = findFirstTripFormErrorElement(document);
-            if (element) {
+            let hasError = document.getElementsByClassName('has-error');
+            if (hasError.length) {
+                let element = hasError[0];
                 this.$scrollToElement(element);
             }
-        },
-        getTripValidationErrorFields() {
-            const fields = [
-                ...this.points.map((point) => point.error),
-                this.puntoPartidaError,
-                this.puntoLlegadaError,
-                this.timeError,
-                this.dateError,
-                this.seatsError,
-                this.priceError,
-                this.lucrarError,
-                this.commentError,
-                this.carSelectionError
-            ];
-
-            if (this.showReturnTrip) {
-                fields.push(
-                    ...this.otherTrip.points.map((point) => point.error),
-                    this.otherTrip.puntoPartidaError,
-                    this.otherTrip.puntoLlegadaError,
-                    this.otherTrip.timeError,
-                    this.otherTrip.dateError,
-                    this.otherTrip.seatsError,
-                    this.otherTrip.commentError,
-                    this.returnPriceError
-                );
-            }
-
-            return fields;
-        },
-        showTripValidationSummary() {
-            const messages = collectActiveValidationMessages(
-                this.getTripValidationErrorFields()
-            );
-
-            if (!messages.length) {
-                return;
-            }
-
-            dialogs.message(
-                formatTripValidationDialogMessage(
-                    this.$t('algunosDatosNoValidos'),
-                    messages
-                ),
-                {
-                    estado: 'error',
-                    duration: 12
-                }
-            );
         },
     restoreData(trip) {
         this.no_lucrar = true;
@@ -2784,7 +660,6 @@ export default {
         this.trip.friendship_type_id = trip.friendship_type_id;
         this.trip.distance = trip.distance;
         this.trip.description = trip.description;
-        restoreTripPointDetailsFromTrip(this.trip, trip);
         
         this.trip.allow_kids = Number(trip.allow_kids) > 0;
         this.trip.allow_animals = Number(trip.allow_animals) > 0;
@@ -2878,6 +753,7 @@ export default {
 
         validate() {
             let globalError = false;
+            let foreignPoints = 0;
             let validTime = false;
             let validDate = false;
             let validOtherTripTime = false;
@@ -2896,14 +772,12 @@ export default {
                     p.error.state = true;
                     p.error.message = this.$t('localidadValida');
                     globalError = true;
+                } else {
+                    foreignPoints +=
+                        p.json.country === this.config.osm_country ? 0 : 1;
                 }
             });
-            if (
-                hasTooManyForeignTripEndpoints(
-                    this.points,
-                    this.config.osm_country
-                )
-            ) {
+            if (foreignPoints > 1) {
                 globalError = true;
                 this.points[0].error.state = true;
                 this.points[0].error.message = this.$t(
@@ -2912,39 +786,24 @@ export default {
             }
 
             if (this.showReturnTrip) {
+                foreignPoints = 0;
                 this.otherTrip.points.forEach((p) => {
                     if (!p.json) {
                         p.error.state = true;
                         p.error.message = this.$t('seleccioneLocalidadValida');
                         globalError = true;
+                    } else {
+                        foreignPoints +=
+                            p.json.country === this.config.osm_country ? 0 : 1;
                     }
                 });
-                if (
-                    hasTooManyForeignTripEndpoints(
-                        this.otherTrip.points,
-                        this.config.osm_country
-                    )
-                ) {
+                if (foreignPoints > 1) {
                     globalError = true;
                     this.otherTrip.points[0].error.state = true;
                     this.otherTrip.points[0].error.message = this.$t(
                         'origenDestinoArgentina'
                     );
                 }
-            }
-
-            if (shouldShowTripPointDetailInputs(this.points)) {
-                globalError =
-                    applyTripPointDetailValidation({
-                        puntoPartida: this.trip.punto_partida,
-                        puntoLlegada: this.trip.punto_llegada,
-                        t: (key) => this.$t(key),
-                        puntoPartidaError: this.puntoPartidaError,
-                        puntoLlegadaError: this.puntoLlegadaError
-                    }) || globalError;
-            } else {
-                this.puntoPartidaError.state = false;
-                this.puntoLlegadaError.state = false;
             }
 
             if (!this.time || !dayjs(this.time, 'HH mm').isValid()) {
@@ -3013,6 +872,10 @@ export default {
                         estado: 'error'
                     }
                 );
+            } else if (globalError) {
+                dialogs.message(this.$t('algunosDatosNoValidos'), {
+                    estado: 'error'
+                });
             } else if (
                 !this.no_lucrar &&
                 this.trip.is_passenger.toString() !== '1'
@@ -3130,20 +993,6 @@ export default {
                     globalError = true;
                 }
 
-                if (shouldShowTripPointDetailInputs(this.otherTrip.points)) {
-                    globalError =
-                        applyTripPointDetailValidation({
-                            puntoPartida: this.otherTrip.trip.punto_partida,
-                            puntoLlegada: this.otherTrip.trip.punto_llegada,
-                            t: (key) => this.$t(key),
-                            puntoPartidaError: this.otherTrip.puntoPartidaError,
-                            puntoLlegadaError: this.otherTrip.puntoLlegadaError
-                        }) || globalError;
-                } else {
-                    this.otherTrip.puntoPartidaError.state = false;
-                    this.otherTrip.puntoLlegadaError.state = false;
-                }
-
                 if (
                     !(
                         this.otherTrip.dateAnswer &&
@@ -3255,10 +1104,6 @@ export default {
                 this.returnPriceError.state = false;
             }
 
-            if (globalError) {
-                this.showTripValidationSummary();
-            }
-
             return globalError;
         },
 
@@ -3311,51 +1156,50 @@ export default {
         },
 
         async save() {
-            if (requiresDriverPlate(this.trip)) {
-                if (!Array.isArray(this.cars)) {
-                    await this.carIndex();
-                }
-                if (!hasDriverPlate(this.cars)) {
-                    dialogs.message(this.$t('olvidastePatente'), {
-                        estado: 'error'
-                    });
-                    this.showTripCarsModal = true;
-                    return;
-                }
-                if (
-                    needsCarSelection(this.cars) &&
-                    !resolveTripCarId(this.cars, this.selectedCarId)
-                ) {
-                    this.carSelectionError.state = true;
-                    this.carSelectionError.message = this.$t('seleccionaAuto');
-                    return;
-                }
-                this.carSelectionError.state = false;
-                const tripCar = this.resolveDriverCarForTrip();
-                if (tripCar && !isCarComplete(tripCar)) {
-                    this.carToComplete = tripCar;
-                    this.showCompleteCarModal = true;
-                    return;
-                }
+            if (
+                requiresDriverPlate(this.trip) &&
+                !Array.isArray(this.cars)
+            ) {
+                await this.carIndex();
+            }
+            if (
+                requiresDriverPlate(this.trip) &&
+                !hasDriverPlate(this.cars)
+            ) {
+                dialogs.message(this.$t('olvidastePatente'), {
+                    estado: 'error'
+                });
+                this.showTripCarsModal = true;
+                return;
+            }
+            if (
+                requiresDriverPlate(this.trip) &&
+                needsCarSelection(this.cars) &&
+                !resolveTripCarId(this.cars, this.selectedCarId)
+            ) {
+                this.carSelectionError.state = true;
+                this.carSelectionError.message = this.$t('seleccionaAuto');
+                return;
             }
             this.carSelectionError.state = false;
+            const tripCar = this.resolveDriverCarForTrip();
+            if (tripCar && !isCarComplete(tripCar)) {
+                this.carToComplete = tripCar;
+                this.showCompleteCarModal = true;
+                return;
+            }
             const validationResult = this.validate();
             if (validationResult) {
-                this.formValidationAttempted = true;
+                // Jump To Error
                 this.$nextTick(() => {
                     this.jumpToError();
                 });
                 return;
             }
-            this.formValidationAttempted = false;
             /* eslint-disable no-unreachable */
             this.saving = true;
             if (!this.updatingTrip) {
                 if (this.$redirectToIdentityValidationIfRequired()) {
-                    this.saving = false;
-                    return;
-                }
-                if (this.$redirectToMyTripsIfPendingRatingsRequired()) {
                     this.saving = false;
                     return;
                 }
@@ -3391,14 +1235,18 @@ export default {
                                     return resolve(ot);
                                 });
                             }
-                        }).then((ot) => {
+                        }).then(() => {
                             this.saving = false;
                             if (t.existing) {
                                 dialogs.message(this.$t('viajeYaPublicado'), {
                                     estado: 'info'
                                 });
                             }
-                            this.$router.replace(tripDetailRouteAfterCreate(t));
+                            if (this.user && this.user.id != null) {
+                                clearTripCreationDraft(this.user.id);
+                            }
+                            this.createdTrip = t;
+                            this.showWizardSuccess = true;
                         });
                     })
                     .catch((err) => {
@@ -3420,12 +1268,6 @@ export default {
                         } else if (this.$checkError(err, 'routing_service_unavailable')) {
                             dialogs.message(this.$t('routingServiceTemporaryError'), {
                                 estado: 'error'
-                            });
-                        } else if (isProfileRequiredTripError(err)) {
-                            redirectToIncompleteProfileForTripCreate(this.$router);
-                            dialogs.message(this.$t('completaPerfilParaCrearViaje'), {
-                                estado: 'error',
-                                duration: 10
                             });
                         } else {
                             dialogs.message(
@@ -3497,11 +1339,6 @@ export default {
                     error: new Error(),
                     id: point.id  // Preserve the original ID
                 }));
-
-                syncReturnTripPointDetailsFromOutbound(
-                    this.trip,
-                    this.otherTrip.trip
-                );
                 
                 // Update the center to the first point of the return trip
                 this.otherTrip.center = this.otherTrip.points[0].location;
@@ -3619,39 +1456,6 @@ export default {
                 }
             });
 
-            if (this.$refs.map && this.$refs.map.mapObject) {
-                let map = this.$refs.map.mapObject;
-                const waypointsMeta = points.map((point) => ({
-                    lat: point.location.lat,
-                    lng: point.location.lng
-                }));
-                const routingLang = appLocaleToRoutingLanguage[this.$i18n.locale] || 'es';
-                const osrmServiceUrl = leafletOsrmServiceUrl();
-                console.debug('[Carpoolear][L.Routing] NewTrip calcRoute: Routing.control via backend OSRM proxy', {
-                    type: type || 'trip',
-                    waypointCount: points.length,
-                    waypoints: waypointsMeta,
-                    language: routingLang,
-                    serviceUrl: osrmServiceUrl
-                });
-
-                /* eslint-disable no-undef */
-                L.Routing.control({
-                    router: L.Routing.osrmv1({
-                        serviceUrl: osrmServiceUrl,
-                        language: routingLang,
-                        suppressDemoServerWarning: true
-                    }),
-                    waypoints: points.map(point => L.latLng(point.location.lat, point.location.lng)),
-                    language: routingLang
-                }).addTo(map);
-            } else {
-                console.debug('[Carpoolear][L.Routing] NewTrip calcRoute: skip Routing.control (no map ref yet)', {
-                    type: type || 'trip',
-                    waypointCount: points.length,
-                    hasMapRef: !!(this.$refs.map && this.$refs.map.mapObject)
-                });
-            }
         },
         validatePrice() {
             const p = parseSeatPriceInput(this.price);

@@ -81,9 +81,11 @@ describe('TripSeats.vue TripInviteFriends integration', () => {
     });
 });
 
-describe('NewTrip.vue post-create invite friends redirect', () => {
-    it('uses tripDetailRouteAfterCreate for post-create navigation', () => {
-        expect(newTripViewSource).toContain('tripDetailRouteAfterCreate');
+describe('NewTrip.vue post-create success flow', () => {
+    it('shows embedded invite friends on the trip creation success screen', () => {
+        expect(newTripViewSource).toContain('TripCreationSuccess');
+        expect(newTripViewSource).toContain('showWizardSuccess');
+        expect(newTripViewSource).toContain('clearTripCreationDraft');
         expect(newTripViewSource).toContain('viajeYaPublicado');
     });
 });
