@@ -16,4 +16,9 @@ describe('car catalog i18n', () => {
         expect(source).toContain("anio: 'Año'");
         expect(source).toContain("anio: 'Year'");
     });
+
+    it('defines editar autos link for create trip car selection', () => {
+        expect(source).toContain("editarAutosEnViaje: '(editar autos)'");
+        expect(source).toContain("editarAutosEnViaje: '(edit vehicles)'");
+    });
 });
