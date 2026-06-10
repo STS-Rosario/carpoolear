@@ -9,14 +9,11 @@ describe('TripCarsModal', () => {
         expect(fs.existsSync(componentPath)).toBe(true);
     });
 
-    it('provides cars CRUD inside a modal', () => {
+    it('wraps shared CarsEditorPanel inside a modal shell', () => {
         const source = fs.readFileSync(componentPath, 'utf8');
 
-        expect(source).toContain('carIndex');
-        expect(source).toContain('openEditCar');
-        expect(source).toContain('openAddCar');
-        expect(source).toContain('deleteCar');
-        expect(source).toContain('CarForm');
+        expect(source).toContain('CarsEditorPanel');
+        expect(source).not.toContain('CarForm');
         expect(source).toContain("@close=\"$emit('close')\"");
     });
 });

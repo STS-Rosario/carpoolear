@@ -11,6 +11,13 @@ describe('ProfileCars CRUD section', () => {
         expect(fs.existsSync(formPath)).toBe(true);
     });
 
+    it('delegates cars CRUD to shared CarsEditorPanel', () => {
+        const viewSource = fs.readFileSync(viewPath, 'utf8');
+
+        expect(viewSource).toContain('CarsEditorPanel');
+        expect(viewSource).not.toContain('CarForm');
+    });
+
     it('lists cars with add, edit and delete actions', () => {
         const viewSource = fs.readFileSync(viewPath, 'utf8');
 
