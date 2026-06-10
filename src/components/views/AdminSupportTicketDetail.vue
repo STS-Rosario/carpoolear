@@ -599,6 +599,10 @@ export default {
     max-height: 160px;
 }
 
+.clickable-img {
+    cursor: pointer;
+}
+
 .ticket-meta-row {
     display: flex;
     align-items: center;

@@ -164,6 +164,7 @@ describe('AdminSupportTicketDetail view', () => {
         expect(viewSource).toContain('openBlobImageInNewTab');
         expect(viewSource).toContain('@click="openBlobImageInNewTab(attachmentBlobUrls[attachment.id])"');
         expect(viewSource).toContain('ticket-attachment-thumb clickable-img');
+        expect(viewSource).toContain('.clickable-img {\n    cursor: pointer;\n}');
     });
 
     it('shows mark needs review action for open tickets', () => {

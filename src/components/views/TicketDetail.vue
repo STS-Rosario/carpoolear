@@ -276,4 +276,8 @@ export default {
     max-width: 160px;
     max-height: 160px;
 }
+
+.clickable-img {
+    cursor: pointer;
+}
 </style>
