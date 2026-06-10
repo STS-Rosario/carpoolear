@@ -12,10 +12,17 @@
             @click="onSegmentClick(step)"
         >
             <span
+                class="trip-creation-stepper__bar"
+                :class="barClasses(step)"
+            ></span>
+            <span
                 v-if="incompleteSteps.includes(step)"
                 class="trip-creation-stepper__incomplete-badge"
                 aria-hidden="true"
             ></span>
+            <span class="trip-creation-stepper__label">
+                {{ $t(getTripCreationStepLabelKey(step)) }}
+            </span>
         </button>
     </div>
 </template>
@@ -23,6 +30,7 @@
 <script>
 import {
     canNavigateToStep,
+    getTripCreationStepLabelKey,
     isStepDisabledForPassenger
 } from '../../utils/tripCreationSteps.js';
 
@@ -59,11 +67,21 @@ export default {
     },
 
     methods: {
+        getTripCreationStepLabelKey,
         isSegmentDisabled(step) {
             return (
                 isStepDisabledForPassenger(step, this.isPassenger) ||
                 !canNavigateToStep(step, this.maxVisitedStep, this.isPassenger)
             );
+        },
+        barClasses(step) {
+            return {
+                'trip-creation-stepper__bar--active': step === this.currentStep,
+                'trip-creation-stepper__bar--completed':
+                    step < this.currentStep || step <= this.maxVisitedStep,
+                'trip-creation-stepper__bar--disabled':
+                    isStepDisabledForPassenger(step, this.isPassenger)
+            };
         },
         segmentClasses(step) {
             return {
@@ -96,31 +114,53 @@ export default {
 .trip-creation-stepper__segment {
     position: relative;
     flex: 1;
-    height: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
     border: none;
     padding: 0;
-    background: #e0e0e0;
-    border-radius: 4px;
+    background: transparent;
     cursor: pointer;
 }
 
-.trip-creation-stepper__segment:first-child {
+.trip-creation-stepper__bar {
+    height: 8px;
     border-radius: 4px;
+    background: #e0e0e0;
 }
 
-.trip-creation-stepper__segment:last-child {
-    border-radius: 4px;
-}
-
-.trip-creation-stepper__segment--active,
-.trip-creation-stepper__segment--completed {
+.trip-creation-stepper__bar--active,
+.trip-creation-stepper__bar--completed {
     background: #4caf50;
 }
 
-.trip-creation-stepper__segment--disabled {
+.trip-creation-stepper__bar--disabled {
     background: #ececec;
+}
+
+.trip-creation-stepper__label {
+    font-size: 0.625rem;
+    line-height: 1.2;
+    text-align: center;
+    color: #666;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.trip-creation-stepper__segment--active .trip-creation-stepper__label {
+    color: #333;
+    font-weight: 600;
+}
+
+.trip-creation-stepper__segment--disabled {
     cursor: not-allowed;
     opacity: 0.55;
+}
+
+.trip-creation-stepper__segment--disabled .trip-creation-stepper__label {
+    color: #aaa;
 }
 
 .trip-creation-stepper__segment:disabled {

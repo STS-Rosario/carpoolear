@@ -30,6 +30,20 @@ const PASSENGER_STEPS = [
     STEP.LAST_DETAILS
 ];
 
+const STEP_LABEL_KEYS = {
+    [STEP.ORIGIN]: 'tripCreationStepLabelOrigin',
+    [STEP.DESTINATION]: 'tripCreationStepLabelDestination',
+    [STEP.SCHEDULE]: 'tripCreationStepLabelSchedule',
+    [STEP.CAR]: 'tripCreationStepLabelCar',
+    [STEP.SEATS]: 'tripCreationStepLabelSeats',
+    [STEP.DESCRIPTION]: 'tripCreationStepLabelDescription',
+    [STEP.LAST_DETAILS]: 'tripCreationStepLabelLastDetails'
+};
+
+export function getTripCreationStepLabelKey(step) {
+    return STEP_LABEL_KEYS[step] || '';
+}
+
 export function getVisibleSteps(isPassenger) {
     return isPassenger ? [...PASSENGER_STEPS] : [...DRIVER_STEPS];
 }
