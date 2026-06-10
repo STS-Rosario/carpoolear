@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import {
     isCarComplete,
+    isCarFormComplete,
+    carFormMissingFieldKeys,
     isValidCarYear,
     carsNeedingCompletion,
     carDetailRows,
@@ -18,9 +20,43 @@ describe('carFields', () => {
                 patente: 'AB123CD',
                 car_brand_id: 1,
                 car_model_id: 2,
+                car_color_id: 3,
                 year: 2020
             })
         ).toBe(true);
+    });
+
+    it('detects incomplete car without color', () => {
+        expect(
+            isCarComplete({
+                patente: 'AB123CD',
+                car_brand_id: 1,
+                car_model_id: 2,
+                year: 2020
+            })
+        ).toBe(false);
+    });
+
+    it('detects complete car form with catalog selections', () => {
+        expect(
+            isCarFormComplete({
+                brandSelection: 1,
+                modelSelection: 2,
+                car_color_id: 3,
+                year: 2020
+            })
+        ).toBe(true);
+    });
+
+    it('lists missing car form fields for profile autos CRUD', () => {
+        expect(
+            carFormMissingFieldKeys({
+                brandSelection: null,
+                modelSelection: null,
+                year: null,
+                car_color_id: null
+            })
+        ).toEqual(['marca', 'modelo', 'anio', 'color']);
     });
 
     it('detects incomplete patente-only car', () => {
@@ -47,7 +83,14 @@ describe('carFields', () => {
 
     it('lists cars needing completion', () => {
         const cars = [
-            { id: 1, patente: 'A', car_brand_id: 1, car_model_id: 2, year: 2020 },
+            {
+                id: 1,
+                patente: 'A',
+                car_brand_id: 1,
+                car_model_id: 2,
+                car_color_id: 3,
+                year: 2020
+            },
             { id: 2, patente: 'B' }
         ];
 
