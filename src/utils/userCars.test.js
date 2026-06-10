@@ -13,20 +13,29 @@ import {
 
 describe('userCars', () => {
     it('builds a single empty row when the user has no cars', () => {
-        expect(buildPatenteRowsFromCars([])).toEqual([{ id: null, patente: '' }]);
-        expect(buildPatenteRowsFromCars(null)).toEqual([{ id: null, patente: '' }]);
+        const row = buildPatenteRowsFromCars([])[0];
+        expect(row.id).toBeNull();
+        expect(row.patente).toBe('');
+        expect(row.brandSelection).toBeNull();
     });
 
     it('maps stored cars to editable rows', () => {
-        expect(
-            buildPatenteRowsFromCars([
-                { id: 1, patente: 'ABC123' },
-                { id: 2, patente: 'XYZ789' }
-            ])
-        ).toEqual([
-            { id: 1, patente: 'ABC123' },
-            { id: 2, patente: 'XYZ789' }
+        const rows = buildPatenteRowsFromCars([
+            {
+                id: 1,
+                patente: 'ABC123',
+                car_brand_id: 10,
+                car_model_id: 20,
+                car_color_id: 3,
+                year: 2019
+            }
         ]);
+
+        expect(rows[0].patente).toBe('ABC123');
+        expect(rows[0].brandSelection).toBe(10);
+        expect(rows[0].modelSelection).toBe(20);
+        expect(rows[0].car_color_id).toBe(3);
+        expect(rows[0].year).toBe(2019);
     });
 
     it('requires explicit car selection when multiple plates exist', () => {

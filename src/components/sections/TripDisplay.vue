@@ -91,16 +91,7 @@
                             </span>
                         </div>
                         <div class="col-md-6" v-if="trip.car">
-                            <span>
-                                <h4>{{ $t('auto') }}:</h4>
-                                {{ trip.car.patente }}
-                                <span
-                                    v-if="trip.car.deleted"
-                                    class="label label-warning trip-car-deleted"
-                                >
-                                    {{ $t('autoEliminado') }}
-                                </span>
-                            </span>
+                            <TripCarDetails :car="trip.car" />
                         </div>
                     </div>
                     <div class="row">
@@ -234,11 +225,15 @@
 <script>
 import Modal from '../Modal';
 import UserNameWithBadge from '../elements/UserNameWithBadge.vue';
+import TripCarDetails from '../elements/TripCarDetails.vue';
 
 // FIXME: Rate_at undefined
 
 export default {
     name: 'trip-display',
+    components: {
+        TripCarDetails
+    },
     mounted() {},
     props: {
         trip: {

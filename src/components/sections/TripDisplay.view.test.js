@@ -24,3 +24,10 @@ describe('TripDisplay profile navigation', () => {
         expect(source).toContain('passengerRequestsByState');
     });
 });
+
+describe('TripDisplay car details', () => {
+    it('shows structured car details component', () => {
+        expect(source).toContain('TripCarDetails');
+        expect(source).toContain(':car="trip.car"');
+    });
+});

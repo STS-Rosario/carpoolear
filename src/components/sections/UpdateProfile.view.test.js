@@ -5,54 +5,11 @@ import path from 'node:path';
 const viewPath = path.resolve(__dirname, 'UpdateProfile.vue');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 
-describe('UpdateProfile missing field routing', () => {
-    it('exposes the patente input as a scroll target', () => {
-        expect(viewSource).toContain('for="input-patente-0"');
-        expect(viewSource).toContain(":id=\"'input-patente-' + index\"");
-        expect(viewSource).toContain('ref="patenteBlock"');
-        expect(viewSource).toContain("getElementById('input-patente-0')");
-    });
-
-    it('scrolls to patente when route query requests the missing patente field', () => {
-        expect(viewSource).toContain("this.$route.query.missing !== 'patente'");
-        expect(viewSource).toContain('getPatenteScrollTarget');
-        expect(viewSource).toContain('scrollToMissingRouteField');
-        expect(viewSource).toContain("'$route.query.missing'");
-        expect(viewSource).toContain(
-            'this.$scrollToElement(target, -270)'
-        );
-    });
-
-    it('highlights the patente field when route query requests it', () => {
-        expect(viewSource).toContain('missing-field-highlight');
-        expect(viewSource).toContain('shouldHighlightPatente');
-        expect(viewSource).toContain("this.$route.query.missing === 'patente'");
-    });
-});
-
-describe('UpdateProfile multiple patentes', () => {
-    it('supports adding another car from the profile form', () => {
-        expect(viewSource).toContain('agregarOtroAuto');
-        expect(viewSource).toContain('addUserCar');
-        expect(viewSource).toContain('removeUserCar');
-        expect(viewSource).toContain('class="form-group user-cars-block"');
-        expect(viewSource).toContain('v-for="(entry, index) in userCars"');
-        expect(viewSource).toContain('saveUserCars');
-    });
-});
-
-describe('UpdateProfile remove saved car', () => {
-    it('shows remove icon for any saved car row including a single patente', () => {
-        expect(viewSource).toContain('canShowRemoveCarRow(');
-        expect(viewSource).toContain('userCars.length');
-        expect(viewSource).toContain('fa fa-times');
-    });
-
-    it('asks for confirmation before deleting a saved car', () => {
-        expect(viewSource).toContain('confirmarEliminarAuto');
-        expect(viewSource).toContain(
-            "window.confirm(this.$t('confirmarEliminarAuto'))"
-        );
+describe('UpdateProfile missing patente routing', () => {
+    it('redirects missing patente guidance to the Autos settings section', () => {
+        expect(viewSource).toContain("name: 'profile_cars'");
+        expect(viewSource).toContain("$t('autosGestionarEnConfiguracion')");
+        expect(viewSource).not.toContain('user-cars-block');
     });
 });
 

@@ -18,7 +18,7 @@ const referenceMessageSecondKey = 'confirmarReferenciaUsuarioMensajeCalificacion
 const referencePersonCopy =
     'Las referencias son de la persona, y no de un viaje.';
 const referenceTripRatingCopy =
-    'Si tuviste un viaje dentro de Carpoolear y querés dejar una calificación, tenés que esperar a que pasen 24 horas luego de la finalización del viaje, vas a recibir una notificación cuando puedas hacerlo.';
+    'Si tuviste un viaje dentro de Carpoolear y querés dejar una calificación, podés hacerlo cuando haya transcurrido el 80% del tiempo estimado del viaje desde Mis Viajes. Vas a recibir una notificación 24 horas después del inicio del viaje.';
 const referenceModalParagraphsRule =
     /<template #body>[\s\S]*<p>[\s\S]*\$t\('confirmarReferenciaUsuarioMensajeReferencia'[\s\S]*<\/p>[\s\S]*<p>[\s\S]*\$t\('confirmarReferenciaUsuarioMensajeCalificacion'\)[\s\S]*<\/p>[\s\S]*<\/template>/;
 
