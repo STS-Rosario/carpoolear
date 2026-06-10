@@ -16,7 +16,7 @@ describe('TripDriver profile navigation', () => {
 
     it('links the driver profile image in the light theme card heading', () => {
         expect(source).toMatch(
-            /trip_driver_img_container[\s\S]*?<router-link[\s\S]*?trip_driver_img/
+            /<router-link[\s\S]*?trip_driver_img_container[\s\S]*?trip_driver_img/
         );
     });
 
@@ -35,9 +35,12 @@ describe('TripDriver profile navigation', () => {
         );
     });
 
-    it('styles profile links with pointer cursor', () => {
+    it('styles profile links with pointer cursor and preserves driver name spacing', () => {
         expect(source).toMatch(
             /\.trip-driver-profile-link\s*\{[\s\S]*?cursor:\s*pointer/
+        );
+        expect(source).toMatch(
+            /\.driver-data > \.trip-driver-profile-link:first-child/
         );
     });
 });

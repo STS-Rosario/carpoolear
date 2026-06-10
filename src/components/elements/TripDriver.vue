@@ -317,6 +317,9 @@ export default {
     color: inherit;
     text-decoration: none;
 }
+.trip-driver-profile-link.trip_driver_img_container {
+    display: inline-block;
+}
 .trip-driver-profile-link.trip_driver_name:hover,
 .trip-driver-profile-link.trip_driver_name:focus {
     text-decoration: underline;
@@ -330,7 +333,8 @@ export default {
 .driver-profile div.row:last-child {
     height: auto;
 }
-.driver-data div:first-child {
+.driver-data > .trip-driver-profile-link:first-child {
+    display: block;
     margin-top: 0.4em;
 }
 .trip-data--subtitle {
@@ -349,7 +353,7 @@ export default {
     .driver-profile div.row:last-child {
         min-height: 11rem;
     }
-    .driver-data div:first-child {
+    .driver-data > .trip-driver-profile-link:first-child {
         margin-top: 16px;
     }
 }
