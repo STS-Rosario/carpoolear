@@ -678,22 +678,29 @@ export default {
 
 .new-trip-wizard__nav {
     margin-top: 2rem;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
 }
 
 .new-trip-wizard__back {
-    display: block;
-    margin: 0 0 1rem;
+    margin: 0;
+    padding: 0.6rem 1rem;
     background: none;
     border: none;
     color: inherit;
     text-decoration: underline;
     cursor: pointer;
+    font-size: 1rem;
+    line-height: 1.5;
 }
 
 .new-trip-wizard__next,
 .new-trip-wizard__submit {
     min-width: 200px;
+    margin: 0;
 }
 
 .trip_seats-total-people {
