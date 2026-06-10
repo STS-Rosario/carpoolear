@@ -2,6 +2,28 @@
     <div class="new-trip-wizard">
         <h2 class="new-trip-wizard__title">{{ wizardTitle }}</h2>
 
+        <fieldset
+            class="trip-type-selection--light new-trip-wizard__type"
+            v-if="!form.updatingTrip"
+        >
+            <button
+                type="button"
+                class="btn btn-option"
+                :class="{ active: !isPassenger }"
+                @click="setPassengerMode(0)"
+            >
+                {{ $t('buscoConductor') }}
+            </button>
+            <button
+                type="button"
+                class="btn btn-option"
+                :class="{ active: isPassenger }"
+                @click="setPassengerMode(1)"
+            >
+                {{ $t('buscoPasajero') }}
+            </button>
+        </fieldset>
+
         <TripCreationStepper
             :current-step="currentStep"
             :max-visited-step="maxVisitedStep"
@@ -616,6 +638,17 @@ export default {
                 return;
             }
             this.form.save();
+        },
+        setPassengerMode(value) {
+            if (Number(this.form.trip.is_passenger) === value) {
+                return;
+            }
+            this.form.trip.is_passenger = value;
+            if (this.isPassenger && this.currentStep === STEP.CAR) {
+                this.currentStep = STEP.SCHEDULE;
+            }
+            this.revalidateVisitedSteps();
+            this.scheduleDraftSave();
         }
     }
 };
@@ -626,6 +659,18 @@ export default {
     font-size: 1.35rem;
     font-weight: 700;
     margin-bottom: 1rem;
+}
+
+.new-trip-wizard__type {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    border: none;
+    padding: 0;
+}
+
+.new-trip-wizard__type .btn-option {
+    flex: 1;
 }
 
 .new-trip-wizard__question {
