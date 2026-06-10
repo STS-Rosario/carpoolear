@@ -652,7 +652,6 @@ export default {
 
         toMakeRequest() {
             if (this.$redirectToIdentityValidationIfRequired()) return;
-            if (this.$redirectToMyTripsIfPendingRatingsRequired()) return;
             if (this.acceptPassengerValue) {
                 let data = {
                     property: 'do_not_alert_request_seat',
@@ -818,7 +817,6 @@ export default {
         },
         onSendToAll() {
             if (this.$redirectToIdentityValidationIfRequired()) return;
-            if (this.$redirectToMyTripsIfPendingRatingsRequired()) return;
             let users = this.matchingUsers.filter(
                 (u) => this.selectedMatchingUser.indexOf(u.id) >= 0
             );

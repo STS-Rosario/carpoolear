@@ -1,7 +1,6 @@
 <template>
     <header class="header header-component">
         <IdentityValidationCountdownBanner />
-        <PendingRatingsBanner />
         <div
             class="actionbar actionbar-top visible-xs"
             :class="{ 'actionbar-top--with-ratings': headerRatings }"
@@ -328,7 +327,6 @@ import router from '../../router';
 import bus from '../../services/bus-event.js';
 import IdentityValidationCountdownBanner from '../IdentityValidationCountdownBanner.vue';
 import UserRatingsCounts from '../elements/UserRatingsCounts.vue';
-import PendingRatingsBanner from '../PendingRatingsBanner.vue';
 import { shouldHideDonationOnIOSCapacitor } from '../../services/capacitor.js';
 
 export default {
@@ -459,8 +457,7 @@ export default {
     components: {
         dropdown,
         IdentityValidationCountdownBanner,
-        UserRatingsCounts,
-        PendingRatingsBanner
+        UserRatingsCounts
     }
 };
 </script>
