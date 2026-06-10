@@ -1,12 +1,16 @@
+import {
+    buildCarFormFromCar,
+    emptyCarForm,
+    isCarComplete,
+    carsNeedingCompletion
+} from './carFields.js';
+
 export function buildPatenteRowsFromCars(cars) {
     if (!Array.isArray(cars) || cars.length === 0) {
-        return [{ id: null, patente: '' }];
+        return [emptyCarForm()];
     }
 
-    return cars.map((car) => ({
-        id: car.id,
-        patente: car.patente || ''
-    }));
+    return cars.map((car) => buildCarFormFromCar(car));
 }
 
 export function activeCarsWithPlate(cars) {
@@ -90,6 +94,8 @@ export function canRemoveSavedCar(entry) {
 export function canShowRemoveCarRow(entry, totalRows) {
     return canRemoveSavedCar(entry) || totalRows > 1;
 }
+
+export { isCarComplete, carsNeedingCompletion };
 
 function hasValue(value) {
     return value !== null && value !== undefined && String(value).trim().length > 0;

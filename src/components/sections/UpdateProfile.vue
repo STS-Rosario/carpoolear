@@ -255,6 +255,60 @@
                                         'has-error': patentError.state
                                     }"
                                 />
+                                <CatalogCombobox
+                                    v-model="entry.brandSelection"
+                                    :options="catalogBrands"
+                                    :placeholder="$t('buscarMarca')"
+                                    :other-label="$t('marcaOtro')"
+                                    @update:model-value="
+                                        onBrandSelectionChange(entry, $event)
+                                    "
+                                    @other-selected="
+                                        onBrandSelectionChange(
+                                            entry,
+                                            'other'
+                                        )
+                                    "
+                                />
+                                <CatalogCombobox
+                                    v-model="entry.modelSelection"
+                                    :options="modelsForEntry(entry)"
+                                    :placeholder="$t('buscarModelo')"
+                                    :other-label="$t('modeloOtro')"
+                                    :disabled="!entry.brandSelection"
+                                    @update:model-value="
+                                        onModelSelectionChange(entry, $event)
+                                    "
+                                    @other-selected="
+                                        onModelSelectionChange(
+                                            entry,
+                                            'other'
+                                        )
+                                    "
+                                />
+                                <input
+                                    v-model.number="entry.year"
+                                    type="number"
+                                    class="form-control user-car-row__year"
+                                    :min="carYearMin"
+                                    :max="carYearMax"
+                                    :placeholder="$t('anio')"
+                                />
+                                <select
+                                    v-model="entry.car_color_id"
+                                    class="form-control"
+                                >
+                                    <option :value="null">
+                                        {{ $t('seleccionarColor') }}
+                                    </option>
+                                    <option
+                                        v-for="color in catalogColors"
+                                        :key="color.id"
+                                        :value="color.id"
+                                    >
+                                        {{ color.name }}
+                                    </option>
+                                </select>
                                 <button
                                     v-if="
                                         canShowRemoveCarRow(
@@ -273,6 +327,28 @@
                                         class="fa fa-times"
                                     ></i>
                                 </button>
+                            </div>
+                            <div
+                                v-if="entry.brandSelection === 'other'"
+                                class="user-car-row__other"
+                            >
+                                <input
+                                    v-model="entry.brand_other"
+                                    type="text"
+                                    class="form-control"
+                                    :placeholder="$t('marcaOtroPlaceholder')"
+                                />
+                            </div>
+                            <div
+                                v-if="entry.modelSelection === 'other'"
+                                class="user-car-row__other"
+                            >
+                                <input
+                                    v-model="entry.model_other"
+                                    type="text"
+                                    class="form-control"
+                                    :placeholder="$t('modeloOtroPlaceholder')"
+                                />
                             </div>
                         </div>
                         <span class="error" v-if="patentError.state">
@@ -702,11 +778,20 @@ import modal from '../Modal';
 import { UserApi } from '../../services/api';
 import { getApiErrorMessage } from '../../utils/apiErrors.js';
 import { normalizeFacebookProfileUrl } from '../../utils/facebookProfileUrl.js';
+import CatalogCombobox from '../elements/CatalogCombobox.vue';
+import { useCarCatalogStore } from '../../stores/carCatalog';
 import {
     buildPatenteRowsFromCars,
     canRemoveSavedCar,
     canShowRemoveCarRow
 } from '../../utils/userCars.js';
+import {
+    carPayloadFromForm,
+    CAR_YEAR_MIN,
+    CATALOG_OTHER_VALUE,
+    emptyCarForm,
+    getCarYearMax
+} from '../../utils/carFields.js';
 
 class Error {
     constructor(state = false, message = '') {
@@ -717,10 +802,16 @@ class Error {
 
 export default {
     name: 'upddate-profile',
+    components: {
+        CatalogCombobox
+    },
     data() {
         return {
             user: null,
-            userCars: [{ id: null, patente: '' }],
+            userCars: [emptyCarForm()],
+            catalogBrands: [],
+            catalogColors: [],
+            catalogModelsByBrand: {},
             pass: {
                 password: '',
                 password_confirmation: ''
@@ -771,6 +862,12 @@ export default {
         ...mapState(useDeviceStore, {
             isMobile: 'isMobile'
         }),
+        carYearMin() {
+            return CAR_YEAR_MIN;
+        },
+        carYearMax() {
+            return getCarYearMax();
+        },
         iptUser() {
             if (this.user) {
                 return this.user.name;
@@ -866,7 +963,46 @@ export default {
             this.userCars = buildPatenteRowsFromCars(this.cars);
         },
         addUserCar() {
-            this.userCars.push({ id: null, patente: '' });
+            this.userCars.push(emptyCarForm());
+        },
+        async loadCarCatalog() {
+            const catalogStore = useCarCatalogStore();
+            this.catalogBrands = await catalogStore.fetchBrands();
+            this.catalogColors = await catalogStore.fetchColors();
+        },
+        modelsForEntry(entry) {
+            const brandId = entry.brandSelection;
+            if (!brandId || brandId === CATALOG_OTHER_VALUE) {
+                return [];
+            }
+
+            return this.catalogModelsByBrand[String(brandId)] || [];
+        },
+        async onBrandSelectionChange(entry, value) {
+            entry.brandSelection = value;
+            entry.car_brand_id =
+                value === CATALOG_OTHER_VALUE ? null : value;
+            entry.car_model_id = null;
+            entry.modelSelection = null;
+            entry.model_other = '';
+            entry.brand_other =
+                value === CATALOG_OTHER_VALUE ? entry.brand_other : '';
+
+            if (value && value !== CATALOG_OTHER_VALUE) {
+                const catalogStore = useCarCatalogStore();
+                const models = await catalogStore.fetchModels(value);
+                this.catalogModelsByBrand[String(value)] = models;
+            }
+        },
+        onModelSelectionChange(entry, value) {
+            entry.modelSelection = value;
+            if (value === CATALOG_OTHER_VALUE) {
+                entry.car_model_id = null;
+                return;
+            }
+
+            entry.model_other = '';
+            entry.car_model_id = value;
         },
         removeUserCar(index) {
             const entry = this.userCars[index];
@@ -876,7 +1012,7 @@ export default {
             const removeRow = () => {
                 this.userCars.splice(index, 1);
                 if (this.userCars.length === 0) {
-                    this.userCars.push({ id: null, patente: '' });
+                    this.userCars.push(emptyCarForm());
                 }
             };
             if (entry.id) {
@@ -902,10 +1038,7 @@ export default {
                 if (!patente) {
                     continue;
                 }
-                const payload = {
-                    patente,
-                    description: 'NOT USED YET'
-                };
+                const payload = carPayloadFromForm(entry);
                 if (entry.id) {
                     await this.carUpdate({ ...payload, id: entry.id });
                 } else {
@@ -1362,10 +1495,21 @@ export default {
             this.accountTypes = data.cc;
         });
         
+        this.loadCarCatalog();
         // Load user's cars to populate patente field
         this.carIndex()
-            .then(() => {
+            .then(async () => {
                 this.syncUserCarsFromStore();
+                for (const entry of this.userCars) {
+                    if (
+                        entry.brandSelection &&
+                        entry.brandSelection !== CATALOG_OTHER_VALUE
+                    ) {
+                        const catalogStore = useCarCatalogStore();
+                        this.catalogModelsByBrand[String(entry.brandSelection)] =
+                            await catalogStore.fetchModels(entry.brandSelection);
+                    }
+                }
                 this.scrollToMissingRouteField();
             })
             .catch((error) => {
@@ -1426,6 +1570,17 @@ export default {
 
 .user-car-row__fields .form-control {
     flex: 1;
+    color: #333;
+}
+
+.user-car-row__fields .user-car-row__year {
+    flex: 0 0 5.5rem;
+    min-width: 5.5rem;
+}
+
+.user-car-row__fields select.form-control option {
+    color: #333;
+    background: #fff;
 }
 
 .user-car-row__remove {

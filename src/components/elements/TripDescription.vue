@@ -1,15 +1,6 @@
 <template>
-    <div v-if="showTripPatente || hasDescription" class="trip-description-block">
-        <p v-if="showTripPatente" class="trip-patente">
-            {{ $t('patenteDelAuto') }}
-            <span class="trip-patente__value">{{ trip.car.patente }}</span>
-            <span
-                v-if="trip.car.deleted"
-                class="trip-car-deleted-label"
-            >
-                ({{ $t('autoEliminado') }})
-            </span>
-        </p>
+    <div v-if="showTripCar || hasDescription" class="trip-description-block">
+        <TripCarDetails v-if="showTripCar" :car="trip.car" />
         <div
             v-if="hasDescription"
             class="row italic quote"
@@ -24,8 +15,13 @@
 import { mapState } from 'pinia';
 import { useTripsStore } from '../../stores/trips';
 import { useAuthStore } from '../../stores/auth';
+import TripCarDetails from './TripCarDetails.vue';
+
 export default {
     name: 'TripDescription',
+    components: {
+        TripCarDetails
+    },
     computed: {
         ...mapState(useTripsStore, {
             trip: 'currentTrip'
@@ -38,7 +34,7 @@ export default {
                 this.trip.description && this.trip.description.length > 0
             );
         },
-        showTripPatente() {
+        showTripCar() {
             return (
                 !this.trip.is_passenger &&
                 this.trip.car &&
@@ -50,21 +46,12 @@ export default {
         }
     },
     props: [],
-    components: {},
     methods: {}
 };
 </script>
 <style scoped>
 .trip-description-block {
     margin-left: 1em;
-}
-
-.trip-patente {
-    margin: 0 0 0.75em;
-}
-
-.trip-patente__value {
-    font-weight: bold;
 }
 
 .quote {

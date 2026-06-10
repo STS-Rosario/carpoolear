@@ -1,3 +1,5 @@
+import { activeCarsWithPlate, isCarComplete } from './userCars';
+
 function hasValue(value) {
     return value !== null && value !== undefined && String(value).trim().length > 0;
 }
@@ -27,6 +29,14 @@ export function hasDriverPlate(cars) {
     return !!firstCarWithPlate(cars);
 }
 
+export function hasCompleteDriverCar(cars) {
+    if (!Array.isArray(cars)) {
+        return false;
+    }
+
+    return activeCarsWithPlate(cars).some((car) => isCarComplete(car));
+}
+
 export function requiresDriverPlate(trip) {
     if (!trip) {
         return false;
@@ -41,6 +51,8 @@ export function requiresDriverPlate(trip) {
 
 export {
     activeCarsWithPlate,
+    carsNeedingCompletion,
+    isCarComplete,
     needsCarSelection,
     resolveTripCarId,
     restoreSelectedCarIdFromTrip

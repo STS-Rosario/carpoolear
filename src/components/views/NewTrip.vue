@@ -1996,6 +1996,12 @@
                 <p>{{ $t('rearMaxTwoRequiresThreeOrFewerSeats') }}</p>
             </div></template>
         </modal>
+        <CompleteCarModal
+            :visible="showCompleteCarModal"
+            :car="carToComplete"
+            @close="showCompleteCarModal = false"
+            @saved="onCarCompletionSaved"
+        />
     </div>
 </template>
 <script>
@@ -2019,6 +2025,7 @@ import UserApi from '../../services/api/User';
 import autocomplete from '../Autocomplete';
 import SvgItem from '../SvgItem';
 import WeeklySchedule from '../elements/WeeklySchedule';
+import CompleteCarModal from '../elements/CompleteCarModal.vue';
 import bus from '../../services/bus-event.js';
 import { getMaxContributionExceededMessage } from '../../utils/maxContributionExceededMessage.js';
 import { rememberMaxContributionWarning } from '../../utils/maxContributionWarningState.js';
@@ -2034,6 +2041,7 @@ import { isRearMaxTwoCompatibleWithSeats, shouldBlockSeatSelection } from '../..
 import {
     activeCarsWithPlate,
     hasDriverPlate,
+    isCarComplete,
     needsCarSelection,
     requiresDriverPlate,
     resolveTripCarId,
@@ -2064,7 +2072,8 @@ export default {
         SvgItem,
         autocomplete,
         spinner,
-        modal
+        modal,
+        CompleteCarModal
     },
     data() {
         return {
@@ -2141,6 +2150,8 @@ export default {
             updatingTrip: null,
             selectedCarId: null,
             carSelectionError: new Error(),
+            showCompleteCarModal: false,
+            carToComplete: null,
             saving: false,
             allowForeignPoints: false,
             url: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
@@ -2438,6 +2449,21 @@ export default {
             if (Array.isArray(profileCars) && profileCars.length > 0) {
                 useCarsStore().$patch({ cars: profileCars });
             }
+        },
+        resolveDriverCarForTrip() {
+            const carId = resolveTripCarId(this.cars, this.selectedCarId);
+            if (carId == null) {
+                return null;
+            }
+
+            return (this.cars || []).find(
+                (car) => String(car.id) === String(carId)
+            );
+        },
+        async onCarCompletionSaved() {
+            this.showCompleteCarModal = false;
+            await this.carIndex();
+            this.save();
         },
         preselectDriverCar() {
             if (!requiresDriverPlate(this.trip)) {
@@ -3098,6 +3124,12 @@ export default {
                 return;
             }
             this.carSelectionError.state = false;
+            const tripCar = this.resolveDriverCarForTrip();
+            if (tripCar && !isCarComplete(tripCar)) {
+                this.carToComplete = tripCar;
+                this.showCompleteCarModal = true;
+                return;
+            }
             const validationResult = this.validate();
             if (validationResult) {
                 // Jump To Error

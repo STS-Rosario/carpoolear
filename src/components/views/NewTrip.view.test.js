@@ -188,3 +188,21 @@ describe('NewTrip.vue rear seat comfort preference', () => {
         );
     });
 });
+
+describe('NewTrip.vue incomplete car completion', () => {
+    it('blocks driver trip save when selected car lacks marca and modelo', () => {
+        expect(viewSource).toContain('CompleteCarModal');
+        expect(viewSource).toContain('isCarComplete');
+        expect(viewSource).toContain('showCompleteCarModal');
+        expect(viewSource).toContain('carToComplete');
+        expect(viewSource).toMatch(
+            /resolveDriverCarForTrip\(\)[\s\S]*?!isCarComplete\(tripCar\)[\s\S]*?showCompleteCarModal = true/s
+        );
+    });
+
+    it('renders CompleteCarModal with catalog comboboxes for legacy cars', () => {
+        expect(viewSource).toMatch(
+            /<CompleteCarModal[\s\S]*?:visible="showCompleteCarModal"/s
+        );
+    });
+});

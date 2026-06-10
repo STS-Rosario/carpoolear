@@ -55,6 +55,9 @@ const AdminSupportReplyTemplateForm = () => import('../components/views/AdminSup
 const AdminChangelogs = () => import('../components/views/AdminChangelogs.vue');
 const AdminChangelogView = () => import('../components/views/AdminChangelogView.vue');
 const AdminChangelogForm = () => import('../components/views/AdminChangelogForm.vue');
+const AdminCarBrands = () => import('../components/views/AdminCarBrands.vue');
+const AdminCarModels = () => import('../components/views/AdminCarModels.vue');
+const AdminCarColors = () => import('../components/views/AdminCarColors.vue');
 
 const UpdateProfile = () => import('../components/sections/UpdateProfile.vue');
 const FriendsSetting = () => import('../components/sections/FriendsSetting.vue');
@@ -1088,6 +1091,43 @@ export default [
                     titleKey: 'detalleChangelog',
                     buttons: ['back']
                 }
+            }
+        }
+    },
+    {
+        path: '/admin/car-brands',
+        name: 'admin-car-brands',
+        component: AdminCarBrands,
+        beforeEnter: authAdmin,
+        meta: {
+            actionbar: {
+                footer: { show: true, active_id: 'admin' },
+                header: { titleKey: 'adminCarBrands', buttons: ['back'] }
+            }
+        }
+    },
+    {
+        path: '/admin/car-brands/:brandId/models',
+        name: 'admin-car-models',
+        component: AdminCarModels,
+        props: true,
+        beforeEnter: authAdmin,
+        meta: {
+            actionbar: {
+                footer: { show: true, active_id: 'admin' },
+                header: { titleKey: 'adminCarModels', buttons: ['back'] }
+            }
+        }
+    },
+    {
+        path: '/admin/car-colors',
+        name: 'admin-car-colors',
+        component: AdminCarColors,
+        beforeEnter: authAdmin,
+        meta: {
+            actionbar: {
+                footer: { show: true, active_id: 'admin' },
+                header: { titleKey: 'adminCarColors', buttons: ['back'] }
             }
         }
     },

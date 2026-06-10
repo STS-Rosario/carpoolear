@@ -83,3 +83,34 @@ describe('UpdateProfile name editing', () => {
         expect(viewSource).toContain('nombreValidadoContacteSoporte');
     });
 });
+
+describe('UpdateProfile car catalog fields', () => {
+    it('uses searchable comboboxes for marca and modelo and a plain color select', () => {
+        expect(viewSource).toContain('CatalogCombobox');
+        expect(viewSource).toContain("$t('marcaOtro')");
+        expect(viewSource).toContain("$t('modeloOtro')");
+        expect(viewSource).toContain('v-model="entry.car_color_id"');
+        expect(viewSource).toContain('v-model.number="entry.year"');
+        expect(viewSource).toContain('carYearMin');
+        expect(viewSource).toContain('carYearMax');
+        expect(viewSource).toContain('v-for="color in catalogColors"');
+        expect(viewSource).not.toMatch(/type="color"/);
+    });
+
+    it('shows Otro text inputs when catalog combobox selects Otro', () => {
+        expect(viewSource).toContain('CATALOG_OTHER_VALUE');
+        expect(viewSource).toContain("$t('marcaOtroPlaceholder')");
+        expect(viewSource).toContain("$t('modeloOtroPlaceholder')");
+        expect(viewSource).toContain('entry.brand_other');
+        expect(viewSource).toContain('entry.model_other');
+    });
+
+    it('loads catalog data and saves cars with carPayloadFromForm', () => {
+        expect(viewSource).toContain('useCarCatalogStore');
+        expect(viewSource).toContain('carPayloadFromForm');
+        expect(viewSource).toMatch(
+            /async saveUserCars\(\)[\s\S]*?carPayloadFromForm\(entry\)/s
+        );
+        expect(viewSource).not.toContain("description: 'NOT USED YET'");
+    });
+});

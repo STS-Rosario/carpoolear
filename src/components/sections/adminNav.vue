@@ -47,6 +47,12 @@
                 <li>
                     <router-link :to="{ name: 'admin-changelogs' }">{{ $t('adminNavChangelog') }}</router-link>
                 </li>
+                <li>
+                    <router-link :to="{ name: 'admin-car-brands' }">{{ $t('adminNavCarCatalog') }}</router-link>
+                </li>
+                <li>
+                    <router-link :to="{ name: 'admin-car-colors' }">{{ $t('adminCarColors') }}</router-link>
+                </li>
             </ul>
         </div>
     </div>
