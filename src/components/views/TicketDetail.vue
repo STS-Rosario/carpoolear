@@ -26,8 +26,9 @@
                         v-show="attachmentBlobUrls[attachment.id]"
                         :key="attachment.id"
                         :src="attachmentBlobUrls[attachment.id]"
-                        class="img-thumbnail ticket-attachment-thumb"
+                        class="img-thumbnail ticket-attachment-thumb clickable-img"
                         :alt="attachment.original_name"
+                        @click="openBlobImageInNewTab(attachmentBlobUrls[attachment.id])"
                     />
                 </div>
             </div>
@@ -70,7 +71,10 @@ import ToastUiEditor from '../elements/ToastUiEditor.vue';
 import { useTicketsStore } from '../../stores/tickets';
 import { ticketReplyBodyAlreadyUsed, isDuplicateReplyApiError } from '../../utils/supportTicketReplyDuplicate';
 import { markdownToHtml } from '../../services/markdown';
-import { fetchSupportTicketAttachmentBlob } from '../../utils/supportTicketAttachmentImage';
+import {
+    fetchSupportTicketAttachmentBlob,
+    openBlobImageInNewTab
+} from '../../utils/supportTicketAttachmentImage';
 import dialogs from '../../services/dialogs';
 import dayjs from '../../dayjs';
 import {
@@ -117,6 +121,7 @@ export default {
         }
     },
     methods: {
+        openBlobImageInNewTab,
         markdownToHtml,
         ...mapActions(useTicketsStore, {
             fetchOne: 'fetchOne',

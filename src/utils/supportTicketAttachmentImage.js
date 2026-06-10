@@ -20,6 +20,14 @@ export function supportTicketAttachmentImagePath(ticketId, attachmentId, { admin
     return `${prefix}${ticketId}/attachments/${attachmentId}/image`;
 }
 
+export function openBlobImageInNewTab(blobUrl) {
+    if (!blobUrl) {
+        return;
+    }
+
+    globalThis.open(blobUrl, '_blank', 'noopener,noreferrer');
+}
+
 export function fetchSupportTicketAttachmentBlob(ticketId, attachmentId, { admin = false } = {}) {
     const baseUrl = resolveApiBaseUrl();
     if (!baseUrl) {
