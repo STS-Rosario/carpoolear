@@ -222,145 +222,19 @@
                     </div>
 
                     <div
-                        ref="patenteBlock"
-                        class="form-group user-cars-block"
+                        ref="autosLinkBlock"
+                        class="form-group profile-autos-link"
                         :class="{
-                            'missing-field-highlight': shouldHighlightPatente
+                            'missing-field-highlight': shouldHighlightAutosLink
                         }"
                     >
-                        <label for="input-patente-0">
-                            {{ $t('patente') }}
-                            <span class="description">
-                                ({{ $t('soloConductores') }}).
-                                {{ $t('incentivoPatente') }}
-                            </span>
-                        </label>
-                        <div
-                            v-for="(entry, index) in userCars"
-                            :key="
-                                entry.id
-                                    ? 'car-' + entry.id
-                                    : 'car-new-' + index
-                            "
-                            class="user-car-row"
+                        <p>{{ $t('autosGestionarEnConfiguracion') }}</p>
+                        <router-link
+                            :to="{ name: 'profile_cars' }"
+                            class="btn btn-default"
                         >
-                            <div class="user-car-row__fields">
-                                <input
-                                    maxlength="20"
-                                    v-model="entry.patente"
-                                    type="text"
-                                    class="form-control"
-                                    :id="'input-patente-' + index"
-                                    :class="{
-                                        'has-error': patentError.state
-                                    }"
-                                />
-                                <CatalogCombobox
-                                    v-model="entry.brandSelection"
-                                    :options="catalogBrands"
-                                    :placeholder="$t('buscarMarca')"
-                                    :other-label="$t('marcaOtro')"
-                                    @update:model-value="
-                                        onBrandSelectionChange(entry, $event)
-                                    "
-                                    @other-selected="
-                                        onBrandSelectionChange(
-                                            entry,
-                                            'other'
-                                        )
-                                    "
-                                />
-                                <CatalogCombobox
-                                    v-model="entry.modelSelection"
-                                    :options="modelsForEntry(entry)"
-                                    :placeholder="$t('buscarModelo')"
-                                    :other-label="$t('modeloOtro')"
-                                    :disabled="!entry.brandSelection"
-                                    @update:model-value="
-                                        onModelSelectionChange(entry, $event)
-                                    "
-                                    @other-selected="
-                                        onModelSelectionChange(
-                                            entry,
-                                            'other'
-                                        )
-                                    "
-                                />
-                                <input
-                                    v-model.number="entry.year"
-                                    type="number"
-                                    class="form-control user-car-row__year"
-                                    :min="carYearMin"
-                                    :max="carYearMax"
-                                    :placeholder="$t('anio')"
-                                />
-                                <select
-                                    v-model="entry.car_color_id"
-                                    class="form-control"
-                                >
-                                    <option :value="null">
-                                        {{ $t('seleccionarColor') }}
-                                    </option>
-                                    <option
-                                        v-for="color in catalogColors"
-                                        :key="color.id"
-                                        :value="color.id"
-                                    >
-                                        {{ color.name }}
-                                    </option>
-                                </select>
-                                <button
-                                    v-if="
-                                        canShowRemoveCarRow(
-                                            entry,
-                                            userCars.length
-                                        )
-                                    "
-                                    type="button"
-                                    class="btn btn-default user-car-row__remove"
-                                    :title="$t('eliminarAuto')"
-                                    :aria-label="$t('eliminarAuto')"
-                                    @click.prevent="removeUserCar(index)"
-                                >
-                                    <i
-                                        aria-hidden="true"
-                                        class="fa fa-times"
-                                    ></i>
-                                </button>
-                            </div>
-                            <div
-                                v-if="entry.brandSelection === 'other'"
-                                class="user-car-row__other"
-                            >
-                                <input
-                                    v-model="entry.brand_other"
-                                    type="text"
-                                    class="form-control"
-                                    :placeholder="$t('marcaOtroPlaceholder')"
-                                />
-                            </div>
-                            <div
-                                v-if="entry.modelSelection === 'other'"
-                                class="user-car-row__other"
-                            >
-                                <input
-                                    v-model="entry.model_other"
-                                    type="text"
-                                    class="form-control"
-                                    :placeholder="$t('modeloOtroPlaceholder')"
-                                />
-                            </div>
-                        </div>
-                        <span class="error" v-if="patentError.state">
-                            {{ patentError.message }}
-                        </span>
-                        <button
-                            type="button"
-                            class="btn btn-default user-cars-block__add"
-                            @click.prevent="addUserCar"
-                        >
-                            {{ $t('agregarOtroAuto') }}
-                        </button>
+                            {{ $t('autos') }}
+                        </router-link>
                     </div>
                     <div class="checkbox">
                         <label>
@@ -763,7 +637,6 @@
 <script>
 import { mapState, mapActions } from 'pinia';
 import { useAuthStore } from '../../stores/auth';
-import { useCarsStore } from '../../stores/car';
 import { useDeviceStore } from '../../stores/device';
 import { useProfileStore } from '../../stores/profile';
 import { inputIsNumber, formatId, cleanId } from '../../services/utility';
@@ -778,20 +651,6 @@ import modal from '../Modal';
 import { UserApi } from '../../services/api';
 import { getApiErrorMessage } from '../../utils/apiErrors.js';
 import { normalizeFacebookProfileUrl } from '../../utils/facebookProfileUrl.js';
-import CatalogCombobox from '../elements/CatalogCombobox.vue';
-import { useCarCatalogStore } from '../../stores/carCatalog';
-import {
-    buildPatenteRowsFromCars,
-    canRemoveSavedCar,
-    canShowRemoveCarRow
-} from '../../utils/userCars.js';
-import {
-    carPayloadFromForm,
-    CAR_YEAR_MIN,
-    CATALOG_OTHER_VALUE,
-    emptyCarForm,
-    getCarYearMax
-} from '../../utils/carFields.js';
 
 class Error {
     constructor(state = false, message = '') {
@@ -802,16 +661,9 @@ class Error {
 
 export default {
     name: 'upddate-profile',
-    components: {
-        CatalogCombobox
-    },
     data() {
         return {
             user: null,
-            userCars: [emptyCarForm()],
-            catalogBrands: [],
-            catalogColors: [],
-            catalogModelsByBrand: {},
             pass: {
                 password: '',
                 password_confirmation: ''
@@ -823,7 +675,6 @@ export default {
             nombreError: new Error(),
             descError: new Error(),
             birthdayError: new Error(),
-            patentError: new Error(),
             dniError: new Error(),
             unaswered_messages_limitError: new Error(),
             phoneError: new Error(),
@@ -856,18 +707,9 @@ export default {
             settings: 'appConfig',
             config: 'appConfig'
         }),
-        ...mapState(useCarsStore, {
-            cars: 'cars'
-        }),
         ...mapState(useDeviceStore, {
             isMobile: 'isMobile'
         }),
-        carYearMin() {
-            return CAR_YEAR_MIN;
-        },
-        carYearMax() {
-            return getCarYearMax();
-        },
         iptUser() {
             if (this.user) {
                 return this.user.name;
@@ -921,7 +763,7 @@ export default {
                 return this.user.mobile_phone;
             }
         },
-        shouldHighlightPatente() {
+        shouldHighlightAutosLink() {
             return !!(
                 this.$route &&
                 this.$route.query &&
@@ -931,17 +773,9 @@ export default {
     },
     methods: {
         dayjs,
-        canRemoveSavedCar,
-        canShowRemoveCarRow,
         ...mapActions(useAuthStore, {
             update: 'update',
             updatePhoto: 'updatePhoto'
-        }),
-        ...mapActions(useCarsStore, {
-            carCreate: 'create',
-            carUpdate: 'update',
-            carDelete: 'delete',
-            carIndex: 'index'
         }),
         ...mapActions(useProfileStore, {
             getBankData: 'getBankData'
@@ -959,108 +793,7 @@ export default {
                 this.$scrollToElement(element, -270);
             }
         },
-        syncUserCarsFromStore() {
-            this.userCars = buildPatenteRowsFromCars(this.cars);
-        },
-        addUserCar() {
-            this.userCars.push(emptyCarForm());
-        },
-        async loadCarCatalog() {
-            const catalogStore = useCarCatalogStore();
-            this.catalogBrands = await catalogStore.fetchBrands();
-            this.catalogColors = await catalogStore.fetchColors();
-        },
-        modelsForEntry(entry) {
-            const brandId = entry.brandSelection;
-            if (!brandId || brandId === CATALOG_OTHER_VALUE) {
-                return [];
-            }
-
-            return this.catalogModelsByBrand[String(brandId)] || [];
-        },
-        async onBrandSelectionChange(entry, value) {
-            entry.brandSelection = value;
-            entry.car_brand_id =
-                value === CATALOG_OTHER_VALUE ? null : value;
-            entry.car_model_id = null;
-            entry.modelSelection = null;
-            entry.model_other = '';
-            entry.brand_other =
-                value === CATALOG_OTHER_VALUE ? entry.brand_other : '';
-
-            if (value && value !== CATALOG_OTHER_VALUE) {
-                const catalogStore = useCarCatalogStore();
-                const models = await catalogStore.fetchModels(value);
-                this.catalogModelsByBrand[String(value)] = models;
-            }
-        },
-        onModelSelectionChange(entry, value) {
-            entry.modelSelection = value;
-            if (value === CATALOG_OTHER_VALUE) {
-                entry.car_model_id = null;
-                return;
-            }
-
-            entry.model_other = '';
-            entry.car_model_id = value;
-        },
-        removeUserCar(index) {
-            const entry = this.userCars[index];
-            if (!entry) {
-                return;
-            }
-            const removeRow = () => {
-                this.userCars.splice(index, 1);
-                if (this.userCars.length === 0) {
-                    this.userCars.push(emptyCarForm());
-                }
-            };
-            if (entry.id) {
-                if (!window.confirm(this.$t('confirmarEliminarAuto'))) {
-                    return;
-                }
-                this.carDelete({ id: entry.id })
-                    .then(removeRow)
-                    .catch((err) => {
-                        console.error(err);
-                        dialogs.message(getApiErrorMessage(err), {
-                            duration: 10,
-                            estado: 'error'
-                        });
-                    });
-                return;
-            }
-            removeRow();
-        },
-        async saveUserCars() {
-            for (const entry of this.userCars) {
-                const patente = (entry.patente || '').trim();
-                if (!patente) {
-                    continue;
-                }
-                const payload = carPayloadFromForm(entry);
-                if (entry.id) {
-                    await this.carUpdate({ ...payload, id: entry.id });
-                } else {
-                    const created = await this.carCreate(payload);
-                    if (created && created.id) {
-                        entry.id = created.id;
-                    }
-                }
-            }
-        },
-        getPatenteScrollTarget() {
-            const input = document.getElementById('input-patente-0');
-            if (input) {
-                return input;
-            }
-            const block = this.$refs.patenteBlock;
-            if (block) {
-                return Array.isArray(block) ? block[0] : block;
-            }
-            return null;
-        },
-        scrollToMissingRouteField() {
+        redirectMissingPatenteToAutos() {
             if (
                 !this.$route ||
                 !this.$route.query ||
@@ -1068,21 +801,19 @@ export default {
             ) {
                 return;
             }
-            const scroll = () => {
-                const target = this.getPatenteScrollTarget();
-                if (!target) {
-                    return false;
-                }
-                this.$scrollToElement(target, -270);
-                return true;
-            };
+
+            this.$router.replace({ name: 'profile_cars' });
+        },
+        scrollToAutosLinkIfNeeded() {
+            if (!this.shouldHighlightAutosLink) {
+                return;
+            }
+
             this.$nextTick(() => {
-                if (scroll()) {
-                    return;
+                const block = this.$refs.autosLinkBlock;
+                if (block) {
+                    this.$scrollToElement(block, -270);
                 }
-                requestAnimationFrame(() => {
-                    this.$nextTick(scroll);
-                });
             });
         },
         changeShowPassword() {
@@ -1203,13 +934,6 @@ export default {
                     this.pass.password_confirmation = '';
                     this.loading = false;
                     dialogs.message(this.$t('perfilActualizadoCorrectamente'));
-                    this.saveUserCars().catch((carErr) => {
-                        console.error(carErr);
-                        dialogs.message(getApiErrorMessage(carErr), {
-                            duration: 10,
-                            estado: 'error'
-                        });
-                    });
                     // this.user.birthday = this.birthdayAnswer;
                     if (
                         this.user.image &&
@@ -1475,14 +1199,9 @@ export default {
         iptPhone() {
             this.phoneError.state = false;
         },
-        userCars: {
-            deep: true,
-            handler() {
-                this.patentError.state = false;
-            }
-        },
         '$route.query.missing'() {
-            this.scrollToMissingRouteField();
+            this.redirectMissingPatenteToAutos();
+            this.scrollToAutosLinkIfNeeded();
         }
     },
 
@@ -1495,27 +1214,8 @@ export default {
             this.accountTypes = data.cc;
         });
         
-        this.loadCarCatalog();
-        // Load user's cars to populate patente field
-        this.carIndex()
-            .then(async () => {
-                this.syncUserCarsFromStore();
-                for (const entry of this.userCars) {
-                    if (
-                        entry.brandSelection &&
-                        entry.brandSelection !== CATALOG_OTHER_VALUE
-                    ) {
-                        const catalogStore = useCarCatalogStore();
-                        this.catalogModelsByBrand[String(entry.brandSelection)] =
-                            await catalogStore.fetchModels(entry.brandSelection);
-                    }
-                }
-                this.scrollToMissingRouteField();
-            })
-            .catch((error) => {
-                console.error('Failed to load cars:', error);
-                this.scrollToMissingRouteField();
-            });
+        this.redirectMissingPatenteToAutos();
+        this.scrollToAutosLinkIfNeeded();
         bus.on('date-change', this.dateChange);
         this.user = this.userData;
         // Format nro_doc with pattern when page loads
@@ -1558,40 +1258,8 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.user-cars-block .user-car-row + .user-car-row {
-    margin-top: 0.35rem;
-}
-
-.user-car-row__fields {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-}
-
-.user-car-row__fields .form-control {
-    flex: 1;
-    color: #333;
-}
-
-.user-car-row__fields .user-car-row__year {
-    flex: 0 0 5.5rem;
-    min-width: 5.5rem;
-}
-
-.user-car-row__fields select.form-control option {
-    color: #333;
-    background: #fff;
-}
-
-.user-car-row__remove {
-    flex-shrink: 0;
-    min-width: 2.25rem;
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-}
-
-.user-cars-block__add {
-    margin-top: 0.5rem;
+.profile-autos-link p {
+    margin-bottom: 0.75rem;
 }
 
 .delete-account-container {

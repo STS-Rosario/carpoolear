@@ -2264,8 +2264,7 @@ export default {
         },
         profilePatenteLink() {
             return {
-                name: 'profile_update',
-                query: { missing: 'patente' }
+                name: 'profile_cars'
             };
         },
         ...mapState(useDeviceStore, {
@@ -3109,8 +3108,7 @@ export default {
                     estado: 'error'
                 });
                 this.$router.replace({
-                    name: 'profile_update',
-                    query: { incompleteProfile: 'true', missing: 'patente' }
+                    name: 'profile_cars'
                 });
                 return;
             }

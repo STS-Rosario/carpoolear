@@ -368,6 +368,8 @@ const messages = {
             'Tenés autos con datos incompletos. Completá marca, modelo, año y color de cada uno.',
         autosDatosIncompletos:
             'Completá marca, modelo, año y color del auto ({fields}).',
+        autosGestionarEnConfiguracion:
+            'Gestioná tus autos (marca, modelo, año, color y patente) en la sección Autos.',
         agregarOtroAuto: 'Agregar otro auto',
         eliminarAuto: 'Eliminar auto',
         confirmarEliminarAuto: '¿Confirmás que querés eliminar este auto?',
@@ -1683,6 +1685,8 @@ const messages = {
             'Tenés autos con datos incompletos. Completá marca, modelo, año y color de cada uno.',
         autosDatosIncompletos:
             'Completá marca, modelo, año y color del auto ({fields}).',
+        autosGestionarEnConfiguracion:
+            'Gestioná tus autos (marca, modelo, año, color y patente) en la sección Autos.',
         agregarOtroAuto: 'Agregar otro auto',
         eliminarAuto: 'Eliminar auto',
         confirmarEliminarAuto: '¿Confirmás que querés eliminar este auto?',
@@ -3134,6 +3138,8 @@ const messages = {
             'Some vehicles are missing details. Complete make, model, year, and color for each one.',
         autosDatosIncompletos:
             'Enter make, model, year, and color for the vehicle ({fields}).',
+        autosGestionarEnConfiguracion:
+            'Manage your vehicles (make, model, year, color, and plate) in the Vehicles section.',
         seleccionarAuto: 'Select vehicle',
         agregarNuevoAutoEnPerfil: '(add new in profile)',
         elegiPatente: 'Choose a license plate',

@@ -20,7 +20,10 @@
                 @other-selected="onBrandSelectionChange('other')"
             />
         </div>
-        <div v-if="entry.brandSelection === 'other'" class="form-group">
+        <div
+            v-if="entry.brandSelection === catalogOtherValue"
+            class="form-group"
+        >
             <input
                 v-model="entry.brand_other"
                 type="text"
@@ -40,7 +43,10 @@
                 @other-selected="onModelSelectionChange('other')"
             />
         </div>
-        <div v-if="entry.modelSelection === 'other'" class="form-group">
+        <div
+            v-if="entry.modelSelection === catalogOtherValue"
+            class="form-group"
+        >
             <input
                 v-model="entry.model_other"
                 type="text"
@@ -108,6 +114,9 @@ export default {
     },
     emits: ['brand-selection-change'],
     computed: {
+        catalogOtherValue() {
+            return CATALOG_OTHER_VALUE;
+        },
         carYearMin() {
             return CAR_YEAR_MIN;
         },
