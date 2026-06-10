@@ -14,3 +14,12 @@ describe('RateItem.vue neutral ratings', () => {
         expect(viewSource).toContain('rate-neutral-icon');
     });
 });
+
+describe('RateItem.vue profile links', () => {
+    it('links rating and reference author names to their profile', () => {
+        expect(viewSource).toContain('authorProfileRoute');
+        expect(viewSource).toContain('rate-item-author-link');
+        expect(viewSource).toContain("name: 'profile'");
+        expect(viewSource).toContain('userProfile: this.rate.from');
+    });
+});

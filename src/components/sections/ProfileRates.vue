@@ -392,4 +392,9 @@ export default {
     color: #333;
     font-size: 1rem;
 }
+
+.profile-rates-component :deep(.rate-neutral-icon) {
+    padding-bottom: 0.3em;
+    padding-right: 0.3em;
+}
 </style>

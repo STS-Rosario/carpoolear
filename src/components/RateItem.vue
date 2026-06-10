@@ -34,16 +34,40 @@
             </div>
 
             <div class="rate-item-profile">
-                <div
-                    class="trip_driver_img circle-box"
-                    v-imgSrc:profile="rate.from.image"
-                ></div>
-                <strong>{{ rate.from.name }}</strong>
+                <router-link
+                    v-if="authorProfileRoute"
+                    :to="authorProfileRoute"
+                    class="rate-item-author-link"
+                >
+                    <div
+                        class="trip_driver_img circle-box"
+                        v-imgSrc:profile="rate.from.image"
+                    ></div>
+                    <strong>{{ rate.from.name }}</strong>
+                </router-link>
+                <template v-else>
+                    <div
+                        class="trip_driver_img circle-box"
+                        v-imgSrc:profile="rate.from.image"
+                    ></div>
+                    <strong>{{ rate.from.name }}</strong>
+                </template>
             </div>
         </template>
         <template v-else>
             <div class="image-width">
+                <router-link
+                    v-if="authorProfileRoute"
+                    :to="authorProfileRoute"
+                    class="rate-item-author-link"
+                >
+                    <div
+                        class="trip_driver_img circle-box"
+                        v-imgSrc:profile="rate.from.image"
+                    ></div>
+                </router-link>
                 <div
+                    v-else
                     class="trip_driver_img circle-box"
                     v-imgSrc:profile="rate.from.image"
                 ></div>
@@ -51,7 +75,14 @@
             <div class="text-width">
                 <div class="rate-item-title">
                     <div>
-                        <strong>{{ rate.from.name }}</strong>
+                        <router-link
+                            v-if="authorProfileRoute"
+                            :to="authorProfileRoute"
+                            class="rate-item-author-link"
+                        >
+                            <strong>{{ rate.from.name }}</strong>
+                        </router-link>
+                        <strong v-else>{{ rate.from.name }}</strong>
                         <template v-if="!notReply">
                             <span class="rate-item-value">
                                 <i
@@ -201,6 +232,20 @@ export default {
             return this.config
                 ? 'rate-item-' + this.config.trip_card_design
                 : ' rate-item-default';
+        },
+        authorProfileRoute() {
+            if (!this.rate?.from?.id) {
+                return null;
+            }
+
+            return {
+                name: 'profile',
+                params: {
+                    id: this.rate.from.id,
+                    userProfile: this.rate.from,
+                    activeTab: 1
+                }
+            };
         }
     },
     props: ['user', 'rate', 'id', 'notReply']
@@ -232,6 +277,13 @@ export default {
 .rate-item-profile strong {
     vertical-align: middle;
     font-size: 14px;
+}
+.rate-item-author-link {
+    color: inherit;
+    text-decoration: none;
+}
+.rate-item-author-link:hover strong {
+    text-decoration: underline;
 }
 .reply_comment_content {
     margin-top: 1.25em;
