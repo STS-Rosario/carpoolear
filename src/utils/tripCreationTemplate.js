@@ -1,3 +1,5 @@
+import { STEP } from './tripCreationSteps.js';
+
 export const TRIP_CREATION_TEMPLATES_STORAGE_KEY = 'TRIP_CREATION_TEMPLATES';
 
 function readStore() {
@@ -93,6 +95,48 @@ export function listTripCreationTemplates(userId) {
         name: templateName,
         data: { ...userTemplates[templateName] }
     }));
+}
+
+export function hasTripCreationTemplates(userId) {
+    return listTripCreationTemplates(userId).length > 0;
+}
+
+export function applyTripCreationTemplateToForm(form, templateData) {
+    if (!form || !templateData) {
+        return false;
+    }
+
+    if (templateData.trip) {
+        Object.assign(form.trip, templateData.trip);
+    }
+    if (templateData.points) {
+        form.points = templateData.points.map((point) => ({
+            ...point,
+            error: { state: false, message: '' }
+        }));
+    }
+    form.dateAnswer = 'dateAnswer' in templateData
+        ? templateData.dateAnswer
+        : form.dateAnswer;
+    form.date = 'date' in templateData ? templateData.date : form.date;
+    form.time = 'time' in templateData ? templateData.time : form.time;
+    form.price = templateData.price || form.price;
+    form.no_lucrar = templateData.no_lucrar || false;
+    form.selectedCarId = templateData.selectedCarId;
+    form.allowForeignPoints = templateData.allowForeignPoints || false;
+    form.wantsIntermediateStops = templateData.wantsIntermediateStops || false;
+    form.useWeeklySchedule = templateData.useWeeklySchedule || false;
+    form.weeklySchedule = templateData.weeklySchedule || 0;
+    form.weeklyScheduleTime = templateData.weeklyScheduleTime || form.weeklyScheduleTime;
+
+    return true;
+}
+
+export function getWizardNavigationAfterTemplateApply() {
+    return {
+        currentStep: STEP.SCHEDULE,
+        maxVisitedStep: STEP.LAST_DETAILS
+    };
 }
 
 export function buildTripCreationTemplateFromSnapshot(snapshot) {
