@@ -146,7 +146,7 @@ describe('NewTripCreationWizard.vue', () => {
             /data-testid="trip-creation-next"[\s\S]*:disabled="isNextDisabled"/
         );
         expect(wizardSource).toMatch(
-            /goNext\(\)[\s\S]*STEP\.DESTINATION[\s\S]*TRIP_INFO_STATUS\.READY/
+            /goNext\(\)[\s\S]*shouldDisableTripCreationNext\([\s\S]*form\.tripInfoStatus/
         );
     });
 });
