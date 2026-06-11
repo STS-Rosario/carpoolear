@@ -532,6 +532,7 @@ const messages = {
         tripCreationUseTemplate: 'Quiero usar una plantilla de viaje',
         tripCreationOr: 'o',
         tripCreationChooseTemplateTitle: 'Elegir plantilla de viaje',
+        tripCreationChooseTemplatePlaceholder: 'Seleccionar plantilla',
         tripCreationRouteDetails: 'Detalles del recorrido',
         tripCreationTotalPeopleLabel:
             'Personas que viajan en total (contándote)',
@@ -2054,6 +2055,7 @@ const messages = {
         tripCreationUseTemplate: 'Quiero usar una plantilla de viaje',
         tripCreationOr: 'o',
         tripCreationChooseTemplateTitle: 'Elegir plantilla de viaje',
+        tripCreationChooseTemplatePlaceholder: 'Seleccionar plantilla',
         tripCreationRouteDetails: 'Detalles del recorrido',
         tripCreationTotalPeopleLabel:
             'Personas que viajan en total (contándote)',
@@ -3424,6 +3426,7 @@ const messages = {
         tripCreationUseTemplate: 'I want to use a trip template',
         tripCreationOr: 'or',
         tripCreationChooseTemplateTitle: 'Choose trip template',
+        tripCreationChooseTemplatePlaceholder: 'Select a template',
         tripCreationRouteDetails: 'Route details',
         tripCreationTotalPeopleLabel:
             'Total people traveling (including you)',
