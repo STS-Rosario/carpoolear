@@ -32,9 +32,20 @@
                         data-testid="trip-creation-use-template"
                         @click="openTemplateModal"
                     >
+                        <i
+                            class="fa fa-bookmark new-trip-wizard__template-button-icon"
+                            aria-hidden="true"
+                        ></i>
                         {{ $t('tripCreationUseTemplate') }}
                     </button>
                 </div>
+                <p
+                    v-if="hasAvailableTemplates"
+                    class="new-trip-wizard__template-or"
+                    aria-hidden="true"
+                >
+                    {{ $t('tripCreationOr') }}
+                </p>
                 <div class="new-trip-wizard__role-cards">
                     <button
                         type="button"
@@ -1093,11 +1104,29 @@ export default {
 }
 
 .new-trip-wizard__template-action {
-    margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0;
 }
 
 .new-trip-wizard__template-button {
-    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    width: auto;
+}
+
+.new-trip-wizard__template-button-icon {
+    line-height: 1;
+}
+
+.new-trip-wizard__template-or {
+    margin: 1rem 0;
+    text-align: center;
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #555;
 }
 
 .new-trip-wizard__template-list {
