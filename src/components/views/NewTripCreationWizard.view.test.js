@@ -180,8 +180,8 @@ describe('NewTrip.vue wizard integration', () => {
 
     it('tracks trip-info status while calculating route info', () => {
         expect(newTripSource).toContain('tripInfoStatus');
-        expect(newTripSource).toContain("TRIP_INFO_STATUS.LOADING");
-        expect(newTripSource).toContain("TRIP_INFO_STATUS.READY");
+        expect(newTripSource).toContain('TRIP_INFO_STATUS.LOADING');
+        expect(newTripSource).toContain('TRIP_INFO_STATUS.READY');
         expect(newTripSource).toMatch(
             /calcRoute\(type\)[\s\S]*tripInfoStatus = TRIP_INFO_STATUS\.LOADING/s
         );
