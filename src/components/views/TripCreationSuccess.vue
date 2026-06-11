@@ -31,7 +31,51 @@
             >
                 {{ $t('cargarViajeRegreso') }}
             </button>
+            <button
+                v-if="canSaveTemplate"
+                type="button"
+                class="btn btn-default trip-creation-success__save-template"
+                data-testid="trip-creation-save-template"
+                @click="openSaveTemplateModal"
+            >
+                {{ $t('tripCreationSaveTemplate') }}
+            </button>
         </div>
+
+        <modal
+            v-if="showSaveTemplateModal"
+            @close="closeSaveTemplateModal"
+        >
+            <template #header>
+                <h3>{{ $t('tripCreationSaveTemplateTitle') }}</h3>
+            </template>
+            <template #body>
+                <p>{{ $t('tripCreationSaveTemplateBody') }}</p>
+                <div class="form-group text-left">
+                    <label for="trip-creation-template-name">
+                        {{ $t('tripCreationTemplateNameLabel') }}
+                    </label>
+                    <input
+                        id="trip-creation-template-name"
+                        v-model="templateName"
+                        type="text"
+                        class="form-control"
+                        data-testid="trip-creation-template-name"
+                    />
+                </div>
+            </template>
+            <template #footer>
+                <button
+                    type="button"
+                    class="btn btn-primary"
+                    data-testid="trip-creation-template-save"
+                    :disabled="!templateName.trim()"
+                    @click="onSaveTemplate"
+                >
+                    {{ $t('guardar') }}
+                </button>
+            </template>
+        </modal>
 
         <div class="trip-creation-success__invite">
             <TripInviteFriends
@@ -43,25 +87,58 @@
 </template>
 
 <script>
+import { mapState } from 'pinia';
 import TripInviteFriends from '../sections/TripInviteFriends.vue';
+import modal from '../Modal';
+import dialogs from '../../services/dialogs.js';
+import { useAuthStore } from '../../stores/auth';
 import { shareContent } from '../../utils/shareContent.js';
 import { buildTripShareMessage } from '../../utils/tripShareMessage.js';
+import {
+    buildTripCreationTemplateFromSnapshot,
+    saveTripCreationTemplate
+} from '../../utils/tripCreationTemplate.js';
 
 export default {
     name: 'trip-creation-success',
 
     components: {
-        TripInviteFriends
+        TripInviteFriends,
+        modal
     },
 
     props: {
         trip: {
             type: Object,
             required: true
+        },
+        creationSnapshot: {
+            type: Object,
+            default: null
         }
     },
 
     emits: ['start-return-trip'],
+
+    data() {
+        return {
+            showSaveTemplateModal: false,
+            templateName: ''
+        };
+    },
+
+    computed: {
+        ...mapState(useAuthStore, {
+            user: 'user'
+        }),
+        canSaveTemplate() {
+            return Boolean(
+                this.creationSnapshot &&
+                    this.user &&
+                    this.user.id != null
+            );
+        }
+    },
 
     methods: {
         tripUrl() {
@@ -83,6 +160,29 @@ export default {
                 title: this.$t('tripCreationShareTrip'),
                 text,
                 url
+            });
+        },
+        openSaveTemplateModal() {
+            this.templateName = '';
+            this.showSaveTemplateModal = true;
+        },
+        closeSaveTemplateModal() {
+            this.showSaveTemplateModal = false;
+            this.templateName = '';
+        },
+        onSaveTemplate() {
+            const name = this.templateName.trim();
+            if (!name || !this.canSaveTemplate) {
+                return;
+            }
+
+            const template = buildTripCreationTemplateFromSnapshot(
+                this.creationSnapshot
+            );
+            saveTripCreationTemplate(this.user.id, name, template);
+            this.closeSaveTemplateModal();
+            dialogs.message(this.$t('tripCreationTemplateSaved'), {
+                estado: 'success'
             });
         }
     }

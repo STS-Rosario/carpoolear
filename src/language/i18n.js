@@ -523,6 +523,12 @@ const messages = {
         tripCreationSuccessSharePrompt: '¿Te gustaría compartir tu viaje?',
         tripCreationShareTrip: 'Compartir viaje',
         tripCreationViewTrip: 'Ver viaje',
+        tripCreationSaveTemplate: 'Guardar viaje como plantilla',
+        tripCreationSaveTemplateTitle: 'Guardar viaje como plantilla',
+        tripCreationSaveTemplateBody:
+            'Si viajás seguido a un destino podés guardar la información de la creación de viaje como plantilla y editar sólo lo que haga falta (fecha por ejemplo) la próxima vez que viajes',
+        tripCreationTemplateNameLabel: 'Nombre de la plantilla',
+        tripCreationTemplateSaved: 'Plantilla de viaje guardada',
         tripCreationRouteDetails: 'Detalles del recorrido',
         tripCreationTotalPeopleLabel:
             'Personas que viajan en total (contándote)',
@@ -2036,6 +2042,12 @@ const messages = {
         tripCreationSuccessSharePrompt: '¿Te gustaría compartir tu viaje?',
         tripCreationShareTrip: 'Compartir viaje',
         tripCreationViewTrip: 'Ver viaje',
+        tripCreationSaveTemplate: 'Guardar viaje como plantilla',
+        tripCreationSaveTemplateTitle: 'Guardar viaje como plantilla',
+        tripCreationSaveTemplateBody:
+            'Si viajás seguido a un destino podés guardar la información de la creación de viaje como plantilla y editar sólo lo que haga falta (fecha por ejemplo) la próxima vez que viajes',
+        tripCreationTemplateNameLabel: 'Nombre de la plantilla',
+        tripCreationTemplateSaved: 'Plantilla de viaje guardada',
         tripCreationRouteDetails: 'Detalles del recorrido',
         tripCreationTotalPeopleLabel:
             'Personas que viajan en total (contándote)',
@@ -3397,6 +3409,12 @@ const messages = {
         tripCreationSuccessSharePrompt: 'Would you like to share your trip?',
         tripCreationShareTrip: 'Share trip',
         tripCreationViewTrip: 'View trip',
+        tripCreationSaveTemplate: 'Save trip as template',
+        tripCreationSaveTemplateTitle: 'Save trip as template',
+        tripCreationSaveTemplateBody:
+            'If you travel often to the same destination, you can save this trip creation as a template and only edit what you need (such as the date) next time you travel',
+        tripCreationTemplateNameLabel: 'Template name',
+        tripCreationTemplateSaved: 'Trip template saved',
         tripCreationRouteDetails: 'Route details',
         tripCreationTotalPeopleLabel:
             'Total people traveling (including you)',
