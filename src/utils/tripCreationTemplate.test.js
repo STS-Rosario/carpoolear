@@ -1,6 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
+    applyTripCreationTemplateToForm,
     buildTripCreationTemplateFromSnapshot,
+    getWizardNavigationAfterTemplateApply,
+    hasTripCreationTemplates,
     listTripCreationTemplates,
     loadTripCreationTemplate,
     saveTripCreationTemplate,
@@ -86,6 +89,72 @@ describe('tripCreationTemplate', () => {
         saveTripCreationTemplate(5, '   ', { trip: {} });
 
         expect(listTripCreationTemplates(5)).toEqual([]);
+    });
+});
+
+describe('trip creation template usage helpers', () => {
+    it('detects when a user has saved templates', () => {
+        expect(hasTripCreationTemplates(3)).toBe(false);
+        saveTripCreationTemplate(3, 'Semanal', { trip: {} });
+        expect(hasTripCreationTemplates(3)).toBe(true);
+    });
+
+    it('applies template data onto the wizard form state', () => {
+        const form = {
+            trip: { is_passenger: 1, total_seats: 2, description: '' },
+            points: [
+                { id: 0, name: '', error: { state: false, message: '' } },
+                { id: 1, name: '', error: { state: false, message: '' } }
+            ],
+            date: '2026-01-01',
+            dateAnswer: '2026-01-01',
+            time: '10:00',
+            price: '',
+            no_lucrar: false,
+            selectedCarId: null,
+            allowForeignPoints: false,
+            wantsIntermediateStops: false,
+            useWeeklySchedule: false,
+            weeklySchedule: 0,
+            weeklyScheduleTime: '12:00'
+        };
+        const template = {
+            trip: { is_passenger: 0, total_seats: 3, description: 'Viaje frecuente' },
+            points: [
+                { id: 0, name: 'Rosario', place: 'Rosario' },
+                { id: 1, name: 'Buenos Aires', place: 'Buenos Aires' }
+            ],
+            date: '',
+            dateAnswer: '',
+            time: '',
+            price: '5000',
+            no_lucrar: true,
+            selectedCarId: 9,
+            allowForeignPoints: true,
+            wantsIntermediateStops: false,
+            useWeeklySchedule: true,
+            weeklySchedule: 2,
+            weeklyScheduleTime: '08:00'
+        };
+
+        applyTripCreationTemplateToForm(form, template);
+
+        expect(form.trip.is_passenger).toBe(0);
+        expect(form.trip.description).toBe('Viaje frecuente');
+        expect(form.points[0].name).toBe('Rosario');
+        expect(form.dateAnswer).toBe('');
+        expect(form.time).toBe('');
+        expect(form.price).toBe('5000');
+        expect(form.selectedCarId).toBe(9);
+        expect(form.useWeeklySchedule).toBe(true);
+        expect(form.points[0].error).toEqual({ state: false, message: '' });
+    });
+
+    it('opens the wizard on the schedule step after applying a template', () => {
+        expect(getWizardNavigationAfterTemplateApply()).toEqual({
+            currentStep: 5,
+            maxVisitedStep: 9
+        });
     });
 });
 
