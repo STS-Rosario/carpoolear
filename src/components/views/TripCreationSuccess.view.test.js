@@ -18,4 +18,21 @@ describe('TripCreationSuccess.vue', () => {
         expect(componentSource).toContain('translate: (key, params) => this.$t(key, params)');
         expect(componentSource).not.toContain("'publicarUnViajeCompartir'");
     });
+
+    it('vertically centers action buttons including the view-trip router-link', () => {
+        expect(componentSource).toContain('.trip-creation-success__actions .btn');
+        expect(componentSource).toMatch(
+            /\.trip-creation-success__actions\s*\{[^}]*align-items:\s*center/
+        );
+        expect(componentSource).toMatch(
+            /\.trip-creation-success__actions\s+\.btn\s*\{[^}]*display:\s*inline-flex[^}]*align-items:\s*center/
+        );
+    });
+
+    it('embeds invite friends once and closes to trip detail', () => {
+        expect(componentSource).not.toContain('trip-creation-success__invite-title');
+        expect(componentSource).not.toContain("$t('queresInvitarTusAmigos')");
+        expect(componentSource).toContain('close-behavior="trip-detail"');
+        expect(componentSource).not.toContain('@close=');
+    });
 });
