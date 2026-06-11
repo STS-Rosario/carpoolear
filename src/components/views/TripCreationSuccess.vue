@@ -75,7 +75,6 @@ export default {
             const url = this.tripUrl();
             const text = buildTripShareMessage({
                 trip: this.trip,
-                url,
                 locale: this.$i18n?.locale,
                 translate: (key, params) => this.$t(key, params)
             });
