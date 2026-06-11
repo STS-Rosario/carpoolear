@@ -167,6 +167,20 @@ describe('NewTripCreationWizard.vue', () => {
         expect(wizardSource).toMatch(/trip-creation-wizard-step-\$\{currentStep\}/);
     });
 
+    it('detects edit flow from route id before trip data finishes loading', () => {
+        expect(wizardSource).toContain('isEditTripFlow');
+        expect(wizardSource).toMatch(
+            /isEditTripFlow\(\)\s*\{[\s\S]*form\.id[\s\S]*form\.updatingTrip/
+        );
+        expect(wizardSource).toMatch(
+            /mounted\(\)[\s\S]*isEditTripFlow[\s\S]*STEP\.ORIGIN/
+        );
+        expect(wizardSource).toMatch(
+            /stepQueryContext\(\)[\s\S]*isEdit:\s*this\.isEditTripFlow/
+        );
+        expect(wizardSource).toContain('currentStep === STEP.ROLE && !isEditTripFlow');
+    });
+
     it('adds horizontal padding on mobile', () => {
         expect(wizardSource).toMatch(
             /@media \(max-width: 767px\)[\s\S]*\.new-trip-wizard[\s\S]*padding-left:\s*1rem/

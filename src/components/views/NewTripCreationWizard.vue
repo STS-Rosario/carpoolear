@@ -15,7 +15,7 @@
             :data-testid="`trip-creation-wizard-step-${currentStep}`"
         >
             <!-- Step 1: Role -->
-            <template v-if="currentStep === STEP.ROLE && !form.updatingTrip">
+            <template v-if="currentStep === STEP.ROLE && !isEditTripFlow">
                 <h3 class="new-trip-wizard__question">
                     {{ $t('tripCreationStepRoleQuestion') }}
                 </h3>
@@ -736,6 +736,9 @@ export default {
         isPassenger() {
             return Number(this.form.trip.is_passenger) === 1;
         },
+        isEditTripFlow() {
+            return Boolean(this.form.id || this.form.updatingTrip);
+        },
         lastPoint() {
             return last(this.form.points) || { name: '', error: { state: false, message: '' } };
         },
@@ -755,7 +758,7 @@ export default {
             return getIntermediatePoints(this.form.points);
         },
         wizardTitle() {
-            if (this.form.updatingTrip) {
+            if (this.isEditTripFlow) {
                 return this.$t('editarViaje');
             }
             if (this.currentStep === STEP.ROLE) {
@@ -766,7 +769,7 @@ export default {
                 : this.$t('tripCreationTitleDriver');
         },
         submitLabel() {
-            return this.form.updatingTrip ? this.$t('actualizar') : this.$t('crearViaje');
+            return this.isEditTripFlow ? this.$t('actualizar') : this.$t('crearViaje');
         },
         totalPeople() {
             return Number(this.form.trip.total_seats) + 1;
@@ -815,7 +818,7 @@ export default {
     },
 
     mounted() {
-        if (this.form.updatingTrip) {
+        if (this.isEditTripFlow) {
             this.currentStep = STEP.ORIGIN;
             this.maxVisitedStep = STEP.LAST_DETAILS;
         } else {
@@ -849,7 +852,7 @@ export default {
 
     methods: {
         scheduleDraftSave() {
-            if (!this.draftSavingEnabled || this.form.updatingTrip) {
+            if (!this.draftSavingEnabled || this.isEditTripFlow) {
                 return;
             }
             clearTimeout(this.draftTimer);
@@ -858,7 +861,7 @@ export default {
         persistDraft() {
             if (
                 !this.draftSavingEnabled ||
-                this.form.updatingTrip ||
+                this.isEditTripFlow ||
                 !this.form.user?.id
             ) {
                 return;
@@ -1044,7 +1047,7 @@ export default {
         stepQueryContext() {
             return {
                 isPassenger: this.isPassenger,
-                isEdit: Boolean(this.form.updatingTrip)
+                isEdit: this.isEditTripFlow
             };
         },
         applyStepFromRouteQuery() {
