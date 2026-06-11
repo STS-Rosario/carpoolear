@@ -15,10 +15,21 @@ test.describe('trip creation wizard', () => {
     test('driver create shows wizard stepper and next control', async ({ page }) => {
         await page.goto('/trips/create');
         await waitForPageReady(page);
+        await expect(page).toHaveURL(/step=1/);
         await expect(page.getByTestId('trip-creation-step-1')).toBeVisible();
         await expect(page.getByTestId('trip-creation-next')).toBeVisible();
         await expect(page.getByText('Crear viaje')).toBeVisible();
         await expect(page.getByTestId('trip-creation-role-driver')).toBeVisible();
+    });
+
+    test('deep link opens requested wizard step', async ({ page }) => {
+        await page.addInitScript(() => {
+            localStorage.removeItem('TRIP_CREATION_DRAFT');
+        });
+        await page.goto('/trips/create?step=5');
+        await waitForPageReady(page);
+        await expect(page).toHaveURL(/step=5/);
+        await expect(page.getByTestId('trip-creation-wizard-step-5')).toBeVisible();
     });
 
     test('update trip route shows wizard', async ({ page }) => {
