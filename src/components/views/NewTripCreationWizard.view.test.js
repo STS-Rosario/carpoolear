@@ -138,6 +138,17 @@ describe('NewTripCreationWizard.vue', () => {
             /@media \(max-width: 767px\)[\s\S]*\.new-trip-wizard[\s\S]*padding-left:\s*1rem/
         );
     });
+
+    it('disables next on destination until trip-info succeeds', () => {
+        expect(wizardSource).toContain('shouldDisableTripCreationNext');
+        expect(wizardSource).toContain('form.tripInfoStatus');
+        expect(wizardSource).toMatch(
+            /data-testid="trip-creation-next"[\s\S]*:disabled="isNextDisabled"/
+        );
+        expect(wizardSource).toMatch(
+            /goNext\(\)[\s\S]*STEP\.DESTINATION[\s\S]*TRIP_INFO_STATUS\.READY/
+        );
+    });
 });
 
 describe('NewTrip.vue wizard integration', () => {
@@ -165,5 +176,14 @@ describe('NewTrip.vue wizard integration', () => {
         expect(newTripSource).toContain('filterTripPointsForSave');
         expect(newTripSource).toContain('removeEmptyIntermediatePoints');
         expect(newTripSource).toContain('wantsIntermediateStops');
+    });
+
+    it('tracks trip-info status while calculating route info', () => {
+        expect(newTripSource).toContain('tripInfoStatus');
+        expect(newTripSource).toContain("TRIP_INFO_STATUS.LOADING");
+        expect(newTripSource).toContain("TRIP_INFO_STATUS.READY");
+        expect(newTripSource).toMatch(
+            /calcRoute\(type\)[\s\S]*tripInfoStatus = TRIP_INFO_STATUS\.LOADING/s
+        );
     });
 });
