@@ -677,10 +677,7 @@ import {
     formatStepQueryValue,
     resolveStepFromQuery
 } from '../../utils/tripCreationStepQuery.js';
-import {
-    shouldDisableTripCreationNext,
-    TRIP_INFO_STATUS
-} from '../../utils/tripCreationTripInfo.js';
+import { shouldDisableTripCreationNext } from '../../utils/tripCreationTripInfo.js';
 
 export default {
     name: 'new-trip-creation-wizard',
@@ -1067,8 +1064,10 @@ export default {
                 return;
             }
             if (
-                this.currentStep === STEP.DESTINATION &&
-                this.form.tripInfoStatus !== TRIP_INFO_STATUS.READY
+                shouldDisableTripCreationNext({
+                    currentStep: this.currentStep,
+                    tripInfoStatus: this.form.tripInfoStatus
+                })
             ) {
                 return;
             }
