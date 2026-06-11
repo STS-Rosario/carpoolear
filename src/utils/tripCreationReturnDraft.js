@@ -18,6 +18,8 @@ export function buildOutboundTripCreationSnapshot(form) {
         selectedCarId: form.selectedCarId,
         allowForeignPoints: form.allowForeignPoints,
         wantsIntermediateStops: form.wantsIntermediateStops,
+        useWeeklySchedule: form.useWeeklySchedule,
+        weeklySchedule: form.weeklySchedule,
         weeklyScheduleTime: form.weeklyScheduleTime
     };
 }
