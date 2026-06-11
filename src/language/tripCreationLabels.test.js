@@ -43,6 +43,7 @@ const KEYS = [
     'tripCreationUseTemplate',
     'tripCreationOr',
     'tripCreationChooseTemplateTitle',
+    'tripCreationChooseTemplatePlaceholder',
     'tripCreationRouteDetails',
     'tripCreationTotalPeopleLabel',
     'tripCreationIncompleteTitle',

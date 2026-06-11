@@ -87,6 +87,7 @@ describe('NewTripCreationWizard.vue', () => {
         expect(wizardSource).toContain('data-testid="trip-creation-use-template"');
         expect(wizardSource).toContain("$t('tripCreationUseTemplate')");
         expect(wizardSource).toContain("$t('tripCreationChooseTemplateTitle')");
+        expect(wizardSource).toContain("$t('tripCreationChooseTemplatePlaceholder')");
         expect(wizardSource).toContain("$t('tripCreationOr')");
         expect(wizardSource).toContain('new-trip-wizard__template-or');
         expect(wizardSource).toContain('fa-bookmark');
@@ -94,6 +95,11 @@ describe('NewTripCreationWizard.vue', () => {
         expect(wizardSource).toContain('listTripCreationTemplates');
         expect(wizardSource).toContain('applyTripCreationTemplateToForm');
         expect(wizardSource).toContain('getWizardNavigationAfterTemplateApply');
+        expect(wizardSource).toContain('data-testid="trip-creation-template-select"');
+        expect(wizardSource).toContain('onTemplateSelectChange');
+        expect(wizardSource).toContain('new-trip-wizard__template-modal');
+        expect(wizardSource).toContain('color-black');
+        expect(wizardSource).not.toContain('new-trip-wizard__template-list');
         expect(wizardSource).toMatch(
             /\.new-trip-wizard__template-action\s*\{[^}]*justify-content:\s*center/
         );
