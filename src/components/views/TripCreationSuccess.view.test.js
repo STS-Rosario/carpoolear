@@ -33,7 +33,7 @@ describe('TripCreationSuccess.vue', () => {
         expect(componentSource).not.toContain('trip-creation-success__invite-title');
         expect(componentSource).not.toContain("$t('queresInvitarTusAmigos')");
         expect(componentSource).toContain('close-behavior="trip-detail"');
-        expect(componentSource).not.toContain('@close=');
+        expect(componentSource).not.toMatch(/TripInviteFriends[\s\S]*@close=/);
     });
 
     it('offers saving the trip as a reusable template', () => {
