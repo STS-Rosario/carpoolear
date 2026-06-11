@@ -6,9 +6,10 @@ const newTripViewPath = path.resolve(__dirname, 'NewTrip.vue');
 const newTripViewSource = fs.readFileSync(newTripViewPath, 'utf8');
 
 describe('NewTrip duplicate create handling', () => {
-    it('redirects via tripDetailRouteAfterCreate and notifies when trip already exists', () => {
-        expect(newTripViewSource).toContain('tripDetailRouteAfterCreate');
+    it('shows success screen and notifies when trip already exists', () => {
+        expect(newTripViewSource).toContain('showWizardSuccess');
         expect(newTripViewSource).toContain('viajeYaPublicado');
         expect(newTripViewSource).toContain('t.existing');
+        expect(newTripViewSource).not.toContain('tripDetailRouteAfterCreate');
     });
 });

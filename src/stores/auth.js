@@ -3,6 +3,7 @@ import { AuthApi, UserApi } from '../services/api';
 import cache, { keys } from '../services/cache';
 import localConfig from '../../config/conf';
 import { completeSessionIfRegistrationReturnsToken } from '../utils/registrationAutoLogin';
+import { clearTripCreationDraftForLogout } from '../utils/tripCreationDraft.js';
 import { getLazyRouter } from '../utils/routerLazy.js';
 import { hasRequiredProfileFields } from '../utils/profileRequirements';
 
@@ -222,6 +223,10 @@ export const useAuthStore = defineStore('auth', {
         async logout() {
             // Call the logout API endpoint
             authApi.logout().catch(() => {});
+
+            if (this.user && this.user.id != null) {
+                clearTripCreationDraftForLogout(this.user.id);
+            }
 
             const { useDeviceStore } = await import('./device');
             const { useRootStore } = await import('./root');
