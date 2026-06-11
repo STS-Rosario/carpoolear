@@ -20,7 +20,6 @@ export function formatTripShareTime(tripDate) {
 
 export function buildTripShareMessage({
     trip,
-    url,
     locale = 'es',
     translate
 }) {
@@ -32,7 +31,6 @@ export function buildTripShareMessage({
     return translate('tripShareMessage', {
         day,
         time,
-        destination,
-        url
+        destination
     });
 }
