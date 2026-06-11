@@ -19,7 +19,15 @@
             </thead>
             <tbody>
                 <tr v-for="trip in trips" :key="trip.id">
-                    <td>{{ trip.id }}</td>
+                    <td>
+                        <router-link
+                            :to="{ name: 'detail_trip', params: { id: trip.id } }"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            {{ trip.id }}
+                        </router-link>
+                    </td>
                     <td>{{ trip.from_town }}</td>
                     <td>{{ trip.to_town }}</td>
                     <td>{{ tripDate(trip) }}</td>
@@ -28,13 +36,13 @@
                     <td>{{ occupiedSeats(trip) }}</td>
                     <td>{{ tripStatus(trip) }}</td>
                     <td class="admin-user-trips-table__actions">
-                        <router-link
-                            :to="{ name: 'detail_trip', params: { id: trip.id } }"
+                        <button
+                            type="button"
                             class="btn btn-default btn-sm"
-                            target="_blank"
+                            v-on:click="openDetail(trip)"
                         >
                             {{ $t('verDetalleViaje') }}
-                        </router-link>
+                        </button>
                         <button
                             v-if="!trip.deleted"
                             type="button"
@@ -75,8 +83,11 @@ export default {
             default: null
         }
     },
-    emits: ['cancel'],
+    emits: ['cancel', 'open-detail'],
     methods: {
+        openDetail(trip) {
+            this.$emit('open-detail', trip);
+        },
         tripDate(trip) {
             return formatTripDate(trip.trip_date);
         },

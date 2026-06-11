@@ -31,6 +31,7 @@
                         :trips="driverTrips"
                         :empty-message="$t('noHayViajes')"
                         :canceling-id="cancelingTripId"
+                        v-on:open-detail="openTripDetail"
                         v-on:cancel="onTripCanceled"
                     />
                 </div>
@@ -43,6 +44,7 @@
                         :trips="passengerTrips"
                         :empty-message="$t('noEstasSubidoViaje')"
                         :canceling-id="cancelingTripId"
+                        v-on:open-detail="openTripDetail"
                         v-on:cancel="onTripCanceled"
                     />
                 </div>
@@ -52,6 +54,7 @@
                         :trips="oldDriverTrips"
                         :empty-message="$t('noHayNingunViajePasado')"
                         :canceling-id="cancelingTripId"
+                        v-on:open-detail="openTripDetail"
                         v-on:cancel="onTripCanceled"
                     />
                 </div>
@@ -61,10 +64,16 @@
                         :trips="oldPassengerTrips"
                         :empty-message="$t('noTeHasSubidoViaje')"
                         :canceling-id="cancelingTripId"
+                        v-on:open-detail="openTripDetail"
                         v-on:cancel="onTripCanceled"
                     />
                 </div>
             </div>
+            <tripDisplay
+                v-if="showTrip"
+                :trip="currentViaje"
+                :clickOutside="closeTripDetail.bind(this)"
+            ></tripDisplay>
         </div>
     </AdminLayout>
 </template>
@@ -72,6 +81,7 @@
 <script>
 import AdminLayout from '../layouts/AdminLayout.vue';
 import AdminUserTripsTable from '../elements/AdminUserTripsTable.vue';
+import tripDisplay from '../sections/TripDisplay';
 import { UserApi } from '../../services/api';
 import { useTripsStore } from '../../stores/trips';
 import { mapActions } from 'pinia';
@@ -81,7 +91,8 @@ export default {
     name: 'admin-user-trips',
     components: {
         AdminLayout,
-        AdminUserTripsTable
+        AdminUserTripsTable,
+        tripDisplay
     },
     data() {
         return {
@@ -92,7 +103,9 @@ export default {
             oldDriverTrips: [],
             oldPassengerTrips: [],
             userApi: null,
-            cancelingTripId: null
+            cancelingTripId: null,
+            showTrip: false,
+            currentViaje: {}
         };
     },
     computed: {
@@ -140,6 +153,14 @@ export default {
                 .finally(() => {
                     this.loading = false;
                 });
+        },
+        openTripDetail(trip) {
+            this.currentViaje = trip;
+            this.showTrip = true;
+        },
+        closeTripDetail() {
+            this.showTrip = false;
+            this.currentViaje = {};
         },
         onTripCanceled(trip) {
             if (!trip || trip.deleted || !window.confirm(this.$t('seguroCancelar'))) {
