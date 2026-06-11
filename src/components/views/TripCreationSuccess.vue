@@ -51,17 +51,49 @@
             </template>
             <template #body>
                 <p>{{ $t('tripCreationSaveTemplateBody') }}</p>
-                <div class="form-group text-left">
-                    <label for="trip-creation-template-name">
-                        {{ $t('tripCreationTemplateNameLabel') }}
-                    </label>
-                    <input
-                        id="trip-creation-template-name"
-                        v-model="templateName"
-                        type="text"
-                        class="form-control"
-                        data-testid="trip-creation-template-name"
-                    />
+                <div class="trip-creation-success__save-template-form text-left color-black">
+                    <div class="form-group">
+                        <label for="trip-creation-template-name">
+                            {{ $t('tripCreationTemplateNameLabel') }}
+                        </label>
+                        <input
+                            id="trip-creation-template-name"
+                            v-model="templateName"
+                            type="text"
+                            class="form-control"
+                            data-testid="trip-creation-template-name"
+                            @input="onTemplateNameInput"
+                        />
+                    </div>
+                    <div
+                        v-if="hasExistingTemplates"
+                        class="trip-creation-success__template-or"
+                    >
+                        {{ $t('tripCreationOr') }}
+                    </div>
+                    <div v-if="hasExistingTemplates" class="form-group">
+                        <label for="trip-creation-template-replace">
+                            {{ $t('tripCreationReplaceTemplateLabel') }}
+                        </label>
+                        <select
+                            id="trip-creation-template-replace"
+                            v-model="replaceTemplateName"
+                            class="form-control"
+                            data-testid="trip-creation-template-replace"
+                            @change="onReplaceTemplateChange"
+                        >
+                            <option disabled value="">
+                                {{ $t('tripCreationChooseTemplatePlaceholder') }}
+                            </option>
+                            <option
+                                v-for="template in availableTemplates"
+                                :key="template.name"
+                                :value="template.name"
+                            >
+                                {{ template.name }}
+                            </option>
+                        </select>
+                    </div>
                 </div>
             </template>
             <template #footer>
@@ -69,7 +101,7 @@
                     type="button"
                     class="btn btn-primary"
                     data-testid="trip-creation-template-save"
-                    :disabled="!templateName.trim()"
+                    :disabled="!canConfirmSaveTemplate"
                     @click="onSaveTemplate"
                 >
                     {{ $t('guardar') }}
@@ -96,6 +128,9 @@ import { shareContent } from '../../utils/shareContent.js';
 import { buildTripShareMessage } from '../../utils/tripShareMessage.js';
 import {
     buildTripCreationTemplateFromSnapshot,
+    canSaveTripCreationTemplateName,
+    listTripCreationTemplates,
+    resolveTripCreationTemplateSaveName,
     saveTripCreationTemplate
 } from '../../utils/tripCreationTemplate.js';
 
@@ -123,7 +158,9 @@ export default {
     data() {
         return {
             showSaveTemplateModal: false,
-            templateName: ''
+            templateName: '',
+            replaceTemplateName: '',
+            availableTemplates: []
         };
     },
 
@@ -132,11 +169,21 @@ export default {
             user: 'user'
         }),
         canSaveTemplate() {
+            const userId = this.user?.id;
             return Boolean(
                 this.creationSnapshot &&
-                    this.user &&
-                    this.user.id != null
+                    userId != null &&
+                    userId !== ''
             );
+        },
+        hasExistingTemplates() {
+            return this.availableTemplates.length > 0;
+        },
+        canConfirmSaveTemplate() {
+            return canSaveTripCreationTemplateName({
+                newName: this.templateName,
+                replaceName: this.replaceTemplateName
+            });
         }
     },
 
@@ -162,16 +209,45 @@ export default {
                 url
             });
         },
+        async refreshAvailableTemplates() {
+            if (!this.user?.id) {
+                this.availableTemplates = [];
+                return;
+            }
+
+            try {
+                this.availableTemplates = await listTripCreationTemplates(this.user.id);
+            } catch {
+                this.availableTemplates = [];
+            }
+        },
         openSaveTemplateModal() {
             this.templateName = '';
+            this.replaceTemplateName = '';
             this.showSaveTemplateModal = true;
+            this.refreshAvailableTemplates();
         },
         closeSaveTemplateModal() {
             this.showSaveTemplateModal = false;
             this.templateName = '';
+            this.replaceTemplateName = '';
+            this.availableTemplates = [];
         },
-        onSaveTemplate() {
-            const name = this.templateName.trim();
+        onTemplateNameInput() {
+            if (this.templateName.trim()) {
+                this.replaceTemplateName = '';
+            }
+        },
+        onReplaceTemplateChange() {
+            if (this.replaceTemplateName) {
+                this.templateName = '';
+            }
+        },
+        async onSaveTemplate() {
+            const name = resolveTripCreationTemplateSaveName({
+                newName: this.templateName,
+                replaceName: this.replaceTemplateName
+            });
             if (!name || !this.canSaveTemplate) {
                 return;
             }
@@ -179,19 +255,24 @@ export default {
             const template = buildTripCreationTemplateFromSnapshot(
                 this.creationSnapshot
             );
-
-            saveTripCreationTemplate(this.user.id, name, template)
-                .then(() => {
-                    this.closeSaveTemplateModal();
-                    dialogs.message(this.$t('tripCreationTemplateSaved'), {
-                        estado: 'success'
-                    });
-                })
-                .catch(() => {
-                    dialogs.message(this.$t('problemaAlCargarElViaje'), {
-                        estado: 'error'
-                    });
+            if (!template) {
+                dialogs.message(this.$t('errorAlGuardar'), {
+                    estado: 'error'
                 });
+                return;
+            }
+
+            try {
+                await saveTripCreationTemplate(this.user.id, name, template);
+                this.closeSaveTemplateModal();
+                dialogs.message(this.$t('tripCreationTemplateSaved'), {
+                    estado: 'success'
+                });
+            } catch {
+                dialogs.message(this.$t('errorAlGuardar'), {
+                    estado: 'error'
+                });
+            }
         }
     }
 };
@@ -256,5 +337,18 @@ export default {
     text-align: left;
     max-width: 500px;
     margin: 0 auto;
+}
+
+.trip-creation-success__save-template-form label {
+    color: #333;
+}
+
+.trip-creation-success__template-or {
+    margin: 1rem 0;
+    text-align: center;
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #555;
 }
 </style>

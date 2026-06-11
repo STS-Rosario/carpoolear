@@ -1,14 +1,48 @@
 import { STEP } from './tripCreationSteps.js';
-import tripCreationTemplateApi from '../services/api/TripCreationTemplate.js';
+import dayjs from '../dayjs.js';
+import TripCreationTemplateApi from '../services/api/TripCreationTemplate.js';
+
+const tripCreationTemplateApi = new TripCreationTemplateApi();
+
+function assertSaveTripCreationTemplateInput(name, data) {
+    if (typeof name !== 'string' || !name.trim()) {
+        throw new Error('Trip creation template name is required');
+    }
+
+    if (!data) {
+        throw new Error('Trip creation template data is required');
+    }
+}
+
+function serializeTripCreationTemplateData(data) {
+    return JSON.parse(JSON.stringify(data));
+}
+
+export function resolveTripCreationTemplateSaveName({ newName, replaceName }) {
+    const trimmedReplace =
+        typeof replaceName === 'string' ? replaceName.trim() : '';
+    if (trimmedReplace) {
+        return trimmedReplace;
+    }
+
+    const trimmedNew = typeof newName === 'string' ? newName.trim() : '';
+    return trimmedNew || null;
+}
+
+export function canSaveTripCreationTemplateName({ newName, replaceName }) {
+    return resolveTripCreationTemplateSaveName({ newName, replaceName }) != null;
+}
 
 export async function saveTripCreationTemplate(userId, name, data) {
-    if (userId == null || userId === '' || typeof name !== 'string' || !name.trim() || !data) {
-        return;
+    if (userId == null || userId === '') {
+        throw new Error('Trip creation template user is required');
     }
+
+    assertSaveTripCreationTemplateInput(name, data);
 
     await tripCreationTemplateApi.store({
         name: name.trim(),
-        data
+        data: serializeTripCreationTemplateData(data)
     });
 }
 
@@ -19,8 +53,8 @@ export async function loadTripCreationTemplate(userId, name) {
 
     try {
         const response = await tripCreationTemplateApi.show(name.trim());
-        const payload = response?.data?.data;
-        return payload?.data ? { ...payload.data } : null;
+        const payload = response?.data;
+        return payload?.data != null ? { ...payload.data } : null;
     } catch {
         return null;
     }
@@ -33,7 +67,7 @@ export async function listTripCreationTemplates(userId) {
 
     try {
         const response = await tripCreationTemplateApi.index();
-        const templates = response?.data?.data;
+        const templates = response?.data;
         if (!Array.isArray(templates)) {
             return [];
         }
@@ -52,7 +86,19 @@ export async function hasTripCreationTemplates(userId) {
     return templates.length > 0;
 }
 
-export function applyTripCreationTemplateToForm(form, templateData) {
+export function getDefaultTripCreationTime(now = dayjs()) {
+    return now.add(1, 'hour').format('HH:00');
+}
+
+function resolveTemplateScheduleTime(templateData, defaultTime) {
+    if (typeof templateData.time === 'string' && templateData.time.trim()) {
+        return templateData.time.trim();
+    }
+
+    return defaultTime;
+}
+
+export function applyTripCreationTemplateToForm(form, templateData, options = {}) {
     if (!form || !templateData) {
         return false;
     }
@@ -60,7 +106,7 @@ export function applyTripCreationTemplateToForm(form, templateData) {
     if (templateData.trip) {
         Object.assign(form.trip, templateData.trip);
     }
-    if (templateData.points) {
+    if (Array.isArray(templateData.points)) {
         form.points = templateData.points.map((point) => ({
             ...point,
             error: { state: false, message: '' }
@@ -70,7 +116,15 @@ export function applyTripCreationTemplateToForm(form, templateData) {
         ? templateData.dateAnswer
         : form.dateAnswer;
     form.date = 'date' in templateData ? templateData.date : form.date;
-    form.time = 'time' in templateData ? templateData.time : form.time;
+    const defaultTime = getDefaultTripCreationTime(options.now ?? dayjs());
+    if (options.useDefaultScheduleTime) {
+        form.time = defaultTime;
+        form.weeklyScheduleTime = defaultTime;
+    } else {
+        form.time = resolveTemplateScheduleTime(templateData, defaultTime);
+        form.weeklyScheduleTime =
+            templateData.weeklyScheduleTime || form.weeklyScheduleTime;
+    }
     form.price = templateData.price || form.price;
     form.no_lucrar = templateData.no_lucrar || false;
     form.selectedCarId = templateData.selectedCarId;
@@ -78,7 +132,6 @@ export function applyTripCreationTemplateToForm(form, templateData) {
     form.wantsIntermediateStops = templateData.wantsIntermediateStops || false;
     form.useWeeklySchedule = templateData.useWeeklySchedule || false;
     form.weeklySchedule = templateData.weeklySchedule || 0;
-    form.weeklyScheduleTime = templateData.weeklyScheduleTime || form.weeklyScheduleTime;
 
     return true;
 }
@@ -95,13 +148,27 @@ export function buildTripCreationTemplateFromSnapshot(snapshot) {
         return null;
     }
 
+    const trip = snapshot.trip || {};
+
     return {
-        trip: { ...snapshot.trip },
+        trip: {
+            is_passenger: trip.is_passenger,
+            total_seats: trip.total_seats,
+            description: trip.description,
+            allow_kids: trip.allow_kids,
+            allow_smoking: trip.allow_smoking,
+            allow_animals: trip.allow_animals,
+            rear_max_two_passengers: trip.rear_max_two_passengers,
+            autoaccept_friends_requests: trip.autoaccept_friends_requests,
+            friendship_type_id: trip.friendship_type_id
+        },
         points: (snapshot.points || []).map((point) => ({
             name: point.name,
             place: point.place,
             json: point.json,
-            location: point.location,
+            location: point.location
+                ? { lat: point.location.lat, lng: point.location.lng }
+                : null,
             id: point.id
         })),
         date: '',

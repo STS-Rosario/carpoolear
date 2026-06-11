@@ -44,6 +44,7 @@ const KEYS = [
     'tripCreationOr',
     'tripCreationChooseTemplateTitle',
     'tripCreationChooseTemplatePlaceholder',
+    'tripCreationReplaceTemplateLabel',
     'tripCreationRouteDetails',
     'tripCreationTotalPeopleLabel',
     'tripCreationIncompleteTitle',

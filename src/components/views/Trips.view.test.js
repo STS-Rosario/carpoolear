@@ -25,6 +25,8 @@ describe('Trips.vue ongoing trip card', () => {
 describe('Trips.vue incomplete trip draft card', () => {
     it('shows trip creation draft card for logged-in users', () => {
         expect(viewSource).toContain('TripCreationDraftCard');
+        expect(viewSource).toContain('ref="tripCreationDraftCard"');
+        expect(viewSource).toContain('refreshTripCreationDraftCard');
         expect(viewSource).toMatch(
             /OngoingTripCard[\s\S]*TripCreationDraftCard[\s\S]*PendingFriendRequestsCard/
         );

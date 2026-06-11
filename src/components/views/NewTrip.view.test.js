@@ -195,6 +195,28 @@ describe('NewTrip.vue trip creation template snapshot', () => {
             /createTrip\(trip\)[\s\S]*?this\.creationSnapshot = buildOutboundTripCreationSnapshot\(this\)/s
         );
     });
+
+    it('clears the draft when leaving after a successful trip creation', () => {
+        expect(viewSource).toContain(':draft-saving-enabled="!showWizardSuccess"');
+        expect(viewSource).toContain(':key="tripCreationWizardKey"');
+        expect(viewSource).toContain('resetTripCreationForm');
+        expect(viewSource).toContain('applyTripCreationFormReset');
+        expect(viewSource).toMatch(
+            /beforeRouteLeave\([\s\S]*showWizardSuccess[\s\S]*resetTripCreationForm\(\)/
+        );
+        expect(viewSource).toMatch(
+            /beforeRouteUpdate\([\s\S]*showWizardSuccess[\s\S]*resetTripCreationForm\(\)/
+        );
+    });
+
+    it('refreshes saved templates whenever the create page is accessed', () => {
+        expect(viewSource).toContain('ref="tripCreationWizard"');
+        expect(viewSource).toContain('refreshTripCreationTemplates');
+        expect(viewSource).toContain(
+            'this.$refs.tripCreationWizard?.refreshAvailableTemplates?.()'
+        );
+        expect(viewSource).toMatch(/activated\(\)[\s\S]*refreshTripCreationTemplates\(\)/);
+    });
 });
 
 describe('NewTrip.vue incomplete car completion', () => {

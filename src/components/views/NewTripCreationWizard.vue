@@ -447,8 +447,15 @@
                             </div>
                         </label>
                     </div>
-                    <span class="error" v-if="form.lucrarError.state">
-                        {{ form.lucrarError.message }}
+                    <span
+                        class="error new-trip-wizard__lucrar-error"
+                        v-if="form.lucrarError.state || stepErrors.lastDetails"
+                    >
+                        {{
+                            form.lucrarError.state
+                                ? form.lucrarError.message
+                                : $t(stepErrors.lastDetails)
+                        }}
                     </span>
                 </div>
                 <div class="new-trip-wizard__last-section new-trip-wizard__last-section--preferences">
@@ -566,7 +573,6 @@
                         </div>
                     </div>
                 </div>
-                <span class="error" v-if="stepErrors.lastDetails">{{ $t(stepErrors.lastDetails) }}</span>
             </template>
         </div>
 
@@ -696,6 +702,13 @@ export default {
 
     inject: ['newTripForm'],
 
+    props: {
+        draftSavingEnabled: {
+            type: Boolean,
+            default: true
+        }
+    },
+
     data() {
         const routeBase = process.env.ROUTE_BASE || '/';
         const normalizedBase = routeBase.endsWith('/') ? routeBase : `${routeBase}/`;
@@ -823,16 +836,31 @@ export default {
         this.refreshAvailableTemplates();
     },
 
+    activated() {
+        this.refreshAvailableTemplates();
+    },
+
+    beforeUnmount() {
+        if (this.draftTimer) {
+            clearTimeout(this.draftTimer);
+            this.draftTimer = null;
+        }
+    },
+
     methods: {
         scheduleDraftSave() {
-            if (this.form.updatingTrip) {
+            if (!this.draftSavingEnabled || this.form.updatingTrip) {
                 return;
             }
             clearTimeout(this.draftTimer);
             this.draftTimer = setTimeout(() => this.persistDraft(), 400);
         },
         persistDraft() {
-            if (this.form.updatingTrip || !this.form.user?.id) {
+            if (
+                !this.draftSavingEnabled ||
+                this.form.updatingTrip ||
+                !this.form.user?.id
+            ) {
                 return;
             }
             saveTripCreationDraft(this.form.user.id, this.buildDraftSnapshot());
@@ -910,12 +938,13 @@ export default {
             this.selectedTemplateName = '';
         },
         onTemplateSelectChange() {
-            if (!this.selectedTemplateName) {
+            const templateName = this.selectedTemplateName;
+            if (!templateName) {
                 return;
             }
 
             const selected = this.availableTemplates.find(
-                (template) => template.name === this.selectedTemplateName
+                (template) => template.name === templateName
             );
 
             if (selected) {
@@ -923,13 +952,13 @@ export default {
                 return;
             }
 
-            loadTripCreationTemplate(this.form.user.id, this.selectedTemplateName)
+            loadTripCreationTemplate(this.form.user.id, templateName)
                 .then((template) => {
                     if (!template) {
                         return;
                     }
 
-                    this.onSelectTemplate(this.selectedTemplateName, template);
+                    this.onSelectTemplate(templateName, template);
                 });
         },
         onSelectTemplate(templateName, templateData) {
@@ -937,7 +966,11 @@ export default {
                 return;
             }
 
-            applyTripCreationTemplateToForm(this.form, templateData);
+            this.closeTemplateModal();
+
+            applyTripCreationTemplateToForm(this.form, templateData, {
+                useDefaultScheduleTime: true
+            });
             const navigation = getWizardNavigationAfterTemplateApply();
             this.setCurrentStep(navigation.currentStep);
             this.maxVisitedStep = navigation.maxVisitedStep;
@@ -950,7 +983,6 @@ export default {
             }
 
             this.revalidateVisitedSteps();
-            this.closeTemplateModal();
         },
         buildValidationContext() {
             return {
@@ -1319,6 +1351,16 @@ export default {
 
 .new-trip-wizard__last-section--preferences {
     margin-top: 1.75rem;
+}
+
+.new-trip-wizard__lucrar-error {
+    display: block;
+    color: #ff0000;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.4;
+    margin-top: 1.25rem;
+    margin-bottom: 0;
 }
 </style>
 
