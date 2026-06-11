@@ -6,16 +6,25 @@ const viewPath = path.resolve(__dirname, 'AdminUserTrips.vue');
 const source = fs.readFileSync(viewPath, 'utf8');
 
 describe('AdminUserTrips view', () => {
-    it('loads trips for the routed user with admin trip modal', () => {
+    it('loads trips for the routed user in admin tables', () => {
         expect(source).toContain('AdminLayout');
         expect(source).toContain("name: 'admin-users-user'");
         expect(source).toContain('tripAsDriver');
         expect(source).toContain('oldTripsAsPassenger');
-        expect(source).toContain(':clickModal="true"');
+        expect(source).toContain('AdminUserTripsTable');
     });
 
-    it('uses Trip clickModal for admin trip inspection', () => {
-        expect(source).toContain("import Trip from '../sections/Trip.vue'");
-        expect(source).toMatch(/<Trip[\s\S]*:clickModal="true"/);
+    it('uses AdminUserTripsTable for each trip section', () => {
+        expect(source).toContain("import AdminUserTripsTable from '../elements/AdminUserTripsTable.vue'");
+        expect(source).toMatch(/<AdminUserTripsTable[\s\S]*:trips="driverTrips"/);
+        expect(source).toMatch(/<AdminUserTripsTable[\s\S]*:trips="passengerTrips"/);
+        expect(source).toMatch(/<AdminUserTripsTable[\s\S]*:trips="oldDriverTrips"/);
+        expect(source).toMatch(/<AdminUserTripsTable[\s\S]*:trips="oldPassengerTrips"/);
+    });
+
+    it('reloads trips after admin cancels one', () => {
+        expect(source).toContain('onTripCanceled');
+        expect(source).toContain('remove');
+        expect(source).toContain('this.load()');
     });
 });
