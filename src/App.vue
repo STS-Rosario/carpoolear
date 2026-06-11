@@ -13,7 +13,7 @@
             />
             <ChangelogModal :suppress="changelogModalSuppress" />
             <!-- Custom Splash Screen -->
-            <div v-if="showCustomSplash" class="custom-splash-screen">
+            <div v-if="customSplashVisible" class="custom-splash-screen">
                 <img
                     :src="$publicImg('splash-android-1280x1920.png')"
                     alt="Carpoolear"
@@ -155,6 +155,11 @@ export default {
             window.SplashScreen.hide();
         }
 
+        if (this.user && this.user.is_admin) {
+            this.showCustomSplash = false;
+            return;
+        }
+
         setTimeout(() => {
             this.showCustomSplash = false;
         }, 3000);
@@ -208,11 +213,17 @@ export default {
                 !this.isBrowser;
             return moduleEnabled && (mustShowMobile || mustShowGeneral);
         },
+        customSplashVisible() {
+            if (this.user && this.user.is_admin) {
+                return false;
+            }
+            return this.showCustomSplash;
+        },
         identityPromptSuppress() {
-            return this.showCustomSplash || this.onBoardingVisibility;
+            return this.customSplashVisible || this.onBoardingVisibility;
         },
         changelogModalSuppress() {
-            return this.showCustomSplash || this.onBoardingVisibility;
+            return this.customSplashVisible || this.onBoardingVisibility;
         },
         passengerMaintenanceWall() {
             const cfg = this.appConfig && this.appConfig.maintenance;
@@ -262,6 +273,11 @@ export default {
     },
     watch: {
         deviceReady: () => {
+        },
+        user(user) {
+            if (user && user.is_admin) {
+                this.showCustomSplash = false;
+            }
         },
         appConfig(value) {
             if (value && value.locale && !localStorage.getItem('app_locale')) {
