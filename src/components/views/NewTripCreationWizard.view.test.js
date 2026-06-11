@@ -99,7 +99,7 @@ describe('NewTripCreationWizard.vue', () => {
         expect(wizardSource).toContain('tripCreationStepQuery');
         expect(wizardSource).toContain('syncStepToRoute');
         expect(wizardSource).toContain('applyStepFromRouteQuery');
-        expect(wizardSource).toContain('trip-creation-wizard-step-${currentStep}');
+        expect(wizardSource).toMatch(/trip-creation-wizard-step-\$\{currentStep\}/);
     });
 
     it('adds horizontal padding on mobile', () => {
