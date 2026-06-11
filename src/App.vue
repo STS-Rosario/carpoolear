@@ -155,6 +155,11 @@ export default {
             window.SplashScreen.hide();
         }
 
+        if (this.user && this.user.is_admin) {
+            this.showCustomSplash = false;
+            return;
+        }
+
         setTimeout(() => {
             this.showCustomSplash = false;
         }, 3000);
@@ -268,6 +273,11 @@ export default {
     },
     watch: {
         deviceReady: () => {
+        },
+        user(user) {
+            if (user && user.is_admin) {
+                this.showCustomSplash = false;
+            }
         },
         appConfig(value) {
             if (value && value.locale && !localStorage.getItem('app_locale')) {
