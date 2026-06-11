@@ -35,4 +35,15 @@ describe('TripCreationSuccess.vue', () => {
         expect(componentSource).toContain('close-behavior="trip-detail"');
         expect(componentSource).not.toContain('@close=');
     });
+
+    it('offers saving the trip as a reusable template', () => {
+        expect(componentSource).toContain('data-testid="trip-creation-save-template"');
+        expect(componentSource).toContain("$t('tripCreationSaveTemplate')");
+        expect(componentSource).toContain("$t('tripCreationSaveTemplateTitle')");
+        expect(componentSource).toContain("$t('tripCreationSaveTemplateBody')");
+        expect(componentSource).toContain("$t('tripCreationTemplateNameLabel')");
+        expect(componentSource).toContain('buildTripCreationTemplateFromSnapshot');
+        expect(componentSource).toContain('saveTripCreationTemplate');
+        expect(componentSource).toContain("$t('tripCreationTemplateSaved')");
+    });
 });
