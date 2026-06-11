@@ -26,6 +26,8 @@ describe('NewTripCreationWizard.vue', () => {
     it('persists create drafts', () => {
         expect(wizardSource).toContain('saveTripCreationDraft');
         expect(wizardSource).toContain('loadTripCreationDraft');
+        expect(wizardSource).toContain('draftSavingEnabled');
+        expect(wizardSource).toContain('beforeUnmount()');
     });
 
     it('binds schedule DatePicker to dateAnswer so revisiting the step shows the chosen date', () => {
@@ -58,6 +60,20 @@ describe('NewTripCreationWizard.vue', () => {
         expect(wizardSource).not.toContain('cargarViajeRegreso');
     });
 
+    it('styles the no-lucrar validation message prominently below the checkbox', () => {
+        expect(wizardSource).toContain('new-trip-wizard__lucrar-error');
+        expect(wizardSource).toContain('stepErrors.lastDetails');
+        expect(wizardSource).toMatch(
+            /\.new-trip-wizard__lucrar-error\s*\{[^}]*color:\s*#ff0000/
+        );
+        expect(wizardSource).toMatch(
+            /\.new-trip-wizard__lucrar-error\s*\{[^}]*font-size:\s*1rem/
+        );
+        expect(wizardSource).toMatch(
+            /\.new-trip-wizard__lucrar-error\s*\{[^}]*margin-top:\s*1\.25rem/
+        );
+    });
+
     it('adds bottom margin below foreign-country option on origin step', () => {
         expect(wizardSource).toContain('new-trip-wizard__allow-foreign');
         expect(wizardSource).toContain('.new-trip-wizard__allow-foreign');
@@ -70,7 +86,8 @@ describe('NewTripCreationWizard.vue', () => {
         expect(wizardSource).toContain('applyTripCreationTemplateToForm(this.form, draft)');
         expect(templateUtilSource).toContain("'dateAnswer' in templateData");
         expect(templateUtilSource).toContain("'date' in templateData");
-        expect(templateUtilSource).toContain("'time' in templateData");
+        expect(templateUtilSource).toContain('resolveTemplateScheduleTime');
+        expect(templateUtilSource).toContain('getDefaultTripCreationTime');
     });
 
     it('shows role selection only on step 1 without persistent top toggle', () => {
@@ -83,7 +100,24 @@ describe('NewTripCreationWizard.vue', () => {
         );
     });
 
+    it('closes the template modal before applying selected template data', () => {
+        expect(wizardSource).toMatch(
+            /onSelectTemplate\(templateName, templateData\)\s*\{[\s\S]*?closeTemplateModal\(\);[\s\S]*?applyTripCreationTemplateToForm\(this\.form, templateData,[\s\S]*?\)/
+        );
+    });
+
+    it('uses the default trip creation schedule time when applying templates', () => {
+        expect(wizardSource).toContain('useDefaultScheduleTime: true');
+        expect(templateUtilSource).toContain('getDefaultTripCreationTime');
+        expect(templateUtilSource).toContain('useDefaultScheduleTime');
+        expect(templateUtilSource).toMatch(
+            /applyTripCreationTemplateToForm\([\s\S]*getDefaultTripCreationTime\(/
+        );
+    });
+
     it('offers saved templates on step 1 when the user has any', () => {
+        expect(wizardSource).toContain('refreshAvailableTemplates');
+        expect(wizardSource).toContain('activated()');
         expect(wizardSource).toContain('data-testid="trip-creation-use-template"');
         expect(wizardSource).toContain("$t('tripCreationUseTemplate')");
         expect(wizardSource).toContain("$t('tripCreationChooseTemplateTitle')");

@@ -1,5 +1,5 @@
 <template>
-    <div class="trip-creation-draft" v-if="hasDraft">
+    <div class="trip-creation-draft" v-if="draftVisible">
         <div class="trip-creation-draft-card">
             <div class="trip-creation-draft-card__body">
                 <div class="trip-creation-draft-card__title">
@@ -39,24 +39,40 @@ import {
 export default {
     name: 'trip-creation-draft-card',
 
+    data() {
+        return {
+            draftVisible: false
+        };
+    },
+
     computed: {
         ...mapState(useAuthStore, {
             user: 'user'
-        }),
-        hasDraft() {
-            if (!this.user || this.user.id == null) {
-                return false;
-            }
-            return hasTripCreationDraft(this.user.id);
-        }
+        })
+    },
+
+    mounted() {
+        this.refresh();
+    },
+
+    activated() {
+        this.refresh();
     },
 
     methods: {
+        refresh() {
+            if (!this.user || this.user.id == null) {
+                this.draftVisible = false;
+                return;
+            }
+
+            this.draftVisible = hasTripCreationDraft(this.user.id);
+        },
         onDelete() {
             if (this.user && this.user.id != null) {
                 clearTripCreationDraft(this.user.id);
             }
-            this.$forceUpdate();
+            this.refresh();
         }
     }
 };

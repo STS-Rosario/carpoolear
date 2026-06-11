@@ -17,7 +17,12 @@
             :creation-snapshot="creationSnapshot"
             @start-return-trip="startReturnTripCreation"
         />
-        <NewTripCreationWizard v-else />
+        <NewTripCreationWizard
+            v-else
+            ref="tripCreationWizard"
+            :key="tripCreationWizardKey"
+            :draft-saving-enabled="!showWizardSuccess"
+        />
 
         <modal
             name="newtrip-rear-comfort-seats-conflict"
@@ -87,6 +92,7 @@ import {
     restoreSelectedCarIdFromTrip
 } from '../../utils/profileRequirements';
 import { clearTripCreationDraft, saveTripCreationDraft } from '../../utils/tripCreationDraft.js';
+import { applyTripCreationFormReset } from '../../utils/tripCreationFormReset.js';
 import {
     buildOutboundTripCreationSnapshot,
     buildReturnTripCreationDraftFromSnapshot
@@ -280,7 +286,8 @@ export default {
             createdTrip: null,
             creationSnapshot: null,
             parentTripId: null,
-            tripInfoStatus: TRIP_INFO_STATUS.IDLE
+            tripInfoStatus: TRIP_INFO_STATUS.IDLE,
+            tripCreationWizardKey: 0
         };
     },
     mounted() {
@@ -307,6 +314,52 @@ export default {
             this.free_trips_amount = result.data.free_trips_amount;
             this.trips_created_by_user_amount = result.data.trips_created_by_user_amount;
         });
+
+        if (!this.id) {
+            this.$nextTick(() => {
+                this.refreshTripCreationTemplates();
+            });
+        }
+    },
+    activated() {
+        if (!this.id) {
+            this.refreshTripCreationTemplates();
+        }
+    },
+    beforeRouteLeave(to, from, next) {
+        if (!this.id && this.showWizardSuccess) {
+            if (this.user?.id != null) {
+                clearTripCreationDraft(this.user.id);
+            }
+            this.resetTripCreationForm();
+        }
+        next();
+    },
+    beforeRouteUpdate(to, from, next) {
+        if (this.id) {
+            next();
+            return;
+        }
+
+        if (to.query.resumeDraft === '1') {
+            next();
+            return;
+        }
+
+        if (this.showWizardSuccess) {
+            if (this.user?.id != null) {
+                clearTripCreationDraft(this.user.id);
+            }
+            this.resetTripCreationForm();
+        }
+
+        next();
+
+        if (!this.id) {
+            this.$nextTick(() => {
+                this.refreshTripCreationTemplates();
+            });
+        }
     },
     beforeUnmount() {},
 
@@ -567,6 +620,7 @@ export default {
             this.showWizardSuccess = false;
             this.createdTrip = null;
             this.creationSnapshot = null;
+            this.tripCreationWizardKey += 1;
         },
         onTripCarsModalClose() {
             this.showTripCarsModal = false;
@@ -1386,6 +1440,21 @@ export default {
             this.$router.replace({
                 name: 'trips'
             });
+        },
+        resetTripCreationForm(options = {}) {
+            applyTripCreationFormReset(this, {
+                defaultTime: dayjs().add(1, 'hours').format('HH:00'),
+                defaultReturnTime: dayjs().add(2, 'hours').format('HH:00'),
+                ...options
+            });
+            this.tripCreationWizardKey += 1;
+            this.preselectDriverCar();
+            this.$nextTick(() => {
+                this.refreshTripCreationTemplates();
+            });
+        },
+        refreshTripCreationTemplates() {
+            this.$refs.tripCreationWizard?.refreshAvailableTemplates?.();
         },
 
         addPoint(force) {

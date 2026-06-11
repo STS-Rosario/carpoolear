@@ -42,8 +42,16 @@ describe('TripCreationSuccess.vue', () => {
         expect(componentSource).toContain("$t('tripCreationSaveTemplateTitle')");
         expect(componentSource).toContain("$t('tripCreationSaveTemplateBody')");
         expect(componentSource).toContain("$t('tripCreationTemplateNameLabel')");
+        expect(componentSource).toContain("$t('tripCreationOr')");
+        expect(componentSource).toContain("$t('tripCreationReplaceTemplateLabel')");
+        expect(componentSource).toContain('data-testid="trip-creation-template-replace"');
+        expect(componentSource).toContain('listTripCreationTemplates');
+        expect(componentSource).toContain('resolveTripCreationTemplateSaveName');
+        expect(componentSource).toContain('canSaveTripCreationTemplateName');
+        expect(componentSource).toContain('canConfirmSaveTemplate');
         expect(componentSource).toContain('buildTripCreationTemplateFromSnapshot');
         expect(componentSource).toContain('saveTripCreationTemplate');
         expect(componentSource).toContain("$t('tripCreationTemplateSaved')");
+        expect(componentSource).toContain("$t('errorAlGuardar')");
     });
 });
