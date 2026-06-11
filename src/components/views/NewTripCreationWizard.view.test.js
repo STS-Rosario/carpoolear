@@ -94,6 +94,19 @@ describe('NewTripCreationWizard.vue', () => {
         expect(wizardSource).toContain('wantsIntermediateStops');
         expect(wizardSource).toContain('removeEmptyIntermediatePoints');
     });
+
+    it('syncs wizard steps to the step query param for deep links', () => {
+        expect(wizardSource).toContain('tripCreationStepQuery');
+        expect(wizardSource).toContain('syncStepToRoute');
+        expect(wizardSource).toContain('applyStepFromRouteQuery');
+        expect(wizardSource).toContain('trip-creation-wizard-step-${currentStep}');
+    });
+
+    it('adds horizontal padding on mobile', () => {
+        expect(wizardSource).toMatch(
+            /@media \(max-width: 767px\)[\s\S]*\.new-trip-wizard[\s\S]*padding-left:\s*1rem/
+        );
+    });
 });
 
 describe('NewTrip.vue wizard integration', () => {

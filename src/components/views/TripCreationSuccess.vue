@@ -95,6 +95,13 @@ export default {
     padding: 1rem 0 2rem;
 }
 
+@media (max-width: 767px) {
+    .trip-creation-success {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+}
+
 .trip-creation-success__title {
     font-size: 1.5rem;
     font-weight: 700;

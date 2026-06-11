@@ -34,4 +34,9 @@ describe('TripCreationStepper.vue', () => {
             /\$t\(getTripCreationStepLabelKey\(step\)\)/
         );
     });
+
+    it('allows step labels to wrap on two lines on mobile', () => {
+        expect(componentSource).toContain('-webkit-line-clamp: 2');
+        expect(componentSource).toContain('white-space: normal');
+    });
 });

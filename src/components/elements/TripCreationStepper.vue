@@ -113,6 +113,7 @@ export default {
 .trip-creation-stepper__segment {
     position: relative;
     flex: 1;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -140,12 +141,24 @@ export default {
 
 .trip-creation-stepper__label {
     font-size: 0.625rem;
-    line-height: 1.2;
+    line-height: 1.25;
     text-align: center;
     color: #666;
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    white-space: normal;
+}
+
+@media (min-width: 768px) {
+    .trip-creation-stepper__label {
+        display: block;
+        -webkit-line-clamp: unset;
+        line-height: 1.2;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
 }
 
 .trip-creation-stepper__segment--active .trip-creation-stepper__label {

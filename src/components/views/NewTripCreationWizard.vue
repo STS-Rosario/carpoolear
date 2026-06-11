@@ -10,7 +10,10 @@
             @select="onStepSelect"
         />
 
-        <div class="new-trip-wizard__step">
+        <div
+            class="new-trip-wizard__step"
+            :data-testid="`trip-creation-wizard-step-${currentStep}`"
+        >
             <!-- Step 1: Role -->
             <template v-if="currentStep === STEP.ROLE && !form.updatingTrip">
                 <h3 class="new-trip-wizard__question">
@@ -601,6 +604,10 @@ import {
     loadTripCreationDraft,
     saveTripCreationDraft
 } from '../../utils/tripCreationDraft.js';
+import {
+    formatStepQueryValue,
+    resolveStepFromQuery
+} from '../../utils/tripCreationStepQuery.js';
 
 export default {
     name: 'new-trip-creation-wizard',
@@ -630,7 +637,8 @@ export default {
             stepErrors: {},
             draftTimer: null,
             pasajeroLogoBlanco: `${normalizedBase}img/icono-pasajero-blanco.png`,
-            pasajeroLogoGris: `${normalizedBase}img/icono-pasajero-gris.png`
+            pasajeroLogoGris: `${normalizedBase}img/icono-pasajero-gris.png`,
+            syncingStepFromRoute: false
         };
     },
 
@@ -679,6 +687,20 @@ export default {
     },
 
     watch: {
+        '$route.query.step'(value) {
+            if (this.syncingStepFromRoute) {
+                return;
+            }
+
+            const step = resolveStepFromQuery(value, this.stepQueryContext());
+            if (step == null || step === this.currentStep) {
+                return;
+            }
+
+            this.syncingStepFromRoute = true;
+            this.setCurrentStep(step, { syncUrl: false });
+            this.syncingStepFromRoute = false;
+        },
         currentStep() {
             this.scheduleDraftSave();
         },
@@ -700,14 +722,19 @@ export default {
         if (this.form.updatingTrip) {
             this.currentStep = STEP.ORIGIN;
             this.maxVisitedStep = STEP.LAST_DETAILS;
-            return;
+        } else {
+            const shouldResume =
+                this.$route.query.resumeDraft === '1' ||
+                loadTripCreationDraft(this.form.user?.id);
+            if (shouldResume && this.form.user?.id) {
+                this.restoreDraft();
+            }
         }
 
-        const shouldResume =
-            this.$route.query.resumeDraft === '1' ||
-            loadTripCreationDraft(this.form.user?.id);
-        if (shouldResume && this.form.user?.id) {
-            this.restoreDraft();
+        if (this.$route.query.step != null && this.$route.query.step !== '') {
+            this.applyStepFromRouteQuery();
+        } else {
+            this.syncStepToRoute(this.currentStep);
         }
     },
 
@@ -846,6 +873,47 @@ export default {
                 this.form.calcRoute();
             }
         },
+        stepQueryContext() {
+            return {
+                isPassenger: this.isPassenger,
+                isEdit: Boolean(this.form.updatingTrip)
+            };
+        },
+        applyStepFromRouteQuery() {
+            const step = resolveStepFromQuery(
+                this.$route.query.step,
+                this.stepQueryContext()
+            );
+            if (step == null) {
+                return;
+            }
+
+            this.syncingStepFromRoute = true;
+            this.setCurrentStep(step, { syncUrl: false });
+            this.syncingStepFromRoute = false;
+        },
+        setCurrentStep(step, { syncUrl = true } = {}) {
+            this.currentStep = step;
+            this.maxVisitedStep = Math.max(this.maxVisitedStep, step);
+            if (syncUrl && !this.syncingStepFromRoute) {
+                this.syncStepToRoute(step);
+            }
+        },
+        syncStepToRoute(step) {
+            const nextStep = formatStepQueryValue(step);
+            if (this.$route.query.step === nextStep) {
+                return;
+            }
+
+            this.$router
+                .replace({
+                    query: {
+                        ...this.$route.query,
+                        step: nextStep
+                    }
+                })
+                .catch(() => {});
+        },
         onStepSelect(step) {
             if (
                 this.currentStep === STEP.STOPS &&
@@ -853,8 +921,7 @@ export default {
             ) {
                 this.syncIntermediatePoints();
             }
-            this.currentStep = step;
-            this.maxVisitedStep = Math.max(this.maxVisitedStep, step);
+            this.setCurrentStep(step);
         },
         goNext() {
             if (!this.validateCurrentStep()) {
@@ -881,8 +948,7 @@ export default {
                 if (next !== STEP.STOPS && this.currentStep === STEP.STOPS) {
                     this.syncIntermediatePoints();
                 }
-                this.currentStep = next;
-                this.maxVisitedStep = Math.max(this.maxVisitedStep, next);
+                this.setCurrentStep(next);
             }
         },
         goBack() {
@@ -895,7 +961,7 @@ export default {
                 this.navigationOptions
             );
             if (prev) {
-                this.currentStep = prev;
+                this.setCurrentStep(prev);
             }
         },
         adjustSeats(delta) {
@@ -922,7 +988,7 @@ export default {
             }
             this.form.trip.is_passenger = value;
             if (this.isPassenger && this.currentStep === STEP.CAR) {
-                this.currentStep = STEP.SCHEDULE;
+                this.setCurrentStep(STEP.SCHEDULE);
             }
             this.revalidateVisitedSteps();
             this.scheduleDraftSave();
@@ -936,6 +1002,13 @@ export default {
     font-size: 1.35rem;
     font-weight: 700;
     margin-bottom: 1rem;
+}
+
+@media (max-width: 767px) {
+    .new-trip-wizard {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
 }
 
 .new-trip-wizard__subtitle {

@@ -171,13 +171,30 @@ test.describe('Screenshot tests', () => {
         });
 
         test('new trip page', async ({ page }) => {
-            await page.goto('/trips/create');
+            await page.goto('/trips/create?step=1');
             await waitForPageReady(page);
             await expect(page).toHaveScreenshot(
                 'new-trip.png',
                 SCREENSHOT_OPTIONS
             );
         });
+
+        for (let step = 1; step <= 9; step += 1) {
+            test(`new trip wizard step ${step}`, async ({ page }) => {
+                await page.addInitScript(() => {
+                    localStorage.removeItem('TRIP_CREATION_DRAFT');
+                });
+                await page.goto(`/trips/create?step=${step}`);
+                await waitForPageReady(page);
+                await expect(
+                    page.getByTestId(`trip-creation-wizard-step-${step}`)
+                ).toBeVisible();
+                await expect(page).toHaveScreenshot(
+                    `new-trip-step-${step}.png`,
+                    SCREENSHOT_OPTIONS
+                );
+            });
+        }
 
         test('update trip page', async ({ page }) => {
             await page.route(/\/api\/trips\/1(\?.*)?$/, (route) => {
