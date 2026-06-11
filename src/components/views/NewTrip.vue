@@ -2034,6 +2034,7 @@ import WeeklySchedule from '../elements/WeeklySchedule';
 import CompleteCarModal from '../elements/CompleteCarModal.vue';
 import TripCarsModal from '../elements/TripCarsModal.vue';
 import bus from '../../services/bus-event.js';
+import { tripDetailRouteAfterCreate } from '../../utils/tripCreateRedirect.js';
 import { getMaxContributionExceededMessage } from '../../utils/maxContributionExceededMessage.js';
 import { rememberMaxContributionWarning } from '../../utils/maxContributionWarningState.js';
 import {
@@ -3189,15 +3190,12 @@ export default {
                             }
                         }).then((ot) => {
                             this.saving = false;
-                            this.$router.replace({
-                                name: 'detail_trip',
-                                params: {
-                                    id: t.id
-                                },
-                                query: {
-                                    inviteFriends: '1'
-                                }
-                            });
+                            if (t.existing) {
+                                dialogs.message(this.$t('viajeYaPublicado'), {
+                                    estado: 'info'
+                                });
+                            }
+                            this.$router.replace(tripDetailRouteAfterCreate(t));
                         });
                     })
                     .catch((err) => {

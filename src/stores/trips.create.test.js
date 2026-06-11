@@ -41,10 +41,12 @@ describe('trips store create', () => {
 
         const store = useTripsStore();
         store.tripsSearchParam = { data: {} };
+        store.tripsSearch = vi.fn().mockResolvedValue(undefined);
         const trip = await store.create({ from_town: 'A', to_town: 'B' });
 
         expect(trip.existing).toBe(true);
         expect(myTripsStoreMock.addTrip).not.toHaveBeenCalled();
+        expect(store.tripsSearch).not.toHaveBeenCalled();
     });
 
     it('adds newly created trips to myTrips', async () => {
@@ -55,6 +57,7 @@ describe('trips store create', () => {
 
         const store = useTripsStore();
         store.tripsSearchParam = { data: {} };
+        store.tripsSearch = vi.fn().mockResolvedValue(undefined);
         const trip = await store.create({ from_town: 'A', to_town: 'B' });
 
         expect(trip.existing).toBe(false);

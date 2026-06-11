@@ -447,6 +447,8 @@ const messages = {
             'Tienes que ser verificado como conductor para poder cargar viajes.',
         problemaAlCargarElViaje:
             'Ocurrió un problema al cargar el viaje. Por favor vuelva a intentarlo.',
+        viajeYaPublicado:
+            'Ya tenés un viaje publicado con el mismo origen, destino y horario. Te llevamos a ese viaje.',
         routingServiceTemporaryError:
             'El sistema de routeo está teniendo problemas temporalmente, por favor intente más tarde',
         ingresePuntoIntermedio: 'Ingrese punto intermedio (opcional)',
@@ -3232,6 +3234,8 @@ const messages = {
             'You must be verified as a driver to be able to create trips.',
         problemaAlCargarElViaje:
             'A problem occurred while loading the trip. Please try again.',
+        viajeYaPublicado:
+            'You already have a trip with the same origin, destination, and time. Redirecting you to it.',
         routingServiceTemporaryError:
             'The routing system is temporarily unavailable, please try again later.',
         ingresePuntoIntermedio: 'Enter intermediate point (optional)',
