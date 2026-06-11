@@ -22,6 +22,19 @@
                 <p class="new-trip-wizard__subtitle">
                     {{ $t('tripCreationStepRoleSubtitle') }}
                 </p>
+                <div
+                    v-if="hasAvailableTemplates"
+                    class="new-trip-wizard__template-action"
+                >
+                    <button
+                        type="button"
+                        class="btn btn-default new-trip-wizard__template-button"
+                        data-testid="trip-creation-use-template"
+                        @click="openTemplateModal"
+                    >
+                        {{ $t('tripCreationUseTemplate') }}
+                    </button>
+                </div>
                 <div class="new-trip-wizard__role-cards">
                     <button
                         type="button"
@@ -546,6 +559,33 @@
             </template>
         </div>
 
+        <modal
+            v-if="showTemplateModal"
+            @close="closeTemplateModal"
+        >
+            <template #header>
+                <h3>{{ $t('tripCreationChooseTemplateTitle') }}</h3>
+            </template>
+            <template #body>
+                <ul class="list-group new-trip-wizard__template-list">
+                    <li
+                        v-for="template in availableTemplates"
+                        :key="template.name"
+                        class="list-group-item new-trip-wizard__template-item"
+                    >
+                        <button
+                            type="button"
+                            class="new-trip-wizard__template-pick"
+                            :data-testid="`trip-creation-template-${template.name}`"
+                            @click="onSelectTemplate(template.name)"
+                        >
+                            {{ template.name }}
+                        </button>
+                    </li>
+                </ul>
+            </template>
+        </modal>
+
         <div class="new-trip-wizard__nav">
             <button
                 v-if="previousStep"
@@ -590,6 +630,7 @@ import autocomplete from '../Autocomplete';
 import WeeklySchedule from '../elements/WeeklySchedule';
 import SvgItem from '../SvgItem';
 import spinner from '../Spinner.vue';
+import modal from '../Modal';
 import {
     STEP,
     getNextStep,
@@ -604,6 +645,13 @@ import {
     loadTripCreationDraft,
     saveTripCreationDraft
 } from '../../utils/tripCreationDraft.js';
+import {
+    applyTripCreationTemplateToForm,
+    getWizardNavigationAfterTemplateApply,
+    hasTripCreationTemplates,
+    listTripCreationTemplates,
+    loadTripCreationTemplate
+} from '../../utils/tripCreationTemplate.js';
 import {
     formatStepQueryValue,
     resolveStepFromQuery
@@ -620,7 +668,8 @@ export default {
         autocomplete,
         WeeklySchedule,
         SvgItem,
-        spinner
+        spinner,
+        modal
     },
 
     inject: ['newTripForm'],
@@ -638,7 +687,9 @@ export default {
             draftTimer: null,
             pasajeroLogoBlanco: `${normalizedBase}img/icono-pasajero-blanco.png`,
             pasajeroLogoGris: `${normalizedBase}img/icono-pasajero-gris.png`,
-            syncingStepFromRoute: false
+            syncingStepFromRoute: false,
+            showTemplateModal: false,
+            availableTemplates: []
         };
     },
 
@@ -683,6 +734,9 @@ export default {
         },
         totalPeople() {
             return Number(this.form.trip.total_seats) + 1;
+        },
+        hasAvailableTemplates() {
+            return this.availableTemplates.length > 0;
         }
     },
 
@@ -736,6 +790,8 @@ export default {
         } else {
             this.syncStepToRoute(this.currentStep);
         }
+
+        this.refreshAvailableTemplates();
     },
 
     methods: {
@@ -815,6 +871,46 @@ export default {
             ) {
                 this.form.calcRoute();
             }
+        },
+        refreshAvailableTemplates() {
+            if (!this.form.user?.id || !hasTripCreationTemplates(this.form.user.id)) {
+                this.availableTemplates = [];
+                return;
+            }
+
+            this.availableTemplates = listTripCreationTemplates(this.form.user.id);
+        },
+        openTemplateModal() {
+            this.refreshAvailableTemplates();
+            if (!this.hasAvailableTemplates) {
+                return;
+            }
+
+            this.showTemplateModal = true;
+        },
+        closeTemplateModal() {
+            this.showTemplateModal = false;
+        },
+        onSelectTemplate(templateName) {
+            const template = loadTripCreationTemplate(this.form.user.id, templateName);
+            if (!template) {
+                return;
+            }
+
+            applyTripCreationTemplateToForm(this.form, template);
+            const navigation = getWizardNavigationAfterTemplateApply();
+            this.setCurrentStep(navigation.currentStep);
+            this.maxVisitedStep = navigation.maxVisitedStep;
+
+            if (
+                this.form.points[0]?.json &&
+                last(this.form.points)?.json
+            ) {
+                this.form.calcRoute();
+            }
+
+            this.revalidateVisitedSteps();
+            this.closeTemplateModal();
         },
         buildValidationContext() {
             return {
@@ -1014,6 +1110,36 @@ export default {
 .new-trip-wizard__subtitle {
     margin-bottom: 1.25rem;
     color: #555;
+}
+
+.new-trip-wizard__template-action {
+    margin-bottom: 1rem;
+}
+
+.new-trip-wizard__template-button {
+    width: 100%;
+}
+
+.new-trip-wizard__template-list {
+    margin-bottom: 0;
+}
+
+.new-trip-wizard__template-item {
+    padding: 0;
+}
+
+.new-trip-wizard__template-pick {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 0;
+    background: transparent;
+    text-align: left;
+    cursor: pointer;
+}
+
+.new-trip-wizard__template-pick:hover {
+    background: #f5f5f5;
 }
 
 .new-trip-wizard__role-cards {
