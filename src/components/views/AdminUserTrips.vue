@@ -27,82 +27,42 @@
                         {{ $t('viajes') }}
                         <strong>{{ $t('creados') }}</strong>
                     </h3>
-                    <Loading :data="driverTrips">
-                        <div class="trips-list">
-                            <Trip
-                                v-for="trip in driverTrips"
-                                :key="trip.id"
-                                :trip="trip"
-                                :user="profileUser"
-                                :clickModal="true"
-                            />
-                        </div>
-                        <template #no-data>
-                            <p class="alert alert-warning" role="alert">
-                                {{ $t('noHayViajes') }}
-                            </p>
-                        </template>
-                    </Loading>
+                    <AdminUserTripsTable
+                        :trips="driverTrips"
+                        :empty-message="$t('noHayViajes')"
+                        :canceling-id="cancelingTripId"
+                        v-on:cancel="onTripCanceled"
+                    />
                 </div>
                 <div class="col-xs-24">
                     <h3>
                         {{ $t('viajes') }}
                         <strong>{{ $t('pasajero') }}</strong>
                     </h3>
-                    <Loading :data="passengerTrips">
-                        <div class="trips-list">
-                            <Trip
-                                v-for="trip in passengerTrips"
-                                :key="trip.id"
-                                :trip="trip"
-                                :user="profileUser"
-                                :clickModal="true"
-                            />
-                        </div>
-                        <template #no-data>
-                            <p class="alert alert-warning" role="alert">
-                                {{ $t('noEstasSubidoViaje') }}
-                            </p>
-                        </template>
-                    </Loading>
+                    <AdminUserTripsTable
+                        :trips="passengerTrips"
+                        :empty-message="$t('noEstasSubidoViaje')"
+                        :canceling-id="cancelingTripId"
+                        v-on:cancel="onTripCanceled"
+                    />
                 </div>
                 <div class="col-xs-24">
                     <h3>{{ $t('misViajesPasados') }}</h3>
-                    <Loading :data="oldDriverTrips">
-                        <div class="trips-list">
-                            <Trip
-                                v-for="trip in oldDriverTrips"
-                                :key="trip.id"
-                                :trip="trip"
-                                :user="profileUser"
-                                :clickModal="true"
-                            />
-                        </div>
-                        <template #no-data>
-                            <p class="alert alert-warning" role="alert">
-                                {{ $t('noHayNingunViajePasado') }}
-                            </p>
-                        </template>
-                    </Loading>
+                    <AdminUserTripsTable
+                        :trips="oldDriverTrips"
+                        :empty-message="$t('noHayNingunViajePasado')"
+                        :canceling-id="cancelingTripId"
+                        v-on:cancel="onTripCanceled"
+                    />
                 </div>
                 <div class="col-xs-24">
                     <h3 v-html="$t('viajesMeSubi')"></h3>
-                    <Loading :data="oldPassengerTrips">
-                        <div class="trips-list">
-                            <Trip
-                                v-for="trip in oldPassengerTrips"
-                                :key="trip.id"
-                                :trip="trip"
-                                :user="profileUser"
-                                :clickModal="true"
-                            />
-                        </div>
-                        <template #no-data>
-                            <p class="alert alert-warning" role="alert">
-                                {{ $t('noTeHasSubidoViaje') }}
-                            </p>
-                        </template>
-                    </Loading>
+                    <AdminUserTripsTable
+                        :trips="oldPassengerTrips"
+                        :empty-message="$t('noTeHasSubidoViaje')"
+                        :canceling-id="cancelingTripId"
+                        v-on:cancel="onTripCanceled"
+                    />
                 </div>
             </div>
         </div>
@@ -111,8 +71,7 @@
 
 <script>
 import AdminLayout from '../layouts/AdminLayout.vue';
-import Trip from '../sections/Trip.vue';
-import Loading from '../Loading.vue';
+import AdminUserTripsTable from '../elements/AdminUserTripsTable.vue';
 import { UserApi } from '../../services/api';
 import { useTripsStore } from '../../stores/trips';
 import { mapActions } from 'pinia';
@@ -122,8 +81,7 @@ export default {
     name: 'admin-user-trips',
     components: {
         AdminLayout,
-        Trip,
-        Loading
+        AdminUserTripsTable
     },
     data() {
         return {
@@ -133,7 +91,8 @@ export default {
             passengerTrips: [],
             oldDriverTrips: [],
             oldPassengerTrips: [],
-            userApi: null
+            userApi: null,
+            cancelingTripId: null
         };
     },
     computed: {
@@ -149,8 +108,21 @@ export default {
             tripAsDriver: 'tripsAsDriver',
             tripAsPassenger: 'tripsAsPassenger',
             oldTripsAsDriver: 'oldTripsAsDriver',
-            oldTripsAsPassenger: 'oldTripsAsPassenger'
+            oldTripsAsPassenger: 'oldTripsAsPassenger',
+            remove: 'remove'
         }),
+        async fetchTripLists(userId) {
+            const body = await this.userApi.show(userId);
+            this.profileUser = body.data || null;
+            if (!this.profileUser) {
+                throw new Error('not found');
+            }
+            const id = this.profileUser.id;
+            this.driverTrips = await this.tripAsDriver(id);
+            this.passengerTrips = await this.tripAsPassenger(id);
+            this.oldDriverTrips = await this.oldTripsAsDriver(id);
+            this.oldPassengerTrips = await this.oldTripsAsPassenger(id);
+        },
         load() {
             const userId = this.$route.params.userId;
             if (!userId) {
@@ -158,19 +130,7 @@ export default {
                 return;
             }
             this.loading = true;
-            this.userApi
-                .show(userId)
-                .then(async (body) => {
-                    this.profileUser = body.data || null;
-                    if (!this.profileUser) {
-                        throw new Error('not found');
-                    }
-                    const id = this.profileUser.id;
-                    this.driverTrips = await this.tripAsDriver(id);
-                    this.passengerTrips = await this.tripAsPassenger(id);
-                    this.oldDriverTrips = await this.oldTripsAsDriver(id);
-                    this.oldPassengerTrips = await this.oldTripsAsPassenger(id);
-                })
+            this.fetchTripLists(userId)
                 .catch(() => {
                     dialogs.message(this.$t('noSeEncontroNingunUsuario'), {
                         estado: 'error'
@@ -179,6 +139,27 @@ export default {
                 })
                 .finally(() => {
                     this.loading = false;
+                });
+        },
+        onTripCanceled(trip) {
+            if (!trip || trip.deleted || !window.confirm(this.$t('seguroCancelar'))) {
+                return;
+            }
+            this.cancelingTripId = trip.id;
+            this.remove(trip.id)
+                .then(() => {
+                    dialogs.message(this.$t('viajeCancelado'), {
+                        estado: 'success'
+                    });
+                    return this.fetchTripLists(this.$route.params.userId);
+                })
+                .catch(() => {
+                    dialogs.message(this.$t('errorAlCancelar'), {
+                        estado: 'error'
+                    });
+                })
+                .finally(() => {
+                    this.cancelingTripId = null;
                 });
         }
     },
