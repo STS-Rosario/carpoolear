@@ -80,6 +80,19 @@ describe('NewTripCreationWizard.vue', () => {
         );
     });
 
+    it('offers saved templates on step 1 when the user has any', () => {
+        expect(wizardSource).toContain('data-testid="trip-creation-use-template"');
+        expect(wizardSource).toContain("$t('tripCreationUseTemplate')");
+        expect(wizardSource).toContain("$t('tripCreationChooseTemplateTitle')");
+        expect(wizardSource).toContain('hasTripCreationTemplates');
+        expect(wizardSource).toContain('listTripCreationTemplates');
+        expect(wizardSource).toContain('applyTripCreationTemplateToForm');
+        expect(wizardSource).toContain('getWizardNavigationAfterTemplateApply');
+        expect(wizardSource).toMatch(
+            /v-if="[^"]*hasAvailableTemplates[^"]*"[\s\S]*new-trip-wizard__role-cards/
+        );
+    });
+
     it('offers intermediate stops checkbox on destination and a dedicated stops step', () => {
         expect(wizardSource).toContain('wantsIntermediateStops');
         expect(wizardSource).toContain('tripCreationWantsIntermediateStops');
