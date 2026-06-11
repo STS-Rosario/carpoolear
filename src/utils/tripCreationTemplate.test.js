@@ -93,6 +93,17 @@ describe('tripCreationTemplate', () => {
 });
 
 describe('trip creation template usage helpers', () => {
+    let storage;
+
+    beforeEach(() => {
+        storage = createStorage();
+        vi.stubGlobal('localStorage', storage);
+    });
+
+    afterEach(() => {
+        vi.unstubAllGlobals();
+    });
+
     it('detects when a user has saved templates', () => {
         expect(hasTripCreationTemplates(3)).toBe(false);
         saveTripCreationTemplate(3, 'Semanal', { trip: {} });
