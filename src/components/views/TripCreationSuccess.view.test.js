@@ -12,4 +12,10 @@ describe('TripCreationSuccess.vue', () => {
         expect(componentSource).toContain("$emit('start-return-trip')");
         expect(componentSource).toContain('!trip.is_passenger');
     });
+
+    it('builds share text with trip date, destination and url', () => {
+        expect(componentSource).toContain('buildTripShareMessage');
+        expect(componentSource).toContain('translate: (key, params) => this.$t(key, params)');
+        expect(componentSource).not.toContain("'publicarUnViajeCompartir'");
+    });
 });

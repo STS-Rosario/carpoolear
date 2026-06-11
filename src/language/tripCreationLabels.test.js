@@ -33,6 +33,7 @@ const KEYS = [
     'tripCreationSuccessAllSet',
     'tripCreationSuccessSharePrompt',
     'tripCreationShareTrip',
+    'tripShareMessage',
     'tripCreationViewTrip',
     'tripCreationRouteDetails',
     'tripCreationTotalPeopleLabel',

@@ -45,6 +45,7 @@
 <script>
 import TripInviteFriends from '../sections/TripInviteFriends.vue';
 import { shareContent } from '../../utils/shareContent.js';
+import { buildTripShareMessage } from '../../utils/tripShareMessage.js';
 
 export default {
     name: 'trip-creation-success',
@@ -71,10 +72,18 @@ export default {
             return window.location.origin + route.href;
         },
         async onShare() {
+            const url = this.tripUrl();
+            const text = buildTripShareMessage({
+                trip: this.trip,
+                url,
+                locale: this.$i18n?.locale,
+                translate: (key, params) => this.$t(key, params)
+            });
+
             await shareContent({
                 title: this.$t('tripCreationShareTrip'),
-                text: this.$t('publicarUnViajeCompartir'),
-                url: this.tripUrl()
+                text,
+                url
             });
         }
     }
