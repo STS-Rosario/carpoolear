@@ -25,6 +25,6 @@ describe('AdminUserTrips view', () => {
     it('reloads trips after admin cancels one', () => {
         expect(source).toContain('onTripCanceled');
         expect(source).toContain('remove');
-        expect(source).toContain('this.load()');
+        expect(source).toContain('fetchTripLists');
     });
 });

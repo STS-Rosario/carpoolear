@@ -52,6 +52,13 @@
 </template>
 
 <script>
+import {
+    formatTripDate,
+    formatTripTime,
+    formatOccupiedSeats,
+    formatTripStatus
+} from '../../utils/adminTripTable';
+
 export default {
     name: 'admin-user-trips-table',
     props: {
@@ -71,31 +78,16 @@ export default {
     emits: ['cancel'],
     methods: {
         tripDate(trip) {
-            if (!trip.trip_date) {
-                return '';
-            }
-            return String(trip.trip_date).slice(0, 10);
+            return formatTripDate(trip.trip_date);
         },
         tripTime(trip) {
-            if (!trip.trip_date) {
-                return '';
-            }
-            return String(trip.trip_date).slice(11, 16);
+            return formatTripTime(trip.trip_date);
         },
         occupiedSeats(trip) {
-            if (trip.passengerAccepted_count != null) {
-                return trip.passengerAccepted_count;
-            }
-            return '—';
+            return formatOccupiedSeats(trip);
         },
         tripStatus(trip) {
-            if (trip.hidden) {
-                return this.$t('oculto');
-            }
-            if (trip.deleted) {
-                return this.$t('borrado');
-            }
-            return this.$t('activo');
+            return formatTripStatus(trip, (key) => this.$t(key));
         },
         cancelTrip(trip) {
             this.$emit('cancel', trip);

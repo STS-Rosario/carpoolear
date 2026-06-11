@@ -111,6 +111,18 @@ export default {
             oldTripsAsPassenger: 'oldTripsAsPassenger',
             remove: 'remove'
         }),
+        async fetchTripLists(userId) {
+            const body = await this.userApi.show(userId);
+            this.profileUser = body.data || null;
+            if (!this.profileUser) {
+                throw new Error('not found');
+            }
+            const id = this.profileUser.id;
+            this.driverTrips = await this.tripAsDriver(id);
+            this.passengerTrips = await this.tripAsPassenger(id);
+            this.oldDriverTrips = await this.oldTripsAsDriver(id);
+            this.oldPassengerTrips = await this.oldTripsAsPassenger(id);
+        },
         load() {
             const userId = this.$route.params.userId;
             if (!userId) {
@@ -118,19 +130,7 @@ export default {
                 return;
             }
             this.loading = true;
-            this.userApi
-                .show(userId)
-                .then(async (body) => {
-                    this.profileUser = body.data || null;
-                    if (!this.profileUser) {
-                        throw new Error('not found');
-                    }
-                    const id = this.profileUser.id;
-                    this.driverTrips = await this.tripAsDriver(id);
-                    this.passengerTrips = await this.tripAsPassenger(id);
-                    this.oldDriverTrips = await this.oldTripsAsDriver(id);
-                    this.oldPassengerTrips = await this.oldTripsAsPassenger(id);
-                })
+            this.fetchTripLists(userId)
                 .catch(() => {
                     dialogs.message(this.$t('noSeEncontroNingunUsuario'), {
                         estado: 'error'
@@ -151,7 +151,7 @@ export default {
                     dialogs.message(this.$t('viajeCancelado'), {
                         estado: 'success'
                     });
-                    return this.load();
+                    return this.fetchTripLists(this.$route.params.userId);
                 })
                 .catch(() => {
                     dialogs.message(this.$t('errorAlCancelar'), {
