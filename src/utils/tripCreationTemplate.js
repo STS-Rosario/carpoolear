@@ -94,3 +94,31 @@ export function listTripCreationTemplates(userId) {
         data: { ...userTemplates[templateName] }
     }));
 }
+
+export function buildTripCreationTemplateFromSnapshot(snapshot) {
+    if (!snapshot) {
+        return null;
+    }
+
+    return {
+        trip: { ...snapshot.trip },
+        points: (snapshot.points || []).map((point) => ({
+            name: point.name,
+            place: point.place,
+            json: point.json,
+            location: point.location,
+            id: point.id
+        })),
+        date: '',
+        dateAnswer: '',
+        time: '',
+        price: snapshot.price || '',
+        no_lucrar: snapshot.no_lucrar ?? false,
+        selectedCarId: snapshot.selectedCarId,
+        allowForeignPoints: snapshot.allowForeignPoints || false,
+        wantsIntermediateStops: snapshot.wantsIntermediateStops || false,
+        useWeeklySchedule: snapshot.useWeeklySchedule || false,
+        weeklySchedule: snapshot.weeklySchedule || 0,
+        weeklyScheduleTime: snapshot.weeklyScheduleTime || '12:00'
+    };
+}
