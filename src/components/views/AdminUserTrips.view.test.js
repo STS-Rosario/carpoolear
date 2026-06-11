@@ -27,4 +27,12 @@ describe('AdminUserTrips view', () => {
         expect(source).toContain('remove');
         expect(source).toContain('fetchTripLists');
     });
+
+    it('opens trip detail in admin popup modal', () => {
+        expect(source).toContain("import tripDisplay from '../sections/TripDisplay'");
+        expect(source).toContain('<tripDisplay');
+        expect(source).toContain('openTripDetail');
+        expect(source).toContain('closeTripDetail');
+        expect(source).toContain('v-on:open-detail="openTripDetail"');
+    });
 });
