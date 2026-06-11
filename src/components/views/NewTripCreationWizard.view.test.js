@@ -87,12 +87,21 @@ describe('NewTripCreationWizard.vue', () => {
         expect(wizardSource).toContain('data-testid="trip-creation-use-template"');
         expect(wizardSource).toContain("$t('tripCreationUseTemplate')");
         expect(wizardSource).toContain("$t('tripCreationChooseTemplateTitle')");
+        expect(wizardSource).toContain("$t('tripCreationOr')");
+        expect(wizardSource).toContain('new-trip-wizard__template-or');
+        expect(wizardSource).toContain('fa-bookmark');
         expect(wizardSource).toContain('hasTripCreationTemplates');
         expect(wizardSource).toContain('listTripCreationTemplates');
         expect(wizardSource).toContain('applyTripCreationTemplateToForm');
         expect(wizardSource).toContain('getWizardNavigationAfterTemplateApply');
         expect(wizardSource).toMatch(
-            /v-if="[^"]*hasAvailableTemplates[^"]*"[\s\S]*new-trip-wizard__role-cards/
+            /\.new-trip-wizard__template-action\s*\{[^}]*justify-content:\s*center/
+        );
+        expect(wizardSource).toMatch(
+            /\.new-trip-wizard__template-button\s*\{[^}]*width:\s*auto/
+        );
+        expect(wizardSource).toMatch(
+            /v-if="[^"]*hasAvailableTemplates[^"]*"[\s\S]*new-trip-wizard__template-or[\s\S]*new-trip-wizard__role-cards/
         );
     });
 
