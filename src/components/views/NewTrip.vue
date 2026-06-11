@@ -14,6 +14,7 @@
         <TripCreationSuccess
             v-if="showWizardSuccess && createdTrip"
             :trip="createdTrip"
+            :creation-snapshot="creationSnapshot"
             @start-return-trip="startReturnTripCreation"
         />
         <NewTripCreationWizard v-else />
@@ -276,6 +277,7 @@ export default {
             weeklyScheduleReturnTime: '12:00',
             showWizardSuccess: false,
             createdTrip: null,
+            creationSnapshot: null,
             parentTripId: null
         };
     },
@@ -562,6 +564,7 @@ export default {
             saveTripCreationDraft(this.user.id, draft);
             this.showWizardSuccess = false;
             this.createdTrip = null;
+            this.creationSnapshot = null;
         },
         onTripCarsModalClose() {
             this.showTripCarsModal = false;
@@ -1261,6 +1264,7 @@ export default {
                             clearTripCreationDraft(this.user.id);
                         }
                         this.parentTripId = null;
+                        this.creationSnapshot = buildOutboundTripCreationSnapshot(this);
                         this.createdTrip = t;
                         this.showWizardSuccess = true;
                     })
