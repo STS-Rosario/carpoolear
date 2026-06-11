@@ -4,6 +4,8 @@ import path from 'node:path';
 
 const wizardPath = path.resolve(__dirname, 'NewTripCreationWizard.vue');
 const wizardSource = fs.readFileSync(wizardPath, 'utf8');
+const templateUtilPath = path.resolve(__dirname, '../../utils/tripCreationTemplate.js');
+const templateUtilSource = fs.readFileSync(templateUtilPath, 'utf8');
 const newTripPath = path.resolve(__dirname, 'NewTrip.vue');
 const newTripSource = fs.readFileSync(newTripPath, 'utf8');
 
@@ -65,9 +67,10 @@ describe('NewTripCreationWizard.vue', () => {
     });
 
     it('restores cleared schedule fields from return-trip draft without keeping outbound values', () => {
-        expect(wizardSource).toContain("'dateAnswer' in draft");
-        expect(wizardSource).toContain("'date' in draft");
-        expect(wizardSource).toContain("'time' in draft");
+        expect(wizardSource).toContain('applyTripCreationTemplateToForm(this.form, draft)');
+        expect(templateUtilSource).toContain("'dateAnswer' in templateData");
+        expect(templateUtilSource).toContain("'date' in templateData");
+        expect(templateUtilSource).toContain("'time' in templateData");
     });
 
     it('shows role selection only on step 1 without persistent top toggle', () => {

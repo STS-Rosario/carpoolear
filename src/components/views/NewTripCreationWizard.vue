@@ -840,29 +840,9 @@ export default {
             if (!draft) {
                 return;
             }
-            if (draft.trip) {
-                Object.assign(this.form.trip, draft.trip);
-            }
-            if (draft.points) {
-                this.form.points = draft.points.map((p) => ({
-                    ...p,
-                    error: { state: false, message: '' }
-                }));
-            }
-            this.form.dateAnswer = 'dateAnswer' in draft
-                ? draft.dateAnswer
-                : this.form.dateAnswer;
-            this.form.date = 'date' in draft ? draft.date : this.form.date;
-            this.form.time = 'time' in draft ? draft.time : this.form.time;
-            this.form.price = draft.price || this.form.price;
-            this.form.no_lucrar = draft.no_lucrar || false;
-            this.form.selectedCarId = draft.selectedCarId;
-            this.form.allowForeignPoints = draft.allowForeignPoints || false;
-            this.form.wantsIntermediateStops = draft.wantsIntermediateStops || false;
+
+            applyTripCreationTemplateToForm(this.form, draft);
             this.form.parentTripId = draft.parentTripId || null;
-            this.form.useWeeklySchedule = draft.useWeeklySchedule || false;
-            this.form.weeklySchedule = draft.weeklySchedule || 0;
-            this.form.weeklyScheduleTime = draft.weeklyScheduleTime || this.form.weeklyScheduleTime;
             this.currentStep = draft.currentStep || STEP.ROLE;
             this.maxVisitedStep = draft.maxVisitedStep || this.currentStep;
             if (
