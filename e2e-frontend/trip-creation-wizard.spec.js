@@ -1,6 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const {
     MOCK_TRIP_DETAIL,
+    MOCK_USER,
     setupCommonMocks,
     setupAuthState,
     waitForPageReady
@@ -18,7 +19,9 @@ test.describe('trip creation wizard', () => {
         await expect(page).toHaveURL(/step=1/);
         await expect(page.getByTestId('trip-creation-step-1')).toBeVisible();
         await expect(page.getByTestId('trip-creation-next')).toBeVisible();
-        await expect(page.getByText('Crear viaje')).toBeVisible();
+        await expect(
+            page.getByRole('heading', { name: 'Crear viaje' })
+        ).toBeVisible();
         await expect(page.getByTestId('trip-creation-role-driver')).toBeVisible();
     });
 
@@ -37,12 +40,26 @@ test.describe('trip creation wizard', () => {
             route.fulfill({
                 status: 200,
                 contentType: 'application/json',
-                body: JSON.stringify({ data: MOCK_TRIP_DETAIL })
+                body: JSON.stringify({
+                    data: {
+                        ...MOCK_TRIP_DETAIL,
+                        user: {
+                            id: MOCK_USER.id,
+                            name: MOCK_USER.name,
+                            image: MOCK_USER.image,
+                            positive_ratings: MOCK_USER.positive_ratings,
+                            negative_ratings: MOCK_USER.negative_ratings
+                        }
+                    }
+                })
             });
         });
         await page.goto('/trips/update/1');
         await waitForPageReady(page);
-        await expect(page.getByTestId('trip-creation-step-1')).toBeVisible();
-        await expect(page.getByText('Editar viaje')).toBeVisible();
+        await expect(page).toHaveURL(/step=2/);
+        await expect(page.getByTestId('trip-creation-wizard-step-2')).toBeVisible();
+        await expect(
+            page.getByRole('heading', { name: 'Editar viaje' })
+        ).toBeVisible();
     });
 });
