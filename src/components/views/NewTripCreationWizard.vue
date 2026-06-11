@@ -669,7 +669,6 @@ import {
 import {
     applyTripCreationTemplateToForm,
     getWizardNavigationAfterTemplateApply,
-    hasTripCreationTemplates,
     listTripCreationTemplates,
     loadTripCreationTemplate
 } from '../../utils/tripCreationTemplate.js';
@@ -875,21 +874,28 @@ export default {
             }
         },
         refreshAvailableTemplates() {
-            if (!this.form.user?.id || !hasTripCreationTemplates(this.form.user.id)) {
+            if (!this.form.user?.id) {
                 this.availableTemplates = [];
-                return;
+                return Promise.resolve();
             }
 
-            this.availableTemplates = listTripCreationTemplates(this.form.user.id);
+            return listTripCreationTemplates(this.form.user.id)
+                .then((templates) => {
+                    this.availableTemplates = templates;
+                })
+                .catch(() => {
+                    this.availableTemplates = [];
+                });
         },
         openTemplateModal() {
-            this.refreshAvailableTemplates();
-            if (!this.hasAvailableTemplates) {
-                return;
-            }
+            this.refreshAvailableTemplates().then(() => {
+                if (!this.hasAvailableTemplates) {
+                    return;
+                }
 
-            this.showTemplateModal = true;
-            this.selectedTemplateName = '';
+                this.selectedTemplateName = '';
+                this.showTemplateModal = true;
+            });
         },
         closeTemplateModal() {
             this.showTemplateModal = false;
@@ -900,15 +906,30 @@ export default {
                 return;
             }
 
-            this.onSelectTemplate(this.selectedTemplateName);
-        },
-        onSelectTemplate(templateName) {
-            const template = loadTripCreationTemplate(this.form.user.id, templateName);
-            if (!template) {
+            const selected = this.availableTemplates.find(
+                (template) => template.name === this.selectedTemplateName
+            );
+
+            if (selected) {
+                this.onSelectTemplate(selected.name, selected.data);
                 return;
             }
 
-            applyTripCreationTemplateToForm(this.form, template);
+            loadTripCreationTemplate(this.form.user.id, this.selectedTemplateName)
+                .then((template) => {
+                    if (!template) {
+                        return;
+                    }
+
+                    this.onSelectTemplate(this.selectedTemplateName, template);
+                });
+        },
+        onSelectTemplate(templateName, templateData) {
+            if (!templateData) {
+                return;
+            }
+
+            applyTripCreationTemplateToForm(this.form, templateData);
             const navigation = getWizardNavigationAfterTemplateApply();
             this.setCurrentStep(navigation.currentStep);
             this.maxVisitedStep = navigation.maxVisitedStep;

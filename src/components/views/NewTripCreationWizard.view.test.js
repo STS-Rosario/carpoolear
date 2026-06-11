@@ -91,8 +91,8 @@ describe('NewTripCreationWizard.vue', () => {
         expect(wizardSource).toContain("$t('tripCreationOr')");
         expect(wizardSource).toContain('new-trip-wizard__template-or');
         expect(wizardSource).toContain('fa-bookmark');
-        expect(wizardSource).toContain('hasTripCreationTemplates');
         expect(wizardSource).toContain('listTripCreationTemplates');
+        expect(wizardSource).toContain('loadTripCreationTemplate');
         expect(wizardSource).toContain('applyTripCreationTemplateToForm');
         expect(wizardSource).toContain('getWizardNavigationAfterTemplateApply');
         expect(wizardSource).toContain('data-testid="trip-creation-template-select"');
