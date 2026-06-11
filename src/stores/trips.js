@@ -33,9 +33,12 @@ export const useTripsStore = defineStore('trips', {
             const { useMyTripsStore } = await import('./myTrips');
             const myTripsStore = useMyTripsStore();
             return tripsApi.create(data).then((response) => {
-                myTripsStore.addTrip(response.data);
-                this.tripsSearch(this.tripsSearchParam.data);
-                return Promise.resolve(response.data);
+                const trip = response.data;
+                if (!trip.existing) {
+                    myTripsStore.addTrip(trip);
+                    this.tripsSearch(this.tripsSearchParam.data);
+                }
+                return Promise.resolve(trip);
             });
         },
 
