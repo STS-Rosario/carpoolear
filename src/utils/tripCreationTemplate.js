@@ -1,104 +1,55 @@
 import { STEP } from './tripCreationSteps.js';
+import tripCreationTemplateApi from '../services/api/TripCreationTemplate.js';
 
-export const TRIP_CREATION_TEMPLATES_STORAGE_KEY = 'TRIP_CREATION_TEMPLATES';
-
-function readStore() {
-    if (typeof localStorage === 'undefined') {
-        return {};
+export async function saveTripCreationTemplate(userId, name, data) {
+    if (userId == null || userId === '' || typeof name !== 'string' || !name.trim() || !data) {
+        return;
     }
 
-    const raw = localStorage.getItem(TRIP_CREATION_TEMPLATES_STORAGE_KEY);
-    if (!raw) {
-        return {};
+    await tripCreationTemplateApi.store({
+        name: name.trim(),
+        data
+    });
+}
+
+export async function loadTripCreationTemplate(userId, name) {
+    if (userId == null || userId === '' || typeof name !== 'string' || !name.trim()) {
+        return null;
     }
 
     try {
-        const parsed = JSON.parse(raw);
-        return parsed && typeof parsed === 'object' ? parsed : {};
+        const response = await tripCreationTemplateApi.show(name.trim());
+        const payload = response?.data?.data;
+        return payload?.data ? { ...payload.data } : null;
     } catch {
-        return {};
+        return null;
     }
 }
 
-function writeStore(store) {
-    if (typeof localStorage === 'undefined') {
-        return;
-    }
-
-    const keys = Object.keys(store);
-    if (keys.length === 0) {
-        localStorage.removeItem(TRIP_CREATION_TEMPLATES_STORAGE_KEY);
-        return;
-    }
-
-    localStorage.setItem(TRIP_CREATION_TEMPLATES_STORAGE_KEY, JSON.stringify(store));
-}
-
-function normalizeUserId(userId) {
+export async function listTripCreationTemplates(userId) {
     if (userId == null || userId === '') {
-        return null;
-    }
-
-    return String(userId);
-}
-
-function normalizeTemplateName(name) {
-    if (typeof name !== 'string') {
-        return '';
-    }
-
-    return name.trim();
-}
-
-function getUserTemplates(store, userId) {
-    const templates = store[userId];
-    return templates && typeof templates === 'object' ? templates : {};
-}
-
-export function saveTripCreationTemplate(userId, name, data) {
-    const id = normalizeUserId(userId);
-    const templateName = normalizeTemplateName(name);
-    if (!id || !templateName || !data) {
-        return;
-    }
-
-    const store = readStore();
-    const userTemplates = getUserTemplates(store, id);
-    userTemplates[templateName] = { ...data };
-    store[id] = userTemplates;
-    writeStore(store);
-}
-
-export function loadTripCreationTemplate(userId, name) {
-    const id = normalizeUserId(userId);
-    const templateName = normalizeTemplateName(name);
-    if (!id || !templateName) {
-        return null;
-    }
-
-    const store = readStore();
-    const userTemplates = getUserTemplates(store, id);
-    const template = userTemplates[templateName];
-    return template ? { ...template } : null;
-}
-
-export function listTripCreationTemplates(userId) {
-    const id = normalizeUserId(userId);
-    if (!id) {
         return [];
     }
 
-    const store = readStore();
-    const userTemplates = getUserTemplates(store, id);
+    try {
+        const response = await tripCreationTemplateApi.index();
+        const templates = response?.data?.data;
+        if (!Array.isArray(templates)) {
+            return [];
+        }
 
-    return Object.keys(userTemplates).map((templateName) => ({
-        name: templateName,
-        data: { ...userTemplates[templateName] }
-    }));
+        return templates.map((template) => ({
+            name: template.name,
+            data: { ...template.data }
+        }));
+    } catch {
+        return [];
+    }
 }
 
-export function hasTripCreationTemplates(userId) {
-    return listTripCreationTemplates(userId).length > 0;
+export async function hasTripCreationTemplates(userId) {
+    const templates = await listTripCreationTemplates(userId);
+    return templates.length > 0;
 }
 
 export function applyTripCreationTemplateToForm(form, templateData) {

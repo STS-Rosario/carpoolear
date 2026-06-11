@@ -179,11 +179,19 @@ export default {
             const template = buildTripCreationTemplateFromSnapshot(
                 this.creationSnapshot
             );
-            saveTripCreationTemplate(this.user.id, name, template);
-            this.closeSaveTemplateModal();
-            dialogs.message(this.$t('tripCreationTemplateSaved'), {
-                estado: 'success'
-            });
+
+            saveTripCreationTemplate(this.user.id, name, template)
+                .then(() => {
+                    this.closeSaveTemplateModal();
+                    dialogs.message(this.$t('tripCreationTemplateSaved'), {
+                        estado: 'success'
+                    });
+                })
+                .catch(() => {
+                    dialogs.message(this.$t('problemaAlCargarElViaje'), {
+                        estado: 'error'
+                    });
+                });
         }
     }
 };
