@@ -622,6 +622,7 @@
                 type="button"
                 class="btn btn-primary btn-lg new-trip-wizard__next"
                 data-testid="trip-creation-next"
+                :disabled="isNextDisabled"
                 @click="goNext"
             >
                 {{ $t('siguiente') }}
@@ -676,6 +677,10 @@ import {
     formatStepQueryValue,
     resolveStepFromQuery
 } from '../../utils/tripCreationStepQuery.js';
+import {
+    shouldDisableTripCreationNext,
+    TRIP_INFO_STATUS
+} from '../../utils/tripCreationTripInfo.js';
 
 export default {
     name: 'new-trip-creation-wizard',
@@ -755,6 +760,12 @@ export default {
         },
         totalPeople() {
             return Number(this.form.trip.total_seats) + 1;
+        },
+        isNextDisabled() {
+            return shouldDisableTripCreationNext({
+                currentStep: this.currentStep,
+                tripInfoStatus: this.form.tripInfoStatus
+            });
         },
         hasAvailableTemplates() {
             return this.availableTemplates.length > 0;
@@ -1053,6 +1064,12 @@ export default {
         },
         goNext() {
             if (!this.validateCurrentStep()) {
+                return;
+            }
+            if (
+                this.currentStep === STEP.DESTINATION &&
+                this.form.tripInfoStatus !== TRIP_INFO_STATUS.READY
+            ) {
                 return;
             }
             if (

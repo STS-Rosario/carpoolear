@@ -95,6 +95,7 @@ import {
     filterTripPointsForSave,
     removeEmptyIntermediatePoints
 } from '../../utils/tripCreationPoints.js';
+import { TRIP_INFO_STATUS } from '../../utils/tripCreationTripInfo.js';
 import NewTripCreationWizard from './NewTripCreationWizard.vue';
 import TripCreationSuccess from './TripCreationSuccess.vue';
 
@@ -278,7 +279,8 @@ export default {
             showWizardSuccess: false,
             createdTrip: null,
             creationSnapshot: null,
-            parentTripId: null
+            parentTripId: null,
+            tripInfoStatus: TRIP_INFO_STATUS.IDLE
         };
     },
     mounted() {
@@ -1348,6 +1350,7 @@ export default {
             }
 
             if (type === 'trip') {
+                this.tripInfoStatus = TRIP_INFO_STATUS.IDLE;
                 this.addPoint();
                 // Mirror the entire points array
                 this.otherTrip.points = this.points.slice().reverse().map(point => ({
@@ -1433,6 +1436,7 @@ export default {
                 this.points.splice(index, 1);
             }
             // Always recalculate trip info
+            this.tripInfoStatus = TRIP_INFO_STATUS.IDLE;
             this.calcRoute('trip');
         },
 
@@ -1445,6 +1449,9 @@ export default {
 
             // Only proceed if we have at least 2 points with names
             if (points.length < 2) {
+                if (type === 'trip') {
+                    this.tripInfoStatus = TRIP_INFO_STATUS.IDLE;
+                }
                 return;
             }
 
@@ -1452,8 +1459,15 @@ export default {
                 points: points.map((point) => point.location)
             };
 
+            if (type === 'trip') {
+                this.tripInfoStatus = TRIP_INFO_STATUS.LOADING;
+            }
+
             tripApi.getTripInfo(data).then((result) => {
                 if (result.status === true) {
+                    if (type === 'trip') {
+                        this.tripInfoStatus = TRIP_INFO_STATUS.READY;
+                    }
                     trip.trip.distance = result.data.distance;
                     trip.duration = result.data.duration;
                     trip.trip.co2 = result.data.co2;
@@ -1469,9 +1483,18 @@ export default {
                         this.recalculateRecommendedReturnPrice();
                     }
                 } else if (result.error_code === 'routing_service_unavailable') {
+                    if (type === 'trip') {
+                        this.tripInfoStatus = TRIP_INFO_STATUS.ERROR;
+                    }
                     dialogs.message(this.$t('routingServiceTemporaryError'), {
                         estado: 'error'
                     });
+                } else if (type === 'trip') {
+                    this.tripInfoStatus = TRIP_INFO_STATUS.ERROR;
+                }
+            }).catch(() => {
+                if (type === 'trip') {
+                    this.tripInfoStatus = TRIP_INFO_STATUS.ERROR;
                 }
             });
 
