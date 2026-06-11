@@ -572,28 +572,38 @@
 
         <modal
             v-if="showTemplateModal"
+            :hide-footer="true"
             @close="closeTemplateModal"
         >
             <template #header>
                 <h3>{{ $t('tripCreationChooseTemplateTitle') }}</h3>
             </template>
             <template #body>
-                <ul class="list-group new-trip-wizard__template-list">
-                    <li
-                        v-for="template in availableTemplates"
-                        :key="template.name"
-                        class="list-group-item new-trip-wizard__template-item"
-                    >
-                        <button
-                            type="button"
-                            class="new-trip-wizard__template-pick"
-                            :data-testid="`trip-creation-template-${template.name}`"
-                            @click="onSelectTemplate(template.name)"
+                <div class="new-trip-wizard__template-modal text-left color-black">
+                    <div class="form-group">
+                        <label for="trip-creation-template-select">
+                            {{ $t('tripCreationTemplateNameLabel') }}
+                        </label>
+                        <select
+                            id="trip-creation-template-select"
+                            v-model="selectedTemplateName"
+                            class="form-control"
+                            data-testid="trip-creation-template-select"
+                            @change="onTemplateSelectChange"
                         >
-                            {{ template.name }}
-                        </button>
-                    </li>
-                </ul>
+                            <option disabled value="">
+                                {{ $t('tripCreationChooseTemplatePlaceholder') }}
+                            </option>
+                            <option
+                                v-for="template in availableTemplates"
+                                :key="template.name"
+                                :value="template.name"
+                            >
+                                {{ template.name }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
             </template>
         </modal>
 
@@ -700,7 +710,8 @@ export default {
             pasajeroLogoGris: `${normalizedBase}img/icono-pasajero-gris.png`,
             syncingStepFromRoute: false,
             showTemplateModal: false,
-            availableTemplates: []
+            availableTemplates: [],
+            selectedTemplateName: ''
         };
     },
 
@@ -878,9 +889,18 @@ export default {
             }
 
             this.showTemplateModal = true;
+            this.selectedTemplateName = '';
         },
         closeTemplateModal() {
             this.showTemplateModal = false;
+            this.selectedTemplateName = '';
+        },
+        onTemplateSelectChange() {
+            if (!this.selectedTemplateName) {
+                return;
+            }
+
+            this.onSelectTemplate(this.selectedTemplateName);
         },
         onSelectTemplate(templateName) {
             const template = loadTripCreationTemplate(this.form.user.id, templateName);
@@ -1129,26 +1149,8 @@ export default {
     color: #555;
 }
 
-.new-trip-wizard__template-list {
-    margin-bottom: 0;
-}
-
-.new-trip-wizard__template-item {
-    padding: 0;
-}
-
-.new-trip-wizard__template-pick {
-    display: block;
-    width: 100%;
-    padding: 0.75rem 1rem;
-    border: 0;
-    background: transparent;
-    text-align: left;
-    cursor: pointer;
-}
-
-.new-trip-wizard__template-pick:hover {
-    background: #f5f5f5;
+.new-trip-wizard__template-modal label {
+    color: #333;
 }
 
 .new-trip-wizard__role-cards {
