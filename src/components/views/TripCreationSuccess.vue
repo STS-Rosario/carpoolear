@@ -34,10 +34,10 @@
         </div>
 
         <div class="trip-creation-success__invite">
-            <p class="trip-creation-success__invite-title">
-                {{ $t('queresInvitarTusAmigos') }}
-            </p>
-            <TripInviteFriends :trip-id="trip.id" />
+            <TripInviteFriends
+                :trip-id="trip.id"
+                close-behavior="trip-detail"
+            />
         </div>
     </div>
 </template>
@@ -122,8 +122,16 @@ export default {
     display: flex;
     gap: 0.75rem;
     justify-content: center;
+    align-items: center;
     flex-wrap: wrap;
     margin-bottom: 2rem;
+}
+
+.trip-creation-success__actions .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.5;
 }
 
 .trip-creation-success__share i {
@@ -134,10 +142,5 @@ export default {
     text-align: left;
     max-width: 500px;
     margin: 0 auto;
-}
-
-.trip-creation-success__invite-title {
-    font-weight: 600;
-    margin-bottom: 0.75rem;
 }
 </style>
