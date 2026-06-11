@@ -56,6 +56,17 @@ describe('tripCreationReturnDraft', () => {
         expect(snapshot.selectedCarId).toBe(9);
     });
 
+    it('includes weekly schedule settings in the outbound snapshot', () => {
+        const snapshot = buildOutboundTripCreationSnapshot({
+            ...outboundSnapshot,
+            useWeeklySchedule: true,
+            weeklySchedule: 3
+        });
+
+        expect(snapshot.useWeeklySchedule).toBe(true);
+        expect(snapshot.weeklySchedule).toBe(3);
+    });
+
     it('inverts origin and destination points for a return trip', () => {
         expect(invertTripPointsForReturn(outboundSnapshot.points)).toEqual([
             {
