@@ -66,4 +66,8 @@ describe('main.js bootstrap splash', () => {
             mainSource.indexOf("bus.on('system-ready'")
         );
     });
+
+    it('passes native platform flag when initializing bootstrap splash', () => {
+        expect(mainSource).toContain('isNativePlatform: Capacitor.isNativePlatform()');
+    });
 });
