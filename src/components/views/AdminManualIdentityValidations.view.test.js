@@ -10,4 +10,17 @@ describe('AdminManualIdentityValidations view', () => {
         expect(viewSource).toContain('getAdminUserProfileRoute');
         expect(viewSource).not.toContain("name: 'profile'");
     });
+
+    it('renders a show-resolved checkbox above the table', () => {
+        expect(viewSource).toContain("{{ $t('mostrarResueltos') }}");
+        expect(viewSource).toContain('v-model="showResolved"');
+        expect(viewSource.indexOf('mostrarResueltos')).toBeLessThan(viewSource.indexOf('<table'));
+    });
+
+    it('filters the displayed list using resolved-case helpers', () => {
+        expect(viewSource).toContain('filterManualIdentityValidationsList');
+        expect(viewSource).toContain('getShowResolvedManualIdentityValidations');
+        expect(viewSource).toContain('saveShowResolvedManualIdentityValidations');
+        expect(viewSource).toContain('v-for="item in displayedList"');
+    });
 });
