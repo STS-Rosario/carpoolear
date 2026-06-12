@@ -1,3 +1,5 @@
+import { formatDisplayDni } from './formatDisplayDni';
+
 const EMPTY_VALUE = '—';
 
 const ADMIN_USER_PROPERTY_DEFINITIONS = [
@@ -9,7 +11,7 @@ const ADMIN_USER_PROPERTY_DEFINITIONS = [
     { key: 'mobile_phone', labelKey: 'numeroDeTelefono' },
     { key: 'phone_verified', labelKey: 'phone_verified', type: 'boolean' },
     { key: 'phone_verified_at', labelKey: 'phone_verified_at' },
-    { key: 'nro_doc', labelKey: 'doc' },
+    { key: 'nro_doc', labelKey: 'doc', type: 'dni' },
     { key: 'is_admin', labelKey: 'is_admin', type: 'boolean' },
     { key: 'is_member', labelKey: 'is_member', type: 'boolean' },
     { key: 'has_pin', labelKey: 'has_pin', type: 'boolean' },
@@ -82,7 +84,12 @@ function isUserBanned(user) {
     return isTruthyFlag(user?.banned);
 }
 
-export function formatAdminUserPropertyValue(value, type = 'text') {
+export function formatAdminUserPropertyValue(value, type = 'text', options = {}) {
+    if (type === 'dni') {
+        const formatted = formatDisplayDni(value, options.profileIdFormat);
+        return formatted === null ? EMPTY_VALUE : formatted;
+    }
+
     if (type === 'boolean') {
         if (value === null || value === undefined || value === '') {
             return EMPTY_VALUE;
@@ -130,7 +137,7 @@ export function getAdminUserBannedBanner(user, translate) {
 
 export function buildAdminUserPropertyRows(
     user,
-    { translate, showFacebookProfileUrl = true }
+    { translate, showFacebookProfileUrl = true, profileIdFormat = null }
 ) {
     if (!user) {
         return [];
@@ -141,7 +148,8 @@ export function buildAdminUserPropertyRows(
         label: resolvePropertyLabel(definition, translate),
         value: formatAdminUserPropertyValue(
             user[definition.key],
-            definition.type || 'text'
+            definition.type || 'text',
+            { profileIdFormat }
         )
     }));
 
