@@ -463,7 +463,9 @@ export default {
             return this.$route.query.result || null;
         },
         mismatchDetails() {
-            return getIdentityValidationMismatchDetails(this.$route.query || {});
+            return getIdentityValidationMismatchDetails(this.$route.query || {}, {
+                profileIdFormat: this.config && this.config.profile_id_format
+            });
         },
         mismatchSupportWarningKey() {
             return getMismatchSupportWarningKey(this.resultMessage);
