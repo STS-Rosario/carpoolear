@@ -1,4 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
+import fs from 'node:fs';
+import path from 'node:path';
 import { refreshNotificationsCountOnRouteChange } from './refreshNotificationsCountOnRouteChange.js';
 
 describe('refreshNotificationsCountOnRouteChange', () => {
@@ -49,9 +51,7 @@ describe('refreshNotificationsCountOnRouteChange', () => {
 });
 
 describe('router beforeEach integration', () => {
-    it('refreshes notifications count on every route change', () => {
-        const fs = require('node:fs');
-        const path = require('node:path');
+    it('passes route locations into refreshNotificationsCountOnRouteChange', () => {
         const routerSource = fs.readFileSync(
             path.resolve(__dirname, 'index.js'),
             'utf8'
