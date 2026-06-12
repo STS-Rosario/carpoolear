@@ -59,7 +59,7 @@ export function stopThreads(tags) {
         const list = taggedList.get(tag);
         if (list) {
             list.forEach((thread) => {
-                clearTimeout(thread.id);
+                clearInterval(thread.id);
             });
         }
     });

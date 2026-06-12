@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { NotificationApi } from '../services/api';
 
 const notificationApi = new NotificationApi();
+let countInFlight = null;
 
 export const useNotificationsStore = defineStore('notifications', {
     state: () => ({
@@ -29,7 +30,11 @@ export const useNotificationsStore = defineStore('notifications', {
         },
 
         countAction() {
-            return notificationApi
+            if (countInFlight) {
+                return countInFlight;
+            }
+
+            countInFlight = notificationApi
                 .count()
                 .then((response) => {
                     this.count = response.data;
@@ -37,7 +42,12 @@ export const useNotificationsStore = defineStore('notifications', {
                 })
                 .catch(() => {
                     return Promise.reject(new Error());
+                })
+                .finally(() => {
+                    countInFlight = null;
                 });
+
+            return countInFlight;
         },
 
         add() {

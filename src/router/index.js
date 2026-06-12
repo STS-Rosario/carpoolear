@@ -24,7 +24,7 @@ router.beforeEach((to, from, next) => {
     const backgroundStore = useBackgroundStore();
     const notificationsStore = useNotificationsStore();
 
-    refreshNotificationsCountOnRouteChange(authStore, notificationsStore);
+    refreshNotificationsCountOnRouteChange(authStore, notificationsStore, to, from);
 
     const actionbar = to.meta.actionbar || {};
     const background = to.meta.background || {};

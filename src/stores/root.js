@@ -2,6 +2,9 @@ import { defineStore } from 'pinia';
 import cache, { keys } from '../services/cache';
 import bus from '../services/bus-event';
 import { Thread, stopThreads } from '../classes/Threads';
+import { shouldPollNotificationCount } from '../utils/notificationPolling';
+
+let initPromise = null;
 
 export const useRootStore = defineStore('root', {
     state: () => ({
@@ -16,6 +19,15 @@ export const useRootStore = defineStore('root', {
         },
 
         async init() {
+            if (initPromise) {
+                return initPromise;
+            }
+
+            initPromise = this._init();
+            return initPromise;
+        },
+
+        async _init() {
             console.log('Starting app.');
 
             const { useAuthStore } = await import('./auth');
@@ -58,11 +70,12 @@ export const useRootStore = defineStore('root', {
                 promises.push(p);
             });
 
-            return Promise.all(promises).then(() => {
+            return Promise.all(promises).then(async () => {
                 if (authStore.token) {
-                    authStore.retoken().then(() => this.startApp());
+                    await authStore.retoken();
+                    await this.startApp();
                 } else {
-                    this.startApp();
+                    await this.startApp();
                 }
             });
         },
@@ -164,16 +177,15 @@ export const useRootStore = defineStore('root', {
         },
 
         async startThread() {
+            this.stopThread();
+
             const { useAuthStore } = await import('./auth');
             const { useNotificationsStore } = await import('./notifications');
             const authStore = useAuthStore();
             const notificationsStore = useNotificationsStore();
 
             const config = authStore.appConfig;
-            if (
-                config.web_push_notification &&
-                window.Notification.permission === 'granted'
-            ) {
+            if (!shouldPollNotificationCount(config)) {
                 return;
             }
 
