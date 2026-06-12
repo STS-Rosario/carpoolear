@@ -164,6 +164,8 @@ export const useRootStore = defineStore('root', {
         },
 
         async startThread() {
+            this.stopThread();
+
             const { useAuthStore } = await import('./auth');
             const { useNotificationsStore } = await import('./notifications');
             const authStore = useAuthStore();
@@ -171,7 +173,10 @@ export const useRootStore = defineStore('root', {
 
             const config = authStore.appConfig;
             if (
+                config &&
                 config.web_push_notification &&
+                typeof window !== 'undefined' &&
+                window.Notification &&
                 window.Notification.permission === 'granted'
             ) {
                 return;
