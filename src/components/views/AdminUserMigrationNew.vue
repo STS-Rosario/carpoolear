@@ -25,7 +25,7 @@
                         <label>
                             {{ $t('usuarioAMantener') }}
                             <span class="admin-user-migration-new__support-ticket-notice">
-                                {{ $t('migracionUsuarioAMantenerAvisoTicketSoporte') }}
+                                {{ supportTicketNoticeText }}
                             </span>
                         </label>
                         <UserSearchAutocomplete
@@ -46,7 +46,7 @@
                                     v-if="card.role === 'keep'"
                                     class="admin-user-migration-new__support-ticket-notice"
                                 >
-                                    {{ $t('migracionUsuarioAMantenerAvisoTicketSoporte') }}
+                                    {{ supportTicketNoticeText }}
                                 </p>
                                 <div class="media user-migration-card">
                                     <div
@@ -198,6 +198,9 @@ export default {
                     user: this.userToKeep
                 }
             ];
+        },
+        supportTicketNoticeText() {
+            return this.$t('migracionUsuarioAMantenerAvisoTicketSoporte');
         }
     },
     methods: {
@@ -427,5 +430,14 @@ export default {
 .admin-user-migration-new__support-ticket-notice {
     color: #c0392b;
     font-weight: 700;
+}
+
+label .admin-user-migration-new__support-ticket-notice {
+    margin-left: 0.5em;
+}
+
+p.admin-user-migration-new__support-ticket-notice {
+    margin-top: -6px;
+    margin-bottom: 12px;
 }
 </style>

@@ -81,7 +81,7 @@ describe('AdminUserMigrationNew view', () => {
 
     it('shows the support ticket notice next to Usuario a mantener', () => {
         const keepLabelIndex = source.indexOf("$t('usuarioAMantener')");
-        const noticeIndex = source.indexOf(`$t('${supportTicketNoticeKey}')`);
+        const noticeIndex = source.indexOf('supportTicketNoticeText');
 
         expect(keepLabelIndex).toBeGreaterThan(-1);
         expect(noticeIndex).toBeGreaterThan(keepLabelIndex);
@@ -94,7 +94,7 @@ describe('AdminUserMigrationNew view', () => {
 
         expect(keepHeadingIndex).toBeGreaterThan(-1);
         expect(keepRoleNoticeIndex).toBeGreaterThan(-1);
-        expect(source).toContain(`$t('${supportTicketNoticeKey}')`);
+        expect(source).toContain('supportTicketNoticeText');
     });
 
     it('styles the support ticket notice as red bold text', () => {
@@ -104,11 +104,14 @@ describe('AdminUserMigrationNew view', () => {
         expect(source).toMatch(
             /\.admin-user-migration-new__support-ticket-notice\s*\{[^}]*font-weight:\s*(700|bold)/
         );
+        expect(source).toMatch(/label \.admin-user-migration-new__support-ticket-notice\s*\{/);
+        expect(source).toMatch(/p\.admin-user-migration-new__support-ticket-notice\s*\{/);
     });
 
     it('keeps the support ticket notice copy in i18n', () => {
         expect(i18nSource).toContain(supportTicketNoticeKey);
         expect(i18nSource).toContain(supportTicketNoticeCopy);
         expect(i18nSource).toContain(supportTicketNoticeEnglishCopy);
+        expect(source).toContain("this.$t('migracionUsuarioAMantenerAvisoTicketSoporte')");
     });
 });
