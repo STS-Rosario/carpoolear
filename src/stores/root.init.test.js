@@ -94,9 +94,11 @@ describe('root store init', () => {
         const startAppSpy = vi.spyOn(rootStore, 'startApp');
 
         await Promise.all([rootStore.init(), rootStore.init()]);
+        await vi.waitFor(() => {
+            expect(bus.emit).toHaveBeenCalledWith('system-ready');
+        });
 
         expect(startAppSpy).toHaveBeenCalledTimes(1);
         expect(bus.emit).toHaveBeenCalledTimes(1);
-        expect(bus.emit).toHaveBeenCalledWith('system-ready');
     });
 });

@@ -4,6 +4,8 @@ import bus from '../services/bus-event';
 import { Thread, stopThreads } from '../classes/Threads';
 import { shouldPollNotificationCount } from '../utils/notificationPolling';
 
+let initPromise = null;
+
 export const useRootStore = defineStore('root', {
     state: () => ({
         appVersion: 3,
@@ -17,6 +19,15 @@ export const useRootStore = defineStore('root', {
         },
 
         async init() {
+            if (initPromise) {
+                return initPromise;
+            }
+
+            initPromise = this._init();
+            return initPromise;
+        },
+
+        async _init() {
             console.log('Starting app.');
 
             const { useAuthStore } = await import('./auth');
