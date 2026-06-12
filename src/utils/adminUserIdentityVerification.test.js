@@ -112,11 +112,36 @@ describe('canClearAdminUserIdentityVerification', () => {
         ).toBe(true);
     });
 
-    it('returns false when user has no verification timestamp', () => {
+    it('returns true when user has manual identity validation in progress', () => {
         expect(
             canClearAdminUserIdentityVerification({
                 identity_validated: false,
-                identity_validated_at: null
+                identity_validated_at: null,
+                manual_identity_validations_count: 1
+            })
+        ).toBe(true);
+    });
+
+    it('returns true when user only has rejection metadata', () => {
+        expect(
+            canClearAdminUserIdentityVerification({
+                identity_validated: false,
+                identity_validated_at: null,
+                identity_validation_rejected_at: '2026-06-02 11:00:00',
+                identity_validation_reject_reason: 'name_mismatch'
+            })
+        ).toBe(true);
+    });
+
+    it('returns false when user has no verification data', () => {
+        expect(
+            canClearAdminUserIdentityVerification({
+                identity_validated: false,
+                identity_validated_at: null,
+                identity_validation_rejected_at: null,
+                identity_validation_reject_reason: null,
+                identity_validation_type: null,
+                manual_identity_validations_count: 0
             })
         ).toBe(false);
     });

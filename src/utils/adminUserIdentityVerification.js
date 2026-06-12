@@ -71,7 +71,20 @@ export function buildAdminUserIdentityVerificationSection(user, { translate }) {
 }
 
 export function canClearAdminUserIdentityVerification(user) {
-    return !!user?.['identity_validated_at'];
+    if (!user) {
+        return false;
+    }
+
+    if (Number(user.manual_identity_validations_count) > 0) {
+        return true;
+    }
+
+    return !!(
+        user.identity_validated_at ||
+        user.identity_validation_rejected_at ||
+        user.identity_validation_reject_reason ||
+        user.identity_validation_type
+    );
 }
 
 export function applyClearedIdentityValidationFields(user) {
