@@ -44,6 +44,60 @@
                                 {{ $t('verPerfilPublico') }}
                             </router-link>
                         </p>
+                        <section
+                            class="admin-user-detail__identity-verification"
+                            aria-labelledby="admin-user-identity-verification-heading"
+                        >
+                            <h4 id="admin-user-identity-verification-heading">
+                                {{ $t('adminUserIdentityVerificationSection') }}
+                            </h4>
+                            <dl class="admin-user-detail__properties">
+                                <div class="admin-user-detail__property">
+                                    <dt>{{ $t('estadoIdentidad') }}</dt>
+                                    <dd>
+                                        <span
+                                            class="label"
+                                            :class="
+                                                identityVerificationSection.isVerified
+                                                    ? 'label-success'
+                                                    : 'label-default'
+                                            "
+                                        >
+                                            {{
+                                                identityVerificationSection.statusLabel
+                                            }}
+                                        </span>
+                                    </dd>
+                                </div>
+                                <div class="admin-user-detail__property">
+                                    <dt>{{ $t('adminIdentityValidationMethod') }}</dt>
+                                    <dd>
+                                        {{ identityVerificationSection.methodLabel }}
+                                    </dd>
+                                </div>
+                                <div
+                                    v-for="row in identityVerificationSection.detailRows"
+                                    :key="row.key"
+                                    class="admin-user-detail__property"
+                                >
+                                    <dt>{{ row.label }}</dt>
+                                    <dd>{{ row.value }}</dd>
+                                </div>
+                            </dl>
+                            <p
+                                v-if="canClearIdentityVerification"
+                                class="admin-user-detail__identity-verification-actions"
+                            >
+                                <button
+                                    type="button"
+                                    class="btn btn-warning"
+                                    :disabled="clearingIdentity"
+                                    @click="confirmClearIdentityValidation"
+                                >
+                                    {{ $t('removerValidacionIdentidad') }}
+                                </button>
+                            </p>
+                        </section>
                         <dl class="admin-user-detail__properties">
                             <div
                                 v-for="row in propertyRows"
@@ -148,8 +202,12 @@ import {
     buildAdminUserPropertyRows,
     getAdminUserBannedBanner
 } from '../../utils/adminUserDetailProperties';
+import {
+    buildAdminUserIdentityVerificationSection,
+    canClearAdminUserIdentityVerification
+} from '../../utils/adminUserIdentityVerification';
 import router from '../../router';
-import { UserApi } from '../../services/api';
+import { AdminApi, UserApi } from '../../services/api';
 import dialogs from '../../services/dialogs.js';
 
 export default {
@@ -158,7 +216,9 @@ export default {
         return {
             loading: true,
             user: null,
-            userApi: null
+            userApi: null,
+            adminApi: null,
+            clearingIdentity: false
         };
     },
     computed: {
@@ -174,8 +234,17 @@ export default {
                 profileIdFormat: this.config && this.config.profile_id_format,
                 showFacebookProfileUrl: !!(
                     this.config && this.config.module_facebook_profile_url_enabled
-                )
+                ),
+                excludeIdentityVerificationFields: true
             });
+        },
+        identityVerificationSection() {
+            return buildAdminUserIdentityVerificationSection(this.user, {
+                translate: this.$t.bind(this)
+            });
+        },
+        canClearIdentityVerification() {
+            return canClearAdminUserIdentityVerification(this.user);
         }
     },
     methods: {
@@ -235,6 +304,27 @@ export default {
         adminUserSupportTicketsRoute,
         adminUserNavLabel(labelKey, count) {
             return formatAdminUserNavLabelFromKey(this.$t.bind(this), labelKey, count);
+        },
+        confirmClearIdentityValidation() {
+            if (!this.user || !this.user.id) return;
+            if (!confirm(this.$t('confirmarRemoverValidacionIdentidad'))) return;
+            this.clearingIdentity = true;
+            this.adminApi
+                .clearIdentityValidation(this.user.id)
+                .then(() => {
+                    this.user.identity_validated = false;
+                    this.user.identity_validated_at = null;
+                    this.user.identity_validation_type = null;
+                    this.user.identity_validation_rejected_at = null;
+                    this.user.identity_validation_reject_reason = null;
+                    dialogs.message(this.$t('validacionIdentidadRemovida'));
+                })
+                .catch(() => {
+                    dialogs.message(this.$t('resultError'), { estado: 'error' });
+                })
+                .finally(() => {
+                    this.clearingIdentity = false;
+                });
         }
     },
     watch: {
@@ -244,6 +334,7 @@ export default {
     },
     mounted() {
         this.userApi = new UserApi();
+        this.adminApi = new AdminApi();
         this.load();
     },
     components: {
@@ -279,6 +370,22 @@ export default {
 
 .admin-user-detail__status {
     margin-bottom: 16px;
+}
+
+.admin-user-detail__identity-verification {
+    margin: 0 0 16px;
+    padding: 12px;
+    border: 1px solid #e8e8e8;
+    border-radius: 4px;
+    background: #fafafa;
+}
+
+.admin-user-detail__identity-verification h4 {
+    margin: 0 0 12px;
+}
+
+.admin-user-detail__identity-verification-actions {
+    margin: 12px 0 0;
 }
 
 .admin-user-detail__properties {
