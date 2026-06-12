@@ -54,10 +54,12 @@ import { Capacitor } from '@capacitor/core';
 import { AppUpdate } from '@capawesome/capacitor-app-update';
 import { compareAndroidVersion, compareSemver } from './utils/versionCompare';
 import {
+    formatSplashVersionText,
     getRemainingSplashMs,
     hideBootstrapSplash,
     isAdminAppUrl,
-    isCustomSplashVisible
+    isCustomSplashVisible,
+    resolveSplashVersion
 } from './utils/customSplash';
 import footerApp from './components/sections/FooterApp.vue';
 import headerApp from './components/sections/HeaderApp.vue';
@@ -179,10 +181,14 @@ export default {
     computed: {
         // Same version we send in X-App-Version header for all requests (network.js getHeader)
         splashVersionText() {
-            const appVersionInfo = useRootStore().appVersionInfo;
-            const version = (appVersionInfo && appVersionInfo.version) || (typeof window !== 'undefined' && window.appVersion) || '0';
-            const base = 'Version ' + version;
-            return Capacitor.isNativePlatform() ? base : base + ' - build 116';
+            return formatSplashVersionText({
+                version: resolveSplashVersion({
+                    appVersionInfo: useRootStore().appVersionInfo,
+                    windowAppVersion:
+                        typeof window !== 'undefined' ? window.appVersion : null
+                }),
+                isNativePlatform: Capacitor.isNativePlatform()
+            });
         },
         ...mapState(useCordovaStore, {
             deviceReady: 'deviceReady',

@@ -38,6 +38,12 @@ describe('App custom splash', () => {
     it('uses custom splash visibility for modal suppression', () => {
         expect(appSource).toContain('return this.customSplashVisible || this.onBoardingVisibility');
     });
+
+    it('shows version and build number on the vue splash overlay', () => {
+        expect(appSource).toContain('class="splash-version"');
+        expect(appSource).toContain('formatSplashVersionText');
+        expect(appSource).toContain('resolveSplashVersion');
+    });
 });
 
 describe('index.html bootstrap splash', () => {
@@ -45,6 +51,11 @@ describe('index.html bootstrap splash', () => {
         expect(indexSource).toContain('id="bootstrap-splash"');
         expect(indexSource).toContain('splash-android-1280x1920.png');
         expect(indexSource).toContain('bootstrap-splash-screen');
+    });
+
+    it('includes a bootstrap version label for the splash overlay', () => {
+        expect(indexSource).toContain('id="bootstrap-splash-version"');
+        expect(indexSource).toContain('bootstrap-splash-version');
     });
 });
 
@@ -54,5 +65,9 @@ describe('main.js bootstrap splash', () => {
         expect(mainSource.indexOf('initBootstrapSplash')).toBeLessThan(
             mainSource.indexOf("bus.on('system-ready'")
         );
+    });
+
+    it('passes native platform flag when initializing bootstrap splash', () => {
+        expect(mainSource).toContain('isNativePlatform: Capacitor.isNativePlatform()');
     });
 });
