@@ -12,6 +12,7 @@ const Activate = () => import('../components/views/Activate.vue');
 const ResetPassword = () => import('../components/views/ResetPassword.vue');
 const Profile = () => import('../components/views/Profile.vue');
 const MyTrips = () => import('../components/views/MyTrips.vue');
+const DonationAfterRating = () => import('../components/views/DonationAfterRating.vue');
 const Trips = () => import('../components/views/Trips.vue');
 const NewTrip = () => import('../components/views/NewTrip.vue');
 const Trip = () => import('../components/views/Trip.vue');
@@ -174,6 +175,33 @@ export default [
                 header: {
                     titleKey: 'miPerfil',
                     buttons: ['back', 'menu']
+                }
+            }
+        }
+    },
+    {
+        path: '/donate-after-rating/:tripId',
+        name: 'donate-after-rating',
+        component: DonationAfterRating,
+        props: true,
+        beforeEnter: (to, from, next) => {
+            if (!getAuthStore().checkLogin) {
+                auth(to, from, next);
+                return;
+            }
+            requireIdentityValidation(to, from, () => {
+                profileComplete(to, from, next);
+            });
+        },
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'home'
+                },
+                header: {
+                    titleKey: 'donaACarpoolear',
+                    buttons: []
                 }
             }
         }
