@@ -25,7 +25,7 @@ const referenciasDescriptionKey = 'referenciasDescripcion';
 const referenciasDescriptionCopy =
     'Las referencias son recomendaciones de la persona, no por un viaje en particular dentro de Carpoolear';
 const referenciasSectionDescriptionRule =
-    /<h2>\{\{ \$t\('referencias'\) \}\}<\/h2>[\s\S]*<p>[\s\S]*\$t\('referenciasDescripcion'\)[\s\S]*<\/p>/;
+    /<h2>\{\{ \$t\('referencias'\) \}\}<\/h2>[\s\S]*<p class="referencias-section-description">[\s\S]*\$t\('referenciasDescripcion'\)[\s\S]*<\/p>/;
 
 describe('ProfileRates reference action', () => {
     it('shows a description paragraph below the references section header', () => {
