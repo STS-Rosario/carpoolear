@@ -17,7 +17,7 @@ describe('shouldPromptDonationAfterRating', () => {
             shouldPromptDonationAfterRating({
                 user: {
                     monthly_donate: false,
-                    donations: [{ trip_id: 42, has_donated: 0, has_denied: 1 }]
+                    donations: [{ trip_id: '42', has_donated: 0, has_denied: 1 }]
                 },
                 tripId: 42,
                 tripsRated: 2

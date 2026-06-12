@@ -3,13 +3,16 @@ export function shouldPromptDonationAfterRating({ user, tripId, tripsRated }) {
         return false;
     }
 
+    const normalizedTripId = Number(tripId);
     const tripRatedLimit = parseFloat(tripsRated);
 
     if (!user.donations) {
         return true;
     }
 
-    const donationForTrip = user.donations.find((donation) => donation.trip_id === tripId);
+    const donationForTrip = user.donations.find(
+        (donation) => Number(donation.trip_id) === normalizedTripId
+    );
     if (donationForTrip) {
         return false;
     }
