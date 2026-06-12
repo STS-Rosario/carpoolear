@@ -44,3 +44,16 @@ describe('MyTrips pending rates carpoodatos modal', () => {
         expect(source).not.toContain('carpoodatosDeciLoQuePensas');
     });
 });
+
+describe('MyTrips donation after positive rating', () => {
+    it('does not render the donation request modal', () => {
+        expect(source).not.toContain('showModalRequestDonation');
+        expect(source).not.toContain('v-if="showModalRequestDonation"');
+    });
+
+    it('redirects to the full-page donation prompt after a positive rating', () => {
+        expect(source).toContain('shouldPromptDonationAfterRating');
+        expect(source).toMatch(/name:\s*'donate-after-rating'/);
+        expect(source).toMatch(/params:\s*\{\s*tripId/);
+    });
+});
