@@ -30,11 +30,11 @@ export const useNotificationsStore = defineStore('notifications', {
         },
 
         countAction() {
-            if (this._countInFlight) {
-                return this._countInFlight;
+            if (countInFlight) {
+                return countInFlight;
             }
 
-            this._countInFlight = notificationApi
+            countInFlight = notificationApi
                 .count()
                 .then((response) => {
                     this.count = response.data;
@@ -44,10 +44,10 @@ export const useNotificationsStore = defineStore('notifications', {
                     return Promise.reject(new Error());
                 })
                 .finally(() => {
-                    this._countInFlight = null;
+                    countInFlight = null;
                 });
 
-            return this._countInFlight;
+            return countInFlight;
         },
 
         add() {
