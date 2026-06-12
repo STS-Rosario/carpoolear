@@ -3,7 +3,13 @@
         <div class="row">
             <div class="col-md-22 col-md-offset-1">
                 <h2>{{ $t('validacionesManuales') }}</h2>
-                <Loading :data="list">
+                <div class="show-resolved-toggle">
+                    <label>
+                        <input v-model="showResolved" type="checkbox" />
+                        {{ $t('mostrarResueltos') }}
+                    </label>
+                </div>
+                <Loading :data="displayedList">
                     <table class="table table-hover table-bordered">
                         <thead>
                             <tr>
@@ -18,7 +24,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="item in list" :key="item.id">
+                            <tr v-for="item in displayedList" :key="item.id">
                                 <th scope="row">{{ item.id }}</th>
                                 <td>{{ item.user_name || $t('na') }}</td>
                                 <td>{{ item.paid_at ? formatDate(item.paid_at) : '-' }}</td>
@@ -73,13 +79,33 @@ import AdminLayout from '../layouts/AdminLayout.vue';
 import Loading from '../Loading';
 import { AdminApi } from '../../services/api';
 import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
+import {
+    filterManualIdentityValidationsList,
+    getShowResolvedManualIdentityValidations,
+    saveShowResolvedManualIdentityValidations
+} from '../../utils/adminManualIdentityValidationsList';
 
 export default {
     name: 'AdminManualIdentityValidations',
     data() {
         return {
-            list: null
+            list: null,
+            showResolved: getShowResolvedManualIdentityValidations()
         };
+    },
+    computed: {
+        displayedList() {
+            if (!Array.isArray(this.list)) {
+                return this.list;
+            }
+
+            return filterManualIdentityValidationsList(this.list, this.showResolved);
+        }
+    },
+    watch: {
+        showResolved(value) {
+            saveShowResolvedManualIdentityValidations(value);
+        }
     },
     methods: {
         getAdminUserProfileRoute,
@@ -145,6 +171,10 @@ export default {
 };
 </script>
 <style scoped>
+.show-resolved-toggle {
+    margin-bottom: 16px;
+}
+
 .pending-images-pill {
     margin-left: 6px;
 }
