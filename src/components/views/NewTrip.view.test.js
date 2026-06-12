@@ -246,6 +246,13 @@ describe('NewTrip.vue trip creation template snapshot', () => {
         expect(viewSource).toContain(':key="tripCreationWizardKey"');
         expect(viewSource).toContain('resetTripCreationForm');
         expect(viewSource).toContain('applyTripCreationFormReset');
+        expect(viewSource).toContain('finalizeTripCreationSuccess');
+        expect(viewSource).toMatch(
+            /finalizeTripCreationSuccess\([\s\S]*cancelDraftSave[\s\S]*showWizardSuccess = true[\s\S]*clearTripCreationDraft/
+        );
+        expect(viewSource).toMatch(
+            /resetTripCreationForm\([\s\S]*clearTripCreationDraft/
+        );
         expect(viewSource).toMatch(
             /beforeRouteLeave\([\s\S]*showWizardSuccess[\s\S]*resetTripCreationForm\(\)/
         );

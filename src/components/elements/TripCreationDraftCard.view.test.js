@@ -11,5 +11,6 @@ describe('TripCreationDraftCard.vue', () => {
         expect(componentSource).toContain('refresh()');
         expect(componentSource).toContain('hasTripCreationDraft(this.user.id)');
         expect(componentSource).toContain('activated()');
+        expect(componentSource).toContain('trip-creation-draft-changed');
     });
 });

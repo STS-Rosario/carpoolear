@@ -844,25 +844,33 @@ export default {
     },
 
     beforeUnmount() {
-        if (this.draftTimer) {
-            clearTimeout(this.draftTimer);
-            this.draftTimer = null;
-        }
+        this.cancelDraftSave();
     },
 
     methods: {
+        cancelDraftSave() {
+            if (this.draftTimer) {
+                clearTimeout(this.draftTimer);
+                this.draftTimer = null;
+            }
+        },
         scheduleDraftSave() {
-            if (!this.draftSavingEnabled || this.isEditTripFlow) {
+            if (
+                !this.draftSavingEnabled ||
+                this.isEditTripFlow ||
+                this.form.saving
+            ) {
                 return;
             }
-            clearTimeout(this.draftTimer);
+            this.cancelDraftSave();
             this.draftTimer = setTimeout(() => this.persistDraft(), 400);
         },
         persistDraft() {
             if (
                 !this.draftSavingEnabled ||
                 this.isEditTripFlow ||
-                !this.form.user?.id
+                !this.form.user?.id ||
+                this.form.saving
             ) {
                 return;
             }

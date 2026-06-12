@@ -35,6 +35,7 @@ import {
     clearTripCreationDraft,
     hasTripCreationDraft
 } from '../../utils/tripCreationDraft.js';
+import bus from '../../services/bus-event.js';
 
 export default {
     name: 'trip-creation-draft-card',
@@ -53,10 +54,15 @@ export default {
 
     mounted() {
         this.refresh();
+        bus.on('trip-creation-draft-changed', this.refresh);
     },
 
     activated() {
         this.refresh();
+    },
+
+    beforeUnmount() {
+        bus.off('trip-creation-draft-changed', this.refresh);
     },
 
     methods: {

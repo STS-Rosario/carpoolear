@@ -1316,13 +1316,7 @@ export default {
                                 estado: 'info'
                             });
                         }
-                        if (this.user && this.user.id != null) {
-                            clearTripCreationDraft(this.user.id);
-                        }
-                        this.parentTripId = null;
-                        this.creationSnapshot = buildOutboundTripCreationSnapshot(this);
-                        this.createdTrip = t;
-                        this.showWizardSuccess = true;
+                        this.finalizeTripCreationSuccess(t);
                     })
                     .catch((err) => {
                         console.log('error_creating', err);
@@ -1442,6 +1436,10 @@ export default {
             });
         },
         resetTripCreationForm(options = {}) {
+            if (this.user?.id != null) {
+                clearTripCreationDraft(this.user.id);
+            }
+            bus.emit('trip-creation-draft-changed');
             applyTripCreationFormReset(this, {
                 defaultTime: dayjs().add(1, 'hours').format('HH:00'),
                 defaultReturnTime: dayjs().add(2, 'hours').format('HH:00'),
@@ -1455,6 +1453,17 @@ export default {
         },
         refreshTripCreationTemplates() {
             this.$refs.tripCreationWizard?.refreshAvailableTemplates?.();
+        },
+        finalizeTripCreationSuccess(trip) {
+            this.$refs.tripCreationWizard?.cancelDraftSave?.();
+            this.createdTrip = trip;
+            this.showWizardSuccess = true;
+            if (this.user?.id != null) {
+                clearTripCreationDraft(this.user.id);
+            }
+            bus.emit('trip-creation-draft-changed');
+            this.parentTripId = null;
+            this.creationSnapshot = buildOutboundTripCreationSnapshot(this);
         },
 
         addPoint(force) {

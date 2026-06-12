@@ -28,6 +28,7 @@ describe('NewTripCreationWizard.vue', () => {
         expect(wizardSource).toContain('loadTripCreationDraft');
         expect(wizardSource).toContain('draftSavingEnabled');
         expect(wizardSource).toContain('beforeUnmount()');
+        expect(wizardSource).toContain('cancelDraftSave');
     });
 
     it('binds schedule DatePicker to dateAnswer so revisiting the step shows the chosen date', () => {
