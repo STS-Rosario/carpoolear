@@ -17,6 +17,8 @@ describe('adminManualIdentityValidationsList', () => {
         it('treats approved and rejected as resolved', () => {
             expect(isManualIdentityValidationResolved(approved)).toBe(true);
             expect(isManualIdentityValidationResolved(rejected)).toBe(true);
+            expect(isManualIdentityValidationResolved({ review_status: 'approve' })).toBe(true);
+            expect(isManualIdentityValidationResolved({ review_status: 'reject' })).toBe(true);
         });
 
         it('treats pending and other statuses as unresolved', () => {

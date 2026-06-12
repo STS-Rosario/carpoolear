@@ -39,9 +39,10 @@ export function saveShowResolvedManualIdentityValidations(showResolved, storage)
     );
 }
 
+const RESOLVED_REVIEW_STATUSES = new Set(['approved', 'approve', 'rejected', 'reject']);
+
 export function isManualIdentityValidationResolved(item) {
-    const status = item?.review_status;
-    return status === 'approved' || status === 'rejected';
+    return RESOLVED_REVIEW_STATUSES.has(item?.review_status);
 }
 
 export function filterManualIdentityValidationsList(list, showResolved = false) {
