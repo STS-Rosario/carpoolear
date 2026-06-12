@@ -53,6 +53,12 @@ import { useRootStore } from './stores/root';
 import { Capacitor } from '@capacitor/core';
 import { AppUpdate } from '@capawesome/capacitor-app-update';
 import { compareAndroidVersion, compareSemver } from './utils/versionCompare';
+import {
+    getRemainingSplashMs,
+    hideBootstrapSplash,
+    isAdminAppUrl,
+    isCustomSplashVisible
+} from './utils/customSplash';
 import footerApp from './components/sections/FooterApp.vue';
 import headerApp from './components/sections/HeaderApp.vue';
 import onBoarding from './components/sections/OnBoarding.vue';
@@ -155,14 +161,20 @@ export default {
             window.SplashScreen.hide();
         }
 
-        if (this.user && this.user.is_admin) {
+        if (isAdminAppUrl(this.$route)) {
+            hideBootstrapSplash();
             this.showCustomSplash = false;
             return;
         }
 
+        hideBootstrapSplash();
+
         setTimeout(() => {
             this.showCustomSplash = false;
-        }, 3000);
+        }, getRemainingSplashMs(
+            performance.now(),
+            window.__customSplashStartedAt
+        ));
     },
     computed: {
         // Same version we send in X-App-Version header for all requests (network.js getHeader)
@@ -214,10 +226,10 @@ export default {
             return moduleEnabled && (mustShowMobile || mustShowGeneral);
         },
         customSplashVisible() {
-            if (this.user && this.user.is_admin) {
-                return false;
-            }
-            return this.showCustomSplash;
+            return isCustomSplashVisible({
+                location: this.$route,
+                showCustomSplash: this.showCustomSplash
+            });
         },
         identityPromptSuppress() {
             return this.customSplashVisible || this.onBoardingVisibility;
@@ -274,9 +286,11 @@ export default {
     watch: {
         deviceReady: () => {
         },
-        user(user) {
-            if (user && user.is_admin) {
+        '$route'(to) {
+            if (isAdminAppUrl(to)) {
+                hideBootstrapSplash();
                 this.showCustomSplash = false;
+                window.__customSplashStartedAt = null;
             }
         },
         appConfig(value) {
