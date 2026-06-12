@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import cache, { keys } from '../services/cache';
 import bus from '../services/bus-event';
 import { Thread, stopThreads } from '../classes/Threads';
+import { shouldPollNotificationCount } from '../utils/notificationPolling';
 
 export const useRootStore = defineStore('root', {
     state: () => ({
@@ -172,13 +173,7 @@ export const useRootStore = defineStore('root', {
             const notificationsStore = useNotificationsStore();
 
             const config = authStore.appConfig;
-            if (
-                config &&
-                config.web_push_notification &&
-                typeof window !== 'undefined' &&
-                window.Notification &&
-                window.Notification.permission === 'granted'
-            ) {
+            if (!shouldPollNotificationCount(config)) {
                 return;
             }
 
