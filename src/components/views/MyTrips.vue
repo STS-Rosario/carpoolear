@@ -51,102 +51,6 @@
         </div>
 
         <div class="col-xs-24">
-            <modal
-                :name="'modal'"
-                v-if="showModalRequestDonation"
-                @close="onModalClose"
-                :title="'Test'"
-                :body="'Body'"
-            >
-                <template #header><h3>
-                    <span>{{ $t('donaACarpoolear') }}</span>
-                    <br class="hidden-sm hidden-md hidden-lg" />
-                    <small>{{ $t('proyectoDe') }}</small>
-                    <img
-                        width="90"
-                        alt="STS Rosario"
-                        :src="$publicImg('logo_sts_nuevo_color.png')"
-                    />
-                </h3></template>
-                <template #body><div class="donation">
-                    <div class="text-center donation-text">
-                        <p>
-                            {{ $t('buenisimoCompartirViaje') }}
-                        </p>
-                        {{ $t('ayudanosPlataforma') }}
-                    </div>
-                    <div class="radio">
-                        <label class="radio-inline">
-                            <input
-                                type="radio"
-                                name="donationValor"
-                                id="donation50"
-                                value="2000"
-                                v-model="donateValue"
-                            />
-                            <span>$ 2000</span>
-                        </label>
-                        <label class="radio-inline">
-                            <input
-                                type="radio"
-                                name="donationValor"
-                                id="donation100"
-                                value="5000"
-                                v-model="donateValue"
-                            />
-                            <span>$ 5000</span>
-                        </label>
-                        <label class="radio-inline">
-                            <input
-                                type="radio"
-                                name="donationValor"
-                                id="donation200"
-                                value="10000"
-                                v-model="donateValue"
-                            />
-                            <span>$ 10000</span>
-                        </label>
-                        <label class="radio-inline">
-                            <input
-                                type="radio"
-                                name="donationValor"
-                                id="donation500"
-                                value="10000"
-                                v-model="donateValue"
-                            />
-                            <span>{{ $t('elegiPropiaAventura') }}</span>
-                        </label>
-                    </div>
-                    <div>
-                        <button
-                            class="btn btn-success btn-unica-vez"
-                            @click="onDonateOnceTime"
-                        >
-                            {{ $t('unicaVez') }}
-                        </button>
-                        <button
-                            class="btn btn-info btn-mensualmente"
-                            @click="onDonateMonthly"
-                        >
-                            {{ $t('MENSUAL') }}
-                            <br />
-                            {{ $t('cancelaCuando') }}
-                        </button>
-                    </div>
-                    <div class="text-center">
-                        <br />
-                        <a
-                            href="/donar"
-                            target="_blank"
-                            v-on:click.prevent="
-                                openDonationLink()
-                            "
-                        >
-                            {{ $t('conoceMasDonar') }}
-                        </a>
-                    </div>
-                </div></template>
-            </modal>
             <Loading :data="pendingRates" :hideOnEmpty="true">
                 <template #title><h2>
                     {{ $t('calificacionesPendientes') }}
@@ -328,25 +232,14 @@ import { useRatesStore } from '../../stores/rates';
 import { usePassengerStore } from '../../stores/passenger';
 import { useAuthStore } from '../../stores/auth';
 import { useSubscriptionsStore } from '../../stores/subscriptions';
-import { useProfileStore } from '../../stores/profile';
 
 import Tab from '../elements/Tab';
-import modal from '../Modal';
-import dialogs from '../../services/dialogs.js';
 import bus from '../../services/bus-event.js';
-import { App } from '@capacitor/app';
-import { Capacitor } from '@capacitor/core';
 import { shouldHideDonationOnIOSCapacitor } from '../../services/capacitor.js';
+import { shouldPromptDonationAfterRating } from '../../utils/donationAfterRating.js';
 
 export default {
     name: 'my-trips',
-    data() {
-        return {
-            showModalRequestDonation: false,
-            donateValue: 0,
-            modalTripId: 0
-        };
-    },
     mounted() {
         this.tripAsDriver();
         this.pendingRate();
@@ -409,9 +302,6 @@ export default {
         ...mapActions(useSubscriptionsStore, {
             findSubscriptions: 'index'
         }),
-        ...mapActions(useProfileStore, {
-            registerDonation: 'registerDonation'
-        }),
         findTrip(id) {
             if (this.trips) {
                 return this.trips.find((item) => item.id === id);
@@ -425,174 +315,34 @@ export default {
                 window.scrollTo(0, domNode.offsetTop - 150);
             }
         },
-        async openExternalBrowser(url) {
-            // On iOS Capacitor, use App.openUrl() to open in external browser (Safari)
-            // This makes the user leave the app, which is required for donations
-            if (Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'ios') {
-                try {
-                    await App.openUrl({ url });
-                } catch (error) {
-                    console.error('Error opening URL in external browser:', error);
-                    // Fallback to window.open if App.openUrl fails
-                    window.open(url, '_blank');
-                }
-            } else {
-                // For web or Android, use window.open
-                window.open(url, '_blank');
-            }
-        },
-        async openDonationLink() {
-            let url = 'https://carpoolear.com.ar/donar';
-            // Add userId parameter for tracking
-            if (this.user && this.user.id) {
-                url = `${url}?u=${this.user.id}`;
-            }
-            await this.openExternalBrowser(url);
-        },
-        async onDonateOnceTime() {
-            if (this.donateValue > 0) {
-                var url = 'http://mpago.la/jgap'; // 50
-                switch (this.donateValue) {
-                    case '2000':
-                        url =
-                            'https://mpago.la/1WhaoLf';
-                        break;
-                    case '5000':
-                        url =
-                            'https://mpago.la/1SB6on8';
-                        break;
-                    case '10000':
-                        url =
-                            'https://mpago.la/2USgEBv';
-                        break;
-                    default:
-                        break;
-                }
-                // Add userId parameter for tracking
-                if (this.user && this.user.id) {
-                    const separator = url.includes('?') ? '&' : '?';
-                    url = `${url}${separator}u=${this.user.id}`;
-                }
-                // Open in external browser (required for iOS donations)
-                await this.openExternalBrowser(url);
-                this.showModalRequestDonation = false;
-                let data = {
-                    has_donated: 1,
-                    has_denied: 0,
-                    ammount: parseFloat(this.donateValue),
-                    trip_id: this.modalTripId
-                };
-                this.registerDonation(data);
-            } else {
-                dialogs.message(
-                    this.$t('tienesQueSeleccionarDonacion'),
-                    {
-                        duration: 10,
-                        estado: 'error'
-                    }
-                );
-            }
-        },
-        async onDonateMonthly() {
-            if (this.donateValue > 0) {
-                var url = 'http://mpago.la/2XdoxpF'; // 50
-                switch (this.donateValue) {
-                    case '2000':
-                        url = 'https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=2c9380848a2fd5c9018a33702cc50181';
-                        break;
-                    case '5000':
-                        url = 'https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=2c9380848cee0ea5018d0e9ea71016d7';
-                        break;
-                    case '10000':
-                        url = 'https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=2c93808497030fc7019705478b370068';
-                        break;
-                    default:
-                        break;
-                }
-                // Add userId parameter for tracking
-                if (this.user && this.user.id) {
-                    const separator = url.includes('?') ? '&' : '?';
-                    url = `${url}${separator}u=${this.user.id}`;
-                }
-                // Open in external browser (required for iOS donations)
-                await this.openExternalBrowser(url);
-                this.showModalRequestDonation = false;
-                let data = {
-                    has_donated: 1,
-                    has_denied: 0,
-                    ammount: parseFloat(this.donateValue),
-                    trip_id: this.modalTripId
-                };
-                this.registerDonation(data);
-            } else {
-                dialogs.message(
-                    this.$t('tienesQueSeleccionarDonacion'),
-                    {
-                        duration: 10,
-                        estado: 'error'
-                    }
-                );
-            }
-        },
-
-        onModalClose() {
-            this.showModalRequestDonation = false;
-            let data = {
-                has_donated: 0,
-                has_denied: 1,
-                ammount: 0,
-                trip_id: this.modalTripId
-            };
-            this.registerDonation(data);
-        },
-        hasToShowModal(tripId) {
+        redirectToDonationPrompt(tripId) {
             if (shouldHideDonationOnIOSCapacitor(this.user)) {
                 return;
             }
-            let tripRateds = parseFloat(this.config.donation.trips_rated);
-            if (this.user && !this.user.monthly_donate) {
-                // solo si el usuario no es donador mensual
-                if (!this.user.donations) {
-                    // no tengo intento de donaciones este mes debe aparecer
-                    this.showModalRequestDonation = true;
-                    this.modalTripId = tripId;
-                } else {
-                    // debe aparecerme una vez por viaje
-                    let donation = this.user.donations.find(
-                        (d) => d.trip_id === tripId
-                    );
-                    if (!donation) {
-                        // para la cantidad de `tripRated` viajes mensuales
-                        let donations = this.user.donations.filter(
-                            (d) => d.trip_id !== null
-                        );
-                        if (donations && donations.length < tripRateds) {
-                            this.showModalRequestDonation = true;
-                            this.modalTripId = tripId;
-                        } else {
-                            console.log(
-                                'hasToShowModal: ya interactue con al menos dos viajes'
-                            );
-                        }
-                    } else {
-                        console.log(
-                            'hasToShowModal: ya interactue con este viaje'
-                        );
-                    }
-                }
+            if (
+                !shouldPromptDonationAfterRating({
+                    user: this.user,
+                    tripId,
+                    tripsRated: this.config.donation.trips_rated
+                })
+            ) {
+                return;
             }
+            this.$router.push({
+                name: 'donate-after-rating',
+                params: { tripId }
+            });
         },
         onUserRated(data) {
             console.log('onUserRated', data);
             if (data.rating) {
-                // vote positivo
                 if (
                     this.config &&
                     this.config.donation &&
                     this.config.donation.month_days > 0 &&
-                    !data.trip.needs_sellado // do not show donation modal if the trip had Sellado de viaje
+                    !data.trip.needs_sellado
                 ) {
-                    this.hasToShowModal(data.trip_id);
+                    this.redirectToDonationPrompt(data.trip_id);
                 }
             }
         }
@@ -631,8 +381,7 @@ export default {
         RatePending,
         SeatRequestTrip,
         Tab,
-        subscriptionItem,
-        modal
+        subscriptionItem
     }
 };
 </script>
@@ -640,13 +389,5 @@ export default {
 <style scoped>
 h2 {
     font-weight: 300;
-}
-.donation-text {
-    margin-bottom: 1.5rem;
-}
-.donation-text p {
-    margin-top: -1rem;
-    font-size: 1.1rem;
-    margin-bottom: 0.5rem;
 }
 </style>
