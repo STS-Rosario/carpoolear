@@ -1323,6 +1323,8 @@ const messages = {
         migrarUsuariosVolverAlListado: 'Volver al listado de migraciones',
         nuevaMigracionDeUsuario: 'Nueva migración de usuario',
         usuarioAMantener: 'Usuario a mantener',
+        migracionUsuarioAMantenerAvisoTicketSoporte:
+            'Si el usuario envió ticket de soporte, la cuenta a mantener debe ser la que envió el ticket',
         usuarioABorrar: 'Usuario a borrar',
         vasAMigrarLosDatosDeEsteUsuario:
             'Vas a pasar los datos de este usuario:',
@@ -2644,6 +2646,8 @@ const messages = {
         migrarUsuariosVolverAlListado: 'Volver al listado de migraciones',
         nuevaMigracionDeUsuario: 'Nueva migración de usuario',
         usuarioAMantener: 'Usuario a mantener',
+        migracionUsuarioAMantenerAvisoTicketSoporte:
+            'Si el usuario envió ticket de soporte, la cuenta a mantener debe ser la que envió el ticket',
         usuarioABorrar: 'Usuario a borrar',
         vasAMigrarLosDatosDeEsteUsuario:
             'Vas a pasar los datos de este usuario:',
@@ -4097,6 +4101,8 @@ const messages = {
         migrarUsuariosVolverAlListado: 'Back to migration list',
         nuevaMigracionDeUsuario: 'New user migration',
         usuarioAMantener: 'User to keep',
+        migracionUsuarioAMantenerAvisoTicketSoporte:
+            'If the user submitted a support ticket, the account to keep must be the one that submitted the ticket',
         usuarioABorrar: 'User to remove',
         vasAMigrarLosDatosDeEsteUsuario:
             'You are about to move this user’s data:',

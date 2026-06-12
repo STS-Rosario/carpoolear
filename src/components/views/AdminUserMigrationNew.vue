@@ -22,7 +22,12 @@
                         />
                     </div>
                     <div class="form-group">
-                        <label>{{ $t('usuarioAMantener') }}</label>
+                        <label>
+                            {{ $t('usuarioAMantener') }}
+                            <span class="admin-user-migration-new__support-ticket-notice">
+                                {{ supportTicketNoticeText }}
+                            </span>
+                        </label>
                         <UserSearchAutocomplete
                             v-model="userToKeep"
                             :placeholder="$t('escribeUnNombreYPresionaBuscar')"
@@ -37,6 +42,12 @@
                         <div class="panel-body">
                             <template v-for="card in previewCards" :key="card.role">
                                 <p class="lead">{{ $t(card.headingKey) }}</p>
+                                <p
+                                    v-if="card.role === 'keep'"
+                                    class="admin-user-migration-new__support-ticket-notice"
+                                >
+                                    {{ supportTicketNoticeText }}
+                                </p>
                                 <div class="media user-migration-card">
                                     <div
                                         v-if="hasUserImage(card.user)"
@@ -193,6 +204,9 @@ export default {
                     user: this.userToKeep
                 }
             ];
+        },
+        supportTicketNoticeText() {
+            return this.$t('migracionUsuarioAMantenerAvisoTicketSoporte');
         }
     },
     methods: {
@@ -422,5 +436,19 @@ export default {
 
 .admin-user-migration-new__submit {
     margin-top: 24px;
+}
+
+.admin-user-migration-new__support-ticket-notice {
+    color: #ff0000;
+    font-weight: 700;
+}
+
+label .admin-user-migration-new__support-ticket-notice {
+    margin-left: 0.5em;
+}
+
+p.admin-user-migration-new__support-ticket-notice {
+    margin-top: -6px;
+    margin-bottom: 12px;
 }
 </style>
