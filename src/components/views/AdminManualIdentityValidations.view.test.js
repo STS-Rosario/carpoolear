@@ -21,6 +21,7 @@ describe('AdminManualIdentityValidations view', () => {
         expect(viewSource).toContain('filterManualIdentityValidationsList');
         expect(viewSource).toContain('getShowResolvedManualIdentityValidations');
         expect(viewSource).toContain('saveShowResolvedManualIdentityValidations');
+        expect(viewSource).toContain(':data="displayedList"');
         expect(viewSource).toContain('v-for="item in displayedList"');
     });
 });
