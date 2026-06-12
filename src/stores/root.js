@@ -70,11 +70,12 @@ export const useRootStore = defineStore('root', {
                 promises.push(p);
             });
 
-            return Promise.all(promises).then(() => {
+            return Promise.all(promises).then(async () => {
                 if (authStore.token) {
-                    authStore.retoken().then(() => this.startApp());
+                    await authStore.retoken();
+                    await this.startApp();
                 } else {
-                    this.startApp();
+                    await this.startApp();
                 }
             });
         },
