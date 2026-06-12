@@ -22,7 +22,12 @@
                         />
                     </div>
                     <div class="form-group">
-                        <label>{{ $t('usuarioAMantener') }}</label>
+                        <label>
+                            {{ $t('usuarioAMantener') }}
+                            <span class="admin-user-migration-new__support-ticket-notice">
+                                {{ $t('migracionUsuarioAMantenerAvisoTicketSoporte') }}
+                            </span>
+                        </label>
                         <UserSearchAutocomplete
                             v-model="userToKeep"
                             :placeholder="$t('escribeUnNombreYPresionaBuscar')"
@@ -37,6 +42,12 @@
                         <div class="panel-body">
                             <template v-for="card in previewCards" :key="card.role">
                                 <p class="lead">{{ $t(card.headingKey) }}</p>
+                                <p
+                                    v-if="card.role === 'keep'"
+                                    class="admin-user-migration-new__support-ticket-notice"
+                                >
+                                    {{ $t('migracionUsuarioAMantenerAvisoTicketSoporte') }}
+                                </p>
                                 <div class="media user-migration-card">
                                     <div
                                         v-if="hasUserImage(card.user)"
@@ -411,5 +422,10 @@ export default {
 
 .admin-user-migration-new__submit {
     margin-top: 24px;
+}
+
+.admin-user-migration-new__support-ticket-notice {
+    color: #c0392b;
+    font-weight: 700;
 }
 </style>
