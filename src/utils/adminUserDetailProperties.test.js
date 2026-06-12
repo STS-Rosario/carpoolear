@@ -51,7 +51,10 @@ describe('buildAdminUserPropertyRows', () => {
     };
 
     it('returns ordered rows with labels and formatted values', () => {
-        const rows = buildAdminUserPropertyRows(sampleUser, { translate });
+        const rows = buildAdminUserPropertyRows(sampleUser, {
+            translate,
+            profileIdFormat: '##.###.###'
+        });
 
         expect(rows.length).toBeGreaterThan(10);
         expect(rows[0]).toEqual({ key: 'id', label: 'ID', value: '42' });
@@ -59,6 +62,11 @@ describe('buildAdminUserPropertyRows', () => {
             key: 'email',
             label: 'Email',
             value: 'jane@example.test'
+        });
+        expect(rows.find((row) => row.key === 'nro_doc')).toEqual({
+            key: 'nro_doc',
+            label: 'DNI',
+            value: '30.123.456'
         });
         expect(rows.find((row) => row.key === 'banned')).toEqual({
             key: 'banned',
@@ -93,7 +101,10 @@ describe('buildAdminUserPropertyRows', () => {
     });
 
     it('places banned before other properties in row order', () => {
-        const rows = buildAdminUserPropertyRows(sampleUser, { translate });
+        const rows = buildAdminUserPropertyRows(sampleUser, {
+            translate,
+            profileIdFormat: '##.###.###'
+        });
         const bannedIndex = rows.findIndex((row) => row.key === 'banned');
         const emailIndex = rows.findIndex((row) => row.key === 'email');
 

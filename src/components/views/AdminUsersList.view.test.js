@@ -11,10 +11,11 @@ describe('AdminUsersList view', () => {
         expect(viewSource).toContain("{{ $t('numeroDeTelefono') }}");
     });
 
-    it('renders DNI and phone values for each user row', () => {
-        expect(viewSource).toContain('{{ displayOrDash(u.nro_doc) }}');
+    it('renders formatted DNI and phone values for each user row', () => {
+        expect(viewSource).toContain('{{ displayDniOrDash(u.nro_doc) }}');
         expect(viewSource).toContain('{{ displayOrDash(u.mobile_phone) }}');
-        expect(viewSource).toContain('displayOrDash(value)');
+        expect(viewSource).toContain('displayDniOrDash(value)');
+        expect(viewSource).toContain('profile_id_format');
     });
 
     it('syncs search, page and sorting in route query for back navigation persistence', () => {

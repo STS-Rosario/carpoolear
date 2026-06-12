@@ -1,3 +1,7 @@
+import { displayDniOrDash } from './formatDisplayDni';
+
+const EMPTY_VALUE = '—';
+
 export const DEFAULT_FIELD_SOURCES = {
     email: 'removed',
     password: 'kept',
@@ -16,4 +20,17 @@ export const migrationFields = [
 
 export function createDefaultFieldSources() {
     return { ...DEFAULT_FIELD_SOURCES };
+}
+
+export function formatMigrationFieldValue(fieldKey, user, options = {}) {
+    if (!user) {
+        return EMPTY_VALUE;
+    }
+
+    if (fieldKey === 'nro_doc') {
+        return displayDniOrDash(user.nro_doc, options.profileIdFormat, EMPTY_VALUE);
+    }
+
+    const value = user[fieldKey];
+    return value ? String(value) : EMPTY_VALUE;
 }

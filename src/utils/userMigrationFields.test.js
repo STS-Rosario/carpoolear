@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
     DEFAULT_FIELD_SOURCES,
     createDefaultFieldSources,
+    formatMigrationFieldValue,
     migrationFields
 } from './userMigrationFields.js';
 
@@ -28,5 +29,20 @@ describe('userMigrationFields', () => {
         const first = createDefaultFieldSources();
         first.email = 'kept';
         expect(createDefaultFieldSources().email).toBe('removed');
+    });
+});
+
+describe('formatMigrationFieldValue', () => {
+    it('formats nro_doc using profile_id_format for display', () => {
+        expect(
+            formatMigrationFieldValue('nro_doc', { nro_doc: '30123456' }, {
+                profileIdFormat: '##.###.###'
+            })
+        ).toBe('30.123.456');
+    });
+
+    it('returns em dash when user or value is missing', () => {
+        expect(formatMigrationFieldValue('nro_doc', null, {})).toBe('—');
+        expect(formatMigrationFieldValue('email', { email: '' }, {})).toBe('—');
     });
 });

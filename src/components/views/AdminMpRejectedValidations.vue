@@ -22,7 +22,7 @@
                                 <th scope="row">{{ item.id }}</th>
                                 <td>{{ item.user_id }}</td>
                                 <td>{{ item.user_name || $t('na') }}</td>
-                                <td>{{ item.user_nro_doc || '-' }}</td>
+                                <td>{{ displayDniOrDash(item.user_nro_doc) }}</td>
                                 <td>
                                     <span :class="item.user_identity_validated ? 'label label-success' : 'label label-default'">
                                         {{ item.user_identity_validated ? $t('identidadValidada') : $t('identidadNoValidada') }}
@@ -62,19 +62,34 @@
 </template>
 
 <script>
+import { mapState } from 'pinia';
 import AdminLayout from '../layouts/AdminLayout.vue';
 import Loading from '../Loading';
+import { useAuthStore } from '../../stores/auth';
 import { AdminApi } from '../../services/api';
 import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
+import { displayDniOrDash as formatDisplayDniOrDash } from '../../utils/formatDisplayDni';
 
 export default {
     name: 'AdminMpRejectedValidations',
+    computed: {
+        ...mapState(useAuthStore, {
+            config: 'appConfig'
+        })
+    },
     data() {
         return {
             list: null
         };
     },
     methods: {
+        displayDniOrDash(value) {
+            return formatDisplayDniOrDash(
+                value,
+                this.config && this.config.profile_id_format,
+                '-'
+            );
+        },
         getAdminUserProfileRoute,
         formatDate(value) {
             if (!value) return '-';

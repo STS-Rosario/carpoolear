@@ -19,7 +19,7 @@
                             :user-id="item.user_id"
                             :user-name="item.user_name"
                         />
-                        <p><strong>{{ $t('doc') }} (DNI):</strong> {{ item.user_nro_doc || '-' }}</p>
+                        <p><strong>{{ $t('doc') }} (DNI):</strong> {{ displayDniOrDash(item.user_nro_doc) }}</p>
                         <p><strong>{{ $t('fechaPago') }}:</strong> {{ item.paid_at ? formatDate(item.paid_at) : '-' }}</p>
                         <p><strong>{{ $t('fechaEnvio') }}:</strong> {{ item.submitted_at ? formatDate(item.submitted_at) : '-' }}</p>
                         <p><strong>{{ $t('pagado') }}:</strong> {{ item.paid ? $t('si') : $t('no') }}</p>
@@ -182,8 +182,10 @@ import AdminLayout from '../layouts/AdminLayout.vue';
 import AdminReviewSubjectUserLine from '../AdminReviewSubjectUserLine.vue';
 import AdminUserSupportTicketsWarning from '../AdminUserSupportTicketsWarning.vue';
 import { AdminApi } from '../../services/api';
+import { mapState } from 'pinia';
 import { useAuthStore } from '../../stores/auth';
 import dialogs from '../../services/dialogs.js';
+import { displayDniOrDash as formatDisplayDniOrDash } from '../../utils/formatDisplayDni';
 
 export default {
     name: 'AdminManualIdentityValidationReview',
@@ -208,11 +210,21 @@ export default {
         };
     },
     computed: {
+        ...mapState(useAuthStore, {
+            config: 'appConfig'
+        }),
         hasComment() {
             return this.reviewNote && this.reviewNote.trim() !== '';
         }
     },
     methods: {
+        displayDniOrDash(value) {
+            return formatDisplayDniOrDash(
+                value,
+                this.config && this.config.profile_id_format,
+                '-'
+            );
+        },
         formatDate(value) {
             if (!value) return '-';
             return new Date(value).toLocaleString();

@@ -143,9 +143,12 @@ import UserSearchAutocomplete from '../UserSearchAutocomplete.vue';
 import { AdminApi } from '../../services/api';
 import dialogs from '../../services/dialogs.js';
 import dayjs from '../../dayjs';
+import { mapState } from 'pinia';
+import { useAuthStore } from '../../stores/auth';
 import {
     DEFAULT_FIELD_SOURCES,
     createDefaultFieldSources,
+    formatMigrationFieldValue,
     migrationFields
 } from '../../utils/userMigrationFields.js';
 
@@ -162,6 +165,9 @@ export default {
         };
     },
     computed: {
+        ...mapState(useAuthStore, {
+            config: 'appConfig'
+        }),
         previewReady() {
             return (
                 this.userToRemove &&
@@ -243,6 +249,11 @@ export default {
             }
             if (fieldKey === 'created_at') {
                 return this.formatJoinDate(user.created_at);
+            }
+            if (fieldKey === 'nro_doc') {
+                return formatMigrationFieldValue(fieldKey, user, {
+                    profileIdFormat: this.config && this.config.profile_id_format
+                });
             }
             const value = user[fieldKey];
             return value ? String(value) : '—';
