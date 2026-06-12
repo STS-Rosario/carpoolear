@@ -428,7 +428,7 @@ export default {
 }
 
 .admin-user-migration-new__support-ticket-notice {
-    color: #c0392b;
+    color: #ff0000;
     font-weight: 700;
 }
 
