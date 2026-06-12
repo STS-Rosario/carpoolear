@@ -161,6 +161,9 @@ export default defineConfig(({ mode }) => {
             'import.meta.env.VITE_HISTORY_MODE': JSON.stringify(historyMode),
             'import.meta.env.VITE_API_URL': JSON.stringify(apiUrl),
             'import.meta.env.VITE_TARGET_APP': JSON.stringify(brandingTarget),
+            'import.meta.env.VITE_SERVE': JSON.stringify(
+                process.env.SERVE === true || process.env.SERVE === 'true'
+            ),
 
             // Keep in sync with `process.env.*` usage under src/ (static replace at build time).
             'process.env': JSON.stringify({
