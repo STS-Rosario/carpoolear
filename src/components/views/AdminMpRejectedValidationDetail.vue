@@ -37,7 +37,7 @@
                             :user-id="item.user_id"
                             :user-name="item.user_name"
                         />
-                        <p><strong>{{ $t('doc') }}:</strong> {{ item.user_nro_doc || '-' }}</p>
+                        <p><strong>{{ $t('doc') }}:</strong> {{ displayDniOrDash(item.user_nro_doc) }}</p>
                         <p><strong>{{ $t('email') }}:</strong> {{ item.user_email || '-' }}</p>
                         <AdminUserSupportTicketsWarning
                             v-if="item.user_id"
@@ -121,11 +121,14 @@
 </template>
 
 <script>
+import { mapState } from 'pinia';
 import AdminLayout from '../layouts/AdminLayout.vue';
 import AdminReviewSubjectUserLine from '../AdminReviewSubjectUserLine.vue';
 import AdminUserSupportTicketsWarning from '../AdminUserSupportTicketsWarning.vue';
+import { useAuthStore } from '../../stores/auth';
 import { AdminApi } from '../../services/api';
 import dialogs from '../../services/dialogs.js';
+import { displayDniOrDash as formatDisplayDniOrDash } from '../../utils/formatDisplayDni';
 
 export default {
     name: 'AdminMpRejectedValidationDetail',
@@ -147,6 +150,9 @@ export default {
         };
     },
     computed: {
+        ...mapState(useAuthStore, {
+            config: 'appConfig'
+        }),
         hasComment() {
             return this.reviewNote && this.reviewNote.trim() !== '';
         },
@@ -160,6 +166,13 @@ export default {
         }
     },
     methods: {
+        displayDniOrDash(value) {
+            return formatDisplayDniOrDash(
+                value,
+                this.config && this.config.profile_id_format,
+                '-'
+            );
+        },
         formatDate(value) {
             if (!value) return '-';
             return new Date(value).toLocaleString();

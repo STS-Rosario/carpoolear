@@ -94,7 +94,7 @@
                                         </router-link>
                                     </td>
                                     <td>{{ displayOrDash(u.email) }}</td>
-                                    <td>{{ displayOrDash(u.nro_doc) }}</td>
+                                    <td>{{ displayDniOrDash(u.nro_doc) }}</td>
                                     <td>{{ displayOrDash(u.mobile_phone) }}</td>
                                     <td>{{ displayOrDash(u.last_connection) }}</td>
                                 </tr>
@@ -143,14 +143,22 @@
 </template>
 
 <script>
+import { mapState } from 'pinia';
 import AdminLayout from '../layouts/AdminLayout.vue';
+import { useAuthStore } from '../../stores/auth';
 import { AdminApi } from '../../services/api';
 import dialogs from '../../services/dialogs.js';
+import { displayDniOrDash as formatDisplayDniOrDash } from '../../utils/formatDisplayDni';
 
 const DEFAULT_SORT = { key: 'id', dir: 'desc' };
 
 export default {
     name: 'admin-users-list',
+    computed: {
+        ...mapState(useAuthStore, {
+            config: 'appConfig'
+        })
+    },
     data() {
         return {
             textSearch: '',
@@ -167,6 +175,12 @@ export default {
     methods: {
         displayOrDash(value) {
             return value === null || value === undefined || value === '' ? '—' : value;
+        },
+        displayDniOrDash(value) {
+            return formatDisplayDniOrDash(
+                value,
+                this.config && this.config.profile_id_format
+            );
         },
         normalizedSearchQuery() {
             return (this.textSearch && this.textSearch.trim()) || '';

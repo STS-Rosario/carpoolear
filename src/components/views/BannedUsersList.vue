@@ -23,7 +23,7 @@
                             >
                                 <th scope="row">{{ item.id }}</th>
                                 <td>{{ item.user ? item.user.name : $t('usuarioAnonimo') }}</td>
-                                <td>{{ item.nro_doc || '-' }}</td>
+                                <td>{{ displayDniOrDash(item.nro_doc) }}</td>
                                 <td>{{ formatDate(item.banned_at) }}</td>
                                 <td>{{ getBannedByLabel(item.banned_by) }}</td>
                                 <td>{{ item.note || '-' }}</td>
@@ -49,14 +49,22 @@
     </AdminLayout>
 </template>
 <script>
+import { mapState } from 'pinia';
 import AdminLayout from '../layouts/AdminLayout.vue';
 import Loading from '../Loading.vue';
+import { useAuthStore } from '../../stores/auth';
 import { AdminApi } from '../../services/api';
 import dialogs from '../../services/dialogs.js';
 import dayjs from '../../dayjs';
+import { displayDniOrDash as formatDisplayDniOrDash } from '../../utils/formatDisplayDni';
 
 export default {
     name: 'admin-banned-users-list',
+    computed: {
+        ...mapState(useAuthStore, {
+            config: 'appConfig'
+        })
+    },
     data() {
         return {
             bannedUsers: null,
@@ -65,6 +73,13 @@ export default {
         };
     },
     methods: {
+        displayDniOrDash(value) {
+            return formatDisplayDniOrDash(
+                value,
+                this.config && this.config.profile_id_format,
+                '-'
+            );
+        },
         formatDate(dateString) {
             if (!dateString) return '-';
             return dayjs(dateString).format('DD/MM/YYYY HH:mm');

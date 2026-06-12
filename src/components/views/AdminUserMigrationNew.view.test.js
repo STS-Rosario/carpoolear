@@ -27,6 +27,11 @@ describe('AdminUserMigrationNew view', () => {
         expect(source).toMatch(/\.user-migration-card__avatar\s*\{[^}]*height:\s*100px/);
     });
 
+    it('formats DNI in the migration field comparison table', () => {
+        expect(source).toContain('formatMigrationFieldValue');
+        expect(source).toContain('profile_id_format');
+    });
+
     it('renders the user email and a friendly join date in the field comparison table', () => {
         expect(source).toContain('field.labelKey');
         expect(source).toContain('formatJoinDate');
