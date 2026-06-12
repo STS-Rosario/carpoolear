@@ -1,12 +1,72 @@
 import { describe, expect, it, vi } from 'vitest';
 import {
     CUSTOM_SPLASH_DISMISS_MS,
+    formatSplashVersionText,
     getRemainingSplashMs,
     hideBootstrapSplash,
     initBootstrapSplash,
     isAdminAppUrl,
-    isCustomSplashVisible
+    isCustomSplashVisible,
+    resolveSplashVersion,
+    SPLASH_WEB_BUILD_NUMBER,
+    updateBootstrapSplashVersion
 } from './customSplash.js';
+
+describe('formatSplashVersionText', () => {
+    it('shows version and build number on web', () => {
+        expect(
+            formatSplashVersionText({ version: '3.2.5', isNativePlatform: false })
+        ).toBe('Version 3.2.5 - build 116');
+    });
+
+    it('shows version only on native platforms', () => {
+        expect(
+            formatSplashVersionText({ version: '123', isNativePlatform: true })
+        ).toBe('Version 123');
+    });
+
+    it('falls back to zero when version is missing', () => {
+        expect(
+            formatSplashVersionText({ version: null, isNativePlatform: false })
+        ).toBe('Version 0 - build 116');
+    });
+});
+
+describe('resolveSplashVersion', () => {
+    it('prefers appVersionInfo over window fallback', () => {
+        expect(
+            resolveSplashVersion({
+                appVersionInfo: { version: '9.9.9' },
+                windowAppVersion: '3.2.5'
+            })
+        ).toBe('9.9.9');
+    });
+
+    it('uses window.appVersion when store info is unavailable', () => {
+        expect(
+            resolveSplashVersion({
+                appVersionInfo: null,
+                windowAppVersion: '3.2.5'
+            })
+        ).toBe('3.2.5');
+    });
+});
+
+describe('updateBootstrapSplashVersion', () => {
+    it('writes version text into the bootstrap splash label', () => {
+        const versionEl = { textContent: '' };
+        const doc = {
+            getElementById: vi.fn((id) => (id === 'bootstrap-splash-version' ? versionEl : null))
+        };
+
+        updateBootstrapSplashVersion(doc, {
+            version: '3.2.5',
+            isNativePlatform: false
+        });
+
+        expect(versionEl.textContent).toBe('Version 3.2.5 - build 116');
+    });
+});
 
 describe('isAdminAppUrl', () => {
     it('detects admin routes in history and hash mode', () => {
@@ -101,11 +161,17 @@ describe('initBootstrapSplash', () => {
     it('shows bootstrap splash immediately for public routes', () => {
         const startedAtValues = [];
         const timeouts = [];
+        const versionEl = { textContent: '' };
+        const doc = {
+            getElementById: vi.fn((id) => (id === 'bootstrap-splash-version' ? versionEl : null))
+        };
 
         const result = initBootstrapSplash({
             location: { pathname: '/trips', hash: '' },
-            doc: { getElementById: () => null },
+            doc,
             now: 100,
+            windowAppVersion: '3.2.5',
+            isNativePlatform: false,
             setStartedAt: (value) => startedAtValues.push(value),
             scheduleTimeout: (fn, delay) => {
                 timeouts.push({ fn, delay });
@@ -115,6 +181,7 @@ describe('initBootstrapSplash', () => {
 
         expect(result.skipped).toBe(false);
         expect(startedAtValues).toEqual([100]);
+        expect(versionEl.textContent).toBe('Version 3.2.5 - build 116');
         expect(timeouts).toEqual([
             expect.objectContaining({ delay: CUSTOM_SPLASH_DISMISS_MS })
         ]);
@@ -158,5 +225,9 @@ describe('initBootstrapSplash', () => {
 describe('CUSTOM_SPLASH_DISMISS_MS', () => {
     it('keeps the public splash visible for three seconds', () => {
         expect(CUSTOM_SPLASH_DISMISS_MS).toBe(3000);
+    });
+
+    it('exposes the web build number used on the splash screen', () => {
+        expect(SPLASH_WEB_BUILD_NUMBER).toBe(116);
     });
 });
