@@ -51,7 +51,9 @@ const debugApi = new DebugApi();
 // Initialize debug logger: clear logs on app init, patch console if debug mode enabled
 initDebugLogger();
 
-initBootstrapSplash();
+initBootstrapSplash({
+    isNativePlatform: Capacitor.isNativePlatform()
+});
 
 // Initialize Capacitor plugins
 const initializeCapacitorPlugins = async () => {

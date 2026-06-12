@@ -1,4 +1,50 @@
 export const CUSTOM_SPLASH_DISMISS_MS = 3000;
+export const SPLASH_WEB_BUILD_NUMBER = 116;
+export const BOOTSTRAP_SPLASH_VERSION_ID = 'bootstrap-splash-version';
+
+export function formatSplashVersionText({
+    version,
+    isNativePlatform = false,
+    webBuildNumber = SPLASH_WEB_BUILD_NUMBER
+}) {
+    const resolvedVersion =
+        version != null && String(version) !== '' ? String(version) : '0';
+    const base = `Version ${resolvedVersion}`;
+
+    return isNativePlatform ? base : `${base} - build ${webBuildNumber}`;
+}
+
+export function resolveSplashVersion({ appVersionInfo, windowAppVersion }) {
+    if (appVersionInfo && appVersionInfo.version) {
+        return String(appVersionInfo.version);
+    }
+
+    if (windowAppVersion) {
+        return String(windowAppVersion);
+    }
+
+    return '0';
+}
+
+export function updateBootstrapSplashVersion(
+    doc,
+    { version, isNativePlatform = false, webBuildNumber = SPLASH_WEB_BUILD_NUMBER }
+) {
+    if (!doc) {
+        return;
+    }
+
+    const versionEl = doc.getElementById(BOOTSTRAP_SPLASH_VERSION_ID);
+    if (!versionEl) {
+        return;
+    }
+
+    versionEl.textContent = formatSplashVersionText({
+        version,
+        isNativePlatform,
+        webBuildNumber
+    });
+}
 
 export function isAdminAppUrl(location) {
     if (!location) {
@@ -51,6 +97,8 @@ export function initBootstrapSplash({
     location = typeof window !== 'undefined' ? window.location : null,
     doc = typeof document !== 'undefined' ? document : null,
     now = typeof performance !== 'undefined' ? performance.now() : 0,
+    windowAppVersion = typeof window !== 'undefined' ? window.appVersion : null,
+    isNativePlatform = false,
     setStartedAt = (value) => {
         if (typeof window !== 'undefined') {
             window.__customSplashStartedAt = value;
@@ -63,6 +111,11 @@ export function initBootstrapSplash({
         setStartedAt(null);
         return { skipped: true, startedAt: null };
     }
+
+    updateBootstrapSplashVersion(doc, {
+        version: resolveSplashVersion({ windowAppVersion }),
+        isNativePlatform
+    });
 
     const startedAt = now;
     setStartedAt(startedAt);
