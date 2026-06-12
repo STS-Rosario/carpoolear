@@ -64,6 +64,7 @@
         <template v-if="config && config.module_references">
             <div class="clearfix">
                 <h2>{{ $t('referencias') }}</h2>
+                <p>{{ $t('referenciasDescripcion') }}</p>
                 <div
                     class="edit-action edit-action-reference"
                     v-if="canWriteReference"
