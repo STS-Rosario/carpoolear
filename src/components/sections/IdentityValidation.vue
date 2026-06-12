@@ -34,6 +34,7 @@
 
         <div v-else>
         <IdentityValidationAdminReviewNote
+            v-if="!showManualRejectedWithChoiceCards"
             :note="displayableManualReviewNote"
             :label-key="manualAdminReviewNoteLabelKey"
             in-flow

@@ -18,6 +18,11 @@ describe('IdentityValidation rejected manual verification', () => {
         expect(viewSource).toContain("$t('validarConMercadoPago')");
         expect(viewSource).toContain("$t('solicitarVerificacionManual')");
     });
+
+    it('does not render standalone in-flow review note when manual verification was rejected', () => {
+        expect(viewSource).toContain('v-if="!showManualRejectedWithChoiceCards"');
+        expect(viewSource).toContain('in-flow');
+    });
 });
 
 describe('IdentityValidation rejection warnings', () => {
