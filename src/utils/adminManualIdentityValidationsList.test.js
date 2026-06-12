@@ -1,7 +1,10 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import {
+    ADMIN_MANUAL_IDENTITY_VALIDATIONS_SHOW_RESOLVED_KEY,
     filterManualIdentityValidationsList,
-    isManualIdentityValidationResolved
+    getShowResolvedManualIdentityValidations,
+    isManualIdentityValidationResolved,
+    saveShowResolvedManualIdentityValidations
 } from './adminManualIdentityValidationsList.js';
 
 describe('adminManualIdentityValidationsList', () => {
@@ -29,6 +32,34 @@ describe('adminManualIdentityValidationsList', () => {
 
         it('shows all cases when showResolved is true', () => {
             expect(filterManualIdentityValidationsList(list, true)).toEqual(list);
+        });
+    });
+
+    describe('showResolved persistence', () => {
+        it('defaults to false when nothing is stored', () => {
+            const storage = { getItem: vi.fn(() => null) };
+
+            expect(getShowResolvedManualIdentityValidations(storage)).toBe(false);
+        });
+
+        it('reads stored true value', () => {
+            const storage = { getItem: vi.fn(() => 'true') };
+
+            expect(getShowResolvedManualIdentityValidations(storage)).toBe(true);
+        });
+
+        it('persists checkbox value', () => {
+            const storage = {
+                getItem: vi.fn(),
+                setItem: vi.fn()
+            };
+
+            saveShowResolvedManualIdentityValidations(true, storage);
+
+            expect(storage.setItem).toHaveBeenCalledWith(
+                ADMIN_MANUAL_IDENTITY_VALIDATIONS_SHOW_RESOLVED_KEY,
+                'true'
+            );
         });
     });
 });
