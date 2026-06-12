@@ -384,6 +384,7 @@ import dialogs from '../../services/dialogs.js';
 import { shouldShowTripSeatRequestsWarning } from '../../utils/tripSeatRequestsWarning.js';
 import {
     resolveOpenConversationModalState,
+    resolvePricingModalConfirm,
     resolveRequestSeatModalConfirm,
     shouldShowPricingHint
 } from '../../utils/tripPassengerMessageFlow.js';
@@ -578,7 +579,19 @@ export default {
                     }
                 });
         },
+        closeCarpoodatosModals() {
+            const modalState = resolveOpenConversationModalState();
+            this.showModalRequestSeat = modalState.showRequestSeatModal;
+            this.showModalPricing = modalState.showPricingModal;
+        },
         toMessageForce() {
+            const flow = resolvePricingModalConfirm();
+            if (flow.closeRequestSeatModal) {
+                this.showModalRequestSeat = false;
+            }
+            if (flow.closePricingModal) {
+                this.showModalPricing = false;
+            }
             this.toMessages(true);
         },
 
@@ -615,9 +628,7 @@ export default {
             }
 
             if (this.profileComplete()) {
-                const modalState = resolveOpenConversationModalState();
-                this.showModalRequestSeat = modalState.showRequestSeatModal;
-                this.showModalPricing = modalState.showPricingModal;
+                this.closeCarpoodatosModals();
                 this.toUserMessages(this.trip.user);
             }
         },

@@ -16,8 +16,16 @@ describe('Trip.vue passenger message carpoodatos flow', () => {
 
     it('closes carpoodatos modals before opening the trip conversation', () => {
         expect(viewSource).toContain('resolveOpenConversationModalState');
+        expect(viewSource).toContain('closeCarpoodatosModals');
         expect(viewSource).toMatch(
-            /resolveOpenConversationModalState\(\)[\s\S]*?this\.toUserMessages\(this\.trip\.user\);/
+            /closeCarpoodatosModals\(\)[\s\S]*?this\.toUserMessages\(this\.trip\.user\);/
+        );
+    });
+
+    it('uses the pricing modal confirm flow when forcing message navigation', () => {
+        expect(viewSource).toContain('resolvePricingModalConfirm');
+        expect(viewSource).toMatch(
+            /toMessageForce\(\)[\s\S]*?resolvePricingModalConfirm\(\)[\s\S]*?this\.toMessages\(true\);/
         );
     });
 });
