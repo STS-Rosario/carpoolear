@@ -4,22 +4,22 @@ const IDENTITY_VERIFICATION_DETAIL_KEYS = [
     {
         key: 'identity_validated_at',
         labelKey: 'identity_validated_at',
-        when: (user) => !!user?.identity_validated_at
+        when: (user) => !!user?.['identity_validated_at']
     },
     {
         key: 'identity_validation_rejected_at',
         labelKey: 'identity_validation_rejected_at',
-        when: (user) => !!user?.identity_validation_rejected_at
+        when: (user) => !!user?.['identity_validation_rejected_at']
     },
     {
         key: 'identity_validation_reject_reason',
         labelKey: 'identity_validation_reject_reason',
-        when: (user) => !!user?.identity_validation_reject_reason
+        when: (user) => !!user?.['identity_validation_reject_reason']
     },
     {
         key: 'validate_by_date',
         labelKey: 'validate_by_date',
-        when: (user) => !!user?.validate_by_date
+        when: (user) => !!user?.['validate_by_date']
     }
 ];
 
@@ -63,7 +63,7 @@ export function buildAdminUserIdentityVerificationSection(user, { translate }) {
             ? translate('identidadValidada')
             : translate('identidadNoValidada'),
         methodLabel: formatIdentityValidationMethod(
-            user?.identity_validation_type,
+            user?.['identity_validation_type'],
             translate
         ),
         detailRows
@@ -71,7 +71,7 @@ export function buildAdminUserIdentityVerificationSection(user, { translate }) {
 }
 
 export function canClearAdminUserIdentityVerification(user) {
-    return !!user?.identity_validated_at;
+    return !!user?.['identity_validated_at'];
 }
 
 export function applyClearedIdentityValidationFields(user) {
@@ -79,9 +79,11 @@ export function applyClearedIdentityValidationFields(user) {
         return;
     }
 
+    /* eslint-disable camelcase -- API user fields use snake_case */
     user.identity_validated = false;
     user.identity_validated_at = null;
     user.identity_validation_type = null;
     user.identity_validation_rejected_at = null;
     user.identity_validation_reject_reason = null;
+    /* eslint-enable camelcase */
 }
