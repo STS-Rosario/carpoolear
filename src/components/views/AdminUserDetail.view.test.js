@@ -54,6 +54,10 @@ describe('AdminUserDetail view', () => {
         expect(source).toContain("'alert-' + bannedBanner.modifier");
     });
 
+    it('passes profile_id_format when building admin user property rows', () => {
+        expect(source).toContain('profileIdFormat: this.config && this.config.profile_id_format');
+    });
+
     it('renders all user properties from the admin profile payload', () => {
         expect(source).toContain('buildAdminUserPropertyRows');
         expect(source).toContain('admin-user-detail__properties');

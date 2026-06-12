@@ -171,6 +171,7 @@ export default {
         propertyRows() {
             return buildAdminUserPropertyRows(this.user, {
                 translate: this.$t.bind(this),
+                profileIdFormat: this.config && this.config.profile_id_format,
                 showFacebookProfileUrl: !!(
                     this.config && this.config.module_facebook_profile_url_enabled
                 )
