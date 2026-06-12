@@ -661,6 +661,7 @@ const messages = {
         identityVerificationPendingReviewNoticeEmphasis:
             'Te notificaremos cuando la verificación esté completa.',
         identityValidationRejectionNoticeTitle: 'Verificación rechazada',
+        identityValidationRetryPrompt: '¿Querés solicitar una nueva verificación de cuenta?',
         identityValidationRejectionNoticeBody:
             'No pudimos verificar tu cuenta con la información enviada.',
         identityValidationRejectionNoticeContactLead:
@@ -2127,6 +2128,7 @@ const messages = {
         identityVerificationPendingReviewNoticeEmphasis:
             'Te notificaremos cuando la verificación esté completa.',
         identityValidationRejectionNoticeTitle: 'Verificación rechazada',
+        identityValidationRetryPrompt: '¿Querés solicitar una nueva verificación de cuenta?',
         identityValidationRejectionNoticeBody:
             'No pudimos verificar tu cuenta con la información enviada.',
         identityValidationRejectionNoticeContactLead:
@@ -3427,6 +3429,7 @@ const messages = {
         identityVerificationPendingReviewNoticeEmphasis:
             'We will notify you when verification is complete.',
         identityValidationRejectionNoticeTitle: 'Verification rejected',
+        identityValidationRetryPrompt: 'Would you like to request a new account verification?',
         identityValidationRejectionNoticeBody:
             "We couldn't verify your account with the information you sent.",
         identityValidationRejectionNoticeContactLead:
