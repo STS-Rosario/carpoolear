@@ -65,4 +65,15 @@ describe('AdminUserDetail view', () => {
         expect(source).toContain('row.label');
         expect(source).toContain('row.value');
     });
+
+    it('shows identity verification section with status method details and clear button', () => {
+        expect(source).toContain('buildAdminUserIdentityVerificationSection');
+        expect(source).toContain('canClearAdminUserIdentityVerification');
+        expect(source).toContain('admin-user-detail__identity-verification');
+        expect(source).toContain('identityVerificationSection');
+        expect(source).toContain('confirmClearIdentityValidation');
+        expect(source).toContain('clearIdentityValidation');
+        expect(source).toContain("$t('removerValidacionIdentidad')");
+        expect(source).toContain('excludeIdentityVerificationFields: true');
+    });
 });

@@ -120,4 +120,19 @@ describe('buildAdminUserPropertyRows', () => {
 
         expect(rows.find((row) => row.key === 'facebook_profile_url')).toBeUndefined();
     });
+
+    it('excludes identity verification fields when dedicated section is shown', () => {
+        const rows = buildAdminUserPropertyRows(sampleUser, {
+            translate,
+            profileIdFormat: '##.###.###',
+            excludeIdentityVerificationFields: true
+        });
+
+        expect(rows.find((row) => row.key === 'identity_validated')).toBeUndefined();
+        expect(rows.find((row) => row.key === 'identity_validated_at')).toBeUndefined();
+        expect(rows.find((row) => row.key === 'identity_validation_type')).toBeUndefined();
+        expect(rows.find((row) => row.key === 'identity_validation_rejected_at')).toBeUndefined();
+        expect(rows.find((row) => row.key === 'identity_validation_reject_reason')).toBeUndefined();
+        expect(rows.find((row) => row.key === 'validate_by_date')).toBeUndefined();
+    });
 });

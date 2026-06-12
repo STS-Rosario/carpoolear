@@ -2,6 +2,15 @@ import { formatDisplayDni } from './formatDisplayDni';
 
 const EMPTY_VALUE = '—';
 
+export const ADMIN_USER_IDENTITY_VERIFICATION_PROPERTY_KEYS = [
+    'identity_validated',
+    'identity_validated_at',
+    'identity_validation_type',
+    'identity_validation_rejected_at',
+    'identity_validation_reject_reason',
+    'validate_by_date'
+];
+
 const ADMIN_USER_PROPERTY_DEFINITIONS = [
     { key: 'id', label: 'ID' },
     { key: 'banned', labelKey: 'usuarioSuspendido', type: 'boolean' },
@@ -137,13 +146,29 @@ export function getAdminUserBannedBanner(user, translate) {
 
 export function buildAdminUserPropertyRows(
     user,
-    { translate, showFacebookProfileUrl = true, profileIdFormat = null }
+    {
+        translate,
+        showFacebookProfileUrl = true,
+        profileIdFormat = null,
+        excludeIdentityVerificationFields = false
+    }
 ) {
     if (!user) {
         return [];
     }
 
-    const rows = ADMIN_USER_PROPERTY_DEFINITIONS.map((definition) => ({
+    let definitions = ADMIN_USER_PROPERTY_DEFINITIONS;
+
+    if (excludeIdentityVerificationFields) {
+        definitions = definitions.filter(
+            (definition) =>
+                !ADMIN_USER_IDENTITY_VERIFICATION_PROPERTY_KEYS.includes(
+                    definition.key
+                )
+        );
+    }
+
+    const rows = definitions.map((definition) => ({
         key: definition.key,
         label: resolvePropertyLabel(definition, translate),
         value: formatAdminUserPropertyValue(
