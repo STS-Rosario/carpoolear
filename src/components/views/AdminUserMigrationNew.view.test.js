@@ -3,7 +3,14 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const viewPath = path.resolve(__dirname, 'AdminUserMigrationNew.vue');
+const i18nPath = path.resolve(__dirname, '../../language/i18n.js');
 const source = fs.readFileSync(viewPath, 'utf8');
+const i18nSource = fs.readFileSync(i18nPath, 'utf8');
+const supportTicketNoticeKey = 'migracionUsuarioAMantenerAvisoTicketSoporte';
+const supportTicketNoticeCopy =
+    'Si el usuario envió ticket de soporte, la cuenta a mantener debe ser la que envió el ticket';
+const supportTicketNoticeEnglishCopy =
+    'If the user submitted a support ticket, the account to keep must be the one that submitted the ticket';
 
 describe('AdminUserMigrationNew view', () => {
     it('uses two UserSearchAutocomplete and confirm before createUserMigration', () => {
@@ -70,5 +77,38 @@ describe('AdminUserMigrationNew view', () => {
     it('highlights the selected field source cell in the comparison table', () => {
         expect(source).toContain('admin-user-migration-new__field-cell--selected');
         expect(source).toContain('isFieldSourceSelected');
+    });
+
+    it('shows the support ticket notice next to Usuario a mantener', () => {
+        const keepLabelIndex = source.indexOf("$t('usuarioAMantener')");
+        const noticeIndex = source.indexOf(`$t('${supportTicketNoticeKey}')`);
+
+        expect(keepLabelIndex).toBeGreaterThan(-1);
+        expect(noticeIndex).toBeGreaterThan(keepLabelIndex);
+        expect(source).toContain('admin-user-migration-new__support-ticket-notice');
+    });
+
+    it('shows the support ticket notice below the keep user preview heading', () => {
+        const keepHeadingIndex = source.indexOf('yLosVasAJuntarConLosDeEsteUsuario');
+        const keepRoleNoticeIndex = source.indexOf("card.role === 'keep'");
+
+        expect(keepHeadingIndex).toBeGreaterThan(-1);
+        expect(keepRoleNoticeIndex).toBeGreaterThan(-1);
+        expect(source).toContain(`$t('${supportTicketNoticeKey}')`);
+    });
+
+    it('styles the support ticket notice as red bold text', () => {
+        expect(source).toMatch(
+            /\.admin-user-migration-new__support-ticket-notice\s*\{[^}]*color:\s*[^;]+/
+        );
+        expect(source).toMatch(
+            /\.admin-user-migration-new__support-ticket-notice\s*\{[^}]*font-weight:\s*(700|bold)/
+        );
+    });
+
+    it('keeps the support ticket notice copy in i18n', () => {
+        expect(i18nSource).toContain(supportTicketNoticeKey);
+        expect(i18nSource).toContain(supportTicketNoticeCopy);
+        expect(i18nSource).toContain(supportTicketNoticeEnglishCopy);
     });
 });
