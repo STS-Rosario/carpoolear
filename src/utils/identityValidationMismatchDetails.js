@@ -1,8 +1,20 @@
+import { formatDisplayDni } from './formatDisplayDni';
+
 export const MISMATCH_RESULT_DNI = 'dni_mismatch';
 export const MISMATCH_RESULT_NAME = 'name_mismatch';
 export const MISMATCH_RESULT_BOTH = 'both_mismatch';
 
-export function getIdentityValidationMismatchDetails(query) {
+function formatMismatchDni(value, profileIdFormat) {
+    if (!value) {
+        return '-';
+    }
+
+    const formatted = formatDisplayDni(value, profileIdFormat);
+    return formatted === null ? '-' : formatted;
+}
+
+export function getIdentityValidationMismatchDetails(query, options = {}) {
+    const { profileIdFormat = null } = options;
     const result = query && query.result;
     if (
         result !== MISMATCH_RESULT_DNI &&
@@ -27,8 +39,8 @@ export function getIdentityValidationMismatchDetails(query) {
         showDni,
         userName: showName ? (query.user_name || '-') : null,
         mpName: showName ? (query.mp_name || '-') : null,
-        userDni: showDni ? (query.user_dni || '-') : null,
-        mpDni: showDni ? (query.mp_dni || '-') : null
+        userDni: showDni ? formatMismatchDni(query.user_dni, profileIdFormat) : null,
+        mpDni: showDni ? formatMismatchDni(query.mp_dni, profileIdFormat) : null
     };
 }
 
