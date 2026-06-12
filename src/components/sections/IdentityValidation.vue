@@ -34,6 +34,7 @@
 
         <div v-else>
         <IdentityValidationAdminReviewNote
+            v-if="!showManualRejectedWithChoiceCards"
             :note="displayableManualReviewNote"
             :label-key="manualAdminReviewNoteLabelKey"
             in-flow
@@ -242,6 +243,10 @@
                     <p class="identity-validation-rejection-notice__text">
                         {{ $t('identityValidationRejectionNoticeBody') }}
                     </p>
+                    <IdentityValidationAdminReviewNote
+                        :note="displayableManualReviewNote"
+                        :label-key="manualAdminReviewNoteLabelKey"
+                    />
                     <p
                         v-if="manualRejectionSupportWarningKey"
                         class="identity-validation-rejection-notice__support-warning"
@@ -253,6 +258,9 @@
                         <strong class="identity-validation-rejection-notice__emphasis-strong">{{ $t('identityValidationRejectionNoticeContactLead') }}</strong><router-link class="identity-validation-rejection-notice__mesa-link" :to="{ name: 'tickets' }">{{ $t('mesaAyuda') }}</router-link>{{ $t('identityValidationRejectionNoticeContactTail') }}
                     </p>
                 </div>
+                <p class="identity-validation-retry-prompt">
+                    {{ $t('identityValidationRetryPrompt') }}
+                </p>
                 <div
                     v-if="isIdentityValidationBlockedByMissingDni"
                     class="identity-validation-dni-warning"
@@ -415,6 +423,8 @@ import {
     getDisplayableManualReviewNote,
     getManualReviewNoteLabelKey
 } from '../../utils/manualIdentityValidationReviewNote';
+import { shouldShowIdentityVerificationSuccessBanner } from '../../utils/identityValidationSuccessBanner';
+import { isManualRejectedWithChoiceCards } from '../../utils/manualIdentityValidationStatus';
 import IdentityValidationAdminReviewNote from '../IdentityValidationAdminReviewNote.vue';
 
 const EMPTY_WARNING_PARTS = { leadKey: null, tailKey: null };
@@ -514,15 +524,9 @@ export default {
         },
         /** Manual docs rejected: show red banner + MP / manual choice cards. */
         showManualRejectedWithChoiceCards() {
-            if (!this.identityValidationManualEnabled) return false;
-            const m = this.manualStatus;
-            return !!(
-                m &&
-                m.has_submission &&
-                m.paid &&
-                m.submitted_at &&
-                m.review_status === 'rejected'
-            );
+            return isManualRejectedWithChoiceCards(this.manualStatus, {
+                manualEnabled: this.identityValidationManualEnabled
+            });
         },
         manualRejectionSupportWarningKey() {
             if (!this.showManualRejectedWithChoiceCards) return null;
@@ -535,20 +539,11 @@ export default {
             return getManualReviewNoteLabelKey(this.manualStatus?.review_status);
         },
         showVerificationSuccessBanner() {
-            if (this.manualDocsPendingAdminReview) {
-                return false;
-            }
-            if (this.resultMessage === 'success') {
-                return true;
-            }
-            if (
-                this.user &&
-                this.user.identity_validated &&
-                this.user.identity_validated_at
-            ) {
-                return true;
-            }
-            return false;
+            return shouldShowIdentityVerificationSuccessBanner({
+                user: this.user,
+                manualStatus: this.manualStatus,
+                resultMessage: this.resultMessage
+            });
         },
         checkCircleIconSrc() {
             const base = process.env.ROUTE_BASE || '/';

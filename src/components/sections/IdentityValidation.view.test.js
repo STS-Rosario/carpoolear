@@ -5,6 +5,26 @@ import path from 'node:path';
 const viewPath = path.resolve(__dirname, 'IdentityValidation.vue');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 
+describe('IdentityValidation rejected manual verification', () => {
+    it('uses shared success banner helper so rejected manual flow is not hidden', () => {
+        expect(viewSource).toContain('shouldShowIdentityVerificationSuccessBanner');
+    });
+
+    it('shows retry prompt and choice cards when manual verification was rejected', () => {
+        expect(viewSource).toContain('showManualRejectedWithChoiceCards');
+        expect(viewSource).toContain('identity-validation-rejected-flow');
+        expect(viewSource).toContain("$t('identityValidationRetryPrompt')");
+        expect(viewSource).toContain('identity-validation-cards');
+        expect(viewSource).toContain("$t('validarConMercadoPago')");
+        expect(viewSource).toContain("$t('solicitarVerificacionManual')");
+    });
+
+    it('does not render standalone in-flow review note when manual verification was rejected', () => {
+        expect(viewSource).toContain('v-if="!showManualRejectedWithChoiceCards"');
+        expect(viewSource).toContain('in-flow');
+    });
+});
+
 describe('IdentityValidation rejection warnings', () => {
     it('shows mismatch support warning with warning icon in MP mismatch alert', () => {
         expect(viewSource).toContain('<div class="alert alert-warning" v-if="mismatchDetails">');
