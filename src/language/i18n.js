@@ -914,6 +914,8 @@ const messages = {
         comenzar: '¡Comenzar!',
         siguiente: 'Siguiente',
         referencias: 'Referencias',
+        referenciasDescripcion:
+            'Las referencias son recomendaciones de la persona, no por un viaje en particular dentro de Carpoolear',
         buscar: 'Buscar',
         opcional: 'opcional',
         pagoPendiente: 'Pago pendiente',
@@ -3695,6 +3697,8 @@ const messages = {
         comenzar: 'Get started!',
         siguiente: 'Next',
         referencias: 'Reviews',
+        referenciasDescripcion:
+            'References are recommendations about the person, not about a specific trip within Carpoolear',
         buscar: 'Search',
         opcional: 'optional',
         pagoPendiente: 'Payment pending',

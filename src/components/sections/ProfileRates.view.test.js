@@ -21,8 +21,30 @@ const referenceTripRatingCopy =
     'Si tuviste un viaje dentro de Carpoolear y querés dejar una calificación, podés hacerlo cuando haya transcurrido el 80% del tiempo estimado del viaje desde Mis Viajes. Vas a recibir una notificación 24 horas después del inicio del viaje.';
 const referenceModalParagraphsRule =
     /<template #body>[\s\S]*<p>[\s\S]*\$t\('confirmarReferenciaUsuarioMensajeReferencia'[\s\S]*<\/p>[\s\S]*<p>[\s\S]*\$t\('confirmarReferenciaUsuarioMensajeCalificacion'\)[\s\S]*<\/p>[\s\S]*<\/template>/;
+const referenciasDescriptionKey = 'referenciasDescripcion';
+const referenciasDescriptionCopy =
+    'Las referencias son recomendaciones de la persona, no por un viaje en particular dentro de Carpoolear';
+const referenciasSectionDescriptionRule =
+    /<h2>\{\{ \$t\('referencias'\) \}\}<\/h2>[\s\S]*<p class="referencias-section-description">[\s\S]*\$t\('referenciasDescripcion'\)[\s\S]*<\/p>/;
 
 describe('ProfileRates reference action', () => {
+    it('shows a description paragraph below the references section header', () => {
+        const referencesHeadingIndex = profileRatesSource.indexOf("$t('referencias')");
+        const descriptionIndex = profileRatesSource.indexOf(
+            `$t('${referenciasDescriptionKey}')`
+        );
+        const actionIndex = profileRatesSource.indexOf("$t('enviarReferencia')");
+
+        expect(profileRatesSource).toMatch(referenciasSectionDescriptionRule);
+        expect(descriptionIndex).toBeGreaterThan(referencesHeadingIndex);
+        expect(descriptionIndex).toBeLessThan(actionIndex);
+    });
+
+    it('keeps the references section description in i18n', () => {
+        expect(i18nSource).toContain(referenciasDescriptionKey);
+        expect(i18nSource).toContain(referenciasDescriptionCopy);
+    });
+
     it('shows the write-reference action in the references section before the list', () => {
         const referencesHeadingIndex = profileRatesSource.indexOf("$t('referencias')");
         const actionIndex = profileRatesSource.indexOf("$t('enviarReferencia')");
