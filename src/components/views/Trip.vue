@@ -382,6 +382,11 @@ import modal from '../Modal';
 import dayjs from '../../dayjs';
 import dialogs from '../../services/dialogs.js';
 import { shouldShowTripSeatRequestsWarning } from '../../utils/tripSeatRequestsWarning.js';
+import {
+    resolveOpenConversationModalState,
+    resolveRequestSeatModalConfirm,
+    shouldShowPricingHint
+} from '../../utils/tripPassengerMessageFlow.js';
 import TripLocation from '../elements/TripLocation';
 import TripDriver from '../elements/TripDriver';
 import TripDate from '../elements/TripDate';
@@ -588,25 +593,32 @@ export default {
                 });
             }
             if (
-                this.user.do_not_alert_pricing ||
-                this.config.disable_user_hints ||
-                force
+                shouldShowPricingHint({
+                    user: this.user,
+                    config: this.config,
+                    force
+                })
             ) {
-                if (this.acceptPassengerValue) {
-                    let data = {
-                        property: 'do_not_alert_request_seat',
-                        value: 1
-                    };
-                    this.changeProperty(data).then(() => {
-                        console.log('do not alert success');
-                    });
-                }
-
-                if (this.profileComplete()) {
-                    this.toUserMessages(this.trip.user);
-                }
-            } else {
+                this.showModalRequestSeat = false;
                 this.showModalPricing = true;
+                return;
+            }
+
+            if (this.acceptPassengerValue) {
+                let data = {
+                    property: 'do_not_alert_request_seat',
+                    value: 1
+                };
+                this.changeProperty(data).then(() => {
+                    console.log('do not alert success');
+                });
+            }
+
+            if (this.profileComplete()) {
+                const modalState = resolveOpenConversationModalState();
+                this.showModalRequestSeat = modalState.showRequestSeatModal;
+                this.showModalPricing = modalState.showPricingModal;
+                this.toUserMessages(this.trip.user);
             }
         },
 
@@ -686,7 +698,19 @@ export default {
             }
             if (this.profileComplete()) {
                 if (this.config.module_coordinate_by_message) {
-                    this.toMessages();
+                    const flow = resolveRequestSeatModalConfirm({
+                        moduleCoordinateByMessage: true,
+                        user: this.user,
+                        config: this.config
+                    });
+                    if (flow.closeRequestSeatModal) {
+                        this.showModalRequestSeat = false;
+                    }
+                    if (flow.showPricingModal) {
+                        this.showModalPricing = true;
+                    } else if (flow.openConversation) {
+                        this.toMessages(true);
+                    }
                     return;
                 }
                 this.sending.requestAction = true;
