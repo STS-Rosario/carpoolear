@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import {
+    applyClearedIdentityValidationFields,
     buildAdminUserIdentityVerificationSection,
     canClearAdminUserIdentityVerification
 } from './adminUserIdentityVerification';
@@ -76,6 +77,28 @@ describe('buildAdminUserIdentityVerificationSection', () => {
                 value: '2026-07-01'
             }
         ]);
+    });
+});
+
+describe('applyClearedIdentityValidationFields', () => {
+    it('clears all identity verification fields on the user object', () => {
+        const user = {
+            identity_validated: true,
+            identity_validated_at: '2026-06-01 10:00:00',
+            identity_validation_type: 'mercado_pago',
+            identity_validation_rejected_at: '2026-06-02 11:00:00',
+            identity_validation_reject_reason: 'name_mismatch'
+        };
+
+        applyClearedIdentityValidationFields(user);
+
+        expect(user).toEqual({
+            identity_validated: false,
+            identity_validated_at: null,
+            identity_validation_type: null,
+            identity_validation_rejected_at: null,
+            identity_validation_reject_reason: null
+        });
     });
 });
 

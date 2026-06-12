@@ -203,6 +203,7 @@ import {
     getAdminUserBannedBanner
 } from '../../utils/adminUserDetailProperties';
 import {
+    applyClearedIdentityValidationFields,
     buildAdminUserIdentityVerificationSection,
     canClearAdminUserIdentityVerification
 } from '../../utils/adminUserIdentityVerification';
@@ -312,11 +313,7 @@ export default {
             this.adminApi
                 .clearIdentityValidation(this.user.id)
                 .then(() => {
-                    this.user.identity_validated = false;
-                    this.user.identity_validated_at = null;
-                    this.user.identity_validation_type = null;
-                    this.user.identity_validation_rejected_at = null;
-                    this.user.identity_validation_reject_reason = null;
+                    applyClearedIdentityValidationFields(this.user);
                     dialogs.message(this.$t('validacionIdentidadRemovida'));
                 })
                 .catch(() => {

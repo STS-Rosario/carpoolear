@@ -73,3 +73,15 @@ export function buildAdminUserIdentityVerificationSection(user, { translate }) {
 export function canClearAdminUserIdentityVerification(user) {
     return !!user?.identity_validated_at;
 }
+
+export function applyClearedIdentityValidationFields(user) {
+    if (!user) {
+        return;
+    }
+
+    user.identity_validated = false;
+    user.identity_validated_at = null;
+    user.identity_validation_type = null;
+    user.identity_validation_rejected_at = null;
+    user.identity_validation_reject_reason = null;
+}
