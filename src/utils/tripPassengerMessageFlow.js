@@ -2,10 +2,10 @@ export function shouldShowPricingHint({ user, config, force = false }) {
     if (force) {
         return false;
     }
-    if (config?.disable_user_hints) {
+    if (config?.['disable_user_hints']) {
         return false;
     }
-    if (user?.do_not_alert_pricing) {
+    if (user?.['do_not_alert_pricing']) {
         return false;
     }
     return true;
