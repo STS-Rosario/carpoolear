@@ -5,6 +5,31 @@ import path from 'node:path';
 const viewPath = path.resolve(__dirname, 'Trip.vue');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 
+describe('Trip.vue passenger message carpoodatos flow', () => {
+    it('closes the request-seat modal before showing the pricing hint', () => {
+        expect(viewSource).toContain('resolveRequestSeatModalConfirm');
+        expect(viewSource).toContain('shouldShowPricingHint');
+        expect(viewSource).toMatch(
+            /shouldShowPricingHint\([\s\S]*?\)[\s\S]*?this\.showModalRequestSeat = false;[\s\S]*?this\.showModalPricing = true;/
+        );
+    });
+
+    it('closes carpoodatos modals before opening the trip conversation', () => {
+        expect(viewSource).toContain('resolveOpenConversationModalState');
+        expect(viewSource).toContain('closeCarpoodatosModals');
+        expect(viewSource).toMatch(
+            /closeCarpoodatosModals\(\)[\s\S]*?this\.toUserMessages\(this\.trip\.user\);/
+        );
+    });
+
+    it('uses the pricing modal confirm flow when forcing message navigation', () => {
+        expect(viewSource).toContain('resolvePricingModalConfirm');
+        expect(viewSource).toMatch(
+            /toMessageForce\(\)[\s\S]*?resolvePricingModalConfirm\(\)[\s\S]*?this\.toMessages\(true\);/
+        );
+    });
+});
+
 describe('Trip.vue driver seat requests warning', () => {
     it('shows a warning link to my-trips when the driver has pending seat requests', () => {
         expect(viewSource).toContain('shouldShowTripSeatRequestsWarning');
