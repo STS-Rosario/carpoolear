@@ -110,7 +110,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div v-else class="alert alert-info">{{ $t('fotosPurgadas') }}</div>
+                        <div v-else-if="shouldShowPurgedPhotosMessage(item)" class="alert alert-info">{{ $t('fotosPurgadas') }}</div>
 
                         <div v-if="item.paid" class="review-actions">
                             <h4>{{ $t('accion') }}</h4>
@@ -186,6 +186,7 @@ import { mapState } from 'pinia';
 import { useAuthStore } from '../../stores/auth';
 import dialogs from '../../services/dialogs.js';
 import { displayDniOrDash as formatDisplayDniOrDash } from '../../utils/formatDisplayDni';
+import { shouldShowPurgedPhotosMessage } from '../../utils/adminManualIdentityValidationImages.js';
 
 export default {
     name: 'AdminManualIdentityValidationReview',
@@ -218,6 +219,7 @@ export default {
         }
     },
     methods: {
+        shouldShowPurgedPhotosMessage,
         displayDniOrDash(value) {
             return formatDisplayDniOrDash(
                 value,
