@@ -819,7 +819,7 @@ const messages = {
         volver: 'Volver',
         accion: 'Acción',
         usuario: 'Usuario',
-        administracion: 'Administracion',
+        administracion: 'Administración',
         buscoConductor: 'Busco Conductor',
         buscoPasajero: 'Busco Pasajero',
         precioAsiento: 'Contribución por persona (incluído el conductor)',
