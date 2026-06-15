@@ -74,4 +74,8 @@ describe('ChangelogModal view', () => {
         expect(viewSource).toMatch(/changelog-modal-intro[\s\S]*font-size:\s*0\.95rem/);
         expect(viewSource).toMatch(/changelog-modal-view-previous[\s\S]*font-size:\s*1\.1rem/);
     });
+
+    it('keeps the OK button right-aligned when the splash link is hidden', () => {
+        expect(viewSource).toMatch(/changelog-modal-ok[\s\S]*margin-left:\s*auto/);
+    });
 });
