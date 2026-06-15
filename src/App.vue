@@ -54,12 +54,12 @@ import { Capacitor } from '@capacitor/core';
 import { AppUpdate } from '@capawesome/capacitor-app-update';
 import { compareAndroidVersion, compareSemver } from './utils/versionCompare';
 import {
+    CUSTOM_SPLASH_DISMISS_MS,
     formatSplashVersionText,
-    getRemainingSplashMs,
-    hideBootstrapSplash,
     isAdminAppUrl,
     isCustomSplashVisible,
-    resolveSplashVersion
+    resolveSplashVersion,
+    SPLASH_WEB_BUILD_NUMBER
 } from './utils/customSplash';
 import footerApp from './components/sections/FooterApp.vue';
 import headerApp from './components/sections/HeaderApp.vue';
@@ -164,19 +164,13 @@ export default {
         }
 
         if (isAdminAppUrl(this.$route)) {
-            hideBootstrapSplash();
             this.showCustomSplash = false;
             return;
         }
 
-        hideBootstrapSplash();
-
         setTimeout(() => {
             this.showCustomSplash = false;
-        }, getRemainingSplashMs(
-            performance.now(),
-            window.__customSplashStartedAt
-        ));
+        }, CUSTOM_SPLASH_DISMISS_MS);
     },
     computed: {
         // Same version we send in X-App-Version header for all requests (network.js getHeader)
@@ -187,7 +181,8 @@ export default {
                     windowAppVersion:
                         typeof window !== 'undefined' ? window.appVersion : null
                 }),
-                isNativePlatform: Capacitor.isNativePlatform()
+                isNativePlatform: Capacitor.isNativePlatform(),
+                webBuildNumber: SPLASH_WEB_BUILD_NUMBER
             });
         },
         ...mapState(useCordovaStore, {
@@ -294,9 +289,7 @@ export default {
         },
         '$route'(to) {
             if (isAdminAppUrl(to)) {
-                hideBootstrapSplash();
                 this.showCustomSplash = false;
-                window.__customSplashStartedAt = null;
             }
         },
         appConfig(value) {

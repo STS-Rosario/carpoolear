@@ -36,8 +36,6 @@ import bus from './services/bus-event';
 import { DebugApi } from './services/api';
 import { init as initDebugLogger } from './services/debug';
 import { installPrototypes } from './prototypes';
-import { initBootstrapSplash } from './utils/customSplash';
-
 // Capacitor plugins
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { SplashScreen } from '@capacitor/splash-screen';
@@ -50,10 +48,6 @@ const debugApi = new DebugApi();
 
 // Initialize debug logger: clear logs on app init, patch console if debug mode enabled
 initDebugLogger();
-
-initBootstrapSplash({
-    isNativePlatform: Capacitor.isNativePlatform()
-});
 
 // Initialize Capacitor plugins
 const initializeCapacitorPlugins = async () => {
