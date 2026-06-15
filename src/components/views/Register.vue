@@ -232,6 +232,7 @@
                         type="file"
                         id="driver_documentation"
                         multiple
+                        :accept="imageUploadAccept"
                         @change="onDriverDocumentChange"
                     />
                     <p class="help-block">{{ $t('requisitosRegister') }}</p>
@@ -387,6 +388,10 @@ import modal from '../Modal';
 import dayjs from '../../dayjs';
 import Spinner from '../Spinner.vue';
 import { isOfflineApiError } from '../../utils/apiErrors.js';
+import {
+    IMAGE_UPLOAD_ACCEPT,
+    filterAllowedImageUploads
+} from '../../utils/imageUpload';
 let emailRegex =
     /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 class Error {
@@ -432,6 +437,7 @@ export default {
             minDate: dayjs('1900-01-01').toDate(),
             showBeDriver: false,
             driverFiles: null,
+            imageUploadAccept: IMAGE_UPLOAD_ACCEPT,
             banks: [],
             accountTypes: [],
             loading: false,
@@ -611,10 +617,8 @@ export default {
             return globalError;
         },
         onDriverDocumentChange(event) {
-            console.log('file input ', event);
-            if (event.target.files) {
-                this.driverFiles = event.target.files;
-            }
+            const files = filterAllowedImageUploads(event.target.files);
+            this.driverFiles = files.length ? files : null;
         },
         changeBeDriver() {
             this.showBeDriver = !this.showBeDriver;

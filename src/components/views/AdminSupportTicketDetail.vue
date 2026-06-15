@@ -83,7 +83,7 @@
                 resizable
                 :class="supportTicketReplyEditorClass"
             />
-            <input ref="attachmentInput" class="mtop-10" type="file" accept="image/*" multiple @change="onAttachments" />
+            <input ref="attachmentInput" class="mtop-10" type="file" :accept="imageUploadAccept" multiple @change="onAttachments" />
             <div class="reply-actions">
                 <div class="reply-actions-left">
                     <button
@@ -200,6 +200,10 @@ import {
     SUPPORT_TICKET_REPLY_EDITOR_HEIGHT,
     SUPPORT_TICKET_REPLY_EDITOR_CLASS
 } from '../../utils/supportTicketReplyEditor';
+import {
+    IMAGE_UPLOAD_ACCEPT,
+    filterAllowedImageUploads
+} from '../../utils/imageUpload';
 
 const PRIORITY_LABEL_KEYS = {
     low: 'prioridadBaja',
@@ -225,6 +229,7 @@ export default {
             ticket: null,
             attachmentBlobUrls: {},
             attachments: [],
+            imageUploadAccept: IMAGE_UPLOAD_ACCEPT,
             internalNote: '',
             ticketType: '',
             ticketTypeOptions,
@@ -366,7 +371,7 @@ export default {
             return dayjs(value).format('YYYY-MM-DD HH:mm:ss');
         },
         onAttachments(event) {
-            this.attachments = Array.from(event.target.files || []).slice(0, 3);
+            this.attachments = filterAllowedImageUploads(event.target.files, 3);
         },
         refresh() {
             return this.fetchAdminOne(this.id).then((data) => {

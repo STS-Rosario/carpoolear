@@ -2,7 +2,9 @@ import { describe, it, expect } from 'vitest';
 import {
     IMAGE_UPLOAD_ACCEPT,
     getImageFileExtension,
-    isAllowedImageUpload
+    isAllowedImageUpload,
+    filterAllowedImageUploads,
+    normalizeCapacitorImageFormat
 } from './imageUpload';
 
 describe('imageUpload', () => {
@@ -39,5 +41,20 @@ describe('imageUpload', () => {
         const file = new File(['x'], 'notes.pdf', { type: 'application/pdf' });
 
         expect(isAllowedImageUpload(file)).toBe(false);
+    });
+
+    it('filters uploads keeping jpeg files and dropping invalid ones', () => {
+        const files = [
+            new File(['a'], 'valid.jpeg', { type: 'image/jpeg' }),
+            new File(['b'], 'invalid.pdf', { type: 'application/pdf' })
+        ];
+
+        expect(filterAllowedImageUploads(files)).toHaveLength(1);
+        expect(filterAllowedImageUploads(files)[0].name).toBe('valid.jpeg');
+    });
+
+    it('normalizes capacitor jpg format to jpeg for data URIs', () => {
+        expect(normalizeCapacitorImageFormat('jpg')).toBe('jpeg');
+        expect(normalizeCapacitorImageFormat('jpeg')).toBe('jpeg');
     });
 });

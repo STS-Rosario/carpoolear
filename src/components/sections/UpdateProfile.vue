@@ -356,6 +356,7 @@
                             type="file"
                             id="driver_documentation"
                             multiple
+                            :accept="imageUploadAccept"
                             @change="onDriverDocumentChange"
                         />
                         <p class="help-block">
@@ -651,6 +652,10 @@ import modal from '../Modal';
 import { UserApi } from '../../services/api';
 import { getApiErrorMessage } from '../../utils/apiErrors.js';
 import { normalizeFacebookProfileUrl } from '../../utils/facebookProfileUrl.js';
+import {
+    IMAGE_UPLOAD_ACCEPT,
+    filterAllowedImageUploads
+} from '../../utils/imageUpload';
 
 class Error {
     constructor(state = false, message = '') {
@@ -689,6 +694,7 @@ export default {
             showChangePassword: false,
             showBeDriver: false,
             driverFiles: null,
+            imageUploadAccept: IMAGE_UPLOAD_ACCEPT,
             banks: [],
             accountTypes: [],
             showModalDeleteAccount: false,
@@ -844,9 +850,8 @@ export default {
                 });
         },
         onDriverDocumentChange(event) {
-            if (event.target.files) {
-                this.driverFiles = event.target.files;
-            }
+            const files = filterAllowedImageUploads(event.target.files);
+            this.driverFiles = files.length ? files : null;
         },
         dateChange(value) {
             this.birthdayAnswer = value;

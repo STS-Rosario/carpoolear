@@ -69,6 +69,12 @@ export function isAllowedImageUpload(file) {
     return isAllowedExtension(extension) || isAllowedMime(mime);
 }
 
+export function filterAllowedImageUploads(files, limit = Number.POSITIVE_INFINITY) {
+    return Array.from(files || [])
+        .filter(isAllowedImageUpload)
+        .slice(0, limit);
+}
+
 export function normalizeCapacitorImageFormat(format) {
     const normalized = String(format || 'jpeg').toLowerCase();
 

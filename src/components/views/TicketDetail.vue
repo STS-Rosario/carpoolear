@@ -48,7 +48,7 @@
                     :class="supportTicketReplyEditorClass"
                 />
                 <label class="control-label mtop-10">{{ $t('adjuntarImagenes') }}</label>
-                <input ref="attachmentInput" class="mtop-10" type="file" accept="image/*" multiple @change="onAttachments" />
+                <input ref="attachmentInput" class="mtop-10" type="file" :accept="imageUploadAccept" multiple @change="onAttachments" />
                 <p class="help-block">{{ $t('maximo3Imagenes') }}</p>
                 <button type="button" class="btn btn-primary" :disabled="replySubmitting" @click="sendReply">
                     {{ replySubmitting ? $t('enviando') : $t('responder') }}
@@ -85,6 +85,10 @@ import {
     SUPPORT_TICKET_REPLY_EDITOR_HEIGHT,
     SUPPORT_TICKET_REPLY_EDITOR_CLASS
 } from '../../utils/supportTicketReplyEditor';
+import {
+    IMAGE_UPLOAD_ACCEPT,
+    filterAllowedImageUploads
+} from '../../utils/imageUpload';
 
 const SUCCESS_TOAST_OPTIONS = { estado: 'success', duration: 2 };
 const ERROR_TOAST_OPTIONS = { estado: 'error', duration: 3 };
@@ -97,6 +101,7 @@ export default {
             ticket: null,
             attachmentBlobUrls: {},
             attachments: [],
+            imageUploadAccept: IMAGE_UPLOAD_ACCEPT,
             editorOptions: {
                 usageStatistics: false,
                 hideModeSwitch: true,
@@ -152,7 +157,7 @@ export default {
             return dayjs(value).format('YYYY-MM-DD HH:mm:ss');
         },
         onAttachments(event) {
-            this.attachments = Array.from(event.target.files || []).slice(0, 3);
+            this.attachments = filterAllowedImageUploads(event.target.files, 3);
         },
         refresh() {
             return this.fetchOne(this.id).then((data) => {
