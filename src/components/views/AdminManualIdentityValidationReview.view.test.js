@@ -33,4 +33,11 @@ describe('AdminManualIdentityValidationReview view', () => {
         expect(viewSource).toContain(':user-id="item.user_id"');
         expect(viewSource).toContain(':user-name="item.user_name"');
     });
+
+    it('shows purged photos message only when images were deleted by admin', () => {
+        expect(viewSource).toContain('shouldShowPurgedPhotosMessage');
+        expect(viewSource).toContain('v-else-if="shouldShowPurgedPhotosMessage(item)"');
+        expect(viewSource).toContain("{{ $t('fotosPurgadas') }}");
+        expect(viewSource).not.toContain('v-else class="alert alert-info">{{ $t(\'fotosPurgadas\') }}');
+    });
 });
