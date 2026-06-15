@@ -21,9 +21,9 @@ describe('App custom splash', () => {
     it('keeps splash enabled by default for the public app', () => {
         expect(appSource).toMatch(/showCustomSplash:\s*true/);
         expect(appSource).toContain('class="custom-splash-screen"');
-        expect(appSource).toContain('getRemainingSplashMs');
+        expect(appSource).toContain('CUSTOM_SPLASH_DISMISS_MS');
         expect(appSource).toMatch(
-            /setTimeout\s*\([\s\S]*showCustomSplash\s*=\s*false[\s\S]*getRemainingSplashMs/
+            /setTimeout\s*\([\s\S]*showCustomSplash\s*=\s*false[\s\S]*CUSTOM_SPLASH_DISMISS_MS/
         );
     });
 
@@ -43,31 +43,26 @@ describe('App custom splash', () => {
         expect(appSource).toContain('class="splash-version"');
         expect(appSource).toContain('formatSplashVersionText');
         expect(appSource).toContain('resolveSplashVersion');
+        expect(appSource).toContain('SPLASH_WEB_BUILD_NUMBER');
+    });
+
+    it('uses a single vue splash overlay without bootstrap handoff', () => {
+        expect(appSource).not.toContain('hideBootstrapSplash');
+        expect(appSource).not.toContain('getRemainingSplashMs');
+        expect(appSource).not.toContain('__customSplashStartedAt');
     });
 });
 
-describe('index.html bootstrap splash', () => {
-    it('shows splash immediately on cold page load before Vue mounts', () => {
-        expect(indexSource).toContain('id="bootstrap-splash"');
-        expect(indexSource).toContain('splash-android-1280x1920.png');
-        expect(indexSource).toContain('bootstrap-splash-screen');
-    });
-
-    it('includes a bootstrap version label for the splash overlay', () => {
-        expect(indexSource).toContain('id="bootstrap-splash-version"');
-        expect(indexSource).toContain('bootstrap-splash-version');
+describe('index.html splash', () => {
+    it('does not render a duplicate bootstrap splash before Vue mounts', () => {
+        expect(indexSource).not.toContain('id="bootstrap-splash"');
+        expect(indexSource).not.toContain('bootstrap-splash-screen');
+        expect(indexSource).not.toContain('bootstrap-splash-image');
     });
 });
 
-describe('main.js bootstrap splash', () => {
-    it('initializes bootstrap splash before system-ready', () => {
-        expect(mainSource).toContain('initBootstrapSplash');
-        expect(mainSource.indexOf('initBootstrapSplash')).toBeLessThan(
-            mainSource.indexOf("bus.on('system-ready'")
-        );
-    });
-
-    it('passes native platform flag when initializing bootstrap splash', () => {
-        expect(mainSource).toContain('isNativePlatform: Capacitor.isNativePlatform()');
+describe('main.js splash', () => {
+    it('does not initialize a bootstrap splash before system-ready', () => {
+        expect(mainSource).not.toContain('initBootstrapSplash');
     });
 });
