@@ -1,15 +1,20 @@
 <template>
-    <input ref="input" type="file" @change="onFileChange" v-show="false" accept="image/*" />
+    <input ref="input" type="file" @change="onFileChange" v-show="false" :accept="imageUploadAccept" />
 </template>
 
 <script>
 import { Capacitor } from '@capacitor/core';
+import {
+    IMAGE_UPLOAD_ACCEPT,
+    normalizeCapacitorImageFormat
+} from '../utils/imageUpload';
 
 export default {
     name: 'uploadfile',
     data() {
         return {
-            isNative: false
+            isNative: false,
+            imageUploadAccept: IMAGE_UPLOAD_ACCEPT
         };
     },
     mounted() {
@@ -40,7 +45,7 @@ export default {
 
                 if (image && image.base64String) {
                     // Format: data:image/jpeg;base64,{base64String}
-                    const imageData = `data:image/${image.format || 'jpeg'};base64,${image.base64String}`;
+                    const imageData = `data:image/${normalizeCapacitorImageFormat(image.format)};base64,${image.base64String}`;
                     const data = {};
                     data[this.name] = imageData;
                     this.$emit('change', data);

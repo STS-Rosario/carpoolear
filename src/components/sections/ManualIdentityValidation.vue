@@ -161,7 +161,7 @@
                             </label>
                             <input
                                 type="file"
-                                accept="image/jpeg,image/png"
+                                :accept="imageUploadAccept"
                                 ref="frontInput"
                                 @change="onFileChange($event, 'front')"
                                 required
@@ -175,7 +175,7 @@
                             </label>
                             <input
                                 type="file"
-                                accept="image/jpeg,image/png"
+                                :accept="imageUploadAccept"
                                 ref="backInput"
                                 @change="onFileChange($event, 'back')"
                                 required
@@ -189,7 +189,7 @@
                             </label>
                             <input
                                 type="file"
-                                accept="image/jpeg,image/png"
+                                :accept="imageUploadAccept"
                                 ref="selfieInput"
                                 @change="onFileChange($event, 'selfie')"
                                 required
@@ -225,6 +225,10 @@ import {
     getManualValidationUploadWarningKey,
     MANUAL_VALIDATION_UPLOAD_WARNING_STYLE
 } from '../../utils/manualValidationUploadWarning';
+import {
+    IMAGE_UPLOAD_ACCEPT,
+    filterAllowedImageUploads
+} from '../../utils/imageUpload';
 
 export default {
     name: 'ManualIdentityValidation',
@@ -248,7 +252,8 @@ export default {
                 front: null,
                 back: null,
                 selfie: null
-            }
+            },
+            imageUploadAccept: IMAGE_UPLOAD_ACCEPT
         };
     },
     computed: {
@@ -406,8 +411,8 @@ export default {
             }
         },
         onFileChange(event, type) {
-            const file = event.target.files && event.target.files[0];
-            this.files[type] = file || null;
+            const file = filterAllowedImageUploads(event.target.files || [], 1)[0] || null;
+            this.files[type] = file;
         },
         submitImages() {
             if (!this.requestId || !this.files.front || !this.files.back || !this.files.selfie) {

@@ -29,7 +29,7 @@
                     class="mtop-10"
                 />
                 <label class="control-label mtop-10">{{ $t('adjuntosTicket') }}</label>
-                <input class="mtop-10" type="file" accept="image/*" multiple @change="onCreateAttachments" />
+                <input class="mtop-10" type="file" :accept="imageUploadAccept" multiple @change="onCreateAttachments" />
                 <p class="help-block">{{ $t('maximo3Imagenes') }}</p>
                 <button class="btn btn-primary" @click="createTicket">{{ $t('crearTicket') }}</button>
             </div>
@@ -47,6 +47,10 @@ import {
     USER_TICKET_TYPE_OPTIONS,
     USER_TICKET_TYPE_VALUES
 } from '../../utils/supportTicketTypeOptions';
+import {
+    IMAGE_UPLOAD_ACCEPT,
+    filterAllowedImageUploads
+} from '../../utils/imageUpload';
 
 export default {
     name: 'ticket-new',
@@ -57,6 +61,7 @@ export default {
                 subject: ''
             },
             attachments: [],
+            imageUploadAccept: IMAGE_UPLOAD_ACCEPT,
             ticketTypeOptions: USER_TICKET_TYPE_OPTIONS,
             editorOptions: {
                 usageStatistics: false,
@@ -70,7 +75,7 @@ export default {
             createTicketAction: 'createTicket'
         }),
         onCreateAttachments(event) {
-            this.attachments = Array.from(event.target.files || []).slice(0, 3);
+            this.attachments = filterAllowedImageUploads(event.target.files, 3);
         },
         createTicket() {
             const markdown = this.$refs.createEditor.invoke('getMarkdown');
