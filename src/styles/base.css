@@ -847,7 +847,6 @@
 
   .header_panel-right .btn-link,
   .header_panel-right a {
-      text-transform: uppercase;
   }
 
   .header_panel-right .btn-link {
@@ -908,7 +907,6 @@
   .nav-tabs>li>a {
       border: none;
       color: #aaa;
-      text-transform: uppercase;
       font-size: 10px;
   }
   .nav-tabs>li>a:hover {
