@@ -45,6 +45,14 @@
             </div>
 
             <div class="changelog-modal-footer">
+                <a
+                    v-if="!navigationMode"
+                    href="#"
+                    class="changelog-modal-view-previous"
+                    @click.prevent="openFromNavigation"
+                >
+                    {{ $t('changelogModalViewPrevious') }}
+                </a>
                 <button type="button" class="btn btn-primary changelog-modal-ok" @click="close">
                     {{ $t('changelogModalOk') }}
                 </button>
@@ -302,10 +310,25 @@ export default {
 
 .changelog-modal-footer {
     flex-shrink: 0;
-    text-align: right;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.changelog-modal-view-previous {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #036686;
+    text-decoration: none;
+}
+
+.changelog-modal-view-previous:hover,
+.changelog-modal-view-previous:focus {
+    text-decoration: underline;
 }
 
 .changelog-modal-ok {
     min-width: 88px;
+    margin-left: auto;
 }
 </style>

@@ -84,6 +84,7 @@ const messages = {
         changelogModalIntro:
             'Estuvimos haciendo mejoras, te dejamos lo que cambiamos para que estés al tanto :)',
         changelogModalOk: 'OK',
+        changelogModalViewPrevious: 'Ver cambios anteriores',
         adminNavChangelog: 'Changelog',
         changelogVersion: 'Versión',
         changelogContenido: 'Contenido',
@@ -1614,6 +1615,7 @@ const messages = {
         changelogModalIntro:
             'Estuvimos haciendo mejoras, te dejamos lo que cambiamos para que estés al tanto :)',
         changelogModalOk: 'OK',
+        changelogModalViewPrevious: 'Ver cambios anteriores',
         adminNavChangelog: 'Changelog',
         changelogVersion: 'Versión',
         changelogContenido: 'Contenido',
@@ -2908,6 +2910,7 @@ const messages = {
         changelogModalIntro:
             'We have been making improvements. Here is what changed so you are up to date :)',
         changelogModalOk: 'OK',
+        changelogModalViewPrevious: 'View previous changes',
         adminNavChangelog: 'Changelog',
         changelogVersion: 'Version',
         changelogContenido: 'Content',
