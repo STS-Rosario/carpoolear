@@ -62,4 +62,16 @@ describe('ChangelogModal view', () => {
         expect(viewSource).toMatch(/changelog-modal-footer[\s\S]*flex-shrink:\s*0/);
         expect(viewSource).toMatch(/changelog-modal-dialog[\s\S]*min-height:\s*0/);
     });
+
+    it('shows a splash-only link to the full changelog in the footer', () => {
+        expect(viewSource).toContain('changelogModalViewPrevious');
+        expect(viewSource).toContain('changelog-modal-view-previous');
+        expect(viewSource).toMatch(/v-if="!navigationMode"[\s\S]*changelog-modal-view-previous/);
+        expect(viewSource).toMatch(/changelog-modal-view-previous[\s\S]*@click[^"]*="openFromNavigation"/);
+    });
+
+    it('styles the full changelog link larger than the intro text', () => {
+        expect(viewSource).toMatch(/changelog-modal-intro[\s\S]*font-size:\s*0\.95rem/);
+        expect(viewSource).toMatch(/changelog-modal-view-previous[\s\S]*font-size:\s*1\.1rem/);
+    });
 });
