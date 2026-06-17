@@ -784,10 +784,12 @@
     background-color: #000000db;
     opacity: 0;
     padding: 10em;
+    pointer-events: none;
   }
   .on-boarding--overlay.show {
       opacity: 1;
       padding: 0;
+      pointer-events: auto;
   }
   .on-boarding--container {
       width: 100%;

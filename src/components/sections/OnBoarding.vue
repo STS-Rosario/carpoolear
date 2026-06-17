@@ -87,7 +87,11 @@ export default {
             );
         }, 600);
         document.documentElement.style.overflow = 'hidden';
-        document.body.scroll = 'no';
+        document.body.style.overflow = 'hidden';
+    },
+    beforeUnmount() {
+        document.documentElement.style.overflow = '';
+        document.body.style.overflow = '';
     },
     computed: {
         ...mapState(useAuthStore, {
@@ -149,8 +153,8 @@ export default {
             this.endActions();
         },
         endActions() {
-            document.documentElement.style.overflow = 'auto';
-            document.body.style.scroll = 'yes';
+            document.documentElement.style.overflow = '';
+            document.body.style.overflow = '';
             this.setFirstTimeAppOpenInDevice();
         }
     },
