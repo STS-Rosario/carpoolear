@@ -98,6 +98,7 @@
 import AdminLayout from '../layouts/AdminLayout.vue';
 import Loading from '../Loading';
 import { AdminApi } from '../../services/api';
+import { normalizeAdminDashboardResponse } from '../../utils/adminDashboardData';
 
 export default {
     name: 'admin-dashboard',
@@ -115,10 +116,10 @@ export default {
         fetchDashboard() {
             const api = new AdminApi();
             return api.getDashboard().then((res) => {
-                const data = res.data || res;
-                const payload = data.data || data;
-                this.manualIdentityValidations = payload.manual_identity_validations || [];
-                this.supportTickets = payload.support_tickets || [];
+                const { manualIdentityValidations, supportTickets } =
+                    normalizeAdminDashboardResponse(res);
+                this.manualIdentityValidations = manualIdentityValidations;
+                this.supportTickets = supportTickets;
             }).catch(() => {
                 this.manualIdentityValidations = [];
                 this.supportTickets = [];
