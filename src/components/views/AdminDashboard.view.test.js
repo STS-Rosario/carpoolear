@@ -20,11 +20,17 @@ describe('AdminDashboard view', () => {
         expect(viewSource).toContain("name: 'admin-manual-identity-validation-review'");
         expect(viewSource).toContain("name: 'admin-manual-identity-validations'");
         expect(viewSource).toContain('adminDashboardVerMas');
+        expect(viewSource).toContain('table table-hover table-bordered');
+        expect(viewSource).toContain('getManualIdentityValidationStatusBadgeClass');
+        expect(viewSource).toContain('tiempoDeEspera');
     });
 
     it('links support ticket rows to detail and filtered list pages', () => {
         expect(viewSource).toContain("name: 'admin-support-ticket-detail'");
         expect(viewSource).toContain("name: 'admin-support-tickets'");
         expect(viewSource).toContain('needs_reply');
+        expect(viewSource).toContain('support-tickets-table support-tickets-table--compact');
+        expect(viewSource).toContain('supportTicketStatusClass');
+        expect(viewSource).toContain('updatedAgeAttentionClass');
     });
 });
