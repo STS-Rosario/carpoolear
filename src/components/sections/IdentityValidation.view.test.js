@@ -5,9 +5,22 @@ import path from 'node:path';
 const viewPath = path.resolve(__dirname, 'IdentityValidation.vue');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 
+describe('IdentityValidation admin review note contexts', () => {
+    it('uses approval note helper in success banner', () => {
+        expect(viewSource).toContain('displayableManualApprovalReviewNote');
+        expect(viewSource).toContain('manualApprovalReviewNoteLabelKey');
+    });
+
+    it('uses rejection note helper only in rejection notice', () => {
+        expect(viewSource).toContain('displayableManualRejectionReviewNote');
+        expect(viewSource).toContain('manualRejectionReviewNoteLabelKey');
+        expect(viewSource).not.toContain(':note="displayableManualReviewNote"');
+    });
+});
+
 describe('IdentityValidation rejected manual verification', () => {
-    it('uses shared success banner helper so rejected manual flow is not hidden', () => {
-        expect(viewSource).toContain('shouldShowIdentityVerificationSuccessBanner');
+    it('passes the current user into manual rejection choice-card helper', () => {
+        expect(viewSource).toContain('user: this.user');
     });
 
     it('shows retry prompt and choice cards when manual verification was rejected', () => {
@@ -20,8 +33,7 @@ describe('IdentityValidation rejected manual verification', () => {
     });
 
     it('does not render standalone in-flow review note when manual verification was rejected', () => {
-        expect(viewSource).toContain('v-if="!showManualRejectedWithChoiceCards"');
-        expect(viewSource).toContain('in-flow');
+        expect(viewSource).not.toContain('in-flow');
     });
 });
 
@@ -100,10 +112,12 @@ describe('IdentityValidation Mercado Pago ownership warning', () => {
 });
 
 describe('IdentityValidation manual admin review note', () => {
-    it('shows admin review note in success banner and main flow when present', () => {
+    it('shows admin review note in success banner and rejection notice when present', () => {
         expect(viewSource).toContain('IdentityValidationAdminReviewNote');
-        expect(viewSource).toContain('displayableManualReviewNote');
-        expect(viewSource).toContain('manualAdminReviewNoteLabelKey');
+        expect(viewSource).toContain('displayableManualApprovalReviewNote');
+        expect(viewSource).toContain('displayableManualRejectionReviewNote');
+        expect(viewSource).toContain('manualApprovalReviewNoteLabelKey');
+        expect(viewSource).toContain('manualRejectionReviewNoteLabelKey');
         expect(viewSource).toContain('manualIdentityValidationReviewNote');
     });
 
