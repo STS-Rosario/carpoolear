@@ -525,7 +525,8 @@ export default {
         /** Manual docs rejected: show red banner + MP / manual choice cards. */
         showManualRejectedWithChoiceCards() {
             return isManualRejectedWithChoiceCards(this.manualStatus, {
-                manualEnabled: this.identityValidationManualEnabled
+                manualEnabled: this.identityValidationManualEnabled,
+                user: this.user
             });
         },
         manualRejectionSupportWarningKey() {

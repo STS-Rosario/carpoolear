@@ -16,7 +16,7 @@ export function shouldShowIdentityVerificationSuccessBanner({
     if (isManualDocsPendingAdminReview(manualStatus)) {
         return false;
     }
-    if (isManualIdentityValidationRejected(manualStatus)) {
+    if (isManualIdentityValidationRejected(manualStatus, user)) {
         return false;
     }
     if (resultMessage === 'success') {
