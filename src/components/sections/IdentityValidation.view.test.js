@@ -5,6 +5,19 @@ import path from 'node:path';
 const viewPath = path.resolve(__dirname, 'IdentityValidation.vue');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 
+describe('IdentityValidation admin review note contexts', () => {
+    it('uses approval note helper in success banner', () => {
+        expect(viewSource).toContain('displayableManualApprovalReviewNote');
+        expect(viewSource).toContain('manualApprovalReviewNoteLabelKey');
+    });
+
+    it('uses rejection note helper only in rejection notice', () => {
+        expect(viewSource).toContain('displayableManualRejectionReviewNote');
+        expect(viewSource).toContain('manualRejectionReviewNoteLabelKey');
+        expect(viewSource).not.toContain(':note="displayableManualReviewNote"');
+    });
+});
+
 describe('IdentityValidation rejected manual verification', () => {
     it('passes the current user into manual rejection choice-card helper', () => {
         expect(viewSource).toContain('user: this.user');
