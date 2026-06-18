@@ -267,7 +267,7 @@
                             <a @click="openChangelog">{{ $t('ultimosCambios') }}</a>
                         </li>
                         <li v-if="user.is_admin">
-                            <router-link :to="{ name: 'admin-page' }">
+                            <router-link :to="{ name: 'admin-dashboard' }">
                                 {{ $t('administracion') }}
                             </router-link>
                         </li>

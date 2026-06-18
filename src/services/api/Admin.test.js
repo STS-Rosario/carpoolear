@@ -37,3 +37,10 @@ describe('AdminApi manual identity validations private note', () => {
         expect(apiSource).toContain('private_admin_note');
     });
 });
+
+describe('AdminApi dashboard', () => {
+    it('fetches admin dashboard summary from dashboard endpoint', () => {
+        expect(apiSource).toContain('getDashboard');
+        expect(apiSource).toContain('/api/admin/dashboard');
+    });
+});

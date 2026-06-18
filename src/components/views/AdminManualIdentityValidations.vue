@@ -84,6 +84,11 @@ import {
     getShowResolvedManualIdentityValidations,
     saveShowResolvedManualIdentityValidations
 } from '../../utils/adminManualIdentityValidationsList';
+import {
+    formatManualIdentityValidationWaitingTime,
+    getManualIdentityValidationStatusBadgeClass,
+    getManualIdentityValidationStatusLabel
+} from '../../utils/adminManualIdentityValidationDisplay';
 
 export default {
     name: 'AdminManualIdentityValidations',
@@ -114,37 +119,13 @@ export default {
             return new Date(value).toLocaleString();
         },
         formatWaitingTime(item) {
-            const submitted = item.submitted_at ? new Date(item.submitted_at).getTime() : null;
-            if (!submitted) return '-';
-            const end = item.manual_validation_started_at
-                ? new Date(item.manual_validation_started_at).getTime()
-                : Date.now();
-            let diffMs = Math.max(0, end - submitted);
-            const days = Math.floor(diffMs / 86400000);
-            diffMs %= 86400000;
-            const hours = Math.floor(diffMs / 3600000);
-            diffMs %= 3600000;
-            const minutes = Math.floor(diffMs / 60000);
-            const parts = [];
-            if (days > 0) parts.push(`${days} ${this.$t('tiempoEsperaDias')}`);
-            if (hours > 0) parts.push(`${hours} ${this.$t('tiempoEsperaHoras')}`);
-            parts.push(`${minutes} ${this.$t('tiempoEsperaMinutos')}`);
-            return parts.join(' ');
+            return formatManualIdentityValidationWaitingTime(item, (key) => this.$t(key));
         },
         getStatusLabel(item) {
-            if (!item.paid) return this.$t('estadoPendientePago');
-            const status = item.review_status;
-            if (status === 'pending') return this.$t('estadoPendienteRevision');
-            if (status === 'approved' || status === 'approve') return this.$t('estadoAprobado');
-            if (status === 'rejected' || status === 'reject') return this.$t('estadoRechazado');
-            return status || '-';
+            return getManualIdentityValidationStatusLabel(item, (key) => this.$t(key));
         },
         getStatusBadgeClass(item) {
-            const status = item.review_status;
-            if (status === 'approved' || status === 'approve') return 'label label-success';
-            if (status === 'rejected' || status === 'reject') return 'label label-danger';
-            if (!item.paid) return 'label label-default';
-            return 'label label-warning';
+            return getManualIdentityValidationStatusBadgeClass(item);
         },
         isApprovedWithImagesPending(item) {
             const status = item.review_status;

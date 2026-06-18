@@ -26,6 +26,7 @@ const ConversationChat = () => import('../components/views/ConversationChat.vue'
 const About = () => import('../components/views/About.vue');
 const Transactions = () => import('../components/views/transactions.vue');
 const TermsAndConditions = () => import('../components/views/TermsAndConditions.vue');
+const AdminDashboard = () => import('../components/views/AdminDashboard.vue');
 const AdminPage = () => import('../components/views/AdminPage.vue');
 const AdminMaintenance = () => import('../components/views/AdminMaintenance.vue');
 const UsersCrud = () => import('../components/views/UsersCrud.vue');
@@ -688,6 +689,24 @@ export default [
     },
     {
         path: '/admin',
+        name: 'admin-dashboard',
+        component: AdminDashboard,
+        beforeEnter: authAdmin,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'admin'
+                },
+                header: {
+                    titleKey: 'adminDashboardTitle',
+                    buttons: []
+                }
+            }
+        }
+    },
+    {
+        path: '/admin/graficos',
         name: 'admin-page',
         component: AdminPage,
         beforeEnter: authAdmin,

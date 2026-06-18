@@ -63,6 +63,10 @@ class AdminApi extends TaggedApi {
         return this.get('/api/admin/manual-identity-validations', {});
     }
 
+    getDashboard() {
+        return this.get('/api/admin/dashboard', {});
+    }
+
     getManualIdentityValidation(id) {
         return this.get('/api/admin/manual-identity-validations/' + id, {});
     }
