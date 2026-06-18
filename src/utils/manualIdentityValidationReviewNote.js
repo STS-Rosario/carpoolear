@@ -1,9 +1,22 @@
-export function getDisplayableManualReviewNote(manualStatus) {
+export function getDisplayableManualReviewNote(manualStatus, options = {}) {
     if (!shouldDisplayManualReviewNote(manualStatus)) {
         return '';
     }
 
+    const requiredReviewStatus = options.reviewStatus;
+    if (requiredReviewStatus && manualStatus.review_status !== requiredReviewStatus) {
+        return '';
+    }
+
     return String(manualStatus.review_note).trim();
+}
+
+export function getDisplayableManualApprovalReviewNote(manualStatus) {
+    return getDisplayableManualReviewNote(manualStatus, { reviewStatus: 'approved' });
+}
+
+export function getDisplayableManualRejectionReviewNote(manualStatus) {
+    return getDisplayableManualReviewNote(manualStatus, { reviewStatus: 'rejected' });
 }
 
 export function shouldDisplayManualReviewNote(manualStatus) {

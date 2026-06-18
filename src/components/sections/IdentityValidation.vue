@@ -20,8 +20,8 @@
                     {{ $t('identityVerificationSuccessEmphasis') }}
                 </p>
                 <IdentityValidationAdminReviewNote
-                    :note="displayableManualReviewNote"
-                    :label-key="manualAdminReviewNoteLabelKey"
+                    :note="displayableManualApprovalReviewNote"
+                    :label-key="manualApprovalReviewNoteLabelKey"
                 />
                 <router-link
                     :to="{ name: 'trips', params: { clearSearch: true } }"
@@ -33,12 +33,6 @@
         </div>
 
         <div v-else>
-        <IdentityValidationAdminReviewNote
-            v-if="!showManualRejectedWithChoiceCards"
-            :note="displayableManualReviewNote"
-            :label-key="manualAdminReviewNoteLabelKey"
-            in-flow
-        />
         <div class="alert alert-danger" v-if="resultMessage === 'error'">
             {{ $t('resultError') }}
         </div>
@@ -244,8 +238,8 @@
                         {{ $t('identityValidationRejectionNoticeBody') }}
                     </p>
                     <IdentityValidationAdminReviewNote
-                        :note="displayableManualReviewNote"
-                        :label-key="manualAdminReviewNoteLabelKey"
+                        :note="displayableManualRejectionReviewNote"
+                        :label-key="manualRejectionReviewNoteLabelKey"
                     />
                     <p
                         v-if="manualRejectionSupportWarningKey"
@@ -420,7 +414,8 @@ import {
     getMismatchSupportWarningKey
 } from '../../utils/identityValidationMismatchDetails';
 import {
-    getDisplayableManualReviewNote,
+    getDisplayableManualApprovalReviewNote,
+    getDisplayableManualRejectionReviewNote,
     getManualReviewNoteLabelKey
 } from '../../utils/manualIdentityValidationReviewNote';
 import { shouldShowIdentityVerificationSuccessBanner } from '../../utils/identityValidationSuccessBanner';
@@ -533,11 +528,17 @@ export default {
             if (!this.showManualRejectedWithChoiceCards) return null;
             return getManualRejectionSupportWarningKey(this.manualStatus.reject_reason);
         },
-        displayableManualReviewNote() {
-            return getDisplayableManualReviewNote(this.manualStatus);
+        displayableManualApprovalReviewNote() {
+            return getDisplayableManualApprovalReviewNote(this.manualStatus);
         },
-        manualAdminReviewNoteLabelKey() {
-            return getManualReviewNoteLabelKey(this.manualStatus?.review_status);
+        displayableManualRejectionReviewNote() {
+            return getDisplayableManualRejectionReviewNote(this.manualStatus);
+        },
+        manualApprovalReviewNoteLabelKey() {
+            return getManualReviewNoteLabelKey('approved');
+        },
+        manualRejectionReviewNoteLabelKey() {
+            return getManualReviewNoteLabelKey('rejected');
         },
         showVerificationSuccessBanner() {
             return shouldShowIdentityVerificationSuccessBanner({

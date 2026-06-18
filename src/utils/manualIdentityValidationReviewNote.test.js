@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
     getDisplayableManualReviewNote,
+    getDisplayableManualApprovalReviewNote,
+    getDisplayableManualRejectionReviewNote,
     getManualReviewNoteLabelKey,
     shouldDisplayManualReviewNote
 } from './manualIdentityValidationReviewNote.js';
@@ -57,6 +59,24 @@ describe('manualIdentityValidationReviewNote', () => {
                 { reviewStatus: 'approved' }
             )
         ).toBe('Todo correcto');
+    });
+
+    it('exposes context-specific helpers for approval and rejection notes', () => {
+        const rejectedStatus = {
+            has_submission: true,
+            review_status: 'rejected',
+            review_note: 'Prueba'
+        };
+        const approvedStatus = {
+            has_submission: true,
+            review_status: 'approved',
+            review_note: 'Todo correcto'
+        };
+
+        expect(getDisplayableManualRejectionReviewNote(rejectedStatus)).toBe('Prueba');
+        expect(getDisplayableManualApprovalReviewNote(rejectedStatus)).toBe('');
+        expect(getDisplayableManualApprovalReviewNote(approvedStatus)).toBe('Todo correcto');
+        expect(getDisplayableManualRejectionReviewNote(approvedStatus)).toBe('');
     });
 
     it('does not display note without a submission', () => {
