@@ -15,6 +15,9 @@
         <div class="admin-nav-sidebar" :class="{ 'is-mobile-open': mobileOpen }">
             <ul class="admin-nav-list">
                 <li>
+                    <router-link :to="{ name: 'admin-dashboard' }">{{ $t('adminNavTablero') }}</router-link>
+                </li>
+                <li>
                     <router-link :to="{ name: 'admin-page' }">{{ $t('adminNavGraficos') }}</router-link>
                 </li>
                 <li>
