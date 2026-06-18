@@ -11,6 +11,12 @@ describe('Trips.vue app banner', () => {
         expect(viewSource).toContain('showAppBanner');
         expect(viewSource).toContain('v-if="showAppBanner"');
     });
+
+    it('resolves banner image URL for Capacitor bundled host', () => {
+        expect(viewSource).toContain('bannerImageSrc');
+        expect(viewSource).toContain('resolveCapacitorBundledHostUrl');
+        expect(viewSource).toContain(':src="bannerImageSrc"');
+    });
 });
 
 describe('Trips.vue ongoing trip card', () => {

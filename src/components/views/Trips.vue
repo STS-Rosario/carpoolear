@@ -7,7 +7,7 @@
                 class="banner"
                 @click.prevent="onBannerClick"
             >
-                <img alt="" :src="appConfig.banner.image" />
+                <img alt="" :src="bannerImageSrc" />
             </a>
         </template>
         <div v-show="!user && isMobile">
@@ -429,6 +429,7 @@ import {
     shouldHideDonationOnIOSCapacitor
 } from '../../services/capacitor.js';
 import { shouldShowAppBanner } from '../../utils/appBanner.js';
+import { resolveCapacitorBundledHostUrl } from '../../utils/capacitorRemoteUrl.js';
 import { splitFriendTrips } from '../../utils/splitFriendTrips.js';
 import { shouldShowSplitDonationPanel } from '../../utils/tripsSplitDonationBanner.js';
 import { readAllowPreferenceParamsFromQuery } from '../../utils/searchAdvancedFilters.js';
@@ -1033,6 +1034,13 @@ export default {
         showAppBanner() {
             const banner = this.appConfig && this.appConfig.banner;
             return shouldShowAppBanner(banner, this.user);
+        },
+        bannerImageSrc() {
+            const image =
+                this.appConfig &&
+                this.appConfig.banner &&
+                this.appConfig.banner.image;
+            return resolveCapacitorBundledHostUrl(image);
         },
         bannerHref() {
             const url =
