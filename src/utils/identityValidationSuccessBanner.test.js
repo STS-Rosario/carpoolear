@@ -7,10 +7,26 @@ describe('shouldShowIdentityVerificationSuccessBanner', () => {
         identity_validated_at: '2026-06-01 10:00:00'
     };
 
-    it('returns false when manual verification was rejected even if user still looks verified', () => {
+    it('returns true when user is verified even if manual verification was previously rejected', () => {
         expect(
             shouldShowIdentityVerificationSuccessBanner({
                 user: verifiedUser,
+                manualStatus: {
+                    has_submission: true,
+                    paid: true,
+                    submitted_at: '2026-06-02 12:00:00',
+                    review_status: 'rejected',
+                    review_note: 'Prueba'
+                },
+                resultMessage: null
+            })
+        ).toBe(true);
+    });
+
+    it('returns false when manual verification was rejected and user is not verified', () => {
+        expect(
+            shouldShowIdentityVerificationSuccessBanner({
+                user: { identity_validated: false, identity_validated_at: null },
                 manualStatus: {
                     has_submission: true,
                     paid: true,
