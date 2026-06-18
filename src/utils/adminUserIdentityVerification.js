@@ -1,4 +1,5 @@
 import { formatAdminUserPropertyValue } from './adminUserDetailProperties';
+import { isUserIdentityVerified } from './userIdentityVerification';
 
 const IDENTITY_VERIFICATION_DETAIL_KEYS = [
     {
@@ -27,16 +28,6 @@ const METHOD_LABEL_KEYS = {
     mercado_pago: 'adminIdentityValidationMethodMercadoPago',
     manual: 'adminIdentityValidationMethodManual'
 };
-
-function isUserIdentityVerified(user) {
-    if (!user) {
-        return false;
-    }
-    if (typeof user.identity_validated === 'boolean') {
-        return user.identity_validated;
-    }
-    return Number(user.identity_validated) > 0;
-}
 
 function formatIdentityValidationMethod(type, translate) {
     if (!type) {

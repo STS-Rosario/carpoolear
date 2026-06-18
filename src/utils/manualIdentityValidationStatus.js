@@ -1,12 +1,4 @@
-function isUserIdentityVerified(user) {
-    if (!user) {
-        return false;
-    }
-    if (typeof user.identity_validated === 'boolean') {
-        return user.identity_validated;
-    }
-    return Number(user.identity_validated) > 0;
-}
+import { isUserIdentityVerified } from './userIdentityVerification.js';
 
 export function isManualIdentityValidationRejected(manualStatus, user = null) {
     if (isUserIdentityVerified(user)) {

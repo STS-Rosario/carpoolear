@@ -6,8 +6,8 @@ const viewPath = path.resolve(__dirname, 'IdentityValidation.vue');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 
 describe('IdentityValidation rejected manual verification', () => {
-    it('uses shared success banner helper so rejected manual flow is not hidden', () => {
-        expect(viewSource).toContain('shouldShowIdentityVerificationSuccessBanner');
+    it('passes the current user into manual rejection choice-card helper', () => {
+        expect(viewSource).toContain('user: this.user');
     });
 
     it('shows retry prompt and choice cards when manual verification was rejected', () => {
