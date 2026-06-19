@@ -19,3 +19,21 @@ export function isManualRejectedWithChoiceCards(
     }
     return isManualIdentityValidationRejected(manualStatus, user);
 }
+
+export function canManualResubmitWithoutPayment(manualStatus) {
+    return manualStatus?.can_resubmit_without_payment === true;
+}
+
+export function getManualValidationResubmitRoute(manualStatus) {
+    if (!canManualResubmitWithoutPayment(manualStatus) || !manualStatus?.request_id) {
+        return null;
+    }
+
+    return {
+        name: 'identity_validation_manual',
+        query: {
+            request_id: manualStatus.request_id,
+            resubmit: '1'
+        }
+    };
+}

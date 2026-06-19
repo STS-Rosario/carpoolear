@@ -249,6 +249,7 @@ export default {
             qrImageUrl: null,
             qrData: null,
             pollIntervalId: null,
+            canResubmitWithoutPayment: false,
             files: {
                 front: null,
                 back: null,
@@ -280,9 +281,12 @@ export default {
             return SWITCH_TO_MERCADO_PAGO_ROUTE;
         },
         canUpload() {
-            return this.requestId && this.paymentSuccess;
+            return this.requestId && (this.paymentSuccess || this.canResubmitWithoutPayment);
         },
         alreadySubmitted() {
+            if (this.canResubmitWithoutPayment) {
+                return false;
+            }
             return this.statusSubmittedAt != null;
         },
         formattedCostDisplay() {
@@ -308,6 +312,10 @@ export default {
             const q = this.$route.query;
             this.requestId = q.request_id ? parseInt(q.request_id, 10) : null;
             this.paymentSuccess = q.payment_success === '1' || q.payment_success === 'true';
+            if (q.resubmit === '1' || q.resubmit === 'true') {
+                this.canResubmitWithoutPayment = true;
+                this.paymentSuccess = true;
+            }
         },
         fetchStatus() {
             const userApi = new UserApi();
@@ -316,6 +324,7 @@ export default {
                     const data = res.data || res;
                     this.statusPaidAt = data.paid_at || null;
                     this.statusSubmittedAt = data.submitted_at || null;
+                    this.canResubmitWithoutPayment = data.can_resubmit_without_payment === true;
                     if (data.has_submission && data.paid === false) {
                         this.unpaidPending = true;
                         if (data.request_id && !this.requestId) {
@@ -325,6 +334,11 @@ export default {
                     if (data.has_submission && data.paid === true && data.request_id && !data.submitted_at) {
                         this.requestId = data.request_id;
                         this.paymentSuccess = true;
+                    }
+                    if (data.can_resubmit_without_payment && data.request_id) {
+                        this.requestId = data.request_id;
+                        this.paymentSuccess = true;
+                        this.statusSubmittedAt = null;
                     }
                 })
                 .catch(() => {});
