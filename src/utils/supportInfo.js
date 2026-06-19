@@ -108,3 +108,50 @@ export function buildSupportInfoSnapshot(deps = {}) {
         userAgent: displayValue(userAgent, 'unknown')
     };
 }
+
+const SUPPORT_INFO_FIELD_LABELS = [
+    ['appVersion', 'App Version'],
+    ['appVersionName', 'App Version Name'],
+    ['appVersionSource', 'App Version Source'],
+    ['webBuildNumber', 'Web Build'],
+    ['platform', 'Platform'],
+    ['operatingSystem', 'Operating System'],
+    ['deviceModel', 'Device Model'],
+    ['osVersion', 'OS Version'],
+    ['deviceManufacturer', 'Manufacturer'],
+    ['isVirtual', 'Is Virtual Device'],
+    ['webViewVersion', 'WebView Version'],
+    ['deviceId', 'Device ID'],
+    ['networkOnline', 'Network'],
+    ['notificationPermission', 'Notification Permission'],
+    ['userAgent', 'User Agent']
+];
+
+export function formatSupportInfoLines(snapshot) {
+    const lines = [SUPPORT_INFO_SECTION_HEADER];
+
+    SUPPORT_INFO_FIELD_LABELS.forEach(([key, label]) => {
+        const value = snapshot[key];
+        if (value === '' || value === undefined) {
+            return;
+        }
+        lines.push(`${label}: ${value}`);
+    });
+
+    return lines;
+}
+
+export function formatSupportInfoBlock(snapshot) {
+    return formatSupportInfoLines(snapshot).join('\n');
+}
+
+export function appendSupportInfoToMessage(message, snapshot) {
+    const block = formatSupportInfoBlock(snapshot);
+    const trimmed = message == null ? '' : String(message).trim();
+
+    if (!trimmed) {
+        return block;
+    }
+
+    return `${trimmed}\n\n${block}`;
+}
