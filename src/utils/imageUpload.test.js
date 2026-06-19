@@ -115,6 +115,20 @@ describe('imageUpload', () => {
         expect(result.oversized).toEqual([{ file: tooBig, displayName: 'huge.jpg' }]);
     });
 
+    it('reads max bytes from config when selecting uploads', () => {
+        const valid = new File(['a'], 'valid.jpg', { type: 'image/jpeg' });
+        Object.defineProperty(valid, 'size', { value: 100 });
+        const tooBig = new File(['b'], 'huge.jpg', { type: 'image/jpeg' });
+        Object.defineProperty(tooBig, 'size', { value: 3 * 1024 * 1024 });
+
+        const result = selectAllowedImageUploads([valid, tooBig], {
+            config: { image_upload_max_bytes: 2 * 1024 * 1024 }
+        });
+
+        expect(result.files).toEqual([valid]);
+        expect(result.oversized).toHaveLength(1);
+    });
+
     it('builds i18n key and params for a single oversized file', () => {
         const file = new File(['x'], 'selfie.jpg', { type: 'image/jpeg' });
         const oversized = [{ file, displayName: 'Photo of yourself holding your ID' }];

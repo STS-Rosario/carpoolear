@@ -90,9 +90,21 @@ export function getImageUploadMaxMb(config) {
     return getImageUploadMaxBytes(config) / (1024 * 1024);
 }
 
+function resolveImageUploadMaxBytes(options = {}) {
+    if (options.maxBytes != null && Number(options.maxBytes) > 0) {
+        return Number(options.maxBytes);
+    }
+
+    return getImageUploadMaxBytes(options.config);
+}
+
+function isOversizedImageUpload(file, maxBytes) {
+    return file && typeof file.size === 'number' && file.size > maxBytes;
+}
+
 export function findOversizedImageUploads(files, maxBytes, getDisplayName) {
     return Array.from(files || [])
-        .filter((file) => file && typeof file.size === 'number' && file.size > maxBytes)
+        .filter((file) => isOversizedImageUpload(file, maxBytes))
         .map((file, index) => ({
             file,
             displayName: getDisplayName ? getDisplayName(file, index) : (file.name || '')
@@ -100,7 +112,7 @@ export function findOversizedImageUploads(files, maxBytes, getDisplayName) {
 }
 
 export function selectAllowedImageUploads(files, options = {}) {
-    const maxBytes = options.maxBytes ?? DEFAULT_IMAGE_UPLOAD_MAX_BYTES;
+    const maxBytes = resolveImageUploadMaxBytes(options);
     const allowed = filterAllowedImageUploads(files, options.limit);
     const oversized = findOversizedImageUploads(allowed, maxBytes, options.getDisplayName);
     const oversizedFiles = new Set(oversized.map((entry) => entry.file));
