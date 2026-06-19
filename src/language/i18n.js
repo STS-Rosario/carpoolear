@@ -1055,16 +1055,12 @@ const messages = {
             'Podrán calificarse aunque el viaje se cancele, te bajen o te bajes del viaje.',
         carpoodatosNoPidasAsiento:
             'No pidas asiento si no tenés seguridad de que vas a viajar, muchas personas también están buscando el mismo viaje que vos. Si ocurriera algo que te impida viajar, avisale lo más rápido que puedas a la persona con que ibas a compartir el viaje.',
-        carpoodatosContactoEmail:
-            'Cualquier duda escribinos a {email} o nuestras redes sociales.',
         noVolverAMostrarMensaje: 'No volver a mostrar mensaje',
         solicitarAsiento: 'Solicitar asiento',
         carpoodatosAntesConfirmar:
             'Antes de confirmar el viaje y para evitar sorpresas, tené en cuenta de coordinar y acordar el punto de encuentro, el horario, la disponibilidad de espacio para equipaje, la cantidad total de pasajeros y la contribución por los gastos de combustible y peaje.',
         carpoodatosContribucionMaxima:
             'La contribución máxima que puede pedir un conductor es igual a gastos de combustible + peaje dividido la cantidad de personas viajando en el auto. Durante la coordinación previa al viaje, cualquier persona puede pedir hacer la división con tickets de combustible y peaje en mano.',
-        carpoodatosContactoRedes:
-            'Cualquier duda escribinos a {email} o por mensaje privado a nuestras redes sociales (facebook,instagram y tweeter).',
         matcheosDelViaje: 'Matcheos del viaje',
         viajaEl: 'Viaja el',
         mensajeParaUsuariosSeleccionados:
@@ -2375,8 +2371,6 @@ const messages = {
             'Podrán calificarse aunque el viaje se cancele, te bajen o te bajes del viaje.',
         carpoodatosNoPidasAsiento:
             'No pidas asiento si no tenés seguridad de que vas a viajar, muchas personas también están buscando el mismo viaje que vos. Si ocurriera algo que te impida viajar, avisale lo más rápido que puedas a la persona con que ibas a compartir el viaje.',
-        carpoodatosContactoEmail:
-            'Cualquier duda escribinos a {email} o nuestras redes sociales.',
         noVolverAMostrarMensaje: 'No volver a mostrar mensaje',
         enviarMensaje: 'Enviar mensaje',
         solicitarAsiento: 'Solicitar asiento',
@@ -2384,8 +2378,6 @@ const messages = {
             'Antes de confirmar el viaje y para evitar sorpresas, tené en cuenta de coordinar y acordar el punto de encuentro, el horario, la disponibilidad de espacio para equipaje, la cantidad total de pasajeros y la contribución por los gastos de combustible y peaje.',
         carpoodatosContribucionMaxima:
             'La contribución máxima que puede pedir un conductor es igual a gastos de combustible + peaje dividido la cantidad de personas viajando en el auto. Durante la coordinación previa al viaje, cualquier persona puede pedir hacer la división con tickets de combustible y peaje en mano.',
-        carpoodatosContactoRedes:
-            'Cualquier duda escribinos a {email} o por mensaje privado a nuestras redes sociales (facebook,instagram y tweeter).',
         matcheosDelViaje: 'Matcheos del viaje',
         viajaEl: 'Viaja el',
         mensajeParaUsuariosSeleccionados:
@@ -3878,16 +3870,12 @@ const messages = {
             'You can rate each other even if the trip is canceled, you are removed, or you leave the trip.',
         carpoodatosNoPidasAsiento:
             "Don't request a seat if you're not sure you're going to travel, many other people are also looking for the same trip as you. If something happens that prevents you from traveling, let the person you were going to share the trip with know as soon as possible.",
-        carpoodatosContactoEmail:
-            'Any questions, write to us at {email} or our social networks.',
         noVolverAMostrarMensaje: 'Do not show message again',
         solicitarAsiento: 'Request seat',
         carpoodatosAntesConfirmar:
             'Before confirming the trip and to avoid surprises, make sure to coordinate and agree on the meeting point, time, luggage space availability, total number of passengers, and contribution for fuel and toll expenses.',
         carpoodatosContribucionMaxima:
             'The maximum contribution a driver can request equals fuel costs + tolls divided by the number of people traveling in the car. During pre-trip coordination, anyone can request to do the division with fuel and toll receipts in hand.',
-        carpoodatosContactoRedes:
-            'Any questions, write to us at {email} or by private message to our social networks (Facebook, Instagram, and Twitter).',
         matcheosDelViaje: 'Trip matches',
         viajaEl: 'Travels on',
         mensajeParaUsuariosSeleccionados: 'Message for selected users',
