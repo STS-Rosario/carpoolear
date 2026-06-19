@@ -668,6 +668,8 @@ const messages = {
         identityValidationRejectionNoticeContactLead:
             'Podés intentar nuevamente o escribinos desde la ',
         identityValidationRejectionNoticeContactTail: '.',
+        identityValidationRejectionResubmitDocumentsCta:
+            'Click acá para subir los documentos nuevamente',
         identityValidationRejectionSupportWarningNameMismatch:
             'Parece que no coincide tu nombre, creá un ticket de Mesa de Ayuda así te ayudamos a cambiarlo y podés intentar nuevamente.',
         identityValidationRejectionSupportWarningNameMismatchLead:
@@ -2144,6 +2146,8 @@ const messages = {
         identityValidationRejectionNoticeContactLead:
             'Podés intentar nuevamente o escribinos desde la ',
         identityValidationRejectionNoticeContactTail: '.',
+        identityValidationRejectionResubmitDocumentsCta:
+            'Click acá para subir los documentos nuevamente',
         identityValidationRejectionSupportWarningNameMismatch:
             'Parece que no coincide tu nombre, creá un ticket de Mesa de Ayuda así te ayudamos a cambiarlo y podés intentar nuevamente.',
         identityValidationRejectionSupportWarningNameMismatchLead:
@@ -3454,6 +3458,8 @@ const messages = {
         identityValidationRejectionNoticeContactLead:
             'You can try again or reach out through the ',
         identityValidationRejectionNoticeContactTail: '.',
+        identityValidationRejectionResubmitDocumentsCta:
+            'Click here to upload your documents again',
         identityValidationRejectionSupportWarningNameMismatch:
             "It looks like your name doesn't match. Create a Help Desk ticket so we can help you update it and try again.",
         identityValidationRejectionSupportWarningNameMismatchLead:

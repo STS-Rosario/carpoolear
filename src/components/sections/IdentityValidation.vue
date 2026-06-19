@@ -248,7 +248,19 @@
                         <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                         {{ $t(manualRejectionSupportWarningKey) }}
                     </p>
-                    <p class="identity-validation-rejection-notice__emphasis">
+                    <p
+                        v-if="canManualResubmitWithoutPayment"
+                        class="identity-validation-rejection-notice__emphasis"
+                    >
+                        <router-link
+                            class="identity-validation-rejection-notice__resubmit-link"
+                            :to="manualValidationResubmitRoute"
+                        >{{ $t('identityValidationRejectionResubmitDocumentsCta') }}</router-link>
+                    </p>
+                    <p
+                        v-else
+                        class="identity-validation-rejection-notice__emphasis"
+                    >
                         <strong class="identity-validation-rejection-notice__emphasis-strong">{{ $t('identityValidationRejectionNoticeContactLead') }}</strong><router-link class="identity-validation-rejection-notice__mesa-link" :to="{ name: 'tickets' }">{{ $t('mesaAyuda') }}</router-link>{{ $t('identityValidationRejectionNoticeContactTail') }}
                     </p>
                 </div>
@@ -419,7 +431,7 @@ import {
     getManualReviewNoteLabelKey
 } from '../../utils/manualIdentityValidationReviewNote';
 import { shouldShowIdentityVerificationSuccessBanner } from '../../utils/identityValidationSuccessBanner';
-import { isManualRejectedWithChoiceCards } from '../../utils/manualIdentityValidationStatus';
+import { isManualRejectedWithChoiceCards, canManualResubmitWithoutPayment, getManualValidationResubmitRoute, getManualValidationRestartRoute } from '../../utils/manualIdentityValidationStatus';
 import IdentityValidationAdminReviewNote from '../IdentityValidationAdminReviewNote.vue';
 
 const EMPTY_WARNING_PARTS = { leadKey: null, tailKey: null };
@@ -438,7 +450,10 @@ export default {
                 paid_at: null,
                 review_status: null,
                 submitted_at: null,
-                review_note: null
+                review_note: null,
+                submission_count: null,
+                max_submissions: null,
+                can_resubmit_without_payment: false
             },
             loadingOAuth: false,
             loadingPreference: false
@@ -524,6 +539,12 @@ export default {
                 user: this.user
             });
         },
+        canManualResubmitWithoutPayment() {
+            return canManualResubmitWithoutPayment(this.manualStatus);
+        },
+        manualValidationResubmitRoute() {
+            return getManualValidationResubmitRoute(this.manualStatus);
+        },
         manualRejectionSupportWarningKey() {
             if (!this.showManualRejectedWithChoiceCards) return null;
             return getManualRejectionSupportWarningKey(this.manualStatus.reject_reason);
@@ -589,7 +610,10 @@ export default {
                 paid_at: null,
                 review_status: null,
                 submitted_at: null,
-                review_note: null
+                review_note: null,
+                submission_count: null,
+                max_submissions: null,
+                can_resubmit_without_payment: false
             };
             const userApi = new UserApi();
             return userApi.getManualIdentityValidationStatus()
@@ -650,6 +674,11 @@ export default {
             this.$router.push(PROFILE_EDIT_ROUTE);
         },
         goToManualValidation() {
+            const restartRoute = getManualValidationRestartRoute(this.manualStatus);
+            if (restartRoute && !this.isIdentityValidationBlockedByMissingDni) {
+                this.$router.push(restartRoute);
+                return;
+            }
             this.$router.push(getManualIdentityValidationRoute(this.user));
         },
         onPendingManualSwitchClick() {
