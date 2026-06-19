@@ -30,6 +30,29 @@ describe('Trip.vue passenger message carpoodatos flow', () => {
     });
 });
 
+describe('Trip.vue carpoodatos mesa de ayuda contact', () => {
+    const mesaAyudaLinkPattern =
+        /<span>\{\{\s*\$t\('mesaAyudaContactoLead'\)\s*\}\}<\/span>\s*<router-link\s+:to="\{\s*name:\s*'tickets'\s*\}">\{\{\s*\$t\('mesaAyuda'\)\s*\}\}<\/router-link>\{\{\s*\$t\('mesaAyudaContactoTail'\)\s*\}\}/;
+
+    it('links the request-seat carpoodatos modal to mesa de ayuda', () => {
+        const requestSeatModal = viewSource.match(
+            /showModalRequestSeat[\s\S]*?showModalPricing/
+        )[0];
+
+        expect(requestSeatModal).toMatch(mesaAyudaLinkPattern);
+        expect(requestSeatModal).not.toContain('carpoodatosContactoEmail');
+    });
+
+    it('links the pricing carpoodatos modal to mesa de ayuda', () => {
+        const pricingModal = viewSource.match(
+            /showModalPricing[\s\S]*?matcheosDelViaje/
+        )[0];
+
+        expect(pricingModal).toMatch(mesaAyudaLinkPattern);
+        expect(pricingModal).not.toContain('carpoodatosContactoRedes');
+    });
+});
+
 describe('Trip.vue driver seat requests warning', () => {
     it('shows a warning link to my-trips when the driver has pending seat requests', () => {
         expect(viewSource).toContain('shouldShowTripSeatRequestsWarning');

@@ -117,7 +117,8 @@
                                             {{ $t('carpoodatosNoPidasAsiento') }}
                                         </p>
                                         <p>
-                                            {{ $t('carpoodatosContactoEmail', { email: config.admin_email }) }}
+                                            <span>{{ $t('mesaAyudaContactoLead') }}</span>
+                                            <router-link :to="{ name: 'tickets' }">{{ $t('mesaAyuda') }}</router-link>{{ $t('mesaAyudaContactoTail') }}
                                         </p>
                                     </div>
                                     <div
@@ -191,7 +192,8 @@
                                             {{ $t('carpoodatosContribucionMaxima') }}
                                         </p>
                                         <p>
-                                            {{ $t('carpoodatosContactoRedes', { email: config.admin_email }) }}
+                                            <span>{{ $t('mesaAyudaContactoLead') }}</span>
+                                            <router-link :to="{ name: 'tickets' }">{{ $t('mesaAyuda') }}</router-link>{{ $t('mesaAyudaContactoTail') }}
                                         </p>
                                     </div>
                                     <div
