@@ -18,4 +18,13 @@ describe('ManualIdentityValidation resubmit upload flow', () => {
         expect(viewSource).toContain('canUpload()');
         expect(viewSource).toContain('canResubmitWithoutPayment');
     });
+
+    it('uses shouldShowManualValidationAlreadySubmitted for submitted-state panel', () => {
+        expect(viewSource).toContain('shouldShowManualValidationAlreadySubmitted');
+    });
+
+    it('supports restart query param to begin payment again after exhausted rejections', () => {
+        expect(viewSource).toContain('forcePaymentRestart');
+        expect(viewSource).toContain("q.restart === '1'");
+    });
 });

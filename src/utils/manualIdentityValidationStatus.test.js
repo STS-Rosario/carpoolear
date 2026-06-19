@@ -3,7 +3,9 @@ import {
     isManualIdentityValidationRejected,
     isManualRejectedWithChoiceCards,
     canManualResubmitWithoutPayment,
-    getManualValidationResubmitRoute
+    getManualValidationResubmitRoute,
+    shouldShowManualValidationAlreadySubmitted,
+    getManualValidationRestartRoute
 } from './manualIdentityValidationStatus';
 
 describe('isManualIdentityValidationRejected', () => {
@@ -119,6 +121,65 @@ describe('getManualValidationResubmitRoute', () => {
             getManualValidationResubmitRoute({
                 can_resubmit_without_payment: false,
                 request_id: 42
+            })
+        ).toBeNull();
+    });
+});
+
+describe('shouldShowManualValidationAlreadySubmitted', () => {
+    it('returns true when docs are pending admin review', () => {
+        expect(
+            shouldShowManualValidationAlreadySubmitted({
+                submitted_at: '2026-06-19 09:42:00',
+                review_status: 'pending',
+                can_resubmit_without_payment: false
+            })
+        ).toBe(true);
+    });
+
+    it('returns false when rejected and free resubmit is still available', () => {
+        expect(
+            shouldShowManualValidationAlreadySubmitted({
+                submitted_at: '2026-06-19 09:42:00',
+                review_status: 'rejected',
+                can_resubmit_without_payment: true
+            })
+        ).toBe(false);
+    });
+
+    it('returns false when rejected and submission attempts are exhausted', () => {
+        expect(
+            shouldShowManualValidationAlreadySubmitted({
+                submitted_at: '2026-06-19 09:42:00',
+                review_status: 'rejected',
+                can_resubmit_without_payment: false,
+                submission_count: 3,
+                max_submissions: 3
+            })
+        ).toBe(false);
+    });
+});
+
+describe('getManualValidationRestartRoute', () => {
+    it('returns manual route with restart query when payment is required after rejection', () => {
+        expect(
+            getManualValidationRestartRoute({
+                submitted_at: '2026-06-19 09:42:00',
+                review_status: 'rejected',
+                can_resubmit_without_payment: false
+            })
+        ).toEqual({
+            name: 'identity_validation_manual',
+            query: { restart: '1' }
+        });
+    });
+
+    it('returns null when free resubmit is still available', () => {
+        expect(
+            getManualValidationRestartRoute({
+                submitted_at: '2026-06-19 09:42:00',
+                review_status: 'rejected',
+                can_resubmit_without_payment: true
             })
         ).toBeNull();
     });
