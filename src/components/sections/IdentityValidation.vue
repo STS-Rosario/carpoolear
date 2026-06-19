@@ -431,7 +431,7 @@ import {
     getManualReviewNoteLabelKey
 } from '../../utils/manualIdentityValidationReviewNote';
 import { shouldShowIdentityVerificationSuccessBanner } from '../../utils/identityValidationSuccessBanner';
-import { isManualRejectedWithChoiceCards, canManualResubmitWithoutPayment, getManualValidationResubmitRoute } from '../../utils/manualIdentityValidationStatus';
+import { isManualRejectedWithChoiceCards, canManualResubmitWithoutPayment, getManualValidationResubmitRoute, getManualValidationRestartRoute } from '../../utils/manualIdentityValidationStatus';
 import IdentityValidationAdminReviewNote from '../IdentityValidationAdminReviewNote.vue';
 
 const EMPTY_WARNING_PARTS = { leadKey: null, tailKey: null };
@@ -674,6 +674,11 @@ export default {
             this.$router.push(PROFILE_EDIT_ROUTE);
         },
         goToManualValidation() {
+            const restartRoute = getManualValidationRestartRoute(this.manualStatus);
+            if (restartRoute && !this.isIdentityValidationBlockedByMissingDni) {
+                this.$router.push(restartRoute);
+                return;
+            }
             this.$router.push(getManualIdentityValidationRoute(this.user));
         },
         onPendingManualSwitchClick() {

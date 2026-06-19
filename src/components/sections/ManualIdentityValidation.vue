@@ -6,7 +6,7 @@
         </div>
         <template v-else>
             <div
-                v-if="(statusPaidAt || statusSubmittedAt) && !(canUpload && !alreadySubmitted)"
+                v-if="showStatusDatesPanel"
                 class="panel panel-default status-dates-panel"
             >
                 <div class="panel-body">
@@ -230,6 +230,10 @@ import {
     getImageUploadMaxMb
 } from '../../utils/imageUpload';
 import { applyImageUploadSelection } from '../../utils/imageUploadSelection';
+import {
+    shouldShowManualValidationAlreadySubmitted,
+    shouldShowManualValidationPayAgain
+} from '../../utils/manualIdentityValidationStatus';
 
 export default {
     name: 'ManualIdentityValidation',
@@ -241,6 +245,8 @@ export default {
             unpaidPending: false,
             statusPaidAt: null,
             statusSubmittedAt: null,
+            reviewStatus: null,
+            forcePaymentRestart: false,
             loadingPreference: false,
             loadingQr: false,
             submitting: false,
@@ -283,11 +289,27 @@ export default {
         canUpload() {
             return this.requestId && (this.paymentSuccess || this.canResubmitWithoutPayment);
         },
+        manualStatusSnapshot() {
+            return {
+                submitted_at: this.statusSubmittedAt,
+                review_status: this.reviewStatus,
+                can_resubmit_without_payment: this.canResubmitWithoutPayment
+            };
+        },
         alreadySubmitted() {
-            if (this.canResubmitWithoutPayment) {
+            if (this.forcePaymentRestart) {
                 return false;
             }
-            return this.statusSubmittedAt != null;
+            return shouldShowManualValidationAlreadySubmitted(this.manualStatusSnapshot);
+        },
+        showStatusDatesPanel() {
+            if (this.forcePaymentRestart) {
+                return false;
+            }
+            if (shouldShowManualValidationPayAgain(this.manualStatusSnapshot)) {
+                return false;
+            }
+            return (this.statusPaidAt || this.statusSubmittedAt) && !(this.canUpload && !this.alreadySubmitted);
         },
         formattedCostDisplay() {
             if (this.costCents <= 0) return '—';
@@ -316,6 +338,12 @@ export default {
                 this.canResubmitWithoutPayment = true;
                 this.paymentSuccess = true;
             }
+            if (q.restart === '1' || q.restart === 'true') {
+                this.forcePaymentRestart = true;
+                this.requestId = null;
+                this.paymentSuccess = false;
+                this.canResubmitWithoutPayment = false;
+            }
         },
         fetchStatus() {
             const userApi = new UserApi();
@@ -324,7 +352,17 @@ export default {
                     const data = res.data || res;
                     this.statusPaidAt = data.paid_at || null;
                     this.statusSubmittedAt = data.submitted_at || null;
+                    this.reviewStatus = data.review_status || null;
                     this.canResubmitWithoutPayment = data.can_resubmit_without_payment === true;
+                    if (this.forcePaymentRestart && shouldShowManualValidationPayAgain(data)) {
+                        this.requestId = null;
+                        this.paymentSuccess = false;
+                        this.unpaidPending = data.has_submission && data.paid === false;
+                        if (this.unpaidPending && data.request_id) {
+                            this.requestId = data.request_id;
+                        }
+                        return;
+                    }
                     if (data.has_submission && data.paid === false) {
                         this.unpaidPending = true;
                         if (data.request_id && !this.requestId) {
