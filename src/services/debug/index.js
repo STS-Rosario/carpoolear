@@ -2,45 +2,53 @@
 
 import cache from '../cache';
 import { createDebugLogger } from './debugLogger.js';
+import {
+    buildSupportInfoSnapshot,
+    fetchSupportInfoSnapshot
+} from '../../utils/supportInfo.js';
 
 let defaultInstance = null;
 
-async function getDeviceInfo() {
-    let device = (window && window.device) || { platform: 'unknown', model: 'unknown', osVersion: 'unknown' };
-    let networkOnline = (typeof navigator !== 'undefined' && navigator.onLine !== undefined) ? navigator.onLine : true;
-    try {
-        const { useCordovaStore } = await import('../../stores/cordova');
-        const store = useCordovaStore();
-        if (store && store.device) {
-            device = store.device;
-        }
-        if (store && store.networkState !== undefined) {
-            networkOnline = store.networkState;
-        }
-    } catch (e) {
-        // Store not ready yet, use window/navigator fallbacks
-    }
-    return {
-        appVersion: (window && window.appVersion) || 'unknown',
-        device,
+function getSupportInfoSnapshot() {
+    return buildSupportInfoSnapshot({
+        windowAppVersion: typeof window !== 'undefined' && window.appVersion
+            ? window.appVersion
+            : null,
+        device: typeof window !== 'undefined' && window.device ? window.device : null,
         notificationPermission: typeof window !== 'undefined' && window.Notification
             ? window.Notification.permission
-            : 'unknown',
-        networkOnline
-    };
+            : null,
+        networkOnline: typeof navigator !== 'undefined' && navigator.onLine !== undefined
+            ? navigator.onLine
+            : null,
+        userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : null
+    });
+}
+
+async function refreshSupportInfoSnapshot(instance) {
+    if (!instance) {
+        return;
+    }
+
+    try {
+        const snapshot = await fetchSupportInfoSnapshot();
+        instance.setSupportInfoSnapshot(snapshot);
+    } catch (err) {
+        instance.refreshSupportInfoSnapshot();
+    }
 }
 
 async function init() {
     defaultInstance = createDebugLogger({
         storage: cache,
-        getDeviceInfo
+        getSupportInfoSnapshot
     });
     await defaultInstance.init();
+    await refreshSupportInfoSnapshot(defaultInstance);
 }
 
 function getInstance() {
     return defaultInstance;
 }
 
-export { init, getInstance };
-export { createDebugLogger } from './debugLogger.js';
+export { init, getInstance, refreshSupportInfoSnapshot };

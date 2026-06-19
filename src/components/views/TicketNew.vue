@@ -52,6 +52,10 @@ import {
     IMAGE_UPLOAD_ACCEPT
 } from '../../utils/imageUpload';
 import { applyImageUploadSelection } from '../../utils/imageUploadSelection';
+import {
+    appendSupportInfoToMessage,
+    fetchSupportInfoSnapshot
+} from '../../utils/supportInfo';
 
 export default {
     name: 'ticket-new',
@@ -89,12 +93,14 @@ export default {
                 this.attachments = files;
             }
         },
-        createTicket() {
+        async createTicket() {
             const markdown = this.$refs.createEditor.invoke('getMarkdown');
+            const snapshot = await fetchSupportInfoSnapshot();
+            const messageMarkdown = appendSupportInfoToMessage(markdown, snapshot);
             return this.createTicketAction({
                 type: this.form.type,
                 subject: this.form.subject,
-                message_markdown: markdown,
+                message_markdown: messageMarkdown,
                 attachments: this.attachments
             }).then((ticket) => {
                 this.$router.push({ name: 'ticket-detail', params: { id: ticket.id } });

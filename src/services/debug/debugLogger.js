@@ -1,5 +1,10 @@
 /* jshint esversion: 6 */
 
+import {
+    buildSupportInfoSnapshot,
+    formatSupportInfoBlock
+} from '../../utils/supportInfo.js';
+
 const STORAGE_KEY = 'DEBUG_MODE_ENABLED';
 const LOG_LEVELS = ['log', 'info', 'warn', 'error', 'debug'];
 
@@ -22,14 +27,21 @@ function createDebugLogger(options = {}) {
         getItem: () => Promise.resolve(null),
         setItem: () => Promise.resolve()
     };
-    const getDeviceInfo = options.getDeviceInfo || function () {
-        return {
-            appVersion: (typeof window !== 'undefined' && window.appVersion) || 'unknown',
-            device: (typeof window !== 'undefined' && window.device) || { platform: 'unknown', model: 'unknown', osVersion: 'unknown' },
-            notificationPermission: typeof window !== 'undefined' && window.Notification ? window.Notification.permission : 'unknown',
-            networkOnline: (typeof navigator !== 'undefined' && navigator.onLine !== undefined) ? navigator.onLine : true
-        };
+    const getSupportInfoSnapshot = options.getSupportInfoSnapshot || function () {
+        return buildSupportInfoSnapshot({
+            windowAppVersion: (typeof window !== 'undefined' && window.appVersion) || null,
+            device: (typeof window !== 'undefined' && window.device) || null,
+            notificationPermission: typeof window !== 'undefined' && window.Notification
+                ? window.Notification.permission
+                : null,
+            networkOnline: (typeof navigator !== 'undefined' && navigator.onLine !== undefined)
+                ? navigator.onLine
+                : null,
+            userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : null
+        });
     };
+
+    let supportInfoSnapshot = getSupportInfoSnapshot();
 
     let logBuffer = [];
     let enabled = false;
@@ -75,15 +87,19 @@ function createDebugLogger(options = {}) {
         logBuffer = [];
     }
 
+    function setSupportInfoSnapshot(snapshot) {
+        supportInfoSnapshot = snapshot;
+    }
+
+    function refreshSupportInfoSnapshot() {
+        supportInfoSnapshot = getSupportInfoSnapshot();
+    }
+
     function getDebugInfo() {
-        const info = getDeviceInfo();
         const lines = [];
 
         lines.push('=== Carpoolear Debug Info ===');
-        lines.push(`App Version: ${info.appVersion}`);
-        lines.push(`Device: ${JSON.stringify(info.device)}`);
-        lines.push(`Notification Permission: ${info.notificationPermission}`);
-        lines.push(`Network: ${info.networkOnline ? 'online' : 'offline'}`);
+        lines.push(formatSupportInfoBlock(supportInfoSnapshot));
         lines.push('');
         lines.push('=== Console Logs ===');
 
@@ -128,6 +144,8 @@ function createDebugLogger(options = {}) {
         init,
         clearLogs,
         getDebugInfo,
+        setSupportInfoSnapshot,
+        refreshSupportInfoSnapshot,
         isEnabled,
         isEnabledAsync,
         setEnabled
@@ -143,11 +161,11 @@ function getDefaultInstance() {
     return defaultInstance;
 }
 
-function init(cache, getDeviceInfo) {
+function init(cache, getSupportInfoSnapshot) {
     if (!defaultInstance) {
         defaultInstance = createDebugLogger({
             storage: cache,
-            getDeviceInfo
+            getSupportInfoSnapshot
         });
     }
     return defaultInstance;

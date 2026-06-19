@@ -12,4 +12,10 @@ describe('TicketNew view', () => {
         expect(source).toContain('USER_TICKET_TYPE_OPTIONS');
         expect(source).toContain('USER_TICKET_TYPE_VALUES');
     });
+
+    it('appends support info to ticket messages', () => {
+        expect(source).toContain("from '../../utils/supportInfo'");
+        expect(source).toContain('appendSupportInfoToMessage');
+        expect(source).toContain('fetchSupportInfoSnapshot');
+    });
 });
