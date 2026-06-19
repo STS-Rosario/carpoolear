@@ -21,10 +21,13 @@ export function isManualRejectedWithChoiceCards(
 }
 
 export function canManualResubmitWithoutPayment(manualStatus) {
+    /* eslint-disable camelcase -- manual status API uses snake_case */
     return manualStatus?.can_resubmit_without_payment === true;
+    /* eslint-enable camelcase */
 }
 
 export function getManualValidationResubmitRoute(manualStatus) {
+    /* eslint-disable camelcase -- manual status API uses snake_case */
     if (!canManualResubmitWithoutPayment(manualStatus) || !manualStatus?.request_id) {
         return null;
     }
@@ -36,4 +39,5 @@ export function getManualValidationResubmitRoute(manualStatus) {
             resubmit: '1'
         }
     };
+    /* eslint-enable camelcase */
 }
