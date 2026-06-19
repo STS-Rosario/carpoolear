@@ -38,7 +38,7 @@
 <script>
 /* jshint esversion: 6 */
 
-import { getInstance, init as initDebugLogger } from '../../services/debug';
+import { getInstance, init as initDebugLogger, refreshSupportInfoSnapshot } from '../../services/debug';
 
 export default {
     name: 'Debug',
@@ -60,16 +60,21 @@ export default {
         this.refreshState();
     },
     methods: {
-        refreshState() {
+        async refreshState() {
             let instance = getInstance();
             if (!instance) {
-                initDebugLogger().then(() => {
-                    this.refreshState();
-                }).catch((err) => {
+                try {
+                    await initDebugLogger();
+                } catch (err) {
                     console.error('Debug init failed:', err);
-                });
+                    return;
+                }
+                instance = getInstance();
+            }
+            if (!instance) {
                 return;
             }
+            await refreshSupportInfoSnapshot(instance);
             this.debugEnabled = instance.isEnabled();
             this.debugInfo = instance.getDebugInfo();
         },
@@ -83,6 +88,7 @@ export default {
             try {
                 await instance.setEnabled(!this.debugEnabled);
                 this.debugEnabled = instance.isEnabled();
+                await refreshSupportInfoSnapshot(instance);
                 this.debugInfo = instance.getDebugInfo();
             } catch (err) {
                 console.error('Toggle debug mode failed:', err);

@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
     appendSupportInfoToMessage,
     buildSupportInfoSnapshot,
+    fetchSupportInfoSnapshot,
     formatSupportInfoBlock,
     SUPPORT_INFO_SECTION_HEADER
 } from './supportInfo.js';
@@ -109,5 +110,49 @@ describe('appendSupportInfoToMessage', () => {
         expect(result.startsWith('Need help with login')).toBe(true);
         expect(result).toContain(SUPPORT_INFO_SECTION_HEADER);
         expect(result).toContain('Web Build: 120');
+    });
+});
+
+describe('fetchSupportInfoSnapshot', () => {
+    it('collects data from injected stores and globals', async () => {
+        const snapshot = await fetchSupportInfoSnapshot({
+            importCordovaStore: async () => ({
+                useCordovaStore: () => ({
+                    device: { platform: 'ios', model: 'iPhone', version: '17.4' },
+                    deviceId: 'device-uuid',
+                    networkState: false
+                })
+            }),
+            importRootStore: async () => ({
+                useRootStore: () => ({
+                    appVersionInfo: {
+                        version: '3.2.9',
+                        versionSource: 'real',
+                        platform: 'ios'
+                    }
+                })
+            }),
+            importCapacitorCore: async () => ({
+                Capacitor: {
+                    getPlatform: () => 'ios',
+                    isNativePlatform: () => true
+                }
+            }),
+            windowRef: {
+                appVersion: '3.2.9',
+                Notification: { permission: 'granted' }
+            },
+            navigatorRef: {
+                userAgent: 'TestAgent/1.0',
+                onLine: true
+            }
+        });
+
+        expect(snapshot.appVersion).toBe('3.2.9');
+        expect(snapshot.platform).toBe('ios');
+        expect(snapshot.deviceModel).toBe('iPhone');
+        expect(snapshot.deviceId).toBe('device-uuid');
+        expect(snapshot.networkOnline).toBe('offline');
+        expect(snapshot.notificationPermission).toBe('granted');
     });
 });

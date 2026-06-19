@@ -155,3 +155,72 @@ export function appendSupportInfoToMessage(message, snapshot) {
 
     return `${trimmed}\n\n${block}`;
 }
+
+export async function fetchSupportInfoSnapshot(deps = {}) {
+    const {
+        importCordovaStore = () => import('../stores/cordova.js'),
+        importRootStore = () => import('../stores/root.js'),
+        importCapacitorCore = () => import('@capacitor/core'),
+        windowRef = typeof window !== 'undefined' ? window : null,
+        navigatorRef = typeof navigator !== 'undefined' ? navigator : null
+    } = deps;
+
+    let appVersionInfo = null;
+    let device = windowRef && windowRef.device ? windowRef.device : null;
+    let deviceId = null;
+    let networkOnline = navigatorRef && navigatorRef.onLine !== undefined
+        ? navigatorRef.onLine
+        : null;
+    let capacitorPlatform = 'unknown';
+    let isNativePlatform = false;
+
+    try {
+        const { Capacitor } = await importCapacitorCore();
+        capacitorPlatform = Capacitor.getPlatform();
+        isNativePlatform = Capacitor.isNativePlatform();
+    } catch (e) {
+        // Capacitor unavailable in test or web-only contexts
+    }
+
+    try {
+        const { useRootStore } = await importRootStore();
+        const rootStore = useRootStore();
+        if (rootStore && rootStore.appVersionInfo) {
+            appVersionInfo = rootStore.appVersionInfo;
+        }
+    } catch (e) {
+        // Store not ready yet
+    }
+
+    try {
+        const { useCordovaStore } = await importCordovaStore();
+        const store = useCordovaStore();
+        if (store) {
+            if (store.device) {
+                device = store.device;
+            }
+            if (store.deviceId) {
+                deviceId = store.deviceId;
+            }
+            if (store.networkState !== undefined) {
+                networkOnline = store.networkState;
+            }
+        }
+    } catch (e) {
+        // Store not ready yet
+    }
+
+    return buildSupportInfoSnapshot({
+        appVersionInfo,
+        windowAppVersion: windowRef && windowRef.appVersion ? windowRef.appVersion : null,
+        capacitorPlatform,
+        isNativePlatform,
+        device,
+        deviceId,
+        networkOnline,
+        notificationPermission: windowRef && windowRef.Notification
+            ? windowRef.Notification.permission
+            : null,
+        userAgent: navigatorRef ? navigatorRef.userAgent : null
+    });
+}
