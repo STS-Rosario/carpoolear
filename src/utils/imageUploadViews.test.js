@@ -24,8 +24,7 @@ describe('image upload views', () => {
     it('Uploadfile blocks oversized profile photos before emitting change', () => {
         const source = fs.readFileSync(uploadfilePath, 'utf8');
 
-        expect(source).toContain('getImageUploadMaxBytes');
-        expect(source).toContain('getDataUrlByteSize');
-        expect(source).toContain('getImageUploadSizeErrorKey');
+        expect(source).toContain('rejectOversizedDataUrl');
+        expect(source).toContain('rejectOversizedFile');
     });
 });
