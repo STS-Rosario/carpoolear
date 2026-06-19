@@ -4,10 +4,15 @@
 
 <script>
 import { Capacitor } from '@capacitor/core';
+import { useAuthStore } from '../stores/auth';
 import {
     IMAGE_UPLOAD_ACCEPT,
     normalizeCapacitorImageFormat
 } from '../utils/imageUpload';
+import {
+    rejectOversizedDataUrl,
+    rejectOversizedFile
+} from '../utils/imageUploadSelection';
 
 export default {
     name: 'uploadfile',
@@ -46,6 +51,14 @@ export default {
                 if (image && image.base64String) {
                     // Format: data:image/jpeg;base64,{base64String}
                     const imageData = `data:image/${normalizeCapacitorImageFormat(image.format)};base64,${image.base64String}`;
+                    if (rejectOversizedDataUrl(
+                        this,
+                        imageData,
+                        this.$t('imageUploadProfilePhoto'),
+                        useAuthStore().appConfig
+                    )) {
+                        return true;
+                    }
                     const data = {};
                     data[this.name] = imageData;
                     this.$emit('change', data);
@@ -82,6 +95,15 @@ export default {
         },
 
         createImage(file) {
+            if (rejectOversizedFile(
+                this,
+                file,
+                file.name || this.$t('imageUploadProfilePhoto'),
+                useAuthStore().appConfig,
+                { target: this.$refs.input }
+            )) {
+                return;
+            }
             /* eslint-disable no-undef */
             let reader = new FileReader();
             let vm = this;

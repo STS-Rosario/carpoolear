@@ -1,6 +1,8 @@
 export const IMAGE_UPLOAD_ACCEPT =
     'image/jpeg,image/jpg,image/png,image/webp,.jpg,.jpeg,.png,.webp';
 
+export const DEFAULT_IMAGE_UPLOAD_MAX_BYTES = 10 * 1024 * 1024;
+
 const JPEG_EXTENSIONS = new Set(['jpg', 'jpeg']);
 const JPEG_MIMES = new Set(['image/jpeg', 'image/jpg']);
 const ALLOWED_EXTENSIONS = new Set(['jpg', 'jpeg', 'png', 'webp', 'heic', 'heif']);
@@ -73,6 +75,92 @@ export function filterAllowedImageUploads(files, limit = Number.POSITIVE_INFINIT
     return Array.from(files || [])
         .filter(isAllowedImageUpload)
         .slice(0, limit);
+}
+
+export function getImageUploadMaxBytes(config) {
+    const n = config && config.image_upload_max_bytes;
+    if (n != null && Number(n) > 0) {
+        return Number(n);
+    }
+
+    return DEFAULT_IMAGE_UPLOAD_MAX_BYTES;
+}
+
+export function getImageUploadMaxMb(config) {
+    return getImageUploadMaxBytes(config) / (1024 * 1024);
+}
+
+function resolveImageUploadMaxBytes(options = {}) {
+    if (options.maxBytes != null && Number(options.maxBytes) > 0) {
+        return Number(options.maxBytes);
+    }
+
+    return getImageUploadMaxBytes(options.config);
+}
+
+function isOversizedImageUpload(file, maxBytes) {
+    return file && typeof file.size === 'number' && file.size > maxBytes;
+}
+
+export function findOversizedImageUploads(files, maxBytes, getDisplayName) {
+    return Array.from(files || [])
+        .filter((file) => isOversizedImageUpload(file, maxBytes))
+        .map((file, index) => ({
+            file,
+            displayName: getDisplayName ? getDisplayName(file, index) : (file.name || '')
+        }));
+}
+
+export function selectAllowedImageUploads(files, options = {}) {
+    const maxBytes = resolveImageUploadMaxBytes(options);
+    const allowed = filterAllowedImageUploads(files, options.limit);
+    const oversized = findOversizedImageUploads(allowed, maxBytes, options.getDisplayName);
+    const oversizedFiles = new Set(oversized.map((entry) => entry.file));
+
+    return {
+        files: allowed.filter((file) => !oversizedFiles.has(file)),
+        oversized,
+        maxBytes
+    };
+}
+
+function formatOversizedImageUploadLabels(oversized) {
+    return oversized.map((entry) => entry.displayName).filter(Boolean);
+}
+
+export function getImageUploadSizeErrorKey(oversized) {
+    return oversized.length === 1 ? 'imageUploadTooLargeSingle' : 'imageUploadTooLargeMultiple';
+}
+
+export function getImageUploadSizeErrorParams(oversized, maxBytes) {
+    const maxMb = Math.round(maxBytes / (1024 * 1024));
+    const fileLabels = formatOversizedImageUploadLabels(oversized).join(', ');
+
+    if (oversized.length === 1) {
+        return {
+            fileLabel: fileLabels,
+            maxMb
+        };
+    }
+
+    return {
+        fileLabels,
+        maxMb
+    };
+}
+
+export function getDataUrlByteSize(dataUrl) {
+    const value = String(dataUrl || '');
+    const commaIndex = value.indexOf(',');
+
+    if (commaIndex < 0) {
+        return 0;
+    }
+
+    const base64 = value.slice(commaIndex + 1);
+    const padding = (base64.match(/=+$/) || [''])[0].length;
+
+    return Math.floor((base64.length * 3) / 4) - padding;
 }
 
 export function normalizeCapacitorImageFormat(format) {

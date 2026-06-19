@@ -201,9 +201,10 @@ import {
     SUPPORT_TICKET_REPLY_EDITOR_CLASS
 } from '../../utils/supportTicketReplyEditor';
 import {
-    IMAGE_UPLOAD_ACCEPT,
-    filterAllowedImageUploads
+    IMAGE_UPLOAD_ACCEPT
 } from '../../utils/imageUpload';
+import { applyImageUploadSelection } from '../../utils/imageUploadSelection';
+import { useAuthStore } from '../../stores/auth';
 
 const PRIORITY_LABEL_KEYS = {
     low: 'prioridadBaja',
@@ -371,7 +372,18 @@ export default {
             return dayjs(value).format('YYYY-MM-DD HH:mm:ss');
         },
         onAttachments(event) {
-            this.attachments = filterAllowedImageUploads(event.target.files, 3);
+            const { files, rejected } = applyImageUploadSelection(
+                this,
+                event,
+                event.target.files,
+                {
+                    limit: 3,
+                    config: useAuthStore().appConfig
+                }
+            );
+            if (!rejected) {
+                this.attachments = files;
+            }
         },
         refresh() {
             return this.fetchAdminOne(this.id).then((data) => {

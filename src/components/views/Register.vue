@@ -389,9 +389,9 @@ import dayjs from '../../dayjs';
 import Spinner from '../Spinner.vue';
 import { isOfflineApiError } from '../../utils/apiErrors.js';
 import {
-    IMAGE_UPLOAD_ACCEPT,
-    filterAllowedImageUploads
+    IMAGE_UPLOAD_ACCEPT
 } from '../../utils/imageUpload';
+import { applyImageUploadSelection } from '../../utils/imageUploadSelection';
 let emailRegex =
     /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 class Error {
@@ -617,8 +617,13 @@ export default {
             return globalError;
         },
         onDriverDocumentChange(event) {
-            const files = filterAllowedImageUploads(event.target.files);
-            this.driverFiles = files.length ? files : null;
+            const { files, rejected } = applyImageUploadSelection(
+                this,
+                event,
+                event.target.files,
+                { config: this.config }
+            );
+            this.driverFiles = rejected || !files.length ? null : files;
         },
         changeBeDriver() {
             this.showBeDriver = !this.showBeDriver;
