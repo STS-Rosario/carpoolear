@@ -227,8 +227,9 @@ import {
 } from '../../utils/manualValidationUploadWarning';
 import {
     IMAGE_UPLOAD_ACCEPT,
-    filterAllowedImageUploads
+    getImageUploadMaxMb
 } from '../../utils/imageUpload';
+import { applyImageUploadSelection } from '../../utils/imageUploadSelection';
 
 export default {
     name: 'ManualIdentityValidation',
@@ -295,12 +296,7 @@ export default {
             }).format(this.costCents / 100);
         },
         manualValidationMaxFileMb() {
-            const c = this.config;
-            const n = c && c.manual_identity_validation_max_upload_mb;
-            if (n != null && Number(n) > 0) {
-                return Number(n);
-            }
-            return 10;
+            return getImageUploadMaxMb(this.config);
         },
         checkCircleIconSrc() {
             const base = process.env.ROUTE_BASE || '/';
@@ -411,8 +407,22 @@ export default {
             }
         },
         onFileChange(event, type) {
-            const file = filterAllowedImageUploads(event.target.files || [], 1)[0] || null;
-            this.files[type] = file;
+            const fieldLabels = {
+                front: this.$t('manualValidationUploadLabelFront'),
+                back: this.$t('manualValidationUploadLabelBack'),
+                selfie: this.$t('manualValidationUploadLabelSelfie')
+            };
+            const { files, rejected } = applyImageUploadSelection(
+                this,
+                event,
+                event.target.files || [],
+                {
+                    limit: 1,
+                    config: this.config,
+                    getDisplayName: () => fieldLabels[type] || type
+                }
+            );
+            this.files[type] = rejected ? null : (files[0] || null);
         },
         submitImages() {
             if (!this.requestId || !this.files.front || !this.files.back || !this.files.selfie) {

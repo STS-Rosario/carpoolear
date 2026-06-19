@@ -39,6 +39,7 @@
 
 <script>
 import { mapActions } from 'pinia';
+import { useAuthStore } from '../../stores/auth';
 import ToastUiEditor from '../elements/ToastUiEditor.vue';
 import { useTicketsStore } from '../../stores/tickets';
 import dialogs from '../../services/dialogs';
@@ -48,9 +49,9 @@ import {
     USER_TICKET_TYPE_VALUES
 } from '../../utils/supportTicketTypeOptions';
 import {
-    IMAGE_UPLOAD_ACCEPT,
-    filterAllowedImageUploads
+    IMAGE_UPLOAD_ACCEPT
 } from '../../utils/imageUpload';
+import { applyImageUploadSelection } from '../../utils/imageUploadSelection';
 
 export default {
     name: 'ticket-new',
@@ -75,7 +76,18 @@ export default {
             createTicketAction: 'createTicket'
         }),
         onCreateAttachments(event) {
-            this.attachments = filterAllowedImageUploads(event.target.files, 3);
+            const { files, rejected } = applyImageUploadSelection(
+                this,
+                event,
+                event.target.files,
+                {
+                    limit: 3,
+                    config: useAuthStore().appConfig
+                }
+            );
+            if (!rejected) {
+                this.attachments = files;
+            }
         },
         createTicket() {
             const markdown = this.$refs.createEditor.invoke('getMarkdown');

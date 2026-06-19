@@ -1,14 +1,15 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { DEFAULT_IMAGE_UPLOAD_MAX_BYTES } from './imageUpload';
-import { applyImageUploadSelection } from './imageUploadSelection';
 
-const dialogs = {
+const dialogs = vi.hoisted(() => ({
     message: vi.fn()
-};
+}));
 
 vi.mock('../services/dialogs', () => ({
     default: dialogs
 }));
+
+import { applyImageUploadSelection } from './imageUploadSelection';
 
 describe('applyImageUploadSelection', () => {
     beforeEach(() => {

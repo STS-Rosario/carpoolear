@@ -4,8 +4,14 @@
 
 <script>
 import { Capacitor } from '@capacitor/core';
+import { useAuthStore } from '../stores/auth';
+import dialogs from '../services/dialogs';
 import {
     IMAGE_UPLOAD_ACCEPT,
+    getDataUrlByteSize,
+    getImageUploadMaxBytes,
+    getImageUploadSizeErrorKey,
+    getImageUploadSizeErrorParams,
     normalizeCapacitorImageFormat
 } from '../utils/imageUpload';
 
@@ -21,6 +27,26 @@ export default {
         this.isNative = Capacitor.isNativePlatform();
     },
     methods: {
+        showOversizedError(displayName) {
+            const maxBytes = getImageUploadMaxBytes(useAuthStore().appConfig);
+            const oversized = [{ displayName }];
+            dialogs.message(
+                this.$t(
+                    getImageUploadSizeErrorKey(oversized),
+                    getImageUploadSizeErrorParams(oversized, maxBytes)
+                ),
+                { estado: 'error' }
+            );
+        },
+        clearInput() {
+            if (this.$refs.input) {
+                this.$refs.input.value = '';
+            }
+        },
+        isDataUrlTooLarge(dataUrl) {
+            const maxBytes = getImageUploadMaxBytes(useAuthStore().appConfig);
+            return getDataUrlByteSize(dataUrl) > maxBytes;
+        },
         async show() {
             if (this.isNative) {
                 const success = await this.showNativePicker();
@@ -46,6 +72,10 @@ export default {
                 if (image && image.base64String) {
                     // Format: data:image/jpeg;base64,{base64String}
                     const imageData = `data:image/${normalizeCapacitorImageFormat(image.format)};base64,${image.base64String}`;
+                    if (this.isDataUrlTooLarge(imageData)) {
+                        this.showOversizedError(this.$t('imageUploadProfilePhoto'));
+                        return true;
+                    }
                     const data = {};
                     data[this.name] = imageData;
                     this.$emit('change', data);
@@ -82,6 +112,11 @@ export default {
         },
 
         createImage(file) {
+            if (file.size > getImageUploadMaxBytes(useAuthStore().appConfig)) {
+                this.showOversizedError(file.name || this.$t('imageUploadProfilePhoto'));
+                this.clearInput();
+                return;
+            }
             /* eslint-disable no-undef */
             let reader = new FileReader();
             let vm = this;

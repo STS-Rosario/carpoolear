@@ -653,9 +653,9 @@ import { UserApi } from '../../services/api';
 import { getApiErrorMessage } from '../../utils/apiErrors.js';
 import { normalizeFacebookProfileUrl } from '../../utils/facebookProfileUrl.js';
 import {
-    IMAGE_UPLOAD_ACCEPT,
-    filterAllowedImageUploads
+    IMAGE_UPLOAD_ACCEPT
 } from '../../utils/imageUpload';
+import { applyImageUploadSelection } from '../../utils/imageUploadSelection';
 
 class Error {
     constructor(state = false, message = '') {
@@ -850,8 +850,13 @@ export default {
                 });
         },
         onDriverDocumentChange(event) {
-            const files = filterAllowedImageUploads(event.target.files);
-            this.driverFiles = files.length ? files : null;
+            const { files, rejected } = applyImageUploadSelection(
+                this,
+                event,
+                event.target.files,
+                { config: this.config }
+            );
+            this.driverFiles = rejected || !files.length ? null : files;
         },
         dateChange(value) {
             this.birthdayAnswer = value;

@@ -723,6 +723,11 @@ const messages = {
         manualValidationUploadReqFormatos: 'Archivos permitidos: JPG o PNG.',
         manualValidationUploadReqTamano:
             'Tamaño máximo por archivo: {maxMb} MB.',
+        imageUploadTooLargeSingle:
+            '{fileLabel} supera el tamaño máximo permitido de {maxMb} MB.',
+        imageUploadTooLargeMultiple:
+            'Estos archivos superan el tamaño máximo permitido de {maxMb} MB: {fileLabels}.',
+        imageUploadProfilePhoto: 'Foto de perfil',
         manualValidationUploadDisclaimer:
             'Si la calidad de las imágenes no es suficiente, no podremos procesar la solicitud, no se reembolsará el pago y deberás abonar nuevamente para intentarlo de nuevo.',
         manualValidationUploadLabelFront:
@@ -2198,6 +2203,11 @@ const messages = {
         manualValidationUploadReqFormatos: 'Archivos permitidos: JPG o PNG.',
         manualValidationUploadReqTamano:
             'Tamaño máximo por archivo: {maxMb} MB.',
+        imageUploadTooLargeSingle:
+            '{fileLabel} supera el tamaño máximo permitido de {maxMb} MB.',
+        imageUploadTooLargeMultiple:
+            'Estos archivos superan el tamaño máximo permitido de {maxMb} MB: {fileLabels}.',
+        imageUploadProfilePhoto: 'Foto de perfil',
         manualValidationUploadDisclaimer:
             'Si la calidad de las imágenes no es suficiente, no podremos procesar la solicitud, no se reembolsará el pago y deberás abonar nuevamente para intentarlo de nuevo.',
         manualValidationUploadLabelFront:
@@ -3506,6 +3516,11 @@ const messages = {
             'Photos must be clear, complete, and readable.',
         manualValidationUploadReqFormatos: 'Allowed files: JPG or PNG.',
         manualValidationUploadReqTamano: 'Maximum size per file: {maxMb} MB.',
+        imageUploadTooLargeSingle:
+            '{fileLabel} exceeds the maximum allowed size of {maxMb} MB.',
+        imageUploadTooLargeMultiple:
+            'These files exceed the maximum allowed size of {maxMb} MB: {fileLabels}.',
+        imageUploadProfilePhoto: 'Profile photo',
         manualValidationUploadDisclaimer:
             'If image quality is not sufficient, we cannot process the request, the payment will not be refunded, and you will need to pay again to try again.',
         manualValidationUploadLabelFront: 'Front of ID (DNI or passport)',
