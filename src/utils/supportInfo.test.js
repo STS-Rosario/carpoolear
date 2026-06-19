@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { buildSupportInfoSnapshot } from './supportInfo.js';
+import {
+    appendSupportInfoToMessage,
+    buildSupportInfoSnapshot,
+    formatSupportInfoBlock,
+    SUPPORT_INFO_SECTION_HEADER
+} from './supportInfo.js';
 
 describe('buildSupportInfoSnapshot', () => {
     it('includes app version from native appVersionInfo on android', () => {
@@ -58,5 +63,51 @@ describe('buildSupportInfoSnapshot', () => {
         expect(snapshot.isVirtual).toBe('false');
         expect(snapshot.webViewVersion).toBe('120.0.0');
         expect(Object.values(snapshot).every((value) => value !== undefined)).toBe(true);
+    });
+});
+
+describe('formatSupportInfoBlock', () => {
+    it('renders labeled device and app fields', () => {
+        const snapshot = buildSupportInfoSnapshot({
+            appVersionInfo: {
+                version: '120',
+                versionName: '3.2.9',
+                versionSource: 'real',
+                platform: 'android'
+            },
+            capacitorPlatform: 'android',
+            isNativePlatform: true,
+            device: {
+                platform: 'android',
+                model: 'Pixel 7',
+                version: '14'
+            }
+        });
+
+        const block = formatSupportInfoBlock(snapshot);
+
+        expect(block).toContain(SUPPORT_INFO_SECTION_HEADER);
+        expect(block).toContain('App Version: 120');
+        expect(block).toContain('App Version Name: 3.2.9');
+        expect(block).toContain('Platform: android');
+        expect(block).toContain('Device Model: Pixel 7');
+        expect(block).toContain('OS Version: 14');
+    });
+});
+
+describe('appendSupportInfoToMessage', () => {
+    it('appends support info block after the user message', () => {
+        const snapshot = buildSupportInfoSnapshot({
+            windowAppVersion: '3.2.9',
+            capacitorPlatform: 'web',
+            isNativePlatform: false,
+            webBuildNumber: 120
+        });
+
+        const result = appendSupportInfoToMessage('Need help with login', snapshot);
+
+        expect(result.startsWith('Need help with login')).toBe(true);
+        expect(result).toContain(SUPPORT_INFO_SECTION_HEADER);
+        expect(result).toContain('Web Build: 120');
     });
 });
