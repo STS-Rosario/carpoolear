@@ -1,7 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import {
     isManualIdentityValidationRejected,
-    isManualRejectedWithChoiceCards
+    isManualRejectedWithChoiceCards,
+    canManualResubmitWithoutPayment,
+    getManualValidationResubmitRoute
 } from './manualIdentityValidationStatus';
 
 describe('isManualIdentityValidationRejected', () => {
@@ -78,5 +80,46 @@ describe('isManualRejectedWithChoiceCards', () => {
                 }
             )
         ).toBe(false);
+    });
+});
+
+describe('canManualResubmitWithoutPayment', () => {
+    it('returns true when API reports resubmit is allowed', () => {
+        expect(
+            canManualResubmitWithoutPayment({
+                can_resubmit_without_payment: true
+            })
+        ).toBe(true);
+    });
+
+    it('returns false when resubmit is not allowed', () => {
+        expect(
+            canManualResubmitWithoutPayment({
+                can_resubmit_without_payment: false
+            })
+        ).toBe(false);
+    });
+});
+
+describe('getManualValidationResubmitRoute', () => {
+    it('returns manual upload route with request_id when resubmit is allowed', () => {
+        expect(
+            getManualValidationResubmitRoute({
+                can_resubmit_without_payment: true,
+                request_id: 42
+            })
+        ).toEqual({
+            name: 'identity_validation_manual',
+            query: { request_id: 42, resubmit: '1' }
+        });
+    });
+
+    it('returns null when resubmit is not allowed', () => {
+        expect(
+            getManualValidationResubmitRoute({
+                can_resubmit_without_payment: false,
+                request_id: 42
+            })
+        ).toBeNull();
     });
 });

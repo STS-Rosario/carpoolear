@@ -80,6 +80,12 @@ describe('IdentityValidation rejection warnings', () => {
     it('uses manual reject reason to choose support warning copy', () => {
         expect(viewSource).toContain('manualStatus.reject_reason');
     });
+
+    it('links to manual upload when resubmit without payment is available', () => {
+        expect(viewSource).toContain('canManualResubmitWithoutPayment');
+        expect(viewSource).toContain('manualValidationResubmitRoute');
+        expect(viewSource).toContain('identityValidationRejectionResubmitDocumentsCta');
+    });
 });
 
 describe('IdentityValidation Mercado Pago ownership warning', () => {
