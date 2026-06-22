@@ -46,16 +46,19 @@ describe('root store startThread', () => {
     });
 
     it('stops existing notification threads before starting polling', async () => {
+        const { useNotificationsStore } = await import('./notifications');
+        const notificationsStore = useNotificationsStore();
         const { useRootStore } = await import('./root');
         const rootStore = useRootStore();
 
         await rootStore.startThread();
 
         expect(stopThreadsMock).toHaveBeenCalledWith('NOTIFICATIONS');
-        expect(threadRunMock).toHaveBeenCalledWith(30000, true);
+        expect(notificationsStore.countAction).toHaveBeenCalledTimes(1);
+        expect(threadRunMock).toHaveBeenCalledWith(30000, false);
     });
 
-    it('stops polling when web push is already granted', async () => {
+    it('fetches notification count once when web push is already granted', async () => {
         vi.stubGlobal('window', { Notification: { permission: 'granted' } });
 
         const { useAuthStore } = await import('./auth');
@@ -63,12 +66,15 @@ describe('root store startThread', () => {
             appConfig: { web_push_notification: true }
         });
 
+        const { useNotificationsStore } = await import('./notifications');
+        const notificationsStore = useNotificationsStore();
         const { useRootStore } = await import('./root');
         const rootStore = useRootStore();
 
         await rootStore.startThread();
 
         expect(stopThreadsMock).toHaveBeenCalledWith('NOTIFICATIONS');
+        expect(notificationsStore.countAction).toHaveBeenCalledTimes(1);
         expect(threadRunMock).not.toHaveBeenCalled();
     });
 });
