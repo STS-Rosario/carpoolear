@@ -105,8 +105,8 @@ export async function compressImageFileForUpload(file, options = {}) {
     ctx.drawImage(img, 0, 0, width, height);
 
     let lastBlob = null;
-    for (const quality of QUALITY_STEPS) {
-        const blob = await canvasToJpegBlob(canvas, quality);
+    for (let stepIndex = 0; stepIndex < QUALITY_STEPS.length; stepIndex += 1) {
+        const blob = await canvasToJpegBlob(canvas, QUALITY_STEPS[stepIndex]);
         if (!blob) {
             continue;
         }
