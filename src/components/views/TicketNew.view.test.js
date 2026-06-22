@@ -18,4 +18,15 @@ describe('TicketNew view', () => {
         expect(source).toContain('appendSupportInfoToMessage');
         expect(source).toContain('fetchSupportInfoSnapshot');
     });
+
+    it('blocks ticket creation when the user message is empty', () => {
+        expect(source).toContain('isEmptyUserTicketMessage');
+        expect(source).toMatch(/if\s*\(\s*isEmptyUserTicketMessage\(markdown\)\s*\)/);
+        expect(source).toContain("this.$t('errorTicketMensajeRequerido')");
+    });
+
+    it('shows a detailed placeholder in the ticket message editor', () => {
+        expect(source).toContain('editorOptionsWithPlaceholder');
+        expect(source).toContain("this.$t('mensajeTicketPlaceholder')");
+    });
 });

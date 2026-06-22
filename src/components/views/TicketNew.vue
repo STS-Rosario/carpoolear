@@ -23,7 +23,7 @@
                 <editor
                     ref="createEditor"
                     :initial-value="''"
-                    :options="editorOptions"
+                    :options="editorOptionsWithPlaceholder"
                     initial-edit-type="wysiwyg"
                     height="180px"
                     class="mtop-10"
@@ -54,7 +54,8 @@ import {
 import { applyImageUploadSelection } from '../../utils/imageUploadSelection';
 import {
     appendSupportInfoToMessage,
-    fetchSupportInfoSnapshot
+    fetchSupportInfoSnapshot,
+    isEmptyUserTicketMessage
 } from '../../utils/supportInfo';
 
 export default {
@@ -74,6 +75,14 @@ export default {
                 toolbarItems: [['bold', 'italic', 'strike'], ['ul', 'ol']]
             }
         };
+    },
+    computed: {
+        editorOptionsWithPlaceholder() {
+            return {
+                ...this.editorOptions,
+                placeholder: this.$t('mensajeTicketPlaceholder')
+            };
+        }
     },
     methods: {
         ...mapActions(useTicketsStore, {
@@ -95,6 +104,10 @@ export default {
         },
         async createTicket() {
             const markdown = this.$refs.createEditor.invoke('getMarkdown');
+            if (isEmptyUserTicketMessage(markdown)) {
+                dialogs.message(this.$t('errorTicketMensajeRequerido'), { estado: 'error' });
+                return;
+            }
             const snapshot = await fetchSupportInfoSnapshot();
             const messageMarkdown = appendSupportInfoToMessage(markdown, snapshot);
             return this.createTicketAction({
