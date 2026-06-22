@@ -4,7 +4,7 @@ import path from 'node:path';
 import { refreshNotificationsCountOnRouteChange } from './refreshNotificationsCountOnRouteChange.js';
 
 describe('refreshNotificationsCountOnRouteChange', () => {
-    it('refreshes notification count when user is logged in and route name changes', () => {
+    it('does not refresh notification count when user is logged in and route name changes', () => {
         const countAction = vi.fn();
         const authStore = { checkLogin: true };
         const notificationsStore = { countAction };
@@ -16,7 +16,7 @@ describe('refreshNotificationsCountOnRouteChange', () => {
             { name: 'trips', params: {}, query: {} }
         );
 
-        expect(countAction).toHaveBeenCalledTimes(1);
+        expect(countAction).not.toHaveBeenCalled();
     });
 
     it('does not refresh notification count when user is logged out', () => {
@@ -34,7 +34,7 @@ describe('refreshNotificationsCountOnRouteChange', () => {
         expect(countAction).not.toHaveBeenCalled();
     });
 
-    it('skips refresh when only query params change on the same route', () => {
+    it('does not refresh when only query params change on the same route', () => {
         const countAction = vi.fn();
         const authStore = { checkLogin: true };
         const notificationsStore = { countAction };

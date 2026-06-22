@@ -2,25 +2,25 @@ import { describe, expect, it } from 'vitest';
 import { shouldRefreshNotificationsCountOnRoute } from './shouldRefreshNotificationsCountOnRoute.js';
 
 describe('shouldRefreshNotificationsCountOnRoute', () => {
-    it('refreshes on initial navigation when from route has no name', () => {
+    it('does not refresh on initial navigation', () => {
         expect(
             shouldRefreshNotificationsCountOnRoute(
                 { name: 'trips', params: {}, query: {} },
                 { name: undefined, params: {}, query: {} }
             )
-        ).toBe(true);
+        ).toBe(false);
     });
 
-    it('refreshes when route name changes', () => {
+    it('does not refresh when route name changes', () => {
         expect(
             shouldRefreshNotificationsCountOnRoute(
                 { name: 'notifications', params: {}, query: {} },
                 { name: 'trips', params: {}, query: {} }
             )
-        ).toBe(true);
+        ).toBe(false);
     });
 
-    it('skips when only query params change on the same route', () => {
+    it('does not refresh when only query params change on the same route', () => {
         expect(
             shouldRefreshNotificationsCountOnRoute(
                 { name: 'trips', params: {}, query: { scroll: '120' } },
@@ -29,12 +29,12 @@ describe('shouldRefreshNotificationsCountOnRoute', () => {
         ).toBe(false);
     });
 
-    it('refreshes when route params change on the same route name', () => {
+    it('does not refresh when route params change on the same route name', () => {
         expect(
             shouldRefreshNotificationsCountOnRoute(
                 { name: 'trip', params: { id: '2' }, query: {} },
                 { name: 'trip', params: { id: '1' }, query: {} }
             )
-        ).toBe(true);
+        ).toBe(false);
     });
 });
