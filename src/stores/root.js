@@ -185,6 +185,9 @@ export const useRootStore = defineStore('root', {
             const notificationsStore = useNotificationsStore();
 
             const config = authStore.appConfig;
+
+            notificationsStore.countAction();
+
             if (!shouldPollNotificationCount(config)) {
                 return;
             }
@@ -193,7 +196,7 @@ export const useRootStore = defineStore('root', {
                 notificationsStore.countAction();
             };
             const th = new Thread(fn, 'NOTIFICATIONS');
-            th.run(30000, true);
+            th.run(30000, false);
         },
 
         stopThread() {
