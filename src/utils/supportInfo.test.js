@@ -4,6 +4,9 @@ import {
     buildSupportInfoSnapshot,
     fetchSupportInfoSnapshot,
     formatSupportInfoBlock,
+    hasUserTicketMessageContent,
+    isEmptyUserTicketMessage,
+    stripSupportInfoFromMessage,
     SUPPORT_INFO_SECTION_HEADER
 } from './supportInfo.js';
 
@@ -93,6 +96,70 @@ describe('formatSupportInfoBlock', () => {
         expect(block).toContain('Platform: android');
         expect(block).toContain('Device Model: Pixel 7');
         expect(block).toContain('OS Version: 14');
+    });
+});
+
+describe('isEmptyUserTicketMessage', () => {
+    it.each([
+        ['', true],
+        ['   ', true],
+        [null, true],
+        [undefined, true],
+        ['Need help', false]
+    ])('treats %j as empty=%s', (message, expected) => {
+        expect(isEmptyUserTicketMessage(message)).toBe(expected);
+    });
+});
+
+describe('stripSupportInfoFromMessage', () => {
+    it('removes appended support info block from the full message', () => {
+        const snapshot = buildSupportInfoSnapshot({
+            windowAppVersion: '3.2.9',
+            capacitorPlatform: 'web',
+            isNativePlatform: false,
+            webBuildNumber: 120
+        });
+        const fullMessage = appendSupportInfoToMessage('Need help with login', snapshot);
+
+        expect(stripSupportInfoFromMessage(fullMessage)).toBe('Need help with login');
+    });
+
+    it('returns empty string when the message is only support info', () => {
+        const snapshot = buildSupportInfoSnapshot({
+            windowAppVersion: '3.2.9',
+            capacitorPlatform: 'web',
+            isNativePlatform: false,
+            webBuildNumber: 120
+        });
+        const fullMessage = appendSupportInfoToMessage('', snapshot);
+
+        expect(stripSupportInfoFromMessage(fullMessage)).toBe('');
+    });
+});
+
+describe('hasUserTicketMessageContent', () => {
+    it('rejects messages that contain only support info', () => {
+        const snapshot = buildSupportInfoSnapshot({
+            windowAppVersion: '3.2.9',
+            capacitorPlatform: 'web',
+            isNativePlatform: false,
+            webBuildNumber: 120
+        });
+        const fullMessage = appendSupportInfoToMessage('', snapshot);
+
+        expect(hasUserTicketMessageContent(fullMessage)).toBe(false);
+    });
+
+    it('accepts messages with user content before support info', () => {
+        const snapshot = buildSupportInfoSnapshot({
+            windowAppVersion: '3.2.9',
+            capacitorPlatform: 'web',
+            isNativePlatform: false,
+            webBuildNumber: 120
+        });
+        const fullMessage = appendSupportInfoToMessage('Need help with login', snapshot);
+
+        expect(hasUserTicketMessageContent(fullMessage)).toBe(true);
     });
 });
 
