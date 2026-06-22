@@ -1,5 +1,5 @@
 export const CUSTOM_SPLASH_DISMISS_MS = 3000;
-export const SPLASH_WEB_BUILD_NUMBER = 121;
+export const SPLASH_WEB_BUILD_NUMBER = 124;
 
 export function formatSplashVersionText({
     version,
@@ -10,7 +10,7 @@ export function formatSplashVersionText({
         version != null && String(version) !== '' ? String(version) : '0';
     const base = `Version ${resolvedVersion}`;
 
-    return isNativePlatform ? base : `${base} - build ${webBuildNumber}`;
+    return `${base} - build ${webBuildNumber}`;
 }
 
 export function resolveSplashVersion({ appVersionInfo, windowAppVersion }) {

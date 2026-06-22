@@ -12,19 +12,19 @@ describe('formatSplashVersionText', () => {
     it('shows version and build number on web', () => {
         expect(
             formatSplashVersionText({ version: '3.2.5', isNativePlatform: false })
-        ).toBe('Version 3.2.5 - build 116');
+        ).toBe('Version 3.2.5 - build 124');
     });
 
-    it('shows version only on native platforms', () => {
+    it('shows version and build number on native platforms', () => {
         expect(
             formatSplashVersionText({ version: '123', isNativePlatform: true })
-        ).toBe('Version 123');
+        ).toBe('Version 123 - build 124');
     });
 
     it('falls back to zero when version is missing', () => {
         expect(
             formatSplashVersionText({ version: null, isNativePlatform: false })
-        ).toBe('Version 0 - build 116');
+        ).toBe('Version 0 - build 124');
     });
 });
 
@@ -117,6 +117,6 @@ describe('CUSTOM_SPLASH_DISMISS_MS', () => {
     });
 
     it('exposes the web build number used on the splash screen', () => {
-        expect(SPLASH_WEB_BUILD_NUMBER).toBe(116);
+        expect(SPLASH_WEB_BUILD_NUMBER).toBe(124);
     });
 });
