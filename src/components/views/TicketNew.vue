@@ -54,7 +54,8 @@ import {
 import { applyImageUploadSelection } from '../../utils/imageUploadSelection';
 import {
     appendSupportInfoToMessage,
-    fetchSupportInfoSnapshot
+    fetchSupportInfoSnapshot,
+    isEmptyUserTicketMessage
 } from '../../utils/supportInfo';
 
 export default {
@@ -95,6 +96,10 @@ export default {
         },
         async createTicket() {
             const markdown = this.$refs.createEditor.invoke('getMarkdown');
+            if (isEmptyUserTicketMessage(markdown)) {
+                dialogs.message(this.$t('errorDatos'), { estado: 'error' });
+                return;
+            }
             const snapshot = await fetchSupportInfoSnapshot();
             const messageMarkdown = appendSupportInfoToMessage(markdown, snapshot);
             return this.createTicketAction({

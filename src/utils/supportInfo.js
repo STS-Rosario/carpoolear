@@ -145,9 +145,30 @@ export function formatSupportInfoBlock(snapshot) {
     return formatSupportInfoLines(snapshot).join('\n');
 }
 
+export function isEmptyUserTicketMessage(message) {
+    return message == null || String(message).trim() === '';
+}
+
+export function stripSupportInfoFromMessage(message) {
+    if (message == null) {
+        return '';
+    }
+
+    const headerIndex = String(message).indexOf(SUPPORT_INFO_SECTION_HEADER);
+    if (headerIndex === -1) {
+        return String(message).trim();
+    }
+
+    return String(message).slice(0, headerIndex).trim();
+}
+
+export function hasUserTicketMessageContent(message) {
+    return !isEmptyUserTicketMessage(stripSupportInfoFromMessage(message));
+}
+
 export function appendSupportInfoToMessage(message, snapshot) {
     const block = formatSupportInfoBlock(snapshot);
-    const trimmed = message == null ? '' : String(message).trim();
+    const trimmed = isEmptyUserTicketMessage(message) ? '' : String(message).trim();
 
     if (!trimmed) {
         return block;
