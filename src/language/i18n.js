@@ -22,6 +22,9 @@ const messages = {
         asuntoTicket: 'Asunto del ticket',
         asuntoTicketPlaceholder: 'Resumen breve del problema o consulta',
         mensajeTicket: 'Mensaje',
+        mensajeTicketPlaceholder:
+            'Si tiene un problema, por favor descríbalo en detalle, comentando en qué momento sucede, qué estaba haciendo, desde dónde (dispositivo, versión, modelo si es un celular, etc.) para que podamos dar una solución más brevemente, gracias',
+        errorTicketMensajeRequerido: 'Debe enviar un mensaje para crear el ticket de soporte',
         adjuntosTicket: 'Imagenes adjuntas',
         responder: 'Responder',
         responderAlTicketDeSoporte: 'Responder al ticket de soporte',
@@ -1563,6 +1566,9 @@ const messages = {
         asuntoTicket: 'Asunto del ticket',
         asuntoTicketPlaceholder: 'Resumen breve del problema o consulta',
         mensajeTicket: 'Mensaje',
+        mensajeTicketPlaceholder:
+            'Si tiene un problema, por favor descríbalo en detalle, comentando en qué momento sucede, qué estaba haciendo, desde dónde (dispositivo, versión, modelo si es un celular, etc.) para que podamos dar una solución más brevemente, gracias',
+        errorTicketMensajeRequerido: 'Debe enviar un mensaje para crear el ticket de soporte',
         adjuntosTicket: 'Imagenes adjuntas',
         responder: 'Responder',
         responderAlTicketDeSoporte: 'Responder al ticket de soporte',
@@ -2868,6 +2874,9 @@ const messages = {
         asuntoTicket: 'Ticket subject',
         asuntoTicketPlaceholder: 'Short summary of the issue or request',
         mensajeTicket: 'Message',
+        mensajeTicketPlaceholder:
+            'If you have an issue, please describe it in detail: when it happens, what you were doing, and where (device, version, phone model if applicable, etc.) so we can help you sooner. Thank you.',
+        errorTicketMensajeRequerido: 'You must send a message to create a support ticket',
         adjuntosTicket: 'Image attachments',
         responder: 'Reply',
         responderAlTicketDeSoporte: 'Reply to the support ticket',

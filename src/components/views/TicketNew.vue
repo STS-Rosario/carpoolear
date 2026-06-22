@@ -23,7 +23,7 @@
                 <editor
                     ref="createEditor"
                     :initial-value="''"
-                    :options="editorOptions"
+                    :options="editorOptionsWithPlaceholder"
                     initial-edit-type="wysiwyg"
                     height="180px"
                     class="mtop-10"
@@ -76,6 +76,14 @@ export default {
             }
         };
     },
+    computed: {
+        editorOptionsWithPlaceholder() {
+            return {
+                ...this.editorOptions,
+                placeholder: this.$t('mensajeTicketPlaceholder')
+            };
+        }
+    },
     methods: {
         ...mapActions(useTicketsStore, {
             createTicketAction: 'createTicket'
@@ -97,7 +105,7 @@ export default {
         async createTicket() {
             const markdown = this.$refs.createEditor.invoke('getMarkdown');
             if (isEmptyUserTicketMessage(markdown)) {
-                dialogs.message(this.$t('errorDatos'), { estado: 'error' });
+                dialogs.message(this.$t('errorTicketMensajeRequerido'), { estado: 'error' });
                 return;
             }
             const snapshot = await fetchSupportInfoSnapshot();
