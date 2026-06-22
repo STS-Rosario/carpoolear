@@ -52,6 +52,7 @@ import {
     IMAGE_UPLOAD_ACCEPT
 } from '../../utils/imageUpload';
 import { applyImageUploadSelection } from '../../utils/imageUploadSelection';
+import { compressImageFilesForUpload } from '../../utils/imageUploadCompress';
 import {
     appendSupportInfoToMessage,
     fetchSupportInfoSnapshot,
@@ -110,11 +111,21 @@ export default {
             }
             const snapshot = await fetchSupportInfoSnapshot();
             const messageMarkdown = appendSupportInfoToMessage(markdown, snapshot);
+            let attachments = this.attachments;
+            try {
+                attachments = await compressImageFilesForUpload(
+                    this.attachments,
+                    useAuthStore().appConfig
+                );
+            } catch (err) {
+                dialogs.message(this.$t('errorDatos'), { estado: 'error' });
+                return;
+            }
             return this.createTicketAction({
                 type: this.form.type,
                 subject: this.form.subject,
                 message_markdown: messageMarkdown,
-                attachments: this.attachments
+                attachments
             }).then((ticket) => {
                 this.$router.push({ name: 'ticket-detail', params: { id: ticket.id } });
             }).catch(() => dialogs.message(this.$t('errorDatos'), { estado: 'error' }));

@@ -89,6 +89,7 @@ import {
     IMAGE_UPLOAD_ACCEPT
 } from '../../utils/imageUpload';
 import { applyImageUploadSelection } from '../../utils/imageUploadSelection';
+import { compressImageFilesForUpload } from '../../utils/imageUploadCompress';
 import { useAuthStore } from '../../stores/auth';
 
 const SUCCESS_TOAST_OPTIONS = { estado: 'success', duration: 2 };
@@ -197,7 +198,7 @@ export default {
                 });
             });
         },
-        sendReply() {
+        async sendReply() {
             if (this.replySubmitting) {
                 return undefined;
             }
@@ -207,9 +208,20 @@ export default {
                 return undefined;
             }
             this.replySubmitting = true;
+            let attachments = this.attachments;
+            try {
+                attachments = await compressImageFilesForUpload(
+                    this.attachments,
+                    useAuthStore().appConfig
+                );
+            } catch (err) {
+                this.replySubmitting = false;
+                dialogs.message(this.$t('errorDatos'), ERROR_TOAST_OPTIONS);
+                return undefined;
+            }
             return this.replyTicket(this.id, {
                 message_markdown: markdown,
-                attachments: this.attachments
+                attachments
             })
                 .then(() => this.refresh())
                 .then(() => {
