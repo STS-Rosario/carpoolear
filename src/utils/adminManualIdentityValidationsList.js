@@ -99,6 +99,7 @@ function compareDates(a, b, direction) {
 }
 
 function getManualIdentityValidationWaitingTimeMs(item, now = Date.now()) {
+    /* eslint-disable camelcase -- manual validation API uses snake_case */
     if (!item?.submitted_at) {
         return null;
     }
@@ -107,6 +108,7 @@ function getManualIdentityValidationWaitingTimeMs(item, now = Date.now()) {
     const end = item.manual_validation_started_at
         ? new Date(item.manual_validation_started_at).getTime()
         : now;
+    /* eslint-enable camelcase */
 
     return Math.max(0, end - submitted);
 }
