@@ -24,4 +24,20 @@ describe('AdminManualIdentityValidations view', () => {
         expect(viewSource).toContain(':data="displayedList"');
         expect(viewSource).toContain('v-for="item in displayedList"');
     });
+
+    it('renders sortable column headers for manual validation rows', () => {
+        expect(viewSource).toContain('sortManualIdentityValidationsList');
+        expect(viewSource).toContain('getNextManualIdentityValidationSortState');
+        expect(viewSource).toContain('toggleSort(');
+        expect(viewSource).toContain('admin-manual-th-sort');
+        expect(viewSource).toContain('sortKey ===');
+        expect(viewSource).toContain("@click=\"toggleSort('id')\"");
+        expect(viewSource).toContain("@click=\"toggleSort('user_name')\"");
+        expect(viewSource).toContain("@click=\"toggleSort('paid_at')\"");
+        expect(viewSource).toContain("@click=\"toggleSort('submitted_at')\"");
+        expect(viewSource).toContain("@click=\"toggleSort('waiting_time')\"");
+        expect(viewSource).toContain("@click=\"toggleSort('paid')\"");
+        expect(viewSource).toContain("@click=\"toggleSort('review_status')\"");
+        expect(viewSource).not.toContain("@click=\"toggleSort('acciones')\"");
+    });
 });
