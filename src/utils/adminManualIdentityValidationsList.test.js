@@ -136,12 +136,12 @@ describe('adminManualIdentityValidationsList', () => {
                 .toEqual([2, 1, 3]);
         });
 
-        it('sorts by review status with pending before approved and rejected', () => {
+        it('sorts by review status with unpaid first, then pending, approved and rejected', () => {
             const list = [
-                { id: 1, review_status: 'approved' },
-                { id: 2, review_status: 'pending' },
-                { id: 3, review_status: 'rejected' },
-                { id: 4, review_status: null, paid: false }
+                { id: 1, paid: true, review_status: 'approved' },
+                { id: 2, paid: true, review_status: 'pending' },
+                { id: 3, paid: true, review_status: 'rejected' },
+                { id: 4, paid: false, review_status: null }
             ];
 
             expect(sortManualIdentityValidationsList(list, 'review_status', 'asc').map((item) => item.id))
