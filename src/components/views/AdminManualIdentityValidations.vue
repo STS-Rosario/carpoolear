@@ -13,13 +13,19 @@
                     <table class="table table-hover table-bordered">
                         <thead>
                             <tr>
-                                <th scope="col">{{ $t('id') }}</th>
-                                <th scope="col">{{ $t('nombre') }}</th>
-                                <th scope="col">{{ $t('fechaPago') }}</th>
-                                <th scope="col">{{ $t('fechaEnvio') }}</th>
-                                <th scope="col">{{ $t('tiempoDeEspera') }}</th>
-                                <th scope="col">{{ $t('pagado') }}</th>
-                                <th scope="col">{{ $t('estado') }}</th>
+                                <th
+                                    v-for="column in sortableColumns"
+                                    :key="column.key"
+                                    scope="col"
+                                    class="admin-manual-th-sort"
+                                    @click="toggleSort(column.key)"
+                                >
+                                    {{ $t(column.labelKey) }}
+                                    <span
+                                        v-if="sortKey === column.key"
+                                        class="admin-manual-sort-hint"
+                                    >{{ sortDir === 'asc' ? '▲' : '▼' }}</span>
+                                </th>
                                 <th scope="col">{{ $t('acciones') }}</th>
                             </tr>
                         </thead>
@@ -81,8 +87,11 @@ import { AdminApi } from '../../services/api';
 import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
 import {
     filterManualIdentityValidationsList,
+    getNextManualIdentityValidationSortState,
     getShowResolvedManualIdentityValidations,
-    saveShowResolvedManualIdentityValidations
+    MANUAL_IDENTITY_VALIDATION_SORT_COLUMNS,
+    saveShowResolvedManualIdentityValidations,
+    sortManualIdentityValidationsList
 } from '../../utils/adminManualIdentityValidationsList';
 import {
     formatManualIdentityValidationWaitingTime,
@@ -95,7 +104,10 @@ export default {
     data() {
         return {
             list: null,
-            showResolved: getShowResolvedManualIdentityValidations()
+            showResolved: getShowResolvedManualIdentityValidations(),
+            sortKey: null,
+            sortDir: 'asc',
+            sortableColumns: MANUAL_IDENTITY_VALIDATION_SORT_COLUMNS
         };
     },
     computed: {
@@ -104,7 +116,9 @@ export default {
                 return this.list;
             }
 
-            return filterManualIdentityValidationsList(this.list, this.showResolved);
+            const filtered = filterManualIdentityValidationsList(this.list, this.showResolved);
+
+            return sortManualIdentityValidationsList(filtered, this.sortKey, this.sortDir);
         }
     },
     watch: {
@@ -132,6 +146,16 @@ export default {
             const approved = status === 'approved' || status === 'approve';
             return approved && item.has_images === true;
         },
+        toggleSort(column) {
+            const next = getNextManualIdentityValidationSortState(
+                this.sortKey,
+                this.sortDir,
+                column
+            );
+
+            this.sortKey = next.sortKey;
+            this.sortDir = next.sortDir;
+        },
         fetchList() {
             const api = new AdminApi();
             return api.getManualIdentityValidations().then((res) => {
@@ -158,5 +182,21 @@ export default {
 
 .pending-images-pill {
     margin-left: 6px;
+}
+
+.admin-manual-th-sort {
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.admin-manual-th-sort:hover {
+    background: #f5f5f5;
+}
+
+.admin-manual-sort-hint {
+    color: #666;
+    margin-left: 4px;
+    font-size: 12px;
 }
 </style>

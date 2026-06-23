@@ -1,6 +1,16 @@
 export const ADMIN_MANUAL_IDENTITY_VALIDATIONS_SHOW_RESOLVED_KEY =
     'adminManualIdentityValidationsShowResolved';
 
+export const MANUAL_IDENTITY_VALIDATION_SORT_COLUMNS = [
+    { key: 'id', labelKey: 'id' },
+    { key: 'user_name', labelKey: 'nombre' },
+    { key: 'paid_at', labelKey: 'fechaPago' },
+    { key: 'submitted_at', labelKey: 'fechaEnvio' },
+    { key: 'waiting_time', labelKey: 'tiempoDeEspera' },
+    { key: 'paid', labelKey: 'pagado' },
+    { key: 'review_status', labelKey: 'estado' }
+];
+
 function createMemoryStorage() {
     const values = new Map();
 
@@ -53,4 +63,129 @@ export function filterManualIdentityValidationsList(list, showResolved = false) 
     }
 
     return list.filter((item) => !isManualIdentityValidationResolved(item));
+}
+
+function compareNumbers(a, b, direction) {
+    return direction * (a - b);
+}
+
+function compareNullableValues(a, b, direction, comparePresent) {
+    if (a == null && b == null) {
+        return 0;
+    }
+
+    if (a == null) {
+        return 1;
+    }
+
+    if (b == null) {
+        return -1;
+    }
+
+    return direction * comparePresent(a, b);
+}
+
+function compareStrings(a, b, direction) {
+    return direction * String(a).localeCompare(String(b), undefined, { sensitivity: 'base' });
+}
+
+function compareDates(a, b, direction) {
+    return compareNullableValues(
+        a,
+        b,
+        direction,
+        (left, right) => new Date(left).getTime() - new Date(right).getTime()
+    );
+}
+
+function getManualIdentityValidationWaitingTimeMs(item, now = Date.now()) {
+    /* eslint-disable camelcase -- manual validation API uses snake_case */
+    if (!item?.submitted_at) {
+        return null;
+    }
+
+    const submitted = new Date(item.submitted_at).getTime();
+    const end = item.manual_validation_started_at
+        ? new Date(item.manual_validation_started_at).getTime()
+        : now;
+    /* eslint-enable camelcase */
+
+    return Math.max(0, end - submitted);
+}
+
+const REVIEW_STATUS_SORT_ORDER = {
+    unpaid: 0,
+    pending: 1,
+    approved: 2,
+    approve: 2,
+    rejected: 3,
+    reject: 3
+};
+
+function getReviewStatusSortRank(item) {
+    if (!item?.paid) {
+        return REVIEW_STATUS_SORT_ORDER.unpaid;
+    }
+
+    const status = item.review_status;
+
+    if (status == null || status === '') {
+        return REVIEW_STATUS_SORT_ORDER.pending;
+    }
+
+    return REVIEW_STATUS_SORT_ORDER[status] ?? REVIEW_STATUS_SORT_ORDER.pending;
+}
+
+const SORT_COMPARATORS = {
+    id: (a, b, direction) => compareNumbers(a.id ?? 0, b.id ?? 0, direction),
+    user_name: (a, b, direction) => compareNullableValues(
+        a.user_name,
+        b.user_name,
+        direction,
+        (left, right) => compareStrings(left, right, 1)
+    ),
+    paid_at: (a, b, direction) => compareDates(a.paid_at, b.paid_at, direction),
+    submitted_at: (a, b, direction) => compareDates(a.submitted_at, b.submitted_at, direction),
+    waiting_time: (a, b, direction, now) => compareNullableValues(
+        getManualIdentityValidationWaitingTimeMs(a, now),
+        getManualIdentityValidationWaitingTimeMs(b, now),
+        direction,
+        (left, right) => compareNumbers(left, right, 1)
+    ),
+    paid: (a, b, direction) => compareNumbers(Number(Boolean(a.paid)), Number(Boolean(b.paid)), direction),
+    review_status: (a, b, direction) => compareNumbers(
+        getReviewStatusSortRank(a),
+        getReviewStatusSortRank(b),
+        direction
+    )
+};
+
+export function sortManualIdentityValidationsList(list, sortKey, sortDir = 'asc', now = Date.now()) {
+    if (!sortKey) {
+        return list;
+    }
+
+    const compare = SORT_COMPARATORS[sortKey];
+
+    if (!compare) {
+        return list;
+    }
+
+    const direction = sortDir === 'desc' ? -1 : 1;
+
+    return [...list].sort((a, b) => compare(a, b, direction, now) || compareNumbers(a.id ?? 0, b.id ?? 0, 1));
+}
+
+export function getNextManualIdentityValidationSortState(currentKey, currentDir, column) {
+    if (currentKey === column) {
+        return {
+            sortKey: column,
+            sortDir: currentDir === 'asc' ? 'desc' : 'asc'
+        };
+    }
+
+    return {
+        sortKey: column,
+        sortDir: column === 'id' ? 'desc' : 'asc'
+    };
 }
