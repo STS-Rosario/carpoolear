@@ -4,7 +4,8 @@ import {
     filterManualIdentityValidationsList,
     getShowResolvedManualIdentityValidations,
     isManualIdentityValidationResolved,
-    saveShowResolvedManualIdentityValidations
+    saveShowResolvedManualIdentityValidations,
+    sortManualIdentityValidationsList
 } from './adminManualIdentityValidationsList.js';
 
 describe('adminManualIdentityValidationsList', () => {
@@ -34,6 +35,19 @@ describe('adminManualIdentityValidationsList', () => {
 
         it('shows all cases when showResolved is true', () => {
             expect(filterManualIdentityValidationsList(list, true)).toEqual(list);
+        });
+    });
+
+    describe('sortManualIdentityValidationsList', () => {
+        const unsorted = [
+            { id: 3, user_name: 'Charlie' },
+            { id: 1, user_name: 'Alice' },
+            { id: 2, user_name: 'Bob' }
+        ];
+
+        it('sorts by id ascending', () => {
+            expect(sortManualIdentityValidationsList(unsorted, 'id', 'asc').map((item) => item.id))
+                .toEqual([1, 2, 3]);
         });
     });
 
