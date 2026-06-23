@@ -5,7 +5,8 @@ import {
     getShowResolvedManualIdentityValidations,
     isManualIdentityValidationResolved,
     saveShowResolvedManualIdentityValidations,
-    sortManualIdentityValidationsList
+    sortManualIdentityValidationsList,
+    getNextManualIdentityValidationSortState
 } from './adminManualIdentityValidationsList.js';
 
 describe('adminManualIdentityValidationsList', () => {
@@ -146,6 +147,29 @@ describe('adminManualIdentityValidationsList', () => {
 
             expect(sortManualIdentityValidationsList(list, 'review_status', 'asc').map((item) => item.id))
                 .toEqual([4, 2, 1, 3]);
+        });
+    });
+
+    describe('getNextManualIdentityValidationSortState', () => {
+        it('toggles direction when clicking the active column', () => {
+            expect(getNextManualIdentityValidationSortState('id', 'desc', 'id')).toEqual({
+                sortKey: 'id',
+                sortDir: 'asc'
+            });
+        });
+
+        it('defaults to descending when selecting id for the first time', () => {
+            expect(getNextManualIdentityValidationSortState(null, 'asc', 'id')).toEqual({
+                sortKey: 'id',
+                sortDir: 'desc'
+            });
+        });
+
+        it('defaults to ascending when selecting other columns for the first time', () => {
+            expect(getNextManualIdentityValidationSortState(null, 'asc', 'user_name')).toEqual({
+                sortKey: 'user_name',
+                sortDir: 'asc'
+            });
         });
     });
 

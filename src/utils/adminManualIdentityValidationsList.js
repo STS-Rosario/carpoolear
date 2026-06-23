@@ -163,3 +163,17 @@ export function sortManualIdentityValidationsList(list, sortKey, sortDir = 'asc'
 
     return [...list].sort((a, b) => compare(a, b, direction, now) || compareNumbers(a.id ?? 0, b.id ?? 0, 1));
 }
+
+export function getNextManualIdentityValidationSortState(currentKey, currentDir, column) {
+    if (currentKey === column) {
+        return {
+            sortKey: column,
+            sortDir: currentDir === 'asc' ? 'desc' : 'asc'
+        };
+    }
+
+    return {
+        sortKey: column,
+        sortDir: column === 'id' ? 'desc' : 'asc'
+    };
+}
