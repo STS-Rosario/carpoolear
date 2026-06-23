@@ -13,6 +13,10 @@ export function isTripPointDetailEmpty(value) {
     return !value || !String(value).trim();
 }
 
+export function tripPointDetailContainsNumber(value) {
+    return /\d/.test(String(value || ''));
+}
+
 export function validateTripPointDetails({ puntoPartida, puntoLlegada, t }) {
     const errors = {};
 
