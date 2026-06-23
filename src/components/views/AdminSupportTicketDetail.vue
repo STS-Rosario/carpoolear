@@ -105,7 +105,7 @@
                     class="btn btn-default reply-action-btn"
                     @click="markNeedsReviewTicket"
                 >
-                    {{ $t('marcarNecesitaRevision') }}
+                    {{ isTicketNeedsReview ? $t('quitarNecesitaRevision') : $t('marcarNecesitaRevision') }}
                 </button>
                 <button
                     v-if="showResolveTicketButton"
@@ -277,6 +277,9 @@ export default {
         isTicketResolved() {
             return this.ticket && this.ticket.status === 'Resuelto';
         },
+        isTicketNeedsReview() {
+            return this.ticket && this.ticket.status === 'Necesita revisión';
+        },
         showReplyForm() {
             return this.ticket && !this.isTicketClosed && !this.isTicketResolved;
         },
@@ -295,8 +298,7 @@ export default {
         showMarkNeedsReviewButton() {
             return this.ticket
                 && !this.isTicketClosed
-                && !this.isTicketResolved
-                && this.ticket.status !== 'Necesita revisión';
+                && !this.isTicketResolved;
         },
         ticketHasAttachments() {
             return (this.ticket?.replies || []).some(
@@ -541,21 +543,34 @@ export default {
                 });
         },
         markNeedsReviewTicket() {
-            if (!window.confirm(this.$t('confirmarMarcarNecesitaRevision'))) {
+            const isUndo = this.isTicketNeedsReview;
+            const confirmKey = isUndo
+                ? 'confirmarQuitarNecesitaRevision'
+                : 'confirmarMarcarNecesitaRevision';
+            if (!window.confirm(this.$t(confirmKey))) {
                 return;
             }
-            const markdown = this.$refs.replyEditor.invoke('getMarkdown');
-            const messageMarkdown = interpolateSupportTemplateVariables(markdown, this.ticketUserForTemplates);
-            const payload = messageMarkdown.trim()
-                ? { message_markdown: messageMarkdown }
-                : {};
+            let payload = {};
+            if (!isUndo) {
+                const markdown = this.$refs.replyEditor.invoke('getMarkdown');
+                const messageMarkdown = interpolateSupportTemplateVariables(markdown, this.ticketUserForTemplates);
+                if (messageMarkdown.trim()) {
+                    payload = { message_markdown: messageMarkdown };
+                }
+            }
             this.adminMarkNeedsReview(this.id, payload)
                 .then(() => this.refresh())
                 .then(() => {
-                    dialogs.message(this.$t('ticketMarcadoNecesitaRevision'), SUCCESS_TOAST_OPTIONS);
+                    const successKey = isUndo
+                        ? 'ticketQuitadoNecesitaRevision'
+                        : 'ticketMarcadoNecesitaRevision';
+                    dialogs.message(this.$t(successKey), SUCCESS_TOAST_OPTIONS);
                 })
                 .catch(() => {
-                    dialogs.message(this.$t('errorMarcandoNecesitaRevision'), ERROR_TOAST_OPTIONS);
+                    const errorKey = isUndo
+                        ? 'errorQuitandoNecesitaRevision'
+                        : 'errorMarcandoNecesitaRevision';
+                    dialogs.message(this.$t(errorKey), ERROR_TOAST_OPTIONS);
                 });
         },
         purgeAllAttachments() {
