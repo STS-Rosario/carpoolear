@@ -10,7 +10,7 @@ export function formatSplashVersionText({
         version != null && String(version) !== '' ? String(version) : '0';
     const base = `Version ${resolvedVersion}`;
 
-    return `${base} - build ${webBuildNumber}`;
+    return isNativePlatform ? base : `${base} - build ${webBuildNumber}`;
 }
 
 export function resolveSplashVersion({ appVersionInfo, windowAppVersion }) {

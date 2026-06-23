@@ -44,6 +44,15 @@ describe('App custom splash', () => {
         expect(appSource).toContain('formatSplashVersionText');
         expect(appSource).toContain('resolveSplashVersion');
         expect(appSource).toContain('SPLASH_WEB_BUILD_NUMBER');
+        expect(appSource).toMatch(
+            /splashVersionText\s*\(\)\s*\{[\s\S]*formatSplashVersionText\s*\([\s\S]*resolveSplashVersion\s*\([\s\S]*isNativePlatform:\s*Capacitor\.isNativePlatform\(\)/
+        );
+    });
+
+    it('does not append build number on native in splashVersionText', () => {
+        expect(appSource).not.toMatch(
+            /splashVersionText[\s\S]*isNativePlatform[\s\S]*-\s*build/
+        );
     });
 
     it('uses a single vue splash overlay without bootstrap handoff', () => {

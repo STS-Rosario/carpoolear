@@ -12,19 +12,45 @@ describe('formatSplashVersionText', () => {
     it('shows version and build number on web', () => {
         expect(
             formatSplashVersionText({ version: '3.2.5', isNativePlatform: false })
-        ).toBe('Version 3.2.5 - build 124');
+        ).toBe('Version 3.2.5 - build 125');
     });
 
-    it('shows version and build number on native platforms', () => {
+    it('shows version only on native platforms', () => {
         expect(
             formatSplashVersionText({ version: '123', isNativePlatform: true })
-        ).toBe('Version 123 - build 124');
+        ).toBe('Version 123');
     });
 
     it('falls back to zero when version is missing', () => {
         expect(
             formatSplashVersionText({ version: null, isNativePlatform: false })
-        ).toBe('Version 0 - build 124');
+        ).toBe('Version 0 - build 125');
+    });
+
+    it('falls back to zero on native when version is missing', () => {
+        expect(
+            formatSplashVersionText({ version: null, isNativePlatform: true })
+        ).toBe('Version 0');
+    });
+
+    it('does not append build suffix on native even with a custom web build number', () => {
+        expect(
+            formatSplashVersionText({
+                version: '3.3.2',
+                isNativePlatform: true,
+                webBuildNumber: 999
+            })
+        ).toBe('Version 3.3.2');
+    });
+
+    it('uses a custom web build number on web', () => {
+        expect(
+            formatSplashVersionText({
+                version: '3.3.2',
+                isNativePlatform: false,
+                webBuildNumber: 999
+            })
+        ).toBe('Version 3.3.2 - build 999');
     });
 });
 
@@ -45,6 +71,55 @@ describe('resolveSplashVersion', () => {
                 windowAppVersion: '3.2.5'
             })
         ).toBe('3.2.5');
+    });
+
+    it('falls back to zero when no version source is available', () => {
+        expect(
+            resolveSplashVersion({
+                appVersionInfo: null,
+                windowAppVersion: null
+            })
+        ).toBe('0');
+    });
+});
+
+describe('splash version display (App.vue integration)', () => {
+    function formatAppSplashVersionText({
+        appVersionInfo,
+        windowAppVersion,
+        isNativePlatform,
+        webBuildNumber = SPLASH_WEB_BUILD_NUMBER
+    }) {
+        return formatSplashVersionText({
+            version: resolveSplashVersion({ appVersionInfo, windowAppVersion }),
+            isNativePlatform,
+            webBuildNumber
+        });
+    }
+
+    it('shows native app version without build suffix on Android', () => {
+        expect(
+            formatAppSplashVersionText({
+                appVersionInfo: {
+                    version: '3030020',
+                    versionName: '3.3.2',
+                    versionSource: 'real',
+                    platform: 'android'
+                },
+                windowAppVersion: '3.3.2',
+                isNativePlatform: true
+            })
+        ).toBe('Version 3030020');
+    });
+
+    it('shows semver fallback with build suffix on web', () => {
+        expect(
+            formatAppSplashVersionText({
+                appVersionInfo: null,
+                windowAppVersion: '3.3.2',
+                isNativePlatform: false
+            })
+        ).toBe('Version 3.3.2 - build 125');
     });
 });
 
@@ -117,6 +192,6 @@ describe('CUSTOM_SPLASH_DISMISS_MS', () => {
     });
 
     it('exposes the web build number used on the splash screen', () => {
-        expect(SPLASH_WEB_BUILD_NUMBER).toBe(124);
+        expect(SPLASH_WEB_BUILD_NUMBER).toBe(125);
     });
 });
