@@ -279,6 +279,8 @@ const messages = {
         puntoDePartida: 'Punto de partida',
         puntoDeLlegada: 'Punto de llegada',
         barrioOPuntoEncuentroPublico: 'Barrio o punto de encuentro público',
+        puntoDetalleAdvertenciaDireccionPersonal:
+            'Por seguridad, asegúrese de no dar direcciones exactas personales',
         puntoPartidaRequerido: 'Ingresá el punto de partida.',
         puntoLlegadaRequerido: 'Ingresá el punto de llegada.',
         distanciaARecorrer: 'Distancia a recorrer',
@@ -1891,6 +1893,8 @@ const messages = {
         puntoDePartida: 'Punto de partida',
         puntoDeLlegada: 'Punto de llegada',
         barrioOPuntoEncuentroPublico: 'Barrio o punto de encuentro público',
+        puntoDetalleAdvertenciaDireccionPersonal:
+            'Por seguridad, asegúrese de no dar direcciones exactas personales',
         puntoPartidaRequerido: 'Ingresá el punto de partida.',
         puntoLlegadaRequerido: 'Ingresá el punto de llegada.',
         distanciaARecorrer: 'Distancia a recorrer',
@@ -3156,6 +3160,8 @@ const messages = {
         puntoDePartida: 'Departure point',
         puntoDeLlegada: 'Arrival point',
         barrioOPuntoEncuentroPublico: 'Neighborhood or public meeting point',
+        puntoDetalleAdvertenciaDireccionPersonal:
+            'For your safety, avoid sharing exact personal addresses',
         puntoPartidaRequerido: 'Enter the departure point.',
         puntoLlegadaRequerido: 'Enter the arrival point.',
         distanciaARecorrer: 'Distance to travel',

@@ -20,6 +20,12 @@
             <span class="error" v-if="puntoPartidaError.state">{{
                 puntoPartidaError.message
             }}</span>
+            <p
+                v-if="tripPointDetailContainsNumber(puntoPartida)"
+                class="trip_point-detail-warning"
+            >
+                {{ $t('puntoDetalleAdvertenciaDireccionPersonal') }}
+            </p>
         </div>
         <div
             class="form-group trip_point-detail"
@@ -41,12 +47,21 @@
             <span class="error" v-if="puntoLlegadaError.state">{{
                 puntoLlegadaError.message
             }}</span>
+            <p
+                v-if="tripPointDetailContainsNumber(puntoLlegada)"
+                class="trip_point-detail-warning"
+            >
+                {{ $t('puntoDetalleAdvertenciaDireccionPersonal') }}
+            </p>
         </div>
     </div>
 </template>
 
 <script>
-import { shouldShowTripPointDetailInputs } from '../../utils/tripPointDetailValidation.js';
+import {
+    shouldShowTripPointDetailInputs,
+    tripPointDetailContainsNumber
+} from '../../utils/tripPointDetailValidation.js';
 
 export default {
     name: 'TripPointDetailFields',
@@ -77,6 +92,9 @@ export default {
         }
     },
     emits: ['update:puntoPartida', 'update:puntoLlegada'],
+    methods: {
+        tripPointDetailContainsNumber
+    },
     computed: {
         visible() {
             return shouldShowTripPointDetailInputs(this.points);
@@ -98,5 +116,11 @@ export default {
 
 .trip_point-detail + .trip_point-detail {
     margin-top: 0.5rem;
+}
+
+.trip_point-detail-warning {
+    margin: 0.35rem 0 0;
+    color: #856404;
+    font-size: 0.875rem;
 }
 </style>
