@@ -16,7 +16,11 @@ describe('UserRatingsCounts.vue', () => {
         expect(viewSource).toContain('user-ratings-counts__icon-slot');
         expect(viewSource).toContain('user-ratings-counts__icon-slot--neutral');
         expect(viewSource).toContain('rate-neutral-icon');
-        expect(viewSource).toMatch(/\.rate-neutral-icon\s*\{[\s\S]*transform:\s*rotate\(-90deg\)/);
+        expect(viewSource).toContain('neutralRatingIconStyle');
+        expect(viewSource).toContain('user-ratings-counts--inverse');
+        expect(viewSource).toMatch(
+            /translateX:\s*this\.variant\s*===\s*'inverse'\s*\?\s*'0\.32em'\s*:\s*null/
+        );
     });
 
     it('uses profile-matching green and red icon colors with spaced icon-number pairs', () => {
@@ -27,10 +31,10 @@ describe('UserRatingsCounts.vue', () => {
         expect(viewSource).toContain('user-ratings-counts__pair--positive');
         expect(viewSource).toContain('user-ratings-counts__pair--negative');
         expect(viewSource).toMatch(
-            /\.user-ratings-counts__pair--positive[\s\S]*gap:\s*0\.55em/
+            /\.user-ratings-counts__pair--positive[\s\S]*gap:\s*0\.65em/
         );
         expect(viewSource).toMatch(
-            /\.rate-neutral-icon\s*\{[\s\S]*translateY\(0\.12em\)/
+            /\.user-ratings-counts__pair--negative[\s\S]*margin-left:\s*0\.15em/
         );
     });
 

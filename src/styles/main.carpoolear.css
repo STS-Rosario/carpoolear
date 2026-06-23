@@ -2066,12 +2066,12 @@ textarea {
     margin-right: 0;
 }
 
-.rate-item i.fa-thumbs-up,
+.rate-item i.fa-thumbs-up:not(.rate-neutral-icon),
 .profile-info-component i.fa-thumbs-up:not(.user-ratings-counts__icon--neutral) {
     color: #59b200;
 }
 
-.rate-item i.fa-thumbs-up,
+.rate-item i.fa-thumbs-up:not(.rate-neutral-icon),
 .rate-item i.fa-thumbs-down {
     padding-left: .6em;
     color: #59b200;

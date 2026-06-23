@@ -1,5 +1,9 @@
 <template>
-    <span class="user-ratings-counts" v-if="visible">
+    <span
+        class="user-ratings-counts"
+        :class="{ 'user-ratings-counts--inverse': variant === 'inverse' }"
+        v-if="visible"
+    >
         <span class="user-ratings-counts__pair user-ratings-counts__pair--positive">
             <span class="user-ratings-counts__icon-slot">
                 <i
@@ -16,6 +20,7 @@
                 <i
                     class="fa fa-thumbs-up user-ratings-counts__icon--neutral rate-neutral-icon"
                     aria-hidden="true"
+                    :style="neutralIconStyle"
                 ></i>
             </span>
             <span>{{ ratings.neutral }}</span>
@@ -33,17 +38,29 @@
 </template>
 
 <script>
+import { neutralRatingIconStyle } from '../../utils/tripRating';
+
 export default {
     name: 'UserRatingsCounts',
     props: {
         ratings: {
             type: Object,
             default: null
+        },
+        variant: {
+            type: String,
+            default: 'default'
         }
     },
     computed: {
         visible() {
             return this.ratings != null;
+        },
+        neutralIconStyle() {
+            return neutralRatingIconStyle({
+                grayscale: this.variant !== 'inverse',
+                translateX: this.variant === 'inverse' ? '0.32em' : null
+            });
         }
     }
 };
@@ -65,10 +82,14 @@ export default {
 }
 .user-ratings-counts__pair--positive,
 .user-ratings-counts__pair--negative {
-    gap: 0.55em;
+    gap: 0.65em;
 }
 .user-ratings-counts__pair--neutral {
     gap: 0.35em;
+    margin-right: 0.15em;
+}
+.user-ratings-counts__pair--negative {
+    margin-left: 0.15em;
 }
 .user-ratings-counts__icon-slot {
     display: inline-flex;
@@ -97,8 +118,11 @@ export default {
 .rate-neutral-icon {
     display: inline-block;
     line-height: 1;
-    transform: rotate(-90deg) translateY(0.12em);
-    filter: grayscale(100%);
+}
+.user-ratings-counts--inverse .user-ratings-counts__icon--positive,
+.user-ratings-counts--inverse .user-ratings-counts__icon--neutral,
+.user-ratings-counts--inverse .user-ratings-counts__icon--negative {
+    color: #fff;
 }
 @media only screen and (max-width: 768px) {
     .user-ratings-counts {
@@ -106,7 +130,7 @@ export default {
     }
     .user-ratings-counts__pair--positive,
     .user-ratings-counts__pair--negative {
-        gap: 0.6em;
+        gap: 0.7em;
     }
 }
 </style>

@@ -12,6 +12,9 @@ describe('RateItem.vue neutral ratings', () => {
         expect(viewSource).toContain('isNegativeRating');
         expect(viewSource).toContain('rateItemNeutral');
         expect(viewSource).toContain('rate-neutral-icon');
+        expect(viewSource).toMatch(
+            /\.rate-item-value\s+\.rate-neutral-icon\s*\{[\s\S]*margin-left:\s*0\.6em/
+        );
     });
 });
 

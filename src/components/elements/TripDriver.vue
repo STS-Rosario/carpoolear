@@ -105,16 +105,10 @@
                         </div>
                     </div>
                     <div class="profile-info--ratings" v-else>
-                        <svgItem icon="thumbUp" size="18"></svgItem>
-                        <span>{{ trip.user.positive_ratings }}</span>
-                        <i
-                            class="fa fa-thumbs-up rate-neutral-icon"
-                            aria-hidden="true"
-                            :style="neutralIconStyle"
-                        ></i>
-                        <span>{{ trip.user.neutral_ratings || 0 }}</span>
-                        <svgItem icon="thumbDown" size="18"></svgItem>
-                        <span>{{ trip.user.negative_ratings }}</span>
+                        <UserRatingsCounts
+                            :ratings="driverRatings"
+                            variant="inverse"
+                        />
                     </div>
                     <div class="user_pin">
                         <span v-if="trip.user.has_pin == 1">
@@ -172,18 +166,11 @@ import { useDeviceStore } from '../../stores/device';
 import TripDate from './TripDate';
 import TripDescription from './TripDescription';
 import SvgItem from '../SvgItem';
-import {
-    NEUTRAL_RATING_ICON_STYLE,
-    sumUserRatings
-} from '../../utils/tripRating';
+import UserRatingsCounts from './UserRatingsCounts.vue';
+import { sumUserRatings, userRatingsFromProfile } from '../../utils/tripRating';
 
 export default {
     name: 'TripDriver',
-    data() {
-        return {
-            neutralIconStyle: NEUTRAL_RATING_ICON_STYLE
-        };
-    },
     methods: {
         sumUserRatings
     },
@@ -208,6 +195,13 @@ export default {
             return this.user.id === this.trip.user.id
                 ? this.user.image
                 : this.trip.user.image;
+        },
+        driverRatings() {
+            if (!this.trip?.user) {
+                return null;
+            }
+
+            return userRatingsFromProfile(this.trip.user);
         },
         tripStars() {
             if (this.trip && this.trip.user) {
@@ -291,6 +285,7 @@ export default {
     },
     components: {
         SvgItem,
+        UserRatingsCounts,
         TripDate,
         TripDescription
     },

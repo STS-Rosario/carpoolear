@@ -394,7 +394,10 @@ export default {
 }
 
 .profile-rates-component :deep(.rate-neutral-icon) {
-    padding-bottom: 0.3em;
-    padding-right: 0.3em;
+    display: inline-block;
+    margin-left: 0.6em;
+    padding-left: 0;
+    color: #888;
+    vertical-align: middle;
 }
 </style>

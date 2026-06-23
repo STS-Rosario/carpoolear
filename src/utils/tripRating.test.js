@@ -3,11 +3,14 @@ import {
     RATING_NEGATIVE,
     RATING_NEUTRAL,
     RATING_POSITIVE,
+    NEUTRAL_RATING_ICON_TRANSFORM,
+    NEUTRAL_RATING_ICON_STYLE,
     canSubmitRatingVote,
     getRequiredCommentMessageKey,
     isNeutralRating,
     isNegativeRating,
     isPositiveRating,
+    neutralRatingIconStyle,
     ratingRequiresComment,
     sumUserRatings,
     userRatingsFromProfile
@@ -102,6 +105,30 @@ describe('userRatingsFromProfile', () => {
             positive: 4,
             negative: 1,
             neutral: 2
+        });
+    });
+});
+
+describe('neutral rating icon style', () => {
+    it('mirrors the neutral icon so the thumb points right', () => {
+        expect(NEUTRAL_RATING_ICON_TRANSFORM).toBe('rotate(270deg) scaleY(-1)');
+        expect(NEUTRAL_RATING_ICON_STYLE.transform).toBe(
+            NEUTRAL_RATING_ICON_TRANSFORM
+        );
+    });
+
+    it('supports optional grayscale and horizontal alignment offsets', () => {
+        expect(neutralRatingIconStyle()).toEqual({
+            transform: NEUTRAL_RATING_ICON_TRANSFORM,
+            filter: 'grayscale(100%)'
+        });
+        expect(
+            neutralRatingIconStyle({
+                grayscale: false,
+                translateX: '0.32em'
+            })
+        ).toEqual({
+            transform: `${NEUTRAL_RATING_ICON_TRANSFORM} translateX(0.32em)`
         });
     });
 });

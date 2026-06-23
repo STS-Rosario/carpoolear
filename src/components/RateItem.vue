@@ -163,7 +163,7 @@ import { useProfileStore } from '../stores/profile';
 import { useRatesStore } from '../stores/rates';
 import dayjs from '../dayjs';
 import {
-    NEUTRAL_RATING_ICON_STYLE,
+    neutralRatingIconStyle,
     isNegativeRating,
     isNeutralRating,
     isPositiveRating
@@ -172,8 +172,7 @@ export default {
     data() {
         return {
             showReply: false,
-            comment: '',
-            neutralIconStyle: NEUTRAL_RATING_ICON_STYLE
+            comment: ''
         };
     },
     methods: {
@@ -246,6 +245,9 @@ export default {
                     activeTab: 1
                 }
             };
+        },
+        neutralIconStyle() {
+            return neutralRatingIconStyle();
         }
     },
     props: ['user', 'rate', 'id', 'notReply']
@@ -266,6 +268,13 @@ export default {
     margin-bottom: 0.6rem;
     margin-left: 0.25rem;
     padding-left: 0;
+}
+.rate-item-value .rate-neutral-icon {
+    display: inline-block;
+    margin-left: 0.6em;
+    padding-left: 0;
+    color: #888;
+    vertical-align: middle;
 }
 .rate-item-profile .trip_driver_img {
     max-width: 30px;

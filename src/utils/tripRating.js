@@ -57,7 +57,23 @@ export function userRatingsFromProfile(profile) {
     };
 }
 
+export const NEUTRAL_RATING_ICON_TRANSFORM = 'rotate(270deg) scaleY(-1)';
+
 export const NEUTRAL_RATING_ICON_STYLE = {
-    transform: 'rotate(-90deg)',
+    transform: NEUTRAL_RATING_ICON_TRANSFORM,
     filter: 'grayscale(100%)'
 };
+
+export function neutralRatingIconStyle({ grayscale = true, translateX = null } = {}) {
+    const style = {
+        transform: translateX
+            ? `${NEUTRAL_RATING_ICON_TRANSFORM} translateX(${translateX})`
+            : NEUTRAL_RATING_ICON_TRANSFORM
+    };
+
+    if (grayscale) {
+        style.filter = 'grayscale(100%)';
+    }
+
+    return style;
+}
