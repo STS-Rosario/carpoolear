@@ -49,6 +49,104 @@ describe('adminManualIdentityValidationsList', () => {
             expect(sortManualIdentityValidationsList(unsorted, 'id', 'asc').map((item) => item.id))
                 .toEqual([1, 2, 3]);
         });
+
+        it('sorts by id descending', () => {
+            expect(sortManualIdentityValidationsList(unsorted, 'id', 'desc').map((item) => item.id))
+                .toEqual([3, 2, 1]);
+        });
+
+        it('returns the original order when sortKey is empty', () => {
+            expect(sortManualIdentityValidationsList(unsorted, null)).toEqual(unsorted);
+            expect(sortManualIdentityValidationsList(unsorted, '')).toEqual(unsorted);
+        });
+
+        it('does not mutate the input list', () => {
+            const input = [...unsorted];
+
+            sortManualIdentityValidationsList(input, 'id', 'asc');
+
+            expect(input).toEqual(unsorted);
+        });
+
+        it('sorts by user name case-insensitively', () => {
+            const list = [
+                { id: 1, user_name: 'charlie' },
+                { id: 2, user_name: 'Alice' },
+                { id: 3, user_name: null }
+            ];
+
+            expect(sortManualIdentityValidationsList(list, 'user_name', 'asc').map((item) => item.id))
+                .toEqual([2, 1, 3]);
+        });
+
+        it('sorts by paid_at with null values last', () => {
+            const list = [
+                { id: 1, paid_at: '2026-06-03 10:00:00' },
+                { id: 2, paid_at: null },
+                { id: 3, paid_at: '2026-06-01 10:00:00' }
+            ];
+
+            expect(sortManualIdentityValidationsList(list, 'paid_at', 'asc').map((item) => item.id))
+                .toEqual([3, 1, 2]);
+        });
+
+        it('sorts by submitted_at with null values last', () => {
+            const list = [
+                { id: 1, submitted_at: '2026-06-03 10:00:00' },
+                { id: 2, submitted_at: null },
+                { id: 3, submitted_at: '2026-06-01 10:00:00' }
+            ];
+
+            expect(sortManualIdentityValidationsList(list, 'submitted_at', 'asc').map((item) => item.id))
+                .toEqual([3, 1, 2]);
+        });
+
+        it('sorts by waiting time in milliseconds', () => {
+            const now = new Date('2026-06-18 12:00:00').getTime();
+            const list = [
+                {
+                    id: 1,
+                    submitted_at: '2026-06-18 10:00:00',
+                    manual_validation_started_at: '2026-06-18 11:00:00'
+                },
+                {
+                    id: 2,
+                    submitted_at: null
+                },
+                {
+                    id: 3,
+                    submitted_at: '2026-06-18 09:00:00',
+                    manual_validation_started_at: null
+                }
+            ];
+
+            expect(
+                sortManualIdentityValidationsList(list, 'waiting_time', 'asc', now).map((item) => item.id)
+            ).toEqual([1, 3, 2]);
+        });
+
+        it('sorts by paid flag with unpaid rows first when ascending', () => {
+            const list = [
+                { id: 1, paid: true },
+                { id: 2, paid: false },
+                { id: 3, paid: true }
+            ];
+
+            expect(sortManualIdentityValidationsList(list, 'paid', 'asc').map((item) => item.id))
+                .toEqual([2, 1, 3]);
+        });
+
+        it('sorts by review status with pending before approved and rejected', () => {
+            const list = [
+                { id: 1, review_status: 'approved' },
+                { id: 2, review_status: 'pending' },
+                { id: 3, review_status: 'rejected' },
+                { id: 4, review_status: null, paid: false }
+            ];
+
+            expect(sortManualIdentityValidationsList(list, 'review_status', 'asc').map((item) => item.id))
+                .toEqual([4, 2, 1, 3]);
+        });
     });
 
     describe('showResolved persistence', () => {
