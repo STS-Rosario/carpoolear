@@ -230,6 +230,7 @@ import {
     getImageUploadMaxMb
 } from '../../utils/imageUpload';
 import { applyImageUploadSelection } from '../../utils/imageUploadSelection';
+import { compressImageFilesForUpload } from '../../utils/imageUploadCompress';
 import {
     shouldShowManualValidationAlreadySubmitted,
     shouldShowManualValidationPayAgain
@@ -476,29 +477,35 @@ export default {
             );
             this.files[type] = rejected ? null : (files[0] || null);
         },
-        submitImages() {
+        async submitImages() {
             if (!this.requestId || !this.files.front || !this.files.back || !this.files.selfie) {
                 this.submitError = this.$t('todosLosArchivosRequeridos');
                 return;
             }
             this.submitting = true;
             this.submitError = null;
-            const formData = new FormData();
-            formData.append('request_id', this.requestId);
-            formData.append('front_image', this.files.front);
-            formData.append('back_image', this.files.back);
-            formData.append('selfie_image', this.files.selfie);
 
-            const userApi = new UserApi();
-            userApi.submitManualIdentityValidation(this.requestId, formData)
-                .then(() => {
-                    this.$router.push({ name: 'identity_validation', query: { result: 'manual_submitted' } });
-                })
-                .catch((err) => {
-                    this.submitting = false;
-                    const msg = (err.response && err.response.data && (err.response.data.message || err.response.data.error)) || this.$t('resultError');
-                    this.submitError = typeof msg === 'string' ? msg : this.$t('resultError');
-                });
+            try {
+                const [front, back, selfie] = await compressImageFilesForUpload(
+                    [this.files.front, this.files.back, this.files.selfie],
+                    this.config
+                );
+
+                const formData = new FormData();
+                formData.append('request_id', this.requestId);
+                formData.append('front_image', front);
+                formData.append('back_image', back);
+                formData.append('selfie_image', selfie);
+
+                const userApi = new UserApi();
+                await userApi.submitManualIdentityValidation(this.requestId, formData);
+                this.$router.push({ name: 'identity_validation', query: { result: 'manual_submitted' } });
+            } catch (err) {
+                this.submitting = false;
+                const responseData = (err && err.data) || (err.response && err.response.data) || {};
+                const msg = responseData.message || responseData.error || err.message || this.$t('resultError');
+                this.submitError = typeof msg === 'string' ? msg : this.$t('resultError');
+            }
         }
     },
     watch: {
