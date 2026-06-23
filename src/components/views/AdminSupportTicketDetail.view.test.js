@@ -167,12 +167,15 @@ describe('AdminSupportTicketDetail view', () => {
         expect(viewSource).toContain('.clickable-img {\n    cursor: pointer;\n}');
     });
 
-    it('shows mark needs review action for open tickets', () => {
+    it('toggles mark needs review action for open and needs-review tickets', () => {
         expect(viewSource).toContain('markNeedsReviewTicket');
         expect(viewSource).toContain('adminMarkNeedsReview');
-        expect(viewSource).toContain("{{ $t('marcarNecesitaRevision') }}");
         expect(viewSource).toContain('showMarkNeedsReviewButton');
-        expect(viewSource).toContain("'Necesita revisión'");
+        expect(viewSource).toContain('isTicketNeedsReview');
+        expect(viewSource).toContain("{{ $t('marcarNecesitaRevision') }}");
+        expect(viewSource).toContain("{{ $t('quitarNecesitaRevision') }}");
+        expect(viewSource).toContain('confirmarQuitarNecesitaRevision');
+        expect(viewSource).toContain('ticketQuitadoNecesitaRevision');
     });
 
     it('lets admins change ticket category and save it', () => {
