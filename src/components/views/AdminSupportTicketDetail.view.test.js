@@ -172,8 +172,9 @@ describe('AdminSupportTicketDetail view', () => {
         expect(viewSource).toContain('adminMarkNeedsReview');
         expect(viewSource).toContain('showMarkNeedsReviewButton');
         expect(viewSource).toContain('isTicketNeedsReview');
-        expect(viewSource).toContain("$t('marcarNecesitaRevision')");
-        expect(viewSource).toContain("$t('quitarNecesitaRevision')");
+        expect(viewSource).toContain('markNeedsReviewButtonLabelKey');
+        expect(viewSource).toContain("'quitarNecesitaRevision'");
+        expect(viewSource).toContain("'marcarNecesitaRevision'");
         expect(viewSource).toContain('confirmarQuitarNecesitaRevision');
         expect(viewSource).toContain('ticketQuitadoNecesitaRevision');
     });

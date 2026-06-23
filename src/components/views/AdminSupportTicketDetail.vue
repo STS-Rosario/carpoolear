@@ -105,7 +105,7 @@
                     class="btn btn-default reply-action-btn"
                     @click="markNeedsReviewTicket"
                 >
-                    {{ isTicketNeedsReview ? $t('quitarNecesitaRevision') : $t('marcarNecesitaRevision') }}
+                    {{ $t(markNeedsReviewButtonLabelKey) }}
                 </button>
                 <button
                     v-if="showResolveTicketButton"
@@ -299,6 +299,9 @@ export default {
             return this.ticket
                 && !this.isTicketClosed
                 && !this.isTicketResolved;
+        },
+        markNeedsReviewButtonLabelKey() {
+            return this.isTicketNeedsReview ? 'quitarNecesitaRevision' : 'marcarNecesitaRevision';
         },
         ticketHasAttachments() {
             return (this.ticket?.replies || []).some(
