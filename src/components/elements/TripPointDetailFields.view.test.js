@@ -18,11 +18,7 @@ describe('TripPointDetailFields', () => {
         expect(viewSource).toContain(
             "$t('puntoDetalleAdvertenciaDireccionPersonal')"
         );
-        expect(viewSource).toMatch(
-            /tripPointDetailContainsNumber\(puntoPartida\)[\s\S]*?puntoDetalleAdvertenciaDireccionPersonal/s
-        );
-        expect(viewSource).toMatch(
-            /tripPointDetailContainsNumber\(puntoLlegada\)[\s\S]*?puntoDetalleAdvertenciaDireccionPersonal/s
-        );
+        expect(viewSource).toContain('showPuntoPartidaPersonalAddressWarning');
+        expect(viewSource).toContain('showPuntoLlegadaPersonalAddressWarning');
     });
 });

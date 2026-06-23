@@ -21,7 +21,7 @@
                 puntoPartidaError.message
             }}</span>
             <p
-                v-if="tripPointDetailContainsNumber(puntoPartida)"
+                v-if="showPuntoPartidaPersonalAddressWarning"
                 class="trip_point-detail-warning"
             >
                 {{ $t('puntoDetalleAdvertenciaDireccionPersonal') }}
@@ -48,7 +48,7 @@
                 puntoLlegadaError.message
             }}</span>
             <p
-                v-if="tripPointDetailContainsNumber(puntoLlegada)"
+                v-if="showPuntoLlegadaPersonalAddressWarning"
                 class="trip_point-detail-warning"
             >
                 {{ $t('puntoDetalleAdvertenciaDireccionPersonal') }}
@@ -92,9 +92,6 @@ export default {
         }
     },
     emits: ['update:puntoPartida', 'update:puntoLlegada'],
-    methods: {
-        tripPointDetailContainsNumber
-    },
     computed: {
         visible() {
             return shouldShowTripPointDetailInputs(this.points);
@@ -104,6 +101,12 @@ export default {
         },
         puntoLlegadaId() {
             return `${this.idPrefix}-llegada`;
+        },
+        showPuntoPartidaPersonalAddressWarning() {
+            return tripPointDetailContainsNumber(this.puntoPartida);
+        },
+        showPuntoLlegadaPersonalAddressWarning() {
+            return tripPointDetailContainsNumber(this.puntoLlegada);
         }
     }
 };
