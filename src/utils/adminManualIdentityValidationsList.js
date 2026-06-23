@@ -54,3 +54,18 @@ export function filterManualIdentityValidationsList(list, showResolved = false) 
 
     return list.filter((item) => !isManualIdentityValidationResolved(item));
 }
+
+export function sortManualIdentityValidationsList(list, sortKey, sortDir = 'asc') {
+    if (!sortKey) {
+        return list;
+    }
+
+    const direction = sortDir === 'desc' ? -1 : 1;
+    const sorted = [...list];
+
+    if (sortKey === 'id') {
+        sorted.sort((a, b) => direction * ((a.id ?? 0) - (b.id ?? 0)));
+    }
+
+    return sorted;
+}
