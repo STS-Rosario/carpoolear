@@ -12,4 +12,17 @@ describe('TripPointDetailFields', () => {
         expect(viewSource).toContain("$t('barrioOPuntoEncuentroPublico')");
         expect(viewSource).toContain('shouldShowTripPointDetailInputs');
     });
+
+    it('shows a personal address warning when punto partida or llegada contain digits', () => {
+        expect(viewSource).toContain('tripPointDetailContainsNumber');
+        expect(viewSource).toContain(
+            "$t('puntoDetalleAdvertenciaDireccionPersonal')"
+        );
+        expect(viewSource).toMatch(
+            /tripPointDetailContainsNumber\(puntoPartida\)[\s\S]*?puntoDetalleAdvertenciaDireccionPersonal/s
+        );
+        expect(viewSource).toMatch(
+            /tripPointDetailContainsNumber\(puntoLlegada\)[\s\S]*?puntoDetalleAdvertenciaDireccionPersonal/s
+        );
+    });
 });
