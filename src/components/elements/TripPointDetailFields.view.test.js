@@ -9,7 +9,7 @@ describe('TripPointDetailFields', () => {
     it('renders i18n labels and placeholder for point detail inputs', () => {
         expect(viewSource).toContain("$t('puntoDePartida')");
         expect(viewSource).toContain("$t('puntoDeLlegada')");
-        expect(viewSource).toContain("$t('lugarExactoOBarrio')");
+        expect(viewSource).toContain("$t('barrioOPuntoEncuentroPublico')");
         expect(viewSource).toContain('shouldShowTripPointDetailInputs');
     });
 });
