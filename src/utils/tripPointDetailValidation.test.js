@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest';
 import {
     shouldShowTripPointDetailInputs,
     validateTripPointDetails,
-    applyTripPointDetailValidation
+    applyTripPointDetailValidation,
+    tripPointDetailContainsNumber
 } from './tripPointDetailValidation.js';
 
 describe('tripPointDetailValidation', () => {
@@ -77,6 +78,21 @@ describe('tripPointDetailValidation', () => {
                 state: false,
                 message: ''
             });
+        });
+    });
+
+    describe('tripPointDetailContainsNumber', () => {
+        it('returns true when the value contains a digit', () => {
+            expect(tripPointDetailContainsNumber('Calle 123')).toBe(true);
+            expect(tripPointDetailContainsNumber('Av. 9 de Julio')).toBe(true);
+        });
+
+        it('returns false when the value has no digits', () => {
+            expect(tripPointDetailContainsNumber('Terminal de Ómnibus')).toBe(
+                false
+            );
+            expect(tripPointDetailContainsNumber('')).toBe(false);
+            expect(tripPointDetailContainsNumber('   ')).toBe(false);
         });
     });
 });
