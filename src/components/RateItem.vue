@@ -6,11 +6,19 @@
             </div>
 
             <div v-if="!notReply" class="rate-item-value">
-                <span v-if="rate.rating == 1">
+                <span v-if="isPositiveRating(rate.rating)">
                         {{ $t('rateItemPositiva') }}
                         <i class="fa fa-thumbs-up" aria-hidden="true"></i>
                     </span>
-                    <span v-if="rate.rating == 0">
+                    <span v-else-if="isNeutralRating(rate.rating)">
+                        {{ $t('rateItemNeutral') }}
+                        <i
+                            class="fa fa-thumbs-up rate-neutral-icon"
+                            aria-hidden="true"
+                            :style="neutralIconStyle"
+                        ></i>
+                    </span>
+                    <span v-else-if="isNegativeRating(rate.rating)">
                         {{ $t('rateItemNegativa') }}
                         <i class="fa fa-thumbs-down" aria-hidden="true"></i>
                     </span>
@@ -26,16 +34,40 @@
             </div>
 
             <div class="rate-item-profile">
-                <div
-                    class="trip_driver_img circle-box"
-                    v-imgSrc:profile="rate.from.image"
-                ></div>
-                <strong>{{ rate.from.name }}</strong>
+                <router-link
+                    v-if="authorProfileRoute"
+                    :to="authorProfileRoute"
+                    class="rate-item-author-link"
+                >
+                    <div
+                        class="trip_driver_img circle-box"
+                        v-imgSrc:profile="rate.from.image"
+                    ></div>
+                    <strong>{{ rate.from.name }}</strong>
+                </router-link>
+                <template v-else>
+                    <div
+                        class="trip_driver_img circle-box"
+                        v-imgSrc:profile="rate.from.image"
+                    ></div>
+                    <strong>{{ rate.from.name }}</strong>
+                </template>
             </div>
         </template>
         <template v-else>
             <div class="image-width">
+                <router-link
+                    v-if="authorProfileRoute"
+                    :to="authorProfileRoute"
+                    class="rate-item-author-link"
+                >
+                    <div
+                        class="trip_driver_img circle-box"
+                        v-imgSrc:profile="rate.from.image"
+                    ></div>
+                </router-link>
                 <div
+                    v-else
                     class="trip_driver_img circle-box"
                     v-imgSrc:profile="rate.from.image"
                 ></div>
@@ -43,18 +75,31 @@
             <div class="text-width">
                 <div class="rate-item-title">
                     <div>
-                        <strong>{{ rate.from.name }}</strong>
+                        <router-link
+                            v-if="authorProfileRoute"
+                            :to="authorProfileRoute"
+                            class="rate-item-author-link"
+                        >
+                            <strong>{{ rate.from.name }}</strong>
+                        </router-link>
+                        <strong v-else>{{ rate.from.name }}</strong>
                         <template v-if="!notReply">
                             <span class="rate-item-value">
                                 <i
                                     class="fa fa-thumbs-up"
                                     aria-hidden="true"
-                                    v-if="rate.rating == 1"
+                                    v-if="isPositiveRating(rate.rating)"
+                                ></i>
+                                <i
+                                    class="fa fa-thumbs-up rate-neutral-icon"
+                                    aria-hidden="true"
+                                    v-else-if="isNeutralRating(rate.rating)"
+                                    :style="neutralIconStyle"
                                 ></i>
                                 <i
                                     class="fa fa-thumbs-down"
                                     aria-hidden="true"
-                                    v-if="rate.rating == 0"
+                                    v-else-if="isNegativeRating(rate.rating)"
                                 ></i>
                             </span>
                             <span
@@ -117,6 +162,12 @@ import { useAuthStore } from '../stores/auth';
 import { useProfileStore } from '../stores/profile';
 import { useRatesStore } from '../stores/rates';
 import dayjs from '../dayjs';
+import {
+    neutralRatingIconStyle,
+    isNegativeRating,
+    isNeutralRating,
+    isPositiveRating
+} from '../utils/tripRating';
 export default {
     data() {
         return {
@@ -126,6 +177,9 @@ export default {
     },
     methods: {
         dayjs,
+        isPositiveRating,
+        isNeutralRating,
+        isNegativeRating,
         ...mapActions(useRatesStore, {
             reply: 'reply'
         }),
@@ -177,6 +231,23 @@ export default {
             return this.config
                 ? 'rate-item-' + this.config.trip_card_design
                 : ' rate-item-default';
+        },
+        authorProfileRoute() {
+            if (!this.rate?.from?.id) {
+                return null;
+            }
+
+            return {
+                name: 'profile',
+                params: {
+                    id: this.rate.from.id,
+                    userProfile: this.rate.from,
+                    activeTab: 1
+                }
+            };
+        },
+        neutralIconStyle() {
+            return neutralRatingIconStyle();
         }
     },
     props: ['user', 'rate', 'id', 'notReply']
@@ -198,6 +269,13 @@ export default {
     margin-left: 0.25rem;
     padding-left: 0;
 }
+.rate-item-value .rate-neutral-icon {
+    display: inline-block;
+    margin-left: 0.6em;
+    padding-left: 0;
+    color: #888;
+    vertical-align: middle;
+}
 .rate-item-profile .trip_driver_img {
     max-width: 30px;
     height: 30px;
@@ -208,6 +286,13 @@ export default {
 .rate-item-profile strong {
     vertical-align: middle;
     font-size: 14px;
+}
+.rate-item-author-link {
+    color: inherit;
+    text-decoration: none;
+}
+.rate-item-author-link:hover strong {
+    text-decoration: underline;
 }
 .reply_comment_content {
     margin-top: 1.25em;

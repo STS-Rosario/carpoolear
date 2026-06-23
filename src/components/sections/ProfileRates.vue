@@ -399,4 +399,12 @@ export default {
     color: #333;
     font-size: 1rem;
 }
+
+.profile-rates-component :deep(.rate-neutral-icon) {
+    display: inline-block;
+    margin-left: 0.6em;
+    padding-left: 0;
+    color: #888;
+    vertical-align: middle;
+}
 </style>

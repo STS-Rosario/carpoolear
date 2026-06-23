@@ -88,4 +88,12 @@ describe('ProfileRates reference action', () => {
         expect(profileRatesSource).toMatch(referenceLabelColorRule);
         expect(profileRatesSource).toMatch(referenceLabelSizeRule);
     });
+
+    it('styles calificaciones neutral icons with the shared transform helper', () => {
+        expect(profileRatesSource).toContain('RateItem');
+        expect(profileRatesSource).toMatch(
+            /\.profile-rates-component\s*:deep\(\.rate-neutral-icon\)\s*\{[\s\S]*margin-left:\s*0\.6em/
+        );
+        expect(profileRatesSource).not.toMatch(/padding-bottom:\s*0\.3em/);
+    });
 });

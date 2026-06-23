@@ -28,7 +28,9 @@ describe('AdminRatingCard', () => {
         expect(cardSource).toContain('getAdminUserProfileRoute');
         expect(cardSource).not.toContain("name: 'profile'");
         expect(cardSource).toContain('admin-rating-pill--positive');
+        expect(cardSource).toContain('admin-rating-pill--neutral');
         expect(cardSource).toContain('admin-rating-pill--negative');
+        expect(cardSource).toContain('rateItemNeutral');
         expect(cardSource).toContain('rate.comment');
     });
 });

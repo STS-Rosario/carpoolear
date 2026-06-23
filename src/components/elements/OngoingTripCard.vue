@@ -116,6 +116,7 @@ export default {
             }
             return {
                 positive: Number(this.trip.user.positive_ratings) || 0,
+                neutral: Number(this.trip.user.neutral_ratings) || 0,
                 negative: Number(this.trip.user.negative_ratings) || 0
             };
         },

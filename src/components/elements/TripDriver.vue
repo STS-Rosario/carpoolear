@@ -52,10 +52,7 @@
                             </div>
                         </div>
                         <div class="trip_driver_ratings" v-else>
-                            {{
-                                trip.user.positive_ratings +
-                                trip.user.negative_ratings
-                            }}
+                            {{ sumUserRatings(trip.user) }}
                             {{ $t('calificaciones') }}
                         </div>
                     </div>
@@ -118,10 +115,10 @@
                         </div>
                     </div>
                     <div class="profile-info--ratings" v-else>
-                        <svgItem icon="thumbUp" size="18"></svgItem>
-                        <span>{{ trip.user.positive_ratings }}</span>
-                        <svgItem icon="thumbDown" size="18"></svgItem>
-                        <span>{{ trip.user.negative_ratings }}</span>
+                        <UserRatingsCounts
+                            :ratings="driverRatings"
+                            variant="inverse"
+                        />
                     </div>
                     <div class="user_pin">
                         <span v-if="trip.user.has_pin == 1">
@@ -173,9 +170,14 @@ import { useDeviceStore } from '../../stores/device';
 import TripDate from './TripDate';
 import TripDescription from './TripDescription';
 import SvgItem from '../SvgItem';
+import UserRatingsCounts from './UserRatingsCounts.vue';
+import { sumUserRatings, userRatingsFromProfile } from '../../utils/tripRating';
 
 export default {
     name: 'TripDriver',
+    methods: {
+        sumUserRatings
+    },
     computed: {
         ...mapState(useAuthStore, {
             user: 'user',
@@ -207,13 +209,17 @@ export default {
                 ? this.user.image
                 : this.trip.user.image;
         },
+        driverRatings() {
+            if (!this.trip?.user) {
+                return null;
+            }
+
+            return userRatingsFromProfile(this.trip.user);
+        },
         tripStars() {
             if (this.trip && this.trip.user) {
-                let value =
-                    (this.trip.user.positive_ratings /
-                        (this.trip.user.positive_ratings +
-                            this.trip.user.negative_ratings)) *
-                    5;
+                const total = sumUserRatings(this.trip.user);
+                let value = total ? (this.trip.user.positive_ratings / total) * 5 : 0;
                 let integerPart = Math.floor(value);
                 let decimalPart = value - integerPart;
                 let stars = [];
@@ -292,6 +298,7 @@ export default {
     },
     components: {
         SvgItem,
+        UserRatingsCounts,
         TripDate,
         TripDescription
     },
