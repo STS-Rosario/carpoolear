@@ -26,6 +26,15 @@
                     <span class="trip_location_from_state-country">
                         {{ googleInfoClean(getStateName(trip.points[0])) }}
                     </span>
+                    <span
+                        v-if="trip.punto_partida"
+                        class="trip-location-point-detail trip-location-point-detail--partida"
+                    >
+                        <span class="trip-location-point-detail__label">{{
+                            $t('puntoDePartida')
+                        }}</span>
+                        {{ trip.punto_partida }}
+                    </span>
                 </div>
             </div>
             <div
@@ -93,6 +102,15 @@
                             googleInfoClean(getStateName(trip.points[trip.points.length - 1]))
                         }}
                     </span>
+                    <span
+                        v-if="trip.punto_llegada"
+                        class="trip-location-point-detail trip-location-point-detail--llegada"
+                    >
+                        <span class="trip-location-point-detail__label">{{
+                            $t('puntoDeLlegada')
+                        }}</span>
+                        {{ trip.punto_llegada }}
+                    </span>
                 </div>
             </div>
             <div
@@ -116,6 +134,15 @@
                 </div>
                 <div class="col-xs-20">
                     {{ trip.from_town }}
+                    <div
+                        v-if="trip.punto_partida"
+                        class="trip-location-point-detail trip-location-point-detail--partida"
+                    >
+                        <span class="trip-location-point-detail__label">{{
+                            $t('puntoDePartida')
+                        }}</span>
+                        {{ trip.punto_partida }}
+                    </div>
                 </div>
             </div>
             <div class="row trip_location_to">
@@ -124,6 +151,15 @@
                 </div>
                 <div class="col-xs-20">
                     {{ trip.to_town }}
+                    <div
+                        v-if="trip.punto_llegada"
+                        class="trip-location-point-detail trip-location-point-detail--llegada"
+                    >
+                        <span class="trip-location-point-detail__label">{{
+                            $t('puntoDeLlegada')
+                        }}</span>
+                        {{ trip.punto_llegada }}
+                    </div>
                 </div>
             </div>
         </template>
