@@ -4,6 +4,8 @@ import bus from '../services/bus-event';
 import { Thread, stopThreads } from '../classes/Threads';
 import { shouldPollNotificationCount } from '../utils/notificationPolling';
 
+const NOTIFICATION_COUNT_POLL_MS = 30000;
+
 let initPromise = null;
 
 export const useRootStore = defineStore('root', {
@@ -185,6 +187,9 @@ export const useRootStore = defineStore('root', {
             const notificationsStore = useNotificationsStore();
 
             const config = authStore.appConfig;
+
+            notificationsStore.countAction();
+
             if (!shouldPollNotificationCount(config)) {
                 return;
             }
@@ -193,7 +198,7 @@ export const useRootStore = defineStore('root', {
                 notificationsStore.countAction();
             };
             const th = new Thread(fn, 'NOTIFICATIONS');
-            th.run(30000, true);
+            th.run(NOTIFICATION_COUNT_POLL_MS, false);
         },
 
         stopThread() {

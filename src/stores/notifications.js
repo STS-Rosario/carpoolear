@@ -4,6 +4,11 @@ import { NotificationApi } from '../services/api';
 const notificationApi = new NotificationApi();
 let countInFlight = null;
 
+function shouldMarkNotificationsAsRead(data) {
+    const mark = data?.mark;
+    return mark === true || mark === 'true';
+}
+
 export const useNotificationsStore = defineStore('notifications', {
     state: () => ({
         list: null,
@@ -17,6 +22,10 @@ export const useNotificationsStore = defineStore('notifications', {
 
     actions: {
         indexAction(data = {}) {
+            if (shouldMarkNotificationsAsRead(data)) {
+                this.count = 0;
+            }
+
             this.list = null;
             return notificationApi
                 .index(data)
