@@ -14,79 +14,15 @@
                         <thead>
                             <tr>
                                 <th
+                                    v-for="column in sortableColumns"
+                                    :key="column.key"
                                     scope="col"
                                     class="admin-manual-th-sort"
-                                    @click="toggleSort('id')"
+                                    @click="toggleSort(column.key)"
                                 >
-                                    {{ $t('id') }}
+                                    {{ $t(column.labelKey) }}
                                     <span
-                                        v-if="sortKey === 'id'"
-                                        class="admin-manual-sort-hint"
-                                    >{{ sortDir === 'asc' ? '▲' : '▼' }}</span>
-                                </th>
-                                <th
-                                    scope="col"
-                                    class="admin-manual-th-sort"
-                                    @click="toggleSort('user_name')"
-                                >
-                                    {{ $t('nombre') }}
-                                    <span
-                                        v-if="sortKey === 'user_name'"
-                                        class="admin-manual-sort-hint"
-                                    >{{ sortDir === 'asc' ? '▲' : '▼' }}</span>
-                                </th>
-                                <th
-                                    scope="col"
-                                    class="admin-manual-th-sort"
-                                    @click="toggleSort('paid_at')"
-                                >
-                                    {{ $t('fechaPago') }}
-                                    <span
-                                        v-if="sortKey === 'paid_at'"
-                                        class="admin-manual-sort-hint"
-                                    >{{ sortDir === 'asc' ? '▲' : '▼' }}</span>
-                                </th>
-                                <th
-                                    scope="col"
-                                    class="admin-manual-th-sort"
-                                    @click="toggleSort('submitted_at')"
-                                >
-                                    {{ $t('fechaEnvio') }}
-                                    <span
-                                        v-if="sortKey === 'submitted_at'"
-                                        class="admin-manual-sort-hint"
-                                    >{{ sortDir === 'asc' ? '▲' : '▼' }}</span>
-                                </th>
-                                <th
-                                    scope="col"
-                                    class="admin-manual-th-sort"
-                                    @click="toggleSort('waiting_time')"
-                                >
-                                    {{ $t('tiempoDeEspera') }}
-                                    <span
-                                        v-if="sortKey === 'waiting_time'"
-                                        class="admin-manual-sort-hint"
-                                    >{{ sortDir === 'asc' ? '▲' : '▼' }}</span>
-                                </th>
-                                <th
-                                    scope="col"
-                                    class="admin-manual-th-sort"
-                                    @click="toggleSort('paid')"
-                                >
-                                    {{ $t('pagado') }}
-                                    <span
-                                        v-if="sortKey === 'paid'"
-                                        class="admin-manual-sort-hint"
-                                    >{{ sortDir === 'asc' ? '▲' : '▼' }}</span>
-                                </th>
-                                <th
-                                    scope="col"
-                                    class="admin-manual-th-sort"
-                                    @click="toggleSort('review_status')"
-                                >
-                                    {{ $t('estado') }}
-                                    <span
-                                        v-if="sortKey === 'review_status'"
+                                        v-if="sortKey === column.key"
                                         class="admin-manual-sort-hint"
                                     >{{ sortDir === 'asc' ? '▲' : '▼' }}</span>
                                 </th>
@@ -153,6 +89,7 @@ import {
     filterManualIdentityValidationsList,
     getNextManualIdentityValidationSortState,
     getShowResolvedManualIdentityValidations,
+    MANUAL_IDENTITY_VALIDATION_SORT_COLUMNS,
     saveShowResolvedManualIdentityValidations,
     sortManualIdentityValidationsList
 } from '../../utils/adminManualIdentityValidationsList';
@@ -169,7 +106,8 @@ export default {
             list: null,
             showResolved: getShowResolvedManualIdentityValidations(),
             sortKey: null,
-            sortDir: 'asc'
+            sortDir: 'asc',
+            sortableColumns: MANUAL_IDENTITY_VALIDATION_SORT_COLUMNS
         };
     },
     computed: {

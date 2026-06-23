@@ -1,6 +1,16 @@
 export const ADMIN_MANUAL_IDENTITY_VALIDATIONS_SHOW_RESOLVED_KEY =
     'adminManualIdentityValidationsShowResolved';
 
+export const MANUAL_IDENTITY_VALIDATION_SORT_COLUMNS = [
+    { key: 'id', labelKey: 'id' },
+    { key: 'user_name', labelKey: 'nombre' },
+    { key: 'paid_at', labelKey: 'fechaPago' },
+    { key: 'submitted_at', labelKey: 'fechaEnvio' },
+    { key: 'waiting_time', labelKey: 'tiempoDeEspera' },
+    { key: 'paid', labelKey: 'pagado' },
+    { key: 'review_status', labelKey: 'estado' }
+];
+
 function createMemoryStorage() {
     const values = new Map();
 

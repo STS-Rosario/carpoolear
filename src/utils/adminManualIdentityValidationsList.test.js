@@ -2,11 +2,12 @@ import { describe, expect, it, vi } from 'vitest';
 import {
     ADMIN_MANUAL_IDENTITY_VALIDATIONS_SHOW_RESOLVED_KEY,
     filterManualIdentityValidationsList,
+    getNextManualIdentityValidationSortState,
     getShowResolvedManualIdentityValidations,
     isManualIdentityValidationResolved,
+    MANUAL_IDENTITY_VALIDATION_SORT_COLUMNS,
     saveShowResolvedManualIdentityValidations,
-    sortManualIdentityValidationsList,
-    getNextManualIdentityValidationSortState
+    sortManualIdentityValidationsList
 } from './adminManualIdentityValidationsList.js';
 
 describe('adminManualIdentityValidationsList', () => {
@@ -147,6 +148,20 @@ describe('adminManualIdentityValidationsList', () => {
 
             expect(sortManualIdentityValidationsList(list, 'review_status', 'asc').map((item) => item.id))
                 .toEqual([4, 2, 1, 3]);
+        });
+    });
+
+    describe('MANUAL_IDENTITY_VALIDATION_SORT_COLUMNS', () => {
+        it('lists every sortable table column except actions', () => {
+            expect(MANUAL_IDENTITY_VALIDATION_SORT_COLUMNS.map((column) => column.key)).toEqual([
+                'id',
+                'user_name',
+                'paid_at',
+                'submitted_at',
+                'waiting_time',
+                'paid',
+                'review_status'
+            ]);
         });
     });
 
