@@ -12,6 +12,10 @@ export function isSelladoPending(trip) {
     return Boolean(trip.needs_sellado) && trip.state !== TRIP_STATE_READY;
 }
 
+export function isInviteFriendsBlockedByUnpaidSellado(trip) {
+    return isSelladoPending(trip);
+}
+
 export function shouldShowSelladoPending(trip, currentUser) {
     if (!isSelladoPending(trip)) {
         return false;
