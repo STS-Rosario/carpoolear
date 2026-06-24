@@ -25,4 +25,10 @@ describe('OngoingTripCard.vue', () => {
         expect(viewSource).toContain('shouldShowLiveLocationShare');
         expect(viewSource).toContain('showShareLocationLink');
     });
+
+    it('aligns neutral rating icon without extra top padding in the ongoing trip card', () => {
+        expect(viewSource).toMatch(
+            /\.ongoing-trip-card__driver-meta\s*:deep\(\.user-ratings-counts__icon-slot--neutral\)\s*\{[\s\S]*padding-top:\s*0/
+        );
+    });
 });
