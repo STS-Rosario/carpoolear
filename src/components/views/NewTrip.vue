@@ -2092,6 +2092,10 @@ import {
     applyTripPointDetailValidation
 } from '../../utils/tripPointDetailValidation.js';
 import {
+    restoreTripPointDetailsFromTrip,
+    syncReturnTripPointDetailsFromOutbound
+} from '../../utils/tripPointDetailPrefill.js';
+import {
     activeCarsWithPlate,
     hasDriverPlate,
     isCarComplete,
@@ -2462,6 +2466,30 @@ export default {
             this.otherTrip.trip.friendship_type_id =
                 this.trip.friendship_type_id;
         },
+        showReturnTrip(value) {
+            if (value) {
+                syncReturnTripPointDetailsFromOutbound(
+                    this.trip,
+                    this.otherTrip.trip
+                );
+            }
+        },
+        'trip.punto_partida'() {
+            if (this.showReturnTrip) {
+                syncReturnTripPointDetailsFromOutbound(
+                    this.trip,
+                    this.otherTrip.trip
+                );
+            }
+        },
+        'trip.punto_llegada'() {
+            if (this.showReturnTrip) {
+                syncReturnTripPointDetailsFromOutbound(
+                    this.trip,
+                    this.otherTrip.trip
+                );
+            }
+        },
         'trip.is_passenger': function () {
             this.preselectDriverCar();
         },
@@ -2667,8 +2695,7 @@ export default {
         this.trip.friendship_type_id = trip.friendship_type_id;
         this.trip.distance = trip.distance;
         this.trip.description = trip.description;
-        this.trip.punto_partida = trip.punto_partida || '';
-        this.trip.punto_llegada = trip.punto_llegada || '';
+        restoreTripPointDetailsFromTrip(this.trip, trip);
         
         this.trip.allow_kids = Number(trip.allow_kids) > 0;
         this.trip.allow_animals = Number(trip.allow_animals) > 0;
@@ -3376,6 +3403,11 @@ export default {
                     error: new Error(),
                     id: point.id  // Preserve the original ID
                 }));
+
+                syncReturnTripPointDetailsFromOutbound(
+                    this.trip,
+                    this.otherTrip.trip
+                );
                 
                 // Update the center to the first point of the return trip
                 this.otherTrip.center = this.otherTrip.points[0].location;
