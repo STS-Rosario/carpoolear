@@ -2091,7 +2091,10 @@ import {
     shouldShowTripPointDetailInputs,
     applyTripPointDetailValidation
 } from '../../utils/tripPointDetailValidation.js';
-import { restoreTripPointDetailsFromTrip } from '../../utils/tripPointDetailPrefill.js';
+import {
+    restoreTripPointDetailsFromTrip,
+    syncReturnTripPointDetailsFromOutbound
+} from '../../utils/tripPointDetailPrefill.js';
 import {
     activeCarsWithPlate,
     hasDriverPlate,
@@ -2462,6 +2465,30 @@ export default {
         'trip.friendship_type_id': function () {
             this.otherTrip.trip.friendship_type_id =
                 this.trip.friendship_type_id;
+        },
+        showReturnTrip(value) {
+            if (value) {
+                syncReturnTripPointDetailsFromOutbound(
+                    this.trip,
+                    this.otherTrip.trip
+                );
+            }
+        },
+        'trip.punto_partida'() {
+            if (this.showReturnTrip) {
+                syncReturnTripPointDetailsFromOutbound(
+                    this.trip,
+                    this.otherTrip.trip
+                );
+            }
+        },
+        'trip.punto_llegada'() {
+            if (this.showReturnTrip) {
+                syncReturnTripPointDetailsFromOutbound(
+                    this.trip,
+                    this.otherTrip.trip
+                );
+            }
         },
         'trip.is_passenger': function () {
             this.preselectDriverCar();
@@ -3376,6 +3403,11 @@ export default {
                     error: new Error(),
                     id: point.id  // Preserve the original ID
                 }));
+
+                syncReturnTripPointDetailsFromOutbound(
+                    this.trip,
+                    this.otherTrip.trip
+                );
                 
                 // Update the center to the first point of the return trip
                 this.otherTrip.center = this.otherTrip.points[0].location;
