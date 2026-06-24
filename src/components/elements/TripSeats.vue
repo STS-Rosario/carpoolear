@@ -46,13 +46,19 @@
                         v-if="canInviteFriendsToTrip"
                         class="trip-invite-friends-trigger"
                     >
-                        <button
-                            type="button"
-                            class="btn btn-primary"
-                            @click="showInviteFriendsModal = true"
+                        <span
+                            class="tooltip-bottom trip-invite-friends-trigger__tooltip"
+                            :data-tooltip="inviteFriendsSelladoTooltip"
                         >
-                            {{ $t('invitarAmigosAlViaje') }}
-                        </button>
+                            <button
+                                type="button"
+                                class="btn btn-primary"
+                                :disabled="inviteFriendsBlockedByUnpaidSellado"
+                                @click="showInviteFriendsModal = true"
+                            >
+                                {{ $t('invitarAmigosAlViaje') }}
+                            </button>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -97,13 +103,19 @@
                         v-if="canInviteFriendsToTrip"
                         class="trip-invite-friends-trigger"
                     >
-                        <button
-                            type="button"
-                            class="btn btn-primary"
-                            @click="showInviteFriendsModal = true"
+                        <span
+                            class="tooltip-bottom trip-invite-friends-trigger__tooltip"
+                            :data-tooltip="inviteFriendsSelladoTooltip"
                         >
-                            {{ $t('invitarAmigosAlViaje') }}
-                        </button>
+                            <button
+                                type="button"
+                                class="btn btn-primary"
+                                :disabled="inviteFriendsBlockedByUnpaidSellado"
+                                @click="showInviteFriendsModal = true"
+                            >
+                                {{ $t('invitarAmigosAlViaje') }}
+                            </button>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -140,6 +152,7 @@ import {
     isAcceptedPassengerOnTrip
 } from '../../utils/tripCoPassengers.js';
 import { shouldShowRearComfortNote } from '../../utils/tripRearComfortSeats.js';
+import { isInviteFriendsBlockedByUnpaidSellado } from '../../utils/tripSelladoDisplay.js';
 
 export default {
     name: 'TripSeats',
@@ -185,6 +198,14 @@ export default {
             return (
                 this.owner && this.trip && isUpcomingTrip(this.trip, dayjs)
             );
+        },
+        inviteFriendsBlockedByUnpaidSellado() {
+            return isInviteFriendsBlockedByUnpaidSellado(this.trip);
+        },
+        inviteFriendsSelladoTooltip() {
+            return this.inviteFriendsBlockedByUnpaidSellado
+                ? this.$t('invitarAmigosSelladoPendiente')
+                : null;
         }
     },
     watch: {
@@ -200,7 +221,10 @@ export default {
             this.showInviteFriendsModal = false;
         },
         maybeOpenInviteFriendsFromQuery() {
-            if (!this.canInviteFriendsToTrip) {
+            if (
+                !this.canInviteFriendsToTrip ||
+                this.inviteFriendsBlockedByUnpaidSellado
+            ) {
                 return;
             }
             const query = this.$route && this.$route.query;
@@ -270,5 +294,9 @@ export default {
 
 .trip-invite-friends-trigger {
     margin-top: 0.25rem;
+}
+
+.trip-invite-friends-trigger__tooltip {
+    display: inline-block;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
     <div
-        :class="[tripCardCountClass, { 'trip-needs-sellado': trip.needs_sellado }]"
+        :class="[tripCardCountClass, { 'trip-needs-sellado': showSelladoPending }]"
     >
         <tripDisplay
             v-if="showTrip && clickModal"
@@ -175,7 +175,7 @@
                         </div>
                     </template>
                     <div
-                        v-if="trip.needs_sellado"
+                        v-if="showSelladoPending"
                         class="trip-legend-sellado"
                     >
                         {{ $t('faltaPagarSellado') }}
@@ -617,6 +617,7 @@ import dayjs from '../../dayjs';
 import SvgItem from '../SvgItem';
 import { googleInfoClean } from '../../filters';
 import { sumUserRatings } from '../../utils/tripRating';
+import { shouldShowSelladoPending } from '../../utils/tripSelladoDisplay';
 
 export default {
     name: 'trip',
@@ -817,6 +818,9 @@ export default {
         },
         tripCardTheme() {
             return this.config ? this.config.trip_card_design : '';
+        },
+        showSelladoPending() {
+            return shouldShowSelladoPending(this.trip, this.user);
         },
         getUserImage() {
             if (!this.trip || !this.trip.user) {

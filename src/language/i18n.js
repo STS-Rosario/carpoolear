@@ -529,6 +529,8 @@ const messages = {
         queresInvitarTusAmigos: '¿Querés invitar a tus amigos a este viaje?',
         invitarATodosMisAmigos: 'Invitar a todos mis amigos',
         invitarAmigosAlViaje: 'Invitar amigos al viaje',
+        invitarAmigosSelladoPendiente:
+            'Una vez que pagues el sellado vas a poder invitar a tus amigos',
         viajesDeMisAmigos: 'Viajes de mis amigos',
         otrosViajes: 'Otros viajes',
         tenesInvitacionesAmigosClickParaVerlas:
@@ -2371,6 +2373,8 @@ const messages = {
         queresInvitarTusAmigos: '¿Querés invitar a tus amigos a este viaje?',
         invitarATodosMisAmigos: 'Invitar a todos mis amigos',
         invitarAmigosAlViaje: 'Invitar amigos al viaje',
+        invitarAmigosSelladoPendiente:
+            'Una vez que pagues el sellado vas a poder invitar a tus amigos',
         viajesDeMisAmigos: 'Viajes de mis amigos',
         otrosViajes: 'Otros viajes',
         tenesInvitacionesAmigosClickParaVerlas:
@@ -3410,6 +3414,8 @@ const messages = {
             'Do you want to invite your friends to this trip?',
         invitarATodosMisAmigos: 'Invite all my friends',
         invitarAmigosAlViaje: 'Invite friends to the trip',
+        invitarAmigosSelladoPendiente:
+            "Once you pay the sellado you'll be able to invite your friends",
         viajesDeMisAmigos: 'My friends trips',
         otrosViajes: 'Other trips',
         tenesInvitacionesAmigosClickParaVerlas:

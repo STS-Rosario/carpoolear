@@ -15,6 +15,9 @@ describe('UserRatingsCounts.vue', () => {
         expect(viewSource).toContain('user-ratings-counts');
         expect(viewSource).toContain('user-ratings-counts__icon-slot');
         expect(viewSource).toContain('user-ratings-counts__icon-slot--neutral');
+        expect(viewSource).toMatch(
+            /\.user-ratings-counts__icon-slot--neutral[\s\S]*padding-top:\s*0\.6em/
+        );
         expect(viewSource).toContain('rate-neutral-icon');
         expect(viewSource).toContain('neutralRatingIconStyle');
         expect(viewSource).toContain('user-ratings-counts--inverse');

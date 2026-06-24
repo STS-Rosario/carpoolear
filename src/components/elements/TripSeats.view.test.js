@@ -70,4 +70,24 @@ describe('TripSeats.vue invite friends placement', () => {
             /trip-seats__availability[\s\S]*?trip-invite-friends-trigger/
         );
     });
+
+    it('disables invite friends with sellado tooltip while payment is pending', () => {
+        expect(viewSource).toContain('isInviteFriendsBlockedByUnpaidSellado');
+        expect(viewSource).toContain("$t('invitarAmigosSelladoPendiente')");
+        expect(viewSource).toMatch(
+            /:disabled="inviteFriendsBlockedByUnpaidSellado"/
+        );
+        expect(viewSource).toMatch(
+            /:data-tooltip="inviteFriendsSelladoTooltip"/
+        );
+        expect(viewSource).toMatch(
+            /inviteFriendsSelladoTooltip\(\)[\s\S]*invitarAmigosSelladoPendiente/
+        );
+    });
+
+    it('does not auto-open invite friends modal when sellado payment is pending', () => {
+        expect(viewSource).toMatch(
+            /maybeOpenInviteFriendsFromQuery[\s\S]*inviteFriendsBlockedByUnpaidSellado/
+        );
+    });
 });

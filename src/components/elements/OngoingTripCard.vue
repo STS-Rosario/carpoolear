@@ -250,6 +250,10 @@ export default {
     font-size: 0.9rem;
 }
 
+.ongoing-trip-card__driver-meta :deep(.user-ratings-counts__icon-slot--neutral) {
+    padding-top: 0;
+}
+
 .ongoing-trip-card__schedule {
     text-align: right;
     flex-shrink: 0;
