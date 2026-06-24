@@ -97,6 +97,14 @@ describe('NewTrip.vue punto partida and punto llegada', () => {
         expect(viewSource).toContain('puntoPartidaError');
         expect(viewSource).toContain('puntoLlegadaError');
     });
+
+    it('restores punto partida and punto llegada when loading a trip for edit', () => {
+        expect(viewSource).toContain("from '../../utils/tripPointDetailPrefill.js'");
+        expect(viewSource).toContain('restoreTripPointDetailsFromTrip');
+        expect(viewSource).toMatch(
+            /restoreData\(trip\)[\s\S]*?restoreTripPointDetailsFromTrip\(this\.trip, trip\)/s
+        );
+    });
 });
 
 describe('NewTrip.vue rear seat comfort preference', () => {
