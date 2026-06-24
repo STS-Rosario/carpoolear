@@ -1,5 +1,35 @@
 import { describe, expect, it } from 'vitest';
-import { shouldShowSelladoPending } from './tripSelladoDisplay';
+import {
+    isSelladoPending,
+    shouldShowSelladoPending
+} from './tripSelladoDisplay';
+
+describe('isSelladoPending', () => {
+    it('prefers sellado_pending from the API when present', () => {
+        expect(
+            isSelladoPending({
+                needs_sellado: true,
+                sellado_pending: false,
+                state: 'awaiting_payment'
+            })
+        ).toBe(false);
+    });
+
+    it('derives pending state from needs_sellado when sellado_pending is missing', () => {
+        expect(
+            isSelladoPending({
+                needs_sellado: true,
+                state: 'awaiting_payment'
+            })
+        ).toBe(true);
+        expect(
+            isSelladoPending({
+                needs_sellado: true,
+                state: 'ready'
+            })
+        ).toBe(false);
+    });
+});
 
 describe('shouldShowSelladoPending', () => {
     const owner = { id: 10 };

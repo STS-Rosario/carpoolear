@@ -1,3 +1,5 @@
+export const TRIP_STATE_READY = 'ready';
+
 export function isSelladoPending(trip) {
     if (!trip) {
         return false;
@@ -7,7 +9,7 @@ export function isSelladoPending(trip) {
         return Boolean(trip.sellado_pending);
     }
 
-    return Boolean(trip.needs_sellado) && trip.state !== 'ready';
+    return Boolean(trip.needs_sellado) && trip.state !== TRIP_STATE_READY;
 }
 
 export function shouldShowSelladoPending(trip, currentUser) {
