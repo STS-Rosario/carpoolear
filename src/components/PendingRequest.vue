@@ -183,6 +183,7 @@ export default {
 
         toAcceptRequest() {
             if (this.$redirectToIdentityValidationIfRequired()) return;
+            if (this.$redirectToMyTripsIfPendingRatingsRequired()) return;
             if (this.acceptRequestValue) {
                 let data = {
                     property: 'do_not_alert_accept_passenger',
@@ -222,6 +223,7 @@ export default {
 
         reject() {
             if (this.$redirectToIdentityValidationIfRequired()) return;
+            if (this.$redirectToMyTripsIfPendingRatingsRequired()) return;
             if (this.acceptRequestValue) {
                 let data = {
                     property: 'do_not_alert_accept_passenger',

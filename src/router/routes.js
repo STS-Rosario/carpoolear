@@ -1,5 +1,5 @@
 /* jshint esversion: 6 */
-import { auth, guest, profileComplete, authAdmin, requireIdentityValidation } from './middleware.js';
+import { auth, guest, profileComplete, authAdmin, requireIdentityValidation, requireIdentityPendingRatingsAndProfile } from './middleware.js';
 import { useAuthStore } from '../stores/auth';
 
 function getAuthStore () {
@@ -216,9 +216,7 @@ export default [
                 auth(to, from, next);
                 return;
             }
-            requireIdentityValidation(to, from, () => {
-                profileComplete(to, from, next);
-            });
+            requireIdentityPendingRatingsAndProfile(to, from, next);
         },
         meta: {
             actionbar: {
@@ -268,9 +266,7 @@ export default [
                 auth(to, from, next);
                 return;
             }
-            requireIdentityValidation(to, from, () => {
-                profileComplete(to, from, next);
-            });
+            requireIdentityPendingRatingsAndProfile(to, from, next);
         },
         meta: {
             actionbar: {
@@ -359,9 +355,7 @@ export default [
                 auth(to, from, next);
                 return;
             }
-            requireIdentityValidation(to, from, () => {
-                profileComplete(to, from, next);
-            });
+            requireIdentityPendingRatingsAndProfile(to, from, next);
         },
         props: true,
         meta: {
@@ -386,9 +380,7 @@ export default [
                 auth(to, from, next);
                 return;
             }
-            requireIdentityValidation(to, from, () => {
-                profileComplete(to, from, next);
-            });
+            requireIdentityPendingRatingsAndProfile(to, from, next);
         },
         props: true,
         meta: {
@@ -606,9 +598,7 @@ export default [
                 auth(to, from, next);
                 return;
             }
-            requireIdentityValidation(to, from, () => {
-                profileComplete(to, from, next);
-            });
+            requireIdentityPendingRatingsAndProfile(to, from, next);
         },
         meta: {
             actionbar: {
