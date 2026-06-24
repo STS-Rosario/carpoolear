@@ -2,6 +2,8 @@ import { defineStore } from 'pinia';
 import { AuthApi, UserApi } from '../services/api';
 import cache, { keys } from '../services/cache';
 import localConfig from '../../config/conf';
+import { resolveInitialLocale, applyResolvedLocale } from '../utils/userLocale.js';
+import i18n from '../i18n.js';
 import { completeSessionIfRegistrationReturnsToken } from '../utils/registrationAutoLogin';
 import { getLazyRouter } from '../utils/routerLazy.js';
 import { hasRequiredProfileFields } from '../utils/profileRequirements';
@@ -38,6 +40,16 @@ export const useAuthStore = defineStore('auth', {
         setUser(user) {
             this.user = user;
             cache.setItem(keys.USER_KEY, user);
+        },
+
+        applyUserLocaleToI18n(i18nInstance = i18n.global) {
+            const locale = resolveInitialLocale({
+                storedLocale: localStorage.getItem('app_locale'),
+                userLocale: this.user?.locale,
+                appLocale: this.appConfig?.locale,
+            });
+
+            applyResolvedLocale(i18nInstance, locale);
         },
 
         doLogout() {
@@ -189,6 +201,7 @@ export const useAuthStore = defineStore('auth', {
                 .show()
                 .then((response) => {
                     this.setUser(response.data);
+                    this.applyUserLocaleToI18n();
                 })
                 .catch(() => {});
         },

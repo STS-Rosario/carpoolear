@@ -139,14 +139,12 @@ export default {
             fbLogin: 'facebookLogin'
         }),
         ...mapActions(useAuthStore, {
-            getConfig: 'getConfig'
+            getConfig: 'getConfig',
+            applyUserLocaleToI18n: 'applyUserLocaleToI18n'
         })
     },
     created() {
-        const stored = localStorage.getItem('app_locale');
-        if (stored) {
-            this.$i18n.locale = stored;
-        }
+        this.applyUserLocaleToI18n(this.$i18n);
     },
     beforeMount() {
         this.getConfig();
@@ -293,8 +291,8 @@ export default {
             }
         },
         appConfig(value) {
-            if (value && value.locale && !localStorage.getItem('app_locale')) {
-                this.$root.$i18n.locale = value.locale;
+            if (value) {
+                this.applyUserLocaleToI18n(this.$root.$i18n);
             }
             if (value && !value.__isLocal) {
                 this.runVersionCheck(value);
