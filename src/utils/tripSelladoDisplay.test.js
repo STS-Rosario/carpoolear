@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+    isInviteFriendsBlockedByUnpaidSellado,
     isSelladoPending,
     shouldShowSelladoPending
 } from './tripSelladoDisplay';
@@ -80,5 +81,27 @@ describe('shouldShowSelladoPending', () => {
         };
 
         expect(shouldShowSelladoPending(trip, owner)).toBe(false);
+    });
+});
+
+describe('isInviteFriendsBlockedByUnpaidSellado', () => {
+    it('blocks invite friends while sellado is unpaid', () => {
+        expect(
+            isInviteFriendsBlockedByUnpaidSellado({
+                needs_sellado: true,
+                sellado_pending: true,
+                state: 'awaiting_payment'
+            })
+        ).toBe(true);
+    });
+
+    it('allows invite friends once sellado is paid', () => {
+        expect(
+            isInviteFriendsBlockedByUnpaidSellado({
+                needs_sellado: true,
+                sellado_pending: false,
+                state: 'ready'
+            })
+        ).toBe(false);
     });
 });
