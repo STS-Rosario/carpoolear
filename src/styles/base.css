@@ -1411,10 +1411,10 @@
       .trip-detail-component .trip-location-point-detail--llegada {
           margin-bottom: 1.25rem;
       }
-      .trip-detail-component .trip_location_from:has(.trip-location-point-detail--partida) {
+      .trip-detail-component .trip_location_from--has-point-detail {
           margin-bottom: 0.5rem;
       }
-      .trip-detail-component .trip_location_to:has(.trip-location-point-detail--llegada) {
+      .trip-detail-component .trip_location_to--has-point-detail {
           margin-bottom: 0.5rem;
       }
   }

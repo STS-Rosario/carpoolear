@@ -2,7 +2,10 @@
     <div class="trip_location">
         <template v-if="trip.points.length >= 2">
             <TripSeats v-if="tripCardTheme === 'light' && isMobile" />
-            <div class="row trip_location_from">
+            <div
+                class="row trip_location_from"
+                :class="{ 'trip_location_from--has-point-detail': trip.punto_partida }"
+            >
                 <div class="col-xs-4" v-if="tripCardTheme === 'light'">
                     <span class="trip_from_time">{{
                         dayjs(trip.trip_date).format('HH:mm')
@@ -72,13 +75,14 @@
             </div>
             <div
                 class="row trip_location_to"
-                :class="
+                :class="[
                     tripCardTheme !== 'light' &&
                     trip.points.length &&
                     trip.points.length > 2
                         ? 'has_points'
-                        : ''
-                "
+                        : '',
+                    { 'trip_location_to--has-point-detail': trip.punto_llegada }
+                ]"
             >
                 <div class="col-xs-4" v-if="tripCardTheme === 'light'">
                     <span class="trip_to_time">{{
@@ -128,7 +132,10 @@
             </div>
         </template>
         <template v-else>
-            <div class="row trip_location_from">
+            <div
+                class="row trip_location_from"
+                :class="{ 'trip_location_from--has-point-detail': trip.punto_partida }"
+            >
                 <div class="col-xs-4 text-right">
                     <i class="fa fa-map-marker" aria-hidden="true"></i>
                 </div>
@@ -145,7 +152,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row trip_location_to">
+            <div class="row trip_location_to" :class="{ 'trip_location_to--has-point-detail': trip.punto_llegada }">
                 <div class="col-xs-4 text-right">
                     <i class="fa fa-map-marker" aria-hidden="true"></i>
                 </div>
