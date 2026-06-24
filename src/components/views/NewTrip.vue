@@ -2091,6 +2091,7 @@ import {
     shouldShowTripPointDetailInputs,
     applyTripPointDetailValidation
 } from '../../utils/tripPointDetailValidation.js';
+import { restoreTripPointDetailsFromTrip } from '../../utils/tripPointDetailPrefill.js';
 import {
     activeCarsWithPlate,
     hasDriverPlate,
@@ -2667,8 +2668,7 @@ export default {
         this.trip.friendship_type_id = trip.friendship_type_id;
         this.trip.distance = trip.distance;
         this.trip.description = trip.description;
-        this.trip.punto_partida = trip.punto_partida || '';
-        this.trip.punto_llegada = trip.punto_llegada || '';
+        restoreTripPointDetailsFromTrip(this.trip, trip);
         
         this.trip.allow_kids = Number(trip.allow_kids) > 0;
         this.trip.allow_animals = Number(trip.allow_animals) > 0;
