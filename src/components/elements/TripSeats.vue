@@ -48,11 +48,7 @@
                     >
                         <span
                             class="tooltip-bottom trip-invite-friends-trigger__tooltip"
-                            :data-tooltip="
-                                inviteFriendsBlockedByUnpaidSellado
-                                    ? $t('invitarAmigosSelladoPendiente')
-                                    : null
-                            "
+                            :data-tooltip="inviteFriendsSelladoTooltip"
                         >
                             <button
                                 type="button"
@@ -109,11 +105,7 @@
                     >
                         <span
                             class="tooltip-bottom trip-invite-friends-trigger__tooltip"
-                            :data-tooltip="
-                                inviteFriendsBlockedByUnpaidSellado
-                                    ? $t('invitarAmigosSelladoPendiente')
-                                    : null
-                            "
+                            :data-tooltip="inviteFriendsSelladoTooltip"
                         >
                             <button
                                 type="button"
@@ -209,6 +201,11 @@ export default {
         },
         inviteFriendsBlockedByUnpaidSellado() {
             return isInviteFriendsBlockedByUnpaidSellado(this.trip);
+        },
+        inviteFriendsSelladoTooltip() {
+            return this.inviteFriendsBlockedByUnpaidSellado
+                ? this.$t('invitarAmigosSelladoPendiente')
+                : null;
         }
     },
     watch: {
@@ -297,5 +294,9 @@ export default {
 
 .trip-invite-friends-trigger {
     margin-top: 0.25rem;
+}
+
+.trip-invite-friends-trigger__tooltip {
+    display: inline-block;
 }
 </style>

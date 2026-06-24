@@ -78,7 +78,10 @@ describe('TripSeats.vue invite friends placement', () => {
             /:disabled="inviteFriendsBlockedByUnpaidSellado"/
         );
         expect(viewSource).toMatch(
-            /:data-tooltip="\s*inviteFriendsBlockedByUnpaidSellado[\s\S]*invitarAmigosSelladoPendiente/
+            /:data-tooltip="inviteFriendsSelladoTooltip"/
+        );
+        expect(viewSource).toMatch(
+            /inviteFriendsSelladoTooltip\(\)[\s\S]*invitarAmigosSelladoPendiente/
         );
     });
 
