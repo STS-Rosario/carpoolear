@@ -330,6 +330,13 @@ import IdentityValidationCountdownBanner from '../IdentityValidationCountdownBan
 import UserRatingsCounts from '../elements/UserRatingsCounts.vue';
 import PendingRatingsBanner from '../PendingRatingsBanner.vue';
 import { shouldHideDonationOnIOSCapacitor } from '../../services/capacitor.js';
+import { UserApi } from '../../services/api';
+import {
+    persistLocaleChoice,
+    syncLocaleToBackend,
+} from '../../utils/userLocale.js';
+
+const userApi = new UserApi();
 
 export default {
     name: 'headerApp',
@@ -449,7 +456,8 @@ export default {
 
         setLocale(locale) {
             this.$root.$i18n.locale = locale;
-            localStorage.setItem('app_locale', locale);
+            persistLocaleChoice(locale);
+            syncLocaleToBackend(userApi, locale, this.logged).catch(() => {});
         }
     },
     watch: {
