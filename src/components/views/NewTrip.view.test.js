@@ -105,6 +105,16 @@ describe('NewTrip.vue punto partida and punto llegada', () => {
             /restoreData\(trip\)[\s\S]*?restoreTripPointDetailsFromTrip\(this\.trip, trip\)/s
         );
     });
+
+    it('prefills inverted punto details on return trips from outbound values', () => {
+        expect(viewSource).toContain('syncReturnTripPointDetailsFromOutbound');
+        expect(viewSource).toMatch(
+            /showReturnTrip\(value\)[\s\S]*?syncReturnTripPointDetailsFromOutbound\([\s\S]*?this\.trip,[\s\S]*?this\.otherTrip\.trip/s
+        );
+        expect(viewSource).toMatch(
+            /getPlace\(i, data, type\)[\s\S]*?syncReturnTripPointDetailsFromOutbound\([\s\S]*?this\.trip,[\s\S]*?this\.otherTrip\.trip/s
+        );
+    });
 });
 
 describe('NewTrip.vue rear seat comfort preference', () => {
