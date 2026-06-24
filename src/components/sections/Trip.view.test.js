@@ -24,6 +24,24 @@ describe('Trip public visibility tooltip', () => {
     });
 });
 
+describe('Trip sellado pending display', () => {
+    it('uses showSelladoPending instead of needs_sellado for card styling and legend', () => {
+        expect(source).toMatch(
+            /:class="\[tripCardCountClass, \{ 'trip-needs-sellado': showSelladoPending \}\]"/
+        );
+        expect(source).toMatch(/v-if="showSelladoPending"/);
+        expect(source).not.toMatch(
+            /:class="\[tripCardCountClass, \{ 'trip-needs-sellado': trip\.needs_sellado \}\]"/
+        );
+        expect(source).not.toMatch(/v-if="trip\.needs_sellado"/);
+    });
+
+    it('derives showSelladoPending from shouldShowSelladoPending helper', () => {
+        expect(source).toContain("from '../../utils/tripSelladoDisplay'");
+        expect(source).toMatch(/showSelladoPending\(\)\s*\{[\s\S]*shouldShowSelladoPending/);
+    });
+});
+
 describe('Trip clickModal', () => {
     it('declares clickModal as a boolean prop defaulting to false', () => {
         expect(source).toMatch(
@@ -33,7 +51,7 @@ describe('Trip clickModal', () => {
 
     it('opens modal from the trip card only, not the modal wrapper', () => {
         const wrapperOpen = source.match(
-            /:class="\[tripCardCountClass, \{ 'trip-needs-sellado': trip\.needs_sellado \}\]"\s*\n\s*v-on:click="clickModal/
+            /:class="\[tripCardCountClass, \{ 'trip-needs-sellado': showSelladoPending \}\]"\s*\n\s*v-on:click="clickModal/
         );
         expect(wrapperOpen).toBeNull();
 
