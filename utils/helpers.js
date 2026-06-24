@@ -46,6 +46,26 @@ export function redirectToIdentityValidationIfRequired (router) {
     }
 }
 
+/**
+ * If the user has pending ratings, redirects to my-trips and returns true.
+ * Call before restricted actions (same places as identity validation redirect).
+ * @param {object} router - Vue Router instance (e.g. this.$router)
+ * @returns {boolean} true if redirect was performed (caller should abort); false otherwise
+ */
+export function redirectToMyTripsIfPendingRatingsRequired (router) {
+    try {
+        const { useRatesStore } = require('../src/stores/rates');
+        const { performPendingRatingsRedirectIfRequired } = require('../src/utils/pendingRatingsEnforcement');
+        return performPendingRatingsRedirectIfRequired(
+            useRatesStore().pendingRates,
+            router
+        );
+    } catch (e) {
+        console.log('[pending ratings check] ERROR:', e.message);
+        return false;
+    }
+}
+
 export function cssvar (name) {
     /* eslint-disable no-undef */
     return getComputedStyle(document.documentElement).getPropertyValue(name);

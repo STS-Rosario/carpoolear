@@ -1,7 +1,12 @@
 /* jshint esversion: 6 */
 import router from '../router';
 import { useAuthStore } from '../stores/auth';
+import { useRatesStore } from '../stores/rates';
 import { hasRequiredProfileFields } from '../utils/profileRequirements';
+import {
+    PENDING_RATINGS_REDIRECT_ROUTE,
+    shouldRedirectForPendingRatings
+} from '../utils/pendingRatingsEnforcement';
 
 function getAuthStore () {
     return useAuthStore();
@@ -81,6 +86,30 @@ export function requireIdentityValidation(to, from, next) {
         return;
     }
     next();
+}
+
+/**
+ * When the user has pending ratings, redirect to my-trips (except on my-trips itself).
+ * Call after auth (only runs when logged in).
+ */
+export function requirePendingRatingsSubmission(to, from, next) {
+    const ratesStore = useRatesStore();
+    const pendingRates = ratesStore.pendingRates;
+
+    if (shouldRedirectForPendingRatings(pendingRates, to.name)) {
+        next(false);
+        router.replace(PENDING_RATINGS_REDIRECT_ROUTE);
+        return;
+    }
+    next();
+}
+
+export function requireIdentityPendingRatingsAndProfile(to, from, next) {
+    requireIdentityValidation(to, from, () => {
+        requirePendingRatingsSubmission(to, from, () => {
+            profileComplete(to, from, next);
+        });
+    });
 }
 
 export function profileComplete(to, from, next) {

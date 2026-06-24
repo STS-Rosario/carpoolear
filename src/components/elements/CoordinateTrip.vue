@@ -280,6 +280,7 @@ export default {
 
         doRequest(isReturnTrip = false) {
             if (this.$redirectToIdentityValidationIfRequired()) return;
+            if (this.$redirectToMyTripsIfPendingRatingsRequired()) return;
             if (this.config.module_coordinate_by_message) {
                 this.sending[isReturnTrip ? 'returnTrip' : 'trip'] = true;
                 let trip = isReturnTrip
