@@ -2,16 +2,13 @@
 export const PREFILLED_TICKET_BLANK_LINE_MARKDOWN = '\u200B';
 
 export function buildPrefilledTicketEditorMarkdown(tripBlockMarkdown) {
-    const tripBlock = tripBlockMarkdown == null ? '' : String(tripBlockMarkdown).trim();
+    const tripBlock =
+        tripBlockMarkdown == null ? '' : String(tripBlockMarkdown).trim();
     if (!tripBlock) {
         return '';
     }
 
-    return [
-        PREFILLED_TICKET_BLANK_LINE_MARKDOWN,
-        PREFILLED_TICKET_BLANK_LINE_MARKDOWN,
-        tripBlock
-    ].join('\n\n');
+    return [PREFILLED_TICKET_BLANK_LINE_MARKDOWN, tripBlock].join('\n\n');
 }
 
 /**

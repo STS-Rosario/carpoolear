@@ -6,13 +6,13 @@ import {
 } from './ticketMessagePrefill.js';
 
 describe('buildPrefilledTicketEditorMarkdown', () => {
-    it('adds two blank paragraphs before the trip block', () => {
+    it('adds a blank paragraph before the trip block', () => {
         const markdown = buildPrefilledTicketEditorMarkdown(
             '--- datos del viaje ---\n\nViaje ID: 1'
         );
 
         expect(markdown).toBe(
-            `${PREFILLED_TICKET_BLANK_LINE_MARKDOWN}\n\n${PREFILLED_TICKET_BLANK_LINE_MARKDOWN}\n\n--- datos del viaje ---\n\nViaje ID: 1`
+            `${PREFILLED_TICKET_BLANK_LINE_MARKDOWN}\n\n--- datos del viaje ---\n\nViaje ID: 1`
         );
     });
 
