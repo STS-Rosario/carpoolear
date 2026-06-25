@@ -1,27 +1,20 @@
 import { describe, expect, it, vi } from 'vitest';
-import { applyTripBlockPrefillToEditor } from './ticketMessagePrefill.js';
+import { preparePrefilledTicketEditorCursor } from './ticketMessagePrefill.js';
 
-describe('applyTripBlockPrefillToEditor', () => {
-    it('loads the trip block then leaves the cursor on blank lines at the top', () => {
+describe('preparePrefilledTicketEditorCursor', () => {
+    it('prepends blank lines and leaves the cursor at the top', () => {
         const invoke = vi.fn();
         const editorRef = { invoke };
 
-        applyTripBlockPrefillToEditor(editorRef, '--- datos del viaje ---\n\nViaje ID: 1');
+        preparePrefilledTicketEditorCursor(editorRef);
 
-        expect(invoke).toHaveBeenNthCalledWith(
-            1,
-            'setMarkdown',
-            '--- datos del viaje ---\n\nViaje ID: 1',
-            true
-        );
-        expect(invoke).toHaveBeenNthCalledWith(2, 'moveCursorToStart', true);
-        expect(invoke).toHaveBeenNthCalledWith(3, 'insertText', '\n\n');
-        expect(invoke).toHaveBeenNthCalledWith(4, 'moveCursorToStart', true);
+        expect(invoke).toHaveBeenNthCalledWith(1, 'moveCursorToStart', true);
+        expect(invoke).toHaveBeenNthCalledWith(2, 'insertText', '\n\n');
+        expect(invoke).toHaveBeenNthCalledWith(3, 'moveCursorToStart', true);
+        expect(invoke).not.toHaveBeenCalledWith('setMarkdown', expect.anything());
     });
 
-    it('does nothing when the trip block is empty', () => {
-        const invoke = vi.fn();
-        applyTripBlockPrefillToEditor({ invoke }, '');
-        expect(invoke).not.toHaveBeenCalled();
+    it('does nothing when the editor ref is missing', () => {
+        expect(preparePrefilledTicketEditorCursor(null)).toBe(false);
     });
 });
