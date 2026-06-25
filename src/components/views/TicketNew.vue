@@ -27,6 +27,7 @@
                     initial-edit-type="wysiwyg"
                     height="180px"
                     class="mtop-10"
+                    @load="onCreateEditorLoad"
                 />
                 <label class="control-label mtop-10">{{ $t('adjuntosTicket') }}</label>
                 <input class="mtop-10" type="file" :accept="imageUploadAccept" multiple @change="onCreateAttachments" />
@@ -140,6 +141,17 @@ export default {
             if (allowed.includes(category)) {
                 this.form.type = category;
             }
+        },
+        onCreateEditorLoad() {
+            if (!this.prefillMessage) {
+                return;
+            }
+            setTimeout(() => {
+                if (!this.$refs.createEditor) {
+                    return;
+                }
+                this.$refs.createEditor.invoke('moveCursorToStart', true);
+            }, 50);
         }
     },
     mounted() {

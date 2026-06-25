@@ -2,7 +2,7 @@ function normalizeWebAppBaseUrl(webAppBaseUrl) {
     return String(webAppBaseUrl || '').replace(/\/$/, '');
 }
 
-const TRIP_REPORT_MESSAGE_SEPARATOR = '--------';
+const TRIP_REPORT_MESSAGE_SEPARATOR = '********';
 
 function buildTripReportSupportTicketContext({
     tripId,
