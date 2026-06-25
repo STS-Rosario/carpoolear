@@ -24,5 +24,13 @@ describe('NewTrip validation feedback', () => {
         expect(newTripViewSource).toContain('TripFormValidationSummary');
         expect(newTripViewSource).toContain('formValidationAttempted');
         expect(newTripViewSource).toContain('activeFormValidationMessages');
+        expect(newTripViewSource).toContain('tripFormValidationSummaryBindings');
+    });
+
+    it('clears description and no-lucrar errors when those fields change', () => {
+        expect(newTripViewSource).toContain("'trip.description': function ()");
+        expect(newTripViewSource).toContain('this.commentError.state = false');
+        expect(newTripViewSource).toContain('no_lucrar()');
+        expect(newTripViewSource).toContain('this.lucrarError.state = false');
     });
 });

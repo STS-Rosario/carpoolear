@@ -1024,9 +1024,7 @@
                                 </div>
                             </div>
                             <TripFormValidationSummary
-                                :attempted="formValidationAttempted"
-                                :messages="activeFormValidationMessages"
-                                :title="$t('algunosDatosNoValidos')"
+                                v-bind="tripFormValidationSummaryBindings"
                             />
                             <button
                                 v-if="!showReturnTrip && !isMobile"
@@ -1912,9 +1910,7 @@
                                 </div>
                             </div>
                             <TripFormValidationSummary
-                                :attempted="formValidationAttempted"
-                                :messages="activeFormValidationMessages"
-                                :title="$t('algunosDatosNoValidos')"
+                                v-bind="tripFormValidationSummaryBindings"
                             />
                             <button
                                 v-if="showReturnTrip && !isMobile"
@@ -2014,9 +2010,7 @@
             </div>
             <TripFormValidationSummary
                 v-if="isMobile"
-                :attempted="formValidationAttempted"
-                :messages="activeFormValidationMessages"
-                :title="$t('algunosDatosNoValidos')"
+                v-bind="tripFormValidationSummaryBindings"
             />
             <button
                 class="trip-create btn btn-primary btn-lg trip-form-mobile-footer__submit"
@@ -2366,6 +2360,13 @@ export default {
                 this.getTripValidationErrorFields()
             );
         },
+        tripFormValidationSummaryBindings() {
+            return {
+                attempted: this.formValidationAttempted,
+                messages: this.activeFormValidationMessages,
+                title: this.$t('algunosDatosNoValidos')
+            };
+        },
         columnClass() {
             return !this.isMobile && this.tripCardTheme === 'light'
                 ? ['col-sm-10', 'col-sm-14']
@@ -2494,6 +2495,12 @@ export default {
         },
         'otherTrip.trip.description': function () {
             this.otherTrip.commentError.state = false;
+        },
+        'trip.description': function () {
+            this.commentError.state = false;
+        },
+        no_lucrar() {
+            this.lucrarError.state = false;
         },
         'trip.friendship_type_id': function () {
             this.otherTrip.trip.friendship_type_id =
