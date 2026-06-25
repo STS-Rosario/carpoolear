@@ -1,4 +1,5 @@
-export const PREFILLED_TICKET_TOP_SPACES = '  ';
+/** Invisible paragraph content so Toast UI keeps empty lines in WYSIWYG mode. */
+export const PREFILLED_TICKET_BLANK_LINE_MARKDOWN = '\u200B';
 
 export function buildPrefilledTicketEditorMarkdown(tripBlockMarkdown) {
     const tripBlock = tripBlockMarkdown == null ? '' : String(tripBlockMarkdown).trim();
@@ -6,7 +7,11 @@ export function buildPrefilledTicketEditorMarkdown(tripBlockMarkdown) {
         return '';
     }
 
-    return `${PREFILLED_TICKET_TOP_SPACES}\n\n${tripBlock}`;
+    return [
+        PREFILLED_TICKET_BLANK_LINE_MARKDOWN,
+        PREFILLED_TICKET_BLANK_LINE_MARKDOWN,
+        tripBlock
+    ].join('\n\n');
 }
 
 /**
