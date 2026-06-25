@@ -30,16 +30,12 @@ describe('TicketNew view', () => {
         expect(source).toContain("this.$t('mensajeTicketPlaceholder')");
     });
 
-    it('prefills ticket message from route query via editor initial value', () => {
+    it('applies trip block prefill when the editor loads', () => {
         expect(source).toContain('prefillMessage');
         expect(source).toContain('this.$route.query.message');
-        expect(source).toMatch(/:initial-value="prefillMessage"/);
-    });
-
-    it('moves cursor to the start after a prefilled message loads', () => {
-        expect(source).toContain('@load="onCreateEditorLoad"');
-        expect(source).toContain('focusPrefilledEditorAtStart');
-        expect(source).toContain("invoke('moveCursorToStart', true)");
-        expect(source).not.toContain("'setMarkdown'");
+        expect(source).toContain("from '../../utils/ticketMessagePrefill.js'");
+        expect(source).toContain('applyPrefilledTripBlock');
+        expect(source).toContain('applyTripBlockPrefillToEditor');
+        expect(source).toContain('load: () => this.applyPrefilledTripBlock()');
     });
 });

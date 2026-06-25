@@ -22,12 +22,11 @@
                 <label class="control-label mtop-10">{{ $t('mensajeTicket') }}</label>
                 <editor
                     ref="createEditor"
-                    :initial-value="prefillMessage"
+                    :initial-value="''"
                     :options="editorOptionsWithPlaceholder"
                     initial-edit-type="wysiwyg"
                     height="180px"
                     class="mtop-10"
-                    @load="onCreateEditorLoad"
                 />
                 <label class="control-label mtop-10">{{ $t('adjuntosTicket') }}</label>
                 <input class="mtop-10" type="file" :accept="imageUploadAccept" multiple @change="onCreateAttachments" />
@@ -59,6 +58,7 @@ import {
     fetchSupportInfoSnapshot,
     isEmptyUserTicketMessage
 } from '../../utils/supportInfo';
+import { applyTripBlockPrefillToEditor } from '../../utils/ticketMessagePrefill.js';
 
 export default {
     name: 'ticket-new',
@@ -84,10 +84,16 @@ export default {
             return message ? String(message) : '';
         },
         editorOptionsWithPlaceholder() {
-            return {
+            const options = {
                 ...this.editorOptions,
                 placeholder: this.$t('mensajeTicketPlaceholder')
             };
+            if (this.prefillMessage) {
+                options.events = {
+                    load: () => this.applyPrefilledTripBlock()
+                };
+            }
+            return options;
         }
     },
     methods: {
@@ -142,26 +148,22 @@ export default {
                 this.form.type = category;
             }
         },
-        onCreateEditorLoad() {
-            this.focusPrefilledEditorAtStart();
-        },
-        focusPrefilledEditorAtStart() {
+        applyPrefilledTripBlock() {
             if (!this.prefillMessage) {
                 return;
             }
             this.$nextTick(() => {
                 setTimeout(() => {
-                    if (!this.$refs.createEditor) {
-                        return;
-                    }
-                    this.$refs.createEditor.invoke('moveCursorToStart', true);
+                    applyTripBlockPrefillToEditor(
+                        this.$refs.createEditor,
+                        this.prefillMessage
+                    );
                 }, 100);
             });
         }
     },
     mounted() {
         this.setTypeFromUrl();
-        this.focusPrefilledEditorAtStart();
     },
     watch: {
         '$route.query.category': function () {
