@@ -59,7 +59,7 @@ import {
     fetchSupportInfoSnapshot,
     isEmptyUserTicketMessage
 } from '../../utils/supportInfo';
-import { preparePrefilledTicketEditorCursor } from '../../utils/ticketMessagePrefill.js';
+import { prependBlankLinesToPrefilledTicketEditor } from '../../utils/ticketMessagePrefill.js';
 
 export default {
     name: 'ticket-new',
@@ -144,22 +144,28 @@ export default {
             }
         },
         onCreateEditorLoad() {
-            this.preparePrefilledEditorCursor();
+            this.prependPrefilledEditorBlankLines();
         },
-        preparePrefilledEditorCursor() {
+        prependPrefilledEditorBlankLines() {
             if (!this.prefillMessage) {
                 return;
             }
+            const run = (attempt = 0) => {
+                const applied = prependBlankLinesToPrefilledTicketEditor(
+                    this.$refs.createEditor
+                );
+                if (!applied && attempt < 5) {
+                    setTimeout(() => run(attempt + 1), 100);
+                }
+            };
             this.$nextTick(() => {
-                setTimeout(() => {
-                    preparePrefilledTicketEditorCursor(this.$refs.createEditor);
-                }, 100);
+                setTimeout(() => run(), 100);
             });
         }
     },
     mounted() {
         this.setTypeFromUrl();
-        this.preparePrefilledEditorCursor();
+        this.prependPrefilledEditorBlankLines();
     },
     watch: {
         '$route.query.category': function () {

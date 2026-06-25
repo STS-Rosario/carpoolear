@@ -1,20 +1,42 @@
 import { describe, expect, it, vi } from 'vitest';
-import { preparePrefilledTicketEditorCursor } from './ticketMessagePrefill.js';
+import {
+    PREFILLED_TICKET_BLANK_LINES_HTML,
+    prependBlankLinesToPrefilledTicketEditor
+} from './ticketMessagePrefill.js';
 
-describe('preparePrefilledTicketEditorCursor', () => {
-    it('prepends blank lines and leaves the cursor at the top', () => {
-        const invoke = vi.fn();
+describe('prependBlankLinesToPrefilledTicketEditor', () => {
+    it('prepends empty paragraphs and leaves the cursor at the top', () => {
+        const invoke = vi.fn((method) => {
+            if (method === 'getHTML') {
+                return '<p>--- datos del viaje ---</p><p>Viaje ID: 1</p>';
+            }
+            return null;
+        });
         const editorRef = { invoke };
 
-        preparePrefilledTicketEditorCursor(editorRef);
+        prependBlankLinesToPrefilledTicketEditor(editorRef);
 
-        expect(invoke).toHaveBeenNthCalledWith(1, 'moveCursorToStart', true);
-        expect(invoke).toHaveBeenNthCalledWith(2, 'insertText', '\n\n');
-        expect(invoke).toHaveBeenNthCalledWith(3, 'moveCursorToStart', true);
-        expect(invoke).not.toHaveBeenCalledWith('setMarkdown', expect.anything());
+        expect(invoke).toHaveBeenCalledWith(
+            'setHTML',
+            `${PREFILLED_TICKET_BLANK_LINES_HTML}<p>--- datos del viaje ---</p><p>Viaje ID: 1</p>`,
+            false
+        );
+        expect(invoke).toHaveBeenCalledWith('moveCursorToStart', true);
+    });
+
+    it('does nothing when the editor has no html yet', () => {
+        const invoke = vi.fn((method) => {
+            if (method === 'getHTML') {
+                return '';
+            }
+            return null;
+        });
+
+        expect(prependBlankLinesToPrefilledTicketEditor({ invoke })).toBe(false);
+        expect(invoke).not.toHaveBeenCalledWith('setHTML', expect.anything(), expect.anything());
     });
 
     it('does nothing when the editor ref is missing', () => {
-        expect(preparePrefilledTicketEditorCursor(null)).toBe(false);
+        expect(prependBlankLinesToPrefilledTicketEditor(null)).toBe(false);
     });
 });

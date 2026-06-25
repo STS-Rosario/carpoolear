@@ -35,7 +35,7 @@ describe('TicketNew view', () => {
         expect(source).toContain('this.$route.query.message');
         expect(source).toMatch(/:initial-value="prefillMessage"/);
         expect(source).toContain('@load="onCreateEditorLoad"');
-        expect(source).toContain('preparePrefilledTicketEditorCursor');
-        expect(source).toContain('preparePrefilledEditorCursor');
+        expect(source).toContain('prependBlankLinesToPrefilledTicketEditor');
+        expect(source).toContain('prependPrefilledEditorBlankLines');
     });
 });
