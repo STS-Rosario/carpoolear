@@ -1023,6 +1023,11 @@
                                     </span>
                                 </div>
                             </div>
+                            <TripFormValidationSummary
+                                :attempted="formValidationAttempted"
+                                :messages="activeFormValidationMessages"
+                                :title="$t('algunosDatosNoValidos')"
+                            />
                             <button
                                 v-if="!showReturnTrip && !isMobile"
                                 class="trip-create btn btn-primary btn-lg"
@@ -1906,6 +1911,11 @@
                                     </div>
                                 </div>
                             </div>
+                            <TripFormValidationSummary
+                                :attempted="formValidationAttempted"
+                                :messages="activeFormValidationMessages"
+                                :title="$t('algunosDatosNoValidos')"
+                            />
                             <button
                                 v-if="showReturnTrip && !isMobile"
                                 class="trip-create btn btn-primary btn-lg"
@@ -2002,6 +2012,12 @@
                     {{ $t('cargarViajeRegreso') }}
                 </label>
             </div>
+            <TripFormValidationSummary
+                v-if="isMobile"
+                :attempted="formValidationAttempted"
+                :messages="activeFormValidationMessages"
+                :title="$t('algunosDatosNoValidos')"
+            />
             <button
                 class="trip-create btn btn-primary btn-lg trip-form-mobile-footer__submit"
                 :class="{ 'trip-create--update': updatingTrip && !showReturnTrip }"
@@ -2073,6 +2089,7 @@ import SvgItem from '../SvgItem';
 import WeeklySchedule from '../elements/WeeklySchedule';
 import CompleteCarModal from '../elements/CompleteCarModal.vue';
 import TripCarsModal from '../elements/TripCarsModal.vue';
+import TripFormValidationSummary from '../elements/TripFormValidationSummary.vue';
 import TripPointDetailFields from '../elements/TripPointDetailFields';
 import bus from '../../services/bus-event.js';
 import { tripDetailRouteAfterCreate } from '../../utils/tripCreateRedirect.js';
@@ -2141,7 +2158,8 @@ export default {
         spinner,
         modal,
         CompleteCarModal,
-        TripCarsModal
+        TripCarsModal,
+        TripFormValidationSummary
     },
     data() {
         return {
@@ -2226,6 +2244,7 @@ export default {
             puntoPartidaError: new Error(),
             puntoLlegadaError: new Error(),
             saving: false,
+            formValidationAttempted: false,
             allowForeignPoints: false,
             url: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
             attribution:
@@ -2342,6 +2361,11 @@ export default {
         ...mapState(useDeviceStore, {
             isMobile: 'isMobile'
         }),
+        activeFormValidationMessages() {
+            return collectActiveValidationMessages(
+                this.getTripValidationErrorFields()
+            );
+        },
         columnClass() {
             return !this.isMobile && this.tripCardTheme === 'light'
                 ? ['col-sm-10', 'col-sm-14']
@@ -3311,12 +3335,13 @@ export default {
             }
             const validationResult = this.validate();
             if (validationResult) {
-                // Jump To Error
+                this.formValidationAttempted = true;
                 this.$nextTick(() => {
                     this.jumpToError();
                 });
                 return;
             }
+            this.formValidationAttempted = false;
             /* eslint-disable no-unreachable */
             this.saving = true;
             if (!this.updatingTrip) {

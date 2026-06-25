@@ -29,6 +29,10 @@ export function collectActiveValidationMessages(errorFields) {
     return messages;
 }
 
+export function shouldShowTripFormValidationSummary(attempted, messages) {
+    return attempted === true && Array.isArray(messages) && messages.length > 0;
+}
+
 export function formatTripValidationDialogMessage(fallback, messages) {
     const unique = [...new Set(
         (messages || [])
