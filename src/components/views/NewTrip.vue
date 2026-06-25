@@ -2080,6 +2080,11 @@ import {
     isProfileRequiredTripError,
     redirectToIncompleteProfileForTripCreate
 } from '../../utils/tripCreateErrors.js';
+import {
+    collectActiveValidationMessages,
+    findFirstTripFormErrorElement,
+    formatTripValidationDialogMessage
+} from '../../utils/tripFormValidationFeedback.js';
 import { getMaxContributionExceededMessage } from '../../utils/maxContributionExceededMessage.js';
 import { rememberMaxContributionWarning } from '../../utils/maxContributionWarningState.js';
 import {
@@ -2637,11 +2642,59 @@ export default {
             this.dateAnswer = date;
         },
         jumpToError() {
-            let hasError = document.getElementsByClassName('has-error');
-            if (hasError.length) {
-                let element = hasError[0];
+            const element = findFirstTripFormErrorElement(document);
+            if (element) {
                 this.$scrollToElement(element);
             }
+        },
+        getTripValidationErrorFields() {
+            const fields = [
+                ...this.points.map((point) => point.error),
+                this.puntoPartidaError,
+                this.puntoLlegadaError,
+                this.timeError,
+                this.dateError,
+                this.seatsError,
+                this.priceError,
+                this.lucrarError,
+                this.commentError,
+                this.carSelectionError
+            ];
+
+            if (this.showReturnTrip) {
+                fields.push(
+                    ...this.otherTrip.points.map((point) => point.error),
+                    this.otherTrip.puntoPartidaError,
+                    this.otherTrip.puntoLlegadaError,
+                    this.otherTrip.timeError,
+                    this.otherTrip.dateError,
+                    this.otherTrip.seatsError,
+                    this.otherTrip.commentError,
+                    this.returnPriceError
+                );
+            }
+
+            return fields;
+        },
+        showTripValidationSummary() {
+            const messages = collectActiveValidationMessages(
+                this.getTripValidationErrorFields()
+            );
+
+            if (!messages.length) {
+                return;
+            }
+
+            dialogs.message(
+                formatTripValidationDialogMessage(
+                    this.$t('algunosDatosNoValidos'),
+                    messages
+                ),
+                {
+                    estado: 'error',
+                    duration: 12
+                }
+            );
         },
     restoreData(trip) {
         this.no_lucrar = true;
@@ -2926,10 +2979,6 @@ export default {
                         estado: 'error'
                     }
                 );
-            } else if (globalError) {
-                dialogs.message(this.$t('algunosDatosNoValidos'), {
-                    estado: 'error'
-                });
             } else if (
                 !this.no_lucrar &&
                 this.trip.is_passenger.toString() !== '1'
@@ -3170,6 +3219,10 @@ export default {
 
             if (!this.showReturnTrip) {
                 this.returnPriceError.state = false;
+            }
+
+            if (globalError) {
+                this.showTripValidationSummary();
             }
 
             return globalError;
