@@ -11,5 +11,9 @@ describe('TripFormValidationSummary', () => {
         expect(componentSource).toContain('v-for="(message, index) in messages"');
         expect(componentSource).toContain('v-if="shouldShow"');
         expect(componentSource).toContain('shouldShowTripFormValidationSummary');
+        expect(componentSource).toContain('list-style-type: disc');
+        expect(componentSource).toContain('border: 2px solid var(--main-error, #d72521)');
+        expect(componentSource).toContain('background-color: #fff');
+        expect(componentSource).toContain('margin-right: 5px');
     });
 });
