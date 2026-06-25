@@ -1,9 +1,25 @@
 import { describe, expect, it } from 'vitest';
 import {
+    TRIP_REPORT_MESSAGE_SEPARATOR,
     buildTripReportSupportTicketMessage,
     buildTripReportSupportTicketRoute,
     resolveWebAppBaseUrl
 } from './supportTicketTripReport.js';
+
+// Patterns from @toast-ui/editor dist/esm/index.js (toastmark block parser).
+const TOAST_THEMATIC_BREAK_LINE =
+    /^(?:(?:\*[ \t]*){3,}|(?:_[ \t]*){3,}|(?:-[ \t]*){3,})[ \t]*$/;
+const TOAST_SETEXT_UNDERLINE_LINE = /^(?:=+|-+)[ \t]*$/;
+
+describe('TRIP_REPORT_MESSAGE_SEPARATOR', () => {
+    it('is not parsed as a thematic break (horizontal rule)', () => {
+        expect(TRIP_REPORT_MESSAGE_SEPARATOR).not.toMatch(TOAST_THEMATIC_BREAK_LINE);
+    });
+
+    it('is not parsed as a setext heading underline', () => {
+        expect(TRIP_REPORT_MESSAGE_SEPARATOR).not.toMatch(TOAST_SETEXT_UNDERLINE_LINE);
+    });
+});
 
 describe('buildTripReportSupportTicketMessage', () => {
     it('leaves room to type above a separator before trip context', () => {
@@ -14,7 +30,7 @@ describe('buildTripReportSupportTicketMessage', () => {
             driverProfileUrl: 'https://carpoolear.com.ar/app/profile/8'
         });
 
-        expect(message.startsWith('====\n\n')).toBe(true);
+        expect(message.startsWith(`${TRIP_REPORT_MESSAGE_SEPARATOR}\n\n`)).toBe(true);
         expect(message).toContain('Viaje ID: 42');
     });
 

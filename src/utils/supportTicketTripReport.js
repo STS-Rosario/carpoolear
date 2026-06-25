@@ -2,7 +2,9 @@ function normalizeWebAppBaseUrl(webAppBaseUrl) {
     return String(webAppBaseUrl || '').replace(/\/$/, '');
 }
 
-const TRIP_REPORT_MESSAGE_SEPARATOR = '====';
+// Toast UI Editor (toastmark) treats whole lines of ***, ---, or ___ as <hr>, and
+// whole lines of only = or - as setext heading underlines. Use a labeled line instead.
+export const TRIP_REPORT_MESSAGE_SEPARATOR = '--- datos del viaje ---';
 
 function buildTripReportSupportTicketContext({
     tripId,
