@@ -561,6 +561,8 @@ const messages = {
         validacionIdentidadRemovida: 'Verificación de cuenta removida.',
         debesValidarIdentidadParaAccion:
             'Debes verificar tu cuenta para realizar esta acción.',
+        completaPerfilParaCrearViaje:
+            'Tenés que completar y guardar tu perfil antes de publicar un viaje.',
         validacionProntoBanner:
             'Verificá tu cuenta o no podrás publicar viajes ni enviar mensajes. Tiempo restante: {countdown}',
         validacionProntoBannerTiempoCumplido:
@@ -2060,6 +2062,8 @@ const messages = {
         validacionIdentidadRemovida: 'Verificación de cuenta removida.',
         debesValidarIdentidadParaAccion:
             'Debes verificar tu cuenta para realizar esta acción.',
+        completaPerfilParaCrearViaje:
+            'Tenés que completar y guardar tu perfil antes de publicar un viaje.',
         validacionProntoBanner:
             'Verificá tu cuenta o no podrás publicar viajes ni enviar mensajes. Tiempo restante: {countdown}',
         validacionProntoBannerTiempoCumplido:
@@ -3643,6 +3647,8 @@ const messages = {
         validacionIdentidadRemovida: 'Account verification removed.',
         debesValidarIdentidadParaAccion:
             'You must verify your account to perform this action.',
+        completaPerfilParaCrearViaje:
+            'You need to complete and save your profile before posting a trip.',
         validacionProntoBanner:
             "Verify your account or you won't be able to post trips or send messages. Time remaining: {countdown}",
         validacionProntoBannerTiempoCumplido:

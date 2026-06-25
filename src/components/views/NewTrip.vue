@@ -2076,6 +2076,10 @@ import TripCarsModal from '../elements/TripCarsModal.vue';
 import TripPointDetailFields from '../elements/TripPointDetailFields';
 import bus from '../../services/bus-event.js';
 import { tripDetailRouteAfterCreate } from '../../utils/tripCreateRedirect.js';
+import {
+    isProfileRequiredTripError,
+    redirectToIncompleteProfileForTripCreate
+} from '../../utils/tripCreateErrors.js';
 import { getMaxContributionExceededMessage } from '../../utils/maxContributionExceededMessage.js';
 import { rememberMaxContributionWarning } from '../../utils/maxContributionWarningState.js';
 import {
@@ -3332,6 +3336,12 @@ export default {
                         } else if (this.$checkError(err, 'routing_service_unavailable')) {
                             dialogs.message(this.$t('routingServiceTemporaryError'), {
                                 estado: 'error'
+                            });
+                        } else if (isProfileRequiredTripError(err)) {
+                            redirectToIncompleteProfileForTripCreate(this.$router);
+                            dialogs.message(this.$t('completaPerfilParaCrearViaje'), {
+                                estado: 'error',
+                                duration: 10
                             });
                         } else {
                             dialogs.message(
