@@ -8,7 +8,12 @@ export function isProfileRequiredTripError(error) {
         return false;
     }
 
-    const profileRequired = error.data?.errors?.profile_required;
+    const errors = error.data?.errors;
+    if (!errors) {
+        return false;
+    }
+    // API field name from Laravel validation bag
+    const profileRequired = errors.profile_required;
     if (Array.isArray(profileRequired)) {
         return profileRequired.length > 0;
     }
