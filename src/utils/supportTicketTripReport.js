@@ -2,7 +2,9 @@ function normalizeWebAppBaseUrl(webAppBaseUrl) {
     return String(webAppBaseUrl || '').replace(/\/$/, '');
 }
 
-export function buildTripReportSupportTicketMessage({
+const TRIP_REPORT_MESSAGE_SEPARATOR = '--------';
+
+function buildTripReportSupportTicketContext({
     tripId,
     tripUrl,
     driverName,
@@ -25,6 +27,22 @@ export function buildTripReportSupportTicketMessage({
     }
 
     return lines.join('\n');
+}
+
+export function buildTripReportSupportTicketMessage({
+    tripId,
+    tripUrl,
+    driverName,
+    driverProfileUrl
+}) {
+    const context = buildTripReportSupportTicketContext({
+        tripId,
+        tripUrl,
+        driverName,
+        driverProfileUrl
+    });
+
+    return `\n\n${TRIP_REPORT_MESSAGE_SEPARATOR}\n\n${context}`;
 }
 
 export function buildTripReportSupportTicketRoute({ trip, webAppBaseUrl }) {
