@@ -22,6 +22,13 @@ describe('UpdateProfile save error feedback', () => {
     });
 });
 
+describe('UpdateProfile draft isolation', () => {
+    it('keeps form edits in a local clone instead of mutating the auth store', () => {
+        expect(viewSource).toContain('cloneProfileUser');
+        expect(viewSource).not.toMatch(/this\.user\s*=\s*this\.userData;/);
+    });
+});
+
 describe('UpdateProfile name editing', () => {
     it('locks the name field when identity is validated', () => {
         expect(viewSource).toContain('isNameLockedByValidation');
