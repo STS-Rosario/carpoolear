@@ -22,7 +22,7 @@
                 <label class="control-label mtop-10">{{ $t('mensajeTicket') }}</label>
                 <editor
                     ref="createEditor"
-                    :initial-value="''"
+                    :initial-value="prefillMessage"
                     :options="editorOptionsWithPlaceholder"
                     initial-edit-type="wysiwyg"
                     height="180px"
@@ -143,24 +143,25 @@ export default {
             }
         },
         onCreateEditorLoad() {
+            this.focusPrefilledEditorAtStart();
+        },
+        focusPrefilledEditorAtStart() {
             if (!this.prefillMessage) {
                 return;
             }
-            setTimeout(() => {
-                if (!this.$refs.createEditor) {
-                    return;
-                }
-                this.$refs.createEditor.invoke(
-                    'setMarkdown',
-                    this.prefillMessage,
-                    false
-                );
-                this.$refs.createEditor.invoke('moveCursorToStart', true);
-            }, 50);
+            this.$nextTick(() => {
+                setTimeout(() => {
+                    if (!this.$refs.createEditor) {
+                        return;
+                    }
+                    this.$refs.createEditor.invoke('moveCursorToStart', true);
+                }, 50);
+            });
         }
     },
     mounted() {
         this.setTypeFromUrl();
+        this.focusPrefilledEditorAtStart();
     },
     watch: {
         '$route.query.category': function () {
