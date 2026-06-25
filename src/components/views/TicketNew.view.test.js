@@ -33,6 +33,7 @@ describe('TicketNew view', () => {
     it('prefills ticket message from route query on mount', () => {
         expect(source).toContain('applyPrefillFromQuery');
         expect(source).toContain('this.$route.query.message');
+        expect(source).toContain('this.$nextTick');
         expect(source).toContain("invoke('setMarkdown'");
     });
 });

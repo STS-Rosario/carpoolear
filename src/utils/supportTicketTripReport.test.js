@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
     buildTripReportSupportTicketMessage,
-    buildTripReportSupportTicketRoute
+    buildTripReportSupportTicketRoute,
+    resolveWebAppBaseUrl
 } from './supportTicketTripReport.js';
 
 describe('buildTripReportSupportTicketMessage', () => {
@@ -54,5 +55,15 @@ describe('buildTripReportSupportTicketRoute', () => {
                 })
             }
         });
+    });
+});
+
+describe('resolveWebAppBaseUrl', () => {
+    it('prefers VITE_WEB_URL when available', () => {
+        expect(
+            resolveWebAppBaseUrl({
+                VITE_WEB_URL: 'https://carpoolear.com.ar/app/'
+            })
+        ).toBe('https://carpoolear.com.ar/app');
     });
 });

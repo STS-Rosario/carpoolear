@@ -140,10 +140,15 @@ export default {
         applyPrefillFromQuery() {
             this.setTypeFromUrl();
             const message = this.$route.query.message;
-            if (!message || !this.$refs.createEditor) {
+            if (!message) {
                 return;
             }
-            this.$refs.createEditor.invoke('setMarkdown', String(message));
+            this.$nextTick(() => {
+                if (!this.$refs.createEditor) {
+                    return;
+                }
+                this.$refs.createEditor.invoke('setMarkdown', String(message));
+            });
         }
     },
     mounted() {
