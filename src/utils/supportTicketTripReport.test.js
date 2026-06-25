@@ -6,6 +6,18 @@ import {
 } from './supportTicketTripReport.js';
 
 describe('buildTripReportSupportTicketMessage', () => {
+    it('leaves room to type above a separator before trip context', () => {
+        const message = buildTripReportSupportTicketMessage({
+            tripId: 42,
+            tripUrl: 'https://carpoolear.com.ar/app/trips/42',
+            driverName: 'Juan Pérez',
+            driverProfileUrl: 'https://carpoolear.com.ar/app/profile/8'
+        });
+
+        expect(message.startsWith('\n\n--------\n\n')).toBe(true);
+        expect(message).toContain('Viaje ID: 42');
+    });
+
     it('includes trip id, trip link, driver name and driver profile link', () => {
         const message = buildTripReportSupportTicketMessage({
             tripId: 42,
