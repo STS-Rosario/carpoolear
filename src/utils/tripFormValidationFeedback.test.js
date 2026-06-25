@@ -35,6 +35,14 @@ describe('tripFormValidationFeedback', () => {
         ).toBe('Algunos datos ingresados no son válidos.');
     });
 
+    it('lists a single active validation message explicitly', () => {
+        expect(
+            formatTripValidationDialogMessage('Algunos datos ingresados no son válidos.', [
+                'Falta fecha'
+            ])
+        ).toBe('Algunos datos ingresados no son válidos.\n• Falta fecha');
+    });
+
     it('prioritizes trip-error markers when scrolling to the first invalid field', () => {
         const root = {
             querySelectorAll(selector) {

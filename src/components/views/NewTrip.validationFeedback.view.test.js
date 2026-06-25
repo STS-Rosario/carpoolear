@@ -12,4 +12,11 @@ describe('NewTrip validation feedback', () => {
         expect(newTripViewSource).toContain('findFirstTripFormErrorElement');
         expect(newTripViewSource).toContain('getTripValidationErrorFields');
     });
+
+    it('shows the validation summary after all field checks complete', () => {
+        expect(newTripViewSource).toContain('showTripValidationSummary');
+        expect(newTripViewSource).not.toMatch(
+            /else if \(globalError\) \{\s*dialogs\.message\(this\.\$t\('algunosDatosNoValidos'\)/
+        );
+    });
 });
