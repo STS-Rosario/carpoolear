@@ -22,7 +22,7 @@
                 <label class="control-label mtop-10">{{ $t('mensajeTicket') }}</label>
                 <editor
                     ref="createEditor"
-                    :initial-value="''"
+                    :initial-value="prefillMessage"
                     :options="editorOptionsWithPlaceholder"
                     initial-edit-type="wysiwyg"
                     height="180px"
@@ -78,6 +78,10 @@ export default {
         };
     },
     computed: {
+        prefillMessage() {
+            const message = this.$route.query.message;
+            return message ? String(message) : '';
+        },
         editorOptionsWithPlaceholder() {
             return {
                 ...this.editorOptions,
@@ -136,30 +140,14 @@ export default {
             if (allowed.includes(category)) {
                 this.form.type = category;
             }
-        },
-        applyPrefillFromQuery() {
-            this.setTypeFromUrl();
-            const message = this.$route.query.message;
-            if (!message) {
-                return;
-            }
-            this.$nextTick(() => {
-                if (!this.$refs.createEditor) {
-                    return;
-                }
-                this.$refs.createEditor.invoke('setMarkdown', String(message));
-            });
         }
     },
     mounted() {
-        this.applyPrefillFromQuery();
+        this.setTypeFromUrl();
     },
     watch: {
         '$route.query.category': function () {
             this.setTypeFromUrl();
-        },
-        '$route.query.message': function () {
-            this.applyPrefillFromQuery();
         }
     },
     components: {
