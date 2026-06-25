@@ -136,14 +136,25 @@ export default {
             if (allowed.includes(category)) {
                 this.form.type = category;
             }
+        },
+        applyPrefillFromQuery() {
+            this.setTypeFromUrl();
+            const message = this.$route.query.message;
+            if (!message || !this.$refs.createEditor) {
+                return;
+            }
+            this.$refs.createEditor.invoke('setMarkdown', String(message));
         }
     },
     mounted() {
-        this.setTypeFromUrl();
+        this.applyPrefillFromQuery();
     },
     watch: {
         '$route.query.category': function () {
             this.setTypeFromUrl();
+        },
+        '$route.query.message': function () {
+            this.applyPrefillFromQuery();
         }
     },
     components: {

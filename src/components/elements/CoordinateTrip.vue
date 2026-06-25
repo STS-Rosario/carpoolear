@@ -58,7 +58,7 @@
                         amountPart: contributionWarningAmountPart
                     })
                 }}
-                <router-link :to="{ path: '/soporte' }">
+                <router-link :to="reportSupportTicketRoute">
                     {{ $t('coordinateTripContributionWarningPassengerReportLink') }}
                 </router-link>
                 {{ $t('coordinateTripContributionWarningPassengerSuffix') }}
@@ -194,6 +194,10 @@ import dayjs from '../../dayjs';
 import { getConversationContributionWarningData } from '../../utils/conversationContributionWarning.js';
 import { getContributionWarningAmountPart } from '../../utils/contributionWarningAmountPart.js';
 import { isVoluntaryContributionSeatPrice } from '../../utils/tripSeatPrice.js';
+import {
+    buildTripReportSupportTicketRoute,
+    resolveWebAppBaseUrl
+} from '../../utils/supportTicketTripReport.js';
 
 export default {
     name: 'conversation-chat',
@@ -268,6 +272,15 @@ export default {
                 this.$n.bind(this),
                 data.maxContributionCents
             );
+        },
+        reportSupportTicketRoute() {
+            if (!this.conversation || !this.conversation.trip) {
+                return { name: 'ticket-new', query: { category: 'report' } };
+            }
+            return buildTripReportSupportTicketRoute({
+                trip: this.conversation.trip,
+                webAppBaseUrl: resolveWebAppBaseUrl()
+            });
         }
     },
     methods: {
