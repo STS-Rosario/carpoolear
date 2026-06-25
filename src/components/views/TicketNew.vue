@@ -21,8 +21,10 @@
                 <input v-model="form.subject" class="form-control" :placeholder="$t('asuntoTicketPlaceholder')" />
                 <label class="control-label mtop-10">{{ $t('mensajeTicket') }}</label>
                 <editor
+                    v-if="showCreateEditor"
+                    :key="createEditorKey"
                     ref="createEditor"
-                    :initial-value="prefillMessage"
+                    :initial-value="editorInitialValue"
                     :options="editorOptionsWithPlaceholder"
                     initial-edit-type="wysiwyg"
                     height="180px"
@@ -59,7 +61,10 @@ import {
     fetchSupportInfoSnapshot,
     isEmptyUserTicketMessage
 } from '../../utils/supportInfo';
-import { prependBlankLinesToPrefilledTicketEditor } from '../../utils/ticketMessagePrefill.js';
+import {
+    buildPrefilledTicketEditorMarkdown,
+    focusPrefilledTicketEditorAtStart
+} from '../../utils/ticketMessagePrefill.js';
 
 export default {
     name: 'ticket-new',
@@ -72,6 +77,8 @@ export default {
             attachments: [],
             imageUploadAccept: IMAGE_UPLOAD_ACCEPT,
             ticketTypeOptions: USER_TICKET_TYPE_OPTIONS,
+            showCreateEditor: false,
+            createEditorKey: 0,
             editorOptions: {
                 usageStatistics: false,
                 hideModeSwitch: true,
@@ -83,6 +90,9 @@ export default {
         prefillMessage() {
             const message = this.$route.query.message;
             return message ? String(message) : '';
+        },
+        editorInitialValue() {
+            return buildPrefilledTicketEditorMarkdown(this.prefillMessage);
         },
         editorOptionsWithPlaceholder() {
             return {
@@ -144,28 +154,23 @@ export default {
             }
         },
         onCreateEditorLoad() {
-            this.prependPrefilledEditorBlankLines();
-        },
-        prependPrefilledEditorBlankLines() {
             if (!this.prefillMessage) {
                 return;
             }
-            const run = (attempt = 0) => {
-                const applied = prependBlankLinesToPrefilledTicketEditor(
-                    this.$refs.createEditor
-                );
-                if (!applied && attempt < 5) {
-                    setTimeout(() => run(attempt + 1), 100);
-                }
-            };
             this.$nextTick(() => {
-                setTimeout(() => run(), 100);
+                setTimeout(() => {
+                    focusPrefilledTicketEditorAtStart(this.$refs.createEditor);
+                }, 50);
             });
+        },
+        mountCreateEditor() {
+            this.showCreateEditor = true;
+            this.createEditorKey += 1;
         }
     },
     mounted() {
         this.setTypeFromUrl();
-        this.prependPrefilledEditorBlankLines();
+        this.mountCreateEditor();
     },
     watch: {
         '$route.query.category': function () {

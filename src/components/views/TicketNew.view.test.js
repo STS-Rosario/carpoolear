@@ -32,10 +32,12 @@ describe('TicketNew view', () => {
 
     it('renders trip block via initial value and prepares cursor on load', () => {
         expect(source).toContain('prefillMessage');
-        expect(source).toContain('this.$route.query.message');
-        expect(source).toMatch(/:initial-value="prefillMessage"/);
+        expect(source).toContain('editorInitialValue');
+        expect(source).toContain('buildPrefilledTicketEditorMarkdown');
+        expect(source).toMatch(/:initial-value="editorInitialValue"/);
+        expect(source).toContain(':key="createEditorKey"');
+        expect(source).toContain('mountCreateEditor');
         expect(source).toContain('@load="onCreateEditorLoad"');
-        expect(source).toContain('prependBlankLinesToPrefilledTicketEditor');
-        expect(source).toContain('prependPrefilledEditorBlankLines');
+        expect(source).toContain('focusPrefilledTicketEditorAtStart');
     });
 });

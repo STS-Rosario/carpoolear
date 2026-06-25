@@ -1,42 +1,30 @@
 import { describe, expect, it, vi } from 'vitest';
 import {
-    PREFILLED_TICKET_BLANK_LINES_HTML,
-    prependBlankLinesToPrefilledTicketEditor
+    PREFILLED_TICKET_BLANK_LINE_MARKDOWN,
+    buildPrefilledTicketEditorMarkdown,
+    focusPrefilledTicketEditorAtStart
 } from './ticketMessagePrefill.js';
 
-describe('prependBlankLinesToPrefilledTicketEditor', () => {
-    it('prepends empty paragraphs and leaves the cursor at the top', () => {
-        const invoke = vi.fn((method) => {
-            if (method === 'getHTML') {
-                return '<p>--- datos del viaje ---</p><p>Viaje ID: 1</p>';
-            }
-            return null;
-        });
-        const editorRef = { invoke };
-
-        prependBlankLinesToPrefilledTicketEditor(editorRef);
-
-        expect(invoke).toHaveBeenCalledWith(
-            'setHTML',
-            `${PREFILLED_TICKET_BLANK_LINES_HTML}<p>--- datos del viaje ---</p><p>Viaje ID: 1</p>`,
-            false
+describe('buildPrefilledTicketEditorMarkdown', () => {
+    it('adds two blank paragraphs before the trip block', () => {
+        const markdown = buildPrefilledTicketEditorMarkdown(
+            '--- datos del viaje ---\n\nViaje ID: 1'
         );
+
+        expect(markdown).toBe(
+            `${PREFILLED_TICKET_BLANK_LINE_MARKDOWN}\n\n${PREFILLED_TICKET_BLANK_LINE_MARKDOWN}\n\n--- datos del viaje ---\n\nViaje ID: 1`
+        );
+    });
+
+    it('returns an empty string when the trip block is missing', () => {
+        expect(buildPrefilledTicketEditorMarkdown('')).toBe('');
+    });
+});
+
+describe('focusPrefilledTicketEditorAtStart', () => {
+    it('moves the cursor to the document start', () => {
+        const invoke = vi.fn();
+        focusPrefilledTicketEditorAtStart({ invoke });
         expect(invoke).toHaveBeenCalledWith('moveCursorToStart', true);
-    });
-
-    it('does nothing when the editor has no html yet', () => {
-        const invoke = vi.fn((method) => {
-            if (method === 'getHTML') {
-                return '';
-            }
-            return null;
-        });
-
-        expect(prependBlankLinesToPrefilledTicketEditor({ invoke })).toBe(false);
-        expect(invoke).not.toHaveBeenCalledWith('setHTML', expect.anything(), expect.anything());
-    });
-
-    it('does nothing when the editor ref is missing', () => {
-        expect(prependBlankLinesToPrefilledTicketEditor(null)).toBe(false);
     });
 });
