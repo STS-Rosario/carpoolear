@@ -35,4 +35,11 @@ describe('TicketNew view', () => {
         expect(source).toContain('this.$route.query.message');
         expect(source).toMatch(/:initial-value="prefillMessage"/);
     });
+
+    it('moves cursor to the start after a prefilled message loads', () => {
+        expect(source).toContain('@load="onCreateEditorLoad"');
+        expect(source).toContain('onCreateEditorLoad');
+        expect(source).toContain("invoke('moveCursorToStart', true)");
+        expect(source).toContain('setTimeout');
+    });
 });
