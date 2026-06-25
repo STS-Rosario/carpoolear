@@ -21,12 +21,15 @@
                 <input v-model="form.subject" class="form-control" :placeholder="$t('asuntoTicketPlaceholder')" />
                 <label class="control-label mtop-10">{{ $t('mensajeTicket') }}</label>
                 <editor
+                    v-if="showCreateEditor"
+                    :key="createEditorKey"
                     ref="createEditor"
-                    :initial-value="''"
+                    :initial-value="editorInitialValue"
                     :options="editorOptionsWithPlaceholder"
                     initial-edit-type="wysiwyg"
                     height="180px"
                     class="mtop-10"
+                    @load="onCreateEditorLoad"
                 />
                 <label class="control-label mtop-10">{{ $t('adjuntosTicket') }}</label>
                 <input class="mtop-10" type="file" :accept="imageUploadAccept" multiple @change="onCreateAttachments" />
@@ -58,6 +61,10 @@ import {
     fetchSupportInfoSnapshot,
     isEmptyUserTicketMessage
 } from '../../utils/supportInfo';
+import {
+    buildPrefilledTicketEditorMarkdown,
+    focusPrefilledTicketEditorAtStart
+} from '../../utils/ticketMessagePrefill.js';
 
 export default {
     name: 'ticket-new',
@@ -70,6 +77,8 @@ export default {
             attachments: [],
             imageUploadAccept: IMAGE_UPLOAD_ACCEPT,
             ticketTypeOptions: USER_TICKET_TYPE_OPTIONS,
+            showCreateEditor: false,
+            createEditorKey: 0,
             editorOptions: {
                 usageStatistics: false,
                 hideModeSwitch: true,
@@ -78,6 +87,13 @@ export default {
         };
     },
     computed: {
+        prefillMessage() {
+            const message = this.$route.query.message;
+            return message ? String(message) : '';
+        },
+        editorInitialValue() {
+            return buildPrefilledTicketEditorMarkdown(this.prefillMessage);
+        },
         editorOptionsWithPlaceholder() {
             return {
                 ...this.editorOptions,
@@ -136,10 +152,25 @@ export default {
             if (allowed.includes(category)) {
                 this.form.type = category;
             }
+        },
+        onCreateEditorLoad() {
+            if (!this.prefillMessage) {
+                return;
+            }
+            this.$nextTick(() => {
+                setTimeout(() => {
+                    focusPrefilledTicketEditorAtStart(this.$refs.createEditor);
+                }, 50);
+            });
+        },
+        mountCreateEditor() {
+            this.showCreateEditor = true;
+            this.createEditorKey += 1;
         }
     },
     mounted() {
         this.setTypeFromUrl();
+        this.mountCreateEditor();
     },
     watch: {
         '$route.query.category': function () {

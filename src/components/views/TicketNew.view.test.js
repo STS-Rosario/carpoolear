@@ -29,4 +29,15 @@ describe('TicketNew view', () => {
         expect(source).toContain('editorOptionsWithPlaceholder');
         expect(source).toContain("this.$t('mensajeTicketPlaceholder')");
     });
+
+    it('renders trip block via initial value and prepares cursor on load', () => {
+        expect(source).toContain('prefillMessage');
+        expect(source).toContain('editorInitialValue');
+        expect(source).toContain('buildPrefilledTicketEditorMarkdown');
+        expect(source).toMatch(/:initial-value="editorInitialValue"/);
+        expect(source).toContain(':key="createEditorKey"');
+        expect(source).toContain('mountCreateEditor');
+        expect(source).toContain('@load="onCreateEditorLoad"');
+        expect(source).toContain('focusPrefilledTicketEditorAtStart');
+    });
 });

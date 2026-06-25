@@ -30,11 +30,14 @@ describe('CoordinateTrip.vue', () => {
         );
     });
 
-    it('links passenger report action to soporte', () => {
+    it('links passenger report action to a prefilled denuncia ticket', () => {
         expect(viewSource).toContain("$t('coordinateTripContributionWarningPassengerPrefix'");
         expect(viewSource).toContain("$t('coordinateTripContributionWarningPassengerSuffix')");
+        expect(viewSource).toContain("from '../../utils/supportTicketTripReport.js'");
+        expect(viewSource).toContain('buildTripReportSupportTicketRoute');
+        expect(viewSource).toContain('reportSupportTicketRoute');
         expect(viewSource).toMatch(
-            /<router-link\s+:to="\{\s*path:\s*'\/soporte'\s*\}">\s*\{\{\s*\$t\('coordinateTripContributionWarningPassengerReportLink'\)\s*\}\}\s*<\/router-link>/
+            /<router-link\s+:to="reportSupportTicketRoute">\s*\{\{\s*\$t\('coordinateTripContributionWarningPassengerReportLink'\)\s*\}\}\s*<\/router-link>/
         );
     });
 });
