@@ -1023,6 +1023,9 @@
                                     </span>
                                 </div>
                             </div>
+                            <TripFormValidationSummary
+                                v-bind="tripFormValidationSummaryBindings"
+                            />
                             <button
                                 v-if="!showReturnTrip && !isMobile"
                                 class="trip-create btn btn-primary btn-lg"
@@ -1906,6 +1909,9 @@
                                     </div>
                                 </div>
                             </div>
+                            <TripFormValidationSummary
+                                v-bind="tripFormValidationSummaryBindings"
+                            />
                             <button
                                 v-if="showReturnTrip && !isMobile"
                                 class="trip-create btn btn-primary btn-lg"
@@ -2002,6 +2008,10 @@
                     {{ $t('cargarViajeRegreso') }}
                 </label>
             </div>
+            <TripFormValidationSummary
+                v-if="isMobile"
+                v-bind="tripFormValidationSummaryBindings"
+            />
             <button
                 class="trip-create btn btn-primary btn-lg trip-form-mobile-footer__submit"
                 :class="{ 'trip-create--update': updatingTrip && !showReturnTrip }"
@@ -2073,6 +2083,7 @@ import SvgItem from '../SvgItem';
 import WeeklySchedule from '../elements/WeeklySchedule';
 import CompleteCarModal from '../elements/CompleteCarModal.vue';
 import TripCarsModal from '../elements/TripCarsModal.vue';
+import TripFormValidationSummary from '../elements/TripFormValidationSummary.vue';
 import TripPointDetailFields from '../elements/TripPointDetailFields';
 import bus from '../../services/bus-event.js';
 import { tripDetailRouteAfterCreate } from '../../utils/tripCreateRedirect.js';
@@ -2080,6 +2091,11 @@ import {
     isProfileRequiredTripError,
     redirectToIncompleteProfileForTripCreate
 } from '../../utils/tripCreateErrors.js';
+import {
+    collectActiveValidationMessages,
+    findFirstTripFormErrorElement,
+    formatTripValidationDialogMessage
+} from '../../utils/tripFormValidationFeedback.js';
 import { getMaxContributionExceededMessage } from '../../utils/maxContributionExceededMessage.js';
 import { rememberMaxContributionWarning } from '../../utils/maxContributionWarningState.js';
 import {
@@ -2136,7 +2152,8 @@ export default {
         spinner,
         modal,
         CompleteCarModal,
-        TripCarsModal
+        TripCarsModal,
+        TripFormValidationSummary
     },
     data() {
         return {
@@ -2221,6 +2238,7 @@ export default {
             puntoPartidaError: new Error(),
             puntoLlegadaError: new Error(),
             saving: false,
+            formValidationAttempted: false,
             allowForeignPoints: false,
             url: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
             attribution:
@@ -2337,6 +2355,18 @@ export default {
         ...mapState(useDeviceStore, {
             isMobile: 'isMobile'
         }),
+        activeFormValidationMessages() {
+            return collectActiveValidationMessages(
+                this.getTripValidationErrorFields()
+            );
+        },
+        tripFormValidationSummaryBindings() {
+            return {
+                attempted: this.formValidationAttempted,
+                messages: this.activeFormValidationMessages,
+                title: this.$t('algunosDatosNoValidos')
+            };
+        },
         columnClass() {
             return !this.isMobile && this.tripCardTheme === 'light'
                 ? ['col-sm-10', 'col-sm-14']
@@ -2465,6 +2495,12 @@ export default {
         },
         'otherTrip.trip.description': function () {
             this.otherTrip.commentError.state = false;
+        },
+        'trip.description': function () {
+            this.commentError.state = false;
+        },
+        no_lucrar() {
+            this.lucrarError.state = false;
         },
         'trip.friendship_type_id': function () {
             this.otherTrip.trip.friendship_type_id =
@@ -2637,11 +2673,59 @@ export default {
             this.dateAnswer = date;
         },
         jumpToError() {
-            let hasError = document.getElementsByClassName('has-error');
-            if (hasError.length) {
-                let element = hasError[0];
+            const element = findFirstTripFormErrorElement(document);
+            if (element) {
                 this.$scrollToElement(element);
             }
+        },
+        getTripValidationErrorFields() {
+            const fields = [
+                ...this.points.map((point) => point.error),
+                this.puntoPartidaError,
+                this.puntoLlegadaError,
+                this.timeError,
+                this.dateError,
+                this.seatsError,
+                this.priceError,
+                this.lucrarError,
+                this.commentError,
+                this.carSelectionError
+            ];
+
+            if (this.showReturnTrip) {
+                fields.push(
+                    ...this.otherTrip.points.map((point) => point.error),
+                    this.otherTrip.puntoPartidaError,
+                    this.otherTrip.puntoLlegadaError,
+                    this.otherTrip.timeError,
+                    this.otherTrip.dateError,
+                    this.otherTrip.seatsError,
+                    this.otherTrip.commentError,
+                    this.returnPriceError
+                );
+            }
+
+            return fields;
+        },
+        showTripValidationSummary() {
+            const messages = collectActiveValidationMessages(
+                this.getTripValidationErrorFields()
+            );
+
+            if (!messages.length) {
+                return;
+            }
+
+            dialogs.message(
+                formatTripValidationDialogMessage(
+                    this.$t('algunosDatosNoValidos'),
+                    messages
+                ),
+                {
+                    estado: 'error',
+                    duration: 12
+                }
+            );
         },
     restoreData(trip) {
         this.no_lucrar = true;
@@ -2926,10 +3010,6 @@ export default {
                         estado: 'error'
                     }
                 );
-            } else if (globalError) {
-                dialogs.message(this.$t('algunosDatosNoValidos'), {
-                    estado: 'error'
-                });
             } else if (
                 !this.no_lucrar &&
                 this.trip.is_passenger.toString() !== '1'
@@ -3172,6 +3252,10 @@ export default {
                 this.returnPriceError.state = false;
             }
 
+            if (globalError) {
+                this.showTripValidationSummary();
+            }
+
             return globalError;
         },
 
@@ -3258,12 +3342,13 @@ export default {
             }
             const validationResult = this.validate();
             if (validationResult) {
-                // Jump To Error
+                this.formValidationAttempted = true;
                 this.$nextTick(() => {
                     this.jumpToError();
                 });
                 return;
             }
+            this.formValidationAttempted = false;
             /* eslint-disable no-unreachable */
             this.saving = true;
             if (!this.updatingTrip) {
