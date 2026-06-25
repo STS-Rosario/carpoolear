@@ -12,3 +12,11 @@ describe('NewTrip duplicate create handling', () => {
         expect(newTripViewSource).toContain('t.existing');
     });
 });
+
+describe('NewTrip incomplete profile handling', () => {
+    it('redirects to profile update when trip create returns profile_required', () => {
+        expect(newTripViewSource).toContain('isProfileRequiredTripError');
+        expect(newTripViewSource).toContain('redirectToIncompleteProfileForTripCreate');
+        expect(newTripViewSource).toContain('completaPerfilParaCrearViaje');
+    });
+});

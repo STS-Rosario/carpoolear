@@ -656,6 +656,7 @@ import {
     IMAGE_UPLOAD_ACCEPT
 } from '../../utils/imageUpload';
 import { applyImageUploadSelection } from '../../utils/imageUploadSelection';
+import { cloneProfileUser } from '../../utils/profileUserClone';
 
 class Error {
     constructor(state = false, message = '') {
@@ -790,6 +791,15 @@ export default {
             const normalized = normalizeFacebookProfileUrl(this.user.facebook_profile_url);
             if (normalized) {
                 this.user.facebook_profile_url = normalized;
+            }
+        },
+        syncProfileDraftFromStore() {
+            this.user = cloneProfileUser(this.userData);
+            if (this.user && this.user.nro_doc) {
+                this.user.nro_doc = formatId(
+                    this.user.nro_doc,
+                    this.config.profile_id_format
+                );
             }
         },
         jumpToError() {
@@ -1185,11 +1195,7 @@ export default {
         },
         userData: function () {
             console.log('userData', this.userData);
-            this.user = this.userData;
-            // Format nro_doc with pattern when loaded from backend
-            if (this.user && this.user.nro_doc) {
-                this.user.nro_doc = formatId(this.user.nro_doc, this.config.profile_id_format);
-            }
+            this.syncProfileDraftFromStore();
         },
         iptUser() {
             this.nombreError.state = false;
@@ -1227,11 +1233,7 @@ export default {
         this.redirectMissingPatenteToAutos();
         this.scrollToAutosLinkIfNeeded();
         bus.on('date-change', this.dateChange);
-        this.user = this.userData;
-        // Format nro_doc with pattern when page loads
-        if (this.user && this.user.nro_doc) {
-            this.user.nro_doc = formatId(this.user.nro_doc, this.config.profile_id_format);
-        }
+        this.syncProfileDraftFromStore();
         console.log('USUARIO', this.userData);
         if (
             Array.isArray(this.user.driver_data_docs) &&

@@ -3,6 +3,7 @@ import router from '../router';
 import { useAuthStore } from '../stores/auth';
 import { useRatesStore } from '../stores/rates';
 import { hasRequiredProfileFields } from '../utils/profileRequirements';
+import { INCOMPLETE_PROFILE_UPDATE_ROUTE } from '../utils/tripCreateErrors';
 import {
     PENDING_RATINGS_REDIRECT_ROUTE,
     shouldRedirectForPendingRatings
@@ -121,7 +122,7 @@ export function profileComplete(to, from, next) {
         };
         console.log('problem');
         next(false);
-        router.replace({ name: 'profile_update', query: { incompleteProfile: 'true' } });
+        router.replace(INCOMPLETE_PROFILE_UPDATE_ROUTE);
     } else {
         next();
     }
