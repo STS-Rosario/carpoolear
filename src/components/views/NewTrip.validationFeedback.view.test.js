@@ -19,4 +19,10 @@ describe('NewTrip validation feedback', () => {
             /else if \(globalError\) \{\s*dialogs\.message\(this\.\$t\('algunosDatosNoValidos'\)/
         );
     });
+
+    it('renders an in-form validation summary before submit actions', () => {
+        expect(newTripViewSource).toContain('TripFormValidationSummary');
+        expect(newTripViewSource).toContain('formValidationAttempted');
+        expect(newTripViewSource).toContain('activeFormValidationMessages');
+    });
 });

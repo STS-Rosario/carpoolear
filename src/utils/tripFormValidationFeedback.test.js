@@ -3,7 +3,8 @@ import {
     TRIP_FORM_ERROR_SELECTORS,
     collectActiveValidationMessages,
     findFirstTripFormErrorElement,
-    formatTripValidationDialogMessage
+    formatTripValidationDialogMessage,
+    shouldShowTripFormValidationSummary
 } from './tripFormValidationFeedback.js';
 
 describe('tripFormValidationFeedback', () => {
@@ -41,6 +42,12 @@ describe('tripFormValidationFeedback', () => {
                 'Falta fecha'
             ])
         ).toBe('Algunos datos ingresados no son válidos.\n• Falta fecha');
+    });
+
+    it('shows the in-form summary only after a failed submit with active errors', () => {
+        expect(shouldShowTripFormValidationSummary(true, ['Falta fecha'])).toBe(true);
+        expect(shouldShowTripFormValidationSummary(false, ['Falta fecha'])).toBe(false);
+        expect(shouldShowTripFormValidationSummary(true, [])).toBe(false);
     });
 
     it('prioritizes trip-error markers when scrolling to the first invalid field', () => {
