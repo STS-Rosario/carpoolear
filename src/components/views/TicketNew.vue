@@ -155,7 +155,7 @@ export default {
                         return;
                     }
                     this.$refs.createEditor.invoke('moveCursorToStart', true);
-                }, 50);
+                }, 100);
             });
         }
     },

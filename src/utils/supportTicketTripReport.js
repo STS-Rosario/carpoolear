@@ -44,7 +44,7 @@ export function buildTripReportSupportTicketMessage({
         driverProfileUrl
     });
 
-    return `${TRIP_REPORT_MESSAGE_SEPARATOR}\n\n${context}`;
+    return `\n\n${TRIP_REPORT_MESSAGE_SEPARATOR}\n\n${context}`;
 }
 
 export function buildTripReportSupportTicketRoute({ trip, webAppBaseUrl }) {
