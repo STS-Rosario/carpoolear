@@ -2,7 +2,7 @@ function normalizeWebAppBaseUrl(webAppBaseUrl) {
     return String(webAppBaseUrl || '').replace(/\/$/, '');
 }
 
-const TRIP_REPORT_MESSAGE_SEPARATOR = '********';
+const TRIP_REPORT_MESSAGE_SEPARATOR = '====';
 
 function buildTripReportSupportTicketContext({
     tripId,
@@ -42,7 +42,7 @@ export function buildTripReportSupportTicketMessage({
         driverProfileUrl
     });
 
-    return `\n\n${TRIP_REPORT_MESSAGE_SEPARATOR}\n\n${context}`;
+    return `\n${TRIP_REPORT_MESSAGE_SEPARATOR}\n\n${context}`;
 }
 
 export function buildTripReportSupportTicketRoute({ trip, webAppBaseUrl }) {

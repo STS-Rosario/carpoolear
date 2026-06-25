@@ -30,10 +30,11 @@ describe('TicketNew view', () => {
         expect(source).toContain("this.$t('mensajeTicketPlaceholder')");
     });
 
-    it('prefills ticket message from route query via editor initial value', () => {
+    it('prefills ticket message from route query when the editor loads', () => {
         expect(source).toContain('prefillMessage');
         expect(source).toContain('this.$route.query.message');
-        expect(source).toMatch(/:initial-value="prefillMessage"/);
+        expect(source).toContain("'setMarkdown'");
+        expect(source).toContain('false');
     });
 
     it('moves cursor to the start after a prefilled message loads', () => {

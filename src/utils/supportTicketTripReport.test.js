@@ -14,7 +14,7 @@ describe('buildTripReportSupportTicketMessage', () => {
             driverProfileUrl: 'https://carpoolear.com.ar/app/profile/8'
         });
 
-        expect(message.startsWith('\n\n********\n\n')).toBe(true);
+        expect(message.startsWith('\n====\n\n')).toBe(true);
         expect(message).toContain('Viaje ID: 42');
     });
 

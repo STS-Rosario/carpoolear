@@ -22,7 +22,7 @@
                 <label class="control-label mtop-10">{{ $t('mensajeTicket') }}</label>
                 <editor
                     ref="createEditor"
-                    :initial-value="prefillMessage"
+                    :initial-value="''"
                     :options="editorOptionsWithPlaceholder"
                     initial-edit-type="wysiwyg"
                     height="180px"
@@ -150,6 +150,11 @@ export default {
                 if (!this.$refs.createEditor) {
                     return;
                 }
+                this.$refs.createEditor.invoke(
+                    'setMarkdown',
+                    this.prefillMessage,
+                    false
+                );
                 this.$refs.createEditor.invoke('moveCursorToStart', true);
             }, 50);
         }
