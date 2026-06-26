@@ -195,7 +195,7 @@ h3 {
     display: block;
     font-size: 15px;
     line-height: 1.15;
-    margin-top: 2px;
+    margin-top: 5px;
     color: var(--medium-font-color);
 }
 .mobile-footer-bar__item.active .mobile-footer-bar__label {

@@ -2153,11 +2153,26 @@ textarea {
 
 .mobile-footer-bar__item {
     vertical-align: middle;
-    display: inline-block;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
     color: var(--medium-font-color);
-    font-size: 26px;
     width: 23%;
     cursor: pointer;
+}
+
+.mobile-footer-bar__icon {
+    display: flex;
+    line-height: 0;
+}
+
+.mobile-footer-bar__icon .svgItem {
+    display: block;
+    line-height: 0;
+}
+
+.mobile-footer-bar__icon svg {
+    display: block;
 }
 
 .mobile-footer-bar__item--home {
