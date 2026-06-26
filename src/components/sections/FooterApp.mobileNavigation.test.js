@@ -13,6 +13,7 @@ describe('FooterApp mobile navigation', () => {
 
     it('shows a badge on my trips when there are pending requests', () => {
         expect(footerSource).toContain('myTripsBadgeCount');
+        expect(footerSource).toContain('myTripsCount');
         expect(footerSource).toContain("item.id === 'my-trips'");
     });
 });
