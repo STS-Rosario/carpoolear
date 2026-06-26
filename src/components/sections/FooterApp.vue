@@ -179,12 +179,6 @@ h3 {
 .width-badges {
     position: relative;
 }
-.actionbar_item_label {
-    display: block;
-    font-size: 11px;
-    line-height: 1.1;
-    margin-top: 2px;
-}
 .badge {
     position: absolute;
     background-color: red;
