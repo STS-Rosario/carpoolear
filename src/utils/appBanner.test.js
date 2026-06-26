@@ -55,7 +55,7 @@ describe('shouldShowAppBanner', () => {
         ).toBe(false);
     });
 
-    it('shows verification banner when user is not logged in', () => {
-        expect(shouldShowAppBanner(verificationBanner, null)).toBe(true);
+    it('hides verification banner when user is not logged in', () => {
+        expect(shouldShowAppBanner(verificationBanner, null)).toBe(false);
     });
 });

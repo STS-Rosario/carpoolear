@@ -10,8 +10,5 @@ export function shouldShowAppBanner(banner, user) {
     if (!isAccountVerificationBanner(banner)) {
         return true;
     }
-    if (!user) {
-        return true;
-    }
-    return !user.identity_validated;
+    return Boolean(user) && !user.identity_validated;
 }
