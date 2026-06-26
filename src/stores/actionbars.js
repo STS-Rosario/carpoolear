@@ -58,21 +58,21 @@ export const useActionbarsStore = defineStore('actionbars', {
             {
                 id: 'my-trips',
                 labelKey: 'misViajes',
-                icon: 'seat',
+                icon: 'my-trips',
                 url: 'my-trips',
                 active: false
             },
             {
                 id: 'new-trip',
                 labelKey: 'crearViaje',
-                icon: 'add',
+                icon: 'create-trip',
                 url: 'new-trip',
                 active: false
             },
             {
                 id: 'profile',
                 labelKey: 'miCuenta',
-                icon: 'contact',
+                icon: 'account',
                 url: 'profile',
                 active: false
             },

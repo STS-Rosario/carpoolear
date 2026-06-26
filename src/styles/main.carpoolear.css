@@ -2172,10 +2172,12 @@ textarea {
     color: var(--secondary-background);
 }
 
-.mobile-footer-bar__item--primary .mobile-footer-bar__icon {
-    color: var(--secondary-font-color);
-    background: red;
-    vertical-align: top;
+.mobile-footer-bar__item svg {
+    fill: none;
+}
+
+.mobile-footer-bar__item svg path {
+    stroke: currentColor;
 }
 
 .mobile-header-bar__section {

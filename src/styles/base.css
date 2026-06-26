@@ -1994,26 +1994,11 @@
   }
 
   .mobile-footer-bar__item svg {
-      fill: #666;
+      fill: none;
   }
 
-  .mobile-footer-bar__item.active svg {
-      fill: var(--secondary-background);
-  }
-
-  .mobile-footer-bar__item--primary .mobile-footer-bar__icon {
-      color: var(--secondary-font-color);
-      background: red;
-      vertical-align: top;
-  }
-
-  .mobile-footer-bar__item--primary svg {
-      margin-top: 6px;
-      fill: #fff;
-  }
-
-  .mobile-footer-bar__item--primary .svgItem path:first-child {
-      stroke: #fff;
+  .mobile-footer-bar__item svg path {
+      stroke: currentColor;
   }
 
   .footer-component {

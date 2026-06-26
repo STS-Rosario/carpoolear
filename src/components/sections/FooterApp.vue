@@ -5,10 +5,7 @@
                 class="mobile-footer-bar__item"
                 v-for="item in footerButtons"
                 :key="item.id"
-                :class="{
-                    active: item.active,
-                    'mobile-footer-bar__item--primary': item.id === 'new-trip'
-                }"
+                :class="{ active: item.active }"
                 @click="onClick(item)"
             >
                 <span
