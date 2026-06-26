@@ -40,10 +40,7 @@
                     {{ myTripsBadgeCount }}
                 </span>
             </router-link>
-            <router-link
-                class="mobile-menu_item"
-                :to="{ name: 'profile', params: { id: 'me' } }"
-            >
+            <router-link class="mobile-menu_item" :to="{ name: 'my-account' }">
                 <svgItem size="22" icon="account"></svgItem>
                 <span class="mobile-menu_item_label">{{ $t('miCuenta') }}</span>
             </router-link>

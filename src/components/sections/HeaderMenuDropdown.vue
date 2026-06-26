@@ -57,7 +57,7 @@
             <router-link
                 tag="a"
                 class="header-menu-dropdown__item"
-                :to="{ name: 'profile', params: { id: 'me' } }"
+                :to="{ name: 'my-account' }"
             >
                 <svgItem size="18" icon="account"></svgItem>
                 <span class="header-menu-dropdown__item-label">{{

@@ -49,6 +49,7 @@ const Tickets = () => import('../components/views/Tickets.vue');
 const TicketNew = () => import('../components/views/TicketNew.vue');
 const TicketDetail = () => import('../components/views/TicketDetail.vue');
 const MobileMenu = () => import('../components/views/MobileMenu.vue');
+const MyAccount = () => import('../components/views/MyAccount.vue');
 const AdminSupportTickets = () => import('../components/views/AdminSupportTickets.vue');
 const AdminSupportTicketNew = () => import('../components/views/AdminSupportTicketNew.vue');
 const AdminSupportTicketDetail = () => import('../components/views/AdminSupportTicketDetail.vue');
@@ -176,6 +177,26 @@ export default [
                 header: {
                     buttons: []
                 }
+            }
+        }
+    },
+    {
+        path: '/mi-cuenta',
+        name: 'my-account',
+        component: MyAccount,
+        beforeEnter: auth,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'profile'
+                },
+                header: {
+                    buttons: []
+                }
+            },
+            background: {
+                style: 'white'
             }
         }
     },

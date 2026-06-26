@@ -18,6 +18,10 @@ const MENU_LABELS = {
         donar: 'Donar',
         inicio: 'Inicio',
         miCuenta: 'Mi cuenta',
+        editarPerfilPublico: 'Editar perfil público',
+        misAutos: 'Mis autos',
+        configuracionNotificaciones: 'Configuración de notificaciones',
+        configuracionPrivacidad: 'Configuración de privacidad',
         menu: 'Menú',
         modoDebug: 'Modo debug',
         legales: 'Legales'
@@ -37,6 +41,10 @@ const MENU_LABELS = {
         donar: 'Donate',
         inicio: 'Home',
         miCuenta: 'My account',
+        editarPerfilPublico: 'Edit public profile',
+        misAutos: 'My cars',
+        configuracionNotificaciones: 'Notification settings',
+        configuracionPrivacidad: 'Privacy settings',
         menu: 'Menu',
         modoDebug: 'Debug mode',
         legales: 'Legal'

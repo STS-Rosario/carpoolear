@@ -26,6 +26,7 @@ describe('MobileMenu view', () => {
         expect(source).toContain('myTripsBadgeCount');
         expect(source).toContain('icon="my-trips"');
         expect(source).toContain('icon="account"');
+        expect(source).toContain("name: 'my-account'");
         expect(source).toContain("svg[fill='none']");
     });
 

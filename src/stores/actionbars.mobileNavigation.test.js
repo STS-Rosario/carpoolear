@@ -5,7 +5,7 @@ const EXPECTED_MOBILE_FOOTER = [
     { id: 'home', labelKey: 'inicio', icon: 'home', url: 'trips' },
     { id: 'my-trips', labelKey: 'misViajes', icon: 'my-trips', url: 'my-trips' },
     { id: 'new-trip', labelKey: 'crearViaje', icon: 'create-trip', url: 'new-trip' },
-    { id: 'profile', labelKey: 'miCuenta', icon: 'account', url: 'profile' },
+    { id: 'profile', labelKey: 'miCuenta', icon: 'account', url: 'my-account' },
     { id: 'menu', labelKey: 'menu', icon: 'menu', url: 'mobile-menu' }
 ];
 

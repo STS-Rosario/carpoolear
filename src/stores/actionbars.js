@@ -73,7 +73,7 @@ export const useActionbarsStore = defineStore('actionbars', {
                 id: 'profile',
                 labelKey: 'miCuenta',
                 icon: 'account',
-                url: 'profile',
+                url: 'my-account',
                 active: false
             },
             {
