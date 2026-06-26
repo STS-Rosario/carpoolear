@@ -8,7 +8,7 @@ const footerSource = fs.readFileSync(footerPath, 'utf8');
 describe('FooterApp mobile navigation', () => {
     it('renders a text label under each footer icon', () => {
         expect(footerSource).toContain('actionbar_item_label');
-        expect(footerSource).toContain("$t(item.labelKey)");
+        expect(footerSource).toContain('$t(item.labelKey)');
     });
 
     it('shows a badge on my trips when there are pending requests', () => {
