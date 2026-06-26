@@ -184,12 +184,18 @@ export default {
 .header-menu-dropdown :deep(.dropdown-menu) {
     right: 0;
     left: auto;
+    font-size: 1rem;
+}
+.header-menu-dropdown :deep(.dropdown-menu > li > a) {
+    font-size: 1rem;
+    padding: 6px 20px;
 }
 .header-menu-dropdown__locale-inner {
     display: block;
-    padding: 3px 20px;
+    padding: 6px 20px;
     clear: both;
     font-weight: normal;
+    font-size: 1rem;
     line-height: 1.42857143;
     color: #333;
     white-space: nowrap;
