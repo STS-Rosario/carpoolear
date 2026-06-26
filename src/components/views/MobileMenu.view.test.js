@@ -22,7 +22,7 @@ describe('MobileMenu view', () => {
         expect(source).toContain("$t('misViajes')");
         expect(source).toContain("$t('miCuenta')");
         expect(source).toContain('notificationsCount');
-        expect(source).toContain('unreadMessagesCount');
+        expect(source).toContain('messagesCount');
         expect(source).toContain('myTripsBadgeCount');
     });
 

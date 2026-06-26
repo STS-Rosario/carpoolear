@@ -29,8 +29,8 @@
             >
                 <svgItem size="22" icon="message"></svgItem>
                 <span class="mobile-menu_item_label">{{ $t('mensajes') }}</span>
-                <span class="mobile-menu_badge" v-if="unreadMessagesCount > 0">
-                    {{ unreadMessagesCount }}
+                <span class="mobile-menu_badge" v-if="messagesCount > 0">
+                    {{ messagesCount }}
                 </span>
             </router-link>
             <router-link class="mobile-menu_item" :to="{ name: 'my-trips' }">
@@ -121,8 +121,6 @@
 import { mapState, mapActions } from 'pinia';
 import { useAuthStore } from '../../stores/auth';
 import { useNotificationsStore } from '../../stores/notifications';
-import { useConversationsStore } from '../../stores/conversations';
-import { usePassengerStore } from '../../stores/passenger';
 import { useDeviceStore } from '../../stores/device';
 import { useActionbarsStore } from '../../stores/actionbars';
 import svgItem from '../SvgItem';
@@ -138,13 +136,9 @@ export default {
     name: 'mobileMenu',
     computed: {
         ...mapState(useNotificationsStore, {
-            notificationsCount: 'count'
-        }),
-        ...mapState(useConversationsStore, {
-            unreadMessagesCount: 'unreadCount'
-        }),
-        ...mapState(usePassengerStore, {
-            myTripsBadgeCount: 'pendingRequestCount'
+            notificationsCount: 'count',
+            messagesCount: 'messagesCount',
+            myTripsBadgeCount: 'myTripsCount'
         }),
         ...mapState(useAuthStore, {
             logged: 'checkLogin'

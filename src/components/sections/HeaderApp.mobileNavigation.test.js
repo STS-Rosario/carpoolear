@@ -11,8 +11,8 @@ describe('HeaderApp mobile navigation', () => {
         expect(headerSource).toContain('toNotifications');
         expect(headerSource).toContain('toConversations');
         expect(headerSource).toContain('notificationsCount');
-        expect(headerSource).toContain('unreadMessagesCount');
         expect(headerSource).toContain('messagesCount');
+        expect(headerSource).not.toContain('unreadMessagesCount');
         expect(headerSource).toContain('v-if="isMobile && logged"');
     });
 

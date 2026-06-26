@@ -142,7 +142,7 @@
 <script>
 import { mapState, mapActions } from 'pinia';
 import { useActionbarsStore } from '../../stores/actionbars';
-import { usePassengerStore } from '../../stores/passenger';
+import { useNotificationsStore } from '../../stores/notifications';
 import { useAuthStore } from '../../stores/auth';
 import svgItem from '../SvgItem';
 
@@ -156,8 +156,8 @@ export default {
             footerButtons: 'footerButtons',
             footerShow: 'footerShow'
         }),
-        ...mapState(usePassengerStore, {
-            myTripsBadgeCount: 'pendingRequestCount'
+        ...mapState(useNotificationsStore, {
+            myTripsBadgeCount: 'myTripsCount'
         }),
         ...mapState(useAuthStore, {
             config: 'appConfig'

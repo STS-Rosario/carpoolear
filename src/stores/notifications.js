@@ -9,10 +9,23 @@ function shouldMarkNotificationsAsRead(data) {
     return mark === true || mark === 'true';
 }
 
+function applyNavigationBadgeCounts(store, data) {
+    if (data && typeof data === 'object') {
+        store.count = data.notifications ?? 0;
+        store.messagesCount = data.messages ?? 0;
+        store.myTripsCount = data.my_trips ?? 0;
+        return;
+    }
+
+    store.count = data ?? 0;
+}
+
 export const useNotificationsStore = defineStore('notifications', {
     state: () => ({
         list: null,
-        count: 0
+        count: 0,
+        messagesCount: 0,
+        myTripsCount: 0
     }),
 
     getters: {
@@ -46,7 +59,7 @@ export const useNotificationsStore = defineStore('notifications', {
             countInFlight = notificationApi
                 .count()
                 .then((response) => {
-                    this.count = response.data;
+                    applyNavigationBadgeCounts(this, response.data);
                     return Promise.resolve(response.data);
                 })
                 .catch(() => {

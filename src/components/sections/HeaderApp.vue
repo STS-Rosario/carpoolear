@@ -85,7 +85,7 @@
                         <svgItem size="22" icon="message"></svgItem>
                         <span
                             class="mobile-header-bar__badge"
-                            v-if="unreadMessagesCount > 0"
+                            v-if="messagesCount > 0"
                         ></span>
                     </span>
                 </div>
@@ -336,7 +336,6 @@
 import { mapState } from 'pinia';
 import { useAuthStore } from '../../stores/auth';
 import { useNotificationsStore } from '../../stores/notifications';
-import { useConversationsStore } from '../../stores/conversations';
 import { useActionbarsStore } from '../../stores/actionbars';
 import { useDeviceStore } from '../../stores/device';
 import { useTripsStore } from '../../stores/trips';
@@ -404,10 +403,8 @@ export default {
             config: 'appConfig'
         }),
         ...mapState(useNotificationsStore, {
-            notificationsCount: 'count'
-        }),
-        ...mapState(useConversationsStore, {
-            unreadMessagesCount: 'unreadCount'
+            notificationsCount: 'count',
+            messagesCount: 'messagesCount'
         }),
         ...mapState(useActionbarsStore, {
             title: 'title',
