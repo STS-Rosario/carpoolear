@@ -56,12 +56,39 @@
                 />
             </div>
             <div class="actionbar_section actionbar_icon pull-right">
-                <template v-for="item in rightHeaderButton" :key="item.id">
+                <template v-for="item in mobileUtilityHeaderButtons" :key="item.id">
                     <span v-if="item.show" @click="onClick(item)">
                         <i :class="'fa ' + item.icon" aria-hidden="true"></i>
                     </span>
                 </template>
-                <div class="dropdown-right" v-if="showMenu || isMobile">
+                <div
+                    class="header_mobile_actions"
+                    v-if="isMobile && logged"
+                >
+                    <span
+                        class="header_mobile_action"
+                        @click="toNotifications"
+                        aria-label="Notificaciones"
+                    >
+                        <svgItem size="22" icon="bell"></svgItem>
+                        <span
+                            class="header_mobile_badge"
+                            v-if="notificationsCount > 0"
+                        ></span>
+                    </span>
+                    <span
+                        class="header_mobile_action"
+                        @click="toConversations"
+                        aria-label="Mensajes"
+                    >
+                        <svgItem size="22" icon="message"></svgItem>
+                        <span
+                            class="header_mobile_badge"
+                            v-if="unreadMessagesCount > 0"
+                        ></span>
+                    </span>
+                </div>
+                <div class="dropdown-right" v-if="showMenu && !isMobile">
                     <dropdown type="icon">
                         <template #button>
                             <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
@@ -113,17 +140,6 @@
                 </div>
             </div>
 
-            <div
-                class="actionbar_section actionbar_icon pull-right"
-                v-if="isMobile && user && !shouldHideDonationOnIOSCapacitor(user)"
-            >
-                <a
-                    href="/donar"
-                    class="btn btn-primary btn-donar-header btn-header-small btn-lg"
-                >
-                    {{ $t('donar') }}
-                </a>
-            </div>
             <div
                 class="actionbar_section actionbar_icon pull-right"
                 v-if="isMobile && !user"
@@ -319,6 +335,7 @@
 import { mapState } from 'pinia';
 import { useAuthStore } from '../../stores/auth';
 import { useNotificationsStore } from '../../stores/notifications';
+import { useConversationsStore } from '../../stores/conversations';
 import { useActionbarsStore } from '../../stores/actionbars';
 import { useDeviceStore } from '../../stores/device';
 import { useTripsStore } from '../../stores/trips';
@@ -329,6 +346,7 @@ import bus from '../../services/bus-event.js';
 import IdentityValidationCountdownBanner from '../IdentityValidationCountdownBanner.vue';
 import UserRatingsCounts from '../elements/UserRatingsCounts.vue';
 import PendingRatingsBanner from '../PendingRatingsBanner.vue';
+import svgItem from '../SvgItem';
 import { shouldHideDonationOnIOSCapacitor } from '../../services/capacitor.js';
 import { UserApi } from '../../services/api';
 import {
@@ -387,6 +405,9 @@ export default {
         ...mapState(useNotificationsStore, {
             notificationsCount: 'count'
         }),
+        ...mapState(useConversationsStore, {
+            unreadMessagesCount: 'unreadCount'
+        }),
         ...mapState(useActionbarsStore, {
             title: 'title',
             titleLink: 'titleLink',
@@ -434,6 +455,12 @@ export default {
             return n === 'identity_validation' || n === 'identity_validation_manual'
                 ? 'actionbar_title--settings-wide'
                 : '';
+        },
+        mobileUtilityHeaderButtons() {
+            if (!this.isMobile) {
+                return this.rightHeaderButton;
+            }
+            return this.rightHeaderButton.filter((item) => item.id !== 'search');
         }
     },
 
@@ -450,6 +477,10 @@ export default {
 
         toNotifications() {
             router.push({ name: 'notifications' });
+        },
+
+        toConversations() {
+            router.push({ name: 'conversations-list' });
         },
 
         onClick(item) {
@@ -479,7 +510,8 @@ export default {
         dropdown,
         IdentityValidationCountdownBanner,
         UserRatingsCounts,
-        PendingRatingsBanner
+        PendingRatingsBanner,
+        svgItem
     }
 };
 </script>
@@ -519,5 +551,29 @@ export default {
     .header_panel-right {
         min-width: 70%;
     }
+}
+.header_mobile_actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-left: 0.25rem;
+}
+.header_mobile_action {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+}
+.header_mobile_action .svgItem svg {
+    fill: #fff;
+}
+.header_mobile_badge {
+    position: absolute;
+    top: -2px;
+    right: -4px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background-color: #e53935;
 }
 </style>

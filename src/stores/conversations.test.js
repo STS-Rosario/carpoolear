@@ -128,3 +128,31 @@ describe('conversations store list getter', () => {
         expect(store.conversationSelected.notifications_enabled).toBe(false);
     });
 });
+
+describe('conversations store unreadCount getter', () => {
+    beforeEach(() => {
+        setActivePinia(createPinia());
+    });
+
+    it('returns zero while conversations are loading', async () => {
+        const { useConversationsStore } = await import('./conversations');
+        const store = useConversationsStore();
+
+        store._list = null;
+
+        expect(store.unreadCount).toBe(0);
+    });
+
+    it('counts conversations marked as unread', async () => {
+        const { useConversationsStore } = await import('./conversations');
+        const store = useConversationsStore();
+
+        store._list = [
+            { id: 1, unread: true },
+            { id: 2, unread: false },
+            { id: 3, unread: true }
+        ];
+
+        expect(store.unreadCount).toBe(2);
+    });
+});

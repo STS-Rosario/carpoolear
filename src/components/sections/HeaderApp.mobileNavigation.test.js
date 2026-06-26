@@ -19,10 +19,8 @@ describe('HeaderApp mobile navigation', () => {
         expect(headerSource).not.toMatch(
             /v-if="isMobile && user && !shouldHideDonationOnIOSCapacitor/
         );
-        expect(headerSource).not.toContain('fa-ellipsis-v');
-        expect(headerSource).not.toContain("item.id === 'search'");
-        expect(headerSource).not.toMatch(
-            /v-for="item in rightHeaderButton"[^]*visible-xs/s
-        );
+        expect(headerSource).toContain('v-if="showMenu && !isMobile"');
+        expect(headerSource).toContain("item.id !== 'search'");
+        expect(headerSource).toContain('mobileUtilityHeaderButtons');
     });
 });
