@@ -2145,10 +2145,10 @@ textarea {
     bottom: 0;
     width: 100%;
     z-index: 10;
-    background: var(--main-background);
-    border-top: 1px solid var(--medium-font-color);
+    background: #eee;
+    border-top: 1px solid #3f3f3f;
     text-align: center;
-    padding: 7px 0;
+    padding: 14px 0;
 }
 
 .mobile-footer-bar__item {
@@ -2156,7 +2156,7 @@ textarea {
     display: inline-flex;
     flex-direction: column;
     align-items: center;
-    color: var(--medium-font-color);
+    color: #666;
     width: 23%;
     cursor: pointer;
 }

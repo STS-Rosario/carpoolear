@@ -196,7 +196,7 @@ h3 {
     font-size: 15px;
     line-height: 1.15;
     margin-top: 5px;
-    color: var(--medium-font-color);
+    color: #666;
 }
 .mobile-footer-bar__item.active .mobile-footer-bar__label {
     color: var(--secondary-background);

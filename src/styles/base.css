@@ -1962,18 +1962,18 @@
       bottom: 0;
       width: 100%;
       z-index: 10;
-      background: var(--actionbar-bakground);
-      border-top: 1px solid var(--medium-font-color);
+      background: #eee;
+      border-top: 1px solid #3f3f3f;
       text-align: center;
-      padding: 10px 0;
+      padding-top: 14px;
       padding-left: constant(safe-area-inset-left);
       padding-left: env(safe-area-inset-left);
       padding-right: constant(safe-area-inset-right);
       padding-right: env(safe-area-inset-right);
-      padding-bottom: calc(7px + constant(safe-area-inset-bottom));
-      padding-bottom: calc(7px + env(safe-area-inset-bottom));
-      min-height: calc(52px + constant(safe-area-inset-bottom));
-      min-height: calc(52px + env(safe-area-inset-bottom));
+      padding-bottom: calc(14px + constant(safe-area-inset-bottom));
+      padding-bottom: calc(14px + env(safe-area-inset-bottom));
+      min-height: calc(60px + constant(safe-area-inset-bottom));
+      min-height: calc(60px + env(safe-area-inset-bottom));
   }
 
   .mobile-footer-bar__item {
@@ -1981,7 +1981,7 @@
       display: inline-flex;
       flex-direction: column;
       align-items: center;
-      color: var(--medium-font-color);
+      color: #666;
       width: 23%;
       cursor: pointer;
   }
