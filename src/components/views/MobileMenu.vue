@@ -34,7 +34,7 @@
                 </span>
             </router-link>
             <router-link class="mobile-menu_item" :to="{ name: 'my-trips' }">
-                <svgItem size="22" icon="seat"></svgItem>
+                <svgItem size="22" icon="my-trips"></svgItem>
                 <span class="mobile-menu_item_label">{{ $t('misViajes') }}</span>
                 <span class="mobile-menu_badge" v-if="myTripsBadgeCount > 0">
                     {{ myTripsBadgeCount }}
@@ -44,7 +44,7 @@
                 class="mobile-menu_item"
                 :to="{ name: 'profile', params: { id: 'me' } }"
             >
-                <svgItem size="22" icon="contact"></svgItem>
+                <svgItem size="22" icon="account"></svgItem>
                 <span class="mobile-menu_item_label">{{ $t('miCuenta') }}</span>
             </router-link>
 
@@ -226,6 +226,14 @@ export default {
 }
 .mobile-menu_item .svgItem svg {
     fill: #666;
+    display: block;
+}
+.mobile-menu_item .svgItem svg[fill='none'] {
+    fill: none;
+    color: #666;
+}
+.mobile-menu_item .svgItem svg[fill='none'] path {
+    stroke: currentColor;
 }
 .mobile-menu_item_label {
     flex: 1;

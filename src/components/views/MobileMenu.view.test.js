@@ -24,6 +24,9 @@ describe('MobileMenu view', () => {
         expect(source).toContain('notificationsCount');
         expect(source).toContain('messagesCount');
         expect(source).toContain('myTripsBadgeCount');
+        expect(source).toContain('icon="my-trips"');
+        expect(source).toContain('icon="account"');
+        expect(source).toContain("svg[fill='none']");
     });
 
     it('includes support, about, legal, debug, locale, and logout actions', () => {

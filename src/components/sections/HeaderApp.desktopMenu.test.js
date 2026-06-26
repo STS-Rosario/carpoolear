@@ -57,6 +57,15 @@ describe('HeaderApp desktop menu', () => {
         expect(menuDropdownSource).toContain("setLocale('arg')");
         expect(menuDropdownSource).toContain("setLocale('en')");
         expect(menuDropdownSource).toContain('header-menu-dropdown__locale-inner');
+        expect(menuDropdownSource).toContain('icon="bell"');
+        expect(menuDropdownSource).toContain('icon="message"');
+        expect(menuDropdownSource).toContain('icon="my-trips"');
+        expect(menuDropdownSource).toContain('icon="account"');
+        expect(menuDropdownSource).toContain("svg[fill='none']");
+        expect(menuDropdownSource).toContain('fa-question-circle');
+        expect(menuDropdownSource).toContain('fa-life-ring');
+        expect(menuDropdownSource).toContain('fa-globe');
+        expect(menuDropdownSource).toContain('fa-sign-out');
         expect(menuDropdownSource).toMatch(
             /right:\s*0[\s\S]*left:\s*auto/
         );

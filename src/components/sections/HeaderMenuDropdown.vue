@@ -9,86 +9,154 @@
             </span>
         </template>
         <li>
-            <router-link tag="a" :to="{ name: 'notifications' }">
-                {{ $t('notificaciones') }}
+            <router-link
+                tag="a"
+                class="header-menu-dropdown__item"
+                :to="{ name: 'notifications' }"
+            >
+                <svgItem size="18" icon="bell"></svgItem>
+                <span class="header-menu-dropdown__item-label">{{
+                    $t('notificaciones')
+                }}</span>
                 <span class="badge" v-if="notificationsCount > 0">{{
                     notificationsCount
                 }}</span>
             </router-link>
         </li>
         <li>
-            <router-link tag="a" :to="{ name: 'conversations-list' }">
-                {{ $t('mensajes') }}
+            <router-link
+                tag="a"
+                class="header-menu-dropdown__item"
+                :to="{ name: 'conversations-list' }"
+            >
+                <svgItem size="18" icon="message"></svgItem>
+                <span class="header-menu-dropdown__item-label">{{
+                    $t('mensajes')
+                }}</span>
                 <span class="badge" v-if="messagesCount > 0">{{
                     messagesCount
                 }}</span>
             </router-link>
         </li>
         <li>
-            <router-link tag="a" :to="{ name: 'my-trips' }">
-                {{ $t('misViajes') }}
+            <router-link
+                tag="a"
+                class="header-menu-dropdown__item"
+                :to="{ name: 'my-trips' }"
+            >
+                <svgItem size="18" icon="my-trips"></svgItem>
+                <span class="header-menu-dropdown__item-label">{{
+                    $t('misViajes')
+                }}</span>
                 <span class="badge" v-if="myTripsBadgeCount > 0">{{
                     myTripsBadgeCount
                 }}</span>
             </router-link>
         </li>
         <li>
-            <router-link tag="a" :to="{ name: 'profile', params: { id: 'me' } }">
-                {{ $t('miCuenta') }}
+            <router-link
+                tag="a"
+                class="header-menu-dropdown__item"
+                :to="{ name: 'profile', params: { id: 'me' } }"
+            >
+                <svgItem size="18" icon="account"></svgItem>
+                <span class="header-menu-dropdown__item-label">{{
+                    $t('miCuenta')
+                }}</span>
             </router-link>
         </li>
         <li role="separator" class="divider"></li>
         <li>
             <a
+                class="header-menu-dropdown__item"
                 href="https://carpoolear.com.ar/plataforma-preguntas-frecuentes"
                 target="_blank"
                 rel="noopener noreferrer"
             >
-                {{ $t('footerPreguntasFrecuentes') }}
+                <i class="fa fa-question-circle" aria-hidden="true"></i>
+                <span class="header-menu-dropdown__item-label">{{
+                    $t('footerPreguntasFrecuentes')
+                }}</span>
             </a>
         </li>
         <li>
-            <router-link tag="a" :to="{ name: 'tickets' }">{{
-                $t('soporte')
-            }}</router-link>
+            <router-link
+                tag="a"
+                class="header-menu-dropdown__item"
+                :to="{ name: 'tickets' }"
+            >
+                <i class="fa fa-life-ring" aria-hidden="true"></i>
+                <span class="header-menu-dropdown__item-label">{{
+                    $t('soporte')
+                }}</span>
+            </router-link>
         </li>
         <li>
-            <router-link tag="a" :to="{ name: 'debug_setting' }">{{
-                $t('modoDebug')
-            }}</router-link>
+            <router-link
+                tag="a"
+                class="header-menu-dropdown__item"
+                :to="{ name: 'debug_setting' }"
+            >
+                <i class="fa fa-bug" aria-hidden="true"></i>
+                <span class="header-menu-dropdown__item-label">{{
+                    $t('modoDebug')
+                }}</span>
+            </router-link>
         </li>
         <li role="separator" class="divider"></li>
         <li>
-            <router-link tag="a" :to="{ name: 'acerca_de' }">{{
-                $t('acercaDe')
-            }}</router-link>
+            <router-link
+                tag="a"
+                class="header-menu-dropdown__item"
+                :to="{ name: 'acerca_de' }"
+            >
+                <i class="fa fa-info-circle" aria-hidden="true"></i>
+                <span class="header-menu-dropdown__item-label">{{
+                    $t('acercaDe')
+                }}</span>
+            </router-link>
         </li>
         <li>
-            <router-link tag="a" :to="{ name: 'terms' }">{{
-                $t('legales')
-            }}</router-link>
+            <router-link
+                tag="a"
+                class="header-menu-dropdown__item"
+                :to="{ name: 'terms' }"
+            >
+                <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                <span class="header-menu-dropdown__item-label">{{
+                    $t('legales')
+                }}</span>
+            </router-link>
         </li>
         <li role="separator" class="divider"></li>
         <li class="header-menu-dropdown__locale">
             <span class="header-menu-dropdown__locale-inner">
-                <a
-                    href="#"
-                    :class="{ active: $i18n.locale === 'arg' }"
-                    @click.prevent="setLocale('arg')"
-                    >Español</a
-                >
-                <span class="header-menu-dropdown__locale-sep">·</span>
-                <a
-                    href="#"
-                    :class="{ active: $i18n.locale === 'en' }"
-                    @click.prevent="setLocale('en')"
-                    >English</a
-                >
+                <i class="fa fa-globe" aria-hidden="true"></i>
+                <span class="header-menu-dropdown__item-label">
+                    <a
+                        href="#"
+                        :class="{ active: $i18n.locale === 'arg' }"
+                        @click.prevent="setLocale('arg')"
+                        >Español</a
+                    >
+                    <span class="header-menu-dropdown__locale-sep">·</span>
+                    <a
+                        href="#"
+                        :class="{ active: $i18n.locale === 'en' }"
+                        @click.prevent="setLocale('en')"
+                        >English</a
+                    >
+                </span>
             </span>
         </li>
         <li v-if="!isFacebokApp" role="separator" class="divider"></li>
         <li v-if="!isFacebokApp">
-            <a @click="logout">{{ $t('cerrarSesion') }}</a>
+            <a class="header-menu-dropdown__item" @click="logout">
+                <i class="fa fa-sign-out" aria-hidden="true"></i>
+                <span class="header-menu-dropdown__item-label">{{
+                    $t('cerrarSesion')
+                }}</span>
+            </a>
         </li>
     </dropdown>
 </template>
@@ -186,19 +254,55 @@ export default {
     left: auto;
     font-size: 1rem;
 }
-.header-menu-dropdown :deep(.dropdown-menu > li > a) {
+.header-menu-dropdown :deep(.dropdown-menu > li > a.header-menu-dropdown__item) {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
     font-size: 1rem;
     padding: 6px 20px;
 }
-.header-menu-dropdown__locale-inner {
+.header-menu-dropdown
+    :deep(.dropdown-menu > li > a.header-menu-dropdown__item .svgItem svg) {
+    fill: #666;
     display: block;
+}
+.header-menu-dropdown
+    :deep(.dropdown-menu > li > a.header-menu-dropdown__item .svgItem svg[fill='none']) {
+    fill: none;
+    color: #666;
+}
+.header-menu-dropdown
+    :deep(.dropdown-menu > li > a.header-menu-dropdown__item .svgItem svg[fill='none'] path) {
+    stroke: currentColor;
+}
+.header-menu-dropdown
+    :deep(.dropdown-menu > li > a.header-menu-dropdown__item > .fa) {
+    width: 18px;
+    text-align: center;
+    color: #666;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+.header-menu-dropdown__item-label {
+    flex: 1;
+}
+.header-menu-dropdown__locale-inner {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
     padding: 6px 20px;
-    clear: both;
     font-weight: normal;
     font-size: 1rem;
     line-height: 1.42857143;
     color: #333;
     white-space: nowrap;
+}
+.header-menu-dropdown__locale-inner > .fa {
+    width: 18px;
+    text-align: center;
+    color: #666;
+    font-size: 1.1rem;
+    flex-shrink: 0;
 }
 .header-menu-dropdown__locale-inner a {
     display: inline;
