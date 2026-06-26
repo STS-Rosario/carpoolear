@@ -383,7 +383,7 @@ export const useConversationsStore = defineStore('conversations', {
             const read = true;
             return conversationApi
                 .getMessages(nid, { read, unread, pageSize, timestamp })
-                .then((response) => {
+                .then(async (response) => {
                     if (!more) {
                         this.blankMessages({ id: nid });
                     }
@@ -395,6 +395,10 @@ export const useConversationsStore = defineStore('conversations', {
                             messages,
                             id: nid
                         });
+                    }
+                    if (!more) {
+                        const { useNotificationsStore } = await import('./notifications');
+                        await useNotificationsStore().countAction();
                     }
                 })
                 .catch((error) => {

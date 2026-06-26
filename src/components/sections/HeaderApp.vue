@@ -200,13 +200,6 @@
                         <img :src="facebook_logo" alt="" />
                     </a>
                 </div>
-                <router-link
-                    v-if="config.trip_card_design !== 'light'"
-                    class="btn btn-link trips-link"
-                    :to="{ name: 'trips', query: { clearSearch: 'true' } }"
-                >
-                    {{ $t('viajes') }}
-                </router-link>
                 <!--<router-link class="btn btn-link" v-if="!logged" :to="{name: 'trips'}">Información</router-link>-->
                 <!--<router-link class="btn btn-link" v-if="!logged" :to="{name: 'register'}">Registrarme</router-link>-->
                 <dropdown type="link" v-if="!logged">
@@ -250,66 +243,16 @@
                 </span>
 
                 <div class="header_profile" v-if="user">
-                    <span>{{ user.name }}</span>
-                    <dropdown type="info" v-if="logged">
-                        <template #button>
-                            <div
-                                class="circle-box header_profile_image"
-                                v-imgSrc:profile="user.image"
-                            ></div>
-                        </template>
-                        <li>
-                            <router-link :to="{ name: 'my-trips' }">
-                                {{ $t('misViajes') }}
-                            </router-link>
-                        </li>
-                        <li>
-                            <router-link :to="{ name: 'conversations-list' }">
-                                {{ $t('mensajes') }}
-                            </router-link>
-                        </li>
-                        <li>
-                            <router-link
-                                :to="{ name: 'profile', params: { id: 'me' } }"
-                            >
-                                {{ $t('perfil') }}
-                            </router-link>
-                        </li>
-                        <!-- /soporte (mesa de ayuda), desktop -->
-                        <li>
-                            <router-link :to="{ name: 'tickets' }">{{
-                                $t('soporte')
-                            }}</router-link>
-                        </li>
-                        <li v-if="showChangelogNav">
-                            <a @click="openChangelog">{{ $t('ultimosCambios') }}</a>
-                        </li>
-                        <li v-if="user.is_admin">
-                            <router-link :to="{ name: 'admin-dashboard' }">
-                                {{ $t('administracion') }}
-                            </router-link>
-                        </li>
-                        <li role="separator" class="divider"></li>
-                        <li>
-                            <a @click="setLocale('arg')">Español</a>
-                        </li>
-                        <li>
-                            <a @click="setLocale('en')">English</a>
-                        </li>
-                        <li role="separator" class="divider"></li>
-                        <!--<li>
-                            <router-link :to="{name: 'acerca_de'}">Acerca</router-link>
-                        </li>
-                        <li role="separator" class="divider"></li>
-                        <li>
-                            <router-link :to="{name: 'profile_update'}">Configuración</router-link>
-                        </li>-->
-                        <li>
-                            <a @click="logout" v-if="!isFacebokApp">{{
-                                $t('cerrarSesion')
-                            }}</a>
-                        </li>
-                    </dropdown>
+                    <router-link
+                        :to="{ name: 'profile', params: { id: 'me' } }"
+                        class="header_profile_link"
+                    >
+                        <div
+                            class="circle-box header_profile_image"
+                            v-imgSrc:profile="user.image"
+                        ></div>
+                        <span class="header_profile_name">{{ user.name }}</span>
+                    </router-link>
                 </div>
 
                 <a
@@ -326,6 +269,7 @@
                 >
                     {{ $t('crearViaje') }}
                 </router-link>
+                <header-menu-dropdown />
             </div>
             <div class="cf"></div>
         </div>
@@ -346,6 +290,7 @@ import bus from '../../services/bus-event.js';
 import IdentityValidationCountdownBanner from '../IdentityValidationCountdownBanner.vue';
 import UserRatingsCounts from '../elements/UserRatingsCounts.vue';
 import PendingRatingsBanner from '../PendingRatingsBanner.vue';
+import HeaderMenuDropdown from './HeaderMenuDropdown.vue';
 import svgItem from '../SvgItem';
 import { shouldHideDonationOnIOSCapacitor } from '../../services/capacitor.js';
 import { UserApi } from '../../services/api';
@@ -509,15 +454,13 @@ export default {
         IdentityValidationCountdownBanner,
         UserRatingsCounts,
         PendingRatingsBanner,
+        HeaderMenuDropdown,
         svgItem
     }
 };
 </script>
 
 <style scoped>
-.trips-link {
-    font-weight: bold;
-}
 .header-social-links {
     display: inline-flex;
     align-items: center;
@@ -535,6 +478,23 @@ export default {
 }
 .header-social-link:hover img {
     opacity: 0.85;
+}
+.header_profile_link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--secondary-font-color);
+    text-decoration: none;
+    vertical-align: middle;
+}
+.header_profile_link:hover,
+.header_profile_link:focus {
+    color: var(--secondary-font-color);
+    text-decoration: none;
+    opacity: 0.9;
+}
+.header_profile_name {
+    vertical-align: middle;
 }
 .mobile-header-bar__actions {
     display: inline-flex;

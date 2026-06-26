@@ -23,9 +23,7 @@
                         v-if="
                             item.id === 'my-trips' && myTripsBadgeCount > 0
                         "
-                    >
-                        {{ myTripsBadgeCount }}
-                    </span>
+                    ></span>
                 </span>
                 <span class="mobile-footer-bar__label">{{ $t(item.labelKey) }}</span>
             </div>
@@ -180,16 +178,16 @@ h3 {
 }
 .mobile-footer-bar__icon--badged {
     position: relative;
+    display: inline-flex;
 }
 .mobile-footer-bar__badge {
     position: absolute;
-    background-color: red;
-    right: 5px;
-    bottom: 3px;
-    font-size: 10px;
-    height: auto;
-    width: auto;
-    padding: 3px 4px !important;
+    top: -2px;
+    right: -4px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #e53935;
 }
 .mobile-footer-bar__label {
     display: block;
