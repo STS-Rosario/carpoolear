@@ -1982,7 +1982,7 @@ textarea {
     border-right: 0;
 }
 
-.actionbar_icon i {
+.mobile-header-bar__icon i {
     cursor: pointer;
 }
 
@@ -2131,33 +2131,27 @@ textarea {
     height: 44px;
 }
 
-.actionbar {
-    position: fixed;
-    left: 0;
-    background: var(--main-background);
-    height: 52px;
-    width: 100%;
-    z-index: 10;
-
-}
-
-.actionbar-bottom {
-    bottom: 0;
-    border-top: 1px solid var(--medium-font-color);
-    text-align: center;
-    padding: 7px 0;
-}
-
-.actionbar-top {
+.mobile-header-bar {
     position: relative;
     top: 0;
     border-top: 1px solid var(--secondary-background);
     padding: 4px 10px;
     background-color: var(--secondary-background);
-    /*white-space: nowrap;*/
 }
 
-.actionbar-bottom .actionbar_item {
+.mobile-footer-bar {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    z-index: 10;
+    background: var(--main-background);
+    border-top: 1px solid var(--medium-font-color);
+    text-align: center;
+    padding: 7px 0;
+}
+
+.mobile-footer-bar__item {
     vertical-align: middle;
     display: inline-block;
     color: var(--medium-font-color);
@@ -2166,48 +2160,41 @@ textarea {
     cursor: pointer;
 }
 
-.actionbar-bottom .actionbar_item i {
+.mobile-footer-bar__item i {
     font-size: 26px !important;
 }
 
-.actionbar_icon.pull-right {
+.mobile-header-bar__icon--right {
     cursor: pointer;
 }
 
-.actionbar-bottom .actionbar_item.active {
+.mobile-footer-bar__item.active {
     color: var(--secondary-background);
 }
 
-.actionbar-bottom .actionbar_item span {
-    vertical-align: middle;
-    padding: 2px 6px;
-}
-
-.actionbar-bottom .actionbar_item .big {
+.mobile-footer-bar__item--primary .mobile-footer-bar__icon {
     color: var(--secondary-font-color);
     background: red;
     vertical-align: top;
 }
 
-.actionbar_section {
+.mobile-header-bar__section {
     display: inline-block;
     margin-top: 2px;
 }
 
-.actionbar_icon {
+.mobile-header-bar__icon {
     font-size: 26px;
-    /* width: 30px; */
 }
 
-.actionbar_title {
+.mobile-header-bar__title {
     font-size: 26px;
     font-family: 'Muli';
     font-weight: 300;
     margin-left: .5em;
 }
 
-/* Long titles on cuenta / identity settings (base.css caps title at 50% width) */
-.actionbar_title.actionbar_title--settings-wide {
+.mobile-header-bar__title.mobile-header-bar__title--settings-wide {
     max-width: 72%;
     font-size: 18px;
     font-weight: 600;

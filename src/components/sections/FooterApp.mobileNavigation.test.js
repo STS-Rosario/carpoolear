@@ -7,7 +7,7 @@ const footerSource = fs.readFileSync(footerPath, 'utf8');
 
 describe('FooterApp mobile navigation', () => {
     it('renders a text label under each footer icon', () => {
-        expect(footerSource).toContain('actionbar_item_label');
+        expect(footerSource).toContain('mobile-footer-bar__label');
         expect(footerSource).toContain('$t(item.labelKey)');
     });
 

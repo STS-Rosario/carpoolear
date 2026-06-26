@@ -1,5 +1,9 @@
 import { defineStore } from 'pinia';
 import { getLazyRouter } from '../utils/routerLazy.js';
+import {
+    resolveMobileMenuCloseTarget,
+    snapshotRoute
+} from '../utils/mobileMenuNavigation.js';
 
 let appName = import.meta.env.VITE_TARGET_APP || 'Carpoolear';
 if (appName && appName.length) {
@@ -42,6 +46,7 @@ export const useActionbarsStore = defineStore('actionbars', {
         ],
         header_logo_visibility: true,
         footer_visibility: true,
+        mobileMenuReturnRoute: null,
         footer_buttons: [
             {
                 id: 'home',
@@ -161,7 +166,33 @@ export const useActionbarsStore = defineStore('actionbars', {
             });
         },
 
+        async openMobileMenu(router) {
+            const current = router.currentRoute.value;
+            if (current.name === 'mobile-menu') {
+                return this.closeMobileMenu(router);
+            }
+            this.mobileMenuReturnRoute = snapshotRoute(current);
+            return router.push({ name: 'mobile-menu' });
+        },
+
+        async closeMobileMenu(router) {
+            const target = resolveMobileMenuCloseTarget(this.mobileMenuReturnRoute);
+            this.mobileMenuReturnRoute = null;
+            if (
+                router.stack &&
+                router.stack.length &&
+                router.stack[router.stack.length - 1]?.name === 'mobile-menu'
+            ) {
+                router.stack.pop();
+            }
+            return router._push(target);
+        },
+
         async footerButtonClick(item) {
+            const router = await getLazyRouter();
+            if (item.id === 'menu') {
+                return this.openMobileMenu(router);
+            }
             const params = {};
             const query = {};
             if (item.url === 'profile') {
@@ -174,7 +205,6 @@ export const useActionbarsStore = defineStore('actionbars', {
                 tripsStore.tripsSearch({ is_passenger: false });
                 tripsStore.setRefreshList(true);
             }
-            const router = await getLazyRouter();
             router.push({
                 name: item.url,
                 ...(Object.keys(params).length ? { params } : {}),

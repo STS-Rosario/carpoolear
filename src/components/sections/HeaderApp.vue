@@ -3,11 +3,11 @@
         <IdentityValidationCountdownBanner />
         <PendingRatingsBanner />
         <div
-            class="actionbar actionbar-top visible-xs"
+            class="mobile-header-bar visible-xs"
             v-if="$route.name !== 'mobile-menu'"
-            :class="{ 'actionbar-top--with-ratings': headerRatings }"
+            :class="{ 'mobile-header-bar--with-ratings': headerRatings }"
         >
-            <div class="actionbar_section actionbar_icon">
+            <div class="mobile-header-bar__section mobile-header-bar__icon">
                 <span v-if="showLogo">
                     <router-link
                         :to="{ name: 'trips', query: { clearSearch: 'true' } }"
@@ -27,7 +27,7 @@
                 </template>
             </div>
             <div
-                class="actionbar_section actionbar_title"
+                class="mobile-header-bar__section mobile-header-bar__title"
                 :class="[
                     subTitle !== '' ? 'header--with-subtitle' : '',
                     headerRatings ? 'header--with-ratings' : '',
@@ -56,35 +56,35 @@
                     class="header--ratings"
                 />
             </div>
-            <div class="actionbar_section actionbar_icon pull-right">
+            <div class="mobile-header-bar__section mobile-header-bar__icon mobile-header-bar__icon--right">
                 <template v-for="item in mobileUtilityHeaderButtons" :key="item.id">
                     <span v-if="item.show" @click="onClick(item)">
                         <i :class="'fa ' + item.icon" aria-hidden="true"></i>
                     </span>
                 </template>
                 <div
-                    class="header_mobile_actions"
+                    class="mobile-header-bar__actions"
                     v-if="isMobile && logged"
                 >
                     <span
-                        class="header_mobile_action"
+                        class="mobile-header-bar__action"
                         @click="toNotifications"
                         aria-label="Notificaciones"
                     >
                         <svgItem size="22" icon="bell"></svgItem>
                         <span
-                            class="header_mobile_badge"
+                            class="mobile-header-bar__badge"
                             v-if="notificationsCount > 0"
                         ></span>
                     </span>
                     <span
-                        class="header_mobile_action"
+                        class="mobile-header-bar__action"
                         @click="toConversations"
                         aria-label="Mensajes"
                     >
                         <svgItem size="22" icon="message"></svgItem>
                         <span
-                            class="header_mobile_badge"
+                            class="mobile-header-bar__badge"
                             v-if="unreadMessagesCount > 0"
                         ></span>
                     </span>
@@ -142,7 +142,7 @@
             </div>
 
             <div
-                class="actionbar_section actionbar_icon pull-right"
+                class="mobile-header-bar__section mobile-header-bar__icon mobile-header-bar__icon--right"
                 v-if="isMobile && !user"
             >
                 <router-link
@@ -454,7 +454,7 @@ export default {
         actionbarTitleWidthClass() {
             const n = this.$route && this.$route.name;
             return n === 'identity_validation' || n === 'identity_validation_manual'
-                ? 'actionbar_title--settings-wide'
+                ? 'mobile-header-bar__title--settings-wide'
                 : '';
         },
         mobileUtilityHeaderButtons() {
@@ -539,7 +539,37 @@ export default {
 .header-social-link:hover img {
     opacity: 0.85;
 }
-.actionbar_icon img {
+.mobile-header-bar__actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-left: 0.5rem;
+    padding-right: 0.75rem;
+    vertical-align: middle;
+}
+.mobile-header-bar__action {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    line-height: 0;
+    vertical-align: middle;
+}
+.mobile-header-bar__action :deep(svg) {
+    fill: #fff;
+    display: block;
+}
+.mobile-header-bar__badge {
+    position: absolute;
+    top: -2px;
+    right: -4px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #e53935;
+}
+.mobile-header-bar__icon img {
     margin-bottom: 2px;
     width: 26px;
     margin-left: 0.3em;
@@ -552,29 +582,5 @@ export default {
     .header_panel-right {
         min-width: 70%;
     }
-}
-.header_mobile_actions {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-left: 0.25rem;
-}
-.header_mobile_action {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    cursor: pointer;
-}
-.header_mobile_action .svgItem svg {
-    fill: #fff;
-}
-.header_mobile_badge {
-    position: absolute;
-    top: -2px;
-    right: -4px;
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background-color: #e53935;
 }
 </style>

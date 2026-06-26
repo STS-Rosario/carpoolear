@@ -666,7 +666,7 @@
       /* position: absolute;
       bottom: 8px; */
   }
-  .actionbar-top--with-ratings {
+  .mobile-header-bar--with-ratings {
       height: auto;
       min-height: 64px;
   }
@@ -1757,7 +1757,7 @@
       border-left: 0;
       border-right: 0;
   }
-  .actionbar_icon i {
+  .mobile-header-bar__icon i {
       cursor: pointer;
   }
   .friends-component,
@@ -1907,129 +1907,113 @@
       height: 44px;
   }
 
-  .actionbar {
-      position: fixed;
+  .mobile-header-bar {
+      position: relative;
+      top: 0;
       left: 0;
-      background: var(--actionbar-bakground);
-      height: 52px;
       width: 100%;
-      z-index: 10;
-      /* Account for safe areas on sides */
-      /* Older iOS uses constant(), modern browsers use env() */
+      border-top: 1px solid var(--secondary-background);
+      padding: 4px 10px;
+      background-color: var(--secondary-background);
+      box-sizing: border-box;
+      padding-top: calc(4px + constant(safe-area-inset-top));
+      padding-top: calc(4px + env(safe-area-inset-top));
       padding-left: constant(safe-area-inset-left);
       padding-left: env(safe-area-inset-left);
       padding-right: constant(safe-area-inset-right);
       padding-right: env(safe-area-inset-right);
   }
 
-  .actionbar-bottom {
+  .mobile-header-bar__section {
+      display: inline-block;
+      margin-top: 2px;
+      vertical-align: middle;
+  }
+
+  .mobile-header-bar__icon {
+      font-size: 26px;
+  }
+
+  .mobile-header-bar__icon--right {
+      cursor: pointer;
+      float: right;
+  }
+
+  .mobile-header-bar__title {
+      font-size: 26px;
+      font-family: 'Muli';
+      font-weight: 300;
+      margin-left: .5em;
+      max-width: 50%;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+  }
+
+  .mobile-header-bar__title--settings-wide {
+      max-width: 72%;
+      font-size: 18px;
+      font-weight: 600;
+  }
+
+  .mobile-footer-bar {
+      position: fixed;
+      left: 0;
       bottom: 0;
+      width: 100%;
+      z-index: 10;
+      background: var(--actionbar-bakground);
       border-top: 1px solid var(--medium-font-color);
       text-align: center;
       padding: 7px 0;
-      background-color: var(--secondary-background);
-      /* Safe area support for iOS and Android - account for navigation bar */
-      /* Older iOS uses constant(), modern browsers use env() */
+      padding-left: constant(safe-area-inset-left);
+      padding-left: env(safe-area-inset-left);
+      padding-right: constant(safe-area-inset-right);
+      padding-right: env(safe-area-inset-right);
       padding-bottom: calc(7px + constant(safe-area-inset-bottom));
       padding-bottom: calc(7px + env(safe-area-inset-bottom));
-      /* Ensure minimum height accounts for safe area */
       min-height: calc(52px + constant(safe-area-inset-bottom));
       min-height: calc(52px + env(safe-area-inset-bottom));
   }
 
-  .actionbar-top {
-      position: relative;
-      top: 0;
-      border-top: 1px solid var(--secondary-background);
-      padding: 4px 10px;
-      background-color: var(--secondary-background);
-      /*white-space: nowrap;*/
-      /* Account for safe area at top (status bar) */
-      /* Older iOS uses constant(), modern browsers use env() */
-      padding-top: calc(4px + constant(safe-area-inset-top));
-      padding-top: calc(4px + env(safe-area-inset-top));
-  }
-
-  .actionbar-bottom .actionbar_item {
+  .mobile-footer-bar__item {
       vertical-align: middle;
       display: inline-block;
-      color: rgba(255, 255, 255, 0.85);
+      color: var(--medium-font-color);
       font-size: 26px;
       width: 20%;
       cursor: pointer;
   }
 
-  .actionbar-bottom .actionbar_item_label {
-      display: block;
-      font-size: 11px;
-      line-height: 1.1;
-      margin-top: 2px;
-      color: rgba(255, 255, 255, 0.9);
-  }
-
-  .actionbar-bottom .actionbar_item i {
+  .mobile-footer-bar__item i {
       font-size: 26px !important;
   }
 
-  .actionbar_icon.pull-right {
-      cursor: pointer;
+  .mobile-footer-bar__item.active {
+      color: var(--secondary-background);
   }
 
-  .actionbar-bottom .actionbar_item.active {
-      color: #ff6b6b;
+  .mobile-footer-bar__item svg {
+      fill: #666;
   }
 
-  .actionbar-bottom .actionbar_item.active .actionbar_item_label {
-      color: #ff6b6b;
-      font-weight: 700;
+  .mobile-footer-bar__item.active svg {
+      fill: var(--secondary-background);
   }
 
-  .actionbar-bottom .actionbar_item span {
-      vertical-align: middle;
-      padding: 2px 6px;
-  }
-
-  .actionbar-bottom .actionbar_item .big {
-      color: #fff;
-      background: transparent;
+  .mobile-footer-bar__item--primary .mobile-footer-bar__icon {
+      color: var(--secondary-font-color);
+      background: red;
       vertical-align: top;
   }
-  .actionbar-bottom .actionbar_item svg {
-    fill: #fff;
-  }
-  .actionbar-bottom .actionbar_item .big svg {
-    margin-top: 6px;
-    fill: #fff
-  }
-  .actionbar-bottom .actionbar_item .big .svgItem path:first-child{
-    stroke: #fff;
-  }
-  .actionbar-bottom .actionbar_item.active svg {
-    fill: #ff6b6b;
-  }
-  .actionbar_section {
-      display: inline-block;
-      margin-top: 2px;
-      vertical-align: middle;
+
+  .mobile-footer-bar__item--primary svg {
+      margin-top: 6px;
+      fill: #fff;
   }
 
-  .actionbar_icon {
-      font-size: 26px;
-      /* width: 30px; */
-  }
-
-  .actionbar_title {
-      font-size: 26px;
-      font-family: 'Muli';
-      font-weight: 300;
-      margin-left: .5em;
-
-      max-width: 50%;
-      text-overflow: ellipsis;
-
-      /* Required for text-overflow to do anything */
-      white-space: nowrap;
-      overflow: hidden;
+  .mobile-footer-bar__item--primary .svgItem path:first-child {
+      stroke: #fff;
   }
 
   .footer-component {

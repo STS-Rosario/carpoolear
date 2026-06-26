@@ -118,14 +118,14 @@
 </template>
 
 <script>
-import { mapState } from 'pinia';
+import { mapState, mapActions } from 'pinia';
 import { useAuthStore } from '../../stores/auth';
 import { useNotificationsStore } from '../../stores/notifications';
 import { useConversationsStore } from '../../stores/conversations';
 import { usePassengerStore } from '../../stores/passenger';
 import { useDeviceStore } from '../../stores/device';
+import { useActionbarsStore } from '../../stores/actionbars';
 import svgItem from '../SvgItem';
-import router from '../../router';
 import { UserApi } from '../../services/api';
 import {
     persistLocaleChoice,
@@ -154,8 +154,13 @@ export default {
         })
     },
     methods: {
-        closeMenu() {
-            router.push({ name: 'trips', query: { clearSearch: 'true' } });
+        ...mapActions(useActionbarsStore, {
+            closeMobileMenu: 'closeMobileMenu'
+        }),
+        async closeMenu() {
+            const { getLazyRouter } = await import('../../utils/routerLazy.js');
+            const router = await getLazyRouter();
+            await this.closeMobileMenu(router);
         },
         logout() {
             useAuthStore().logout();
@@ -179,7 +184,7 @@ export default {
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 9;
+    z-index: 11;
     background: #fff;
     display: flex;
     flex-direction: column;

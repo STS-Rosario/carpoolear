@@ -1,23 +1,25 @@
 <template>
     <footer class="footer-component">
-        <div class="actionbar actionbar-bottom visible-xs" v-if="footerShow">
+        <div class="mobile-footer-bar visible-xs" v-if="footerShow">
             <div
-                class="actionbar_item"
+                class="mobile-footer-bar__item"
                 v-for="item in footerButtons"
                 :key="item.id"
-                :class="{ active: item.active }"
+                :class="{
+                    active: item.active,
+                    'mobile-footer-bar__item--primary': item.id === 'new-trip'
+                }"
                 @click="onClick(item)"
             >
                 <span
-                    class="actionbar_item_icon"
+                    class="mobile-footer-bar__icon"
                     :class="{
-                        big: item.id === 'new-trip',
-                        'width-badges': item.id === 'my-trips'
+                        'mobile-footer-bar__icon--badged': item.id === 'my-trips'
                     }"
                 >
                     <svgItem size="26" :icon="item.icon"></svgItem>
                     <span
-                        class="badge"
+                        class="mobile-footer-bar__badge"
                         v-if="
                             item.id === 'my-trips' && myTripsBadgeCount > 0
                         "
@@ -25,7 +27,7 @@
                         {{ myTripsBadgeCount }}
                     </span>
                 </span>
-                <span class="actionbar_item_label">{{ $t(item.labelKey) }}</span>
+                <span class="mobile-footer-bar__label">{{ $t(item.labelKey) }}</span>
             </div>
         </div>
         <div class="container hidden-xs" v-if="config.enable_footer">
@@ -176,10 +178,10 @@ export default {
 h3 {
     font-size: 18px;
 }
-.width-badges {
+.mobile-footer-bar__icon--badged {
     position: relative;
 }
-.badge {
+.mobile-footer-bar__badge {
     position: absolute;
     background-color: red;
     right: 5px;
@@ -188,5 +190,16 @@ h3 {
     height: auto;
     width: auto;
     padding: 3px 4px !important;
+}
+.mobile-footer-bar__label {
+    display: block;
+    font-size: 11px;
+    line-height: 1.1;
+    margin-top: 2px;
+    color: var(--medium-font-color);
+}
+.mobile-footer-bar__item.active .mobile-footer-bar__label {
+    color: var(--secondary-background);
+    font-weight: 600;
 }
 </style>

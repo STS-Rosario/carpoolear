@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { createPinia, setActivePinia } from 'pinia';
 
 const EXPECTED_MOBILE_FOOTER = [
@@ -35,5 +35,88 @@ describe('actionbars store mobile footer navigation', () => {
 
         expect(menuButton).toBeDefined();
         expect(menuButton.url).toBe('mobile-menu');
+    });
+
+    it('opens the mobile menu and remembers the current route', async () => {
+        const { useActionbarsStore } = await import('./actionbars.js');
+        const store = useActionbarsStore();
+        const push = vi.fn(() => Promise.resolve());
+        const router = {
+            currentRoute: {
+                value: {
+                    name: 'profile',
+                    params: { id: 'me' },
+                    query: {}
+                }
+            },
+            push,
+            stack: [],
+            _push: push
+        };
+
+        await store.openMobileMenu(router);
+
+        expect(store.mobileMenuReturnRoute).toEqual({
+            name: 'profile',
+            params: { id: 'me' },
+            query: {}
+        });
+        expect(push).toHaveBeenCalledWith({ name: 'mobile-menu' });
+    });
+
+    it('closes the mobile menu when the menu tab is tapped again', async () => {
+        const { useActionbarsStore } = await import('./actionbars.js');
+        const store = useActionbarsStore();
+        store.mobileMenuReturnRoute = {
+            name: 'trips',
+            params: {},
+            query: { clearSearch: 'true' }
+        };
+        const push = vi.fn(() => Promise.resolve());
+        const router = {
+            currentRoute: {
+                value: {
+                    name: 'mobile-menu',
+                    params: {},
+                    query: {}
+                }
+            },
+            push,
+            stack: [{ name: 'mobile-menu' }],
+            _push: push
+        };
+
+        await store.openMobileMenu(router);
+
+        expect(push).toHaveBeenCalledWith({
+            name: 'trips',
+            params: {},
+            query: { clearSearch: 'true' }
+        });
+        expect(store.mobileMenuReturnRoute).toBeNull();
+    });
+
+    it('closes the mobile menu using the remembered route', async () => {
+        const { useActionbarsStore } = await import('./actionbars.js');
+        const store = useActionbarsStore();
+        store.mobileMenuReturnRoute = {
+            name: 'my-trips',
+            params: {},
+            query: {}
+        };
+        const push = vi.fn(() => Promise.resolve());
+        const router = {
+            stack: [{ name: 'mobile-menu' }],
+            _push: push
+        };
+
+        await store.closeMobileMenu(router);
+
+        expect(push).toHaveBeenCalledWith({
+            name: 'my-trips',
+            params: {},
+            query: {}
+        });
+        expect(store.mobileMenuReturnRoute).toBeNull();
     });
 });

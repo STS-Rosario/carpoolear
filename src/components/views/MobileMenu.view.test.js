@@ -37,6 +37,12 @@ describe('MobileMenu view', () => {
         expect(source).toContain("setLocale('arg')");
         expect(source).toContain("setLocale('en')");
     });
+
+    it('closes via the actionbars store so it returns to the previous screen', () => {
+        const source = fs.readFileSync(viewPath, 'utf8');
+        expect(source).toContain('closeMobileMenu');
+        expect(source).toContain('@click="closeMenu"');
+    });
 });
 
 describe('mobile menu route', () => {

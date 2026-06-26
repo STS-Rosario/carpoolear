@@ -7,7 +7,7 @@ const headerSource = fs.readFileSync(headerPath, 'utf8');
 
 describe('HeaderApp mobile navigation', () => {
     it('shows notification and message icons with badges when logged in on mobile', () => {
-        expect(headerSource).toContain('header_mobile_actions');
+        expect(headerSource).toContain('mobile-header-bar__actions');
         expect(headerSource).toContain('toNotifications');
         expect(headerSource).toContain('toConversations');
         expect(headerSource).toContain('notificationsCount');
