@@ -542,9 +542,9 @@ export default {
 .mobile-header-bar__actions {
     display: inline-flex;
     align-items: center;
-    gap: 1.25rem;
+    gap: 2.5rem;
     margin-left: 0.5rem;
-    padding-right: 0.75rem;
+    padding-right: 1.3rem;
     vertical-align: middle;
 }
 .mobile-header-bar__action {
