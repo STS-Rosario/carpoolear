@@ -18,8 +18,8 @@ export const usePassengerStore = defineStore('passenger', {
     }),
 
     getters: {
-        // pendingRequest and pendingPaymentRequests are accessed via mapState
-        // which maps state properties directly — no redundant getters needed.
+        pendingRequestCount: (state) =>
+            state.pendingRequest ? state.pendingRequest.length : 0
     },
 
     actions: {

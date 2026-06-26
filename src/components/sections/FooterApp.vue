@@ -4,27 +4,28 @@
             <div
                 class="actionbar_item"
                 v-for="item in footerButtons"
+                :key="item.id"
                 :class="{ active: item.active }"
                 @click="onClick(item)"
             >
                 <span
+                    class="actionbar_item_icon"
                     :class="{
                         big: item.id === 'new-trip',
-                        'width-badges': item.id === 'notifications'
+                        'width-badges': item.id === 'my-trips'
                     }"
-                    class=""
                 >
                     <svgItem size="26" :icon="item.icon"></svgItem>
                     <span
                         class="badge"
                         v-if="
-                            notificationsCount > 0 &&
-                            item.id === 'notifications'
+                            item.id === 'my-trips' && myTripsBadgeCount > 0
                         "
                     >
-                        {{ notificationsCount }}
+                        {{ myTripsBadgeCount }}
                     </span>
                 </span>
+                <span class="actionbar_item_label">{{ $t(item.labelKey) }}</span>
             </div>
         </div>
         <div class="container hidden-xs" v-if="config.enable_footer">
@@ -139,7 +140,7 @@
 <script>
 import { mapState, mapActions } from 'pinia';
 import { useActionbarsStore } from '../../stores/actionbars';
-import { useNotificationsStore } from '../../stores/notifications';
+import { usePassengerStore } from '../../stores/passenger';
 import { useAuthStore } from '../../stores/auth';
 import svgItem from '../SvgItem';
 
@@ -153,8 +154,8 @@ export default {
             footerButtons: 'footerButtons',
             footerShow: 'footerShow'
         }),
-        ...mapState(useNotificationsStore, {
-            notificationsCount: 'count'
+        ...mapState(usePassengerStore, {
+            myTripsBadgeCount: 'pendingRequestCount'
         }),
         ...mapState(useAuthStore, {
             config: 'appConfig'
@@ -177,6 +178,12 @@ h3 {
 }
 .width-badges {
     position: relative;
+}
+.actionbar_item_label {
+    display: block;
+    font-size: 11px;
+    line-height: 1.1;
+    margin-top: 2px;
 }
 .badge {
     position: absolute;
