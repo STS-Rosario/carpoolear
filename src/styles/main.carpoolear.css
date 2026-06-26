@@ -2156,8 +2156,16 @@ textarea {
     display: inline-block;
     color: var(--medium-font-color);
     font-size: 26px;
-    width: 20%;
+    width: 23%;
     cursor: pointer;
+}
+
+.mobile-footer-bar__item--home {
+    width: 16%;
+}
+
+.mobile-footer-bar__item--menu {
+    width: 15%;
 }
 
 .mobile-footer-bar__item i {

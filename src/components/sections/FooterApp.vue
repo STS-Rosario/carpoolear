@@ -5,7 +5,10 @@
                 class="mobile-footer-bar__item"
                 v-for="item in footerButtons"
                 :key="item.id"
-                :class="{ active: item.active }"
+                :class="[
+                    { active: item.active },
+                    `mobile-footer-bar__item--${item.id}`
+                ]"
                 @click="onClick(item)"
             >
                 <span
@@ -190,8 +193,8 @@ h3 {
 }
 .mobile-footer-bar__label {
     display: block;
-    font-size: 11px;
-    line-height: 1.1;
+    font-size: 15px;
+    line-height: 1.15;
     margin-top: 2px;
     color: var(--medium-font-color);
 }
