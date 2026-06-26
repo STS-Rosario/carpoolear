@@ -242,18 +242,17 @@
                     </span>
                 </span>
 
-                <div class="header_profile" v-if="user">
-                    <router-link
-                        :to="{ name: 'profile', params: { id: 'me' } }"
-                        class="header_profile_link"
-                    >
-                        <div
-                            class="circle-box header_profile_image"
-                            v-imgSrc:profile="user.image"
-                        ></div>
-                        <span class="header_profile_name">{{ user.name }}</span>
-                    </router-link>
-                </div>
+                <span
+                    class="header_messages"
+                    @click="toConversations"
+                    v-if="logged"
+                    :aria-label="$t('mensajes')"
+                >
+                    <svgItem size="22" icon="message"></svgItem>
+                    <span class="badge" v-if="messagesCount > 0">
+                        {{ messagesCount }}
+                    </span>
+                </span>
 
                 <a
                     v-if="!shouldHideDonationOnIOSCapacitor(user)"
@@ -479,22 +478,21 @@ export default {
 .header-social-link:hover img {
     opacity: 0.85;
 }
-.header_profile_link {
+.header_messages {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    color: var(--secondary-font-color);
-    text-decoration: none;
+    position: relative;
+    margin-left: 1rem;
+    margin-right: 1.5rem;
+    padding-left: 6px;
+    padding-right: 6px;
+    cursor: pointer;
     vertical-align: middle;
+    line-height: 0;
 }
-.header_profile_link:hover,
-.header_profile_link:focus {
-    color: var(--secondary-font-color);
-    text-decoration: none;
-    opacity: 0.9;
-}
-.header_profile_name {
-    vertical-align: middle;
+.header_messages :deep(svg) {
+    fill: #fff;
+    display: block;
 }
 .mobile-header-bar__actions {
     display: inline-flex;

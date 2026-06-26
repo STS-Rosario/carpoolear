@@ -15,6 +15,16 @@ describe('HeaderApp desktop menu', () => {
         );
     });
 
+    it('shows messages icon with badge after notifications on desktop', () => {
+        expect(headerSource).toContain('header_messages');
+        expect(headerSource).toMatch(
+            /header_notifications[\s\S]*header_messages[\s\S]*toConversations/
+        );
+        expect(headerSource).toMatch(
+            /header_messages[\s\S]*messagesCount[\s\S]*badge/
+        );
+    });
+
     it('shows menu icon dropdown after crear viaje on desktop', () => {
         expect(headerSource).toMatch(
             /btn-create-trip[\s\S]*<header-menu-dropdown \/>/
@@ -25,12 +35,12 @@ describe('HeaderApp desktop menu', () => {
         expect(menuDropdownSource).toContain("$t('menu')");
     });
 
-    it('profile link shows avatar left of name without dropdown', () => {
-        expect(headerSource).toContain('header_profile_link');
-        expect(headerSource).toContain('header_profile_name');
-        expect(headerSource).not.toMatch(
-            /header_profile[\s\S]*dropdown type="info"/
-        );
+    it('hides profile avatar and name on desktop header', () => {
+        const desktopHeader = headerSource.match(
+            /header_content hidden-xs[\s\S]*?<\/div>\s*<div class="cf">/
+        )[0];
+        expect(desktopHeader).not.toContain('header_profile');
+        expect(desktopHeader).not.toContain('header_profile_link');
     });
 
     it('dropdown mirrors mobile menu items', () => {
