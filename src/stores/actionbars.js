@@ -45,32 +45,37 @@ export const useActionbarsStore = defineStore('actionbars', {
         footer_buttons: [
             {
                 id: 'home',
+                labelKey: 'inicio',
                 icon: 'home',
                 url: 'trips',
                 active: true
             },
             {
-                id: 'profile',
-                icon: 'contact',
-                url: 'profile',
+                id: 'my-trips',
+                labelKey: 'misViajes',
+                icon: 'seat',
+                url: 'my-trips',
                 active: false
             },
             {
                 id: 'new-trip',
+                labelKey: 'crearViaje',
                 icon: 'add',
                 url: 'new-trip',
                 active: false
             },
             {
-                id: 'conversations',
-                icon: 'message',
-                url: 'conversations-list',
+                id: 'profile',
+                labelKey: 'miCuenta',
+                icon: 'contact',
+                url: 'profile',
                 active: false
             },
             {
-                id: 'notifications',
-                icon: 'bell',
-                url: 'notifications',
+                id: 'menu',
+                labelKey: 'menu',
+                icon: 'menu',
+                url: 'mobile-menu',
                 active: false
             }
         ]
