@@ -4,6 +4,7 @@
         <PendingRatingsBanner />
         <div
             class="actionbar actionbar-top visible-xs"
+            v-if="$route.name !== 'mobile-menu'"
             :class="{ 'actionbar-top--with-ratings': headerRatings }"
         >
             <div class="actionbar_section actionbar_icon">

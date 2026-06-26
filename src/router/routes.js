@@ -48,6 +48,7 @@ const AdminUserMigrationNew = () => import('../components/views/AdminUserMigrati
 const Tickets = () => import('../components/views/Tickets.vue');
 const TicketNew = () => import('../components/views/TicketNew.vue');
 const TicketDetail = () => import('../components/views/TicketDetail.vue');
+const MobileMenu = () => import('../components/views/MobileMenu.vue');
 const AdminSupportTickets = () => import('../components/views/AdminSupportTickets.vue');
 const AdminSupportTicketNew = () => import('../components/views/AdminSupportTicketNew.vue');
 const AdminSupportTicketDetail = () => import('../components/views/AdminSupportTicketDetail.vue');
@@ -162,6 +163,23 @@ export default [
         }
     },
     {
+        path: '/mobile-menu',
+        name: 'mobile-menu',
+        component: MobileMenu,
+        beforeEnter: auth,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'menu'
+                },
+                header: {
+                    buttons: []
+                }
+            }
+        }
+    },
+    {
         path: '/profile/:id',
         name: 'profile',
         component: Profile,
@@ -222,7 +240,7 @@ export default [
             actionbar: {
                 footer: {
                     show: true,
-                    active_id: 'profile'
+                    active_id: 'my-trips'
                 },
                 header: {
                     titleKey: 'misViajes',
