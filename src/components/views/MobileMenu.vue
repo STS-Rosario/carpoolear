@@ -184,7 +184,7 @@ export default {
     display: flex;
     flex-direction: column;
     padding: calc(12px + env(safe-area-inset-top)) 16px
-        calc(12px + env(safe-area-inset-bottom));
+        calc(72px + env(safe-area-inset-bottom));
     overflow-y: auto;
 }
 .mobile-menu_header {

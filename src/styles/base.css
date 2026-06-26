@@ -1927,6 +1927,7 @@
       border-top: 1px solid var(--medium-font-color);
       text-align: center;
       padding: 7px 0;
+      background-color: var(--secondary-background);
       /* Safe area support for iOS and Android - account for navigation bar */
       /* Older iOS uses constant(), modern browsers use env() */
       padding-bottom: calc(7px + constant(safe-area-inset-bottom));
@@ -1952,10 +1953,18 @@
   .actionbar-bottom .actionbar_item {
       vertical-align: middle;
       display: inline-block;
-      color: var(--medium-font-color);
+      color: rgba(255, 255, 255, 0.85);
       font-size: 26px;
       width: 20%;
       cursor: pointer;
+  }
+
+  .actionbar-bottom .actionbar_item_label {
+      display: block;
+      font-size: 11px;
+      line-height: 1.1;
+      margin-top: 2px;
+      color: rgba(255, 255, 255, 0.9);
   }
 
   .actionbar-bottom .actionbar_item i {
@@ -1967,7 +1976,12 @@
   }
 
   .actionbar-bottom .actionbar_item.active {
-      color: var(--secondary-background);
+      color: #ff6b6b;
+  }
+
+  .actionbar-bottom .actionbar_item.active .actionbar_item_label {
+      color: #ff6b6b;
+      font-weight: 700;
   }
 
   .actionbar-bottom .actionbar_item span {
@@ -1976,12 +1990,12 @@
   }
 
   .actionbar-bottom .actionbar_item .big {
-      color: var(--secondary-font-color);
-      background: red;
+      color: #fff;
+      background: transparent;
       vertical-align: top;
   }
   .actionbar-bottom .actionbar_item svg {
-    fill: #666;
+    fill: #fff;
   }
   .actionbar-bottom .actionbar_item .big svg {
     margin-top: 6px;
@@ -1991,7 +2005,7 @@
     stroke: #fff;
   }
   .actionbar-bottom .actionbar_item.active svg {
-    fill: var(--secondary-background);
+    fill: #ff6b6b;
   }
   .actionbar_section {
       display: inline-block;

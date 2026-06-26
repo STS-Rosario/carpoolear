@@ -16,7 +16,11 @@ const MENU_LABELS = {
         viajes: 'Viajes',
         crearViaje: 'Crear viaje',
         donar: 'Donar',
-        inicio: 'Inicio'
+        inicio: 'Inicio',
+        miCuenta: 'Mi cuenta',
+        menu: 'Menú',
+        modoDebug: 'Modo debug',
+        legales: 'Legales'
     },
     en: {
         misViajes: 'My trips',
@@ -31,7 +35,11 @@ const MENU_LABELS = {
         viajes: 'Trips',
         crearViaje: 'Create trip',
         donar: 'Donate',
-        inicio: 'Home'
+        inicio: 'Home',
+        miCuenta: 'My account',
+        menu: 'Menu',
+        modoDebug: 'Debug mode',
+        legales: 'Legal'
     }
 };
 

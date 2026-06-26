@@ -288,6 +288,10 @@ export default [
         },
         meta: {
             actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'new-trip'
+                },
                 header: {
                     titleKey: 'crearViaje',
                     buttons: ['clear']

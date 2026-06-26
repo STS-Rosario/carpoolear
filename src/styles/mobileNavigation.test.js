@@ -15,7 +15,7 @@ describe('mobile navigation styles', () => {
     it('styles footer labels and active state for labeled tabs', () => {
         expect(baseCss).toContain('.actionbar_item_label');
         expect(baseCss).toMatch(
-            /\.actionbar-bottom \.actionbar_item\.active \.actionbar_item_label\s*\{[^}]*color:\s*#fff/s
+            /\.actionbar-bottom \.actionbar_item\.active \.actionbar_item_label\s*\{[^}]*color:\s*#ff6b6b/s
         );
         expect(baseCss).toMatch(
             /\.actionbar-bottom \.actionbar_item svg\s*\{[^}]*fill:\s*#fff/s
