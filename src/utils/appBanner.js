@@ -11,7 +11,7 @@ export function shouldShowAppBanner(banner, user) {
         return true;
     }
     if (!user) {
-        return true;
+        return false;
     }
     return !user.identity_validated;
 }
