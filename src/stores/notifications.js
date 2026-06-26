@@ -74,7 +74,6 @@ export const useNotificationsStore = defineStore('notifications', {
 
         add() {
             this.count = this.count + 1;
-            console.log(this.$state);
         }
     }
 });
