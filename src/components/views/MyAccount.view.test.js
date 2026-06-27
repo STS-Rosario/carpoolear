@@ -12,13 +12,8 @@ describe('MyAccount view', () => {
         expect(viewSource).toContain('my-account__title');
         expect(viewSource).toContain("$t('miCuenta')");
         expect(viewSource).toContain("$t('verPerfilPublico')");
-        expect(viewSource).toContain('editarPerfilPublico');
-        expect(viewSource).toContain('misAutos');
-        expect(viewSource).toContain('misAmigos');
-        expect(viewSource).toContain('configuracionNotificaciones');
-        expect(viewSource).toContain('configuracionPrivacidad');
-        expect(viewSource).toContain("'cambiarPassword'");
-        expect(viewSource).toContain("'eliminarCuenta'");
+        expect(viewSource).toContain('getMyAccountMenuItems');
+        expect(viewSource).toContain('menuItems');
         expect(viewSource).toContain("$t('cerrarSesion')");
     });
 

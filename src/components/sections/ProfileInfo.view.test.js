@@ -85,6 +85,16 @@ describe('ProfileInfo friend actions', () => {
     });
 });
 
+describe('ProfileInfo own profile actions', () => {
+    it('does not duplicate account settings buttons covered by account nav', () => {
+        expect(viewSource).not.toContain("name: 'profile_update'");
+        expect(viewSource).not.toContain("name: 'friends_setting'");
+        expect(viewSource).not.toContain("name: 'debug_setting'");
+        expect(viewSource).not.toContain("name: 'transacciones'");
+        expect(viewSource).not.toContain("name: 'identity_validation'");
+    });
+});
+
 describe('ProfileInfo friend trip alerts toggle', () => {
     it('shows receive alerts button label with friend name when alerts are disabled', () => {
         expect(viewSource).toContain("friendship_state === 'friend'");

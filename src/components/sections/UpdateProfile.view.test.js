@@ -63,3 +63,23 @@ describe('UpdateProfile email notifications setting', () => {
         expect(viewSource).toContain('v-if="showProfileEmailNotificationsSetting"');
     });
 });
+
+describe('UpdateProfile desktop identity layout', () => {
+    it('places avatar beside the top info alert and identity fields', () => {
+        expect(viewSource).toContain('profile-top-row');
+        expect(viewSource).toContain('profile-top-content');
+        expect(viewSource).toContain('profile-top-alert');
+        expect(viewSource).toContain('profile-identity-fields');
+        expect(viewSource).toContain('profile_image-inline');
+        expect(viewSource).not.toContain('col-sm-push-16');
+    });
+});
+
+describe('UpdateProfile delete account entry point', () => {
+    it('opens the delete modal from the route query instead of an inline button', () => {
+        expect(viewSource).toContain('DELETE_ACCOUNT_QUERY');
+        expect(viewSource).toContain('openDeleteAccountModalFromRoute');
+        expect(viewSource).toContain("query.action'(action)");
+        expect(viewSource).not.toContain('delete-account-container');
+    });
+});

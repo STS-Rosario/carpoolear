@@ -1,16 +1,14 @@
 <template>
-    <div class="my-account">
-        <h1 class="my-account__title">{{ $t('miCuenta') }}</h1>
-
-        <div class="my-account__profile" v-if="user">
+    <aside class="my-account-nav" aria-label="my-account">
+        <div class="my-account-nav__profile" v-if="user">
             <div
-                class="circle-box my-account__avatar"
+                class="circle-box my-account-nav__avatar"
                 v-imgSrc:profile="user.image"
             ></div>
-            <div class="my-account__profile-info">
-                <div class="my-account__name">{{ user.name }}</div>
+            <div class="my-account-nav__profile-info">
+                <div class="my-account-nav__name">{{ user.name }}</div>
                 <router-link
-                    class="my-account__public-profile"
+                    class="my-account-nav__public-profile"
                     :to="{ name: 'profile', params: { id: 'me' } }"
                 >
                     {{ $t('verPerfilPublico') }}
@@ -18,38 +16,43 @@
             </div>
         </div>
 
-        <nav class="my-account__list" aria-label="my-account">
+        <nav class="my-account-nav__list">
             <router-link
                 v-for="item in menuItems"
                 :key="item.id"
-                class="my-account__item"
+                class="my-account-nav__item"
+                :class="{ 'my-account-nav__item--active': isItemActive(item) }"
                 :to="item.route"
             >
                 <i :class="['fa', item.icon]" aria-hidden="true"></i>
-                <span class="my-account__item-label">{{ $t(item.labelKey) }}</span>
-                <i class="fa fa-chevron-right my-account__chevron" aria-hidden="true"></i>
+                <span class="my-account-nav__item-label">{{
+                    $t(item.labelKey)
+                }}</span>
             </router-link>
         </nav>
 
         <button
             type="button"
-            class="my-account__logout"
+            class="my-account-nav__logout"
             v-if="!isFacebokApp"
             @click="logout"
         >
             {{ $t('cerrarSesion') }}
         </button>
-    </div>
+    </aside>
 </template>
 
 <script>
 import { mapState } from 'pinia';
 import { useAuthStore } from '../../stores/auth';
 import { useDeviceStore } from '../../stores/device';
-import { getMyAccountMenuItems } from '../../utils/myAccountMenuItems';
+import {
+    getMyAccountMenuItems,
+    isMyAccountMenuItemActive
+} from '../../utils/myAccountMenuItems';
 
 export default {
-    name: 'myAccount',
+    name: 'myAccountNav',
     computed: {
         ...mapState(useAuthStore, {
             user: 'user',
@@ -63,6 +66,9 @@ export default {
         }
     },
     methods: {
+        isItemActive(item) {
+            return isMyAccountMenuItemActive(item, this.$route.name);
+        },
         logout() {
             useAuthStore().logout();
         }
@@ -71,20 +77,10 @@ export default {
 </script>
 
 <style scoped>
-.my-account {
-    max-width: 480px;
-    margin: 0 auto;
-    padding: 1rem 1rem calc(5.5rem + env(safe-area-inset-bottom));
+.my-account-nav {
     color: #333;
 }
-.my-account__title {
-    margin: 0 0 1.25rem;
-    font-size: 1.75rem;
-    font-weight: 700;
-    line-height: 1.2;
-    color: #333;
-}
-.my-account__profile {
+.my-account-nav__profile {
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -93,38 +89,38 @@ export default {
     width: 100%;
     text-align: left;
 }
-.my-account__avatar {
+.my-account-nav__avatar {
     width: 56px;
     height: 56px;
     flex-shrink: 0;
     border-radius: 50%;
     margin: 0;
 }
-.my-account__profile-info {
+.my-account-nav__profile-info {
     min-width: 0;
 }
-.my-account__name {
+.my-account-nav__name {
     font-size: 1rem;
     font-weight: 700;
     line-height: 1.3;
     color: #333;
 }
-.my-account__public-profile {
+.my-account-nav__public-profile {
     display: inline-block;
     margin-top: 0.15rem;
     font-size: 0.95rem;
     color: #666;
     text-decoration: none;
 }
-.my-account__public-profile:hover,
-.my-account__public-profile:focus {
+.my-account-nav__public-profile:hover,
+.my-account-nav__public-profile:focus {
     color: #333;
     text-decoration: underline;
 }
-.my-account__list {
+.my-account-nav__list {
     border-top: 1px solid #e8e8e8;
 }
-.my-account__item {
+.my-account-nav__item {
     display: flex;
     align-items: center;
     gap: 0.85rem;
@@ -133,29 +129,28 @@ export default {
     color: #333;
     text-decoration: none;
 }
-.my-account__item:hover,
-.my-account__item:focus {
+.my-account-nav__item:hover,
+.my-account-nav__item:focus {
     color: #111;
     text-decoration: none;
 }
-.my-account__item > .fa:first-child {
+.my-account-nav__item--active {
+    font-weight: 700;
+    color: #111;
+}
+.my-account-nav__item > .fa:first-child {
     width: 22px;
     text-align: center;
     color: #666;
     font-size: 1.15rem;
     flex-shrink: 0;
 }
-.my-account__item-label {
+.my-account-nav__item-label {
     flex: 1;
     font-size: 1rem;
     line-height: 1.3;
 }
-.my-account__chevron {
-    color: #bbb;
-    font-size: 0.85rem;
-    flex-shrink: 0;
-}
-.my-account__logout {
+.my-account-nav__logout {
     margin-top: 1.5rem;
     width: 100%;
     border: 0;
@@ -165,11 +160,14 @@ export default {
     font-size: 1rem;
     font-weight: 600;
     padding: 0.9rem 1rem;
+    text-align: left;
 }
 @media only screen and (min-width: 768px) {
-    .my-account {
-        padding-top: 2rem;
-        padding-bottom: 2rem;
+    .my-account-nav__logout {
+        width: auto;
+        padding: 0.9rem 0;
+        background: transparent;
+        border-radius: 0;
     }
 }
 </style>

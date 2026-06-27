@@ -182,45 +182,6 @@
                         {{ $t('enviarMensaje') }}
                     </button>
                 </div>
-                <div class="edit-action" v-if="profile.id === user.id">
-                    <router-link
-                        class="btn btn-primary"
-                        tag="button"
-                        :to="{ name: 'profile_update' }"
-                    >
-                        {{ $t('editarPerfil') }}
-                    </router-link>
-                    <router-link
-                        v-if="identityValidationAvailable"
-                        class="btn btn-primary"
-                        tag="button"
-                        :to="{ name: 'identity_validation' }"
-                    >
-                        {{ $t('validarIdentidad') }}
-                    </router-link>
-                    <router-link
-                        class="btn btn-primary"
-                        tag="button"
-                        :to="{ name: 'friends_setting' }"
-                    >
-                        {{ $t('verAmigos') }}
-                    </router-link>
-                    <router-link
-                        class="btn btn-primary"
-                        tag="button"
-                        :to="{ name: 'debug_setting' }"
-                    >
-                        {{ $t('debug') }}
-                    </router-link>
-                    <router-link
-                        v-if="config && config.module_trip_seats_payment"
-                        class="btn btn-primary"
-                        tag="button"
-                        :to="{ name: 'transacciones' }"
-                    >
-                        {{ $t('transacciones') }}
-                    </router-link>
-                </div>
             </div>
         </div>
     </div>
@@ -262,15 +223,6 @@ export default {
             profile: 'user',
             badges: 'badges'
         }),
-        identityValidationAvailable() {
-            const c = this.config;
-            return (
-                c &&
-                c.identity_validation_enabled === true &&
-                (c.identity_validation_mercado_pago_enabled === true ||
-                    c.identity_validation_manual_enabled === true)
-            );
-        },
         formattedNroDoc() {
             return formatId(this.profile.nro_doc, this.config.profile_id_format);
         },

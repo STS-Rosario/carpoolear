@@ -1,19 +1,22 @@
 <template>
-    <tabset ref="tabs" :keytabset="'profile'" :rememberTab="isMyOwnProfile">
-        <tab :header="viajesHeaderTitle">
-            <component :is="currentView" :userId="id"></component>
-        </tab>
-        <tab :header="$t('perfil')">
-            <ProfileInfo></ProfileInfo>
-        </tab>
-        <tab :header="$t('calificaciones')">
-            <ProfileRates :id="id"></ProfileRates>
-        </tab>
-    </tabset>
+    <AccountSettingsLayout :show-nav="isMyOwnProfile">
+        <tabset ref="tabs" :keytabset="'profile'" :rememberTab="isMyOwnProfile">
+            <tab :header="viajesHeaderTitle">
+                <component :is="currentView" :userId="id"></component>
+            </tab>
+            <tab :header="$t('perfil')">
+                <ProfileInfo></ProfileInfo>
+            </tab>
+            <tab :header="$t('calificaciones')">
+                <ProfileRates :id="id"></ProfileRates>
+            </tab>
+        </tabset>
+    </AccountSettingsLayout>
 </template>
 <script>
 import Tab from '../elements/Tab';
 import Tabset from '../elements/Tabset';
+import AccountSettingsLayout from '../layouts/AccountSettingsLayout.vue';
 import { mapState, mapActions } from 'pinia';
 import { useAuthStore } from '../../stores/auth';
 import { useProfileStore } from '../../stores/profile';
@@ -29,6 +32,7 @@ export default {
     components: {
         Tab,
         Tabset,
+        AccountSettingsLayout,
         ProfileInfo,
         ProfileRates,
         MyTrips,
