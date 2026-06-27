@@ -18,9 +18,13 @@ describe('FooterApp mobile navigation', () => {
         expect(footerSource).toContain("item.id === 'my-trips'");
     });
 
-    it('uses the same stroke icons as the desktop menu for my trips and account', () => {
+    it('uses stroke icons that inherit active tab color', () => {
         expect(footerSource).toContain(":deep(.svgItem svg[fill='none'])");
         expect(footerSource).toContain('stroke: currentColor');
+        expect(footerSource).toContain('color: inherit');
+        expect(footerSource).not.toMatch(
+            /\.mobile-footer-bar__item\.active[\s\S]*fill:\s*#666/
+        );
     });
 });
 
