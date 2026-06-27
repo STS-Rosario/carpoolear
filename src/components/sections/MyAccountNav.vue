@@ -29,16 +29,18 @@
                     $t(item.labelKey)
                 }}</span>
             </router-link>
+            <button
+                type="button"
+                class="my-account-nav__item my-account-nav__item--logout"
+                v-if="!isFacebokApp"
+                @click="logout"
+            >
+                <i class="fa fa-sign-out" aria-hidden="true"></i>
+                <span class="my-account-nav__item-label">{{
+                    $t('cerrarSesion')
+                }}</span>
+            </button>
         </nav>
-
-        <button
-            type="button"
-            class="my-account-nav__logout"
-            v-if="!isFacebokApp"
-            @click="logout"
-        >
-            {{ $t('cerrarSesion') }}
-        </button>
     </aside>
 </template>
 
@@ -150,24 +152,20 @@ export default {
     font-size: 1rem;
     line-height: 1.3;
 }
-.my-account-nav__logout {
-    margin-top: 1.5rem;
+.my-account-nav__item--logout {
     width: 100%;
     border: 0;
-    border-radius: 8px;
-    background: #f0f0f0;
-    color: #e53935;
-    font-size: 1rem;
-    font-weight: 600;
-    padding: 0.9rem 1rem;
+    background: transparent;
+    cursor: pointer;
+    font: inherit;
     text-align: left;
+    color: #e53935;
 }
-@media only screen and (min-width: 768px) {
-    .my-account-nav__logout {
-        width: auto;
-        padding: 0.9rem 0;
-        background: transparent;
-        border-radius: 0;
-    }
+.my-account-nav__item--logout:hover,
+.my-account-nav__item--logout:focus {
+    color: #c62828;
+}
+.my-account-nav__item--logout > .fa:first-child {
+    color: #e53935;
 }
 </style>
