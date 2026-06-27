@@ -3,12 +3,22 @@
         <h1 class="my-account__title">{{ $t('miCuenta') }}</h1>
 
         <div class="my-account__profile" v-if="user">
-            <div
-                class="circle-box my-account__avatar"
-                v-imgSrc:profile="user.image"
-            ></div>
+            <router-link
+                class="my-account__profile-link"
+                :to="{ name: 'profile', params: { id: 'me' } }"
+            >
+                <div
+                    class="circle-box my-account__avatar"
+                    v-imgSrc:profile="user.image"
+                ></div>
+            </router-link>
             <div class="my-account__profile-info">
-                <div class="my-account__name">{{ user.name }}</div>
+                <router-link
+                    class="my-account__name"
+                    :to="{ name: 'profile', params: { id: 'me' } }"
+                >
+                    {{ user.name }}
+                </router-link>
                 <router-link
                     class="my-account__public-profile"
                     :to="{ name: 'profile', params: { id: 'me' } }"
@@ -93,6 +103,10 @@ export default {
     width: 100%;
     text-align: left;
 }
+.my-account__profile-link {
+    flex-shrink: 0;
+    text-decoration: none;
+}
 .my-account__avatar {
     width: 56px;
     height: 56px;
@@ -104,10 +118,17 @@ export default {
     min-width: 0;
 }
 .my-account__name {
+    display: block;
     font-size: 1rem;
     font-weight: 700;
     line-height: 1.3;
     color: #333;
+    text-decoration: none;
+}
+.my-account__name:hover,
+.my-account__name:focus {
+    color: #111;
+    text-decoration: none;
 }
 .my-account__public-profile {
     display: inline-block;

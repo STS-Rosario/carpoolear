@@ -12,6 +12,14 @@ describe('MyAccount view', () => {
         expect(viewSource).toContain('my-account__title');
         expect(viewSource).toContain("$t('miCuenta')");
         expect(viewSource).toContain("$t('verPerfilPublico')");
+        expect(viewSource).toContain('my-account__profile-link');
+        expect(viewSource).toContain('my-account__name');
+        expect(viewSource).toMatch(
+            /my-account__profile-link[\s\S]*name:\s*'profile'[\s\S]*id:\s*'me'/
+        );
+        expect(viewSource).toMatch(
+            /my-account__name[\s\S]*name:\s*'profile'[\s\S]*id:\s*'me'/
+        );
         expect(viewSource).toContain('getMyAccountMenuItems');
         expect(viewSource).toContain('menuItems');
         expect(viewSource).toContain("$t('cerrarSesion')");

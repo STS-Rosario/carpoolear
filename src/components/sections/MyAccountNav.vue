@@ -1,12 +1,22 @@
 <template>
     <aside class="my-account-nav" aria-label="my-account">
         <div class="my-account-nav__profile" v-if="user">
-            <div
-                class="circle-box my-account-nav__avatar"
-                v-imgSrc:profile="user.image"
-            ></div>
+            <router-link
+                class="my-account-nav__profile-link"
+                :to="{ name: 'profile', params: { id: 'me' } }"
+            >
+                <div
+                    class="circle-box my-account-nav__avatar"
+                    v-imgSrc:profile="user.image"
+                ></div>
+            </router-link>
             <div class="my-account-nav__profile-info">
-                <div class="my-account-nav__name">{{ user.name }}</div>
+                <router-link
+                    class="my-account-nav__name"
+                    :to="{ name: 'profile', params: { id: 'me' } }"
+                >
+                    {{ user.name }}
+                </router-link>
                 <router-link
                     class="my-account-nav__public-profile"
                     :to="{ name: 'profile', params: { id: 'me' } }"
@@ -91,6 +101,10 @@ export default {
     width: 100%;
     text-align: left;
 }
+.my-account-nav__profile-link {
+    flex-shrink: 0;
+    text-decoration: none;
+}
 .my-account-nav__avatar {
     width: 56px;
     height: 56px;
@@ -102,10 +116,17 @@ export default {
     min-width: 0;
 }
 .my-account-nav__name {
+    display: block;
     font-size: 1rem;
     font-weight: 700;
     line-height: 1.3;
     color: #333;
+    text-decoration: none;
+}
+.my-account-nav__name:hover,
+.my-account-nav__name:focus {
+    color: #111;
+    text-decoration: none;
 }
 .my-account-nav__public-profile {
     display: inline-block;

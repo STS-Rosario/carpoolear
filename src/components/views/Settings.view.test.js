@@ -16,6 +16,16 @@ describe('Settings navigation', () => {
         expect(layoutSource).toContain('effectiveShowNav');
     });
 
+    it('links profile avatar and name to the public profile', () => {
+        expect(navSource).toContain('my-account-nav__profile-link');
+        expect(navSource).toMatch(
+            /my-account-nav__profile-link[\s\S]*name:\s*'profile'[\s\S]*id:\s*'me'/
+        );
+        expect(navSource).toMatch(
+            /my-account-nav__name[\s\S]*name:\s*'profile'[\s\S]*id:\s*'me'/
+        );
+    });
+
     it('renders logout as a nav item with a sign-out icon', () => {
         expect(navSource).toContain('my-account-nav__item--logout');
         expect(navSource).toContain('fa-sign-out');
