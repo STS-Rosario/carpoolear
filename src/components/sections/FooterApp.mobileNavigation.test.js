@@ -19,7 +19,7 @@ describe('FooterApp mobile navigation', () => {
     });
 
     it('uses the same stroke icons as the desktop menu for my trips and account', () => {
-        expect(footerSource).toContain("svg[fill='none']");
+        expect(footerSource).toContain(":deep(.svgItem svg[fill='none'])");
         expect(footerSource).toContain('stroke: currentColor');
     });
 });

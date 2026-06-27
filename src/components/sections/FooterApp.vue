@@ -200,18 +200,18 @@ h3 {
     color: var(--secondary-background);
     font-weight: 600;
 }
-.mobile-footer-bar__icon .svgItem svg {
+.mobile-footer-bar__icon :deep(.svgItem svg) {
     fill: #666;
     display: block;
 }
-.mobile-footer-bar__item.active .mobile-footer-bar__icon .svgItem svg {
+.mobile-footer-bar__item.active .mobile-footer-bar__icon :deep(.svgItem svg) {
     fill: #666;
 }
-.mobile-footer-bar__icon .svgItem svg[fill='none'] {
+.mobile-footer-bar__icon :deep(.svgItem svg[fill='none']) {
     fill: none;
     color: inherit;
 }
-.mobile-footer-bar__icon .svgItem svg[fill='none'] path {
+.mobile-footer-bar__icon :deep(.svgItem svg[fill='none'] path) {
     stroke: currentColor;
 }
 </style>

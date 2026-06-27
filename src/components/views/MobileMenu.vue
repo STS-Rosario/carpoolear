@@ -221,15 +221,15 @@ export default {
     color: #666;
     font-size: 1.2rem;
 }
-.mobile-menu_item .svgItem svg {
+.mobile-menu_item :deep(.svgItem svg) {
     fill: #666;
     display: block;
 }
-.mobile-menu_item .svgItem svg[fill='none'] {
+.mobile-menu_item :deep(.svgItem svg[fill='none']) {
     fill: none;
     color: #666;
 }
-.mobile-menu_item .svgItem svg[fill='none'] path {
+.mobile-menu_item :deep(.svgItem svg[fill='none'] path) {
     stroke: currentColor;
 }
 .mobile-menu_item_label {
