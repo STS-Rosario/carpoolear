@@ -720,6 +720,11 @@ export default {
     padding: 0 0 1em 0;
     color: #333;
 }
+@media only screen and (max-width: 768px) {
+    .identity-validation-component {
+        padding: 1em;
+    }
+}
 
 .identity-verification-success-banner {
     display: flex;

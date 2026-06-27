@@ -33,6 +33,9 @@ describe('ProfileCars CRUD section', () => {
         expect(viewSource).toContain('visible-xs-block');
         expect(viewSource).toContain('color: #036686');
         expect(viewSource).toContain('var(--main-font-color');
+        expect(viewSource).toMatch(
+            /@media only screen and \(max-width: 768px\)[\s\S]*\.profile-cars[\s\S]*padding:\s*1em/
+        );
     });
 });
 

@@ -12,6 +12,14 @@ describe('IdentityValidation paid awaiting photos', () => {
     });
 });
 
+describe('IdentityValidation mobile layout', () => {
+    it('adds page padding on small screens like friends settings', () => {
+        expect(viewSource).toMatch(
+            /@media only screen and \(max-width: 768px\)[\s\S]*\.identity-validation-component[\s\S]*padding:\s*1em/
+        );
+    });
+});
+
 describe('IdentityValidation admin review note contexts', () => {
     it('uses approval note helper in success banner', () => {
         expect(viewSource).toContain('displayableManualApprovalReviewNote');
