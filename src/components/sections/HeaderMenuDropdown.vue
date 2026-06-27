@@ -18,7 +18,7 @@
                 <span class="header-menu-dropdown__item-label">{{
                     $t('notificaciones')
                 }}</span>
-                <span class="badge" v-if="notificationsCount > 0">{{
+                <span class="header-menu-dropdown__badge" v-if="notificationsCount > 0">{{
                     notificationsCount
                 }}</span>
             </router-link>
@@ -33,7 +33,7 @@
                 <span class="header-menu-dropdown__item-label">{{
                     $t('mensajes')
                 }}</span>
-                <span class="badge" v-if="messagesCount > 0">{{
+                <span class="header-menu-dropdown__badge" v-if="messagesCount > 0">{{
                     messagesCount
                 }}</span>
             </router-link>
@@ -48,7 +48,7 @@
                 <span class="header-menu-dropdown__item-label">{{
                     $t('misViajes')
                 }}</span>
-                <span class="badge" v-if="myTripsBadgeCount > 0">{{
+                <span class="header-menu-dropdown__badge" v-if="myTripsBadgeCount > 0">{{
                     myTripsBadgeCount
                 }}</span>
             </router-link>
@@ -285,6 +285,18 @@ export default {
 }
 .header-menu-dropdown__item-label {
     flex: 1;
+}
+.header-menu-dropdown__badge {
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    border-radius: 11px;
+    background: #e53935;
+    color: #fff;
+    font-size: 12px;
+    line-height: 22px;
+    text-align: center;
+    flex-shrink: 0;
 }
 .header-menu-dropdown__locale-inner {
     display: flex;

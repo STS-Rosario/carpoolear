@@ -66,6 +66,8 @@ describe('HeaderApp desktop menu', () => {
         expect(menuDropdownSource).toContain('fa-life-ring');
         expect(menuDropdownSource).toContain('fa-globe');
         expect(menuDropdownSource).toContain('fa-sign-out');
+        expect(menuDropdownSource).toContain('header-menu-dropdown__badge');
+        expect(menuDropdownSource).toContain('#e53935');
         expect(menuDropdownSource).toMatch(
             /right:\s*0[\s\S]*left:\s*auto/
         );
