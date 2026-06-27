@@ -18,7 +18,7 @@ describe('HeaderApp desktop menu', () => {
     it('shows messages icon with badge after notifications on desktop', () => {
         expect(headerSource).toContain('header_messages');
         expect(headerSource).toMatch(
-            /header_notifications[\s\S]*header_messages[\s\S]*toConversations/
+            /header_notifications[\s\S]*icon="bell"[\s\S]*header_messages[\s\S]*toConversations/
         );
         expect(headerSource).toMatch(
             /header_messages[\s\S]*messagesCount[\s\S]*badge/

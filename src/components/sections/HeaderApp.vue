@@ -226,17 +226,9 @@
                     class="header_notifications"
                     @click="toNotifications"
                     v-if="logged"
+                    aria-label="Notificaciones"
                 >
-                    <span class="fa-container">
-                        <i class="fa fa-bell background" aria-hidden="true"></i>
-                        <i
-                            :style="
-                                notificationsCount > 0 ? 'color: white' : ''
-                            "
-                            class="fa fa-bell"
-                            aria-hidden="true"
-                        ></i>
-                    </span>
+                    <svgItem size="22" icon="bell"></svgItem>
                     <span class="badge" v-if="notificationsCount > 0">
                         {{ notificationsCount }}
                     </span>
@@ -477,6 +469,20 @@ export default {
 }
 .header-social-link:hover img {
     opacity: 0.85;
+}
+.header_notifications {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    padding-left: 10px;
+    padding-right: 6px;
+    cursor: pointer;
+    vertical-align: middle;
+    line-height: 0;
+}
+.header_notifications :deep(svg) {
+    fill: #fff;
+    display: block;
 }
 .header_messages {
     display: inline-flex;
