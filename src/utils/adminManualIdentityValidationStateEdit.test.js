@@ -2,7 +2,8 @@ import { describe, it, expect } from 'vitest';
 import {
     MANUAL_IDENTITY_VALIDATION_REVIEW_STATUS_OPTIONS,
     buildManualIdentityValidationStatePayload,
-    hasManualIdentityValidationStateChanges
+    hasManualIdentityValidationStateChanges,
+    hasPhotosSubmitted
 } from './adminManualIdentityValidationStateEdit.js';
 
 describe('adminManualIdentityValidationStateEdit', () => {
@@ -15,7 +16,7 @@ describe('adminManualIdentityValidationStateEdit', () => {
     });
 
     it('builds payload only for changed fields', () => {
-        const item = { review_status: 'pending', paid: false };
+        const item = { review_status: 'pending', paid: false, submitted_at: null };
 
         expect(
             buildManualIdentityValidationStatePayload(item, {
@@ -76,6 +77,8 @@ describe('adminManualIdentityValidationStateEdit', () => {
 
     it('treats missing submitted_at as photos not submitted', () => {
         const item = { review_status: 'pending', paid: true, submitted_at: null };
+
+        expect(hasPhotosSubmitted(item)).toBe(false);
 
         expect(
             buildManualIdentityValidationStatePayload(item, {

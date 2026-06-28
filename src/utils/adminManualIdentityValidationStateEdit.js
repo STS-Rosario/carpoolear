@@ -4,15 +4,23 @@ export const MANUAL_IDENTITY_VALIDATION_REVIEW_STATUS_OPTIONS = [
     { value: 'rejected', labelKey: 'estadoRechazado' }
 ];
 
-export function hasManualIdentityValidationStateChanges(item, { reviewStatus, paid }) {
+export function hasPhotosSubmitted(item) {
+    return !!item?.submitted_at;
+}
+
+export function hasManualIdentityValidationStateChanges(item, { reviewStatus, paid, photosSubmitted }) {
     if (!item) {
         return false;
     }
 
-    return item.review_status !== reviewStatus || !!item.paid !== !!paid;
+    return (
+        item.review_status !== reviewStatus ||
+        !!item.paid !== !!paid ||
+        hasPhotosSubmitted(item) !== !!photosSubmitted
+    );
 }
 
-export function buildManualIdentityValidationStatePayload(item, { reviewStatus, paid }) {
+export function buildManualIdentityValidationStatePayload(item, { reviewStatus, paid, photosSubmitted }) {
     const payload = {};
 
     if (item.review_status !== reviewStatus) {
@@ -21,6 +29,10 @@ export function buildManualIdentityValidationStatePayload(item, { reviewStatus, 
 
     if (!!item.paid !== !!paid) {
         payload.paid = !!paid;
+    }
+
+    if (hasPhotosSubmitted(item) !== !!photosSubmitted) {
+        payload.photos_submitted = !!photosSubmitted;
     }
 
     return payload;

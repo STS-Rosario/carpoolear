@@ -39,6 +39,17 @@
                                 </select>
                             </div>
                             <div class="form-group">
+                                <label for="manual-identity-edit-photos-submitted">{{ $t('fotosEnviadas') }}</label>
+                                <select
+                                    id="manual-identity-edit-photos-submitted"
+                                    v-model="editablePhotosSubmitted"
+                                    class="form-control admin-manual-identity-state-edit-photos-submitted"
+                                >
+                                    <option :value="true">{{ $t('si') }}</option>
+                                    <option :value="false">{{ $t('no') }}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <label for="manual-identity-edit-status">{{ $t('estado') }}</label>
                                 <select
                                     id="manual-identity-edit-status"
@@ -232,7 +243,8 @@ import { shouldShowPurgedPhotosMessage } from '../../utils/adminManualIdentityVa
 import {
     MANUAL_IDENTITY_VALIDATION_REVIEW_STATUS_OPTIONS,
     buildManualIdentityValidationStatePayload,
-    hasManualIdentityValidationStateChanges
+    hasManualIdentityValidationStateChanges,
+    hasPhotosSubmitted
 } from '../../utils/adminManualIdentityValidationStateEdit.js';
 import { shouldProceedWithReviewAction } from '../../utils/adminManualIdentityValidationReviewConfirm.js';
 
@@ -254,6 +266,7 @@ export default {
             privateAdminNote: '',
             editableReviewStatus: 'pending',
             editablePaid: false,
+            editablePhotosSubmitted: false,
             savingPrivateNote: false,
             savingState: false,
             stateSaveError: null,
@@ -275,7 +288,8 @@ export default {
         hasStateChanges() {
             return hasManualIdentityValidationStateChanges(this.item, {
                 reviewStatus: this.editableReviewStatus,
-                paid: this.editablePaid
+                paid: this.editablePaid,
+                photosSubmitted: this.editablePhotosSubmitted
             });
         }
     },
@@ -309,7 +323,11 @@ export default {
             this.item = data.data || data;
             this.privateAdminNote = (this.item && this.item.private_admin_note) || '';
             this.syncEditableStateFromItem();
-            this.loadImages();
+            if (!this.item.has_images) {
+                this.clearImageBlobUrls();
+            } else {
+                this.loadImages();
+            }
         },
         syncEditableStateFromItem() {
             if (!this.item) {
@@ -317,7 +335,14 @@ export default {
             }
             this.editableReviewStatus = this.item.review_status || 'pending';
             this.editablePaid = !!this.item.paid;
+            this.editablePhotosSubmitted = hasPhotosSubmitted(this.item);
             this.stateSaveError = null;
+        },
+        clearImageBlobUrls() {
+            Object.values(this.blobUrls).forEach((url) => {
+                if (url) URL.revokeObjectURL(url);
+            });
+            this.blobUrls = { front: null, back: null, selfie: null };
         },
         getApiErrorMessage(err) {
             return (err && err.data && (err.data.error || err.data.message)) ||
@@ -386,7 +411,8 @@ export default {
             const api = new AdminApi();
             const payload = buildManualIdentityValidationStatePayload(this.item, {
                 reviewStatus: this.editableReviewStatus,
-                paid: this.editablePaid
+                paid: this.editablePaid,
+                photosSubmitted: this.editablePhotosSubmitted
             });
 
             api.updateManualIdentityValidationState(this.item.id, payload)
@@ -441,7 +467,7 @@ export default {
             const api = new AdminApi();
             api.purgeManualIdentityValidation(this.id)
                 .then(() => {
-                    this.blobUrls = { front: null, back: null, selfie: null };
+                    this.clearImageBlobUrls();
                     this.fetchItem();
                 })
                 .finally(() => {
@@ -461,9 +487,7 @@ export default {
         }
     },
     beforeUnmount() {
-        Object.values(this.blobUrls).forEach((url) => {
-            if (url) URL.revokeObjectURL(url);
-        });
+        this.clearImageBlobUrls();
     },
     components: {
         AdminLayout,
