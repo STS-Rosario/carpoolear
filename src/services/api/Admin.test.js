@@ -44,7 +44,7 @@ describe('AdminApi manual identity validations state', () => {
         expect(apiSource).toContain(
             "/api/admin/manual-identity-validations/' + id + '/state"
         );
-        expect(apiSource).toContain('review_status');
+        expect(apiSource).toContain('payload');
     });
 });
 

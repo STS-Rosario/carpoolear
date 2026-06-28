@@ -95,6 +95,13 @@ class AdminApi extends TaggedApi {
         );
     }
 
+    updateManualIdentityValidationState(id, payload) {
+        return this.post(
+            '/api/admin/manual-identity-validations/' + id + '/state',
+            payload
+        );
+    }
+
     getMercadoPagoRejectedValidations() {
         return this.get('/api/admin/mercado-pago-rejected-validations', {});
     }

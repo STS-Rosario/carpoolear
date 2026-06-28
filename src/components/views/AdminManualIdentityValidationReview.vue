@@ -22,8 +22,50 @@
                         <p><strong>{{ $t('doc') }} (DNI):</strong> {{ displayDniOrDash(item.user_nro_doc) }}</p>
                         <p><strong>{{ $t('fechaPago') }}:</strong> {{ item.paid_at ? formatDate(item.paid_at) : '-' }}</p>
                         <p><strong>{{ $t('fechaEnvio') }}:</strong> {{ item.submitted_at ? formatDate(item.submitted_at) : '-' }}</p>
-                        <p><strong>{{ $t('pagado') }}:</strong> {{ item.paid ? $t('si') : $t('no') }}</p>
-                        <p><strong>{{ $t('estado') }}:</strong> {{ getStatusLabel(item.review_status) }}</p>
+                        <div class="admin-manual-identity-state-edit form-group">
+                            <h4>{{ $t('adminManualIdentityEditState') }}</h4>
+                            <p class="text-muted admin-manual-identity-state-edit-hint">
+                                {{ $t('adminManualIdentityEditStateHint') }}
+                            </p>
+                            <div class="form-group">
+                                <label for="manual-identity-edit-paid">{{ $t('pagado') }}</label>
+                                <select
+                                    id="manual-identity-edit-paid"
+                                    v-model="editablePaid"
+                                    class="form-control admin-manual-identity-state-edit-paid"
+                                >
+                                    <option :value="true">{{ $t('si') }}</option>
+                                    <option :value="false">{{ $t('no') }}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="manual-identity-edit-status">{{ $t('estado') }}</label>
+                                <select
+                                    id="manual-identity-edit-status"
+                                    v-model="editableReviewStatus"
+                                    class="form-control admin-manual-identity-state-edit-status"
+                                >
+                                    <option
+                                        v-for="option in reviewStatusOptions"
+                                        :key="option.value"
+                                        :value="option.value"
+                                    >
+                                        {{ $t(option.labelKey) }}
+                                    </option>
+                                </select>
+                            </div>
+                            <button
+                                class="btn btn-default btn-sm admin-manual-identity-state-edit-save"
+                                :disabled="!hasStateChanges || savingState"
+                                @click="saveManualIdentityValidationState"
+                            >
+                                <span v-if="savingState">{{ $t('guardando') }}</span>
+                                <span v-else>{{ $t('guardar') }}</span>
+                            </button>
+                            <p v-if="stateSaveError" class="text-danger admin-manual-identity-state-edit-error">
+                                {{ stateSaveError }}
+                            </p>
+                        </div>
                         <AdminUserSupportTicketsWarning
                             v-if="item.user_id"
                             :user-id="item.user_id"
@@ -187,6 +229,11 @@ import { useAuthStore } from '../../stores/auth';
 import dialogs from '../../services/dialogs.js';
 import { displayDniOrDash as formatDisplayDniOrDash } from '../../utils/formatDisplayDni';
 import { shouldShowPurgedPhotosMessage } from '../../utils/adminManualIdentityValidationImages.js';
+import {
+    MANUAL_IDENTITY_VALIDATION_REVIEW_STATUS_OPTIONS,
+    buildManualIdentityValidationStatePayload,
+    hasManualIdentityValidationStateChanges
+} from '../../utils/adminManualIdentityValidationStateEdit.js';
 
 export default {
     name: 'AdminManualIdentityValidationReview',
@@ -204,7 +251,11 @@ export default {
             fullSizeImage: null,
             reviewNote: '',
             privateAdminNote: '',
+            editableReviewStatus: 'pending',
+            editablePaid: false,
             savingPrivateNote: false,
+            savingState: false,
+            stateSaveError: null,
             submitting: false,
             reviewError: null,
             purging: false
@@ -216,6 +267,15 @@ export default {
         }),
         hasComment() {
             return this.reviewNote && this.reviewNote.trim() !== '';
+        },
+        reviewStatusOptions() {
+            return MANUAL_IDENTITY_VALIDATION_REVIEW_STATUS_OPTIONS;
+        },
+        hasStateChanges() {
+            return hasManualIdentityValidationStateChanges(this.item, {
+                reviewStatus: this.editableReviewStatus,
+                paid: this.editablePaid
+            });
         }
     },
     methods: {
@@ -247,7 +307,16 @@ export default {
             const data = res.data || res;
             this.item = data.data || data;
             this.privateAdminNote = (this.item && this.item.private_admin_note) || '';
+            this.syncEditableStateFromItem();
             this.loadImages();
+        },
+        syncEditableStateFromItem() {
+            if (!this.item) {
+                return;
+            }
+            this.editableReviewStatus = this.item.review_status || 'pending';
+            this.editablePaid = !!this.item.paid;
+            this.stateSaveError = null;
         },
         fetchItem() {
             const api = new AdminApi();
@@ -299,6 +368,32 @@ export default {
                 })
                 .finally(() => {
                     this.savingPrivateNote = false;
+                });
+        },
+        saveManualIdentityValidationState() {
+            if (!this.item || !this.hasStateChanges) {
+                return;
+            }
+
+            this.savingState = true;
+            this.stateSaveError = null;
+            const api = new AdminApi();
+            const payload = buildManualIdentityValidationStatePayload(this.item, {
+                reviewStatus: this.editableReviewStatus,
+                paid: this.editablePaid
+            });
+
+            api.updateManualIdentityValidationState(this.item.id, payload)
+                .then((res) => {
+                    this.applyResponseItem(res);
+                    dialogs.message(this.$t('guardar'), { duration: 2, estado: 'success' });
+                }, (err) => {
+                    const apiError = (err && err.data && (err.data.error || err.data.message)) ||
+                        (err && err.response && err.response.data && (err.response.data.error || err.response.data.message));
+                    this.stateSaveError = apiError || this.$t('resultError');
+                })
+                .finally(() => {
+                    this.savingState = false;
                 });
         },
         review(action) {
@@ -408,6 +503,19 @@ export default {
 }
 .private-admin-note-save-btn {
     margin-top: 0.5rem;
+}
+.admin-manual-identity-state-edit {
+    margin-top: 1rem;
+}
+.admin-manual-identity-state-edit-hint {
+    margin-bottom: 0.75rem;
+}
+.admin-manual-identity-state-edit-save {
+    margin-top: 0.25rem;
+}
+.admin-manual-identity-state-edit-error {
+    margin-top: 0.5rem;
+    margin-bottom: 0;
 }
 .identity-validation-review-comment-user-visible {
     display: block;

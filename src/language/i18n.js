@@ -1188,6 +1188,9 @@ const messages = {
         eMail: 'E-mail',
         notaPrivada: 'Nota privada',
         notaPrivadaSoloAdmins: 'Nota privada (sólo la ven los administradores)',
+        adminManualIdentityEditState: 'Editar estado (admin)',
+        adminManualIdentityEditStateHint:
+            'Corrección manual de pagado y estado de revisión. No envía notificaciones al usuario.',
         notaSoloVisiblePorAdmins: 'Nota sólo visible por admins',
         numeroDeDocumento: 'Número de documento',
         numeroDeTelefono: 'Número de teléfono',
@@ -2516,6 +2519,9 @@ const messages = {
         eMail: 'E-mail',
         notaPrivada: 'Nota privada',
         notaPrivadaSoloAdmins: 'Nota privada (sólo la ven los administradores)',
+        adminManualIdentityEditState: 'Editar estado (admin)',
+        adminManualIdentityEditStateHint:
+            'Corrección manual de pagado y estado de revisión. No envía notificaciones al usuario.',
         notaSoloVisiblePorAdmins: 'Nota sólo visible por admins',
         numeroDeDocumento: 'Número de documento',
         numeroDeTelefono: 'Número de teléfono',
@@ -4064,6 +4070,9 @@ const messages = {
         eMail: 'E-mail',
         notaPrivada: 'Private note',
         notaPrivadaSoloAdmins: 'Private note (admins only)',
+        adminManualIdentityEditState: 'Edit state (admin)',
+        adminManualIdentityEditStateHint:
+            'Manual override for paid and review status. Does not notify the user.',
         notaSoloVisiblePorAdmins: 'Note only visible to admins',
         numeroDeDocumento: 'Document number',
         numeroDeTelefono: 'Phone number',
