@@ -38,6 +38,16 @@ describe('AdminApi manual identity validations private note', () => {
     });
 });
 
+describe('AdminApi manual identity validations state', () => {
+    it('posts review_status and paid to manual identity validation state endpoint', () => {
+        expect(apiSource).toContain('updateManualIdentityValidationState');
+        expect(apiSource).toContain(
+            "/api/admin/manual-identity-validations/' + id + '/state"
+        );
+        expect(apiSource).toContain('review_status');
+    });
+});
+
 describe('AdminApi dashboard', () => {
     it('fetches admin dashboard summary from dashboard endpoint', () => {
         expect(apiSource).toContain('getDashboard');

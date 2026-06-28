@@ -40,4 +40,13 @@ describe('AdminManualIdentityValidationReview view', () => {
         expect(viewSource).toContain("{{ $t('fotosPurgadas') }}");
         expect(viewSource).not.toContain('v-else class="alert alert-info">{{ $t(\'fotosPurgadas\') }}');
     });
+
+    it('shows editable review status and paid state with save wired to AdminApi', () => {
+        expect(viewSource).toContain('admin-manual-identity-state-edit');
+        expect(viewSource).toContain('editableReviewStatus');
+        expect(viewSource).toContain('editablePaid');
+        expect(viewSource).toContain('saveManualIdentityValidationState');
+        expect(viewSource).toContain('updateManualIdentityValidationState');
+        expect(viewSource).toContain('hasManualIdentityValidationStateChanges');
+    });
 });
