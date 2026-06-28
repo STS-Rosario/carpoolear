@@ -318,6 +318,11 @@ export default {
             this.editablePaid = !!this.item.paid;
             this.stateSaveError = null;
         },
+        getApiErrorMessage(err) {
+            return (err && err.data && (err.data.error || err.data.message)) ||
+                (err && err.response && err.response.data && (err.response.data.error || err.response.data.message)) ||
+                this.$t('resultError');
+        },
         fetchItem() {
             const api = new AdminApi();
             return api.getManualIdentityValidation(this.id).then((res) => {
@@ -388,9 +393,7 @@ export default {
                     this.applyResponseItem(res);
                     dialogs.message(this.$t('guardar'), { duration: 2, estado: 'success' });
                 }, (err) => {
-                    const apiError = (err && err.data && (err.data.error || err.data.message)) ||
-                        (err && err.response && err.response.data && (err.response.data.error || err.response.data.message));
-                    this.stateSaveError = apiError || this.$t('resultError');
+                    this.stateSaveError = this.getApiErrorMessage(err);
                 })
                 .finally(() => {
                     this.savingState = false;
@@ -411,9 +414,7 @@ export default {
                         this.$router.push({ name: 'admin-manual-identity-validations' });
                     }, 2000);
                 }, (err) => {
-                    const apiError = (err && err.data && (err.data.error || err.data.message)) ||
-                        (err && err.response && err.response.data && (err.response.data.error || err.response.data.message));
-                    this.reviewError = apiError || this.$t('resultError');
+                    this.reviewError = this.getApiErrorMessage(err);
                 })
                 .finally(() => {
                     this.submitting = false;
