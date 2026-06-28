@@ -49,4 +49,11 @@ describe('AdminManualIdentityValidationReview view', () => {
         expect(viewSource).toContain('updateManualIdentityValidationState');
         expect(viewSource).toContain('hasManualIdentityValidationStateChanges');
     });
+
+    it('confirms mark pending when request is already pending', () => {
+        expect(viewSource).toContain('confirmReview');
+        expect(viewSource).toContain('@click="confirmReview(\'pending\')"');
+        expect(viewSource).toContain('confirmMarcarPendienteYaPendiente');
+        expect(viewSource).toContain('shouldConfirmAlreadyPendingReview');
+    });
 });
