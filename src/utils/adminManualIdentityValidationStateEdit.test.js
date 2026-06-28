@@ -20,33 +20,69 @@ describe('adminManualIdentityValidationStateEdit', () => {
         expect(
             buildManualIdentityValidationStatePayload(item, {
                 reviewStatus: 'approved',
-                paid: false
+                paid: false,
+                photosSubmitted: false
             })
         ).toEqual({ review_status: 'approved' });
 
         expect(
             buildManualIdentityValidationStatePayload(item, {
                 reviewStatus: 'pending',
-                paid: true
+                paid: true,
+                photosSubmitted: false
             })
         ).toEqual({ paid: true });
     });
 
     it('detects when admin edited review status or paid flag', () => {
-        const item = { review_status: 'pending', paid: true };
+        const item = { review_status: 'pending', paid: true, submitted_at: '2026-01-01T10:00:00' };
 
         expect(
             hasManualIdentityValidationStateChanges(item, {
                 reviewStatus: 'pending',
-                paid: true
+                paid: true,
+                photosSubmitted: true
             })
         ).toBe(false);
 
         expect(
             hasManualIdentityValidationStateChanges(item, {
                 reviewStatus: 'rejected',
-                paid: true
+                paid: true,
+                photosSubmitted: true
             })
         ).toBe(true);
+    });
+
+    it('builds payload for photos submitted changes', () => {
+        const item = { review_status: 'pending', paid: true, submitted_at: '2026-01-01T10:00:00' };
+
+        expect(
+            buildManualIdentityValidationStatePayload(item, {
+                reviewStatus: 'pending',
+                paid: true,
+                photosSubmitted: false
+            })
+        ).toEqual({ photos_submitted: false });
+
+        expect(
+            buildManualIdentityValidationStatePayload(item, {
+                reviewStatus: 'pending',
+                paid: true,
+                photosSubmitted: true
+            })
+        ).toEqual({});
+    });
+
+    it('treats missing submitted_at as photos not submitted', () => {
+        const item = { review_status: 'pending', paid: true, submitted_at: null };
+
+        expect(
+            buildManualIdentityValidationStatePayload(item, {
+                reviewStatus: 'pending',
+                paid: true,
+                photosSubmitted: true
+            })
+        ).toEqual({ photos_submitted: true });
     });
 });

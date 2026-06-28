@@ -45,6 +45,8 @@ describe('AdminManualIdentityValidationReview view', () => {
         expect(viewSource).toContain('admin-manual-identity-state-edit');
         expect(viewSource).toContain('editableReviewStatus');
         expect(viewSource).toContain('editablePaid');
+        expect(viewSource).toContain('editablePhotosSubmitted');
+        expect(viewSource).toContain('fotosEnviadas');
         expect(viewSource).toContain('saveManualIdentityValidationState');
         expect(viewSource).toContain('updateManualIdentityValidationState');
         expect(viewSource).toContain('hasManualIdentityValidationStateChanges');
