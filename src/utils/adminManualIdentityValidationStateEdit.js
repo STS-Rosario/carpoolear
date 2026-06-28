@@ -5,7 +5,7 @@ export const MANUAL_IDENTITY_VALIDATION_REVIEW_STATUS_OPTIONS = [
 ];
 
 export function hasPhotosSubmitted(item) {
-    return !!item?.submitted_at;
+    return !!item?.['submitted_at'];
 }
 
 export function hasManualIdentityValidationStateChanges(item, { reviewStatus, paid, photosSubmitted }) {
