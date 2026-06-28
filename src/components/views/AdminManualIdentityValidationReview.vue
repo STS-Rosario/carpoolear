@@ -234,7 +234,7 @@ import {
     buildManualIdentityValidationStatePayload,
     hasManualIdentityValidationStateChanges
 } from '../../utils/adminManualIdentityValidationStateEdit.js';
-import { shouldConfirmAlreadyPendingReview } from '../../utils/adminManualIdentityValidationReviewConfirm.js';
+import { shouldProceedWithReviewAction } from '../../utils/adminManualIdentityValidationReviewConfirm.js';
 
 export default {
     name: 'AdminManualIdentityValidationReview',
@@ -422,10 +422,12 @@ export default {
                 });
         },
         confirmReview(action) {
-            if (
-                shouldConfirmAlreadyPendingReview(action, this.item && this.item.review_status) &&
-                !confirm(this.$t('confirmMarcarPendienteYaPendiente'))
-            ) {
+            const proceed = shouldProceedWithReviewAction(
+                action,
+                this.item && this.item.review_status,
+                () => confirm(this.$t('confirmMarcarPendienteYaPendiente'))
+            );
+            if (!proceed) {
                 return;
             }
             this.review(action);

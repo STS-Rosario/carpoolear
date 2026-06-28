@@ -54,6 +54,6 @@ describe('AdminManualIdentityValidationReview view', () => {
         expect(viewSource).toContain('confirmReview');
         expect(viewSource).toContain('@click="confirmReview(\'pending\')"');
         expect(viewSource).toContain('confirmMarcarPendienteYaPendiente');
-        expect(viewSource).toContain('shouldConfirmAlreadyPendingReview');
+        expect(viewSource).toContain('shouldProceedWithReviewAction');
     });
 });
