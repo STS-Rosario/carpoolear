@@ -179,7 +179,7 @@
                                     class="btn btn-warning"
                                     :disabled="!hasComment || submitting"
                                     :title="!hasComment ? $t('comentarioRequeridoParaAccion') : ''"
-                                    @click="review('pending')"
+                                    @click="confirmReview('pending')"
                                 >
                                     {{ $t('marcarPendiente') }}
                                 </button>
@@ -234,6 +234,7 @@ import {
     buildManualIdentityValidationStatePayload,
     hasManualIdentityValidationStateChanges
 } from '../../utils/adminManualIdentityValidationStateEdit.js';
+import { shouldConfirmAlreadyPendingReview } from '../../utils/adminManualIdentityValidationReviewConfirm.js';
 
 export default {
     name: 'AdminManualIdentityValidationReview',
@@ -419,6 +420,15 @@ export default {
                 .finally(() => {
                     this.submitting = false;
                 });
+        },
+        confirmReview(action) {
+            if (
+                shouldConfirmAlreadyPendingReview(action, this.item && this.item.review_status) &&
+                !confirm(this.$t('confirmMarcarPendienteYaPendiente'))
+            ) {
+                return;
+            }
+            this.review(action);
         },
         confirmPurge() {
             if (!confirm(this.$t('confirmarPurgarFotos'))) return;
