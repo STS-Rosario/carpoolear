@@ -11,14 +11,32 @@ describe('adminManualIdentityValidationDisplay', () => {
     it('labels pending paid reviews as pending revision', () => {
         expect(getManualIdentityValidationStatusLabel({
             paid: true,
-            review_status: 'pending'
+            review_status: 'pending',
+            submitted_at: '2026-06-18 10:00:00'
         }, t)).toBe('estadoPendienteRevision');
+    });
+
+    it('labels paid requests awaiting photos before submission', () => {
+        expect(getManualIdentityValidationStatusLabel({
+            paid: true,
+            review_status: 'awaiting_photos',
+            submitted_at: null
+        }, t)).toBe('estadoEsperandoFotos');
+    });
+
+    it('uses info badge for paid requests awaiting photos', () => {
+        expect(getManualIdentityValidationStatusBadgeClass({
+            paid: true,
+            review_status: 'awaiting_photos',
+            submitted_at: null
+        })).toBe('label label-info');
     });
 
     it('uses warning badge for pending paid reviews', () => {
         expect(getManualIdentityValidationStatusBadgeClass({
             paid: true,
-            review_status: 'pending'
+            review_status: 'pending',
+            submitted_at: '2026-06-18 10:00:00'
         })).toBe('label label-warning');
     });
 

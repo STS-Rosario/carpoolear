@@ -9,6 +9,7 @@ import {
 describe('adminManualIdentityValidationStateEdit', () => {
     it('exposes review status options for admin select', () => {
         expect(MANUAL_IDENTITY_VALIDATION_REVIEW_STATUS_OPTIONS).toEqual([
+            { value: 'awaiting_photos', labelKey: 'estadoEsperandoFotos' },
             { value: 'pending', labelKey: 'estadoPendiente' },
             { value: 'approved', labelKey: 'estadoAprobado' },
             { value: 'rejected', labelKey: 'estadoRechazado' }
