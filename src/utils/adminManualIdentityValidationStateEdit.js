@@ -1,4 +1,5 @@
 export const MANUAL_IDENTITY_VALIDATION_REVIEW_STATUS_OPTIONS = [
+    { value: 'awaiting_photos', labelKey: 'estadoEsperandoFotos' },
     { value: 'pending', labelKey: 'estadoPendiente' },
     { value: 'approved', labelKey: 'estadoAprobado' },
     { value: 'rejected', labelKey: 'estadoRechazado' }

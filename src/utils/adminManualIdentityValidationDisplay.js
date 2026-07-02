@@ -1,5 +1,18 @@
+export function isManualIdentityValidationAwaitingPhotos(item) {
+    if (!item?.paid) {
+        return false;
+    }
+
+    if (item.submitted_at) {
+        return false;
+    }
+
+    return item.review_status === 'awaiting_photos' || item.review_status === 'pending';
+}
+
 export function getManualIdentityValidationStatusLabel(item, t) {
     if (!item.paid) return t('estadoPendientePago');
+    if (isManualIdentityValidationAwaitingPhotos(item)) return t('estadoEsperandoFotos');
     const status = item.review_status;
     if (status === 'pending') return t('estadoPendienteRevision');
     if (status === 'approved' || status === 'approve') return t('estadoAprobado');
@@ -8,6 +21,7 @@ export function getManualIdentityValidationStatusLabel(item, t) {
 }
 
 export function getManualIdentityValidationStatusBadgeClass(item) {
+    if (isManualIdentityValidationAwaitingPhotos(item)) return 'label label-info';
     const status = item.review_status;
     if (status === 'approved' || status === 'approve') return 'label label-success';
     if (status === 'rejected' || status === 'reject') return 'label label-danger';

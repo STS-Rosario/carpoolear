@@ -308,6 +308,7 @@ export default {
         },
         getStatusLabel(status) {
             if (status === 'pending') return this.$t('estadoPendiente');
+            if (status === 'awaiting_photos') return this.$t('estadoEsperandoFotos');
             if (status === 'approved') return this.$t('estadoAprobado');
             if (status === 'rejected') return this.$t('estadoRechazado');
             return status || '-';

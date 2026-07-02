@@ -184,6 +184,10 @@
                 <p class="manual-status-upload-block__lead">
                     {{ $t('pagoRealizadoSubeDocumentos') }}
                 </p>
+                <p class="manual-status-upload-block__status">
+                    <strong>{{ $t('estado') }}:</strong>
+                    {{ $t('estadoEsperandoFotos') }}
+                </p>
                 <router-link
                     v-if="manualStatus.request_id"
                     :to="{
