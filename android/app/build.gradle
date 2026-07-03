@@ -7,8 +7,8 @@ android {
         applicationId "com.sts.carpoolear"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 3030030
-        versionName "3.3.3"
+        versionCode 3030040
+        versionName "3.3.4"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
