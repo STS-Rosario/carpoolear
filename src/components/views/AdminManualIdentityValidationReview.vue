@@ -22,8 +22,61 @@
                         <p><strong>{{ $t('doc') }} (DNI):</strong> {{ displayDniOrDash(item.user_nro_doc) }}</p>
                         <p><strong>{{ $t('fechaPago') }}:</strong> {{ item.paid_at ? formatDate(item.paid_at) : '-' }}</p>
                         <p><strong>{{ $t('fechaEnvio') }}:</strong> {{ item.submitted_at ? formatDate(item.submitted_at) : '-' }}</p>
-                        <p><strong>{{ $t('pagado') }}:</strong> {{ item.paid ? $t('si') : $t('no') }}</p>
-                        <p><strong>{{ $t('estado') }}:</strong> {{ getStatusLabel(item.review_status) }}</p>
+                        <div class="admin-manual-identity-state-edit form-group">
+                            <h4>{{ $t('adminManualIdentityEditState') }}</h4>
+                            <p class="text-muted admin-manual-identity-state-edit-hint">
+                                {{ $t('adminManualIdentityEditStateHint') }}
+                            </p>
+                            <div class="form-group">
+                                <label for="manual-identity-edit-paid">{{ $t('pagado') }}</label>
+                                <select
+                                    id="manual-identity-edit-paid"
+                                    v-model="editablePaid"
+                                    class="form-control admin-manual-identity-state-edit-paid"
+                                >
+                                    <option :value="true">{{ $t('si') }}</option>
+                                    <option :value="false">{{ $t('no') }}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="manual-identity-edit-photos-submitted">{{ $t('fotosEnviadas') }}</label>
+                                <select
+                                    id="manual-identity-edit-photos-submitted"
+                                    v-model="editablePhotosSubmitted"
+                                    class="form-control admin-manual-identity-state-edit-photos-submitted"
+                                >
+                                    <option :value="true">{{ $t('si') }}</option>
+                                    <option :value="false">{{ $t('no') }}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="manual-identity-edit-status">{{ $t('estado') }}</label>
+                                <select
+                                    id="manual-identity-edit-status"
+                                    v-model="editableReviewStatus"
+                                    class="form-control admin-manual-identity-state-edit-status"
+                                >
+                                    <option
+                                        v-for="option in reviewStatusOptions"
+                                        :key="option.value"
+                                        :value="option.value"
+                                    >
+                                        {{ $t(option.labelKey) }}
+                                    </option>
+                                </select>
+                            </div>
+                            <button
+                                class="btn btn-default btn-sm admin-manual-identity-state-edit-save"
+                                :disabled="!hasStateChanges || savingState"
+                                @click="saveManualIdentityValidationState"
+                            >
+                                <span v-if="savingState">{{ $t('guardando') }}</span>
+                                <span v-else>{{ $t('guardar') }}</span>
+                            </button>
+                            <p v-if="stateSaveError" class="text-danger admin-manual-identity-state-edit-error">
+                                {{ stateSaveError }}
+                            </p>
+                        </div>
                         <AdminUserSupportTicketsWarning
                             v-if="item.user_id"
                             :user-id="item.user_id"
@@ -137,7 +190,7 @@
                                     class="btn btn-warning"
                                     :disabled="!hasComment || submitting"
                                     :title="!hasComment ? $t('comentarioRequeridoParaAccion') : ''"
-                                    @click="review('pending')"
+                                    @click="confirmReview('pending')"
                                 >
                                     {{ $t('marcarPendiente') }}
                                 </button>
@@ -187,6 +240,13 @@ import { useAuthStore } from '../../stores/auth';
 import dialogs from '../../services/dialogs.js';
 import { displayDniOrDash as formatDisplayDniOrDash } from '../../utils/formatDisplayDni';
 import { shouldShowPurgedPhotosMessage } from '../../utils/adminManualIdentityValidationImages.js';
+import {
+    MANUAL_IDENTITY_VALIDATION_REVIEW_STATUS_OPTIONS,
+    buildManualIdentityValidationStatePayload,
+    hasManualIdentityValidationStateChanges,
+    hasPhotosSubmitted
+} from '../../utils/adminManualIdentityValidationStateEdit.js';
+import { shouldProceedWithReviewAction } from '../../utils/adminManualIdentityValidationReviewConfirm.js';
 
 export default {
     name: 'AdminManualIdentityValidationReview',
@@ -204,7 +264,12 @@ export default {
             fullSizeImage: null,
             reviewNote: '',
             privateAdminNote: '',
+            editableReviewStatus: 'pending',
+            editablePaid: false,
+            editablePhotosSubmitted: false,
             savingPrivateNote: false,
+            savingState: false,
+            stateSaveError: null,
             submitting: false,
             reviewError: null,
             purging: false
@@ -216,6 +281,16 @@ export default {
         }),
         hasComment() {
             return this.reviewNote && this.reviewNote.trim() !== '';
+        },
+        reviewStatusOptions() {
+            return MANUAL_IDENTITY_VALIDATION_REVIEW_STATUS_OPTIONS;
+        },
+        hasStateChanges() {
+            return hasManualIdentityValidationStateChanges(this.item, {
+                reviewStatus: this.editableReviewStatus,
+                paid: this.editablePaid,
+                photosSubmitted: this.editablePhotosSubmitted
+            });
         }
     },
     methods: {
@@ -233,6 +308,7 @@ export default {
         },
         getStatusLabel(status) {
             if (status === 'pending') return this.$t('estadoPendiente');
+            if (status === 'awaiting_photos') return this.$t('estadoEsperandoFotos');
             if (status === 'approved') return this.$t('estadoAprobado');
             if (status === 'rejected') return this.$t('estadoRechazado');
             return status || '-';
@@ -247,7 +323,32 @@ export default {
             const data = res.data || res;
             this.item = data.data || data;
             this.privateAdminNote = (this.item && this.item.private_admin_note) || '';
-            this.loadImages();
+            this.syncEditableStateFromItem();
+            if (!this.item.has_images) {
+                this.clearImageBlobUrls();
+            } else {
+                this.loadImages();
+            }
+        },
+        syncEditableStateFromItem() {
+            if (!this.item) {
+                return;
+            }
+            this.editableReviewStatus = this.item.review_status || 'pending';
+            this.editablePaid = !!this.item.paid;
+            this.editablePhotosSubmitted = hasPhotosSubmitted(this.item);
+            this.stateSaveError = null;
+        },
+        clearImageBlobUrls() {
+            Object.values(this.blobUrls).forEach((url) => {
+                if (url) URL.revokeObjectURL(url);
+            });
+            this.blobUrls = { front: null, back: null, selfie: null };
+        },
+        getApiErrorMessage(err) {
+            return (err && err.data && (err.data.error || err.data.message)) ||
+                (err && err.response && err.response.data && (err.response.data.error || err.response.data.message)) ||
+                this.$t('resultError');
         },
         fetchItem() {
             const api = new AdminApi();
@@ -301,6 +402,31 @@ export default {
                     this.savingPrivateNote = false;
                 });
         },
+        saveManualIdentityValidationState() {
+            if (!this.item || !this.hasStateChanges) {
+                return;
+            }
+
+            this.savingState = true;
+            this.stateSaveError = null;
+            const api = new AdminApi();
+            const payload = buildManualIdentityValidationStatePayload(this.item, {
+                reviewStatus: this.editableReviewStatus,
+                paid: this.editablePaid,
+                photosSubmitted: this.editablePhotosSubmitted
+            });
+
+            api.updateManualIdentityValidationState(this.item.id, payload)
+                .then((res) => {
+                    this.applyResponseItem(res);
+                    dialogs.message(this.$t('guardar'), { duration: 2, estado: 'success' });
+                }, (err) => {
+                    this.stateSaveError = this.getApiErrorMessage(err);
+                })
+                .finally(() => {
+                    this.savingState = false;
+                });
+        },
         review(action) {
             if (action !== 'approve' && !this.hasComment) return;
             this.submitting = true;
@@ -316,13 +442,22 @@ export default {
                         this.$router.push({ name: 'admin-manual-identity-validations' });
                     }, 2000);
                 }, (err) => {
-                    const apiError = (err && err.data && (err.data.error || err.data.message)) ||
-                        (err && err.response && err.response.data && (err.response.data.error || err.response.data.message));
-                    this.reviewError = apiError || this.$t('resultError');
+                    this.reviewError = this.getApiErrorMessage(err);
                 })
                 .finally(() => {
                     this.submitting = false;
                 });
+        },
+        confirmReview(action) {
+            const proceed = shouldProceedWithReviewAction(
+                action,
+                this.item && this.item.review_status,
+                () => confirm(this.$t('confirmMarcarPendienteYaPendiente'))
+            );
+            if (!proceed) {
+                return;
+            }
+            this.review(action);
         },
         confirmPurge() {
             if (!confirm(this.$t('confirmarPurgarFotos'))) return;
@@ -333,7 +468,7 @@ export default {
             const api = new AdminApi();
             api.purgeManualIdentityValidation(this.id)
                 .then(() => {
-                    this.blobUrls = { front: null, back: null, selfie: null };
+                    this.clearImageBlobUrls();
                     this.fetchItem();
                 })
                 .finally(() => {
@@ -353,9 +488,7 @@ export default {
         }
     },
     beforeUnmount() {
-        Object.values(this.blobUrls).forEach((url) => {
-            if (url) URL.revokeObjectURL(url);
-        });
+        this.clearImageBlobUrls();
     },
     components: {
         AdminLayout,
@@ -408,6 +541,19 @@ export default {
 }
 .private-admin-note-save-btn {
     margin-top: 0.5rem;
+}
+.admin-manual-identity-state-edit {
+    margin-top: 1rem;
+}
+.admin-manual-identity-state-edit-hint {
+    margin-bottom: 0.75rem;
+}
+.admin-manual-identity-state-edit-save {
+    margin-top: 0.25rem;
+}
+.admin-manual-identity-state-edit-error {
+    margin-top: 0.5rem;
+    margin-bottom: 0;
 }
 .identity-validation-review-comment-user-visible {
     display: block;

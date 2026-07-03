@@ -5,6 +5,13 @@ import path from 'node:path';
 const viewPath = path.resolve(__dirname, 'IdentityValidation.vue');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 
+describe('IdentityValidation paid awaiting photos', () => {
+    it('shows esperando fotos status before documents are uploaded', () => {
+        expect(viewSource).toContain('manual-status-upload-block__status');
+        expect(viewSource).toContain("{{ $t('estadoEsperandoFotos') }}");
+    });
+});
+
 describe('IdentityValidation admin review note contexts', () => {
     it('uses approval note helper in success banner', () => {
         expect(viewSource).toContain('displayableManualApprovalReviewNote');
