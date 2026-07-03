@@ -20,7 +20,7 @@
         <OngoingTripCard v-if="ongoingTrip" :trip="ongoingTrip" />
         <PendingFriendRequestsCard v-if="user" />
         <div
-            v-if="appConfig.web_push_notification && isPWA() && !hasNotificationPermission && showNotificationWarning"
+            v-if="user && appConfig.web_push_notification && isPWA() && !hasNotificationPermission && showNotificationWarning"
             class="alert alert-warning ios-notification-warning"
             style="text-align: center"
             role="alert"
@@ -993,7 +993,7 @@ export default {
             this.pendingScrollRestore = null;
         }
 
-        if (this.appConfig.web_push_notification && this.isPWA()) {
+        if (this.user && this.appConfig.web_push_notification && this.isPWA()) {
             this.checkNotificationPermission();
         }
 
