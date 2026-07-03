@@ -37,7 +37,10 @@ describe('Trips.vue pending friend invitations card', () => {
 });
 
 describe('Trips.vue web push prompt', () => {
-    it('renders the notification permission warning and actions on trips', () => {
+    it('only renders the notification permission warning for logged-in users', () => {
+        expect(viewSource).toContain(
+            'v-if="user && appConfig.web_push_notification && isPWA() && !hasNotificationPermission && showNotificationWarning"'
+        );
         expect(viewSource).toContain("$t('notificacionesNoHabilitadas')");
         expect(viewSource).toContain('requestNotificationPermission');
         expect(viewSource).toContain('dismissNotificationWarning');
