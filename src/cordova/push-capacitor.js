@@ -5,6 +5,24 @@ import { Capacitor } from '@capacitor/core';
 import { useCordovaStore } from '../stores/cordova';
 import { useDeviceStore } from '../stores/device';
 
+function getFirebaseConfig() {
+    let raw = import.meta.env.VITE_FIREBASE_PARAMS;
+    if (!raw) {
+        return null;
+    }
+    if (typeof raw === 'string') {
+        try {
+            raw = JSON.parse(raw);
+        } catch {
+            return null;
+        }
+    }
+    if (typeof raw !== 'object' || !raw.apiKey) {
+        return null;
+    }
+    return raw;
+}
+
 class Notification {
     constructor(e) {
         this.foreground = false;
@@ -71,102 +89,123 @@ export default {
     },
 
     async initWebPush() {
+        const firebaseConfig = getFirebaseConfig();
         if (
-            import.meta.env.VITE_FIREBASE_PARAMS !== undefined &&
-            window.Notification &&
-            window.Notification.requestPermission
+            !firebaseConfig ||
+            !window.Notification ||
+            !window.Notification.requestPermission
         ) {
-            try {
-                const firebaseParamsString = new URLSearchParams(
-                    import.meta.env.VITE_FIREBASE_PARAMS
-                ).toString();
+            return;
+        }
 
-                // Get service worker path based on environment
-                const swBase = import.meta.env.VITE_ROUTE_BASE || '/';
-                let serviceWorkerPath = swBase + 'firebase-messaging-sw.js';
+        try {
+            if (window.Notification.permission === 'default') {
+                const permission = await Notification.requestPermission();
+                if (permission !== 'granted') {
+                    return;
+                }
+            } else if (window.Notification.permission !== 'granted') {
+                return;
+            }
 
-                // Append firebase params as query since service workers can't access import.meta.env
-                serviceWorkerPath += '?' + firebaseParamsString;
+            const firebaseParamsString = new URLSearchParams(
+                firebaseConfig
+            ).toString();
 
-                const serviceWorker = navigator.serviceWorker
-                    .register(serviceWorkerPath)
-                    .catch((error) => {
-                        console.error(
-                            'Service worker registration failed:',
-                            error
-                        );
-                    });
+            // Get service worker path based on environment
+            const swBase = import.meta.env.VITE_ROUTE_BASE || '/';
+            let serviceWorkerPath = swBase + 'firebase-messaging-sw.js';
 
-                const reg = await serviceWorker;
+            // Append firebase params as query since service workers can't access import.meta.env
+            serviceWorkerPath += '?' + firebaseParamsString;
 
-                const firebaseApp = initializeApp(import.meta.env.VITE_FIREBASE_PARAMS);
-                const messaging = getMessaging(firebaseApp);
-
-                // Get FCM token
-                const currentToken = await getToken(messaging, {
-                    vapidKey: import.meta.env.VITE_FIRABASE_VAPID_KEY,
-                    serviceWorkerRegistration: reg
+            const serviceWorker = navigator.serviceWorker
+                .register(serviceWorkerPath)
+                .catch((error) => {
+                    console.error(
+                        'Service worker registration failed:',
+                        error
+                    );
                 });
 
-                if (currentToken) {
-                    useCordovaStore().setDeviceId(currentToken);
-                    useDeviceStore().register().catch((error) => {
-                        console.error('❌ Device registration failed:', error);
-                    });
+            const reg = await serviceWorker;
 
-                    // Monitor notification permission changes and reload if revoked to initialize polling
-                    const permissionStatus = await navigator.permissions.query({ name: 'notifications' });
-                    permissionStatus.onchange = function() {
-                        if (this.state !== 'granted') {
-                            window.location.reload();
-                        }
-                    };
-                } else {
-                    console.warn('Failed to get FCM token');
-                }
+            const firebaseApp = initializeApp(firebaseConfig);
+            const messaging = getMessaging(firebaseApp);
 
-                const handleNotification = (payload, isBackgroundMessage) => {
-                    const notification = new Notification({
-                        notification: payload.notification,
-                        data: payload.data
-                    });
+            const vapidKey = import.meta.env.VITE_FIRABASE_VAPID_KEY;
+            if (!vapidKey) {
+                console.warn('Web push: missing VITE_FIRABASE_VAPID_KEY');
+                return;
+            }
 
-                    useCordovaStore().notificationArrive(notification);
-                    // conversations/getUnreaded
-                    // notifications/count
+            // Get FCM token
+            const currentToken = await getToken(messaging, {
+                vapidKey,
+                serviceWorkerRegistration: reg
+            });
 
-                    // Background messages already open a notification
-                    if (isBackgroundMessage) {
-                        return;
-                    }
+            if (currentToken) {
+                useCordovaStore().setDeviceId(currentToken);
+                useDeviceStore().register().catch((error) => {
+                    console.error('❌ Device registration failed:', error);
+                });
 
-                    // Show native notification for web
-                    const notificationTitle = payload.notification.title;
-                    const notificationOptions = {
-                        body: payload.notification.body,
-                        data: payload.data,
-                        icon: payload.notification.icon // import.meta.env.VITE_ROUTE_BASE + 'img/icon-192.png'
-                    };
-
-                    if (payload.data.url !== window.location.pathname) {
-                        reg.showNotification(
-                            notificationTitle,
-                            notificationOptions
-                        );
+                // Monitor notification permission changes and reload if revoked to initialize polling
+                const permissionStatus = await navigator.permissions.query({
+                    name: 'notifications'
+                });
+                permissionStatus.onchange = function () {
+                    if (this.state !== 'granted') {
+                        window.location.reload();
                     }
                 };
+            } else {
+                console.warn('Failed to get FCM token');
+            }
 
-                navigator.serviceWorker.addEventListener('message', (event) => {
-                    if (event.data.type === 'firebase-background-message') {
-                        handleNotification(event.data.payload, true);
-                    }
+            const handleNotification = (payload, isBackgroundMessage) => {
+                const notification = new Notification({
+                    notification: payload.notification,
+                    data: payload.data
                 });
 
-                // Listen for foreground messages
-                onMessage(messaging, handleNotification);
-            } catch (error) {
-                console.error('Web push initialization error:', error);
-            }
+                useCordovaStore().notificationArrive(notification);
+
+                // Background messages already open a notification
+                if (isBackgroundMessage) {
+                    return;
+                }
+
+                // Show native notification for web
+                const notificationTitle = payload.notification.title;
+                const notificationOptions = {
+                    body: payload.notification.body,
+                    data: payload.data,
+                    icon: payload.notification.icon
+                };
+
+                if (
+                    payload.data &&
+                    payload.data.url !== window.location.pathname
+                ) {
+                    reg.showNotification(
+                        notificationTitle,
+                        notificationOptions
+                    );
+                }
+            };
+
+            navigator.serviceWorker.addEventListener('message', (event) => {
+                if (event.data.type === 'firebase-background-message') {
+                    handleNotification(event.data.payload, true);
+                }
+            });
+
+            // Listen for foreground messages
+            onMessage(messaging, handleNotification);
+        } catch (error) {
+            console.error('Web push initialization error:', error);
         }
     },
 

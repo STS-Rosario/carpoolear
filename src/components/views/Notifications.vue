@@ -2,7 +2,7 @@
     <div>
         <Loading class="container" :data="notifications">
             <div
-                v-if="isPWA() && !hasNotificationPermission && showNotificationWarning"
+                v-if="user && isPWA() && !hasNotificationPermission && showNotificationWarning"
                 class="alert alert-warning ios-notification-warning"
                 style="text-align: center"
                 role="alert"
@@ -128,9 +128,7 @@ export default {
                     this.showNotificationWarning = false;
                     // Initialize push-capacitor.js after permission is granted
                     try {
-                        setTimeout(() => {
-                            push.init();
-                        }, 3000);
+                        push.init();
                     } catch (error) {
                         console.log(
                             'Error initializing push notifications:',
@@ -220,6 +218,7 @@ export default {
             notifications: 'index'
         }),
         ...mapState(useAuthStore, {
+            user: 'user',
             appConfig: 'appConfig'
         })
     },
@@ -227,7 +226,7 @@ export default {
     mounted() {
         this.search(this.query);
 
-        if (this.appConfig.web_push_notification && this.isPWA()) {
+        if (this.user && this.appConfig.web_push_notification && this.isPWA()) {
             this.checkNotificationPermission();
         }
     },

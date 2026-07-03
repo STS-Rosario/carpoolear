@@ -36,6 +36,19 @@ describe('Trips.vue pending friend invitations card', () => {
     });
 });
 
+describe('Trips.vue web push prompt', () => {
+    it('only renders the notification permission warning for logged-in users', () => {
+        expect(viewSource).toContain(
+            'v-if="user && appConfig.web_push_notification && isPWA() && !hasNotificationPermission && showNotificationWarning"'
+        );
+        expect(viewSource).toContain("$t('notificacionesNoHabilitadas')");
+        expect(viewSource).toContain('requestNotificationPermission');
+        expect(viewSource).toContain('dismissNotificationWarning');
+        expect(viewSource).toContain('checkNotificationPermission');
+        expect(viewSource).toContain('pwa_notification_dismiss');
+    });
+});
+
 describe('Trips.vue friend-first trip sections', () => {
     it('splits logged-in trip list into friend and other sections', () => {
         expect(viewSource).toContain('splitFriendTrips');

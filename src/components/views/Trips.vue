@@ -19,6 +19,32 @@
         </div>
         <OngoingTripCard v-if="ongoingTrip" :trip="ongoingTrip" />
         <PendingFriendRequestsCard v-if="user" />
+        <div
+            v-if="user && appConfig.web_push_notification && isPWA() && !hasNotificationPermission && showNotificationWarning"
+            class="alert alert-warning ios-notification-warning"
+            style="text-align: center"
+            role="alert"
+        >
+            <h4>⚠️ {{ $t('notificacionesNoHabilitadas') }}</h4>
+            <p>
+                {{ $t('notificacionesNoAceptastePermisos') }}
+            </p>
+            <div class="notification-warning-buttons">
+                <button
+                    class="btn btn-success"
+                    @click="requestNotificationPermission"
+                >
+                    {{ $t('otorgarPermisos') }}
+                </button>
+                <button
+                    class="btn btn-default"
+                    @click="dismissNotificationWarning"
+                    style="margin-left: 10px;"
+                >
+                    {{ $t('noMostrarDeNuevo') }}
+                </button>
+            </div>
+        </div>
         <SearchBox
             :params="searchParams"
             v-on:trip-search="research"
@@ -421,6 +447,7 @@ import { useFriendsStore } from '../../stores/friends';
 import dayjs from '../../dayjs';
 import router from '../../router';
 import dialogs from '../../services/dialogs.js';
+import push from '../../cordova/push-capacitor.js';
 import modal from '../Modal';
 import { App } from '@capacitor/app';
 import { Capacitor } from '@capacitor/core';
@@ -507,10 +534,48 @@ export default {
             return /iphone|ipad|ipod/.test(userAgent) && /safari/.test(userAgent) && !/chrome/.test(userAgent);
         },
         isPWA() {
-            // Check if running as PWA (standalone mode)
-            return window.navigator.standalone === true || 
-                   window.matchMedia('(display-mode: standalone)').matches ||
-                   window.matchMedia('(display-mode: window-controls-overlay)').matches;
+            return !window.Capacitor || window.Capacitor.getPlatform() === 'web';
+        },
+        checkNotificationPermission() {
+            if (window.Notification && window.Notification.permission) {
+                if (window.Notification.permission === 'granted') {
+                    this.hasNotificationPermission = true;
+                    this.showNotificationWarning = false;
+                } else {
+                    this.hasNotificationPermission = false;
+                    const dismissedAt = parseInt(localStorage.getItem('pwa_notification_dismiss'));
+                    this.showNotificationWarning = !dismissedAt || Date.now() - dismissedAt > 14 * 24 * 3600 * 1000;
+                }
+            }
+        },
+        requestNotificationPermission() {
+            Notification.requestPermission().then((permission) => {
+                if (permission === 'granted') {
+                    this.hasNotificationPermission = true;
+                    this.showNotificationWarning = false;
+                    try {
+                        push.init();
+                    } catch (error) {
+                        console.log(
+                            'Error initializing push notifications:',
+                            error
+                        );
+                    }
+                    dialogs.message(this.$t('notificacionesPermitidas'), {
+                        duration: 10,
+                        estado: 'success'
+                    });
+                } else {
+                    dialogs.message(this.$t('notificacionesDenegadas'), {
+                        duration: 10,
+                        estado: 'error'
+                    });
+                }
+            });
+        },
+        dismissNotificationWarning() {
+            this.showNotificationWarning = false;
+            localStorage.setItem('pwa_notification_dismiss', Date.now());
         },
         shouldShowInstallModal() {
             // Show modal if we have install event (Android) or if we're on iOS
@@ -926,6 +991,10 @@ export default {
         this.pendingScrollRestore = Number.parseInt(this.getRouteQuery().scroll, 10);
         if (Number.isNaN(this.pendingScrollRestore)) {
             this.pendingScrollRestore = null;
+        }
+
+        if (this.user && this.appConfig.web_push_notification && this.isPWA()) {
+            this.checkNotificationPermission();
         }
 
         window.addEventListener('beforeinstallprompt', (e) => {

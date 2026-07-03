@@ -80,9 +80,27 @@ function resolveRouteBase(rawWeb, rawMobile, isWebBuild) {
     return isWebBuild ? '/app/' : '';
 }
 
+function parseFirebaseParams(env) {
+    const raw = env.VITE_FIREBASE_PARAMS || env.FIREBASE_PARAMS || '';
+    if (!raw) {
+        return null;
+    }
+    if (typeof raw === 'object') {
+        return raw;
+    }
+    try {
+        return JSON.parse(raw);
+    } catch {
+        return null;
+    }
+}
+
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, process.cwd(), '');
     const nodeEnv = env.NODE_ENV || 'development';
+    const firebaseParams = parseFirebaseParams(env);
+    const firebaseVapidKey =
+        env.VITE_FIRABASE_VAPID_KEY || env.FIRABASE_VAPID_KEY || '';
 
     const PLATFORM = process.env.PLATFORM || 'browser';
     const isWebBuild = PLATFORM === 'browser';
@@ -182,8 +200,16 @@ export default defineConfig(({ mode }) => {
             VITE_FACEBOOK_API: JSON.stringify(env.FACEBOOK_API || ''),
             VITE_MAPS_API: JSON.stringify(env.MAPS_API || ''),
             VITE_RECAPTCHA_SITE_KEY: JSON.stringify(env.RECAPTCHA_SITE_KEY || ''),
-            VITE_FIREBASE_PARAMS: JSON.stringify(env.FIREBASE_PARAMS || ''),
-            VITE_FIRABASE_VAPID_KEY: JSON.stringify(env.FIRABASE_VAPID_KEY || '')
+            'import.meta.env.VITE_FIREBASE_PARAMS': firebaseParams
+                ? JSON.stringify(firebaseParams)
+                : 'undefined',
+            'import.meta.env.VITE_FIRABASE_VAPID_KEY': JSON.stringify(
+                firebaseVapidKey
+            ),
+            VITE_FIREBASE_PARAMS: firebaseParams
+                ? JSON.stringify(firebaseParams)
+                : 'undefined',
+            VITE_FIRABASE_VAPID_KEY: JSON.stringify(firebaseVapidKey)
         },
         optimizeDeps: {
             include: ['vue', 'vue-router', 'vue-i18n']

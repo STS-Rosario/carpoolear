@@ -11,7 +11,7 @@ import { useCordovaStore } from '../stores/cordova';
 import { useRootStore } from '../stores/root';
 
 window.facebook = facebook;
-window.appVersion = '3.3.3';
+window.appVersion = '3.3.4';
 
 const NETWORK_POLL_INTERVAL_MS = 5000;
 let networkMonitoringStarted = false;
@@ -204,10 +204,7 @@ if (Capacitor.isNativePlatform()) {
     }, 1000);
 } else {
     initNetworkMonitoring();
-    if (
-        config.web_push_notification &&
-        window.Notification.permission === 'granted'
-    ) {
+    if (config.web_push_notification) {
         onDeviceReady();
     }
 }

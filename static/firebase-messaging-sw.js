@@ -11,19 +11,27 @@ firebase.initializeApp(firebaseConfig);
 // Retrieve firebase messaging
 const messaging = firebase.messaging();
 
+const DEFAULT_ICON =
+    'https://carpoolear.com.ar/app/static/img/carpoolear_logo.png';
+
 messaging.onBackgroundMessage(function (payload) {
     console.log('Received background message ', payload);
 
-    /*
-    const notificationTitle = payload.notification.title;
+    const notificationTitle =
+        (payload.notification && payload.notification.title) || 'Carpoolear';
     const notificationOptions = {
-        body: payload.notification.body
+        body: (payload.notification && payload.notification.body) || '',
+        icon:
+            (payload.notification && payload.notification.icon) || DEFAULT_ICON,
+        data: payload.data || {}
     };
 
-    self.registration.showNotification(notificationTitle, notificationOptions);
-    */
+    self.registration.showNotification(
+        notificationTitle,
+        notificationOptions
+    );
 
-    // Send message to all open clients to update the store
+    // Notify open clients so in-app state (badge count, etc.) stays in sync
     self.clients
         .matchAll({
             type: 'window',

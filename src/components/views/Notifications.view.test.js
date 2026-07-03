@@ -6,6 +6,15 @@ const viewPath = path.resolve(__dirname, 'Notifications.vue');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 
 describe('Notifications view', () => {
+    it('only renders the web push prompt for logged-in users', () => {
+        expect(viewSource).toContain(
+            "user: 'user'"
+        );
+        expect(viewSource).toContain(
+            'v-if="user && isPWA() && !hasNotificationPermission && showNotificationWarning"'
+        );
+    });
+
     it('routes identity_validation notifications to account verification page', () => {
         expect(viewSource).toContain("case 'identity_validation':");
         expect(viewSource).toContain("name: 'identity_validation'");
