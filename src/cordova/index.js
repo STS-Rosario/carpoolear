@@ -204,10 +204,7 @@ if (Capacitor.isNativePlatform()) {
     }, 1000);
 } else {
     initNetworkMonitoring();
-    if (
-        config.web_push_notification &&
-        window.Notification.permission === 'granted'
-    ) {
+    if (config.web_push_notification) {
         onDeviceReady();
     }
 }

@@ -128,9 +128,7 @@ export default {
                     this.showNotificationWarning = false;
                     // Initialize push-capacitor.js after permission is granted
                     try {
-                        setTimeout(() => {
-                            push.init();
-                        }, 3000);
+                        push.init();
                     } catch (error) {
                         console.log(
                             'Error initializing push notifications:',
