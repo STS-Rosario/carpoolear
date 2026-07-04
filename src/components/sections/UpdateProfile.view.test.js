@@ -51,7 +51,7 @@ describe('UpdateProfile name editing', () => {
 describe('UpdateProfile email notifications setting', () => {
     it('keeps the setting in code but hides it behind an explicit flag', () => {
         expect(viewSource).toContain("$t('notificacionesPorCorreo')");
-        expect(viewSource).toContain('showEmailNotificationsSetting');
-        expect(viewSource).toContain('v-if="showEmailNotificationsSetting"');
+        expect(viewSource).toContain('showProfileEmailNotificationsSetting');
+        expect(viewSource).toContain('v-if="showProfileEmailNotificationsSetting"');
     });
 });
