@@ -250,8 +250,11 @@
                             {{ $t('tildaOpcionDatosVisibles') }}
                         </div>
                     </div>
-                    <hr />
-                    <div class="checkbox">
+                    <hr v-if="showEmailNotificationsSetting" />
+                    <div
+                        class="checkbox"
+                        v-if="showEmailNotificationsSetting"
+                    >
                         <label>
                             <input
                                 type="checkbox"
@@ -694,6 +697,7 @@ export default {
             birthdayAnswer: '',
             showChangePassword: false,
             showBeDriver: false,
+            showEmailNotificationsSetting: false,
             driverFiles: null,
             imageUploadAccept: IMAGE_UPLOAD_ACCEPT,
             banks: [],
