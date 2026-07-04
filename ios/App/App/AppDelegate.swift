@@ -1,22 +1,16 @@
 import UIKit
 import Capacitor
-import UserNotifications
+import FirebaseCore
+import FirebaseMessaging
 
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-
-        // Initialize Firebase
-        // FirebaseApp.configure()
-
-        // Configure push notifications
-        // UNUserNotificationCenter.current().delegate = self
-
+        FirebaseApp.configure()
         return true
     }
 
@@ -55,15 +49,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         return ApplicationDelegateProxy.shared.application(application, continue: userActivity, restorationHandler: restorationHandler)
     }
 
-    // MARK: - Push Notifications
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        Messaging.messaging().apnsToken = deviceToken
+        Messaging.messaging().token(completion: { (token, error) in
+            if let error = error {
+                NotificationCenter.default.post(name: .capacitorDidFailToRegisterForRemoteNotifications, object: error)
+            } else if let token = token {
+                NotificationCenter.default.post(name: .capacitorDidRegisterForRemoteNotifications, object: token)
+            }
+        })
+    }
 
-        func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-            // Forward the device token to Capacitor PushNotifications plugin
-            NotificationCenter.default.post(name: .capacitorDidRegisterForRemoteNotifications, object: deviceToken)        }
-
-        func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-            // Forward the error to Capacitor PushNotifications plugin
-            NotificationCenter.default.post(name: .capacitorDidFailToRegisterForRemoteNotifications, object: error)
-        }
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        NotificationCenter.default.post(name: .capacitorDidFailToRegisterForRemoteNotifications, object: error)
+    }
 
 }
