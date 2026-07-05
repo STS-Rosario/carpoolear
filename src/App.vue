@@ -24,6 +24,7 @@
 
             <onBoarding key="1" v-if="onBoardingVisibility"></onBoarding>
             <MaintenanceAdminBanner v-if="maintenanceAdminStickyVisible" />
+            <ImpersonationBanner v-if="isImpersonating" />
             <headerApp></headerApp>
             <main id="main">
                 <div
@@ -69,6 +70,7 @@ import IdentityValidationPromptModal from './components/IdentityValidationPrompt
 import ChangelogModal from './components/ChangelogModal.vue';
 import MaintenanceFullscreen from './components/MaintenanceFullscreen.vue';
 import MaintenanceAdminBanner from './components/MaintenanceAdminBanner.vue';
+import ImpersonationBanner from './components/ImpersonationBanner.vue';
 import OfflineStatusBar from './components/OfflineStatusBar.vue';
 import ServerDownFullscreen from './components/ServerDownFullscreen.vue';
 import { useServerStatusStore } from './stores/serverStatus';
@@ -198,7 +200,8 @@ export default {
             logged: 'checkLogin',
             appConfig: 'appConfig',
             isRemoteConfig: 'isRemoteConfig',
-            user: 'user'
+            user: 'user',
+            isImpersonating: 'isImpersonating'
         }),
         ...mapState(useDeviceStore, {
             isFacebokApp: 'isFacebokApp',
@@ -316,6 +319,7 @@ export default {
         ChangelogModal,
         MaintenanceFullscreen,
         MaintenanceAdminBanner,
+        ImpersonationBanner,
         OfflineStatusBar,
         ServerDownFullscreen
     }

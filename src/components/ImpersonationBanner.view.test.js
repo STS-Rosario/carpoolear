@@ -14,6 +14,6 @@ describe('ImpersonationBanner', () => {
     });
 
     it('uses target user name in banner text', () => {
-        expect(source).toContain('user.name');
+        expect(source).toContain('user?.name');
     });
 });

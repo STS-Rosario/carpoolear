@@ -174,6 +174,14 @@
                                 {{ $t('adminUsuarioVerTicketsSoporte', { count: user.support_tickets_count }) }}
                             </router-link>
                             <button
+                                v-if="user && !user.is_admin"
+                                type="button"
+                                class="btn btn-warning"
+                                @click="startImpersonation"
+                            >
+                                {{ $t('adminUsuariosImpersonate') }}
+                            </button>
+                            <button
                                 type="button"
                                 class="btn btn-success btn-circle"
                                 @click="toUserMessages"
@@ -252,6 +260,9 @@ export default {
         ...mapActions(useConversationsStore, {
             lookConversation: 'createConversation'
         }),
+        ...mapActions(useAuthStore, {
+            startImpersonationSession: 'startImpersonation'
+        }),
         load() {
             const userId = this.$route.params.userId;
             if (!userId) {
@@ -305,6 +316,23 @@ export default {
         adminUserSupportTicketsRoute,
         adminUserNavLabel(labelKey, count) {
             return formatAdminUserNavLabelFromKey(this.$t.bind(this), labelKey, count);
+        },
+        async startImpersonation() {
+            if (!this.user || this.user.is_admin) {
+                return;
+            }
+            if (!window.confirm(this.$t('adminUsuariosImpersonateConfirm'))) {
+                return;
+            }
+            try {
+                const response = await this.adminApi.impersonateUser(this.user.id);
+                await this.startImpersonationSession(response.handoff_token);
+                this.$router.push({ name: 'trips' });
+            } catch (error) {
+                dialogs.message(this.$t('adminUsuariosImpersonateError'), {
+                    estado: 'error'
+                });
+            }
         },
         confirmClearIdentityValidation() {
             if (!this.user || !this.user.id) return;
