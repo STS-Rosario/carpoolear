@@ -265,6 +265,8 @@ export const useAuthStore = defineStore('auth', {
         },
 
         async stopImpersonation() {
+            // API field name from backend impersonation payload
+            // eslint-disable-next-line camelcase
             const targetUserId = this.impersonation?.target_user_id;
 
             try {
