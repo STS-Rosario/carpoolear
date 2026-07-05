@@ -95,6 +95,14 @@ class AuthApi extends TaggedApi {
     changePassword(token, data) {
         return this.post('/api/change-password/' + token, data);
     }
+
+    consumeImpersonation(data) {
+        return this.post('/api/auth/impersonate/consume', data);
+    }
+
+    stopImpersonation() {
+        return this.post('/api/impersonate/stop', {});
+    }
 }
 
 export { AuthApi as default };

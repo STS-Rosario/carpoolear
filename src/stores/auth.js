@@ -17,11 +17,13 @@ export const useAuthStore = defineStore('auth', {
         user: null,
         token: null,
         firstTime: false,
-        appConfig: null
+        appConfig: null,
+        impersonation: null
     }),
 
     getters: {
         checkLogin: (state) => state.auth,
+        isImpersonating: (state) => state.impersonation !== null,
         authHeader: (state) =>
             state.auth ? { Authorization: 'Bearer ' + state.token } : {},
         tripCardTheme: (state) =>
@@ -65,6 +67,14 @@ export const useAuthStore = defineStore('auth', {
 
         setAppConfig(appConfig) {
             this.appConfig = appConfig;
+        },
+
+        setImpersonation(impersonation) {
+            this.impersonation = impersonation;
+        },
+
+        clearImpersonation() {
+            this.impersonation = null;
         },
 
         /**
@@ -230,6 +240,59 @@ export const useAuthStore = defineStore('auth', {
                         resolve();
                     });
             });
+        },
+
+        async startImpersonation(handoffToken) {
+            if (this.token) {
+                await cache.setItem(keys.ADMIN_TOKEN_BACKUP_KEY, this.token);
+            }
+
+            const response = await authApi.consumeImpersonation({
+                token: handoffToken
+            });
+
+            this.setToken(response.token);
+            this.setAppConfig({
+                ...localConfig,
+                ...response.config
+            });
+            this.setImpersonation(response.impersonation);
+            await cache.setItem(
+                keys.IMPERSONATION_SESSION_KEY,
+                response.impersonation
+            );
+            await this.fetchUser();
+        },
+
+        async stopImpersonation() {
+            const targetUserId = this.impersonation?.target_user_id;
+
+            try {
+                await authApi.stopImpersonation();
+            } catch (e) {
+                // Session may already be stopped server-side.
+            }
+
+            const backupToken = await cache.getItem(keys.ADMIN_TOKEN_BACKUP_KEY);
+            await cache.removeItem(keys.IMPERSONATION_SESSION_KEY);
+            await cache.removeItem(keys.ADMIN_TOKEN_BACKUP_KEY);
+            this.clearImpersonation();
+
+            if (backupToken) {
+                this.setToken(backupToken);
+                await this.retoken();
+                await this.fetchUser();
+            }
+
+            const router = await getLazyRouter();
+            if (targetUserId) {
+                router.push({
+                    name: 'admin-users-user',
+                    params: { userId: String(targetUserId) }
+                });
+            } else {
+                router.push({ name: 'admin-dashboard' });
+            }
         },
 
         async logout() {
