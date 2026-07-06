@@ -52,4 +52,23 @@ describe('getApiErrorMessage', () => {
     it('returns fallback when api error is missing', () => {
         expect(getApiErrorMessage(null, fallback)).toBe(fallback);
     });
+
+    it('translates known impersonation forbidden error codes', () => {
+        expect(
+            getApiErrorMessage(
+                { data: { message: 'impersonation_action_forbidden' }, status: 403 },
+                fallback,
+                (key) => (key === 'impersonationActionForbidden' ? 'Acción no permitida durante suplantación.' : key)
+            )
+        ).toBe('Acción no permitida durante suplantación.');
+    });
+
+    it('returns raw message from nested data when no translator is provided', () => {
+        expect(
+            getApiErrorMessage(
+                { data: { message: 'impersonation_action_forbidden' }, status: 403 },
+                fallback
+            )
+        ).toBe('impersonation_action_forbidden');
+    });
 });

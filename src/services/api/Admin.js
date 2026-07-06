@@ -181,6 +181,10 @@ class AdminApi extends TaggedApi {
     updateReference(referenceId, data) {
         return this.patch('/api/admin/references/' + referenceId, data);
     }
+
+    impersonateUser(userId) {
+        return this.post('/api/admin/users/' + userId + '/impersonate', {});
+    }
 }
 
 export { AdminApi as default };

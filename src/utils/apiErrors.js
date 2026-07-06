@@ -3,27 +3,36 @@ const GENERIC_API_ERROR_MESSAGES = new Set([
     'Could not create user.'
 ]);
 
-export function isOfflineApiError(error) {
-    return Boolean(
-        error &&
-            (error.offline === true ||
-                error.status === 0 ||
-                (error.data && error.data.message === 'network_offline') ||
-                error.message === 'network_offline')
-    );
+const API_ERROR_I18N_KEYS = {
+    impersonation_action_forbidden: 'impersonationActionForbidden'
+};
+
+function extractApiErrorMessage(apiError) {
+    if (!apiError) {
+        return null;
+    }
+
+    if (typeof apiError.message === 'string' && apiError.message.trim()) {
+        return apiError.message;
+    }
+
+    if (
+        apiError.data &&
+        typeof apiError.data.message === 'string' &&
+        apiError.data.message.trim()
+    ) {
+        return apiError.data.message;
+    }
+
+    return null;
 }
 
-/**
- * @param {object|null|undefined} apiError Rejected API payload (e.g. { errors, message })
- * @param {string} fallback Localized message when no user-facing detail is available
- * @returns {string}
- */
-export function getApiErrorMessage(apiError, fallback) {
+export function getApiErrorMessage(apiError, fallback, translate) {
     if (!apiError) {
         return fallback;
     }
 
-    const errors = apiError.errors;
+    const errors = apiError.errors || (apiError.data && apiError.data.errors);
     if (errors && typeof errors === 'object') {
         const errorValues = Object.values(errors);
         for (let i = 0; i < errorValues.length; i += 1) {
@@ -37,14 +46,25 @@ export function getApiErrorMessage(apiError, fallback) {
         }
     }
 
-    const message = apiError.message;
-    if (
-        typeof message === 'string' &&
-        message.trim() &&
-        !GENERIC_API_ERROR_MESSAGES.has(message)
-    ) {
-        return message;
+    const message = extractApiErrorMessage(apiError);
+    if (message) {
+        if (translate && API_ERROR_I18N_KEYS[message]) {
+            return translate(API_ERROR_I18N_KEYS[message]);
+        }
+        if (!GENERIC_API_ERROR_MESSAGES.has(message)) {
+            return message;
+        }
     }
 
     return fallback;
+}
+
+export function isOfflineApiError(error) {
+    return Boolean(
+        error &&
+            (error.offline === true ||
+                error.status === 0 ||
+                (error.data && error.data.message === 'network_offline') ||
+                error.message === 'network_offline')
+    );
 }

@@ -54,6 +54,10 @@ export const useRootStore = defineStore('root', {
                 {
                     key: keys.FIRST_TIME_APP_KEY,
                     apply: (value) => { if (value) deviceStore.setFirstTimeAppOpen(value); }
+                },
+                {
+                    key: keys.IMPERSONATION_SESSION_KEY,
+                    apply: (value) => { if (value) authStore.setImpersonation(value); }
                 }
             ];
 

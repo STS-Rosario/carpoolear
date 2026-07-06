@@ -1523,6 +1523,14 @@ const messages = {
         adminUsers: 'Admin users',
         adminUsuariosPagina: 'Página {current} de {total}',
         adminUsuariosEditar: 'Editar datos',
+        adminUsuariosImpersonate: 'Suplantar usuario',
+        adminUsuariosImpersonateConfirm:
+            '¿Iniciar suplantación de este usuario? Podés detenerla en cualquier momento desde la barra superior.',
+        adminUsuariosImpersonateError: 'No se pudo iniciar la suplantación.',
+        impersonationBannerText: 'Estás suplantando a {name}.',
+        impersonationBannerStop: 'Detener suplantación',
+        impersonationActionForbidden:
+            'Esta acción no está permitida mientras suplantás a un usuario.',
         adminUsuariosVolverAlListado: 'Volver al listado',
         adminUsuariosVolverResumen: 'Volver al resumen',
         adminUsuariosVerViajes: 'Ver viajes',
@@ -2883,6 +2891,14 @@ const messages = {
         adminUsers: 'Admin users',
         adminUsuariosPagina: 'Página {current} de {total}',
         adminUsuariosEditar: 'Editar datos',
+        adminUsuariosImpersonate: 'Suplantar usuario',
+        adminUsuariosImpersonateConfirm:
+            '¿Iniciar suplantación de este usuario? Podés detenerla en cualquier momento desde la barra superior.',
+        adminUsuariosImpersonateError: 'No se pudo iniciar la suplantación.',
+        impersonationBannerText: 'Estás suplantando a {name}.',
+        impersonationBannerStop: 'Detener suplantación',
+        impersonationActionForbidden:
+            'Esta acción no está permitida mientras suplantás a un usuario.',
         adminUsuariosVolverAlListado: 'Volver al listado',
         adminUsuariosVolverResumen: 'Volver al resumen',
         adminUsuariosVerViajes: 'Ver viajes',
@@ -4405,6 +4421,14 @@ const messages = {
         adminUsers: 'Admin users',
         adminUsuariosPagina: 'Page {current} of {total}',
         adminUsuariosEditar: 'Edit details',
+        adminUsuariosImpersonate: 'Impersonate user',
+        adminUsuariosImpersonateConfirm:
+            'Start impersonating this user? You can stop anytime from the top banner.',
+        adminUsuariosImpersonateError: 'Could not start impersonation.',
+        impersonationBannerText: 'You are impersonating {name}.',
+        impersonationBannerStop: 'Stop impersonating',
+        impersonationActionForbidden:
+            'This action is not allowed while impersonating a user.',
         adminUsuariosVolverAlListado: 'Back to list',
         adminUsuariosVolverResumen: 'Back to summary',
         adminUsuariosVerViajes: 'View trips',

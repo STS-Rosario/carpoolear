@@ -54,3 +54,11 @@ describe('AdminApi dashboard', () => {
         expect(apiSource).toContain('/api/admin/dashboard');
     });
 });
+
+describe('AdminApi impersonation', () => {
+    it('starts impersonation for a user', () => {
+        expect(apiSource).toContain('impersonateUser');
+        expect(apiSource).toContain('/api/admin/users/');
+        expect(apiSource).toContain('/impersonate');
+    });
+});

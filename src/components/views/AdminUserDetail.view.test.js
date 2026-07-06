@@ -76,4 +76,12 @@ describe('AdminUserDetail view', () => {
         expect(source).toContain("$t('removerValidacionIdentidad')");
         expect(source).toContain('excludeIdentityVerificationFields: true');
     });
+
+    it('includes impersonate action for non-admin users with confirmation', () => {
+        expect(source).toContain('startImpersonation');
+        expect(source).toContain("t('adminUsuariosImpersonate')");
+        expect(source).toContain("t('adminUsuariosImpersonateConfirm')");
+        expect(source).toContain('!user.is_admin');
+        expect(source).toContain('impersonateUser');
+    });
 });
