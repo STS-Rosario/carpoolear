@@ -263,8 +263,8 @@
                             {{ $t('notificacionesPorCorreo') }}
                         </label>
                     </div>
-                    <hr />
-                    <div class="checkbox">
+                    <hr v-if="!isImpersonating" />
+                    <div class="checkbox" v-if="!isImpersonating">
                         <label>
                             <input
                                 type="checkbox"
@@ -273,7 +273,7 @@
                             {{ $t('cambiarPassword') }}
                         </label>
                     </div>
-                    <div class="form-group" v-if="showChangePassword">
+                    <div class="form-group" v-if="!isImpersonating && showChangePassword">
                         <label for="input-pass">{{
                             $t('ingreseNuevaPassword')
                         }}</label>
@@ -716,7 +716,8 @@ export default {
             userData: 'user',
             firstTime: 'firstTime',
             settings: 'appConfig',
-            config: 'appConfig'
+            config: 'appConfig',
+            isImpersonating: 'isImpersonating'
         }),
         ...mapState(useDeviceStore, {
             isMobile: 'isMobile'
@@ -919,7 +920,7 @@ export default {
                     data.facebook_profile_url = normalized;
                 }
             }
-            if (this.pass.password) {
+            if (this.pass.password && !this.isImpersonating) {
                 if (this.pass.password !== this.pass.password_confirmation) {
                     this.error = this.$t('passwordNoCoincide');
                     return;
@@ -980,7 +981,11 @@ export default {
                 .catch((err) => {
                     console.error(err);
                     this.loading = false;
-                    const message = getApiErrorMessage(err, this.$t('errorDatos'));
+                    const message = getApiErrorMessage(
+                        err,
+                        this.$t('errorDatos'),
+                        this.$t.bind(this)
+                    );
                     this.error = message;
                     dialogs.message(message, {
                         duration: 10,
@@ -1163,7 +1168,11 @@ export default {
                     if (error.data && error.data.error === 'negative_ratings') {
                         this.showNegativeRatingsInModal = true;
                     } else {
-                        const message = (error.data && error.data.message) || this.$t('errorEnviarPedidoEliminacion');
+                        const message = getApiErrorMessage(
+                            error,
+                            this.$t('errorEnviarPedidoEliminacion'),
+                            this.$t.bind(this)
+                        );
                         dialogs.message(message, {
                             duration: 5,
                             estado: 'error'

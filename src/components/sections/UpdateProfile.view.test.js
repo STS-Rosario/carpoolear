@@ -48,6 +48,14 @@ describe('UpdateProfile name editing', () => {
     });
 });
 
+describe('UpdateProfile impersonation guardrails', () => {
+    it('hides password change UI and skips password in save payload while impersonating', () => {
+        expect(viewSource).toContain('isImpersonating');
+        expect(viewSource).toContain('v-if="!isImpersonating"');
+        expect(viewSource).toContain('this.pass.password && !this.isImpersonating');
+    });
+});
+
 describe('UpdateProfile email notifications setting', () => {
     it('keeps the setting in code but hides it behind an explicit flag', () => {
         expect(viewSource).toContain("$t('notificacionesPorCorreo')");

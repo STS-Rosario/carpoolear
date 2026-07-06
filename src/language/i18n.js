@@ -1529,6 +1529,8 @@ const messages = {
         adminUsuariosImpersonateError: 'No se pudo iniciar la suplantación.',
         impersonationBannerText: 'Estás suplantando a {name}.',
         impersonationBannerStop: 'Detener suplantación',
+        impersonationActionForbidden:
+            'Esta acción no está permitida mientras suplantás a un usuario.',
         adminUsuariosVolverAlListado: 'Volver al listado',
         adminUsuariosVolverResumen: 'Volver al resumen',
         adminUsuariosVerViajes: 'Ver viajes',
@@ -2895,6 +2897,8 @@ const messages = {
         adminUsuariosImpersonateError: 'No se pudo iniciar la suplantación.',
         impersonationBannerText: 'Estás suplantando a {name}.',
         impersonationBannerStop: 'Detener suplantación',
+        impersonationActionForbidden:
+            'Esta acción no está permitida mientras suplantás a un usuario.',
         adminUsuariosVolverAlListado: 'Volver al listado',
         adminUsuariosVolverResumen: 'Volver al resumen',
         adminUsuariosVerViajes: 'Ver viajes',
@@ -4423,6 +4427,8 @@ const messages = {
         adminUsuariosImpersonateError: 'Could not start impersonation.',
         impersonationBannerText: 'You are impersonating {name}.',
         impersonationBannerStop: 'Stop impersonating',
+        impersonationActionForbidden:
+            'This action is not allowed while impersonating a user.',
         adminUsuariosVolverAlListado: 'Back to list',
         adminUsuariosVolverResumen: 'Back to summary',
         adminUsuariosVerViajes: 'View trips',
