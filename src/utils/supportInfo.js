@@ -192,6 +192,7 @@ export async function fetchSupportInfoSnapshot(deps = {}) {
         importCordovaStore = () => import('../stores/cordova.js'),
         importRootStore = () => import('../stores/root.js'),
         importCapacitorCore = () => import('@capacitor/core'),
+        importNotificationPermission = () => import('./notificationPermission.js'),
         windowRef = typeof window !== 'undefined' ? window : null,
         navigatorRef = typeof navigator !== 'undefined' ? navigator : null
     } = deps;
@@ -204,6 +205,7 @@ export async function fetchSupportInfoSnapshot(deps = {}) {
         : null;
     let capacitorPlatform = 'unknown';
     let isNativePlatform = false;
+    let isPWA = false;
 
     try {
         const { Capacitor } = await importCapacitorCore();
@@ -211,6 +213,13 @@ export async function fetchSupportInfoSnapshot(deps = {}) {
         isNativePlatform = Capacitor.isNativePlatform();
     } catch (e) {
         // Capacitor unavailable in test or web-only contexts
+    }
+
+    try {
+        const { isPWA: detectPWA } = await importNotificationPermission();
+        isPWA = detectPWA();
+    } catch (e) {
+        // notificationPermission module unavailable
     }
 
     try {
@@ -246,6 +255,7 @@ export async function fetchSupportInfoSnapshot(deps = {}) {
         windowAppVersion: windowRef && windowRef.appVersion ? windowRef.appVersion : null,
         capacitorPlatform,
         isNativePlatform,
+        isPWA,
         device,
         deviceId,
         networkOnline,
