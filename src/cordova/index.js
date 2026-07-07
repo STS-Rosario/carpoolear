@@ -39,13 +39,19 @@ const doInit = async () => {
     // Initialize device info with Capacitor
     await initDeviceInfo();
 
-    // Initialize push notifications with Capacitor
-    push.init();
-
     // Initialize network monitoring with Capacitor
     initNetworkMonitoring();
 
-    getRootStore().init();
+    // Restore the cached session before deciding whether to init push,
+    // so signed-out users are never prompted for notification permissions.
+    await getRootStore().init();
+
+    const { useAuthStore } = await import('../stores/auth');
+    const authStore = useAuthStore();
+    if (authStore.auth) {
+        // Initialize push notifications with Capacitor (authed users only)
+        push.init();
+    }
 
     document.addEventListener('backbutton', onBackbutton, false);
 };
