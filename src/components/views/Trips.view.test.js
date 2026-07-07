@@ -56,10 +56,18 @@ describe('Trips.vue notification permission prompt', () => {
         expect(viewSource).toContain('requestNotificationPermission');
     });
 
-    it('enables push for native Capacitor builds regardless of web_push_notification', () => {
+    it('enables push for native Capacitor and installed PWA, excluding plain web in /trips', () => {
         expect(viewSource).toContain('notificationsEnabledForPlatform');
         expect(viewSource).toContain('isNativePlatform');
-        expect(viewSource).not.toContain('isPWA()');
+        expect(viewSource).toContain('isPWA');
+        const computedBlock = viewSource.match(
+            /notificationsEnabledForPlatform\(\)\s*\{[\s\S]*?\n\s*\},/
+        );
+        expect(computedBlock).not.toBeNull();
+        expect(computedBlock[0]).toContain('isNativePlatform()');
+        expect(computedBlock[0]).toContain('isPWA()');
+        // Plain web (non-PWA, non-native) must NOT enable the banner in /trips.
+        expect(computedBlock[0]).toContain('return false');
     });
 });
 

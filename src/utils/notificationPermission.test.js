@@ -37,6 +37,55 @@ describe('isNativePlatform', () => {
     });
 });
 
+describe('isPWA', () => {
+    afterEach(() => {
+        vi.resetModules();
+    });
+
+    it('returns false on plain web (browser display-mode)', async () => {
+        globalThis.window = {
+            matchMedia: vi.fn((query) => ({
+                matches: false,
+                media: query
+            }))
+        };
+        const { isPWA } = await import('./notificationPermission.js');
+        expect(isPWA()).toBe(false);
+    });
+
+    it('returns true when display-mode is standalone', async () => {
+        globalThis.window = {
+            matchMedia: vi.fn((query) => ({
+                matches: query === '(display-mode: standalone)',
+                media: query
+            }))
+        };
+        const { isPWA } = await import('./notificationPermission.js');
+        expect(isPWA()).toBe(true);
+    });
+
+    it('returns true on iOS Safari standalone (navigator.standalone)', async () => {
+        globalThis.window = {
+            matchMedia: vi.fn((query) => ({ matches: false, media: query })),
+            navigator: { standalone: true }
+        };
+        const { isPWA } = await import('./notificationPermission.js');
+        expect(isPWA()).toBe(true);
+    });
+
+    it('returns false on native Capacitor even if display-mode matches', async () => {
+        globalThis.window = {
+            Capacitor: { isNativePlatform: () => true },
+            matchMedia: vi.fn((query) => ({
+                matches: query === '(display-mode: standalone)',
+                media: query
+            }))
+        };
+        const { isPWA } = await import('./notificationPermission.js');
+        expect(isPWA()).toBe(false);
+    });
+});
+
 describe('getNotificationPermissionStatus', () => {
     afterEach(() => {
         vi.clearAllMocks();
