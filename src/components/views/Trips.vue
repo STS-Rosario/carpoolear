@@ -459,6 +459,7 @@ import { shouldShowAppBanner } from '../../utils/appBanner.js';
 import { resolveCapacitorBundledHostUrl } from '../../utils/capacitorRemoteUrl.js';
 import {
     isNativePlatform,
+    isPWA,
     getNotificationPermissionStatus,
     requestNotificationPermission as requestPermissionStatus
 } from '../../utils/notificationPermission.js';
@@ -1100,6 +1101,10 @@ export default {
         notificationsEnabledForPlatform() {
             if (isNativePlatform()) {
                 return true;
+            }
+            if (!isPWA()) {
+                // Plain web browser: only the /notifications view prompts.
+                return false;
             }
             return Boolean(this.appConfig && this.appConfig.web_push_notification);
         },

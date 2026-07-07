@@ -11,6 +11,26 @@ export function isWebPlatform() {
     return !isNativePlatform();
 }
 
+export function isPWA() {
+    if (isNativePlatform()) {
+        return false;
+    }
+    if (typeof window === 'undefined') {
+        return false;
+    }
+    const matchMedia =
+        window.matchMedia && window.matchMedia.bind(window);
+    const standalone = matchMedia && matchMedia('(display-mode: standalone)').matches;
+    const fullscreen = matchMedia && matchMedia('(display-mode: fullscreen)').matches;
+    const iosStandalone =
+        window.navigator && window.navigator.standalone === true;
+    return Boolean(standalone || fullscreen || iosStandalone);
+}
+
+export function isPlainWeb() {
+    return !isNativePlatform() && !isPWA();
+}
+
 async function loadPushNotifications() {
     const module = await import('@capacitor/push-notifications');
     return module.PushNotifications;
