@@ -260,4 +260,10 @@ describe('NewTrip.vue incomplete car completion', () => {
             /<CompleteCarModal[\s\S]*?:visible="showCompleteCarModal"/s
         );
     });
+
+    it('only asks to complete car info when creating a driver trip, not a passenger trip', () => {
+        expect(viewSource).toMatch(
+            /if \(requiresDriverPlate\(this\.trip\)\) \{[\s\S]*?const tripCar = this\.resolveDriverCarForTrip\(\);[\s\S]*?!isCarComplete\(tripCar\)[\s\S]*?this\.showCompleteCarModal = true;/s
+        );
+    });
 });

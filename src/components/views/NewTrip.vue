@@ -3308,38 +3308,34 @@ export default {
         },
 
         async save() {
-            if (
-                requiresDriverPlate(this.trip) &&
-                !Array.isArray(this.cars)
-            ) {
-                await this.carIndex();
-            }
-            if (
-                requiresDriverPlate(this.trip) &&
-                !hasDriverPlate(this.cars)
-            ) {
-                dialogs.message(this.$t('olvidastePatente'), {
-                    estado: 'error'
-                });
-                this.showTripCarsModal = true;
-                return;
-            }
-            if (
-                requiresDriverPlate(this.trip) &&
-                needsCarSelection(this.cars) &&
-                !resolveTripCarId(this.cars, this.selectedCarId)
-            ) {
-                this.carSelectionError.state = true;
-                this.carSelectionError.message = this.$t('seleccionaAuto');
-                return;
+            if (requiresDriverPlate(this.trip)) {
+                if (!Array.isArray(this.cars)) {
+                    await this.carIndex();
+                }
+                if (!hasDriverPlate(this.cars)) {
+                    dialogs.message(this.$t('olvidastePatente'), {
+                        estado: 'error'
+                    });
+                    this.showTripCarsModal = true;
+                    return;
+                }
+                if (
+                    needsCarSelection(this.cars) &&
+                    !resolveTripCarId(this.cars, this.selectedCarId)
+                ) {
+                    this.carSelectionError.state = true;
+                    this.carSelectionError.message = this.$t('seleccionaAuto');
+                    return;
+                }
+                this.carSelectionError.state = false;
+                const tripCar = this.resolveDriverCarForTrip();
+                if (tripCar && !isCarComplete(tripCar)) {
+                    this.carToComplete = tripCar;
+                    this.showCompleteCarModal = true;
+                    return;
+                }
             }
             this.carSelectionError.state = false;
-            const tripCar = this.resolveDriverCarForTrip();
-            if (tripCar && !isCarComplete(tripCar)) {
-                this.carToComplete = tripCar;
-                this.showCompleteCarModal = true;
-                return;
-            }
             const validationResult = this.validate();
             if (validationResult) {
                 this.formValidationAttempted = true;
