@@ -272,4 +272,58 @@ describe('fetchSupportInfoSnapshot', () => {
         expect(snapshot.networkOnline).toBe('offline');
         expect(snapshot.notificationPermission).toBe('granted');
     });
+
+    it('sets appMode "native" when running on a native platform', async () => {
+        const snapshot = await fetchSupportInfoSnapshot({
+            importCordovaStore: async () => ({ useCordovaStore: () => ({}) }),
+            importRootStore: async () => ({ useRootStore: () => ({}) }),
+            importCapacitorCore: async () => ({
+                Capacitor: {
+                    getPlatform: () => 'android',
+                    isNativePlatform: () => true
+                }
+            }),
+            importNotificationPermission: async () => ({ isPWA: () => true }),
+            windowRef: { Notification: { permission: 'granted' } },
+            navigatorRef: { userAgent: 'TestAgent/1.0', onLine: true }
+        });
+
+        expect(snapshot.appMode).toBe('native');
+    });
+
+    it('sets appMode "pwa" when isPWA returns true on web platform', async () => {
+        const snapshot = await fetchSupportInfoSnapshot({
+            importCordovaStore: async () => ({ useCordovaStore: () => ({}) }),
+            importRootStore: async () => ({ useRootStore: () => ({}) }),
+            importCapacitorCore: async () => ({
+                Capacitor: {
+                    getPlatform: () => 'web',
+                    isNativePlatform: () => false
+                }
+            }),
+            importNotificationPermission: async () => ({ isPWA: () => true }),
+            windowRef: { Notification: { permission: 'default' } },
+            navigatorRef: { userAgent: 'TestAgent/1.0', onLine: true }
+        });
+
+        expect(snapshot.appMode).toBe('pwa');
+    });
+
+    it('sets appMode "web" when isPWA returns false on web platform', async () => {
+        const snapshot = await fetchSupportInfoSnapshot({
+            importCordovaStore: async () => ({ useCordovaStore: () => ({}) }),
+            importRootStore: async () => ({ useRootStore: () => ({}) }),
+            importCapacitorCore: async () => ({
+                Capacitor: {
+                    getPlatform: () => 'web',
+                    isNativePlatform: () => false
+                }
+            }),
+            importNotificationPermission: async () => ({ isPWA: () => false }),
+            windowRef: { Notification: { permission: 'default' } },
+            navigatorRef: { userAgent: 'TestAgent/1.0', onLine: true }
+        });
+
+        expect(snapshot.appMode).toBe('web');
+    });
 });
