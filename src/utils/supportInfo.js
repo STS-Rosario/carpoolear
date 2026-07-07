@@ -74,12 +74,20 @@ export function normalizeDeviceRecord(device) {
     };
 }
 
+export function resolveAppMode({ isNativePlatform = false, isPWA = false } = {}) {
+    if (isNativePlatform) {
+        return 'native';
+    }
+    return isPWA ? 'pwa' : 'web';
+}
+
 export function buildSupportInfoSnapshot(deps = {}) {
     const {
         appVersionInfo = null,
         windowAppVersion = null,
         capacitorPlatform = 'unknown',
         isNativePlatform = false,
+        isPWA = false,
         webBuildNumber = SPLASH_WEB_BUILD_NUMBER,
         device = null,
         deviceId = null,
@@ -99,6 +107,7 @@ export function buildSupportInfoSnapshot(deps = {}) {
     return {
         ...versionFields,
         platform: displayValue(capacitorPlatform, 'unknown'),
+        appMode: resolveAppMode({ isNativePlatform, isPWA }),
         ...deviceFields,
         deviceId: displayValue(deviceId, 'unknown'),
         networkOnline: networkOnline === null
@@ -115,6 +124,7 @@ const SUPPORT_INFO_FIELD_LABELS = [
     ['appVersionSource', 'App Version Source'],
     ['webBuildNumber', 'Web Build'],
     ['platform', 'Platform'],
+    ['appMode', 'App Mode'],
     ['operatingSystem', 'Operating System'],
     ['deviceModel', 'Device Model'],
     ['osVersion', 'OS Version'],
