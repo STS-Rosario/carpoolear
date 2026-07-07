@@ -100,7 +100,7 @@ export default {
 
         try {
             if (window.Notification.permission === 'default') {
-                const permission = await Notification.requestPermission();
+                const permission = await window.Notification.requestPermission();
                 if (permission !== 'granted') {
                     return;
                 }

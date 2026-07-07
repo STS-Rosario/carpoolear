@@ -2,7 +2,7 @@
     <div>
         <Loading class="container" :data="notifications">
             <div
-                v-if="user && isPWA() && !hasNotificationPermission && showNotificationWarning"
+                v-if="user && notificationsEnabledForPlatform && !hasNotificationPermission && showNotificationWarning"
                 class="alert alert-warning ios-notification-warning"
                 style="text-align: center"
                 role="alert"
@@ -84,6 +84,11 @@ import dialogs from '../../services/dialogs.js';
 import push from '../../cordova/push-capacitor.js';
 import dayjs from '../../dayjs';
 import { resolveTripDetailRoute } from '../../utils/notificationNavigation.js';
+import {
+    isNativePlatform,
+    getNotificationPermissionStatus,
+    requestNotificationPermission as requestPermissionStatus
+} from '../../utils/notificationPermission.js';
 
 
 export default {
@@ -106,46 +111,44 @@ export default {
         ...mapActions(useNotificationsStore, {
             search: 'indexAction'
         }),
-        isPWA() {
-            return !window.Capacitor || window.Capacitor.getPlatform() === 'web';
-        },
-        checkNotificationPermission() {
-            if (window.Notification && window.Notification.permission) {
-                if (window.Notification.permission === 'granted') {
-                    this.hasNotificationPermission = true;
-                    this.showNotificationWarning = false;
-                } else {
-                    this.hasNotificationPermission = false;
-                    const dismissedAt = parseInt(localStorage.getItem('pwa_notification_dismiss'));
-                    this.showNotificationWarning = !dismissedAt || Date.now() - dismissedAt > 14 * 24 * 3600 * 1000;
-                }
+        isNativePlatform,
+        async checkNotificationPermission() {
+            const status = await getNotificationPermissionStatus();
+            if (status === 'granted') {
+                this.hasNotificationPermission = true;
+                this.showNotificationWarning = false;
+            } else if (status === 'unsupported') {
+                this.showNotificationWarning = false;
+            } else {
+                this.hasNotificationPermission = false;
+                const dismissedAt = parseInt(localStorage.getItem('pwa_notification_dismiss'));
+                this.showNotificationWarning = !dismissedAt || Date.now() - dismissedAt > 14 * 24 * 3600 * 1000;
             }
         },
-        requestNotificationPermission() {
-            Notification.requestPermission().then((permission) => {
-                if (permission === 'granted') {
-                    this.hasNotificationPermission = true;
-                    this.showNotificationWarning = false;
-                    // Initialize push-capacitor.js after permission is granted
-                    try {
-                        push.init();
-                    } catch (error) {
-                        console.log(
-                            'Error initializing push notifications:',
-                            error
-                        );
-                    }
-                    dialogs.message(this.$t('notificacionesPermitidas'), {
-                        duration: 10,
-                        estado: 'success'
-                    });
-                } else {
-                    dialogs.message(this.$t('notificacionesDenegadas'), {
-                        duration: 10,
-                        estado: 'error'
-                    });
+        async requestNotificationPermission() {
+            const permission = await requestPermissionStatus();
+            if (permission === 'granted') {
+                this.hasNotificationPermission = true;
+                this.showNotificationWarning = false;
+                // Initialize push-capacitor.js after permission is granted
+                try {
+                    push.init();
+                } catch (error) {
+                    console.log(
+                        'Error initializing push notifications:',
+                        error
+                    );
                 }
-            });
+                dialogs.message(this.$t('notificacionesPermitidas'), {
+                    duration: 10,
+                    estado: 'success'
+                });
+            } else {
+                dialogs.message(this.$t('notificacionesDenegadas'), {
+                    duration: 10,
+                    estado: 'error'
+                });
+            }
         },
         dismissNotificationWarning() {
             this.showNotificationWarning = false;
@@ -220,13 +223,19 @@ export default {
         ...mapState(useAuthStore, {
             user: 'user',
             appConfig: 'appConfig'
-        })
+        }),
+        notificationsEnabledForPlatform() {
+            if (isNativePlatform()) {
+                return true;
+            }
+            return Boolean(this.appConfig && this.appConfig.web_push_notification);
+        }
     },
 
     mounted() {
         this.search(this.query);
 
-        if (this.user && this.appConfig.web_push_notification && this.isPWA()) {
+        if (this.user && this.notificationsEnabledForPlatform) {
             this.checkNotificationPermission();
         }
     },

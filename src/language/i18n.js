@@ -1292,7 +1292,7 @@ const messages = {
         facebook: 'Facebook',
         notificacionesNoHabilitadas: 'No tenés habilitadas las notificaciones',
         notificacionesNoAceptastePermisos:
-            'Parece que no aceptaste los permisos para que te podamos enviar notificaciones (en nuevos mensajes, etc.), presioná el botón para hacerlo:',
+            'Parece que no aceptaste los permisos para que te podamos enviar notificaciones (en nuevos mensajes, etc.) en este dispositivo , presioná el botón si querés hacerlo:',
         otorgarPermisos: 'Otorgar permisos',
         noMostrarDeNuevo: 'No mostrar de nuevo',
         elegirPropiaAventuraSoloMensual:
@@ -2678,7 +2678,7 @@ const messages = {
         facebook: 'Facebook',
         notificacionesNoHabilitadas: 'No tenés habilitadas las notificaciones',
         notificacionesNoAceptastePermisos:
-            'Parece que no aceptaste los permisos para que te podamos enviar notificaciones (en nuevos mensajes, etc.), presioná el botón para hacerlo:',
+            'Parece que no aceptaste los permisos para que te podamos enviar notificaciones (en nuevos mensajes, etc.) en este dispositivo , presioná el botón si querés hacerlo:',
         otorgarPermisos: 'Otorgar permisos',
         noMostrarDeNuevo: 'No mostrar de nuevo',
         elegirPropiaAventuraSoloMensual:
