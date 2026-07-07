@@ -3334,11 +3334,13 @@ export default {
                 return;
             }
             this.carSelectionError.state = false;
-            const tripCar = this.resolveDriverCarForTrip();
-            if (tripCar && !isCarComplete(tripCar)) {
-                this.carToComplete = tripCar;
-                this.showCompleteCarModal = true;
-                return;
+            if (requiresDriverPlate(this.trip)) {
+                const tripCar = this.resolveDriverCarForTrip();
+                if (tripCar && !isCarComplete(tripCar)) {
+                    this.carToComplete = tripCar;
+                    this.showCompleteCarModal = true;
+                    return;
+                }
             }
             const validationResult = this.validate();
             if (validationResult) {
