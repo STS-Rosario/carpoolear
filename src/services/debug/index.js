@@ -6,6 +6,7 @@ import {
     buildSupportInfoSnapshot,
     fetchSupportInfoSnapshot
 } from '../../utils/supportInfo.js';
+import { isNativePlatform, isPWA } from '../../utils/notificationPermission.js';
 
 let defaultInstance = null;
 
@@ -15,6 +16,8 @@ function getSupportInfoSnapshot() {
             ? window.appVersion
             : null,
         device: typeof window !== 'undefined' && window.device ? window.device : null,
+        isNativePlatform: isNativePlatform(),
+        isPWA: isPWA(),
         notificationPermission: typeof window !== 'undefined' && window.Notification
             ? window.Notification.permission
             : null,
