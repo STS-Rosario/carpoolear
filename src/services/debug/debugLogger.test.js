@@ -111,6 +111,31 @@ describe('debugLogger', () => {
             expect(info).not.toContain('"platform"');
         });
 
+        it('includes an App Mode line from the snapshot', async () => {
+            const logger = createDebugLogger({ storage: mockStorage, getSupportInfoSnapshot: mockGetSupportInfoSnapshot });
+            await logger.init();
+            const info = logger.getDebugInfo();
+            expect(info).toContain('App Mode:');
+        });
+
+        it('default fallback reports pwa mode when running as installed PWA', async () => {
+            const originalWindow = globalThis.window;
+            globalThis.window = {
+                matchMedia: (query) => ({
+                    matches: query === '(display-mode: standalone)',
+                    media: query
+                })
+            };
+            try {
+                const logger = createDebugLogger({ storage: mockStorage });
+                await logger.init();
+                const info = logger.getDebugInfo();
+                expect(info).toContain('App Mode: pwa');
+            } finally {
+                globalThis.window = originalWindow;
+            }
+        });
+
         it('includes notification permission in output', async () => {
             const logger = createDebugLogger({ storage: mockStorage, getSupportInfoSnapshot: mockGetSupportInfoSnapshot });
             await logger.init();

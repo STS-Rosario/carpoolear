@@ -4,6 +4,7 @@ import {
     buildSupportInfoSnapshot,
     formatSupportInfoBlock
 } from '../../utils/supportInfo.js';
+import { isNativePlatform, isPWA } from '../../utils/notificationPermission.js';
 
 const STORAGE_KEY = 'DEBUG_MODE_ENABLED';
 const LOG_LEVELS = ['log', 'info', 'warn', 'error', 'debug'];
@@ -31,6 +32,8 @@ function createDebugLogger(options = {}) {
         return buildSupportInfoSnapshot({
             windowAppVersion: (typeof window !== 'undefined' && window.appVersion) || null,
             device: (typeof window !== 'undefined' && window.device) || null,
+            isNativePlatform: isNativePlatform(),
+            isPWA: isPWA(),
             notificationPermission: typeof window !== 'undefined' && window.Notification
                 ? window.Notification.permission
                 : null,

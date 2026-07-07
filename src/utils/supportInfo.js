@@ -74,12 +74,20 @@ export function normalizeDeviceRecord(device) {
     };
 }
 
+export function resolveAppMode({ isNativePlatform = false, isPWA = false } = {}) {
+    if (isNativePlatform) {
+        return 'native';
+    }
+    return isPWA ? 'pwa' : 'web';
+}
+
 export function buildSupportInfoSnapshot(deps = {}) {
     const {
         appVersionInfo = null,
         windowAppVersion = null,
         capacitorPlatform = 'unknown',
         isNativePlatform = false,
+        isPWA = false,
         webBuildNumber = SPLASH_WEB_BUILD_NUMBER,
         device = null,
         deviceId = null,
@@ -99,6 +107,7 @@ export function buildSupportInfoSnapshot(deps = {}) {
     return {
         ...versionFields,
         platform: displayValue(capacitorPlatform, 'unknown'),
+        appMode: resolveAppMode({ isNativePlatform, isPWA }),
         ...deviceFields,
         deviceId: displayValue(deviceId, 'unknown'),
         networkOnline: networkOnline === null
@@ -115,6 +124,7 @@ const SUPPORT_INFO_FIELD_LABELS = [
     ['appVersionSource', 'App Version Source'],
     ['webBuildNumber', 'Web Build'],
     ['platform', 'Platform'],
+    ['appMode', 'App Mode'],
     ['operatingSystem', 'Operating System'],
     ['deviceModel', 'Device Model'],
     ['osVersion', 'OS Version'],
@@ -182,6 +192,7 @@ export async function fetchSupportInfoSnapshot(deps = {}) {
         importCordovaStore = () => import('../stores/cordova.js'),
         importRootStore = () => import('../stores/root.js'),
         importCapacitorCore = () => import('@capacitor/core'),
+        importNotificationPermission = () => import('./notificationPermission.js'),
         windowRef = typeof window !== 'undefined' ? window : null,
         navigatorRef = typeof navigator !== 'undefined' ? navigator : null
     } = deps;
@@ -194,6 +205,7 @@ export async function fetchSupportInfoSnapshot(deps = {}) {
         : null;
     let capacitorPlatform = 'unknown';
     let isNativePlatform = false;
+    let isPWA = false;
 
     try {
         const { Capacitor } = await importCapacitorCore();
@@ -201,6 +213,13 @@ export async function fetchSupportInfoSnapshot(deps = {}) {
         isNativePlatform = Capacitor.isNativePlatform();
     } catch (e) {
         // Capacitor unavailable in test or web-only contexts
+    }
+
+    try {
+        const { isPWA: detectPWA } = await importNotificationPermission();
+        isPWA = detectPWA();
+    } catch (e) {
+        // notificationPermission module unavailable
     }
 
     try {
@@ -236,6 +255,7 @@ export async function fetchSupportInfoSnapshot(deps = {}) {
         windowAppVersion: windowRef && windowRef.appVersion ? windowRef.appVersion : null,
         capacitorPlatform,
         isNativePlatform,
+        isPWA,
         device,
         deviceId,
         networkOnline,

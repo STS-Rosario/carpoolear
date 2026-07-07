@@ -68,6 +68,44 @@ describe('buildSupportInfoSnapshot', () => {
         expect(snapshot.webViewVersion).toBe('120.0.0');
         expect(Object.values(snapshot).every((value) => value !== undefined)).toBe(true);
     });
+
+    describe('appMode', () => {
+        it('is "web" for plain web (no pwa, not native)', () => {
+            const snapshot = buildSupportInfoSnapshot({
+                capacitorPlatform: 'web',
+                isNativePlatform: false,
+                isPWA: false
+            });
+
+            expect(snapshot.appMode).toBe('web');
+        });
+
+        it('is "pwa" when isPWA is true and not native', () => {
+            const snapshot = buildSupportInfoSnapshot({
+                capacitorPlatform: 'web',
+                isNativePlatform: false,
+                isPWA: true
+            });
+
+            expect(snapshot.appMode).toBe('pwa');
+        });
+
+        it('is "native" when isNativePlatform is true, even if isPWA is true', () => {
+            const snapshot = buildSupportInfoSnapshot({
+                capacitorPlatform: 'android',
+                isNativePlatform: true,
+                isPWA: true
+            });
+
+            expect(snapshot.appMode).toBe('native');
+        });
+
+        it('is "web" by default when no platform flags are provided', () => {
+            const snapshot = buildSupportInfoSnapshot({});
+
+            expect(snapshot.appMode).toBe('web');
+        });
+    });
 });
 
 describe('formatSupportInfoBlock', () => {
@@ -96,6 +134,18 @@ describe('formatSupportInfoBlock', () => {
         expect(block).toContain('Platform: android');
         expect(block).toContain('Device Model: Pixel 7');
         expect(block).toContain('OS Version: 14');
+    });
+
+    it('renders App Mode line for pwa', () => {
+        const snapshot = buildSupportInfoSnapshot({
+            capacitorPlatform: 'web',
+            isNativePlatform: false,
+            isPWA: true
+        });
+
+        const block = formatSupportInfoBlock(snapshot);
+
+        expect(block).toContain('App Mode: pwa');
     });
 });
 
@@ -221,5 +271,59 @@ describe('fetchSupportInfoSnapshot', () => {
         expect(snapshot.deviceId).toBe('device-uuid');
         expect(snapshot.networkOnline).toBe('offline');
         expect(snapshot.notificationPermission).toBe('granted');
+    });
+
+    it('sets appMode "native" when running on a native platform', async () => {
+        const snapshot = await fetchSupportInfoSnapshot({
+            importCordovaStore: async () => ({ useCordovaStore: () => ({}) }),
+            importRootStore: async () => ({ useRootStore: () => ({}) }),
+            importCapacitorCore: async () => ({
+                Capacitor: {
+                    getPlatform: () => 'android',
+                    isNativePlatform: () => true
+                }
+            }),
+            importNotificationPermission: async () => ({ isPWA: () => true }),
+            windowRef: { Notification: { permission: 'granted' } },
+            navigatorRef: { userAgent: 'TestAgent/1.0', onLine: true }
+        });
+
+        expect(snapshot.appMode).toBe('native');
+    });
+
+    it('sets appMode "pwa" when isPWA returns true on web platform', async () => {
+        const snapshot = await fetchSupportInfoSnapshot({
+            importCordovaStore: async () => ({ useCordovaStore: () => ({}) }),
+            importRootStore: async () => ({ useRootStore: () => ({}) }),
+            importCapacitorCore: async () => ({
+                Capacitor: {
+                    getPlatform: () => 'web',
+                    isNativePlatform: () => false
+                }
+            }),
+            importNotificationPermission: async () => ({ isPWA: () => true }),
+            windowRef: { Notification: { permission: 'default' } },
+            navigatorRef: { userAgent: 'TestAgent/1.0', onLine: true }
+        });
+
+        expect(snapshot.appMode).toBe('pwa');
+    });
+
+    it('sets appMode "web" when isPWA returns false on web platform', async () => {
+        const snapshot = await fetchSupportInfoSnapshot({
+            importCordovaStore: async () => ({ useCordovaStore: () => ({}) }),
+            importRootStore: async () => ({ useRootStore: () => ({}) }),
+            importCapacitorCore: async () => ({
+                Capacitor: {
+                    getPlatform: () => 'web',
+                    isNativePlatform: () => false
+                }
+            }),
+            importNotificationPermission: async () => ({ isPWA: () => false }),
+            windowRef: { Notification: { permission: 'default' } },
+            navigatorRef: { userAgent: 'TestAgent/1.0', onLine: true }
+        });
+
+        expect(snapshot.appMode).toBe('web');
     });
 });
