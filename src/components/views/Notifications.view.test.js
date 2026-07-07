@@ -6,13 +6,25 @@ const viewPath = path.resolve(__dirname, 'Notifications.vue');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 
 describe('Notifications view', () => {
-    it('only renders the web push prompt for logged-in users', () => {
+    it('renders the notification permission warning for logged-in users on any supported platform', () => {
+        expect(viewSource).toContain("user: 'user'");
         expect(viewSource).toContain(
-            "user: 'user'"
+            'v-if="user && notificationsEnabledForPlatform && !hasNotificationPermission && showNotificationWarning"'
         );
+    });
+
+    it('delegates permission check/request to the shared platform-aware util', () => {
         expect(viewSource).toContain(
-            'v-if="user && isPWA() && !hasNotificationPermission && showNotificationWarning"'
+            "from '../../utils/notificationPermission.js'"
         );
+        expect(viewSource).toContain('getNotificationPermissionStatus');
+        expect(viewSource).toContain('requestNotificationPermission');
+    });
+
+    it('enables push for native Capacitor builds regardless of web_push_notification', () => {
+        expect(viewSource).toContain('notificationsEnabledForPlatform');
+        expect(viewSource).toContain('isNativePlatform');
+        expect(viewSource).not.toContain('isPWA()');
     });
 
     it('routes identity_validation notifications to account verification page', () => {

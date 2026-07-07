@@ -36,16 +36,30 @@ describe('Trips.vue pending friend invitations card', () => {
     });
 });
 
-describe('Trips.vue web push prompt', () => {
-    it('only renders the notification permission warning for logged-in users', () => {
+describe('Trips.vue notification permission prompt', () => {
+    it('renders the warning for logged-in users on any supported platform', () => {
         expect(viewSource).toContain(
-            'v-if="user && appConfig.web_push_notification && isPWA() && !hasNotificationPermission && showNotificationWarning"'
+            'v-if="user && notificationsEnabledForPlatform && !hasNotificationPermission && showNotificationWarning"'
         );
         expect(viewSource).toContain("$t('notificacionesNoHabilitadas')");
         expect(viewSource).toContain('requestNotificationPermission');
         expect(viewSource).toContain('dismissNotificationWarning');
         expect(viewSource).toContain('checkNotificationPermission');
         expect(viewSource).toContain('pwa_notification_dismiss');
+    });
+
+    it('delegates permission check/request to the shared platform-aware util', () => {
+        expect(viewSource).toContain(
+            "from '../../utils/notificationPermission.js'"
+        );
+        expect(viewSource).toContain('getNotificationPermissionStatus');
+        expect(viewSource).toContain('requestNotificationPermission');
+    });
+
+    it('enables push for native Capacitor builds regardless of web_push_notification', () => {
+        expect(viewSource).toContain('notificationsEnabledForPlatform');
+        expect(viewSource).toContain('isNativePlatform');
+        expect(viewSource).not.toContain('isPWA()');
     });
 });
 
