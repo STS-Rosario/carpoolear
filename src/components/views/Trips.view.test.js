@@ -25,11 +25,26 @@ describe('Trips.vue app banner', () => {
     });
 
     it('passes isMobile into the banner asset resolution', () => {
+        const assetBlock = viewSource.match(
+            /appBannerAsset\(\)\s*\{[\s\S]*?\n\s*\},/
+        );
+        expect(assetBlock).not.toBeNull();
+        expect(assetBlock[0]).toContain('isMobile');
+        expect(assetBlock[0]).toContain('resolveAppBannerAsset');
+    });
+
+    it('derives banner image and href from the shared banner asset', () => {
         const imageBlock = viewSource.match(
             /bannerImageSrc\(\)\s*\{[\s\S]*?\n\s*\},/
         );
         expect(imageBlock).not.toBeNull();
-        expect(imageBlock[0]).toContain('isMobile');
+        expect(imageBlock[0]).toContain('this.appBannerAsset');
+
+        const hrefBlock = viewSource.match(
+            /bannerHref\(\)\s*\{[\s\S]*?\n\s*\},/
+        );
+        expect(hrefBlock).not.toBeNull();
+        expect(hrefBlock[0]).toContain('this.appBannerAsset');
     });
 
     it('uses the resolved url for the banner href and click handler', () => {

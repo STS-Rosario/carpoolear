@@ -1119,15 +1119,16 @@ export default {
             const banner = this.appConfig && this.appConfig.banner;
             return shouldShowAppBanner(banner, this.user);
         },
-        bannerImageSrc() {
+        appBannerAsset() {
             const banner = this.appConfig && this.appConfig.banner;
-            const asset = resolveAppBannerAsset(banner, this.isMobile);
-            return resolveCapacitorBundledHostUrl(asset && asset.image);
+            return resolveAppBannerAsset(banner, this.isMobile);
+        },
+        bannerImageSrc() {
+            const image = this.appBannerAsset && this.appBannerAsset.image;
+            return resolveCapacitorBundledHostUrl(image);
         },
         bannerHref() {
-            const banner = this.appConfig && this.appConfig.banner;
-            const asset = resolveAppBannerAsset(banner, this.isMobile);
-            const url = asset && asset.url;
+            const url = this.appBannerAsset && this.appBannerAsset.url;
             return typeof url === 'string' ? url : '#';
         },
         bannerTarget() {
