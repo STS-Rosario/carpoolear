@@ -17,6 +17,29 @@ describe('Trips.vue app banner', () => {
         expect(viewSource).toContain('resolveCapacitorBundledHostUrl');
         expect(viewSource).toContain(':src="bannerImageSrc"');
     });
+
+    it('uses resolveAppBannerAsset to pick mobile banner image and url', () => {
+        expect(viewSource).toContain('resolveAppBannerAsset');
+        expect(viewSource).toContain("from '../../utils/appBanner.js'");
+        expect(viewSource).toMatch(/resolveAppBannerAsset\([^)]*isMobile[^)]*\)/);
+    });
+
+    it('passes isMobile into the banner asset resolution', () => {
+        const imageBlock = viewSource.match(
+            /bannerImageSrc\(\)\s*\{[\s\S]*?\n\s*\},/
+        );
+        expect(imageBlock).not.toBeNull();
+        expect(imageBlock[0]).toContain('isMobile');
+    });
+
+    it('uses the resolved url for the banner href and click handler', () => {
+        expect(viewSource).toContain('bannerHref');
+        const clickBlock = viewSource.match(
+            /onBannerClick\(\)\s*\{[\s\S]*?\n\s*\},/
+        );
+        expect(clickBlock).not.toBeNull();
+        expect(clickBlock[0]).toContain('this.bannerHref');
+    });
 });
 
 describe('Trips.vue ongoing trip card', () => {
