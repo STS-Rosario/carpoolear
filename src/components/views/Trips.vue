@@ -455,7 +455,10 @@ import {
     isIOSCapacitor,
     shouldHideDonationOnIOSCapacitor
 } from '../../services/capacitor.js';
-import { shouldShowAppBanner } from '../../utils/appBanner.js';
+import {
+    shouldShowAppBanner,
+    resolveAppBannerAsset
+} from '../../utils/appBanner.js';
 import { resolveCapacitorBundledHostUrl } from '../../utils/capacitorRemoteUrl.js';
 import {
     isNativePlatform,
@@ -519,11 +522,8 @@ export default {
             return typeof url === 'string' && url.trim().startsWith('/');
         },
         onBannerClick() {
-            const url =
-                this.appConfig &&
-                this.appConfig.banner &&
-                this.appConfig.banner.url;
-            if (!url || typeof url !== 'string') return;
+            const url = this.bannerHref;
+            if (!url || typeof url !== 'string' || url === '#') return;
             const normalized = url.trim();
             if (!normalized) return;
             if (this.isInternalBannerUrl(normalized)) {
@@ -1120,17 +1120,14 @@ export default {
             return shouldShowAppBanner(banner, this.user);
         },
         bannerImageSrc() {
-            const image =
-                this.appConfig &&
-                this.appConfig.banner &&
-                this.appConfig.banner.image;
-            return resolveCapacitorBundledHostUrl(image);
+            const banner = this.appConfig && this.appConfig.banner;
+            const asset = resolveAppBannerAsset(banner, this.isMobile);
+            return resolveCapacitorBundledHostUrl(asset && asset.image);
         },
         bannerHref() {
-            const url =
-                this.appConfig &&
-                this.appConfig.banner &&
-                this.appConfig.banner.url;
+            const banner = this.appConfig && this.appConfig.banner;
+            const asset = resolveAppBannerAsset(banner, this.isMobile);
+            const url = asset && asset.url;
             return typeof url === 'string' ? url : '#';
         },
         bannerTarget() {
