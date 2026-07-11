@@ -169,7 +169,10 @@
                     <img :src="app_logo" />
                 </router-link>
                 <a
-                    v-if="!shouldHideDonationOnIOSCapacitor(user)"
+                    v-if="
+                        !isNotLargeDesktop &&
+                        !shouldHideDonationOnIOSCapacitor(user)
+                    "
                     href="/donar"
                     class="btn btn-primary btn-donar-header btn-lg"
                     >{{ $t('donar') }}</a
