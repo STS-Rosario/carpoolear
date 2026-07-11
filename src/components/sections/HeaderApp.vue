@@ -316,8 +316,7 @@ export default {
             config: 'appConfig'
         }),
         ...mapState(useNotificationsStore, {
-            notificationsCount: 'count',
-            messagesCount: 'messagesCount'
+            notificationsCount: 'count'
         }),
         ...mapState(useActionbarsStore, {
             title: 'title',
@@ -388,10 +387,6 @@ export default {
 
         toNotifications() {
             router.push({ name: 'notifications' });
-        },
-
-        toConversations() {
-            router.push({ name: 'conversations-list' });
         },
 
         onClick(item) {
