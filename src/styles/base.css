@@ -3426,10 +3426,10 @@
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    border: 1.5px solid #1e3a5f;
+    border: 1.5px solid #1E5F9E;
     border-radius: 12px;
     background: #fff;
-    color: #1e3a5f;
+    color: #1E5F9E;
     font-size: 1rem;
     font-weight: 600;
     line-height: 1.2;
@@ -3443,11 +3443,11 @@
 }
 .account-logout-btn:hover {
     background: #eef4fb;
-    color: #1e3a5f;
+    color: #1E5F9E;
 }
 .account-logout-btn:focus {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.22);
+    box-shadow: 0 0 0 3px rgba(30, 95, 158, 0.22);
 }
 .account-logout-btn:disabled {
     background: #f5f5f5;
