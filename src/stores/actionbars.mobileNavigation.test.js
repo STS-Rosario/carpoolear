@@ -1,12 +1,17 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import fs from 'node:fs';
+import path from 'node:path';
 import { createPinia, setActivePinia } from 'pinia';
+
+const routesPath = path.resolve(__dirname, '../router/routes.js');
+const routesSource = fs.readFileSync(routesPath, 'utf8');
 
 const EXPECTED_MOBILE_FOOTER = [
     { id: 'home', labelKey: 'inicio', icon: 'home', url: 'trips' },
     { id: 'my-trips', labelKey: 'misViajes', icon: 'my-trips', url: 'my-trips' },
     { id: 'new-trip', labelKey: 'crearViaje', icon: 'create-trip', url: 'new-trip' },
-    { id: 'profile', labelKey: 'miCuenta', icon: 'account', url: 'my-account' },
-    { id: 'menu', labelKey: 'menu', icon: 'menu', url: 'mobile-menu' }
+    { id: 'messages', labelKey: 'mensajes', icon: 'message', url: 'conversations-list' },
+    { id: 'profile', labelKey: 'miCuenta', icon: 'account', url: 'my-account' }
 ];
 
 describe('actionbars store mobile footer navigation', () => {
@@ -28,13 +33,26 @@ describe('actionbars store mobile footer navigation', () => {
         });
     });
 
-    it('includes a menu tab that routes to the mobile menu screen', async () => {
+    it('does not include a menu tab in the footer', async () => {
         const { useActionbarsStore } = await import('./actionbars.js');
         const store = useActionbarsStore();
-        const menuButton = store.footer_buttons.find((b) => b.id === 'menu');
 
-        expect(menuButton).toBeDefined();
-        expect(menuButton.url).toBe('mobile-menu');
+        expect(store.footer_buttons.find((b) => b.id === 'menu')).toBeUndefined();
+    });
+
+    it('includes a messages tab that routes to the conversations list', async () => {
+        const { useActionbarsStore } = await import('./actionbars.js');
+        const store = useActionbarsStore();
+        const messagesButton = store.footer_buttons.find((b) => b.id === 'messages');
+
+        expect(messagesButton).toBeDefined();
+        expect(messagesButton.url).toBe('conversations-list');
+    });
+
+    it('marks the messages tab active on the conversations list route', () => {
+        expect(routesSource).toMatch(
+            /name:\s*'conversations-list'[\s\S]*?active_id:\s*'messages'/
+        );
     });
 
     it('opens the mobile menu and remembers the current route', async () => {
