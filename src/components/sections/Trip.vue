@@ -840,10 +840,10 @@ export default {
             );
         },
         showSeatRequestLimitWarning() {
-            return shouldShowDriverSeatRequestLimitWarning(
-                this.isTripOwner,
-                this.trip
-            );
+            return shouldShowDriverSeatRequestLimitWarning(this.isTripOwner, {
+                seat_request_limit_reached:
+                    this.trip?.seat_request_limit_reached,
+            });
         },
         getUserImage() {
             if (!this.trip || !this.trip.user) {
