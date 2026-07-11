@@ -29,4 +29,12 @@ describe('mobile navigation class separation', () => {
         expect(footerSource).not.toContain('actionbar-bottom');
         expect(footerSource).not.toContain('class="actionbar ');
     });
+
+    it('lays out five equal-width footer tabs without a menu-specific width', () => {
+        expect(baseCss).toMatch(
+            /\.mobile-footer-bar__item\s*\{[^}]*width:\s*20%/
+        );
+        expect(baseCss).not.toMatch(/\.mobile-footer-bar__item--menu/);
+        expect(baseCss).not.toMatch(/\.mobile-footer-bar__item--home/);
+    });
 });
