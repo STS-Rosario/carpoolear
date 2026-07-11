@@ -1,44 +1,81 @@
 <template>
     <aside class="my-account-nav" aria-label="my-account">
-        <div class="my-account-nav__profile" v-if="user">
-            <router-link
-                class="my-account-nav__profile-link"
-                :to="{ name: 'profile', params: { id: 'me' } }"
-            >
-                <div
-                    class="circle-box my-account-nav__avatar"
-                    v-imgSrc:profile="user.image"
-                ></div>
-            </router-link>
-            <div class="my-account-nav__profile-info">
-                <router-link
-                    class="my-account-nav__name"
-                    :to="{ name: 'profile', params: { id: 'me' } }"
-                >
-                    {{ user.name }}
-                </router-link>
-                <router-link
-                    class="my-account-nav__public-profile"
-                    :to="{ name: 'profile', params: { id: 'me' } }"
-                >
-                    {{ $t('verPerfilPublico') }}
-                </router-link>
-            </div>
-        </div>
+        <h1 class="my-account-nav__title">{{ $t('miCuenta') }}</h1>
 
-        <nav class="my-account-nav__list">
-            <router-link
-                v-for="item in menuItems"
-                :key="item.id"
-                class="my-account-nav__item"
-                :class="{ 'my-account-nav__item--active': isItemActive(item) }"
-                :to="item.route"
+        <section
+            class="my-account-nav__section"
+            v-for="section in desktopSections"
+            :key="section.id"
+        >
+            <button
+                type="button"
+                class="my-account-nav__section-toggle"
+                :aria-expanded="isSectionExpanded(section.id)"
+                @click="toggleSection(section.id)"
             >
-                <i :class="['fa', item.icon]" aria-hidden="true"></i>
-                <span class="my-account-nav__item-label">{{
-                    $t(item.labelKey)
-                }}</span>
-            </router-link>
+                <span>{{ $t(section.labelKey) }}</span>
+                <i
+                    :class="[
+                        'fa',
+                        isSectionExpanded(section.id)
+                            ? 'fa-chevron-down'
+                            : 'fa-chevron-right'
+                    ]"
+                    aria-hidden="true"
+                ></i>
+            </button>
+            <div
+                class="my-account-nav__section-items"
+                v-show="isSectionExpanded(section.id)"
+            >
+                <template v-for="item in section.items" :key="item.id">
+                    <div
+                        v-if="item.localeSwitcher"
+                        class="my-account-nav__item my-account-nav__locale"
+                    >
+                        <i :class="['fa', item.icon]" aria-hidden="true"></i>
+                        <span class="my-account-nav__item-label">{{
+                            $t(item.labelKey)
+                        }}</span>
+                        <span class="my-account-nav__item-value">{{
+                            item.value
+                        }}</span>
+                        <span class="my-account-nav__locale-switch">
+                            <a
+                                href="#"
+                                :class="{ active: $i18n.locale === 'arg' }"
+                                @click.prevent="setLocale('arg')"
+                                >Español</a
+                            >
+                            <span class="my-account-nav__locale-sep">·</span>
+                            <a
+                                href="#"
+                                :class="{ active: $i18n.locale === 'en' }"
+                                @click.prevent="setLocale('en')"
+                                >English</a
+                            >
+                        </span>
+                    </div>
+                    <component
+                        v-else
+                        :is="itemTag(item)"
+                        class="my-account-nav__item"
+                        :class="{
+                            'my-account-nav__item--active': isItemActive(item),
+                            'my-account-nav__item--placeholder': item.placeholder
+                        }"
+                        v-bind="itemProps(item)"
+                    >
+                        <i :class="['fa', item.icon]" aria-hidden="true"></i>
+                        <span class="my-account-nav__item-label">{{
+                            $t(item.labelKey)
+                        }}</span>
+                    </component>
+                </template>
+            </div>
+        </section>
+
+        <div class="my-account-nav__actions">
             <button
                 type="button"
                 class="my-account-nav__item my-account-nav__item--logout"
@@ -50,7 +87,15 @@
                     $t('cerrarSesion')
                 }}</span>
             </button>
-        </nav>
+            <router-link
+                class="my-account-nav__delete"
+                :to="deleteAccountRoute"
+                v-if="!isFacebokApp"
+            >
+                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                {{ $t('eliminarCuenta') }}
+            </router-link>
+        </div>
     </aside>
 </template>
 
@@ -59,30 +104,89 @@ import { mapState } from 'pinia';
 import { useAuthStore } from '../../stores/auth';
 import { useDeviceStore } from '../../stores/device';
 import {
-    getMyAccountMenuItems,
-    isMyAccountMenuItemActive
-} from '../../utils/myAccountMenuItems';
+    DESKTOP_DELETE_ACCOUNT_ROUTE,
+    getMyAccountDesktopExpandedSection,
+    getMyAccountDesktopSections,
+    isMyAccountDesktopItemActive
+} from '../../utils/myAccountDesktopSections';
+import { UserApi } from '../../services/api';
+import {
+    persistLocaleChoice,
+    syncLocaleToBackend
+} from '../../utils/userLocale.js';
+
+const userApi = new UserApi();
 
 export default {
     name: 'myAccountNav',
+    data() {
+        return {
+            manualExpandedSection: null
+        };
+    },
     computed: {
         ...mapState(useAuthStore, {
-            user: 'user',
-            config: 'appConfig'
+            config: 'appConfig',
+            logged: 'checkLogin'
         }),
         ...mapState(useDeviceStore, {
             isFacebokApp: 'isFacebokApp'
         }),
-        menuItems() {
-            return getMyAccountMenuItems(this.config);
+        desktopSections() {
+            return getMyAccountDesktopSections(
+                this.config,
+                this.$i18n.locale
+            );
+        },
+        routeExpandedSection() {
+            return getMyAccountDesktopExpandedSection(this.$route.name);
+        },
+        deleteAccountRoute() {
+            return DESKTOP_DELETE_ACCOUNT_ROUTE;
+        }
+    },
+    watch: {
+        '$route.name'() {
+            this.manualExpandedSection = null;
         }
     },
     methods: {
+        isSectionExpanded(sectionId) {
+            const expanded =
+                this.manualExpandedSection || this.routeExpandedSection;
+            return expanded === sectionId;
+        },
+        toggleSection(sectionId) {
+            this.manualExpandedSection = sectionId;
+        },
         isItemActive(item) {
-            return isMyAccountMenuItemActive(item, this.$route.name);
+            return isMyAccountDesktopItemActive(item, this.$route.name);
         },
         logout() {
             useAuthStore().logout();
+        },
+        setLocale(locale) {
+            this.$root.$i18n.locale = locale;
+            persistLocaleChoice(locale);
+            syncLocaleToBackend(userApi, locale, this.logged).catch(() => {});
+        },
+        itemTag(item) {
+            if (item.href) {
+                return 'a';
+            }
+            if (item.route) {
+                return 'router-link';
+            }
+            return 'span';
+        },
+        itemProps(item) {
+            if (item.href) {
+                return { href: item.href, target: '_blank', rel: 'noopener' };
+            }
+            if (item.route) {
+                return { to: item.route };
+            }
+            return { 'aria-disabled': 'true' };
         }
     }
 };
@@ -91,64 +195,51 @@ export default {
 <style scoped>
 .my-account-nav {
     color: #333;
+    background: #fff;
+    border-radius: 12px;
+    padding: 1.25rem 1rem 1rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
 }
-.my-account-nav__profile {
+.my-account-nav__title {
+    margin: 0 0 1rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: #333;
+}
+.my-account-nav__section {
+    border-top: 1px solid #ececec;
+}
+.my-account-nav__section-toggle {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    gap: 0.85rem;
-    margin-bottom: 1.5rem;
+    justify-content: space-between;
     width: 100%;
+    padding: 0.85rem 0.25rem;
+    border: 0;
+    background: transparent;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #888;
+    cursor: pointer;
     text-align: left;
 }
-.my-account-nav__profile-link {
-    flex-shrink: 0;
-    text-decoration: none;
+.my-account-nav__section-toggle > .fa {
+    font-size: 0.7rem;
+    color: #aaa;
 }
-.my-account-nav__avatar {
-    width: 56px;
-    height: 56px;
-    flex-shrink: 0;
-    border-radius: 50%;
-    margin: 0;
-}
-.my-account-nav__profile-info {
-    min-width: 0;
-}
-.my-account-nav__name {
-    display: block;
-    font-size: 1rem;
-    font-weight: 700;
-    line-height: 1.3;
-    color: #333;
-    text-decoration: none;
-}
-.my-account-nav__name:hover,
-.my-account-nav__name:focus {
-    color: #111;
-    text-decoration: none;
-}
-.my-account-nav__public-profile {
-    display: inline-block;
-    margin-top: 0.15rem;
-    font-size: 0.95rem;
-    color: #666;
-    text-decoration: none;
-}
-.my-account-nav__public-profile:hover,
-.my-account-nav__public-profile:focus {
-    color: #333;
-    text-decoration: underline;
-}
-.my-account-nav__list {
-    border-top: 1px solid #e8e8e8;
+.my-account-nav__section-items {
+    padding-bottom: 0.35rem;
 }
 .my-account-nav__item {
     display: flex;
     align-items: center;
-    gap: 0.85rem;
-    padding: 0.95rem 0;
-    border-bottom: 1px solid #e8e8e8;
+    gap: 0.75rem;
+    padding: 0.65rem 0.75rem;
+    margin: 0.1rem 0;
+    border-radius: 8px;
     color: #333;
     text-decoration: none;
 }
@@ -156,22 +247,58 @@ export default {
 .my-account-nav__item:focus {
     color: #111;
     text-decoration: none;
+    background: #f7f7f7;
 }
 .my-account-nav__item--active {
-    font-weight: 700;
+    background: #f0f0f0;
+    font-weight: 600;
     color: #111;
 }
+.my-account-nav__item--placeholder {
+    color: #999;
+    pointer-events: none;
+}
 .my-account-nav__item > .fa:first-child {
-    width: 22px;
+    width: 18px;
     text-align: center;
     color: #666;
-    font-size: 1.15rem;
+    font-size: 1rem;
     flex-shrink: 0;
 }
 .my-account-nav__item-label {
     flex: 1;
-    font-size: 1rem;
+    font-size: 0.95rem;
     line-height: 1.3;
+}
+.my-account-nav__item-value {
+    color: #999;
+    font-size: 0.85rem;
+    margin-right: 0.25rem;
+}
+.my-account-nav__locale {
+    flex-wrap: wrap;
+}
+.my-account-nav__locale-switch {
+    width: 100%;
+    padding-left: calc(18px + 0.75rem);
+    font-size: 0.85rem;
+}
+.my-account-nav__locale-switch a {
+    color: #666;
+    text-decoration: none;
+}
+.my-account-nav__locale-switch a.active {
+    color: #333;
+    font-weight: 700;
+}
+.my-account-nav__locale-sep {
+    margin: 0 0.35rem;
+    color: #999;
+}
+.my-account-nav__actions {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid #ececec;
 }
 .my-account-nav__item--logout {
     width: 100%;
@@ -180,13 +307,28 @@ export default {
     cursor: pointer;
     font: inherit;
     text-align: left;
-    color: #e53935;
+    color: #666;
 }
 .my-account-nav__item--logout:hover,
 .my-account-nav__item--logout:focus {
-    color: #c62828;
+    color: #333;
+    background: #f7f7f7;
 }
 .my-account-nav__item--logout > .fa:first-child {
+    color: #666;
+}
+.my-account-nav__delete {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.35rem;
+    padding: 0.65rem 0.75rem;
     color: #e53935;
+    font-size: 0.9rem;
+    text-decoration: none;
+}
+.my-account-nav__delete:hover,
+.my-account-nav__delete:focus {
+    text-decoration: underline;
 }
 </style>
