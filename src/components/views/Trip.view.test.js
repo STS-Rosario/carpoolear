@@ -66,3 +66,14 @@ describe('Trip.vue driver seat requests warning', () => {
         expect(viewSource).toContain('.trip-seat-requests-warning a');
     });
 });
+
+describe('Trip.vue driver seat request limit warning', () => {
+    it('prefers limit warning with my-trips link when limit reached', () => {
+        expect(viewSource).toContain('shouldShowDriverSeatRequestLimitWarning');
+        expect(viewSource).toContain("$t('tripSeatRequestLimitDriverWarning')");
+        expect(viewSource).toMatch(
+            /tripSeatRequestLimitDriverWarning[\s\S]*?name: 'my-trips'|name: 'my-trips'[\s\S]*?tripSeatRequestLimitDriverWarning/s
+        );
+        expect(viewSource).toContain('seat_request_limit_reached');
+    });
+});
