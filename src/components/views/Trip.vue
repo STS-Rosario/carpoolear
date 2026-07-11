@@ -20,6 +20,19 @@
                 <div
                     class="alert alert-warning trip-seat-requests-warning"
                     role="alert"
+                    v-if="showSeatRequestLimitWarning"
+                >
+                    <i
+                        class="fa fa-exclamation-triangle trip-seat-requests-warning__icon"
+                        aria-hidden="true"
+                    ></i>
+                    <router-link :to="{ name: 'my-trips' }">
+                        {{ $t('tripSeatRequestLimitDriverWarning') }}
+                    </router-link>
+                </div>
+                <div
+                    class="alert alert-warning trip-seat-requests-warning"
+                    role="alert"
                     v-if="showSeatRequestsWarning"
                 >
                     <i
@@ -383,7 +396,10 @@ import svgItem from '../SvgItem';
 import modal from '../Modal';
 import dayjs from '../../dayjs';
 import dialogs from '../../services/dialogs.js';
-import { shouldShowTripSeatRequestsWarning } from '../../utils/tripSeatRequestsWarning.js';
+import {
+    shouldShowTripSeatRequestsWarning,
+    shouldShowDriverSeatRequestLimitWarning,
+} from '../../utils/tripSeatRequestsWarning.js';
 import {
     resolveOpenConversationModalState,
     resolvePricingModalConfirm,
@@ -1090,10 +1106,14 @@ export default {
         owner() {
             return this.trip && this.user && this.user.id === this.trip.user.id;
         },
+        showSeatRequestLimitWarning() {
+            return shouldShowDriverSeatRequestLimitWarning(this.owner, this.trip);
+        },
         showSeatRequestsWarning() {
             return shouldShowTripSeatRequestsWarning(
                 this.owner,
-                this.trip?.passengerPending_count
+                this.trip?.passengerPending_count,
+                this.trip?.seat_request_limit_reached
             );
         },
         isPassengersView() {

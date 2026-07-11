@@ -181,6 +181,14 @@
                         {{ $t('faltaPagarSellado') }}
                     </div>
                     <div
+                        class="alert alert-warning trip-seat-request-limit-warning"
+                        role="alert"
+                        v-if="showSeatRequestLimitWarning"
+                        @click.stop
+                    >
+                        {{ $t('tripSeatRequestLimitDriverWarning') }}
+                    </div>
+                    <div
                         class="trip-card-section trip-card-section--route"
                     >
                     <div class="trip_location">
@@ -618,6 +626,7 @@ import SvgItem from '../SvgItem';
 import { googleInfoClean } from '../../filters';
 import { sumUserRatings } from '../../utils/tripRating';
 import { shouldShowSelladoPending } from '../../utils/tripSelladoDisplay';
+import { shouldShowDriverSeatRequestLimitWarning } from '../../utils/tripSeatRequestsWarning.js';
 
 export default {
     name: 'trip',
@@ -821,6 +830,20 @@ export default {
         },
         showSelladoPending() {
             return shouldShowSelladoPending(this.trip, this.user);
+        },
+        isTripOwner() {
+            return Boolean(
+                this.user &&
+                    this.trip &&
+                    this.trip.user &&
+                    this.user.id === this.trip.user.id
+            );
+        },
+        showSeatRequestLimitWarning() {
+            return shouldShowDriverSeatRequestLimitWarning(
+                this.isTripOwner,
+                this.trip
+            );
         },
         getUserImage() {
             if (!this.trip || !this.trip.user) {
