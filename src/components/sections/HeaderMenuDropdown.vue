@@ -147,13 +147,15 @@ export default {
 .header-menu-dropdown :deep(.dropdown-menu) {
     right: 0;
     left: auto;
-    min-width: 260px;
-    padding: 0.5rem 0;
+    min-width: 280px;
+    padding: 0;
     font-size: 1rem;
     border-radius: 8px;
+    overflow: visible;
 }
 .header-menu-dropdown__user {
     padding: 0;
+    overflow: visible;
 }
 .header-menu-dropdown__user-row {
     display: flex;
@@ -166,10 +168,14 @@ export default {
     flex-shrink: 0;
     overflow: visible;
     line-height: 0;
-}
-.header-menu-dropdown__avatar {
     width: 48px;
     height: 48px;
+}
+.header-menu-dropdown__avatar {
+    width: 48px !important;
+    height: 48px !important;
+    max-width: 48px;
+    max-height: 48px;
     margin: 0;
     display: block;
 }
