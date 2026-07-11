@@ -49,8 +49,8 @@ describe('getMyAccountDesktopSections', () => {
     it('shows idioma with the current locale label in configuracion', () => {
         const configuracion = getMyAccountDesktopSections({}, 'arg')[1];
         const language = configuracion.items.find((i) => i.id === 'language');
-        expect(language.value).toBe('Español');
         expect(language.localeSwitcher).toBe(true);
+        expect(language.value).toBeUndefined();
     });
 });
 

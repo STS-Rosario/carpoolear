@@ -25,9 +25,28 @@ describe('MyAccountNav desktop sidebar', () => {
     it('renders locale switcher, logout and delete account actions', () => {
         expect(navSource).toContain('localeSwitcher');
         expect(navSource).toContain("setLocale('arg')");
+        expect(navSource).toContain('my-account-nav__locale-switch');
+        expect(navSource).not.toContain('my-account-nav__item-value');
         expect(navSource).toContain('DESKTOP_DELETE_ACCOUNT_ROUTE');
         expect(navSource).toContain('my-account-nav__delete');
-        expect(navSource).toContain('my-account-nav__item--logout');
+        expect(navSource).toContain('my-account-nav__logout');
+        expect(navSource).not.toContain('my-account-nav__item--logout');
+    });
+
+    it('tightens collapsed section spacing before the footer actions', () => {
+        expect(navSource).toContain('my-account-nav__section--collapsed');
+        expect(navSource).toMatch(
+            /\.my-account-nav__section--collapsed\s+\.my-account-nav__section-toggle\s*\{[^}]*padding-bottom:\s*0\.45rem/
+        );
+    });
+
+    it('styles logout as a pill button like mobile Mi cuenta', () => {
+        expect(navSource).toMatch(
+            /\.my-account-nav__logout\s*\{[^}]*border:\s*1\.5px\s+solid\s+#00a3e0/
+        );
+        expect(navSource).toMatch(
+            /\.my-account-nav__logout\s*\{[^}]*border-radius:\s*999px/
+        );
     });
 
     it('removes the old flat profile header from the sidebar', () => {
