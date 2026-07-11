@@ -145,11 +145,12 @@
             </div>
         </div>
         <div class="header_content hidden-xs">
-            <router-link
-                :to="{ name: 'trips', query: { clearSearch: 'true' } }"
-                v-on:click.native="tripsClick"
-            >
-                <div class="header_panel-left" v-if="logoHeaderVisibility">
+            <div class="header_panel-left" v-if="logoHeaderVisibility">
+                <router-link
+                    :to="{ name: 'trips', query: { clearSearch: 'true' } }"
+                    v-on:click.native="tripsClick"
+                    class="header_logo-link"
+                >
                     <img
                         :src="background_desktop_mini"
                         v-if="
@@ -166,31 +167,39 @@
                         "
                     />
                     <img :src="app_logo" />
-                </div>
-            </router-link>
+                </router-link>
+                <a
+                    v-if="!shouldHideDonationOnIOSCapacitor(user)"
+                    href="/donar"
+                    class="btn btn-primary btn-donar-header btn-lg"
+                    >{{ $t('donar') }}</a
+                >
+            </div>
+            <nav class="header_panel-center" v-if="logged" aria-label="main">
+                <router-link
+                    class="header_nav-link"
+                    :to="{ name: 'trips', query: { clearSearch: 'true' } }"
+                    v-on:click.native="tripsClick"
+                >
+                    {{ $t('inicio') }}
+                </router-link>
+                <router-link
+                    class="header_nav-link"
+                    :to="{ name: 'my-trips' }"
+                >
+                    {{ $t('misViajes') }}
+                </router-link>
+                <router-link
+                    class="header_nav-link header_nav-messages"
+                    :to="{ name: 'conversations-list' }"
+                >
+                    {{ $t('mensajes') }}
+                    <span class="badge" v-if="messagesCount > 0">
+                        {{ messagesCount }}
+                    </span>
+                </router-link>
+            </nav>
             <div class="header_panel-right">
-                <div class="header-social-links">
-                    <a
-                        href="https://www.instagram.com/carpoolear/?hl=en"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="header-social-link"
-                        aria-label="Instagram Carpoolear"
-                    >
-                        <img :src="instagram_logo" alt="" />
-                    </a>
-                    <a
-                        href="https://www.facebook.com/Carpoolear"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="header-social-link"
-                        aria-label="Facebook Carpoolear"
-                    >
-                        <img :src="facebook_logo" alt="" />
-                    </a>
-                </div>
-                <!--<router-link class="btn btn-link" v-if="!logged" :to="{name: 'trips'}">Información</router-link>-->
-                <!--<router-link class="btn btn-link" v-if="!logged" :to="{name: 'register'}">Registrarme</router-link>-->
                 <dropdown type="link" v-if="!logged">
                     <template #button>
                         {{ currentLocaleShortLabel }}
@@ -208,9 +217,17 @@
                     v-if="!logged"
                     :to="{ name: 'login' }"
                 >
-                    {{ $t('inicio') }}
+                    {{ $t('ingresar') }}
                 </router-link>
 
+                <router-link
+                    v-if="logged"
+                    :to="{ name: 'new-trip' }"
+                    id="btn-create-trip"
+                    class="btn btn-primary btn-lg"
+                >
+                    {{ $t('crearViaje') }}
+                </router-link>
                 <span
                     class="header_notifications"
                     @click="toNotifications"
@@ -222,22 +239,7 @@
                         {{ notificationsCount }}
                     </span>
                 </span>
-
-                <a
-                    v-if="!shouldHideDonationOnIOSCapacitor(user)"
-                    href="/donar"
-                    class="btn btn-primary btn-donar-header btn-lg"
-                    >{{ $t('donar') }}</a
-                >
-                <router-link
-                    v-if="logged"
-                    :to="{ name: 'new-trip' }"
-                    id="btn-create-trip"
-                    class="btn btn-primary btn-lg"
-                >
-                    {{ $t('crearViaje') }}
-                </router-link>
-                <header-menu-dropdown />
+                <header-menu-dropdown v-if="logged" />
             </div>
             <div class="cf"></div>
         </div>
@@ -289,9 +291,7 @@ export default {
                 process.env.ROUTE_BASE +
                 'img/' +
                 process.env.TARGET_APP +
-                '_logo.png',
-            facebook_logo: process.env.ROUTE_BASE + 'img/fb_logo.png',
-            instagram_logo: process.env.ROUTE_BASE + 'img/instagram-logo.png'
+                '_logo.png'
         };
     },
 
@@ -316,7 +316,8 @@ export default {
             config: 'appConfig'
         }),
         ...mapState(useNotificationsStore, {
-            notificationsCount: 'count'
+            notificationsCount: 'count',
+            messagesCount: 'messagesCount'
         }),
         ...mapState(useActionbarsStore, {
             title: 'title',
@@ -424,23 +425,55 @@ export default {
 </script>
 
 <style scoped>
-.header-social-links {
+.header_content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+.header_panel-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+}
+.header_logo-link {
     display: inline-flex;
     align-items: center;
-    gap: 0.45rem;
-    margin-right: 3rem;
-    vertical-align: middle;
 }
-.header-social-link img {
-    width: 22px;
-    height: 22px;
-    display: block;
-    object-fit: contain;
-    vertical-align: middle;
-    margin-right: 1rem;
+.header_panel-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    flex: 1;
 }
-.header-social-link:hover img {
-    opacity: 0.85;
+.header_nav-link {
+    position: relative;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    white-space: nowrap;
+}
+.header_nav-link:hover,
+.header_nav-link:focus {
+    color: #fff;
+    text-decoration: none;
+    opacity: 0.9;
+}
+.header_nav-messages .badge {
+    position: absolute;
+    top: -0.55rem;
+    right: -0.85rem;
+}
+.header_panel-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    flex-shrink: 0;
+    min-width: auto;
+    text-align: right;
 }
 .header_notifications {
     display: inline-flex;
@@ -490,14 +523,5 @@ export default {
     margin-bottom: 2px;
     width: 26px;
     margin-left: 0.3em;
-}
-.header_panel-right {
-    min-width: 50%;
-    text-align: right;
-}
-@media (max-width: 1050px) {
-    .header_panel-right {
-        min-width: 70%;
-    }
 }
 </style>
