@@ -77,17 +77,6 @@
                             v-if="notificationsCount > 0"
                         ></span>
                     </span>
-                    <span
-                        class="mobile-header-bar__action"
-                        @click="toConversations"
-                        aria-label="Mensajes"
-                    >
-                        <svgItem size="22" icon="message"></svgItem>
-                        <span
-                            class="mobile-header-bar__badge"
-                            v-if="messagesCount > 0"
-                        ></span>
-                    </span>
                 </div>
                 <div class="dropdown-right" v-if="showMenu && !isMobile">
                     <dropdown type="icon">
@@ -231,18 +220,6 @@
                     <svgItem size="22" icon="bell"></svgItem>
                     <span class="badge" v-if="notificationsCount > 0">
                         {{ notificationsCount }}
-                    </span>
-                </span>
-
-                <span
-                    class="header_messages"
-                    @click="toConversations"
-                    v-if="logged"
-                    :aria-label="$t('mensajes')"
-                >
-                    <svgItem size="22" icon="message"></svgItem>
-                    <span class="badge" v-if="messagesCount > 0">
-                        {{ messagesCount }}
                     </span>
                 </span>
 
@@ -481,22 +458,6 @@ export default {
     line-height: 0;
 }
 .header_notifications :deep(svg) {
-    fill: #fff;
-    display: block;
-}
-.header_messages {
-    display: inline-flex;
-    align-items: center;
-    position: relative;
-    margin-left: 1rem;
-    margin-right: 1.5rem;
-    padding-left: 6px;
-    padding-right: 6px;
-    cursor: pointer;
-    vertical-align: middle;
-    line-height: 0;
-}
-.header_messages :deep(svg) {
     fill: #fff;
     display: block;
 }
