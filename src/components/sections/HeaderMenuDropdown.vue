@@ -39,7 +39,7 @@
             <router-link
                 tag="a"
                 class="header-menu-dropdown__item"
-                :to="{ name: 'my-account' }"
+                :to="desktopDefaultAccountRoute"
             >
                 <i class="fa fa-user" aria-hidden="true"></i>
                 <span class="header-menu-dropdown__item-label">{{
@@ -91,6 +91,7 @@ import { mapState } from 'pinia';
 import { useAuthStore } from '../../stores/auth';
 import { useDeviceStore } from '../../stores/device';
 import dropdown from '../Dropdown';
+import { DESKTOP_DEFAULT_ACCOUNT_ROUTE } from '../../utils/myAccountDesktopSections';
 
 export default {
     name: 'headerMenuDropdown',
@@ -100,7 +101,10 @@ export default {
         }),
         ...mapState(useDeviceStore, {
             isFacebokApp: 'isFacebokApp'
-        })
+        }),
+        desktopDefaultAccountRoute() {
+            return DESKTOP_DEFAULT_ACCOUNT_ROUTE;
+        }
     },
     methods: {
         logout() {

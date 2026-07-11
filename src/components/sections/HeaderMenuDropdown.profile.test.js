@@ -57,7 +57,10 @@ describe('HeaderMenuDropdown profile menu', () => {
         expect(menuDropdownSource).toContain("$t('configuracion')");
         expect(menuDropdownSource).toContain("$t('ayuda')");
         expect(menuDropdownSource).toContain("$t('cerrarSesion')");
-        expect(menuDropdownSource).toContain("name: 'my-account'");
+        expect(menuDropdownSource).toContain("name: 'profile_update'");
+        expect(menuDropdownSource).not.toMatch(
+            /\$t\('miCuenta'\)[\s\S]*name:\s*'my-account'/
+        );
         expect(menuDropdownSource).toContain("name: 'profile_update'");
         expect(menuDropdownSource).toContain("name: 'tickets'");
         expect(menuDropdownSource).toContain('fa-user');

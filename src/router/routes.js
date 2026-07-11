@@ -1,6 +1,7 @@
 /* jshint esversion: 6 */
 import { auth, guest, profileComplete, authAdmin, requireIdentityValidation, requireIdentityPendingRatingsAndProfile } from './middleware.js';
 import { useAuthStore } from '../stores/auth';
+import { redirectMyAccountOnDesktop } from '../utils/myAccountRouteGuards.js';
 
 function getAuthStore () {
     return useAuthStore();
@@ -184,7 +185,9 @@ export default [
         path: '/mi-cuenta',
         name: 'my-account',
         component: MyAccount,
-        beforeEnter: auth,
+        beforeEnter: (to, from, next) => {
+            auth(to, from, () => redirectMyAccountOnDesktop(to, from, next));
+        },
         meta: {
             actionbar: {
                 footer: {
