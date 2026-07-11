@@ -647,7 +647,7 @@ export default [
             actionbar: {
                 footer: {
                     show: true,
-                    active_id: 'conversations'
+                    active_id: 'messages'
                 },
                 header: {
                     titleKey: 'mensajes'
@@ -667,7 +667,7 @@ export default [
                     hide: true,
                     actionbar: {
                         footer: {
-                            active_id: 'conversations'
+                            active_id: 'messages'
                         },
                         header: {
                             titleKey: 'conversacion',

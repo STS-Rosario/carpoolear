@@ -70,17 +70,17 @@ export const useActionbarsStore = defineStore('actionbars', {
                 active: false
             },
             {
+                id: 'messages',
+                labelKey: 'mensajes',
+                icon: 'message',
+                url: 'conversations-list',
+                active: false
+            },
+            {
                 id: 'profile',
                 labelKey: 'miCuenta',
                 icon: 'account',
                 url: 'my-account',
-                active: false
-            },
-            {
-                id: 'menu',
-                labelKey: 'menu',
-                icon: 'menu',
-                url: 'mobile-menu',
                 active: false
             }
         ]
