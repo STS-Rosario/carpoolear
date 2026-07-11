@@ -352,10 +352,6 @@ export default {
         isTripsPage() {
             return this.$route.name === 'trips';
         },
-        currentLocaleLabel() {
-            const labels = { arg: 'Español', en: 'English' };
-            return labels[this.$i18n.locale] || 'Español';
-        },
         currentLocaleShortLabel() {
             const short = { arg: 'ES', en: 'EN' };
             return short[this.$i18n.locale] || 'ES';
