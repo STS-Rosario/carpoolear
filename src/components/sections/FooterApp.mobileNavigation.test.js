@@ -18,6 +18,12 @@ describe('FooterApp mobile navigation', () => {
         expect(footerSource).toContain("item.id === 'my-trips'");
     });
 
+    it('shows a badge on messages when there are unread conversations', () => {
+        expect(footerSource).toContain('messagesBadgeCount');
+        expect(footerSource).toContain('messagesCount');
+        expect(footerSource).toContain("item.id === 'messages'");
+    });
+
     it('uses stroke icons that inherit active tab color', () => {
         expect(footerSource).toContain(":deep(.svgItem svg[fill='none'])");
         expect(footerSource).toContain('stroke: currentColor');
