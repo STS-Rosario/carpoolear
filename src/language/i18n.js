@@ -1113,6 +1113,10 @@ const messages = {
         viajeCarpooleado: 'Viaje Carpooleado',
         tripSeatRequestsDriverWarning:
             'Tenés pedidos de asiento de pasajeros para este viaje, revisalos en Tus Viajes',
+        tripSeatRequestLimitPassengerMessage:
+            'Este viaje ya llegó a su límite de {limit} solicitudes, el conductor las está evaluando, volvé más tarde',
+        tripSeatRequestLimitDriverWarning:
+            'Este viaje llegó al límite de solicitudes de asiento, contestá las solicitudes para poder recibir más de otros usuarios interesados',
         atencionViajeSolicitado:
             'Atención! Este viaje está siendo muy solicitado: {count} personas lo están solicitando',
         bajarPasajeroViaje: 'Bajar pasajero del viaje',
@@ -2477,6 +2481,10 @@ const messages = {
         viajeCarpooleado: 'Viaje Carpooleado',
         tripSeatRequestsDriverWarning:
             'Tenés pedidos de asiento de pasajeros para este viaje, revisalos en Tus Viajes',
+        tripSeatRequestLimitPassengerMessage:
+            'Este viaje ya llegó a su límite de {limit} solicitudes, el conductor las está evaluando, volvé más tarde',
+        tripSeatRequestLimitDriverWarning:
+            'Este viaje llegó al límite de solicitudes de asiento, contestá las solicitudes para poder recibir más de otros usuarios interesados',
         atencionViajeSolicitado:
             'Atención! Este viaje está siendo muy solicitado: {count} personas lo están solicitando',
         bajarPasajeroViaje: 'Bajar pasajero del viaje',
@@ -4021,6 +4029,10 @@ const messages = {
         viajeCarpooleado: 'Carpooled Trip',
         tripSeatRequestsDriverWarning:
             'You have passenger seat requests for this trip, review them in My Trips',
+        tripSeatRequestLimitPassengerMessage:
+            'This trip has reached its limit of {limit} requests; the driver is reviewing them, try again later',
+        tripSeatRequestLimitDriverWarning:
+            'This trip has reached the seat request limit; answer the requests to receive more from other interested users',
         atencionViajeSolicitado:
             'Attention! This trip is in high demand: {count} people are requesting it',
         bajarPasajeroViaje: 'Remove passenger from trip',
