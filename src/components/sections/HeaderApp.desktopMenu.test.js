@@ -15,14 +15,12 @@ describe('HeaderApp desktop menu', () => {
         );
     });
 
-    it('shows messages icon with badge after notifications on desktop', () => {
-        expect(headerSource).toContain('header_messages');
-        expect(headerSource).toMatch(
-            /header_notifications[\s\S]*icon="bell"[\s\S]*header_messages[\s\S]*toConversations/
-        );
-        expect(headerSource).toMatch(
-            /header_messages[\s\S]*messagesCount[\s\S]*badge/
-        );
+    it('removes the messages icon from the desktop header but keeps notifications', () => {
+        expect(headerSource).not.toContain('header_messages');
+        expect(headerSource).not.toContain('icon="message"');
+        expect(headerSource).not.toMatch(/@click="toConversations"/);
+        expect(headerSource).toContain('header_notifications');
+        expect(headerSource).toContain('icon="bell"');
     });
 
     it('shows menu icon dropdown after crear viaje on desktop', () => {
