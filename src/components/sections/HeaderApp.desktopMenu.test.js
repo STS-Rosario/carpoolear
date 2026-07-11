@@ -31,7 +31,7 @@ describe('HeaderApp desktop menu', () => {
         );
         expect(menuDropdownSource).toContain('icon="menu"');
         expect(menuDropdownSource).toContain('size="26"');
-        expect(menuDropdownSource).toContain("header-menu-dropdown__label");
+        expect(menuDropdownSource).toContain('header-menu-dropdown__label');
         expect(menuDropdownSource).toContain("$t('menu')");
     });
 
