@@ -37,7 +37,9 @@ describe('MyAccount view', () => {
     });
 
     it('keeps the logout button and a separate delete account action', () => {
+        expect(viewSource).toContain('account-logout-btn');
         expect(viewSource).toContain('my-account__logout');
+        expect(viewSource).toMatch(/my-account__logout[\s\S]*fa-sign-out/);
         expect(viewSource).toContain("$t('cerrarSesion')");
         expect(viewSource).toContain('my-account__delete');
         expect(viewSource).toContain('MOBILE_DELETE_ACCOUNT_ROUTE');

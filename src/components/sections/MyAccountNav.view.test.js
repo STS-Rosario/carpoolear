@@ -40,11 +40,12 @@ describe('MyAccountNav desktop sidebar', () => {
         );
     });
 
-    it('styles logout as a pill button like mobile Mi cuenta', () => {
+    it('styles logout as an outline button with a left sign-out icon', () => {
+        expect(navSource).toContain('account-logout-btn');
         expect(navSource).toMatch(
-            /\.my-account-nav__logout\s*\{[^}]*border:\s*1\.5px\s+solid\s+#00a3e0/
+            /my-account-nav__logout[\s\S]*fa-sign-out/
         );
-        expect(navSource).toMatch(
+        expect(navSource).not.toMatch(
             /\.my-account-nav__logout\s*\{[^}]*border-radius:\s*999px/
         );
     });

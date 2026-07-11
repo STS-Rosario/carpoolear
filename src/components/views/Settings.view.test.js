@@ -22,8 +22,10 @@ describe('Settings navigation', () => {
         expect(navSource).toContain('my-account-nav__section-toggle');
     });
 
-    it('renders logout as a pill button like mobile Mi cuenta', () => {
+    it('renders logout as an outline button with a left sign-out icon', () => {
+        expect(navSource).toContain('account-logout-btn');
         expect(navSource).toContain('my-account-nav__logout');
+        expect(navSource).toMatch(/my-account-nav__logout[\s\S]*fa-sign-out/);
         expect(navSource).not.toContain('my-account-nav__item--logout');
     });
 });
