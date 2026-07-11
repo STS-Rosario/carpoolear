@@ -24,6 +24,13 @@ describe('HeaderApp desktop menu', () => {
         expect(left).toContain("$t('donar')");
     });
 
+    it('shows Doná only on large desktop widths', () => {
+        const donate = headerSource.match(
+            /<a[\s\S]*?btn-donar-header[\s\S]*?<\/a/
+        )[0];
+        expect(donate).toContain('!isNotLargeDesktop');
+    });
+
     it('puts Inicio, Mis viajes and Mensajes with unread badge in the center', () => {
         const center = headerSource.match(
             /header_panel-center[\s\S]*?header_panel-right/
