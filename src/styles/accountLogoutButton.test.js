@@ -22,6 +22,12 @@ describe('account logout outline button', () => {
             /\.account-logout-btn\s*\{[^}]*border-radius:\s*12px/
         );
         expect(baseCss).toMatch(
+            /\.account-logout-btn\s*\{[^}]*color:\s*#1E5F9E/
+        );
+        expect(baseCss).toMatch(
+            /\.account-logout-btn\s*\{[^}]*border:\s*1\.5px\s+solid\s+#1E5F9E/
+        );
+        expect(baseCss).toMatch(
             /\.account-logout-btn:hover\s*\{[^}]*background:\s*#eef4fb/
         );
         expect(baseCss).toMatch(
