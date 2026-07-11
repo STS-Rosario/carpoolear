@@ -2154,7 +2154,7 @@ textarea {
     flex-direction: column;
     align-items: center;
     color: #666;
-    width: 23%;
+    width: 20%;
     cursor: pointer;
 }
 
@@ -2170,14 +2170,6 @@ textarea {
 
 .mobile-footer-bar__icon svg {
     display: block;
-}
-
-.mobile-footer-bar__item--home {
-    width: 16%;
-}
-
-.mobile-footer-bar__item--menu {
-    width: 15%;
 }
 
 .mobile-footer-bar__item i {
