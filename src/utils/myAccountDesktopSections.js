@@ -5,11 +5,6 @@ import {
 
 const FAQ_URL = 'https://carpoolear.com.ar/plataforma-preguntas-frecuentes';
 
-const LANGUAGE_LABELS = {
-    arg: 'Español',
-    en: 'English'
-};
-
 const ROUTE_SECTION = {
     profile_update: 'perfil',
     profile_cars: 'perfil',
@@ -39,7 +34,7 @@ const ROUTE_ACTIVE_ITEM_ID = {
     terms: 'legal'
 };
 
-function buildDesktopSections(config, locale) {
+function buildDesktopSections(config) {
     const profile = [
         {
             id: 'resumen',
@@ -108,8 +103,7 @@ function buildDesktopSections(config, locale) {
             id: 'language',
             labelKey: 'idioma',
             icon: 'fa-globe',
-            localeSwitcher: true,
-            value: LANGUAGE_LABELS[locale] || LANGUAGE_LABELS.arg
+            localeSwitcher: true
         }
     ];
 
@@ -155,8 +149,8 @@ function buildDesktopSections(config, locale) {
     ];
 }
 
-export function getMyAccountDesktopSections(config, locale = 'arg') {
-    return buildDesktopSections(config, locale);
+export function getMyAccountDesktopSections(config) {
+    return buildDesktopSections(config);
 }
 
 export function getMyAccountDesktopExpandedSection(routeName) {

@@ -4,6 +4,10 @@
 
         <section
             class="my-account-nav__section"
+            :class="{
+                'my-account-nav__section--collapsed':
+                    !isSectionExpanded(section.id)
+            }"
             v-for="section in desktopSections"
             :key="section.id"
         >
@@ -36,9 +40,6 @@
                         <i :class="['fa', item.icon]" aria-hidden="true"></i>
                         <span class="my-account-nav__item-label">{{
                             $t(item.labelKey)
-                        }}</span>
-                        <span class="my-account-nav__item-value">{{
-                            item.value
                         }}</span>
                         <span class="my-account-nav__locale-switch">
                             <a
@@ -78,14 +79,11 @@
         <div class="my-account-nav__actions">
             <button
                 type="button"
-                class="my-account-nav__item my-account-nav__item--logout"
+                class="my-account-nav__logout"
                 v-if="!isFacebokApp"
                 @click="logout"
             >
-                <i class="fa fa-sign-out" aria-hidden="true"></i>
-                <span class="my-account-nav__item-label">{{
-                    $t('cerrarSesion')
-                }}</span>
+                {{ $t('cerrarSesion') }}
             </button>
             <router-link
                 class="my-account-nav__delete"
@@ -133,10 +131,7 @@ export default {
             isFacebokApp: 'isFacebokApp'
         }),
         desktopSections() {
-            return getMyAccountDesktopSections(
-                this.config,
-                this.$i18n.locale
-            );
+            return getMyAccountDesktopSections(this.config);
         },
         routeExpandedSection() {
             return getMyAccountDesktopExpandedSection(this.$route.name);
@@ -230,8 +225,11 @@ export default {
     font-size: 0.7rem;
     color: #aaa;
 }
+.my-account-nav__section--collapsed .my-account-nav__section-toggle {
+    padding-bottom: 0.45rem;
+}
 .my-account-nav__section-items {
-    padding-bottom: 0.35rem;
+    padding-bottom: 0.2rem;
 }
 .my-account-nav__item {
     display: flex;
@@ -270,18 +268,13 @@ export default {
     font-size: 0.95rem;
     line-height: 1.3;
 }
-.my-account-nav__item-value {
-    color: #999;
-    font-size: 0.85rem;
-    margin-right: 0.25rem;
-}
 .my-account-nav__locale {
-    flex-wrap: wrap;
+    gap: 0.5rem;
 }
 .my-account-nav__locale-switch {
-    width: 100%;
-    padding-left: calc(18px + 0.75rem);
+    margin-left: auto;
     font-size: 0.85rem;
+    white-space: nowrap;
 }
 .my-account-nav__locale-switch a {
     color: #666;
@@ -296,26 +289,26 @@ export default {
     color: #999;
 }
 .my-account-nav__actions {
-    margin-top: 0.75rem;
+    margin-top: 0.5rem;
     padding-top: 0.75rem;
     border-top: 1px solid #ececec;
 }
-.my-account-nav__item--logout {
+.my-account-nav__logout {
+    display: block;
     width: 100%;
-    border: 0;
-    background: transparent;
+    border: 1.5px solid #00a3e0;
+    border-radius: 999px;
+    background: #fff;
+    color: #00a3e0;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.8rem 1rem;
     cursor: pointer;
-    font: inherit;
-    text-align: left;
-    color: #666;
 }
-.my-account-nav__item--logout:hover,
-.my-account-nav__item--logout:focus {
-    color: #333;
-    background: #f7f7f7;
-}
-.my-account-nav__item--logout > .fa:first-child {
-    color: #666;
+.my-account-nav__logout:hover,
+.my-account-nav__logout:focus {
+    background: #00a3e0;
+    color: #fff;
 }
 .my-account-nav__delete {
     display: flex;
