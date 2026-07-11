@@ -79,11 +79,12 @@
         <div class="my-account-nav__actions">
             <button
                 type="button"
-                class="my-account-nav__logout"
+                class="account-logout-btn my-account-nav__logout"
                 v-if="!isFacebokApp"
                 @click="logout"
             >
-                {{ $t('cerrarSesion') }}
+                <i class="fa fa-sign-out" aria-hidden="true"></i>
+                <span>{{ $t('cerrarSesion') }}</span>
             </button>
             <router-link
                 class="my-account-nav__delete"
@@ -294,21 +295,7 @@ export default {
     border-top: 1px solid #ececec;
 }
 .my-account-nav__logout {
-    display: block;
     width: 100%;
-    border: 1.5px solid #00a3e0;
-    border-radius: 999px;
-    background: #fff;
-    color: #00a3e0;
-    font-size: 1rem;
-    font-weight: 600;
-    padding: 0.8rem 1rem;
-    cursor: pointer;
-}
-.my-account-nav__logout:hover,
-.my-account-nav__logout:focus {
-    background: #00a3e0;
-    color: #fff;
 }
 .my-account-nav__delete {
     display: flex;

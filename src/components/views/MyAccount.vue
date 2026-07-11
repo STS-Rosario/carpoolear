@@ -108,11 +108,12 @@
 
         <button
             type="button"
-            class="my-account__logout"
+            class="account-logout-btn my-account__logout"
             v-if="!isFacebokApp"
             @click="logout"
         >
-            {{ $t('cerrarSesion') }}
+            <i class="fa fa-sign-out" aria-hidden="true"></i>
+            <span>{{ $t('cerrarSesion') }}</span>
         </button>
 
         <router-link
@@ -364,23 +365,10 @@ export default {
     color: #999;
 }
 .my-account__logout {
-    display: block;
+    display: flex;
     margin: 1.75rem auto 0;
     width: 100%;
     max-width: 260px;
-    border: 1.5px solid #00a3e0;
-    border-radius: 999px;
-    background: #fff;
-    color: #00a3e0;
-    font-size: 1rem;
-    font-weight: 600;
-    padding: 0.8rem 1rem;
-    cursor: pointer;
-}
-.my-account__logout:hover,
-.my-account__logout:focus {
-    background: #00a3e0;
-    color: #fff;
 }
 .my-account__delete {
     display: flex;
