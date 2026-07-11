@@ -14,7 +14,8 @@
                 <span
                     class="mobile-footer-bar__icon"
                     :class="{
-                        'mobile-footer-bar__icon--badged': item.id === 'my-trips'
+                        'mobile-footer-bar__icon--badged':
+                            item.id === 'my-trips' || item.id === 'messages'
                     }"
                 >
                     <svgItem size="26" :icon="item.icon"></svgItem>
@@ -22,6 +23,12 @@
                         class="mobile-footer-bar__badge"
                         v-if="
                             item.id === 'my-trips' && myTripsBadgeCount > 0
+                        "
+                    ></span>
+                    <span
+                        class="mobile-footer-bar__badge"
+                        v-if="
+                            item.id === 'messages' && messagesBadgeCount > 0
                         "
                     ></span>
                 </span>
@@ -155,7 +162,8 @@ export default {
             footerShow: 'footerShow'
         }),
         ...mapState(useNotificationsStore, {
-            myTripsBadgeCount: 'myTripsCount'
+            myTripsBadgeCount: 'myTripsCount',
+            messagesBadgeCount: 'messagesCount'
         }),
         ...mapState(useAuthStore, {
             config: 'appConfig'
