@@ -17,7 +17,7 @@ const ROUTE_SECTION = {
     friends_search: 'perfil',
     identity_validation: 'perfil',
     identity_validation_manual: 'perfil',
-    my-account: 'perfil',
+    'my-account': 'perfil',
     tickets: 'ayuda',
     'ticket-new': 'ayuda',
     'ticket-detail': 'ayuda',
