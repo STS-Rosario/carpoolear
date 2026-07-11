@@ -6,8 +6,9 @@ const viewPath = path.resolve(__dirname, 'Tickets.vue');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 
 describe('Tickets list view', () => {
-    it('shows soporte page title', () => {
-        expect(viewSource).toContain("{{ $t('soporte') }}");
+    it('shows soporte page title via account settings layout', () => {
+        expect(viewSource).toContain('AccountSettingsLayout');
+        expect(viewSource).toContain('page-title-key="soporte"');
     });
 
     it('shows empty-state message when user has no support tickets', () => {
