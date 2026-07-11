@@ -190,9 +190,6 @@ export const useActionbarsStore = defineStore('actionbars', {
 
         async footerButtonClick(item) {
             const router = await getLazyRouter();
-            if (item.id === 'menu') {
-                return this.openMobileMenu(router);
-            }
             const params = {};
             const query = {};
             if (item.url === 'profile') {
