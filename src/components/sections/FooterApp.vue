@@ -18,7 +18,7 @@
                             item.id === 'my-trips' || item.id === 'messages'
                     }"
                 >
-                    <svgItem size="26" :icon="item.icon"></svgItem>
+                    <svgItem size="50" :icon="item.icon"></svgItem>
                     <span
                         class="mobile-footer-bar__badge"
                         v-if="

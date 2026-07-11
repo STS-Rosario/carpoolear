@@ -22,6 +22,10 @@ const MENU_LABELS = {
         misAutos: 'Mis autos',
         configuracionNotificaciones: 'Configuración de notificaciones',
         configuracionPrivacidad: 'Configuración de privacidad',
+        configuracion: 'Configuración',
+        ayuda: 'Ayuda',
+        idioma: 'Idioma',
+        preguntasFrecuentes: 'Preguntas frecuentes',
         menu: 'Menú',
         modoDebug: 'Modo debug',
         legales: 'Legales'
@@ -45,6 +49,10 @@ const MENU_LABELS = {
         misAutos: 'My cars',
         configuracionNotificaciones: 'Notification settings',
         configuracionPrivacidad: 'Privacy settings',
+        configuracion: 'Settings',
+        ayuda: 'Help',
+        idioma: 'Language',
+        preguntasFrecuentes: 'Frequently asked questions',
         menu: 'Menu',
         modoDebug: 'Debug mode',
         legales: 'Legal'
