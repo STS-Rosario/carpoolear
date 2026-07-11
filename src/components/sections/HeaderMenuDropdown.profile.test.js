@@ -23,6 +23,33 @@ describe('HeaderMenuDropdown profile menu', () => {
             /name:\s*'profile'[\s\S]*id:\s*'me'/
         );
         expect(menuDropdownSource).toContain('header-menu-dropdown__online');
+        expect(menuDropdownSource).toMatch(
+            /header-menu-dropdown__avatar-wrap[\s\S]*header-menu-dropdown__user-info[\s\S]*user\.name[\s\S]*verPerfilPublico/
+        );
+    });
+
+    it('spaces the profile header and seats the online dot on the avatar edge', () => {
+        expect(menuDropdownSource).toMatch(
+            /\.header-menu-dropdown__user-row\s*\{[^}]*padding:\s*1\.1rem\s+1\.25rem\s+0\.95rem/
+        );
+        expect(menuDropdownSource).toMatch(
+            /\.header-menu-dropdown__user-row\s*\{[^}]*gap:\s*0\.85rem/
+        );
+        expect(menuDropdownSource).toMatch(
+            /\.header-menu-dropdown__avatar\s*\{[^}]*width:\s*48px/
+        );
+        expect(menuDropdownSource).toMatch(
+            /\.header-menu-dropdown__online\s*\{[^}]*right:\s*-2px/
+        );
+        expect(menuDropdownSource).toMatch(
+            /\.header-menu-dropdown__online\s*\{[^}]*bottom:\s*-1px/
+        );
+        expect(menuDropdownSource).toMatch(
+            /\.header-menu-dropdown__online\s*\{[^}]*border:\s*2px\s+solid\s+#fff/
+        );
+        expect(menuDropdownSource).toMatch(
+            /\.header-menu-dropdown__avatar-wrap\s*\{[^}]*overflow:\s*visible/
+        );
     });
 
     it('lists Mi cuenta, Configuración, Ayuda and red Cerrar sesión', () => {
