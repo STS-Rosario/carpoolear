@@ -241,7 +241,6 @@
                 </span>
                 <header-menu-dropdown v-if="logged" />
             </div>
-            <div class="cf"></div>
         </div>
     </header>
 </template>
@@ -432,14 +431,24 @@ export default {
     gap: 1rem;
 }
 .header_panel-left {
-    display: flex;
+    display: flex !important;
     align-items: center;
     gap: 0.75rem;
     flex-shrink: 0;
+    float: none;
+    line-height: normal;
 }
 .header_logo-link {
+    position: relative;
     display: inline-flex;
     align-items: center;
+}
+.header_logo-link img:last-child {
+    left: 22px;
+    top: -12px;
+    position: absolute;
+    filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.3));
+    z-index: 10;
 }
 .header_panel-center {
     display: flex;
@@ -447,6 +456,7 @@ export default {
     justify-content: center;
     gap: 1.5rem;
     flex: 1;
+    min-width: 0;
 }
 .header_nav-link {
     position: relative;
@@ -454,6 +464,7 @@ export default {
     text-decoration: none;
     font-weight: 600;
     white-space: nowrap;
+    text-transform: none;
 }
 .header_nav-link:hover,
 .header_nav-link:focus {
@@ -467,13 +478,15 @@ export default {
     right: -0.85rem;
 }
 .header_panel-right {
-    display: flex;
+    display: flex !important;
     align-items: center;
     justify-content: flex-end;
     gap: 0.5rem;
     flex-shrink: 0;
+    float: none;
     min-width: auto;
     text-align: right;
+    line-height: normal;
 }
 .header_notifications {
     display: inline-flex;

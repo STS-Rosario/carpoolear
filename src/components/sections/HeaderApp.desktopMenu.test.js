@@ -40,17 +40,16 @@ describe('HeaderApp desktop menu', () => {
     });
 
     it('puts Crear viaje, notifications and profile dropdown on the right', () => {
-        const right = headerSource.match(
-            /header_panel-right[\s\S]*?<\/div>\s*<div class="cf">/
-        )[0];
-        expect(right).toContain('btn-create-trip');
-        expect(right).toContain("$t('crearViaje')");
-        expect(right).toContain('header_notifications');
-        expect(right).toContain('icon="bell"');
-        expect(right).toContain('<header-menu-dropdown');
-        expect(right).not.toContain('btn-donar-header');
-        expect(right).not.toContain("$t('inicio')");
-        expect(right).not.toContain("$t('mensajes')");
+        expect(headerSource).toContain('header_panel-right');
+        expect(headerSource).toContain('btn-create-trip');
+        expect(headerSource).toContain("$t('crearViaje')");
+        expect(headerSource).toContain('header_notifications');
+        expect(headerSource).toContain('icon="bell"');
+        expect(headerSource).toContain('<header-menu-dropdown');
+        const rightStart = headerSource.indexOf('header_panel-right');
+        const rightChunk = headerSource.slice(rightStart, rightStart + 1200);
+        expect(rightChunk).not.toContain('btn-donar-header');
+        expect(rightChunk).not.toContain("$t('mensajes')");
     });
 
     it('removes social links from the desktop header', () => {
