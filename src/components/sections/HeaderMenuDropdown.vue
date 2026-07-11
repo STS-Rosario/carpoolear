@@ -153,47 +153,58 @@ export default {
     border-radius: 8px;
 }
 .header-menu-dropdown__user {
-    padding: 0.35rem 0 0.15rem;
+    padding: 0;
 }
 .header-menu-dropdown__user-row {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    padding: 0.35rem 1.1rem 0.5rem;
+    gap: 0.85rem;
+    padding: 1.1rem 1.25rem 0.95rem;
 }
 .header-menu-dropdown__avatar-wrap {
     position: relative;
     flex-shrink: 0;
+    overflow: visible;
+    line-height: 0;
 }
 .header-menu-dropdown__avatar {
-    width: 40px;
-    height: 40px;
+    width: 48px;
+    height: 48px;
     margin: 0;
+    display: block;
 }
 .header-menu-dropdown__online {
     position: absolute;
-    right: 0;
-    bottom: 0;
-    width: 10px;
-    height: 10px;
+    right: -2px;
+    bottom: -1px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
     background: #4caf50;
     border: 2px solid #fff;
+    box-sizing: border-box;
+    z-index: 1;
 }
 .header-menu-dropdown__user-info {
     min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.15rem;
 }
 .header-menu-dropdown__user-name {
     display: block;
     font-weight: 700;
+    font-size: 1rem;
     color: #333;
-    line-height: 1.3;
+    line-height: 1.25;
 }
 .header-menu-dropdown__public-profile {
     display: inline-block;
-    margin-top: 0.1rem;
+    margin-top: 0;
     color: #00a3e0;
     font-size: 0.9rem;
+    line-height: 1.3;
     text-decoration: none;
 }
 .header-menu-dropdown__public-profile:hover,
