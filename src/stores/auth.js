@@ -146,6 +146,13 @@ export const useAuthStore = defineStore('auth', {
             } catch (e) { /* optional */ }
 
             if (cordovaStore.device) {
+                // Fresh logins skip push.init() at startup (auth-gated). Start
+                // push here so the FCM token is obtained; registration then
+                // persists the device. register() alone is a no-op without token.
+                const push = (
+                    await import('../cordova/push-capacitor.js')
+                ).default;
+                push.init();
                 deviceStore.register();
             }
             tripsStore.tripsSearch({ is_passenger: false });

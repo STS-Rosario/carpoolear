@@ -64,55 +64,6 @@ const initializeCapacitorPlugins = async () => {
     setTimeout(async () => {
         await SplashScreen.hide();
     }, 1000);
-
-    // Initialize push notifications directly here
-    await initializePushNotifications();
-};
-
-// Direct push notification initialization
-const initializePushNotifications = async () => {
-    try {
-        const { Capacitor } = await import('@capacitor/core');
-
-        if (Capacitor.isNativePlatform()) {
-            const { PushNotifications } = await import(
-                '@capacitor/push-notifications'
-            );
-
-            const result = await PushNotifications.requestPermissions();
-
-            if (result.receive === 'granted') {
-                await PushNotifications.register();
-
-                // Listen for registration success
-                PushNotifications.addListener('registration', () => {});
-
-                // Listen for registration errors
-                PushNotifications.addListener(
-                    'registrationError',
-                    () => {
-                        return undefined;
-                    }
-                );
-
-                // Listen for incoming push notifications
-                PushNotifications.addListener(
-                    'pushNotificationReceived',
-                    () => {
-                        return undefined;
-                    }
-                );
-
-                // Listen for notification tap
-                PushNotifications.addListener(
-                    'pushNotificationActionPerformed',
-                    () => {
-                        return undefined;
-                    }
-                );
-            }
-        }
-    } catch (error) {}
 };
 
 // Initialize plugins when app is ready
