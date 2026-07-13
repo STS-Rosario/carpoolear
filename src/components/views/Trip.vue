@@ -135,7 +135,7 @@
                                         </p>
                                     </div>
                                     <div
-                                        class="check"
+                                        class="check carpoodatos-modal-check"
                                         style="margin-bottom: 10px"
                                     >
                                         <label class="check-inline">
@@ -220,7 +220,7 @@
                                         </p>
                                     </div>
                                     <div
-                                        class="check"
+                                        class="check carpoodatos-modal-check"
                                         style="margin-bottom: 10px"
                                     >
                                         <label class="check-inline">

@@ -65,6 +65,7 @@ describe('Trip.vue carpoodatos mesa de ayuda contact', () => {
         expect(pricingModal).toContain("$t('carpoodatosAntesConfirmarBullet5')");
         expect(pricingModal).toContain("$t('carpoodatosContribucionComprobantes')");
         expect(pricingModal).toMatch(/<ul>[\s\S]*?<\/ul>/);
+        expect(pricingModal).toContain('carpoodatos-modal-check');
     });
 });
 

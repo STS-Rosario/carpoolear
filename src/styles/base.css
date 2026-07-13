@@ -3228,6 +3228,36 @@
     color: #009bde;
  }
 
+  .carpoodatos {
+      color: #333;
+  }
+
+  .carpoodatos ul {
+      color: #333;
+      list-style-type: disc;
+      padding-left: 1.25rem;
+      margin: 0 0 15px;
+  }
+
+  .carpoodatos li {
+      color: #333;
+      margin-bottom: 0.35rem;
+  }
+
+  .carpoodatos li:last-child {
+      margin-bottom: 0;
+  }
+
+  .carpoodatos-modal-check .check-inline {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+  }
+
+  .carpoodatos-modal-check .check-inline input[type='checkbox'] {
+      margin: 0;
+  }
+
   @media (max-width: 800px) {
       .carpoodatos p,
       .carpoodatos ul {
