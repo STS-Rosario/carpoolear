@@ -1096,9 +1096,23 @@ const messages = {
         noVolverAMostrarMensaje: 'No volver a mostrar mensaje',
         solicitarAsiento: 'Solicitar asiento',
         carpoodatosAntesConfirmar:
-            'Antes de confirmar el viaje y para evitar sorpresas, tené en cuenta de coordinar y acordar el punto de encuentro, el horario, la disponibilidad de espacio para equipaje, la cantidad total de pasajeros y la contribución por los gastos de combustible y peaje.',
+            'Antes de solicitar asiento, revisá el detalle del viaje y coordiná :',
+        carpoodatosAntesConfirmarBullet1:
+            'Punto de encuentro para la salida y la llegada.',
+        carpoodatosAntesConfirmarBullet2: 'Horario de salida.',
+        carpoodatosAntesConfirmarBullet3: 'Tamaño del equipaje.',
+        carpoodatosAntesConfirmarBullet4:
+            'Contribución para combustible y peajes.',
+        carpoodatosAntesConfirmarBullet5:
+            'Cualquier otra cuestión que consideren importante para compartir el viaje.',
         carpoodatosContribucionMaxima:
-            'La contribución máxima que puede pedir un conductor es igual a gastos de combustible + peaje dividido la cantidad de personas viajando en el auto. Durante la coordinación previa al viaje, cualquier persona puede pedir hacer la división con tickets de combustible y peaje en mano.',
+            'La contribución máxima es el costo del combustible y los peajes dividido por la cantidad de asientos del vehículo.',
+        carpoodatosContribucionComprobantes:
+            'Durante la coordinación previa al viaje, cualquiera de las personas participantes puede solicitar que ese cálculo se realice con los comprobantes de combustible y peajes.',
+        carpoodatosAntesConfirmarDudaLead:
+            'Si tenés alguna duda o surge algún inconveniente, ',
+        carpoodatosAntesConfirmarDudaLink: 'escribinos a la Mesa de Ayuda',
+        carpoodatosAntesConfirmarDudaTail: '',
         matcheosDelViaje: 'Matcheos del viaje',
         viajaEl: 'Viaja el',
         mensajeParaUsuariosSeleccionados:
@@ -2471,9 +2485,23 @@ const messages = {
         enviarMensaje: 'Enviar mensaje',
         solicitarAsiento: 'Solicitar asiento',
         carpoodatosAntesConfirmar:
-            'Antes de confirmar el viaje y para evitar sorpresas, tené en cuenta de coordinar y acordar el punto de encuentro, el horario, la disponibilidad de espacio para equipaje, la cantidad total de pasajeros y la contribución por los gastos de combustible y peaje.',
+            'Antes de solicitar asiento, revisá el detalle del viaje y coordiná :',
+        carpoodatosAntesConfirmarBullet1:
+            'Punto de encuentro para la salida y la llegada.',
+        carpoodatosAntesConfirmarBullet2: 'Horario de salida.',
+        carpoodatosAntesConfirmarBullet3: 'Tamaño del equipaje.',
+        carpoodatosAntesConfirmarBullet4:
+            'Contribución para combustible y peajes.',
+        carpoodatosAntesConfirmarBullet5:
+            'Cualquier otra cuestión que consideren importante para compartir el viaje.',
         carpoodatosContribucionMaxima:
-            'La contribución máxima que puede pedir un conductor es igual a gastos de combustible + peaje dividido la cantidad de personas viajando en el auto. Durante la coordinación previa al viaje, cualquier persona puede pedir hacer la división con tickets de combustible y peaje en mano.',
+            'La contribución máxima es el costo del combustible y los peajes dividido por la cantidad de asientos del vehículo.',
+        carpoodatosContribucionComprobantes:
+            'Durante la coordinación previa al viaje, cualquiera de las personas participantes puede solicitar que ese cálculo se realice con los comprobantes de combustible y peajes.',
+        carpoodatosAntesConfirmarDudaLead:
+            'Si tenés alguna duda o surge algún inconveniente, ',
+        carpoodatosAntesConfirmarDudaLink: 'escribinos a la Mesa de Ayuda',
+        carpoodatosAntesConfirmarDudaTail: '',
         matcheosDelViaje: 'Matcheos del viaje',
         viajaEl: 'Viaja el',
         mensajeParaUsuariosSeleccionados:
@@ -4027,9 +4055,23 @@ const messages = {
         noVolverAMostrarMensaje: 'Do not show message again',
         solicitarAsiento: 'Request seat',
         carpoodatosAntesConfirmar:
-            'Before confirming the trip and to avoid surprises, make sure to coordinate and agree on the meeting point, time, luggage space availability, total number of passengers, and contribution for fuel and toll expenses.',
+            'Before requesting a seat, review the trip details and coordinate:',
+        carpoodatosAntesConfirmarBullet1:
+            'Meeting point for departure and arrival.',
+        carpoodatosAntesConfirmarBullet2: 'Departure time.',
+        carpoodatosAntesConfirmarBullet3: 'Luggage size.',
+        carpoodatosAntesConfirmarBullet4:
+            'Contribution for fuel and tolls.',
+        carpoodatosAntesConfirmarBullet5:
+            'Any other issue you consider important for sharing the trip.',
         carpoodatosContribucionMaxima:
-            'The maximum contribution a driver can request equals fuel costs + tolls divided by the number of people traveling in the car. During pre-trip coordination, anyone can request to do the division with fuel and toll receipts in hand.',
+            'The maximum contribution is the cost of fuel and tolls divided by the number of seats in the vehicle.',
+        carpoodatosContribucionComprobantes:
+            'During pre-trip coordination, any participant can request that this calculation be done with fuel and toll receipts.',
+        carpoodatosAntesConfirmarDudaLead:
+            'If you have any questions or run into any issues, ',
+        carpoodatosAntesConfirmarDudaLink: 'contact us through the Help desk',
+        carpoodatosAntesConfirmarDudaTail: '',
         matcheosDelViaje: 'Trip matches',
         viajaEl: 'Travels on',
         mensajeParaUsuariosSeleccionados: 'Message for selected users',
