@@ -74,6 +74,13 @@ describe('IdentityValidation rejection warnings', () => {
         expect(viewSource).toContain('$t(mismatchSupportWarningParts.tailKey)');
     });
 
+    it('renders two-paragraph both-mismatch warning with ticket link in second paragraph', () => {
+        expect(viewSource).toContain("mismatchSupportWarningParts.layout === 'twoParagraph'");
+        expect(viewSource).toContain('$t(mismatchSupportWarningParts.paragraph1Key)');
+        expect(viewSource).toContain('$t(mismatchSupportWarningParts.paragraph2LeadKey)');
+        expect(viewSource).toContain('$t(mismatchSupportWarningParts.paragraph2TailKey)');
+    });
+
     it('shows warning icon and translated mismatch warning placeholder in rejected flow', () => {
         expect(viewSource).toContain('identity-validation-rejection-notice__support-warning');
         expect(viewSource).toContain('fa fa-exclamation-triangle');

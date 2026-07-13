@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
     getIdentityValidationMismatchDetails,
     getMismatchSupportWarningKey,
+    getMismatchSupportWarningParts,
     getManualRejectionSupportWarningKey,
     MISMATCH_RESULT_BOTH
 } from './identityValidationMismatchDetails.js';
@@ -59,5 +60,33 @@ describe('getIdentityValidationMismatchDetails', () => {
         expect(getMismatchSupportWarningKey('both_mismatch'))
             .toBe('identityValidationRejectionSupportWarningBothMismatch');
         expect(getMismatchSupportWarningKey('other')).toBe(null);
+    });
+
+    it('returns two-paragraph warning parts for both mismatch', () => {
+        expect(
+            getMismatchSupportWarningParts(
+                'identityValidationRejectionSupportWarningBothMismatch'
+            )
+        ).toEqual({
+            layout: 'twoParagraph',
+            paragraph1Key:
+                'identityValidationRejectionSupportWarningBothMismatchParagraph1',
+            paragraph2LeadKey:
+                'identityValidationRejectionSupportWarningBothMismatchParagraph2Lead',
+            paragraph2TailKey:
+                'identityValidationRejectionSupportWarningBothMismatchParagraph2Tail'
+        });
+    });
+
+    it('returns inline-link warning parts for single-field mismatch', () => {
+        expect(
+            getMismatchSupportWarningParts(
+                'identityValidationRejectionSupportWarningNameMismatch'
+            )
+        ).toEqual({
+            layout: 'inlineLink',
+            leadKey: 'identityValidationRejectionSupportWarningNameMismatchLead',
+            tailKey: 'identityValidationRejectionSupportWarningNameMismatchTail'
+        });
     });
 });
