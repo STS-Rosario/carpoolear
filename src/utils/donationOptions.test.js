@@ -27,8 +27,8 @@ describe('donationOptions', () => {
     describe('getDonationOnceUrl', () => {
         it('returns Mercado Pago link for each preset amount', () => {
             expect(getDonationOnceUrl(5000)).toBe('https://mpago.la/1SB6on8');
-            expect(getDonationOnceUrl(7500)).toBe('MP_LINK_UNIQUE_7500');
-            expect(getDonationOnceUrl(12000)).toBe('MP_LINK_UNIQUE_12000');
+            expect(getDonationOnceUrl(7500)).toBe('https://mpago.li/2oU8U2Z');
+            expect(getDonationOnceUrl(12000)).toBe('https://mpago.la/2wD4Q8x');
         });
 
         it('returns default link for unknown amounts', () => {
@@ -61,8 +61,8 @@ describe('donationOptions', () => {
             expect(getDonationMonthlyUrl(5000)).toBe(
                 'https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=2c9380848cee0ea5018d0e9ea71016d7'
             );
-            expect(getDonationMonthlyUrl(7500)).toBe('MP_LINK_MONTHLY_7500');
-            expect(getDonationMonthlyUrl(12000)).toBe('MP_LINK_MONTHLY_12000');
+            expect(getDonationMonthlyUrl(7500)).toBe('https://mpago.la/116nAEj');
+            expect(getDonationMonthlyUrl(12000)).toBe('https://mpago.la/1puqtYo');
         });
     });
 });

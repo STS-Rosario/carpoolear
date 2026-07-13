@@ -12,15 +12,15 @@ export const DONATION_TIERS = [
         amount: 7500,
         labelKey: 'donationTierBeer',
         icon: 'fa-beer',
-        onceUrl: 'MP_LINK_UNIQUE_7500',
-        monthlyUrl: 'MP_LINK_MONTHLY_7500'
+        onceUrl: 'https://mpago.li/2oU8U2Z',
+        monthlyUrl: 'https://mpago.la/116nAEj'
     },
     {
         amount: 12000,
         labelKey: 'donationTierFood',
         icon: 'fa-cutlery',
-        onceUrl: 'MP_LINK_UNIQUE_12000',
-        monthlyUrl: 'MP_LINK_MONTHLY_12000'
+        onceUrl: 'https://mpago.la/2wD4Q8x',
+        monthlyUrl: 'https://mpago.la/1puqtYo'
     }
 ];
 
