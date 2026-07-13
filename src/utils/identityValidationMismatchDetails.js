@@ -3,6 +3,10 @@ import { formatDisplayDni } from './formatDisplayDni';
 export const MISMATCH_RESULT_DNI = 'dni_mismatch';
 export const MISMATCH_RESULT_NAME = 'name_mismatch';
 export const MISMATCH_RESULT_BOTH = 'both_mismatch';
+export const BOTH_MISMATCH_WARNING_KEY =
+    'identityValidationRejectionSupportWarningBothMismatch';
+export const WARNING_PART_LAYOUT_TWO_PARAGRAPH = 'twoParagraph';
+export const WARNING_PART_LAYOUT_INLINE_LINK = 'inlineLink';
 
 function formatMismatchDni(value, profileIdFormat) {
     if (!value) {
@@ -52,9 +56,28 @@ export function getMismatchSupportWarningKey(mismatchReason) {
         return 'identityValidationRejectionSupportWarningDniMismatch';
     }
     if (mismatchReason === MISMATCH_RESULT_BOTH) {
-        return 'identityValidationRejectionSupportWarningBothMismatch';
+        return BOTH_MISMATCH_WARNING_KEY;
     }
     return null;
+}
+
+export function getMismatchSupportWarningParts(warningKey) {
+    if (!warningKey) {
+        return null;
+    }
+    if (warningKey === BOTH_MISMATCH_WARNING_KEY) {
+        return {
+            layout: WARNING_PART_LAYOUT_TWO_PARAGRAPH,
+            paragraph1Key: `${warningKey}Paragraph1`,
+            paragraph2LeadKey: `${warningKey}Paragraph2Lead`,
+            paragraph2TailKey: `${warningKey}Paragraph2Tail`
+        };
+    }
+    return {
+        layout: WARNING_PART_LAYOUT_INLINE_LINK,
+        leadKey: `${warningKey}Lead`,
+        tailKey: `${warningKey}Tail`
+    };
 }
 
 export function getManualRejectionSupportWarningKey(rejectReason) {
