@@ -12,7 +12,11 @@ describe('DonationAfterRating page content', () => {
         expect(viewSource).toContain("$t('proyectoDe')");
         expect(viewSource).toContain("$t('buenisimoCompartirViaje')");
         expect(viewSource).toContain("$t('ayudanosPlataforma')");
-        expect(viewSource).toContain("$t('elegiPropiaAventura')");
+        expect(viewSource).toContain('DonationAmountPicker');
+        expect(viewSource).toContain('getDonationOnceUrl');
+        expect(viewSource).toContain('getDonationMonthlyUrl');
+        expect(viewSource).not.toContain('value="2000"');
+        expect(viewSource).not.toContain('value="10000"');
         expect(viewSource).toContain("$t('unicaVez')");
         expect(viewSource).toContain("$t('MENSUAL')");
         expect(viewSource).toContain("$t('cancelaCuando')");

@@ -194,3 +194,13 @@ describe('Trips.vue persisted search state', () => {
         expect(viewSource).toContain("from '../../utils/searchAdvancedFilters.js'");
     });
 });
+
+describe('Trips.vue donation modal', () => {
+    it('uses shared donation picker and Mercado Pago helpers', () => {
+        expect(viewSource).toContain('DonationAmountPicker');
+        expect(viewSource).toContain('getDonationOnceUrl');
+        expect(viewSource).toContain('getDonationMonthlyUrl');
+        expect(viewSource).not.toContain('value="2000"');
+        expect(viewSource).not.toContain('value="10000"');
+    });
+});
