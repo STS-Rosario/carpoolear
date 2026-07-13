@@ -3229,7 +3229,8 @@
  }
 
   @media (max-width: 800px) {
-      .carpoodatos p {
+      .carpoodatos p,
+      .carpoodatos ul {
           font-size: 11px;
       }
       .carpoodatos {
