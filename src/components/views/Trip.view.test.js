@@ -48,8 +48,23 @@ describe('Trip.vue carpoodatos mesa de ayuda contact', () => {
             /showModalPricing[\s\S]*?matcheosDelViaje/
         )[0];
 
-        expect(pricingModal).toMatch(mesaAyudaLinkPattern);
+        const pricingMesaAyudaLinkPattern =
+            /<span>\{\{\s*\$t\('carpoodatosAntesConfirmarDudaLead'\)\s*\}\}<\/span>\s*<router-link\s+:to="\{\s*name:\s*'tickets'\s*\}">\{\{\s*\$t\('carpoodatosAntesConfirmarDudaLink'\)\s*\}\}<\/router-link>\{\{\s*\$t\('carpoodatosAntesConfirmarDudaTail'\)\s*\}\}/;
+
+        expect(pricingModal).toMatch(pricingMesaAyudaLinkPattern);
         expect(pricingModal).not.toContain('carpoodatosContactoRedes');
+        expect(pricingModal).not.toMatch(mesaAyudaLinkPattern);
+    });
+
+    it('lists coordination topics in the pricing carpoodatos modal', () => {
+        const pricingModal = viewSource.match(
+            /showModalPricing[\s\S]*?matcheosDelViaje/
+        )[0];
+
+        expect(pricingModal).toContain("$t('carpoodatosAntesConfirmarBullet1')");
+        expect(pricingModal).toContain("$t('carpoodatosAntesConfirmarBullet5')");
+        expect(pricingModal).toContain("$t('carpoodatosContribucionComprobantes')");
+        expect(pricingModal).toMatch(/<ul>[\s\S]*?<\/ul>/);
     });
 });
 
