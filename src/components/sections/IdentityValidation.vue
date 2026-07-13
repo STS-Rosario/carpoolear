@@ -46,19 +46,34 @@
                 <strong>{{ $t('nombreEnCarpoolear') }}:</strong> {{ mismatchDetails.userName }}<br />
                 <strong>{{ $t('nombreEnMercadoPago') }}:</strong> {{ mismatchDetails.mpName }}
             </p>
-            <p
-                v-if="mismatchSupportWarningKey"
-                class="identity-validation-mismatch-support-warning"
-            >
-                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                {{ $t(mismatchSupportWarningParts.leadKey) }}
-                <router-link :to="{ name: 'ticket-new' }">
-                    {{ $t('identityValidationMismatchSupportTicketCta') }}
-                </router-link>
-                <span v-if="mismatchSupportWarningParts.tailKey">
-                    {{ $t(mismatchSupportWarningParts.tailKey) }}
-                </span>
-            </p>
+            <template v-if="mismatchSupportWarningKey">
+                <template v-if="mismatchSupportWarningParts.layout === 'twoParagraph'">
+                    <p class="identity-validation-mismatch-support-warning">
+                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                        {{ $t(mismatchSupportWarningParts.paragraph1Key) }}
+                    </p>
+                    <p class="identity-validation-mismatch-support-warning">
+                        {{ $t(mismatchSupportWarningParts.paragraph2LeadKey) }}
+                        <router-link :to="{ name: 'ticket-new' }">
+                            {{ $t('identityValidationMismatchSupportTicketCta') }}
+                        </router-link>
+                        {{ $t(mismatchSupportWarningParts.paragraph2TailKey) }}
+                    </p>
+                </template>
+                <p
+                    v-else
+                    class="identity-validation-mismatch-support-warning"
+                >
+                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                    {{ $t(mismatchSupportWarningParts.leadKey) }}
+                    <router-link :to="{ name: 'ticket-new' }">
+                        {{ $t('identityValidationMismatchSupportTicketCta') }}
+                    </router-link>
+                    <span v-if="mismatchSupportWarningParts.tailKey">
+                        {{ $t(mismatchSupportWarningParts.tailKey) }}
+                    </span>
+                </p>
+            </template>
         </div>
 
             <div v-if="!identityValidationAvailable" class="alert alert-info">
@@ -427,7 +442,8 @@ import {
 import {
     getIdentityValidationMismatchDetails,
     getManualRejectionSupportWarningKey,
-    getMismatchSupportWarningKey
+    getMismatchSupportWarningKey,
+    getMismatchSupportWarningParts
 } from '../../utils/identityValidationMismatchDetails';
 import {
     getDisplayableManualApprovalReviewNote,
@@ -438,7 +454,7 @@ import { shouldShowIdentityVerificationSuccessBanner } from '../../utils/identit
 import { isManualRejectedWithChoiceCards, canManualResubmitWithoutPayment, getManualValidationResubmitRoute, getManualValidationRestartRoute } from '../../utils/manualIdentityValidationStatus';
 import IdentityValidationAdminReviewNote from '../IdentityValidationAdminReviewNote.vue';
 
-const EMPTY_WARNING_PARTS = { leadKey: null, tailKey: null };
+const EMPTY_WARNING_PARTS = { layout: null, leadKey: null, tailKey: null };
 
 export default {
     name: 'IdentityValidation',
@@ -495,11 +511,10 @@ export default {
             return getMismatchSupportWarningKey(this.resultMessage);
         },
         mismatchSupportWarningParts() {
-            if (!this.mismatchSupportWarningKey) return EMPTY_WARNING_PARTS;
-            return {
-                leadKey: `${this.mismatchSupportWarningKey}Lead`,
-                tailKey: `${this.mismatchSupportWarningKey}Tail`
-            };
+            return (
+                getMismatchSupportWarningParts(this.mismatchSupportWarningKey) ||
+                EMPTY_WARNING_PARTS
+            );
         },
         /**
          * Paid + docs sent + not yet approved/rejected — still in admin queue.

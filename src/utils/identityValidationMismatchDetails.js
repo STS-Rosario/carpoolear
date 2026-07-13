@@ -57,6 +57,28 @@ export function getMismatchSupportWarningKey(mismatchReason) {
     return null;
 }
 
+const BOTH_MISMATCH_WARNING_KEY =
+    'identityValidationRejectionSupportWarningBothMismatch';
+
+export function getMismatchSupportWarningParts(warningKey) {
+    if (!warningKey) {
+        return null;
+    }
+    if (warningKey === BOTH_MISMATCH_WARNING_KEY) {
+        return {
+            layout: 'twoParagraph',
+            paragraph1Key: `${warningKey}Paragraph1`,
+            paragraph2LeadKey: `${warningKey}Paragraph2Lead`,
+            paragraph2TailKey: `${warningKey}Paragraph2Tail`
+        };
+    }
+    return {
+        layout: 'inlineLink',
+        leadKey: `${warningKey}Lead`,
+        tailKey: `${warningKey}Tail`
+    };
+}
+
 export function getManualRejectionSupportWarningKey(rejectReason) {
     return getMismatchSupportWarningKey(rejectReason);
 }

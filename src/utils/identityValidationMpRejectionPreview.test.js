@@ -24,8 +24,7 @@ describe('identityValidationMpRejectionPreview', () => {
     it('builds full dev preview url when base origin is provided', () => {
         expect(
             buildIdentityValidationMpBothMismatchPreviewUrl({
-                origin: 'http://localhost:8080',
-                hashPrefix: '#'
+                origin: 'http://localhost:8080'
             })
         ).toBe(
             'http://localhost:8080/#/identity-validation?result=both_mismatch&user_name=Juan+P%C3%A9rez&mp_name=Mar%C3%ADa+Garc%C3%ADa&user_dni=30123456&mp_dni=30999999'
