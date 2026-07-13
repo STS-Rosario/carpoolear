@@ -15,3 +15,15 @@ describe('TripButtons.vue group chat', () => {
         expect(viewSource).toContain('showGroupChatButton');
     });
 });
+
+describe('TripButtons.vue seat request limit', () => {
+    it('disables message and request actions and shows passenger limit message', () => {
+        expect(viewSource).toContain('shouldShowPassengerSeatRequestLimitMessage');
+        expect(viewSource).toContain('seatRequestLimitReached');
+        expect(viewSource).toContain("$t('tripSeatRequestLimitPassengerMessage'");
+        expect(viewSource).toContain('seat_request_limit');
+        expect(viewSource).toMatch(
+            /:disabled="[^"]*seatRequestLimitReached/
+        );
+    });
+});

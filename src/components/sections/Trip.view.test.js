@@ -66,3 +66,11 @@ describe('Trip clickModal', () => {
         );
     });
 });
+
+describe('Trip card seat request limit warning', () => {
+    it('shows driver limit warning on my-trips cards', () => {
+        expect(source).toContain('shouldShowDriverSeatRequestLimitWarning');
+        expect(source).toContain("$t('tripSeatRequestLimitDriverWarning')");
+        expect(source).toContain('seat_request_limit_reached');
+    });
+});

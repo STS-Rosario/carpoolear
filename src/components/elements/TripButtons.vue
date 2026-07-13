@@ -36,7 +36,7 @@
                     class="btn btn-primary"
                     @click="$emit('toMessages')"
                     v-if="!owner"
-                    :disabled="sendingStatus"
+                    :disabled="sendingStatus || seatRequestLimitReached"
                 >
                     <spinner
                         class="blue"
@@ -51,7 +51,7 @@
                         class="btn btn-primary"
                         @click="$emit('onMakeRequest')"
                         v-if="canRequest && trip.seats_available > 0"
-                        :disabled="sendingStatus"
+                        :disabled="sendingStatus || seatRequestLimitReached"
                     >
                         <template v-if="sending && sending.requestAction">
                             <spinner class="blue"></spinner>
@@ -159,6 +159,17 @@
                 >
                     {{ $t('atencionViajeSolicitado', { count: trip.passengerPending_count }) }}
                 </div>
+            <div
+                class="alert alert-warning"
+                role="alert"
+                v-if="showPassengerSeatRequestLimitMessage"
+            >
+                {{
+                    $t('tripSeatRequestLimitPassengerMessage', {
+                        limit: trip.seat_request_limit,
+                    })
+                }}
+            </div>
         </div>
         <div class="buttons-container" v-if="isPassengersView && !owner">
             <template v-if="true">
@@ -166,7 +177,7 @@
                     class="btn btn-primary"
                     @click="$emit('toMessages')"
                     v-if="!owner"
-                    :disabled="sendingStatus"
+                    :disabled="sendingStatus || seatRequestLimitReached"
                 >
                     <spinner
                         class="blue"
@@ -188,6 +199,7 @@ import spinner from '../Spinner.vue';
 import Transactions from '../views/transactions.vue';
 import { isVoluntaryContributionSeatPrice } from '../../utils/tripSeatPrice.js';
 import { shouldShowLiveLocationShare } from '../../utils/ongoingTrip.js';
+import { shouldShowPassengerSeatRequestLimitMessage } from '../../utils/tripSeatRequestsWarning.js';
 
 export default {
     name: 'TripButtons',
@@ -227,6 +239,15 @@ export default {
         },
         canRequest() {
             return !this.owner && !this.trip.request;
+        },
+        seatRequestLimitReached() {
+            return Boolean(this.trip && this.trip.seat_request_limit_reached);
+        },
+        showPassengerSeatRequestLimitMessage() {
+            return shouldShowPassengerSeatRequestLimitMessage(
+                this.owner,
+                this.trip
+            );
         },
         showLiveLocationShare() {
             if (!this.trip || !this.user) {
