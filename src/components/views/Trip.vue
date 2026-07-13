@@ -201,12 +201,22 @@
                                         <p>
                                             {{ $t('carpoodatosAntesConfirmar') }}
                                         </p>
+                                        <ul>
+                                            <li>{{ $t('carpoodatosAntesConfirmarBullet1') }}</li>
+                                            <li>{{ $t('carpoodatosAntesConfirmarBullet2') }}</li>
+                                            <li>{{ $t('carpoodatosAntesConfirmarBullet3') }}</li>
+                                            <li>{{ $t('carpoodatosAntesConfirmarBullet4') }}</li>
+                                            <li>{{ $t('carpoodatosAntesConfirmarBullet5') }}</li>
+                                        </ul>
                                         <p>
                                             {{ $t('carpoodatosContribucionMaxima') }}
                                         </p>
                                         <p>
-                                            <span>{{ $t('mesaAyudaContactoLead') }}</span>
-                                            <router-link :to="{ name: 'tickets' }">{{ $t('mesaAyuda') }}</router-link>{{ $t('mesaAyudaContactoTail') }}
+                                            {{ $t('carpoodatosContribucionComprobantes') }}
+                                        </p>
+                                        <p>
+                                            <span>{{ $t('carpoodatosAntesConfirmarDudaLead') }}</span>
+                                            <router-link :to="{ name: 'tickets' }">{{ $t('carpoodatosAntesConfirmarDudaLink') }}</router-link>{{ $t('carpoodatosAntesConfirmarDudaTail') }}
                                         </p>
                                     </div>
                                     <div

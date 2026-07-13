@@ -46,10 +46,13 @@ describe('carpoodatos pricing modal copy', () => {
     });
 
     it('en locale defines the pricing modal coordination keys', () => {
-        const keys = Object.keys(EXPECTED_COPY);
+        const keys = Object.keys(EXPECTED_COPY).filter(
+            (key) => key !== 'carpoodatosAntesConfirmarDudaTail'
+        );
 
         keys.forEach((key) => {
             expect(messages.en[key]).toBeTruthy();
         });
+        expect(messages.en.carpoodatosAntesConfirmarDudaTail).toBe('');
     });
 });
