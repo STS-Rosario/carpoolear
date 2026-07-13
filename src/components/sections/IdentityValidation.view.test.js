@@ -76,6 +76,8 @@ describe('IdentityValidation rejection warnings', () => {
 
     it('renders two-paragraph both-mismatch warning with ticket link in second paragraph', () => {
         expect(viewSource).toContain("mismatchSupportWarningParts.layout === 'twoParagraph'");
+        expect(viewSource).toContain('identity-validation-mismatch-support-warning--stacked');
+        expect(viewSource).toContain('identity-validation-mismatch-support-warning__paragraph');
         expect(viewSource).toContain('$t(mismatchSupportWarningParts.paragraph1Key)');
         expect(viewSource).toContain('$t(mismatchSupportWarningParts.paragraph2LeadKey)');
         expect(viewSource).toContain('$t(mismatchSupportWarningParts.paragraph2TailKey)');

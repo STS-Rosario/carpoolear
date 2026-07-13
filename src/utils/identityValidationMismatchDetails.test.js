@@ -4,7 +4,9 @@ import {
     getMismatchSupportWarningKey,
     getMismatchSupportWarningParts,
     getManualRejectionSupportWarningKey,
-    MISMATCH_RESULT_BOTH
+    MISMATCH_RESULT_BOTH,
+    WARNING_PART_LAYOUT_INLINE_LINK,
+    WARNING_PART_LAYOUT_TWO_PARAGRAPH
 } from './identityValidationMismatchDetails.js';
 
 describe('getIdentityValidationMismatchDetails', () => {
@@ -68,7 +70,7 @@ describe('getIdentityValidationMismatchDetails', () => {
                 'identityValidationRejectionSupportWarningBothMismatch'
             )
         ).toEqual({
-            layout: 'twoParagraph',
+            layout: WARNING_PART_LAYOUT_TWO_PARAGRAPH,
             paragraph1Key:
                 'identityValidationRejectionSupportWarningBothMismatchParagraph1',
             paragraph2LeadKey:
@@ -84,7 +86,7 @@ describe('getIdentityValidationMismatchDetails', () => {
                 'identityValidationRejectionSupportWarningNameMismatch'
             )
         ).toEqual({
-            layout: 'inlineLink',
+            layout: WARNING_PART_LAYOUT_INLINE_LINK,
             leadKey: 'identityValidationRejectionSupportWarningNameMismatchLead',
             tailKey: 'identityValidationRejectionSupportWarningNameMismatchTail'
         });

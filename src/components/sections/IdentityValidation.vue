@@ -47,19 +47,22 @@
                 <strong>{{ $t('nombreEnMercadoPago') }}:</strong> {{ mismatchDetails.mpName }}
             </p>
             <template v-if="mismatchSupportWarningKey">
-                <template v-if="mismatchSupportWarningParts.layout === 'twoParagraph'">
-                    <p class="identity-validation-mismatch-support-warning">
+                <div
+                    v-if="mismatchSupportWarningParts.layout === 'twoParagraph'"
+                    class="identity-validation-mismatch-support-warning identity-validation-mismatch-support-warning--stacked"
+                >
+                    <p class="identity-validation-mismatch-support-warning__paragraph">
                         <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                         {{ $t(mismatchSupportWarningParts.paragraph1Key) }}
                     </p>
-                    <p class="identity-validation-mismatch-support-warning">
+                    <p class="identity-validation-mismatch-support-warning__paragraph">
                         {{ $t(mismatchSupportWarningParts.paragraph2LeadKey) }}
                         <router-link :to="{ name: 'ticket-new' }">
                             {{ $t('identityValidationMismatchSupportTicketCta') }}
                         </router-link>
                         {{ $t(mismatchSupportWarningParts.paragraph2TailKey) }}
                     </p>
-                </template>
+                </div>
                 <p
                     v-else
                     class="identity-validation-mismatch-support-warning"
@@ -1032,6 +1035,14 @@ export default {
     border: 1px solid #f0c36d;
     background: #fff7e6;
     color: #8a6d3b;
+}
+
+.identity-validation-mismatch-support-warning__paragraph {
+    margin: 0;
+}
+
+.identity-validation-mismatch-support-warning__paragraph + .identity-validation-mismatch-support-warning__paragraph {
+    margin-top: 0.75rem;
 }
 
 .identity-validation-mismatch-support-warning .fa {
