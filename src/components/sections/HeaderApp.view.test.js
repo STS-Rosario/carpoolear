@@ -17,6 +17,13 @@ describe('HeaderApp changelog navigation', () => {
     });
 });
 
+describe('HeaderApp header offset observer', () => {
+    it('measures the header height for mobile layout offsets', () => {
+        expect(viewSource).toContain('installAppHeaderOffsetObserver');
+        expect(viewSource).toContain('stopHeaderOffsetObserver');
+    });
+});
+
 describe('HeaderApp.vue chat user ratings', () => {
     it('renders ratings below the subtitle in the mobile action bar', () => {
         expect(viewSource).toContain('UserRatingsCounts');
