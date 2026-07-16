@@ -73,9 +73,11 @@ describe('appHeaderOffset', () => {
             constructor(cb) {
                 callback = cb;
             }
+
             observe() {
                 observer.observe();
             }
+
             disconnect() {
                 observer.disconnect();
             }
@@ -86,12 +88,13 @@ describe('appHeaderOffset', () => {
             '51px'
         );
 
-        callback([
+        const resizeEntries = [
             {
                 borderBoxSize: [{ blockSize: 112 }],
                 contentRect: { height: 112 }
             }
-        ]);
+        ];
+        callback(resizeEntries);
         expect(root.style.getPropertyValue(APP_HEADER_OFFSET_CSS_VAR)).toBe(
             '112px'
         );
