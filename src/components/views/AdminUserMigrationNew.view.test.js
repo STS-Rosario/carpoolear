@@ -128,7 +128,7 @@ describe('AdminUserMigrationNew view', () => {
             'La cuenta de {name} (ID: {id}) se encuentra suspendida por lo que no se puede realizar la migración'
         );
         expect(i18nSource).toContain(
-            "The account of {name} (ID: {id}) is suspended so the migration cannot be performed"
+            'The account of {name} (ID: {id}) is suspended so the migration cannot be performed'
         );
     });
 });
