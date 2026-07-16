@@ -119,4 +119,16 @@ describe('AdminUserMigrationNew view', () => {
         expect(i18nSource).toContain(supportTicketNoticeEnglishCopy);
         expect(source).toContain("this.$t('migracionUsuarioAMantenerAvisoTicketSoporte')");
     });
+
+    it('shows a translated error when migration is blocked for a banned user', () => {
+        expect(source).toContain('getApiErrorMessage');
+        expect(source).toContain('errorMigracionUsuarioSuspendido');
+        expect(i18nSource).toContain('errorMigracionUsuarioSuspendido');
+        expect(i18nSource).toContain(
+            'La cuenta de {name} (ID: {id}) se encuentra suspendida por lo que no se puede realizar la migración'
+        );
+        expect(i18nSource).toContain(
+            "The account of {name} (ID: {id}) is suspended so the migration cannot be performed"
+        );
+    });
 });

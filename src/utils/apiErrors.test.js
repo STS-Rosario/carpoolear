@@ -63,6 +63,28 @@ describe('getApiErrorMessage', () => {
         ).toBe('Acción no permitida durante suplantación.');
     });
 
+    it('translates migration banned user error with user name and id', () => {
+        expect(
+            getApiErrorMessage(
+                {
+                    data: {
+                        message: 'migration_banned_user',
+                        user_name: 'Cuenta Suspendida',
+                        user_id: 42
+                    },
+                    status: 422
+                },
+                fallback,
+                (key, params) =>
+                    key === 'errorMigracionUsuarioSuspendido'
+                        ? `La cuenta de ${params.name} (ID: ${params.id}) se encuentra suspendida por lo que no se puede realizar la migración`
+                        : key
+            )
+        ).toBe(
+            'La cuenta de Cuenta Suspendida (ID: 42) se encuentra suspendida por lo que no se puede realizar la migración'
+        );
+    });
+
     it('returns raw message from nested data when no translator is provided', () => {
         expect(
             getApiErrorMessage(
