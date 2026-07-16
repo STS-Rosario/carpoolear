@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
+import fs from 'node:fs';
+import path from 'node:path';
 import { getApiErrorMessage, isOfflineApiError } from './apiErrors.js';
+
+const apiErrorsSource = fs.readFileSync(
+    path.resolve(import.meta.dirname, 'apiErrors.js'),
+    'utf8'
+);
 
 describe('api error helpers', () => {
     it('detects normalized offline API errors', () => {
@@ -61,6 +68,10 @@ describe('getApiErrorMessage', () => {
                 (key) => (key === 'impersonationActionForbidden' ? 'Acción no permitida durante suplantación.' : key)
             )
         ).toBe('Acción no permitida durante suplantación.');
+    });
+
+    it('maps migration banned user backend code to i18n key', () => {
+        expect(apiErrorsSource).toContain("migration_banned_user: 'errorMigracionUsuarioSuspendido'");
     });
 
     it('translates migration banned user error with user name and id', () => {

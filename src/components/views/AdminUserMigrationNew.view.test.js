@@ -122,7 +122,7 @@ describe('AdminUserMigrationNew view', () => {
 
     it('shows a translated error when migration is blocked for a banned user', () => {
         expect(source).toContain('getApiErrorMessage');
-        expect(source).toContain('errorMigracionUsuarioSuspendido');
+        expect(source).toContain("this.$t('errorMigrandoUsuarios')");
         expect(i18nSource).toContain('errorMigracionUsuarioSuspendido');
         expect(i18nSource).toContain(
             'La cuenta de {name} (ID: {id}) se encuentra suspendida por lo que no se puede realizar la migración'

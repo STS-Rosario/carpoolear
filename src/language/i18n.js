@@ -1419,6 +1419,8 @@ const messages = {
         neutral_ratings: 'Calificaciones neutrales',
         calificacionesNegativas: 'Calificaciones negativas',
         errorMigrandoUsuarios: 'Error al migrar usuarios',
+        errorMigracionUsuarioSuspendido:
+            'La cuenta de {name} (ID: {id}) se encuentra suspendida por lo que no se puede realizar la migración',
         migracionElegirDatos: 'Elegí qué datos conservar',
         migracionElegirDatosAyuda:
             'Hacé clic en el valor que querés usar en la cuenta final. Por defecto: email, DNI y fecha de creación de la cuenta a borrar; contraseña y teléfono de la cuenta a mantener.',
@@ -2830,6 +2832,8 @@ const messages = {
         neutral_ratings: 'Calificaciones neutrales',
         calificacionesNegativas: 'Calificaciones negativas',
         errorMigrandoUsuarios: 'Error al migrar usuarios',
+        errorMigracionUsuarioSuspendido:
+            'La cuenta de {name} (ID: {id}) se encuentra suspendida por lo que no se puede realizar la migración',
         migracionElegirDatos: 'Elegí qué datos conservar',
         migracionElegirDatosAyuda:
             'Hacé clic en el valor que querés usar en la cuenta final. Por defecto: email, DNI y fecha de creación de la cuenta a borrar; contraseña y teléfono de la cuenta a mantener.',
@@ -4371,6 +4375,8 @@ const messages = {
         neutral_ratings: 'Neutral ratings',
         calificacionesNegativas: 'Negative ratings',
         errorMigrandoUsuarios: 'Error migrating users',
+        errorMigracionUsuarioSuspendido:
+            'The account of {name} (ID: {id}) is suspended so the migration cannot be performed',
         migracionElegirDatos: 'Choose which data to keep',
         migracionElegirDatosAyuda:
             'Click the value you want on the final account. Defaults: email, ID, and creation date from the account to remove; password and phone from the account to keep.',

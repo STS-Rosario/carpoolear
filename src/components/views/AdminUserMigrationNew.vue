@@ -157,6 +157,7 @@ import AdminLayout from '../layouts/AdminLayout.vue';
 import UserSearchAutocomplete from '../UserSearchAutocomplete.vue';
 import { AdminApi } from '../../services/api';
 import dialogs from '../../services/dialogs.js';
+import { getApiErrorMessage } from '../../utils/apiErrors.js';
 import dayjs from '../../dayjs';
 import { mapState } from 'pinia';
 import { useAuthStore } from '../../stores/auth';
@@ -341,10 +342,17 @@ export default {
                 });
             } catch (e) {
                 console.error(e);
-                dialogs.message(this.$t('errorMigrandoUsuarios'), {
-                    estado: 'error',
-                    duration: 6
-                });
+                dialogs.message(
+                    getApiErrorMessage(
+                        e,
+                        this.$t('errorMigrandoUsuarios'),
+                        (key, params) => this.$t(key, params)
+                    ),
+                    {
+                        estado: 'error',
+                        duration: 6
+                    }
+                );
             } finally {
                 this.migrating = false;
             }

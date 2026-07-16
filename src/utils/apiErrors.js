@@ -4,8 +4,21 @@ const GENERIC_API_ERROR_MESSAGES = new Set([
 ]);
 
 const API_ERROR_I18N_KEYS = {
-    impersonation_action_forbidden: 'impersonationActionForbidden'
+    impersonation_action_forbidden: 'impersonationActionForbidden',
+    migration_banned_user: 'errorMigracionUsuarioSuspendido'
 };
+
+function extractApiErrorPayload(apiError) {
+    if (!apiError) {
+        return null;
+    }
+
+    if (apiError.data && typeof apiError.data === 'object') {
+        return apiError.data;
+    }
+
+    return null;
+}
 
 function extractApiErrorMessage(apiError) {
     if (!apiError) {
@@ -48,7 +61,15 @@ export function getApiErrorMessage(apiError, fallback, translate) {
 
     const message = extractApiErrorMessage(apiError);
     if (message) {
+        const payload = extractApiErrorPayload(apiError);
         if (translate && API_ERROR_I18N_KEYS[message]) {
+            if (message === 'migration_banned_user' && payload) {
+                return translate(API_ERROR_I18N_KEYS[message], {
+                    name: payload.user_name || '',
+                    id: payload.user_id ?? ''
+                });
+            }
+
             return translate(API_ERROR_I18N_KEYS[message]);
         }
         if (!GENERIC_API_ERROR_MESSAGES.has(message)) {
