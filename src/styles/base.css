@@ -880,11 +880,17 @@
 
   .nav-tabs {
       position: fixed;
+      top: var(--app-header-offset, calc(51px + constant(safe-area-inset-top)));
+      top: var(--app-header-offset, calc(51px + env(safe-area-inset-top)));
       background-color: var(--secondary-background);
       padding-top: .4em;
       padding-bottom: .3em;
       z-index: 3;
       width: 100%;
+  }
+  .ios .nav-tabs {
+      top: var(--app-header-offset, calc(77px + constant(safe-area-inset-top)));
+      top: var(--app-header-offset, calc(77px + env(safe-area-inset-top)));
   }
 
   .tab-content {
@@ -2018,17 +2024,13 @@
   }
 
   .view-container {
-      padding-top: 51px;
-      /* Account for safe area at top (status bar) */
-      /* Older iOS uses constant(), modern browsers use env() */
-      padding-top: calc(51px + constant(safe-area-inset-top));
-      padding-top: calc(51px + env(safe-area-inset-top));
+      /* Measured from .header via --app-header-offset; fallbacks match legacy heights */
+      padding-top: var(--app-header-offset, calc(51px + constant(safe-area-inset-top)));
+      padding-top: var(--app-header-offset, calc(51px + env(safe-area-inset-top)));
   }
   .ios .view-container {
-    padding-top: 77px;
-    /* Account for safe area at top on iOS */
-    padding-top: calc(77px + constant(safe-area-inset-top));
-    padding-top: calc(77px + env(safe-area-inset-top));
+    padding-top: var(--app-header-offset, calc(77px + constant(safe-area-inset-top)));
+    padding-top: var(--app-header-offset, calc(77px + env(safe-area-inset-top)));
   }
 
   .container {

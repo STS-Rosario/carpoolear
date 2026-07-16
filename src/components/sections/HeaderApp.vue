@@ -335,6 +335,7 @@ import {
     persistLocaleChoice,
     syncLocaleToBackend,
 } from '../../utils/userLocale.js';
+import { installAppHeaderOffsetObserver } from '../../utils/appHeaderOffset.js';
 
 const userApi = new UserApi();
 
@@ -365,6 +366,16 @@ export default {
 
     mounted() {
         bus.on('header-title-change', this.onHeaderChange);
+        this.stopHeaderOffsetObserver = installAppHeaderOffsetObserver(
+            this.$el
+        );
+    },
+
+    beforeUnmount() {
+        bus.off('header-title-change', this.onHeaderChange);
+        if (this.stopHeaderOffsetObserver) {
+            this.stopHeaderOffsetObserver();
+        }
     },
 
     computed: {
