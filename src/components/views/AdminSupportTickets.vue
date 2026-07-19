@@ -50,6 +50,7 @@
                         <th class="support-tickets-table__narrow">{{ capitalizeFirst($t('creado')) }}</th>
                         <th class="support-tickets-table__narrow">{{ capitalizeFirst($t('actualizado')) }}</th>
                         <th class="support-tickets-table__narrow">{{ capitalizeFirst($t('estado')) }}</th>
+                        <th class="support-tickets-table__narrow">{{ capitalizeFirst($t('asignadoA')) }}</th>
                         <th class="support-tickets-table__narrow">{{ capitalizeFirst($t('categoriaTicket')) }}</th>
                     </tr>
                 </thead>
@@ -86,6 +87,7 @@
                             :title="fullDate(ticket.updated_at)"
                         >{{ relativeDate(ticket.updated_at) }}</td>
                         <td class="support-tickets-table__narrow"><span :class="statusClass(ticket.status)">{{ statusLabel(ticket.status) }}</span></td>
+                        <td class="support-tickets-table__narrow">{{ assignedAdminLabel(ticket) }}</td>
                         <td class="support-tickets-table__narrow">{{ ticketCategoryLabel(ticket.type) }}</td>
                     </tr>
                 </tbody>
@@ -109,6 +111,7 @@ import {
     parseAdminSupportTicketListFiltersFromRoute
 } from '../../utils/adminSupportTicketListFilters';
 import { getUpdatedAgeAttentionClass, hasUnreadUserReplyIndicator } from '../../utils/supportTicketUpdatedAgeAttention';
+import { assignedAdminDisplayName } from '../../utils/adminSupportTicketAssignment';
 import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
 
 const ticketTypeOptions = USER_TICKET_TYPE_OPTIONS;
@@ -250,6 +253,10 @@ export default {
             const username = u.username != null && String(u.username).trim();
             if (username) return username;
             return '';
+        },
+        assignedAdminLabel(ticket) {
+            const name = assignedAdminDisplayName(ticket);
+            return name || '-';
         }
     },
     components: {

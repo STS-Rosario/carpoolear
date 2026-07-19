@@ -23,13 +23,15 @@ describe('AdminSupportTickets view', () => {
         const cre = thead.indexOf("$t('creado')");
         const upd = thead.indexOf("$t('actualizado')");
         const est = thead.indexOf("$t('estado')");
+        const asg = thead.indexOf("$t('asignadoA')");
         const cat = thead.indexOf("$t('categoriaTicket')");
         expect(sub).toBeGreaterThan(-1);
         expect(sub).toBeLessThan(pri);
         expect(pri).toBeLessThan(cre);
         expect(cre).toBeLessThan(upd);
         expect(upd).toBeLessThan(est);
-        expect(est).toBeLessThan(cat);
+        expect(est).toBeLessThan(asg);
+        expect(asg).toBeLessThan(cat);
     });
 
     it('shows subject link before priority and category cell last in row', () => {

@@ -101,6 +101,23 @@
         <div class="admin-ticket-actions reply-actions mtop-10">
             <div class="reply-actions-right">
                 <button
+                    v-if="showAssignTicketButton"
+                    class="btn btn-default reply-action-btn"
+                    @click="assignTicketToMe"
+                >
+                    {{ $t('asignarmeTicket') }}
+                </button>
+                <button
+                    v-if="showUnassignTicketButton"
+                    class="btn btn-default reply-action-btn"
+                    @click="unassignTicketFromMe"
+                >
+                    {{ $t('desasignarmeTicket') }}
+                </button>
+                <p v-if="showAssignedToOtherAdmin" class="ticket-assigned-to-other text-muted">
+                    {{ $t('asignadoA') }}: {{ assignedAdminDisplayName(ticket) }}
+                </p>
+                <button
                     v-if="showMarkNeedsReviewButton"
                     class="btn btn-default reply-action-btn"
                     @click="markNeedsReviewTicket"
@@ -205,6 +222,12 @@ import {
 } from '../../utils/imageUpload';
 import { applyImageUploadSelection } from '../../utils/imageUploadSelection';
 import { compressImageFilesForUpload } from '../../utils/imageUploadCompress';
+import {
+    assignedAdminDisplayName,
+    hasActiveTicketAssignment,
+    isTicketAssignableByAdmin,
+    isTicketAssignedToAdmin
+} from '../../utils/adminSupportTicketAssignment';
 import { useAuthStore } from '../../stores/auth';
 
 const PRIORITY_LABEL_KEYS = {
@@ -307,9 +330,28 @@ export default {
             return (this.ticket?.replies || []).some(
                 (reply) => Array.isArray(reply.attachments) && reply.attachments.length > 0
             );
+        },
+        currentAdminId() {
+            const user = useAuthStore().user;
+            return user && user.id != null ? Number(user.id) : null;
+        },
+        showAssignTicketButton() {
+            return this.ticket
+                && isTicketAssignableByAdmin(this.ticket)
+                && !hasActiveTicketAssignment(this.ticket);
+        },
+        showUnassignTicketButton() {
+            return this.ticket
+                && isTicketAssignedToAdmin(this.ticket, this.currentAdminId);
+        },
+        showAssignedToOtherAdmin() {
+            return this.ticket
+                && hasActiveTicketAssignment(this.ticket)
+                && !isTicketAssignedToAdmin(this.ticket, this.currentAdminId);
         }
     },
     methods: {
+        assignedAdminDisplayName,
         openBlobImageInNewTab,
         markdownToHtml,
         ...mapActions(useTicketsStore, {
@@ -322,7 +364,9 @@ export default {
             adminMarkNeedsReview: 'adminMarkNeedsReview',
             adminPurgeAttachments: 'adminPurgeAttachments',
             adminSetInternalNote: 'adminSetInternalNote',
-            adminSetType: 'adminSetType'
+            adminSetType: 'adminSetType',
+            adminAssignMe: 'adminAssignMe',
+            adminUnassignMe: 'adminUnassignMe'
         }),
         ...mapActions(useReplyTemplatesStore, {
             fetchReplyTemplatesAdminList: 'fetchAdminList'
@@ -608,6 +652,26 @@ export default {
                 .catch(() => {
                     dialogs.message(this.$t('errorGuardandoCategoriaTicket'), ERROR_TOAST_OPTIONS);
                 });
+        },
+        assignTicketToMe() {
+            this.adminAssignMe(this.id)
+                .then(() => this.refresh())
+                .then(() => {
+                    dialogs.message(this.$t('ticketAsignado'), SUCCESS_TOAST_OPTIONS);
+                })
+                .catch(() => {
+                    dialogs.message(this.$t('errorAsignandoTicket'), ERROR_TOAST_OPTIONS);
+                });
+        },
+        unassignTicketFromMe() {
+            this.adminUnassignMe(this.id)
+                .then(() => this.refresh())
+                .then(() => {
+                    dialogs.message(this.$t('ticketDesasignado'), SUCCESS_TOAST_OPTIONS);
+                })
+                .catch(() => {
+                    dialogs.message(this.$t('errorDesasignandoTicket'), ERROR_TOAST_OPTIONS);
+                });
         }
     },
     mounted() {
@@ -757,5 +821,9 @@ export default {
     background: transparent;
     padding: 0;
     text-align: left;
+}
+
+.ticket-assigned-to-other {
+    margin: 0 8px 8px 0;
 }
 </style>
