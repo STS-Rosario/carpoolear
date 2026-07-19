@@ -106,4 +106,9 @@ describe('AdminSupportTickets view', () => {
         expect(viewSource).toContain('filterUserId');
         expect(viewSource).toContain('userId: this.filterUserId');
     });
+
+    it('shows assigned admin column in tickets table', () => {
+        expect(viewSource).toContain("{{ capitalizeFirst($t('asignadoA')) }}");
+        expect(viewSource).toContain('assignedAdminDisplayName(ticket)');
+    });
 });

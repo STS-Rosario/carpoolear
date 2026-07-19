@@ -196,4 +196,17 @@ describe('AdminSupportTicketDetail view', () => {
         expect(viewSource).toContain(':class="supportTicketReplyEditorClass"');
         expect(viewSource).not.toContain('height="140px"');
     });
+
+    it('shows assign and unassign ticket actions for admins', () => {
+        expect(viewSource).toContain('showAssignTicketButton');
+        expect(viewSource).toContain('showUnassignTicketButton');
+        expect(viewSource).toContain('assignTicketToMe');
+        expect(viewSource).toContain('unassignTicketFromMe');
+        expect(viewSource).toContain("{{ $t('asignarmeTicket') }}");
+        expect(viewSource).toContain("{{ $t('desasignarmeTicket') }}");
+        expect(viewSource).toContain('adminAssignMe');
+        expect(viewSource).toContain('adminUnassignMe');
+        expect(viewSource).toContain('isTicketAssignableByAdmin');
+        expect(viewSource).toContain('isTicketAssignedToAdmin');
+    });
 });
