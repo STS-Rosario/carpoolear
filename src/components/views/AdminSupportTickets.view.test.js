@@ -113,4 +113,14 @@ describe('AdminSupportTickets view', () => {
         expect(viewSource).toContain("{{ capitalizeFirst($t('asignadoA')) }}");
         expect(viewSource).toContain('assignedAdminDisplayName(ticket)');
     });
+
+    it('polls admin ticket list while tab is visible', () => {
+        expect(viewSource).toContain('listPollTimer');
+        expect(viewSource).toContain('startListPolling');
+        expect(viewSource).toContain('stopListPolling');
+        expect(viewSource).toContain('handleVisibilityChange');
+        expect(viewSource).toContain("document.addEventListener('visibilitychange', this.handleVisibilityChange)");
+        expect(viewSource).toContain('setInterval');
+        expect(viewSource).toContain('loadTickets({ silent: true })');
+    });
 });
