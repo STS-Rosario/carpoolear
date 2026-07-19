@@ -31,7 +31,17 @@ export function assignedAdminDisplayName(ticket) {
 }
 
 export function hasActiveTicketAssignment(ticket) {
-    return Boolean(ticket && ticket.assigned_to_user_id != null);
+    const assigneeId = ticket && ticket.assigned_to_user_id;
+    return assigneeId != null && assigneeId !== '' && Number(assigneeId) > 0;
+}
+
+export function shouldShowAssignTicketButton(ticket, adminUserId) {
+    return isTicketAssignableByAdmin(ticket) &&
+        !isTicketAssignedToAdmin(ticket, adminUserId);
+}
+
+export function isAssignTicketDisabled(ticket, adminUserId) {
+    return isReplyBlockedByOtherAdminAssignment(ticket, adminUserId);
 }
 
 export function isReplyBlockedByOtherAdminAssignment(ticket, adminUserId) {

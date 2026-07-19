@@ -239,7 +239,6 @@ describe('AdminSupportTicketDetail view', () => {
         expect(viewSource).toContain("{{ $t('desasignarmeTicket') }}");
         expect(viewSource).toContain('adminAssignMe');
         expect(viewSource).toContain('adminUnassignMe');
-        expect(viewSource).toContain('isTicketAssignableByAdmin');
         expect(viewSource).toContain('shouldShowAssignTicketButton');
         expect(viewSource).toContain('isAssignTicketDisabled');
         expect(viewSource).not.toContain('ticket-assigned-to-other text-muted');

@@ -24,6 +24,7 @@
                 v-if="showAssignTicketButton"
                 type="button"
                 class="btn btn-info"
+                :disabled="isAssignTicketDisabled(ticket, currentAdminId)"
                 @click="assignTicketToMe"
             >
                 {{ $t('asignarmeTicket') }}
@@ -129,7 +130,7 @@
             <div class="reply-actions-right">
                 <button
                     v-if="showMarkNeedsReviewButton"
-                    class="btn btn-default reply-action-btn"
+                    class="btn btn-info reply-action-btn"
                     @click="markNeedsReviewTicket"
                 >
                     {{ $t(markNeedsReviewButtonLabelKey) }}
@@ -235,9 +236,10 @@ import { compressImageFilesForUpload } from '../../utils/imageUploadCompress';
 import {
     assignedAdminDisplayName,
     hasActiveTicketAssignment,
+    isAssignTicketDisabled,
     isReplyBlockedByOtherAdminAssignment,
-    isTicketAssignableByAdmin,
-    isTicketAssignedToAdmin
+    isTicketAssignedToAdmin,
+    shouldShowAssignTicketButton
 } from '../../utils/adminSupportTicketAssignment';
 import { useAuthStore } from '../../stores/auth';
 
@@ -350,9 +352,7 @@ export default {
             return user && user.id != null ? Number(user.id) : null;
         },
         showAssignTicketButton() {
-            return this.ticket
-                && isTicketAssignableByAdmin(this.ticket)
-                && !hasActiveTicketAssignment(this.ticket);
+            return shouldShowAssignTicketButton(this.ticket, this.currentAdminId);
         },
         showUnassignTicketButton() {
             return this.ticket
@@ -366,6 +366,7 @@ export default {
     },
     methods: {
         assignedAdminDisplayName,
+        isAssignTicketDisabled,
         openBlobImageInNewTab,
         markdownToHtml,
         ...mapActions(useTicketsStore, {
@@ -668,6 +669,9 @@ export default {
                 });
         },
         assignTicketToMe() {
+            if (isAssignTicketDisabled(this.ticket, this.currentAdminId)) {
+                return;
+            }
             this.adminAssignMe(this.id)
                 .then(() => this.refresh())
                 .then(() => {
