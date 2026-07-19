@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
     assignedAdminDisplayName,
     hasActiveTicketAssignment,
+    isReplyBlockedByOtherAdminAssignment,
     isTicketAssignableByAdmin,
     isTicketAssignedToAdmin
 } from './adminSupportTicketAssignment';
@@ -36,5 +37,12 @@ describe('adminSupportTicketAssignment', () => {
     it('detects active assignment', () => {
         expect(hasActiveTicketAssignment({ assigned_to_user_id: 3 })).toBe(true);
         expect(hasActiveTicketAssignment({ assigned_to_user_id: null })).toBe(false);
+    });
+
+    it('blocks reply when ticket is assigned to another admin', () => {
+        const ticket = { assigned_to_user_id: 5 };
+        expect(isReplyBlockedByOtherAdminAssignment(ticket, 7)).toBe(true);
+        expect(isReplyBlockedByOtherAdminAssignment(ticket, 5)).toBe(false);
+        expect(isReplyBlockedByOtherAdminAssignment({ assigned_to_user_id: null }, 5)).toBe(false);
     });
 });
