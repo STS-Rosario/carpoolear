@@ -23,13 +23,15 @@ describe('AdminSupportTickets view', () => {
         const cre = thead.indexOf("$t('creado')");
         const upd = thead.indexOf("$t('actualizado')");
         const est = thead.indexOf("$t('estado')");
+        const asg = thead.indexOf("$t('asignadoA')");
         const cat = thead.indexOf("$t('categoriaTicket')");
         expect(sub).toBeGreaterThan(-1);
         expect(sub).toBeLessThan(pri);
         expect(pri).toBeLessThan(cre);
         expect(cre).toBeLessThan(upd);
         expect(upd).toBeLessThan(est);
-        expect(est).toBeLessThan(cat);
+        expect(est).toBeLessThan(asg);
+        expect(asg).toBeLessThan(cat);
     });
 
     it('shows subject link before priority and category cell last in row', () => {
@@ -105,5 +107,20 @@ describe('AdminSupportTickets view', () => {
     it('passes userId filter from route query to admin ticket list fetch', () => {
         expect(viewSource).toContain('filterUserId');
         expect(viewSource).toContain('userId: this.filterUserId');
+    });
+
+    it('shows assigned admin column in tickets table', () => {
+        expect(viewSource).toContain("{{ capitalizeFirst($t('asignadoA')) }}");
+        expect(viewSource).toContain('assignedAdminDisplayName(ticket)');
+    });
+
+    it('polls admin ticket list while tab is visible', () => {
+        expect(viewSource).toContain('listPollTimer');
+        expect(viewSource).toContain('startListPolling');
+        expect(viewSource).toContain('stopListPolling');
+        expect(viewSource).toContain('handleVisibilityChange');
+        expect(viewSource).toContain("document.addEventListener('visibilitychange', this.handleVisibilityChange)");
+        expect(viewSource).toContain('setInterval');
+        expect(viewSource).toContain('loadTickets({ silent: true })');
     });
 });

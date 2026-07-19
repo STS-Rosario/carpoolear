@@ -80,6 +80,12 @@ export const useTicketsStore = defineStore('tickets', {
         },
         adminSetInternalNote(id, note) {
             return ticketsApi.adminSetInternalNote(id, note).then((response) => response.data);
+        },
+        adminAssignMe(id) {
+            return ticketsApi.adminAssignMe(id).then((response) => response.data);
+        },
+        adminUnassignMe(id) {
+            return ticketsApi.adminUnassignMe(id).then((response) => response.data);
         }
     }
 });

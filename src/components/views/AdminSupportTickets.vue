@@ -50,6 +50,7 @@
                         <th class="support-tickets-table__narrow">{{ capitalizeFirst($t('creado')) }}</th>
                         <th class="support-tickets-table__narrow">{{ capitalizeFirst($t('actualizado')) }}</th>
                         <th class="support-tickets-table__narrow">{{ capitalizeFirst($t('estado')) }}</th>
+                        <th class="support-tickets-table__narrow">{{ capitalizeFirst($t('asignadoA')) }}</th>
                         <th class="support-tickets-table__narrow">{{ capitalizeFirst($t('categoriaTicket')) }}</th>
                     </tr>
                 </thead>
@@ -86,6 +87,7 @@
                             :title="fullDate(ticket.updated_at)"
                         >{{ relativeDate(ticket.updated_at) }}</td>
                         <td class="support-tickets-table__narrow"><span :class="statusClass(ticket.status)">{{ statusLabel(ticket.status) }}</span></td>
+                        <td class="support-tickets-table__narrow">{{ assignedAdminLabel(ticket) }}</td>
                         <td class="support-tickets-table__narrow">{{ ticketCategoryLabel(ticket.type) }}</td>
                     </tr>
                 </tbody>
@@ -109,6 +111,7 @@ import {
     parseAdminSupportTicketListFiltersFromRoute
 } from '../../utils/adminSupportTicketListFilters';
 import { getUpdatedAgeAttentionClass, hasUnreadUserReplyIndicator } from '../../utils/supportTicketUpdatedAgeAttention';
+import { assignedAdminDisplayName } from '../../utils/adminSupportTicketAssignment';
 import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
 
 const ticketTypeOptions = USER_TICKET_TYPE_OPTIONS;
@@ -123,7 +126,8 @@ export default {
             filterPriority: '',
             filterNeedsReply: false,
             filterUserId: null,
-            ticketTypeOptions
+            ticketTypeOptions,
+            listPollTimer: null
         };
     },
     computed: {
@@ -182,16 +186,49 @@ export default {
         applyFilters() {
             this.syncFiltersToRoute();
         },
-        loadTickets() {
-            this.loading = true;
-            this.error = '';
+        loadTickets(options = {}) {
+            const silent = Boolean(options && options.silent);
+            if (!silent) {
+                this.loading = true;
+                this.error = '';
+            }
             return this.fetchAdminList(this.listFilters)
                 .catch(() => {
-                    this.error = this.$t('errorCargandoTickets');
+                    if (!silent) {
+                        this.error = this.$t('errorCargandoTickets');
+                    }
                 })
                 .finally(() => {
-                    this.loading = false;
+                    if (!silent) {
+                        this.loading = false;
+                    }
                 });
+        },
+        startListPolling() {
+            this.stopListPolling();
+            if (typeof document !== 'undefined' && document.visibilityState === 'hidden') {
+                return;
+            }
+            this.listPollTimer = setInterval(() => {
+                this.loadTickets({ silent: true });
+            }, 30000);
+        },
+        stopListPolling() {
+            if (this.listPollTimer) {
+                clearInterval(this.listPollTimer);
+                this.listPollTimer = null;
+            }
+        },
+        handleVisibilityChange() {
+            if (typeof document === 'undefined') {
+                return;
+            }
+            if (document.visibilityState === 'hidden') {
+                this.stopListPolling();
+                return;
+            }
+            this.loadTickets({ silent: true });
+            this.startListPolling();
         },
         capitalizeFirst(value) {
             if (!value) return '';
@@ -250,6 +287,22 @@ export default {
             const username = u.username != null && String(u.username).trim();
             if (username) return username;
             return '';
+        },
+        assignedAdminLabel(ticket) {
+            const name = assignedAdminDisplayName(ticket);
+            return name || '-';
+        }
+    },
+    mounted() {
+        if (typeof document !== 'undefined') {
+            document.addEventListener('visibilitychange', this.handleVisibilityChange);
+        }
+        this.startListPolling();
+    },
+    beforeUnmount() {
+        this.stopListPolling();
+        if (typeof document !== 'undefined') {
+            document.removeEventListener('visibilitychange', this.handleVisibilityChange);
         }
     },
     components: {

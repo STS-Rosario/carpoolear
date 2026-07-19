@@ -11,6 +11,34 @@
             <span class="ticket-priority-label" :class="priorityClass(ticket.priority)">{{ priorityLabel(ticket.priority) }}</span>
         </p>
 
+        <div
+            v-if="showAssignedToOtherAdmin"
+            class="alert alert-warning ticket-assigned-warning"
+            role="alert"
+        >
+            {{ $t('ticketAsignadoAOtroAdmin', { name: assignedAdminDisplayName(ticket) }) }}
+        </div>
+
+        <div v-if="showAssignTicketButton || showUnassignTicketButton" class="ticket-assignment-actions">
+            <button
+                v-if="showAssignTicketButton"
+                type="button"
+                class="btn btn-info"
+                :disabled="isAssignTicketDisabled(ticket, currentAdminId)"
+                @click="assignTicketToMe"
+            >
+                {{ $t('asignarmeTicket') }}
+            </button>
+            <button
+                v-if="showUnassignTicketButton"
+                type="button"
+                class="btn btn-warning"
+                @click="unassignTicketFromMe"
+            >
+                {{ $t('desasignarmeTicket') }}
+            </button>
+        </div>
+
         <label>{{ $t('categoriaTicket') }}</label>
         <select v-model="ticketType" class="form-control ticket-category-select">
             <option
@@ -102,14 +130,14 @@
             <div class="reply-actions-right">
                 <button
                     v-if="showMarkNeedsReviewButton"
-                    class="btn btn-default reply-action-btn"
+                    class="btn btn-info reply-action-btn"
                     @click="markNeedsReviewTicket"
                 >
                     {{ $t(markNeedsReviewButtonLabelKey) }}
                 </button>
                 <button
                     v-if="showResolveTicketButton"
-                    class="btn btn-default reply-action-btn"
+                    class="btn btn-success reply-action-btn"
                     @click="resolveTicket"
                 >
                     {{ $t('marcarResuelto') }}
@@ -121,7 +149,7 @@
                 >
                     {{ $t('marcarComoNoResuelto') }}
                 </button>
-                <button v-if="showCloseTicketButton" class="btn btn-default reply-action-btn" @click="closeTicket">{{ $t('cerrarTicket') }}</button>
+                <button v-if="showCloseTicketButton" class="btn btn-danger reply-action-btn" @click="closeTicket">{{ $t('cerrarTicket') }}</button>
                 <button v-if="showReopenTicketButton" class="btn btn-default reply-action-btn" @click="reopenTicket">{{ $t('reabrirTicket') }}</button>
             </div>
         </div>
@@ -205,6 +233,14 @@ import {
 } from '../../utils/imageUpload';
 import { applyImageUploadSelection } from '../../utils/imageUploadSelection';
 import { compressImageFilesForUpload } from '../../utils/imageUploadCompress';
+import {
+    assignedAdminDisplayName,
+    hasActiveTicketAssignment,
+    isAssignTicketDisabled,
+    isReplyBlockedByOtherAdminAssignment,
+    isTicketAssignedToAdmin,
+    shouldShowAssignTicketButton
+} from '../../utils/adminSupportTicketAssignment';
 import { useAuthStore } from '../../stores/auth';
 
 const PRIORITY_LABEL_KEYS = {
@@ -281,7 +317,10 @@ export default {
             return this.ticket && this.ticket.status === 'Necesita revisión';
         },
         showReplyForm() {
-            return this.ticket && !this.isTicketClosed && !this.isTicketResolved;
+            return this.ticket
+                && !this.isTicketClosed
+                && !this.isTicketResolved
+                && !isReplyBlockedByOtherAdminAssignment(this.ticket, this.currentAdminId);
         },
         showReopenTicketButton() {
             return this.isTicketClosed;
@@ -307,9 +346,27 @@ export default {
             return (this.ticket?.replies || []).some(
                 (reply) => Array.isArray(reply.attachments) && reply.attachments.length > 0
             );
+        },
+        currentAdminId() {
+            const user = useAuthStore().user;
+            return user && user.id != null ? Number(user.id) : null;
+        },
+        showAssignTicketButton() {
+            return shouldShowAssignTicketButton(this.ticket, this.currentAdminId);
+        },
+        showUnassignTicketButton() {
+            return this.ticket
+                && isTicketAssignedToAdmin(this.ticket, this.currentAdminId);
+        },
+        showAssignedToOtherAdmin() {
+            return this.ticket
+                && hasActiveTicketAssignment(this.ticket)
+                && !isTicketAssignedToAdmin(this.ticket, this.currentAdminId);
         }
     },
     methods: {
+        assignedAdminDisplayName,
+        isAssignTicketDisabled,
         openBlobImageInNewTab,
         markdownToHtml,
         ...mapActions(useTicketsStore, {
@@ -322,7 +379,9 @@ export default {
             adminMarkNeedsReview: 'adminMarkNeedsReview',
             adminPurgeAttachments: 'adminPurgeAttachments',
             adminSetInternalNote: 'adminSetInternalNote',
-            adminSetType: 'adminSetType'
+            adminSetType: 'adminSetType',
+            adminAssignMe: 'adminAssignMe',
+            adminUnassignMe: 'adminUnassignMe'
         }),
         ...mapActions(useReplyTemplatesStore, {
             fetchReplyTemplatesAdminList: 'fetchAdminList'
@@ -608,6 +667,29 @@ export default {
                 .catch(() => {
                     dialogs.message(this.$t('errorGuardandoCategoriaTicket'), ERROR_TOAST_OPTIONS);
                 });
+        },
+        assignTicketToMe() {
+            if (isAssignTicketDisabled(this.ticket, this.currentAdminId)) {
+                return;
+            }
+            this.adminAssignMe(this.id)
+                .then(() => this.refresh())
+                .then(() => {
+                    dialogs.message(this.$t('ticketAsignado'), SUCCESS_TOAST_OPTIONS);
+                })
+                .catch(() => {
+                    dialogs.message(this.$t('errorAsignandoTicket'), ERROR_TOAST_OPTIONS);
+                });
+        },
+        unassignTicketFromMe() {
+            this.adminUnassignMe(this.id)
+                .then(() => this.refresh())
+                .then(() => {
+                    dialogs.message(this.$t('ticketDesasignado'), SUCCESS_TOAST_OPTIONS);
+                })
+                .catch(() => {
+                    dialogs.message(this.$t('errorDesasignandoTicket'), ERROR_TOAST_OPTIONS);
+                });
         }
     },
     mounted() {
@@ -757,5 +839,18 @@ export default {
     background: transparent;
     padding: 0;
     text-align: left;
+}
+
+.ticket-assigned-warning {
+    margin-top: 12px;
+    margin-bottom: 0;
+}
+
+.ticket-assignment-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+    margin-bottom: 12px;
 }
 </style>

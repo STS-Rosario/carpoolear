@@ -78,6 +78,14 @@ class TicketsApi extends TaggedApi {
         });
     }
 
+    adminAssignMe(id) {
+        return this.post('/api/admin/support/tickets/' + id + '/assign-me', {});
+    }
+
+    adminUnassignMe(id) {
+        return this.post('/api/admin/support/tickets/' + id + '/unassign-me', {});
+    }
+
     adminReplyTemplateList() {
         return this.get('/api/admin/support/reply-templates');
     }
