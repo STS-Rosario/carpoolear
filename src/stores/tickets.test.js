@@ -16,7 +16,9 @@ const apiMock = {
     adminSetPriority: vi.fn(),
     adminSetType: vi.fn(),
     adminSetInternalNote: vi.fn(),
-    adminCreate: vi.fn()
+    adminCreate: vi.fn(),
+    adminAssignMe: vi.fn(),
+    adminUnassignMe: vi.fn()
 };
 
 vi.mock('../services/api', () => ({
@@ -111,5 +113,39 @@ describe('tickets store', () => {
 
         expect(updated).toEqual({ id: 5, type: 'bug_report' });
         expect(apiMock.adminSetType).toHaveBeenCalledWith(5, 'bug_report');
+    });
+
+    it('adminAssignMe delegates to API and returns ticket data', async () => {
+        const { useTicketsStore } = await import('./tickets');
+        apiMock.adminAssignMe.mockResolvedValue({
+            data: { id: 9, assigned_to_user_id: 2, assigned_to: { id: 2, name: 'Admin' } }
+        });
+
+        const store = useTicketsStore();
+        const updated = await store.adminAssignMe(9);
+
+        expect(updated).toEqual({
+            id: 9,
+            assigned_to_user_id: 2,
+            assigned_to: { id: 2, name: 'Admin' }
+        });
+        expect(apiMock.adminAssignMe).toHaveBeenCalledWith(9);
+    });
+
+    it('adminUnassignMe delegates to API and returns ticket data', async () => {
+        const { useTicketsStore } = await import('./tickets');
+        apiMock.adminUnassignMe.mockResolvedValue({
+            data: { id: 9, assigned_to_user_id: null, assigned_to: null }
+        });
+
+        const store = useTicketsStore();
+        const updated = await store.adminUnassignMe(9);
+
+        expect(updated).toEqual({
+            id: 9,
+            assigned_to_user_id: null,
+            assigned_to: null
+        });
+        expect(apiMock.adminUnassignMe).toHaveBeenCalledWith(9);
     });
 });
