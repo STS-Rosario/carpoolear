@@ -33,3 +33,8 @@ export function assignedAdminDisplayName(ticket) {
 export function hasActiveTicketAssignment(ticket) {
     return Boolean(ticket && ticket.assigned_to_user_id != null);
 }
+
+export function isReplyBlockedByOtherAdminAssignment(ticket, adminUserId) {
+    return hasActiveTicketAssignment(ticket)
+        && !isTicketAssignedToAdmin(ticket, adminUserId);
+}
