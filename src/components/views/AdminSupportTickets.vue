@@ -126,7 +126,8 @@ export default {
             filterPriority: '',
             filterNeedsReply: false,
             filterUserId: null,
-            ticketTypeOptions
+            ticketTypeOptions,
+            listPollTimer: null
         };
     },
     computed: {
@@ -185,16 +186,49 @@ export default {
         applyFilters() {
             this.syncFiltersToRoute();
         },
-        loadTickets() {
-            this.loading = true;
-            this.error = '';
+        loadTickets(options = {}) {
+            const silent = Boolean(options && options.silent);
+            if (!silent) {
+                this.loading = true;
+                this.error = '';
+            }
             return this.fetchAdminList(this.listFilters)
                 .catch(() => {
-                    this.error = this.$t('errorCargandoTickets');
+                    if (!silent) {
+                        this.error = this.$t('errorCargandoTickets');
+                    }
                 })
                 .finally(() => {
-                    this.loading = false;
+                    if (!silent) {
+                        this.loading = false;
+                    }
                 });
+        },
+        startListPolling() {
+            this.stopListPolling();
+            if (typeof document !== 'undefined' && document.visibilityState === 'hidden') {
+                return;
+            }
+            this.listPollTimer = setInterval(() => {
+                this.loadTickets({ silent: true });
+            }, 30000);
+        },
+        stopListPolling() {
+            if (this.listPollTimer) {
+                clearInterval(this.listPollTimer);
+                this.listPollTimer = null;
+            }
+        },
+        handleVisibilityChange() {
+            if (typeof document === 'undefined') {
+                return;
+            }
+            if (document.visibilityState === 'hidden') {
+                this.stopListPolling();
+                return;
+            }
+            this.loadTickets({ silent: true });
+            this.startListPolling();
         },
         capitalizeFirst(value) {
             if (!value) return '';
@@ -257,6 +291,18 @@ export default {
         assignedAdminLabel(ticket) {
             const name = assignedAdminDisplayName(ticket);
             return name || '-';
+        }
+    },
+    mounted() {
+        if (typeof document !== 'undefined') {
+            document.addEventListener('visibilitychange', this.handleVisibilityChange);
+        }
+        this.startListPolling();
+    },
+    beforeUnmount() {
+        this.stopListPolling();
+        if (typeof document !== 'undefined') {
+            document.removeEventListener('visibilitychange', this.handleVisibilityChange);
         }
     },
     components: {
