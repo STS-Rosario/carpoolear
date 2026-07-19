@@ -126,7 +126,36 @@ describe('AdminSupportTicketDetail view', () => {
     it('hides reply composer when ticket is resolved or closed', () => {
         expect(viewSource).toContain('v-if="showReplyForm"');
         expect(viewSource).toContain('isTicketResolved');
-        expect(viewSource).toContain('return this.ticket && !this.isTicketClosed && !this.isTicketResolved');
+        expect(viewSource).toContain('isReplyBlockedByOtherAdminAssignment');
+    });
+
+    it('hides reply composer when ticket is assigned to another admin', () => {
+        expect(viewSource).toContain('isReplyBlockedByOtherAdminAssignment(this.ticket, this.currentAdminId)');
+    });
+
+    it('shows warning banner when ticket is assigned to another admin', () => {
+        expect(viewSource).toContain('ticket-assigned-warning');
+        expect(viewSource).toContain('alert-warning');
+        expect(viewSource).toContain('ticketAsignadoAOtroAdmin');
+        expect(viewSource).toContain('showAssignedToOtherAdmin');
+    });
+
+    it('places assign and unassign actions at the top with distinct button styles', () => {
+        const assignmentTop = viewSource.indexOf('ticket-assignment-actions');
+        const replyBox = viewSource.indexOf('admin-reply-box');
+        const categoryLabel = viewSource.indexOf("{{ $t('categoriaTicket') }}");
+        expect(assignmentTop).toBeGreaterThan(-1);
+        expect(assignmentTop).toBeLessThan(categoryLabel);
+        expect(assignmentTop).toBeLessThan(replyBox);
+        expect(viewSource).toContain('btn-info');
+        expect(viewSource).toContain('btn-warning');
+        expect(viewSource).toMatch(/showAssignTicketButton[\s\S]*btn-info/);
+        expect(viewSource).toMatch(/showUnassignTicketButton[\s\S]*btn-warning/);
+    });
+
+    it('uses green resolve and red close action buttons', () => {
+        expect(viewSource).toMatch(/showResolveTicketButton[\s\S]*btn-success/);
+        expect(viewSource).toMatch(/showCloseTicketButton[\s\S]*btn-danger/);
     });
 
     it('toggles resolve and unresolve actions', () => {
@@ -208,5 +237,6 @@ describe('AdminSupportTicketDetail view', () => {
         expect(viewSource).toContain('adminUnassignMe');
         expect(viewSource).toContain('isTicketAssignableByAdmin');
         expect(viewSource).toContain('isTicketAssignedToAdmin');
+        expect(viewSource).not.toContain('ticket-assigned-to-other text-muted');
     });
 });
