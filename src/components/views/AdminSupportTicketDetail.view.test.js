@@ -158,6 +158,10 @@ describe('AdminSupportTicketDetail view', () => {
         expect(viewSource).toMatch(/showCloseTicketButton[\s\S]*btn-danger/);
     });
 
+    it('uses blue mark needs review action button', () => {
+        expect(viewSource).toMatch(/showMarkNeedsReviewButton[\s\S]*btn-info/);
+    });
+
     it('toggles resolve and unresolve actions', () => {
         expect(viewSource).toContain('showResolveTicketButton');
         expect(viewSource).toContain('showUnresolveTicketButton');
@@ -236,7 +240,8 @@ describe('AdminSupportTicketDetail view', () => {
         expect(viewSource).toContain('adminAssignMe');
         expect(viewSource).toContain('adminUnassignMe');
         expect(viewSource).toContain('isTicketAssignableByAdmin');
-        expect(viewSource).toContain('isTicketAssignedToAdmin');
+        expect(viewSource).toContain('shouldShowAssignTicketButton');
+        expect(viewSource).toContain('isAssignTicketDisabled');
         expect(viewSource).not.toContain('ticket-assigned-to-other text-muted');
     });
 });

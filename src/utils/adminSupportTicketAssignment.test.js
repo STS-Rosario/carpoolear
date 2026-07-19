@@ -2,9 +2,11 @@ import { describe, expect, it } from 'vitest';
 import {
     assignedAdminDisplayName,
     hasActiveTicketAssignment,
+    isAssignTicketDisabled,
     isReplyBlockedByOtherAdminAssignment,
     isTicketAssignableByAdmin,
-    isTicketAssignedToAdmin
+    isTicketAssignedToAdmin,
+    shouldShowAssignTicketButton
 } from './adminSupportTicketAssignment';
 
 describe('adminSupportTicketAssignment', () => {
@@ -44,5 +46,22 @@ describe('adminSupportTicketAssignment', () => {
         expect(isReplyBlockedByOtherAdminAssignment(ticket, 7)).toBe(true);
         expect(isReplyBlockedByOtherAdminAssignment(ticket, 5)).toBe(false);
         expect(isReplyBlockedByOtherAdminAssignment({ assigned_to_user_id: null }, 5)).toBe(false);
+    });
+
+    it('shows assign button for assignable unassigned tickets', () => {
+        const ticket = { status: 'Open', unread_for_admin: 0 };
+        expect(shouldShowAssignTicketButton(ticket, 3)).toBe(true);
+        expect(isAssignTicketDisabled(ticket, 3)).toBe(false);
+    });
+
+    it('shows disabled assign button when ticket is assigned to another admin', () => {
+        const ticket = { status: 'Open', unread_for_admin: 0, assigned_to_user_id: 9 };
+        expect(shouldShowAssignTicketButton(ticket, 3)).toBe(true);
+        expect(isAssignTicketDisabled(ticket, 3)).toBe(true);
+    });
+
+    it('hides assign button when ticket is assigned to current admin', () => {
+        const ticket = { status: 'Open', unread_for_admin: 0, assigned_to_user_id: 3 };
+        expect(shouldShowAssignTicketButton(ticket, 3)).toBe(false);
     });
 });
