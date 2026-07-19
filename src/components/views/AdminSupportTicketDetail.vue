@@ -11,6 +11,33 @@
             <span class="ticket-priority-label" :class="priorityClass(ticket.priority)">{{ priorityLabel(ticket.priority) }}</span>
         </p>
 
+        <div
+            v-if="showAssignedToOtherAdmin"
+            class="alert alert-warning ticket-assigned-warning"
+            role="alert"
+        >
+            {{ $t('ticketAsignadoAOtroAdmin', { name: assignedAdminDisplayName(ticket) }) }}
+        </div>
+
+        <div v-if="showAssignTicketButton || showUnassignTicketButton" class="ticket-assignment-actions">
+            <button
+                v-if="showAssignTicketButton"
+                type="button"
+                class="btn btn-info"
+                @click="assignTicketToMe"
+            >
+                {{ $t('asignarmeTicket') }}
+            </button>
+            <button
+                v-if="showUnassignTicketButton"
+                type="button"
+                class="btn btn-warning"
+                @click="unassignTicketFromMe"
+            >
+                {{ $t('desasignarmeTicket') }}
+            </button>
+        </div>
+
         <label>{{ $t('categoriaTicket') }}</label>
         <select v-model="ticketType" class="form-control ticket-category-select">
             <option
@@ -101,23 +128,6 @@
         <div class="admin-ticket-actions reply-actions mtop-10">
             <div class="reply-actions-right">
                 <button
-                    v-if="showAssignTicketButton"
-                    class="btn btn-default reply-action-btn"
-                    @click="assignTicketToMe"
-                >
-                    {{ $t('asignarmeTicket') }}
-                </button>
-                <button
-                    v-if="showUnassignTicketButton"
-                    class="btn btn-default reply-action-btn"
-                    @click="unassignTicketFromMe"
-                >
-                    {{ $t('desasignarmeTicket') }}
-                </button>
-                <p v-if="showAssignedToOtherAdmin" class="ticket-assigned-to-other text-muted">
-                    {{ $t('asignadoA') }}: {{ assignedAdminDisplayName(ticket) }}
-                </p>
-                <button
                     v-if="showMarkNeedsReviewButton"
                     class="btn btn-default reply-action-btn"
                     @click="markNeedsReviewTicket"
@@ -126,7 +136,7 @@
                 </button>
                 <button
                     v-if="showResolveTicketButton"
-                    class="btn btn-default reply-action-btn"
+                    class="btn btn-success reply-action-btn"
                     @click="resolveTicket"
                 >
                     {{ $t('marcarResuelto') }}
@@ -138,7 +148,7 @@
                 >
                     {{ $t('marcarComoNoResuelto') }}
                 </button>
-                <button v-if="showCloseTicketButton" class="btn btn-default reply-action-btn" @click="closeTicket">{{ $t('cerrarTicket') }}</button>
+                <button v-if="showCloseTicketButton" class="btn btn-danger reply-action-btn" @click="closeTicket">{{ $t('cerrarTicket') }}</button>
                 <button v-if="showReopenTicketButton" class="btn btn-default reply-action-btn" @click="reopenTicket">{{ $t('reabrirTicket') }}</button>
             </div>
         </div>
@@ -225,6 +235,7 @@ import { compressImageFilesForUpload } from '../../utils/imageUploadCompress';
 import {
     assignedAdminDisplayName,
     hasActiveTicketAssignment,
+    isReplyBlockedByOtherAdminAssignment,
     isTicketAssignableByAdmin,
     isTicketAssignedToAdmin
 } from '../../utils/adminSupportTicketAssignment';
@@ -304,7 +315,10 @@ export default {
             return this.ticket && this.ticket.status === 'Necesita revisión';
         },
         showReplyForm() {
-            return this.ticket && !this.isTicketClosed && !this.isTicketResolved;
+            return this.ticket
+                && !this.isTicketClosed
+                && !this.isTicketResolved
+                && !isReplyBlockedByOtherAdminAssignment(this.ticket, this.currentAdminId);
         },
         showReopenTicketButton() {
             return this.isTicketClosed;
@@ -823,7 +837,16 @@ export default {
     text-align: left;
 }
 
-.ticket-assigned-to-other {
-    margin: 0 8px 8px 0;
+.ticket-assigned-warning {
+    margin-top: 12px;
+    margin-bottom: 0;
+}
+
+.ticket-assignment-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+    margin-bottom: 12px;
 }
 </style>
