@@ -35,6 +35,6 @@ export function hasActiveTicketAssignment(ticket) {
 }
 
 export function isReplyBlockedByOtherAdminAssignment(ticket, adminUserId) {
-    return hasActiveTicketAssignment(ticket)
-        && !isTicketAssignedToAdmin(ticket, adminUserId);
+    return hasActiveTicketAssignment(ticket) &&
+        !isTicketAssignedToAdmin(ticket, adminUserId);
 }
