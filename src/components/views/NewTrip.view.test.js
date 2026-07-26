@@ -5,6 +5,18 @@ import path from 'node:path';
 const viewPath = path.resolve(__dirname, 'NewTrip.vue');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 
+describe('NewTrip.vue foreign endpoints validation', () => {
+    it('validates foreign endpoints only at origin and destination', () => {
+        expect(viewSource).toContain(
+            "from '../../utils/tripForeignEndpointsValidation.js'"
+        );
+        expect(viewSource).toContain('hasTooManyForeignTripEndpoints');
+        expect(viewSource).toMatch(
+            /validate\(\)[\s\S]*?hasTooManyForeignTripEndpoints\(\s*this\.points,\s*this\.config\.osm_country/s
+        );
+    });
+});
+
 describe('NewTrip.vue negative contribution validation', () => {
     it('imports negative seat price helper and blocks negative values on save', () => {
         expect(viewSource).toMatch(/from '\.\.\/\.\.\/utils\/tripSeatPrice\.js'/);

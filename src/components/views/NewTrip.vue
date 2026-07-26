@@ -2111,6 +2111,7 @@ import {
     shouldShowTripPointDetailInputs,
     applyTripPointDetailValidation
 } from '../../utils/tripPointDetailValidation.js';
+import { hasTooManyForeignTripEndpoints } from '../../utils/tripForeignEndpointsValidation.js';
 import {
     restoreTripPointDetailsFromTrip,
     syncReturnTripPointDetailsFromOutbound
@@ -2877,7 +2878,6 @@ export default {
 
         validate() {
             let globalError = false;
-            let foreignPoints = 0;
             let validTime = false;
             let validDate = false;
             let validOtherTripTime = false;
@@ -2896,12 +2896,14 @@ export default {
                     p.error.state = true;
                     p.error.message = this.$t('localidadValida');
                     globalError = true;
-                } else {
-                    foreignPoints +=
-                        p.json.country === this.config.osm_country ? 0 : 1;
                 }
             });
-            if (foreignPoints > 1) {
+            if (
+                hasTooManyForeignTripEndpoints(
+                    this.points,
+                    this.config.osm_country
+                )
+            ) {
                 globalError = true;
                 this.points[0].error.state = true;
                 this.points[0].error.message = this.$t(
@@ -2910,18 +2912,19 @@ export default {
             }
 
             if (this.showReturnTrip) {
-                foreignPoints = 0;
                 this.otherTrip.points.forEach((p) => {
                     if (!p.json) {
                         p.error.state = true;
                         p.error.message = this.$t('seleccioneLocalidadValida');
                         globalError = true;
-                    } else {
-                        foreignPoints +=
-                            p.json.country === this.config.osm_country ? 0 : 1;
                     }
                 });
-                if (foreignPoints > 1) {
+                if (
+                    hasTooManyForeignTripEndpoints(
+                        this.otherTrip.points,
+                        this.config.osm_country
+                    )
+                ) {
                     globalError = true;
                     this.otherTrip.points[0].error.state = true;
                     this.otherTrip.points[0].error.message = this.$t(
