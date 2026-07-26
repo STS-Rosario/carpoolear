@@ -55,4 +55,20 @@ describe('getConversationContributionWarningData', () => {
             maxContributionCents: 0
         });
     });
+
+    it('returns null for trip group conversations', () => {
+        const data = getConversationContributionWarningData({
+            conversation: {
+                type: 1,
+                trip: {
+                    id: 42,
+                    seat_price_cents: 11100,
+                    user: { id: 8 }
+                }
+            },
+            user: { id: 8 }
+        });
+
+        expect(data).toBeNull();
+    });
 });

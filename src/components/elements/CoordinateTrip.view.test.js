@@ -40,4 +40,11 @@ describe('CoordinateTrip.vue', () => {
             /<router-link\s+:to="reportSupportTicketRoute">\s*\{\{\s*\$t\('coordinateTripContributionWarningPassengerReportLink'\)\s*\}\}\s*<\/router-link>/
         );
     });
+
+    it('does not render coordinate trip actions for trip group conversations', () => {
+        expect(viewSource).toContain('isTripGroupConversation');
+        expect(viewSource).toMatch(
+            /v-if="conversation && conversation\.trip && !isTripGroupConversation\(conversation\)"/
+        );
+    });
 });
