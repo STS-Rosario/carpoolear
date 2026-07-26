@@ -1,5 +1,8 @@
 <template>
-    <div class="trip_actions" v-if="conversation && conversation.trip">
+    <div
+        class="trip_actions"
+        v-if="conversation && conversation.trip && !isTripGroupConversation(conversation)"
+    >
         <div class="trip_actions-detail">
             <span v-if="owner">{{ $t('coordinateTripTeEnviaUnaConsultaPorTuViajeDesde') }}</span>
             <span v-else>{{ $t('coordinateTripViajeDesde') }}</span>{{ ' ' }}<strong>{{ conversation.trip.from_town }}</strong>{{ ' ' }}{{ $t('coordinateTripHacia') }}{{ ' ' }}<strong>{{ conversation.trip.to_town }}</strong>{{ ' ' }}<span v-if="owner">
@@ -198,6 +201,7 @@ import {
     buildTripReportSupportTicketRoute,
     resolveWebAppBaseUrl
 } from '../../utils/supportTicketTripReport.js';
+import { isTripGroupConversation } from '../../utils/tripGroupChatTitle.js';
 
 export default {
     name: 'conversation-chat',
@@ -285,6 +289,7 @@ export default {
     },
     methods: {
         isVoluntaryContributionSeatPrice,
+        isTripGroupConversation,
         dayjs,
         ...mapActions(usePassengerStore, {
             make: 'makeRequest',

@@ -1,8 +1,9 @@
 import { maxContributionCapFromSeatPriceCents } from './tripSeatPrice.js';
+import { isTripGroupConversation } from './tripGroupChatTitle.js';
 
 export function getConversationContributionWarningData({ conversation, user }) {
     const trip = conversation && conversation.trip;
-    if (!trip || !trip.user || !user) {
+    if (!trip || !trip.user || !user || isTripGroupConversation(conversation)) {
         return null;
     }
 
