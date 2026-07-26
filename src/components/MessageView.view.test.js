@@ -15,4 +15,9 @@ describe('MessageView.vue group chat', () => {
         expect(viewSource).toContain('message-wrapper--system');
         expect(viewSource).toContain('message.is_system');
     });
+
+    it('uses readable system message colors on dark chat bubbles', () => {
+        expect(viewSource).toContain('.message-wrapper--system .message');
+        expect(viewSource).toContain('var(--medium-font-color)');
+    });
 });

@@ -64,7 +64,7 @@
                 {{ $t('coordinateTripContributionWarningPassengerSuffix') }}
             </template>
         </p>
-        <template v-if="!owner">
+        <template v-if="!owner && !isTripGroupConversation(conversation)">
             <button
                 :disabled="sending.trip || expiredTrip"
                 :style="
@@ -130,7 +130,9 @@
                 </template>
             </button>
         </template>
-        <template v-if="conversation.return_trip">
+        <template
+            v-if="conversation.return_trip && !isTripGroupConversation(conversation)"
+        >
             <button
                 :disabled="sending.returnTrip || expiredReturnTrip"
                 class="btn btn-primary"
@@ -198,6 +200,7 @@ import {
     buildTripReportSupportTicketRoute,
     resolveWebAppBaseUrl
 } from '../../utils/supportTicketTripReport.js';
+import { isTripGroupConversation } from '../../utils/tripGroupChatTitle.js';
 
 export default {
     name: 'conversation-chat',
@@ -285,6 +288,7 @@ export default {
     },
     methods: {
         isVoluntaryContributionSeatPrice,
+        isTripGroupConversation,
         dayjs,
         ...mapActions(usePassengerStore, {
             make: 'makeRequest',

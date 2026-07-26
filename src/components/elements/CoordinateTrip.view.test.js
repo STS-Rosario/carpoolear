@@ -40,4 +40,17 @@ describe('CoordinateTrip.vue', () => {
             /<router-link\s+:to="reportSupportTicketRoute">\s*\{\{\s*\$t\('coordinateTripContributionWarningPassengerReportLink'\)\s*\}\}\s*<\/router-link>/
         );
     });
+
+    it('keeps trip info visible in group chat but hides seat request actions', () => {
+        expect(viewSource).toContain('isTripGroupConversation');
+        expect(viewSource).toMatch(
+            /v-if="conversation && conversation\.trip"/
+        );
+        expect(viewSource).toMatch(
+            /v-if="!owner && !isTripGroupConversation\(conversation\)"/
+        );
+        expect(viewSource).toMatch(
+            /v-if="conversation\.return_trip && !isTripGroupConversation\(conversation\)"/
+        );
+    });
 });

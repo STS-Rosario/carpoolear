@@ -13,6 +13,7 @@ describe('TripButtons.vue group chat', () => {
         expect(viewSource).toContain("$t('groupChatButton')");
         expect(viewSource).toContain('group_chat_unread_count');
         expect(viewSource).toContain('showGroupChatButton');
+        expect(viewSource).toContain('group_chat_conversation_id');
     });
 });
 

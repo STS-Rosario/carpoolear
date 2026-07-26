@@ -256,7 +256,10 @@ export default {
             return shouldShowLiveLocationShare(this.trip, this.user.id, dayjs());
         },
         showGroupChatButton() {
-            return this.owner || this.isPassenger;
+            return (
+                (this.owner || this.isPassenger) &&
+                !!this.trip?.group_chat_conversation_id
+            );
         },
         groupChatUnreadCount() {
             return Number(this.trip?.group_chat_unread_count || 0);

@@ -144,12 +144,17 @@ export default {
     text-align: center;
     margin: 0.75em 0;
 }
+.message-wrapper--system .message {
+    background: transparent;
+    padding: 0;
+    color: inherit;
+}
 .message-wrapper--system .message_text {
     display: inline-block;
     padding: 0.35em 0.75em;
     border-radius: 999px;
-    background: rgba(0, 0, 0, 0.06);
-    color: #666;
+    background: rgba(0, 0, 0, 0.08);
+    color: var(--medium-font-color);
     font-size: 0.9em;
 }
 </style>
