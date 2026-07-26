@@ -98,6 +98,13 @@ describe('AdminSupportTickets view', () => {
         expect(viewSource).toContain("{{ $t('filtroTicketsRequiereRespuesta') }}");
     });
 
+    it('renders admin pagination bar with per-page selector', () => {
+        expect(viewSource).toContain('AdminPaginationBar');
+        expect(viewSource).toContain(':pagination="listPagination"');
+        expect(viewSource).toContain(':per-page="listPerPage"');
+        expect(viewSource).toContain('@update:per-page="onPerPageChange"');
+    });
+
     it('loads admin list using route query filters', () => {
         expect(viewSource).toContain('parseAdminSupportTicketListFiltersFromRoute');
         expect(viewSource).toContain('fetchAdminList(this.listFilters)');

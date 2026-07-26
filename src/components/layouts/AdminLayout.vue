@@ -25,6 +25,10 @@ export default {
 <style scoped>
 .admin-layout-content {
     margin-top: 72px;
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 @media (max-width: 767px) {

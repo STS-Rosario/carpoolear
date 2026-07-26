@@ -59,35 +59,15 @@
                             {{ $t('noSeEncontroNingunUsuario') }}
                         </p>
                     </div>
-                    <div
-                        v-if="!listLoading && pagination && pagination.total_pages > 1"
-                        class="admin-user-migrations__pager"
-                    >
-                        <button
-                            type="button"
-                            class="btn btn-default btn-sm"
-                            :disabled="pagination.current_page <= 1"
-                            @click="goPrevPage"
-                        >
-                            {{ $t('anterior') }}
-                        </button>
-                        <span class="text-muted admin-user-migrations__pager-label">
-                            {{
-                                $t('adminUsuariosPagina', {
-                                    current: pagination.current_page,
-                                    total: pagination.total_pages
-                                })
-                            }}
-                        </span>
-                        <button
-                            type="button"
-                            class="btn btn-default btn-sm"
-                            :disabled="pagination.current_page >= pagination.total_pages"
-                            @click="goNextPage"
-                        >
-                            {{ $t('siguiente') }}
-                        </button>
-                    </div>
+                    <AdminPaginationBar
+                        v-if="!listLoading && pagination"
+                        :pagination="pagination"
+                        :per-page="listPerPage"
+                        :loading="listLoading"
+                        @prev="goPrevPage"
+                        @next="goNextPage"
+                        @update:per-page="onPerPageChange"
+                    />
                 </div>
             </div>
         </div>
@@ -96,9 +76,11 @@
 
 <script>
 import AdminLayout from '../layouts/AdminLayout.vue';
+import AdminPaginationBar from '../AdminPaginationBar.vue';
 import { AdminApi } from '../../services/api';
 import dialogs from '../../services/dialogs.js';
 import dayjs from '../../dayjs';
+import { DEFAULT_ADMIN_PER_PAGE } from '../../utils/adminPagination';
 
 export default {
     name: 'admin-user-migrations-list',
@@ -108,6 +90,7 @@ export default {
             rows: [],
             listMeta: null,
             listPage: 1,
+            listPerPage: DEFAULT_ADMIN_PER_PAGE,
             adminApi: null
         };
     },
@@ -135,7 +118,7 @@ export default {
             try {
                 const body = await this.adminApi.getUserMigrations({
                     page: this.listPage,
-                    per_page: 20
+                    per_page: this.listPerPage
                 });
                 this.rows = body.data || [];
                 this.listMeta = body.meta || null;
@@ -160,6 +143,10 @@ export default {
             const p = this.pagination;
             if (!p || p.current_page >= p.total_pages) return;
             this.fetchList(p.current_page + 1);
+        },
+        onPerPageChange(perPage) {
+            this.listPerPage = perPage;
+            this.fetchList(1);
         }
     },
     mounted() {
@@ -167,7 +154,8 @@ export default {
         this.fetchList(1);
     },
     components: {
-        AdminLayout
+        AdminLayout,
+        AdminPaginationBar
     }
 };
 </script>
@@ -184,20 +172,5 @@ export default {
 
 .admin-user-migrations__title {
     margin: 0;
-}
-
-.admin-user-migrations__pager {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    margin-top: 12px;
-}
-
-.admin-user-migrations__pager-label {
-    flex: 1;
-    text-align: center;
-    font-size: 12px;
 }
 </style>

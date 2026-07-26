@@ -6,6 +6,11 @@ const viewPath = path.resolve(__dirname, 'AdminMpRejectedValidations.vue');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 
 describe('AdminMpRejectedValidations view', () => {
+    it('renders admin pagination bar with per-page selector', () => {
+        expect(viewSource).toContain('AdminPaginationBar');
+        expect(viewSource).toContain('getMercadoPagoRejectedValidations');
+    });
+
     it('links user profile action to the admin user profile route', () => {
         expect(viewSource).toContain('getAdminUserProfileRoute');
         expect(viewSource).not.toContain("name: 'profile'");

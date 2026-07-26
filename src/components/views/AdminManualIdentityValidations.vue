@@ -10,6 +10,7 @@
                     </label>
                 </div>
                 <Loading :data="displayedList">
+                    <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                         <thead>
                             <tr>
@@ -67,6 +68,7 @@
                             </tr>
                         </tbody>
                     </table>
+                    </div>
                     <template #no-data><div class="text-center" style="margin-top: 20px;">
                         <div class="alert alert-info">{{ $t('noHayValidacionesManuales') }}</div>
                     </div></template>
@@ -75,6 +77,15 @@
                         <p>{{ $t('cargando') }}</p>
                     </div></template>
                 </Loading>
+                <AdminPaginationBar
+                    v-if="listMeta && listMeta.pagination"
+                    :pagination="listMeta.pagination"
+                    :per-page="listPerPage"
+                    :loading="list === null"
+                    @prev="goPrevPage"
+                    @next="goNextPage"
+                    @update:per-page="onPerPageChange"
+                />
             </div>
         </div>
     </AdminLayout>
@@ -82,17 +93,18 @@
 
 <script>
 import AdminLayout from '../layouts/AdminLayout.vue';
+import AdminPaginationBar from '../AdminPaginationBar.vue';
 import Loading from '../Loading';
 import { AdminApi } from '../../services/api';
 import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
 import {
-    filterManualIdentityValidationsList,
     getNextManualIdentityValidationSortState,
     getShowResolvedManualIdentityValidations,
     MANUAL_IDENTITY_VALIDATION_SORT_COLUMNS,
     saveShowResolvedManualIdentityValidations,
     sortManualIdentityValidationsList
 } from '../../utils/adminManualIdentityValidationsList';
+import { DEFAULT_ADMIN_PER_PAGE } from '../../utils/adminPagination';
 import {
     formatManualIdentityValidationWaitingTime,
     getManualIdentityValidationStatusBadgeClass,
@@ -104,6 +116,9 @@ export default {
     data() {
         return {
             list: null,
+            listMeta: null,
+            listPage: 1,
+            listPerPage: DEFAULT_ADMIN_PER_PAGE,
             showResolved: getShowResolvedManualIdentityValidations(),
             sortKey: null,
             sortDir: 'asc',
@@ -116,14 +131,14 @@ export default {
                 return this.list;
             }
 
-            const filtered = filterManualIdentityValidationsList(this.list, this.showResolved);
-
-            return sortManualIdentityValidationsList(filtered, this.sortKey, this.sortDir);
+            return sortManualIdentityValidationsList(this.list, this.sortKey, this.sortDir);
         }
     },
     watch: {
         showResolved(value) {
             saveShowResolvedManualIdentityValidations(value);
+            this.listPage = 1;
+            this.fetchList();
         }
     },
     methods: {
@@ -158,12 +173,41 @@ export default {
         },
         fetchList() {
             const api = new AdminApi();
-            return api.getManualIdentityValidations().then((res) => {
-                const data = res.data || res;
-                this.list = Array.isArray(data) ? data : (data.data || []);
+            const params = {
+                page: this.listPage,
+                per_page: this.listPerPage
+            };
+            if (this.showResolved) {
+                params.show_resolved = '1';
+            }
+            return api.getManualIdentityValidations(params).then((res) => {
+                this.list = res.data || [];
+                this.listMeta = res.meta || null;
             }).catch(() => {
                 this.list = [];
+                this.listMeta = null;
             });
+        },
+        goPrevPage() {
+            const pagination = this.listMeta && this.listMeta.pagination;
+            if (!pagination || pagination.current_page <= 1) {
+                return;
+            }
+            this.listPage = pagination.current_page - 1;
+            this.fetchList();
+        },
+        goNextPage() {
+            const pagination = this.listMeta && this.listMeta.pagination;
+            if (!pagination || pagination.current_page >= pagination.total_pages) {
+                return;
+            }
+            this.listPage = pagination.current_page + 1;
+            this.fetchList();
+        },
+        onPerPageChange(perPage) {
+            this.listPerPage = perPage;
+            this.listPage = 1;
+            this.fetchList();
         }
     },
     mounted() {
@@ -171,6 +215,7 @@ export default {
     },
     components: {
         AdminLayout,
+        AdminPaginationBar,
         Loading
     }
 };

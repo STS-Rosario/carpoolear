@@ -35,18 +35,25 @@ describe('tickets store', () => {
         Object.values(apiMock).forEach((fn) => fn.mockReset());
     });
 
-    it('stores admin list response array', async () => {
+    it('stores admin list response array and pagination meta', async () => {
         const { useTicketsStore } = await import('./tickets');
-        apiMock.adminList.mockResolvedValue({ data: [{ id: 10 }] });
+        apiMock.adminList.mockResolvedValue({
+            data: [{ id: 10 }],
+            meta: { pagination: { current_page: 1, per_page: 20, total: 1, total_pages: 1 } }
+        });
 
         const store = useTicketsStore();
-        const list = await store.fetchAdminList();
+        const result = await store.fetchAdminList();
 
-        expect(list).toEqual([{ id: 10 }]);
+        expect(result.data).toEqual([{ id: 10 }]);
+        expect(result.meta.pagination.total).toBe(1);
         expect(store.adminList).toEqual([{ id: 10 }]);
+        expect(store.adminListMeta).toEqual({
+            pagination: { current_page: 1, per_page: 20, total: 1, total_pages: 1 }
+        });
     });
 
-    it('fetchAdminList passes filter params to adminList API', async () => {
+    it('fetchAdminList passes filter and pagination params to adminList API', async () => {
         const { useTicketsStore } = await import('./tickets');
         apiMock.adminList.mockResolvedValue({ data: [{ id: 3 }] });
 
@@ -54,13 +61,17 @@ describe('tickets store', () => {
         await store.fetchAdminList({
             type: 'contact',
             priority: 'high',
-            needsReply: true
+            needsReply: true,
+            page: 2,
+            perPage: 30
         });
 
         expect(apiMock.adminList).toHaveBeenCalledWith({
             type: 'contact',
             priority: 'high',
-            needs_reply: '1'
+            needs_reply: '1',
+            page: 2,
+            per_page: 30
         });
     });
 
@@ -71,6 +82,7 @@ describe('tickets store', () => {
         const store = useTicketsStore();
         await expect(store.fetchAdminList()).rejects.toThrow('network error');
         expect(store.adminList).toEqual([]);
+        expect(store.adminListMeta).toBeNull();
     });
 
     it('creates support ticket from admin and returns payload data', async () => {

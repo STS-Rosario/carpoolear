@@ -93,12 +93,22 @@
                 </tbody>
             </table>
         </div>
+        <AdminPaginationBar
+            v-if="!loading && listPagination"
+            :pagination="listPagination"
+            :per-page="listPerPage"
+            :loading="loading"
+            @prev="goPrevPage"
+            @next="goNextPage"
+            @update:per-page="onPerPageChange"
+        />
     </AdminLayout>
 </template>
 
 <script>
 import { mapActions, mapState } from 'pinia';
 import AdminLayout from '../layouts/AdminLayout.vue';
+import AdminPaginationBar from '../AdminPaginationBar.vue';
 import { useTicketsStore } from '../../stores/tickets';
 import dayjs from '../../dayjs';
 import { TICKET_TYPE_LABEL_KEYS, TICKET_PRIORITY_LABEL_KEYS } from '../../utils/supportTicketLabels';
@@ -113,6 +123,7 @@ import {
 import { getUpdatedAgeAttentionClass, hasUnreadUserReplyIndicator } from '../../utils/supportTicketUpdatedAgeAttention';
 import { assignedAdminDisplayName } from '../../utils/adminSupportTicketAssignment';
 import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
+import { DEFAULT_ADMIN_PER_PAGE } from '../../utils/adminPagination';
 
 const ticketTypeOptions = USER_TICKET_TYPE_OPTIONS;
 
@@ -126,23 +137,31 @@ export default {
             filterPriority: '',
             filterNeedsReply: false,
             filterUserId: null,
+            listPage: 1,
+            listPerPage: DEFAULT_ADMIN_PER_PAGE,
             ticketTypeOptions,
             listPollTimer: null
         };
     },
     computed: {
         ...mapState(useTicketsStore, {
-            tickets: 'adminList'
+            tickets: 'adminList',
+            listMeta: 'adminListMeta'
         }),
         safeTickets() {
             return Array.isArray(this.tickets) ? this.tickets : [];
+        },
+        listPagination() {
+            return this.listMeta && this.listMeta.pagination ? this.listMeta.pagination : null;
         },
         listFilters() {
             return {
                 type: this.filterType,
                 priority: this.filterPriority,
                 needsReply: this.filterNeedsReply,
-                userId: this.filterUserId
+                userId: this.filterUserId,
+                page: this.listPage,
+                perPage: this.listPerPage
             };
         }
     },
@@ -166,6 +185,8 @@ export default {
             this.filterPriority = parsed.priority;
             this.filterNeedsReply = parsed.needsReply;
             this.filterUserId = parsed.userId;
+            this.listPage = parsed.page;
+            this.listPerPage = parsed.perPage;
         },
         syncFiltersToRoute() {
             const query = {};
@@ -181,9 +202,16 @@ export default {
             if (this.filterUserId) {
                 query.user_id = String(this.filterUserId);
             }
+            if (this.listPage > 1) {
+                query.page = String(this.listPage);
+            }
+            if (this.listPerPage !== DEFAULT_ADMIN_PER_PAGE) {
+                query.per_page = String(this.listPerPage);
+            }
             this.$router.replace({ query });
         },
         applyFilters() {
+            this.listPage = 1;
             this.syncFiltersToRoute();
         },
         loadTickets(options = {}) {
@@ -291,6 +319,27 @@ export default {
         assignedAdminLabel(ticket) {
             const name = assignedAdminDisplayName(ticket);
             return name || '-';
+        },
+        goPrevPage() {
+            const pagination = this.listPagination;
+            if (!pagination || pagination.current_page <= 1) {
+                return;
+            }
+            this.listPage = pagination.current_page - 1;
+            this.syncFiltersToRoute();
+        },
+        goNextPage() {
+            const pagination = this.listPagination;
+            if (!pagination || pagination.current_page >= pagination.total_pages) {
+                return;
+            }
+            this.listPage = pagination.current_page + 1;
+            this.syncFiltersToRoute();
+        },
+        onPerPageChange(perPage) {
+            this.listPerPage = perPage;
+            this.listPage = 1;
+            this.syncFiltersToRoute();
         }
     },
     mounted() {
@@ -306,7 +355,8 @@ export default {
         }
     },
     components: {
-        AdminLayout
+        AdminLayout,
+        AdminPaginationBar
     }
 };
 </script>

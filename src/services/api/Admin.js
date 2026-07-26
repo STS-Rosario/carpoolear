@@ -59,8 +59,8 @@ class AdminApi extends TaggedApi {
         );
     }
 
-    getManualIdentityValidations() {
-        return this.get('/api/admin/manual-identity-validations', {});
+    getManualIdentityValidations(params = {}) {
+        return this.get('/api/admin/manual-identity-validations', params);
     }
 
     getDashboard() {
@@ -102,8 +102,8 @@ class AdminApi extends TaggedApi {
         );
     }
 
-    getMercadoPagoRejectedValidations() {
-        return this.get('/api/admin/mercado-pago-rejected-validations', {});
+    getMercadoPagoRejectedValidations(params = {}) {
+        return this.get('/api/admin/mercado-pago-rejected-validations', params);
     }
 
     getMercadoPagoRejectedValidation(id) {

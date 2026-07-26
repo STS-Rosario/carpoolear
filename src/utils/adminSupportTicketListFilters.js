@@ -1,3 +1,5 @@
+import { parseAdminPaginationFromRoute } from './adminPagination';
+
 const TRUTHY_QUERY_VALUES = new Set(['1', 'true', 'yes']);
 
 export function buildAdminSupportTicketListParams(filters = {}) {
@@ -14,17 +16,26 @@ export function buildAdminSupportTicketListParams(filters = {}) {
     if (filters.userId) {
         params.user_id = String(filters.userId);
     }
+    if (filters.page) {
+        params.page = filters.page;
+    }
+    if (filters.perPage) {
+        params.per_page = filters.perPage;
+    }
     return params;
 }
 
 export function parseAdminSupportTicketListFiltersFromRoute(query = {}) {
     const needsReplyRaw = query.needs_reply != null ? String(query.needs_reply).toLowerCase() : '';
     const userIdRaw = query.user_id != null ? parseInt(String(query.user_id), 10) : NaN;
+    const pagination = parseAdminPaginationFromRoute(query);
     return {
         type: query.type ? String(query.type) : '',
         priority: query.priority ? String(query.priority) : '',
         needsReply: TRUTHY_QUERY_VALUES.has(needsReplyRaw),
-        userId: Number.isNaN(userIdRaw) || userIdRaw <= 0 ? null : userIdRaw
+        userId: Number.isNaN(userIdRaw) || userIdRaw <= 0 ? null : userIdRaw,
+        page: pagination.page,
+        perPage: pagination.perPage
     };
 }
 

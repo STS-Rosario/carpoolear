@@ -4,6 +4,7 @@
             <div class="col-md-22 col-md-offset-1">
                 <h2>{{ $t('rechazosMercadoPago') }}</h2>
                 <Loading :data="list">
+                    <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                         <thead>
                             <tr>
@@ -48,6 +49,7 @@
                             </tr>
                         </tbody>
                     </table>
+                    </div>
                     <template #no-data><div class="text-center" style="margin-top: 20px;">
                         <div class="alert alert-info">{{ $t('noHayRechazosMp') }}</div>
                     </div></template>
@@ -56,6 +58,15 @@
                         <p>{{ $t('cargando') }}</p>
                     </div></template>
                 </Loading>
+                <AdminPaginationBar
+                    v-if="listMeta && listMeta.pagination"
+                    :pagination="listMeta.pagination"
+                    :per-page="listPerPage"
+                    :loading="list === null"
+                    @prev="goPrevPage"
+                    @next="goNextPage"
+                    @update:per-page="onPerPageChange"
+                />
             </div>
         </div>
     </AdminLayout>
@@ -64,11 +75,13 @@
 <script>
 import { mapState } from 'pinia';
 import AdminLayout from '../layouts/AdminLayout.vue';
+import AdminPaginationBar from '../AdminPaginationBar.vue';
 import Loading from '../Loading';
 import { useAuthStore } from '../../stores/auth';
 import { AdminApi } from '../../services/api';
 import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
 import { displayDniOrDash as formatDisplayDniOrDash } from '../../utils/formatDisplayDni';
+import { DEFAULT_ADMIN_PER_PAGE } from '../../utils/adminPagination';
 
 export default {
     name: 'AdminMpRejectedValidations',
@@ -79,7 +92,10 @@ export default {
     },
     data() {
         return {
-            list: null
+            list: null,
+            listMeta: null,
+            listPage: 1,
+            listPerPage: DEFAULT_ADMIN_PER_PAGE
         };
     },
     methods: {
@@ -103,12 +119,37 @@ export default {
         },
         fetchList() {
             const api = new AdminApi();
-            return api.getMercadoPagoRejectedValidations().then((res) => {
-                const data = res.data || res;
-                this.list = Array.isArray(data) ? data : (data.data || []);
+            return api.getMercadoPagoRejectedValidations({
+                page: this.listPage,
+                per_page: this.listPerPage
+            }).then((res) => {
+                this.list = res.data || [];
+                this.listMeta = res.meta || null;
             }).catch(() => {
                 this.list = [];
+                this.listMeta = null;
             });
+        },
+        goPrevPage() {
+            const pagination = this.listMeta && this.listMeta.pagination;
+            if (!pagination || pagination.current_page <= 1) {
+                return;
+            }
+            this.listPage = pagination.current_page - 1;
+            this.fetchList();
+        },
+        goNextPage() {
+            const pagination = this.listMeta && this.listMeta.pagination;
+            if (!pagination || pagination.current_page >= pagination.total_pages) {
+                return;
+            }
+            this.listPage = pagination.current_page + 1;
+            this.fetchList();
+        },
+        onPerPageChange(perPage) {
+            this.listPerPage = perPage;
+            this.listPage = 1;
+            this.fetchList();
         }
     },
     mounted() {
@@ -116,6 +157,7 @@ export default {
     },
     components: {
         AdminLayout,
+        AdminPaginationBar,
         Loading
     }
 };
