@@ -183,6 +183,7 @@ export default {
     margin-bottom: 0.5rem;
 }
 
+/* Clear fixed .actionbar-bottom (52px + safe area) on mobile */
 .donation-after-rating__skip {
     margin-top: 1.5rem;
     margin-bottom: calc(52px + constant(safe-area-inset-bottom, 0px));
