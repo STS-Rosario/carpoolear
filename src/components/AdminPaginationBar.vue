@@ -3,26 +3,6 @@
         v-if="pagination"
         class="admin-pagination-bar"
     >
-        <div class="admin-pagination-bar__per-page">
-            <label :for="perPageSelectId" class="admin-pagination-bar__per-page-label">
-                {{ $t('adminItemsPerPage') }}
-            </label>
-            <select
-                :id="perPageSelectId"
-                class="form-control input-sm admin-pagination-bar__per-page-select"
-                :value="perPage"
-                :disabled="loading"
-                @change="onPerPageChange"
-            >
-                <option
-                    v-for="option in perPageOptions"
-                    :key="option"
-                    :value="option"
-                >
-                    {{ option }}
-                </option>
-            </select>
-        </div>
         <div
             v-if="pagination.total_pages > 1"
             class="admin-pagination-bar__pager"
@@ -51,6 +31,26 @@
             >
                 {{ $t('siguiente') }}
             </button>
+        </div>
+        <div class="admin-pagination-bar__per-page">
+            <label :for="perPageSelectId" class="admin-pagination-bar__per-page-label">
+                {{ $t('adminItemsPerPage') }}
+            </label>
+            <select
+                :id="perPageSelectId"
+                class="form-control input-sm admin-pagination-bar__per-page-select"
+                :value="perPage"
+                :disabled="loading"
+                @change="onPerPageChange"
+            >
+                <option
+                    v-for="option in perPageOptions"
+                    :key="option"
+                    :value="option"
+                >
+                    {{ option }}
+                </option>
+            </select>
         </div>
     </div>
 </template>
@@ -110,6 +110,7 @@ export default {
     display: flex;
     align-items: center;
     gap: 8px;
+    margin-left: auto;
 }
 
 .admin-pagination-bar__per-page-label {

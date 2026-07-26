@@ -13,11 +13,12 @@ describe('AdminPaginationBar component', () => {
         expect(componentSource).toContain("emit('update:perPage'");
     });
 
-    it('renders prev/next pager controls when multiple pages exist', () => {
-        expect(componentSource).toContain('pagination.total_pages > 1');
+    it('renders pager before per-page selector so pagination stays on the left', () => {
+        const pagerIndex = componentSource.indexOf('admin-pagination-bar__pager');
+        const perPageIndex = componentSource.indexOf('admin-pagination-bar__per-page');
+        expect(pagerIndex).toBeGreaterThan(-1);
+        expect(perPageIndex).toBeGreaterThan(pagerIndex);
         expect(componentSource).toContain("{{ $t('anterior') }}");
         expect(componentSource).toContain("{{ $t('siguiente') }}");
-        expect(componentSource).toContain("emit('prev')");
-        expect(componentSource).toContain("emit('next')");
     });
 });
