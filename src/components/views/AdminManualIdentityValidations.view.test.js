@@ -17,6 +17,12 @@ describe('AdminManualIdentityValidations view', () => {
         expect(viewSource.indexOf('mostrarResueltos')).toBeLessThan(viewSource.indexOf('<table'));
     });
 
+    it('renders admin pagination bar with per-page selector', () => {
+        expect(viewSource).toContain('AdminPaginationBar');
+        expect(viewSource).toContain('getManualIdentityValidations');
+        expect(viewSource).toContain('show_resolved');
+    });
+
     it('filters the displayed list using resolved-case helpers', () => {
         expect(viewSource).toContain('filterManualIdentityValidationsList');
         expect(viewSource).toContain('getShowResolvedManualIdentityValidations');

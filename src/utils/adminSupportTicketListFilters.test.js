@@ -12,13 +12,17 @@ describe('adminSupportTicketListFilters', () => {
                 type: 'bug_report',
                 priority: 'high',
                 needsReply: true,
-                userId: 42
+                userId: 42,
+                page: 2,
+                perPage: 50
             })
         ).toEqual({
             type: 'bug_report',
             priority: 'high',
             needs_reply: '1',
-            user_id: '42'
+            user_id: '42',
+            page: 2,
+            per_page: 50
         });
     });
 
@@ -33,13 +37,17 @@ describe('adminSupportTicketListFilters', () => {
                 type: 'contact',
                 priority: 'low',
                 needs_reply: '1',
-                user_id: '99'
+                user_id: '99',
+                page: '3',
+                per_page: '30'
             })
         ).toEqual({
             type: 'contact',
             priority: 'low',
             needsReply: true,
-            userId: 99
+            userId: 99,
+            page: 3,
+            perPage: 30
         });
     });
 
