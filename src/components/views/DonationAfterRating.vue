@@ -185,5 +185,7 @@ export default {
 
 .donation-after-rating__skip {
     margin-top: 1.5rem;
+    margin-bottom: calc(52px + constant(safe-area-inset-bottom, 0px));
+    margin-bottom: calc(52px + env(safe-area-inset-bottom, 0px));
 }
 </style>
