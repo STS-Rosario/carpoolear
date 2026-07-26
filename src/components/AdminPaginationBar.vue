@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import { ADMIN_PER_PAGE_OPTIONS } from '../../utils/adminPagination';
+import { ADMIN_PER_PAGE_OPTIONS } from '../utils/adminPagination';
 
 let nextPerPageSelectId = 0;
 
