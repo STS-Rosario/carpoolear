@@ -2111,6 +2111,7 @@ import {
     shouldShowTripPointDetailInputs,
     applyTripPointDetailValidation
 } from '../../utils/tripPointDetailValidation.js';
+import { hasTooManyForeignTripEndpoints } from '../../utils/tripForeignEndpointsValidation.js';
 import {
     restoreTripPointDetailsFromTrip,
     syncReturnTripPointDetailsFromOutbound
@@ -2877,7 +2878,6 @@ export default {
 
         validate() {
             let globalError = false;
-            let foreignPoints = 0;
             let validTime = false;
             let validDate = false;
             let validOtherTripTime = false;
@@ -2896,12 +2896,38 @@ export default {
                     p.error.state = true;
                     p.error.message = this.$t('localidadValida');
                     globalError = true;
-                } else {
-                    foreignPoints +=
-                        p.json.country === this.config.osm_country ? 0 : 1;
                 }
             });
-            if (foreignPoints > 1) {
+            // #region agent log
+            const outboundAllPointsForeignCount = this.points.filter(
+                (p) => p.json && p.json.country !== this.config.osm_country
+            ).length;
+            const outboundEndpointsInvalid = hasTooManyForeignTripEndpoints(
+                this.points,
+                this.config.osm_country
+            );
+            fetch('http://127.0.0.1:7606/ingest/e65c7dbd-3b9f-4cb7-9135-310a836ba96d', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Debug-Session-Id': '17ba99'
+                },
+                body: JSON.stringify({
+                    sessionId: '17ba99',
+                    location: 'NewTrip.vue:validate',
+                    message: 'outbound foreign endpoints check',
+                    data: {
+                        allPointsForeignCount: outboundAllPointsForeignCount,
+                        endpointsInvalid: outboundEndpointsInvalid,
+                        osmCountry: this.config.osm_country,
+                        pointCountries: this.points.map((p) => p.json?.country)
+                    },
+                    timestamp: Date.now(),
+                    hypothesisId: 'A'
+                })
+            }).catch(() => {});
+            // #endregion
+            if (outboundEndpointsInvalid) {
                 globalError = true;
                 this.points[0].error.state = true;
                 this.points[0].error.message = this.$t(
@@ -2910,18 +2936,45 @@ export default {
             }
 
             if (this.showReturnTrip) {
-                foreignPoints = 0;
                 this.otherTrip.points.forEach((p) => {
                     if (!p.json) {
                         p.error.state = true;
                         p.error.message = this.$t('seleccioneLocalidadValida');
                         globalError = true;
-                    } else {
-                        foreignPoints +=
-                            p.json.country === this.config.osm_country ? 0 : 1;
                     }
                 });
-                if (foreignPoints > 1) {
+                // #region agent log
+                const returnAllPointsForeignCount = this.otherTrip.points.filter(
+                    (p) => p.json && p.json.country !== this.config.osm_country
+                ).length;
+                const returnEndpointsInvalid = hasTooManyForeignTripEndpoints(
+                    this.otherTrip.points,
+                    this.config.osm_country
+                );
+                fetch('http://127.0.0.1:7606/ingest/e65c7dbd-3b9f-4cb7-9135-310a836ba96d', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Debug-Session-Id': '17ba99'
+                    },
+                    body: JSON.stringify({
+                        sessionId: '17ba99',
+                        location: 'NewTrip.vue:validate',
+                        message: 'return foreign endpoints check',
+                        data: {
+                            allPointsForeignCount: returnAllPointsForeignCount,
+                            endpointsInvalid: returnEndpointsInvalid,
+                            osmCountry: this.config.osm_country,
+                            pointCountries: this.otherTrip.points.map(
+                                (p) => p.json?.country
+                            )
+                        },
+                        timestamp: Date.now(),
+                        hypothesisId: 'A'
+                    })
+                }).catch(() => {});
+                // #endregion
+                if (returnEndpointsInvalid) {
                     globalError = true;
                     this.otherTrip.points[0].error.state = true;
                     this.otherTrip.points[0].error.message = this.$t(
