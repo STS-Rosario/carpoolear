@@ -1,8 +1,5 @@
 <template>
-    <div
-        class="trip_actions"
-        v-if="conversation && conversation.trip && !isTripGroupConversation(conversation)"
-    >
+    <div class="trip_actions" v-if="conversation && conversation.trip">
         <div class="trip_actions-detail">
             <span v-if="owner">{{ $t('coordinateTripTeEnviaUnaConsultaPorTuViajeDesde') }}</span>
             <span v-else>{{ $t('coordinateTripViajeDesde') }}</span>{{ ' ' }}<strong>{{ conversation.trip.from_town }}</strong>{{ ' ' }}{{ $t('coordinateTripHacia') }}{{ ' ' }}<strong>{{ conversation.trip.to_town }}</strong>{{ ' ' }}<span v-if="owner">
@@ -67,7 +64,7 @@
                 {{ $t('coordinateTripContributionWarningPassengerSuffix') }}
             </template>
         </p>
-        <template v-if="!owner">
+        <template v-if="!owner && !isTripGroupConversation(conversation)">
             <button
                 :disabled="sending.trip || expiredTrip"
                 :style="
@@ -133,7 +130,9 @@
                 </template>
             </button>
         </template>
-        <template v-if="conversation.return_trip">
+        <template
+            v-if="conversation.return_trip && !isTripGroupConversation(conversation)"
+        >
             <button
                 :disabled="sending.returnTrip || expiredReturnTrip"
                 class="btn btn-primary"

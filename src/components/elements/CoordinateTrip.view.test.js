@@ -41,10 +41,16 @@ describe('CoordinateTrip.vue', () => {
         );
     });
 
-    it('does not render coordinate trip actions for trip group conversations', () => {
+    it('keeps trip info visible in group chat but hides seat request actions', () => {
         expect(viewSource).toContain('isTripGroupConversation');
         expect(viewSource).toMatch(
-            /v-if="conversation && conversation\.trip && !isTripGroupConversation\(conversation\)"/
+            /v-if="conversation && conversation\.trip"/
+        );
+        expect(viewSource).toMatch(
+            /v-if="!owner && !isTripGroupConversation\(conversation\)"/
+        );
+        expect(viewSource).toMatch(
+            /v-if="conversation\.return_trip && !isTripGroupConversation\(conversation\)"/
         );
     });
 });
