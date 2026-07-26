@@ -107,35 +107,15 @@
                             {{ $t('noSeEncontroNingunUsuario') }}
                         </p>
                     </div>
-                    <div
-                        v-if="!listLoading && listMeta && listMeta.pagination && listMeta.pagination.total_pages > 1"
-                        class="admin-users-pager-bar"
-                    >
-                        <button
-                            type="button"
-                            class="btn btn-default btn-sm"
-                            :disabled="!listMeta.pagination || listMeta.pagination.current_page <= 1"
-                            @click="goPrevPage"
-                        >
-                            {{ $t('anterior') }}
-                        </button>
-                        <span class="user-admin-pager-label text-muted">
-                            {{
-                                $t('adminUsuariosPagina', {
-                                    current: listMeta.pagination.current_page,
-                                    total: listMeta.pagination.total_pages
-                                })
-                            }}
-                        </span>
-                        <button
-                            type="button"
-                            class="btn btn-default btn-sm"
-                            :disabled="!listMeta.pagination || listMeta.pagination.current_page >= listMeta.pagination.total_pages"
-                            @click="goNextPage"
-                        >
-                            {{ $t('siguiente') }}
-                        </button>
-                    </div>
+                    <AdminPaginationBar
+                        v-if="!listLoading && listMeta && listMeta.pagination"
+                        :pagination="listMeta.pagination"
+                        :per-page="listPerPage"
+                        :loading="listLoading"
+                        @prev="goPrevPage"
+                        @next="goNextPage"
+                        @update:per-page="onPerPageChange"
+                    />
                 </div>
             </div>
         </div>
@@ -145,10 +125,12 @@
 <script>
 import { mapState } from 'pinia';
 import AdminLayout from '../layouts/AdminLayout.vue';
+import AdminPaginationBar from '../AdminPaginationBar.vue';
 import { useAuthStore } from '../../stores/auth';
 import { AdminApi } from '../../services/api';
 import dialogs from '../../services/dialogs.js';
 import { displayDniOrDash as formatDisplayDniOrDash } from '../../utils/formatDisplayDni';
+import { DEFAULT_ADMIN_PER_PAGE, resolveAdminPerPage } from '../../utils/adminPagination';
 
 const DEFAULT_SORT = { key: 'id', dir: 'desc' };
 
@@ -166,6 +148,7 @@ export default {
             listLoading: false,
             listMeta: null,
             listPage: 1,
+            listPerPage: DEFAULT_ADMIN_PER_PAGE,
             sortKey: DEFAULT_SORT.key,
             sortDir: DEFAULT_SORT.dir,
             keyUpTimerId: 0,
@@ -208,6 +191,9 @@ export default {
                 sort: this.sortKey,
                 direction: this.sortDir
             };
+            if (this.listPerPage !== DEFAULT_ADMIN_PER_PAGE) {
+                query.per_page = String(this.listPerPage);
+            }
             const q = this.normalizedSearchQuery();
             if (q) {
                 query.name = q;
@@ -229,13 +215,16 @@ export default {
             if (query.name) {
                 this.textSearch = String(query.name);
             }
+            if (query.per_page) {
+                this.listPerPage = resolveAdminPerPage(query.per_page);
+            }
         },
         async fetchList(page) {
             this.listLoading = true;
             this.listPage = page || 1;
             const params = {
                 page: this.listPage,
-                per_page: 30,
+                per_page: this.listPerPage,
                 sort: this.sortKey,
                 direction: this.sortDir
             };
@@ -270,6 +259,10 @@ export default {
             if (!p || p.current_page >= p.total_pages) return;
             this.fetchList(p.current_page + 1);
         },
+        onPerPageChange(perPage) {
+            this.listPerPage = perPage;
+            this.fetchList(1);
+        },
     },
     mounted() {
         this.adminApi = new AdminApi();
@@ -277,7 +270,8 @@ export default {
         this.fetchList(this.listPage || 1);
     },
     components: {
-        AdminLayout
+        AdminLayout,
+        AdminPaginationBar
     }
 };
 </script>
@@ -302,20 +296,5 @@ export default {
     margin-left: 4px;
     font-size: 12px;
     color: #666;
-}
-
-.admin-users-pager-bar {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    margin-top: 12px;
-}
-
-.user-admin-pager-label {
-    flex: 1;
-    text-align: center;
-    font-size: 12px;
 }
 </style>

@@ -23,10 +23,10 @@ describe('AdminManualIdentityValidations view', () => {
         expect(viewSource).toContain('show_resolved');
     });
 
-    it('filters the displayed list using resolved-case helpers', () => {
-        expect(viewSource).toContain('filterManualIdentityValidationsList');
+    it('reloads list from API when show-resolved preference changes', () => {
         expect(viewSource).toContain('getShowResolvedManualIdentityValidations');
         expect(viewSource).toContain('saveShowResolvedManualIdentityValidations');
+        expect(viewSource).toContain('show_resolved');
         expect(viewSource).toContain(':data="displayedList"');
         expect(viewSource).toContain('v-for="item in displayedList"');
     });

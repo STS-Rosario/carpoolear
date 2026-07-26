@@ -8,7 +8,8 @@ export const useTicketsStore = defineStore('tickets', {
     state: () => ({
         list: null,
         selected: null,
-        adminList: null
+        adminList: null,
+        adminListMeta: null
     }),
     actions: {
         fetchList() {
@@ -36,12 +37,15 @@ export const useTicketsStore = defineStore('tickets', {
         },
         fetchAdminList(filters) {
             this.adminList = null;
+            this.adminListMeta = null;
             const params = buildAdminSupportTicketListParams(filters);
             return ticketsApi.adminList(params).then((response) => {
                 this.adminList = response.data || [];
-                return this.adminList;
+                this.adminListMeta = response.meta || null;
+                return response;
             }).catch((error) => {
                 this.adminList = [];
+                this.adminListMeta = null;
                 return Promise.reject(error);
             });
         },
