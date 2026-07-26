@@ -32,6 +32,13 @@ describe('Notifications view', () => {
         expect(viewSource).toContain("name: 'identity_validation'");
     });
 
+    it('routes identity_validation_manual notifications to manual validation upload page', () => {
+        expect(viewSource).toContain("case 'identity_validation_manual':");
+        expect(viewSource).toContain("name: 'identity_validation_manual'");
+        expect(viewSource).toContain('request_id: n.extras.request_id');
+        expect(viewSource).toContain('resubmit: n.extras.resubmit');
+    });
+
     it('routes friend trip alert notifications through trip detail resolver', () => {
         expect(viewSource).toContain(
             "import { resolveTripDetailRoute } from '../../utils/notificationNavigation.js'"

@@ -201,6 +201,15 @@ export default {
                     case 'identity_validation':
                         router.push({ name: 'identity_validation' });
                         break;
+                    case 'identity_validation_manual':
+                        router.push({
+                            name: 'identity_validation_manual',
+                            query: {
+                                request_id: n.extras.request_id,
+                                resubmit: n.extras.resubmit
+                            }
+                        });
+                        break;
                     case 'announcement':
                         // open external url
                         if (n.extras.external_url) {
