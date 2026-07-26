@@ -32,6 +32,15 @@ describe('DonationAfterRating page content', () => {
         expect(viewSource).toMatch(/name:\s*'trips'/);
     });
 
+    it('adds bottom spacing on the skip action so it clears the mobile tab bar', () => {
+        expect(viewSource).toMatch(
+            /donation-after-rating__skip[\s\S]*safe-area-inset-bottom/
+        );
+        expect(viewSource).toMatch(
+            /donation-after-rating__skip[\s\S]*52px/
+        );
+    });
+
     it.each(['arg', 'en'])('defines continuarSinDonar in %s locale', (locale) => {
         expect(messages[locale].continuarSinDonar).toBeTruthy();
     });
