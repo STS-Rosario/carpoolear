@@ -102,6 +102,8 @@ export default {
     justify-content: space-between;
     gap: 12px;
     margin-top: 12px;
+    width: 100%;
+    min-width: min(100%, 20rem);
 }
 
 .admin-pagination-bar__per-page {
@@ -123,14 +125,16 @@ export default {
 
 .admin-pagination-bar__pager {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     align-items: center;
     gap: 8px;
+    flex-shrink: 0;
 }
 
 .admin-pagination-bar__pager-label {
-    flex: 1;
+    flex: 0 1 auto;
     text-align: center;
     font-size: 12px;
+    white-space: nowrap;
 }
 </style>

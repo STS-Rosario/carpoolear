@@ -10,6 +10,7 @@
                     </label>
                 </div>
                 <Loading :data="displayedList">
+                    <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                         <thead>
                             <tr>
@@ -67,6 +68,7 @@
                             </tr>
                         </tbody>
                     </table>
+                    </div>
                     <template #no-data><div class="text-center" style="margin-top: 20px;">
                         <div class="alert alert-info">{{ $t('noHayValidacionesManuales') }}</div>
                     </div></template>
