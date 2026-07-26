@@ -1557,6 +1557,7 @@ const messages = {
         adminPage: 'Admin Page',
         adminUsers: 'Admin users',
         adminUsuariosPagina: 'Página {current} de {total}',
+        adminItemsPerPage: 'Ítems por página',
         adminUsuariosEditar: 'Editar datos',
         adminUsuariosImpersonate: 'Suplantar usuario',
         adminUsuariosImpersonateConfirm:
@@ -2960,6 +2961,7 @@ const messages = {
         adminPage: 'Admin Page',
         adminUsers: 'Admin users',
         adminUsuariosPagina: 'Página {current} de {total}',
+        adminItemsPerPage: 'Ítems por página',
         adminUsuariosEditar: 'Editar datos',
         adminUsuariosImpersonate: 'Suplantar usuario',
         adminUsuariosImpersonateConfirm:
@@ -4525,6 +4527,7 @@ const messages = {
         adminPage: 'Admin Page',
         adminUsers: 'Admin users',
         adminUsuariosPagina: 'Page {current} of {total}',
+        adminItemsPerPage: 'Items per page',
         adminUsuariosEditar: 'Edit details',
         adminUsuariosImpersonate: 'Impersonate user',
         adminUsuariosImpersonateConfirm:
