@@ -49,10 +49,11 @@ describe('UpdateProfile name editing', () => {
 });
 
 describe('UpdateProfile impersonation guardrails', () => {
-    it('hides password change UI and skips password in save payload while impersonating', () => {
-        expect(viewSource).toContain('isImpersonating');
-        expect(viewSource).toContain('v-if="!isImpersonating"');
-        expect(viewSource).toContain('this.pass.password && !this.isImpersonating');
+    it('no longer includes password change UI in the profile editor', () => {
+        expect(viewSource).not.toContain('changeShowPassword');
+        expect(viewSource).not.toContain('showChangePassword');
+        expect(viewSource).not.toContain("{{ $t('cambiarPassword') }}");
+        expect(viewSource).not.toContain('this.pass.password');
     });
 });
 

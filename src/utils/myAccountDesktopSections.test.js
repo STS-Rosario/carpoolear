@@ -17,7 +17,7 @@ describe('getMyAccountDesktopSections', () => {
         ]);
     });
 
-    it('hides resumen, calificaciones, privacidad, notificaciones and password but keeps them in source', () => {
+    it('hides resumen, calificaciones, privacidad and notificaciones but keeps them in source', () => {
         const source = fs.readFileSync(
             path.resolve(__dirname, 'myAccountDesktopSections.js'),
             'utf8'
@@ -26,7 +26,6 @@ describe('getMyAccountDesktopSections', () => {
         expect(source).toMatch(/id:\s*'ratings'[\s\S]*?hidden:\s*true/);
         expect(source).toMatch(/id:\s*'privacy'[\s\S]*?hidden:\s*true/);
         expect(source).toMatch(/id:\s*'notifications'[\s\S]*?hidden:\s*true/);
-        expect(source).toMatch(/id:\s*'password'[\s\S]*?hidden:\s*true/);
 
         const visibleIds = getMyAccountDesktopSections({}, 'arg').flatMap((s) =>
             s.items.map((i) => i.id)
@@ -35,7 +34,14 @@ describe('getMyAccountDesktopSections', () => {
         expect(visibleIds).not.toContain('ratings');
         expect(visibleIds).not.toContain('privacy');
         expect(visibleIds).not.toContain('notifications');
-        expect(visibleIds).not.toContain('password');
+    });
+
+    it('shows cambiar contraseña in configuracion linking to the password route', () => {
+        const configuracion = getMyAccountDesktopSections({}, 'arg')[1];
+        const password = configuracion.items.find((i) => i.id === 'password');
+        expect(password).toBeDefined();
+        expect(password.labelKey).toBe('cambiarPassword');
+        expect(password.route).toEqual({ name: 'profile_password' });
     });
 
     it('lists visible perfil items with Editar perfil as the default profile route', () => {
@@ -52,6 +58,10 @@ describe('getMyAccountDesktopSections', () => {
 
     it('shows idioma with the current locale label in configuracion', () => {
         const configuracion = getMyAccountDesktopSections({}, 'arg')[1];
+        expect(configuracion.items.map((i) => i.id)).toEqual([
+            'password',
+            'language'
+        ]);
         const language = configuracion.items.find((i) => i.id === 'language');
         expect(language.localeSwitcher).toBe(true);
         expect(language.value).toBeUndefined();
@@ -71,6 +81,12 @@ describe('getMyAccountDesktopExpandedSection', () => {
         );
     });
 
+    it('expands configuracion for the password route', () => {
+        expect(getMyAccountDesktopExpandedSection('profile_password')).toBe(
+            'configuracion'
+        );
+    });
+
     it('expands ayuda for support and legal routes', () => {
         expect(getMyAccountDesktopExpandedSection('tickets')).toBe('ayuda');
         expect(getMyAccountDesktopExpandedSection('acerca_de')).toBe('ayuda');
@@ -83,6 +99,14 @@ describe('isMyAccountDesktopItemActive', () => {
         const sections = getMyAccountDesktopSections({}, 'arg');
         const editProfile = sections[0].items.find((i) => i.id === 'edit-profile');
         expect(isMyAccountDesktopItemActive(editProfile, 'profile_update')).toBe(
+            true
+        );
+    });
+
+    it('highlights password on profile_password', () => {
+        const sections = getMyAccountDesktopSections({}, 'arg');
+        const password = sections[1].items.find((i) => i.id === 'password');
+        expect(isMyAccountDesktopItemActive(password, 'profile_password')).toBe(
             true
         );
     });

@@ -438,16 +438,8 @@ export default {
     line-height: normal;
 }
 .header_logo-link {
-    position: relative;
     display: inline-flex;
     align-items: center;
-}
-.header_logo-link img:last-child {
-    left: 22px;
-    top: -12px;
-    position: absolute;
-    filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.3));
-    z-index: 10;
 }
 .header_panel-center {
     display: flex;

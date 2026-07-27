@@ -73,8 +73,7 @@ export function getMyAccountMobileSections(config) {
             id: 'password',
             labelKey: 'cambiarPassword',
             icon: 'fa-key',
-            route: { name: 'profile_update' },
-            hidden: true
+            route: { name: 'profile_password' }
         },
         {
             id: 'language',

@@ -37,4 +37,13 @@ describe('mobile navigation class separation', () => {
         expect(baseCss).not.toMatch(/\.mobile-footer-bar__item--menu/);
         expect(baseCss).not.toMatch(/\.mobile-footer-bar__item--home/);
     });
+
+    it('renders footer icons as filled paths without an extra stroke', () => {
+        expect(baseCss).toMatch(
+            /\.mobile-footer-bar__item svg path\s*\{[^}]*fill:\s*currentColor[^}]*stroke:\s*none/s
+        );
+        expect(baseCss).not.toMatch(
+            /\.mobile-footer-bar__item svg path\s*\{[^}]*stroke:\s*currentColor/s
+        );
+    });
 });

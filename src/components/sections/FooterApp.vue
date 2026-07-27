@@ -211,13 +211,10 @@ h3 {
     display: block;
 }
 .mobile-footer-bar__icon :deep(.svgItem svg[fill='none']) {
-    fill: none;
     color: inherit;
 }
 .mobile-footer-bar__icon :deep(.svgItem svg[fill='none'] path) {
-    stroke: currentColor;
-}
-.mobile-footer-bar__item.active .mobile-footer-bar__icon :deep(.svgItem svg[fill='none']) {
-    fill: none;
+    fill: currentColor;
+    stroke: none;
 }
 </style>

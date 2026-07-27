@@ -371,6 +371,7 @@ const messages = {
         faltanCamposObligatorios:
             'Te faltaron completar campos obligatorios o ingresaste datos inválidos.',
         passwordNoCoincide: 'Password no coincide',
+        passwordActualizadaCorrectamente: 'Contraseña actualizada correctamente',
         perfilActualizadoCorrectamente: 'Perfil actualizado correctamente.',
         debesImagenPerfil: 'Debes cargar una imagen de perfil.',
         errorDatos: 'No se pudo grabar los datos. Intente de nuevo',
@@ -3379,6 +3380,7 @@ const messages = {
         faltanCamposObligatorios:
             'You missed required fields or entered invalid data.',
         passwordNoCoincide: 'Password does not match',
+        passwordActualizadaCorrectamente: 'Password updated successfully',
         perfilActualizadoCorrectamente: 'Profile updated successfully.',
         debesImagenPerfil: 'You must upload a profile picture.',
         errorDatos: 'Could not save data. Please try again.',

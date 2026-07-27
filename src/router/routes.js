@@ -66,6 +66,7 @@ const AdminCarModels = () => import('../components/views/AdminCarModels.vue');
 const AdminCarColors = () => import('../components/views/AdminCarColors.vue');
 
 const UpdateProfile = () => import('../components/sections/UpdateProfile.vue');
+const ChangePassword = () => import('../components/sections/ChangePassword.vue');
 const ProfileCars = () => import('../components/sections/ProfileCars.vue');
 const FriendsSetting = () => import('../components/sections/FriendsSetting.vue');
 const FriendsRequest = () => import('../components/sections/FriendsRequest.vue');
@@ -525,6 +526,24 @@ export default [
                         },
                         header: {
                             titleKey: 'editarPerfil',
+                            buttons: ['menu']
+                        }
+                    }
+                }
+            },
+            {
+                path: 'password',
+                name: 'profile_password',
+                component: ChangePassword,
+                meta: {
+                    tab: 'profile',
+                    actionbar: {
+                        footer: {
+                            show: true,
+                            active_id: 'profile'
+                        },
+                        header: {
+                            titleKey: 'cambiarPassword',
                             buttons: ['menu']
                         }
                     }

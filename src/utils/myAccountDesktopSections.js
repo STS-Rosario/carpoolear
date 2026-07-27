@@ -10,6 +10,7 @@ const ROUTE_SECTION = {
     friends_search: 'perfil',
     identity_validation: 'perfil',
     identity_validation_manual: 'perfil',
+    profile_password: 'configuracion',
     'my-account': 'perfil',
     tickets: 'ayuda',
     'ticket-new': 'ayuda',
@@ -28,6 +29,7 @@ const ROUTE_ACTIVE_ITEM_ID = {
     friends_search: 'friends',
     identity_validation: 'identity-validation',
     identity_validation_manual: 'identity-validation',
+    profile_password: 'password',
     tickets: 'support',
     'ticket-new': 'support',
     'ticket-detail': 'support',
@@ -102,8 +104,7 @@ function buildDesktopSections(config) {
             id: 'password',
             labelKey: 'cambiarPassword',
             icon: 'fa-key',
-            route: { name: 'profile_update' },
-            hidden: true
+            route: { name: 'profile_password' }
         },
         {
             id: 'language',

@@ -267,39 +267,6 @@
                             {{ $t('notificacionesPorCorreo') }}
                         </label>
                     </div>
-                    <hr v-if="!isImpersonating" />
-                    <div class="checkbox" v-if="!isImpersonating">
-                        <label>
-                            <input
-                                type="checkbox"
-                                @change="changeShowPassword"
-                            />
-                            {{ $t('cambiarPassword') }}
-                        </label>
-                    </div>
-                    <div class="form-group" v-if="!isImpersonating && showChangePassword">
-                        <label for="input-pass">{{
-                            $t('ingreseNuevaPassword')
-                        }}</label>
-                        <input
-                            maxlength="40"
-                            v-model="pass.password"
-                            type="password"
-                            autocomplete="new-password"
-                            class="form-control"
-                            id="input-pass"
-                            :placeholder="$t('placeholderContrasena')"
-                        />
-                        <input
-                            maxlength="40"
-                            v-model="pass.password_confirmation"
-                            type="password"
-                            autocomplete="new-password"
-                            class="form-control"
-                            id="input-pass-confirm"
-                            :placeholder="$t('placeholderRepetirContrasena')"
-                        />
-                    </div>
 
                     <hr v-if="settings.module_unaswered_message_limit" />
                     <div
@@ -665,10 +632,6 @@ export default {
     data() {
         return {
             user: null,
-            pass: {
-                password: '',
-                password_confirmation: ''
-            },
             error: null,
             loading: false,
             loadingImg: false,
@@ -687,7 +650,6 @@ export default {
             minDate: dayjs('1900-01-01').toDate(),
             birthday: '',
             birthdayAnswer: '',
-            showChangePassword: false,
             showBeDriver: false,
             showProfileEmailNotificationsSetting: false,
             driverFiles: null,
@@ -709,7 +671,7 @@ export default {
             firstTime: 'firstTime',
             settings: 'appConfig',
             config: 'appConfig',
-            isImpersonating: 'isImpersonating'
+
         }),
         ...mapState(useDeviceStore, {
             isMobile: 'isMobile'
@@ -829,9 +791,6 @@ export default {
                 }
             });
         },
-        changeShowPassword() {
-            this.showChangePassword = !this.showChangePassword;
-        },
         changeBeDriver() {
             this.showBeDriver = !this.showBeDriver;
         },
@@ -912,14 +871,6 @@ export default {
                     data.facebook_profile_url = normalized;
                 }
             }
-            if (this.pass.password && !this.isImpersonating) {
-                if (this.pass.password !== this.pass.password_confirmation) {
-                    this.error = this.$t('passwordNoCoincide');
-                    return;
-                }
-                data.password = this.pass.password;
-                data.password_confirmation = this.pass.password_confirmation;
-            }
             /* global FormData */
             let bodyFormData = new FormData();
             for (const key in data) {
@@ -947,8 +898,6 @@ export default {
             this.update(bodyFormData)
                 .then(() => {
                     this.error = null;
-                    this.pass.password = '';
-                    this.pass.password_confirmation = '';
                     this.loading = false;
                     dialogs.message(this.$t('perfilActualizadoCorrectamente'));
                     // this.user.birthday = this.birthdayAnswer;

@@ -24,13 +24,11 @@ describe('FooterApp mobile navigation', () => {
         expect(footerSource).toContain("item.id === 'messages'");
     });
 
-    it('uses stroke icons that inherit active tab color', () => {
-        expect(footerSource).toContain(":deep(.svgItem svg[fill='none'])");
-        expect(footerSource).toContain('stroke: currentColor');
+    it('uses fill icons that inherit active tab color', () => {
         expect(footerSource).toContain('color: inherit');
-        expect(footerSource).not.toMatch(
-            /\.mobile-footer-bar__item\.active[\s\S]*fill:\s*#666/
-        );
+        expect(footerSource).toContain('fill: currentColor');
+        expect(footerSource).toContain('stroke: none');
+        expect(footerSource).not.toContain('stroke: currentColor');
     });
 });
 
