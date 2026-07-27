@@ -26,6 +26,7 @@ const MENU_LABELS = {
         ayuda: 'Ayuda',
         idioma: 'Idioma',
         preguntasFrecuentes: 'Preguntas frecuentes',
+        divisionDeGastos: 'División de gastos',
         menu: 'Menú',
         modoDebug: 'Modo debug',
         legales: 'Legales'
@@ -53,6 +54,7 @@ const MENU_LABELS = {
         ayuda: 'Help',
         idioma: 'Language',
         preguntasFrecuentes: 'Frequently asked questions',
+        divisionDeGastos: 'Trip cost sharing',
         menu: 'Menu',
         modoDebug: 'Debug mode',
         legales: 'Legal'

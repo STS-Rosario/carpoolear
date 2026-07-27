@@ -27,6 +27,7 @@ const ConversationChat = () => import('../components/views/ConversationChat.vue'
 const About = () => import('../components/views/About.vue');
 const Transactions = () => import('../components/views/transactions.vue');
 const TermsAndConditions = () => import('../components/views/TermsAndConditions.vue');
+const StaticHtmlPage = () => import('../components/views/StaticHtmlPage.vue');
 const AdminDashboard = () => import('../components/views/AdminDashboard.vue');
 const AdminPage = () => import('../components/views/AdminPage.vue');
 const AdminMaintenance = () => import('../components/views/AdminMaintenance.vue');
@@ -718,6 +719,57 @@ export default [
             actionbar: {
                 header: {
                     titleKey: 'terminos',
+                    buttons: ['back']
+                }
+            }
+        }
+    },
+    {
+        path: '/preguntas-frecuentes',
+        name: 'faq',
+        component: StaticHtmlPage,
+        props: {
+            pageSlug: 'faq',
+            pageTitleKey: 'preguntasFrecuentes'
+        },
+        meta: {
+            actionbar: {
+                header: {
+                    titleKey: 'preguntasFrecuentes',
+                    buttons: ['back']
+                }
+            }
+        }
+    },
+    {
+        path: '/division-de-gastos',
+        name: 'division_de_gastos',
+        component: StaticHtmlPage,
+        props: {
+            pageSlug: 'division-de-gastos',
+            pageTitleKey: 'divisionDeGastos'
+        },
+        meta: {
+            actionbar: {
+                header: {
+                    titleKey: 'divisionDeGastos',
+                    buttons: ['back']
+                }
+            }
+        }
+    },
+    {
+        path: '/verificacion-cuenta',
+        name: 'verificacion_cuenta',
+        component: StaticHtmlPage,
+        props: {
+            pageSlug: 'verificacion-cuenta',
+            pageTitleKey: 'validarIdentidad'
+        },
+        meta: {
+            actionbar: {
+                header: {
+                    titleKey: 'validarIdentidad',
                     buttons: ['back']
                 }
             }

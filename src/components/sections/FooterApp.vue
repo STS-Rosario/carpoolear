@@ -67,12 +67,9 @@
                     <ul>
                         <!--<li><a href="https://carpoolear.com.ar/tutoriales.php" target="_blank">Tutoriales de uso</a></li>-->
                         <li>
-                            <a
-                                href="https://carpoolear.com.ar/plataforma-preguntas-frecuentes"
-                                target="_blank"
-                            >
+                            <router-link :to="{ name: 'faq' }">
                                 {{ $t('footerPreguntasFrecuentes') }}
-                            </a>
+                            </router-link>
                         </li>
                         <li>
                             <a

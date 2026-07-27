@@ -47,17 +47,12 @@
 
             <hr class="mobile-menu_divider" />
 
-            <a
-                class="mobile-menu_item"
-                href="https://carpoolear.com.ar/plataforma-preguntas-frecuentes"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
+            <router-link class="mobile-menu_item" :to="{ name: 'faq' }">
                 <i class="fa fa-question-circle" aria-hidden="true"></i>
                 <span class="mobile-menu_item_label">{{
                     $t('footerPreguntasFrecuentes')
                 }}</span>
-            </a>
+            </router-link>
             <router-link class="mobile-menu_item" :to="{ name: 'tickets' }">
                 <i class="fa fa-life-ring" aria-hidden="true"></i>
                 <span class="mobile-menu_item_label">{{ $t('soporte') }}</span>
