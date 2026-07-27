@@ -1,6 +1,6 @@
 <template>
-    <div class="container">
-        <h3>{{ $t('soporte') }}</h3>
+    <AccountSettingsLayout page-title-key="soporte">
+        <div class="container tickets-page">
         <div class="mbot-10 create-ticket-cta">
             <router-link class="btn btn-primary" :to="{ name: 'ticket-new' }">
                 {{ $t('crearNuevoTicketMesaAyuda') }}
@@ -39,10 +39,12 @@
                 </tbody>
             </table>
         </div>
-    </div>
+        </div>
+    </AccountSettingsLayout>
 </template>
 
 <script>
+import AccountSettingsLayout from '../layouts/AccountSettingsLayout.vue';
 import { mapActions, mapState } from 'pinia';
 import { useTicketsStore } from '../../stores/tickets';
 import dayjs from '../../dayjs';
@@ -51,6 +53,9 @@ import { USER_TICKET_STATUS_LABEL_KEYS as STATUS_LABEL_KEYS } from '../../utils/
 
 export default {
     name: 'tickets',
+    components: {
+        AccountSettingsLayout
+    },
     data() {
         return {
             statusClassMap: {

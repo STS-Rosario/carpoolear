@@ -1,5 +1,9 @@
 import { defineStore } from 'pinia';
 import { getLazyRouter } from '../utils/routerLazy.js';
+import {
+    resolveMobileMenuCloseTarget,
+    snapshotRoute
+} from '../utils/mobileMenuNavigation.js';
 
 let appName = import.meta.env.VITE_TARGET_APP || 'Carpoolear';
 if (appName && appName.length) {
@@ -42,35 +46,41 @@ export const useActionbarsStore = defineStore('actionbars', {
         ],
         header_logo_visibility: true,
         footer_visibility: true,
+        mobileMenuReturnRoute: null,
         footer_buttons: [
             {
                 id: 'home',
+                labelKey: 'inicio',
                 icon: 'home',
                 url: 'trips',
                 active: true
             },
             {
-                id: 'profile',
-                icon: 'contact',
-                url: 'profile',
+                id: 'my-trips',
+                labelKey: 'misViajes',
+                icon: 'my-trips',
+                url: 'my-trips',
                 active: false
             },
             {
                 id: 'new-trip',
-                icon: 'add',
+                labelKey: 'crearViaje',
+                icon: 'create-trip',
                 url: 'new-trip',
                 active: false
             },
             {
-                id: 'conversations',
+                id: 'messages',
+                labelKey: 'mensajes',
                 icon: 'message',
                 url: 'conversations-list',
                 active: false
             },
             {
-                id: 'notifications',
-                icon: 'bell',
-                url: 'notifications',
+                id: 'profile',
+                labelKey: 'miCuenta',
+                icon: 'account',
+                url: 'my-account',
                 active: false
             }
         ]
@@ -156,7 +166,30 @@ export const useActionbarsStore = defineStore('actionbars', {
             });
         },
 
+        async openMobileMenu(router) {
+            const current = router.currentRoute.value;
+            if (current.name === 'mobile-menu') {
+                return this.closeMobileMenu(router);
+            }
+            this.mobileMenuReturnRoute = snapshotRoute(current);
+            return router.push({ name: 'mobile-menu' });
+        },
+
+        async closeMobileMenu(router) {
+            const target = resolveMobileMenuCloseTarget(this.mobileMenuReturnRoute);
+            this.mobileMenuReturnRoute = null;
+            if (
+                router.stack &&
+                router.stack.length &&
+                router.stack[router.stack.length - 1]?.name === 'mobile-menu'
+            ) {
+                router.stack.pop();
+            }
+            return router._push(target);
+        },
+
         async footerButtonClick(item) {
+            const router = await getLazyRouter();
             const params = {};
             const query = {};
             if (item.url === 'profile') {
@@ -169,7 +202,6 @@ export const useActionbarsStore = defineStore('actionbars', {
                 tripsStore.tripsSearch({ is_passenger: false });
                 tripsStore.setRefreshList(true);
             }
-            const router = await getLazyRouter();
             router.push({
                 name: item.url,
                 ...(Object.keys(params).length ? { params } : {}),

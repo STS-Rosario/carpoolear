@@ -1,0 +1,58 @@
+import { describe, expect, it } from 'vitest';
+import fs from 'node:fs';
+import path from 'node:path';
+
+const baseCssPath = path.resolve(__dirname, 'base.css');
+const baseCss = fs.readFileSync(baseCssPath, 'utf8');
+const headerPath = path.resolve(__dirname, '../components/sections/HeaderApp.vue');
+const footerPath = path.resolve(__dirname, '../components/sections/FooterApp.vue');
+const headerSource = fs.readFileSync(headerPath, 'utf8');
+const footerSource = fs.readFileSync(footerPath, 'utf8');
+
+describe('mobile navigation class separation', () => {
+    it('styles header and footer bars independently in base.css', () => {
+        expect(baseCss).toContain('.mobile-header-bar {');
+        expect(baseCss).toContain('.mobile-footer-bar {');
+        expect(baseCss).not.toMatch(/\.actionbar-top\s*\{/);
+        expect(baseCss).not.toMatch(/\.actionbar-bottom\s*\{/);
+        expect(baseCss).not.toMatch(/\.actionbar\s*\{/);
+    });
+
+    it('uses mobile-header-bar classes in HeaderApp', () => {
+        expect(headerSource).toContain('mobile-header-bar');
+        expect(headerSource).not.toContain('actionbar-top');
+        expect(headerSource).not.toContain('class="actionbar ');
+    });
+
+    it('uses mobile-footer-bar classes in FooterApp', () => {
+        expect(footerSource).toContain('mobile-footer-bar');
+        expect(footerSource).not.toContain('actionbar-bottom');
+        expect(footerSource).not.toContain('class="actionbar ');
+    });
+
+    it('lays out five equal-width footer tabs without a menu-specific width', () => {
+        expect(baseCss).toMatch(
+            /\.mobile-footer-bar__item\s*\{[^}]*width:\s*20%/
+        );
+        expect(baseCss).not.toMatch(/\.mobile-footer-bar__item--menu/);
+        expect(baseCss).not.toMatch(/\.mobile-footer-bar__item--home/);
+    });
+
+    it('renders footer icons as filled paths without an extra stroke', () => {
+        expect(baseCss).toMatch(
+            /\.mobile-footer-bar__item svg path\s*\{[^}]*fill:\s*currentColor[^}]*stroke:\s*none/s
+        );
+        expect(baseCss).not.toMatch(
+            /\.mobile-footer-bar__item svg path\s*\{[^}]*stroke:\s*currentColor/s
+        );
+    });
+
+    it('shows a blue bottom border on the active footer tab', () => {
+        expect(baseCss).toMatch(
+            /\.mobile-footer-bar__item\.active::after\s*\{[^}]*background-color:\s*var\(--secondary-background\)/s
+        );
+        expect(baseCss).toMatch(
+            /\.mobile-footer-bar__item\.active::after\s*\{[^}]*height:\s*4px/s
+        );
+    });
+});

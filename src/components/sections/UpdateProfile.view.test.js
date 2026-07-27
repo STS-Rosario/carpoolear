@@ -49,10 +49,11 @@ describe('UpdateProfile name editing', () => {
 });
 
 describe('UpdateProfile impersonation guardrails', () => {
-    it('hides password change UI and skips password in save payload while impersonating', () => {
-        expect(viewSource).toContain('isImpersonating');
-        expect(viewSource).toContain('v-if="!isImpersonating"');
-        expect(viewSource).toContain('this.pass.password && !this.isImpersonating');
+    it('no longer includes password change UI in the profile editor', () => {
+        expect(viewSource).not.toContain('changeShowPassword');
+        expect(viewSource).not.toContain('showChangePassword');
+        expect(viewSource).not.toContain("{{ $t('cambiarPassword') }}");
+        expect(viewSource).not.toContain('this.pass.password');
     });
 });
 
@@ -61,5 +62,35 @@ describe('UpdateProfile email notifications setting', () => {
         expect(viewSource).toContain("$t('notificacionesPorCorreo')");
         expect(viewSource).toContain('showProfileEmailNotificationsSetting');
         expect(viewSource).toContain('v-if="showProfileEmailNotificationsSetting"');
+    });
+});
+
+describe('UpdateProfile desktop identity layout', () => {
+    it('places avatar beside the top info alert and identity fields', () => {
+        expect(viewSource).toContain('profile-top-row');
+        expect(viewSource).toContain('profile-top-content');
+        expect(viewSource).toContain('profile-top-alert');
+        expect(viewSource).toContain('profile-identity-fields');
+        expect(viewSource).toContain('profile_image-inline');
+        expect(viewSource).not.toContain('col-sm-push-16');
+    });
+});
+
+describe('UpdateProfile delete account entry point', () => {
+    it('opens the delete modal from the route query instead of an inline button', () => {
+        expect(viewSource).toContain('DELETE_ACCOUNT_QUERY');
+        expect(viewSource).toContain('openDeleteAccountModalFromRoute');
+        expect(viewSource).toContain("query.action'(action)");
+        expect(viewSource).not.toContain('delete-account-container');
+    });
+
+    it('requires a second confirmation step before deleting the account', () => {
+        expect(viewSource).toContain('showDeleteAccountConfirmation');
+        expect(viewSource).toContain('promptDeleteAccountConfirmation');
+        expect(viewSource).toContain('cancelDeleteAccountConfirmation');
+        expect(viewSource).toContain('confirmarEliminarCuentaMensaje');
+        expect(viewSource).toMatch(
+            /promptDeleteAccountConfirmation[\s\S]*confirmarEliminarCuentaMensaje[\s\S]*@click="deleteAccount"/
+        );
     });
 });

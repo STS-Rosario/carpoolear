@@ -23,7 +23,14 @@ describe('notifications store countAction', () => {
         countMock.mockImplementation(
             () =>
                 new Promise((resolve) => {
-                    resolveCount = () => resolve({ data: 3 });
+                    resolveCount = () =>
+                        resolve({
+                            data: {
+                                notifications: 3,
+                                messages: 2,
+                                my_trips: 1
+                            }
+                        });
                 })
         );
 
@@ -39,6 +46,8 @@ describe('notifications store countAction', () => {
         await Promise.all([first, second]);
 
         expect(store.count).toBe(3);
+        expect(store.messagesCount).toBe(2);
+        expect(store.myTripsCount).toBe(1);
     });
 });
 
@@ -67,9 +76,32 @@ describe('notifications store indexAction', () => {
         const { useNotificationsStore } = await import('./notifications');
         const store = useNotificationsStore();
         store.count = 4;
+        store.messagesCount = 2;
+        store.myTripsCount = 1;
 
         await store.indexAction({ page: 1, page_size: 25 });
 
         expect(store.count).toBe(4);
+        expect(store.messagesCount).toBe(2);
+        expect(store.myTripsCount).toBe(1);
+    });
+
+    it('stores navigation badge counts from the count endpoint payload', async () => {
+        countMock.mockResolvedValue({
+            data: {
+                notifications: 5,
+                messages: 2,
+                my_trips: 3
+            }
+        });
+
+        const { useNotificationsStore } = await import('./notifications');
+        const store = useNotificationsStore();
+
+        await store.countAction();
+
+        expect(store.count).toBe(5);
+        expect(store.messagesCount).toBe(2);
+        expect(store.myTripsCount).toBe(3);
     });
 });

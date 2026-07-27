@@ -497,7 +497,7 @@ export default {
      * only #messagesWrapper scrolls (flex middle).
      */
     /*
-     * Explicit height above fixed .actionbar-bottom (52px + safe area).
+     * Explicit height above fixed .mobile-footer-bar (52px + safe area).
      * Do not subtract 5.6rem here: that matches desktop .view-container padding
      * (min-width: 768px in base.css). Mobile view-container uses ~51px/77px + safe
      * top padding already, so 5.6rem would double-count and shrink the chat column.

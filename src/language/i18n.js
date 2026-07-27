@@ -371,6 +371,7 @@ const messages = {
         faltanCamposObligatorios:
             'Te faltaron completar campos obligatorios o ingresaste datos inválidos.',
         passwordNoCoincide: 'Password no coincide',
+        passwordActualizadaCorrectamente: 'Contraseña actualizada correctamente',
         perfilActualizadoCorrectamente: 'Perfil actualizado correctamente.',
         debesImagenPerfil: 'Debes cargar una imagen de perfil.',
         errorDatos: 'No se pudo grabar los datos. Intente de nuevo',
@@ -509,6 +510,14 @@ const messages = {
         creados: 'Creados',
         misViajes: 'Mis viajes',
         miPerfil: 'Mi Perfil',
+        miCuenta: 'Mi cuenta',
+        editarPerfilPublico: 'Editar perfil público',
+        misAutos: 'Mis autos',
+        configuracionNotificaciones: 'Configuración de notificaciones',
+        configuracionPrivacidad: 'Configuración de privacidad',
+        menu: 'Menú',
+        modoDebug: 'Modo debug',
+        legales: 'Legales',
         crearViaje: 'Crear viaje',
         editarViaje: 'Editar viaje',
         notificaciones: 'Notificaciones',
@@ -551,7 +560,13 @@ const messages = {
         inicio: 'Inicio',
         mensajes: 'Mensajes',
         perfil: 'Perfil',
+        resumen: 'Resumen',
         validarIdentidad: 'Verificación de cuenta',
+        configuracion: 'Configuración',
+        ayuda: 'Ayuda',
+        idioma: 'Idioma',
+        preguntasFrecuentes: 'Preguntas frecuentes',
+        divisionDeGastos: 'División de gastos',
         debug: 'Debug',
         debugMode: 'Modo debug',
         debugModeOn: 'Activado',
@@ -922,6 +937,8 @@ const messages = {
         placeholderRepetirContrasena: 'Repetir contraseña',
         eliminarCuenta: 'Eliminar cuenta',
         seguroEliminarCuenta: '¿Estás seguro que querés eliminar tu cuenta?',
+        confirmarEliminarCuentaMensaje:
+            '¿Confirmás que querés eliminar tu cuenta de forma permanente?',
         eliminacionCuentaIrreversible:
             'Si querés eliminar tu cuenta, tené en cuenta que este proceso es IRREVERSIBLE. Una vez que la cuenta se elimine, no podrás deshacerlo ni volver a acceder a Carpoolear en un futuro ya que se elimina el acceso a la persona.',
         eliminacionCuentaMesaAyuda:
@@ -2630,6 +2647,8 @@ const messages = {
         placeholderRepetirContrasena: 'Repetir contraseña',
         eliminarCuenta: 'Eliminar cuenta',
         seguroEliminarCuenta: '¿Estás seguro que querés eliminar tu cuenta?',
+        confirmarEliminarCuentaMensaje:
+            '¿Confirmás que querés eliminar tu cuenta de forma permanente?',
         eliminacionCuentaIrreversible:
             'Si querés eliminar tu cuenta, tené en cuenta que este proceso es IRREVERSIBLE. Una vez que la cuenta se elimine, no podrás deshacerlo ni volver a acceder a Apalan-car en un futuro ya que se elimina el acceso a la persona.',
         eliminacionCuentaMesaAyuda:
@@ -3365,6 +3384,7 @@ const messages = {
         faltanCamposObligatorios:
             'You missed required fields or entered invalid data.',
         passwordNoCoincide: 'Password does not match',
+        passwordActualizadaCorrectamente: 'Password updated successfully',
         perfilActualizadoCorrectamente: 'Profile updated successfully.',
         debesImagenPerfil: 'You must upload a profile picture.',
         errorDatos: 'Could not save data. Please try again.',
@@ -3500,6 +3520,14 @@ const messages = {
         creados: 'Created',
         misViajes: 'My trips',
         miPerfil: 'My Profile',
+        miCuenta: 'My account',
+        editarPerfilPublico: 'Edit public profile',
+        misAutos: 'My cars',
+        configuracionNotificaciones: 'Notification settings',
+        configuracionPrivacidad: 'Privacy settings',
+        menu: 'Menu',
+        modoDebug: 'Debug mode',
+        legales: 'Legal',
         crearViaje: 'Create trip',
         editarViaje: 'Edit trip',
         notificaciones: 'Notifications',
@@ -3542,7 +3570,13 @@ const messages = {
         inicio: 'Home',
         mensajes: 'Messages',
         perfil: 'Profile',
+        resumen: 'Summary',
         validarIdentidad: 'Account verification',
+        configuracion: 'Settings',
+        ayuda: 'Help',
+        idioma: 'Language',
+        preguntasFrecuentes: 'Frequently asked questions',
+        divisionDeGastos: 'Trip cost sharing',
         debug: 'Debug',
         debugMode: 'Debug mode',
         debugModeOn: 'On',
@@ -3908,6 +3942,8 @@ const messages = {
         placeholderRepetirContrasena: 'Repeat password',
         eliminarCuenta: 'Delete account',
         seguroEliminarCuenta: 'Are you sure you want to delete your account?',
+        confirmarEliminarCuentaMensaje:
+            'Do you confirm that you want to permanently delete your account?',
         eliminacionCuentaIrreversible:
             "If you want to delete your account, please note that this process is IRREVERSIBLE. Once the account is deleted, you will not be able to undo it or access Carpoolear again in the future as the person's access is deleted.",
         eliminacionCuentaMesaAyuda:

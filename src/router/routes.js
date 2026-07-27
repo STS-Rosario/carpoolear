@@ -1,6 +1,7 @@
 /* jshint esversion: 6 */
 import { auth, guest, profileComplete, authAdmin, requireIdentityValidation, requireIdentityPendingRatingsAndProfile } from './middleware.js';
 import { useAuthStore } from '../stores/auth';
+import { redirectMyAccountOnDesktop } from '../utils/myAccountRouteGuards.js';
 
 function getAuthStore () {
     return useAuthStore();
@@ -26,6 +27,7 @@ const ConversationChat = () => import('../components/views/ConversationChat.vue'
 const About = () => import('../components/views/About.vue');
 const Transactions = () => import('../components/views/transactions.vue');
 const TermsAndConditions = () => import('../components/views/TermsAndConditions.vue');
+const StaticHtmlPage = () => import('../components/views/StaticHtmlPage.vue');
 const AdminDashboard = () => import('../components/views/AdminDashboard.vue');
 const AdminPage = () => import('../components/views/AdminPage.vue');
 const AdminMaintenance = () => import('../components/views/AdminMaintenance.vue');
@@ -48,6 +50,8 @@ const AdminUserMigrationNew = () => import('../components/views/AdminUserMigrati
 const Tickets = () => import('../components/views/Tickets.vue');
 const TicketNew = () => import('../components/views/TicketNew.vue');
 const TicketDetail = () => import('../components/views/TicketDetail.vue');
+const MobileMenu = () => import('../components/views/MobileMenu.vue');
+const MyAccount = () => import('../components/views/MyAccount.vue');
 const AdminSupportTickets = () => import('../components/views/AdminSupportTickets.vue');
 const AdminSupportTicketNew = () => import('../components/views/AdminSupportTicketNew.vue');
 const AdminSupportTicketDetail = () => import('../components/views/AdminSupportTicketDetail.vue');
@@ -62,6 +66,7 @@ const AdminCarModels = () => import('../components/views/AdminCarModels.vue');
 const AdminCarColors = () => import('../components/views/AdminCarColors.vue');
 
 const UpdateProfile = () => import('../components/sections/UpdateProfile.vue');
+const ChangePassword = () => import('../components/sections/ChangePassword.vue');
 const ProfileCars = () => import('../components/sections/ProfileCars.vue');
 const FriendsSetting = () => import('../components/sections/FriendsSetting.vue');
 const FriendsRequest = () => import('../components/sections/FriendsRequest.vue');
@@ -162,6 +167,45 @@ export default [
         }
     },
     {
+        path: '/mobile-menu',
+        name: 'mobile-menu',
+        component: MobileMenu,
+        beforeEnter: auth,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'menu'
+                },
+                header: {
+                    buttons: []
+                }
+            }
+        }
+    },
+    {
+        path: '/mi-cuenta',
+        name: 'my-account',
+        component: MyAccount,
+        beforeEnter: (to, from, next) => {
+            auth(to, from, () => redirectMyAccountOnDesktop(to, from, next));
+        },
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'profile'
+                },
+                header: {
+                    buttons: []
+                }
+            },
+            background: {
+                style: 'white'
+            }
+        }
+    },
+    {
         path: '/profile/:id',
         name: 'profile',
         component: Profile,
@@ -222,7 +266,7 @@ export default [
             actionbar: {
                 footer: {
                     show: true,
-                    active_id: 'profile'
+                    active_id: 'my-trips'
                 },
                 header: {
                     titleKey: 'misViajes',
@@ -270,6 +314,10 @@ export default [
         },
         meta: {
             actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'new-trip'
+                },
                 header: {
                     titleKey: 'crearViaje',
                     buttons: ['clear']
@@ -484,6 +532,24 @@ export default [
                 }
             },
             {
+                path: 'password',
+                name: 'profile_password',
+                component: ChangePassword,
+                meta: {
+                    tab: 'profile',
+                    actionbar: {
+                        footer: {
+                            show: true,
+                            active_id: 'profile'
+                        },
+                        header: {
+                            titleKey: 'cambiarPassword',
+                            buttons: ['menu']
+                        }
+                    }
+                }
+            },
+            {
                 path: 'cars',
                 name: 'profile_cars',
                 component: ProfileCars,
@@ -604,7 +670,7 @@ export default [
             actionbar: {
                 footer: {
                     show: true,
-                    active_id: 'conversations'
+                    active_id: 'messages'
                 },
                 header: {
                     titleKey: 'mensajes'
@@ -624,7 +690,7 @@ export default [
                     hide: true,
                     actionbar: {
                         footer: {
-                            active_id: 'conversations'
+                            active_id: 'messages'
                         },
                         header: {
                             titleKey: 'conversacion',
@@ -672,6 +738,57 @@ export default [
             actionbar: {
                 header: {
                     titleKey: 'terminos',
+                    buttons: ['back']
+                }
+            }
+        }
+    },
+    {
+        path: '/preguntas-frecuentes',
+        name: 'faq',
+        component: StaticHtmlPage,
+        props: {
+            pageSlug: 'faq',
+            pageTitleKey: 'preguntasFrecuentes'
+        },
+        meta: {
+            actionbar: {
+                header: {
+                    titleKey: 'preguntasFrecuentes',
+                    buttons: ['back']
+                }
+            }
+        }
+    },
+    {
+        path: '/division-de-gastos',
+        name: 'division_de_gastos',
+        component: StaticHtmlPage,
+        props: {
+            pageSlug: 'division-de-gastos',
+            pageTitleKey: 'divisionDeGastos'
+        },
+        meta: {
+            actionbar: {
+                header: {
+                    titleKey: 'divisionDeGastos',
+                    buttons: ['back']
+                }
+            }
+        }
+    },
+    {
+        path: '/verificacion-cuenta',
+        name: 'verificacion_cuenta',
+        component: StaticHtmlPage,
+        props: {
+            pageSlug: 'verificacion-cuenta',
+            pageTitleKey: 'validarIdentidad'
+        },
+        meta: {
+            actionbar: {
+                header: {
+                    titleKey: 'validarIdentidad',
                     buttons: ['back']
                 }
             }

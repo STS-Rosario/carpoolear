@@ -16,7 +16,20 @@ const MENU_LABELS = {
         viajes: 'Viajes',
         crearViaje: 'Crear viaje',
         donar: 'Donar',
-        inicio: 'Inicio'
+        inicio: 'Inicio',
+        miCuenta: 'Mi cuenta',
+        editarPerfilPublico: 'Editar perfil público',
+        misAutos: 'Mis autos',
+        configuracionNotificaciones: 'Configuración de notificaciones',
+        configuracionPrivacidad: 'Configuración de privacidad',
+        configuracion: 'Configuración',
+        ayuda: 'Ayuda',
+        idioma: 'Idioma',
+        preguntasFrecuentes: 'Preguntas frecuentes',
+        divisionDeGastos: 'División de gastos',
+        menu: 'Menú',
+        modoDebug: 'Modo debug',
+        legales: 'Legales'
     },
     en: {
         misViajes: 'My trips',
@@ -31,7 +44,20 @@ const MENU_LABELS = {
         viajes: 'Trips',
         crearViaje: 'Create trip',
         donar: 'Donate',
-        inicio: 'Home'
+        inicio: 'Home',
+        miCuenta: 'My account',
+        editarPerfilPublico: 'Edit public profile',
+        misAutos: 'My cars',
+        configuracionNotificaciones: 'Notification settings',
+        configuracionPrivacidad: 'Privacy settings',
+        configuracion: 'Settings',
+        ayuda: 'Help',
+        idioma: 'Language',
+        preguntasFrecuentes: 'Frequently asked questions',
+        divisionDeGastos: 'Trip cost sharing',
+        menu: 'Menu',
+        modoDebug: 'Debug mode',
+        legales: 'Legal'
     }
 };
 

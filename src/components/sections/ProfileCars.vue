@@ -35,4 +35,9 @@ export default {
     margin: 0 0 1rem;
     color: #036686;
 }
+@media only screen and (max-width: 768px) {
+    .profile-cars {
+        padding: 1em;
+    }
+}
 </style>

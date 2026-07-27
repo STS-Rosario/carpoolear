@@ -3,12 +3,29 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 const viewPath = path.join(__dirname, 'Settings.vue');
+const layoutPath = path.join(__dirname, '../layouts/AccountSettingsLayout.vue');
+const navPath = path.join(__dirname, '../sections/MyAccountNav.vue');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
+const layoutSource = fs.readFileSync(layoutPath, 'utf8');
+const navSource = fs.readFileSync(navPath, 'utf8');
 
 describe('Settings navigation', () => {
-    it('includes Autos section in settings menu', () => {
-        expect(viewSource).toContain("name: 'profile_cars'");
-        expect(viewSource).toContain("$t('autos')");
-        expect(viewSource).toContain("tabActive === 'cars'");
+    it('uses the shared account settings layout with desktop nav', () => {
+        expect(viewSource).toContain('AccountSettingsLayout');
+        expect(layoutSource).toContain('MyAccountNav');
+        expect(layoutSource).toContain('effectiveShowNav');
+    });
+
+    it('renders grouped desktop sidebar navigation', () => {
+        expect(navSource).toContain('my-account-nav__title');
+        expect(navSource).toContain('getMyAccountDesktopSections');
+        expect(navSource).toContain('my-account-nav__section-toggle');
+    });
+
+    it('renders logout as an outline button with a left sign-out icon', () => {
+        expect(navSource).toContain('account-logout-btn');
+        expect(navSource).toContain('my-account-nav__logout');
+        expect(navSource).toMatch(/my-account-nav__logout[\s\S]*fa-sign-out/);
+        expect(navSource).not.toContain('my-account-nav__item--logout');
     });
 });

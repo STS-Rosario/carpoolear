@@ -533,6 +533,11 @@ export default {
     padding: 0 0 1em 0;
     color: #333;
 }
+@media only screen and (max-width: 768px) {
+    .manual-identity-validation-component {
+        padding: 1em;
+    }
+}
 
 .manual-identity-validation-component .btn-primary,
 .manual-identity-validation-component .btn-danger {

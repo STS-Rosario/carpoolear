@@ -666,7 +666,7 @@
       /* position: absolute;
       bottom: 8px; */
   }
-  .actionbar-top--with-ratings {
+  .mobile-header-bar--with-ratings {
       height: auto;
       min-height: 64px;
   }
@@ -697,10 +697,6 @@
       margin-left: .2em;
   }
   .header_notifications {
-      border: 1px solid #0180a9;
-      border-right: 0;
-      border-bottom: 0;
-      border-top: 0;
       padding-left: 10px;
       padding-right: 6px;
       cursor: pointer;
@@ -741,7 +737,13 @@
       vertical-align: middle;
   }
 
-  .header .header_panel-left > img:last-child {
+  .header .header_panel-left .header_logo-link {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+  }
+
+  .header .header_panel-left .header_logo-link img:last-child {
       left: 22px;
       top: -12px;
       position: absolute;
@@ -1757,7 +1759,7 @@
       border-left: 0;
       border-right: 0;
   }
-  .actionbar_icon i {
+  .mobile-header-bar__icon i {
       cursor: pointer;
   }
   .friends-component,
@@ -1907,115 +1909,123 @@
       height: 44px;
   }
 
-  .actionbar {
-      position: fixed;
+  .mobile-header-bar {
+      position: relative;
+      top: 0;
       left: 0;
-      background: var(--actionbar-bakground);
-      height: 52px;
       width: 100%;
-      z-index: 10;
-      /* Account for safe areas on sides */
-      /* Older iOS uses constant(), modern browsers use env() */
+      border-top: 1px solid var(--secondary-background);
+      padding: 4px 10px;
+      background-color: var(--secondary-background);
+      box-sizing: border-box;
+      padding-top: calc(4px + constant(safe-area-inset-top));
+      padding-top: calc(4px + env(safe-area-inset-top));
       padding-left: constant(safe-area-inset-left);
       padding-left: env(safe-area-inset-left);
       padding-right: constant(safe-area-inset-right);
       padding-right: env(safe-area-inset-right);
   }
 
-  .actionbar-bottom {
-      bottom: 0;
-      border-top: 1px solid var(--medium-font-color);
-      text-align: center;
-      padding: 7px 0;
-      /* Safe area support for iOS and Android - account for navigation bar */
-      /* Older iOS uses constant(), modern browsers use env() */
-      padding-bottom: calc(7px + constant(safe-area-inset-bottom));
-      padding-bottom: calc(7px + env(safe-area-inset-bottom));
-      /* Ensure minimum height accounts for safe area */
-      min-height: calc(52px + constant(safe-area-inset-bottom));
-      min-height: calc(52px + env(safe-area-inset-bottom));
-  }
-
-  .actionbar-top {
-      position: relative;
-      top: 0;
-      border-top: 1px solid var(--secondary-background);
-      padding: 4px 10px;
-      background-color: var(--secondary-background);
-      /*white-space: nowrap;*/
-      /* Account for safe area at top (status bar) */
-      /* Older iOS uses constant(), modern browsers use env() */
-      padding-top: calc(4px + constant(safe-area-inset-top));
-      padding-top: calc(4px + env(safe-area-inset-top));
-  }
-
-  .actionbar-bottom .actionbar_item {
-      vertical-align: middle;
-      display: inline-block;
-      color: var(--medium-font-color);
-      font-size: 26px;
-      width: 20%;
-      cursor: pointer;
-  }
-
-  .actionbar-bottom .actionbar_item i {
-      font-size: 26px !important;
-  }
-
-  .actionbar_icon.pull-right {
-      cursor: pointer;
-  }
-
-  .actionbar-bottom .actionbar_item.active {
-      color: var(--secondary-background);
-  }
-
-  .actionbar-bottom .actionbar_item span {
-      vertical-align: middle;
-      padding: 2px 6px;
-  }
-
-  .actionbar-bottom .actionbar_item .big {
-      color: var(--secondary-font-color);
-      background: red;
-      vertical-align: top;
-  }
-  .actionbar-bottom .actionbar_item svg {
-    fill: #666;
-  }
-  .actionbar-bottom .actionbar_item .big svg {
-    margin-top: 6px;
-    fill: #fff
-  }
-  .actionbar-bottom .actionbar_item .big .svgItem path:first-child{
-    stroke: #fff;
-  }
-  .actionbar-bottom .actionbar_item.active svg {
-    fill: var(--secondary-background);
-  }
-  .actionbar_section {
+  .mobile-header-bar__section {
       display: inline-block;
       margin-top: 2px;
       vertical-align: middle;
   }
 
-  .actionbar_icon {
+  .mobile-header-bar__icon {
       font-size: 26px;
-      /* width: 30px; */
   }
 
-  .actionbar_title {
+  .mobile-header-bar__icon--right {
+      cursor: pointer;
+      float: right;
+  }
+
+  .mobile-header-bar__title {
       font-size: 26px;
       font-family: 'Muli';
       font-weight: 300;
       margin-left: .5em;
-
       max-width: 50%;
       text-overflow: ellipsis;
-
-      /* Required for text-overflow to do anything */
       white-space: nowrap;
       overflow: hidden;
+  }
+
+  .mobile-header-bar__title--settings-wide {
+      max-width: 72%;
+      font-size: 18px;
+      font-weight: 600;
+  }
+
+  .mobile-footer-bar {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      z-index: 10;
+      background: #eee;
+      border-top: 1px solid #e4e4e4;
+      box-shadow: none;
+      text-align: center;
+      padding-top: 5px;
+      padding-left: constant(safe-area-inset-left);
+      padding-left: env(safe-area-inset-left);
+      padding-right: constant(safe-area-inset-right);
+      padding-right: env(safe-area-inset-right);
+      padding-bottom: calc(14px + constant(safe-area-inset-bottom));
+      padding-bottom: calc(14px + env(safe-area-inset-bottom));
+      min-height: calc(60px + constant(safe-area-inset-bottom));
+      min-height: calc(60px + env(safe-area-inset-bottom));
+  }
+
+  .mobile-footer-bar__item {
+      position: relative;
+      vertical-align: middle;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      color: #666;
+      width: 20%;
+      cursor: pointer;
+  }
+
+  .mobile-footer-bar__icon {
+      display: flex;
+      line-height: 0;
+  }
+
+  .mobile-footer-bar__icon .svgItem {
+      display: block;
+      line-height: 0;
+  }
+
+  .mobile-footer-bar__icon svg {
+      display: block;
+  }
+
+  .mobile-footer-bar__item i {
+      font-size: 26px !important;
+  }
+
+  .mobile-footer-bar__item.active {
+      color: var(--secondary-background);
+  }
+
+  .mobile-footer-bar__item.active::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: calc(-14px - constant(safe-area-inset-bottom));
+      bottom: calc(-14px - env(safe-area-inset-bottom));
+      height: 4px;
+      background-color: var(--secondary-background);
+  }
+
+  .mobile-footer-bar__item svg path {
+      fill: currentColor;
+      stroke: none;
   }
 
   .footer-component {
@@ -2735,6 +2745,67 @@
           font-size: 18px;
           color: #333;
       }
+      .settings-component .tabset > .nav-tabs {
+          position: relative;
+          top: auto;
+          left: auto;
+          width: 100%;
+          margin: 0 0 1.25rem;
+          padding: 0;
+          display: flex;
+          background-color: transparent;
+          border-bottom: 1px solid #aaa;
+      }
+      .settings-component .tabset > .nav-tabs > li {
+          float: none;
+          width: auto;
+          flex: 1 1 0;
+          text-align: center;
+      }
+      .settings-component .tabset > .nav-tabs::after {
+          display: none;
+      }
+      .settings-component .tabset > .nav-tabs > li > a.active {
+          border-bottom: 4px solid var(--trip-almost-fill-color);
+          margin-bottom: -1px;
+      }
+      .settings-component .tabset > .nav-tabs > li > a:focus,
+      .settings-component .tabset > .nav-tabs > li > a:focus-visible {
+          outline: none;
+          box-shadow: none;
+      }
+      .settings-component .tabset > .tab-content {
+          margin-top: 0;
+          min-height: 0;
+      }
+      .settings-component .tabset .tab-pane.container {
+          width: 100%;
+          padding-left: 0;
+          padding-right: 0;
+      }
+      .settings-component .profile-info-component .list-group {
+          display: grid;
+          grid-template-columns: minmax(180px, 230px) minmax(0, 1fr);
+          column-gap: 2rem;
+          align-items: start;
+      }
+      .settings-component .profile-info-component .pic-info,
+      .settings-component .profile-info-component .data-info {
+          float: none;
+          width: auto;
+          max-width: none;
+          margin: 0;
+          padding: 0;
+      }
+      .settings-component .profile-info-component .profile-info--name.desktop {
+          padding: 0 0 1rem;
+      }
+      .settings-component .profile-info-component .list-container {
+          margin: 0;
+      }
+      .settings-component .tab-content .list-group-item {
+          padding-left: 0;
+      }
       .user-form .btn-primary {
           width: fit-content;
           max-width: 100%;
@@ -2831,7 +2902,7 @@
       .header_panel-left img:first-child {
           display: none;
       }
-      .header .header_panel-left > img:last-child {
+      .header .header_panel-left .header_logo-link img:last-child {
           top: -22px;
       }
   }
@@ -2916,7 +2987,7 @@
       .header_panel-left {
           margin: 0 0 0 4em;
       }
-      .header .header_panel-left > img:last-child {
+      .header .header_panel-left .header_logo-link img:last-child {
           left: 62px;
       }
       .header_panel-right .btn-link {
@@ -3424,4 +3495,39 @@
 }
 .trip_allow-foreign .checkbox-box {
     top: 9px;
+}
+
+.account-logout-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: 1.5px solid #1E5F9E;
+    border-radius: 12px;
+    background: #fff;
+    color: #1E5F9E;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.2;
+    padding: 0.75rem 1.25rem;
+    cursor: pointer;
+    text-decoration: none;
+}
+.account-logout-btn > .fa {
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+.account-logout-btn:hover {
+    background: #eef4fb;
+    color: #1E5F9E;
+}
+.account-logout-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(30, 95, 158, 0.22);
+}
+.account-logout-btn:disabled {
+    background: #f5f5f5;
+    border-color: #ccc;
+    color: #aaa;
+    cursor: not-allowed;
 }

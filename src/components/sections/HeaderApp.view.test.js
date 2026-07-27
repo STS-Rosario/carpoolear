@@ -6,13 +6,13 @@ const viewPath = path.resolve(__dirname, 'HeaderApp.vue');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 
 describe('HeaderApp changelog navigation', () => {
-    it('offers últimos cambios after mesa de ayuda in profile dropdowns', () => {
+    it('offers últimos cambios after mesa de ayuda in mobile ellipsis menu', () => {
         expect(viewSource).toContain('ultimosCambios');
         expect(viewSource).toContain('openChangelog');
         expect(viewSource).toContain('showChangelogNav');
         expect(viewSource).toContain('hasAnyChangelog');
         expect(viewSource).toMatch(
-            /\$t\('soporte'\)[\s\S]*showChangelogNav[\s\S]*\$t\('ultimosCambios'\)/
+            /showMenu && !isMobile[\s\S]*\$t\('soporte'\)[\s\S]*showChangelogNav[\s\S]*\$t\('ultimosCambios'\)/
         );
     });
 });

@@ -50,68 +50,72 @@
                 </span>
             </div>
         </div>
-        <div class="row">
-            <div class="col-xs-24 col-sm-8 col-sm-push-16 profile_image">
-                <div class="profile_image-container">
-                    <div
-                        class="circle-box"
-                        v-imgSrc:profile="user.image"
-                        :class="{ loading: loadingImg }"
-                    >
-                        <div @click="changePhoto" class="profile_image-edit">
-                            <svgItem icon="addPhoto" size="28"></svgItem>
+        <div class="form">
+            <div class="profile-top-row">
+                <div class="profile-top-content">
+                    <div class="alert alert-info profile-top-alert">
+                        {{ $t('incentivoFoto') }}
+                    </div>
+                    <div class="profile-identity-fields">
+                        <div class="form-group">
+                            <label for="input-name">
+                                {{ $t('nombreYapellido') }}
+                                <span
+                                    class="required-field-flag"
+                                    :title="$t('tituloCampoRequerido')"
+                                    >(*)</span
+                                >
+                            </label>
+                            <input
+                                maxlength="25"
+                                v-model="user.name"
+                                type="text"
+                                class="form-control"
+                                id="input-name"
+                                :placeholder="$t('placeholderNombre')"
+                                :class="{ 'has-error': nombreError.state }"
+                                :disabled="isNameLockedByValidation"
+                                :title="nameInputTitle"
+                            />
+                            <span class="error" v-if="nombreError.state">
+                                {{ nombreError.message }}
+                            </span>
+                        </div>
+                        <div class="form-group">
+                            <label for="input-email">
+                                {{ $t('email') }}
+                                <span
+                                    class="required-field-flag"
+                                    :title="$t('tituloCampoRequerido')"
+                                    >(*)</span
+                                >
+                            </label>
+                            <input
+                                maxlength="40"
+                                v-model="user.email"
+                                type="text"
+                                class="form-control"
+                                id="input-email"
+                                :placeholder="$t('eMail')"
+                                disabled
+                            />
+                        </div>
+                    </div>
+                </div>
+                <div class="profile_image profile_image-inline">
+                    <div class="profile_image-container">
+                        <div
+                            class="circle-box"
+                            v-imgSrc:profile="user.image"
+                            :class="{ loading: loadingImg }"
+                        >
+                            <div @click="changePhoto" class="profile_image-edit">
+                                <svgItem icon="addPhoto" size="28"></svgItem>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-xs-24 col-sm-16 col-sm-pull-8">
-                <div class="form">
-                    <div class="alert alert-info">
-                        {{ $t('incentivoFoto') }}
-                    </div>
-                    <div class="form-group">
-                        <label for="input-name">
-                            {{ $t('nombreYapellido') }}
-                            <span
-                                class="required-field-flag"
-                                :title="$t('tituloCampoRequerido')"
-                                >(*)</span
-                            >
-                        </label>
-                        <input
-                            maxlength="25"
-                            v-model="user.name"
-                            type="text"
-                            class="form-control"
-                            id="input-name"
-                            :placeholder="$t('placeholderNombre')"
-                            :class="{ 'has-error': nombreError.state }"
-                            :disabled="isNameLockedByValidation"
-                            :title="nameInputTitle"
-                        />
-                        <span class="error" v-if="nombreError.state">
-                            {{ nombreError.message }}
-                        </span>
-                    </div>
-                    <div class="form-group">
-                        <label for="input-email">
-                            {{ $t('email') }}
-                            <span
-                                class="required-field-flag"
-                                :title="$t('tituloCampoRequerido')"
-                                >(*)</span
-                            >
-                        </label>
-                        <input
-                            maxlength="40"
-                            v-model="user.email"
-                            type="text"
-                            class="form-control"
-                            id="input-email"
-                            :placeholder="$t('eMail')"
-                            disabled
-                        />
-                    </div>
                     <!--<div class="form-group">
                     <label for="">Fecha de nacimiento <span class="required-field-flag" title="Campo requerido">(*)</span></label>
                     <DatePicker :model-value="dayjs(birthday).format('YYYY-MM-DD') " ref="ipt_calendar" name="ipt_calendar" :maxDate="maxDate" :minDate="minDate" :class="{'has-error': birthdayError.state}" ></DatePicker>
@@ -263,39 +267,6 @@
                             {{ $t('notificacionesPorCorreo') }}
                         </label>
                     </div>
-                    <hr v-if="!isImpersonating" />
-                    <div class="checkbox" v-if="!isImpersonating">
-                        <label>
-                            <input
-                                type="checkbox"
-                                @change="changeShowPassword"
-                            />
-                            {{ $t('cambiarPassword') }}
-                        </label>
-                    </div>
-                    <div class="form-group" v-if="!isImpersonating && showChangePassword">
-                        <label for="input-pass">{{
-                            $t('ingreseNuevaPassword')
-                        }}</label>
-                        <input
-                            maxlength="40"
-                            v-model="pass.password"
-                            type="password"
-                            autocomplete="new-password"
-                            class="form-control"
-                            id="input-pass"
-                            :placeholder="$t('placeholderContrasena')"
-                        />
-                        <input
-                            maxlength="40"
-                            v-model="pass.password_confirmation"
-                            type="password"
-                            autocomplete="new-password"
-                            class="form-control"
-                            id="input-pass-confirm"
-                            :placeholder="$t('placeholderRepetirContrasena')"
-                        />
-                    </div>
 
                     <hr v-if="settings.module_unaswered_message_limit" />
                     <div
@@ -327,7 +298,6 @@
                             {{ unaswered_messages_limitError.message }}
                         </span>
                     </div>
-                    <hr />
                     <div
                         class="checkbox"
                         v-if="
@@ -482,16 +452,6 @@
                             {{ $t('camposObligatorios') }}
                         </span>
                     </div>
-                    <hr />
-                    <div class="delete-account-container">
-                        <button
-                            class="btn btn-danger pull-right"
-                            @click="toggleModalDeleteAccount"
-                        >
-                            {{ $t('eliminarCuenta') }}
-                        </button>
-                    </div>
-                    
                     <div
                         v-if="error"
                         class="alert alert-danger profile-save-error"
@@ -508,8 +468,6 @@
                         @change="onPhotoChange"
                         ref="file"
                     ></Uploadfile>
-                </div>
-            </div>
         </div>
 
         <modal
@@ -527,28 +485,52 @@
             </h3></template>
             <template #body><div>
                 <div class="text-left color-black" v-if="!showNegativeRatingsInModal">
-                    <p>{{ $t('eliminacionCuentaRecuperarCuenta') }}</p>
-                    <div class="text-center" style="margin-top: 1em;">
-                        <button
-                            class="btn btn-default"
-                            @click="openMesaAyudaFromDelete"
-                        >
-                            {{ $t('contactarMesaAyuda') }}
-                        </button>
-                    </div>
-                    <p style="margin-top: 1.5em;">{{ $t('eliminacionCuentaOtroMotivo') }}</p>
-                    <div class="text-center" style="margin-top: 1.5em;">
-                        <button
-                            class="btn btn-danger"
-                            @click="deleteAccount"
-                            :disabled="loadingDeleteAccount"
-                        >
-                            <span v-if="!loadingDeleteAccount"
-                                >{{ $t('eliminarCuenta') }}</span
+                    <template v-if="!showDeleteAccountConfirmation">
+                        <p>{{ $t('eliminacionCuentaRecuperarCuenta') }}</p>
+                        <div class="text-center" style="margin-top: 1em;">
+                            <button
+                                class="btn btn-default"
+                                @click="openMesaAyudaFromDelete"
                             >
-                            <spinner class="blue" v-if="loadingDeleteAccount"></spinner>
-                        </button>
-                    </div>
+                                {{ $t('contactarMesaAyuda') }}
+                            </button>
+                        </div>
+                        <p style="margin-top: 1.5em;">{{ $t('eliminacionCuentaOtroMotivo') }}</p>
+                        <div class="text-center" style="margin-top: 1.5em;">
+                            <button
+                                class="btn btn-danger"
+                                @click="promptDeleteAccountConfirmation"
+                            >
+                                {{ $t('eliminarCuenta') }}
+                            </button>
+                        </div>
+                    </template>
+                    <template v-else>
+                        <p>{{ $t('eliminacionCuentaIrreversible') }}</p>
+                        <p>{{ $t('confirmarEliminarCuentaMensaje') }}</p>
+                        <div class="text-center delete-account-confirmation-actions">
+                            <button
+                                type="button"
+                                class="btn btn-default"
+                                @click="cancelDeleteAccountConfirmation"
+                            >
+                                {{ $t('cancelar') }}
+                            </button>
+                            <button
+                                class="btn btn-danger"
+                                @click="deleteAccount"
+                                :disabled="loadingDeleteAccount"
+                            >
+                                <span v-if="!loadingDeleteAccount">{{
+                                    $t('confirmar')
+                                }}</span>
+                                <spinner
+                                    class="blue"
+                                    v-if="loadingDeleteAccount"
+                                ></spinner>
+                            </button>
+                        </div>
+                    </template>
                 </div>
                 <div class="text-left color-black" v-else>
                     <p>
@@ -660,6 +642,7 @@ import {
 } from '../../utils/imageUpload';
 import { applyImageUploadSelection } from '../../utils/imageUploadSelection';
 import { cloneProfileUser } from '../../utils/profileUserClone';
+import { DELETE_ACCOUNT_QUERY } from '../../utils/myAccountMenuItems';
 
 class Error {
     constructor(state = false, message = '') {
@@ -673,10 +656,6 @@ export default {
     data() {
         return {
             user: null,
-            pass: {
-                password: '',
-                password_confirmation: ''
-            },
             error: null,
             loading: false,
             loadingImg: false,
@@ -695,7 +674,6 @@ export default {
             minDate: dayjs('1900-01-01').toDate(),
             birthday: '',
             birthdayAnswer: '',
-            showChangePassword: false,
             showBeDriver: false,
             showProfileEmailNotificationsSetting: false,
             driverFiles: null,
@@ -703,6 +681,7 @@ export default {
             banks: [],
             accountTypes: [],
             showModalDeleteAccount: false,
+            showDeleteAccountConfirmation: false,
             loadingDeleteAccount: false,
             showDatosEnUsoModal: false,
             showBannedDniModal: false,
@@ -717,7 +696,7 @@ export default {
             firstTime: 'firstTime',
             settings: 'appConfig',
             config: 'appConfig',
-            isImpersonating: 'isImpersonating'
+
         }),
         ...mapState(useDeviceStore, {
             isMobile: 'isMobile'
@@ -837,9 +816,6 @@ export default {
                 }
             });
         },
-        changeShowPassword() {
-            this.showChangePassword = !this.showChangePassword;
-        },
         changeBeDriver() {
             this.showBeDriver = !this.showBeDriver;
         },
@@ -920,14 +896,6 @@ export default {
                     data.facebook_profile_url = normalized;
                 }
             }
-            if (this.pass.password && !this.isImpersonating) {
-                if (this.pass.password !== this.pass.password_confirmation) {
-                    this.error = this.$t('passwordNoCoincide');
-                    return;
-                }
-                data.password = this.pass.password;
-                data.password_confirmation = this.pass.password_confirmation;
-            }
             /* global FormData */
             let bodyFormData = new FormData();
             for (const key in data) {
@@ -955,8 +923,6 @@ export default {
             this.update(bodyFormData)
                 .then(() => {
                     this.error = null;
-                    this.pass.password = '';
-                    this.pass.password_confirmation = '';
                     this.loading = false;
                     dialogs.message(this.$t('perfilActualizadoCorrectamente'));
                     // this.user.birthday = this.birthdayAnswer;
@@ -1131,11 +1097,33 @@ export default {
             return globalError;
         },
         toggleModalDeleteAccount() {
+            const wasOpen = this.showModalDeleteAccount;
             this.showModalDeleteAccount = !this.showModalDeleteAccount;
             this.showNegativeRatingsInModal = false;
+            this.showDeleteAccountConfirmation = false;
+            if (wasOpen) {
+                this.clearDeleteAccountRouteQuery();
+            }
+        },
+        isDeleteAccountRouteQuery() {
+            return this.$route.query.action === DELETE_ACCOUNT_QUERY.action;
+        },
+        openDeleteAccountModalFromRoute() {
+            if (this.isDeleteAccountRouteQuery()) {
+                this.showModalDeleteAccount = true;
+            }
+        },
+        clearDeleteAccountRouteQuery() {
+            if (!this.isDeleteAccountRouteQuery()) {
+                return;
+            }
+            const query = { ...this.$route.query };
+            delete query.action;
+            this.$router.replace({ name: 'profile_update', query });
         },
         openMesaAyudaFromDelete() {
             this.showModalDeleteAccount = false;
+            this.clearDeleteAccountRouteQuery();
             this.showMesaAyudaModal = true;
         },
         toggleDatosEnUsoModal() {
@@ -1143,6 +1131,12 @@ export default {
         },
         toggleBannedDniModal() {
             this.showBannedDniModal = !this.showBannedDniModal;
+        },
+        promptDeleteAccountConfirmation() {
+            this.showDeleteAccountConfirmation = true;
+        },
+        cancelDeleteAccountConfirmation() {
+            this.showDeleteAccountConfirmation = false;
         },
         deleteAccount() {
             this.loadingDeleteAccount = true;
@@ -1231,6 +1225,11 @@ export default {
         '$route.query.missing'() {
             this.redirectMissingPatenteToAutos();
             this.scrollToAutosLinkIfNeeded();
+        },
+        '$route.query.action'(action) {
+            if (action === DELETE_ACCOUNT_QUERY.action) {
+                this.showModalDeleteAccount = true;
+            }
         }
     },
 
@@ -1245,6 +1244,7 @@ export default {
         
         this.redirectMissingPatenteToAutos();
         this.scrollToAutosLinkIfNeeded();
+        this.openDeleteAccountModalFromRoute();
         bus.on('date-change', this.dateChange);
         this.syncProfileDraftFromStore();
         console.log('USUARIO', this.userData);
@@ -1287,10 +1287,6 @@ export default {
     margin-bottom: 0.75rem;
 }
 
-.delete-account-container {
-    display: flex;
-    justify-content: flex-end;
-}
 .required-field-flag {
     color: red;
 }
@@ -1303,6 +1299,73 @@ export default {
 }
 .profile_image-container.error .span {
     color: red;
+}
+.profile-top-row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0.5rem;
+}
+.profile-top-content {
+    min-width: 0;
+}
+.profile-top-alert {
+    margin-bottom: 1rem;
+}
+.profile_image-inline {
+    order: -1;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+.profile_image-inline .profile_image-container {
+    margin: 0 auto;
+    position: relative;
+    width: 160px;
+}
+.profile_image-inline .circle-box {
+    width: 160px;
+    height: 160px;
+    max-width: 160px;
+    max-height: 160px;
+    margin: 0;
+}
+.profile-identity-fields {
+    min-width: 0;
+}
+.profile-identity-fields .form-group:last-child {
+    margin-bottom: 0;
+}
+@media only screen and (min-width: 768px) {
+    .profile-top-row {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    .profile-top-content {
+        order: 1;
+        flex: 1;
+    }
+    .profile_image-inline {
+        order: 2;
+        flex: 0 0 auto;
+        margin-bottom: 0;
+        align-self: stretch;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+    }
+    .profile_image-inline .profile_image-container {
+        width: 220px;
+    }
+    .profile_image-inline .circle-box {
+        width: 220px;
+        height: 220px;
+        max-width: 220px;
+        max-height: 220px;
+    }
+    .profile-identity-fields .form-group:last-child {
+        margin-bottom: 15px;
+    }
 }
 span.error {
     display: block;
@@ -1349,6 +1412,14 @@ span.error.textarea {
 
 hr {
     border-top: 1px solid #cccccc;
+}
+
+.delete-account-confirmation-actions {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: 1.5em;
 }
 </style>
 

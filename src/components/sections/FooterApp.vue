@@ -1,30 +1,38 @@
 <template>
     <footer class="footer-component">
-        <div class="actionbar actionbar-bottom visible-xs" v-if="footerShow">
+        <div class="mobile-footer-bar visible-xs" v-if="footerShow">
             <div
-                class="actionbar_item"
+                class="mobile-footer-bar__item"
                 v-for="item in footerButtons"
-                :class="{ active: item.active }"
+                :key="item.id"
+                :class="[
+                    { active: item.active },
+                    `mobile-footer-bar__item--${item.id}`
+                ]"
                 @click="onClick(item)"
             >
                 <span
+                    class="mobile-footer-bar__icon"
                     :class="{
-                        big: item.id === 'new-trip',
-                        'width-badges': item.id === 'notifications'
+                        'mobile-footer-bar__icon--badged':
+                            item.id === 'my-trips' || item.id === 'messages'
                     }"
-                    class=""
                 >
-                    <svgItem size="26" :icon="item.icon"></svgItem>
+                    <svgItem size="50" :icon="item.icon"></svgItem>
                     <span
-                        class="badge"
+                        class="mobile-footer-bar__badge"
                         v-if="
-                            notificationsCount > 0 &&
-                            item.id === 'notifications'
+                            item.id === 'my-trips' && myTripsBadgeCount > 0
                         "
-                    >
-                        {{ notificationsCount }}
-                    </span>
+                    ></span>
+                    <span
+                        class="mobile-footer-bar__badge"
+                        v-if="
+                            item.id === 'messages' && messagesBadgeCount > 0
+                        "
+                    ></span>
                 </span>
+                <span class="mobile-footer-bar__label">{{ $t(item.labelKey) }}</span>
             </div>
         </div>
         <div class="container hidden-xs" v-if="config.enable_footer">
@@ -59,12 +67,9 @@
                     <ul>
                         <!--<li><a href="https://carpoolear.com.ar/tutoriales.php" target="_blank">Tutoriales de uso</a></li>-->
                         <li>
-                            <a
-                                href="https://carpoolear.com.ar/plataforma-preguntas-frecuentes"
-                                target="_blank"
-                            >
+                            <router-link :to="{ name: 'faq' }">
                                 {{ $t('footerPreguntasFrecuentes') }}
-                            </a>
+                            </router-link>
                         </li>
                         <li>
                             <a
@@ -154,7 +159,8 @@ export default {
             footerShow: 'footerShow'
         }),
         ...mapState(useNotificationsStore, {
-            notificationsCount: 'count'
+            myTripsBadgeCount: 'myTripsCount',
+            messagesBadgeCount: 'messagesCount'
         }),
         ...mapState(useAuthStore, {
             config: 'appConfig'
@@ -175,17 +181,40 @@ export default {
 h3 {
     font-size: 18px;
 }
-.width-badges {
+.mobile-footer-bar__icon--badged {
     position: relative;
+    display: inline-flex;
 }
-.badge {
+.mobile-footer-bar__badge {
     position: absolute;
-    background-color: red;
-    right: 5px;
-    bottom: 3px;
-    font-size: 10px;
-    height: auto;
-    width: auto;
-    padding: 3px 4px !important;
+    top: -2px;
+    right: -4px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #e53935;
+}
+.mobile-footer-bar__label {
+    display: block;
+    font-size: 15px;
+    line-height: 1.15;
+    margin-top: 5px;
+    color: inherit;
+}
+.mobile-footer-bar__item.active .mobile-footer-bar__label {
+    font-weight: 600;
+}
+.mobile-footer-bar__icon {
+    color: inherit;
+}
+.mobile-footer-bar__icon :deep(.svgItem svg) {
+    display: block;
+}
+.mobile-footer-bar__icon :deep(.svgItem svg[fill='none']) {
+    color: inherit;
+}
+.mobile-footer-bar__icon :deep(.svgItem svg[fill='none'] path) {
+    fill: currentColor;
+    stroke: none;
 }
 </style>
