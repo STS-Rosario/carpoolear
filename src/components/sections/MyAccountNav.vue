@@ -301,7 +301,7 @@ export default {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    margin-top: 0.35rem;
+    margin-top: 2rem;
     padding: 0.65rem 0.75rem;
     color: #e53935;
     font-size: 0.9rem;

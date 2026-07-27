@@ -937,6 +937,8 @@ const messages = {
         placeholderRepetirContrasena: 'Repetir contraseña',
         eliminarCuenta: 'Eliminar cuenta',
         seguroEliminarCuenta: '¿Estás seguro que querés eliminar tu cuenta?',
+        confirmarEliminarCuentaMensaje:
+            '¿Confirmás que querés eliminar tu cuenta de forma permanente?',
         eliminacionCuentaIrreversible:
             'Si querés eliminar tu cuenta, tené en cuenta que este proceso es IRREVERSIBLE. Una vez que la cuenta se elimine, no podrás deshacerlo ni volver a acceder a Carpoolear en un futuro ya que se elimina el acceso a la persona.',
         eliminacionCuentaMesaAyuda:
@@ -2645,6 +2647,8 @@ const messages = {
         placeholderRepetirContrasena: 'Repetir contraseña',
         eliminarCuenta: 'Eliminar cuenta',
         seguroEliminarCuenta: '¿Estás seguro que querés eliminar tu cuenta?',
+        confirmarEliminarCuentaMensaje:
+            '¿Confirmás que querés eliminar tu cuenta de forma permanente?',
         eliminacionCuentaIrreversible:
             'Si querés eliminar tu cuenta, tené en cuenta que este proceso es IRREVERSIBLE. Una vez que la cuenta se elimine, no podrás deshacerlo ni volver a acceder a Apalan-car en un futuro ya que se elimina el acceso a la persona.',
         eliminacionCuentaMesaAyuda:
@@ -3938,6 +3942,8 @@ const messages = {
         placeholderRepetirContrasena: 'Repeat password',
         eliminarCuenta: 'Delete account',
         seguroEliminarCuenta: 'Are you sure you want to delete your account?',
+        confirmarEliminarCuentaMensaje:
+            'Do you confirm that you want to permanently delete your account?',
         eliminacionCuentaIrreversible:
             "If you want to delete your account, please note that this process is IRREVERSIBLE. Once the account is deleted, you will not be able to undo it or access Carpoolear again in the future as the person's access is deleted.",
         eliminacionCuentaMesaAyuda:

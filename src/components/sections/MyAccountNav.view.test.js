@@ -48,6 +48,9 @@ describe('MyAccountNav desktop sidebar', () => {
         expect(navSource).not.toMatch(
             /\.my-account-nav__logout\s*\{[^}]*border-radius:\s*999px/
         );
+        expect(navSource).toMatch(
+            /\.my-account-nav__delete\s*\{[^}]*margin-top:\s*2rem/
+        );
     });
 
     it('removes the old flat profile header from the sidebar', () => {

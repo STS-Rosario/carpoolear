@@ -485,28 +485,52 @@
             </h3></template>
             <template #body><div>
                 <div class="text-left color-black" v-if="!showNegativeRatingsInModal">
-                    <p>{{ $t('eliminacionCuentaRecuperarCuenta') }}</p>
-                    <div class="text-center" style="margin-top: 1em;">
-                        <button
-                            class="btn btn-default"
-                            @click="openMesaAyudaFromDelete"
-                        >
-                            {{ $t('contactarMesaAyuda') }}
-                        </button>
-                    </div>
-                    <p style="margin-top: 1.5em;">{{ $t('eliminacionCuentaOtroMotivo') }}</p>
-                    <div class="text-center" style="margin-top: 1.5em;">
-                        <button
-                            class="btn btn-danger"
-                            @click="deleteAccount"
-                            :disabled="loadingDeleteAccount"
-                        >
-                            <span v-if="!loadingDeleteAccount"
-                                >{{ $t('eliminarCuenta') }}</span
+                    <template v-if="!showDeleteAccountConfirmation">
+                        <p>{{ $t('eliminacionCuentaRecuperarCuenta') }}</p>
+                        <div class="text-center" style="margin-top: 1em;">
+                            <button
+                                class="btn btn-default"
+                                @click="openMesaAyudaFromDelete"
                             >
-                            <spinner class="blue" v-if="loadingDeleteAccount"></spinner>
-                        </button>
-                    </div>
+                                {{ $t('contactarMesaAyuda') }}
+                            </button>
+                        </div>
+                        <p style="margin-top: 1.5em;">{{ $t('eliminacionCuentaOtroMotivo') }}</p>
+                        <div class="text-center" style="margin-top: 1.5em;">
+                            <button
+                                class="btn btn-danger"
+                                @click="promptDeleteAccountConfirmation"
+                            >
+                                {{ $t('eliminarCuenta') }}
+                            </button>
+                        </div>
+                    </template>
+                    <template v-else>
+                        <p>{{ $t('eliminacionCuentaIrreversible') }}</p>
+                        <p>{{ $t('confirmarEliminarCuentaMensaje') }}</p>
+                        <div class="text-center delete-account-confirmation-actions">
+                            <button
+                                type="button"
+                                class="btn btn-default"
+                                @click="cancelDeleteAccountConfirmation"
+                            >
+                                {{ $t('cancelar') }}
+                            </button>
+                            <button
+                                class="btn btn-danger"
+                                @click="deleteAccount"
+                                :disabled="loadingDeleteAccount"
+                            >
+                                <span v-if="!loadingDeleteAccount">{{
+                                    $t('confirmar')
+                                }}</span>
+                                <spinner
+                                    class="blue"
+                                    v-if="loadingDeleteAccount"
+                                ></spinner>
+                            </button>
+                        </div>
+                    </template>
                 </div>
                 <div class="text-left color-black" v-else>
                     <p>
@@ -657,6 +681,7 @@ export default {
             banks: [],
             accountTypes: [],
             showModalDeleteAccount: false,
+            showDeleteAccountConfirmation: false,
             loadingDeleteAccount: false,
             showDatosEnUsoModal: false,
             showBannedDniModal: false,
@@ -1075,6 +1100,7 @@ export default {
             const wasOpen = this.showModalDeleteAccount;
             this.showModalDeleteAccount = !this.showModalDeleteAccount;
             this.showNegativeRatingsInModal = false;
+            this.showDeleteAccountConfirmation = false;
             if (wasOpen) {
                 this.clearDeleteAccountRouteQuery();
             }
@@ -1105,6 +1131,12 @@ export default {
         },
         toggleBannedDniModal() {
             this.showBannedDniModal = !this.showBannedDniModal;
+        },
+        promptDeleteAccountConfirmation() {
+            this.showDeleteAccountConfirmation = true;
+        },
+        cancelDeleteAccountConfirmation() {
+            this.showDeleteAccountConfirmation = false;
         },
         deleteAccount() {
             this.loadingDeleteAccount = true;
@@ -1380,6 +1412,14 @@ span.error.textarea {
 
 hr {
     border-top: 1px solid #cccccc;
+}
+
+.delete-account-confirmation-actions {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: 1.5em;
 }
 </style>
 

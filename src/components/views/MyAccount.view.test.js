@@ -22,9 +22,11 @@ describe('MyAccount view', () => {
         );
         expect(viewSource).toContain('userRatingsFromProfile');
         expect(viewSource).toContain('my-account__stats');
-        expect(viewSource).toContain('my-account__stat--positive');
-        expect(viewSource).toContain('my-account__stat--neutral');
-        expect(viewSource).toContain('my-account__stat--negative');
+        expect(viewSource).toContain('UserRatingsCounts');
+        expect(viewSource).toContain(':ratings="ratings"');
+        expect(viewSource).not.toContain('fa-smile-o');
+        expect(viewSource).not.toContain('fa-meh-o');
+        expect(viewSource).not.toContain('fa-frown-o');
         expect(viewSource).toContain("$t('viajes')");
     });
 
@@ -40,8 +42,9 @@ describe('MyAccount view', () => {
         expect(viewSource).toContain('account-logout-btn');
         expect(viewSource).toContain('my-account__logout');
         expect(viewSource).toMatch(/my-account__logout[\s\S]*fa-sign-out/);
-        expect(viewSource).toContain("$t('cerrarSesion')");
         expect(viewSource).toContain('my-account__delete');
+        expect(viewSource).toMatch(/my-account__delete\s*\{[^}]*margin-top:\s*2\.5rem/s);
+        expect(viewSource).toContain("$t('cerrarSesion')");
         expect(viewSource).toContain('MOBILE_DELETE_ACCOUNT_ROUTE');
         expect(viewSource).toContain("$t('eliminarCuenta')");
     });

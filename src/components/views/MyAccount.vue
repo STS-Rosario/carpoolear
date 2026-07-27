@@ -20,18 +20,10 @@
                     {{ user.name }}
                 </router-link>
                 <div class="my-account__stats">
-                    <span class="my-account__stat my-account__stat--positive">
-                        <i class="fa fa-smile-o" aria-hidden="true"></i>
-                        {{ ratings.positive }}
-                    </span>
-                    <span class="my-account__stat my-account__stat--neutral">
-                        <i class="fa fa-meh-o" aria-hidden="true"></i>
-                        {{ ratings.neutral }}
-                    </span>
-                    <span class="my-account__stat my-account__stat--negative">
-                        <i class="fa fa-frown-o" aria-hidden="true"></i>
-                        {{ ratings.negative }}
-                    </span>
+                    <UserRatingsCounts
+                        class="my-account__ratings"
+                        :ratings="ratings"
+                    />
                     <span
                         class="my-account__stats-separator"
                         v-if="showTripsStat"
@@ -142,11 +134,15 @@ import {
     persistLocaleChoice,
     syncLocaleToBackend
 } from '../../utils/userLocale.js';
+import UserRatingsCounts from '../elements/UserRatingsCounts.vue';
 
 const userApi = new UserApi();
 
 export default {
     name: 'myAccount',
+    components: {
+        UserRatingsCounts
+    },
     computed: {
         ...mapState(useAuthStore, {
             user: 'user',
@@ -262,19 +258,8 @@ export default {
     font-size: 0.85rem;
     color: #666;
 }
-.my-account__stat {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-}
-.my-account__stat--positive {
-    color: #00a3e0;
-}
-.my-account__stat--neutral {
-    color: #9e9e9e;
-}
-.my-account__stat--negative {
-    color: #e53935;
+.my-account__ratings {
+    font-size: 0.85rem;
 }
 .my-account__stats-separator {
     width: 1px;
@@ -375,7 +360,7 @@ export default {
     align-items: center;
     justify-content: center;
     gap: 0.4rem;
-    margin-top: 1rem;
+    margin-top: 2.5rem;
     color: #e53935;
     font-size: 0.9rem;
     text-decoration: none;

@@ -83,4 +83,14 @@ describe('UpdateProfile delete account entry point', () => {
         expect(viewSource).toContain("query.action'(action)");
         expect(viewSource).not.toContain('delete-account-container');
     });
+
+    it('requires a second confirmation step before deleting the account', () => {
+        expect(viewSource).toContain('showDeleteAccountConfirmation');
+        expect(viewSource).toContain('promptDeleteAccountConfirmation');
+        expect(viewSource).toContain('cancelDeleteAccountConfirmation');
+        expect(viewSource).toContain('confirmarEliminarCuentaMensaje');
+        expect(viewSource).toMatch(
+            /promptDeleteAccountConfirmation[\s\S]*confirmarEliminarCuentaMensaje[\s\S]*@click="deleteAccount"/
+        );
+    });
 });
