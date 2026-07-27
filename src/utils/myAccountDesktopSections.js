@@ -3,8 +3,6 @@ import {
     identityValidationAvailable
 } from './myAccountMenuItems';
 
-const FAQ_URL = 'https://carpoolear.com.ar/plataforma-preguntas-frecuentes';
-
 const ROUTE_SECTION = {
     profile_update: 'perfil',
     profile_cars: 'perfil',
@@ -17,7 +15,10 @@ const ROUTE_SECTION = {
     'ticket-new': 'ayuda',
     'ticket-detail': 'ayuda',
     acerca_de: 'ayuda',
-    terms: 'ayuda'
+    terms: 'ayuda',
+    faq: 'ayuda',
+    division_de_gastos: 'ayuda',
+    verificacion_cuenta: 'ayuda'
 };
 
 const ROUTE_ACTIVE_ITEM_ID = {
@@ -31,7 +32,10 @@ const ROUTE_ACTIVE_ITEM_ID = {
     'ticket-new': 'support',
     'ticket-detail': 'support',
     acerca_de: 'about',
-    terms: 'legal'
+    terms: 'legal',
+    faq: 'faq',
+    division_de_gastos: 'faq',
+    verificacion_cuenta: 'faq'
 };
 
 function buildDesktopSections(config) {
@@ -84,7 +88,8 @@ function buildDesktopSections(config) {
             id: 'notifications',
             labelKey: 'configuracionNotificaciones',
             icon: 'fa-bell-o',
-            route: { name: 'profile_update' }
+            route: { name: 'profile_update' },
+            hidden: true
         },
         {
             id: 'privacy',
@@ -97,7 +102,8 @@ function buildDesktopSections(config) {
             id: 'password',
             labelKey: 'cambiarPassword',
             icon: 'fa-key',
-            route: { name: 'profile_update' }
+            route: { name: 'profile_update' },
+            hidden: true
         },
         {
             id: 'language',
@@ -112,7 +118,7 @@ function buildDesktopSections(config) {
             id: 'faq',
             labelKey: 'preguntasFrecuentes',
             icon: 'fa-question-circle',
-            href: FAQ_URL
+            route: { name: 'faq' }
         },
         {
             id: 'support',

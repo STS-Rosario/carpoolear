@@ -3,8 +3,6 @@ import {
     identityValidationAvailable
 } from './myAccountMenuItems';
 
-const FAQ_URL = 'https://carpoolear.com.ar/plataforma-preguntas-frecuentes';
-
 /**
  * Builds the grouped mobile "Mi cuenta" navigation sections.
  *
@@ -61,7 +59,8 @@ export function getMyAccountMobileSections(config) {
             id: 'notifications',
             labelKey: 'configuracionNotificaciones',
             icon: 'fa-bell-o',
-            route: { name: 'profile_update' }
+            route: { name: 'profile_update' },
+            hidden: true
         },
         {
             id: 'privacy',
@@ -74,7 +73,8 @@ export function getMyAccountMobileSections(config) {
             id: 'password',
             labelKey: 'cambiarPassword',
             icon: 'fa-key',
-            route: { name: 'profile_update' }
+            route: { name: 'profile_update' },
+            hidden: true
         },
         {
             id: 'language',
@@ -89,7 +89,7 @@ export function getMyAccountMobileSections(config) {
             id: 'faq',
             labelKey: 'preguntasFrecuentes',
             icon: 'fa-question-circle',
-            href: FAQ_URL
+            route: { name: 'faq' }
         },
         {
             id: 'support',

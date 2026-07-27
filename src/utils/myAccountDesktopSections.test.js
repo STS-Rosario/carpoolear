@@ -17,7 +17,7 @@ describe('getMyAccountDesktopSections', () => {
         ]);
     });
 
-    it('hides resumen, calificaciones and privacidad but keeps them in source', () => {
+    it('hides resumen, calificaciones, privacidad, notificaciones and password but keeps them in source', () => {
         const source = fs.readFileSync(
             path.resolve(__dirname, 'myAccountDesktopSections.js'),
             'utf8'
@@ -25,6 +25,8 @@ describe('getMyAccountDesktopSections', () => {
         expect(source).toMatch(/id:\s*'resumen'[\s\S]*?hidden:\s*true/);
         expect(source).toMatch(/id:\s*'ratings'[\s\S]*?hidden:\s*true/);
         expect(source).toMatch(/id:\s*'privacy'[\s\S]*?hidden:\s*true/);
+        expect(source).toMatch(/id:\s*'notifications'[\s\S]*?hidden:\s*true/);
+        expect(source).toMatch(/id:\s*'password'[\s\S]*?hidden:\s*true/);
 
         const visibleIds = getMyAccountDesktopSections({}, 'arg').flatMap((s) =>
             s.items.map((i) => i.id)
@@ -32,6 +34,8 @@ describe('getMyAccountDesktopSections', () => {
         expect(visibleIds).not.toContain('resumen');
         expect(visibleIds).not.toContain('ratings');
         expect(visibleIds).not.toContain('privacy');
+        expect(visibleIds).not.toContain('notifications');
+        expect(visibleIds).not.toContain('password');
     });
 
     it('lists visible perfil items with Editar perfil as the default profile route', () => {

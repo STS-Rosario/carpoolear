@@ -26,13 +26,15 @@ describe('getMyAccountMobileSections', () => {
         expect(perfil.items.map((i) => i.id)).not.toContain('ratings');
     });
 
-    it('keeps ratings and privacy defined but hidden in the source', () => {
+    it('keeps ratings, privacy, notifications and password defined but hidden in the source', () => {
         const source = fs.readFileSync(
             path.resolve(__dirname, 'myAccountMobileSections.js'),
             'utf8'
         );
         expect(source).toMatch(/id:\s*'ratings'[\s\S]*?hidden:\s*true/);
         expect(source).toMatch(/id:\s*'privacy'[\s\S]*?hidden:\s*true/);
+        expect(source).toMatch(/id:\s*'notifications'[\s\S]*?hidden:\s*true/);
+        expect(source).toMatch(/id:\s*'password'[\s\S]*?hidden:\s*true/);
     });
 
     it('adds identity validation to perfil only when enabled', () => {
@@ -49,14 +51,12 @@ describe('getMyAccountMobileSections', () => {
         expect(withValidation.map((i) => i.id)).toContain('identity-validation');
     });
 
-    it('lists configuracion items with a locale switcher, hiding privacy for now', () => {
+    it('lists configuracion items with a locale switcher, hiding privacy, notifications and password for now', () => {
         const configuracion = getMyAccountMobileSections({}, 'arg')[1];
-        expect(configuracion.items.map((i) => i.id)).toEqual([
-            'notifications',
-            'password',
-            'language'
-        ]);
+        expect(configuracion.items.map((i) => i.id)).toEqual(['language']);
         expect(configuracion.items.map((i) => i.id)).not.toContain('privacy');
+        expect(configuracion.items.map((i) => i.id)).not.toContain('notifications');
+        expect(configuracion.items.map((i) => i.id)).not.toContain('password');
         const language = configuracion.items.find((i) => i.id === 'language');
         expect(language.localeSwitcher).toBe(true);
         expect(language.placeholder).toBeUndefined();
@@ -71,7 +71,7 @@ describe('getMyAccountMobileSections', () => {
             'about',
             'legal'
         ]);
-        expect(ayuda.items[0].href).toMatch(/^https:\/\/carpoolear\.com\.ar/);
+        expect(ayuda.items[0].route).toEqual({ name: 'faq' });
         expect(ayuda.items[1].route).toEqual({ name: 'tickets' });
     });
 
