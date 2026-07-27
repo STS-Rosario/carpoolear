@@ -2730,6 +2730,67 @@
           font-size: 18px;
           color: #333;
       }
+      .settings-component .tabset > .nav-tabs {
+          position: relative;
+          top: auto;
+          left: auto;
+          width: 100%;
+          margin: 0 0 1.25rem;
+          padding: 0;
+          display: flex;
+          background-color: transparent;
+          border-bottom: 1px solid #aaa;
+      }
+      .settings-component .tabset > .nav-tabs > li {
+          float: none;
+          width: auto;
+          flex: 1 1 0;
+          text-align: center;
+      }
+      .settings-component .tabset > .nav-tabs::after {
+          display: none;
+      }
+      .settings-component .tabset > .nav-tabs > li > a.active {
+          border-bottom: 4px solid var(--trip-almost-fill-color);
+          margin-bottom: -1px;
+      }
+      .settings-component .tabset > .nav-tabs > li > a:focus,
+      .settings-component .tabset > .nav-tabs > li > a:focus-visible {
+          outline: none;
+          box-shadow: none;
+      }
+      .settings-component .tabset > .tab-content {
+          margin-top: 0;
+          min-height: 0;
+      }
+      .settings-component .tabset .tab-pane.container {
+          width: 100%;
+          padding-left: 0;
+          padding-right: 0;
+      }
+      .settings-component .profile-info-component .list-group {
+          display: grid;
+          grid-template-columns: minmax(180px, 230px) minmax(0, 1fr);
+          column-gap: 2rem;
+          align-items: start;
+      }
+      .settings-component .profile-info-component .pic-info,
+      .settings-component .profile-info-component .data-info {
+          float: none;
+          width: auto;
+          max-width: none;
+          margin: 0;
+          padding: 0;
+      }
+      .settings-component .profile-info-component .profile-info--name.desktop {
+          padding: 0 0 1rem;
+      }
+      .settings-component .profile-info-component .list-container {
+          margin: 0;
+      }
+      .settings-component .tab-content .list-group-item {
+          padding-left: 0;
+      }
       .user-form .btn-primary {
           width: fit-content;
           max-width: 100%;
