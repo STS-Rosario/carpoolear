@@ -1968,7 +1968,7 @@
       border-top: 1px solid #e4e4e4;
       box-shadow: none;
       text-align: center;
-      padding-top: 14px;
+      padding-top: 5px;
       padding-left: constant(safe-area-inset-left);
       padding-left: env(safe-area-inset-left);
       padding-right: constant(safe-area-inset-right);
@@ -1980,6 +1980,7 @@
   }
 
   .mobile-footer-bar__item {
+      position: relative;
       vertical-align: middle;
       display: inline-flex;
       flex-direction: column;
@@ -2009,6 +2010,17 @@
 
   .mobile-footer-bar__item.active {
       color: var(--secondary-background);
+  }
+
+  .mobile-footer-bar__item.active::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: calc(-14px - constant(safe-area-inset-bottom));
+      bottom: calc(-14px - env(safe-area-inset-bottom));
+      height: 4px;
+      background-color: var(--secondary-background);
   }
 
   .mobile-footer-bar__item svg path {

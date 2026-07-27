@@ -46,4 +46,13 @@ describe('mobile navigation class separation', () => {
             /\.mobile-footer-bar__item svg path\s*\{[^}]*stroke:\s*currentColor/s
         );
     });
+
+    it('shows a blue bottom border on the active footer tab', () => {
+        expect(baseCss).toMatch(
+            /\.mobile-footer-bar__item\.active::after\s*\{[^}]*background-color:\s*var\(--secondary-background\)/s
+        );
+        expect(baseCss).toMatch(
+            /\.mobile-footer-bar__item\.active::after\s*\{[^}]*height:\s*4px/s
+        );
+    });
 });
