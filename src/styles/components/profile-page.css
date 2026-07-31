@@ -384,11 +384,15 @@
 }
 
 .profile-page .profile-rates-component h2 {
+    margin: 1.25rem 0 0.75rem;
+    color: var(--ds-text-primary);
     font-family: var(--ds-font-family);
     font-weight: var(--ds-font-weight-bold, 700);
-    font-size: 1rem;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
+    font-size: 1.25rem;
+    line-height: 1.15;
+    letter-spacing: normal;
+    text-transform: none;
+    text-align: left;
 }
 
 .profile-page .profile-rates-component .referencias-section-description,
