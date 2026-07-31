@@ -72,4 +72,14 @@ describe('profile page styles', () => {
             /\.profile-page\s+\.profile-rates-component\s+\.alert[\s\S]*max-width:\s*100%/
         );
     });
+
+    it('puts profile Viajes schedule beside the route on desktop', () => {
+        const css = fs.readFileSync(cssPath, 'utf8');
+        expect(css).toMatch(
+            /@media[^{]*min-width:\s*768px[^{]*\{[\s\S]*\.profile-trip-card\s+\.trip-card-shell__body\s*\{[^}]*flex-direction:\s*row/
+        );
+        expect(css).toMatch(
+            /@media[^{]*min-width:\s*768px[^{]*\{[\s\S]*\.profile-trip-card\s+\.trip-card-shell__schedule\s*\{[^}]*flex-direction:\s*column/
+        );
+    });
 });
