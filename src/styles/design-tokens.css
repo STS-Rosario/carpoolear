@@ -88,11 +88,17 @@
     --ds-header-create-bg: #FFFFFF;
     --ds-header-create-text: #1E5F9E;
     --ds-header-create-hover-bg: #EEF4FB;
+    --ds-header-outline-bg: transparent;
+    --ds-header-outline-border: #FFFFFF;
+    --ds-header-outline-text: #FFFFFF;
+    --ds-header-outline-hover-bg: rgba(255, 255, 255, 0.12);
+    --ds-header-outline-hover-border: #FFFFFF;
     --ds-header-donate-bg: #C53036;
     --ds-header-donate-border: #A8282D;
     --ds-header-donate-hover-bg: #991B1B;
     --ds-header-donate-hover-border: #7F1D1D;
     --ds-header-bg: #1E5F9E;
+    --ds-header-desktop-padding-y: 1rem;
     --ds-header-mobile-padding-x: 1rem;
     --ds-header-mobile-padding-y: 0.75rem;
 

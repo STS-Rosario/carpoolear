@@ -246,14 +246,24 @@
                         <a @click="setLocale('en')">English</a>
                     </li>
                 </dropdown>
-                <router-link
-                    class="btn btn-primary"
-                    btn-lg
-                    v-if="!logged"
-                    :to="{ name: 'login' }"
-                >
-                    {{ $t('ingresar') }}
-                </router-link>
+                <template v-if="!logged">
+                    <AppButton
+                        class="header_auth-btn"
+                        variant="header-create"
+                        size="sm"
+                        :to="{ name: 'login' }"
+                    >
+                        {{ $t('iniciarSesion') }}
+                    </AppButton>
+                    <AppButton
+                        class="header_auth-btn"
+                        variant="header-outline"
+                        size="sm"
+                        :to="{ name: 'register' }"
+                    >
+                        {{ $t('RegistrarNuevoUsuario') }}
+                    </AppButton>
+                </template>
 
                 <AppButton
                     v-if="logged"
@@ -469,6 +479,8 @@ export default {
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
+    padding-top: var(--ds-header-desktop-padding-y);
+    padding-bottom: var(--ds-header-desktop-padding-y);
 }
 .header_panel-left {
     display: flex !important;
@@ -578,6 +590,9 @@ export default {
     flex-shrink: 0;
 }
 .header_create-trip-btn {
+    flex-shrink: 0;
+}
+.header_auth-btn {
     flex-shrink: 0;
 }
 </style>

@@ -269,6 +269,24 @@ a.app-button:visited,
     color: var(--ds-action-hover);
 }
 
+.app-button--header-outline {
+    background: var(--ds-header-outline-bg);
+    border-color: var(--ds-header-outline-border);
+    color: var(--ds-header-outline-text);
+}
+
+.app-button--header-outline:hover:not(:disabled):not([aria-disabled='true']) {
+    background: var(--ds-header-outline-hover-bg);
+    border-color: var(--ds-header-outline-hover-border);
+    color: var(--ds-header-outline-text);
+}
+
+.app-button--header-outline:active:not(:disabled):not([aria-disabled='true']) {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: var(--ds-header-outline-border);
+    color: var(--ds-header-outline-text);
+}
+
 .app-button--header-donate {
     background: var(--ds-header-donate-bg);
     border-color: var(--ds-header-donate-border);

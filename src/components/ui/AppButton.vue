@@ -55,6 +55,7 @@ export default {
                     'success',
                     'warning',
                     'header-create',
+                    'header-outline',
                     'header-donate'
                 ].includes(value)
         },
