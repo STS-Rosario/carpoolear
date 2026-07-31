@@ -94,6 +94,21 @@ describe('trip card styles', () => {
         );
     });
 
+    it('equal-heights My Trips cards in the same row without requiring .row', () => {
+        expect(css).toMatch(
+            /\.trips-list\s*\{[^}]*display:\s*flex[^}]*justify-content:\s*flex-start[^}]*align-items:\s*stretch/
+        );
+        expect(css).toMatch(
+            /\.trips-list\s*>\s*\[class\*='col-'\][\s,][\s\S]*?\{[^}]*display:\s*flex/
+        );
+        expect(css).toMatch(
+            /\.trips-list\s*>\s*\[class\*='col-'\]\s*>\s*\.trip[\s,][\s\S]*?\{[^}]*height:\s*100%/
+        );
+        expect(css).toMatch(
+            /\.trip-card-shell__footer\s*\{[^}]*margin-top:\s*auto/
+        );
+    });
+
     it('left-aligns friend trip rows with a fixed gap', () => {
         // Must beat .app-container .trips-section__list.row (space-between)
         expect(css).toMatch(
