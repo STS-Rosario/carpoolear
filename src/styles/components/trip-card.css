@@ -147,14 +147,16 @@
 
 .trip-card-shell__body {
     display: flex;
-    align-items: flex-start;
+    align-items: stretch;
     gap: 0.875rem;
+    flex: 1 1 auto;
     margin-bottom: 0.75rem;
 }
 
 .trip-card-shell__route {
     display: flex;
     flex: 1 1 auto;
+    align-items: stretch;
     gap: 0.75rem;
     min-width: 0;
 }
@@ -164,6 +166,7 @@
     flex: 0 0 0.75rem;
     width: 0.75rem;
     margin-top: 0.35rem;
+    margin-bottom: 0.15rem;
 }
 
 .trip-card-shell__route-graphic::before {
@@ -204,9 +207,11 @@
 .trip-card-shell__route-content {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     gap: 0.875rem;
     flex: 1 1 auto;
     min-width: 0;
+    min-height: 100%;
 }
 
 .trip-card-shell__endpoint {
@@ -233,8 +238,10 @@
 .trip-card-shell__schedule {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     gap: 0.5rem;
     flex: 0 0 auto;
+    align-self: stretch;
 }
 
 .trip-card-shell__chip {
@@ -259,7 +266,6 @@
     display: flex;
     flex-direction: column;
     gap: 0.625rem;
-    margin-top: auto;
 }
 
 .trip-card-shell__footer > [data-slot='actions-extra'],
