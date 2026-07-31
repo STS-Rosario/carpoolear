@@ -10,7 +10,6 @@
         ></tripDisplay>
         <div
             class="trip"
-            v-on:click="clickModal ? openModal() : goToDetail(false)"
             :class="{
                 'trip-fill': seats_available === 0,
                 'trip-almost-fill': seats_available === 1,
@@ -19,167 +18,70 @@
                 'trip-with-control': enableChangeSeats
             }"
         >
-            <div
-                class="panel panel-default panel-card card card-trip"
-                :class="[tripCardClass]"
+            <TripCardShell
+                :user="shellUser"
+                :ratings="driverRatings"
+                :trips-count-label="driverTripsLabel"
+                :seats-available="seats_available"
+                :show-seats-pill="!trip.is_passenger"
+                :from-city="locationLabels.fromCity"
+                :from-region="locationLabels.fromRegion"
+                :to-city="locationLabels.toCity"
+                :to-region="locationLabels.toRegion"
+                :date-label="cardDateLabel"
+                :time-label="cardTimeLabel"
+                @profile-click="goToProfile"
+                @detail-click="onShellDetailClick"
             >
-                <div class="panel-heading card_heading">
-                    <div class="panel-title card-trip_title row">
-                        <div class="card-icon" v-if="tripCardTheme !== 'light'">
-                            <span class="trip_visibility">
-                                <span
-                                    v-if="trip.friendship_type_id === 0"
-                                    :title="$t('visibilidadSoloAmigos')"
-                                >
-                                    <span
-                                        class="tooltip"
-                                        :title="$t('visibilidadSoloAmigos')"
-                                        :data-tooltip="$t('soloAmigosTooltip')"
-                                    >
-                                        <i
-                                            class="fa fa-user"
-                                            aria-hidden="true"
-                                        ></i>
-                                    </span>
-                                </span>
-                                <span
-                                    v-else-if="trip.friendship_type_id === 1"
-                                    :title="$t('visibilidadAmigosDeAmigos')"
-                                >
-                                    <i
-                                        class="fa fa-users"
-                                        aria-hidden="true"
-                                    ></i>
-                                </span>
-                                <span
-                                    v-else-if="trip.friendship_type_id === 2"
-                                    :title="$t('visibilidadPublico')"
-                                >
-                                    <span
-                                        class="tooltip-bottom"
-                                        :title="$t('visibilidadPublico')"
-                                        :data-tooltip="$t('publicoTooltip')"
-                                    >
-                                        <i
-                                            class="fa fa-globe"
-                                            aria-hidden="true"
-                                        ></i>
-                                    </span>
-                                </span>
-                            </span>
-                        </div>
-
-                        <time
-                            class="trip_date_right"
-                            :datetime="trip.trip_date"
-                            v-if="tripCardTheme === 'light' && trip.trip_date"
+                <template #body-extra>
+                    <div class="trip_visibility">
+                        <span
+                            v-if="trip.friendship_type_id === 0"
+                            :title="$t('visibilidadSoloAmigos')"
                         >
-                            <div class="trip_date_date">
-                                <span class="trip_date_date_day">
-                                    <span style="text-transform: uppercase">
-                                        {{ dayjs(trip.trip_date).format('ddd') }}
-                                    </span>
-                                </span>
-                                <br />
-                                <span class="trip_date_date_month">
-                                    {{ dayjs(trip.trip_date).format('MMM') }}
-                                </span>
-                            </div>
-                        </time>
-                        <template v-else-if="tripCardTheme === 'light' && !trip.trip_date">
-                            <div class="trip_date_right">
-                                <WeeklySchedule
-                                    :weeklySchedule="trip.weekly_schedule"
-                                    :weeklyScheduleTime="trip.weekly_schedule_time"
-                                    readonly
-                                    :theme="tripCardTheme"
-                                />
-                            </div>
-                        </template>
-                        <template v-if="user && trip.user">
-                            <div
-                                class="trip_driver_img_container"
-                                v-on:click="goToProfile"
+                            <span
+                                class="tooltip"
+                                :title="$t('visibilidadSoloAmigos')"
+                                :data-tooltip="$t('soloAmigosTooltip')"
                             >
-                                <div
-                                    class="trip_driver_img circle-box"
-                                    v-imgSrc:profile="getUserImage"
-                                ></div>
-                            </div>
-                            <div class="trip_driver_details">
-                                <div
-                                    class="trip_driver_name"
-                                    v-on:click="goToProfile"
-                                >
-                                    <UserNameWithBadge :user="trip.user" />
-                                </div>
-                                <div
-                                    class="trip_driver_ratings"
-                                    v-if="
-                                        config
-                                            ? config.trip_stars
-                                            : false &&
-                                              tripStars &&
-                                              tripStars.length > 0
-                                    "
-                                >
-                                    <div
-                                        v-if="
-                                            trip.user.positive_ratings ||
-                                            trip.user.positive_ratings
-                                        "
-                                    >
-                                        <svg-item
-                                            v-for="{ value, id } in tripStars"
-                                            :key="id"
-                                            :size="24"
-                                            :icon="'star' + value"
-                                        ></svg-item>
-                                    </div>
-                                    <div v-else>
-                                        {{ $t('noCalificado') }}
-                                    </div>
-                                </div>
-                                <div class="trip_driver_ratings" v-else>
-                                    {{ sumUserRatings(trip.user) }}
-                                    {{ $t('calificaciones') }}
-                                </div>
-                            </div>
-                        </template>
+                                <i class="fa fa-user" aria-hidden="true"></i>
+                            </span>
+                        </span>
+                        <span
+                            v-else-if="trip.friendship_type_id === 1"
+                            :title="$t('visibilidadAmigosDeAmigos')"
+                        >
+                            <i class="fa fa-users" aria-hidden="true"></i>
+                        </span>
+                        <span
+                            v-else-if="trip.friendship_type_id === 2"
+                            :title="$t('visibilidadPublico')"
+                        >
+                            <span
+                                class="tooltip-bottom"
+                                :title="$t('visibilidadPublico')"
+                                :data-tooltip="$t('publicoTooltip')"
+                            >
+                                <i class="fa fa-globe" aria-hidden="true"></i>
+                            </span>
+                        </span>
                     </div>
-                </div>
-                <div class="panel-body card_body">
-                    <template v-if="tripCardTheme === 'light'">
-                        <div class="trip_seats-available_with-icons">
-                            <div
-                                class="trip_seats-available"
-                                v-if="!trip.is_passenger"
-                            >
-                                <template v-for="n in trip.total_seats">
-                                    <span
-                                        :class="
-                                            n <
-                                            trip.total_seats -
-                                                trip.seats_available
-                                                ? 'seat-taken'
-                                                : 'seat-free'
-                                        "
-                                    >
-                                        <svg-item
-                                            :icon="'seat'"
-                                            :size="18"
-                                        ></svg-item>
-                                    </span>
-                                </template>
-                            </div>
-                        </div>
-                    </template>
+
                     <div
-                        v-if="showSelladoPending"
-                        class="trip-legend-sellado"
+                        v-if="showWeeklyScheduleOnly"
+                        class="trip-card-weekly-schedule"
                     >
+                        <WeeklySchedule
+                            :weeklySchedule="trip.weekly_schedule"
+                            :weeklyScheduleTime="trip.weekly_schedule_time"
+                            readonly
+                        />
+                    </div>
+
+                    <div v-if="showSelladoPending" class="trip-legend-sellado">
                         {{ $t('faltaPagarSellado') }}
                     </div>
+
                     <div
                         class="alert alert-warning trip-seat-request-limit-warning"
                         role="alert"
@@ -188,427 +90,108 @@
                     >
                         {{ $t('tripSeatRequestLimitDriverWarning') }}
                     </div>
+
                     <div
-                        class="trip-card-section trip-card-section--route"
+                        v-if="!enableChangeSeats && trip.is_passenger"
+                        class="passenger-looking-for-trip"
                     >
-                    <div class="trip_location">
-                        <template v-if="trip.points && trip.points.length >= 2">
-                            <div
-                                v-if="tripCardTheme !== 'light'"
-                                class="trip_location-routed"
-                            >
-                                <div class="trip_location-routed__row">
-                                    <div
-                                        class="trip_location-routed__pin-col text-right"
-                                    >
-                                        <i
-                                            class="fa fa-map-marker trip_location-routed__pin trip_location-routed__pin--from"
-                                            aria-hidden="true"
-                                        ></i>
-                                    </div>
-                                    <div
-                                        class="trip_location-routed__text-col trip_location_from"
-                                    >
-                                        <span class="trip_location_from_city">
-                                            {{
-                                                getLocationName(trip.points[0])
-                                            }}
-                                        </span>
-                                        <span
-                                            class="trip_location_from_state-country"
-                                        >
-                                            {{
-                                                googleInfoClean(
-                                                    getStateName(trip.points[0])
-                                                )
-                                            }}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div
-                                    class="trip_location-routed__row trip_location-routed__row--connector"
-                                >
-                                    <div class="trip_location-routed__pin-col">
-                                        <span
-                                            class="trip_location-routed__connector"
-                                            aria-hidden="true"
-                                        ></span>
-                                    </div>
-                                    <div
-                                        class="trip_location-routed__text-col"
-                                        aria-hidden="true"
-                                    ></div>
-                                </div>
-                                <div class="trip_location-routed__row">
-                                    <div
-                                        class="trip_location-routed__pin-col text-right"
-                                    >
-                                        <i
-                                            class="fa fa-map-marker trip_location-routed__pin trip_location-routed__pin--to"
-                                            aria-hidden="true"
-                                        ></i>
-                                    </div>
-                                    <div
-                                        class="trip_location-routed__text-col trip_location_to"
-                                    >
-                                        <span class="trip_location_to_city">
-                                            {{
-                                                getLocationName(
-                                                    trip.points[
-                                                        trip.points.length - 1
-                                                    ]
-                                                )
-                                            }}
-                                        </span>
-                                        <span
-                                            class="trip_location_to_state-country"
-                                        >
-                                            {{
-                                                googleInfoClean(
-                                                    getStateName(
-                                                        trip.points[
-                                                            trip.points.length -
-                                                                1
-                                                        ]
-                                                    )
-                                                )
-                                            }}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <template v-else>
-                                <div class="row trip_location_from">
-                                    <div class="col-xs-4">
-                                        <span class="trip_from_time">
-                                            {{
-                                                dayjs(trip.trip_date).format(
-                                                    'HH:mm'
-                                                )
-                                            }}
-                                        </span>
-                                    </div>
-                                    <div class="text-right col-xs-2">
-                                        <i
-                                            class="fa fa-circle"
-                                            aria-hidden="true"
-                                        ></i>
-                                    </div>
-                                    <div class="col-xs-14">
-                                        <span class="trip_location_from_city">
-                                            {{
-                                                getLocationName(trip.points[0])
-                                            }}
-                                        </span>
-                                        <span
-                                            class="trip_location_from_state-country"
-                                        >
-                                            {{
-                                                googleInfoClean(
-                                                    getStateName(trip.points[0])
-                                                )
-                                            }}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="row trip_location_to">
-                                    <div class="col-xs-4">
-                                        <span class="trip_to_time">
-                                            {{
-                                                dayjs(tripArrivingTime).format(
-                                                    'HH:mm'
-                                                )
-                                            }}
-                                        </span>
-                                    </div>
-                                    <div class="text-right col-xs-2">
-                                        <i
-                                            class="fa fa-map-marker"
-                                            aria-hidden="true"
-                                        ></i>
-                                    </div>
-                                    <div class="col-xs-14">
-                                        <span class="trip_location_to_city">
-                                            {{
-                                                getLocationName(
-                                                    trip.points[
-                                                        trip.points.length - 1
-                                                    ]
-                                                )
-                                            }}
-                                        </span>
-                                        <span
-                                            class="trip_location_to_state-country"
-                                        >
-                                            {{
-                                                googleInfoClean(
-                                                    getStateName(
-                                                        trip.points[
-                                                            trip.points
-                                                                .length - 1
-                                                        ]
-                                                    )
-                                                )
-                                            }}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div
-                                    class="col-xs-2 trip_location-dot-line trip_location-dot-line-small"
-                                >
-                                    <div></div>
-                                </div>
-                            </template>
-                        </template>
-                        <template v-else>
-                            <div class="row trip_location_from">
-                                <div class="col-xs-4 text-right">
-                                    <i
-                                        class="fa fa-map-marker"
-                                        aria-hidden="true"
-                                    ></i>
-                                </div>
-                                <div class="col-xs-20">
-                                    {{
-                                        String(trip.from_town || '').slice(
-                                            0,
-                                            23
-                                        ) +
-                                            (String(trip.from_town || '')
-                                                .length > 34
-                                                ? '...'
-                                                : '')
-                                    }}
-                                </div>
-                            </div>
-                            <div class="row trip_location_to">
-                                <div class="col-xs-4 text-right">
-                                    <i
-                                        class="fa fa-map-marker"
-                                        aria-hidden="true"
-                                    ></i>
-                                </div>
-                                <div class="col-xs-20">
-                                    {{
-                                        String(trip.to_town || '').slice(0, 23) +
-                                            (String(trip.to_town || '').length >
-                                            34
-                                                ? '...'
-                                                : '')
-                                    }}
-                                </div>
-                            </div>
-                        </template>
+                        <strong class="warning-is-passenger">
+                            {{ $t('pasajeroQueBuscaViaje') }}
+                        </strong>
                     </div>
-                    </div>
-                    <div
-                        v-if="tripCardTheme !== 'light'"
-                        class="trip-card-section trip-card-section--schedule"
-                    >
+                </template>
+
+                <template v-if="enableChangeSeats" #footer-extra>
                     <div class="row">
-                        <time
-                            class="trip_datetime col-xs-24"
-                            :datetime="trip.trip_date"
-                            v-if="tripCardTheme !== 'light' && trip.trip_date"
+                        <div
+                            v-if="!trip.is_passenger"
+                            class="trip-seats-control col-xs-offset-2"
                         >
-                            <div class="row">
-                                <div class="col-xs-14 trip_datetime_date">
-                                    <span class="trip_datetime_date_day">
-                                        <span style="text-transform: uppercase">
-                                            {{
-                                                dayjs(trip.trip_date).format('ddd')
-                                            }}
-                                        </span>
-                                        {{
-                                            dayjs(trip.trip_date).format('DD MMMM')
-                                        }}
-                                    </span>
-                                    <br />
-                                    <span class="trip_datetime_date_year">
-                                        {{ dayjs(trip.trip_date).format('YYYY') }}
-                                    </span>
-                                </div>
-                                <div class="col-xs-10">
-                                    <span class="trip_datetime_time">
-                                        {{ dayjs(trip.trip_date).format('HH:mm') }}
-                                        {{ $t('horas') }}
-                                    </span>
-                                </div>
-                            </div>
-                        </time>
-                        <div v-else-if="tripCardTheme !== 'light' && !trip.trip_date" class="col-xs-24">
-                            <WeeklySchedule
-                                :weeklySchedule="trip.weekly_schedule"
-                                :weeklyScheduleTime="trip.weekly_schedule_time"
-                                readonly
-                                :theme="tripCardTheme"
-                            />
+                            <button
+                                :aria-label="$t('disminuirCantidadAsientos')"
+                                v-on:click.stop="changeSeatsNumber(-1)"
+                                :disabled="sending || trip.total_seats < 1"
+                                class="btn btn-default"
+                            >
+                                -
+                            </button>
+                            <span class="trip_seats-available_value">
+                                {{ seats_available }}
+                            </span>
+                            <button
+                                :aria-label="$t('aumentarCantidadAsientos')"
+                                v-on:click.stop="changeSeatsNumber(1)"
+                                :disabled="sending || seats_available > 3"
+                                class="btn btn-default"
+                            >
+                                +
+                            </button>
+                            <span
+                                class="trip_seats-available_label"
+                                v-if="seats_available > 1"
+                            >
+                                <span
+                                    >{{ $t('Lugares') }}
+                                    {{ $t('libres') }}</span
+                                >
+                            </span>
+                            <span
+                                class="trip_seats-available_label"
+                                v-if="seats_available === 1"
+                            >
+                                <span
+                                    >{{ $t('Lugar') }}
+                                    {{ $t('libre') }}</span
+                                >
+                            </span>
+                            <span
+                                class="trip_seats-available_label"
+                                v-if="seats_available === 0"
+                            >
+                                {{ $t('Carpooleado') }}
+                            </span>
+                        </div>
+                        <div class="trip-inline-controls row">
+                            <span class="col-xs-8">
+                                <button
+                                    v-on:click.stop="goToDetail(false)"
+                                    class="btn btn-default"
+                                    :aria-label="$t('verDetalleViaje')"
+                                >
+                                    <i
+                                        class="fa fa-eye"
+                                        aria-hidden="true"
+                                    ></i>
+                                </button>
+                            </span>
+                            <span class="col-xs-8">
+                                <button
+                                    v-on:click.stop="goToDetail(true)"
+                                    class="btn btn-default"
+                                    :aria-label="$t('editarViaje')"
+                                >
+                                    <i
+                                        class="fa fa-pencil"
+                                        aria-hidden="true"
+                                    ></i>
+                                </button>
+                            </span>
+                            <span class="col-xs-8">
+                                <button
+                                    v-on:click.stop="deleteTrip"
+                                    class="btn btn-default"
+                                    :aria-label="$t('eliminarViaje')"
+                                >
+                                    <i
+                                        class="fa fa-trash-o"
+                                        aria-hidden="true"
+                                    ></i>
+                                </button>
+                            </span>
                         </div>
                     </div>
-                    </div>
-                    <div
-                        v-if="tripCardTheme !== 'light'"
-                        class="trip-card-section trip-card-section--footer"
-                    >
-                        <template v-if="!enableChangeSeats">
-                            <div v-if="trip.seats_available !== 0" class="row">
-                                <div
-                                    class="trip_seats-available col-xs-offset-2 col-xs-12"
-                                    v-if="!trip.is_passenger"
-                                >
-                                    <span
-                                        class="trip_seats-available_value pull-left"
-                                    >
-                                        {{ trip.seats_available }}
-                                    </span>
-                                    <span
-                                        class="trip_seats-available_label"
-                                        v-if="trip.seats_available > 1"
-                                    >
-                                        <span>{{ $t('Lugares') }}</span>
-                                        <span>{{ $t('libres') }}</span>
-                                    </span>
-                                    <span
-                                        class="trip_seats-available_label"
-                                        v-else="trip.seats_available > 1"
-                                    >
-                                        <span>{{ $t('Lugar') }}</span>
-                                        <span>{{ $t('libre') }}</span>
-                                    </span>
-                                </div>
-                                <div class="col-xs-offset-2 col-xs-12" v-else>
-                                    <div
-                                        class="passenger-looking-for-trip"
-                                        v-if="
-                                            tripCardTheme !== 'light' &&
-                                            trip.is_passenger
-                                        "
-                                    >
-                                        <strong class="warning-is-passenger">
-                                            {{ $t('pasajeroQueBuscaViaje') }}
-                                        </strong>
-                                    </div>
-                                </div>
-                                <div class="trip_actions col-xs-10">
-                                    <div
-                                        class="btn btn-default btn-lg btn-trip-detail"
-                                    >
-                                        {{ $t('Ver') }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div
-                                v-if="trip.seats_available === 0"
-                                class="row row--carpooleado"
-                            >
-                                <div
-                                    class="trip_seats-available col-xs-offset-6 col-xs-18 carpooleado"
-                                >
-                                    <span>{{ $t('Carpooleado') }}</span>
-                                </div>
-                            </div>
-                        </template>
-                        <template v-else>
-                            <div class="row">
-                                <div
-                                    v-if="!trip.is_passenger"
-                                    class="trip-seats-control col-xs-offset-2"
-                                >
-                                    <button
-                                        :aria-label="
-                                            $t('disminuirCantidadAsientos')
-                                        "
-                                        v-on:click.stop="changeSeatsNumber(-1)"
-                                        :disabled="
-                                            sending || trip.total_seats < 1
-                                        "
-                                        class="btn btn-default"
-                                    >
-                                        -
-                                    </button>
-                                    <span class="trip_seats-available_value">
-                                        {{ seats_available }}
-                                    </span>
-                                    <button
-                                        :aria-label="
-                                            $t('aumentarCantidadAsientos')
-                                        "
-                                        v-on:click.stop="changeSeatsNumber(1)"
-                                        :disabled="
-                                            sending || seats_available > 3
-                                        "
-                                        class="btn btn-default"
-                                    >
-                                        +
-                                    </button>
-                                    <span
-                                        class="trip_seats-available_label"
-                                        v-if="seats_available > 1"
-                                    >
-                                        <span
-                                            >{{ $t('Lugares') }}
-                                            {{ $t('libres') }}</span
-                                        >
-                                    </span>
-                                    <span
-                                        class="trip_seats-available_label"
-                                        v-if="seats_available === 1"
-                                    >
-                                        <span
-                                            >{{ $t('Lugar') }}
-                                            {{ $t('libre') }}</span
-                                        >
-                                    </span>
-                                    <span
-                                        class="trip_seats-available_label"
-                                        v-if="seats_available === 0"
-                                    >
-                                        {{ $t('Carpooleado') }}
-                                    </span>
-                                </div>
-                                <div class="trip-inline-controls row">
-                                    <span class="col-xs-8">
-                                        <button
-                                            v-on:click.stop="goToDetail(false)"
-                                            class="btn btn-default"
-                                            :aria-label="$t('verDetalleViaje')"
-                                        >
-                                            <i
-                                                class="fa fa-eye"
-                                                aria-hidden="true"
-                                            ></i>
-                                        </button>
-                                    </span>
-                                    <span class="col-xs-8">
-                                        <button
-                                            v-on:click.stop="goToDetail(true)"
-                                            class="btn btn-default"
-                                            :aria-label="$t('editarViaje')"
-                                        >
-                                            <i
-                                                class="fa fa-pencil"
-                                                aria-hidden="true"
-                                            ></i>
-                                        </button>
-                                    </span>
-                                    <span class="col-xs-8">
-                                        <button
-                                            v-on:click.stop="deleteTrip"
-                                            class="btn btn-default"
-                                            :aria-label="$t('eliminarViaje')"
-                                        >
-                                            <i
-                                                class="fa fa-trash-o"
-                                                aria-hidden="true"
-                                            ></i>
-                                        </button>
-                                    </span>
-                                </div>
-                            </div>
-                        </template>
-                    </div>
-                </div>
-            </div>
+                </template>
+            </TripCardShell>
         </div>
     </div>
 </template>
@@ -620,13 +203,14 @@ import dialogs from '../../services/dialogs.js';
 import bus from '../../services/bus-event.js';
 import tripDisplay from './TripDisplay';
 import WeeklySchedule from '../elements/WeeklySchedule';
-import UserNameWithBadge from '../elements/UserNameWithBadge.vue';
+import TripCardShell from '../elements/TripCardShell.vue';
 import dayjs from '../../dayjs';
-import SvgItem from '../SvgItem';
-import { googleInfoClean } from '../../filters';
-import { sumUserRatings } from '../../utils/tripRating';
+import { userRatingsFromProfile } from '../../utils/tripRating';
 import { shouldShowSelladoPending } from '../../utils/tripSelladoDisplay';
 import { shouldShowDriverSeatRequestLimitWarning } from '../../utils/tripSeatRequestsWarning.js';
+import { getTripLocationLabels } from '../../utils/ongoingTrip.js';
+import { formatTripCardDate, formatTripCardTime } from '../../utils/tripCardDisplay.js';
+import { normalizeTripsCount } from '../../utils/profileMemberStats.js';
 
 export default {
     name: 'trip',
@@ -663,9 +247,6 @@ export default {
     },
 
     methods: {
-        googleInfoClean,
-        dayjs,
-        sumUserRatings,
         ...mapActions(useTripsStore, {
             changeSeats: 'changeSeats',
             remove: 'remove'
@@ -685,7 +266,9 @@ export default {
             }
         },
         goToProfile: function (event) {
-            event.stopPropagation();
+            if (event && event.stopPropagation) {
+                event.stopPropagation();
+            }
             if (!this.trip.user) {
                 return;
             }
@@ -697,6 +280,16 @@ export default {
                     activeTab: 1
                 }
             });
+        },
+        onShellDetailClick: function (event) {
+            if (event && event.stopPropagation) {
+                event.stopPropagation();
+            }
+            if (this.clickModal) {
+                this.openModal();
+            } else {
+                this.goToDetail(false);
+            }
         },
         changeSeatsNumber: function (increment) {
             this.sending = true;
@@ -771,28 +364,6 @@ export default {
         },
         closeModal() {
             this.showTrip = false;
-        },
-        getLocationName(location) {
-            if (location.json_address) {
-                if (location.json_address.ciudad) {
-                    return location.json_address.ciudad;
-                }
-                if (location.json_address.name) {
-                    return location.json_address.name;
-                }
-            }
-            return location.address;
-        },
-        getStateName(location) {
-            if (location.json_address) {
-                if (location.json_address.provincia) {
-                    return location.json_address.provincia;
-                }
-                if (location.json_address.state) {
-                    return location.json_address.state;
-                }
-            }
-            return '';
         }
     },
     data() {
@@ -819,14 +390,6 @@ export default {
             } else {
                 return 'col-lg-6 col-md-8 col-sm-12';
             }
-        },
-        tripCardClass() {
-            return this.config
-                ? 'card-trip-theme-' + this.config.trip_card_design
-                : '';
-        },
-        tripCardTheme() {
-            return this.config ? this.config.trip_card_design : '';
         },
         showSelladoPending() {
             return shouldShowSelladoPending(this.trip, this.user);
@@ -856,60 +419,55 @@ export default {
                 ? this.user.image
                 : this.trip.user.image;
         },
-        tripArrivingTime() {
-            if (this.trip && this.trip.estimated_time) {
-                let minutes = 0;
-                minutes = parseInt(this.trip.estimated_time.split(':')[0]) * 60;
-                minutes += parseInt(this.trip.estimated_time.split(':')[1]);
-                return dayjs(this.trip.trip_date).add(minutes, 'minutes');
+        shellUser() {
+            if (!this.trip || !this.trip.user) {
+                return null;
             }
-            return '';
+            return { ...this.trip.user, image: this.getUserImage };
         },
-        tripStars() {
-            if (this.trip && this.trip.user) {
-                const total = sumUserRatings(this.trip.user);
-                let value = total ? (this.trip.user.positive_ratings / total) * 5 : 0;
-                let integerPart = Math.floor(value);
-                let decimalPart = value - integerPart;
-                let stars = [];
-                for (let i = 1; i <= 5; i++) {
-                    if (i < integerPart) {
-                        stars.push({
-                            id: i,
-                            value: ''
-                        });
-                    } else {
-                        if (i === integerPart) {
-                            if (decimalPart >= 0.5) {
-                                stars.push({
-                                    id: i,
-                                    value: ''
-                                });
-                            } else {
-                                stars.push({
-                                    id: i,
-                                    value: '-half'
-                                });
-                            }
-                        } else {
-                            stars.push({
-                                id: i,
-                                value: '-empty'
-                            });
-                        }
-                    }
-                }
-                return stars;
-            } else {
-                return [];
+        driverRatings() {
+            if (!this.trip || !this.trip.user) {
+                return null;
             }
+            return userRatingsFromProfile(this.trip.user);
+        },
+        driverTripsLabel() {
+            if (
+                !this.trip ||
+                !this.trip.user ||
+                this.trip.user.trips_count == null
+            ) {
+                return '';
+            }
+            return this.$t('perfilViajesParticipados', {
+                count: normalizeTripsCount(this.trip.user.trips_count)
+            });
+        },
+        locationLabels() {
+            return getTripLocationLabels(this.trip);
+        },
+        cardDateLabel() {
+            if (!this.trip) {
+                return '';
+            }
+            return formatTripCardDate(this.trip.trip_date, dayjs);
+        },
+        cardTimeLabel() {
+            if (!this.trip) {
+                return '';
+            }
+            return formatTripCardTime(this.trip.trip_date, dayjs);
+        },
+        showWeeklyScheduleOnly() {
+            return Boolean(
+                this.trip && this.trip.weekly_schedule && !this.trip.trip_date
+            );
         }
     },
     components: {
         tripDisplay,
         WeeklySchedule,
-        SvgItem,
-        UserNameWithBadge
+        TripCardShell
     },
     mounted() {
         this.seats_available = this.trip.seats_available;
@@ -942,9 +500,6 @@ export default {
 .trip-seats-control > * {
     vertical-align: middle;
 }
-.trip-with-control .card-trip {
-    height: 470px;
-}
 .trip-inline-controls .btn {
     width: 100%;
 }
@@ -956,11 +511,6 @@ export default {
 }
 .trip-inline-controls .btn[disabled]:hover {
     background: #eee;
-}
-@media (min-width: 1200px) {
-    .trip-with-control .card-trip {
-        height: 500px;
-    }
 }
 
 .trip-needs-sellado {

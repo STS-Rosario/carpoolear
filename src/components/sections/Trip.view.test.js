@@ -57,7 +57,7 @@ describe('Trip clickModal', () => {
 
         expect(source).toContain('@detail-click="onShellDetailClick"');
         expect(source).toMatch(
-            /onShellDetailClick\([^)]*\)\s*\{[\s\S]*?this\.clickModal[\s\S]*?openModal\(\)[\s\S]*?else[\s\S]*?goToDetail\(false\)/
+            /onShellDetailClick[\s\S]*?\{[\s\S]*?this\.clickModal[\s\S]*?openModal\(\)[\s\S]*?else[\s\S]*?goToDetail\(false\)/
         );
     });
 
@@ -126,11 +126,11 @@ describe('Trip card redesign shell', () => {
     });
 
     it('keeps visibility, sellado legend, seat warning and seat controls as shell extras', () => {
-        expect(source).toContain('name="body-extra"');
-        expect(source).toMatch(/friendship_type_id === 2[\s\S]*?body-extra|body-extra[\s\S]*?friendship_type_id === 2/);
+        expect(source).toContain('#body-extra');
+        expect(source).toMatch(/#body-extra[\s\S]*?friendship_type_id === 2/);
         expect(source).toMatch(/#body-extra[\s\S]*?showSelladoPending[\s\S]*?faltaPagarSellado/);
         expect(source).toMatch(/#body-extra[\s\S]*?showSeatRequestLimitWarning/);
-        expect(source).toContain('name="footer-extra"');
+        expect(source).toContain('#footer-extra');
         expect(source).toContain('changeSeatsNumber');
     });
 });
