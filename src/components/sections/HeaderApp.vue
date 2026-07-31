@@ -569,7 +569,7 @@ export default {
 .header_nav-messages .badge,
 .header_nav-my-trips .badge {
     position: absolute;
-    top: -0.55rem;
+    top: calc(-0.55rem + 3px);
     right: -0.85rem;
     min-width: 1.15rem;
     height: 1.15rem;
