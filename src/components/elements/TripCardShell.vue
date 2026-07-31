@@ -9,24 +9,32 @@
                 class="trip-card-shell__driver"
                 @click.stop="onProfileClick"
             >
-                <div
-                    class="trip-card-shell__avatar circle-box"
-                    v-imgSrc:profile="avatarImage"
-                ></div>
-                <div class="trip-card-shell__driver-info">
+                <div class="trip-card-shell__primary">
+                    <div
+                        class="trip-card-shell__avatar circle-box"
+                        v-imgSrc:profile="avatarImage"
+                    ></div>
                     <div class="trip-card-shell__name">
                         <UserNameWithBadge :user="user" />
                     </div>
-                    <div class="trip-card-shell__meta">
-                        <UserRatingsCounts :ratings="ratings" />
-                        <span v-if="tripsCountLabel" class="trip-card-shell__trips">
-                            | {{ tripsCountLabel }}
-                        </span>
+                    <div
+                        v-if="showSeatsPill"
+                        class="trip-card-shell__seats"
+                        :class="'trip-card-shell__seats--' + seatsTone"
+                    >
+                        <i class="fa fa-user" aria-hidden="true"></i>
+                        {{ seatsLabel }}
                     </div>
+                </div>
+                <div class="trip-card-shell__meta">
+                    <UserRatingsCounts :ratings="ratings" />
+                    <span v-if="tripsCountLabel" class="trip-card-shell__trips">
+                        | {{ tripsCountLabel }}
+                    </span>
                 </div>
             </div>
             <div
-                v-if="showSeatsPill"
+                v-else-if="showSeatsPill"
                 class="trip-card-shell__seats"
                 :class="'trip-card-shell__seats--' + seatsTone"
             >
