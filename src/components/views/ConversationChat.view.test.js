@@ -34,4 +34,25 @@ describe('ConversationChat.vue user ratings', () => {
             /v-if="isGroupChat"[\s\S]*groupChatTitle/s
         );
     });
+
+    it('keeps Toast UI markdown composer for sending messages', () => {
+        expect(viewSource).toContain('ToastUiEditor');
+        expect(viewSource).toContain('messageEditor');
+        expect(viewSource).toContain("invoke('getMarkdown')");
+        expect(viewSource).toContain("['bold', 'italic', 'strike']");
+        expect(viewSource).toContain('message-composer-editor');
+    });
+
+    it('renders day separators between message groups', () => {
+        expect(viewSource).toContain('buildMessagesWithDaySeparators');
+        expect(viewSource).toContain('messagesWithDaySeparators');
+        expect(viewSource).toContain('message-day-separator');
+    });
+
+    it('links group chat header to the trip when trip id is present', () => {
+        expect(viewSource).toContain('verDetalleViaje');
+        expect(viewSource).toMatch(
+            /isGroupChat[\s\S]*verDetalleViaje[\s\S]*trip/s
+        );
+    });
 });
