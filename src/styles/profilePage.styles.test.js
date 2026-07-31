@@ -56,4 +56,20 @@ describe('profile page styles', () => {
             /\.profile-page\s+\.tab-content\s+\.profile-rates-component\s+\.list-group-item[\s\S]*box-shadow:\s*none/
         );
     });
+
+    it('keeps profile tab panels from overflowing the content card', () => {
+        const css = fs.readFileSync(cssPath, 'utf8');
+        expect(css).toMatch(
+            /\.profile-page\s+\.profile-rates-component\.container[\s\S]*max-width:\s*100%/
+        );
+        expect(css).toMatch(
+            /\.profile-page\s+\.profile-trip-component\.container[\s\S]*max-width:\s*100%/
+        );
+        expect(css).toMatch(
+            /\.profile-page__content-card\s*\{[^}]*overflow-x:\s*hidden/
+        );
+        expect(css).toMatch(
+            /\.profile-page\s+\.profile-rates-component\s+\.alert[\s\S]*max-width:\s*100%/
+        );
+    });
 });
