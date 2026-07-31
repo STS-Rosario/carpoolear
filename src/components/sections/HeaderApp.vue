@@ -552,6 +552,12 @@ export default {
     color: #fff;
     text-decoration: none;
     opacity: 0.9;
+    outline: none;
+    box-shadow: none;
+}
+.header_nav-link:focus-visible {
+    outline: none;
+    box-shadow: none;
 }
 .header_nav-link--active {
     border-bottom: 2px solid #fff;
