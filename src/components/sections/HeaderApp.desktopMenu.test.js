@@ -65,6 +65,15 @@ describe('HeaderApp desktop menu', () => {
         );
     });
 
+    it('removes the focus outline from desktop nav links', () => {
+        expect(headerSource).toMatch(
+            /\.header_nav-link:focus(?!-visible)[^{]*\{[^}]*outline:\s*none/
+        );
+        expect(headerSource).toMatch(
+            /\.header_nav-link:focus-visible\s*\{[^}]*outline:\s*none/
+        );
+    });
+
     it('puts Crear viaje, notifications and profile dropdown on the right', () => {
         expect(headerSource).toContain('header_panel-right');
         expect(headerSource).toContain('btn-create-trip');
