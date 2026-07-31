@@ -53,12 +53,18 @@
                 <div class="trip-card-shell__route-content">
                     <div class="trip-card-shell__endpoint">
                         <span class="trip-card-shell__city">{{ fromCity }}</span>
+                        <span v-if="fromRegion" class="trip-card-shell__region">{{
+                            fromRegion
+                        }}</span>
                         <span v-if="fromPoint" class="trip-card-shell__point">{{
                             fromPoint
                         }}</span>
                     </div>
                     <div class="trip-card-shell__endpoint">
                         <span class="trip-card-shell__city">{{ toCity }}</span>
+                        <span v-if="toRegion" class="trip-card-shell__region">{{
+                            toRegion
+                        }}</span>
                         <span v-if="toPoint" class="trip-card-shell__point">{{
                             toPoint
                         }}</span>
@@ -123,11 +129,19 @@ export default {
             type: String,
             default: ''
         },
+        fromRegion: {
+            type: String,
+            default: ''
+        },
         fromPoint: {
             type: String,
             default: ''
         },
         toCity: {
+            type: String,
+            default: ''
+        },
+        toRegion: {
             type: String,
             default: ''
         },

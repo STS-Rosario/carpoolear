@@ -222,6 +222,7 @@
     color: var(--ds-text-primary);
 }
 
+.trip-card-shell__region,
 .trip-card-shell__point {
     font-size: 0.875rem;
     font-weight: var(--ds-font-weight-regular, 400);
