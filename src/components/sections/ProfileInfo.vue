@@ -422,6 +422,22 @@ export default {
     background: transparent;
 }
 
+.profile-info-panel__details .list-group-item i {
+    float: none !important;
+    width: 1.5rem !important;
+    flex-shrink: 0;
+    margin: 0.15rem 0 0;
+}
+
+.profile-info-panel__details .list-group-item .list-group-item--content {
+    display: block;
+    width: auto;
+    flex: 1 1 auto;
+    padding-right: 0;
+    text-align: left;
+    font-weight: 400;
+}
+
 .profile-friend-actions {
     margin-top: 1.25rem;
     display: flex;

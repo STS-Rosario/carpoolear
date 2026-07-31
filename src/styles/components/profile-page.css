@@ -10,6 +10,19 @@
     --profile-privacy-bg: #e8f4f8;
     --profile-chip-active: var(--secondary-background, #016587);
     --profile-divider: #e6e6e6;
+    font-family: var(--ds-font-family);
+    font-weight: var(--ds-font-weight-normal, 400);
+    color: var(--ds-text-primary, #333);
+}
+
+.profile-page strong,
+.profile-page b,
+.profile-page .profile-identity-header__name,
+.profile-page .profile-info-panel__section-label,
+.profile-page .profile-info-panel__tile-title,
+.profile-page .rate-item-title strong,
+.profile-page .profile-filter-chip--active {
+    font-weight: var(--ds-font-weight-bold, 700);
 }
 
 .profile-page .tabset > .nav-tabs {
@@ -35,23 +48,30 @@
 .profile-page .tabset > .nav-tabs > li > a {
     border: none;
     color: var(--profile-tab-muted);
+    font-family: var(--ds-font-family);
     font-size: 0.95rem;
-    font-weight: 500;
+    font-weight: var(--ds-font-weight-normal, 400);
     padding: 0.85rem 0.5rem;
     background: transparent;
+    outline: none;
+    box-shadow: none;
 }
 
 .profile-page .tabset > .nav-tabs > li > a:hover,
-.profile-page .tabset > .nav-tabs > li > a:focus {
+.profile-page .tabset > .nav-tabs > li > a:focus,
+.profile-page .tabset > .nav-tabs > li > a:focus-visible {
     border: none;
     color: var(--profile-tab-active);
     background: transparent;
+    outline: none;
+    box-shadow: none;
 }
 
 .profile-page .tabset > .nav-tabs > li > a.active {
     color: var(--profile-tab-active);
     border-bottom: 4px solid var(--profile-tab-active);
     margin-bottom: -1px;
+    font-weight: var(--ds-font-weight-normal, 400);
 }
 
 .profile-page .tabset > .nav-tabs::after {
@@ -82,6 +102,8 @@
     text-align: center;
     padding: 1.25rem 1rem 1rem;
     background: var(--profile-card-bg);
+    font-family: var(--ds-font-family);
+    font-weight: var(--ds-font-weight-normal, 400);
 }
 
 .profile-identity-header__avatar {
@@ -95,7 +117,7 @@
 
 .profile-identity-header__name {
     font-size: 1.35rem;
-    font-weight: 700;
+    font-weight: var(--ds-font-weight-bold, 700);
     color: #222;
     margin: 0 0 0.5rem;
     line-height: 1.25;
@@ -110,7 +132,7 @@
     background: #e8f5e9;
     color: var(--profile-verified);
     font-size: 0.75rem;
-    font-weight: 600;
+    font-weight: var(--ds-font-weight-normal, 400);
     margin-bottom: 0.75rem;
 }
 
@@ -122,6 +144,7 @@
     gap: 0.4rem 0.65rem;
     color: #666;
     font-size: 0.85rem;
+    font-weight: var(--ds-font-weight-normal, 400);
 }
 
 .profile-identity-header__stats-sep {
@@ -150,16 +173,26 @@
     color: #333;
     border-radius: 999px;
     padding: 0.35rem 0.75rem;
+    font-family: var(--ds-font-family);
     font-size: 0.85rem;
-    font-weight: 500;
+    font-weight: var(--ds-font-weight-normal, 400);
     cursor: pointer;
     line-height: 1.2;
+    outline: none;
+    box-shadow: none;
+}
+
+.profile-filter-chip:focus,
+.profile-filter-chip:focus-visible {
+    outline: none;
+    box-shadow: none;
 }
 
 .profile-filter-chip--active {
     background: var(--profile-chip-active);
     border-color: var(--profile-chip-active);
     color: #fff;
+    font-weight: var(--ds-font-weight-bold, 700);
 }
 
 .profile-filter-chip__check {
@@ -169,12 +202,14 @@
 /* Perfil content */
 .profile-info-panel {
     padding: 0.25rem 0 1.5rem;
+    font-family: var(--ds-font-family);
+    font-weight: var(--ds-font-weight-normal, 400);
 }
 
 .profile-info-panel__section-label {
     margin: 0 0 0.5rem;
     font-size: 0.7rem;
-    font-weight: 700;
+    font-weight: var(--ds-font-weight-bold, 700);
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: #888;
@@ -185,6 +220,7 @@
     color: #333;
     line-height: 1.45;
     font-size: 0.95rem;
+    font-weight: var(--ds-font-weight-normal, 400);
 }
 
 .profile-info-panel__tiles {
@@ -208,10 +244,11 @@
     text-align: center;
     flex-shrink: 0;
     margin-top: 0.1rem;
+    float: none;
 }
 
 .profile-info-panel__tile-title {
-    font-weight: 600;
+    font-weight: var(--ds-font-weight-bold, 700);
     color: #222;
     margin: 0 0 0.15rem;
     font-size: 0.95rem;
@@ -222,6 +259,7 @@
     color: #777;
     font-size: 0.85rem;
     line-height: 1.35;
+    font-weight: var(--ds-font-weight-normal, 400);
 }
 
 .profile-info-panel__privacy {
@@ -235,29 +273,131 @@
     color: var(--profile-tab-active);
     font-size: 0.85rem;
     line-height: 1.4;
+    font-weight: var(--ds-font-weight-normal, 400);
 }
 
 .profile-info-panel__privacy i {
     margin-top: 0.1rem;
     flex-shrink: 0;
+    float: none;
+    width: auto;
 }
 
-/* Rating rows */
-.profile-rates-list .rate-item,
-.profile-rates-component .list-group-item {
+/* Override legacy float icon layout that overlaps text */
+.profile-page .profile-info-panel__details .list-group-item,
+.profile-page .profile-info-component .profile-info-panel__details .list-group-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.85rem 0;
+    border: none;
+    border-top: 1px solid var(--profile-divider);
+    background: transparent;
+    text-align: left;
+}
+
+.profile-page .profile-info-panel__details .list-group-item i,
+.profile-page .profile-info-component .profile-info-panel__details .list-group-item i {
+    float: none;
+    width: 1.5rem;
+    flex-shrink: 0;
+    margin: 0.15rem 0 0;
+    line-height: 1;
+    font-size: 1.15rem;
+}
+
+.profile-page .profile-info-panel__details .list-group-item .list-group-item--content,
+.profile-page .profile-info-component .profile-info-panel__details .list-group-item .list-group-item--content {
+    display: block;
+    width: auto;
+    flex: 1 1 auto;
+    padding-right: 0;
+    text-align: left;
+    font-weight: var(--ds-font-weight-normal, 400);
+}
+
+/* Rating rows — beat desktop card chrome from base.css */
+.profile-page .tab-content .profile-rates-component .list-group-item,
+.profile-page .profile-rates-component .list-group-item {
     border: none;
     border-bottom: 1px solid var(--profile-divider);
     background: transparent;
+    box-shadow: none;
+    margin: 0;
     padding: 1rem 0;
+    border-radius: 0;
 }
 
-/* Profile trip cards */
+.profile-page .profile-rates-component .rate-item {
+    border: none;
+    box-shadow: none;
+    background: transparent;
+    font-family: var(--ds-font-family);
+    font-weight: var(--ds-font-weight-normal, 400);
+}
+
+.profile-page .profile-rates-component .rate-item-detail {
+    font-weight: var(--ds-font-weight-normal, 400);
+}
+
+.profile-page .profile-rates-component .list-group {
+    display: block;
+}
+
+.profile-page .profile-rates-component .column-rating {
+    float: none;
+    width: 100%;
+    max-width: 100%;
+    display: block;
+}
+
+.profile-page .profile-rates-component h2 {
+    font-family: var(--ds-font-family);
+    font-weight: var(--ds-font-weight-bold, 700);
+    font-size: 1rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.profile-page .profile-rates-component .referencias-section-description,
+.profile-page .profile-rates-component .alert {
+    font-weight: var(--ds-font-weight-normal, 400);
+}
+
+/* Profile trip cards — neutralize Bootstrap col floats from Trip.vue */
+.profile-trip-component .trips-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    width: 100%;
+}
+
 .profile-trip-card {
     border: 1px solid #ddd;
     border-radius: 0.65rem;
     padding: 0.85rem 1rem 1rem;
-    margin-bottom: 0.85rem;
+    margin-bottom: 0;
     background: #fff;
+    width: 100%;
+    max-width: 100%;
+    float: none;
+    clear: both;
+}
+
+.profile-trip-card > [class*='col-'] {
+    float: none;
+    width: 100%;
+    max-width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+    margin: 0;
+    display: block;
+}
+
+.profile-trip-card .trip {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
 }
 
 .profile-trip-card__role {
@@ -266,7 +406,21 @@
     gap: 0.4rem;
     color: #888;
     font-size: 0.8rem;
+    font-weight: var(--ds-font-weight-normal, 400);
     margin-bottom: 0.65rem;
+}
+
+.profile-page .profile-trip-component {
+    font-family: var(--ds-font-family);
+    font-weight: var(--ds-font-weight-normal, 400);
+}
+
+.profile-page .profile-trip-component .container,
+.profile-page .profile-trip-component .col-xs-24 {
+    width: 100%;
+    max-width: 100%;
+    padding-left: 0;
+    padding-right: 0;
 }
 
 @media only screen and (min-width: 768px) {
@@ -353,6 +507,12 @@
         border: 1px solid #ddd;
         border-radius: 0.5rem;
         padding: 1rem;
+    }
+
+    /* Keep ratings as a single stacked list on desktop too */
+    .profile-page .profile-rates-component .column-rating {
+        float: none;
+        width: 100%;
     }
 }
 
