@@ -50,6 +50,15 @@ describe('TripCardShell.vue', () => {
         );
     });
 
+    it('places schedule chips below the full-width route', () => {
+        expect(viewSource).toMatch(
+            /trip-card-shell__route[\s\S]*trip-card-shell__schedule/
+        );
+        expect(viewSource).toMatch(
+            /trip-card-shell__body[\s\S]*trip-card-shell__route[\s\S]*trip-card-shell__schedule[\s\S]*<\/div>\s*<slot name="body-extra"/
+        );
+    });
+
     it('renders dividers between header, body and footer', () => {
         expect(viewSource).toMatch(
             /trip-card-shell__header[\s\S]*trip-card-shell__divider[\s\S]*trip-card-shell__body[\s\S]*trip-card-shell__divider[\s\S]*trip-card-shell__footer/

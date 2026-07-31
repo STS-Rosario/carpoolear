@@ -55,18 +55,24 @@ describe('trip card styles', () => {
         );
     });
 
-    it('puts leftover card height between origin and destination and spaces schedule chips', () => {
+    it('puts leftover card height between origin and destination', () => {
         expect(css).toMatch(
             /\.trip-card-shell__body\s*\{[^}]*flex:\s*1/
         );
         expect(css).toMatch(
             /\.trip-card-shell__route-content\s*\{[^}]*justify-content:\s*space-between/
         );
+    });
+
+    it('stacks schedule under the full-width route', () => {
         expect(css).toMatch(
-            /\.trip-card-shell__schedule\s*\{[^}]*justify-content:\s*space-between/
+            /\.trip-card-shell__body\s*\{[^}]*flex-direction:\s*column/
         );
-        expect(css).not.toMatch(
-            /\.trip-card-shell__footer\s*\{[^}]*margin-top:\s*auto/
+        expect(css).toMatch(
+            /\.trip-card-shell__route\s*\{[^}]*width:\s*100%/
+        );
+        expect(css).toMatch(
+            /\.trip-card-shell__schedule\s*\{[^}]*flex-direction:\s*row/
         );
     });
 
