@@ -456,6 +456,10 @@ export default {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    justify-content: flex-start;
     gap: 0.5rem;
+    text-align: left;
+    padding-left: 0;
+    padding-right: 0;
 }
 </style>

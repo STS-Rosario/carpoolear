@@ -263,6 +263,13 @@
     font-weight: var(--ds-font-weight-normal, 400);
 }
 
+.profile-page .profile-info-component .edit-action.profile-friend-actions {
+    justify-content: flex-start;
+    text-align: left;
+    padding-left: 0;
+    padding-right: 0;
+}
+
 .profile-info-panel__section-label {
     margin: 0 0 0.5rem;
     font-size: 0.7rem;
