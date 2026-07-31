@@ -416,6 +416,7 @@
     border: 1px solid #ddd;
     border-radius: 0.65rem;
     padding: 0.85rem 0.875rem 0.85rem;
+    padding-left: calc(0.875rem - 5px);
     margin-bottom: 0;
     background: #fff;
     width: 100%;
