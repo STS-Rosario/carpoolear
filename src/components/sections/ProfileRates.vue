@@ -350,7 +350,10 @@ export default {
             isDesktop: 'isDesktop'
         }),
         filteredRates() {
-            const list = Array.isArray(this.rates) ? this.rates : [];
+            if (!Array.isArray(this.rates)) {
+                return this.rates;
+            }
+            const list = this.rates;
             if (this.ratingFilter === 'positive') {
                 return list.filter((rate) => isPositiveRating(rate.rating));
             }
