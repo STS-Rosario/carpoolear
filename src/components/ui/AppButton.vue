@@ -53,7 +53,9 @@ export default {
                     'tertiary',
                     'danger',
                     'success',
-                    'warning'
+                    'warning',
+                    'header-create',
+                    'header-donate'
                 ].includes(value)
         },
         tone: {

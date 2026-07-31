@@ -21,10 +21,21 @@ describe('HeaderApp mobile navigation', () => {
         expect(headerSource).not.toContain('icon="message"');
     });
 
-    it('does not show donate button, search, or ellipsis menu on mobile', () => {
-        expect(headerSource).not.toMatch(
-            /v-if="isMobile && user && !shouldHideDonationOnIOSCapacitor/
+    it('shows a branded mobile header with logo and Doná when the logo is visible', () => {
+        expect(headerSource).toContain('mobile-header-bar--branded');
+        expect(headerSource).toContain('showBrandedMobileHeader');
+        expect(headerSource).toMatch(
+            /showBrandedMobileHeader[\s\S]*header_logo/
         );
+        expect(headerSource).toMatch(
+            /showBrandedMobileHeader[\s\S]*variant="header-donate"/
+        );
+        expect(headerSource).toMatch(
+            /showBrandedMobileHeader[\s\S]*variant="header-donate"/
+        );
+    });
+
+    it('keeps search and ellipsis menu out of the branded mobile header', () => {
         expect(headerSource).toContain('v-if="showMenu && !isMobile"');
         expect(headerSource).toContain("item.id !== 'search'");
         expect(headerSource).toContain('mobileUtilityHeaderButtons');

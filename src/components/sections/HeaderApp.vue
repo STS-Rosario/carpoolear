@@ -5,8 +5,43 @@
         <div
             class="mobile-header-bar visible-xs"
             v-if="$route.name !== 'mobile-menu'"
-            :class="{ 'mobile-header-bar--with-ratings': headerRatings }"
+            :class="{
+                'mobile-header-bar--with-ratings': headerRatings,
+                'mobile-header-bar--branded': showBrandedMobileHeader
+            }"
         >
+            <template v-if="showBrandedMobileHeader">
+                <div class="mobile-header-bar__brand">
+                    <router-link
+                        :to="{ name: 'trips', query: { clearSearch: 'true' } }"
+                        v-on:click.native="tripsClick"
+                        class="mobile-header-bar__logo-link"
+                    >
+                        <img
+                            :src="header_logo"
+                            alt=""
+                            class="mobile-header-bar__logo"
+                        />
+                    </router-link>
+                </div>
+                <AppButton
+                    v-if="!shouldHideDonationOnIOSCapacitor(user)"
+                    class="mobile-header-bar__donate"
+                    variant="header-donate"
+                    size="sm"
+                    href="/donar"
+                >
+                    {{ $t('donar') }}
+                    <template #iconRight>
+                        <img
+                            :src="gift_icon"
+                            alt=""
+                            class="app-button__gift-icon"
+                        />
+                    </template>
+                </AppButton>
+            </template>
+            <template v-else>
             <div class="mobile-header-bar__section mobile-header-bar__icon">
                 <span v-if="showLogo">
                     <router-link
@@ -143,6 +178,7 @@
                     Ingresar
                 </router-link>
             </div>
+            </template>
         </div>
         <div class="header_content hidden-xs">
             <div class="header_panel-left" v-if="logoHeaderVisibility">
@@ -152,31 +188,27 @@
                     class="header_logo-link"
                 >
                     <img
-                        :src="background_desktop_mini"
-                        v-if="
-                            isNotLargeDesktop ||
-                            (config && config.trip_card_design === 'light')
-                        "
+                        :src="header_logo"
+                        alt=""
+                        class="header_logo-image"
                     />
-                    <img
-                        :src="background_desktop"
-                        v-if="
-                            !isNotLargeDesktop &&
-                            config &&
-                            config.trip_card_design !== 'light'
-                        "
-                    />
-                    <img :src="app_logo" />
                 </router-link>
-                <a
-                    v-if="
-                        !isNotLargeDesktop &&
-                        !shouldHideDonationOnIOSCapacitor(user)
-                    "
+                <AppButton
+                    v-if="!shouldHideDonationOnIOSCapacitor(user)"
+                    class="header_donate-btn"
+                    variant="header-donate"
+                    size="sm"
                     href="/donar"
-                    class="btn btn-primary btn-donar-header btn-lg"
-                    >{{ $t('donar') }}</a
                 >
+                    {{ $t('donar') }}
+                    <template #iconRight>
+                        <img
+                            :src="gift_icon"
+                            alt=""
+                            class="app-button__gift-icon"
+                        />
+                    </template>
+                </AppButton>
             </div>
             <nav class="header_panel-center" v-if="logged" aria-label="main">
                 <router-link
@@ -223,14 +255,17 @@
                     {{ $t('ingresar') }}
                 </router-link>
 
-                <router-link
+                <AppButton
                     v-if="logged"
-                    :to="{ name: 'new-trip' }"
                     id="btn-create-trip"
-                    class="btn btn-primary btn-lg"
+                    class="header_create-trip-btn"
+                    variant="header-create"
+                    size="sm"
+                    icon-left="fa fa-plus"
+                    :to="{ name: 'new-trip' }"
                 >
                     {{ $t('crearViaje') }}
-                </router-link>
+                </AppButton>
                 <span
                     class="header_notifications"
                     @click="toNotifications"
@@ -264,6 +299,7 @@ import UserRatingsCounts from '../elements/UserRatingsCounts.vue';
 import PendingRatingsBanner from '../PendingRatingsBanner.vue';
 import HeaderMenuDropdown from './HeaderMenuDropdown.vue';
 import svgItem from '../SvgItem';
+import AppButton from '../ui/AppButton.vue';
 import { shouldHideDonationOnIOSCapacitor } from '../../services/capacitor.js';
 import { UserApi } from '../../services/api';
 import {
@@ -279,16 +315,8 @@ export default {
 
     data() {
         return {
-            background_desktop_mini:
-                process.env.ROUTE_BASE +
-                'img/' +
-                process.env.TARGET_APP +
-                '_background_desktop_mini.png',
-            background_desktop:
-                process.env.ROUTE_BASE +
-                'img/' +
-                process.env.TARGET_APP +
-                '_background_desktop.png',
+            header_logo: process.env.ROUTE_BASE + 'img/logo2.svg',
+            gift_icon: process.env.ROUTE_BASE + 'img/gift.svg',
             app_logo:
                 process.env.ROUTE_BASE +
                 'img/' +
@@ -351,6 +379,9 @@ export default {
                 }
             }
             return true;
+        },
+        showBrandedMobileHeader() {
+            return this.isMobile && this.showLogo;
         },
         isTripsPage() {
             return this.$route.name === 'trips';
@@ -417,7 +448,8 @@ export default {
         UserRatingsCounts,
         PendingRatingsBanner,
         HeaderMenuDropdown,
-        svgItem
+        svgItem,
+        AppButton
     }
 };
 </script>
@@ -527,5 +559,40 @@ export default {
     margin-bottom: 2px;
     width: 26px;
     margin-left: 0.3em;
+}
+.mobile-header-bar--branded {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    min-height: 3rem;
+}
+.mobile-header-bar__brand {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+}
+.mobile-header-bar__logo-link {
+    display: inline-flex;
+    align-items: center;
+}
+.mobile-header-bar__logo {
+    display: block;
+    height: 1.75rem;
+    width: auto;
+}
+.mobile-header-bar__donate {
+    flex-shrink: 0;
+}
+.header_logo-image {
+    display: block;
+    height: 2rem;
+    width: auto;
+}
+.header_donate-btn {
+    flex-shrink: 0;
+}
+.header_create-trip-btn {
+    flex-shrink: 0;
 }
 </style>

@@ -34,4 +34,16 @@ describe('app button styles', () => {
         expect(buttonCss).toContain('.app-button--icon-only');
         expect(buttonCss).toContain('.app-button__unread');
     });
+
+    it('never underlines button text on hover or focus', () => {
+        expect(buttonCss).toMatch(
+            /a\.app-button:hover,\s*\n\s*a\.app-button:focus/
+        );
+        expect(buttonCss).toMatch(
+            /a\.app-button:hover[\s\S]*text-decoration:\s*none/
+        );
+        expect(buttonCss).toMatch(
+            /\.app-button:hover[\s\S]*text-decoration:\s*none/
+        );
+    });
 });

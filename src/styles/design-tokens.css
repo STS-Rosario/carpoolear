@@ -68,4 +68,14 @@
     --ds-button-icon-only-sm: 2.25rem;
     --ds-button-icon-only-md: 2.75rem;
     --ds-button-icon-only-lg: 3.25rem;
+
+    /* Header buttons */
+    --ds-header-create-bg: #FFFFFF;
+    --ds-header-create-text: #1E5F9E;
+    --ds-header-create-hover-bg: #EEF4FB;
+    --ds-header-donate-bg: #C53036;
+    --ds-header-donate-border: #A8282D;
+    --ds-header-donate-hover-bg: #991B1B;
+    --ds-header-donate-hover-border: #7F1D1D;
+    --ds-header-bg: #1E5F9E;
 }

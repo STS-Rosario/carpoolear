@@ -15,20 +15,22 @@ describe('HeaderApp desktop menu', () => {
         );
     });
 
-    it('puts logo and Doná on the left desktop zone', () => {
+    it('puts logo2 and Doná on the left desktop zone', () => {
         const left = headerSource.match(
             /header_panel-left[\s\S]*?header_panel-center/
         )[0];
-        expect(left).toContain('app_logo');
-        expect(left).toContain('btn-donar-header');
+        expect(left).toContain('header_logo');
+        expect(left).toContain('variant="header-donate"');
         expect(left).toContain("$t('donar')");
+        expect(left).toContain('gift_icon');
     });
 
-    it('shows Doná only on large desktop widths', () => {
+    it('shows Doná on desktop when donation is allowed', () => {
         const donate = headerSource.match(
-            /<a[\s\S]*?btn-donar-header[\s\S]*?<\/a/
+            /variant="header-donate"[\s\S]*?gift\.svg/
         )[0];
-        expect(donate).toContain('!isNotLargeDesktop');
+        expect(donate).toContain('shouldHideDonationOnIOSCapacitor');
+        expect(donate).not.toContain('!isNotLargeDesktop');
     });
 
     it('puts Inicio, Mis viajes and Mensajes with unread badge in the center', () => {
@@ -49,13 +51,14 @@ describe('HeaderApp desktop menu', () => {
     it('puts Crear viaje, notifications and profile dropdown on the right', () => {
         expect(headerSource).toContain('header_panel-right');
         expect(headerSource).toContain('btn-create-trip');
+        expect(headerSource).toContain('variant="header-create"');
         expect(headerSource).toContain("$t('crearViaje')");
         expect(headerSource).toContain('header_notifications');
         expect(headerSource).toContain('icon="bell"');
         expect(headerSource).toContain('<header-menu-dropdown');
         const rightStart = headerSource.indexOf('header_panel-right');
         const rightChunk = headerSource.slice(rightStart, rightStart + 1200);
-        expect(rightChunk).not.toContain('btn-donar-header');
+        expect(rightChunk).not.toContain('variant="header-donate"');
         expect(rightChunk).not.toContain("$t('mensajes')");
     });
 

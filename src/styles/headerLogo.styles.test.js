@@ -11,19 +11,19 @@ const headerPath = path.resolve(
 const headerSource = fs.readFileSync(headerPath, 'utf8');
 
 describe('desktop header logo positioning', () => {
-    it('positions the pin over the brand image inside header_logo-link', () => {
+    it('renders logo2.svg as a single inline logo image', () => {
         expect(headerSource).toContain('class="header_logo-link"');
-        expect(baseCss).toMatch(
-            /\.header \.header_panel-left \.header_logo-link img:last-child\s*\{[^}]*left:\s*22px/s
-        );
-        expect(baseCss).not.toMatch(
-            /\.header \.header_panel-left > img:last-child/
-        );
+        expect(headerSource).toContain('logo2.svg');
+        expect(headerSource).toContain('class="header_logo-image"');
+        expect(headerSource).not.toContain('background_desktop');
     });
 
-    it('offsets the pin further right on large desktop widths', () => {
+    it('sizes the desktop header logo without layered background images', () => {
         expect(baseCss).toMatch(
-            /@media only screen and \(min-width: 1300px\)[\s\S]*\.header \.header_panel-left \.header_logo-link img:last-child\s*\{[^}]*left:\s*62px/s
+            /\.header \.header_panel-left \.header_logo-link \.header_logo-image\s*\{[^}]*height:\s*2rem/s
+        );
+        expect(baseCss).not.toMatch(
+            /\.header \.header_panel-left \.header_logo-link img:last-child/
         );
     });
 });

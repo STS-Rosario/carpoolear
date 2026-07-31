@@ -17,6 +17,18 @@
         box-shadow 0.15s ease;
 }
 
+a.app-button,
+a.app-button:hover,
+a.app-button:focus,
+a.app-button:active,
+a.app-button:visited,
+.app-button:hover,
+.app-button:focus,
+.app-button:active,
+.app-button:visited {
+    text-decoration: none;
+}
+
 .app-button:focus {
     outline: none;
 }
@@ -207,6 +219,7 @@
 .app-button__label {
     display: inline-flex;
     align-items: center;
+    text-decoration: none;
 }
 
 .app-button__unread {
@@ -236,4 +249,46 @@
 .app-button--loading .app-button__spinner {
     position: absolute;
     inset: 0;
+}
+
+.app-button--header-create {
+    background: var(--ds-header-create-bg);
+    border-color: var(--ds-header-create-bg);
+    color: var(--ds-header-create-text);
+}
+
+.app-button--header-create:hover:not(:disabled):not([aria-disabled='true']) {
+    background: var(--ds-header-create-hover-bg);
+    border-color: var(--ds-header-create-hover-bg);
+    color: var(--ds-header-create-text);
+}
+
+.app-button--header-create:active:not(:disabled):not([aria-disabled='true']) {
+    background: var(--ds-info-bg);
+    border-color: var(--ds-info-bg);
+    color: var(--ds-action-hover);
+}
+
+.app-button--header-donate {
+    background: var(--ds-header-donate-bg);
+    border-color: var(--ds-header-donate-border);
+    color: var(--ds-action-on);
+}
+
+.app-button--header-donate:hover:not(:disabled):not([aria-disabled='true']) {
+    background: var(--ds-header-donate-hover-bg);
+    border-color: var(--ds-header-donate-hover-border);
+    color: var(--ds-action-on);
+}
+
+.app-button--header-donate:active:not(:disabled):not([aria-disabled='true']) {
+    background: var(--ds-destructive);
+    border-color: var(--ds-destructive);
+    color: var(--ds-action-on);
+}
+
+.app-button__gift-icon {
+    width: 1rem;
+    height: 1rem;
+    display: block;
 }
