@@ -107,5 +107,8 @@ describe('profile page styles', () => {
         expect(css).toMatch(
             /\.profile-trip-card\s+\.trip-card-shell\s*\{[^}]*padding-top:\s*0/
         );
+        expect(css).toMatch(
+            /\.profile-trip-card\s*\{[^}]*padding-left:\s*calc\(0\.875rem - 5px\)/
+        );
     });
 });
