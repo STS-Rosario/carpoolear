@@ -121,7 +121,7 @@ describe('HeaderApp desktop menu', () => {
             /\.header_notifications\s+\.badge\s*\{[^}]*top:\s*calc\(-0\.55rem \+ 3px\)/
         );
         expect(headerSource).toMatch(
-            /\.header_notifications\s+\.badge\s*\{[^}]*right:\s*calc\(-0\.85rem \+ 5px\)/
+            /\.header_notifications\s+\.badge\s*\{[^}]*right:\s*calc\(-0\.85rem \+ 9px\)/
         );
     });
 });
