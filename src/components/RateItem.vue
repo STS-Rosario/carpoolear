@@ -24,12 +24,12 @@
                     </span>
 
                 <span
-                    class="pull-right clickeable"
+                    class="pull-right clickeable rate-item-reply-toggle"
                     v-if="canReply"
                     @click="showReply = !showReply"
                 >
-                    <!--   -->
                     <i class="fa fa-reply" aria-hidden="true"></i>
+                    {{ $t('responder') }}
                 </span>
             </div>
 
@@ -103,11 +103,12 @@
                                 ></i>
                             </span>
                             <span
-                                class="pull-right clickeable"
+                                class="pull-right clickeable rate-item-reply-toggle"
                                 v-if="canReply"
                                 @click="showReply = !showReply"
                             >
                                 <i class="fa fa-reply" aria-hidden="true"></i>
+                                {{ $t('responder') }}
                             </span>
                         </template>
                     </div>
@@ -293,6 +294,16 @@ export default {
 }
 .rate-item-author-link:hover strong {
     text-decoration: underline;
+}
+.rate-item-reply-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: var(--ds-font-weight-normal, 400);
+    color: var(--ds-action, var(--secondary-background, #016587));
+}
+.rate-item-reply-toggle .fa {
+    margin: 0;
 }
 .reply_comment_content {
     margin-top: 1.25em;
