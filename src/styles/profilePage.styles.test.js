@@ -112,6 +112,19 @@ describe('profile page styles', () => {
         );
     });
 
+    it('pads mobile profile content and constrains nested trips containers', () => {
+        const css = fs.readFileSync(cssPath, 'utf8');
+        expect(css).toMatch(
+            /\.profile-page\s*\{[^}]*padding:[^}]*1rem/
+        );
+        expect(css).toMatch(
+            /\.profile-page\s+\.trips\.container[\s,][\s\S]*?\{[^}]*max-width:\s*100%/
+        );
+        expect(css).toMatch(
+            /\.profile-page__content-card\s*\{[^}]*padding:[^}]*1rem/
+        );
+    });
+
     it('aligns profile trip role label with avatar and route', () => {
         const css = fs.readFileSync(cssPath, 'utf8');
         expect(css).toMatch(

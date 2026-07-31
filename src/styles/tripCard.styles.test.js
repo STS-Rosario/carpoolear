@@ -109,6 +109,18 @@ describe('trip card styles', () => {
         );
     });
 
+    it('lets trip cards wrap instead of clipping when the row is too narrow', () => {
+        expect(css).toMatch(
+            /\.trips-list\s*>\s*\[class\*='col-'\][\s,][\s\S]*?\{[^}]*min-width:\s*0/
+        );
+        expect(css).toMatch(
+            /@media\s*\(min-width:\s*1200px\)\s*\{[\s\S]*\.trips-list\s*>\s*\.col-lg-6[\s,][\s\S]*?\{[^}]*min-width:\s*min\(100%,\s*17rem\)/
+        );
+        expect(css).toMatch(
+            /@media\s*\(min-width:\s*1200px\)\s*\{[\s\S]*\.trips-list\s*>\s*\.col-lg-6[\s,][\s\S]*?\{[^}]*flex:\s*1\s+1\s+calc\(25%/
+        );
+    });
+
     it('left-aligns friend trip rows with a fixed gap', () => {
         // Must beat .app-container .trips-section__list.row (space-between)
         expect(css).toMatch(
