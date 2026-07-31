@@ -33,7 +33,7 @@ describe('ProfileTrip trip card navigation', () => {
     });
 
     it('filters profile trips with Todos Conductor Pasajero chips', () => {
-        expect(source).toContain('profile-filter-chips');
+        expect(source).toContain('FilterChips');
         expect(source).toContain('tripRoleFilter');
         expect(source).toContain("$t('filtroViajesTodos')");
         expect(source).toContain("$t('filtroViajesConductor')");

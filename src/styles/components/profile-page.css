@@ -196,52 +196,14 @@
     display: inline-flex;
 }
 
-/* Filter chips */
-.profile-filter-chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin: 0 0 1rem;
-    padding: 0 0.25rem;
-}
-
-.profile-filter-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    border: 1px solid #cfcfcf;
-    background: #f7f7f7;
-    color: #333;
-    border-radius: 999px;
-    padding: 0.35rem 0.75rem;
-    font-family: var(--ds-font-family);
-    font-size: 0.85rem;
-    font-weight: var(--ds-font-weight-normal, 400);
-    cursor: pointer;
-    line-height: 1.2;
-    outline: none;
-    box-shadow: none;
-}
-
-.profile-filter-chip:focus,
-.profile-filter-chip:focus-visible {
-    outline: none;
-    box-shadow: none;
-}
-
-.profile-filter-chip--active {
-    background: var(--profile-chip-active);
-    border-color: var(--profile-chip-active);
-    color: #fff;
-    font-weight: var(--ds-font-weight-bold, 700);
-}
-
-.profile-filter-chip__check {
-    font-size: 0.75rem;
-}
-
-/* Calificaciones: tinted active chip by rating type */
+/* Calificaciones: tinted active chip by rating type (base chips in filter-chips.css) */
 .profile-rates-component .profile-filter-chip--all.profile-filter-chip--active {
+    background: #e3f2f8;
+    border-color: #016587;
+    color: #016587;
+}
+
+.profile-rates-component .filter-chip--all.filter-chip--active {
     background: #e3f2f8;
     border-color: #016587;
     color: #016587;
@@ -253,13 +215,31 @@
     color: #2e7d32;
 }
 
+.profile-rates-component .filter-chip--positive.filter-chip--active {
+    background: #e8f5e9;
+    border-color: #2e7d32;
+    color: #2e7d32;
+}
+
 .profile-rates-component .profile-filter-chip--neutral.profile-filter-chip--active {
     background: #ececec;
     border-color: #757575;
     color: #616161;
 }
 
+.profile-rates-component .filter-chip--neutral.filter-chip--active {
+    background: #ececec;
+    border-color: #757575;
+    color: #616161;
+}
+
 .profile-rates-component .profile-filter-chip--negative.profile-filter-chip--active {
+    background: #fdecea;
+    border-color: #c62828;
+    color: #c62828;
+}
+
+.profile-rates-component .filter-chip--negative.filter-chip--active {
     background: #fdecea;
     border-color: #c62828;
     color: #c62828;

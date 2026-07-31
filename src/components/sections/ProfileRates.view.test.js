@@ -98,8 +98,7 @@ describe('ProfileRates reference action', () => {
     });
 
     it('filters ratings with chips Todas Positivas Neutras Negativas', () => {
-        expect(profileRatesSource).toContain('profile-filter-chips');
-        expect(profileRatesSource).toContain('profile-filter-chip');
+        expect(profileRatesSource).toContain('FilterChips');
         expect(profileRatesSource).toContain('ratingFilter');
         expect(profileRatesSource).toContain("$t('filtroCalificacionesTodas')");
         expect(profileRatesSource).toContain("$t('filtroCalificacionesPositivas')");
@@ -110,9 +109,9 @@ describe('ProfileRates reference action', () => {
     });
 
     it('adds rating-type class on each calificaciones filter chip', () => {
-        expect(profileRatesSource).toMatch(
-            /profile-filter-chip--\$\{chip\.id\}|`profile-filter-chip--\$\{chip\.id\}`/
-        );
+        expect(profileRatesSource).toContain('ratingFilterChips');
+        expect(profileRatesSource).toMatch(/id:\s*'all'/);
+        expect(profileRatesSource).toMatch(/id:\s*'positive'/);
     });
 
     it('uses AppButton primary for the write-reference action', () => {

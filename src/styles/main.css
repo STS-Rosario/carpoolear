@@ -12,6 +12,7 @@
 @import url('./components/trip-card.css');
 @import url('./components/header-mobile.css');
 @import url('./base.css');
+@import url('./components/filter-chips.css');
 @import url('./components/profile-page.css');
 @import url('./components/app-auth-page.css');
 :root {

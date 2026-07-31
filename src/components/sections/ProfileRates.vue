@@ -1,26 +1,10 @@
 <template>
     <div class="profile-rates-component container profile-rates-list">
         <div class="clearfix">
-            <div class="profile-filter-chips" role="tablist">
-                <button
-                    v-for="chip in ratingFilterChips"
-                    :key="chip.id"
-                    type="button"
-                    class="profile-filter-chip"
-                    :class="[
-                        `profile-filter-chip--${chip.id}`,
-                        { 'profile-filter-chip--active': ratingFilter === chip.id }
-                    ]"
-                    @click="ratingFilter = chip.id"
-                >
-                    <i
-                        v-if="ratingFilter === chip.id"
-                        class="fa fa-check profile-filter-chip__check"
-                        aria-hidden="true"
-                    ></i>
-                    {{ chip.label }}
-                </button>
-            </div>
+            <FilterChips
+                v-model="ratingFilter"
+                :options="ratingFilterChips"
+            />
             <Loading :data="filteredRates">
                 <div class="list-group">
                     <div class="column-rating">
@@ -232,6 +216,7 @@ import RateItem from '../RateItem';
 import Spinner from '../Spinner.vue';
 import modal from '../Modal';
 import AppButton from '../ui/AppButton.vue';
+import FilterChips from '../elements/FilterChips.vue';
 import dialogs from '../../services/dialogs.js';
 import {
     isNegativeRating,
@@ -470,7 +455,8 @@ export default {
         RateItem,
         Spinner,
         modal,
-        AppButton
+        AppButton,
+        FilterChips
     }
 };
 </script>

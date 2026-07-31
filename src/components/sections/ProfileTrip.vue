@@ -1,23 +1,10 @@
 <template>
     <div class="profile-trip-component container">
         <div class="col-xs-24">
-            <div class="profile-filter-chips" role="tablist">
-                <button
-                    v-for="chip in tripFilterChips"
-                    :key="chip.id"
-                    type="button"
-                    class="profile-filter-chip"
-                    :class="{ 'profile-filter-chip--active': tripRoleFilter === chip.id }"
-                    @click="tripRoleFilter = chip.id"
-                >
-                    <i
-                        v-if="tripRoleFilter === chip.id"
-                        class="fa fa-check profile-filter-chip__check"
-                        aria-hidden="true"
-                    ></i>
-                    {{ chip.label }}
-                </button>
-            </div>
+            <FilterChips
+                v-model="tripRoleFilter"
+                :options="tripFilterChips"
+            />
             <Loading :data="filteredTripItems">
                 <div class="trips-list">
                     <div
@@ -119,6 +106,7 @@
 <script>
 import Trip from '../sections/Trip.vue';
 import Loading from '../Loading.vue';
+import FilterChips from '../elements/FilterChips.vue';
 import { mapState, mapActions } from 'pinia';
 import { useAuthStore } from '../../stores/auth';
 import { useTripsStore } from '../../stores/trips';
@@ -221,7 +209,8 @@ export default {
 
     components: {
         Trip,
-        Loading
+        Loading,
+        FilterChips
     }
 };
 </script>

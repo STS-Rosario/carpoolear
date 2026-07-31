@@ -1,0 +1,49 @@
+/* Shared filter chips (profile Calificaciones/Viajes, messages list, etc.) */
+.filter-chips,
+.profile-filter-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0 0 1rem;
+    padding: 0 0.25rem;
+}
+
+.filter-chip,
+.profile-filter-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    border: 1px solid #cfcfcf;
+    background: #f7f7f7;
+    color: #333;
+    border-radius: 999px;
+    padding: 0.35rem 0.75rem;
+    font-family: var(--ds-font-family);
+    font-size: 0.85rem;
+    font-weight: var(--ds-font-weight-normal, 400);
+    cursor: pointer;
+    line-height: 1.2;
+    outline: none;
+    box-shadow: none;
+}
+
+.filter-chip:focus,
+.filter-chip:focus-visible,
+.profile-filter-chip:focus,
+.profile-filter-chip:focus-visible {
+    outline: none;
+    box-shadow: none;
+}
+
+.filter-chip--active,
+.profile-filter-chip--active {
+    background: var(--profile-chip-active, #016587);
+    border-color: var(--profile-chip-active, #016587);
+    color: #fff;
+    font-weight: var(--ds-font-weight-bold, 700);
+}
+
+.filter-chip__check,
+.profile-filter-chip__check {
+    font-size: 0.75rem;
+}
