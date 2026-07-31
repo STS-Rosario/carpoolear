@@ -231,13 +231,16 @@
                     {{ $t('inicio') }}
                 </router-link>
                 <router-link
-                    class="header_nav-link"
+                    class="header_nav-link header_nav-my-trips"
                     :class="{
                         'header_nav-link--active': isDesktopNavActive('my-trips')
                     }"
                     :to="{ name: 'my-trips' }"
                 >
                     {{ $t('misViajes') }}
+                    <span class="badge" v-if="myTripsCount > 0">
+                        {{ myTripsCount }}
+                    </span>
                 </router-link>
                 <router-link
                     class="header_nav-link header_nav-messages"
@@ -376,7 +379,8 @@ export default {
         }),
         ...mapState(useNotificationsStore, {
             notificationsCount: 'count',
-            messagesCount: 'messagesCount'
+            messagesCount: 'messagesCount',
+            myTripsCount: 'myTripsCount'
         }),
         ...mapState(useActionbarsStore, {
             title: 'title',
@@ -562,7 +566,8 @@ export default {
 .header_nav-link--active {
     border-bottom: 2px solid #fff;
 }
-.header_nav-messages .badge {
+.header_nav-messages .badge,
+.header_nav-my-trips .badge {
     position: absolute;
     top: -0.55rem;
     right: -0.85rem;
