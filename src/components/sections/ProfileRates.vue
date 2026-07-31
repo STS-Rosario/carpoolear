@@ -1,13 +1,30 @@
 <template>
-    <div class="profile-rates-component container">
+    <div class="profile-rates-component container profile-rates-list">
         <div class="clearfix">
-            <h2>{{ $t('calificaciones') }}</h2>
-            <Loading :data="rates">
+            <div class="profile-filter-chips" role="tablist">
+                <button
+                    v-for="chip in ratingFilterChips"
+                    :key="chip.id"
+                    type="button"
+                    class="profile-filter-chip"
+                    :class="{ 'profile-filter-chip--active': ratingFilter === chip.id }"
+                    @click="ratingFilter = chip.id"
+                >
+                    <i
+                        v-if="ratingFilter === chip.id"
+                        class="fa fa-check profile-filter-chip__check"
+                        aria-hidden="true"
+                    ></i>
+                    {{ chip.label }}
+                </button>
+            </div>
+            <Loading :data="filteredRates">
                 <div class="list-group">
                     <div class="column-rating">
                         <div
                             class="list-group-item clearfix"
                             v-for="rate in rating.col1"
+                            :key="rate.id || rate.trip_id"
                         >
                             <RateItem
                                 :user="user"
@@ -20,6 +37,7 @@
                         <div
                             class="list-group-item clearfix"
                             v-for="rate in rating.col2"
+                            :key="rate.id || rate.trip_id"
                         >
                             <RateItem
                                 :user="user"
@@ -32,6 +50,7 @@
                         <div
                             class="list-group-item clearfix"
                             v-for="rate in rating.col3"
+                            :key="rate.id || rate.trip_id"
                         >
                             <RateItem
                                 :user="user"
@@ -41,12 +60,6 @@
                         </div>
                     </div>
                 </div>
-                <!--
-                <div v-if="morePages">
-                    <button class="btn btn-primary" @click="nextPage">Más resultados</button>
-                </div>
-                -->
-
                 <template #no-data><p class="alert alert-warning" role="alert">
                     {{ $t('noCalificaciones') }}
                 </p></template>
@@ -151,6 +164,7 @@
                             <div
                                 class="list-group-item clearfix"
                                 v-for="reference in referencesCol.col1"
+                                :key="reference.id"
                             >
                                 <RateItem
                                     :notReply="true"
@@ -164,6 +178,7 @@
                             <div
                                 class="list-group-item clearfix"
                                 v-for="reference in referencesCol.col2"
+                                :key="reference.id"
                             >
                                 <RateItem
                                     :notReply="true"
@@ -177,6 +192,7 @@
                             <div
                                 class="list-group-item clearfix"
                                 v-for="reference in referencesCol.col3"
+                                :key="reference.id"
                             >
                                 <RateItem
                                     :notReply="true"
@@ -187,11 +203,6 @@
                             </div>
                         </div>
                     </div>
-                    <!--
-                    <div v-if="morePages">
-                        <button class="btn btn-primary" @click="nextPage">Más resultados</button>
-                    </div>
-                    -->
                     <template #no-data><p class="alert alert-warning" role="alert">
                         {{ $t('noReferences') }}
                     </p></template>
@@ -218,6 +229,11 @@ import RateItem from '../RateItem';
 import Spinner from '../Spinner.vue';
 import modal from '../Modal';
 import dialogs from '../../services/dialogs.js';
+import {
+    isNegativeRating,
+    isNeutralRating,
+    isPositiveRating
+} from '../../utils/tripRating';
 
 let emptyCols = {
     col1: [],
@@ -230,11 +246,17 @@ export default {
         return {
             rating: {},
             referencesCol: {},
+            ratingFilter: 'all',
             sendReferenceFormVisibility: false,
             referenceConfirmationVisibility: false,
             referenceComment: '',
             sending: false
         };
+    },
+    props: {
+        id: {
+            required: false
+        }
     },
     methods: {
         ...mapActions(useProfileStore, {
@@ -243,23 +265,31 @@ export default {
         cleanCols(array) {
             this[array] = JSON.parse(JSON.stringify(emptyCols));
         },
-        makeRows(arrayToCheck, arrayToPush) {
-            if (this[arrayToCheck]) {
-                this.cleanCols(arrayToPush);
-                if (this.isMobile) {
-                    this[arrayToPush].col1 = this[arrayToCheck].slice(0);
-                } else {
-                    let i, j;
-                    let rows = this.isTablet ? 2 : 3;
-                    for (j = 0; j < rows; j++) {
-                        i = j;
-                        for (i; i < this[arrayToCheck].length; i += rows) {
-                            this[arrayToPush][`col${j + 1}`].push(
-                                this[arrayToCheck][i]
-                            );
-                        }
+        makeRowsFromList(list, arrayToPush) {
+            this.cleanCols(arrayToPush);
+            if (!list || !list.length) {
+                return;
+            }
+            if (this.isMobile) {
+                this[arrayToPush].col1 = list.slice(0);
+            } else {
+                let i, j;
+                let rows = this.isTablet ? 2 : 3;
+                for (j = 0; j < rows; j++) {
+                    i = j;
+                    for (i; i < list.length; i += rows) {
+                        this[arrayToPush][`col${j + 1}`].push(list[i]);
                     }
                 }
+            }
+        },
+        makeRows(arrayToCheck, arrayToPush) {
+            if (arrayToCheck === 'rates') {
+                this.makeRowsFromList(this.filteredRates, arrayToPush);
+                return;
+            }
+            if (this[arrayToCheck]) {
+                this.makeRowsFromList(this[arrayToCheck], arrayToPush);
             }
         },
         showReferenceConfirmation() {
@@ -319,6 +349,51 @@ export default {
             isTablet: 'isTablet',
             isDesktop: 'isDesktop'
         }),
+        filteredRates() {
+            const list = Array.isArray(this.rates) ? this.rates : [];
+            if (this.ratingFilter === 'positive') {
+                return list.filter((rate) => isPositiveRating(rate.rating));
+            }
+            if (this.ratingFilter === 'neutral') {
+                return list.filter((rate) => isNeutralRating(rate.rating));
+            }
+            if (this.ratingFilter === 'negative') {
+                return list.filter((rate) => isNegativeRating(rate.rating));
+            }
+            return list;
+        },
+        ratingCounts() {
+            const list = Array.isArray(this.rates) ? this.rates : [];
+            return {
+                all: list.length,
+                positive: list.filter((rate) => isPositiveRating(rate.rating))
+                    .length,
+                neutral: list.filter((rate) => isNeutralRating(rate.rating))
+                    .length,
+                negative: list.filter((rate) => isNegativeRating(rate.rating))
+                    .length
+            };
+        },
+        ratingFilterChips() {
+            return [
+                {
+                    id: 'all',
+                    label: `${this.$t('filtroCalificacionesTodas')} ${this.ratingCounts.all}`
+                },
+                {
+                    id: 'positive',
+                    label: `${this.$t('filtroCalificacionesPositivas')} ${this.ratingCounts.positive}`
+                },
+                {
+                    id: 'neutral',
+                    label: `${this.$t('filtroCalificacionesNeutras')} ${this.ratingCounts.neutral}`
+                },
+                {
+                    id: 'negative',
+                    label: `${this.$t('filtroCalificacionesNegativas')} ${this.ratingCounts.negative}`
+                }
+            ];
+        },
         canWriteReference() {
             return (
                 this.config &&
@@ -344,28 +419,32 @@ export default {
     },
     watch: {
         rates: {
-            handler: function (val, oldVal) {
+            handler: function () {
+                this.makeRows('rates', 'rating');
+            }
+        },
+        ratingFilter: {
+            handler: function () {
                 this.makeRows('rates', 'rating');
             }
         },
         references: {
-            handler: function (val, oldVal) {
+            handler: function () {
                 if (this.config && this.config.module_references) {
                     this.makeRows('references', 'referencesCol');
                 }
             }
         },
         isMobile: {
-            handler: function (val, oldVal) {
-                console.log('isMobileChange');
+            handler: function () {
                 this.makeRows('rates', 'rating');
                 if (this.config && this.config.module_references) {
                     this.makeRows('references', 'referencesCol');
                 }
             }
         },
-        isDesktop: {
-            handler: function (val, oldVal) {
+        isTablet: {
+            handler: function () {
                 this.makeRows('rates', 'rating');
                 if (this.config && this.config.module_references) {
                     this.makeRows('references', 'referencesCol');
@@ -373,38 +452,43 @@ export default {
             }
         }
     },
+    mounted() {
+        this.makeRows('rates', 'rating');
+        if (this.config && this.config.module_references) {
+            this.makeRows('references', 'referencesCol');
+        }
+    },
     components: {
         Loading,
         RateItem,
         Spinner,
         modal
-    },
-    props: ['id']
+    }
 };
 </script>
-<style scoped>
-.profile-rates-component {
-    padding-bottom: 6em;
-}
 
+<style scoped>
 .edit-action-reference {
     margin-bottom: 1rem;
 }
-
+.label-reply {
+    display: block;
+    padding: 0;
+    font-size: 1rem;
+    font-weight: bold;
+    line-height: 1.5em;
+    color: #333;
+    text-align: left;
+    border-radius: 0;
+}
+.reply-btns button {
+    min-width: 7rem;
+}
+.profile-rates-component :deep(.rate-neutral-icon) {
+    margin-left: 0.6em;
+}
 .referencias-section-description {
     margin-bottom: 1rem;
-}
-
-.label-reply {
-    color: #333;
-    font-size: 1rem;
-}
-
-.profile-rates-component :deep(.rate-neutral-icon) {
-    display: inline-block;
-    margin-left: 0.6em;
-    padding-left: 0;
-    color: #888;
-    vertical-align: middle;
+    color: #666;
 }
 </style>

@@ -495,6 +495,13 @@ const messages = {
         tiempoPromedioRespuesta: 'Tiempo promedio: {delay}.',
         contactoPrivacidadPerfil:
             'Sus datos de contacto se comparten solo cuando coordinan un viaje juntos.',
+        filtroCalificacionesTodas: 'Todas',
+        filtroCalificacionesPositivas: 'Positivas',
+        filtroCalificacionesNeutras: 'Neutras',
+        filtroCalificacionesNegativas: 'Negativas',
+        filtroViajesTodos: 'Todos',
+        filtroViajesConductor: 'Conductor',
+        filtroViajesPasajero: 'Pasajero',
         perfilViajesParticipados: '{count} viajes',
         cambioFacebook:
             'Facebook cambió sus políticas y no podemos llevarte al perfil de esta persona, pero te ayudamos a buscarlo.',
@@ -2617,6 +2624,13 @@ const messages = {
         tiempoPromedioRespuesta: 'Tiempo promedio: {delay}.',
         contactoPrivacidadPerfil:
             'Sus datos de contacto se comparten solo cuando coordinan un viaje juntos.',
+        filtroCalificacionesTodas: 'Todas',
+        filtroCalificacionesPositivas: 'Positivas',
+        filtroCalificacionesNeutras: 'Neutras',
+        filtroCalificacionesNegativas: 'Negativas',
+        filtroViajesTodos: 'Todos',
+        filtroViajesConductor: 'Conductor',
+        filtroViajesPasajero: 'Pasajero',
         perfilViajesParticipados: '{count} viajes',
         compartirEnFacebook: 'Compartir en Facebook',
         compartirEnTwitter: 'Compartir en Twitter',
@@ -3552,6 +3566,13 @@ const messages = {
         tiempoPromedioRespuesta: 'Average time: {delay}.',
         contactoPrivacidadPerfil:
             'Contact details are shared only when you coordinate a trip together.',
+        filtroCalificacionesTodas: 'All',
+        filtroCalificacionesPositivas: 'Positive',
+        filtroCalificacionesNeutras: 'Neutral',
+        filtroCalificacionesNegativas: 'Negative',
+        filtroViajesTodos: 'All',
+        filtroViajesConductor: 'Driver',
+        filtroViajesPasajero: 'Passenger',
         perfilViajesParticipados: '{count} trips',
         cambioFacebook:
             "Facebook changed its policies and we cannot take you to this person's profile, but we can help you search for them.",
