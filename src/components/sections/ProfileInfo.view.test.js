@@ -90,7 +90,9 @@ describe('ProfileInfo friend trip alerts toggle', () => {
     });
 
     it('shows snackbar feedback when toggling friend trip alerts', () => {
-        expect(viewSource).toContain("import dialogs from '../../services/dialogs.js'");
+        expect(viewSource).toContain(
+            "import dialogs from '../../services/dialogs.js'"
+        );
         expect(viewSource).toContain("'alertasViajeAmigoActivadas'");
         expect(viewSource).toContain("'alertasViajeAmigoDesactivadas'");
         expect(viewSource).toContain("this.$t('errorAlertasViajeAmigo')");
@@ -110,12 +112,20 @@ describe('ProfileInfo friend trip alerts toggle', () => {
     });
 
     it('places primary Enviar mensaje beside secondary trip-alerts AppButtons', () => {
-        expect(viewSource).toContain("import AppButton from '../ui/AppButton.vue'");
+        expect(viewSource).toContain(
+            "import AppButton from '../ui/AppButton.vue'"
+        );
         expect(viewSource).toMatch(
             /friendship_state === 'friend'[\s\S]*?<AppButton[\s\S]*?variant="primary"[\s\S]*?messageUser[\s\S]*?\$t\('enviarMensaje'\)[\s\S]*?<\/AppButton>[\s\S]*?<AppButton[\s\S]*?variant="secondary"[\s\S]*?onToggleTripAlerts[\s\S]*?tripAlertsButtonLabel[\s\S]*?<\/AppButton>/
         );
         expect(viewSource).toMatch(
             /\.profile-friend-actions\s*\{[^}]*display:\s*flex/
+        );
+        expect(viewSource).toMatch(
+            /\.profile-friend-actions\s*\{[^}]*justify-content:\s*flex-start/
+        );
+        expect(viewSource).toMatch(
+            /\.profile-friend-actions\s*\{[^}]*text-align:\s*left/
         );
     });
 });
