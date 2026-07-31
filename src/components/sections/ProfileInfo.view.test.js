@@ -108,4 +108,14 @@ describe('ProfileInfo friend trip alerts toggle', () => {
         expect(onToggleTripAlerts[0]).toContain('setFriendTripAlertsEnabled');
         expect(onToggleTripAlerts[0]).not.toContain('setProfileUser');
     });
+
+    it('places primary Enviar mensaje beside secondary trip-alerts AppButtons', () => {
+        expect(viewSource).toContain("import AppButton from '../ui/AppButton.vue'");
+        expect(viewSource).toMatch(
+            /friendship_state === 'friend'[\s\S]*?<AppButton[\s\S]*?variant="primary"[\s\S]*?messageUser[\s\S]*?\$t\('enviarMensaje'\)[\s\S]*?<\/AppButton>[\s\S]*?<AppButton[\s\S]*?variant="secondary"[\s\S]*?onToggleTripAlerts[\s\S]*?tripAlertsButtonLabel[\s\S]*?<\/AppButton>/
+        );
+        expect(viewSource).toMatch(
+            /\.profile-friend-actions\s*\{[^}]*display:\s*flex/
+        );
+    });
 });
