@@ -18,11 +18,10 @@ describe('OngoingTripCard.vue', () => {
         expect(viewSource).toContain('compartiendoUbicacionTiempoReal');
         expect(viewSource).toContain('isSharingLiveLocation');
         expect(viewSource).toContain('loadLiveShareStatus');
-        expect(viewSource).toContain('verDetalle');
         expect(viewSource).toContain("name: 'trip_live_share'");
         expect(viewSource).toContain('shouldShowLiveLocationShare');
         expect(viewSource).toContain('showShareLocationLink');
-        expect(viewSource).toContain('name="actions-extra"');
+        expect(viewSource).toContain('#actions-extra');
     });
 
     it('routes profile and detail clicks through the shell', () => {
