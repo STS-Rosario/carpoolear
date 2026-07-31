@@ -14,13 +14,10 @@ describe('Trip card quick actions', () => {
 });
 
 describe('Trip public visibility tooltip', () => {
-    it('uses visibilidadPublico title for friendship_type_id 2', () => {
-        expect(source).toMatch(
-            /friendship_type_id === 2[\s\S]*?:title="\$t\('visibilidadPublico'\)"/s
-        );
-        expect(source).not.toMatch(
-            /friendship_type_id === 2[\s\S]*?:title="\$t\('visibilidadAmigosDeAmigos'\)"/s
-        );
+    it('does not show trip visibility icons on the redesigned card', () => {
+        expect(source).not.toContain('trip_visibility');
+        expect(source).not.toContain("$t('visibilidadPublico')");
+        expect(source).not.toContain('friendship_type_id === 2');
     });
 });
 
@@ -114,20 +111,20 @@ describe('Trip card redesign shell', () => {
         expect(source).toMatch(/shellUser\(\)\s*\{[\s\S]*?getUserImage/);
     });
 
-    it('passes ratings, trips count and route/date labels to the shell', () => {
+    it('passes ratings, trips count, cities, puntos and date labels to the shell', () => {
         expect(source).toContain(':ratings="driverRatings"');
         expect(source).toContain(':trips-count-label="driverTripsLabel"');
         expect(source).toContain(':from-city="locationLabels.fromCity"');
-        expect(source).toContain(':from-region="locationLabels.fromRegion"');
+        expect(source).toContain(':from-point="locationLabels.fromPoint"');
         expect(source).toContain(':to-city="locationLabels.toCity"');
-        expect(source).toContain(':to-region="locationLabels.toRegion"');
+        expect(source).toContain(':to-point="locationLabels.toPoint"');
         expect(source).toContain(':date-label="cardDateLabel"');
         expect(source).toContain(':time-label="cardTimeLabel"');
     });
 
-    it('keeps visibility, sellado legend, seat warning and seat controls as shell extras', () => {
+    it('keeps sellado legend, seat warning and seat controls as shell extras without visibility icons', () => {
         expect(source).toContain('#body-extra');
-        expect(source).toMatch(/#body-extra[\s\S]*?friendship_type_id === 2/);
+        expect(source).not.toContain('trip_visibility');
         expect(source).toMatch(/#body-extra[\s\S]*?showSelladoPending[\s\S]*?faltaPagarSellado/);
         expect(source).toMatch(/#body-extra[\s\S]*?showSeatRequestLimitWarning/);
         expect(source).toContain('#footer-extra');

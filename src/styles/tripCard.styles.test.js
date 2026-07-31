@@ -9,17 +9,39 @@ const css = fs.readFileSync(
 const mainCss = fs.readFileSync(path.resolve(__dirname, 'main.css'), 'utf8');
 
 describe('trip card styles', () => {
-    it('defines shell layout, seats tones, route labels, chips and detail CTA', () => {
+    it('defines shell layout, seats tones, route point text, chips and detail CTA', () => {
         expect(css).toContain('.trip-card-shell');
         expect(css).toContain('.trip-card-shell__seats--high');
         expect(css).toContain('.trip-card-shell__seats--medium');
         expect(css).toContain('.trip-card-shell__seats--low');
         expect(css).toContain('.trip-card-shell__seats--full');
-        expect(css).toContain('.trip-card-shell__route-label');
+        expect(css).toContain('.trip-card-shell__point');
         expect(css).toContain('.trip-card-shell__chip');
         expect(css).toContain('.trip-card-shell__detail');
+        expect(css).toContain('.trip-card-shell__divider');
         expect(css).toMatch(
             /\.trip-card-shell__header\s*\{[\s\S]*min-height:\s*2\.25rem/
+        );
+    });
+
+    it('uses a compact driver header and tighter detail button padding', () => {
+        expect(css).toMatch(
+            /\.trip-card-shell__avatar\s*\{[\s\S]*width:\s*2\.25rem/
+        );
+        expect(css).toMatch(
+            /\.trip-card-shell__detail\s*\{[\s\S]*padding:\s*var\(--ds-button-padding-y-sm\)/
+        );
+    });
+
+    it('stretches cards to equal height within a row', () => {
+        expect(css).toMatch(
+            /\.trip\s*\{[\s\S]*height:\s*100%/
+        );
+        expect(css).toMatch(
+            /\.trip-card-shell\s*\{[\s\S]*height:\s*100%/
+        );
+        expect(css).toMatch(
+            /\.trip-card-shell__footer\s*\{[\s\S]*margin-top:\s*auto/
         );
     });
 
