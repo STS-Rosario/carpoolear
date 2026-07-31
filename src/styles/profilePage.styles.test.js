@@ -86,16 +86,19 @@ describe('profile page styles', () => {
         );
     });
 
-    it('styles Referencias heading like login title but smaller and not uppercase', () => {
+    it('styles profile and trips section h2 like login titles: dark, not uppercase, h2-sized', () => {
         const css = fs.readFileSync(cssPath, 'utf8');
         expect(css).toMatch(
-            /\.profile-page\s+\.profile-rates-component\s+h2\s*\{[^}]*color:\s*var\(--ds-text-primary\)/
+            /\.profile-page\s+h2[\s,][\s\S]*?\{[^}]*color:\s*var\(--ds-text-primary\)/
         );
         expect(css).toMatch(
-            /\.profile-page\s+\.profile-rates-component\s+h2\s*\{[^}]*text-transform:\s*none/
+            /\.profile-page\s+h2[\s,][\s\S]*?\{[^}]*text-transform:\s*none/
         );
         expect(css).toMatch(
-            /\.profile-page\s+\.profile-rates-component\s+h2\s*\{[^}]*font-size:\s*1\.25rem/
+            /\.profile-page\s+h2[\s,][\s\S]*?\{[^}]*font-size:\s*var\(--ds-heading-h2-size/
+        );
+        expect(css).toMatch(
+            /\.trips\.container\s+h2[\s,][\s\S]*?\{[^}]*color:\s*var\(--ds-text-primary\)/
         );
     });
 

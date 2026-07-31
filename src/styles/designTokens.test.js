@@ -36,6 +36,9 @@ describe('design tokens', () => {
         expect(tokensCss).toContain('--ds-link-font-weight: 400');
         expect(tokensCss).toContain('--ds-font-size-base:');
         expect(tokensCss).toContain('--ds-font-family:');
+        expect(tokensCss).toContain('--ds-page-title-size:');
+        expect(tokensCss).toContain('--ds-heading-h2-size:');
+        expect(tokensCss).toContain('--ds-heading-h3-size:');
         expect(tokensCss).toContain('--ds-button-gap:');
         expect(tokensCss).toContain('--ds-focus-ring:');
         expect(tokensCss).toContain('--ds-button-disabled-bg:');
