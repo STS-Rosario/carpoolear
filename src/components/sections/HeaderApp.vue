@@ -567,11 +567,25 @@ export default {
     border-bottom: 2px solid #fff;
 }
 .header_nav-messages .badge,
-.header_nav-my-trips .badge,
-.header_notifications .badge {
+.header_nav-my-trips .badge {
     position: absolute;
     top: calc(-0.55rem + 3px);
     right: -0.85rem;
+    min-width: 1.15rem;
+    height: 1.15rem;
+    padding: 0 0.3rem;
+    border-radius: 999px;
+    background: #e53935;
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    line-height: 1.15rem;
+    text-align: center;
+}
+.header_notifications .badge {
+    position: absolute;
+    top: calc(-0.55rem + 3px);
+    right: calc(-0.85rem + 5px);
     min-width: 1.15rem;
     height: 1.15rem;
     padding: 0 0.3rem;
