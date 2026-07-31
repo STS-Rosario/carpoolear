@@ -108,4 +108,10 @@ describe('ProfileRates reference action', () => {
         expect(profileRatesSource).toContain('filteredRates');
         expect(profileRatesSource).not.toContain('fa-smile');
     });
+
+    it('adds rating-type class on each calificaciones filter chip', () => {
+        expect(profileRatesSource).toMatch(
+            /profile-filter-chip--\$\{chip\.id\}|`profile-filter-chip--\$\{chip\.id\}`/
+        );
+    });
 });

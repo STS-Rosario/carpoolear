@@ -111,4 +111,24 @@ describe('profile page styles', () => {
             /\.profile-trip-card__role\s*\{[^}]*margin-left:\s*5px/
         );
     });
+
+    it('tints Calificaciones active chips by rating type', () => {
+        const css = fs.readFileSync(cssPath, 'utf8');
+        expect(css).toMatch(
+            /\.profile-rates-component\s+\.profile-filter-chip--all\.profile-filter-chip--active\s*\{[^}]*color:/
+        );
+        expect(css).toMatch(
+            /\.profile-rates-component\s+\.profile-filter-chip--positive\.profile-filter-chip--active\s*\{[^}]*color:/
+        );
+        expect(css).toMatch(
+            /\.profile-rates-component\s+\.profile-filter-chip--neutral\.profile-filter-chip--active\s*\{[^}]*color:/
+        );
+        expect(css).toMatch(
+            /\.profile-rates-component\s+\.profile-filter-chip--negative\.profile-filter-chip--active\s*\{[^}]*color:/
+        );
+        // Neutral selected state stays gray (not brand blue / green / red)
+        expect(css).toMatch(
+            /\.profile-rates-component\s+\.profile-filter-chip--neutral\.profile-filter-chip--active\s*\{[^}]*background:\s*#[eE][0-9a-fA-F]{5}/
+        );
+    });
 });
