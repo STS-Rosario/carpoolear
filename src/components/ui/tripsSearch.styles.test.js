@@ -57,4 +57,13 @@ describe('trips search redesign integration', () => {
         expect(tripsSearchCss).toContain('.trips-mobile-home__role-card');
         expect(tripsSearchCss).toContain('.trips-search__foreign-box');
     });
+
+    it('keeps the desktop search card aligned with the trips list width', () => {
+        expect(tripsSearchCss).toMatch(
+            /\.trips\.container\s*>\s*\.trips-search,\s*\.trips\.container\s*>\s*\.trips-list\s*\{[^}]*padding-left:\s*0/
+        );
+        expect(tripsSearchCss).toMatch(
+            /\.trips\.container\s*>\s*\.trips-search,\s*\.trips\.container\s*>\s*\.trips-list\s*\{[^}]*padding-right:\s*0/
+        );
+    });
 });

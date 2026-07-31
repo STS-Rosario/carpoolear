@@ -70,6 +70,21 @@ describe('trip card styles', () => {
         );
     });
 
+    it('space-betweens trip cards across the full trips row width', () => {
+        expect(css).toMatch(
+            /\.trips-section__list\.row[\s\S]*?\{[^}]*justify-content:\s*space-between/
+        );
+        expect(css).toMatch(
+            /\.trips-section__list\.row::(?:before|after)[\s\S]*?\{[^}]*display:\s*none/
+        );
+        expect(css).toMatch(
+            /\.trips-section__list\.row\s*\{[^}]*padding-left:\s*0/
+        );
+        expect(css).toMatch(
+            /\.trips-section__list\.row\s*\{[^}]*padding-right:\s*0/
+        );
+    });
+
     it('lays out primary row and meta row without absolute seats', () => {
         expect(css).toContain('.trip-card-shell__primary');
         expect(css).toMatch(
