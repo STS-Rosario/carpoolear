@@ -38,3 +38,23 @@ describe('ConversationList.vue mobile chat layout', () => {
         expect(block[0]).toMatch(/max-width:\s*100%/);
     });
 });
+
+describe('ConversationList.vue messages redesign', () => {
+    it('shows Mensajes title and FilterChips for Todos Grupales Individuales', () => {
+        expect(viewSource).toContain('FilterChips');
+        expect(viewSource).toContain('messagesFilter');
+        expect(viewSource).toContain('filteredConversations');
+        expect(viewSource).toContain("$t('mensajes')");
+        expect(viewSource).toContain("$t('filtroMensajesTodos')");
+        expect(viewSource).toContain("$t('filtroMensajesGrupales')");
+        expect(viewSource).toContain("$t('filtroMensajesIndividuales')");
+        expect(viewSource).toContain('filterConversationsByKind');
+        expect(viewSource).toContain('messages-page');
+    });
+
+    it('marks group rows and unread with redesign hooks', () => {
+        expect(viewSource).toContain('conversation_header--group');
+        expect(viewSource).toContain('conversation_header__unread-dot');
+        expect(viewSource).toContain('isTripGroupConversation');
+    });
+});
