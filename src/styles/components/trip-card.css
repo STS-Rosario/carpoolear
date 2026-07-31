@@ -37,10 +37,19 @@
 
 .trip-card-shell__driver {
     display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
     min-width: 0;
     cursor: pointer;
+}
+
+.trip-card-shell__copy {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    flex: 1 1 auto;
+    min-width: 0;
 }
 
 .trip-card-shell__primary {
@@ -83,7 +92,6 @@
     flex-wrap: nowrap;
     align-items: center;
     gap: 0.25rem;
-    padding-left: calc(2.25rem + 0.5rem);
     font-size: 0.75rem;
     line-height: 1.2;
     color: var(--ds-text-secondary);
